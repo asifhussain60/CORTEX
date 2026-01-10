@@ -1,0 +1,307 @@
+{
+  "feature_name": "unknown",
+  "plan_id": "PLAN-PROGRESS-001",
+  "plan_path": "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/documents/planning/active/autonomous-progress-tracking",
+  "acceptance_criteria": [],
+  "test_requirements": {
+    "phases": [],
+    "requirements": [],
+    "acceptance_criteria": [],
+    "priority_order": [
+      "P0_CRITICAL",
+      "P1_HIGH",
+      "P2_MEDIUM",
+      "P3_LOW"
+    ]
+  },
+  "domain_knowledge": {
+    "domain": "general",
+    "description": "",
+    "requirements": []
+  },
+  "governance_rules": [
+    {
+      "rule_id": "CORE-021",
+      "original_id": "ORCHESTRATOR_SCAFFOLDER_COMPLIANCE",
+      "category": "architecture_integrity",
+      "severity": "blocked",
+      "name": "New Orchestrators MUST Use Scaffolder",
+      "description": "ALL NEW orchestrators MUST be created via the Orchestrator Scaffolder\n(`src/tools/orchestrator_scaffolder.py`). This ensures:\n1. MasterOrchestrator registration (@register_with_master decorator)\n2. 4-tier governance compliance injection\n3. Manifest contract validation\n4. Test stub generation\n5. Team ownership tracking\n\nEXCEPTION: Legacy orchestrators created before this rule may remain\nnon-compliant until formal migration (AC-MIGRATE-001 in Phase 5).\n\nCRITICAL: MasterOrchestrator is IN CHARGE - never bypassed.\n",
+      "enforcement": {
+        "trigger": "orchestrator_creation",
+        "action": "block_if_not_scaffolded"
+      },
+      "validation": [
+        "Orchestrator created via `orchestrator_scaffolder.py` CLI",
+        "Extends BaseOrchestratorV4",
+        "Has @register_with_master decorator on class",
+        "Has @require_master_routing decorator on execute()",
+        "Manifest exists in cortex-brain/manifests/orchestrators/",
+        "Tier3 domain patterns file created",
+        "Test stubs generated"
+      ],
+      "implementation": {
+        "middleware": "src.orchestrators.middleware.orchestrator_creation_guard.OrchestratorCreationGuard",
+        "hook": "pre_file_creation",
+        "priority": 3
+      },
+      "exceptions": {
+        "legacy_orchestrators": {
+          "description": "Orchestrators created before CORE-021 are exempt until AC-MIGRATE-001",
+          "list": [
+            "TDDMasterOrchestrator",
+            "PlanningOrchestratorV5",
+            "ADOOrchestratorV2",
+            "VacuumOrchestratorV2",
+            "InvestigationOrchestratorV2",
+            "SanitizationOrchestratorV2",
+            "MaintenanceOrchestratorV2",
+            "ReviewOrchestratorV2",
+            "GapFixOrchestrator",
+            "TDDOrchestrator",
+            "MasterOrchestrator"
+          ],
+          "migration_tracked_by": "AC-MIGRATE-001",
+          "migration_phase": 5
+        }
+      },
+      "ac_ids": [
+        "AC-SCAFFOLD-001",
+        "AC-SCAFFOLD-003",
+        "AC-SCAFFOLD-005"
+      ],
+      "future_work": {
+        "migration_ac": "AC-MIGRATE-001",
+        "phase": 5,
+        "weeks": "9-10",
+        "description": "Migrate legacy orchestrators to scaffolder compliance"
+      },
+      "examples": {
+        "pass": [
+          "python -m src.tools.orchestrator_scaffolder --name 'Finance Report' --domain finance",
+          "New FinanceReportOrchestrator extends BaseOrchestratorV4",
+          "FinanceReportOrchestrator has @register_with_master decorator"
+        ],
+        "fail": [
+          "Manually creating src/orchestrators/new/new_orchestrator.py",
+          "New orchestrator without @register_with_master",
+          "New orchestrator without manifest in cortex-brain/manifests/"
+        ]
+      }
+    },
+    {
+      "rule_id": "CORE-022",
+      "original_id": "KEBAB_CASE_FILE_NAMING",
+      "category": "architecture_integrity",
+      "severity": "blocked",
+      "name": "Kebab-Case File Naming with 20-Character Limit",
+      "description": "ALL file names MUST follow kebab-case format (lowercase, hyphen-separated)\nwith a maximum of 20 characters EXCLUDING the file extension.\n\nThis rule is FINAL and SUPERSEDES any conflicting naming conventions\nelsewhere in the codebase or documentation.\n\nFormat: `{name}.{ext}` where:\n- `name` = 1-20 lowercase alphanumeric characters with hyphens\n- Hyphens cannot be leading, trailing, or consecutive\n- Extension is NOT counted in the 20-character limit\n\nEXCEPTIONS (grandfathered):\n- Python files with underscores in src/ (Python module convention)\n- __init__.py, __main__.py, conftest.py (Python special files)\n- LICENSE, README.md, Makefile (standard project files)\n- .gitignore, .env, .editorconfig (dotfiles)\n",
+      "enforcement": {
+        "trigger": "file_creation",
+        "action": "block_if_invalid_filename"
+      },
+      "validation": [
+        "File name (excluding extension) <= 20 characters",
+        {
+          "File name matches pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+        },
+        "No uppercase characters in file name",
+        "No underscores in file name (except Python src/ files)",
+        "No spaces or special characters",
+        "No consecutive hyphens (--)",
+        "No leading or trailing hyphens"
+      ],
+      "implementation": {
+        "middleware": "src.orchestrators.middleware.file_naming_validator.FileNamingValidator",
+        "hook": "pre_file_creation",
+        "priority": 1,
+        "regex_pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+        "max_length": 20
+      },
+      "exceptions": {
+        "python_modules": {
+          "description": "Python files in src/ may use underscores per PEP 8",
+          "pattern": "src/**/*.py",
+          "allowed_pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "python_special": {
+          "description": "Python special files",
+          "files": [
+            "__init__.py",
+            "__main__.py",
+            "__pycache__",
+            "conftest.py",
+            "pytest.ini"
+          ]
+        },
+        "project_standard": {
+          "description": "Standard project files (case-sensitive names)",
+          "files": [
+            "LICENSE",
+            "README.md",
+            "CHANGELOG.md",
+            "CONTRIBUTING.md",
+            "Makefile",
+            "Dockerfile",
+            "requirements.txt",
+            "setup.py",
+            "pyproject.toml"
+          ]
+        },
+        "dotfiles": {
+          "description": "Configuration dotfiles",
+          "pattern": "^\\..*",
+          "files": [
+            ".gitignore",
+            ".env",
+            ".env.example",
+            ".editorconfig",
+            ".pre-commit-config.yaml"
+          ]
+        }
+      },
+      "supersedes": {
+        "description": "This rule is FINAL and overrides any conflicting rules",
+        "conflicting_patterns": [
+          "camelCase file names",
+          "PascalCase file names",
+          "snake_case file names (except Python src/)",
+          "SCREAMING_CASE file names",
+          "File names > 20 characters"
+        ],
+        "resolution": "CORE-022 wins all naming conflicts"
+      },
+      "examples": {
+        "pass": [
+          "ac-index.yaml (8 chars) \u2713",
+          "core-rules.yaml (10 chars) \u2713",
+          "progress-tracker.json (16 chars) \u2713",
+          "audit-config.yaml (12 chars) \u2713",
+          "api.py (3 chars) \u2713",
+          "src/utils/token_counter.py (Python module - underscore OK) \u2713",
+          "README.md (standard file - exempt) \u2713"
+        ],
+        "fail": [
+          "AC-INDEX.yaml (uppercase) \u2717",
+          "progressTracker.json (camelCase) \u2717",
+          "progress_tracker.json (snake_case outside src/) \u2717",
+          "my-very-long-file-name.yaml (21 chars) \u2717",
+          "--invalid.yaml (leading hyphen) \u2717",
+          "also--invalid.yaml (consecutive hyphens) \u2717"
+        ]
+      },
+      "migration_guidance": {
+        "description": "Existing files violating this rule should be renamed",
+        "priority": "LOW - rename during regular maintenance",
+        "tooling": "scripts/rename_to_kebab.py (to be created)"
+      },
+      "rationale": "Kebab-case with length limits ensures:\n1. Cross-platform compatibility (Windows, macOS, Linux)\n2. URL-safe file names (no encoding needed)\n3. Readable file names (hyphens more readable than underscores)\n4. Consistent naming across entire codebase\n5. Predictable file discovery and sorting\n6. Git-friendly (avoids case-sensitivity issues)\n7. Terminal-friendly (no quoting needed)\n8. 20-char limit prevents unwieldy names while allowing descriptive names\n"
+    },
+    {
+      "rule_id": "CORE-023",
+      "category": "quality_gates",
+      "severity": "blocked",
+      "name": "File Type-Specific Validation Required Before Commit",
+      "description": "Modified files MUST pass file-type-specific validation before state\nchanges (git commit, plan completion, orchestrator finish).\n\nThis is a PRE-COMMIT quality gate, NOT a TDD cycle requirement.\nValidation happens once at completion, not during development iterations.\n\nValidation per file type:\n- .html \u2192 HTML5 syntax (html5lib) + WCAG AA compliance (zero tolerance)\n- .yaml \u2192 Schema validation + YAML syntax (already enforced by OE-002)\n- .py \u2192 pytest + test coverage (handled by TDD-Master via CORE-019)\n- .json \u2192 JSON syntax validation\n- .css \u2192 CSS syntax validation (optional)\n\nCRITICAL: HTML files MUST NOT be left in broken states. Any HTML\nmodification by any orchestrator or GitHub Copilot MUST result in\nvalid HTML5 with zero parse errors.\n",
+      "enforcement": {
+        "trigger": "pre_commit_hook",
+        "action": "block_if_validation_fails",
+        "scope": "modified_files_only"
+      },
+      "validation": {
+        "html_files": [
+          "Parse with html5lib (TreeBuilder with strict mode)",
+          "Zero parse errors or warnings",
+          "Valid HTML5 DOCTYPE present",
+          "No unclosed tags, no malformed attributes",
+          "WCAG AA compliance (contrast ratios, semantic HTML, ARIA)",
+          "Responsive design validation (viewport meta tag)"
+        ],
+        "yaml_files": [
+          "YAML syntax validation via yaml.safe_load()",
+          "Schema validation (OE-002 already enforces this)"
+        ],
+        "python_files": [
+          "All tests pass (TDD-Master ensures this via CORE-019)",
+          "No validation needed at pre-commit (already tested)"
+        ],
+        "json_files": [
+          "JSON syntax validation via json.loads()",
+          "Schema validation if JSON schema exists"
+        ]
+      },
+      "implementation": {
+        "pre_commit_hook": "scripts/pre-commit",
+        "validators": {
+          "html": "src.orchestrators.html_view.validators.html_validator.HTMLValidator",
+          "yaml": "src.tools.yaml_validator.YAMLValidator",
+          "json": "src.tools.json_validator.JSONValidator"
+        },
+        "libraries": {
+          "html5lib": ">=1.1",
+          "lxml": ">=6.0.0"
+        }
+      },
+      "scope": {
+        "applies_to": [
+          "HTMLViewOrchestrator outputs (.html files)",
+          "Manual HTML edits by GitHub Copilot",
+          "Configuration file changes (.yaml, .json)",
+          "Documentation HTML files (docs/**/*.html)"
+        ],
+        "does_not_apply_to": [
+          "TDD execution cycles (Python unit tests)",
+          "Read-only operations (grep, semantic search)",
+          "Backup files (*.bak, *.backup)",
+          "Git-ignored files"
+        ]
+      },
+      "error_handling": {
+        "on_html_validation_failure": {
+          "action": "block_commit",
+          "message": "\u274c HTML VALIDATION FAILED\n\nModified HTML file(s) contain syntax errors or WCAG violations.\nAll HTML must be valid HTML5 with zero parse errors.\n\nRun validator manually:\n  python -m src.orchestrators.html_view.validators.html_validator <file.html>\n\nOr fix via HTMLViewOrchestrator:\n  python -m src.main \"fix visual issues in <file.html>\"\n",
+          "bypass": "git commit --no-verify (EMERGENCY ONLY)"
+        },
+        "on_yaml_validation_failure": {
+          "action": "block_commit",
+          "message": "YAML syntax error (see OE-002)"
+        },
+        "on_json_validation_failure": {
+          "action": "block_commit",
+          "message": "JSON syntax error - invalid structure"
+        }
+      },
+      "examples": {
+        "pass": [
+          "Modified docs/features/index.html \u2192 html5lib validates \u2192 \u2713 commit allowed",
+          "Fixed docs/orchestrators/planning.html \u2192 WCAG AA compliant \u2192 \u2713 commit allowed",
+          "Updated config.yaml \u2192 schema valid \u2192 \u2713 commit allowed (OE-002)"
+        ],
+        "fail": [
+          "Modified index.html with unclosed <div> \u2192 \u274c blocked (HTML5 error)",
+          "Added feature.html with contrast ratio 2.5:1 \u2192 \u274c blocked (WCAG AA requires 4.5:1)",
+          "HTML missing DOCTYPE \u2192 \u274c blocked (invalid HTML5)",
+          "Unclosed <section> tag \u2192 \u274c blocked (parse error)"
+        ]
+      },
+      "integration_points": [
+        "HTMLViewOrchestrator Phase 5 (VALIDATION) runs same checks during development",
+        "Pre-commit hook (scripts/pre-commit) enforces at commit time",
+        "GitHub Copilot edits HTML \u2192 pre-commit catches issues before merge",
+        "TDD-Master does NOT validate HTML (separation of concerns)"
+      ],
+      "performance": [
+        "Validation only on modified files (not entire codebase)",
+        "HTML5 parsing: ~50ms per file",
+        "WCAG validation: ~200ms per file (contrast checks, semantic analysis)",
+        "Total overhead: <1 second for typical commits (1-5 HTML files)"
+      ],
+      "rationale": "Zero-tolerance HTML validation prevents:\n1. Broken HTML merged into main branch (blocks GitHubPages deployment)\n2. WCAG AA violations (accessibility compliance failures)\n3. Browser rendering issues (parse errors cause layout breaks)\n4. Developer confusion (debug time wasted on malformed HTML)\n5. Accumulated technical debt (broken HTML compounds over time)\n\nThis rule addresses the observed pattern of TDD-Master and other\norchestrators leaving HTML in broken states. By validating at the\nquality gate layer (pre-commit), we catch issues before they pollute\nthe repository.\n\nArchitectural rationale:\n- HTML validation is NOT a TDD concern (HTML is declarative, not testable code)\n- Separation of concerns: HTMLViewOrchestrator handles HTML, TDD-Master handles code\n- Pre-commit hooks are the correct architectural layer for cross-cutting quality checks\n- This approach is extensible (easy to add CSS linting, Markdown validation, etc.)\n"
+    }
+  ],
+  "metadata": {
+    "created_at": "2026-01-10T18:04:50.369637",
+    "version": "1.0.0",
+    "source": "TDDMasterOrchestrator"
+  }
+}

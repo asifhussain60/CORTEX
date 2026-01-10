@@ -101,6 +101,7 @@
             font-size: 2.5em;
             font-weight: 700;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
@@ -197,6 +198,7 @@
             font-size: 3em;
             font-weight: 700;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             opacity: 0.3;
@@ -426,7 +428,7 @@
     <div class="container">
         <!-- Header -->
         <header class="glass">
-            <img src="../../docs/assets/images/CORTEX-logo-200.png" alt="CORTEX Logo" class="logo">
+            <img src="CORTEX-logo-200.png" alt="CORTEX Logo" class="logo">
             <div class="header-content">
                 <h1>CORTEX 6.0</h1>
                 <div class="subtitle">Holistic Snowball Implementation Plan</div>
@@ -444,8 +446,8 @@
             
             <div class="metric-card glass">
                 <div class="metric-label">Total AC-IDs</div>
-                <div class="metric-value">102</div>
-                <div class="metric-sublabel">90 original + 12 hybrid</div>
+                <div class="metric-value">111</div>
+                <div class="metric-sublabel">90 original + 21 enhanced</div>
             </div>
             
             <div class="metric-card glass">
@@ -625,6 +627,29 @@
                             <span class="ac-badge">AC-PLAN-006</span>
                             <span class="ac-badge">AC-PLAN-007</span>
                             <span class="ac-badge">AC-PLAN-008</span>
+                        </div>
+                    </div>
+                    
+                    <div class="component-item" style="background: rgba(255, 190, 11, 0.1); border-left: 3px solid var(--warning-color); cursor: pointer;" onclick="window.location.href='template-architecture-detail.html'">
+                        <div class="component-name">🎨 3-Layer Response Template Architecture <span style="color: var(--warning-color); font-size: 0.8em; font-weight: 600; margin-left: 10px;">NEW · CLICK FOR DETAILS</span></div>
+                        <div style="font-size: 0.9em; color: var(--text-secondary); margin: 8px 0;">
+                            Replace 2046-line v4.yaml with 3-layer system: Core blocks (50 lines) + Categories (250 lines) + Orchestrator overrides (15 lines each)
+                        </div>
+                        <div style="font-size: 0.85em; color: var(--success-color); margin: 5px 0;">
+                            <strong>Target:</strong> 85% reduction (2046 → &lt;300 lines) • &lt;50ms render • 0% duplication • 100% consistency
+                        </div>
+                        <div class="ac-ids">
+                            <span class="ac-badge">AC-TEMPLATE-001</span>
+                            <span class="ac-badge">AC-TEMPLATE-002</span>
+                            <span class="ac-badge">AC-TEMPLATE-003</span>
+                            <span class="ac-badge">AC-TEMPLATE-004</span>
+                            <span class="ac-badge">AC-TEMPLATE-005</span>
+                            <span class="ac-badge">AC-TEMPLATE-006</span>
+                            <span class="ac-badge">AC-TEMPLATE-007</span>
+                            <span class="ac-badge">AC-TEMPLATE-008</span>
+                        </div>
+                        <div style="margin-top: 10px; font-size: 0.85em; color: var(--primary-color);">
+                            📖 Click to view full architecture documentation →
                         </div>
                     </div>
                     
@@ -847,7 +872,7 @@
         
         <!-- Architecture Documentation Navigation -->
         <div style="margin-top: 60px;">
-            <h2 style="font-size: 2.2em; margin-bottom: 15px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            <h2 style="font-size: 2.2em; margin-bottom: 15px; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                 📚 Architecture Documentation
             </h2>
             <p style="color: var(--text-secondary); margin-bottom: 40px; font-size: 1.1em;">
@@ -855,6 +880,25 @@
             </p>
             
             <div class="metrics-grid" style="grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));">
+                <!-- 3-Layer Response Template Architecture -->
+                <a href="template-architecture-detail.html" style="text-decoration: none; color: inherit;">
+                    <div class="metric-card" style="cursor: pointer; transition: all 0.3s; background: rgba(255, 190, 11, 0.05); border: 2px solid var(--warning-color);">
+                        <div style="font-size: 3em; margin-bottom: 15px;">🎨</div>
+                        <div style="font-size: 1.8em; font-weight: 600; margin-bottom: 10px; color: var(--warning-color);">
+                            3-Layer Template Architecture
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 1em; line-height: 1.6;">
+                            Phase 2 Enhancement: 85% reduction in template bloat. Core blocks + Categories + Overrides.
+                        </div>
+                        <div style="margin-top: 15px; padding: 8px 12px; background: rgba(255, 190, 11, 0.2); border-radius: 8px; font-size: 0.85em; color: var(--warning-color);">
+                            <strong>NEW:</strong> AC-TEMPLATE-001 to 008
+                        </div>
+                        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <span style="color: var(--warning-color); font-size: 0.9em;">→ View Full Architecture</span>
+                        </div>
+                    </div>
+                </a>
+                
                 <!-- Governance Rules -->
                 <a href="../../docs/architecture/governance-rules.html" style="text-decoration: none; color: inherit;">
                     <div class="metric-card" style="cursor: pointer; transition: all 0.3s;">
@@ -1070,7 +1114,7 @@
                 datasets: [
                     {
                         label: 'AC-IDs Completed',
-                        data: [0, 15, 43, 65, 80, 90, 98, 102],
+                        data: [0, 15, 43, 65, 80, 90, 98, 111],
                         borderColor: 'rgba(0, 212, 255, 1)',
                         backgroundColor: 'rgba(0, 212, 255, 0.1)',
                         tension: 0.4,
@@ -1159,5 +1203,160 @@
         
         loadProgressData();
     </script>
+
+    <!-- Link State Management -->
+    <script>
+        /**
+         * Dynamic Link State Management
+         * Loads documentation-status.json and applies visual states to links
+         */
+        async function initializeLinkStates() {
+            try {
+                const response = await fetch('documentation-status.json');
+                const statusData = await response.json();
+                
+                console.log('📊 Documentation Status loaded:', Object.keys(statusData.links).length, 'links tracked');
+                
+                // Apply states to all links
+                document.querySelectorAll('a[href], [onclick*="location.href"]').forEach(element => {
+                    let linkUrl = null;
+                    
+                    // Extract URL from href or onclick
+                    if (element.href && !element.href.startsWith('http')) {
+                        // Extract relative path from absolute file:// URL
+                        const urlObj = new URL(element.href);
+                        linkUrl = urlObj.pathname.split('/templates/plan-viewer/')[1] || 
+                                 element.getAttribute('href');
+                    } else if (element.onclick) {
+                        const match = element.onclick.toString().match(/location\.href\s*=\s*['"]([^'"]+)['"]/);
+                        if (match) linkUrl = match[1];
+                    }
+                    
+                    if (!linkUrl) return;
+                    
+                    // Check status
+                    const status = statusData.links[linkUrl];
+                    if (status) {
+                        // Add visual indicator
+                        element.setAttribute('data-doc-state', status.state);
+                        element.setAttribute('title', status.tooltip);
+                        
+                        // Style based on state
+                        if (status.state === 'disabled') {
+                            element.style.opacity = '0.5';
+                            element.style.cursor = 'not-allowed';
+                            element.style.pointerEvents = 'none';
+                            element.classList.add('doc-disabled');
+                        } else if (status.state === 'enabled') {
+                            element.classList.add('doc-enabled');
+                            // Add success indicator
+                            if (!element.querySelector('.doc-indicator')) {
+                                const indicator = document.createElement('span');
+                                indicator.className = 'doc-indicator';
+                                indicator.innerHTML = ' ✓';
+                                indicator.style.color = 'var(--success-color)';
+                                indicator.style.fontSize = '0.8em';
+                                indicator.style.marginLeft = '4px';
+                                element.appendChild(indicator);
+                            }
+                        }
+                    }
+                });
+                
+                console.log('✅ Link states initialized successfully');
+                
+            } catch (error) {
+                console.warn('⚠️ Could not load documentation status:', error.message);
+                console.log('Using default enabled state for all links');
+            }
+        }
+        
+        // Initialize on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeLinkStates);
+        } else {
+            initializeLinkStates();
+        }
+        
+        /**
+         * Enhanced tooltip system
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add hover effects for phase cards
+            document.querySelectorAll('.phase-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    const state = this.getAttribute('data-doc-state');
+                    if (state === 'disabled') {
+                        this.style.transform = 'none';
+                        this.style.cursor = 'not-allowed';
+                    } else {
+                        this.style.transform = 'translateY(-8px)';
+                    }
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+
+    <!-- Link Status Indicator Styles -->
+    <style>
+        .doc-enabled {
+            position: relative;
+        }
+        
+        .doc-disabled {
+            opacity: 0.5 !important;
+            cursor: not-allowed !important;
+            pointer-events: none !important;
+        }
+        
+        .doc-indicator {
+            display: inline-block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        /* Enhanced tooltips */
+        [title] {
+            position: relative;
+        }
+        
+        /* Phase card disabled state */
+        .phase-card[data-doc-state="disabled"] {
+            opacity: 0.6;
+            cursor: not-allowed !important;
+            pointer-events: none;
+            filter: grayscale(50%);
+        }
+        
+        .phase-card[data-doc-state="disabled"]::after {
+            content: '🔒 Documentation Pending';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: var(--warning-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .phase-card[data-doc-state="disabled"]:hover::after {
+            opacity: 1;
+        }
+    </style>
 </body>
 </html>
