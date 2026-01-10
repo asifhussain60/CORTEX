@@ -1,0 +1,225 @@
+# ==============================================================================
+# PHASE CX6-008: CLI Entry Point
+# ==============================================================================
+# Layer: 5 | Priority: 🟢 HIGH | Status: ⏸️ PENDING
+# Estimated Effort: 4h | Blocking: No | Snowball Impact: Unlocks 4 downstream criteria
+# ==============================================================================
+
+metadata:
+  phase_id: "CX6-008"
+  phase_name: "CLI Entry Point"
+  layer: 5
+  layer_name: "Dashboard & Features"
+  status: "PENDING"
+  priority: "HIGH"
+  blocking: false
+  estimated_hours: 4
+  actual_hours: 0
+  started_at: null
+  completed_at: null
+  
+strategic_requirement:
+  sr_id: "SR-010"
+  sr_name: "Cross-Repo CLI Entry Point"
+  description: "bin/cortex shell script for invoking CORTEX from any repo"
+  
+acceptance_criteria:
+  - id: "AC-REPO-001"
+    description: "bin/cortex CLI works from any git repo"
+    priority: "CRITICAL"
+    
+  - id: "AC-REPO-002"
+    description: "CLI routes to src/main.py in CORTEX repo"
+    priority: "CRITICAL"
+    
+  - id: "AC-CLI-001"
+    description: "Subcommands: plan, migrate, dashboard, maintenance, vacuum"
+    priority: "HIGH"
+    
+  - id: "AC-CLI-002"
+    description: "Help text with examples"
+    priority: "MEDIUM"
+    
+  - id: "AC-CLI-003"
+    description: "Version flag (--version)"
+    priority: "LOW"
+
+objective:
+  summary: |
+    Universal CLI entry point (bin/cortex) that works from any git repo.
+    Routes to CORTEX src/main.py, detects repo context, passes commands.
+  
+  deliverables:
+    - "bin/cortex (shell script)"
+    - "tests/cli/test_cortex_cli.py (CLI tests)"
+    - ".github/prompts/cli.prompt.md (usage guide)"
+  
+  success_criteria:
+    - "bin/cortex works from user repos"
+    - "Routes to CORTEX src/main.py"
+    - "Subcommands functional"
+    - "Help text clear"
+    - "Version flag works"
+
+definition_of_ready:
+  checklist:
+    - "✅ src/main.py entry point working"
+    - "✅ Orchestrators routable via CLI"
+    - "✅ CORTEX repo path detectable"
+
+dor_questions:
+  Q25:
+    question: "Hardcode CORTEX path or auto-detect?"
+    answer: "AUTO-DETECT (via git config or environment variable)"
+    impact: "Portable across machines"
+    rationale: "User may have CORTEX in different locations"
+    
+  Q26:
+    question: "Require CORTEX repo or bundle scripts?"
+    answer: "REQUIRE CORTEX REPO (no bundling)"
+    impact: "Simpler, single source of truth"
+    rationale: "Bundling complicates updates"
+    
+  Q27:
+    question: "Pass repo context to CORTEX or detect in Python?"
+    answer: "DETECT IN PYTHON (CLI just routes)"
+    impact: "Simpler shell script"
+    rationale: "Python has better workspace detection"
+
+definition_of_done:
+  required:
+    - "[ ] bin/cortex script created"
+    - "[ ] Auto-detects CORTEX repo path"
+    - "[ ] Routes to src/main.py with arguments"
+    - "[ ] Subcommands: plan, migrate, dashboard, maintenance, vacuum"
+    - "[ ] Help text with examples (--help)"
+    - "[ ] Version flag (--version)"
+    - "[ ] Tests passing: test_cortex_cli.py"
+    - "[ ] Documentation: cli.prompt.md"
+  
+  optional:
+    - "[ ] Bash completion script"
+    - "[ ] Alias suggestions (e.g., ctx)"
+    - "[ ] Color output"
+
+implementation_steps:
+  
+  step_1:
+    name: "Create Shell Script"
+    duration: "1h"
+    tasks:
+      - "Create bin/cortex script"
+      - "Add shebang: #!/bin/bash"
+      - "Parse command-line arguments"
+      - "Implement --help and --version flags"
+    outputs:
+      - "bin/cortex"
+    acceptance:
+      - "Script executes"
+      - "--help shows usage"
+      - "--version shows version"
+  
+  step_2:
+    name: "Implement CORTEX Path Detection"
+    duration: "1h"
+    tasks:
+      - "Check CORTEX_PATH environment variable"
+      - "Check git config cortex.path"
+      - "Fallback: search common paths"
+      - "Error if CORTEX not found"
+    acceptance:
+      - "CORTEX repo correctly detected"
+      - "Clear error if not found"
+  
+  step_3:
+    name: "Implement Command Routing"
+    duration: "1h"
+    tasks:
+      - "Route: cortex plan → python3 -m src.main \"plan ...\""
+      - "Route: cortex migrate → python3 -m src.main \"migrate ...\""
+      - "Route: cortex dashboard → python3 -m src.main \"dashboard ...\""
+      - "Route: cortex maintenance → python3 -m src.main \"maintenance\""
+      - "Route: cortex vacuum → python3 -m src.main \"vacuum\""
+      - "Pass arguments to Python"
+    acceptance:
+      - "All subcommands route correctly"
+      - "Arguments passed through"
+  
+  step_4:
+    name: "Write Tests & Documentation"
+    duration: "1h"
+    tasks:
+      - "Test: CORTEX path detection"
+      - "Test: subcommand routing"
+      - "Test: --help and --version"
+      - "Write cli.prompt.md with examples"
+    outputs:
+      - "tests/cli/test_cortex_cli.py"
+      - ".github/prompts/cli.prompt.md"
+    acceptance:
+      - "All tests passing"
+      - "Prompt has clear examples"
+
+dependencies:
+  required:
+    - "src/main.py entry point"
+    - "Orchestrators routable via CLI"
+  
+  optional:
+    - "Bash completion support"
+
+risks:
+  risk_1:
+    description: "CORTEX path not found"
+    mitigation: "Clear error message with setup instructions"
+    likelihood: "MEDIUM"
+    impact: "HIGH"
+  
+  risk_2:
+    description: "Python environment mismatch"
+    mitigation: "Use python3 explicitly, check version"
+    likelihood: "LOW"
+    impact: "MEDIUM"
+
+validation:
+  automated:
+    - "pytest tests/cli/test_cortex_cli.py"
+    - "Test: bin/cortex --help"
+    - "Test: bin/cortex --version"
+  
+  manual:
+    - "Run bin/cortex plan from user repo"
+    - "Run bin/cortex migrate from user repo"
+    - "Verify routing to CORTEX src/main.py"
+
+evidence_location:
+  cli_script: "bin/cortex"
+  tests: "tests/cli/test_cortex_cli.py"
+  prompt: ".github/prompts/cli.prompt.md"
+
+next_phase:
+  phase_id: null
+  phase_name: "All CORTEX 6 phases complete"
+  unlocks: "Full system operational"
+  handoff: "Ready for production use"
+
+usage_examples:
+  example_1:
+    command: "cortex plan user authentication"
+    description: "Create plan for user auth from any repo"
+  
+  example_2:
+    command: "cortex migrate cortex6"
+    description: "Migrate CORTEX 6 plan to user repo"
+  
+  example_3:
+    command: "cortex dashboard --launch"
+    description: "Launch plan viewer dashboard"
+  
+  example_4:
+    command: "cortex maintenance --auto-fix"
+    description: "Run maintenance with auto-fix"
+  
+  example_5:
+    command: "cortex vacuum --dry-run"
+    description: "Preview filesystem cleanup"

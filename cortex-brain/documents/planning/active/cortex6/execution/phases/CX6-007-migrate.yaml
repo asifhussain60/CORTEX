@@ -1,0 +1,271 @@
+# ==============================================================================
+# PHASE CX6-007: Migrate Orchestrator
+# ==============================================================================
+# Layer: 5 | Priority: 🟢 HIGH | Status: ⏸️ PENDING
+# Estimated Effort: 8h | Blocking: No | Snowball Impact: Unlocks 5 downstream criteria
+# ==============================================================================
+
+metadata:
+  phase_id: "CX6-007"
+  phase_name: "Migrate Orchestrator"
+  layer: 5
+  layer_name: "Dashboard & Features"
+  status: "PENDING"
+  priority: "HIGH"
+  blocking: false
+  estimated_hours: 8
+  actual_hours: 0
+  started_at: null
+  completed_at: null
+  
+strategic_requirement:
+  sr_id: "SR-009"
+  sr_name: "Migrate Orchestrator (on-demand plan migration)"
+  description: "Copy active plans from CORTEX to user repos without git history"
+  
+acceptance_criteria:
+  - id: "AC-MIGRATE-001"
+    description: "Copy files from cortex-brain/documents/planning/active/{plan} to user repo"
+    priority: "CRITICAL"
+    
+  - id: "AC-MIGRATE-002"
+    description: "Preserve folder structure (requirements/, execution/, etc.)"
+    priority: "CRITICAL"
+    
+  - id: "AC-MIGRATE-003"
+    description: "Exclude git history (.git folder not copied)"
+    priority: "CRITICAL"
+    
+  - id: "AC-MIGRATE-004"
+    description: "Update progress tracker with migration timestamp"
+    priority: "HIGH"
+    
+  - id: "AC-MIGRATE-005"
+    description: "Audit log with migration details"
+    priority: "HIGH"
+    
+  - id: "AC-MIGRATE-006"
+    description: "Dry-run mode (preview without copying)"
+    priority: "MEDIUM"
+
+objective:
+  summary: |
+    On-demand orchestrator to copy active plans from CORTEX repo to user repos.
+    Preserves folder structure, excludes git history, updates progress tracker.
+  
+  deliverables:
+    - "src/orchestrators/migrate_orchestrator.py (main orchestrator)"
+    - "cortex-brain/manifests/orchestrators/migrate.yaml (config)"
+    - "tests/orchestrators/test_migrate.py (orchestrator tests)"
+    - ".github/prompts/migrate.prompt.md (routing prompt)"
+  
+  success_criteria:
+    - "Files copied correctly to user repo"
+    - "Folder structure preserved"
+    - "Git history excluded"
+    - "Progress tracker updated"
+    - "Audit log recorded"
+    - "Dry-run mode functional"
+
+definition_of_ready:
+  checklist:
+    - "✅ Plan folder structure finalized (6 folders)"
+    - "✅ Progress tracker format defined"
+    - "✅ Audit logger available"
+    - "✅ Target repo detection working"
+
+dor_questions:
+  Q22:
+    question: "Copy entire plan folder or selective files?"
+    answer: "ENTIRE FOLDER (preserve complete structure)"
+    impact: "Simpler logic, maintains relationships"
+    rationale: "User repos need full context"
+    
+  Q23:
+    question: "Overwrite existing files or merge?"
+    answer: "MERGE (update existing, preserve user edits)"
+    impact: "Safer for iterative migrations"
+    rationale: "User may have customized plan"
+    
+  Q24:
+    question: "Track migration history in source or destination?"
+    answer: "BOTH (CORTEX audit log + user repo progress tracker)"
+    impact: "Bidirectional traceability"
+    rationale: "CORTEX tracks all migrations, user tracks their copy"
+
+definition_of_done:
+  required:
+    - "[ ] Orchestrator copies plan folder to user repo"
+    - "[ ] Folder structure preserved (6 folders)"
+    - "[ ] Git history excluded (.git/ ignored)"
+    - "[ ] Progress tracker updated with migration timestamp"
+    - "[ ] Audit log recorded with source/destination paths"
+    - "[ ] Dry-run mode working (--dry-run flag)"
+    - "[ ] Tests passing: test_migrate.py"
+    - "[ ] Documentation: migrate.prompt.md"
+  
+  optional:
+    - "[ ] --target-path flag (custom destination)"
+    - "[ ] --selective flag (copy specific folders only)"
+    - "[ ] Conflict resolution UI (interactive mode)"
+
+implementation_steps:
+  
+  step_1:
+    name: "Setup Orchestrator Structure"
+    duration: "1h"
+    tasks:
+      - "Create migrate_orchestrator.py"
+      - "Setup MasterOrchestrator inheritance"
+      - "Add manifest loading"
+      - "Configure audit logger"
+    outputs:
+      - "src/orchestrators/migrate_orchestrator.py"
+    acceptance:
+      - "Orchestrator loads manifest"
+      - "Audit logger initialized"
+  
+  step_2:
+    name: "Implement Source Detection"
+    duration: "1h"
+    tasks:
+      - "Detect active plan folder"
+      - "Read plan-index.yaml for metadata"
+      - "Validate source folder structure"
+      - "Check for required files"
+    acceptance:
+      - "Source plan correctly identified"
+      - "Validation catches missing files"
+  
+  step_3:
+    name: "Implement Destination Detection"
+    duration: "1h"
+    tasks:
+      - "Detect target repo (user workspace)"
+      - "Check if CORTEX repo (block migration)"
+      - "Create destination path if missing"
+      - "Validate write permissions"
+    acceptance:
+      - "Target repo correctly identified"
+      - "CORTEX repo migration blocked"
+      - "Destination created if needed"
+  
+  step_4:
+    name: "Implement File Copy Logic"
+    duration: "2h"
+    tasks:
+      - "Recursive copy with folder structure"
+      - "Exclude .git folder and gitignore patterns"
+      - "Preserve file permissions"
+      - "Handle symlinks"
+      - "Merge mode (update existing, keep user edits)"
+    acceptance:
+      - "All files copied correctly"
+      - "Git history excluded"
+      - "Permissions preserved"
+      - "Merge mode working"
+  
+  step_5:
+    name: "Implement Progress Tracker Update"
+    duration: "1h"
+    tasks:
+      - "Update source progress tracker (migration_timestamp)"
+      - "Update destination progress tracker"
+      - "Add migration metadata (source, destination, file count)"
+      - "Handle missing progress tracker gracefully"
+    acceptance:
+      - "Progress tracker updated in both repos"
+      - "Metadata recorded accurately"
+  
+  step_6:
+    name: "Implement Audit Logging"
+    duration: "0.5h"
+    tasks:
+      - "Log migration start"
+      - "Log each file copied"
+      - "Log migration completion"
+      - "Include source/destination paths in logs"
+    acceptance:
+      - "All events logged"
+      - "Paths recorded correctly"
+  
+  step_7:
+    name: "Implement Dry-Run Mode"
+    duration: "1h"
+    tasks:
+      - "Add --dry-run flag"
+      - "Preview files to be copied"
+      - "Show conflicts (existing files)"
+      - "No actual file operations"
+    acceptance:
+      - "Dry-run shows accurate preview"
+      - "No files modified"
+  
+  step_8:
+    name: "Write Tests & Documentation"
+    duration: "1.5h"
+    tasks:
+      - "Test: file copy works"
+      - "Test: git history excluded"
+      - "Test: progress tracker updated"
+      - "Test: dry-run mode"
+      - "Write migrate.prompt.md"
+    outputs:
+      - "tests/orchestrators/test_migrate.py"
+      - ".github/prompts/migrate.prompt.md"
+    acceptance:
+      - "All tests passing"
+      - "Coverage ≥80%"
+      - "Prompt clear and concise"
+
+dependencies:
+  required:
+    - "Plan folder structure (6 folders)"
+    - "Progress tracker format"
+    - "Audit logger"
+  
+  optional:
+    - "Dashboard integration (show migration status)"
+
+risks:
+  risk_1:
+    description: "User repo has conflicting files"
+    mitigation: "Merge mode + dry-run preview"
+    likelihood: "MEDIUM"
+    impact: "MEDIUM"
+  
+  risk_2:
+    description: "Large plans (>1GB) slow down copy"
+    mitigation: "Progress bar + incremental copy"
+    likelihood: "LOW"
+    impact: "LOW"
+  
+  risk_3:
+    description: "User accidentally migrates to CORTEX repo"
+    mitigation: "Detect CORTEX repo, block operation"
+    likelihood: "LOW"
+    impact: "HIGH"
+
+validation:
+  automated:
+    - "pytest tests/orchestrators/test_migrate.py"
+    - "Test: copy 100+ files successfully"
+    - "Test: git history excluded"
+  
+  manual:
+    - "Migrate cortex6 plan to test repo"
+    - "Verify folder structure preserved"
+    - "Check progress tracker updated"
+    - "Verify audit log complete"
+
+evidence_location:
+  orchestrator: "src/orchestrators/migrate_orchestrator.py"
+  tests: "tests/orchestrators/test_migrate.py"
+  manifest: "cortex-brain/manifests/orchestrators/migrate.yaml"
+  prompt: ".github/prompts/migrate.prompt.md"
+
+next_phase:
+  phase_id: "CX6-008"
+  phase_name: "CLI Entry Point"
+  unlocks: "CLI can invoke migrate orchestrator"
+  handoff: "Migrate orchestrator ready for CLI integration"

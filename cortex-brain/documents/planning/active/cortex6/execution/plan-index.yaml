@@ -1,0 +1,76 @@
+# CORTEX 6.0 Execution Plan - Master Index
+# Generated: 2026-01-11
+# Status: ACTIVE
+# Plan ID: cortex6-build-2026
+# Total Estimated Effort: 70h (Layers 1-5)
+
+metadata:
+  plan_name: "CORTEX 6.0 Complete Build"
+  plan_id: "cortex6-build-2026"
+  version: "1.0.0"
+  status: "IN_PROGRESS"
+  created: "2026-01-11T06:00:00Z"
+  strategy: "snowball"
+  strategy_source: "../analysis/snowball-strategy-20260110.yaml"
+  requirements_source: "../requirements/CX6-requirements.yaml"
+  ac_source: "../requirements/CX6-acceptance-criteria.yaml"
+  
+progress:
+  current_layer: 4
+  current_phase: "CX6-005"
+  layers_completed: 3
+  layers_total: 5
+  hours_completed: 34
+  hours_remaining: 36
+  completion_percentage: 48.6
+
+layers:
+  - layer: 1
+    name: "Governance Foundation"
+    status: "✅ COMPLETE"
+    effort: "4h"
+    phases: ["SNOWBALL-001"]
+    
+  - layer: 2
+    name: "TDD-Master Orchestrator"
+    status: "✅ COMPLETE"
+    effort: "16h"
+    phases: ["SNOWBALL-002"]
+    
+  - layer: 3
+    name: "Audit Validation"
+    status: "✅ COMPLETE"
+    effort: "14h"
+    phases: ["SNOWBALL-003", "SNOWBALL-004"]
+    
+  - layer: 4
+    name: "AC-ID Traceability"
+    status: "🔄 IN_PROGRESS"
+    effort: "4h"
+    phases: ["CX6-005"]
+    
+  - layer: 5
+    name: "Dashboard & Features"
+    status: "⏸️ PENDING"
+    effort: "32h"
+    phases: ["CX6-006", "CX6-007", "CX6-008"]
+
+folder_structure:
+  phases: "./phases/"          # Individual phase definitions
+  tracking: "./tracking/"      # Progress tracking
+  dashboard: "./dashboard/"    # Plan viewer dashboard
+  artifacts: "../artifacts/"   # Generated deliverables
+  evidence: "./evidence/"      # Test results, logs
+  dependencies: "./dependencies/" # Dependency maps
+
+execution_order:
+  - "Phase CX6-005: AC-ID Traceability (4h) → Layer 4"
+  - "Phase CX6-006: Plan Viewer Dashboard (20h) → Layer 5"
+  - "Phase CX6-007: Migrate Orchestrator (8h) → Layer 5"
+  - "Phase CX6-008: CLI Entry Point (4h) → Layer 5"
+
+phase_files:
+  CX6-005: "phases/CX6-005-ac-traceability.yaml"
+  CX6-006: "phases/CX6-006-dashboard.yaml"
+  CX6-007: "phases/CX6-007-migrate.yaml"
+  CX6-008: "phases/CX6-008-cli.yaml"
