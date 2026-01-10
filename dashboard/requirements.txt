@@ -1,0 +1,25 @@
+# CORTEX Plan Viewer Dashboard - Python Dependencies
+# Phase 1: Backend API Infrastructure
+
+# FastAPI Framework
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# WebSocket Support
+websockets==12.0
+
+# CORS Middleware (included in FastAPI)
+# Static file serving (included in FastAPI)
+
+# Development Dependencies
+pytest==7.4.3
+pytest-asyncio==0.21.1
+httpx==0.25.2  # For testing async endpoints
+
+# File watching (Phase 3)
+watchdog==3.0.0
+
+# Optional: Production deployment
+# gunicorn==21.2.0
+# uvloop==0.19.0

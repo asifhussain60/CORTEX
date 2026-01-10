@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Plan Viewer Dashboard - Phase 1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: #a8b2d1;
+            margin-bottom: 30px;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 8px 16px;
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4caf50;
+            border-radius: 20px;
+            color: #4caf50;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        
+        .info {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .info h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .info p {
+            color: #a8b2d1;
+            line-height: 1.6;
+        }
+        
+        .endpoints {
+            list-style: none;
+            margin-top: 15px;
+        }
+        
+        .endpoints li {
+            padding: 8px;
+            margin: 5px 0;
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 3px solid #667eea;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🛡️ CORTEX Dashboard</h1>
+        <p class="subtitle">Plan Viewer - Phase 1 Foundation</p>
+        
+        <div class="status">✅ API Server Online</div>
+        
+        <div class="info">
+            <h3>Phase 1: Backend API Infrastructure</h3>
+            <p>
+                Foundation layer complete! The FastAPI server is running with all core endpoints operational.
+                This is the START SMALL phase of the snowball strategy.
+            </p>
+        </div>
+        
+        <div class="info">
+            <h3>Available Endpoints:</h3>
+            <ul class="endpoints">
+                <li>GET /api/plan - Plan metadata</li>
+                <li>GET /api/progress - Progress snapshot</li>
+                <li>GET /api/audit-logs - Audit log entries</li>
+                <li>GET /api/tests - Test coverage metrics</li>
+                <li>GET /api/summary - Dashboard summary</li>
+                <li>GET /health - Health check</li>
+                <li>WS /ws - WebSocket (real-time updates)</li>
+            </ul>
+        </div>
+        
+        <div class="info">
+            <h3>API Documentation:</h3>
+            <p>
+                Interactive API documentation available at:
+                <ul class="endpoints">
+                    <li><a href="/api/docs" style="color: #667eea;">/api/docs</a> - Swagger UI</li>
+                    <li><a href="/api/redoc" style="color: #667eea;">/api/redoc</a> - ReDoc</li>
+                </ul>
+            </p>
+        </div>
+        
+        <div class="info">
+            <h3>Next Steps:</h3>
+            <p>
+                Phase 2 will add the full dashboard UI with Tailwind CSS, glassmorphism theme,
+                and interactive components. Phase 3 adds live updates via WebSocket.
+            </p>
+        </div>
+        
+        <div class="footer">
+            <p>CORTEX 6.0 | Snowball Strategy | Phase 1 Complete ✅</p>
+            <p>Copyright © 2026 Asif Hussain. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
