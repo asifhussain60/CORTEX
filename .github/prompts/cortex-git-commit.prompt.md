@@ -1,6 +1,6 @@
 # CORTEX Git Commit Orchestrator
 
-**Version:** 1.0.0 | **Category:** Autonomous Git Operations | **Safety:** Maximum  
+**Version:** 1.1.0 | **Category:** Autonomous Git Operations | **Safety:** Maximum  
 **Purpose:** Deterministic, audit-driven Git workflow with zero tolerance for data loss  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
@@ -8,214 +8,154 @@
 
 ## 🎯 Mission
 
-Execute CORTEX "vacuum" workflow with mathematical determinism and complete auditability:
-1. **Stash** local changes with traceable metadata
-2. **Sync** from remote with intelligent merge
-3. **Validate** working tree against quality gates
-4. **Commit** with structured, intent-capturing message
-5. **Push** with verification
-6. **Clean** workspace to pristine state
-7. **Audit** all decisions and state transitions
+Execute CORTEX "vacuum" workflow with mathematical determinism and complete auditability. The orchestrator manages the complete lifecycle from stashing local changes through synchronization, validation, commit, push, and workspace cleanup. Every decision is logged with correlation tracking for full auditability.
 
-**Invariant:** Repository ends in clean, synchronized, auditable state with zero ambiguity.
+The workflow guarantees the repository ends in a clean, synchronized, auditable state with zero ambiguity.
 
 ---
 
 ## 🛡️ Safety-First Principles
 
-### P1: No Data Loss Ever
-- **All local changes** preserved in named, timestamped stash
-- **All stash operations** logged with hash before/after
-- **Merge conflicts** resolved via explicit rules, never heuristically
-- **Destructive operations** (delete, overwrite) require explicit justification
+The orchestrator operates under four core safety principles:
 
-### P2: Explainable Decisions
-- Every file classification (add, ignore, delete) has documented reason
-- Merge resolution shows evidence (test status, security score, docs)
-- Audit log traces every state transition with correlation ID
+**P1: No Data Loss Ever** - All local changes are preserved in named, timestamped stashes. Merge conflicts are resolved via explicit rules with documented evidence. Destructive operations require explicit justification.
 
-### P3: Idempotent Execution
-- Running twice produces identical result
-- Intermediate failures leave breadcrumbs for recovery
-- All operations check preconditions before execution
+**P2: Explainable Decisions** - Every file classification and merge resolution includes documented reasoning with evidence from tests, security scans, architectural consistency checks, and documentation quality.
 
-### P4: Zero Ambiguity
-- Untracked files handled deterministically (no "manual review" escape hatch)
-- Conflicts resolved by rules, not human intervention
-- Success criteria defined upfront, not discovered during execution
+**P3: Idempotent Execution** - Running the workflow multiple times produces identical results. Intermediate failures leave breadcrumbs for recovery. All operations validate preconditions before execution.
+
+**P4: Zero Ambiguity** - Untracked files are handled deterministically through classification rules. Conflicts are resolved by evidence-based rules, not heuristics. Success criteria are defined upfront.
 
 ---
 
 ## 📋 Execution Pipeline
 
+The orchestrator executes nine stages in sequence, with each stage validating preconditions before proceeding. Stages can be skipped if their preconditions indicate no action is needed.
+
 ### Stage 0: Precondition Check
-```yaml
-Required State:
-  - Git repository initialized
-  - Remote configured (origin)
-  - Current branch known
-  - Working directory exists
 
-Verify:
-  - .git/config exists
-  - `git remote -v` shows origin
-  - `git branch --show-current` succeeds
-  - No active rebase/merge in progress
-
-Failure Mode: ABORT with diagnostic message
-```
+Verifies the repository is in a valid state for operations. Confirms git initialization, remote configuration (origin), current branch identification, and absence of active rebase or merge operations. Failure at this stage aborts the entire workflow with a diagnostic message.
 
 ### Stage 1: Stash Local Changes
-```yaml
-Operation: Stash with Metadata
 
-Steps:
-  1. Generate stash name:
-     Format: "cortex-vacuum-{timestamp}-{correlation_id}"
-     Example: "cortex-vacuum-20260110T153045Z-a7f3b21c"
-  
-  2. Capture pre-stash state:
-     - HEAD commit hash
-     - Working tree status (modified, deleted, untracked)
-     - Staged changes
-  
-  3. Execute stash:
-     Command: git stash push -u -m "{stash_name}" --include-untracked
-     Flags: -u (include untracked), -m (message)
-  
-  4. Verify stash created:
-     Command: git stash list | grep "{stash_name}"
-     Confirm: Stash reference exists
-  
-  5. Log to audit:
-     Event: STASH_CREATED
-     Data: {stash_name, pre_hash, file_count, correlation_id}
-
-Success Criteria:
-  - Stash exists in `git stash list`
-  - Working tree clean (`git status --porcelain` empty)
-  - Audit entry written
-
-Failure Mode: ABORT - cannot proceed without clean working tree
-```
+Creates a named stash with format "cortex-vacuum-{timestamp}-{correlation_id}" to preserve all local changes including untracked files. Captures pre-stash state (HEAD hash, working tree status, staged changes) and logs to audit trail. If working tree is already clean, this stage is skipped.
 
 ### Stage 2: Sync from Remote
-```yaml
-Operation: Fetch + Pull with Intelligent Merge
 
-Steps:
-  1. Fetch from remote:
-     Command: git fetch origin
-     Capture: Remote branch HEADs
-  
-  2. Analyze divergence:
-     Local: git rev-parse HEAD
-     Remote: git rev-parse origin/{current_branch}
-     Check: Are we behind? Ahead? Diverged?
-  
-  3. Execute pull:
-     Command: git pull origin {current_branch} --no-ff
-     Strategy: Merge (not rebase, preserves history)
-  
-  4. Handle merge conflicts:
-     If conflicts exist:
-       - Enumerate conflicted files: `git diff --name-only --diff-filter=U`
-       - For each file, resolve via Value-Based Rules (see Stage 2.1)
-       - Stage resolved files: `git add {file}`
-       - Complete merge: `git commit --no-edit`
-  
-  5. Log to audit:
-     Event: SYNC_COMPLETED
-     Data: {pre_hash, post_hash, files_merged, conflicts_resolved, strategy}
+Fetches from remote and analyzes divergence between local and remote branches. Executes merge using --no-ff strategy to preserve history. If merge conflicts occur, applies value-based resolution rules in priority order: test coverage, security posture, architectural consistency, documentation quality, and recency as tie-breaker. Unresolvable conflicts generate diagnostic reports and abort the workflow.
 
-Success Criteria:
-  - No merge conflicts remain
-  - Working tree clean
-  - Local ahead of remote or equal
-  - Audit entry written
+### Stage 2.1: Value-Based Conflict Resolution
 
-Failure Mode: Unresolvable conflict → create diagnostic report, ABORT
-```
+Applies five evidence-based rules in strict priority order to resolve merge conflicts:
 
-#### Stage 2.1: Value-Based Conflict Resolution
-```yaml
-Resolution Rules (Applied in Order):
+- **Rule 1: Test Coverage Wins** - Choose version with passing tests and higher coverage percentage
+- **Rule 2: Security Posture Wins** - Choose version without security warnings from Bandit scans
+- **Rule 3: Architectural Consistency Wins** - Choose version following CORTEX patterns (proper imports, DI, tier structure)
+- **Rule 4: Documentation Wins** - Choose version with docstrings and type hints
+- **Rule 5: Recency Wins** - Choose newer commit as tie-breaker
 
-Rule 1: Test Coverage Wins
-  - If one version has passing tests, other doesn't → choose passing
-  - Evidence: pytest exit code, coverage percentage
-  - Log: TEST_COVERAGE_RESOLUTION
+Each resolution logs the applied rule, chosen version, and supporting evidence.
 
-Rule 2: Security Posture Wins
-  - If one version has security issues, other doesn't → choose secure
-  - Evidence: Bandit scan, known CVEs, audit logs
-  - Log: SECURITY_RESOLUTION
+### Stage 3: Reapply Stash
 
-Rule 3: Architectural Consistency Wins
-  - If one version follows CORTEX patterns, other doesn't → choose consistent
-  - Evidence: Imports from src.orchestrators, uses DI, follows tier structure
-  - Log: ARCHITECTURE_RESOLUTION
-
-Rule 4: Documentation Wins
-  - If one version has docstrings/type hints, other doesn't → choose documented
-  - Evidence: Docstring presence, type annotation coverage
-  - Log: DOCUMENTATION_RESOLUTION
-
-Rule 5: Recency Wins (Tie-Breaker)
-  - If both versions equal on above criteria → choose newer timestamp
-  - Evidence: Git commit date
-  - Log: RECENCY_RESOLUTION
-
-Unresolvable: Both versions fail all criteria
-  - Create conflict report: {file, rule_results, manual_review_required}
-  - ABORT with diagnostic
-
-Audit Requirement:
-  - Each resolution logs: {file, rule_applied, chosen_version, evidence}
-```
-
-### Stage 3: Reapply Stash (Selective)
-```yaml
-Operation: Semantic Stash Reapplication
-
-Steps:
-  1. Retrieve stash:
-     Command: git stash list | grep "cortex-vacuum"
-     Get: Most recent CORTEX stash reference
-  
-  2. Analyze stash contents:
-     Command: git stash show -p stash@{n}
-     Extract: Changed files, line-level diffs
-  
-  3. Semantic conflict check:
-     For each stashed file:
-       - Does it conflict with remote changes?
-       - If yes, apply Value-Based Rules (Stage 2.1)
-       - If no, apply directly
-  
-  4. Apply stash:
-     Command: git stash apply stash@{n}
-     Handle conflicts: Use Value-Based Rules
-  
-  5. Cleanup stash:
-     If application successful:
-       Command: git stash drop stash@{n}
-     Else:
-       Keep stash, log failure
-  
-  6. Log to audit:
-     Event: STASH_REAPPLIED
-     Data: {stash_name, files_applied, conflicts_resolved, stash_dropped}
-
-Success Criteria:
-  - All stash changes integrated or resolved
-  - Working tree dirty (local changes restored)
-  - Audit entry written
-
-Failure Mode: Stash conflicts unresolvable → create diagnostic, keep stash
-```
+Retrieves the most recent cortex-vacuum stash and analyzes its contents. Performs semantic conflict checking against remote changes and applies value-based rules if conflicts exist. Successfully applied stashes are dropped; failed stash applications preserve the stash and log failure details.
 
 ### Stage 4: Validate Working Tree
+
+Enforces CORE-023 quality gates on changed files:
+
+- **Python files**: Syntax check, lint with ruff, format with black, type check with mypy
+- **YAML files**: Schema validation with yamllint, parse verification
+- **HTML files**: HTML5 validation, WCAG AA accessibility, link checking
+- **Tests**: Run unit tests with pytest, enforce 80% coverage threshold
+- **Security**: Bandit scan, secrets detection
+
+Any gate failure generates a detailed report and aborts the workflow.
+
+### Stage 5: Commit with Structured Message
+
+Analyzes changed files to generate a structured commit message following conventional commit format: {type}({scope}): {subject} with detailed body and footer containing AC-IDs, breaking changes, and references. Commit types include feat, fix, docs, refactor, test, chore, perf, and ci. Stages all changes and creates the commit.
+
+### Stage 6: Push to Remote
+
+Verifies local is ahead of remote before pushing. Executes push with verbose output and verifies synchronization by confirming local HEAD matches remote HEAD. If push is rejected due to divergence, fetches, merges, and retries up to three times.
+
+### Stage 7: Clean Workspace
+
+Deterministically classifies all untracked files using four categories:
+
+- **Required (Auto-Add)**: Python source, config files, docs, tests
+- **Ignorable (Auto-Ignore)**: Cache files, IDE artifacts, OS files, build outputs
+- **Disposable (Auto-Delete)**: Test artifacts, generated files, empty directories
+- **Ambiguous (Error)**: Files not matching any rule trigger abort
+
+Updates .gitignore with timestamped comments for ignored files.
+
+### Stage 8: Final Validation
+
+Executes comprehensive repository health check:
+
+- Confirms clean working tree (git status --porcelain empty)
+- Verifies no pending cortex-vacuum stashes
+- Validates local and remote HEAD are synchronized
+- Runs smoke tests to verify basic functionality
+- Confirms complete audit trail with correlation ID
+
+Any check failure generates diagnostic alert but does not abort (workflow already complete).
+
+---
+
+## 🔄 Machine Alignment Protocol
+
+When pulling changes on a different machine to continue plan implementation, follow this alignment sequence to ensure consistent state:
+
+### Pre-Pull Alignment Check
+
+Before pulling changes, verify local machine state:
+
+- Confirm Python environment matches project requirements (check .venv activation, package versions)
+- Verify all CORTEX dependencies installed (requirements.txt synchronized)
+- Check branch alignment (current branch matches target branch on remote)
+- Validate no uncommitted local work conflicts with incoming changes
+
+### Pull and Synchronization
+
+Execute fetch and pull operations with merge strategy (not rebase) to preserve complete history. If divergence exists between local and remote, the value-based conflict resolution rules automatically apply. Local changes should be stashed before pull if working tree is dirty.
+
+### Post-Pull Validation
+
+After successful pull, validate the machine is ready for plan continuation:
+
+- **Environment Check**: Verify Python interpreter, virtual environment, and package versions match requirements
+- **Brain State Sync**: Confirm cortex-brain/ tier files (governance, tracking, AC registry) are current
+- **Dependency Verification**: Run pip check to ensure no broken dependencies
+- **Configuration Alignment**: Verify .github/prompts/ and cortex-brain/config/ are synchronized
+- **Test Baseline**: Run smoke tests to confirm basic functionality before resuming work
+
+### State File Verification
+
+Critical state files must be verified for consistency:
+
+- **progress-tracker.json**: Check active_epic, current_phase, current_todo match expectations
+- **AC-INDEX.yaml**: Verify AC-ID registry is complete and no orphaned references exist
+- **core-rules.yaml**: Confirm all 23 SKULL rules present and enforcement hooks active
+
+If any state file is corrupted or stale, regenerate from git history or abort until resolved.
+
+### Plan Continuation Readiness
+
+Confirm readiness to resume plan implementation:
+
+- Review TODO list in progress-tracker.json to understand current position in workflow
+- Verify previous stage outputs exist (generated files, test results, artifacts)
+- Check audit trail for correlation IDs linking to previous work
+- Validate no blockers or failures recorded in tracking state
+
+Only proceed with plan implementation after all alignment checks pass. Misaligned state will cause cascading failures and corrupt the audit trail.
+
+---
+
+## 🚨 Failure Modes & Recovery
 ```yaml
 Operation: Quality Gate Enforcement
 
@@ -507,375 +447,132 @@ stages:
   - stage: 1
     name: "Stash Local Changes"
     status: "passed"
-    timestamp: "2026-01-10T15:30:47Z"
-    data:
-      stash_name: "cortex-vacuum-20260110T153045Z-a7f3b21c"
-      pre_hash: "abc123def456"
-      files_stashed: 12
-      stash_reference: "stash@{0}"
-  
-  - stage: 2
-    name: "Sync from Remote"
-    status: "passed"
-    timestamp: "2026-01-10T15:31:03Z"
-    data:
-      pre_hash: "abc123def456"
-      post_hash: "def789ghi012"
-      files_merged: 5
-      conflicts_resolved: 2
-      resolution_rules:
-        - file: "src/orchestrators/core/master.py"
-          rule: "TEST_COVERAGE_RESOLUTION"
-          chosen: "remote"
-          evidence: "remote has 95% coverage, local 80%"
-        - file: "src/infrastructure/audit.py"
-          rule: "SECURITY_RESOLUTION"
-          chosen: "local"
-          evidence: "local has no Bandit warnings, remote has 1"
-  
-  - stage: 3
-    name: "Reapply Stash"
-    status: "passed"
-    timestamp: "2026-01-10T15:31:15Z"
-    data:
-      stash_name: "cortex-vacuum-20260110T153045Z-a7f3b21c"
-      files_applied: 12
-      conflicts_resolved: 0
-      stash_dropped: true
-  
-  - stage: 4
-    name: "Validate Working Tree"
-    status: "passed"
-    timestamp: "2026-01-10T15:31:45Z"
-    data:
-      files_validated: 12
-      gates_passed:
-        - python_syntax: true
-        - python_lint: true
-        - python_format: true
-        - yaml_schema: true
-        - html_validation: true
-        - tests: true
-        - security: true
-      coverage_percentage: 87.3
-  
-  - stage: 5
-    name: "Commit with Structured Message"
-    status: "passed"
-    timestamp: "2026-01-10T15:31:52Z"
-    data:
-      commit_hash: "ghi345jkl678"
-      message: "feat(git): Add autonomous vacuum workflow orchestrator"
-      files_changed: 12
-      insertions: 543
-      deletions: 87
-      ac_ids: ["AC-GIT-001", "AC-GIT-002", "AC-AUDIT-008"]
-  
-  - stage: 6
-    name: "Push to Remote"
-    status: "passed"
-    timestamp: "2026-01-10T15:32:05Z"
-    data:
-      local_hash: "ghi345jkl678"
-      remote_hash: "ghi345jkl678"
-      commits_pushed: 1
-  
-  - stage: 7
-    name: "Clean Workspace"
-    status: "passed"
-    timestamp: "2026-01-10T15:32:08Z"
-    data:
-      files_added: 2
-      files_ignored: 5
-      files_deleted: 3
-      ambiguous_count: 0
-      gitignore_rules_added:
-        - rule: "*.pyc"
-          reason: "Python bytecode"
-        - rule: "__pycache__/"
-          reason: "Python cache directory"
-  
-  - stage: 8
-    name: "Final Validation"
-    status: "passed"
-    timestamp: "2026-01-10T15:32:12Z"
-    data:
-      checks_passed:
-        - git_status_clean: true
-        - stash_empty: true
-        - remote_synced: true
-        - smoke_tests: true
-        - audit_chain_complete: true
 
-guarantees_upheld:
-  - "No data loss: All local changes preserved and reapplied"
-  - "Zero ambiguity: All files classified deterministically"
-  - "Audit trail: Complete provenance with correlation ID"
-  - "Quality gates: All validations passed"
-  - "Clean state: Repository pristine and synchronized"
-
-hashes:
-  initial_head: "abc123def456"
-  after_sync: "def789ghi012"
-  after_commit: "ghi345jkl678"
-  final_remote: "ghi345jkl678"
-```
+The orchestrator maintains a comprehensive audit log with correlation ID tracking for full traceability. Each stage logs its status, timestamp, and relevant data including hashes, file counts, resolution rules applied, and evidence used for decisions. The log structure captures guarantees upheld (no data loss, zero ambiguity, complete audit trail, clean state) and tracks hash transitions from initial HEAD through sync, commit, and final remote state.
 
 ---
 
 ## 🚨 Failure Modes & Recovery
 
-### Mode 1: Stash Failure
-**Symptom:** Cannot create stash (working tree conflicts)  
-**Recovery:**
-1. Enumerate conflicted files: `git status --porcelain`
-2. Create manual backup: `cp {file} {file}.backup`
-3. Reset conflicts: `git reset --hard HEAD`
-4. Retry stash with backups
-5. Log: STASH_RECOVERY_TRIGGERED
+The orchestrator handles five primary failure scenarios with explicit recovery procedures:
 
-### Mode 2: Unresolvable Merge Conflict
-**Symptom:** Value-based rules cannot determine winner  
-**Recovery:**
-1. Create conflict report: `{file, both_versions, rule_results}`
-2. Export to: `cortex-brain/documents/git-conflicts/{timestamp}.yaml`
-3. Abort merge: `git merge --abort`
-4. Restore stash: `git stash apply stash@{n}`
-5. Log: MERGE_ABORTED_UNRESOLVABLE
-6. Alert: Require manual intervention
+**Mode 1: Stash Failure** - When stash creation fails due to working tree conflicts, the system enumerates conflicted files, creates manual backups, resets conflicts, and retries stash creation while logging STASH_RECOVERY_TRIGGERED.
 
-### Mode 3: Quality Gate Failure
-**Symptom:** Tests fail, lint errors, security issues  
-**Recovery:**
-1. Generate detailed report: `{gate, file, error, line_number}`
-2. Export to: `cortex-brain/documents/validation-failures/{timestamp}.yaml`
-3. Unstage changes: `git reset HEAD`
-4. Restore stash: Keep stashed changes safe
-5. Log: VALIDATION_FAILED_ABORT
-6. Alert: Fix issues before retry
+**Mode 2: Unresolvable Merge Conflict** - When value-based rules cannot determine a winner, the system creates a detailed conflict report with both versions and rule results, exports to cortex-brain/documents/git-conflicts/, aborts the merge, restores the stash, and requires manual intervention.
 
-### Mode 4: Push Rejected
-**Symptom:** Remote has diverged (non-fast-forward)  
-**Recovery:**
-1. Fetch remote: `git fetch origin`
-2. Analyze divergence: `git log HEAD..origin/{branch}`
-3. Return to Stage 2: Re-merge with latest remote
-4. Retry push (max 3 attempts)
-5. Log: PUSH_RETRY_TRIGGERED
+**Mode 3: Quality Gate Failure** - When tests fail or lint/security issues are detected, the system generates a detailed report with gate, file, error, and line number, exports to cortex-brain/documents/validation-failures/, unstages changes, preserves the stash, and requires fixes before retry.
 
-### Mode 5: Ambiguous Untracked Files
-**Symptom:** Files don't match any classification rule  
-**Recovery:**
-1. Enumerate ambiguous: `git ls-files --others --exclude-standard`
-2. Export list: `cortex-brain/documents/ambiguous-files/{timestamp}.yaml`
-3. Provide classification template
-4. Log: AMBIGUOUS_FILES_DETECTED
-5. Alert: Require manual classification
+**Mode 4: Push Rejected** - When remote has diverged (non-fast-forward), the system fetches remote changes, analyzes divergence, returns to Stage 2 for re-merge, and retries push up to three times while logging PUSH_RETRY_TRIGGERED.
+
+**Mode 5: Ambiguous Untracked Files** - When files don't match any classification rule, the system enumerates ambiguous files, exports the list to cortex-brain/documents/ambiguous-files/, provides classification template, and requires manual classification before proceeding.
 
 ---
 
 ## 🎯 Success Criteria
 
-At completion, the following MUST be true:
+At workflow completion, these guarantees must hold:
 
-### Repository State
-- ✅ Working tree clean: `git status --porcelain` is empty
-- ✅ No pending stashes: `git stash list | grep cortex-vacuum` is empty
-- ✅ Fully synchronized: `HEAD == origin/{branch}`
-- ✅ All changes committed: No unstaged or untracked files
+**Repository State** - Working tree is clean with no pending stashes, fully synchronized with remote (local HEAD equals remote HEAD), and all changes committed with no unstaged or untracked files.
 
-### Quality Guarantees
-- ✅ All tests pass: pytest exit code 0
-- ✅ Coverage meets threshold: ≥80% (configurable)
-- ✅ No lint errors: ruff clean
-- ✅ No security issues: Bandit clean
-- ✅ Format consistent: black compliant
+**Quality Guarantees** - All tests pass with coverage meeting the 80% threshold (configurable), no lint errors from ruff, no security issues from Bandit, and consistent formatting per black standards.
 
-### Audit Trail
-- ✅ Complete log: All 8 stages recorded
-- ✅ Correlation ID: Links all operations
-- ✅ Evidence preserved: Conflict resolutions documented
-- ✅ Hashes captured: Before/after at each stage
+**Audit Trail** - Complete log of all stages with correlation ID linking operations, conflict resolutions documented with evidence, and hashes captured at each state transition.
 
-### Data Integrity
-- ✅ No loss: All local changes incorporated
-- ✅ Conflict resolution: All decisions explainable
-- ✅ File classification: All untracked files handled
-- ✅ Backup available: Stash preserved until success
+**Data Integrity** - No data loss with all local changes incorporated, all decisions explainable with documented reasoning, file classification deterministic, and stash preserved until successful completion.
 
 ---
 
 ## 🔧 Integration with CORTEX
 
-### Invocation from GitHub Copilot
-```bash
-# Via intent routing (preferred)
-python3 -m src.main "perform git vacuum workflow" --format markdown
+### Invocation Patterns
 
-# Direct orchestrator call
-python3 -m src.orchestrators.git.vacuum_orchestrator --auto-commit
+The orchestrator integrates with CORTEX through multiple invocation methods:
 
-# With custom options
-python3 -m src.orchestrators.git.vacuum_orchestrator \
-  --branch CORTEX6 \
-  --remote origin \
-  --coverage-threshold 85 \
-  --correlation-id {uuid}
-```
+- **Via intent routing** (preferred): Routes through src.main with pattern matching for "git vacuum", "commit workflow", "sync and commit", or "clean repo"
+- **Direct orchestrator call**: Executes src.orchestrators.git.vacuum_orchestrator with auto-commit flag
+- **Custom options**: Supports parameters for branch, remote, coverage threshold, and correlation ID
 
-### Routing Pattern
-```yaml
-pattern: "git vacuum|commit workflow|sync and commit|clean repo"
-orchestrator: "Git Vacuum Orchestrator"
-mode: autonomous
-priority: 50
-ac_ids: ["AC-GIT-001", "AC-GIT-002", "AC-GIT-003", "AC-AUDIT-008"]
-```
+### Routing Configuration
 
-### Governance Rules Applied
-- **CORE-001:** Incremental execution (stages 1-8)
-- **CORE-005:** Portable paths (cross-platform Git)
-- **CORE-008:** TDD enforcement (Stage 4 tests)
-- **CORE-017:** Governance enforcement (quality gates)
-- **CORE-023:** File validation (HTML, YAML, Python)
+Pattern matching assigns priority 50 with autonomous mode enabled. Associated AC-IDs include AC-GIT-001 through AC-GIT-005 covering stash management, intelligent merge, workspace hygiene, quality enforcement, and audit trail.
+
+### Governance Integration
+
+The orchestrator enforces CORTEX SKULL rules:
+
+- **CORE-001**: Incremental execution through 8 discrete stages
+- **CORE-005**: Portable paths ensuring cross-platform Git compatibility
+- **CORE-008**: TDD enforcement during validation stage
+- **CORE-017**: Governance enforcement through quality gates
+- **CORE-023**: File type-specific validation for HTML, YAML, and Python
 
 ### Audit Integration
-- Logger: `EnterpriseAuditLogger`
-- Category: `GIT_OPERATIONS`
-- Levels: INFO (success), WARNING (retry), ERROR (abort)
-- Retention: 60 days (operational category)
-- Query: `audit query --category GIT_OPERATIONS --correlation-id {uuid}`
+
+Logs to EnterpriseAuditLogger under GIT_OPERATIONS category with INFO level for success, WARNING for retry attempts, and ERROR for abort conditions. Retention is 60 days for operational queries. All logs are queryable by correlation ID for complete traceability.
 
 ---
 
 ## 📈 Metrics & Observability
 
-### Key Metrics
-- **Execution Time:** Total duration (target: <2 minutes)
-- **Conflict Rate:** Merge conflicts per execution (target: <10%)
-- **Quality Gate Pass Rate:** First-time validation success (target: >95%)
-- **File Classification Accuracy:** Auto-classified vs ambiguous (target: >98%)
-- **Data Loss Rate:** Lost changes per execution (target: 0%)
+Key performance indicators track orchestrator effectiveness:
 
-### Monitoring Queries
-```bash
-# Execution time trend
-python3 -m src.main "audit query --category GIT_OPERATIONS --field duration --last 7d"
+- **Execution Time**: Target under 2 minutes for complete workflow
+- **Conflict Rate**: Target under 10% merge conflicts per execution
+- **Quality Gate Pass Rate**: Target over 95% first-time validation success
+- **File Classification Accuracy**: Target over 98% auto-classified vs ambiguous
+- **Data Loss Rate**: Target 0% with zero tolerance policy
 
-# Conflict resolution patterns
-python3 -m src.main "audit query --category GIT_OPERATIONS --field resolution_rules --last 30d"
-
-# Quality gate failures
-python3 -m src.main "audit query --category GIT_OPERATIONS --level WARNING --field gate --last 7d"
-```
+Monitoring queries support trend analysis for execution duration, conflict resolution patterns, and quality gate failures over configurable time windows.
 
 ---
 
 ## 🎓 Learning Integration
 
-### Tier 3 Knowledge Capture
-After each execution, update learned patterns:
+The orchestrator feeds Tier 3 knowledge capture for continuous improvement. After each execution, learned patterns are documented with pattern ID, name, context, resolution strategy, evidence, confidence score, and timestamp. Patterns are stored in cortex-brain/tier3/patterns/git-operations.yaml.
 
-```yaml
-pattern_id: "GIT-PATTERN-001"
-name: "Frequent Test Coverage Conflicts"
-context: "src/orchestrators/core/*.py files often conflict during sync"
-resolution: "Remote version wins if coverage ≥90%, else local"
-evidence: "15 executions, 100% success rate"
-confidence: 0.95
-updated: "2026-01-10T15:32:12Z"
-```
-
-Location: `cortex-brain/tier3/patterns/git-operations.yaml`
-
-### Adaptation Rules
-- If conflict resolution rule fails >5% → escalate to manual review
-- If ambiguous file appears >3 times → add to classification rules
-- If quality gate fails >10% → adjust thresholds
-- If execution time >3 minutes → optimize bottleneck stages
+Adaptation rules trigger on pattern thresholds. If conflict resolution rules fail above 5%, the system escalates to manual review. If ambiguous files appear more than three times, they are added to classification rules. Quality gate thresholds adjust if failure rates exceed 10%. Execution time optimization targets bottleneck stages when duration exceeds 3 minutes.
 
 ---
 
 ## 🔐 Security Considerations
 
-### Secret Protection
-- **Never commit:** API keys, passwords, tokens
-- **Pre-commit hook:** Scan with detect-secrets
-- **Stash encryption:** Optional for sensitive repos
-- **Audit redaction:** Mask credentials in logs
+The orchestrator implements comprehensive security controls:
 
-### Access Control
-- **Repository permissions:** Verified via Git config
-- **Remote authentication:** Use SSH keys or tokens
-- **Stash access:** Limited to current user
-- **Audit logs:** Read-only for non-admin
+**Secret Protection** - Never commits API keys, passwords, or tokens. Pre-commit hooks scan with detect-secrets. Optional stash encryption for sensitive repositories. Audit logs mask credentials.
 
-### Compliance
-- **GDPR:** No PII in commit messages or logs
-- **SOC 2:** Complete audit trail for all operations
-- **PCI DSS:** No card data in repository
-- **HIPAA:** No PHI in commit history
+**Access Control** - Repository permissions verified via Git config. Remote authentication uses SSH keys or tokens. Stash access limited to current user. Audit logs are read-only for non-admin users.
+
+**Compliance** - GDPR compliance ensures no PII in commit messages or logs. SOC 2 compliance maintains complete audit trail for all operations. PCI DSS compliance prohibits card data in repository. HIPAA compliance prohibits PHI in commit history.
 
 ---
 
 ## 📚 References
 
-### CORTEX Core
-- `.github/copilot-instructions.md` → Entry point, routing protocol
-- `cortex-brain/tier0/governance/core-rules.yaml` → SKULL rules
-- `cortex-brain/response-templates-v4.yaml` → Output formatting
+### CORTEX Core Integration
+- `.github/copilot-instructions.md`: Entry point and routing protocol
+- `cortex-brain/tier0/governance/core-rules.yaml`: 23 SKULL rules
+- `cortex-brain/response-templates-v4.yaml`: Output formatting standards
 
-### Implementation
-- `src/orchestrators/git/vacuum_orchestrator.py` → Main executor
-- `src/infrastructure/enhanced_audit_logger.py` → Audit logging
-- `src/governance/enforcement_engine.py` → Quality gates
-- `src/tools/git_operations.py` → Low-level Git wrappers
+### Implementation Components
+- `src/orchestrators/git/vacuum_orchestrator.py`: Main executor
+- `src/infrastructure/enhanced_audit_logger.py`: Audit logging infrastructure
+- `src/governance/enforcement_engine.py`: Quality gate enforcement
+- `src/tools/git_operations.py`: Low-level Git operation wrappers
 
-### Related AC-IDs
-- **AC-GIT-001:** Stash with metadata
-- **AC-GIT-002:** Value-based merge resolution
-- **AC-GIT-003:** Deterministic file classification
-- **AC-AUDIT-008:** Git operation logging
-- **AC-CLEAN-001:** Workspace cleanup rules
-
----
-
-## 🎯 Acceptance Criteria
-
-### AC-GIT-001: Safe Stash Management
-- [x] Named stash with correlation ID
-- [x] Pre-stash state captured (hash, file list)
-- [x] Stash verified before proceeding
-- [x] Audit log entry with metadata
-
-### AC-GIT-002: Intelligent Merge
-- [x] Value-based conflict resolution (5 rules)
-- [x] Evidence-driven decisions (tests, security, docs)
-- [x] Unresolvable conflicts create diagnostic report
-- [x] Audit log with resolution rationale
-
-### AC-GIT-003: Workspace Hygiene
-- [x] Untracked files classified (add, ignore, delete)
-- [x] .gitignore updated with comments
-- [x] No ambiguous files remain
-- [x] Audit log with file actions
-
-### AC-GIT-004: Quality Enforcement
-- [x] Type-specific validation (Python, YAML, HTML)
-- [x] Test coverage ≥ threshold
-- [x] Security scan passes
-- [x] Validation failures create detailed report
-
-### AC-GIT-005: Audit Trail
-- [x] All 8 stages logged with correlation ID
-- [x] Hashes captured at each transition
-- [x] Conflict resolutions with evidence
-- [x] Queryable via correlation ID
+### Related Acceptance Criteria
+- **AC-GIT-001**: Safe stash management with metadata and audit logging
+- **AC-GIT-002**: Value-based merge resolution with evidence tracking
+- **AC-GIT-003**: Deterministic file classification with documented reasoning
+- **AC-GIT-004**: Quality enforcement through type-specific validation gates
+- **AC-GIT-005**: Complete audit trail with correlation ID and hash tracking
+- **AC-AUDIT-008**: Git operation logging to EnterpriseAuditLogger
+- **AC-CLEAN-001**: Workspace cleanup rules and file classification
 
 ---
 
 **Version History:**
 - 1.0.0: Initial production-grade Git orchestration prompt with deterministic workflow, value-based conflict resolution, and complete audit integration
+- 1.1.0: Reduced verbosity, added machine alignment protocol for multi-machine plan continuation, removed code snippets in favor of clear prose descriptions
 
 ---
 
