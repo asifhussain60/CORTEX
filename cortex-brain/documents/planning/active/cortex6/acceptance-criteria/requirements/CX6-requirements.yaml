@@ -16,10 +16,11 @@
 
 metadata:
   document_type: finalized_requirements
-  version: 1.0.0
+  version: 1.1.0
   status: FINALIZED
   dor_status: COMPLETE
   created: 2026-01-09T18:00:00Z
+  updated: 2026-01-09T20:30:00Z
   author: Asif Hussain
   
   clarification_sessions:
@@ -46,8 +47,23 @@ metadata:
       decisions: 4
       topic: "Plan Viewer Dashboard (plan-viewer.html) DoR"
       
-  total_decisions: 18
+    session_5:
+      date: 2026-01-09T20:30:00Z
+      questions: [Q21]
+      decisions: 1
+      topic: "Dashboard Integration Approach (Option A vs Option B)"
+      outcome: "Option A (Integrated) selected"
+      
+  total_decisions: 19
   ambiguity_level: 0  # Zero ambiguity achieved
+  
+  changelog:
+    v1.1.0:
+      date: 2026-01-09T20:30:00Z
+      changes:
+        - "SR-008: Updated with Option A (Integrated) implementation approach"
+        - "Q21: Added decision rationale for integrated dashboard"
+        - "Archived standalone plan: PLAN-VIEWER-DASHBOARD-STANDALONE.yaml"
   execution_readiness: true
 
   dor_decisions:
@@ -200,13 +216,20 @@ strategic_requirements:
   
   SR-008:
     id: SR-008
-    name: Interactive Plan Viewer Dashboard
+    name: Interactive Plan Viewer Dashboard (OPTION A - INTEGRATED)
     priority: HIGH
+    implementation_approach: "OPTION_A_INTEGRATED"
     description: |
+      ✅ **OPTION A SELECTED**: Dashboard integrated into Planning Orchestrator v6
+      
       Real-time, interactive dashboard for plan execution monitoring with
       audit log evidence, test coverage metrics, and live progress updates.
       Served on localhost:8000 with auto-refresh and modern glassmorphism UI.
+      
+      Dashboard is embedded in plan generation workflow and auto-generated
+      in the plan's dashboard/ folder alongside other artifacts.
     acceptance_criteria:
+      - Dashboard auto-generated in {plan}/dashboard/ folder during plan creation
       - FastAPI server serves dashboard on localhost:8000
       - Real-time updates via WebSocket (<500ms latency)
       - Audit log viewer with filtering and pagination
@@ -214,24 +237,42 @@ strategic_requirements:
       - Glassmorphism dark theme with Tailwind CSS
       - Integrated with Planning Orchestrator (auto-generation)
       - Performance SLAs met (page load <2s, memory <200MB)
+      - Single source of truth: dashboard reads from plan's tracking/ folder
     technical_details:
       frontend: "HTML5 SPA with Tailwind CSS and Vanilla JS"
       backend: "FastAPI with WebSocket support"
-      data_sources: "progress-tracker.json, audit-logs/*.jsonl, tests/"
+      data_sources: "tracking/progress-tracker.json, audit-logs/*.jsonl, tests/"
       deployment: "localhost:8000 (development), Docker (production)"
       architecture:
-        generation: "Static HTML generated once at plan creation (Q17)"
+        generation: "Static HTML generated once at plan creation in dashboard/ folder (Q17)"
         launch: "Manual launch by default, --dashboard-launch flag optional (Q18)"
         execution: "Foreground server (Ctrl+C to stop), --daemon flag optional (Q19)"
         updates: "WebSocket push updates (no polling, <100ms latency) (Q20)"
+        integration: "Planning Orchestrator v6 generates dashboard/ folder with index.html, app.js, styles.css"
+        folder_structure: |
+          {plan-name}/
+          ├── dashboard/
+          │   ├── index.html (SPA entry point)
+          │   ├── app.js (dashboard logic)
+          │   ├── styles.css (Tailwind + glassmorphism theme)
+          │   └── api.py (FastAPI server)
+          ├── tracking/
+          │   └── progress-tracker.json (live data source)
+          └── artifacts/ (other plan files)
     implementation:
       phases:
-        - "Phase 1: Backend API (4-5h)"
-        - "Phase 2: Frontend SPA (6-8h)"
-        - "Phase 3: Orchestrator Integration (3-4h)"
-        - "Phase 4: Polish & Deployment (3-4h)"
+        - "Phase 1: Backend API (4-5h) - api.py in dashboard/"
+        - "Phase 2: Frontend SPA (6-8h) - index.html + app.js + styles.css"
+        - "Phase 3: Orchestrator Integration (3-4h) - Planning Orchestrator v6 generates dashboard/"
+        - "Phase 4: Polish & Deployment (3-4h) - Launch scripts + testing"
       total_effort: "16-20 hours"
     rationale: |
+      ✅ **OPTION A ADVANTAGES:**
+      - Dashboard co-located with plan (single folder, easy to find)
+      - Automatically generated (no manual setup per plan)
+      - Self-contained (dashboard/ folder has all assets)
+      - Easy to share (copy plan folder = copy dashboard)
+      
       Developers and stakeholders need visual feedback on plan execution progress,
       audit trail evidence, and test coverage metrics. Dashboard provides
       transparency and real-time visibility into CORTEX 6.0 build progress.
@@ -240,7 +281,14 @@ strategic_requirements:
       - "Q18: Manual launch default, --dashboard-launch flag for auto-open browser"
       - "Q19: Foreground server default (see logs), --daemon flag for background"
       - "Q20: WebSocket push (no polling) for <100ms real-time updates"
-    plan_reference: "artifacts/PLAN-VIEWER-DASHBOARD-PLAN.yaml"
+      - "Q21: Option A (integrated) selected over Option B (standalone utility)"
+    decision_rationale: |
+      User selected Option A (integrated) over Option B (standalone) for:
+      1. Simpler deployment (embedded in plan folder)
+      2. Automatic generation (no manual setup)
+      3. Single source of truth (dashboard reads from plan's tracking/)
+      4. Better discoverability (dashboard/ folder next to other plan artifacts)
+    plan_reference: "archive/requirements-consolidation-2026-01-09/PLAN-VIEWER-DASHBOARD-STANDALONE.yaml (archived)"
     stage: 3  # Features stage
     blocking: false
 
