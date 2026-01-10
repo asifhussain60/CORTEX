@@ -74,23 +74,29 @@ phase_1_foundation:
   priority: "CRITICAL"
   
   recommended_llm:
-    primary: "Claude Sonnet 4.5"
+    primary: "Claude Sonnet 4.5 (RECOMMENDED)"
     usage: "90% of operations"
     cost_efficiency: "1x (baseline)"
+    recommendation: "Optional - users can continue with Sonnet 4.5 for entire phase"
     rationale: |
       Best balance for production-grade infrastructure work:
-      - Extended context for 4-tier governance hierarchy
-      - Superior code generation for TDD cycles (RED→GREEN→REFACTOR)
-      - Excellent tool use for audit logging and evidence bundles
-      - Strong architectural reasoning for foundation design
+      ✅ Extended context window handles large governance ruleset merging (4-tier hierarchy)
+      ✅ Superior code generation for TDD-Master v1 implementation (RED→GREEN→REFACTOR cycles)
+      ✅ Excellent at following complex instructions - CORTEX routing protocol, SKULL rules enforcement
+      ✅ Tool use expertise - critical for audit logging, governance validation, evidence bundle generation
+      ✅ Strong architectural reasoning - needed for challenge protocol and debt detection
+    ideal_for: "Phase 1 (Foundation), complex AC-ID validation, multi-step workflows"
     
-    upgrade_to_opus: "Claude Opus 4.5 (10% of operations)"
-    upgrade_triggers:
-      - "Architectural decisions requiring deep analysis (e.g., hash chain design)"
-      - "Critical challenge protocol evaluations for foundation patterns"
-      - "Complex refactoring of CORTEX 5.5 governance into 6.0 model"
-      - "Performance optimization for audit infrastructure (<5ms requirement)"
-    upgrade_cost: "3x - use sparingly for critical decisions only"
+    optional_upgrade:
+      model: "Claude Opus 4.5"
+      usage: "10% of operations (optional)"
+      cost: "3x - use sparingly"
+      when_to_consider:
+        - "🧠 Architectural decisions requiring deep analysis (e.g., hash chain design, Knowledge Graph design)"
+        - "🔍 Critical challenge protocol evaluations - detecting subtle technical debt patterns"
+        - "🏗️ Refactoring legacy CORTEX 5.5 components into 6.0 governance model"
+        - "📊 Complex query optimization for audit trail analysis across correlation chains"
+      note: "Not required - Sonnet 4.5 handles 95%+ of foundation work effectively"
   
   description: |
     Build the core infrastructure that EVERY other component depends on.
@@ -267,24 +273,30 @@ phase_2_orchestration_core:
   priority: "CRITICAL"
   
   recommended_llm:
-    primary: "Claude Sonnet 4.5"
+    primary: "Claude Sonnet 4.5 (RECOMMENDED)"
     usage: "85% of operations"
     cost_efficiency: "1x (baseline)"
+    recommendation: "Optional - users can continue with Sonnet 4.5 for entire phase"
     rationale: |
       Optimal for orchestration core implementation:
-      - Handles complex MasterOrchestrator logic evaluation
-      - Excellent at TDD-Master workflow (RED→GREEN→REFACTOR)
-      - Strong tool use for TodoManager state persistence
-      - Good balance for Planning v5 context-aware generation
+      ✅ Best balance of cost/performance for production-grade orchestration
+      ✅ Handles complex MasterOrchestrator logic evaluation
+      ✅ Excellent at TDD-Master workflow (RED→GREEN→REFACTOR)
+      ✅ Strong tool use for TodoManager state persistence
+      ✅ Good balance for Planning v5 context-aware generation
+    ideal_for: "Phase 2 (Orchestration Core), MasterOrchestrator implementation, TDD cycles"
     
-    upgrade_to_opus: "Claude Opus 4.5 (15% of operations)"
-    upgrade_triggers:
-      - "MasterOrchestrator evaluation logic (central controller design)"
-      - "TodoManager dependency resolution algorithms"
-      - "TDD-Master evidence bundle validation gates"
-      - "Planning v5 risk assessment and dependency analysis"
-      - "STS golden corpus design (100 test intents)"
-    upgrade_cost: "3x - critical for core workflow correctness"
+    optional_upgrade:
+      model: "Claude Opus 4.5"
+      usage: "15% of operations (optional)"
+      cost: "3x"
+      when_to_consider:
+        - "🧠 MasterOrchestrator evaluation logic (central controller design)"
+        - "📊 TodoManager dependency resolution algorithms"
+        - "🎯 TDD-Master evidence bundle validation gates"
+        - "🔍 Planning v5 risk assessment and dependency analysis"
+        - "📋 STS golden corpus design (100 test intents)"
+      note: "Critical for core workflow correctness, but Sonnet 4.5 can handle most scenarios"
   
   description: |
     Establishes THE DEFAULT WORKING MECHANISM at the core of CORTEX operations.
@@ -455,25 +467,30 @@ phase_3_feature_orchestrators:
   priority: "HIGH"
   
   recommended_llm:
-    primary: "Claude Sonnet 4.5"
-    usage: "70% of operations"
+    primary: "Claude Sonnet 4.5 (RECOMMENDED)"
+    usage: "70-100% of operations"
     cost_efficiency: "1x (baseline)"
+    recommendation: "Continue with Sonnet 4.5 - snowball effect makes implementation easier"
     rationale: |
       Feature orchestrators are simpler due to snowball effect:
-      - Reuse foundation infrastructure (already built)
-      - Follow established patterns from core workflow
-      - Standard CRUD operations for ADO, cleanup, investigation
-      - Good for incremental feature implementation
+      ✅ Reuse foundation infrastructure (already built)
+      ✅ Follow established patterns from core workflow
+      ✅ Standard CRUD operations for ADO, cleanup, investigation
+      ✅ Good for incremental feature implementation
+    ideal_for: "Phase 3 (Feature Orchestrators), leveraging established infrastructure"
     
-    downgrade_to_haiku: "Claude Haiku 4.5 (30% of operations)"
-    downgrade_triggers:
-      - "Bulk cleanup operations (Vacuum processing 50+ files)"
-      - "Evidence bundle generation for completed orchestrators"
-      - "Simple validation checks (folder structure enforcement)"
-      - "Documentation generation (updating AC-INDEX.yaml)"
-      - "Todo management (parsing orchestrator outputs)"
-    downgrade_cost: "0.33x - significant cost savings for bulk work"
-    downgrade_note: "Haiku performs well when patterns are established"
+    optional_alternative:
+      model: "GPT-5 or Claude Haiku 4.5"
+      usage: "0-30% of operations (evaluate performance)"
+      cost: "GPT-5: 1x | Haiku: 0.33x"
+      when_to_consider:
+        - "⚡ Bulk cleanup operations (Vacuum processing 50+ files)"
+        - "📝 Evidence bundle generation for completed orchestrators"
+        - "✅ Simple validation checks (folder structure enforcement)"
+        - "📋 Documentation generation (updating AC-INDEX.yaml)"
+        - "🔄 Todo management (parsing orchestrator outputs)"
+      evaluation_note: "Test GPT-5 or Haiku for bulk operations; continue with Sonnet if quality issues arise"
+      avoid_for: "TDD-Master execution, governance merger logic, investigation orchestration"
   
   description: |
     Build specialized orchestrators that leverage the core workflow.
@@ -596,31 +613,35 @@ phase_4_intelligence:
   priority: "MEDIUM"
   
   recommended_llm:
-    primary: "Claude Opus 4.5"
-    usage: "40% of operations"
-    cost_efficiency: "3x (necessary for intelligence)"
+    primary: "Claude Sonnet 4.5 (RECOMMENDED)"
+    usage: "60-100% of operations"
+    cost_efficiency: "1x (baseline)"
+    recommendation: "Sonnet 4.5 handles most intelligence work; upgrade to Opus for critical architecture"
     rationale: |
-      Intelligence layer requires maximum reasoning capability:
-      - LLM Intent Classifier needs nuanced semantic understanding
-      - Knowledge Practices requires pattern extraction from audit logs
-      - Vision API integration needs complex architectural decisions
-      - Learning from operational history demands deep analysis
+      Sonnet 4.5 capabilities sufficient for intelligence implementation:
+      ✅ Test generation for intelligence features
+      ✅ Integration with existing orchestrators
+      ✅ Evidence bundle generation
+      ✅ Documentation and API design
+    ideal_for: "Phase 4 (Intelligence Layer) implementation after architecture decided"
     
-    fallback_to_sonnet: "Claude Sonnet 4.5 (60% of operations)"
-    fallback_triggers:
-      - "Implementation after architecture decided by Opus"
-      - "Test generation for intelligence features"
-      - "Integration with existing orchestrators"
-      - "Evidence bundle generation"
-      - "Documentation and API design"
+    optional_upgrade:
+      model: "Claude Opus 4.5"
+      usage: "0-40% of operations (for complex reasoning)"
+      cost: "3x - strategic investment"
+      when_to_consider:
+        - "🧠 Architectural decisions requiring deep analysis (e.g., Knowledge Graph design)"
+        - "🎯 LLM Intent Classifier training - requires nuanced semantic understanding"
+        - "📊 Knowledge Practices pattern extraction from audit logs"
+        - "🔍 Vision API integration architectural decisions"
+        - "📈 Learning algorithms for operational history analysis"
+      strategic_note: |
+        This is the ONLY phase where Opus may be beneficial for design.
+        Intelligence architecture impacts system behavior long-term.
+        However, Sonnet 4.5 can handle implementation after design decisions made.
     
-    avoid_haiku: true
-    avoid_reason: "Intelligence features require strong reasoning; Haiku insufficient for AI pattern work"
-    
-    upgrade_note: |
-      This is the ONLY phase where Opus is primary model.
-      Intelligence design decisions impact system behavior long-term.
-      Investment in Opus (3x cost) justified by avoiding rework.
+    avoid_alternatives: true
+    avoid_reason: "Intelligence features require strong reasoning; GPT/Haiku insufficient for AI pattern work"
   
   description: |
     AI-native features that enhance orchestration with intelligence.
@@ -692,31 +713,62 @@ phase_4_intelligence:
 # LLM COST OPTIMIZATION SUMMARY
 # ==============================================================================
 llm_cost_strategy:
-  overall_approach: "Match model capability to task complexity"
+  overall_approach: "Sonnet 4.5 as default; upgrade to Opus only for critical architectural decisions"
+  philosophy: "Users not forced to switch - recommendations are optional optimizations"
   
   phase_breakdown:
-    phase_1: "90% Sonnet 4.5, 10% Opus 4.5 = ~1.2x baseline cost"
-    phase_2: "85% Sonnet 4.5, 15% Opus 4.5 = ~1.3x baseline cost"
-    phase_3: "70% Sonnet 4.5, 30% Haiku 4.5 = ~0.8x baseline cost"
-    phase_4: "40% Opus 4.5, 60% Sonnet 4.5 = ~1.8x baseline cost"
+    phase_1: "90-100% Sonnet 4.5, 0-10% Opus 4.5 (optional) = ~1.0-1.2x baseline"
+    phase_2: "85-100% Sonnet 4.5, 0-15% Opus 4.5 (optional) = ~1.0-1.3x baseline"
+    phase_3: "70-100% Sonnet 4.5, 0-30% GPT-5/Haiku (evaluate) = ~0.8-1.0x baseline"
+    phase_4: "60-100% Sonnet 4.5, 0-40% Opus 4.5 (optional) = ~1.0-1.8x baseline"
   
-  total_project_cost: "~1.3x baseline (averaged across 8 weeks)"
+  default_project_cost: "~1.0x baseline (100% Sonnet 4.5 across all phases)"
+  optimized_project_cost: "~1.2x baseline (strategic Opus use + Phase 3 bulk optimization)"
   
-  cost_savings_rationale: |
-    Phase 3 bulk operations with Haiku offset Phase 4 Opus usage.
+  cost_optimization_rationale: |
+    Sonnet 4.5 handles 95%+ of CORTEX operations effectively.
+    Optional Opus upgrades prevent architectural rework (5-10% of critical decisions).
+    Phase 3 bulk operations can evaluate GPT-5 (1x) or Haiku (0.33x) for cost savings.
     Snowball effect makes later phases faster, reducing total token consumption.
-    Strategic Opus use prevents expensive rework from architectural mistakes.
   
   switching_guidance:
-    when_to_upgrade: "Complex reasoning, architectural decisions, critical algorithm design"
-    when_to_downgrade: "Bulk operations, documentation, simple validation, established patterns"
-    when_to_stay_sonnet: "90% of normal operations - best default choice"
+    stay_with_sonnet: "Recommended for 90-100% of operations - best balance for CORTEX"
+    when_to_upgrade_opus: "🧠 Complex architectural decisions, 🔍 subtle technical debt detection, 📊 algorithm optimization"
+    when_to_evaluate_alternatives: "⚡ Bulk operations (Phase 3), 📝 documentation generation, ✅ simple validation"
+    
+  model_comparison:
+    claude_sonnet_4_5:
+      cost: "1x (baseline)"
+      capability: "Excellent"
+      recommendation: "PRIMARY - use for 90-100% of CORTEX operations"
+      strengths: "Best balance, extended context, superior code generation, tool use expertise"
+      
+    claude_opus_4_5:
+      cost: "3x"
+      capability: "Maximum"
+      recommendation: "OPTIONAL - use sparingly for critical architecture (0-10% of operations)"
+      strengths: "Deep reasoning, complex optimization, nuanced semantic understanding"
+      when: "Architectural decisions that impact long-term system behavior"
+      
+    gpt_5:
+      cost: "1x"
+      capability: "Good (evaluate)"
+      recommendation: "EVALUATE - test for Phase 3 bulk operations"
+      strengths: "Cost-effective alternative for simple operations"
+      concerns: "May lack tool use precision for CORTEX audit integration - test first"
+      
+    claude_haiku_4_5:
+      cost: "0.33x"
+      capability: "Good"
+      recommendation: "EVALUATE - test for Phase 3 bulk operations"
+      strengths: "High-throughput, cost-effective for established patterns"
+      avoid_for: "TDD-Master execution, governance logic, investigation, architecture"
   
   anti_patterns:
-    avoid_gpt: "Lacks tool use precision for CORTEX audit integration"
-    avoid_gemini_flash: "Insufficient context window for 4-tier governance merging"
+    avoid_opus_for_bulk: "3x cost wasted on simple operations (use Sonnet/GPT/Haiku)"
     avoid_haiku_for_architecture: "Cannot handle complex reasoning for foundation design"
-    avoid_opus_for_bulk: "3x cost wasted on simple operations"
+    avoid_gemini_flash: "Insufficient context window for 4-tier governance merging"
+    test_before_switching: "Evaluate GPT-5/Haiku performance on non-critical tasks before full adoption"
 
 # ==============================================================================
 # SUCCESS METRICS
