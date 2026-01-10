@@ -630,10 +630,10 @@ class DeploymentValidator:
                 name=name,
                 severity="MEDIUM",
                 passed=False,
-                message="SKULL protection tests missing",
-                details="Quality gates (SKULL-001 through SKULL-004) not validated",
+                message="CORE protection tests missing",
+                details="Quality gates (CORE-001 through CORE-004) not validated",
                 fix_available=False,
-                fix_command="Implement SKULL protection test suite (8 hours estimated)"
+                fix_command="Implement CORE protection test suite (8 hours estimated)"
             ))
         else:
             self.results.append(ValidationResult(
@@ -641,7 +641,7 @@ class DeploymentValidator:
                 name=name,
                 severity="MEDIUM",
                 passed=True,
-                message="✓ SKULL protection test suite exists (test_brain_protector.py)"
+                message="✓ CORE protection test suite exists (test_brain_protector.py)"
             ))
     
     def check_onboarding_workflow(self):
@@ -1706,14 +1706,14 @@ class DeploymentValidator:
                 with open(brain_rules, 'r', encoding='utf-8') as f:
                     rules_content = f.read()
                 
-                # Check for SKULL TDD rules
-                skull_tdd_rules = ['SKULL-001', 'SKULL-002', 'SKULL-007', 'test_before_claim']
-                missing_rules = [rule for rule in skull_tdd_rules if rule.lower() not in rules_content.lower()]
+                # Check for CORE TDD rules (migrated from SKULL)
+                core_tdd_rules = ['CORE-001', 'CORE-002', 'CORE-008', 'test_before_claim']
+                missing_rules = [rule for rule in core_tdd_rules if rule.lower() not in rules_content.lower()]
                 
                 if missing_rules:
-                    tdd_issues.append(f"brain-protection-rules.yaml missing TDD rules: {', '.join(missing_rules)}")
+                    tdd_issues.append(f"core-rules.yaml missing TDD rules: {', '.join(missing_rules)}")
             except Exception as e:
-                tdd_issues.append(f"Failed to validate brain-protection-rules.yaml: {e}")
+                tdd_issues.append(f"Failed to validate core-rules.yaml: {e}")
         
         # Check response-templates-v4.yaml has TDD workflow sections
         templates = self.project_root / "cortex-brain" / "response-templates-v4.yaml"
