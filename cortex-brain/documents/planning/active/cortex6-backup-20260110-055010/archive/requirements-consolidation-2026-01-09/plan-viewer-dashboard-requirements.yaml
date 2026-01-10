@@ -1,0 +1,364 @@
+# ==============================================================================
+# PLAN VIEWER DASHBOARD REQUIREMENTS
+# ==============================================================================
+# Purpose: Transform plan-viewer.html into comprehensive development dashboard
+# Author: Asif Hussain
+# Version: 1.0.0
+# Created: 2026-01-09
+# Status: ACTIVE
+# Parent AC: AC-PLAN-DASH-001 through AC-PLAN-DASH-007
+# Copyright © 2025-2026 Asif Hussain. All rights reserved.
+# ==============================================================================
+
+metadata:
+  feature_id: "FEAT-PLAN-DASH"
+  feature_name: "Plan Viewer Dashboard Enhancement"
+  version: "1.0.0"
+  created: "2026-01-09"
+  updated: "2026-01-09"
+  author: "Asif Hussain"
+  status: "ACTIVE"
+  priority: "P0_CRITICAL"
+  estimated_effort: "16 hours"
+  
+  ac_criteria_ids:
+    - "AC-PLAN-DASH-001"
+    - "AC-PLAN-DASH-002"
+    - "AC-PLAN-DASH-003"
+    - "AC-PLAN-DASH-004"
+    - "AC-PLAN-DASH-005"
+    - "AC-PLAN-DASH-006"
+    - "AC-PLAN-DASH-007"
+
+# ==============================================================================
+# EXECUTIVE SUMMARY
+# ==============================================================================
+
+executive_summary:
+  objective: "Transform plan-viewer.html from simple plan display into full development dashboard"
+  
+  key_features:
+    - "Visual progress tracking with progress bars and completion percentages"
+    - "Acceptance Criteria fulfillment display alongside plan tasks"
+    - "Material Design aesthetic with Dark Blue Glassmorphism styling"
+    - "file:// protocol compatible (no server required)"
+    - "Zero external dependencies (no CDN, inline styles only)"
+    - "Single self-contained HTML file"
+  
+  technical_constraints:
+    no_external_resources:
+      - "No CDN links (CORS blocks on file://)"
+      - "No external CSS files"
+      - "No external JavaScript libraries"
+      - "No fetch() or XMLHttpRequest calls"
+    
+    must_use:
+      - "Inline <style> blocks for all CSS"
+      - "Inline <script> blocks for all JavaScript"
+      - "Embedded JSON data in <script type='application/json'>"
+      - "System fonts only (no @font-face or Google Fonts)"
+      - "CSS-only effects (no backdrop-filter dependency)"
+    
+    browser_compatibility:
+      - "Chrome, Firefox, Safari, Edge"
+      - "No CSS vendor prefixes required"
+      - "Works when opened via file:// protocol"
+
+# ==============================================================================
+# DESIGN SPECIFICATIONS
+# ==============================================================================
+
+design_specs:
+  
+  color_palette:
+    primary: "#1a237e"           # Dark Indigo (primary actions)
+    primary_light: "#534bae"     # Light Indigo (hover states)
+    primary_dark: "#000051"      # Darker Indigo (borders)
+    accent: "#7c4dff"            # Deep Purple Accent
+    accent_light: "#b47cff"      # Light Purple (highlights)
+    background: "#0a1628"        # Very Dark Blue (page background)
+    surface: "rgba(26,35,126,0.7)"  # Glassmorphic card surface
+    surface_hover: "rgba(26,35,126,0.85)"  # Card hover state
+    text_primary: "#ffffff"      # White text
+    text_secondary: "#b0bec5"    # Light gray text
+    success: "#00e676"           # Green (complete)
+    warning: "#ffab00"           # Amber (in progress)
+    error: "#ff5252"             # Red (blocked)
+    info: "#40c4ff"              # Cyan (pending)
+  
+  glassmorphism_technique:
+    description: "CSS-only glassmorphism without backdrop-filter dependency"
+    implementation:
+      card_base: |
+        background: linear-gradient(135deg, 
+          rgba(26,35,126,0.8) 0%, 
+          rgba(26,35,126,0.6) 100%);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 16px;
+        box-shadow: 
+          0 8px 32px rgba(0,0,0,0.3),
+          inset 0 1px 0 rgba(255,255,255,0.1);
+      
+      hover_effect: |
+        background: linear-gradient(135deg,
+          rgba(26,35,126,0.9) 0%,
+          rgba(26,35,126,0.75) 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+  
+  typography:
+    font_family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif"
+    heading_1: "font-size: 2rem; font-weight: 600; letter-spacing: -0.5px"
+    heading_2: "font-size: 1.5rem; font-weight: 500; letter-spacing: -0.25px"
+    heading_3: "font-size: 1.25rem; font-weight: 500"
+    body: "font-size: 1rem; font-weight: 400; line-height: 1.6"
+    caption: "font-size: 0.875rem; font-weight: 400; color: #b0bec5"
+
+# ==============================================================================
+# DASHBOARD COMPONENTS
+# ==============================================================================
+
+dashboard_components:
+  
+  header:
+    id: "dashboard-header"
+    description: "Top banner with CORTEX logo, plan title, and overall progress"
+    elements:
+      - "CORTEX logo (200x200px or base64 embedded)"
+      - "Plan/Epic title"
+      - "Overall completion percentage"
+      - "Last updated timestamp"
+      - "Quick stats (total tasks, completed, remaining)"
+  
+  progress_panel:
+    id: "progress-panel"
+    description: "Main progress visualization area"
+    elements:
+      - "Overall progress bar (full width)"
+      - "Phase breakdown with individual progress bars"
+      - "Task status distribution pie/donut chart (CSS-only)"
+      - "Blocking issues indicator"
+  
+  phase_grid:
+    id: "phase-grid"
+    description: "Grid of phase cards showing status"
+    elements:
+      - "Phase name and number"
+      - "Progress bar per phase"
+      - "Task count (completed/total)"
+      - "Status indicator (NOT_STARTED, IN_PROGRESS, COMPLETE)"
+      - "Expand/collapse for task details"
+  
+  task_list:
+    id: "task-list"
+    description: "Detailed task listing per phase"
+    elements:
+      - "Task name and description"
+      - "Status badge (color-coded)"
+      - "Linked AC criteria (if any)"
+      - "Dependencies (visual connection)"
+      - "Estimated vs actual effort"
+  
+  ac_panel:
+    id: "ac-panel"
+    description: "Acceptance Criteria fulfillment tracker"
+    elements:
+      - "AC fulfillment progress bar"
+      - "AC categories (collapsible sections)"
+      - "Per-criterion status (PENDING, PARTIAL, COMPLETE, BLOCKED)"
+      - "Linked tasks for each criterion"
+      - "Coverage gaps highlighted"
+  
+  metrics_sidebar:
+    id: "metrics-sidebar"
+    description: "Right sidebar with key metrics"
+    elements:
+      - "Tasks: {completed}/{total} ({percentage}%)"
+      - "AC Coverage: {covered}/{total}"
+      - "Blocked: {count}"
+      - "In Progress: {count}"
+      - "Estimated Remaining: {hours}h"
+  
+  timeline:
+    id: "timeline"
+    description: "Visual timeline showing phase progression"
+    elements:
+      - "Horizontal timeline with phase markers"
+      - "Current position indicator"
+      - "Completed phases filled"
+      - "Future phases outlined"
+
+# ==============================================================================
+# DATA STRUCTURE
+# ==============================================================================
+
+data_structure:
+  
+  embedded_json_format:
+    description: "JSON embedded in <script id='plan-data' type='application/json'>"
+    
+    schema:
+      plan:
+        id: "string (UUID)"
+        name: "string"
+        type: "epic | feature"
+        created: "ISO 8601 timestamp"
+        updated: "ISO 8601 timestamp"
+        status: "NOT_STARTED | IN_PROGRESS | COMPLETE | BLOCKED"
+        
+      metrics:
+        total_tasks: "number"
+        completed_tasks: "number"
+        blocked_tasks: "number"
+        in_progress_tasks: "number"
+        completion_percentage: "number (0-100)"
+        ac_total: "number"
+        ac_complete: "number"
+        ac_coverage_percentage: "number (0-100)"
+        estimated_hours_remaining: "number"
+        
+      phases:
+        - id: "string"
+          name: "string"
+          order: "number"
+          status: "NOT_STARTED | IN_PROGRESS | COMPLETE | BLOCKED"
+          progress_percentage: "number (0-100)"
+          tasks: "array of task objects"
+          
+      tasks:
+        - id: "string"
+          name: "string"
+          description: "string"
+          phase_id: "string (parent phase)"
+          status: "NOT_STARTED | IN_PROGRESS | COMPLETE | BLOCKED"
+          priority: "P0_CRITICAL | P1_HIGH | P2_MEDIUM | P3_LOW"
+          ac_criteria: "array of AC IDs"
+          dependencies: "array of task IDs"
+          estimated_hours: "number"
+          actual_hours: "number | null"
+          
+      acceptance_criteria:
+        - id: "string (AC-XXX-NNN)"
+          criterion: "string"
+          category: "string"
+          status: "PENDING | PARTIAL | COMPLETE | BLOCKED"
+          linked_tasks: "array of task IDs"
+          blocking: "boolean"
+          priority: "string"
+
+# ==============================================================================
+# IMPLEMENTATION PHASES
+# ==============================================================================
+
+implementation_phases:
+  
+  phase_1_foundation:
+    name: "Foundation & Data Structure"
+    tasks:
+      - "Define embedded JSON schema for plan data"
+      - "Create data extraction from progress-tracker.json"
+      - "Create AC data extraction from acceptance-criteria.yaml"
+      - "Build data merger (plan + AC data)"
+      - "Validate JSON structure and escape special characters"
+    effort: "4 hours"
+    ac_coverage: ["AC-PLAN-DASH-007"]
+    
+  phase_2_layout:
+    name: "HTML Layout & Structure"
+    tasks:
+      - "Create responsive grid layout (CSS Grid)"
+      - "Build header component with logo"
+      - "Build progress panel structure"
+      - "Build phase grid structure"
+      - "Build AC panel structure"
+      - "Build metrics sidebar"
+    effort: "3 hours"
+    ac_coverage: ["AC-PLAN-DASH-001", "AC-PLAN-DASH-003"]
+    
+  phase_3_styling:
+    name: "Glassmorphism & Material Design Styling"
+    tasks:
+      - "Implement color palette CSS variables"
+      - "Create glassmorphic card styles (CSS-only)"
+      - "Style progress bars (CSS-only animation)"
+      - "Style status badges"
+      - "Style navigation and interactions"
+      - "Add hover effects and transitions"
+    effort: "4 hours"
+    ac_coverage: ["AC-PLAN-DASH-002", "AC-PLAN-DASH-006"]
+    
+  phase_4_components:
+    name: "Interactive Components"
+    tasks:
+      - "Build progress bar components with live data"
+      - "Build phase cards with expand/collapse"
+      - "Build task list with status indicators"
+      - "Build AC fulfillment display"
+      - "Build timeline visualization (CSS-only)"
+    effort: "3 hours"
+    ac_coverage: ["AC-PLAN-DASH-004", "AC-PLAN-DASH-005"]
+    
+  phase_5_integration:
+    name: "Planning Orchestrator Integration"
+    tasks:
+      - "Update PlanningOrchestrator to generate dashboard"
+      - "Add AC data injection to generation"
+      - "Add metrics calculation"
+      - "Validate file:// compatibility"
+      - "Test cross-browser rendering"
+    effort: "2 hours"
+    ac_coverage: ["AC-PLAN-DASH-001", "AC-PLAN-DASH-003"]
+
+# ==============================================================================
+# VALIDATION CRITERIA
+# ==============================================================================
+
+validation:
+  
+  file_protocol_tests:
+    - "Open plan-viewer.html via file:// in Chrome"
+    - "Open plan-viewer.html via file:// in Firefox"
+    - "Open plan-viewer.html via file:// in Safari"
+    - "Verify no CORS errors in console"
+    - "Verify no 404 errors for resources"
+    - "Verify all styles render correctly"
+    - "Verify all JavaScript executes"
+  
+  visual_tests:
+    - "Progress bars display accurate percentages"
+    - "Phase cards show correct task counts"
+    - "AC panel shows correct fulfillment status"
+    - "Colors match design spec palette"
+    - "Glassmorphism effect visible on cards"
+    - "Typography hierarchy is clear"
+  
+  data_tests:
+    - "Embedded JSON is valid (JSON.parse succeeds)"
+    - "All special characters properly escaped"
+    - "Plan data matches progress-tracker.json"
+    - "AC data matches acceptance-criteria.yaml"
+    - "Metrics calculations are accurate"
+  
+  accessibility_tests:
+    - "Color contrast meets WCAG AA (4.5:1 for text)"
+    - "Interactive elements have focus indicators"
+    - "Progress percentages in text (not just visual)"
+
+# ==============================================================================
+# REFERENCES
+# ==============================================================================
+
+references:
+  parent_ac: "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml"
+  planning_orchestrator: "src/orchestrators/planning_orchestrator.py"
+  current_plan_viewer: "Generated at: {plan_path}/plan-viewer.html"
+  design_inspiration:
+    - "Material Design 3: https://m3.material.io/"
+    - "Glassmorphism: CSS-only technique (no backdrop-filter)"
+    - "CORTEX design system: Dark blue theme"
+
+# ==============================================================================
+# COPYRIGHT
+# ==============================================================================
+
+copyright: "Copyright © 2025-2026 Asif Hussain. All rights reserved."

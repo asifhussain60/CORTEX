@@ -24,7 +24,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
 
-from src.orchestrators.maintenance.maintenance_orchestrator_v2 import (
+from src.orchestrators.maintenance.maintenance_orchestrator import (
     MaintenanceOrchestratorV2,
     MaintenancePhase,
     MaintenanceResult

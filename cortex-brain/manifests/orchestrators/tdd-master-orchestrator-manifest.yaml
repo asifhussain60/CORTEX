@@ -1,0 +1,237 @@
+# ==============================================================================
+# TDD-MASTER ORCHESTRATOR MANIFEST
+# ==============================================================================
+# Purpose: Configuration for TDD-Master Orchestrator v1.0
+#          Coordination layer for Planning → TDD workflow
+#
+# Author: Asif Hussain
+# Version: 1.0.0
+# Created: 2026-01-10
+# Status: ACTIVE
+#
+# AC Coverage:
+#   - AC-TDD-MASTER-000: Unplanned development request handling
+#   - AC-TDD-MASTER-001: Plan detection via config.yaml validation
+#   - AC-TDD-MASTER-002: Planning → TDD context transformation (JSON)
+#   - AC-TDD-MASTER-003: TDD Orchestrator invocation with enriched context
+#   - AC-TDD-MASTER-004: 100% AC coverage validation post-TDD
+#   - AC-TDD-MASTER-005: Tier0-3 governance continuity enforcement
+#   - AC-TDD-MASTER-006: Dashboard updates (plan-viewer.html)
+#   - AC-TDD-MASTER-007: Unified completion report generation (JSON)
+# ==============================================================================
+
+metadata:
+  id: tdd_master
+  name: TDD-Master Orchestrator
+  version: 1.0.0
+  type: AUTONOMOUS
+  category: WORKFLOW
+  status: ACTIVE
+  created: '2026-01-10'
+  author: Asif Hussain
+  description: |
+    Coordination layer between Planning Orchestrator and TDD Orchestrator.
+    Bridges the gap between planning phase and implementation phase using
+    TDD methodology (RED → GREEN → REFACTOR).
+  
+implementation:
+  class_name: TDDMasterOrchestrator
+  module_path: src.orchestrators.tdd_master.tdd_master_orchestrator
+  test_file: tests/orchestrators/test_tdd_master_orchestrator.py
+  
+patterns:
+  - "^(tdd-master|implement|build|create|fix|refactor|add feature).*$"
+  - "^execute plan.*$"
+  - "^start implementation.*$"
+  - "^run tdd.*$"
+
+capabilities:
+  - plan_detection
+  - context_transformation
+  - tdd_invocation
+  - ac_validation
+  - governance_enforcement
+  - dashboard_updates
+  - completion_reports
+  - unplanned_mode
+
+dependencies:
+  required:
+    - planning_v5        # Provides plan artifacts
+    - tdd_orchestrator   # Executes TDD workflow
+  optional:
+    - dashboard_manager  # For plan-viewer.html updates
+    - audit_logger       # For execution audit trail
+
+configuration:
+  tdd_context_filename: tdd-context.json
+  completion_report_filename: completion-report.json
+  dashboard_data_filename: plan-data.json
+  
+  planning_dir: cortex-brain/documents/planning/active
+  governance_rules_path: cortex-brain/tier0/governance/core-rules.yaml
+  dashboard_dir: cortex-brain/dashboards
+
+workflow:
+  phases:
+    - id: GOVERNANCE_VALIDATION
+      name: Validate Governance
+      description: Enforce Tier0-3 governance continuity
+      ac_id: AC-TDD-MASTER-005
+      blocking: true
+      
+    - id: PLAN_DETECTION
+      name: Detect Ready Plans
+      description: Find plans with READY_FOR_IMPLEMENTATION status
+      ac_id: AC-TDD-MASTER-001
+      blocking: true
+      
+    - id: CONTEXT_TRANSFORMATION
+      name: Transform Context
+      description: Convert Planning data to TDD context JSON
+      ac_id: AC-TDD-MASTER-002
+      blocking: true
+      outputs:
+        - tdd-context.json
+        
+    - id: TDD_INVOCATION
+      name: Invoke TDD Orchestrator
+      description: Execute TDD workflow with enriched context
+      ac_id: AC-TDD-MASTER-003
+      blocking: true
+      
+    - id: AC_VALIDATION
+      name: Validate AC Coverage
+      description: Verify 100% acceptance criteria coverage
+      ac_id: AC-TDD-MASTER-004
+      blocking: false  # Warning if not 100%
+      
+    - id: DASHBOARD_UPDATE
+      name: Update Dashboard
+      description: Update plan-viewer.html with TDD progress
+      ac_id: AC-TDD-MASTER-006
+      blocking: false
+      
+    - id: COMPLETION_REPORT
+      name: Generate Report
+      description: Create unified completion report (JSON)
+      ac_id: AC-TDD-MASTER-007
+      blocking: false
+      outputs:
+        - completion-report.json
+
+modes:
+  planned:
+    description: Execute TDD for an existing plan
+    requires:
+      - Valid config.yaml with READY_FOR_IMPLEMENTATION status
+      - requirements.yaml (optional but recommended)
+      - acceptance_criteria defined
+    phases: all
+    
+  unplanned:
+    description: Execute TDD for ad-hoc development requests
+    ac_id: AC-TDD-MASTER-000
+    requires:
+      - User development request
+    phases:
+      - GOVERNANCE_VALIDATION
+      - TDD_INVOCATION
+      - COMPLETION_REPORT
+    generates:
+      - Minimal context from request
+      - plan_id with "unplanned-" prefix
+
+data_schemas:
+  tdd_context:
+    type: object
+    required:
+      - feature_name
+      - plan_id
+      - plan_path
+      - acceptance_criteria
+      - test_requirements
+      - domain_knowledge
+      - governance_rules
+    properties:
+      feature_name:
+        type: string
+        description: Feature being implemented
+      plan_id:
+        type: string
+        description: Unique plan identifier
+      plan_path:
+        type: string
+        description: Path to plan directory
+      acceptance_criteria:
+        type: array
+        items:
+          type: string
+        description: List of AC IDs to cover
+      test_requirements:
+        type: object
+        description: Test generation requirements
+      domain_knowledge:
+        type: object
+        description: Domain context for implementation
+      governance_rules:
+        type: array
+        items:
+          type: object
+        description: Applicable CORE rules
+      metadata:
+        type: object
+        description: Additional context metadata
+
+  completion_report:
+    type: object
+    required:
+      - format
+      - plan_id
+      - success
+      - data
+      - generated_at
+    properties:
+      format:
+        type: string
+        enum: [json]
+      plan_id:
+        type: string
+      success:
+        type: boolean
+      data:
+        type: object
+        properties:
+          tdd_summary:
+            type: object
+          ac_coverage:
+            type: object
+          governance:
+            type: object
+      generated_at:
+        type: string
+        format: date-time
+
+audit:
+  enabled: true
+  log_phases: true
+  log_context_transformation: true
+  log_tdd_invocation: true
+  log_ac_validation: true
+  ac_id_prefix: AC-TDD-MASTER
+
+governance:
+  tier0_enforcement: true
+  rules_required:
+    - CORE-019  # TDD Enforcement
+    - CORE-001  # Test Isolation (if applicable)
+  violation_action: BLOCK  # Block execution on violation
+
+metrics:
+  track:
+    - plans_processed
+    - tdd_invocations
+    - ac_coverage_percent
+    - governance_validations
+    - execution_time_ms
+  report_to: cortex-brain/metrics/tdd-master-metrics.json

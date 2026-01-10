@@ -20,8 +20,8 @@ from typing import Dict, Any, List, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from src.orchestrators.base.base_orchestrator_v4_1 import (
-    BaseOrchestratorV4_1,
+from src.orchestrators.base.base_orchestrator_v4 import (
+    BaseOrchestratorV4,
     PhaseStatus,
     PhaseResult,
     OrchestratorResult,
@@ -102,7 +102,7 @@ class CleanCodeViolation:
     max_recommended: Optional[int] = None
 
 
-class TDDOrchestrator(BaseOrchestratorV4_1):
+class TDDOrchestrator(BaseOrchestratorV4):
     """
     TDD Orchestrator v4 - Autonomous RED→GREEN→REFACTOR workflow.
     

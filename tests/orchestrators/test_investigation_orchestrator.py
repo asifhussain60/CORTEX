@@ -15,7 +15,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 import pytest
 from pathlib import Path
 
-from src.orchestrators.investigation.investigation_orchestrator_v2 import (
+from src.orchestrators.investigation.investigation_orchestrator import (
     InvestigationOrchestratorV2,
     InvestigationPhase,
     InvestigationResult

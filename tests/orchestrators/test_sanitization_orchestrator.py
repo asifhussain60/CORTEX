@@ -15,7 +15,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 import pytest
 from pathlib import Path
 
-from src.orchestrators.sanitization.sanitization_orchestrator_v2 import (
+from src.orchestrators.sanitization.sanitization_orchestrator import (
     SanitizationOrchestratorV2,
     SanitizationType,
     SanitizationResult

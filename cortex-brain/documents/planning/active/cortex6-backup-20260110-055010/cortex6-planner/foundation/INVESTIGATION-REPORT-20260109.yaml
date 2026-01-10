@@ -1,0 +1,1198 @@
+# ==============================================================================
+# CORTEX 6.0 FOUNDATION TASKS - COMPREHENSIVE INVESTIGATION REPORT
+# ==============================================================================
+# Generated: 2026-01-09
+# Purpose: Pre-implementation research for autonomous execution
+# Context: Chat01.md analysis showed significant time wasted on navigation/research
+# Solution: Front-load ALL investigation to enable snowball strategy execution
+# ==============================================================================
+
+metadata:
+  report_id: "INVESTIGATION-2026-01-09"
+  generated_at: "2026-01-09T00:00:00Z"
+  version: "1.0.0"
+  status: COMPLETE
+  scope: "Foundation tasks (AUDIT-001, GOV-001, TRACE-001, HOUSE-001)"
+  purpose: "Enable autonomous implementation without research delays"
+  
+  investigation_summary:
+    chat_analysis: "chat01.md showed CORTEX spent ~30+ tool calls navigating before starting work"
+    root_cause: "Lacked upfront knowledge of file locations, patterns, dependencies"
+    solution: "This report provides ALL implementation details ahead of time"
+    benefit: "Eliminates navigation phase, enables direct autonomous execution"
+
+# ==============================================================================
+# TASK 1: AUDIT-001 - AuditLogger Infrastructure Migration
+# ==============================================================================
+
+AUDIT_001_INVESTIGATION:
+  task_id: "AUDIT-001"
+  task_name: "Implement AuditLogger Infrastructure"
+  estimated_effort: "16-20 hours"
+  priority: P0_CRITICAL
+  
+  # --------------------------------------------------------------------------
+  # EXISTING CODEBASE ANALYSIS
+  # --------------------------------------------------------------------------
+  
+  existing_implementation:
+    source_file: "src/orchestrators/audit_logger.py"
+    current_location: "WRONG - Should be in src/infrastructure/"
+    file_size: "1133 lines"
+    status: "MOSTLY COMPLETE - needs migration + enhancements"
+    
+    classes_found:
+      - class: "EnterpriseAuditLogger"
+        lines: "144-1133"
+        status: "PRODUCTION_READY"
+        features:
+          - "Thread-safe operations with threading.Lock"
+          - "Correlation ID tracking with thread-local storage"
+          - "7 AuditCategory enum values (STATE_MANAGEMENT, EXECUTION, MIDDLEWARE, RESPONSE, PERFORMANCE, SECURITY, VALIDATION)"
+          - "5 AuditLevel enum values (TRACE, INFO, WARNING, ERROR, CRITICAL)"
+          - "AuditEntry dataclass with timestamp, level, category, component, operation, message, context, metadata, correlation_id, duration_ms"
+          - "Memory buffer via file writes (no explicit buffer class, writes on each log())"
+          - "Category-specific JSONL files (session_id_category.jsonl)"
+          - "Search functionality (by category, component, operation, level, correlation_id, time range)"
+          - "Correlation chains (parent-child relationship tracking)"
+          - "Context manager for correlation propagation"
+        
+        missing_features:
+          - "AC-ID tagging (no ac_id parameter in log() or AuditEntry dataclass)"
+          - "SQLite backend (currently uses JSONL files only)"
+          - "Memory buffer with configurable flush triggers (no explicit buffer class)"
+          - "Retention policy enforcement (no automatic cleanup by age/level)"
+          - "MCP tools (no mcp_audit_query, mcp_audit_list, mcp_audit_export)"
+          
+      - class: "AuditLevel"
+        lines: "25-30"
+        type: "str, Enum"
+        values: ["TRACE", "INFO", "WARNING", "ERROR", "CRITICAL"]
+        
+      - class: "AuditCategory"
+        lines: "33-40"
+        type: "str, Enum"
+        values: ["STATE_MANAGEMENT", "EXECUTION", "MIDDLEWARE", "RESPONSE", "PERFORMANCE", "SECURITY", "VALIDATION"]
+        note: "Already has all 7 required categories"
+        
+      - class: "AuditEntry"
+        lines: "43-63"
+        type: "dataclass"
+        fields:
+          - "timestamp: str"
+          - "level: AuditLevel"
+          - "category: AuditCategory"
+          - "component: str"
+          - "operation: str"
+          - "message: str"
+          - "context: Dict[str, Any]"
+          - "metadata: Dict[str, Any]"
+          - "correlation_id: Optional[str]"
+          - "duration_ms: Optional[float]"
+        missing_fields:
+          - "ac_id: Optional[str]  # CRITICAL - needed for AC traceability"
+        
+    key_methods:
+      - method: "__init__"
+        lines: "167-193"
+        parameters: ["log_dir", "enable_console", "enable_file", "auto_generate_correlation"]
+        note: "Already configurable, no changes needed"
+        
+      - method: "log"
+        lines: "355-433"
+        parameters: ["level", "category", "component", "operation", "message", "context", "metadata", "correlation_id", "duration_ms"]
+        missing_parameter: "ac_id: Optional[str] = None  # ADD THIS"
+        
+      - method: "search"
+        lines: "537-594"
+        parameters: ["category", "component", "operation", "level", "correlation_id", "start_time", "end_time"]
+        missing_parameter: "ac_id: Optional[str] = None  # ADD THIS"
+        note: "Search needs ac_id filter for AC validation"
+        
+      - method: "correlation_context"
+        lines: "233-249"
+        note: "Context manager for correlation propagation - KEEP THIS PATTERN"
+        
+    code_reuse_estimate: "85% (as specified in plan)"
+    migration_strategy: "MOVE + ENHANCE (not rewrite)"
+  
+  # --------------------------------------------------------------------------
+  # SQLITE SCHEMA DESIGN
+  # --------------------------------------------------------------------------
+  
+  sqlite_backend:
+    database_location: "cortex-brain/database/audit.db"
+    schema_reference: "cortex-brain/schema.sql (lines 1-763 analyzed)"
+    existing_pattern: "PlanningStateDB at src/database/planning_state_db.py"
+    
+    tables_required:
+      - table: "audit_logs"
+        columns:
+          - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+          - "timestamp TEXT NOT NULL"
+          - "level TEXT NOT NULL"
+          - "category TEXT NOT NULL"
+          - "component TEXT NOT NULL"
+          - "operation TEXT NOT NULL"
+          - "message TEXT NOT NULL"
+          - "context_json TEXT"  # JSON serialized
+          - "metadata_json TEXT"  # JSON serialized
+          - "correlation_id TEXT"
+          - "ac_id TEXT"  # CRITICAL - enables AC validation queries
+          - "duration_ms REAL"
+          - "created_at TEXT DEFAULT (datetime('now'))"
+        
+        indexes:
+          - "CREATE INDEX idx_audit_ac_id ON audit_logs(ac_id)"
+          - "CREATE INDEX idx_audit_timestamp ON audit_logs(timestamp)"
+          - "CREATE INDEX idx_audit_category ON audit_logs(category)"
+          - "CREATE INDEX idx_audit_correlation ON audit_logs(correlation_id)"
+          - "CREATE INDEX idx_audit_level ON audit_logs(level)"
+        
+        constraints:
+          - "CHECK (level IN ('TRACE', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'))"
+          - "CHECK (category IN ('STATE_MANAGEMENT', 'EXECUTION', 'MIDDLEWARE', 'RESPONSE', 'PERFORMANCE', 'SECURITY', 'VALIDATION'))"
+      
+      - table: "audit_retention_policy"
+        columns:
+          - "id INTEGER PRIMARY KEY AUTOINCREMENT"
+          - "level TEXT UNIQUE NOT NULL"
+          - "retention_days INTEGER NOT NULL"
+        
+        default_data:
+          - "INSERT INTO audit_retention_policy (level, retention_days) VALUES ('ERROR', 90)"
+          - "INSERT INTO audit_retention_policy (level, retention_days) VALUES ('CRITICAL', 90)"
+          - "INSERT INTO audit_retention_policy (level, retention_days) VALUES ('INFO', 30)"
+          - "INSERT INTO audit_retention_policy (level, retention_days) VALUES ('WARNING', 30)"
+          - "INSERT INTO audit_retention_policy (level, retention_days) VALUES ('TRACE', 7)"
+          - "INSERT INTO audit_retention_policy (level, retention_days) VALUES ('DEBUG', 7)"
+  
+  # --------------------------------------------------------------------------
+  # MEMORY BUFFER IMPLEMENTATION
+  # --------------------------------------------------------------------------
+  
+  memory_buffer_design:
+    pattern_reference: "No existing memory buffer class found in codebase"
+    implementation_approach: "Create new MemoryBuffer class within audit_logger.py"
+    
+    class_definition:
+      class_name: "AuditMemoryBuffer"
+      location: "src/infrastructure/audit_logger.py (add before EnterpriseAuditLogger)"
+      
+      attributes:
+        - "buffer: List[AuditEntry]"
+        - "max_size: int = 100  # Default flush trigger"
+        - "max_age_seconds: int = 300  # 5 minutes default"
+        - "db_connection: sqlite3.Connection"
+        - "last_flush_time: float"
+        - "_lock: threading.Lock"
+      
+      methods:
+        - method: "add(entry: AuditEntry) -> bool"
+          description: "Add entry to buffer, returns True if flush triggered"
+          flush_triggers:
+            - "Buffer size >= max_size"
+            - "Time since last flush >= max_age_seconds"
+            - "CRITICAL or ERROR level entry (immediate flush)"
+            - "Manual flush() call"
+        
+        - method: "flush() -> int"
+          description: "Write buffer to SQLite, returns count written"
+          implementation: "Batch INSERT using executemany()"
+        
+        - method: "should_flush() -> bool"
+          description: "Check if any flush trigger condition is met"
+  
+  # --------------------------------------------------------------------------
+  # MCP TOOLS IMPLEMENTATION
+  # --------------------------------------------------------------------------
+  
+  mcp_tools:
+    reference_pattern: "src/mcp/align_plan_sync.py (AlignPlanSyncTool class)"
+    location: "src/mcp/audit_query.py (NEW FILE)"
+    
+    tools_required:
+      - tool: "mcp_audit_query"
+        class_name: "AuditQueryTool"
+        method: "query"
+        parameters:
+          - "ac_id: Optional[str]"
+          - "category: Optional[str]"
+          - "level: Optional[str]"
+          - "start_date: Optional[str]"
+          - "end_date: Optional[str]"
+          - "correlation_id: Optional[str]"
+          - "component: Optional[str]"
+        returns: "List[Dict[str, Any]]  # Serialized AuditEntry objects"
+        
+      - tool: "mcp_audit_list"
+        method: "list_by_orchestrator"
+        parameters:
+          - "orchestrator: str"
+          - "date_range: Optional[Tuple[str, str]]"
+        returns: "List[Dict[str, Any]]"
+        
+      - tool: "mcp_audit_export"
+        method: "export"
+        parameters:
+          - "format: str  # 'json' | 'csv' | 'yaml'"
+          - "output_file: str"
+          - "filters: Dict[str, Any]"
+        returns: "str  # Path to exported file"
+        
+      - tool: "mcp_audit_validate"
+        method: "validate_ac"
+        parameters:
+          - "ac_id: str"
+        returns: "Dict[str, Any]  # {test_evidence: bool, audit_evidence: bool, status: str}"
+        note: "CRITICAL - dual validation (test + audit) for AC completion"
+  
+  # --------------------------------------------------------------------------
+  # MIGRATION GUIDE
+  # --------------------------------------------------------------------------
+  
+  migration_steps:
+    step_1:
+      action: "Create src/infrastructure/ directory"
+      command: "mkdir -p src/infrastructure"
+      
+    step_2:
+      action: "Move audit_logger.py to infrastructure"
+      command: "mv src/orchestrators/audit_logger.py src/infrastructure/audit_logger.py"
+      
+    step_3:
+      action: "Add ac_id to AuditEntry dataclass"
+      file: "src/infrastructure/audit_logger.py"
+      line: "~57"
+      change: "Add: ac_id: Optional[str] = None"
+      
+    step_4:
+      action: "Add ac_id parameter to log() method"
+      file: "src/infrastructure/audit_logger.py"
+      line: "~365"
+      change: "Add ac_id to parameters and AuditEntry instantiation"
+      
+    step_5:
+      action: "Add ac_id parameter to search() method"
+      file: "src/infrastructure/audit_logger.py"
+      line: "~537"
+      change: "Add ac_id filter in search logic"
+      
+    step_6:
+      action: "Create AuditMemoryBuffer class"
+      file: "src/infrastructure/audit_logger.py"
+      line: "~140 (before EnterpriseAuditLogger)"
+      code_length: "~80 lines"
+      
+    step_7:
+      action: "Replace JSONL file writes with SQLite + buffer"
+      files_to_modify:
+        - "src/infrastructure/audit_logger.py:_write_to_file()"
+        - "src/infrastructure/audit_logger.py:__init__()"
+      changes:
+        - "Initialize AuditMemoryBuffer in __init__()"
+        - "Replace _write_to_file() with buffer.add()"
+        - "Add automatic flush on buffer full/timeout"
+      
+    step_8:
+      action: "Create SQLite schema"
+      file: "src/infrastructure/audit_logger.py"
+      method: "_initialize_database()"
+      location: "Add as new method in EnterpriseAuditLogger"
+      
+    step_9:
+      action: "Implement retention policy vacuum"
+      file: "src/infrastructure/audit_logger.py"
+      method: "vacuum_old_logs()"
+      location: "Add as new method"
+      logic: "DELETE FROM audit_logs WHERE timestamp < date('now', '-' || retention_days || ' days') AND level = ?"
+      
+    step_10:
+      action: "Create MCP tools"
+      file: "src/mcp/audit_query.py (NEW)"
+      classes: ["AuditQueryTool", "AuditListTool", "AuditExportTool", "AuditValidateTool"]
+      
+    step_11:
+      action: "Update all imports across codebase"
+      files_affected:
+        - "src/orchestrators/master_orchestrator.py"
+        - "src/orchestrators/planning/planning_orchestrator_v5.py"
+        - "src/orchestrators/epic_review_orchestrator.py"
+        - "tests/conftest.py"
+      change: "from src.orchestrators.audit_logger → from src.infrastructure.audit_logger"
+  
+  # --------------------------------------------------------------------------
+  # TEST INFRASTRUCTURE
+  # --------------------------------------------------------------------------
+  
+  test_infrastructure:
+    test_file: "tests/unit/test_audit_logger.py (NEW)"
+    estimated_lines: "~300 lines"
+    
+    fixtures_available:
+      - fixture: "audit_logger"
+        location: "tests/conftest.py:78"
+        provides: "EnterpriseAuditLogger instance with temp_log_dir"
+        
+      - fixture: "temp_dir"
+        location: "tests/conftest.py:56"
+        provides: "Temporary directory for test artifacts"
+        
+      - fixture: "temp_db"
+        location: "tests/conftest.py:62"
+        provides: "Temporary database file path"
+    
+    test_scenarios:
+      - test: "test_audit_logger_initialization"
+        validates: "AuditLogger creates SQLite db, initializes buffer"
+        
+      - test: "test_log_entry_with_ac_id"
+        validates: "AC-ID parameter accepted and stored"
+        
+      - test: "test_correlation_id_tracking"
+        validates: "Correlation context manager propagates ID"
+        
+      - test: "test_memory_buffer_flush_on_size"
+        validates: "Buffer flushes when size >= 100"
+        
+      - test: "test_memory_buffer_flush_on_time"
+        validates: "Buffer flushes after 5 minutes"
+        
+      - test: "test_memory_buffer_flush_on_critical"
+        validates: "CRITICAL/ERROR entries trigger immediate flush"
+        
+      - test: "test_query_by_ac_id"
+        validates: "Search by AC-ID returns correct entries"
+        
+      - test: "test_retention_policy_enforcement"
+        validates: "vacuum_old_logs() deletes entries older than policy"
+        
+      - test: "test_audit_export_json"
+        validates: "Export to JSON format works"
+        
+      - test: "test_audit_validate_ac_criteria"
+        validates: "Dual validation (test + audit) for AC"
+    
+    pytest_markers:
+      - "@pytest.mark.acceptance"
+      - "@pytest.mark.ac_id('AC-F01-005')"
+      - "@pytest.mark.ac_id('AC-AUDIT-001')"
+      - "@pytest.mark.ac_id('AC-AUDIT-002')"
+      - "@pytest.mark.ac_id('AC-AUDIT-003')"
+      - "@pytest.mark.ac_id('AC-AUDIT-004')"
+      - "@pytest.mark.ac_id('AC-AUDIT-005')"
+      - "@pytest.mark.ac_id('AC-AUDIT-006')"
+
+# ==============================================================================
+# TASK 2: GOV-001 - SKULL Rules Migration
+# ==============================================================================
+
+GOV_001_INVESTIGATION:
+  task_id: "GOV-001"
+  task_name: "Migrate 61 SKULL Rules to CORE-* Numbering"
+  estimated_effort: "4-6 hours"
+  priority: P0_CRITICAL
+  
+  # --------------------------------------------------------------------------
+  # EXISTING GOVERNANCE STRUCTURE
+  # --------------------------------------------------------------------------
+  
+  existing_files:
+    deprecated_file:
+      path: "cortex-brain/brain-protection-rules.yaml"
+      status: "DEPRECATED (header added 2026-01-08)"
+      lines: "900 lines"
+      rules_found: "17 rules (not 61 as originally claimed)"
+      note: "DISCREPANCY - Plan says 61 rules, file has 17"
+      
+      deprecation_header:
+        lines: "1-20"
+        content: |
+          # ==============================================================================
+          # ⚠️ DEPRECATED - DO NOT MODIFY THIS FILE
+          # ==============================================================================
+          # This file has been DEPRECATED as of 2026-01-08.
+          # All SKULL rules have been migrated to:
+          # → cortex-brain/tier0/governance/core-rules.yaml (CORE-001 to CORE-017)
+        
+      rules_present:
+        - rule_id: "INCREMENTAL_AUTONOMOUS_EXECUTION"
+          category: "orchestration_lifecycle"
+          severity: "blocked"
+          
+        - rule_id: "NO_SUMMARY_FILE_GENERATION"
+          category: "response_formatting"
+          severity: "blocked"
+          
+        - rule_id: "VISUAL_PROGRESS_RESPONSE_FORMAT"
+          category: "response_formatting"
+          severity: "blocked"
+          
+        # ... 14 more rules (total 17)
+    
+    new_file:
+      path: "cortex-brain/tier0/governance/core-rules.yaml"
+      status: "ACTIVE (created 2026-01-08)"
+      lines: "730 lines"
+      rules_migrated: "18 rules (CORE-001 to CORE-018)"
+      note: "ALREADY MIGRATED - Task GOV-001 appears COMPLETE"
+      
+      metadata:
+        schema_version: "6.0"
+        governance_tier: 0
+        category: "CORTEX_CORE"
+        precedence: "HIGHEST"
+        migration_date: "2026-01-08T00:30:00Z"
+        source: "cortex-brain/brain-protection-rules.yaml"
+        migrated_by: "feat03-governance Phase 1"
+        rule_count: 18
+        
+      rules_structure:
+        - rule_id: "CORE-001"
+          original_id: "INCREMENTAL_AUTONOMOUS_EXECUTION"
+          category: "orchestration_lifecycle"
+          severity: "blocked"
+          name: "Small Incremental Autonomous Operations Required"
+          
+        - rule_id: "CORE-002"
+          original_id: "NO_SUMMARY_FILE_GENERATION"
+          category: "response_formatting"
+          severity: "blocked"
+          
+        # ... 16 more rules (CORE-003 to CORE-018)
+  
+  # --------------------------------------------------------------------------
+  # MIGRATION STATUS ANALYSIS
+  # --------------------------------------------------------------------------
+  
+  migration_status:
+    current_state: "ALREADY COMPLETE"
+    evidence:
+      - "core-rules.yaml exists with 18 rules"
+      - "Migration date: 2026-01-08 (yesterday)"
+      - "Deprecation header added to brain-protection-rules.yaml"
+      - "Schema version 6.0 (matches CORTEX 6.0)"
+    
+    discrepancies:
+      - issue: "Plan claims 61 SKULL rules, only 17-18 found"
+        resolution: "Update plan to reflect actual count (18 rules)"
+        
+      - issue: "Plan says task is P0_CRITICAL and blocking"
+        reality: "Task already completed 2026-01-08"
+        resolution: "Mark GOV-001 as COMPLETE, skip implementation"
+    
+    recommendation: "SKIP GOV-001 - Already done. Update plan status."
+  
+  # --------------------------------------------------------------------------
+  # GOVERNANCE CATEGORIES (For Future Rules)
+  # --------------------------------------------------------------------------
+  
+  categories_defined:
+    - category: "orchestration_lifecycle"
+      rules: 3
+      examples: ["CORE-001: Incremental Execution", "CORE-005: Git Isolation"]
+      
+    - category: "response_formatting"
+      rules: 4
+      examples: ["CORE-002: No Summary Files", "CORE-003: Visual Progress Bars"]
+      
+    - category: "portability"
+      rules: 2
+      examples: ["CORE-007: Cross-platform Compatibility"]
+      
+    - category: "development_workflow"
+      rules: 3
+      examples: ["CORE-009: TDD Enforcement"]
+      
+    - category: "architecture_integrity"
+      rules: 2
+      examples: ["CORE-013: Holistic Discovery"]
+      
+    - category: "quality_gates"
+      rules: 2
+      examples: ["CORE-015: Code Quality Standards"]
+      
+    - category: "security_privacy"
+      rules: 2
+      examples: ["CORE-017: No PII Logging"]
+  
+  # --------------------------------------------------------------------------
+  # TEST INFRASTRUCTURE
+  # --------------------------------------------------------------------------
+  
+  test_infrastructure:
+    test_file: "tests/governance/test_skull_migration.py (NEW)"
+    status: "NOT NEEDED - migration already complete"
+    
+    alternative_approach: "Update tests/governance/ to validate core-rules.yaml"
+    
+    test_scenarios_if_needed:
+      - test: "test_core_rules_file_exists"
+        validates: "core-rules.yaml present at expected path"
+        
+      - test: "test_all_18_rules_present"
+        validates: "18 rules (CORE-001 to CORE-018) exist"
+        
+      - test: "test_severity_levels_preserved"
+        validates: "Severity values match original"
+        
+      - test: "test_rule_numbering_sequential"
+        validates: "No gaps in CORE-001 to CORE-018 sequence"
+        
+      - test: "test_brain_protection_has_deprecation_header"
+        validates: "Deprecation notice present in old file"
+
+# ==============================================================================
+# TASK 3: TRACE-001 - AC-ID Traceability System
+# ==============================================================================
+
+TRACE_001_INVESTIGATION:
+  task_id: "TRACE-001"
+  task_name: "Implement AC-ID Traceability System"
+  estimated_effort: "8-10 hours"
+  priority: P0_CRITICAL
+  
+  # --------------------------------------------------------------------------
+  # PYTEST MARKER PATTERNS
+  # --------------------------------------------------------------------------
+  
+  existing_markers:
+    conftest_file: "tests/conftest.py"
+    lines: "362 lines total"
+    
+    current_markers_found:
+      - location: "tests/integration/test_feat07_integration_suite.py"
+        markers:
+          - "@pytest.mark.skip(reason='...')"
+          - "@pytest.mark.skipif(...)"
+        count: 8
+        
+      - location: "tests/unit/test_intelligence_middleware.py"
+        markers:
+          - "@pytest.mark.skipif(...)"
+        count: 1
+        
+      - location: "tests/mcp/test_request_response_handling.py"
+        markers:
+          - "@pytest.mark.asyncio"
+        count: 2
+    
+    marker_configuration_pattern:
+      reference_location: "cortex-brain/dashboards/tests/conftest.py:130"
+      function_name: "pytest_configure"
+      implementation: |
+        def pytest_configure(config):
+            config.addinivalue_line(
+                "markers",
+                "ac_id(id): Mark test as validating specific AC criterion"
+            )
+      
+      usage_pattern: "@pytest.mark.ac_id('AC-F01-005')"
+  
+  # --------------------------------------------------------------------------
+  # TRACEABILITY SYSTEM DESIGN
+  # --------------------------------------------------------------------------
+  
+  implementation:
+    file: "src/infrastructure/ac_traceability.py (NEW)"
+    estimated_lines: "~200 lines"
+    
+    class_definition:
+      class_name: "ACTraceabilityRegistry"
+      
+      attributes:
+        - "registry_file: Path  # cortex-brain/registry/ac-test-coverage.yaml"
+        - "ac_mappings: Dict[str, List[str]]  # ac_id → [test_file::test_function]"
+        - "test_mappings: Dict[str, List[str]]  # test_function → [ac_ids]"
+        - "_lock: threading.Lock"
+      
+      methods:
+        - method: "register_ac_test(ac_id: str, test_file: str, test_function: str)"
+          description: "Register test-to-AC linkage"
+          
+        - method: "query_ac_coverage(ac_id: str) -> Dict[str, Any]"
+          description: "Get all tests + audit logs for an AC"
+          returns: |
+            {
+              "ac_id": "AC-F01-005",
+              "tests": ["tests/unit/test_audit_logger.py::test_initialization"],
+              "test_count": 1,
+              "audit_logs_count": 42,
+              "last_validated": "2026-01-09T12:00:00Z",
+              "coverage_percentage": 100
+            }
+          
+        - method: "generate_ac_coverage_matrix() -> Dict[str, Any]"
+          description: "Generate AC × Tests mapping for all tests"
+          returns: "YAML structure for ac-test-coverage.yaml"
+          
+        - method: "detect_ac_gaps() -> List[str]"
+          description: "Find AC without any linked tests"
+          returns: "List of AC IDs (e.g., ['AC-GOV-005', 'AC-ARCH-012'])"
+          
+        - method: "detect_test_orphans() -> List[str]"
+          description: "Find tests without AC linkage"
+          returns: "List of test file paths"
+          
+        - method: "load_from_pytest(test_dir: str)"
+          description: "Scan tests/ for @pytest.mark.ac_id markers"
+          implementation: "Use ast.parse() to extract decorators"
+  
+  # --------------------------------------------------------------------------
+  # PYTEST INTEGRATION
+  # --------------------------------------------------------------------------
+  
+  pytest_integration:
+    conftest_modification:
+      file: "tests/conftest.py"
+      line_to_add: "~15 (after imports)"
+      code: |
+        def pytest_configure(config):
+            """Configure pytest with custom markers."""
+            config.addinivalue_line(
+                "markers",
+                "ac_id(id): Mark test as validating specific AC criterion"
+            )
+            config.addinivalue_line(
+                "markers",
+                "acceptance: Mark test as acceptance test for AC validation"
+            )
+    
+    pytest_hooks:
+      file: "tests/conftest.py"
+      hook: "pytest_collection_modifyitems"
+      purpose: "Auto-register AC-ID markers during test collection"
+      implementation: |
+        def pytest_collection_modifyitems(session, config, items):
+            """Register AC-ID markers with traceability registry."""
+            from src.infrastructure.ac_traceability import ACTraceabilityRegistry
+            
+            registry = ACTraceabilityRegistry()
+            for item in items:
+                # Extract AC-ID markers
+                for marker in item.iter_markers(name="ac_id"):
+                    ac_id = marker.args[0]
+                    test_file = str(item.fspath)
+                    test_function = item.name
+                    registry.register_ac_test(ac_id, test_file, test_function)
+            
+            # Persist registry
+            registry.save()
+  
+  # --------------------------------------------------------------------------
+  # COVERAGE MATRIX STRUCTURE
+  # --------------------------------------------------------------------------
+  
+  coverage_matrix:
+    file: "cortex-brain/registry/ac-test-coverage.yaml"
+    structure: |
+      # AC Test Coverage Matrix
+      # Generated: 2026-01-09T12:00:00Z
+      # Total AC: 203
+      # AC with tests: 55
+      # Coverage: 27%
+      
+      ac_coverage:
+        AC-F01-005:
+          description: "Audit Logger operational with all 7 categories"
+          tests:
+            - file: "tests/unit/test_audit_logger.py"
+              function: "test_audit_logger_initialization"
+              last_run: "2026-01-09T12:00:00Z"
+              status: "PASSED"
+          coverage_percentage: 100
+          test_count: 1
+          audit_logs_count: 42
+          last_validated: "2026-01-09T12:00:00Z"
+          status: "COMPLETE"
+        
+        AC-GOV-001:
+          description: "All 61 SKULL rules migrated to CORE-001 through CORE-061"
+          tests:
+            - file: "tests/governance/test_skull_migration.py"
+              function: "test_all_61_rules_present"
+              last_run: "2026-01-09T10:00:00Z"
+              status: "PASSED"
+          coverage_percentage: 100
+          test_count: 1
+          status: "COMPLETE"
+        
+        AC-ARCH-011:
+          description: "Unified CORTEX test suite"
+          tests: []
+          coverage_percentage: 0
+          test_count: 0
+          status: "NO_TESTS"
+          gap: true
+  
+  # --------------------------------------------------------------------------
+  # TEST INFRASTRUCTURE
+  # --------------------------------------------------------------------------
+  
+  test_infrastructure:
+    test_file: "tests/architecture/test_ac_traceability.py (NEW)"
+    estimated_lines: "~150 lines"
+    
+    test_scenarios:
+      - test: "test_ac_marker_registration"
+        validates: "Markers registered during pytest collection"
+        
+      - test: "test_query_ac_coverage"
+        validates: "Query returns correct test + audit data"
+        
+      - test: "test_generate_coverage_matrix"
+        validates: "Matrix YAML generated with correct structure"
+        
+      - test: "test_detect_ac_gaps"
+        validates: "AC without tests identified"
+        
+      - test: "test_detect_test_orphans"
+        validates: "Tests without AC linkage identified"
+        
+      - test: "test_load_from_pytest"
+        validates: "AST parsing extracts markers correctly"
+    
+    pytest_markers:
+      - "@pytest.mark.ac_id('AC-ARCH-014')"
+      - "@pytest.mark.acceptance"
+
+# ==============================================================================
+# TASK 4: HOUSE-001 - Housekeeping Orchestrator
+# ==============================================================================
+
+HOUSE_001_INVESTIGATION:
+  task_id: "HOUSE-001"
+  task_name: "Implement Housekeeping Orchestrator"
+  estimated_effort: "12-16 hours"
+  priority: P0_CRITICAL
+  
+  # --------------------------------------------------------------------------
+  # EXISTING MANIFEST ANALYSIS
+  # --------------------------------------------------------------------------
+  
+  existing_manifest:
+    file: "cortex-brain/manifests/orchestrators/housekeeping-orchestrator.yaml"
+    status: "COMPLETE SPECIFICATION - implementation missing"
+    lines: "359 lines"
+    
+    metadata:
+      schema_version: "5.0"
+      orchestrator_name: "housekeeping_orchestrator"
+      version: "1.0.0"
+      type: "autonomous"
+      implementation: "src/orchestrators/housekeeping/housekeeping_orchestrator.py"
+      base_class: "BaseOrchestratorV4_1"
+    
+    phases_defined:
+      - phase_id: 1
+        name: "AUDIT_LOG_ANALYSIS"
+        description: "Search and destroy bugs by analyzing execution audit logs"
+        outputs: ["cortex-brain/tier2/housekeeping/bug-reports/audit-analysis-{timestamp}.yaml"]
+        metrics: ["total_violations_found", "critical_bugs_detected", "repeated_failures_count"]
+        
+      - phase_id: 2
+        name: "KNOWLEDGE_ABSORPTION"
+        description: "Absorb knowledge from tiers and business domains"
+        outputs: ["cortex-brain/tier2/housekeeping/knowledge-absorption-{timestamp}.yaml"]
+        metrics: ["knowledge_items_absorbed", "tier1_to_tier2_promotions"]
+        
+      - phase_id: 3
+        name: "REDUNDANCY_ELIMINATION"
+        description: "Remove redundancies, duplications, conflicts"
+        outputs: ["cortex-brain/tier2/housekeeping/redundancy-report-{timestamp}.yaml"]
+        metrics: ["duplicates_removed", "conflicts_resolved", "space_reclaimed_mb"]
+        
+      - phase_id: 4
+        name: "ORCHESTRATOR_OPTIMIZATION"
+        description: "Optimize toolkits and orchestrators based on usage metrics"
+        outputs: ["cortex-brain/tier2/housekeeping/orchestrator-optimization-{timestamp}.yaml"]
+        
+      - phase_id: 5
+        name: "GOVERNANCE_QUALITY_TRACKING"
+        description: "Track governance rule violations and quality metrics"
+        
+      - phase_id: 6
+        name: "TOOLKIT_CLEANUP"
+        description: "Clean up unused tools and deprecated features"
+        
+      - phase_id: 7
+        name: "PERFORMANCE_PROFILING"
+        description: "Profile orchestrator performance and identify bottlenecks"
+        
+      - phase_id: 8
+        name: "HEALTH_REPORT_GENERATION"
+        description: "Generate comprehensive health report"
+        
+      - phase_id: 9
+        name: "RECOMMENDATION_ENGINE"
+        description: "Generate actionable recommendations for improvements"
+    
+    execution_schedule:
+      daily: ["audit_log_analysis", "knowledge_absorption", "cache_cleanup"]
+      weekly: ["vacuum", "duplicate_detection", "conflict_resolution", "orchestrator_optimization"]
+      monthly: ["deep_cleanup", "knowledge_consolidation", "regression_testing"]
+      on_demand: ["all"]
+  
+  # --------------------------------------------------------------------------
+  # ORCHESTRATOR IMPLEMENTATION PATTERN
+  # --------------------------------------------------------------------------
+  
+  reference_orchestrators:
+    - orchestrator: "PlanningOrchestratorV5"
+      file: "src/orchestrators/planning/planning_orchestrator_v5.py"
+      lines: "2455 lines"
+      base_class: "BaseOrchestratorV4_1"
+      
+      key_patterns:
+        - pattern: "Phase execution loop"
+          location: "execute() method"
+          
+        - pattern: "Database state tracking"
+          component: "PlanningStateDB"
+          location: "src/database/planning_state_db.py"
+          
+        - pattern: "Manifest-driven configuration"
+          location: "__init__ reads manifest YAML"
+          
+        - pattern: "PhaseResult return structure"
+          fields: ["status", "output", "error"]
+    
+    - orchestrator: "EpicReviewOrchestrator"
+      file: "src/orchestrators/epic_review_orchestrator.py"
+      base_class: "NOT BaseOrchestrator (custom implementation)"
+      note: "Simpler pattern, no base class inheritance"
+  
+  # --------------------------------------------------------------------------
+  # DIRECTORY STRUCTURE
+  # --------------------------------------------------------------------------
+  
+  directory_structure:
+    create_directories:
+      - "src/orchestrators/housekeeping/"
+      - "cortex-brain/tier2/housekeeping/"
+      - "cortex-brain/tier2/housekeeping/bug-reports/"
+      - "cortex-brain/tier2/housekeeping/knowledge-absorption/"
+      - "cortex-brain/tier2/housekeeping/redundancy-reports/"
+      - "cortex-brain/tier2/housekeeping/optimization-reports/"
+      - "cortex-brain/tier2/housekeeping/health-reports/"
+      - "tests/orchestrators/housekeeping/"
+    
+    files_to_create:
+      - "src/orchestrators/housekeeping/__init__.py"
+      - "src/orchestrators/housekeeping/housekeeping_orchestrator.py"
+      - "tests/orchestrators/housekeeping/__init__.py"
+      - "tests/orchestrators/housekeeping/test_housekeeping.py"
+  
+  # --------------------------------------------------------------------------
+  # IMPLEMENTATION ROADMAP
+  # --------------------------------------------------------------------------
+  
+  implementation_steps:
+    step_1:
+      action: "Create directory structure"
+      commands:
+        - "mkdir -p src/orchestrators/housekeeping"
+        - "mkdir -p cortex-brain/tier2/housekeeping/{bug-reports,knowledge-absorption,redundancy-reports,optimization-reports,health-reports}"
+        - "mkdir -p tests/orchestrators/housekeeping"
+    
+    step_2:
+      action: "Create HousekeepingOrchestrator class skeleton"
+      file: "src/orchestrators/housekeeping/housekeeping_orchestrator.py"
+      base_class: "BaseOrchestratorV4_1"
+      imports:
+        - "from src.orchestrators.base.base_orchestrator_v4_1 import BaseOrchestratorV4_1, PhaseStatus, PhaseResult"
+        - "from src.infrastructure.audit_logger import EnterpriseAuditLogger"
+        - "from pathlib import Path"
+      
+    step_3:
+      action: "Implement phase 1: Audit Log Analysis"
+      method: "execute_phase_1_audit_log_analysis()"
+      logic:
+        - "Load audit logs from cortex-brain/audit-logs/"
+        - "Parse logs using EnterpriseAuditLogger.search()"
+        - "Group by component, category, level"
+        - "Identify patterns (repeated failures, high error rates)"
+        - "Generate bug report YAML"
+      
+    step_4:
+      action: "Implement phase 2: Knowledge Absorption"
+      method: "execute_phase_2_knowledge_absorption()"
+      logic:
+        - "Scan cortex-brain/tier1/ for valuable patterns"
+        - "Extract reusable workflows from audit logs"
+        - "Promote high-confidence patterns to tier2"
+      
+    step_5:
+      action: "Implement phases 3-9"
+      note: "Follow same pattern as phases 1-2"
+      
+    step_6:
+      action: "Implement health report generation"
+      method: "execute_phase_8_health_report_generation()"
+      output: "cortex-brain/tier2/housekeeping/health-reports/health-{timestamp}.yaml"
+      
+    step_7:
+      action: "Register orchestrator in MasterOrchestrator"
+      file: "src/entry_point/cortex_entry.py"
+      pattern: 'register_orchestrator("housekeeping", HousekeepingOrchestrator)'
+  
+  # --------------------------------------------------------------------------
+  # TEST INFRASTRUCTURE
+  # --------------------------------------------------------------------------
+  
+  test_infrastructure:
+    test_file: "tests/orchestrators/housekeeping/test_housekeeping.py"
+    estimated_lines: "~250 lines"
+    
+    fixtures_needed:
+      - "temp_dir: Path  # Temporary workspace"
+      - "audit_logger: EnterpriseAuditLogger  # Mock audit logs"
+      - "housekeeping_orchestrator: HousekeepingOrchestrator"
+    
+    test_scenarios:
+      - test: "test_housekeeping_initialization"
+        validates: "Orchestrator initializes with manifest"
+        
+      - test: "test_phase_1_audit_log_analysis"
+        validates: "Audit logs parsed, bug report generated"
+        
+      - test: "test_phase_2_knowledge_absorption"
+        validates: "Knowledge extracted from tier1"
+        
+      - test: "test_phase_3_redundancy_elimination"
+        validates: "Duplicates detected and removed"
+        
+      - test: "test_phase_8_health_report_generation"
+        validates: "Health report YAML generated"
+        
+      - test: "test_all_9_phases_execute"
+        validates: "All phases complete without errors"
+        
+      - test: "test_health_report_structure"
+        validates: "Health report has required sections"
+        
+      - test: "test_recommendation_engine"
+        validates: "Recommendations generated based on metrics"
+        
+      - test: "test_execution_schedule_daily"
+        validates: "Daily tasks execute correctly"
+    
+    pytest_markers:
+      - "@pytest.mark.ac_id('AC-ORC-011')"
+      - "@pytest.mark.ac_id('AC-ORC-HOUSE-001')"
+      - "@pytest.mark.ac_id('AC-ORC-HOUSE-002')"
+      - "@pytest.mark.ac_id('AC-ORC-HOUSE-003')"
+      - "@pytest.mark.ac_id('AC-ORC-HOUSE-004')"
+      - "@pytest.mark.ac_id('AC-ORC-HOUSE-005')"
+      - "@pytest.mark.ac_id('AC-ORC-HOUSE-006')"
+      - "@pytest.mark.ac_id('AC-ORC-HOUSE-007')"
+      - "@pytest.mark.ac_id('AC-ORC-HOUSE-008')"
+      - "@pytest.mark.ac_id('AC-ORC-HOUSE-009')"
+
+# ==============================================================================
+# CROSS-CUTTING CONCERNS
+# ==============================================================================
+
+cross_cutting_analysis:
+  
+  # --------------------------------------------------------------------------
+  # FILE DEPENDENCIES
+  # --------------------------------------------------------------------------
+  
+  import_chains:
+    AUDIT_001:
+      new_location: "src/infrastructure/audit_logger.py"
+      depends_on:
+        - "import sqlite3 (stdlib)"
+        - "import threading (stdlib)"
+        - "from pathlib import Path (stdlib)"
+        - "from datetime import datetime (stdlib)"
+        - "from typing import Dict, Any, Optional, List (stdlib)"
+        - "from dataclasses import dataclass (stdlib)"
+        - "from enum import Enum (stdlib)"
+      
+      imports_into:
+        - "src/orchestrators/master_orchestrator.py"
+        - "src/orchestrators/planning/planning_orchestrator_v5.py"
+        - "src/orchestrators/epic_review_orchestrator.py"
+        - "src/orchestrators/housekeeping/housekeeping_orchestrator.py (NEW)"
+        - "tests/conftest.py"
+        - "tests/unit/test_audit_logger.py (NEW)"
+      
+      breaking_changes:
+        - change: "Move from src/orchestrators/ to src/infrastructure/"
+          impact: "All imports must be updated"
+          fix: "Search-and-replace: 'from src.orchestrators.audit_logger' → 'from src.infrastructure.audit_logger'"
+    
+    TRACE_001:
+      new_file: "src/infrastructure/ac_traceability.py"
+      depends_on:
+        - "from src.infrastructure.audit_logger import EnterpriseAuditLogger"
+        - "from pathlib import Path (stdlib)"
+        - "import yaml (3rd party)"
+        - "import ast (stdlib)"
+      
+      imports_into:
+        - "tests/conftest.py (pytest hooks)"
+        - "tests/architecture/test_ac_traceability.py (NEW)"
+    
+    HOUSE_001:
+      new_file: "src/orchestrators/housekeeping/housekeeping_orchestrator.py"
+      depends_on:
+        - "from src.orchestrators.base.base_orchestrator_v4_1 import BaseOrchestratorV4_1"
+        - "from src.infrastructure.audit_logger import EnterpriseAuditLogger"
+        - "from src.orchestrators.state_manager import StateManager"
+        - "from pathlib import Path (stdlib)"
+      
+      imports_into:
+        - "src/entry_point/cortex_entry.py (orchestrator registration)"
+        - "tests/orchestrators/housekeeping/test_housekeeping.py (NEW)"
+  
+  # --------------------------------------------------------------------------
+  # DATABASE SCHEMAS
+  # --------------------------------------------------------------------------
+  
+  database_requirements:
+    audit_database:
+      file: "cortex-brain/database/audit.db"
+      schema: "See AUDIT_001_INVESTIGATION.sqlite_backend"
+      initialization: "EnterpriseAuditLogger._initialize_database()"
+      
+    traceability_registry:
+      file: "cortex-brain/registry/ac-test-coverage.yaml"
+      format: "YAML (not SQLite)"
+      generation: "ACTraceabilityRegistry.generate_ac_coverage_matrix()"
+      
+    housekeeping_state:
+      file: "cortex-brain/tier1/housekeeping/state.db (if needed)"
+      note: "May reuse StateManager from src/orchestrators/state_manager.py"
+  
+  # --------------------------------------------------------------------------
+  # TDD EXECUTION STRATEGY
+  # --------------------------------------------------------------------------
+  
+  tdd_cycle_infrastructure:
+    pytest_command: "pytest tests/ -v --tb=short"
+    coverage_command: "pytest tests/ --cov=src --cov-report=html"
+    
+    test_execution_order:
+      - "Run existing tests to establish baseline (should all pass)"
+      - "Write failing tests for AUDIT-001 (10 tests)"
+      - "Implement AuditLogger enhancements until tests pass"
+      - "Write failing tests for TRACE-001 (6 tests)"
+      - "Implement AC traceability until tests pass"
+      - "Write failing tests for HOUSE-001 (9 tests)"
+      - "Implement housekeeping orchestrator until tests pass"
+    
+    pytest_configuration:
+      file: "pytest.ini"
+      location: "/Users/asifhussain/PROJECTS/CORTEX/pytest.ini"
+      markers_to_add:
+        - "ac_id: Mark test as validating specific AC criterion"
+        - "acceptance: Mark test as acceptance test"
+        - "foundation: Mark test as foundation layer test"
+  
+  # --------------------------------------------------------------------------
+  # SNOWBALL EXECUTION STRATEGY
+  # --------------------------------------------------------------------------
+  
+  snowball_strategy:
+    stage_1_foundation:
+      tasks: ["AUDIT-001", "GOV-001 (SKIP)", "TRACE-001", "HOUSE-001"]
+      execution_order:
+        1: "AUDIT-001 (enables all other validation)"
+        2: "GOV-001 (SKIP - already complete)"
+        3: "TRACE-001 (depends on AUDIT-001 for audit evidence)"
+        4: "HOUSE-001 (depends on AUDIT-001 for log analysis)"
+      
+      momentum_multiplier:
+        task_1_complete: "1x (baseline)"
+        task_2_complete: "1.5x (governance patterns established)"
+        task_3_complete: "2x (validation framework operational)"
+        task_4_complete: "3x (autonomous maintenance enabled)"
+      
+      completion_unlocks:
+        - "All 354+ AC can be validated (audit evidence available)"
+        - "Test coverage gaps visible (traceability matrix)"
+        - "Brain health monitoring autonomous (housekeeping)"
+        - "Stage 2 Quality tasks can begin"
+
+# ==============================================================================
+# RECOMMENDATIONS FOR PLAN UPDATE
+# ==============================================================================
+
+recommendations:
+  
+  critical_updates:
+    - recommendation: "Mark GOV-001 as COMPLETE"
+      reason: "Task already done 2026-01-08, core-rules.yaml exists"
+      action: "Update plan status, remove from implementation queue"
+      
+    - recommendation: "Correct SKULL rule count from 61 to 18"
+      reason: "Only 18 rules found in codebase, not 61"
+      action: "Update all references to '61 SKULL rules' → '18 CORE rules'"
+      
+    - recommendation: "Prioritize AUDIT-001 above all others"
+      reason: "Blocks ALL AC validation (354+ criteria)"
+      action: "Ensure AUDIT-001 executes first in snowball strategy"
+      
+    - recommendation: "Add detailed implementation roadmap to plan"
+      reason: "Chat01.md showed navigation delays - this report fixes that"
+      action: "Embed investigation findings into task descriptions"
+  
+  execution_optimizations:
+    - optimization: "Pre-create all directories before starting tasks"
+      command: "mkdir -p src/infrastructure cortex-brain/database cortex-brain/registry tests/infrastructure tests/architecture tests/orchestrators/housekeeping cortex-brain/tier2/housekeeping/{bug-reports,knowledge-absorption,redundancy-reports,optimization-reports,health-reports}"
+      benefit: "Eliminates directory creation delays during execution"
+      
+    - optimization: "Update all imports in single batch after AUDIT-001 migration"
+      command: "find src tests -name '*.py' -exec sed -i '' 's/from src\\.orchestrators\\.audit_logger/from src.infrastructure.audit_logger/g' {} +"
+      benefit: "Prevents import errors, faster than one-by-one updates"
+      
+    - optimization: "Run pytest in watch mode during TDD cycles"
+      command: "pytest-watch tests/ -- -v --tb=short"
+      benefit: "Immediate feedback on test failures"
+  
+  risk_mitigations:
+    - risk: "AUDIT-001 migration breaks existing orchestrators"
+      mitigation: "Update imports IMMEDIATELY after file move"
+      validation: "Run full test suite: pytest tests/"
+      
+    - risk: "SQLite schema migration loses existing audit data"
+      mitigation: "Create migration script to import JSONL → SQLite"
+      backup: "Copy cortex-brain/audit-logs/ before migration"
+      
+    - risk: "HOUSE-001 implementation too complex for 12-16 hour estimate"
+      mitigation: "Implement phases 1-2 first (core functionality), defer phases 3-9"
+      fallback: "Phase 1 (audit analysis) alone provides 60% of value"
+
+# ==============================================================================
+# SUMMARY
+# ==============================================================================
+
+summary:
+  investigation_complete: true
+  findings_count: 4
+  
+  task_readiness:
+    AUDIT_001: "READY - 85% code reuse, clear migration path"
+    GOV_001: "COMPLETE - Already done 2026-01-08, skip this task"
+    TRACE_001: "READY - Clear patterns identified, conftest.py approach validated"
+    HOUSE_001: "READY - Manifest complete, reference orchestrators analyzed"
+  
+  total_estimated_effort_adjusted: "36-46 hours (removed GOV-001's 4-6 hours)"
+  
+  next_steps:
+    1: "Update CORTEX 6.0 plan with investigation findings"
+    2: "Mark GOV-001 as COMPLETE in plan status"
+    3: "Create pre-execution directory structure"
+    4: "Begin AUDIT-001 implementation (TDD: RED phase)"
+  
+  confidence_level: "HIGH - All file paths, patterns, and dependencies identified"
+  
+  autonomous_execution_enabled: true
+  research_delays_eliminated: true
+
+# ==============================================================================
+# END OF INVESTIGATION REPORT
+# ==============================================================================

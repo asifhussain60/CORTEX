@@ -1,0 +1,152 @@
+# ==============================================================================
+# CORTEX 6.0 UPGRADE PLAN - EXECUTION CONFIGURATION
+# ==============================================================================
+# Purpose: Planning Orchestrator v5/v6 configuration for CORTEX 6.0 upgrade
+# Created: 2026-01-09
+# Status: ACTIVE - EXECUTION READY
+# ==============================================================================
+
+plan_metadata:
+  plan_id: "cortex-60-comprehensive-upgrade"
+  plan_name: "CORTEX 6.0 Comprehensive Upgrade"
+  version: "2.0.0"
+  created: "2026-01-09T18:37:00Z"
+  status: "ACTIVE"
+  epic_id: "CORTEX6-BUILD"
+  
+  source_documents:
+    requirements: "cortex6/acceptance-criteria/requirements/CX6-requirements.yaml"
+    acceptance_criteria: "cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml"
+    master_plan: "cortex6/artifacts/CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml"
+  
+  dor_status:
+    achieved: true
+    sessions: 4
+    total_decisions: 18  # Q1-Q20 (Q11 was rolled into other questions)
+    ambiguity_level: 0
+    execution_readiness: true
+
+execution_config:
+  mode: "autonomous"
+  tdd_enforcement: true
+  audit_logging: true
+  holistic_validation: true
+  
+  performance_targets:
+    audit_latency_ms: 5
+    startup_time_ms: 500
+    housekeeping_max_seconds: 60
+    dashboard_page_load_seconds: 2
+    dashboard_websocket_latency_ms: 100
+    dashboard_memory_mb: 200
+
+phases:
+  stage_1_foundation:
+    name: "Foundation (Stage 1)"
+    duration_hours: "40-48"
+    blocking: true
+    components:
+      - "Audit Logger Infrastructure"
+      - "SKULL → CORE Rules Migration"
+      - "AC Traceability Framework"
+      - "Housekeeping Orchestrator"
+    
+  stage_2_quality:
+    name: "Quality Framework (Stage 2)"
+    duration_hours: "24-32"
+    blocking: false
+    dependencies: ["stage_1_foundation"]
+    components:
+      - "TDD Orchestrator"
+      - "Test Harness"
+      - "Dual Validation (Test + Audit)"
+      - "Gap-Fix Orchestrator"
+    
+  stage_3_features:
+    name: "Features (Stage 3)"
+    duration_hours: "60-80"
+    blocking: false
+    dependencies: ["stage_1_foundation", "stage_2_quality"]
+    components:
+      - "Planning Orchestrator v6"
+      - "Cross-Repo Detection"
+      - "CLI Entry Point (bin/cortex)"
+      - "Lazy Loading System"
+      - "Migrate Orchestrator"
+      - "Plan Viewer Dashboard"
+    
+  stage_4_hardening:
+    name: "Hardening (Stage 4)"
+    duration_hours: "40-60"
+    blocking: false
+    dependencies: ["stage_3_features"]
+    components:
+      - "Security Audit"
+      - "Performance Optimization"
+      - "Integration Testing"
+      - "Documentation"
+    
+  stage_5_enhancements:
+    name: "Enhancements (Stage 5)"
+    duration_hours: "40-60"
+    blocking: false
+    dependencies: ["stage_4_hardening"]
+    components:
+      - "Observability (Metrics)"
+      - "Automation (CI/CD)"
+      - "Learning (Knowledge Base)"
+      - "Self-Improvement"
+
+acceptance_criteria:
+  total: 361
+  sections: 26
+  categories: 14
+  validation_gates: 13
+  
+  coverage_requirements:
+    toolkit_minimum: "85%"
+    orchestrator_minimum: "100%"
+    dual_validation: true  # Test + Audit evidence required
+
+strategic_requirements:
+  SR-001: "Comprehensive Audit Logging"
+  SR-002: "AC-ID Traceability"
+  SR-003: "SKULL → CORE Rules Migration"
+  SR-004: "Manual Housekeeping Orchestrator"
+  SR-005: "Cross-Repo Architecture"
+  SR-006: "Migrate Orchestrator (On-Demand)"
+  SR-007: "Fast Startup via Lazy Loading"
+  SR-008: "Interactive Plan Viewer Dashboard"
+
+architectural_decisions:
+  AD-001: "Manual plan (fix Planning Orchestrator in Stage 3)"
+  AD-002: "AC-ID tracking only (no schema validation)"
+  AD-003: "No backward compatibility (clean SKULL deletion)"
+  AD-004: "Manual housekeeping (no automatic triggers)"
+  AD-005: "Clone + PATH (no global installation)"
+  AD-006: "Size-based audit log rotation (50MB + daily fallback)"
+  AD-007: "Bootstrap self-audit for AuditLogger"
+  AD-008: "bin/cortex shell script (CLI entry point)"
+  AD-009: "Check cortex-brain/ folder (workspace detection)"
+  AD-010: "Store plans in CORTEX + on-demand migration"
+  AD-011: "Import-time lazy loading"
+  AD-012: "README + setup.sh (both options)"
+  AD-013: "Dashboard HTML generated once (not regenerated)"
+  AD-014: "Manual dashboard launch (optional auto-launch)"
+  AD-015: "Dashboard server foreground (optional daemon)"
+  AD-016: "WebSocket push (no polling)"
+
+risk_register:
+  R-001: "Scope creep during Stage 2-5"
+  R-002: "Audit logging performance overhead"
+  R-003: "Cross-repo detection edge cases"
+  R-004: "Planning Orchestrator persistence bug"
+  R-005: "User confusion with dual storage"
+
+success_metrics:
+  ac_validation_rate: "≥95% (343+/361 AC validated)"
+  test_coverage_toolkit: "≥85%"
+  test_coverage_orchestrator: "100%"
+  audit_coverage: "100% (all operations audited)"
+  startup_time: "<500ms"
+  security_vulnerabilities: "0 critical/high"

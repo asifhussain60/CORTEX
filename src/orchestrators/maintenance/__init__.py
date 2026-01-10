@@ -1,6 +1,6 @@
 """Maintenance orchestrator package."""
 
-from src.orchestrators.maintenance.maintenance_orchestrator_v2 import (
+from src.orchestrators.maintenance.maintenance_orchestrator import (
     MaintenanceOrchestratorV2,
     MaintenancePhase,
     MaintenanceResult

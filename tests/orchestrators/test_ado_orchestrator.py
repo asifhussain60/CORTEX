@@ -17,7 +17,7 @@ import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 
-from src.orchestrators.ado.ado_orchestrator_v2 import (
+from src.orchestrators.ado.ado_orchestrator import (
     ADOOrchestratorV2,
     WorkItemType,
     ADOResult

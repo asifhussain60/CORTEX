@@ -1,6 +1,6 @@
 """Investigation orchestrator package."""
 
-from src.orchestrators.investigation.investigation_orchestrator_v2 import (
+from src.orchestrators.investigation.investigation_orchestrator import (
     InvestigationOrchestratorV2,
     InvestigationPhase,
     InvestigationResult

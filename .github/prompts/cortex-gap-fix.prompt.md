@@ -1,6 +1,6 @@
 # 🔍🔧 CORTEX Gap-Fix - Holistic Gap Detection & Remediation
 
-**Version:** 1.4.0 | **Status:** ✅ PRODUCTION | **Type:** Autonomous Analysis + Remediation  
+**Version:** 1.5.0 | **Status:** ✅ PRODUCTION | **Type:** Autonomous Analysis + Remediation  
 **Author:** Asif Hussain | **Source of Truth:** CORTEX 6.0 Canonical Requirements  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
@@ -124,13 +124,13 @@
 ## 📋 Canonical Source of Truth (CORTEX 6.0)
 
 **Primary Sources:**
-- **Requirements:** `cortex6/acceptance-criteria/requirements/CX6-requirements.yaml` (820 lines)
+- **Requirements:** `cortex6/requirements/CX6-requirements.yaml` (820 lines)
   - 18 Strategic/Foundation/Cross-Repo requirements
   - 18 DoR decisions (Q1-Q20, 100% complete)
   - 16 Architectural decisions (AD-001 to AD-016)
   - Risk register, success metrics
 
-- **Acceptance Criteria:** `cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml` (5,717 lines)
+- **Acceptance Criteria:** `cortex6/requirements/CX6-acceptance-criteria.yaml` (5,717 lines)
   - 361 acceptance criteria across 26 sections
   - 14 categories (governance, audit, orchestrators, dashboard, toolkit, etc.)
   - Test files, validation methods, evidence requirements
@@ -292,17 +292,27 @@ cortex-brain/tier0/      → Governance rules
 ### Phase 2: Discrepancy Detection
 **Duration:** 2-3 minutes
 
+**⚡ INTELLIGENT GAP DETECTION:**
+1. **Load Progress Tracker** (`cortex6/execution/tracking/progress-tracker.json`)
+2. **Extract Completed AC IDs** from tracker's `evidence.ac_validated` arrays
+3. **Filter Out Completed Work** - Skip gaps for AC IDs marked COMPLETE
+4. **Verify Implementation Exists** - Check for matching test/source files
+5. **Report Only Real Gaps** - No false positives for already-complete work
+
 **Discrepancy Types:**
-- **MISSING** - AC criterion exists, no code found
+- **MISSING** - AC criterion exists, no code found, NOT in progress tracker
 - **PARTIAL** - Code exists but incomplete
 - **STALE** - Code outdated vs spec
 - **CONFLICT** - Code differs from AC
 - **OVER** - Code exceeds AC scope
 
+**🛡️ Protection:** Prevents reporting on work already validated in progress tracker.
+
 **Phase Completion Output:**
 ```
 ✅ Phase 2 - Discrepancy Detection: Complete
-   └─ Discrepancies Found: {count}
+   └─ Progress Tracker Loaded: {completed_count} AC IDs marked complete
+   └─ Discrepancies Found: {count} (after filtering completed work)
    └─ MISSING: {count} | PARTIAL: {count} | STALE: {count}
    └─ Duration: 90s
    └─ Auto-proceeding to Phase 3...
@@ -337,7 +347,7 @@ cortex-brain/tier0/      → Governance rules
 
 **Per AC-VAL-002:** Verify every criterion has audit log coverage
 
-**Primary Output:** `cortex6/acceptance-criteria/search-findings-{timestamp}.yaml`
+**Primary Output:** `cortex6/analysis/search-findings-{timestamp}.yaml`
 
 ```yaml
 search_findings:
@@ -347,8 +357,8 @@ search_findings:
   plan_version: '2.0.0'
   
   sources:
-    requirements: 'cortex6/acceptance-criteria/requirements/CX6-requirements.yaml'
-    acceptance_criteria: 'cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml'
+    requirements: 'cortex6/requirements/CX6-requirements.yaml'
+    acceptance_criteria: 'cortex6/requirements/CX6-acceptance-criteria.yaml'
     master_plan: 'cortex6/artifacts/CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml'
   
   summary:
@@ -917,21 +927,21 @@ Execute the remediation plan:
 
 | Artifact | Location | Lines | Purpose |
 |----------|----------|-------|---------|
-| **Requirements** | `cortex6/acceptance-criteria/requirements/CX6-requirements.yaml` | 820 | 18 SR, 18 DoR, 16 AD decisions |
-| **Acceptance Criteria** | `cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml` | 5,717 | 361 AC across 26 sections |
+| **Requirements** | `cortex6/requirements/CX6-requirements.yaml` | 820 | 18 SR, 18 DoR, 16 AD decisions |
+| **Acceptance Criteria** | `cortex6/requirements/CX6-acceptance-criteria.yaml` | 5,717 | 361 AC across 26 sections |
 | **Master Plan** | `cortex6/artifacts/CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml` | 1,403 | 5-stage implementation plan |
 | **Dashboard Plan** | `cortex6/artifacts/PLAN-VIEWER-DASHBOARD-PLAN.yaml` | 1,233 | Dashboard 4-phase plan |
-| **Plan Config** | `cortex6/plan/config.yaml` | 164 | Execution configuration |
+| **Plan Config** | `cortex6/execution/config.yaml` | 164 | Execution configuration |
 | **Navigation** | `cortex6/00-SOURCE-OF-TRUTH-README.md` | - | Canonical file guide |
 
 ### Gap-Fix Output Files
 
 | Artifact | Location | Purpose |
 |----------|----------|---------|
-| **Search Findings** | `cortex6/acceptance-criteria/search-findings-{timestamp}.yaml` | Gap detection results |
-| **Snowball Strategy** | `cortex6/acceptance-criteria/snowball-strategy.yaml` | Prioritization order |
-| **Conflict Report** | `cortex6/acceptance-criteria/conflict-report-{timestamp}.yaml` | Phase 10B results |
-| **Archive** | `cortex6/acceptance-criteria/archive/` | Historical findings |
+| **Search Findings** | `cortex6/analysis/search-findings-{timestamp}.yaml` | Gap detection results |
+| **Snowball Strategy** | `cortex6/analysis/snowball-strategy.yaml` | Prioritization order |
+| **Conflict Report** | `cortex6/analysis/conflict-report-{timestamp}.yaml` | Phase 10B results |
+| **Archive** | `cortex6/archive/` | Historical findings |
 
 ### Progress Tracking Files
 
@@ -960,7 +970,7 @@ Execute the remediation plan:
 
 **✅ ONLY ALLOWED Location (CORTEX 6 Planning):**
 ```
-cortex-brain/documents/planning/active/cortex6/acceptance-criteria/
+cortex-brain/documents/planning/active/cortex6/requirements/
 ```
 
 **🛡️ Enforcement:**
@@ -1009,8 +1019,8 @@ cortex-brain/documents/planning/active/cortex6/acceptance-criteria/
 ## 📚 References
 
 - **Main Entry Point:** `.github/prompts/CORTEX.prompt.md`
-- **Canonical Requirements:** `cortex6/acceptance-criteria/requirements/CX6-requirements.yaml` (820 lines)
-- **Canonical AC:** `cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml` (5,717 lines)
+- **Canonical Requirements:** `cortex6/requirements/CX6-requirements.yaml` (820 lines)
+- **Canonical AC:** `cortex6/requirements/CX6-acceptance-criteria.yaml` (5,717 lines)
 - **Master Plan:** `cortex6/artifacts/CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml` (1,403 lines)
 - **Dashboard Plan:** `cortex6/artifacts/PLAN-VIEWER-DASHBOARD-PLAN.yaml` (1,233 lines)
 - **MCP Server:** `src/mcp/align_plan_sync.py` (Phase 11 implementation)
@@ -1019,6 +1029,7 @@ cortex-brain/documents/planning/active/cortex6/acceptance-criteria/
 ---
 
 **Version History:**
+- v1.5.0 (2026-01-11): **Progress Tracker Integration** - Phase 2 now loads progress-tracker.json, filters out completed AC IDs, verifies implementation existence before reporting gaps (fixes false positives for completed work like SKULL tests)
 - v1.4.0 (2026-01-09): **Aligned with CORTEX 6.0 Canonical Sources** - Updated to reference CX6-requirements.yaml (18 SR, 18 DoR, 16 AD), CX6-acceptance-criteria.yaml (361 AC, 26 sections), CORTEX6-COMPREHENSIVE-UPGRADE-PLAN.yaml (5 stages, 210-288h), phase outputs now include strategic requirements gaps, DoR decision violations, stage/phase mapping
 - v1.3.0 (2026-01-09): Added Phase 10C - Test Stability Validation (AC-GAPFIX-005 to AC-GAPFIX-007)
 - v1.2.0 (2026-01-09): Mobile-friendly progress display - removed ASCII borders, minimal 3-row updates during execution

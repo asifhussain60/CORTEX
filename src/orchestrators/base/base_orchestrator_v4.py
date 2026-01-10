@@ -37,9 +37,9 @@ class PhaseResult:
     data: Dict[str, Any]
 
 
-class BaseOrchestratorV4_1(BaseOrchestrator):
+class BaseOrchestratorV4(BaseOrchestrator):
     """
-    Base orchestrator v4.1 with phase management (stub).
+    Base orchestrator v4 with phase management (stub).
     
     TODO: Phase 3 - Full implementation with phase lifecycle.
     """

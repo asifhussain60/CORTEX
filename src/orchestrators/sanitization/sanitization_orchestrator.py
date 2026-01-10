@@ -19,8 +19,8 @@ from pathlib import Path
 from datetime import datetime
 from enum import Enum
 
-from src.orchestrators.base.base_orchestrator_v4_1 import (
-    BaseOrchestratorV4_1,
+from src.orchestrators.base.base_orchestrator_v4 import (
+    BaseOrchestratorV4,
     PhaseStatus,
     PhaseResult
 )
@@ -48,7 +48,7 @@ class SanitizationResult:
         self.timestamp = datetime.now().isoformat()
 
 
-class SanitizationOrchestratorV2(BaseOrchestratorV4_1):
+class SanitizationOrchestratorV2(BaseOrchestratorV4):
     """
     Sanitization Orchestrator v2 - Data sanitization and compliance.
     
