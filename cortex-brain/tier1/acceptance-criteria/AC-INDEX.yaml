@@ -3482,15 +3482,6 @@ ac_clean:
     dependencies: ["AC-CLEAN-001"]
 
 # ==============================================================================
-      - "crawler_orchestrator.py"
-      - "analyzers/python_analyzer.py"
-      - "analyzers/javascript_analyzer.py"
-      - "analyzers/csharp_analyzer.py"
-      - "analyzers/coldfusion_analyzer.py"
-      - "analyzers/generic_analyzer.py"
-    extraction_command: |
-      python -m src.tools.git_history_intelligence extract CORTEX-4.0 src/crawlers/
-
-# ==============================================================================
 # END OF AC INDEX
+# ==============================================================================
 # ==============================================================================
