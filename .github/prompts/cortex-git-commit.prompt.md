@@ -153,6 +153,87 @@ Confirm readiness to resume plan implementation:
 
 Only proceed with plan implementation after all alignment checks pass. Misaligned state will cause cascading failures and corrupt the audit trail.
 
+### Automated Handoff Commands
+
+Execute these commands on the pulling machine to ensure complete operational alignment:
+
+```bash
+# 1. Pull latest changes
+git fetch origin
+git pull origin CORTEX6
+
+# 2. Verify Python environment
+python --version  # Should match requirements
+pip list --format=freeze | diff - requirements.txt  # Check package drift
+
+# 3. Load working state
+cat cortex-brain/tier1/tracking/progress-tracker.json | python -c "import sys, json; data=json.load(sys.stdin); print(f\"Epic: {data['active_epic']['id']}\"); print(f\"Phase: {data['current_phase']['number']} - {data['current_phase']['name']}\"); print(f\"Status: {data['current_phase']['status']}\")"
+
+# 4. Verify governance rules
+python -c "import yaml; rules=yaml.safe_load(open('cortex-brain/tier0/governance/core-rules.yaml')); print(f\"SKULL Rules: {len(rules.get('rules', []))}\")"
+
+# 5. Check AC registry
+python -c "import yaml; index=yaml.safe_load(open('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml')); print(f\"Total AC-IDs: {len(index.get('acceptance_criteria', []))}\")"
+
+# 6. Validate test baseline
+pytest tests/smoke/ -v --tb=short
+
+# 7. Query audit trail for last activity
+python -m src.main "audit query --last 1h --format markdown"
+```
+
+### CORTEX Alignment Verification Prompt
+
+After pulling, ask CORTEX to verify alignment with this prompt:
+
+```
+CORTEX: Verify operational alignment after git pull. Check:
+1. Load progress-tracker.json and report: active epic, current phase, current todo, blockers
+2. Verify AC-INDEX.yaml integrity (count AC-IDs, check for orphans)
+3. Confirm core-rules.yaml has all 23 SKULL rules
+4. Check audit trail for last 5 operations (correlation IDs, timestamps, statuses)
+5. Validate environment (Python version, installed packages, virtual environment)
+6. Report any misalignment or corruption requiring remediation
+
+If all checks pass, report: "✅ Operational alignment verified. Ready to resume plan implementation."
+If any check fails, report: "🚨 Alignment failure detected: [DETAILS]. Remediation required before proceeding."
+```
+
+### Cross-Machine Handoff Checklist
+
+Before pushing from Machine A (exiting work session):
+
+- [ ] Commit all work with structured message (via this orchestrator)
+- [ ] Push to remote and verify synchronization
+- [ ] Update progress-tracker.json with current status and next steps
+- [ ] Document any blockers or pending decisions in tracking state
+- [ ] Generate evidence bundle if AC-ID completed
+- [ ] Verify audit trail is complete with correlation IDs
+- [ ] Push final state to remote
+
+After pulling on Machine B (starting work session):
+
+- [ ] Execute automated handoff commands (see above)
+- [ ] Run CORTEX alignment verification prompt
+- [ ] Review progress-tracker.json TODO list
+- [ ] Check for any blockers or alerts from previous session
+- [ ] Verify last correlation ID in audit trail matches expected state
+- [ ] Run smoke tests to confirm operational readiness
+- [ ] Resume plan implementation from current_todo
+
+### Handoff Quality Gates
+
+The handoff is considered successful only when all gates pass:
+
+- **Gate 1: Repository Sync** - Local HEAD matches remote HEAD, no divergence
+- **Gate 2: State Integrity** - All tracking files parse without errors, no orphaned references
+- **Gate 3: Environment Parity** - Python version and packages match across machines
+- **Gate 4: Governance Active** - All 23 SKULL rules loaded, enforcement hooks operational
+- **Gate 5: Audit Continuity** - Last operation on Machine A logged, first operation on Machine B creates new correlation chain
+- **Gate 6: Test Baseline** - Smoke tests pass, confirming basic functionality intact
+
+Failure of any gate requires remediation before proceeding. Proceeding with failed gates risks corrupting the plan state and audit trail.
+
 ---
 
 ## 🚨 Failure Modes & Recovery
