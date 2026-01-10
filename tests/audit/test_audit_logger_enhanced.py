@@ -594,10 +594,65 @@ class TestMCPTools:
             first_entry = json.loads(lines[0])
             assert "ac_id" in first_entry
 
+    def test_audit_validate_success(self):
+        """Test: audit_validate returns VALIDATED for successful traces."""
+        from src.mcp.audit_tools import audit_validate
+        
+        result = audit_validate(
+            db_path=str(self.db_path),
+            ac_id="AC-TEST-001"
+        )
+        
+        assert result["success"] is True
+        assert result["ac_id"] == "AC-TEST-001"
+        assert result["validation_status"] == "VALIDATED"
+        assert result["audit_trace_exists"] is True
+        assert result["evidence"]["total_entries"] == 1
+        assert result["evidence"]["info_count"] == 1
+        assert result["evidence"]["error_count"] == 0
+    
+    def test_audit_validate_no_data(self):
+        """Test: audit_validate returns NO_DATA when AC not found."""
+        from src.mcp.audit_tools import audit_validate
+        
+        result = audit_validate(
+            db_path=str(self.db_path),
+            ac_id="AC-NONEXISTENT-999"
+        )
+        
+        assert result["success"] is True
+        assert result["ac_id"] == "AC-NONEXISTENT-999"
+        assert result["validation_status"] == "NO_DATA"
+        assert result["audit_trace_exists"] is False
+    
+    def test_audit_validate_with_errors(self):
+        """Test: audit_validate returns FAILED when errors exist."""
+        from src.mcp.audit_tools import audit_validate
+        
+        # Add an error entry
+        self.storage.log(
+            level=AuditLevel.ERROR,
+            category=AuditCategory.ORCHESTRATOR,
+            component="test",
+            operation="test_fail",
+            message="Error occurred",
+            ac_id="AC-TEST-ERROR"
+        )
+        
+        result = audit_validate(
+            db_path=str(self.db_path),
+            ac_id="AC-TEST-ERROR"
+        )
+        
+        assert result["success"] is True
+        assert result["ac_id"] == "AC-TEST-ERROR"
+        assert result["validation_status"] == "FAILED"
+        assert result["evidence"]["error_count"] == 1
+
 
 # ==============================================================================
 # AC-AUDIT-005: Automatic Vacuum Tests
-# ==============================================================================
+# =============================================================================
 
 @pytest.mark.ac_id
 class TestAutomaticVacuum:
