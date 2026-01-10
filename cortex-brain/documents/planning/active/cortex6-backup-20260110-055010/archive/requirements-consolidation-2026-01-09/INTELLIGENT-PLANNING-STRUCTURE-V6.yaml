@@ -1,0 +1,1455 @@
+# ========================================================================
+# CORTEX Intelligent Planning Structure v6.0 - YAML Specification
+# ========================================================================
+# Date: 2026-01-09
+# Version: 6.0.0
+# Purpose: Complete plan structure specification with governance integration
+# Copyright © 2026 Asif Hussain. All rights reserved.
+# ========================================================================
+
+metadata:
+  version: "6.0.0"
+  schema_version: "1.0"
+  created_date: "2026-01-09"
+  author: "Asif Hussain"
+  description: "Intelligent Planning Orchestrator v6 structure with autonomous execution"
+  
+# ========================================================================
+# SECTION 1: FOLDER STRUCTURE SPECIFICATION
+# ========================================================================
+
+folder_structure:
+  root_pattern: "cortex-brain/documents/planning/active/{plan-id}-{name-snake-case}/"
+  
+  naming_conventions:
+    plan_folder:
+      format: "{plan-id}-{name-snake-case}/"
+      description: "Plan ID followed by meaningful epic or feature name"
+      max_length: 20  # for {name-snake-case} portion only
+      examples:
+        - "cortex6-build-epic/"
+        - "cx150-user-auth/"
+        - "feat-analytics-dash/"
+        - "epic-refactor-core/"
+      
+    master_file:
+      format: "{PLAN-ID}-{NAME}-MASTER-SOURCE-OF-TRUTH.yaml"
+      example: "CORTEX6-BUILD-EPIC-MASTER-SOURCE-OF-TRUTH.yaml"
+      prefix_forbidden: "00-"
+      location: "root"
+      
+    feature_folders:
+      format: "feat{NN}-{name-snake-case}/"
+      number_digits: 2
+      max_length: 25  # for {name-snake-case} portion
+      examples:
+        - "feat01-foundation/"
+        - "feat02-todo-orchestrator/"
+        - "feat03-governance-system/"
+      
+    phase_files:
+      format: "{NN}-phase-{name-snake-case}.json"
+      number_digits: 2
+      max_length: 25  # for {name-snake-case} portion
+      location: "features/feat##-{name}/phases/"
+      examples:
+        - "01-phase-test-infrastructure.json"
+        - "02-phase-state-manager.json"
+        - "03-phase-dag-engine.json"
+  
+  required_root_files:
+    - name: "{PLAN-ID}-{NAME}-MASTER-SOURCE-OF-TRUTH.yaml"
+      description: "Master plan configuration with governance rules"
+      example: "CORTEX6-BUILD-EPIC-MASTER-SOURCE-OF-TRUTH.yaml"
+      
+    - name: "epic.yaml"
+      description: "Epic metadata (if plan type is epic)"
+      
+    - name: "plan-viewer.html"
+      description: "Interactive HTML dashboard for visual progress"
+      
+    - name: "thoughts.txt"
+      description: "Intermittent thoughts and notes during planning"
+      
+    - name: "continuation-prompt.md"
+      description: "Cross-session resumption context"
+      
+    - name: "README.md"
+      description: "Quick start guide for the plan"
+      
+    - name: "EXECUTION-GUIDE.yaml"
+      description: "Execution workflow steps"
+      
+    - name: "config.yaml"
+      description: "Plan-specific governance and approval configuration"
+  
+  required_folders:
+    requirements:
+      description: "Requirements gathered during Phase 1"
+      required: true
+      files:
+        - "requirements.yaml"  # Final consolidated requirements (NO MD)
+        - "requirements-draft-turn-*.yaml"  # Incremental drafts per iteration
+      
+    features:
+      description: "Container for all features (flattened structure)"
+      required: true
+      structure:
+        - "feature.yaml"                 # Feature metadata, phases list, dependencies
+        - "acceptance-criteria.yaml"     # Acceptance criteria from requirements
+        - "context/{feature-name}-context.yaml"  # Feature context (NO MD files)
+        - "phases/"                      # Phase YAML files (##-phase-{name}.yaml)
+        - "tracking/"                    # Per-feature progress
+      
+      governance:
+        no_md_files: true
+        allowed_formats: ["yaml", "json"]
+        reason: "Structured data only for autonomous execution"
+    
+    analysis:
+      description: "Analysis from Phase 1 requirements gathering"
+      required: true
+      files:
+        - "domain-knowledge-final.json"       # Final knowledge graph
+        - "context-analysis-turn-*.yaml"      # Per-iteration analysis
+        - "dependencies-discovered.yaml"      # Dependency mapping
+        - "knowledge-graph-incremental.json"  # Incremental graph updates
+    
+    tracking:
+      description: "Epic-level tracking and audit"
+      required: true
+      files:
+        - "progress-tracker.json"              # Overall epic progress
+        - "requirements-audit.jsonl"           # Phase 1 audit trail
+        - "requirements-conversation.jsonl"    # Interactive session log
+        - "plan-approval-audit.jsonl"          # Phase 3 approval audit
+        - "execution-audit.jsonl"              # Phase 4 execution audit
+    
+    reports:
+      description: "Epic-level reports (YAML format only)"
+      required: true
+      subfolders:
+        - "completion-reports/"  # feat##-{name}-complete.yaml files
+        - "quality-reports/"     # quality-metrics-*.yaml files
+      
+      governance:
+        no_md_files: true
+        allowed_formats: ["yaml", "json"]
+    
+    artifacts:
+      description: "Epic-level deliverables"
+      required: false
+      
+    diagrams:
+      description: "Mermaid diagrams and visualizations"
+      required: false
+      
+    policies:
+      description: "Governance policies for this plan"
+      required: false
+      
+    risk:
+      description: "Risk registry and mitigation"
+      required: false
+      
+    todo:
+      description: "Epic-level TODO tracking"
+      required: false
+      
+    backlog:
+      description: "Archived items and backlogs"
+      required: false
+      
+    scripts:
+      description: "Utility scripts for plan execution"
+      required: false
+
+# ========================================================================
+# SECTION 2: FILE STRUCTURE SCHEMAS
+# ========================================================================
+
+file_schemas:
+  
+  # Master Plan Configuration
+  master_plan_file:
+    filename: "{PLAN-ID}-{NAME}-MASTER-SOURCE-OF-TRUTH.yaml"
+    example: "CORTEX6-BUILD-EPIC-MASTER-SOURCE-OF-TRUTH.yaml"
+    schema:
+      metadata:
+        plan_id: "string"
+        plan_type: "enum[epic, feature, standalone]"
+        version: "string"
+        created_date: "date"
+        author: "string"
+        
+      governance:
+        approval_required: "boolean"
+        approval_granted_by: "string|null"
+        approval_date: "date|null"
+        approval_scope: "enum[full, phase-by-phase, feature-by-feature]"
+        
+      config_file: "string"  # Path to config.yaml
+      
+      features:
+        - feature_id: "string"
+          name: "string"
+          priority: "integer"
+          dependencies: ["string"]
+          
+      execution:
+        mode: "enum[autonomous, interactive]"
+        start_date: "date|null"
+        target_completion: "date|null"
+  
+  # Plan Configuration (Governance & Approvals)
+  config_file:
+    filename: "config.yaml"
+    schema:
+      governance:
+        enforcement_level: "enum[strict, moderate, relaxed]"
+        
+        rules:
+          tdd_enforcement:
+            enabled: "boolean"
+            red_green_refactor_required: "boolean"
+            min_test_coverage: "integer"  # percentage
+            
+          holistic_discovery:
+            enabled: "boolean"
+            search_before_create: "boolean"
+            prevent_duplicates: "boolean"
+            
+          git_isolation:
+            enabled: "boolean"
+            prevent_user_repo_commits: "boolean"
+            
+          planning_isolation:
+            enabled: "boolean"
+            plan_only_no_implement: "boolean"
+        
+        approvals:
+          plan_approval_required: "boolean"
+          feature_approval_required: "boolean"
+          phase_approval_required: "boolean"
+          
+          approval_workflow:
+            - step: "integer"
+              approver: "string"
+              scope: "enum[plan, feature, phase]"
+              
+      execution:
+        autonomous_mode: "boolean"
+        pause_on_error: "boolean"
+        max_retries: "integer"
+        
+        notifications:
+          feature_start: "boolean"
+          feature_complete: "boolean"
+          phase_start: "boolean"
+          phase_complete: "boolean"
+          
+      presentation:
+        feature_intro_max_lines: "integer"  # default: 3
+        phase_intro_max_lines: "integer"    # default: 3
+        show_progress_bars: "boolean"
+        html_viewer_enabled: "boolean"
+  
+  # Feature Configuration
+  feature_file:
+    filename: "feature.yaml"
+    schema:
+      metadata:
+        feature_id: "string"
+        feature_number: "integer"
+        name: "string"
+        description: "string"
+        epic_id: "string"
+        
+      introduction:
+        summary: "string"  # Max 3 lines for user
+        key_objectives: ["string"]
+        
+      phases:
+        - phase_id: "string"
+          phase_number: "integer"
+          name: "string"
+          file: "string"  # Path to JSON file
+          
+      dependencies:
+        features: ["string"]
+        external: ["string"]
+        
+      tracking:
+        status: "enum[NOT_STARTED, IN_PROGRESS, COMPLETED, BLOCKED]"
+        progress: "integer"  # 0-100
+        estimated_hours: "number"
+        actual_hours: "number"
+  
+  # Phase Configuration (JSON)
+  phase_file:
+    filename: "{NN}-phase-{name-snake-case}.json"
+    schema:
+      phase_id: "string"
+      phase_number: "integer"
+      name: "string"
+      feature_id: "string"
+      epic_id: "string"
+      
+      introduction:
+        summary: "string"  # Max 3 lines for user
+        
+      status: "enum[NOT_STARTED, IN_PROGRESS, COMPLETED, BLOCKED]"
+      progress: "integer"
+      estimated_hours: "number"
+      actual_hours: "number"
+      
+      objectives: ["string"]
+      deliverables: ["string"]
+      
+      tasks:
+        - task_id: "string"
+          description: "string"
+          status: "enum[NOT_STARTED, IN_PROGRESS, COMPLETED]"
+          estimated_hours: "number"
+          
+      dependencies:
+        phases: ["string"]
+        
+      validation:
+        tests_required: "boolean"
+        min_test_coverage: "integer"
+        
+  # Domain Knowledge Graph
+  domain_knowledge_file:
+    filename: "domain-knowledge.json"
+    schema:
+      metadata:
+        generated_date: "datetime"
+        plan_id: "string"
+        version: "string"
+        
+      entities:
+        - entity_id: "string"
+          name: "string"
+          type: "enum[class, function, module, package]"
+          location: "string"  # File path
+          methods: ["string"]
+          attributes: ["string"]
+          confidence: "number"  # 0.0-1.0
+          
+      patterns:
+        - pattern_id: "string"
+          pattern_type: "string"
+          base_class: "string|null"
+          common_methods: ["string"]
+          examples: ["string"]
+          
+      relationships:
+        - source_entity: "string"
+          target_entity: "string"
+          relationship_type: "enum[inherits, implements, uses, calls]"
+          
+      insights:
+        - insight_id: "string"
+          category: "enum[reusability, security, performance, architecture]"
+          description: "string"
+          recommendation: "string"
+
+# ========================================================================
+# SECTION 3: ORCHESTRATOR WORKFLOW
+# ========================================================================
+
+orchestrator_workflow:
+  
+  # Phase 1: Interactive Requirements Gathering
+  phase_1_requirements_gathering:
+    name: "Interactive Requirements Discovery (Definition of Ready)"
+    duration: "30-50% of planning time"
+    mode: "interactive"  # USER COLLABORATION REQUIRED
+    autonomous: false
+    
+    introduction:
+      trigger: "when user indicates intent to plan"
+      format: "concise_introduction"
+      max_lines: 5
+      content: |
+        Welcome message explaining:
+        - Planning orchestrator's role
+        - Interactive requirements gathering process
+        - Useful tips (be specific, provide context, mention constraints)
+        - Expected outcome (zero-assumption requirements)
+    
+    iterative_cycle:
+      description: "Repeat until Definition of Ready (DoR) achieved"
+      
+      steps:
+        - step: 1
+          action: "User Provides Context"
+          description: "User describes work, requirements, constraints"
+          user_input: "required"
+          
+        - step: 2
+          action: "CORTEX Analyzes Context (Using Tools)"
+          description: "Master orchestrator uses CORTEX toolkit to analyze"
+          tools_used:
+            - "Semantic Search" # Search workspace for relevant code/docs
+            - "AST Parser" # Parse relevant files to understand structure
+            - "Git History Analysis" # Review commits, comments for context
+            - "Knowledge Graph Builder" # Build entity-relationship graph
+            - "Pattern Detector" # Identify reusable patterns
+            - "Dependency Mapper" # Map dependencies and relationships
+          outputs:
+            - "analysis/context-analysis-turn-{N}.yaml"
+            - "analysis/knowledge-graph-incremental.json"
+            - "analysis/dependencies-discovered.yaml"
+          
+        - step: 3
+          action: "CORTEX Explains Understanding"
+          description: "Return analysis results and understanding to user"
+          format: "structured_explanation"
+          includes:
+            - "What CORTEX discovered in codebase"
+            - "Relevant patterns and components found"
+            - "Assumptions made (to be validated)"
+            - "Gaps or ambiguities identified"
+            - "Questions to clarify requirements"
+          max_lines: 20  # Concise but comprehensive
+          
+        - step: 4
+          action: "User Responds with Clarifications"
+          description: "User provides additional context, answers questions"
+          user_input: "required"
+          
+        - step: 5
+          action: "Update Requirements (Incremental)"
+          description: "Update requirements.yaml with new information"
+          output: "requirements/requirements-draft-turn-{N}.yaml"
+          
+        - step: 6
+          action: "Check DoR Achievement"
+          description: "Evaluate if Definition of Ready achieved"
+          criteria:
+            - "All user stories clearly defined"
+            - "Acceptance criteria specified"
+            - "Dependencies identified"
+            - "Constraints documented"
+            - "Assumptions validated (zero remaining)"
+            - "Technical approach agreed upon"
+            - "Risks identified and mitigated"
+          
+          if_dor_achieved:
+            action: "Proceed to Approval Phase"
+            
+          if_dor_not_achieved:
+            action: "Continue to next iteration (back to Step 1)"
+      
+      termination:
+        condition: "DoR achieved AND no more user clarifications"
+        max_iterations: 10  # Safety limit
+    
+    acceptance_criteria_gathering:
+      trigger: "after initial requirements captured"
+      mode: "interactive"
+      description: "Gather acceptance criteria as part of DoR"
+      
+      steps:
+        - step: 1
+          action: "Present Draft Requirements"
+          description: "Show user the requirements captured so far"
+          format: "structured_summary"
+          
+        - step: 2
+          action: "Request Acceptance Criteria"
+          description: "Ask user to provide acceptance criteria for each feature/user story"
+          prompt: |
+            Requirements captured. Please provide acceptance criteria.
+            
+            For each feature/story, what defines "done"?
+            - What must work?
+            - What must be tested?
+            - What quality standards must be met?
+          
+        - step: 3
+          action: "Capture Acceptance Criteria"
+          description: "Record acceptance criteria provided by user"
+          format: "structured_yaml"
+          updates: "requirements/requirements.yaml (acceptance_criteria section)"
+          
+          criteria_types:
+            - "Functional criteria (features work as expected)"
+            - "Quality criteria (performance, security, usability)"
+            - "Testing criteria (test coverage, test types required)"
+            - "Documentation criteria (what must be documented)"
+          
+        - step: 4
+          action: "Validate Acceptance Criteria Completeness"
+          description: "Ensure every feature has acceptance criteria"
+          validation:
+            - "All features have at least one acceptance criterion"
+            - "Criteria are specific and measurable"
+            - "Criteria include validation method"
+          
+          if_incomplete:
+            action: "Prompt user for missing criteria"
+          
+          if_complete:
+            action: "Add to DoR and proceed to approval checkpoint"
+    
+    approval_checkpoint:
+      trigger: "after DoR achieved (including acceptance criteria)"
+      mode: "interactive"
+      
+      steps:
+        - step: 1
+          action: "Present Final Requirements Summary"
+          description: "Show consolidated requirements to user"
+          format: "structured_summary"
+          includes:
+            - "Features and phases overview"
+            - "Acceptance criteria summary (per feature)"
+            - "Dependencies and constraints"
+            - "Estimated effort and timeline"
+            - "Risks and mitigation strategies"
+        
+        - step: 2
+          action: "Request Approval for Requirements"
+          description: "Ask user to approve requirements before plan generation"
+          prompt: "Requirements complete with acceptance criteria. Approve to generate detailed plan?"
+          
+        - step: 3
+          action: "Handle User Response"
+          options:
+            approve:
+              action: "Create plan-config.yaml with approval and proceed to Phase 2"
+              creates: "plan-config.yaml"
+            modify:
+              action: "Continue interactive cycle for modifications"
+            reject:
+              action: "Pause planning and document feedback"
+    
+    audit_logging:
+      enabled: true
+      location: "tracking/requirements-audit.jsonl"
+      logged_events:
+        - "user_input_received"
+        - "tool_analysis_performed"
+        - "understanding_explained"
+        - "requirements_updated"
+        - "dor_evaluation_result"
+        - "approval_requested"
+        - "approval_response"
+      format: "jsonl"  # Append-only for audit trail
+    
+    outputs:
+      requirements_file:
+        filename: "requirements/requirements.yaml"
+        description: "Final consolidated requirements (NO MD files)"
+        schema:
+          metadata:
+            plan_id: "string"
+            created_date: "date"
+            dor_achieved: "boolean"
+            total_iterations: "integer"
+            acceptance_criteria_provided: "boolean"
+            
+          user_stories:
+            - story_id: "string"
+              description: "string"
+              acceptance_criteria: ["string"]
+              priority: "enum[P0, P1, P2]"
+              
+          features:
+            - feature_id: "string"
+              name: "string"
+              description: "string"
+              user_stories: ["string"]
+              dependencies: ["string"]
+              acceptance_criteria:
+                functional:
+                  - criterion_id: "string"
+                    description: "string"
+                    validation_method: "string"
+                quality:
+                  - criterion_id: "string"
+                    description: "string"
+                    validation_method: "string"
+                testing:
+                  - criterion_id: "string"
+                    description: "string"
+                    validation_method: "string"
+              
+          constraints:
+            technical: ["string"]
+            business: ["string"]
+            timeline: "string"
+            
+          risks:
+            - risk_id: "string"
+              description: "string"
+              severity: "enum[high, medium, low]"
+              mitigation: "string"
+              
+          context:
+            discovered_entities: ["string"]
+            reusable_components: ["string"]
+            patterns_identified: ["string"]
+      
+      plan_config_file:
+        filename: "plan-config.yaml"
+        description: "Plan configuration with approvals (governance enforcement)"
+        created_by: "Phase 1 approval checkpoint"
+        schema:
+          plan_id: "string"
+          plan_name: "string"
+          created_date: "date"
+          
+          approvals:
+            requirements_approved: "boolean"
+            requirements_approved_by: "string"
+            requirements_approved_date: "date"
+            
+            plan_approved: "boolean"  # Set in Phase 3
+            plan_approved_by: "string|null"
+            plan_approved_date: "date|null"
+            
+            execution_authorized: "boolean"  # Set in Phase 3
+            execution_authorized_by: "string|null"
+            execution_authorized_date: "date|null"
+          
+          governance:
+            enforcement_level: "enum[strict, moderate, relaxed]"
+            tdd_enforcement: "boolean"
+            holistic_discovery: "boolean"
+            git_isolation: "boolean"
+            no_md_files: "boolean"
+            
+          execution:
+            mode: "enum[interactive, autonomous]"
+            pause_on_error: "boolean"
+            max_retries: "integer"
+            
+          metadata:
+            requirements_file: "string"
+            dor_achieved: "boolean"
+            acceptance_criteria_count: "integer"
+      
+      knowledge_graph:
+        filename: "analysis/domain-knowledge-final.json"
+        description: "Accumulated knowledge from analysis"
+        
+      conversation_log:
+        filename: "tracking/requirements-conversation.jsonl"
+        description: "Complete audit trail of interactive session"
+  
+  # Phase 2: Plan Structure Generation (From Requirements)
+  phase_2_plan_generation:
+    name: "Detailed Plan Generation (Zero Ambiguity)"
+    duration: "15-25% of planning time"
+    autonomous: true
+    trigger: "after user approves requirements.yaml"
+    
+    prerequisites:
+      validation:
+        - "plan-config.yaml exists"
+        - "plan-config.yaml approvals.requirements_approved == true"
+        - "requirements/requirements.yaml exists"
+        - "requirements.yaml metadata.dor_achieved == true"
+        - "requirements.yaml metadata.acceptance_criteria_provided == true"
+      
+      on_validation_failure:
+        action: "Reject plan generation"
+        message: "Cannot proceed - requirements not approved in plan-config.yaml"
+        exit: true
+    
+    steps:
+      - step: 1
+        action: "Validate Prerequisites"
+        description: "Check plan-config.yaml approvals before proceeding"
+        reads: "plan-config.yaml"
+        validates:
+          - "requirements_approved == true"
+          - "requirements_approved_by is not null"
+          - "requirements_approved_date is valid"
+        
+      - step: 2
+        action: "Load Approved Requirements"
+        description: "Read requirements/requirements.yaml"
+        validation: "Ensure DoR achieved flag is true"
+        
+      - step: 2
+        action: "Generate Feature Structure"
+        description: "Convert requirements into feature folders"
+        output: "features/feat##-{name}/"
+        
+        for_each_feature:
+          create_files:
+            - filename: "feature.yaml"
+              description: "Feature metadata with phases list"
+              schema:
+                feature_id: "string"
+                name: "string"
+                description: "string"
+                phases: ["string"]  # List of phase IDs
+                dependencies: ["string"]
+                acceptance_criteria_file: "string"  # Reference to acceptance-criteria.yaml
+                
+            - filename: "context/{feature-name}-context.yaml"
+              description: "Feature context in YAML (NO MD files)"
+              schema:
+                overview: "string"
+                technical_approach: "string"
+                reusable_components: ["string"]
+                risks: ["string"]
+                
+            - filename: "phases/"
+              description: "Folder for phase YAML/JSON files"
+              
+            - filename: "tracking/progress-tracker.json"
+              description: "Per-feature progress tracking"
+      
+      - step: 3
+        action: "Generate Phase Files (Detailed Instructions)"
+        description: "Create phase YAML files with complete autonomous instructions"
+        output: "features/feat##-{name}/phases/##-phase-{name}.yaml"
+        
+        for_each_phase:
+          create_file:
+            filename: "{NN}-phase-{name-snake-case}.yaml"
+            description: "Complete phase instructions (zero ambiguity)"
+            schema:
+              phase_id: "string"
+              phase_number: "integer"
+              name: "string"
+              feature_id: "string"
+              
+              objectives:
+                - "Clear, actionable objective statements"
+                
+              instructions:
+                description: "Step-by-step instructions for autonomous execution"
+                format: "structured_yaml"
+                steps:
+                  - step_id: "string"
+                    action: "string"
+                    details: "string"
+                    validation: "string"
+                    
+              deliverables:
+                - deliverable_id: "string"
+                  description: "string"
+                  location: "string"  # File path
+                  validation_criteria: "string"
+                  
+              tasks:
+                - task_id: "string"
+                  description: "string"
+                  type: "enum[implementation, testing, documentation]"
+                  estimated_hours: "number"
+                  dependencies: ["string"]
+                  
+              validation:
+                tests_required: "boolean"
+                min_test_coverage: "integer"
+                acceptance_criteria_refs: ["string"]  # References from acceptance-criteria.yaml
+                
+              dependencies:
+                phases: ["string"]
+                external: ["string"]
+      
+      - step: 4
+        action: "Generate Acceptance Criteria File"
+        description: "Create acceptance-criteria.yaml based on requirements.yaml"
+        output: "features/feat##-{name}/acceptance-criteria.yaml"
+        
+        schema:
+          feature_id: "string"
+          acceptance_criteria:
+            - criterion_id: "string"
+              description: "string"
+              phase_id: "string"  # Which phase this criterion applies to
+              validation_method: "enum[automated_test, manual_review, integration_test]"
+              priority: "enum[must_have, should_have, nice_to_have]"
+              status: "enum[not_started, in_progress, completed]"
+              
+          phase_specific_criteria:
+            - phase_id: "string"
+              criteria:
+                - criterion_id: "string"
+                  description: "string"
+                  validation_steps: ["string"]
+      
+      - step: 5
+        action: "Add Refactor Phase (Last Phase for Each Feature)"
+        description: "Create phase-refactor.yaml as final phase"
+        output: "features/feat##-{name}/phases/99-phase-refactor.yaml"
+        
+        schema:
+          phase_id: "99-phase-refactor"
+          phase_number: 99  # Always last
+          name: "Feature Refactor & Quality Review"
+          feature_id: "string"
+          
+          objectives:
+            - "Review all work done in feature holistically"
+            - "Ensure all best practices followed"
+            - "Validate acceptance criteria met"
+            - "Refactor for code quality and maintainability"
+            
+          instructions:
+            steps:
+              - step_id: "review_acceptance_criteria"
+                action: "Review acceptance-criteria.yaml"
+                details: "Validate all criteria marked as completed"
+                validation: "All must_have criteria must be met"
+                
+              - step_id: "code_quality_review"
+                action: "Review code quality"
+                details: |
+                  - Check for code smells
+                  - Ensure naming conventions followed
+                  - Validate error handling comprehensive
+                  - Review logging and monitoring
+                validation: "Code quality score >= 8/10"
+                
+              - step_id: "test_coverage_review"
+                action: "Validate test coverage"
+                details: "Ensure all critical paths tested"
+                validation: "Test coverage >= configured minimum"
+                
+              - step_id: "documentation_review"
+                action: "Review documentation"
+                details: "Ensure all public APIs documented"
+                validation: "Documentation completeness check passes"
+                
+              - step_id: "refactor_opportunities"
+                action: "Identify and implement refactoring"
+                details: |
+                  - Extract common patterns
+                  - Reduce duplication
+                  - Improve readability
+                  - Optimize performance hotspots
+                validation: "Refactoring improves maintainability score"
+                
+              - step_id: "final_validation"
+                action: "Run full test suite"
+                details: "Execute all tests for feature"
+                validation: "All tests pass, no regressions"
+          
+          deliverables:
+            - deliverable_id: "refactor_report"
+              description: "Summary of refactoring improvements"
+              location: "features/feat##-{name}/tracking/refactor-report.yaml"
+              
+            - deliverable_id: "quality_metrics"
+              description: "Code quality and test coverage metrics"
+              location: "features/feat##-{name}/tracking/quality-metrics.json"
+      
+      - step: 6
+        action: "Generate Master Plan File"
+        description: "Create master YAML with all metadata"
+        output: "{PLAN-ID}-{NAME}-MASTER-SOURCE-OF-TRUTH.yaml"
+        
+        schema:
+          metadata:
+            plan_id: "string"
+            plan_type: "enum[epic, feature, standalone]"
+            requirements_file: "requirements/requirements.yaml"
+            dor_achieved: "boolean"
+            
+          governance:
+            approval_required: "boolean"
+            approval_granted_by: "string|null"
+            approval_date: "date|null"
+            
+          features:
+            - feature_id: "string"
+              phases_count: "integer"
+              includes_refactor_phase: "boolean"  # Always true
+              
+          execution:
+            mode: "autonomous"
+            zero_ambiguity_validated: "boolean"
+      
+      - step: 7
+        action: "Validate Plan Completeness"
+        description: "Ensure zero ambiguity in plan"
+        validations:
+          - "All phases have detailed instructions"
+          - "All acceptance criteria defined"
+          - "All dependencies mapped"
+          - "All deliverables specified"
+          - "Refactor phase added to all features"
+          - "NO MD files (only YAML/JSON)"
+          - "File naming conventions followed"
+        
+        if_validation_fails:
+          action: "Pause and report missing elements"
+          
+        if_validation_passes:
+          action: "Proceed to execution approval"
+    
+    presentation:
+      user_visibility: "high"
+      update_frequency: "per-feature"
+      format: "executive_summary"
+      show_validation_results: true
+  
+  # Phase 3: Plan Approval (For Autonomous Execution)
+  phase_3_plan_approval:
+    name: "Plan Approval for Autonomous Execution"
+    duration: "Variable (user-dependent)"
+    autonomous: false
+    mode: "interactive"
+    
+    steps:
+      - step: 1
+        action: "Generate HTML Plan Viewer"
+        description: "Create interactive dashboard for plan review"
+        output: "plan-viewer.html"
+        features:
+          - "Visual feature/phase structure"
+          - "Acceptance criteria checklist"
+          - "Dependency graph visualization"
+          - "Estimated timeline"
+          - "Risk summary"
+        
+      - step: 2
+        action: "Present Plan Summary to User"
+        description: "Show plan overview and request approval"
+        format: "structured_summary"
+        includes:
+          - "Total features and phases"
+          - "Estimated effort (hours)"
+          - "Dependencies identified"
+          - "Acceptance criteria count"
+          - "Refactor phases included"
+          - "Zero ambiguity validation passed"
+          
+        - step: 3
+          action: "Request Approval for Autonomous Execution"
+          description: "Ask user to approve autonomous execution"
+          prompt: |
+            Plan generation complete. Zero ambiguity validated.
+            Review plan-viewer.html and approve to begin autonomous execution.
+          
+        - step: 4
+          action: "Handle User Response"
+          options:
+            approve_autonomous_execution:
+              action: "Update plan-config.yaml with execution approval and proceed to Phase 4"
+              updates:
+                - "plan-config.yaml approvals.plan_approved = true"
+                - "plan-config.yaml approvals.plan_approved_by = user"
+                - "plan-config.yaml approvals.plan_approved_date = now"
+                - "plan-config.yaml approvals.execution_authorized = true"
+                - "plan-config.yaml approvals.execution_authorized_by = user"
+                - "plan-config.yaml approvals.execution_authorized_date = now"
+                - "plan-config.yaml execution.mode = 'autonomous'"
+              logs:
+                - "Log approval event to tracking/plan-approval-audit.jsonl"
+              
+            request_modifications:
+              action: "Stay in interactive mode"
+              behavior: "User can request changes to plan structure"
+              loop_back_to: "Phase 2 (regenerate affected parts)"
+              
+            reject_plan:
+              action: "Pause planning"
+              behavior: "Document rejection reason and exit"    audit_logging:
+      enabled: true
+      location: "tracking/plan-approval-audit.jsonl"
+      logged_events:
+        - "plan_presented"
+        - "approval_requested"
+        - "user_response"
+        - "approval_granted"
+        - "modifications_requested"
+    
+    presentation:
+      user_visibility: "full"
+      format: "html_viewer"
+  
+  # Phase 4: Autonomous Execution (Zero Stopping)
+  phase_4_autonomous_execution:
+    name: "Autonomous Feature/Phase Execution"
+    duration: "50-70% of total time"
+    autonomous: true
+    trigger: "after user approves autonomous execution"
+    
+    prerequisites:
+      validation:
+        - "plan-config.yaml exists"
+        - "plan-config.yaml approvals.execution_authorized == true"
+        - "plan-config.yaml execution.mode == 'autonomous'"
+        - "Master plan file exists"
+        - "All feature files exist"
+      
+      on_validation_failure:
+        action: "Reject execution"
+        message: "Master orchestrator rejects execution - plan-config.yaml does not show execution_authorized"
+        exit: true
+    
+    startup_validation:
+      description: "Master orchestrator checks plan-config.yaml before execution"
+      checks:
+        - check: "requirements_approved"
+          required: true
+          error_message: "Requirements not approved"
+          
+        - check: "plan_approved"
+          required: true
+          error_message: "Plan not approved"
+          
+        - check: "execution_authorized"
+          required: true
+          error_message: "Execution not authorized"
+          
+        - check: "execution.mode == 'autonomous'"
+          required: true
+          error_message: "Execution mode not set to autonomous"
+      
+      if_any_check_fails:
+        action: "Master orchestrator rejects execution"
+        behavior: "Exit with error and notify user"
+    
+    execution_loop:
+      for_each: "feature in features"
+      
+      steps:
+        - step: 1
+          action: "Present Feature Introduction"
+          description: "Show 3-line feature summary to user"
+          format: "github_copilot_chat_message"
+          max_lines: 3
+          content: |
+            ## 🎯 Feature {NN}: {Feature Name}
+            
+            {Brief description of feature scope and objectives}
+            
+            Phases: {N} | Estimated Time: {X}h | Includes Refactor Phase
+          
+        - step: 2
+          action: "Execute Feature Phases Sequentially"
+          
+          sub_loop:
+            for_each: "phase in feature.phases (including refactor phase)"
+            
+            steps:
+              - step: "2.1"
+                action: "Present Phase Introduction"
+                description: "Show 3-line phase summary"
+                format: "github_copilot_chat_message"
+                max_lines: 3
+                content: |
+                  ### ⚙️ Phase {NN}: {Phase Name}
+                  
+                  {Brief description of phase objectives and deliverables}
+                
+              - step: "2.2"
+                action: "Execute Phase Instructions (From YAML)"
+                description: "Follow step-by-step instructions in phase YAML file"
+                behavior: "autonomous"
+                reads_from: "features/feat##-{name}/phases/##-phase-{name}.yaml"
+                follows:
+                  - "instructions.steps (sequential execution)"
+                  - "validation criteria per step"
+                  - "TDD enforcement (if enabled)"
+                  
+              - step: "2.3"
+                action: "Validate Phase Completion"
+                description: "Check deliverables and acceptance criteria"
+                validations:
+                  - "All deliverables created and validated"
+                  - "Tests pass (if TDD enabled)"
+                  - "Acceptance criteria met (from acceptance-criteria.yaml)"
+                  - "Phase-specific validation criteria passed"
+                  
+                if_validation_fails:
+                  action: "Pause, notify user, attempt retry"
+                  max_retries: 3
+                  
+                if_validation_passes:
+                  action: "Mark phase complete and proceed"
+                
+              - step: "2.4"
+                action: "Execute Refactor Phase (If Last Phase)"
+                description: "Special handling for 99-phase-refactor.yaml"
+                behavior: "holistic_review"
+                validates:
+                  - "All acceptance criteria for feature met"
+                  - "Code quality standards met"
+                  - "Test coverage adequate"
+                  - "Documentation complete"
+                  - "Refactoring opportunities addressed"
+                  
+              - step: "2.5"
+                action: "Update Progress"
+                description: "Update tracking files and logs"
+                updates:
+                  - "features/feat##-{name}/tracking/progress-tracker.json"
+                  - "tracking/progress-tracker.json (epic-level)"
+                  - "tracking/audit-log.jsonl"
+                refresh:
+                  - "plan-viewer.html (auto-refresh via polling)"
+        
+        - step: 3
+          action: "Validate Feature Completion"
+          description: "Run feature-level validation"
+          validations:
+            - "All phases completed (including refactor)"
+            - "All acceptance criteria met"
+            - "Feature-level tests pass"
+            - "No regressions introduced"
+            
+        - step: 4
+          action: "Generate Feature Completion Report"
+          description: "Create completion report for feature"
+          output: "reports/completion-reports/feat##-{name}-complete.yaml"
+          
+          schema:
+            feature_id: "string"
+            completion_date: "date"
+            phases_completed: "integer"
+            acceptance_criteria_met: "integer/integer"
+            test_coverage: "number"
+            quality_metrics:
+              code_quality_score: "number"
+              maintainability_index: "number"
+              technical_debt: "enum[low, medium, high]"
+            refactor_improvements:
+              - "improvement description"
+          
+        - step: 5
+          action: "Update Progress (Feature-Level)"
+          description: "Update epic-level progress"
+          updates:
+            - "tracking/progress-tracker.json"
+            - "tracking/audit-log.jsonl"
+    
+    no_stopping_policy:
+      description: "Execution continues without user intervention"
+      exceptions:
+        - "Validation failure after max retries"
+        - "Critical error encountered"
+        - "Governance rule violation detected"
+      
+      on_exception:
+        action: "Pause and notify user with error details"
+        provide:
+          - "Error description"
+          - "Failed validation details"
+          - "Retry attempts made"
+          - "Recommended resolution"
+    
+    presentation:
+      user_visibility: "informational_only"
+      update_frequency: "per_phase_completion"
+      format: "concise_progress_update"
+      max_lines_per_update: 15
+      include_code_snippets: false
+      
+      progress_update_template: |
+        ## 📊 Progress Update
+        
+        Feature: {feature_name} ({progress}%)
+        Phase: {phase_name} ✅ COMPLETED
+        Duration: {actual_hours}h (Est: {estimated_hours}h)
+        
+        Deliverables:
+        - ✅ {deliverable_1}
+        - ✅ {deliverable_2}
+        
+        Acceptance Criteria: {met}/{total}
+        Next: {next_phase_name}
+    
+    audit_logging:
+      enabled: true
+      location: "tracking/execution-audit.jsonl"
+      logged_events:
+        - "feature_started"
+        - "phase_started"
+        - "phase_completed"
+        - "validation_result"
+        - "refactor_phase_completed"
+        - "feature_completed"
+        - "error_encountered"
+        - "retry_attempted"
+
+# ========================================================================
+# SECTION 4: PRESENTATION & USER EXPERIENCE
+# ========================================================================
+
+presentation:
+  
+  # Feature Introduction Format
+  feature_introduction:
+    trigger: "before feature execution"
+    format: "GitHub Copilot chat message"
+    max_lines: 3
+    template: |
+      ## 🎯 Feature {NN}: {Feature Name}
+      
+      {1-3 line summary of what the feature covers}
+      
+      **Phases:** {N} | **Estimated Time:** {X}h
+    
+    example: |
+      ## 🎯 Feature 01: Foundation Infrastructure
+      
+      Establishes core CORTEX infrastructure including test framework, state management,
+      audit logging, and pattern routing. This feature provides the foundation for all
+      subsequent orchestrators and autonomous execution capabilities.
+      
+      **Phases:** 4 | **Estimated Time:** 16h
+  
+  # Phase Introduction Format
+  phase_introduction:
+    trigger: "before phase execution"
+    format: "GitHub Copilot chat message"
+    max_lines: 3
+    template: |
+      ### ⚙️ Phase {NN}: {Phase Name}
+      
+      {1-3 line summary of what the phase covers}
+    
+    example: |
+      ### ⚙️ Phase 01: Test Infrastructure Setup
+      
+      Creates pytest configuration, shared fixtures, and base test classes for unit and
+      integration testing. Establishes TDD workflow foundation.
+  
+  # Progress Update Format
+  progress_update:
+    frequency: "per-phase completion"
+    format: "concise executive summary"
+    max_lines: 15
+    include_code_snippets: false
+    
+    template: |
+      ## 📊 Progress Update
+      
+      **Feature:** {feature_name} ({progress}%)
+      **Phase:** {phase_name} ✅ COMPLETED
+      **Duration:** {actual_hours}h (Est: {estimated_hours}h)
+      
+      **Deliverables:**
+      - ✅ {deliverable_1}
+      - ✅ {deliverable_2}
+      
+      **Next:** {next_phase_name}
+  
+  # HTML Viewer (Interactive Dashboard)
+  html_viewer:
+    filename: "plan-viewer.html"
+    location: "plan root"
+    features:
+      - "Visual progress bars for features and phases"
+      - "Expandable feature sections"
+      - "Color-coded status (Not Started, In Progress, Completed, Blocked)"
+      - "Real-time updates from tracking files"
+      - "Dependency graph visualization"
+      - "Domain knowledge insights panel"
+      
+    refresh_strategy: "polling (every 5s) or WebSocket (real-time)"
+    
+    layout:
+      header: "Plan title, overall progress, status"
+      sidebar: "Features list with quick navigation"
+      main_panel: "Selected feature details with phases"
+      insights_panel: "Domain knowledge and recommendations"
+      footer: "Last updated timestamp, version"
+
+# ========================================================================
+# SECTION 5: GOVERNANCE & COMPLIANCE
+# ========================================================================
+
+governance:
+  
+  # Approval Workflow
+  approval_workflow:
+    plan_approval:
+      required: true
+      trigger: "after plan structure generation"
+      method: "HTML viewer presentation + user confirmation"
+      recorded_in: "{PLAN-ID}-MASTER-SOURCE-OF-TRUTH.yaml"
+      
+    feature_approval:
+      required: false
+      trigger: "before feature execution (optional)"
+      
+    phase_approval:
+      required: false
+      trigger: "before phase execution (optional)"
+  
+  # Rule Enforcement
+  rule_enforcement:
+    tdd_enforcement:
+      applies_to: "all code changes"
+      enforcement: "automatic"
+      validation: "pytest run before phase completion"
+      
+    holistic_discovery:
+      applies_to: "all file creation"
+      enforcement: "automatic"
+      validation: "semantic search before file creation"
+      
+    git_isolation:
+      applies_to: "all commits"
+      enforcement: "automatic"
+      validation: "prevent commits to non-CORTEX repos"
+      
+    planning_isolation:
+      applies_to: "planning orchestrator"
+      enforcement: "automatic"
+      validation: "ensure no implementation during planning"
+  
+  # Audit Trail
+  audit_trail:
+    format: "JSONL (append-only)"
+    location: "tracking/audit-log.jsonl"
+    
+    logged_events:
+      - "plan_created"
+      - "approval_granted"
+      - "feature_started"
+      - "feature_completed"
+      - "phase_started"
+      - "phase_completed"
+      - "error_occurred"
+      - "retry_attempted"
+
+# ========================================================================
+# SECTION 6: INTELLIGENT DOMAIN LEARNING
+# ========================================================================
+
+domain_learning:
+  
+  # Knowledge Accumulation Strategy
+  accumulation:
+    method: "incremental during research phase"
+    persistence: "analysis/domain-knowledge.json"
+    reuse: "across plans in same domain"
+    
+  # Entity Extraction
+  entity_extraction:
+    source: "AST parsing"
+    types:
+      - "classes"
+      - "functions"
+      - "modules"
+      - "packages"
+    confidence_threshold: 0.7
+    
+  # Pattern Detection
+  pattern_detection:
+    method: "LLM-assisted analysis"
+    patterns:
+      - "Orchestrator patterns"
+      - "Factory patterns"
+      - "Singleton patterns"
+      - "Observer patterns"
+      - "Strategy patterns"
+    
+  # Context Enrichment
+  context_enrichment:
+    trigger: "during phase generation"
+    enrichment_types:
+      - "Reusable components"
+      - "Existing patterns"
+      - "Security considerations"
+      - "Performance optimizations"
+      - "Architectural best practices"
+    
+    example:
+      user_request: "plan user authentication"
+      enriched_context: |
+        ✨ INSIGHT: Reuse existing OAuth2Provider class (src/auth/oauth2_provider.py)
+        ✨ INSIGHT: Session management pattern found in UserSessionManager
+        ⚠️ SECURITY: Implement JWT token expiration (found in SecurityPolicy)
+
+# ========================================================================
+# SECTION 7: PERFORMANCE OPTIMIZATIONS
+# ========================================================================
+
+performance:
+  
+  # Lazy AST Parsing
+  lazy_ast_parsing:
+    strategy: "parse on-demand, cache results"
+    cache_location: "cortex-brain/cache/ast-cache/"
+    cache_ttl: "24 hours"
+    
+  # Incremental Knowledge Building
+  incremental_knowledge:
+    strategy: "build during planning, not before"
+    avoids: "full codebase scan upfront"
+    speedup: "4x faster than v5"
+    
+  # Parallel Processing
+  parallel_processing:
+    enabled: true
+    max_workers: 4
+    applies_to:
+      - "File scanning"
+      - "AST parsing"
+      - "Pattern detection"
+
+# ========================================================================
+# SECTION 8: ERROR HANDLING & RESILIENCE
+# ========================================================================
+
+error_handling:
+  
+  # Error Classification
+  error_types:
+    - type: "validation_error"
+      severity: "medium"
+      action: "pause and notify"
+      
+    - type: "file_not_found"
+      severity: "low"
+      action: "skip and log"
+      
+    - type: "parsing_error"
+      severity: "medium"
+      action: "fallback to text parsing"
+      
+    - type: "execution_error"
+      severity: "high"
+      action: "pause and notify"
+  
+  # Retry Logic
+  retry_logic:
+    enabled: true
+    max_retries: 3
+    backoff_strategy: "exponential"
+    retry_delay: "1s, 2s, 4s"
+  
+  # Rollback Strategy
+  rollback:
+    enabled: true
+    checkpoint_frequency: "per-phase"
+    checkpoint_location: "tracking/checkpoints/"
+
+# ========================================================================
+# SECTION 9: MIGRATION & VERSIONING
+# ========================================================================
+
+migration:
+  
+  # Version Compatibility
+  version_compatibility:
+    current_version: "6.0.0"
+    backward_compatible: ["5.0.0", "5.1.0"]
+    
+  # Migration Path
+  migration_path:
+    from_v5:
+      - "Convert flat phase files to phase JSON files"
+      - "Add config.yaml for governance"
+      - "Generate domain-knowledge.json"
+      - "Create plan-viewer.html"
+
+# ========================================================================
+# END OF SPECIFICATION
+# ========================================================================

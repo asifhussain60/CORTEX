@@ -176,15 +176,9 @@ class PlanConverterOrchestrator:
         root_changes = self._reorganize_root()
         changes['files_moved'].extend(root_changes)
         
-        # Rename master-plan.md if exists
-        master_plan = self.plan_path / "master-plan.md"
-        target_name = f"00-{self.plan_name}.md"
-        target_path = self.plan_path / target_name
-        
-        if master_plan.exists() and not target_path.exists():
-            master_plan.rename(target_path)
-            changes['files_renamed'].append(f"master-plan.md → {target_name}")
-            self._log(f"Renamed: master-plan.md → {target_name}")
+        # NO LONGER RENAME master-plan.md to 00- prefix (AC-ORC-PLAN-002: NO numeric prefixes)
+        # Plans should use kebab-case YAML files (e.g., feature-name-plan.yaml)
+        # Legacy 00- pattern is FORBIDDEN
         
         # Generate launch_plan_viewer.py
         if not (self.plan_path / "launch_plan_viewer.py").exists():
@@ -194,7 +188,8 @@ class PlanConverterOrchestrator:
         # Update plan-viewer.html if exists
         plan_viewer = self.plan_path / "plan-viewer.html"
         if plan_viewer.exists():
-            self._update_plan_viewer_references(target_name)
+            # Update to use kebab-case plan filename (not 00- prefix)
+            self._update_plan_viewer_references(f"{self.plan_name}-plan.yaml")
             self._log("Updated plan-viewer.html references")
         
         return changes
@@ -332,9 +327,9 @@ class PlanConverterOrchestrator:
         moved = []
         allowed_root_files = {'plan-viewer.html', 'CONTINUATION-PROMPT.md', 'launch_plan_viewer.py'}
         
-        # Add renamed master plan to allowed files
-        renamed_master = f"00-{self.plan_name}.md"
-        allowed_root_files.add(renamed_master)
+        # Add kebab-case plan YAML to allowed files (NO 00- prefix per AC-ORC-PLAN-002)
+        plan_yaml = f"{self.plan_name}-plan.yaml"
+        allowed_root_files.add(plan_yaml)
         
         for item in self.plan_path.iterdir():
             if item.is_file() and item.name not in allowed_root_files:
@@ -450,8 +445,8 @@ if __name__ == "__main__":
             if not (self.plan_path / folder).exists():
                 errors.append(f"Missing required folder: {folder}/")
         
-        # Check root cleanup
-        allowed_root = {'plan-viewer.html', 'CONTINUATION-PROMPT.md', 'launch_plan_viewer.py', f'00-{self.plan_name}.md'}
+        # Check root cleanup (kebab-case YAML, NO 00- prefix per AC-ORC-PLAN-002)
+        allowed_root = {'plan-viewer.html', 'CONTINUATION-PROMPT.md', 'launch_plan_viewer.py', f'{self.plan_name}-plan.yaml'}
         root_files = [f.name for f in self.plan_path.iterdir() if f.is_file()]
         unexpected_root = set(root_files) - allowed_root
         

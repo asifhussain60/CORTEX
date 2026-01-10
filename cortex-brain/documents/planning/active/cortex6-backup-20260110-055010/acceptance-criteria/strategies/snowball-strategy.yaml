@@ -1,0 +1,636 @@
+# CORTEX Snowball Strategy Framework
+# Consolidated from multiple scattered snowball*.md files
+# Version: 1.0.0
+# Created: 2026-01-09
+# Purpose: Define iterative momentum-building strategy for epic execution
+
+metadata:
+  version: "1.0.0"
+  created: "2026-01-09"
+  author: "Asif Hussain"
+  status: AUTHORITATIVE
+  description: "Framework for snowball effect execution - each completed phase builds momentum and enables subsequent phases, creating exponential value delivery"
+
+# ==============================================================================
+# SNOWBALL CONCEPT
+# ==============================================================================
+
+concept:
+  name: "Snowball Effect Strategy"
+  definition: "Each completed phase builds momentum and enables subsequent phases, creating exponential value delivery over time"
+  
+  core_principles:
+    - name: "Momentum Building"
+      description: "Start small, build foundation, accelerate as dependencies complete"
+      
+    - name: "Parallel Execution"
+      description: "Once foundation solid, execute multiple independent tracks simultaneously"
+      
+    - name: "Value Amplification"
+      description: "Early phases unlock exponential value in later phases (multiplier effect)"
+      
+    - name: "Live Feedback Loop"
+      description: "Work on production files with immediate browser/test validation"
+      
+    - name: "Pattern Recognition"
+      description: "First implementations teach patterns, subsequent work accelerates"
+      
+    - name: "Iterative Refinement"
+      description: "One section at a time, validate before proceeding, atomic commits"
+
+# ==============================================================================
+# MOMENTUM LEVELS
+# ==============================================================================
+
+momentum_levels:
+  - level: "SMALL"
+    symbol: "⚪"
+    description: "Foundation phase - just starting, building base capabilities"
+    characteristics:
+      - "Linear execution (no parallelism)"
+      - "High learning curve"
+      - "Velocity: 0.5-1.0 phases/week"
+      - "Focus: Quality over speed"
+    typical_duration: "Weeks 1-2"
+    
+  - level: "GROWING"
+    symbol: "🟡"
+    description: "Foundation complete - capabilities proven, patterns emerging"
+    characteristics:
+      - "2-way parallelism possible"
+      - "Patterns recognized"
+      - "Velocity: 1.5-2.0 phases/week"
+      - "Focus: Pattern replication"
+    typical_duration: "Weeks 3-4"
+    
+  - level: "ACCELERATING"
+    symbol: "🟠"
+    description: "Parallel execution - 3+ tracks running simultaneously"
+    characteristics:
+      - "3-way parallelism active"
+      - "High velocity sustained"
+      - "Velocity: 2.0-3.0 phases/week"
+      - "Focus: Throughput optimization"
+    typical_duration: "Weeks 5-7"
+    
+  - level: "PEAK"
+    symbol: "🔴"
+    description: "Maximum momentum - all capabilities operational, integration phase"
+    characteristics:
+      - "Maximum parallelism"
+      - "Peak velocity"
+      - "Velocity: 3.0+ phases/week"
+      - "Focus: Integration + validation"
+    typical_duration: "Weeks 8-9"
+    
+  - level: "MAXIMUM"
+    symbol: "🔴🔴🔴"
+    description: "Epic complete - full platform operational, exponential value delivered"
+    characteristics:
+      - "All phases complete"
+      - "Zero regression"
+      - "Production deployment ready"
+      - "Focus: Go-live preparation"
+    typical_duration: "Week 9+"
+
+# ==============================================================================
+# EXECUTION PATTERNS
+# ==============================================================================
+
+execution_patterns:
+  
+  # Pattern 1: Epic-Level Snowball (Large, Multi-Phase Initiatives)
+  epic_snowball:
+    name: "Epic-Level Momentum Building"
+    description: "Multi-week, multi-phase execution with parallel tracks"
+    
+    phases:
+      foundation:
+        duration: "Weeks 1-2"
+        momentum: "SMALL"
+        execution_mode: "Linear"
+        focus: "Build base capabilities that unlock future phases"
+        validation: "Foundation solid before proceeding"
+        
+      expansion:
+        duration: "Weeks 3-4"
+        momentum: "GROWING"
+        execution_mode: "2-way parallel"
+        focus: "Leverage foundation, establish patterns"
+        validation: "Patterns proven, ready for parallelism"
+        
+      acceleration:
+        duration: "Weeks 5-7"
+        momentum: "ACCELERATING"
+        execution_mode: "3-way parallel"
+        focus: "Maximum throughput, pattern replication"
+        validation: "No conflicts, sustained velocity"
+        
+      integration:
+        duration: "Weeks 8-9"
+        momentum: "PEAK"
+        execution_mode: "Linear (integration testing)"
+        focus: "Validate all components work together"
+        validation: "Zero regression, all tests pass"
+    
+    milestone_structure:
+      - name: "Foundation Complete"
+        timing: "End of Week 2"
+        validation: "Base capabilities operational, first real use case working"
+        snowball_effect: "All future phases can leverage foundation"
+        
+      - name: "Patterns Established"
+        timing: "End of Week 4"
+        validation: "Patterns proven with 2+ implementations"
+        snowball_effect: "Parallel execution unlocked"
+        
+      - name: "Peak Velocity Achieved"
+        timing: "Week 6-7"
+        validation: "3+ tracks executing simultaneously without conflicts"
+        snowball_effect: "Maximum throughput sustained"
+        
+      - name: "Integration Complete"
+        timing: "End of Week 9"
+        validation: "All components integrated, zero regression"
+        snowball_effect: "Production deployment ready"
+    
+    value_delivery_curve:
+      description: "Value accelerates exponentially after foundation"
+      equation: "Value(t) = Base × (1 + growth_rate)^time"
+      key_insight: "70% of value delivered in final 30% of timeline"
+  
+  # Pattern 2: Feature-Level Snowball (Small, Iterative Refinement)
+  feature_snowball:
+    name: "Feature-Level Iterative Refinement"
+    description: "Single feature development with live feedback loop"
+    
+    workflow_steps:
+      - step: 1
+        action: "Open file in editor"
+        example: "architecture/index.html"
+        
+      - step: 2
+        action: "Open in browser/test environment"
+        example: "http://localhost:8000/architecture/index.html"
+        
+      - step: 3
+        action: "User reviews current state"
+        validation: "Visual inspection or test execution"
+        
+      - step: 4
+        action: "User identifies issues (one section at a time)"
+        focus: "Single concern, not entire file"
+        
+      - step: 5
+        action: "Apply fixes"
+        constraint: "Only fix identified section"
+        
+      - step: 6
+        action: "User validates fix"
+        validation: "Browser refresh or test re-run"
+        
+      - step: 7
+        action: "Iterate until section perfect"
+        criteria: "User confirms 'this looks perfect'"
+        
+      - step: 8
+        action: "Move to next section"
+        constraint: "Don't touch working sections"
+        
+      - step: 9
+        action: "When complete, git commit"
+        format: "Phase [X]: [action] [file] - [changes]"
+        
+      - step: 10
+        action: "Move to next file/feature"
+        momentum: "Patterns learned, velocity increases"
+    
+    quality_gates:
+      per_section:
+        - "All classes from approved CSS file (no inline styles)"
+        - "Icons + titles inline (proper spacing)"
+        - "Hover effects work correctly"
+        - "Responsive on mobile (320px breakpoint)"
+        - "Accessible (WCAG AA - 4.5:1 contrast)"
+        - "User confirms 'perfect' before proceeding"
+      
+      per_file:
+        - "All sections validated"
+        - "No regression to previous sections"
+        - "Git commit with descriptive message"
+        - "Tests pass (if applicable)"
+    
+    velocity_acceleration:
+      initial_pages: "2 hours/page (learning patterns)"
+      accelerated_pages: "0.5 hours/page (pattern application)"
+      efficiency_gain: "75% time reduction after pattern mastery"
+      key_insight: "First 4 implementations teach the rest"
+
+# ==============================================================================
+# DEPENDENCY MANAGEMENT
+# ==============================================================================
+
+dependency_patterns:
+  
+  linear_dependencies:
+    description: "Must complete in order (blocking dependencies)"
+    notation: "A → B → C"
+    example:
+      - "Phase 1: Knowledge Extension"
+      - "Phase 2: Orchestrator Registry (depends on Phase 1)"
+      - "Phase 4: Knowledge Merge (depends on Phase 2)"
+      - "Phase 5: Custom Framework (depends on Phase 4)"
+    
+    risk: "Delay in Phase 1 blocks entire epic"
+    mitigation:
+      - "Phase 1 has no dependencies - start immediately"
+      - "Critical path phases get priority resources"
+      - "Contingency: Reduce scope if behind schedule"
+  
+  parallel_dependencies:
+    description: "Can execute simultaneously (independent tracks)"
+    notation: "A + B + C (parallel)"
+    examples:
+      two_way:
+        timing: "Week 3"
+        phases: ["Phase 2: Registry", "Phase 3: Goal Detection"]
+        constraint: "No shared resources"
+        
+      three_way:
+        timing: "Weeks 5-7"
+        phases: ["Phase 5: Custom Framework", "Phase 8: TDD Harness", "Phase 9: Plan Viewer"]
+        constraint: "Clear module boundaries"
+    
+    risk: "Parallel phases interfere, reducing velocity"
+    mitigation:
+      - "Integration tests validate no conflicts"
+      - "Clear ownership per track"
+      - "Fallback: Serialize execution if conflicts detected"
+  
+  convergence_dependencies:
+    description: "Multiple phases feed into single integration phase"
+    notation: "A + B + C → D"
+    example:
+      inputs: ["Phase 4: Merge Logic", "Phase 7: Rule Layering"]
+      output: "Phase 11: Integration Testing"
+    
+    risk: "Integration phase blocked until all inputs complete"
+    mitigation:
+      - "Partial integration as phases complete"
+      - "Stub/mock incomplete phases for early testing"
+
+# ==============================================================================
+# MOMENTUM AMPLIFIERS
+# ==============================================================================
+
+amplifiers:
+  description: "Phases that unlock exponential value in subsequent phases"
+  
+  - name: "Foundation Amplifier"
+    phases: ["Phase 1: Knowledge Extension"]
+    impact: "ALL future orchestrators benefit from capability"
+    multiplier: "10x (affects all 10+ orchestrators)"
+    key_insight: "Invest heavily in foundation - ROI is exponential"
+    
+  - name: "Extensibility Amplifier"
+    phases: ["Phase 2: Orchestrator Registry"]
+    impact: "Custom orchestrators registrable via YAML (no code changes)"
+    multiplier: "∞ (unlimited custom orchestrators supported)"
+    key_insight: "Platform extensibility unlocks unlimited value"
+    
+  - name: "Customization Amplifier"
+    phases: ["Phase 5: Custom Framework"]
+    impact: "Companies can build domain-specific orchestrators"
+    multiplier: "N (where N = companies × orchestrators per company)"
+    key_insight: "Customer empowerment drives adoption"
+    
+  - name: "Scalability Amplifier"
+    phases: ["Phase 7: Rule Layering"]
+    impact: "Governance scales to unlimited companies"
+    multiplier: "3x (Core + Company + Domain rules)"
+    key_insight: "Multi-tenant architecture enables scale"
+
+# ==============================================================================
+# MOMENTUM BLOCKERS (RISKS)
+# ==============================================================================
+
+blockers:
+  description: "Risks that halt or reduce momentum"
+  
+  - name: "Foundation Phase Delay"
+    phases_affected: "ALL (entire epic blocked)"
+    severity: "CRITICAL"
+    impact: "Phase 1 delay cascades to all dependent phases"
+    mitigation:
+      - "Phase 1 has no dependencies - start immediately"
+      - "Allocate best resources to Phase 1"
+      - "Daily progress checks"
+    contingency:
+      - "Reduce Phase 1 scope (skip sample data)"
+      - "Add deferred features in Phase 2"
+    
+  - name: "Quality Threshold Not Met"
+    phases_affected: "Phase 4 (blocks Phase 7, reduces confidence in Phase 11)"
+    severity: "HIGH"
+    example: "Phase 4 merge logic <95% accuracy"
+    impact: "Cannot proceed to rule layering if merge unreliable"
+    mitigation:
+      - "100+ merge test cases before Phase 4 sign-off"
+      - "Comprehensive validation suite"
+      - "Stakeholder review of merge results"
+    contingency:
+      - "Explicit override flags if merge fails"
+      - "Manual review workflow as fallback"
+    
+  - name: "Parallel Execution Conflicts"
+    phases_affected: "Phases 5-10 (Weeks 5-7)"
+    severity: "MEDIUM"
+    impact: "Phases interfere, reducing velocity"
+    mitigation:
+      - "Clear module boundaries defined upfront"
+      - "Integration tests run after each commit"
+      - "Daily sync meetings during parallel phases"
+    contingency:
+      - "Serialize execution if conflicts detected"
+      - "Extend timeline by 1-2 weeks"
+    
+  - name: "Pattern Recognition Failure"
+    phases_affected: "All subsequent implementations"
+    severity: "MEDIUM"
+    example: "First 4 pages don't establish clear patterns"
+    impact: "Velocity never accelerates, timeline extends"
+    mitigation:
+      - "Explicit pattern documentation after each implementation"
+      - "Review patterns with stakeholders"
+      - "Adjust approach if patterns not emerging by page 4"
+    contingency:
+      - "Reduce scope (fewer pages/features)"
+      - "Accept slower velocity"
+
+# ==============================================================================
+# SUCCESS INDICATORS
+# ==============================================================================
+
+success_indicators:
+  description: "Metrics that confirm snowball effect is working"
+  
+  momentum_metrics:
+    - name: "Phases Complete"
+      baseline: "0"
+      week_3: "3 (27%)"
+      week_6: "8 (73%)"
+      week_9: "11 (100%)"
+      target: "100%"
+      
+    - name: "Velocity"
+      baseline: "0 phases/week"
+      foundation: "0.5-1.0 phases/week"
+      growing: "1.5-2.0 phases/week"
+      accelerating: "2.0-3.0 phases/week"
+      peak: "3.0+ phases/week"
+      target: "Sustained >1.0 phases/week through completion"
+      
+    - name: "Parallel Tracks Active"
+      foundation: "1 (linear)"
+      growing: "2 (2-way parallel)"
+      accelerating: "3 (3-way parallel)"
+      peak: "1 (integration, linear)"
+      target: "3-way parallel by Week 5"
+  
+  quality_metrics:
+    - name: "Test Coverage"
+      threshold: "≥80% overall, ≥90% core components"
+      validation: "Automated (pytest --cov)"
+      
+    - name: "Regression Rate"
+      threshold: "0% (zero regression allowed)"
+      validation: "All existing tests must pass"
+      
+    - name: "Accuracy/Quality"
+      threshold: "≥95% (e.g., merge logic accuracy)"
+      validation: "100+ test cases per critical component"
+  
+  business_metrics:
+    - name: "Customer Adoption"
+      example: "Companies onboarded"
+      baseline: "0"
+      week_3: "1"
+      week_6: "2"
+      week_9: "3+"
+      target: "3+ companies"
+      
+    - name: "Custom Extensions"
+      example: "Custom orchestrators deployed"
+      baseline: "0"
+      week_6: "1 (reference implementation)"
+      week_9: "2+"
+      target: "2+ production custom orchestrators"
+  
+  go_live_criteria:
+    required_for_production:
+      - "Foundation solid (Weeks 1-4): Knowledge Extension + Registry + Merge Logic operational"
+      - "Parallel execution (Weeks 5-7): 3 tracks ran simultaneously without conflicts"
+      - "Custom orchestrators (Week 7+): 2+ production custom orchestrators deployed"
+      - "Momentum sustained: Velocity >1.0 phases/week maintained through completion"
+      - "Zero regression: All existing tests pass after each phase"
+      - "Stakeholder sign-off: All go-live criteria approved"
+
+# ==============================================================================
+# TRACKING & REPORTING
+# ==============================================================================
+
+tracking:
+  
+  progress_visualization:
+    format: "ASCII progress bars with momentum symbols"
+    example: |
+      ╔════════════════════════════════════════════════════════════════════════════╗
+      ║                      SNOWBALL STRATEGY PROGRESS                            ║
+      ╠════════════════════════════════════════════════════════════════════════════╣
+      ║ Phase 1: Foundation (2 weeks)       [████████░░]  80%  🟡 GROWING        ║
+      ║ Phase 2: Expansion (2 weeks)        [░░░░░░░░░░]   0%  ⏳ PENDING        ║
+      ║ Phase 3: Acceleration (3 weeks)     [░░░░░░░░░░]   0%  ⏳ PENDING        ║
+      ║ Phase 4: Integration (2 weeks)      [░░░░░░░░░░]   0%  ⏳ PENDING        ║
+      ╠════════════════════════════════════════════════════════════════════════════╣
+      ║ Total: 9 weeks | Completed: 2 | Remaining: 7                              ║
+      ║ Momentum: 🟡 GROWING | Velocity: 1.5 phases/week                          ║
+      ╚════════════════════════════════════════════════════════════════════════════╝
+  
+  value_curve_visualization:
+    format: "ASCII graph showing exponential value growth"
+    example: |
+      Value
+        ↑
+        │                                        ╱🔴 Milestone 6
+        │                                  ╱🔴 Milestone 5
+        │                            ╱🟠 Milestone 4
+        │                      ╱🟠 Milestone 3
+        │               ╱🟡 Milestone 2
+        │        ⚪ Milestone 1
+        │  ⚪
+        └──────────────────────────────────────────────→ Time
+           W1  W2  W3  W4  W5  W6  W7  W8  W9
+  
+  git_commit_strategy:
+    format: "Phase [X][Y]: [action] [file/component] - [changes]"
+    examples:
+      epic_level: "Phase 1: Complete Knowledge Extension - All 5 tasks validated"
+      feature_level: "Phase 16a: Refine architecture/index.html - Brain tiers tetris layout"
+      integration: "Phase 11: Integration - All orchestrators validated, zero regression"
+    
+    guidelines:
+      - "Atomic commits per completed section/task"
+      - "Descriptive messages (what + why)"
+      - "Phase prefix for snowball tracking"
+      - "Rollback-safe (each commit is stable state)"
+
+# ==============================================================================
+# INTELLIGENCE LAYER (OPTIONAL ENHANCEMENT)
+# ==============================================================================
+
+intelligence_layer:
+  description: "Automated decision-making to optimize snowball execution"
+  
+  complexity_based_execution:
+    threshold_simple:
+      score_range: "0-20"
+      strategy: "Direct execution (no planning)"
+      example: "Single file refinement"
+      
+    threshold_moderate:
+      score_range: "21-50"
+      strategy: "Light planning (checklist)"
+      example: "4-5 page batch update"
+      
+    threshold_complex:
+      score_range: "51+"
+      strategy: "Full snowball strategy (phased execution)"
+      example: "Multi-week epic with parallel tracks"
+  
+  holistic_pattern_detection:
+    description: "Auto-find similar files/components for batch processing"
+    example: "One request to fix header → detects all pages with similar header pattern"
+    benefit: "User requests one change, system applies pattern across all similar contexts"
+  
+  tool_first_philosophy:
+    description: "95% automation via scripts/tools"
+    guideline: "If task is repetitive, automate it"
+    example: "52 scripts for HTML standardization"
+  
+  automatic_scope_detection:
+    description: "One request → system determines full scope"
+    example: "Fix architecture header → system identifies all architecture pages needing update"
+    benefit: "Reduces user cognitive load, ensures consistency"
+  
+  self_documenting_standards:
+    description: "Patterns auto-recorded as they're established"
+    format: "YAML configuration + markdown guides"
+    benefit: "Future work references standards automatically"
+
+# ==============================================================================
+# ANTI-PATTERNS (WHAT TO AVOID)
+# ==============================================================================
+
+anti_patterns:
+  
+  - name: "Preview-Based Development"
+    description: "Creating isolated preview files disconnected from production environment"
+    why_fails: "Preview doesn't reflect production CSS, dependencies, or runtime context"
+    correct_approach: "Work directly on production files with live browser feedback"
+    
+  - name: "Big Bang Refactoring"
+    description: "Attempting to fix entire file/feature in one pass"
+    why_fails: "Overwhelming changes, difficult to validate, high regression risk"
+    correct_approach: "One section at a time, validate before proceeding"
+    
+  - name: "Parallel Execution Too Early"
+    description: "Starting parallel tracks before foundation is solid"
+    why_fails: "Conflicts multiply, momentum stalls, rework required"
+    correct_approach: "Wait until foundation proven (2+ implementations) before parallelizing"
+    
+  - name: "Ignoring Quality Gates"
+    description: "Proceeding to next phase despite failing validation"
+    why_fails: "Technical debt compounds, momentum lost in rework"
+    correct_approach: "Block progression until quality threshold met"
+    
+  - name: "Undefined Patterns"
+    description: "Not documenting patterns as they emerge"
+    why_fails: "Velocity never accelerates, each implementation starts from scratch"
+    correct_approach: "Explicit pattern documentation after first 2-3 implementations"
+    
+  - name: "No User Validation"
+    description: "Assuming changes are correct without user feedback"
+    why_fails: "Misalignment with requirements, rework required"
+    correct_approach: "User confirms 'perfect' before proceeding to next section"
+
+# ==============================================================================
+# USAGE GUIDELINES
+# ==============================================================================
+
+usage:
+  
+  when_to_use_epic_snowball:
+    - "Multi-week initiatives (4+ weeks)"
+    - "Multiple dependent phases (5+ phases)"
+    - "Opportunity for parallel execution"
+    - "Foundation phase unlocks exponential value"
+    - "Example: Platform transformation, new capability deployment"
+  
+  when_to_use_feature_snowball:
+    - "Single feature development (hours to days)"
+    - "Iterative refinement needed"
+    - "Live feedback loop available"
+    - "Pattern learning expected"
+    - "Example: UI refinement, bug fixing, script development"
+  
+  customization_guidance:
+    - "Adjust momentum levels to match team size and complexity"
+    - "Define amplifiers specific to your domain"
+    - "Identify critical path dependencies early"
+    - "Set quality thresholds based on business risk"
+    - "Track metrics that matter to stakeholders"
+  
+  integration_with_cortex:
+    planning_orchestrator: "Generate snowball-structured plans automatically"
+    epic_review_orchestrator: "Track momentum metrics and identify blockers"
+    maintenance_orchestrator: "Validate no regression as momentum builds"
+    todo_orchestrator: "Manage DAG with snowball dependencies"
+
+# ==============================================================================
+# REFERENCES
+# ==============================================================================
+
+references:
+  consolidated_from:
+    - path: "cortex-brain/documents/planning/active/cortex5-epic/tracking/snowball.md"
+      focus: "Epic-level momentum building, dependency chains, amplifiers"
+      
+    - path: "cortex-brain/archives/planning/cleanup-2026-01-06/html-glassmorphism-alignment/guides/snowball-strategy.md"
+      focus: "Feature-level iterative refinement, live feedback loop, quality gates"
+  
+  related_documents:
+    - "cortex-brain/documents/planning/active/cortex6/acceptance-criteria/CX6-acceptance-criteria.yaml"
+    - ".asif/AI-Learning/cortex6/acceptance/FINAL-HOLISTIC-REVIEW-CRITICAL-GAPS.md"
+    - ".github/prompts/CORTEX.prompt.md"
+    - "cortex-brain/tier0/brain-protection-rules.yaml"
+
+# ==============================================================================
+# VERSION HISTORY
+# ==============================================================================
+
+version_history:
+  - version: "1.0.0"
+    date: "2026-01-09"
+    changes:
+      - "Initial consolidation from scattered snowball*.md files"
+      - "Epic-level and feature-level patterns documented"
+      - "Momentum levels, amplifiers, blockers, success indicators defined"
+      - "Anti-patterns and usage guidelines added"
+      - "Intelligence layer enhancements captured"
+    author: "Asif Hussain"
+
+# ==============================================================================
+# COPYRIGHT
+# ==============================================================================
+
+copyright: "Copyright © 2025-2026 Asif Hussain. All rights reserved."

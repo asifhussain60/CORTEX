@@ -27,8 +27,8 @@ from pathlib import Path
 from datetime import datetime
 from enum import Enum
 
-from src.orchestrators.base.base_orchestrator_v4_1 import (
-    BaseOrchestratorV4_1,
+from src.orchestrators.base.base_orchestrator_v4 import (
+    BaseOrchestratorV4,
     PhaseStatus,
     PhaseResult
 )
@@ -64,7 +64,7 @@ class MaintenanceResult:
         self.timestamp = datetime.now().isoformat()
 
 
-class MaintenanceOrchestratorV2(BaseOrchestratorV4_1):
+class MaintenanceOrchestratorV2(BaseOrchestratorV4):
     """
     Maintenance Orchestrator v2 - 12-phase maintenance pipeline.
     

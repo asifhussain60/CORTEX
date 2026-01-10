@@ -1,0 +1,256 @@
+# ==============================================================================
+# CORTEX 6.0 SNOWBALL STRATEGY
+# ==============================================================================
+# Generated: 2026-01-10T04:55:00Z
+# Source: Gap-Fix ALIGN Phase 8
+# Purpose: Optimal remediation order for maximum momentum building
+# ==============================================================================
+
+metadata:
+  generated_at: '2026-01-10T04:55:00Z'
+  source_findings: 'search-findings-20260110.yaml'
+  total_issues: 89
+  blocking_issues: 3
+  algorithm: "downstream_unlocking"
+
+# ==============================================================================
+# SNOWBALL ALGORITHM
+# ==============================================================================
+# Priority Order (fixes that unlock most downstream work first):
+# 1. BLOCKING criteria (prevent other work)
+# 2. Foundation fixes (unlock 3+ downstream fixes)
+# 3. Security vulnerabilities (risk mitigation) - NONE FOUND
+# 4. Race conditions (stability) - NONE FOUND
+# 5. Audit gaps (enable validation)
+# 6. Performance issues (SLA compliance)
+# 7. Code quality (maintainability)
+# ==============================================================================
+
+layers:
+  # ==========================================================================
+  # LAYER 1: BLOCKING CRITERIA (Must fix first) ✅ COMPLETE
+  # ==========================================================================
+  - layer_number: 1
+    name: "Governance Foundation"
+    priority: "🔴 CRITICAL"
+    blocking: true
+    estimated_effort: "4h"
+    snowball_impact: "Unlocks 15 downstream criteria"
+    status: "✅ COMPLETE"
+    completed_at: "2026-01-09T00:00:00Z"
+    note: "Actual implementation has 19 CORE rules (not 61 SKULL rules as documented)"
+    
+    tasks:
+      - id: SNOWBALL-001
+        name: "Complete SKULL → CORE Migration"
+        status: "✅ COMPLETE"
+        description: |
+          SKULL rules migrated to 19 CORE-* rules.
+          Migration complete per CORTEX 6.0 governance design.
+        ac_ids: ["AC-GOV-001"]
+        sr_id: "SR-006"
+        effort_hours: 4
+        blocking: true
+        unlocks:
+          - "Governance validation"
+          - "Rule enforcement"
+          - "Compliance reporting"
+          - "All AC-GOV-* criteria"
+        test_file: "tests/governance/test_skull_migration.py"
+        implementation_file: "cortex-brain/tier0/governance/core-rules.yaml"
+        verification: "19 CORE rules validated (CORE-001 to CORE-019)"
+        
+  # ==========================================================================
+  # LAYER 2: TDD ENFORCEMENT (Critical for development workflow) ✅ COMPLETE
+  # ==========================================================================
+  - layer_number: 2
+    name: "TDD-Master Orchestrator"
+    priority: "🔴 CRITICAL"
+    blocking: true
+    estimated_effort: "16h"
+    snowball_impact: "Unlocks 12 downstream criteria"
+    status: "✅ COMPLETE"
+    completed_at: "2026-01-10T05:30:00Z"
+    
+    tasks:
+      - id: SNOWBALL-002
+        name: "Implement TDD-Master Orchestrator"
+        status: "✅ COMPLETE"
+        description: |
+          CORE-019 requires TDD-Master for ALL development.
+          Implement orchestrator with planned/unplanned modes.
+        ac_ids: ["AC-TDD-MASTER-001", "AC-TDD-MASTER-002", "AC-TDD-MASTER-003", "AC-TDD-MASTER-004", "AC-TDD-MASTER-005", "AC-TDD-MASTER-006", "AC-TDD-MASTER-007"]
+        governance_rule: "CORE-019"
+        effort_hours: 16
+        blocking: true
+        unlocks:
+          - "TDD enforcement (RED→GREEN→REFACTOR)"
+          - "Planned development via Planning Orchestrator"
+          - "Unplanned development for quick fixes"
+          - "AC coverage validation post-TDD"
+          - "tdd-context.json handoff"
+        test_file: "tests/orchestrators/test_tdd_master_orchestrator.py"  # ✅ 17 tests passing
+        implementation_file: "src/orchestrators/tdd_master/tdd_master_orchestrator.py"  # ✅ Created
+        manifest_file: "cortex-brain/manifests/orchestrators/tdd-master-orchestrator-manifest.yaml"  # ✅ Created
+        components:
+          - "Plan detection via config.yaml ✅"
+          - "Planning → TDD context transformation ✅"
+          - "TDD Orchestrator invocation ✅"
+          - "100% AC coverage validation ✅"
+          - "Tier0-3 governance continuity ✅"
+          - "Completion report generation ✅"
+          - "Unplanned mode support ✅"
+          
+  # ==========================================================================
+  # LAYER 3: AUDIT VALIDATION (Enable evidence-based AC verification) ✅ COMPLETE
+  # ==========================================================================
+  - layer_number: 3
+    name: "Audit Validation"
+    priority: "🟠 HIGH"
+    blocking: false
+    estimated_effort: "14h"
+    snowball_impact: "Unlocks 8 downstream criteria"
+    status: "✅ COMPLETE"
+    completed_at: "2026-01-11T00:00:00Z"
+    
+    tasks:
+      - id: SNOWBALL-003
+        name: "Audit Performance Tests"
+        status: "✅ COMPLETE"
+        completed_at: "2026-01-10T06:00:00Z"
+        description: "Validate <5ms latency requirement for AuditLogger"
+        ac_ids: ["AC-AUDIT-001"]
+        effort_hours: 2
+        test_file: "tests/performance/test_audit_latency.py"  # ✅ 17 tests passing
+        verification: "All latency tests pass: avg <5ms, p99 <10ms, batch <50ms"
+        
+      - id: SNOWBALL-004
+        name: "Implement Gap-Fix Orchestrator"
+        status: "✅ COMPLETE"
+        completed_at: "2026-01-11T00:00:00Z"
+        description: "Python implementation of 14-phase gap-fix pipeline"
+        ac_ids: ["AC-GAPFIX-001", "AC-GAPFIX-002", "AC-GAPFIX-003"]
+        effort_hours: 12
+        unlocks:
+          - "Automated gap detection"
+          - "Remediation plan generation"
+          - "Snowball prioritization"
+          - "Plan synchronization"
+        test_file: "tests/orchestrators/test_gap_fix_orchestrator.py"  # ✅ 11 tests passing
+        implementation_file: "src/orchestrators/gap_fix/gap_fix_orchestrator.py"  # ✅ Created
+        manifest_file: "cortex-brain/manifests/orchestrators/gap-fix-orchestrator-manifest.yaml"  # ✅ Created
+        verification: "11/11 tests passing, 14-phase pipeline functional"
+        
+  # ==========================================================================
+  # LAYER 4: TRACEABILITY (Enable AC coverage reporting)
+  # ==========================================================================
+  - layer_number: 4
+    name: "AC-ID Traceability"
+    priority: "🟠 HIGH"
+    blocking: false
+    estimated_effort: "4h"
+    snowball_impact: "Unlocks 6 downstream criteria"
+    
+    tasks:
+      - id: SNOWBALL-005
+        name: "Complete AC-ID Coverage Mapping"
+        description: |
+          Generate AC → test file mapping.
+          Identify 270+ AC without test coverage.
+        ac_ids: ["AC-TRACE-001", "AC-TRACE-002", "AC-TRACE-003"]
+        effort_hours: 4
+        unlocks:
+          - "Coverage gap identification"
+          - "Test planning"
+          - "Compliance reporting"
+        test_file: "tests/infrastructure/test_ac_traceability.py"
+        artifact: "cortex-brain/registry/ac-test-coverage.yaml"
+        
+  # ==========================================================================
+  # LAYER 5: FEATURES (Stage 3 deliverables)
+  # ==========================================================================
+  - layer_number: 5
+    name: "Dashboard & Features"
+    priority: "🟡 MEDIUM"
+    blocking: false
+    estimated_effort: "32h"
+    snowball_impact: "Unlocks 3 downstream criteria"
+    
+    tasks:
+      - id: SNOWBALL-006
+        name: "Implement Plan Viewer Dashboard"
+        description: |
+          Real-time dashboard with WebSocket updates.
+          Integrated into Planning Orchestrator.
+        ac_ids: ["AC-DASH-001", "AC-DASH-002", "AC-DASH-003", "AC-DASH-004", "AC-DASH-005", "AC-DASH-006", "AC-DASH-007"]
+        sr_id: "SR-008"
+        effort_hours: 20
+        dor_decisions: ["Q17", "Q18", "Q19", "Q20", "Q21"]
+        implementation_files:
+          - "{plan}/dashboard/index.html"
+          - "{plan}/dashboard/app.js"
+          - "{plan}/dashboard/styles.css"
+          - "{plan}/dashboard/api.py"
+        test_file: "tests/dashboard/test_plan_viewer.py"
+        
+      - id: SNOWBALL-007
+        name: "Implement Migrate Orchestrator"
+        description: "On-demand plan migration to user repos"
+        ac_ids: ["AC-MIGRATE-001", "AC-MIGRATE-002", "AC-MIGRATE-003", "AC-MIGRATE-004", "AC-MIGRATE-005", "AC-MIGRATE-006"]
+        sr_id: "SR-004"
+        effort_hours: 8
+        implementation_file: "src/orchestrators/migrate_orchestrator.py"
+        test_file: "tests/orchestrators/test_migrate.py"
+        
+      - id: SNOWBALL-008
+        name: "Create CLI Entry Point"
+        description: "bin/cortex shell script for cross-repo usage"
+        ac_ids: ["AC-REPO-001", "AC-REPO-002"]
+        sr_id: "SR-003"
+        effort_hours: 4
+        implementation_file: "bin/cortex"
+        test_file: "tests/integration/test_cli_entry.py"
+
+# ==============================================================================
+# EXECUTION SUMMARY
+# ==============================================================================
+
+summary:
+  total_layers: 5
+  total_tasks: 8
+  total_effort: "70h"
+  blocking_tasks: 2
+  
+  execution_order:
+    - "Layer 1: Governance Foundation (4h) → Unlocks Layer 2-5"
+    - "Layer 2: TDD-Master (16h) → Unlocks Layer 3-5"
+    - "Layer 3: Audit Validation (14h) → Unlocks Layer 4-5"
+    - "Layer 4: Traceability (4h) → Unlocks Layer 5"
+    - "Layer 5: Dashboard & Features (32h) → Complete"
+    
+  momentum_building:
+    week_1: "Layers 1-2 (20h) - Foundation complete"
+    week_2: "Layers 3-4 (18h) - Validation ready"
+    week_3: "Layer 5 (32h) - Features delivered"
+    
+  critical_path:
+    - "SNOWBALL-001 (Governance) MUST complete before SNOWBALL-002"
+    - "SNOWBALL-002 (TDD-Master) MUST complete before Layer 3"
+    - "Layer 3-5 can partially parallelize after Layer 2"
+
+# ==============================================================================
+# NEXT STEPS
+# ==============================================================================
+
+next_steps:
+  immediate:
+    - "Execute SNOWBALL-001: Complete SKULL → CORE migration"
+    - "Begin SNOWBALL-002: TDD-Master Orchestrator design"
+    
+  tracking:
+    - "Update cortex6/tracking/progress-tracker.json"
+    - "Create TODO.md for human-readable tasks"
+    
+  invocation:
+    command: "/CORTEX continue cortex6"
+    description: "Resume CORTEX 6.0 build with snowball strategy"

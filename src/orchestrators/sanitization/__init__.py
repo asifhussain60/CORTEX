@@ -1,6 +1,6 @@
 """Sanitization orchestrator package."""
 
-from src.orchestrators.sanitization.sanitization_orchestrator_v2 import (
+from src.orchestrators.sanitization.sanitization_orchestrator import (
     SanitizationOrchestratorV2,
     SanitizationType,
     SanitizationResult

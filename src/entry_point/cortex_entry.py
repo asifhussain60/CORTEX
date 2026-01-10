@@ -139,7 +139,7 @@ class CortexEntry:
             type=OrchestratorType.AUTONOMOUS,
             category=OrchestratorCategory.PLANNING,
             class_name="PlanningOrchestratorV5",
-            module_path="src.orchestrators.planning.planning_orchestrator_v5",
+            module_path="src.orchestrators.planning.planning_orchestrator",
             manifest_path="cortex-brain/manifests/orchestrators/planning-system-5.0-manifest.yaml",
             patterns=[r"^(plan|create a plan|make a plan).*$"],
             capabilities=["planning", "context_discovery", "state_tracking"]
@@ -167,7 +167,7 @@ class CortexEntry:
             type=OrchestratorType.AUTONOMOUS,
             category=OrchestratorCategory.MAINTENANCE,
             class_name="MaintenanceOrchestratorV2",
-            module_path="src.orchestrators.maintenance.maintenance_orchestrator_v2",
+            module_path="src.orchestrators.maintenance.maintenance_orchestrator",
             manifest_path="cortex-brain/manifests/orchestrators/maintenance-orchestrator-v2.yaml",
             patterns=[r"^(maintenance|system maintenance|run maintenance).*$"],
             capabilities=["health_monitoring", "dependency_updates", "security_scan", "performance_optimization"]
@@ -181,7 +181,7 @@ class CortexEntry:
             type=OrchestratorType.AUTONOMOUS,
             category=OrchestratorCategory.INTEGRATION,
             class_name="ADOOrchestratorV2",
-            module_path="src.orchestrators.ado.ado_orchestrator_v2",
+            module_path="src.orchestrators.ado.ado_orchestrator",
             manifest_path="cortex-brain/manifests/orchestrators/ado-orchestrator-v2.yaml",
             patterns=[r"^(ado|ado story|ado feature|create ado|azure devops).*$"],
             capabilities=["work_item_creation", "user_story_generation", "feature_creation", "epic_linking"]
@@ -195,7 +195,7 @@ class CortexEntry:
             type=OrchestratorType.AUTONOMOUS,
             category=OrchestratorCategory.ANALYSIS,
             class_name="InvestigationOrchestratorV2",
-            module_path="src.orchestrators.investigation.investigation_orchestrator_v2",
+            module_path="src.orchestrators.investigation.investigation_orchestrator",
             manifest_path="cortex-brain/manifests/orchestrators/investigation-orchestrator-v2.yaml",
             patterns=[r"^(investigate|investigation|find root cause|analyze error|debug issue).*$"],
             capabilities=["log_analysis", "error_detection", "dependency_analysis", "root_cause_analysis"]
@@ -209,7 +209,7 @@ class CortexEntry:
             type=OrchestratorType.AUTONOMOUS,
             category=OrchestratorCategory.SECURITY,
             class_name="SanitizationOrchestratorV2",
-            module_path="src.orchestrators.sanitization.sanitization_orchestrator_v2",
+            module_path="src.orchestrators.sanitization.sanitization_orchestrator",
             manifest_path="cortex-brain/manifests/orchestrators/sanitization-orchestrator-v2.yaml",
             patterns=[r"^(sanitize|sanitization|remove pii|remove secrets|anonymize).*$"],
             capabilities=["pii_removal", "secret_detection", "data_anonymization", "compliance_validation"]
@@ -227,6 +227,34 @@ class CortexEntry:
             manifest_path="cortex-brain/manifests/orchestrators/todo-orchestrator.yaml",
             patterns=[r"^(todo|manage todos|task management|dag|dependencies).*$"],
             capabilities=["dag_management", "dependency_tracking", "task_parallelization", "checkpoint_recovery"]
+        )
+        
+        # TDD-Master Orchestrator (Planning → TDD coordination)
+        self.registry.register(
+            id="tdd_master",
+            name="TDD-Master Orchestrator",
+            version="1.0.0",
+            type=OrchestratorType.AUTONOMOUS,
+            category=OrchestratorCategory.WORKFLOW,
+            class_name="TDDMasterOrchestrator",
+            module_path="src.orchestrators.tdd_master.tdd_master_orchestrator",
+            manifest_path="cortex-brain/manifests/orchestrators/tdd-master-orchestrator-manifest.yaml",
+            patterns=[r"^(tdd-master|implement|build|create|fix|refactor|add feature).*$"],
+            capabilities=["plan_detection", "context_transformation", "tdd_invocation", "ac_validation", "governance_enforcement", "dashboard_updates", "completion_reports"]
+        )
+        
+        # Gap-Fix Orchestrator (14-phase gap detection and remediation)
+        self.registry.register(
+            id="gap_fix",
+            name="Gap-Fix Orchestrator",
+            version="1.0.0",
+            type=OrchestratorType.AUTONOMOUS,
+            category=OrchestratorCategory.ANALYSIS,
+            class_name="GapFixOrchestrator",
+            module_path="src.orchestrators.gap_fix.gap_fix_orchestrator",
+            manifest_path="cortex-brain/manifests/orchestrators/gap-fix-orchestrator-manifest.yaml",
+            patterns=[r"^(gap-fix|gap fix|find gaps|detect gaps|fix gaps|gap detection|gap analysis).*$"],
+            capabilities=["gap_detection", "snowball_analysis", "mcp_validation", "plan_alignment", "remediation_planning", "phase_orchestration"]
         )
         
         self.logger.info("Registered core orchestrators")

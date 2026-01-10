@@ -85,7 +85,7 @@ def planning_execute(
         Execution status and results
     """
     try:
-        from orchestrators.planning.planning_orchestrator_v5 import PlanningOrchestratorV5
+        from orchestrators.planning.planning_orchestrator import PlanningOrchestratorV5
         
         workspace = Path(workspace_root).resolve()
         

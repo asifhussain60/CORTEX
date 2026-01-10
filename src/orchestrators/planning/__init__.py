@@ -10,7 +10,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 
 # Planning v5 orchestrator
 try:
-    from .planning_orchestrator_v5 import PlanningOrchestratorV5
+    from .planning_orchestrator import PlanningOrchestratorV5
     __all__ = ['PlanningOrchestratorV5']
 except ImportError:
     __all__ = []

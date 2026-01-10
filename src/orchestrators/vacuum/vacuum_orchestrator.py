@@ -23,8 +23,8 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional
 from datetime import datetime
 
-from src.orchestrators.base.base_orchestrator_v4_1 import (
-    BaseOrchestratorV4_1,
+from src.orchestrators.base.base_orchestrator_v4 import (
+    BaseOrchestratorV4,
     PhaseStatus,
     PhaseResult,
     OrchestratorResult,
@@ -36,7 +36,7 @@ from src.database.planning_state_db import PlanningStateDB
 logger = logging.getLogger(__name__)
 
 
-class VacuumOrchestratorV2(BaseOrchestratorV4_1):
+class VacuumOrchestratorV2(BaseOrchestratorV4):
     """
     Vacuum Orchestrator v2 - Pure autonomous filesystem cleanup.
     
@@ -73,7 +73,7 @@ class VacuumOrchestratorV2(BaseOrchestratorV4_1):
         self.state_db = state_db
         self.plan_id = plan_id
         
-        # Call parent with only config_path (BaseOrchestratorV4_1 only accepts this)
+        # Call parent with only config_path (BaseOrchestratorV4 only accepts this)
         super().__init__(config_path=config_path)
         
         # Load config manually since base doesn't do it

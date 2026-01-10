@@ -17,8 +17,8 @@ from typing import Dict, Any, Optional, List
 from pathlib import Path
 from datetime import datetime
 
-from src.orchestrators.base.base_orchestrator_v4_1 import (
-    BaseOrchestratorV4_1,
+from src.orchestrators.base.base_orchestrator_v4 import (
+    BaseOrchestratorV4,
     PhaseStatus,
     PhaseResult
 )
@@ -52,7 +52,7 @@ from src.orchestrators.master.todo_manager import TodoManager, Task, TaskStatus
 # from src.knowledge.knowledge_merger import KnowledgeMerger
 
 
-class PlanningOrchestratorV5(BaseOrchestratorV4_1):
+class PlanningOrchestratorV5(BaseOrchestratorV4):
     """
     Planning Orchestrator v5 - Pure autonomous planning.
     
@@ -154,7 +154,7 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
         """
         Execute a single phase with DoR/DoD validation.
         
-        Override of BaseOrchestratorV4_1.execute_phase() to add acceptance criteria
+        Override of BaseOrchestratorV4.execute_phase() to add acceptance criteria
         validation hooks. Validates DoR before phase start and DoD after phase completion.
         
         Args:
@@ -670,39 +670,28 @@ class PlanningOrchestratorV5(BaseOrchestratorV4_1):
     
     def _generate_master_plan_filename(self, feature_name: str) -> str:
         """
-        Generate meaningful master plan filename with 3-char ID prefix.
+        Generate meaningful master plan filename in kebab-case (NO numeric prefix).
         
-        Format: [A-Z0-9]{3}-{abbreviated-name}.md
-        Total length: 3 (ID) + 1 (dash) + 20-25 (name) + 3 (.md) = 27-32 chars
+        Format: {feature-name}-plan.yaml (YAML-first per AC-ORC-PLAN-002)
         
         Args:
             feature_name: Full feature name (kebab-case)
         
         Returns:
-            Master plan filename (e.g., "A01-enterprise-audit-logger.md")
+            Master plan filename (e.g., "enterprise-audit-logger-plan.yaml")
         
         Examples:
-            "enterprise-python-audit-logger" → "A01-ent-py-aud-log.md"
-            "glassmorphism-css-standardization" → "A02-glassmorphism-css-std.md"
-            "oauth2-authentication-system" → "A03-oauth2-auth-sys.md"
+            "enterprise-python-audit-logger" → "enterprise-python-audit-logger-plan.yaml"
+            "glassmorphism-css-standardization" → "glassmorphism-css-standardization-plan.yaml"
+            "oauth2-authentication-system" → "oauth2-authentication-system-plan.yaml"
+        
+        AC-ORC-PLAN-002: NO '00-', '01-', or any numeric prefixes allowed.
         """
-        # Generate 3-char ID based on plan count in database
-        if hasattr(self, 'state_db') and self.state_db:
-            # Query database directly for plan count
-            cursor = self.state_db._conn.execute("SELECT COUNT(*) FROM plans")
-            plan_count = cursor.fetchone()[0]
-        else:
-            plan_count = 0
+        # Ensure kebab-case
+        kebab_name = feature_name.lower().replace('_', '-').replace(' ', '-')
         
-        # ID format: A00-A99 (100 plans), then B00-B99, etc.
-        letter = chr(65 + (plan_count // 100))  # A=0-99, B=100-199, etc.
-        number = plan_count % 100
-        plan_id = f"{letter}{number:02d}"
-        
-        # Use helper method to abbreviate
-        abbreviated_name = self._abbreviate_feature_name(feature_name, max_length=22)
-        
-        return f"{plan_id}-{abbreviated_name}.md"
+        # Return YAML filename (YAML-first architecture)
+        return f"{kebab_name}-plan.yaml"
     
     def _create_plan_metadata(
         self,
