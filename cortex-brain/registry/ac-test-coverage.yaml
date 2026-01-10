@@ -1,5 +1,5 @@
 metadata:
-  generated_at: '2026-01-09T19:25:20.109546'
+  generated_at: '2026-01-09T19:36:32.764897'
   generator: ACTraceabilitySystem
   version: 1.0.0
 coverage: {}
@@ -957,6 +957,87 @@ gaps:
   - file: orchestrators/test_ado_orchestrator_v2.py
     line: 106
     test: test_full_ado_execution
+  - file: orchestrators/test_housekeeping.py
+    line: 48
+    test: test_no_automatic_scheduling
+  - file: orchestrators/test_housekeeping.py
+    line: 63
+    test: test_no_git_hooks
+  - file: orchestrators/test_housekeeping.py
+    line: 77
+    test: test_manual_execution_required
+  - file: orchestrators/test_housekeeping.py
+    line: 94
+    test: test_user_control_prioritized
+  - file: orchestrators/test_housekeeping.py
+    line: 131
+    test: test_nine_phases_defined
+  - file: orchestrators/test_housekeeping.py
+    line: 153
+    test: test_sequential_execution
+  - file: orchestrators/test_housekeeping.py
+    line: 168
+    test: test_phase_failure_handling
+  - file: orchestrators/test_housekeeping.py
+    line: 184
+    test: test_execution_performance
+  - file: orchestrators/test_housekeeping.py
+    line: 196
+    test: test_health_report_generation
+  - file: orchestrators/test_housekeeping.py
+    line: 229
+    test: test_governance_rules_loaded
+  - file: orchestrators/test_housekeeping.py
+    line: 249
+    test: test_governance_rule_conflicts_detected
+  - file: orchestrators/test_housekeeping.py
+    line: 269
+    test: test_governance_validation_metrics
+  - file: orchestrators/test_housekeeping.py
+    line: 301
+    test: test_test_suite_analysis
+  - file: orchestrators/test_housekeeping.py
+    line: 321
+    test: test_orphaned_tests_detected
+  - file: orchestrators/test_housekeeping.py
+    line: 336
+    test: test_coverage_metrics_reported
+  - file: orchestrators/test_housekeeping.py
+    line: 369
+    test: test_audit_log_analysis
+  - file: orchestrators/test_housekeeping.py
+    line: 397
+    test: test_error_pattern_detection
+  - file: orchestrators/test_housekeeping.py
+    line: 449
+    test: test_tier_structure_validation
+  - file: orchestrators/test_housekeeping.py
+    line: 461
+    test: test_tier_synchronization
+  - file: orchestrators/test_housekeeping.py
+    line: 492
+    test: test_cache_cleanup_execution
+  - file: orchestrators/test_housekeeping.py
+    line: 513
+    test: test_recent_cache_preserved
+  - file: orchestrators/test_housekeeping.py
+    line: 550
+    test: test_git_isolation_check
+  - file: orchestrators/test_housekeeping.py
+    line: 558
+    test: test_gitignore_validation
+  - file: orchestrators/test_housekeeping.py
+    line: 591
+    test: test_ac_gap_detection
+  - file: orchestrators/test_housekeeping.py
+    line: 600
+    test: test_critical_gaps_flagged
+  - file: orchestrators/test_housekeeping.py
+    line: 616
+    test: test_full_housekeeping_execution
+  - file: orchestrators/test_housekeeping.py
+    line: 642
+    test: test_health_score_calculation
   - file: orchestrators/test_investigation_orchestrator_v2.py
     line: 56
     test: test_orchestrator_initialization
@@ -3040,5 +3121,5 @@ statistics:
   uncovered_ac: 0
   coverage_percentage: 0.0
   total_tests: 0
-  orphaned_tests: 1009
+  orphaned_tests: 1036
   critical_gaps: 0
