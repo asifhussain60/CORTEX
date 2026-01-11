@@ -20,8 +20,19 @@ from src.infrastructure.ac_traceability import (
     ACGapReport,
     TraceabilityConfig,
 )
+from src.mcp.mcp_decorator import mcp_tool
 
 
+@mcp_tool(
+    name="cortex_traceability_scan",
+    description="Scan test files for @pytest.mark.ac_id markers to build AC→Test mapping",
+    category="traceability",
+    parameters={
+        "workspace_root": {"type": "string", "required": True, "description": "Workspace root path"},
+        "force_refresh": {"type": "boolean", "required": False, "description": "Force cache refresh"}
+    },
+    metadata={"tags": ["traceability", "testing", "ac-ids"]}
+)
 def traceability_scan(
     workspace_root: str,
     force_refresh: bool = False
@@ -120,6 +131,25 @@ def traceability_coverage(
         }
 
 
+@mcp_tool(
+    name="cortex_traceability_gaps",
+    description="Detect gaps in test coverage - uncovered AC-IDs and orphaned tests (critical for finding missing tests)",
+    category="traceability",
+    orchestrator_id="traceability_orchestrator",
+    parameters={
+        "workspace_root": {"type": "string", "required": True, "description": "Workspace root path"},
+        "include_orphans": {"type": "boolean", "required": False, "description": "Include tests without AC markers"}
+    },
+    returns={
+        "type": "object",
+        "description": "Gap report with uncovered AC and orphaned tests"
+    },
+    metadata={
+        "tags": ["traceability", "gaps", "coverage", "ac-validation"],
+        "version": "1.0",
+        "priority": "P0"
+    }
+)
 def traceability_gaps(
     workspace_root: str,
     include_orphans: bool = True

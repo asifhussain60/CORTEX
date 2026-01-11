@@ -113,7 +113,7 @@ class PlanningOrchestratorV5(BaseOrchestratorV4):
         
         # Initialize database if not provided
         if state_db is None:
-            db_path = "cortex-brain/database/planning_state.db"
+            db_path = "cortex-brain/state/planning.db"
             state_db = PlanningStateDB(db_path=db_path)
         
         # Initialize base orchestrator with config_path only

@@ -1,0 +1,178 @@
+%% 3-Layer Response Template Architecture
+%% CORTEX 6.0 Phase 2 Enhancement
+%% AC-TEMPLATE-001 to AC-TEMPLATE-008
+
+graph TB
+    %% ============================================================================
+    %% PROBLEM: Current v4.yaml Bloat
+    %% ============================================================================
+    
+    V4[response-templates-v4.yaml<br/>2046 LINES<br/>⚠️ CORE-002 VIOLATION]
+    
+    BLOAT1[Inline Templates<br/>No Reuse]
+    BLOAT2[Duplication Across<br/>40+ Orchestrators]
+    BLOAT3[Maintenance<br/>Nightmare]
+    BLOAT4[Inconsistency<br/>No Enforcement]
+    
+    V4 --> BLOAT1
+    V4 --> BLOAT2
+    V4 --> BLOAT3
+    V4 --> BLOAT4
+    
+    %% ============================================================================
+    %% SOLUTION: 3-Layer Architecture
+    %% ============================================================================
+    
+    SOLUTION[3-Layer Response<br/>Template Architecture<br/>AC-TEMPLATE-001 to 008]
+    
+    %% Layer 1: Core Blocks
+    LAYER1[LAYER 1: Core Blocks<br/>tier0/response-blocks.yaml<br/>MAX 50 LINES]
+    
+    BLOCK1[header<br/>progress<br/>next_steps]
+    BLOCK2[error<br/>warning<br/>completion]
+    BLOCK3[cautions<br/>achievements<br/>validation]
+    
+    LAYER1 --> BLOCK1
+    LAYER1 --> BLOCK2
+    LAYER1 --> BLOCK3
+    
+    %% Layer 2: Category Templates
+    LAYER2[LAYER 2: Category Templates<br/>tier2/response-templates/<br/>5 × 50 LINES = 250 LINES]
+    
+    CAT1[core.yaml<br/>Planning, TDD, Investigation]
+    CAT2[integration.yaml<br/>ADO, Git, APIs]
+    CAT3[maintenance.yaml<br/>Vacuum, Cleanup, Sanitization]
+    CAT4[conversion.yaml<br/>Data Transformation]
+    CAT5[security.yaml<br/>Security Formatting]
+    
+    LAYER2 --> CAT1
+    LAYER2 --> CAT2
+    LAYER2 --> CAT3
+    LAYER2 --> CAT4
+    LAYER2 --> CAT5
+    
+    %% Layer 3: Orchestrator Overrides
+    LAYER3[LAYER 3: Orchestrator Overrides<br/>manifests/{orch}/response_config<br/>MAX 15 LINES EACH]
+    
+    ORCH1[planning_v5<br/>response_config]
+    ORCH2[tdd_master<br/>response_config]
+    ORCH3[ado_v2<br/>response_config]
+    ORCH_N[40+ orchestrators<br/>15 lines each]
+    
+    LAYER3 --> ORCH1
+    LAYER3 --> ORCH2
+    LAYER3 --> ORCH3
+    LAYER3 --> ORCH_N
+    
+    SOLUTION --> LAYER1
+    SOLUTION --> LAYER2
+    SOLUTION --> LAYER3
+    
+    %% ============================================================================
+    %% PRECEDENCE RESOLUTION
+    %% ============================================================================
+    
+    RENDERER[ResponseRenderer<br/>src/orchestrators/response_renderer.py]
+    
+    RESOLVER[Inheritance Resolver<br/>AC-TEMPLATE-005]
+    PRECEDENCE[Precedence Rules:<br/>Orchestrator > Category > Core]
+    
+    LAYER1 --> RESOLVER
+    LAYER2 --> RESOLVER
+    LAYER3 --> RESOLVER
+    
+    RESOLVER --> PRECEDENCE
+    PRECEDENCE --> RENDERER
+    
+    %% ============================================================================
+    %% TARGETS & GUARANTEES
+    %% ============================================================================
+    
+    TARGET[TARGETS]
+    
+    T1[Total Lines: <300<br/>86% reduction from 2046]
+    T2[Render Time: <50ms<br/>Performance validated]
+    T3[Duplication: 0%<br/>Static analysis]
+    T4[Consistency: 100%<br/>All use core blocks]
+    
+    RENDERER --> TARGET
+    TARGET --> T1
+    TARGET --> T2
+    TARGET --> T3
+    TARGET --> T4
+    
+    %% ============================================================================
+    %% IMPLEMENTATION PHASES
+    %% ============================================================================
+    
+    PHASE1[Phase 1: Foundation<br/>Week 1<br/>AC-TEMPLATE-001 to 003]
+    PHASE2[Phase 2: Categories<br/>Week 2<br/>AC-TEMPLATE-004 to 006]
+    PHASE3[Phase 3: Migration<br/>Week 3-4<br/>AC-TEMPLATE-007 to 008]
+    
+    P1T1[Extract Core Blocks]
+    P1T2[Block Schema Validator]
+    P1T3[ResponseRenderer Loader]
+    
+    P2T1[Create 5 Category Templates]
+    P2T2[Inheritance Resolver]
+    P2T3[Backwards Compatibility]
+    
+    P3T1[Migrate 40+ Orchestrators]
+    P3T2[Performance Validation]
+    P3T3[Delete v4.yaml ✂️]
+    
+    PHASE1 --> P1T1
+    PHASE1 --> P1T2
+    PHASE1 --> P1T3
+    
+    PHASE2 --> P2T1
+    PHASE2 --> P2T2
+    PHASE2 --> P2T3
+    
+    PHASE3 --> P3T1
+    PHASE3 --> P3T2
+    PHASE3 --> P3T3
+    
+    P1T3 --> PHASE2
+    P2T3 --> PHASE3
+    
+    %% ============================================================================
+    %% EVIDENCE BUNDLE
+    %% ============================================================================
+    
+    EVIDENCE[Evidence Bundle<br/>AC-TEMPLATE-001 to 008]
+    
+    EV1[Test Coverage ≥80%]
+    EV2[Performance <50ms]
+    EV3[CORE-002 Enforced]
+    EV4[40+ Orchestrators Validated]
+    
+    EVIDENCE --> EV1
+    EVIDENCE --> EV2
+    EVIDENCE --> EV3
+    EVIDENCE --> EV4
+    
+    PHASE3 --> EVIDENCE
+    
+    %% ============================================================================
+    %% STYLING
+    %% ============================================================================
+    
+    classDef problem fill:#ff6b6b,stroke:#c92a2a,stroke-width:3px,color:#fff
+    classDef solution fill:#51cf66,stroke:#2f9e44,stroke-width:3px,color:#fff
+    classDef layer1 fill:#4dabf7,stroke:#1971c2,stroke-width:3px,color:#fff
+    classDef layer2 fill:#a78bfa,stroke:#7c3aed,stroke-width:3px,color:#fff
+    classDef layer3 fill:#ffd43b,stroke:#f59f00,stroke-width:3px,color:#000
+    classDef target fill:#06ffa5,stroke:#0ca678,stroke-width:3px,color:#000
+    classDef phase fill:#e9ecef,stroke:#868e96,stroke-width:2px,color:#000
+    classDef evidence fill:#ff8787,stroke:#fa5252,stroke-width:3px,color:#fff
+    
+    class V4,BLOAT1,BLOAT2,BLOAT3,BLOAT4 problem
+    class SOLUTION solution
+    class LAYER1,BLOCK1,BLOCK2,BLOCK3 layer1
+    class LAYER2,CAT1,CAT2,CAT3,CAT4,CAT5 layer2
+    class LAYER3,ORCH1,ORCH2,ORCH3,ORCH_N layer3
+    class TARGET,T1,T2,T3,T4 target
+    class PHASE1,PHASE2,PHASE3,P1T1,P1T2,P1T3,P2T1,P2T2,P2T3,P3T1,P3T2,P3T3 phase
+    class EVIDENCE,EV1,EV2,EV3,EV4 evidence
+    class RENDERER,RESOLVER,PRECEDENCE solution

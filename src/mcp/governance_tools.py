@@ -21,8 +21,20 @@ from src.orchestrators.core.governance_merger import (
     GovernanceRule,
     UnifiedInstructionSet,
 )
+from src.mcp.mcp_decorator import mcp_tool
 
 
+@mcp_tool(
+    name="cortex_governance_rules",
+    description="List all governance rules from 4-tier system (Tier 0 CORE, Tier 1 Business, Tier 2 Company, Tier 3 Knowledge)",
+    category="governance",
+    parameters={
+        "workspace_root": {"type": "string", "required": True, "description": "Workspace root path"},
+        "tier": {"type": "integer", "required": False, "description": "Filter by tier (0-3)"},
+        "category": {"type": "string", "required": False, "description": "Filter by category"}
+    },
+    metadata={"tags": ["governance", "rules", "policy"]}
+)
 def governance_rules(
     workspace_root: str,
     tier: Optional[int] = None,
@@ -85,6 +97,25 @@ def governance_rules(
         }
 
 
+@mcp_tool(
+    name="cortex_governance_validate",
+    description="Validate that a governance rule exists and is enforced (critical for pre-flight checks)",
+    category="governance",
+    orchestrator_id="governance_orchestrator",
+    parameters={
+        "workspace_root": {"type": "string", "required": True, "description": "Workspace root path"},
+        "rule_id": {"type": "string", "required": True, "description": "Rule ID (e.g., CORE-008, CORE-019)"}
+    },
+    returns={
+        "type": "object",
+        "description": "Validation result with rule details and enforcement status"
+    },
+    metadata={
+        "tags": ["governance", "validation", "pre-flight"],
+        "version": "1.0",
+        "priority": "P0"
+    }
+)
 def governance_validate(
     workspace_root: str,
     rule_id: str

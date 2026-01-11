@@ -1,7 +1,7 @@
 """
 CORTEX 6.0 Enhanced Audit Logger - Infrastructure Layer
 
-Implements AC-AUDIT-001 through AC-AUDIT-006:
+Implements AC-AUDIT-001 through AC-AUDIT-007:
 - SQLite + JSONL dual storage with <5ms latency
 - 7 audit categories (governance, orchestrator, validation, infrastructure, mcp, brain, integration)
 - AC-ID traceability for compliance tracking
@@ -9,6 +9,7 @@ Implements AC-AUDIT-001 through AC-AUDIT-006:
 - Per-repo database isolation
 - Queryable by AC-ID, orchestrator, date range, level
 - Automatic vacuum with level-based retention
+- Hash chain integrity (AC-AUDIT-007): Tamper detection via event_hash + prev_event_hash
 
 Author: Asif Hussain
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
@@ -19,6 +20,7 @@ import sqlite3
 import threading
 import time
 import yaml
+import hashlib
 from contextlib import contextmanager
 from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
@@ -103,7 +105,7 @@ class AuditStorage:
         self._lock = threading.Lock()
     
     def _init_database(self):
-        """Initialize SQLite database schema."""
+        """Initialize SQLite database schema with hash chain support (AC-AUDIT-007)."""
         with sqlite3.connect(self.db_path) as conn:
             conn.execute("""
                 CREATE TABLE IF NOT EXISTS audit_logs (
@@ -119,6 +121,8 @@ class AuditStorage:
                     duration_ms REAL,
                     context TEXT,
                     metadata TEXT,
+                    event_hash TEXT NOT NULL,
+                    prev_event_hash TEXT,
                     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
                 )
             """)
@@ -131,7 +135,76 @@ class AuditStorage:
             conn.execute("CREATE INDEX IF NOT EXISTS idx_category ON audit_logs(category)")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_correlation ON audit_logs(correlation_id)")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_created_at ON audit_logs(created_at)")
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_event_hash ON audit_logs(event_hash)")
+            
+            # Check if hash columns exist in existing database (migration support)
+            cursor = conn.execute("PRAGMA table_info(audit_logs)")
+            columns = [row[1] for row in cursor.fetchall()]
+            
+            if 'event_hash' not in columns:
+                conn.execute("ALTER TABLE audit_logs ADD COLUMN event_hash TEXT")
+            if 'prev_event_hash' not in columns:
+                conn.execute("ALTER TABLE audit_logs ADD COLUMN prev_event_hash TEXT")
+            
             conn.commit()
+    
+    def _compute_event_hash(
+        self,
+        timestamp: str,
+        level: str,
+        category: str,
+        component: str,
+        operation: str,
+        message: str,
+        ac_id: Optional[str] = None,
+        correlation_id: Optional[str] = None,
+        prev_hash: Optional[str] = None
+    ) -> str:
+        """
+        Compute SHA-256 hash of audit event (AC-AUDIT-007).
+        
+        Hash includes all critical fields to detect tampering.
+        Must complete in <1ms (AC-AUDIT-007 performance requirement).
+        
+        Args:
+            timestamp: Event timestamp
+            level: Audit level
+            category: Audit category
+            component: Component name
+            operation: Operation name
+            message: Event message
+            ac_id: Optional AC-ID
+            correlation_id: Optional correlation ID
+            prev_hash: Previous event hash (for chain linkage)
+        
+        Returns:
+            64-character SHA-256 hex digest
+        """
+        # Concatenate critical fields
+        hash_input = f"{timestamp}|{level}|{category}|{component}|{operation}|{message}"
+        if ac_id:
+            hash_input += f"|{ac_id}"
+        if correlation_id:
+            hash_input += f"|{correlation_id}"
+        if prev_hash:
+            hash_input += f"|{prev_hash}"
+        
+        # Compute SHA-256
+        return hashlib.sha256(hash_input.encode('utf-8')).hexdigest()
+    
+    def _get_last_event_hash(self) -> Optional[str]:
+        """
+        Get the event_hash of the most recent audit entry (AC-AUDIT-007).
+        
+        Returns:
+            Previous event hash or None if no events exist
+        """
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.execute(
+                "SELECT event_hash FROM audit_logs ORDER BY id DESC LIMIT 1"
+            )
+            row = cursor.fetchone()
+            return row[0] if row else None
     
     def log(
         self,
@@ -148,7 +221,7 @@ class AuditStorage:
         timestamp: Optional[str] = None
     ):
         """
-        Log an audit entry to SQLite.
+        Log an audit entry to SQLite with hash chain (AC-AUDIT-007).
         
         Args:
             level: Audit level (ERROR, INFO, etc.)
@@ -163,15 +236,34 @@ class AuditStorage:
             metadata: Additional metadata
             timestamp: Override timestamp (for testing)
         """
+        ts = timestamp or datetime.now().isoformat()
+        
         with self._lock:
+            # Get previous event hash for chain linkage (AC-AUDIT-007)
+            prev_hash = self._get_last_event_hash()
+            
+            # Compute event hash (AC-AUDIT-007)
+            event_hash = self._compute_event_hash(
+                timestamp=ts,
+                level=level.value,
+                category=category.value,
+                component=component,
+                operation=operation,
+                message=message,
+                ac_id=ac_id,
+                correlation_id=correlation_id,
+                prev_hash=prev_hash
+            )
+            
             with sqlite3.connect(self.db_path) as conn:
                 conn.execute("""
                     INSERT INTO audit_logs 
                     (timestamp, level, category, component, operation, message, 
-                     ac_id, correlation_id, duration_ms, context, metadata)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     ac_id, correlation_id, duration_ms, context, metadata,
+                     event_hash, prev_event_hash)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, (
-                    timestamp or datetime.now().isoformat(),
+                    ts,
                     level.value,
                     category.value,
                     component,
@@ -181,7 +273,9 @@ class AuditStorage:
                     correlation_id,
                     duration_ms,
                     json.dumps(context) if context else None,
-                    json.dumps(metadata) if metadata else None
+                    json.dumps(metadata) if metadata else None,
+                    event_hash,
+                    prev_hash
                 ))
                 conn.commit()
     
@@ -307,6 +401,97 @@ class AuditStorage:
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute(query, params)
             return cursor.fetchone()[0]
+    
+    def verify_chain(self) -> Tuple[bool, Optional[str]]:
+        """
+        Verify hash chain integrity (AC-AUDIT-007).
+        
+        Recalculates event_hash for each entry and verifies:
+        1. event_hash matches recalculated hash
+        2. prev_event_hash matches previous entry's event_hash
+        
+        Must complete in <10ms per 100 events (AC-AUDIT-007 performance requirement).
+        
+        Returns:
+            Tuple of (is_valid, error_message)
+            - (True, None) if chain is valid
+            - (False, error_message) if tampering detected
+        """
+        with sqlite3.connect(self.db_path) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.execute(
+                "SELECT id, timestamp, level, category, component, operation, message, "
+                "ac_id, correlation_id, event_hash, prev_event_hash "
+                "FROM audit_logs ORDER BY id ASC"
+            )
+            events = cursor.fetchall()
+        
+        if not events:
+            return (True, None)  # Empty chain is valid
+        
+        prev_hash = None
+        for event in events:
+            # Verify prev_event_hash linkage
+            if event['prev_event_hash'] != prev_hash:
+                return (False, f"Chain broken at event {event['id']}: "
+                              f"prev_event_hash mismatch (expected {prev_hash}, got {event['prev_event_hash']})")
+            
+            # Recalculate event_hash
+            computed_hash = self._compute_event_hash(
+                timestamp=event['timestamp'],
+                level=event['level'],
+                category=event['category'],
+                component=event['component'],
+                operation=event['operation'],
+                message=event['message'],
+                ac_id=event['ac_id'],
+                correlation_id=event['correlation_id'],
+                prev_hash=prev_hash
+            )
+            
+            # Verify event_hash matches
+            if event['event_hash'] != computed_hash:
+                return (False, f"Tamper detected at event {event['id']}: "
+                              f"event_hash mismatch (stored {event['event_hash']}, computed {computed_hash})")
+            
+            prev_hash = event['event_hash']
+        
+        return (True, None)
+    
+    def query_audit_trail(
+        self,
+        limit: int = 100,
+        order: str = "DESC"
+    ) -> List[Dict[str, Any]]:
+        """
+        Query audit trail for chain verification tests.
+        
+        Args:
+            limit: Number of recent events to return
+            order: Sort order ("ASC" or "DESC")
+        
+        Returns:
+            List of audit entries with hash chain fields
+        """
+        with sqlite3.connect(self.db_path) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.execute(
+                f"SELECT * FROM audit_logs ORDER BY id {order} LIMIT ?",
+                (limit,)
+            )
+            rows = cursor.fetchall()
+            
+            results = []
+            for row in rows:
+                entry = dict(row)
+                # Parse JSON fields
+                if entry.get('context'):
+                    entry['context'] = json.loads(entry['context'])
+                if entry.get('metadata'):
+                    entry['metadata'] = json.loads(entry['metadata'])
+                results.append(entry)
+            
+            return results
 
 
 # ==============================================================================
