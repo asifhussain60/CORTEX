@@ -1276,11 +1276,11 @@
                     this.updateMetrics();
                     
                     // Render main content sections
+                    this.renderCompletionCharts();
                     this.renderPhaseOverview();
                     this.renderGovernanceRules();
                     this.renderActiveCapabilities();
                     this.renderArchitectureView();
-                    this.renderCompletionCharts();
                 } catch (error) {
                     console.error('Error rendering dashboard:', error);
                     this.showError('Failed to render dashboard: ' + error.message);
