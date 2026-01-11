@@ -159,9 +159,17 @@ class OrchestratorLoader:
             init_args['config_path'] = metadata.manifest_path
 
         try:
+            # Filter init_args to only include parameters accepted by the orchestrator's __init__
+            import inspect
+            sig = inspect.signature(orchestrator_class.__init__)
+            valid_params = set(sig.parameters.keys()) - {'self'}
+            
+            # Filter out args not in the signature
+            filtered_args = {k: v for k, v in init_args.items() if k in valid_params}
+            
             # Instantiate orchestrator
-            self.logger.debug(f"Instantiating {orchestrator_id} with args: {init_args}")
-            instance = orchestrator_class(**init_args)
+            self.logger.debug(f"Instantiating {orchestrator_id} with args: {filtered_args}")
+            instance = orchestrator_class(**filtered_args)
 
             self.logger.info(f"Loaded orchestrator instance: {orchestrator_id}")
             return instance
