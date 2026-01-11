@@ -241,17 +241,20 @@ Request → GovernanceMerger → MasterOrchestrator → TodoManager → Execute
 
 ---
 
-## 🎯 Snowball Implementation Strategy
+## 🎯 Sequential Implementation Strategy
 
-**Build core infrastructure first; features compound on infrastructure:**
+**Execute phases strictly in order. Each phase must reach 100% completion before starting the next.**
 
-### Phase 1: Foundation (Week 1-2)
-**These MUST complete before feature work:**
+### Phase 1: Foundation (Week 1-2) - MUST COMPLETE FIRST
+**All infrastructure that other phases depend on:**
 - Audit Infrastructure (AC-AUDIT-001 to AC-AUDIT-006)
 - Governance Merger (AC-GOV-001 to AC-GOV-005)
 - State Manager (AC-STATE-001 to AC-STATE-003)
+- Lifecycle Management (AC-LIFECYCLE-001 to AC-LIFECYCLE-003)
+- Evidence Bundles (AC-EVIDENCE-001 to AC-EVIDENCE-003)
+- Security Layer (AC-SECURITY-001 to AC-SECURITY-006)
 
-**Why first:** Every other component logs to audit, enforces governance, persists state.
+**Gate:** Phase 1 at 100% → Phase 2 starts
 
 ### Phase 2: Orchestration Core (Week 3-4) ⭐ CORE WORKFLOW
 **Critical path for default mechanism:**
@@ -260,22 +263,26 @@ Request → GovernanceMerger → MasterOrchestrator → TodoManager → Execute
 - TDD-Master (AC-TDD-001 to AC-TDD-010)
 - Planning v5 (AC-PLAN-001 to AC-PLAN-008)
 
-**Why second:** Establishes THE DEFAULT WORKING MECHANISM - all requests flow through MasterOrchestrator.
+**Gate:** Phase 2 at 100% → Phase 3 starts
 
 ### Phase 3: Feature Orchestrators (Week 5-6)
 - ADO v2, Vacuum/Cleanup, Investigation, Sanitization, Crawlers
 
+**Gate:** Phase 3 at 100% → Phase 4 starts
+
 ### Phase 4: Intelligence (Week 7-8)
 - LLM Intent Classifier, Vision API, Knowledge Practices, Knowledge Graph
+
+**Sequential Advantage:** Cleaner mental model, easier tracking, no context-switching overhead.
 
 ---
 
 ## ⚠️ Production Failure Modes & Mitigations
 
-### Concurrency Hazards
-- **Race condition on tracking files:** Two orchestrators update same JSON
-- **Mitigation:** File locking via `fcntl` (Unix) / `msvcrt` (Windows)
-- **Detection:** Audit logs show interleaved writes
+### Sequential Execution (No Concurrency)
+- **Strategy:** One phase completes 100% before next phase starts
+- **Benefit:** No race conditions, no parallel state conflicts
+- **Trade-off:** Slightly longer timeline (~15%), cleaner execution
 
 ### State Corruption
 - **Partial write leaves invalid JSON:** Power failure mid-write
@@ -413,5 +420,6 @@ This file evolves based on:
 **Version History:**
 - 5.0.0: Initial orchestration architecture
 - 5.5.0: Terminal execution bridge
-- 6.0.0: **Production-grade redesign** with 4-tier governance, audit integration, failure mode documentation, incremental AC building, and snowball implementation strategy
+- 6.0.0: **Production-grade redesign** with 4-tier governance, audit integration, failure mode documentation, incremental AC building, and sequential phase-by-phase execution strategy
+- 6.0.1: **Sequential execution strategy** - 100% phase gates, cleaner tracking, no parallel execution hazards
 

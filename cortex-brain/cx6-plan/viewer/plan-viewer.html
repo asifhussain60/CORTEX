@@ -1233,7 +1233,9 @@
                 // Fallback only if JSON load fails - mirrors current tracker state
                 return {
                     plan_metadata: {
-                        plan_id: 'CORTEX-6.0-SNOWBALL-MASTER',
+                        plan_id: 'CORTEX-6.0-SEQUENTIAL-MASTER',
+                        execution_strategy: 'SEQUENTIAL',
+                        phase_gate_policy: '100% completion required before next phase',
                         total_ac_ids: 0,
                         completed_ac_ids: 0,
                         in_progress_ac_ids: 0,
@@ -1354,7 +1356,10 @@
                 
                 const html = `
                     <div class="section-container">
-                        <h2 class="section-title">Snowball Implementation Phases</h2>
+                        <h2 class="section-title">Sequential Implementation Phases</h2>
+                        <p class="section-description" style="color: var(--color-text-secondary); margin-bottom: var(--spacing-lg);">
+                            Each phase must reach 100% completion before next phase starts. No parallel execution.
+                        </p>
                         <div class="phases-grid">
                             ${phases.map(phase => this.renderPhaseCardCompact(phase)).join('')}
                         </div>
