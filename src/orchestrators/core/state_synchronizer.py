@@ -231,7 +231,7 @@ class StateSynchronizer:
     
     def _validate_holistic_plan(self) -> Tuple[TruthSource, Dict]:
         """Validate holistic-snowball-plan.yaml"""
-        path = self.brain_root / "documents" / "cx6-holistic-analysis" / "holistic-snowball-plan.yaml"
+        path = self.brain_root / "cx6-plan" / "master-plan.yaml"
         issues = []
         
         if not path.exists():

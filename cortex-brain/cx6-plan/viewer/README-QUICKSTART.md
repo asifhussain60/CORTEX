@@ -191,7 +191,7 @@ Edit CSS variables in `<style>` section:
 - **Full Redesign Summary:** `/cortex-brain/documents/validation/plan-viewer-redesign-summary.md`
 - **Progress Tracker:** `/cortex-brain/tier1/tracking/progress-tracker.json`
 - **AC Index:** `/cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml`
-- **Holistic Plan:** `/cortex-brain/documents/cx6-holistic-analysis/holistic-snowball-plan.yaml`
+- **Holistic Plan:** `/cortex-brain/cx6-plan/master-plan.yaml`
 
 ---
 
