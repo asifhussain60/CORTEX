@@ -423,9 +423,27 @@
     </style>
 </head>
 <body>
+    <!-- CORTEX Standardized Header -->
+    <div id="cortex-header-container"></div>
+    
+    <script>
+        // Configure header for this page (will be updated dynamically when phase loads)
+        const cortexHeaderConfig = {
+            pageTitle: "Phase Detail",
+            pageDescription: "Detailed view of phase implementation progress and architecture",
+            designScore: "97/95",
+            loadScoreFromPlan: true,
+            breadcrumbs: [
+                { text: "Dashboard", link: "cortex-plan-viewer.html" },
+                { text: "Phase Detail", link: null }
+            ]
+        };
+    </script>
+    <script src="shared/header-loader.js"></script>
+    
     <div class="container">
-        <!-- Header -->
-        <div class="phase-header glass">
+        <!-- Phase-Specific Header Info -->
+        <div class="phase-header glass" style="margin-top: 20px;">
             <div class="phase-title-section">
                 <h1 id="phaseTitle">Loading Phase...</h1>
                 <div class="phase-meta" id="phaseMeta"></div>
