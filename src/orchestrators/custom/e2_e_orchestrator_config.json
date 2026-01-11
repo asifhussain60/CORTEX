@@ -1,0 +1,13 @@
+{
+  "orchestrator": "E2EOrchestrator",
+  "domain": "e2e",
+  "description": "End-to-end test orchestrator",
+  "version": "1.0.0",
+  "author": "CORTEX Team",
+  "metadata": {
+    "created_at": "2026-01-11T20:49:45.933051+00:00",
+    "governance_integrated": true,
+    "template": "basic",
+    "features": []
+  }
+}

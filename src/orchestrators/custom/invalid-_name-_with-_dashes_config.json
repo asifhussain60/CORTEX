@@ -1,0 +1,13 @@
+{
+  "orchestrator": "Invalid-Name-With-Dashes",
+  "domain": "invalid_test",
+  "description": "Invalid-Name-With-Dashes for invalid_test domain",
+  "version": "1.0.0",
+  "author": "CORTEX Team",
+  "metadata": {
+    "created_at": "2026-01-11T20:49:45.935994+00:00",
+    "governance_integrated": true,
+    "template": "basic",
+    "features": []
+  }
+}

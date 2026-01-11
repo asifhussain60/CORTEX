@@ -113,6 +113,58 @@ class MasterOrchestrator:
         self.logger.info(
             f"MasterOrchestrator initialized with context middleware + response pipeline (config={config_path})"
         )
+        
+        # Initialize orchestrator registry for AC-SCAFFOLD-003 enforcement
+        from src.orchestrators.master.orchestrator_registry import OrchestratorRegistry
+        self.orchestrator_registry = OrchestratorRegistry(workspace_root=Path.cwd())
+    
+    def _validate_orchestrator_registration(
+        self,
+        orchestrator_id: str
+    ) -> tuple[bool, str]:
+        """
+        AC-SCAFFOLD-003: Validate that orchestrator is registered.
+        
+        Prevents bypass by ensuring all orchestrators are registered
+        with MasterOrchestrator before routing.
+        
+        Args:
+            orchestrator_id: Orchestrator to validate
+        
+        Returns:
+            (is_valid, reason_or_ok)
+        """
+        # Check registration
+        is_registered = self.orchestrator_registry.is_registered(orchestrator_id)
+        if not is_registered:
+            reason = f"Orchestrator not registered: {orchestrator_id}"
+            self.logger.warning(reason)
+            self.audit_logger.log(
+                level="WARNING",
+                category="GOVERNANCE",
+                message=reason,
+                metadata={'orchestrator_id': orchestrator_id}
+            )
+            return False, reason
+        
+        # Check routing validity
+        is_valid, reason = self.orchestrator_registry.validate_for_routing(
+            orchestrator_id
+        )
+        
+        if not is_valid:
+            self.logger.warning(reason)
+            self.audit_logger.log(
+                level="WARNING",
+                category="GOVERNANCE",
+                message=reason,
+                metadata={'orchestrator_id': orchestrator_id}
+            )
+            return False, reason
+        
+        # All checks passed
+        self.logger.debug(f"Orchestrator registration validated: {orchestrator_id}")
+        return True, "OK"
     
     def _check_review_schedule(
         self,
@@ -238,6 +290,15 @@ class MasterOrchestrator:
             f"Routed to: {match.orchestrator_id} "
             f"(confidence={match.confidence:.2f}, type={match.match_type.value})"
         )
+        
+        # STEP 3.2: AC-SCAFFOLD-003 - Validate orchestrator registration
+        is_registered, reg_reason = self._validate_orchestrator_registration(
+            match.orchestrator_id
+        )
+        if not is_registered:
+            error_msg = f"Orchestrator registration validation failed: {reg_reason}"
+            self.logger.error(error_msg)
+            raise ValueError(error_msg)
         
         # STEP 3.5: Check if holistic review should be triggered (NEW - Phase 6.4)
         review_config = self._check_review_schedule(match.orchestrator_id, enriched_context)
