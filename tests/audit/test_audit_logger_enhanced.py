@@ -39,7 +39,7 @@ from src.infrastructure.enhanced_audit_logger import (
 # AC-AUDIT-001: Queryable Logs Tests
 # ==============================================================================
 
-@pytest.mark.ac_id
+@pytest.mark.ac_id("AC-AUDIT-001")
 class TestAuditQueries:
     """Test queryable audit logs by various filters."""
     
@@ -236,6 +236,7 @@ class TestAuditQueries:
 # ==============================================================================
 
 @pytest.mark.ac_id
+@pytest.mark.ac_id("AC-AUDIT-002")
 class TestMemoryBuffer:
     """Test memory buffer with configurable flush thresholds."""
     
@@ -382,7 +383,7 @@ class TestMemoryBuffer:
 # AC-AUDIT-003: Per-Repo Isolation Tests
 # ==============================================================================
 
-@pytest.mark.ac_id
+@pytest.mark.ac_id("AC-AUDIT-003")
 class TestRepoIsolation:
     """Test per-repo SQLite audit database isolation."""
     
@@ -497,8 +498,9 @@ class TestRepoIsolation:
 # AC-AUDIT-004: MCP Tools Tests
 # ==============================================================================
 
-@pytest.mark.ac_id
+@pytest.mark.ac_id("AC-AUDIT-004")
 class TestMCPTools:
+    """Test MCP tools for audit query, list, export."""
     """Test MCP audit tools (audit_query, audit_list, audit_export)."""
     
     def setup_method(self):
@@ -654,7 +656,7 @@ class TestMCPTools:
 # AC-AUDIT-005: Automatic Vacuum Tests
 # =============================================================================
 
-@pytest.mark.ac_id
+@pytest.mark.ac_id("AC-AUDIT-005")
 class TestAutomaticVacuum:
     """Test automatic vacuum removes old logs."""
     
@@ -759,7 +761,7 @@ class TestAutomaticVacuum:
 # AC-AUDIT-006: Retention Policy Tests
 # ==============================================================================
 
-@pytest.mark.ac_id
+@pytest.mark.ac_id("AC-AUDIT-006")
 class TestRetentionPolicy:
     """Test log level-based retention policy."""
     

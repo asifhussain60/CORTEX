@@ -323,6 +323,7 @@ class TestDryRun:
 class TestCleanupExecution:
     """Test actual cleanup execution"""
     
+    @pytest.mark.ac_id("AC-CLEAN-001")
     def test_cleanup_deletes_matched_files(self, vacuum, temp_workspace):
         """Test cleanup actually deletes matched files"""
         # Scan first
@@ -340,6 +341,7 @@ class TestCleanupExecution:
         for item in items:
             assert not item.path.exists()
     
+    @pytest.mark.ac_id("AC-CLEAN-002")
     def test_cleanup_preserves_source_files(self, vacuum, temp_workspace):
         """Test cleanup preserves non-matched files"""
         # Execute cleanup
@@ -349,6 +351,7 @@ class TestCleanupExecution:
         assert (temp_workspace / "src" / "main.py").exists()
         assert (temp_workspace / "README.md").exists()
     
+    @pytest.mark.ac_id("AC-CLEAN-003")
     def test_cleanup_reports_errors(self, vacuum, temp_workspace):
         """Test cleanup reports errors for failed deletions"""
         # Create a file we can't delete (by making parent read-only)

@@ -289,15 +289,19 @@ class AuditBasedValidator:
                 tracker['current_phase']['completed_count'] = phase_result['verified_count']
                 tracker['current_phase']['completion_percentage'] = phase_result['actual_percentage']
                 tracker['current_phase']['verified_implemented'] = phase_result['verified_ac_ids']
+                # UPDATE THE COMPLETED_AC_IDS ARRAY
+                tracker['current_phase']['completed_ac_ids'] = phase_result['verified_ac_ids']
             elif phase_key == 'phase_1_5' and 'phase_1_5_sts' in tracker:
                 tracker['phase_1_5_sts']['completed_count'] = phase_result['verified_count']
                 tracker['phase_1_5_sts']['completion_percentage'] = phase_result['actual_percentage']
+                tracker['phase_1_5_sts']['completed_ac_ids'] = phase_result['verified_ac_ids']
             elif phase_key == 'phase_2':
                 for phase in tracker.get('completed_phases', []):
                     if phase.get('number') == 2:
                         phase['completed_count'] = phase_result['verified_count']
                         phase['completion_percentage'] = phase_result['actual_percentage']
                         phase['verified_implemented'] = phase_result['verified_ac_ids']
+                        phase['completed_ac_ids'] = phase_result['verified_ac_ids']
                         if phase_result['actual_percentage'] < 100:
                             phase['status'] = 'in_progress'
         

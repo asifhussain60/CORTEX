@@ -30,6 +30,7 @@ class TestHashChainIntegrity:
         """Create audit logger instance."""
         return AuditStorage(db_path=temp_audit_db)
     
+    @pytest.mark.ac_id("AC-AUDIT-007")
     def test_hash_chain_creation(self, logger):
         """
         AC-AUDIT-007: Test that each audit entry has event_hash.
@@ -75,6 +76,7 @@ class TestHashChainIntegrity:
             assert 'event_hash' in event, "Each event must have event_hash"
             assert len(event['event_hash']) == 64, "SHA-256 hash must be 64 chars"
     
+    @pytest.mark.ac_id("AC-AUDIT-007")
     def test_prev_event_hash_chain(self, logger):
         """
         AC-AUDIT-007: Test prev_event_hash links to previous event.
@@ -107,6 +109,7 @@ class TestHashChainIntegrity:
             assert curr_prev_hash == prev_hash, \
                 f"Event {i} prev_event_hash must match event {i-1} event_hash"
     
+    @pytest.mark.ac_id("AC-AUDIT-007")
     def test_hash_verification_success(self, logger):
         """
         AC-AUDIT-007: Test verification passes for untampered chain.
@@ -166,6 +169,7 @@ class TestHashChainIntegrity:
         assert error is not None, "Error message should describe tampering"
         assert "tamper" in error.lower() or "integrity" in error.lower()
     
+    @pytest.mark.ac_id("AC-AUDIT-007")
     def test_hash_computation_performance(self, logger):
         """
         AC-AUDIT-007: Hash computation must be <1ms.
@@ -218,6 +222,7 @@ class TestHashChainIntegrity:
         assert is_valid is True, "Chain should be valid"
         assert duration_ms < 10.0, f"Verification took {duration_ms:.2f}ms (must be <10ms for 100 events)"
     
+    @pytest.mark.ac_id("AC-AUDIT-007")
     def test_hash_includes_all_critical_fields(self, logger):
         """
         AC-AUDIT-007: event_hash must include all critical fields.

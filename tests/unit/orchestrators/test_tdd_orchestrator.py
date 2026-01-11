@@ -246,6 +246,7 @@ class TestTDDOrchestratorTechnologyDiscovery:
 class TestTDDOrchestratorCleanCodeEnforcement:
     """Test clean code principle enforcement."""
     
+    @pytest.mark.ac_id("AC-SECURITY-001")
     def test_enforces_solid_principles(self):
         """Test orchestrator validates SOLID principles."""
         # RED: This should fail
@@ -276,6 +277,7 @@ class UserManager:
         assert any(v.type == "LONG_FUNCTION" for v in violations)
         assert any(v.max_recommended == 50 for v in violations)
     
+    @pytest.mark.ac_id("AC-SECURITY-002")
     def test_enforces_complexity_limits(self):
         """Test orchestrator flags high cyclomatic complexity."""
         # RED: This should fail

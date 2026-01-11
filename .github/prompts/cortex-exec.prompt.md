@@ -1,7 +1,7 @@
 # 🎯 CORTEX-PLAN-EXECUTIONER – Autonomous Implementation & Validation Loop
 
 **Purpose:** Autonomous AC-ID implementation, test execution, evidence validation, and progress tracking  
-**Version:** 2.1.0 (Sequential Execution)  
+**Version:** 2.2.0 (Sequential Execution with Title Display)  
 **Date:** 2026-01-11  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
@@ -75,12 +75,16 @@ while True:
     # 6. Sync dashboard
     run_terminal('python3 scripts/sync_plan_viewer_data.py')
     
-    # 7. Report (ONE LINE)
-    print(f"{ac_id} done ({test_result.passed}/{test_result.total} tests passing). "
-          f"Phase {current_phase.number} at {calculate_percent()}%. "
-          f"Implementing {incomplete_ac_ids[1]} next...")
+    # 7. Look up AC-ID title
+    ac_title = lookup_ac_title(ac_id)  # e.g., "Queryable Audit Storage"
+    next_ac_title = lookup_ac_title(incomplete_ac_ids[1])
     
-    # 8. CONTINUE IMMEDIATELY (no stopping between AC-IDs!)
+    # 8. Report (ONE LINE with titles)
+    print(f"{ac_id}: {ac_title} done ({test_result.passed}/{test_result.total} tests). "
+          f"Phase {current_phase.number} at {calculate_percent()}%. "
+          f"Implementing {incomplete_ac_ids[1]}: {next_ac_title}...")
+    
+    # 9. CONTINUE IMMEDIATELY (no stopping between AC-IDs!)
 ```
 
 **Critical Rules:**
@@ -96,6 +100,20 @@ while True:
 ---
 
 ## 📋 EXECUTION WORKFLOW
+
+### Step 0: AC-ID Title Lookup (ALWAYS USE)
+
+**CRITICAL:** Before reporting ANY AC-ID, look up its human-readable title:
+
+```bash
+# Get AC-ID title from AC-INDEX.yaml
+ac_id="AC-AUDIT-001"
+title=$(grep -A 1 "id: ${ac_id}" cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml | grep "name:" | sed 's/.*name: //')
+
+# Example output: "Queryable Audit Storage"
+```
+
+**Always display:** `{AC-ID}: {Title}` format (e.g., "AC-AUDIT-001: Queryable Audit Storage")
 
 ### Step 1: Load Incomplete AC-IDs
 
@@ -113,21 +131,25 @@ cat cortex-brain/tier1/tracking/progress-tracker.json | jq -r '
 - Current phase AC-IDs
 - Filter out completed ones
 - Get first 5 incomplete
+- Look up title for EACH AC-ID
 
 ### Step 2: Implement AC-ID
 
 ```bash
+# Look up title first
+title=$(grep -A 1 "id: AC-LIFECYCLE-001" cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml | grep "name:" | sed 's/.*name: //')
+
 # Execute via orchestrator
 python3 -m src.main "implement AC-LIFECYCLE-001" --format markdown
 
-# Capture output
-# Display to user
+# Display with title: "Implementing AC-LIFECYCLE-001: Lifecycle State Management..."
 ```
 
 **Requirements:**
+- Look up AC-ID title before implementing
 - Use orchestrator (not direct coding)
 - Capture full output
-- Display clearly
+- Display with title in status updates
 - Don't stop for approval
 
 ### Step 3: Test AC-ID
@@ -243,27 +265,74 @@ echo "Validation complete. Phase X at Y% (Z/W AC-IDs verified)."
 
 ## 📊 REPORT FORMAT (MANDATORY)
 
-### After Each AC-ID (1-2 lines):
+**CRITICAL:** Executive summary format with bullets on separate lines. **NO AC-ID codes in user output**. Translate to capabilities.
+
+### After Each Capability Implementation:
 ```
-AC-AUDIT-007 implemented (5/5 tests). Phase 1 at 50% (17/34). Implementing AC-LIFECYCLE-001...
+✅ OUTCOMES
+
+• Hash chain integrity validation operational (5/5 tests)
+• Phase 1 audit infrastructure: 50% complete (17/34 capabilities)
+
+⚙️ IN PROGRESS
+
+• Lifecycle state management (7-state orchestrator transitions)
 ```
 
-### After Phase Complete (3-4 lines):
+### After Phase Complete:
 ```
-Phase 1 complete (34/34 AC-IDs, 100%). Tests: 152/152 passing. Verification: 100%.
+✅ OUTCOMES
 
-Awaiting approval to proceed to Phase 2.
+• Phase 1 foundation complete (34/34 capabilities, 152/152 tests)
+• Verification rate: 100%
+
+🎯 IMPACT
+
+• All audit infrastructure operational
+• Ready for Phase 2 orchestration layer
+
+⚠️ NEXT
+
+• Awaiting approval to proceed to Phase 2
 ```
 
-### After Validation Run (5-6 lines):
+### After Validation Run:
 ```
-Tests: 1209/1209 passing (30.6s). Verified: 30/30 AC-IDs (100%). Phase 1: 15/34 (44%). Phase 2: 17/17 (100%). Dashboard synced. Status: GREEN.
+✅ OUTCOMES
+
+• Test suite: 1209/1209 passing (30.6s)
+
+• Verification: 30/30 capabilities (100%)
+• Phase 1: 15/34 (44%) | Phase 2: 17/17 (100%)
+
+🎯 IMPACT
+
+• Dashboard synced with reality
+• System health: GREEN
+```
+
+**Capability Translation (Internal Use Only):**
+```bash
+# Get AC-ID title internally
+title=$(./scripts/get_ac_title.sh ${ac_id})
+
+# Translate to plain English for user output
+# AC-AUDIT-007 → "Hash chain integrity validation"
+# AC-LIFECYCLE-001 → "Lifecycle state management"
+# AC-EVIDENCE-001 → "Evidence bundle generation"
 ```
 
 **Rules:**
-- Max 6 lines total
-- No bullet points
-- No section headers (TEST EXECUTION, etc.)
+- Executive bullet format (✅ Outcomes / ⚙️ In Progress / ⚠️ Risks / 🎯 Impact)
+- Each bullet on separate line (no blank lines between bullets)
+- Blank line after each section header only
+- NO AC-ID codes in user-facing output
+- Human-readable capability descriptions
+- Focus on outcomes, risks, decisions
+- Call out blockers and assumptions explicitly
+- Separate facts from recommendations
+- No code snippets or implementation details
+- Readable in <1 minute by technical leader
 - No verbose explanations
 - Just facts and next action
 
@@ -274,7 +343,8 @@ Tests: 1209/1209 passing (30.6s). Verified: 30/30 AC-IDs (100%). Phase 1: 15/34 
 ### Test Failures
 ```bash
 if [ $FAILED -gt 0 ]; then
-    echo "AC-{ID} tests failed ({FAILED}/{TOTAL}). Skipping tracker update. Continuing to next AC-ID..."
+    title=$(grep -A 1 "id: ${ac_id}" cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml | grep "name:" | sed 's/.*name: //')
+    echo "${ac_id}: ${title} tests failed (${FAILED}/${TOTAL}). Skipping tracker update. Continuing to next AC-ID..."
     continue  # Don't stop the loop
 fi
 ```
@@ -282,7 +352,8 @@ fi
 ### Implementation Failures
 ```bash
 if orchestrator_failed; then
-    echo "AC-{ID} implementation failed. Marking as blocked. Continuing to next AC-ID..."
+    title=$(grep -A 1 "id: ${ac_id}" cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml | grep "name:" | sed 's/.*name: //')
+    echo "${ac_id}: ${title} implementation failed. Marking as blocked. Continuing to next AC-ID..."
     mark_blocked(ac_id)
     continue  # Don't stop the loop
 fi
@@ -386,15 +457,15 @@ python3 scripts/sync_plan_viewer_data.py
 
 **Copilot:**
 ```
-Phase 1 at 44% (15/34 AC-IDs). Implementing AC-LIFECYCLE-001...
+Phase 1 at 44% (15/34 AC-IDs). Implementing AC-LIFECYCLE-001: Lifecycle State Management...
 
-AC-LIFECYCLE-001 implemented (3/3 tests). Phase 1 at 47% (16/34). Implementing AC-LIFECYCLE-002...
+AC-LIFECYCLE-001: Lifecycle State Management done (3/3 tests). Phase 1 at 47% (16/34). Implementing AC-LIFECYCLE-002: Phase Transition Hooks...
 
-AC-LIFECYCLE-002 implemented (4/4 tests). Phase 1 at 50% (17/34). Implementing AC-LIFECYCLE-003...
+AC-LIFECYCLE-002: Phase Transition Hooks done (4/4 tests). Phase 1 at 50% (17/34). Implementing AC-LIFECYCLE-003: Pre/Post Phase Callbacks...
 
-AC-LIFECYCLE-003 implemented (2/2 tests). Phase 1 at 53% (18/34). Implementing AC-EVIDENCE-001...
+AC-LIFECYCLE-003: Pre/Post Phase Callbacks done (2/2 tests). Phase 1 at 53% (18/34). Implementing AC-EVIDENCE-001: Evidence Bundle Generation...
 
-AC-EVIDENCE-001 implemented (5/5 tests). Phase 1 at 56% (19/34). Implementing AC-EVIDENCE-002...
+AC-EVIDENCE-001: Evidence Bundle Generation done (5/5 tests). Phase 1 at 56% (19/34). Implementing AC-EVIDENCE-002: Test Result Aggregation...
 ```
 
 (Continues until phase complete or blocked)

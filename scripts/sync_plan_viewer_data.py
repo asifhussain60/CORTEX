@@ -2,14 +2,76 @@
 """
 Sync plan-viewer-data.json from progress-tracker.json
 Run after any progress updates to keep dashboard current
+Translates AC-IDs to human-readable capability names
 """
 import json
+import yaml
 from pathlib import Path
 from datetime import datetime, timezone
 
 
+def load_ac_index():
+    """Load AC-INDEX.yaml to get AC-ID to name mappings"""
+    ac_index_path = Path('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml')
+    if not ac_index_path.exists():
+        return {}
+    
+    try:
+        with open(ac_index_path, 'r') as f:
+            data = yaml.safe_load(f)
+        
+        ac_map = {}
+        
+        # Process foundation section (has all AC-IDs organized by category)
+        foundation = data.get('foundation', {})
+        for category_name, ac_list in foundation.items():
+            if not isinstance(ac_list, list):
+                continue
+            for ac in ac_list:
+                if not isinstance(ac, dict):
+                    continue
+                ac_id = ac.get('id')
+                name = ac.get('name')
+                desc = ac.get('description', '')
+                if ac_id and name:
+                    ac_map[ac_id] = {
+                        'name': name,
+                        'description': desc
+                    }
+        
+        return ac_map
+    except Exception as e:
+        print(f'⚠️  Warning: Could not load AC-INDEX: {e}')
+        import traceback
+        traceback.print_exc()
+        return {}
+
+
+def translate_ac_list(ac_ids, ac_map):
+    """Convert list of AC-IDs to human-readable capability list"""
+    capabilities = []
+    for ac_id in ac_ids:
+        if ac_id in ac_map:
+            capabilities.append({
+                'id': ac_id,  # Keep for internal tracking
+                'name': ac_map[ac_id]['name'],
+                'description': ac_map[ac_id]['description']
+            })
+        else:
+            # Fallback if AC not found
+            capabilities.append({
+                'id': ac_id,
+                'name': ac_id,
+                'description': ''
+            })
+    return capabilities
+
+
 def sync_plan_viewer_data():
     """Generate plan-viewer-data.json from progress tracker"""
+    
+    # Load AC-ID mappings
+    ac_map = load_ac_index()
     
     # Load progress tracker
     tracker_path = Path('cortex-brain/tier1/tracking/progress-tracker.json')
@@ -41,6 +103,11 @@ def sync_plan_viewer_data():
         p1 = tracker['current_phase']
         completed = p1.get('completed_count', 0)
         total_completed += completed
+        
+        # Translate AC-IDs to capabilities
+        verified_impl = p1.get('verified_implemented', [])
+        capabilities = translate_ac_list(verified_impl, ac_map)
+        
         data['phases'].append({
             'id': 1,
             'name': 'Foundation Enhancement',
@@ -49,7 +116,8 @@ def sync_plan_viewer_data():
             'ac_ids_total': p1.get('total_ac_count', 34),
             'status': p1.get('status', 'in_progress'),
             'description': 'Build core infrastructure (Audit, Governance, State, Lifecycle, Evidence, Security)',
-            'verified_implemented': p1.get('verified_implemented', [])
+            'verified_implemented': verified_impl,  # Keep for internal tracking
+            'capabilities': capabilities  # Human-readable list
         })
     
     # Add Phase 1.5
@@ -72,6 +140,10 @@ def sync_plan_viewer_data():
         p2 = tracker['phase_2_orchestration']
         completed = p2.get('completed_count', 0)
         total_completed += completed
+        
+        verified_impl = p2.get('verified_implemented', [])
+        capabilities = translate_ac_list(verified_impl, ac_map)
+        
         data['phases'].append({
             'id': 2,
             'name': 'Orchestration Core',
@@ -80,7 +152,8 @@ def sync_plan_viewer_data():
             'ac_ids_total': p2.get('total_ac_count', 17),
             'status': p2.get('status', 'in_progress'),
             'description': 'Establish default working mechanism (MasterOrchestrator, TodoManager, TDD-Master, Planning)',
-            'verified_implemented': p2.get('verified_implemented', [])
+            'verified_implemented': verified_impl,
+            'capabilities': capabilities
         })
     
     # Add Phase 3
@@ -88,6 +161,10 @@ def sync_plan_viewer_data():
         p3 = tracker['phase_3_features']
         completed = p3.get('completed_count', 0)
         total_completed += completed
+        
+        verified_impl = p3.get('verified_implemented', [])
+        capabilities = translate_ac_list(verified_impl, ac_map)
+        
         data['phases'].append({
             'id': 3,
             'name': 'Feature Orchestrators',
@@ -96,7 +173,8 @@ def sync_plan_viewer_data():
             'ac_ids_total': p3.get('total_ac_count', 16),
             'status': p3.get('status', 'in_progress'),
             'description': 'Build feature orchestrators (ADO, Vacuum, Investigation, Crawlers, Onboarding)',
-            'verified_implemented': p3.get('verified_implemented', [])
+            'verified_implemented': verified_impl,
+            'capabilities': capabilities
         })
     
     # Add Phase 4
@@ -104,6 +182,10 @@ def sync_plan_viewer_data():
         p4 = tracker['phase_4_intelligence']
         completed = p4.get('completed_count', 0)
         total_completed += completed
+        
+        verified_impl = p4.get('verified_implemented', [])
+        capabilities = translate_ac_list(verified_impl, ac_map)
+        
         data['phases'].append({
             'id': 4,
             'name': 'Intelligence Layer',
@@ -112,7 +194,8 @@ def sync_plan_viewer_data():
             'ac_ids_total': p4.get('total_ac_count', 10),
             'status': p4.get('status', 'in_progress'),
             'description': 'Intelligence layer (LLM Intent Classifier, Vision API, Knowledge Practices, Knowledge Graph)',
-            'verified_implemented': p4.get('verified_implemented', [])
+            'verified_implemented': verified_impl,
+            'capabilities': capabilities
         })
     
     # Update metadata totals

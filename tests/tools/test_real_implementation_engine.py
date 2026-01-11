@@ -17,7 +17,6 @@ from src.tools.real_implementation_engine import (
 from src.tools.llm_code_generator import LLMProvider, CodeGenerationResult
 
 
-@pytest.mark.skip(reason="RealImplementationEngine is Phase 2+ feature")
 class TestRealImplementationEngine(unittest.TestCase):
     """Tests for Real Implementation Engine."""
     
@@ -30,6 +29,7 @@ class TestRealImplementationEngine(unittest.TestCase):
     @patch('src.tools.real_implementation_engine.FileOperations')
     @patch('src.tools.real_implementation_engine.TestExecutor')
     @patch('src.tools.real_implementation_engine.EvidenceBundleGenerator')
+    @pytest.mark.ac_id("AC-EVIDENCE-001")
     def test_initialization(self, mock_evidence, mock_test, mock_file, mock_llm):
         """Test engine initialization."""
         engine = RealImplementationEngine(
@@ -46,6 +46,7 @@ class TestRealImplementationEngine(unittest.TestCase):
     @patch('src.tools.real_implementation_engine.FileOperations')
     @patch('src.tools.real_implementation_engine.TestExecutor')
     @patch('src.tools.real_implementation_engine.EvidenceBundleGenerator')
+    @pytest.mark.ac_id("AC-EVIDENCE-002")
     def test_implement_ac_id_no_llm(self, mock_evidence, mock_test, mock_file, mock_llm):
         """Test implementation when LLM not available."""
         # Mock LLM initialization failure
@@ -65,6 +66,7 @@ class TestRealImplementationEngine(unittest.TestCase):
         self.assertFalse(result.success)
         self.assertIn("LLM not available", result.message)
     
+    @pytest.mark.ac_id("AC-EVIDENCE-003")
     def test_determine_target_file_from_prefix(self):
         """Test target file determination from AC-ID prefix."""
         engine = RealImplementationEngine(

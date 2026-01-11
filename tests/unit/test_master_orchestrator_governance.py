@@ -52,6 +52,7 @@ class TestMasterOrchestratorGovernance:
         """Create master orchestrator"""
         return MasterOrchestrator(workspace_root)
     
+    @pytest.mark.ac_id("AC-GOV-005")
     def test_initializes_with_governance_orchestrator(self, master):
         """Should initialize with governance orchestrator registered"""
         assert master.has_orchestrator("governance")
