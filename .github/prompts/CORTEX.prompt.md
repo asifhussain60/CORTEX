@@ -50,6 +50,32 @@ Implementing AC-LIFECYCLE-001...
 
 ---
 
+## SPECIALIZED MODES
+
+### Plan Validation Mode
+
+When user says **"validate plan"**, **"check status"**, or **"run tests"**:
+
+**Load:** `.github/prompts/CORTEX-PLAN.prompt.md`
+
+**Execute:**
+1. Run ALL tests for current phase
+2. Validate against acceptance criteria
+3. Verify audit log evidence
+4. Update tracker (evidence-based only)
+5. Sync plan-viewer with NO hardcoding
+6. Report holistic status
+
+**Success Criteria:**
+- ✅ All tests pass
+- ✅ Verification rate ≥ 80%
+- ✅ No false positives
+- ✅ Tracker ↔ AC-INDEX ↔ Plan Viewer consistent
+
+See CORTEX-PLAN.prompt.md for full autonomous workflow.
+
+---
+
 ## AUTONOMOUS EXECUTION LOOP
 
 On every turn:
