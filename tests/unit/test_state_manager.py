@@ -29,6 +29,7 @@ import time
 class TestStateManagerCRUD:
     """Tests for basic Create, Read, Update, Delete operations."""
     
+    @pytest.mark.ac_id("AC-STATE-001")
     def test_create_state(self, state_manager):
         """Test creating a new state entry."""
         # Arrange
@@ -190,6 +191,7 @@ class TestOptimisticLocking:
 class TestWALMode:
     """Tests for SQLite WAL (Write-Ahead Logging) mode."""
     
+    @pytest.mark.ac_id("AC-STATE-002")
     def test_wal_mode_enabled(self, state_manager):
         """Test that WAL mode is enabled on database."""
         # Act
@@ -256,6 +258,7 @@ class TestCheckpointResume:
         assert "checkpoint_1" in names
         assert "checkpoint_2" in names
         
+    @pytest.mark.ac_id("AC-STATE-003")
     def test_restore_checkpoint(self, state_manager):
         """Test restoring from a checkpoint."""
         # Arrange - Create initial state

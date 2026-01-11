@@ -366,6 +366,7 @@ class TestTDDInvocation:
 class TestACValidation:
     """Tests for AC-TDD-MASTER-004."""
     
+    @pytest.mark.ac_id("AC-TEST-004")
     def test_validates_full_ac_coverage(
         self, 
         orchestrator: TDDMasterOrchestrator, 

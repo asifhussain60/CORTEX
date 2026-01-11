@@ -145,6 +145,9 @@ next_ac_ids = state.current_phase.planned_not_implemented
 
 # Step 2: Execute LOOP (don't stop!)
 for ac_id in next_ac_ids:
+    # Look up AC-ID title for clear reporting
+    ac_title = run_terminal(f"./scripts/get_ac_title.sh {ac_id}").strip()
+    
     # Execute via terminal
     run_terminal(f"python3 -m src.main 'implement {ac_id}' --format markdown")
     
@@ -155,10 +158,13 @@ for ac_id in next_ac_ids:
     if test_result.passed:
         update_progress(ac_id, "implemented")
     
-    # Report in ONE paragraph (no sections!)
-    print(f"{ac_id} done ({test_result.passed}/{test_result.total} tests) → "
-          f"Phase {state.phase} now {calculate_percent()}% → "
-          f"Implementing {next_ac_ids[i+1]} next...")
+    # Get next AC title
+    next_ac_title = run_terminal(f"./scripts/get_ac_title.sh {next_ac_ids[i+1]}").strip()
+    
+    # Report with clear titles (no AC-ID codes alone!)
+    print(f"{ac_id}: {ac_title} done ({test_result.passed}/{test_result.total} tests). "
+          f"Phase {state.phase} at {calculate_percent()}%. "
+          f"Implementing {next_ac_ids[i+1]}: {next_ac_title}...")
     
     # KEY: Continue immediately (NO stopping for approval)
 
@@ -166,16 +172,49 @@ for ac_id in next_ac_ids:
 print(f"Phase {state.phase} complete (100%) → Moving to Phase {state.next_phase}...")
 ```
 
-**YOU MUST:**
-- ✅ Execute continuously (loop until phase complete)
-- ✅ Report in single paragraph (no bullet sections)
-- ✅ Continue to next AC-ID automatically (no asking permission)
+**RESPONSE FORMAT (MANDATORY):**
 
-**YOU MUST NOT:**
-- ❌ Stop after single operation
-- ❌ Present "Next Steps" section
-- ❌ Ask user "Should I continue?"
-- ❌ Use bullet-driven "Outcomes/Risks/Decisions" format
+Executive summary format with bullets on separate lines. **NEVER show AC-ID codes to user**. Translate to human-readable capabilities.
+
+**Example:**
+```
+✅ OUTCOMES
+
+• Hash chain integrity validation operational (5/5 tests passing)
+• Phase 1 audit infrastructure at 67% (22/33 capabilities)
+
+⚙️ IN PROGRESS
+
+• Implementing lifecycle state management (7-state orchestrator flow)
+
+⚠️ RISKS
+
+• None detected
+
+🎯 IMPACT
+
+• Tamper-proof audit trail now enforceable
+• Orchestrators can validate state transitions
+```
+
+**Translation Rules:**
+- AC-AUDIT-007 → "Hash chain integrity validation"
+- AC-LIFECYCLE-001 → "Lifecycle state management"
+- AC-EVIDENCE-001 → "Evidence bundle generation"
+- Always describe WHAT capability, not the code reference
+
+**Rules:**
+- ✅ Executive bullet format (Outcomes/In Progress/Risks/Impact)
+- ✅ Each bullet on separate line (no blank lines between bullets)
+- ✅ Blank line after each section header only
+- ✅ Human-readable capability names (no AC-IDs)
+- ✅ Call out risks, blockers, assumptions explicitly
+- ✅ Separate facts from recommendations
+- ✅ Readable in <1 minute by technical leader
+- ❌ No AC-ID codes in user-facing output
+- ❌ No code snippets
+- ❌ No implementation details
+- ❌ No narrative prose or filler
 
 ---
 
@@ -378,12 +417,32 @@ python3 -m src.main "audit query --category GOVERNANCE --level WARNING"
 | File | Purpose |
 |------|---------|
 | `.github/prompts/CORTEX.prompt.md` | Master routing gateway |
+| `.github/prompts/cortex-exec.prompt.md` | Autonomous execution engine |
 | `cortex-brain/tier0/governance/core-rules.yaml` | 19 SKULL rules |
 | `cortex-brain/tier1/tracking/progress-tracker.json` | Active epic state |
-| `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml` | AC registry |
+| `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml` | AC registry with titles |
 | `cortex-brain/response-templates-v4.yaml` | Output formatting |
+| `scripts/get_ac_title.sh` | AC-ID title lookup helper |
 | `src/infrastructure/enhanced_audit_logger.py` | Audit implementation |
 | `src/orchestrators/core/governance_merger.py` | Rule merging |
+
+---
+
+## 🏷️ AC-ID Title Lookup (CRITICAL)
+
+**Always display AC-IDs with their human-readable titles:**
+
+```bash
+# Quick lookup
+./scripts/get_ac_title.sh AC-AUDIT-001
+# Output: Queryable Audit Storage
+
+# In reports, always use format:
+# AC-AUDIT-001: Queryable Audit Storage
+# NOT just: AC-AUDIT-001
+```
+
+**Why?** Users need to understand what's being implemented without memorizing AC-ID codes.
 
 ---
 
@@ -422,4 +481,5 @@ This file evolves based on:
 - 5.5.0: Terminal execution bridge
 - 6.0.0: **Production-grade redesign** with 4-tier governance, audit integration, failure mode documentation, incremental AC building, and sequential phase-by-phase execution strategy
 - 6.0.1: **Sequential execution strategy** - 100% phase gates, cleaner tracking, no parallel execution hazards
+- 6.0.2: **AC-ID title display** - Always show human-readable titles with AC-IDs for clarity
 

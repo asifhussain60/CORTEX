@@ -22,31 +22,50 @@ Never ask for permission. Never stop mid‑phase.
 
 ## RESPONSE FORMAT (MANDATORY)
 
-Use **short lines**, never dense paragraphs.
+Executive summary format with bullets on separate lines. **NEVER show AC-ID codes**. Translate to business capabilities.
 
+**Example:**
 ```
-[Current phase + % complete + counts]
+✅ OUTCOMES
 
-[What just completed]
+• Hash chain integrity validation operational (5/5 tests)
+• Phase 1 audit infrastructure: 67% complete (22/33 capabilities)
 
-[What is executing now]
+⚙️ IN PROGRESS
+
+• Lifecycle state management (7-state orchestrator transitions)
+
+⚠️ RISKS
+
+• None detected
+
+🎯 IMPACT
+
+• Tamper-proof audit trail enforceable
+• Orchestrator state transitions now validated
 ```
 
-Example:
-```
-Phase 1 at 67% (22/33 AC-IDs complete).
+**Capability Translation Map:**
+```bash
+# Internal (for logging): AC-AUDIT-007
+# User-facing: "Hash chain integrity validation"
 
-AC-AUDIT-007 implemented. Tests: 5/5 passing.
-
-Implementing AC-LIFECYCLE-001...
+# Use get_ac_title.sh internally, then translate to plain English
+title=$(./scripts/get_ac_title.sh ${ac_id})
+# Output: Human description without AC-ID prefix
 ```
 
 **Rules**
-- Max 3–5 short lines
-- No bullets unless explicitly requested
-- No summaries, outcomes, risks, or decisions
-- No filler language
-- No code blocks unless user asks for code
+- Executive bullet format (✅ Outcomes / ⚙️ In Progress / ⚠️ Risks / 🎯 Impact)
+- Each bullet on separate line (no blank lines between bullets)
+- Blank line after each section header only
+- No AC-ID codes in user output
+- Focus on outcomes, risks, decisions
+- Call out assumptions and blockers explicitly
+- Separate facts from recommendations
+- Short declarative bullets, no filler
+- No code snippets
+- Readable in <1 minute by technical leader
 
 ---
 
@@ -188,7 +207,7 @@ Example:
 ```
 State sync fixed 3 items; 2 AC stubs added; 5 files relocated; dashboard synced.
 
-Phase 1 at 64%. Implementing AC-AUDIT-007...
+Phase 1 at 64%. Implementing AC-AUDIT-007: Hash Chain Integrity...
 ```
 
 **Dashboard Sync Protocol:**
@@ -198,6 +217,7 @@ Phase 1 at 64%. Implementing AC-AUDIT-007...
 - Ensures plan viewer always shows current reality
 - **Never modify plan-viewer-data.json directly**
 - **Always sync: progress-tracker.json → plan-viewer-data.json → HTML**
+- **Always display AC-ID with title in all reports**
 
 ---
 

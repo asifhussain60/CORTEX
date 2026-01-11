@@ -32,6 +32,7 @@ class TestLifecycleStates:
         """Create lifecycle manager"""
         return OrchestratorLifecycle(orchestrator_id="test-orchestrator")
     
+    @pytest.mark.ac_id("AC-LIFECYCLE-001")
     def test_initial_state_is_initialized(self, lifecycle):
         """Should start in INITIALIZED state"""
         assert lifecycle.current_state == LifecycleState.INITIALIZED
@@ -84,6 +85,7 @@ class TestInvalidTransitions:
     def lifecycle(self):
         return OrchestratorLifecycle(orchestrator_id="test-orchestrator")
     
+    @pytest.mark.ac_id("AC-LIFECYCLE-002")
     def test_cannot_run_without_ready(self, lifecycle):
         """Should not transition to RUNNING without being READY"""
         with pytest.raises(LifecycleError) as exc_info:
@@ -203,6 +205,7 @@ class TestLifecycleTimestamps:
     def lifecycle(self):
         return OrchestratorLifecycle(orchestrator_id="test-orchestrator")
     
+    @pytest.mark.ac_id("AC-LIFECYCLE-003")
     def test_tracks_state_entry_time(self, lifecycle):
         """Should track when state was entered"""
         before = datetime.now()

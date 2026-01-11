@@ -1094,7 +1094,7 @@
                             <span class="hero-meta-value" id="overall-status">Loading...</span>
                         </div>
                         <div class="hero-meta-item">
-                            <span class="hero-meta-label">Total AC-IDs</span>
+                            <span class="hero-meta-label">Total Capabilities</span>
                             <span class="hero-meta-value" id="total-acs">--</span>
                         </div>
                         <div class="hero-meta-item">
@@ -1121,7 +1121,7 @@
                             <div class="progress-bar-fill" id="overall-progress-bar" style="width: 0%;"></div>
                         </div>
                         <div style="display: flex; justify-content: space-between; margin-top: var(--spacing-sm); font-size: var(--font-size-xs); color: var(--color-text-tertiary);">
-                            <span id="overall-progress-text">0 of 0 AC-IDs complete</span>
+                            <span id="overall-progress-text">0 of 0 capabilities complete</span>
                             <span id="overall-progress-phases">0 of 0 phases</span>
                         </div>
                     </div>
@@ -1284,7 +1284,7 @@
                     'completed': 'Phase Complete',
                     'not_started': 'Implementation Complete',
                     'phase_1_nearing_completion': 'All Phases Complete',
-                    'phase_4_complete': 'All 4 Phases Complete - 80 AC-IDs Operational'
+                    'phase_4_complete': 'All 4 Phases Complete - 80 Capabilities Operational'
                 };
                 
                 const overallCompletion = meta.completed_ac_ids || 0;
@@ -1292,7 +1292,7 @@
                 const completionPct = Math.round((overallCompletion / totalACs) * 100);
                 
                 document.getElementById('overall-status').textContent = 
-                    `${completionPct}% Complete (${overallCompletion}/${totalACs} AC-IDs)`;
+                    `${completionPct}% Complete (${overallCompletion}/${totalACs} Capabilities)`;
                 document.getElementById('total-acs').textContent = 
                     meta.total_ac_ids || '102';
                 document.getElementById('active-phase').textContent = 
@@ -1304,7 +1304,7 @@
                 document.getElementById('overall-progress-pct').textContent = `${completionPct}%`;
                 document.getElementById('overall-progress-bar').style.width = `${completionPct}%`;
                 document.getElementById('overall-progress-text').textContent = 
-                    `${overallCompletion} of ${totalACs} AC-IDs complete`;
+                    `${overallCompletion} of ${totalACs} capabilities complete`;
                 
                 // Count completed phases
                 const completedPhases = phases.filter(p => p.completion_percentage === 100).length;
@@ -1325,7 +1325,7 @@
                 document.getElementById('health-bar').style.width = completionPct + '%';
                 document.getElementById('completion-pct').textContent = completionPct + '%';
                 document.getElementById('health-subtitle').textContent = 
-                    `${totalComplete} of ${totalACs} AC-IDs complete`;
+                    `${totalComplete} of ${totalACs} capabilities complete`;
                 
                 // Phase breakdown
                 const phaseMetrics = document.getElementById('phase-metrics');
@@ -1373,6 +1373,33 @@
                 const status = this.getStatusClass(phaseData.status);
                 const statusText = this.getStatusText(phaseData.status);
                 
+                // Render capability list if available
+                let capabilityList = '';
+                if (phaseData.capabilities && phaseData.capabilities.length > 0) {
+                    capabilityList = `
+                        <div class="mt-lg">
+                            <div class="text-sm text-muted mb-sm" style="font-weight: 600;">Implemented Capabilities:</div>
+                            <div style="display: grid; gap: var(--spacing-sm);">
+                                ${phaseData.capabilities.map(cap => `
+                                    <div style="
+                                        padding: var(--spacing-sm) var(--spacing-md);
+                                        background: rgba(0, 212, 255, 0.05);
+                                        border-left: 2px solid var(--color-primary-accent);
+                                        border-radius: 4px;
+                                    ">
+                                        <div style="font-weight: 600; color: var(--color-text-primary); margin-bottom: 2px;">
+                                            ${cap.name}
+                                        </div>
+                                        <div style="font-size: var(--font-size-xs); color: var(--color-text-tertiary);">
+                                            ${cap.description}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                
                 return `
                     <div class="card collapsible-panel" data-phase="${phaseData.id}">
                         <div class="collapsible-header">
@@ -1386,7 +1413,7 @@
                         <div class="collapsible-content">
                             <div class="flex flex-between mb-md">
                                 <div>
-                                    <div class="text-sm text-muted">AC-IDs Complete</div>
+                                    <div class="text-sm text-muted">Capabilities Complete</div>
                                     <div style="font-size: var(--font-size-xl); font-weight: 700; color: var(--color-${status});">
                                         ${phaseData.ac_ids_complete} / ${phaseData.ac_ids_total}
                                     </div>
@@ -1404,6 +1431,7 @@
                             <div class="text-sm text-muted mt-md">
                                 ${phaseData.description}
                             </div>
+                            ${capabilityList}
                         </div>
                     </div>
                 `;
@@ -1430,7 +1458,7 @@
                             <div class="phase-card-body">
                                 <div class="phase-card-metrics">
                                     <div class="phase-card-metric">
-                                        <div class="phase-card-metric-label">AC-IDs</div>
+                                        <div class="phase-card-metric-label">Capabilities</div>
                                         <div class="phase-card-metric-value" style="color: var(--color-${status});">
                                             ${phaseData.ac_ids_complete}/${phaseData.ac_ids_total}
                                         </div>

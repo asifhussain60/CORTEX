@@ -36,6 +36,7 @@ def workspace_root() -> str:
 class TestGovernanceRules:
     """Test governance_rules MCP tool."""
     
+    @pytest.mark.ac_id("AC-GOV-001")
     def test_list_all_rules(self, workspace_root):
         """Test: List all governance rules returns valid response."""
         result = governance_rules(workspace_root)
@@ -67,6 +68,7 @@ class TestGovernanceRules:
 class TestGovernanceValidate:
     """Test governance_validate MCP tool."""
     
+    @pytest.mark.ac_id("AC-GOV-002")
     def test_validate_existing_rule(self, workspace_root):
         """Test: Validate CORE-001 returns ENFORCED."""
         result = governance_validate(workspace_root, "CORE-001")
