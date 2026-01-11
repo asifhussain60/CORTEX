@@ -2248,7 +2248,9 @@
                     const response = await fetch('../../../audit-logs/consolidated-audit.json');
                     if (response.ok) {
                         const data = await response.json();
-                        this.data.auditLogs = this.normalizeAuditLogs(data);
+                        // Handle both {logs: [...]} and direct array formats
+                        const logsArray = data.logs || data;
+                        this.data.auditLogs = this.normalizeAuditLogs(logsArray);
                     } else {
                         this.data.auditLogs = this.generateMockAuditData();
                     }
@@ -2258,6 +2260,7 @@
                     console.warn('Could not load audit logs, using mock data:', error);
                     this.data.auditLogs = this.generateMockAuditData();
                     this.data.filteredLogs = [...this.data.auditLogs];
+                }
                 }
             },
             
@@ -2406,6 +2409,15 @@
                                     
                                     <!-- Category Pills with Badges -->
                                     <span class="audit-filter-section-title">Category:</span>
+                                    <div class="audit-pill active" data-filter="category" data-value="all">
+                                        All <span class="audit-pill-badge" id="filter-count-category-all">0</span>
+                                    </div>
+                                    <div class="audit-pill" data-filter="category" data-value="middleware">
+                                        Middleware <span class="audit-pill-badge" id="filter-count-middleware">0</span>
+                                    </div>
+                                    <div class="audit-pill" data-filter="category" data-value="state_management">
+                                        State Mgmt <span class="audit-pill-badge" id="filter-count-state_management">0</span>
+                                    </div>
                                     <div class="audit-pill" data-filter="category" data-value="governance">
                                         Governance <span class="audit-pill-badge" id="filter-count-governance">0</span>
                                     </div>
@@ -2414,9 +2426,6 @@
                                     </div>
                                     <div class="audit-pill" data-filter="category" data-value="validation">
                                         Validation <span class="audit-pill-badge" id="filter-count-validation">0</span>
-                                    </div>
-                                    <div class="audit-pill" data-filter="category" data-value="middleware">
-                                        Middleware <span class="audit-pill-badge" id="filter-count-middleware">0</span>
                                     </div>
                                 </div>
                                 
@@ -2631,6 +2640,14 @@
             updateFilterCounts() {
                 const logs = this.data.auditLogs;
                 
+                // Update total count
+                const totalEl = document.getElementById('filter-count-all');
+                if (totalEl) totalEl.textContent = logs.length;
+                
+                const categoryAllEl = document.getElementById('filter-count-category-all');
+                if (categoryAllEl) categoryAllEl.textContent = logs.length;
+                
+                // Count by category
                 const categoryCounts = {};
                 logs.forEach(log => {
                     categoryCounts[log.domain] = (categoryCounts[log.domain] || 0) + 1;
@@ -2641,8 +2658,7 @@
                     if (el) el.textContent = categoryCounts[category];
                 });
                 
-                document.getElementById('filter-count-all').textContent = logs.length;
-                
+                // Count by level
                 const levelCounts = {};
                 logs.forEach(log => {
                     levelCounts[log.level] = (levelCounts[log.level] || 0) + 1;
