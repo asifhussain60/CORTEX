@@ -44,9 +44,11 @@ class STSLogger:
         # Filter metadata to remove keys that aren't accepted by storage backend
         filtered_metadata = {}
         if metadata:
-            # Remove 'intent' and other non-storage keys
+            # Remove 'intent', 'rule', 'attack_type' and other non-storage keys
+            # Keep only 'ac_id', 'correlation_id', 'session_id', 'duration_ms', 'error_details'
+            allowed_keys = {'ac_id', 'correlation_id', 'session_id', 'duration_ms', 'error_details'}
             filtered_metadata = {k: v for k, v in metadata.items() 
-                                 if k not in ('component', 'operation', 'intent')}
+                                 if k in allowed_keys}
         
         self.logger.log(
             level=audit_level,

@@ -115,15 +115,20 @@ class TestGovernanceEnforcement:
         
         # CORE-001: Incremental Execution (>500 lines)
         if violated_rule == "CORE-001":
-            if "800 lines" in intent or "600 lines" in intent or "1000 lines" in intent:
-                blocked = True
-                logged = True
-                self.audit_logger.log(
-                    level="WARNING",
-                    message=f"CORE-001 violation: Large operation detected",
-                    category="GOVERNANCE",
-                    metadata={"intent": intent, "rule": "CORE-001"}
-                )
+            # Check for line count references (both "600 lines" and "600-line" formats)
+            import re
+            line_match = re.search(r'(\d+)[-\s]?lines?', intent.lower())
+            if line_match:
+                line_count = int(line_match.group(1))
+                if line_count > 500:
+                    blocked = True
+                    logged = True
+                    self.audit_logger.log(
+                        level="WARNING",
+                        message=f"CORE-001 violation: Large operation detected ({line_count} lines > 500 limit)",
+                        category="GOVERNANCE",
+                        metadata={"intent": intent, "rule": "CORE-001"}
+                    )
         
         # CORE-002: No Summary Files
         elif violated_rule == "CORE-002":
@@ -165,20 +170,30 @@ class TestGovernanceEnforcement:
         
         # CORE-009: Plan File Organization
         elif violated_rule == "CORE-009":
-            if ("plan" in intent.lower() or "roadmap" in intent.lower()) and \
-               ("root" in intent.lower() or "sharpening-cortex" in intent.lower()):
-                if "docs/" in intent.lower():
-                    blocked = False  # Allow with warning
+            # Check if creating plan/roadmap files
+            is_plan_file = ("plan" in intent.lower() or "roadmap" in intent.lower())
+            in_docs = ("docs/" in intent.lower() or "docs folder" in intent.lower())
+            in_cortex_brain = ("cortex-brain" in intent.lower())
+            in_disallowed = ("sharpening-cortex" in intent.lower() or "root" in intent.lower())
+            
+            if is_plan_file:
+                if in_docs or in_cortex_brain:
+                    blocked = False  # Allow with warning in approved locations
+                    logged = True
+                elif in_disallowed or not (in_docs or in_cortex_brain):
+                    blocked = True  # Block if in disallowed or unknown location
                     logged = True
                 else:
-                    blocked = True
+                    blocked = False
                     logged = True
-                self.audit_logger.log(
-                    level="WARNING",
-                    message=f"CORE-009 violation: Plan file organization issue",
-                    category="GOVERNANCE",
-                    metadata={"intent": intent, "rule": "CORE-009"}
-                )
+                
+                if logged:
+                    self.audit_logger.log(
+                        level="WARNING",
+                        message=f"CORE-009 violation: Plan file organization issue",
+                        category="GOVERNANCE",
+                        metadata={"intent": intent, "rule": "CORE-009"}
+                    )
         
         # CORE-017: Governance Enforcement
         elif violated_rule == "CORE-017":

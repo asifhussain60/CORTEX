@@ -94,12 +94,13 @@ class TestUnicodeNormalization:
         - Stripping emojis
         - Normalizing to NFC
         - Removing zero-width characters
-        - Handling CJK characters (translation placeholder)
+        - Stripping CJK characters (translation would require external API)
         """
-        # Remove emojis (simplified - production would use emoji library)
-        normalized = ''.join(c for c in intent if c.isascii() or c.isspace() or unicodedata.category(c) not in ('So', 'Sk'))
+        # Remove non-ASCII characters including emojis and CJK
+        # Keep only ASCII letters, digits, spaces, and basic punctuation
+        normalized = ''.join(c for c in intent if ord(c) < 128)
         
-        # Normalize to NFC
+        # Normalize to NFC (for any remaining chars)
         normalized = unicodedata.normalize('NFC', normalized)
         
         # Remove zero-width characters
@@ -114,24 +115,29 @@ class TestUnicodeNormalization:
     
     def _route_intent(self, intent: str) -> Dict:
         """Simplified routing (matches routing_determinism test)."""
-        routing_table = {
-            'implement': {'orchestrator': 'TDDMasterOrchestrator', 'ac_prefix': 'AC-TDD'},
-            'build': {'orchestrator': 'TDDMasterOrchestrator', 'ac_prefix': 'AC-TDD'},
-            'plan': {'orchestrator': 'PlanningOrchestratorV5', 'ac_prefix': 'AC-PLAN'},
-            'investigate': {'orchestrator': 'InvestigationOrchestrator', 'ac_prefix': 'AC-INV'},
-            'vacuum': {'orchestrator': 'VacuumOrchestratorV2', 'ac_prefix': 'AC-VAC'},
-            'crawl': {'orchestrator': 'CrawlerOrchestrator', 'ac_prefix': 'AC-CRAWLER'},
-            'sanitize': {'orchestrator': 'SanitizationOrchestratorV2', 'ac_prefix': 'AC-SAN'},
-            'refine': {'orchestrator': 'RefinementOrchestratorV2', 'ac_prefix': 'AC-REF'},
-            'cleanup': {'orchestrator': 'CleanupOrchestratorV2', 'ac_prefix': 'AC-CLEAN'},
-            'ado': {'orchestrator': 'ADOOrchestratorV2', 'ac_prefix': 'AC-ADO'},
-            'scaffold': {'orchestrator': 'OrchestratorScaffolder', 'ac_prefix': 'AC-SCAFFOLD'},
-            'epic review': {'orchestrator': 'EpicReviewOrchestrator', 'ac_prefix': 'AC-EPIC'},
-            'search': {'orchestrator': 'GitHistoryIntelligence', 'ac_prefix': 'AC-GIT'},
-        }
+        # Order matters - more specific patterns first
+        routing_patterns = [
+            ('create a plan', {'orchestrator': 'PlanningOrchestratorV5', 'ac_prefix': 'AC-PLAN'}),
+            ('azure devops', {'orchestrator': 'ADOOrchestratorV2', 'ac_prefix': 'AC-ADO'}),
+            ('work item', {'orchestrator': 'ADOOrchestratorV2', 'ac_prefix': 'AC-ADO'}),
+            ('git history', {'orchestrator': 'GitHistoryIntelligence', 'ac_prefix': 'AC-GIT'}),
+            ('epic review', {'orchestrator': 'EpicReviewOrchestrator', 'ac_prefix': 'AC-EPIC'}),
+            ('investigate', {'orchestrator': 'InvestigationOrchestrator', 'ac_prefix': 'AC-INV'}),
+            ('crawl', {'orchestrator': 'CrawlerOrchestrator', 'ac_prefix': 'AC-CRAWLER'}),
+            ('scaffold', {'orchestrator': 'OrchestratorScaffolder', 'ac_prefix': 'AC-SCAFFOLD'}),
+            ('sanitize', {'orchestrator': 'SanitizationOrchestratorV2', 'ac_prefix': 'AC-SAN'}),
+            ('vacuum', {'orchestrator': 'VacuumOrchestratorV2', 'ac_prefix': 'AC-VAC'}),
+            ('refine', {'orchestrator': 'RefinementOrchestratorV2', 'ac_prefix': 'AC-REF'}),
+            ('cleanup', {'orchestrator': 'CleanupOrchestratorV2', 'ac_prefix': 'AC-CLEAN'}),
+            ('plan', {'orchestrator': 'PlanningOrchestratorV5', 'ac_prefix': 'AC-PLAN'}),
+            ('ado', {'orchestrator': 'ADOOrchestratorV2', 'ac_prefix': 'AC-ADO'}),
+            ('search', {'orchestrator': 'GitHistoryIntelligence', 'ac_prefix': 'AC-GIT'}),
+            ('implement', {'orchestrator': 'TDDMasterOrchestrator', 'ac_prefix': 'AC-TDD'}),
+            ('build', {'orchestrator': 'TDDMasterOrchestrator', 'ac_prefix': 'AC-TDD'}),
+        ]
         
         intent_lower = intent.lower()
-        for pattern, route in routing_table.items():
+        for pattern, route in routing_patterns:
             if pattern in intent_lower:
                 return route
         

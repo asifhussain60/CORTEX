@@ -114,30 +114,34 @@ class TestRoutingDeterminism:
         For STS, we use pattern matching based on routing table.
         """
         # Simplified routing table (matches .github/copilot-instructions.md)
-        routing_table = {
-            'implement': {'orchestrator': 'TDDMasterOrchestrator', 'ac_prefix': 'AC-TDD'},
-            'build': {'orchestrator': 'TDDMasterOrchestrator', 'ac_prefix': 'AC-TDD'},
-            'create': {'orchestrator': 'TDDMasterOrchestrator', 'ac_prefix': 'AC-TDD'},
-            'fix': {'orchestrator': 'TDDMasterOrchestrator', 'ac_prefix': 'AC-TDD'},
-            'plan': {'orchestrator': 'PlanningOrchestratorV5', 'ac_prefix': 'AC-PLAN'},
-            'ado': {'orchestrator': 'ADOOrchestratorV2', 'ac_prefix': 'AC-ADO'},
-            'sync work items': {'orchestrator': 'ADOOrchestratorV2', 'ac_prefix': 'AC-ADO'},
-            'investigate': {'orchestrator': 'InvestigationOrchestrator', 'ac_prefix': 'AC-INV'},
-            'vacuum': {'orchestrator': 'VacuumOrchestratorV2', 'ac_prefix': 'AC-VAC'},
-            'crawl': {'orchestrator': 'CrawlerOrchestrator', 'ac_prefix': 'AC-CRAWLER'},
-            'scaffold': {'orchestrator': 'OrchestratorScaffolder', 'ac_prefix': 'AC-SCAFFOLD'},
-            'sanitize': {'orchestrator': 'SanitizationOrchestratorV2', 'ac_prefix': 'AC-SAN'},
-            'refine': {'orchestrator': 'RefinementOrchestratorV2', 'ac_prefix': 'AC-REF'},
-            'cleanup': {'orchestrator': 'CleanupOrchestratorV2', 'ac_prefix': 'AC-CLEAN'},
-            'git history': {'orchestrator': 'GitHistoryIntelligence', 'ac_prefix': 'AC-GIT'},
-            'search': {'orchestrator': 'GitHistoryIntelligence', 'ac_prefix': 'AC-GIT'},
-            'epic review': {'orchestrator': 'EpicReviewOrchestrator', 'ac_prefix': 'AC-EPIC'},
-            'health check': {'orchestrator': 'EpicReviewOrchestrator', 'ac_prefix': 'AC-EPIC'},
-        }
+        # Order matters - more specific patterns first
+        routing_patterns = [
+            ('create a plan', {'orchestrator': 'PlanningOrchestratorV5', 'ac_prefix': 'AC-PLAN'}),
+            ('azure devops', {'orchestrator': 'ADOOrchestratorV2', 'ac_prefix': 'AC-ADO'}),
+            ('work item', {'orchestrator': 'ADOOrchestratorV2', 'ac_prefix': 'AC-ADO'}),
+            ('sync work items', {'orchestrator': 'ADOOrchestratorV2', 'ac_prefix': 'AC-ADO'}),
+            ('git history', {'orchestrator': 'GitHistoryIntelligence', 'ac_prefix': 'AC-GIT'}),
+            ('epic review', {'orchestrator': 'EpicReviewOrchestrator', 'ac_prefix': 'AC-EPIC'}),
+            ('health check', {'orchestrator': 'EpicReviewOrchestrator', 'ac_prefix': 'AC-EPIC'}),
+            ('investigate', {'orchestrator': 'InvestigationOrchestrator', 'ac_prefix': 'AC-INV'}),
+            ('crawl', {'orchestrator': 'CrawlerOrchestrator', 'ac_prefix': 'AC-CRAWLER'}),
+            ('scaffold', {'orchestrator': 'OrchestratorScaffolder', 'ac_prefix': 'AC-SCAFFOLD'}),
+            ('sanitize', {'orchestrator': 'SanitizationOrchestratorV2', 'ac_prefix': 'AC-SAN'}),
+            ('vacuum', {'orchestrator': 'VacuumOrchestratorV2', 'ac_prefix': 'AC-VAC'}),
+            ('refine', {'orchestrator': 'RefinementOrchestratorV2', 'ac_prefix': 'AC-REF'}),
+            ('cleanup', {'orchestrator': 'CleanupOrchestratorV2', 'ac_prefix': 'AC-CLEAN'}),
+            ('plan', {'orchestrator': 'PlanningOrchestratorV5', 'ac_prefix': 'AC-PLAN'}),
+            ('ado', {'orchestrator': 'ADOOrchestratorV2', 'ac_prefix': 'AC-ADO'}),
+            ('search', {'orchestrator': 'GitHistoryIntelligence', 'ac_prefix': 'AC-GIT'}),
+            ('implement', {'orchestrator': 'TDDMasterOrchestrator', 'ac_prefix': 'AC-TDD'}),
+            ('build', {'orchestrator': 'TDDMasterOrchestrator', 'ac_prefix': 'AC-TDD'}),
+            ('create', {'orchestrator': 'TDDMasterOrchestrator', 'ac_prefix': 'AC-TDD'}),
+            ('fix', {'orchestrator': 'TDDMasterOrchestrator', 'ac_prefix': 'AC-TDD'}),
+        ]
         
         # Match intent to orchestrator (deterministic pattern matching)
         intent_lower = intent.lower()
-        for pattern, route in routing_table.items():
+        for pattern, route in routing_patterns:
             if pattern in intent_lower:
                 return route
         

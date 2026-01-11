@@ -59,7 +59,7 @@ class EpicReviewOrchestrator:
         config_path: Optional[str] = None
     ):
         """Initialize the epic review orchestrator."""
-        self.workspace_root = workspace_root or Path.cwd()
+        self.workspace_root = Path(workspace_root) if workspace_root else Path.cwd()
         self.audit_logger = audit_logger or EnterpriseAuditLogger()
         self.correlation_id = f"EPIC-REVIEW-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
         
