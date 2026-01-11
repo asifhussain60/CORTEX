@@ -1191,9 +1191,10 @@ orchestration_core:
     name: Task Creation from Governance Evaluation
     description: TodoManager receives required_actions from MasterOrchestrator governance
       evaluation and creates tracked tasks
-    status: not_started
-    tests: []
-    implementation: ''
+    status: implemented
+    tests:
+    - tests/infrastructure/test_todo_manager_ac_002.py
+    implementation: src/orchestrators/master/todo_manager.py
     dependencies:
     - AC-TODO-001
     - AC-ORCH-007
