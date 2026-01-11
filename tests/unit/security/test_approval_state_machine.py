@@ -47,9 +47,9 @@ class TestApprovalStateMachine:
         """Test valid state transitions."""
         # Valid transitions: REQUESTED → APPROVED/DENIED/EXPIRED
         transitions = [
-            ("REQUESTED", "APPROVED"),
-            ("REQUESTED", "DENIED"),
-            ("REQUESTED", "EXPIRED"),
+            (ApprovalState.REQUESTED.value, ApprovalState.APPROVED.value),
+            (ApprovalState.REQUESTED.value, ApprovalState.DENIED.value),
+            (ApprovalState.REQUESTED.value, ApprovalState.EXPIRED.value),
         ]
         
         for from_state, to_state in transitions:

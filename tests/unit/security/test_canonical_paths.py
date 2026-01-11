@@ -124,8 +124,13 @@ class TestCanonicalPathResolution:
 class TestSymlinkEscapeDetection:
     """Tests for detecting symlink-based escape attempts."""
     
+    @pytest.fixture
+    def workspace_root(self, tmp_path):
+        """Fixture providing workspace root."""
+        return tmp_path
+    
     @pytest.mark.ac_id("AC-SECURITY-006")
-    def test_detects_symlink_to_parent(self, workspace_root, tmp_path):
+    def test_detects_symlink_to_parent(self, workspace_root):
         """Test detection of symlink to parent directory."""
         if sys.platform == "win32":
             pytest.skip("Unix symlink test")
@@ -191,6 +196,11 @@ class TestSymlinkEscapeDetection:
 
 class TestPathResolutionAudit:
     """Tests for auditing path resolution."""
+    
+    @pytest.fixture
+    def workspace_root(self, tmp_path):
+        """Fixture providing workspace root."""
+        return tmp_path
     
     @pytest.mark.ac_id("AC-SECURITY-006")
     def test_logs_path_operations(self):
