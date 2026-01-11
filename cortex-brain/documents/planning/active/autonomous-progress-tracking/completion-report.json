@@ -1,0 +1,22 @@
+{
+  "format": "json",
+  "plan_id": "PLAN-PROGRESS-001",
+  "success": false,
+  "data": {
+    "tdd_summary": {
+      "tests_created": 0,
+      "tests_passed": 0,
+      "coverage": 0
+    },
+    "ac_coverage": {
+      "coverage_percent": 100.0,
+      "all_acs_covered": true,
+      "covered_acs": [],
+      "missing_acs": []
+    },
+    "governance": {
+      "validated": true
+    }
+  },
+  "generated_at": "2026-01-10T21:39:16.794763"
+}

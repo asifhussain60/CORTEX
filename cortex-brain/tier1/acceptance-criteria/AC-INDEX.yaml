@@ -11,12 +11,12 @@
 # Each AC-ID maps to implementation status, tests, and audit trail.
 # ==============================================================================
 
-schema_version: "1.6"
-last_updated: "2026-01-10T15:45:00Z"
-total_ac_count: 103  # 102 (previous) + 1 (AC-CORE-023: HTML validation)
-completed_count: 0
+schema_version: "1.7"
+last_updated: "2026-01-10T22:55:00Z"
+total_ac_count: 112  # 111 (previous) + 1 (AC-SYNC-001)
+completed_count: 19  # 18 (previous) + 1 (AC-SYNC-001)
 in_progress_count: 0
-design_score_current: 97  # +1 for HTML validation governance
+design_score_current: 97  # Maintained
 design_score_target: 95
 
 # ==============================================================================
@@ -729,20 +729,23 @@ categories:
     
   COPILOT:
     prefix: "AC-COPILOT"
-    description: "GitHub Copilot integration - Bridge MasterOrchestrator todos to Copilot's manage_todo_list"
+    description: "VS Code GitHub Copilot TODO list integration - Write CORTEX tasks as TODO comments to .cortex/copilot-todos.md"
     tier: 1
     priority: 2  # After foundation - part of core workflow
     core_workflow: true
     team_extensibility: true
     note: |
-      GitHubCopilotTodoBridge improves execution accuracy from 70% (manual) to 90% (Copilot-managed).
-      Each todo includes governance rules, AC-IDs, file paths, and dependencies for maximum context.
-      Integrates with MasterOrchestrator via OrchestratorResult.copilot_todos field.
+      VSCodeCopilotTodoBridge writes CORTEX TodoManager tasks as TODO comments that
+      VS Code's GitHub Copilot automatically detects and displays in the TODO panel.
+      Each TODO includes governance rules, AC-IDs, file paths, and dependencies.
+      Improves execution accuracy from 70% (manual) to 90% (Copilot-guided).
+      Integrates with MasterOrchestrator via file write after execute().
     benefits:
       - "90% execution accuracy vs 70% manual control"
-      - "Stateful resume across sessions"
-      - "Governance enforcement per-task"
-      - "Clear dependency tracking"
+      - "Visual task tracking in VS Code's TODO panel"
+      - "Governance enforcement per-task with emoji status"
+      - "Clear dependency tracking with clickable links"
+      - "Optional bidirectional sync with progress-tracker.json"
       
   LIFECYCLE:
     prefix: "AC-LIFECYCLE"
@@ -966,6 +969,38 @@ foundation:
       status: "implemented"
       tests: ["tests/orchestrators/test_continuation.py"]
       implementation: "src/orchestrators/state_manager.py"
+      
+  synchronization:
+    - id: "AC-SYNC-001"
+      name: "Automated State Synchronization Validator"
+      description: "Validates all 6 CORTEX truth sources on every turn, detects discrepancies, generates recommendations"
+      status: "implemented"
+      phase: "Phase 1 Foundation (Week 1-2)"
+      priority: "CRITICAL"
+      implemented_at: "2026-01-10T22:30:00Z"
+      tests: ["tests/orchestrators/test_state_synchronizer.py"]
+      implementation: "src/orchestrators/core/state_synchronizer.py"
+      integration: ".github/prompts/CORTEX.prompt.md (v6.0.5)"
+      evidence_bundle: "cortex-brain/tier1/evidence-bundles/AC-SYNC-001/"
+      acceptance_criteria:
+        - "AC-SYNC-001.1: Validate 6 truth sources"
+        - "AC-SYNC-001.2: Detect discrepancies"
+        - "AC-SYNC-001.3: Calculate sync score"
+        - "AC-SYNC-001.4: Generate recommendations"
+        - "AC-SYNC-001.5: Markdown report generation"
+      test_results:
+        total: 14
+        passing: 14
+        failing: 0
+        coverage: 100
+      validation:
+        - "All 6 truth sources validated"
+        - "Discrepancy detection working"
+        - "Sync score calculation accurate"
+        - "Recommendations actionable"
+        - "Markdown reports generated"
+        - "Integrated with CORTEX.prompt.md"
+        - "Blocks operations if sync_score < 80%"
 
   # ==============================================================================
   # Hybrid Approach: Extended Lifecycle States
@@ -1891,78 +1926,89 @@ features:
         - "Post-install hooks → Not planned (fragile)"
 
 # ==============================================================================
-# Phase 2: GitHub Copilot Integration ACs (NEW - 2026-01-10)
+# Phase 2: VS Code GitHub Copilot TODO List Integration (NEW - 2026-01-10)
 # ==============================================================================
-# Purpose: Bridge MasterOrchestrator todos → GitHub Copilot's manage_todo_list
-# Benefits: 90% accuracy vs 70% manual, stateful resume, governance per-task
+# Purpose: Add CORTEX TodoManager tasks to VS Code's GitHub Copilot TODO list UI
+# Benefits: 90% accuracy vs 70% manual, visible in VS Code sidebar, stateful tracking
 # ==============================================================================
 github_copilot_bridge:
   description: |
-    GitHubCopilotTodoBridge converts CORTEX TodoManager tasks into GitHub Copilot's
-    native manage_todo_list format. This improves execution accuracy by leveraging
-    Copilot's proven ability to track and execute its own todo lists (90% vs 70%).
+    VSCodeCopilotTodoBridge writes CORTEX TodoManager tasks as TODO comments that
+    VS Code's GitHub Copilot automatically detects and displays in the TODO panel.
+    This improves execution accuracy by making tasks visible in the developer's
+    workspace and leveraging Copilot's ability to understand and act on TODOs.
     
     Key Design Principles:
-    - Bridge pattern: decouples CORTEX from Copilot API changes
-    - One-way translation: CORTEX → Copilot (Copilot remains stateless)
-    - Governance injection: Each task includes relevant SKULL rules
-    - AC-ID traceability: Task descriptions link back to acceptance criteria
+    - Comment-based: Uses // TODO:, # TODO:, <!-- TODO: --> format (language-specific)
+    - Centralized file: .cortex/copilot-todos.md for all CORTEX-generated tasks
+    - VS Code integration: Tasks appear in GitHub Copilot's TODO panel automatically
+    - Governance injection: Each TODO comment includes relevant SKULL rules
+    - AC-ID traceability: TODO descriptions link back to acceptance criteria
     
-    Integration Point: MasterOrchestrator.execute() emits copilot_todos in result
+    Integration Point: MasterOrchestrator.execute() writes to .cortex/copilot-todos.md
 
   copilot_bridge_acs:
     - id: "AC-COPILOT-001"
-      name: "GitHubCopilotTodoBridge Core Component"
+      name: "VSCodeCopilotTodoBridge Core Component"
       description: |
-        Bridge component that converts TodoManager Task objects to Copilot format.
+        Bridge component that converts TodoManager Task objects to TODO comments
+        that VS Code's GitHub Copilot can detect and display in the TODO panel.
         Input: Task[] from TodoManager (AC-TODO-001)
-        Output: CopilotTodo[] with format: {id, title, description, status}
+        Output: Markdown file (.cortex/copilot-todos.md) with TODO comments
         
         Key Methods:
-        - format_for_copilot(tasks: List[Task]) → List[CopilotTodo]
+        - write_todos_to_file(tasks: List[Task]) → None
+        - _format_as_todo_comment(task) → Markdown TODO comment with metadata
         - _generate_title(task) → Clear, action-oriented title (3-7 words)
         - _generate_description(task) → Context, governance, AC-ID, dependencies
-        - _map_status(task_status) → not-started|in-progress|completed
+        - _get_status_emoji(task_status) → ⏳ | 🔄 | ✅ | ❌ | 🚫
       status: "not_started"
       priority: "P1-HIGH"
       phase: 2
       core_workflow: true
       tests:
-        - "tests/unit/core/test_github_copilot_todo_bridge.py"
-        - "tests/integration/core/test_copilot_bridge_formatting.py"
-      implementation: "src/orchestrators/core/github_copilot_todo_bridge.py"
+        - "tests/unit/core/test_vscode_copilot_todo_bridge.py"
+        - "tests/integration/core/test_copilot_todo_file_generation.py"
+      implementation: "src/orchestrators/core/vscode_copilot_todo_bridge.py"
       dependencies: ["AC-TODO-001", "AC-ORCH-006"]
       acceptance_criteria:
-        - "Converts Task objects to Copilot format with all required fields"
-        - "Title generation: concise, action-oriented, <50 chars"
-        - "Description includes: context, governance rules, AC-ID, file paths, dependencies"
-        - "Status mapping: PENDING→not-started, IN_PROGRESS→in-progress, COMPLETE→completed, FAILED/BLOCKED→not-started"
-        - "Handles empty task list gracefully (returns [])"
-        - "Performance: <5ms for 100 tasks"
+        - "Creates/updates .cortex/copilot-todos.md with TODO comments"
+        - "Each TODO: <!-- TODO: {title} --> format for Markdown files"
+        - "Title generation: concise, action-oriented, <80 chars"
+        - "Description includes: context, governance rules (3-5 max), AC-ID, file paths, dependencies"
+        - "Status tracking: ⏳ not-started, 🔄 in-progress, ✅ completed, ❌ failed, 🚫 blocked"
+        - "Handles empty task list gracefully (creates empty file with header)"
+        - "Performance: <10ms for 100 tasks"
+        - "File atomicity: Uses temp file + atomic rename to prevent corruption"
       
     - id: "AC-COPILOT-002"
       name: "Governance Context Injection"
       description: |
-        Each Copilot todo includes relevant SKULL rules in description.
+        Each TODO comment includes relevant SKULL rules in the description.
         Uses GovernanceMerger to extract applicable rules per task.
         
         Example Output:
-        "Implement user authentication with JWT.
+        <!-- TODO: Implement user authentication with JWT -->
+        **Task:** AC-AUTH-001
+        **Description:** Implement user authentication with JWT tokens
         
         **Governance:**
         - CORE-008: TDD required (write tests first)
         - CORE-001: Incremental execution (<500 lines per commit)
         - CORE-005: Use pathlib.Path for all file operations
         
-        **AC-ID:** AC-AUTH-001
-        **Files:** src/auth/jwt_handler.py, tests/auth/test_jwt_handler.py"
+        **Files:**
+        - src/auth/jwt_handler.py
+        - tests/auth/test_jwt_handler.py
+        
+        **Status:** ⏳ Not Started
       status: "not_started"
       priority: "P1-HIGH"
       phase: 2
       core_workflow: true
       tests:
         - "tests/unit/core/test_governance_injection.py"
-      implementation: "src/orchestrators/core/github_copilot_todo_bridge.py"
+      implementation: "src/orchestrators/core/vscode_copilot_todo_bridge.py"
       dependencies: ["AC-COPILOT-001", "AC-GOV-005"]
       acceptance_criteria:
         - "Extracts relevant SKULL rules from GovernanceMerger unified set"
@@ -1970,41 +2016,47 @@ github_copilot_bridge:
         - "Rule formatting: CORE-XXX: Brief description (not full text)"
         - "Includes AC-ID with link to acceptance criteria"
         - "Lists affected file paths for context"
+        - "Markdown formatting compatible with VS Code's Copilot TODO panel"
       
     - id: "AC-COPILOT-003"
       name: "Dependency Graph Serialization"
       description: |
-        Serialize task dependencies into Copilot-understandable format.
-        Copilot respects task order and dependency hints in descriptions.
+        Serialize task dependencies into TODO comment format that Copilot understands.
         
         Example:
-        "Task 3: Implement API endpoint
-        **Dependencies:** Task 1 (Database schema), Task 2 (Auth middleware)
-        **Blocked by:** AC-AUTH-001 (must complete first)"
+        <!-- TODO: Implement API endpoint -->
+        **Task:** AC-API-003
+        **Dependencies:** 
+        - ✅ AC-API-001 (Database schema) - COMPLETED
+        - ✅ AC-API-002 (Auth middleware) - COMPLETED
+        - ⏳ AC-AUTH-001 (JWT handler) - BLOCKED BY
+        
+        **Status:** 🚫 Blocked
       status: "not_started"
       priority: "P2-MEDIUM"
       phase: 2
       tests:
         - "tests/unit/core/test_dependency_serialization.py"
-      implementation: "src/orchestrators/core/github_copilot_todo_bridge.py"
+      implementation: "src/orchestrators/core/vscode_copilot_todo_bridge.py"
       dependencies: ["AC-COPILOT-001", "AC-TODO-004"]
       acceptance_criteria:
         - "Dependency tracking: blocked_by and depends_on fields"
-        - "Clear dependency explanation in description"
-        - "Task ordering: dependencies listed first in todo array"
-        - "Circular dependency detection and warning"
+        - "Clear dependency status with emojis (✅ done, ⏳ pending, 🔄 in-progress)"
+        - "Task ordering: dependencies listed first in file"
+        - "Circular dependency detection and warning in TODO comment"
+        - "Clickable AC-ID links (VS Code supports file:// URIs)"
       
     - id: "AC-COPILOT-004"
       name: "MasterOrchestrator Integration"
       description: |
-        MasterOrchestrator instantiates GitHubCopilotTodoBridge and includes
-        formatted todos in OrchestratorResult.
+        MasterOrchestrator instantiates VSCodeCopilotTodoBridge and writes
+        tasks to .cortex/copilot-todos.md after execution.
         
         Integration Points:
         1. MasterOrchestrator.__init__: Instantiate bridge
-        2. MasterOrchestrator.execute(): Call bridge.format_for_copilot(todos)
-        3. OrchestratorResult: Add copilot_todos field
-        4. ResponseFormatter: Render copilot_todos using template
+        2. MasterOrchestrator.execute(): Call bridge.write_todos_to_file(todos)
+        3. File location: .cortex/copilot-todos.md (workspace root)
+        4. VS Code detection: Automatic (Copilot scans for TODO comments)
       status: "not_started"
       priority: "P1-HIGH"
       phase: 2
@@ -2015,134 +2067,143 @@ github_copilot_bridge:
       dependencies: ["AC-COPILOT-001", "AC-ORCH-006"]
       acceptance_criteria:
         - "Bridge instantiated in MasterOrchestrator.__init__ with GovernanceMerger reference"
-        - "execute() method calls bridge.format_for_copilot() after todo creation"
-        - "OrchestratorResult includes copilot_todos: List[CopilotTodo]"
-        - "Backwards compatible: works if bridge disabled (copilot_todos = [])"
+        - "execute() method calls bridge.write_todos_to_file() after todo creation"
+        - ".cortex/copilot-todos.md created in workspace root (pathlib.Path for portability)"
+        - "File includes header: # CORTEX TodoManager Tasks (managed by CORTEX, do not edit manually)"
+        - "Backwards compatible: works if bridge disabled (no file written)"
+        - "VS Code Copilot automatically detects and displays TODOs in panel"
       
     - id: "AC-COPILOT-005"
       name: "Response Template Enhancement"
       description: |
-        Extend response-templates-v4.yaml with copilot_todo_format section.
-        Template renders manage_todo_list JSON payload for Copilot.
+        Extend response templates to notify users about TODO file creation.
+        Template informs users where to find TODOs in VS Code.
         
         Template Sections:
         - Todo count and phase summary
+        - File location: .cortex/copilot-todos.md
+        - VS Code instruction: "Open GitHub Copilot TODO panel to view tasks"
         - Estimated completion time
-        - JSON payload for manage_todo_list tool
         - Governance reminders (CORE-001, CORE-008, etc.)
       status: "not_started"
-      priority: "P1-HIGH"
+      priority: "P2-MEDIUM"
       phase: 2
       tests:
         - "tests/response_templates/test_copilot_todo_template.py"
-      implementation: "cortex-brain/response-templates-v4.yaml"
-      dependencies: ["AC-COPILOT-004"]
+      implementation: "cortex-brain/tier2/response-templates/core.yaml"
+      dependencies: ["AC-COPILOT-004", "AC-TEMPLATE-004"]
       acceptance_criteria:
-        - "New section: copilot_todo_format with Jinja2 template"
-        - "Renders manage_todo_list JSON with operation=write"
-        - "Includes phase context and governance summary"
-        - "Estimates completion time based on task complexity"
-        - "Includes reminder: 'Mark tasks completed as you finish them'"
+        - "New section: copilot_todo_notification in core template"
+        - "Clear instructions: 'TODOs written to .cortex/copilot-todos.md'"
+        - "VS Code guidance: 'View in GitHub Copilot panel (Ctrl/Cmd+Shift+P → GitHub Copilot: Show TODO Panel)'"
+        - "Includes task count and estimated completion time"
+        - "Reminder: 'TODOs auto-sync with progress-tracker.json'"
+        - "Link to documentation on TODO-based workflow"
       
     - id: "AC-COPILOT-006"
       name: "Title Generation Algorithm"
       description: |
-        Generate clear, action-oriented titles for Copilot todos.
-        Copilot performs better with concise, specific titles.
+        Generate clear, action-oriented titles for TODO comments.
+        VS Code Copilot displays titles prominently in the TODO panel.
         
         Algorithm:
         1. Extract primary action verb (implement, test, refactor, document)
         2. Extract primary entity (feature, component, function)
         3. Format: "{VERB} {ENTITY}" (e.g., "Implement JWT Handler")
-        4. Truncate to 50 chars if needed
+        4. Truncate to 80 chars if needed (Markdown TODO comment limit)
         5. Title case formatting
       status: "not_started"
       priority: "P2-MEDIUM"
       phase: 2
       tests:
         - "tests/unit/core/test_title_generation.py"
-      implementation: "src/orchestrators/core/github_copilot_todo_bridge.py"
+      implementation: "src/orchestrators/core/vscode_copilot_todo_bridge.py"
       dependencies: ["AC-COPILOT-001"]
       acceptance_criteria:
-        - "Action verbs: implement, test, refactor, document, fix, investigate, plan"
-        - "Max length: 50 chars (Copilot UI constraint)"
+        - "Action verbs: implement, test, refactor, document, fix, investigate, plan, create, update, delete"
+        - "Max length: 80 chars (comfortable reading in VS Code TODO panel)"
         - "Title case formatting (Implement JWT Handler, not implement jwt handler)"
-        - "Handles edge cases: empty task name, very long names"
+        - "Handles edge cases: empty task name, very long names, special characters"
+        - "Sanitizes for Markdown: escapes <, >, &, etc."
       
     - id: "AC-COPILOT-007"
       name: "Description Generation with Context"
       description: |
-        Generate comprehensive descriptions with maximum context for Copilot.
+        Generate comprehensive descriptions with maximum context for TODO comments.
         More context = better execution accuracy (90% vs 70%).
         
-        Description Sections:
-        1. Task objective (1-2 sentences)
-        2. Governance rules (3-5 SKULL rules)
-        3. AC-ID and link
-        4. File paths affected
-        5. Dependencies (if any)
-        6. Acceptance criteria summary
-        7. Testing requirements
+        Description Sections (Markdown format):
+        1. **Task:** AC-ID
+        2. **Description:** Task objective (1-2 sentences)
+        3. **Governance:** 3-5 SKULL rules
+        4. **Files:** Affected file paths (absolute paths)
+        5. **Dependencies:** Task IDs and status
+        6. **Acceptance Criteria:** Summary of AC
+        7. **Tests Required:** Test types (unit, integration, security)
+        8. **Status:** Emoji + text (⏳ Not Started, 🔄 In Progress, ✅ Completed)
       status: "not_started"
       priority: "P1-HIGH"
       phase: 2
       tests:
         - "tests/unit/core/test_description_generation.py"
-      implementation: "src/orchestrators/core/github_copilot_todo_bridge.py"
+      implementation: "src/orchestrators/core/vscode_copilot_todo_bridge.py"
       dependencies: ["AC-COPILOT-001", "AC-COPILOT-002"]
       acceptance_criteria:
         - "Objective: Clear, 1-2 sentence task summary"
         - "Governance: Top 3-5 relevant SKULL rules with brief explanation"
-        - "AC-ID: Formatted as **AC-ID:** AC-XXX-001 for easy scanning"
-        - "Files: Absolute paths for primary implementation and test files"
-        - "Dependencies: Task IDs and brief reason"
+        - "AC-ID: Formatted as **Task:** AC-XXX-001 for easy scanning"
+        - "Files: Relative paths from workspace root"
+        - "Dependencies: Task IDs with status emojis"
         - "Testing: Required test types (unit, integration, security)"
-        - "Max length: 2000 chars (Copilot description limit)"
+        - "Markdown formatting: Bold headers, bullet lists, code formatting"
+        - "Max length: No limit (Markdown file can be long)"
       
     - id: "AC-COPILOT-008"
-      name: "Status Mapping with Edge Cases"
+      name: "Status Mapping with Emojis"
       description: |
-        Map TodoManager task statuses to Copilot's 3-state model.
-        Handle edge cases: FAILED, BLOCKED, CANCELLED.
+        Map TodoManager task statuses to emoji + text format for visual clarity.
+        VS Code's TODO panel displays emojis prominently.
         
         Mapping:
-        - PENDING → not-started
-        - IN_PROGRESS → in-progress
-        - COMPLETE → completed
-        - FAILED → not-started (with failure note in description)
-        - BLOCKED → not-started (with blocker note in description)
-        - CANCELLED → (excluded from Copilot list)
+        - PENDING → ⏳ Not Started
+        - IN_PROGRESS → 🔄 In Progress
+        - COMPLETE → ✅ Completed
+        - FAILED → ❌ Failed (with failure reason)
+        - BLOCKED → 🚫 Blocked (with blocker info)
+        - CANCELLED → (excluded from file)
       status: "not_started"
       priority: "P2-MEDIUM"
       phase: 2
       tests:
         - "tests/unit/core/test_status_mapping.py"
-      implementation: "src/orchestrators/core/github_copilot_todo_bridge.py"
+      implementation: "src/orchestrators/core/vscode_copilot_todo_bridge.py"
       dependencies: ["AC-COPILOT-001"]
       acceptance_criteria:
-        - "Simple states: PENDING/IN_PROGRESS/COMPLETE map directly"
-        - "FAILED: Map to not-started, append failure reason to description"
-        - "BLOCKED: Map to not-started, prepend blocker info to description"
-        - "CANCELLED: Exclude from output (don't send to Copilot)"
-        - "Unknown states: Log warning, default to not-started"
+        - "Simple states: PENDING/IN_PROGRESS/COMPLETE map to emojis + text"
+        - "FAILED: ❌ Failed + append failure reason to description"
+        - "BLOCKED: 🚫 Blocked + prepend blocker info to description"
+        - "CANCELLED: Exclude from TODO file completely"
+        - "Unknown states: Log warning, default to ⏳ Not Started"
+        - "Emoji + text format: '**Status:** ⏳ Not Started'"
       
     - id: "AC-COPILOT-009"
       name: "Task Breakdown for Large Implementations"
       description: |
         Automatically break down large tasks (>500 LOC estimate) into subtasks.
-        Aligns with CORE-001 (incremental execution) and improves Copilot accuracy.
+        Aligns with CORE-001 (incremental execution) and improves visibility.
         
         Breakdown Strategy:
         - Estimate LOC from task complexity
         - If >500 LOC: Create subtasks (design, implement core, tests, refactor, docs)
         - Each subtask <500 LOC
         - Subtasks have dependencies: design → implement → tests → refactor
+        - Each subtask becomes separate TODO comment in file
       status: "not_started"
       priority: "P2-MEDIUM"
       phase: 2
       tests:
         - "tests/unit/core/test_task_breakdown.py"
-      implementation: "src/orchestrators/core/github_copilot_todo_bridge.py"
+      implementation: "src/orchestrators/core/vscode_copilot_todo_bridge.py"
       dependencies: ["AC-COPILOT-001", "AC-COPILOT-003"]
       acceptance_criteria:
         - "LOC estimation: heuristic based on task type and complexity"
@@ -2150,6 +2211,7 @@ github_copilot_bridge:
         - "Subtask types: design, implement_core, tests, refactor, documentation"
         - "Subtask ordering: enforces TDD flow (tests before refactor)"
         - "Governance preserved: Each subtask includes relevant SKULL rules"
+        - "Parent-child relationship: Subtasks reference parent AC-ID"
       
     - id: "AC-COPILOT-010"
       name: "Time Estimation for Tasks"
@@ -2178,26 +2240,60 @@ github_copilot_bridge:
         - "Learning: Track actual completion times, improve estimates over time"
       
     - id: "AC-COPILOT-011"
-      name: "Integration Tests with Real Copilot API"
+      name: "Integration Tests with VS Code Copilot TODO Panel"
       description: |
-        Integration tests validate bridge output works with GitHub Copilot's
-        manage_todo_list tool.
+        Integration tests validate that TODO comments in .cortex/copilot-todos.md
+        are properly detected by VS Code's GitHub Copilot TODO panel.
         
         Test Scenarios:
-        - Single task: Simple todo with no dependencies
+        - Single task: Simple TODO with no dependencies
         - Multi-task: 5 tasks with dependency chain
-        - Large task: Task requiring breakdown
-        - Edge cases: FAILED task, BLOCKED task, CANCELLED task
+        - Large task: Task requiring breakdown into subtasks
+        - Edge cases: FAILED task, BLOCKED task, CANCELLED task (excluded)
         - Governance: Verify governance rules in description
+        - File detection: Verify VS Code can parse the file
       status: "not_started"
       priority: "P1-HIGH"
       phase: 2
       tests:
-        - "tests/integration/core/test_copilot_api_integration.py"
+        - "tests/integration/core/test_vscode_copilot_todo_detection.py"
       implementation: ""
       dependencies: ["AC-COPILOT-001", "AC-COPILOT-004"]
       acceptance_criteria:
-        - "Test fixture: Mock GitHub Copilot manage_todo_list tool"
+        - "Test fixture: Creates .cortex/copilot-todos.md with sample TODOs"
+        - "Validation: Parses file to verify Markdown TODO comment format"
+        - "VS Code simulation: Mock VS Code's TODO comment detection regex"
+        - "Status verification: All 5 status emojis properly displayed"
+        - "Dependency verification: Dependency tree properly formatted"
+        - "Performance: File generation <10ms for 100 tasks"
+      
+    - id: "AC-COPILOT-012"
+      name: "Auto-Sync with Progress Tracker"
+      description: |
+        Automatically sync TODO completion status back to progress-tracker.json
+        when tasks are marked as completed in VS Code.
+        
+        Sync Strategy:
+        - Watch .cortex/copilot-todos.md for changes (file watcher)
+        - Parse status changes: ⏳ → 🔄 or 🔄 → ✅
+        - Update progress-tracker.json with new status
+        - Log sync operations to audit trail
+        
+        Note: This creates a bidirectional sync between VS Code TODOs and CORTEX state.
+      status: "not_started"
+      priority: "P2-MEDIUM"
+      phase: 3
+      tests:
+        - "tests/integration/core/test_todo_sync.py"
+      implementation: "src/infrastructure/todo_file_watcher.py"
+      dependencies: ["AC-COPILOT-001", "AC-STATE-002"]
+      acceptance_criteria:
+        - "File watcher: Monitors .cortex/copilot-todos.md for changes"
+        - "Parse status: Detects emoji changes (⏳ → 🔄 → ✅)"
+        - "Update state: Writes to progress-tracker.json atomically"
+        - "Audit trail: Logs all sync operations"
+        - "Conflict resolution: CORTEX state wins if conflict detected"
+        - "Performance: <50ms sync latency after file change"
         - "Validates JSON schema matches Copilot's expected format"
         - "Tests all status mappings work in Copilot UI"
         - "Verifies description rendering (no HTML/Markdown breaking)"
@@ -3480,6 +3576,148 @@ ac_clean:
     tests:
       - "tests/integration/clean/test_file_size_limits.py"
     dependencies: ["AC-CLEAN-001"]
+
+# ------------------------------------------------------------------------------
+# AC-TEMPLATE: 3-Layer Response Template Architecture (HIGH - Phase 2)
+# ------------------------------------------------------------------------------
+ac_template:
+  description: "Refactor 2046-line response-templates-v4.yaml into 3-layer architecture"
+  priority: "P1-HIGH"
+  phase: 2
+  category: "infrastructure"
+  plan_file: "cortex-brain/tier1/acceptance-criteria/TEMPLATE-ARCHITECTURE-PLAN.yaml"
+  rationale: "Current v4.yaml violates CORE-002 anti-bloat principle"
+  
+  AC-TEMPLATE-001:
+    title: "Extract Core Blocks"
+    description: "Extract 15-20 atomic blocks from v4.yaml → tier0/response-blocks.yaml"
+    status: "not_started"
+    priority: "P1-HIGH"
+    phase: 2
+    acceptance_criteria:
+      - "response-blocks.yaml created with max 50 lines"
+      - "Blocks: header, progress, next_steps, error, warning, completion, etc."
+      - "Schema validation implemented"
+      - "CORE-002 compliance verified"
+    tests:
+      - "tests/response_templates/test_core_blocks.py"
+    dependencies: []
+    
+  AC-TEMPLATE-002:
+    title: "Block Schema Validation"
+    description: "Create JSON schema for block structure validation"
+    status: "not_started"
+    priority: "P1-HIGH"
+    phase: 2
+    acceptance_criteria:
+      - "JSON schema defines block structure"
+      - "Validation enforces required fields"
+      - "Invalid blocks rejected at load time"
+    tests:
+      - "tests/response_templates/test_block_schema.py"
+    dependencies: ["AC-TEMPLATE-001"]
+    
+  AC-TEMPLATE-003:
+    title: "ResponseRenderer Block Loader"
+    description: "Update ResponseRenderer to load and cache blocks"
+    status: "not_started"
+    priority: "P1-HIGH"
+    phase: 2
+    acceptance_criteria:
+      - "Loads tier0/response-blocks.yaml on initialization"
+      - "Caches blocks in memory (singleton pattern)"
+      - "Reload capability for testing"
+      - "<5ms load time"
+    tests:
+      - "tests/response_templates/test_renderer_loader.py"
+    dependencies: ["AC-TEMPLATE-001", "AC-TEMPLATE-002"]
+    
+  AC-TEMPLATE-004:
+    title: "Create Category Templates"
+    description: "Create 5 category templates in tier2/"
+    status: "not_started"
+    priority: "P1-HIGH"
+    phase: 2
+    acceptance_criteria:
+      - "5 files created: core, integration, maintenance, conversion, security"
+      - "Each file max 50 lines"
+      - "Block composition rules defined"
+      - "Category-specific overrides documented"
+    tests:
+      - "tests/response_templates/test_category_templates.py"
+    dependencies: ["AC-TEMPLATE-003"]
+    
+  AC-TEMPLATE-005:
+    title: "Category Inheritance Resolver"
+    description: "Implement precedence resolution (orchestrator > category > core)"
+    status: "not_started"
+    priority: "P1-HIGH"
+    phase: 2
+    acceptance_criteria:
+      - "Resolver loads: core → category → orchestrator"
+      - "Precedence rules enforced"
+      - "Multi-category inheritance supported (e.g., ADO = integration + planning)"
+      - "Audit logs show resolution path"
+    tests:
+      - "tests/response_templates/test_inheritance_resolver.py"
+    dependencies: ["AC-TEMPLATE-004"]
+    
+  AC-TEMPLATE-006:
+    title: "Backwards Compatibility Layer"
+    description: "Support v4.yaml during migration period"
+    status: "not_started"
+    priority: "P1-HIGH"
+    phase: 2
+    acceptance_criteria:
+      - "Feature flag: use_v4_templates (default: false)"
+      - "Fallback to v4.yaml if new system fails"
+      - "Deprecation warnings logged"
+      - "2-week cutoff date enforced (2026-02-28)"
+    tests:
+      - "tests/response_templates/test_backwards_compat.py"
+    dependencies: ["AC-TEMPLATE-005"]
+    
+  AC-TEMPLATE-007:
+    title: "Migrate Core Orchestrators"
+    description: "Migrate 10 core orchestrators to new system"
+    status: "not_started"
+    priority: "P1-HIGH"
+    phase: 2
+    orchestrators:
+      - "Planning v5"
+      - "TDD-Master"
+      - "ADO v2"
+      - "Investigation"
+      - "Vacuum"
+      - "Cleanup"
+      - "Sanitization"
+      - "Debug"
+      - "Refinement"
+      - "MasterOrchestrator"
+    acceptance_criteria:
+      - "response_config added to each manifest"
+      - "All orchestrators render correctly"
+      - "Performance: <50ms render time"
+      - "Backwards compatibility maintained"
+    tests:
+      - "tests/integration/test_orchestrator_migration.py"
+    dependencies: ["AC-TEMPLATE-006"]
+    
+  AC-TEMPLATE-008:
+    title: "Delete v4.yaml After Validation"
+    description: "Remove response-templates-v4.yaml after all orchestrators migrated"
+    status: "not_started"
+    priority: "P1-HIGH"
+    phase: 2
+    acceptance_criteria:
+      - "All 40+ orchestrators validated"
+      - "Integration tests pass"
+      - "Performance benchmarks met"
+      - "response-templates-v4.yaml deleted"
+      - "Audit trail documents deletion"
+    tests:
+      - "tests/integration/test_full_migration.py"
+    dependencies: ["AC-TEMPLATE-007"]
 
 # ==============================================================================
 # END OF AC INDEX

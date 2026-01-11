@@ -6,11 +6,15 @@
 -- Plans table: Master plan records
 CREATE TABLE IF NOT EXISTS plans (
     plan_id TEXT PRIMARY KEY,
-    plan_name TEXT NOT NULL UNIQUE,
-    plan_type TEXT NOT NULL,  -- 'feature', 'epic', 'phase', 'sub-plan'
-    status TEXT NOT NULL,  -- 'draft', 'approved', 'in_progress', 'complete', 'archived'
-    created_at INTEGER NOT NULL,
-    updated_at INTEGER NOT NULL,
+    feature_name TEXT NOT NULL,
+    complexity_tier INTEGER NOT NULL DEFAULT 3,
+    strategy TEXT NOT NULL DEFAULT 'bootstrap',
+    status TEXT NOT NULL DEFAULT 'not_started',
+    estimated_duration_days REAL DEFAULT 0.0,
+    started_at INTEGER,
+    completed_at INTEGER,
+    created_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+    updated_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
     metadata TEXT  -- JSON
 );
 

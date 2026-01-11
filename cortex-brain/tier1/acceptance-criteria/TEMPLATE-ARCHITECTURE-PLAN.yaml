@@ -1,0 +1,364 @@
+---
+plan_id: "template-architecture-refactor-2026-01"
+plan_name: "3-Layer Response Template Architecture"
+created: "2026-01-10"
+updated: "2026-01-10T17:45:00Z"
+status: "approved"
+priority: "P0-CRITICAL"
+rationale: "2046-line response-templates-v4.yaml violates CORE-002 anti-bloat principle"
+
+# ==============================================================================
+# DOCUMENTATION STATUS
+# ==============================================================================
+
+documentation:
+  status: "COMPLETE"
+  last_validation: "2026-01-10T17:45:00Z"
+  plan_viewer_ready: true
+  link_validation:
+    total_links: 18
+    valid_links: 18
+    broken_links: 0
+    success_rate: "100%"
+  
+  available_docs:
+    - "templates/plan-viewer/cortex-plan-viewer.html"
+    - "templates/plan-viewer/template-architecture-detail.html"
+    - "templates/plan-viewer/phase-detail-viewer.html"
+    - "templates/plan-viewer/documentation-status.json"
+    - "cortex-brain/tier1/acceptance-criteria/TEMPLATE-ARCHITECTURE-PLAN.yaml"
+  
+  validation_tooling:
+    - script: "scripts/validate_plan_viewer_links.py"
+      description: "Validates all HTML links and generates status JSON"
+      usage: "python3 scripts/validate_plan_viewer_links.py"
+      output: 
+        - "templates/plan-viewer/documentation-status.json"
+        - "templates/plan-viewer/link-validation-report.json"
+    
+  link_states:
+    enabled: "Documentation exists and is accessible (shows ✓ indicator)"
+    disabled: "Documentation planned but not yet created (50% opacity, not clickable)"
+    missing: "Broken link (red warning, blocked)"
+
+# ==============================================================================
+# PROBLEM STATEMENT
+# ==============================================================================
+
+problem:
+  current_state: "response-templates-v4.yaml is 2046 lines with inline template definitions"
+  pain_points:
+    - "Duplication: Continuation prompts repeat patterns across orchestrators"
+    - "Maintenance: 40+ orchestrators × templates = 80-160 files if per-orchestrator approach used"
+    - "Inconsistency: No enforcement of standard blocks across responses"
+    - "Bloat: Violates CORE-002 minimalism principle"
+  
+  root_cause: "Templates defined inline instead of referencing reusable blocks"
+
+# ==============================================================================
+# SOLUTION: 3-LAYER HYBRID ARCHITECTURE
+# ==============================================================================
+
+solution:
+  architecture: "3-layer composition with precedence rules"
+  
+  layer_1_core_blocks:
+    location: "cortex-brain/tier0/response-blocks.yaml"
+    max_lines: 50
+    governance: "CORE-002 enforced"
+    content:
+      - "15-20 atomic markdown fragments"
+      - "Examples: header, progress, next_steps, error, warning, completion"
+      - "SKULL governance enforced"
+  
+  layer_2_category_templates:
+    location: "cortex-brain/tier2/response-templates/{category}.yaml"
+    max_lines_per_file: 50
+    categories:
+      - name: "core.yaml"
+        orchestrators: ["Planning", "TDD", "Investigation"]
+        lines: 40
+      
+      - name: "integration.yaml"
+        orchestrators: ["ADO", "Git", "External APIs"]
+        lines: 40
+      
+      - name: "maintenance.yaml"
+        orchestrators: ["Vacuum", "Cleanup", "Sanitization"]
+        lines: 40
+      
+      - name: "conversion.yaml"
+        orchestrators: ["Data transformation orchestrators"]
+        lines: 40
+      
+      - name: "security.yaml"
+        orchestrators: ["Security-specific formatting"]
+        lines: 40
+    
+    content: "Block composition rules + category-specific overrides"
+  
+  layer_3_orchestrator_overrides:
+    location: "cortex-brain/manifests/orchestrators/{name}.yaml → response_config:"
+    max_lines: 15
+    content: "Only deviations from category template"
+    fallback: "Inherits from category, falls back to core blocks"
+
+  precedence: "orchestrator > category > core"
+
+# ==============================================================================
+# TARGETS & GUARANTEES
+# ==============================================================================
+
+targets:
+  total_lines: "<300 (down from 2046)"
+  render_time: "<50ms"
+  duplication: "0%"
+  consistency: "100% (all use core blocks)"
+  maintenance_events_per_month: "<2"
+
+guarantees:
+  - "response-blocks.yaml: Max 50 lines (CORE-002 enforced)"
+  - "{category}.yaml: Max 50 lines each"
+  - "orchestrator override: Max 15 lines (schema validation)"
+  - "Backwards compatibility layer for 2-week migration window"
+
+# ==============================================================================
+# IMPLEMENTATION PHASES
+# ==============================================================================
+
+phases:
+  phase_1_foundation:
+    name: "Foundation"
+    duration: "Week 1"
+    ac_ids:
+      - id: "AC-TEMPLATE-001"
+        name: "Extract Core Blocks"
+        description: "Extract 15-20 atomic blocks from v4.yaml → tier0/response-blocks.yaml"
+        acceptance_criteria:
+          - "response-blocks.yaml created with max 50 lines"
+          - "Blocks: header, progress, next_steps, error, warning, completion, etc."
+          - "Schema validation implemented"
+          - "CORE-002 compliance verified"
+        tests:
+          - "tests/response_templates/test_core_blocks.py"
+      
+      - id: "AC-TEMPLATE-002"
+        name: "Block Schema Validation"
+        description: "Create JSON schema for block structure validation"
+        acceptance_criteria:
+          - "JSON schema defines block structure"
+          - "Validation enforces required fields"
+          - "Invalid blocks rejected at load time"
+        tests:
+          - "tests/response_templates/test_block_schema.py"
+      
+      - id: "AC-TEMPLATE-003"
+        name: "ResponseRenderer Block Loader"
+        description: "Update ResponseRenderer to load and cache blocks"
+        acceptance_criteria:
+          - "Loads tier0/response-blocks.yaml on initialization"
+          - "Caches blocks in memory (singleton pattern)"
+          - "Reload capability for testing"
+          - "<5ms load time"
+        tests:
+          - "tests/response_templates/test_renderer_loader.py"
+  
+  phase_2_categories:
+    name: "Categories"
+    duration: "Week 2"
+    ac_ids:
+      - id: "AC-TEMPLATE-004"
+        name: "Create Category Templates"
+        description: "Create 5 category templates in tier2/"
+        acceptance_criteria:
+          - "5 files created: core, integration, maintenance, conversion, security"
+          - "Each file max 50 lines"
+          - "Block composition rules defined"
+          - "Category-specific overrides documented"
+        tests:
+          - "tests/response_templates/test_category_templates.py"
+      
+      - id: "AC-TEMPLATE-005"
+        name: "Category Inheritance Resolver"
+        description: "Implement precedence resolution (orchestrator > category > core)"
+        acceptance_criteria:
+          - "Resolver loads: core → category → orchestrator"
+          - "Precedence rules enforced"
+          - "Multi-category inheritance supported (e.g., ADO = integration + planning)"
+          - "Audit logs show resolution path"
+        tests:
+          - "tests/response_templates/test_inheritance_resolver.py"
+      
+      - id: "AC-TEMPLATE-006"
+        name: "Backwards Compatibility Layer"
+        description: "Support v4.yaml during migration period"
+        acceptance_criteria:
+          - "Feature flag: use_v4_templates (default: false)"
+          - "Fallback to v4.yaml if new system fails"
+          - "Deprecation warnings logged"
+          - "2-week cutoff date enforced (2026-02-28)"
+        tests:
+          - "tests/response_templates/test_backwards_compat.py"
+  
+  phase_3_migration:
+    name: "Migration"
+    duration: "Week 3-4"
+    ac_ids:
+      - id: "AC-TEMPLATE-007"
+        name: "Migrate Core Orchestrators"
+        description: "Migrate 10 core orchestrators to new system"
+        orchestrators:
+          - "Planning v5"
+          - "TDD-Master"
+          - "ADO v2"
+          - "Investigation"
+          - "Vacuum"
+          - "Cleanup"
+          - "Sanitization"
+          - "Debug"
+          - "Refinement"
+          - "MasterOrchestrator"
+        acceptance_criteria:
+          - "response_config added to each manifest"
+          - "All orchestrators render correctly"
+          - "Performance: <50ms render time"
+          - "Backwards compatibility maintained"
+        tests:
+          - "tests/integration/test_orchestrator_migration.py"
+      
+      - id: "AC-TEMPLATE-008"
+        name: "Delete v4.yaml After Validation"
+        description: "Remove response-templates-v4.yaml after all orchestrators migrated"
+        acceptance_criteria:
+          - "All 40+ orchestrators validated"
+          - "Integration tests pass"
+          - "Performance benchmarks met"
+          - "response-templates-v4.yaml deleted"
+          - "Audit trail documents deletion"
+        tests:
+          - "tests/integration/test_full_migration.py"
+
+# ==============================================================================
+# MASTER ORCHESTRATOR INTEGRATION
+# ==============================================================================
+
+integration:
+  master_orchestrator:
+    component: "ResponseRenderer"
+    flow: |
+      handle_request() → execute_orchestrator() → OrchestratorResult
+          ↓
+      ResponseRenderer.render()
+          ↓
+      1. Load core blocks (tier0/response-blocks.yaml)
+      2. Load category template (tier2/response-templates/{category}.yaml)
+      3. Load orchestrator overrides (manifests/{orch}/response_config)
+      4. Merge with precedence: orchestrator > category > core
+      5. Compose blocks per work breakdown structure
+      6. Return markdown
+    
+    location: "src/orchestrators/response_renderer.py (line 99)"
+  
+  work_breakdown_structure:
+    description: "ResponseRenderer composes blocks based on WBS from MasterOrchestrator"
+    example: |
+      WBS: ["header", "understanding", "progress", "changes", "next_steps"]
+      → Renderer loads each block from resolved template hierarchy
+      → Composes final markdown response
+
+# ==============================================================================
+# RISKS & MITIGATIONS
+# ==============================================================================
+
+risks:
+  - risk: "Breaking existing response rendering"
+    impact: "HIGH"
+    mitigation: "Phased migration with backwards compatibility flag"
+    timeline: "2-week migration window"
+  
+  - risk: "Category assignment conflicts"
+    impact: "MEDIUM"
+    mitigation: "Allow multi-category inheritance"
+    detection: "Audit logs show category resolution path"
+  
+  - risk: "Testing overhead"
+    impact: "MEDIUM"
+    mitigation: "Generate test matrix from orchestrator registry automatically"
+    validation: "AC-TEMPLATE-001 to AC-TEMPLATE-008"
+
+# ==============================================================================
+# SUCCESS METRICS
+# ==============================================================================
+
+metrics:
+  - metric: "Total template lines"
+    target: "<300"
+    measurement: "File line count"
+  
+  - metric: "Response render time"
+    target: "<50ms"
+    measurement: "Benchmark tests"
+  
+  - metric: "Consistency score"
+    target: "100%"
+    measurement: "All orchestrators use core blocks"
+  
+  - metric: "Maintenance events/month"
+    target: "<2"
+    measurement: "Git commit frequency to template files"
+  
+  - metric: "Orchestrator duplication"
+    target: "0%"
+    measurement: "Static analysis"
+
+# ==============================================================================
+# GOVERNANCE ALIGNMENT
+# ==============================================================================
+
+governance:
+  core_rules:
+    - "CORE-002: No summary files, enforce minimalism (<300 lines)"
+    - "CORE-008: TDD enforcement (all AC-IDs have tests)"
+    - "CORE-019: TDD-Master required for implementation"
+  
+  audit_trail:
+    - "All operations logged to EnterpriseAuditLogger"
+    - "Category: INFRASTRUCTURE"
+    - "Retention: 30 days (INFO level)"
+  
+  evidence_bundles:
+    required: true
+    location: "cortex-brain/tier1/evidence-bundles/AC-TEMPLATE-*/"
+    contents:
+      - "manifest.yaml"
+      - "test_results.json"
+      - "performance_metrics.json"
+      - "audit_trace.jsonl"
+
+# ==============================================================================
+# DELIVERABLES
+# ==============================================================================
+
+deliverables:
+  - "cortex-brain/tier0/response-blocks.yaml (50 lines)"
+  - "cortex-brain/tier2/response-templates/core.yaml (40 lines)"
+  - "cortex-brain/tier2/response-templates/integration.yaml (40 lines)"
+  - "cortex-brain/tier2/response-templates/maintenance.yaml (40 lines)"
+  - "cortex-brain/tier2/response-templates/conversion.yaml (40 lines)"
+  - "cortex-brain/tier2/response-templates/security.yaml (40 lines)"
+  - "Updated ResponseRenderer with 3-layer loader"
+  - "Migration guide for orchestrator developers"
+  - "Performance benchmarks"
+  - "Deletion of response-templates-v4.yaml"
+
+# ==============================================================================
+# APPROVAL & SIGN-OFF
+# ==============================================================================
+
+approval:
+  status: "APPROVED"
+  approved_by: "Asif Hussain"
+  approved_date: "2026-01-10"
+  implementation_start: "2026-01-13"
+  target_completion: "2026-02-07"
+  cutover_date: "2026-02-28"  # v4.yaml deletion date

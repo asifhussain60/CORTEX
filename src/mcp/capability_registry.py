@@ -258,11 +258,13 @@ class CapabilityRegistry:
     
     def discover_all(self):
         """
-        Discover all capabilities from known orchestrators.
+        Discover all capabilities from known orchestrators and decorated tools.
         
-        Loads capability definitions based on common orchestrator patterns.
+        Loads capability definitions from:
+        1. Common orchestrator patterns (manual definitions)
+        2. @mcp_tool decorated functions (automatic discovery)
         """
-        # Define common CORTEX capabilities
+        # Define common CORTEX capabilities (manually defined orchestrators)
         common_capabilities = [
             Capability(
                 name="plan",
@@ -498,7 +500,59 @@ class CapabilityRegistry:
         for cap in common_capabilities:
             self.register(cap)
         
-        logger.info(f"Discovered {len(common_capabilities)} capabilities")
+        # Auto-discover decorated tools by importing tool modules
+        self._discover_decorated_tools()
+        
+        logger.info(f"Discovered {len(self.capabilities)} total capabilities ({len(common_capabilities)} manual + decorated)")
+    
+    def _discover_decorated_tools(self):
+        """
+        Discover and register @mcp_tool decorated functions.
+        
+        Imports all *_tools.py modules to trigger decorator registration,
+        then converts decorated tool metadata to Capability objects.
+        """
+        try:
+            # Import mcp_decorator to access decorated tools
+            from src.mcp.mcp_decorator import get_decorated_tools
+            
+            # Import all tool modules to trigger decoration
+            tool_modules = [
+                'src.mcp.audit_tools',
+                'src.mcp.governance_tools',
+                'src.mcp.housekeeping_tools',
+                'src.mcp.planning_tools',
+                'src.mcp.tdd_tools',
+                'src.mcp.todo_tools',
+                'src.mcp.traceability_tools',
+            ]
+            
+            for module_name in tool_modules:
+                try:
+                    __import__(module_name)
+                    logger.debug(f"Imported {module_name} for tool discovery")
+                except Exception as e:
+                    logger.warning(f"Failed to import {module_name}: {e}")
+            
+            # Get all decorated tools
+            decorated_tools = get_decorated_tools()
+            
+            # Convert to Capability objects and register
+            for tool_meta in decorated_tools:
+                capability = Capability(
+                    name=tool_meta["name"],
+                    description=tool_meta["description"],
+                    parameters=tool_meta["parameters"],
+                    returns=tool_meta["returns"],
+                    orchestrator_id=tool_meta.get("orchestrator_id"),
+                    metadata=tool_meta.get("metadata", {})
+                )
+                self.register(capability)
+            
+            logger.info(f"Auto-registered {len(decorated_tools)} decorated tools")
+            
+        except Exception as e:
+            logger.error(f"Failed to discover decorated tools: {e}")
 
 
 # Global registry instance

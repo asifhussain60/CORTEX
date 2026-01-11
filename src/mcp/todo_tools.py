@@ -10,8 +10,24 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 
 from pathlib import Path
 from typing import Dict, Any, Optional, List
+from src.mcp.mcp_decorator import mcp_tool
 
 
+@mcp_tool(
+    name="cortex_todo_create",
+    description="Create a new TODO item with DAG dependencies",
+    category="todo",
+    orchestrator_id="todo_orchestrator",
+    parameters={
+        "title": {"type": "string", "required": True, "description": "TODO title"},
+        "description": {"type": "string", "required": False, "description": "TODO description"},
+        "workspace_root": {"type": "string", "required": False, "description": "Workspace root path"},
+        "priority": {"type": "string", "required": False, "description": "Priority (LOW/MEDIUM/HIGH/CRITICAL)"},
+        "tags": {"type": "array", "required": False, "description": "List of tags"},
+        "dependencies": {"type": "array", "required": False, "description": "List of dependent TODO IDs"}
+    },
+    metadata={"tags": ["todo", "task-management"]}
+)
 def todo_create(
     title: str,
     description: str = "",
@@ -75,6 +91,27 @@ def todo_create(
         }
 
 
+@mcp_tool(
+    name="cortex_todo_list",
+    description="List TODO items with filters (critical for progress tracking and dashboard)",
+    category="todo",
+    orchestrator_id="todo_orchestrator",
+    parameters={
+        "workspace_root": {"type": "string", "required": False, "description": "Workspace root path"},
+        "status": {"type": "string", "required": False, "description": "Filter by status (PENDING/IN_PROGRESS/COMPLETE)"},
+        "priority": {"type": "string", "required": False, "description": "Filter by priority"},
+        "tags": {"type": "array", "required": False, "description": "Filter by tags"}
+    },
+    returns={
+        "type": "object",
+        "description": "List of matching TODOs with metadata"
+    },
+    metadata={
+        "tags": ["todo", "progress-tracking", "dashboard"],
+        "version": "1.0",
+        "priority": "P0"
+    }
+)
 def todo_list(
     workspace_root: str = ".",
     status: Optional[str] = None,

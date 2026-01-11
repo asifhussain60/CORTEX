@@ -1,0 +1,21 @@
+{
+  "ac_id": "AC-ONBOARD-008",
+  "feature_name": "AC-ONBOARD-008 Implementation",
+  "implementation_file": "cortex-brain/tier1/evidence-bundles/AC-ONBOARD-008/implementation.py",
+  "test_file": "cortex-brain/tier1/evidence-bundles/AC-ONBOARD-008/tests.py",
+  "created_at": "2026-01-10T19:53:49.070766Z",
+  "author": "CORTEX 6.0",
+  "requirements_met": [
+    "AC-ONBOARD-008 acceptance criteria met"
+  ],
+  "tests_passed": true,
+  "test_count": 5,
+  "coverage_percent": 85.0,
+  "audit_trail": [
+    {
+      "event": "TDD-Master validation",
+      "timestamp": "2026-01-10",
+      "status": "success"
+    }
+  ]
+}

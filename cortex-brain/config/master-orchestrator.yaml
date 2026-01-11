@@ -6,6 +6,26 @@ schema_version: "5.0"
 # Pattern-Based Routing Rules (Primary)
 # 90%+ of requests handled via exact/regex matching
 routing_rules:
+  # Autonomous AC Implementor - HIGHEST PRIORITY (Direct AC-ID Implementation)
+  # Bypasses plan overhead and implements AC-IDs directly from progress-tracker.json
+  - pattern: "^(autonomous|implement phase|continue autonomous|carry out|implement plan autonomous).*$"
+    orchestrator: "autonomous_ac_implementor"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 5
+    metadata:
+      description: "Autonomous AC-ID implementor - direct implementation from progress tracker"
+      autonomous: true
+      version: "1.0"
+      features:
+        - "Direct AC-ID implementation from progress-tracker.json"
+        - "No plan overhead"
+        - "Automatic progress tracking"
+        - "Sequential AC-ID execution"
+        - "Evidence generation per AC-ID"
+        - "Blocker detection"
+        - "Phase completion detection"
+  
   # Epic Review - NEW (Health Check & Progress Analysis)
   # Autonomous health check and progress analysis for CORTEX 6.0 Build Epic
   - pattern: "^(epic review|review epic|health check|progress report|cortex status|epic status).*$"
@@ -102,6 +122,24 @@ routing_rules:
     metadata:
       description: "Test-Driven Development orchestrator"
       autonomous: false
+  
+  # TDD-Master Orchestrator (Implementation + AC Validation + Evidence Generation)
+  - pattern: "^(implement|build|create|fix|add feature).*$"
+    orchestrator: "tdd_master"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 15
+    metadata:
+      description: "TDD-Master for full implementation lifecycle with evidence bundles"
+      autonomous: true
+      version: "1.0"
+      features:
+        - "Plan detection and context transformation"
+        - "TDD workflow orchestration"
+        - "AC validation with evidence bundles"
+        - "Governance enforcement"
+        - "Dashboard updates"
+        - "Completion reports"
   
   # Refactor Orchestrator v2 - NEW (Parent-Child Architecture)
   # Coordinates specialized refactoring children (code quality, architecture, docs, tests)

@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX 6.0 - 3-Layer Response Template Architecture</title>
+    
+    <!-- Mermaid.js for diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-color: #00d4ff;
+            --secondary-color: #7b2cbf;
+            --accent-color: #ff006e;
+            --success-color: #06ffa5;
+            --warning-color: #ffbe0b;
+            --danger-color: #ff006e;
+            --bg-dark: #0a0a0f;
+            --bg-darker: #050508;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0c0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, var(--bg-dark) 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(123, 44, 191, 0.1) 0%, transparent 50%);
+            z-index: 0;
+            animation: pulse 15s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header */
+        .doc-header {
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .back-button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .back-button:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: var(--primary-color);
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            background: rgba(255, 190, 11, 0.2);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+        
+        /* Content Sections */
+        .content-section {
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--primary-color);
+        }
+        
+        .section-content {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+        
+        .section-content h3 {
+            color: var(--text-primary);
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .section-content ul, .section-content ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .section-content li {
+            margin-bottom: 8px;
+        }
+        
+        /* Problem Statement Box */
+        .problem-box {
+            background: rgba(255, 0, 110, 0.1);
+            border-left: 4px solid var(--accent-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .problem-box h4 {
+            color: var(--accent-color);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        /* Solution Box */
+        .solution-box {
+            background: rgba(6, 255, 165, 0.1);
+            border-left: 4px solid var(--success-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .solution-box h4 {
+            color: var(--success-color);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        /* Diagram Container */
+        .diagram-container {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        /* Layer Cards */
+        .layer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .layer-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s;
+        }
+        
+        .layer-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-5px);
+        }
+        
+        .layer-number {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--primary-color);
+            opacity: 0.3;
+            margin-bottom: 10px;
+        }
+        
+        .layer-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text-primary);
+        }
+        
+        .layer-location {
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            color: var(--secondary-color);
+            background: rgba(123, 44, 191, 0.1);
+            padding: 5px 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+        
+        .layer-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .layer-features {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .layer-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .layer-features li:before {
+            content: "✓ ";
+            color: var(--success-color);
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        /* Phase Cards */
+        .phase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .phase-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .phase-name {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        
+        .phase-duration {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+        
+        .ac-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .ac-item {
+            background: rgba(0, 212, 255, 0.05);
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        .ac-id {
+            font-weight: 600;
+            color: var(--primary-color);
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .ac-description {
+            color: var(--text-secondary);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        /* Metrics Grid */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .metric-card {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+        }
+        
+        .metric-label {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        
+        .metric-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .metric-unit {
+            font-size: 0.4em;
+            color: var(--text-secondary);
+        }
+        
+        /* Code Blocks */
+        .code-block {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+        
+        .code-block pre {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+            margin: 30px 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -33px;
+            top: 25px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            border: 3px solid var(--bg-dark);
+        }
+        
+        .timeline-date {
+            font-size: 0.9em;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-content {
+            color: var(--text-secondary);
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-secondary);
+            font-size: 0.9em;
+        }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="doc-header glass">
+            <a href="cortex-plan-viewer.html" class="back-button">
+                <span>←</span> Back to Plan Overview
+            </a>
+            
+            <h1>🎨 3-Layer Response Template Architecture</h1>
+            <div class="subtitle">Phase 2 Enhancement • Weeks 3-4</div>
+            <span class="status-badge">DESIGN PHASE</span>
+        </div>
+        
+        <!-- Problem Statement -->
+        <div class="content-section glass">
+            <h2 class="section-title">📋 Problem Statement</h2>
+            <div class="section-content">
+                <div class="problem-box">
+                    <h4>🚨 Current State: 2046-Line Monolith</h4>
+                    <p>The <code>response-templates-v4.yaml</code> file has grown to <strong>2046 lines</strong>, creating severe maintainability issues:</p>
+                    <ul>
+                        <li><strong>Duplication:</strong> Continuation prompts and common patterns repeated across 40+ orchestrators</li>
+                        <li><strong>Maintenance Burden:</strong> Changes to common patterns require updates in multiple locations</li>
+                        <li><strong>Inconsistency:</strong> No enforcement mechanism for standard response blocks</li>
+                        <li><strong>CORE-002 Violation:</strong> Directly violates the anti-bloat governance principle (max 300 lines for knowledge files)</li>
+                        <li><strong>Scalability:</strong> Per-orchestrator approach would create 80-160 files if decomposed naively</li>
+                    </ul>
+                </div>
+                
+                <div class="problem-box">
+                    <h4>🔍 Root Cause</h4>
+                    <p>Templates are defined <strong>inline</strong> instead of <strong>referencing reusable blocks</strong>. This architectural flaw leads to exponential growth as new orchestrators are added.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Solution Overview -->
+        <div class="content-section glass">
+            <h2 class="section-title">💡 Solution: 3-Layer Hybrid Architecture</h2>
+            <div class="section-content">
+                <div class="solution-box">
+                    <h4>✅ Target Architecture</h4>
+                    <p>Decompose into <strong>3 composable layers</strong> with clear precedence rules and governance enforcement:</p>
+                    <ul>
+                        <li><strong>Total Lines:</strong> <300 (down from 2046) — <strong>85% reduction</strong></li>
+                        <li><strong>Duplication:</strong> 0% (all use core blocks)</li>
+                        <li><strong>Consistency:</strong> 100% (schema validation enforced)</li>
+                        <li><strong>Render Time:</strong> <50ms (performance maintained)</li>
+                        <li><strong>Maintenance Events:</strong> <2/month (down from ~8/month)</li>
+                    </ul>
+                </div>
+                
+                <h3>Architecture Principles</h3>
+                <ul>
+                    <li><strong>Composition over Inheritance:</strong> Build complex templates from atomic blocks</li>
+                    <li><strong>Clear Precedence:</strong> orchestrator > category > core (no ambiguity)</li>
+                    <li><strong>Governance First:</strong> CORE-002 enforced at every layer</li>
+                    <li><strong>Backwards Compatible:</strong> 2-week migration window with fallback</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Architecture Diagram -->
+        <div class="content-section glass">
+            <h2 class="section-title">🏗️ Architecture Diagram</h2>
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TB
+    subgraph "Layer 1: Core Blocks (Tier 0 - SKULL Governance)"
+        A[response-blocks.yaml<br/>Max 50 lines<br/>15-20 atomic blocks]
+        A1[header<br/>progress<br/>next_steps]
+        A2[error<br/>warning<br/>completion]
+        A3[understanding<br/>changes<br/>validation]
+        A --> A1
+        A --> A2
+        A --> A3
+    end
+    
+    subgraph "Layer 2: Category Templates (Tier 2 - Engineering Practices)"
+        B1[core.yaml<br/>40 lines<br/>Planning, TDD, Investigation]
+        B2[integration.yaml<br/>40 lines<br/>ADO, Git, APIs]
+        B3[maintenance.yaml<br/>40 lines<br/>Vacuum, Cleanup, Sanitization]
+        B4[conversion.yaml<br/>40 lines<br/>Data Transformers]
+        B5[security.yaml<br/>40 lines<br/>Security-specific]
+    end
+    
+    subgraph "Layer 3: Orchestrator Overrides (Manifest Files)"
+        C[response_config:<br/>Max 15 lines<br/>Only deviations]
+    end
+    
+    subgraph "Runtime: ResponseRenderer"
+        D[Composition Engine]
+        D1[Load Core Blocks]
+        D2[Load Category Template]
+        D3[Load Orchestrator Override]
+        D4[Merge with Precedence]
+        D5[Compose Final Response]
+    end
+    
+    A1 --> D1
+    A2 --> D1
+    A3 --> D1
+    B1 --> D2
+    B2 --> D2
+    B3 --> D2
+    B4 --> D2
+    B5 --> D2
+    C --> D3
+    D1 --> D4
+    D2 --> D4
+    D3 --> D4
+    D4 --> D5
+    D5 --> Output[Markdown Response<br/>50ms render time]
+    
+    style A fill:#0a0a0f,stroke:#00d4ff,stroke-width:3px
+    style B1 fill:#0a0a0f,stroke:#7b2cbf,stroke-width:2px
+    style B2 fill:#0a0a0f,stroke:#7b2cbf,stroke-width:2px
+    style B3 fill:#0a0a0f,stroke:#7b2cbf,stroke-width:2px
+    style B4 fill:#0a0a0f,stroke:#7b2cbf,stroke-width:2px
+    style B5 fill:#0a0a0f,stroke:#7b2cbf,stroke-width:2px
+    style C fill:#0a0a0f,stroke:#ff006e,stroke-width:2px
+    style D5 fill:#0a0a0f,stroke:#06ffa5,stroke-width:3px
+    style Output fill:#0a0a0f,stroke:#06ffa5,stroke-width:3px
+                </div>
+            </div>
+        </div>
+        
+        <!-- Layer Details -->
+        <div class="content-section glass">
+            <h2 class="section-title">📦 Layer Details</h2>
+            <div class="layer-grid">
+                <!-- Layer 1 -->
+                <div class="layer-card">
+                    <div class="layer-number">01</div>
+                    <div class="layer-title">Core Blocks</div>
+                    <div class="layer-location">cortex-brain/tier0/response-blocks.yaml</div>
+                    <div class="layer-description">
+                        <strong>15-20 atomic markdown fragments</strong> that serve as building blocks for all responses.
+                        Protected by SKULL governance (CORE-002: max 50 lines).
+                    </div>
+                    <ul class="layer-features">
+                        <li>header (orchestrator branding)</li>
+                        <li>progress (current state)</li>
+                        <li>next_steps (actionable items)</li>
+                        <li>error (error formatting)</li>
+                        <li>warning (warnings formatting)</li>
+                        <li>completion (success messaging)</li>
+                        <li>understanding (request summary)</li>
+                        <li>changes (file modifications)</li>
+                        <li>validation (test results)</li>
+                    </ul>
+                </div>
+                
+                <!-- Layer 2 -->
+                <div class="layer-card">
+                    <div class="layer-number">02</div>
+                    <div class="layer-title">Category Templates</div>
+                    <div class="layer-location">cortex-brain/tier2/response-templates/{category}.yaml</div>
+                    <div class="layer-description">
+                        <strong>5 category-specific templates</strong> that define block composition rules and category overrides.
+                        Each file limited to 50 lines.
+                    </div>
+                    <ul class="layer-features">
+                        <li>core.yaml (Planning, TDD, Investigation)</li>
+                        <li>integration.yaml (ADO, Git, External APIs)</li>
+                        <li>maintenance.yaml (Vacuum, Cleanup, Sanitization)</li>
+                        <li>conversion.yaml (Data transformers)</li>
+                        <li>security.yaml (Security-specific formatting)</li>
+                    </ul>
+                </div>
+                
+                <!-- Layer 3 -->
+                <div class="layer-card">
+                    <div class="layer-number">03</div>
+                    <div class="layer-title">Orchestrator Overrides</div>
+                    <div class="layer-location">cortex-brain/manifests/orchestrators/{name}.yaml</div>
+                    <div class="layer-description">
+                        <strong>response_config section</strong> in orchestrator manifests containing only deviations
+                        from category template. Limited to 15 lines via schema validation.
+                    </div>
+                    <ul class="layer-features">
+                        <li>Only deviations from category</li>
+                        <li>Inherits category composition</li>
+                        <li>Falls back to core blocks</li>
+                        <li>Multi-category support (e.g., ADO = integration + planning)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Precedence Rules -->
+        <div class="content-section glass">
+            <h2 class="section-title">⚖️ Precedence Resolution</h2>
+            <div class="section-content">
+                <p>The ResponseRenderer applies a <strong>hierarchical merge strategy</strong> with clear precedence rules:</p>
+                
+                <div class="code-block">
+                    <pre>
+PRECEDENCE: orchestrator > category > core
+
+Resolution Flow:
+1. Load core blocks (tier0/response-blocks.yaml)
+2. Load category template (tier2/response-templates/{category}.yaml)
+3. Load orchestrator overrides (manifests/{orch}/response_config)
+4. Merge with precedence: orchestrator wins conflicts
+5. Compose blocks per work breakdown structure
+6. Return markdown
+
+Example:
+  Core:       header: "# {orchestrator_name}"
+  Category:   header: "# 🔧 {orchestrator_name} - {category}"
+  Orchestrator: header: "# 🎯 Custom Header"
+  
+  Result:     "# 🎯 Custom Header" (orchestrator wins)
+                    </pre>
+                </div>
+                
+                <h3>Multi-Category Inheritance</h3>
+                <p>Orchestrators can inherit from <strong>multiple categories</strong> for cross-cutting concerns:</p>
+                <ul>
+                    <li><strong>ADO v2:</strong> integration + planning (API calls + task breakdown)</li>
+                    <li><strong>Security Scanner:</strong> security + maintenance (scanning + cleanup)</li>
+                </ul>
+                <p>Audit logs capture the full resolution path for debugging.</p>
+            </div>
+        </div>
+        
+        <!-- Implementation Phases -->
+        <div class="content-section glass">
+            <h2 class="section-title">🚀 Implementation Roadmap</h2>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Week 3 (Days 1-3)</div>
+                    <div class="timeline-content">
+                        <strong>Phase 1: Foundation</strong>
+                        <ul>
+                            <li>AC-TEMPLATE-001: Extract 15-20 core blocks from v4.yaml</li>
+                            <li>AC-TEMPLATE-002: Create JSON schema validation</li>
+                            <li>AC-TEMPLATE-003: Update ResponseRenderer loader</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">Week 3 (Days 4-5)</div>
+                    <div class="timeline-content">
+                        <strong>Phase 2: Categories</strong>
+                        <ul>
+                            <li>AC-TEMPLATE-004: Create 5 category templates</li>
+                            <li>AC-TEMPLATE-005: Implement inheritance resolver</li>
+                            <li>AC-TEMPLATE-006: Build backwards compatibility layer</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-date">Week 4</div>
+                    <div class="timeline-content">
+                        <strong>Phase 3: Migration</strong>
+                        <ul>
+                            <li>AC-TEMPLATE-007: Migrate 10 core orchestrators</li>
+                            <li>AC-TEMPLATE-008: Validate and delete v4.yaml</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- AC-ID Details -->
+        <div class="content-section glass">
+            <h2 class="section-title">📝 Acceptance Criteria Breakdown</h2>
+            
+            <div class="phase-grid">
+                <!-- Phase 1: Foundation -->
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-name">Phase 1: Foundation</div>
+                    </div>
+                    <div class="phase-duration">Week 3, Days 1-3</div>
+                    
+                    <ul class="ac-list">
+                        <li class="ac-item">
+                            <div class="ac-id">AC-TEMPLATE-001</div>
+                            <div class="ac-description">
+                                <strong>Extract Core Blocks</strong><br/>
+                                Extract 15-20 atomic blocks from v4.yaml → tier0/response-blocks.yaml (max 50 lines)
+                            </div>
+                        </li>
+                        <li class="ac-item">
+                            <div class="ac-id">AC-TEMPLATE-002</div>
+                            <div class="ac-description">
+                                <strong>Block Schema Validation</strong><br/>
+                                Create JSON schema for block structure validation with required fields enforcement
+                            </div>
+                        </li>
+                        <li class="ac-item">
+                            <div class="ac-id">AC-TEMPLATE-003</div>
+                            <div class="ac-description">
+                                <strong>ResponseRenderer Block Loader</strong><br/>
+                                Update ResponseRenderer to load and cache blocks (singleton, <5ms load time)
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Phase 2: Categories -->
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-name">Phase 2: Categories</div>
+                    </div>
+                    <div class="phase-duration">Week 3, Days 4-5</div>
+                    
+                    <ul class="ac-list">
+                        <li class="ac-item">
+                            <div class="ac-id">AC-TEMPLATE-004</div>
+                            <div class="ac-description">
+                                <strong>Create Category Templates</strong><br/>
+                                Create 5 category templates in tier2/ (core, integration, maintenance, conversion, security)
+                            </div>
+                        </li>
+                        <li class="ac-item">
+                            <div class="ac-id">AC-TEMPLATE-005</div>
+                            <div class="ac-description">
+                                <strong>Category Inheritance Resolver</strong><br/>
+                                Implement precedence resolution (orchestrator > category > core) with multi-category support
+                            </div>
+                        </li>
+                        <li class="ac-item">
+                            <div class="ac-id">AC-TEMPLATE-006</div>
+                            <div class="ac-description">
+                                <strong>Backwards Compatibility Layer</strong><br/>
+                                Support v4.yaml during migration with feature flag (2-week cutoff: 2026-02-28)
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Phase 3: Migration -->
+                <div class="phase-card">
+                    <div class="phase-header">
+                        <div class="phase-name">Phase 3: Migration</div>
+                    </div>
+                    <div class="phase-duration">Week 4</div>
+                    
+                    <ul class="ac-list">
+                        <li class="ac-item">
+                            <div class="ac-id">AC-TEMPLATE-007</div>
+                            <div class="ac-description">
+                                <strong>Migrate Core Orchestrators</strong><br/>
+                                Migrate 10 core orchestrators (Planning, TDD, ADO, Investigation, Vacuum, Cleanup, Sanitization, Debug, Refinement, MasterOrchestrator)
+                            </div>
+                        </li>
+                        <li class="ac-item">
+                            <div class="ac-id">AC-TEMPLATE-008</div>
+                            <div class="ac-description">
+                                <strong>Delete v4.yaml After Validation</strong><br/>
+                                Remove response-templates-v4.yaml after all 40+ orchestrators validated and integration tests pass
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Success Metrics -->
+        <div class="content-section glass">
+            <h2 class="section-title">📊 Success Metrics</h2>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">Total Lines</div>
+                    <div class="metric-value">
+                        <300
+                        <div class="metric-unit">85% reduction</div>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-label">Render Time</div>
+                    <div class="metric-value">
+                        <50<span class="metric-unit">ms</span>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-label">Duplication</div>
+                    <div class="metric-value">
+                        0<span class="metric-unit">%</span>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-label">Consistency</div>
+                    <div class="metric-value">
+                        100<span class="metric-unit">%</span>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-label">Maintenance Events</div>
+                    <div class="metric-value">
+                        <2<span class="metric-unit">/month</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Governance & Risks -->
+        <div class="content-section glass">
+            <h2 class="section-title">🛡️ Governance & Risk Mitigation</h2>
+            <div class="section-content">
+                <h3>Governance Alignment</h3>
+                <ul>
+                    <li><strong>CORE-002:</strong> No summary files, enforce minimalism (<300 lines) ✅</li>
+                    <li><strong>CORE-008:</strong> TDD enforcement (all AC-IDs have tests) ✅</li>
+                    <li><strong>CORE-019:</strong> TDD-Master required for implementation ✅</li>
+                </ul>
+                
+                <h3>Audit Trail Requirements</h3>
+                <ul>
+                    <li>All operations logged to EnterpriseAuditLogger</li>
+                    <li>Category: INFRASTRUCTURE, Retention: 30 days (INFO)</li>
+                    <li>Resolution path captured for debugging</li>
+                </ul>
+                
+                <h3>Risk Mitigation</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                        <th style="text-align: left; padding: 10px; color: var(--primary-color);">Risk</th>
+                        <th style="text-align: left; padding: 10px; color: var(--primary-color);">Impact</th>
+                        <th style="text-align: left; padding: 10px; color: var(--primary-color);">Mitigation</th>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 10px;">Breaking existing rendering</td>
+                        <td style="padding: 10px; color: var(--danger-color);">HIGH</td>
+                        <td style="padding: 10px;">Phased migration + backwards compat flag</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 10px;">Category assignment conflicts</td>
+                        <td style="padding: 10px; color: var(--warning-color);">MEDIUM</td>
+                        <td style="padding: 10px;">Multi-category inheritance + audit logs</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
+                        <td style="padding: 10px;">Testing overhead</td>
+                        <td style="padding: 10px; color: var(--warning-color);">MEDIUM</td>
+                        <td style="padding: 10px;">Auto-generate test matrix from registry</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Evidence Bundles -->
+        <div class="content-section glass">
+            <h2 class="section-title">📦 Evidence Bundle Requirements</h2>
+            <div class="section-content">
+                <p>Each AC-ID must produce an evidence bundle at <code>cortex-brain/tier1/evidence-bundles/AC-TEMPLATE-*/</code>:</p>
+                
+                <div class="code-block">
+                    <pre>
+AC-TEMPLATE-001/
+├── manifest.yaml           (AC metadata, status, completion date)
+├── test_results.json       (pytest output with coverage)
+├── performance_metrics.json (render time benchmarks)
+└── audit_trace.jsonl       (filtered audit logs for this AC)
+                    </pre>
+                </div>
+                
+                <p><strong>Completeness Score:</strong> Evidence bundles must achieve 100% completeness (all 4 files present and valid) before AC-ID marked as complete.</p>
+            </div>
+        </div>
+        
+        <!-- Deliverables -->
+        <div class="content-section glass">
+            <h2 class="section-title">📦 Deliverables Checklist</h2>
+            <div class="section-content">
+                <ul>
+                    <li>✅ <code>cortex-brain/tier0/response-blocks.yaml</code> (50 lines)</li>
+                    <li>✅ <code>cortex-brain/tier2/response-templates/core.yaml</code> (40 lines)</li>
+                    <li>✅ <code>cortex-brain/tier2/response-templates/integration.yaml</code> (40 lines)</li>
+                    <li>✅ <code>cortex-brain/tier2/response-templates/maintenance.yaml</code> (40 lines)</li>
+                    <li>✅ <code>cortex-brain/tier2/response-templates/conversion.yaml</code> (40 lines)</li>
+                    <li>✅ <code>cortex-brain/tier2/response-templates/security.yaml</code> (40 lines)</li>
+                    <li>✅ Updated <code>ResponseRenderer</code> with 3-layer loader</li>
+                    <li>✅ Migration guide for orchestrator developers</li>
+                    <li>✅ Performance benchmarks (render time <50ms)</li>
+                    <li>✅ Deletion of <code>response-templates-v4.yaml</code> (after validation)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>CORTEX 6.0 - 3-Layer Response Template Architecture</p>
+        <p style="margin-top: 5px; font-size: 0.85em;">© 2025-2026 Asif Hussain. All rights reserved.</p>
+    </footer>
+    
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#00d4ff',
+                primaryTextColor: '#ffffff',
+                primaryBorderColor: '#00d4ff',
+                lineColor: '#7b2cbf',
+                secondaryColor: '#7b2cbf',
+                tertiaryColor: '#0a0a0f',
+                background: '#0a0a0f',
+                mainBkg: '#0a0a0f',
+                secondBkg: '#050508',
+                textColor: '#ffffff',
+                fontSize: '14px'
+            },
+            flowchart: {
+                curve: 'basis',
+                padding: 20
+            }
+        });
+    </script>
+</body>
+</html>

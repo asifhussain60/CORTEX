@@ -1,4 +1,30 @@
 {
+  "autonomous_ac_implementor": {
+    "id": "autonomous_ac_implementor",
+    "name": "Autonomous AC Implementor",
+    "version": "1.0.0",
+    "type": "autonomous",
+    "category": "execution",
+    "class_name": "AutonomousACImplementor",
+    "module_path": "src.orchestrators.autonomous.autonomous_ac_implementor",
+    "description": "Direct AC-ID implementation engine from progress-tracker.json",
+    "manifest_path": "cortex-brain/manifests/orchestrators/autonomous-ac-implementor.yaml",
+    "patterns": [
+      "^(autonomous|implement phase|continue autonomous|carry out|implement plan autonomous).*$"
+    ],
+    "dependencies": [],
+    "capabilities": [
+      "ac_id_implementation",
+      "progress_tracking",
+      "evidence_generation",
+      "blocker_detection"
+    ],
+    "tags": {
+      "priority": "highest",
+      "autonomous": true
+    },
+    "enabled": true
+  },
   "epic_review": {
     "id": "epic_review",
     "name": "Epic Review Orchestrator",
