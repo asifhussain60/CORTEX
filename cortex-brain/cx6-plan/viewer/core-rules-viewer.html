@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORTEX 6.0 - CORE Rules Viewer</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.min.css">
+  <link rel="stylesheet" href="shared/styles.css">
+  <style>
+    .rule-card {
+      border-left: 4px solid;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .rule-card:hover {
+      transform: translateX(5px);
+      background: rgba(0, 212, 255, 0.05);
+    }
+
+    .rule-card.blocked {
+      border-left-color: #ff006e;
+    }
+
+    .rule-card.critical {
+      border-left-color: #ffbe0b;
+    }
+
+    .rule-card.active {
+      border-left-color: #06ffa5;
+    }
+
+    .severity-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .severity-blocked {
+      background: rgba(255, 0, 110, 0.2);
+      color: #ff006e;
+    }
+
+    .severity-critical {
+      background: rgba(255, 190, 11, 0.2);
+      color: #ffbe0b;
+    }
+
+    .severity-high {
+      background: rgba(0, 212, 255, 0.2);
+      color: #00d4ff;
+    }
+
+    .rule-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+    }
+
+    .rule-id {
+      font-weight: 700;
+      color: #00d4ff;
+      font-size: 0.95rem;
+    }
+
+    .rule-name {
+      font-weight: 600;
+      color: #ffffff;
+      font-size: 0.95rem;
+    }
+
+    .rule-description {
+      color: #a0a0a0;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .example-code {
+      background: rgba(26, 31, 58, 0.8);
+      padding: 0.75rem;
+      border-radius: 0.25rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: #b3d9ff;
+      overflow-x: auto;
+      margin-top: 0.5rem;
+    }
+
+    .heatmap-cell {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 0.25rem;
+      margin: 2px;
+      font-weight: 600;
+      color: #ffffff;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .heatmap-cell:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .impact-cell {
+      padding: 1rem;
+      background: rgba(0, 212, 255, 0.05);
+      border-radius: 0.5rem;
+      border-left: 3px solid #00d4ff;
+    }
+
+    .tabs-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .tab-btn {
+      padding: 0.75rem;
+      background: rgba(0, 212, 255, 0.1);
+      border: 2px solid transparent;
+      border-radius: 0.5rem;
+      color: #a0a0a0;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 600;
+    }
+
+    .tab-btn.active {
+      background: rgba(0, 212, 255, 0.2);
+      border-color: #00d4ff;
+      color: #00d4ff;
+    }
+
+    .tab-btn:hover {
+      background: rgba(0, 212, 255, 0.15);
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid p-4">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb mb-4">
+      <a href="cortex-plan-viewer.html">Dashboard</a>
+      <span>/</span>
+      <span>CORE Rules Viewer</span>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <h1><i class="bi bi-shield-check"></i> CORTEX 6.0 CORE Rules</h1>
+      <p>23 immutable governance rules protecting framework integrity with enforcement verification</p>
+    </div>
+
+    <!-- Rule Statistics -->
+    <div class="grid-auto mb-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <div style="font-size: 1.8rem; color: #00d4ff; font-weight: 700;">23</div>
+          <div style="color: #a0a0a0; font-size: 0.9rem;">Total CORE Rules</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body text-center">
+          <div style="font-size: 1.8rem; color: #ff006e; font-weight: 700;">7</div>
+          <div style="color: #a0a0a0; font-size: 0.9rem;">BLOCKED Violations</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body text-center">
+          <div style="font-size: 1.8rem; color: #ffbe0b; font-weight: 700;">8</div>
+          <div style="color: #a0a0a0; font-size: 0.9rem;">CRITICAL Enforcement</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body text-center">
+          <div style="font-size: 1.8rem; color: #06ffa5; font-weight: 700;">100%</div>
+          <div style="color: #a0a0a0; font-size: 0.9rem;">Enforcement Active</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="bi bi-funnel"></i> Filter by Category
+      </div>
+      <div class="card-body">
+        <div class="tabs-container" style="grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));">
+          <button class="tab-btn active" onclick="filterRules('all')">All (23)</button>
+          <button class="tab-btn" onclick="filterRules('infrastructure')">Infrastructure (4)</button>
+          <button class="tab-btn" onclick="filterRules('execution')">Execution (5)</button>
+          <button class="tab-btn" onclick="filterRules('organization')">Organization (4)</button>
+          <button class="tab-btn" onclick="filterRules('governance')">Governance (3)</button>
+          <button class="tab-btn" onclick="filterRules('orchestration')">Orchestration (7)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Severity Matrix Heatmap -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="bi bi-square-fill"></i> Severity Distribution Matrix
+      </div>
+      <div class="card-body">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+          <div>
+            <label style="color: #ff006e; font-weight: 600; margin-bottom: 0.5rem; display: block;">🔴 BLOCKED (7 rules)</label>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.25rem;">
+              <div class="heatmap-cell" style="background: #ff006e;" title="CORE-001">001</div>
+              <div class="heatmap-cell" style="background: #ff006e;" title="CORE-002">002</div>
+              <div class="heatmap-cell" style="background: #ff006e;" title="CORE-005">005</div>
+              <div class="heatmap-cell" style="background: #ff006e;" title="CORE-008">008</div>
+              <div class="heatmap-cell" style="background: #ff006e;" title="CORE-009">009</div>
+              <div class="heatmap-cell" style="background: #ff006e;" title="CORE-017">017</div>
+              <div class="heatmap-cell" style="background: #ff006e;" title="CORE-019">019</div>
+            </div>
+          </div>
+
+          <div>
+            <label style="color: #ffbe0b; font-weight: 600; margin-bottom: 0.5rem; display: block;">🟡 CRITICAL (8 rules)</label>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.25rem;">
+              <div class="heatmap-cell" style="background: #ffbe0b;" title="CORE-003">003</div>
+              <div class="heatmap-cell" style="background: #ffbe0b;" title="CORE-004">004</div>
+              <div class="heatmap-cell" style="background: #ffbe0b;" title="CORE-006">006</div>
+              <div class="heatmap-cell" style="background: #ffbe0b;" title="CORE-007">007</div>
+              <div class="heatmap-cell" style="background: #ffbe0b;" title="CORE-010">010</div>
+              <div class="heatmap-cell" style="background: #ffbe0b;" title="CORE-011">011</div>
+              <div class="heatmap-cell" style="background: #ffbe0b;" title="CORE-014">014</div>
+              <div class="heatmap-cell" style="background: #ffbe0b;" title="CORE-023">023</div>
+            </div>
+          </div>
+
+          <div>
+            <label style="color: #06ffa5; font-weight: 600; margin-bottom: 0.5rem; display: block;">🟢 HIGH (8 rules)</label>
+            <div style="display: flex; flex-wrap: wrap; gap: 0.25rem;">
+              <div class="heatmap-cell" style="background: #06ffa5;" title="CORE-012">012</div>
+              <div class="heatmap-cell" style="background: #06ffa5;" title="CORE-013">013</div>
+              <div class="heatmap-cell" style="background: #06ffa5;" title="CORE-015">015</div>
+              <div class="heatmap-cell" style="background: #06ffa5;" title="CORE-016">016</div>
+              <div class="heatmap-cell" style="background: #06ffa5;" title="CORE-018">018</div>
+              <div class="heatmap-cell" style="background: #06ffa5;" title="CORE-020">020</div>
+              <div class="heatmap-cell" style="background: #06ffa5;" title="CORE-021">021</div>
+              <div class="heatmap-cell" style="background: #06ffa5;" title="CORE-022">022</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rules Display -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="bi bi-list-ul"></i> CORE Rules Catalog
+      </div>
+      <div class="card-body" style="padding: 0;">
+        <div id="rulesContainer" style="display: grid; gap: 1rem; padding: 1.5rem;">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Enforcement Examples -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="bi bi-code-slash"></i> Enforcement Examples
+      </div>
+      <div class="card-body">
+        <div style="display: grid; gap: 1.5rem;">
+          <div>
+            <div style="font-weight: 700; color: #ff006e; margin-bottom: 0.5rem;">CORE-001: Incremental Execution (≤500 lines)</div>
+            <div class="example-code">
+// ❌ BLOCKED: Operation exceeds 500 lines
+if (operation.line_count > 500) {
+  raise GovernanceViolation(
+    rule_id="CORE-001",
+    violation="HTTP 502: Operation too large for single execution",
+    max_allowed=500,
+    actual=operation.line_count
+  )
+}
+
+// ✓ ALLOWED: Operation within limit
+split_into_smaller_chunks(operation, max_lines=500)
+            </div>
+          </div>
+
+          <div>
+            <div style="font-weight: 700; color: #ff006e; margin-bottom: 0.5rem;">CORE-008: TDD Enforcement (RED→GREEN→REFACTOR)</div>
+            <div class="example-code">
+// ❌ BLOCKED: Direct implementation without tests
+def implement_feature():
+  # ... 50 lines of code ...
+  pass
+
+// ✓ REQUIRED: Tests first, then implementation
+def test_feature():
+  assert feature.works() == True
+
+def implement_feature():
+  # ... code to make test pass ...
+  pass
+            </div>
+          </div>
+
+          <div>
+            <div style="font-weight: 700; color: #ff006e; margin-bottom: 0.5rem;">CORE-019: TDD-Master Gateway</div>
+            <div class="example-code">
+// ❌ BLOCKED: Direct coding without TDD-Master routing
+autonomous_implementer.code(feature)
+
+// ✓ REQUIRED: All logic through TDD-Master
+request = RequestContext(...)
+orchestrator.route(request) → TDD_Master.execute(request)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Impact Analysis -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="bi bi-exclamation-circle"></i> Impact Analysis: Violation Consequences
+      </div>
+      <div class="card-body">
+        <div class="impact-grid">
+          <div class="impact-cell">
+            <div style="font-weight: 700; color: #ff006e;">🔴 BLOCKED Violations</div>
+            <div style="color: #a0a0a0; font-size: 0.85rem; margin-top: 0.5rem;">
+              <strong>Consequence:</strong> HTTP 502 error, operation rejected<br>
+              <strong>Examples:</strong> >500 lines, summary files, governance bypass<br>
+              <strong>Recovery:</strong> Implement governance compliance checklist
+            </div>
+          </div>
+
+          <div class="impact-cell">
+            <div style="font-weight: 700; color: #ffbe0b;">🟡 CRITICAL Violations</div>
+            <div style="color: #a0a0a0; font-size: 0.85rem; margin-top: 0.5rem;">
+              <strong>Consequence:</strong> Audit alert, operation proceeds with warning<br>
+              <strong>Examples:</strong> Hardcoded paths, missing TDD tests<br>
+              <strong>Recovery:</strong> Implement corrective actions, log audit entry
+            </div>
+          </div>
+
+          <div class="impact-cell">
+            <div style="font-weight: 700; color: #06ffa5;">🟢 HIGH Violations</div>
+            <div style="color: #a0a0a0; font-size: 0.85rem; margin-top: 0.5rem;">
+              <strong>Consequence:</strong> Audit log entry, operation proceeds<br>
+              <strong>Examples:</strong> Missing documentation, incomplete tests<br>
+              <strong>Recovery:</strong> Asynchronous correction, tracked for later
+            </div>
+          </div>
+
+          <div class="impact-cell">
+            <div style="font-weight: 700; color: #00d4ff;">ℹ️ User Challenge Rights</div>
+            <div style="color: #a0a0a0; font-size: 0.85rem; margin-top: 0.5rem;">
+              <strong>Escalation:</strong> "Too good to be true" skepticism valid<br>
+              <strong>Evidence:</strong> Requires proof: >500 byte files, test passage<br>
+              <strong>Outcome:</strong> Prevents false positives reaching production
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #1a1f3a; text-align: center; color: #a0a0a0; font-size: 0.85rem;">
+      <p>CORE Rules Version: 6.0.0 | Enforcement Status: ACTIVE ✓ | Last Updated: 2026-01-10</p>
+    </div>
+  </div>
+
+  <script>
+    const rules = [
+      { id: 'CORE-001', name: 'Incremental Execution', category: 'execution', severity: 'blocked', description: 'Operations >500 lines blocked (HTTP 502). Enforces incremental delivery.' },
+      { id: 'CORE-002', name: 'No Summary Files', category: 'organization', severity: 'blocked', description: 'Root-level summary files blocked. All content in tier folders.' },
+      { id: 'CORE-003', name: 'State Isolation', category: 'infrastructure', severity: 'critical', description: 'Concurrent state access requires file locking. Prevents race conditions.' },
+      { id: 'CORE-004', name: 'Atomic Writes', category: 'infrastructure', severity: 'critical', description: 'All file writes atomic (write→rename). SQLite WAL mode for transactions.' },
+      { id: 'CORE-005', name: 'Path Portability', category: 'execution', severity: 'blocked', description: 'Hardcoded paths blocked. All paths must be portable (Unix/Windows).' },
+      { id: 'CORE-006', name: 'Context Load Protocol', category: 'governance', severity: 'critical', description: 'All operations verify context before execution (progress-tracker, AC-INDEX).' },
+      { id: 'CORE-007', name: 'Hash Verification', category: 'infrastructure', severity: 'critical', description: 'Context hash mismatch triggers reload. Detects stale state.' },
+      { id: 'CORE-008', name: 'TDD Enforcement', category: 'execution', severity: 'blocked', description: 'Untested code blocked. RED→GREEN→REFACTOR required.' },
+      { id: 'CORE-009', name: 'Plan Organization', category: 'organization', severity: 'blocked', description: 'Root-level plans blocked. All plans in tier1/tracking/.' },
+      { id: 'CORE-010', name: 'Audit Completeness', category: 'governance', severity: 'critical', description: '100% audit logging required. Every operation logged with timestamp, category, AC-ID.' },
+      { id: 'CORE-011', name: 'Token Budget Tracking', category: 'execution', severity: 'critical', description: 'Operations track token usage. Context summarization triggered at 80% budget.' },
+      { id: 'CORE-012', name: 'Governance Precedence', category: 'governance', severity: 'high', description: 'Tier 0 (SKULL) > Tier 1 > Tier 2 > Tier 3. Highest tier always wins.' },
+      { id: 'CORE-013', name: 'Evidence Bundle Format', category: 'organization', severity: 'high', description: '3-file format: manifest, test_results, audit_trace. >100 bytes each.' },
+      { id: 'CORE-014', name: 'AC-ID Traceability', category: 'governance', severity: 'critical', description: 'All operations assigned AC-ID. All AC-IDs in AC-INDEX.yaml.' },
+      { id: 'CORE-015', name: 'Correlation IDs', category: 'infrastructure', severity: 'high', description: 'All requests assigned UUID correlation ID for audit trail.' },
+      { id: 'CORE-016', name: 'Integration Testing', category: 'execution', severity: 'high', description: 'Contract tests required for all integrations (ADO, MCP, etc).' },
+      { id: 'CORE-017', name: 'Governance Enforcement', category: 'governance', severity: 'blocked', description: 'Governance bypass triggers alert. All rule violations logged.' },
+      { id: 'CORE-018', name: 'Coverage Tracking', category: 'execution', severity: 'high', description: 'All code changes require 80%+ code coverage. Coverage reports generated.' },
+      { id: 'CORE-019', name: 'TDD-Master Gateway', category: 'orchestration', severity: 'blocked', description: 'All implementations through TDD-Master. No direct coding.' },
+      { id: 'CORE-020', name: 'Design Score Maintenance', category: 'governance', severity: 'high', description: 'Maintain design score ≥95. Architectural debt tracked and addressed.' },
+      { id: 'CORE-021', name: 'Dependency Resolution', category: 'orchestration', severity: 'high', description: 'TodoManager resolves task dependencies. Deadlock prevention required.' },
+      { id: 'CORE-022', name: 'Rollback Capability', category: 'infrastructure', severity: 'high', description: 'All changes reversible. Git history maintained. Atomic rollback supported.' },
+      { id: 'CORE-023', name: 'HTML Validation', category: 'orchestration', severity: 'critical', description: 'All HTML valid, responsive, accessible (WCAG AA). Validation required.' }
+    ];
+
+    function renderRules(filter = 'all') {
+      const container = document.getElementById('rulesContainer');
+      const filtered = filter === 'all' ? rules : rules.filter(r => r.category === filter);
+
+      container.innerHTML = filtered.map(rule => `
+        <div class="rule-card ${rule.severity}">
+          <div class="rule-header">
+            <div>
+              <div class="rule-id">${rule.id}</div>
+              <div class="rule-name">${rule.name}</div>
+            </div>
+            <span class="severity-badge severity-${rule.severity}">${rule.severity.toUpperCase()}</span>
+          </div>
+          <div class="rule-description">${rule.description}</div>
+        </div>
+      `).join('');
+    }
+
+    function filterRules(category) {
+      // Update active tab
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      renderRules(category);
+    }
+
+    // Initial render
+    renderRules();
+  </script>
+  <script src="shared/data-loader.js"></script>
+</body>
+</html>

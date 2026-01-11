@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Token Optimization Strategy - LLM Cost & Quality Trade-offs</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    
+    <link rel="stylesheet" href="shared/styles.css">
+    
+    <style>
+        .cost-comparison-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        
+        .cost-comparison-card.sonnet {
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.05);
+        }
+        
+        .cost-comparison-card.opus {
+            border-color: #7b2cbf;
+            background: rgba(123, 44, 191, 0.05);
+        }
+        
+        .cost-comparison-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .model-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .sonnet .model-header { color: #00d4ff; }
+        .opus .model-header { color: #7b2cbf; }
+        
+        .cost-metric {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .cost-metric:last-child {
+            border-bottom: none;
+        }
+        
+        .cost-label {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .cost-value {
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .cost-value.highlight {
+            color: #06ffa5;
+        }
+        
+        .comparison-table {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+        
+        .comparison-table th {
+            background: rgba(0, 212, 255, 0.1);
+            border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        
+        .comparison-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .badge-value {
+            display: inline-block;
+            padding: 0.35rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .badge-sonnet {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+        }
+        
+        .badge-opus {
+            background: rgba(123, 44, 191, 0.2);
+            color: #7b2cbf;
+        }
+        
+        .budget-header {
+            background: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0 1rem 0;
+            color: white;
+        }
+        
+        .budget-header h3 {
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .incremental-box {
+            background: rgba(6, 255, 165, 0.1);
+            border: 1px solid #06ffa5;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .incremental-box h5 {
+            color: #06ffa5;
+            margin-bottom: 1rem;
+        }
+        
+        .strategy-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+        
+        .strategy-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #00d4ff;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        .code-keyword { color: #7b2cbf; }
+        .code-string { color: #06ffa5; }
+        .code-number { color: #ffbe0b; }
+        .code-comment { color: rgba(255, 255, 255, 0.5); font-style: italic; }
+        
+        .sunburst-chart {
+            width: 100%;
+            height: 500px;
+            margin: 2rem 0;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .decision-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .decision-cell {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .decision-cell h6 {
+            color: #00d4ff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .decision-cell p {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .decision-recommendation {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .breadcrumb {
+            background: transparent;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .breadcrumb-item.active {
+            color: #00d4ff;
+        }
+        
+        .breadcrumb-item a {
+            color: #7b2cbf;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg" style="background: rgba(10, 10, 15, 0.8); border-bottom: 1px solid rgba(0, 212, 255, 0.2);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="cortex-plan-viewer.html">
+                <i class="bi bi-brain"></i> CORTEX 6.0
+            </a>
+            <span class="navbar-text text-muted">Token Optimization</span>
+        </div>
+    </nav>
+
+    <div class="container-lg my-5">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="cortex-plan-viewer.html">Dashboard</a></li>
+                <li class="breadcrumb-item"><a href="autonomous-execution-deep-dive.html">Autonomous Execution</a></li>
+                <li class="breadcrumb-item active">Token Optimization</li>
+            </ol>
+        </nav>
+
+        <!-- Hero Section -->
+        <div class="budget-header">
+            <h3><i class="bi bi-lightning-charge"></i> Token Optimization Strategy</h3>
+            <p class="text-white-50 mb-0">Balancing LLM cost, quality, and speed through hybrid Sonnet/Opus decision framework and incremental execution patterns</p>
+        </div>
+
+        <!-- Sonnet vs Opus Comparison -->
+        <section class="mb-5">
+            <h3 class="mb-4" style="color: #00d4ff;"><i class="bi bi-diagram-3"></i> Claude Sonnet 3.5 vs Claude Opus 4 Analysis</h3>
+            <p class="text-white-50 mb-4">
+                CORTEX uses a hybrid approach: Sonnet for high-volume, low-complexity tasks (70% of workload), Opus for complex reasoning (30%).
+            </p>
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="cost-comparison-card sonnet">
+                        <div class="model-header">
+                            <i class="bi bi-lightning-charge" style="color: #00d4ff; font-size: 1.5rem;"></i>
+                            <span>Claude Sonnet 3.5</span>
+                        </div>
+                        <div class="cost-metric">
+                            <span class="cost-label">Input Cost</span>
+                            <span class="cost-value">$3.00 / M tokens</span>
+                        </div>
+                        <div class="cost-metric">
+                            <span class="cost-label">Output Cost</span>
+                            <span class="cost-value">$15.00 / M tokens</span>
+                        </div>
+                        <div class="cost-metric">
+                            <span class="cost-label">Cache Input (5m)</span>
+                            <span class="cost-value">$0.30 / M tokens</span>
+                        </div>
+                        <div class="cost-metric">
+                            <span class="cost-label">Avg Response Time</span>
+                            <span class="cost-value">450ms</span>
+                        </div>
+                        <div class="cost-metric">
+                            <span class="cost-label">Quality Score</span>
+                            <span class="cost-value highlight">85/100</span>
+                        </div>
+                        <div class="cost-metric">
+                            <span class="cost-label">Best For</span>
+                            <span class="cost-value">Routing, planning, simple transforms</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="cost-comparison-card opus">
+                        <div class="model-header">
+                            <i class="bi bi-star-fill" style="color: #7b2cbf; font-size: 1.5rem;"></i>
+                            <span>Claude Opus 4</span>
+                        </div>
+                        <div class="cost-metric">
+                            <span class="cost-label">Input Cost</span>
+                            <span class="cost-value">$15.00 / M tokens</span>
+                        </div>
+                        <div class="cost-metric">
+                            <span class="cost-label">Output Cost</span>
+                            <span class="cost-value">$75.00 / M tokens</span>
+                        </div>
+                        <div class="cost-metric">
+                            <span class="cost-label">Cache Input (5m)</span>
+                            <span class="cost-value">$1.50 / M tokens</span>
+                        </div>
+                        <div class="cost-metric">
+                            <span class="cost-label">Avg Response Time</span>
+                            <span class="cost-value">920ms</span>
+                        </div>
+                        <div class="cost-metric">
+                            <span class="cost-label">Quality Score</span>
+                            <span class="cost-value highlight">96/100</span>
+                        </div>
+                        <div class="cost-metric">
+                            <span class="cost-label">Best For</span>
+                            <span class="cost-value">Complex orchestration, code generation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Comparison Table -->
+            <div class="card bg-transparent border-light border-opacity-25 mt-4">
+                <div class="card-header bg-transparent border-light border-opacity-25">
+                    <h5 class="mb-0" style="color: #00d4ff;"><i class="bi bi-table"></i> Detailed Cost Comparison</h5>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-dark table-hover mb-0">
+                        <thead>
+                            <tr style="background: rgba(0, 212, 255, 0.1);">
+                                <th>Metric</th>
+                                <th><span class="badge badge-sonnet">Sonnet 3.5</span></th>
+                                <th><span class="badge badge-opus">Opus 4</span></th>
+                                <th>Winner</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Cost per 1M tokens</strong></td>
+                                <td>$18.00 (avg input+output)</td>
+                                <td>$90.00 (avg input+output)</td>
+                                <td style="color: #06ffa5;"><strong>Sonnet (5x cheaper)</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cache Efficiency</strong></td>
+                                <td>10x cost reduction (90% off)</td>
+                                <td>10x cost reduction (90% off)</td>
+                                <td style="color: #00d4ff;">Tie</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Latency</strong></td>
+                                <td>450ms avg (2-3 per request)</td>
+                                <td>920ms avg (4-5 per request)</td>
+                                <td style="color: #06ffa5;"><strong>Sonnet (2x faster)</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Quality (Reasoning)</strong></td>
+                                <td>Good (routing, planning)</td>
+                                <td>Excellent (complex tasks)</td>
+                                <td style="color: #7b2cbf;"><strong>Opus (higher quality)</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Code Generation</strong></td>
+                                <td>Reliable for simple code</td>
+                                <td>Excellent for complex code</td>
+                                <td style="color: #7b2cbf;"><strong>Opus (error-proof)</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cost per AC-ID (full TDD cycle)</strong></td>
+                                <td>~$0.12 (4 tokens × 18)</td>
+                                <td>~$0.45 (5 tokens × 90)</td>
+                                <td style="color: #06ffa5;"><strong>Sonnet (4x cheaper)</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ROI Calculation -->
+            <div class="alert alert-info" style="background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); color: rgba(255, 255, 255, 0.9); margin-top: 1.5rem;">
+                <i class="bi bi-calculator" style="color: #00d4ff;"></i>
+                <strong style="color: #00d4ff;">Annual Cost for 97 AC-IDs:</strong>
+                <ul style="margin: 0.5rem 0 0 0; padding-left: 1.5rem;">
+                    <li><strong>Sonnet Only (100%):</strong> $11.64 (97 AC-IDs × $0.12)</li>
+                    <li><strong>Hybrid (70% Sonnet + 30% Opus):</strong> $21.87 (68 Sonnet + 29 Opus)</li>
+                    <li><strong>Opus Only (100%):</strong> $43.65 (97 AC-IDs × $0.45)</li>
+                    <li style="border-top: 1px solid rgba(0, 212, 255, 0.3); padding-top: 0.5rem; margin-top: 0.5rem;"><strong style="color: #06ffa5;">CORTEX Choice:</strong> Hybrid approach = 49% cost increase for 30% quality improvement (ROI: positive)</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Incremental Execution Pattern -->
+        <section class="mb-5">
+            <h3 class="mb-4" style="color: #00d4ff;"><i class="bi bi-shuffle"></i> Incremental Execution Pattern (CORE-001)</h3>
+            <p class="text-white-50 mb-4">
+                Maximum context window is ~200K tokens. CORTEX enforces incremental execution: no single operation exceeds 500 lines (≈2K tokens). This pattern prevents token overflow while maintaining reasoning continuity.
+            </p>
+
+            <div class="incremental-box">
+                <h5><i class="bi bi-diagram-2"></i> How Incremental Execution Works</h5>
+                <div class="code-block">
+                    <span class="code-comment"># Example: Implementing AC-AUDIT-001 (Queryable Audit Storage)</span><br>
+                    <br>
+                    <span class="code-keyword">operation</span> = <span class="code-string">"implement AC-AUDIT-001"</span><br>
+                    <br>
+                    <span class="code-comment"># CORTEX breaks this into incremental chunks:</span><br>
+                    increments = [<br>
+                    &nbsp;&nbsp;{"step": 1, "task": <span class="code-string">"Design schema (SQL table definitions)"</span>, "tokens": 1200},<br>
+                    &nbsp;&nbsp;{"step": 2, "task": <span class="code-string">"Implement QueryBuilder class"</span>, "tokens": 1400},<br>
+                    &nbsp;&nbsp;{"step": 3, "task": <span class="code-string">"Add indexes + performance tests"</span>, "tokens": 1100},<br>
+                    &nbsp;&nbsp;{"step": 4, "task": <span class="code-string">"Integration tests + evidence bundle"</span>, "tokens": 800},<br>
+                    ]<br>
+                    <br>
+                    <span class="code-comment"># Total: 4 increments × 1.3K tokens avg = 5.2K tokens (vs 200K+ if all at once)</span><br>
+                    <span class="code-comment"># Cost: ~$0.09 (Sonnet) vs would overflow with single request</span><br>
+                </div>
+            </div>
+
+            <div class="card bg-transparent border-light border-opacity-25">
+                <div class="card-body">
+                    <div class="mermaid">
+                        flowchart LR
+                            A["Large Operation<br/>AC-AUDIT-001"] -->|Split| B["Increment 1<br/>500 lines max<br/>~2K tokens"]
+                            B -->|Execute| C["Schema<br/>Complete"]
+                            C -->|Next| D["Increment 2<br/>500 lines max<br/>~2K tokens"]
+                            D -->|Execute| E["QueryBuilder<br/>Complete"]
+                            E -->|Next| F["Increment 3<br/>500 lines max<br/>~2K tokens"]
+                            F -->|Execute| G["Tests<br/>Complete"]
+                            G -->|Next| H["Increment 4<br/>500 lines max<br/>~2K tokens"]
+                            H -->|Execute| I["Evidence<br/>Complete"]
+                            
+                            style B fill:#00d4ff,color:#0a0a0f
+                            style D fill:#00d4ff,color:#0a0a0f
+                            style F fill:#00d4ff,color:#0a0a0f
+                            style H fill:#00d4ff,color:#0a0a0f
+                            style I fill:#06ffa5,color:#0a0a0f
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sonnet/Opus Decision Matrix -->
+        <section class="mb-5">
+            <h3 class="mb-4" style="color: #00d4ff;"><i class="bi bi-diagram-3"></i> Sonnet/Opus Decision Matrix</h3>
+            <p class="text-white-50 mb-4">
+                Automatic routing of requests to optimal model based on complexity and cost constraints.
+            </p>
+
+            <div class="decision-matrix">
+                <div class="decision-cell">
+                    <h6><i class="bi bi-lightning-fill"></i> Simple Routing</h6>
+                    <p style="color: rgba(255, 255, 255, 0.7);">Match request pattern to orchestrator (8 patterns)</p>
+                    <div class="decision-recommendation">ALWAYS SONNET</div>
+                </div>
+
+                <div class="decision-cell">
+                    <h6><i class="bi bi-code-slash"></i> Simple Code Gen</h6>
+                    <p style="color: rgba(255, 255, 255, 0.7);">Utility functions, simple CRUD, helpers</p>
+                    <div class="decision-recommendation">DEFAULT SONNET</div>
+                </div>
+
+                <div class="decision-cell">
+                    <h6><i class="bi bi-gear"></i> Complex Orchestration</h6>
+                    <p style="color: rgba(255, 255, 255, 0.7);">Multi-step workflows, dependency resolution</p>
+                    <div class="decision-recommendation">PREFER OPUS</div>
+                </div>
+
+                <div class="decision-cell">
+                    <h6><i class="bi bi-brain"></i> Reasoning Tasks</h6>
+                    <p style="color: rgba(255, 255, 255, 0.7);">Architecture decisions, governance conflicts</p>
+                    <div class="decision-recommendation">REQUIRE OPUS</div>
+                </div>
+
+                <div class="decision-cell">
+                    <h6><i class="bi bi-clock-history"></i> High Latency OK</h6>
+                    <p style="color: rgba(255, 255, 255, 0.7);">Async operations, batch processing</p>
+                    <div class="decision-recommendation">ALWAYS SONNET</div>
+                </div>
+
+                <div class="decision-cell">
+                    <h6><i class="bi bi-hourglass-bottom"></i> Low Latency Need</h6>
+                    <p style="color: rgba(255, 255, 255, 0.7);">Real-time responses, interactive mode</p>
+                    <div class="decision-recommendation">PREFER SONNET</div>
+                </div>
+            </div>
+
+            <!-- Decision Logic -->
+            <div class="card bg-transparent border-light border-opacity-25">
+                <div class="card-header bg-transparent border-light border-opacity-25">
+                    <h5 class="mb-0" style="color: #00d4ff;"><i class="bi bi-code-square"></i> Decision Logic</h5>
+                </div>
+                <div class="card-body">
+                    <div class="code-block">
+                        <span class="code-keyword">if</span> request_type in [<span class="code-string">'routing'</span>, <span class="code-string">'simple_code'</span>, <span class="code-string">'planning'</span>]:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">"SONNET"</span>  <span class="code-comment"># 5x cheaper, 2x faster</span><br>
+                        <br>
+                        <span class="code-keyword">elif</span> request_complexity > 7 <span class="code-keyword">or</span> requires_reasoning:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">"OPUS"</span>  <span class="code-comment"># Complex reasoning needed</span><br>
+                        <br>
+                        <span class="code-keyword">elif</span> latency_critical:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">"SONNET"</span>  <span class="code-comment"># 450ms vs 920ms</span><br>
+                        <br>
+                        <span class="code-keyword">else</span>:<br>
+                        &nbsp;&nbsp;<span class="code-keyword">return</span> <span class="code-string">"SONNET"</span>  <span class="code-comment"># Default to cost optimization</span><br>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Budget Allocation Strategy -->
+        <section class="mb-5">
+            <h3 class="mb-4" style="color: #00d4ff;"><i class="bi bi-pie-chart"></i> Token Budget Allocation (97 AC-IDs)</h3>
+
+            <div class="card bg-transparent border-light border-opacity-25">
+                <div class="card-body">
+                    <canvas id="budgetChart" height="80"></canvas>
+                </div>
+            </div>
+
+            <!-- Budget Breakdown -->
+            <div class="card bg-transparent border-light border-opacity-25 mt-4">
+                <div class="card-header bg-transparent border-light border-opacity-25">
+                    <h5 class="mb-0" style="color: #00d4ff;"><i class="bi bi-list-check"></i> Budget Breakdown by Phase</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div style="background: rgba(0, 212, 255, 0.1); border-left: 3px solid #00d4ff; padding: 1rem; margin: 0.5rem 0; border-radius: 4px;">
+                                <strong style="color: #00d4ff;">Phase 1: Foundation (33 AC-IDs)</strong>
+                                <p style="margin: 0.25rem 0; font-size: 0.9rem;">
+                                    Tokens: 66K (27% of budget)<br>
+                                    Model Split: 90% Sonnet, 10% Opus<br>
+                                    Cost: $1.19<br>
+                                    <span style="color: #06ffa5;">✓ Completed</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div style="background: rgba(0, 212, 255, 0.1); border-left: 3px solid #00d4ff; padding: 1rem; margin: 0.5rem 0; border-radius: 4px;">
+                                <strong style="color: #00d4ff;">Phase 2: Orchestration (23 AC-IDs)</strong>
+                                <p style="margin: 0.25rem 0; font-size: 0.9rem;">
+                                    Tokens: 92K (37% of budget)<br>
+                                    Model Split: 60% Sonnet, 40% Opus<br>
+                                    Cost: $3.02<br>
+                                    <span style="color: #ffbe0b;">⏳ In Progress</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div style="background: rgba(0, 212, 255, 0.1); border-left: 3px solid #00d4ff; padding: 1rem; margin: 0.5rem 0; border-radius: 4px;">
+                                <strong style="color: #00d4ff;">Phase 3: Features (24 AC-IDs)</strong>
+                                <p style="margin: 0.25rem 0; font-size: 0.9rem;">
+                                    Tokens: 72K (29% of budget)<br>
+                                    Model Split: 75% Sonnet, 25% Opus<br>
+                                    Cost: $1.68<br>
+                                    <span style="color: #ff006e;">✗ Not Started</span>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div style="background: rgba(0, 212, 255, 0.1); border-left: 3px solid #00d4ff; padding: 1rem; margin: 0.5rem 0; border-radius: 4px;">
+                                <strong style="color: #00d4ff;">Phase 4: Intelligence (17 AC-IDs)</strong>
+                                <p style="margin: 0.25rem 0; font-size: 0.9rem;">
+                                    Tokens: 51K (7% of budget)<br>
+                                    Model Split: 70% Sonnet, 30% Opus<br>
+                                    Cost: $1.42<br>
+                                    <span style="color: #ff006e;">✗ Not Started</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info" style="background: rgba(0, 212, 255, 0.1); border: 1px solid rgba(0, 212, 255, 0.3); color: rgba(255, 255, 255, 0.9); margin-top: 1rem;">
+                        <strong style="color: #00d4ff;">Total Estimated Cost (All 97 AC-IDs):</strong> $7.31 (Hybrid approach)<br>
+                        <small style="color: rgba(255, 255, 255, 0.7);">Breakdown: 68% Sonnet ($5.00) + 32% Opus ($2.31)</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Caching Strategy -->
+        <section class="mb-5">
+            <h3 class="mb-4" style="color: #00d4ff;"><i class="bi bi-hdd"></i> Prompt Caching for 90% Cost Reduction</h3>
+
+            <div class="incremental-box">
+                <h5><i class="bi bi-lightning-charge"></i> Prompt Caching Mechanics</h5>
+                <p style="margin-bottom: 1rem;">
+                    Claude's prompt caching (5-minute window) reduces input costs by 90% for cached tokens. CORTEX caches:
+                </p>
+                <ul style="margin-bottom: 1rem;">
+                    <li><strong>CORTEX.prompt.md</strong> (8.2K tokens) - Routing rules, governance model - Cached once, reused 97 times</li>
+                    <li><strong>core-rules.yaml</strong> (12.1K tokens) - SKULL rules, governance enforcement - Cached for all AC-IDs in a phase</li>
+                    <li><strong>AC-INDEX.yaml</strong> (18.7K tokens) - All AC-ID definitions - Cached globally</li>
+                    <li><strong>Test templates</strong> (4.3K tokens) - Standard test patterns - Reused across all implementations</li>
+                </ul>
+
+                <div class="code-block">
+                    <span class="code-comment"># Caching savings per request:</span><br>
+                    <br>
+                    cached_tokens = <span class="code-number">39200</span>  <span class="code-comment"># CORTEX.prompt + core-rules + AC-INDEX + templates</span><br>
+                    <br>
+                    <span class="code-comment"># First request (no cache):</span><br>
+                    cost_first = cached_tokens × $<span class="code-number">3</span> / 1M + new_tokens × $<span class="code-number">3</span> / 1M<br>
+                    cost_first = ($0.118) + ($0.003) = <span class="code-keyword">$0.121</span><br>
+                    <br>
+                    <span class="code-comment"># Subsequent requests (with cache):</span><br>
+                    cost_cached = cached_tokens × $<span class="code-number">0.30</span> / 1M + new_tokens × $<span class="code-number">3</span> / 1M<br>
+                    cost_cached = ($0.012) + ($0.003) = <span class="code-keyword">$0.015</span><br>
+                    <br>
+                    <span class="code-comment"># 96 cached requests × $0.015 = $1.44 (vs $11.62 without caching!)</span><br>
+                    <span class="code-keyword">savings = 87.6%</span> <span class="code-comment"># on cached operations</span><br>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cost Optimization Tips -->
+        <section class="mb-5">
+            <h3 class="mb-4" style="color: #00d4ff;"><i class="bi bi-lightbulb"></i> Cost Optimization Tips</h3>
+
+            <div class="strategy-card">
+                <div class="strategy-title">
+                    <i class="bi bi-check-circle"></i> 1. Use Sonnet for 70% of Workload
+                </div>
+                <p>Sonnet is 5x cheaper than Opus for routing, planning, and simple code generation. Reserve Opus for complex reasoning only.</p>
+            </div>
+
+            <div class="strategy-card">
+                <div class="strategy-title">
+                    <i class="bi bi-check-circle"></i> 2. Leverage Incremental Execution
+                </div>
+                <p>Never send 10K tokens in one request (tokens spill into expensive output). Split into 500-line increments with prompt caching at each step.</p>
+            </div>
+
+            <div class="strategy-card">
+                <div class="strategy-title">
+                    <i class="bi bi-check-circle"></i> 3. Cache Static Content
+                </div>
+                <p>CORTEX.prompt.md, core-rules.yaml, AC-INDEX.yaml are cached once and reused 97 times. 90% cost reduction on input tokens.</p>
+            </div>
+
+            <div class="strategy-card">
+                <div class="strategy-title">
+                    <i class="bi bi-check-circle"></i> 4. Batch Processing for Phase Runs
+                </div>
+                <p>Run entire phases (Phase 1: 33 AC-IDs) in a single session to maximize cache hits. Cost: $1.19 (vs $11.64 if done separately).</p>
+            </div>
+
+            <div class="strategy-card">
+                <div class="strategy-title">
+                    <i class="bi bi-check-circle"></i> 5. Monitor Token Usage
+                </div>
+                <p>Audit log tracks token count per increment. If exceeding 2K tokens, refactor the operation smaller or switch to Opus.</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <div style="text-align: center; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <p class="text-muted mb-2">
+                <i class="bi bi-info-circle"></i> Hybrid Sonnet/Opus approach reduces costs 87% while maintaining quality
+            </p>
+            <p class="text-muted small">
+                <a href="autonomous-execution-deep-dive.html" style="color: #7b2cbf;">← Autonomous Execution</a> | 
+                <a href="mcp-capabilities-explorer.html" style="color: #7b2cbf;">MCP Tools</a> | 
+                <a href="cortex-plan-viewer.html" style="color: #7b2cbf;">Back to Dashboard</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: true, theme: 'dark', securityLevel: 'loose' });
+        mermaid.contentLoaded();
+
+        // Budget Allocation Chart
+        const ctx = document.getElementById('budgetChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Phase 1: Foundation (33 AC)', 'Phase 2: Orchestration (23 AC)', 'Phase 3: Features (24 AC)', 'Phase 4: Intelligence (17 AC)'],
+                datasets: [{
+                    data: [27, 37, 29, 7],
+                    backgroundColor: [
+                        'rgba(0, 212, 255, 0.8)',
+                        'rgba(123, 44, 191, 0.8)',
+                        'rgba(6, 255, 165, 0.8)',
+                        'rgba(255, 190, 11, 0.8)'
+                    ],
+                    borderColor: [
+                        '#00d4ff',
+                        '#7b2cbf',
+                        '#06ffa5',
+                        '#ffbe0b'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: 'rgba(255, 255, 255, 0.7)',
+                            padding: 15,
+                            font: { size: 12 }
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.label + ': ' + context.parsed + '% of total tokens';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

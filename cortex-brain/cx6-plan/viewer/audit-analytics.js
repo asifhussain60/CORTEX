@@ -154,10 +154,18 @@ class AuditAnalytics {
     updateMetrics() {
         const metrics = this.calculateMetrics();
         
-        document.getElementById('totalOperations').textContent = metrics.total;
-        document.getElementById('successRate').textContent = metrics.successRate + '%';
-        document.getElementById('activeComponents').textContent = metrics.components;
-        document.getElementById('avgResponseTime').textContent = metrics.avgDuration + 'ms';
+        // Optional: Update metric elements if they exist
+        const totalOps = document.getElementById('totalOperations');
+        const successRate = document.getElementById('successRate');
+        const activeComps = document.getElementById('activeComponents');
+        const avgTime = document.getElementById('avgResponseTime');
+        
+        if (totalOps) totalOps.textContent = metrics.total;
+        if (successRate) successRate.textContent = metrics.successRate + '%';
+        if (activeComps) activeComps.textContent = metrics.components;
+        if (avgTime) avgTime.textContent = metrics.avgDuration + 'ms';
+        
+        console.log('📊 Metrics calculated:', metrics);
     }
 
     /**
@@ -316,100 +324,118 @@ class AuditAnalytics {
 
         if (this.logs.length === 0) {
             container.innerHTML = `
-                <div class="alert alert-info">
-                    <i class="bi bi-info-circle"></i> No audit logs found. 
-                    Run some operations to generate audit trail data.
+                <div style="grid-column: 1/-1; text-align: center; padding: 2rem; color: rgba(255,255,255,0.5);">
+                    <i class="bi bi-info-circle" style="font-size: 2rem;"></i>
+                    <p style="margin-top: 1rem;">No audit logs found.</p>
                 </div>
             `;
             return;
         }
 
-        const html = this.logs.slice(0, 20).map(log => {
-            if (this.showJSON) {
-                return this.renderJSONEntry(log);
-            } else {
-                return this.renderFormattedEntry(log);
-            }
-        }).join('');
-
+        // Group logs by category and get summaries
+        const summaries = this.generateAuditSummaries();
+        
+        const html = summaries.map(summary => this.renderAuditCard(summary)).join('');
         container.innerHTML = html;
     }
 
     /**
-     * Render formatted audit entry
+     * Generate meaningful audit summaries from logs
      */
-    renderFormattedEntry(log) {
-        const levelClass = {
-            'error': 'danger',
-            'warning': 'warning',
-            'info': 'info',
-            'debug': 'secondary'
-        }[log.level] || 'secondary';
+    generateAuditSummaries() {
+        const summaries = [];
+        const categories = {};
 
-        const levelIcon = {
-            'error': 'x-circle-fill',
-            'warning': 'exclamation-triangle-fill',
-            'info': 'check-circle-fill',
-            'debug': 'bug-fill'
-        }[log.level] || 'circle-fill';
-
-        const time = new Date(log.timestamp).toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
+        // Group logs by category
+        this.logs.forEach(log => {
+            const cat = log.category || 'unknown';
+            if (!categories[cat]) {
+                categories[cat] = [];
+            }
+            categories[cat].push(log);
         });
 
-        const duration = log.duration_ms !== null && log.duration_ms !== undefined
-            ? `<span class="badge bg-secondary ms-2">${log.duration_ms}ms</span>`
-            : '';
+        // Create summary for each category
+        Object.entries(categories).slice(0, 6).forEach(([category, logs]) => {
+            const count = logs.length;
+            const successCount = logs.filter(l => l.level === 'info' || l.level === 'debug').length;
+            const errorCount = logs.filter(l => l.level === 'error').length;
+            const lastLog = logs[0];
+            const timestamp = new Date(lastLog.timestamp).toLocaleString();
+
+            const icons = {
+                'middleware': '⚙️',
+                'governance': '🛡️',
+                'state_management': '💾',
+                'orchestration': '🎯',
+                'validation': '✓',
+                'infrastructure': '🏗️',
+                'audit': '📊',
+                'unknown': '📝'
+            };
+
+            const icon = icons[category] || icons['unknown'];
+
+            summaries.push({
+                category,
+                icon,
+                count,
+                successCount,
+                errorCount,
+                successRate: Math.round((successCount / count) * 100),
+                lastLog: lastLog.operation || 'Operation executed',
+                timestamp,
+                level: errorCount > 0 ? 'error' : successCount === count ? 'success' : 'warning'
+            });
+        });
+
+        return summaries;
+    }
+
+    /**
+     * Render a meaningful audit summary card
+     */
+    renderAuditCard(summary) {
+        const badgeClass = {
+            'error': 'error',
+            'success': 'success',
+            'warning': 'warning'
+        }[summary.level] || 'info';
 
         return `
-            <div class="audit-entry mb-2 p-2 border-start border-3 border-${levelClass}" style="background: rgba(255,255,255,0.02);">
-                <div class="d-flex justify-content-between align-items-start mb-1">
-                    <div>
-                        <i class="bi bi-${levelIcon} text-${levelClass}"></i>
-                        <strong class="ms-1">${log.component || 'Unknown'}</strong>
-                        <span class="badge bg-${levelClass} ms-2">${log.level.toUpperCase()}</span>
-                        ${duration}
+            <div class="audit-entry">
+                <div class="entry-icon">${summary.icon}</div>
+                <div class="entry-title">${this.formatCategoryName(summary.category)}</div>
+                <div class="entry-summary">
+                    <strong>${summary.count}</strong> operations | 
+                    <strong style="color: #06ffa5;">${summary.successRate}%</strong> successful
+                    <div style="margin-top: 0.5rem; font-size: 0.9rem; color: rgba(255,255,255,0.7);">
+                        Last: ${summary.lastLog}
                     </div>
-                    <small class="text-muted">${time}</small>
                 </div>
-                <div class="small text-muted mb-1">
-                    <i class="bi bi-gear"></i> ${log.operation || 'N/A'}
+                <div class="entry-meta">
+                    <span>${new Date(summary.timestamp).toLocaleTimeString()}</span>
+                    <span class="entry-badge ${badgeClass}">${summary.level}</span>
                 </div>
-                <div class="small">${log.message || 'No message'}</div>
-                ${log.correlation_id ? `<div class="small text-muted mt-1"><i class="bi bi-link-45deg"></i> ${log.correlation_id}</div>` : ''}
             </div>
         `;
     }
 
     /**
-     * Render JSON entry
+     * Format category name for display
      */
-    renderJSONEntry(log) {
-        const json = JSON.stringify(log, null, 2);
-        return `
-            <div class="mb-2">
-                <pre class="bg-dark p-2 border rounded" style="font-size: 0.75rem; max-height: 200px; overflow-y: auto;"><code>${this.escapeHtml(json)}</code></pre>
-            </div>
-        `;
-    }
-
-    /**
-     * Escape HTML for safe display
-     */
-    escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    /**
-     * Toggle between formatted and JSON view
-     */
-    toggleView() {
-        this.showJSON = !this.showJSON;
-        this.renderAuditEntries();
+    formatCategoryName(category) {
+        const names = {
+            'middleware': 'Middleware',
+            'governance': 'Governance',
+            'state_management': 'State Management',
+            'orchestration': 'Orchestration',
+            'validation': 'Validation',
+            'infrastructure': 'Infrastructure',
+            'audit': 'Audit Trail',
+            'unknown': 'Operations'
+        };
+        return names[category] || category.replace(/_/g, ' ').toUpperCase();
     }
 
     /**

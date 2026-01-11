@@ -3,439 +3,707 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CORTEX 6.0 Dashboard - Implementation Progress</title>
+    <title>CORTEX 6.0 - Plan Overview & Execution Dashboard</title>
     
-    <!-- Bootstrap 5 Dark Theme -->
+    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Shared CORTEX Styles -->
+    <link rel="stylesheet" href="shared/styles.css">
     
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     
     <style>
-        :root {
-            --cortex-cyan: #00d4ff;
-            --cortex-purple: #7b2cbf;
-            --cortex-pink: #ff006e;
-            --cortex-green: #06ffa5;
-            --cortex-yellow: #ffbe0b;
-        }
+        /* ============================================================================
+           CORTEX 6.0 Plan Viewer - Complete Redesign
+           Glassmorphism + Dark Blue Theme + Proper Visual Hierarchy
+           ============================================================================ */
         
         body {
-            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            min-height: 100vh;
+            background: linear-gradient(135deg, #050814 0%, #0a0e27 50%, #050814 100%);
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
-        
-        /* Header Glow Effect */
-        .header-glow {
-            background: linear-gradient(135deg, var(--cortex-cyan), var(--cortex-purple));
-            padding: 2rem 0;
-            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+
+        /* Two-Column Layout: Metrics Right, Content Left */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 2rem;
+            padding: 2rem;
         }
-        
-        /* Metric Cards */
-        .metric-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 1.5rem;
-            transition: transform 0.2s, box-shadow 0.2s;
+
+        @media (max-width: 1200px) {
+            .dashboard-layout {
+                grid-template-columns: 1fr;
+            }
         }
-        
-        .metric-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.2);
+
+        /* Main Content Area */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
         }
-        
-        .metric-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--cortex-cyan), var(--cortex-green));
-            background-clip: text;
+
+        /* ============================================================================
+           TOP HERO SECTION
+           ============================================================================ */
+
+        .dashboard-hero {
+            background: linear-gradient(135deg, 
+                rgba(0, 212, 255, 0.08) 0%, 
+                rgba(123, 44, 191, 0.08) 50%,
+                rgba(0, 212, 255, 0.04) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 16px;
+            padding: 3rem;
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.1);
+        }
+
+        .dashboard-hero h1 {
+            background: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 50%, #06ffa5 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
         }
-        
-        .metric-label {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+
+        .dashboard-hero p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1rem;
+            margin-bottom: 0;
         }
-        
-        /* Phase Cards */
-        .phase-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+
+        /* ============================================================================
+           RIGHT SIDEBAR: KEY METRICS & QUICK STATUS
+           ============================================================================ */
+
+        .metrics-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .metric-card {
+            background: rgba(10, 14, 39, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 212, 255, 0.15);
             border-radius: 12px;
             padding: 1.5rem;
-            margin-bottom: 1rem;
-            border-left: 4px solid var(--cortex-cyan);
+            text-align: center;
             transition: all 0.3s ease;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
+            position: relative;
         }
-        
-        .phase-card.completed {
-            border-left-color: var(--cortex-green);
-            background: rgba(6, 255, 165, 0.05);
+
+        .metric-card:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.1);
+            transform: translateY(-4px);
         }
-        
-        .phase-card.in-progress {
-            border-left-color: var(--cortex-yellow);
-            background: rgba(255, 190, 11, 0.05);
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(0, 212, 255, 0.5), rgba(123, 44, 191, 0.5), transparent);
+            border-radius: 12px 12px 0 0;
         }
-        
-        .phase-card.blocked {
-            border-left-color: #dc3545;
-            background: rgba(220, 53, 69, 0.05);
+
+        .metric-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
         }
-        
-        /* Progress Bars */
-        .progress {
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #00d4ff;
+            margin-bottom: 0.3rem;
         }
-        
-        .progress-bar {
-            background: linear-gradient(90deg, var(--cortex-cyan), var(--cortex-green));
-            border-radius: 10px;
+
+        .metric-meta {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
         }
-        
-        /* Badges */
-        .badge-cyan {
-            background: rgba(0, 212, 255, 0.2);
-            color: var(--cortex-cyan);
-            border: 1px solid var(--cortex-cyan);
-        }
-        
-        .badge-green {
-            background: rgba(6, 255, 165, 0.2);
-            color: var(--cortex-green);
-            border: 1px solid var(--cortex-green);
-        }
-        
-        .badge-yellow {
-            background: rgba(255, 190, 11, 0.2);
-            color: var(--cortex-yellow);
-            border: 1px solid var(--cortex-yellow);
-        }
-        
-        .badge-red {
-            background: rgba(220, 53, 69, 0.2);
-            color: #dc3545;
-            border: 1px solid #dc3545;
-        }
-        
-        /* Equal height columns */
-        .row-equal-height {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        
-        .row-equal-height > [class*='col-'] {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        /* Documentation Links */
-        .doc-link-card {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+
+        /* Status Indicator */
+        .status-indicator {
+            background: rgba(6, 255, 165, 0.1);
+            border: 1px solid rgba(6, 255, 165, 0.3);
             border-radius: 8px;
             padding: 1rem;
-            transition: all 0.2s;
-            height: 100%;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .status-indicator.blocked {
+            background: rgba(255, 0, 110, 0.1);
+            border-color: rgba(255, 0, 110, 0.3);
+        }
+
+        .status-indicator.warning {
+            background: rgba(255, 190, 11, 0.1);
+            border-color: rgba(255, 190, 11, 0.3);
+        }
+
+        .status-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.3rem;
+        }
+
+        .status-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #06ffa5;
+        }
+
+        .status-indicator.blocked .status-value {
+            color: #ff006e;
+        }
+
+        .status-indicator.warning .status-value {
+            color: #ffbe0b;
+        }
+
+        /* ============================================================================
+           CRITICAL INSIGHTS
+           ============================================================================ */
+
+        .insights-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .insights-box {
+            background: rgba(123, 44, 191, 0.1);
+            border: 1px solid rgba(123, 44, 191, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .insights-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, rgba(123, 44, 191, 0.8), transparent);
+        }
+
+        .insights-box.success {
+            background: rgba(6, 255, 165, 0.08);
+            border-color: rgba(6, 255, 165, 0.3);
+        }
+
+        .insights-box.success::before {
+            background: linear-gradient(90deg, rgba(6, 255, 165, 0.8), transparent);
+        }
+
+        .insights-box.critical {
+            background: rgba(255, 0, 110, 0.08);
+            border-color: rgba(255, 0, 110, 0.3);
+        }
+
+        .insights-box.critical::before {
+            background: linear-gradient(90deg, rgba(255, 0, 110, 0.8), transparent);
+        }
+
+        .insights-box h4 {
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .insights-box.success h4 {
+            color: #06ffa5;
+        }
+
+        .insights-box.critical h4 {
+            color: #ff006e;
+        }
+
+        .insights-text {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+        }
+
+        /* ============================================================================
+           PHASE CARDS SECTION
+           ============================================================================ */
+
+        .phases-section h3 {
+            color: #00d4ff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
         }
-        
-        .doc-link-card:hover {
+
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .phase-card {
+            background: rgba(10, 14, 39, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: rgba(0, 212, 255, 0.3);
+            transition: width 0.3s ease;
+        }
+
+        .phase-card:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 12px 32px rgba(0, 212, 255, 0.15);
+            transform: translateY(-6px);
+        }
+
+        .phase-card:hover::before {
+            width: 5px;
+            background: #00d4ff;
+        }
+
+        .phase-header {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .phase-title {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: rgba(255, 190, 11, 0.2);
+            color: #ffbe0b;
+        }
+
+        .phase-badge.completed {
+            background: rgba(6, 255, 165, 0.2);
+            color: #06ffa5;
+        }
+
+        .phase-badge.blocked {
+            background: rgba(255, 0, 110, 0.2);
+            color: #ff006e;
+        }
+
+        .phase-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .phase-meta {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .phase-description {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .phase-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .phase-stat {
+            background: rgba(0, 212, 255, 0.05);
+            border-radius: 8px;
+            padding: 0.8rem;
+            text-align: center;
+        }
+
+        .phase-stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #00d4ff;
+            display: block;
+        }
+
+        .phase-stat-label {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            margin-top: 0.3rem;
+        }
+
+        .phase-progress {
+            height: 6px;
             background: rgba(255, 255, 255, 0.08);
-            border-color: var(--cortex-cyan);
-            transform: translateY(-2px);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1rem;
         }
-        
-        .doc-link-card a {
-            color: var(--cortex-cyan);
-            text-decoration: none;
+
+        .phase-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff 0%, #7b2cbf 100%);
+            border-radius: 10px;
+            transition: width 0.3s ease;
         }
-        
-        .doc-link-card a:hover {
-            color: var(--cortex-green);
+
+        .phase-progress-bar.warning {
+            background: linear-gradient(90deg, #ffbe0b 0%, #ffa500 100%);
         }
-        
+
+        .phase-progress-bar.danger {
+            background: linear-gradient(90deg, #ff006e 0%, #dc3545 100%);
+        }
+
+        /* ============================================================================
+           AUDIT ANALYTICS
+           ============================================================================ */
+
+        .audit-section h3 {
+            color: #00d4ff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .audit-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .audit-card {
+            background: rgba(10, 14, 39, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .audit-card:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.1);
+        }
+
+        .audit-metric-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .audit-metric-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #06ffa5;
+        }
+
+        /* ============================================================================
+           DOCUMENTATION SECTION
+           ============================================================================ */
+
+        .docs-section h3 {
+            color: #00d4ff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .doc-card {
+            background: rgba(10, 14, 39, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .doc-card:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.1);
+            transform: translateY(-4px);
+        }
+
         .doc-category {
             font-size: 0.75rem;
             text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 0.8rem;
             letter-spacing: 1px;
-            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .doc-title {
+            font-size: 1rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
         }
-        
-        /* Equal Height Cards */
-        .card.h-100 {
-            height: 100% !important;
+
+        .doc-title a {
+            color: #00d4ff;
+            text-decoration: none;
+            transition: color 0.3s ease;
         }
-        
-        .card.d-flex.flex-column {
-            display: flex;
-            flex-direction: column;
+
+        .doc-title a:hover {
+            color: #7b2cbf;
         }
-        
-        .card-body.flex-grow-1 {
-            flex: 1 1 auto;
-        }
-        
-        /* Chart Container */
-        .chart-container {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 2rem;
-            height: 400px;
-        }
-        
-        /* Audit Log */
-        .audit-log-container {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 1.5rem;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-        
-        .audit-entry {
-            background: rgba(255, 255, 255, 0.05);
-            border-left: 3px solid var(--cortex-cyan);
-            padding: 0.75rem;
-            margin-bottom: 0.5rem;
-            border-radius: 6px;
+
+        .doc-description {
             font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
         }
-        
-        .audit-entry.error {
-            border-left-color: var(--cortex-pink);
-        }
-        
-        .audit-entry.warning {
-            border-left-color: var(--cortex-yellow);
-        }
-        
-        .audit-entry.success {
-            border-left-color: var(--cortex-green);
-        }
-        
-        /* AC Badge Grid */
-        .ac-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 0.5rem;
-        }
-        
-        .ac-badge {
-            padding: 0.5rem;
+
+        /* ============================================================================
+           FOOTER
+           ============================================================================ */
+
+        .dashboard-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
             text-align: center;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            border: 1px solid;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+            margin-top: 3rem;
         }
-        
-        .ac-badge.implemented {
-            background: rgba(6, 255, 165, 0.1);
-            color: var(--cortex-green);
-            border-color: var(--cortex-green);
+
+        .dashboard-footer a {
+            color: #00d4ff;
+            text-decoration: none;
         }
-        
-        .ac-badge.partial {
-            background: rgba(255, 190, 11, 0.1);
-            color: var(--cortex-yellow);
-            border-color: var(--cortex-yellow);
+
+        .dashboard-footer a:hover {
+            color: #7b2cbf;
         }
-        
-        .ac-badge.planned {
-            background: rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.5);
-            border-color: rgba(255, 255, 255, 0.2);
+
+        /* ============================================================================
+           UTILITIES
+           ============================================================================ */
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
         }
-        
-        /* Scrollbar Styling */
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
-        
+
         ::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.05);
         }
-        
+
         ::-webkit-scrollbar-thumb {
-            background: var(--cortex-cyan);
+            background: rgba(0, 212, 255, 0.3);
             border-radius: 4px;
         }
-        
-        /* Progress Bar Enhancements */
-        .progress {
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: visible;
-            position: relative;
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 212, 255, 0.5);
         }
-        
-        .progress-bar {
-            background: linear-gradient(90deg, var(--cortex-cyan), var(--cortex-purple));
-            border-radius: 10px;
-            position: relative;
-            transition: width 0.6s ease;
-            box-shadow: 0 2px 10px rgba(0, 212, 255, 0.5);
+
+        /* ============================================================================
+           AUDIT ENTRIES & CHARTS STYLING
+           ============================================================================ */
+
+        #auditEntriesDisplay {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
         }
-        
-        .progress-bar.bg-success {
-            background: linear-gradient(90deg, var(--cortex-green), #00b894);
-            box-shadow: 0 2px 10px rgba(6, 255, 165, 0.5);
-        }
-        
-        .progress-bar.bg-warning {
-            background: linear-gradient(90deg, var(--cortex-yellow), #ffa500);
-            box-shadow: 0 2px 10px rgba(255, 190, 11, 0.5);
-        }
-        
-        .progress-bar.bg-danger {
-            background: linear-gradient(90deg, var(--cortex-pink), #dc3545);
-            box-shadow: 0 2px 10px rgba(255, 0, 110, 0.5);
-        }
-        
-        /* Animated progress bar */
-        @keyframes progressPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-        
-        .progress-bar.animated {
-            animation: progressPulse 2s ease-in-out infinite;
-        }
-        
-        /* Progress label overlay */
-        .progress-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            color: white;
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-        }
-        
-        /* Overall progress container */
-        .overall-progress-container {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+
+        #auditEntriesDisplay .audit-entry {
+            background: rgba(10, 14, 39, 0.5);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-top: 3px solid #00d4ff;
             padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-        
-        .overall-progress-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--cortex-cyan);
-        }
-        
-        .progress-milestone {
-            display: flex;
-            align-items: center;
-            margin-bottom: 0.75rem;
-        }
-        
-        .progress-milestone-label {
-            min-width: 150px;
-            font-size: 0.9rem;
-        }
-        
-        .progress-milestone .progress {
-            flex: 1;
-            margin: 0 1rem;
-        }
-        
-        .progress-milestone-value {
-            min-width: 60px;
-            text-align: right;
-            font-weight: 600;
-        }
-        
-        /* Phase card progress */
-        .phase-progress-wrapper {
-            margin: 1rem 0;
-            padding: 1rem;
-            background: rgba(0, 0, 0, 0.2);
             border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
         }
-        
-        .phase-progress-header {
+
+        #auditEntriesDisplay .audit-entry:hover {
+            background: rgba(10, 14, 39, 0.7);
+            border-color: rgba(0, 212, 255, 0.4);
+            border-top-color: #7b2cbf;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 212, 255, 0.15);
+        }
+
+        #auditEntriesDisplay .entry-icon {
+            font-size: 2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        #auditEntriesDisplay .entry-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #00d4ff;
+            margin-bottom: 0.5rem;
+        }
+
+        #auditEntriesDisplay .entry-summary {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.8rem;
+            line-height: 1.5;
+        }
+
+        #auditEntriesDisplay .entry-meta {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 0.5rem;
-        }
-        
-        .phase-progress-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
-            margin-top: 0.75rem;
-            font-size: 0.75rem;
-        }
-        
-        .phase-progress-stat {
-            text-align: center;
-            padding: 0.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 6px;
-        }
-        
-        .phase-progress-stat-value {
-            font-size: 1.2rem;
-            font-weight: 700;
-            display: block;
-        }
-        
-        .phase-progress-stat-label {
-            display: block;
-            color: rgba(255, 255, 255, 0.6);
-            margin-top: 0.25rem;
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        #auditEntriesDisplay .entry-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
         }
-        
-        .fade-in {
-            animation: fadeIn 0.5s ease-out;
+
+        #auditEntriesDisplay .entry-badge.success {
+            background: rgba(6, 255, 165, 0.2);
+            color: #06ffa5;
+        }
+
+        #auditEntriesDisplay .entry-badge.warning {
+            background: rgba(255, 190, 11, 0.2);
+            color: #ffbe0b;
+        }
+
+        #auditEntriesDisplay .entry-badge.error {
+            background: rgba(255, 0, 110, 0.2);
+            color: #ff006e;
+        }
+
+        #auditEntriesDisplay pre {
+            display: none;
+        }
+
+        /* Chart Container Styling */
+        #activityTimelineChart,
+        #categoryDistributionChart {
+            position: relative !important;
+            height: 250px !important;
+        }
+
+        /* Audit card metrics specific styling */
+        .audit-card .audit-metric-value {
+            color: #00d4ff;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .audit-card .audit-metric-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* CORTEX Logo Sizing */
+        .cortex-logo {
+            width: 200px !important;
+            height: 200px !important;
+            object-fit: contain;
         }
     </style>
 </head>
 <body>
-    <!-- CORTEX Standardized Header -->
+    <!-- CORTEX Header -->
     <div id="cortex-header-container"></div>
     
     <script>
-        // Configure header for this page
         const cortexHeaderConfig = {
-            pageTitle: "Dashboard",
-            pageDescription: "Production-Grade AI Orchestration Implementation Progress",
+            pageTitle: "Plan Overview & Dashboard",
+            pageDescription: "CORTEX 6.0 Implementation Progress Tracking",
             designScore: "97/95",
             loadScoreFromPlan: true,
             breadcrumbs: [
@@ -446,907 +714,451 @@
     </script>
     <script src="shared/header-loader.js"></script>
 
-    <div class="container mt-4">
-        <!-- Key Metrics Dashboard -->
-        <div class="row g-3 mb-4 fade-in">
-            <div class="col-md-3">
-                <div class="metric-card">
-                    <div class="metric-label">Total AC-IDs</div>
-                    <div class="metric-value" id="totalAcIds">97</div>
-                    <div class="text-muted small">Acceptance Criteria</div>
+    <!-- Main Dashboard Container -->
+    <div class="dashboard-layout fade-in">
+        <!-- LEFT COLUMN: Main Content -->
+        <div class="main-content">
+            <!-- Critical Insights -->
+            <section class="insights-section">
+                <div class="insights-box success">
+                    <h4><i class="bi bi-check-circle"></i> Phase 1 Foundation</h4>
+                    <p class="insights-text">
+                        48% Complete (16/33 AC-IDs). Enterprise audit logger, 4-tier governance, and state management successfully implemented with 99.4% test coverage.
+                    </p>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="metric-card">
-                    <div class="metric-label">Completed</div>
-                    <div class="metric-value" id="completedAcIds">18</div>
-                    <div class="text-muted small">18.5% Progress</div>
+                <div class="insights-box critical">
+                    <h4><i class="bi bi-exclamation-triangle"></i> Phase 1.5 STS Gate</h4>
+                    <p class="insights-text">
+                        85% Complete (2.55/3 AC-IDs). Framework validation with 100 test intents created. 4/5 test suites passing. Awaiting MasterOrchestrator integration.
+                    </p>
                 </div>
-            </div>
-            <div class="col-md-3">
-                <div class="metric-card">
-                    <div class="metric-label">Current Phase</div>
-                    <div class="metric-value">1.5</div>
-                    <div class="text-muted small">STS Validation</div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="metric-card">
-                    <div class="metric-label">Test Coverage</div>
-                    <div class="metric-value">99.4%</div>
-                    <div class="text-muted small">1232/1239 Passing</div>
-                </div>
-            </div>
-        </div>
+            </section>
 
-        <!-- Overall Implementation Progress -->
-        <div class="overall-progress-container fade-in">
-            <div class="overall-progress-title">
-                <i class="bi bi-speedometer2"></i> Overall Implementation Progress
-            </div>
-            
-            <div class="progress-milestone">
-                <div class="progress-milestone-label">Total Progress</div>
-                <div class="progress" style="height: 12px;">
-                    <div class="progress-bar animated" role="progressbar" style="width: 18.5%" aria-valuenow="18.5" aria-valuemin="0" aria-valuemax="100">
-                        <span class="progress-label">18.5%</span>
+            <!-- Phases Section -->
+            <section class="phases-section">
+                <h3><i class="bi bi-diagram-3"></i> Implementation Phases</h3>
+                <div class="phases-grid">
+                    <!-- Phase 1 -->
+                    <div class="phase-card fade-in">
+                        <div class="phase-header">
+                            <div class="phase-title">
+                                <span class="phase-badge completed">Phase 1</span>
+                                <div>
+                                    <div class="phase-name">Foundation</div>
+                                    <div class="phase-meta">33 AC-IDs</div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="phase-description">Enterprise audit, 4-tier governance, state management</p>
+                        <div class="phase-stats">
+                            <div class="phase-stat">
+                                <span class="phase-stat-value">16</span>
+                                <span class="phase-stat-label">Done</span>
+                            </div>
+                            <div class="phase-stat">
+                                <span class="phase-stat-value">17</span>
+                                <span class="phase-stat-label">Left</span>
+                            </div>
+                            <div class="phase-stat">
+                                <span class="phase-stat-value">48%</span>
+                                <span class="phase-stat-label">Progress</span>
+                            </div>
+                        </div>
+                        <div class="phase-progress">
+                            <div class="phase-progress-bar warning" style="width: 48%;"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="progress-milestone-value text-cyan">18 / 97 AC-IDs</div>
-            </div>
-            
-            <div class="progress-milestone">
-                <div class="progress-milestone-label">Phase 1 Foundation</div>
-                <div class="progress" style="height: 10px;">
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: 48%" aria-valuenow="48" aria-valuemin="0" aria-valuemax="100">
-                        <span class="progress-label">48%</span>
-                    </div>
-                </div>
-                <div class="progress-milestone-value text-warning">16 / 33 AC-IDs</div>
-            </div>
-            
-            <div class="progress-milestone">
-                <div class="progress-milestone-label">Phase 1.5 STS</div>
-                <div class="progress" style="height: 10px;">
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">
-                        <span class="progress-label">85%</span>
-                    </div>
-                </div>
-                <div class="progress-milestone-value text-warning">2.55 / 3 AC-IDs</div>
-            </div>
-            
-            <div class="progress-milestone">
-                <div class="progress-milestone-label">Phase 2 Core</div>
-                <div class="progress" style="height: 10px;">
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <div class="progress-milestone-value text-danger">0 / 23 AC-IDs</div>
-            </div>
-            
-            <div class="progress-milestone">
-                <div class="progress-milestone-label">Phase 3 Features</div>
-                <div class="progress" style="height: 10px;">
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <div class="progress-milestone-value text-danger">0 / 24 AC-IDs</div>
-            </div>
-            
-            <div class="progress-milestone">
-                <div class="progress-milestone-label">Phase 4 Intelligence</div>
-                <div class="progress" style="height: 10px;">
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-                <div class="progress-milestone-value text-danger">0 / 31 AC-IDs</div>
-            </div>
-            
-            <hr class="my-3" style="border-color: rgba(255, 255, 255, 0.1);">
-            
-            <div class="row text-center small">
-                <div class="col-3">
-                    <div class="text-success fw-bold" style="font-size: 1.5rem;">99.4%</div>
-                    <div class="text-muted">Test Coverage</div>
-                </div>
-                <div class="col-3">
-                    <div class="text-success fw-bold" style="font-size: 1.5rem;">97/95</div>
-                    <div class="text-muted">Design Score</div>
-                </div>
-                <div class="col-3">
-                    <div class="text-cyan fw-bold" style="font-size: 1.5rem;">23</div>
-                    <div class="text-muted">CORE Rules</div>
-                </div>
-                <div class="col-3">
-                    <div class="text-warning fw-bold" style="font-size: 1.5rem;">~20wk</div>
-                    <div class="text-muted">Est. Completion</div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Progress Charts Row -->
-        <div class="row g-3 mb-4 fade-in">
-            <div class="col-lg-6">
-                <div class="chart-container">
-                    <canvas id="phaseProgressChart"></canvas>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="chart-container">
-                    <canvas id="acStatusChart"></canvas>
-                </div>
-            </div>
-        </div>
+                    <!-- Phase 1.5 -->
+                    <div class="phase-card fade-in">
+                        <div class="phase-header">
+                            <div class="phase-title">
+                                <span class="phase-badge">Phase 1.5</span>
+                                <div>
+                                    <div class="phase-name">STS Gate</div>
+                                    <div class="phase-meta">3 AC-IDs (Critical Path)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="phase-description">Framework validation, 100 test intents, golden corpus</p>
+                        <div class="phase-stats">
+                            <div class="phase-stat">
+                                <span class="phase-stat-value">2.55</span>
+                                <span class="phase-stat-label">Done</span>
+                            </div>
+                            <div class="phase-stat">
+                                <span class="phase-stat-value">0.45</span>
+                                <span class="phase-stat-label">Left</span>
+                            </div>
+                            <div class="phase-stat">
+                                <span class="phase-stat-value">85%</span>
+                                <span class="phase-stat-label">Progress</span>
+                            </div>
+                        </div>
+                        <div class="phase-progress">
+                            <div class="phase-progress-bar warning" style="width: 85%;"></div>
+                        </div>
+                    </div>
 
-        <!-- Phase Timeline -->
-        <div class="mb-4 fade-in">
-            <h3 class="mb-3"><i class="bi bi-diagram-3"></i> Implementation Phases</h3>
-            
-            <!-- Phases Grid - Multi-column -->
-            <div class="row row-equal-height g-3">
-                <!-- Phase 1 -->
-                <div class="col-lg-6">
-                    <div class="phase-card in-progress">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <div>
-                                <h5 class="mb-1">
-                                    <span class="badge badge-yellow">Phase 1</span>
-                                    Foundation Enhancement
-                                </h5>
-                                <small class="text-muted">Week 1-2 | 33 AC-IDs</small>
-                            </div>
-                            <span class="badge badge-yellow">PARTIAL 48%</span>
-                        </div>
-                        <p class="text-muted small mb-2">
-                            Enterprise audit logger, 4-tier governance, state management, lifecycle, evidence bundles, security layer
-                        </p>
-                        
-                        <!-- Enhanced Phase Progress -->
-                        <div class="phase-progress-wrapper">
-                            <div class="phase-progress-header">
-                                <span class="fw-bold">Phase Completion</span>
-                                <span class="badge badge-warning">48% Complete</span>
-                            </div>
-                            <div class="progress" style="height: 16px;">
-                                <div class="progress-bar bg-warning animated" role="progressbar" style="width: 48%" aria-valuenow="48" aria-valuemin="0" aria-valuemax="100">
-                                    <span class="progress-label" style="font-size: 0.75rem;">16 / 33 AC-IDs</span>
-                                </div>
-                            </div>
-                            <div class="phase-progress-stats">
-                                <div class="phase-progress-stat">
-                                    <span class="phase-progress-stat-value text-success">16</span>
-                                    <span class="phase-progress-stat-label">Completed</span>
-                                </div>
-                                <div class="phase-progress-stat">
-                                    <span class="phase-progress-stat-value text-warning">17</span>
-                                    <span class="phase-progress-stat-label">Remaining</span>
-                                </div>
-                                <div class="phase-progress-stat">
-                                    <span class="phase-progress-stat-value text-cyan">33</span>
-                                    <span class="phase-progress-stat-label">Total</span>
+                    <!-- Phase 2 -->
+                    <div class="phase-card fade-in">
+                        <div class="phase-header">
+                            <div class="phase-title">
+                                <span class="phase-badge blocked">Phase 2</span>
+                                <div>
+                                    <div class="phase-name">Orchestration</div>
+                                    <div class="phase-meta">23 AC-IDs</div>
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Completed AC-IDs -->
-                        <details class="mt-3">
-                            <summary class="text-cyan cursor-pointer">✅ Completed (16)</summary>
-                            <div class="ac-grid mt-2">
-                                <div class="ac-badge implemented">AC-AUDIT-001</div>
-                                <div class="ac-badge implemented">AC-AUDIT-002</div>
-                                <div class="ac-badge implemented">AC-AUDIT-003</div>
-                                <div class="ac-badge implemented">AC-AUDIT-004</div>
-                                <div class="ac-badge implemented">AC-AUDIT-005</div>
-                                <div class="ac-badge implemented">AC-AUDIT-006</div>
-                                <div class="ac-badge implemented">AC-GOV-001</div>
-                                <div class="ac-badge implemented">AC-GOV-002</div>
-                                <div class="ac-badge implemented">AC-GOV-003</div>
-                                <div class="ac-badge implemented">AC-GOV-004</div>
-                                <div class="ac-badge implemented">AC-GOV-005</div>
-                                <div class="ac-badge implemented">AC-STATE-001</div>
-                                <div class="ac-badge implemented">AC-STATE-002</div>
-                                <div class="ac-badge implemented">AC-STATE-003</div>
+                        <p class="phase-description">MasterOrchestrator, TodoManager, TDD-Master, Planning</p>
+                        <div class="phase-stats">
+                            <div class="phase-stat">
+                                <span class="phase-stat-value">0</span>
+                                <span class="phase-stat-label">Done</span>
                             </div>
-                        </details>
-                        
-                        <!-- Planned AC-IDs -->
-                        <details class="mt-2">
-                            <summary class="text-muted cursor-pointer">⏳ Remaining (17)</summary>
-                            <div class="ac-grid mt-2">
-                                <div class="ac-badge planned">AC-AUDIT-007</div>
-                                <div class="ac-badge planned">AC-LIFECYCLE-001</div>
-                                <div class="ac-badge planned">AC-LIFECYCLE-002</div>
-                                <div class="ac-badge planned">AC-LIFECYCLE-003</div>
-                                <div class="ac-badge planned">AC-EVIDENCE-001</div>
-                                <div class="ac-badge planned">AC-EVIDENCE-002</div>
-                                <div class="ac-badge planned">AC-EVIDENCE-003</div>
-                                <div class="ac-badge planned">AC-SECURITY-001</div>
-                                <div class="ac-badge planned">AC-SECURITY-002</div>
-                                <div class="ac-badge planned">AC-SECURITY-003</div>
-                                <div class="ac-badge planned">AC-SECURITY-004</div>
-                                <div class="ac-badge planned">AC-SECURITY-005</div>
-                                <div class="ac-badge planned">AC-SECURITY-006</div>
-                                <div class="ac-badge planned">AC-TEST-001</div>
-                                <div class="ac-badge planned">AC-TEST-002</div>
-                                <div class="ac-badge planned">AC-TEST-003</div>
-                                <div class="ac-badge planned">AC-TEST-004</div>
+                            <div class="phase-stat">
+                                <span class="phase-stat-value">23</span>
+                                <span class="phase-stat-label">Left</span>
                             </div>
-                        </details>
+                            <div class="phase-stat">
+                                <span class="phase-stat-value">0%</span>
+                                <span class="phase-stat-label">Progress</span>
+                            </div>
+                        </div>
+                        <div class="phase-progress">
+                            <div class="phase-progress-bar danger" style="width: 5%;"></div>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Phase 1.5 -->
-                <div class="col-lg-6">
-                    <div class="phase-card in-progress">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <div>
-                                <h5 class="mb-1">
-                                    <span class="badge badge-yellow">Phase 1.5</span>
-                                    STS Validation (Capability 0)
-                                </h5>
-                                <small class="text-muted">Week 1 | 3 AC-IDs | HIGH PRIORITY</small>
-                            </div>
-                            <span class="badge badge-yellow">IN PROGRESS 85%</span>
-                        </div>
-                        <p class="text-muted small mb-2">
-                            ⚠️ Framework validation with 100 test intents across 5 categories (routing, unicode, governance, policy, security)
-                        </p>
-                        
-                        <!-- Enhanced Phase Progress -->
-                        <div class="phase-progress-wrapper">
-                            <div class="phase-progress-header">
-                                <span class="fw-bold">Phase Completion</span>
-                                <span class="badge badge-warning">85% Complete</span>
-                            </div>
-                            <div class="progress" style="height: 16px;">
-                                <div class="progress-bar bg-warning animated" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">
-                                    <span class="progress-label" style="font-size: 0.75rem;">2.55 / 3 AC-IDs</span>
-                                </div>
-                            </div>
-                            <div class="phase-progress-stats">
-                                <div class="phase-progress-stat">
-                                    <span class="phase-progress-stat-value text-warning">2.55</span>
-                                    <span class="phase-progress-stat-label">Completed</span>
-                                </div>
-                                <div class="phase-progress-stat">
-                                    <span class="phase-progress-stat-value text-warning">0.45</span>
-                                    <span class="phase-progress-stat-label">Remaining</span>
-                                </div>
-                                <div class="phase-progress-stat">
-                                    <span class="phase-progress-stat-value text-cyan">3</span>
-                                    <span class="phase-progress-stat-label">Total</span>
+                    <!-- Phase 3 -->
+                    <div class="phase-card fade-in">
+                        <div class="phase-header">
+                            <div class="phase-title">
+                                <span class="phase-badge blocked">Phase 3</span>
+                                <div>
+                                    <div class="phase-name">Features</div>
+                                    <div class="phase-meta">24 AC-IDs</div>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="ac-grid mt-3">
-                            <div class="ac-badge partial">AC-STS-001</div>
-                            <div class="ac-badge partial">AC-STS-002</div>
-                            <div class="ac-badge partial">AC-STS-003</div>
+                        <p class="phase-description">ADO, Crawlers, Refinement, Sanitization</p>
+                        <div class="phase-stats">
+                            <div class="phase-stat">
+                                <span class="phase-stat-value">0</span>
+                                <span class="phase-stat-label">Done</span>
+                            </div>
+                            <div class="phase-stat">
+                                <span class="phase-stat-value">24</span>
+                                <span class="phase-stat-label">Left</span>
+                            </div>
+                            <div class="phase-stat">
+                                <span class="phase-stat-value">0%</span>
+                                <span class="phase-stat-label">Progress</span>
+                            </div>
                         </div>
-                        
-                        <div class="alert alert-warning mt-3 mb-0" role="alert">
-                            <i class="bi bi-exclamation-triangle"></i>
-                            <strong>Critical:</strong> Golden corpus (36,815 bytes) and 5 test suites created. 4/5 passing. Awaiting MasterOrchestrator integration.
+                        <div class="phase-progress">
+                            <div class="phase-progress-bar danger" style="width: 5%;"></div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Phase 2 -->
-                <div class="col-lg-6">
-                    <div class="phase-card blocked">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <div>
-                                <h5 class="mb-1">
-                                    <span class="badge badge-red">Phase 2</span>
-                                    Orchestration Core
-                                </h5>
-                                <small class="text-muted">Week 3-6 | 23 AC-IDs</small>
-                            </div>
-                            <span class="badge badge-red">BLOCKED 0%</span>
-                        </div>
-                        <p class="text-muted small mb-2">
-                            MasterOrchestrator, TodoManager, TDD-Master, Knowledge Practices, Planning v5
-                        </p>
-                        
-                        <!-- Enhanced Phase Progress -->
-                        <div class="phase-progress-wrapper">
-                            <div class="phase-progress-header">
-                                <span class="fw-bold">Phase Completion</span>
-                                <span class="badge badge-danger">0% Complete</span>
-                            </div>
-                            <div class="progress" style="height: 16px;">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                    <span class="progress-label" style="font-size: 0.75rem;">0 / 23 AC-IDs</span>
-                                </div>
-                            </div>
-                            <div class="phase-progress-stats">
-                                <div class="phase-progress-stat">
-                                    <span class="phase-progress-stat-value text-danger">0</span>
-                                    <span class="phase-progress-stat-label">Completed</span>
-                                </div>
-                                <div class="phase-progress-stat">
-                                    <span class="phase-progress-stat-value text-warning">23</span>
-                                    <span class="phase-progress-stat-label">Remaining</span>
-                                </div>
-                                <div class="phase-progress-stat">
-                                    <span class="phase-progress-stat-value text-cyan">23</span>
-                                    <span class="phase-progress-stat-label">Total</span>
+                    <!-- Phase 4 -->
+                    <div class="phase-card fade-in">
+                        <div class="phase-header">
+                            <div class="phase-title">
+                                <span class="phase-badge blocked">Phase 4</span>
+                                <div>
+                                    <div class="phase-name">Intelligence</div>
+                                    <div class="phase-meta">31 AC-IDs</div>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="alert alert-danger mt-2 mb-0" role="alert">
-                            <i class="bi bi-lock"></i> Blocked until Phase 1 + 1.5 complete
+                        <p class="phase-description">LLM Classifier, Vision API, Knowledge Graph</p>
+                        <div class="phase-stats">
+                            <div class="phase-stat">
+                                <span class="phase-stat-value">0</span>
+                                <span class="phase-stat-label">Done</span>
+                            </div>
+                            <div class="phase-stat">
+                                <span class="phase-stat-value">31</span>
+                                <span class="phase-stat-label">Left</span>
+                            </div>
+                            <div class="phase-stat">
+                                <span class="phase-stat-value">0%</span>
+                                <span class="phase-stat-label">Progress</span>
+                            </div>
+                        </div>
+                        <div class="phase-progress">
+                            <div class="phase-progress-bar danger" style="width: 5%;"></div>
                         </div>
                     </div>
                 </div>
+            </section>
 
-                <!-- Phase 3 -->
-                <div class="col-lg-6">
-                    <div class="phase-card blocked">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <div>
-                                <h5 class="mb-1">
-                                    <span class="badge badge-red">Phase 3</span>
-                                    Feature Orchestrators
-                                </h5>
-                                <small class="text-muted">Week 7-12 | 24 AC-IDs</small>
-                            </div>
-                            <span class="badge badge-red">BLOCKED 0%</span>
-                        </div>
-                        <p class="text-muted small mb-2">
-                            Crawler, Knowledge Graph, Onboarding, Scaffolder
-                        </p>
-                        
-                        <!-- Enhanced Phase Progress -->
-                        <div class="phase-progress-wrapper">
-                            <div class="phase-progress-header">
-                                <span class="fw-bold">Phase Completion</span>
-                                <span class="badge badge-danger">0% Complete</span>
-                            </div>
-                            <div class="progress" style="height: 16px;">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                    <span class="progress-label" style="font-size: 0.75rem;">0 / 24 AC-IDs</span>
-                                </div>
-                            </div>
-                            <div class="phase-progress-stats">
-                                <div class="phase-progress-stat">
-                                    <span class="phase-progress-stat-value text-danger">0</span>
-                                    <span class="phase-progress-stat-label">Completed</span>
-                                </div>
-                                <div class="phase-progress-stat">
-                                    <span class="phase-progress-stat-value text-warning">24</span>
-                                    <span class="phase-progress-stat-label">Remaining</span>
-                                </div>
-                                <div class="phase-progress-stat">
-                                    <span class="phase-progress-stat-value text-cyan">24</span>
-                                    <span class="phase-progress-stat-label">Total</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="alert alert-danger mt-2 mb-0" role="alert">
-                            <i class="bi bi-lock"></i> Blocked until Phase 2 complete
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Phase 4 -->
-                <div class="col-lg-6">
-                    <div class="phase-card blocked">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <div>
-                                <h5 class="mb-1">
-                                    <span class="badge badge-red">Phase 4</span>
-                                    Intelligence Layer
-                                </h5>
-                                <small class="text-muted">Week 13-20 | 31 AC-IDs</small>
-                            </div>
-                            <span class="badge badge-red">BLOCKED 0%</span>
-                        </div>
-                        <p class="text-muted small mb-2">
-                            GitHub Copilot Bridge, Interaction Management, Progressive Rollout
-                        </p>
-                        
-                        <!-- Enhanced Phase Progress -->
-                        <div class="phase-progress-wrapper">
-                            <div class="phase-progress-header">
-                                <span class="fw-bold">Phase Completion</span>
-                                <span class="badge badge-danger">0% Complete</span>
-                            </div>
-                            <div class="progress" style="height: 16px;">
-                                <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                    <span class="progress-label" style="font-size: 0.75rem;">0 / 31 AC-IDs</span>
-                                </div>
-                            </div>
-                            <div class="phase-progress-stats">
-                                <div class="phase-progress-stat">
-                                    <span class="phase-progress-stat-value text-danger">0</span>
-                                    <span class="phase-progress-stat-label">Completed</span>
-                                </div>
-                                <div class="phase-progress-stat">
-                                    <span class="phase-progress-stat-value text-warning">31</span>
-                                    <span class="phase-progress-stat-label">Remaining</span>
-                                </div>
-                                <div class="phase-progress-stat">
-                                    <span class="phase-progress-stat-value text-cyan">31</span>
-                                    <span class="phase-progress-stat-label">Total</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="alert alert-danger mt-2 mb-0" role="alert">
-                            <i class="bi bi-lock"></i> Blocked until Phase 3 complete
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Audit Analytics Dashboard -->
-        <div class="mb-4 fade-in">
-            <h3 class="mb-3"><i class="bi bi-graph-up"></i> Audit Trail Analytics</h3>
-            
-            <!-- Audit Metrics Cards -->
-            <div class="row g-3 mb-3">
-                <div class="col-md-3">
-                    <div class="metric-card">
-                        <div class="metric-label">Total Operations</div>
-                        <div class="metric-value" id="totalOperations">0</div>
-                        <div class="small text-muted">Last 24 hours</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="metric-card">
-                        <div class="metric-label">Success Rate</div>
-                        <div class="metric-value text-success" id="successRate">0%</div>
-                        <div class="small text-muted">Info vs Errors</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="metric-card">
-                        <div class="metric-label">Components Active</div>
-                        <div class="metric-value" id="activeComponents">0</div>
-                        <div class="small text-muted">Unique components</div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="metric-card">
-                        <div class="metric-label">Avg Response Time</div>
-                        <div class="metric-value text-info" id="avgResponseTime">0ms</div>
-                        <div class="small text-muted">With duration data</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Audit Charts & Logs -->
-            <div class="row row-equal-height g-3">
-                <!-- Activity Timeline Chart -->
-                <div class="col-lg-6">
-                    <div class="card bg-dark border-secondary h-100 d-flex flex-column">
-                        <div class="card-header">
-                            <h5 class="mb-0"><i class="bi bi-activity"></i> Activity Timeline</h5>
-                        </div>
-                        <div class="card-body flex-grow-1">
-                            <canvas id="activityTimelineChart" style="max-height: 250px;"></canvas>
-                            <hr>
-                            <h6 class="mb-2"><i class="bi bi-pie-chart"></i> Category Distribution</h6>
-                            <canvas id="categoryDistributionChart" style="max-height: 200px;"></canvas>
-                        </div>
-                    </div>
-                </div>
+            <!-- Overall Progress Bar Section -->
+            <section style="background: rgba(10, 14, 39, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(0, 212, 255, 0.15); border-radius: 12px; padding: 2rem; margin-top: 2rem;">
+                <h3 style="color: #00d4ff; font-size: 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem;">
+                    <i class="bi bi-speedometer2"></i> Overall Implementation Progress
+                </h3>
                 
-                <!-- Recent Audit Entries -->
-                <div class="col-lg-6">
-                    <div class="card bg-dark border-secondary h-100 d-flex flex-column">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0"><i class="bi bi-list-ul"></i> Recent Audit Entries</h5>
-                            <button class="btn btn-sm btn-outline-light" onclick="toggleAuditView()">
-                                <i class="bi bi-code-slash"></i> Toggle JSON
-                            </button>
+                <!-- Overall Progress -->
+                <div style="margin-bottom: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.8rem;">
+                        <span style="color: rgba(255, 255, 255, 0.7); font-weight: 600;">Total Progress</span>
+                        <span style="color: #00d4ff; font-weight: 700; font-size: 1.2rem;">18.5% (18 / 97 AC-IDs)</span>
+                    </div>
+                    <div style="height: 12px; background: rgba(255, 255, 255, 0.08); border-radius: 10px; overflow: hidden;">
+                        <div style="height: 100%; width: 18.5%; background: linear-gradient(90deg, #00d4ff 0%, #7b2cbf 100%); border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 212, 255, 0.5);"></div>
+                    </div>
+                </div>
+
+                <!-- Phase Breakdowns -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <!-- Phase 1 -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span style="color: rgba(255, 255, 255, 0.6);">Phase 1: Foundation</span>
+                            <span style="color: #ffbe0b; font-weight: 700;">48% (16 / 33)</span>
                         </div>
-                        <div class="card-body flex-grow-1" style="overflow-y: auto; max-height: 500px;">
-                            <div id="auditEntriesDisplay"></div>
+                        <div style="height: 8px; background: rgba(255, 255, 255, 0.08); border-radius: 10px; overflow: hidden;">
+                            <div style="height: 100%; width: 48%; background: linear-gradient(90deg, #ffbe0b 0%, #ffa500 100%);"></div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 1.5 -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span style="color: rgba(255, 255, 255, 0.6);">Phase 1.5: STS Gate</span>
+                            <span style="color: #ffbe0b; font-weight: 700;">85% (2.55 / 3)</span>
+                        </div>
+                        <div style="height: 8px; background: rgba(255, 255, 255, 0.08); border-radius: 10px; overflow: hidden;">
+                            <div style="height: 100%; width: 85%; background: linear-gradient(90deg, #ffbe0b 0%, #ffa500 100%);"></div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 2 -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span style="color: rgba(255, 255, 255, 0.6);">Phase 2: Orchestration</span>
+                            <span style="color: #ff006e; font-weight: 700;">0% (0 / 23)</span>
+                        </div>
+                        <div style="height: 8px; background: rgba(255, 255, 255, 0.08); border-radius: 10px; overflow: hidden;">
+                            <div style="height: 100%; width: 0%; background: linear-gradient(90deg, #ff006e 0%, #dc3545 100%);"></div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 3 -->
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span style="color: rgba(255, 255, 255, 0.6);">Phase 3: Features</span>
+                            <span style="color: #ff006e; font-weight: 700;">0% (0 / 24)</span>
+                        </div>
+                        <div style="height: 8px; background: rgba(255, 255, 255, 0.08); border-radius: 10px; overflow: hidden;">
+                            <div style="height: 100%; width: 0%; background: linear-gradient(90deg, #ff006e 0%, #dc3545 100%);"></div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 4 -->
+                    <div style="grid-column: 1;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span style="color: rgba(255, 255, 255, 0.6);">Phase 4: Intelligence</span>
+                            <span style="color: #ff006e; font-weight: 700;">0% (0 / 31)</span>
+                        </div>
+                        <div style="height: 8px; background: rgba(255, 255, 255, 0.08); border-radius: 10px; overflow: hidden;">
+                            <div style="height: 100%; width: 0%; background: linear-gradient(90deg, #ff006e 0%, #dc3545 100%);"></div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- Charts Section -->
+            <section style="margin-top: 2rem;">
+                <h3 style="color: #00d4ff; font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem;">
+                    <i class="bi bi-graph-up"></i> Analytics & Trends
+                </h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+                    <!-- Activity Timeline Chart -->
+                    <div style="background: rgba(10, 14, 39, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(0, 212, 255, 0.15); border-radius: 12px; padding: 1.5rem;">
+                        <h5 style="color: #00d4ff; margin-bottom: 1rem; font-weight: 700;">Activity Timeline (24h)</h5>
+                        <canvas id="activityTimelineChart" style="max-height: 250px;"></canvas>
+                    </div>
+
+                    <!-- Category Distribution Chart -->
+                    <div style="background: rgba(10, 14, 39, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(0, 212, 255, 0.15); border-radius: 12px; padding: 1.5rem;">
+                        <h5 style="color: #00d4ff; margin-bottom: 1rem; font-weight: 700;">Audit Category Distribution</h5>
+                        <canvas id="categoryDistributionChart" style="max-height: 250px;"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Audit Metrics Cards -->
+            <section>
+                <h3 style="color: #00d4ff; font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem;">
+                    <i class="bi bi-shield-check"></i> System Health & Metrics
+                </h3>
+                <div class="audit-cards">
+                    <div class="audit-card">
+                        <div class="audit-metric-label">Test Coverage</div>
+                        <div class="audit-metric-value">99.4%</div>
+                    </div>
+                    <div class="audit-card">
+                        <div class="audit-metric-label">Tests Passing</div>
+                        <div class="audit-metric-value">1,232</div>
+                    </div>
+                    <div class="audit-card">
+                        <div class="audit-metric-label">CORE Rules</div>
+                        <div class="audit-metric-value">23</div>
+                    </div>
+                    <div class="audit-card">
+                        <div class="audit-metric-label">Design Score</div>
+                        <div class="audit-metric-value">97/95</div>
+                    </div>
+                    <div class="audit-card">
+                        <div class="audit-metric-label">AC-IDs Complete</div>
+                        <div class="audit-metric-value">18</div>
+                    </div>
+                    <div class="audit-card">
+                        <div class="audit-metric-label">Overall Progress</div>
+                        <div class="audit-metric-value">18.5%</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Audit Log Section -->
+            <section style="margin-top: 2rem;">
+                <h3 style="color: #00d4ff; font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem;">
+                    <span><i class="bi bi-list-ul"></i> Audit Trail & Operations</span>
+                </h3>
+                <div style="background: rgba(10, 14, 39, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(0, 212, 255, 0.15); border-radius: 12px; padding: 1.5rem; max-height: 500px; overflow-y: auto;">
+                    <div id="auditEntriesDisplay">
+                        <div style="color: rgba(255, 255, 255, 0.5); text-align: center; padding: 2rem;">
+                            <i class="bi bi-hourglass-split" style="font-size: 2rem;"></i>
+                            <p style="margin-top: 1rem;">Loading audit trail...</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Documentation -->
+            <section class="docs-section">
+                <h3><i class="bi bi-book"></i> Documentation & Resources</h3>
+                <div class="docs-grid">
+                    <div class="doc-card">
+                        <div class="doc-category">Planning</div>
+                        <div class="doc-title">
+                            <a href="../../cortex-brain/cx6-plan/master-plan.yaml" target="_blank">Master Plan</a>
+                        </div>
+                        <p class="doc-description">Complete 97 AC-ID structure with phases and milestones</p>
+                    </div>
+                    <div class="doc-card">
+                        <div class="doc-category">Planning</div>
+                        <div class="doc-title">
+                            <a href="../../cortex-brain/cx6-plan/implementation-roadmap.md" target="_blank">Implementation Roadmap</a>
+                        </div>
+                        <p class="doc-description">20-week corrected plan with STS validation gate</p>
+                    </div>
+                    <div class="doc-card">
+                        <div class="doc-category">Analysis</div>
+                        <div class="doc-title">
+                            <a href="../../cortex-brain/cx6-plan/validation/cx6-requirements-gap-analysis.md" target="_blank">Gap Analysis</a>
+                        </div>
+                        <p class="doc-description">Requirements gap analysis and critical findings</p>
+                    </div>
+                    <div class="doc-card">
+                        <div class="doc-category">Validation</div>
+                        <div class="doc-title">
+                            <a href="../../cortex-brain/cx6-plan/validation/option-a-sts-implementation-summary.md" target="_blank">STS Implementation</a>
+                        </div>
+                        <p class="doc-description">Phase 1.5 validation framework documentation</p>
+                    </div>
+                    <div class="doc-card">
+                        <div class="doc-category">Architecture</div>
+                        <div class="doc-title">
+                            <a href="../../.github/prompts/CORTEX.prompt.md" target="_blank">CORTEX Instructions</a>
+                        </div>
+                        <p class="doc-description">Master orchestration gateway instructions</p>
+                    </div>
+                    <div class="doc-card">
+                        <div class="doc-category">Governance</div>
+                        <div class="doc-title">
+                            <a href="../../cortex-brain/tier0/governance/core-rules.yaml" target="_blank">CORE Rules (23)</a>
+                        </div>
+                        <p class="doc-description">Tier 0 governance rules (SKULL enforcement)</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="dashboard-footer">
+                <p>
+                    Last Updated: 2026-01-11 | 
+                    <a href="https://github.com/asifhussain60/CORTEX">GitHub</a> | 
+                    <a href="../../README.md">Project Docs</a>
+                </p>
+            </footer>
         </div>
 
-        <!-- Keep original section for backward compatibility but hide it -->
-        <div class="row row-equal-height g-3 mb-4 fade-in" style="display: none;">
-            <div class="col-lg-6">
-                <div class="card bg-dark border-secondary h-100 d-flex flex-column">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Activity (Legacy)</h5>
-                    </div>
-                    <div class="card-body flex-grow-1">
-                        <div class="audit-log-container" id="auditLogDisplay" style="max-height: 400px; overflow-y: auto;">
-                            <!-- Legacy entries kept for reference -->
-                        </div>
-                    </div>
-                </div>
+        <!-- RIGHT COLUMN: Key Metrics Sidebar -->
+        <aside class="metrics-sidebar fade-in">
+            <!-- Overall Progress -->
+            <div class="metric-card">
+                <div class="metric-label">Overall Progress</div>
+                <div class="metric-value">18.5%</div>
+                <div class="metric-meta">18 / 97 AC-IDs</div>
             </div>
 
-            <div class="col-lg-6">
-                <div class="card bg-dark border-secondary h-100 d-flex flex-column">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="bi bi-shield-check"></i> Quality Metrics</h5>
-                    </div>
-                    <div class="card-body flex-grow-1">
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Test Coverage</span>
-                                <span class="text-success fw-bold">99.4%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 99.4%" aria-valuenow="99.4" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Governance Compliance</span>
-                                <span class="text-success fw-bold">100%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <small class="text-muted">All 23 CORE rules enforced</small>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Evidence Bundle Quality</span>
-                                <span class="text-warning fw-bold">48%</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-warning" role="progressbar" style="width: 48%" aria-valuenow="48" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <small class="text-muted">16 of 33 bundles complete</small>
-                        </div>
-                        
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span>Design Score</span>
-                                <span class="text-success fw-bold">97/95</span>
-                            </div>
-                            <div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                            <small class="text-success">✅ Target exceeded</small>
-                        </div>
-
-                        <hr class="my-3">
-                        
-                        <h6 class="mb-2">Infrastructure Status</h6>
-                        <div class="small">
-                            <div class="mb-2">
-                                <i class="bi bi-check-circle-fill text-success"></i>
-                                <strong>Audit Logger:</strong> <span class="text-success">Operational</span>
-                            </div>
-                            <div class="mb-2">
-                                <i class="bi bi-check-circle-fill text-success"></i>
-                                <strong>Governance Merger:</strong> <span class="text-success">Operational</span>
-                            </div>
-                            <div class="mb-2">
-                                <i class="bi bi-check-circle-fill text-success"></i>
-                                <strong>State Manager:</strong> <span class="text-success">Operational</span>
-                            </div>
-                            <div class="mb-2">
-                                <i class="bi bi-exclamation-circle-fill text-warning"></i>
-                                <strong>MasterOrchestrator:</strong> <span class="text-warning">Phase 2</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <!-- Current Phase -->
+            <div class="metric-card">
+                <div class="metric-label">Current Phase</div>
+                <div class="metric-value">1 → 1.5</div>
+                <div class="metric-meta">STS Validation</div>
             </div>
-        </div>
 
-        <!-- Documentation & Resources -->
-        <div class="mb-4 fade-in">
-            <h3 class="mb-3"><i class="bi bi-book"></i> Documentation & Resources</h3>
-            
-            <div class="row row-equal-height g-3">
-                <!-- 📊 Core Planning Documents -->
-                <div class="col-md-6">
-                    <div class="doc-link-card">
-                        <div class="doc-category"><i class="bi bi-diagram-3"></i> Core Planning</div>
-                        <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-spreadsheet text-primary"></i>
-                            <a href="../../cortex-brain/cx6-plan/master-plan.yaml" target="_blank">
-                                Master Plan (YAML)
-                            </a>
-                        </h6>
-                        <p class="small text-muted mb-3">Complete 97 AC-ID structure with phases, dependencies, and milestones (31KB)</p>
-                        
-                        <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-text text-info"></i>
-                            <a href="../../cortex-brain/cx6-plan/implementation-roadmap.md" target="_blank">
-                                Implementation Roadmap
-                            </a>
-                        </h6>
-                        <p class="small text-muted mb-3">20-week corrected plan with Phase 1.5 STS validation gate (11KB)</p>
-                        
-                        <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-bar-graph text-warning"></i>
-                            <a href="../../cortex-brain/cx6-plan/validation/cx6-requirements-gap-analysis.md" target="_blank">
-                                Gap Analysis Report
-                            </a>
-                        </h6>
-                        <p class="small text-muted">Requirements gap analysis showing 16.5% true completion (12KB)</p>
-                    </div>
-                </div>
-
-                <!-- 🧪 Validation & Quality -->
-                <div class="col-md-6">
-                    <div class="doc-link-card">
-                        <div class="doc-category"><i class="bi bi-shield-check"></i> Validation & Quality</div>
-                        <h6 class="mb-2">
-                            <i class="bi bi-clipboard-check text-success"></i>
-                            <a href="../../cortex-brain/cx6-plan/validation/phase1-verification-report.yaml" target="_blank">
-                                Phase 1 Verification Report
-                            </a>
-                        </h6>
-                        <p class="small text-muted mb-3">Core-rules.yaml YAML bug fix + 105 test results (8KB)</p>
-                        
-                        <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-check text-success"></i>
-                            <a href="../../cortex-brain/cx6-plan/validation/option-a-sts-implementation-summary.md" target="_blank">
-                                STS Implementation Summary
-                            </a>
-                        </h6>
-                        <p class="small text-muted mb-3">Phase 1.5 Option A with 36,815-byte golden corpus (11KB)</p>
-                        
-                        <h6 class="mb-2">
-                            <i class="bi bi-folder-check text-success"></i>
-                            <a href="../../tests/sts/" target="_blank">
-                                STS Test Suites
-                            </a>
-                        </h6>
-                        <p class="small text-muted">5 framework validation suites (routing, unicode, governance, policy, security)</p>
-                    </div>
-                </div>
-
-                <!-- ⚙️ Live Progress Tracking -->
-                <div class="col-md-6">
-                    <div class="doc-link-card">
-                        <div class="doc-category"><i class="bi bi-speedometer2"></i> Live Tracking</div>
-                        <h6 class="mb-2">
-                            <i class="bi bi-clipboard-data text-primary"></i>
-                            <a href="../../cortex-brain/tier1/tracking/progress-tracker.json" target="_blank">
-                                Progress Tracker
-                            </a>
-                        </h6>
-                        <p class="small text-muted mb-3">Current phase status, completed AC-IDs, active blockers (23KB)</p>
-                        
-                        <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-spreadsheet text-info"></i>
-                            <a href="../../cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml" target="_blank">
-                                AC-INDEX Registry
-                            </a>
-                        </h6>
-                        <p class="small text-muted mb-3">Complete acceptance criteria definitions (97 AC-IDs, 125KB)</p>
-                        
-                        <h6 class="mb-2">
-                            <i class="bi bi-folder text-warning"></i>
-                            <a href="../../cortex-brain/tier1/evidence-bundles/" target="_blank">
-                                Evidence Bundles
-                            </a>
-                        </h6>
-                        <p class="small text-muted">Implementation proof packages (tests, audit, manifests)</p>
-                    </div>
-                </div>
-
-                <!-- 🏛️ Architecture & Governance -->
-                <div class="col-md-6">
-                    <div class="doc-link-card">
-                        <div class="doc-category"><i class="bi bi-building"></i> Architecture</div>
-                        <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-code text-danger"></i>
-                            <a href="../../.github/prompts/CORTEX.prompt.md" target="_blank">
-                                CORTEX Instructions
-                            </a>
-                        </h6>
-                        <p class="small text-muted mb-3">Master GitHub Copilot orchestration gateway (146KB)</p>
-                        
-                        <h6 class="mb-2">
-                            <i class="bi bi-shield-exclamation text-danger"></i>
-                            <a href="../../cortex-brain/tier0/governance/core-rules.yaml" target="_blank">
-                                CORE Rules (23 SKULL)
-                            </a>
-                        </h6>
-                        <p class="small text-muted mb-3">Tier 0 governance rules (CORE-001 to CORE-023, 57KB)</p>
-                        
-                        <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-spreadsheet text-secondary"></i>
-                            <a href="../../cortex-brain/database/governance.db" target="_blank">
-                                Governance Database
-                            </a>
-                        </h6>
-                        <p class="small text-muted">SQLite audit trail with hash chain integrity</p>
-                    </div>
-                </div>
-
-                <!-- 📁 Supporting Resources -->
-                <div class="col-md-12">
-                    <div class="doc-link-card">
-                        <div class="doc-category"><i class="bi bi-folder2-open"></i> Supporting Resources</div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <h6 class="mb-2">
-                                    <i class="bi bi-file-earmark-richtext text-muted"></i>
-                                    <a href="../../README.md" target="_blank">
-                                        Project README
-                                    </a>
-                                </h6>
-                                <p class="small text-muted">CORTEX 6.0 overview</p>
-                            </div>
-                            <div class="col-md-3">
-                                <h6 class="mb-2">
-                                    <i class="bi bi-file-earmark-medical text-muted"></i>
-                                    <a href="../../sharpening-cortex/sts-template/golden_corpus.yaml" target="_blank">
-                                        STS Golden Corpus
-                                    </a>
-                                </h6>
-                                <p class="small text-muted">100 test intents (36KB)</p>
-                            </div>
-                            <div class="col-md-3">
-                                <h6 class="mb-2">
-                                    <i class="bi bi-folder-symlink text-muted"></i>
-                                    <a href="../../cortex-brain/audit-logs/" target="_blank">
-                                        Audit Logs
-                                    </a>
-                                </h6>
-                                <p class="small text-muted">470 JSONL log files</p>
-                            </div>
-                            <div class="col-md-3">
-                                <h6 class="mb-2">
-                                    <i class="bi bi-info-circle text-muted"></i>
-                                    <a href="./plan-data.json" target="_blank">
-                                        Plan Data (JSON)
-                                    </a>
-                                </h6>
-                                <p class="small text-muted">Dashboard data source</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <!-- Test Coverage -->
+            <div class="metric-card">
+                <div class="metric-label">Test Coverage</div>
+                <div class="metric-value">99.4%</div>
+                <div class="metric-meta">1,232 Passing</div>
             </div>
-        </div>
 
-        <!-- Footer -->
-        <footer class="text-center text-muted py-4 mb-3">
-            <p class="mb-1">
-                <strong>CORTEX 6.0</strong> - Production-Grade AI Orchestration Framework
-            </p>
-            <p class="small mb-0">
-                Last Updated: 2026-01-10 21:30 UTC | 
-                <a href="https://github.com/asifhussain60/CORTEX" class="text-decoration-none" style="color: var(--cortex-cyan)">
-                    <i class="bi bi-github"></i> GitHub Repository
-                </a>
-            </p>
-        </footer>
+            <!-- Design Score -->
+            <div class="metric-card">
+                <div class="metric-label">Design Score</div>
+                <div class="metric-value">97/95</div>
+                <div class="metric-meta">Target Exceeded</div>
+            </div>
+
+            <!-- Status -->
+            <div class="status-indicator">
+                <div class="status-label">Phase 1.5 Status</div>
+                <div class="status-value">🟡 IN PROGRESS</div>
+            </div>
+
+            <!-- Blockers -->
+            <div class="status-indicator blocked">
+                <div class="status-label">Phases 2-4</div>
+                <div class="status-value">🔴 BLOCKED</div>
+            </div>
+
+            <!-- Estimate -->
+            <div class="metric-card">
+                <div class="metric-label">Est. Completion</div>
+                <div class="metric-value">~20w</div>
+                <div class="metric-meta">March 2025</div>
+            </div>
+        </aside>
     </div>
 
-    <!-- Bootstrap JS -->
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Audit Analytics Dashboard -->
     <script src="audit-analytics.js"></script>
     
-    <!-- Charts Initialization -->
     <script>
-        // Phase Progress Chart (Doughnut)
-        const phaseProgressCtx = document.getElementById('phaseProgressChart').getContext('2d');
-        const phaseProgressChart = new Chart(phaseProgressCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Phase 1 (48%)', 'Phase 1.5 (85%)', 'Phase 2 (0%)', 'Phase 3 (0%)', 'Phase 4 (0%)'],
-                datasets: [{
-                    data: [16, 2.55, 0, 0, 0],
-                    backgroundColor: [
-                        'rgba(0, 212, 255, 0.8)',
-                        'rgba(255, 190, 11, 0.8)',
-                        'rgba(255, 255, 255, 0.1)',
-                        'rgba(255, 255, 255, 0.1)',
-                        'rgba(255, 255, 255, 0.1)'
-                    ],
-                    borderColor: [
-                        'rgba(0, 212, 255, 1)',
-                        'rgba(255, 190, 11, 1)',
-                        'rgba(255, 255, 255, 0.2)',
-                        'rgba(255, 255, 255, 0.2)',
-                        'rgba(255, 255, 255, 0.2)'
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            color: 'rgba(255, 255, 255, 0.8)',
-                            padding: 15,
-                            font: {
-                                size: 12
-                            }
-                        }
-                    },
-                    title: {
-                        display: true,
-                        text: 'Phase Progress Distribution',
-                        color: 'rgba(255, 255, 255, 0.9)',
-                        font: {
-                            size: 16,
-                            weight: 'bold'
-                        }
-                    }
-                }
-            }
-        });
-
-        // AC Status Chart (Bar)
-        const acStatusCtx = document.getElementById('acStatusChart').getContext('2d');
-        const acStatusChart = new Chart(acStatusCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Implemented', 'Partial', 'Planned', 'Blocked'],
-                datasets: [{
-                    label: 'AC-IDs',
-                    data: [16, 2, 54, 25],
-                    backgroundColor: [
-                        'rgba(6, 255, 165, 0.6)',
-                        'rgba(255, 190, 11, 0.6)',
-                        'rgba(255, 255, 255, 0.2)',
-                        'rgba(255, 0, 110, 0.6)'
-                    ],
-                    borderColor: [
-                        'rgba(6, 255, 165, 1)',
-                        'rgba(255, 190, 11, 1)',
-                        'rgba(255, 255, 255, 0.4)',
-                        'rgba(255, 0, 110, 1)'
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    title: {
-                        display: true,
-                        text: 'AC-ID Status Breakdown',
-                        color: 'rgba(255, 255, 255, 0.9)',
-                        font: {
-                            size: 16,
-                            weight: 'bold'
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            color: 'rgba(255, 255, 255, 0.7)'
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            color: 'rgba(255, 255, 255, 0.7)'
-                        },
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        }
-                    }
-                }
+        // Initialize audit dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof AuditAnalytics !== 'undefined') {
+                const auditDash = new AuditAnalytics();
+                auditDash.initialize();
             }
         });
 
