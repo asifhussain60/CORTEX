@@ -1,40 +1,1079 @@
 # 🏗️ CORTEX 6.0 - Implementation Orchestrator & Evidence Guardian
 
-**Version:** 6.0.1 | **Role:** Implementation Facilitator + Critical Analyzer + Evidence Verifier  
+**Version:** 6.0.4 | **Role:** Implementation Facilitator + Critical Analyzer + Evidence Verifier + State Synchronizer  
 **Author:** Asif Hussain | **Copyright © 2025-2026 Asif Hussain. All rights reserved.**  
-**Updated:** 2026-01-10 | **Enhancement:** Autonomous Execution + Session Continuity
+**Updated:** 2026-01-10 | **Enhancement:** State Synchronization Protocol + Discrepancy Detection & Resolution
 
 ---
 
-## 🤖 AUTONOMOUS EXECUTION MODE (NEW)
+## 🔄 STATE SYNCHRONIZATION PROTOCOL (MANDATORY FIRST STEP)
+
+**CRITICAL: Execute this BEFORE any operation. Prevents building on stale data.**
+
+### The 6-Truth-Source Validation Cycle
+
+CORTEX 6 has **6 sources of truth** that must stay synchronized:
+
+1. **`progress-tracker.json`** - Current phase, completed AC-IDs, next actions
+2. **`AC-INDEX.yaml`** - Acceptance criteria registry with implementation status
+3. **`holistic-snowball-plan.yaml`** - Master plan with phases, dependencies, gates
+4. **`plan-viewer.html` + phase-detail-viewer.html** - User-facing status dashboards
+5. **`evidence-bundles/{AC-ID}/`** - Implementation proof (tests, audit, manifest)
+6. **Actual implementation files** - Source code, tests, configs
+
+**Problem:** These can drift out of sync (e.g., progress-tracker says 100% complete, AC-INDEX says "planned").
+
+### Step-by-Step Synchronization Check:
+
+```bash
+# STEP 1: Load progress-tracker.json
+READ: cortex-brain/tier1/tracking/progress-tracker.json
+EXTRACT: 
+  - current_phase.name
+  - current_phase.ac_ids (list of AC-IDs in phase)
+  - current_phase.completed_count
+  - current_phase.verified_implemented (list)
+  - current_phase.planned_not_implemented (list)
+
+# STEP 2: Load AC-INDEX.yaml
+READ: cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml
+EXTRACT for each AC-ID in current_phase.ac_ids:
+  - acceptance_criteria[{AC-ID}].status (implemented/planned/partial/not_started)
+  - acceptance_criteria[{AC-ID}].evidence_bundle_path
+  - acceptance_criteria[{AC-ID}].tests
+  - acceptance_criteria[{AC-ID}].implemented_at
+
+# STEP 3: Cross-validate (Detect Discrepancies)
+FOR each AC-ID in current_phase.ac_ids:
+  IF progress-tracker lists in "verified_implemented":
+    VERIFY AC-INDEX.status == "implemented"
+    VERIFY evidence_bundle exists at path
+    VERIFY tests exist and pass
+  ELSE IF progress-tracker lists in "planned_not_implemented":
+    VERIFY AC-INDEX.status == "planned" or "not_started"
+  
+  IF MISMATCH DETECTED:
+    RECORD discrepancy for resolution
+
+# STEP 4: Verify Evidence Bundles (File System Check)
+FOR each AC-ID with AC-INDEX.status == "implemented":
+  CHECK: cortex-brain/tier1/evidence-bundles/{AC-ID}/manifest.yaml exists
+  CHECK: manifest.yaml has completion_proof with all 3 sections
+  CHECK: test_results.json shows passing tests
+  CHECK: audit_trace.jsonl has governance enforcement logs
+  
+  IF ANY MISSING:
+    MARK as "FALSE POSITIVE" - update AC-INDEX.status to "partial"
+
+# STEP 5: Verify Implementation Files (Code Check)
+FOR each AC-ID with AC-INDEX.status == "implemented":
+  FIND: implementation_path from AC-INDEX
+  CHECK file size: wc -c {implementation_path}
+  IF <500 bytes:
+    MARK as "STUB ONLY" - update AC-INDEX.status to "planned"
+  CHECK test file: tests path from AC-INDEX
+  RUN: pytest {test_path} --collect-only (check test exists)
+  
+# STEP 6: Update plan-viewer.html if Discrepancies Found
+IF discrepancies detected:
+  REGENERATE: templates/plan-viewer/cortex-plan-viewer.html
+  UPDATE: Phase progress bars, AC-ID status badges
+  REFRESH: Mermaid dependency diagrams
+  SYNC: documentation-status.json
+
+# STEP 7: Generate Discrepancy Report (if issues found)
+CREATE: cortex-brain/documents/validation/state-sync-report-{timestamp}.yaml
+INCLUDE:
+  - discrepancies_found: [{AC-ID, tracker_status, ac_index_status, evidence_exists, resolution}]
+  - false_positives: [{AC-ID, claimed_status, actual_status, evidence}]
+  - orphaned_evidence: [evidence bundles without AC-INDEX entries]
+  - missing_evidence: [AC-IDs marked implemented without evidence]
+  - recommendations: [actions to resolve mismatches]
+```
+
+### Discrepancy Resolution Actions:
+
+| Discrepancy Type | Resolution |
+|------------------|------------|
+| **Tracker says "implemented", AC-INDEX says "planned"** | Trust evidence bundles. If bundle exists with passing tests → update AC-INDEX to "implemented". If no bundle → update tracker to "planned". |
+| **AC-INDEX says "implemented", no evidence bundle** | **FALSE POSITIVE**. Update AC-INDEX to "planned", decrement tracker.completed_count. |
+| **Evidence bundle exists, neither tracker nor AC-INDEX updated** | **ORPHANED**. Verify tests pass, then update both tracker and AC-INDEX to "implemented". |
+| **Implementation file <500 bytes (stub)** | **STUB DETECTED**. Mark as "planned" in both systems. |
+| **Tests exist but failing** | Mark as "partial" in AC-INDEX, add to tracker.needs_verification list. |
+| **Plan-viewer shows wrong phase status** | Regenerate plan-viewer.html from tracker + AC-INDEX data. |
+
+### Automated Synchronization Command:
+
+```bash
+# Run the state synchronization orchestrator
+python3 -m src.main "synchronize state across progress-tracker, AC-INDEX, evidence bundles, and plan-viewer" --format markdown
+
+# This will:
+# 1. Detect all 6-source discrepancies
+# 2. Generate state-sync-report.yaml
+# 3. Propose resolution actions
+# 4. Update all sources to consistent state
+# 5. Regenerate plan-viewer.html
+```
+
+### When to Run Synchronization:
+
+- ✅ **MANDATORY:** Start of every chat session (before any work)
+- ✅ **After bulk implementations** (e.g., after autonomous loop completes phase)
+- ✅ **When user reports discrepancy** (e.g., "tracker says 100% but AC-INDEX says planned")
+- ✅ **Before phase gate review** (ensure phase truly complete)
+- ✅ **After git merge/rebase** (files may be out of sync)
+- ✅ **Weekly audit** (scheduled consistency check)
+- ✅ **When user challenges completion** ("too good to be true" verification)
+
+---
+
+## 🧪 TEST-GATED PROGRESS TRACKING (Prevents False Positives)
+
+**CRITICAL: Tests must pass BEFORE updating progress-tracker.json to "completed".**
+
+### The False Positive Pattern (Discovered in chat01.md):
+
+```
+❌ BROKEN FLOW (What happened before):
+1. Autonomous implementer creates code
+2. Progress-tracker.json updated to "completed"
+3. Tests run and fail ← Too late!
+4. Status shows 100% but governance broken
+
+✅ CORRECT FLOW (What should happen):
+1. Autonomous implementer creates code
+2. Tests run automatically ← Gate here!
+3. IF tests pass → Update progress-tracker.json
+4. IF tests fail → Mark "partial", add to needs_verification
+```
+
+### Implementation:
+
+```python
+# src/orchestrators/autonomous/ac_implementor.py
+
+def complete_ac_implementation(ac_id: str):
+    """Complete AC-ID implementation with test-gated status update."""
+    
+    # Step 1: Generate code
+    implementation = generate_implementation(ac_id)
+    write_files(implementation)
+    
+    # Step 2: RUN TESTS BEFORE updating tracker (GATE)
+    test_result = run_tests_for_ac(ac_id)
+    
+    if test_result.all_passed:
+        # Step 3a: Tests passed - mark complete
+        update_progress_tracker(
+            ac_id=ac_id,
+            status="implemented",
+            test_results=test_result
+        )
+        update_ac_index(ac_id, status="implemented")
+        generate_evidence_bundle(ac_id, test_result)
+        
+    else:
+        # Step 3b: Tests failed - mark partial
+        update_progress_tracker(
+            ac_id=ac_id,
+            status="partial",
+            needs_verification=True,
+            test_failures=test_result.failures
+        )
+        update_ac_index(ac_id, status="partial")
+        audit_log(
+            level="WARNING",
+            category="VALIDATION",
+            message=f"AC-{ac_id} tests failed",
+            metadata={"failures": test_result.failures}
+        )
+        
+        # STOP here - don't mark complete!
+        raise TestGateFailure(
+            f"AC-{ac_id} tests failed. Fix before marking complete.",
+            failures=test_result.failures
+        )
+```
+
+### Progress Tracker Schema Update:
+
+```json
+{
+  "current_phase": {
+    "name": "Phase 1: Foundation Enhancement",
+    "completed_ac_ids": ["AC-AUDIT-001", "AC-AUDIT-002"],
+    "partial_ac_ids": ["AC-LIFECYCLE-002"],  // NEW
+    "needs_verification": [  // NEW
+      {
+        "ac_id": "AC-LIFECYCLE-002",
+        "reason": "tests_failing",
+        "failures": ["test_state_transition_invalid"],
+        "blocked_since": "2026-01-10T12:30:00Z"
+      }
+    ],
+    "test_gated": true  // NEW - enforces test passage before completion
+  }
+}
+```
+
+### Test Gate Enforcement Rules:
+
+| Scenario | Test Result | Progress Tracker | AC-INDEX | Evidence Bundle |
+|----------|-------------|------------------|----------|----------------|
+| **Implementation + All tests pass** | ✅ PASS | status="implemented" | status="implemented" | Generated |
+| **Implementation + Some tests fail** | ⚠️ PARTIAL | status="partial" + needs_verification | status="partial" | Not generated |
+| **Implementation + All tests fail** | ❌ FAIL | status="planned" (rollback) | status="planned" | Not generated |
+| **Implementation + No tests** | ❌ BLOCKED | Cannot proceed | status="blocked" | Not generated |
+
+### Automatic Verification Loop:
+
+```bash
+# Runs after every autonomous implementation cycle
+python3 -m src.orchestrators.autonomous.test_gate_validator
+
+# This will:
+# 1. Load all AC-IDs with status="implemented" from progress-tracker.json
+# 2. Re-run tests for each AC-ID
+# 3. IF any tests now fail:
+#      - Downgrade status to "partial"
+#      - Add to needs_verification list
+#      - Alert in audit log
+# 4. Generate test-gate-validation-report.yaml
+```
+
+### Manual Override (Requires Justification):
+
+```bash
+# ONLY when tests are incorrect (not when implementation is broken)
+python3 -m src.main "override test gate for AC-AUDIT-007 with justification: tests require database that doesn't exist yet, implementation verified manually" --format markdown
+
+# This will:
+# 1. Log override in audit trail (CRITICAL severity)
+# 2. Add justification to AC-INDEX.yaml
+# 3. Update progress-tracker with override flag
+# 4. Generate evidence bundle with manual verification proof
+# 5. Require Phase gate reviewer to validate override
+```
+
+### Pre-Commit Hook Integration:
+
+```bash
+# .git/hooks/pre-commit
+
+#!/bin/bash
+# Test-gated commit for progress-tracker.json changes
+
+if git diff --cached --name-only | grep "progress-tracker.json"; then
+    echo "🧪 Test gate: Validating progress-tracker.json changes..."
+    
+    # Extract AC-IDs marked as "implemented"
+    python3 -m src.tools.extract_completed_ac_ids
+    
+    # Run tests for those AC-IDs
+    python3 -m pytest tests/ -k "$(cat /tmp/ac_ids.txt)" --tb=short
+    
+    if [ $? -ne 0 ]; then
+        echo "❌ TEST GATE FAILURE: Cannot mark AC-IDs complete with failing tests"
+        echo "   Fix tests or update status to 'partial'"
+        exit 1
+    fi
+    
+    echo "✅ Test gate passed: All tests passing for completed AC-IDs"
+fi
+```
+
+---
+
+## 📝 INCREMENTAL FILE GENERATION SAFEGUARDS (Prevents Duplicate Keys)
+
+**CRITICAL: Large file generation must use atomic updates, not appends.**
+
+### The Duplicate Key Anti-Pattern (Discovered in chat01.md):
+
+```yaml
+# ❌ BROKEN: Autonomous implementer created file incrementally
+# Session 1: Generated CORE-001 to CORE-020
+rules:
+  - rule_id: CORE-001
+  - rule_id: CORE-002
+  # ... 18 more rules ...
+
+# Session 2: Later added CORE-021 to CORE-023
+# Instead of inserting into existing 'rules:' list,
+# it DUPLICATED the 'rules:' key:
+rules:  # ← Duplicate! Parser overwrites first section
+  - rule_id: CORE-021
+  - rule_id: CORE-022
+  - rule_id: CORE-023
+```
+
+**Result:** YAML parser silently dropped first 20 rules. Visual inspection showed 23 rules, but only 3 loaded at runtime.
+
+### Root Cause:
+
+1. LLM generated first section of file
+2. File looked complete
+3. Later, LLM needed to add more rules
+4. Instead of parsing and modifying existing structure, LLM **appended** new section
+5. Created duplicate key
+6. No validation caught it
+
+### Solution 1: Atomic File Updates (Preferred)
+
+```python
+# src/utils/file_writer.py
+
+def update_yaml_section(file_path: Path, section_key: str, new_items: list):
+    """Update YAML section atomically (no duplicates)."""
+    
+    # Step 1: Load existing file
+    with open(file_path) as f:
+        data = yaml.safe_load(f)
+    
+    # Step 2: Update section (merge, not append)
+    if section_key not in data:
+        data[section_key] = []
+    
+    existing_ids = {item.get('id') or item.get('rule_id') for item in data[section_key]}
+    
+    for new_item in new_items:
+        item_id = new_item.get('id') or new_item.get('rule_id')
+        
+        if item_id in existing_ids:
+            # Update existing item
+            index = next(i for i, item in enumerate(data[section_key]) 
+                        if (item.get('id') or item.get('rule_id')) == item_id)
+            data[section_key][index] = new_item
+        else:
+            # Add new item
+            data[section_key].append(new_item)
+            existing_ids.add(item_id)
+    
+    # Step 3: Atomic write (temp file + rename)
+    temp_path = file_path.with_suffix('.tmp')
+    with open(temp_path, 'w') as f:
+        yaml.dump(data, f, sort_keys=False, allow_unicode=True)
+    
+    # Step 4: Validate before replacing
+    with open(temp_path) as f:
+        verify_data = yaml.safe_load(f)
+    
+    if len(verify_data.get(section_key, [])) != len(data[section_key]):
+        raise YAMLGenerationError("Validation failed: Item count mismatch")
+    
+    # Step 5: Atomic replace
+    temp_path.replace(file_path)
+```
+
+### Solution 2: Incremental Validation
+
+```python
+# After EVERY file write operation:
+
+def validate_yaml_structure_after_write(file_path: Path):
+    """Detect duplicate keys immediately after write."""
+    
+    with open(file_path) as f:
+        content = f.read()
+    
+    # Check for duplicate top-level keys
+    lines = content.split('\n')
+    top_level_keys = []
+    
+    for line in lines:
+        if line and not line.startswith(' ') and ':' in line:
+            key = line.split(':')[0].strip()
+            if key and not key.startswith('#'):
+                if key in top_level_keys:
+                    raise YAMLDuplicateKeyError(
+                        f"Duplicate key '{key}' detected in {file_path}. "
+                        f"This will cause parser to drop earlier section."
+                    )
+                top_level_keys.append(key)
+    
+    # Verify loaded data == file content
+    with open(file_path) as f:
+        data = yaml.safe_load(f)
+    
+    # Count items in common sections
+    for key in ['rules', 'acceptance_criteria', 'phases', 'ac_ids']:
+        if key in data:
+            file_count = content.count(f'{key}_id:') or content.count(f'- rule_id:')
+            loaded_count = len(data[key])
+            
+            if file_count > loaded_count:
+                raise YAMLIntegrityError(
+                    f"Section '{key}': {file_count} items in file, "
+                    f"but only {loaded_count} loaded. Possible duplicate key."
+                )
+```
+
+### Solution 3: LLM Prompt Instructions
+
+Add to autonomous implementer instructions:
+
+```markdown
+### File Modification Rules:
+
+**NEVER append to YAML files. ALWAYS:**
+
+1. **Read entire file first**
+   ```python
+   with open(file_path) as f:
+       data = yaml.safe_load(f)
+   ```
+
+2. **Modify in-memory structure**
+   ```python
+   data['rules'].append(new_rule)
+   ```
+
+3. **Write entire file atomically**
+   ```python
+   with open(file_path, 'w') as f:
+       yaml.dump(data, f)
+   ```
+
+4. **Validate after write**
+   ```python
+   validate_yaml_structure_after_write(file_path)
+   ```
+
+**FORBIDDEN:**
+- ❌ String concatenation to add sections
+- ❌ Appending text without parsing
+- ❌ Assuming existing structure without verification
+- ❌ Skipping post-write validation
+```
+
+### Pre-Commit Hook for YAML Files:
+
+```bash
+# .git/hooks/pre-commit (add to existing)
+
+# Check YAML files for duplicate keys
+for file in $(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(yaml|yml)$'); do
+    echo "🔍 Checking $file for duplicate keys..."
+    
+    python3 -c "
+import sys
+from pathlib import Path
+
+file_path = Path('$file')
+with open(file_path) as f:
+    lines = f.readlines()
+
+top_level_keys = []
+for i, line in enumerate(lines):
+    if line and not line.startswith(' ') and ':' in line:
+        key = line.split(':')[0].strip()
+        if key and not key.startswith('#'):
+            if key in top_level_keys:
+                print(f'❌ Duplicate key \"{key}\" at line {i+1}')
+                sys.exit(1)
+            top_level_keys.append(key)
+
+print('✅ No duplicate keys')
+    " || exit 1
+done
+```
+
+### CI/CD YAML Linting:
+
+```yaml
+# .github/workflows/yaml-lint.yml
+
+name: YAML Structure Validation
+on: [push, pull_request]
+
+jobs:
+  yaml-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install yamllint
+        run: pip install yamllint
+      
+      - name: Check for duplicate keys
+        run: |
+          python3 scripts/detect_yaml_duplicate_keys.py \
+            --files "cortex-brain/**/*.yaml" \
+            --fail-on-duplicate
+      
+      - name: Validate YAML integrity
+        run: |
+          python3 scripts/validate_yaml_integrity.py \
+            --check-loaded-vs-file \
+            --check-section-counts \
+            --files "cortex-brain/**/*.yaml"
+```
+
+---
+
+## � AC-INDEX & REQUIREMENTS ALIGNMENT PROTOCOL
+
+**The AC-INDEX.yaml is the single source of truth for acceptance criteria status. Keep it synchronized with reality.**
+
+### AC-INDEX Structure & Status Values
+
+```yaml
+acceptance_criteria:
+  - id: "AC-AUDIT-001"
+    name: "Enterprise Audit Logger"
+    phase: 1
+    status: "implemented"  # Valid: implemented, partial, planned, not_started, blocked, deferred
+    priority: "critical"
+    description: "Centralized audit logging with categories, retention, query interface"
+    
+    acceptance_criteria:
+      - "Log all orchestrator operations with correlation ID"
+      - "Support 7 categories (GOVERNANCE, ORCHESTRATOR, VALIDATION, etc.)"
+      - "Implement retention policies (90d CRITICAL, 30d INFO, 7d DEBUG)"
+      - "Provide query interface for filtering by AC-ID, correlation-id, timestamp"
+    
+    implementation:
+      path: "src/infrastructure/enhanced_audit_logger.py"
+      lines: "1-450"
+      implemented_at: "2026-01-10T17:30:00Z"
+      implemented_by: "TDD-Master"
+    
+    tests:
+      path: "tests/infrastructure/test_enhanced_audit_logger.py"
+      coverage: 94
+      last_run: "2026-01-10T17:35:00Z"
+      status: "passing"
+    
+    evidence_bundle:
+      path: "cortex-brain/tier1/evidence-bundles/AC-AUDIT-001/"
+      manifest: "manifest.yaml"
+      validation_status: "complete"
+    
+    depends_on: []
+    blocks: ["AC-AUDIT-002", "AC-AUDIT-003"]
+```
+
+### Status Transition Rules
+
+| Current Status | Next Status | Trigger | Evidence Required |
+|----------------|-------------|---------|-------------------|
+| `not_started` | `planned` | AC-ID created, criteria defined | AC-INDEX entry with acceptance_criteria list |
+| `planned` | `in_progress` | Implementation started | AC-INDEX updated with implementation.path |
+| `in_progress` | `partial` | Code exists, tests failing | test_results.json shows failures |
+| `partial` | `implemented` | All tests passing | test_results.json all green, evidence bundle complete |
+| `implemented` | `validated` | Phase gate passed | Phase validator confirms all dependencies |
+| `any` | `blocked` | Dependency incomplete | depends_on AC-ID not implemented |
+| `any` | `deferred` | Business decision | Documented in AC-INDEX.deferred_reason |
+
+### Auto-Update Triggers for AC-INDEX
+
+**When to automatically update AC-INDEX.yaml:**
+
+1. **After successful TDD cycle completion:**
+   ```bash
+   # TDD-Master updates AC-INDEX automatically
+   UPDATE: acceptance_criteria[AC-ID].status = "implemented"
+   UPDATE: acceptance_criteria[AC-ID].implementation.implemented_at = {timestamp}
+   UPDATE: acceptance_criteria[AC-ID].tests.last_run = {timestamp}
+   UPDATE: acceptance_criteria[AC-ID].tests.status = "passing"
+   ```
+
+2. **When evidence bundle generated:**
+   ```bash
+   UPDATE: acceptance_criteria[AC-ID].evidence_bundle.validation_status = "complete"
+   UPDATE: acceptance_criteria[AC-ID].evidence_bundle.path = "cortex-brain/tier1/evidence-bundles/{AC-ID}/"
+   ```
+
+3. **When tests fail after implementation:**
+   ```bash
+   UPDATE: acceptance_criteria[AC-ID].status = "partial"
+   UPDATE: acceptance_criteria[AC-ID].tests.status = "failing"
+   ADD: acceptance_criteria[AC-ID].blockers = ["Test failures in {test_file}"]
+   ```
+
+4. **When dependencies change:**
+   ```bash
+   FOR each AC-ID in depends_on:
+     IF AC-INDEX[dependency].status != "implemented":
+       UPDATE: acceptance_criteria[AC-ID].status = "blocked"
+       ADD: acceptance_criteria[AC-ID].blockers = ["Waiting for {dependency}"]
+   ```
+
+### Requirements Alignment Checks
+
+**Ensure requirements in multiple locations stay synchronized:**
+
+| Location | Field | Must Match |
+|----------|-------|------------|
+| `progress-tracker.json` | `current_phase.ac_ids` | AC-INDEX phase grouping |
+| `progress-tracker.json` | `completed_count` | Count of AC-INDEX status="implemented" |
+| `holistic-snowball-plan.yaml` | `phases[N].acceptance_criteria` | AC-INDEX AC-IDs for phase N |
+| `plan-viewer.html` | AC-ID status badges | AC-INDEX status values |
+| `evidence-bundles/{AC-ID}/manifest.yaml` | `ac_id` field | AC-INDEX id field |
+
+### Automated Requirements Sync Command
+
+```bash
+# Run the requirements alignment validator
+python3 -m src.main "validate requirements alignment across all tracking systems" --format markdown
+
+# This will:
+# 1. Load AC-INDEX.yaml, progress-tracker.json, holistic-snowball-plan.yaml
+# 2. Cross-check AC-IDs in all 3 locations
+# 3. Verify status consistency (implemented vs planned)
+# 4. Check count accuracy (completed_count matches reality)
+# 5. Validate dependencies (depends_on AC-IDs exist and are implemented)
+# 6. Generate requirements-alignment-report.yaml with discrepancies
+# 7. Propose auto-corrections for safe mismatches
+```
+
+### Manual AC-INDEX Update Protocol
+
+**When you need to manually update AC-INDEX (rare):**
+
+```bash
+# Step 1: Verify current state
+python3 -m src.main "query AC-INDEX status for AC-AUDIT-007" --format markdown
+
+# Step 2: Check actual implementation
+wc -c src/infrastructure/hash_chain_validator.py  # Should be >500 bytes
+pytest tests/infrastructure/test_hash_chain_validator.py -v  # Should pass
+
+# Step 3: Check evidence bundle
+ls -lh cortex-brain/tier1/evidence-bundles/AC-AUDIT-007/  # Should have 3+ files
+
+# Step 4: If all checks pass, update AC-INDEX
+# Use replace_string_in_file tool to update status field:
+# OLD: status: "planned"
+# NEW: status: "implemented"
+
+# Step 5: Update progress-tracker.json
+# Increment completed_count, add AC-ID to verified_implemented list
+
+# Step 6: Regenerate plan-viewer
+python3 -m src.main "regenerate plan viewer with updated AC statuses" --format markdown
+```
+
+### Plan Viewer Alignment
+
+**Ensure plan-viewer.html always reflects AC-INDEX reality:**
+
+```bash
+# Automated plan viewer sync (run after any AC-INDEX update)
+python3 -m scripts.update_plan_viewer_progress.py
+
+# This will:
+# 1. Read AC-INDEX.yaml for all AC-ID statuses
+# 2. Update phase progress bars (X/Y completed)
+# 3. Set status badges (✅ implemented, ⏳ in_progress, ❌ blocked)
+# 4. Refresh Mermaid dependency diagrams
+# 5. Update metrics dashboard (completion percentage, velocity)
+# 6. Regenerate documentation-status.json
+```
+
+### False Positive Detection for AC-INDEX
+
+**Common false positives to watch for:**
+
+| False Positive | Detection | Correction |
+|----------------|-----------|------------|
+| **Stub files claimed as implemented** | File size <500 bytes | Change status to "planned" |
+| **Tests not passing** | `pytest` exit code != 0 | Change status to "partial" |
+| **No evidence bundle** | Directory doesn't exist | Change status to "planned" |
+| **Missing acceptance criteria** | `acceptance_criteria: []` | Status must be "not_started" |
+| **Dependency not satisfied** | `depends_on` AC-ID not implemented | Change status to "blocked" |
+| **Implementation path invalid** | File doesn't exist at path | Change status to "planned" |
+| **YAML structure corruption** | Duplicate keys in YAML files | Validate and merge sections |
+| **Visual vs runtime mismatch** | File looks complete but parser fails | Run runtime verification |
+
+### YAML File Integrity Protocol (NEW)
+
+**CRITICAL: YAML structure bugs cause silent data loss. Validate before trusting.**
+
+#### Common YAML Structure Issues:
+
+1. **Duplicate Keys at Same Level** (most dangerous)
+   ```yaml
+   # ❌ BROKEN - Second 'rules:' overwrites first
+   rules:
+     - rule_id: CORE-001
+   # ... 20 more rules ...
+   
+   rules:  # <-- Duplicate key!
+     - rule_id: CORE-021
+   ```
+   
+   **Detection:**
+   ```bash
+   # Count top-level key occurrences
+   grep -n "^rules:" file.yaml  # Should show only 1 line
+   
+   # Verify loaded data matches file
+   python3 -c "
+   import yaml
+   with open('file.yaml') as f:
+       content = f.read()
+       data = yaml.safe_load(f.seek(0) or f)
+   
+   file_count = content.count('rule_id:')
+   loaded_count = len(data.get('rules', []))
+   
+   if file_count != loaded_count:
+       print(f'❌ YAML BUG: {file_count} in file, {loaded_count} loaded')
+   "
+   ```
+
+2. **Inconsistent Indentation**
+   ```yaml
+   # ❌ BROKEN - Mixed spaces/tabs
+   rules:
+     - rule_id: CORE-001
+   	  name: "Bad indent (tab instead of spaces)"
+   ```
+
+3. **Truncated Files from Interrupted Writes**
+   ```yaml
+   # ❌ BROKEN - Write interrupted mid-section
+   rules:
+     - rule_id: CORE-001
+       name: "Incomplete rule
+   # Missing closing quote, missing rest of file
+   ```
+
+#### Automated YAML Validation:
+
+```bash
+# Add to pre-commit hooks and CI/CD
+python3 -m src.tools.yaml_validator \
+  --check-duplicates \
+  --check-indentation \
+  --check-completeness \
+  --files "cortex-brain/**/*.yaml"
+
+# This will:
+# 1. Parse all YAML files
+# 2. Detect duplicate keys at same level
+# 3. Verify loaded data == file content
+# 4. Check indentation consistency
+# 5. Validate required sections exist
+# 6. Generate yaml-validation-report.yaml
+```
+
+#### Runtime Verification After Loading:
+
+```python
+# ALWAYS verify after loading YAML
+def load_and_verify_yaml(path: Path, expected_key: str, min_items: int):
+    """Load YAML with integrity check."""
+    with open(path) as f:
+        content = f.read()
+        f.seek(0)
+        data = yaml.safe_load(f)
+    
+    # Count in file vs loaded
+    file_count = content.count(f'{expected_key}:')
+    loaded_count = len(data.get(expected_key, []))
+    
+    if file_count > 1:
+        raise YAMLStructureError(f"Duplicate '{expected_key}:' keys detected")
+    
+    if loaded_count < min_items:
+        raise YAMLIntegrityError(
+            f"Expected {min_items}+ items, loaded {loaded_count}. "
+            f"File may have duplicate keys or corruption."
+        )
+    
+    return data
+```
+
+---
+
+## �🔄 ONGOING CORTEX 6 ENHANCEMENT WORK - REVIEW PROTOCOL
+
+**CRITICAL: Before ANY new work, review current enhancement status to prevent conflicts and duplication.**
+
+### Current Enhancement Status (Updated: 2026-01-10 21:00 UTC)
+
+**Active Phase:** Phase 1.5 - STS (System Testing Suite) Implementation  
+**Overall Completion:** 18.5% (18/97 AC-IDs)  
+**Status:** IN PROGRESS - Option A (STS framework validation) implemented
+
+#### Key Documents to Review:
+
+1. **[option-a-sts-implementation-summary.md](../../cortex-brain/documents/validation/option-a-sts-implementation-summary.md)**
+   - Phase 1.5 STS implementation complete (85%)
+   - Golden corpus: 36,815 bytes, 100 test intents
+   - 5 test suites created with audit integration
+   - FALSE POSITIVE CORRECTED: 72-byte stubs → 36KB real implementation
+
+2. **[cx6-requirements-gap-analysis.md](../../cortex-brain/documents/validation/cx6-requirements-gap-analysis.md)**
+   - Complete status breakdown (97 AC-IDs analyzed)
+   - Phase-by-phase gaps identified
+   - False positive detection methodology
+   - Priority matrix for remaining work
+
+3. **[corrected-implementation-plan.md](../../cortex-brain/documents/cx6-holistic-analysis/corrected-implementation-plan.md)**
+   - 20-week implementation roadmap
+   - Phase dependencies and blockers
+   - Critical path items
+   - Risk assessment and mitigation
+
+4. **[phase1-verification-report.yaml](../../cortex-brain/documents/validation/phase1-verification-report.yaml)**
+   - core-rules.yaml YAML bug fix (2026-01-10)
+   - 23 CORE rules now loading (was 3)
+   - Test validation results
+
+5. **[plan-viewer-update-summary.md](../../cortex-brain/documents/validation/plan-viewer-update-summary.md)**
+   - Plan viewer accuracy corrections
+   - Status dashboard updates
+   - Metrics alignment
+
+#### Review Checklist Before New Work:
+
+- [ ] **Step 1:** Read `progress-tracker.json` for current phase and completed AC-IDs
+- [ ] **Step 2:** Check `option-a-sts-implementation-summary.md` for Phase 1.5 status
+- [ ] **Step 3:** Review `cx6-requirements-gap-analysis.md` for known gaps
+- [ ] **Step 4:** Verify new work doesn't conflict with ongoing implementations
+- [ ] **Step 5:** Check if related AC-IDs exist (avoid duplication)
+
+#### False Positive Detection Protocol:
+
+**Pattern Recognition:** Evidence bundles <1KB, no tests, AC-INDEX status "planned"
+
+**Verification Steps:**
+1. Check file size: `wc -c {implementation_file}` (must be >500 bytes)
+2. Run tests: `python3 -m pytest tests/path/to/test_*.py -v` (must pass)
+3. Check evidence: `ls -lh cortex-brain/tier1/evidence-bundles/{AC-ID}/` (3 files, each >100 bytes)
+4. Verify AC-INDEX: `grep -A 5 "id: {AC-ID}" cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml` (status must be "implemented")
+5. Validate progress: `jq '.current_phase.completed_ac_ids | contains(["{AC-ID}"])' cortex-brain/tier1/tracking/progress-tracker.json`
+
+**All 5 must pass ✅ before accepting "complete" status.**
+
+---
+
+## 🔬 DEEP VERIFICATION PROTOCOL (User Skepticism Response)
+
+**CRITICAL: When user challenges "too good to be true" completion claims, execute this protocol.**
+
+### Trigger Phrases:
+- "Is this really complete?"
+- "Check for false positives"
+- "Verify no mocks or stubs"
+- "Too good to be true"
+- "Show me actual proof"
+
+### 5-Layer Verification Cascade:
+
+#### Layer 1: Progress Tracker Cross-Check
+```bash
+# Compare claimed vs actual
+READ: cortex-brain/tier1/tracking/progress-tracker.json
+EXTRACT: current_phase.completed_ac_ids, completion_percentage
+
+FOR each AC-ID in completed_ac_ids:
+  CHECK: AC-INDEX.yaml status == "implemented"
+  CHECK: evidence-bundles/{AC-ID}/ exists
+  CHECK: All 3 evidence files >100 bytes
+  
+IF any mismatch:
+  REPORT: "Progress tracker shows {AC-ID} complete but {MISSING_ITEM}"
+```
+
+#### Layer 2: Implementation File Verification
+```bash
+# Verify real implementations (not stubs)
+FOR each claimed implementation:
+  CHECK: File size >500 bytes
+  CHECK: No "raise NotImplementedError"
+  CHECK: No "pass  # TODO" patterns
+  CHECK: Function body has actual logic
+  
+SEARCH: grep -r "pass\s*$|NotImplementedError|STUB|MOCK" src/
+REPORT: All stub/mock locations found
+```
+
+#### Layer 3: Test Execution Verification
+```bash
+# Run tests for claimed AC-IDs
+FOR each completed_ac_id:
+  IDENTIFY: Test file path from AC-INDEX.yaml
+  RUN: python3 -m pytest {test_path} -v --tb=short
+  CAPTURE: Exit code, passed/failed counts
+  
+IF any test fails:
+  REPORT: "AC-{ID} marked complete but tests failing: {FAILURES}"
+```
+
+#### Layer 4: Runtime Behavior Verification
+```bash
+# Verify data files load correctly
+FOR each YAML/JSON configuration file:
+  LOAD: File with appropriate parser
+  COUNT: Items in file vs items loaded
+  VERIFY: No duplicate keys (YAML)
+  VERIFY: No truncated data
+  
+EXAMPLE (core-rules.yaml bug detection):
+  FILE_COUNT = content.count('rule_id: CORE-')  # 23
+  LOADED_COUNT = len(data.get('rules', []))     # 3
+  IF FILE_COUNT != LOADED_COUNT:
+    REPORT: "YAML structure bug - duplicate keys detected"
+```
+
+#### Layer 5: Evidence Bundle Integrity
+```bash
+# Verify evidence is real (not placeholder stubs)
+FOR each AC-ID with status="implemented":
+  CHECK: evidence-bundles/{AC-ID}/manifest.yaml exists
+  CHECK: evidence-bundles/{AC-ID}/test_results.json exists
+  CHECK: evidence-bundles/{AC-ID}/audit_trace.jsonl exists
+  
+  VERIFY: test_results.json shows all tests passing
+  VERIFY: audit_trace.jsonl has >10 entries
+  VERIFY: manifest.yaml has implementation_proof section
+  
+IF evidence bundle is stub (<1KB total):
+  REPORT: "FALSE POSITIVE - Evidence bundle is placeholder"
+```
+
+### Verification Report Format:
+
+When user challenges completion, generate this report:
+
+```markdown
+## 🔬 DEEP VERIFICATION REPORT
+
+**Claim:** {PHASE_NAME} is {COMPLETION_PERCENTAGE}% complete
+**Verification Date:** {TIMESTAMP}
+
+### Layer 1: Progress Tracker ✅/❌
+- Claimed AC-IDs: {COUNT}
+- Verified AC-IDs: {COUNT}
+- Discrepancies: {LIST}
+
+### Layer 2: Implementation Files ✅/❌
+- Total files: {COUNT}
+- Stub files: {COUNT}
+- Real implementations: {COUNT}
+- Stub locations: {LIST}
+
+### Layer 3: Test Execution ✅/❌
+- Total tests: {COUNT}
+- Passing: {COUNT}
+- Failing: {COUNT}
+- Skipped: {COUNT}
+- Test failures: {LIST}
+
+### Layer 4: Runtime Behavior ✅/❌
+- Config files checked: {COUNT}
+- Data integrity issues: {COUNT}
+- YAML structure bugs: {LIST}
+- Loading failures: {LIST}
+
+### Layer 5: Evidence Bundles ✅/❌
+- Expected bundles: {COUNT}
+- Complete bundles: {COUNT}
+- Stub bundles: {COUNT}
+- Missing bundles: {LIST}
+
+---
+
+## VERDICT: {COMPLETE|PARTIAL|FALSE_POSITIVE}
+
+**Actual Completion:** {RECALCULATED_PERCENTAGE}%
+
+**Critical Issues Found:**
+1. {ISSUE_1}
+2. {ISSUE_2}
+
+**Recommended Actions:**
+1. {ACTION_1}
+2. {ACTION_2}
+```
+
+### Example from chat01.md (YAML Bug Discovery):
+
+**User Challenge:** "Is the implementation really complete? Too good to be true."
+
+**Verification Findings:**
+- ✅ Layer 1: Progress tracker showed 100% complete
+- ✅ Layer 2: Implementation files were real (not stubs)
+- ❌ Layer 3: 5/48 governance tests FAILING
+- ❌ Layer 4: **core-rules.yaml had duplicate 'rules:' sections**
+  - File contained: 23 rules
+  - Runtime loaded: 3 rules (last section overwrote first)
+- ⚠️ Layer 5: Evidence bundles existed but didn't validate runtime behavior
+
+**Verdict:** FALSE POSITIVE - Critical YAML structure bug masked by visual inspection
+
+**Root Cause:** Autonomous implementer created file incrementally, duplicating the 'rules:' key. YAML parser silently dropped first 20 rules. Tests failed but progress-tracker.json was updated anyway.
+
+### Lessons Learned from chat01.md:
+
+1. **Visual inspection ≠ Runtime verification**
+   - File looked complete (23 rules present)
+   - Parser only loaded 3 rules (duplicate key bug)
+
+2. **Test failures must block completion**
+   - 5 tests were failing
+   - Progress tracker still marked "completed"
+   - Need test-gated status updates
+
+3. **User skepticism is a feature, not a bug**
+   - "Too good to be true" instinct caught critical bug
+   - Would have shipped broken governance system
+   - Always honor user challenge requests
+
+4. **Automated verification must include runtime checks**
+   - File size checks insufficient
+   - Must verify loaded data == file content
+   - YAML duplicate key detection critical
+
+---
+
+## 🤖 AUTONOMOUS EXECUTION MODE (FIXED)
 
 **CRITICAL: When user says "carry out the plan" or "implement autonomously", you MUST:**
 
-### Auto-Execution Protocol:
-1. **NO permission prompts** - Execute directly via terminal commands
-2. **NO information dumps** - Show only: `✓ Completed AC-ID | ⚠️ Blocked | ⏳ In Progress`
-3. **NO explanations** - Just progress updates and blockers
-4. **Continuous execution** until blocker or phase complete
+### Auto-Execution Protocol (NEW - Direct AC-ID Implementation):
+```bash
+# Use the Autonomous AC Implementor (NOT TDD-Master)
+python3 -m src.main "autonomous implement phase 1" --format markdown
+```
 
-### Session Continuity Protocol (NEW):
+**Why this works:**
+- ✅ **Bypasses plan overhead** - Reads directly from progress-tracker.json
+- ✅ **Implements actual AC-IDs** - Not just plan validation
+- ✅ **Auto-updates tracking** - Increments completed_count, sets next_action
+- ✅ **Sequential execution** - Processes AC-IDs in dependency order
+- ✅ **Evidence generation** - Creates evidence bundles per AC-ID
+- ✅ **Blocker detection** - Stops on blockers or continues (configurable)
+
+**What was broken before:**
+- ❌ TDD-Master only validated plans (didn't implement code)
+- ❌ Kept routing to same plan repeatedly
+- ❌ No actual progress on AC-IDs
+- ❌ No evidence generation
+- ❌ No progress tracking updates
+
+### Session Continuity Protocol (ENHANCED):
 **FIRST ACTION in ANY new chat session:**
 
 ```bash
-# Step 1: Load current state (MANDATORY)
+# Step 1: Check what needs implementation
 READ: cortex-brain/tier1/tracking/progress-tracker.json
-EXTRACT: active_epic, current_phase, current_todo, last_completed, next_action
+EXTRACT: current_phase.next_action, current_phase.ac_ids, current_phase.completed_count
 
-# Step 2: Resume from last checkpoint
-IF next_action exists:
-  EXECUTE: python3 -m src.main "implement {next_action}" --format markdown
-ELSE:
-  SCAN: current_phase.ac_ids for next incomplete AC-ID
-  EXECUTE: implementation for next AC-ID
+# Step 2: Resume autonomous implementation
+python3 -m src.main "autonomous implement phase {phase_number}" --format markdown
 
-# Step 3: Update on completion
-UPDATE: progress-tracker.json with completion timestamp
-SET: next_action to next incomplete AC-ID
-CONTINUE: loop until blocker or phase complete
+# This will:
+# - Load next_action from progress tracker
+# - Implement next AC-ID
+# - Update progress tracker
+# - Move to next AC-ID
+# - Repeat until blocker or phase complete
 ```
 
 ### Progress Output Format (Minimal):
