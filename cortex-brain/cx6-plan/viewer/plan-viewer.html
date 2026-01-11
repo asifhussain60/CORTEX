@@ -706,72 +706,78 @@
         /* THREE-PANE LAYOUT */
         .audit-three-pane {
             display: grid;
-            grid-template-columns: 280px 1fr;
-            grid-template-rows: 1fr auto;
-            height: 600px;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto 1fr auto;
+            height: 800px;
         }
         
-        /* LEFT PANE: FILTERS */
+        /* TOP: PILL FILTERS */
         .audit-filters-pane {
-            grid-row: 1 / 3;
-            border-right: 1px solid var(--color-border);
+            border-bottom: 1px solid var(--color-border);
             padding: var(--spacing-lg);
-            overflow-y: auto;
             background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+            align-items: center;
         }
         
-        .audit-filter-section {
-            margin-bottom: var(--spacing-xl);
-        }
-        
-        .audit-filter-title {
+        .audit-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-md);
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--color-border);
+            border-radius: 20px;
             font-size: var(--font-size-sm);
-            font-weight: 600;
-            color: var(--color-text-secondary);
-            margin-bottom: var(--spacing-md);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        
-        .audit-filter-item {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-sm);
-            padding: var(--spacing-sm) 0;
             cursor: pointer;
-            transition: color var(--transition-base);
-        }
-        
-        .audit-filter-item:hover {
-            color: var(--color-primary-accent);
-        }
-        
-        .audit-filter-checkbox {
-            width: 16px;
-            height: 16px;
-            border: 2px solid var(--color-border);
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
             transition: all var(--transition-base);
+            white-space: nowrap;
         }
         
-        .audit-filter-item.active .audit-filter-checkbox {
-            background: var(--color-primary-accent);
+        .audit-pill:hover {
+            background: rgba(0, 212, 255, 0.2);
             border-color: var(--color-primary-accent);
         }
         
-        .audit-filter-label {
-            font-size: var(--font-size-sm);
-            flex: 1;
+        .audit-pill.active {
+            background: var(--color-primary-accent);
+            border-color: var(--color-primary-accent);
+            font-weight: 600;
         }
         
-        .audit-filter-count {
-            font-size: var(--font-size-xs);
-            color: var(--color-text-tertiary);
+        .audit-pill-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        
+        .audit-pill.active .audit-pill-badge {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .audit-filter-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--color-border);
+            margin: 0 var(--spacing-sm);
+        }
+        
+        .audit-filter-section-title {
+            font-size: var(--font-size-sm);
             font-weight: 600;
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-right: var(--spacing-md);
         }
         
         /* CENTER PANE: TIMELINE */
@@ -823,29 +829,46 @@
         
         .audit-event-row {
             background: rgba(0, 212, 255, 0.03);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-sm);
-            padding: var(--spacing-md);
+            border-left: 3px solid transparent;
+            border-bottom: 1px solid var(--color-border);
+            padding: var(--spacing-sm) var(--spacing-md);
             cursor: pointer;
             transition: all var(--transition-base);
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            gap: var(--spacing-md);
+            align-items: center;
         }
         
         .audit-event-row:hover {
             background: rgba(0, 212, 255, 0.08);
-            border-color: var(--color-primary-accent);
-            transform: translateX(4px);
+            border-left-color: var(--color-primary-accent);
         }
         
         .audit-event-row.selected {
             background: rgba(0, 212, 255, 0.15);
-            border-color: var(--color-primary-accent);
+            border-left-color: var(--color-primary-accent);
+            border-left-width: 4px;
+        }
+        
+        .audit-event-time {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-tertiary);
+            font-family: 'Courier New', monospace;
+            min-width: 80px;
+        }
+        
+        .audit-event-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
         }
         
         .audit-event-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: var(--spacing-sm);
+            gap: var(--spacing-sm);
         }
         
         .audit-event-time {
@@ -916,7 +939,6 @@
         
         /* BOTTOM PANE: DETAIL PANEL */
         .audit-detail-pane {
-            grid-column: 2 / 3;
             border-top: 1px solid var(--color-border);
             padding: var(--spacing-lg);
             background: rgba(0, 0, 0, 0.3);
@@ -2351,83 +2373,50 @@
                             
                             <!-- THREE-PANE LAYOUT -->
                             <div class="audit-three-pane">
-                                <!-- LEFT: FILTERS -->
+                                <!-- TOP: PILL FILTERS -->
                                 <div class="audit-filters-pane">
-                                    <div class="audit-filter-section">
-                                        <div class="audit-filter-title">Time Range</div>
-                                        <div class="audit-filter-item active" data-filter="time" data-value="all">
-                                            <div class="audit-filter-checkbox"><i class="bi bi-check"></i></div>
-                                            <span class="audit-filter-label">All Time</span>
-                                        </div>
-                                        <div class="audit-filter-item" data-filter="time" data-value="1h">
-                                            <div class="audit-filter-checkbox"></div>
-                                            <span class="audit-filter-label">Last Hour</span>
-                                        </div>
-                                        <div class="audit-filter-item" data-filter="time" data-value="24h">
-                                            <div class="audit-filter-checkbox"></div>
-                                            <span class="audit-filter-label">Last 24 Hours</span>
-                                        </div>
-                                        <div class="audit-filter-item" data-filter="time" data-value="7d">
-                                            <div class="audit-filter-checkbox"></div>
-                                            <span class="audit-filter-label">Last 7 Days</span>
-                                        </div>
+                                    <!-- Time Range Pills -->
+                                    <span class="audit-filter-section-title">Time:</span>
+                                    <div class="audit-pill active" data-filter="time" data-value="all">All Time</div>
+                                    <div class="audit-pill" data-filter="time" data-value="1h">Last Hour</div>
+                                    <div class="audit-pill" data-filter="time" data-value="24h">Last 24h</div>
+                                    <div class="audit-pill" data-filter="time" data-value="7d">Last 7d</div>
+                                    
+                                    <div class="audit-filter-divider"></div>
+                                    
+                                    <!-- Level Pills with Badges -->
+                                    <span class="audit-filter-section-title">Level:</span>
+                                    <div class="audit-pill active" data-filter="level" data-value="all">
+                                        All <span class="audit-pill-badge" id="filter-count-all">0</span>
+                                    </div>
+                                    <div class="audit-pill" data-filter="level" data-value="info">
+                                        <i class="bi bi-info-circle"></i> Info <span class="audit-pill-badge" id="filter-count-info">0</span>
+                                    </div>
+                                    <div class="audit-pill" data-filter="level" data-value="warning">
+                                        <i class="bi bi-exclamation-triangle"></i> Warning <span class="audit-pill-badge" id="filter-count-warning">0</span>
+                                    </div>
+                                    <div class="audit-pill" data-filter="level" data-value="error">
+                                        <i class="bi bi-x-circle"></i> Error <span class="audit-pill-badge" id="filter-count-error">0</span>
+                                    </div>
+                                    <div class="audit-pill" data-filter="level" data-value="critical">
+                                        <i class="bi bi-shield-exclamation"></i> Critical <span class="audit-pill-badge" id="filter-count-critical">0</span>
                                     </div>
                                     
-                                    <div class="audit-filter-section">
-                                        <div class="audit-filter-title">Category</div>
-                                        <div class="audit-filter-item active" data-filter="category" data-value="all">
-                                            <div class="audit-filter-checkbox"><i class="bi bi-check"></i></div>
-                                            <span class="audit-filter-label">All</span>
-                                            <span class="audit-filter-count" id="filter-count-all">0</span>
-                                        </div>
-                                        <div class="audit-filter-item" data-filter="category" data-value="governance">
-                                            <div class="audit-filter-checkbox"></div>
-                                            <span class="audit-filter-label">Governance</span>
-                                            <span class="audit-filter-count" id="filter-count-governance">0</span>
-                                        </div>
-                                        <div class="audit-filter-item" data-filter="category" data-value="orchestrator">
-                                            <div class="audit-filter-checkbox"></div>
-                                            <span class="audit-filter-label">Orchestrator</span>
-                                            <span class="audit-filter-count" id="filter-count-orchestrator">0</span>
-                                        </div>
-                                        <div class="audit-filter-item" data-filter="category" data-value="validation">
-                                            <div class="audit-filter-checkbox"></div>
-                                            <span class="audit-filter-label">Validation</span>
-                                            <span class="audit-filter-count" id="filter-count-validation">0</span>
-                                        </div>
-                                        <div class="audit-filter-item" data-filter="category" data-value="middleware">
-                                            <div class="audit-filter-checkbox"></div>
-                                            <span class="audit-filter-label">Middleware</span>
-                                            <span class="audit-filter-count" id="filter-count-middleware">0</span>
-                                        </div>
-                                    </div>
+                                    <div class="audit-filter-divider"></div>
                                     
-                                    <div class="audit-filter-section">
-                                        <div class="audit-filter-title">Level</div>
-                                        <div class="audit-filter-item active" data-filter="level" data-value="all">
-                                            <div class="audit-filter-checkbox"><i class="bi bi-check"></i></div>
-                                            <span class="audit-filter-label">All</span>
-                                        </div>
-                                        <div class="audit-filter-item" data-filter="level" data-value="info">
-                                            <div class="audit-filter-checkbox"></div>
-                                            <span class="audit-filter-label">Info</span>
-                                            <span class="audit-filter-count" id="filter-count-info">0</span>
-                                        </div>
-                                        <div class="audit-filter-item" data-filter="level" data-value="warning">
-                                            <div class="audit-filter-checkbox"></div>
-                                            <span class="audit-filter-label">Warning</span>
-                                            <span class="audit-filter-count" id="filter-count-warning">0</span>
-                                        </div>
-                                        <div class="audit-filter-item" data-filter="level" data-value="error">
-                                            <div class="audit-filter-checkbox"></div>
-                                            <span class="audit-filter-label">Error</span>
-                                            <span class="audit-filter-count" id="filter-count-error">0</span>
-                                        </div>
-                                        <div class="audit-filter-item" data-filter="level" data-value="critical">
-                                            <div class="audit-filter-checkbox"></div>
-                                            <span class="audit-filter-label">Critical</span>
-                                            <span class="audit-filter-count" id="filter-count-critical">0</span>
-                                        </div>
+                                    <!-- Category Pills with Badges -->
+                                    <span class="audit-filter-section-title">Category:</span>
+                                    <div class="audit-pill" data-filter="category" data-value="governance">
+                                        Governance <span class="audit-pill-badge" id="filter-count-governance">0</span>
+                                    </div>
+                                    <div class="audit-pill" data-filter="category" data-value="orchestrator">
+                                        Orchestrator <span class="audit-pill-badge" id="filter-count-orchestrator">0</span>
+                                    </div>
+                                    <div class="audit-pill" data-filter="category" data-value="validation">
+                                        Validation <span class="audit-pill-badge" id="filter-count-validation">0</span>
+                                    </div>
+                                    <div class="audit-pill" data-filter="category" data-value="middleware">
+                                        Middleware <span class="audit-pill-badge" id="filter-count-middleware">0</span>
                                     </div>
                                 </div>
                                 
@@ -2509,14 +2498,14 @@
                 
                 container.innerHTML = logs.slice(0, 50).map(log => `
                     <div class="audit-event-row" data-event-id="${log.id}">
-                        <div class="audit-event-header">
-                            <span class="audit-event-time">${this.formatTimestamp(log.timestamp)}</span>
-                            <span class="audit-event-level ${log.level}">${log.level}</span>
-                        </div>
-                        <div class="audit-event-body">
-                            <div class="audit-event-category">${log.domain}</div>
-                            <div class="audit-event-message">${this.truncate(log.reason, 100)}</div>
-                            <div class="audit-event-meta">
+                        <div class="audit-event-time">${this.formatTimestamp(log.timestamp).split(',')[1].trim()}</div>
+                        <div class="audit-event-content">
+                            <div class="audit-event-header">
+                                <span class="audit-event-category">${log.domain}</span>
+                                <span class="audit-event-level ${log.level}">${log.level.toUpperCase()}</span>
+                            </div>
+                            <div class="audit-event-message">${this.truncate(log.reason, 120)}</div>
+                            <div class="audit-event-metadata">
                                 <div class="audit-event-meta-item">
                                     <i class="bi bi-cpu"></i>
                                     <span>${log.actor}</span>
@@ -2525,12 +2514,16 @@
                                     <i class="bi bi-bullseye"></i>
                                     <span>${log.target}</span>
                                 </div>
-                                <div class="audit-event-meta-item">
-                                    <i class="bi bi-check-circle"></i>
-                                    <span>${log.outcome}</span>
-                                </div>
                             </div>
                         </div>
+                        <div class="audit-event-outcome" style="
+                            background: ${log.outcome === 'blocked' ? 'rgba(239, 68, 68, 0.2)' : 
+                                        log.outcome === 'allowed' || log.outcome === 'verified' ? 'rgba(34, 197, 94, 0.2)' : 
+                                        'rgba(245, 158, 11, 0.2)'};
+                            color: ${log.outcome === 'blocked' ? 'var(--color-blocked)' : 
+                                    log.outcome === 'allowed' || log.outcome === 'verified' ? 'var(--color-completed)' : 
+                                    'var(--color-in-progress)'};
+                        ">${log.outcome}</div>
                     </div>
                 `).join('');
             },
@@ -2710,14 +2703,16 @@
             
             setupAuditEventListeners() {
                 setTimeout(() => {
-                    document.querySelectorAll('.audit-filter-item').forEach(item => {
-                        item.addEventListener('click', (e) => {
-                            const filterType = item.dataset.filter;
-                            const filterValue = item.dataset.value;
+                    // Pill filter click handlers
+                    document.querySelectorAll('.audit-pill').forEach(pill => {
+                        pill.addEventListener('click', (e) => {
+                            const filterType = pill.dataset.filter;
+                            const filterValue = pill.dataset.value;
                             
-                            const siblings = document.querySelectorAll(`.audit-filter-item[data-filter="${filterType}"]`);
+                            // Remove active from siblings
+                            const siblings = document.querySelectorAll(`.audit-pill[data-filter="${filterType}"]`);
                             siblings.forEach(s => s.classList.remove('active'));
-                            item.classList.add('active');
+                            pill.classList.add('active');
                             
                             this.data.filters[filterType] = filterValue;
                             this.applyFilters();
