@@ -1187,14 +1187,8 @@
                     // Load plan data
                     await this.loadPlanData();
                     
-                    // Load audit logs
-                    await this.loadAuditLogs();
-                    
                     // Render UI
                     this.renderDashboard();
-                    
-                    // Setup audit event listeners
-                    this.setupAuditEventListeners();
                     
                     console.log('✓ CORTEX Plan Viewer initialized');
                 } catch (error) {
