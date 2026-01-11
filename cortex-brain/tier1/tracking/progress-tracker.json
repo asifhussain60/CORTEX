@@ -1,14 +1,16 @@
 {
   "schema_version": "1.9",
-  "last_updated": "2026-01-11T17:58:58.915302+00:00",
+  "last_updated": "2026-01-11T18:36:57.395422+00:00",
   "updated_by": "Audit-based validator (audit_logs + live_tests)",
   "active_epic": {
     "id": "CORTEX-6.0",
-    "name": "CORTEX 6.0 Production-Grade Rebuild with Hybrid Approach",
-    "description": "4-tier governance + audit + security + GPT plan rigor (hash chain, STS, Evidence Bundles)",
+    "name": "CORTEX 6.0 Production-Grade Rebuild with Sequential Execution",
+    "description": "4-tier governance + audit + security + Sequential phase-by-phase implementation (100% gates)",
     "started": "2026-01-10",
     "target_completion": "2026-02-28",
-    "status": "phase_2_in_progress",
+    "status": "phase_1_in_progress",
+    "execution_strategy": "SEQUENTIAL",
+    "phase_gate_policy": "Each phase must reach 100% before next phase starts",
     "design_score": 97,
     "design_score_target": 95,
     "design_score_previous": 96,
@@ -36,8 +38,8 @@
       "HTML Validation Governance (CORE-023)",
       "3-Layer Response Template Architecture (AC-TEMPLATE-001 to AC-TEMPLATE-008)"
     ],
-    "current_phase": "Phase 2: Orchestration Core (47% complete)",
-    "next_action": "Phase 1 at 97% (33/34 AC-IDs), Phase 1.5 complete (3/3). Total: 36 AC-IDs operational. Phase 2 (Orchestration Core) not started. Ready to begin Phase 2 implementation."
+    "current_phase": "Phase 1: Foundation (44% complete - 15/34 verified)",
+    "next_action": "Complete Phase 1 to 100% before starting Phase 2. Focus: AC-STATE-002, AC-LIFECYCLE-002, AC-LIFECYCLE-003, AC-EVIDENCE-002, AC-EVIDENCE-003, Security layer (AC-SECURITY-001 to AC-SECURITY-006)."
   },
   "current_phase": {
     "number": 1,
@@ -631,11 +633,9 @@
         "AC-ONBOARD-011",
         "AC-ONBOARD-012"
       ],
-      "notes": "Onboarding orchestrator builds context from AST crawlers, git history, stores in tier1. AC-ONBOARD-012 enables auto-run during setup/installation.",
-      "status": "completed",
-      "started": "2026-01-10T19:33:00Z",
-      "completed_at": "2026-01-10T19:34:30Z",
-      "completed_count": 23,
+      "notes": "Onboarding orchestrator builds context from AST crawlers, git history, stores in tier1. AC-ONBOARD-012 enables auto-run during setup/installation. CORRECTED: No test evidence found - marking as planned.",
+      "status": "planned",
+      "completed_count": 0,
       "total_ac_count": 23
     },
     {

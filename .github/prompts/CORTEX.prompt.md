@@ -81,15 +81,18 @@ See CORTEX-PLAN.prompt.md for full autonomous workflow.
 On every turn:
 
 1. Read `progress-tracker.json`
-2. Select the first incomplete AC-ID
-3. Execute via orchestrator
-4. Run tests
-5. Update state with EVIDENCE ONLY (test results)
-6. Sync plan viewer: `python3 scripts/sync_plan_viewer_data.py`
-7. Report concisely
-8. Continue immediately
+2. Check current phase completion (must be < 100%)
+3. Select the first incomplete AC-ID in current phase
+4. Execute via orchestrator
+5. Run tests
+6. Update state with EVIDENCE ONLY (test results)
+7. Sync plan viewer: `python3 scripts/sync_plan_viewer_data.py`
+8. Report concisely
+9. Continue immediately
 
-Do **not** pause between AC-IDs.
+**Sequential Gate:** If current phase reaches 100%, report completion and STOP. User must approve phase transition.
+
+Do **not** pause between AC-IDs within a phase.
 
 **Evidence Requirements:**
 - Mark "implemented" only if tests exist AND pass
@@ -201,10 +204,18 @@ Phase 1 at 64%. Implementing AC-AUDIT-007...
 ## WHEN BLOCKED
 
 Only stop when:
+- **Phase 100% complete** (await user approval for next phase)
 - Missing required user input
 - External dependency unavailable
 
 Report in one sentence. Do not speculate.
+
+**Phase Transition Protocol:**
+```
+Phase N complete (100%). Ready to start Phase N+1.
+
+Awaiting approval to proceed.
+```
 
 ---
 
