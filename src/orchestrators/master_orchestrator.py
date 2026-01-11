@@ -458,8 +458,11 @@ class MasterOrchestrator:
             ValueError: If orchestrator not found
             RuntimeError: If execution fails
         """
-        # Get orchestrator from registry
-        orchestrator = self.registry.instantiate(orchestrator_id)
+        # Get orchestrator from registry with workspace_root init arg
+        init_args = {
+            'workspace_root': str(Path.cwd())
+        }
+        orchestrator = self.registry.instantiate(orchestrator_id, init_args=init_args)
         
         if not orchestrator:
             raise ValueError(f"Orchestrator not found: {orchestrator_id}")
@@ -482,9 +485,25 @@ class MasterOrchestrator:
                 # Direct execution (for simple orchestrators)
                 started_at = datetime.now()
                 
-                # Pass params to execute method
+                # Pass params to execute method - intelligently map parameters
                 if params:
-                    result_data = orchestrator.execute(**params)
+                    import inspect
+                    sig = inspect.signature(orchestrator.execute)
+                    execute_params = set(sig.parameters.keys())
+                    
+                    # Map params to execute method signature
+                    mapped_params = {}
+                    if 'context' in execute_params and 'user_request' in params:
+                        # Map user_request to context for orchestrators expecting context dict
+                        mapped_params['context'] = {'user_request': params['user_request']}
+                    elif 'user_request' in execute_params:
+                        # Pass user_request directly
+                        mapped_params['user_request'] = params.get('user_request', '')
+                    else:
+                        # Pass all params as-is
+                        mapped_params = params
+                    
+                    result_data = orchestrator.execute(**mapped_params)
                 else:
                     result_data = orchestrator.execute()
                     
