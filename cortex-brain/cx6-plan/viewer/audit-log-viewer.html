@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX 6.0 Audit Log Viewer - Real-time governance observability and accountability tracking">
+    <title>CORTEX 6.0 - Audit Log Viewer</title>
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        /* DESIGN SYSTEM */
+        :root {
+            --color-primary-dark: #0a0e27;
+            --color-primary-darker: #050814;
+            --color-primary-accent: #00d4ff;
+            --color-primary-accent-alt: #7b2cbf;
+            --color-primary-green: #06ffa5;
+            
+            --color-completed: #10b981;
+            --color-in-progress: #f59e0b;
+            --color-blocked: #ef4444;
+            --color-not-started: #6b7280;
+            
+            --color-audit-info: #60a5fa;
+            --color-audit-warning: #fbbf24;
+            --color-audit-error: #ef4444;
+            --color-audit-critical: #991b1b;
+            
+            --color-text-primary: #ffffff;
+            --color-text-secondary: rgba(255, 255, 255, 0.7);
+            --color-text-tertiary: rgba(255, 255, 255, 0.5);
+            --color-border: rgba(0, 212, 255, 0.15);
+            --color-bg-elevated: rgba(10, 14, 39, 0.6);
+            
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            
+            --transition-base: 200ms ease-out;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--color-primary-darker) 0%, var(--color-primary-dark) 50%, var(--color-primary-darker) 100%);
+            color: var(--color-text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* HEADER */
+        .app-header {
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--color-border);
+            padding: var(--spacing-lg) var(--spacing-2xl);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-lg);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--color-primary-accent) 0%, var(--color-primary-accent-alt) 100%);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 700;
+            box-shadow: 0 4px 16px rgba(0, 212, 255, 0.3);
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-title {
+            font-size: var(--font-size-lg);
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--color-primary-accent) 0%, var(--color-primary-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .logo-subtitle {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        
+        .header-divider {
+            width: 1px;
+            height: 40px;
+            background: var(--color-border);
+        }
+        
+        .page-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--color-text-primary);
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+        
+        .header-btn {
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            color: var(--color-text-primary);
+            font-size: var(--font-size-sm);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            text-decoration: none;
+        }
+        
+        .header-btn:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: var(--color-primary-accent);
+            transform: translateY(-1px);
+        }
+        
+        /* MAIN CONTAINER */
+        .app-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: var(--spacing-2xl);
+        }
+        
+        /* METRICS STRIP */
+        .metrics-strip {
+            background: rgba(10, 14, 39, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: var(--spacing-xl);
+        }
+        
+        .metric-card {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+        }
+        
+        .metric-label {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .metric-value {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+        }
+        
+        /* VIEWER CONTAINER */
+        .viewer-container {
+            background: rgba(10, 14, 39, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 300px);
+        }
+        
+        /* PILL FILTERS */
+        .filters-bar {
+            border-bottom: 1px solid var(--color-border);
+            padding: var(--spacing-lg);
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-md);
+            align-items: center;
+        }
+        
+        .filter-group-label {
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-right: var(--spacing-sm);
+        }
+        
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-md);
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--color-border);
+            border-radius: 20px;
+            font-size: var(--font-size-sm);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            white-space: nowrap;
+        }
+        
+        .pill:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: var(--color-primary-accent);
+        }
+        
+        .pill.active {
+            background: var(--color-primary-accent);
+            border-color: var(--color-primary-accent);
+            font-weight: 600;
+            color: var(--color-primary-dark);
+        }
+        
+        .pill-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            padding: 0 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+        
+        .pill.active .pill-badge {
+            background: rgba(10, 14, 39, 0.3);
+        }
+        
+        .filter-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--color-border);
+            margin: 0 var(--spacing-sm);
+        }
+        
+        /* TIMELINE */
+        .timeline-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: var(--spacing-lg);
+        }
+        
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .timeline-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .event-row {
+            background: rgba(0, 212, 255, 0.03);
+            border-left: 3px solid transparent;
+            border-bottom: 1px solid var(--color-border);
+            padding: var(--spacing-sm) var(--spacing-md);
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: var(--spacing-md);
+            align-items: center;
+        }
+        
+        .event-row:hover {
+            background: rgba(0, 212, 255, 0.08);
+            border-left-color: var(--color-primary-accent);
+        }
+        
+        .event-row.selected {
+            background: rgba(0, 212, 255, 0.15);
+            border-left-color: var(--color-primary-accent);
+            border-left-width: 4px;
+        }
+        
+        .event-time {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-tertiary);
+            font-family: 'Courier New', monospace;
+            min-width: 80px;
+        }
+        
+        .event-content {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+        }
+        
+        .event-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+        
+        .event-category {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: rgba(0, 212, 255, 0.15);
+        }
+        
+        .event-level {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: var(--font-size-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .event-level.info {
+            background: rgba(96, 165, 250, 0.2);
+            color: var(--color-audit-info);
+        }
+        
+        .event-level.warning {
+            background: rgba(251, 191, 36, 0.2);
+            color: var(--color-audit-warning);
+        }
+        
+        .event-level.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--color-audit-error);
+        }
+        
+        .event-level.critical {
+            background: rgba(153, 27, 27, 0.3);
+            color: var(--color-audit-critical);
+        }
+        
+        .event-message {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-primary);
+            font-weight: 500;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .event-metadata {
+            display: flex;
+            gap: var(--spacing-sm);
+            align-items: center;
+            font-size: 11px;
+            color: var(--color-text-tertiary);
+        }
+        
+        .event-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .event-meta-item i {
+            font-size: 12px;
+            opacity: 0.6;
+        }
+        
+        .event-outcome {
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            white-space: nowrap;
+        }
+        
+        /* DETAIL PANEL */
+        .detail-panel {
+            border-top: 1px solid var(--color-border);
+            padding: var(--spacing-lg);
+            background: rgba(0, 0, 0, 0.3);
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .detail-empty {
+            text-align: center;
+            color: var(--color-text-tertiary);
+            padding: var(--spacing-xl);
+        }
+        
+        .detail-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+        }
+        
+        .detail-section {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+        
+        .detail-heading {
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: var(--color-primary-accent);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--spacing-xs);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+        
+        .detail-text {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+        
+        .detail-impact {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            padding: var(--spacing-md);
+        }
+        
+        .detail-impact.high {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+        }
+        
+        .detail-impact.medium {
+            background: rgba(245, 158, 11, 0.1);
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+        
+        .detail-impact.low {
+            background: rgba(107, 114, 128, 0.1);
+            border-color: rgba(107, 114, 128, 0.3);
+        }
+        
+        .detail-evidence {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+        }
+        
+        .evidence-link {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            color: var(--color-primary-accent);
+            text-decoration: none;
+            font-size: var(--font-size-xs);
+            transition: all var(--transition-base);
+        }
+        
+        .evidence-link:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: var(--color-primary-accent);
+        }
+        
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 212, 255, 0.3);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 212, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header class="app-header">
+        <div class="header-left">
+            <div class="logo-container">
+                <div class="logo-icon">C6</div>
+                <div class="logo-text">
+                    <div class="logo-title">CORTEX 6.0</div>
+                    <div class="logo-subtitle">Audit Intelligence</div>
+                </div>
+            </div>
+            <div class="header-divider"></div>
+            <h1 class="page-title">Audit Log Viewer & Governance Observability</h1>
+        </div>
+        <div class="header-actions">
+            <a href="plan-viewer.html" class="header-btn">
+                <i class="bi bi-arrow-left"></i> Back to Plan
+            </a>
+            <button class="header-btn" id="btn-refresh">
+                <i class="bi bi-arrow-clockwise"></i> Refresh
+            </button>
+            <button class="header-btn" id="btn-export">
+                <i class="bi bi-download"></i> Export
+            </button>
+        </div>
+    </header>
+    
+    <!-- MAIN CONTAINER -->
+    <div class="app-container">
+        <!-- METRICS STRIP -->
+        <div class="metrics-strip">
+            <div class="metric-card">
+                <span class="metric-label">Total Events</span>
+                <span class="metric-value" id="metric-total" style="color: var(--color-primary-accent);">--</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Allowed / Verified</span>
+                <span class="metric-value" id="metric-allowed" style="color: var(--color-completed);">--</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">In Progress</span>
+                <span class="metric-value" id="metric-progress" style="color: var(--color-in-progress);">--</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Blocked / Violations</span>
+                <span class="metric-value" id="metric-blocked" style="color: var(--color-blocked);">--</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Last Event</span>
+                <span class="metric-value" id="metric-last" style="font-size: var(--font-size-base);">--</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Risk Level</span>
+                <span class="metric-value" id="metric-risk">--</span>
+            </div>
+        </div>
+        
+        <!-- VIEWER CONTAINER -->
+        <div class="viewer-container">
+            <!-- FILTERS BAR -->
+            <div class="filters-bar">
+                <span class="filter-group-label">Time:</span>
+                <div class="pill active" data-filter="time" data-value="all">All Time</div>
+                <div class="pill" data-filter="time" data-value="1h">Last Hour</div>
+                <div class="pill" data-filter="time" data-value="24h">Last 24h</div>
+                <div class="pill" data-filter="time" data-value="7d">Last 7d</div>
+                
+                <div class="filter-divider"></div>
+                
+                <span class="filter-group-label">Level:</span>
+                <div class="pill active" data-filter="level" data-value="all">
+                    All <span class="pill-badge" id="count-all">0</span>
+                </div>
+                <div class="pill" data-filter="level" data-value="info">
+                    <i class="bi bi-info-circle"></i> Info <span class="pill-badge" id="count-info">0</span>
+                </div>
+                <div class="pill" data-filter="level" data-value="warning">
+                    <i class="bi bi-exclamation-triangle"></i> Warning <span class="pill-badge" id="count-warning">0</span>
+                </div>
+                <div class="pill" data-filter="level" data-value="error">
+                    <i class="bi bi-x-circle"></i> Error <span class="pill-badge" id="count-error">0</span>
+                </div>
+                <div class="pill" data-filter="level" data-value="critical">
+                    <i class="bi bi-shield-exclamation"></i> Critical <span class="pill-badge" id="count-critical">0</span>
+                </div>
+                
+                <div class="filter-divider"></div>
+                
+                <span class="filter-group-label">Category:</span>
+                <div class="pill active" data-filter="category" data-value="all">
+                    All <span class="pill-badge" id="count-category-all">0</span>
+                </div>
+                <div class="pill" data-filter="category" data-value="middleware">
+                    Middleware <span class="pill-badge" id="count-middleware">0</span>
+                </div>
+                <div class="pill" data-filter="category" data-value="state_management">
+                    State Mgmt <span class="pill-badge" id="count-state_management">0</span>
+                </div>
+                <div class="pill" data-filter="category" data-value="governance">
+                    Governance <span class="pill-badge" id="count-governance">0</span>
+                </div>
+                <div class="pill" data-filter="category" data-value="orchestrator">
+                    Orchestrator <span class="pill-badge" id="count-orchestrator">0</span>
+                </div>
+                <div class="pill" data-filter="category" data-value="validation">
+                    Validation <span class="pill-badge" id="count-validation">0</span>
+                </div>
+            </div>
+            
+            <!-- TIMELINE -->
+            <div class="timeline-container">
+                <div class="timeline-header">
+                    <div class="timeline-title">
+                        <i class="bi bi-clock-history"></i> Audit Event Timeline
+                    </div>
+                </div>
+                <div id="timeline-list">
+                    <div class="detail-empty">
+                        <i class="bi bi-hourglass-split" style="font-size: 48px; opacity: 0.3;"></i>
+                        <div style="margin-top: var(--spacing-md);">Loading audit events...</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- DETAIL PANEL -->
+            <div class="detail-panel" id="detail-panel">
+                <div class="detail-empty">
+                    <i class="bi bi-info-circle" style="font-size: 32px; opacity: 0.3;"></i>
+                    <div style="margin-top: var(--spacing-sm);">Select an audit event to view details</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Audit Viewer Application
+        const app = {
+            data: {
+                auditLogs: [],
+                filteredLogs: [],
+                selectedEvent: null,
+                filters: {
+                    time: 'all',
+                    category: 'all',
+                    level: 'all'
+                }
+            },
+            
+            async init() {
+                console.log('Initializing CORTEX Audit Viewer...');
+                await this.loadAuditLogs();
+                this.updateMetrics();
+                this.updateFilterCounts();
+                this.renderTimeline();
+                this.setupEventListeners();
+                console.log('✓ Audit Viewer initialized');
+            },
+            
+            async loadAuditLogs() {
+                try {
+                    const response = await fetch('../../../cortex-brain/audit-logs/consolidated-audit.json');
+                    if (response.ok) {
+                        const data = await response.json();
+                        const logsArray = data.logs || data;
+                        this.data.auditLogs = this.normalizeAuditLogs(logsArray);
+                    } else {
+                        this.data.auditLogs = this.generateMockData();
+                    }
+                    this.data.filteredLogs = [...this.data.auditLogs];
+                    console.log(`✓ Loaded ${this.data.auditLogs.length} audit events`);
+                } catch (error) {
+                    console.warn('Could not load audit logs, using mock data:', error);
+                    this.data.auditLogs = this.generateMockData();
+                    this.data.filteredLogs = [...this.data.auditLogs];
+                }
+            },
+            
+            normalizeAuditLogs(rawLogs) {
+                return rawLogs.map((log, index) => ({
+                    id: log.id || `evt-${index}`,
+                    timestamp: log.timestamp || new Date().toISOString(),
+                    domain: log.category || log.domain || 'unknown',
+                    actor: log.component || log.actor || 'System',
+                    action: log.operation || log.action || 'unknown',
+                    target: log.target || log.message || 'N/A',
+                    outcome: this.determineOutcome(log),
+                    level: log.level || 'info',
+                    reason: log.message || 'No message',
+                    evidence: log.metadata || {},
+                    correlationId: log.correlation_id || null
+                }));
+            },
+            
+            determineOutcome(log) {
+                if (log.outcome) return log.outcome;
+                if (log.message && log.message.includes('block')) return 'blocked';
+                if (log.message && log.message.includes('success')) return 'allowed';
+                if (log.level === 'error' || log.level === 'critical') return 'blocked';
+                return 'verified';
+            },
+            
+            generateMockData() {
+                // Mock data generator for fallback
+                return Array.from({ length: 50 }, (_, i) => ({
+                    id: `mock-${i}`,
+                    timestamp: new Date(Date.now() - i * 60000).toISOString(),
+                    domain: ['governance', 'orchestrator', 'middleware', 'validation'][Math.floor(Math.random() * 4)],
+                    actor: ['MasterOrchestrator', 'GovernanceMerger', 'StateManager'][Math.floor(Math.random() * 3)],
+                    action: 'execute',
+                    target: 'operation',
+                    outcome: ['allowed', 'blocked', 'verified', 'in-progress'][Math.floor(Math.random() * 4)],
+                    level: ['info', 'warning', 'error', 'critical'][Math.floor(Math.random() * 4)],
+                    reason: `Mock audit event ${i}`,
+                    evidence: {},
+                    correlationId: `CORTEX-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
+                }));
+            },
+            
+            updateMetrics() {
+                const logs = this.data.auditLogs;
+                const total = logs.length;
+                const allowed = logs.filter(l => l.outcome === 'allowed' || l.outcome === 'verified').length;
+                const inProgress = logs.filter(l => l.outcome === 'in-progress' || l.outcome === 'deferred').length;
+                const blocked = logs.filter(l => l.outcome === 'blocked').length;
+                const lastEvent = logs.length > 0 ? this.formatTimestamp(logs[0].timestamp) : 'N/A';
+                const riskLevel = this.calculateRiskLevel(logs);
+                
+                document.getElementById('metric-total').textContent = total;
+                document.getElementById('metric-allowed').textContent = allowed;
+                document.getElementById('metric-progress').textContent = inProgress;
+                document.getElementById('metric-blocked').textContent = blocked;
+                document.getElementById('metric-last').textContent = lastEvent;
+                document.getElementById('metric-risk').textContent = riskLevel.text;
+                document.getElementById('metric-risk').style.color = riskLevel.color;
+            },
+            
+            updateFilterCounts() {
+                const logs = this.data.auditLogs;
+                
+                document.getElementById('count-all').textContent = logs.length;
+                document.getElementById('count-category-all').textContent = logs.length;
+                
+                const categoryCounts = {};
+                logs.forEach(log => {
+                    categoryCounts[log.domain] = (categoryCounts[log.domain] || 0) + 1;
+                });
+                
+                Object.keys(categoryCounts).forEach(category => {
+                    const el = document.getElementById(`count-${category}`);
+                    if (el) el.textContent = categoryCounts[category];
+                });
+                
+                const levelCounts = {};
+                logs.forEach(log => {
+                    levelCounts[log.level] = (levelCounts[log.level] || 0) + 1;
+                });
+                
+                Object.keys(levelCounts).forEach(level => {
+                    const el = document.getElementById(`count-${level}`);
+                    if (el) el.textContent = levelCounts[level];
+                });
+            },
+            
+            renderTimeline() {
+                const container = document.getElementById('timeline-list');
+                const logs = this.data.filteredLogs;
+                
+                if (logs.length === 0) {
+                    container.innerHTML = `
+                        <div class="detail-empty">
+                            <i class="bi bi-filter-circle" style="font-size: 48px; opacity: 0.3;"></i>
+                            <div style="margin-top: var(--spacing-md);">No events match current filters</div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = logs.slice(0, 100).map(log => `
+                    <div class="event-row" data-event-id="${log.id}">
+                        <div class="event-time">${this.formatTimestamp(log.timestamp).split(',')[1]?.trim() || ''}</div>
+                        <div class="event-content">
+                            <div class="event-header">
+                                <span class="event-category">${log.domain}</span>
+                                <span class="event-level ${log.level}">${log.level.toUpperCase()}</span>
+                            </div>
+                            <div class="event-message">${this.truncate(log.reason, 120)}</div>
+                            <div class="event-metadata">
+                                <div class="event-meta-item">
+                                    <i class="bi bi-cpu"></i>
+                                    <span>${log.actor}</span>
+                                </div>
+                                <div class="event-meta-item">
+                                    <i class="bi bi-bullseye"></i>
+                                    <span>${log.target}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event-outcome" style="
+                            background: ${log.outcome === 'blocked' ? 'rgba(239, 68, 68, 0.2)' : 
+                                        log.outcome === 'allowed' || log.outcome === 'verified' ? 'rgba(34, 197, 94, 0.2)' : 
+                                        'rgba(245, 158, 11, 0.2)'};
+                            color: ${log.outcome === 'blocked' ? 'var(--color-blocked)' : 
+                                    log.outcome === 'allowed' || log.outcome === 'verified' ? 'var(--color-completed)' : 
+                                    'var(--color-in-progress)'};
+                        ">${log.outcome}</div>
+                    </div>
+                `).join('');
+            },
+            
+            renderDetail(event) {
+                const panel = document.getElementById('detail-panel');
+                
+                if (!event) {
+                    panel.innerHTML = `
+                        <div class="detail-empty">
+                            <i class="bi bi-info-circle" style="font-size: 32px; opacity: 0.3;"></i>
+                            <div style="margin-top: var(--spacing-sm);">Select an audit event to view details</div>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const impact = this.assessImpact(event);
+                
+                panel.innerHTML = `
+                    <div class="detail-content">
+                        <div class="detail-section">
+                            <div class="detail-heading">
+                                <i class="bi bi-info-circle"></i> What Happened
+                            </div>
+                            <div class="detail-text">
+                                <strong>${event.actor}</strong> performed <strong>${event.action}</strong> on <strong>${event.target}</strong> with outcome: <strong>${event.outcome}</strong>. ${event.reason}
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <div class="detail-heading">
+                                <i class="bi bi-question-circle"></i> Why It Happened
+                            </div>
+                            <div class="detail-text">
+                                This action was part of ${event.domain} operations during system execution.
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <div class="detail-heading">
+                                <i class="bi bi-exclamation-triangle"></i> Impact Assessment
+                            </div>
+                            <div class="detail-impact ${impact.level}">
+                                <strong>${impact.title}</strong><br>
+                                ${impact.description}
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <div class="detail-heading">
+                                <i class="bi bi-link-45deg"></i> Evidence & References
+                            </div>
+                            <div class="detail-evidence">
+                                ${event.correlationId ? `<a href="#" class="evidence-link">Trace: ${event.correlationId}</a>` : ''}
+                                <a href="#" class="evidence-link">Component: ${event.actor}</a>
+                                <a href="#" class="evidence-link">Domain: ${event.domain}</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            assessImpact(event) {
+                if (event.level === 'critical' || event.outcome === 'blocked') {
+                    return {
+                        level: 'high',
+                        title: '🔴 HIGH IMPACT',
+                        description: 'This event blocks progress or violates critical governance rules. Immediate attention required.'
+                    };
+                } else if (event.level === 'warning' || event.outcome === 'deferred') {
+                    return {
+                        level: 'medium',
+                        title: '🟡 MEDIUM IMPACT',
+                        description: 'This event may affect plan execution or reduce confidence. Review recommended.'
+                    };
+                } else {
+                    return {
+                        level: 'low',
+                        title: '✅ NO CURRENT IMPACT',
+                        description: 'This is an informational event. No action required.'
+                    };
+                }
+            },
+            
+            applyFilters() {
+                const { time, category, level } = this.data.filters;
+                let filtered = [...this.data.auditLogs];
+                
+                if (time !== 'all') {
+                    const now = new Date();
+                    const cutoff = this.getTimeCutoff(time, now);
+                    filtered = filtered.filter(log => new Date(log.timestamp) >= cutoff);
+                }
+                
+                if (category !== 'all') {
+                    filtered = filtered.filter(log => log.domain === category);
+                }
+                
+                if (level !== 'all') {
+                    filtered = filtered.filter(log => log.level === level);
+                }
+                
+                this.data.filteredLogs = filtered;
+                this.renderTimeline();
+            },
+            
+            getTimeCutoff(timeRange, now) {
+                const cutoffs = {
+                    '1h': 60 * 60 * 1000,
+                    '24h': 24 * 60 * 60 * 1000,
+                    '7d': 7 * 24 * 60 * 60 * 1000
+                };
+                return new Date(now - cutoffs[timeRange]);
+            },
+            
+            calculateRiskLevel(logs) {
+                const critical = logs.filter(l => l.level === 'critical').length;
+                const errors = logs.filter(l => l.level === 'error').length;
+                const blocked = logs.filter(l => l.outcome === 'blocked').length;
+                
+                const riskScore = (critical * 3) + (errors * 2) + blocked;
+                
+                if (riskScore > 20) {
+                    return { text: 'HIGH', color: 'var(--color-blocked)' };
+                } else if (riskScore > 10) {
+                    return { text: 'MEDIUM', color: 'var(--color-in-progress)' };
+                } else {
+                    return { text: 'LOW', color: 'var(--color-completed)' };
+                }
+            },
+            
+            setupEventListeners() {
+                // Pill filters
+                document.querySelectorAll('.pill').forEach(pill => {
+                    pill.addEventListener('click', () => {
+                        const filterType = pill.dataset.filter;
+                        const filterValue = pill.dataset.value;
+                        
+                        document.querySelectorAll(`.pill[data-filter="${filterType}"]`).forEach(s => s.classList.remove('active'));
+                        pill.classList.add('active');
+                        
+                        this.data.filters[filterType] = filterValue;
+                        this.applyFilters();
+                    });
+                });
+                
+                // Event row clicks
+                document.addEventListener('click', (e) => {
+                    const row = e.target.closest('.event-row');
+                    if (row) {
+                        document.querySelectorAll('.event-row.selected').forEach(r => r.classList.remove('selected'));
+                        row.classList.add('selected');
+                        
+                        const eventId = row.dataset.eventId;
+                        const event = this.data.filteredLogs.find(log => log.id === eventId);
+                        this.renderDetail(event);
+                    }
+                });
+                
+                // Header buttons
+                document.getElementById('btn-refresh').addEventListener('click', () => {
+                    this.init();
+                });
+                
+                document.getElementById('btn-export').addEventListener('click', () => {
+                    const data = JSON.stringify(this.data.filteredLogs, null, 2);
+                    const blob = new Blob([data], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `cortex-audit-export-${new Date().toISOString()}.json`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                });
+            },
+            
+            formatTimestamp(timestamp) {
+                return new Date(timestamp).toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                });
+            },
+            
+            truncate(str, maxLength) {
+                return str.length > maxLength ? str.substring(0, maxLength) + '...' : str;
+            }
+        };
+        
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+    </script>
+</body>
+</html>
