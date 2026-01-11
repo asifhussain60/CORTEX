@@ -76,7 +76,16 @@ READ: cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml
 VERIFY: All referenced AC-IDs exist and are valid
 ```
 
-### Step 4: Check Git History (BEFORE creating new code)
+### Step 4: Validate Evidence (NEW - v6.0.1)
+```
+RUN: python3 scripts/audit_based_evidence_validator.py
+VERIFY: Tracker completion claims backed by test evidence
+CHECK: Verification rate ≥ 80% (current: 56%)
+```
+
+**Critical Rule:** If verification rate < 60%, BLOCK all new work until false positives removed.
+
+### Step 5: Check Git History (BEFORE creating new code)
 ```
 SEARCH: python -m src.tools.git_history_intelligence search "{capability}"
 CHECK: Does existing implementation exist in CORTEX-4.0, CORTEX-5.0, etc.?

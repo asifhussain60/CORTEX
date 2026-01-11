@@ -1,7 +1,7 @@
 {
   "schema_version": "1.9",
-  "last_updated": "2026-01-11T17:14:36.666598+00:00",
-  "updated_by": "Evidence-based correction from test results (1209/1259 passing)",
+  "last_updated": "2026-01-11T17:58:58.915302+00:00",
+  "updated_by": "Audit-based validator (audit_logs + live_tests)",
   "active_epic": {
     "id": "CORTEX-6.0",
     "name": "CORTEX 6.0 Production-Grade Rebuild with Hybrid Approach",
@@ -82,9 +82,9 @@
     "status": "completed",
     "started": "2026-01-10T17:00:00Z",
     "completed_at": null,
-    "completed_count": 34,
+    "completed_count": 15,
     "total_ac_count": 34,
-    "completion_percentage": 100,
+    "completion_percentage": 44,
     "verified_implemented": [
       "AC-AUDIT-001",
       "AC-AUDIT-002",
@@ -92,34 +92,15 @@
       "AC-AUDIT-004",
       "AC-AUDIT-005",
       "AC-AUDIT-006",
+      "AC-AUDIT-007",
       "AC-GOV-001",
       "AC-GOV-002",
       "AC-GOV-003",
       "AC-GOV-004",
-      "AC-GOV-005",
-      "AC-STATE-001",
-      "AC-STATE-003",
-      "AC-AUDIT-007",
       "AC-LIFECYCLE-001",
-      "AC-LIFECYCLE-002",
-      "AC-LIFECYCLE-003",
-      "AC-EVIDENCE-001",
-      "AC-EVIDENCE-002",
-      "AC-EVIDENCE-003",
-      "AC-SECURITY-001",
-      "AC-SECURITY-002",
-      "AC-SECURITY-003",
-      "AC-SECURITY-004",
-      "AC-SECURITY-005",
-      "AC-SECURITY-006",
       "AC-TEST-001",
       "AC-TEST-002",
-      "AC-TEST-003",
-      "AC-TEST-004",
-      "AC-CLEAN-001",
-      "AC-CLEAN-002",
-      "AC-CLEAN-003",
-      "AC-STATE-002"
+      "AC-TEST-003"
     ],
     "partial": [
       "AC-ORCH-003",
@@ -154,8 +135,8 @@
       "AC-STS-003"
     ],
     "total_ac_count": 3,
-    "completed_count": 3,
-    "completion_percentage": 100,
+    "completed_count": 1,
+    "completion_percentage": 33,
     "gpt_adoption": "STS as Capability 0 proves framework works",
     "validation": "First Evidence Bundle (sts_capability_zero_evidence.yaml)",
     "implementation_status": {
@@ -561,7 +542,7 @@
       "description": "MasterOrchestrator, TodoManager, TDD-Master, Planning v5",
       "started": "2026-01-10T19:27:03.747082Z",
       "target_completion": "2026-01-24",
-      "status": "completed",
+      "status": "in_progress",
       "ac_ids": [
         "AC-ORCH-001",
         "AC-ORCH-002",
@@ -595,7 +576,7 @@
         "AC-PLAN-008"
       ],
       "total_ac_count": 30,
-      "completed_count": 30,
+      "completed_count": 14,
       "critical_path": [
         "AC-ORCH-001",
         "AC-ORCH-006",
@@ -603,7 +584,24 @@
         "AC-TDD-001",
         "AC-PLAN-001"
       ],
-      "next_action": "Phase 2 complete - all 30 AC-IDs implemented with plans"
+      "next_action": "Phase 2 complete - all 30 AC-IDs implemented with plans",
+      "completion_percentage": 46,
+      "verified_implemented": [
+        "AC-TODO-001",
+        "AC-TODO-002",
+        "AC-TODO-003",
+        "AC-TODO-004",
+        "AC-TDD-001",
+        "AC-TDD-002",
+        "AC-TDD-003",
+        "AC-TDD-004",
+        "AC-TDD-005",
+        "AC-PLAN-001",
+        "AC-PLAN-002",
+        "AC-PLAN-003",
+        "AC-PLAN-004",
+        "AC-PLAN-005"
+      ]
     },
     {
       "number": 3,
