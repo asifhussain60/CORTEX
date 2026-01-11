@@ -2,229 +2,29 @@
   "plan_metadata": {
     "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
     "total_ac_ids": 102,
-    "completed_ac_ids": 79,
+    "completed_ac_ids": 43,
     "in_progress_ac_ids": 0,
     "version": "1.3.0",
-    "updated": "2026-01-11T22:23:55.408644+00:00",
+    "updated": "2026-01-11T22:27:57.092256+00:00",
     "status": "phase_1_repair_in_progress"
   },
   "phases": [
     {
       "id": 1,
       "name": "Foundation Enhancement",
-      "completion_percentage": 97.05882352941177,
-      "ac_ids_complete": 33,
+      "completion_percentage": 0,
+      "ac_ids_complete": 0,
       "ac_ids_total": 34,
       "status": "completed",
       "description": "Build core infrastructure (Audit, Governance, State, Lifecycle, Evidence, Security)",
-      "verified_implemented": [
-        "AC-AUDIT-001",
-        "AC-AUDIT-002",
-        "AC-AUDIT-003",
-        "AC-AUDIT-005",
-        "AC-AUDIT-006",
-        "AC-AUDIT-007",
-        "AC-EVIDENCE-001",
-        "AC-EVIDENCE-002",
-        "AC-GOV-001",
-        "AC-GOV-002",
-        "AC-GOV-003",
-        "AC-GOV-004",
-        "AC-GOV-005",
-        "AC-STATE-001",
-        "AC-STATE-002",
-        "AC-STATE-003",
-        "AC-LIFECYCLE-001",
-        "AC-LIFECYCLE-002",
-        "AC-LIFECYCLE-003",
-        "AC-SECURITY-001",
-        "AC-SECURITY-002",
-        "AC-SECURITY-003",
-        "AC-SECURITY-004",
-        "AC-SECURITY-005",
-        "AC-SECURITY-006",
-        "AC-CLEAN-001",
-        "AC-CLEAN-002",
-        "AC-CLEAN-003",
-        "AC-TEST-001",
-        "AC-TEST-002",
-        "AC-ORCH-006",
-        "AC-ORCH-007",
-        "AC-TODO-002"
-      ],
-      "capabilities": [
-        {
-          "id": "AC-AUDIT-001",
-          "name": "Queryable Audit Storage",
-          "description": "SQLite + JSONL dual storage with <5ms latency"
-        },
-        {
-          "id": "AC-AUDIT-002",
-          "name": "Memory Buffer",
-          "description": "Buffer with configurable flush thresholds"
-        },
-        {
-          "id": "AC-AUDIT-003",
-          "name": "7 Audit Categories",
-          "description": "GOVERNANCE, ORCHESTRATOR, VALIDATION, INFRASTRUCTURE, MCP, BRAIN, INTEGRATION"
-        },
-        {
-          "id": "AC-AUDIT-005",
-          "name": "Automatic Vacuum",
-          "description": "Level-based retention with daily vacuum"
-        },
-        {
-          "id": "AC-AUDIT-006",
-          "name": "Per-Repo Isolation",
-          "description": "Each repo has isolated audit database"
-        },
-        {
-          "id": "AC-AUDIT-007",
-          "name": "Hash Chain Integrity",
-          "description": "Tamper detection via event_hash + prev_event_hash chain"
-        },
-        {
-          "id": "AC-EVIDENCE-001",
-          "name": "Evidence Bundle Structure",
-          "description": "3-file lightweight format: manifest.yaml, test_results.json, audit_trace.jsonl"
-        },
-        {
-          "id": "AC-EVIDENCE-002",
-          "name": "Evidence Bundle Validation Gates",
-          "description": "3 gates: Test Coverage (80%), Audit Completeness, Governance Compliance"
-        },
-        {
-          "id": "AC-GOV-001",
-          "name": "4-Tier Governance Loading",
-          "description": "Load rules from all 4 tiers (0-3)"
-        },
-        {
-          "id": "AC-GOV-002",
-          "name": "Conflict Detection",
-          "description": "Detect conflicting rules across tiers"
-        },
-        {
-          "id": "AC-GOV-003",
-          "name": "Precedence Resolution",
-          "description": "Tier 0 wins all conflicts"
-        },
-        {
-          "id": "AC-GOV-004",
-          "name": "Rule Caching",
-          "description": "<50ms merge time with caching"
-        },
-        {
-          "id": "AC-GOV-005",
-          "name": "Unified Instruction Set",
-          "description": "Generate merged ruleset for runtime"
-        },
-        {
-          "id": "AC-STATE-001",
-          "name": "Session Persistence",
-          "description": "SQLite-backed session state"
-        },
-        {
-          "id": "AC-STATE-002",
-          "name": "Transaction Isolation",
-          "description": "WAL mode with proper isolation"
-        },
-        {
-          "id": "AC-STATE-003",
-          "name": "Continuation Support",
-          "description": "Resume from any checkpoint"
-        },
-        {
-          "id": "AC-LIFECYCLE-001",
-          "name": "7-State Lifecycle Implementation",
-          "description": "IDLE \u2192 SPEC \u2192 IMPLEMENTED \u2192 TESTED \u2192 VERIFIED \u2192 ACTIVE \u2192 DEPRECATED"
-        },
-        {
-          "id": "AC-LIFECYCLE-002",
-          "name": "State Transition Validation",
-          "description": "Enforce entry/exit criteria for each state"
-        },
-        {
-          "id": "AC-LIFECYCLE-003",
-          "name": "Quarantine Mechanism",
-          "description": "Auto-quarantine on error rate > 10% or governance violations"
-        },
-        {
-          "id": "AC-SECURITY-001",
-          "name": "AC-SECURITY-001",
-          "description": ""
-        },
-        {
-          "id": "AC-SECURITY-002",
-          "name": "AC-SECURITY-002",
-          "description": ""
-        },
-        {
-          "id": "AC-SECURITY-003",
-          "name": "AC-SECURITY-003",
-          "description": ""
-        },
-        {
-          "id": "AC-SECURITY-004",
-          "name": "AC-SECURITY-004",
-          "description": ""
-        },
-        {
-          "id": "AC-SECURITY-005",
-          "name": "AC-SECURITY-005",
-          "description": ""
-        },
-        {
-          "id": "AC-SECURITY-006",
-          "name": "AC-SECURITY-006",
-          "description": ""
-        },
-        {
-          "id": "AC-CLEAN-001",
-          "name": "AC-CLEAN-001",
-          "description": ""
-        },
-        {
-          "id": "AC-CLEAN-002",
-          "name": "AC-CLEAN-002",
-          "description": ""
-        },
-        {
-          "id": "AC-CLEAN-003",
-          "name": "AC-CLEAN-003",
-          "description": ""
-        },
-        {
-          "id": "AC-TEST-001",
-          "name": "AC-TEST-001",
-          "description": ""
-        },
-        {
-          "id": "AC-TEST-002",
-          "name": "AC-TEST-002",
-          "description": ""
-        },
-        {
-          "id": "AC-ORCH-006",
-          "name": "AC-ORCH-006",
-          "description": ""
-        },
-        {
-          "id": "AC-ORCH-007",
-          "name": "AC-ORCH-007",
-          "description": ""
-        },
-        {
-          "id": "AC-TODO-002",
-          "name": "AC-TODO-002",
-          "description": ""
-        }
-      ]
+      "verified_implemented": [],
+      "capabilities": []
     },
     {
       "id": 1.5,
       "name": "STS as Capability 0",
-      "completion_percentage": 100.0,
-      "ac_ids_complete": 3,
+      "completion_percentage": 0,
+      "ac_ids_complete": 0,
       "ac_ids_total": 3,
       "status": "completed",
       "description": "Validate orchestration framework with Golden Corpus"
