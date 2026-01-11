@@ -1,0 +1,17 @@
+CORTEX 6 Validation Consolidation Log
+Date: 2026-01-11T05:40:02.230039
+================================================================================
+
+MOVED: audit-analytics-dashboard-005.md → audit-analytics-dashboard-005.md
+MOVED: cleanup-recommendations.md → cleanup-recommendations.md
+MOVED: cortex-prompt-enhancements-from-chat01.md → cortex-prompt-enhancements-from-chat01.md
+MOVED: cx6-plan-consolidation-summary.md → cx6-plan-consolidation-summary.md
+MOVED: holistic-analysis-organization-summary.md → holistic-analysis-organization-summary.md
+MOVED: plan-update-summary.md → plan-update-summary.md
+MOVED: state-sync-report-2026-01-10.md → state-sync-report-2026-01-10.md
+MOVED: sts-verification-report.yaml → sts-verification-report.yaml
+MOVED: vacuum-orchestrator-v2-summary.md → vacuum-orchestrator-v2-summary.md
+MOVED: AC-MCP-EXPOSE-001-Evidence-Bundle.md → AC-MCP-EXPOSE-001-evidence-bundle.md
+MOVED: AC-STS-001-002-003-Evidence-Bundle.md → AC-STS-001-002-003-evidence-bundle.md
+MOVED: AC-SYNC-001-COMPLETION-REPORT.md → AC-SYNC-001-completion-report.md
+MOVED: STS-Implementation-Summary.md → sts-implementation-summary.md

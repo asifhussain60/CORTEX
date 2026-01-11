@@ -161,7 +161,7 @@ templates/plan-viewer/
 
 The plan viewer dynamically loads from:
 
-- `cortex-brain/documents/cx6-holistic-analysis/holistic-snowball-plan.yaml` - Implementation plan
+- `cortex-brain/cx6-plan/master-plan.yaml` - Implementation plan
 - `cortex-brain/tier1/tracking/progress-tracker.json` - Real-time progress
 - `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml` - AC-ID registry
 - `cortex-brain/audit-logs/*.jsonl` - Audit trail evidence
