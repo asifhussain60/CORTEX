@@ -927,10 +927,80 @@
         "Total overhead: <1 second for typical commits (1-5 HTML files)"
       ],
       "rationale": "Zero-tolerance HTML validation prevents:\n1. Broken HTML merged into main branch (blocks GitHubPages deployment)\n2. WCAG AA violations (accessibility compliance failures)\n3. Browser rendering issues (parse errors cause layout breaks)\n4. Developer confusion (debug time wasted on malformed HTML)\n5. Accumulated technical debt (broken HTML compounds over time)\n\nThis rule addresses the observed pattern of TDD-Master and other\norchestrators leaving HTML in broken states. By validating at the\nquality gate layer (pre-commit), we catch issues before they pollute\nthe repository.\n\nArchitectural rationale:\n- HTML validation is NOT a TDD concern (HTML is declarative, not testable code)\n- Separation of concerns: HTMLViewOrchestrator handles HTML, TDD-Master handles code\n- Pre-commit hooks are the correct architectural layer for cross-cutting quality checks\n- This approach is extensible (easy to add CSS linting, Markdown validation, etc.)\n"
+    },
+    {
+      "rule_id": "CORE-024",
+      "category": "architecture_integrity",
+      "severity": "blocked",
+      "name": "All MCP Tools MUST Use @mcp_tool Decorator",
+      "description": "ALL tools in src/mcp/*_tools.py MUST use the @mcp_tool decorator for\nautomatic registration. Manual registration is FORBIDDEN.\n\nThis prevents registration drift where tools exist but aren't exposed\nvia MCP, causing silent failures in capability discovery.\n\nThe decorator provides:\n- Automatic registration at import time (no manual registry calls)\n- Consistent metadata structure (name, description, parameters, returns)\n- JSON Schema validation for parameters\n- Category-based grouping\n- Versioning and audit trails\n",
+      "enforcement": {
+        "trigger": "pre_commit",
+        "action": "block_commit_if_undecorated_tools_found",
+        "static_analysis": true
+      },
+      "validation": [
+        "All functions in src/mcp/*_tools.py have @mcp_tool decorator",
+        "Decorator precedes function definition immediately (no blank lines)",
+        "Decorator includes: name, description, category, parameters",
+        "Parameter definitions include: type, required, description",
+        "Returns definition specifies output schema"
+      ],
+      "implementation": {
+        "pre_commit_hook": "scripts/pre-commit",
+        "validator": "src.tools.validators.mcp_decorator_validator.MCPDecoratorValidator",
+        "hook": "pre_commit",
+        "priority": 9
+      },
+      "detection_methods": {
+        "static_analysis": [
+          "AST parsing: Find function definitions in *_tools.py without decorator",
+          "Grep pattern: Functions matching 'def (.*?)\\(' without '@mcp_tool' above",
+          "Import check: Verify decorator imported from src.mcp.mcp_decorator"
+        ],
+        "runtime_check": [
+          "Compare: Functions in tool modules vs. decorated tool registry",
+          "Alert: If function count > decorated count (drift detected)"
+        ]
+      },
+      "pre_commit_hook_logic": "#!/usr/bin/env python3\n# Validate MCP tool decorator usage (CORE-024)\n\nimport ast\nimport sys\nfrom pathlib import Path\n\ndef check_mcp_tools():\n    tool_files = Path('src/mcp').glob('*_tools.py')\n    violations = []\n    \n    for file in tool_files:\n        with open(file) as f:\n            tree = ast.parse(f.read())\n        \n        for node in ast.walk(tree):\n            if isinstance(node, ast.FunctionDef):\n                # Check if function has @mcp_tool decorator\n                has_decorator = any(\n                    isinstance(d, ast.Name) and d.id == 'mcp_tool' or\n                    isinstance(d, ast.Attribute) and d.attr == 'mcp_tool'\n                    for d in node.decorator_list\n                )\n                \n                if not has_decorator:\n                    violations.append(f\"{file}:{node.lineno} - {node.name}\")\n    \n    if violations:\n        print(\"\u274c CORE-024 VIOLATION: Undecorated MCP tools found\")\n        for v in violations:\n            print(f\"   {v}\")\n        print(\"\\nAll tools in src/mcp/*_tools.py MUST use @mcp_tool decorator\")\n        sys.exit(1)\n\nif __name__ == '__main__':\n    check_mcp_tools()\n",
+      "error_messages": {
+        "on_undecorated_tool": {
+          "action": "block_commit",
+          "message": "\u274c MCP TOOL DECORATOR VIOLATION (CORE-024)\n\nFound function(s) in src/mcp/*_tools.py without @mcp_tool decorator.\nThis causes registration drift - tool exists but not exposed via MCP.\n\nAdd decorator:\n  from src.mcp.mcp_decorator import mcp_tool\n  \n  @mcp_tool(\n      name=\"cortex_<function_name>\",\n      description=\"Tool description\",\n      category=\"<audit|governance|planning|etc>\",\n      parameters={...},\n      returns={...}\n  )\n  def your_function(...):\n      pass\n\nSee: cortex-brain/tier2/mcp-tool-creation-protocol.md\n",
+          "bypass": "git commit --no-verify (EMERGENCY ONLY - creates audit alert)"
+        }
+      },
+      "examples": {
+        "pass": [
+          "# \u2705 CORRECT: Decorated tool\nfrom src.mcp.mcp_decorator import mcp_tool\n\n@mcp_tool(\n    name=\"cortex_audit_query\",\n    description=\"Query audit logs\",\n    category=\"audit\",\n    parameters={\"db_path\": {\"type\": \"string\", \"required\": True}}\n)\ndef audit_query(db_path: str):\n    pass\n"
+        ],
+        "fail": [
+          "# \u274c WRONG: Manual registration (bypasses decorator)\ndef audit_query(db_path: str):\n    pass\n\n# Manual registry.register() call - FORBIDDEN\n",
+          "# \u274c WRONG: Missing decorator\ndef new_tool():\n    pass  # Will NOT be exposed via MCP\n"
+        ]
+      },
+      "integration_points": [
+        "CapabilityRegistry auto-discovers decorated tools at startup",
+        "Pre-commit hook blocks undecorated tools before merge",
+        "MCP server lists all decorated tools via /tools/list",
+        "Audit logs record tool registrations with decorator metadata"
+      ],
+      "cross_repo_support": {
+        "plugin_package": "cortex-mcp-protocol (Phase 3 roadmap)",
+        "user_repos_usage": "# User repo can adopt same protocol:\npip install cortex-mcp-protocol\n\nfrom cortex_mcp_protocol import mcp_tool\n\n@mcp_tool(name=\"my_tool\", ...)\ndef my_custom_tool():\n    pass\n",
+        "cortex_discovery": "CORTEX scans sys.modules for cortex_mcp_protocol presence.\nIf found, imports user's decorated tools and merges into registry.\n"
+      },
+      "performance": [
+        "Decorator overhead: <1ms per tool (executed once at import)",
+        "Pre-commit check: ~50ms (AST parsing of 7 tool modules)",
+        "Runtime discovery: ~100ms (imports all tool modules once)"
+      ],
+      "rationale": "Prevents registration drift - the #1 failure mode in MCP exposure:\n\nWITHOUT decorator:\n1. Developer creates tool function\n2. Forgets manual registry.register() call\n3. Code merges, tests pass (no detection)\n4. Tool exists but not discoverable via MCP\n5. Silent failure - users can't find tool\n6. Remediation required (audit finds drift 3 days later)\n\nWITH decorator:\n1. Developer creates tool function\n2. Pre-commit hook detects missing decorator \u2192 blocks commit\n3. Developer adds decorator\n4. Import triggers auto-registration (no manual call)\n5. Tool immediately discoverable via MCP\n6. Zero drift possible\n\nDecorator pattern is PROACTIVE (prevents wrong code) vs. governance\nvalidation which is REACTIVE (detects wrong code after merge).\n\nMulti-layer defense:\n- Layer 1: SKULL rule (this) - blocks at commit time\n- Layer 2: Template scaffolder (AC-MCP-PROTOCOL-002) - generates correct code\n- Layer 3: Cross-repo plugin (AC-MCP-PROTOCOL-003) - portable protocol\n- Layer 4: Documentation - developer guidance\n"
     }
   ],
   "metadata": {
-    "created_at": "2026-01-10T20:57:52.399003",
+    "created_at": "2026-01-10T21:39:16.759830",
     "version": "1.0.0",
     "source": "TDDMasterOrchestrator"
   }

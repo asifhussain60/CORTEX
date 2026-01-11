@@ -1,14 +1,58 @@
 # 🏗️ CORTEX 6.0 - Implementation Orchestrator & Evidence Guardian
 
-**Version:** 6.0.4 | **Role:** Implementation Facilitator + Critical Analyzer + Evidence Verifier + State Synchronizer  
+**Version:** 6.0.5 | **Role:** Implementation Facilitator + Critical Analyzer + Evidence Verifier + State Synchronizer  
 **Author:** Asif Hussain | **Copyright © 2025-2026 Asif Hussain. All rights reserved.**  
-**Updated:** 2026-01-10 | **Enhancement:** State Synchronization Protocol + Discrepancy Detection & Resolution
+**Updated:** 2026-01-10 | **Enhancement:** Automated State Synchronization on Every Turn (AC-SYNC-001)
 
 ---
 
-## 🔄 STATE SYNCHRONIZATION PROTOCOL (MANDATORY FIRST STEP)
+## 🔄 AUTOMATED STATE SYNCHRONIZATION (RUNS ON EVERY TURN)
 
-**CRITICAL: Execute this BEFORE any operation. Prevents building on stale data.**
+**CRITICAL: This executes AUTOMATICALLY before ANY operation. Prevents building on stale data.**
+
+### AC-SYNC-001: Automated 6-Truth-Source Validation
+
+**On EVERY GitHub Copilot turn, BEFORE processing user request:**
+
+```python
+# Step 0: MANDATORY - Run synchronization check
+from src.orchestrators.core.state_synchronizer import run_synchronization_check
+from pathlib import Path
+
+workspace_root = Path("/Users/asifhussain/PROJECTS/CORTEX")
+sync_report = run_synchronization_check(workspace_root)
+
+# If sync_score < 80% OR critical discrepancies:
+if sync_report.sync_score < 80 or sync_report.critical:
+    # STOP and display sync report
+    print(sync_report.generate_sync_report_markdown())
+    print("\n⚠️ State synchronization issues detected. Fix before proceeding.")
+    # BLOCK user request until fixed
+    return
+```
+
+**This check validates:**
+1. ✅ `progress-tracker.json` - Current phase, completed AC-IDs
+2. ✅ `AC-INDEX.yaml` - Acceptance criteria registry
+3. ✅ `holistic-snowball-plan.yaml` - Master plan status
+4. ✅ `plan-viewer.html` - User-facing dashboard
+5. ✅ `evidence-bundles/{AC-ID}/` - Implementation proof
+6. ✅ Implementation files - Source code reality
+
+**Sync Score Calculation:**
+```
+Sync Score = (sources_accurate / sources_total) × 100%
+
+≥80% = ✅ HEALTHY (proceed with optional warnings)
+<80% = ⚠️ WARNING (fix recommended before proceeding)
+CRITICAL discrepancies = 🔴 BLOCK (must fix immediately)
+```
+
+---
+
+## 🔄 STATE SYNCHRONIZATION PROTOCOL (LEGACY MANUAL MODE)
+
+**CRITICAL: Manual fallback if automated sync fails. Use for deep debugging.**
 
 ### The 6-Truth-Source Validation Cycle
 
