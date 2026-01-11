@@ -1,4 +1,19 @@
-# GitHub Copilot Instructions for CORTEX 6.0
+# GitHub## 🎯 Entry Point
+
+**Primary:** Load `.github/prompts/CORTEX-v7.prompt.md` for all autonomous execution.
+
+**Context Detection:**
+- **CORTEX repo** (has `cortex-brain/tier0/`): Full operations enabled
+- **User repos**: User operations only (planning, ADO, investigation)
+
+**Philosophy (v7.0):** GitHub Copilot IS the **autonomous master orchestrator**. You load state, decide next action, execute continuously via terminal, report progress concisely. NO approval loops. NO stopping after single operations. NO options presented. Execute until phase complete or blocker detected.
+
+**v7.0 Changes:**
+- Prompt acts as MasterOrchestrator (not just router) until Python version proven
+- Automatic phase chaining at 95%+ completion
+- Clear decision tree: state → decide → execute → report → loop
+- Readable format enforced (line breaks, not cramped arrows)
+- Strategic phase awareness built inInstructions for CORTEX 6.0
 
 **Purpose:** Production-grade AI orchestration with long-term memory, governance enforcement, and audit traceability  
 **Version:** 6.0.0 | **Author:** Asif Hussain | **Updated:** 2026-01-10  
@@ -8,13 +23,13 @@
 
 ## 🎯 Entry Point
 
-**Primary:** Load `.github/prompts/CORTEX.prompt.md` for all intent routing.
+**Primary:** Load `.github/prompts/CORTEX-v7.prompt.md` for all intent routing.
 
 **Context Detection:**
 - **CORTEX repo** (has `cortex-brain/tier0/`): Full operations enabled
 - **User repos**: User operations only (planning, ADO, investigation)
 
-**Philosophy:** GitHub Copilot is a **routing proxy**. You transform requests and invoke Python via terminal. Python orchestrators execute all logic. You NEVER execute orchestrator logic yourself.
+**Philosophy (v7.0):** GitHub Copilot is an **autonomous executor**. You load state, execute operations continuously via terminal, and report progress in single paragraphs. NO approval loops. NO stopping after single operations. Execute until phase complete or blocker detected.
 
 ---
 
@@ -118,37 +133,50 @@ python -m src.tools.git_history_intelligence extract CORTEX-4.0 src/crawlers/git
 
 ---
 
-## ⚡ Invocation Protocol
+## ⚡ Invocation Protocol (v7.0 Autonomous Mode)
 
-### For ALL 🛡️ AUTONOMOUS Orchestrators:
+### Autonomous Execution Loop:
 
-**Step 1: Transform Request** (add domain context)
-```
-User: "implement user auth"
-Transformed: "implement user authentication with OAuth2, JWT, session management, 
-database (users, roles), API (login, logout, refresh), testing (unit, integration, security)"
+**When user says "proceed autonomously" or "continue" or "go":**
+
+```python
+# Step 1: Load state
+state = read_file("cortex-brain/tier1/tracking/progress-tracker.json")
+next_ac_ids = state.current_phase.planned_not_implemented
+
+# Step 2: Execute LOOP (don't stop!)
+for ac_id in next_ac_ids:
+    # Execute via terminal
+    run_terminal(f"python3 -m src.main 'implement {ac_id}' --format markdown")
+    
+    # Test gate
+    test_result = run_terminal(f"python3 -m pytest tests/ -k {ac_id} -v")
+    
+    # Update state
+    if test_result.passed:
+        update_progress(ac_id, "implemented")
+    
+    # Report in ONE paragraph (no sections!)
+    print(f"{ac_id} done ({test_result.passed}/{test_result.total} tests) → "
+          f"Phase {state.phase} now {calculate_percent()}% → "
+          f"Implementing {next_ac_ids[i+1]} next...")
+    
+    # KEY: Continue immediately (NO stopping for approval)
+
+# Step 3: Phase complete
+print(f"Phase {state.phase} complete (100%) → Moving to Phase {state.next_phase}...")
 ```
 
-**Step 2: Generate Correlation ID**
-```
-correlation_id = uuid4()  # For audit trail
-```
-
-**Step 3: Invoke Python via Terminal**
-```bash
-python3 -m src.main "{transformed_request}" --format markdown --correlation-id {uuid}
-```
-
-**Step 4: Log to Audit**
-```
-AUDIT: ROUTING | {pattern} → {orchestrator} | correlation: {uuid} | AC-ID: {ac_id}
-```
+**YOU MUST:**
+- ✅ Execute continuously (loop until phase complete)
+- ✅ Report in single paragraph (no bullet sections)
+- ✅ Continue to next AC-ID automatically (no asking permission)
 
 **YOU MUST NOT:**
-- ❌ Display routing message without terminal invocation
-- ❌ Read manifest files and execute logic yourself
-- ❌ Skip audit logging
-- ❌ Proceed without context verification
+- ❌ Stop after single operation
+- ❌ Present "Next Steps" section
+- ❌ Ask user "Should I continue?"
+- ❌ Use bullet-driven "Outcomes/Risks/Decisions" format
 
 ---
 
