@@ -25,7 +25,8 @@
       "2026-01-11: STEP 2 Complete - Path utilities (project_root) created, paths portable",
       "2026-01-11: STEP 3 Complete - Audit ACs 005-007 implemented (58 tests passing)",
       "2026-01-11: STEP 4 Complete - Evidence bundle system (AC-EVIDENCE-001-002) implemented (20 tests passing)",
-      "2026-01-11: STEP 5 Complete - Final verification (30/34 verified, 88.24% ≥ 80% gate). Phase 2 APPROVED."
+      "2026-01-11: STEP 5 Complete - Final verification (30/34 verified, 88.24% ≥ 80% gate). Phase 2 APPROVED.",
+      "2026-01-11: Phase 2 AC-ORCH-007 Complete - Governance-to-Todo Pipeline (43 tests passing)"
     ],
     "enhancements": [
       "Action Security Layer (AC-SECURITY-001 to AC-SECURITY-008)",
@@ -92,9 +93,9 @@
     "status": "completed",
     "started": "2026-01-10T17:00:00Z",
     "completed_at": null,
-    "completed_count": 30,
+    "completed_count": 32,
     "total_ac_count": 34,
-    "completion_percentage": 88.23529411764706,
+    "completion_percentage": 94.11764705882354,
     "verified_implemented": [
       "AC-AUDIT-001",
       "AC-AUDIT-002",
@@ -125,7 +126,9 @@
       "AC-CLEAN-002",
       "AC-CLEAN-003",
       "AC-TEST-001",
-      "AC-TEST-002"
+      "AC-TEST-002",
+      "AC-ORCH-006",
+      "AC-ORCH-007"
     ],
     "partial": [
       "AC-ORCH-003",
