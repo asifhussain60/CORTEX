@@ -94,7 +94,12 @@ def main():
     # Paths
     workspace_root = Path(__file__).parent.parent
     audit_logs_dir = workspace_root / "cortex-brain" / "audit-logs"
-    output_file = workspace_root / "templates" / "plan-viewer" / "audit-logs-aggregated.json"
+    
+    # Output to both viewer locations
+    output_files = [
+        workspace_root / "templates" / "plan-viewer" / "audit-logs-aggregated.json",
+        workspace_root / "cortex-brain" / "cx6-plan" / "viewer" / "audit-logs-aggregated.json"
+    ]
     
     print("CORTEX 6.0 - Audit Log Aggregator")
     print("=" * 50)
@@ -103,13 +108,20 @@ def main():
         print(f"❌ Audit logs directory not found: {audit_logs_dir}")
         return 1
     
-    # Aggregate logs
+    # Aggregate logs once
     result = aggregate_audit_logs(
         audit_logs_dir=audit_logs_dir,
-        output_file=output_file,
+        output_file=output_files[0],
         days_back=7,
         max_entries=200
     )
+    
+    # Copy to second location
+    if output_files[1].parent.exists():
+        with open(output_files[0], 'r', encoding='utf-8') as src:
+            with open(output_files[1], 'w', encoding='utf-8') as dst:
+                dst.write(src.read())
+        print(f"   Copied to: {output_files[1]}")
     
     print("\n" + "=" * 50)
     print("Aggregation complete!")

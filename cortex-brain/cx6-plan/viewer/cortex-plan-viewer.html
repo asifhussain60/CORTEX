@@ -281,6 +281,141 @@
             border-radius: 4px;
         }
         
+        /* Progress Bar Enhancements */
+        .progress {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: visible;
+            position: relative;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, var(--cortex-cyan), var(--cortex-purple));
+            border-radius: 10px;
+            position: relative;
+            transition: width 0.6s ease;
+            box-shadow: 0 2px 10px rgba(0, 212, 255, 0.5);
+        }
+        
+        .progress-bar.bg-success {
+            background: linear-gradient(90deg, var(--cortex-green), #00b894);
+            box-shadow: 0 2px 10px rgba(6, 255, 165, 0.5);
+        }
+        
+        .progress-bar.bg-warning {
+            background: linear-gradient(90deg, var(--cortex-yellow), #ffa500);
+            box-shadow: 0 2px 10px rgba(255, 190, 11, 0.5);
+        }
+        
+        .progress-bar.bg-danger {
+            background: linear-gradient(90deg, var(--cortex-pink), #dc3545);
+            box-shadow: 0 2px 10px rgba(255, 0, 110, 0.5);
+        }
+        
+        /* Animated progress bar */
+        @keyframes progressPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+        
+        .progress-bar.animated {
+            animation: progressPulse 2s ease-in-out infinite;
+        }
+        
+        /* Progress label overlay */
+        .progress-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: white;
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Overall progress container */
+        .overall-progress-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .overall-progress-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--cortex-cyan);
+        }
+        
+        .progress-milestone {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .progress-milestone-label {
+            min-width: 150px;
+            font-size: 0.9rem;
+        }
+        
+        .progress-milestone .progress {
+            flex: 1;
+            margin: 0 1rem;
+        }
+        
+        .progress-milestone-value {
+            min-width: 60px;
+            text-align: right;
+            font-weight: 600;
+        }
+        
+        /* Phase card progress */
+        .phase-progress-wrapper {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        
+        .phase-progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        
+        .phase-progress-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+            font-size: 0.75rem;
+        }
+        
+        .phase-progress-stat {
+            text-align: center;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 6px;
+        }
+        
+        .phase-progress-stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: block;
+        }
+        
+        .phase-progress-stat-label {
+            display: block;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 0.25rem;
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
@@ -293,24 +428,23 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <div class="header-glow">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <h1 class="display-4 fw-bold mb-2">
-                        <i class="bi bi-cpu"></i> CORTEX 6.0
-                    </h1>
-                    <p class="lead mb-0">Production-Grade AI Orchestration Implementation Dashboard</p>
-                </div>
-                <div class="col-md-4 text-end">
-                    <div class="badge badge-cyan fs-6 px-3 py-2">
-                        <i class="bi bi-graph-up"></i> Design Score: 97/95
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- CORTEX Standardized Header -->
+    <div id="cortex-header-container"></div>
+    
+    <script>
+        // Configure header for this page
+        const cortexHeaderConfig = {
+            pageTitle: "Dashboard",
+            pageDescription: "Production-Grade AI Orchestration Implementation Progress",
+            designScore: "97/95",
+            loadScoreFromPlan: true,
+            breadcrumbs: [
+                { text: "Home", link: "#" },
+                { text: "Dashboard", link: null }
+            ]
+        };
+    </script>
+    <script src="shared/header-loader.js"></script>
 
     <div class="container mt-4">
         <!-- Key Metrics Dashboard -->
@@ -341,6 +475,88 @@
                     <div class="metric-label">Test Coverage</div>
                     <div class="metric-value">99.4%</div>
                     <div class="text-muted small">1232/1239 Passing</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overall Implementation Progress -->
+        <div class="overall-progress-container fade-in">
+            <div class="overall-progress-title">
+                <i class="bi bi-speedometer2"></i> Overall Implementation Progress
+            </div>
+            
+            <div class="progress-milestone">
+                <div class="progress-milestone-label">Total Progress</div>
+                <div class="progress" style="height: 12px;">
+                    <div class="progress-bar animated" role="progressbar" style="width: 18.5%" aria-valuenow="18.5" aria-valuemin="0" aria-valuemax="100">
+                        <span class="progress-label">18.5%</span>
+                    </div>
+                </div>
+                <div class="progress-milestone-value text-cyan">18 / 97 AC-IDs</div>
+            </div>
+            
+            <div class="progress-milestone">
+                <div class="progress-milestone-label">Phase 1 Foundation</div>
+                <div class="progress" style="height: 10px;">
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: 48%" aria-valuenow="48" aria-valuemin="0" aria-valuemax="100">
+                        <span class="progress-label">48%</span>
+                    </div>
+                </div>
+                <div class="progress-milestone-value text-warning">16 / 33 AC-IDs</div>
+            </div>
+            
+            <div class="progress-milestone">
+                <div class="progress-milestone-label">Phase 1.5 STS</div>
+                <div class="progress" style="height: 10px;">
+                    <div class="progress-bar bg-warning" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">
+                        <span class="progress-label">85%</span>
+                    </div>
+                </div>
+                <div class="progress-milestone-value text-warning">2.55 / 3 AC-IDs</div>
+            </div>
+            
+            <div class="progress-milestone">
+                <div class="progress-milestone-label">Phase 2 Core</div>
+                <div class="progress" style="height: 10px;">
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="progress-milestone-value text-danger">0 / 23 AC-IDs</div>
+            </div>
+            
+            <div class="progress-milestone">
+                <div class="progress-milestone-label">Phase 3 Features</div>
+                <div class="progress" style="height: 10px;">
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="progress-milestone-value text-danger">0 / 24 AC-IDs</div>
+            </div>
+            
+            <div class="progress-milestone">
+                <div class="progress-milestone-label">Phase 4 Intelligence</div>
+                <div class="progress" style="height: 10px;">
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="progress-milestone-value text-danger">0 / 31 AC-IDs</div>
+            </div>
+            
+            <hr class="my-3" style="border-color: rgba(255, 255, 255, 0.1);">
+            
+            <div class="row text-center small">
+                <div class="col-3">
+                    <div class="text-success fw-bold" style="font-size: 1.5rem;">99.4%</div>
+                    <div class="text-muted">Test Coverage</div>
+                </div>
+                <div class="col-3">
+                    <div class="text-success fw-bold" style="font-size: 1.5rem;">97/95</div>
+                    <div class="text-muted">Design Score</div>
+                </div>
+                <div class="col-3">
+                    <div class="text-cyan fw-bold" style="font-size: 1.5rem;">23</div>
+                    <div class="text-muted">CORE Rules</div>
+                </div>
+                <div class="col-3">
+                    <div class="text-warning fw-bold" style="font-size: 1.5rem;">~20wk</div>
+                    <div class="text-muted">Est. Completion</div>
                 </div>
             </div>
         </div>
@@ -381,12 +597,32 @@
                         <p class="text-muted small mb-2">
                             Enterprise audit logger, 4-tier governance, state management, lifecycle, evidence bundles, security layer
                         </p>
-                        <div class="progress mb-2">
-                            <div class="progress-bar" role="progressbar" style="width: 48%" aria-valuenow="48" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="d-flex justify-content-between small text-muted">
-                            <span>16 of 33 completed</span>
-                            <span>48%</span>
+                        
+                        <!-- Enhanced Phase Progress -->
+                        <div class="phase-progress-wrapper">
+                            <div class="phase-progress-header">
+                                <span class="fw-bold">Phase Completion</span>
+                                <span class="badge badge-warning">48% Complete</span>
+                            </div>
+                            <div class="progress" style="height: 16px;">
+                                <div class="progress-bar bg-warning animated" role="progressbar" style="width: 48%" aria-valuenow="48" aria-valuemin="0" aria-valuemax="100">
+                                    <span class="progress-label" style="font-size: 0.75rem;">16 / 33 AC-IDs</span>
+                                </div>
+                            </div>
+                            <div class="phase-progress-stats">
+                                <div class="phase-progress-stat">
+                                    <span class="phase-progress-stat-value text-success">16</span>
+                                    <span class="phase-progress-stat-label">Completed</span>
+                                </div>
+                                <div class="phase-progress-stat">
+                                    <span class="phase-progress-stat-value text-warning">17</span>
+                                    <span class="phase-progress-stat-label">Remaining</span>
+                                </div>
+                                <div class="phase-progress-stat">
+                                    <span class="phase-progress-stat-value text-cyan">33</span>
+                                    <span class="phase-progress-stat-label">Total</span>
+                                </div>
+                            </div>
                         </div>
                         
                         <!-- Completed AC-IDs -->
@@ -452,12 +688,32 @@
                         <p class="text-muted small mb-2">
                             ⚠️ Framework validation with 100 test intents across 5 categories (routing, unicode, governance, policy, security)
                         </p>
-                        <div class="progress mb-2">
-                            <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <div class="d-flex justify-content-between small text-muted">
-                            <span>Option A implemented - awaiting Phase 2 integration</span>
-                            <span>85%</span>
+                        
+                        <!-- Enhanced Phase Progress -->
+                        <div class="phase-progress-wrapper">
+                            <div class="phase-progress-header">
+                                <span class="fw-bold">Phase Completion</span>
+                                <span class="badge badge-warning">85% Complete</span>
+                            </div>
+                            <div class="progress" style="height: 16px;">
+                                <div class="progress-bar bg-warning animated" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">
+                                    <span class="progress-label" style="font-size: 0.75rem;">2.55 / 3 AC-IDs</span>
+                                </div>
+                            </div>
+                            <div class="phase-progress-stats">
+                                <div class="phase-progress-stat">
+                                    <span class="phase-progress-stat-value text-warning">2.55</span>
+                                    <span class="phase-progress-stat-label">Completed</span>
+                                </div>
+                                <div class="phase-progress-stat">
+                                    <span class="phase-progress-stat-value text-warning">0.45</span>
+                                    <span class="phase-progress-stat-label">Remaining</span>
+                                </div>
+                                <div class="phase-progress-stat">
+                                    <span class="phase-progress-stat-value text-cyan">3</span>
+                                    <span class="phase-progress-stat-label">Total</span>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="ac-grid mt-3">
@@ -489,9 +745,34 @@
                         <p class="text-muted small mb-2">
                             MasterOrchestrator, TodoManager, TDD-Master, Knowledge Practices, Planning v5
                         </p>
-                        <div class="progress mb-2">
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        
+                        <!-- Enhanced Phase Progress -->
+                        <div class="phase-progress-wrapper">
+                            <div class="phase-progress-header">
+                                <span class="fw-bold">Phase Completion</span>
+                                <span class="badge badge-danger">0% Complete</span>
+                            </div>
+                            <div class="progress" style="height: 16px;">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                    <span class="progress-label" style="font-size: 0.75rem;">0 / 23 AC-IDs</span>
+                                </div>
+                            </div>
+                            <div class="phase-progress-stats">
+                                <div class="phase-progress-stat">
+                                    <span class="phase-progress-stat-value text-danger">0</span>
+                                    <span class="phase-progress-stat-label">Completed</span>
+                                </div>
+                                <div class="phase-progress-stat">
+                                    <span class="phase-progress-stat-value text-warning">23</span>
+                                    <span class="phase-progress-stat-label">Remaining</span>
+                                </div>
+                                <div class="phase-progress-stat">
+                                    <span class="phase-progress-stat-value text-cyan">23</span>
+                                    <span class="phase-progress-stat-label">Total</span>
+                                </div>
+                            </div>
                         </div>
+                        
                         <div class="alert alert-danger mt-2 mb-0" role="alert">
                             <i class="bi bi-lock"></i> Blocked until Phase 1 + 1.5 complete
                         </div>
@@ -514,9 +795,34 @@
                         <p class="text-muted small mb-2">
                             Crawler, Knowledge Graph, Onboarding, Scaffolder
                         </p>
-                        <div class="progress mb-2">
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        
+                        <!-- Enhanced Phase Progress -->
+                        <div class="phase-progress-wrapper">
+                            <div class="phase-progress-header">
+                                <span class="fw-bold">Phase Completion</span>
+                                <span class="badge badge-danger">0% Complete</span>
+                            </div>
+                            <div class="progress" style="height: 16px;">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                    <span class="progress-label" style="font-size: 0.75rem;">0 / 24 AC-IDs</span>
+                                </div>
+                            </div>
+                            <div class="phase-progress-stats">
+                                <div class="phase-progress-stat">
+                                    <span class="phase-progress-stat-value text-danger">0</span>
+                                    <span class="phase-progress-stat-label">Completed</span>
+                                </div>
+                                <div class="phase-progress-stat">
+                                    <span class="phase-progress-stat-value text-warning">24</span>
+                                    <span class="phase-progress-stat-label">Remaining</span>
+                                </div>
+                                <div class="phase-progress-stat">
+                                    <span class="phase-progress-stat-value text-cyan">24</span>
+                                    <span class="phase-progress-stat-label">Total</span>
+                                </div>
+                            </div>
                         </div>
+                        
                         <div class="alert alert-danger mt-2 mb-0" role="alert">
                             <i class="bi bi-lock"></i> Blocked until Phase 2 complete
                         </div>
@@ -539,9 +845,34 @@
                         <p class="text-muted small mb-2">
                             GitHub Copilot Bridge, Interaction Management, Progressive Rollout
                         </p>
-                        <div class="progress mb-2">
-                            <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        
+                        <!-- Enhanced Phase Progress -->
+                        <div class="phase-progress-wrapper">
+                            <div class="phase-progress-header">
+                                <span class="fw-bold">Phase Completion</span>
+                                <span class="badge badge-danger">0% Complete</span>
+                            </div>
+                            <div class="progress" style="height: 16px;">
+                                <div class="progress-bar bg-danger" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                    <span class="progress-label" style="font-size: 0.75rem;">0 / 31 AC-IDs</span>
+                                </div>
+                            </div>
+                            <div class="phase-progress-stats">
+                                <div class="phase-progress-stat">
+                                    <span class="phase-progress-stat-value text-danger">0</span>
+                                    <span class="phase-progress-stat-label">Completed</span>
+                                </div>
+                                <div class="phase-progress-stat">
+                                    <span class="phase-progress-stat-value text-warning">31</span>
+                                    <span class="phase-progress-stat-label">Remaining</span>
+                                </div>
+                                <div class="phase-progress-stat">
+                                    <span class="phase-progress-stat-value text-cyan">31</span>
+                                    <span class="phase-progress-stat-label">Total</span>
+                                </div>
+                            </div>
                         </div>
+                        
                         <div class="alert alert-danger mt-2 mb-0" role="alert">
                             <i class="bi bi-lock"></i> Blocked until Phase 3 complete
                         </div>
@@ -715,183 +1046,168 @@
             <h3 class="mb-3"><i class="bi bi-book"></i> Documentation & Resources</h3>
             
             <div class="row row-equal-height g-3">
-                <!-- Analysis & Planning -->
-                <div class="col-md-4">
+                <!-- 📊 Core Planning Documents -->
+                <div class="col-md-6">
                     <div class="doc-link-card">
-                        <div class="doc-category">Analysis & Planning</div>
+                        <div class="doc-category"><i class="bi bi-diagram-3"></i> Core Planning</div>
                         <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-text"></i>
-                            <a href="../../cortex-brain/documents/validation/cx6-requirements-gap-analysis.md" target="_blank">
-                                Gap Analysis Report
-                            </a>
-                        </h6>
-                        <p class="small text-muted mb-2">Complete requirements gap analysis showing 16.5% completion status</p>
-                        
-                        <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-text"></i>
-                            <a href="../../cortex-brain/documents/cx6-holistic-analysis/corrected-implementation-plan.md" target="_blank">
-                                Implementation Plan
-                            </a>
-                        </h6>
-                        <p class="small text-muted mb-2">20-week roadmap with phases, dependencies, and gates</p>
-                        
-                        <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-text"></i>
-                            <a href="../../cortex-brain/documents/cx6-holistic-analysis/holistic-snowball-plan.yaml" target="_blank">
+                            <i class="bi bi-file-earmark-spreadsheet text-primary"></i>
+                            <a href="../../cortex-brain/cx6-plan/master-plan.yaml" target="_blank">
                                 Master Plan (YAML)
                             </a>
                         </h6>
-                        <p class="small text-muted">Complete plan structure with all AC-IDs</p>
+                        <p class="small text-muted mb-3">Complete 97 AC-ID structure with phases, dependencies, and milestones (31KB)</p>
+                        
+                        <h6 class="mb-2">
+                            <i class="bi bi-file-earmark-text text-info"></i>
+                            <a href="../../cortex-brain/cx6-plan/implementation-roadmap.md" target="_blank">
+                                Implementation Roadmap
+                            </a>
+                        </h6>
+                        <p class="small text-muted mb-3">20-week corrected plan with Phase 1.5 STS validation gate (11KB)</p>
+                        
+                        <h6 class="mb-2">
+                            <i class="bi bi-file-earmark-bar-graph text-warning"></i>
+                            <a href="../../cortex-brain/cx6-plan/validation/cx6-requirements-gap-analysis.md" target="_blank">
+                                Gap Analysis Report
+                            </a>
+                        </h6>
+                        <p class="small text-muted">Requirements gap analysis showing 16.5% true completion (12KB)</p>
                     </div>
                 </div>
 
-                <!-- Validation & Testing -->
-                <div class="col-md-4">
+                <!-- 🧪 Validation & Quality -->
+                <div class="col-md-6">
                     <div class="doc-link-card">
-                        <div class="doc-category">Validation & Testing</div>
+                        <div class="doc-category"><i class="bi bi-shield-check"></i> Validation & Quality</div>
                         <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-check"></i>
-                            <a href="../../cortex-brain/documents/validation/option-a-sts-implementation-summary.md" target="_blank">
-                                STS Implementation Summary
-                            </a>
-                        </h6>
-                        <p class="small text-muted mb-2">Phase 1.5 Option A complete documentation (36,815 byte corpus)</p>
-                        
-                        <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-check"></i>
-                            <a href="../../cortex-brain/documents/validation/phase1-verification-report.yaml" target="_blank">
+                            <i class="bi bi-clipboard-check text-success"></i>
+                            <a href="../../cortex-brain/cx6-plan/validation/phase1-verification-report.yaml" target="_blank">
                                 Phase 1 Verification Report
                             </a>
                         </h6>
-                        <p class="small text-muted mb-2">Core-rules.yaml YAML bug fix and test execution results</p>
+                        <p class="small text-muted mb-3">Core-rules.yaml YAML bug fix + 105 test results (8KB)</p>
                         
                         <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-check"></i>
+                            <i class="bi bi-file-earmark-check text-success"></i>
+                            <a href="../../cortex-brain/cx6-plan/validation/option-a-sts-implementation-summary.md" target="_blank">
+                                STS Implementation Summary
+                            </a>
+                        </h6>
+                        <p class="small text-muted mb-3">Phase 1.5 Option A with 36,815-byte golden corpus (11KB)</p>
+                        
+                        <h6 class="mb-2">
+                            <i class="bi bi-folder-check text-success"></i>
                             <a href="../../tests/sts/" target="_blank">
                                 STS Test Suites
                             </a>
                         </h6>
-                        <p class="small text-muted">5 validation test suites (routing, unicode, governance, policy, security)</p>
+                        <p class="small text-muted">5 framework validation suites (routing, unicode, governance, policy, security)</p>
                     </div>
                 </div>
 
-                <!-- Architecture & Design -->
-                <div class="col-md-4">
+                <!-- ⚙️ Live Progress Tracking -->
+                <div class="col-md-6">
                     <div class="doc-link-card">
-                        <div class="doc-category">Architecture & Design</div>
+                        <div class="doc-category"><i class="bi bi-speedometer2"></i> Live Tracking</div>
                         <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-code"></i>
-                            <a href="../../.github/prompts/CORTEX.prompt.md" target="_blank">
-                                CORTEX Instructions
-                            </a>
-                        </h6>
-                        <p class="small text-muted mb-2">Master instructions for GitHub Copilot orchestration</p>
-                        
-                        <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-code"></i>
-                            <a href="../../cortex-brain/tier0/governance/core-rules.yaml" target="_blank">
-                                CORE Rules (23 SKULL)
-                            </a>
-                        </h6>
-                        <p class="small text-muted mb-2">Tier 0 governance rules (CORE-001 to CORE-023)</p>
-                        
-                        <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-code"></i>
-                            <a href="../../cortex-brain/documents/standards/" target="_blank">
-                                Design Standards
-                            </a>
-                        </h6>
-                        <p class="small text-muted">Glassmorphism, responsive design, purpose-driven architecture</p>
-                    </div>
-                </div>
-
-                <!-- Progress Tracking -->
-                <div class="col-md-4">
-                    <div class="doc-link-card">
-                        <div class="doc-category">Progress Tracking</div>
-                        <h6 class="mb-2">
-                            <i class="bi bi-clipboard-data"></i>
+                            <i class="bi bi-clipboard-data text-primary"></i>
                             <a href="../../cortex-brain/tier1/tracking/progress-tracker.json" target="_blank">
                                 Progress Tracker
                             </a>
                         </h6>
-                        <p class="small text-muted mb-2">Current phase status and completed AC-IDs</p>
+                        <p class="small text-muted mb-3">Current phase status, completed AC-IDs, active blockers (23KB)</p>
                         
                         <h6 class="mb-2">
-                            <i class="bi bi-clipboard-data"></i>
+                            <i class="bi bi-file-earmark-spreadsheet text-info"></i>
                             <a href="../../cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml" target="_blank">
                                 AC-INDEX Registry
                             </a>
                         </h6>
-                        <p class="small text-muted mb-2">Complete acceptance criteria registry (97 AC-IDs)</p>
+                        <p class="small text-muted mb-3">Complete acceptance criteria definitions (97 AC-IDs, 125KB)</p>
                         
                         <h6 class="mb-2">
-                            <i class="bi bi-clipboard-data"></i>
+                            <i class="bi bi-folder text-warning"></i>
                             <a href="../../cortex-brain/tier1/evidence-bundles/" target="_blank">
                                 Evidence Bundles
                             </a>
                         </h6>
-                        <p class="small text-muted">Implementation proof (tests, audit, manifests)</p>
+                        <p class="small text-muted">Implementation proof packages (tests, audit, manifests)</p>
                     </div>
                 </div>
 
-                <!-- Audit & Logs -->
-                <div class="col-md-4">
+                <!-- 🏛️ Architecture & Governance -->
+                <div class="col-md-6">
                     <div class="doc-link-card">
-                        <div class="doc-category">Audit & Logs</div>
+                        <div class="doc-category"><i class="bi bi-building"></i> Architecture</div>
                         <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-spreadsheet"></i>
-                            <a href="../../cortex-brain/audit-logs/" target="_blank">
-                                Audit Logs Directory
+                            <i class="bi bi-file-earmark-code text-danger"></i>
+                            <a href="../../.github/prompts/CORTEX.prompt.md" target="_blank">
+                                CORTEX Instructions
                             </a>
                         </h6>
-                        <p class="small text-muted mb-2">JSONL audit logs (middleware, state management)</p>
+                        <p class="small text-muted mb-3">Master GitHub Copilot orchestration gateway (146KB)</p>
                         
                         <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-spreadsheet"></i>
+                            <i class="bi bi-shield-exclamation text-danger"></i>
+                            <a href="../../cortex-brain/tier0/governance/core-rules.yaml" target="_blank">
+                                CORE Rules (23 SKULL)
+                            </a>
+                        </h6>
+                        <p class="small text-muted mb-3">Tier 0 governance rules (CORE-001 to CORE-023, 57KB)</p>
+                        
+                        <h6 class="mb-2">
+                            <i class="bi bi-file-earmark-spreadsheet text-secondary"></i>
                             <a href="../../cortex-brain/database/governance.db" target="_blank">
                                 Governance Database
                             </a>
                         </h6>
-                        <p class="small text-muted mb-2">SQLite database with audit trail and hash chain</p>
-                        
-                        <h6 class="mb-2">
-                            <i class="bi bi-file-earmark-spreadsheet"></i>
-                            <a href="../../cortex-brain/documents/validation/plan-viewer-redesign-summary.md" target="_blank">
-                                Dashboard Redesign
-                            </a>
-                        </h6>
-                        <p class="small text-muted">This dashboard redesign documentation</p>
+                        <p class="small text-muted">SQLite audit trail with hash chain integrity</p>
                     </div>
                 </div>
 
-                <!-- Implementation Guides -->
-                <div class="col-md-4">
+                <!-- 📁 Supporting Resources -->
+                <div class="col-md-12">
                     <div class="doc-link-card">
-                        <div class="doc-category">Implementation Guides</div>
-                        <h6 class="mb-2">
-                            <i class="bi bi-book-half"></i>
-                            <a href="../../README.md" target="_blank">
-                                Project README
-                            </a>
-                        </h6>
-                        <p class="small text-muted mb-2">CORTEX 6.0 project overview and setup</p>
-                        
-                        <h6 class="mb-2">
-                            <i class="bi bi-book-half"></i>
-                            <a href="../../sharpening-cortex/sts-template/golden_corpus.yaml" target="_blank">
-                                STS Golden Corpus
-                            </a>
-                        </h6>
-                        <p class="small text-muted mb-2">100 test intents across 5 validation categories</p>
-                        
-                        <h6 class="mb-2">
-                            <i class="bi bi-book-half"></i>
-                            <a href="./README-QUICKSTART.md" target="_blank">
-                                Dashboard Quick Start
-                            </a>
-                        </h6>
-                        <p class="small text-muted">How to use this dashboard</p>
+                        <div class="doc-category"><i class="bi bi-folder2-open"></i> Supporting Resources</div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <h6 class="mb-2">
+                                    <i class="bi bi-file-earmark-richtext text-muted"></i>
+                                    <a href="../../README.md" target="_blank">
+                                        Project README
+                                    </a>
+                                </h6>
+                                <p class="small text-muted">CORTEX 6.0 overview</p>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="mb-2">
+                                    <i class="bi bi-file-earmark-medical text-muted"></i>
+                                    <a href="../../sharpening-cortex/sts-template/golden_corpus.yaml" target="_blank">
+                                        STS Golden Corpus
+                                    </a>
+                                </h6>
+                                <p class="small text-muted">100 test intents (36KB)</p>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="mb-2">
+                                    <i class="bi bi-folder-symlink text-muted"></i>
+                                    <a href="../../cortex-brain/audit-logs/" target="_blank">
+                                        Audit Logs
+                                    </a>
+                                </h6>
+                                <p class="small text-muted">470 JSONL log files</p>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="mb-2">
+                                    <i class="bi bi-info-circle text-muted"></i>
+                                    <a href="./plan-data.json" target="_blank">
+                                        Plan Data (JSON)
+                                    </a>
+                                </h6>
+                                <p class="small text-muted">Dashboard data source</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
