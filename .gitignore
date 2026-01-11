@@ -59,3 +59,7 @@ cortex-brain/documents/reports/tdd/*.md
 
 # Auto-generated audit reports (pre-commit hook) - 2026-01-10
 cortex-brain/documents/reports/architecture-audit-*.json
+# Generated aggregated audit logs - Sat Jan 10 22:24:33 EST 2026
+templates/plan-viewer/audit-logs-aggregated.json
+# Old backup - Sat Jan 10 22:24:38 EST 2026
+templates/plan-viewer/cortex-plan-viewer-old-backup.html

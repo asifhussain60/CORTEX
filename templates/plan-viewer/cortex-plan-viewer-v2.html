@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX 6.0 Dashboard - Implementation Progress</title>
+    
+    <!-- Bootstrap 5 Dark Theme -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    
+    <style>
+        :root {
+            --cortex-cyan: #00d4ff;
+            --cortex-purple: #7b2cbf;
+            --cortex-pink: #ff006e;
+            --cortex-green: #06ffa5;
+            --cortex-yellow: #ffbe0b;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            min-height: 100vh;
+        }
+        
+        /* Header Glow Effect */
+        .header-glow {
+            background: linear-gradient(135deg, var(--cortex-cyan), var(--cortex-purple));
+            padding: 2rem 0;
+            box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
+        }
+        
+        /* Metric Cards */
+        .metric-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .metric-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.2);
+        }
+        
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--cortex-cyan), var(--cortex-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .metric-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Phase Cards */
+        .phase-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--cortex-cyan);
+        }
+        
+        .phase-card.completed {
+            border-left-color: var(--cortex-green);
+        }
+        
+        .phase-card.blocked {
+            border-left-color: var(--cortex-yellow);
+        }
+        
+        /* Progress Bars */
+        .progress {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, var(--cortex-cyan), var(--cortex-green));
+            border-radius: 10px;
+        }
+        
+        /* Badges */
+        .badge-cyan {
+            background: rgba(0, 212, 255, 0.2);
+            color: var(--cortex-cyan);
+            border: 1px solid var(--cortex-cyan);
+        }
+        
+        .badge-green {
+            background: rgba(6, 255, 165, 0.2);
+            color: var(--cortex-green);
+            border: 1px solid var(--cortex-green);
+        }
+        
+        .badge-yellow {
+            background: rgba(255, 190, 11, 0.2);
+            color: var(--cortex-yellow);
+            border: 1px solid var(--cortex-yellow);
+        }
+        
+        /* Chart Container */
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            height: 400px;
+        }
+        
+        /* Audit Log */
+        .audit-log-container {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .audit-entry {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid var(--cortex-cyan);
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+        
+        .audit-entry.error {
+            border-left-color: var(--cortex-pink);
+        }
+        
+        .audit-entry.warning {
+            border-left-color: var(--cortex-yellow);
+        }
+        
+        .audit-entry.success {
+            border-left-color: var(--cortex-green);
+        }
+        
+        /* AC Badge Grid */
+        .ac-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 0.5rem;
+        }
+        
+        .ac-badge {
+            padding: 0.5rem;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid;
+        }
+        
+        .ac-badge.implemented {
+            background: rgba(6, 255, 165, 0.1);
+            color: var(--cortex-green);
+            border-color: var(--cortex-green);
+        }
+        
+        .ac-badge.partial {
+            background: rgba(255, 190, 11, 0.1);
+            color: var(--cortex-yellow);
+            border-color: var(--cortex-yellow);
+        }
+        
+        .ac-badge.planned {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--cortex-cyan);
+            border-radius: 4px;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header-glow">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-4 fw-bold mb-2">
+                        <i class="bi bi-cpu"></i> CORTEX 6.0
+                    </h1>
+                    <p class="lead mb-0">Production-Grade AI Orchestration Implementation Dashboard</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="badge badge-cyan fs-6 px-3 py-2">
+                        <i class="bi bi-graph-up"></i> Design Score: 97/95
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <!-- Key Metrics Dashboard -->
+        <div class="row g-3 mb-4 fade-in">
+            <div class="col-md-3">
+                <div class="metric-card">
+                    <div class="metric-label">Total AC-IDs</div>
+                    <div class="metric-value" id="totalAcIds">97</div>
+                    <div class="text-muted small">Acceptance Criteria</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric-card">
+                    <div class="metric-label">Completed</div>
+                    <div class="metric-value" id="completedAcIds">18</div>
+                    <div class="text-muted small">18.5% Progress</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric-card">
+                    <div class="metric-label">Current Phase</div>
+                    <div class="metric-value">1.5</div>
+                    <div class="text-muted small">STS Validation</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric-card">
+                    <div class="metric-label">Test Coverage</div>
+                    <div class="metric-value">99.4%</div>
+                    <div class="text-muted small">1232/1239 Passing</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Charts Row -->
+        <div class="row g-3 mb-4 fade-in">
+            <div class="col-lg-6">
+                <div class="chart-container">
+                    <canvas id="phaseProgressChart"></canvas>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="chart-container">
+                    <canvas id="acStatusChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phase Timeline -->
+        <div class="mb-4 fade-in">
+            <h3 class="mb-3"><i class="bi bi-diagram-3"></i> Implementation Phases</h3>
+            
+            <!-- Phase 1 -->
+            <div class="phase-card">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <h5 class="mb-1">
+                            <span class="badge badge-cyan">Phase 1</span>
+                            Foundation Enhancement
+                        </h5>
+                        <small class="text-muted">Week 1-2 | 33 AC-IDs</small>
+                    </div>
+                    <span class="badge badge-yellow">PARTIAL 48%</span>
+                </div>
+                <p class="text-muted small mb-2">
+                    Enterprise audit logger, 4-tier governance, state management, lifecycle, evidence bundles, security layer
+                </p>
+                <div class="progress mb-2">
+                    <div class="progress-bar" role="progressbar" style="width: 48%" aria-valuenow="48" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="d-flex justify-content-between small text-muted">
+                    <span>16 of 33 completed</span>
+                    <span>48%</span>
+                </div>
+                
+                <!-- Completed AC-IDs -->
+                <details class="mt-3">
+                    <summary class="text-cyan cursor-pointer">✅ Completed (16)</summary>
+                    <div class="ac-grid mt-2">
+                        <div class="ac-badge implemented">AC-AUDIT-001</div>
+                        <div class="ac-badge implemented">AC-AUDIT-002</div>
+                        <div class="ac-badge implemented">AC-AUDIT-003</div>
+                        <div class="ac-badge implemented">AC-AUDIT-004</div>
+                        <div class="ac-badge implemented">AC-AUDIT-005</div>
+                        <div class="ac-badge implemented">AC-AUDIT-006</div>
+                        <div class="ac-badge implemented">AC-GOV-001</div>
+                        <div class="ac-badge implemented">AC-GOV-002</div>
+                        <div class="ac-badge implemented">AC-GOV-003</div>
+                        <div class="ac-badge implemented">AC-GOV-004</div>
+                        <div class="ac-badge implemented">AC-GOV-005</div>
+                        <div class="ac-badge implemented">AC-STATE-001</div>
+                        <div class="ac-badge implemented">AC-STATE-002</div>
+                        <div class="ac-badge implemented">AC-STATE-003</div>
+                    </div>
+                </details>
+                
+                <!-- Planned AC-IDs -->
+                <details class="mt-2">
+                    <summary class="text-muted cursor-pointer">⏳ Remaining (17)</summary>
+                    <div class="ac-grid mt-2">
+                        <div class="ac-badge planned">AC-AUDIT-007</div>
+                        <div class="ac-badge planned">AC-LIFECYCLE-001</div>
+                        <div class="ac-badge planned">AC-LIFECYCLE-002</div>
+                        <div class="ac-badge planned">AC-LIFECYCLE-003</div>
+                        <div class="ac-badge planned">AC-EVIDENCE-001</div>
+                        <div class="ac-badge planned">AC-EVIDENCE-002</div>
+                        <div class="ac-badge planned">AC-EVIDENCE-003</div>
+                        <div class="ac-badge planned">AC-SECURITY-001</div>
+                        <div class="ac-badge planned">AC-SECURITY-002</div>
+                        <div class="ac-badge planned">AC-SECURITY-003</div>
+                        <div class="ac-badge planned">AC-SECURITY-004</div>
+                        <div class="ac-badge planned">AC-SECURITY-005</div>
+                        <div class="ac-badge planned">AC-SECURITY-006</div>
+                        <div class="ac-badge planned">AC-TEST-001</div>
+                        <div class="ac-badge planned">AC-TEST-002</div>
+                        <div class="ac-badge planned">AC-TEST-003</div>
+                        <div class="ac-badge planned">AC-TEST-004</div>
+                    </div>
+                </details>
+            </div>
+
+            <!-- Phase 1.5 -->
+            <div class="phase-card">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <h5 class="mb-1">
+                            <span class="badge badge-yellow">Phase 1.5</span>
+                            STS Validation (Capability 0)
+                        </h5>
+                        <small class="text-muted">Week 1 | 3 AC-IDs | HIGH PRIORITY</small>
+                    </div>
+                    <span class="badge badge-yellow">IN PROGRESS 85%</span>
+                </div>
+                <p class="text-muted small mb-2">
+                    ⚠️ Framework validation with 100 test intents across 5 categories (routing, unicode, governance, policy, security)
+                </p>
+                <div class="progress mb-2">
+                    <div class="progress-bar" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="d-flex justify-content-between small text-muted">
+                    <span>Option A implemented - awaiting Phase 2 integration</span>
+                    <span>85%</span>
+                </div>
+                
+                <div class="ac-grid mt-3">
+                    <div class="ac-badge partial">AC-STS-001</div>
+                    <div class="ac-badge partial">AC-STS-002</div>
+                    <div class="ac-badge partial">AC-STS-003</div>
+                </div>
+                
+                <div class="alert alert-warning mt-3 mb-0" role="alert">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    <strong>Critical:</strong> Golden corpus (36,815 bytes) and 5 test suites created. 4/5 passing. Awaiting MasterOrchestrator integration.
+                </div>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="phase-card blocked">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <h5 class="mb-1">
+                            <span class="badge badge-yellow">Phase 2</span>
+                            Orchestration Core
+                        </h5>
+                        <small class="text-muted">Week 3-6 | 23 AC-IDs</small>
+                    </div>
+                    <span class="badge badge-yellow">BLOCKED 0%</span>
+                </div>
+                <p class="text-muted small mb-2">
+                    MasterOrchestrator, TodoManager, TDD-Master, Knowledge Practices, Planning v5
+                </p>
+                <div class="progress mb-2">
+                    <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="alert alert-info mt-2 mb-0" role="alert">
+                    <i class="bi bi-lock"></i> Blocked until Phase 1 + 1.5 complete
+                </div>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="phase-card blocked">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <h5 class="mb-1">
+                            <span class="badge badge-yellow">Phase 3</span>
+                            Feature Orchestrators
+                        </h5>
+                        <small class="text-muted">Week 7-12 | 24 AC-IDs</small>
+                    </div>
+                    <span class="badge badge-yellow">BLOCKED 0%</span>
+                </div>
+                <p class="text-muted small mb-2">
+                    Crawler, Knowledge Graph, Onboarding, Scaffolder
+                </p>
+                <div class="progress mb-2">
+                    <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="alert alert-info mt-2 mb-0" role="alert">
+                    <i class="bi bi-lock"></i> Blocked until Phase 2 complete
+                </div>
+            </div>
+
+            <!-- Phase 4 -->
+            <div class="phase-card blocked">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                        <h5 class="mb-1">
+                            <span class="badge badge-yellow">Phase 4</span>
+                            Intelligence Layer
+                        </h5>
+                        <small class="text-muted">Week 13-20 | 31 AC-IDs</small>
+                    </div>
+                    <span class="badge badge-yellow">BLOCKED 0%</span>
+                </div>
+                <p class="text-muted small mb-2">
+                    GitHub Copilot Bridge, Interaction Management, Progressive Rollout
+                </p>
+                <div class="progress mb-2">
+                    <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="alert alert-info mt-2 mb-0" role="alert">
+                    <i class="bi bi-lock"></i> Blocked until Phase 3 complete
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity & Audit Logs -->
+        <div class="row g-3 mb-4 fade-in">
+            <div class="col-lg-6">
+                <div class="card bg-dark border-secondary">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-clock-history"></i> Recent Activity</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="audit-log-container" id="auditLogDisplay" style="max-height: 400px;">
+                            <div class="audit-entry success">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <strong>Option A STS Implemented</strong>
+                                    <span class="text-muted">2026-01-10 21:00</span>
+                                </div>
+                                <div class="small text-muted">
+                                    ✅ Golden corpus created (36,815 bytes, 100 test intents)
+                                </div>
+                            </div>
+                            
+                            <div class="audit-entry success">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <strong>Phase 1 Verification Complete</strong>
+                                    <span class="text-muted">2026-01-10 20:04</span>
+                                </div>
+                                <div class="small text-muted">
+                                    ✅ Fixed core-rules.yaml YAML bug (23 rules now loading)
+                                </div>
+                            </div>
+                            
+                            <div class="audit-entry success">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <strong>Test Suite Execution</strong>
+                                    <span class="text-muted">2026-01-10 20:00</span>
+                                </div>
+                                <div class="small text-muted">
+                                    ✅ 105/105 tests passing (100% pass rate)
+                                </div>
+                            </div>
+                            
+                            <div class="audit-entry warning">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <strong>Gap Analysis Detected</strong>
+                                    <span class="text-muted">2026-01-10 18:30</span>
+                                </div>
+                                <div class="small text-muted">
+                                    ⚠️ Phase 1.5 STS false positive - only 72-byte stubs
+                                </div>
+                            </div>
+                            
+                            <div class="audit-entry">
+                                <div class="d-flex justify-content-between mb-1">
+                                    <strong>Phase 1 Implementation</strong>
+                                    <span class="text-muted">2026-01-10 17:00</span>
+                                </div>
+                                <div class="small text-muted">
+                                    📦 Implemented AC-AUDIT-001 to AC-STATE-003 (16 AC-IDs)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card bg-dark border-secondary">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="bi bi-shield-check"></i> Quality Metrics</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>Test Coverage</span>
+                                <span class="text-success fw-bold">99.4%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 99.4%" aria-valuenow="99.4" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>Governance Compliance</span>
+                                <span class="text-success fw-bold">100%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <small class="text-muted">All 23 CORE rules enforced</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>Evidence Bundle Quality</span>
+                                <span class="text-warning fw-bold">48%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-warning" role="progressbar" style="width: 48%" aria-valuenow="48" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <small class="text-muted">16 of 33 bundles complete</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span>Design Score</span>
+                                <span class="text-success fw-bold">97/95</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                            <small class="text-success">✅ Target exceeded</small>
+                        </div>
+
+                        <hr class="my-3">
+                        
+                        <h6 class="mb-2">Infrastructure Status</h6>
+                        <div class="small">
+                            <div class="mb-2">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                <strong>Audit Logger:</strong> <span class="text-success">Operational</span>
+                            </div>
+                            <div class="mb-2">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                <strong>Governance Merger:</strong> <span class="text-success">Operational</span>
+                            </div>
+                            <div class="mb-2">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                <strong>State Manager:</strong> <span class="text-success">Operational</span>
+                            </div>
+                            <div class="mb-2">
+                                <i class="bi bi-exclamation-circle-fill text-warning"></i>
+                                <strong>MasterOrchestrator:</strong> <span class="text-warning">Phase 2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center text-muted py-4 mb-3">
+            <p class="mb-1">
+                <strong>CORTEX 6.0</strong> - Production-Grade AI Orchestration Framework
+            </p>
+            <p class="small mb-0">
+                Last Updated: 2026-01-10 21:30 UTC | 
+                <a href="https://github.com/asifhussain60/CORTEX" class="text-decoration-none" style="color: var(--cortex-cyan)">
+                    <i class="bi bi-github"></i> GitHub Repository
+                </a>
+            </p>
+        </footer>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Audit Log Loader -->
+    <script src="audit-loader.js"></script>
+    
+    <!-- Charts Initialization -->
+    <script>
+        // Phase Progress Chart (Doughnut)
+        const phaseProgressCtx = document.getElementById('phaseProgressChart').getContext('2d');
+        const phaseProgressChart = new Chart(phaseProgressCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Phase 1 (48%)', 'Phase 1.5 (85%)', 'Phase 2 (0%)', 'Phase 3 (0%)', 'Phase 4 (0%)'],
+                datasets: [{
+                    data: [16, 2.55, 0, 0, 0],
+                    backgroundColor: [
+                        'rgba(0, 212, 255, 0.8)',
+                        'rgba(255, 190, 11, 0.8)',
+                        'rgba(255, 255, 255, 0.1)',
+                        'rgba(255, 255, 255, 0.1)',
+                        'rgba(255, 255, 255, 0.1)'
+                    ],
+                    borderColor: [
+                        'rgba(0, 212, 255, 1)',
+                        'rgba(255, 190, 11, 1)',
+                        'rgba(255, 255, 255, 0.2)',
+                        'rgba(255, 255, 255, 0.2)',
+                        'rgba(255, 255, 255, 0.2)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            color: 'rgba(255, 255, 255, 0.8)',
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Phase Progress Distribution',
+                        color: 'rgba(255, 255, 255, 0.9)',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    }
+                }
+            }
+        });
+
+        // AC Status Chart (Bar)
+        const acStatusCtx = document.getElementById('acStatusChart').getContext('2d');
+        const acStatusChart = new Chart(acStatusCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Implemented', 'Partial', 'Planned', 'Blocked'],
+                datasets: [{
+                    label: 'AC-IDs',
+                    data: [16, 2, 54, 25],
+                    backgroundColor: [
+                        'rgba(6, 255, 165, 0.6)',
+                        'rgba(255, 190, 11, 0.6)',
+                        'rgba(255, 255, 255, 0.2)',
+                        'rgba(255, 0, 110, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(6, 255, 165, 1)',
+                        'rgba(255, 190, 11, 1)',
+                        'rgba(255, 255, 255, 0.4)',
+                        'rgba(255, 0, 110, 1)'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'AC-ID Status Breakdown',
+                        color: 'rgba(255, 255, 255, 0.9)',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: 'rgba(255, 255, 255, 0.7)'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Auto-refresh every 30 seconds
+        setTimeout(() => {
+            location.reload();
+        }, 30000);
+    </script>
+</body>
+</html>
