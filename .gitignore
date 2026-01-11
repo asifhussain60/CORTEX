@@ -69,3 +69,7 @@ cortex-brain/documents/reports/architecture-audit-*.json
 # Auto-ignored by CORTEX vacuum - 2026-01-11T11:40:59Z
 .cortex-initialized  # Temp marker
 .favorites.json      # IDE artifact
+
+# Test execution artifacts
+test-execution-log.txt
+test-results.xml
