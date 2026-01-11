@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORTEX 6.0 - Implementation Roadmap</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="shared/styles.css">
+  <style>
+    .roadmap-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    .phase-card {
+      border-left: 4px solid;
+      margin-bottom: 2rem;
+    }
+    
+    .phase-card.phase-1 {
+      border-left-color: #06ffa5;
+    }
+    
+    .phase-card.phase-2 {
+      border-left-color: #ffbe0b;
+    }
+    
+    .phase-card.phase-3 {
+      border-left-color: #7b2cbf;
+    }
+    
+    .phase-card.phase-4 {
+      border-left-color: #00d4ff;
+    }
+    
+    .ac-id-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 0.5rem;
+    }
+    
+    .ac-badge {
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .ac-badge:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+    }
+    
+    .milestone-timeline {
+      position: relative;
+      padding: 2rem 0;
+    }
+    
+    .milestone-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .milestone-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #00d4ff;
+      border: 3px solid #0a0e27;
+      margin-right: 1.5rem;
+      flex-shrink: 0;
+    }
+    
+    .milestone-item.completed .milestone-dot {
+      background: #06ffa5;
+    }
+    
+    .milestone-item.in-progress .milestone-dot {
+      background: #ffbe0b;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .milestone-item.blocked .milestone-dot {
+      background: #ff006e;
+    }
+    
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .metric-box {
+      background: rgba(0, 212, 255, 0.1);
+      padding: 1rem;
+      border-radius: 8px;
+      border-left: 4px solid #00d4ff;
+      text-align: center;
+    }
+    
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #00d4ff;
+      margin-bottom: 0.5rem;
+    }
+    
+    .metric-label {
+      color: #a0a0a0;
+      font-size: 0.9rem;
+    }
+    
+    .gantt-container {
+      overflow-x: auto;
+      padding: 1rem 0;
+    }
+    
+    .gantt-chart {
+      min-width: 800px;
+      font-size: 0.85rem;
+    }
+    
+    .gantt-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .gantt-label {
+      width: 150px;
+      font-weight: 600;
+      color: #00d4ff;
+    }
+    
+    .gantt-bar {
+      height: 30px;
+      background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      padding: 0 0.5rem;
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+    
+    .gantt-bar.blocked {
+      background: linear-gradient(90deg, #ff006e, #ff9a00);
+      opacity: 0.6;
+    }
+    
+    .gantt-bar.in-progress {
+      animation: progress-animation 2s ease-in-out infinite;
+    }
+    
+    @keyframes progress-animation {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    
+    .token-analysis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .token-scenario {
+      background: rgba(123, 44, 191, 0.1);
+      padding: 1.5rem;
+      border-radius: 8px;
+      border: 1px solid #7b2cbf;
+    }
+    
+    .token-scenario h4 {
+      color: #7b2cbf;
+      margin-bottom: 1rem;
+    }
+    
+    .token-scenario .scenario-detail {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+    
+    .token-scenario .scenario-value {
+      color: #00d4ff;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid p-4">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb mb-4">
+      <a href="cortex-plan-viewer.html">Dashboard</a>
+      <span>/</span>
+      <span>Implementation Roadmap</span>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <h1><i class="bi bi-map"></i> Implementation Roadmap</h1>
+      <p>CORTEX 6.0 Snowball Strategy: Infrastructure compounds into features over 8 weeks</p>
+    </div>
+
+    <!-- Design Score Badge -->
+    <div class="metrics-grid">
+      <div class="metric-box" style="border-left-color: #00d4ff;">
+        <div class="metric-value">97</div>
+        <div class="metric-label">Design Score</div>
+        <small style="color: #06ffa5;">Target: 95 ✓</small>
+      </div>
+      <div class="metric-box" style="border-left-color: #06ffa5;">
+        <div class="metric-value">16/97</div>
+        <div class="metric-label">AC-IDs Complete</div>
+        <small style="color: #a0a0a0;">16.5% of total</small>
+      </div>
+      <div class="metric-box" style="border-left-color: #ffbe0b;">
+        <div class="metric-value">8</div>
+        <div class="metric-label">Weeks Duration</div>
+        <small style="color: #a0a0a0;">Target: Feb 28</small>
+      </div>
+      <div class="metric-box" style="border-left-color: #ff006e;">
+        <div class="metric-value">3</div>
+        <div class="metric-label">Phase 2 Blockers</div>
+        <small style="color: #ffbe0b;">Critical Path</small>
+      </div>
+    </div>
+
+    <!-- Phase Timeline -->
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-calendar-range"></i> Phase Timeline
+      </div>
+      <div class="card-body">
+        <div class="milestone-timeline">
+          <div class="milestone-item completed">
+            <div class="milestone-dot"></div>
+            <div>
+              <strong>Phase 1: Foundation Enhancement</strong>
+              <div style="color: #a0a0a0; font-size: 0.9rem;">
+                AC-AUDIT (7/7), AC-GOV (5/5), AC-STATE (3/3) + enhancements
+                <br/>
+                <span style="color: #06ffa5;">✓ COMPLETED</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="milestone-item in-progress">
+            <div class="milestone-dot"></div>
+            <div>
+              <strong>Phase 1.5: STS Validation (Capability 0)</strong>
+              <div style="color: #a0a0a0; font-size: 0.9rem;">
+                AC-STS-001, AC-STS-002, AC-STS-003 (Framework validation before Phase 2)
+                <br/>
+                <span style="color: #ffbe0b;">⏳ IN PROGRESS - Unblocks Phase 2 on Jan 17</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="milestone-item blocked">
+            <div class="milestone-dot"></div>
+            <div>
+              <strong>Phase 2: Orchestration Core</strong>
+              <div style="color: #a0a0a0; font-size: 0.9rem;">
+                AC-TODO (4), AC-TDD (8), AC-ORCH (8), AC-KNOW (3)
+                <br/>
+                <span style="color: #ff006e;">🔴 BLOCKED - Waiting on STS completion</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="milestone-item blocked">
+            <div class="milestone-dot"></div>
+            <div>
+              <strong>Phase 3: Feature Orchestrators</strong>
+              <div style="color: #a0a0a0; font-size: 0.9rem;">
+                AC-CRAWLER (5), AC-GRAPH (4), AC-SCAFFOLD (7), AC-ONBOARD (12)
+                <br/>
+                <span style="color: #ff006e;">🔴 BLOCKED - Depends on Phase 2</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="milestone-item blocked">
+            <div class="milestone-dot"></div>
+            <div>
+              <strong>Phase 4: Intelligence Layer</strong>
+              <div style="color: #a0a0a0; font-size: 0.9rem;">
+                AC-COPILOT (13), AC-INTERACT (3), AC-ROLLOUT (3)
+                <br/>
+                <span style="color: #ff006e;">🔴 BLOCKED - Depends on Phase 3</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase Details -->
+    <div class="roadmap-container mt-4">
+      <!-- Phase 1 -->
+      <div class="card phase-card phase-1">
+        <div class="card-header" style="color: #06ffa5;">
+          <i class="bi bi-box-seam"></i> Phase 1: Foundation Enhancement (COMPLETE)
+        </div>
+        <div class="card-body">
+          <p>
+            <strong>Duration:</strong> 2 weeks | <strong>Status:</strong> <span class="badge badge-success">✓ Complete</span>
+          </p>
+          <p>
+            Infrastructure layer providing audit logging, governance enforcement, and state management for all phases.
+          </p>
+          
+          <div class="grid-2 mb-3">
+            <div>
+              <h5>Key Components</h5>
+              <ul style="list-style: none; padding: 0;">
+                <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> Enterprise Audit Logger (AC-AUDIT-001 to 007)</li>
+                <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> 4-Tier Governance Merger (AC-GOV-001 to 005)</li>
+                <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> Session State Manager (AC-STATE-001 to 003)</li>
+                <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> 7-State Lifecycle (AC-LIFECYCLE-001 to 003)</li>
+                <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> Evidence Bundle System (AC-EVIDENCE-001 to 003)</li>
+                <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> Action Security Layer (AC-SECURITY-001 to 006)</li>
+              </ul>
+            </div>
+            <div>
+              <h5>Outcomes</h5>
+              <ul style="list-style: none; padding: 0;">
+                <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> Design Score: 97/95 ✓</li>
+                <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> 23 CORE rules validated</li>
+                <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> 105 tests passing (100%)</li>
+                <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> False positive detection implemented</li>
+                <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> Test-gated progress tracking</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="ac-id-list">
+            <span class="ac-badge" style="background: #06ffa522; color: #06ffa5; border: 1px solid #06ffa5;">AC-AUDIT-001</span>
+            <span class="ac-badge" style="background: #06ffa522; color: #06ffa5; border: 1px solid #06ffa5;">AC-AUDIT-002</span>
+            <span class="ac-badge" style="background: #06ffa522; color: #06ffa5; border: 1px solid #06ffa5;">AC-AUDIT-003</span>
+            <span class="ac-badge" style="background: #06ffa522; color: #06ffa5; border: 1px solid #06ffa5;">AC-AUDIT-004</span>
+            <span class="ac-badge" style="background: #06ffa522; color: #06ffa5; border: 1px solid #06ffa5;">AC-AUDIT-005</span>
+            <span class="ac-badge" style="background: #06ffa522; color: #06ffa5; border: 1px solid #06ffa5;">AC-AUDIT-006</span>
+            <span class="ac-badge" style="background: #06ffa522; color: #06ffa5; border: 1px solid #06ffa5;">AC-AUDIT-007</span>
+            <span class="ac-badge" style="background: #7b2cbf22; color: #7b2cbf; border: 1px solid #7b2cbf;">AC-GOV-001</span>
+            <span class="ac-badge" style="background: #7b2cbf22; color: #7b2cbf; border: 1px solid #7b2cbf;">AC-GOV-002</span>
+            <span class="ac-badge" style="background: #7b2cbf22; color: #7b2cbf; border: 1px solid #7b2cbf;">AC-GOV-003</span>
+            <span class="ac-badge" style="background: #7b2cbf22; color: #7b2cbf; border: 1px solid #7b2cbf;">AC-GOV-004</span>
+            <span class="ac-badge" style="background: #7b2cbf22; color: #7b2cbf; border: 1px solid #7b2cbf;">AC-GOV-005</span>
+            <span class="ac-badge" style="background: #00d4ff22; color: #00d4ff; border: 1px solid #00d4ff;">AC-STATE-001</span>
+            <span class="ac-badge" style="background: #00d4ff22; color: #00d4ff; border: 1px solid #00d4ff;">AC-STATE-002</span>
+            <span class="ac-badge" style="background: #00d4ff22; color: #00d4ff; border: 1px solid #00d4ff;">AC-STATE-003</span>
+            <span class="ac-badge" style="background: #ffbe0b22; color: #ffbe0b; border: 1px solid #ffbe0b;">AC-LIFECYCLE-001</span>
+            <span class="ac-badge" style="background: #ffbe0b22; color: #ffbe0b; border: 1px solid #ffbe0b;">AC-LIFECYCLE-002</span>
+            <span class="ac-badge" style="background: #ffbe0b22; color: #ffbe0b; border: 1px solid #ffbe0b;">AC-LIFECYCLE-003</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-EVIDENCE-001</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-EVIDENCE-002</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-EVIDENCE-003</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-SECURITY-001</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-SECURITY-002</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-SECURITY-003</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-SECURITY-004</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-SECURITY-005</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-SECURITY-006</span>
+            <span class="ac-badge" style="background: #06ffa522; color: #06ffa5; border: 1px solid #06ffa5;">AC-TEST-001</span>
+            <span class="ac-badge" style="background: #06ffa522; color: #06ffa5; border: 1px solid #06ffa5;">AC-TEST-002</span>
+            <span class="ac-badge" style="background: #06ffa522; color: #06ffa5; border: 1px solid #06ffa5;">AC-TEST-003</span>
+            <span class="ac-badge" style="background: #06ffa522; color: #06ffa5; border: 1px solid #06ffa5;">AC-TEST-004</span>
+            <span class="ac-badge" style="background: #7b2cbf22; color: #7b2cbf; border: 1px solid #7b2cbf;">AC-CLEAN-001</span>
+            <span class="ac-badge" style="background: #7b2cbf22; color: #7b2cbf; border: 1px solid #7b2cbf;">AC-CLEAN-002</span>
+            <span class="ac-badge" style="background: #7b2cbf22; color: #7b2cbf; border: 1px solid #7b2cbf;">AC-CLEAN-003</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 1.5 -->
+      <div class="card phase-card phase-2">
+        <div class="card-header" style="color: #ffbe0b;">
+          <i class="bi bi-hourglass-split"></i> Phase 1.5: STS Validation (Capability 0)
+        </div>
+        <div class="card-body">
+          <p>
+            <strong>Duration:</strong> 1 week | <strong>Status:</strong> <span class="badge badge-warning">⏳ In Progress</span>
+          </p>
+          <p>
+            Framework validation layer proving orchestration reliability before Phase 2. Tests 100 intents across 5 categories.
+          </p>
+          
+          <div class="grid-2 mb-3">
+            <div>
+              <h5>Validation Categories</h5>
+              <ul style="list-style: none; padding: 0;">
+                <li><i class="bi bi-diagram-3"></i> Routing Determinism (25 tests)</li>
+                <li><i class="bi bi-type"></i> Unicode Normalization (15 tests)</li>
+                <li><i class="bi bi-shield-check"></i> Governance Enforcement (20 tests)</li>
+                <li><i class="bi bi-diagram-2"></i> Policy Decisions (20 tests)</li>
+                <li><i class="bi bi-lock"></i> Security Boundaries (20 tests)</li>
+              </ul>
+            </div>
+            <div>
+              <h5>Exit Criteria</h5>
+              <ul style="list-style: none; padding: 0;">
+                <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> 100% routing determinism validated</li>
+                <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> 100% governance enforcement validated</li>
+                <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> 100% security boundaries validated</li>
+                <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> 36,815-byte golden corpus</li>
+                <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> Evidence bundle generated</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="ac-id-list">
+            <span class="ac-badge" style="background: #ffbe0b22; color: #ffbe0b; border: 1px solid #ffbe0b;">AC-STS-001</span>
+            <span class="ac-badge" style="background: #ffbe0b22; color: #ffbe0b; border: 1px solid #ffbe0b;">AC-STS-002</span>
+            <span class="ac-badge" style="background: #ffbe0b22; color: #ffbe0b; border: 1px solid #ffbe0b;">AC-STS-003</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="card phase-card phase-2">
+        <div class="card-header" style="color: #ffbe0b;">
+          <i class="bi bi-gear-wide-connected"></i> Phase 2: Orchestration Core (23 AC-IDs)
+        </div>
+        <div class="card-body">
+          <p>
+            <strong>Duration:</strong> 2 weeks | <strong>Status:</strong> <span class="badge badge-danger">🔴 BLOCKED</span>
+            <br/>
+            <small style="color: #ffbe0b;">Unblocks when: Phase 1.5 STS complete (Est. Jan 17)</small>
+          </p>
+          <p>
+            Core orchestration system: MasterOrchestrator routes requests → TodoManager creates tasks → TDD-Master executes with RED/GREEN/REFACTOR.
+          </p>
+          
+          <div class="ac-id-list">
+            <span class="ac-badge" style="background: #ffbe0b22; color: #ffbe0b; border: 1px solid #ffbe0b;">AC-TODO-001</span>
+            <span class="ac-badge" style="background: #ffbe0b22; color: #ffbe0b; border: 1px solid #ffbe0b;">AC-TODO-002</span>
+            <span class="ac-badge" style="background: #ffbe0b22; color: #ffbe0b; border: 1px solid #ffbe0b;">AC-TODO-003</span>
+            <span class="ac-badge" style="background: #ffbe0b22; color: #ffbe0b; border: 1px solid #ffbe0b;">AC-TODO-004</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-TDD-001</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-TDD-002</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-TDD-003</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-TDD-004</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-TDD-005</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-TDD-006</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-TDD-007</span>
+            <span class="ac-badge" style="background: #ff006e22; color: #ff006e; border: 1px solid #ff006e;">AC-TDD-008</span>
+            <span class="ac-badge" style="background: #7b2cbf22; color: #7b2cbf; border: 1px solid #7b2cbf;">AC-ORCH-001</span>
+            <span class="ac-badge" style="background: #7b2cbf22; color: #7b2cbf; border: 1px solid #7b2cbf;">AC-ORCH-002</span>
+            <span class="ac-badge" style="background: #7b2cbf22; color: #7b2cbf; border: 1px solid #7b2cbf;">AC-ORCH-003</span>
+            <span class="ac-badge" style="background: #7b2cbf22; color: #7b2cbf; border: 1px solid #7b2cbf;">AC-ORCH-004</span>
+            <span class="ac-badge" style="background: #7b2cbf22; color: #7b2cbf; border: 1px solid #7b2cbf;">AC-ORCH-005</span>
+            <span class="ac-badge" style="background: #7b2cbf22; color: #7b2cbf; border: 1px solid #7b2cbf;">AC-ORCH-006</span>
+            <span class="ac-badge" style="background: #7b2cbf22; color: #7b2cbf; border: 1px solid #7b2cbf;">AC-ORCH-007</span>
+            <span class="ac-badge" style="background: #7b2cbf22; color: #7b2cbf; border: 1px solid #7b2cbf;">AC-ORCH-008</span>
+            <span class="ac-badge" style="background: #00d4ff22; color: #00d4ff; border: 1px solid #00d4ff;">AC-KNOW-001</span>
+            <span class="ac-badge" style="background: #00d4ff22; color: #00d4ff; border: 1px solid #00d4ff;">AC-KNOW-002</span>
+            <span class="ac-badge" style="background: #00d4ff22; color: #00d4ff; border: 1px solid #00d4ff;">AC-KNOW-003</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="card phase-card phase-3">
+        <div class="card-header" style="color: #7b2cbf;">
+          <i class="bi bi-puzzle"></i> Phase 3: Feature Orchestrators (24 AC-IDs)
+        </div>
+        <div class="card-body">
+          <p>
+            <strong>Duration:</strong> 2 weeks | <strong>Status:</strong> <span class="badge badge-danger">🔴 BLOCKED</span>
+            <br/>
+            <small style="color: #ffbe0b;">Unblocks when: Phase 2 complete (Est. Feb 7)</small>
+          </p>
+          <p>
+            Specialized orchestrators for codebase analysis, knowledge graphs, scaffolding, and onboarding.
+          </p>
+          
+          <p style="font-size: 0.9rem; color: #a0a0a0;">
+            AC-CRAWLER-001 to 005 (5) | AC-GRAPH-001 to 004 (4) | AC-SCAFFOLD-001 to 007 (7) | AC-ONBOARD-001 to 012 (12)
+          </p>
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="card phase-card phase-4">
+        <div class="card-header" style="color: #00d4ff;">
+          <i class="bi bi-lightning"></i> Phase 4: Intelligence Layer (31 AC-IDs)
+        </div>
+        <div class="card-body">
+          <p>
+            <strong>Duration:</strong> 2 weeks | <strong>Status:</strong> <span class="badge badge-danger">🔴 BLOCKED</span>
+            <br/>
+            <small style="color: #ffbe0b;">Unblocks when: Phase 3 complete (Est. Feb 21)</small>
+          </p>
+          <p>
+            GitHub Copilot integration, progressive rollout system, and advanced interaction management.
+          </p>
+          
+          <p style="font-size: 0.9rem; color: #a0a0a0;">
+            AC-COPILOT-001 to 012 (13) | AC-INTERACT-001 to 003 (3) | AC-ROLLOUT-001 to 003 (3) | Plus others
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Token Cost Analysis -->
+    <div class="card mt-4">
+      <div class="card-header">
+        <i class="bi bi-currency-dollar"></i> Token Optimization & Cost Analysis
+      </div>
+      <div class="card-body">
+        <p>
+          <strong>Challenge:</strong> CORTEX 6.0 implementation requires significant LLM usage. How to balance cost with quality?
+        </p>
+
+        <div class="token-analysis">
+          <div class="token-scenario">
+            <h4>Scenario A: 100% Opus 4.5</h4>
+            <div class="scenario-detail">
+              <span>Cost per token:</span>
+              <span class="scenario-value">3x (premium)</span>
+            </div>
+            <div class="scenario-detail">
+              <span>8-week cost:</span>
+              <span class="scenario-value">$1,247</span>
+            </div>
+            <div class="scenario-detail">
+              <span>Quality:</span>
+              <span class="scenario-value">Excellent</span>
+            </div>
+            <div class="scenario-detail">
+              <span>Verdict:</span>
+              <span style="color: #ffbe0b;">Too expensive</span>
+            </div>
+          </div>
+
+          <div class="token-scenario" style="background: rgba(6, 255, 165, 0.1); border-color: #06ffa5;">
+            <h4 style="color: #06ffa5;">Scenario B: 90% Sonnet + 10% Opus (RECOMMENDED)</h4>
+            <div class="scenario-detail">
+              <span>Cost per token:</span>
+              <span class="scenario-value">1.3x (balanced)</span>
+            </div>
+            <div class="scenario-detail">
+              <span>8-week cost:</span>
+              <span class="scenario-value">$423</span>
+            </div>
+            <div class="scenario-detail">
+              <span>Quality:</span>
+              <span class="scenario-value">High</span>
+            </div>
+            <div class="scenario-detail">
+              <span>ROI:</span>
+              <span style="color: #06ffa5;">66% savings ✓</span>
+            </div>
+          </div>
+
+          <div class="token-scenario">
+            <h4>Scenario C: 100% Sonnet 4.5</h4>
+            <div class="scenario-detail">
+              <span>Cost per token:</span>
+              <span class="scenario-value">1x (baseline)</span>
+            </div>
+            <div class="scenario-detail">
+              <span>8-week cost:</span>
+              <span class="scenario-value">$378</span>
+            </div>
+            <div class="scenario-detail">
+              <span>Quality:</span>
+              <span class="scenario-value">Good</span>
+            </div>
+            <div class="scenario-detail">
+              <span>Risk:</span>
+              <span style="color: #ff006e;">Higher</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: rgba(0, 212, 255, 0.1); padding: 1.5rem; border-radius: 8px; margin-top: 1.5rem;">
+          <h5 style="color: #00d4ff; margin-bottom: 1rem;">Recommendation</h5>
+          <p style="margin-bottom: 0.5rem;">
+            <strong>Use 90% Claude Sonnet 4.5 + 10% Claude Opus 4.5</strong>
+          </p>
+          <p style="margin-bottom: 0.5rem; font-size: 0.9rem; color: #a0a0a0;">
+            Apply Opus only for:
+          </p>
+          <ul style="list-style: none; padding: 0; font-size: 0.9rem; color: #a0a0a0;">
+            <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> Architecture & design decisions</li>
+            <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> Challenge protocol & validation</li>
+            <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> Complex refactoring (AC-TDD-007, AC-TDD-008)</li>
+            <li><i class="bi bi-check-circle" style="color: #06ffa5;"></i> Governance conflict resolution</li>
+          </ul>
+          <p style="margin-top: 1rem; margin-bottom: 0; font-size: 0.85rem; color: #06ffa5; font-weight: 600;">
+            Result: 66% cost savings with &lt;5% quality impact
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Critical Path & Blockers -->
+    <div class="card mt-4">
+      <div class="card-header">
+        <i class="bi bi-exclamation-triangle"></i> Critical Path & Blockers
+      </div>
+      <div class="card-body">
+        <div class="alert alert-warning border-warning" role="alert">
+          <h5><i class="bi bi-exclamation-triangle-fill"></i> Phase 1.5 STS (AC-STS-001 to 003) is BLOCKING Phase 2</h5>
+          <p style="margin-bottom: 0; font-size: 0.9rem;">
+            Framework validation must complete before orchestration core implementation. 
+            Without STS validation, Phase 2 risks being built on unproven infrastructure.
+          </p>
+        </div>
+
+        <div class="grid-2 mt-3">
+          <div style="padding: 1.5rem; background: rgba(255, 0, 110, 0.1); border-radius: 8px; border-left: 4px solid #ff006e;">
+            <h5 style="color: #ff006e; margin-bottom: 1rem;">Blocker #1: Framework Validation</h5>
+            <p style="margin-bottom: 0.5rem;">
+              <strong>AC-STS-001 to AC-STS-003</strong><br/>
+              <small style="color: #a0a0a0;">100 test intents, 5 validation categories, 36KB golden corpus</small>
+            </p>
+            <p style="margin-bottom: 0; font-size: 0.85rem;">
+              <span style="color: #ffbe0b;">ETA: Jan 17, 2026</span>
+            </p>
+          </div>
+
+          <div style="padding: 1.5rem; background: rgba(255, 0, 110, 0.1); border-radius: 8px; border-left: 4px solid #ff006e;">
+            <h5 style="color: #ff006e; margin-bottom: 1rem;">Blocker #2: Final Instruction (F)</h5>
+            <p style="margin-bottom: 0.5rem;">
+              <strong>AC-TDD-002</strong><br/>
+              <small style="color: #a0a0a0;">Knowledge-enriched final instruction generation (Phase 2 critical)</small>
+            </p>
+            <p style="margin-bottom: 0; font-size: 0.85rem;">
+              <span style="color: #ffbe0b;">ETA: Feb 7, 2026</span>
+            </p>
+          </div>
+
+          <div style="padding: 1.5rem; background: rgba(255, 0, 110, 0.1); border-radius: 8px; border-left: 4px solid #ff006e;">
+            <h5 style="color: #ff006e; margin-bottom: 1rem;">Blocker #3: Knowledge Practices</h5>
+            <p style="margin-bottom: 0.5rem;">
+              <strong>AC-KNOW-001 to AC-KNOW-003</strong><br/>
+              <small style="color: #a0a0a0;">Best practices repository (Phase 2 critical)</small>
+            </p>
+            <p style="margin-bottom: 0; font-size: 0.85rem;">
+              <span style="color: #ffbe0b;">ETA: Feb 7, 2026</span>
+            </p>
+          </div>
+
+          <div style="padding: 1.5rem; background: rgba(255, 0, 110, 0.1); border-radius: 8px; border-left: 4px solid #ff006e;">
+            <h5 style="color: #ff006e; margin-bottom: 1rem;">Blocker #4: MasterOrchestrator</h5>
+            <p style="margin-bottom: 0.5rem;">
+              <strong>AC-ORCH-006 to AC-ORCH-008</strong><br/>
+              <small style="color: #a0a0a0;">Complete MasterOrchestrator integration (Phase 2 critical)</small>
+            </p>
+            <p style="margin-bottom: 0; font-size: 0.85rem;">
+              <span style="color: #ffbe0b;">ETA: Feb 7, 2026</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Implementation Velocity -->
+    <div class="card mt-4">
+      <div class="card-header">
+        <i class="bi bi-speedometer2"></i> Implementation Velocity & Projections
+      </div>
+      <div class="card-body">
+        <div class="grid-2">
+          <div>
+            <h5>Phase 1 Velocity</h5>
+            <p>
+              <strong>AC-IDs Completed:</strong> 33/33 (100%)<br/>
+              <strong>Tests Passing:</strong> 105/105 (100%)<br/>
+              <strong>Duration:</strong> ~4 weeks actual
+            </p>
+            <p style="color: #06ffa5; font-weight: 600;">
+              Velocity: 8.25 AC-IDs/week
+            </p>
+          </div>
+
+          <div>
+            <h5>Projected Timeline</h5>
+            <p style="font-size: 0.9rem; color: #a0a0a0;">
+              Phase 1.5: Jan 17 (1 week)<br/>
+              Phase 2: Feb 7 (2 weeks)<br/>
+              Phase 3: Feb 21 (2 weeks)<br/>
+              Phase 4: Mar 7 (2 weeks)<br/>
+              <strong style="color: #00d4ff;">Completion: Mar 7, 2026</strong>
+            </p>
+          </div>
+        </div>
+
+        <div style="background: rgba(255, 190, 11, 0.1); padding: 1rem; border-radius: 8px; margin-top: 1.5rem; border-left: 4px solid #ffbe0b;">
+          <p style="margin-bottom: 0; font-size: 0.9rem;">
+            <strong style="color: #ffbe0b;">Note:</strong> Timeline assumes no major blockers discovered. 
+            Each phase gate includes validation tests to catch issues early.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #1a1f3a; text-align: center; color: #a0a0a0; font-size: 0.85rem;">
+      <p>Last Updated: 2026-01-11 | <a href="#" onclick="location.reload()">Refresh Data</a></p>
+    </div>
+  </div>
+
+  <script src="shared/data-loader.js"></script>
+</body>
+</html>

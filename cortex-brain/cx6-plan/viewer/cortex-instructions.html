@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CORTEX Operating Manual - Routing, Governance & Orchestration</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+    
+    <link rel="stylesheet" href="shared/styles.css">
+    
+    <style>
+        .section-header {
+            background: linear-gradient(135deg, #00d4ff 0%, #7b2cbf 100%);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0 1rem 0;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+        }
+        
+        .section-header h2 {
+            color: white;
+            margin: 0;
+            font-weight: 600;
+        }
+        
+        .routing-flow {
+            display: flex;
+            align-items: center;
+            margin: 2rem 0;
+            gap: 1rem;
+        }
+        
+        .routing-step {
+            background: rgba(0, 212, 255, 0.1);
+            border: 2px solid #00d4ff;
+            border-radius: 8px;
+            padding: 1rem;
+            flex: 1;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .routing-step.user { border-color: #06ffa5; background: rgba(6, 255, 165, 0.1); }
+        .routing-step.router { border-color: #00d4ff; background: rgba(0, 212, 255, 0.1); }
+        .routing-step.orchestrator { border-color: #7b2cbf; background: rgba(123, 44, 191, 0.1); }
+        .routing-step.result { border-color: #ffbe0b; background: rgba(255, 190, 11, 0.1); }
+        
+        .arrow {
+            color: #00d4ff;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .governance-tier {
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid;
+            border-radius: 4px;
+        }
+        
+        .tier-0 {
+            border-color: #ff006e;
+            background: rgba(255, 0, 110, 0.05);
+            background-image: linear-gradient(90deg, rgba(255, 0, 110, 0.1) 1px, transparent 1px);
+        }
+        
+        .tier-1 {
+            border-color: #7b2cbf;
+            background: rgba(123, 44, 191, 0.05);
+        }
+        
+        .tier-2 {
+            border-color: #00d4ff;
+            background: rgba(0, 212, 255, 0.05);
+        }
+        
+        .tier-3 {
+            border-color: #06ffa5;
+            background: rgba(6, 255, 165, 0.05);
+        }
+        
+        .tier-header {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .tier-0 .tier-header { color: #ff006e; }
+        .tier-1 .tier-header { color: #7b2cbf; }
+        .tier-2 .tier-header { color: #00d4ff; }
+        .tier-3 .tier-header { color: #06ffa5; }
+        
+        .rule-list {
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .ac-id-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .ac-id-table th {
+            background: rgba(0, 212, 255, 0.1);
+            border-bottom: 2px solid #00d4ff;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .ac-id-table td {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.75rem;
+        }
+        
+        .ac-id-table tr:hover {
+            background: rgba(0, 212, 255, 0.05);
+        }
+        
+        .orchestrator-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            background: rgba(123, 44, 191, 0.2);
+            color: #7b2cbf;
+        }
+        
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status-implemented { background: rgba(6, 255, 165, 0.2); color: #06ffa5; }
+        .status-partial { background: rgba(255, 190, 11, 0.2); color: #ffbe0b; }
+        .status-planned { background: rgba(200, 200, 200, 0.2); color: #ccc; }
+        
+        #sankey-diagram {
+            width: 100%;
+            height: 500px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .breadcrumb {
+            background: transparent;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+        
+        .breadcrumb-item.active {
+            color: #00d4ff;
+        }
+        
+        .breadcrumb-item a {
+            color: #7b2cbf;
+            text-decoration: none;
+        }
+        
+        .breadcrumb-item a:hover {
+            color: #00d4ff;
+        }
+        
+        .search-filter {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .search-filter input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            color: white;
+        }
+        
+        .search-filter input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg" style="background: rgba(10, 10, 15, 0.8); border-bottom: 1px solid rgba(0, 212, 255, 0.2);">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="cortex-plan-viewer.html">
+                <i class="bi bi-brain"></i> CORTEX 6.0
+            </a>
+            <span class="navbar-text text-muted">Operating Manual</span>
+        </div>
+    </nav>
+
+    <div class="container-lg my-5">
+        <!-- Breadcrumb -->
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="cortex-plan-viewer.html">Dashboard</a></li>
+                <li class="breadcrumb-item active">Operating Manual</li>
+            </ol>
+        </nav>
+
+        <!-- Hero Section -->
+        <div class="section-header">
+            <h2><i class="bi bi-cog"></i> CORTEX Operating Manual</h2>
+            <p class="text-white-50 mb-0">How GitHub Copilot routes requests, enforces governance, and orchestrates autonomous execution</p>
+        </div>
+
+        <!-- Intent Routing Pattern Overview -->
+        <section class="mb-5">
+            <h3 class="mb-4" style="color: #00d4ff;"><i class="bi bi-diagram-3"></i> Intent Routing System</h3>
+            <p class="text-white-50">
+                CORTEX is a <strong>routing proxy</strong> that transforms user requests, matches them to specialized orchestrators, and ensures governance enforcement at every step.
+            </p>
+            
+            <!-- Simple Routing Flow -->
+            <div class="routing-flow">
+                <div class="routing-step user">
+                    <i class="bi bi-person" style="font-size: 1.5rem;"></i><br>
+                    <small>User Request</small>
+                </div>
+                <div class="arrow">→</div>
+                <div class="routing-step router">
+                    <i class="bi bi-shuffle" style="font-size: 1.5rem;"></i><br>
+                    <small>Pattern Match</small>
+                </div>
+                <div class="arrow">→</div>
+                <div class="routing-step orchestrator">
+                    <i class="bi bi-boxes" style="font-size: 1.5rem;"></i><br>
+                    <small>Orchestrator</small>
+                </div>
+                <div class="arrow">→</div>
+                <div class="routing-step result">
+                    <i class="bi bi-check-circle" style="font-size: 1.5rem;"></i><br>
+                    <small>Result</small>
+                </div>
+            </div>
+
+            <!-- Routing Table -->
+            <div class="card bg-transparent border-light border-opacity-25 mb-4">
+                <div class="card-header bg-transparent border-light border-opacity-25">
+                    <h5 class="mb-0" style="color: #00d4ff;"><i class="bi bi-list"></i> Routing Table (Pattern → Orchestrator)</h5>
+                </div>
+                <div class="card-body p-0">
+                    <table class="ac-id-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%;">User Pattern</th>
+                                <th style="width: 35%;">Matches</th>
+                                <th style="width: 20%;">Orchestrator</th>
+                                <th style="width: 20%;">Priority</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>implement</code>, <code>build</code>, <code>create</code></td>
+                                <td>AC-AUDIT-001, AC-GOV-001, AC-STATE-001</td>
+                                <td><span class="orchestrator-badge">TDD-Master v1</span></td>
+                                <td><span style="color: #ff006e;">★★★★★ P0</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>plan</code>, <code>create a plan</code></td>
+                                <td>Planning workflows, AC-IDs</td>
+                                <td><span class="orchestrator-badge">Planning v5</span></td>
+                                <td><span style="color: #ffbe0b;">★★★★☆ P1</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>tdd</code>, <code>test driven</code></td>
+                                <td>TDD cycles, RED→GREEN→REFACTOR</td>
+                                <td><span class="orchestrator-badge">TDD-Master v1</span></td>
+                                <td><span style="color: #ff006e;">★★★★★ P0</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>ado</code>, <code>azure devops</code></td>
+                                <td>Work item creation, sync</td>
+                                <td><span class="orchestrator-badge">ADO v2</span></td>
+                                <td><span style="color: #ffbe0b;">★★★☆☆ P2</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>epic review</code>, <code>health check</code></td>
+                                <td>System status, gap analysis</td>
+                                <td><span class="orchestrator-badge">Epic Review</span></td>
+                                <td><span style="color: #ffbe0b;">★★★☆☆ P2</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>crawl</code>, <code>scan code</code></td>
+                                <td>Codebase analysis, graph building</td>
+                                <td><span class="orchestrator-badge">Crawler Orchestrator</span></td>
+                                <td><span style="color: #06ffa5;">★★☆☆☆ P3</span></td>
+                            </tr>
+                            <tr>
+                                <td><code>investigate</code></td>
+                                <td>Debugging, trace analysis</td>
+                                <td><span class="orchestrator-badge">Investigation</span></td>
+                                <td><span style="color: #06ffa5;">★★☆☆☆ P3</span></td>
+                            </tr>
+                            <tr>
+                                <td>No pattern match</td>
+                                <td>Unknown intent</td>
+                                <td><span class="orchestrator-badge">LLM Classifier</span></td>
+                                <td><span style="color: #7b2cbf;">Fallback</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4-Tier Governance System -->
+        <section class="mb-5">
+            <h3 class="mb-4" style="color: #00d4ff;"><i class="bi bi-shield-lock"></i> 4-Tier Governance Precedence</h3>
+            <p class="text-white-50">
+                CORTEX enforces hierarchical governance where Tier 0 rules are immutable and always win conflicts. Each tier can define or override lower tiers.
+            </p>
+
+            <!-- Governance Tiers -->
+            <div class="mb-4">
+                <div class="governance-tier tier-0">
+                    <div class="tier-header">
+                        <span style="font-size: 1.3rem;">🔴</span>
+                        Tier 0: CORTEX CORE (IMMUTABLE)
+                    </div>
+                    <div class="rule-list">
+                        <strong>23 SKULL Rules - Production-Grade Brain Protection</strong><br>
+                        CORE-001: Incremental Execution (<500 lines per operation)<br>
+                        CORE-002: No Summary Files (prevent workspace clutter)<br>
+                        CORE-005: Path Portability (cross-platform compatibility)<br>
+                        CORE-008: TDD Enforcement (RED→GREEN→REFACTOR)<br>
+                        CORE-009: Plan File Organization (files in tier folders)<br>
+                        CORE-017: Governance Enforcement (rules are law)<br>
+                        CORE-019: TDD-Master Required (direct coding blocked)<br>
+                        <span style="color: #ff006e; font-size: 0.85rem;">... and 16 more immutable protection rules</span>
+                    </div>
+                </div>
+
+                <div class="governance-tier tier-1">
+                    <div class="tier-header">
+                        <span style="font-size: 1.3rem;">🟣</span>
+                        Tier 1: BUSINESS TIER (Active Epic & Requirements)
+                    </div>
+                    <div class="rule-list">
+                        <strong>Active Epic: CORTEX-6.0</strong><br>
+                        Current Requirement: "Complete Phase 1 Foundation (48% done)"<br>
+                        Target: "Production-ready orchestration by Feb 28"<br>
+                        <span style="color: #7b2cbf; font-size: 0.85rem;">Business requirements layer (0 rules defined currently)</span>
+                    </div>
+                </div>
+
+                <div class="governance-tier tier-2">
+                    <div class="tier-header">
+                        <span style="font-size: 1.3rem;">🔵</span>
+                        Tier 2: COMPANY PRACTICES (Engineering Standards)
+                    </div>
+                    <div class="rule-list">
+                        <strong>Engineering Standards & Contracts</strong><br>
+                        Code style guidelines, testing requirements, documentation standards<br>
+                        Security checklist, deployment procedures, review requirements<br>
+                        <span style="color: #00d4ff; font-size: 0.85rem;">Engineering practices layer (0 rules defined currently)</span>
+                    </div>
+                </div>
+
+                <div class="governance-tier tier-3">
+                    <div class="tier-header">
+                        <span style="font-size: 1.3rem;">🟢</span>
+                        Tier 3: KNOWLEDGE PRACTICES (Learned Patterns)
+                    </div>
+                    <div class="rule-list">
+                        <strong>Optimization Patterns & Insights</strong><br>
+                        Domain-specific patterns (auth, database, API, security)<br>
+                        Performance optimizations, architectural insights<br>
+                        <span style="color: #06ffa5; font-size: 0.85rem;">Knowledge practices layer (0 rules defined currently)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conflict Resolution Algorithm -->
+            <div class="card bg-transparent border-light border-opacity-25">
+                <div class="card-header bg-transparent border-light border-opacity-25">
+                    <h5 class="mb-0" style="color: #00d4ff;"><i class="bi bi-diagram-2"></i> Conflict Resolution Algorithm</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mermaid">
+                        flowchart TD
+                            A[Request] --> B[Load 4-Tier Rules]
+                            B --> C{Conflicts?}
+                            C -->|Yes| D[Tier 0 Wins]
+                            C -->|No| E[Merge Rules]
+                            D --> F[Unified Instruction Set]
+                            E --> F
+                            F --> G[Evaluate vs Rules]
+                            G --> H{Violations?}
+                            H -->|Yes| I[Block + Log]
+                            H -->|No| J[Proceed]
+                            I --> K[Governance Alert]
+                            J --> L[Execute + Audit]
+                            style D fill:#ff006e,stroke:#fff
+                            style L fill:#06ffa5,stroke:#fff
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Orchestrator Request Flow -->
+        <section class="mb-5">
+            <h3 class="mb-4" style="color: #00d4ff;"><i class="bi bi-diagram-3"></i> End-to-End Request Flow</h3>
+            
+            <div class="card bg-transparent border-light border-opacity-25">
+                <div class="card-body">
+                    <div class="mermaid">
+                        sequenceDiagram
+                            participant User
+                            participant Copilot
+                            participant Router
+                            participant Master as MasterOrch
+                            participant TodoMgr
+                            participant TDD
+                            participant Audit
+                            
+                            User->>Copilot: "implement AC-AUDIT-001"
+                            Copilot->>Router: Transform + Pattern Match
+                            Router->>Master: Route to TDD-Master
+                            Master->>Master: Load 4-Tier Governance
+                            Master->>TodoMgr: Create Task from AC-ID
+                            Master->>TDD: Execute TDD Cycle
+                            TDD->>Audit: Log RED phase
+                            TDD->>Audit: Log GREEN phase
+                            TDD->>Audit: Log REFACTOR phase
+                            TDD->>Master: Complete
+                            Master->>User: Evidence Bundle + Audit Trail
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AC-ID Reference -->
+        <section class="mb-5">
+            <h3 class="mb-4" style="color: #00d4ff;"><i class="bi bi-search"></i> AC-ID Reference (Searchable)</h3>
+            
+            <div class="search-filter">
+                <input type="text" id="acSearch" class="form-control" placeholder="Search AC-ID by name, category, or phase...">
+            </div>
+
+            <div class="card bg-transparent border-light border-opacity-25">
+                <div class="card-body p-0">
+                    <table class="ac-id-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%;">AC-ID</th>
+                                <th style="width: 30%;">Name</th>
+                                <th style="width: 15%;">Phase</th>
+                                <th style="width: 15%;">Status</th>
+                                <th style="width: 25%;">Evidence Bundle</th>
+                            </tr>
+                        </thead>
+                        <tbody id="acTableBody">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted py-4">
+                                    <i class="bi bi-hourglass"></i> Loading AC-ID reference...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <div style="text-align: center; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+            <p class="text-muted mb-2">
+                <i class="bi bi-info-circle"></i> This manual describes CORTEX 6.0 routing, governance, and orchestration architecture
+            </p>
+            <p class="text-muted small">
+                <a href="#" onclick="location.href='cortex-plan-viewer.html'; return false;" style="color: #7b2cbf;">← Back to Dashboard</a> | 
+                <a href="master-plan.html" style="color: #7b2cbf;">View Master Plan</a> | 
+                <a href="governance-architecture.html" style="color: #7b2cbf;">Governance Deep-Dive</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="shared/data-loader.js"></script>
+    
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({ startOnLoad: true, theme: 'dark', securityLevel: 'loose' });
+        mermaid.contentLoaded();
+
+        // Load and display AC-IDs in table
+        async function loadAcIds() {
+            try {
+                const response = await fetch('../../cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml');
+                const yamlText = await response.text();
+                
+                // Parse YAML (simplified - in production use proper parser)
+                const table = document.getElementById('acTableBody');
+                table.innerHTML = '';
+                
+                // Sample AC-IDs for demonstration
+                const samples = [
+                    { id: 'AC-AUDIT-001', name: 'Queryable Audit Storage', phase: 'Phase 1', status: 'implemented' },
+                    { id: 'AC-GOV-001', name: '4-Tier Governance Loading', phase: 'Phase 1', status: 'implemented' },
+                    { id: 'AC-STATE-001', name: 'Session Persistence', phase: 'Phase 1', status: 'implemented' },
+                    { id: 'AC-TODO-001', name: 'TodoManager Core', phase: 'Phase 2', status: 'partial' },
+                    { id: 'AC-TDD-001', name: 'TDD Orchestrator Core', phase: 'Phase 2', status: 'partial' },
+                    { id: 'AC-CRAWLER-001', name: 'Multi-Threaded Crawling', phase: 'Phase 3', status: 'planned' },
+                    { id: 'AC-COPILOT-001', name: 'GitHub Copilot TODO Bridge', phase: 'Phase 4', status: 'planned' }
+                ];
+                
+                samples.forEach(ac => {
+                    const statusClass = ac.status === 'implemented' ? 'status-implemented' : 
+                                      ac.status === 'partial' ? 'status-partial' : 'status-planned';
+                    const statusText = ac.status.charAt(0).toUpperCase() + ac.status.slice(1);
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><strong>${ac.id}</strong></td>
+                        <td>${ac.name}</td>
+                        <td><span style="color: #00d4ff;">${ac.phase}</span></td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td><a href="evidence-bundle-viewer.html?ac=${ac.id}" style="color: #7b2cbf;">View Bundle</a></td>
+                    `;
+                    table.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error loading AC-IDs:', error);
+                document.getElementById('acTableBody').innerHTML = `
+                    <tr><td colspan="5" class="text-center text-danger py-4">
+                        <i class="bi bi-exclamation-triangle"></i> Error loading AC-ID reference
+                    </td></tr>
+                `;
+            }
+        }
+
+        // Search functionality
+        document.getElementById('acSearch').addEventListener('keyup', function() {
+            const query = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#acTableBody tr');
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(query) ? '' : 'none';
+            });
+        });
+
+        // Load on page ready
+        document.addEventListener('DOMContentLoaded', loadAcIds);
+    </script>
+</body>
+</html>

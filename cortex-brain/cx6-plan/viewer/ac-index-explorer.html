@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CORTEX 6.0 - AC-ID Explorer</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="shared/styles.css">
+  <style>
+    .filter-controls {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+    }
+    
+    .filter-group {
+      flex: 1;
+      min-width: 150px;
+    }
+    
+    .ac-table tbody tr:hover {
+      background: rgba(0, 212, 255, 0.05);
+      cursor: pointer;
+    }
+    
+    .ac-table td {
+      vertical-align: middle;
+      padding: 1rem 0.75rem;
+    }
+    
+    .search-box {
+      position: relative;
+    }
+    
+    .search-icon {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #a0a0a0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid p-4">
+    <!-- Breadcrumb -->
+    <div class="breadcrumb mb-4">
+      <a href="cortex-plan-viewer.html">Dashboard</a>
+      <span>/</span>
+      <span>AC-ID Explorer</span>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+      <h1><i class="bi bi-search"></i> AC-ID Explorer</h1>
+      <p>Complete registry of 97 Acceptance Criteria IDs with search, filter, and dependency tracking</p>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="grid-auto mb-4">
+      <div class="card">
+        <div class="card-body text-center">
+          <div style="font-size: 1.8rem; color: #00d4ff; font-weight: 700;">97</div>
+          <div style="color: #a0a0a0; font-size: 0.9rem;">Total AC-IDs</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body text-center">
+          <div style="font-size: 1.8rem; color: #06ffa5; font-weight: 700;">16</div>
+          <div style="color: #a0a0a0; font-size: 0.9rem;">Implemented</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body text-center">
+          <div style="font-size: 1.8rem; color: #ffbe0b; font-weight: 700;">0</div>
+          <div style="color: #a0a0a0; font-size: 0.9rem;">In Progress</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body text-center">
+          <div style="font-size: 1.8rem; color: #ff006e; font-weight: 700;">81</div>
+          <div style="color: #a0a0a0; font-size: 0.9rem;">Remaining</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Controls -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <i class="bi bi-funnel"></i> Search & Filter
+      </div>
+      <div class="card-body">
+        <div class="filter-controls">
+          <div class="filter-group">
+            <label for="searchBox" style="color: #a0a0a0; font-size: 0.85rem;">Search AC-ID or Name</label>
+            <div class="search-box">
+              <input type="text" id="searchBox" class="form-control" placeholder="e.g., AC-AUDIT-001, TDD, Governance..." style="padding-right: 2.5rem;">
+              <i class="bi bi-search search-icon"></i>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <label for="phaseFilter" style="color: #a0a0a0; font-size: 0.85rem;">Phase</label>
+            <select id="phaseFilter" class="form-select">
+              <option value="">All Phases</option>
+              <option value="Phase 1">Phase 1: Foundation</option>
+              <option value="Phase 1.5">Phase 1.5: STS</option>
+              <option value="Phase 2">Phase 2: Orchestration</option>
+              <option value="Phase 3">Phase 3: Features</option>
+              <option value="Phase 4">Phase 4: Intelligence</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="statusFilter" style="color: #a0a0a0; font-size: 0.85rem;">Status</label>
+            <select id="statusFilter" class="form-select">
+              <option value="">All Status</option>
+              <option value="Implemented">Implemented</option>
+              <option value="Partial">Partial</option>
+              <option value="Planned">Planned</option>
+              <option value="Blocked">Blocked</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label for="categoryFilter" style="color: #a0a0a0; font-size: 0.85rem;">Category</label>
+            <select id="categoryFilter" class="form-select">
+              <option value="">All Categories</option>
+              <option value="AUDIT">AUDIT</option>
+              <option value="GOV">GOV</option>
+              <option value="STATE">STATE</option>
+              <option value="LIFECYCLE">LIFECYCLE</option>
+              <option value="EVIDENCE">EVIDENCE</option>
+              <option value="SECURITY">SECURITY</option>
+              <option value="TEST">TEST</option>
+              <option value="CLEAN">CLEAN</option>
+              <option value="TODO">TODO</option>
+              <option value="TDD">TDD</option>
+              <option value="ORCH">ORCH</option>
+              <option value="KNOW">KNOW</option>
+              <option value="STS">STS</option>
+              <option value="CRAWLER">CRAWLER</option>
+              <option value="GRAPH">GRAPH</option>
+              <option value="SCAFFOLD">SCAFFOLD</option>
+              <option value="ONBOARD">ONBOARD</option>
+              <option value="COPILOT">COPILOT</option>
+            </select>
+          </div>
+
+          <div style="display: flex; align-items: flex-end; gap: 0.5rem;">
+            <button class="btn btn-primary btn-small" onclick="resetFilters()">
+              <i class="bi bi-arrow-clockwise"></i> Reset
+            </button>
+            <button class="btn btn-secondary btn-small" onclick="exportToCSV()">
+              <i class="bi bi-download"></i> Export CSV
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AC-ID Table -->
+    <div class="card">
+      <div class="card-header">
+        <i class="bi bi-table"></i> Acceptance Criteria Registry
+      </div>
+      <div class="card-body">
+        <div style="overflow-x: auto;">
+          <table class="table table-dark ac-table" style="margin-bottom: 0;">
+            <thead>
+              <tr>
+                <th onclick="sortTable('id')" style="cursor: pointer;">AC-ID <i class="bi bi-arrow-down-up"></i></th>
+                <th onclick="sortTable('name')" style="cursor: pointer;">Name <i class="bi bi-arrow-down-up"></i></th>
+                <th>Phase</th>
+                <th>Status</th>
+                <th>Category</th>
+                <th>Evidence</th>
+                <th>Tests</th>
+              </tr>
+            </thead>
+            <tbody id="acTable">
+              <!-- Populated by JavaScript -->
+            </tbody>
+          </table>
+          <div id="noResults" style="text-align: center; padding: 2rem; color: #a0a0a0;">
+            Loading AC-ID data...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #1a1f3a; text-align: center; color: #a0a0a0; font-size: 0.85rem;">
+      <p>Last Updated: 2026-01-11 | Total AC-IDs: <span id="totalCount">97</span> | Filtered: <span id="filteredCount">0</span></p>
+    </div>
+  </div>
+
+  <script>
+    // Sample AC-ID data structure
+    const acData = [
+      // Phase 1 - AUDIT
+      { id: 'AC-AUDIT-001', name: 'Queryable Audit Storage', phase: 'Phase 1', status: 'Implemented', category: 'AUDIT', evidence: true, tests: 5 },
+      { id: 'AC-AUDIT-002', name: 'Memory Buffer', phase: 'Phase 1', status: 'Implemented', category: 'AUDIT', evidence: true, tests: 3 },
+      { id: 'AC-AUDIT-003', name: '7 Audit Categories', phase: 'Phase 1', status: 'Implemented', category: 'AUDIT', evidence: true, tests: 4 },
+      { id: 'AC-AUDIT-004', name: 'AC-ID Traceability', phase: 'Phase 1', status: 'Implemented', category: 'AUDIT', evidence: true, tests: 6 },
+      { id: 'AC-AUDIT-005', name: 'Automatic Vacuum', phase: 'Phase 1', status: 'Implemented', category: 'AUDIT', evidence: true, tests: 4 },
+      { id: 'AC-AUDIT-006', name: 'Audit Integration', phase: 'Phase 1', status: 'Implemented', category: 'AUDIT', evidence: true, tests: 5 },
+      { id: 'AC-AUDIT-007', name: 'Hash Chain Integrity', phase: 'Phase 1', status: 'Implemented', category: 'AUDIT', evidence: true, tests: 8 },
+      // Phase 1 - GOV
+      { id: 'AC-GOV-001', name: '4-Tier Governance Loading', phase: 'Phase 1', status: 'Implemented', category: 'GOV', evidence: true, tests: 5 },
+      { id: 'AC-GOV-002', name: 'Conflict Detection', phase: 'Phase 1', status: 'Implemented', category: 'GOV', evidence: true, tests: 6 },
+      { id: 'AC-GOV-003', name: 'Precedence Resolution', phase: 'Phase 1', status: 'Implemented', category: 'GOV', evidence: true, tests: 7 },
+      { id: 'AC-GOV-004', name: 'Rule Caching', phase: 'Phase 1', status: 'Implemented', category: 'GOV', evidence: true, tests: 4 },
+      { id: 'AC-GOV-005', name: 'Unified Instruction Set', phase: 'Phase 1', status: 'Implemented', category: 'GOV', evidence: true, tests: 8 },
+      // Phase 1 - STATE
+      { id: 'AC-STATE-001', name: 'Session Persistence', phase: 'Phase 1', status: 'Implemented', category: 'STATE', evidence: true, tests: 6 },
+      { id: 'AC-STATE-002', name: 'Transaction Isolation', phase: 'Phase 1', status: 'Implemented', category: 'STATE', evidence: true, tests: 7 },
+      { id: 'AC-STATE-003', name: 'Continuation Support', phase: 'Phase 1', status: 'Implemented', category: 'STATE', evidence: true, tests: 5 },
+      // Phase 1 - Others
+      { id: 'AC-LIFECYCLE-001', name: '7-State Lifecycle', phase: 'Phase 1', status: 'Implemented', category: 'LIFECYCLE', evidence: true, tests: 8 },
+      { id: 'AC-LIFECYCLE-002', name: 'State Transitions', phase: 'Phase 1', status: 'Implemented', category: 'LIFECYCLE', evidence: true, tests: 6 },
+      { id: 'AC-LIFECYCLE-003', name: 'Quarantine Mechanism', phase: 'Phase 1', status: 'Implemented', category: 'LIFECYCLE', evidence: true, tests: 5 },
+      { id: 'AC-EVIDENCE-001', name: 'Evidence Bundle Structure', phase: 'Phase 1', status: 'Implemented', category: 'EVIDENCE', evidence: true, tests: 4 },
+      { id: 'AC-EVIDENCE-002', name: 'Bundle Validation Gates', phase: 'Phase 1', status: 'Implemented', category: 'EVIDENCE', evidence: true, tests: 5 },
+      { id: 'AC-EVIDENCE-003', name: 'Auto-Generation', phase: 'Phase 1', status: 'Implemented', category: 'EVIDENCE', evidence: true, tests: 3 },
+      { id: 'AC-SECURITY-001', name: 'Path Traversal Prevention', phase: 'Phase 1', status: 'Implemented', category: 'SECURITY', evidence: true, tests: 6 },
+      { id: 'AC-SECURITY-002', name: 'Injection Prevention', phase: 'Phase 1', status: 'Implemented', category: 'SECURITY', evidence: true, tests: 5 },
+      { id: 'AC-SECURITY-003', name: 'Access Control', phase: 'Phase 1', status: 'Implemented', category: 'SECURITY', evidence: true, tests: 4 },
+      { id: 'AC-SECURITY-004', name: 'Encryption At Rest', phase: 'Phase 1', status: 'Implemented', category: 'SECURITY', evidence: true, tests: 3 },
+      { id: 'AC-SECURITY-005', name: 'Session Security', phase: 'Phase 1', status: 'Implemented', category: 'SECURITY', evidence: true, tests: 5 },
+      { id: 'AC-SECURITY-006', name: 'Audit Logging', phase: 'Phase 1', status: 'Implemented', category: 'SECURITY', evidence: true, tests: 4 },
+      { id: 'AC-TEST-001', name: 'Test Framework Setup', phase: 'Phase 1', status: 'Implemented', category: 'TEST', evidence: true, tests: 3 },
+      { id: 'AC-TEST-002', name: 'Coverage Tracking', phase: 'Phase 1', status: 'Implemented', category: 'TEST', evidence: true, tests: 5 },
+      { id: 'AC-TEST-003', name: 'Automation', phase: 'Phase 1', status: 'Implemented', category: 'TEST', evidence: true, tests: 4 },
+      { id: 'AC-TEST-004', name: 'Contract Tests', phase: 'Phase 1', status: 'Implemented', category: 'TEST', evidence: true, tests: 6 },
+      { id: 'AC-CLEAN-001', name: 'Folder Structure', phase: 'Phase 1', status: 'Implemented', category: 'CLEAN', evidence: true, tests: 4 },
+      { id: 'AC-CLEAN-002', name: 'Naming Conventions', phase: 'Phase 1', status: 'Implemented', category: 'CLEAN', evidence: true, tests: 3 },
+      { id: 'AC-CLEAN-003', name: 'Organization Rules', phase: 'Phase 1', status: 'Implemented', category: 'CLEAN', evidence: true, tests: 4 },
+      // Phase 1.5 - STS
+      { id: 'AC-STS-001', name: 'Golden Corpus', phase: 'Phase 1.5', status: 'Planned', category: 'STS', evidence: false, tests: 25 },
+      { id: 'AC-STS-002', name: 'Framework Tests', phase: 'Phase 1.5', status: 'Planned', category: 'STS', evidence: false, tests: 75 },
+      { id: 'AC-STS-003', name: 'Evidence Bundle', phase: 'Phase 1.5', status: 'Planned', category: 'STS', evidence: false, tests: 0 },
+      // Phase 2 - TODO
+      { id: 'AC-TODO-001', name: 'TodoManager Core', phase: 'Phase 2', status: 'Planned', category: 'TODO', evidence: false, tests: 0 },
+      { id: 'AC-TODO-002', name: 'Task Creation', phase: 'Phase 2', status: 'Planned', category: 'TODO', evidence: false, tests: 0 },
+      { id: 'AC-TODO-003', name: 'Progress Persistence', phase: 'Phase 2', status: 'Planned', category: 'TODO', evidence: false, tests: 0 },
+      { id: 'AC-TODO-004', name: 'Dependency Resolution', phase: 'Phase 2', status: 'Planned', category: 'TODO', evidence: false, tests: 0 },
+      // Phase 2 - TDD (partial)
+      { id: 'AC-TDD-001', name: 'TDD Core', phase: 'Phase 2', status: 'Partial', category: 'TDD', evidence: false, tests: 12 },
+      { id: 'AC-TDD-002', name: 'Final Instruction', phase: 'Phase 2', status: 'Planned', category: 'TDD', evidence: false, tests: 0 },
+      { id: 'AC-TDD-003', name: 'RED Phase', phase: 'Phase 2', status: 'Partial', category: 'TDD', evidence: false, tests: 8 },
+      { id: 'AC-TDD-004', name: 'GREEN Phase', phase: 'Phase 2', status: 'Partial', category: 'TDD', evidence: false, tests: 8 },
+      { id: 'AC-TDD-005', name: 'REFACTOR Phase', phase: 'Phase 2', status: 'Partial', category: 'TDD', evidence: false, tests: 6 },
+      { id: 'AC-TDD-006', name: 'Discovery Phase', phase: 'Phase 2', status: 'Partial', category: 'TDD', evidence: false, tests: 5 },
+      { id: 'AC-TDD-007', name: 'Domain Integration', phase: 'Phase 2', status: 'Planned', category: 'TDD', evidence: false, tests: 0 },
+      { id: 'AC-TDD-008', name: 'Orchestrator Handoff', phase: 'Phase 2', status: 'Planned', category: 'TDD', evidence: false, tests: 0 },
+      // Phase 2 - ORCH
+      { id: 'AC-ORCH-001', name: 'Pattern Routing', phase: 'Phase 2', status: 'Implemented', category: 'ORCH', evidence: true, tests: 6 },
+      { id: 'AC-ORCH-002', name: 'LLM Fallback', phase: 'Phase 2', status: 'Implemented', category: 'ORCH', evidence: true, tests: 4 },
+      { id: 'AC-ORCH-003', name: 'Request Transform', phase: 'Phase 2', status: 'Partial', category: 'ORCH', evidence: false, tests: 5 },
+      { id: 'AC-ORCH-004', name: 'Correlation ID', phase: 'Phase 2', status: 'Partial', category: 'ORCH', evidence: false, tests: 3 },
+      { id: 'AC-ORCH-005', name: 'Middleware Pipeline', phase: 'Phase 2', status: 'Implemented', category: 'ORCH', evidence: true, tests: 7 },
+      { id: 'AC-ORCH-006', name: 'MasterOrchestrator', phase: 'Phase 2', status: 'Partial', category: 'ORCH', evidence: false, tests: 4 },
+      { id: 'AC-ORCH-007', name: 'Gov-to-Todo Pipeline', phase: 'Phase 2', status: 'Planned', category: 'ORCH', evidence: false, tests: 0 },
+      { id: 'AC-ORCH-008', name: 'Best Practices Merge', phase: 'Phase 2', status: 'Partial', category: 'ORCH', evidence: false, tests: 3 },
+      // Phase 2 - KNOW
+      { id: 'AC-KNOW-001', name: 'Best Practices Repo', phase: 'Phase 2', status: 'Planned', category: 'KNOW', evidence: false, tests: 0 },
+      { id: 'AC-KNOW-002', name: 'Domain Patterns', phase: 'Phase 2', status: 'Planned', category: 'KNOW', evidence: false, tests: 0 },
+      { id: 'AC-KNOW-003', name: 'Company Practices', phase: 'Phase 2', status: 'Planned', category: 'KNOW', evidence: false, tests: 0 },
+      // Add Phase 3 & 4 placeholders
+      { id: 'AC-CRAWLER-001', name: 'Multi-Threaded Processing', phase: 'Phase 3', status: 'Planned', category: 'CRAWLER', evidence: false, tests: 0 },
+      { id: 'AC-COPILOT-001', name: 'VSCode TODO Bridge', phase: 'Phase 4', status: 'Planned', category: 'COPILOT', evidence: false, tests: 0 }
+    ];
+
+    let currentData = [...acData];
+
+    function renderTable() {
+      const tbody = document.getElementById('acTable');
+      const noResults = document.getElementById('noResults');
+      
+      if (currentData.length === 0) {
+        tbody.innerHTML = '';
+        noResults.style.display = 'block';
+        document.getElementById('filteredCount').textContent = '0';
+        return;
+      }
+
+      noResults.style.display = 'none';
+      tbody.innerHTML = currentData.map(ac => `
+        <tr onclick="showACDetails('${ac.id}')">
+          <td><strong style="color: #00d4ff;">${ac.id}</strong></td>
+          <td>${ac.name}</td>
+          <td><span style="color: #a0a0a0; font-size: 0.85rem;">${ac.phase}</span></td>
+          <td>
+            ${ac.status === 'Implemented' ? '<span class="badge badge-success">✓ Implemented</span>' : 
+              ac.status === 'Partial' ? '<span class="badge badge-warning">◐ Partial</span>' :
+              ac.status === 'Planned' ? '<span class="badge badge-info">◯ Planned</span>' :
+              '<span class="badge badge-danger">✗ Blocked</span>'}
+          </td>
+          <td><span style="color: #7b2cbf; font-size: 0.85rem;">${ac.category}</span></td>
+          <td>${ac.evidence ? '<i class="bi bi-check-circle" style="color: #06ffa5;"></i>' : '<i class="bi bi-dash-circle" style="color: #a0a0a0;"></i>'}</td>
+          <td>${ac.tests > 0 ? `<span style="color: #00d4ff;">${ac.tests}</span>` : '-'}</td>
+        </tr>
+      `).join('');
+
+      document.getElementById('filteredCount').textContent = currentData.length;
+    }
+
+    function applyFilters() {
+      const search = document.getElementById('searchBox').value.toLowerCase();
+      const phase = document.getElementById('phaseFilter').value;
+      const status = document.getElementById('statusFilter').value;
+      const category = document.getElementById('categoryFilter').value;
+
+      currentData = acData.filter(ac => {
+        const matchesSearch = !search || ac.id.toLowerCase().includes(search) || ac.name.toLowerCase().includes(search);
+        const matchesPhase = !phase || ac.phase === phase;
+        const matchesStatus = !status || ac.status === status;
+        const matchesCategory = !category || ac.category === category;
+
+        return matchesSearch && matchesPhase && matchesStatus && matchesCategory;
+      });
+
+      renderTable();
+    }
+
+    function resetFilters() {
+      document.getElementById('searchBox').value = '';
+      document.getElementById('phaseFilter').value = '';
+      document.getElementById('statusFilter').value = '';
+      document.getElementById('categoryFilter').value = '';
+      currentData = [...acData];
+      renderTable();
+    }
+
+    function sortTable(column) {
+      currentData.sort((a, b) => {
+        if (column === 'id') return a.id.localeCompare(b.id);
+        if (column === 'name') return a.name.localeCompare(b.name);
+        return 0;
+      });
+      renderTable();
+    }
+
+    function exportToCSV() {
+      const csv = [['AC-ID', 'Name', 'Phase', 'Status', 'Category', 'Evidence', 'Tests']];
+      currentData.forEach(ac => {
+        csv.push([ac.id, ac.name, ac.phase, ac.status, ac.category, ac.evidence ? 'Yes' : 'No', ac.tests]);
+      });
+      
+      const csvContent = csv.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'ac-id-registry.csv';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    function showACDetails(acId) {
+      const ac = acData.find(a => a.id === acId);
+      if (ac) {
+        alert(`${ac.id}: ${ac.name}\nPhase: ${ac.phase}\nStatus: ${ac.status}\nTests: ${ac.tests}`);
+      }
+    }
+
+    // Event listeners
+    document.getElementById('searchBox').addEventListener('input', applyFilters);
+    document.getElementById('phaseFilter').addEventListener('change', applyFilters);
+    document.getElementById('statusFilter').addEventListener('change', applyFilters);
+    document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+
+    // Initial render
+    renderTable();
+  </script>
+  <script src="shared/data-loader.js"></script>
+</body>
+</html>
