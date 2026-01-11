@@ -1693,9 +1693,9 @@
                     .append('rect')
                     .attr('class', 'bar-remaining')
                     .attr('x', d => x(`Phase ${d.id}`))
-                    .attr('y', d => y(0))
+                    .attr('y', d => y(d.completion_percentage))
                     .attr('width', x.bandwidth())
-                    .attr('height', d => y(d.completion_percentage) - innerHeight)
+                    .attr('height', d => y(0) - y(d.completion_percentage))
                     .style('fill', '#6b7280')
                     .style('opacity', 0.4);
                 
@@ -2245,7 +2245,7 @@
             async loadAuditLogs() {
                 console.log('Loading audit logs...');
                 try {
-                    const response = await fetch('../../../audit-logs/consolidated-audit.json');
+                    const response = await fetch('../../../cortex-brain/audit-logs/consolidated-audit.json');
                     if (response.ok) {
                         const data = await response.json();
                         // Handle both {logs: [...]} and direct array formats
