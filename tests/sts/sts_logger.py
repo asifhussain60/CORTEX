@@ -41,11 +41,18 @@ class STSLogger:
         component = metadata.get('component', 'STS') if metadata else 'STS'
         operation = metadata.get('operation', 'test_validation') if metadata else 'test_validation'
         
+        # Filter metadata to remove keys that aren't accepted by storage backend
+        filtered_metadata = {}
+        if metadata:
+            # Remove 'intent' and other non-storage keys
+            filtered_metadata = {k: v for k, v in metadata.items() 
+                                 if k not in ('component', 'operation', 'intent')}
+        
         self.logger.log(
             level=audit_level,
             category=audit_category,
             component=component,
             operation=operation,
             message=message,
-            **(metadata or {})
+            **filtered_metadata
         )
