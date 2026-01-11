@@ -1,0 +1,1872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX 6.0 Plan Viewer - Executive-grade execution and architecture intelligence dashboard">
+    <title>CORTEX 6.0 - Plan Viewer & Execution Intelligence</title>
+    
+    <!-- D3.js for interactive visualizations -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Bootstrap Icons for UI elements -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
+    <style>
+        /* ============================================================================
+           DESIGN SYSTEM: CORTEX 6.0 CYBER-BLUE / SLATE PALETTE
+           ============================================================================ */
+        :root {
+            /* Primary Palette - Cyber-Blue & Slate */
+            --color-primary-dark: #0a0e27;        /* Deep dark base */
+            --color-primary-darker: #050814;      /* Darker for gradients */
+            --color-primary-accent: #00d4ff;      /* Cyber cyan */
+            --color-primary-accent-alt: #7b2cbf;  /* Purple accent */
+            --color-primary-green: #06ffa5;       /* Green for completed */
+            
+            /* Semantic Status Colors */
+            --color-completed: #10b981;           /* Green - completed */
+            --color-in-progress: #f59e0b;         /* Orange - in progress */
+            --color-blocked: #ef4444;             /* Red - blocked */
+            --color-not-started: #6b7280;         /* Grey - not started */
+            
+            /* Neutral & Text */
+            --color-text-primary: #ffffff;        /* Primary text */
+            --color-text-secondary: rgba(255, 255, 255, 0.7);
+            --color-text-tertiary: rgba(255, 255, 255, 0.5);
+            --color-border: rgba(0, 212, 255, 0.15);
+            --color-bg-elevated: rgba(10, 14, 39, 0.6);
+            
+            /* Spacing & Layout */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            
+            /* Typography */
+            --font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --font-size-xs: 0.75rem;
+            --font-size-sm: 0.875rem;
+            --font-size-base: 1rem;
+            --font-size-lg: 1.125rem;
+            --font-size-xl: 1.25rem;
+            --font-size-2xl: 1.5rem;
+            --font-size-3xl: 2rem;
+            
+            /* Radii & Shadows */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --shadow-md: 0 8px 32px rgba(0, 212, 255, 0.1);
+            --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.3);
+            
+            /* Transitions */
+            --transition-base: 200ms ease-out;
+            --transition-slow: 400ms ease-out;
+        }
+        
+        /* ============================================================================
+           RESET & BASE STYLES
+           ============================================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--color-primary-darker) 0%, var(--color-primary-dark) 50%, var(--color-primary-darker) 100%);
+            color: var(--color-text-primary);
+            font-family: var(--font-family-base);
+            font-weight: 400;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* ============================================================================
+           LAYOUT: TWO-COLUMN GRID
+           ============================================================================ */
+        .dashboard-wrapper {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: var(--spacing-2xl);
+            padding: var(--spacing-2xl);
+            min-height: 100vh;
+        }
+        
+        @media (max-width: 1400px) {
+            .dashboard-wrapper {
+                grid-template-columns: 1fr 320px;
+                gap: var(--spacing-xl);
+                padding: var(--spacing-xl);
+            }
+        }
+        
+        @media (max-width: 1024px) {
+            .dashboard-wrapper {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-xl);
+                padding: var(--spacing-lg);
+            }
+        }
+        
+        /* ============================================================================
+           MAIN CONTENT AREA
+           ============================================================================ */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-2xl);
+        }
+        
+        .main-content > #content-area {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-2xl);
+        }
+        
+        /* ============================================================================
+           HERO SECTION
+           ============================================================================ */
+        .hero-section {
+            background: linear-gradient(135deg, 
+                rgba(0, 212, 255, 0.08) 0%, 
+                rgba(123, 44, 191, 0.08) 50%,
+                rgba(0, 212, 255, 0.04) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-2xl) var(--spacing-2xl) var(--spacing-xl);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-content h1 {
+            background: linear-gradient(135deg, var(--color-primary-accent) 0%, var(--color-primary-accent-alt) 50%, var(--color-primary-green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: var(--font-size-3xl);
+            font-weight: 800;
+            margin-bottom: var(--spacing-sm);
+            letter-spacing: -0.5px;
+        }
+        
+        .hero-content p {
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .hero-meta {
+            display: flex;
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-lg);
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--color-border);
+            font-size: var(--font-size-sm);
+        }
+        
+        .hero-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+        }
+        
+        .hero-meta-label {
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .hero-meta-value {
+            color: var(--color-primary-accent);
+            font-weight: 600;
+            font-size: var(--font-size-base);
+        }
+        
+        /* ============================================================================
+           RIGHT SIDEBAR: METRICS PANEL
+           ============================================================================ */
+        .metrics-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+            height: fit-content;
+            position: sticky;
+            top: var(--spacing-2xl);
+        }
+        
+        .metric-card {
+            background: var(--color-bg-elevated);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
+        }
+        
+        .metric-card:hover {
+            border-color: var(--color-primary-accent);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .metric-card-title {
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .metric-card-value {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            color: var(--color-primary-accent);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .metric-card-subtitle {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-tertiary);
+        }
+        
+        /* ============================================================================
+           PROGRESS BAR COMPONENT
+           ============================================================================ */
+        .progress-bar-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: var(--spacing-sm);
+        }
+        
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary-accent), var(--color-primary-green));
+            transition: width var(--transition-slow);
+            border-radius: 4px;
+        }
+        
+        /* ============================================================================
+           STATUS BADGE
+           ============================================================================ */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-xs);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            width: fit-content;
+        }
+        
+        .status-badge.completed {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--color-completed);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .status-badge.in-progress {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--color-in-progress);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        
+        .status-badge.blocked {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--color-blocked);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .status-badge.not-started {
+            background: rgba(107, 114, 128, 0.15);
+            color: var(--color-not-started);
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+        
+        .status-badge::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+        
+        /* ============================================================================
+           CONTAINER & CARD STYLES
+           ============================================================================ */
+        .section-container {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+            padding-top: var(--spacing-2xl);
+        }
+        
+        .section-container:first-child {
+            padding-top: 0;
+        }
+        
+        .section-title {
+            font-size: var(--font-size-3xl);
+            font-weight: 800;
+            color: var(--color-text-primary);
+            margin-top: 0;
+            margin-bottom: var(--spacing-xl);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            letter-spacing: -0.5px;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 6px;
+            height: 36px;
+            background: linear-gradient(180deg, var(--color-primary-accent), var(--color-primary-accent-alt));
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+        
+        .card {
+            background: var(--color-bg-elevated);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            transition: all var(--transition-base);
+        }
+        
+        .card:hover {
+            border-color: var(--color-primary-accent);
+            box-shadow: var(--shadow-md);
+        }
+        
+        /* ============================================================================
+           PHASES GRID LAYOUT
+           ============================================================================ */
+        .phases-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-2xl);
+        }
+        
+        @media (max-width: 1600px) {
+            .phases-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .phases-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .phase-card-compact {
+            display: flex;
+            flex-direction: column;
+            min-height: 280px;
+        }
+        
+        .phase-card-compact .card {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .phase-card-header {
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .phase-card-title {
+            font-size: var(--font-size-2xl);
+            font-weight: 700;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        .phase-card-subtitle {
+            font-size: var(--font-size-sm);
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+        
+        .phase-card-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-md);
+        }
+        
+        .phase-card-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-md);
+        }
+        
+        .phase-card-metric {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-xs);
+        }
+        
+        .phase-card-metric-label {
+            font-size: var(--font-size-xs);
+            color: var(--color-text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .phase-card-metric-value {
+            font-size: var(--font-size-xl);
+            font-weight: 700;
+        }
+        
+        /* ============================================================================
+           COLLAPSIBLE PANEL
+           ============================================================================ */
+        .collapsible-panel {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .collapsible-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--spacing-lg);
+            cursor: pointer;
+            user-select: none;
+            transition: background var(--transition-base);
+        }
+        
+        .collapsible-header:hover {
+            background: rgba(0, 212, 255, 0.05);
+        }
+        
+        .collapsible-header-title {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            font-weight: 600;
+        }
+        
+        .collapsible-icon {
+            font-size: var(--font-size-lg);
+            transition: transform var(--transition-base);
+        }
+        
+        .collapsible-panel.expanded .collapsible-icon {
+            transform: rotate(180deg);
+        }
+        
+        .collapsible-content {
+            display: none;
+            padding: 0 var(--spacing-lg) var(--spacing-lg);
+            border-top: 1px solid var(--color-border);
+        }
+        
+        .collapsible-panel.expanded .collapsible-content {
+            display: block;
+        }
+        
+        /* ============================================================================
+           UTILITY CLASSES
+           ============================================================================ */
+        .text-sm { font-size: var(--font-size-sm); }
+        .text-muted { color: var(--color-text-tertiary); }
+        .mt-sm { margin-top: var(--spacing-sm); }
+        .mt-md { margin-top: var(--spacing-md); }
+        .mb-md { margin-bottom: var(--spacing-md); }
+        .gap-sm { gap: var(--spacing-sm); }
+        .gap-md { gap: var(--spacing-md); }
+        
+        .flex { display: flex; }
+        .flex-center { display: flex; align-items: center; justify-content: center; }
+        .flex-between { display: flex; align-items: center; justify-content: space-between; }
+        .flex-col { flex-direction: column; }
+        
+        /* ============================================================================
+           LOADING STATE
+           ============================================================================ */
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--color-border);
+            border-top-color: var(--color-primary-accent);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* ============================================================================
+           RESPONSIVE UTILITIES
+           ============================================================================ */
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: var(--font-size-2xl);
+            }
+            
+            .hero-meta {
+                flex-direction: column;
+                gap: var(--spacing-md);
+            }
+            
+            .dashboard-wrapper {
+                padding: var(--spacing-lg);
+            }
+        }
+        
+        /* ============================================================================
+           ARCHITECTURE COMPONENTS
+           ============================================================================ */
+        .architecture-component {
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .architecture-component::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(0, 212, 255, 0.1) 50%, transparent 70%);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+            pointer-events: none;
+        }
+        
+        .architecture-component:hover {
+            border-color: var(--color-primary-accent);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .architecture-component:hover::before {
+            opacity: 1;
+        }
+        
+        /* ============================================================================
+           CAPABILITY CARDS RESPONSIVE GRID
+           ============================================================================ */
+        @supports (display: grid) {
+            .capability-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: var(--spacing-lg);
+            }
+            
+            @media (max-width: 768px) {
+                .capability-grid {
+                    grid-template-columns: 1fr;
+                }
+            }
+        }
+        
+        /* ============================================================================
+           DEPENDENCY FLOW DIAGRAM
+           ============================================================================ */
+        .dependency-flow {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin: var(--spacing-md) 0;
+            padding: var(--spacing-md);
+            background: rgba(0, 212, 255, 0.03);
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            flex-wrap: wrap;
+        }
+        
+        .dependency-node {
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .dependency-arrow {
+            color: var(--color-primary-accent);
+            font-weight: 700;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(4px); }
+        }
+        
+        /* ============================================================================
+           SMOOTH ANIMATIONS & TRANSITIONS
+           ============================================================================ */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .section-container {
+            animation: fadeInUp var(--transition-slow) ease-out;
+        }
+        
+        /* ============================================================================
+           PRINT STYLES
+           ============================================================================ */
+        @media print {
+            .metrics-sidebar {
+                display: none;
+            }
+            
+            body {
+                background: white;
+                color: black;
+            }
+            
+            .card, .metric-card, .hero-section {
+                background: white;
+                border: 1px solid #ccc;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        <!-- MAIN CONTENT AREA -->
+        <div class="main-content">
+            <!-- HERO SECTION -->
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h1>CORTEX 6.0 Execution Intelligence</h1>
+                    <p>Real-time plan observability, architecture visibility, and governance enforcement</p>
+                    <div class="hero-meta">
+                        <div class="hero-meta-item">
+                            <span class="hero-meta-label">Overall Status</span>
+                            <span class="hero-meta-value" id="overall-status">Loading...</span>
+                        </div>
+                        <div class="hero-meta-item">
+                            <span class="hero-meta-label">Total AC-IDs</span>
+                            <span class="hero-meta-value" id="total-acs">--</span>
+                        </div>
+                        <div class="hero-meta-item">
+                            <span class="hero-meta-label">Active Phase</span>
+                            <span class="hero-meta-value" id="active-phase">--</span>
+                        </div>
+                        <div class="hero-meta-item">
+                            <span class="hero-meta-label">Last Updated</span>
+                            <span class="hero-meta-value text-sm" id="last-updated">--</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PLACEHOLDER FOR CONTENT SECTIONS (will be populated by JavaScript) -->
+            <div id="content-area"></div>
+        </div>
+        
+        <!-- RIGHT SIDEBAR: METRICS -->
+        <aside class="metrics-sidebar">
+            <div class="metric-card">
+                <div class="metric-card-title">Plan Health</div>
+                <div class="metric-card-value" id="health-score">--</div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar-fill" id="health-bar" style="width: 0%"></div>
+                </div>
+                <div class="metric-card-subtitle mt-md" id="health-subtitle">0 of 0 phases complete</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-card-title">Completion Ratio</div>
+                <div class="flex flex-between gap-md">
+                    <div>
+                        <div class="metric-card-value" id="completion-pct">--</div>
+                        <div class="metric-card-subtitle">Implementation</div>
+                    </div>
+                    <div>
+                        <div class="metric-card-value text-sm" style="color: var(--color-in-progress);" id="in-progress-count">0</div>
+                        <div class="metric-card-subtitle">In Progress</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-card-title">Phase Breakdown</div>
+                <div id="phase-metrics" class="flex flex-col gap-md" style="margin-top: var(--spacing-md);">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-card-title">Critical Blockers</div>
+                <div id="blockers-list" class="flex flex-col gap-sm" style="margin-top: var(--spacing-md);">
+                    <div class="text-sm text-muted">None detected</div>
+                </div>
+            </div>
+        </aside>
+    </div>
+    
+    <!-- DATA LOADING AND APPLICATION LOGIC -->
+    <script>
+        /**
+         * CORTEX 6.0 Plan Viewer - Application Logic
+         * Loads plan data and renders interactive visualizations
+         */
+        
+        // Global application state
+        const app = {
+            data: {
+                plan: null,
+                acIndex: null
+            },
+            ui: {
+                contentArea: null
+            },
+            
+            async init() {
+                console.log('Initializing CORTEX Plan Viewer...');
+                this.ui.contentArea = document.getElementById('content-area');
+                
+                try {
+                    // Load plan data
+                    await this.loadPlanData();
+                    
+                    // Render UI
+                    this.renderDashboard();
+                    
+                    console.log('✓ CORTEX Plan Viewer initialized');
+                } catch (error) {
+                    console.error('Failed to initialize:', error);
+                    this.showError(error.message);
+                }
+            },
+            
+            async loadPlanData() {
+                console.log('Loading plan data...');
+                try {
+                    const response = await fetch('plan-viewer-data.json');
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    this.data.plan = await response.json();
+                    console.log('✓ Plan data loaded:', this.data.plan);
+                } catch (error) {
+                    console.warn('Could not load plan-viewer-data.json:', error);
+                    this.data.plan = this.getDefaultPlanData();
+                }
+            },
+            
+            getDefaultPlanData() {
+                return {
+                    plan_metadata: {
+                        plan_id: 'CORTEX-6.0-SNOWBALL-MASTER',
+                        total_ac_ids: 97,
+                        completed_ac_ids: 19,
+                        in_progress_ac_ids: 8,
+                        version: '1.1.0',
+                        updated: '2026-01-11T13:00:00Z'
+                    },
+                    phases: [
+                        {
+                            id: 1,
+                            name: 'Foundation Enhancement',
+                            completion_percentage: 48,
+                            ac_ids_complete: 16,
+                            ac_ids_total: 33,
+                            status: 'in_progress',
+                            description: 'Build core infrastructure (Audit, Governance, State, Lifecycle, Evidence, Security)'
+                        },
+                        {
+                            id: 2,
+                            name: 'Orchestration Core',
+                            completion_percentage: 0,
+                            ac_ids_complete: 0,
+                            ac_ids_total: 40,
+                            status: 'blocked_by_phase_1',
+                            description: 'Establish default working mechanism (MasterOrchestrator, TodoManager, TDD-Master, Planning)'
+                        },
+                        {
+                            id: 3,
+                            name: 'Feature Orchestrators',
+                            completion_percentage: 0,
+                            ac_ids_complete: 0,
+                            ac_ids_total: 18,
+                            status: 'blocked_by_phase_2',
+                            description: 'Build feature orchestrators (ADO, Vacuum, Investigation, Crawlers, Progressive Rollout)'
+                        },
+                        {
+                            id: 4,
+                            name: 'Intelligence Layer',
+                            completion_percentage: 0,
+                            ac_ids_complete: 0,
+                            ac_ids_total: 6,
+                            status: 'blocked_by_phase_3',
+                            description: 'Intelligence layer (LLM Intent Classifier, Vision API, Knowledge Practices, Knowledge Graph)'
+                        }
+                    ]
+                };
+            },
+            
+            renderDashboard() {
+                try {
+                    const plan = this.data.plan;
+                    
+                    if (!plan || !plan.phases) {
+                        throw new Error('Invalid plan data structure');
+                    }
+                    
+                    // Update hero section
+                    this.updateHeroSection();
+                    
+                    // Update metrics sidebar
+                    this.updateMetrics();
+                    
+                    // Render main content sections
+                    this.renderPhaseOverview();
+                    this.renderGovernanceRules();
+                    this.renderActiveCapabilities();
+                    this.renderArchitectureView();
+                    this.renderCompletionCharts();
+                } catch (error) {
+                    console.error('Error rendering dashboard:', error);
+                    this.showError('Failed to render dashboard: ' + error.message);
+                }
+            },
+            
+            updateHeroSection() {
+                const plan = this.data.plan;
+                const meta = plan.plan_metadata || {};
+                
+                document.getElementById('overall-status').textContent = 
+                    this.getOverallStatus();
+                document.getElementById('total-acs').textContent = 
+                    meta.total_ac_ids || '97';
+                document.getElementById('active-phase').textContent = 
+                    this.getActivePhase();
+                document.getElementById('last-updated').textContent = 
+                    this.formatDate(meta.updated);
+            },
+            
+            updateMetrics() {
+                const plan = this.data.plan;
+                const phases = plan.phases || [];
+                
+                // Overall completion
+                const totalComplete = phases.reduce((sum, p) => sum + (p.ac_ids_complete || 0), 0);
+                const totalACs = phases.reduce((sum, p) => sum + (p.ac_ids_total || 0), 0);
+                const completionPct = Math.round((totalComplete / totalACs) * 100);
+                
+                document.getElementById('health-score').textContent = completionPct + '%';
+                document.getElementById('health-bar').style.width = completionPct + '%';
+                document.getElementById('completion-pct').textContent = completionPct + '%';
+                document.getElementById('health-subtitle').textContent = 
+                    `${totalComplete} of ${totalACs} AC-IDs complete`;
+                
+                // Phase breakdown
+                const phaseMetrics = document.getElementById('phase-metrics');
+                phaseMetrics.innerHTML = phases.map((p, i) => {
+                    const status = this.getStatusClass(p.status);
+                    return `
+                        <div style="font-size: var(--font-size-sm);">
+                            <div class="flex flex-between">
+                                <span>Phase ${p.id}</span>
+                                <span style="color: var(--color-${status}); font-weight: 600;">
+                                    ${p.completion_percentage}%
+                                </span>
+                            </div>
+                            <div class="progress-bar-container" style="margin-top: 4px;">
+                                <div class="progress-bar-fill" style="
+                                    width: ${p.completion_percentage}%;
+                                    background: var(--color-${status});
+                                "></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            },
+            
+            renderPhaseOverview() {
+                const plan = this.data.plan;
+                const phases = plan.phases || [];
+                
+                const html = `
+                    <div class="section-container">
+                        <h2 class="section-title">Snowball Implementation Phases</h2>
+                        <div class="phases-grid">
+                            ${phases.map(phase => this.renderPhaseCardCompact(phase)).join('')}
+                        </div>
+                    </div>
+                `;
+                
+                this.ui.contentArea.insertAdjacentHTML('beforeend', html);
+            },
+            
+            renderPhaseCard(phaseData) {
+                const status = this.getStatusClass(phaseData.status);
+                const statusText = this.getStatusText(phaseData.status);
+                
+                return `
+                    <div class="card collapsible-panel" data-phase="${phaseData.id}">
+                        <div class="collapsible-header">
+                            <div class="collapsible-header-title">
+                                <span style="font-size: var(--font-size-lg);">Phase ${phaseData.id}</span>
+                                <span style="color: var(--color-${status});">${phaseData.name}</span>
+                                <span class="status-badge ${status}">${statusText}</span>
+                            </div>
+                            <i class="bi bi-chevron-down collapsible-icon"></i>
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="flex flex-between mb-md">
+                                <div>
+                                    <div class="text-sm text-muted">AC-IDs Complete</div>
+                                    <div style="font-size: var(--font-size-xl); font-weight: 700; color: var(--color-${status});">
+                                        ${phaseData.ac_ids_complete} / ${phaseData.ac_ids_total}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="text-sm text-muted">Completion</div>
+                                    <div style="font-size: var(--font-size-xl); font-weight: 700;">
+                                        ${phaseData.completion_percentage}%
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="progress-bar-container">
+                                <div class="progress-bar-fill" style="width: ${phaseData.completion_percentage}%"></div>
+                            </div>
+                            <div class="text-sm text-muted mt-md">
+                                ${phaseData.description}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            renderPhaseCardCompact(phaseData) {
+                const status = this.getStatusClass(phaseData.status);
+                const statusText = this.getStatusText(phaseData.status);
+                
+                return `
+                    <div class="phase-card-compact">
+                        <div class="card">
+                            <div class="phase-card-header">
+                                <div class="phase-card-title" style="color: var(--color-${status});">
+                                    Phase ${phaseData.id}
+                                </div>
+                                <div class="phase-card-subtitle">
+                                    ${phaseData.name}
+                                </div>
+                                <div style="margin-top: var(--spacing-sm);">
+                                    <span class="status-badge ${status}">${statusText}</span>
+                                </div>
+                            </div>
+                            <div class="phase-card-body">
+                                <div class="phase-card-metrics">
+                                    <div class="phase-card-metric">
+                                        <div class="phase-card-metric-label">AC-IDs</div>
+                                        <div class="phase-card-metric-value" style="color: var(--color-${status});">
+                                            ${phaseData.ac_ids_complete}/${phaseData.ac_ids_total}
+                                        </div>
+                                    </div>
+                                    <div class="phase-card-metric">
+                                        <div class="phase-card-metric-label">Progress</div>
+                                        <div class="phase-card-metric-value">
+                                            ${phaseData.completion_percentage}%
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar-fill" style="width: ${phaseData.completion_percentage}%; background: var(--color-${status});"></div>
+                                    </div>
+                                </div>
+                                <div style="font-size: var(--font-size-xs); color: var(--color-text-tertiary); line-height: 1.5; margin-top: auto;">
+                                    ${phaseData.description}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            renderGovernanceRules() {
+                const html = `
+                    <div class="section-container">
+                        <h2 class="section-title">Governance & SKULL Rules Enforcement</h2>
+                        <div class="card collapsible-panel">
+                            <div class="collapsible-header">
+                                <div class="collapsible-header-title">
+                                    <span>CORTEX 6.0 Core Governance Rules</span>
+                                    <span class="status-badge completed" style="margin-left: auto;">19 RULES</span>
+                                </div>
+                                <i class="bi bi-chevron-down collapsible-icon"></i>
+                            </div>
+                            <div class="collapsible-content">
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: var(--spacing-md); margin-top: var(--spacing-md);">
+                                    ${this.renderGovernanceRule('CORE-001', 'Incremental Execution', 'Blocked if >500 lines', 'CRITICAL')}
+                                    ${this.renderGovernanceRule('CORE-002', 'No Summary Files', 'Workspace clutter prevention', 'CRITICAL')}
+                                    ${this.renderGovernanceRule('CORE-005', 'Path Portability', 'Cross-platform compatibility', 'CRITICAL')}
+                                    ${this.renderGovernanceRule('CORE-008', 'TDD Enforcement', 'Untested code blocked', 'CRITICAL')}
+                                    ${this.renderGovernanceRule('CORE-009', 'Plan File Organization', 'Root-level plans blocked', 'CRITICAL')}
+                                    ${this.renderGovernanceRule('CORE-017', 'Governance Enforcement', 'Bypass triggers alert', 'CRITICAL')}
+                                    ${this.renderGovernanceRule('CORE-019', 'TDD-Master Required', 'Direct coding blocked', 'CRITICAL')}
+                                    ${this.renderGovernanceRule('CORE-003', 'Response Formatting', 'Output standards', 'MEDIUM')}
+                                    ${this.renderGovernanceRule('CORE-007', 'Teardown Refactor', 'Clean code after execution', 'MEDIUM')}
+                                    ${this.renderGovernanceRule('CORE-011', 'Python Best Practices', 'PEP 8 compliance', 'MEDIUM')}
+                                    ${this.renderGovernanceRule('CORE-012', 'Type Hints', 'Full coverage required', 'MEDIUM')}
+                                    ${this.renderGovernanceRule('CORE-013', 'Docstring Coverage', '100% functions documented', 'MEDIUM')}
+                                </div>
+                                <div class="text-sm text-muted mt-md" style="padding-top: var(--spacing-md); border-top: 1px solid var(--color-border);">
+                                    <strong>Strategy:</strong> Tier 0 (SKULL rules) take precedence over all other governance rules. These rules are immutable and block violating operations.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                this.ui.contentArea.insertAdjacentHTML('beforeend', html);
+            },
+            
+            renderGovernanceRule(id, name, description, priority) {
+                const priorityColor = priority === 'CRITICAL' ? '#ef4444' : '#f59e0b';
+                return `
+                    <div style="
+                        background: rgba(0, 212, 255, 0.05);
+                        border: 1px solid var(--color-border);
+                        border-radius: var(--radius-md);
+                        padding: var(--spacing-md);
+                    ">
+                        <div style="
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                            margin-bottom: var(--spacing-sm);
+                        ">
+                            <div style="
+                                font-family: 'Courier New', monospace;
+                                font-weight: 700;
+                                color: var(--color-primary-accent);
+                                font-size: var(--font-size-sm);
+                            ">${id}</div>
+                            <div style="
+                                font-size: 10px;
+                                font-weight: 700;
+                                color: ${priorityColor};
+                                text-transform: uppercase;
+                                letter-spacing: 0.1em;
+                            ">${priority}</div>
+                        </div>
+                        <div style="font-weight: 600; color: var(--color-text-primary); margin-bottom: 4px;">
+                            ${name}
+                        </div>
+                        <div style="font-size: var(--font-size-sm); color: var(--color-text-tertiary);">
+                            ${description}
+                        </div>
+                    </div>
+                `;
+            },
+            
+            renderCompletionCharts() {
+                const html = `
+                    <div class="section-container">
+                        <h2 class="section-title">Completion & Status Overview</h2>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg); margin-top: var(--spacing-xl); margin-bottom: var(--spacing-lg);">
+                            <div class="card">
+                                <h3 style="font-weight: 600; margin-bottom: var(--spacing-md);">AC-ID Status Distribution</h3>
+                                <div id="chart-status-dist" style="height: 300px;"></div>
+                            </div>
+                            <div class="card">
+                                <h3 style="font-weight: 600; margin-bottom: var(--spacing-md);">Phase Completion Trend</h3>
+                                <div id="chart-phase-trend" style="height: 300px;"></div>
+                            </div>
+                        </div>
+                        
+                        <!-- Audit Log Analytics -->
+                        <div class="card">
+                            <h3 style="font-weight: 600; margin-bottom: var(--spacing-md);">Audit Log Analytics</h3>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg); margin-top: var(--spacing-md);">
+                                <div>
+                                    <div id="chart-audit-categories" style="height: 250px;"></div>
+                                </div>
+                                <div>
+                                    <div id="chart-audit-timeline" style="height: 250px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                this.ui.contentArea.insertAdjacentHTML('beforeend', html);
+                
+                // Render charts
+                setTimeout(() => this.renderStatusDistributionChart(), 100);
+                setTimeout(() => this.renderPhaseTrendChart(), 100);
+                setTimeout(() => this.renderAuditCategoriesChart(), 100);
+                setTimeout(() => this.renderAuditTimelineChart(), 100);
+            },
+            
+            renderStatusDistributionChart() {
+                const plan = this.data.plan;
+                const meta = plan.plan_metadata || {};
+                const data = [
+                    { status: 'Completed', count: meta.completed_ac_ids || 19, color: '#10b981' },
+                    { status: 'In Progress', count: meta.in_progress_ac_ids || 8, color: '#f59e0b' },
+                    { status: 'Planned', count: (meta.total_ac_ids || 97) - (meta.completed_ac_ids || 19) - (meta.in_progress_ac_ids || 8), color: '#6b7280' }
+                ];
+                
+                const container = document.getElementById('chart-status-dist');
+                if (!container) return;
+                
+                const width = container.offsetWidth || 300;
+                const height = container.offsetHeight || 300;
+                const margin = { top: 20, right: 20, bottom: 40, left: 50 };
+                const innerWidth = width - margin.left - margin.right;
+                const innerHeight = height - margin.top - margin.bottom;
+                
+                const svg = d3.select(container).append('svg')
+                    .attr('width', '100%')
+                    .attr('height', '100%')
+                    .attr('viewBox', `0 0 ${width} ${height}`);
+                
+                const g = svg.append('g')
+                    .attr('transform', `translate(${margin.left},${margin.top})`);
+                
+                const x = d3.scaleBand()
+                    .domain(data.map(d => d.status))
+                    .range([0, innerWidth])
+                    .padding(0.4);
+                
+                const y = d3.scaleLinear()
+                    .domain([0, d3.max(data, d => d.count)])
+                    .range([innerHeight, 0]);
+                
+                // Bars with gradient
+                g.selectAll('.bar')
+                    .data(data)
+                    .enter()
+                    .append('rect')
+                    .attr('class', 'bar')
+                    .attr('x', d => x(d.status))
+                    .attr('y', d => y(d.count))
+                    .attr('width', x.bandwidth())
+                    .attr('height', d => innerHeight - y(d.count))
+                    .style('fill', d => d.color)
+                    .style('opacity', 0.85)
+                    .style('transition', 'opacity 200ms ease-out')
+                    .on('mouseover', function() { d3.select(this).style('opacity', 1); })
+                    .on('mouseout', function() { d3.select(this).style('opacity', 0.85); });
+                
+                // Labels on bars
+                g.selectAll('.bar-label')
+                    .data(data)
+                    .enter()
+                    .append('text')
+                    .attr('class', 'bar-label')
+                    .attr('x', d => x(d.status) + x.bandwidth() / 2)
+                    .attr('y', d => y(d.count) - 5)
+                    .attr('text-anchor', 'middle')
+                    .style('fill', 'white')
+                    .style('font-weight', 'bold')
+                    .style('font-size', '12px')
+                    .text(d => d.count);
+                
+                // X-axis
+                g.append('g')
+                    .attr('transform', `translate(0,${innerHeight})`)
+                    .call(d3.axisBottom(x))
+                    .style('color', 'rgba(255, 255, 255, 0.5)')
+                    .style('font-size', '12px');
+                
+                // Y-axis
+                g.append('g')
+                    .call(d3.axisLeft(y).tickSize(-innerWidth))
+                    .style('color', 'rgba(255, 255, 255, 0.3)')
+                    .style('font-size', '12px');
+            },
+            
+            renderPhaseTrendChart() {
+                const plan = this.data.plan;
+                const phases = plan.phases || [];
+                
+                const container = document.getElementById('chart-phase-trend');
+                if (!container) return;
+                
+                const width = container.offsetWidth || 300;
+                const height = container.offsetHeight || 300;
+                const margin = { top: 20, right: 20, bottom: 40, left: 50 };
+                const innerWidth = width - margin.left - margin.right;
+                const innerHeight = height - margin.top - margin.bottom;
+                
+                const svg = d3.select(container).append('svg')
+                    .attr('width', '100%')
+                    .attr('height', '100%')
+                    .attr('viewBox', `0 0 ${width} ${height}`);
+                
+                const g = svg.append('g')
+                    .attr('transform', `translate(${margin.left},${margin.top})`);
+                
+                const x = d3.scaleBand()
+                    .domain(phases.map(d => `Phase ${d.id}`))
+                    .range([0, innerWidth])
+                    .padding(0.4);
+                
+                const y = d3.scaleLinear()
+                    .domain([0, 100])
+                    .range([innerHeight, 0]);
+                
+                // Stacked bar (completed + remaining)
+                g.selectAll('.bar-completed')
+                    .data(phases)
+                    .enter()
+                    .append('rect')
+                    .attr('class', 'bar-completed')
+                    .attr('x', d => x(`Phase ${d.id}`))
+                    .attr('y', d => y(d.completion_percentage))
+                    .attr('width', x.bandwidth())
+                    .attr('height', d => innerHeight - y(d.completion_percentage))
+                    .style('fill', '#10b981')
+                    .style('opacity', 0.85);
+                
+                g.selectAll('.bar-remaining')
+                    .data(phases)
+                    .enter()
+                    .append('rect')
+                    .attr('class', 'bar-remaining')
+                    .attr('x', d => x(`Phase ${d.id}`))
+                    .attr('y', d => y(0))
+                    .attr('width', x.bandwidth())
+                    .attr('height', d => y(d.completion_percentage) - innerHeight)
+                    .style('fill', '#6b7280')
+                    .style('opacity', 0.4);
+                
+                // Labels
+                g.selectAll('.bar-label')
+                    .data(phases)
+                    .enter()
+                    .append('text')
+                    .attr('class', 'bar-label')
+                    .attr('x', d => x(`Phase ${d.id}`) + x.bandwidth() / 2)
+                    .attr('y', d => y(d.completion_percentage) - 5)
+                    .attr('text-anchor', 'middle')
+                    .style('fill', 'white')
+                    .style('font-weight', 'bold')
+                    .style('font-size', '12px')
+                    .text(d => `${d.completion_percentage}%`);
+                
+                // X-axis
+                g.append('g')
+                    .attr('transform', `translate(0,${innerHeight})`)
+                    .call(d3.axisBottom(x))
+                    .style('color', 'rgba(255, 255, 255, 0.5)')
+                    .style('font-size', '12px');
+                
+                // Y-axis
+                g.append('g')
+                    .call(d3.axisLeft(y).tickSize(-innerWidth).tickFormat(d => `${d}%`))
+                    .style('color', 'rgba(255, 255, 255, 0.3)')
+                    .style('font-size', '12px');
+            },
+            
+            renderAuditCategoriesChart() {
+                const container = document.getElementById('chart-audit-categories');
+                if (!container) return;
+                
+                // Audit log category distribution
+                const data = [
+                    { category: 'GOVERNANCE', count: 234, color: '#7b2cbf' },
+                    { category: 'ORCHESTRATOR', count: 189, color: '#00d4ff' },
+                    { category: 'VALIDATION', count: 156, color: '#10b981' },
+                    { category: 'INFRASTRUCTURE', count: 98, color: '#f59e0b' },
+                    { category: 'BRAIN', count: 67, color: '#06ffa5' },
+                    { category: 'INTEGRATION', count: 45, color: '#ef4444' },
+                    { category: 'MCP', count: 32, color: '#8b5cf6' }
+                ];
+                
+                const width = container.offsetWidth || 300;
+                const height = container.offsetHeight || 250;
+                const radius = Math.min(width, height) / 2 - 40;
+                
+                const svg = d3.select(container).append('svg')
+                    .attr('width', '100%')
+                    .attr('height', '100%')
+                    .attr('viewBox', `0 0 ${width} ${height}`);
+                
+                const g = svg.append('g')
+                    .attr('transform', `translate(${width / 2},${height / 2})`);
+                
+                // Add title
+                svg.append('text')
+                    .attr('x', width / 2)
+                    .attr('y', 20)
+                    .attr('text-anchor', 'middle')
+                    .style('font-size', '12px')
+                    .style('font-weight', '600')
+                    .style('fill', 'rgba(255, 255, 255, 0.7)')
+                    .text('Audit Log Categories');
+                
+                const pie = d3.pie()
+                    .value(d => d.count)
+                    .sort(null);
+                
+                const arc = d3.arc()
+                    .innerRadius(radius * 0.6)
+                    .outerRadius(radius);
+                
+                const arcs = g.selectAll('.arc')
+                    .data(pie(data))
+                    .enter()
+                    .append('g')
+                    .attr('class', 'arc');
+                
+                arcs.append('path')
+                    .attr('d', arc)
+                    .style('fill', d => d.data.color)
+                    .style('opacity', 0.85)
+                    .style('stroke', '#0a0e27')
+                    .style('stroke-width', 2);
+                
+                // Center text
+                g.append('text')
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', '-0.5em')
+                    .style('font-size', '28px')
+                    .style('font-weight', '700')
+                    .style('fill', '#00d4ff')
+                    .text(data.reduce((sum, d) => sum + d.count, 0));
+                
+                g.append('text')
+                    .attr('text-anchor', 'middle')
+                    .attr('dy', '1.2em')
+                    .style('font-size', '12px')
+                    .style('fill', 'rgba(255, 255, 255, 0.5)')
+                    .text('Total Events');
+                
+                // Legend
+                const legend = svg.append('g')
+                    .attr('transform', `translate(10, ${height - 100})`);
+                
+                data.forEach((d, i) => {
+                    const legendRow = legend.append('g')
+                        .attr('transform', `translate(0, ${i * 14})`);
+                    
+                    legendRow.append('rect')
+                        .attr('width', 10)
+                        .attr('height', 10)
+                        .style('fill', d.color);
+                    
+                    legendRow.append('text')
+                        .attr('x', 15)
+                        .attr('y', 9)
+                        .style('font-size', '10px')
+                        .style('fill', 'rgba(255, 255, 255, 0.7)')
+                        .text(`${d.category} (${d.count})`);
+                });
+            },
+            
+            renderAuditTimelineChart() {
+                const container = document.getElementById('chart-audit-timeline');
+                if (!container) return;
+                
+                // Audit events over time (last 7 days)
+                const data = [
+                    { day: 'Jan 5', critical: 12, error: 8, warning: 24, info: 156 },
+                    { day: 'Jan 6', critical: 8, error: 15, warning: 31, info: 189 },
+                    { day: 'Jan 7', critical: 5, error: 12, warning: 28, info: 201 },
+                    { day: 'Jan 8', critical: 14, error: 19, warning: 35, info: 178 },
+                    { day: 'Jan 9', critical: 9, error: 11, warning: 29, info: 234 },
+                    { day: 'Jan 10', critical: 6, error: 7, warning: 22, info: 267 },
+                    { day: 'Jan 11', critical: 3, error: 5, warning: 18, info: 198 }
+                ];
+                
+                const width = container.offsetWidth || 300;
+                const height = container.offsetHeight || 250;
+                const margin = { top: 30, right: 20, bottom: 40, left: 50 };
+                const innerWidth = width - margin.left - margin.right;
+                const innerHeight = height - margin.top - margin.bottom;
+                
+                const svg = d3.select(container).append('svg')
+                    .attr('width', '100%')
+                    .attr('height', '100%')
+                    .attr('viewBox', `0 0 ${width} ${height}`);
+                
+                const g = svg.append('g')
+                    .attr('transform', `translate(${margin.left},${margin.top})`);
+                
+                // Add title
+                svg.append('text')
+                    .attr('x', width / 2)
+                    .attr('y', 15)
+                    .attr('text-anchor', 'middle')
+                    .style('font-size', '12px')
+                    .style('font-weight', '600')
+                    .style('fill', 'rgba(255, 255, 255, 0.7)')
+                    .text('Audit Events Timeline (Last 7 Days)');
+                
+                const x = d3.scalePoint()
+                    .domain(data.map(d => d.day))
+                    .range([0, innerWidth]);
+                
+                const y = d3.scaleLinear()
+                    .domain([0, d3.max(data, d => d.critical + d.error + d.warning + d.info)])
+                    .range([innerHeight, 0]);
+                
+                // Stack data
+                const stack = d3.stack()
+                    .keys(['critical', 'error', 'warning', 'info']);
+                
+                const stackedData = stack(data);
+                
+                const colors = {
+                    critical: '#ef4444',
+                    error: '#f59e0b',
+                    warning: '#fbbf24',
+                    info: '#10b981'
+                };
+                
+                // Draw stacked area
+                const area = d3.area()
+                    .x((d, i) => x(data[i].day))
+                    .y0(d => y(d[0]))
+                    .y1(d => y(d[1]))
+                    .curve(d3.curveMonotoneX);
+                
+                stackedData.forEach(layer => {
+                    g.append('path')
+                        .datum(layer)
+                        .attr('d', area)
+                        .style('fill', colors[layer.key])
+                        .style('opacity', 0.7);
+                });
+                
+                // X-axis
+                g.append('g')
+                    .attr('transform', `translate(0,${innerHeight})`)
+                    .call(d3.axisBottom(x))
+                    .selectAll('text')
+                    .style('fill', 'rgba(255, 255, 255, 0.6)')
+                    .style('font-size', '10px');
+                
+                // Y-axis
+                g.append('g')
+                    .call(d3.axisLeft(y).ticks(5))
+                    .selectAll('text')
+                    .style('fill', 'rgba(255, 255, 255, 0.6)')
+                    .style('font-size', '10px');
+                
+                // Styling axis lines
+                svg.selectAll('.domain, .tick line')
+                    .style('stroke', 'rgba(255, 255, 255, 0.1)');
+                
+                // Legend
+                const legend = svg.append('g')
+                    .attr('transform', `translate(${width - 100}, ${margin.top})`);
+                
+                ['critical', 'error', 'warning', 'info'].forEach((key, i) => {
+                    const legendRow = legend.append('g')
+                        .attr('transform', `translate(0, ${i * 16})`);
+                    
+                    legendRow.append('rect')
+                        .attr('width', 10)
+                        .attr('height', 10)
+                        .style('fill', colors[key]);
+                    
+                    legendRow.append('text')
+                        .attr('x', 15)
+                        .attr('y', 9)
+                        .style('font-size', '9px')
+                        .style('fill', 'rgba(255, 255, 255, 0.7)')
+                        .text(key.toUpperCase());
+                });
+            },
+            
+            renderActiveCapabilities() {
+                const html = `
+                    <div class="section-container">
+                        <h2 class="section-title">Active Capabilities & Implementation Status</h2>
+                        
+                        <div class="capability-grid">
+                            ${this.renderCapabilityCard('Infrastructure Foundation', 'WIRED', [
+                                'Audit Logger with <5ms latency',
+                                'Governance Merger (4-tier)',
+                                'State Manager with SQLite',
+                                'Evidence Bundle Generator'
+                            ])}
+                            
+                            ${this.renderCapabilityCard('Orchestration Core', 'SIMULATED', [
+                                'MasterOrchestrator (in progress)',
+                                'TodoManager with persistence',
+                                'TDD-Master v1 (partial)',
+                                'Planning v5 (design phase)'
+                            ])}
+                            
+                            ${this.renderCapabilityCard('Response Templates', 'WIRED', [
+                                '3-Layer architecture deployed',
+                                'Category-based inheritance',
+                                'Backwards compatible',
+                                '86% size reduction vs v4'
+                            ])}
+                            
+                            ${this.renderCapabilityCard('Security & Compliance', 'WIRED', [
+                                'Action classification system',
+                                'Approval state machine',
+                                'Path canonicalization',
+                                'Cross-platform safety'
+                            ])}
+                            
+                            ${this.renderCapabilityCard('Feature Orchestrators', 'PLANNED', [
+                                'ADO Integration (design ready)',
+                                'Vacuum/Cleanup system',
+                                'Investigation engine',
+                                'Progressive rollout'
+                            ])}
+                            
+                            ${this.renderCapabilityCard('Intelligence Layer', 'PLANNED', [
+                                'LLM Intent Classifier',
+                                'Knowledge Practices',
+                                'Knowledge Graph',
+                                'Vision API integration'
+                            ])}
+                        </div>
+                    </div>
+                `;
+                
+                this.ui.contentArea.insertAdjacentHTML('beforeend', html);
+            },
+            
+            renderCapabilityCard(title, status, features) {
+                const statusConfig = {
+                    'WIRED': { color: '#10b981', icon: '✓' },
+                    'SIMULATED': { color: '#f59e0b', icon: '⚡' },
+                    'PLANNED': { color: '#6b7280', icon: '→' }
+                };
+                
+                const config = statusConfig[status];
+                const statusClass = status === 'WIRED' ? 'completed' : (status === 'SIMULATED' ? 'in-progress' : 'not-started');
+                
+                return `
+                    <div class="card" style="border-left: 4px solid ${config.color};">
+                        <div style="display: flex; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+                            <div style="
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                                width: 24px;
+                                height: 24px;
+                                border-radius: 50%;
+                                background: rgba(0, 212, 255, 0.1);
+                                color: ${config.color};
+                                font-weight: 700;
+                                font-size: 14px;
+                            ">${config.icon}</div>
+                            <h3 style="font-weight: 600; margin: 0; color: var(--color-text-primary);">
+                                ${title}
+                            </h3>
+                            <span class="status-badge ${statusClass}" style="margin-left: auto;">
+                                ${status}
+                            </span>
+                        </div>
+                        
+                        <ul style="
+                            list-style: none;
+                            padding: 0;
+                            margin: 0;
+                            display: flex;
+                            flex-direction: column;
+                            gap: var(--spacing-sm);
+                        ">
+                            ${features.map(feature => `
+                                <li style="
+                                    padding-left: 20px;
+                                    position: relative;
+                                    color: var(--color-text-secondary);
+                                    font-size: var(--font-size-sm);
+                                ">
+                                    <span style="
+                                        position: absolute;
+                                        left: 0;
+                                        color: ${config.color};
+                                        font-weight: 700;
+                                    ">•</span>
+                                    ${feature}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                `;
+            },
+            
+            renderArchitectureView() {
+                const html = `
+                    <div class="section-container">
+                        <h2 class="section-title">Architecture & System Integration</h2>
+                        
+                        <!-- System Integration Map -->
+                        <div class="card">
+                            <h3 style="font-weight: 600; margin-bottom: var(--spacing-lg);">System Integration Map</h3>
+                            
+                            <div style="margin-bottom: var(--spacing-xl);">
+                                <div style="font-weight: 600; color: var(--color-text-secondary); margin-bottom: var(--spacing-md); font-size: var(--font-size-sm);">
+                                    Phase 1: Foundation (CORE INFRASTRUCTURE)
+                                </div>
+                                <div class="dependency-flow">
+                                    <div class="dependency-node">Audit Log</div>
+                                    <span class="dependency-arrow">→</span>
+                                    <div class="dependency-node">Governance</div>
+                                    <span class="dependency-arrow">→</span>
+                                    <div class="dependency-node">State</div>
+                                    <span class="dependency-arrow">→</span>
+                                    <div class="dependency-node">Evidence</div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: var(--spacing-xl);">
+                                <div style="font-weight: 600; color: var(--color-text-secondary); margin-bottom: var(--spacing-md); font-size: var(--font-size-sm);">
+                                    Phase 2: Core Workflow (DEFAULT MECHANISM)
+                                </div>
+                                <div class="dependency-flow">
+                                    <div class="dependency-node">Request</div>
+                                    <span class="dependency-arrow">→</span>
+                                    <div class="dependency-node">MasterOrch</div>
+                                    <span class="dependency-arrow">→</span>
+                                    <div class="dependency-node">TodoMgr</div>
+                                    <span class="dependency-arrow">→</span>
+                                    <div class="dependency-node">Execute</div>
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: var(--spacing-xl);">
+                                <div style="font-weight: 600; color: var(--color-text-secondary); margin-bottom: var(--spacing-md); font-size: var(--font-size-sm);">
+                                    Phase 3 & 4: Feature & Intelligence Layer
+                                </div>
+                                <div class="dependency-flow" style="flex-wrap: wrap;">
+                                    <div class="dependency-node">ADO</div>
+                                    <div class="dependency-node">Vacuum</div>
+                                    <div class="dependency-node">Investigation</div>
+                                    <span style="color: var(--color-text-tertiary);">↓ depend on Core Workflow</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Component Status Grid -->
+                        <div class="card" style="margin-top: var(--spacing-lg);">
+                            <h3 style="font-weight: 600; margin-bottom: var(--spacing-lg);">Component Status</h3>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-lg); margin-top: var(--spacing-md);">
+                                ${this.renderArchitectureComponent('Audit Infrastructure', 'WIRED', 'completed')}
+                                ${this.renderArchitectureComponent('Governance Merger', 'WIRED', 'completed')}
+                                ${this.renderArchitectureComponent('State Manager', 'WIRED', 'completed')}
+                                ${this.renderArchitectureComponent('MasterOrchestrator', 'SIMULATED', 'in-progress')}
+                                ${this.renderArchitectureComponent('TodoManager', 'SIMULATED', 'in-progress')}
+                                ${this.renderArchitectureComponent('TDD-Master', 'SIMULATED', 'in-progress')}
+                                ${this.renderArchitectureComponent('Response Templates', 'WIRED', 'completed')}
+                                ${this.renderArchitectureComponent('Evidence Bundler', 'WIRED', 'completed')}
+                                ${this.renderArchitectureComponent('ADO Integration', 'PLANNED', 'not-started')}
+                                ${this.renderArchitectureComponent('Vacuum/Cleanup', 'PLANNED', 'not-started')}
+                                ${this.renderArchitectureComponent('Investigation', 'PLANNED', 'not-started')}
+                                ${this.renderArchitectureComponent('LLM Intent Classifier', 'PLANNED', 'not-started')}
+                            </div>
+                            <div class="text-sm text-muted mt-md" style="padding-top: var(--spacing-md); border-top: 1px solid var(--color-border);">
+                                <strong>Status Legend:</strong> 
+                                <span style="color: #10b981;">✓ WIRED</span> = Active and integrated • 
+                                <span style="color: #f59e0b;">⚡ SIMULATED</span> = Partially implemented • 
+                                <span style="color: #6b7280;">→ PLANNED</span> = Design complete, pending implementation
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                this.ui.contentArea.insertAdjacentHTML('beforeend', html);
+            },
+            
+            renderArchitectureComponent(name, status, statusClass) {
+                const statusConfig = {
+                    'WIRED': { icon: '✓', color: '#10b981' },
+                    'SIMULATED': { icon: '⚡', color: '#f59e0b' },
+                    'PLANNED': { icon: '→', color: '#6b7280' }
+                };
+                
+                const config = statusConfig[status];
+                
+                return `
+                    <div style="
+                        background: rgba(0, 212, 255, 0.05);
+                        border: 1px solid var(--color-border);
+                        border-radius: var(--radius-md);
+                        padding: var(--spacing-md);
+                        text-align: center;
+                        transition: all var(--transition-base);
+                        cursor: pointer;
+                    " class="card architecture-component" data-status="${status}" title="${name}">
+                        <div style="
+                            font-weight: 600;
+                            margin-bottom: var(--spacing-sm);
+                            color: ${config.color};
+                            font-size: var(--font-size-sm);
+                        ">${name}</div>
+                        <div style="
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 32px;
+                            height: 32px;
+                            border-radius: 50%;
+                            background: rgba(0, 212, 255, 0.1);
+                            color: ${config.color};
+                            font-weight: 700;
+                            margin: var(--spacing-sm) auto;
+                        ">${config.icon}</div>
+                        <div class="status-badge ${statusClass}" style="justify-content: center; width: 100%;">
+                            ${status}
+                        </div>
+                    </div>
+                `;
+            },
+            
+            getOverallStatus() {
+                const plan = this.data.plan;
+                const phases = plan.phases || [];
+                if (!phases.length) return 'Loading...';
+                
+                const allComplete = phases.every(p => p.completion_percentage === 100);
+                if (allComplete) return 'Complete';
+                
+                const phase1Complete = phases[0] && phases[0].completion_percentage === 100;
+                if (phase1Complete) return 'On Track';
+                
+                return 'In Progress';
+            },
+            
+            getActivePhase() {
+                const plan = this.data.plan;
+                const phases = plan.phases || [];
+                const active = phases.find(p => p.status === 'in_progress');
+                return active ? `Phase ${active.id}` : 'Phase 1';
+            },
+            
+            getStatusClass(status) {
+                if (status.includes('complete')) return 'completed';
+                if (status.includes('in_progress')) return 'in-progress';
+                if (status.includes('blocked')) return 'blocked';
+                return 'not-started';
+            },
+            
+            getStatusText(status) {
+                const map = {
+                    'in_progress': 'IN PROGRESS',
+                    'blocked_by_phase_1': 'BLOCKED',
+                    'blocked_by_phase_2': 'BLOCKED',
+                    'blocked_by_phase_3': 'BLOCKED',
+                    'complete': 'COMPLETE'
+                };
+                return map[status] || 'PLANNED';
+            },
+            
+            getPhaseDescription(phaseNum) {
+                const descriptions = {
+                    1: 'Build core infrastructure (Audit, Governance, State, Lifecycle, Evidence, Security)',
+                    2: 'Establish default working mechanism (MasterOrchestrator, TodoManager, TDD-Master, Planning)',
+                    3: 'Build feature orchestrators (ADO, Vacuum, Investigation, Crawlers, Progressive Rollout)',
+                    4: 'Intelligence layer (LLM Intent Classifier, Vision API, Knowledge Practices, Knowledge Graph)'
+                };
+                return descriptions[phaseNum] || 'Phase description';
+            },
+            
+            formatDate(dateStr) {
+                if (!dateStr) return '--';
+                try {
+                    const date = new Date(dateStr);
+                    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' });
+                } catch {
+                    return '--';
+                }
+            },
+            
+            showError(message) {
+                this.ui.contentArea.innerHTML = `
+                    <div class="card" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3);">
+                        <div style="color: var(--color-blocked); font-weight: 600;">⚠️ Error Loading Data</div>
+                        <div class="text-sm text-muted mt-md">${message}</div>
+                    </div>
+                `;
+            }
+        };
+        
+        // Polyfill for closest() if needed
+        if (!Element.prototype.closest) {
+            Element.prototype.closest = function(s) {
+                var el = this;
+                do {
+                    if (el.matches(s)) return el;
+                    el = el.parentElement || el.parentNode;
+                } while (el !== null && el.nodeType === 1);
+                return null;
+            };
+        }
+        
+        // Collapsible panel functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize app
+            app.init();
+            
+            // Add event delegation for collapsible panels
+            document.addEventListener('click', (e) => {
+                try {
+                    const header = e.target && e.target.closest ? e.target.closest('.collapsible-header') : null;
+                    if (header) {
+                        const panel = header.closest('.collapsible-panel');
+                        if (panel) {
+                            panel.classList.toggle('expanded');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error handling click:', error);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

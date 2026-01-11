@@ -1,0 +1,295 @@
+{
+  "plan_metadata": {
+    "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
+    "version": "1.1.0",
+    "created": "2026-01-10T23:50:00Z",
+    "updated": "2026-01-11T13:00:00Z",
+    "total_weeks": 8,
+    "total_ac_ids": 97,
+    "completed_ac_ids": 19,
+    "in_progress_ac_ids": 8,
+    "planned_ac_ids": 34,
+    "blocked_ac_ids": 0
+  },
+  "phases": [
+    {
+      "id": 1,
+      "name": "Foundation Enhancement",
+      "status": "in_progress",
+      "duration_weeks": 2,
+      "start_date": "2026-01-13",
+      "end_date": "2026-01-24",
+      "completion_percentage": 48,
+      "ac_ids_complete": 16,
+      "ac_ids_total": 33,
+      "priority": "CRITICAL",
+      "description": "Build core infrastructure that every other component depends on. All orchestrators log to audit, enforce governance, persist state.",
+      "components": [
+        {
+          "name": "Audit Infrastructure",
+          "ac_ids": "AC-AUDIT-001 to 007",
+          "status": "in_progress",
+          "priority": "CRITICAL",
+          "description": "Audit Infrastructure with Hash Chain, SQLite backend with WAL mode"
+        },
+        {
+          "name": "Governance Merger",
+          "ac_ids": "AC-GOV-001 to 005",
+          "status": "completed",
+          "priority": "CRITICAL",
+          "description": "4-Tier Governance Merger with precedence resolution and rule deduplication"
+        },
+        {
+          "name": "State Manager",
+          "ac_ids": "AC-STATE-001 to 003",
+          "status": "in_progress",
+          "priority": "CRITICAL",
+          "description": "State Manager with SQLite, atomic transitions, rollback on failure"
+        },
+        {
+          "name": "Lifecycle System",
+          "ac_ids": "AC-LIFECYCLE-001 to 003",
+          "status": "not_started",
+          "priority": "HIGH",
+          "description": "7-state lifecycle with entry/exit criteria and quarantine mechanism"
+        },
+        {
+          "name": "Evidence Bundler",
+          "ac_ids": "AC-EVIDENCE-001 to 003",
+          "status": "not_started",
+          "priority": "HIGH",
+          "description": "3-file format Evidence Bundles with auto-generation and validation gates"
+        },
+        {
+          "name": "Security Layer",
+          "ac_ids": "AC-SECURITY-001 to 008",
+          "status": "not_started",
+          "priority": "CRITICAL",
+          "description": "Action classification, approval state machine, path resolution"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Orchestration Core (CORE WORKFLOW)",
+      "status": "blocked_by_phase_1",
+      "duration_weeks": 2,
+      "start_date": "2026-01-27",
+      "end_date": "2026-02-07",
+      "completion_percentage": 0,
+      "ac_ids_complete": 0,
+      "ac_ids_total": 40,
+      "priority": "CRITICAL",
+      "description": "Establishes THE DEFAULT WORKING MECHANISM. MasterOrchestrator is IN CHARGE: evaluates requests, creates tasks, executes.",
+      "components": [
+        {
+          "name": "MasterOrchestrator",
+          "ac_ids": "AC-ORCH-001 to 008",
+          "status": "not_started",
+          "priority": "CRITICAL",
+          "description": "Central request evaluation, required_actions generation, dependency order execution"
+        },
+        {
+          "name": "TodoManager",
+          "ac_ids": "AC-TODO-001 to 004",
+          "status": "not_started",
+          "priority": "CRITICAL",
+          "description": "Create trackable tasks, persist to progress-tracker.json, status tracking"
+        },
+        {
+          "name": "TDD-Master v1",
+          "ac_ids": "AC-TDD-001 to 010",
+          "status": "not_started",
+          "priority": "CRITICAL",
+          "description": "RED→GREEN→REFACTOR workflow, CORE-019 enforcement, auto-generate tests"
+        },
+        {
+          "name": "Planning v5",
+          "ac_ids": "AC-PLAN-001 to 008",
+          "status": "not_started",
+          "priority": "HIGH",
+          "description": "Git history intelligence, context-aware planning, task dependency analysis"
+        },
+        {
+          "name": "Response Template Architecture",
+          "ac_ids": "AC-TEMPLATE-001 to 008",
+          "status": "not_started",
+          "priority": "HIGH",
+          "description": "3-Layer architecture replacing 2046-line v4.yaml with modular design"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Feature Orchestrators",
+      "status": "blocked_by_phase_2",
+      "duration_weeks": 2,
+      "start_date": "2026-02-10",
+      "end_date": "2026-02-21",
+      "completion_percentage": 0,
+      "ac_ids_complete": 0,
+      "ac_ids_total": 18,
+      "priority": "HIGH",
+      "description": "Build specialized orchestrators that leverage the core workflow. Snowball effect: implementation becomes easier with solid foundation.",
+      "components": [
+        {
+          "name": "Azure DevOps Integration v2",
+          "ac_ids": "AC-ADO-001 to 006",
+          "status": "not_started",
+          "priority": "HIGH",
+          "description": "Work item creation/update, query execution, state synchronization"
+        },
+        {
+          "name": "Vacuum and Cleanup v2",
+          "ac_ids": "AC-VAC-001 to 003, AC-CLEAN-001 to 003",
+          "status": "not_started",
+          "priority": "MEDIUM",
+          "description": "Deep workspace cleaning, DRY_RUN preview, folder structure enforcement"
+        },
+        {
+          "name": "Investigation Orchestrator",
+          "ac_ids": "AC-INV-001 to 003",
+          "status": "not_started",
+          "priority": "MEDIUM",
+          "description": "Codebase investigation, pattern detection, evidence collection"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Intelligence Layer",
+      "status": "blocked_by_phase_3",
+      "duration_weeks": 2,
+      "start_date": "2026-02-24",
+      "end_date": "2026-03-07",
+      "completion_percentage": 0,
+      "ac_ids_complete": 0,
+      "ac_ids_total": 6,
+      "priority": "MEDIUM",
+      "description": "AI-native features that enhance orchestration with intelligence. Leverages all previous components.",
+      "components": [
+        {
+          "name": "LLM Intent Classifier",
+          "ac_ids": "AC-INTEL-001 to 002",
+          "status": "not_started",
+          "priority": "HIGH",
+          "description": "Intent routing, domain hint extraction, semantic understanding"
+        },
+        {
+          "name": "Knowledge Practices",
+          "ac_ids": "AC-KNOW-001 to 003",
+          "status": "not_started",
+          "priority": "MEDIUM",
+          "description": "Learned patterns, insights from execution history, optimization suggestions"
+        },
+        {
+          "name": "Knowledge Graph",
+          "ac_ids": "AC-GRAPH-001",
+          "status": "not_started",
+          "priority": "MEDIUM",
+          "description": "Visual representation of system knowledge and relationships"
+        }
+      ]
+    }
+  ],
+  "governance": {
+    "total_skull_rules": 19,
+    "tier0_rules": {
+      "core_001": "Incremental Execution (blocked if >500 lines)",
+      "core_002": "No Summary Files (workspace clutter)",
+      "core_005": "Path Portability (cross-platform)",
+      "core_008": "TDD Enforcement (untested code blocked)",
+      "core_009": "Plan File Organization (root-level plans blocked)",
+      "core_017": "Governance Enforcement (bypass triggers alert)",
+      "core_019": "TDD-Master Required (direct coding blocked)"
+    }
+  },
+  "architecture": {
+    "subsystems": [
+      {
+        "name": "Audit Infrastructure",
+        "status": "WIRED",
+        "dependencies": [],
+        "description": "Foundation for all logging and traceability"
+      },
+      {
+        "name": "Governance Merger",
+        "status": "WIRED",
+        "dependencies": ["Audit Infrastructure"],
+        "description": "Merges 4-tier governance rules with precedence"
+      },
+      {
+        "name": "State Manager",
+        "status": "WIRED",
+        "dependencies": ["Audit Infrastructure"],
+        "description": "Persistent state with SQLite and transactions"
+      },
+      {
+        "name": "MasterOrchestrator",
+        "status": "SIMULATED",
+        "dependencies": ["Governance Merger", "State Manager", "Audit Infrastructure"],
+        "description": "Central controller for all operations"
+      },
+      {
+        "name": "TodoManager",
+        "status": "SIMULATED",
+        "dependencies": ["State Manager", "Audit Infrastructure"],
+        "description": "Task tracking and execution ordering"
+      },
+      {
+        "name": "TDD-Master",
+        "status": "SIMULATED",
+        "dependencies": ["Audit Infrastructure", "Governance Merger"],
+        "description": "Test-driven development enforcement"
+      },
+      {
+        "name": "Response Templates",
+        "status": "WIRED",
+        "dependencies": [],
+        "description": "3-layer response template architecture"
+      },
+      {
+        "name": "Evidence Bundler",
+        "status": "WIRED",
+        "dependencies": ["Audit Infrastructure"],
+        "description": "Generates proof of completion"
+      },
+      {
+        "name": "ADO Integration",
+        "status": "PLANNED",
+        "dependencies": ["MasterOrchestrator"],
+        "description": "Azure DevOps work item management"
+      },
+      {
+        "name": "Vacuum/Cleanup",
+        "status": "PLANNED",
+        "dependencies": ["MasterOrchestrator"],
+        "description": "Workspace maintenance and cleanup"
+      },
+      {
+        "name": "Investigation",
+        "status": "PLANNED",
+        "dependencies": ["MasterOrchestrator", "TDD-Master"],
+        "description": "Codebase analysis and pattern detection"
+      },
+      {
+        "name": "LLM Intent Classifier",
+        "status": "PLANNED",
+        "dependencies": ["MasterOrchestrator"],
+        "description": "Intelligent request routing"
+      }
+    ]
+  },
+  "metrics": {
+    "overall_completion_percentage": 19.59,
+    "overall_health_score": 19,
+    "active_phase": 1,
+    "critical_blockers": [
+      "Phase 1.5 STS validation (HIGH PRIORITY)",
+      "Phase 2 TodoManager (3/4 AC-IDs)",
+      "Phase 2 TDD-Master Final Instruction (3/8 AC-IDs)"
+    ],
+    "design_score": 97,
+    "design_score_target": 95
+  }
+}
