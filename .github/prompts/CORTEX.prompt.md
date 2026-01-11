@@ -1,8 +1,8 @@
 # 🏗️ CORTEX 6.0 - Implementation Orchestrator & Evidence Guardian
 
-**Version:** 6.2.0 | **Role:** Master Orchestrator + Implementation Facilitator + Critical Analyzer + Evidence Verifier + State Synchronizer + CX6 File Organization Guardian  
+**Version:** 6.2.1 | **Role:** Master Orchestrator + Implementation Facilitator + Critical Analyzer + Evidence Verifier + State Synchronizer + CX6 File Organization Guardian  
 **Author:** Asif Hussain | **Copyright © 2025-2026 Asif Hussain. All rights reserved.**  
-**Updated:** 2026-01-11 | **Enhancement:** Added CX6 file organization mandate - all CORTEX 6 artifacts MUST reside under cortex-brain/cx6-plan/
+**Updated:** 2026-01-11 | **Enhancement:** Added phase folder structure requirement - each phase must have dedicated folder with YAML (structure) + JSON (tracking) files
 
 ---
 
@@ -37,11 +37,19 @@ cortex-brain/cx6-plan/                    ← THE ONLY LOCATION FOR ALL CX6 CONT
 │   ├── master-orchestrator-handoff-analysis.md
 │   └── consolidation-logs/
 │
-├── phases/                               ← Phase-specific documentation
-│   ├── phase-1-foundation.md
-│   ├── phase-2-orchestration.md
-│   ├── phase-3-features.md
-│   └── phase-4-intelligence.md
+├── phases/                               ← Phase-specific documentation & tracking
+│   ├── phase-1/                         ← Phase 1 folder
+│   │   ├── phase-1-foundation.yaml     ← Phase 1 structure (YAML)
+│   │   └── phase-1-tracking.json       ← Phase 1 execution tracking (JSON)
+│   ├── phase-2/                         ← Phase 2 folder
+│   │   ├── phase-2-orchestration.yaml  ← Phase 2 structure (YAML)
+│   │   └── phase-2-tracking.json       ← Phase 2 execution tracking (JSON)
+│   ├── phase-3/                         ← Phase 3 folder
+│   │   ├── phase-3-features.yaml       ← Phase 3 structure (YAML)
+│   │   └── phase-3-tracking.json       ← Phase 3 execution tracking (JSON)
+│   └── phase-4/                         ← Phase 4 folder
+│       ├── phase-4-intelligence.yaml   ← Phase 4 structure (YAML)
+│       └── phase-4-tracking.json       ← Phase 4 execution tracking (JSON)
 │
 ├── architecture/                         ← Architecture diagrams & specs
 │   ├── phase-1-foundation.mmd           ← Mermaid diagrams
@@ -89,7 +97,7 @@ fi
 | **HTML dashboards** | `viewer/` | `*.html`, `*.js`, `*.json` (plan data) |
 | **Evidence bundles** | `validation/` | `AC-*-evidence-bundle.md`, `*-verification-*.yaml` |
 | **Completion reports** | `reports/` | `*-completion-report.md`, `*-summary.md` |
-| **Phase docs** | `phases/` | `phase-N-*.md` |
+| **Phase structures** | `phases/phase-N/` | `phase-N-*.yaml` (structure), `phase-N-tracking.json` (execution) |
 | **Architecture** | `architecture/` | `*.mmd`, `*-approach.yaml`, diagrams |
 | **Legacy/historical** | `archive/` | Old plans, GPT reviews, deprecated specs |
 

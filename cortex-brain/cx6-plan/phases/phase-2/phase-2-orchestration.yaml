@@ -1,0 +1,293 @@
+# ==============================================================================
+# CORTEX 6.0 - PHASE 2: ORCHESTRATION CORE (CORE WORKFLOW)
+# ==============================================================================
+# Duration: 2 weeks (Week 3-4)
+# Status: Blocked by Phase 1
+# Priority: CRITICAL
+# ==============================================================================
+
+phase_metadata:
+  phase_number: 2
+  phase_name: "Orchestration Core (CORE WORKFLOW)"
+  duration_weeks: 2
+  start_date: "2026-01-27"
+  end_date: "2026-02-07"
+  status: "blocked_by_phase_1"
+  priority: "CRITICAL"
+  blocked_until: "Phase 1 complete (all 33 AC-IDs)"
+
+# ==============================================================================
+# PHASE DESCRIPTION
+# ==============================================================================
+description:
+  summary: |
+    Establishes THE DEFAULT WORKING MECHANISM at the core of CORTEX operations.
+    MasterOrchestrator is IN CHARGE: evaluates requests, creates tasks, executes.
+    This is the central controller that all user requests flow through.
+  
+  why_second: |
+    Phase 2 depends on Phase 1 infrastructure:
+    - MasterOrchestrator logs to audit (AC-AUDIT-*)
+    - TodoManager persists to state (AC-STATE-*)
+    - TDD-Master enforces governance (AC-GOV-*)
+    - All generate Evidence Bundles (AC-EVIDENCE-*)
+    Without Foundation, orchestration cannot reliably operate.
+  
+  critical_path: |
+    This is THE CORE WORKFLOW:
+    Request → GovernanceMerger → MasterOrchestrator → TodoManager → Execute
+    All other orchestrators are features that plug into this pipeline.
+  
+  dependencies:
+    - "Phase 1 (Foundation Enhancement)"
+  blocks_phases: [3, 4]
+
+# ==============================================================================
+# RECOMMENDED LLM CONFIGURATION
+# ==============================================================================
+recommended_llm:
+  primary:
+    model: "Claude Sonnet 4.5"
+    usage_percentage: 85
+    cost_multiplier: "1x"
+    recommendation: "RECOMMENDED - Optimal for orchestration core"
+    rationale: |
+      Optimal for orchestration core implementation:
+      ✅ Best balance of cost/performance for production-grade orchestration
+      ✅ Handles complex MasterOrchestrator logic evaluation
+      ✅ Excellent at TDD-Master workflow (RED→GREEN→REFACTOR)
+      ✅ Strong tool use for TodoManager state persistence
+      ✅ Good balance for Planning v5 context-aware generation
+    ideal_for: "Phase 2 (Orchestration Core), MasterOrchestrator implementation, TDD cycles"
+  
+  optional_upgrade:
+    model: "Claude Opus 4.5"
+    usage_percentage: 15
+    cost_multiplier: "3x"
+    when_to_consider:
+      - "🧠 MasterOrchestrator evaluation logic (central controller design)"
+      - "📊 TodoManager dependency resolution algorithms"
+      - "🎯 TDD-Master evidence bundle validation gates"
+      - "🔍 Planning v5 risk assessment and dependency analysis"
+      - "📋 STS golden corpus design (100 test intents)"
+    note: "Critical for core workflow correctness, but Sonnet 4.5 can handle most scenarios"
+
+# ==============================================================================
+# COMPONENTS
+# ==============================================================================
+components:
+  
+  master_orchestrator:
+    name: "MasterOrchestrator (Central Controller)"
+    ac_ids:
+      - "AC-ORCH-001"
+      - "AC-ORCH-002"
+      - "AC-ORCH-003"
+      - "AC-ORCH-004"
+      - "AC-ORCH-005"
+      - "AC-ORCH-006"
+      - "AC-ORCH-007"
+      - "AC-ORCH-008"
+    priority: "CRITICAL"
+    duration_days: 6
+    owner: "Orchestration Team"
+    status: "blocked"
+    
+    capabilities:
+      - "Central request evaluation against merged governance"
+      - "required_actions generation from governance rules"
+      - "Dependency order execution"
+      - "State checkpoint persistence"
+      - "Rollback on failure"
+      - "Evidence Bundle generation"
+    
+    dependencies:
+      - "AC-GOV-001"
+      - "AC-AUDIT-001"
+      - "AC-STATE-001"
+      - "AC-EVIDENCE-001"
+    
+    evidence_bundle:
+      test_coverage: ">=80%"
+      governance_integration: "Enforces all merged rules"
+      checkpoint_validated: "State recovery tested"
+  
+  todo_manager:
+    name: "TodoManager (Task Tracking)"
+    ac_ids:
+      - "AC-TODO-001"
+      - "AC-TODO-002"
+      - "AC-TODO-003"
+      - "AC-TODO-004"
+    priority: "CRITICAL"
+    duration_days: 4
+    owner: "Orchestration Team"
+    status: "blocked"
+    
+    capabilities:
+      - "Create trackable tasks from required_actions"
+      - "Persist to progress-tracker.json"
+      - "Status tracking (not-started, in-progress, completed)"
+      - "Dependency order enforcement"
+    
+    dependencies:
+      - "AC-STATE-001"
+      - "AC-AUDIT-001"
+    
+    evidence_bundle:
+      test_coverage: ">=80%"
+      persistence_validated: "Atomic writes, no corruption"
+  
+  tdd_master:
+    name: "TDD-Master v1 (Test-Driven Development)"
+    ac_ids:
+      - "AC-TDD-001"
+      - "AC-TDD-002"
+      - "AC-TDD-003"
+      - "AC-TDD-004"
+      - "AC-TDD-005"
+      - "AC-TDD-006"
+      - "AC-TDD-007"
+      - "AC-TDD-008"
+      - "AC-TDD-009"
+      - "AC-TDD-010"
+    priority: "CRITICAL"
+    duration_days: 8
+    owner: "Development Team"
+    status: "blocked"
+    
+    capabilities:
+      - "RED→GREEN→REFACTOR workflow"
+      - "CORE-019 enforcement (no direct coding)"
+      - "Auto-generate tests from acceptance criteria"
+      - "Evidence Bundle with test results"
+    
+    dependencies:
+      - "AC-TEST-001"
+      - "AC-AUDIT-001"
+      - "AC-GOV-001"
+    
+    evidence_bundle:
+      test_coverage: ">=80%"
+      tdd_enforcement: "Blocks untested code"
+  
+  planning_v5:
+    name: "Planning v5 (Intelligent Planning)"
+    ac_ids:
+      - "AC-PLAN-001"
+      - "AC-PLAN-002"
+      - "AC-PLAN-003"
+      - "AC-PLAN-004"
+      - "AC-PLAN-005"
+      - "AC-PLAN-006"
+      - "AC-PLAN-007"
+      - "AC-PLAN-008"
+    priority: "HIGH"
+    duration_days: 6
+    owner: "Planning Team"
+    status: "blocked"
+    
+    capabilities:
+      - "Git history intelligence integration"
+      - "Context-aware planning"
+      - "Task dependency analysis"
+      - "Risk assessment"
+    
+    dependencies:
+      - "AC-ORCH-001"
+      - "AC-TODO-001"
+    
+    evidence_bundle:
+      test_coverage: ">=80%"
+      planning_quality: "Generated plans validated"
+  
+  deterministic_routing:
+    name: "Deterministic Routing Engine"
+    ac_ids:
+      - "AC-ROUTE-001"
+      - "AC-ROUTE-002"
+      - "AC-ROUTE-003"
+      - "AC-ROUTE-004"
+      - "AC-ROUTE-005"
+    priority: "HIGH"
+    duration_days: 4
+    owner: "Orchestration Team"
+    status: "blocked"
+    
+    capabilities:
+      - "Pattern matching with unicode normalization"
+      - "Priority-based routing"
+      - "Tie-breaking with PREFIX length"
+      - "LLM Intent Classifier fallback"
+    
+    dependencies:
+      - "AC-ORCH-001"
+    
+    evidence_bundle:
+      test_coverage: ">=80%"
+      routing_accuracy: "100% for known patterns"
+  
+  sts_capability_0:
+    name: "STS as Capability 0 (Framework Validation)"
+    ac_ids:
+      - "AC-STS-001"
+      - "AC-STS-002"
+      - "AC-STS-003"
+    priority: "CRITICAL"
+    duration_days: 5
+    owner: "QA Team"
+    status: "completed"
+    
+    capabilities:
+      - "Golden corpus (100+ test intents)"
+      - "Framework validation (routing, policy, execution)"
+      - "Regression testing in CI"
+      - "First Evidence Bundle proving system works"
+    
+    dependencies:
+      - "AC-ROUTE-001"
+      - "AC-ORCH-001"
+      - "AC-EVIDENCE-001"
+    
+    evidence_bundle:
+      test_coverage: "100% (golden corpus)"
+      framework_validated: "All 3 gates pass"
+      first_evidence: "Proves orchestration framework operational"
+
+# ==============================================================================
+# EXIT CRITERIA
+# ==============================================================================
+exit_criteria:
+  must_complete:
+    - "MasterOrchestrator operational as central controller"
+    - "TodoManager persisting tasks to progress-tracker.json"
+    - "TDD-Master enforcing CORE-019 (no untested code)"
+    - "Planning v5 generating context-aware plans"
+    - "Deterministic Routing with 100% accuracy"
+    - "STS golden corpus passing (100 intents)"
+    - "First Evidence Bundle generated (proves system works)"
+  
+  gate_validation:
+    test_coverage: ">=80% across all core components"
+    integration: "MasterOrchestrator → TodoManager → TDD-Master pipeline tested"
+    sts_validation: "All 100 golden corpus intents route correctly"
+  
+  blocker_prevention:
+    - "No Phase 3 work starts until core workflow proven"
+    - "STS Evidence Bundle is the gate: if it passes, proceed"
+
+# ==============================================================================
+# AC-IDS BREAKDOWN
+# ==============================================================================
+ac_ids:
+  total: 36
+  completed: 3
+  blocked: 33
+  
+  by_component:
+    master_orchestrator: 8
+    todo_manager: 4
+    tdd_master: 10
+    planning_v5: 8
+    routing: 5
+    sts: 3
