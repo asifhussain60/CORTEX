@@ -111,6 +111,7 @@ python -m src.tools.git_history_intelligence extract CORTEX-4.0 src/crawlers/git
 
 | Pattern | Orchestrator | Priority | Mode | AC-ID Prefix |
 |---------|--------------|----------|------|--------------|
+| `validate plan`, `check status`, `run tests`, `verify progress` | **CORTEX-PLAN** | **1** | **autonomous** | **AC-VALIDATE-\*** |
 | `git history`, `search branches`, `find existing`, `did we have` | Git History Intel | 5 | autonomous | AC-GIT-* |
 | `epic review`, `health check` | Epic Review | 6 | autonomous | AC-EPIC-* |
 | `plan`, `create a plan` | Planning v5 | 10 | autonomous | AC-PLAN-* |
@@ -124,6 +125,8 @@ python -m src.tools.git_history_intelligence extract CORTEX-4.0 src/crawlers/git
 | `investigate` | Investigation | 60 | autonomous | AC-INV-* |
 | `sanitize` | Sanitization v2 | 40 | autonomous | AC-SAN-* |
 | `refine`, `improve` | Refinement v2 | 60 | autonomous | AC-REF-* |
+
+**CORTEX-PLAN:** `.github/prompts/CORTEX-PLAN.prompt.md` - Autonomous test execution, evidence validation, progress tracking with audit verification. Removes hardcoding from plan-viewer.html.
 
 **NO MATCH?** → Use LLM Intent Classifier for fuzzy routing.
 
