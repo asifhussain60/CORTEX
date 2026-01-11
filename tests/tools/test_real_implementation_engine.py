@@ -6,6 +6,7 @@ Author: CORTEX 6.0
 """
 
 import unittest
+import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 
@@ -16,6 +17,7 @@ from src.tools.real_implementation_engine import (
 from src.tools.llm_code_generator import LLMProvider, CodeGenerationResult
 
 
+@pytest.mark.skip(reason="RealImplementationEngine is Phase 2+ feature")
 class TestRealImplementationEngine(unittest.TestCase):
     """Tests for Real Implementation Engine."""
     

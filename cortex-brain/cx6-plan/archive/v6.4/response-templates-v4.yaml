@@ -1,11 +1,18 @@
-schema_version: '4.1.0'
-last_updated: '2026-01-05'
+schema_version: '4.2.0'
+last_updated: '2026-01-11'
 architecture: adaptive_minimalism
 description: |
-  Response Template System v4.1 - Added Continuation Prompts
+  Response Template System v4.2 - Executive Summary Mode
   
   Philosophy: Dynamic composition over static templates.
   No full templates - just routing rules + reusable components.
+  
+  NEW in v4.2 (2026-01-11):
+  - Executive summary mode enforced across all responses
+  - Configurable word limits (default: 500 words, adjustable)
+  - Bullet-driven format with outcome/risk/decision structure
+  - NO code snippets unless explicitly requested
+  - NO narrative prose - declarative facts only
   
   Tier system:
   - TIER 1 (INSTANT): <50 tokens, factual queries, no sections
@@ -21,6 +28,76 @@ description: |
   Custom Templates:
   - introduction: Comprehensive CORTEX overview for Engineers/Product Owners
   - business_value: ROI-focused presentation for Leadership
+
+# ============================================================================
+# EXECUTIVE SUMMARY CONFIGURATION (v4.2)
+# ============================================================================
+
+executive_summary:
+  enabled: true
+  description: |
+    Enforces concise, executive-level responses across all orchestrators.
+    Eliminates verbose narratives and code blocks in favor of actionable bullets.
+  
+  word_limits:
+    default: 500  # Maximum words per response (configurable)
+    override_key: "max_words"  # Users can override: "create plan --max-words 1000"
+    tiers:
+      INSTANT: 50
+      FOCUSED: 200
+      STRUCTURED: 400
+      COMPREHENSIVE: 500
+  
+  format_rules:
+    mandatory:
+      - "Start with executive summary paragraph (3-5 sentences max)"
+      - "Use bullet points for all lists (max 5 bullets per section)"
+      - "NO code snippets unless user explicitly requests implementation"
+      - "NO narrative prose - use declarative statements"
+      - "Quantify outcomes (X files, Y AC-IDs, Z% complete)"
+    
+    forbidden:
+      - "Code blocks in responses (unless user says 'show me the code')"
+      - "Step-by-step procedural descriptions"
+      - "Explanatory paragraphs (use bullets instead)"
+      - "Verbose status updates (use progress bars + bullets)"
+      - "Nested sections deeper than 2 levels"
+  
+  structure:
+    description: "Standard executive summary structure"
+    sections:
+      - name: "Executive Summary"
+        max_sentences: 5
+        purpose: "Outcome achieved, impact, and next action"
+        
+      - name: "Outcomes"
+        max_bullets: 5
+        format: "• [Declarative fact with quantification]"
+        
+      - name: "Risks"
+        max_bullets: 3
+        format: "• [Explicit risk or assumption]"
+        optional: true
+        
+      - name: "Decisions"
+        max_bullets: 3
+        format: "• [Rule/precedence applied to resolve ambiguity]"
+        optional: true
+        
+      - name: "Next Steps"
+        max_bullets: 3
+        format: "• [Actionable command with context file reference]"
+  
+  examples:
+    bad_verbose: |
+      "I will now proceed to analyze the codebase by first examining the 
+      directory structure, then reading through each Python file to understand 
+      the architecture. After that, I'll create a comprehensive report..."
+    
+    good_executive: |
+      "• Analyzed 47 Python files across 8 modules
+       • Identified 3 governance violations (CORE-001, CORE-005, CORE-008)
+       • Generated compliance report: `cortex-brain/documents/governance/audit-2026-01-11.md`"
 
 # ============================================================================
 # CONTINUATION PROMPT CONFIGURATION
@@ -96,8 +173,8 @@ templates:
 # ============================================================================
 
 template_selection_algorithm:
-  version: "1.0"
-  description: "Intelligent LEGO-style template composition - dynamically select and compose blocks based on context"
+  version: "2.0"
+  description: "Executive-mode LEGO composition - dynamically select and compose blocks with word limit enforcement"
   enabled: true
   
   # Context signals used for block selection
@@ -115,7 +192,7 @@ template_selection_algorithm:
     complexity_tier:
       description: "Response complexity level from tier routing"
       values: [INSTANT, FOCUSED, STRUCTURED, COMPREHENSIVE]
-      determines: [section_count, detail_level]
+      determines: [section_count, detail_level, word_limit]
       
     orchestrator_type:
       description: "Orchestrator executing the operation"
@@ -126,6 +203,12 @@ template_selection_algorithm:
       description: "Whether orchestrator is autonomously executing (shield mode)"
       values: [true, false]
       determines: [header_shield_icon, template_override]
+    
+    executive_mode:
+      description: "Force executive summary format (default: true)"
+      values: [true, false]
+      determines: [verbosity, code_inclusion, structure]
+      default: true
   
   # Block categories with selection priorities
   block_categories:
@@ -220,11 +303,21 @@ template_selection_algorithm:
         - next_steps
     
     max_sections:
-      description: "Maximum sections per complexity tier"
+      description: "Maximum sections per complexity tier (executive mode)"
       INSTANT: 1
-      FOCUSED: 3
-      STRUCTURED: 5
-      COMPREHENSIVE: 8
+      FOCUSED: 2
+      STRUCTURED: 4
+      COMPREHENSIVE: 5
+    
+    word_count_enforcement:
+      description: "Enforce word limits per tier"
+      enabled: true
+      method: "truncate_with_continuation_prompt"
+      limits:
+        INSTANT: 50
+        FOCUSED: 200
+        STRUCTURED: 400
+        COMPREHENSIVE: 500
     
     selection_algorithm:
       description: "Step-by-step block selection process"

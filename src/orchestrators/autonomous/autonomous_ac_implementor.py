@@ -358,13 +358,13 @@ class AutonomousACImplementor(BaseOrchestrator):
         ac_registry: Dict[str, Any]
     ) -> Optional[Dict[str, Any]]:
         """Find AC-ID in registry."""
-        # AC-INDEX.yaml structure: categories → ac_ids
-        categories = ac_registry.get("categories", {})
-        
-        for category_name, category_data in categories.items():
-            ac_ids = category_data.get("ac_ids", {})
-            if ac_id in ac_ids:
-                return ac_ids[ac_id]
+        # AC-INDEX.yaml structure: ac_category (e.g., ac_audit, ac_security) → AC-ID → details
+        # Search all top-level keys that start with 'ac_'
+        for key, value in ac_registry.items():
+            if key.startswith('ac_') and isinstance(value, dict):
+                # Check if AC-ID exists directly in this category
+                if ac_id in value:
+                    return value[ac_id]
         
         self.logger.warning(f"AC-ID not found in registry: {ac_id}")
         return None
