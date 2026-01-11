@@ -1126,9 +1126,10 @@ orchestration_core:
       \ (tier0/tier2) \nwith company best practices (tier1/tier3), (2) MasterOrchestrator\
       \ evaluates request \nagainst merged ruleset, (3) TodoManager creates actionable\
       \ tasks based on evaluation.\nThis pipeline is the CORE of CORTEX operation.\n"
-    status: not_started
-    tests: []
-    implementation: ''
+    status: implemented
+    tests:
+    - tests/infrastructure/test_governance_to_todo_pipeline.py
+    implementation: src/orchestrators/core/governance_to_todo_pipeline.py
     dependencies:
     - AC-ORCH-006
     - AC-GOV-005
