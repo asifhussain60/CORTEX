@@ -1,0 +1,821 @@
+# ==============================================================================
+# CORTEX 6.0 - Brittleness & Ambiguity Testing Framework
+# ==============================================================================
+# Version: 1.0.0
+# Author: Asif Hussain
+# Copyright © 2025-2026 Asif Hussain. All rights reserved.
+# Updated: 2026-01-11
+#
+# Purpose: Strategic testing framework to detect brittleness, ambiguity, and
+#          quality degradation. Enforces 100% DoR before execution proceeds.
+#          Halts execution if any change reduces design score below target.
+# ==============================================================================
+
+schema_version: '1.0'
+last_updated: '2026-01-11T00:00:00Z'
+enforcement_level: 'blocking'  # blocking | warning | disabled
+
+# ==============================================================================
+# GOVERNANCE INTEGRATION
+# ==============================================================================
+governance:
+  target_design_score: 95
+  halt_on_score_reduction: true
+  dor_threshold: 100  # 100% DoR required - no shortcuts
+  minimum_pass_rate: 100  # All tests must pass
+  
+  score_calculation:
+    formula: "weighted_average(brittleness_tests, ambiguity_tests, dor_validation)"
+    weights:
+      brittleness_score: 0.40  # 40% - System stability
+      ambiguity_score: 0.35    # 35% - Clarity & precision
+      dor_score: 0.25          # 25% - Requirements readiness
+    
+    threshold_actions:
+      below_50: "BLOCK + ALERT + ROLLBACK"
+      below_70: "BLOCK + ALERT"
+      below_85: "WARNING + REPORT"
+      below_95: "INFO + TRACK"
+      at_or_above_95: "PROCEED"
+
+# ==============================================================================
+# BRITTLENESS DETECTION TESTS
+# ==============================================================================
+brittleness_tests:
+  description: |
+    Tests to detect fragile, unmaintainable, or unstable system components.
+    Brittleness = susceptibility to breaking under change.
+  
+  weight: 0.40
+  halt_on_failure: true
+  
+  categories:
+    
+    # --------------------------------------------------------------------------
+    # Category 1: Hardcoded Dependencies (25% of brittleness score)
+    # --------------------------------------------------------------------------
+    - category_id: "BRIT-001"
+      name: "Hardcoded Dependencies Detection"
+      description: "Detect hardcoded paths, URLs, credentials, or configuration"
+      weight: 0.25
+      severity: "critical"
+      
+      tests:
+        - test_id: "BRIT-001-001"
+          name: "Absolute Path Detection"
+          detection_pattern: "regex"
+          patterns:
+            - "/Users/[a-zA-Z0-9_-]+/.*"
+            - "C:\\\\Users\\\\.*"
+            - "/home/[a-zA-Z0-9_-]+/.*"
+          exclude_patterns:
+            - "# Example: /Users/..."
+            - "<!-- .* -->"
+          file_types: ["*.py", "*.yaml", "*.json", "*.md"]
+          expected_behavior: "Use Path(__file__).parent or config-based paths"
+          failure_action: "BLOCK"
+          
+        - test_id: "BRIT-001-002"
+          name: "Hardcoded Credentials Detection"
+          detection_pattern: "regex"
+          patterns:
+            - "password\\s*=\\s*['\"](?!\\$\\{|env\\.).*['\"]"
+            - "api_key\\s*=\\s*['\"](?!\\$\\{|env\\.).*['\"]"
+            - "secret\\s*=\\s*['\"](?!\\$\\{|env\\.).*['\"]"
+            - "token\\s*=\\s*['\"](?!\\$\\{|env\\.).*['\"]"
+          file_types: ["*.py", "*.yaml", "*.json"]
+          expected_behavior: "Use environment variables or secrets manager"
+          failure_action: "BLOCK"
+          
+        - test_id: "BRIT-001-003"
+          name: "Hardcoded URLs Detection"
+          detection_pattern: "regex"
+          patterns:
+            - "http://[^/]+(?!\\$\\{|config\\.)"
+            - "https://[^/]+(?!\\$\\{|config\\.)"
+          exclude_patterns:
+            - "https://github.com"
+            - "https://docs\\."
+            - "# Example:"
+          file_types: ["*.py", "*.yaml", "*.json"]
+          expected_behavior: "Use configuration-based URLs"
+          failure_action: "WARNING"
+    
+    # --------------------------------------------------------------------------
+    # Category 2: Circular Dependencies (20% of brittleness score)
+    # --------------------------------------------------------------------------
+    - category_id: "BRIT-002"
+      name: "Circular Dependency Detection"
+      description: "Detect circular imports, task dependencies, or orchestrator cycles"
+      weight: 0.20
+      severity: "high"
+      
+      tests:
+        - test_id: "BRIT-002-001"
+          name: "Python Import Cycles"
+          detection_method: "ast_analysis"
+          analyze_files: ["src/**/*.py"]
+          validation_command: "python -m scripts.detect_import_cycles"
+          expected_behavior: "Zero circular imports detected"
+          failure_action: "BLOCK"
+          
+        - test_id: "BRIT-002-002"
+          name: "Task Dependency Cycles"
+          detection_method: "graph_analysis"
+          analyze_files: ["cortex-brain/tier1/tracking/progress-tracker.json"]
+          validation_logic: "topological_sort_validation"
+          expected_behavior: "All task dependencies form DAG (Directed Acyclic Graph)"
+          failure_action: "BLOCK"
+          
+        - test_id: "BRIT-002-003"
+          name: "Orchestrator Call Cycles"
+          detection_method: "call_graph_analysis"
+          analyze_files: ["src/orchestrators/**/*.py"]
+          validation_logic: "detect_mutual_invocations"
+          expected_behavior: "No orchestrators call each other in cycles"
+          failure_action: "WARNING"
+    
+    # --------------------------------------------------------------------------
+    # Category 3: Missing Error Handling (20% of brittleness score)
+    # --------------------------------------------------------------------------
+    - category_id: "BRIT-003"
+      name: "Missing Error Handling"
+      description: "Detect unhandled exceptions, missing validation, no fallbacks"
+      weight: 0.20
+      severity: "high"
+      
+      tests:
+        - test_id: "BRIT-003-001"
+          name: "Bare Except Detection"
+          detection_pattern: "ast"
+          patterns:
+            - "except:\\s*(?!#)"  # Bare except without comment
+            - "except Exception:\\s*pass"
+          file_types: ["*.py"]
+          expected_behavior: "Specific exception types with logging"
+          failure_action: "WARNING"
+          
+        - test_id: "BRIT-003-002"
+          name: "Missing Input Validation"
+          detection_method: "function_analysis"
+          analyze_functions:
+            - target: "public functions with Dict parameters"
+            - validate: "contains schema validation or type checking"
+          expected_behavior: "All public functions validate inputs"
+          failure_action: "WARNING"
+          
+        - test_id: "BRIT-003-003"
+          name: "Missing Fallback Strategies"
+          detection_pattern: "semantic"
+          patterns:
+            - "File I/O without fallback"
+            - "Network calls without retry logic"
+            - "LLM calls without timeout"
+          expected_behavior: "All external calls have fallback/retry/timeout"
+          failure_action: "WARNING"
+    
+    # --------------------------------------------------------------------------
+    # Category 4: State Management Issues (15% of brittleness score)
+    # --------------------------------------------------------------------------
+    - category_id: "BRIT-004"
+      name: "State Management Issues"
+      description: "Detect race conditions, missing locks, inconsistent state"
+      weight: 0.15
+      severity: "high"
+      
+      tests:
+        - test_id: "BRIT-004-001"
+          name: "Concurrent File Access Without Locking"
+          detection_pattern: "ast"
+          patterns:
+            - "open\\([^)]+['\"]w['\"].*\\)(?!.*with filelock)"
+            - "json\\.dump\\((?!.*with filelock)"
+          file_types: ["*.py"]
+          expected_behavior: "All JSON writes use file locking or SQLite"
+          failure_action: "WARNING"
+          
+        - test_id: "BRIT-004-002"
+          name: "State Desynchronization Risk"
+          detection_method: "multi_file_analysis"
+          analyze_files:
+            - "cortex-brain/tier1/tracking/progress-tracker.json"
+            - "cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml"
+            - "cortex-brain/cx6-plan/master-plan.yaml"
+          validation_logic: "compare_ac_counts_and_statuses"
+          expected_behavior: "All plan files synchronized (AC counts, statuses)"
+          failure_action: "BLOCK"
+          
+        - test_id: "BRIT-004-003"
+          name: "Missing Transaction Boundaries"
+          detection_method: "code_review"
+          patterns:
+            - "Multiple DB operations without transaction context"
+            - "State changes without rollback mechanism"
+          expected_behavior: "All multi-step operations wrapped in transactions"
+          failure_action: "WARNING"
+    
+    # --------------------------------------------------------------------------
+    # Category 5: Test Coverage Gaps (20% of brittleness score)
+    # --------------------------------------------------------------------------
+    - category_id: "BRIT-005"
+      name: "Test Coverage Gaps"
+      description: "Detect missing tests, low coverage, brittle test patterns"
+      weight: 0.20
+      severity: "medium"
+      
+      tests:
+        - test_id: "BRIT-005-001"
+          name: "Critical Path Coverage"
+          detection_method: "coverage_analysis"
+          target_files: ["src/orchestrators/**/*.py", "src/infrastructure/**/*.py"]
+          minimum_coverage: 80
+          expected_behavior: "≥80% line coverage on critical paths"
+          failure_action: "WARNING"
+          
+        - test_id: "BRIT-005-002"
+          name: "Missing Integration Tests"
+          detection_method: "test_inventory"
+          required_tests:
+            - "MasterOrchestrator → TodoManager → Execution"
+            - "GovernanceMerger → Rule Enforcement → Audit"
+            - "TDD-Master → RED → GREEN → REFACTOR"
+          expected_behavior: "All critical workflows have integration tests"
+          failure_action: "WARNING"
+          
+        - test_id: "BRIT-005-003"
+          name: "Brittle Test Patterns"
+          detection_pattern: "regex"
+          patterns:
+            - "time\\.sleep\\([0-9]+\\)"  # Hardcoded sleeps
+            - "assert.*==.*\".*\".*#.*TODO"  # Commented out assertions
+          file_types: ["tests/**/*.py"]
+          expected_behavior: "No hardcoded sleeps, no TODOs in assertions"
+          failure_action: "INFO"
+
+# ==============================================================================
+# AMBIGUITY DETECTION TESTS
+# ==============================================================================
+ambiguity_tests:
+  description: |
+    Tests to detect vague requirements, unclear specifications, and ambiguous
+    acceptance criteria. Ambiguity = multiple valid interpretations.
+  
+  weight: 0.35
+  halt_on_failure: true
+  
+  categories:
+    
+    # --------------------------------------------------------------------------
+    # Category 1: Vague Language (35% of ambiguity score)
+    # --------------------------------------------------------------------------
+    - category_id: "AMBIG-001"
+      name: "Vague Language Detection"
+      description: "Detect non-specific, unmeasurable, or subjective terms"
+      weight: 0.35
+      severity: "high"
+      
+      vague_terms_list:
+        quantitative:
+          - "many"
+          - "few"
+          - "several"
+          - "some"
+          - "most"
+          - "often"
+          - "rarely"
+          - "frequently"
+          - "occasionally"
+        qualitative:
+          - "good"
+          - "better"
+          - "best"
+          - "bad"
+          - "poor"
+          - "excellent"
+          - "adequate"
+          - "sufficient"
+          - "appropriate"
+          - "reasonable"
+        temporal:
+          - "soon"
+          - "quickly"
+          - "asap"
+          - "eventually"
+          - "later"
+          - "when possible"
+        technical:
+          - "fast"
+          - "slow"
+          - "efficient"
+          - "optimize"
+          - "improve"
+          - "enhance"
+          - "scalable"
+          - "secure"
+          - "robust"
+          - "user-friendly"
+      
+      tests:
+        - test_id: "AMBIG-001-001"
+          name: "Vague Terms in AC Descriptions"
+          detection_pattern: "keyword"
+          analyze_files: ["cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml"]
+          scan_fields: ["description", "validation_criteria", "exit_criteria"]
+          expected_behavior: "All AC descriptions use measurable terms"
+          failure_action: "BLOCK"
+          clarification_required: true
+          
+        - test_id: "AMBIG-001-002"
+          name: "Vague Terms in Requirements"
+          detection_pattern: "keyword"
+          analyze_files: ["cortex-brain/cx6-plan/**/*.md", "cortex-brain/manifests/**/*.yaml"]
+          scan_fields: ["requirements", "objectives", "success_criteria"]
+          expected_behavior: "All requirements quantified or bounded"
+          failure_action: "WARNING"
+          clarification_required: true
+          
+        - test_id: "AMBIG-001-003"
+          name: "Unmeasurable Success Criteria"
+          detection_method: "semantic_analysis"
+          patterns:
+            - "Success criteria without numeric thresholds"
+            - "Goals without completion conditions"
+            - "Requirements without validation method"
+          expected_behavior: "All success criteria have measurable outcomes"
+          failure_action: "BLOCK"
+          clarification_required: true
+    
+    # --------------------------------------------------------------------------
+    # Category 2: Missing Specifications (30% of ambiguity score)
+    # --------------------------------------------------------------------------
+    - category_id: "AMBIG-002"
+      name: "Missing Specifications"
+      description: "Detect incomplete requirements, undefined behaviors, missing details"
+      weight: 0.30
+      severity: "high"
+      
+      tests:
+        - test_id: "AMBIG-002-001"
+          name: "Missing Error Scenarios"
+          detection_method: "requirement_analysis"
+          check_presence:
+            - "Error handling approach"
+            - "Failure modes documented"
+            - "Retry strategies defined"
+            - "Rollback procedures specified"
+          analyze_files: ["cortex-brain/tier1/acceptance-criteria/**/*.yaml"]
+          expected_behavior: "All AC-IDs specify error handling"
+          failure_action: "WARNING"
+          clarification_required: true
+          
+        - test_id: "AMBIG-002-002"
+          name: "Missing Edge Cases"
+          detection_method: "requirement_analysis"
+          check_presence:
+            - "Empty input handling"
+            - "Maximum size/count limits"
+            - "Concurrent access behavior"
+            - "Network failure behavior"
+          expected_behavior: "All AC-IDs document edge cases"
+          failure_action: "WARNING"
+          clarification_required: true
+          
+        - test_id: "AMBIG-002-003"
+          name: "Missing Performance Criteria"
+          detection_method: "keyword_presence"
+          required_keywords:
+            - "response time: <X ms"
+            - "throughput: >Y ops/sec"
+            - "memory limit: <Z MB"
+            - "timeout: X seconds"
+          analyze_files: ["cortex-brain/tier1/acceptance-criteria/**/*.yaml"]
+          expected_behavior: "Performance-sensitive AC-IDs have SLAs"
+          failure_action: "INFO"
+    
+    # --------------------------------------------------------------------------
+    # Category 3: Conflicting Requirements (20% of ambiguity score)
+    # --------------------------------------------------------------------------
+    - category_id: "AMBIG-003"
+      name: "Conflicting Requirements"
+      description: "Detect contradictory specifications across documents"
+      weight: 0.20
+      severity: "critical"
+      
+      tests:
+        - test_id: "AMBIG-003-001"
+          name: "AC Count Mismatches"
+          detection_method: "multi_file_comparison"
+          compare_files:
+            - source: "cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml"
+              field: "total_ac_count"
+            - source: "cortex-brain/cx6-plan/master-plan.yaml"
+              field: "total_ac_ids"
+            - source: "cortex-brain/cx6-plan/implementation-roadmap.md"
+              extract_pattern: "Total:\\s+([0-9]+)\\s+AC-IDs"
+          expected_behavior: "All AC counts identical across files"
+          failure_action: "BLOCK"
+          auto_fix: "Synchronize to AC-INDEX.yaml value (source of truth)"
+          
+        - test_id: "AMBIG-003-002"
+          name: "Status Conflicts"
+          detection_method: "status_comparison"
+          compare:
+            - progress_tracker: "cortex-brain/tier1/tracking/progress-tracker.json"
+              field: "completed_ac_ids"
+            - ac_index: "cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml"
+              field: "status"
+          expected_behavior: "progress-tracker 'completed' = AC-INDEX 'implemented'"
+          failure_action: "BLOCK"
+          auto_fix: false  # Require manual review
+          
+        - test_id: "AMBIG-003-003"
+          name: "Phase Misalignment"
+          detection_method: "structure_comparison"
+          compare:
+            - master_plan_phases: "cortex-brain/cx6-plan/master-plan.yaml::phases"
+            - progress_tracker_phases: "cortex-brain/tier1/tracking/progress-tracker.json::phases"
+          expected_behavior: "Phase structures identical (names, AC-IDs, dependencies)"
+          failure_action: "BLOCK"
+          auto_fix: "Synchronize to master-plan.yaml (authoritative)"
+    
+    # --------------------------------------------------------------------------
+    # Category 4: Undefined Terms (15% of ambiguity score)
+    # --------------------------------------------------------------------------
+    - category_id: "AMBIG-004"
+      name: "Undefined Terms"
+      description: "Detect jargon, acronyms, or domain terms without definitions"
+      weight: 0.15
+      severity: "medium"
+      
+      tests:
+        - test_id: "AMBIG-004-001"
+          name: "Acronym Definitions Missing"
+          detection_pattern: "regex"
+          patterns:
+            - "\\b[A-Z]{2,}\\b(?!.*\\(.*\\))"  # Acronym without explanation
+          exclude_patterns:
+            - "AC-[A-Z]+-[0-9]+"  # AC-IDs are standard
+            - "SQL|JSON|YAML|HTTP|API|URL|UUID"  # Common acronyms
+          analyze_files: ["cortex-brain/tier1/acceptance-criteria/**/*.yaml"]
+          expected_behavior: "All domain acronyms defined on first use"
+          failure_action: "INFO"
+          
+        - test_id: "AMBIG-004-002"
+          name: "Domain Terms Without Glossary"
+          detection_method: "glossary_check"
+          required_glossary: "cortex-brain/tier0/governance/glossary.yaml"
+          extract_domain_terms: true
+          expected_behavior: "All domain-specific terms in glossary"
+          failure_action: "INFO"
+
+# ==============================================================================
+# DEFINITION OF READY (DoR) VALIDATION
+# ==============================================================================
+dor_validation:
+  description: |
+    Validates requirements meet 100% DoR before implementation begins.
+    Based on existing DoR framework in cortex-brain/config/dor-dod-rules.yaml.
+  
+  weight: 0.25
+  halt_on_failure: true
+  threshold: 100  # 100% DoR required
+  
+  categories:
+    
+    # --------------------------------------------------------------------------
+    # Category 1: Requirements Completeness (30%)
+    # --------------------------------------------------------------------------
+    - category_id: "DOR-001"
+      name: "Requirements Completeness"
+      weight: 0.30
+      
+      criteria:
+        - criterion_id: "DOR-001-001"
+          name: "Feature Name Defined"
+          validation: "name is not null and len(name) >= 5"
+          mandatory: true
+          clarification_question: "What is the specific name for this feature/AC?"
+          recommended_answer: "Use descriptive name reflecting capability (e.g., 'TodoManager Task Dependency Resolution')"
+          
+        - criterion_id: "DOR-001-002"
+          name: "Description Provided"
+          validation: "description is not null and len(description) >= 100"
+          mandatory: true
+          clarification_question: "What EXACTLY does this feature do? (min 100 chars)"
+          recommended_answer: "Describe inputs, processing, outputs, and edge cases"
+          
+        - criterion_id: "DOR-001-003"
+          name: "Acceptance Criteria Defined"
+          validation: "len(acceptance_criteria) >= 3"
+          mandatory: true
+          clarification_question: "What are 3+ measurable criteria proving this is DONE?"
+          recommended_answer: "Use Given-When-Then format with numeric thresholds"
+    
+    # --------------------------------------------------------------------------
+    # Category 2: Clarity & Precision (25%)
+    # --------------------------------------------------------------------------
+    - category_id: "DOR-002"
+      name: "Clarity & Precision"
+      weight: 0.25
+      
+      criteria:
+        - criterion_id: "DOR-002-001"
+          name: "No Vague Terms"
+          validation: "ambiguity_score < 5"
+          mandatory: true
+          clarification_question: "Replace vague terms: '{vague_term}' → specific metric?"
+          recommended_answer: "'fast' → '<200ms', 'scalable' → 'handles 10K+ concurrent users'"
+          
+        - criterion_id: "DOR-002-002"
+          name: "Technical Approach Clear"
+          validation: "technical_design is not null and len(technical_design) >= 50"
+          mandatory: true
+          clarification_question: "What is the high-level technical approach?"
+          recommended_answer: "Specify architecture, patterns, key technologies (e.g., 'SQLite + topological sort')"
+          
+        - criterion_id: "DOR-002-003"
+          name: "Dependencies Identified"
+          validation: "dependencies is not null"
+          mandatory: true
+          clarification_question: "What are ALL dependencies (AC-IDs, files, libraries, services)?"
+          recommended_answer: "List AC-ID dependencies, file dependencies, external services"
+    
+    # --------------------------------------------------------------------------
+    # Category 3: Testability (20%)
+    # --------------------------------------------------------------------------
+    - category_id: "DOR-003"
+      name: "Testability"
+      weight: 0.20
+      
+      criteria:
+        - criterion_id: "DOR-003-001"
+          name: "Measurable Acceptance Criteria"
+          validation: "all(has_numeric_threshold(ac) for ac in acceptance_criteria)"
+          mandatory: true
+          clarification_question: "How do we MEASURE each acceptance criterion?"
+          recommended_answer: "Each AC has numeric threshold or boolean outcome (e.g., '100% pass rate')"
+          
+        - criterion_id: "DOR-003-002"
+          name: "Test Approach Defined"
+          validation: "test_strategy is not null and len(test_types) >= 2"
+          mandatory: true
+          clarification_question: "What test types are needed (unit, integration, STS, e2e)?"
+          recommended_answer: "Specify test types, coverage target, key scenarios"
+          
+        - criterion_id: "DOR-003-003"
+          name: "Edge Cases Documented"
+          validation: "len(edge_cases) >= 2"
+          mandatory: true
+          clarification_question: "What are the edge cases (empty input, max size, concurrency, errors)?"
+          recommended_answer: "List 2+ edge cases with expected behavior"
+    
+    # --------------------------------------------------------------------------
+    # Category 4: Security & Compliance (15%)
+    # --------------------------------------------------------------------------
+    - category_id: "DOR-004"
+      name: "Security & Compliance"
+      weight: 0.15
+      
+      criteria:
+        - criterion_id: "DOR-004-001"
+          name: "Security Review Completed"
+          validation: "security_review_complete == true"
+          mandatory: true
+          clarification_question: "Have security risks been reviewed (OWASP if applicable)?"
+          recommended_answer: "YES if reviewed, NO requires security review checklist"
+          
+        - criterion_id: "DOR-004-002"
+          name: "PII Handling Defined"
+          validation: "pii_handling is not null if handles_pii == true"
+          mandatory: false
+          clarification_question: "Does this handle PII? If yes, how is it protected?"
+          recommended_answer: "Specify encryption, access controls, retention policy"
+    
+    # --------------------------------------------------------------------------
+    # Category 5: Context & Traceability (10%)
+    # --------------------------------------------------------------------------
+    - category_id: "DOR-005"
+      name: "Context & Traceability"
+      weight: 0.10
+      
+      criteria:
+        - criterion_id: "DOR-005-001"
+          name: "Git History Checked"
+          validation: "git_history_searched == true"
+          mandatory: true
+          clarification_question: "Did we search git history for existing implementations?"
+          recommended_answer: "Run: python -m src.tools.git_history_intelligence search '{feature}'"
+          
+        - criterion_id: "DOR-005-002"
+          name: "Clarifications Resolved"
+          validation: "len(unresolved_clarifications) == 0"
+          mandatory: true
+          clarification_question: "Are there ANY unresolved questions or ambiguities?"
+          recommended_answer: "All clarifications documented and resolved in AC-INDEX.yaml::definition_of_ready"
+
+# ==============================================================================
+# CLARIFICATION FRAMEWORK
+# ==============================================================================
+clarification_framework:
+  description: |
+    Automated questioning system to reach 100% DoR. All questions answered
+    before implementation proceeds. Recommendations provided as default YES
+    answers aligned with CORTEX 6 plan and vision.
+  
+  process:
+    1_detect_ambiguity:
+      action: "Run brittleness + ambiguity tests"
+      output: "List of detected issues with severity"
+      
+    2_generate_questions:
+      action: "Generate clarification questions for each detected issue"
+      format: "Question + Recommended Answer + Rationale"
+      
+    3_present_to_user:
+      format: |
+        ## Clarification Required: {issue_id}
+        
+        **Detected Issue:** {description}
+        **Severity:** {severity_level}
+        **Impact:** {impact_on_design_score}
+        
+        **Clarification Question:**
+        {question}
+        
+        **Recommended Answer (Default YES):**
+        {recommended_answer}
+        
+        **Rationale:**
+        {alignment_with_cx6_plan_and_vision}
+        
+        **Options:**
+        [Y] Accept recommended answer (default)
+        [N] Provide custom answer
+        [S] Skip this issue (document as technical debt)
+      
+    4_capture_answer:
+      action: "Record user decision"
+      persist_to: "cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml::definition_of_ready::resolved_specifications"
+      
+    5_recalculate_score:
+      action: "Re-run tests with clarifications applied"
+      halt_if: "design_score < target_design_score"
+
+# ==============================================================================
+# EXECUTION CONTROL
+# ==============================================================================
+execution_control:
+  pre_execution_gates:
+    - gate_id: "GATE-BRIT-001"
+      name: "Brittleness Test Pass"
+      required_score: 80
+      halt_on_failure: true
+      
+    - gate_id: "GATE-AMBIG-001"
+      name: "Ambiguity Test Pass"
+      required_score: 85
+      halt_on_failure: true
+      
+    - gate_id: "GATE-DOR-001"
+      name: "Definition of Ready Complete"
+      required_score: 100
+      halt_on_failure: true
+  
+  score_tracking:
+    persist_to: "cortex-brain/tier1/tracking/quality-scores.json"
+    history_retention_days: 90
+    alert_on_degradation: true
+    
+    score_history_format:
+      - timestamp: "ISO 8601"
+      - brittleness_score: "float (0-100)"
+      - ambiguity_score: "float (0-100)"
+      - dor_score: "float (0-100)"
+      - overall_design_score: "float (0-100)"
+      - tests_passed: "int"
+      - tests_failed: "int"
+      - clarifications_required: "int"
+      - clarifications_resolved: "int"
+  
+  halt_conditions:
+    - condition: "design_score < target_design_score"
+      action: "HALT + ALERT + GENERATE_REPORT"
+      message: "Design score degraded below target. Review and fix before proceeding."
+      
+    - condition: "brittleness_score < 70"
+      action: "HALT + ALERT"
+      message: "Critical brittleness detected. Fix hardcoded dependencies, circular deps, or error handling."
+      
+    - condition: "ambiguity_score < 80"
+      action: "HALT + REQUEST_CLARIFICATION"
+      message: "High ambiguity detected. Answer clarification questions to proceed."
+      
+    - condition: "dor_score < 100"
+      action: "HALT + SHOW_DOR_CHECKLIST"
+      message: "Definition of Ready incomplete. Complete all DoR criteria."
+
+# ==============================================================================
+# REPORTING & AUDIT
+# ==============================================================================
+reporting:
+  test_execution_report:
+    filename: "brittleness-ambiguity-test-report-{timestamp}.yaml"
+    location: "cortex-brain/tier1/evidence-bundles/{ac_id}/"
+    format: "YAML"
+    
+    sections:
+      - section: "executive_summary"
+        fields:
+          - overall_design_score
+          - brittleness_score
+          - ambiguity_score
+          - dor_score
+          - pass_fail_status
+          - tests_passed
+          - tests_failed
+          - clarifications_required
+          
+      - section: "brittleness_results"
+        fields:
+          - category_scores
+          - failed_tests
+          - recommendations
+          
+      - section: "ambiguity_results"
+        fields:
+          - vague_terms_detected
+          - missing_specifications
+          - conflicting_requirements
+          - clarification_questions
+          
+      - section: "dor_validation_results"
+        fields:
+          - completeness_score
+          - clarity_score
+          - testability_score
+          - security_score
+          - context_score
+          - missing_criteria
+          
+      - section: "clarifications"
+        fields:
+          - question
+          - recommended_answer
+          - user_answer
+          - resolution_timestamp
+  
+  audit_logging:
+    log_to: "EnhancedAuditLogger"
+    category: "VALIDATION"
+    level: "INFO"
+    include_fields:
+      - test_id
+      - test_result
+      - score
+      - detected_issues
+      - clarifications_provided
+
+# ==============================================================================
+# INTEGRATION WITH CORTEX 6.0
+# ==============================================================================
+cortex6_integration:
+  trigger_points:
+    - "Before AC-ID implementation starts"
+    - "Before phase transition"
+    - "On demand via: 'run brittleness tests'"
+    - "Pre-commit hook (optional)"
+  
+  orchestrator_integration:
+    master_orchestrator:
+      action: "Call brittleness_ambiguity_validator.validate_before_execution()"
+      halt_on_failure: true
+      
+    tdd_master:
+      action: "Validate RED phase requirements before GREEN"
+      require_dor: true
+      
+    planning_v5:
+      action: "Run ambiguity tests on plan files"
+      require_zero_conflicts: true
+  
+  file_updates:
+    - file: ".github/prompts/CORTEX.prompt.md"
+      section: "## 🎯 Brittleness & Ambiguity Testing Protocol"
+      action: "Add execution instructions"
+      
+    - file: "cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml"
+      field: "definition_of_ready::resolved_specifications"
+      action: "Store clarification resolutions"
+
+# ==============================================================================
+# VERSION HISTORY
+# ==============================================================================
+version_history:
+  - version: "1.0.0"
+    date: "2026-01-11"
+    author: "Asif Hussain"
+    changes:
+      - "Initial brittleness & ambiguity testing framework"
+      - "100% DoR enforcement"
+      - "Automated clarification system with recommended answers"
+      - "Design score tracking and halt-on-degradation"
