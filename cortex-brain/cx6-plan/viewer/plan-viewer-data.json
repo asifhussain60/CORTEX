@@ -2,18 +2,18 @@
   "plan_metadata": {
     "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
     "total_ac_ids": 102,
-    "completed_ac_ids": 76,
+    "completed_ac_ids": 78,
     "in_progress_ac_ids": 0,
     "version": "1.3.0",
-    "updated": "2026-01-11T21:47:56.137355+00:00",
+    "updated": "2026-01-11T21:50:40.694441+00:00",
     "status": "phase_1_repair_in_progress"
   },
   "phases": [
     {
       "id": 1,
       "name": "Foundation Enhancement",
-      "completion_percentage": 88.23529411764706,
-      "ac_ids_complete": 30,
+      "completion_percentage": 94.11764705882354,
+      "ac_ids_complete": 32,
       "ac_ids_total": 34,
       "status": "completed",
       "description": "Build core infrastructure (Audit, Governance, State, Lifecycle, Evidence, Security)",
@@ -47,7 +47,9 @@
         "AC-CLEAN-002",
         "AC-CLEAN-003",
         "AC-TEST-001",
-        "AC-TEST-002"
+        "AC-TEST-002",
+        "AC-ORCH-006",
+        "AC-ORCH-007"
       ],
       "capabilities": [
         {
@@ -198,6 +200,16 @@
         {
           "id": "AC-TEST-002",
           "name": "AC-TEST-002",
+          "description": ""
+        },
+        {
+          "id": "AC-ORCH-006",
+          "name": "AC-ORCH-006",
+          "description": ""
+        },
+        {
+          "id": "AC-ORCH-007",
+          "name": "AC-ORCH-007",
           "description": ""
         }
       ]
