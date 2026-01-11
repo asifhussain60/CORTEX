@@ -1,0 +1,154 @@
+# ==============================================================================
+# PRE-EXECUTION VALIDATION MANIFEST SCHEMA
+# ==============================================================================
+# Purpose: Define structure for pre-flight compatibility checks
+# Version: 1.0.0
+# Created: 2026-01-11
+# Author: GitHub Copilot (CORTEX 6.0)
+#
+# This schema enables early detection of orchestrator compatibility issues
+# before runtime, preventing TypeError and signature mismatch failures.
+# ==============================================================================
+
+schema_version: '1.0'
+manifest_type: precheck_validation
+created_for: CORTEX 6.0 Pre-Execution Validation System
+
+# Validation Result Structure
+validation_result:
+  manifest_id: string  # UUID for this validation run
+  timestamp: datetime  # ISO 8601 format
+  validation_passed: boolean  # Overall result
+  
+  orchestrator:
+    id: string  # Orchestrator identifier (e.g., 'planning_v5')
+    class_name: string  # Python class name
+    module_path: string  # Import path
+    version: string  # Orchestrator version
+  
+  # Signature Validation (AC-PRECHECK-001)
+  signature_checks:
+    init_signature:
+      valid: boolean
+      required_params: list  # Parameters without defaults
+      optional_params: list  # Parameters with defaults
+      accepts_kwargs: boolean  # **kwargs present
+      issues: list  # List of compatibility issues
+    
+    execute_signature:
+      valid: boolean
+      required_params: list
+      optional_params: list
+      accepts_kwargs: boolean
+      issues: list
+  
+  # Parameter Compatibility (AC-PRECHECK-002)
+  parameter_compatibility:
+    init_args_available:
+      - param_name: string
+        required: boolean
+        available: boolean
+        source: string  # 'registry', 'master_orchestrator', 'context'
+        
+    execute_params_mappable:
+      - param_name: string
+        expected_type: string  # 'user_request', 'context', etc.
+        can_map_from: list  # Sources that can provide this param
+        mapping_strategy: string  # 'direct', 'context_wrap', 'filtered'
+  
+  # Dependency Validation (AC-PRECHECK-003)
+  dependencies:
+    python_imports:
+      - module: string
+        available: boolean
+        version: string
+        required_version: string
+    
+    file_dependencies:
+      - file_path: string
+        exists: boolean
+        readable: boolean
+        
+    orchestrator_dependencies:
+      - orchestrator_id: string
+        available: boolean
+        compatible: boolean
+  
+  # Test Suite Validation (AC-PRECHECK-004)
+  test_compatibility:
+    test_files_found: list
+    signature_mismatches:
+      - test_file: string
+        line_number: int
+        issue: string  # Description of mismatch
+        suggested_fix: string
+    
+    fixture_compatibility:
+      - fixture_name: string
+        compatible: boolean
+        issues: list
+  
+  # Recommendations (AC-PRECHECK-005)
+  recommendations:
+    - severity: string  # 'critical', 'warning', 'info'
+      category: string  # 'signature', 'parameter', 'dependency', 'test'
+      message: string
+      fix_suggestion: string
+      code_location: string  # File:line where fix should be applied
+
+# Integration Points
+integration:
+  master_orchestrator_hook: '_validate_dependencies'
+  tdd_master_phase: 'pre_implementation_validation'
+  registry_enhancement: 'metadata_signature_cache'
+  
+# Validation Modes
+validation_modes:
+  quick:
+    description: "Fast signature-only check (<100ms)"
+    checks: ['init_signature', 'execute_signature']
+    
+  standard:
+    description: "Signature + parameter compatibility (< 500ms)"
+    checks: ['init_signature', 'execute_signature', 'parameter_compatibility']
+    
+  comprehensive:
+    description: "Full validation including tests (< 2s)"
+    checks: ['all']
+
+# Example Usage
+example:
+  validation_result:
+    manifest_id: "precheck-a1b2c3d4"
+    timestamp: "2026-01-11T08:30:00Z"
+    validation_passed: false
+    
+    orchestrator:
+      id: "investigation_v2"
+      class_name: "InvestigationOrchestratorV2"
+      module_path: "src.orchestrators.investigation.investigation_orchestrator"
+      version: "2.0.0"
+    
+    signature_checks:
+      init_signature:
+        valid: false
+        required_params: ['workspace_root', 'config_path']
+        optional_params: []
+        accepts_kwargs: false
+        issues:
+          - "Missing required parameter 'workspace_root' in registry init_args"
+      
+      execute_signature:
+        valid: false
+        required_params: ['context']
+        optional_params: []
+        accepts_kwargs: false
+        issues:
+          - "Parameter 'user_request' cannot be directly mapped to 'context'"
+    
+    recommendations:
+      - severity: "critical"
+        category: "signature"
+        message: "init requires workspace_root but master_orchestrator not providing it"
+        fix_suggestion: "Add workspace_root to master_orchestrator.execute_orchestrator init_args"
+        code_location: "src/orchestrators/master_orchestrator.py:462"
