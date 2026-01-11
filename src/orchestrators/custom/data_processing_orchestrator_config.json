@@ -1,0 +1,13 @@
+{
+  "orchestrator": "DataProcessingOrchestrator",
+  "domain": "data_processing",
+  "description": "DataProcessingOrchestrator for data_processing domain",
+  "version": "1.0.0",
+  "author": "CORTEX Team",
+  "metadata": {
+    "created_at": "2026-01-11T20:49:45.650993+00:00",
+    "governance_integrated": true,
+    "template": "basic",
+    "features": []
+  }
+}

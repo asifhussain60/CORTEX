@@ -1053,28 +1053,30 @@
       "AC-ORCH-006",
       "AC-ORCH-007",
       "AC-TODO-001",
-      "AC-TODO-002"
+      "AC-TODO-002",
+      "AC-SCAFFOLD-001",
+      "AC-SCAFFOLD-003"
     ],
     "test_results": {
-      "total_tests": 1275,
-      "passed": 1275,
+      "total_tests": 1310,
+      "passed": 1310,
       "skipped": 47,
       "pass_rate": "100%",
-      "new_tests_added": 25
+      "new_tests_added": 60
     },
     "last_milestone": {
-      "ac_id": "AC-ORCH-007",
-      "name": "Governance-to-Todo Pipeline",
+      "ac_id": "AC-SCAFFOLD-003",
+      "name": "MasterOrchestrator Registration (Enforcement)",
       "status": "implemented",
-      "test_count": 15,
+      "test_count": 18,
       "test_pass_rate": "100%",
-      "timestamp": "2026-01-11T20:43:00.004818+00:00"
+      "timestamp": "2026-01-11T21:40:00.000000+00:00"
     },
     "milestones": [
       {
         "ac_id": "AC-ORCH-006",
         "name": "MasterOrchestrator as Central Controller",
-        "status": "partial\u2192implemented",
+        "status": "partial→implemented",
         "tests": 43,
         "completion_date": "2026-01-11"
       },
@@ -1086,10 +1088,31 @@
         "completion_date": "2026-01-11"
       },
       {
+        "ac_id": "AC-TODO-001",
+        "name": "TodoManager Core",
+        "status": "implemented",
+        "tests": 8,
+        "completion_date": "2026-01-11"
+      },
+      {
         "ac_id": "AC-TODO-002",
         "name": "Task Creation from Governance Evaluation",
         "status": "implemented",
         "tests": 10,
+        "completion_date": "2026-01-11"
+      },
+      {
+        "ac_id": "AC-SCAFFOLD-001",
+        "name": "Orchestrator Scaffolder CLI",
+        "status": "implemented",
+        "tests": 17,
+        "completion_date": "2026-01-11"
+      },
+      {
+        "ac_id": "AC-SCAFFOLD-003",
+        "name": "MasterOrchestrator Registration (Enforcement)",
+        "status": "implemented",
+        "tests": 18,
         "completion_date": "2026-01-11"
       }
     ],
@@ -1098,9 +1121,9 @@
       "AC-ORCH-007": "implemented",
       "AC-TODO-001": "implemented",
       "AC-TODO-002": "implemented",
-      "AC-SCAFFOLD-001": "pending",
-      "AC-SCAFFOLD-003": "pending"
+      "AC-SCAFFOLD-001": "implemented",
+      "AC-SCAFFOLD-003": "implemented"
     },
-    "completion_percentage": 67
+    "completion_percentage": 100
   }
 }
