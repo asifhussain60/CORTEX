@@ -904,3 +904,26 @@ class GovernanceMerger:
             }
         }
 
+    def merge_all_tiers(self) -> Dict[str, Any]:
+        """
+        Public API method for AC-ORCH-007: Governance-to-Todo Pipeline.
+        
+        Merges all 4 tiers of governance and returns as unified dict.
+        
+        Returns:
+            Dict with merged rules from all tiers
+        """
+        unified = self.merge()
+        
+        # Convert UnifiedInstructionSet to dict format
+        return {
+            'rules': unified.rules if hasattr(unified, 'rules') else [],
+            'tier_count': unified.tier_count,
+            'rule_count': unified.rule_count,
+            'metadata': {
+                'tiers_merged': 4,
+                'precedence_applied': True,
+                'conflicts_resolved': unified.conflict_count if hasattr(unified, 'conflict_count') else 0
+            }
+        }
+

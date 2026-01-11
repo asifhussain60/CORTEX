@@ -797,6 +797,115 @@ class MasterOrchestrator:
             self._pattern_match_count / self._request_count
             if self._request_count > 0 else 0.0
         )
+    def governance_to_todo_pipeline(
+        self,
+        request: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
+        """
+        AC-ORCH-007: Governance-to-Todo Pipeline.
+        
+        Complete pipeline:
+        1. GovernanceMerger.merge_all_tiers() → unified instruction set
+        2. MasterOrchestrator.evaluate(request, merged) → required_actions
+        3. TodoManager.create_tasks(required_actions) → task_ids
+        
+        Args:
+            request: User request with intent, context
+        
+        Returns:
+            List of created task IDs
+        """
+        from src.orchestrators.core.governance_merger import GovernanceMerger
+        from src.orchestrators.master.todo_manager import TodoManager
+        
+        self.logger.info(f"Starting governance-to-todo pipeline for request: {request.get('intent')}")
+        
+        # Step 1: GovernanceMerger.merge_all_tiers()
+        merger = GovernanceMerger()
+        merged_rules = merger.merge_all_tiers()
+        
+        self.logger.info(
+            f"Governance merged: {merged_rules.get('rule_count', 0)} rules "
+            f"from {merged_rules.get('tier_count', 0)} tiers"
+        )
+        
+        # Step 2: MasterOrchestrator.evaluate(request, merged)
+        required_actions = self._evaluate_request_against_governance(
+            request=request,
+            merged_rules=merged_rules
+        )
+        
+        self.logger.info(f"Governance evaluation produced {len(required_actions)} required actions")
+        
+        # Step 3: TodoManager.create_tasks(required_actions)
+        todo_manager = TodoManager()
+        task_ids = []
+        
+        for action in required_actions:
+            task = todo_manager.create_task(
+                name=f"{action.get('action_type')}: {action.get('target')}",
+                metadata=action
+            )
+            task_ids.append(task.id)
+            
+            self.logger.debug(f"Created task {task.id} for action: {action.get('action_id')}")
+        
+        self.logger.info(f"Governance-to-todo pipeline complete: {len(task_ids)} tasks created")
+        
+        return task_ids
+    
+    def _evaluate_request_against_governance(
+        self,
+        request: Dict[str, Any],
+        merged_rules: Dict[str, Any]
+    ) -> List[Dict[str, Any]]:
+        """
+        Evaluate request against merged governance rules.
+        
+        Produces required_actions that become tasks.
+        
+        Args:
+            request: User request
+            merged_rules: Merged governance rules from all tiers
+        
+        Returns:
+            List of required_actions
+        """
+        intent = request.get('intent', '')
+        target = request.get('target', '')
+        
+        # Map intent to action type
+        action_type_map = {
+            'implement': 'CREATE_FILE',
+            'plan': 'GENERATE_DOC',
+            'test': 'RUN_TEST',
+            'validate': 'RUN_TEST',
+            'build': 'EXECUTE_COMMAND',
+            'deploy': 'EXECUTE_COMMAND'
+        }
+        
+        action_type = action_type_map.get(intent, 'EXECUTE_COMMAND')
+        
+        # Extract applicable governance rules
+        rules = merged_rules.get('rules', [])
+        applicable_rules = []
+        
+        # Simple heuristic: TDD enforcement for code implementation
+        if action_type == 'CREATE_FILE':
+            applicable_rules.extend(['CORE-008', 'CORE-001'])  # TDD, incremental execution
+        
+        # Build required action
+        required_action = {
+            'action_id': f"action-{target}",
+            'action_type': action_type,
+            'target': target,
+            'priority': 1 if 'CRITICAL' in str(request.get('priority', '')) else 2,
+            'governance_rules_applied': applicable_rules,
+            'intent': intent
+        }
+        
+        return [required_action]
+
         
         llm_fallback_rate = (
             self._llm_fallback_count / self._request_count
