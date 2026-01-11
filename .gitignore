@@ -65,3 +65,7 @@ templates/plan-viewer/audit-logs-aggregated.json
 templates/plan-viewer/cortex-plan-viewer-old-backup.html
 # Architecture audit reports - Sat Jan 10 22:25:24 EST 2026
 cortex-brain/documents/reports/architecture-audit-*.json
+
+# Auto-ignored by CORTEX vacuum - 2026-01-11T11:40:59Z
+.cortex-initialized  # Temp marker
+.favorites.json      # IDE artifact
