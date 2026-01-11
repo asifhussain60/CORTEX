@@ -1,6 +1,6 @@
 schema_version: '1.7'
-last_updated: '2026-01-11T11:54:40Z'
-total_ac_count: 97
+last_updated: '2026-01-11T13:00:00Z'
+total_ac_count: 102
 completed_count: 19
 in_progress_count: 0
 design_score_current: 97
@@ -652,6 +652,16 @@ categories:
     note: Enables domain teams to build orchestrators using CORTEX governance intelligence
     related_governance: CORE-021
     future_migration: AC-MIGRATE-001
+  PRECHECK:
+    prefix: AC-PRECHECK
+    description: Pre-Execution Validation System (PEVS) - Early detection of signature and parameter compatibility issues
+    tier: 1
+    priority: 0
+    core_workflow: true
+    triggered_by: Chat01.md runtime failures (2026-01-11)
+    design_source: cortex-brain/cx6-plan/validation/precheck-system-design.md
+    prevents: Runtime signature mismatches, parameter incompatibilities, test fixture failures
+    roi: 27x faster issue resolution
   MIGRATE:
     prefix: AC-MIGRATE
     description: Legacy system migration acceptance criteria
@@ -3867,6 +3877,139 @@ ac_clean:
     - tests/integration/clean/test_file_size_limits.py
     dependencies:
     - AC-CLEAN-001
+  AC-PRECHECK-001:
+    title: Signature Validator Core
+    description: Validates __init__ and execute() signatures match registry expectations
+    status: planned
+    priority: P0-CRITICAL
+    phase: Phase 1.5 Enhancement (Pre-Execution Validation)
+    implementation: src/infrastructure/precheck/signature_validator.py
+    tests:
+    - tests/infrastructure/precheck/test_signature_validator.py
+    design_source: cortex-brain/cx6-plan/validation/precheck-system-design.md
+    acceptance_criteria:
+    - Extracts signature from orchestrator class using inspect.signature()
+    - Compares against registry metadata (init_args, execute_params)
+    - Detects mismatches (missing params, extra params, wrong types)
+    - Validates parameter annotations match expected types
+    - Reports compatibility score (0-100%)
+    exit_criteria:
+    - Detects all 3 chat01.md issues in <100ms
+    - Zero false positives on existing orchestrators
+    - Generates actionable error messages
+    triggered_by: Chat01.md runtime signature mismatch analysis (2026-01-11)
+    prevents:
+    - Investigation orchestrator init failures (missing workspace_root)
+    - Signature mismatches between orchestrator and registry
+    - Runtime TypeErrors during orchestrator instantiation
+  AC-PRECHECK-002:
+    title: Parameter Compatibility Checker
+    description: Validates parameter mappings between orchestrators and callers
+    status: planned
+    priority: P0-CRITICAL
+    phase: Phase 1.5 Enhancement (Pre-Execution Validation)
+    implementation: src/infrastructure/precheck/parameter_checker.py
+    tests:
+    - tests/infrastructure/precheck/test_parameter_checker.py
+    design_source: cortex-brain/cx6-plan/validation/precheck-system-design.md
+    acceptance_criteria:
+    - Analyzes MasterOrchestrator → Child Orchestrator parameter flow
+    - Detects parameter name mismatches (e.g., user_request vs context)
+    - Validates all required parameters are provided
+    - Suggests parameter mappings for mismatches
+    - Validates default values are compatible
+    exit_criteria:
+    - Detects user_request → context mismatch before execution
+    - Suggests fix with executable code
+    - Validates all 15+ registered orchestrators
+    depends_on:
+    - AC-PRECHECK-001
+    prevents:
+    - Investigation orchestrator execute failures (parameter mismatch)
+    - Runtime errors from incompatible parameter names
+    - Silent parameter mismatches causing logic errors
+  AC-PRECHECK-003:
+    title: Test Suite Validator
+    description: Validates test fixtures match production signatures
+    status: planned
+    priority: P0-CRITICAL
+    phase: Phase 1.5 Enhancement (Pre-Execution Validation)
+    implementation: src/infrastructure/precheck/test_validator.py
+    tests:
+    - tests/infrastructure/precheck/test_test_validator.py
+    design_source: cortex-brain/cx6-plan/validation/precheck-system-design.md
+    acceptance_criteria:
+    - Compares test mock signatures with production class signatures
+    - Detects parameter mismatches in test calls
+    - Validates test fixtures provide all required parameters
+    - Checks for extra parameters not accepted by production code
+    - Generates test compatibility report
+    exit_criteria:
+    - Detects STSLogger intent parameter issue before test run
+    - Validates all test files in tests/sts/, tests/orchestrators/
+    - Reports incompatibilities with line numbers
+    depends_on:
+    - AC-PRECHECK-001
+    prevents:
+    - STS test failures from metadata parameter mismatches
+    - Test suite passing but production code failing
+    - Extra parameters in test calls not caught until runtime
+  AC-PRECHECK-004:
+    title: Pre-Flight Manifest Generator
+    description: Creates compatibility manifest before execution
+    status: planned
+    priority: P0-CRITICAL
+    phase: Phase 1.5 Enhancement (Pre-Execution Validation)
+    implementation: src/infrastructure/precheck/manifest_generator.py
+    tests:
+    - tests/infrastructure/precheck/test_manifest_generator.py
+    design_source: cortex-brain/cx6-plan/validation/precheck-system-design.md
+    manifest_schema: cortex-brain/tier0/schemas/precheck-manifest-schema.yaml
+    acceptance_criteria:
+    - Runs all validation checks (signature, parameter, test)
+    - Generates YAML manifest with pass/fail status
+    - Includes actionable recommendations for failures
+    - Persists manifest to cortex-brain/tier0/manifests/precheck-{correlation_id}.yaml
+    - Gates execution if critical failures detected
+    exit_criteria:
+    - Manifest generated in <200ms
+    - Contains all 3 validation categories
+    - Blocks execution if any CRITICAL issue found
+    depends_on:
+    - AC-PRECHECK-001
+    - AC-PRECHECK-002
+    - AC-PRECHECK-003
+    produces:
+    - Pre-execution compatibility manifest (YAML)
+    - Audit trail entries with validation results
+    - Actionable recommendations for fixing issues
+  AC-PRECHECK-005:
+    title: Integration with Orchestrators
+    description: Integrates PEVS into MasterOrchestrator and TDD-Master workflows
+    status: planned
+    priority: P0-CRITICAL
+    phase: Phase 1.5 Enhancement (Pre-Execution Validation)
+    implementation: src/infrastructure/precheck/integration_hooks.py
+    tests:
+    - tests/infrastructure/precheck/test_integration_hooks.py
+    design_source: cortex-brain/cx6-plan/validation/precheck-system-design.md
+    acceptance_criteria:
+    - MasterOrchestrator calls PEVS before registry.instantiate()
+    - TDD-Master calls PEVS before RED phase
+    - Test runner calls PEVS before pytest execution
+    - Validation results logged to audit trail
+    - Execution blocked if validation fails
+    exit_criteria:
+    - Zero signature mismatches reach production
+    - All 3 chat01.md issues prevented
+    - Less than 5% performance overhead
+    depends_on:
+    - AC-PRECHECK-004
+    integration_points:
+    - src/orchestrators/master_orchestrator.py::execute_orchestrator()
+    - src/orchestrators/tdd_master.py::red_phase()
+    - tests/conftest.py::pytest_collection_modifyitems()
+    roi: 27x faster issue resolution (135min debugging → 5min precheck)
 ac_template:
   description: Refactor 2046-line response-templates-v4.yaml into 3-layer architecture
   priority: P1-HIGH
