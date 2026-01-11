@@ -22,8 +22,36 @@ from src.infrastructure.enhanced_audit_logger import (
     AuditLevel,
     AuditCategory
 )
+from src.mcp.mcp_decorator import mcp_tool
 
 
+@mcp_tool(
+    name="cortex_audit_query",
+    description="Query CORTEX audit logs with filters (ac_id, component, level, category, time range)",
+    category="audit",
+    orchestrator_id="audit_orchestrator",
+    parameters={
+        "db_path": {
+            "type": "string",
+            "required": True,
+            "description": "Path to audit database (governance.db)"
+        },
+        "filters": {
+            "type": "object",
+            "required": False,
+            "description": "Query filters: ac_id, component, level (INFO/WARNING/ERROR), category, start_time, end_time"
+        }
+    },
+    returns={
+        "type": "object",
+        "description": "Query result with success, entries list, and count"
+    },
+    metadata={
+        "tags": ["audit", "logging", "debugging", "traceability"],
+        "version": "1.0",
+        "priority": "P0"
+    }
+)
 def audit_query(
     db_path: str,
     filters: Optional[Dict[str, Any]] = None
@@ -68,6 +96,19 @@ def audit_query(
         }
 
 
+@mcp_tool(
+    name="cortex_audit_list",
+    description="Paginated list view of audit logs with sorting",
+    category="audit",
+    parameters={
+        "db_path": {"type": "string", "required": True, "description": "Path to audit database"},
+        "page": {"type": "integer", "required": False, "description": "Page number (1-indexed)"},
+        "page_size": {"type": "integer", "required": False, "description": "Results per page"},
+        "order_by": {"type": "string", "required": False, "description": "Order by field"},
+        "order_dir": {"type": "string", "required": False, "description": "Order direction (ASC/DESC)"}
+    },
+    metadata={"tags": ["audit", "pagination"]}
+)
 def audit_list(
     db_path: str,
     page: int = 1,
@@ -122,6 +163,18 @@ def audit_list(
         }
 
 
+@mcp_tool(
+    name="cortex_audit_export",
+    description="Export audit logs to file (jsonl, csv, or json format)",
+    category="audit",
+    parameters={
+        "db_path": {"type": "string", "required": True, "description": "Path to audit database"},
+        "output_path": {"type": "string", "required": True, "description": "Output file path"},
+        "format": {"type": "string", "required": False, "description": "Export format (jsonl/csv/json)"},
+        "filters": {"type": "object", "required": False, "description": "Query filters"}
+    },
+    metadata={"tags": ["audit", "export", "reporting"]}
+)
 def audit_export(
     db_path: str,
     output_path: str,
