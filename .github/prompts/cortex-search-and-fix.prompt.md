@@ -1,15 +1,19 @@
 ---
 agent: agent
 ---
-# CORTEX6: Cortex Search-and-Fix (Day-Zero Brittleness & Risk Review)
 
-You are reviewing the CORTEX6 plan and implementation for production-readiness under real load, partial failure, and ongoing change. Your job is to search across the entire repo/landscape and identify brittleness, breakage points, and material risks—then recommend the simplest robust improvements with minimal impact and no scope creep.
+# 🔧 CORTEX Search-and-Fix – Production Brittleness & Risk Review
 
+**Purpose:** Search CORTEX codebase for brittleness, breakage points, and material production risks  
+**Version:** 2.0.0  
+**Date:** 2026-01-12  
+**Governance:** CORE-002 (no root files), CORE-017 (governance enforcement), CORE-009 (plan organization), CORE-025 (intelligent challenge)
 
+---
 
 ## 🔗 MASTERORCHESTRATOR DELEGATION
 
-**All implementation delegated to unified orchestrator:**
+**All findings delegated to unified orchestrator for planning:**
 
 ```bash
 # Execute via MasterOrchestrator (central control)
@@ -19,65 +23,41 @@ python3 -m src.main "{user_intent}" --orchestrator master --format markdown
 **MasterOrchestrator handles:**
 - ✅ Load governance rules (tier0/tier1/tier2/tier3)
 - ✅ Validate against SKULL rules
-- ✅ Create TodoManager tasks
-- ✅ Execute tasks in dependency order
-- ✅ Update progress-tracker.json (atomic writes)
-- ✅ Enforce phase gates
-- ✅ Return structured results
+- ✅ Create AC-IDs for brittleness findings
+- ✅ Append findings to AC-INDEX.yaml
+- ✅ Update master-plan.yaml with new AC-IDs
+- ✅ Update progress-tracker.json
+- ✅ Trigger SyncOrchestrator
 
 **Do NOT:**
-- ❌ Directly modify progress-tracker.json
 - ❌ Directly modify AC-INDEX.yaml
-- ❌ Call sync_plan_viewer_data.py multiple times
-- ❌ Manipulate state outside MasterOrchestrator
+- ❌ Directly modify progress-tracker.json
+- ❌ Create separate brittleness files
+- ❌ Update tracker manually
 
 ---
 
-## 🛡️ REGRESSION PREVENTION (See CORTEX.prompt.md § "UNIFIED REGRESSION CHECK")
+## 🛡️ REGRESSION PREVENTION (Reference Only)
 
-**Reference:** CORTEX.prompt.md maintains the unified regression check. All prompts use the same check.
+**Reference:** CORTEX.prompt.md maintains unified regression check via MasterOrchestrator.
 
-**Quick Verification:**
-```bash
-python3 << 'EOF'
-import json, yaml, sys
-errors = []
-try:
-    ac_index = yaml.safe_load(open('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml'))
-    if not ac_index.get('schema_version'): errors.append("AC-INDEX schema missing")
-except Exception as e: errors.append(f"AC-INDEX: {e}")
-try:
-    tracker = json.load(open('cortex-brain/tier1/tracking/progress-tracker.json'))
-    if not tracker.get('current_phase'): errors.append("tracker phase missing")
-except Exception as e: errors.append(f"tracker: {e}")
-try:
-    plan = yaml.safe_load(open('cortex-brain/cx6-plan/master-plan.yaml'))
-    if not plan.get('plan_metadata'): errors.append("plan metadata missing")
-except Exception as e: errors.append(f"plan: {e}")
-if errors:
-    print("❌ " + " | ".join(errors)); sys.exit(1)
-print("✅ State valid")
-EOF
-```
+**This prompt DOES NOT perform direct file access.** All findings delegated to Python orchestrator.
 
-## Scope & Inputs (repo conventions)
-- Primary plan/design source: `cortex-brain/cx6-plan/**`
-- Execution/update anchor file (must be used to maintain a single evolving plan): `#file:cortex-exec.prompt.md`
-- Search across the entire CORTEX6 architecture + infrastructure landscape (code, IaC, CI/CD, runtime configs, docs, ADRs, scripts, manifests, charts, pipelines, and operational artifacts)
-- **CORTEX-specific paths:**
-  - State files: `cortex-brain/tier1/tracking/progress-tracker.json`, `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml`
-  - Governance: `cortex-brain/tier0/governance/core-rules.yaml` (23 SKULL rules)
-  - Database: `cortex-brain/state/planning.db` (SQLite, single-writer)
-  - Orchestrators: `src/orchestrators/` (master, planning, TDD, ADO, cleanup, etc.)
-  - Tests: `tests/` (pytest-based, evidence source for tracker)
-  - Scripts: `scripts/` (sync, validation, consolidation utilities)
+**Why not embed code?** When MasterOrchestrator is updated, regression check automatically improves for all prompts (DRY principle).
 
-## Operating Rules
-- **No code snippets or configuration blocks** in the response.
-- Focus on **issues that materially impact**: correctness, reliability, security, deployability, scalability, operability.
-- Assume production constraints: **partial failures**, latency spikes, retries, deployment rollouts, config drift, dependency upgrades, and noisy neighbors.
-- Challenge assumptions and defaults; look for execution-time brittleness and hidden edge cases.
-- **Minimal-impact changes only**: do not introduce new subsystems, major rewrites, or architecture expansions. Prefer small, robust fixes.
+---
+
+## 🛡️ INTELLIGENT CHALLENGE PROTOCOL (CORE-025)
+
+**Purpose:** Validate findings against governance and feasibility.
+
+**Implementation:** Delegated to MasterOrchestrator → RequestValidator.
+
+**Reference:** `.github/prompts/CORTEX-ALIGN.prompt.md § INTELLIGENT CHALLENGE PROTOCOL`
+
+---
+
+## 📊 Analysis Scope
 - Prioritize by real-world impact and likelihood; explain how failures manifest at runtime.
 
 ## Repeatable “Tool” Behavior (avoid file bloat)

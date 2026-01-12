@@ -4,7 +4,8 @@
 **Design goal:** Thin routing layer; all execution delegated to Python orchestrators.  
 **Version:** 8.0.0 | **Date:** 2026-01-12  
 **Architecture:** Prompt = Gateway + Clarification. Python = Execution via MasterOrchestrator.  
-**Phase:** 2 (Orchestration Core) – Full LLM intent routing planned for Phase 4 (Intelligence Layer).
+**Phase:** 2 (Orchestration Core) – Full LLM intent routing planned for Phase 4 (Intelligence Layer).  
+**Governance:** CORE-002 (no root files), CORE-017 (governance enforcement), CORE-009 (plan organization), CORE-025 (intelligent challenge)
 
 ---
 
@@ -93,35 +94,41 @@ TODAY: Run MasterOrchestrator (any intent)
 **Reference:** See `cortex-brain/documents/CORTEX-INTEGRATION-ARCHITECTURE.md` for full integration spec.
 
 ---
-## 🛡️ REGRESSION PREVENTION PROTOCOL (UNIFIED)
 
-**Before any operation, verify critical state files:**
+## 🛡️ REGRESSION PREVENTION PROTOCOL (Reference Only)
 
-```python
-# 🛡️ UNIFIED REGRESSION CHECK
-import json, yaml, sys
+**Reference:** MasterOrchestrator enforces unified regression checks via `src/infrastructure/enhanced_audit_logger.py`.
 
-errors = []
-try:
-    ac_index = yaml.safe_load(open('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml'))
-    if not ac_index.get('schema_version'): errors.append("AC-INDEX missing schema_version")
-except Exception as e: errors.append(f"AC-INDEX parse error: {e}")
+**This prompt DOES NOT perform regression checks.** All state validation is delegated to Python orchestrator:
+- ✅ AC-INDEX.yaml schema validation
+- ✅ progress-tracker.json integrity checks
+- ✅ master-plan.yaml structure validation
+- ✅ Atomic state writes with WAL mode
 
-try:
-    tracker = json.load(open('cortex-brain/tier1/tracking/progress-tracker.json'))
-    if not tracker.get('current_phase'): errors.append("tracker missing current_phase")
-except Exception as e: errors.append(f"tracker parse error: {e}")
+**Why not embed code here?** When MasterOrchestrator implementation is updated, regression check automatically improves for all prompts (DRY principle).
 
-try:
-    plan = yaml.safe_load(open('cortex-brain/cx6-plan/master-plan.yaml'))
-    if not plan.get('plan_metadata'): errors.append("master-plan missing plan_metadata")
-except Exception as e: errors.append(f"master-plan parse error: {e}")
-
-if errors:
-    print("❌ REGRESSION DETECTED:\n" + "\n".join([f"  - {e}" for e in errors]))
-    sys.exit(1)
-print("✅ Regression check passed.")
+**Local verification (optional):**
+```bash
+python3 -m src.main "validate state" --orchestrator master --format markdown
 ```
+
+---
+
+## 🛡️ INTELLIGENT CHALLENGE PROTOCOL (CORE-025)
+
+**Purpose:** Validate requests against Tier 0 governance before execution.
+
+**Implementation:** Delegated to MasterOrchestrator → RequestValidator (governs scope, feasibility, architecture).
+
+**User will see:**
+- ✅ **BLOCK (CHALLENGE)** – Tier 0 violations or high risk
+- ✅ **ADVISE (CHALLENGE)** – Governance concerns with alternatives
+- ✅ **ENHANCE (SUGGEST)** – Best practices available
+- ✅ **APPROVE (PROCEED)** – No blockers, ready to execute
+
+**Reference:** `.github/prompts/CORTEX-ALIGN.prompt.md § INTELLIGENT CHALLENGE PROTOCOL`
+
+---
 
 ## 🎯 YOUR ROLE (CRITICAL)
 

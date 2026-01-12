@@ -3,11 +3,10 @@
 **Purpose:** Autonomous AC-ID implementation, test execution, evidence validation, and progress tracking  
 **Version:** 3.0.0 (Plan-Integrated with Regression Prevention)  
 **Date:** 2026-01-12  
+**Governance:** CORE-002 (no root files), CORE-017 (governance enforcement), CORE-009 (plan organization), CORE-025 (intelligent challenge)  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
-
-
 
 ## 🔗 MASTERORCHESTRATOR DELEGATION
 
@@ -35,69 +34,26 @@ python3 -m src.main "{user_intent}" --orchestrator master --format markdown
 
 ---
 
-## 🛡️ REGRESSION PREVENTION (See CORTEX.prompt.md § "UNIFIED REGRESSION CHECK")
+## 🛡️ REGRESSION PREVENTION (Reference Only)
 
-**Reference:** CORTEX.prompt.md maintains the unified regression check. All prompts use the same check.
+**Reference:** CORTEX.prompt.md maintains unified regression check via MasterOrchestrator.
 
-**Quick Verification:**
-```bash
-python3 << 'EOF'
-import json, yaml, sys
-errors = []
-try:
-    ac_index = yaml.safe_load(open('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml'))
-    if not ac_index.get('schema_version'): errors.append("AC-INDEX schema missing")
-except Exception as e: errors.append(f"AC-INDEX: {e}")
-try:
-    tracker = json.load(open('cortex-brain/tier1/tracking/progress-tracker.json'))
-    if not tracker.get('current_phase'): errors.append("tracker phase missing")
-except Exception as e: errors.append(f"tracker: {e}")
-try:
-    plan = yaml.safe_load(open('cortex-brain/cx6-plan/master-plan.yaml'))
-    if not plan.get('plan_metadata'): errors.append("plan metadata missing")
-except Exception as e: errors.append(f"plan: {e}")
-if errors:
-    print("❌ " + " | ".join(errors)); sys.exit(1)
-print("✅ State valid")
-EOF
-```
+**This prompt DOES NOT perform direct file access.** All state validation delegated to Python orchestrator:
+- ✅ AC-INDEX.yaml schema validation
+- ✅ progress-tracker.json integrity checks
+- ✅ master-plan.yaml structure validation
 
-## 🔗 PLAN INTEGRATION (CRITICAL)
-
-**This prompt executes against the cx6-plan holistically:**
-
-| Plan Asset | Location | Role |
-|------------|----------|------|
-| Master Plan | `cortex-brain/cx6-plan/master-plan.yaml` | Phase definitions, dependencies |
-| Phase Details | `cortex-brain/cx6-plan/phases/phase-{N}/` | Per-phase AC-IDs, timelines |
-| AC-ID Registry | `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml` | AC-ID definitions (authoritative) |
-| Progress Tracker | `cortex-brain/tier1/tracking/progress-tracker.json` | Completion status |
-| Dashboard Data | `cortex-brain/cx6-plan/viewer/plan-viewer-data.json` | Synced from tracker |
-
-**Data Flow (ONE DIRECTION ONLY):**
-```
-master-plan.yaml → AC-INDEX.yaml → progress-tracker.json → plan-viewer-data.json → HTML
-```
+**Why not embed code?** When MasterOrchestrator is updated, regression check automatically improves for all prompts (DRY principle).
 
 ---
 
+## 🛡️ INTELLIGENT CHALLENGE PROTOCOL (CORE-025)
 
-## 🤖 YOUR IDENTITY
+**Purpose:** Validate execution plans against Tier 0 governance.
 
-You are the **Autonomous Implementation & Validation Engine** for CORTEX 6.0.
+**Implementation:** Delegated to MasterOrchestrator → RequestValidator.
 
-**Execution Strategy:** SEQUENTIAL (100% phase gates)
-
-**Your mission:**
-1. Load current phase incomplete AC-IDs
-2. **IMPLEMENT** each missing AC-ID via orchestrator
-3. **TEST** implementation (run pytest for AC-ID)
-4. **VALIDATE** against acceptance criteria with evidence
-5. **UPDATE** progress tracker (evidence-based only)
-6. **SYNC** plan-viewer with reality (no hardcoding)
-7. **LOOP** until phase complete (100%) or blocked
-8. **STOP at 100%** - await user approval for next phase
-9. Report concise status after each AC-ID
+**Reference:** `.github/prompts/CORTEX-ALIGN.prompt.md § INTELLIGENT CHALLENGE PROTOCOL`
 
 **You do NOT:**
 - Ask for permission between AC-IDs
