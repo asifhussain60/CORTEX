@@ -1,7 +1,7 @@
 schema_version: '1.7'
-last_updated: '2026-01-12T08:28:19.266955Z'
-total_ac_count: 163
-completed_count: 33
+last_updated: '2026-01-12T08:45:00.000000Z'
+total_ac_count: 164
+completed_count: 34
 in_progress_count: 0
 design_score_current: 97
 design_score_target: 95
@@ -720,7 +720,29 @@ categories:
       data_pipeline: CORTEX-4.0:src/cortex_lens/core/pipeline.py
       collectors: CORTEX-4.0:src/cortex_lens/collectors/
     stores_to: cortex-brain/tier1/  (company tier - project-specific knowledge)
+  HEADER:
+    prefix: AC-HEADER
+    description: Dynamic CORTEX header/footer injection system - Centralized response
+      branding and copyright management
+    tier: 1
+    priority: 1
+    core_workflow: true
+    compliance_requirement: true
+    note: Ensures all orchestrator responses include CORTEX title, version, date, author,
+      and copyright. Configuration-driven to enable updates without template hardcoding.
+      Supports markdown, HTML, JSON, and plaintext formats.
+    infrastructure_component: true
+    implementation: src/infrastructure/response_header_footer_manager.py
+    registered_in: MasterOrchestrator (via wrap_response, inject_cortex_header methods)
+    formats_supported:
+    - markdown (primary)
+    - html (with glassmorphism styling)
+    - json (as metadata object)
+    - plaintext (ASCII format)
+    configuration_source: cortex-brain/response-templates-v4.yaml (mandatory_header section)
+    governance_link: CORE-017 (governance enforcement)
 foundation:
+
   audit:
   - id: AC-AUDIT-001
     name: Queryable Audit Storage
@@ -963,6 +985,61 @@ foundation:
     - AC-EVIDENCE-001
     - AC-EVIDENCE-002
     location: cortex-brain/evidence-bundles/
+  header:
+  - id: AC-HEADER-001
+    name: CORTEX Response Header Injection System
+    description: Dynamic, configuration-driven header/footer injection middleware for
+      all orchestrator responses. Ensures consistent CORTEX branding (title, version,
+      date, author, copyright) across markdown, HTML, JSON, and plaintext formats.
+    status: implemented
+    phase: Phase 1 Infrastructure Enhancement
+    priority: HIGH
+    compliance: copyright_enforcement
+    tests:
+    - tests/infrastructure/test_header_injection.py
+    - tests/infrastructure/test_header_formats.py
+    - tests/infrastructure/test_header_compliance.py
+    implementation: src/infrastructure/response_header_footer_manager.py
+    registered_in: src/orchestrators/core/master_orchestrator.py
+    design_principles:
+    - 'Configuration-driven (NOT hardcoded to templates)'
+    - 'Centralized header/footer configuration in response-templates-v4.yaml'
+    - 'Middleware-based injection via MasterOrchestrator.wrap_response()'
+    - 'Supports all output formats (markdown, HTML, JSON, plaintext)'
+    - 'Automatic version, date, and copyright injection'
+    - 'Zero-overhead singleton pattern for manager instance'
+    formats_supported:
+    - markdown (with border separators)
+    - html (with glassmorphism styling)
+    - json (as metadata object in response structure)
+    - plaintext (ASCII box format)
+    integration_points:
+    - 'MasterOrchestrator.wrap_response(content, operation_type, format)'
+    - 'MasterOrchestrator.inject_cortex_header(content, operation_type, format)'
+    - 'All child orchestrators inherit wrapping capability'
+    governance_alignment:
+    - CORE-017 (governance enforcement - brand/copyright non-negotiable)
+    - CORE-002 (no summary files - but branding must persist)
+    - CORE-008 (TDD enforcement - all orchestrator outputs verified)
+    configuration:
+      source: cortex-brain/response-templates-v4.yaml
+      section: mandatory_header
+      components:
+      - title (CORTEX)
+      - version (6.0.0)
+      - timestamp (ISO 8601 UTC)
+      - author (Asif Hussain)
+      - copyright (2025-2026)
+    acceptance_criteria:
+    - 'Header appears FIRST in all responses (before summary/content)'
+    - 'Copyright notice always includes current year range (2025-2026)'
+    - 'Version matches cortex-brain/TRUTH-SOURCES.yaml:cortex_version'
+    - 'Timestamp auto-generated at response time (UTC ISO 8601)'
+    - 'All formats render identically (content-only difference, structure identical)'
+    - 'Performance: header generation <1ms, zero observable latency overhead'
+    - 'Configuration updates reflect immediately (no restart required)'
+    - 'Backwards compatible (no changes required to existing orchestrators)'
+    evidence_bundle_location: cortex-brain/evidence-bundles/AC-HEADER-001/
   sts:
   - id: AC-STS-001
     name: Golden Corpus (100 Test Intents)

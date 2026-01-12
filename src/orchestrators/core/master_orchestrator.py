@@ -11,7 +11,7 @@ TDD Phase: GREEN
 """
 
 from dataclasses import dataclass
-from typing import Dict, Optional, Any, List
+from typing import Dict, Optional, Any, List, Literal
 from pathlib import Path
 
 from ..middleware.orchestrator_lifecycle import (
@@ -28,6 +28,11 @@ from ..phase_boundary_cleanup import (
     CleanupEvidenceBundle
 )
 from ..housekeeping_orchestrator import HousekeepingOrchestrator
+from ..infrastructure.response_header_footer_manager import (
+    ResponseHeaderFooterManager,
+    get_header_footer_manager,
+    wrap_cortex_response
+)
 
 
 @dataclass
@@ -58,6 +63,9 @@ class MasterOrchestrator:
         
         # Governance merger reference (Task 2.2)
         self._governance_merger: Optional[GovernanceMerger] = None
+        
+        # Header/Footer manager (AC-HEADER-001) - Ensures CORTEX branding on all outputs
+        self._header_footer_manager = get_header_footer_manager()
         
         # Initialize sub-orchestrators
         self._initialize_orchestrators()
@@ -542,3 +550,67 @@ class MasterOrchestrator:
             
             # Re-raise to block phase transition
             raise
+    
+    def wrap_response(
+        self,
+        content: str,
+        operation_type: str = "Execution",
+        format: Literal["markdown", "html", "json", "plaintext"] = "markdown",
+        include_footer: bool = True
+    ) -> str:
+        """
+        Wrap orchestrator response with CORTEX header and footer (AC-HEADER-001).
+        
+        This middleware method ensures all responses include:
+        - CORTEX title and branding
+        - Version and date information
+        - Copyright notice
+        - Optional footer with CORTEX attribution
+        
+        This is the centralized way to inject branding into any response.
+        
+        Args:
+            content: Response content to wrap
+            operation_type: Type of operation (Execution, Validation, Planning, etc.)
+            format: Output format (markdown, html, json, plaintext)
+            include_footer: Whether to include footer
+        
+        Returns:
+            Complete response with header and footer
+            
+        Example:
+            # In any orchestrator execution
+            result = self.execute()
+            complete = self.wrap_response(result, "Planning", format="markdown")
+        """
+        return self._header_footer_manager.wrap_response(
+            content,
+            operation_type=operation_type,
+            format=format,
+            include_footer=include_footer
+        )
+    
+    def inject_cortex_header(
+        self,
+        content: str,
+        operation_type: str = "Execution",
+        format: Literal["markdown", "html", "json", "plaintext"] = "markdown"
+    ) -> str:
+        """
+        Inject CORTEX header into response (AC-HEADER-001).
+        
+        Lightweight alternative to wrap_response() if footer is not needed.
+        
+        Args:
+            content: Response content
+            operation_type: Type of operation
+            format: Output format
+        
+        Returns:
+            Content with CORTEX header prepended
+        """
+        return self._header_footer_manager.generate_header(
+            operation_type,
+            "6.0.0",
+            format
+        ) + content
