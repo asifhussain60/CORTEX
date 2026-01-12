@@ -27,6 +27,7 @@ from ..phase_boundary_cleanup import (
     PhaseBoundaryCleanup,
     CleanupEvidenceBundle
 )
+from ..housekeeping_orchestrator import HousekeepingOrchestrator
 
 
 @dataclass
@@ -85,6 +86,37 @@ class MasterOrchestrator:
         gov_lifecycle = OrchestratorLifecycle("governance-merger")
         gov_lifecycle.transition_to(LifecycleState.READY)
         self.lifecycles["governance"] = gov_lifecycle
+        
+        # Initialize Housekeeping Orchestrator (manual on-demand)
+        # Phase 2 enhancement: AC-CLEAN-201, AC-CLEAN-202
+        # Per DOR Q4/Q9: Manual execution only, no automatic triggers
+        try:
+            housekeeping = HousekeepingOrchestrator(
+                workspace_root=self.workspace_root,
+                manual_only=True
+            )
+            self.orchestrators["housekeeping"] = housekeeping
+            
+            # Create lifecycle tracker for Housekeeping
+            housekeeping_lifecycle = OrchestratorLifecycle("housekeeping-orchestrator")
+            housekeeping_lifecycle.transition_to(LifecycleState.READY)
+            self.lifecycles["housekeeping"] = housekeeping_lifecycle
+            
+            self.logger.info(
+                category=AuditCategory.EXECUTION,
+                component='master_orchestrator',
+                operation='initialize_housekeeping',
+                message='Housekeeping orchestrator registered (manual on-demand only)',
+                context={'manual_only': True, 'ac_ids': ['AC-CLEAN-201', 'AC-CLEAN-202']}
+            )
+        except Exception as e:
+            self.logger.warning(
+                category=AuditCategory.EXECUTION,
+                component='master_orchestrator',
+                operation='initialize_housekeeping',
+                message=f'Housekeeping orchestrator initialization failed: {e}',
+                context={'error': str(e)}
+            )
         
         self.logger.info(
             category=AuditCategory.EXECUTION,

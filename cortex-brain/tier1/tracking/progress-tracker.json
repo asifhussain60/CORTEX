@@ -1,7 +1,7 @@
 {
   "schema_version": "1.9",
-  "last_updated": "2026-01-12T07:55:17.874166",
-  "updated_by": "Audit-based validator (audit_logs + live_tests)",
+  "last_updated": "2026-01-12T08:31:06.028892",
+  "updated_by": "Brittleness Review (2026-01-12)",
   "active_epic": {
     "id": "CORTEX-6.0",
     "name": "CORTEX 6.0 Production-Grade Rebuild with Sequential Execution",
@@ -18,6 +18,7 @@
     "hybrid_approach_phase": "DOCUMENTED - READY FOR IMPLEMENTATION",
     "review_rounds_completed": 4,
     "recent_fixes": [
+      "2026-01-12: Brittleness Review Complete - 38 new AC-IDs added (15 toolkit, 6 risk, 3 security, 12 debt, 2 performance)",
       "2026-01-10: Fixed core-rules.yaml YAML structure bug (duplicate sections merged)",
       "2026-01-10: All 23 CORE rules now loading correctly",
       "2026-01-10: Governance tests: 48/48 passing (100%)",
@@ -109,7 +110,9 @@
       "AC-TEST-004",
       "AC-CLEAN-001",
       "AC-CLEAN-002",
-      "AC-CLEAN-003"
+      "AC-CLEAN-003",
+      "AC-RISK-010",
+      "AC-DEBT-014"
     ],
     "prerequisites": [],
     "status": "completed",
