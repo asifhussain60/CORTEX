@@ -1,0 +1,403 @@
+schema_version: "1.0"
+view_id: "analytics-dashboard"
+view_name: "CORTEX Lens 3.0.0 - Analytics & Insights"
+priority: 9
+status: "approved"
+last_updated: "2026-01-12"
+
+theme:
+  base_reference: "plan-viewer.html"
+  inherit_css_variables: true
+  metric_colors:
+    healthy: "#10b981"
+    warning: "#f59e0b"
+    critical: "#ef4444"
+    neutral: "#60a5fa"
+
+navigation:
+  back_link:
+    text: "← Back to Plan Viewer"
+    href: "../plan-viewer.html"
+  breadcrumb: ["CORTEX 6.0", "Intelligence", "CORTEX Lens 3.0.0"]
+
+content:
+  
+  hero:
+    title: "CORTEX Lens 3.0.0"
+    subtitle: "Real-Time Analytics & System Intelligence"
+    tagline: "Health metrics, trend analysis, and AI-driven recommendations"
+    
+    key_stats:
+      - label: "Data Sources"
+        value: "4"
+        description: "Conversations, tests, builds, deployments"
+      - label: "Metrics Tracked"
+        value: "15+"
+        description: "Health, coverage, performance, trends"
+      - label: "Recommendations"
+        value: "AI-Generated"
+        description: "Based on system patterns"
+  
+  overview:
+    section_title: "Analytics Dashboard Features"
+    
+    core_purpose:
+      description: "Provide executives and engineers with real-time visibility into CORTEX health and performance"
+      benefits:
+        - "Identify bottlenecks before they become critical"
+        - "Track progress toward epic completion"
+        - "Monitor code quality trends"
+        - "Optimize resource allocation"
+        - "Predict delivery risks"
+  
+  health_metrics:
+    section_title: "System Health Score"
+    description: "Composite metric from multiple sub-metrics"
+    
+    diagram:
+      type: "d3_gauge_chart"
+      metric: "Overall System Health"
+      scale: "0-100"
+      thresholds:
+        excellent: "90-100"
+        good: "75-90"
+        fair: "50-75"
+        critical: "<50"
+      
+      sample_values:
+        current: 87
+        target: 95
+        trend: "increasing"
+    
+    component_metrics:
+      - metric: "Test Coverage"
+        weight: "25%"
+        current: 82
+        target: 90
+        color: "#f59e0b"
+        description: "Percentage of code covered by tests"
+      
+      - metric: "Governance Compliance"
+        weight: "30%"
+        current: 98
+        target: 100
+        color: "#10b981"
+        description: "SKULL rule violations (lower is better)"
+      
+      - metric: "Phase Completion"
+        weight: "20%"
+        current: 74
+        target: 100
+        color: "#f59e0b"
+        description: "Current epic phase progress"
+      
+      - metric: "Deployment Success"
+        weight: "15%"
+        current: 99
+        target: 99
+        color: "#10b981"
+        description: "Rollback rate and deployment frequency"
+      
+      - metric: "Build Performance"
+        weight: "10%"
+        current: 91
+        target: 95
+        color: "#10b981"
+        description: "Build time trend (lower is better)"
+    
+    calculation_formula:
+      formula: "Health = Σ(metric_value × weight)"
+      example: "(0.82 × 0.25) + (0.98 × 0.30) + (0.74 × 0.20) + (0.99 × 0.15) + (0.91 × 0.10) = 0.87"
+  
+  trend_analysis:
+    section_title: "Trend Analysis Over Time"
+    description: "Track metrics across days, weeks, months"
+    
+    diagram:
+      type: "d3_multi_line_chart"
+      x_axis: "Date"
+      y_axis: "Metric Value"
+      time_periods:
+        last_7_days: "Week view"
+        last_30_days: "Month view"
+        last_90_days: "Quarter view"
+      
+      series:
+        - name: "Test Coverage %"
+          color: "#3b82f6"
+          data_points: 30
+          trend: "increasing"
+          trend_label: "+3.2% this week"
+        
+        - name: "Build Duration (seconds)"
+          color: "#ef4444"
+          data_points: 30
+          trend: "increasing"
+          trend_label: "-2.1 sec/day"
+        
+        - name: "Deployment Frequency (per week)"
+          color: "#10b981"
+          data_points: 30
+          trend: "increasing"
+          trend_label: "+0.5 per week"
+        
+        - name: "Phase Completion %"
+          color: "#f59e0b"
+          data_points: 30
+          trend: "stable"
+          trend_label: "+1.4% this week"
+      
+      interactions:
+        hover: "Show exact values and timestamps"
+        click_legend: "Toggle series on/off"
+        date_range_picker: "Select custom date range"
+  
+  recommendation_engine:
+    section_title: "AI-Driven Recommendations"
+    description: "Intelligent suggestions based on patterns and trends"
+    
+    recommendation_types:
+      - type: "Performance Optimization"
+        examples:
+          - "Refactor frequently called functions (HOT_PATH smell detected)"
+          - "Optimize database queries (search takes 234ms avg)"
+          - "Parallel test execution can reduce suite time by 40%"
+        data_source: "Performance metrics + pattern library"
+        confidence: "0.89"
+        impact: "HIGH"
+      
+      - type: "Code Quality"
+        examples:
+          - "Increase test coverage in auth module (currently 65%)"
+          - "Extract common validation logic (DUPLICATE_CODE)"
+          - "Simplify complex conditional in payment processor"
+        data_source: "Code smell detection + coverage trends"
+        confidence: "0.92"
+        impact: "MEDIUM"
+      
+      - type: "Process Improvement"
+        examples:
+          - "Phase 1 taking 8 days, Phase 2 took 5 days → adjust planning"
+          - "AC-AUDIT-001 to AC-AUDIT-007 had higher failure rate"
+          - "Consider increasing time estimates for complex features"
+        data_source: "Phase execution history + estimation accuracy"
+        confidence: "0.85"
+        impact: "MEDIUM"
+      
+      - type: "Risk Alerts"
+        examples:
+          - "Test coverage dropping (was 85%, now 79%)"
+          - "Build duration increasing (trend: +2 sec/day)"
+          - "3 deployments failed this week (vs 1 historically)"
+        data_source: "Real-time monitoring + anomaly detection"
+        confidence: "0.78"
+        impact: "HIGH"
+    
+    recommendation_card:
+      type: "Interactive card"
+      fields:
+        - "Recommendation text"
+        - "Confidence level (%) + color coded"
+        - "Estimated impact (HIGH/MEDIUM/LOW)"
+        - "Related metric and trend"
+        - "Suggested action (clickable link)"
+  
+  widget_gallery:
+    section_title: "Dashboard Widgets"
+    description: "Individual metric cards composing the dashboard"
+    
+    widget_types:
+      - widget: "Progress Bar"
+        metric: "Phase completion, test coverage"
+        displays:
+          - "Current vs target"
+          - "Trend arrow (↑ ↓ →)"
+          - "Time-based projection"
+      
+      - widget: "Gauge Chart"
+        metric: "Overall health score"
+        displays:
+          - "Numerical score (0-100)"
+          - "Color-coded zone"
+          - "Target marker"
+      
+      - widget: "Sparkline"
+        metric: "Quick trend indicator"
+        displays:
+          - "Small line chart"
+          - "Trend direction"
+          - "Last 7 days"
+      
+      - widget: "Donut Chart"
+        metric: "Distribution of items"
+        displays:
+          - "Implemented vs planned AC-IDs"
+          - "Passed vs failed tests"
+          - "By category/phase"
+      
+      - widget: "Number Card"
+        metric: "Single metric with context"
+        displays:
+          - "Large number"
+          - "Unit and trend"
+          - "Color indication (↑ green, ↓ red)"
+      
+      - widget: "Stat Panel"
+        metric: "Multiple related stats"
+        displays:
+          - "List of metrics with values"
+          - "Comparison to historical"
+          - "Commentary text"
+    
+    widget_customization:
+      user_can:
+        - "Choose time period (7d, 30d, 90d)"
+        - "Filter by category/phase/orchestrator"
+        - "Pin frequently viewed widgets"
+        - "Arrange dashboard layout"
+  
+  data_sources:
+    section_title: "Data Collection"
+    description: "Where CORTEX Lens gets its data"
+    
+    sources:
+      - source: "Conversation Logs"
+        data_collected:
+          - "Request count by operation type"
+          - "Orchestrator usage (which agents used most)"
+          - "Average complexity tier"
+        retention: "30 days rolling"
+      
+      - source: "Audit Logger"
+        data_collected:
+          - "Governance violations (SKULL rules)"
+          - "Error count and types"
+          - "Execution timing per phase"
+        retention: "90 days"
+      
+      - source: "Test Results"
+        data_collected:
+          - "Code coverage percentage"
+          - "Test count and pass rate"
+          - "Test execution duration"
+        retention: "60 days"
+      
+      - source: "Build & Deploy"
+        data_collected:
+          - "Build duration (CI/CD metrics)"
+          - "Deployment frequency"
+          - "Rollback rate"
+          - "Build success rate"
+        retention: "90 days"
+    
+    data_pipeline:
+      steps:
+        - "1. Data collected from source systems"
+        - "2. Aggregated in cortex-brain/tier3/"
+        - "3. Metrics calculated hourly"
+        - "4. Dashboard updated in real-time"
+        - "5. Old data archived after retention period"
+  
+  export_functionality:
+    section_title: "Data Export"
+    
+    export_formats:
+      - format: "CSV"
+        use_case: "Spreadsheet analysis"
+        data: "Metrics table with timestamps"
+      
+      - format: "JSON"
+        use_case: "API integration"
+        data: "Structured metrics and recommendations"
+      
+      - format: "PDF Report"
+        use_case: "Executive summary"
+        data: "Charts, trends, recommendations"
+    
+    export_options:
+      - "Export current view"
+      - "Export date range"
+      - "Schedule recurring export (daily/weekly)"
+      - "Send to external analytics tool"
+
+external_references:
+  - title: "Designing Data Dashboards"
+    url: "https://www.youtube.com/watch?v=CIpMqM2SXEw"
+    description: "Dashboard design principles (18:30)"
+    embed: true
+  
+  - title: "AI-Driven Analytics and Recommendations"
+    url: "https://www.youtube.com/watch?v=UdBJ2Jbs2oA"
+    description: "Using ML for intelligent insights (16:15)"
+    embed: true
+
+interactivity:
+  
+  time_period_selector:
+    enabled: true
+    description: "Switch between time periods"
+    options:
+      - "Last 7 days"
+      - "Last 30 days"
+      - "Last 90 days"
+      - "Custom range"
+  
+  metric_comparison:
+    enabled: true
+    title: "Compare Metrics"
+    description: "See how metrics relate to each other"
+    
+    input_form:
+      fields:
+        - name: "metric1"
+          label: "Metric 1"
+          type: "select"
+          options: ["Test Coverage", "Build Duration", "Phase Progress"]
+        - name: "metric2"
+          label: "Metric 2"
+          type: "select"
+          options: ["Test Coverage", "Build Duration", "Phase Progress"]
+      
+      button:
+        text: "Compare"
+    
+    output_display:
+      type: "Correlation chart"
+      show:
+        - "Two-axis chart"
+        - "Correlation coefficient"
+        - "Insight (does higher X correlate with higher Y?)"
+  
+  alert_configuration:
+    enabled: true
+    title: "Configure Alerts"
+    description: "Set thresholds for notifications"
+    
+    examples:
+      - "Alert if test coverage drops below 80%"
+      - "Alert if build duration exceeds 120 seconds"
+      - "Alert if governance violations exceed 5 per day"
+      - "Alert if phase completion is behind schedule"
+
+metadata:
+  target_audience: "Project managers, technical leads, executives"
+  reading_time: "8-10 minutes"
+  complexity_level: "Intermediate"
+  
+  implementation_references:
+    - path: "cortex-brain/tier3/metrics/"
+    - path: "cortex-brain/dashboards/"
+    - path: "src/analytics/cortex_lens.py"
+
+accessibility:
+  wcag_level: "AA"
+  requirements:
+    - "Charts have text alternatives"
+    - "Color not sole indicator (use patterns + text)"
+    - "Keyboard navigation for all widgets"
+    - "Focus indicators visible"
+
+responsive_design:
+  mobile: "Single-column widget stack"
+  tablet: "2-column grid"
+  desktop: "3-4 column grid with customizable layout"

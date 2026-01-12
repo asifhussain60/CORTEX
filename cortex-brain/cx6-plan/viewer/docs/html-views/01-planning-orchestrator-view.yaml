@@ -1,0 +1,534 @@
+schema_version: "1.0"
+view_id: "planning-orchestrator"
+view_name: "Planning System 5.0.0 - Autonomous Feature Planning"
+priority: 1
+status: "approved"
+last_updated: "2026-01-12"
+
+# =============================================================================
+# THEME & DESIGN SYSTEM
+# =============================================================================
+theme:
+  base_reference: "plan-viewer.html"
+  color_scheme:
+    primary_dark: "#0a0e27"
+    primary_darker: "#050814"
+    primary_accent: "#00d4ff"
+    accent_alt: "#7b2cbf"
+    green_completed: "#06ffa5"
+    text_primary: "#ffffff"
+    text_secondary: "rgba(255, 255, 255, 0.7)"
+    border: "rgba(0, 212, 255, 0.15)"
+    bg_elevated: "rgba(10, 14, 39, 0.6)"
+  
+  css_variables:
+    - "Use CSS variables from plan-viewer.html"
+    - "var(--color-primary-dark)"
+    - "var(--color-primary-accent)"
+    - "var(--spacing-md)"
+    - "var(--radius-lg)"
+    - "var(--shadow-md)"
+    - "var(--transition-base)"
+  
+  design_elements:
+    - "Dark glass-morphism: translucent panels with backdrop-blur"
+    - "Rounded corners (border-radius: var(--radius-lg))"
+    - "Subtle neon accents on borders and highlights"
+    - "Smooth transitions (var(--transition-base))"
+    - "Elevated cards with box-shadow: var(--shadow-md)"
+
+# =============================================================================
+# NAVIGATION
+# =============================================================================
+navigation:
+  back_link:
+    text: "← Back to Plan Viewer"
+    href: "../plan-viewer.html"
+    style: "Neon accent color, hover effect, positioned top-left"
+    icon: "SVG arrow-left (bootstrap-icons)"
+  
+  breadcrumb:
+    items:
+      - text: "CORTEX 6.0"
+        href: "../plan-viewer.html"
+      - text: "Orchestrators"
+        href: "#"
+      - text: "Planning System 5.0.0"
+        current: true
+
+# =============================================================================
+# CONTENT STRUCTURE
+# =============================================================================
+content:
+  
+  # ---------------------------------------------------------------------------
+  # 1. HERO SECTION
+  # ---------------------------------------------------------------------------
+  hero:
+    title: "Planning System 5.0.0"
+    subtitle: "Autonomous Feature Planning with 4-Tier Complexity Routing"
+    tagline: "Pure configuration-driven planning with zero natural language in manifests"
+    
+    background:
+      type: "generated_image"
+      prompt: "Stylized blueprint of neural network and brain structure in dark cyber-blue tones with subtle circuit patterns"
+      style: "Abstract, minimal, fits dark theme"
+    
+    key_stats:
+      - label: "Complexity Tiers"
+        value: "4"
+        description: "INSTANT → LIGHTWEIGHT → DOCUMENTED → COMPLEX"
+      - label: "Token Reduction"
+        value: "95%"
+        description: "Hierarchical plan structure"
+      - label: "Orchestrator Type"
+        value: "Autonomous"
+        description: "No user intervention during execution"
+  
+  # ---------------------------------------------------------------------------
+  # 2. FOUR-TIER COMPLEXITY ROUTING
+  # ---------------------------------------------------------------------------
+  complexity_routing:
+    section_title: "4-Tier Complexity Routing"
+    description: "Plans are automatically routed based on estimated duration and complexity"
+    
+    diagram:
+      type: "d3_sunburst"
+      library: "D3.js v7"
+      data:
+        - tier: "INSTANT"
+          duration: "<2s"
+          use_case: "Direct function calls, no file creation"
+          color: "#06ffa5"
+          examples:
+            - "Status check"
+            - "Quick query"
+            - "Parameter validation"
+        
+        - tier: "LIGHTWEIGHT"
+          duration: "2-10s"
+          use_case: "Inline validation, minimal file operations"
+          color: "#00d4ff"
+          examples:
+            - "Single file validation"
+            - "Quick refactor"
+            - "Config update"
+        
+        - tier: "DOCUMENTED"
+          duration: "10min - 1hr"
+          use_case: "Single markdown plan with context"
+          color: "#7b2cbf"
+          examples:
+            - "Feature implementation"
+            - "Bug fix with analysis"
+            - "Module refactor"
+        
+        - tier: "COMPLEX"
+          duration: ">1hr"
+          use_case: "Nested markdown plans with phases"
+          color: "#f59e0b"
+          examples:
+            - "Epic-level features"
+            - "Architecture changes"
+            - "Multi-module integration"
+      
+      interactions:
+        hover: "Display tier details: duration, use case, examples"
+        click: "Expand to show example plans for that tier"
+        tooltip: "Show token consumption for each tier"
+  
+  # ---------------------------------------------------------------------------
+  # 3. PLANNING PROCESS FLOWCHART
+  # ---------------------------------------------------------------------------
+  planning_flow:
+    section_title: "Autonomous Planning Workflow"
+    description: "End-to-end planning process from request to execution"
+    
+    diagram:
+      type: "mermaid_flowchart"
+      library: "Mermaid.js"
+      code: |
+        flowchart TD
+          A[User Request] --> B[Parse Feature Name]
+          B --> C[Pre-Planning Discovery]
+          C --> D{Plan Exists?}
+          D -->|Yes| E[Load Existing Plan]
+          D -->|No| F[Create New Plan ID]
+          F --> G[Tier Routing Decision]
+          G --> H{Complexity Tier?}
+          H -->|INSTANT| I[Direct Execution]
+          H -->|LIGHTWEIGHT| J[Inline Validation]
+          H -->|DOCUMENTED| K[Generate Single Plan]
+          H -->|COMPLEX| L[Generate Nested Plans]
+          K --> M[Context Discovery]
+          L --> M
+          M --> N[AST Analysis]
+          N --> O[Template Rendering]
+          O --> P[Folder Creation]
+          P --> Q[Validation Gate]
+          Q --> R{Valid?}
+          R -->|Yes| S[Update Database]
+          R -->|No| T[Rollback & Fix]
+          T --> O
+          S --> U[TodoManager Integration]
+          U --> V[Ready for TDD-Master]
+      
+      style: "Dark theme with neon accents matching plan-viewer"
+      node_colors:
+        decision: "#7b2cbf"
+        process: "#00d4ff"
+        success: "#06ffa5"
+        error: "#ef4444"
+  
+  # ---------------------------------------------------------------------------
+  # 4. PRE-PLANNING DISCOVERY
+  # ---------------------------------------------------------------------------
+  discovery:
+    section_title: "Pre-Planning Discovery"
+    description: "Prevents duplicate plans by searching existing plans before creation"
+    
+    search_locations:
+      - path: "cortex-brain/documents/planning/active"
+        description: "Active plans currently in development"
+      - path: "cortex-brain/documents/planning/temp-plans"
+        description: "Temporary experimental plans"
+      - path: "cortex-brain/documents/planning/completed"
+        description: "Historical completed plans"
+    
+    detection_strategy:
+      - "Fuzzy match on feature name (Levenshtein distance)"
+      - "Keyword extraction and comparison"
+      - "Context similarity using embedding vectors"
+    
+    callout:
+      type: "info"
+      icon: "shield-check"
+      title: "Duplicate Prevention"
+      message: "Discovery reduces redundant work by 40% and prevents conflicting plans"
+  
+  # ---------------------------------------------------------------------------
+  # 5. TOKEN OPTIMIZATION
+  # ---------------------------------------------------------------------------
+  token_optimization:
+    section_title: "Hierarchical Token Optimization"
+    description: "95% token reduction through structured plan hierarchy"
+    
+    diagram:
+      type: "d3_bar_chart"
+      library: "D3.js v7"
+      data:
+        - document_type: "Status-Only Query"
+          tokens: 400
+          description: "Check plan status without loading full content"
+        - document_type: "Master Hub"
+          tokens: 1200
+          description: "Overview with phase summaries and links"
+        - document_type: "Phase-Specific"
+          tokens: 2500
+          description: "Detailed phase content with acceptance criteria"
+        - document_type: "Full Plan (Old)"
+          tokens: 47500
+          description: "Monolithic plan before optimization"
+      
+      x_axis: "Document Type"
+      y_axis: "Token Count"
+      color_scale:
+        low: "#06ffa5"
+        high: "#ef4444"
+      
+      annotation:
+        text: "95% Reduction"
+        position: "Between Full Plan and Master Hub"
+        style: "Neon accent callout with arrow"
+    
+    optimization_strategies:
+      - strategy: "Lazy Loading"
+        description: "Load only requested phase content"
+      - strategy: "Content Caching"
+        description: "Cache frequently accessed sections"
+      - strategy: "Link-Based Navigation"
+        description: "Use file references instead of embedding"
+  
+  # ---------------------------------------------------------------------------
+  # 6. OUTPUT STRUCTURE
+  # ---------------------------------------------------------------------------
+  output_structure:
+    section_title: "Generated Plan Structure"
+    description: "Standardized folder hierarchy for all plans"
+    
+    tree_diagram:
+      type: "collapsible_tree"
+      library: "Custom HTML/CSS with icons"
+      structure:
+        - name: "{plan-id}/"
+          type: "folder"
+          icon: "folder"
+          children:
+            - name: "00-master-plan.md"
+              type: "file"
+              icon: "file-text"
+              description: "Hub document with phase overview"
+            
+            - name: "context/"
+              type: "folder"
+              icon: "folder"
+              children:
+                - name: "discovered-context.md"
+                  type: "file"
+                  icon: "file-text"
+                  description: "Workspace search results"
+                - name: "ast-analysis.yaml"
+                  type: "file"
+                  icon: "file-code"
+                  description: "Code structure analysis"
+                - name: "governance-rules.yaml"
+                  type: "file"
+                  icon: "shield"
+                  description: "Applicable SKULL rules"
+            
+            - name: "phases/"
+              type: "folder"
+              icon: "folder"
+              children:
+                - name: "phase-01-foundation.md"
+                  type: "file"
+                  icon: "file-text"
+                - name: "phase-02-implementation.md"
+                  type: "file"
+                  icon: "file-text"
+                - name: "phase-03-testing.md"
+                  type: "file"
+                  icon: "file-text"
+            
+            - name: "tracking/"
+              type: "folder"
+              icon: "folder"
+              children:
+                - name: "progress-tracker.json"
+                  type: "file"
+                  icon: "file-json"
+                  description: "Real-time phase progress"
+                - name: "todo-list.yaml"
+                  type: "file"
+                  icon: "list-check"
+                  description: "TodoManager task list"
+            
+            - name: "config.yaml"
+              type: "file"
+              icon: "gear"
+              description: "Plan configuration and metadata"
+    
+    folder_descriptions:
+      - folder: "context/"
+        purpose: "Pre-execution discovery and analysis"
+        file_count: "3-5 files"
+      - folder: "phases/"
+        purpose: "Phase-specific implementation plans"
+        file_count: "3-8 files depending on complexity"
+      - folder: "tracking/"
+        purpose: "Real-time execution state"
+        file_count: "2 files"
+  
+  # ---------------------------------------------------------------------------
+  # 7. TODOMANAGER INTEGRATION
+  # ---------------------------------------------------------------------------
+  todomanager:
+    section_title: "TodoManager Integration (v6 Enhancement)"
+    description: "Real-time task tracking and dependency management"
+    
+    features:
+      - feature: "Task Generation from AC-IDs"
+        description: "Each acceptance criterion becomes a tracked task"
+      - feature: "Dependency Resolution"
+        description: "Tasks ordered by dependencies and priorities"
+      - feature: "Status Synchronization"
+        description: "Task status synced with progress-tracker.json"
+      - feature: "Dashboard Updates"
+        description: "Plan viewer shows live task completion"
+    
+    diagram:
+      type: "mermaid_sequence"
+      code: |
+        sequenceDiagram
+          participant P as Planning Orchestrator
+          participant TM as TodoManager
+          participant DB as Database
+          participant PV as Plan Viewer
+          
+          P->>TM: Generate tasks from AC-IDs
+          TM->>DB: Store task definitions
+          P->>TM: Update task status (PENDING → IN_PROGRESS)
+          TM->>DB: Persist status change
+          DB->>PV: Sync dashboard data
+          PV->>PV: Render updated progress
+  
+  # ---------------------------------------------------------------------------
+  # 8. SAFETY MEASURES
+  # ---------------------------------------------------------------------------
+  safety:
+    section_title: "Built-in Safety & Validation"
+    
+    measures:
+      - measure: "Git Checkpoints"
+        description: "Automatic checkpoints before major operations"
+        icon: "git"
+      
+      - measure: "Validation Gates"
+        description: "config.yaml schema validation before phase progression"
+        icon: "shield-check"
+      
+      - measure: "Rollback Capability"
+        description: "Revert to last checkpoint on failure"
+        icon: "arrow-counterclockwise"
+      
+      - measure: "Governance Enforcement"
+        description: "All operations validated against SKULL rules"
+        icon: "shield-lock"
+    
+    callout:
+      type: "warning"
+      title: "Autonomous Execution Safeguards"
+      message: "Planning System operates autonomously but includes multiple validation gates and rollback mechanisms to prevent errors from propagating"
+
+# =============================================================================
+# EXTERNAL REFERENCES (MAX 3)
+# =============================================================================
+external_references:
+  - title: "Agile Feature Planning with AI"
+    url: "https://www.youtube.com/watch?v=kHYJKD_fdoo"
+    description: "Overview of AI-driven planning approaches (8:24)"
+    embed: true
+    caption: "Context: How AI can automate feature breakdown and estimation"
+  
+  - title: "Autonomous Agent Orchestration Patterns"
+    url: "https://www.youtube.com/watch?v=sal78ACtGTc"
+    description: "Design patterns for autonomous agent systems (15:32)"
+    embed: true
+    caption: "Context: Architectural patterns CORTEX Planning uses for autonomous execution"
+  
+  - title: "Managing Technical Debt with Structured Planning"
+    url: "https://www.youtube.com/watch?v=YxIPGaGxEiQ"
+    description: "Best practices for maintaining plan quality (12:45)"
+    embed: false
+    link_text: "Watch on YouTube"
+    caption: "Context: Why hierarchical plan structures reduce maintenance burden"
+
+# =============================================================================
+# INTERACTIVE ELEMENTS
+# =============================================================================
+interactivity:
+  
+  live_demo:
+    enabled: true
+    title: "Try It: Generate a Sample Plan"
+    description: "See how Planning System routes different requests"
+    
+    input_form:
+      fields:
+        - name: "feature_name"
+          label: "Feature Name"
+          type: "text"
+          placeholder: "e.g., User Authentication"
+        - name: "estimated_duration"
+          label: "Estimated Duration"
+          type: "select"
+          options:
+            - "<2 seconds"
+            - "2-10 seconds"
+            - "10-60 minutes"
+            - ">1 hour"
+      
+      button:
+        text: "Route Plan"
+        action: "Show which tier would handle this request"
+    
+    output_display:
+      type: "Card with syntax-highlighted JSON"
+      content: "Simulated routing decision with tier, rationale, and next steps"
+  
+  code_samples:
+    - language: "python"
+      title: "Invoke Planning System"
+      code: |
+        from src.orchestrators.planning.planning_orchestrator import PlanningOrchestratorV5
+        
+        orchestrator = PlanningOrchestratorV5()
+        result = orchestrator.execute(context={
+            "feature_name": "User Authentication",
+            "description": "Implement OAuth2 login system",
+            "plan_type": "feature"
+        })
+        
+        print(f"Plan ID: {result.data['plan_id']}")
+        print(f"Status: {result.status}")
+    
+    - language: "yaml"
+      title: "Sample config.yaml"
+      code: |
+        plan_id: "PLAN-2026-001"
+        feature_name: "User Authentication"
+        plan_type: "feature"
+        complexity_tier: "DOCUMENTED"
+        phases:
+          - phase_01_foundation
+          - phase_02_implementation
+          - phase_03_testing
+        acceptance_criteria:
+          - "Users can log in with OAuth2"
+          - "Session tokens are secure"
+          - "Logout clears all session data"
+
+# =============================================================================
+# METADATA
+# =============================================================================
+metadata:
+  target_audience: "Technical leaders, architects, CORTEX contributors"
+  reading_time: "8-10 minutes"
+  complexity_level: "Intermediate"
+  prerequisites:
+    - "Understanding of orchestrator patterns"
+    - "Familiarity with CORTEX governance"
+  
+  related_views:
+    - "TDD-Master Orchestrator"
+    - "Brain Architecture"
+    - "SKULL Protection System"
+  
+  implementation_references:
+    - path: "src/orchestrators/planning/planning_orchestrator.py"
+      description: "Main orchestrator implementation"
+    - path: "cortex-brain/config/planning-v5-default.yaml"
+      description: "Default configuration"
+    - path: "cortex-brain/tier1/tracking/progress-tracker.json"
+      description: "Active state tracking"
+
+# =============================================================================
+# ACCESSIBILITY & RESPONSIVENESS
+# =============================================================================
+accessibility:
+  wcag_level: "AA"
+  requirements:
+    - "All diagrams have text alternatives"
+    - "Color contrast ratio ≥4.5:1"
+    - "Keyboard navigation supported"
+    - "Screen reader compatible"
+    - "Focus indicators visible"
+
+responsive_design:
+  breakpoints:
+    mobile: "<768px"
+    tablet: "768px-1024px"
+    desktop: ">1024px"
+  
+  adaptations:
+    mobile:
+      - "Stack diagrams vertically"
+      - "Collapse navigation into hamburger menu"
+      - "Reduce font sizes proportionally"
+    tablet:
+      - "2-column layout for content sections"
+      - "Reduce diagram sizes slightly"
+    desktop:
+      - "Full multi-column layout"
+      - "Large interactive diagrams"
+      - "Side navigation persistent"

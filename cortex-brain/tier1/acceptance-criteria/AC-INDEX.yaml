@@ -1,6 +1,6 @@
 schema_version: '1.7'
-last_updated: '2026-01-11T11:41:46.696277Z'
-total_ac_count: 102
+last_updated: '2026-01-12T00:00:00Z'
+total_ac_count: 104
 completed_count: 33
 in_progress_count: 0
 design_score_current: 97
@@ -3881,6 +3881,107 @@ ac_clean:
     - tests/integration/clean/test_file_size_limits.py
     dependencies:
     - AC-CLEAN-001
+  AC-CLEAN-201:
+    title: Phase-Boundary Cleanup Framework + Intent Registry
+    description: |
+      Cleanup integrated into phase completion workflow.
+      Deletes previous phase artifacts only, safety-validated.
+      Generates cleanup evidence bundle proving deletions.
+      Includes file intent registry for semantic cleanup decisions.
+    status: planned
+    priority: P2-MEDIUM
+    phase: 2
+    owner: Infrastructure Team
+    duration: 2 days
+    design_source: cortex-brain/documents/strategy/HOUSEKEEPING-ORCHESTRATOR-ANALYSIS.md
+    rationale: |
+      Phase-integrated cleanup eliminates race conditions with State Manager,
+      respects CORTEX phase gate system, produces auditable evidence.
+      Intent registry prevents false positives through documented intent.
+    capabilities:
+    - Cleanup runs at phase boundary (not mid-phase)
+    - Cleanup AC-IDs produce evidence bundles
+    - All deletions logged with reason
+    - Phase completion blocked if cleanup fails
+    - Intent registry marks files as keep/optional/build_artifact
+    - Manual approval workflow for semantic cleanup
+    dependencies:
+    - AC-LIFECYCLE-001
+    - AC-EVIDENCE-001
+    - AC-AUDIT-001
+    - AC-STATE-001
+    acceptance_criteria:
+    - Cleanup integrated into MasterOrchestrator.complete_phase()
+    - Intent registry YAML loads without errors
+    - Vacuum checks intent before deleting
+    - Manual cleanup requires explicit approval
+    - Audit trail shows intent + approval for each deletion
+    - Phase completion blocked if cleanup validation fails
+    - Evidence bundle generated with cleanup manifest
+    tests:
+    - tests/orchestrators/test_phase_boundary_cleanup.py
+    - tests/infrastructure/test_intent_registry.py
+    - tests/integration/test_cleanup_evidence_bundle.py
+    implementation: |
+      1. Create intent registry loader in vacuum orchestrator
+      2. Add cleanup gate to MasterOrchestrator.complete_phase()
+      3. Implement approval workflow for semantic cleanup
+      4. Generate cleanup evidence bundles
+      5. Add audit trail entries with intent + approval
+    evidence_bundle:
+      test_coverage: '>=80%'
+      safety_validated: Protected file list verified
+      phase_integration: Cleanup failures block phase completion
+  AC-CLEAN-202:
+    title: Infrastructure Cleanup Daemon
+    description: |
+      Autonomous cleanup of .gitignore-d files only.
+      Runs hourly or as background service.
+      No approval needed (safe by design).
+      Minimal audit logging (non-blocking).
+    status: planned
+    priority: P2-MEDIUM
+    phase: 2
+    owner: Infrastructure Team
+    duration: 1 day
+    design_source: cortex-brain/documents/strategy/HOUSEKEEPING-ORCHESTRATOR-ANALYSIS.md
+    rationale: |
+      Infrastructure artifacts (cache, bytecode, build output) are safe to
+      delete autonomously since they're in .gitignore and auto-regenerated.
+      Scoped cleanup (gitignored only) eliminates false positive risk.
+    capabilities:
+    - Only deletes .gitignore-d patterns (safe by design)
+    - Runs on schedule (hourly) or as background service
+    - No approval required
+    - Minimal audit logging (summary only)
+    - Zero false positives (by definition)
+    - Performance <100ms per cleanup cycle
+    dependencies:
+    - AC-CLEAN-201
+    - AC-AUDIT-001
+    acceptance_criteria:
+    - Daemon runs autonomously without intervention
+    - Zero false deletions (gitignore-scoped)
+    - Protected patterns respected (cortex-brain/database/*, tier0/*, etc.)
+    - Audit trail shows cleanup summary hourly
+    - Performance <100ms per cleanup cycle
+    - Configuration via cortex-brain/manifests/housekeeping/infra-daemon.yaml
+    tests:
+    - tests/orchestrators/test_infra_cleanup_daemon.py
+    - tests/integration/test_daemon_scheduling.py
+    - tests/security/test_gitignore_scope_validation.py
+    implementation: |
+      1. Create InfrastructureCleanupDaemon class
+      2. Implement pattern matching for .gitignore
+      3. Add file deletion with logging
+      4. Implement scheduling (hourly or background)
+      5. Add minimal audit trail entries
+      6. Configuration file: infra-daemon.yaml
+    evidence_bundle:
+      test_coverage: '>=80%'
+      scope_validated: Only gitignored files deleted
+      safety: Zero false deletions confirmed
+      performance: <100ms per cycle validated
   AC-PRECHECK-001:
     title: Signature Validator Core
     description: Validates __init__ and execute() signatures match registry expectations
