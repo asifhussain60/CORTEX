@@ -160,8 +160,11 @@ def build_plan_viewer_data():
                     if 'verified_implemented' in phase_data:
                         all_completed_ac_ids.update(phase_data['verified_implemented'])
     
-    total_ac_ids = len(ac_map)
-    completed_ac_ids = len(all_completed_ac_ids)
+    # IMPORTANT: Use AC-INDEX count as total, not master-plan count
+    # Master-plan only lists Phases 1-5 (59 ACs), but AC-INDEX declares 175 total ACs
+    # This prevents the dashboard from showing >100% when we have ACs from STS, risk assessments, etc.
+    total_ac_ids = ac_index.get('total_ac_count', len(ac_map))  # 175 from AC-INDEX
+    completed_ac_ids = len(all_completed_ac_ids)  # 92 completed
     
     # Build phases array
     phases = []
