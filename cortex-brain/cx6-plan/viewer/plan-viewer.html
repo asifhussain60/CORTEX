@@ -1128,6 +1128,81 @@
                 </div>
             </div>
             
+            <!-- VIEWS NAVIGATION MODULE -->
+            <div class="views-navigation-module" style="background: var(--color-bg-elevated); backdrop-filter: blur(20px); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--spacing-lg); margin-bottom: var(--spacing-2xl);">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-md); padding-bottom: var(--spacing-md); border-bottom: 1px solid var(--color-border);">
+                    <span style="font-size: var(--font-size-sm); font-weight: 600; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">
+                        <i class="bi bi-diagram-3"></i> CORTEX Views
+                    </span>
+                    <span style="font-size: 0.75rem; color: var(--color-text-tertiary);">9 Interactive Views</span>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: var(--spacing-md);">
+                    <a href="./docs/html-views/views/01-planning-orchestrator-view.html" class="view-quick-link">
+                        <i class="bi bi-layout-split"></i><span>Planning System</span>
+                    </a>
+                    <a href="./docs/html-views/views/02-tdd-master-orchestrator-view.html" class="view-quick-link">
+                        <i class="bi bi-diagram-3"></i><span>TDD Orchestrator</span>
+                    </a>
+                    <a href="./docs/html-views/views/03-ado-orchestrator-view.html" class="view-quick-link">
+                        <i class="bi bi-kanban"></i><span>ADO Operations</span>
+                    </a>
+                    <a href="./docs/html-views/views/04-brain-architecture-view.html" class="view-quick-link">
+                        <i class="bi bi-layers"></i><span>Brain Architecture</span>
+                    </a>
+                    <a href="./docs/html-views/views/05-skull-protection-view.html" class="view-quick-link">
+                        <i class="bi bi-shield-check"></i><span>SKULL Protection</span>
+                    </a>
+                    <a href="./docs/html-views/views/06-agent-system-view.html" class="view-quick-link">
+                        <i class="bi bi-cpu"></i><span>Agent System</span>
+                    </a>
+                    <a href="./docs/html-views/views/07-response-optimization-view.html" class="view-quick-link">
+                        <i class="bi bi-lightning-charge"></i><span>Response Opt</span>
+                    </a>
+                    <a href="./docs/html-views/views/08-audit-logging-view.html" class="view-quick-link">
+                        <i class="bi bi-file-text"></i><span>Audit & Logging</span>
+                    </a>
+                    <a href="./docs/html-views/views/09-analytics-dashboard-view.html" class="view-quick-link">
+                        <i class="bi bi-graph-up"></i><span>Analytics</span>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- CSS for Views Navigation -->
+            <style>
+                .view-quick-link {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
+                    gap: var(--spacing-xs);
+                    padding: var(--spacing-md);
+                    background: rgba(0, 212, 255, 0.05);
+                    border: 1px solid var(--color-border);
+                    border-radius: var(--radius-sm);
+                    color: var(--color-primary-accent);
+                    text-decoration: none;
+                    font-size: var(--font-size-xs);
+                    font-weight: 600;
+                    text-align: center;
+                    transition: all var(--transition-base);
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+                
+                .view-quick-link:hover {
+                    background: rgba(0, 212, 255, 0.15);
+                    border-color: var(--color-primary-accent);
+                    box-shadow: var(--shadow-md);
+                    transform: translateY(-2px);
+                }
+                
+                .view-quick-link i {
+                    font-size: 1.25rem;
+                    color: var(--color-primary-green);
+                }
+            </style>
+            
             <!-- PLACEHOLDER FOR CONTENT SECTIONS (will be populated by JavaScript) -->
             <div id="content-area"></div>
         </div>

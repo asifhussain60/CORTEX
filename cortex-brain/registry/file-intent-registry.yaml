@@ -1,0 +1,166 @@
+################################################################################
+# FILE INTENT REGISTRY
+# ============================================================================
+# Purpose: Explicit markers for "keep" vs "optional" files in CORTEX
+# Enables semantic cleanup without false positives
+# All deletions must respect intent markers + approval workflow
+#
+# Schema: https://cortex-brain/schemas/file-intent-registry.json
+# Author: CORTEX Housekeeping Enhancement v1
+# Version: 1.0.0
+# Created: 2026-01-12
+################################################################################
+
+version: '1.0'
+schema_version: '1.0'
+last_updated: '2026-01-12T00:00:00Z'
+purpose: |
+  Document intent for files to guide semantic cleanup decisions.
+  Prevents deletion of intentionally-kept files (learning material, history).
+  Enables approval workflow for candidate cleanup items.
+  All deletions backed by documented intent + human approval.
+
+registry:
+  # ========================================================================
+  # TIER 1: INTENTIONALLY KEPT FILES (Learning, History, Reference)
+  # ========================================================================
+  cortex-brain/documents/archives/:
+    intent: keep
+    intent_reason: Historical reference material and learning documentation
+    last_touched: '2026-01-10'
+    suggested_cleanup: false
+    deletion_requires_approval: false
+    notes: |
+      Archives directory contains valuable historical context for CORTEX development.
+      Preservation valuable for learning and understanding architectural decisions.
+
+  cortex-brain/documents/reports/:
+    intent: keep
+    intent_reason: Phase completion evidence and phase transition artifacts
+    last_touched: '2026-01-11'
+    suggested_cleanup: false
+    deletion_requires_approval: false
+    notes: |
+      Reports contain phase evidence bundles and completion proofs.
+      Part of CORTEX audit trail and decision records.
+
+  cortex-brain/tier0/:
+    intent: keep
+    intent_reason: Immutable CORTEX brain protection rules
+    last_touched: '2026-01-10'
+    suggested_cleanup: false
+    deletion_requires_approval: false
+    notes: |
+      CORE rules are tier 0 governance (highest precedence).
+      Any deletion requires re-verification of all dependent systems.
+
+  cortex-brain/tier1/:
+    intent: keep
+    intent_reason: Active working memory and state persistence
+    last_touched: '2026-01-11'
+    suggested_cleanup: false
+    deletion_requires_approval: false
+    notes: |
+      Tier 1 contains active tracking, AC-IDs, and system state.
+      Database files and working memory must be preserved.
+
+  cortex-brain/tier2/:
+    intent: keep
+    intent_reason: Engineering standards and company practices
+    last_touched: '2026-01-10'
+    suggested_cleanup: false
+    deletion_requires_approval: false
+
+  cortex-brain/tier3/:
+    intent: keep
+    intent_reason: Learned patterns and domain knowledge
+    last_touched: '2026-01-10'
+    suggested_cleanup: false
+    deletion_requires_approval: false
+
+  # ========================================================================
+  # TIER 2: OPTIONAL FILES (Can be cleaned with approval)
+  # ========================================================================
+  cortex-brain/documents/old-analysis-2025/:
+    intent: optional
+    intent_reason: Deprecated analysis, knowledge migrated to tier3
+    last_touched: '2025-12-01'
+    suggested_cleanup: true
+    deletion_requires_approval: true
+    notes: |
+      Analysis from 2025 has been consolidated into tier3 domain patterns.
+      Original files now redundant with newer formulations.
+
+  # ========================================================================
+  # TIER 3: BUILD ARTIFACTS (Safe for autonomous cleanup)
+  # ========================================================================
+  __pycache__/:
+    intent: build_artifact
+    intent_reason: Python bytecode cache
+    last_touched: null
+    suggested_cleanup: true
+    deletion_requires_approval: false
+    cleanup_method: autonomous_daemon
+
+  .pytest_cache/:
+    intent: build_artifact
+    intent_reason: Pytest execution cache
+    last_touched: null
+    suggested_cleanup: true
+    deletion_requires_approval: false
+    cleanup_method: autonomous_daemon
+
+  htmlcov/:
+    intent: build_artifact
+    intent_reason: HTML coverage report directory
+    last_touched: null
+    suggested_cleanup: true
+    deletion_requires_approval: false
+    cleanup_method: autonomous_daemon
+
+cleanup_workflow:
+  phase_boundary_cleanup:
+    when: At end of each phase completion
+    scope: Previous phase artifacts only
+    approval_required: false
+    evidence: Cleanup evidence bundle required
+    automation: MasterOrchestrator.complete_phase()
+    safety_level: high
+
+  semantic_cleanup:
+    when: Weekly manual review (optional, on-demand)
+    scope: Files marked intent=optional only
+    approval_required: true
+    evidence: Manual approval ticket + cleanup manifest
+    automation: Human review + explicit approval
+    safety_level: very_high
+
+  infrastructure_cleanup:
+    when: Hourly or as background service
+    scope: .gitignore-d patterns only
+    approval_required: false
+    evidence: Minimal audit logging (summary only)
+    automation: InfrastructureDaemon (autonomous)
+    safety_level: very_high
+
+safety_rules:
+  protected_patterns:
+    - "cortex-brain/database/*"
+    - "cortex-brain/tier0/*"
+    - "cortex-brain/tier1/*"
+    - "cortex-brain/registry/*"
+    - ".env*"
+    - ".secrets*"
+    - ".git/*"
+    - ".github/*"
+
+  verification_requirements:
+    - All deletions must be backed by file-intent-registry entries
+    - Phase boundary cleanup must generate evidence bundles
+    - Semantic cleanup requires explicit approval
+    - Infrastructure daemon must respect protected patterns
+
+audit_trail:
+  deletion_log_location: cortex-brain/audit-logs/cleanup-manifest.jsonl
+  approval_log_location: cortex-brain/documents/cleanup-approvals/
+  cleanup_reports: cortex-brain/documents/reports/cleanup-summary-{date}.yaml

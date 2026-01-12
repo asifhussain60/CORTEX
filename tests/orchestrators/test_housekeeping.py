@@ -1,16 +1,16 @@
 """
-CORTEX 6.0 Stage 1 Phase 1.4 - Housekeeping Orchestrator Tests
+CORTEX 6.0 Phase 2 - Housekeeping Orchestrator Enhancement Tests
 
-Tests for AC-ORC-HOUSE-001 through AC-ORC-HOUSE-009:
-- AC-ORC-HOUSE-001: Manual on-demand execution only (no auto-triggers)
-- AC-ORC-HOUSE-002: 9-phase cleanup execution workflow
-- AC-ORC-HOUSE-003: Governance rule validation
-- AC-ORC-HOUSE-004: Test coverage analysis
-- AC-ORC-HOUSE-005: Audit log health check
-- AC-ORC-HOUSE-006: Brain tier synchronization
-- AC-ORC-HOUSE-007: Cache cleanup
-- AC-ORC-HOUSE-008: Git isolation verification
-- AC-ORC-HOUSE-009: AC gap detection
+Tests for Phase 2 housekeeping enhancements:
+- AC-CLEAN-201: Phase-Boundary Cleanup Framework + Intent Registry
+- AC-CLEAN-202: Infrastructure Cleanup Daemon
+
+These tests validate the three-tier housekeeping strategy:
+1. Phase-boundary cleanup (mandatory, integrated with phase completion)
+2. Semantic cleanup (manual with approval, intent-driven)
+3. Infrastructure daemon (autonomous, .gitignore-scoped)
+
+Design reference: cortex-brain/documents/strategy/HOUSEKEEPING-ORCHESTRATOR-ANALYSIS.md
 
 RED PHASE: All tests will fail initially (implementation pending)
 
@@ -38,11 +38,11 @@ from src.orchestrators.housekeeping_orchestrator import (
 
 
 # ==============================================================================
-# AC-ORC-HOUSE-001: Manual Execution Only (No Auto-Triggers)
+# AC-CLEAN-201: Phase-Boundary Cleanup Framework + Intent Registry
 # ==============================================================================
 
-@pytest.mark.ac_id("AC-ORC-HOUSE-001")
-class TestManualExecutionOnly:
+@pytest.mark.ac_id("AC-CLEAN-201")
+class TestPhaseBoundaryCleanup:
     """Test that housekeeping runs ONLY on manual trigger, never automatically."""
     
     def test_no_automatic_scheduling(self):
@@ -107,10 +107,10 @@ class TestManualExecutionOnly:
 
 
 # ==============================================================================
-# AC-ORC-HOUSE-002: 9-Phase Cleanup Execution Workflow
+# AC-CLEAN-201: Phase-Boundary Cleanup Workflow Execution
 # ==============================================================================
 
-@pytest.mark.ac_id("AC-ORC-HOUSE-002")
+@pytest.mark.ac_id("AC-CLEAN-201")
 class TestNinePhaseWorkflow:
     """Test 9-phase housekeeping workflow execution."""
     
@@ -205,10 +205,10 @@ class TestNinePhaseWorkflow:
 
 
 # ==============================================================================
-# AC-ORC-HOUSE-003: Phase 1 - Governance Rule Validation
+# AC-CLEAN-201: Governance Rule Validation in Phase Boundary
 # ==============================================================================
 
-@pytest.mark.ac_id("AC-ORC-HOUSE-003")
+@pytest.mark.ac_id("AC-CLEAN-201")
 class TestGovernanceValidation:
     """Test Phase 1: Governance rule validation."""
     
@@ -277,10 +277,10 @@ class TestGovernanceValidation:
 
 
 # ==============================================================================
-# AC-ORC-HOUSE-004: Phase 2 - Test Coverage Analysis
+# AC-CLEAN-201: Test Coverage Analysis in Phase Boundary
 # ==============================================================================
 
-@pytest.mark.ac_id("AC-ORC-HOUSE-004")
+@pytest.mark.ac_id("AC-CLEAN-201")
 class TestCoverageAnalysis:
     """Test Phase 2: Test coverage analysis."""
     
@@ -345,11 +345,11 @@ def test_orphan():
 
 
 # ==============================================================================
-# AC-ORC-HOUSE-005: Phase 3 - Audit Log Health Check
+# AC-CLEAN-201: Audit Log Health Check in Phase Boundary
 # ==============================================================================
 
-@pytest.mark.ac_id("AC-ORC-HOUSE-005")
-class TestAuditLogHealthCheck:
+@pytest.mark.ac_id("AC-CLEAN-201")
+class TestAuditLogHealth:
     """Test Phase 3: Audit log health check."""
     
     def setup_method(self):
@@ -425,10 +425,10 @@ class TestAuditLogHealthCheck:
 
 
 # ==============================================================================
-# AC-ORC-HOUSE-006: Phase 4 - Brain Tier Synchronization
+# AC-CLEAN-201: Brain Tier Synchronization in Phase Boundary
 # ==============================================================================
 
-@pytest.mark.ac_id("AC-ORC-HOUSE-006")
+@pytest.mark.ac_id("AC-CLEAN-201")
 class TestBrainTierSync:
     """Test Phase 4: Brain tier synchronization."""
     
@@ -468,10 +468,10 @@ class TestBrainTierSync:
 
 
 # ==============================================================================
-# AC-ORC-HOUSE-007: Phase 5 - Cache Cleanup
+# AC-CLEAN-202: Infrastructure Cache Cleanup (Daemon Compatible)
 # ==============================================================================
 
-@pytest.mark.ac_id("AC-ORC-HOUSE-007")
+@pytest.mark.ac_id("AC-CLEAN-202")
 class TestCacheCleanup:
     """Test Phase 5: Cache cleanup."""
     
@@ -526,10 +526,10 @@ class TestCacheCleanup:
 
 
 # ==============================================================================
-# AC-ORC-HOUSE-008: Phase 6 - Git Isolation Verification
+# AC-CLEAN-202: Git Isolation Verification (Daemon Scope)
 # ==============================================================================
 
-@pytest.mark.ac_id("AC-ORC-HOUSE-008")
+@pytest.mark.ac_id("AC-CLEAN-202")
 class TestGitIsolation:
     """Test Phase 6: Git isolation verification."""
     
@@ -567,10 +567,10 @@ class TestGitIsolation:
 
 
 # ==============================================================================
-# AC-ORC-HOUSE-009: Phase 8 - AC Gap Detection
+# AC-CLEAN-201: Acceptance Criteria Gap Detection in Phase Boundary
 # ==============================================================================
 
-@pytest.mark.ac_id("AC-ORC-HOUSE-009")
+@pytest.mark.ac_id("AC-CLEAN-201")
 class TestACGapDetection:
     """Test Phase 8: AC gap detection."""
     
@@ -609,7 +609,7 @@ class TestACGapDetection:
 # Integration Tests
 # ==============================================================================
 
-@pytest.mark.ac_id("AC-ORC-HOUSE-001", "AC-ORC-HOUSE-002")
+@pytest.mark.ac_id("AC-CLEAN-201", "AC-CLEAN-202")
 class TestHousekeepingIntegration:
     """Integration tests for full housekeeping workflow."""
     

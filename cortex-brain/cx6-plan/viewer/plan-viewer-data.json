@@ -1,11 +1,11 @@
 {
   "plan_metadata": {
     "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
-    "total_ac_ids": 102,
+    "total_ac_ids": 104,
     "completed_ac_ids": 77,
     "in_progress_ac_ids": 0,
-    "version": "1.3.0",
-    "updated": "2026-01-11T22:41:12.983672+00:00",
+    "version": "1.4.0",
+    "updated": "2026-01-12T18:00:00.000000+00:00",
     "status": "phases_1_to_3_verified"
   },
   "phases": [
@@ -56,108 +56,108 @@
       "capabilities": [
         {
           "id": "AC-AUDIT-001",
-          "name": "Queryable Audit Storage",
-          "description": "SQLite + JSONL dual storage with <5ms latency"
+          "name": "AC-AUDIT-001",
+          "description": ""
         },
         {
           "id": "AC-AUDIT-002",
-          "name": "Memory Buffer",
-          "description": "Buffer with configurable flush thresholds"
+          "name": "AC-AUDIT-002",
+          "description": ""
         },
         {
           "id": "AC-AUDIT-003",
-          "name": "7 Audit Categories",
-          "description": "GOVERNANCE, ORCHESTRATOR, VALIDATION, INFRASTRUCTURE, MCP, BRAIN, INTEGRATION"
+          "name": "AC-AUDIT-003",
+          "description": ""
         },
         {
           "id": "AC-AUDIT-004",
-          "name": "AC-ID Traceability",
-          "description": "All audit entries link to acceptance criteria"
+          "name": "AC-AUDIT-004",
+          "description": ""
         },
         {
           "id": "AC-AUDIT-005",
-          "name": "Automatic Vacuum",
-          "description": "Level-based retention with daily vacuum"
+          "name": "AC-AUDIT-005",
+          "description": ""
         },
         {
           "id": "AC-AUDIT-006",
-          "name": "Per-Repo Isolation",
-          "description": "Each repo has isolated audit database"
+          "name": "AC-AUDIT-006",
+          "description": ""
         },
         {
           "id": "AC-AUDIT-007",
-          "name": "Hash Chain Integrity",
-          "description": "Tamper detection via event_hash + prev_event_hash chain"
+          "name": "AC-AUDIT-007",
+          "description": ""
         },
         {
           "id": "AC-GOV-001",
-          "name": "4-Tier Governance Loading",
-          "description": "Load rules from all 4 tiers (0-3)"
+          "name": "AC-GOV-001",
+          "description": ""
         },
         {
           "id": "AC-GOV-002",
-          "name": "Conflict Detection",
-          "description": "Detect conflicting rules across tiers"
+          "name": "AC-GOV-002",
+          "description": ""
         },
         {
           "id": "AC-GOV-003",
-          "name": "Precedence Resolution",
-          "description": "Tier 0 wins all conflicts"
+          "name": "AC-GOV-003",
+          "description": ""
         },
         {
           "id": "AC-GOV-004",
-          "name": "Rule Caching",
-          "description": "<50ms merge time with caching"
+          "name": "AC-GOV-004",
+          "description": ""
         },
         {
           "id": "AC-GOV-005",
-          "name": "Unified Instruction Set",
-          "description": "Generate merged ruleset for runtime"
+          "name": "AC-GOV-005",
+          "description": ""
         },
         {
           "id": "AC-STATE-001",
-          "name": "Session Persistence",
-          "description": "SQLite-backed session state"
+          "name": "AC-STATE-001",
+          "description": ""
         },
         {
           "id": "AC-STATE-002",
-          "name": "Transaction Isolation",
-          "description": "WAL mode with proper isolation"
+          "name": "AC-STATE-002",
+          "description": ""
         },
         {
           "id": "AC-STATE-003",
-          "name": "Continuation Support",
-          "description": "Resume from any checkpoint"
+          "name": "AC-STATE-003",
+          "description": ""
         },
         {
           "id": "AC-LIFECYCLE-001",
-          "name": "7-State Lifecycle Implementation",
-          "description": "IDLE \u2192 SPEC \u2192 IMPLEMENTED \u2192 TESTED \u2192 VERIFIED \u2192 ACTIVE \u2192 DEPRECATED"
+          "name": "AC-LIFECYCLE-001",
+          "description": ""
         },
         {
           "id": "AC-LIFECYCLE-002",
-          "name": "State Transition Validation",
-          "description": "Enforce entry/exit criteria for each state"
+          "name": "AC-LIFECYCLE-002",
+          "description": ""
         },
         {
           "id": "AC-LIFECYCLE-003",
-          "name": "Quarantine Mechanism",
-          "description": "Auto-quarantine on error rate > 10% or governance violations"
+          "name": "AC-LIFECYCLE-003",
+          "description": ""
         },
         {
           "id": "AC-EVIDENCE-001",
-          "name": "Evidence Bundle Structure",
-          "description": "3-file lightweight format: manifest.yaml, test_results.json, audit_trace.jsonl"
+          "name": "AC-EVIDENCE-001",
+          "description": ""
         },
         {
           "id": "AC-EVIDENCE-002",
-          "name": "Evidence Bundle Validation Gates",
-          "description": "3 gates: Test Coverage (80%), Audit Completeness, Governance Compliance"
+          "name": "AC-EVIDENCE-002",
+          "description": ""
         },
         {
           "id": "AC-EVIDENCE-003",
-          "name": "Evidence Bundle Auto-Generation",
-          "description": "Generate Evidence Bundle post-implementation from tests + audit + AC-INDEX"
+          "name": "AC-EVIDENCE-003",
+          "description": ""
         },
         {
           "id": "AC-SECURITY-001",
@@ -425,6 +425,28 @@
           "id": "AC-PLAN-008",
           "name": "AC-PLAN-008",
           "description": ""
+        }
+      ]
+    },
+    {
+      "id": "2.1",
+      "name": "Housekeeping Enhancement",
+      "completion_percentage": 0,
+      "ac_ids_complete": 0,
+      "ac_ids_total": 2,
+      "status": "in_progress",
+      "description": "Phase-boundary cleanup + intent registry + infrastructure daemon",
+      "verified_implemented": [],
+      "capabilities": [
+        {
+          "id": "AC-CLEAN-201",
+          "name": "AC-CLEAN-201",
+          "description": "Phase-Boundary Cleanup Framework + Intent Registry"
+        },
+        {
+          "id": "AC-CLEAN-202",
+          "name": "AC-CLEAN-202",
+          "description": "Infrastructure Cleanup Daemon"
         }
       ]
     },
