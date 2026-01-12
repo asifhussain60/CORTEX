@@ -25,10 +25,11 @@ class TestResponseRendererHeaderInjection:
         )
     
     def test_header_includes_brain_icon(self, renderer):
-        """Header must include 🧠 brain icon."""
+        """Header must include 🧠 brain icon (CORTEX-4.0 style)."""
         result = {"message": "Test result"}
         context = {
-            "version": "6.0.0",
+            "phase": "Phase 2",
+            "orchestrator_name": "tdd_master",
             "summary": "Test execution completed",
             "outcomes": ["Outcome 1", "Outcome 2"]
         }
@@ -36,27 +37,31 @@ class TestResponseRendererHeaderInjection:
         markdown = renderer.render(result, context=context)
         
         assert "🧠 CORTEX" in markdown, "Brain icon missing from header"
-        assert markdown.startswith("# 🧠"), "Header should start with brain icon"
+        assert markdown.startswith("## 🧠"), "Header should start with ## and brain icon (CORTEX-4.0 style)"
     
     def test_header_includes_copyright(self, renderer):
-        """Header must include copyright line."""
+        """Header must include phase and orchestrator information."""
         result = {"message": "Test result"}
         context = {
-            "version": "6.0.0",
+            "phase": "Phase 1",
+            "orchestrator_name": "planning_orchestrator",
             "summary": "Test execution completed",
             "outcomes": ["Outcome 1"]
         }
         
         markdown = renderer.render(result, context=context)
         
-        assert "Copyright © 2025-2026 Asif Hussain" in markdown, "Copyright missing"
-        assert "All rights reserved" in markdown, "Rights notice missing"
+        assert "**Author:** Asif Hussain" in markdown, "Author missing"
+        assert "**Phase:** Phase 1" in markdown, "Phase missing"
+        assert "**Orchestrator:**" in markdown, "Orchestrator missing"
+        assert "✅" in markdown, "Checkmark missing"
     
     def test_header_includes_author(self, renderer):
-        """Header must include author name."""
+        """Header must include author name and phase/orchestrator."""
         result = {"message": "Test result"}
         context = {
-            "version": "6.0.0",
+            "phase": "Phase 2",
+            "orchestrator_name": "tdd_master",
             "summary": "Test execution completed",
             "outcomes": ["Outcome 1"]
         }
@@ -64,26 +69,29 @@ class TestResponseRendererHeaderInjection:
         markdown = renderer.render(result, context=context)
         
         assert "**Author:** Asif Hussain" in markdown, "Author name missing"
+        assert "Phase" in markdown, "Phase missing"
     
     def test_header_includes_version_and_date(self, renderer):
-        """Header must include version and ISO date."""
+        """Header must include phase and orchestrator information."""
         result = {"message": "Test result"}
         context = {
-            "version": "6.0.0",
+            "phase": "Phase 2",
+            "orchestrator_name": "tdd_master",
             "summary": "Test execution completed",
             "outcomes": ["Outcome 1"]
         }
         
         markdown = renderer.render(result, context=context)
         
-        assert "**Version:** 6.0.0" in markdown, "Version missing"
-        assert "UTC" in markdown, "UTC timestamp missing"
+        assert "**Phase:**" in markdown, "Phase missing"
+        assert "**Orchestrator:**" in markdown, "Orchestrator missing"
     
     def test_header_comes_before_content(self, renderer):
         """Header must be first element before any content."""
         result = {"message": "Test result"}
         context = {
-            "version": "6.0.0",
+            "phase": "Phase 2",
+            "orchestrator_name": "master_orchestrator",
             "summary": "Test execution completed",
             "outcomes": ["Outcome 1"]
         }
@@ -101,7 +109,8 @@ class TestResponseRendererHeaderInjection:
         """Outcomes section must have ✅ marker."""
         result = {"message": "Test result"}
         context = {
-            "version": "6.0.0",
+            "phase": "Phase 2",
+            "orchestrator_name": "master_orchestrator",
             "summary": "Test execution completed",
             "outcomes": ["Outcome 1", "Outcome 2", "Outcome 3"]
         }
@@ -115,7 +124,8 @@ class TestResponseRendererHeaderInjection:
         """Next Steps section must be mandatory and final."""
         result = {"message": "Test result"}
         context = {
-            "version": "6.0.0",
+            "phase": "Phase 1",
+            "orchestrator_name": "planning_orchestrator",
             "summary": "Test execution completed",
             "outcomes": ["Outcome 1"],
             "next_steps": ["Step 1", "Step 2"]
@@ -133,9 +143,10 @@ class TestResponseRendererHeaderInjection:
         """Next Steps should be auto-generated if not provided."""
         result = {"message": "Test result"}
         context = {
-            "version": "6.0.0",
+            "phase": "Phase 2",
+            "orchestrator_name": "tdd_master",
             "summary": "Test execution completed",
-            "outcomes": ["Outcome 1"],
+            "outcomes": ["Outcome 1"]
             # No next_steps provided
         }
         
@@ -147,7 +158,8 @@ class TestResponseRendererHeaderInjection:
         """Sections must appear in correct order."""
         result = {"message": "Test result"}
         context = {
-            "version": "6.0.0",
+            "phase": "Phase 2",
+            "orchestrator_name": "master_orchestrator",
             "summary": "Test execution completed",
             "outcomes": ["Outcome 1"],
             "in_progress": ["Work item 1"],
@@ -182,7 +194,7 @@ class TestResponseMiddlewareInjection:
     
     def test_inject_token_warning(self, middleware):
         """Should inject token usage warning when > 80%."""
-        markdown = "# Test\nContent here"
+        markdown = "## 🧠 CORTEX Test\n**Author:** Asif Hussain | **Phase:** Phase 2 | **Orchestrator:** TDD-Master ✅\n\n# Content here"
         context = {"token_usage_percentage": 85}
         
         result = middleware.inject_system_messages(markdown, context)
@@ -192,7 +204,7 @@ class TestResponseMiddlewareInjection:
     
     def test_inject_security_warnings(self, middleware):
         """Should inject security warnings when present."""
-        markdown = "# Test\nContent here"
+        markdown = "## 🧠 CORTEX Test\n**Author:** Asif Hussain | **Phase:** Phase 2 | **Orchestrator:** TDD-Master ✅\n\n# Content here"
         context = {
             "security_warnings": ["No secrets validation", "Missing rate limiting"]
         }
@@ -204,7 +216,7 @@ class TestResponseMiddlewareInjection:
     
     def test_inject_deprecation_notices(self, middleware):
         """Should inject deprecation notices when features used."""
-        markdown = "# Test\nContent here"
+        markdown = "## 🧠 CORTEX Test\n**Author:** Asif Hussain | **Phase:** Phase 2 | **Orchestrator:** TDD-Master ✅\n\n# Content here"
         context = {
             "deprecated_features_used": ["python-dateutil < 2.8", "requests < 2.25"]
         }
@@ -216,7 +228,7 @@ class TestResponseMiddlewareInjection:
     
     def test_continuation_protocol(self, middleware):
         """Should inject continuation protocol at end."""
-        markdown = "# Test\nContent here"
+        markdown = "## 🧠 CORTEX Test\n**Author:** Asif Hussain | **Phase:** Phase 2 | **Orchestrator:** TDD-Master ✅\n\n# Content here"
         context = {"session_id": "session-12345"}
         
         result = middleware.inject_system_messages(markdown, context)
@@ -239,7 +251,8 @@ class TestResponseIntegration:
         # Render
         result = {"message": "Implementation completed"}
         context = {
-            "version": "6.0.0",
+            "phase": "Phase 2",
+            "orchestrator_name": "tdd_master",
             "operation_type": "TDD-Master",
             "summary": "Test-driven implementation completed successfully.",
             "outcomes": [
@@ -263,7 +276,7 @@ class TestResponseIntegration:
         
         # Verify complete response
         assert "🧠 CORTEX" in final, "Brain icon missing"
-        assert "Copyright © 2025-2026" in final, "Copyright missing"
+        assert "**Author:** Asif Hussain" in final, "Author missing"
         assert "✅ OUTCOMES" in final, "Outcomes missing"
         assert "📋 NEXT STEPS" in final, "Next Steps missing"
         assert "Token Usage Alert" in final, "Token warning missing"
