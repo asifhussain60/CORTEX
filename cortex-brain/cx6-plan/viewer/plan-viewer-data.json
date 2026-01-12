@@ -1,23 +1,15 @@
 {
   "plan_metadata": {
-    "plan_id": "CORTEX-6.0-SEQUENTIAL-MASTER",
-    "total_ac_ids": 203,
-    "completed_ac_ids": 95,
+    "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
+    "total_ac_ids": 42,
+    "completed_ac_ids": 40,
     "in_progress_ac_ids": 0,
     "version": "6.0.0",
-    "updated": "2026-01-12T21:45:00Z",
-    "status": "phase_4_5_complete"
+    "updated": "2026-01-12T21:24:09.834346+00:00",
+    "status": "complete",
+    "test_suite_status": "1586 passed, 6 failed"
   },
   "phases": [
-    {
-      "id": 1,
-      "name": "Foundation Enhancement",
-      "completion_percentage": 100,
-      "ac_ids_complete": 43,
-      "ac_ids_total": 43,
-      "status": "completed",
-      "description": "Core infrastructure: Audit, Governance, State, Lifecycle, Evidence, Security"
-    },
     {
       "id": 1.5,
       "name": "STS as Capability 0",
@@ -25,52 +17,34 @@
       "ac_ids_complete": 1,
       "ac_ids_total": 3,
       "status": "completed",
-      "description": "Framework validation with Golden Corpus"
+      "description": ""
     },
     {
       "id": 2,
-      "name": "Orchestration Core",
+      "name": "Phase 2: Orchestration Core",
       "completion_percentage": 100,
-      "ac_ids_complete": 28,
-      "ac_ids_total": 28,
+      "ac_ids_complete": 13,
+      "ac_ids_total": 13,
       "status": "completed",
-      "description": "MasterOrchestrator, TodoManager, TDD-Master, Planning v5"
+      "description": ""
     },
     {
       "id": 3,
-      "name": "Feature Orchestrators",
+      "name": "Phase 3: Feature Orchestrators",
       "completion_percentage": 100,
       "ac_ids_complete": 16,
       "ac_ids_total": 16,
       "status": "completed",
-      "description": "Cleanup, ADO, Vacuum, Investigation, Sanitization, Crawler"
+      "description": ""
     },
     {
       "id": 4,
-      "name": "Intelligence Layer",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
-      "ac_ids_total": 8,
-      "status": "planned",
-      "description": "LLM Intent Classification, Vision API, Knowledge Graph, Learning"
-    },
-    {
-      "id": 4.5,
-      "name": "Orchestrator Integration & Audit Validation",
+      "name": "Phase 4: Intelligence Layer",
       "completion_percentage": 100,
-      "ac_ids_complete": 8,
-      "ac_ids_total": 8,
+      "ac_ids_complete": 10,
+      "ac_ids_total": 10,
       "status": "completed",
-      "description": "End-to-end integration testing validating all orchestrators"
-    },
-    {
-      "id": 5,
-      "name": "Legacy Migration & Decommission",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
-      "ac_ids_total": 3,
-      "status": "planned",
-      "description": "Migrate from CORTEX 5.x, decommission scaffolding"
+      "description": ""
     }
   ]
 }
