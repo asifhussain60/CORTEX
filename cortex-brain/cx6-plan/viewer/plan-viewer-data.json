@@ -1,15 +1,24 @@
 {
   "plan_metadata": {
     "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
-    "total_ac_ids": 42,
-    "completed_ac_ids": 40,
+    "total_ac_ids": 96,
+    "completed_ac_ids": 91,
     "in_progress_ac_ids": 0,
     "version": "6.0.0",
-    "updated": "2026-01-12T21:24:09.834346+00:00",
-    "status": "complete",
+    "updated": "2026-01-12T21:26:45.491444+00:00",
+    "status": "phase_6_complete",
     "test_suite_status": "1586 passed, 6 failed"
   },
   "phases": [
+    {
+      "id": 1,
+      "name": "Foundation Enhancement",
+      "completion_percentage": 100.0,
+      "ac_ids_complete": 43,
+      "ac_ids_total": 43,
+      "status": "completed",
+      "description": ""
+    },
     {
       "id": 1.5,
       "name": "STS as Capability 0",
@@ -44,6 +53,24 @@
       "ac_ids_complete": 10,
       "ac_ids_total": 10,
       "status": "completed",
+      "description": ""
+    },
+    {
+      "id": 4.5,
+      "name": "Orchestrator Integration & Audit Validation",
+      "completion_percentage": 100.0,
+      "ac_ids_complete": 8,
+      "ac_ids_total": 8,
+      "status": "completed",
+      "description": ""
+    },
+    {
+      "id": 5,
+      "name": "Legacy Migration & Decommission",
+      "completion_percentage": 0.0,
+      "ac_ids_complete": 0,
+      "ac_ids_total": 3,
+      "status": "planned",
       "description": ""
     }
   ]
