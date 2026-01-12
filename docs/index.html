@@ -681,73 +681,59 @@ button, a, input, select, textarea, [role="button"] {
             </h2>
             <p class="panel-subtitle-main">Comprehensive threat modeling, compliance standards, and security assessments</p>
         </div>
-        <!-- Tabs: Security Categories -->
-        <div class="cortex-tabs" role="tablist" aria-label="Security categories">
-            <button class="cortex-tab active" role="tab" aria-selected="true" aria-controls="security-tab-protection" data-target="security-tab-protection">
-                🔒 Protection
-            </button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="security-tab-assessment" data-target="security-tab-assessment">
-                📋 Assessment
-            </button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="security-tab-compliance" data-target="security-tab-compliance">
-                ✅ Compliance
-            </button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="security-tab-response" data-target="security-tab-response">
-                🚨 Response
-            </button>
-        </div>
-        <div class="cortex-tab-panels">
-            <!-- Protection Panel -->
-            <div id="security-tab-protection" class="cortex-tab-panel active" role="tabpanel" aria-labelledby="security-tab-protection">
-                <div class="category-subpanel animation-t1">
-                    <div class="category-icon-wrapper"><span class="category-icon">🔒</span></div>
-                    <h3 class="category-title">Protection</h3>
-                    <p class="category-description">Role-based access control, data encryption, privacy safeguards, and comprehensive activity tracking for security compliance.</p>
-                    <div class="category-tags">
-                        <a class="category-tag animation-t2" data-icon="🔐" href="security/access-control.html"><span>Access</span></a>
-                        <a class="category-tag animation-t2" data-icon="🛡️" href="security/data-protection.html"><span>Data</span></a>
-                        <a class="category-tag animation-t2" data-icon="📝" href="security/audit-logging.html"><span>Audit</span></a>
-                    </div>
+        <!-- Security Cards Grid -->
+        <div class="security-cards-grid">
+            <!-- Protection Card -->
+            <div class="security-card protection-card animation-t1">
+                <div class="card-header">
+                    <div class="card-icon">🔒</div>
+                    <h3 class="card-title">Protection</h3>
+                </div>
+                <p class="card-description">Role-based access control, data encryption, privacy safeguards, and comprehensive activity tracking for security compliance.</p>
+                <div class="category-tags">
+                    <a class="category-tag animation-t2" data-icon="🔐" href="security/access-control.html"><span>Access</span></a>
+                    <a class="category-tag animation-t2" data-icon="🛡️" href="security/data-protection.html"><span>Data</span></a>
+                    <a class="category-tag animation-t2" data-icon="📝" href="security/audit-logging.html"><span>Audit</span></a>
                 </div>
             </div>
-            <!-- Assessment Panel -->
-            <div id="security-tab-assessment" class="cortex-tab-panel" role="tabpanel" aria-labelledby="security-tab-assessment">
-                <div class="category-subpanel animation-t1">
-                    <div class="category-icon-wrapper"><span class="category-icon">📋</span></div>
-                    <h3 class="category-title">Assessment</h3>
-                    <p class="category-description">Structured threat identification using STRIDE methodology, risk evaluation, vulnerability scanning, and ethical penetration testing.</p>
-                    <div class="category-tags">
-                        <a class="category-tag animation-t2" data-icon="🎯" href="security/threat-modeling.html"><span>Threats</span></a>
-                        <a class="category-tag animation-t2" data-icon="⚠️" href="security/risk-assessment.html"><span>Risks</span></a>
-                        <a class="category-tag animation-t2" data-icon="🔍" href="security/vulnerability-assessment.html"><span>Vulnerabilities</span></a>
-                        <a class="category-tag animation-t2" data-icon="🔨" href="security/penetration-testing.html"><span>Pen Testing</span></a>
-                    </div>
+            <!-- Assessment Card -->
+            <div class="security-card assessment-card animation-t2">
+                <div class="card-header">
+                    <div class="card-icon">📋</div>
+                    <h3 class="card-title">Assessment</h3>
+                </div>
+                <p class="card-description">Structured threat identification using STRIDE methodology, risk evaluation, vulnerability scanning, and ethical penetration testing.</p>
+                <div class="category-tags">
+                    <a class="category-tag animation-t2" data-icon="🎯" href="security/threat-modeling.html"><span>Threats</span></a>
+                    <a class="category-tag animation-t2" data-icon="⚠️" href="security/risk-assessment.html"><span>Risks</span></a>
+                    <a class="category-tag animation-t2" data-icon="🔍" href="security/vulnerability-assessment.html"><span>Vulnerabilities</span></a>
+                    <a class="category-tag animation-t2" data-icon="🔨" href="security/penetration-testing.html"><span>Pen Testing</span></a>
                 </div>
             </div>
-            <!-- Compliance Panel -->
-            <div id="security-tab-compliance" class="cortex-tab-panel" role="tabpanel" aria-labelledby="security-tab-compliance">
-                <div class="category-subpanel animation-t1">
-                    <div class="category-icon-wrapper"><span class="category-icon">✅</span></div>
-                    <h3 class="category-title">Compliance</h3>
-                    <p class="category-description">Ready-to-use checklists for GDPR, SOC 2, ISO 27001, HIPAA, and PCI-DSS compliance with evidence tracking and team education.</p>
-                    <div class="category-tags">
-                        <a class="category-tag animation-t2" data-icon="📚" href="security/owasp.html"><span>OWASP</span></a>
-                        <a class="category-tag animation-t2" data-icon="✅" href="security/compliance.html"><span>Compliance</span></a>
-                        <a class="category-tag animation-t2" data-icon="🎓" href="security/security-training.html"><span>Training</span></a>
-                    </div>
+            <!-- Compliance Card -->
+            <div class="security-card compliance-card animation-t3">
+                <div class="card-header">
+                    <div class="card-icon">✅</div>
+                    <h3 class="card-title">Compliance</h3>
+                </div>
+                <p class="card-description">Ready-to-use checklists for GDPR, SOC 2, ISO 27001, HIPAA, and PCI-DSS compliance with evidence tracking and team education.</p>
+                <div class="category-tags">
+                    <a class="category-tag animation-t2" data-icon="📚" href="security/owasp.html"><span>OWASP</span></a>
+                    <a class="category-tag animation-t2" data-icon="✅" href="security/compliance.html"><span>Compliance</span></a>
+                    <a class="category-tag animation-t2" data-icon="🎓" href="security/security-training.html"><span>Training</span></a>
                 </div>
             </div>
-            <!-- Response Panel -->
-            <div id="security-tab-response" class="cortex-tab-panel" role="tabpanel" aria-labelledby="security-tab-response">
-                <div class="category-subpanel animation-t1">
-                    <div class="category-icon-wrapper"><span class="category-icon">🚨</span></div>
-                    <h3 class="category-title">Response</h3>
-                    <p class="category-description">Emergency incident protocols, real-time threat intelligence monitoring, and comprehensive security dashboard for proactive defense.</p>
-                    <div class="category-tags">
-                        <a class="category-tag animation-t2" data-icon="🚨" href="security/incident-response.html"><span>Incidents</span></a>
-                        <a class="category-tag animation-t2" data-icon="🧠" href="security/threat-intelligence.html"><span>Intel</span></a>
-                        <a class="category-tag animation-t2" data-icon="📊" href="security/dashboard.html"><span>Dashboard</span></a>
-                    </div>
+            <!-- Response Card -->
+            <div class="security-card response-card animation-t4">
+                <div class="card-header">
+                    <div class="card-icon">🚨</div>
+                    <h3 class="card-title">Response</h3>
+                </div>
+                <p class="card-description">Emergency incident protocols, real-time threat intelligence monitoring, and comprehensive security dashboard for proactive defense.</p>
+                <div class="category-tags">
+                    <a class="category-tag animation-t2" data-icon="🚨" href="security/incident-response.html"><span>Incidents</span></a>
+                    <a class="category-tag animation-t2" data-icon="🧠" href="security/threat-intelligence.html"><span>Intel</span></a>
+                    <a class="category-tag animation-t2" data-icon="📊" href="security/dashboard.html"><span>Dashboard</span></a>
                 </div>
             </div>
         </div>
