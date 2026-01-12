@@ -1,0 +1,472 @@
+manifest_id: MANIFEST-UNIFIED-ce0e6bbc
+timestamp: '2026-01-12T15:33:10.699377+00:00'
+version: 1.0.0
+author: Asif Hussain
+copyright: "Copyright \xA9 2025-2026 Asif Hussain. All rights reserved."
+operation: 'Toolkit Integration: Response Templates + CORTEX LENS + Centralization'
+phase: Phase 1.5 (Intelligent Discovery)
+status: integrated_and_activated
+components:
+  templates:
+    integration_id: INTEGRATION-TEMPLATES-ce0e6bbc
+    timestamp: '2026-01-12T15:33:10.699377+00:00'
+    source: cortex-brain/response-templates-v4.yaml
+    version: 4.2.0
+    status: active
+    categories:
+      mandatory_header:
+        enabled: true
+        description: 'All responses from CORTEX orchestrators MUST include this header.
+
+          Establishes authority, copyright, and version context.
+
+          '
+        template: "# CORTEX {operation_type} Summary\n**Version:** {version} | **Date:**\
+          \ {iso_date}\n**Author:** Asif Hussain\n**Copyright \xA9 2025-2026 Asif\
+          \ Hussain. All rights reserved.**\n---\n"
+        critical_rules:
+        - EVERY response must start with this header
+        - Header comes BEFORE any summary, sections, or content
+        - Copyright line is non-negotiable (legal + brand)
+        - Author is always 'Asif Hussain' (never LLM names)
+        - Date reflects when response was generated
+      executive_summary:
+        enabled: true
+        position: after_header
+        description: 'Enforces concise, executive-level responses across all orchestrators.
+
+          Eliminates verbose narratives and code blocks.
+
+          '
+        format_rules:
+          mandatory:
+          - Start with 3-5 sentence executive summary
+          - Use bullet points for all lists (max 5 per section)
+          - NO code snippets unless explicitly requested
+          - NO narrative prose - declarative statements only
+          - Quantify outcomes (X files, Y AC-IDs, Z% complete)
+          - Mandatory header BEFORE all other content
+          forbidden:
+          - Code blocks (unless user says 'show code')
+          - Step-by-step procedures
+          - Explanatory paragraphs
+          - Verbose status updates
+          - Nested sections >2 levels
+          - Missing CORTEX header
+        structure:
+          sections:
+          - name: Outcomes
+            marker: "\u2705"
+            max_bullets: 5
+            required: true
+          - name: In Progress
+            marker: "\u2699\uFE0F"
+            max_bullets: 3
+            required: false
+          - name: Risks
+            marker: "\u26A0\uFE0F"
+            max_bullets: 3
+            required: false
+          - name: Impact
+            marker: "\U0001F3AF"
+            max_bullets: 3
+            required: false
+      capability_translation:
+        enabled: true
+        description: 'Translates internal AC-IDs to human-readable business capabilities.
+
+          Uses get_ac_title.sh script to look up official titles.
+
+          '
+        rules:
+        - NEVER display raw AC-ID codes to end users
+        - ALWAYS translate to plain English capability names
+        - Use get_ac_title.sh to retrieve canonical titles
+        - Include AC-ID in internal logs ONLY
+      progress_indicators:
+        enabled: true
+        status_icons:
+          complete: "\u2705"
+          in_progress: "\U0001F504"
+          pending: "\u23F3"
+          failed: "\u274C"
+          blocked: "\U0001F6AB"
+        section_markers:
+          outcomes: "\u2705"
+          in_progress: "\u2699\uFE0F"
+          risks: "\u26A0\uFE0F"
+          impact: "\U0001F3AF"
+          continuation: "\U0001F4CB"
+      continuation:
+        enabled: true
+        position: after_sections
+        format: "\U0001F4CB Resume Work: `continue {operation}` (see tracking files)"
+        description: Enables cross-session resume with state reference
+      tier_routing:
+        INSTANT:
+          token_limit: 50
+          sections: 0
+          use_case: Direct factual answer
+        FOCUSED:
+          token_limit: 200
+          sections: 1-2
+          use_case: Single concept
+        STRUCTURED:
+          token_limit: 400
+          sections: 2-4
+          use_case: Multi-faceted analysis
+        COMPREHENSIVE:
+          token_limit: 500
+          sections: 4-6
+          use_case: Complex system overview
+      operation_templates:
+        execution_operation:
+          description: TDD-Master, Planning, Implementation
+          mandatory_header: true
+          sections:
+          - outcomes (required)
+          - in_progress (required)
+          - risks (optional)
+          - impact (optional)
+        analysis_operation:
+          description: Brittleness Review, Risk Analysis
+          mandatory_header: true
+          sections:
+          - outcomes (required)
+          - risks (required)
+          - impact (required)
+        validation_operation:
+          description: Test execution, evidence validation
+          mandatory_header: true
+          sections:
+          - outcomes (required)
+          - risks (optional)
+      composition_rules:
+        mandatory_elements:
+        - header: CORTEX {operation} with copyright
+        - summary: 3-5 sentence executive summary
+        - outcomes: At least 1 quantified bullet
+        conditional_elements:
+        - in_progress: If work ongoing
+        - risks: If risks exist
+        - impact: If strategic importance
+        forbidden_elements:
+        - code_blocks: Unless requested
+        - explanatory_prose: Use bullets
+        - nested_sections: Max 2 levels
+        - ac_id_codes: Translate first
+      quality_gates:
+        pre_output:
+        - Header present and formatted correctly
+        - Copyright includes 2025-2026
+        - No AC-ID codes visible
+        - All metrics quantified
+        - No code blocks unless requested
+        - No explanatory prose
+        verification_checklist:
+        - "\u2713 CORTEX header with version and copyright"
+        - "\u2713 Executive summary (not under header)"
+        - "\u2713 Outcomes section with \u2705 marker"
+        - "\u2713 All bullets on separate lines"
+        - "\u2713 Quantified metrics"
+        - "\u2713 No AC-ID codes visible"
+        - "\u2713 No code snippets"
+        - "\u2713 Section headers properly formatted"
+        - "\u2713 Within tier word limit"
+      examples:
+        example_comprehensive: "# CORTEX TDD-Master Execution Summary\n**Version:**\
+          \ 2.1.0 | **Date:** 2026-01-12\n**Author:** Asif Hussain\n**Copyright \xA9\
+          \ 2025-2026 Asif Hussain. All rights reserved.**\n---\n\nCompleted test-driven\
+          \ implementation of toolkit consolidation. Phase 2 at 45% with clear path\
+          \ to 100%.\n\n\u2705 OUTCOMES\n\n\u2022 Hash chain integrity validation\
+          \ operational (5/5 tests passing)\n\u2022 Audit tool consolidation complete\
+          \ (merged duplicate tools)\n\u2022 Naming standards audit completed (8 violations\
+          \ identified)\n\u2022 @mcp_tool decorator framework applied to 12 public\
+          \ tools\n\u2022 Phase 2 toolkit work at 45% completion\n\n\u2699\uFE0F IN\
+          \ PROGRESS\n\n\u2022 Implementing naming standard fixes\n\u2022 Refactoring\
+          \ scripts/ directory into toolkit modules\n\n\U0001F3AF IMPACT\n\n\u2022\
+          \ MasterOrchestrator has complete toolkit visibility\n\u2022 Governance\
+          \ compliance enforced (CORE-022, CORE-024)\n"
+        example_instant: "# CORTEX Version Query Summary\n**Version:** 2.1.0 | **Date:**\
+          \ 2026-01-12\n**Author:** Asif Hussain\n**Copyright \xA9 2025-2026 Asif\
+          \ Hussain. All rights reserved.**\n---\n\nCurrent CORTEX version is 6.0\
+          \ (Phase 2 active), brittleness review is v2.1.0.\n"
+    statistics:
+      total_sections: 3
+      quality_gates_defined: 9
+      routing_tiers: 4
+  lens:
+    integration_id: INTEGRATION-LENS-ce0e6bbc
+    timestamp: '2026-01-12T15:33:10.699377+00:00'
+    source: cortex-brain/cx6-plan/master-plan.yaml
+    status: ready_after_phase_1
+    cortex_lens:
+      name: CORTEX LENS - Universal Code Intelligence System
+      priority: CRITICAL
+      ac_ids:
+      - AC-LENS-001
+      - AC-LENS-002
+      - AC-LENS-003
+      - AC-LENS-004
+      - AC-LENS-005
+      - AC-LENS-006
+      capabilities:
+      - 'AST Analysis: Python, JavaScript/TypeScript, C#, Java, Go, Rust, SQL'
+      - 'Code Crawlers: Architecture, Complexity, Dependencies, Tech Stack'
+      - 'Reverse Engineering: Intent inference, pattern detection, domain extraction'
+      - 'Knowledge Graph: Semantic code representation (nodes, edges, traversal)'
+      - 'Domain Learning: Company practices, naming conventions, patterns'
+      - 'MCP Exposure: All analyzers accessible as tools to other orchestrators'
+      dependencies:
+      - AC-AUDIT-001
+      - AC-EVIDENCE-001
+      - AC-STATE-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        languages_supported: '>=6 (Python, JS/TS, C#, Java, Go, Rust)'
+        performance: <5s AST analysis per 1000 LOC
+        mcp_tools: All 6 analyzers exposed
+        knowledge_storage: Tier 1 & 3 integration tested
+      mcp_tools_exposed:
+      - ast_analyzer
+      - architecture_crawler
+      - complexity_analyzer
+      - dependency_graph_generator
+      - tech_stack_detector
+      - domain_pattern_extractor
+    cortex_toolkit:
+      name: CORTEX TOOLKIT - HTML View Generation & Visualization
+      priority: HIGH
+      ac_ids: []
+      capabilities: []
+      dependencies: []
+      evidence_bundle: {}
+      mcp_tools_exposed:
+      - epic_plan_viewer_generator
+      - knowledge_graph_visualizer
+      - architecture_diagram_generator
+      - audit_log_exporter
+      - glassmorphism_validator
+      - tab_system_generator
+      - mermaid_engine
+      - toolkit_mcp_server
+    statistics:
+      total_lens_acs: 6
+      total_toolkit_acs: 0
+      total_mcp_tools: 14
+      phase_placement: 1.5 (between Phase 1 and Phase 2)
+  toolkit:
+    integration_id: INTEGRATION-TOOLKIT-ce0e6bbc
+    timestamp: '2026-01-12T15:33:10.699377+00:00'
+    source: cortex-brain/manifests/unified-toolkit-registry.yaml
+    status: centralized
+    core_structure:
+      tools:
+        primary_location: src/tools/
+        purpose: Standalone utilities, validators, executors
+        subdirectories:
+          orchestration:
+            location: src/tools/orchestration/
+            tools:
+            - name: master_orchestrator_facade
+              category: orchestration
+              status: primary
+              path: src/tools/orchestration/master_orchestrator_facade.py
+            - name: checkpoint_manager
+              category: state_management
+              status: primary
+              path: src/tools/checkpoint_manager.py
+            - name: test_executor
+              category: testing
+              status: primary
+              path: src/tools/test_executor.py
+          validation:
+            location: src/tools/validators/
+            tools:
+            - name: mcp_decorator_validator
+              category: validation
+              status: active
+              path: src/tools/validators/mcp_decorator_validator.py
+            - name: duplicate_detection_toolkit
+              category: validation
+              status: active
+              path: src/tools/duplicate-detection-toolkit.py
+          utilities:
+            location: src/tools/utilities/
+            tools:
+            - name: orchestrator_scaffolder
+              category: generation
+              status: primary
+              path: src/tools/orchestrator_scaffolder.py
+              description: CLI for creating new orchestrators with templates
+      orchestrators:
+        primary_location: src/orchestrators/
+        purpose: Executable orchestration layers
+        core:
+          location: src/orchestrators/core/
+          description: Critical path orchestrators
+          orchestrators:
+          - name: MasterOrchestrator
+            path: src/orchestrators/core/master_orchestrator.py
+            status: primary
+            ac_ids:
+            - AC-ORCH-006
+            - AC-ORCH-007
+            description: Main routing and execution orchestrator
+          - name: TodoOrchestrator
+            path: src/orchestrators/core/todo_orchestrator.py
+            status: primary
+            ac_ids:
+            - AC-TODO-001
+            - AC-TODO-002
+            - AC-TODO-003
+            - AC-TODO-004
+            description: Task lifecycle and dependency management
+          - name: TDD-Master
+            path: src/orchestrators/core/tdd_master_orchestrator.py
+            status: primary
+            ac_ids:
+            - AC-TDD-001
+            - AC-TDD-002
+            - AC-TDD-003
+            - AC-TDD-004
+            - AC-TDD-005
+            description: Test-driven development orchestrator
+          - name: StateManager
+            path: src/database/state_manager.py
+            status: primary
+            ac_ids:
+            - AC-STATE-001
+            - AC-STATE-002
+            - AC-STATE-003
+            description: Persistent state management
+        domain:
+          location: src/orchestrators/
+          description: Domain-specific orchestrators
+          orchestrators:
+          - name: ADO Orchestrator
+            path: src/orchestrators/ado/ado_orchestrator.py
+            status: active
+            ac_ids:
+            - AC-ADO-001
+            - AC-ADO-006
+          - name: Investigation Orchestrator
+            path: src/orchestrators/investigation/investigation_orchestrator.py
+            status: active
+            ac_ids:
+            - AC-INV-001
+            - AC-INV-003
+          - name: Sanitization Orchestrator
+            path: src/orchestrators/sanitization/sanitization_orchestrator.py
+            status: active
+            ac_ids:
+            - AC-SAN-001
+            - AC-SAN-002
+          - name: Crawler Orchestrator
+            path: src/orchestrators/crawler/crawler_orchestrator.py
+            status: active
+            ac_ids:
+            - AC-CRAWLER-001
+            - AC-CRAWLER-002
+          - name: Vacuum Orchestrator
+            path: src/orchestrators/vacuum/vacuum_orchestrator.py
+            status: primary
+            ac_ids:
+            - AC-VAC-001
+            - AC-VAC-004
+            description: Code cleanup and duplicate detection
+        base:
+          location: src/orchestrators/base/
+          description: Base classes and interfaces
+          orchestrators:
+          - name: BaseOrchestrator
+            path: src/orchestrators/base/base_orchestrator.py
+            status: primary
+            description: Abstract base class for all orchestrators
+      infrastructure:
+        primary_location: src/infrastructure/
+        purpose: System-level infrastructure
+        persistence:
+          location: src/infrastructure/persistence/
+          modules:
+          - name: AuditStorage
+            path: src/infrastructure/audit_storage.py
+            status: active
+        audit:
+          location: src/infrastructure/audit/
+          modules:
+          - name: EnterpriseAuditLogger
+            path: src/orchestrators/audit_logger.py
+            status: canonical
+            description: Unified audit logging infrastructure
+            note: Source of truth for all audit operations
+            deprecated_versions:
+            - path: src/infrastructure/enhanced_audit_logger.py
+              reason: Use canonical version
+              action: DELETE after consolidation
+        governance:
+          location: src/infrastructure/governance/
+          modules:
+          - name: GovernanceMerger
+            path: src/infrastructure/governance/governance_merger.py
+            status: active
+          - name: GovernanceRules
+            path: src/infrastructure/governance/core_rules.yaml
+            status: active
+    mcp_exposure_matrix:
+      response_templates_tools:
+      - format_response
+      - translate_ac_id
+      - apply_header
+      cortex_lens_tools:
+      - ast_analyzer
+      - architecture_crawler
+      - complexity_analyzer
+      - dependency_graph_generator
+      - tech_stack_detector
+      - domain_pattern_extractor
+      cortex_toolkit_tools:
+      - epic_plan_viewer_generator
+      - knowledge_graph_visualizer
+      - architecture_diagram_generator
+      - audit_log_exporter
+      - glassmorphism_validator
+      - tab_system_generator
+      - mermaid_engine
+      - toolkit_mcp_server
+      core_orchestrator_tools:
+      - master_orchestrator_facade
+      - todo_manager
+      - tdd_master_executor
+      - state_checkpoint_manager
+      - governance_merger
+      domain_orchestrator_tools:
+      - ado_orchestrator_facade
+      - investigation_orchestrator
+      - sanitization_executor
+      - crawler_orchestrator
+      - vacuum_executor
+    centralization_benefits:
+    - Single source of truth for all tools
+    - Automatic MCP registration
+    - Dependency tracking across modules
+    - Audit trail for tool lifecycle
+    - Automated discovery in Planning v5
+    statistics:
+      total_orchestrators: 9
+      total_tools: 6
+      total_infrastructure_modules: 4
+      mcp_enabled_count: 22
+activation_checklist:
+  response_templates_loaded: true
+  cortex_lens_registered: true
+  toolkit_centralized: true
+  mcp_tools_exposed: true
+  registry_updated: false
+  audit_trail_recorded: false
+next_steps:
+- Update AC-INDEX.yaml with all LENS, TOOLKIT, and ONBOARD AC-IDs
+- Register MCP tools with MCP server
+- Activate CORTEX LENS discovery mode
+- Enable CORTEX TOOLKIT view generation
+- Execute Phase 1.5 integration tests

@@ -1,0 +1,48 @@
+checklist_id: CHECKLIST-6160caae
+timestamp: '2026-01-12T15:33:51.178815+00:00'
+title: CORTEX Toolkit Activation Checklist
+pre_activation:
+- item: Response templates loaded from cortex-brain/response-templates-v4.yaml
+  status: "\u2713"
+- item: CORTEX LENS configuration extracted from master-plan.yaml
+  status: "\u2713"
+- item: CORTEX TOOLKIT configuration extracted from master-plan.yaml
+  status: "\u2713"
+- item: Unified toolkit registry updated
+  status: "\u2713"
+- item: Integration manifests created
+  status: "\u2713"
+- item: MCP tools inventory compiled
+  status: "\u2713"
+activation:
+- item: Register response templates in AC-INDEX
+  status: pending
+- item: Register CORTEX LENS (AC-LENS-001 to 006) in AC-INDEX
+  status: pending
+- item: Register CORTEX TOOLKIT (AC-TOOLKIT-001 to 008) in AC-INDEX
+  status: pending
+- item: Register Onboarding (AC-ONBOARD-001 to 012) in AC-INDEX
+  status: pending
+- item: Register MCP tools in MCP registry
+  status: pending
+- item: Set phase_1_5 status to READY
+  status: pending
+- item: Enable CORTEX LENS discovery mode
+  status: pending
+- item: Enable CORTEX TOOLKIT view generation
+  status: pending
+post_activation:
+- item: Run integration tests for LENS
+  status: pending
+- item: Run integration tests for TOOLKIT
+  status: pending
+- item: Run integration tests for ONBOARDING
+  status: pending
+- item: Validate MCP tool exposure
+  status: pending
+- item: Verify audit trail recording
+  status: pending
+- item: Update progress tracker
+  status: pending
+- item: Generate activation report
+  status: pending
