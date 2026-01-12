@@ -135,65 +135,32 @@ def sync_plan_viewer_data():
             'description': 'Validate orchestration framework with Golden Corpus'
         })
     
-    # Add Phase 2
-    if 'phase_2_orchestration' in tracker:
-        p2 = tracker['phase_2_orchestration']
-        completed = p2.get('completed_count', 0)
+    # Add Phases 2-5 from completed_phases array
+    for phase_data in tracker.get('completed_phases', []):
+        phase_num = phase_data.get('number')
+        completed = phase_data.get('completed_count', 0)
         total_completed += completed
         
-        verified_impl = p2.get('verified_implemented', [])
+        verified_impl = phase_data.get('completed_ac_ids', [])
         capabilities = translate_ac_list(verified_impl, ac_map)
         
-        data['phases'].append({
-            'id': 2,
-            'name': 'Orchestration Core',
-            'completion_percentage': p2.get('completion_percentage', 0),
-            'ac_ids_complete': completed,
-            'ac_ids_total': p2.get('total_ac_count', 17),
-            'status': p2.get('status', 'in_progress'),
-            'description': 'Establish default working mechanism (MasterOrchestrator, TodoManager, TDD-Master, Planning)',
-            'verified_implemented': verified_impl,
-            'capabilities': capabilities
-        })
-    
-    # Add Phase 3
-    if 'phase_3_features' in tracker:
-        p3 = tracker['phase_3_features']
-        completed = p3.get('completed_count', 0)
-        total_completed += completed
-        
-        verified_impl = p3.get('verified_implemented', [])
-        capabilities = translate_ac_list(verified_impl, ac_map)
+        # Determine status
+        pct = phase_data.get('completion_percentage', 0)
+        if pct == 100:
+            status = 'completed'
+        elif pct > 0:
+            status = 'in_progress'
+        else:
+            status = 'planned'
         
         data['phases'].append({
-            'id': 3,
-            'name': 'Feature Orchestrators',
-            'completion_percentage': p3.get('completion_percentage', 0),
+            'id': phase_num,
+            'name': phase_data.get('name', f'Phase {phase_num}'),
+            'completion_percentage': pct,
             'ac_ids_complete': completed,
-            'ac_ids_total': p3.get('total_ac_count', 16),
-            'status': p3.get('status', 'in_progress'),
-            'description': 'Build feature orchestrators (ADO, Vacuum, Investigation, Crawlers, Onboarding)',
-            'verified_implemented': verified_impl,
-            'capabilities': capabilities
-        })
-    
-    # Add Phase 4
-    if 'phase_4_intelligence' in tracker:
-        p4 = tracker['phase_4_intelligence']
-        completed = p4.get('completed_count', 0)
-        total_completed += completed
-        
-        verified_impl = p4.get('verified_implemented', [])
-        capabilities = translate_ac_list(verified_impl, ac_map)
-        
-        data['phases'].append({
-            'id': 4,
-            'name': 'Intelligence Layer',
-            'completion_percentage': p4.get('completion_percentage', 0),
-            'ac_ids_complete': completed,
-            'ac_ids_total': p4.get('total_ac_count', 10),
-            'status': p4.get('status', 'in_progress'),
-            'description': 'Intelligence layer (LLM Intent Classifier, Vision API, Knowledge Practices, Knowledge Graph)',
+            'ac_ids_total': phase_data.get('total_ac_count', 0),
+            'status': status,
+            'description': phase_data.get('description', ''),
             'verified_implemented': verified_impl,
             'capabilities': capabilities
         })

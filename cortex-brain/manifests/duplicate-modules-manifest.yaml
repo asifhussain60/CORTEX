@@ -1,0 +1,369 @@
+schema_version: '1.0'
+title: 'CORTEX Duplicate Module Detection & Consolidation Manifest'
+date: '2026-01-12'
+purpose: 'Identify redundant implementations across src/ and scripts/ for consolidation'
+
+# Critical duplicates that block execution
+critical_duplicates:
+  # BLOCKER: Audit logger split between two locations
+  - category: 'audit_infrastructure'
+    severity: 'CRITICAL'
+    impact: 'Execution failures, import resolution errors'
+    modules:
+      - name: 'audit_logger'
+        primary: 'src/orchestrators/audit_logger.py'
+        primary_stats:
+          size_bytes: 1132
+          lines: 1132
+          classes: ['EnterpriseAuditLogger', 'AuditEntry', 'AuditLevel', 'AuditCategory']
+          imports: 9
+        duplicate: 'src/infrastructure/enhanced_audit_logger.py'
+        duplicate_stats:
+          size_bytes: 1067
+          lines: 1067
+          classes: ['EnhancedAuditLogger', 'AuditVacuum', 'ACImplementationTracker']
+          imports: 4
+        recommendation: 'DELETE src/infrastructure/enhanced_audit_logger.py. Consolidate all needed classes into primary.'
+        action_needed:
+          - 'Merge AuditVacuum and ACImplementationTracker from enhanced version into primary'
+          - 'Update 4 broken imports to use src.orchestrators.audit_logger'
+          - 'Delete src/infrastructure/enhanced_audit_logger.py'
+
+# Orchestrator duplicates (mixed in src/orchestrators/core/ and src/orchestrators/)
+major_duplicates:
+  - category: 'master_orchestrator'
+    severity: 'HIGH'
+    modules:
+      - name: 'master_orchestrator'
+        primary: 'src/orchestrators/master_orchestrator.py'
+        primary_stats:
+          size_bytes: 37878
+          lines: 991
+          classes: ['MasterOrchestrator']
+        duplicate: 'src/orchestrators/core/master_orchestrator.py'
+        duplicate_stats:
+          size_bytes: 16646
+          lines: 438
+          classes: ['MasterOrchestrator']
+        recommendation: 'Keep primary (larger, more complete). DELETE core version OR merge unique features.'
+        action_type: 'CONSOLIDATE'
+
+  - category: 'state_management'
+    severity: 'HIGH'
+    modules:
+      - name: 'state_manager'
+        primary: 'src/database/state_manager.py'
+        primary_stats:
+          size_bytes: 32118
+          lines: 869
+          classes: ['StateManager', 'KeyNotFoundError', 'VersionConflictError']
+        duplicate: 'src/orchestrators/state_manager.py'
+        duplicate_stats:
+          size_bytes: 11339
+          lines: 383
+          classes: ['StateManager', 'StateTransition']
+        recommendation: 'Keep primary (database layer). DELETE orchestrators version. Update imports.'
+        action_type: 'DELETE'
+
+  - category: 'todo_management'
+    severity: 'HIGH'
+    modules:
+      - name: 'todo'
+        primary: 'src/orchestrators/core/todo_orchestrator.py'
+        primary_stats:
+          size_bytes: 55118
+          lines: 1548
+          classes: ['TodoOrchestrator', 'TodoError', 'TodoNotFoundError']
+        duplicate: 'src/orchestrators/master/todo_manager.py'
+        duplicate_stats:
+          size_bytes: 12252
+          lines: 353
+          classes: ['TodoManager', 'Task']
+        recommendation: 'Merge TodoManager features into TodoOrchestrator. DELETE master version.'
+        action_type: 'CONSOLIDATE'
+
+  - category: 'scaffolding'
+    severity: 'HIGH'
+    modules:
+      - name: 'orchestrator_scaffolder'
+        primary: 'src/tools/orchestrator_scaffolder.py'
+        primary_stats:
+          size_bytes: 39040
+          lines: 1025
+          classes: ['OrchestratorScaffolder', 'OrchestratorSpec']
+        duplicate: 'src/orchestrators/scaffolder/orchestrator_scaffolder.py'
+        duplicate_stats:
+          size_bytes: 14690
+          lines: 445
+          classes: ['OrchestratorScaffolder']
+        recommendation: 'Keep primary (CLI). DELETE orchestrator version. Import from tools.'
+        action_type: 'DELETE'
+
+  - category: 'checkpoint_management'
+    severity: 'MEDIUM'
+    modules:
+      - name: 'checkpoint_manager'
+        primary: 'src/tools/checkpoint_manager.py'
+        primary_stats:
+          size_bytes: 13786
+          lines: 395
+          classes: ['CheckpointManager', 'Checkpoint']
+        duplicate: 'src/orchestrators/core/checkpoint_manager.py'
+        duplicate_stats:
+          size_bytes: 12059
+          lines: 350
+          classes: ['CheckpointManager', 'CheckpointRecord']
+        recommendation: 'Merge both. Keep tools version as primary reference. Consolidate feature sets.'
+        action_type: 'CONSOLIDATE'
+
+  - category: 'test_execution'
+    severity: 'MEDIUM'
+    modules:
+      - name: 'test_executor'
+        primary: 'src/tools/test_executor.py'
+        primary_stats:
+          size_bytes: 11877
+          lines: 392
+          classes: ['TestExecutor', 'TestResult']
+        duplicate: 'src/infrastructure/test_executor.py'
+        duplicate_stats:
+          size_bytes: 4851
+          lines: 174
+          classes: ['TestExecutor', 'TestResult']
+        recommendation: 'Keep tools version. DELETE infrastructure version. Update imports.'
+        action_type: 'DELETE'
+
+  - category: 'duplicate_detection'
+    severity: 'MEDIUM'
+    modules:
+      - name: 'duplicate_detector'
+        primary: 'src/orchestrators/vacuum/duplicate_detector.py'
+        primary_stats:
+          size_bytes: 8086
+          lines: 246
+          classes: ['DuplicateDetector']
+        duplicate: 'src/orchestrators/planning/duplicate_detector.py'
+        duplicate_stats:
+          size_bytes: 692
+          lines: 27
+          classes: ['PlanningDuplicateDetector']
+        recommendation: 'Keep vacuum version. DELETE planning stub. Extend for planning use case.'
+        action_type: 'DELETE'
+
+  - category: 'orphan_detection'
+    severity: 'MEDIUM'
+    modules:
+      - name: 'orphan_detector'
+        primary: 'src/orchestrators/vacuum/orphan_detector.py'
+        primary_stats:
+          size_bytes: 7352
+          lines: 231
+          classes: ['OrphanDetector']
+        duplicate: 'src/orchestrators/planning/orphan_detector.py'
+        duplicate_stats:
+          size_bytes: 773
+          lines: 29
+          classes: ['PlanningOrphanDetector']
+        recommendation: 'Keep vacuum version. DELETE planning stub. Generalize for planning use case.'
+        action_type: 'DELETE'
+
+  - category: 'vacuum_orchestration'
+    severity: 'MEDIUM'
+    modules:
+      - name: 'vacuum_orchestrator'
+        primary: 'src/orchestrators/vacuum/vacuum_orchestrator.py'
+        primary_stats:
+          size_bytes: 33236
+          lines: 797
+          classes: ['VacuumOrchestratorV2']
+        duplicate: 'scripts/vacuum_orchestrator.py'
+        duplicate_stats:
+          size_bytes: 17181
+          lines: 454
+          classes: ['VacuumOrchestrator']
+        recommendation: 'Keep src version as primary. DELETE scripts version. Reference as module.'
+        action_type: 'DELETE'
+
+  - category: 'base_orchestrator'
+    severity: 'LOW'
+    modules:
+      - name: 'base_orchestrator'
+        primary: 'src/orchestrators/base/base_orchestrator.py'
+        primary_stats:
+          size_bytes: 1312
+          lines: 52
+          classes: ['BaseOrchestrator', 'OrchestratorStatus']
+        duplicate: 'src/orchestrators/base/base_orchestrator_v4.py'
+        duplicate_stats:
+          size_bytes: 1507
+          lines: 60
+          classes: ['BaseOrchestratorV4', 'PhaseStatus']
+        recommendation: 'Merge v4 features into primary. DELETE v4 version. Maintain single base class.'
+        action_type: 'CONSOLIDATE'
+
+tool_duplicates:
+  - category: 'mcp_decorator'
+    severity: 'MEDIUM'
+    modules:
+      - name: 'mcp_decorator'
+        primary: 'src/mcp/mcp_decorator.py'
+        primary_stats:
+          size_bytes: 5519
+          lines: 169
+          functions: ['mcp_tool', 'get_decorated_tools']
+        duplicate: 'src/tools/validators/mcp_decorator_validator.py'
+        duplicate_stats:
+          size_bytes: 5679
+          lines: 188
+          classes: ['MCPDecoratorValidator']
+        recommendation: 'Keep primary. Make validator reference primary implementation.'
+        action_type: 'REFERENCE'
+
+consolidation_strategy:
+  phase_1_critical: |
+    Fix blocker: Consolidate audit logger split
+    1. Merge AuditVacuum + ACImplementationTracker into src/orchestrators/audit_logger.py
+    2. Update 4 broken imports (audit_config, audit_vacuum, brittleness_validator, audit_tools)
+    3. Delete src/infrastructure/enhanced_audit_logger.py
+    4. Verify: python3 -m src.main "implement AC-ORCH-001"
+
+  phase_2_high_impact: |
+    Consolidate high-severity duplicates (master, state, todo, scaffolder)
+    1. Merge master_orchestrator versions (keep primary from src/orchestrators/)
+    2. Consolidate state_manager (keep database layer as primary)
+    3. Consolidate todo (TodoOrchestrator + TodoManager merger)
+    4. Keep scaffolder in tools/ as primary reference
+
+  phase_3_medium_impact: |
+    Consolidate medium-severity (checkpoint, test_executor, detectors, vacuum)
+    1. Consolidate checkpoint_manager (feature merge)
+    2. Delete infrastructure/test_executor (redundant to tools)
+    3. Consolidate detectors (vacuum as primary)
+    4. Delete scripts/vacuum_orchestrator (reference src version)
+
+  phase_4_cleanup: |
+    Base orchestrator consolidation and final audit
+    1. Merge base_orchestrator_v4 into base_orchestrator
+    2. Delete all v4 suffixes
+    3. Full import audit
+    4. Run comprehensive test suite
+
+centralization_mechanism:
+  description: 'Unified toolkit registry for tools and orchestrators'
+  location: 'cortex-brain/manifests/unified-toolkit-registry.yaml'
+  structure:
+    - section: 'tools'
+      primary_location: 'src/tools/'
+      subdirectories:
+        - 'orchestration/'
+        - 'validation/'
+        - 'utilities/'
+    - section: 'orchestrators'
+      primary_location: 'src/orchestrators/'
+      subdirectories:
+        - 'core/' (MasterOrchestrator, TodoOrchestrator, TDD-Master)
+        - 'domain/' (ADO, Investigation, Sanitization, Crawlers)
+        - 'base/' (BaseOrchestrator, interfaces)
+        - 'middleware/' (governance, validation)
+    - section: 'infrastructure'
+      primary_location: 'src/infrastructure/'
+      subdirectories:
+        - 'persistence/' (state_manager, database)
+        - 'audit/' (unified_audit_logger)
+        - 'governance/' (rules, merging)
+
+mcp_toolkit_spec:
+  title: 'Duplicate Detection & Consolidation Toolkit'
+  description: 'Exposed via MCP for autonomous housekeeping orchestrator'
+  
+  tools:
+    - name: 'scan_duplicates'
+      description: 'Scan codebase for duplicate/variant module patterns'
+      parameters:
+        - 'scope: str (default: "src/,scripts/")'
+        - 'patterns: List[str] (custom patterns to match)'
+        - 'format: str (json|yaml)'
+      output: 'Structured manifest with duplicate groups'
+    
+    - name: 'analyze_duplicates'
+      description: 'Deep-dive analysis of duplicate set'
+      parameters:
+        - 'module_name: str (e.g., "audit_logger")'
+        - 'analysis_type: str (feature_diff|import_count|test_coverage|size_comparison)'
+      output: 'Detailed comparison with merge recommendations'
+    
+    - name: 'generate_consolidation_plan'
+      description: 'Generate ordered consolidation tasks with dependencies'
+      parameters:
+        - 'duplicates: List[str] (module names to consolidate)'
+        - 'priority: str (critical|high|medium|low)'
+        - 'preserve_functionality: bool (default: true)'
+      output: 'Ordered task list with merge scripts'
+    
+    - name: 'consolidate_module'
+      description: 'Execute consolidation for a single module'
+      parameters:
+        - 'module_name: str'
+        - 'keep_primary: str (path to primary version)'
+        - 'merge_features_from: List[str] (paths to merge from)'
+        - 'delete_duplicates: bool (default: true)'
+        - 'update_imports: bool (default: true)'
+      output: 'Consolidation report with import audit'
+    
+    - name: 'validate_consolidation'
+      description: 'Verify consolidation succeeded'
+      parameters:
+        - 'module_name: str'
+      output: 'Pass/fail with detailed validation report'
+    
+    - name: 'update_toolkit_registry'
+      description: 'Update centralized toolkit manifest'
+      parameters:
+        - 'action: str (add|remove|update)'
+        - 'tool_name: str'
+        - 'metadata: Dict'
+      output: 'Updated registry'
+
+integration_points:
+  housekeeping_orchestrator: |
+    New capability: AC-CLEAN-004: Duplicate Module Detection & Consolidation
+    - Runs scan_duplicates on scheduled basis
+    - Generates consolidation plans
+    - Executes phase-by-phase consolidation
+    - Updates toolkit registry
+    - Runs validation tests after each consolidation
+
+  workflow:
+    step_1: 'Invoke: scan_duplicates(scope="src/,scripts/")'
+    step_2: 'Compare output to duplicate-modules-manifest.yaml'
+    step_3: 'For CRITICAL duplicates: generate_consolidation_plan(priority="critical")'
+    step_4: 'For each module: consolidate_module(...) + validate_consolidation(...)'
+    step_5: 'Run full test suite to verify no regressions'
+    step_6: 'Update toolkit registry with final structure'
+
+migration_order:
+  1_critical:
+    - 'audit_logger (BLOCKS execution)'
+  2_orchestration_core:
+    - 'master_orchestrator'
+    - 'todo_management'
+    - 'state_manager'
+  3_execution_support:
+    - 'scaffolder'
+    - 'checkpoint_manager'
+    - 'test_executor'
+  4_cleanup_utilities:
+    - 'duplicate_detector'
+    - 'orphan_detector'
+    - 'vacuum_orchestrator'
+  5_final_consolidation:
+    - 'base_orchestrator'
+    - 'mcp_decorator'
+
+expected_impact:
+  lines_of_code_reduction: '~15%'
+  duplicate_modules_eliminated: '11'
+  files_deleted: '11'
+  import_consolidation_points: '4'
+  execution_blocker_fixed: 'YES (audit logger)'
+  test_regression_risk: 'LOW (with comprehensive test suite)'

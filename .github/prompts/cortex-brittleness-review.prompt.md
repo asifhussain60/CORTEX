@@ -1,13 +1,84 @@
 ---
 agent: agent
 ---
-# CORTEX6: Cortex Search-and-Fix (Day-Zero Brittleness & Risk Review)
+# CORTEX6: Cortex Search-and-Fix (Day-Zero Brittleness & Risk Review + Toolkit Alignment)
+**Version:** 2.1.0 (Plan-Integrated with Regression Prevention + CORTEX Toolkit Coherence)  
+**Date:** 2026-01-12
+
+## Repeatable "Tool" Behavior (avoid file bloat)
+- Do **NOT** create separate YAML/JSON files for findings.
+- **APPEND directly to AC-INDEX.yaml** (the single source of truth).
+- If an AC-ID already exists, update it in-place rather than duplicating.
+- After appending, update `progress-tracker.json` and run `sync_plan_viewer_data.py`.
+
+## Required Output Format
+1) A concise summary (paragraphs + bullets), broken into sections.
+2) AC-ID entries ready to **APPEND to AC-INDEX.yaml** (not a separate file).
+3) The payload must be **idempotent**: same findings should map to the same stable IDs and update in-place.
 
 You are reviewing the CORTEX6 plan and implementation for production-readiness under real load, partial failure, and ongoing change. Your job is to search across the entire repo/landscape and identify brittleness, breakage points, and material risks—then recommend the simplest robust improvements with minimal impact and no scope creep.
 
+---
+
+## 🔗 PLAN INTEGRATION (CRITICAL)
+
+**This review MUST integrate findings into the cx6-plan:**
+
+| Plan Asset | Integration Role |
+|------------|------------------|
+| `master-plan.yaml` | Add new AC-IDs to appropriate phase |
+| `AC-INDEX.yaml` | **APPEND** brittleness AC-IDs (not separate files) |
+| `progress-tracker.json` | Add AC-IDs to phase planned_work |
+| `plan-viewer-data.json` | Auto-synced via sync script |
+
+**Output Flow:**
+```
+Findings → AC-IDs → AC-INDEX.yaml append → master-plan update → tracker update → dashboard sync
+```
+
+---
+
+## 🛡️ REGRESSION PREVENTION (MANDATORY)
+
+**Before generating findings:**
+
+```bash
+# Check current AC-INDEX state
+python3 << 'EOF'
+import yaml, sys
+
+ac_index = yaml.safe_load(open('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml'))
+current_count = ac_index.get('total_ac_count', 0)
+schema_version = ac_index.get('schema_version', 'unknown')
+
+print(f"AC-INDEX state: {current_count} AC-IDs, schema v{schema_version}")
+
+# Get highest AC-IDs per category for brittleness findings
+categories = {'BRITTLE': 0, 'RISK': 0, 'SEC': 0, 'PERF': 0, 'DEBT': 0}
+# Scan for existing AC-IDs in these categories
+import re
+content = open('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml').read()
+for cat in categories:
+    matches = re.findall(f'AC-{cat}-(\\d+)', content)
+    if matches:
+        categories[cat] = max(int(m) for m in matches)
+
+print("Next available AC-IDs:")
+for cat, num in categories.items():
+    print(f"  AC-{cat}-{num+1:03d}")
+EOF
+```
+
+**Regression Triggers (STOP if detected):**
+- ❌ AC-INDEX.yaml parse fails → Schema broken, fix before proceeding
+- ❌ Duplicate AC-ID would be created → Check existing IDs first
+- ❌ Phase assignment invalid → Verify phase exists in master-plan.yaml
+
+---
+
 ## Scope & Inputs (repo conventions)
 - Primary plan/design source: `cortex-brain/cx6-plan/**`
-- Execution/update anchor file (must be used to maintain a single evolving plan): `#file:cortex-exec.prompt.md`
+- Execution anchor: `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml` (append AC-IDs here)
 - Search across the entire CORTEX6 architecture + infrastructure landscape (code, IaC, CI/CD, runtime configs, docs, ADRs, scripts, manifests, charts, pipelines, and operational artifacts)
 - **CORTEX-specific paths:**
   - State files: `cortex-brain/tier1/tracking/progress-tracker.json`, `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml`
@@ -16,6 +87,106 @@ You are reviewing the CORTEX6 plan and implementation for production-readiness u
   - Orchestrators: `src/orchestrators/` (master, planning, TDD, ADO, cleanup, etc.)
   - Tests: `tests/` (pytest-based, evidence source for tracker)
   - Scripts: `scripts/` (sync, validation, consolidation utilities)
+  - **CORTEX TOOLKIT:** `src/tools/` (Python tool modules) and `src/mcp/` (MCP tool exposure)
+
+## 🔧 CORTEX TOOLKIT COHERENCE REVIEW (NEW - v2.1.0)
+
+**CRITICAL:** All Python tools in CORTEX TOOLKIT must be neatly organized, efficiently named, and fully exposed via MCP for the MasterOrchestrator to have complete knowledge of available capabilities.
+
+### Toolkit Inventory & Analysis
+
+**Search Scope:**
+- `src/tools/*.py` → Core utility tools (non-MCP exposed)
+- `src/mcp/*_tools.py` → MCP-exposed tools (decorated with @mcp_tool)
+- `scripts/*.py` → Operational scripts (should be refactored into tools or orchestrators)
+
+**Toolkit Assessment Checklist:**
+
+1. **Tool Discovery & Exposure**
+   - [ ] All tools in `src/tools/` and `src/mcp/` are cataloged
+   - [ ] Each tool is either: (a) exposed via @mcp_tool, (b) internal utility, or (c) candidate for consolidation
+   - [ ] MCP discovery in `capability_registry.py` knows about ALL MCP tools
+   - [ ] MasterOrchestrator can query complete tool registry without blind spots
+   - [ ] No tools hidden in unimported modules or orphaned directories
+
+2. **Naming Consistency & Clarity**
+   - [ ] ALL tool filenames follow kebab-case (not snake_case, not PascalCase)
+   - [ ] ALL tool filenames ≤ 25 characters (excluding `.py` extension)
+   - [ ] NO adjectives in tool names (new, updated, enhanced, old, legacy, etc.)
+   - [ ] Tool names are **capability-focused**, not implementation-focused
+     - ✅ GOOD: `audit-query.py`, `evidence-generator.py`, `state-manager.py`
+     - ❌ BAD: `new-audit-query.py`, `enhanced-evidence-generator.py`, `legacy-state-manager.py`
+   - [ ] Tool names describe WHAT the tool does, not HOW or WHEN it was created
+   - [ ] Function naming inside tools follows snake_case convention
+
+3. **Duplicate & Redundant Tools**
+   - [ ] Search for tools with overlapping functionality
+   - [ ] Identify candidates for consolidation (e.g., multiple "audit" tools)
+   - [ ] Check git history for orphaned reimplementations of same capability
+   - [ ] Flag tools with <20% usage in codebase (candidates for removal)
+   - [ ] Consolidation should preserve all unique capabilities (no feature loss)
+
+4. **MCP Exposure & Governance (CORE-024)**
+   - [ ] ALL public-facing tools MUST be decorated with `@mcp_tool` (CORE-024 enforcement)
+   - [ ] MCP decorator applied consistently: `name`, `description`, `category`, `parameters`, `returns`, `metadata`
+   - [ ] Tool categories align with governance intent: `audit`, `governance`, `planning`, `development`, `maintenance`, etc.
+   - [ ] Metadata includes: `tags`, `version`, `autonomous` flag, `ac_standard` (if governance-tracked)
+   - [ ] Tools without @mcp_tool decorator must have documented reasons (internal utilities only)
+   - [ ] Non-MCP tools must NOT be called directly by MasterOrchestrator (routing via MCP only)
+
+5. **Tool Organization & Discoverability**
+   - [ ] Tool modules are organized by responsibility (audit, governance, planning, etc.)
+   - [ ] No single tool file exceeds 500 lines (split large tools)
+   - [ ] Each tool file has clear docstring explaining purpose and examples
+   - [ ] Tool dependencies are explicit (imports at top, no circular deps)
+   - [ ] Validation helpers and constants are co-located with tools they serve
+   - [ ] No orphaned utility functions (all utilities either exported or internal to tool)
+
+6. **Quality & Testing**
+   - [ ] Each MCP tool has corresponding test file in `tests/mcp/test_*_tools.py`
+   - [ ] Tool tests include: happy path, error handling, parameter validation, integration
+   - [ ] Tools validate input parameters strictly (type hints + runtime checks)
+   - [ ] Tools fail fast with clear error messages (no silent failures)
+   - [ ] Tools return consistent output format (dict with `status`, `data`, `error` keys)
+   - [ ] Tools are idempotent where applicable (safe to retry without side effects)
+
+7. **Documentation & Discoverability**
+   - [ ] Each tool has clear docstring (description, parameters, returns, examples)
+   - [ ] MCP metadata includes human-readable descriptions (not just technical specs)
+   - [ ] Tool purpose is understandable to MasterOrchestrator (not magic names)
+   - [ ] Related tools are cross-referenced in documentation
+   - [ ] Tool catalog or index document exists (human-readable tool directory)
+
+### Implementation Priority for Toolkit Coherence
+
+**Phase 1: Audit & Classification** (Low risk, high visibility)
+1. Inventory all tools in `src/tools/` and `src/mcp/`
+2. Classify each tool: (a) Core MCP tool, (b) Internal utility, (c) Candidate for consolidation/removal
+3. Identify naming violations (adjectives, non-kebab-case, >25 chars)
+4. Generate toolkit health report (coverage %, exposure %, quality metrics)
+
+**Phase 2: Consolidation & Renaming** (Medium risk, high impact)
+1. Consolidate duplicate tools (preserve all unique capabilities)
+2. Rename tools to remove adjectives and enforce kebab-case (<25 chars)
+3. Update all imports and references after renaming
+4. Add @mcp_tool decorator to all public tools (enforces CORE-024)
+5. Verify MCP discovery re-discovers all tools post-rename
+
+**Phase 3: Organization & Optimization** (Medium risk, medium impact)
+1. Reorganize tools by responsibility (move orphaned utilities)
+2. Split oversized tools (>500 lines) into focused modules
+3. Define tool categories consistently (align with governance intents)
+4. Update tool documentation and cross-references
+5. Ensure no circular dependencies between tools
+
+**Phase 4: Quality & Testing** (Medium risk, high confidence)
+1. Add/update test files for all MCP tools
+2. Validate input parameters strictly in each tool
+3. Implement consistent error handling and output format
+4. Verify idempotency where applicable
+5. Update tests to verify MCP exposure (CORE-024 compliance)
+
+---
 
 ## Operating Rules
 - **No code snippets or configuration blocks** in the response.
@@ -25,15 +196,17 @@ You are reviewing the CORTEX6 plan and implementation for production-readiness u
 - **Minimal-impact changes only**: do not introduce new subsystems, major rewrites, or architecture expansions. Prefer small, robust fixes.
 - Prioritize by real-world impact and likelihood; explain how failures manifest at runtime.
 
+---
+
 ## Repeatable “Tool” Behavior (avoid file bloat)
 - Do **NOT** create new files each run.
-- Update/extend the existing plan via **one canonical record** inside `#file:cortex-exec.prompt.md`.
+- Update/extend the existing plan via **one canonical record** inside `AC-INDEX.yaml`.
 - If an entry already exists, update it (status, severity, evidence paths, recommendation, owner, lastReviewed) rather than duplicating.
 - Use the structured format below for all updates.
 
 ## Required Output Format
 1) A concise summary (paragraphs + bullets), broken into sections.
-2) A single YAML (preferred) or JSON “update payload” that can be pasted into `#file:cortex-exec.prompt.md` to incrementally maintain the plan.
+2) A single YAML (preferred) or JSON “update payload” that can be pasted into `AC-INDEX.yaml` to incrementally maintain the plan.
 3) The payload must be **idempotent**: same findings should map to the same stable IDs and update in-place.
 
 ---
@@ -49,6 +222,61 @@ Search for and map:
 - CI/CD pipelines, release strategy, and rollback mechanisms.
 - Observability stack: logging, metrics, tracing, dashboards, alerts.
 - Security controls: authN/Z, secrets, key management, RBAC/IAM, network policies.
+
+## 1a) CORTEX Toolkit Inventory & Analysis (CRITICAL)
+Perform exhaustive toolkit audit:
+1. **List all tool files:**
+   - `src/tools/*.py` (list all, note file sizes and naming)
+   - `src/mcp/*_tools.py` (identify MCP tool modules)
+   - `src/mcp/` non-tools (identify core MCP files vs tools)
+   - `scripts/*.py` (candidate tools for refactoring into toolkit)
+
+2. **Classify each tool:**
+   - **Exposed via MCP** (has @mcp_tool decorator)
+   - **Internal utility** (explicitly marked as internal, no MCP exposure)
+   - **Candidate for consolidation** (overlapping functionality)
+   - **Candidate for removal** (unused, redundant, orphaned)
+   - **Missing MCP exposure** (public tool without @mcp_tool decorator)
+
+3. **Naming audit:**
+   - Files with adjectives (new, old, updated, enhanced, legacy, temp, etc.) → Rename
+   - Files with non-kebab-case naming → Convert to kebab-case
+   - Files with names >25 characters (excluding .py) → Shorten/refactor
+   - Examples to flag: `duplicate-detection-toolkit.py` (too long, adjective), `real_implementation_engine.py` (non-kebab, compound), `enhanced-audit-query.py` (adjective)
+
+4. **Duplication detection:**
+   - Group tools by purpose (all audit tools together, etc.)
+   - Identify overlapping capabilities (e.g., multiple "validate" tools)
+   - Check git history for reimplemented features
+   - Flag tools with <20% usage in codebase
+
+5. **MCP exposure validation:**
+   - For each tool in `src/tools/`, check if it has @mcp_tool decorator
+   - For each tool in `src/mcp/*_tools.py`, verify decorator with proper metadata
+   - Check `capability_registry.py` `_discover_decorated_tools()` to verify all tools are imported
+   - Verify CORE-024 compliance (all public tools must have @mcp_tool)
+   - Identify any tools registered manually that should use decorator
+
+6. **Test coverage & organization:**
+   - Map each tool to its test file (should exist in `tests/mcp/test_*_tools.py`)
+   - Flag tools without tests
+   - Check for orphaned test files with no corresponding tool
+   - Verify test imports and dependencies are correct
+
+7. **Documentation & discoverability:**
+   - Check tool module docstrings (should clearly describe purpose)
+   - Verify MCP metadata includes human-readable descriptions
+   - Flag missing examples or unclear parameter documentation
+   - Check for tool catalog or directory document (if missing, candidate for creation)
+
+8. **Quantified metrics (required output):**
+   - Total tools: `N`
+   - Tools with @mcp_tool decorator: `M` (percentage: M/N)
+   - Tools without tests: `T`
+   - Naming violations (adjectives, case, length): `V`
+   - Consolidation candidates: `C`
+   - Tools not in capability_registry discovery: `U`
+   - Overall toolkit health score: `(N-V-U-T+M)/N * 100%`
 
 ## 2) Brittleness analysis categories (must cover all)
 For each category, identify concrete risks and where they live (file paths / modules / components):
@@ -105,16 +333,30 @@ For each issue:
 - **Verification**: smallest test/experiment to validate the fix
 
 ## 4) Generate AC-IDs (not finding IDs)
-All brittleness findings MUST be converted to proper AC-IDs that flow through the governance-to-todo pipeline.
+All brittleness and toolkit findings MUST be converted to proper AC-IDs that flow through the governance-to-todo pipeline.
 
 **AC-ID Format:** `AC-<CATEGORY>-<NNN>`
-- Examples: `AC-BRITTLE-001`, `AC-RISK-005`, `AC-DEBT-012`
-- Categories: `BRITTLE` (brittleness/fragility), `RISK` (runtime failure risks), `DEBT` (technical debt), `SEC` (security issues)
+- Examples: `AC-BRITTLE-001`, `AC-RISK-005`, `AC-DEBT-012`, `AC-TOOLKIT-008`
+- Categories: 
+  - `BRITTLE` (brittleness/fragility issues)
+  - `RISK` (runtime failure risks)
+  - `DEBT` (technical debt)
+  - `SEC` (security issues)
+  - `TOOLKIT` (CORTEX toolkit organization, naming, exposure, consolidation)
 - Sequential numbering: Query AC-INDEX.yaml to find highest existing number in category, increment by 1
 
-**Category Mapping (brittleness type → AC category):**
+**Category Mapping (issue type → AC category):**
 - Encoding/corruption/data integrity → `AC-BRITTLE-*`
 - Concurrency/race conditions/state loss → `AC-RISK-*`
+- Missing tests/validation gaps/observability → `AC-DEBT-*`
+- Security/secrets/exposure → `AC-SEC-*`
+- Governance/blocking/hardcoded assumptions → `AC-RISK-*`
+- **NEW: Tool naming violations (adjectives, non-kebab-case, >25 chars) → `AC-TOOLKIT-*`**
+- **NEW: Tool duplication/consolidation opportunities → `AC-TOOLKIT-*`**
+- **NEW: Tool MCP exposure gaps (missing @mcp_tool decorator) → `AC-TOOLKIT-*`**
+- **NEW: Tool organization/discoverability issues → `AC-TOOLKIT-*`**
+- **NEW: Tool test coverage gaps → `AC-TOOLKIT-*`**
+
 - Missing tests/validation gaps/observability → `AC-DEBT-*`
 - Security/secrets/exposure → `AC-SEC-*`
 - Governance/blocking/hardcoded assumptions → `AC-RISK-*`
@@ -134,6 +376,7 @@ All brittleness findings MUST be converted to proper AC-IDs that flow through th
 Use these sections:
 - **Executive Summary** (2-3 paragraphs: current state, critical risks, recommended actions)
 - **Top Risks (Critical/High)** (must-fix before production)
+- **CORTEX Toolkit Coherence** (organization, naming, exposure gaps, consolidation opportunities)
 - **Reliability & Failure Modes** (retry, timeout, rollback, circuit breaking)
 - **Data & Concurrency Hazards** (corruption, races, sync drift)
 - **Security & Secrets** (exposure, least privilege, encryption)
@@ -144,9 +387,35 @@ Use these sections:
 - **Quick Wins** (minimal-impact, high leverage, <1 day implementation)
 - **Assumptions Challenged** (what defaults seem risky, hidden dependencies)
 
-Each issue should be bullets with: 
-- **AC-ID** (generated identifier, e.g., AC-BRITTLE-015)
-- **Title** (capability-focused, e.g., "YAML encoding repair mechanism")
+### CORTEX Toolkit Coherence Section Details
+
+**Toolkit Health Report** (quantified metrics):
+- Total tools inventoried: `N` (src/tools/ + src/mcp/ modules)
+- Tools exposed via MCP: `M` (with @mcp_tool decorator)
+- Naming violations: `K` (adjectives, non-kebab-case, >25 chars)
+- Duplicate/redundant tools: `D` (candidates for consolidation)
+- Tools without tests: `T` (missing test coverage)
+- Tools not in capability_registry: `U` (discovery blind spots)
+
+**Specific Findings** (per toolkit concern):
+- **AC-TOOLKIT-NNN: [Naming issue]** (e.g., "Rename enhanced-audit-query.py to audit-query.py per CORE-022")
+- **AC-TOOLKIT-MMM: [Consolidation opportunity]** (e.g., "Merge duplicate-detection-toolkit.py with gap-detector.py")
+- **AC-TOOLKIT-LLL: [MCP exposure gap]** (e.g., "Add @mcp_tool decorator to validate-prompt-integrity.py")
+- **AC-TOOLKIT-KKK: [Organization issue]** (e.g., "Move orphaned validators/ utilities into audit-tools.py")
+- **AC-TOOLKIT-JJJ: [Test coverage gap]** (e.g., "Add test_orchestrator-scaffolder.py for CORE-024 validation")
+
+Each toolkit issue should include:
+- **AC-ID** (e.g., AC-TOOLKIT-001)
+- **Tool(s) affected** (specific file names)
+- **Type** (naming|consolidation|exposure|organization|testing)
+- **Current state** (what's wrong)
+- **Desired state** (how it should be)
+- **Impact** (why this matters for MasterOrchestrator)
+- **Effort** (minimal|low|medium)
+
+Each issue (brittleness or toolkit) should be bullets with: 
+- **AC-ID** (generated identifier, e.g., AC-BRITTLE-015, AC-TOOLKIT-008)
+- **Title** (capability-focused, e.g., "YAML encoding repair mechanism", "Consolidate audit tool family")
 - **Priority** (critical|high|medium|low)
 - **What fails** (runtime manifestation)
 - **Where** (file paths, components)
@@ -163,63 +432,72 @@ Each issue should be bullets with:
 - AC-ID validation chain integrity (AC-INDEX → TodoManager → progress-tracker → evidence)
 
 ## B) AC-ID entries for `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml`
-Produce AC-ID entries ready for direct insertion into AC-INDEX.yaml:
 
-- `runMeta`: 
-  - `date` (ISO 8601)
-  - `reviewer` (agent name or human)
-  - `repoRef` (branch/commit hash)
-  - `scopePaths` (list of directories searched)
-  - `cortexVersion` (e.g., "6.0.0")
-  - `phaseContext` (current phase from progress-tracker.json)
-  - `nextAvailableIDs`: Map of category → next sequential number (e.g., BRITTLE: 15, RISK: 8)
-- `acceptanceCriteria[]`: array of AC-ID objects matching AC-INDEX.yaml schema
-- `acceptanceCriteria[].fields`:
-  - `id` (AC-<CATEGORY>-<NNN>, e.g., AC-BRITTLE-015)
-  - `title` (concise, capability-focused, e.g., "YAML encoding corruption repair")
-  - `description` (detailed acceptance criteria - what "done" means)
-  - `status` (planned|in_progress|implemented|validated - default: planned)
-  - `priority` (critical|high|medium|low)
-  - `phase` (1|2|3|4 - which phase implements this)
-  - `category` (brittleness|reliability|security|observability|testing)
-  - `tests` (list of test file paths that validate this AC)
-  - `dependencies` (list of AC-IDs that must complete first)
-  - `evidencePaths` (list of repo paths where issue manifests)
-  - `riskIfUnfixed` (Critical/High/Medium/Low severity)
-  - `implementation` (minimal-impact fix description)
-  - `verification` (how to test/validate the fix)
-  - `estimatedEffort` (hours or story points)
-  - `owner` (component owner if inferable; else TBD)
-- `rollup`: 
-  - `countByPriority` (critical|high|medium|low counts)
-  - `countByCategory` (brittleness|reliability|security|observability counts)
-  - `countByPhase` (Phase 1/2/3/4 counts)
-  - `topRiskAreas` (list of components with most critical/high AC-IDs)
-  - `totalEstimatedEffort` (sum of estimated hours)
-- `implementationPlan[]`: ordered list of AC-IDs for day-zero fixes
-  - `acID` (the AC-ID to implement)
-  - `title` (from AC-ID entry)
-  - `priority` (critical|high|medium|low)
-  - `estimatedEffort` (hours)
-  - `dependencies` (list of AC-IDs that must complete first)
-  - `phase` (which phase implements this)
-  - `owner` (if inferable)
+**CRITICAL INTEGRATION REQUIREMENT:**
 
-**Integration with Governance Pipeline:**
-1. AC-IDs generated by this prompt append to AC-INDEX.yaml
-2. MasterOrchestrator reads AC-INDEX.yaml via GovernanceMerger
-3. TodoManager creates tasks for AC-IDs with status=planned
-4. TDD-Master enforces test-first implementation (CORE-019)
-5. Completion tracked in progress-tracker.json with test evidence
-6. Audit trail logged via EnterpriseAuditLogger
+All AC-IDs generated by this review MUST be **appended directly to AC-INDEX.yaml's `acceptanceCriteria[]` array** — NOT as a separate file under a new root key like `brittleness_acs:`.
 
-The AC-IDs must be appended to AC-INDEX.yaml (no duplicates):
-- Query existing AC-IDs in category to get next sequential number
-- If AC-ID exists, treat as update (refresh description, status, tests)
-- If new, append to acceptanceCriteria array
-- Sort by category, then by number within category
+The SINGLE SOURCE OF TRUTH is: `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml`
 
-Do not include any code/config blocks; only descriptive text.
+### Integration Steps (MANDATORY):
+
+1. **Query AC-INDEX.yaml** for existing AC-ID counts per category:
+   ```bash
+   grep "^    - id: AC-BRITTLE-" cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml | tail -1
+   grep "^    - id: AC-RISK-" cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml | tail -1
+   ```
+   Extract the highest number in each category to determine next sequential ID.
+
+2. **Append to `acceptanceCriteria[]` array** (NOT a separate nested YAML file):
+   - Insert new AC-ID objects at the END of the `acceptanceCriteria[]` array
+   - DO NOT create new root-level keys like `brittleness_acs:` or `report_acs:`
+   - DO NOT create separate YAML files (e.g., AC-IDS-BRITTLENESS-2026-01-12.yaml) as the canonical storage
+
+3. **Update AC-INDEX.yaml metadata**:
+   - `total_ac_count`: Increment from current (e.g., 102 → 131 if adding 29)
+   - `last_updated`: Set to ISO 8601 timestamp of this review
+   - `categories.{BRITTLE,RISK,etc}.prefix`: Auto-populate if new category
+
+4. **AC-ID Format** (each entry in `acceptanceCriteria[]`):
+   - `id`: AC-<CATEGORY>-<NNN> (e.g., AC-BRITTLE-001)
+   - `title`: Concise, capability-focused (e.g., "YAML encoding corruption repair")
+   - `description`: Detailed acceptance criteria (what "done" means)
+   - `status`: planned|in_progress|implemented|validated (default: planned)
+   - `priority`: critical|high|medium|low
+   - `phase`: 1|2|3|4 (which phase implements this)
+   - `category`: brittleness|reliability|security|observability|testing
+   - `tests`: List of test file paths (may be empty for planned AC-IDs)
+   - `dependencies`: List of AC-IDs that must complete first
+   - `evidencePaths`: List of repo paths where issue manifests
+   - `riskIfUnfixed`: Critical/High/Medium/Low severity
+   - `implementation`: Minimal-impact fix description (if known)
+   - `verification`: How to test/validate the fix
+   - `estimatedEffort`: Hours or story points
+   - `owner`: Component owner (TBD if unknown)
+
+5. **Flow through Governance Pipeline**:
+   - MasterOrchestrator reads updated AC-INDEX.yaml via GovernanceMerger
+   - TodoManager creates tasks for new AC-IDs with status=planned
+   - TDD-Master enforces test-first implementation (CORE-019)
+   - Completion tracked in progress-tracker.json with test evidence
+   - Audit trail logged via EnterpriseAuditLogger
+
+### DO NOT:
+
+❌ Create separate YAML/JSON files in `cortex-brain/documents/reports/` as the canonical source  
+❌ Nest AC-IDs under new root keys like `brittleness_acs:` or `report_acs:`  
+❌ Split AC-ID definitions across multiple files  
+❌ Update progress-tracker.json with new AC-IDs before integrating into AC-INDEX.yaml  
+
+**Why?** MasterOrchestrator reads ONLY AC-INDEX.yaml. Separate files are invisible to the governance pipeline and won't flow through TodoManager → TDD-Master → Evidence Validation.
+
+### Duplicate Handling:
+
+- If AC-ID already exists in AC-INDEX.yaml, update in-place (refresh description, status, tests)
+- If AC-ID is new, append to `acceptanceCriteria[]` array
+- No duplicate AC-IDs allowed; each ID must be unique within the registry
+
+Do not include any code/config blocks in the summary; only descriptive text.
 
 ---
 
