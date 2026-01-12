@@ -1,0 +1,399 @@
+################################################################################
+# CORTEX Prompt Alignment Governance v3.0
+################################################################################
+# 
+# PURPOSE:
+#   Enforce unified prompt architecture to prevent brittleness patterns
+#   discovered in Phase 4.5 implementation. Prevents mixed patterns that
+#   create hidden operational bugs.
+#
+# SCOPE:
+#   All `.github/prompts/*.prompt.md` files must comply with this governance.
+#
+# VERSION: 3.0.0
+# DATE: 2026-01-12
+# AUTHOR: GitHub Copilot (CORTEX 6.0 Enhancement)
+#
+# RELATED INCIDENTS:
+#   - chat01.md: Found import brittleness (mixed relative/absolute patterns)
+#   - IMPORT-BRITTLENESS-FIX.md: Root cause analysis and prevention strategy
+#   - DESIGN-BRITTLENESS-FIX-REPORT.md: Applied holistic fix
+#
+################################################################################
+
+schema_version: '1.0'
+governance_tier: 2  # Tier 2 = Company engineering standards
+category: PROMPT_GOVERNANCE
+precedence: HIGH  # Overridden only by Tier 0 SKULL rules
+
+metadata:
+  created_date: "2026-01-12T18:00:00Z"
+  created_by: "GitHub Copilot (CORTEX Enhancement)"
+  last_updated: "2026-01-12T18:00:00Z"
+  enforcement_phase: "Phase 4.5 (Orchestrator Integration)"
+  related_ac_ids:
+    - AC-INTEG-008  # Prompt alignment and consistency
+    - AC-GOV-005    # Governance enforcement
+  related_skull_rules:
+    - CORE-002      # No root-level files
+    - CORE-009      # Plan file organization
+    - CORE-017      # Governance enforcement
+    - CORE-024      # MCP tool pattern equivalent (state access)
+
+################################################################################
+## BRITTLENESS DEFINITIONS
+################################################################################
+
+brittleness_patterns:
+  - id: BP-001
+    name: Mixed Orchestrator Patterns
+    description: "Some prompts delegate to MasterOrchestrator, others bypass it"
+    symptom: "Inconsistent execution patterns across prompts"
+    prevention: "ALL prompts use identical delegation: python3 -m src.main"
+    governance_rule: CORE-017
+
+  - id: BP-002
+    name: Direct File Access
+    description: "Prompts read state files directly (YAML/JSON parsing)"
+    symptom: "Prompt contains yaml.safe_load(open(...)) or json.load(open(...))"
+    prevention: "Zero direct file access - all via MasterOrchestrator"
+    governance_rule: CORE-024
+
+  - id: BP-003
+    name: Copy-Paste Regression Checks
+    description: "Regression checks duplicated across prompts instead of referenced"
+    symptom: "Multiple identical regression check code blocks"
+    prevention: "All prompts REFERENCE CORTEX.prompt.md (DRY principle)"
+    governance_rule: CORE-017
+
+  - id: BP-004
+    name: Hardcoded Paths
+    description: "File paths hardcoded in prompts break on refactoring"
+    symptom: "Prompt contains specific paths like cortex-brain/tier1/..."
+    prevention: "Zero hardcoded paths - all via configuration/orchestrator"
+    governance_rule: CORE-009
+
+  - id: BP-005
+    name: Independent Sync Commands
+    description: "Prompts call sync scripts independently → race conditions"
+    symptom: "Prompt contains sync_plan_viewer_data.py calls"
+    prevention: "ONLY MasterOrchestrator calls sync (automatic post-state-change)"
+    governance_rule: CORE-017
+
+  - id: BP-006
+    name: State Mutation by Multiple Writers
+    description: "Multiple prompts independently mutate tracker/AC-INDEX"
+    symptom: "Prompt contains .write() to tracker or AC-INDEX"
+    prevention: "ONLY MasterOrchestrator writes state (atomic operations)"
+    governance_rule: CORE-024
+
+  - id: BP-007
+    name: Inconsistent Response Formats
+    description: "Prompts return results in different formats"
+    symptom: "Response format doesn't follow response-templates-v4.yaml"
+    prevention: "All responses use executive bullet format (✅ 📋 ⚙️ etc.)"
+    governance_rule: CORE-017
+
+  - id: BP-008
+    name: Missing Governance Declaration
+    description: "Prompts don't declare which SKULL rules they enforce"
+    symptom: "No CORE-XXX references in prompt header"
+    prevention: "Header must list all applicable governance rules"
+    governance_rule: CORE-017
+
+################################################################################
+## UNIFIED PROMPT ARCHITECTURE v3.0
+################################################################################
+
+unified_architecture:
+  sections:
+    - number: 1
+      name: "PROMPT HEADER"
+      required: true
+      content:
+        - title_with_emoji
+        - purpose_statement
+        - version_in_format_X_Y_Z
+        - governance_rules_list  # CORE-XXX
+        - date_ISO8601
+        - author
+
+    - number: 2
+      name: "MASTERORCHESTRATOR DELEGATION"
+      required: true
+      pattern: |
+        ## 🔗 MASTERORCHESTRATOR DELEGATION
+        
+        **All implementation delegated to unified orchestrator:**
+        
+        ```bash
+        python3 -m src.main "{user_intent}" --orchestrator master --format markdown
+        ```
+        
+        **MasterOrchestrator handles:**
+        - ✅ Load governance rules (tier0/tier1/tier2/tier3)
+        - ✅ Validate against all 24 SKULL rules
+        - ✅ Create TodoManager tasks in dependency order
+        - ✅ Execute tasks sequentially
+        - ✅ Update progress-tracker.json (atomic writes)
+        - ✅ Trigger SyncOrchestrator automatically
+        - ✅ Enforce phase gates
+        - ✅ Return structured results
+        
+        **Do NOT:**
+        - ❌ Directly modify progress-tracker.json
+        - ❌ Directly modify AC-INDEX.yaml
+        - ❌ Call sync scripts independently
+        - ❌ Manipulate state outside orchestrator
+        - ❌ Bypass governance checks
+      exceptions: []
+
+    - number: 3
+      name: "INTELLIGENT CHALLENGE PROTOCOL"
+      required: true
+      pattern: |
+        ## 🛡️ INTELLIGENT CHALLENGE PROTOCOL (CORE-025)
+        
+        **Purpose:** Prevent blind-siding requests by validating scope and governance.
+        
+        **Reference:** cortex-brain/documents/analysis/REQUEST-VALIDATOR-VISUAL-ARCHITECTURE.md
+        
+        **Decision Matrix:**
+        - BLOCK (CHALLENGE):   Critical governance/scope issues
+        - ADVISE (CHALLENGE):  High issues + good workarounds
+        - ENHANCE (SUGGEST):   Viable + improvements available
+        - APPROVE (PROCEED):   No issues, ready to execute
+        
+        **Scenario A: Blocking Challenge**
+        [Include example of critical issue with alternatives]
+        
+        **Scenario B: Enhancement Suggestions**
+        [Include example of viable request with improvements]
+        
+        **Integration:** MasterOrchestrator delegates to RequestValidator
+      exceptions:
+        - "Internal-only prompts (not user-facing) may simplify challenge flow"
+
+    - number: 4
+      name: "REGRESSION CHECK (Reference Only)"
+      required: true
+      pattern: |
+        ## 🛡️ REGRESSION CHECK (Reference Only)
+        
+        **Reference:** CORTEX.prompt.md maintains unified regression check
+        (§ UNIFIED REGRESSION CHECK).
+        
+        **Why not copy-paste?** When CORTEX.prompt.md is updated, all prompts
+        automatically inherit fix (DRY principle).
+      exceptions: []
+
+    - number: 5
+      name: "CORE PURPOSE / INTENT CLARIFICATION"
+      required: true
+      content:
+        - description_of_what_prompt_does
+        - what_it_does_NOT_do
+        - when_to_use_vs_other_prompts
+        - NO direct file reads
+        - NO direct state mutations
+        - references_to_governance_rules
+      exceptions: []
+
+    - number: 6
+      name: "EXECUTION PROTOCOL"
+      required: true
+      content:
+        - step_by_step_instructions
+        - emphasis_on_orchestrator_delegation
+        - response_format_requirements
+        - no_workarounds_or_shortcuts
+      exceptions: []
+
+    - number: 7
+      name: "APPENDIX / REFERENCES"
+      required: false
+      content:
+        - links_to_CORTEX_prompt_sections
+        - links_to_governance_files
+        - links_to_related_prompts
+        - links_to_AC_definitions
+
+################################################################################
+## VALIDATION RULES
+################################################################################
+
+validation_rules:
+  - rule_id: VAL-001
+    name: Single Orchestrator Section
+    description: "Each prompt must have EXACTLY ONE 'MASTERORCHESTRATOR DELEGATION' section"
+    check: 'count(grep -c "## .* MASTERORCHESTRATOR" prompt.md) == 1'
+    severity: CRITICAL
+    governance: CORE-017
+
+  - rule_id: VAL-002
+    name: No Direct File Access
+    description: "Prompts must NOT contain yaml.safe_load(open(...)) or json.load(open(...))"
+    check: 'count(grep -c "yaml.safe_load(open" prompt.md) == 0'
+    severity: CRITICAL
+    governance: CORE-024
+
+  - rule_id: VAL-003
+    name: Regression Check References CORTEX.prompt.md
+    description: "Regression check section must reference CORTEX.prompt.md, not copy-paste code"
+    check: 'grep -i "Reference.*CORTEX.prompt" prompt.md exists'
+    severity: HIGH
+    governance: CORE-017
+
+  - rule_id: VAL-004
+    name: No Hardcoded Paths in Logic
+    description: "File paths must not appear in executable sections (allowed in examples/context)"
+    check: 'count(grep "cortex-brain/tier[0-3]" prompt.md in logic sections) == 0'
+    severity: HIGH
+    governance: CORE-009
+
+  - rule_id: VAL-005
+    name: No Independent Sync Commands
+    description: "Prompts must not call sync_plan_viewer_data.py or similar"
+    check: 'grep -c "sync_plan_viewer_data\|regenerate_plan_viewer_data" prompt.md == 0'
+    severity: CRITICAL
+    governance: CORE-017
+
+  - rule_id: VAL-006
+    name: No Direct State Mutation
+    description: "Prompts must not contain .write() calls to tracker or AC-INDEX"
+    check: 'grep -c "\.write.*tracker\|\.write.*AC-INDEX" prompt.md == 0'
+    severity: CRITICAL
+    governance: CORE-024
+
+  - rule_id: VAL-007
+    name: Consistent Response Format
+    description: "Responses must use executive bullet format with indicators (✅ ⚙️ 🎯 ❌ ⚠️)"
+    check: 'prompt contains response format guidance'
+    severity: HIGH
+    governance: CORE-017
+
+  - rule_id: VAL-008
+    name: Governance Rules Declared in Header
+    description: "Header must list all applicable CORE-XXX rules"
+    check: 'grep -c "CORE-[0-9]\{3\}" prompt.md >= 1'
+    severity: HIGH
+    governance: CORE-017
+
+  - rule_id: VAL-009
+    name: File Location (Not in Root)
+    description: "All prompt files must be in .github/prompts/, not root"
+    check: 'prompt_file path contains .github/prompts/'
+    severity: CRITICAL
+    governance: CORE-002
+
+  - rule_id: VAL-010
+    name: Semantic Versioning
+    description: "Version must be in format X.Y.Z (e.g., 3.0.0)"
+    check: 'prompt version matches regex \d+\.\d+\.\d+'
+    severity: HIGH
+    governance: CORE-017
+
+  - rule_id: VAL-011
+    name: Intelligent Challenge Protocol
+    description: "Prompts must include INTELLIGENT CHALLENGE PROTOCOL section with examples"
+    checks:
+      - 'grep -i "INTELLIGENT CHALLENGE PROTOCOL\|CORE-025" prompt.md exists'
+      - 'grep -i "Scenario A.*blocking\|Scenario B.*enhancement" prompt.md exists'
+      - 'grep "REQUEST-VALIDATOR-VISUAL-ARCHITECTURE" prompt.md exists'
+      - 'challenge section includes decision matrix (BLOCK/ADVISE/ENHANCE/APPROVE)'
+    severity: HIGH
+    governance: CORE-025
+    exception_policy: "New prompts created before CORE-025 enforcement may be added in Phase 2"
+
+################################################################################
+## ENFORCEMENT MECHANISM
+################################################################################
+
+enforcement:
+  pre_commit_hook: "scripts/validate-prompt-brittleness.py --validate-all"
+  pre_commit_behavior: "BLOCK commit if any CRITICAL failures"
+  pre_commit_warnings: "WARN but allow commit"
+  
+  automated_audit:
+    frequency: "After every CORTEX-ALIGN execution"
+    tool: "scripts/validate-prompt-brittleness.py --audit"
+    report_location: "cortex-brain/documents/prompt-brittleness-report-{timestamp}.yaml"
+    
+  manual_audit:
+    command: "python3 scripts/validate-prompt-brittleness.py --audit"
+    frequency: "Weekly or after governance changes"
+
+################################################################################
+## UNIFIED DELEGATION PATTERN (COPY THIS TO ALL PROMPTS)
+################################################################################
+
+standard_delegation_template: |
+  ## 🔗 MASTERORCHESTRATOR DELEGATION
+  
+  **All implementation delegated to unified orchestrator:**
+  
+  ```bash
+  python3 -m src.main "{user_intent}" --orchestrator master --format markdown
+  ```
+  
+  **MasterOrchestrator handles:**
+  - ✅ Load governance rules (tier0/tier1/tier2/tier3)
+  - ✅ Validate against all 24 SKULL rules
+  - ✅ Create TodoManager tasks in dependency order
+  - ✅ Execute tasks sequentially (no race conditions)
+  - ✅ Update progress-tracker.json (atomic writes)
+  - ✅ Trigger SyncOrchestrator automatically
+  - ✅ Enforce phase gates
+  - ✅ Return structured results
+  
+  **Do NOT:**
+  - ❌ Directly modify progress-tracker.json
+  - ❌ Directly modify AC-INDEX.yaml
+  - ❌ Call sync scripts independently
+  - ❌ Manipulate state outside orchestrator
+  - ❌ Bypass governance checks
+
+################################################################################
+## BRITTLENESS PREVENTION CHECKLIST
+################################################################################
+
+prevention_checklist:
+  before_modifying_any_prompt:
+    - run: "python3 scripts/validate-prompt-brittleness.py --check {filename}"
+      ensures: "Baseline brittleness metrics"
+  
+  after_modifying_any_prompt:
+    - run: "python3 scripts/validate-prompt-brittleness.py --check {filename}"
+      ensures: "No new brittleness introduced"
+  
+  after_ALL_prompt_modifications:
+    - run: "python3 scripts/validate-prompt-brittleness.py --validate-all"
+      ensures: "Full suite passes all checks"
+
+################################################################################
+## VERSION HISTORY
+################################################################################
+
+version_history:
+  - version: "1.0.0"
+    date: "2026-01-10"
+    description: "Initial governance for prompt standards"
+    
+  - version: "2.0.0"
+    date: "2026-01-11"
+    description: "Added orchestrator alignment rules"
+    
+  - version: "3.0.0"
+    date: "2026-01-12"
+    description: "Added brittleness prevention (learned from Phase 4.5)"
+    changes:
+      - Added brittleness_patterns definitions (8 types)
+      - Added validation_rules (10 automated checks)
+      - Added unified_architecture section
+      - Added enforcement via validate-prompt-brittleness.py
+      - Created standard_delegation_template for copy-paste consistency
+    lesson_from: "chat01.md - Import brittleness discovered and fixed"
+
+################################################################################
+# END OF GOVERNANCE
+################################################################################

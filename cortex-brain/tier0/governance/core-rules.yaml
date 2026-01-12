@@ -1462,3 +1462,117 @@ rules:
       - Layer 3: Cross-repo plugin (AC-MCP-PROTOCOL-003) - portable protocol
       - Layer 4: Documentation - developer guidance
 
+
+# ==============================================================================
+# CORE-025: Intelligent Request Validation & Challenge Protocol
+# ==============================================================================
+rule_id: CORE-025
+rule_name: "Intelligent Request Validation & Challenge"
+severity: CRITICAL
+category: REQUEST_GOVERNANCE
+status: ACTIVE
+date_added: "2026-01-12"
+
+requirement: |
+  All user requests MUST pass intelligent validation before execution.
+  Requests that may introduce scope creep, architectural conflicts, or 
+  governance violations MUST be challenged with alternatives.
+  
+  The challenge capability MUST be:
+  - Intelligent (only challenge when justified, not over-cautious)
+  - Transparent (explain why being challenged)
+  - Constructive (offer alternatives, not just block)
+  - User-empowering (let user override with full visibility)
+
+implementation: |
+  All prompts MUST integrate REQUEST-VALIDATOR pattern:
+  
+  1. Before execution, validate request against:
+     - Tier 0 SKULL rules (governance violations)
+     - Scope boundaries (creep detection)
+     - Historical patterns (success/failure rates)
+     - Architectural alignment (integration impact)
+  
+  2. Decision matrix (from REQUEST-VALIDATOR-VISUAL-ARCHITECTURE.md):
+     - BLOCK (CHALLENGE):    Critical issues, offer alternatives
+     - ADVISE (CHALLENGE):   High issues but workarounds exist
+     - ENHANCE (SUGGEST):    Viable but improvements available
+     - APPROVE (PROCEED):    No issues, ready to execute
+  
+  3. User interaction rules:
+     - CHALLENGE: Present issues + alternatives, wait for user decision
+     - ENHANCE: Suggest improvements, let user accept/skip
+     - ADVISE: Recommend workflow, let user choose
+     - APPROVE: Execute (no user input needed)
+
+enforcement: |
+  - Missing validation → blocks prompt execution (CORE-017)
+  - Hardcoded bypass → governance violation flag
+  - Challenge capability missing → fails brittleness validator (VAL-008)
+  
+  All prompts MUST have:
+  - Section: "INTELLIGENT CHALLENGE PROTOCOL"
+  - Reference: REQUEST-VALIDATOR-VISUAL-ARCHITECTURE.md
+  - Examples: Scenario A (blocking challenge) + Scenario B (enhancements)
+  - Integration: MasterOrchestrator delegates to RequestValidator
+
+pattern_reference: |
+  Location: cortex-brain/documents/analysis/REQUEST-VALIDATOR-VISUAL-ARCHITECTURE.md
+  
+  Sub-components:
+  - ViabilityAnalyzer: Checks Tier 0 rules, scope, DoR
+  - HistoricalAnalyzer: Finds similar patterns, success rates
+  - EnhancementAnalyzer: Suggests improvements
+  - SynthesisEngine: Combines results into decision
+  - ValidationPresenter: Formats for user decision
+  
+  Decision outcomes:
+  - CHALLENGE (BLOCKING): Critical issues found
+  - CHALLENGE (ADVISE):   Issues + good alternatives
+  - ENHANCE (SUGGEST):    Viable + improvements available
+  - APPROVE (PROCEED):    No issues detected
+
+scope_limitations: |
+  - Only applies to user requests (internal CORTEX operations exempt)
+  - Must NOT over-challenge (adjust confidence thresholds as learned)
+  - Must respect user override (with audit trail)
+  - Performance target: <300ms validation overhead
+
+anti_patterns: |
+  ❌ Bypassing validation ("skip validation", "ignore warnings")
+  ❌ Over-challenging every request (loses credibility)
+  ❌ Missing challenge protocol in prompts (governance gap)
+  ❌ No alternatives offered (not constructive)
+  ❌ Hardcoded challenge rules (use REQUEST-VALIDATOR instead)
+
+governance_conflict_resolution: |
+  If request conflicts with other SKULL rules:
+  - CORE-017 (Governance Enforcement) takes precedence
+  - CORE-019 (TDD Enforcement) not waivable
+  - CORE-025 challenges to suggest workarounds, not bypass
+  
+  Example: User requests "skip tests" → CHALLENGE with:
+  - Issue: "Violates CORE-019 (TDD Enforcement)"
+  - Alternative 1: "Run focused tests (3 min)"
+  - Alternative 2: "Use spike branch (1 hour, unrestricted)"
+  - User can override but will be audited
+
+success_criteria: |
+  ✅ All user-facing prompts integrate REQUEST-VALIDATOR
+  ✅ Challenge scenarios documented (Scenario A + B)
+  ✅ <300ms validation overhead maintained
+  ✅ User override audit trail complete
+  ✅ Zero false positives after learning loop (Tier 3)
+  ✅ Challenge capability tests at 90%+ pass rate
+
+verification_method: |
+  # Automated validation
+  python3 scripts/validate-prompt-brittleness.py --check {prompt}
+  
+  # Manual review
+  1. Confirm INTELLIGENT CHALLENGE PROTOCOL section exists
+  2. Verify REQUEST-VALIDATOR-VISUAL-ARCHITECTURE.md reference
+  3. Check Scenario A (blocking) + Scenario B (enhancement) examples
+  4. Validate MasterOrchestrator integration
+  5. Test challenge flow with sample request
+
