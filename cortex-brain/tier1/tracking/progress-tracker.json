@@ -1,6 +1,6 @@
 {
   "schema_version": "1.9",
-  "last_updated": "2026-01-12T11:24:35.626201+00:00",
+  "last_updated": "2026-01-12T16:30:00Z",
   "updated_by": "Audit-based validator (audit_logs + live_tests)",
   "active_epic": {
     "id": "CORTEX-6.0",
@@ -1162,5 +1162,27 @@
       "AC-SCAFFOLD-003": "implemented"
     },
     "completion_percentage": 100
+  },
+  "phases": {
+    "phase_1": {
+      "phase_number": 1,
+      "name": "Foundation",
+      "planned_work": [
+        "AC-BRITTLE-001",
+        "AC-BRITTLE-002",
+        "AC-BRITTLE-003",
+        "AC-BRITTLE-004",
+        "AC-BRITTLE-005",
+        "AC-RISK-001",
+        "AC-RISK-002",
+        "AC-RISK-003",
+        "AC-RISK-004",
+        "AC-RISK-005",
+        "AC-RISK-006",
+        "AC-RISK-007"
+      ],
+      "in_progress": [],
+      "completed": []
+    }
   }
 }

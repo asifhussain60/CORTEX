@@ -1,6 +1,6 @@
 schema_version: '1.7'
-last_updated: '2026-01-11T11:41:46.696277Z'
-total_ac_count: 102
+last_updated: '2026-01-12T16:30:00Z'
+total_ac_count: 125
 completed_count: 33
 in_progress_count: 0
 design_score_current: 97
@@ -4152,3 +4152,1127 @@ ac_template:
     - tests/integration/test_full_migration.py
     dependencies:
     - AC-TEMPLATE-007
+acceptanceCriteria:
+- id: AC-BRITTLE-001
+  title: YAML Encoding Corruption Detection & Repair
+  description: 'Implement detection and repair for YAML files with encoding corruption
+    (bytes 0x8f, 0x9d from Windows-1252 mishandling).
+
+
+    Problem: AC-INDEX.yaml or core-rules.yaml loaded with encoding mismatch → yaml.safe_load()
+    silently misparses → Governance rules incomplete/incorrect.
+
+
+    Solution:
+
+    1. Add pre-load YAML encoding validator (check BOM, sample bytes, validate UTF-8)
+
+    2. Detect corruption pattern (non-ASCII bytes in specific fields)
+
+    3. Implement 3-level repair: re-encode to UTF-8, strip non-ASCII, or fail with
+    clear error
+
+    4. Add file integrity hash (first 50 bytes SHA256) for detection
+
+    5. Log encoding issues to audit trail (AuditCategory.INFRASTRUCTURE)
+
+
+    Acceptance Criteria:
+
+    - Detects Windows-1252 corruption on AC-INDEX.yaml load
+
+    - Repairs file automatically (re-encodes to UTF-8)
+
+    - Falls back to git recovery if repair fails
+
+    - Logs repair action with file path, bytes corrupted, action taken
+
+    - Tests: corrupt AC-INDEX.yaml intentionally, verify detection and repair
+
+    '
+  status: planned
+  priority: critical
+  phase: 1
+  category: brittleness
+  tests:
+  - tests/quality/test_yaml_encoding_detection.py
+  - tests/infrastructure/test_governance_merger_encoding.py
+  dependencies:
+  - AC-AUDIT-001
+  evidencePaths:
+  - src/orchestrators/core/governance_merger.py
+  - src/utils/yaml_cache.py
+  - cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml
+  - cortex-brain/tier0/governance/core-rules.yaml
+  riskIfUnfixed: critical
+  estimatedEffort: 3
+  owner: Infrastructure
+- id: AC-BRITTLE-002
+  title: YAML File Locking & Atomic Writes for Concurrency Safety
+  description: 'Implement file locking and atomic write patterns to prevent corruption
+    from concurrent writes to YAML files.
+
+
+    Problem: Multiple orchestrators writing to progress-tracker.json or AC-INDEX.yaml
+    simultaneously → Race conditions → Corrupted JSON.
+
+
+    Solution:
+
+    1. Use filelock library for cross-platform advisory file locking
+
+    2. Implement atomic write pattern: write to temp file, atomic rename on success
+
+    3. Add lock timeout (5s) to prevent deadlock
+
+    4. Log lock contention to audit trail (debug level)
+
+
+    Acceptance Criteria:
+
+    - Acquires lock before writing progress-tracker.json, AC-INDEX.yaml
+
+    - Writes to temp file, atomically renames on success
+
+    - Times out gracefully after 5s (retries with exponential backoff)
+
+    - No corrupted JSON after concurrent writes
+
+    - Tests: 10 concurrent writers, all complete without corruption
+
+    '
+  status: planned
+  priority: medium
+  phase: 1
+  category: brittleness
+  tests:
+  - tests/quality/test_json_concurrent_writes.py
+  - tests/infrastructure/test_file_lock_contention.py
+  dependencies:
+  - AC-BRITTLE-001
+  evidencePaths:
+  - cortex-brain/tier1/tracking/progress-tracker.json
+  - cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml
+  - src/orchestrators/master/todo_manager.py
+  riskIfUnfixed: high
+  estimatedEffort: 2
+  owner: Infrastructure
+- id: AC-BRITTLE-003
+  title: YAML File Locking - Out-of-Order Concurrent Write Detection
+  description: 'Detect and prevent out-of-order updates to progress-tracker.json when
+    multiple AC-ID implementations write field values concurrently.
+
+
+    Problem: AC-ID X marks complete, AC-ID Y updates completion_percentage, both write()
+    called simultaneously → Final file has only Y''s updates.
+
+
+    Solution:
+
+    1. Add version counter to progress-tracker.json (incremented per write)
+
+    2. Compare expected version before writing (detect skipped updates)
+
+    3. Retry with exponential backoff if version mismatch detected
+
+    4. Log version conflicts to audit trail (AuditCategory.ORCHESTRATOR)
+
+
+    Acceptance Criteria:
+
+    - Detects version mismatch on concurrent writes
+
+    - Retries up to 3 times with backoff (100ms, 200ms, 500ms)
+
+    - No lost updates after retry sequence
+
+    - Tests: 5 concurrent update_tracker() calls, verify all fields updated
+
+    '
+  status: planned
+  priority: medium
+  phase: 1
+  category: brittleness
+  tests:
+  - tests/quality/test_progress_tracker_version_control.py
+  dependencies:
+  - AC-BRITTLE-002
+  evidencePaths:
+  - cortex-brain/tier1/tracking/progress-tracker.json
+  - src/infrastructure/test_executor.py
+  riskIfUnfixed: medium
+  estimatedEffort: 2
+  owner: Infrastructure
+- id: AC-BRITTLE-004
+  title: Cross-Platform Path Portability Enforcement
+  description: 'Add static analysis to detect and prevent hardcoded paths (e.g., /Users/asifhussain/PROJECTS/CORTEX)
+    in scripts and code.
+
+
+    Problem: Scripts with hardcoded absolute paths fail on Linux/Windows. CORE-005
+    already enforces this, but no active detection.
+
+
+    Solution:
+
+    1. Add CI/CD linter that searches for absolute path patterns
+
+    2. Whitelist: project_root paths (relative/dynamic only)
+
+    3. Scan: scripts/, src/ for hardcoded paths
+
+    4. Fail build if violations found
+
+
+    Acceptance Criteria:
+
+    - CI linter detects absolute hardcoded paths
+
+    - Whitelist dynamic path usage (Path.home(), project_root, etc.)
+
+    - No hardcoded paths in scripts/
+
+    - Tests: attempt to use hardcoded path, CI fails with clear message
+
+    '
+  status: planned
+  priority: medium
+  phase: 1
+  category: brittleness
+  tests:
+  - tests/quality/test_path_portability.py
+  dependencies: []
+  evidencePaths:
+  - scripts/
+  - src/
+  riskIfUnfixed: medium
+  estimatedEffort: 2
+  owner: QA
+- id: AC-BRITTLE-005
+  title: Environment Variable Validation & Defaults
+  description: 'Document all required environment variables and provide safe defaults
+    to prevent unset-var failures.
+
+
+    Problem: Code assumes CORTEX_ROOT, DEBUG, etc. are set. Unset → AttributeError/KeyError
+    at runtime.
+
+
+    Solution:
+
+    1. Add env var schema in src/config/ (required, optional, defaults)
+
+    2. Validate on main.py entry (check required vars, apply defaults)
+
+    3. Fail fast with clear error if required var missing
+
+
+    Acceptance Criteria:
+
+    - All required env vars documented in README
+
+    - Validation runs on entry_point.py startup
+
+    - Clear error message if required var missing
+
+    - Default values used for optional vars (DEBUG=False, etc.)
+
+    - Tests: run without env vars, verify graceful failure with helpful message
+
+    '
+  status: planned
+  priority: low
+  phase: 1
+  category: brittleness
+  tests:
+  - tests/infrastructure/test_env_var_defaults.py
+  dependencies: []
+  evidencePaths:
+  - src/entry_point/
+  - src/main.py
+  riskIfUnfixed: low
+  estimatedEffort: 2
+  owner: Infrastructure
+- id: AC-RISK-001
+  title: Automatic Progress Tracker → Plan Viewer Sync
+  description: 'Implement automatic synchronization of progress-tracker.json to plan-viewer-data.json
+    to eliminate dashboard sync drift.
+
+
+    Problem: progress-tracker.json is source of truth (updated by test execution).
+    plan-viewer-data.json manually synced via script. 30+ min drift possible → Stale
+    dashboard → Wrong phase gate decisions.
+
+
+    Solution:
+
+    1. Hook sync_plan_viewer_data.py as post-write callback in progress-tracker.json
+    save
+
+    2. Make sync atomic (write to temp, rename)
+
+    3. Add file watcher in MasterOrchestrator (triggers sync on file change)
+
+    4. Add refresh timer to cortex-plan-viewer.html (AJAX poll every 60s)
+
+    5. Log sync operations to cortex-brain/documents/logs/sync-history.jsonl
+
+
+    Acceptance Criteria:
+
+    - Sync executes within 5s of progress-tracker.json update
+
+    - Plan viewer auto-refreshes (no manual F5 needed)
+
+    - Sync history logged with timestamp, source, status
+
+    - No drift >60s between tracker and viewer
+
+    - Tests: update tracker, verify viewer updates within 5s
+
+    '
+  status: planned
+  priority: critical
+  phase: 1
+  category: reliability
+  tests:
+  - tests/integration/test_progress_tracker_sync.py
+  - tests/quality/test_plan_viewer_refresh.py
+  dependencies:
+  - AC-BRITTLE-002
+  evidencePaths:
+  - scripts/sync_plan_viewer_data.py
+  - cortex-brain/tier1/tracking/progress-tracker.json
+  - templates/plan-viewer/plan-viewer-data.json
+  - templates/plan-viewer/cortex-plan-viewer.html
+  riskIfUnfixed: critical
+  estimatedEffort: 3
+  owner: Infrastructure
+- id: AC-RISK-002
+  title: TodoManager SQLite Persistence & Restart Recovery
+  description: 'Implement SQLite persistence for TodoManager to survive orchestrator
+    restarts and maintain full task context.
+
+
+    Problem: TodoOrchestrator.todos dict is in-memory only. Orchestrator crash/restart
+    → All TODO items lost. Phase recovery requires manual AC-ID list from progress-tracker.json.
+
+
+    Solution:
+
+    1. Integrate TodoOrchestrator with StateManager for SQLite persistence
+
+    2. Save TODO items on creation/update/delete (not just in memory)
+
+    3. Load TODO items on orchestrator __init__ (recovery on restart)
+
+    4. Enable WAL mode on state.db (concurrency, atomic writes)
+
+    5. Implement checkpoint mechanism (save full state graph before major operations)
+
+
+    Acceptance Criteria:
+
+    - Create TODO, restart orchestrator, verify TODO still exists
+
+    - Create TODO chain (A→B→C), restart, verify dependency graph intact
+
+    - Parallel task detection works after restart
+
+    - Load test: 1000 TODOs, verify <100ms persistence latency per operation
+
+    - Tests: tests/integration/test_todo_orchestrator_restart.py
+
+    '
+  status: planned
+  priority: critical
+  phase: 2
+  category: reliability
+  tests:
+  - tests/integration/test_todo_orchestrator_restart.py
+  - tests/performance/test_todo_persistence_latency.py
+  dependencies:
+  - AC-STATE-001
+  - AC-STATE-002
+  - AC-STATE-003
+  evidencePaths:
+  - src/orchestrators/core/todo_orchestrator.py
+  - src/orchestrators/master/todo_manager.py
+  - src/orchestrators/state_manager.py
+  riskIfUnfixed: critical
+  estimatedEffort: 4
+  owner: Orchestration
+- id: AC-RISK-003
+  title: Phase Rollback & Cleanup Mechanism
+  description: 'Implement automatic cleanup and rollback for failed phases to prevent
+    orphaned artifacts.
+
+
+    Problem: Phase 2 starts, AC-ORCH-006 fails → TODO items created, tests generated,
+    files written, phase marked FAILED. No automatic rollback → Orphaned artifacts,
+    manual cleanup required.
+
+
+    Solution:
+
+    1. Add phase-scoped checkpoint before starting new AC-IDs
+
+    2. Implement rollback orchestrator (deletes files, removes TODO items, restores
+    state)
+
+    3. Create rollback trigger on phase FAILED (automatic)
+
+    4. Store rollback actions in state.db (track what was rolled back)
+
+    5. Log rollback events to audit trail (AuditCategory.ORCHESTRATOR)
+
+
+    Acceptance Criteria:
+
+    - Phase checkpoint created before AC-ID 1 of new phase
+
+    - On phase FAILED, automatic rollback deletes all phase artifacts
+
+    - Rollback actions logged to audit trail with file paths, TODO IDs
+
+    - State restored to pre-phase state
+
+    - Tests: fail an AC-ID mid-implementation, trigger rollback, verify cleanup
+
+    '
+  status: planned
+  priority: high
+  phase: 2
+  category: reliability
+  tests:
+  - tests/orchestrators/test_phase_rollback.py
+  dependencies:
+  - AC-RISK-002
+  - AC-STATE-002
+  evidencePaths:
+  - src/orchestrators/core/todo_orchestrator.py
+  - src/orchestrators/master/master_orchestrator.py
+  - cortex-brain/tier1/tracking/progress-tracker.json
+  riskIfUnfixed: high
+  estimatedEffort: 3
+  owner: Orchestration
+- id: AC-RISK-004
+  title: Database Backup & WAL Mode for Crash Safety
+  description: 'Enable SQLite WAL (Write-Ahead Logging) mode and implement pre-write
+    backups to prevent corruption on crash.
+
+
+    Problem: StateManager writes to planning.db without WAL mode. Crash during write
+    → Corrupted database, unrecoverable state.
+
+
+    Solution:
+
+    1. Enable WAL mode on all database opens (PRAGMA journal_mode=WAL)
+
+    2. Pre-write backup (copy DB to .backup before transaction)
+
+    3. Integrity check on database open (PRAGMA integrity_check)
+
+    4. Database recovery tool (restore from last good backup on startup)
+
+    5. Log backup operations to audit trail (AuditCategory.INFRASTRUCTURE)
+
+
+    Acceptance Criteria:
+
+    - WAL mode enabled, write performance verified (no regression)
+
+    - Pre-write backup created, verified on recovery
+
+    - Startup detects corrupted database, restores from backup
+
+    - No data loss after crash recovery
+
+    - Tests: corrupt DB file, verify recovery on next startup
+
+    '
+  status: planned
+  priority: high
+  phase: 1
+  category: reliability
+  tests:
+  - tests/infrastructure/test_database_wal_mode.py
+  - tests/infrastructure/test_database_recovery.py
+  dependencies: []
+  evidencePaths:
+  - src/orchestrators/state_manager.py
+  - cortex-brain/state/planning.db
+  - src/infrastructure/enhanced_audit_logger.py
+  riskIfUnfixed: high
+  estimatedEffort: 3
+  owner: Infrastructure
+- id: AC-RISK-005
+  title: Governance Rule Violation Severity Levels
+  description: 'Add severity levels (BLOCKED vs WARNING) to governance rules to allow
+    partial work on non-critical violations.
+
+
+    Problem: Single CORE rule violation (e.g., CORE-019 TDD missing) blocks entire
+    phase. No partial work, no warning option.
+
+
+    Solution:
+
+    1. Add severity field to GovernanceRule (BLOCKED vs WARNING)
+
+    2. MasterOrchestrator continues on WARNING, logs to audit
+
+    3. BLOCKED rules still stop execution
+
+    4. Track rule violations in progress-tracker.json
+
+    5. Audit trail shows which rules triggered stop vs warning
+
+
+    Acceptance Criteria:
+
+    - CORE rules categorized (some BLOCKED, some WARNING)
+
+    - Phase continues on WARNING violations with audit log
+
+    - BLOCKED violations still stop execution immediately
+
+    - Violations tracked in progress-tracker.json
+
+    - Tests: trigger non-critical rule violation, verify warning logged and execution
+    continues
+
+    '
+  status: planned
+  priority: high
+  phase: 2
+  category: reliability
+  tests:
+  - tests/governance/test_rule_severity_levels.py
+  dependencies:
+  - AC-GOV-001
+  evidencePaths:
+  - cortex-brain/tier0/governance/core-rules.yaml
+  - src/orchestrators/core/governance_merger.py
+  riskIfUnfixed: high
+  estimatedEffort: 2
+  owner: Governance
+- id: AC-RISK-006
+  title: Evidence Validation Batch Re-Validation & Accuracy Improvement
+  description: 'Improve evidence validator accuracy from current 56% verification
+    rate to >95%, and implement batch re-validation.
+
+
+    Problem: progress-tracker.json shows 85% complete but only 88.24% verified (56%
+    verification rate). False positive claims block phases. AC-LIFECYCLE-001 marked
+    verified but tests not passing.
+
+
+    Solution:
+
+    1. Batch re-validate all Phase AC-IDs (run all tests, update tracker atomically)
+
+    2. Test discovery: find all tests with @pytest.mark.ac_id() marker
+
+    3. Improve pytest output parsing (use --json-report if available)
+
+    4. Add evidence source tracking (test file path, execution date)
+
+    5. Log validation results to cortex-brain/documents/logs/evidence-audit.jsonl
+
+
+    Acceptance Criteria:
+
+    - Batch validation runs on all Phase 1 AC-IDs
+
+    - Verification rate increases to >95%
+
+    - Evidence source tracked (test file, marker, execution date)
+
+    - False positive rate <5%
+
+    - Tests: mark AC-ID "verified" without passing tests, batch validator corrects
+    it
+
+    '
+  status: planned
+  priority: high
+  phase: 1
+  category: validation
+  tests:
+  - tests/infrastructure/test_evidence_validator_accuracy.py
+  - tests/integration/test_batch_validation.py
+  dependencies:
+  - AC-TEST-001
+  - AC-TEST-002
+  evidencePaths:
+  - scripts/audit_based_evidence_validator.py
+  - cortex-brain/tier1/tracking/progress-tracker.json
+  - cortex-brain/documents/logs/evidence-audit.jsonl
+  riskIfUnfixed: high
+  estimatedEffort: 4
+  owner: QA
+- id: AC-RISK-007
+  title: Pattern Router Unmatched Intent Tracking & Library Expansion
+  description: 'Add tracking and auto-expansion for unmatched intents in PatternRouter
+    to maintain >90% pattern coverage.
+
+
+    Problem: PatternRouter depends on regex/keyword patterns covering 90%+ intents.
+    No tracking of misses → Pattern library degrades over time.
+
+
+    Solution:
+
+    1. Log all unmatched intents to cortex-brain/documents/logs/unmatched-intents.jsonl
+
+    2. Analyze unmatched log weekly (pattern expansion candidates)
+
+    3. Add new patterns to pattern_router_config.yaml
+
+    4. Track coverage metric (matched / total intents)
+
+    5. Alert if coverage drops below 85%
+
+
+    Acceptance Criteria:
+
+    - Unmatched intents logged with intent text, source, timestamp
+
+    - Pattern coverage calculated weekly (from logs)
+
+    - Coverage metric exported to metrics endpoint
+
+    - Recommendation generated for missing patterns
+
+    - Tests: send unmatched intent, verify logging and analysis
+
+    '
+  status: planned
+  priority: medium
+  phase: 3
+  category: reliability
+  tests:
+  - tests/routing/test_pattern_router_coverage.py
+  dependencies:
+  - AC-ROUTE-001
+  evidencePaths:
+  - src/orchestrators/pattern_router.py
+  - cortex-brain/documents/logs/unmatched-intents.jsonl
+  riskIfUnfixed: medium
+  estimatedEffort: 2
+  owner: Routing
+- id: AC-SEC-001
+  title: Audit Log Secret Redaction Filter
+  description: 'Implement automatic secret redaction in audit logs to prevent credential
+    exposure.
+
+
+    Problem: Audit entries include context dict (arbitrary key/value). If AC implementation
+    logs API keys, passwords, tokens → Exposed in audit logs.
+
+
+    Solution:
+
+    1. Detect secret patterns in context: password, token, api_key, secret, credential
+    (regex patterns)
+
+    2. Redact values (replace with [REDACTED])
+
+    3. Log redaction action (audit entry says "secret_count: 3, redacted")
+
+    4. Require AC implementations to use safe_log() helper (filters before audit)
+
+
+    Acceptance Criteria:
+
+    - Password/token/api_key patterns detected and redacted
+
+    - Redaction logged (for audit transparency)
+
+    - No credentials appear in audit logs
+
+    - Tests: log context with password, verify redaction
+
+    '
+  status: planned
+  priority: medium
+  phase: 2
+  category: security
+  tests:
+  - tests/security/test_audit_secret_redaction.py
+  dependencies:
+  - AC-AUDIT-001
+  evidencePaths:
+  - src/infrastructure/enhanced_audit_logger.py
+  riskIfUnfixed: medium
+  estimatedEffort: 2
+  owner: Security
+- id: AC-SEC-002
+  title: Planning Database File Permissions & Access Control
+  description: 'Set planning.db file permissions to 0600 (user-only) and add optional
+    encryption.
+
+
+    Problem: planning.db world-readable. Any process can read phase state, AC-ID execution
+    order, orchestrator configs.
+
+
+    Solution:
+
+    1. Set planning.db permissions to 0600 on creation (user-only read/write)
+
+    2. Verify permissions on startup, correct if drifted
+
+    3. Optional: Encrypt DB at-rest using sqlcipher (if sensitive data increases)
+
+    4. Add access control check in StateManager (verify caller identity)
+
+
+    Acceptance Criteria:
+
+    - File permissions set to 0600 on DB creation
+
+    - Permissions verified on startup (log if drifted)
+
+    - Other processes cannot read DB without user ownership
+
+    - Tests: create DB, verify 0600 permissions, attempt read from other process (denied)
+
+    '
+  status: planned
+  priority: medium
+  phase: 1
+  category: security
+  tests:
+  - tests/security/test_database_file_permissions.py
+  dependencies: []
+  evidencePaths:
+  - src/orchestrators/state_manager.py
+  riskIfUnfixed: medium
+  estimatedEffort: 2
+  owner: Security
+- id: AC-SEC-003
+  title: Orchestrator Registration Validation & Decorator Enforcement
+  description: 'Validate orchestrator class signatures and enforce CORE-024 @mcp_tool
+    decorator on registration.
+
+
+    Problem: CORE-024 enforces @mcp_tool decorator, but registration not validated.
+    Malicious code could register without decorator.
+
+
+    Solution:
+
+    1. Validate orchestrator class signature before registration (has required methods)
+
+    2. Check for @mcp_tool decorator on class or key methods
+
+    3. Fail registration if decorator missing (clear error)
+
+    4. Require explicit ACL per orchestrator (allowed_by = CORE rule ID)
+
+    5. Audit all registration attempts
+
+
+    Acceptance Criteria:
+
+    - Class signature validated (has execute(), validate() methods)
+
+    - @mcp_tool decorator required, checked before registration
+
+    - Registration fails with clear error if decorator missing
+
+    - Orchestrator ACL tracked in audit trail
+
+    - Tests: attempt to register undecorated orchestrator, verify failure
+
+    '
+  status: planned
+  priority: low
+  phase: 2
+  category: security
+  tests:
+  - tests/security/test_orchestrator_registration_validation.py
+  dependencies:
+  - AC-ORCH-001
+  evidencePaths:
+  - src/orchestrators/
+  - src/mcp/
+  riskIfUnfixed: low
+  estimatedEffort: 2
+  owner: Security
+- id: AC-PERF-001
+  title: Semantic Search Result Caching with TTL
+  description: 'Implement caching for semantic_search results to avoid repeated workspace
+    scans.
+
+
+    Problem: Crawler or knowledge system queries workspace multiple times → No caching
+    layer → Repeated filesystem scans (slow).
+
+
+    Solution:
+
+    1. Add LRU cache to semantic_search with TTL (5 min default)
+
+    2. Cache key: search query text + filters
+
+    3. Invalidate on file modification (watch cortex-brain/)
+
+    4. Log cache hits/misses
+
+
+    Acceptance Criteria:
+
+    - Semantic search returns cached results within 5 min window
+
+    - Cache hit rate >70% on repeated queries
+
+    - TTL configurable via cortex-brain/config/
+
+    - Tests: query twice, verify cache hit on 2nd query
+
+    '
+  status: planned
+  priority: medium
+  phase: 3
+  category: performance
+  tests:
+  - tests/performance/test_semantic_search_cache.py
+  dependencies: []
+  evidencePaths:
+  - src/tools/knowledge_graph.py
+  - src/orchestrators/crawler/
+  riskIfUnfixed: medium
+  estimatedEffort: 2
+  owner: Performance
+- id: AC-PERF-002
+  title: Audit Log Rotation & Cleanup
+  description: 'Implement log rotation and retention policies for JSONL audit log
+    files to prevent unbounded growth.
+
+
+    Problem: Enhanced audit logger appends to JSONL indefinitely → Files grow to GBs
+    → Slow queries, disk space issues.
+
+
+    Solution:
+
+    1. Rotate logs by date or size (daily or 100MB, whichever first)
+
+    2. Compress old logs (.jsonl → .jsonl.gz)
+
+    3. Delete based on retention policy (AuditLevel-based: CRITICAL 90d, ERROR 60d,
+    INFO 30d, DEBUG 7d)
+
+    4. Archive rotated logs to cortex-brain/archives/audit-logs/
+
+
+    Acceptance Criteria:
+
+    - Logs rotated daily or at 100MB threshold
+
+    - Old logs compressed automatically
+
+    - Retention enforced (files deleted after retention period)
+
+    - Archive location cortex-brain/archives/audit-logs/
+
+    - Tests: generate 1GB logs, verify rotation and compression
+
+    '
+  status: planned
+  priority: medium
+  phase: 2
+  category: performance
+  tests:
+  - tests/infrastructure/test_audit_log_rotation.py
+  dependencies:
+  - AC-AUDIT-001
+  evidencePaths:
+  - src/infrastructure/enhanced_audit_logger.py
+  - cortex-brain/audit-logs/
+  riskIfUnfixed: medium
+  estimatedEffort: 3
+  owner: Infrastructure
+- id: AC-DEBT-001
+  title: Health Check Endpoints for Orchestrators
+  description: 'Add health check endpoints and CLI command for orchestrator status
+    monitoring.
+
+
+    Problem: Operators cannot easily check if MasterOrchestrator is healthy. No /health
+    endpoint, no status command.
+
+
+    Solution:
+
+    1. Add health_check() method to MasterOrchestrator
+
+    2. Checks: subprocess state, database connection, governance rules, recent execution
+
+    3. Export as JSON/YAML endpoint (if REST server available)
+
+    4. Add CLI command: cortex health --orchestrator master
+
+    5. Return detailed status (ready, degraded, failed)
+
+
+    Acceptance Criteria:
+
+    - Health check method implemented
+
+    - Checks governance, database, recent execution
+
+    - CLI command returns JSON status
+
+    - Health endpoint available (if applicable)
+
+    - Tests: call health check, verify output format and accuracy
+
+    '
+  status: planned
+  priority: medium
+  phase: 2
+  category: operability
+  tests:
+  - tests/orchestrators/test_master_orchestrator_health.py
+  dependencies:
+  - AC-ORCH-001
+  evidencePaths:
+  - src/orchestrators/master/master_orchestrator.py
+  riskIfUnfixed: medium
+  estimatedEffort: 2
+  owner: Operations
+- id: AC-DEBT-002
+  title: Phase Completion Percentage Calculation Formula Documentation
+  description: 'Document and clarify the formula for phase completion_percentage to
+    match actual verified_implemented counts.
+
+
+    Problem: progress-tracker.json shows "completion_percentage": 85 but verified_implemented
+    = 29/34 = 85.3%. Formula unclear.
+
+
+    Solution:
+
+    1. Define formula explicitly (% of verified_implemented, not total or planned)
+
+    2. Document in progress-tracker.json schema
+
+    3. Add audit log when percentage updated (show calculation)
+
+    4. Implement formula as method in progress tracker class
+
+
+    Acceptance Criteria:
+
+    - Formula documented in cortex-brain/documents/
+
+    - Percentage recalculated to match verified_implemented %
+
+    - Audit log shows calculation (completed/total) on each update
+
+    - Tests: update AC-ID status, verify percentage calculated correctly
+
+    '
+  status: planned
+  priority: medium
+  phase: 1
+  category: observability
+  tests:
+  - tests/infrastructure/test_phase_completion_percentage.py
+  dependencies: []
+  evidencePaths:
+  - cortex-brain/tier1/tracking/progress-tracker.json
+  riskIfUnfixed: medium
+  estimatedEffort: 1
+  owner: Observability
+- id: AC-DEBT-003
+  title: Smoke Test Suite for Critical User Workflows
+  description: 'Create automated smoke tests for 5-10 critical user workflows (governance
+    merge, pattern routing, plan-viewer sync, evidence validation).
+
+
+    Problem: No automated smoke test for critical paths → Operators unaware of failures
+    until they occur.
+
+
+    Solution:
+
+    1. Create tests/smoke/ directory with smoke test suite
+
+    2. Test workflows: governance merge, pattern routing, plan-viewer sync, evidence
+    validation, phase gate
+
+    3. Run smoke tests on startup (log results to audit trail)
+
+    4. Alert if smoke test failure rate >10%
+
+
+    Acceptance Criteria:
+
+    - 5+ smoke tests covering critical paths
+
+    - Tests run on startup and log results
+
+    - Smoke test failures alert operator
+
+    - Failure rate tracked (<10% threshold)
+
+    - Tests: run smoke suite, verify all critical paths tested
+
+    '
+  status: planned
+  priority: medium
+  phase: 2
+  category: testing
+  tests:
+  - tests/smoke/test_governance_merge_smoke.py
+  - tests/smoke/test_pattern_routing_smoke.py
+  - tests/smoke/test_plan_viewer_sync_smoke.py
+  dependencies: []
+  evidencePaths:
+  - tests/smoke/
+  riskIfUnfixed: medium
+  estimatedEffort: 3
+  owner: QA
+- id: AC-DEBT-004
+  title: Enhanced Audit Query Interface & Presets
+  description: 'Add SQL CLI query interface and preset queries for common audit operations
+    (latest errors, phase summary, AC-ID timeline).
+
+
+    Problem: Audit logs queryable only via custom Python script. No CLI, no REPL for
+    ad-hoc queries.
+
+
+    Solution:
+
+    1. Add audit query CLI: cortex audit-query --ac-id AC-AUDIT-001
+
+    2. Preset queries: --latest-errors, --phase-summary, --ac-id-timeline
+
+    3. Export output as JSON/YAML/table
+
+    4. Support SQL input for custom queries (limited to read-only)
+
+
+    Acceptance Criteria:
+
+    - CLI command implemented with common presets
+
+    - Output formats: JSON, YAML, table
+
+    - Custom SQL queries supported (read-only)
+
+    - Tests: query audit logs via CLI, verify output format and accuracy
+
+    '
+  status: planned
+  priority: low
+  phase: 3
+  category: operability
+  tests:
+  - tests/infrastructure/test_audit_query_cli.py
+  dependencies:
+  - AC-AUDIT-001
+  evidencePaths:
+  - src/infrastructure/enhanced_audit_logger.py
+  riskIfUnfixed: low
+  estimatedEffort: 3
+  owner: Operations
+- id: AC-DEBT-005
+  title: AC-ID Marker Detection Robustness & Auto-Repair
+  description: 'Improve test evidence validator to detect AC-IDs in docstrings/comments
+    and auto-generate markers if missing.
+
+
+    Problem: Evidence validator looks for @pytest.mark.ac_id() marker. Missing marker
+    → Test not counted, evidence lost.
+
+
+    Solution:
+
+    1. Auto-scan tests for AC-ID content in docstrings/comments
+
+    2. If AC-ID found but no marker, auto-generate marker (code modification)
+
+    3. Pre-commit hook: warn if test has no AC-ID marker
+
+    4. Log auto-repair actions to audit trail
+
+
+    Acceptance Criteria:
+
+    - Detects AC-ID in docstring/comment (no marker)
+
+    - Auto-generates marker if missing
+
+    - Pre-commit hook warns about missing markers
+
+    - Tests: write test with AC-ID in docstring, verify marker auto-generated
+
+    '
+  status: planned
+  priority: medium
+  phase: 2
+  category: testing
+  tests:
+  - tests/infrastructure/test_ac_id_marker_detection.py
+  dependencies:
+  - AC-TEST-001
+  evidencePaths:
+  - src/infrastructure/test_executor.py
+  - tests/
+  riskIfUnfixed: medium
+  estimatedEffort: 2
+  owner: QA
+- id: AC-DEBT-006
+  title: Pytest Fixture Health Check & Validation
+  description: 'Add fixture health check to verify conftest.py fixtures load correctly
+    and report failures clearly.
+
+
+    Problem: Test evidence assumes pytest fixtures work. If fixture broken, all dependent
+    tests fail silently.
+
+
+    Solution:
+
+    1. Add fixture validation on test startup
+
+    2. Load all fixtures, verify no errors
+
+    3. Log fixture failures to audit trail (INFRASTRUCTURE level)
+
+    4. Fail test run with clear error if fixture broken
+
+
+    Acceptance Criteria:
+
+    - Fixture health check runs before test suite
+
+    - Broken fixtures logged with error message
+
+    - Test run fails with clear error if fixture broken
+
+    - Tests: break fixture intentionally, verify clear error message
+
+    '
+  status: planned
+  priority: low
+  phase: 2
+  category: testing
+  tests:
+  - tests/infrastructure/test_pytest_fixture_health.py
+  dependencies:
+  - AC-TEST-001
+  evidencePaths:
+  - tests/conftest.py
+  - src/infrastructure/test_executor.py
+  riskIfUnfixed: low
+  estimatedEffort: 1
+  owner: QA
