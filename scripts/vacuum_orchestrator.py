@@ -4,19 +4,21 @@ CORTEX 6.0 Vacuum Orchestrator - Intelligent File Organization & Cleanup
 Enforces CORE-009 (file organization) and naming conventions (kebab-case)
 
 Author: GitHub Copilot + CORTEX Governance System
-Version: 2.0.0
-Date: 2026-01-11
+Version: 3.0.0 (ENHANCED with Safety Guards, Similarity Detection, Tier-Aware Relocation)
+Date: 2026-01-12
 """
 
 import re
 import shutil
 from pathlib import Path
-from typing import List, Dict, Tuple, Set
-from dataclasses import dataclass
+from typing import List, Dict, Tuple, Set, Optional
+from dataclasses import dataclass, field
 from enum import Enum
 import sys
 import hashlib
 import yaml
+from difflib import SequenceMatcher
+from datetime import datetime
 
 # Define workspace root
 WORKSPACE_ROOT = Path(__file__).parent.parent
@@ -142,7 +144,254 @@ class GovernanceRules:
         return "misc"
 
 
+class FilePurposeClassifier:
+    """
+    Classifies file purpose: actionable vs. informational vs. critical
+    Enables selective deletion with safety guarantees
+    """
+    
+    # Patterns that indicate ACTIONABLE documents (NEVER DELETE)
+    ACTIONABLE_PATTERNS = [
+        r".*FUNCTIONAL-ANALYSIS.*",     # Analysis documents (your request)
+        r".*IMPLEMENTATION.*",          # Implementation guides
+        r".*PROGRESS.*",                # Progress tracking
+        r".*EVIDENCE.*",                # Evidence bundles
+        r".*RECOVERY.*",                # Recovery strategies
+        r".*ROADMAP.*",                 # Project roadmaps
+        r".*PLAN.*",                    # Planning documents
+        r".*STRATEGY.*",                # Strategic plans
+        r".*ARCHITECTURE.*",            # Architecture docs
+        r".*CORTEX-BRAIN.*",            # Core analysis
+        r"AC-INDEX.*",                  # AC registry
+        r".*core-rules.*",              # Core governance
+        r".*progress-tracker.*",        # State tracking
+        r".*master-plan.*",             # Master plan
+    ]
+    
+    # Patterns that indicate INFORMATIONAL only (SAFE TO DELETE)
+    INFORMATIONAL_PATTERNS = [
+        r".*TEMP.*",
+        r".*DRAFT.*",
+        r".*WORKING.*",
+        r".*OLD.*",
+        r".*BACKUP.*",
+        r".*ARCHIVE.*",
+        r".*[0-9]{8}.*",                # Timestamped versions (YYYYMMDD)
+        r".*\.bak$",                    # Backup files
+        r".*\.tmp$",                    # Temp files
+        r"test-.*\.md$",                # Test markdown files
+        r".*debug.*",
+    ]
+    
+    # Critical system files (NEVER DELETE UNDER ANY CIRCUMSTANCE)
+    CRITICAL_PATHS = {
+        "cortex-brain/tier0/",
+        "cortex-brain/tier1/tracking/",
+        "cortex-brain/tier1/acceptance-criteria/",
+        ".github/",
+        ".git/",
+        "src/",
+        "tests/",
+        "LICENSE",
+        "README.md",
+    }
+    
+    @staticmethod
+    def is_actionable(file_path: Path) -> bool:
+        """Check if file contains actionable content (should be preserved)"""
+        filename = file_path.name.upper()
+        stem = file_path.stem.upper()
+        
+        for pattern in FilePurposeClassifier.ACTIONABLE_PATTERNS:
+            if re.match(pattern, stem, re.IGNORECASE):
+                return True
+            if re.match(pattern, filename, re.IGNORECASE):
+                return True
+        
+        return False
+    
+    @staticmethod
+    def is_informational(file_path: Path) -> bool:
+        """Check if file is informational-only (safe to delete)"""
+        filename = file_path.name.upper()
+        stem = file_path.stem.upper()
+        
+        for pattern in FilePurposeClassifier.INFORMATIONAL_PATTERNS:
+            if re.match(pattern, stem, re.IGNORECASE):
+                return True
+            if re.match(pattern, filename, re.IGNORECASE):
+                return True
+        
+        return False
+    
+    @staticmethod
+    def is_critical(file_path: Path) -> bool:
+        """Check if file is in critical system area"""
+        file_str = str(file_path).replace("\\", "/")
+        
+        for critical_path in FilePurposeClassifier.CRITICAL_PATHS:
+            if critical_path in file_str:
+                return True
+        
+        return False
+    
+    @staticmethod
+    def classify_file(file_path: Path) -> str:
+        """
+        Classify file purpose.
+        Returns: 'critical', 'actionable', 'informational', or 'unknown'
+        """
+        if FilePurposeClassifier.is_critical(file_path):
+            return "critical"
+        
+        if FilePurposeClassifier.is_actionable(file_path):
+            return "actionable"
+        
+        if FilePurposeClassifier.is_informational(file_path):
+            return "informational"
+        
+        return "unknown"
+
+
+class SimilarityDetector:
+    """
+    Detects similar documents for intelligent consolidation.
+    Uses fuzzy matching to find related documents.
+    """
+    
+    SIMILARITY_THRESHOLD = 0.85  # 85% content similarity
+    
+    @staticmethod
+    def _similarity_ratio(content1: str, content2: str) -> float:
+        """Calculate similarity ratio between two strings (0.0 to 1.0)"""
+        matcher = SequenceMatcher(None, content1, content2)
+        return matcher.ratio()
+    
+    @staticmethod
+    def find_similar_files(files: List[Path], threshold: float = 0.85) -> Dict[str, List[Path]]:
+        """
+        Find groups of similar files.
+        Returns: dict mapping representative file to list of similar files
+        """
+        file_contents = {}
+        similar_groups = {}
+        
+        # Load all file contents
+        for f in files:
+            try:
+                if f.suffix in {'.md', '.yaml', '.yml', '.txt'}:
+                    file_contents[f] = f.read_text(encoding='utf-8', errors='ignore')
+            except Exception:
+                pass
+        
+        if len(file_contents) < 2:
+            return {}
+        
+        # Compare all pairs
+        files_list = list(file_contents.keys())
+        processed = set()
+        
+        for i, file1 in enumerate(files_list):
+            if file1 in processed:
+                continue
+            
+            similar_set = [file1]
+            
+            for file2 in files_list[i+1:]:
+                if file2 in processed:
+                    continue
+                
+                similarity = SimilarityDetector._similarity_ratio(
+                    file_contents[file1],
+                    file_contents[file2]
+                )
+                
+                if similarity >= threshold:
+                    similar_set.append(file2)
+                    processed.add(file2)
+            
+            if len(similar_set) > 1:
+                # Sort by newest first, use as representative
+                representative = sorted(similar_set, 
+                                      key=lambda p: p.stat().st_mtime, 
+                                      reverse=True)[0]
+                similar_groups[representative] = similar_set
+                processed.add(file1)
+        
+        return similar_groups
+
+
+class TierAwareCategorizer:
+    """
+    Categorizes files to appropriate cortex-brain tier
+    Enables intelligent relocation to tier0, tier1, tier2, or tier3
+    """
+    
+    TIER_RULES = {
+        "tier0": [
+            r".*governance.*",
+            r".*core-rules.*",
+            r".*SKULL.*",
+            r"AC-INDEX.*",
+            r".*core-.*",
+        ],
+        "tier1": [
+            r".*progress.*",
+            r".*acceptance.*",
+            r".*tracking.*",
+            r".*state.*",
+            r".*active.*",
+        ],
+        "tier2": [
+            r".*standards.*",
+            r".*practices.*",
+            r".*engineering.*",
+            r".*guidelines.*",
+        ],
+        "tier3": [
+            r".*knowledge.*",
+            r".*patterns.*",
+            r".*insights.*",
+            r".*learned.*",
+        ]
+    }
+    
+    @staticmethod
+    def categorize_to_tier(file_path: Path) -> Optional[str]:
+        """
+        Determine appropriate tier for a file.
+        Returns: 'tier0', 'tier1', 'tier2', 'tier3', or None if no match
+        """
+        filename = file_path.name.lower()
+        stem = file_path.stem.lower()
+        
+        # Check filename against tier patterns
+        for tier in ["tier0", "tier1", "tier2", "tier3"]:
+            for pattern in TierAwareCategorizer.TIER_RULES[tier]:
+                if re.search(pattern, stem, re.IGNORECASE):
+                    return tier
+                if re.search(pattern, filename, re.IGNORECASE):
+                    return tier
+        
+        return None
+    
+    @staticmethod
+    def suggest_tier_path(file_path: Path, category: str) -> Path:
+        """
+        Suggest full path including tier.
+        Example: progress-tracker.json → cortex-brain/tier1/tracking/progress-tracker.json
+        """
+        tier = TierAwareCategorizer.categorize_to_tier(file_path)
+        
+        if not tier:
+            return None
+        
+        tier_path = CORTEX_BRAIN / tier / category
+        return tier_path / file_path.name
+
+
 class VacuumOrchestrator:
+
     """Main orchestrator for file cleanup and organization"""
     
     def __init__(self, dry_run: bool = True):
@@ -325,36 +574,152 @@ class VacuumOrchestrator:
                 self._remediate_violation(violation)
     
     def _remediate_violation(self, violation: FileViolation):
-        """Remediate a single violation"""
+        """Remediate a single violation with enhanced safety checks"""
         try:
             if violation.violation_type == ViolationType.DUPLICATE_FILE:
-                # Remove duplicate
+                # ENHANCED: Check file classification before deletion
+                classification = FilePurposeClassifier.classify_file(violation.path)
+                
+                if classification == "critical":
+                    self.log_action(f"⛔ BLOCKED (CRITICAL): {violation.path.relative_to(WORKSPACE_ROOT)}")
+                    self.log_action(f"   Reason: File is in critical system area")
+                    return
+                
+                if classification == "actionable":
+                    self.log_action(f"⚠️  SKIPPED (ACTIONABLE): {violation.path.relative_to(WORKSPACE_ROOT)}")
+                    self.log_action(f"   Reason: File contains actionable analysis content")
+                    return
+                
+                # Only remove if informational
                 if not self.dry_run:
                     violation.path.unlink()
-                self.log_action(f"Removed duplicate: {violation.path.relative_to(WORKSPACE_ROOT)}")
+                
+                self.log_action(f"✓ Removed duplicate: {violation.path.relative_to(WORKSPACE_ROOT)} [{classification}]")
             
             elif violation.violation_type == ViolationType.ROOT_LEVEL_DOC:
-                # Move to proper subfolder
+                # Check classification before moving
+                classification = FilePurposeClassifier.classify_file(violation.path)
+                
+                if classification == "critical":
+                    self.log_action(f"⛔ BLOCKED (CRITICAL): {violation.path.relative_to(WORKSPACE_ROOT)}")
+                    self.log_action(f"   Cannot move critical files")
+                    return
+                
                 if not self.dry_run:
                     violation.target_path.parent.mkdir(parents=True, exist_ok=True)
                     shutil.move(str(violation.path), str(violation.target_path))
-                self.log_action(f"Moved: {violation.path.relative_to(WORKSPACE_ROOT)} → {violation.target_path.relative_to(WORKSPACE_ROOT)}")
+                
+                self.log_action(f"✓ Moved: {violation.path.relative_to(WORKSPACE_ROOT)} → {violation.target_path.relative_to(WORKSPACE_ROOT)}")
             
             elif violation.violation_type == ViolationType.UPPERCASE_NAME:
                 # Rename to kebab-case
+                classification = FilePurposeClassifier.classify_file(violation.path)
+                
+                if classification == "critical":
+                    self.log_action(f"⛔ BLOCKED (CRITICAL): {violation.path.relative_to(WORKSPACE_ROOT)}")
+                    self.log_action(f"   Cannot rename critical files")
+                    return
+                
                 new_path = violation.path.parent / violation.new_name
+                
                 if not self.dry_run:
                     shutil.move(str(violation.path), str(new_path))
-                self.log_action(f"Renamed: {violation.path.name} → {violation.new_name}")
+                
+                self.log_action(f"✓ Renamed: {violation.path.name} → {violation.new_name} [{classification}]")
             
             elif violation.violation_type == ViolationType.LARGE_FILE:
                 # Report only (manual review required)
-                self.log_action(f"⚠️  REVIEW NEEDED: {violation.path.relative_to(WORKSPACE_ROOT)} - {violation.recommendation}")
+                self.log_action(f"⚠️  REVIEW NEEDED: {violation.path.relative_to(WORKSPACE_ROOT)}")
+                self.log_action(f"   {violation.recommendation}")
         
         except Exception as e:
             self.log_error(f"Failed to remediate {violation.path.relative_to(WORKSPACE_ROOT)}: {e}")
+
+    def detect_similar_documents(self):
+        """Detect similar documents for consolidation"""
+        self.log_action("\n=== Detecting Similar Documents (85%+ similarity) ===\n")
+        
+        # Collect all document files
+        doc_files = []
+        for file_path in CORTEX_BRAIN.rglob("*"):
+            if file_path.is_file() and file_path.suffix in {'.md', '.yaml', '.yml', '.txt'}:
+                doc_files.append(file_path)
+        
+        if len(doc_files) < 2:
+            self.log_action("✅ No similar documents found (less than 2 files)")
+            return
+        
+        # Find similar groups
+        similar_groups = SimilarityDetector.find_similar_files(doc_files, threshold=0.85)
+        
+        if not similar_groups:
+            self.log_action("✅ No similar documents found (>85% similarity)")
+            return
+        
+        self.log_action(f"Found {len(similar_groups)} consolidation opportunities:\n")
+        
+        for i, (representative, similar_files) in enumerate(similar_groups.items(), 1):
+            self.log_action(f"Consolidation Group {i}:")
+            self.log_action(f"  ✓ KEEP (newest): {representative.relative_to(WORKSPACE_ROOT)}")
+            
+            for similar in similar_files:
+                if similar != representative:
+                    # Archive with timestamp suffix
+                    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+                    archive_dir = CORTEX_BRAIN / "documents" / "archive" / "consolidated"
+                    archive_path = archive_dir / f"{similar.stem}-{timestamp}{similar.suffix}"
+                    
+                    self.log_action(f"  ↳ ARCHIVE: {similar.relative_to(WORKSPACE_ROOT)}")
+                    self.log_action(f"     → {archive_path.relative_to(WORKSPACE_ROOT)}")
+                    
+                    if not self.dry_run:
+                        try:
+                            archive_dir.mkdir(parents=True, exist_ok=True)
+                            shutil.copy2(str(similar), str(archive_path))
+                        except Exception as e:
+                            self.log_error(f"Failed to archive {similar}: {e}")
+            
+            self.log_action("")
+    
+    def suggest_tier_relocations(self):
+        """Suggest tier-aware relocations for documents"""
+        self.log_action("\n=== Suggesting Tier-Aware Relocations ===\n")
+        
+        relocations = []
+        
+        for file_path in CORTEX_BRAIN.rglob("*"):
+            if not file_path.is_file():
+                continue
+            
+            if file_path.suffix not in {'.md', '.yaml', '.yml', '.txt'}:
+                continue
+            
+            # Skip files already in tier structure
+            if any(tier in str(file_path) for tier in ["tier0", "tier1", "tier2", "tier3"]):
+                continue
+            
+            # Check tier suggestion
+            tier = TierAwareCategorizer.categorize_to_tier(file_path)
+            
+            if tier:
+                category = GovernanceRules.categorize_document(file_path)
+                suggested_path = TierAwareCategorizer.suggest_tier_path(file_path, category)
+                
+                if suggested_path and suggested_path != file_path:
+                    relocations.append((file_path, suggested_path, tier, category))
+        
+        if relocations:
+            self.log_action(f"Found {len(relocations)} suggested tier relocations:\n")
+            
+            for file_path, suggested_path, tier, category in relocations:
+                self.log_action(f"✓ {file_path.relative_to(WORKSPACE_ROOT)}")
+                self.log_action(f"  → Tier: {tier}, Category: {category}")
+                self.log_action(f"  → {suggested_path.relative_to(WORKSPACE_ROOT)}\n")
+        else:
+            self.log_action("✅ All documents are properly tier-organized")
     
     def generate_report(self):
+
         """Generate summary report"""
         self.log_action("\n" + "="*70)
         self.log_action("=== VACUUM ORCHESTRATOR SUMMARY ===")
@@ -398,11 +763,18 @@ class VacuumOrchestrator:
             self.log_action("  python3 scripts/vacuum_orchestrator.py --execute")
     
     def execute(self):
-        """Execute the full vacuum operation"""
+        """Execute the full vacuum operation with all enhancements"""
         try:
+            print("\n🔍 PHASE 1: Governance Violation Detection & Remediation")
             self.scan_for_violations()
             self.detect_duplicates()
             self.execute_remediation()
+            
+            print("\n📚 PHASE 2: Smart Document Analysis")
+            self.detect_similar_documents()
+            self.suggest_tier_relocations()
+            
+            print("\n📊 PHASE 3: Summary Report")
             self.generate_report()
             
             return len(self.errors_log) == 0
