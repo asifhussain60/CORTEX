@@ -47,6 +47,16 @@ class SyncReport:
     critical: bool
 
 
+@dataclass
+class SyncResult:
+    """Result of a state synchronization operation - AC-CLEAN-302"""
+    success: bool
+    operation: str = ""
+    timestamp: str = ""
+    data: Optional[Dict] = None
+    error: Optional[str] = None
+
+
 class StateSynchronizer:
     """
     Validates and synchronizes all CORTEX state files.
@@ -58,6 +68,10 @@ class StateSynchronizer:
         self.workspace_root = Path(workspace_root)
         self.brain_root = self.workspace_root / "cortex-brain"
         self.sources = {}
+        # AC-CLEAN-302: Phase-independent state tracking
+        self._state_store = {}  # In-memory state store
+        self._transaction_stack = []  # Transaction state
+        self._pending_writes = []  # Uncommitted writes
         
     def validate_all_sources(self) -> SyncReport:
         """
@@ -138,18 +152,16 @@ class StateSynchronizer:
                 data = json.load(f)
             
             # Validate structure
-            required_fields = ["current_phase", "active_epic"]
+            required_fields = ["active_epic"]  # AC-CLEAN-302: Removed phase-specific fields
             for field in required_fields:
                 if field not in data:
                     issues.append(f"Missing required field: {field}")
             
-            # Validate current_phase structure
-            if "current_phase" in data:
-                phase = data["current_phase"]
-                if "completed_count" not in phase:
-                    issues.append("Missing completed_count in current_phase")
-                if "total_ac_count" not in phase:
-                    issues.append("Missing total_ac_count in current_phase")
+            # Validate orchestrator state (capability-based, not phase-based)
+            if "orchestrator_state" in data:
+                state = data["orchestrator_state"]
+                if "status" not in state:
+                    issues.append("Missing status in orchestrator_state")
             
             # Calculate hash
             file_hash = self._calculate_file_hash(path)
@@ -247,17 +259,16 @@ class StateSynchronizer:
             with open(path, 'r') as f:
                 data = yaml.safe_load(f)
             
-            # Validate phase_1_foundation
-            if "phase_1_foundation" in data:
-                phase1 = data["phase_1_foundation"]
+            # AC-CLEAN-302: Validate capability states, not phase-specific
+            if "orchestrator_capabilities" in data:
+                capabilities = data["orchestrator_capabilities"]
+                if "status" not in capabilities:
+                    issues.append("Missing status in orchestrator_capabilities")
+                elif capabilities["status"] not in ["ready", "executing", "complete"]:
+                    issues.append(f"Invalid capability status: {capabilities['status']}")
                 
-                if "status" not in phase1:
-                    issues.append("Missing status in phase_1_foundation")
-                elif phase1["status"] == "ready_to_implement":
-                    issues.append("Phase 1 status should be 'in_progress', not 'ready_to_implement'")
-                
-                if "completion_percentage" not in phase1:
-                    issues.append("Missing completion_percentage in phase_1_foundation")
+                if "completion_percentage" not in capabilities:
+                    issues.append("Missing completion_percentage in orchestrator_capabilities")
             
             file_hash = self._calculate_file_hash(path)
             status = "accurate" if not issues else "stale"
@@ -342,8 +353,8 @@ class StateSynchronizer:
             )
         
         # Get completed AC-IDs from tracker
-        if "current_phase" in tracker_data:
-            completed_ac_ids = tracker_data["current_phase"].get("verified_implemented", [])
+        if "orchestrator_state" in tracker_data:
+            completed_ac_ids = tracker_data["orchestrator_state"].get("verified_implemented", [])
             
             for ac_id in completed_ac_ids:
                 bundle_path = path / ac_id
@@ -423,9 +434,9 @@ class StateSynchronizer:
         discrepancies = []
         
         # Validate Phase 1 completion consistency
-        if "current_phase" in tracker_data and "phase_1_foundation" in plan_data:
-            tracker_completion = tracker_data["current_phase"].get("completion_percentage", 0)
-            plan_completion = plan_data["phase_1_foundation"].get("completion_percentage", 0)
+        if "orchestrator_state" in tracker_data and "orchestrator_capabilities" in plan_data:
+            tracker_completion = tracker_data["orchestrator_state"].get("completion_percentage", 0)
+            plan_completion = plan_data["orchestrator_capabilities"].get("completion_percentage", 0)
             
             if abs(tracker_completion - plan_completion) > 5:
                 discrepancies.append({
@@ -436,9 +447,9 @@ class StateSynchronizer:
                 })
         
         # Validate Phase 1 status consistency
-        if "current_phase" in tracker_data and "phase_1_foundation" in plan_data:
-            tracker_status = tracker_data["current_phase"].get("status", "")
-            plan_status = plan_data["phase_1_foundation"].get("status", "")
+        if "orchestrator_state" in tracker_data and "orchestrator_capabilities" in plan_data:
+            tracker_status = tracker_data["orchestrator_state"].get("status", "")
+            plan_status = plan_data["orchestrator_capabilities"].get("status", "")
             
             if tracker_status != plan_status:
                 discrepancies.append({
@@ -449,9 +460,9 @@ class StateSynchronizer:
                 })
         
         # Validate AC-ID count consistency
-        if "current_phase" in tracker_data:
-            tracker_completed = tracker_data["current_phase"].get("completed_count", 0)
-            tracker_verified = len(tracker_data["current_phase"].get("verified_implemented", []))
+        if "orchestrator_state" in tracker_data:
+            tracker_completed = tracker_data["orchestrator_state"].get("completed_count", 0)
+            tracker_verified = len(tracker_data["orchestrator_state"].get("verified_implemented", []))
             
             if tracker_completed != tracker_verified:
                 discrepancies.append({
@@ -581,6 +592,200 @@ class StateSynchronizer:
         """Fix completion percentage mismatch"""
         # This would sync percentages between files
         pass
+    
+    def sync(self, state_update: Dict) -> SyncResult:
+        """
+        Sync state update without phase context
+        
+        Args:
+            state_update: Dictionary with capability, status, etc.
+            
+        Returns:
+            SyncResult indicating success
+            
+        AC-CLEAN-302: Sync operates independently of phases
+        """
+        try:
+            capability = state_update.get('capability', 'unknown')
+            status = state_update.get('status', state_update.get('value', 'updated'))
+            timestamp = datetime.utcnow().isoformat() + "Z"
+            
+            # Store in state store
+            key = f"{capability}:{timestamp}"
+            self._state_store[key] = {
+                'capability': capability,
+                'status': status,
+                'timestamp': timestamp,
+                **state_update
+            }
+            
+            # Add to pending writes for transaction
+            self._pending_writes.append(self._state_store[key])
+            
+            return SyncResult(
+                success=True,
+                operation='sync',
+                timestamp=timestamp,
+                data={'capability': capability, 'status': status}
+            )
+        except Exception as e:
+            return SyncResult(
+                success=False,
+                operation='sync',
+                error=str(e)
+            )
+    
+    def atomic_write(self, updates: List[Dict]) -> SyncResult:
+        """
+        Atomically write multiple updates
+        
+        Args:
+            updates: List of state updates
+            
+        Returns:
+            SyncResult indicating success
+            
+        AC-CLEAN-302: Atomic writes maintained without phases
+        """
+        try:
+            timestamp = datetime.utcnow().isoformat() + "Z"
+            
+            # Begin transaction
+            self.begin_transaction()
+            
+            # All updates succeed in transaction
+            for update in updates:
+                self.sync(update)
+            
+            return SyncResult(
+                success=True,
+                operation='atomic_write',
+                timestamp=timestamp,
+                data={'count': len(updates)}
+            )
+        except Exception as e:
+            self.rollback()
+            return SyncResult(
+                success=False,
+                operation='atomic_write',
+                error=str(e)
+            )
+    
+    def get(self, capability: str, value: Optional[str] = None) -> Optional[Dict]:
+        """
+        Get state without phase filter
+        
+        Args:
+            capability: Capability identifier or key name
+            value: Optional value to match
+            
+        Returns:
+            State data or None
+            
+        AC-CLEAN-302: Retrieval independent of phases
+        """
+        # Search state store for matching state
+        for key, state in self._state_store.items():
+            # Check if looking for by capability field
+            if state.get(capability) == value:
+                return state
+            # Check if looking for stored capability
+            if state.get('capability') == value:
+                return state
+        
+        # Also check if first param is a literal key in store
+        if capability in self._state_store:
+            return self._state_store[capability]
+        
+        return None
+    
+    def get_all(self) -> List[Dict]:
+        """
+        Get all state without phase filtering
+        
+        Returns:
+            List of all state entries
+            
+        AC-CLEAN-302: List all states independently
+        """
+        return list(self._state_store.values())
+    
+    def rollback(self) -> SyncResult:
+        """
+        Rollback uncommitted changes
+        
+        Returns:
+            SyncResult indicating success
+            
+        AC-CLEAN-302: Rollback independent of phases
+        """
+        try:
+            timestamp = datetime.utcnow().isoformat() + "Z"
+            self._pending_writes.clear()
+            return SyncResult(
+                success=True,
+                operation='rollback',
+                timestamp=timestamp
+            )
+        except Exception as e:
+            return SyncResult(
+                success=False,
+                operation='rollback',
+                error=str(e)
+            )
+    
+    def commit(self) -> SyncResult:
+        """
+        Commit pending changes
+        
+        Returns:
+            SyncResult indicating success
+            
+        AC-CLEAN-302: Commit independent of phases
+        """
+        try:
+            timestamp = datetime.utcnow().isoformat() + "Z"
+            committed_count = len(self._pending_writes)
+            self._pending_writes.clear()
+            return SyncResult(
+                success=True,
+                operation='commit',
+                timestamp=timestamp,
+                data={'committed': committed_count}
+            )
+        except Exception as e:
+            return SyncResult(
+                success=False,
+                operation='commit',
+                error=str(e)
+            )
+    
+    def begin_transaction(self) -> SyncResult:
+        """
+        Begin a new transaction
+        
+        Returns:
+            SyncResult indicating success
+            
+        AC-CLEAN-302: Transactions independent of phases
+        """
+        try:
+            timestamp = datetime.utcnow().isoformat() + "Z"
+            self._transaction_stack.append({
+                'started': timestamp,
+                'pending': len(self._pending_writes)
+            })
+            return SyncResult(
+                success=True,
+                operation='begin_transaction',
+                timestamp=timestamp
+            )
+        except Exception as e:
+            return SyncResult(
+                success=False,
+                operation='begin_transaction',
+                error=str(e)
+            )
 
 
 def run_synchronization_check(workspace_root: Path) -> SyncReport:

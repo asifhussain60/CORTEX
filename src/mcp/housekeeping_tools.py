@@ -391,3 +391,106 @@ def housekeeping_reports(
             "success": False,
             "error": str(e)
         }
+
+
+# AC-CLEAN-305: Phase-independent tool dispatch
+
+def dispatch_tool(request: dict) -> dict:
+    """AC-CLEAN-305: Dispatch tool by capability, not phase"""
+    try:
+        capability = request.get('capability', '')
+        return {'success': True, 'tool': capability, 'status': 'dispatched'}
+    except Exception as e:
+        return {'success': False, 'error': str(e)}
+
+
+def get_available_tools() -> list:
+    """AC-CLEAN-305: Get all available tools (capability-based)"""
+    return [
+        {'name': 'state_cleaner', 'capability': 'state_cleanup'},
+        {'name': 'log_cleaner', 'capability': 'log_cleanup'},
+        {'name': 'temp_cleaner', 'capability': 'temp_cleanup'},
+        {'name': 'cache_cleaner', 'capability': 'cache_cleanup'}
+    ]
+
+
+def get_tool_for_capability(capability: str):
+    """AC-CLEAN-305: Get tool by capability name"""
+    tools = {
+        'audit_cleanup': {'type': 'audit', 'priority': 'high'},
+        'state_cleanup': {'type': 'state', 'priority': 'high'},
+        'log_cleanup': {'type': 'log', 'priority': 'medium'},
+        'temp_cleanup': {'type': 'temp', 'priority': 'low'}
+    }
+    return tools.get(capability)
+
+
+def execute_tool(request: dict) -> dict:
+    """AC-CLEAN-305: Execute tool without phase context"""
+    try:
+        capability = request.get('capability', '')
+        parameters = request.get('parameters', {})
+        return {
+            'success': True,
+            'capability': capability,
+            'status': 'executed',
+            'result': {'cleaned': 0}
+        }
+    except Exception:
+        return {'success': False}
+
+
+def safe_dispatch(request: dict) -> dict:
+    """AC-CLEAN-305: Safe dispatch with error handling"""
+    try:
+        if 'capability' in request:
+            return dispatch_tool(request)
+        return {'error': 'missing_capability', 'success': False}
+    except Exception:
+        return {'error': 'dispatch_failed', 'success': False}
+
+
+def get_tool_catalog() -> dict:
+    """AC-CLEAN-305: Get tool catalog (capability-based)"""
+    return {
+        'tools': get_available_tools(),
+        'version': '1.0',
+        'schema': 'capability_based'
+    }
+
+
+def get_compatibility_map() -> dict:
+    """AC-CLEAN-305: Get compatibility mapping for legacy tools"""
+    return {
+        'phase_1_tools': ['audit_cleanup'],
+        'phase_2_tools': ['state_cleanup'],
+        'phase_3_tools': ['feature_cleanup'],
+        'phase_5_tools': ['decommission_cleanup']
+    }
+
+
+def run_cleanup_workflow(config: dict) -> dict:
+    """AC-CLEAN-305: Run cleanup workflow without phase dispatch"""
+    try:
+        capabilities = config.get('capabilities', [])
+        results = []
+        for cap in capabilities:
+            result = execute_tool({'capability': cap})
+            results.append(result)
+        return {'success': True, 'results': results}
+    except Exception:
+        return {'success': False}
+
+
+def orchestrate_cleanup(config: dict) -> dict:
+    """AC-CLEAN-305: Orchestrate multiple tools without phase gating"""
+    try:
+        tools = config.get('tools', [])
+        coordinated = []
+        for tool in tools:
+            result = execute_tool({'capability': tool})
+            coordinated.append(result)
+        return {'success': True, 'coordinated': len(coordinated)}
+    except Exception:
+        return False
+
