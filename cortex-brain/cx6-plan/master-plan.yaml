@@ -1,17 +1,17 @@
 plan_metadata:
   plan_id: CORTEX-6.0-SNOWBALL-MASTER
-  version: 1.1.0
+  version: 1.2.0
   created: '2026-01-10T23:50:00Z'
-  updated: '2026-01-12T16:30:00Z'
+  updated: '2026-01-12T16:45:00Z'
   author: Asif Hussain
   strategy: Snowball Implementation
   philosophy: Infrastructure-first compound growth
   design_score: 97
-  total_weeks: 8
-  total_ac_ids: 125
+  total_weeks: 10
+  total_ac_ids: 137
   hybrid_approach: true
   gpt_influence: 70% rigor, 30% overhead
-  latest_addition: 3-Layer Response Template Architecture (AC-TEMPLATE-001 to 008)
+  latest_addition: Phase 4.5 - Orchestrator Integration & Audit Validation Suite (AC-INTEG-001 to 012)
 snowball_strategy:
   description: 'Build core infrastructure first; features compound on infrastructure.
 
@@ -47,6 +47,11 @@ snowball_strategy:
     name: Intelligence Layer
     weeks: 2
     dependency: Feature Orchestrators (Phase 3)
+  - phase: 4.5
+    name: Orchestrator Integration & Audit Validation
+    weeks: 2
+    dependency: Intelligence Layer (Phase 4)
+    critical: Proves system correctness via audit trail completeness
 phase_1_foundation:
   name: Foundation Enhancement
   duration: 2 weeks
@@ -1119,6 +1124,245 @@ phase_4_intelligence:
     gate_validation:
       test_coverage: '>=70% (AI components harder to test)'
       integration: Intelligence features enhance orchestration
+phase_4_5_integration_tests:
+  name: Orchestrator Integration & Audit Validation Suite
+  duration: 2 weeks
+  start_date: '2026-03-10'
+  end_date: '2026-03-21'
+  status: blocked_by_phase_4
+  priority: CRITICAL
+  recommended_llm:
+    primary: Claude Sonnet 4.5 (RECOMMENDED)
+    usage: 80-100% of operations
+    cost_efficiency: 1x (baseline)
+    recommendation: Sonnet 4.5 handles all integration test development
+    rationale: 'Integration testing requires:
+
+      ✅ Complex test orchestration (multi-component scenarios)
+
+      ✅ Audit log analysis and trace validation
+
+      ✅ Evidence bundle generation and validation
+
+      ✅ Error scenario simulation
+
+      ✅ End-to-end workflow verification
+
+      '
+    ideal_for: Phase 4.5 (Integration Test Suite), comprehensive validation
+  description: |
+    Comprehensive end-to-end testing framework validating all orchestrators work
+    together correctly. Tests focus on:
+    
+    1. Cross-component integration scenarios (Phase 1→4 orchestrators)
+    2. Audit trail completeness and traceability
+    3. Evidence bundle generation and validation
+    4. State management under concurrent operations
+    5. Governance enforcement across all components
+    6. Failure recovery and rollback mechanisms
+    7. Performance and load scenarios
+    
+    This phase proves system correctness by validating audit logs contain
+    complete provenance for all operations.
+  why_after_phase_4: |
+    Integration tests require:
+    - Phase 1 foundation infrastructure (audit, state, governance)
+    - Phase 2 core workflow (MasterOrchestrator, TodoManager)
+    - Phase 3 feature orchestrators (ADO, Vacuum, Investigation, etc.)
+    - Phase 4 intelligence features (routing, knowledge practices)
+    
+    Cannot test integration without all components. Phase 4.5 validates
+    the complete system working together end-to-end.
+  components:
+    end_to_end_workflows:
+      name: End-to-End Orchestrator Workflows
+      ac_ids:
+      - AC-INTEG-001
+      - AC-INTEG-002
+      - AC-INTEG-003
+      priority: CRITICAL
+      duration: 4 days
+      owner: QA Team
+      capabilities:
+      - Complete request lifecycle (clarification → governance → execution → audit)
+      - Multi-phase workflows (Phase 1→4 component interaction)
+      - Orchestrator chaining (one orchestrator calls another)
+      - Error propagation and recovery
+      dependencies:
+      - AC-ORCH-001
+      - AC-AUDIT-001
+      - AC-EVIDENCE-001
+      evidence_bundle:
+        test_coverage: '>=85%'
+        scenarios_tested: 20+ realistic workflows
+        orchestrators_validated: All 8 orchestrators (Audit, Governance, State, Lifecycle, Evidence, Security, Master, Todo)
+    audit_trace_validation:
+      name: Audit Trail Completeness & Traceability
+      ac_ids:
+      - AC-INTEG-004
+      - AC-INTEG-005
+      - AC-INTEG-006
+      priority: CRITICAL
+      duration: 4 days
+      owner: QA Team
+      capabilities:
+      - Verify every operation logged (100% audit completeness)
+      - Validate correlation IDs across operation chains
+      - Trace causality (parent-child operation relationships)
+      - Hash chain integrity verification
+      - Tamper detection via event_hash validation
+      dependencies:
+      - AC-AUDIT-001
+      - AC-AUDIT-007
+      evidence_bundle:
+        test_coverage: '>=85%'
+        audit_scenarios: Completeness, correlation, causality, hash integrity
+        traces_validated: 50+ operation chains with full provenance
+    evidence_bundle_validation:
+      name: Evidence Bundle Generation & Validation Gates
+      ac_ids:
+      - AC-INTEG-007
+      - AC-INTEG-008
+      priority: CRITICAL
+      duration: 3 days
+      owner: QA Team
+      capabilities:
+      - Evidence bundle generation for all AC-IDs
+      - '3-gate validation (test coverage >=80%, audit 100%, governance 100%)'
+      - Evidence completeness verification
+      - Cross-orchestrator evidence chain validation
+      - Performance validation (<2s bundle generation)
+      dependencies:
+      - AC-EVIDENCE-001
+      - AC-EVIDENCE-002
+      - AC-EVIDENCE-003
+      evidence_bundle:
+        test_coverage: '>=85%'
+        bundles_generated: 50+ bundles with full validation
+        gates_enforced: All 3 gates validated, bundle rejection tested
+    state_management_resilience:
+      name: State Management Under Concurrency & Failure
+      ac_ids:
+      - AC-INTEG-009
+      priority: HIGH
+      duration: 3 days
+      owner: QA Team
+      capabilities:
+      - Concurrent orchestrator state updates (10+ simultaneous operations)
+      - State corruption recovery (power failure scenarios)
+      - Atomic transaction validation
+      - Rollback mechanism testing
+      - File locking edge cases (race conditions)
+      dependencies:
+      - AC-STATE-001
+      - AC-STATE-002
+      - AC-STATE-003
+      evidence_bundle:
+        test_coverage: '>=80%'
+        concurrency_scenarios: 10+ simultaneous writers
+        failure_scenarios: 15+ failure modes tested
+    governance_enforcement_integration:
+      name: Governance Enforcement Across All Phases
+      ac_ids:
+      - AC-INTEG-010
+      priority: HIGH
+      duration: 3 days
+      owner: QA Team
+      capabilities:
+      - SKULL rule enforcement (CORE-001 through CORE-019)
+      - 4-tier governance merger validation (Tier 0→3 precedence)
+      - Rule violation detection and blocking
+      - Governance bypass prevention
+      - Compliance audit trail
+      dependencies:
+      - AC-GOV-001
+      - AC-GOV-002
+      - AC-GOV-003
+      - AC-GOV-004
+      - AC-GOV-005
+      evidence_bundle:
+        test_coverage: '>=85%'
+        rules_enforced: All 19 SKULL rules tested
+        violations_caught: 30+ violation scenarios
+    performance_and_load:
+      name: Performance & Load Testing
+      ac_ids:
+      - AC-INTEG-011
+      priority: MEDIUM
+      duration: 2 days
+      owner: Performance Team
+      capabilities:
+      - Audit logging latency (<5ms per operation)
+      - Governance merge performance (<100ms)
+      - Hash chain verification (<10ms per 100 events)
+      - Concurrent operation throughput (100+ ops/sec)
+      - Memory stability under sustained load (1000+ operations)
+      dependencies:
+      - AC-AUDIT-001
+      - AC-GOV-001
+      - AC-STATE-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        performance_metrics: Latency, throughput, memory, CPU
+        load_scenarios: 5+ load profiles (light, medium, heavy, sustained, spike)
+    regression_and_compatibility:
+      name: Regression Testing & Version Compatibility
+      ac_ids:
+      - AC-INTEG-012
+      priority: HIGH
+      duration: 2 days
+      owner: QA Team
+      capabilities:
+      - All prior phase functionality still working
+      - No degradation in performance metrics
+      - Backwards compatibility with previous AC-ID versions
+      - Orchestrator API contract validation
+      - Database schema stability
+      dependencies:
+      - AC-STATE-001
+      - AC-ORCH-001
+      - AC-AUDIT-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        regression_scenarios: 25+ regression tests
+        version_compatibility: Tested across phases
+  phase_4_5_exit_criteria:
+    must_complete:
+    - All 12 AC-IDs implemented (AC-INTEG-001 through AC-INTEG-012)
+    - End-to-end workflows tested (20+ scenarios passing)
+    - Audit trail 100% complete for all operations
+    - Evidence bundles generated for all AC-IDs
+    - Zero test failures in integration suite
+    - Performance targets met (<5ms audit, <100ms governance)
+    - All governance rules enforced (19/19 SKULL rules)
+    - Concurrent operations validated (10+ simultaneous)
+    - State management resilience proven
+    - Regression suite passing (100% backwards compatibility)
+    gate_validation:
+      test_coverage: '>=85% across all integration scenarios'
+      audit_completeness: 100% - all operations traced
+      governance_compliance: 100% - all rules enforced
+      performance: All targets met (audit <5ms, governance <100ms, hash <10ms)
+      evidence_bundles: All 12 AC-INTEG-* have complete evidence bundles
+      system_correctness: End-to-end audit logs prove system works correctly
+    blocker_prevention:
+    - Integration tests serve as final validation before production release
+    - Audit logs are primary proof of correctness
+    - No Phase 5+ work until integration suite at 100%
+    - All orchestrators must have full audit trail in passing tests
+  success_criteria:
+    description: System correctness proven via audit trail completeness
+    criteria:
+    - 100% audit completeness across 50+ operation chains
+    - Zero untraced operations
+    - All correlation IDs properly linked
+    - Hash chain integrity validated
+    - Evidence bundles sufficient proof of implementation
+    - Performance meets SLA targets
+    - Governance never bypassed
+    - Concurrent operations safe (no corruption, no deadlocks)
+    - Failure recovery tested and working
+    - Backwards compatibility maintained
 llm_cost_strategy:
   overall_approach: Sonnet 4.5 as default; upgrade to Opus only for critical architectural
     decisions
