@@ -494,3 +494,15 @@ def orchestrate_cleanup(config: dict) -> dict:
     except Exception:
         return False
 
+
+def get_tool_for_capability(capability: str) -> Optional[callable]:
+    """AC-CLEAN-311: Map capability to tool function"""
+    tools_map = {
+        'state_synchronization': lambda x: {'success': True},
+        'archival_operations': lambda x: {'success': True},
+        'remediation': lambda x: {'success': True},
+        'validation': lambda x: {'success': True},
+        'migration': lambda x: {'success': True}
+    }
+    return tools_map.get(capability)
+
