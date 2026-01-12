@@ -1,7 +1,7 @@
 {
   "schema_version": "1.9",
-  "last_updated": "2026-01-12T17:14:24.270926+00:00",
-  "updated_by": "GitHub Copilot - Brittleness Fix Session",
+  "last_updated": "2026-01-12T19:17:56.725158+00:00",
+  "updated_by": "Audit-based validator (audit_logs + live_tests)",
   "active_epic": {
     "id": "CORTEX-6.0",
     "name": "CORTEX 6.0 Production-Grade Rebuild with Sequential Execution",
@@ -95,9 +95,9 @@
     "status": "completed",
     "started": "2026-01-12T11:45:00Z",
     "completed_at": "2026-01-12T16:49:57.862399+00:00",
-    "completed_count": 12,
+    "completed_count": 10,
     "total_ac_count": 12,
-    "completion_percentage": 100,
+    "completion_percentage": 83,
     "prerequisites": [
       "Phase 1 (Foundation) \u2705",
       "Phase 2 (Orchestration Core) \u2705",
@@ -106,8 +106,6 @@
     ],
     "verified_implemented": [
       "AC-INTEG-001",
-      "AC-INTEG-002",
-      "AC-INTEG-003",
       "AC-INTEG-004",
       "AC-INTEG-005",
       "AC-INTEG-006",
@@ -159,7 +157,19 @@
         "hash_verification": "<10ms",
         "throughput": "100+ ops/sec"
       }
-    }
+    },
+    "completed_ac_ids": [
+      "AC-INTEG-001",
+      "AC-INTEG-004",
+      "AC-INTEG-005",
+      "AC-INTEG-006",
+      "AC-INTEG-007",
+      "AC-INTEG-008",
+      "AC-INTEG-009",
+      "AC-INTEG-010",
+      "AC-INTEG-011",
+      "AC-INTEG-012"
+    ]
   },
   "phase_1_5_sts": {
     "number": 1.5,
@@ -622,7 +632,7 @@
         "AC-PLAN-008"
       ],
       "total_ac_count": 30,
-      "completed_count": 30,
+      "completed_count": 17,
       "critical_path": [
         "AC-ORCH-001",
         "AC-ORCH-006",
@@ -631,17 +641,12 @@
         "AC-PLAN-001"
       ],
       "next_action": "Phase 2 complete at 100% - Ready for Phase 3",
-      "completion_percentage": 100,
-      "status": "complete",
+      "completion_percentage": 56,
+      "status": "in_progress",
       "verified_implemented": [
         "AC-ORCH-001",
-        "AC-ORCH-002",
-        "AC-ORCH-003",
-        "AC-ORCH-004",
-        "AC-ORCH-005",
         "AC-ORCH-006",
         "AC-ORCH-007",
-        "AC-ORCH-008",
         "AC-TODO-001",
         "AC-TODO-002",
         "AC-TODO-003",
@@ -651,29 +656,16 @@
         "AC-TDD-003",
         "AC-TDD-004",
         "AC-TDD-005",
-        "AC-TDD-006",
-        "AC-TDD-007",
-        "AC-TDD-008",
-        "AC-TDD-009",
-        "AC-TDD-010",
         "AC-PLAN-001",
         "AC-PLAN-002",
         "AC-PLAN-003",
         "AC-PLAN-004",
-        "AC-PLAN-005",
-        "AC-PLAN-006",
-        "AC-PLAN-007",
-        "AC-PLAN-008"
+        "AC-PLAN-005"
       ],
       "completed_ac_ids": [
         "AC-ORCH-001",
-        "AC-ORCH-002",
-        "AC-ORCH-003",
-        "AC-ORCH-004",
-        "AC-ORCH-005",
         "AC-ORCH-006",
         "AC-ORCH-007",
-        "AC-ORCH-008",
         "AC-TODO-001",
         "AC-TODO-002",
         "AC-TODO-003",
@@ -683,19 +675,11 @@
         "AC-TDD-003",
         "AC-TDD-004",
         "AC-TDD-005",
-        "AC-TDD-006",
-        "AC-TDD-007",
-        "AC-TDD-008",
-        "AC-TDD-009",
-        "AC-TDD-010",
         "AC-PLAN-001",
         "AC-PLAN-002",
         "AC-PLAN-003",
         "AC-PLAN-004",
-        "AC-PLAN-005",
-        "AC-PLAN-006",
-        "AC-PLAN-007",
-        "AC-PLAN-008"
+        "AC-PLAN-005"
       ]
     },
     {
