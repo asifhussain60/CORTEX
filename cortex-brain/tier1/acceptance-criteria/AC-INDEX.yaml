@@ -1,6 +1,6 @@
 schema_version: '1.8'
-last_updated: '2026-01-12T16:50:00.000000Z'
-total_ac_count: 175
+last_updated: '2026-01-12T21:00:00.000000Z'
+total_ac_count: 203
 completed_count: 33
 in_progress_count: 0
 design_score_current: 97
@@ -7237,3 +7237,496 @@ AC-INTEG-012:
   - Orchestrator API contracts unchanged
   - Database schema backwards compatible
   - Legacy AC-ID versions still functional
+
+AC-CLEAN-301:
+  id: AC-CLEAN-301
+  name: Remove Phase References from MasterOrchestrator
+  description: Eliminate hardcoded phase numbers (1-5) from master_orchestrator.py
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: CRITICAL
+  category: cleanup
+  tests:
+  - tests/cleanup/test_phase_reference_removal.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  dependencies:
+  - AC-ORCH-001
+  - AC-ORCH-007
+  acceptance_criteria:
+  - MasterOrchestrator operates without phase numbers
+  - Request routing independent of phases
+  - Phase logic extracted to optional module
+  - All tests pass with phase-free implementation
+
+AC-CLEAN-302:
+  id: AC-CLEAN-302
+  name: Remove Phase References from State Synchronizer
+  description: Eliminate hardcoded phase numbers from state_synchronizer.py
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: CRITICAL
+  category: cleanup
+  tests:
+  - tests/cleanup/test_state_sync_cleanup.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  dependencies:
+  - AC-STATE-001
+  acceptance_criteria:
+  - StateSync operates without phase references
+  - Atomic writes maintained
+  - Progress tracking works without phases
+
+AC-CLEAN-303:
+  id: AC-CLEAN-303
+  name: Remove Phase References from Atomic State Manager
+  description: Eliminate hardcoded phase numbers from atomic_state_manager.py
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: CRITICAL
+  category: cleanup
+  tests:
+  - tests/cleanup/test_atomic_state_cleanup.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  dependencies:
+  - AC-STATE-002
+  acceptance_criteria:
+  - AtomicStateManager operates without phases
+  - WAL mode maintained
+  - Consistency guaranteed
+
+AC-CLEAN-304:
+  id: AC-CLEAN-304
+  name: Remove Phase References from Planning State DB
+  description: Migrate planning_state_db.py schema from phase-based to module-based
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: CRITICAL
+  category: cleanup
+  tests:
+  - tests/cleanup/test_planning_state_db_cleanup.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  dependencies:
+  - AC-STATE-003
+  acceptance_criteria:
+  - PlanningStateDB schema migrated
+  - Phase columns removed from tables
+  - Data integrity maintained during migration
+  - Backwards compatibility optional module
+
+AC-CLEAN-305:
+  id: AC-CLEAN-305
+  name: Remove Phase References from Housekeeping Tools
+  description: Remove hardcoded phase dispatch (1-9) from src/mcp/housekeeping_tools.py
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: CRITICAL
+  category: cleanup
+  tests:
+  - tests/cleanup/test_housekeeping_cleanup.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  dependencies:
+  - AC-CLEAN-201
+  acceptance_criteria:
+  - Housekeeping operates without phase dispatch
+  - Alignment checks function phase-independently
+  - Continuous enforcement maintained
+
+AC-CLEAN-306:
+  id: AC-CLEAN-306
+  name: Remove Phase References from Remediation Executor
+  description: Remove phase-based logic from src/tools/remediation_executor.py
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: CRITICAL
+  category: cleanup
+  tests:
+  - tests/cleanup/test_remediation_cleanup.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  dependencies:
+  - AC-ORCH-007
+  acceptance_criteria:
+  - RemediationExecutor operates without phases
+  - Condition evaluation works phase-independently
+  - Verification logic phase-agnostic
+
+AC-CLEAN-307:
+  id: AC-CLEAN-307
+  name: Archive cortex-brain/cx6-plan/ Directory
+  description: Create versioned, checksummed archive of entire cx6-plan/ folder
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: CRITICAL
+  category: artifact_management
+  tests:
+  - tests/cleanup/test_archive_creation.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  acceptance_criteria:
+  - Archive created at cortex-brain/documents/archives/CORTEX-6.0-construction/
+  - Checksum manifest generated and verified
+  - Archive read-only and isolated
+  - Never imported at runtime
+
+AC-CLEAN-308:
+  id: AC-CLEAN-308
+  name: Archive master-plan.yaml
+  description: Extract and archive master-plan.yaml with historical reference
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: CRITICAL
+  category: artifact_management
+  tests:
+  - tests/cleanup/test_master_plan_archive.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  acceptance_criteria:
+  - master-plan.yaml archived separately for historical reference
+  - Version metadata preserved
+  - Read-only archive location set
+
+AC-CLEAN-309:
+  id: AC-CLEAN-309
+  name: Archive plan-viewer.html and UI Files
+  description: Archive plan-viewer.html and all related UI/dashboard components
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: HIGH
+  category: artifact_management
+  tests:
+  - tests/cleanup/test_ui_archive.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  acceptance_criteria:
+  - All plan-viewer files archived
+  - HTML/CSS/JS preserved for history
+  - Read-only archive verification
+
+AC-CLEAN-310:
+  id: AC-CLEAN-310
+  name: Archive Phase-Specific Documentation
+  description: Archive all docs/architecture/phase-*.md and related phase documentation
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: HIGH
+  category: artifact_management
+  tests:
+  - tests/cleanup/test_docs_archive.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  acceptance_criteria:
+  - Phase-specific docs archived
+  - Index created for archive navigation
+  - Archive checksummed and verified
+
+AC-CLEAN-311:
+  id: AC-CLEAN-311
+  name: Archive Scaffolding Scripts
+  description: Archive scripts/ files related to planning and phase management
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: MEDIUM
+  category: artifact_management
+  tests:
+  - tests/cleanup/test_scripts_archive.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  acceptance_criteria:
+  - Planning scripts archived
+  - Synchronization scripts archived
+  - Archive integrity verified
+
+AC-CLEAN-312:
+  id: AC-CLEAN-312
+  name: Archive and Consolidate All Scaffolding Artifacts
+  description: Final consolidation pass - ensure all construction artifacts are archived
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: CRITICAL
+  category: artifact_management
+  tests:
+  - tests/cleanup/test_comprehensive_archive.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  acceptance_criteria:
+  - All planned artifacts verified in archive
+  - Archive manifest complete and checksummed
+  - Zero scaffolding remains in active code directories
+  - Archive can be accessed for historical reference
+
+AC-CLEAN-313:
+  id: AC-CLEAN-313
+  name: Update Governance Rules - Remove Plan References
+  description: Update tier0/governance/ rules to remove references to planning phases
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: CRITICAL
+  category: configuration
+  tests:
+  - tests/cleanup/test_governance_cleanup.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  dependencies:
+  - AC-GOV-001
+  acceptance_criteria:
+  - Governance rules updated to phase-independent
+  - 19 SKULL rules verified to work without phases
+  - 4-tier governance merger works phase-independently
+  - All governance tests pass
+
+AC-CLEAN-314:
+  id: AC-CLEAN-314
+  name: Update File Organization Policy
+  description: Update tier0/governance/file-organization-policy.yaml to remove plan references
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: HIGH
+  category: configuration
+  tests:
+  - tests/cleanup/test_file_policy_cleanup.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  acceptance_criteria:
+  - File organization policy updated
+  - No phase-based folder requirements
+  - All linters pass with updated policy
+
+AC-CLEAN-315:
+  id: AC-CLEAN-315
+  name: Update AC-INDEX.yaml - Remove Phase References
+  description: Update AC-INDEX metadata to remove phase declarations post-decommission
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: HIGH
+  category: configuration
+  tests:
+  - tests/cleanup/test_ac_index_cleanup.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  acceptance_criteria:
+  - AC-INDEX phase fields made optional
+  - Filtering by phase still works (archived data)
+  - AC registry remains functional
+
+AC-CLEAN-316:
+  id: AC-CLEAN-316
+  name: Update Operational Efficiency Rules
+  description: Update tier0/governance/operational-efficiency-rules.yaml post-phases
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: MEDIUM
+  category: configuration
+  tests:
+  - tests/cleanup/test_efficiency_rules_cleanup.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  acceptance_criteria:
+  - Efficiency rules work without phase context
+  - Performance targets maintained
+  - Audit logging continues
+
+AC-CLEAN-317:
+  id: AC-CLEAN-317
+  name: Update Scripts - Remove Phase Dispatch Logic
+  description: Update scripts/ to remove phase-based automation and dispatch
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: MEDIUM
+  category: configuration
+  tests:
+  - tests/cleanup/test_scripts_update.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  acceptance_criteria:
+  - All scripts work without phases
+  - Automation functions phase-independently
+  - Backwards-compatible interface maintained
+
+AC-CLEAN-318:
+  id: AC-CLEAN-318
+  name: Update All Configuration Files
+  description: Final pass on all YAML/JSON config files to remove phase references
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: MEDIUM
+  category: configuration
+  tests:
+  - tests/cleanup/test_config_cleanup.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  acceptance_criteria:
+  - All config files validated
+  - No lingering phase references
+  - Config schema updated and documented
+
+AC-CLEAN-319:
+  id: AC-CLEAN-319
+  name: Implement HousekeepingOrchestratorV3 - Continuous Alignment Checks
+  description: Create HousekeepingOrchestratorV3 with per-turn alignment validation
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: CRITICAL
+  category: housekeeping
+  tests:
+  - tests/cleanup/test_housekeeping_v3.py
+  implementation: src/orchestrators/core/housekeeping_orchestrator_v3.py
+  dependencies:
+  - AC-ORCH-007
+  acceptance_criteria:
+  - Alignment checks run every orchestrator turn
+  - Phase-reference regression detected
+  - Pre-commit hooks validate scaffolding-free code
+  - Performance <100ms per check
+
+AC-CLEAN-320:
+  id: AC-CLEAN-320
+  name: Implement Pre-Commit Hook for Phase Reference Detection
+  description: Pre-commit hook blocks phase-based changes after Phase 5
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: CRITICAL
+  category: housekeeping
+  tests:
+  - tests/cleanup/test_precommit_hook.py
+  implementation: src/orchestrators/core/housekeeping_orchestrator_v3.py
+  acceptance_criteria:
+  - Hook executes on every commit
+  - Phase references detected and blocked
+  - Override only available via security exemption
+  - Exemptions logged in audit trail
+
+AC-CLEAN-321:
+  id: AC-CLEAN-321
+  name: Implement Regression Detection for Re-Introduced References
+  description: Continuous monitoring for phase references accidentally re-introduced
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: HIGH
+  category: housekeeping
+  tests:
+  - tests/cleanup/test_regression_detection.py
+  implementation: src/orchestrators/core/housekeeping_orchestrator_v3.py
+  acceptance_criteria:
+  - Daily regression scan enabled
+  - Re-introduced references detected within 1 hour
+  - Alerts generated for engineering team
+  - Auto-remediation available
+
+AC-CLEAN-322:
+  id: AC-CLEAN-322
+  name: Implement Feature Flag Validation
+  description: Verify INCLUDE_PLANNING_SCAFFOLDING feature flags working correctly
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: HIGH
+  category: housekeeping
+  tests:
+  - tests/cleanup/test_feature_flag_validation.py
+  implementation: src/orchestrators/core/housekeeping_orchestrator_v3.py
+  dependencies:
+  - AC-CLEAN-319
+  acceptance_criteria:
+  - Feature flags operate as expected
+  - Optional module loading/unloading works
+  - No runtime errors with flags disabled
+  - Flag status logged in audit trail
+
+AC-CLEAN-323:
+  id: AC-CLEAN-323
+  name: Implement Governance Rule Monitoring
+  description: Monitor all 19 SKULL rules for phase-based violations post-decommission
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: HIGH
+  category: housekeeping
+  tests:
+  - tests/cleanup/test_governance_monitoring.py
+  implementation: src/orchestrators/core/housekeeping_orchestrator_v3.py
+  dependencies:
+  - AC-GOV-001
+  acceptance_criteria:
+  - All 19 rules monitored continuously
+  - Violations detected and logged
+  - No false positives after Phase 5
+  - Monitoring overhead <5%
+
+AC-CLEAN-324:
+  id: AC-CLEAN-324
+  name: Implement Continuous Alignment Enforcement
+  description: Automated enforcement of scaffolding-free architecture
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: HIGH
+  category: housekeeping
+  tests:
+  - tests/cleanup/test_alignment_enforcement.py
+  implementation: src/orchestrators/core/housekeeping_orchestrator_v3.py
+  acceptance_criteria:
+  - Enforcement runs every turn
+  - Misalignments corrected automatically
+  - Manual overrides require approval
+  - Full audit trail maintained
+
+AC-CLEAN-325:
+  id: AC-CLEAN-325
+  name: Verify Zero Hardcoded Phase References in Production
+  description: Final verification suite - confirm no phase numbers in production code
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: CRITICAL
+  category: verification
+  tests:
+  - tests/cleanup/test_phase_reference_verification.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  acceptance_criteria:
+  - Grep scan for zero matches on phase number patterns
+  - All src/ files verified clean
+  - All tests pass verification
+  - Evidence bundle generated
+
+AC-CLEAN-326:
+  id: AC-CLEAN-326
+  name: Verify Archive Integrity and Isolation
+  description: Confirm archives are properly created, checksummed, and isolated
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: CRITICAL
+  category: verification
+  tests:
+  - tests/cleanup/test_archive_integrity.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  acceptance_criteria:
+  - Archive checksums verified
+  - Archive directory is read-only
+  - No runtime imports from archive
+  - Historical access documented
+
+AC-CLEAN-327:
+  id: AC-CLEAN-327
+  name: Verify Performance Baseline Met
+  description: Confirm no performance regression from Phase 5 cleanup operations
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: HIGH
+  category: verification
+  tests:
+  - tests/cleanup/test_performance_baseline.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  acceptance_criteria:
+  - Audit latency <5ms (maintained)
+  - Governance merge <100ms (maintained)
+  - Housekeeping check <100ms (new baseline)
+  - No throughput regression
+
+AC-CLEAN-328:
+  id: AC-CLEAN-328
+  name: Final Comprehensive Verification & Documentation
+  description: Final gate before production release - all checks passing, docs updated
+  status: planned
+  phase: Phase 5 (CORTEX Cleanup & Decommission)
+  priority: CRITICAL
+  category: verification
+  tests:
+  - tests/cleanup/test_final_gate.py
+  implementation: src/orchestrators/cleanup/scaffolding_removal_orchestrator.py
+  dependencies:
+  - AC-CLEAN-301
+  - AC-CLEAN-307
+  - AC-CLEAN-313
+  - AC-CLEAN-319
+  - AC-CLEAN-325
+  acceptance_criteria:
+  - All Phase 5 AC-IDs implemented and tested
+  - Zero phase references in production code
+  - All archives verified
+  - Documentation reflects permanent architecture
+  - Evidence bundles for all 28 AC-IDs generated
+  - Production release approved
+
