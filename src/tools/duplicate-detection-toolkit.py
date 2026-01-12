@@ -469,7 +469,7 @@ class DuplicateDetectionToolkit:
                 tree = ast.parse(f.read())
             classes = [n.name for n in ast.walk(tree) if isinstance(n, ast.ClassDef)][:10]
             functions = [n.name for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)][:10]
-        except:
+        except (SyntaxError, OSError, UnicodeDecodeError):
             pass
         
         # Import count
@@ -484,7 +484,7 @@ class DuplicateDetectionToolkit:
             with open(filepath, errors='ignore') as f:
                 tree = ast.parse(f.read())
             doc_string = ast.get_docstring(tree)
-        except:
+        except (SyntaxError, OSError, UnicodeDecodeError):
             pass
         
         # MD5 hash
@@ -493,7 +493,7 @@ class DuplicateDetectionToolkit:
             try:
                 with open(filepath, 'rb') as f:
                     hash_md5 = hashlib.md5(f.read()).hexdigest()
-            except:
+            except (OSError, IOError):
                 pass
         
         return FileMetadata(

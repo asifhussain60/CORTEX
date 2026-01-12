@@ -60,6 +60,35 @@ class OrchestratorRegistry:
     Tracks registration lifecycle and governance compliance.
     """
     
+    # Class-level registry for decorator usage
+    _global_registry: Dict[str, Dict[str, Any]] = {}
+    
+    @staticmethod
+    def register(name: str, patterns: List[str], priority: int = 50, **metadata):
+        """
+        Decorator for registering orchestrators.
+        
+        Usage:
+            @OrchestratorRegistry.register(
+                name="crawler",
+                patterns=["crawl", "analyze"],
+                priority=35,
+                domain="analysis"
+            )
+            class CrawlerOrchestrator:
+                pass
+        """
+        def decorator(cls):
+            OrchestratorRegistry._global_registry[name] = {
+                'class': cls,
+                'name': name,
+                'patterns': patterns,
+                'priority': priority,
+                **metadata
+            }
+            return cls
+        return decorator
+    
     def __init__(
         self,
         workspace_root: Optional[Path] = None,

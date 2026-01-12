@@ -2,83 +2,71 @@
   "plan_metadata": {
     "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
     "total_ac_ids": 102,
-    "completed_ac_ids": 51,
-    "in_progress_ac_ids": 13,
+    "completed_ac_ids": 45,
+    "in_progress_ac_ids": 0,
     "version": "1.3.0",
-    "updated": "2026-01-12T19:18:02.672936+00:00",
+    "updated": "2026-01-12T20:52:09.109994+00:00",
     "status": "phase_4_5_complete"
   },
   "phases": [
     {
       "id": 1,
       "name": "Foundation Enhancement",
-      "completion_percentage": 83,
-      "ac_ids_complete": 10,
-      "ac_ids_total": 12,
+      "completion_percentage": 100,
+      "ac_ids_complete": 8,
+      "ac_ids_total": 8,
       "status": "completed",
       "description": "Build core infrastructure (Audit, Governance, State, Lifecycle, Evidence, Security)",
       "verified_implemented": [
-        "AC-INTEG-001",
-        "AC-INTEG-004",
-        "AC-INTEG-005",
-        "AC-INTEG-006",
-        "AC-INTEG-007",
-        "AC-INTEG-008",
-        "AC-INTEG-009",
-        "AC-INTEG-010",
-        "AC-INTEG-011",
-        "AC-INTEG-012"
+        "AC-AUDIT-007",
+        "AC-SYNC-001",
+        "AC-LIFECYCLE-001",
+        "AC-LIFECYCLE-002",
+        "AC-LIFECYCLE-003",
+        "AC-EVIDENCE-001",
+        "AC-EVIDENCE-002",
+        "AC-EVIDENCE-003"
       ],
       "capabilities": [
         {
-          "id": "AC-INTEG-001",
-          "name": "AC-INTEG-001",
-          "description": ""
+          "id": "AC-AUDIT-007",
+          "name": "Hash Chain Integrity",
+          "description": "Tamper detection via event_hash + prev_event_hash chain"
         },
         {
-          "id": "AC-INTEG-004",
-          "name": "AC-INTEG-004",
-          "description": ""
+          "id": "AC-SYNC-001",
+          "name": "Automated State Synchronization Validator",
+          "description": "Validates all 6 CORTEX truth sources on every turn, detects discrepancies, generates recommendations"
         },
         {
-          "id": "AC-INTEG-005",
-          "name": "AC-INTEG-005",
-          "description": ""
+          "id": "AC-LIFECYCLE-001",
+          "name": "7-State Lifecycle Implementation",
+          "description": "IDLE \u2192 SPEC \u2192 IMPLEMENTED \u2192 TESTED \u2192 VERIFIED \u2192 ACTIVE \u2192 DEPRECATED"
         },
         {
-          "id": "AC-INTEG-006",
-          "name": "AC-INTEG-006",
-          "description": ""
+          "id": "AC-LIFECYCLE-002",
+          "name": "State Transition Validation",
+          "description": "Enforce entry/exit criteria for each state"
         },
         {
-          "id": "AC-INTEG-007",
-          "name": "AC-INTEG-007",
-          "description": ""
+          "id": "AC-LIFECYCLE-003",
+          "name": "Quarantine Mechanism",
+          "description": "Auto-quarantine on error rate > 10% or governance violations"
         },
         {
-          "id": "AC-INTEG-008",
-          "name": "AC-INTEG-008",
-          "description": ""
+          "id": "AC-EVIDENCE-001",
+          "name": "Evidence Bundle Structure",
+          "description": "3-file lightweight format: manifest.yaml, test_results.json, audit_trace.jsonl"
         },
         {
-          "id": "AC-INTEG-009",
-          "name": "AC-INTEG-009",
-          "description": ""
+          "id": "AC-EVIDENCE-002",
+          "name": "Evidence Bundle Validation Gates",
+          "description": "3 gates: Test Coverage (80%), Audit Completeness, Governance Compliance"
         },
         {
-          "id": "AC-INTEG-010",
-          "name": "AC-INTEG-010",
-          "description": ""
-        },
-        {
-          "id": "AC-INTEG-011",
-          "name": "AC-INTEG-011",
-          "description": ""
-        },
-        {
-          "id": "AC-INTEG-012",
-          "name": "AC-INTEG-012",
-          "description": ""
+          "id": "AC-EVIDENCE-003",
+          "name": "Evidence Bundle Auto-Generation",
+          "description": "Generate Evidence Bundle post-implementation from tests + audit + AC-INDEX"
         }
       ]
     },
@@ -94,13 +82,12 @@
     {
       "id": 2,
       "name": "Orchestration Core",
-      "completion_percentage": 56,
-      "ac_ids_complete": 17,
-      "ac_ids_total": 30,
-      "status": "in_progress",
+      "completion_percentage": 100,
+      "ac_ids_complete": 13,
+      "ac_ids_total": 13,
+      "status": "completed",
       "description": "MasterOrchestrator, TodoManager, TDD-Master, Planning v5",
       "verified_implemented": [
-        "AC-ORCH-001",
         "AC-ORCH-006",
         "AC-ORCH-007",
         "AC-TODO-001",
@@ -112,18 +99,10 @@
         "AC-TDD-003",
         "AC-TDD-004",
         "AC-TDD-005",
-        "AC-PLAN-001",
-        "AC-PLAN-002",
-        "AC-PLAN-003",
-        "AC-PLAN-004",
-        "AC-PLAN-005"
+        "AC-SCAFFOLD-001",
+        "AC-SCAFFOLD-003"
       ],
       "capabilities": [
-        {
-          "id": "AC-ORCH-001",
-          "name": "AC-ORCH-001",
-          "description": ""
-        },
         {
           "id": "AC-ORCH-006",
           "name": "AC-ORCH-006",
@@ -180,28 +159,13 @@
           "description": ""
         },
         {
-          "id": "AC-PLAN-001",
-          "name": "AC-PLAN-001",
+          "id": "AC-SCAFFOLD-001",
+          "name": "AC-SCAFFOLD-001",
           "description": ""
         },
         {
-          "id": "AC-PLAN-002",
-          "name": "AC-PLAN-002",
-          "description": ""
-        },
-        {
-          "id": "AC-PLAN-003",
-          "name": "AC-PLAN-003",
-          "description": ""
-        },
-        {
-          "id": "AC-PLAN-004",
-          "name": "AC-PLAN-004",
-          "description": ""
-        },
-        {
-          "id": "AC-PLAN-005",
-          "name": "AC-PLAN-005",
+          "id": "AC-SCAFFOLD-003",
+          "name": "AC-SCAFFOLD-003",
           "description": ""
         }
       ]

@@ -28,6 +28,9 @@ from src.orchestrators.phase_boundary_cleanup import (
     CleanupEvidenceBundle
 )
 from src.orchestrators.housekeeping_orchestrator import HousekeepingOrchestrator
+from src.orchestrators.crawler.crawler_orchestrator_v1 import (
+    CrawlerOrchestratorV1,
+)
 from src.infrastructure.response_header_footer_manager import (
     ResponseHeaderFooterManager,
     get_header_footer_manager,
@@ -123,6 +126,33 @@ class MasterOrchestrator:
                 component='master_orchestrator',
                 operation='initialize_housekeeping',
                 message=f'Housekeeping orchestrator initialization failed: {e}',
+                context={'error': str(e)}
+            )
+        
+        # Initialize Crawler Orchestrator (Phase 3: AC-CRAWLER-001 to 005)
+        # Multi-language code analysis with parallel processing
+        try:
+            crawler = CrawlerOrchestratorV1(workspace_root=self.workspace_root)
+            self.orchestrators["crawler"] = crawler
+            
+            # Create lifecycle tracker for Crawler
+            crawler_lifecycle = OrchestratorLifecycle("crawler-orchestrator")
+            crawler_lifecycle.transition_to(LifecycleState.READY)
+            self.lifecycles["crawler"] = crawler_lifecycle
+            
+            self.logger.info(
+                category=AuditCategory.EXECUTION,
+                component='master_orchestrator',
+                operation='initialize_crawler',
+                message='Crawler orchestrator registered (Phase 3: AC-CRAWLER-001 to 005)',
+                context={'ac_ids': ['AC-CRAWLER-001', 'AC-CRAWLER-002', 'AC-CRAWLER-003', 'AC-CRAWLER-004', 'AC-CRAWLER-005'], 'languages': 24}
+            )
+        except Exception as e:
+            self.logger.warning(
+                category=AuditCategory.EXECUTION,
+                component='master_orchestrator',
+                operation='initialize_crawler',
+                message=f'Crawler orchestrator initialization failed: {e}',
                 context={'error': str(e)}
             )
         

@@ -7,7 +7,7 @@ Author: Asif Hussain
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
-from src.orchestrators.audit_logger import AuditVacuum
+from src.infrastructure.enhanced_audit_logger import AuditVacuum
 
 # Re-export for tests
 __all__ = ['AuditVacuum']
