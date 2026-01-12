@@ -371,3 +371,127 @@ python3 scripts/sync_plan_viewer_data.py
 **Last Updated:** 2026-01-12  
 **Status:** Template Ready for Implementation  
 **Next:** Update all 4 prompts with OUTPUT SPECIFICATION sections
+
+---
+
+## 🔗 PROMPT COHESION MODEL (v7.0)
+
+**All prompts work as a unified system:**
+
+### Prompt Roles
+
+| Prompt | Role | Input | Output | Triggers |
+|--------|------|-------|--------|----------|
+| `CORTEX.prompt.md` | Gateway/Router | User intent | Route to executor | Always first |
+| `cortex-exec.prompt.md` | Executor | AC-IDs from tracker | Code + tests | "execute", "implement" |
+| `cortex-evidence-validator.prompt.md` | Validator | Test results | Verification status | "validate", "check status" |
+| `cortex-brittleness-review.prompt.md` | Analyst | Codebase scan | AC-IDs for risks | "brittleness", "risk review" |
+
+### Data Flow (ONE DIRECTION)
+
+```
+master-plan.yaml → AC-INDEX.yaml → progress-tracker.json → plan-viewer-data.json → HTML
+       ↑                 ↑                  ↑                      ↑
+ (brittleness)      (execution)       (validation)            (sync script)
+```
+
+### Shared Contracts
+
+1. **AC-IDs always in AC-INDEX.yaml** - No separate files
+2. **Progress always in tracker** - No direct dashboard edits
+3. **Sync always via script** - `python3 scripts/sync_plan_viewer_data.py`
+4. **Evidence always test-based** - No manual completion claims
+
+### Conflict Resolution
+
+| Source | Priority | Authoritative For |
+|--------|----------|-------------------|
+| `AC-INDEX.yaml` | 1 (Highest) | AC-ID definitions |
+| `master-plan.yaml` | 2 | Phase sequencing |
+| `progress-tracker.json` | 3 | Completion status |
+| `plan-viewer-data.json` | 4 (Derived) | Display only |
+
+---
+
+## 🛡️ REGRESSION PREVENTION
+
+**All prompts MUST include regression checks:**
+
+### Pre-Execution Check (MANDATORY)
+
+```bash
+# Every prompt execution must start with:
+python3 << 'EOF'
+import yaml, json, sys
+
+errors = []
+
+# Check 1: AC-INDEX.yaml parseable
+try:
+    yaml.safe_load(open('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml'))
+except Exception as e:
+    errors.append(f"AC-INDEX.yaml: {e}")
+
+# Check 2: progress-tracker.json parseable
+try:
+    json.load(open('cortex-brain/tier1/tracking/progress-tracker.json'))
+except Exception as e:
+    errors.append(f"progress-tracker.json: {e}")
+
+# Check 3: master-plan.yaml parseable
+try:
+    yaml.safe_load(open('cortex-brain/cx6-plan/master-plan.yaml'))
+except Exception as e:
+    errors.append(f"master-plan.yaml: {e}")
+
+if errors:
+    print("❌ REGRESSION DETECTED - HALT")
+    for e in errors:
+        print(f"  - {e}")
+    sys.exit(1)
+else:
+    print("✅ Regression check passed")
+EOF
+```
+
+### Post-Execution Check
+
+```bash
+# Every prompt execution must end with:
+python3 scripts/sync_plan_viewer_data.py --check-only
+```
+
+### Regression Response
+
+If check fails:
+1. **HALT** execution immediately
+2. **LOG** to `cortex-brain/audit-logs/regression-alerts.jsonl`
+3. **REPORT** to user with diagnostic
+4. **DO NOT** continue until user acknowledges
+
+---
+
+## 📋 ARCHITECTURE ENHANCEMENT PROTOCOL
+
+**When any prompt identifies need for new architecture:**
+
+1. **DO NOT implement** in current session
+2. **Document in:** `cortex-brain/documents/future-enhancements/{capability}.yaml`
+3. **Format:**
+   ```yaml
+   enhancement_id: ENH-{NNN}
+   title: {capability name}
+   source_prompt: {which prompt identified this}
+   category: architecture|infrastructure|integration
+   priority: low|medium|high
+   rationale: {why needed}
+   current_workaround: {how to proceed without it}
+   estimated_effort: {hours/days}
+   recommended_phase: future
+   status: documented
+   created: {ISO timestamp}
+   ```
+4. **Report:** `📋 Enhancement ENH-{NNN} documented for future review`
+5. **Continue** with current scope using workaround
+
+**Why?** Prevents scope creep and unreviewed changes.

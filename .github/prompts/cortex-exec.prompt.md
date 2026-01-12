@@ -1,9 +1,80 @@
 # 🎯 CORTEX-PLAN-EXECUTIONER – Autonomous Implementation & Validation Loop
 
 **Purpose:** Autonomous AC-ID implementation, test execution, evidence validation, and progress tracking  
-**Version:** 2.2.0 (Sequential Execution with Title Display)  
-**Date:** 2026-01-11  
+**Version:** 3.0.0 (Plan-Integrated with Regression Prevention)  
+**Date:** 2026-01-12  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+
+---
+
+## 🔗 PLAN INTEGRATION (CRITICAL)
+
+**This prompt executes against the cx6-plan holistically:**
+
+| Plan Asset | Location | Role |
+|------------|----------|------|
+| Master Plan | `cortex-brain/cx6-plan/master-plan.yaml` | Phase definitions, dependencies |
+| Phase Details | `cortex-brain/cx6-plan/phases/phase-{N}/` | Per-phase AC-IDs, timelines |
+| AC-ID Registry | `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml` | AC-ID definitions (authoritative) |
+| Progress Tracker | `cortex-brain/tier1/tracking/progress-tracker.json` | Completion status |
+| Dashboard Data | `cortex-brain/cx6-plan/viewer/plan-viewer-data.json` | Synced from tracker |
+
+**Data Flow (ONE DIRECTION ONLY):**
+```
+master-plan.yaml → AC-INDEX.yaml → progress-tracker.json → plan-viewer-data.json → HTML
+```
+
+---
+
+## 🛡️ REGRESSION PREVENTION (MANDATORY)
+
+**Before EVERY implementation cycle:**
+
+```bash
+# Step 0: Regression check (MUST PASS before proceeding)
+python3 << 'EOF'
+import json, yaml, sys
+from pathlib import Path
+
+errors = []
+
+# Check 1: AC-INDEX.yaml valid
+try:
+    ac_index = yaml.safe_load(open('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml'))
+    if not ac_index.get('schema_version'):
+        errors.append("AC-INDEX.yaml missing schema_version")
+except Exception as e:
+    errors.append(f"AC-INDEX.yaml parse error: {e}")
+
+# Check 2: progress-tracker.json valid
+try:
+    tracker = json.load(open('cortex-brain/tier1/tracking/progress-tracker.json'))
+    if not tracker.get('current_phase'):
+        errors.append("progress-tracker.json missing current_phase")
+except Exception as e:
+    errors.append(f"progress-tracker.json parse error: {e}")
+
+# Check 3: master-plan.yaml valid
+try:
+    plan = yaml.safe_load(open('cortex-brain/cx6-plan/master-plan.yaml'))
+    if not plan.get('plan_metadata'):
+        errors.append("master-plan.yaml missing plan_metadata")
+except Exception as e:
+    errors.append(f"master-plan.yaml parse error: {e}")
+
+if errors:
+    print("❌ REGRESSION DETECTED:")
+    for e in errors:
+        print(f"  - {e}")
+    print("\nHALT: Fix regressions before continuing.")
+    sys.exit(1)
+else:
+    print("✅ Regression check passed. Proceeding with execution.")
+    sys.exit(0)
+EOF
+```
+
+**If check fails:** HALT immediately. Do NOT proceed. Report to user.
 
 ---
 
@@ -437,17 +508,79 @@ python3 scripts/sync_plan_viewer_data.py
 - User says "continue autonomously"
 
 **This prompt** executes:
-1. Load incomplete AC-IDs
-2. Implement each via `python3 -m src.main`
-3. Test each via `pytest`
-4. Validate via `audit_based_evidence_validator.py`
-5. Sync via `sync_plan_viewer_data.py`
-6. Loop until complete
+1. **Regression check (MANDATORY)**
+2. Load incomplete AC-IDs
+3. Implement each via `python3 -m src.main`
+4. Test each via `pytest`
+5. Validate via `audit_based_evidence_validator.py`
+6. Sync via `sync_plan_viewer_data.py`
+7. Loop until complete
 
 **Orchestrator integration:**
 - All implementation flows through `src.main`
 - This prompt is the DRIVER
 - Python orchestrators are the EXECUTORS
+
+---
+
+## 🔗 OUTPUT STANDARDS COMPLIANCE
+
+**All outputs from this prompt MUST follow `output-standards.md`:**
+
+### AC-ID Generation
+- ✅ APPEND to AC-INDEX.yaml (not separate files)
+- ✅ Update metadata (total_ac_count, last_updated)
+- ❌ DO NOT create AC-IDS-*.yaml files
+
+### Evidence Bundles
+- ✅ Store in `cortex-brain/tier1/evidence-bundles/AC-{ID}/`
+- ✅ Include: manifest.yaml, test-results.json, audit-trace.jsonl
+- ❌ DO NOT put evidence in documents/reports/
+
+### Dashboard Sync
+- ✅ Run `python3 scripts/sync_plan_viewer_data.py` after EVERY progress update
+- ✅ Verify sync succeeded before reporting
+- ❌ DO NOT edit plan-viewer-data.json directly
+
+---
+
+## 🛡️ REGRESSION SAFEGUARDS
+
+### Pre-Implementation Check
+```bash
+# Before implementing any AC-ID
+python3 -m pytest tests/ --collect-only -q 2>/dev/null | tail -1
+# Must show test count, not error
+```
+
+### Post-Implementation Check
+```bash
+# After implementing any AC-ID
+python3 scripts/audit_based_evidence_validator.py --fast
+# Must return exit code 0
+```
+
+### Phase Transition Check
+```bash
+# Before advancing to next phase
+python3 scripts/sync_plan_viewer_data.py --check-only
+# Must show all sources in sync
+```
+
+**If ANY check fails:** HALT and report regression to user.
+
+---
+
+## 📊 ARCHITECTURE ENHANCEMENT PROTOCOL
+
+**When implementation reveals need for new architecture:**
+
+1. **DO NOT implement** new architecture patterns
+2. **Document in:** `cortex-brain/documents/future-enhancements/{capability}.yaml`
+3. **Report:** `📋 Enhancement documented: {title} - requires architecture review`
+4. **Continue** with current implementation scope
+
+**Why?** Prevents scope creep and unreviewed architectural changes.
 
 ---
 
