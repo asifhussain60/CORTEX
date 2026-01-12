@@ -1,7 +1,7 @@
 {
   "schema_version": "1.10",
-  "last_updated": "2026-01-12T22:07:09.980770+00:00",
-  "updated_by": "HolisticUpdater - 1586 passed, 6 failed",
+  "last_updated": "2026-01-12T22:20:53.683365+00:00",
+  "updated_by": "Audit-based validator (audit_logs + live_tests)",
   "active_epic": {
     "id": "CORTEX-6.0",
     "name": "CORTEX 6.0 Production-Grade Rebuild with Sequential Execution",
@@ -96,9 +96,9 @@
     "status": "completed",
     "started": "2026-01-12T11:45:00Z",
     "completed_at": "2026-01-12T15:52:05.826054+00:00",
-    "completed_count": 8,
+    "completed_count": 6,
     "total_ac_count": 8,
-    "completion_percentage": 100,
+    "completion_percentage": 75,
     "prerequisites": [
       "Phase 1 (Foundation) \u2705",
       "Phase 2 (Orchestration Core) \u2705",
@@ -109,8 +109,6 @@
       "AC-AUDIT-007",
       "AC-SYNC-001",
       "AC-LIFECYCLE-001",
-      "AC-LIFECYCLE-002",
-      "AC-LIFECYCLE-003",
       "AC-EVIDENCE-001",
       "AC-EVIDENCE-002",
       "AC-EVIDENCE-003"
@@ -158,16 +156,12 @@
       }
     },
     "completed_ac_ids": [
-      "AC-INTEG-001",
-      "AC-INTEG-004",
-      "AC-INTEG-005",
-      "AC-INTEG-006",
-      "AC-INTEG-007",
-      "AC-INTEG-008",
-      "AC-INTEG-009",
-      "AC-INTEG-010",
-      "AC-INTEG-011",
-      "AC-INTEG-012"
+      "AC-AUDIT-007",
+      "AC-SYNC-001",
+      "AC-LIFECYCLE-001",
+      "AC-EVIDENCE-001",
+      "AC-EVIDENCE-002",
+      "AC-EVIDENCE-003"
     ],
     "in_progress": []
   },
@@ -632,7 +626,7 @@
         "AC-PLAN-008"
       ],
       "total_ac_count": 13,
-      "completed_count": 13,
+      "completed_count": 17,
       "critical_path": [
         "AC-ORCH-001",
         "AC-ORCH-006",
@@ -641,8 +635,8 @@
         "AC-PLAN-001"
       ],
       "next_action": "Phase 2 complete at 100% - Ready for Phase 3",
-      "completion_percentage": 100,
-      "status": "completed",
+      "completion_percentage": 56,
+      "status": "in_progress",
       "verified_implemented": [
         "AC-ORCH-001",
         "AC-ORCH-006",
@@ -663,6 +657,7 @@
         "AC-PLAN-005"
       ],
       "completed_ac_ids": [
+        "AC-ORCH-001",
         "AC-ORCH-006",
         "AC-ORCH-007",
         "AC-TODO-001",
@@ -674,8 +669,11 @@
         "AC-TDD-003",
         "AC-TDD-004",
         "AC-TDD-005",
-        "AC-SCAFFOLD-001",
-        "AC-SCAFFOLD-003"
+        "AC-PLAN-001",
+        "AC-PLAN-002",
+        "AC-PLAN-003",
+        "AC-PLAN-004",
+        "AC-PLAN-005"
       ],
       "completed_at": "2026-01-12T15:49:58.036425+00:00"
     },
