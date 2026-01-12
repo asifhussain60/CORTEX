@@ -1297,93 +1297,11 @@
                     const response = await fetch('plan-viewer-data.json');
                     if (!response.ok) throw new Error(`HTTP ${response.status}`);
                     this.data.plan = await response.json();
-                    console.log('✓ Plan data loaded:', this.data.plan);
+                    console.log('✓ Plan data loaded from plan-viewer-data.json:', this.data.plan);
                 } catch (error) {
-                    console.warn('Could not load plan-viewer-data.json:', error);
-                    this.data.plan = this.getDefaultPlanData();
+                    console.error('❌ CRITICAL: Could not load plan-viewer-data.json:', error);
+                    throw new Error('Plan viewer data file not found. Run: python3 scripts/sync_plan_viewer_data.py');
                 }
-            },
-            
-            getDefaultPlanData() {
-                // Fallback only if JSON load fails - reflects Phase 4.5 completion (2026-01-12)
-                return {
-                    plan_metadata: {
-                        plan_id: 'CORTEX-6.0-SEQUENTIAL-MASTER',
-                        execution_strategy: 'SEQUENTIAL',
-                        phase_gate_policy: '100% completion required before next phase',
-                        total_ac_ids: 203,
-                        completed_ac_ids: 95,
-                        in_progress_ac_ids: 0,
-                        version: '6.0.0',
-                        updated: '2026-01-12T21:45:00Z',
-                        status: 'phase_4_5_complete'
-                    },
-                    phases: [
-                        {
-                            id: 1,
-                            name: 'Phase 1: Foundation Enhancement',
-                            status: 'completed',
-                            completion_percentage: 100,
-                            ac_ids_total: 43,
-                            ac_ids_complete: 43,
-                            description: 'Core infrastructure: Audit, Governance, State, Lifecycle, Evidence, Security'
-                        },
-                        {
-                            id: 1.5,
-                            name: 'Phase 1.5: STS as Capability 0',
-                            status: 'completed',
-                            completion_percentage: 33,
-                            ac_ids_total: 3,
-                            ac_ids_complete: 1,
-                            description: 'Framework validation with Golden Corpus'
-                        },
-                        {
-                            id: 2,
-                            name: 'Phase 2: Orchestration Core',
-                            status: 'completed',
-                            completion_percentage: 100,
-                            ac_ids_total: 28,
-                            ac_ids_complete: 28,
-                            description: 'MasterOrchestrator, TodoManager, TDD-Master, Planning v5'
-                        },
-                        {
-                            id: 3,
-                            name: 'Phase 3: Feature Orchestrators',
-                            status: 'completed',
-                            completion_percentage: 100,
-                            ac_ids_total: 16,
-                            ac_ids_complete: 16,
-                            description: 'Cleanup, ADO, Vacuum, Investigation, Sanitization, Multi-language Crawler (1586 tests passing)'
-                        },
-                        {
-                            id: 4,
-                            name: 'Phase 4: Intelligence Layer',
-                            status: 'planned',
-                            completion_percentage: 0,
-                            ac_ids_total: 8,
-                            ac_ids_complete: 0,
-                            description: 'LLM Intent Classifier, Vision API, Knowledge Graph, Learning'
-                        },
-                        {
-                            id: 4.5,
-                            name: 'Phase 4.5: Orchestrator Integration & Audit Validation',
-                            status: 'completed',
-                            completion_percentage: 100,
-                            ac_ids_total: 8,
-                            ac_ids_complete: 8,
-                            description: 'End-to-end integration testing (1586 tests passing)'
-                        },
-                        {
-                            id: 5,
-                            name: 'Phase 5: Legacy Migration & Decommission',
-                            status: 'planned',
-                            completion_percentage: 0,
-                            ac_ids_total: 3,
-                            ac_ids_complete: 0,
-                            description: 'Migrate from CORTEX 5.x, decommission scaffolding'
-                        }
-                    ]
-                };
             },
             
             renderDashboard() {
