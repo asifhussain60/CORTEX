@@ -377,7 +377,7 @@ class MasterOrchestrator:
                 'phase': enriched_context.get('current_phase', 'Phase 2'),
                 'orchestrator_name': match.orchestrator_id,
                 'version': '6.0.0',  # CORTEX version
-                'summary': result.get('message', 'Operation completed successfully.'),
+                'summary': getattr(result, 'message', 'Operation completed successfully.'),
                 'session_id': enriched_context.get('session_id'),
                 'token_usage_percentage': enriched_context.get('token_usage_percentage', 0),
                 'total_tokens': enriched_context.get('total_tokens', 0),

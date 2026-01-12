@@ -21,6 +21,7 @@ from src.orchestrators.audit_logger import (
     AuditLevel,
     AuditCategory
 )
+from src.infrastructure.enhanced_audit_logger import AuditStorage
 from src.mcp.mcp_decorator import mcp_tool
 
 
