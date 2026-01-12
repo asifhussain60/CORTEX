@@ -1,0 +1,943 @@
+{
+  "ac_id_map": {
+    "AC-ORCH-001": {
+      "id": "AC-ORCH-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-KNOW-001": {
+      "id": "AC-KNOW-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-INTEG-002": {
+      "id": "AC-INTEG-002",
+      "title": "",
+      "category": "integration",
+      "status": "planned",
+      "phase": "Phase 4.5 (Integration Tests)"
+    },
+    "AC-ROUTE-001": {
+      "id": "AC-ROUTE-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TEMPLATE-001": {
+      "id": "AC-TEMPLATE-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-EVIDENCE-003": {
+      "id": "AC-EVIDENCE-003",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-STATE-003": {
+      "id": "AC-STATE-003",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-PLAN-004": {
+      "id": "AC-PLAN-004",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TDD-004": {
+      "id": "AC-TDD-004",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TEMPLATE-008": {
+      "id": "AC-TEMPLATE-008",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TEMPLATE-005": {
+      "id": "AC-TEMPLATE-005",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-INTEG-011": {
+      "id": "AC-INTEG-011",
+      "title": "",
+      "category": "integration",
+      "status": "planned",
+      "phase": "Phase 4.5 (Integration Tests)"
+    },
+    "AC-INTEG-010": {
+      "id": "AC-INTEG-010",
+      "title": "",
+      "category": "integration",
+      "status": "planned",
+      "phase": "Phase 4.5 (Integration Tests)"
+    },
+    "AC-PLAN-007": {
+      "id": "AC-PLAN-007",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-INTEG-005": {
+      "id": "AC-INTEG-005",
+      "title": "",
+      "category": "integration",
+      "status": "planned",
+      "phase": "Phase 4.5 (Integration Tests)"
+    },
+    "AC-ROUTE-003": {
+      "id": "AC-ROUTE-003",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-ORCH-005": {
+      "id": "AC-ORCH-005",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-STS-001": {
+      "id": "AC-STS-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-INTEG-008": {
+      "id": "AC-INTEG-008",
+      "title": "",
+      "category": "integration",
+      "status": "planned",
+      "phase": "Phase 4.5 (Integration Tests)"
+    },
+    "AC-INV-001": {
+      "id": "AC-INV-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-ORCH-003": {
+      "id": "AC-ORCH-003",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-INV-002": {
+      "id": "AC-INV-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TDD-010": {
+      "id": "AC-TDD-010",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-INTEG-003": {
+      "id": "AC-INTEG-003",
+      "title": "",
+      "category": "integration",
+      "status": "planned",
+      "phase": "Phase 4.5 (Integration Tests)"
+    },
+    "AC-TDD-008": {
+      "id": "AC-TDD-008",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TODO-004": {
+      "id": "AC-TODO-004",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-GOV-002": {
+      "id": "AC-GOV-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-GOV-003": {
+      "id": "AC-GOV-003",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TODO-001": {
+      "id": "AC-TODO-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-SECURITY-005": {
+      "id": "AC-SECURITY-005",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-EVIDENCE-001": {
+      "id": "AC-EVIDENCE-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-STATE-002": {
+      "id": "AC-STATE-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-SECURITY-003": {
+      "id": "AC-SECURITY-003",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-AUDIT-004": {
+      "id": "AC-AUDIT-004",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-PLAN-001": {
+      "id": "AC-PLAN-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-ROUTE-004": {
+      "id": "AC-ROUTE-004",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TDD-009": {
+      "id": "AC-TDD-009",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-CRAWLER-003": {
+      "id": "AC-CRAWLER-003",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-SECURITY-007": {
+      "id": "AC-SECURITY-007",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TDD-001": {
+      "id": "AC-TDD-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TEMPLATE-002": {
+      "id": "AC-TEMPLATE-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-ADO-002": {
+      "id": "AC-ADO-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-CRAWLER-002": {
+      "id": "AC-CRAWLER-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-VAC-002": {
+      "id": "AC-VAC-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TDD-002": {
+      "id": "AC-TDD-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-ORCH-002": {
+      "id": "AC-ORCH-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-EVIDENCE-002": {
+      "id": "AC-EVIDENCE-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-AUDIT-005": {
+      "id": "AC-AUDIT-005",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-CRAWLER-001": {
+      "id": "AC-CRAWLER-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-LIFECYCLE-001": {
+      "id": "AC-LIFECYCLE-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-INTEG-007": {
+      "id": "AC-INTEG-007",
+      "title": "",
+      "category": "integration",
+      "status": "planned",
+      "phase": "Phase 4.5 (Integration Tests)"
+    },
+    "AC-INTEG-001": {
+      "id": "AC-INTEG-001",
+      "title": "",
+      "category": "integration",
+      "status": "planned",
+      "phase": "Phase 4.5 (Integration Tests)"
+    },
+    "AC-INTEG-012": {
+      "id": "AC-INTEG-012",
+      "title": "",
+      "category": "integration",
+      "status": "planned",
+      "phase": "Phase 4.5 (Integration Tests)"
+    },
+    "AC-CLEAN-001": {
+      "id": "AC-CLEAN-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-GOV-001": {
+      "id": "AC-GOV-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-SAN-001": {
+      "id": "AC-SAN-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-SECURITY-001": {
+      "id": "AC-SECURITY-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-STS-002": {
+      "id": "AC-STS-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TDD-005": {
+      "id": "AC-TDD-005",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-GOV-004": {
+      "id": "AC-GOV-004",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-SECURITY-008": {
+      "id": "AC-SECURITY-008",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TDD-003": {
+      "id": "AC-TDD-003",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-VAC-001": {
+      "id": "AC-VAC-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-ROUTE-005": {
+      "id": "AC-ROUTE-005",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-PLAN-008": {
+      "id": "AC-PLAN-008",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-AUDIT-002": {
+      "id": "AC-AUDIT-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TEMPLATE-004": {
+      "id": "AC-TEMPLATE-004",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-ROUTE-002": {
+      "id": "AC-ROUTE-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-ADO-003": {
+      "id": "AC-ADO-003",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-KNOW-002": {
+      "id": "AC-KNOW-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-SECURITY-004": {
+      "id": "AC-SECURITY-004",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-KNOW-003": {
+      "id": "AC-KNOW-003",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-ORCH-007": {
+      "id": "AC-ORCH-007",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-SAN-002": {
+      "id": "AC-SAN-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-PLAN-005": {
+      "id": "AC-PLAN-005",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TEMPLATE-006": {
+      "id": "AC-TEMPLATE-006",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-AUDIT-007": {
+      "id": "AC-AUDIT-007",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-ORCH-004": {
+      "id": "AC-ORCH-004",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TODO-003": {
+      "id": "AC-TODO-003",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-STATE-001": {
+      "id": "AC-STATE-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-AUDIT-001": {
+      "id": "AC-AUDIT-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-PLAN-006": {
+      "id": "AC-PLAN-006",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TEMPLATE-003": {
+      "id": "AC-TEMPLATE-003",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-CLEAN-002": {
+      "id": "AC-CLEAN-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-INTEG-006": {
+      "id": "AC-INTEG-006",
+      "title": "",
+      "category": "integration",
+      "status": "planned",
+      "phase": "Phase 4.5 (Integration Tests)"
+    },
+    "AC-TEMPLATE-007": {
+      "id": "AC-TEMPLATE-007",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-ORCH-006": {
+      "id": "AC-ORCH-006",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-SECURITY-002": {
+      "id": "AC-SECURITY-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-PLAN-002": {
+      "id": "AC-PLAN-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TDD-007": {
+      "id": "AC-TDD-007",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-INTEG-004": {
+      "id": "AC-INTEG-004",
+      "title": "",
+      "category": "integration",
+      "status": "planned",
+      "phase": "Phase 4.5 (Integration Tests)"
+    },
+    "AC-STS-003": {
+      "id": "AC-STS-003",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-PLAN-003": {
+      "id": "AC-PLAN-003",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-SECURITY-006": {
+      "id": "AC-SECURITY-006",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-AUDIT-006": {
+      "id": "AC-AUDIT-006",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-CLEAN-003": {
+      "id": "AC-CLEAN-003",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-AUDIT-003": {
+      "id": "AC-AUDIT-003",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TODO-002": {
+      "id": "AC-TODO-002",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-ADO-001": {
+      "id": "AC-ADO-001",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-INTEG-009": {
+      "id": "AC-INTEG-009",
+      "title": "",
+      "category": "integration",
+      "status": "planned",
+      "phase": "Phase 4.5 (Integration Tests)"
+    },
+    "AC-ORCH-008": {
+      "id": "AC-ORCH-008",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    },
+    "AC-TDD-006": {
+      "id": "AC-TDD-006",
+      "title": "",
+      "category": "",
+      "status": "",
+      "phase": 0
+    }
+  },
+  "category_index": {
+    "unknown": [
+      "AC-ORCH-001",
+      "AC-KNOW-001",
+      "AC-ROUTE-001",
+      "AC-TEMPLATE-001",
+      "AC-EVIDENCE-003",
+      "AC-STATE-003",
+      "AC-PLAN-004",
+      "AC-TDD-004",
+      "AC-TEMPLATE-008",
+      "AC-TEMPLATE-005",
+      "AC-PLAN-007",
+      "AC-ROUTE-003",
+      "AC-ORCH-005",
+      "AC-STS-001",
+      "AC-INV-001",
+      "AC-ORCH-003",
+      "AC-INV-002",
+      "AC-TDD-010",
+      "AC-TDD-008",
+      "AC-TODO-004",
+      "AC-GOV-002",
+      "AC-GOV-003",
+      "AC-TODO-001",
+      "AC-SECURITY-005",
+      "AC-EVIDENCE-001",
+      "AC-STATE-002",
+      "AC-SECURITY-003",
+      "AC-AUDIT-004",
+      "AC-PLAN-001",
+      "AC-ROUTE-004",
+      "AC-TDD-009",
+      "AC-CRAWLER-003",
+      "AC-SECURITY-007",
+      "AC-TDD-001",
+      "AC-TEMPLATE-002",
+      "AC-ADO-002",
+      "AC-CRAWLER-002",
+      "AC-VAC-002",
+      "AC-TDD-002",
+      "AC-ORCH-002",
+      "AC-EVIDENCE-002",
+      "AC-AUDIT-005",
+      "AC-CRAWLER-001",
+      "AC-LIFECYCLE-001",
+      "AC-CLEAN-001",
+      "AC-GOV-001",
+      "AC-SAN-001",
+      "AC-SECURITY-001",
+      "AC-STS-002",
+      "AC-TDD-005",
+      "AC-GOV-004",
+      "AC-SECURITY-008",
+      "AC-TDD-003",
+      "AC-VAC-001",
+      "AC-ROUTE-005",
+      "AC-PLAN-008",
+      "AC-AUDIT-002",
+      "AC-TEMPLATE-004",
+      "AC-ROUTE-002",
+      "AC-ADO-003",
+      "AC-KNOW-002",
+      "AC-SECURITY-004",
+      "AC-KNOW-003",
+      "AC-ORCH-007",
+      "AC-SAN-002",
+      "AC-PLAN-005",
+      "AC-TEMPLATE-006",
+      "AC-AUDIT-007",
+      "AC-ORCH-004",
+      "AC-TODO-003",
+      "AC-STATE-001",
+      "AC-AUDIT-001",
+      "AC-PLAN-006",
+      "AC-TEMPLATE-003",
+      "AC-CLEAN-002",
+      "AC-TEMPLATE-007",
+      "AC-ORCH-006",
+      "AC-SECURITY-002",
+      "AC-PLAN-002",
+      "AC-TDD-007",
+      "AC-STS-003",
+      "AC-PLAN-003",
+      "AC-SECURITY-006",
+      "AC-AUDIT-006",
+      "AC-CLEAN-003",
+      "AC-AUDIT-003",
+      "AC-TODO-002",
+      "AC-ADO-001",
+      "AC-ORCH-008",
+      "AC-TDD-006"
+    ],
+    "integration": [
+      "AC-INTEG-002",
+      "AC-INTEG-011",
+      "AC-INTEG-010",
+      "AC-INTEG-005",
+      "AC-INTEG-008",
+      "AC-INTEG-003",
+      "AC-INTEG-007",
+      "AC-INTEG-001",
+      "AC-INTEG-012",
+      "AC-INTEG-006",
+      "AC-INTEG-004",
+      "AC-INTEG-009"
+    ]
+  },
+  "status_index": {
+    "unknown": [
+      "AC-ORCH-001",
+      "AC-KNOW-001",
+      "AC-ROUTE-001",
+      "AC-TEMPLATE-001",
+      "AC-EVIDENCE-003",
+      "AC-STATE-003",
+      "AC-PLAN-004",
+      "AC-TDD-004",
+      "AC-TEMPLATE-008",
+      "AC-TEMPLATE-005",
+      "AC-PLAN-007",
+      "AC-ROUTE-003",
+      "AC-ORCH-005",
+      "AC-STS-001",
+      "AC-INV-001",
+      "AC-ORCH-003",
+      "AC-INV-002",
+      "AC-TDD-010",
+      "AC-TDD-008",
+      "AC-TODO-004",
+      "AC-GOV-002",
+      "AC-GOV-003",
+      "AC-TODO-001",
+      "AC-SECURITY-005",
+      "AC-EVIDENCE-001",
+      "AC-STATE-002",
+      "AC-SECURITY-003",
+      "AC-AUDIT-004",
+      "AC-PLAN-001",
+      "AC-ROUTE-004",
+      "AC-TDD-009",
+      "AC-CRAWLER-003",
+      "AC-SECURITY-007",
+      "AC-TDD-001",
+      "AC-TEMPLATE-002",
+      "AC-ADO-002",
+      "AC-CRAWLER-002",
+      "AC-VAC-002",
+      "AC-TDD-002",
+      "AC-ORCH-002",
+      "AC-EVIDENCE-002",
+      "AC-AUDIT-005",
+      "AC-CRAWLER-001",
+      "AC-LIFECYCLE-001",
+      "AC-CLEAN-001",
+      "AC-GOV-001",
+      "AC-SAN-001",
+      "AC-SECURITY-001",
+      "AC-STS-002",
+      "AC-TDD-005",
+      "AC-GOV-004",
+      "AC-SECURITY-008",
+      "AC-TDD-003",
+      "AC-VAC-001",
+      "AC-ROUTE-005",
+      "AC-PLAN-008",
+      "AC-AUDIT-002",
+      "AC-TEMPLATE-004",
+      "AC-ROUTE-002",
+      "AC-ADO-003",
+      "AC-KNOW-002",
+      "AC-SECURITY-004",
+      "AC-KNOW-003",
+      "AC-ORCH-007",
+      "AC-SAN-002",
+      "AC-PLAN-005",
+      "AC-TEMPLATE-006",
+      "AC-AUDIT-007",
+      "AC-ORCH-004",
+      "AC-TODO-003",
+      "AC-STATE-001",
+      "AC-AUDIT-001",
+      "AC-PLAN-006",
+      "AC-TEMPLATE-003",
+      "AC-CLEAN-002",
+      "AC-TEMPLATE-007",
+      "AC-ORCH-006",
+      "AC-SECURITY-002",
+      "AC-PLAN-002",
+      "AC-TDD-007",
+      "AC-STS-003",
+      "AC-PLAN-003",
+      "AC-SECURITY-006",
+      "AC-AUDIT-006",
+      "AC-CLEAN-003",
+      "AC-AUDIT-003",
+      "AC-TODO-002",
+      "AC-ADO-001",
+      "AC-ORCH-008",
+      "AC-TDD-006"
+    ],
+    "planned": [
+      "AC-INTEG-002",
+      "AC-INTEG-011",
+      "AC-INTEG-010",
+      "AC-INTEG-005",
+      "AC-INTEG-008",
+      "AC-INTEG-003",
+      "AC-INTEG-007",
+      "AC-INTEG-001",
+      "AC-INTEG-012",
+      "AC-INTEG-006",
+      "AC-INTEG-004",
+      "AC-INTEG-009"
+    ]
+  },
+  "by_category": {
+    "unknown": {
+      "count": 90
+    },
+    "integration": {
+      "count": 12
+    }
+  },
+  "total_count": 102
+}
