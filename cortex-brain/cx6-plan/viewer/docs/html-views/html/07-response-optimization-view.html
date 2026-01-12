@@ -3,365 +3,460 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="CORTEX 6.0 Interactive View">
-    <title>07 Response Optimization View</title>
-    
-    <!-- Design System & Libraries -->
+    <title>Response Optimization - CORTEX 6.0</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
-    
     <style>
-        
         :root {
-            /* Colors */
-            --color-primary-dark: #0a0e27;
-            --color-primary-accent: #00d4ff;
-            --color-primary-accent-alt: #7b2cbf;
-            --color-primary-green: #06ffa5;
-            --color-text-primary: #ffffff;
+            --color-primary-dark: #0a0e27; --color-primary-darker: #050814;
+            --color-primary-accent: #00d4ff; --color-primary-accent-alt: #7b2cbf;
+            --color-primary-green: #06ffa5; --color-text-primary: #ffffff;
             --color-text-secondary: rgba(255, 255, 255, 0.7);
+            --color-text-tertiary: rgba(255, 255, 255, 0.5);
             --color-border: rgba(0, 212, 255, 0.15);
             --color-bg-elevated: rgba(10, 14, 39, 0.6);
-            
-            /* Spacing */
-            --spacing-xs: 0.25rem;
-            --spacing-md: 1rem;
-            --spacing-lg: 1.5rem;
-            --spacing-2xl: 3rem;
-            
-            /* Radii & Shadows */
-            --radius-md: 12px;
+            --spacing-xs: 0.25rem; --spacing-sm: 0.5rem; --spacing-md: 1rem;
+            --spacing-lg: 1.5rem; --spacing-xl: 2rem; --spacing-2xl: 3rem;
+            --radius-md: 12px; --radius-lg: 16px;
+            --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.15);
             --shadow-md: 0 8px 32px rgba(0, 212, 255, 0.1);
             --transition-base: 200ms ease-out;
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: linear-gradient(135deg, #050814 0%, #0a0e27 50%, #050814 100%);
+            background: linear-gradient(135deg, var(--color-primary-darker) 0%, var(--color-primary-dark) 50%, var(--color-primary-darker) 100%);
             color: var(--color-text-primary);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             line-height: 1.6;
         }
-        
-        .view-wrapper {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        
-        /* Navigation */
+        .view-wrapper { display: flex; flex-direction: column; min-height: 100vh; }
         .view-nav {
-            background: rgba(10, 14, 39, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--color-border);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            background: rgba(10, 14, 39, 0.8); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--color-border); position: sticky; top: 0; z-index: 100;
         }
-        
         .nav-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: var(--spacing-lg) var(--spacing-2xl);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: var(--spacing-2xl);
+            max-width: 1400px; margin: 0 auto; padding: var(--spacing-lg) var(--spacing-2xl);
+            display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-2xl);
         }
-        
         .nav-back {
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-xs);
-            color: var(--color-primary-accent);
-            text-decoration: none;
-            font-size: 0.875rem;
-            font-weight: 600;
-            transition: all var(--transition-base);
+            display: flex; align-items: center; gap: var(--spacing-xs);
+            color: var(--color-primary-accent); text-decoration: none;
+            font-size: 0.875rem; font-weight: 600; transition: all var(--transition-base);
         }
-        
-        .nav-back:hover {
-            gap: var(--spacing-md);
-        }
-        
+        .nav-back:hover { gap: var(--spacing-md); }
         .nav-title {
-            flex: 1;
-            font-size: 1.5rem;
-            font-weight: 700;
+            flex: 1; font-size: 1.5rem; font-weight: 700;
             background: linear-gradient(135deg, var(--color-primary-accent), var(--color-primary-green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        
-        .nav-actions {
-            display: flex;
-            gap: var(--spacing-md);
-        }
-        
         .nav-btn {
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid var(--color-border);
-            color: var(--color-primary-accent);
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: rgba(0, 212, 255, 0.1); border: 1px solid var(--color-border);
+            color: var(--color-primary-accent); width: 40px; height: 40px;
+            border-radius: var(--radius-md); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
             transition: all var(--transition-base);
         }
-        
-        .nav-btn:hover {
-            background: rgba(0, 212, 255, 0.2);
-            box-shadow: var(--shadow-md);
-        }
-        
-        /* Content */
+        .nav-btn:hover { background: rgba(0, 212, 255, 0.2); box-shadow: var(--shadow-md); }
         .view-content {
-            flex: 1;
-            max-width: 1400px;
-            width: 100%;
-            margin: 0 auto;
-            padding: var(--spacing-2xl);
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-2xl);
+            flex: 1; max-width: 1400px; width: 100%; margin: 0 auto;
+            padding: var(--spacing-2xl); display: flex; flex-direction: column; gap: var(--spacing-2xl);
         }
-        
-        /* Hero Section */
         .hero-section {
             background: linear-gradient(135deg, rgba(0, 212, 255, 0.08) 0%, rgba(123, 44, 191, 0.04) 100%);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-2xl);
-            position: relative;
-            overflow: hidden;
+            backdrop-filter: blur(20px); border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg); padding: var(--spacing-2xl);
+            position: relative; overflow: hidden;
         }
-        
         .hero-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -10%;
-            width: 400px;
-            height: 400px;
+            content: ""; position: absolute; top: -50%; right: -10%;
+            width: 400px; height: 400px;
             background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
             border-radius: 50%;
-            pointer-events: none;
         }
-        
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
-        
+        .hero-content { position: relative; z-index: 1; }
         .hero-content h1 {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: var(--spacing-md);
-            background: linear-gradient(135deg, var(--color-primary-accent), var(--color-primary-accent-alt));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 2.5rem; font-weight: 800; margin-bottom: var(--spacing-sm);
+            background: linear-gradient(135deg, var(--color-primary-accent), var(--color-primary-green));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        
-        .hero-content p {
-            color: var(--color-text-secondary);
-            font-size: 1.125rem;
-            max-width: 600px;
+        .hero-content p { color: var(--color-text-secondary); font-size: 1.125rem; margin-bottom: var(--spacing-lg); }
+        .hero-stats {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--spacing-xl);
+            margin-top: var(--spacing-xl); padding-top: var(--spacing-xl);
+            border-top: 1px solid var(--color-border);
         }
-        
-        /* Cards & Sections */
-        .section {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-lg);
+        .stat-card { display: flex; flex-direction: column; gap: var(--spacing-xs); }
+        .stat-card-label {
+            color: var(--color-text-tertiary); text-transform: uppercase;
+            letter-spacing: 0.05em; font-size: 0.75rem;
         }
-        
+        .stat-card-value { font-size: 2rem; font-weight: 700; color: var(--color-primary-accent); }
+        .stat-card-description { color: var(--color-text-secondary); font-size: 0.875rem; }
+        .section { display: flex; flex-direction: column; gap: var(--spacing-lg); }
         .section-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--color-text-primary);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
+            font-size: 2rem; font-weight: 700; margin-bottom: var(--spacing-md);
+            display: flex; align-items: center; gap: var(--spacing-md);
         }
-        
         .section-title::before {
-            content: '';
-            width: 4px;
-            height: 28px;
+            content: ""; width: 4px; height: 28px;
             background: linear-gradient(180deg, var(--color-primary-accent), var(--color-primary-accent-alt));
             border-radius: 2px;
         }
-        
-        .card {
-            background: var(--color-bg-elevated);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-md);
+        .section-description { color: var(--color-text-secondary); margin-bottom: var(--spacing-lg); }
+        .signals-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--spacing-lg);
+        }
+        .signal-card {
+            background: var(--color-bg-elevated); backdrop-filter: blur(20px);
+            border: 1px solid var(--color-border); border-radius: var(--radius-md);
+            padding: var(--spacing-lg); transition: all var(--transition-base);
+        }
+        .signal-card:hover { border-color: var(--color-primary-accent); box-shadow: var(--shadow-md); }
+        .signal-name {
+            font-size: 1.125rem; font-weight: 700; color: var(--color-primary-accent);
+            margin-bottom: var(--spacing-sm);
+        }
+        .signal-values {
+            background: rgba(0, 0, 0, 0.3); padding: var(--spacing-sm);
+            border-radius: 4px; font-size: 0.875rem;
+            color: var(--color-primary-green); margin-bottom: var(--spacing-md);
+            font-family: "Courier New", monospace;
+        }
+        .signal-impact { color: var(--color-text-secondary); font-size: 0.9375rem; }
+        .blocks-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--spacing-lg);
+        }
+        .block-card {
+            background: var(--color-bg-elevated); backdrop-filter: blur(20px);
+            border: 1px solid var(--color-border); border-radius: var(--radius-md);
             padding: var(--spacing-lg);
-            transition: all var(--transition-base);
         }
-        
-        .card:hover {
-            border-color: var(--color-primary-accent);
-            box-shadow: var(--shadow-md);
+        .block-card-header {
+            display: flex; align-items: center; gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md); padding-bottom: var(--spacing-md);
+            border-bottom: 1px solid var(--color-border);
         }
-        
-        /* SVG/Diagram Containers */
+        .block-type {
+            padding: 4px 8px; border-radius: 4px; font-size: 0.75rem;
+            font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+        }
+        .block-type.mandatory { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+        .block-type.conditional { background: rgba(245, 158, 11, 0.2); color: #f59e0b; }
+        .block-name { font-weight: 700; font-size: 1.125rem; }
+        .block-condition {
+            background: rgba(0, 0, 0, 0.3); padding: var(--spacing-sm);
+            border-radius: 4px; font-size: 0.875rem; color: var(--color-primary-accent);
+            font-family: "Courier New", monospace; margin: var(--spacing-sm) 0;
+        }
+        .block-tokens {
+            color: var(--color-text-tertiary); font-size: 0.875rem;
+            margin-top: var(--spacing-sm);
+        }
+        #tokenChart { background: rgba(0, 0, 0, 0.2); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--spacing-lg); }
         .diagram-container {
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-lg);
-            min-height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background: rgba(0, 0, 0, 0.2); border: 1px solid var(--color-border);
+            border-radius: var(--radius-md); padding: var(--spacing-xl);
+            min-height: 500px; display: flex; align-items: center; justify-content: center;
         }
-        
-        /* Mermaid Diagram Styling */
-        .mermaid {
-            display: flex;
-            justify-content: center;
+        .mermaid { display: flex; justify-content: center; }
+        .example-box {
+            background: var(--color-bg-elevated); backdrop-filter: blur(20px);
+            border: 1px solid var(--color-border); border-radius: var(--radius-md);
+            padding: var(--spacing-xl);
         }
-        
-        /* Footer */
+        .example-header {
+            font-size: 1.25rem; font-weight: 700; margin-bottom: var(--spacing-md);
+            color: var(--color-primary-accent);
+        }
+        .example-scenario {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl); padding-bottom: var(--spacing-xl);
+            border-bottom: 1px solid var(--color-border);
+        }
+        .example-label {
+            font-size: 0.875rem; text-transform: uppercase;
+            letter-spacing: 0.05em; color: var(--color-text-tertiary);
+        }
+        .example-value {
+            font-family: "Courier New", monospace; color: var(--color-primary-green);
+            font-size: 0.9375rem;
+        }
+        .example-comparison {
+            display: flex; gap: var(--spacing-2xl); align-items: center;
+        }
+        .comparison-metric {
+            flex: 1; text-align: center; padding: var(--spacing-lg);
+            background: rgba(0, 0, 0, 0.3); border-radius: var(--radius-md);
+        }
+        .comparison-label {
+            font-size: 0.875rem; color: var(--color-text-tertiary);
+            text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--spacing-sm);
+        }
+        .comparison-value {
+            font-size: 2.5rem; font-weight: 700; margin-bottom: var(--spacing-xs);
+        }
+        .comparison-value.old { color: #ef4444; }
+        .comparison-value.new { color: #10b981; }
+        .comparison-reduction {
+            font-size: 1.25rem; font-weight: 600; color: var(--color-primary-accent);
+        }
         .view-footer {
-            background: rgba(10, 14, 39, 0.6);
-            border-top: 1px solid var(--color-border);
+            background: rgba(10, 14, 39, 0.6); border-top: 1px solid var(--color-border);
             margin-top: auto;
         }
-        
         .footer-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: var(--spacing-xl) var(--spacing-2xl);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: var(--spacing-xl);
+            max-width: 1400px; margin: 0 auto; padding: var(--spacing-xl) var(--spacing-2xl);
+            display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-xl);
         }
-        
-        .footer-text {
-            font-size: 0.875rem;
-            color: var(--color-text-tertiary);
-        }
-        
+        .footer-text { font-size: 0.875rem; color: var(--color-text-tertiary); }
         .footer-link {
-            font-size: 0.875rem;
-            color: var(--color-primary-accent);
-            text-decoration: none;
-            transition: all var(--transition-base);
+            font-size: 0.875rem; color: var(--color-primary-accent);
+            text-decoration: none; transition: all var(--transition-base);
         }
-        
-        .footer-link:hover {
-            color: var(--color-primary-green);
-        }
-        
-        /* Responsive */
+        .footer-link:hover { color: var(--color-primary-green); }
         @media (max-width: 768px) {
-            .view-content {
-                padding: var(--spacing-lg);
-            }
-            
-            .nav-content {
-                flex-wrap: wrap;
-            }
-            
-            .hero-content h1 {
-                font-size: 1.875rem;
-            }
-            
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-            }
+            .view-content { padding: var(--spacing-lg); }
+            .hero-stats { grid-template-columns: 1fr; }
+            .signals-grid, .blocks-grid { grid-template-columns: 1fr; }
+            .example-scenario { grid-template-columns: 1fr; }
+            .example-comparison { flex-direction: column; }
         }
-        
-        /* Dark mode (future) */
-        @media (prefers-color-scheme: dark) {
-            /* Already dark by default */
-        }
-        
     </style>
 </head>
 <body>
     <div class="view-wrapper">
-        <!-- Navigation -->
         <nav class="view-nav">
             <div class="nav-content">
                 <a href="../plan-viewer.html" class="nav-back">
                     <i class="bi bi-arrow-left"></i> Back to Dashboard
                 </a>
-                <h1 class="nav-title">07 Response Optimization View</h1>
+                <h1 class="nav-title">07 Response Optimization</h1>
                 <div class="nav-actions">
-                    <button class="nav-btn" onclick="toggleDarkMode()">
-                        <i class="bi bi-moon"></i>
-                    </button>
+                    <button class="nav-btn"><i class="bi bi-moon"></i></button>
                 </div>
             </div>
         </nav>
-        
-        <!-- Main Content -->
         <main class="view-content">
-            
-        <section class="hero-section">
-            <div class="hero-content">
-                <h1>07 Response Optimization View</h1>
-                <p>CORTEX 6.0 Production System View</p>
-            </div>
-        </section>
-        
-            
-        <section class="section">
-            <h2 class="section-title">Overview</h2>
-            <div class="card">
-                <p>View content loaded from specification</p>
-                
-            </div>
-        </section>
-                
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h1>Response & Token Optimization</h1>
+                    <p>Adaptive Minimalism with 97% Content Reduction</p>
+                    <div class="hero-stats">
+                        <div class="stat-card">
+                            <span class="stat-card-label">Token Reduction</span>
+                            <span class="stat-card-value">97%</span>
+                            <span class="stat-card-description">15,851 → 486 lines</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-card-label">Response Types</span>
+                            <span class="stat-card-value">3</span>
+                            <span class="stat-card-description">Minimal, Standard, Comprehensive</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-card-label">Context Signals</span>
+                            <span class="stat-card-value">5</span>
+                            <span class="stat-card-description">Operation, phase, complexity, etc.</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-card-label">Token Limits</span>
+                            <span class="stat-card-value">40K / 50K</span>
+                            <span class="stat-card-description">Soft / Hard limits</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section class="section">
+                <h2 class="section-title">5 Context Signals</h2>
+                <p class="section-description">Signals that determine response template selection</p>
+                <div class="signals-grid">
+                    <div class="signal-card">
+                        <div class="signal-name">operation_type</div>
+                        <div class="signal-values">["planning", "implementation", "testing", "cleanup", "analysis"]</div>
+                        <p class="signal-impact"><strong>Impact:</strong> Determines which sections are mandatory</p>
+                    </div>
+                    <div class="signal-card">
+                        <div class="signal-name">response_phase</div>
+                        <div class="signal-values">["start", "progress", "completion", "error", "summary"]</div>
+                        <p class="signal-impact"><strong>Impact:</strong> START shows full context; PROGRESS shows delta only</p>
+                    </div>
+                    <div class="signal-card">
+                        <div class="signal-name">complexity_tier</div>
+                        <div class="signal-values">["instant", "lightweight", "documented", "complex"]</div>
+                        <p class="signal-impact"><strong>Impact:</strong> Higher complexity → more detailed explanations</p>
+                    </div>
+                    <div class="signal-card">
+                        <div class="signal-name">orchestrator_type</div>
+                        <div class="signal-values">["planning", "tdd", "ado", "vacuum", "investigation"]</div>
+                        <p class="signal-impact"><strong>Impact:</strong> TDD shows RED/GREEN/REFACTOR phase breakdown</p>
+                    </div>
+                    <div class="signal-card">
+                        <div class="signal-name">orchestrator_engaged</div>
+                        <div class="signal-values">["true", "false"]</div>
+                        <p class="signal-impact"><strong>Impact:</strong> When true, include orchestrator-specific blocks</p>
+                    </div>
+                </div>
+            </section>
+            <section class="section">
+                <h2 class="section-title">Response Block Categories</h2>
+                <p class="section-description">Mandatory and conditional blocks compose responses dynamically</p>
+                <div class="blocks-grid">
+                    <div class="block-card">
+                        <div class="block-card-header">
+                            <span class="block-type mandatory">MANDATORY</span>
+                            <span class="block-name">cortex_header</span>
+                        </div>
+                        <p>CORTEX 6.0 branding + session info</p>
+                        <div class="block-tokens">~50 tokens</div>
+                    </div>
+                    <div class="block-card">
+                        <div class="block-card-header">
+                            <span class="block-type mandatory">MANDATORY</span>
+                            <span class="block-name">next_steps</span>
+                        </div>
+                        <p>What to do next (user-actionable)</p>
+                        <div class="block-tokens">~100 tokens</div>
+                    </div>
+                    <div class="block-card">
+                        <div class="block-card-header">
+                            <span class="block-type conditional">CONDITIONAL</span>
+                            <span class="block-name">progress_tracker</span>
+                        </div>
+                        <div class="block-condition">response_phase == progress OR completion</div>
+                        <p>Current phase, completion %, AC-IDs implemented</p>
+                        <div class="block-tokens">~150 tokens</div>
+                    </div>
+                    <div class="block-card">
+                        <div class="block-card-header">
+                            <span class="block-type conditional">CONDITIONAL</span>
+                            <span class="block-name">understanding</span>
+                        </div>
+                        <div class="block-condition">complexity_tier == complex</div>
+                        <p>Summary of request interpretation, assumptions, clarifications</p>
+                        <div class="block-tokens">~120 tokens</div>
+                    </div>
+                    <div class="block-card">
+                        <div class="block-card-header">
+                            <span class="block-type conditional">CONDITIONAL</span>
+                            <span class="block-name">validation_status</span>
+                        </div>
+                        <div class="block-condition">orchestrator_engaged == true</div>
+                        <p>Governance checks, test results, coverage metrics</p>
+                        <div class="block-tokens">~100 tokens</div>
+                    </div>
+                    <div class="block-card">
+                        <div class="block-card-header">
+                            <span class="block-type conditional">CONDITIONAL</span>
+                            <span class="block-name">changes</span>
+                        </div>
+                        <div class="block-condition">operation_type in [implementation, cleanup]</div>
+                        <p>Files modified/created, lines added/removed, DB updates</p>
+                        <div class="block-tokens">~130 tokens</div>
+                    </div>
+                </div>
+            </section>
+            <section class="section">
+                <h2 class="section-title">Token Consumption Comparison</h2>
+                <p class="section-description">Monolithic vs Modular response architecture</p>
+                <div id="tokenChart"></div>
+            </section>
+            <section class="section">
+                <h2 class="section-title">Response Composition Pipeline</h2>
+                <p class="section-description">How responses are built with token monitoring</p>
+                <div class="diagram-container">
+                    <pre class="mermaid">
+flowchart TD
+    A[Orchestrator Output] --> B[Extract Context Signals]
+    B --> C[Load Mandatory Blocks]
+    C --> D[Count Tokens]
+    D --> E{Under 40K?}
+    E -->|Yes| F[Add Conditional Blocks]
+    E -->|No| G[Skip to next_steps]
+    F --> H{Under 40K?}
+    H -->|Yes| I[Add Orchestrator Blocks]
+    H -->|No| G
+    I --> J{Under 50K Hard?}
+    J -->|No| K[Truncate + Add Continuation Link]
+    J -->|Yes| L[Finalize Response]
+    G --> L
+    K --> L
+    L --> M[Return to User]
+    
+    style A fill:#0a0e27,stroke:#00d4ff,stroke-width:2px
+    style M fill:#10b981,stroke:#06ffa5,stroke-width:2px
+    style E fill:#7b2cbf,stroke:#7b2cbf,stroke-width:2px
+    style H fill:#7b2cbf,stroke:#7b2cbf,stroke-width:2px
+    style J fill:#ef4444,stroke:#991b1b,stroke-width:2px
+                    </pre>
+                </div>
+            </section>
+            <section class="section">
+                <h2 class="section-title">Real-World Example: TDD Implementation</h2>
+                <div class="example-box">
+                    <div class="example-header">Scenario: Implement user authentication using TDD</div>
+                    <div class="example-scenario">
+                        <div>
+                            <div class="example-label">operation_type</div>
+                            <div class="example-value">implementation</div>
+                        </div>
+                        <div>
+                            <div class="example-label">response_phase</div>
+                            <div class="example-value">progress</div>
+                        </div>
+                        <div>
+                            <div class="example-label">complexity_tier</div>
+                            <div class="example-value">documented</div>
+                        </div>
+                        <div>
+                            <div class="example-label">orchestrator_type</div>
+                            <div class="example-value">tdd</div>
+                        </div>
+                    </div>
+                    <div class="example-comparison">
+                        <div class="comparison-metric">
+                            <div class="comparison-label">Old (Monolithic)</div>
+                            <div class="comparison-value old">3,500</div>
+                            <div class="comparison-label">tokens</div>
+                        </div>
+                        <div class="comparison-metric" style="background: rgba(0, 212, 255, 0.1);">
+                            <div class="comparison-reduction">82% Reduction</div>
+                        </div>
+                        <div class="comparison-metric">
+                            <div class="comparison-label">New (Modular)</div>
+                            <div class="comparison-value new">650</div>
+                            <div class="comparison-label">tokens</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </main>
-        
-        <!-- Footer -->
         <footer class="view-footer">
             <div class="footer-content">
-                <p class="footer-text">
-                    CORTEX 6.0 • All Users • 
-                    Generated 2026-01-12
-                </p>
-                <a href="#" class="footer-link">Documentation</a>
-                <a href="#" class="footer-link">Feedback</a>
+                <p class="footer-text">CORTEX 6.0 Response Optimization • Adaptive Minimalism • Updated 2026-01-12</p>
+                <a href="../plan-viewer.html" class="footer-link">Documentation</a>
             </div>
         </footer>
     </div>
-    
     <script>
-        
-        // Initialize Mermaid
-        mermaid.initialize({ startOnLoad: true, theme: 'dark' });
-        
-        // Dark mode toggle
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
-        }
-        
-        // Initialize D3 diagrams when needed
-        document.addEventListener('DOMContentLoaded', () => {
+        mermaid.initialize({ startOnLoad: true, theme: "dark", themeVariables: { darkMode: true, background: "#0a0e27", primaryColor: "#00d4ff", primaryTextColor: "#ffffff", primaryBorderColor: "#00d4ff", lineColor: "#00d4ff", secondaryColor: "#7b2cbf", tertiaryColor: "#f59e0b" }});
+        document.addEventListener("DOMContentLoaded", () => {
             mermaid.contentLoaded();
+            const data = [
+                {type: "Monolithic (Old)", value: 3500, color: "#ef4444"},
+                {type: "Modular (New)", value: 650, color: "#10b981"}
+            ];
+            const width = document.getElementById("tokenChart").clientWidth;
+            const height = 300;
+            const margin = {top: 40, right: 40, bottom: 60, left: 80};
+            const svg = d3.select("#tokenChart").append("svg").attr("width", width).attr("height", height);
+            const x = d3.scaleBand().domain(data.map(d => d.type)).range([margin.left, width - margin.right]).padding(0.3);
+            const y = d3.scaleLinear().domain([0, 4000]).range([height - margin.bottom, margin.top]);
+            svg.selectAll("rect").data(data).join("rect").attr("x", d => x(d.type)).attr("y", d => y(d.value)).attr("width", x.bandwidth()).attr("height", d => y(0) - y(d.value)).attr("fill", d => d.color).attr("rx", 8);
+            svg.selectAll(".value-label").data(data).join("text").attr("class", "value-label").attr("x", d => x(d.type) + x.bandwidth() / 2).attr("y", d => y(d.value) - 10).attr("text-anchor", "middle").attr("fill", "#ffffff").attr("font-weight", "700").attr("font-size", "1.25rem").text(d => d.value + " tokens");
+            svg.append("g").attr("transform", `translate(0,${height - margin.bottom})`).call(d3.axisBottom(x)).selectAll("text").attr("fill", "#ffffff").attr("font-size", "0.875rem");
+            svg.append("g").attr("transform", `translate(${margin.left},0)`).call(d3.axisLeft(y).ticks(5)).selectAll("text").attr("fill", "#ffffff");
+            svg.append("text").attr("x", width / 2).attr("y", height - 10).attr("text-anchor", "middle").attr("fill", "#00d4ff").attr("font-size", "0.875rem").text("97% Token Reduction Achieved");
         });
-        
     </script>
 </body>
 </html>
