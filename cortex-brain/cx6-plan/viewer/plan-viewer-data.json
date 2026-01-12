@@ -1,11 +1,11 @@
 {
   "plan_metadata": {
     "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
-    "total_ac_ids": 59,
+    "total_ac_ids": 175,
     "completed_ac_ids": 92,
     "in_progress_ac_ids": 0,
     "version": "1.2.0",
-    "updated": "2026-01-12T15:21:50.691780+00:00",
+    "updated": "2026-01-12T15:24:32.687441+00:00",
     "status": "phases_1_to_5_defined_4.5_integration_tests_added"
   },
   "phases": [
