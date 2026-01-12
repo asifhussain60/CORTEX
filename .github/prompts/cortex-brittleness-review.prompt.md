@@ -1,15 +1,19 @@
 ---
 agent: agent
 ---
-# CORTEX6: Cortex Search-and-Fix (Day-Zero Brittleness & Risk Review + Toolkit Alignment)
-**Version:** 2.1.0 (Plan-Integrated with Regression Prevention + CORTEX Toolkit Coherence)  
-**Date:** 2026-01-12
 
+# 🔍 CORTEX Brittleness Review – Day-Zero Risk Analysis
 
+**Purpose:** Analyze CORTEX codebase for brittleness, breakage points, and production risks  
+**Version:** 2.1.0 (Plan-Integrated with Regression Prevention)  
+**Date:** 2026-01-12  
+**Governance:** CORE-002 (no root files), CORE-017 (governance enforcement), CORE-009 (plan organization), CORE-025 (intelligent challenge)
+
+---
 
 ## 🔗 MASTERORCHESTRATOR DELEGATION
 
-**All implementation delegated to unified orchestrator:**
+**All findings delegated to unified orchestrator for planning:**
 
 ```bash
 # Execute via MasterOrchestrator (central control)
@@ -19,85 +23,59 @@ python3 -m src.main "{user_intent}" --orchestrator master --format markdown
 **MasterOrchestrator handles:**
 - ✅ Load governance rules (tier0/tier1/tier2/tier3)
 - ✅ Validate against SKULL rules
-- ✅ Create TodoManager tasks
-- ✅ Execute tasks in dependency order
-- ✅ Update progress-tracker.json (atomic writes)
-- ✅ Enforce phase gates
-- ✅ Return structured results
+- ✅ Create AC-IDs for brittleness findings
+- ✅ Append to AC-INDEX.yaml
+- ✅ Update master-plan.yaml with new AC-IDs
+- ✅ Update progress-tracker.json
+- ✅ Trigger SyncOrchestrator for dashboard
 
 **Do NOT:**
-- ❌ Directly modify progress-tracker.json
 - ❌ Directly modify AC-INDEX.yaml
-- ❌ Call sync_plan_viewer_data.py multiple times
-- ❌ Manipulate state outside MasterOrchestrator
+- ❌ Directly modify progress-tracker.json
+- ❌ Create separate brittleness files
+- ❌ Update tracker manually
 
 ---
 
-## 🛡️ REGRESSION PREVENTION (See CORTEX.prompt.md § "UNIFIED REGRESSION CHECK")
+## 🛡️ REGRESSION PREVENTION (Reference Only)
 
-**Reference:** CORTEX.prompt.md maintains the unified regression check. All prompts use the same check.
+**Reference:** CORTEX.prompt.md maintains unified regression check via MasterOrchestrator.
 
-**Quick Verification:**
-```bash
-python3 << 'EOF'
-import json, yaml, sys
-errors = []
-try:
-    ac_index = yaml.safe_load(open('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml'))
-    if not ac_index.get('schema_version'): errors.append("AC-INDEX schema missing")
-except Exception as e: errors.append(f"AC-INDEX: {e}")
-try:
-    tracker = json.load(open('cortex-brain/tier1/tracking/progress-tracker.json'))
-    if not tracker.get('current_phase'): errors.append("tracker phase missing")
-except Exception as e: errors.append(f"tracker: {e}")
-try:
-    plan = yaml.safe_load(open('cortex-brain/cx6-plan/master-plan.yaml'))
-    if not plan.get('plan_metadata'): errors.append("plan metadata missing")
-except Exception as e: errors.append(f"plan: {e}")
-if errors:
-    print("❌ " + " | ".join(errors)); sys.exit(1)
-print("✅ State valid")
-EOF
-```
+**This prompt DOES NOT perform direct file access.** All state validation delegated to Python orchestrator.
 
-## Repeatable "Tool" Behavior (avoid file bloat)
-- Do **NOT** create separate YAML/JSON files for findings.
-- **APPEND directly to AC-INDEX.yaml** (the single source of truth).
-- If an AC-ID already exists, update it in-place rather than duplicating.
-- After appending, update `progress-tracker.json` and run `sync_plan_viewer_data.py`.
+**Why not embed code?** When MasterOrchestrator is updated, regression check automatically improves for all prompts (DRY principle).
 
-## Required Output Format
-1) A concise summary (paragraphs + bullets), broken into sections.
-2) AC-ID entries ready to **APPEND to AC-INDEX.yaml** (not a separate file).
-3) The payload must be **idempotent**: same findings should map to the same stable IDs and update in-place.
+---
 
-You are reviewing the CORTEX6 plan and implementation for production-readiness under real load, partial failure, and ongoing change. Your job is to search across the entire repo/landscape and identify brittleness, breakage points, and material risks—then recommend the simplest robust improvements with minimal impact and no scope creep.
+## 🛡️ INTELLIGENT CHALLENGE PROTOCOL (CORE-025)
+
+**Purpose:** Validate analysis findings against governance and feasibility.
+
+**Implementation:** Delegated to MasterOrchestrator → RequestValidator.
+
+**Reference:** `.github/prompts/CORTEX-ALIGN.prompt.md § INTELLIGENT CHALLENGE PROTOCOL`
 
 ---
 
 ## 🔗 PLAN INTEGRATION (CRITICAL)
 
-**This review MUST integrate findings into the cx6-plan:**
+**This review integrates findings into the cx6-plan:**
 
 | Plan Asset | Integration Role |
 |------------|------------------|
 | `master-plan.yaml` | Add new AC-IDs to appropriate phase |
-| `AC-INDEX.yaml` | **APPEND** brittleness AC-IDs (not separate files) |
-| `progress-tracker.json` | Add AC-IDs to phase planned_work |
-| `plan-viewer-data.json` | Auto-synced via sync script |
+| `AC-INDEX.yaml` | Orchestrator APPENDs brittleness AC-IDs |
+| `progress-tracker.json` | Orchestrator updates planned_work |
+| `plan-viewer-data.json` | Auto-synced via SyncOrchestrator |
 
 **Output Flow:**
 ```
-Findings → AC-IDs → AC-INDEX.yaml append → master-plan update → tracker update → dashboard sync
+Findings → AC-IDs → MasterOrchestrator → AC-INDEX.yaml append → master-plan update → tracker update → dashboard sync
 ```
 
 ---
 
-
-## Scope & Inputs (repo conventions)
-- Primary plan/design source: `cortex-brain/cx6-plan/**`
-- Execution anchor: `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml` (append AC-IDs here)
-- Search across the entire CORTEX6 architecture + infrastructure landscape (code, IaC, CI/CD, runtime configs, docs, ADRs, scripts, manifests, charts, pipelines, and operational artifacts)
+## 📊 Scope & Analysis
 - **CORTEX-specific paths:**
   - State files: `cortex-brain/tier1/tracking/progress-tracker.json`, `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml`
   - Governance: `cortex-brain/tier0/governance/core-rules.yaml` (23 SKULL rules)

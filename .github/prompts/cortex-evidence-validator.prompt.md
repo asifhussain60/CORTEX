@@ -1,17 +1,16 @@
-# Evidence-Based Status Validation Prompt (Plan-Integrated)
+# ✅ Evidence-Based Status Validation Prompt
 
+**Purpose:** Fast, automated validation of AC-ID completion claims against test evidence  
 **Version:** 3.0.0  
-**Author:** Asif Hussain  
 **Date:** 2026-01-12  
-**Purpose:** Fast, automated validation of AC-ID completion claims against test evidence with plan integration
+**Governance:** CORE-002 (no root files), CORE-017 (governance enforcement), CORE-009 (plan organization), CORE-025 (intelligent challenge)  
+**Author:** Asif Hussain
 
 ---
 
-
-
 ## 🔗 MASTERORCHESTRATOR DELEGATION
 
-**All implementation delegated to unified orchestrator:**
+**All validation delegated to unified orchestrator:**
 
 ```bash
 # Execute via MasterOrchestrator (central control)
@@ -21,46 +20,42 @@ python3 -m src.main "{user_intent}" --orchestrator master --format markdown
 **MasterOrchestrator handles:**
 - ✅ Load governance rules (tier0/tier1/tier2/tier3)
 - ✅ Validate against SKULL rules
-- ✅ Create TodoManager tasks
+- ✅ Collect test evidence for AC-IDs
 - ✅ Execute tasks in dependency order
 - ✅ Update progress-tracker.json (atomic writes)
-- ✅ Enforce phase gates
+- ✅ Enforce evidence requirements
 - ✅ Return structured results
 
 **Do NOT:**
 - ❌ Directly modify progress-tracker.json
 - ❌ Directly modify AC-INDEX.yaml
-- ❌ Call sync_plan_viewer_data.py multiple times
+- ❌ Accept claims without test evidence
 - ❌ Manipulate state outside MasterOrchestrator
 
 ---
 
-## 🛡️ REGRESSION PREVENTION (See CORTEX.prompt.md § "UNIFIED REGRESSION CHECK")
+## 🛡️ REGRESSION PREVENTION (Reference Only)
 
-**Reference:** CORTEX.prompt.md maintains the unified regression check. All prompts use the same check.
+**Reference:** CORTEX.prompt.md maintains unified regression check via MasterOrchestrator.
 
-**Quick Verification:**
-```bash
-python3 << 'EOF'
-import json, yaml, sys
-errors = []
-try:
-    ac_index = yaml.safe_load(open('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml'))
-    if not ac_index.get('schema_version'): errors.append("AC-INDEX schema missing")
-except Exception as e: errors.append(f"AC-INDEX: {e}")
-try:
-    tracker = json.load(open('cortex-brain/tier1/tracking/progress-tracker.json'))
-    if not tracker.get('current_phase'): errors.append("tracker phase missing")
-except Exception as e: errors.append(f"tracker: {e}")
-try:
-    plan = yaml.safe_load(open('cortex-brain/cx6-plan/master-plan.yaml'))
-    if not plan.get('plan_metadata'): errors.append("plan metadata missing")
-except Exception as e: errors.append(f"plan: {e}")
-if errors:
-    print("❌ " + " | ".join(errors)); sys.exit(1)
-print("✅ State valid")
-EOF
-```
+**This prompt DOES NOT perform direct file access.** All evidence validation delegated to Python orchestrator:
+- ✅ Test result collection and aggregation
+- ✅ Evidence bundle validation
+- ✅ Atomic state updates
+
+**Why not embed code?** When MasterOrchestrator is updated, validation automatically improves for all prompts (DRY principle).
+
+---
+
+## 🛡️ INTELLIGENT CHALLENGE PROTOCOL (CORE-025)
+
+**Purpose:** Validate evidence requirements against governance and quality standards.
+
+**Implementation:** Delegated to MasterOrchestrator → RequestValidator.
+
+**Reference:** `.github/prompts/CORTEX-ALIGN.prompt.md § INTELLIGENT CHALLENGE PROTOCOL`
+
+---
 
 ## 🔗 PLAN INTEGRATION (CRITICAL)
 

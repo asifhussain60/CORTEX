@@ -1,11 +1,14 @@
 # 🔄 CORTEX Prompt Alignment & Cohesion Orchestrator v3.0
 
+**Type:** Meta-Prompt (Documents alignment process for other prompts)  
 **Purpose:** Physically refactor all `.github/prompts/*.prompt.md` files to eliminate conflicts, redundancy, brittleness, and disconnects.  
 **Version:** 3.1.0 (NOW WITH INTELLIGENT CHALLENGE PROTOCOL)  
 **Date:** 2026-01-12  
 **Scope:** Auto-discovers, validates, and refactors all prompts  
 **Author:** GitHub Copilot (for CORTEX)  
 **Governance:** CORE-002 (no root files), CORE-017 (governance enforcement), CORE-009 (plan organization), CORE-025 (intelligent challenge)
+
+**⚠️ NOTE:** This is a meta-prompt documenting the alignment process. It contains template examples and reference code for guidance. Do NOT execute the example code directly—use it as a template for editing other prompts.
 
 ---
 
