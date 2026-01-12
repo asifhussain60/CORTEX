@@ -14,21 +14,21 @@ from dataclasses import dataclass
 from typing import Dict, Optional, Any, List, Literal
 from pathlib import Path
 
-from ..middleware.orchestrator_lifecycle import (
+from src.orchestrators.middleware.orchestrator_lifecycle import (
     OrchestratorLifecycle,
     LifecycleState,
     LifecycleError
 )
-from .todo_orchestrator import TodoOrchestrator
-from .governance_merger import GovernanceMerger
-from ..state_manager import StateManager
-from ..audit_logger import get_audit_logger, AuditCategory
-from ..phase_boundary_cleanup import (
+from src.orchestrators.core.todo_orchestrator import TodoOrchestrator
+from src.orchestrators.core.governance_merger import GovernanceMerger
+from src.orchestrators.state_manager import StateManager
+from src.orchestrators.audit_logger import get_audit_logger, AuditCategory
+from src.orchestrators.phase_boundary_cleanup import (
     PhaseBoundaryCleanup,
     CleanupEvidenceBundle
 )
-from ..housekeeping_orchestrator import HousekeepingOrchestrator
-from ..infrastructure.response_header_footer_manager import (
+from src.orchestrators.housekeeping_orchestrator import HousekeepingOrchestrator
+from src.infrastructure.response_header_footer_manager import (
     ResponseHeaderFooterManager,
     get_header_footer_manager,
     wrap_cortex_response
