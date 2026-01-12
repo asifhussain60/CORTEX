@@ -113,9 +113,9 @@ class ResponseHeaderFooterManager:
             return self._generate_plaintext_header(operation_type, version)
     
     def _generate_markdown_header(self, operation_type: str, version: str) -> str:
-        """Generate markdown-formatted header."""
+        """Generate markdown-formatted header (CORTEX-4.0 style with brain icon)."""
         iso_date = datetime.utcnow().isoformat() + "Z"
-        header = f"""# CORTEX {operation_type} Summary
+        header = f"""## 🧠 CORTEX {operation_type}
 
 **Version:** {version} | **Date:** {iso_date}  
 **Author:** Asif Hussain  
