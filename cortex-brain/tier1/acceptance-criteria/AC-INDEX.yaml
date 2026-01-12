@@ -1,8 +1,8 @@
 schema_version: '1.7'
-last_updated: '2026-01-12T18:45:00Z'
-total_ac_count: 118
+last_updated: '2026-01-12T20:15:00Z'
+total_ac_count: 126
 completed_count: 33
-in_progress_count: 14
+in_progress_count: 22
 design_score_current: 97
 design_score_target: 95
 definition_of_ready:
@@ -747,6 +747,45 @@ categories:
       data_pipeline: CORTEX-4.0:src/cortex_lens/core/pipeline.py
       collectors: CORTEX-4.0:src/cortex_lens/collectors/
     stores_to: cortex-brain/tier1/  (company tier - project-specific knowledge)
+  TOOLKIT:
+    prefix: AC-TOOLKIT
+    description: CORTEX TOOLKIT - Static HTML view generation, visualization infrastructure, and MCP exposure
+    tier: 1
+    priority: 1
+    core_workflow: true
+    team_extensibility: true
+    phase: 1.5
+    note: |
+      CORTEX TOOLKIT transforms CORTEX LENS outputs and audit logs into interactive
+      static HTML dashboards with glassmorphism design, modern tab systems, and D3.js
+      visualizations. All generators exposed as MCP tools for other orchestrators.
+      
+      8 Components:
+      1. AC-TOOLKIT-001: Epic Plan Viewer Generator (master-plan + progress as HTML)
+      2. AC-TOOLKIT-002: Knowledge Graph Visualizer (YAML → D3.js force graph)
+      3. AC-TOOLKIT-003: Architecture Diagram Generator (4-tier brain visualization)
+      4. AC-TOOLKIT-004: Audit Log HTML Exporter (JSONL → searchable timeline)
+      5. AC-TOOLKIT-005: Glassmorphism Compliance Engine (design standard validation)
+      6. AC-TOOLKIT-006: Modern Tab System (keyboard-accessible reusable component)
+      7. AC-TOOLKIT-007: Mermaid Diagram Engine (flowcharts, state diagrams)
+      8. AC-TOOLKIT-008: CORTEX TOOLKIT MCP Server (all tools exposed as MCP)
+      
+      Key Features:
+      - All dashboards self-contained (<500KB), zero external dependencies
+      - Real-time JSON polling (5s refresh for dynamic data)
+      - WCAG AA accessible (7:1 contrast, keyboard navigation)
+      - Mobile responsive (320px-1440px+)
+      - <2s page load even with 10K+ events
+      - 100% glassmorphism design compliance
+      - Integrated with CORTEX LENS outputs + onboarding discovery
+    stores_to: cortex-brain/dashboards/ (HTML viewers)
+    integrates_with: Planning v5, Investigation, Onboarding, all orchestrators
+    source_references:
+      html_viewer_generator: cortex_html_viewer_generator.py (798 lines from CORTEX-5.5)
+      modern_tabs_css: modern-tabs.css (399 lines, commit 61635bc15)
+      modern_tabs_js: modern-tabs.js (200+ lines, commit 61635bc15)
+      page_modernizer: page_modernizer.py (from CORTEX-5.5)
+      four_tier_brain_css: four-tier-brain-custom.css (150+ lines)
 foundation:
   audit:
   - id: AC-AUDIT-001
@@ -2024,6 +2063,155 @@ features:
     deferred:
     - VS Code Extension integration → Phase 4+
     - Post-install hooks → Not planned (fragile)
+  toolkit:
+  - id: AC-TOOLKIT-001
+    name: Epic Plan Viewer Generator
+    description: 'Generate interactive HTML dashboard from master-plan.yaml + progress-tracker.json.
+
+      Outputs cortex-plan-viewer.html with real-time JSON polling, glassmorphism styling,
+
+      D3.js charts (status distribution, phase trend), responsive grid layout.
+
+      '
+    status: not_started
+    tests:
+    - tests/toolkit/test_toolkit_001_epic_viewer.py
+    implementation: src/orchestrators/toolkit/epic_viewer_generator.py
+    priority: HIGH
+    source_references:
+    - cortex_html_viewer_generator.py (798 lines from CORTEX-5.5)
+    dependencies:
+    - AC-AUDIT-001
+    - AC-STATE-001
+  - id: AC-TOOLKIT-002
+    name: Knowledge Graph Visualizer
+    description: 'Convert knowledge-graph.yaml (CORTEX LENS output) into interactive
+
+      D3.js force-directed graph. Renders nodes by category (color-coded), edges by
+
+      relationship strength, hover tooltips, click highlights related nodes, zoom/pan controls.
+
+      '
+    status: not_started
+    tests:
+    - tests/toolkit/test_toolkit_002_knowledge_graph.py
+    implementation: src/orchestrators/toolkit/knowledge_graph_visualizer.py
+    priority: HIGH
+    dependencies:
+    - AC-LENS-004
+  - id: AC-TOOLKIT-003
+    name: Architecture Diagram Generator
+    description: 'Generate four-tier brain visualization with glassmorphism styling
+
+      and D3.js animations. Renders 4 circular tier nodes (tiers 0-3) with radial
+
+      gradients, curved connection paths with pulsing animation, hover effects (scale
+
+      1.05x, gradient glow), statistics panel per tier.
+
+      '
+    status: not_started
+    tests:
+    - tests/toolkit/test_toolkit_003_architecture.py
+    implementation: src/orchestrators/toolkit/architecture_diagram_generator.py
+    priority: HIGH
+    source_references:
+    - four-tier-brain-custom.css (150+ lines)
+    - commit:61635bc15 (modern tab system + D3.js brain visualization)
+  - id: AC-TOOLKIT-004
+    name: Audit Log HTML Exporter
+    description: 'Export audit-logs/*.jsonl as searchable, filterable HTML timeline.
+
+      Renders events in reverse chronological order, filter pills (by level + category),
+
+      search box (real-time), click event → detail panel (3-pane layout), export CSV.
+
+      Mobile responsive with virtual scrolling for 10K+ events.
+
+      '
+    status: not_started
+    tests:
+    - tests/toolkit/test_toolkit_004_audit_viewer.py
+    implementation: src/orchestrators/toolkit/audit_log_exporter.py
+    priority: MEDIUM
+    dependencies:
+    - AC-AUDIT-001
+  - id: AC-TOOLKIT-005
+    name: Glassmorphism Compliance Engine
+    description: 'Validate all HTML outputs meet glassmorphism design standard.
+
+      Checks: backdrop-filter blur, rgba transparency, correct border colors, no
+
+      inline styles, approved color palette, correct font stack, embedded CSS, smooth
+
+      transitions (200-400ms ease-out).
+
+      '
+    status: not_started
+    tests:
+    - tests/toolkit/test_toolkit_005_glassmorphism.py
+    implementation: src/orchestrators/toolkit/glassmorphism_engine.py
+    priority: HIGH
+    source_references:
+    - .github/workflows/glassmorphism-compliance.yml (from CORTEX-5.5)
+  - id: AC-TOOLKIT-006
+    name: Modern Tab System (Keyboard-Accessible Component)
+    description: 'Reusable tabbed interface component with keyboard navigation (LEFT/RIGHT/HOME/END),
+
+      ARIA labels, state persistence via localStorage, smooth fade animations (300ms),
+
+      mobile-friendly (horizontal scrolling on narrow screens).
+
+      '
+    status: not_started
+    tests:
+    - tests/toolkit/test_toolkit_006_tabs.py
+    implementation: src/orchestrators/toolkit/modern_tab_system.py
+    priority: MEDIUM
+    source_references:
+    - modern-tabs.css (399 lines, commit 61635bc15)
+    - modern-tabs.js (200+ lines, commit 61635bc15)
+    - cortex-brain/documents/implementation-guides/modern-tab-system-guide.md
+  - id: AC-TOOLKIT-007
+    name: Mermaid Diagram Engine
+    description: 'Embed Mermaid diagrams in all dashboard types. Supports:
+
+      flowcharts (dependency flows, state transitions), class diagrams (object hierarchies),
+
+      timelines (phase progression), sequence diagrams (component interactions).
+
+      Diagrams auto-theme with CORTEX color palette, responsive SVG scaling.
+
+      '
+    status: not_started
+    tests:
+    - tests/toolkit/test_toolkit_007_mermaid.py
+    implementation: src/orchestrators/toolkit/mermaid_engine.py
+    priority: MEDIUM
+  - id: AC-TOOLKIT-008
+    name: CORTEX TOOLKIT MCP Server
+    description: 'Expose all 7 generators as MCP tools callable by Planning v5,
+
+      Investigation, Onboarding, and other orchestrators. Tools: generate_epic_viewer(),
+
+      generate_knowledge_graph_viz(), generate_architecture_diagram(), generate_audit_log_viewer(),
+
+      validate_glassmorphism(), regenerate_all_dashboards().
+
+      '
+    status: not_started
+    tests:
+    - tests/toolkit/test_toolkit_008_mcp.py
+    implementation: src/orchestrators/toolkit/toolkit_mcp_server.py
+    priority: HIGH
+    dependencies:
+    - AC-TOOLKIT-001
+    - AC-TOOLKIT-002
+    - AC-TOOLKIT-003
+    - AC-TOOLKIT-004
+    - AC-TOOLKIT-005
+    - AC-TOOLKIT-006
+    - AC-TOOLKIT-007
 github_copilot_bridge:
   description: 'VSCodeCopilotTodoBridge writes CORTEX TodoManager tasks as TODO comments
     that
