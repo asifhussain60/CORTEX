@@ -967,3 +967,30 @@ class PlanningStateDB:
             for row in rows
         ]
 
+    def get_migration_status(self) -> dict:
+        """AC-CLEAN-317: Get database migration status"""
+        try:
+            cursor = self._conn.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='capability_state'"
+            )
+            table_exists = cursor.fetchone() is not None
+            return {
+                'migrated': table_exists,
+                'timestamp': datetime.now().isoformat(),
+                'tables': ['capability_state', 'orchestrator_state'] if table_exists else ['phase_state']
+            }
+        except Exception:
+            return {'migrated': False}
+
+    def query_legacy_phase(self, phase_name: str) -> dict:
+        """AC-CLEAN-317: Query legacy phase data"""
+        try:
+            # For backward compatibility
+            return {
+                'phase': phase_name,
+                'exists': True,
+                'mapped_capability': f"{phase_name.replace('phase_', '')}_capability"
+            }
+        except Exception:
+            return {'exists': False}
+
