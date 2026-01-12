@@ -272,22 +272,42 @@ class SimilarityDetector:
         """
         Find groups of similar files.
         Returns: dict mapping representative file to list of similar files
+        
+        OPTIMIZED: Samples files to avoid O(n²) race condition with large directories
         """
         file_contents = {}
         similar_groups = {}
         
-        # Load all file contents
-        for f in files:
+        # FIX: Limit to documents folder only (avoid scanning all of cortex-brain)
+        doc_files = [f for f in files if 'documents' in str(f)]
+        
+        if len(doc_files) < 2:
+            return {}
+        
+        # FIX: Sample if too many files (avoid O(n²) explosion)
+        MAX_SAMPLE = 50
+        if len(doc_files) > MAX_SAMPLE:
+            print(f"    ⚠️  Sampling {MAX_SAMPLE} of {len(doc_files)} files (too many for full comparison)")
+            import random
+            random.seed(42)  # Deterministic sampling
+            doc_files = random.sample(doc_files, MAX_SAMPLE)
+        
+        # Load file contents with size limit (avoid memory explosion)
+        MAX_FILE_SIZE = 1024 * 1024  # 1MB limit per file
+        for f in doc_files:
             try:
+                size = f.stat().st_size
+                if size > MAX_FILE_SIZE:
+                    continue  # Skip very large files
                 if f.suffix in {'.md', '.yaml', '.yml', '.txt'}:
-                    file_contents[f] = f.read_text(encoding='utf-8', errors='ignore')
+                    file_contents[f] = f.read_text(encoding='utf-8', errors='ignore')[:100000]  # First 100KB
             except Exception:
                 pass
         
         if len(file_contents) < 2:
             return {}
         
-        # Compare all pairs
+        # Compare all pairs (now limited by sampling)
         files_list = list(file_contents.keys())
         processed = set()
         
@@ -638,18 +658,24 @@ class VacuumOrchestrator:
     def detect_similar_documents(self):
         """Detect similar documents for consolidation"""
         self.log_action("\n=== Detecting Similar Documents (85%+ similarity) ===\n")
+        print("    [Phase 2.1/3] Collecting document files...")
         
-        # Collect all document files
+        # Collect document files ONLY (fix: avoid scanning entire cortex-brain)
         doc_files = []
-        for file_path in CORTEX_BRAIN.rglob("*"):
-            if file_path.is_file() and file_path.suffix in {'.md', '.yaml', '.yml', '.txt'}:
-                doc_files.append(file_path)
+        doc_dir = CORTEX_BRAIN / "documents"
+        if doc_dir.exists():
+            for file_path in doc_dir.rglob("*"):
+                if file_path.is_file() and file_path.suffix in {'.md', '.yaml', '.yml', '.txt'}:
+                    doc_files.append(file_path)
+        
+        print(f"    [Phase 2.2/3] Found {len(doc_files)} document files")
         
         if len(doc_files) < 2:
             self.log_action("✅ No similar documents found (less than 2 files)")
             return
         
         # Find similar groups
+        print("    [Phase 2.3/3] Computing similarities (may take a moment)...")
         similar_groups = SimilarityDetector.find_similar_files(doc_files, threshold=0.85)
         
         if not similar_groups:
@@ -684,12 +710,24 @@ class VacuumOrchestrator:
     def suggest_tier_relocations(self):
         """Suggest tier-aware relocations for documents"""
         self.log_action("\n=== Suggesting Tier-Aware Relocations ===\n")
+        print("    [Phase 2.4/4] Analyzing tier placement...")
         
         relocations = []
         
-        for file_path in CORTEX_BRAIN.rglob("*"):
+        # FIX: Only scan documents folder (not entire cortex-brain)
+        doc_dir = CORTEX_BRAIN / "documents"
+        if not doc_dir.exists():
+            self.log_action("✅ No documents folder found")
+            return
+        
+        scanned = 0
+        for file_path in doc_dir.rglob("*"):
             if not file_path.is_file():
                 continue
+            
+            scanned += 1
+            if scanned % 10 == 0:
+                print(f"    Scanned {scanned} files...")
             
             if file_path.suffix not in {'.md', '.yaml', '.yml', '.txt'}:
                 continue
@@ -708,13 +746,18 @@ class VacuumOrchestrator:
                 if suggested_path and suggested_path != file_path:
                     relocations.append((file_path, suggested_path, tier, category))
         
+        print(f"    Analyzed {scanned} files, found {len(relocations)} tier suggestions")
+        
         if relocations:
             self.log_action(f"Found {len(relocations)} suggested tier relocations:\n")
             
-            for file_path, suggested_path, tier, category in relocations:
+            for file_path, suggested_path, tier, category in relocations[:20]:  # Limit to 20 suggestions
                 self.log_action(f"✓ {file_path.relative_to(WORKSPACE_ROOT)}")
                 self.log_action(f"  → Tier: {tier}, Category: {category}")
                 self.log_action(f"  → {suggested_path.relative_to(WORKSPACE_ROOT)}\n")
+            
+            if len(relocations) > 20:
+                self.log_action(f"... and {len(relocations) - 20} more suggestions")
         else:
             self.log_action("✅ All documents are properly tier-organized")
     
@@ -763,19 +806,31 @@ class VacuumOrchestrator:
             self.log_action("  python3 scripts/vacuum_orchestrator.py --execute")
     
     def execute(self):
-        """Execute the full vacuum operation with all enhancements"""
+        """Execute the full vacuum operation with all enhancements (SEQUENTIAL)"""
         try:
-            print("\n🔍 PHASE 1: Governance Violation Detection & Remediation")
+            print("\n" + "="*70)
+            print("🔍 PHASE 1: Governance Violation Detection & Remediation")
+            print("="*70)
+            print("  [1/3] Scanning for governance violations...")
             self.scan_for_violations()
+            
+            print("  [2/3] Detecting duplicate files...")
             self.detect_duplicates()
+            
+            print("  [3/3] Executing remediation with safety checks...")
             self.execute_remediation()
             
-            print("\n📚 PHASE 2: Smart Document Analysis")
+            print("\n" + "="*70)
+            print("📚 PHASE 2: Smart Document Analysis")
+            print("="*70)
             self.detect_similar_documents()
             self.suggest_tier_relocations()
             
-            print("\n📊 PHASE 3: Summary Report")
+            print("\n" + "="*70)
+            print("📊 PHASE 3: Summary Report")
+            print("="*70)
             self.generate_report()
+            print("="*70)
             
             return len(self.errors_log) == 0
         
