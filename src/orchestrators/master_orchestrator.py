@@ -374,6 +374,8 @@ class MasterOrchestrator:
             
             # Prepare rendering context
             render_context = {
+                'version': '6.0.0',  # CORTEX version
+                'summary': result.get('message', 'Operation completed successfully.'),
                 'session_id': enriched_context.get('session_id'),
                 'token_usage_percentage': enriched_context.get('token_usage_percentage', 0),
                 'total_tokens': enriched_context.get('total_tokens', 0),
@@ -384,15 +386,20 @@ class MasterOrchestrator:
                 'multi_phase_operation': result.metadata.get('multi_phase_operation', False),
                 'progress': result.metadata.get('progress', {}),
                 'next_steps': result.metadata.get('next_steps', []),
-                'review_insights': enriched_context.get('review_insights', [])
+                'review_insights': enriched_context.get('review_insights', []),
+                'outcomes': result.metadata.get('outcomes', []),
+                'in_progress': result.metadata.get('in_progress', []),
+                'risks': result.metadata.get('risks', []),
+                'impact': result.metadata.get('impact', [])
             }
             
             try:
-                # Step 5.1: Render markdown
+                # Step 5.1: Render markdown with operation type
                 rendered_markdown = self.response_renderer.render(
                     orch_result,
                     tier='auto',
-                    context=render_context
+                    context=render_context,
+                    operation_type=match.orchestrator_id.replace('_', ' ').title()
                 )
                 
                 # Step 5.2: Inject system messages
