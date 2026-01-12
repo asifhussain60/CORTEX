@@ -11,6 +11,7 @@ This module:
 - Supports multiple formats (markdown, HTML, JSON, plaintext)
 - Automatically applies version, date, and copyright info
 - Enables easy updates without touching individual templates
+- Handles Windows emoji encoding gracefully
 
 Author: Asif Hussain
 Created: 2026-01-12
@@ -23,9 +24,22 @@ from pathlib import Path
 from typing import Dict, Optional, Literal
 import yaml
 import logging
+import sys
 
 
 logger = logging.getLogger(__name__)
+
+
+def _get_brain_emoji():
+    """Get brain emoji for markdown, with fallback for Windows encoding issues."""
+    # Try to use brain emoji, fall back to gear if encoding fails
+    try:
+        # Test if system can encode emoji
+        "🧠".encode(sys.stdout.encoding or 'utf-8')
+        return "🧠"
+    except (UnicodeEncodeError, AttributeError):
+        # Windows cmd.exe compatibility fallback
+        return "⚙️"
 
 
 @dataclass
@@ -115,7 +129,8 @@ class ResponseHeaderFooterManager:
     def _generate_markdown_header(self, operation_type: str, version: str) -> str:
         """Generate markdown-formatted header (CORTEX-4.0 style with brain icon)."""
         iso_date = datetime.utcnow().isoformat() + "Z"
-        header = f"""## 🧠 CORTEX {operation_type}
+        brain_emoji = _get_brain_emoji()
+        header = f"""## {brain_emoji} CORTEX {operation_type}
 
 **Version:** {version} | **Date:** {iso_date}  
 **Author:** Asif Hussain  
