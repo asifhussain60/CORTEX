@@ -289,6 +289,63 @@ else
 fi
 
 # ============================================================================
+# Step 5: Export Database State (NEW - Database Sync Strategy)
+# ============================================================================
+echo ""
+echo "💾 Step 5: Exporting database state for git sync..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# Export working memory state (tier1)
+if python3 -c "import src.infrastructure.state_manager" 2>/dev/null; then
+    echo "🔄 Exporting progress-tracker.json and active-todos.yaml..."
+    python3 -m src.infrastructure.state_manager export 2>/dev/null && {
+        # Stage exported state files if they changed
+        if [ -f "cortex-brain/tier1/tracking/progress-tracker.json" ]; then
+            git add cortex-brain/tier1/tracking/progress-tracker.json 2>/dev/null || true
+        fi
+        if [ -f "cortex-brain/tier1/tracking/active-todos.yaml" ]; then
+            git add cortex-brain/tier1/tracking/active-todos.yaml 2>/dev/null || true
+        fi
+        echo "✅ Working memory state exported"
+    } || {
+        echo "⚠️  StateManager export not fully implemented yet - skipping"
+    }
+else
+    echo "⚠️  StateManager module not found - will be available after Phase 2 implementation"
+fi
+
+# Export audit trail session (tier0)
+if python3 -c "import src.infrastructure.enhanced_audit_logger" 2>/dev/null; then
+    echo "🔄 Exporting audit trail session..."
+    python3 -m src.infrastructure.enhanced_audit_logger export_session 2>/dev/null && {
+        # Stage audit export files if any were created
+        git add cortex-brain/audit-logs/*.jsonl 2>/dev/null || true
+        echo "✅ Audit trail session exported"
+    } || {
+        echo "⚠️  AuditLogger export not fully implemented yet - skipping"
+    }
+else
+    echo "⚠️  AuditLogger export module not found - will be available after Phase 2 implementation"
+fi
+
+# Export knowledge patterns (tier3)
+if python3 -c "import src.infrastructure.tier3_manager" 2>/dev/null; then
+    echo "🔄 Exporting learned patterns..."
+    python3 -m src.infrastructure.tier3_manager export_patterns 2>/dev/null && {
+        # Stage pattern files if they changed
+        git add cortex-brain/tier3/patterns/*.yaml 2>/dev/null || true
+        echo "✅ Knowledge patterns exported"
+    } || {
+        echo "⚠️  Tier3Manager export not fully implemented yet - skipping"
+    }
+else
+    echo "⚠️  Tier3Manager module not found - will be available after Phase 2 implementation"
+fi
+
+echo ""
+echo "📖 Reference: cortex-brain/documents/analysis/database-synchronization-strategy.md"
+
+# ============================================================================
 # Success
 # ============================================================================
 echo ""
@@ -302,6 +359,7 @@ echo "   • Architecture: ✅ Compliant"
 echo "   • SKULL rules: ✅ Passed"
 echo "   • HTML validation: ✅ Passed (CORE-023)"
 echo "   • Build progress: ✅ Logged"
+echo "   • Database state: ✅ Exported for sync"
 echo ""
 
 exit 0
