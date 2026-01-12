@@ -739,7 +739,7 @@ button, a, input, select, textarea, [role="button"] {
         </div>
     </div>
 </section>
-<!-- Orchestrators Panel (Multi-Panel) -->
+<!-- Orchestrators Panel (Card Grid) -->
 <section class="key-features-section" id="orchestrators-panel">
     <div class="main-panel-wrapper animation-t3">
         <div class="panel-header-centered">
@@ -749,78 +749,71 @@ button, a, input, select, textarea, [role="button"] {
             </h2>
             <p class="panel-subtitle-main">Autonomous workflow coordinators for planning, execution, and system management</p>
         </div>
-        <!-- Tabs: Orchestrator Categories -->
-        <div class="cortex-tabs" role="tablist" aria-label="Orchestrator categories">
-            <button class="cortex-tab active" role="tab" aria-selected="true" aria-controls="orchestrator-tab-planning" data-target="orchestrator-tab-planning">🧠 Planning</button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="orchestrator-tab-execution" data-target="orchestrator-tab-execution">⚙️ Execution</button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="orchestrator-tab-system" data-target="orchestrator-tab-system">🔧 System</button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="orchestrator-tab-analysis" data-target="orchestrator-tab-analysis">📊 Analysis</button>
-            <button class="cortex-tab" role="tab" aria-selected="false" aria-controls="orchestrator-tab-debug" data-target="orchestrator-tab-debug">🐛 Debug</button>
-        </div>
-        <div class="cortex-tab-panels">
-            <!-- Planning -->
-            <div id="orchestrator-tab-planning" class="cortex-tab-panel active" role="tabpanel">
-                <div class="category-subpanel animation-t1">
-                    <div class="category-icon-wrapper"><span class="category-icon">🧠</span></div>
-                    <h3 class="category-title">Planning</h3>
-                    <p class="category-description">Strategic planning system, ADO work item generation, pre-flight readiness checks, and comprehensive architectural design validation.</p>
-                    <div class="category-tags">
-                        <a class="category-tag animation-t2" data-icon="📋" href="orchestrators/planning-system.html"><span>Planning</span></a>
-                        <a class="category-tag animation-t2" data-icon="🤖" href="orchestrators/ado-orchestrator.html"><span>ADO</span></a>
-                        <a class="category-tag animation-t2" data-icon="⚙️" href="orchestrators/ado-operations.html"><span>ADO Ops</span></a>
-                        <a class="category-tag animation-t2" data-icon="📅" href="orchestrators/ado-planning.html"><span>ADO Plan</span></a>
-                    </div>
+        <!-- Orchestrator Cards Grid -->
+        <div class="orchestrator-cards-grid">
+            <!-- Planning Card -->
+            <div class="orchestrator-card planning-card animation-t1">
+                <div class="card-header">
+                    <div class="card-icon">🧠</div>
+                    <h3 class="card-title">Planning</h3>
+                </div>
+                <p class="card-description">Strategic planning system, ADO work item generation, pre-flight readiness checks, and comprehensive architectural design validation.</p>
+                <div class="category-tags">
+                    <a class="category-tag animation-t2" data-icon="📋" href="orchestrators/planning-system.html"><span>Planning</span></a>
+                    <a class="category-tag animation-t2" data-icon="🤖" href="orchestrators/ado-orchestrator.html"><span>ADO</span></a>
+                    <a class="category-tag animation-t2" data-icon="⚙️" href="orchestrators/ado-operations.html"><span>ADO Ops</span></a>
+                    <a class="category-tag animation-t2" data-icon="📅" href="orchestrators/ado-planning.html"><span>ADO Plan</span></a>
                 </div>
             </div>
-            <!-- Execution -->
-            <div id="orchestrator-tab-execution" class="cortex-tab-panel" role="tabpanel">
-                <div class="category-subpanel animation-t1">
-                    <div class="category-icon-wrapper"><span class="category-icon">⚙️</span></div>
-                    <h3 class="category-title">Execution</h3>
-                    <p class="category-description">Test-driven development workflow, automated RED→GREEN→REFACTOR cycles, git checkpoint management, and comprehensive execution orchestration.</p>
-                    <div class="category-tags">
-                        <a class="category-tag animation-t2" data-icon="✅" href="orchestrators/tdd-orchestrator.html"><span>TDD</span></a>
-                        <a class="category-tag animation-t2" data-icon="▶️" href="orchestrators/execution-orchestrator.html"><span>Execution</span></a>
-                        <a class="category-tag animation-t2" data-icon="💾" href="orchestrators/git-checkpoint.html"><span>Checkpoint</span></a>
-                    </div>
+            <!-- Execution Card -->
+            <div class="orchestrator-card execution-card animation-t2">
+                <div class="card-header">
+                    <div class="card-icon">⚙️</div>
+                    <h3 class="card-title">Execution</h3>
+                </div>
+                <p class="card-description">Test-driven development workflow, automated RED→GREEN→REFACTOR cycles, git checkpoint management, and comprehensive execution orchestration.</p>
+                <div class="category-tags">
+                    <a class="category-tag animation-t2" data-icon="✅" href="orchestrators/tdd-orchestrator.html"><span>TDD</span></a>
+                    <a class="category-tag animation-t2" data-icon="▶️" href="orchestrators/execution-orchestrator.html"><span>Execution</span></a>
+                    <a class="category-tag animation-t2" data-icon="💾" href="orchestrators/git-checkpoint.html"><span>Checkpoint</span></a>
                 </div>
             </div>
-            <!-- System -->
-            <div id="orchestrator-tab-system" class="cortex-tab-panel" role="tabpanel">
-                <div class="category-subpanel animation-t1">
-                    <div class="category-icon-wrapper"><span class="category-icon">🔧</span></div>
-                    <h3 class="category-title">System</h3>
-                    <p class="category-description">Automated cleanup workflows, code sanitization, and system integrity validation.</p>
-                    <div class="category-tags">
-                        <a class="category-tag animation-t2" data-icon="🧹" href="orchestrators/cleanup-orchestrator.html"><span>Cleanup</span></a>
-                        <a class="category-tag animation-t2" data-icon="🧼" href="orchestrators/sanitization-orchestrator.html"><span>Sanitize</span></a>
-                        <a class="category-tag animation-t2" data-icon="🔒" href="orchestrators/system-integrity.html"><span>Integrity</span></a>
-                    </div>
+            <!-- System Card -->
+            <div class="orchestrator-card system-card animation-t3">
+                <div class="card-header">
+                    <div class="card-icon">🔧</div>
+                    <h3 class="card-title">System</h3>
+                </div>
+                <p class="card-description">Automated cleanup workflows, code sanitization, and system integrity validation.</p>
+                <div class="category-tags">
+                    <a class="category-tag animation-t2" data-icon="🧹" href="orchestrators/cleanup-orchestrator.html"><span>Cleanup</span></a>
+                    <a class="category-tag animation-t2" data-icon="🧼" href="orchestrators/sanitization-orchestrator.html"><span>Sanitize</span></a>
+                    <a class="category-tag animation-t2" data-icon="🔒" href="orchestrators/system-integrity.html"><span>Integrity</span></a>
                 </div>
             </div>
-            <!-- Analysis -->
-            <div id="orchestrator-tab-analysis" class="cortex-tab-panel" role="tabpanel">
-                <div class="category-subpanel animation-t1">
-                    <div class="category-icon-wrapper"><span class="category-icon">📊</span></div>
-                    <h3 class="category-title">Analysis</h3>
-                    <p class="category-description">Code refinement workflows, AST-based analysis, architectural review automation, and quality improvement recommendations.</p>
-                    <div class="category-tags">
-                        <a class="category-tag animation-t2" data-icon="✨" href="orchestrators/refinement-orchestrator.html"><span>Refine</span></a>
-                        <a class="category-tag animation-t2" data-icon="🔍" href="orchestrators/cortex-lens.html"><span>Lens</span></a>
-                        <a class="category-tag animation-t2" data-icon="🏛️" href="orchestrators/architectural-review.html"><span>Arch Review</span></a>
-                    </div>
+            <!-- Analysis Card -->
+            <div class="orchestrator-card analysis-card animation-t4">
+                <div class="card-header">
+                    <div class="card-icon">📊</div>
+                    <h3 class="card-title">Analysis</h3>
+                </div>
+                <p class="card-description">Code refinement workflows, AST-based analysis, architectural review automation, and quality improvement recommendations.</p>
+                <div class="category-tags">
+                    <a class="category-tag animation-t2" data-icon="✨" href="orchestrators/refinement-orchestrator.html"><span>Refine</span></a>
+                    <a class="category-tag animation-t2" data-icon="🔍" href="orchestrators/cortex-lens.html"><span>Lens</span></a>
+                    <a class="category-tag animation-t2" data-icon="🏛️" href="orchestrators/architectural-review.html"><span>Arch Review</span></a>
                 </div>
             </div>
-            <!-- Debug -->
-            <div id="orchestrator-tab-debug" class="cortex-tab-panel" role="tabpanel">
-                <div class="category-subpanel animation-t1">
-                    <div class="category-icon-wrapper"><span class="category-icon">🐛</span></div>
-                    <h3 class="category-title">Debug</h3>
-                    <p class="category-description">Intelligent debugging workflows, automated error analysis, and rollback management for rapid issue resolution.</p>
-                    <div class="category-tags">
-                        <a class="category-tag animation-t2" data-icon="🔧" href="orchestrators/debug-orchestrator.html"><span>Debug</span></a>
-                        <a class="category-tag animation-t2" data-icon="⏪" href="orchestrators/rollback-orchestrator.html"><span>Rollback</span></a>
-                    </div>
+            <!-- Debug Card -->
+            <div class="orchestrator-card debug-card animation-t5">
+                <div class="card-header">
+                    <div class="card-icon">🐛</div>
+                    <h3 class="card-title">Debug</h3>
+                </div>
+                <p class="card-description">Intelligent debugging workflows, automated error analysis, and rollback management for rapid issue resolution.</p>
+                <div class="category-tags">
+                    <a class="category-tag animation-t2" data-icon="🔧" href="orchestrators/debug-orchestrator.html"><span>Debug</span></a>
+                    <a class="category-tag animation-t2" data-icon="⏪" href="orchestrators/rollback-orchestrator.html"><span>Rollback</span></a>
                 </div>
             </div>
         </div>
