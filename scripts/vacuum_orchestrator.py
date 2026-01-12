@@ -4,8 +4,12 @@ CORTEX 6.0 Vacuum Orchestrator - Intelligent File Organization & Cleanup
 Enforces CORE-009 (file organization) and naming conventions (kebab-case)
 
 Author: GitHub Copilot + CORTEX Governance System
-Version: 3.0.0 (ENHANCED with Safety Guards, Similarity Detection, Tier-Aware Relocation)
+Version: 4.0.0 (NEW: Root Pollution Prevention, Interactive Audit)
 Date: 2026-01-12
+
+CHANGELOG:
+- v3.0.0: Safety guards, similarity detection, tier-aware relocation
+- v4.0.0: Root pollution prevention, interactive audit, phase 0 detection
 """
 
 import re
@@ -44,6 +48,126 @@ class FileViolation:
     recommendation: str
     target_path: Path = None
     new_name: str = None
+
+
+class RootPollutionPrevention:
+    """
+    NEW (v4.0): Prevents files from accumulating at repository root.
+    Analyzes root-level files and suggests intelligent relocation.
+    """
+    
+    # Files ALLOWED at root (essential only)
+    ALLOWED_ROOT_FILES = {
+        "README.md", "LICENSE", "LICENSE.md", ".gitignore", ".gitattributes",
+        ".github", ".git", ".pytest_cache", ".favorites.json", ".cortex",
+        "requirements.txt", "package.json", "pyproject.toml", "setup.py",
+        ".dockerignore", ".env.example", "Makefile", "CHANGELOG.md"
+    }
+    
+    # File type to relocation target mapping
+    RELOCATION_TARGETS = {
+        # Python scripts (demo, diagnostic, test utilities)
+        r"^(demo|example|test_|diagnose|inspect|analyze).*\.py$": {
+            "target_dir": "docs/examples/",
+            "category": "example",
+            "reason": "Demo and diagnostic utilities"
+        },
+        # Test outputs
+        r"^(test|coverage|results)[-_].*\.(txt|xml|json|html)$": {
+            "target_dir": "cortex-brain/documents/testing/",
+            "category": "testing",
+            "reason": "Test execution outputs"
+        },
+        # Markdown documentation at root
+        r"^[A-Z][A-Z0-9-]*\.md$": {
+            "target_dir": "cortex-brain/documents/misc/",
+            "category": "documentation",
+            "reason": "Root-level markdown moved to documents"
+        },
+        # Log files
+        r"^.*\.(log|trace)$": {
+            "target_dir": "cortex-brain/documents/testing/",
+            "category": "logs",
+            "reason": "System logs and traces"
+        },
+        # State/metadata files
+        r"^\.cortex-.*$": {
+            "target_dir": "cortex-brain/state/",
+            "category": "metadata",
+            "reason": "CORTEX system state files"
+        }
+    }
+    
+    @staticmethod
+    def scan_root_pollution() -> List[Dict]:
+        """
+        Scan repository root for files that should be relocated.
+        Returns: List of found violations with relocation targets
+        """
+        violations = []
+        
+        root_files = list(WORKSPACE_ROOT.glob("*"))
+        
+        for item in root_files:
+            # Skip essential files and directories
+            if item.name in RootPollutionPrevention.ALLOWED_ROOT_FILES:
+                continue
+            
+            if item.is_dir():
+                continue  # Ignore directories
+            
+            # Check if file matches relocation pattern
+            for pattern, target_info in RootPollutionPrevention.RELOCATION_TARGETS.items():
+                if re.match(pattern, item.name, re.IGNORECASE):
+                    violations.append({
+                        "file": item.name,
+                        "full_path": item,
+                        "target_dir": target_info["target_dir"],
+                        "category": target_info["category"],
+                        "reason": target_info["reason"]
+                    })
+                    break
+        
+        return violations
+    
+    @staticmethod
+    def auto_relocate_root_pollution(dry_run: bool = False) -> int:
+        """
+        Automatically relocate files from root to proper directories.
+        Returns: Number of files relocated
+        """
+        violations = RootPollutionPrevention.scan_root_pollution()
+        
+        if not violations:
+            print("  ✓ Root directory clean (no pollution detected)")
+            return 0
+        
+        print(f"  ⚠️  Detected {len(violations)} root-level files to relocate")
+        
+        count = 0
+        for violation in violations:
+            source = violation["full_path"]
+            target_dir = Path(violation["target_dir"])
+            
+            # Create target directory
+            target_dir.mkdir(parents=True, exist_ok=True)
+            
+            # Convert filename to kebab-case
+            new_name = GovernanceRules.to_kebab_case(source.stem) + source.suffix
+            dest = target_dir / new_name
+            
+            if not dry_run:
+                try:
+                    shutil.move(str(source), str(dest))
+                    print(f"    ✓ {source.name:40} → {violation['category']}/")
+                    count += 1
+                except Exception as e:
+                    print(f"    ✗ Failed to move {source.name}: {e}")
+            else:
+                print(f"    [DRY-RUN] Would move {source.name:30} → {violation['category']}/")
+                count += 1
+        
+        return count
 
 
 class GovernanceRules:
@@ -434,6 +558,53 @@ class VacuumOrchestrator:
         self.errors_log.append(message)
         print(message, file=sys.stderr)
     
+    def audit_root_directory(self) -> Dict:
+        """
+        NEW (v4.0): Interactive audit of repository root.
+        Provides detailed analysis of root-level files and relocation recommendations.
+        Returns: Dict with audit results
+        """
+        print("\n" + "="*70)
+        print("📋 CORTEX ROOT DIRECTORY AUDIT (v4.0)")
+        print("="*70)
+        
+        # Scan for pollution
+        violations = RootPollutionPrevention.scan_root_pollution()
+        
+        print(f"\n✓ Repository root contains {len(violations)} files needing relocation\n")
+        
+        # Categorize violations
+        categories = {}
+        for v in violations:
+            cat = v["category"]
+            if cat not in categories:
+                categories[cat] = []
+            categories[cat].append(v)
+        
+        # Display by category
+        for category in sorted(categories.keys()):
+            files = categories[category]
+            print(f"📁 {category.upper()} ({len(files)} file{'s' if len(files) != 1 else ''})")
+            for file_info in files:
+                print(f"   • {file_info['file']:40} → {file_info['target_dir']}")
+                print(f"     Reason: {file_info['reason']}")
+            print()
+        
+        # Allowed files
+        print("✅ ALLOWED AT ROOT (Essential)")
+        allowed_list = sorted(list(RootPollutionPrevention.ALLOWED_ROOT_FILES))
+        for i, fname in enumerate(allowed_list, 1):
+            if (WORKSPACE_ROOT / fname).exists() or fname.startswith("."):
+                print(f"   [{i:2}] {fname}")
+        
+        print("\n" + "="*70)
+        
+        return {
+            "total_violations": len(violations),
+            "categories": categories,
+            "allowed_count": len(RootPollutionPrevention.ALLOWED_ROOT_FILES)
+        }
+    
     def calculate_file_hash(self, path: Path) -> str:
         """Calculate MD5 hash of file content"""
         try:
@@ -809,6 +980,16 @@ class VacuumOrchestrator:
         """Execute the full vacuum operation with all enhancements (SEQUENTIAL)"""
         try:
             print("\n" + "="*70)
+            print("🔍 PHASE 0: Root Pollution Prevention")
+            print("="*70)
+            print("  [1/1] Checking for root-level files that should be relocated...")
+            root_pollution_count = RootPollutionPrevention.auto_relocate_root_pollution(
+                dry_run=self.dry_run
+            )
+            if root_pollution_count > 0:
+                self.actions_log.append(f"Relocated {root_pollution_count} root-level files")
+            
+            print("\n" + "="*70)
             print("🔍 PHASE 1: Governance Violation Detection & Remediation")
             print("="*70)
             print("  [1/3] Scanning for governance violations...")
@@ -858,15 +1039,30 @@ def main():
         default=True,
         help="Preview changes without executing (default)"
     )
+    parser.add_argument(
+        "--audit-root",
+        action="store_true",
+        help="NEW (v4.0): Audit repository root for pollution (no cleanup)"
+    )
     
     args = parser.parse_args()
-    
-    # Execute is opposite of dry-run
-    dry_run = not args.execute
     
     print("="*70)
     print("CORTEX 6.0 VACUUM ORCHESTRATOR")
     print("="*70)
+    
+    # If audit-root flag is set, run audit only
+    if args.audit_root:
+        print("Mode: ROOT AUDIT ONLY")
+        print("="*70)
+        print()
+        orchestrator = VacuumOrchestrator(dry_run=True)
+        orchestrator.audit_root_directory()
+        sys.exit(0)
+    
+    # Execute is opposite of dry-run
+    dry_run = not args.execute
+    
     print(f"Mode: {'DRY-RUN (preview only)' if dry_run else 'EXECUTE (apply changes)'}")
     print("="*70)
     print()
