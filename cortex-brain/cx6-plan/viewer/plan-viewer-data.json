@@ -2,22 +2,45 @@
   "plan_metadata": {
     "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
     "total_ac_ids": 59,
-    "completed_ac_ids": 0,
+    "completed_ac_ids": 92,
     "in_progress_ac_ids": 0,
     "version": "1.2.0",
-    "updated": "2026-01-12T15:15:13.081213+00:00",
+    "updated": "2026-01-12T15:21:50.691780+00:00",
     "status": "phases_1_to_5_defined_4.5_integration_tests_added"
   },
   "phases": [
     {
       "id": 1,
       "name": "Foundation Enhancement",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
+      "completion_percentage": 75,
+      "ac_ids_complete": 22,
       "ac_ids_total": 29,
-      "status": "planned",
+      "status": "in_progress",
       "description": "Build the core infrastructure that EVERY other component depends on.\nAll orchestrators log to audit, enforce governance, persist state.\nWithout this foundation, nothing else can reliably operate.\n",
-      "verified_implemented": [],
+      "verified_implemented": [
+        "AC-AUDIT-001",
+        "AC-AUDIT-002",
+        "AC-AUDIT-003",
+        "AC-AUDIT-004",
+        "AC-AUDIT-005",
+        "AC-AUDIT-006",
+        "AC-AUDIT-007",
+        "AC-EVIDENCE-001",
+        "AC-EVIDENCE-002",
+        "AC-EVIDENCE-003",
+        "AC-GOV-001",
+        "AC-GOV-002",
+        "AC-GOV-003",
+        "AC-GOV-004",
+        "AC-LIFECYCLE-001",
+        "AC-SECURITY-003",
+        "AC-SECURITY-004",
+        "AC-SECURITY-005",
+        "AC-SECURITY-006",
+        "AC-STATE-001",
+        "AC-STATE-002",
+        "AC-STATE-003"
+      ],
       "capabilities": [
         {
           "ac_id": "AC-SECURITY-001",
@@ -32,22 +55,22 @@
         {
           "ac_id": "AC-SECURITY-003",
           "name": "",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-SECURITY-004",
           "name": "",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-SECURITY-005",
           "name": "",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-SECURITY-006",
           "name": "",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-SECURITY-007",
@@ -64,12 +87,46 @@
     {
       "id": 2,
       "name": "Orchestration Core (CORE WORKFLOW)",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
+      "completion_percentage": 71,
+      "ac_ids_complete": 33,
       "ac_ids_total": 46,
-      "status": "planned",
+      "status": "in_progress",
       "description": "Establishes THE DEFAULT WORKING MECHANISM at the core of CORTEX operations.\nMasterOrchestrator is IN CHARGE: evaluates requests, creates tasks, executes.\nThis is the central controller that all user requests flow through.\n",
-      "verified_implemented": [],
+      "verified_implemented": [
+        "AC-ORCH-001",
+        "AC-ORCH-002",
+        "AC-ORCH-003",
+        "AC-ORCH-004",
+        "AC-ORCH-005",
+        "AC-ORCH-006",
+        "AC-ORCH-007",
+        "AC-ORCH-008",
+        "AC-PLAN-001",
+        "AC-PLAN-002",
+        "AC-PLAN-003",
+        "AC-PLAN-004",
+        "AC-PLAN-005",
+        "AC-PLAN-006",
+        "AC-PLAN-007",
+        "AC-PLAN-008",
+        "AC-STS-001",
+        "AC-STS-002",
+        "AC-STS-003",
+        "AC-TDD-001",
+        "AC-TDD-002",
+        "AC-TDD-003",
+        "AC-TDD-004",
+        "AC-TDD-005",
+        "AC-TDD-006",
+        "AC-TDD-007",
+        "AC-TDD-008",
+        "AC-TDD-009",
+        "AC-TDD-010",
+        "AC-TODO-001",
+        "AC-TODO-002",
+        "AC-TODO-003",
+        "AC-TODO-004"
+      ],
       "capabilities": [
         {
           "ac_id": "AC-ROUTE-001",
@@ -141,39 +198,59 @@
     {
       "id": 3,
       "name": "Feature Orchestrators",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
+      "completion_percentage": 55,
+      "ac_ids_complete": 15,
       "ac_ids_total": 27,
-      "status": "planned",
+      "status": "in_progress",
       "description": "Build specialized orchestrators that leverage the core workflow.\nEach orchestrator reuses: Audit, Governance, State, Lifecycle, Evidence.\nSnowball effect: implementation becomes easier with solid foundation.\n",
-      "verified_implemented": [],
+      "verified_implemented": [
+        "AC-ADO-001",
+        "AC-ADO-002",
+        "AC-ADO-003",
+        "AC-CLEAN-001",
+        "AC-CLEAN-002",
+        "AC-CLEAN-003",
+        "AC-CRAWLER-001",
+        "AC-CRAWLER-002",
+        "AC-CRAWLER-003",
+        "AC-INV-001",
+        "AC-INV-002",
+        "AC-SAN-001",
+        "AC-SAN-002",
+        "AC-VAC-001",
+        "AC-VAC-002"
+      ],
       "capabilities": [
         {
           "ac_id": "AC-CLEAN-001",
           "name": "",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-CLEAN-002",
           "name": "",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-CLEAN-003",
           "name": "",
-          "status": "planned"
+          "status": "completed"
         }
       ]
     },
     {
       "id": 4,
       "name": "Intelligence Layer",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
+      "completion_percentage": 60,
+      "ac_ids_complete": 3,
       "ac_ids_total": 5,
-      "status": "planned",
+      "status": "in_progress",
       "description": "AI-native features that enhance orchestration with intelligence.\nLeverages all previous components: audit history, execution patterns,\ngovernance rules, and orchestrator behaviors.\n",
-      "verified_implemented": [],
+      "verified_implemented": [
+        "AC-KNOW-001",
+        "AC-KNOW-002",
+        "AC-KNOW-003"
+      ],
       "capabilities": [
         {
           "ac_id": "AC-ROUTE-003",

@@ -139,11 +139,29 @@ def build_plan_viewer_data():
     print("📊 Loading progress-tracker.json...")
     progress_tracker = load_progress_tracker()
     
-    # Count total AC-IDs from AC-INDEX
-    total_ac_ids = len(ac_map)
+    # Get all completed AC-IDs from progress-tracker
+    all_completed_ac_ids = set()
+    if progress_tracker:
+        # Check various places where verified_implemented might be
+        if 'current_phase' in progress_tracker and 'verified_implemented' in progress_tracker['current_phase']:
+            all_completed_ac_ids.update(progress_tracker['current_phase']['verified_implemented'])
+        
+        # Check all phase_N sections
+        for phase_key in ['phase_1', 'phase_2', 'phase_3', 'phase_4', 'phase_5', 'phase_1_5_sts', 'phase_2_orchestration', 'phase_3_features', 'phase_4_intelligence', 'completed_phases']:
+            if phase_key in progress_tracker:
+                phase_data = progress_tracker[phase_key]
+                # Handle list of phases (completed_phases)
+                if isinstance(phase_data, list):
+                    for item in phase_data:
+                        if isinstance(item, dict) and 'verified_implemented' in item:
+                            all_completed_ac_ids.update(item['verified_implemented'])
+                # Handle dict phases
+                elif isinstance(phase_data, dict):
+                    if 'verified_implemented' in phase_data:
+                        all_completed_ac_ids.update(phase_data['verified_implemented'])
     
-    # Count completed AC-IDs
-    completed_ac_ids = len(progress_tracker.get('verified_implemented', [])) if progress_tracker else 0
+    total_ac_ids = len(ac_map)
+    completed_ac_ids = len(all_completed_ac_ids)
     
     # Build phases array
     phases = []
@@ -155,7 +173,9 @@ def build_plan_viewer_data():
             continue
         
         ac_ids = extract_ac_ids_for_phase(master_plan, phase_num)
-        ac_completed = count_completed_ac_ids(ac_ids, progress_tracker)
+        
+        # Get completed AC-IDs for this phase
+        ac_completed_in_phase = len([ac for ac in ac_ids if ac in all_completed_ac_ids])
         
         # Get phase name
         phase_name = phase_info.get('name', f'Phase {phase_num}')
@@ -167,12 +187,12 @@ def build_plan_viewer_data():
                 capabilities.append({
                     'ac_id': ac_id,
                     'name': ac_map[ac_id]['name'],
-                    'status': 'completed' if ac_id in (progress_tracker.get('verified_implemented', []) if progress_tracker else []) else 'planned'
+                    'status': 'completed' if ac_id in all_completed_ac_ids else 'planned'
                 })
         
         # Calculate percentage
         total_in_phase = len(ac_ids)
-        percentage = (ac_completed / total_in_phase * 100) if total_in_phase > 0 else 0
+        percentage = (ac_completed_in_phase / total_in_phase * 100) if total_in_phase > 0 else 0
         
         # Determine phase status
         if percentage == 100 and total_in_phase > 0:
@@ -182,15 +202,18 @@ def build_plan_viewer_data():
         else:
             status = 'planned'
         
+        # Get verified_implemented list for this phase (actual completed AC-IDs)
+        verified_in_phase = [ac for ac in ac_ids if ac in all_completed_ac_ids]
+        
         phase_obj = {
             'id': int(phase_num) if phase_num != 4.5 else 4.5,
             'name': phase_name,
             'completion_percentage': int(percentage),
-            'ac_ids_complete': ac_completed,
+            'ac_ids_complete': ac_completed_in_phase,
             'ac_ids_total': total_in_phase,
             'status': status,
             'description': phase_info.get('description', ''),
-            'verified_implemented': ac_ids[:ac_completed],  # First N AC-IDs as completed
+            'verified_implemented': verified_in_phase,
             'capabilities': capabilities
         }
         
