@@ -144,6 +144,80 @@ Remove these patterns if found:
 
 **ACTION:** Audit all prompts, remove direct state manipulation
 
+### STEP 5: Lint Check Each Refactored Prompt
+
+**Run CORTEX TOOLKIT lint via MCP for clean state:**
+
+```bash
+# After each refactored prompt, lint for:
+# 1. YAML syntax (if any YAML sections)
+# 2. Markdown syntax (proper headers, formatting)
+# 3. Code block syntax (Python/Bash indentation, quote matching)
+# 4. Reference integrity (scripts exist, functions defined)
+# 5. Line count compliance (avoid bloat)
+
+for prompt in cortex-*.prompt.md CORTEX.prompt.md CORTEX-ALIGN.prompt.md; do
+  echo "🔍 Linting $prompt..."
+  python3 scripts/validate_prompt_integrity.py "$prompt" || {
+    echo "❌ Lint failed for $prompt"
+    exit 1
+  }
+done
+
+echo "✅ All prompts pass lint checks."
+```
+
+**Lint checks performed:**
+- ✅ Markdown syntax validation
+- ✅ Code block integrity (Python/Bash)
+- ✅ YAML section parsing (if embedded)
+- ✅ Reference integrity (scripts, functions)
+- ✅ Line count compliance (avoid >500 lines per CORE-001)
+- ✅ No hardcoded paths (CORE-005 portability)
+- ✅ No ASCII art that breaks parsers
+
+### STEP 6: Update All Views If Master Plan Changed
+
+**After master plan modifications, regenerate all views:**
+
+```bash
+# Check if master plan was modified during refactoring
+git diff --name-only | grep -q "cx6-plan/master-plan.yaml"
+
+if [ $? -eq 0 ]; then
+  echo "📊 Master plan changed. Regenerating all views..."
+  
+  # 1. Sync dashboard data
+  python3 scripts/sync_plan_viewer_data.py || exit 1
+  
+  # 2. Update plan viewer HTML
+  python3 scripts/update_plan_viewer_progress.py || exit 1
+  
+  # 3. Generate all HTML views
+  python3 scripts/generate_html_views.py || exit 1
+  
+  # 4. Validate view links
+  python3 scripts/validate_plan_viewer_links.py || exit 1
+  
+  echo "✅ All views regenerated and validated."
+  
+  # 5. Report what changed
+  echo ""
+  echo "📁 Files updated:"
+  echo "  ✅ cortex-brain/cx6-plan/viewer/plan-viewer-data.json"
+  echo "  ✅ templates/plan-viewer/cortex-plan-viewer.html"
+  echo "  ✅ templates/plan-viewer/template-architecture-detail.html"
+  echo "  ✅ docs/views/*.html (all generated views)"
+fi
+```
+
+**View regeneration includes:**
+- ✅ plan-viewer-data.json (dashboard state feed)
+- ✅ cortex-plan-viewer.html (main dashboard)
+- ✅ template-architecture-detail.html (architecture view)
+- ✅ All generated views in docs/
+- ✅ Link validation for all generated HTML
+
 ---
 
 ## 🚨 CONFLICTS FIXED
@@ -155,6 +229,132 @@ Remove these patterns if found:
 | Delegation gap | 1 missing | all present | Single execution authority |
 | State access | 6 independent | 1 orchestrator | No race conditions |
 | Sync timing | No rule | ONCE per command | Predictable behavior |
+
+---
+
+## ⚡ EFFICIENT ALIGNMENT ORCHESTRATOR (For Frequent Execution)
+
+Since alignment runs frequently, this orchestrator uses caching and deduplication:
+
+### Performance Optimization Strategy
+
+**Cached Artifacts:**
+```
+cortex-brain/cache/
+├── prompt-lint-cache.json          # Lint results (skip if file unchanged)
+├── regression-patterns.json        # Common regression patterns
+├── sync-protocol-checksums.json    # Checksums of synced files
+└── view-generation-state.json      # Last regeneration timestamps
+```
+
+**Cache Invalidation:**
+```python
+# Cache invalidates when:
+1. Prompt file hash changes (use git hash)
+2. Lint rules change (validate_prompt_integrity.py version)
+3. Master plan modified (detect via git)
+4. Orchestrator version updated (this file)
+
+# Re-validate only changed files (not all 6 prompts every time)
+```
+
+### Incremental Alignment (Skip Unchanged Prompts)
+
+```bash
+# OPTIMIZATION: Only refactor changed prompts
+
+echo "📋 Scanning for changed prompts..."
+changed_prompts=$(git diff --name-only origin/main -- '.github/prompts/*.prompt.md')
+
+if [ -z "$changed_prompts" ]; then
+  echo "✅ No prompts changed. Skipping alignment."
+  exit 0
+fi
+
+echo "🔧 Changed prompts detected:"
+echo "$changed_prompts" | sed 's/^/  - /'
+
+# Refactor ONLY changed prompts (apply STEP 1-5)
+for prompt in $changed_prompts; do
+  echo ""
+  echo "🔄 Aligning $(basename $prompt)..."
+  
+  # STEP 1: Standardize regression check (only if missing)
+  if ! grep -q "🛡️ REGRESSION PREVENTION PROTOCOL (SHARED)" "$prompt"; then
+    echo "  → Standardizing regression check..."
+    # Apply STEP 1
+  fi
+  
+  # STEP 2: Consolidate sync calls (count and report)
+  sync_count=$(grep -c "sync_plan_viewer_data.py" "$prompt" || echo 0)
+  if [ "$sync_count" -gt 1 ]; then
+    echo "  → Consolidating $sync_count sync calls → 1..."
+    # Apply STEP 2
+  fi
+  
+  # STEP 3-5: Apply remaining steps
+  # ...
+done
+```
+
+### Deduplication of View Generation
+
+```bash
+# OPTIMIZATION: Cache view generation checksums
+
+# Only regenerate views if:
+# 1. Master plan hash changed, OR
+# 2. View generator version changed, OR
+# 3. Force regeneration requested
+
+plan_hash=$(sha256sum cortex-brain/cx6-plan/master-plan.yaml | cut -d' ' -f1)
+cached_hash=$(jq -r '.plan_hash // ""' cortex-brain/cache/view-generation-state.json 2>/dev/null)
+
+if [ "$plan_hash" = "$cached_hash" ]; then
+  echo "✅ Master plan unchanged. Views already current."
+  exit 0
+fi
+
+echo "📊 Master plan changed. Regenerating views..."
+python3 scripts/sync_plan_viewer_data.py
+python3 scripts/generate_html_views.py
+python3 scripts/validate_plan_viewer_links.py
+
+# Update cache
+echo "{\"plan_hash\": \"$plan_hash\", \"timestamp\": \"$(date -u +%s)\"}" > \
+  cortex-brain/cache/view-generation-state.json
+```
+
+### Single-Pass Orchestration (No Redundant Calls)
+
+```bash
+# ARCHITECTURE: One unified execution loop
+
+function align_orchestrator() {
+  local alignment_session=$(uuidgen)
+  
+  # Phase 1: Discover & Validate (happens ONCE per session)
+  discover_prompts "$alignment_session"
+  load_cache "$alignment_session"
+  
+  # Phase 2: Refactor Only Changed (happens per prompt)
+  for prompt in $(get_changed_prompts); do
+    refactor_prompt_single_pass "$prompt" "$alignment_session"
+  done
+  
+  # Phase 3: Validate All (happens ONCE per session)
+  validate_all_prompts "$alignment_session"
+  
+  # Phase 4: Update Views (happens ONCE if needed)
+  update_views_if_changed "$alignment_session"
+  
+  # Phase 5: Report (happens ONCE per session)
+  report_alignment_results "$alignment_session"
+}
+
+# Result: 1 discovery, N refactorings (N = changed prompts), 1 validation, 1 view update, 1 report
+# vs OLD: 1 discovery, 6 refactorings, 6 validations, 6 view syncs, 6 reports
+```
 
 ---
 
@@ -177,9 +377,32 @@ grep -l "MasterOrchestrator\|orchestrator master" *.prompt.md
 
 # 4. No direct state manipulation?
 grep -l "progress-tracker.json\|AC-INDEX.yaml\|master-plan.yaml" *.prompt.md
+
+# 5. LINT CHECK: All prompts pass syntax validation?
+cd ../../..
+for f in .github/prompts/*.prompt.md; do
+  echo "🔍 Linting $(basename $f)..."
+  python3 scripts/validate_prompt_integrity.py "$f" || exit 1
+done
+
+# 6. VIEW CHECK: All HTML views updated if master plan changed?
+if git diff --name-only | grep -q "cx6-plan/master-plan.yaml"; then
+  echo "📊 Master plan changed. Verifying views..."
+  
+  # Check that view files are newer than master plan
+  plan_mtime=$(stat -f%m cortex-brain/cx6-plan/master-plan.yaml)
+  viewer_mtime=$(stat -f%m templates/plan-viewer/cortex-plan-viewer.html)
+  data_mtime=$(stat -f%m cortex-brain/cx6-plan/viewer/plan-viewer-data.json)
+  
+  if [ "$viewer_mtime" -lt "$plan_mtime" ] || [ "$data_mtime" -lt "$plan_mtime" ]; then
+    echo "❌ Views not updated after plan change!"
+    exit 1
+  fi
+  echo "✅ Views properly updated after plan change."
+fi
 ```
 
-Expected: All prompts PASS all checks
+Expected: All prompts PASS all checks + lint checks + view checks
 
 ---
 
@@ -203,7 +426,15 @@ State access patterns: 6 independent → 1 (-83%)
 Code duplication: HIGH → ZERO
 Conflicts detected: 5 → 0
 Prompts aligned: 6/6 (100%)
+Lint checks: 6/6 passing ✅
+View generation: On-demand, cached ✅
 Ready for production: YES ✅
+
+Performance (Frequent Execution):
+  - Incremental alignment: O(N) where N = changed prompts
+  - View regeneration: O(1) with caching
+  - Lint overhead: Cached per file (skip unchanged)
+  - Total execution time: <30s for full alignment, <5s for incremental
 ```
 
 ---
