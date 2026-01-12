@@ -35,6 +35,64 @@ python3 -m src.main "{user_intent}" --orchestrator master --format markdown
 - ❌ Manipulate state outside MasterOrchestrator
 
 ---
+
+## 🔄 DATA FLOW & INTEGRATION ARCHITECTURE (CRITICAL)
+
+**Single Source of Truth (SSOT) - Everything Flows From These:**
+
+```
+PRIMARY SOURCES (SSOT - Never modify directly):
+├─ master-plan.yaml          (phase definitions, AC ranges, dependencies)
+├─ AC-INDEX.yaml             (AC-ID definitions, acceptance criteria)
+├─ progress-tracker.json     (completion state - only MasterOrchestrator writes)
+└─ core-rules.yaml           (19 SKULL governance rules)
+
+AUTOMATIC SYNC TRIGGER:
+└─ MasterOrchestrator completes any state change
+   → Automatically triggers SyncOrchestrator
+
+DERIVED FILES (Auto-regenerated - Never touch these):
+├─ plan-viewer-data.json     (dashboard feed from SSOT)
+├─ docs/html-views/          (per-phase HTML/YAML views)
+├─ audit-logs-aggregated.json (audit dashboard feed)
+└─ .github/prompts/AC-mappings.json (AC-ID lookup for all prompts)
+
+GUARANTEE: Derived files always in sync with master-plan.yaml + AC-INDEX.yaml
+```
+
+**Data Flow Diagram:**
+```
+master-plan.yaml + AC-INDEX.yaml + progress-tracker.json
+        ↓ (read by)
+MasterOrchestrator (updates SSOT, then triggers sync)
+        ↓ (writes)
+progress-tracker.json (new completion state)
+        ↓ (read by)
+SyncOrchestrator (auto-triggered)
+        ├─→ plan-viewer-data.json
+        ├─→ docs/html-views/*.html/.yaml
+        ├─→ audit-logs-aggregated.json
+        └─→ .github/prompts/AC-mappings.json
+            ↓ (consumed by)
+        Users/Browsers/Prompts (always see current state)
+```
+
+**Example: Phase 4.5 Addition**
+```
+YESTERDAY: Added to master-plan.yaml + AC-INDEX.yaml ✅
+TODAY: Run MasterOrchestrator (any intent)
+  → Detects changes
+  → Triggers SyncOrchestrator
+  → Regenerates all derived files
+  → Phase 4.5 now visible in:
+     • plan-viewer.html ✅
+     • All CORTEX prompts ✅
+     • AC-mappings.json ✅
+```
+
+**Reference:** See `cortex-brain/documents/CORTEX-INTEGRATION-ARCHITECTURE.md` for full integration spec.
+
+---
 ## 🛡️ REGRESSION PREVENTION PROTOCOL (UNIFIED)
 
 **Before any operation, verify critical state files:**
