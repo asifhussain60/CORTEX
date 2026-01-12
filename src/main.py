@@ -42,6 +42,9 @@ from typing import Optional
 # Fast-path handler loaded eagerly (lightweight)
 from src.entry_point.fast_commands import FastCommandHandler, is_fast_command
 
+# Header/Footer injection for CORTEX branding (AC-HEADER-001)
+from src.infrastructure.response_header_footer_manager import wrap_cortex_response
+
 # CortexEntry loaded lazily (heavy)
 from src.utils.lazy_loader import lazy_import
 
@@ -315,7 +318,16 @@ Examples:
         try:
             handler = FastCommandHandler(brain_path=Path(args.brain) if args.brain else None)
             response = handler.handle(args.message, format_type=args.format)
-            print(response)
+            
+            # Wrap response with CORTEX header/footer (AC-HEADER-001)
+            wrapped_response = wrap_cortex_response(
+                response,
+                operation_type="Execution",
+                format=args.format if args.format else "markdown",
+                include_footer=True
+            )
+            
+            print(wrapped_response)
             
             if args.profile:
                 elapsed = (time.perf_counter() - start_time) * 1000
@@ -378,7 +390,15 @@ Examples:
                     format_type=args.format
                 )
             
-            print(response)
+            # Wrap response with CORTEX header/footer (AC-HEADER-001)
+            wrapped_response = wrap_cortex_response(
+                response,
+                operation_type="Execution",
+                format=args.format if args.format else "markdown",
+                include_footer=True
+            )
+            
+            print(wrapped_response)
             
             if args.profile:
                 command_time = (time.perf_counter() - command_start) * 1000
@@ -423,7 +443,15 @@ Examples:
                     format_type=args.format
                 )
                 
-                print(f"\n{response}\n")
+                # Wrap response with CORTEX header/footer (AC-HEADER-001)
+                wrapped_response = wrap_cortex_response(
+                    response,
+                    operation_type="Execution",
+                    format=args.format if args.format else "markdown",
+                    include_footer=True
+                )
+                
+                print(f"\n{wrapped_response}\n")
                 
                 if args.profile:
                     command_time = (time.perf_counter() - command_start) * 1000
