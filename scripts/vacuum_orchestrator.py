@@ -4,12 +4,13 @@ CORTEX 6.0 Vacuum Orchestrator - Intelligent File Organization & Cleanup
 Enforces CORE-009 (file organization) and naming conventions (kebab-case)
 
 Author: GitHub Copilot + CORTEX Governance System
-Version: 4.0.0 (NEW: Root Pollution Prevention, Interactive Audit)
+Version: 4.1.0 (NEW: Post-Vacuum Integrity Verification Phase)
 Date: 2026-01-12
 
 CHANGELOG:
 - v3.0.0: Safety guards, similarity detection, tier-aware relocation
 - v4.0.0: Root pollution prevention, interactive audit, phase 0 detection
+- v4.1.0: Post-vacuum integrity verification (Phase 4), self-learning checks
 """
 
 import re
@@ -976,6 +977,131 @@ class VacuumOrchestrator:
             self.log_action("\nTo execute, run:")
             self.log_action("  python3 scripts/vacuum_orchestrator.py --execute")
     
+    def verify_post_vacuum_integrity(self):
+        """
+        NEW (v4.0): Post-vacuum integrity verification phase.
+        Ensures vacuum operations didn't break CORTEX architecture.
+        
+        Checks:
+        1. All critical files still exist
+        2. Core module imports work
+        3. Governance files are valid
+        4. Database integrity
+        """
+        print("  [1/4] Checking critical files...")
+        critical_files = [
+            "cortex-brain/tier0/governance/core-rules.yaml",
+            "cortex-brain/tier1/tracking/progress-tracker.json",
+            "cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml",
+            "cortex-brain/cx6-plan/master-plan.yaml",
+            "src/infrastructure/enhanced_audit_logger.py",
+            "src/orchestrators/core/governance_merger.py",
+        ]
+        
+        missing_files = []
+        for file_path in critical_files:
+            full_path = WORKSPACE_ROOT / file_path
+            if not full_path.exists():
+                missing_files.append(file_path)
+                self.log_error(f"Critical file missing: {file_path}")
+        
+        if missing_files:
+            print(f"    ✗ {len(missing_files)} critical file(s) missing")
+        else:
+            print(f"    ✓ All {len(critical_files)} critical files present")
+        
+        print("  [2/4] Verifying core imports...")
+        import_errors = []
+        critical_imports = [
+            ("src.infrastructure.enhanced_audit_logger", "EnhancedAuditLogger"),
+            ("src.orchestrators.core.governance_merger", "GovernanceMerger"),
+            ("src.orchestrators.core.master_orchestrator", "MasterOrchestrator"),
+        ]
+        
+        import sys
+        original_path = sys.path.copy()
+        sys.path.insert(0, str(WORKSPACE_ROOT))
+        
+        for module_name, class_name in critical_imports:
+            try:
+                module = __import__(module_name, fromlist=[class_name])
+                if hasattr(module, class_name):
+                    print(f"    ✓ {module_name}.{class_name}")
+                else:
+                    import_errors.append(f"{module_name}.{class_name} not exported")
+                    self.log_error(f"Import error: {module_name}.{class_name} not exported")
+            except Exception as e:
+                import_errors.append(str(e))
+                self.log_error(f"Import failed: {module_name}: {e}")
+        
+        sys.path = original_path
+        
+        if import_errors:
+            print(f"    ✗ {len(import_errors)} import error(s)")
+        else:
+            print(f"    ✓ All core imports verified")
+        
+        print("  [3/4] Validating governance files...")
+        governance_files = [
+            "cortex-brain/tier0/governance/core-rules.yaml",
+            "cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml",
+        ]
+        
+        governance_errors = []
+        for gov_file in governance_files:
+            file_path = WORKSPACE_ROOT / gov_file
+            if file_path.exists():
+                try:
+                    data = yaml.safe_load(open(file_path, 'r'))
+                    if data is None:
+                        governance_errors.append(f"{gov_file} is empty")
+                    else:
+                        print(f"    ✓ {gov_file} (valid)")
+                except Exception as e:
+                    governance_errors.append(f"{gov_file}: {e}")
+                    self.log_error(f"Governance file error: {gov_file}: {e}")
+            else:
+                governance_errors.append(f"{gov_file} not found")
+        
+        if governance_errors:
+            print(f"    ✗ {len(governance_errors)} governance error(s)")
+        else:
+            print(f"    ✓ All governance files valid")
+        
+        print("  [4/4] Database integrity check...")
+        db_path = WORKSPACE_ROOT / "cortex-brain" / "database" / "governance.db"
+        if db_path.exists():
+            try:
+                import sqlite3
+                conn = sqlite3.connect(str(db_path))
+                cursor = conn.cursor()
+                cursor.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='table';")
+                table_count = cursor.fetchone()[0]
+                conn.close()
+                print(f"    ✓ Database has {table_count} table(s)")
+            except Exception as e:
+                self.log_error(f"Database error: {e}")
+                print(f"    ✗ Database error: {e}")
+        else:
+            print(f"    ⚠ Database not found (may not be initialized)")
+        
+        # Summary
+        total_issues = len(missing_files) + len(import_errors) + len(governance_errors)
+        
+        print()
+        if total_issues == 0:
+            print("  ✅ INTEGRITY VERIFICATION PASSED - No issues detected")
+            self.log_action("✅ Post-vacuum verification: All checks passed")
+        else:
+            print(f"  ⚠️  INTEGRITY VERIFICATION COMPLETE - {total_issues} issue(s) detected")
+            self.log_action(f"⚠️  Post-vacuum verification: {total_issues} issue(s) found")
+            if missing_files:
+                self.log_action(f"   - Missing files: {', '.join(missing_files)}")
+            if import_errors:
+                self.log_action(f"   - Import errors: {len(import_errors)}")
+            if governance_errors:
+                self.log_action(f"   - Governance errors: {len(governance_errors)}")
+    
     def execute(self):
         """Execute the full vacuum operation with all enhancements (SEQUENTIAL)"""
         try:
@@ -1011,6 +1137,11 @@ class VacuumOrchestrator:
             print("📊 PHASE 3: Summary Report")
             print("="*70)
             self.generate_report()
+            
+            print("\n" + "="*70)
+            print("🔍 PHASE 4: Post-Vacuum Integrity Verification (NEW - Self-Learning)")
+            print("="*70)
+            self.verify_post_vacuum_integrity()
             print("="*70)
             
             return len(self.errors_log) == 0
