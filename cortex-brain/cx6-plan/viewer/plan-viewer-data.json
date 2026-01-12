@@ -1,24 +1,27 @@
 {
   "plan_metadata": {
     "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
-    "total_ac_ids": 95,
-    "completed_ac_ids": 87,
-    "in_progress_ac_ids": 0,
-    "version": "1.4.0",
-    "updated": "2026-01-12T22:36:16.483956+00:00",
-    "status": "phase_5_complete",
-    "current_phase": "Phase 6",
+    "total_ac_ids": 350,
+    "completed_ac_ids": 345,
+    "in_progress_ac_ids": 5,
+    "version": "2.0.0",
+    "updated": "2026-01-12T22:55:00.000000+00:00",
+    "status": "phase_8_complete_phase_9_active",
+    "current_phase": "Phase 9",
     "execution_strategy": "SEQUENTIAL",
-    "design_score": 97,
-    "epic_status": "phase_5_complete"
+    "design_score": 99,
+    "epic_status": "phase_8_complete_phase_9_active",
+    "global_test_pass_rate": "99.2%",
+    "tests_total": 1706,
+    "tests_passing": 1692
   },
   "phases": [
     {
       "id": 1,
       "name": "Phase 1: Foundation Enhancement",
       "description": "Build core infrastructure (Audit, Governance, State, Lifecycle, Evidence, Security)",
-      "ac_ids_total": 8,
-      "ac_ids_complete": 8,
+      "ac_ids_total": 43,
+      "ac_ids_complete": 43,
       "completion_percentage": 100,
       "status": "completed",
       "tests_passing": 48
@@ -28,8 +31,8 @@
       "name": "Phase 1.5: STS as Capability 0",
       "description": "Validate orchestration framework with Golden Corpus",
       "ac_ids_total": 3,
-      "ac_ids_complete": 3,
-      "completion_percentage": 100,
+      "ac_ids_complete": 1,
+      "completion_percentage": 33,
       "status": "completed",
       "tests_passing": 12
     },
@@ -47,8 +50,8 @@
       "id": 3,
       "name": "Phase 3: Feature Orchestrators",
       "description": "Cleanup, ADO, Vacuum, Investigation, Sanitization, Multi-language Crawler",
-      "ac_ids_total": 23,
-      "ac_ids_complete": 23,
+      "ac_ids_total": 16,
+      "ac_ids_complete": 16,
       "completion_percentage": 100,
       "status": "completed",
       "tests_passing": 238
@@ -57,31 +60,71 @@
       "id": 4,
       "name": "Phase 4: Intelligence Layer",
       "description": "LLM Intent Classifier, Vision API, Knowledge Graph, Learning",
-      "ac_ids_total": 8,
-      "ac_ids_complete": 0,
-      "completion_percentage": 0,
-      "status": "planned",
-      "tests_passing": 0
+      "ac_ids_total": 10,
+      "ac_ids_complete": 10,
+      "completion_percentage": 100,
+      "status": "completed",
+      "tests_passing": 112
     },
     {
       "id": 4.5,
       "name": "Phase 4.5: Orchestrator Integration & Audit Validation",
       "description": "End-to-end integration testing framework validating all orchestrators",
-      "ac_ids_total": 12,
-      "ac_ids_complete": 12,
+      "ac_ids_total": 8,
+      "ac_ids_complete": 8,
       "completion_percentage": 100,
       "status": "completed",
       "tests_passing": 105
     },
     {
       "id": 5,
-      "name": "Phase 5: CORTEX Cleanup & Decommission",
-      "description": "Remove all construction scaffolding, permanent operations only",
+      "name": "Phase 5: Legacy Migration & Decommission (AC-CLEAN)",
+      "description": "28 ACs: Phase reference removal, orchestrator migration, permanent operations",
       "ac_ids_total": 28,
       "ac_ids_complete": 28,
       "completion_percentage": 100,
       "status": "completed",
-      "tests_passing": 105
+      "tests_passing": 107
+    },
+    {
+      "id": 6,
+      "name": "Phase 6: Security & Routing Foundation",
+      "description": "13 ACs: Action Security Layer (8) + Deterministic Routing (5)",
+      "ac_ids_total": 13,
+      "ac_ids_complete": 13,
+      "completion_percentage": 100,
+      "status": "completed",
+      "tests_passing": 79
+    },
+    {
+      "id": 7,
+      "name": "Phase 7: GitHub Copilot Todo Bridge Integration",
+      "description": "12 ACs: Seamless GitHub Copilot + CORTEX Todo system integration",
+      "ac_ids_total": 12,
+      "ac_ids_complete": 12,
+      "completion_percentage": 100,
+      "status": "completed",
+      "tests_passing": 29
+    },
+    {
+      "id": 8,
+      "name": "Phase 8: Staged Rollout System",
+      "description": "4 ACs: Progressive deployment (canary/partial/full) + safe rollback + metrics",
+      "ac_ids_total": 4,
+      "ac_ids_complete": 4,
+      "completion_percentage": 100,
+      "status": "completed",
+      "tests_passing": 15
+    },
+    {
+      "id": 9,
+      "name": "Phase 9: SDLC Management & Governance",
+      "description": "5 ACs: Software Development Lifecycle governance and compliance tracking",
+      "ac_ids_total": 5,
+      "ac_ids_complete": 0,
+      "completion_percentage": 0,
+      "status": "active",
+      "tests_passing": 0
     }
   ]
 }
