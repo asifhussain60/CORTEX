@@ -1,6 +1,6 @@
-schema_version: '1.7'
-last_updated: '2026-01-12T08:28:19.266955Z'
-total_ac_count: 163
+schema_version: '1.8'
+last_updated: '2026-01-12T16:50:00.000000Z'
+total_ac_count: 175
 completed_count: 33
 in_progress_count: 0
 design_score_current: 97
@@ -6999,3 +6999,241 @@ AC-TOOLKIT-005:
   - Integrated with brittleness review prompt for toolkit health metrics
   owner: TDD-Master
   riskIfUnfixed: low
+AC-INTEG-001:
+  id: AC-INTEG-001
+  name: End-to-End Request Lifecycle
+  description: Complete request flow validated (clarification → governance → execution → audit logging)
+  status: planned
+  phase: Phase 4.5 (Integration Tests)
+  priority: CRITICAL
+  category: integration
+  tests:
+  - tests/integration/test_e2e_workflows.py
+  implementation: src/orchestrators/integration_test_suite.py
+  dependencies:
+  - AC-ORCH-001
+  - AC-AUDIT-001
+  - AC-EVIDENCE-001
+  acceptance_criteria:
+  - Complete request lifecycle tested from entry point to audit log
+  - Request clarification, governance evaluation, and execution validated
+  - Audit trail complete for entire lifecycle
+  - Performance target met (<5ms audit latency)
+AC-INTEG-002:
+  id: AC-INTEG-002
+  name: Multi-Phase Orchestrator Interaction
+  description: Orchestrators from Phase 1-4 interact correctly together
+  status: planned
+  phase: Phase 4.5 (Integration Tests)
+  priority: CRITICAL
+  category: integration
+  tests:
+  - tests/integration/test_orchestrator_chaining.py
+  implementation: src/orchestrators/integration_test_suite.py
+  dependencies:
+  - AC-ORCH-001
+  - AC-TODO-001
+  acceptance_criteria:
+  - Master orchestrator chains to feature orchestrators correctly
+  - Data flows properly between components
+  - State transitions validated across orchestrator boundaries
+  - Error propagation traced correctly
+AC-INTEG-003:
+  id: AC-INTEG-003
+  name: Orchestrator Error Propagation & Recovery
+  description: Errors in orchestrators propagate correctly and recovery mechanisms work
+  status: planned
+  phase: Phase 4.5 (Integration Tests)
+  priority: CRITICAL
+  category: integration
+  tests:
+  - tests/integration/test_error_propagation.py
+  implementation: src/orchestrators/integration_test_suite.py
+  dependencies:
+  - AC-ORCH-001
+  - AC-STATE-001
+  acceptance_criteria:
+  - Errors propagate from child to parent orchestrator
+  - Rollback triggered on critical failures
+  - State remains consistent after error recovery
+  - Audit trail shows error and recovery sequence
+AC-INTEG-004:
+  id: AC-INTEG-004
+  name: Audit Trail Completeness Validation
+  description: Every operation is logged with full audit trail, 100% completeness
+  status: planned
+  phase: Phase 4.5 (Integration Tests)
+  priority: CRITICAL
+  category: integration
+  tests:
+  - tests/integration/test_audit_completeness.py
+  implementation: src/orchestrators/integration_test_suite.py
+  dependencies:
+  - AC-AUDIT-001
+  - AC-AUDIT-002
+  acceptance_criteria:
+  - Zero unlogged operations
+  - All audit entries have required fields (timestamp, category, AC-ID, etc.)
+  - Audit database contains 100% of logged operations
+  - No audit entries missing from correlation chain
+AC-INTEG-005:
+  id: AC-INTEG-005
+  name: Correlation ID Traceability
+  description: Correlation IDs link all related operations in an audit chain
+  status: planned
+  phase: Phase 4.5 (Integration Tests)
+  priority: CRITICAL
+  category: integration
+  tests:
+  - tests/integration/test_correlation_tracing.py
+  implementation: src/orchestrators/integration_test_suite.py
+  dependencies:
+  - AC-AUDIT-001
+  - AC-AUDIT-004
+  acceptance_criteria:
+  - Each operation has correlation_id
+  - All related operations share correlation_id
+  - Audit trail can be reconstructed from correlation_id
+  - Parent-child relationships traceable via correlation chain
+AC-INTEG-006:
+  id: AC-INTEG-006
+  name: Hash Chain Integrity Validation
+  description: Hash chains unbroken, tamper detection operational
+  status: planned
+  phase: Phase 4.5 (Integration Tests)
+  priority: CRITICAL
+  category: integration
+  tests:
+  - tests/integration/test_hash_chain_integrity.py
+  implementation: src/orchestrators/integration_test_suite.py
+  dependencies:
+  - AC-AUDIT-007
+  acceptance_criteria:
+  - All event_hash values match computed hashes
+  - prev_event_hash correctly links to previous events
+  - Tampering detection works (hash mismatch detected)
+  - Chain integrity maintained across 50+ operations
+AC-INTEG-007:
+  id: AC-INTEG-007
+  name: Evidence Bundle Generation for All AC-IDs
+  description: Evidence bundles successfully generated for completed AC-IDs
+  status: planned
+  phase: Phase 4.5 (Integration Tests)
+  priority: CRITICAL
+  category: integration
+  tests:
+  - tests/integration/test_evidence_bundle_generation.py
+  implementation: src/orchestrators/integration_test_suite.py
+  dependencies:
+  - AC-EVIDENCE-001
+  - AC-EVIDENCE-002
+  - AC-EVIDENCE-003
+  acceptance_criteria:
+  - Evidence bundles created with 3-file format (manifest, tests, audit)
+  - All bundles include test_results.json with coverage >=80%
+  - All bundles include audit_trace.jsonl with 100% completeness
+  - Manifest.yaml contains required metadata
+AC-INTEG-008:
+  id: AC-INTEG-008
+  name: Evidence Bundle 3-Gate Validation
+  description: Test coverage, audit completeness, and governance compliance gates enforced
+  status: planned
+  phase: Phase 4.5 (Integration Tests)
+  priority: CRITICAL
+  category: integration
+  tests:
+  - tests/integration/test_evidence_gates.py
+  implementation: src/orchestrators/integration_test_suite.py
+  dependencies:
+  - AC-EVIDENCE-001
+  - AC-GOV-001
+  acceptance_criteria:
+  - Gate 1 (test coverage >=80%) enforced, bundles rejected if below
+  - Gate 2 (audit 100%) enforced, bundles rejected if incomplete
+  - Gate 3 (governance 100%) enforced, bundles rejected if violations exist
+  - Bundle rejection logged with reason
+AC-INTEG-009:
+  id: AC-INTEG-009
+  name: State Management Under Concurrency & Failure
+  description: State remains consistent with 10+ concurrent operations, recovers from failures
+  status: planned
+  phase: Phase 4.5 (Integration Tests)
+  priority: HIGH
+  category: integration
+  tests:
+  - tests/integration/test_state_concurrency.py
+  implementation: src/orchestrators/integration_test_suite.py
+  dependencies:
+  - AC-STATE-001
+  - AC-STATE-002
+  - AC-STATE-003
+  acceptance_criteria:
+  - 10+ concurrent state updates handled without corruption
+  - File locking prevents race conditions
+  - Atomic transactions validated
+  - State recovery works after simulated failure
+  - Zero data loss on power failure simulation
+AC-INTEG-010:
+  id: AC-INTEG-010
+  name: Governance Rule Enforcement Integration
+  description: All 19 SKULL rules enforced, 4-tier governance working, bypass prevented
+  status: planned
+  phase: Phase 4.5 (Integration Tests)
+  priority: HIGH
+  category: integration
+  tests:
+  - tests/integration/test_governance_enforcement.py
+  implementation: src/orchestrators/integration_test_suite.py
+  dependencies:
+  - AC-GOV-001
+  - AC-GOV-002
+  - AC-GOV-003
+  - AC-GOV-004
+  - AC-GOV-005
+  acceptance_criteria:
+  - All 19 SKULL rules enforced (CORE-001 through CORE-019)
+  - Rule violations blocked with audit trail
+  - Tier 0 (SKULL) rules override lower tiers
+  - Governance bypass attempts logged and blocked
+  - Rule evaluation <100ms for merged ruleset
+AC-INTEG-011:
+  id: AC-INTEG-011
+  name: Performance & Load Testing
+  description: All performance targets met under load (latency, throughput, memory)
+  status: planned
+  phase: Phase 4.5 (Integration Tests)
+  priority: MEDIUM
+  category: integration
+  tests:
+  - tests/integration/test_performance_load.py
+  implementation: src/orchestrators/integration_test_suite.py
+  dependencies:
+  - AC-AUDIT-001
+  - AC-GOV-001
+  acceptance_criteria:
+  - Audit latency <5ms per operation
+  - Governance merge <100ms for full ruleset
+  - Hash chain verification <10ms per 100 events
+  - Concurrent throughput 100+ operations/sec
+  - Memory stable under 1000+ sustained operations
+AC-INTEG-012:
+  id: AC-INTEG-012
+  name: Regression & Backwards Compatibility
+  description: All prior phases still working, no degradation, API contracts maintained
+  status: planned
+  phase: Phase 4.5 (Integration Tests)
+  priority: HIGH
+  category: integration
+  tests:
+  - tests/integration/test_regression_suite.py
+  implementation: src/orchestrators/integration_test_suite.py
+  dependencies:
+  - AC-STATE-001
+  - AC-ORCH-001
+  - AC-AUDIT-001
+  acceptance_criteria:
+  - 25+ regression tests passing (Phase 1-4 functionality)
+  - No performance degradation from prior measurements
+  - Orchestrator API contracts unchanged
+  - Database schema backwards compatible
+  - Legacy AC-ID versions still functional
