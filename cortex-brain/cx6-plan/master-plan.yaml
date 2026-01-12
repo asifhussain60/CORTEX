@@ -651,7 +651,7 @@ phase_3_feature_orchestrators:
       - AC-ORCH-001
       - AC-SECURITY-001
     vacuum_cleanup:
-      name: Vacuum and Cleanup v2
+      name: Vacuum and Cleanup v2 - Enhanced with Intent Registry
       ac_ids:
       - AC-VAC-001
       - AC-VAC-002
@@ -659,16 +659,89 @@ phase_3_feature_orchestrators:
       - AC-CLEAN-001
       - AC-CLEAN-002
       - AC-CLEAN-003
+      - AC-CLEAN-201
+      - AC-CLEAN-202
       priority: MEDIUM
-      duration: 4 days
+      duration: 6 days (includes ~2 days for new enhancements)
       owner: Infrastructure Team
+      rationale: Housekeeping enhancement from strategic analysis to integrate with phase gates and reduce false positives
       capabilities:
       - Deep workspace cleaning
       - DRY_RUN preview
       - Folder structure enforcement
+      - Phase-boundary cleanup integration (AC-CLEAN-201)
+      - Intent registry for semantic cleanup decisions (AC-CLEAN-201)
+      - Infrastructure daemon for autonomous .gitignored cleanup (AC-CLEAN-202)
       dependencies:
       - AC-ORCH-001
       - AC-SECURITY-005
+      - AC-LIFECYCLE-001
+      enhancements:
+        phase_2_addition: true
+        reason: Strategic architectural improvement from housekeeping analysis
+        design_doc: cortex-brain/documents/strategy/HOUSEKEEPING-ORCHESTRATOR-ANALYSIS.md
+        trade_offs: |
+          Option B (Phase-Integrated + Intent Registry) selected:
+          - Pros: 100% auditability, zero race conditions, CORTEX-aligned
+          - Cons: 5% time overhead per phase, requires intent registry maintenance
+          - Benefit: Eliminates false positives, provides documented intent for every deletion
+      components:
+        phase_boundary_cleanup:
+          ac_id: AC-CLEAN-201
+          name: Phase-Boundary Cleanup Framework
+          description: |
+            Cleanup integrated into phase completion workflow.
+            Deletes previous phase artifacts only, safety-validated.
+            Generates cleanup evidence bundle proving deletions.
+          duration: 2 days
+          test_requirements:
+            - Phase transition integration tests
+            - Cleanup evidence bundle validation
+            - Protected file list verification
+            - Safety test: no false deletions
+          acceptance_criteria:
+            - Cleanup runs at phase boundary (not mid-phase)
+            - Cleanup AC-IDs produce evidence bundles
+            - All deletions logged with reason
+            - Phase completion blocked if cleanup fails
+        intent_registry:
+          ac_id: AC-CLEAN-201 (co-owned)
+          name: File Intent Registry System
+          description: |
+            YAML-based registry marking files as "keep" or "optional".
+            Enables semantic cleanup without false positives.
+            Supports approval workflow for semantic cleanup candidates.
+          duration: 1 day
+          file_location: cortex-brain/registry/file-intent-registry.yaml
+          test_requirements:
+            - Intent registry schema validation
+            - Cleanup respects intent markers
+            - Approval workflow tested
+            - Registry persistence and atomicity
+          acceptance_criteria:
+            - Registry YAML loads without errors
+            - Vacuum checks intent before deleting
+            - Manual cleanup requires explicit approval
+            - Audit trail shows intent + approval for each deletion
+        infrastructure_daemon:
+          ac_id: AC-CLEAN-202
+          name: Infrastructure Cleanup Daemon
+          description: |
+            Autonomous cleanup of .gitignore-d files only.
+            Runs hourly or as background service.
+            No approval needed (safe by design).
+          duration: 1 day
+          implementation: cortex-brain/manifests/housekeeping/infra-daemon.yaml
+          test_requirements:
+            - Daemon runs on schedule
+            - Only deletes .gitignored files
+            - Protected patterns respected
+            - Minimal audit logging (non-blocking)
+          acceptance_criteria:
+            - Daemon runs autonomously without intervention
+            - Zero false deletions (gitignore-scoped)
+            - Audit trail shows cleanup summary hourly
+            - Performance <100ms per cleanup cycle
     investigation:
       name: Investigation Orchestrator
       ac_ids:

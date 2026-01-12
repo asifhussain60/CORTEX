@@ -1,0 +1,227 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.2, pluggy-1.6.0
+rootdir: D:\PROJECTS\CORTEX\tests
+configfile: pytest.ini
+plugins: anyio-4.12.0, asyncio-1.3.0, cov-7.0.0, timeout-2.4.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+timeout: 30.0s
+timeout method: thread
+timeout func_only: False
+collected 1404 items
+
+tests\audit\test_audit_logger_enhanced.py ...........F.................  [  2%]
+tests\governance\test_audit_validation.py ..sssssss                      [  2%]
+tests\governance\test_audit_validation_simple.py ..                      [  2%]
+tests\governance\test_governance_merger.py ...................           [  4%]
+tests\governance\test_governance_performance.py ..........               [  4%]
+tests\governance\test_governance_tools.py FFFFFFFFFFFF.F.                [  5%]
+tests\infrastructure\test_ac_id_traceability.py .......                  [  6%]
+tests\infrastructure\test_ac_traceability.py .....................       [  7%]
+tests\infrastructure\test_automatic_vacuum.py ................           [  9%]
+tests\infrastructure\test_evidence_bundle_structure.py ...............   [ 10%]
+tests\infrastructure\test_evidence_bundle_validation_gates.py .....      [ 10%]
+tests\infrastructure\test_governance_to_todo_pipeline.py ............... [ 11%]
+............................                                             [ 13%]
+tests\infrastructure\test_hash_chain.py ....F..                          [ 14%]
+tests\infrastructure\test_hash_chain_integrity.py ....................E. [ 15%]
+.                                                                        [ 15%]
+tests\infrastructure\test_repo_audit_isolation.py ....................   [ 17%]
+tests\infrastructure\test_test_discovery.py .......                      [ 17%]
+tests\infrastructure\test_test_executor.py ...sss                        [ 18%]
+tests\infrastructure\test_todo_manager_ac_002.py ....................... [ 19%]
+..........                                                               [ 20%]
+tests\integration\test_cortex_self_management.py ...                     [ 20%]
+tests\integration\test_edge_case_mitigations.py ........................ [ 22%]
+........                                                                 [ 22%]
+tests\integration\test_feat04_end_to_end.py ...............              [ 23%]
+tests\integration\test_feat07_integration_suite.py sssss.s.......ss      [ 25%]
+tests\integration\test_governance_todo_integration.py ........           [ 25%]
+tests\integration\test_todo_lifecycle.py .s...                           [ 25%]
+tests\integration\test_unified_pipeline.py .......                       [ 26%]
+tests\integration\test_version_compatibility.py ....................     [ 27%]
+tests\mcp\test_capability_exposure.py ....................               [ 29%]
+tests\mcp\test_company_brain.py .............                            [ 30%]
+tests\mcp\test_housekeeping_tools.py ......F....                         [ 31%]
+tests\mcp\test_jsonrpc_server.py .....................                   [ 32%]
+tests\mcp\test_mcp_integration.py ............                           [ 33%]
+tests\mcp\test_multi_repo.py ..........F.......                          [ 34%]
+tests\mcp\test_planning_tools.py ........                                [ 35%]
+tests\mcp\test_request_response_handling.py .......F............         [ 36%]
+tests\mcp\test_tdd_tools.py .F.....                                      [ 37%]
+tests\mcp\test_todo_tools.py .......                                     [ 37%]
+tests\mcp\test_traceability_tools.py ..........                          [ 38%]
+tests\orchestrators\core\test_todo_handoff_validation.py .........       [ 39%]
+tests\orchestrators\core\test_todo_lifecycle_manager.py ........s....    [ 39%]
+tests\orchestrators\core\test_todo_rollback_manager.py ..........        [ 40%]
+tests\orchestrators\test_ado_orchestrator.py .......                     [ 41%]
+tests\orchestrators\test_gap_fix_orchestrator.py ............            [ 42%]
+tests\orchestrators\test_housekeeping.py ...........................     [ 43%]
+tests\orchestrators\test_infrastructure_cleanup_daemon.py .............. [ 44%]
+..............                                                           [ 45%]
+tests\orchestrators\test_investigation_orchestrator.py .......           [ 46%]
+tests\orchestrators\test_maintenance_orchestrator.py ..............      [ 47%]
+tests\orchestrators\test_phase_boundary_cleanup.py ....................  [ 48%]
+tests\orchestrators\test_sanitization_orchestrator.py .......            [ 49%]
+tests\orchestrators\test_state_synchronizer.py ..............            [ 50%]
+tests\orchestrators\test_tdd_master_orchestrator.py ...............ss    [ 51%]
+tests\performance\test_audit_latency.py .................                [ 52%]
+tests\performance\test_feat07_performance.py ........                    [ 53%]
+tests\quality\test_exception_handling.py ..F..s.sssss...FF               [ 54%]
+tests\sts\test_governance_enforcement.py .                               [ 54%]
+tests\sts\test_policy_decisions.py .                                     [ 54%]
+tests\sts\test_routing_determinism.py ..                                 [ 54%]
+tests\sts\test_security_boundaries.py .                                  [ 54%]
+tests\sts\test_unicode_normalization.py .                                [ 54%]
+tests\tools\test_real_implementation_engine.py ....                      [ 55%]
+tests\unit\core\test_github_copilot_todo_bridge.py ..................... [ 56%]
+........                                                                 [ 57%]
+tests\unit\security\test_approval_state_machine.py ..........            [ 58%]
+tests\unit\security\test_canonical_paths.py .s..sss....                  [ 58%]
+tests\unit\security\test_command_allowlist.py .......                    [ 59%]
+tests\unit\security\test_secret_redaction.py ..........                  [ 60%]
+tests\unit\test_audit_logger.py .................s....                   [ 61%]
+tests\unit\test_checkpoint_manager.py FFFFFFFF.F.                        [ 62%]
+tests\unit\test_circuit_breaker.py ........................              [ 64%]
+tests\unit\test_dag.py ................................................. [ 67%]
+..............................................                           [ 70%]
+tests\unit\test_enhanced_vacuum.py ....................................F [ 73%]
+..                                                                       [ 73%]
+tests\unit\test_execution_and_progress.py ...........                    [ 74%]
+tests\unit\test_file_utils.py ...............                            [ 75%]
+tests\unit\test_governance_to_todo_pipeline.py FF.FF.F.......F           [ 76%]
+tests\unit\test_intelligence_middleware.py ...................s          [ 77%]
+tests\unit\test_mistake_prevention.py .......................            [ 79%]
+tests\unit\test_path_utils.py ....FFFF......                             [ 80%]
+tests\unit\test_phase_boundary_reporter.py ............                  [ 81%]
+tests\unit\test_progress_throttler.py ...........                        [ 82%]
+tests\unit\test_rate_limiter.py ........................                 [ 83%]
+tests\unit\test_requirements_restructurer.py .........                   [ 84%]
+tests\unit\test_resource_limiter.py ....................                 [ 86%]
+tests\unit\test_rollback_manager.py ..........                           [ 86%]
+tests\unit\test_silent_execution.py ..........                           [ 87%]
+tests\unit\test_smoke.py .........                                       [ 88%]
+tests\unit\test_state_manager.py ................................        [ 90%]
+tests\unit\test_structure_validator.py .........................F......  [ 92%]
+tests\unit\test_todo_critical_path.py ..                                 [ 92%]
+tests\unit\test_todo_crud.py .........................                   [ 94%]
+tests\unit\test_todo_parallel.py ..                                      [ 94%]
+tests\unit\test_todo_status_transitions.py ....                          [ 95%]
+tests\unit\test_todo_task_creation.py ......F...                         [ 95%]
+tests\unit\test_trie_router.py ........................................  [ 98%]
+tests\unit\test_yaml_first_enforcement.py ................               [ 99%]
+tests\unit\test_yaml_to_todos.py ....                                    [100%]
+
+============================== warnings summary ===============================
+src\infrastructure\evidence_bundle_structure.py:26
+  D:\PROJECTS\CORTEX\src\infrastructure\evidence_bundle_structure.py:26: PytestCollectionWarning: cannot collect test class 'TestResult' because it has a __init__ constructor (from: infrastructure/test_evidence_bundle_structure.py)
+    @dataclass
+
+src\infrastructure\evidence_bundle_structure.py:35
+  D:\PROJECTS\CORTEX\src\infrastructure\evidence_bundle_structure.py:35: PytestCollectionWarning: cannot collect test class 'TestMetrics' because it has a __init__ constructor (from: infrastructure/test_evidence_bundle_structure.py)
+    @dataclass
+
+src\infrastructure\evidence_bundle_structure.py:35
+  D:\PROJECTS\CORTEX\src\infrastructure\evidence_bundle_structure.py:35: PytestCollectionWarning: cannot collect test class 'TestMetrics' because it has a __init__ constructor (from: infrastructure/test_evidence_bundle_validation_gates.py)
+    @dataclass
+
+src\infrastructure\evidence_bundle_structure.py:26
+  D:\PROJECTS\CORTEX\src\infrastructure\evidence_bundle_structure.py:26: PytestCollectionWarning: cannot collect test class 'TestResult' because it has a __init__ constructor (from: infrastructure/test_evidence_bundle_validation_gates.py)
+    @dataclass
+
+src\infrastructure\test_executor.py:36
+  D:\PROJECTS\CORTEX\src\infrastructure\test_executor.py:36: PytestCollectionWarning: cannot collect test class 'TestExecutor' because it has a __init__ constructor (from: infrastructure/test_test_executor.py)
+    class TestExecutor:
+
+src\infrastructure\test_executor.py:19
+  D:\PROJECTS\CORTEX\src\infrastructure\test_executor.py:19: PytestCollectionWarning: cannot collect test class 'TestResult' because it has a __init__ constructor (from: infrastructure/test_test_executor.py)
+    @dataclass
+
+mcp/test_traceability_tools.py::TestTraceabilityScan::test_scan_real_workspace
+mcp/test_traceability_tools.py::TestTraceabilityCoverage::test_coverage_real_workspace
+mcp/test_traceability_tools.py::TestTraceabilityGaps::test_gaps_real_workspace
+mcp/test_traceability_tools.py::TestTraceabilityGaps::test_gaps_real_workspace
+  D:\PROJECTS\CORTEX\tests\unit\test_dag.py:80: SyntaxWarning: invalid escape sequence '\ '
+    \ /
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+SKIPPED [1] tests\governance\test_audit_validation.py:94: Audit log file not found
+SKIPPED [1] tests\governance\test_audit_validation.py:124: Audit log file not found
+SKIPPED [1] tests\governance\test_audit_validation.py:153: Audit log file not found
+SKIPPED [1] tests\governance\test_audit_validation.py:179: Audit log file not found
+SKIPPED [1] tests\governance\test_audit_validation.py:206: Audit log file not found
+SKIPPED [1] tests\governance\test_audit_validation.py:229: Audit log file not found
+SKIPPED [1] tests\governance\test_audit_validation.py:262: Audit log file not found
+SKIPPED [1] tests\infrastructure\test_test_executor.py:54: Causes infinite recursion - subprocess runs full test suite including self
+SKIPPED [1] tests\infrastructure\test_test_executor.py:67: Causes infinite recursion - subprocess runs full test suite including self
+SKIPPED [1] tests\infrastructure\test_test_executor.py:78: Causes infinite recursion - subprocess runs full test suite including self
+SKIPPED [1] tests\integration\test_feat07_integration_suite.py:60: Scaffolding test - needs create_todos_from_plan() implementation (feat04 Phase 2)
+SKIPPED [1] tests\integration\test_feat07_integration_suite.py:109: Scaffolding test - needs GovernanceMerger.generate_unified_instruction_set() (feat04 Phase 2)
+SKIPPED [1] tests\integration\test_feat07_integration_suite.py:161: Scaffolding test - needs create_todos_from_plan() and error recovery (feat04 Phase 2)
+SKIPPED [1] tests\integration\test_feat07_integration_suite.py:210: Scaffolding test - needs StateManager.get_audit_context() (feat04 Phase 2)
+SKIPPED [1] tests\integration\test_feat07_integration_suite.py:239: Scaffolding test - needs TodoOrchestrator+Governance integration (feat04 Phase 2)
+SKIPPED [1] tests\integration\test_feat07_integration_suite.py:305: Scaffolding test - needs full stack integration (feat04 Phase 2)
+SKIPPED [1] tests\integration\test_feat07_integration_suite.py:512: Scaffolding test - needs create_todos_from_plan() (feat04 Phase 2)
+SKIPPED [1] tests\integration\test_feat07_integration_suite.py:561: Scaffolding test - needs mark_task_completed() (feat04 Phase 2)
+SKIPPED [1] tests\integration\test_todo_lifecycle.py:189: Checkpoint integration requires TodoOrchestrator integration with CheckpointManager
+SKIPPED [1] tests\orchestrators\core\test_todo_lifecycle_manager.py:278: TODO orchestrator integration pending Phase 2
+SKIPPED [1] tests\orchestrators\test_tdd_master_orchestrator.py:628: TDD-Master validation logic needs refinement (Phase 2)
+SKIPPED [1] tests\orchestrators\test_tdd_master_orchestrator.py:682: TDD-Master unplanned mode needs validation refinement (Phase 2)
+SKIPPED [1] tests\quality\test_exception_handling.py:149: Requires file_utils.FileOperations implementation with os.replace
+SKIPPED [1] tests\quality\test_exception_handling.py:209: Requires MasterOrchestrator.todo_orchestrator implementation (Phase 2)
+SKIPPED [1] tests\quality\test_exception_handling.py:222: Requires MasterOrchestrator._execute_todo implementation (Phase 2)
+SKIPPED [1] tests\quality\test_exception_handling.py:233: Requires MasterOrchestrator._execute_governance implementation (Phase 2)
+SKIPPED [1] tests\quality\test_exception_handling.py:245: Requires MasterOrchestrator._execute_governance implementation (Phase 2)
+SKIPPED [1] tests\quality\test_exception_handling.py:256: Requires MasterOrchestrator lifecycle error handling (Phase 2)
+SKIPPED [1] tests\unit\security\test_canonical_paths.py:61: Unix symlink test
+SKIPPED [1] tests\unit\security\test_canonical_paths.py:136: Unix symlink test
+SKIPPED [1] tests\unit\security\test_canonical_paths.py:153: Unix symlink test
+SKIPPED [1] tests\unit\security\test_canonical_paths.py:175: Unix symlink test
+SKIPPED [1] tests\unit\test_audit_logger.py:563: StateManager.set_audit_logger not yet implemented - future enhancement
+SKIPPED [1] tests\unit\test_intelligence_middleware.py:444: pytest-benchmark not installed
+ERROR tests\infrastructure\test_hash_chain_integrity.py::TestChainTracing::test_get_event_chain_nonexistent
+FAILED tests\audit\test_audit_logger_enhanced.py::TestMemoryBuffer::test_buffer_performance
+FAILED tests\governance\test_governance_tools.py::TestGovernanceRules::test_list_all_rules
+FAILED tests\governance\test_governance_tools.py::TestGovernanceRules::test_filter_by_tier
+FAILED tests\governance\test_governance_tools.py::TestGovernanceRules::test_tier_counts_accurate
+FAILED tests\governance\test_governance_tools.py::TestGovernanceValidate::test_validate_existing_rule
+FAILED tests\governance\test_governance_tools.py::TestGovernanceValidate::test_validate_nonexistent_rule
+FAILED tests\governance\test_governance_tools.py::TestGovernanceValidate::test_validate_tdd_enforcement
+FAILED tests\governance\test_governance_tools.py::TestGovernanceConflicts::test_detect_conflicts
+FAILED tests\governance\test_governance_tools.py::TestGovernanceConflicts::test_conflict_structure
+FAILED tests\governance\test_governance_tools.py::TestGovernanceUnified::test_generate_unified_set
+FAILED tests\governance\test_governance_tools.py::TestGovernanceUnified::test_performance_under_50ms
+FAILED tests\governance\test_governance_tools.py::TestGovernanceTDDCheck::test_tdd_rules_present
+FAILED tests\governance\test_governance_tools.py::TestGovernanceTDDCheck::test_tdd_enforcement_active
+FAILED tests\governance\test_governance_tools.py::TestACGOV001Migration::test_skull_rules_migrated
+FAILED tests\infrastructure\test_hash_chain.py::TestHashChainIntegrity::test_hash_computation_performance
+FAILED tests\mcp\test_housekeeping_tools.py::TestHousekeepingHealth::test_health_real_workspace
+FAILED tests\mcp\test_multi_repo.py::TestCrossRepoOperations::test_cross_repo_search
+FAILED tests\mcp\test_request_response_handling.py::TestErrorHandling::test_timeout_handling
+FAILED tests\mcp\test_tdd_tools.py::TestTDDExecute::test_execute_real - asser...
+FAILED tests\quality\test_exception_handling.py::TestNoBareExceptClauses::test_gap_detector_no_bare_except
+FAILED tests\quality\test_exception_handling.py::TestExceptionHandlingIntegration::test_no_bare_except_in_core_codebase
+FAILED tests\quality\test_exception_handling.py::TestExceptionHandlingIntegration::test_all_exception_handlers_have_type_specificity
+FAILED tests\unit\test_checkpoint_manager.py::test_create_checkpoint - OSErro...
+FAILED tests\unit\test_checkpoint_manager.py::test_checkpoint_content - OSErr...
+FAILED tests\unit\test_checkpoint_manager.py::test_recover_from_checkpoint - ...
+FAILED tests\unit\test_checkpoint_manager.py::test_partial_recovery - OSError...
+FAILED tests\unit\test_checkpoint_manager.py::test_list_checkpoints - OSError...
+FAILED tests\unit\test_checkpoint_manager.py::test_get_latest_checkpoint - OS...
+FAILED tests\unit\test_checkpoint_manager.py::test_rollback_to_checkpoint - O...
+FAILED tests\unit\test_checkpoint_manager.py::test_rollback_cascade - OSError...
+FAILED tests\unit\test_checkpoint_manager.py::test_checkpoint_cleanup - OSErr...
+FAILED tests\unit\test_enhanced_vacuum.py::TestReportGeneration::test_generate_report_saves_to_file
+FAILED tests\unit\test_governance_to_todo_pipeline.py::TestGovernanceMergerIntegration::test_merger_loads_all_tiers
+FAILED tests\unit\test_governance_to_todo_pipeline.py::TestGovernanceMergerIntegration::test_merger_returns_unified_instruction_set
+FAILED tests\unit\test_governance_to_todo_pipeline.py::TestGovernanceToTodoPipeline::test_pipeline_step1_merge_governance
+FAILED tests\unit\test_governance_to_todo_pipeline.py::TestGovernanceToTodoPipeline::test_pipeline_step2_evaluate_request
+FAILED tests\unit\test_governance_to_todo_pipeline.py::TestGovernanceToTodoPipeline::test_pipeline_complete_flow
+FAILED tests\unit\test_governance_to_todo_pipeline.py::TestPipelineIntegration::test_governance_merge_to_task_creation_flow
+FAILED tests\unit\test_path_utils.py::test_audit_logs_path_is_subdir - Assert...
+FAILED tests\unit\test_path_utils.py::test_state_db_path_ends_with_cortex_db
+FAILED tests\unit\test_path_utils.py::test_tier0_governance_path_is_subdir - ...
+FAILED tests\unit\test_path_utils.py::test_tier1_tracking_path_is_subdir - As...
+FAILED tests\unit\test_structure_validator.py::TestReportGeneration::test_report_saves_to_file
+FAILED tests\unit\test_todo_task_creation.py::TestTaskCreationFromGovernanceEvaluationFlow::test_complete_governance_to_task_flow
+= 44 failed, 1326 passed, 34 skipped, 10 warnings, 1 error in 66.83s (0:01:06) =

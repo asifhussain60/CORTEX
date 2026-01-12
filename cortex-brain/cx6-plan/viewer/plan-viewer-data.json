@@ -1,19 +1,19 @@
 {
   "plan_metadata": {
     "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
-    "total_ac_ids": 102,
-    "completed_ac_ids": 71,
+    "total_ac_ids": 104,
+    "completed_ac_ids": 77,
     "in_progress_ac_ids": 0,
-    "version": "1.3.0",
-    "updated": "2026-01-12T12:55:28.717522+00:00",
+    "version": "1.4.0",
+    "updated": "2026-01-12T18:00:00.000000+00:00",
     "status": "phases_1_to_3_verified"
   },
   "phases": [
     {
       "id": 1,
       "name": "Foundation Enhancement",
-      "completion_percentage": 100,
-      "ac_ids_complete": 29,
+      "completion_percentage": 100.0,
+      "ac_ids_complete": 34,
       "ac_ids_total": 34,
       "status": "completed",
       "description": "Build core infrastructure (Audit, Governance, State, Lifecycle, Evidence, Security)",
@@ -29,13 +29,18 @@
         "AC-GOV-002",
         "AC-GOV-003",
         "AC-GOV-004",
+        "AC-GOV-005",
         "AC-STATE-001",
         "AC-STATE-002",
         "AC-STATE-003",
         "AC-LIFECYCLE-001",
+        "AC-LIFECYCLE-002",
+        "AC-LIFECYCLE-003",
         "AC-EVIDENCE-001",
         "AC-EVIDENCE-002",
         "AC-EVIDENCE-003",
+        "AC-SECURITY-001",
+        "AC-SECURITY-002",
         "AC-SECURITY-003",
         "AC-SECURITY-004",
         "AC-SECURITY-005",
@@ -51,93 +56,118 @@
       "capabilities": [
         {
           "id": "AC-AUDIT-001",
-          "name": "Queryable Audit Storage",
-          "description": "SQLite + JSONL dual storage with <5ms latency"
+          "name": "AC-AUDIT-001",
+          "description": ""
         },
         {
           "id": "AC-AUDIT-002",
-          "name": "Memory Buffer",
-          "description": "Buffer with configurable flush thresholds"
+          "name": "AC-AUDIT-002",
+          "description": ""
         },
         {
           "id": "AC-AUDIT-003",
-          "name": "7 Audit Categories",
-          "description": "GOVERNANCE, ORCHESTRATOR, VALIDATION, INFRASTRUCTURE, MCP, BRAIN, INTEGRATION"
+          "name": "AC-AUDIT-003",
+          "description": ""
         },
         {
           "id": "AC-AUDIT-004",
-          "name": "AC-ID Traceability",
-          "description": "All audit entries link to acceptance criteria"
+          "name": "AC-AUDIT-004",
+          "description": ""
         },
         {
           "id": "AC-AUDIT-005",
-          "name": "Automatic Vacuum",
-          "description": "Level-based retention with daily vacuum"
+          "name": "AC-AUDIT-005",
+          "description": ""
         },
         {
           "id": "AC-AUDIT-006",
-          "name": "Per-Repo Isolation",
-          "description": "Each repo has isolated audit database"
+          "name": "AC-AUDIT-006",
+          "description": ""
         },
         {
           "id": "AC-AUDIT-007",
-          "name": "Hash Chain Integrity",
-          "description": "Tamper detection via event_hash + prev_event_hash chain"
+          "name": "AC-AUDIT-007",
+          "description": ""
         },
         {
           "id": "AC-GOV-001",
-          "name": "4-Tier Governance Loading",
-          "description": "Load rules from all 4 tiers (0-3)"
+          "name": "AC-GOV-001",
+          "description": ""
         },
         {
           "id": "AC-GOV-002",
-          "name": "Conflict Detection",
-          "description": "Detect conflicting rules across tiers"
+          "name": "AC-GOV-002",
+          "description": ""
         },
         {
           "id": "AC-GOV-003",
-          "name": "Precedence Resolution",
-          "description": "Tier 0 wins all conflicts"
+          "name": "AC-GOV-003",
+          "description": ""
         },
         {
           "id": "AC-GOV-004",
-          "name": "Rule Caching",
-          "description": "<50ms merge time with caching"
+          "name": "AC-GOV-004",
+          "description": ""
+        },
+        {
+          "id": "AC-GOV-005",
+          "name": "AC-GOV-005",
+          "description": ""
         },
         {
           "id": "AC-STATE-001",
-          "name": "Session Persistence",
-          "description": "SQLite-backed session state"
+          "name": "AC-STATE-001",
+          "description": ""
         },
         {
           "id": "AC-STATE-002",
-          "name": "Transaction Isolation",
-          "description": "WAL mode with proper isolation"
+          "name": "AC-STATE-002",
+          "description": ""
         },
         {
           "id": "AC-STATE-003",
-          "name": "Continuation Support",
-          "description": "Resume from any checkpoint"
+          "name": "AC-STATE-003",
+          "description": ""
         },
         {
           "id": "AC-LIFECYCLE-001",
-          "name": "7-State Lifecycle Implementation",
-          "description": "IDLE \u2192 SPEC \u2192 IMPLEMENTED \u2192 TESTED \u2192 VERIFIED \u2192 ACTIVE \u2192 DEPRECATED"
+          "name": "AC-LIFECYCLE-001",
+          "description": ""
+        },
+        {
+          "id": "AC-LIFECYCLE-002",
+          "name": "AC-LIFECYCLE-002",
+          "description": ""
+        },
+        {
+          "id": "AC-LIFECYCLE-003",
+          "name": "AC-LIFECYCLE-003",
+          "description": ""
         },
         {
           "id": "AC-EVIDENCE-001",
-          "name": "Evidence Bundle Structure",
-          "description": "3-file lightweight format: manifest.yaml, test_results.json, audit_trace.jsonl"
+          "name": "AC-EVIDENCE-001",
+          "description": ""
         },
         {
           "id": "AC-EVIDENCE-002",
-          "name": "Evidence Bundle Validation Gates",
-          "description": "3 gates: Test Coverage (80%), Audit Completeness, Governance Compliance"
+          "name": "AC-EVIDENCE-002",
+          "description": ""
         },
         {
           "id": "AC-EVIDENCE-003",
-          "name": "Evidence Bundle Auto-Generation",
-          "description": "Generate Evidence Bundle post-implementation from tests + audit + AC-INDEX"
+          "name": "AC-EVIDENCE-003",
+          "description": ""
+        },
+        {
+          "id": "AC-SECURITY-001",
+          "name": "AC-SECURITY-001",
+          "description": ""
+        },
+        {
+          "id": "AC-SECURITY-002",
+          "name": "AC-SECURITY-002",
+          "description": ""
         },
         {
           "id": "AC-SECURITY-003",
@@ -199,8 +229,8 @@
     {
       "id": 1.5,
       "name": "STS as Capability 0",
-      "completion_percentage": 33,
-      "ac_ids_complete": 1,
+      "completion_percentage": 0,
+      "ac_ids_complete": 0,
       "ac_ids_total": 3,
       "status": "completed",
       "description": "Validate orchestration framework with Golden Corpus"
@@ -209,10 +239,10 @@
       "id": 2,
       "name": "Orchestration Core",
       "completion_percentage": 100,
-      "ac_ids_complete": 30,
-      "ac_ids_total": 30,
+      "ac_ids_complete": 17,
+      "ac_ids_total": 17,
       "status": "completed",
-      "description": "MasterOrchestrator, TodoManager, TDD-Master, Planning v5",
+      "description": "Establish default working mechanism (MasterOrchestrator, TodoManager, TDD-Master, Planning)",
       "verified_implemented": [
         "AC-ORCH-001",
         "AC-ORCH-002",
@@ -399,37 +429,226 @@
       ]
     },
     {
-      "id": 3,
-      "name": "Feature Orchestrators + Onboarding",
+      "id": "2.1",
+      "name": "Housekeeping Enhancement",
       "completion_percentage": 0,
       "ac_ids_complete": 0,
-      "ac_ids_total": 23,
-      "status": "planned",
-      "description": "",
+      "ac_ids_total": 2,
+      "status": "in_progress",
+      "description": "Phase-boundary cleanup + intent registry + infrastructure daemon",
       "verified_implemented": [],
-      "capabilities": []
+      "capabilities": [
+        {
+          "id": "AC-CLEAN-201",
+          "name": "AC-CLEAN-201",
+          "description": "Phase-Boundary Cleanup Framework + Intent Registry"
+        },
+        {
+          "id": "AC-CLEAN-202",
+          "name": "AC-CLEAN-202",
+          "description": "Infrastructure Cleanup Daemon"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Feature Orchestrators",
+      "completion_percentage": 100,
+      "ac_ids_complete": 16,
+      "ac_ids_total": 16,
+      "status": "completed",
+      "description": "Build feature orchestrators (ADO, Vacuum, Investigation, Crawlers, Onboarding)",
+      "verified_implemented": [
+        "AC-ADO-001",
+        "AC-ADO-002",
+        "AC-ADO-003",
+        "AC-VAC-001",
+        "AC-VAC-002",
+        "AC-CLEAN-001",
+        "AC-CLEAN-002",
+        "AC-CLEAN-003",
+        "AC-CLEAN-004",
+        "AC-CLEAN-005",
+        "AC-INV-001",
+        "AC-INV-002",
+        "AC-CRAWLER-001",
+        "AC-CRAWLER-002",
+        "AC-CRAWLER-003",
+        "AC-ONBOARD-001",
+        "AC-ONBOARD-002",
+        "AC-ONBOARD-006",
+        "AC-ONBOARD-007"
+      ],
+      "capabilities": [
+        {
+          "id": "AC-ADO-001",
+          "name": "AC-ADO-001",
+          "description": ""
+        },
+        {
+          "id": "AC-ADO-002",
+          "name": "AC-ADO-002",
+          "description": ""
+        },
+        {
+          "id": "AC-ADO-003",
+          "name": "AC-ADO-003",
+          "description": ""
+        },
+        {
+          "id": "AC-VAC-001",
+          "name": "AC-VAC-001",
+          "description": ""
+        },
+        {
+          "id": "AC-VAC-002",
+          "name": "AC-VAC-002",
+          "description": ""
+        },
+        {
+          "id": "AC-CLEAN-001",
+          "name": "AC-CLEAN-001",
+          "description": ""
+        },
+        {
+          "id": "AC-CLEAN-002",
+          "name": "AC-CLEAN-002",
+          "description": ""
+        },
+        {
+          "id": "AC-CLEAN-003",
+          "name": "AC-CLEAN-003",
+          "description": ""
+        },
+        {
+          "id": "AC-CLEAN-004",
+          "name": "AC-CLEAN-004",
+          "description": ""
+        },
+        {
+          "id": "AC-CLEAN-005",
+          "name": "AC-CLEAN-005",
+          "description": ""
+        },
+        {
+          "id": "AC-INV-001",
+          "name": "AC-INV-001",
+          "description": ""
+        },
+        {
+          "id": "AC-INV-002",
+          "name": "AC-INV-002",
+          "description": ""
+        },
+        {
+          "id": "AC-CRAWLER-001",
+          "name": "AC-CRAWLER-001",
+          "description": ""
+        },
+        {
+          "id": "AC-CRAWLER-002",
+          "name": "AC-CRAWLER-002",
+          "description": ""
+        },
+        {
+          "id": "AC-CRAWLER-003",
+          "name": "AC-CRAWLER-003",
+          "description": ""
+        },
+        {
+          "id": "AC-ONBOARD-001",
+          "name": "AC-ONBOARD-001",
+          "description": ""
+        },
+        {
+          "id": "AC-ONBOARD-002",
+          "name": "AC-ONBOARD-002",
+          "description": ""
+        },
+        {
+          "id": "AC-ONBOARD-006",
+          "name": "AC-ONBOARD-006",
+          "description": ""
+        },
+        {
+          "id": "AC-ONBOARD-007",
+          "name": "AC-ONBOARD-007",
+          "description": ""
+        }
+      ]
     },
     {
       "id": 4,
       "name": "Intelligence Layer",
-      "completion_percentage": 0,
-      "ac_ids_complete": 8,
-      "ac_ids_total": 8,
-      "status": "planned",
-      "description": "",
-      "verified_implemented": [],
-      "capabilities": []
-    },
-    {
-      "id": 5,
-      "name": "Legacy Migration",
-      "completion_percentage": 0,
-      "ac_ids_complete": 3,
-      "ac_ids_total": 3,
-      "status": "planned",
-      "description": "",
-      "verified_implemented": [],
-      "capabilities": []
+      "completion_percentage": 100,
+      "ac_ids_complete": 10,
+      "ac_ids_total": 10,
+      "status": "completed",
+      "description": "Intelligence layer (LLM Intent Classifier, Vision API, Knowledge Practices, Knowledge Graph)",
+      "verified_implemented": [
+        "AC-LLM-001",
+        "AC-LLM-002",
+        "AC-LLM-003",
+        "AC-KNOW-001",
+        "AC-KNOW-002",
+        "AC-KNOW-003",
+        "AC-GRAPH-001",
+        "AC-GRAPH-002",
+        "AC-VIS-001",
+        "AC-VIS-002"
+      ],
+      "capabilities": [
+        {
+          "id": "AC-LLM-001",
+          "name": "AC-LLM-001",
+          "description": ""
+        },
+        {
+          "id": "AC-LLM-002",
+          "name": "AC-LLM-002",
+          "description": ""
+        },
+        {
+          "id": "AC-LLM-003",
+          "name": "AC-LLM-003",
+          "description": ""
+        },
+        {
+          "id": "AC-KNOW-001",
+          "name": "AC-KNOW-001",
+          "description": ""
+        },
+        {
+          "id": "AC-KNOW-002",
+          "name": "AC-KNOW-002",
+          "description": ""
+        },
+        {
+          "id": "AC-KNOW-003",
+          "name": "AC-KNOW-003",
+          "description": ""
+        },
+        {
+          "id": "AC-GRAPH-001",
+          "name": "AC-GRAPH-001",
+          "description": ""
+        },
+        {
+          "id": "AC-GRAPH-002",
+          "name": "AC-GRAPH-002",
+          "description": ""
+        },
+        {
+          "id": "AC-VIS-001",
+          "name": "AC-VIS-001",
+          "description": ""
+        },
+        {
+          "id": "AC-VIS-002",
+          "name": "AC-VIS-002",
+          "description": ""
+        }
+      ]
     }
   ]
 }
