@@ -1,0 +1,220 @@
+{
+  "tdd_master": {
+    "orchestrator_id": "tdd_master",
+    "class_name": "TDDMasterOrchestrator",
+    "domain": "development",
+    "version": "1.0.0",
+    "created_by": "system",
+    "governance_rules": [
+      "CORE-008",
+      "CORE-019"
+    ],
+    "capabilities": [
+      "test_generation",
+      "test_execution",
+      "test_validation",
+      "red_green_refactor"
+    ],
+    "status": "routing_enabled",
+    "governance_validated": true,
+    "routing_enabled": true,
+    "created_at": "2026-01-11T00:00:00Z",
+    "metadata": {
+      "ac_ids": ["AC-TDD-001", "AC-TDD-002", "AC-TDD-003", "AC-TDD-004", "AC-TDD-005"],
+      "phase": 2
+    }
+  },
+  "master_orchestrator": {
+    "orchestrator_id": "master_orchestrator",
+    "class_name": "MasterOrchestrator",
+    "domain": "orchestration",
+    "version": "1.0.0",
+    "created_by": "system",
+    "governance_rules": [
+      "CORE-001",
+      "CORE-017",
+      "CORE-021"
+    ],
+    "capabilities": [
+      "routing",
+      "pattern_matching",
+      "orchestration",
+      "lifecycle_management"
+    ],
+    "status": "routing_enabled",
+    "governance_validated": true,
+    "routing_enabled": true,
+    "created_at": "2026-01-11T00:00:00Z",
+    "metadata": {
+      "ac_ids": ["AC-ORCH-006", "AC-ORCH-007"],
+      "phase": 2
+    }
+  },
+  "todo_orchestrator": {
+    "orchestrator_id": "todo_orchestrator",
+    "class_name": "TodoOrchestrator",
+    "domain": "task_management",
+    "version": "1.0.0",
+    "created_by": "system",
+    "governance_rules": [
+      "CORE-001",
+      "CORE-019"
+    ],
+    "capabilities": [
+      "task_creation",
+      "task_lifecycle",
+      "dependency_resolution",
+      "task_validation"
+    ],
+    "status": "routing_enabled",
+    "governance_validated": true,
+    "routing_enabled": true,
+    "created_at": "2026-01-11T00:00:00Z",
+    "metadata": {
+      "ac_ids": ["AC-TODO-001", "AC-TODO-002", "AC-TODO-003", "AC-TODO-004"],
+      "phase": 2
+    }
+  },
+  "planning_orchestrator": {
+    "orchestrator_id": "planning_orchestrator",
+    "class_name": "PlanningOrchestrator",
+    "domain": "planning",
+    "version": "1.0.0",
+    "created_by": "system",
+    "governance_rules": [
+      "CORE-001",
+      "CORE-021"
+    ],
+    "capabilities": [
+      "plan_generation",
+      "plan_validation",
+      "plan_execution",
+      "plan_refinement"
+    ],
+    "status": "routing_enabled",
+    "governance_validated": true,
+    "routing_enabled": true,
+    "created_at": "2026-01-11T00:00:00Z",
+    "metadata": {
+      "ac_ids": ["AC-PLAN-001", "AC-PLAN-002", "AC-PLAN-003", "AC-PLAN-004", "AC-PLAN-005"],
+      "phase": 2
+    }
+  },
+  "ado_orchestrator": {
+    "orchestrator_id": "ado_orchestrator",
+    "class_name": "ADOOrchestrator",
+    "domain": "api_management",
+    "version": "1.0.0",
+    "created_by": "system",
+    "governance_rules": [
+      "CORE-001"
+    ],
+    "capabilities": [
+      "ado_integration",
+      "work_item_sync",
+      "sprint_management"
+    ],
+    "status": "routing_enabled",
+    "governance_validated": true,
+    "routing_enabled": true,
+    "created_at": "2026-01-11T00:00:00Z",
+    "metadata": {
+      "ac_ids": ["AC-ADO-001", "AC-ADO-006"],
+      "phase": 3
+    }
+  },
+  "investigation_orchestrator": {
+    "orchestrator_id": "investigation_orchestrator",
+    "class_name": "InvestigationOrchestrator",
+    "domain": "analysis",
+    "version": "1.0.0",
+    "created_by": "system",
+    "governance_rules": [
+      "CORE-001"
+    ],
+    "capabilities": [
+      "code_analysis",
+      "pattern_detection",
+      "issue_investigation"
+    ],
+    "status": "routing_enabled",
+    "governance_validated": true,
+    "routing_enabled": true,
+    "created_at": "2026-01-11T00:00:00Z",
+    "metadata": {
+      "ac_ids": ["AC-INV-001", "AC-INV-003"],
+      "phase": 3
+    }
+  },
+  "vacuum_orchestrator": {
+    "orchestrator_id": "vacuum_orchestrator",
+    "class_name": "VacuumOrchestratorV2",
+    "domain": "maintenance",
+    "version": "2.0.0",
+    "created_by": "system",
+    "governance_rules": [
+      "CORE-001",
+      "CORE-002"
+    ],
+    "capabilities": [
+      "duplicate_detection",
+      "orphan_detection",
+      "code_cleanup",
+      "governance_validation"
+    ],
+    "status": "routing_enabled",
+    "governance_validated": true,
+    "routing_enabled": true,
+    "created_at": "2026-01-11T00:00:00Z",
+    "metadata": {
+      "ac_ids": ["AC-VAC-001", "AC-VAC-004"],
+      "phase": 3
+    }
+  },
+  "sanitization_orchestrator": {
+    "orchestrator_id": "sanitization_orchestrator",
+    "class_name": "SanitizationOrchestrator",
+    "domain": "security",
+    "version": "1.0.0",
+    "created_by": "system",
+    "governance_rules": [
+      "CORE-001"
+    ],
+    "capabilities": [
+      "data_sanitization",
+      "secret_detection",
+      "path_normalization"
+    ],
+    "status": "routing_enabled",
+    "governance_validated": true,
+    "routing_enabled": true,
+    "created_at": "2026-01-11T00:00:00Z",
+    "metadata": {
+      "ac_ids": ["AC-SAN-001", "AC-SAN-002"],
+      "phase": 3
+    }
+  },
+  "crawler_orchestrator": {
+    "orchestrator_id": "crawler_orchestrator",
+    "class_name": "CrawlerorchestrationOrchestrator",
+    "domain": "analysis",
+    "version": "1.0.0",
+    "created_by": "system",
+    "governance_rules": [
+      "CORE-001"
+    ],
+    "capabilities": [
+      "codebase_crawl",
+      "knowledge_extraction",
+      "dependency_mapping"
+    ],
+    "status": "routing_enabled",
+    "governance_validated": true,
+    "routing_enabled": true,
+    "created_at": "2026-01-11T00:00:00Z",
+    "metadata": {
+      "ac_ids": ["AC-CRAWLER-001", "AC-CRAWLER-002"],
+      "phase": 3
+    }
+  }
+}

@@ -17,8 +17,7 @@ import csv
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 
-from src.infrastructure.enhanced_audit_logger import (
-    AuditStorage,
+from src.orchestrators.audit_logger import (
     AuditLevel,
     AuditCategory
 )
