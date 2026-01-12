@@ -11,7 +11,8 @@ plan_metadata:
   total_ac_ids: 184
   hybrid_approach: true
   gpt_influence: 70% rigor, 30% overhead
-  latest_addition: Phase 5 - CORTEX Cleanup & Decommission Suite (AC-CLEAN-301 to 328)
+  latest_addition: Phase 5 - CORTEX Cleanup & Decommission Suite (AC-CLEAN-301 to
+    328)
 snowball_strategy:
   description: 'Build core infrastructure first; features compound on infrastructure.
 
@@ -57,7 +58,6 @@ snowball_strategy:
     weeks: 2
     dependency: Orchestrator Integration (Phase 4.5)
     critical: Remove all construction scaffolding, permanent operations only
-
 phase_1_foundation:
   name: Foundation Enhancement
   duration: 2 weeks
@@ -75,34 +75,28 @@ phase_1_foundation:
     usage: 90% of operations
     cost_efficiency: 1x (baseline)
     recommendation: Optional - users can continue with Sonnet 4.5 for entire phase
-    rationale: 'Best balance for production-grade infrastructure work:
-
-      ✅ Extended context window handles large governance ruleset merging (4-tier hierarchy)
-
-      ✅ Superior code generation for TDD-Master v1 implementation (RED→GREEN→REFACTOR
-      cycles)
-
-      ✅ Excellent at following complex instructions - CORTEX routing protocol, SKULL
-      rules enforcement
-
-      ✅ Tool use expertise - critical for audit logging, governance validation, evidence
-      bundle generation
-
-      ✅ Strong architectural reasoning - needed for challenge protocol and debt detection
-
-      '
+    rationale: "Best balance for production-grade infrastructure work:\n\u2705 Extended\
+      \ context window handles large governance ruleset merging (4-tier hierarchy)\n\
+      \u2705 Superior code generation for TDD-Master v1 implementation (RED\u2192\
+      GREEN\u2192REFACTOR cycles)\n\u2705 Excellent at following complex instructions\
+      \ - CORTEX routing protocol, SKULL rules enforcement\n\u2705 Tool use expertise\
+      \ - critical for audit logging, governance validation, evidence bundle generation\n\
+      \u2705 Strong architectural reasoning - needed for challenge protocol and debt\
+      \ detection\n"
     ideal_for: Phase 1 (Foundation), complex AC-ID validation, multi-step workflows
     optional_upgrade:
       model: Claude Opus 4.5
       usage: 10% of operations (optional)
       cost: 3x - use sparingly
       when_to_consider:
-      - 🧠 Architectural decisions requiring deep analysis (e.g., hash chain design,
-        Knowledge Graph design)
-      - 🔍 Critical challenge protocol evaluations - detecting subtle technical debt
-        patterns
-      - 🏗️ Refactoring legacy CORTEX 5.5 components into 6.0 governance model
-      - 📊 Complex query optimization for audit trail analysis across correlation chains
+      - "\U0001F9E0 Architectural decisions requiring deep analysis (e.g., hash chain\
+        \ design, Knowledge Graph design)"
+      - "\U0001F50D Critical challenge protocol evaluations - detecting subtle technical\
+        \ debt patterns"
+      - "\U0001F3D7\uFE0F Refactoring legacy CORTEX 5.5 components into 6.0 governance\
+        \ model"
+      - "\U0001F4CA Complex query optimization for audit trail analysis across correlation\
+        \ chains"
       note: Not required - Sonnet 4.5 handles 95%+ of foundation work effectively
   description: 'Build the core infrastructure that EVERY other component depends on.
 
@@ -207,8 +201,8 @@ phase_1_foundation:
       duration: 4 days
       owner: Orchestration Team
       capabilities:
-      - '7-state lifecycle: IDLE → SPEC → IMPLEMENTED → TESTED → VERIFIED → ACTIVE
-        → DEPRECATED'
+      - "7-state lifecycle: IDLE \u2192 SPEC \u2192 IMPLEMENTED \u2192 TESTED \u2192\
+        \ VERIFIED \u2192 ACTIVE \u2192 DEPRECATED"
       - Entry/exit criteria enforcement
       - Quarantine mechanism (error rate > 10%)
       - State transition audit trail
@@ -256,7 +250,7 @@ phase_1_foundation:
       owner: Security Team
       capabilities:
       - Action classification (SAFE, INSPECT, DESTRUCTIVE)
-      - Approval state machine (PENDING → APPROVED/DENIED/TIMEOUT)
+      - "Approval state machine (PENDING \u2192 APPROVED/DENIED/TIMEOUT)"
       - Canonical path resolution (AC-SECURITY-006)
       - Cross-platform file operations (AC-SECURITY-008)
       - Argument validation (incremental via TDD)
@@ -294,50 +288,55 @@ phase_1_5_intelligent_discovery:
   status: ready_after_phase_1
   priority: CRITICAL
   placement: Between Phase 1 & Phase 2
-  rationale: |
-    CORTEX LENS and Onboarding orchestrators provide intelligent codebase
+  rationale: 'CORTEX LENS and Onboarding orchestrators provide intelligent codebase
+
     discovery and knowledge extraction. They:
-    
+
+
     1. Run AFTER Phase 1 completes (need audit, evidence, state)
+
     2. Run BEFORE Phase 2 planning (Planning v5 uses discovered context)
+
     3. Auto-run during project onboarding (discovery on first use)
+
     4. Expose crawlers/analyzers as MCP tools for all orchestrators
+
     5. Feed the CORTEX brain with company and domain knowledge
-    
-    This is NOT a UI dashboard. It's a universal reverse-engineering and
+
+
+    This is NOT a UI dashboard. It''s a universal reverse-engineering and
+
     knowledge-discovery system that makes CORTEX smarter with each use.
+
+    '
   recommended_llm:
     primary: Claude Sonnet 4.5 (RECOMMENDED)
     usage: 85% of operations
     cost_efficiency: 1x (baseline)
     recommendation: Optional Opus for AST parser design decisions
-    rationale: 'AST crawlers and code analysis:
-
-      ✅ Excellent for TDD test generation
-
-      ✅ Strong tool integration (MCP exposure)
-
-      ✅ Good for multi-language parser design
-
-      ✅ Handles complex knowledge graph structure
-
-      '
+    rationale: "AST crawlers and code analysis:\n\u2705 Excellent for TDD test generation\n\
+      \u2705 Strong tool integration (MCP exposure)\n\u2705 Good for multi-language\
+      \ parser design\n\u2705 Handles complex knowledge graph structure\n"
     optional_upgrade:
       model: Claude Opus 4.5
       usage: 10-15% of operations (optional)
       cost: 3x
       when_to_consider:
-      - 🧠 Multi-language AST parser architecture
-      - 📊 Knowledge graph schema design
-      - 🔍 Domain learning algorithm design
-  description: |
-    Build universal code analysis and knowledge discovery system that:
-    
+      - "\U0001F9E0 Multi-language AST parser architecture"
+      - "\U0001F4CA Knowledge graph schema design"
+      - "\U0001F50D Domain learning algorithm design"
+  description: 'Build universal code analysis and knowledge discovery system that:
+
+
     1. CORTEX LENS: Reverse-engineer codebase via AST, crawlers, git history
+
     2. Onboarding: Guide teams through intelligent project discovery
+
     3. Knowledge Store: Capture company and domain patterns for reuse
+
     4. MCP Tools: Expose analyzers so Planning/other orchestrators access findings
-  
+
+    '
   components:
     cortex_lens:
       name: CORTEX LENS - Universal Code Intelligence System
@@ -365,7 +364,7 @@ phase_1_5_intelligent_discovery:
       evidence_bundle:
         test_coverage: '>=80%'
         languages_supported: '>=6 (Python, JS/TS, C#, Java, Go, Rust)'
-        performance: '<5s AST analysis per 1000 LOC'
+        performance: <5s AST analysis per 1000 LOC
         mcp_tools: All 6 analyzers exposed
         knowledge_storage: Tier 1 & 3 integration tested
     onboarding_orchestrator:
@@ -383,7 +382,8 @@ phase_1_5_intelligent_discovery:
       duration: 1.5 weeks
       owner: UX/Integration Team
       capabilities:
-      - '10-Phase Discovery: Metadata → Quality → Security → Tech → Architecture → Dashboard'
+      - "10-Phase Discovery: Metadata \u2192 Quality \u2192 Security \u2192 Tech \u2192\
+        \ Architecture \u2192 Dashboard"
       - 'Parallel Crawlers: 6 analyzers run simultaneously'
       - 'Interactive Setup Wizard: Guided onboarding flow'
       - 'Dashboard Generation: HTML visualization of findings'
@@ -400,53 +400,60 @@ phase_1_5_intelligent_discovery:
       - AC-ORCH-001
       evidence_bundle:
         test_coverage: '>=80%'
-        output_files: '7 JSON files + HTML dashboard'
-        execution_time: '<2 minutes for typical project'
+        output_files: 7 JSON files + HTML dashboard
+        execution_time: <2 minutes for typical project
         integration: Planning v5, other orchestrators use discovery results
         auto_run: Auto-executes during CORTEX setup
   cortex_toolkit:
-      name: CORTEX TOOLKIT - HTML View Generation & Visualization Infrastructure
-      ac_ids:
-      - AC-TOOLKIT-001
-      - AC-TOOLKIT-002
-      - AC-TOOLKIT-003
-      - AC-TOOLKIT-004
-      - AC-TOOLKIT-005
-      - AC-TOOLKIT-006
-      - AC-TOOLKIT-007
-      - AC-TOOLKIT-008
-      priority: HIGH
-      duration: 1.5 weeks
-      owner: Visualization & MCP Team
-      purpose: |
-        Transform CORTEX LENS outputs and audit logs into interactive static HTML
-        dashboards with glassmorphism design, modern tab systems, and D3.js visualizations.
-        Expose all generators as MCP tools for Planning v5, Investigation, and other
-        orchestrators.
-      capabilities:
-      - 'AC-TOOLKIT-001: Epic Plan Viewer Generator (master-plan + progress as interactive HTML)'
-      - 'AC-TOOLKIT-002: Knowledge Graph Visualizer (YAML → D3.js force-directed graph)'
-      - 'AC-TOOLKIT-003: Architecture Diagram Generator (4-tier brain with glassmorphism)'
-      - 'AC-TOOLKIT-004: Audit Log HTML Exporter (JSONL → searchable timeline viewer)'
-      - 'AC-TOOLKIT-005: Glassmorphism Compliance Engine (validate design standard)'
-      - 'AC-TOOLKIT-006: Modern Tab System (reusable keyboard-accessible tabs)'
-      - 'AC-TOOLKIT-007: Mermaid Diagram Engine (flowcharts, state diagrams in dashboards)'
-      - 'AC-TOOLKIT-008: CORTEX TOOLKIT MCP Server (expose all generators as MCP tools)'
-      dependencies:
-      - AC-LENS-001
-      - AC-LENS-002
-      - AC-LENS-003
-      - AC-LENS-004
-      - AC-ONBOARD-001
-      - AC-ONBOARD-008
-      evidence_bundle:
-        test_coverage: '>=80% for all generators'
-        html_performance: '<2s page load time'
-        glassmorphism_compliance: '100% compliance with design standard'
-        mcp_tools_exposed: All 8 tools callable by other orchestrators
-        design_system: Modern tabs + D3.js + Mermaid integration
-        file_assets: modern-tabs.css (399 lines), modern-tabs.js (200+ lines), html_viewer_generator.py (798 lines)
-  
+    name: CORTEX TOOLKIT - HTML View Generation & Visualization Infrastructure
+    ac_ids:
+    - AC-TOOLKIT-001
+    - AC-TOOLKIT-002
+    - AC-TOOLKIT-003
+    - AC-TOOLKIT-004
+    - AC-TOOLKIT-005
+    - AC-TOOLKIT-006
+    - AC-TOOLKIT-007
+    - AC-TOOLKIT-008
+    priority: HIGH
+    duration: 1.5 weeks
+    owner: Visualization & MCP Team
+    purpose: 'Transform CORTEX LENS outputs and audit logs into interactive static
+      HTML
+
+      dashboards with glassmorphism design, modern tab systems, and D3.js visualizations.
+
+      Expose all generators as MCP tools for Planning v5, Investigation, and other
+
+      orchestrators.
+
+      '
+    capabilities:
+    - 'AC-TOOLKIT-001: Epic Plan Viewer Generator (master-plan + progress as interactive
+      HTML)'
+    - "AC-TOOLKIT-002: Knowledge Graph Visualizer (YAML \u2192 D3.js force-directed\
+      \ graph)"
+    - 'AC-TOOLKIT-003: Architecture Diagram Generator (4-tier brain with glassmorphism)'
+    - "AC-TOOLKIT-004: Audit Log HTML Exporter (JSONL \u2192 searchable timeline viewer)"
+    - 'AC-TOOLKIT-005: Glassmorphism Compliance Engine (validate design standard)'
+    - 'AC-TOOLKIT-006: Modern Tab System (reusable keyboard-accessible tabs)'
+    - 'AC-TOOLKIT-007: Mermaid Diagram Engine (flowcharts, state diagrams in dashboards)'
+    - 'AC-TOOLKIT-008: CORTEX TOOLKIT MCP Server (expose all generators as MCP tools)'
+    dependencies:
+    - AC-LENS-001
+    - AC-LENS-002
+    - AC-LENS-003
+    - AC-LENS-004
+    - AC-ONBOARD-001
+    - AC-ONBOARD-008
+    evidence_bundle:
+      test_coverage: '>=80% for all generators'
+      html_performance: <2s page load time
+      glassmorphism_compliance: 100% compliance with design standard
+      mcp_tools_exposed: All 8 tools callable by other orchestrators
+      design_system: Modern tabs + D3.js + Mermaid integration
+      file_assets: modern-tabs.css (399 lines), modern-tabs.js (200+ lines), html_viewer_generator.py
+        (798 lines)
   phase_1_5_exit_criteria:
     must_complete:
     - All 6 CORTEX LENS ACs implemented (Universal AST + Crawlers)
@@ -464,11 +471,12 @@ phase_1_5_intelligent_discovery:
       language_support: '>=6 programming languages (CORTEX LENS)'
       mcp_integration: All 14 tools callable as MCP tools (6 LENS + 8 TOOLKIT)
       knowledge_persistence: tier1/tier3 files created, queryable, visualized
-      performance: '<2 minutes end-to-end for typical project (LENS + Onboarding)'
-      html_dashboards: 'All 5 viewers <500KB, <2s load, WCAG AA compliant'
+      performance: <2 minutes end-to-end for typical project (LENS + Onboarding)
+      html_dashboards: All 5 viewers <500KB, <2s load, WCAG AA compliant
       visualization_quality: D3.js rendering <1s for 500-node graphs
     blocker_prevention:
-    - Phase 2 uses onboarding + LENS results for context (can proceed after Phase 1.5)
+    - Phase 2 uses onboarding + LENS results for context (can proceed after Phase
+      1.5)
     - Crawlers tested independently before integration
     - Knowledge storage schema validated before scaling
     - Auto-run capability tested in both production and test modes
@@ -486,19 +494,11 @@ phase_2_orchestration_core:
     usage: 85% of operations
     cost_efficiency: 1x (baseline)
     recommendation: Optional - users can continue with Sonnet 4.5 for entire phase
-    rationale: 'Optimal for orchestration core implementation:
-
-      ✅ Best balance of cost/performance for production-grade orchestration
-
-      ✅ Handles complex MasterOrchestrator logic evaluation
-
-      ✅ Excellent at TDD-Master workflow (RED→GREEN→REFACTOR)
-
-      ✅ Strong tool use for TodoManager state persistence
-
-      ✅ Good balance for Planning v5 context-aware generation
-
-      '
+    rationale: "Optimal for orchestration core implementation:\n\u2705 Best balance\
+      \ of cost/performance for production-grade orchestration\n\u2705 Handles complex\
+      \ MasterOrchestrator logic evaluation\n\u2705 Excellent at TDD-Master workflow\
+      \ (RED\u2192GREEN\u2192REFACTOR)\n\u2705 Strong tool use for TodoManager state\
+      \ persistence\n\u2705 Good balance for Planning v5 context-aware generation\n"
     ideal_for: Phase 2 (Orchestration Core), MasterOrchestrator implementation, TDD
       cycles
     optional_upgrade:
@@ -506,11 +506,11 @@ phase_2_orchestration_core:
       usage: 15% of operations (optional)
       cost: 3x
       when_to_consider:
-      - 🧠 MasterOrchestrator evaluation logic (central controller design)
-      - 📊 TodoManager dependency resolution algorithms
-      - 🎯 TDD-Master evidence bundle validation gates
-      - 🔍 Planning v5 risk assessment and dependency analysis
-      - 📋 STS golden corpus design (100 test intents)
+      - "\U0001F9E0 MasterOrchestrator evaluation logic (central controller design)"
+      - "\U0001F4CA TodoManager dependency resolution algorithms"
+      - "\U0001F3AF TDD-Master evidence bundle validation gates"
+      - "\U0001F50D Planning v5 risk assessment and dependency analysis"
+      - "\U0001F4CB STS golden corpus design (100 test intents)"
       note: Critical for core workflow correctness, but Sonnet 4.5 can handle most
         scenarios
   description: 'Establishes THE DEFAULT WORKING MECHANISM at the core of CORTEX operations.
@@ -533,13 +533,9 @@ phase_2_orchestration_core:
     Without Foundation, orchestration cannot reliably operate.
 
     '
-  critical_path: 'This is THE CORE WORKFLOW:
-
-    Request → GovernanceMerger → MasterOrchestrator → TodoManager → Execute
-
-    All other orchestrators are features that plug into this pipeline.
-
-    '
+  critical_path: "This is THE CORE WORKFLOW:\nRequest \u2192 GovernanceMerger \u2192\
+    \ MasterOrchestrator \u2192 TodoManager \u2192 Execute\nAll other orchestrators\
+    \ are features that plug into this pipeline.\n"
   components:
     master_orchestrator:
       name: MasterOrchestrator (Central Controller)
@@ -609,7 +605,7 @@ phase_2_orchestration_core:
       duration: 8 days
       owner: Development Team
       capabilities:
-      - RED→GREEN→REFACTOR workflow
+      - "RED\u2192GREEN\u2192REFACTOR workflow"
       - CORE-019 enforcement (no direct coding)
       - Auto-generate tests from acceptance criteria
       - Evidence Bundle with test results
@@ -662,9 +658,9 @@ phase_2_orchestration_core:
       rationale: Replace 2046-line response-templates-v4.yaml (CORE-002 violation)
       capabilities:
       - 'Layer 1: Core blocks (tier0/response-blocks.yaml, 50 lines)'
-      - 'Layer 2: Category templates (5 files × 50 lines = 250 lines)'
+      - "Layer 2: Category templates (5 files \xD7 50 lines = 250 lines)"
       - 'Layer 3: Orchestrator overrides (15 lines per manifest)'
-      - '86% reduction: 2046 lines → <300 lines'
+      - "86% reduction: 2046 lines \u2192 <300 lines"
       - Backwards compatibility during migration
       - Multi-category inheritance support
       phases:
@@ -768,7 +764,8 @@ phase_2_orchestration_core:
     - First Evidence Bundle generated (proves system works)
     gate_validation:
       test_coverage: '>=80% across all core components'
-      integration: MasterOrchestrator → TodoManager → TDD-Master pipeline tested
+      integration: "MasterOrchestrator \u2192 TodoManager \u2192 TDD-Master pipeline\
+        \ tested"
       sts_validation: All 100 golden corpus intents route correctly
     blocker_prevention:
     - No Phase 3 work starts until core workflow proven
@@ -786,28 +783,21 @@ phase_3_feature_orchestrators:
     cost_efficiency: 1x (baseline)
     recommendation: Continue with Sonnet 4.5 - snowball effect makes implementation
       easier
-    rationale: 'Feature orchestrators are simpler due to snowball effect:
-
-      ✅ Reuse foundation infrastructure (already built)
-
-      ✅ Follow established patterns from core workflow
-
-      ✅ Standard CRUD operations for ADO, cleanup, investigation
-
-      ✅ Good for incremental feature implementation
-
-      '
+    rationale: "Feature orchestrators are simpler due to snowball effect:\n\u2705\
+      \ Reuse foundation infrastructure (already built)\n\u2705 Follow established\
+      \ patterns from core workflow\n\u2705 Standard CRUD operations for ADO, cleanup,\
+      \ investigation\n\u2705 Good for incremental feature implementation\n"
     ideal_for: Phase 3 (Feature Orchestrators), leveraging established infrastructure
     optional_alternative:
       model: GPT-5 or Claude Haiku 4.5
       usage: 0-30% of operations (evaluate performance)
       cost: 'GPT-5: 1x | Haiku: 0.33x'
       when_to_consider:
-      - ⚡ Bulk cleanup operations (Vacuum processing 50+ files)
-      - 📝 Evidence bundle generation for completed orchestrators
-      - ✅ Simple validation checks (folder structure enforcement)
-      - 📋 Documentation generation (updating AC-INDEX.yaml)
-      - 🔄 Todo management (parsing orchestrator outputs)
+      - "\u26A1 Bulk cleanup operations (Vacuum processing 50+ files)"
+      - "\U0001F4DD Evidence bundle generation for completed orchestrators"
+      - "\u2705 Simple validation checks (folder structure enforcement)"
+      - "\U0001F4CB Documentation generation (updating AC-INDEX.yaml)"
+      - "\U0001F504 Todo management (parsing orchestrator outputs)"
       evaluation_note: Test GPT-5 or Haiku for bulk operations; continue with Sonnet
         if quality issues arise
       avoid_for: TDD-Master execution, governance merger logic, investigation orchestration
@@ -863,7 +853,8 @@ phase_3_feature_orchestrators:
       priority: MEDIUM
       duration: 6 days (includes ~2 days for new enhancements)
       owner: Infrastructure Team
-      rationale: Housekeeping enhancement from strategic analysis to integrate with phase gates and reduce false positives
+      rationale: Housekeeping enhancement from strategic analysis to integrate with
+        phase gates and reduce false positives
       capabilities:
       - Deep workspace cleaning
       - DRY_RUN preview
@@ -879,68 +870,82 @@ phase_3_feature_orchestrators:
         phase_2_addition: true
         reason: Strategic architectural improvement from housekeeping analysis
         design_doc: cortex-brain/documents/strategy/HOUSEKEEPING-ORCHESTRATOR-ANALYSIS.md
-        trade_offs: |
-          Option B (Phase-Integrated + Intent Registry) selected:
+        trade_offs: 'Option B (Phase-Integrated + Intent Registry) selected:
+
           - Pros: 100% auditability, zero race conditions, CORTEX-aligned
+
           - Cons: 5% time overhead per phase, requires intent registry maintenance
-          - Benefit: Eliminates false positives, provides documented intent for every deletion
+
+          - Benefit: Eliminates false positives, provides documented intent for every
+          deletion
+
+          '
       components:
         phase_boundary_cleanup:
           ac_id: AC-CLEAN-201
           name: Phase-Boundary Cleanup Framework
-          description: |
-            Cleanup integrated into phase completion workflow.
+          description: 'Cleanup integrated into phase completion workflow.
+
             Deletes previous phase artifacts only, safety-validated.
+
             Generates cleanup evidence bundle proving deletions.
+
+            '
           duration: 2 days
           test_requirements:
-            - Phase transition integration tests
-            - Cleanup evidence bundle validation
-            - Protected file list verification
-            - Safety test: no false deletions
+          - Phase transition integration tests
+          - Cleanup evidence bundle validation
+          - Protected file list verification
+          - Safety test: no false deletions
           acceptance_criteria:
-            - Cleanup runs at phase boundary (not mid-phase)
-            - Cleanup AC-IDs produce evidence bundles
-            - All deletions logged with reason
-            - Phase completion blocked if cleanup fails
+          - Cleanup runs at phase boundary (not mid-phase)
+          - Cleanup AC-IDs produce evidence bundles
+          - All deletions logged with reason
+          - Phase completion blocked if cleanup fails
         intent_registry:
           ac_id: AC-CLEAN-201 (co-owned)
           name: File Intent Registry System
-          description: |
-            YAML-based registry marking files as "keep" or "optional".
+          description: 'YAML-based registry marking files as "keep" or "optional".
+
             Enables semantic cleanup without false positives.
+
             Supports approval workflow for semantic cleanup candidates.
+
+            '
           duration: 1 day
           file_location: cortex-brain/registry/file-intent-registry.yaml
           test_requirements:
-            - Intent registry schema validation
-            - Cleanup respects intent markers
-            - Approval workflow tested
-            - Registry persistence and atomicity
+          - Intent registry schema validation
+          - Cleanup respects intent markers
+          - Approval workflow tested
+          - Registry persistence and atomicity
           acceptance_criteria:
-            - Registry YAML loads without errors
-            - Vacuum checks intent before deleting
-            - Manual cleanup requires explicit approval
-            - Audit trail shows intent + approval for each deletion
+          - Registry YAML loads without errors
+          - Vacuum checks intent before deleting
+          - Manual cleanup requires explicit approval
+          - Audit trail shows intent + approval for each deletion
         infrastructure_daemon:
           ac_id: AC-CLEAN-202
           name: Infrastructure Cleanup Daemon
-          description: |
-            Autonomous cleanup of .gitignore-d files only.
+          description: 'Autonomous cleanup of .gitignore-d files only.
+
             Runs hourly or as background service.
+
             No approval needed (safe by design).
+
+            '
           duration: 1 day
           implementation: cortex-brain/manifests/housekeeping/infra-daemon.yaml
           test_requirements:
-            - Daemon runs on schedule
-            - Only deletes .gitignored files
-            - Protected patterns respected
-            - Minimal audit logging (non-blocking)
+          - Daemon runs on schedule
+          - Only deletes .gitignored files
+          - Protected patterns respected
+          - Minimal audit logging (non-blocking)
           acceptance_criteria:
-            - Daemon runs autonomously without intervention
-            - Zero false deletions (gitignore-scoped)
-            - Audit trail shows cleanup summary hourly
-            - Performance <100ms per cleanup cycle
+          - Daemon runs autonomously without intervention
+          - Zero false deletions (gitignore-scoped)
+          - Audit trail shows cleanup summary hourly
+          - Performance <100ms per cleanup cycle
     investigation:
       name: Investigation Orchestrator
       ac_ids:
@@ -1028,28 +1033,22 @@ phase_4_intelligence:
     cost_efficiency: 1x (baseline)
     recommendation: Sonnet 4.5 handles most intelligence work; upgrade to Opus for
       critical architecture
-    rationale: 'Sonnet 4.5 capabilities sufficient for intelligence implementation:
-
-      ✅ Test generation for intelligence features
-
-      ✅ Integration with existing orchestrators
-
-      ✅ Evidence bundle generation
-
-      ✅ Documentation and API design
-
-      '
+    rationale: "Sonnet 4.5 capabilities sufficient for intelligence implementation:\n\
+      \u2705 Test generation for intelligence features\n\u2705 Integration with existing\
+      \ orchestrators\n\u2705 Evidence bundle generation\n\u2705 Documentation and\
+      \ API design\n"
     ideal_for: Phase 4 (Intelligence Layer) implementation after architecture decided
     optional_upgrade:
       model: Claude Opus 4.5
       usage: 0-40% of operations (for complex reasoning)
       cost: 3x - strategic investment
       when_to_consider:
-      - 🧠 Architectural decisions requiring deep analysis (e.g., Knowledge Graph design)
-      - 🎯 LLM Intent Classifier training - requires nuanced semantic understanding
-      - 📊 Knowledge Practices pattern extraction from audit logs
-      - 🔍 Vision API integration architectural decisions
-      - 📈 Learning algorithms for operational history analysis
+      - "\U0001F9E0 Architectural decisions requiring deep analysis (e.g., Knowledge\
+        \ Graph design)"
+      - "\U0001F3AF LLM Intent Classifier training - requires nuanced semantic understanding"
+      - "\U0001F4CA Knowledge Practices pattern extraction from audit logs"
+      - "\U0001F50D Vision API integration architectural decisions"
+      - "\U0001F4C8 Learning algorithms for operational history analysis"
       strategic_note: 'This is the ONLY phase where Opus may be beneficial for design.
 
         Intelligence architecture impacts system behavior long-term.
@@ -1142,43 +1141,35 @@ phase_4_5_integration_tests:
     usage: 80-100% of operations
     cost_efficiency: 1x (baseline)
     recommendation: Sonnet 4.5 handles all integration test development
-    rationale: 'Integration testing requires:
-
-      ✅ Complex test orchestration (multi-component scenarios)
-
-      ✅ Audit log analysis and trace validation
-
-      ✅ Evidence bundle generation and validation
-
-      ✅ Error scenario simulation
-
-      ✅ End-to-end workflow verification
-
-      '
+    rationale: "Integration testing requires:\n\u2705 Complex test orchestration (multi-component\
+      \ scenarios)\n\u2705 Audit log analysis and trace validation\n\u2705 Evidence\
+      \ bundle generation and validation\n\u2705 Error scenario simulation\n\u2705\
+      \ End-to-end workflow verification\n"
     ideal_for: Phase 4.5 (Integration Test Suite), comprehensive validation
-  description: |
-    Comprehensive end-to-end testing framework validating all orchestrators work
-    together correctly. Tests focus on:
-    
-    1. Cross-component integration scenarios (Phase 1→4 orchestrators)
-    2. Audit trail completeness and traceability
-    3. Evidence bundle generation and validation
-    4. State management under concurrent operations
-    5. Governance enforcement across all components
-    6. Failure recovery and rollback mechanisms
-    7. Performance and load scenarios
-    
-    This phase proves system correctness by validating audit logs contain
-    complete provenance for all operations.
-  why_after_phase_4: |
-    Integration tests require:
+  description: "Comprehensive end-to-end testing framework validating all orchestrators\
+    \ work\ntogether correctly. Tests focus on:\n\n1. Cross-component integration\
+    \ scenarios (Phase 1\u21924 orchestrators)\n2. Audit trail completeness and traceability\n\
+    3. Evidence bundle generation and validation\n4. State management under concurrent\
+    \ operations\n5. Governance enforcement across all components\n6. Failure recovery\
+    \ and rollback mechanisms\n7. Performance and load scenarios\n\nThis phase proves\
+    \ system correctness by validating audit logs contain\ncomplete provenance for\
+    \ all operations.\n"
+  why_after_phase_4: 'Integration tests require:
+
     - Phase 1 foundation infrastructure (audit, state, governance)
+
     - Phase 2 core workflow (MasterOrchestrator, TodoManager)
+
     - Phase 3 feature orchestrators (ADO, Vacuum, Investigation, etc.)
+
     - Phase 4 intelligence features (routing, knowledge practices)
-    
+
+
     Cannot test integration without all components. Phase 4.5 validates
+
     the complete system working together end-to-end.
+
+    '
   components:
     end_to_end_workflows:
       name: End-to-End Orchestrator Workflows
@@ -1190,8 +1181,9 @@ phase_4_5_integration_tests:
       duration: 4 days
       owner: QA Team
       capabilities:
-      - Complete request lifecycle (clarification → governance → execution → audit)
-      - Multi-phase workflows (Phase 1→4 component interaction)
+      - "Complete request lifecycle (clarification \u2192 governance \u2192 execution\
+        \ \u2192 audit)"
+      - "Multi-phase workflows (Phase 1\u21924 component interaction)"
       - Orchestrator chaining (one orchestrator calls another)
       - Error propagation and recovery
       dependencies:
@@ -1201,7 +1193,8 @@ phase_4_5_integration_tests:
       evidence_bundle:
         test_coverage: '>=85%'
         scenarios_tested: 20+ realistic workflows
-        orchestrators_validated: All 8 orchestrators (Audit, Governance, State, Lifecycle, Evidence, Security, Master, Todo)
+        orchestrators_validated: All 8 orchestrators (Audit, Governance, State, Lifecycle,
+          Evidence, Security, Master, Todo)
     audit_trace_validation:
       name: Audit Trail Completeness & Traceability
       ac_ids:
@@ -1234,7 +1227,7 @@ phase_4_5_integration_tests:
       owner: QA Team
       capabilities:
       - Evidence bundle generation for all AC-IDs
-      - '3-gate validation (test coverage >=80%, audit 100%, governance 100%)'
+      - 3-gate validation (test coverage >=80%, audit 100%, governance 100%)
       - Evidence completeness verification
       - Cross-orchestrator evidence chain validation
       - Performance validation (<2s bundle generation)
@@ -1276,7 +1269,7 @@ phase_4_5_integration_tests:
       owner: QA Team
       capabilities:
       - SKULL rule enforcement (CORE-001 through CORE-019)
-      - 4-tier governance merger validation (Tier 0→3 precedence)
+      - "4-tier governance merger validation (Tier 0\u21923 precedence)"
       - Rule violation detection and blocking
       - Governance bypass prevention
       - Compliance audit trail
@@ -1369,7 +1362,6 @@ phase_4_5_integration_tests:
     - Concurrent operations safe (no corruption, no deadlocks)
     - Failure recovery tested and working
     - Backwards compatibility maintained
-
 phase_5_cortex_cleanup_decommission:
   name: CORTEX Cleanup & Decommission
   duration: 2 weeks
@@ -1377,85 +1369,109 @@ phase_5_cortex_cleanup_decommission:
   end_date: '2026-04-07'
   status: planned
   priority: CRITICAL
-  description: |
-    Remove all temporary scaffolding, planning artifacts, and embedded phase-gating logic.
+  description: 'Remove all temporary scaffolding, planning artifacts, and embedded
+    phase-gating logic.
+
     Post-CORTEX-6.0 decommissioning of construction infrastructure.
+
     Permanent CORTEX system operates with zero references to planning phases.
 
+    '
   ac_ids:
     total: 28
     range: AC-CLEAN-301 to AC-CLEAN-328
-
   components:
     reference_removal:
-      ac_ids: [AC-CLEAN-301, AC-CLEAN-302, AC-CLEAN-303, AC-CLEAN-304, AC-CLEAN-305, AC-CLEAN-306]
+      ac_ids:
+      - AC-CLEAN-301
+      - AC-CLEAN-302
+      - AC-CLEAN-303
+      - AC-CLEAN-304
+      - AC-CLEAN-305
+      - AC-CLEAN-306
       description: Remove hardcoded phase references from production code
       targets:
-        - src/orchestrators/core/master_orchestrator.py
-        - src/orchestrators/core/state_synchronizer.py
-        - src/infrastructure/atomic_state_manager.py
-        - src/database/planning_state_db.py
-        - src/mcp/housekeeping_tools.py
-        - src/tools/remediation_executor.py
+      - src/orchestrators/core/master_orchestrator.py
+      - src/orchestrators/core/state_synchronizer.py
+      - src/infrastructure/atomic_state_manager.py
+      - src/database/planning_state_db.py
+      - src/mcp/housekeeping_tools.py
+      - src/tools/remediation_executor.py
       outcomes:
-        - All phase numbers 1-5 removed from permanent code
-        - Phase logic extracted to optional PlanningModule
-        - Database schema migrated to module-based
-        - Core operations function without phase references
-
+      - All phase numbers 1-5 removed from permanent code
+      - Phase logic extracted to optional PlanningModule
+      - Database schema migrated to module-based
+      - Core operations function without phase references
     artifact_decommission:
-      ac_ids: [AC-CLEAN-307, AC-CLEAN-308, AC-CLEAN-309, AC-CLEAN-310, AC-CLEAN-311, AC-CLEAN-312]
+      ac_ids:
+      - AC-CLEAN-307
+      - AC-CLEAN-308
+      - AC-CLEAN-309
+      - AC-CLEAN-310
+      - AC-CLEAN-311
+      - AC-CLEAN-312
       description: Archive and remove planning artifacts
       archive_location: cortex-brain/documents/archives/CORTEX-6.0-construction/
       artifacts:
-        - cortex-brain/cx6-plan/ complete directory
-        - master-plan.yaml
-        - plan-viewer.html and related UI
-        - Phase-specific documentation
+      - cortex-brain/cx6-plan/ complete directory
+      - master-plan.yaml
+      - plan-viewer.html and related UI
+      - Phase-specific documentation
       strategy:
-        - Create versioned compressed archive
-        - Generate integrity manifest with checksums
-        - Make archive read-only
-        - Never import at runtime
-
+      - Create versioned compressed archive
+      - Generate integrity manifest with checksums
+      - Make archive read-only
+      - Never import at runtime
     configuration_cleanup:
-      ac_ids: [AC-CLEAN-313, AC-CLEAN-314, AC-CLEAN-315, AC-CLEAN-316, AC-CLEAN-317, AC-CLEAN-318]
+      ac_ids:
+      - AC-CLEAN-313
+      - AC-CLEAN-314
+      - AC-CLEAN-315
+      - AC-CLEAN-316
+      - AC-CLEAN-317
+      - AC-CLEAN-318
       description: Update governance rules and configurations
       files:
-        - cortex-brain/tier0/governance/brittleness-ambiguity-tests.yaml
-        - cortex-brain/tier0/governance/file-organization-policy.yaml
-        - cortex-brain/tier0/governance/operational-efficiency-rules.yaml
-        - cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml
-        - Scripts and automation with phase references
-
+      - cortex-brain/tier0/governance/brittleness-ambiguity-tests.yaml
+      - cortex-brain/tier0/governance/file-organization-policy.yaml
+      - cortex-brain/tier0/governance/operational-efficiency-rules.yaml
+      - cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml
+      - Scripts and automation with phase references
     housekeeping_enhancement:
-      ac_ids: [AC-CLEAN-319, AC-CLEAN-320, AC-CLEAN-321, AC-CLEAN-322, AC-CLEAN-323, AC-CLEAN-324]
+      ac_ids:
+      - AC-CLEAN-319
+      - AC-CLEAN-320
+      - AC-CLEAN-321
+      - AC-CLEAN-322
+      - AC-CLEAN-323
+      - AC-CLEAN-324
       description: Continuous enforcement of scaffolding-free architecture
       mechanisms:
-        - Automatic alignment checks on every turn
-        - Pre-commit hooks blocking phase changes
-        - Regression detection for re-introduced references
-        - Feature flag validation
-        - Governance rule monitoring
-
+      - Automatic alignment checks on every turn
+      - Pre-commit hooks blocking phase changes
+      - Regression detection for re-introduced references
+      - Feature flag validation
+      - Governance rule monitoring
     verification_validation:
-      ac_ids: [AC-CLEAN-325, AC-CLEAN-326, AC-CLEAN-327, AC-CLEAN-328]
+      ac_ids:
+      - AC-CLEAN-325
+      - AC-CLEAN-326
+      - AC-CLEAN-327
+      - AC-CLEAN-328
       description: Final verification suite
       checks:
-        - Zero hardcoded phase references in production code
-        - Archive integrity and isolation confirmed
-        - Feature flags operating correctly
-        - Performance baseline met
-        - Documentation reflects permanent architecture
-
+      - Zero hardcoded phase references in production code
+      - Archive integrity and isolation confirmed
+      - Feature flags operating correctly
+      - Performance baseline met
+      - Documentation reflects permanent architecture
   exit_criteria:
-    - Zero phase references in production code
-    - All planning artifacts archived
-    - Archive directory read-only and isolated
-    - Housekeeping alignment at 100%
-    - All tests passing
-    - Documentation updated
-
+  - Zero phase references in production code
+  - All planning artifacts archived
+  - Archive directory read-only and isolated
+  - Housekeeping alignment at 100%
+  - All tests passing
+  - Documentation updated
   success_metrics:
     references_removed: 100%
     artifacts_archived: 100%
@@ -1463,7 +1479,6 @@ phase_5_cortex_cleanup_decommission:
     housekeeping_enforcement: 100%
     test_coverage: '>=95%'
     performance_regression: <1%
-
 llm_cost_strategy:
   overall_approach: Sonnet 4.5 as default; upgrade to Opus only for critical architectural
     decisions
@@ -1486,10 +1501,10 @@ llm_cost_strategy:
     '
   switching_guidance:
     stay_with_sonnet: Recommended for 90-100% of operations - best balance for CORTEX
-    when_to_upgrade_opus: 🧠 Complex architectural decisions, 🔍 subtle technical debt
-      detection, 📊 algorithm optimization
-    when_to_evaluate_alternatives: ⚡ Bulk operations (Phase 3), 📝 documentation generation,
-      ✅ simple validation
+    when_to_upgrade_opus: "\U0001F9E0 Complex architectural decisions, \U0001F50D\
+      \ subtle technical debt detection, \U0001F4CA algorithm optimization"
+    when_to_evaluate_alternatives: "\u26A1 Bulk operations (Phase 3), \U0001F4DD documentation\
+      \ generation, \u2705 simple validation"
   model_comparison:
     claude_sonnet_4_5:
       cost: 1x (baseline)
@@ -1565,3 +1580,91 @@ conclusion:
   readiness: READY TO IMPLEMENT
   confidence: VERY HIGH (97/100)
   next_action: START PHASE 1 ON 2026-01-13
+governance_infrastructure:
+  middleware_implementations:
+    CORE-001:
+      rule: Incremental Autonomous Execution
+      middleware: IncrementalExecutor
+      file: src/orchestrators/middleware/incremental_executor.py
+      status: implemented
+      implemented_date: '2026-01-12T13:53:45.569468'
+    CORE-002:
+      rule: No Summary File Generation
+      middleware: FileCreationGuard
+      file: src/orchestrators/middleware/file_creation_guard.py
+      status: implemented
+      implemented_date: '2026-01-12T13:53:45.569474'
+    CORE-003:
+      rule: Executive Summary with Visual Progress Bars
+      middleware: ResponseFormatter
+      file: src/orchestrators/middleware/response_formatter.py
+      status: implemented
+      implemented_date: '2026-01-12T13:53:45.569475'
+    CORE-006:
+      rule: Phase -2 Setup Verification Mandatory
+      middleware: SetupVerifier
+      file: src/orchestrators/middleware/setup_verifier.py
+      status: implemented
+      implemented_date: '2026-01-12T13:53:45.569476'
+    CORE-018:
+      rule: YAML-First Design Mandatory
+      middleware: YAMLFirstValidator
+      file: src/orchestrators/middleware/yaml_first_validator.py
+      status: implemented
+      implemented_date: '2026-01-12T13:53:45.569477'
+    CORE-019:
+      rule: All Development Through TDD-Master
+      middleware: DevelopmentRouter
+      file: src/orchestrators/middleware/development_router.py
+      status: implemented
+      implemented_date: '2026-01-12T13:53:45.569477'
+    CORE-020:
+      rule: No Markdown Work Products
+      middleware: FileCreationGuard (shared with CORE-002)
+      file: src/orchestrators/middleware/file_creation_guard.py
+      status: implemented
+      implemented_date: '2026-01-12T13:53:45.569478'
+    CORE-021:
+      rule: New Orchestrators Through Scaffolder
+      middleware: OrchestratorCreationGuard
+      file: src/orchestrators/middleware/orchestrator_creation_guard.py
+      status: implemented
+      implemented_date: '2026-01-12T13:53:45.569478'
+    CORE-022:
+      rule: Kebab-Case File Naming (20 char limit)
+      middleware: FileNamingValidator
+      file: src/orchestrators/middleware/file_naming_validator.py
+      status: implemented
+      implemented_date: '2026-01-12T13:53:45.569479'
+  phase_1_governance_status:
+    status: fully_enforced
+    rules_enforced: 4
+    rules_total: 4
+    completion_percent: 100
+    enforced_rules:
+    - CORE-001
+    - CORE-002
+    - CORE-006
+    - CORE-022
+    updated: '2026-01-12T13:53:45.569481'
+  phase_2_governance_status:
+    status: fully_enforced
+    rules_enforced: 3
+    rules_total: 3
+    completion_percent: 100
+    enforced_rules:
+    - CORE-001
+    - CORE-019
+    - CORE-003
+    phase_unlocked: true
+    updated: '2026-01-12T13:53:45.569482'
+  overall_status:
+    middleware_created: 8
+    middleware_tested: 8
+    enforcement_coverage: 100%
+    critical_rules_blocked: 9
+    critical_rules_implemented: 9
+    phase_1_gate_status: UNLOCKED
+    phase_2_gate_status: UNLOCKED
+    last_updated: '2026-01-12T13:53:45.569483'
+    completion_date: '2026-01-12T13:53:45.569484'
