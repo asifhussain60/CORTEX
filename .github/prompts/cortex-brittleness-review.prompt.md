@@ -1,13 +1,81 @@
 ---
 agent: agent
 ---
-# CORTEX6: Cortex Search-and-Fix (Day-Zero Brittleness & Risk Review)
+# CORTEX6: Cortex Search-and-Fix (Day-Zero Brittleness & Risk Revie## Repeatable "Tool" Behavior (avoid file bloat)
+- Do **NOT** create separate YAML/JSON files for findings.
+- **APPEND directly to AC-INDEX.yaml** (the single source of truth).
+- If an AC-ID already exists, update it in-place rather than duplicating.
+- After appending, update `progress-tracker.json` and run `sync_plan_viewer_data.py`.
+
+## Required Output Format
+1) A concise summary (paragraphs + bullets), broken into sections.
+2) AC-ID entries ready to **APPEND to AC-INDEX.yaml** (not a separate file).
+3) The payload must be **idempotent**: same findings should map to the same stable IDs and update in-place.ion:** 2.0.0 (Plan-Integrated with Regression Prevention)  
+**Date:** 2026-01-12
 
 You are reviewing the CORTEX6 plan and implementation for production-readiness under real load, partial failure, and ongoing change. Your job is to search across the entire repo/landscape and identify brittleness, breakage points, and material risks—then recommend the simplest robust improvements with minimal impact and no scope creep.
 
+---
+
+## 🔗 PLAN INTEGRATION (CRITICAL)
+
+**This review MUST integrate findings into the cx6-plan:**
+
+| Plan Asset | Integration Role |
+|------------|------------------|
+| `master-plan.yaml` | Add new AC-IDs to appropriate phase |
+| `AC-INDEX.yaml` | **APPEND** brittleness AC-IDs (not separate files) |
+| `progress-tracker.json` | Add AC-IDs to phase planned_work |
+| `plan-viewer-data.json` | Auto-synced via sync script |
+
+**Output Flow:**
+```
+Findings → AC-IDs → AC-INDEX.yaml append → master-plan update → tracker update → dashboard sync
+```
+
+---
+
+## 🛡️ REGRESSION PREVENTION (MANDATORY)
+
+**Before generating findings:**
+
+```bash
+# Check current AC-INDEX state
+python3 << 'EOF'
+import yaml, sys
+
+ac_index = yaml.safe_load(open('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml'))
+current_count = ac_index.get('total_ac_count', 0)
+schema_version = ac_index.get('schema_version', 'unknown')
+
+print(f"AC-INDEX state: {current_count} AC-IDs, schema v{schema_version}")
+
+# Get highest AC-IDs per category for brittleness findings
+categories = {'BRITTLE': 0, 'RISK': 0, 'SEC': 0, 'PERF': 0, 'DEBT': 0}
+# Scan for existing AC-IDs in these categories
+import re
+content = open('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml').read()
+for cat in categories:
+    matches = re.findall(f'AC-{cat}-(\\d+)', content)
+    if matches:
+        categories[cat] = max(int(m) for m in matches)
+
+print("Next available AC-IDs:")
+for cat, num in categories.items():
+    print(f"  AC-{cat}-{num+1:03d}")
+EOF
+```
+
+**Regression Triggers (STOP if detected):**
+- ❌ AC-INDEX.yaml parse fails → Schema broken, fix before proceeding
+- ❌ Duplicate AC-ID would be created → Check existing IDs first
+- ❌ Phase assignment invalid → Verify phase exists in master-plan.yaml
+
+---
+
 ## Scope & Inputs (repo conventions)
 - Primary plan/design source: `cortex-brain/cx6-plan/**`
-- Execution/update anchor file (must be used to maintain a single evolving plan): `#file:cortex-exec.prompt.md`
+- Execution anchor: `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml` (append AC-IDs here)
 - Search across the entire CORTEX6 architecture + infrastructure landscape (code, IaC, CI/CD, runtime configs, docs, ADRs, scripts, manifests, charts, pipelines, and operational artifacts)
 - **CORTEX-specific paths:**
   - State files: `cortex-brain/tier1/tracking/progress-tracker.json`, `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml`
@@ -27,13 +95,13 @@ You are reviewing the CORTEX6 plan and implementation for production-readiness u
 
 ## Repeatable “Tool” Behavior (avoid file bloat)
 - Do **NOT** create new files each run.
-- Update/extend the existing plan via **one canonical record** inside `#file:cortex-exec.prompt.md`.
+- Update/extend the existing plan via **one canonical record** inside `AC-INDEX.yaml`.
 - If an entry already exists, update it (status, severity, evidence paths, recommendation, owner, lastReviewed) rather than duplicating.
 - Use the structured format below for all updates.
 
 ## Required Output Format
 1) A concise summary (paragraphs + bullets), broken into sections.
-2) A single YAML (preferred) or JSON “update payload” that can be pasted into `#file:cortex-exec.prompt.md` to incrementally maintain the plan.
+2) A single YAML (preferred) or JSON “update payload” that can be pasted into `AC-INDEX.yaml` to incrementally maintain the plan.
 3) The payload must be **idempotent**: same findings should map to the same stable IDs and update in-place.
 
 ---

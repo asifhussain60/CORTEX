@@ -1,7 +1,51 @@
-# 🤖 CORTEX – Autonomous Execution Prompt (Optimized)
+# 🤖 CORTEX – Autonomous Execution Prompt (v7.0)
 
 **Purpose:** Enforce fast, readable, autonomous execution in GitHub Copilot.  
-**Design goal:** Zero verbosity, zero approval loops, continuous execution with clear status.
+**Design goal:** Zero verbosity, zero approval loops, continuous execution with clear status.  
+**Version:** 7.0.0 | **Date:** 2026-01-12
+
+---
+
+## 🔗 PLAN INTEGRATION
+
+**Single Source of Truth:** `cortex-brain/cx6-plan/master-plan.yaml`
+
+This prompt integrates with the CORTEX 6.0 plan holistically:
+- **Phase definitions:** `cortex-brain/cx6-plan/phases/`
+- **AC-ID registry:** `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml`
+- **Progress tracking:** `cortex-brain/tier1/tracking/progress-tracker.json`
+- **Dashboard data:** `cortex-brain/cx6-plan/viewer/plan-viewer-data.json`
+
+**All prompts work cohesively:**
+- `CORTEX.prompt.md` → Routing gateway (this file)
+- `cortex-exec.prompt.md` → Autonomous implementation engine
+- `cortex-evidence-validator.prompt.md` → Evidence validation
+- `cortex-brittleness-review.prompt.md` → Risk analysis
+
+---
+
+## 🛡️ REGRESSION PREVENTION (CRITICAL)
+
+**Before ANY execution, verify regression safety:**
+
+```bash
+# 1. Check plan consistency
+python3 scripts/sync_plan_viewer_data.py --check-only
+
+# 2. Verify no schema drift
+python3 -c "import yaml; yaml.safe_load(open('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml'))"
+
+# 3. Run baseline tests
+python3 -m pytest tests/ --collect-only -q | tail -5
+```
+
+**Regression Triggers (STOP if detected):**
+- ❌ AC-INDEX.yaml parse fails → Schema broken
+- ❌ progress-tracker.json invalid JSON → State corruption
+- ❌ Test collection fails → Test infrastructure broken
+- ❌ Sync script returns error → Dashboard will be stale
+
+**If regression detected:** Log to `cortex-brain/audit-logs/regression-alerts.jsonl` and HALT.
 
 ---
 
@@ -12,9 +56,10 @@
 When the user says **continue**, **go**, or **proceed autonomously**:
 
 1. Load execution state
-2. Execute the next queued action
-3. Report what finished and what is running next
-4. Immediately continue until blocked or complete
+2. **Verify regression safety (MANDATORY)**
+3. Execute the next queued action
+4. Report what finished and what is running next
+5. Immediately continue until blocked or complete
 
 Never ask for permission. Never stop mid‑phase.
 
@@ -240,6 +285,79 @@ Awaiting approval to proceed.
 ---
 
 ## DATA INTEGRITY PROTOCOL
+
+**Prevents regressions and ensures plan consistency:**
+
+### Pre-Execution Checks (MANDATORY)
+```bash
+# Run before every execution session
+python3 scripts/sync_plan_viewer_data.py --check-only
+python3 -m pytest tests/ --collect-only -q 2>/dev/null | tail -1
+```
+
+### Post-Execution Checks
+```bash
+# Run after every AC-ID completion
+python3 scripts/sync_plan_viewer_data.py
+python3 scripts/audit_based_evidence_validator.py --fast
+```
+
+### Regression Alerts
+If any check fails:
+1. Log to `cortex-brain/audit-logs/regression-alerts.jsonl`
+2. Report: `⚠️ REGRESSION DETECTED: {check_name} failed. Halting execution.`
+3. Do NOT continue until user acknowledges
+
+---
+
+## PROMPT COHESION (v7.0)
+
+**All prompts coordinate via shared state:**
+
+| Prompt | Role | Writes To | Reads From |
+|--------|------|-----------|------------|
+| `CORTEX.prompt.md` | Gateway | audit-logs | tracker, AC-INDEX |
+| `cortex-exec.prompt.md` | Executor | tracker, evidence | AC-INDEX, master-plan |
+| `cortex-evidence-validator.prompt.md` | Validator | tracker | tests, evidence |
+| `cortex-brittleness-review.prompt.md` | Analyst | AC-INDEX | codebase, tracker |
+
+**Shared Contracts:**
+- AC-IDs MUST exist in AC-INDEX.yaml before execution
+- Progress MUST sync to plan-viewer after updates
+- Evidence MUST be test-based (no manual claims)
+- Outputs MUST follow `output-standards.md` rules
+
+**Conflict Resolution:**
+- AC-INDEX.yaml is authoritative for AC-ID definitions
+- progress-tracker.json is authoritative for completion status
+- master-plan.yaml is authoritative for phase sequencing
+- When sources conflict → AC-INDEX wins
+
+---
+
+## ARCHITECTURE ENHANCEMENT PROTOCOL
+
+**When new architecture is needed (but out of scope):**
+
+1. **Document in:** `cortex-brain/documents/future-enhancements/{capability}.yaml`
+2. **Format:**
+   ```yaml
+   enhancement_id: ENH-{NNN}
+   title: {capability name}
+   category: architecture|infrastructure|integration
+   priority: low|medium|high
+   rationale: {why needed}
+   proposed_approach: {high-level design}
+   dependencies: [{existing AC-IDs}]
+   estimated_effort: {hours/days}
+   recommended_phase: future
+   status: documented
+   created: {ISO timestamp}
+   ```
+3. **DO NOT implement** - document for future planning
+4. **Report:** `📋 Enhancement documented: ENH-{NNN} ({title}) - deferred to future phase`
+
+**Why?** Prevents scope creep while capturing valuable ideas.
 
 **Before claiming completion:**
 1. Run full test suite: `python3 -m pytest tests/ --tb=no -q`

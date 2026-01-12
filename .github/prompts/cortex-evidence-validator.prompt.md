@@ -1,9 +1,58 @@
-# Evidence-Based Status Validation Prompt (OPTIMIZED)
+# Evidence-Based Status Validation Prompt (Plan-Integrated)
 
-**Version:** 2.0.0  
+**Version:** 3.0.0  
 **Author:** Asif Hussain  
 **Date:** 2026-01-12  
-**Purpose:** Fast, automated validation of AC-ID completion claims against test evidence
+**Purpose:** Fast, automated validation of AC-ID completion claims against test evidence with plan integration
+
+---
+
+## 🔗 PLAN INTEGRATION (CRITICAL)
+
+**This validator ensures cx6-plan consistency:**
+
+| Plan Asset | Validation Role |
+|------------|-----------------|
+| `master-plan.yaml` | Phase sequencing, AC-ID dependencies |
+| `AC-INDEX.yaml` | AC-ID definitions (count must match tracker) |
+| `progress-tracker.json` | Completion claims (must have test evidence) |
+| `plan-viewer-data.json` | Dashboard data (must sync from tracker) |
+
+**Validation Chain:**
+```
+AC-INDEX (defines) → progress-tracker (claims) → tests (proves) → plan-viewer (displays)
+```
+
+---
+
+## 🛡️ REGRESSION PREVENTION
+
+**Before validation, check plan integrity:**
+
+```bash
+# Pre-validation regression check
+python3 << 'EOF'
+import json, yaml, sys
+
+# Check AC-INDEX.yaml AC-ID count
+ac_index = yaml.safe_load(open('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml'))
+ac_count = ac_index.get('total_ac_count', 0)
+
+# Check progress-tracker.json
+tracker = json.load(open('cortex-brain/tier1/tracking/progress-tracker.json'))
+tracker_phases = tracker.get('phases', {})
+
+# Validate consistency
+print(f"AC-INDEX total: {ac_count}")
+print(f"Tracker phases: {len(tracker_phases)}")
+
+# Regression: If AC-INDEX changed, tracker may be stale
+if ac_count > 102:  # Original baseline
+    print(f"⚠️ New AC-IDs detected ({ac_count} vs baseline 102). Verify tracker updated.")
+    
+sys.exit(0)
+EOF
+```
 
 ---
 
@@ -392,6 +441,97 @@ Total across all phases: 77/102 (75.5%) verified
 
 ---
 
+## 🔗 OUTPUT STANDARDS COMPLIANCE
+
+**All validation outputs MUST follow `output-standards.md`:**
+
+### Evidence Storage
+- ✅ Evidence bundles in `cortex-brain/tier1/evidence-bundles/AC-{ID}/`
+- ✅ Format: manifest.yaml + test-results.json + audit-trace.jsonl
+- ❌ DO NOT scatter evidence across documents/reports/
+
+### Progress Updates
+- ✅ Update ONLY `progress-tracker.json` (not plan-viewer-data.json directly)
+- ✅ Sync dashboard: `python3 scripts/sync_plan_viewer_data.py`
+- ❌ DO NOT edit dashboard data directly
+
+### Reporting
+- ✅ Use executive bullet format (✅ Outcomes / ⚙️ In Progress / ⚠️ Risks)
+- ✅ Translate AC-IDs to human-readable capability names
+- ❌ DO NOT show raw AC-ID codes in user output
+
+---
+
+## 🛡️ REGRESSION SAFEGUARDS
+
+### Validation Integrity Checks
+
+```bash
+# Check 1: AC-INDEX.yaml parseable
+python3 -c "import yaml; yaml.safe_load(open('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml'))"
+
+# Check 2: progress-tracker.json parseable
+python3 -c "import json; json.load(open('cortex-brain/tier1/tracking/progress-tracker.json'))"
+
+# Check 3: Sync script exists and works
+python3 scripts/sync_plan_viewer_data.py --check-only
+```
+
+### Post-Validation Verification
+
+```bash
+# After any tracker update, verify sync
+python3 << 'EOF'
+import json
+from pathlib import Path
+
+tracker = json.load(open('cortex-brain/tier1/tracking/progress-tracker.json'))
+viewer = json.load(open('cortex-brain/cx6-plan/viewer/plan-viewer-data.json'))
+
+# Compare key metrics
+tracker_complete = tracker.get('current_phase', {}).get('completed_count', 0)
+viewer_complete = viewer.get('phases', [{}])[0].get('completed', 0)
+
+if tracker_complete != viewer_complete:
+    print(f"⚠️ SYNC DRIFT: tracker={tracker_complete}, viewer={viewer_complete}")
+    print("Run: python3 scripts/sync_plan_viewer_data.py")
+else:
+    print(f"✅ Tracker and viewer in sync: {tracker_complete} AC-IDs complete")
+EOF
+```
+
+---
+
+## 📊 PROMPT COHESION
+
+**This validator integrates with other prompts:**
+
+| Prompt | Integration |
+|--------|-------------|
+| `CORTEX.prompt.md` | Calls validator for "validate plan" / "check status" |
+| `cortex-exec.prompt.md` | Calls validator after each AC-ID implementation |
+| `cortex-brittleness-review.prompt.md` | Uses validator data for risk assessment |
+
+**Shared Contracts:**
+- Validator writes to `progress-tracker.json` ONLY
+- Validator triggers `sync_plan_viewer_data.py` after updates
+- Validator uses AC-INDEX.yaml as reference for AC-ID definitions
+- Validator outputs follow `output-standards.md` format
+
+---
+
+## 📋 ARCHITECTURE ENHANCEMENT PROTOCOL
+
+**When validation reveals need for new capabilities:**
+
+1. **DO NOT implement** new validation features inline
+2. **Document in:** `cortex-brain/documents/future-enhancements/validation-{capability}.yaml`
+3. **Report:** `📋 Enhancement documented: {title} - requires review`
+4. **Continue** with existing validation scope
+
+---
+
 **Version History:**
 - 1.0.0 (2026-01-11): Comprehensive validation framework (overly complex)
-- 2.0.0 (2026-01-12): **OPTIMIZED** - Single command, fast validation, test-evidence-only, integrated with CORTEX.prompt.md autonomous loop
+- 2.0.0 (2026-01-12): **OPTIMIZED** - Single command, fast validation, test-evidence-only
+- 3.0.0 (2026-01-12): **PLAN-INTEGRATED** - Regression prevention, cohesive prompt integration, output standards compliance
