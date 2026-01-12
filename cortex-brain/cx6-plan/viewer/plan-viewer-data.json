@@ -1,22 +1,106 @@
 {
+  "timestamp": "2026-01-12T15:37:13.821337+00:00",
+  "version": "2.0.0",
   "plan_metadata": {
     "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
-    "total_ac_ids": 175,
-    "completed_ac_ids": 92,
-    "in_progress_ac_ids": 0,
     "version": "1.2.0",
-    "updated": "2026-01-12T15:24:32.687441+00:00",
-    "status": "phases_1_to_5_defined_4.5_integration_tests_added"
+    "created": "2026-01-10T23:50:00Z",
+    "updated": "2026-01-12T16:45:00Z",
+    "author": "Asif Hussain",
+    "strategy": "Snowball Implementation",
+    "philosophy": "Infrastructure-first compound growth",
+    "design_score": 97,
+    "total_weeks": 10,
+    "total_ac_ids": 137,
+    "hybrid_approach": true,
+    "gpt_influence": "70% rigor, 30% overhead",
+    "latest_addition": "Phase 4.5 - Orchestrator Integration & Audit Validation Suite (AC-INTEG-001 to 012)"
   },
-  "phases": [
-    {
-      "id": 1,
-      "name": "Foundation Enhancement",
-      "completion_percentage": 75,
-      "ac_ids_complete": 22,
-      "ac_ids_total": 29,
-      "status": "in_progress",
-      "description": "Build the core infrastructure that EVERY other component depends on.\nAll orchestrators log to audit, enforce governance, persist state.\nWithout this foundation, nothing else can reliably operate.\n",
+  "phases": [],
+  "toolkit_integration": {
+    "response_templates": {
+      "sections": 3,
+      "quality_gates": 9,
+      "routing_tiers": 4,
+      "status": "active"
+    },
+    "cortex_lens": {
+      "ac_ids": [],
+      "count": 0,
+      "analyzers": 6,
+      "mcp_tools": 6,
+      "status": "ready_after_phase_1"
+    },
+    "cortex_toolkit": {
+      "ac_ids": [],
+      "count": 0,
+      "generators": 8,
+      "mcp_tools": 8,
+      "status": "integrated"
+    },
+    "onboarding": {
+      "ac_ids": [],
+      "count": 0,
+      "phases": 12,
+      "status": "ready"
+    },
+    "mcp_tools_total": 25
+  },
+  "statistics": {
+    "total_acs": 175,
+    "completed_acs": 33,
+    "in_progress_acs": 0,
+    "completion_percentage": 18.9,
+    "design_score": 97,
+    "phases_total": 0,
+    "current_phase": {
+      "number": 1,
+      "name": "Phase 1: Foundation Enhancement",
+      "ac_ids": [
+        "AC-AUDIT-001",
+        "AC-AUDIT-002",
+        "AC-AUDIT-003",
+        "AC-AUDIT-004",
+        "AC-AUDIT-005",
+        "AC-AUDIT-006",
+        "AC-AUDIT-007",
+        "AC-GOV-001",
+        "AC-GOV-002",
+        "AC-GOV-003",
+        "AC-GOV-004",
+        "AC-GOV-005",
+        "AC-STATE-001",
+        "AC-STATE-002",
+        "AC-STATE-003",
+        "AC-LIFECYCLE-001",
+        "AC-LIFECYCLE-002",
+        "AC-LIFECYCLE-003",
+        "AC-EVIDENCE-001",
+        "AC-EVIDENCE-002",
+        "AC-EVIDENCE-003",
+        "AC-SECURITY-001",
+        "AC-SECURITY-002",
+        "AC-SECURITY-003",
+        "AC-SECURITY-004",
+        "AC-SECURITY-005",
+        "AC-SECURITY-006",
+        "AC-TEST-001",
+        "AC-TEST-002",
+        "AC-TEST-003",
+        "AC-TEST-004",
+        "AC-CLEAN-001",
+        "AC-CLEAN-002",
+        "AC-CLEAN-003",
+        "AC-RISK-010",
+        "AC-DEBT-014"
+      ],
+      "prerequisites": [],
+      "status": "completed",
+      "started": "2026-01-10T17:00:00Z",
+      "completed_at": null,
+      "completed_count": 29,
+      "total_ac_count": 34,
+      "completion_percentage": 100,
       "verified_implemented": [
         "AC-AUDIT-001",
         "AC-AUDIT-002",
@@ -25,6 +109,59 @@
         "AC-AUDIT-005",
         "AC-AUDIT-006",
         "AC-AUDIT-007",
+        "AC-GOV-001",
+        "AC-GOV-002",
+        "AC-GOV-003",
+        "AC-GOV-004",
+        "AC-STATE-001",
+        "AC-STATE-002",
+        "AC-STATE-003",
+        "AC-LIFECYCLE-001",
+        "AC-EVIDENCE-001",
+        "AC-EVIDENCE-002",
+        "AC-EVIDENCE-003",
+        "AC-SECURITY-003",
+        "AC-SECURITY-004",
+        "AC-SECURITY-005",
+        "AC-SECURITY-006",
+        "AC-TEST-001",
+        "AC-TEST-002",
+        "AC-TEST-003",
+        "AC-TEST-004",
+        "AC-CLEAN-001",
+        "AC-CLEAN-002",
+        "AC-CLEAN-003"
+      ],
+      "partial": [
+        "AC-ORCH-003",
+        "AC-ORCH-004"
+      ],
+      "planned_not_implemented": [],
+      "needs_verification": [],
+      "resolution": {
+        "issue": "Duplicate 'rules:' sections in core-rules.yaml causing only 3/23 rules to load",
+        "fix_applied": "Merged duplicate sections into single unified rules list",
+        "verification": "All 23 CORE rules now loading, 48/48 governance tests passing",
+        "fixed_at": "2026-01-10T20:04:00Z"
+      },
+      "holistic_verification": {
+        "date": "2026-01-10T21:30:00Z",
+        "source": "AC-INDEX.yaml + file verification + test execution",
+        "confidence": "HIGH",
+        "notes": "Corrected inflated 100% claim. Files exist for lifecycle/evidence but AC-INDEX marks as 'planned'."
+      },
+      "next_action": "Phase 1 complete at 94% - Ready for Phase 2 Orchestration Core",
+      "completed_ac_ids": [
+        "AC-AUDIT-001",
+        "AC-AUDIT-002",
+        "AC-AUDIT-003",
+        "AC-AUDIT-004",
+        "AC-AUDIT-005",
+        "AC-AUDIT-006",
+        "AC-AUDIT-007",
+        "AC-CLEAN-001",
+        "AC-CLEAN-002",
+        "AC-CLEAN-003",
         "AC-EVIDENCE-001",
         "AC-EVIDENCE-002",
         "AC-EVIDENCE-003",
@@ -32,304 +169,176 @@
         "AC-GOV-002",
         "AC-GOV-003",
         "AC-GOV-004",
+        "AC-GOV-005",
         "AC-LIFECYCLE-001",
+        "AC-LIFECYCLE-002",
+        "AC-LIFECYCLE-003",
+        "AC-SECURITY-001",
+        "AC-SECURITY-002",
         "AC-SECURITY-003",
         "AC-SECURITY-004",
         "AC-SECURITY-005",
         "AC-SECURITY-006",
         "AC-STATE-001",
         "AC-STATE-002",
-        "AC-STATE-003"
-      ],
-      "capabilities": [
-        {
-          "ac_id": "AC-SECURITY-001",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-SECURITY-002",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-SECURITY-003",
-          "name": "",
-          "status": "completed"
-        },
-        {
-          "ac_id": "AC-SECURITY-004",
-          "name": "",
-          "status": "completed"
-        },
-        {
-          "ac_id": "AC-SECURITY-005",
-          "name": "",
-          "status": "completed"
-        },
-        {
-          "ac_id": "AC-SECURITY-006",
-          "name": "",
-          "status": "completed"
-        },
-        {
-          "ac_id": "AC-SECURITY-007",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-SECURITY-008",
-          "name": "",
-          "status": "planned"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "name": "Orchestration Core (CORE WORKFLOW)",
-      "completion_percentage": 71,
-      "ac_ids_complete": 33,
-      "ac_ids_total": 46,
-      "status": "in_progress",
-      "description": "Establishes THE DEFAULT WORKING MECHANISM at the core of CORTEX operations.\nMasterOrchestrator is IN CHARGE: evaluates requests, creates tasks, executes.\nThis is the central controller that all user requests flow through.\n",
-      "verified_implemented": [
-        "AC-ORCH-001",
-        "AC-ORCH-002",
-        "AC-ORCH-003",
-        "AC-ORCH-004",
-        "AC-ORCH-005",
-        "AC-ORCH-006",
-        "AC-ORCH-007",
-        "AC-ORCH-008",
-        "AC-PLAN-001",
-        "AC-PLAN-002",
-        "AC-PLAN-003",
-        "AC-PLAN-004",
-        "AC-PLAN-005",
-        "AC-PLAN-006",
-        "AC-PLAN-007",
-        "AC-PLAN-008",
-        "AC-STS-001",
-        "AC-STS-002",
-        "AC-STS-003",
-        "AC-TDD-001",
-        "AC-TDD-002",
-        "AC-TDD-003",
-        "AC-TDD-004",
-        "AC-TDD-005",
-        "AC-TDD-006",
-        "AC-TDD-007",
-        "AC-TDD-008",
-        "AC-TDD-009",
-        "AC-TDD-010",
-        "AC-TODO-001",
-        "AC-TODO-002",
-        "AC-TODO-003",
-        "AC-TODO-004"
-      ],
-      "capabilities": [
-        {
-          "ac_id": "AC-ROUTE-001",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-ROUTE-002",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-ROUTE-003",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-ROUTE-004",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-ROUTE-005",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-TEMPLATE-001",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-TEMPLATE-002",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-TEMPLATE-003",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-TEMPLATE-004",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-TEMPLATE-005",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-TEMPLATE-006",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-TEMPLATE-007",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-TEMPLATE-008",
-          "name": "",
-          "status": "planned"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "name": "Feature Orchestrators",
-      "completion_percentage": 55,
-      "ac_ids_complete": 15,
-      "ac_ids_total": 27,
-      "status": "in_progress",
-      "description": "Build specialized orchestrators that leverage the core workflow.\nEach orchestrator reuses: Audit, Governance, State, Lifecycle, Evidence.\nSnowball effect: implementation becomes easier with solid foundation.\n",
-      "verified_implemented": [
-        "AC-ADO-001",
-        "AC-ADO-002",
-        "AC-ADO-003",
-        "AC-CLEAN-001",
-        "AC-CLEAN-002",
-        "AC-CLEAN-003",
-        "AC-CRAWLER-001",
-        "AC-CRAWLER-002",
-        "AC-CRAWLER-003",
-        "AC-INV-001",
-        "AC-INV-002",
-        "AC-SAN-001",
-        "AC-SAN-002",
-        "AC-VAC-001",
-        "AC-VAC-002"
-      ],
-      "capabilities": [
-        {
-          "ac_id": "AC-CLEAN-001",
-          "name": "",
-          "status": "completed"
-        },
-        {
-          "ac_id": "AC-CLEAN-002",
-          "name": "",
-          "status": "completed"
-        },
-        {
-          "ac_id": "AC-CLEAN-003",
-          "name": "",
-          "status": "completed"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "name": "Intelligence Layer",
-      "completion_percentage": 60,
-      "ac_ids_complete": 3,
-      "ac_ids_total": 5,
-      "status": "in_progress",
-      "description": "AI-native features that enhance orchestration with intelligence.\nLeverages all previous components: audit history, execution patterns,\ngovernance rules, and orchestrator behaviors.\n",
-      "verified_implemented": [
-        "AC-KNOW-001",
-        "AC-KNOW-002",
-        "AC-KNOW-003"
-      ],
-      "capabilities": [
-        {
-          "ac_id": "AC-ROUTE-003",
-          "name": "",
-          "status": "planned"
-        }
-      ]
-    },
-    {
-      "id": 4.5,
-      "name": "Orchestrator Integration & Audit Validation Suite",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
-      "ac_ids_total": 12,
-      "status": "planned",
-      "description": "Comprehensive end-to-end testing framework validating all orchestrators work\ntogether correctly. Tests focus on:\n\n1. Cross-component integration scenarios (Phase 1\u21924 orchestrators)\n2. Audit trail completeness and traceability\n3. Evidence bundle generation and validation\n4. State management under concurrent operations\n5. Governance enforcement across all components\n6. Failure recovery and rollback mechanisms\n7. Performance and load scenarios\n\nThis phase proves system correctness by validating audit logs contain\ncomplete provenance for all operations.\n",
-      "verified_implemented": [],
-      "capabilities": [
-        {
-          "ac_id": "AC-INTEG-001",
-          "name": "End-to-End Request Lifecycle",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-INTEG-002",
-          "name": "Multi-Phase Orchestrator Interaction",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-INTEG-003",
-          "name": "Orchestrator Error Propagation & Recovery",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-INTEG-004",
-          "name": "Audit Trail Completeness Validation",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-INTEG-005",
-          "name": "Correlation ID Traceability",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-INTEG-006",
-          "name": "Hash Chain Integrity Validation",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-INTEG-007",
-          "name": "Evidence Bundle Generation for All AC-IDs",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-INTEG-008",
-          "name": "Evidence Bundle 3-Gate Validation",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-INTEG-009",
-          "name": "State Management Under Concurrency & Failure",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-INTEG-010",
-          "name": "Governance Rule Enforcement Integration",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-INTEG-011",
-          "name": "Performance & Load Testing",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-INTEG-012",
-          "name": "Regression & Backwards Compatibility",
-          "status": "planned"
-        }
+        "AC-STATE-003",
+        "AC-TEST-001",
+        "AC-TEST-002",
+        "AC-TEST-003",
+        "AC-TEST-004"
       ]
     }
-  ]
+  },
+  "current_phase": {
+    "number": 1,
+    "name": "Phase 1: Foundation Enhancement",
+    "ac_ids": [
+      "AC-AUDIT-001",
+      "AC-AUDIT-002",
+      "AC-AUDIT-003",
+      "AC-AUDIT-004",
+      "AC-AUDIT-005",
+      "AC-AUDIT-006",
+      "AC-AUDIT-007",
+      "AC-GOV-001",
+      "AC-GOV-002",
+      "AC-GOV-003",
+      "AC-GOV-004",
+      "AC-GOV-005",
+      "AC-STATE-001",
+      "AC-STATE-002",
+      "AC-STATE-003",
+      "AC-LIFECYCLE-001",
+      "AC-LIFECYCLE-002",
+      "AC-LIFECYCLE-003",
+      "AC-EVIDENCE-001",
+      "AC-EVIDENCE-002",
+      "AC-EVIDENCE-003",
+      "AC-SECURITY-001",
+      "AC-SECURITY-002",
+      "AC-SECURITY-003",
+      "AC-SECURITY-004",
+      "AC-SECURITY-005",
+      "AC-SECURITY-006",
+      "AC-TEST-001",
+      "AC-TEST-002",
+      "AC-TEST-003",
+      "AC-TEST-004",
+      "AC-CLEAN-001",
+      "AC-CLEAN-002",
+      "AC-CLEAN-003",
+      "AC-RISK-010",
+      "AC-DEBT-014"
+    ],
+    "prerequisites": [],
+    "status": "completed",
+    "started": "2026-01-10T17:00:00Z",
+    "completed_at": null,
+    "completed_count": 29,
+    "total_ac_count": 34,
+    "completion_percentage": 100,
+    "verified_implemented": [
+      "AC-AUDIT-001",
+      "AC-AUDIT-002",
+      "AC-AUDIT-003",
+      "AC-AUDIT-004",
+      "AC-AUDIT-005",
+      "AC-AUDIT-006",
+      "AC-AUDIT-007",
+      "AC-GOV-001",
+      "AC-GOV-002",
+      "AC-GOV-003",
+      "AC-GOV-004",
+      "AC-STATE-001",
+      "AC-STATE-002",
+      "AC-STATE-003",
+      "AC-LIFECYCLE-001",
+      "AC-EVIDENCE-001",
+      "AC-EVIDENCE-002",
+      "AC-EVIDENCE-003",
+      "AC-SECURITY-003",
+      "AC-SECURITY-004",
+      "AC-SECURITY-005",
+      "AC-SECURITY-006",
+      "AC-TEST-001",
+      "AC-TEST-002",
+      "AC-TEST-003",
+      "AC-TEST-004",
+      "AC-CLEAN-001",
+      "AC-CLEAN-002",
+      "AC-CLEAN-003"
+    ],
+    "partial": [
+      "AC-ORCH-003",
+      "AC-ORCH-004"
+    ],
+    "planned_not_implemented": [],
+    "needs_verification": [],
+    "resolution": {
+      "issue": "Duplicate 'rules:' sections in core-rules.yaml causing only 3/23 rules to load",
+      "fix_applied": "Merged duplicate sections into single unified rules list",
+      "verification": "All 23 CORE rules now loading, 48/48 governance tests passing",
+      "fixed_at": "2026-01-10T20:04:00Z"
+    },
+    "holistic_verification": {
+      "date": "2026-01-10T21:30:00Z",
+      "source": "AC-INDEX.yaml + file verification + test execution",
+      "confidence": "HIGH",
+      "notes": "Corrected inflated 100% claim. Files exist for lifecycle/evidence but AC-INDEX marks as 'planned'."
+    },
+    "next_action": "Phase 1 complete at 94% - Ready for Phase 2 Orchestration Core",
+    "completed_ac_ids": [
+      "AC-AUDIT-001",
+      "AC-AUDIT-002",
+      "AC-AUDIT-003",
+      "AC-AUDIT-004",
+      "AC-AUDIT-005",
+      "AC-AUDIT-006",
+      "AC-AUDIT-007",
+      "AC-CLEAN-001",
+      "AC-CLEAN-002",
+      "AC-CLEAN-003",
+      "AC-EVIDENCE-001",
+      "AC-EVIDENCE-002",
+      "AC-EVIDENCE-003",
+      "AC-GOV-001",
+      "AC-GOV-002",
+      "AC-GOV-003",
+      "AC-GOV-004",
+      "AC-GOV-005",
+      "AC-LIFECYCLE-001",
+      "AC-LIFECYCLE-002",
+      "AC-LIFECYCLE-003",
+      "AC-SECURITY-001",
+      "AC-SECURITY-002",
+      "AC-SECURITY-003",
+      "AC-SECURITY-004",
+      "AC-SECURITY-005",
+      "AC-SECURITY-006",
+      "AC-STATE-001",
+      "AC-STATE-002",
+      "AC-STATE-003",
+      "AC-TEST-001",
+      "AC-TEST-002",
+      "AC-TEST-003",
+      "AC-TEST-004"
+    ]
+  },
+  "current_todo": {
+    "id": "TODO-015",
+    "name": "Begin Phase 1 Implementation",
+    "description": "Start Week 1-2: Foundation Enhancement (AC-AUDIT-007, AC-LIFECYCLE-001-003, AC-EVIDENCE-001-003)",
+    "status": "not_started",
+    "ac_ids": [
+      "AC-AUDIT-007",
+      "AC-LIFECYCLE-001",
+      "AC-LIFECYCLE-002",
+      "AC-LIFECYCLE-003",
+      "AC-EVIDENCE-001",
+      "AC-EVIDENCE-002",
+      "AC-EVIDENCE-003"
+    ],
+    "priority": 1
+  },
+  "blockers": []
 }
