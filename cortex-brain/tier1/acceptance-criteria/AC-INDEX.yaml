@@ -1,8 +1,8 @@
 schema_version: '1.7'
-last_updated: '2026-01-12T00:00:00Z'
-total_ac_count: 104
+last_updated: '2026-01-12T18:45:00Z'
+total_ac_count: 118
 completed_count: 33
-in_progress_count: 0
+in_progress_count: 14
 design_score_current: 97
 design_score_target: 95
 definition_of_ready:
@@ -687,32 +687,59 @@ categories:
     - CORE-001
     - CORE-017
     design_approach: distributed_with_centralized_config
+  LENS:
+    prefix: AC-LENS
+    description: CORTEX LENS - Universal code analysis and reverse-engineering system for intelligent knowledge discovery
+    tier: 1
+    priority: 1
+    core_workflow: true
+    team_extensibility: true
+    phase: 1.5
+    note: |
+      CORTEX LENS is the intelligence backbone that:
+      
+      1. Runs AST analysis across all supported languages (Python, JS/TS, C#, Java, Go, Rust, SQL)
+      2. Executes code crawlers to extract architecture, dependencies, complexity, tech stack
+      3. Reverse-engineers codebase intent from comments, git history, patterns
+      4. Builds knowledge graphs and stores in tier1/tier3
+      5. Exposes all analyzers as MCP tools for other orchestrators
+      6. Enables Planning v5, Onboarding, and other orchestrators to access discoveries
+      
+      This is NOT a dashboard. It's a universal knowledge discovery system that makes
+      CORTEX smarter by learning from each codebase analyzed.
+      
+      Used by: Onboarding Orchestrator, Planning v5, Investigation, all crawlers
+    stores_to: "cortex-brain/tier1/{project}/ (knowledge-graph.yaml, analysis results)"
+    exposes_via: "MCP tools - ast_analyzer, code_crawler, git_analyzer, domain_learner"
   ONBOARD:
     prefix: AC-ONBOARD
-    description: Comprehensive repo/project onboarding with AST crawlers, git history
-      analysis, and knowledge graph building
+    description: Onboarding Orchestrator - Interactive project discovery using CORTEX LENS for intelligent setup
     tier: 1
-    priority: 2
+    priority: 1
     core_workflow: true
     team_extensibility: true
     setup_integration: true
-    note: 'The Onboarding Orchestrator runs on new repos/projects to:
-
-      1. Run AST crawlers to analyze codebase structure
-
-      2. Analyze git history and commit patterns
-
-      3. Build knowledge graphs stored in company tier (tier1)
-
-      4. Detect tech stack, dependencies, architecture patterns
-
-      5. Create initial CORTEX configuration
-
+    phase: 1.5
+    note: |
+      The Onboarding Orchestrator uses CORTEX LENS to provide intelligent project
+      discovery at setup time:
+      
+      1. Run CORTEX LENS AST crawlers to analyze codebase structure
+      2. Analyze git history to extract team patterns and code churn hotspots
+      3. Build knowledge graphs stored in tier1 (company knowledge)
+      4. Detect technology stack, dependencies, architecture patterns
+      5. Generate health dashboards with findings
       6. Provide interactive guided setup for users/teams
-
-      7. AUTO-RUN during setup/installation (AC-ONBOARD-012)
-
-      '
+      7. AUTO-RUN during CORTEX setup/installation (AC-ONBOARD-008)
+      8. Store discovered knowledge for reuse by Planning, other orchestrators
+      
+      10-Phase Flow: Metadata → AST → Git → Tech → Quality → Architecture → Comments 
+                    → Domain Learning → Parallel Crawlers → Dashboard
+      
+      Execution time: <2 minutes for typical project
+    uses: AC-LENS (all 6 components)
+    stores_to: cortex-brain/tier1/{project}/ + dashboards/
+    integrates_with: Planning v5, Investigation, all orchestrators
     source_references:
       onboarding_orchestrator: commit:4686dc7a8 - src/orchestration_3_0/orchestrators/onboarding/
       cortex_lens: CORTEX-4.0:src/cortex_lens/
