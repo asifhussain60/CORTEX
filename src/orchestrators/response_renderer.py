@@ -58,10 +58,10 @@ class ResponseRenderer:
     def _get_default_templates(self) -> Dict[str, Any]:
         """Return hardcoded default templates as fallback."""
         return {
-            "schema_version": "4.2.0",
+            "schema_version": "4.3.0",
             "mandatory_header": {
                 "enabled": True,
-                "template": "# 🧠 CORTEX {operation_type} Summary\n**Version:** {version} | **Date:** {iso_date}\n**Author:** Asif Hussain\n**Copyright © 2025-2026 Asif Hussain. All rights reserved.**\n---\n"
+                "template": "## 🧠 CORTEX {operation_type}\n**Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅\n"
             },
             "executive_summary": {
                 "enabled": True,
@@ -131,37 +131,42 @@ class ResponseRenderer:
     
     def _build_header(self, operation_type: str, context: Dict[str, Any]) -> str:
         """
-        Build mandatory CORTEX header with brain icon and copyright.
+        Build mandatory CORTEX header with brain icon (CORTEX-4.0 style).
         
         Format:
-        # 🧠 CORTEX {operation_type} Summary
-        **Version:** {version} | **Date:** {iso_date}
-        **Author:** Asif Hussain
-        **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
-        ---
+        ## 🧠 CORTEX {work_subtitle}
+        **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator_name} ✅
+        
+        This is the authoritative header format - operational, concise, context-aware.
         """
         header_config = self.templates.get("mandatory_header", {})
         
         if not header_config.get("enabled", True):
             return ""
         
-        # Extract version from context or use default
-        version = context.get("version", "6.0.0")
-        iso_date = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+        # Extract operational context from context dict
+        phase = context.get("phase", "Phase 2")
+        orchestrator = context.get("orchestrator_name", "MasterOrchestrator")
         
-        # Use template from config
+        # Clean up orchestrator name for display (e.g., "tdd_master" → "TDD-Master v1.0")
+        if orchestrator and "_" in orchestrator:
+            # Convert snake_case to Title-Case
+            parts = orchestrator.split("_")
+            orchestrator = "-".join(p.upper() if len(p) <= 3 else p.title() for p in parts)
+        
+        # Use template from config or default CORTEX-4.0 style
         template = header_config.get(
             "template",
-            "# 🧠 CORTEX {operation_type} Summary\n**Version:** {version} | **Date:** {iso_date}\n**Author:** Asif Hussain\n**Copyright © 2025-2026 Asif Hussain. All rights reserved.**\n---\n"
+            "## 🧠 CORTEX {operation_type}\n**Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅\n"
         )
         
         header = template.format(
             operation_type=operation_type,
-            version=version,
-            iso_date=iso_date
+            phase=phase,
+            orchestrator=orchestrator
         )
         
-        self.logger.debug(f"Built header for operation: {operation_type}")
+        self.logger.debug(f"Built CORTEX-4.0 style header: {operation_type} | Phase={phase} | Orchestrator={orchestrator}")
         return header
     
     def _build_sections(self, message_content: str, context: Dict[str, Any]) -> str:

@@ -1,33 +1,33 @@
-schema_version: '4.2.1'
+schema_version: '4.3.0'
 last_updated: '2026-01-12'
-architecture: 'executive_summary_with_mandatory_header_and_next_steps'
+architecture: 'cortex_4_0_style_header_with_next_steps'
 description: |
-  CORTEX Response Template System v4.2.1
-  Executive Summary Mode with Mandatory CORTEX Header (Brain Icon) and Next Steps
+  CORTEX Response Template System v4.3.0
+  CORTEX-4.0 Style Headers (Operational, Concise, Context-Aware)
   
-  All responses must include:
-  1. Mandatory CORTEX header with 🧠 brain icon and copyright info
+  All responses include:
+  1. Mandatory CORTEX-4.0 style header (2 lines, operational)
   2. Executive summary sections (Outcomes, In Progress, Risks, Impact)
   3. Mandatory "Next Steps:" section as final section
-  Dynamic composition of reusable components based on operation context.
+  
+  Header format (CORTEX-4.0 style):
+  ## 🧠 CORTEX {work_subtitle}
+  **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator_name} ✅
 
 # ============================================================================
-# MANDATORY CORTEX HEADER (v4.2.1)
+# MANDATORY CORTEX HEADER (v4.3.0 - CORTEX-4.0 Style)
 # ============================================================================
 
 mandatory_header:
   enabled: true
   description: |
-    All responses from CORTEX orchestrators MUST include this header.
-    Establishes authority, copyright, and version context with 🧠 brain icon.
+    CORTEX-4.0 style header - operational, concise, context-aware.
+    Shows what's being done, who's doing it, and what phase/orchestrator.
     THIS IS THE AUTHORITATIVE HEADER - appears on EVERY response.
   
   template: |
-    # 🧠 CORTEX {operation_type} Summary
-    **Version:** {version} | **Date:** {iso_date}
-    **Author:** Asif Hussain
-    **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
-    ---
+    ## 🧠 CORTEX {operation_type}
+    **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
   
   critical_rules:
     - "EVERY response must start with this header"

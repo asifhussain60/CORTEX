@@ -24,14 +24,15 @@ from src.orchestrators.response_middleware import ResponseMiddleware
 def demo_basic_response():
     """Demonstrate basic response with header and sections."""
     print("=" * 80)
-    print("DEMO 1: Basic Response with Header and Sections")
+    print("DEMO 1: Basic Response with Header and Sections (CORTEX-4.0 Style)")
     print("=" * 80)
     
     renderer = ResponseRenderer(templates_path="cortex-brain/response-templates-v4.yaml")
     
     result = {"message": "Operation completed"}
     context = {
-        "version": "6.0.0",
+        "phase": "Phase 2",
+        "orchestrator_name": "tdd_master",
         "operation_type": "TDD-Master",
         "summary": "Test-driven implementation of governance module completed successfully.",
         "outcomes": [
@@ -66,7 +67,8 @@ def demo_with_warnings():
     
     result = {"message": "Query completed"}
     context = {
-        "version": "6.0.0",
+        "phase": "Phase 1",
+        "orchestrator_name": "investigation_orchestrator",
         "operation_type": "Analysis",
         "summary": "Brittleness review identified 8 critical and 12 high-priority risks.",
         "outcomes": [
@@ -104,14 +106,15 @@ def demo_with_warnings():
 def demo_minimal_response():
     """Demonstrate minimal response (instant tier)."""
     print("=" * 80)
-    print("DEMO 3: Minimal Response (Instant Tier)")
+    print("DEMO 3: Minimal Response (Instant Tier - CORTEX-4.0 Style)")
     print("=" * 80)
     
     renderer = ResponseRenderer(templates_path="cortex-brain/response-templates-v4.yaml")
     
     result = {"message": "Status query"}
     context = {
-        "version": "6.0.0",
+        "phase": "Phase 2",
+        "orchestrator_name": "master_orchestrator",
         "operation_type": "Status",
         "summary": "CORTEX 6.0 Phase 1 at 60% completion.",
         "outcomes": [
@@ -130,14 +133,15 @@ def demo_minimal_response():
 def demo_validation():
     """Show that all quality gates pass."""
     print("=" * 80)
-    print("VALIDATION: Quality Gate Checks")
+    print("VALIDATION: Quality Gate Checks (CORTEX-4.0 Format)")
     print("=" * 80)
     
     renderer = ResponseRenderer(templates_path="cortex-brain/response-templates-v4.yaml")
     
     result = {"message": "Test"}
     context = {
-        "version": "6.0.0",
+        "phase": "Phase 2",
+        "orchestrator_name": "tdd_master",
         "operation_type": "Test",
         "summary": "Test response.",
         "outcomes": ["Test outcome"],
@@ -149,12 +153,14 @@ def demo_validation():
     # Check quality gates
     checks = {
         "🧠 Brain icon present": "🧠 CORTEX" in markdown,
-        "Copyright present": "Copyright © 2025-2026" in markdown,
+        "CORTEX-4.0 header format": markdown.startswith("## 🧠"),
         "Author present": "**Author:** Asif Hussain" in markdown,
-        "Version present": "**Version:**" in markdown,
+        "Phase present": "**Phase:**" in markdown,
+        "Orchestrator present": "**Orchestrator:**" in markdown,
+        "Checkmark present": "✅" in markdown,
         "Outcomes section": "✅ OUTCOMES" in markdown,
         "Next Steps section": "📋 NEXT STEPS" in markdown,
-        "Proper order (header first)": markdown.startswith("# 🧠"),
+        "Proper order (header first)": markdown.startswith("## 🧠"),
         "Proper order (Next Steps last)": markdown.rstrip().endswith("Next step"),
     }
     
@@ -171,6 +177,7 @@ if __name__ == "__main__":
     try:
         print("\n" + "=" * 80)
         print("CORTEX RESPONSE HEADER INJECTION SYSTEM - DEMONSTRATION")
+        print("Using CORTEX-4.0 Style Headers with Phase and Orchestrator")
         print("=" * 80 + "\n")
         
         demo_basic_response()
@@ -180,8 +187,8 @@ if __name__ == "__main__":
         
         print("=" * 80)
         print("DEMONSTRATION COMPLETE - All responses include:")
-        print("  ✅ 🧠 Brain icon with CORTEX title")
-        print("  ✅ Version, date, author, copyright")
+        print("  ✅ 🧠 Brain icon with CORTEX-4.0 style header (## heading)")
+        print("  ✅ Author, Phase, and Orchestrator information")
         print("  ✅ Executive summary format (bullets, no prose)")
         print("  ✅ Mandatory Next Steps section")
         print("  ✅ System message injection (warnings, deprecations)")

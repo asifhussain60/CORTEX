@@ -374,6 +374,8 @@ class MasterOrchestrator:
             
             # Prepare rendering context
             render_context = {
+                'phase': enriched_context.get('current_phase', 'Phase 2'),
+                'orchestrator_name': match.orchestrator_id,
                 'version': '6.0.0',  # CORTEX version
                 'summary': result.get('message', 'Operation completed successfully.'),
                 'session_id': enriched_context.get('session_id'),
