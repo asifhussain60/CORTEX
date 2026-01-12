@@ -21,8 +21,8 @@ from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass, field
 from enum import Enum
 
-from src.infrastructure.enhanced_audit_logger import (
-    EnhancedAuditLogger,
+from src.orchestrators.audit_logger import (
+    EnterpriseAuditLogger,
     AuditCategory,
     AuditLevel
 )
@@ -121,12 +121,12 @@ class BrittlenessAmbiguityValidator:
     def __init__(
         self,
         config_path: str = "cortex-brain/tier0/governance/brittleness-ambiguity-tests.yaml",
-        audit_logger: Optional[EnhancedAuditLogger] = None
+        audit_logger: Optional[EnterpriseAuditLogger] = None
     ):
         """Initialize validator with configuration"""
         self.config_path = Path(config_path)
         self.config = self._load_config()
-        self.audit_logger = audit_logger or EnhancedAuditLogger()
+        self.audit_logger = audit_logger or EnterpriseAuditLogger()
         
         # Targets from config
         self.target_design_score = self.config['governance']['target_design_score']

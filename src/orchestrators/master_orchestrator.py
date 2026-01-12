@@ -18,6 +18,11 @@ from src.orchestrators.execution_engine import ExecutionEngine, ExecutionResult
 from src.orchestrators.context_middleware import CrossSessionContextMiddleware
 from src.orchestrators.response_renderer import ResponseRenderer
 from src.orchestrators.response_middleware import ResponseMiddleware
+from src.orchestrators.audit_logger import (
+    get_audit_logger,
+    AuditLevel,
+    AuditCategory
+)
 from src.mcp.registry import OrchestratorRegistry
 from src.database.planning_state_db import PlanningStateDB
 
@@ -86,6 +91,7 @@ class MasterOrchestrator:
         
         # Setup logging
         self.logger = logging.getLogger("cortex.orchestrators.master")
+        self.audit_logger = get_audit_logger()
         
         # Core components
         self.router = PatternRouter(config_path)
@@ -140,8 +146,10 @@ class MasterOrchestrator:
             reason = f"Orchestrator not registered: {orchestrator_id}"
             self.logger.warning(reason)
             self.audit_logger.log(
-                level="WARNING",
-                category="GOVERNANCE",
+                level=AuditLevel.WARNING,
+                category=AuditCategory.SECURITY,
+                component="MasterOrchestrator",
+                operation="validate_registration",
                 message=reason,
                 metadata={'orchestrator_id': orchestrator_id}
             )
@@ -155,8 +163,10 @@ class MasterOrchestrator:
         if not is_valid:
             self.logger.warning(reason)
             self.audit_logger.log(
-                level="WARNING",
-                category="GOVERNANCE",
+                level=AuditLevel.WARNING,
+                category=AuditCategory.SECURITY,
+                component="MasterOrchestrator",
+                operation="validate_routing",
                 message=reason,
                 metadata={'orchestrator_id': orchestrator_id}
             )

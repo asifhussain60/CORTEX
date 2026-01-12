@@ -16,7 +16,7 @@ from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field, asdict
 from enum import Enum
 
-from src.infrastructure.enhanced_audit_logger import EnterpriseAuditLogger
+from src.orchestrators.audit_logger import EnterpriseAuditLogger
 
 
 class RegistrationStatus(str, Enum):
