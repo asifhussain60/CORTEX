@@ -32,34 +32,32 @@ python3 -m src.main "{user_intent}" --orchestrator master --format markdown
 - ❌ Manipulate state outside MasterOrchestrator
 
 ---
-## 🛡️ REGRESSION PREVENTION PROTOCOL (UNIFIED)
 
-**Before any operation, verify critical state files:**
+## 🛡️ REGRESSION PREVENTION (See CORTEX.prompt.md § "UNIFIED REGRESSION CHECK")
 
-```python
-# 🛡️ UNIFIED REGRESSION CHECK
+**Reference:** CORTEX.prompt.md maintains the unified regression check. All prompts use the same check.
+
+**Quick Verification:**
+```bash
+python3 << 'EOF'
 import json, yaml, sys
-
 errors = []
 try:
     ac_index = yaml.safe_load(open('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml'))
-    if not ac_index.get('schema_version'): errors.append("AC-INDEX missing schema_version")
-except Exception as e: errors.append(f"AC-INDEX parse error: {e}")
-
+    if not ac_index.get('schema_version'): errors.append("AC-INDEX schema missing")
+except Exception as e: errors.append(f"AC-INDEX: {e}")
 try:
     tracker = json.load(open('cortex-brain/tier1/tracking/progress-tracker.json'))
-    if not tracker.get('current_phase'): errors.append("tracker missing current_phase")
-except Exception as e: errors.append(f"tracker parse error: {e}")
-
+    if not tracker.get('current_phase'): errors.append("tracker phase missing")
+except Exception as e: errors.append(f"tracker: {e}")
 try:
     plan = yaml.safe_load(open('cortex-brain/cx6-plan/master-plan.yaml'))
-    if not plan.get('plan_metadata'): errors.append("master-plan missing plan_metadata")
-except Exception as e: errors.append(f"master-plan parse error: {e}")
-
+    if not plan.get('plan_metadata'): errors.append("plan metadata missing")
+except Exception as e: errors.append(f"plan: {e}")
 if errors:
-    print("❌ REGRESSION DETECTED:\n" + "\n".join([f"  - {e}" for e in errors]))
-    sys.exit(1)
-print("✅ Regression check passed.")
+    print("❌ " + " | ".join(errors)); sys.exit(1)
+print("✅ State valid")
+EOF
 ```
 
 ## Scope & Inputs (repo conventions)
