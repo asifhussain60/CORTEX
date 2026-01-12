@@ -1,0 +1,1172 @@
+# AC-ID Payload for CORTEX 6.0 Brittleness Review (2026-01-12)
+# These AC-IDs should be appended to cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml
+# in the acceptanceCriteria[] array (after AC-TOOLKIT-005)
+
+# TOOLKIT COHERENCE ISSUES (AC-TOOLKIT-006 to AC-TOOLKIT-020)
+
+- id: AC-TOOLKIT-006
+  title: Rename Tools - Adjective & Length Violations (duplicate-detection)
+  description: |
+    Enforce CORE-022 (kebab-case, ≤25 chars, no adjectives).
+    
+    Rename: duplicate-detection-toolkit.py → detection-analyzer.py
+    - Remove adjective "duplicate"
+    - Reduce length from 27 chars to 18 chars
+    - Maintain all functionality (no feature loss)
+    
+    Acceptance Criteria:
+    - Tool renamed and all imports updated
+    - Tool still performs duplicate detection + gap analysis
+    - All existing tests pass (consolidation with gap_detector.py tested separately)
+    - Naming validated by pre-commit hook (CORE-022 enforcer)
+    - Audit log entry for renaming action
+  status: planned
+  priority: medium
+  phase: 2
+  category: toolkit
+  tests:
+  - tests/tools/test_detection_analyzer.py
+  dependencies:
+  - AC-TOOLKIT-016
+  estimatedEffort: 2
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: medium
+
+- id: AC-TOOLKIT-007
+  title: Rename Tools - Adjective & Case Violations (real_implementation)
+  description: |
+    Enforce CORE-022.
+    
+    Rename: real_implementation_engine.py → code-executor.py
+    - Remove adjective "real"
+    - Convert snake_case to kebab-case
+    - Reduce length from 26 chars to 14 chars
+    - Maintain all functionality
+    
+    Acceptance Criteria:
+    - Tool renamed with all imports updated
+    - All tests pass
+    - Pre-commit validates new name against CORE-022
+  status: planned
+  priority: medium
+  phase: 2
+  category: toolkit
+  tests:
+  - tests/tools/test_code_executor.py
+  dependencies:
+  - AC-TOOLKIT-018
+  estimatedEffort: 2
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: medium
+
+- id: AC-TOOLKIT-008
+  title: Rename Tools - Length Violations (feature_requirements_extractor)
+  description: |
+    Enforce CORE-022.
+    
+    Rename: feature_requirements_extractor.py → requirement-parser.py
+    - Reduce length from 30 chars to 17 chars
+    - Convert snake_case to kebab-case
+    - Maintain all functionality
+    
+    Acceptance Criteria:
+    - Tool renamed with all imports updated
+    - All tests pass
+    - Pre-commit validates new name against CORE-022
+  status: planned
+  priority: medium
+  phase: 2
+  category: toolkit
+  tests:
+  - tests/tools/test_requirement_parser.py
+  estimatedEffort: 1
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: medium
+
+- id: AC-TOOLKIT-009
+  title: Rename Tools - Length Violations (traceability_matrix_generator)
+  description: |
+    Enforce CORE-022.
+    
+    Rename: traceability_matrix_generator.py → matrix-builder.py
+    - Reduce length from 29 chars to 14 chars
+    - Convert snake_case to kebab-case
+    - Maintain all functionality
+    
+    Acceptance Criteria:
+    - Tool renamed with all imports updated
+    - All tests pass
+    - Pre-commit validates new name against CORE-022
+  status: planned
+  priority: medium
+  phase: 2
+  category: toolkit
+  tests:
+  - tests/tools/test_matrix_builder.py
+  estimatedEffort: 1
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: medium
+
+- id: AC-TOOLKIT-010
+  title: Add @mcp_tool to planning_tools.py (CORE-024 Enforcement)
+  description: |
+    CORE-024 mandates @mcp_tool decorator for all public tools.
+    planning_tools.py (7KB) lacks decorator → invisible to MasterOrchestrator.
+    
+    Implementation:
+    1. Add @mcp_tool decorator to planning_tools.py module
+    2. Define tool name, description, category, parameters, returns
+    3. Add metadata: tags=['planning'], version='6.0.0', autonomous=true, ac_standard='AC-PLAN-*'
+    4. Update MCP registry (auto-discovers via decorator)
+    5. Verify tool appears in capability_registry queries
+    
+    Acceptance Criteria:
+    - @mcp_tool decorator applied with all required fields
+    - Tool appears in MCP capability discovery
+    - MasterOrchestrator can route to planning_tools
+    - Tests verify decorator metadata completeness (CORE-024)
+  status: planned
+  priority: high
+  phase: 2
+  category: toolkit
+  tests:
+  - tests/mcp/test_planning_tools.py
+  - tests/mcp/test_capability_exposure.py
+  dependencies:
+  - AC-TOOLKIT-019
+  estimatedEffort: 2
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: high
+
+- id: AC-TOOLKIT-011
+  title: Add @mcp_tool to tdd_tools.py (CORE-024 Enforcement)
+  description: |
+    CORE-024 enforcement. tdd_tools.py (7KB) needs @mcp_tool decorator.
+    
+    Same pattern as AC-TOOLKIT-010: decorator + metadata + registry verification.
+    
+    Acceptance Criteria:
+    - Decorator applied with complete metadata
+    - Tool discoverable via MCP registry
+    - MasterOrchestrator can route to tdd_tools
+    - Tests verify CORE-024 compliance
+  status: planned
+  priority: high
+  phase: 2
+  category: toolkit
+  tests:
+  - tests/mcp/test_tdd_tools.py
+  - tests/mcp/test_capability_exposure.py
+  dependencies:
+  - AC-TOOLKIT-019
+  estimatedEffort: 2
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: high
+
+- id: AC-TOOLKIT-012
+  title: Add @mcp_tool to housekeeping_tools.py (CORE-024 Enforcement)
+  description: |
+    CORE-024 enforcement. housekeeping_tools.py (13KB) needs @mcp_tool.
+    
+    Same pattern as AC-TOOLKIT-010.
+    
+    Acceptance Criteria:
+    - Decorator applied
+    - Tool discoverable
+    - MasterOrchestrator can route
+    - CORE-024 compliance verified
+  status: planned
+  priority: high
+  phase: 2
+  category: toolkit
+  tests:
+  - tests/mcp/test_housekeeping_tools.py
+  - tests/mcp/test_capability_exposure.py
+  dependencies:
+  - AC-TOOLKIT-019
+  estimatedEffort: 2
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: high
+
+- id: AC-TOOLKIT-013
+  title: Add @mcp_tool to evidence_bundle_generator.py (CORE-024 Enforcement)
+  description: |
+    CORE-024 enforcement. evidence_bundle_generator.py (10KB) needs @mcp_tool.
+    
+    Same pattern as AC-TOOLKIT-010.
+    
+    Acceptance Criteria:
+    - Decorator applied
+    - Tool discoverable
+    - MasterOrchestrator can route
+    - CORE-024 compliance verified
+  status: planned
+  priority: high
+  phase: 2
+  category: toolkit
+  tests:
+  - tests/mcp/test_evidence_bundle_generator.py
+  - tests/mcp/test_capability_exposure.py
+  dependencies:
+  - AC-TOOLKIT-019
+  estimatedEffort: 2
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: high
+
+- id: AC-TOOLKIT-014
+  title: Add @mcp_tool to orchestrator_scaffolder.py (CORE-024 Enforcement)
+  description: |
+    CORE-024 enforcement. orchestrator_scaffolder.py (38KB) needs @mcp_tool.
+    
+    Same pattern as AC-TOOLKIT-010.
+    
+    Acceptance Criteria:
+    - Decorator applied
+    - Tool discoverable
+    - MasterOrchestrator can route
+    - CORE-024 compliance verified
+  status: planned
+  priority: high
+  phase: 2
+  category: toolkit
+  tests:
+  - tests/tools/test_orchestrator_scaffolder.py
+  - tests/mcp/test_capability_exposure.py
+  dependencies:
+  - AC-TOOLKIT-019
+  estimatedEffort: 2
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: high
+
+- id: AC-TOOLKIT-015
+  title: Add @mcp_tool to test_executor.py (CORE-024 Enforcement)
+  description: |
+    CORE-024 enforcement. test_executor.py (11KB) needs @mcp_tool.
+    
+    Same pattern as AC-TOOLKIT-010.
+    
+    Acceptance Criteria:
+    - Decorator applied
+    - Tool discoverable
+    - MasterOrchestrator can route
+    - CORE-024 compliance verified
+  status: planned
+  priority: high
+  phase: 2
+  category: toolkit
+  tests:
+  - tests/tools/test_executor.py
+  - tests/mcp/test_capability_exposure.py
+  dependencies:
+  - AC-TOOLKIT-019
+  estimatedEffort: 2
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: high
+
+- id: AC-TOOLKIT-016
+  title: Consolidate Detection Suite (duplicate-detection + gap-detector)
+  description: |
+    Currently: duplicate-detection-toolkit.py (23KB) + gap_detector.py (17KB)
+    Redundancy: Both detect missing/broken features with overlapping logic.
+    
+    Consolidate into: detection-analyzer.py
+    - Merge all functions from both tools
+    - Preserve all unique capabilities
+    - No feature loss
+    - Single test suite
+    - Simplifies maintenance
+    
+    Acceptance Criteria:
+    - New detection-analyzer.py created with all merged functionality
+    - All duplicate-detection-toolkit.py capabilities preserved
+    - All gap_detector.py capabilities preserved
+    - All tests pass (old tests + new consolidated tests)
+    - Old files deleted (after verification)
+    - Import updates in files using old tools
+  status: planned
+  priority: medium
+  phase: 2
+  category: toolkit
+  tests:
+  - tests/tools/test_detection_analyzer.py
+  dependencies:
+  - AC-TOOLKIT-007
+  estimatedEffort: 6
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: medium
+
+- id: AC-TOOLKIT-017
+  title: Consolidate Validation Suite (yaml_validator + requirements_auditor)
+  description: |
+    Currently: yaml_validator.py (14KB) + requirements_auditor.py (9KB)
+    Redundancy: Both validate structured data (YAML, JSON, markdown).
+    
+    Consolidate into: data-validator.py
+    - Merge all validation logic
+    - Support YAML, JSON, markdown validation
+    - Preserve all unique capabilities
+    - Single validation interface
+    
+    Acceptance Criteria:
+    - New data-validator.py created with merged functionality
+    - All yaml_validator.py capabilities preserved
+    - All requirements_auditor.py capabilities preserved
+    - All tests pass
+    - Old files deleted
+    - Import updates in dependents
+  status: planned
+  priority: medium
+  phase: 2
+  category: toolkit
+  tests:
+  - tests/tools/test_data_validator.py
+  dependencies:
+  - AC-TOOLKIT-008
+  estimatedEffort: 6
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: medium
+
+- id: AC-TOOLKIT-018
+  title: Consolidate Code Generation Suite (orchestrator_scaffolder + real_implementation)
+  description: |
+    Currently: orchestrator_scaffolder.py (38KB) + real_implementation_engine.py (12KB)
+    Redundancy: Both generate code artifacts (templates, execution code).
+    
+    Consolidate into: artifact-generator.py
+    - Merge template generation (scaffolder)
+    - Merge execution generation (engine)
+    - Preserve all capabilities
+    - Unified interface
+    
+    Acceptance Criteria:
+    - New artifact-generator.py created
+    - All scaffolder capabilities preserved
+    - All engine capabilities preserved
+    - All tests pass
+    - Old files deleted
+    - Import updates
+  status: planned
+  priority: medium
+  phase: 2
+  category: toolkit
+  tests:
+  - tests/tools/test_artifact_generator.py
+  dependencies:
+  - AC-TOOLKIT-007
+  estimatedEffort: 8
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: medium
+
+- id: AC-TOOLKIT-019
+  title: Establish Tool Taxonomy & Organization Structure
+  description: |
+    Currently: 37 tools scattered across src/tools/ and src/mcp/.
+    No clear organization by responsibility.
+    
+    Implement taxonomy:
+    1. Audit tools (audit_tools.py, detection-analyzer.py, etc.)
+    2. Governance tools (governance_tools.py, validation-suite.py)
+    3. Planning tools (planning_tools.py, requirement-parser.py)
+    4. Development tools (tdd_tools.py, artifact-generator.py, code-executor.py)
+    5. Maintenance tools (housekeeping_tools.py, matrix-builder.py)
+    
+    Documentation:
+    - Create TOOL-CATALOG.yaml with all tools, purposes, MCP metadata
+    - Update tool module docstrings with clear purpose + examples
+    - Link related tools in documentation
+    
+    Acceptance Criteria:
+    - TOOL-CATALOG.yaml created and maintained
+    - All tools categorized
+    - Tool docstrings complete (purpose, usage, examples)
+    - MPC metadata clear and discoverable
+    - Catalog queryable by category, status, phase
+  status: planned
+  priority: medium
+  phase: 2
+  category: toolkit
+  tests:
+  - tests/tools/test_tool_catalog.py
+  dependencies:
+  - AC-TOOLKIT-010
+  - AC-TOOLKIT-011
+  - AC-TOOLKIT-012
+  - AC-TOOLKIT-013
+  - AC-TOOLKIT-014
+  - AC-TOOLKIT-015
+  estimatedEffort: 6
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: medium
+
+- id: AC-TOOLKIT-020
+  title: Add Test Coverage for Exposed Tools (planning, tdd, housekeeping, evidence, orchestrator, executor)
+  description: |
+    Currently: 6 newly exposed tools (AC-TOOLKIT-010-015) lack test files.
+    21/37 tools (57%) untested.
+    
+    Add test files:
+    - tests/mcp/test_planning_tools.py (for AC-TOOLKIT-010)
+    - tests/mcp/test_tdd_tools.py (for AC-TOOLKIT-011)
+    - tests/mcp/test_housekeeping_tools.py (for AC-TOOLKIT-012)
+    - tests/tools/test_evidence_bundle_generator.py (for AC-TOOLKIT-013)
+    - tests/tools/test_orchestrator_scaffolder.py (for AC-TOOLKIT-014)
+    - tests/tools/test_executor.py (for AC-TOOLKIT-015)
+    
+    Test coverage:
+    - Happy path (normal operation)
+    - Error handling (validation failures, missing inputs)
+    - Parameter validation (strict type checking)
+    - Integration (tool interaction with MCP, orchestrators)
+    - Output format consistency (dict with status/data/error keys)
+    
+    Acceptance Criteria:
+    - All 6 test files created
+    - Happy path tests passing
+    - Error handling tests passing
+    - Integration tests passing
+    - Coverage > 85% for each tool
+  status: planned
+  priority: high
+  phase: 2
+  category: toolkit
+  tests:
+  - tests/mcp/test_planning_tools.py
+  - tests/mcp/test_tdd_tools.py
+  - tests/mcp/test_housekeeping_tools.py
+  - tests/tools/test_evidence_bundle_generator.py
+  - tests/tools/test_orchestrator_scaffolder.py
+  - tests/tools/test_executor.py
+  dependencies:
+  - AC-TOOLKIT-010
+  - AC-TOOLKIT-011
+  - AC-TOOLKIT-012
+  - AC-TOOLKIT-013
+  - AC-TOOLKIT-014
+  - AC-TOOLKIT-015
+  estimatedEffort: 12
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: high
+
+# RELIABILITY & STATE CONSISTENCY ISSUES (AC-RISK-008 to AC-RISK-013)
+
+- id: AC-RISK-008
+  title: Create Plan-Viewer Canonical Data Source
+  description: |
+    Problem: plan-viewer.html synced from progress-tracker.json via manual
+    sync_plan_viewer_data.py script. No atomic writes. If sync forgotten or script fails,
+    HTML and tracker drift → dashboard shows wrong phase status.
+    
+    Solution:
+    Create cortex-brain/registry/plan-viewer-data.json as canonical source:
+    1. progress-tracker.json writes to plan-viewer-data.json (atomic + backup)
+    2. plan-viewer.html reads ONLY from plan-viewer-data.json
+    3. Remove hardcoded values from HTML (all from JSON)
+    4. Validate sync on startup (file hash check)
+    5. Implement drift detection (plan-viewer reads tracker, compares to registry)
+    
+    Acceptance Criteria:
+    - plan-viewer-data.json created and maintains AC-ID list
+    - Atomic writes (backup before write, verify after)
+    - plan-viewer.html reads all data from JSON (no hardcoded values)
+    - Sync script validates both sources match (hash comparison)
+    - On mismatch, log warning and repair (tracker is authoritative)
+    - Tests: verify no hardcoded values in HTML, verify atomic writes
+  status: planned
+  priority: critical
+  phase: 2
+  category: reliability
+  tests:
+  - tests/integration/test_plan_viewer_sync.py
+  - tests/quality/test_plan_viewer_html_validation.py
+  dependencies:
+  - AC-TODO-002
+  estimatedEffort: 16
+  effort_unit: hours
+  owner: MasterOrchestrator
+  riskIfUnfixed: critical
+
+- id: AC-RISK-009
+  title: Add TodoManager Task Persistence (todo.db)
+  description: |
+    Problem: TodoManager stores tasks in-memory only. On orchestrator restart,
+    all tasks lost. No recovery mechanism → phase must repeat from beginning.
+    
+    Solution:
+    Create cortex-brain/state/todo.db (SQLite):
+    1. TodoManager persists tasks on creation and state changes
+    2. On startup, load tasks from DB
+    3. Implement atomic writes (WAL mode + backup)
+    4. Task recovery: if task incomplete on restart, retry with exponential backoff
+    5. Periodic cleanup: archive completed tasks after 7 days
+    
+    Acceptance Criteria:
+    - todo.db created and tasks persisted
+    - Tasks loaded on TodoManager init
+    - Atomic writes with no corruption risk
+    - Restart recovery works (incomplete tasks retry)
+    - Tests: simulate restart, verify tasks loaded; corrupt DB, verify recovery
+  status: planned
+  priority: critical
+  phase: 2
+  category: reliability
+  tests:
+  - tests/orchestrators/test_todo_persistence.py
+  - tests/quality/test_state_recovery.py
+  dependencies:
+  - AC-TODO-002
+  estimatedEffort: 12
+  effort_unit: hours
+  owner: TodoManager
+  riskIfUnfixed: critical
+
+- id: AC-RISK-010
+  title: Fix SKULL Rules Loading (Governance Integrity)
+  description: |
+    Problem: core-rules.yaml metadata says "rule_count: 23" but GovernanceMerger
+    loads 0 SKULL rules. Governance enforcement hooks not firing → rules not applied.
+    
+    Solution:
+    1. Debug GovernanceMerger._load_skull_rules() → verify YAML section exists
+    2. Check YAML structure (ensure rules nested under correct key)
+    3. Add runtime assertion: assert len(rules) == metadata['rule_count']
+    4. If mismatch, fail startup with diagnostic (which rules missing?)
+    5. Log loaded rule IDs to audit trail for debugging
+    
+    Acceptance Criteria:
+    - GovernanceMerger loads 23 SKULL rules
+    - Loaded rules match metadata count
+    - Startup fails if rule_count mismatch (with diagnostic)
+    - Rule loading logged to audit trail
+    - Tests: load core-rules.yaml, verify 23 rules present
+  status: planned
+  priority: critical
+  phase: 1
+  category: reliability
+  tests:
+  - tests/governance/test_skull_rules_loading.py
+  dependencies:
+  - AC-GOV-001
+  estimatedEffort: 3
+  effort_unit: hours
+  owner: GovernanceMerger
+  riskIfUnfixed: critical
+
+- id: AC-RISK-011
+  title: Add Rollback on Phase Failure
+  description: |
+    Problem: Phase execution writes artifacts (code, tests, docs) before DoD validation.
+    If DoD fails, artifacts left in inconsistent state. Phase retry uncertain (idempotent or not?).
+    
+    Solution:
+    1. Snapshot workspace before phase start (files, directories, DB state)
+    2. On phase failure, restore snapshot (atomic rollback)
+    3. Test rollback: simulate failure mid-phase, verify workspace cleaned
+    4. Log rollback action to audit trail (what was rolled back, why)
+    
+    Acceptance Criteria:
+    - Workspace snapshot taken before phase.start()
+    - Rollback implemented as atomic restore
+    - Phase failure triggers rollback
+    - Tests: simulate failure, verify rollback works
+  status: planned
+  priority: high
+  phase: 2
+  category: reliability
+  tests:
+  - tests/orchestrators/test_phase_rollback.py
+  estimatedEffort: 8
+  effort_unit: hours
+  owner: MasterOrchestrator
+  riskIfUnfixed: high
+
+- id: AC-RISK-012
+  title: Harden SQLite Concurrency (WAL + Advisory Locks)
+  description: |
+    Problem: planning.db uses WAL mode but allows multiple simultaneous writers.
+    Corruption risk: power loss during write, truncated WAL file, race conditions.
+    
+    Solution:
+    1. Implement advisory locks (SQLite `BEGIN EXCLUSIVE` before writes)
+    2. Backup DB before every write operation (copy to .backup file)
+    3. Verify WAL integrity on startup (check WAL header + CRC)
+    4. Implement write timeout + retry (exponential backoff)
+    
+    Acceptance Criteria:
+    - Advisory locks prevent concurrent writes
+    - DB backups created before writes
+    - WAL integrity validated on startup
+    - Tests: simulate concurrent writes, verify no corruption
+  status: planned
+  priority: high
+  phase: 2
+  category: reliability
+  tests:
+  - tests/infrastructure/test_sqlite_concurrency.py
+  dependencies:
+  - AC-STATE-002
+  estimatedEffort: 8
+  effort_unit: hours
+  owner: StateManager
+  riskIfUnfixed: high
+
+- id: AC-RISK-013
+  title: Validate Plan-Viewer HTML (No Hardcoded Status)
+  description: |
+    Problem: plan-viewer.html may contain hardcoded AC-ID status values.
+    If JSON updates but HTML cached, misalignment.
+    
+    Solution:
+    1. Audit plan-viewer.html for hardcoded values (grep for status, progress, phase)
+    2. Remove all hardcoded values; replace with dynamic JSON loads
+    3. Add pre-commit hook: validate HTML has zero hardcoded AC-IDs
+    4. Add test: verify HTML loads all data from plan-viewer-data.json
+    
+    Acceptance Criteria:
+    - Zero hardcoded status values in HTML
+    - All data loaded from plan-viewer-data.json
+    - Pre-commit hook validates no hardcoded values
+    - Tests: parse HTML, verify no AC-ID values found
+  status: planned
+  priority: medium
+  phase: 2
+  category: reliability
+  tests:
+  - tests/quality/test_plan_viewer_html_validation.py
+  dependencies:
+  - AC-RISK-008
+  estimatedEffort: 4
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: medium
+
+# SECURITY & SECRETS (AC-SEC-004 to AC-SEC-006)
+
+- id: AC-SEC-004
+  title: Redact Secrets from Audit Logs
+  description: |
+    Problem: Audit logs (JSONL) store full governance rule evaluation context.
+    If rule checks for API keys, auth patterns, or secrets → logged in plaintext
+    → accessible to all users.
+    
+    Solution:
+    1. Define sensitive patterns (API_KEY, password, token, secret, etc.)
+    2. Before logging context, scan for sensitive fields
+    3. Replace sensitive values with [REDACTED] placeholder
+    4. Log original field name + redaction reason (for debugging)
+    5. Add audit category for redaction events (AuditCategory.SECURITY)
+    
+    Acceptance Criteria:
+    - Secrets redacted in all audit logs
+    - Sensitive patterns detected and replaced
+    - Redaction logged with reason
+    - Tests: log context with secret, verify redacted in audit trail
+  status: planned
+  priority: high
+  phase: 2
+  category: security
+  tests:
+  - tests/infrastructure/test_audit_secrets_redaction.py
+  dependencies:
+  - AC-AUDIT-007
+  estimatedEffort: 6
+  effort_unit: hours
+  owner: EnterpriseAuditLogger
+  riskIfUnfixed: high
+
+- id: AC-SEC-005
+  title: Encrypt Planning Database at Rest
+  description: |
+    Problem: planning.db readable by all processes on same machine.
+    If workstation compromised, attacker reads full plan state
+    (includes secrets, orchestration logic, AC-ID details).
+    
+    Solution:
+    1. Use SQLCipher for encryption at rest
+    2. Implement key management (store password securely, e.g., environment variable)
+    3. Test encryption/decryption on open
+    4. Add pre-commit hook: verify DB encrypted (check magic bytes)
+    
+    Acceptance Criteria:
+    - planning.db encrypted with SQLCipher
+    - Password required to open
+    - Tests: encrypt, close, reopen, verify data readable
+  status: planned
+  priority: medium
+  phase: 2
+  category: security
+  tests:
+  - tests/infrastructure/test_db_encryption.py
+  estimatedEffort: 6
+  effort_unit: hours
+  owner: StateManager
+  riskIfUnfixed: medium
+
+- id: AC-SEC-006
+  title: Audit Log Rotation & Retention Policy
+  description: |
+    Problem: Audit logs (JSONL) append-only, unbounded growth.
+    After 1 month: 500MB+. Disk full risk. Old logs not cleaned.
+    
+    Solution:
+    1. Implement log rotation (daily, compress old files)
+    2. Define retention policy: 30 days hot, 1 year cold storage
+    3. Archive old logs to cold storage (S3, compressed tar)
+    4. Add cleanup job (delete logs >1 year old)
+    5. Monitor disk usage, alert if >90%
+    
+    Acceptance Criteria:
+    - Logs rotate daily
+    - Old logs compressed + archived
+    - Retention policy enforced
+    - Tests: create logs, verify rotation, verify cleanup
+  status: planned
+  priority: medium
+  phase: 2
+  category: security
+  tests:
+  - tests/infrastructure/test_audit_log_rotation.py
+  estimatedEffort: 6
+  effort_unit: hours
+  owner: EnterpriseAuditLogger
+  riskIfUnfixed: medium
+
+# EVIDENCE TRACKING & OBSERVABILITY (AC-DEBT-007 to AC-DEBT-018)
+
+- id: AC-DEBT-007
+  title: Validate Evidence Claims Before Phase Advance
+  description: |
+    Problem: progress-tracker.json claims "Phase 1 at 48% complete" based on
+    AC-ID counts, not test passing. If tests fail, claim still shows.
+    Tracker never validates.
+    
+    Solution:
+    1. On tracker update, call audit-based-validator
+    2. Verify actual test passing matches AC-ID status
+    3. Block phase advance if verification < 80%
+    4. Log validation result to audit trail
+    
+    Acceptance Criteria:
+    - Tracker validation runs on update
+    - Test passing validated against claims
+    - Phase advance blocked if verification < 80%
+    - Tests: mark AC-ID implemented without tests, verify validation fails
+  status: planned
+  priority: high
+  phase: 2
+  category: testing
+  tests:
+  - tests/orchestrators/test_evidence_validation.py
+  dependencies:
+  - AC-TODO-003
+  estimatedEffort: 6
+  effort_unit: hours
+  owner: TodoManager
+  riskIfUnfixed: high
+
+- id: AC-DEBT-008
+  title: Aggregate Test Evidence Into Unified Bundle
+  description: |
+    Problem: Test results scattered across pytest output, audit logs, orchestrator
+    stdout. No unified evidence view. Validation operator must manually aggregate.
+    
+    Solution:
+    1. Create evidence-aggregator tool
+    2. Query all sources (pytest, audit logs, orchestrator output)
+    3. Produce unified evidence bundle (JSON)
+    4. Include: test count, passing/failing, coverage %, timestamps
+    5. Sign bundle (hash for integrity verification)
+    
+    Acceptance Criteria:
+    - evidence-aggregator tool created
+    - Aggregates from pytest, audit, orchestrator
+    - Produces signed evidence bundle
+    - Tests: run tests, generate bundle, verify completeness
+  status: planned
+  priority: high
+  phase: 2
+  category: testing
+  tests:
+  - tests/infrastructure/test_evidence_aggregation.py
+  dependencies:
+  - AC-EVIDENCE-003
+  estimatedEffort: 8
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: high
+
+- id: AC-DEBT-009
+  title: Validate Verification Rate Against Actual Tests
+  description: |
+    Problem: Phase 1 verification rate (88.24%) claimed but not validated
+    against actual passing tests. Metadata may drift from reality.
+    
+    Solution:
+    1. Implement verification-validator tool
+    2. Query actual test results (pytest database or logs)
+    3. Calculate true verification % = passing_tests / total_tests
+    4. Compare to claimed % in tracker
+    5. If drift > 5%, log warning and update tracker
+    
+    Acceptance Criteria:
+    - Verification validator implemented
+    - Compares claimed vs actual %
+    - Updates tracker if drift detected
+    - Tests: set claim to 90%, run tests that give 85%, verify detected
+  status: planned
+  priority: high
+  phase: 2
+  category: testing
+  tests:
+  - tests/orchestrators/test_verification_validation.py
+  dependencies:
+  - AC-DEBT-007
+  estimatedEffort: 6
+  effort_unit: hours
+  owner: TodoManager
+  riskIfUnfixed: high
+
+- id: AC-DEBT-010
+  title: Extend Test Executor to Capture All Evidence
+  description: |
+    Problem: test_executor.py may not capture all test results
+    (only pytest stdout). Evidence gaps in audit trail.
+    
+    Solution:
+    1. Extend test_executor to write test results to audit trail
+    2. Include: test file, test name, status, duration, output
+    3. Integrate with evidence-aggregator (AuditCategory.TEST_EVIDENCE)
+    4. Add coverage report capture (pytest --cov output)
+    
+    Acceptance Criteria:
+    - test_executor logs all results to audit trail
+    - Coverage reports captured
+    - Evidence aggregator can find all test logs
+    - Tests: run tests via executor, verify all logged
+  status: planned
+  priority: medium
+  phase: 2
+  category: testing
+  tests:
+  - tests/tools/test_executor.py
+  dependencies:
+  - AC-DEBT-008
+  estimatedEffort: 4
+  effort_unit: hours
+  owner: TestExecutor
+  riskIfUnfixed: medium
+
+- id: AC-DEBT-011
+  title: Add Health Check Endpoints for Orchestrators
+  description: |
+    Problem: MasterOrchestrator has no health status endpoint.
+    On-call engineer cannot query if orchestrator running.
+    
+    Solution:
+    1. Implement /health endpoint (JSON)
+    2. Returns: orchestrator state, last heartbeat, active phase, pending tasks
+    3. Add health check to monitoring stack
+    4. Define SLO: health check responds <500ms
+    
+    Acceptance Criteria:
+    - /health endpoint implemented
+    - Returns required fields (state, heartbeat, phase, tasks)
+    - Responds <500ms
+    - Tests: query endpoint, verify response format
+  status: planned
+  priority: medium
+  phase: 3
+  category: observability
+  tests:
+  - tests/integration/test_health_endpoints.py
+  estimatedEffort: 4
+  effort_unit: hours
+  owner: MasterOrchestrator
+  riskIfUnfixed: medium
+
+- id: AC-DEBT-012
+  title: Calculate Phase Completion % from Evidence (Not Metadata)
+  description: |
+    Problem: Completion % calculated as completed_ac_ids / total_ac_ids.
+    If AC-ID "implemented" but tests failing, % still counts it.
+    
+    Solution:
+    1. Change calculation to: passing_test_count / total_tests
+    2. Query test results (from pytest or audit logs)
+    3. Update tracker % on every test run
+    4. Block phase advance if % < gate threshold (80%)
+    
+    Acceptance Criteria:
+    - Completion % now evidence-based
+    - Updated after each test run
+    - Phase advance blocked if % < 80%
+    - Tests: run failing tests, verify % decreases
+  status: planned
+  priority: medium
+  phase: 2
+  category: observability
+  tests:
+  - tests/orchestrators/test_phase_completion_percentage.py
+  dependencies:
+  - AC-DEBT-007
+  estimatedEffort: 6
+  effort_unit: hours
+  owner: TodoManager
+  riskIfUnfixed: medium
+
+- id: AC-DEBT-013
+  title: Add Correlation ID Index for Audit Logs
+  description: |
+    Problem: Audit logs JSONL but no index. Querying "all logs for orchestrator
+    run XYZ" requires full scan. No fast correlation ID lookup.
+    
+    Solution:
+    1. Create audit log index (SQLite or RocksDB)
+    2. Key: correlation_id, value: list of log line numbers
+    3. Query time: O(log N) instead of O(N)
+    4. Update index on every audit log write
+    5. Add audit query tool: query_audit_by_correlation_id()
+    
+    Acceptance Criteria:
+    - Audit index implemented
+    - Queries fast (< 100ms for 10k logs)
+    - Tests: create logs, query by correlation ID, verify results
+  status: planned
+  priority: medium
+  phase: 3
+  category: observability
+  tests:
+  - tests/infrastructure/test_audit_index.py
+  dependencies:
+  - AC-AUDIT-007
+  estimatedEffort: 6
+  effort_unit: hours
+  owner: EnterpriseAuditLogger
+  riskIfUnfixed: medium
+
+- id: AC-DEBT-014
+  title: Add Smoke Tests for Critical Paths (Governance, Routing, Lifecycle)
+  description: |
+    Problem: Governance merge, pattern routing, phase lifecycle untested by
+    integration tests. Single rule change breaks entire routing → discovered in production.
+    
+    Solution:
+    1. Add smoke test: test_governance_merge_smoke
+       - Load all tier YAML files, verify no parse errors
+       - Merge tiers, verify precedence correct
+    2. Add smoke test: test_routing_smoke
+       - Test 20+ common intents, verify routes to correct orchestrator
+    3. Add smoke test: test_phase_lifecycle_smoke
+       - Create phase, transition states, verify state machine correct
+    4. Run smoke tests on every commit (pre-commit hook)
+    
+    Acceptance Criteria:
+    - 3 smoke tests implemented
+    - All common intents routed correctly
+    - Phase state transitions correct
+    - Tests run in <10 seconds (fast feedback)
+  status: planned
+  priority: high
+  phase: 1
+  category: testing
+  tests:
+  - tests/quality/test_governance_merge_smoke.py
+  - tests/quality/test_routing_smoke.py
+  - tests/quality/test_phase_lifecycle_smoke.py
+  estimatedEffort: 6
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: high
+
+- id: AC-DEBT-015
+  title: Implement Environment Detection (Dev vs Prod Config)
+  description: |
+    Problem: CORTEX runs same way in dev and production. No feature flags,
+    no config parity checks. Dev database schema differs from prod → migrations fail on deploy.
+    
+    Solution:
+    1. Add environment detection (CORTEX_ENV env var: dev|staging|prod)
+    2. Load config per environment (cortex-brain/config/dev.yaml, prod.yaml)
+    3. Validate schema parity on startup
+    4. Add feature flags for dev-only capabilities
+    
+    Acceptance Criteria:
+    - Environment auto-detected
+    - Config loaded per environment
+    - Schema parity validated
+    - Tests: set env=prod, verify prod config loaded
+  status: planned
+  priority: low
+  phase: 3
+  category: deployability
+  tests:
+  - tests/integration/test_environment_detection.py
+  estimatedEffort: 8
+  effort_unit: hours
+  owner: MasterOrchestrator
+  riskIfUnfixed: low
+
+- id: AC-DEBT-016
+  title: Centralize Configuration Into Single Source of Truth
+  description: |
+    Problem: Config spread across master-plan.yaml, core-rules.yaml, and
+    individual orchestrator YAML files. Single source of truth missing.
+    
+    Solution:
+    1. Create cortex-brain/config/system-config.yaml as canonical config
+    2. All YAML files reference single config (no duplication)
+    3. Document all config options with descriptions
+    4. Add config validation on startup
+    
+    Acceptance Criteria:
+    - system-config.yaml created
+    - All config references centralized
+    - Validation implemented
+    - Tests: modify config, verify all components see changes
+  status: planned
+  priority: low
+  phase: 3
+  category: deployability
+  tests:
+  - tests/integration/test_config_centralization.py
+  estimatedEffort: 6
+  effort_unit: hours
+  owner: MasterOrchestrator
+  riskIfUnfixed: low
+
+- id: AC-DEBT-017
+  title: Validate Test Count Claims Against Actual Test Files
+  description: |
+    Problem: AC-INDEX.yaml says "AC-AUDIT-001 has 12 tests passing"
+    but actual test file has 8 tests. Metadata drift.
+    
+    Solution:
+    1. Implement test-count-validator tool
+    2. Query actual test files for each AC-ID
+    3. Count actual tests (via pytest.collect)
+    4. Compare to AC-INDEX claim
+    5. Update tracker if mismatch detected
+    
+    Acceptance Criteria:
+    - Validator implemented
+    - Queries actual test counts
+    - Detects metadata drift
+    - Tests: add test file, verify count updated
+  status: planned
+  priority: medium
+  phase: 3
+  category: testing
+  tests:
+  - tests/orchestrators/test_test_count_validation.py
+  dependencies:
+  - AC-DEBT-007
+  estimatedEffort: 4
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: medium
+
+- id: AC-DEBT-018
+  title: Produce Unified Evidence Bundle (Signed Integrity)
+  description: |
+    Problem: Evidence scattered across pytest output, audit logs, orchestrator
+    stdout. No unified view. No integrity verification.
+    
+    Solution:
+    1. Extend evidence-aggregator to produce signed bundle
+    2. Bundle format: JSON with test results, coverage, timestamps
+    3. Sign bundle with SHA256 hash
+    4. Store bundle in cortex-brain/documents/evidence/{ac_id}-evidence-bundle.json
+    5. Validate bundle signature on read
+    
+    Acceptance Criteria:
+    - Evidence bundle created for each AC-ID
+    - Bundle contains all required fields
+    - Bundle signed and verified
+    - Tests: create bundle, verify signature, tamper with bundle, verify rejection
+  status: planned
+  priority: medium
+  phase: 2
+  category: testing
+  tests:
+  - tests/infrastructure/test_evidence_bundle_signing.py
+  dependencies:
+  - AC-DEBT-008
+  estimatedEffort: 6
+  effort_unit: hours
+  owner: TDD-Master
+  riskIfUnfixed: medium
+
+# SCALABILITY & PERFORMANCE (AC-PERF-003 to AC-PERF-004)
+
+- id: AC-PERF-003
+  title: Implement Knowledge Graph Caching
+  description: |
+    Problem: Every orchestrator invocation may scan entire workspace
+    (knowledge graph queries). Repeated scans on same data → high latency → timeouts.
+    
+    Solution:
+    1. Cache knowledge graph in-memory (invalidate on file change)
+    2. Use file watcher (watchdog library) to detect file changes
+    3. On change, invalidate cache + rebuild
+    4. TTL: 1 hour (or force refresh on demand)
+    
+    Acceptance Criteria:
+    - Cache implemented
+    - Invalidates on file change
+    - TTL enforced
+    - Tests: cache hit/miss, verify performance improvement
+  status: planned
+  priority: medium
+  phase: 3
+  category: performance
+  tests:
+  - tests/tools/test_knowledge_graph_caching.py
+  estimatedEffort: 6
+  effort_unit: hours
+  owner: KnowledgeGraphCrawler
+  riskIfUnfixed: medium
+
+- id: AC-PERF-004
+  title: Implement Audit Log Rotation & Archival
+  description: |
+    Problem: Audit logs (JSONL) append-only, unbounded growth.
+    After 1 month: 500MB+. Disk full risk.
+    
+    Solution:
+    1. Implement log rotation (daily rollover)
+    2. Compress old logs (gzip)
+    3. Archive to cold storage (S3 or local archive/)
+    4. Keep 30 days hot logs, 1 year cold storage
+    5. Add cleanup job (delete >1 year old)
+    6. Monitor disk usage, alert at >90%
+    
+    Acceptance Criteria:
+    - Logs rotate daily
+    - Old logs compressed + archived
+    - Retention policy enforced
+    - Cleanup job runs daily
+    - Tests: create logs, verify rotation, verify cleanup
+  status: planned
+  priority: medium
+  phase: 3
+  category: performance
+  tests:
+  - tests/infrastructure/test_audit_log_rotation.py
+  estimatedEffort: 8
+  effort_unit: hours
+  owner: EnterpriseAuditLogger
+  riskIfUnfixed: medium
