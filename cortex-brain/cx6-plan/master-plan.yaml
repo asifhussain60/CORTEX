@@ -275,6 +275,194 @@ phase_1_foundation:
     - No Phase 2 work starts until ALL Phase 1 complete
     - Evidence Bundles prove completion, not just code commit
     - Integration tests prove components work together
+phase_1_5_intelligent_discovery:
+  name: Phase 1.5 - CORTEX LENS & Onboarding (Intelligent Discovery)
+  duration: 3 weeks
+  start_date: '2026-01-25'
+  end_date: '2026-02-14'
+  status: ready_after_phase_1
+  priority: CRITICAL
+  placement: Between Phase 1 & Phase 2
+  rationale: |
+    CORTEX LENS and Onboarding orchestrators provide intelligent codebase
+    discovery and knowledge extraction. They:
+    
+    1. Run AFTER Phase 1 completes (need audit, evidence, state)
+    2. Run BEFORE Phase 2 planning (Planning v5 uses discovered context)
+    3. Auto-run during project onboarding (discovery on first use)
+    4. Expose crawlers/analyzers as MCP tools for all orchestrators
+    5. Feed the CORTEX brain with company and domain knowledge
+    
+    This is NOT a UI dashboard. It's a universal reverse-engineering and
+    knowledge-discovery system that makes CORTEX smarter with each use.
+  recommended_llm:
+    primary: Claude Sonnet 4.5 (RECOMMENDED)
+    usage: 85% of operations
+    cost_efficiency: 1x (baseline)
+    recommendation: Optional Opus for AST parser design decisions
+    rationale: 'AST crawlers and code analysis:
+
+      ✅ Excellent for TDD test generation
+
+      ✅ Strong tool integration (MCP exposure)
+
+      ✅ Good for multi-language parser design
+
+      ✅ Handles complex knowledge graph structure
+
+      '
+    optional_upgrade:
+      model: Claude Opus 4.5
+      usage: 10-15% of operations (optional)
+      cost: 3x
+      when_to_consider:
+      - 🧠 Multi-language AST parser architecture
+      - 📊 Knowledge graph schema design
+      - 🔍 Domain learning algorithm design
+  description: |
+    Build universal code analysis and knowledge discovery system that:
+    
+    1. CORTEX LENS: Reverse-engineer codebase via AST, crawlers, git history
+    2. Onboarding: Guide teams through intelligent project discovery
+    3. Knowledge Store: Capture company and domain patterns for reuse
+    4. MCP Tools: Expose analyzers so Planning/other orchestrators access findings
+  
+  components:
+    cortex_lens:
+      name: CORTEX LENS - Universal Code Intelligence System
+      ac_ids:
+      - AC-LENS-001
+      - AC-LENS-002
+      - AC-LENS-003
+      - AC-LENS-004
+      - AC-LENS-005
+      - AC-LENS-006
+      priority: CRITICAL
+      duration: 2 weeks
+      owner: Intelligence Team
+      capabilities:
+      - 'AST Analysis: Python, JavaScript/TypeScript, C#, Java, Go, Rust, SQL'
+      - 'Code Crawlers: Architecture, Complexity, Dependencies, Tech Stack'
+      - 'Reverse Engineering: Intent inference, pattern detection, domain extraction'
+      - 'Knowledge Graph: Semantic code representation (nodes, edges, traversal)'
+      - 'Domain Learning: Company practices, naming conventions, patterns'
+      - 'MCP Exposure: All analyzers accessible as tools to other orchestrators'
+      dependencies:
+      - AC-AUDIT-001
+      - AC-EVIDENCE-001
+      - AC-STATE-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        languages_supported: '>=6 (Python, JS/TS, C#, Java, Go, Rust)'
+        performance: '<5s AST analysis per 1000 LOC'
+        mcp_tools: All 6 analyzers exposed
+        knowledge_storage: Tier 1 & 3 integration tested
+    onboarding_orchestrator:
+      name: Onboarding Orchestrator - Intelligent Project Setup
+      ac_ids:
+      - AC-ONBOARD-001
+      - AC-ONBOARD-002
+      - AC-ONBOARD-003
+      - AC-ONBOARD-004
+      - AC-ONBOARD-005
+      - AC-ONBOARD-006
+      - AC-ONBOARD-007
+      - AC-ONBOARD-008
+      priority: CRITICAL
+      duration: 1.5 weeks
+      owner: UX/Integration Team
+      capabilities:
+      - '10-Phase Discovery: Metadata → Quality → Security → Tech → Architecture → Dashboard'
+      - 'Parallel Crawlers: 6 analyzers run simultaneously'
+      - 'Interactive Setup Wizard: Guided onboarding flow'
+      - 'Dashboard Generation: HTML visualization of findings'
+      - 'Knowledge Persistence: Stores tier1/tier3 knowledge files'
+      - 'Production & Test Modes: Embedded vs standalone operation'
+      - 'Auto-run on Setup: Discovery at project initialization'
+      dependencies:
+      - AC-LENS-001
+      - AC-LENS-002
+      - AC-LENS-003
+      - AC-LENS-004
+      - AC-LENS-005
+      - AC-LENS-006
+      - AC-ORCH-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        output_files: '7 JSON files + HTML dashboard'
+        execution_time: '<2 minutes for typical project'
+        integration: Planning v5, other orchestrators use discovery results
+        auto_run: Auto-executes during CORTEX setup
+  cortex_toolkit:
+      name: CORTEX TOOLKIT - HTML View Generation & Visualization Infrastructure
+      ac_ids:
+      - AC-TOOLKIT-001
+      - AC-TOOLKIT-002
+      - AC-TOOLKIT-003
+      - AC-TOOLKIT-004
+      - AC-TOOLKIT-005
+      - AC-TOOLKIT-006
+      - AC-TOOLKIT-007
+      - AC-TOOLKIT-008
+      priority: HIGH
+      duration: 1.5 weeks
+      owner: Visualization & MCP Team
+      purpose: |
+        Transform CORTEX LENS outputs and audit logs into interactive static HTML
+        dashboards with glassmorphism design, modern tab systems, and D3.js visualizations.
+        Expose all generators as MCP tools for Planning v5, Investigation, and other
+        orchestrators.
+      capabilities:
+      - 'AC-TOOLKIT-001: Epic Plan Viewer Generator (master-plan + progress as interactive HTML)'
+      - 'AC-TOOLKIT-002: Knowledge Graph Visualizer (YAML → D3.js force-directed graph)'
+      - 'AC-TOOLKIT-003: Architecture Diagram Generator (4-tier brain with glassmorphism)'
+      - 'AC-TOOLKIT-004: Audit Log HTML Exporter (JSONL → searchable timeline viewer)'
+      - 'AC-TOOLKIT-005: Glassmorphism Compliance Engine (validate design standard)'
+      - 'AC-TOOLKIT-006: Modern Tab System (reusable keyboard-accessible tabs)'
+      - 'AC-TOOLKIT-007: Mermaid Diagram Engine (flowcharts, state diagrams in dashboards)'
+      - 'AC-TOOLKIT-008: CORTEX TOOLKIT MCP Server (expose all generators as MCP tools)'
+      dependencies:
+      - AC-LENS-001
+      - AC-LENS-002
+      - AC-LENS-003
+      - AC-LENS-004
+      - AC-ONBOARD-001
+      - AC-ONBOARD-008
+      evidence_bundle:
+        test_coverage: '>=80% for all generators'
+        html_performance: '<2s page load time'
+        glassmorphism_compliance: '100% compliance with design standard'
+        mcp_tools_exposed: All 8 tools callable by other orchestrators
+        design_system: Modern tabs + D3.js + Mermaid integration
+        file_assets: modern-tabs.css (399 lines), modern-tabs.js (200+ lines), html_viewer_generator.py (798 lines)
+  
+  phase_1_5_exit_criteria:
+    must_complete:
+    - All 6 CORTEX LENS ACs implemented (Universal AST + Crawlers)
+    - All 8 Onboarding ACs implemented (10-phase discovery + dashboard)
+    - All 8 CORTEX TOOLKIT ACs implemented (HTML viewers + MCP exposure)
+    - Zero test failures across all discovery + visualization components
+    - MCP tools registered and accessible to Planning/other orchestrators
+    - Knowledge storage (tier1/tier3) integrated and tested
+    - All 5 interactive dashboards regenerate automatically
+    - End-to-end onboarding flow <2 minutes for typical project
+    - Auto-run on setup validated (discovery on first use)
+    - 100% glassmorphism design compliance across all views
+    gate_validation:
+      test_coverage: '>=80% for all discovery + visualization components'
+      language_support: '>=6 programming languages (CORTEX LENS)'
+      mcp_integration: All 14 tools callable as MCP tools (6 LENS + 8 TOOLKIT)
+      knowledge_persistence: tier1/tier3 files created, queryable, visualized
+      performance: '<2 minutes end-to-end for typical project (LENS + Onboarding)'
+      html_dashboards: 'All 5 viewers <500KB, <2s load, WCAG AA compliant'
+      visualization_quality: D3.js rendering <1s for 500-node graphs
+    blocker_prevention:
+    - Phase 2 uses onboarding + LENS results for context (can proceed after Phase 1.5)
+    - Crawlers tested independently before integration
+    - Knowledge storage schema validated before scaling
+    - Auto-run capability tested in both production and test modes
+    - Glassmorphism compliance validated by AC-TOOLKIT-005 before go-live
+    - All HTML generators tested on Chrome/Firefox/Safari/Edge
 phase_2_orchestration_core:
   name: Orchestration Core (CORE WORKFLOW)
   duration: 2 weeks
