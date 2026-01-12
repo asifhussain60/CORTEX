@@ -176,61 +176,6 @@ class MasterOrchestrator:
         """Get lifecycle tracker for orchestrator"""
         return self.lifecycles.get(name)
     
-    def update_state(self, state_update: Dict[str, Any]) -> bool:
-        """
-        Update orchestrator state (phase-independent)
-        
-        Args:
-            state_update: Dictionary with state changes
-            
-        Returns:
-            True if state updated successfully
-            
-        AC-CLEAN-301: Update state without phase context
-        """
-        try:
-            if "todo" in self.orchestrators:
-                todo_orch = self.orchestrators["todo"]
-                if hasattr(todo_orch, 'state_manager'):
-                    todo_orch.state_manager.update(state_update)
-            return True
-        except Exception as e:
-            self.logger.error(
-                category=AuditCategory.EXECUTION,
-                component='master_orchestrator',
-                operation='update_state',
-                message=f'State update failed: {e}'
-            )
-            return False
-    
-    def get_state(self, key: str, value: Any = None) -> Optional[Dict]:
-        """
-        Get state without phase filtering
-        
-        Args:
-            key: State key to retrieve
-            value: Optional value to filter by
-            
-        Returns:
-            State data or None if not found
-            
-        AC-CLEAN-301: Retrieve state independently of phases
-        """
-        try:
-            if "todo" in self.orchestrators:
-                todo_orch = self.orchestrators["todo"]
-                if hasattr(todo_orch, 'state_manager'):
-                    return todo_orch.state_manager.get(key)
-            return None
-        except Exception as e:
-            self.logger.error(
-                category=AuditCategory.EXECUTION,
-                component='master_orchestrator',
-                operation='get_state',
-                message=f'State retrieval failed: {e}'
-            )
-            return None
-    
     def connect_governance(self, merger: GovernanceMerger) -> None:
         """
         Register GovernanceMerger for rule validation (Task 2.2)
@@ -374,71 +319,6 @@ class MasterOrchestrator:
                 operation='execute',
                 message=f'Execution failed: {e}',
                 context={'request': request[:100]}
-            )
-            return ExecutionResult(
-                success=False,
-                orchestrator="master",
-                error=str(e)
-            )
-    
-    def route_request(self, request: Dict[str, Any]) -> Optional[ExecutionResult]:
-        """
-        Route a request to appropriate orchestrator (phase-independent)
-        
-        Args:
-            request: Request dict with 'intent' and optional 'format'
-            
-        Returns:
-            ExecutionResult or None if routing fails
-            
-        AC-CLEAN-301: Route requests without phase context
-        """
-        intent = request.get('intent', '')
-        
-        try:
-            # Route based on intent, not phases
-            return self.execute(intent)
-        except Exception as e:
-            self.logger.error(
-                category=AuditCategory.ORCHESTRATOR,
-                component='master_orchestrator',
-                operation='route_request',
-                message=f'Routing failed: {e}',
-                context={'intent': intent[:100]}
-            )
-            return None
-    
-    def handle_request(self, request: Dict[str, Any]) -> ExecutionResult:
-        """
-        Handle a request end-to-end (phase-independent)
-        
-        Args:
-            request: Request dict with 'intent' and optional 'format'
-            
-        Returns:
-            ExecutionResult with execution details
-            
-        AC-CLEAN-301: Handle requests without phase gates
-        """
-        try:
-            intent = request.get('intent', '')
-            
-            # Execute without phase validation
-            result = self.execute(intent)
-            
-            # Ensure status is never blocked_by_phase
-            if hasattr(result, 'error') and 'phase' in str(result.error).lower():
-                result.error = None
-                result.success = True
-            
-            return result
-            
-        except Exception as e:
-            self.logger.error(
-                category=AuditCategory.ORCHESTRATOR,
-                component='master_orchestrator',
-                operation='handle_request',
-                message=f'Request handling failed: {e}'
             )
             return ExecutionResult(
                 success=False,

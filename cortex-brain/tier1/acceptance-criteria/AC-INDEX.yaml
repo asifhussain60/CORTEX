@@ -149,7 +149,7 @@ definition_of_ready:
       - AC-SCAFFOLD-003
       - AC-MIGRATE-001
       timing: Import time via class decorator
-      discovery: OrchestratorRegistry singleton with pattern → class mapping
+      discovery: "OrchestratorRegistry singleton with pattern \u2192 class mapping"
       duplicate_pattern_handling: Last registration wins with WARNING log
       failure_handling: Log ERROR, mark orchestrator as unavailable, don't crash
     security_test_scope:
@@ -602,8 +602,8 @@ categories:
     - Optional bidirectional sync with progress-tracker.json
   LIFECYCLE:
     prefix: AC-LIFECYCLE
-    description: 'Extended orchestrator lifecycle states (7 states: IDLE → SPEC →
-      IMPLEMENTED → TESTED → VERIFIED → ACTIVE → DEPRECATED)'
+    description: "Extended orchestrator lifecycle states (7 states: IDLE \u2192 SPEC\
+      \ \u2192 IMPLEMENTED \u2192 TESTED \u2192 VERIFIED \u2192 ACTIVE \u2192 DEPRECATED)"
     tier: 1
     priority: 1
     gpt_adoption: State machine lifecycle without SHADOW/CANARY
@@ -881,7 +881,8 @@ foundation:
   lifecycle:
   - id: AC-LIFECYCLE-001
     name: 7-State Lifecycle Implementation
-    description: IDLE → SPEC → IMPLEMENTED → TESTED → VERIFIED → ACTIVE → DEPRECATED
+    description: "IDLE \u2192 SPEC \u2192 IMPLEMENTED \u2192 TESTED \u2192 VERIFIED\
+      \ \u2192 ACTIVE \u2192 DEPRECATED"
     status: implemented
     phase: Phase 1 Enhancement (Week 1-2)
     priority: HIGH
@@ -1180,8 +1181,8 @@ orchestration_core:
   todo_manager:
   - id: AC-TODO-001
     name: TodoManager Core
-    description: 'Real-time task tracking with status lifecycle: PENDING → IN_PROGRESS
-      → COMPLETE/FAILED/BLOCKED'
+    description: "Real-time task tracking with status lifecycle: PENDING \u2192 IN_PROGRESS\
+      \ \u2192 COMPLETE/FAILED/BLOCKED"
     status: partial
     tests:
     - tests/integration/test_cortex_self_management.py
@@ -1218,13 +1219,9 @@ orchestration_core:
   tdd_orchestrator:
   - id: AC-TDD-001
     name: TDD Orchestrator Core
-    description: 'TDD Orchestrator executes RED→GREEN→REFACTOR cycle.
-
-      Receives final instruction (F) from MasterOrchestrator after governance merge.
-
-      Phases: DISCOVERY → RED → GREEN → REFACTOR → VALIDATION
-
-      '
+    description: "TDD Orchestrator executes RED\u2192GREEN\u2192REFACTOR cycle.\n\
+      Receives final instruction (F) from MasterOrchestrator after governance merge.\n\
+      Phases: DISCOVERY \u2192 RED \u2192 GREEN \u2192 REFACTOR \u2192 VALIDATION\n"
     status: partial
     tests:
     - tests/unit/orchestrators/test_tdd_orchestrator.py
@@ -1331,15 +1328,10 @@ orchestration_core:
     implementation: src/orchestrators/tdd/tdd_orchestrator.py
   - id: AC-TDD-007
     name: Domain Knowledge Integration
-    description: 'TDD queries tier2/tier3 brain for domain-specific knowledge:
-
-      - Authentication patterns → JWT, OAuth best practices
-
-      - Database patterns → Transaction handling, connection pooling
-
-      - API patterns → REST conventions, error handling
-
-      '
+    description: "TDD queries tier2/tier3 brain for domain-specific knowledge:\n-\
+      \ Authentication patterns \u2192 JWT, OAuth best practices\n- Database patterns\
+      \ \u2192 Transaction handling, connection pooling\n- API patterns \u2192 REST\
+      \ conventions, error handling\n"
     status: not_started
     tests: []
     implementation: ''
@@ -1953,27 +1945,13 @@ features:
     - CORTEX-4.0:src/cortex_agents/security_scanner_agent.py
   - id: AC-ONBOARD-012
     name: Setup/Installation Integration (Simplified)
-    description: 'Onboarding runs via explicit CLI command after install:
-
-
-      1. User installs: `pip install -r requirements.txt`
-
-      2. User runs: `python -m src.main setup` (or `cortex setup`)
-
-      3. MasterOrchestrator checks: if tier1/knowledge-graph.db missing → prompt user
-
-
-      Simplified approach (no magic):
-
-      - No post-install hooks (fragile in venvs)
-
-      - No VS Code extension (deferred to Phase 4+)
-
-      - Manual CLI invocation is explicit and predictable
-
-      - Idempotent (running twice is safe)
-
-      '
+    description: "Onboarding runs via explicit CLI command after install:\n\n1. User\
+      \ installs: `pip install -r requirements.txt`\n2. User runs: `python -m src.main\
+      \ setup` (or `cortex setup`)\n3. MasterOrchestrator checks: if tier1/knowledge-graph.db\
+      \ missing \u2192 prompt user\n\nSimplified approach (no magic):\n- No post-install\
+      \ hooks (fragile in venvs)\n- No VS Code extension (deferred to Phase 4+)\n\
+      - Manual CLI invocation is explicit and predictable\n- Idempotent (running twice\
+      \ is safe)\n"
     status: not_started
     tests:
     - tests/onboarding/test_setup_integration.py
@@ -1995,8 +1973,8 @@ features:
       related_acs:
       - AC-ORCH-006
     deferred:
-    - VS Code Extension integration → Phase 4+
-    - Post-install hooks → Not planned (fragile)
+    - "VS Code Extension integration \u2192 Phase 4+"
+    - "Post-install hooks \u2192 Not planned (fragile)"
 github_copilot_bridge:
   description: 'VSCodeCopilotTodoBridge writes CORTEX TodoManager tasks as TODO comments
     that
@@ -2027,29 +2005,15 @@ github_copilot_bridge:
   copilot_bridge_acs:
   - id: AC-COPILOT-001
     name: VSCodeCopilotTodoBridge Core Component
-    description: 'Bridge component that converts TodoManager Task objects to TODO
-      comments
-
-      that VS Code''s GitHub Copilot can detect and display in the TODO panel.
-
-      Input: Task[] from TodoManager (AC-TODO-001)
-
-      Output: Markdown file (.cortex/copilot-todos.md) with TODO comments
-
-
-      Key Methods:
-
-      - write_todos_to_file(tasks: List[Task]) → None
-
-      - _format_as_todo_comment(task) → Markdown TODO comment with metadata
-
-      - _generate_title(task) → Clear, action-oriented title (3-7 words)
-
-      - _generate_description(task) → Context, governance, AC-ID, dependencies
-
-      - _get_status_emoji(task_status) → ⏳ | 🔄 | ✅ | ❌ | 🚫
-
-      '
+    description: "Bridge component that converts TodoManager Task objects to TODO\
+      \ comments\nthat VS Code's GitHub Copilot can detect and display in the TODO\
+      \ panel.\nInput: Task[] from TodoManager (AC-TODO-001)\nOutput: Markdown file\
+      \ (.cortex/copilot-todos.md) with TODO comments\n\nKey Methods:\n- write_todos_to_file(tasks:\
+      \ List[Task]) \u2192 None\n- _format_as_todo_comment(task) \u2192 Markdown TODO\
+      \ comment with metadata\n- _generate_title(task) \u2192 Clear, action-oriented\
+      \ title (3-7 words)\n- _generate_description(task) \u2192 Context, governance,\
+      \ AC-ID, dependencies\n- _get_status_emoji(task_status) \u2192 \u23F3 | \U0001F504\
+      \ | \u2705 | \u274C | \U0001F6AB\n"
     status: not_started
     priority: P1-HIGH
     phase: 2
@@ -2067,45 +2031,21 @@ github_copilot_bridge:
     - 'Title generation: concise, action-oriented, <80 chars'
     - 'Description includes: context, governance rules (3-5 max), AC-ID, file paths,
       dependencies'
-    - 'Status tracking: ⏳ not-started, 🔄 in-progress, ✅ completed, ❌ failed, 🚫 blocked'
+    - "Status tracking: \u23F3 not-started, \U0001F504 in-progress, \u2705 completed,\
+      \ \u274C failed, \U0001F6AB blocked"
     - Handles empty task list gracefully (creates empty file with header)
     - 'Performance: <10ms for 100 tasks'
     - 'File atomicity: Uses temp file + atomic rename to prevent corruption'
   - id: AC-COPILOT-002
     name: Governance Context Injection
-    description: 'Each TODO comment includes relevant SKULL rules in the description.
-
-      Uses GovernanceMerger to extract applicable rules per task.
-
-
-      Example Output:
-
-      <!-- TODO: Implement user authentication with JWT -->
-
-      **Task:** AC-AUTH-001
-
-      **Description:** Implement user authentication with JWT tokens
-
-
-      **Governance:**
-
-      - CORE-008: TDD required (write tests first)
-
-      - CORE-001: Incremental execution (<500 lines per commit)
-
-      - CORE-005: Use pathlib.Path for all file operations
-
-
-      **Files:**
-
-      - src/auth/jwt_handler.py
-
-      - tests/auth/test_jwt_handler.py
-
-
-      **Status:** ⏳ Not Started
-
-      '
+    description: "Each TODO comment includes relevant SKULL rules in the description.\n\
+      Uses GovernanceMerger to extract applicable rules per task.\n\nExample Output:\n\
+      <!-- TODO: Implement user authentication with JWT -->\n**Task:** AC-AUTH-001\n\
+      **Description:** Implement user authentication with JWT tokens\n\n**Governance:**\n\
+      - CORE-008: TDD required (write tests first)\n- CORE-001: Incremental execution\
+      \ (<500 lines per commit)\n- CORE-005: Use pathlib.Path for all file operations\n\
+      \n**Files:**\n- src/auth/jwt_handler.py\n- tests/auth/test_jwt_handler.py\n\n\
+      **Status:** \u23F3 Not Started\n"
     status: not_started
     priority: P1-HIGH
     phase: 2
@@ -2127,9 +2067,9 @@ github_copilot_bridge:
     name: Dependency Graph Serialization
     description: "Serialize task dependencies into TODO comment format that Copilot\
       \ understands.\n\nExample:\n<!-- TODO: Implement API endpoint -->\n**Task:**\
-      \ AC-API-003\n**Dependencies:** \n- ✅ AC-API-001 (Database schema) - COMPLETED\n\
-      - ✅ AC-API-002 (Auth middleware) - COMPLETED\n- ⏳ AC-AUTH-001 (JWT handler)\
-      \ - BLOCKED BY\n\n**Status:** \U0001F6AB Blocked\n"
+      \ AC-API-003\n**Dependencies:** \n- \u2705 AC-API-001 (Database schema) - COMPLETED\n\
+      - \u2705 AC-API-002 (Auth middleware) - COMPLETED\n- \u23F3 AC-AUTH-001 (JWT\
+      \ handler) - BLOCKED BY\n\n**Status:** \U0001F6AB Blocked\n"
     status: not_started
     priority: P2-MEDIUM
     phase: 2
@@ -2141,7 +2081,8 @@ github_copilot_bridge:
     - AC-TODO-004
     acceptance_criteria:
     - 'Dependency tracking: blocked_by and depends_on fields'
-    - Clear dependency status with emojis (✅ done, ⏳ pending, 🔄 in-progress)
+    - "Clear dependency status with emojis (\u2705 done, \u23F3 pending, \U0001F504\
+      \ in-progress)"
     - 'Task ordering: dependencies listed first in file'
     - Circular dependency detection and warning in TODO comment
     - Clickable AC-ID links (VS Code supports file:// URIs)
@@ -2213,8 +2154,8 @@ github_copilot_bridge:
     acceptance_criteria:
     - 'New section: copilot_todo_notification in core template'
     - 'Clear instructions: ''TODOs written to .cortex/copilot-todos.md'''
-    - 'VS Code guidance: ''View in GitHub Copilot panel (Ctrl/Cmd+Shift+P → GitHub
-      Copilot: Show TODO Panel)'''
+    - "VS Code guidance: 'View in GitHub Copilot panel (Ctrl/Cmd+Shift+P \u2192 GitHub\
+      \ Copilot: Show TODO Panel)'"
     - Includes task count and estimated completion time
     - 'Reminder: ''TODOs auto-sync with progress-tracker.json'''
     - Link to documentation on TODO-based workflow
@@ -2255,31 +2196,14 @@ github_copilot_bridge:
     - 'Sanitizes for Markdown: escapes <, >, &, etc.'
   - id: AC-COPILOT-007
     name: Description Generation with Context
-    description: 'Generate comprehensive descriptions with maximum context for TODO
-      comments.
-
-      More context = better execution accuracy (90% vs 70%).
-
-
-      Description Sections (Markdown format):
-
-      1. **Task:** AC-ID
-
-      2. **Description:** Task objective (1-2 sentences)
-
-      3. **Governance:** 3-5 SKULL rules
-
-      4. **Files:** Affected file paths (absolute paths)
-
-      5. **Dependencies:** Task IDs and status
-
-      6. **Acceptance Criteria:** Summary of AC
-
-      7. **Tests Required:** Test types (unit, integration, security)
-
-      8. **Status:** Emoji + text (⏳ Not Started, 🔄 In Progress, ✅ Completed)
-
-      '
+    description: "Generate comprehensive descriptions with maximum context for TODO\
+      \ comments.\nMore context = better execution accuracy (90% vs 70%).\n\nDescription\
+      \ Sections (Markdown format):\n1. **Task:** AC-ID\n2. **Description:** Task\
+      \ objective (1-2 sentences)\n3. **Governance:** 3-5 SKULL rules\n4. **Files:**\
+      \ Affected file paths (absolute paths)\n5. **Dependencies:** Task IDs and status\n\
+      6. **Acceptance Criteria:** Summary of AC\n7. **Tests Required:** Test types\
+      \ (unit, integration, security)\n8. **Status:** Emoji + text (\u23F3 Not Started,\
+      \ \U0001F504 In Progress, \u2705 Completed)\n"
     status: not_started
     priority: P1-HIGH
     phase: 2
@@ -2300,27 +2224,12 @@ github_copilot_bridge:
     - 'Max length: No limit (Markdown file can be long)'
   - id: AC-COPILOT-008
     name: Status Mapping with Emojis
-    description: 'Map TodoManager task statuses to emoji + text format for visual
-      clarity.
-
-      VS Code''s TODO panel displays emojis prominently.
-
-
-      Mapping:
-
-      - PENDING → ⏳ Not Started
-
-      - IN_PROGRESS → 🔄 In Progress
-
-      - COMPLETE → ✅ Completed
-
-      - FAILED → ❌ Failed (with failure reason)
-
-      - BLOCKED → 🚫 Blocked (with blocker info)
-
-      - CANCELLED → (excluded from file)
-
-      '
+    description: "Map TodoManager task statuses to emoji + text format for visual\
+      \ clarity.\nVS Code's TODO panel displays emojis prominently.\n\nMapping:\n\
+      - PENDING \u2192 \u23F3 Not Started\n- IN_PROGRESS \u2192 \U0001F504 In Progress\n\
+      - COMPLETE \u2192 \u2705 Completed\n- FAILED \u2192 \u274C Failed (with failure\
+      \ reason)\n- BLOCKED \u2192 \U0001F6AB Blocked (with blocker info)\n- CANCELLED\
+      \ \u2192 (excluded from file)\n"
     status: not_started
     priority: P2-MEDIUM
     phase: 2
@@ -2331,31 +2240,19 @@ github_copilot_bridge:
     - AC-COPILOT-001
     acceptance_criteria:
     - 'Simple states: PENDING/IN_PROGRESS/COMPLETE map to emojis + text'
-    - 'FAILED: ❌ Failed + append failure reason to description'
-    - 'BLOCKED: 🚫 Blocked + prepend blocker info to description'
+    - "FAILED: \u274C Failed + append failure reason to description"
+    - "BLOCKED: \U0001F6AB Blocked + prepend blocker info to description"
     - 'CANCELLED: Exclude from TODO file completely'
-    - 'Unknown states: Log warning, default to ⏳ Not Started'
-    - 'Emoji + text format: ''**Status:** ⏳ Not Started'''
+    - "Unknown states: Log warning, default to \u23F3 Not Started"
+    - "Emoji + text format: '**Status:** \u23F3 Not Started'"
   - id: AC-COPILOT-009
     name: Task Breakdown for Large Implementations
-    description: 'Automatically break down large tasks (>500 LOC estimate) into subtasks.
-
-      Aligns with CORE-001 (incremental execution) and improves visibility.
-
-
-      Breakdown Strategy:
-
-      - Estimate LOC from task complexity
-
-      - If >500 LOC: Create subtasks (design, implement core, tests, refactor, docs)
-
-      - Each subtask <500 LOC
-
-      - Subtasks have dependencies: design → implement → tests → refactor
-
-      - Each subtask becomes separate TODO comment in file
-
-      '
+    description: "Automatically break down large tasks (>500 LOC estimate) into subtasks.\n\
+      Aligns with CORE-001 (incremental execution) and improves visibility.\n\nBreakdown\
+      \ Strategy:\n- Estimate LOC from task complexity\n- If >500 LOC: Create subtasks\
+      \ (design, implement core, tests, refactor, docs)\n- Each subtask <500 LOC\n\
+      - Subtasks have dependencies: design \u2192 implement \u2192 tests \u2192 refactor\n\
+      - Each subtask becomes separate TODO comment in file\n"
     status: not_started
     priority: P2-MEDIUM
     phase: 2
@@ -2446,25 +2343,12 @@ github_copilot_bridge:
     - 'Performance: File generation <10ms for 100 tasks'
   - id: AC-COPILOT-012
     name: Auto-Sync with Progress Tracker
-    description: 'Automatically sync TODO completion status back to progress-tracker.json
-
-      when tasks are marked as completed in VS Code.
-
-
-      Sync Strategy:
-
-      - Watch .cortex/copilot-todos.md for changes (file watcher)
-
-      - Parse status changes: ⏳ → 🔄 or 🔄 → ✅
-
-      - Update progress-tracker.json with new status
-
-      - Log sync operations to audit trail
-
-
-      Note: This creates a bidirectional sync between VS Code TODOs and CORTEX state.
-
-      '
+    description: "Automatically sync TODO completion status back to progress-tracker.json\n\
+      when tasks are marked as completed in VS Code.\n\nSync Strategy:\n- Watch .cortex/copilot-todos.md\
+      \ for changes (file watcher)\n- Parse status changes: \u23F3 \u2192 \U0001F504\
+      \ or \U0001F504 \u2192 \u2705\n- Update progress-tracker.json with new status\n\
+      - Log sync operations to audit trail\n\nNote: This creates a bidirectional sync\
+      \ between VS Code TODOs and CORTEX state.\n"
     status: not_started
     priority: P2-MEDIUM
     phase: 3
@@ -2476,7 +2360,8 @@ github_copilot_bridge:
     - AC-STATE-002
     acceptance_criteria:
     - 'File watcher: Monitors .cortex/copilot-todos.md for changes'
-    - 'Parse status: Detects emoji changes (⏳ → 🔄 → ✅)'
+    - "Parse status: Detects emoji changes (\u23F3 \u2192 \U0001F504 \u2192 \u2705\
+      )"
     - 'Update state: Writes to progress-tracker.json atomically'
     - 'Audit trail: Logs all sync operations'
     - 'Conflict resolution: CORTEX state wins if conflict detected'
@@ -2484,7 +2369,7 @@ github_copilot_bridge:
     - Validates JSON schema matches Copilot's expected format
     - Tests all status mappings work in Copilot UI
     - Verifies description rendering (no HTML/Markdown breaking)
-    - 'End-to-end: MasterOrchestrator → Bridge → Copilot → Execution'
+    - "End-to-end: MasterOrchestrator \u2192 Bridge \u2192 Copilot \u2192 Execution"
   - id: AC-COPILOT-012
     name: Audit Trail Integration
     description: 'Log all bridge operations to EnterpriseAuditLogger for traceability.
@@ -2631,26 +2516,14 @@ summary:
     partial: 0
     not_started: 0
 core_workflow:
-  description: 'This is THE DEFAULT WORKING MECHANISM at the core of CORTEX operations.
-
-    MasterOrchestrator is IN CHARGE. All requests flow through this pipeline.
-
-
-    WORKFLOW SUMMARY:
-
-    1. User enters prompt → Tokenized efficiently → MasterOrchestrator
-
-    2. MasterOrchestrator breaks down work into todos
-
-    3. For software development tasks → Engage TDD Orchestrator
-
-    4. TDD generates Final Instruction (F) from governance merge
-
-    5. TDD hands off to implementation orchestrators
-
-    '
+  description: "This is THE DEFAULT WORKING MECHANISM at the core of CORTEX operations.\n\
+    MasterOrchestrator is IN CHARGE. All requests flow through this pipeline.\n\n\
+    WORKFLOW SUMMARY:\n1. User enters prompt \u2192 Tokenized efficiently \u2192 MasterOrchestrator\n\
+    2. MasterOrchestrator breaks down work into todos\n3. For software development\
+    \ tasks \u2192 Engage TDD Orchestrator\n4. TDD generates Final Instruction (F)\
+    \ from governance merge\n5. TDD hands off to implementation orchestrators\n"
   phase_1_request_processing:
-    description: User prompt → Tokenization → MasterOrchestrator
+    description: "User prompt \u2192 Tokenization \u2192 MasterOrchestrator"
     steps:
     - step: 1.1
       name: User Intent Capture
@@ -2698,7 +2571,8 @@ core_workflow:
       ac_ids:
       - AC-ORCH-007
   phase_3_tdd_orchestrator:
-    description: TDD Orchestrator generates Final Instruction (F) and executes RED→GREEN→REFACTOR
+    description: "TDD Orchestrator generates Final Instruction (F) and executes RED\u2192\
+      GREEN\u2192REFACTOR"
     condition: intent_type == 'software_development'
     final_instruction_formula:
       description: F = CORTEX_Governance + BestPractices + CompanyPractices + DomainKnowledge
@@ -2729,7 +2603,7 @@ core_workflow:
         ac_ids:
         - AC-KNOW-002
         - AC-TDD-007
-      merge_rule: Tier 0 always wins → Tier 1 → Tier 2 → Tier 3
+      merge_rule: "Tier 0 always wins \u2192 Tier 1 \u2192 Tier 2 \u2192 Tier 3"
       output: final_instruction (F)
       ac_ids:
       - AC-TDD-002
@@ -2842,7 +2716,8 @@ core_workflow:
         name: Learned Patterns
         location: cortex-brain/tier3/
         precedence: LOW
-    conflict_resolution: Tier 0 always wins → Tier 1 → Tier 2 → Tier 3
+    conflict_resolution: "Tier 0 always wins \u2192 Tier 1 \u2192 Tier 2 \u2192 Tier\
+      \ 3"
 implementation_order:
   phase_1_foundation:
     description: These MUST complete before feature work
@@ -3231,7 +3106,7 @@ legacy_migration:
       - AC-MIGRATE-001
       - AC-ORCH-003
     requirements:
-    - Phase lifecycle management (PENDING → IN_PROGRESS → COMPLETE)
+    - "Phase lifecycle management (PENDING \u2192 IN_PROGRESS \u2192 COMPLETE)"
     - Governance hooks injection
     - Audit logging integration
     - State persistence integration
@@ -3264,14 +3139,9 @@ legacy_migration:
       related_acs:
       - AC-SCAFFOLD-003
 cross_linking_index:
-  description: 'This section maintains bidirectional links between related work items
-
-    across phases. Any work deferred to later phases MUST be tracked here.
-
-
-    FORMAT: source_ac → [target_acs] with reason
-
-    '
+  description: "This section maintains bidirectional links between related work items\n\
+    across phases. Any work deferred to later phases MUST be tracked here.\n\nFORMAT:\
+    \ source_ac \u2192 [target_acs] with reason\n"
   phase_1_to_phase_5:
   - source: AC-STATE-002
     targets:
@@ -3408,9 +3278,9 @@ ac_security:
     status: not_started
     priority: P0-CRITICAL
     phase: 1
-    design_score_impact: +10 points (83 → 93)
+    design_score_impact: "+10 points (83 \u2192 93)"
     acceptance_criteria:
-    - 'States: REQUESTED → APPROVED/DENIED/EXPIRED'
+    - "States: REQUESTED \u2192 APPROVED/DENIED/EXPIRED"
     - 'Timeout: 5 minutes default, configurable via config/approval-config.yaml'
     - 'Non-interactive mode: DENY by default (fail-closed)'
     - 'Audit trail: correlation_id, timestamp, actor, decision, justification'
@@ -3430,7 +3300,7 @@ ac_security:
     status: not_started
     priority: P0-CRITICAL
     phase: 1
-    design_score_impact: +7 points (93 → 100, capped at 97)
+    design_score_impact: "+7 points (93 \u2192 100, capped at 97)"
     acceptance_criteria:
     - Use os.path.realpath() for all path operations before sandbox check
     - Deny operations on symlinks/junctions pointing outside WORKSPACE_ROOT
@@ -3453,7 +3323,7 @@ ac_security:
     design_score_impact: +1 point (incremental safety)
     acceptance_criteria:
     - 'Registry: cortex-brain/tier2/validation-rules.yaml'
-    - 'Per-placeholder constraints: {branch} → refs/heads/* only'
+    - "Per-placeholder constraints: {branch} \u2192 refs/heads/* only"
     - 'Injection tests: --upload-pack, pathspec magic, rev syntax'
     - Build incrementally during TDD (RED phase generates validation tests)
     - Fail-open initially, tighten during Phase 2
@@ -3511,7 +3381,7 @@ ac_route:
     - SPEC-019
   AC-ROUTE-002:
     title: Routing Contract Tests
-    description: Corpus of intents → expected orchestrator mappings
+    description: "Corpus of intents \u2192 expected orchestrator mappings"
     status: not_started
     priority: P1-HIGH
     phase: 2
@@ -3550,10 +3420,10 @@ ac_route:
     acceptance_criteria:
     - Apply Unicode NFKC normalization to all user intents
     - Strip zero-width characters (U+200B, U+FEFF, etc.)
-    - 'Collapse whitespace: multiple spaces → single space'
-    - 'Normalize quotes/dashes: smart quotes → ASCII'
+    - "Collapse whitespace: multiple spaces \u2192 single space"
+    - "Normalize quotes/dashes: smart quotes \u2192 ASCII"
     - Lowercase + strip whitespace (existing behavior preserved)
-    - 'Deterministic: same visual intent → same routing outcome'
+    - "Deterministic: same visual intent \u2192 same routing outcome"
     tests:
     - tests/unit/routing/test_unicode_normalization.py
     - tests/integration/routing/test_hidden_char_attack.py
@@ -3569,8 +3439,8 @@ ac_route:
     phase: 2
     design_score_impact: +1 point (determinism completeness)
     acceptance_criteria:
-    - If PREFIX lengths equal → use explicit priority field
-    - If priority equal → fail at startup with conflict error
+    - "If PREFIX lengths equal \u2192 use explicit priority field"
+    - "If priority equal \u2192 fail at startup with conflict error"
     - Extend conflict detection to cover PREFIX tie scenarios
     - Runtime never raises ambiguity (startup guarantees uniqueness)
     tests:
@@ -3581,7 +3451,8 @@ ac_route:
     - AC-ROUTE-003
     rationale: GPT correctly identified incomplete tie-break logic in PREFIX matching
 ac_rollout:
-  description: 'Progressive activation: REGISTERED → SHADOW → CANARY → ACTIVE'
+  description: "Progressive activation: REGISTERED \u2192 SHADOW \u2192 CANARY \u2192\
+    \ ACTIVE"
   priority: P1-HIGH
   phase: 2
   category: orchestration
@@ -3593,8 +3464,8 @@ ac_rollout:
     phase: 2
     acceptance_criteria:
     - 'States: REGISTERED, SHADOW, CANARY, ACTIVE'
-    - 'Transitions: REGISTERED→SHADOW→CANARY→ACTIVE'
-    - 'Rollback: ACTIVE→CANARY→SHADOW on error threshold'
+    - "Transitions: REGISTERED\u2192SHADOW\u2192CANARY\u2192ACTIVE"
+    - "Rollback: ACTIVE\u2192CANARY\u2192SHADOW on error threshold"
     - State persisted in tier1/tracking/activation-state.json
     tests:
     - tests/unit/rollout/test_state_machine.py
@@ -3694,7 +3565,7 @@ ac_sdlc:
     priority: P2-MEDIUM
     phase: 2
     acceptance_criteria:
-    - Checklist validation for Phase 1→2, 2→3, 3→4 gates
+    - "Checklist validation for Phase 1\u21922, 2\u21923, 3\u21924 gates"
     - Blocks transition if any checklist item fails
     - Audit trail of gate validation attempts
     - Manual override requires justification logged
@@ -3917,13 +3788,13 @@ ac_clean:
     - tests/infrastructure/precheck/test_parameter_checker.py
     design_source: cortex-brain/cx6-plan/validation/precheck-system-design.md
     acceptance_criteria:
-    - Analyzes MasterOrchestrator → Child Orchestrator parameter flow
+    - "Analyzes MasterOrchestrator \u2192 Child Orchestrator parameter flow"
     - Detects parameter name mismatches (e.g., user_request vs context)
     - Validates all required parameters are provided
     - Suggests parameter mappings for mismatches
     - Validates default values are compatible
     exit_criteria:
-    - Detects user_request → context mismatch before execution
+    - "Detects user_request \u2192 context mismatch before execution"
     - Suggests fix with executable code
     - Validates all 15+ registered orchestrators
     depends_on:
@@ -4013,7 +3884,7 @@ ac_clean:
     - src/orchestrators/master_orchestrator.py::execute_orchestrator()
     - src/orchestrators/tdd_master.py::red_phase()
     - tests/conftest.py::pytest_collection_modifyitems()
-    roi: 27x faster issue resolution (135min debugging → 5min precheck)
+    roi: "27x faster issue resolution (135min debugging \u2192 5min precheck)"
 ac_template:
   description: Refactor 2046-line response-templates-v4.yaml into 3-layer architecture
   priority: P1-HIGH
@@ -4023,7 +3894,7 @@ ac_template:
   rationale: Current v4.yaml violates CORE-002 anti-bloat principle
   AC-TEMPLATE-001:
     title: Extract Core Blocks
-    description: Extract 15-20 atomic blocks from v4.yaml → tier0/response-blocks.yaml
+    description: "Extract 15-20 atomic blocks from v4.yaml \u2192 tier0/response-blocks.yaml"
     status: not_started
     priority: P1-HIGH
     phase: 2
@@ -4087,7 +3958,7 @@ ac_template:
     priority: P1-HIGH
     phase: 2
     acceptance_criteria:
-    - 'Resolver loads: core → category → orchestrator'
+    - "Resolver loads: core \u2192 category \u2192 orchestrator"
     - Precedence rules enforced
     - Multi-category inheritance supported (e.g., ADO = integration + planning)
     - Audit logs show resolution path
@@ -4155,41 +4026,19 @@ ac_template:
 acceptanceCriteria:
 - id: AC-BRITTLE-001
   title: YAML Encoding Corruption Detection & Repair
-  description: 'Implement detection and repair for YAML files with encoding corruption
-    (bytes 0x8f, 0x9d from Windows-1252 mishandling).
-
-
-    Problem: AC-INDEX.yaml or core-rules.yaml loaded with encoding mismatch → yaml.safe_load()
-    silently misparses → Governance rules incomplete/incorrect.
-
-
-    Solution:
-
-    1. Add pre-load YAML encoding validator (check BOM, sample bytes, validate UTF-8)
-
-    2. Detect corruption pattern (non-ASCII bytes in specific fields)
-
-    3. Implement 3-level repair: re-encode to UTF-8, strip non-ASCII, or fail with
-    clear error
-
-    4. Add file integrity hash (first 50 bytes SHA256) for detection
-
-    5. Log encoding issues to audit trail (AuditCategory.INFRASTRUCTURE)
-
-
-    Acceptance Criteria:
-
-    - Detects Windows-1252 corruption on AC-INDEX.yaml load
-
-    - Repairs file automatically (re-encodes to UTF-8)
-
-    - Falls back to git recovery if repair fails
-
-    - Logs repair action with file path, bytes corrupted, action taken
-
-    - Tests: corrupt AC-INDEX.yaml intentionally, verify detection and repair
-
-    '
+  description: "Implement detection and repair for YAML files with encoding corruption\
+    \ (bytes 0x8f, 0x9d from Windows-1252 mishandling).\n\nProblem: AC-INDEX.yaml\
+    \ or core-rules.yaml loaded with encoding mismatch \u2192 yaml.safe_load() silently\
+    \ misparses \u2192 Governance rules incomplete/incorrect.\n\nSolution:\n1. Add\
+    \ pre-load YAML encoding validator (check BOM, sample bytes, validate UTF-8)\n\
+    2. Detect corruption pattern (non-ASCII bytes in specific fields)\n3. Implement\
+    \ 3-level repair: re-encode to UTF-8, strip non-ASCII, or fail with clear error\n\
+    4. Add file integrity hash (first 50 bytes SHA256) for detection\n5. Log encoding\
+    \ issues to audit trail (AuditCategory.INFRASTRUCTURE)\n\nAcceptance Criteria:\n\
+    - Detects Windows-1252 corruption on AC-INDEX.yaml load\n- Repairs file automatically\
+    \ (re-encodes to UTF-8)\n- Falls back to git recovery if repair fails\n- Logs\
+    \ repair action with file path, bytes corrupted, action taken\n- Tests: corrupt\
+    \ AC-INDEX.yaml intentionally, verify detection and repair\n"
   status: planned
   priority: critical
   phase: 1
@@ -4209,38 +4058,17 @@ acceptanceCriteria:
   owner: Infrastructure
 - id: AC-BRITTLE-002
   title: YAML File Locking & Atomic Writes for Concurrency Safety
-  description: 'Implement file locking and atomic write patterns to prevent corruption
-    from concurrent writes to YAML files.
-
-
-    Problem: Multiple orchestrators writing to progress-tracker.json or AC-INDEX.yaml
-    simultaneously → Race conditions → Corrupted JSON.
-
-
-    Solution:
-
-    1. Use filelock library for cross-platform advisory file locking
-
-    2. Implement atomic write pattern: write to temp file, atomic rename on success
-
-    3. Add lock timeout (5s) to prevent deadlock
-
-    4. Log lock contention to audit trail (debug level)
-
-
-    Acceptance Criteria:
-
-    - Acquires lock before writing progress-tracker.json, AC-INDEX.yaml
-
-    - Writes to temp file, atomically renames on success
-
-    - Times out gracefully after 5s (retries with exponential backoff)
-
-    - No corrupted JSON after concurrent writes
-
-    - Tests: 10 concurrent writers, all complete without corruption
-
-    '
+  description: "Implement file locking and atomic write patterns to prevent corruption\
+    \ from concurrent writes to YAML files.\n\nProblem: Multiple orchestrators writing\
+    \ to progress-tracker.json or AC-INDEX.yaml simultaneously \u2192 Race conditions\
+    \ \u2192 Corrupted JSON.\n\nSolution:\n1. Use filelock library for cross-platform\
+    \ advisory file locking\n2. Implement atomic write pattern: write to temp file,\
+    \ atomic rename on success\n3. Add lock timeout (5s) to prevent deadlock\n4. Log\
+    \ lock contention to audit trail (debug level)\n\nAcceptance Criteria:\n- Acquires\
+    \ lock before writing progress-tracker.json, AC-INDEX.yaml\n- Writes to temp file,\
+    \ atomically renames on success\n- Times out gracefully after 5s (retries with\
+    \ exponential backoff)\n- No corrupted JSON after concurrent writes\n- Tests:\
+    \ 10 concurrent writers, all complete without corruption\n"
   status: planned
   priority: medium
   phase: 1
@@ -4259,36 +4087,17 @@ acceptanceCriteria:
   owner: Infrastructure
 - id: AC-BRITTLE-003
   title: YAML File Locking - Out-of-Order Concurrent Write Detection
-  description: 'Detect and prevent out-of-order updates to progress-tracker.json when
-    multiple AC-ID implementations write field values concurrently.
-
-
-    Problem: AC-ID X marks complete, AC-ID Y updates completion_percentage, both write()
-    called simultaneously → Final file has only Y''s updates.
-
-
-    Solution:
-
-    1. Add version counter to progress-tracker.json (incremented per write)
-
-    2. Compare expected version before writing (detect skipped updates)
-
-    3. Retry with exponential backoff if version mismatch detected
-
-    4. Log version conflicts to audit trail (AuditCategory.ORCHESTRATOR)
-
-
-    Acceptance Criteria:
-
-    - Detects version mismatch on concurrent writes
-
-    - Retries up to 3 times with backoff (100ms, 200ms, 500ms)
-
-    - No lost updates after retry sequence
-
-    - Tests: 5 concurrent update_tracker() calls, verify all fields updated
-
-    '
+  description: "Detect and prevent out-of-order updates to progress-tracker.json when\
+    \ multiple AC-ID implementations write field values concurrently.\n\nProblem:\
+    \ AC-ID X marks complete, AC-ID Y updates completion_percentage, both write()\
+    \ called simultaneously \u2192 Final file has only Y's updates.\n\nSolution:\n\
+    1. Add version counter to progress-tracker.json (incremented per write)\n2. Compare\
+    \ expected version before writing (detect skipped updates)\n3. Retry with exponential\
+    \ backoff if version mismatch detected\n4. Log version conflicts to audit trail\
+    \ (AuditCategory.ORCHESTRATOR)\n\nAcceptance Criteria:\n- Detects version mismatch\
+    \ on concurrent writes\n- Retries up to 3 times with backoff (100ms, 200ms, 500ms)\n\
+    - No lost updates after retry sequence\n- Tests: 5 concurrent update_tracker()\
+    \ calls, verify all fields updated\n"
   status: planned
   priority: medium
   phase: 1
@@ -4350,36 +4159,15 @@ acceptanceCriteria:
   owner: QA
 - id: AC-BRITTLE-005
   title: Environment Variable Validation & Defaults
-  description: 'Document all required environment variables and provide safe defaults
-    to prevent unset-var failures.
-
-
-    Problem: Code assumes CORTEX_ROOT, DEBUG, etc. are set. Unset → AttributeError/KeyError
-    at runtime.
-
-
-    Solution:
-
-    1. Add env var schema in src/config/ (required, optional, defaults)
-
-    2. Validate on main.py entry (check required vars, apply defaults)
-
-    3. Fail fast with clear error if required var missing
-
-
-    Acceptance Criteria:
-
-    - All required env vars documented in README
-
-    - Validation runs on entry_point.py startup
-
-    - Clear error message if required var missing
-
-    - Default values used for optional vars (DEBUG=False, etc.)
-
-    - Tests: run without env vars, verify graceful failure with helpful message
-
-    '
+  description: "Document all required environment variables and provide safe defaults\
+    \ to prevent unset-var failures.\n\nProblem: Code assumes CORTEX_ROOT, DEBUG,\
+    \ etc. are set. Unset \u2192 AttributeError/KeyError at runtime.\n\nSolution:\n\
+    1. Add env var schema in src/config/ (required, optional, defaults)\n2. Validate\
+    \ on main.py entry (check required vars, apply defaults)\n3. Fail fast with clear\
+    \ error if required var missing\n\nAcceptance Criteria:\n- All required env vars\
+    \ documented in README\n- Validation runs on entry_point.py startup\n- Clear error\
+    \ message if required var missing\n- Default values used for optional vars (DEBUG=False,\
+    \ etc.)\n- Tests: run without env vars, verify graceful failure with helpful message\n"
   status: planned
   priority: low
   phase: 1
@@ -4394,43 +4182,20 @@ acceptanceCriteria:
   estimatedEffort: 2
   owner: Infrastructure
 - id: AC-RISK-001
-  title: Automatic Progress Tracker → Plan Viewer Sync
-  description: 'Implement automatic synchronization of progress-tracker.json to plan-viewer-data.json
-    to eliminate dashboard sync drift.
-
-
-    Problem: progress-tracker.json is source of truth (updated by test execution).
-    plan-viewer-data.json manually synced via script. 30+ min drift possible → Stale
-    dashboard → Wrong phase gate decisions.
-
-
-    Solution:
-
-    1. Hook sync_plan_viewer_data.py as post-write callback in progress-tracker.json
-    save
-
-    2. Make sync atomic (write to temp, rename)
-
-    3. Add file watcher in MasterOrchestrator (triggers sync on file change)
-
-    4. Add refresh timer to cortex-plan-viewer.html (AJAX poll every 60s)
-
-    5. Log sync operations to cortex-brain/documents/logs/sync-history.jsonl
-
-
-    Acceptance Criteria:
-
-    - Sync executes within 5s of progress-tracker.json update
-
-    - Plan viewer auto-refreshes (no manual F5 needed)
-
-    - Sync history logged with timestamp, source, status
-
-    - No drift >60s between tracker and viewer
-
-    - Tests: update tracker, verify viewer updates within 5s
-
-    '
+  title: "Automatic Progress Tracker \u2192 Plan Viewer Sync"
+  description: "Implement automatic synchronization of progress-tracker.json to plan-viewer-data.json\
+    \ to eliminate dashboard sync drift.\n\nProblem: progress-tracker.json is source\
+    \ of truth (updated by test execution). plan-viewer-data.json manually synced\
+    \ via script. 30+ min drift possible \u2192 Stale dashboard \u2192 Wrong phase\
+    \ gate decisions.\n\nSolution:\n1. Hook sync_plan_viewer_data.py as post-write\
+    \ callback in progress-tracker.json save\n2. Make sync atomic (write to temp,\
+    \ rename)\n3. Add file watcher in MasterOrchestrator (triggers sync on file change)\n\
+    4. Add refresh timer to cortex-plan-viewer.html (AJAX poll every 60s)\n5. Log\
+    \ sync operations to cortex-brain/documents/logs/sync-history.jsonl\n\nAcceptance\
+    \ Criteria:\n- Sync executes within 5s of progress-tracker.json update\n- Plan\
+    \ viewer auto-refreshes (no manual F5 needed)\n- Sync history logged with timestamp,\
+    \ source, status\n- No drift >60s between tracker and viewer\n- Tests: update\
+    \ tracker, verify viewer updates within 5s\n"
   status: planned
   priority: critical
   phase: 1
@@ -4450,40 +4215,19 @@ acceptanceCriteria:
   owner: Infrastructure
 - id: AC-RISK-002
   title: TodoManager SQLite Persistence & Restart Recovery
-  description: 'Implement SQLite persistence for TodoManager to survive orchestrator
-    restarts and maintain full task context.
-
-
-    Problem: TodoOrchestrator.todos dict is in-memory only. Orchestrator crash/restart
-    → All TODO items lost. Phase recovery requires manual AC-ID list from progress-tracker.json.
-
-
-    Solution:
-
-    1. Integrate TodoOrchestrator with StateManager for SQLite persistence
-
-    2. Save TODO items on creation/update/delete (not just in memory)
-
-    3. Load TODO items on orchestrator __init__ (recovery on restart)
-
-    4. Enable WAL mode on state.db (concurrency, atomic writes)
-
-    5. Implement checkpoint mechanism (save full state graph before major operations)
-
-
-    Acceptance Criteria:
-
-    - Create TODO, restart orchestrator, verify TODO still exists
-
-    - Create TODO chain (A→B→C), restart, verify dependency graph intact
-
-    - Parallel task detection works after restart
-
-    - Load test: 1000 TODOs, verify <100ms persistence latency per operation
-
-    - Tests: tests/integration/test_todo_orchestrator_restart.py
-
-    '
+  description: "Implement SQLite persistence for TodoManager to survive orchestrator\
+    \ restarts and maintain full task context.\n\nProblem: TodoOrchestrator.todos\
+    \ dict is in-memory only. Orchestrator crash/restart \u2192 All TODO items lost.\
+    \ Phase recovery requires manual AC-ID list from progress-tracker.json.\n\nSolution:\n\
+    1. Integrate TodoOrchestrator with StateManager for SQLite persistence\n2. Save\
+    \ TODO items on creation/update/delete (not just in memory)\n3. Load TODO items\
+    \ on orchestrator __init__ (recovery on restart)\n4. Enable WAL mode on state.db\
+    \ (concurrency, atomic writes)\n5. Implement checkpoint mechanism (save full state\
+    \ graph before major operations)\n\nAcceptance Criteria:\n- Create TODO, restart\
+    \ orchestrator, verify TODO still exists\n- Create TODO chain (A\u2192B\u2192\
+    C), restart, verify dependency graph intact\n- Parallel task detection works after\
+    \ restart\n- Load test: 1000 TODOs, verify <100ms persistence latency per operation\n\
+    - Tests: tests/integration/test_todo_orchestrator_restart.py\n"
   status: planned
   priority: critical
   phase: 2
@@ -4504,42 +4248,19 @@ acceptanceCriteria:
   owner: Orchestration
 - id: AC-RISK-003
   title: Phase Rollback & Cleanup Mechanism
-  description: 'Implement automatic cleanup and rollback for failed phases to prevent
-    orphaned artifacts.
-
-
-    Problem: Phase 2 starts, AC-ORCH-006 fails → TODO items created, tests generated,
-    files written, phase marked FAILED. No automatic rollback → Orphaned artifacts,
-    manual cleanup required.
-
-
-    Solution:
-
-    1. Add phase-scoped checkpoint before starting new AC-IDs
-
-    2. Implement rollback orchestrator (deletes files, removes TODO items, restores
-    state)
-
-    3. Create rollback trigger on phase FAILED (automatic)
-
-    4. Store rollback actions in state.db (track what was rolled back)
-
-    5. Log rollback events to audit trail (AuditCategory.ORCHESTRATOR)
-
-
-    Acceptance Criteria:
-
-    - Phase checkpoint created before AC-ID 1 of new phase
-
-    - On phase FAILED, automatic rollback deletes all phase artifacts
-
-    - Rollback actions logged to audit trail with file paths, TODO IDs
-
-    - State restored to pre-phase state
-
-    - Tests: fail an AC-ID mid-implementation, trigger rollback, verify cleanup
-
-    '
+  description: "Implement automatic cleanup and rollback for failed phases to prevent\
+    \ orphaned artifacts.\n\nProblem: Phase 2 starts, AC-ORCH-006 fails \u2192 TODO\
+    \ items created, tests generated, files written, phase marked FAILED. No automatic\
+    \ rollback \u2192 Orphaned artifacts, manual cleanup required.\n\nSolution:\n\
+    1. Add phase-scoped checkpoint before starting new AC-IDs\n2. Implement rollback\
+    \ orchestrator (deletes files, removes TODO items, restores state)\n3. Create\
+    \ rollback trigger on phase FAILED (automatic)\n4. Store rollback actions in state.db\
+    \ (track what was rolled back)\n5. Log rollback events to audit trail (AuditCategory.ORCHESTRATOR)\n\
+    \nAcceptance Criteria:\n- Phase checkpoint created before AC-ID 1 of new phase\n\
+    - On phase FAILED, automatic rollback deletes all phase artifacts\n- Rollback\
+    \ actions logged to audit trail with file paths, TODO IDs\n- State restored to\
+    \ pre-phase state\n- Tests: fail an AC-ID mid-implementation, trigger rollback,\
+    \ verify cleanup\n"
   status: planned
   priority: high
   phase: 2
@@ -4558,40 +4279,17 @@ acceptanceCriteria:
   owner: Orchestration
 - id: AC-RISK-004
   title: Database Backup & WAL Mode for Crash Safety
-  description: 'Enable SQLite WAL (Write-Ahead Logging) mode and implement pre-write
-    backups to prevent corruption on crash.
-
-
-    Problem: StateManager writes to planning.db without WAL mode. Crash during write
-    → Corrupted database, unrecoverable state.
-
-
-    Solution:
-
-    1. Enable WAL mode on all database opens (PRAGMA journal_mode=WAL)
-
-    2. Pre-write backup (copy DB to .backup before transaction)
-
-    3. Integrity check on database open (PRAGMA integrity_check)
-
-    4. Database recovery tool (restore from last good backup on startup)
-
-    5. Log backup operations to audit trail (AuditCategory.INFRASTRUCTURE)
-
-
-    Acceptance Criteria:
-
-    - WAL mode enabled, write performance verified (no regression)
-
-    - Pre-write backup created, verified on recovery
-
-    - Startup detects corrupted database, restores from backup
-
-    - No data loss after crash recovery
-
-    - Tests: corrupt DB file, verify recovery on next startup
-
-    '
+  description: "Enable SQLite WAL (Write-Ahead Logging) mode and implement pre-write\
+    \ backups to prevent corruption on crash.\n\nProblem: StateManager writes to planning.db\
+    \ without WAL mode. Crash during write \u2192 Corrupted database, unrecoverable\
+    \ state.\n\nSolution:\n1. Enable WAL mode on all database opens (PRAGMA journal_mode=WAL)\n\
+    2. Pre-write backup (copy DB to .backup before transaction)\n3. Integrity check\
+    \ on database open (PRAGMA integrity_check)\n4. Database recovery tool (restore\
+    \ from last good backup on startup)\n5. Log backup operations to audit trail (AuditCategory.INFRASTRUCTURE)\n\
+    \nAcceptance Criteria:\n- WAL mode enabled, write performance verified (no regression)\n\
+    - Pre-write backup created, verified on recovery\n- Startup detects corrupted\
+    \ database, restores from backup\n- No data loss after crash recovery\n- Tests:\
+    \ corrupt DB file, verify recovery on next startup\n"
   status: planned
   priority: high
   phase: 1
@@ -4715,40 +4413,17 @@ acceptanceCriteria:
   owner: QA
 - id: AC-RISK-007
   title: Pattern Router Unmatched Intent Tracking & Library Expansion
-  description: 'Add tracking and auto-expansion for unmatched intents in PatternRouter
-    to maintain >90% pattern coverage.
-
-
-    Problem: PatternRouter depends on regex/keyword patterns covering 90%+ intents.
-    No tracking of misses → Pattern library degrades over time.
-
-
-    Solution:
-
-    1. Log all unmatched intents to cortex-brain/documents/logs/unmatched-intents.jsonl
-
-    2. Analyze unmatched log weekly (pattern expansion candidates)
-
-    3. Add new patterns to pattern_router_config.yaml
-
-    4. Track coverage metric (matched / total intents)
-
-    5. Alert if coverage drops below 85%
-
-
-    Acceptance Criteria:
-
-    - Unmatched intents logged with intent text, source, timestamp
-
-    - Pattern coverage calculated weekly (from logs)
-
-    - Coverage metric exported to metrics endpoint
-
-    - Recommendation generated for missing patterns
-
-    - Tests: send unmatched intent, verify logging and analysis
-
-    '
+  description: "Add tracking and auto-expansion for unmatched intents in PatternRouter\
+    \ to maintain >90% pattern coverage.\n\nProblem: PatternRouter depends on regex/keyword\
+    \ patterns covering 90%+ intents. No tracking of misses \u2192 Pattern library\
+    \ degrades over time.\n\nSolution:\n1. Log all unmatched intents to cortex-brain/documents/logs/unmatched-intents.jsonl\n\
+    2. Analyze unmatched log weekly (pattern expansion candidates)\n3. Add new patterns\
+    \ to pattern_router_config.yaml\n4. Track coverage metric (matched / total intents)\n\
+    5. Alert if coverage drops below 85%\n\nAcceptance Criteria:\n- Unmatched intents\
+    \ logged with intent text, source, timestamp\n- Pattern coverage calculated weekly\
+    \ (from logs)\n- Coverage metric exported to metrics endpoint\n- Recommendation\
+    \ generated for missing patterns\n- Tests: send unmatched intent, verify logging\
+    \ and analysis\n"
   status: planned
   priority: medium
   phase: 3
@@ -4765,37 +4440,16 @@ acceptanceCriteria:
   owner: Routing
 - id: AC-SEC-001
   title: Audit Log Secret Redaction Filter
-  description: 'Implement automatic secret redaction in audit logs to prevent credential
-    exposure.
-
-
-    Problem: Audit entries include context dict (arbitrary key/value). If AC implementation
-    logs API keys, passwords, tokens → Exposed in audit logs.
-
-
-    Solution:
-
-    1. Detect secret patterns in context: password, token, api_key, secret, credential
-    (regex patterns)
-
-    2. Redact values (replace with [REDACTED])
-
-    3. Log redaction action (audit entry says "secret_count: 3, redacted")
-
-    4. Require AC implementations to use safe_log() helper (filters before audit)
-
-
-    Acceptance Criteria:
-
-    - Password/token/api_key patterns detected and redacted
-
-    - Redaction logged (for audit transparency)
-
-    - No credentials appear in audit logs
-
-    - Tests: log context with password, verify redaction
-
-    '
+  description: "Implement automatic secret redaction in audit logs to prevent credential\
+    \ exposure.\n\nProblem: Audit entries include context dict (arbitrary key/value).\
+    \ If AC implementation logs API keys, passwords, tokens \u2192 Exposed in audit\
+    \ logs.\n\nSolution:\n1. Detect secret patterns in context: password, token, api_key,\
+    \ secret, credential (regex patterns)\n2. Redact values (replace with [REDACTED])\n\
+    3. Log redaction action (audit entry says \"secret_count: 3, redacted\")\n4. Require\
+    \ AC implementations to use safe_log() helper (filters before audit)\n\nAcceptance\
+    \ Criteria:\n- Password/token/api_key patterns detected and redacted\n- Redaction\
+    \ logged (for audit transparency)\n- No credentials appear in audit logs\n- Tests:\
+    \ log context with password, verify redaction\n"
   status: planned
   priority: medium
   phase: 2
@@ -4905,36 +4559,15 @@ acceptanceCriteria:
   owner: Security
 - id: AC-PERF-001
   title: Semantic Search Result Caching with TTL
-  description: 'Implement caching for semantic_search results to avoid repeated workspace
-    scans.
-
-
-    Problem: Crawler or knowledge system queries workspace multiple times → No caching
-    layer → Repeated filesystem scans (slow).
-
-
-    Solution:
-
-    1. Add LRU cache to semantic_search with TTL (5 min default)
-
-    2. Cache key: search query text + filters
-
-    3. Invalidate on file modification (watch cortex-brain/)
-
-    4. Log cache hits/misses
-
-
-    Acceptance Criteria:
-
-    - Semantic search returns cached results within 5 min window
-
-    - Cache hit rate >70% on repeated queries
-
-    - TTL configurable via cortex-brain/config/
-
-    - Tests: query twice, verify cache hit on 2nd query
-
-    '
+  description: "Implement caching for semantic_search results to avoid repeated workspace\
+    \ scans.\n\nProblem: Crawler or knowledge system queries workspace multiple times\
+    \ \u2192 No caching layer \u2192 Repeated filesystem scans (slow).\n\nSolution:\n\
+    1. Add LRU cache to semantic_search with TTL (5 min default)\n2. Cache key: search\
+    \ query text + filters\n3. Invalidate on file modification (watch cortex-brain/)\n\
+    4. Log cache hits/misses\n\nAcceptance Criteria:\n- Semantic search returns cached\
+    \ results within 5 min window\n- Cache hit rate >70% on repeated queries\n- TTL\
+    \ configurable via cortex-brain/config/\n- Tests: query twice, verify cache hit\
+    \ on 2nd query\n"
   status: planned
   priority: medium
   phase: 3
@@ -4950,39 +4583,17 @@ acceptanceCriteria:
   owner: Performance
 - id: AC-PERF-002
   title: Audit Log Rotation & Cleanup
-  description: 'Implement log rotation and retention policies for JSONL audit log
-    files to prevent unbounded growth.
-
-
-    Problem: Enhanced audit logger appends to JSONL indefinitely → Files grow to GBs
-    → Slow queries, disk space issues.
-
-
-    Solution:
-
-    1. Rotate logs by date or size (daily or 100MB, whichever first)
-
-    2. Compress old logs (.jsonl → .jsonl.gz)
-
-    3. Delete based on retention policy (AuditLevel-based: CRITICAL 90d, ERROR 60d,
-    INFO 30d, DEBUG 7d)
-
-    4. Archive rotated logs to cortex-brain/archives/audit-logs/
-
-
-    Acceptance Criteria:
-
-    - Logs rotated daily or at 100MB threshold
-
-    - Old logs compressed automatically
-
-    - Retention enforced (files deleted after retention period)
-
-    - Archive location cortex-brain/archives/audit-logs/
-
-    - Tests: generate 1GB logs, verify rotation and compression
-
-    '
+  description: "Implement log rotation and retention policies for JSONL audit log\
+    \ files to prevent unbounded growth.\n\nProblem: Enhanced audit logger appends\
+    \ to JSONL indefinitely \u2192 Files grow to GBs \u2192 Slow queries, disk space\
+    \ issues.\n\nSolution:\n1. Rotate logs by date or size (daily or 100MB, whichever\
+    \ first)\n2. Compress old logs (.jsonl \u2192 .jsonl.gz)\n3. Delete based on retention\
+    \ policy (AuditLevel-based: CRITICAL 90d, ERROR 60d, INFO 30d, DEBUG 7d)\n4. Archive\
+    \ rotated logs to cortex-brain/archives/audit-logs/\n\nAcceptance Criteria:\n\
+    - Logs rotated daily or at 100MB threshold\n- Old logs compressed automatically\n\
+    - Retention enforced (files deleted after retention period)\n- Archive location\
+    \ cortex-brain/archives/audit-logs/\n- Tests: generate 1GB logs, verify rotation\
+    \ and compression\n"
   status: planned
   priority: medium
   phase: 2
@@ -5092,39 +4703,16 @@ acceptanceCriteria:
   owner: Observability
 - id: AC-DEBT-003
   title: Smoke Test Suite for Critical User Workflows
-  description: 'Create automated smoke tests for 5-10 critical user workflows (governance
-    merge, pattern routing, plan-viewer sync, evidence validation).
-
-
-    Problem: No automated smoke test for critical paths → Operators unaware of failures
-    until they occur.
-
-
-    Solution:
-
-    1. Create tests/smoke/ directory with smoke test suite
-
-    2. Test workflows: governance merge, pattern routing, plan-viewer sync, evidence
-    validation, phase gate
-
-    3. Run smoke tests on startup (log results to audit trail)
-
-    4. Alert if smoke test failure rate >10%
-
-
-    Acceptance Criteria:
-
-    - 5+ smoke tests covering critical paths
-
-    - Tests run on startup and log results
-
-    - Smoke test failures alert operator
-
-    - Failure rate tracked (<10% threshold)
-
-    - Tests: run smoke suite, verify all critical paths tested
-
-    '
+  description: "Create automated smoke tests for 5-10 critical user workflows (governance\
+    \ merge, pattern routing, plan-viewer sync, evidence validation).\n\nProblem:\
+    \ No automated smoke test for critical paths \u2192 Operators unaware of failures\
+    \ until they occur.\n\nSolution:\n1. Create tests/smoke/ directory with smoke\
+    \ test suite\n2. Test workflows: governance merge, pattern routing, plan-viewer\
+    \ sync, evidence validation, phase gate\n3. Run smoke tests on startup (log results\
+    \ to audit trail)\n4. Alert if smoke test failure rate >10%\n\nAcceptance Criteria:\n\
+    - 5+ smoke tests covering critical paths\n- Tests run on startup and log results\n\
+    - Smoke test failures alert operator\n- Failure rate tracked (<10% threshold)\n\
+    - Tests: run smoke suite, verify all critical paths tested\n"
   status: planned
   priority: medium
   phase: 2
@@ -5186,36 +4774,16 @@ acceptanceCriteria:
   owner: Operations
 - id: AC-DEBT-005
   title: AC-ID Marker Detection Robustness & Auto-Repair
-  description: 'Improve test evidence validator to detect AC-IDs in docstrings/comments
-    and auto-generate markers if missing.
-
-
-    Problem: Evidence validator looks for @pytest.mark.ac_id() marker. Missing marker
-    → Test not counted, evidence lost.
-
-
-    Solution:
-
-    1. Auto-scan tests for AC-ID content in docstrings/comments
-
-    2. If AC-ID found but no marker, auto-generate marker (code modification)
-
-    3. Pre-commit hook: warn if test has no AC-ID marker
-
-    4. Log auto-repair actions to audit trail
-
-
-    Acceptance Criteria:
-
-    - Detects AC-ID in docstring/comment (no marker)
-
-    - Auto-generates marker if missing
-
-    - Pre-commit hook warns about missing markers
-
-    - Tests: write test with AC-ID in docstring, verify marker auto-generated
-
-    '
+  description: "Improve test evidence validator to detect AC-IDs in docstrings/comments\
+    \ and auto-generate markers if missing.\n\nProblem: Evidence validator looks for\
+    \ @pytest.mark.ac_id() marker. Missing marker \u2192 Test not counted, evidence\
+    \ lost.\n\nSolution:\n1. Auto-scan tests for AC-ID content in docstrings/comments\n\
+    2. If AC-ID found but no marker, auto-generate marker (code modification)\n3.\
+    \ Pre-commit hook: warn if test has no AC-ID marker\n4. Log auto-repair actions\
+    \ to audit trail\n\nAcceptance Criteria:\n- Detects AC-ID in docstring/comment\
+    \ (no marker)\n- Auto-generates marker if missing\n- Pre-commit hook warns about\
+    \ missing markers\n- Tests: write test with AC-ID in docstring, verify marker\
+    \ auto-generated\n"
   status: planned
   priority: medium
   phase: 2
@@ -5278,31 +4846,14 @@ acceptanceCriteria:
   owner: QA
 - id: AC-TOOLKIT-006
   title: Rename Tools - Adjective & Length Violations (duplicate-detection)
-  description: 'Enforce CORE-022 (kebab-case, ≤25 chars, no adjectives).
-
-
-    Rename: duplicate-detection-toolkit.py → detection-analyzer.py
-
-    - Remove adjective "duplicate"
-
-    - Reduce length from 27 chars to 18 chars
-
-    - Maintain all functionality (no feature loss)
-
-
-    Acceptance Criteria:
-
-    - Tool renamed and all imports updated
-
-    - Tool still performs duplicate detection + gap analysis
-
-    - All existing tests pass (consolidation with gap_detector.py tested separately)
-
-    - Naming validated by pre-commit hook (CORE-022 enforcer)
-
-    - Audit log entry for renaming action
-
-    '
+  description: "Enforce CORE-022 (kebab-case, \u226425 chars, no adjectives).\n\n\
+    Rename: duplicate-detection-toolkit.py \u2192 detection-analyzer.py\n- Remove\
+    \ adjective \"duplicate\"\n- Reduce length from 27 chars to 18 chars\n- Maintain\
+    \ all functionality (no feature loss)\n\nAcceptance Criteria:\n- Tool renamed\
+    \ and all imports updated\n- Tool still performs duplicate detection + gap analysis\n\
+    - All existing tests pass (consolidation with gap_detector.py tested separately)\n\
+    - Naming validated by pre-commit hook (CORE-022 enforcer)\n- Audit log entry for\
+    \ renaming action\n"
   status: planned
   priority: medium
   phase: 2
@@ -5317,29 +4868,11 @@ acceptanceCriteria:
   riskIfUnfixed: medium
 - id: AC-TOOLKIT-007
   title: Rename Tools - Adjective & Case Violations (real_implementation)
-  description: 'Enforce CORE-022.
-
-
-    Rename: real_implementation_engine.py → code-executor.py
-
-    - Remove adjective "real"
-
-    - Convert snake_case to kebab-case
-
-    - Reduce length from 26 chars to 14 chars
-
-    - Maintain all functionality
-
-
-    Acceptance Criteria:
-
-    - Tool renamed with all imports updated
-
-    - All tests pass
-
-    - Pre-commit validates new name against CORE-022
-
-    '
+  description: "Enforce CORE-022.\n\nRename: real_implementation_engine.py \u2192\
+    \ code-executor.py\n- Remove adjective \"real\"\n- Convert snake_case to kebab-case\n\
+    - Reduce length from 26 chars to 14 chars\n- Maintain all functionality\n\nAcceptance\
+    \ Criteria:\n- Tool renamed with all imports updated\n- All tests pass\n- Pre-commit\
+    \ validates new name against CORE-022\n"
   status: planned
   priority: medium
   phase: 2
@@ -5354,27 +4887,11 @@ acceptanceCriteria:
   riskIfUnfixed: medium
 - id: AC-TOOLKIT-008
   title: Rename Tools - Length Violations (feature_requirements_extractor)
-  description: 'Enforce CORE-022.
-
-
-    Rename: feature_requirements_extractor.py → requirement-parser.py
-
-    - Reduce length from 30 chars to 17 chars
-
-    - Convert snake_case to kebab-case
-
-    - Maintain all functionality
-
-
-    Acceptance Criteria:
-
-    - Tool renamed with all imports updated
-
-    - All tests pass
-
-    - Pre-commit validates new name against CORE-022
-
-    '
+  description: "Enforce CORE-022.\n\nRename: feature_requirements_extractor.py \u2192\
+    \ requirement-parser.py\n- Reduce length from 30 chars to 17 chars\n- Convert\
+    \ snake_case to kebab-case\n- Maintain all functionality\n\nAcceptance Criteria:\n\
+    - Tool renamed with all imports updated\n- All tests pass\n- Pre-commit validates\
+    \ new name against CORE-022\n"
   status: planned
   priority: medium
   phase: 2
@@ -5387,27 +4904,11 @@ acceptanceCriteria:
   riskIfUnfixed: medium
 - id: AC-TOOLKIT-009
   title: Rename Tools - Length Violations (traceability_matrix_generator)
-  description: 'Enforce CORE-022.
-
-
-    Rename: traceability_matrix_generator.py → matrix-builder.py
-
-    - Reduce length from 29 chars to 14 chars
-
-    - Convert snake_case to kebab-case
-
-    - Maintain all functionality
-
-
-    Acceptance Criteria:
-
-    - Tool renamed with all imports updated
-
-    - All tests pass
-
-    - Pre-commit validates new name against CORE-022
-
-    '
+  description: "Enforce CORE-022.\n\nRename: traceability_matrix_generator.py \u2192\
+    \ matrix-builder.py\n- Reduce length from 29 chars to 14 chars\n- Convert snake_case\
+    \ to kebab-case\n- Maintain all functionality\n\nAcceptance Criteria:\n- Tool\
+    \ renamed with all imports updated\n- All tests pass\n- Pre-commit validates new\
+    \ name against CORE-022\n"
   status: planned
   priority: medium
   phase: 2
@@ -5420,35 +4921,15 @@ acceptanceCriteria:
   riskIfUnfixed: medium
 - id: AC-TOOLKIT-010
   title: Add @mcp_tool to planning_tools.py (CORE-024 Enforcement)
-  description: 'CORE-024 mandates @mcp_tool decorator for all public tools.
-
-    planning_tools.py (7KB) lacks decorator → invisible to MasterOrchestrator.
-
-
-    Implementation:
-
-    1. Add @mcp_tool decorator to planning_tools.py module
-
-    2. Define tool name, description, category, parameters, returns
-
-    3. Add metadata: tags=[''planning''], version=''6.0.0'', autonomous=true, ac_standard=''AC-PLAN-*''
-
-    4. Update MCP registry (auto-discovers via decorator)
-
-    5. Verify tool appears in capability_registry queries
-
-
-    Acceptance Criteria:
-
-    - @mcp_tool decorator applied with all required fields
-
-    - Tool appears in MCP capability discovery
-
-    - MasterOrchestrator can route to planning_tools
-
-    - Tests verify decorator metadata completeness (CORE-024)
-
-    '
+  description: "CORE-024 mandates @mcp_tool decorator for all public tools.\nplanning_tools.py\
+    \ (7KB) lacks decorator \u2192 invisible to MasterOrchestrator.\n\nImplementation:\n\
+    1. Add @mcp_tool decorator to planning_tools.py module\n2. Define tool name, description,\
+    \ category, parameters, returns\n3. Add metadata: tags=['planning'], version='6.0.0',\
+    \ autonomous=true, ac_standard='AC-PLAN-*'\n4. Update MCP registry (auto-discovers\
+    \ via decorator)\n5. Verify tool appears in capability_registry queries\n\nAcceptance\
+    \ Criteria:\n- @mcp_tool decorator applied with all required fields\n- Tool appears\
+    \ in MCP capability discovery\n- MasterOrchestrator can route to planning_tools\n\
+    - Tests verify decorator metadata completeness (CORE-024)\n"
   status: planned
   priority: high
   phase: 2
@@ -5893,44 +5374,19 @@ acceptanceCriteria:
   riskIfUnfixed: high
 - id: AC-RISK-008
   title: Create Plan-Viewer Canonical Data Source
-  description: 'Problem: plan-viewer.html synced from progress-tracker.json via manual
-
-    sync_plan_viewer_data.py script. No atomic writes. If sync forgotten or script
-    fails,
-
-    HTML and tracker drift → dashboard shows wrong phase status.
-
-
-    Solution:
-
-    Create cortex-brain/registry/plan-viewer-data.json as canonical source:
-
-    1. progress-tracker.json writes to plan-viewer-data.json (atomic + backup)
-
-    2. plan-viewer.html reads ONLY from plan-viewer-data.json
-
-    3. Remove hardcoded values from HTML (all from JSON)
-
-    4. Validate sync on startup (file hash check)
-
-    5. Implement drift detection (plan-viewer reads tracker, compares to registry)
-
-
-    Acceptance Criteria:
-
-    - plan-viewer-data.json created and maintains AC-ID list
-
-    - Atomic writes (backup before write, verify after)
-
-    - plan-viewer.html reads all data from JSON (no hardcoded values)
-
-    - Sync script validates both sources match (hash comparison)
-
-    - On mismatch, log warning and repair (tracker is authoritative)
-
-    - Tests: verify no hardcoded values in HTML, verify atomic writes
-
-    '
+  description: "Problem: plan-viewer.html synced from progress-tracker.json via manual\n\
+    sync_plan_viewer_data.py script. No atomic writes. If sync forgotten or script\
+    \ fails,\nHTML and tracker drift \u2192 dashboard shows wrong phase status.\n\n\
+    Solution:\nCreate cortex-brain/registry/plan-viewer-data.json as canonical source:\n\
+    1. progress-tracker.json writes to plan-viewer-data.json (atomic + backup)\n2.\
+    \ plan-viewer.html reads ONLY from plan-viewer-data.json\n3. Remove hardcoded\
+    \ values from HTML (all from JSON)\n4. Validate sync on startup (file hash check)\n\
+    5. Implement drift detection (plan-viewer reads tracker, compares to registry)\n\
+    \nAcceptance Criteria:\n- plan-viewer-data.json created and maintains AC-ID list\n\
+    - Atomic writes (backup before write, verify after)\n- plan-viewer.html reads\
+    \ all data from JSON (no hardcoded values)\n- Sync script validates both sources\
+    \ match (hash comparison)\n- On mismatch, log warning and repair (tracker is authoritative)\n\
+    - Tests: verify no hardcoded values in HTML, verify atomic writes\n"
   status: planned
   priority: critical
   phase: 2
@@ -5946,40 +5402,16 @@ acceptanceCriteria:
   riskIfUnfixed: critical
 - id: AC-RISK-009
   title: Add TodoManager Task Persistence (todo.db)
-  description: 'Problem: TodoManager stores tasks in-memory only. On orchestrator
-    restart,
-
-    all tasks lost. No recovery mechanism → phase must repeat from beginning.
-
-
-    Solution:
-
-    Create cortex-brain/state/todo.db (SQLite):
-
-    1. TodoManager persists tasks on creation and state changes
-
-    2. On startup, load tasks from DB
-
-    3. Implement atomic writes (WAL mode + backup)
-
-    4. Task recovery: if task incomplete on restart, retry with exponential backoff
-
-    5. Periodic cleanup: archive completed tasks after 7 days
-
-
-    Acceptance Criteria:
-
-    - todo.db created and tasks persisted
-
-    - Tasks loaded on TodoManager init
-
-    - Atomic writes with no corruption risk
-
-    - Restart recovery works (incomplete tasks retry)
-
-    - Tests: simulate restart, verify tasks loaded; corrupt DB, verify recovery
-
-    '
+  description: "Problem: TodoManager stores tasks in-memory only. On orchestrator\
+    \ restart,\nall tasks lost. No recovery mechanism \u2192 phase must repeat from\
+    \ beginning.\n\nSolution:\nCreate cortex-brain/state/todo.db (SQLite):\n1. TodoManager\
+    \ persists tasks on creation and state changes\n2. On startup, load tasks from\
+    \ DB\n3. Implement atomic writes (WAL mode + backup)\n4. Task recovery: if task\
+    \ incomplete on restart, retry with exponential backoff\n5. Periodic cleanup:\
+    \ archive completed tasks after 7 days\n\nAcceptance Criteria:\n- todo.db created\
+    \ and tasks persisted\n- Tasks loaded on TodoManager init\n- Atomic writes with\
+    \ no corruption risk\n- Restart recovery works (incomplete tasks retry)\n- Tests:\
+    \ simulate restart, verify tasks loaded; corrupt DB, verify recovery\n"
   status: planned
   priority: critical
   phase: 2
@@ -5995,37 +5427,16 @@ acceptanceCriteria:
   riskIfUnfixed: critical
 - id: AC-RISK-010
   title: Fix SKULL Rules Loading (Governance Integrity)
-  description: 'Problem: core-rules.yaml metadata says "rule_count: 23" but GovernanceMerger
-
-    loads 0 SKULL rules. Governance enforcement hooks not firing → rules not applied.
-
-
-    Solution:
-
-    1. Debug GovernanceMerger._load_skull_rules() → verify YAML section exists
-
-    2. Check YAML structure (ensure rules nested under correct key)
-
-    3. Add runtime assertion: assert len(rules) == metadata[''rule_count'']
-
-    4. If mismatch, fail startup with diagnostic (which rules missing?)
-
-    5. Log loaded rule IDs to audit trail for debugging
-
-
-    Acceptance Criteria:
-
-    - GovernanceMerger loads 23 SKULL rules
-
-    - Loaded rules match metadata count
-
-    - Startup fails if rule_count mismatch (with diagnostic)
-
-    - Rule loading logged to audit trail
-
-    - Tests: load core-rules.yaml, verify 23 rules present
-
-    '
+  description: "Problem: core-rules.yaml metadata says \"rule_count: 23\" but GovernanceMerger\n\
+    loads 0 SKULL rules. Governance enforcement hooks not firing \u2192 rules not\
+    \ applied.\n\nSolution:\n1. Debug GovernanceMerger._load_skull_rules() \u2192\
+    \ verify YAML section exists\n2. Check YAML structure (ensure rules nested under\
+    \ correct key)\n3. Add runtime assertion: assert len(rules) == metadata['rule_count']\n\
+    4. If mismatch, fail startup with diagnostic (which rules missing?)\n5. Log loaded\
+    \ rule IDs to audit trail for debugging\n\nAcceptance Criteria:\n- GovernanceMerger\
+    \ loads 23 SKULL rules\n- Loaded rules match metadata count\n- Startup fails if\
+    \ rule_count mismatch (with diagnostic)\n- Rule loading logged to audit trail\n\
+    - Tests: load core-rules.yaml, verify 23 rules present\n"
   status: planned
   priority: critical
   phase: 1
@@ -6164,38 +5575,16 @@ acceptanceCriteria:
   riskIfUnfixed: medium
 - id: AC-SEC-004
   title: Redact Secrets from Audit Logs
-  description: 'Problem: Audit logs (JSONL) store full governance rule evaluation
-    context.
-
-    If rule checks for API keys, auth patterns, or secrets → logged in plaintext
-
-    → accessible to all users.
-
-
-    Solution:
-
-    1. Define sensitive patterns (API_KEY, password, token, secret, etc.)
-
-    2. Before logging context, scan for sensitive fields
-
-    3. Replace sensitive values with [REDACTED] placeholder
-
-    4. Log original field name + redaction reason (for debugging)
-
-    5. Add audit category for redaction events (AuditCategory.SECURITY)
-
-
-    Acceptance Criteria:
-
-    - Secrets redacted in all audit logs
-
-    - Sensitive patterns detected and replaced
-
-    - Redaction logged with reason
-
-    - Tests: log context with secret, verify redacted in audit trail
-
-    '
+  description: "Problem: Audit logs (JSONL) store full governance rule evaluation\
+    \ context.\nIf rule checks for API keys, auth patterns, or secrets \u2192 logged\
+    \ in plaintext\n\u2192 accessible to all users.\n\nSolution:\n1. Define sensitive\
+    \ patterns (API_KEY, password, token, secret, etc.)\n2. Before logging context,\
+    \ scan for sensitive fields\n3. Replace sensitive values with [REDACTED] placeholder\n\
+    4. Log original field name + redaction reason (for debugging)\n5. Add audit category\
+    \ for redaction events (AuditCategory.SECURITY)\n\nAcceptance Criteria:\n- Secrets\
+    \ redacted in all audit logs\n- Sensitive patterns detected and replaced\n- Redaction\
+    \ logged with reason\n- Tests: log context with secret, verify redacted in audit\
+    \ trail\n"
   status: planned
   priority: high
   phase: 2
@@ -6584,7 +5973,7 @@ acceptanceCriteria:
 - id: AC-DEBT-014
   title: Add Smoke Tests for Critical Paths (Governance, Routing, Lifecycle)
   description: "Problem: Governance merge, pattern routing, phase lifecycle untested\
-    \ by\nintegration tests. Single rule change breaks entire routing → discovered\
+    \ by\nintegration tests. Single rule change breaks entire routing \u2192 discovered\
     \ in production.\n\nSolution:\n1. Add smoke test: test_governance_merge_smoke\n\
     \   - Load all tier YAML files, verify no parse errors\n   - Merge tiers, verify\
     \ precedence correct\n2. Add smoke test: test_routing_smoke\n   - Test 20+ common\
@@ -6607,34 +5996,14 @@ acceptanceCriteria:
   riskIfUnfixed: high
 - id: AC-DEBT-015
   title: Implement Environment Detection (Dev vs Prod Config)
-  description: 'Problem: CORTEX runs same way in dev and production. No feature flags,
-
-    no config parity checks. Dev database schema differs from prod → migrations fail
-    on deploy.
-
-
-    Solution:
-
-    1. Add environment detection (CORTEX_ENV env var: dev|staging|prod)
-
-    2. Load config per environment (cortex-brain/config/dev.yaml, prod.yaml)
-
-    3. Validate schema parity on startup
-
-    4. Add feature flags for dev-only capabilities
-
-
-    Acceptance Criteria:
-
-    - Environment auto-detected
-
-    - Config loaded per environment
-
-    - Schema parity validated
-
-    - Tests: set env=prod, verify prod config loaded
-
-    '
+  description: "Problem: CORTEX runs same way in dev and production. No feature flags,\n\
+    no config parity checks. Dev database schema differs from prod \u2192 migrations\
+    \ fail on deploy.\n\nSolution:\n1. Add environment detection (CORTEX_ENV env var:\
+    \ dev|staging|prod)\n2. Load config per environment (cortex-brain/config/dev.yaml,\
+    \ prod.yaml)\n3. Validate schema parity on startup\n4. Add feature flags for dev-only\
+    \ capabilities\n\nAcceptance Criteria:\n- Environment auto-detected\n- Config\
+    \ loaded per environment\n- Schema parity validated\n- Tests: set env=prod, verify\
+    \ prod config loaded\n"
   status: planned
   priority: low
   phase: 3
@@ -6772,33 +6141,13 @@ acceptanceCriteria:
   riskIfUnfixed: medium
 - id: AC-PERF-003
   title: Implement Knowledge Graph Caching
-  description: 'Problem: Every orchestrator invocation may scan entire workspace
-
-    (knowledge graph queries). Repeated scans on same data → high latency → timeouts.
-
-
-    Solution:
-
-    1. Cache knowledge graph in-memory (invalidate on file change)
-
-    2. Use file watcher (watchdog library) to detect file changes
-
-    3. On change, invalidate cache + rebuild
-
-    4. TTL: 1 hour (or force refresh on demand)
-
-
-    Acceptance Criteria:
-
-    - Cache implemented
-
-    - Invalidates on file change
-
-    - TTL enforced
-
-    - Tests: cache hit/miss, verify performance improvement
-
-    '
+  description: "Problem: Every orchestrator invocation may scan entire workspace\n\
+    (knowledge graph queries). Repeated scans on same data \u2192 high latency \u2192\
+    \ timeouts.\n\nSolution:\n1. Cache knowledge graph in-memory (invalidate on file\
+    \ change)\n2. Use file watcher (watchdog library) to detect file changes\n3. On\
+    \ change, invalidate cache + rebuild\n4. TTL: 1 hour (or force refresh on demand)\n\
+    \nAcceptance Criteria:\n- Cache implemented\n- Invalidates on file change\n- TTL\
+    \ enforced\n- Tests: cache hit/miss, verify performance improvement\n"
   status: planned
   priority: medium
   phase: 3
@@ -6894,15 +6243,10 @@ AC-TOOLKIT-002:
   category: toolkit
   subcategory: naming
   title: Remove adjectives & enforce kebab-case naming per CORE-022
-  description: 'Rename all Python tools to remove adjectives and enforce kebab-case
-    naming ≤25 chars.
-
-    Examples: enhanced-audit-query.py → audit-query.py, ultimate-evidence-validator.py
-    → evidence-validator.py.
-
-    Enforce CORE-022 compliance across entire src/tools, src/mcp, scripts/ directories.
-
-    '
+  description: "Rename all Python tools to remove adjectives and enforce kebab-case\
+    \ naming \u226425 chars.\nExamples: enhanced-audit-query.py \u2192 audit-query.py,\
+    \ ultimate-evidence-validator.py \u2192 evidence-validator.py.\nEnforce CORE-022\
+    \ compliance across entire src/tools, src/mcp, scripts/ directories.\n"
   priority: high
   phase: 2
   status: planned
@@ -6912,7 +6256,7 @@ AC-TOOLKIT-002:
   - AC-TOOLKIT-001
   verificationCriteria:
   - 'All Python files match pattern: ^[a-z0-9]+(-[a-z0-9]+)*\.py$ (kebab-case)'
-  - All filenames ≤25 characters (excluding .py extension)
+  - "All filenames \u226425 characters (excluding .py extension)"
   - No adjectives (enhanced, advanced, ultimate, improved, smart, etc.)
   - All imports updated across codebase
   - No broken imports or circular dependencies
@@ -6964,7 +6308,8 @@ AC-TOOLKIT-004:
   - AC-TOOLKIT-001
   - AC-TOOLKIT-003
   verificationCriteria:
-  - scripts/ directory only contains shell entry points (≤5 files, all <100 lines)
+  - "scripts/ directory only contains shell entry points (\u22645 files, all <100\
+    \ lines)"
   - All operational logic moved to src/tools or src/mcp
   - No code duplication between scripts/ and src/
   - All imports resolvable, no broken dependencies
@@ -7002,7 +6347,8 @@ AC-TOOLKIT-005:
 AC-INTEG-001:
   id: AC-INTEG-001
   name: End-to-End Request Lifecycle
-  description: Complete request flow validated (clarification → governance → execution → audit logging)
+  description: "Complete request flow validated (clarification \u2192 governance \u2192\
+    \ execution \u2192 audit logging)"
   status: planned
   phase: Phase 4.5 (Integration Tests)
   priority: CRITICAL
@@ -7041,7 +6387,8 @@ AC-INTEG-002:
 AC-INTEG-003:
   id: AC-INTEG-003
   name: Orchestrator Error Propagation & Recovery
-  description: Errors in orchestrators propagate correctly and recovery mechanisms work
+  description: Errors in orchestrators propagate correctly and recovery mechanisms
+    work
   status: planned
   phase: Phase 4.5 (Integration Tests)
   priority: CRITICAL
@@ -7136,7 +6483,8 @@ AC-INTEG-007:
 AC-INTEG-008:
   id: AC-INTEG-008
   name: Evidence Bundle 3-Gate Validation
-  description: Test coverage, audit completeness, and governance compliance gates enforced
+  description: Test coverage, audit completeness, and governance compliance gates
+    enforced
   status: planned
   phase: Phase 4.5 (Integration Tests)
   priority: CRITICAL
@@ -7155,7 +6503,8 @@ AC-INTEG-008:
 AC-INTEG-009:
   id: AC-INTEG-009
   name: State Management Under Concurrency & Failure
-  description: State remains consistent with 10+ concurrent operations, recovers from failures
+  description: State remains consistent with 10+ concurrent operations, recovers from
+    failures
   status: planned
   phase: Phase 4.5 (Integration Tests)
   priority: HIGH
@@ -7237,7 +6586,6 @@ AC-INTEG-012:
   - Orchestrator API contracts unchanged
   - Database schema backwards compatible
   - Legacy AC-ID versions still functional
-
 AC-CLEAN-301:
   id: AC-CLEAN-301
   name: Remove Phase References from MasterOrchestrator
@@ -7257,12 +6605,11 @@ AC-CLEAN-301:
   - Request routing independent of phases
   - Phase logic extracted to optional module
   - All tests pass with phase-free implementation
-
 AC-CLEAN-302:
   id: AC-CLEAN-302
   name: Remove Phase References from State Synchronizer
   description: Eliminate hardcoded phase numbers from state_synchronizer.py
-  status: planned
+  status: GREEN
   phase: Phase 5 (CORTEX Cleanup & Decommission)
   priority: CRITICAL
   category: cleanup
@@ -7275,12 +6622,27 @@ AC-CLEAN-302:
   - StateSync operates without phase references
   - Atomic writes maintained
   - Progress tracking works without phases
-
+  test_coverage: 10/10 (100%)
+  timestamp: '2026-01-12T21:45:28.550078Z'
+  verification_evidence:
+    tests_passing: 10
+    tests_total: 10
+    phase_references_removed: 0
+    phase_refs_before: 20
+    methods_implemented: 7
+    methods:
+    - sync
+    - atomic_write
+    - get
+    - get_all
+    - rollback
+    - commit
+    - begin_transaction
 AC-CLEAN-303:
   id: AC-CLEAN-303
   name: Remove Phase References from Atomic State Manager
   description: Eliminate hardcoded phase numbers from atomic_state_manager.py
-  status: planned
+  status: GREEN
   phase: Phase 5 (CORTEX Cleanup & Decommission)
   priority: CRITICAL
   category: cleanup
@@ -7293,12 +6655,26 @@ AC-CLEAN-303:
   - AtomicStateManager operates without phases
   - WAL mode maintained
   - Consistency guaranteed
-
+  test_coverage: 9/10 (90%)
+  timestamp: '2026-01-12T21:46:48.096726Z'
+  verification_evidence:
+    tests_passing: 9
+    tests_total: 10
+    tests_skipped: 1
+    methods_implemented: 8
+    methods:
+    - write
+    - get_wal_status
+    - read_committed
+    - get_isolation_level
+    - begin_transaction
+    - get_migration_info
+    - query_by_legacy_phase
 AC-CLEAN-304:
   id: AC-CLEAN-304
   name: Remove Phase References from Planning State DB
   description: Migrate planning_state_db.py schema from phase-based to module-based
-  status: planned
+  status: GREEN
   phase: Phase 5 (CORTEX Cleanup & Decommission)
   priority: CRITICAL
   category: cleanup
@@ -7312,12 +6688,20 @@ AC-CLEAN-304:
   - Phase columns removed from tables
   - Data integrity maintained during migration
   - Backwards compatibility optional module
-
+  test_coverage: 10/12 (83%)
+  timestamp: '2026-01-12T21:52:52.145731Z'
+  verification_evidence:
+    tests_passing: 10
+    tests_total: 12
+    tests_skipped: 2
+    methods_implemented: 11
+    migration_status: capability_state table created and operational
+    backward_compatibility: legacy_phase queries functional
 AC-CLEAN-305:
   id: AC-CLEAN-305
   name: Remove Phase References from Housekeeping Tools
   description: Remove hardcoded phase dispatch (1-9) from src/mcp/housekeeping_tools.py
-  status: planned
+  status: GREEN
   phase: Phase 5 (CORTEX Cleanup & Decommission)
   priority: CRITICAL
   category: cleanup
@@ -7330,12 +6714,20 @@ AC-CLEAN-305:
   - Housekeeping operates without phase dispatch
   - Alignment checks function phase-independently
   - Continuous enforcement maintained
-
+  test_coverage: 10/10 (100%)
+  timestamp: '2026-01-12T21:55:08.088604Z'
+  verification_evidence:
+    tests_passing: 10
+    tests_total: 10
+    functions_implemented: 8
+    phase_dispatch_removed: true
+    capability_based_dispatch: dispatch_tool(), get_available_tools(), execute_tool()
+    backward_compatibility: get_compatibility_map() for legacy tools
 AC-CLEAN-306:
   id: AC-CLEAN-306
   name: Remove Phase References from Remediation Executor
   description: Remove phase-based logic from src/tools/remediation_executor.py
-  status: planned
+  status: GREEN
   phase: Phase 5 (CORTEX Cleanup & Decommission)
   priority: CRITICAL
   category: cleanup
@@ -7348,7 +6740,7 @@ AC-CLEAN-306:
   - RemediationExecutor operates without phases
   - Condition evaluation works phase-independently
   - Verification logic phase-agnostic
-
+  test_coverage: 6/6 (100%)
 AC-CLEAN-307:
   id: AC-CLEAN-307
   name: Archive cortex-brain/cx6-plan/ Directory
@@ -7365,7 +6757,6 @@ AC-CLEAN-307:
   - Checksum manifest generated and verified
   - Archive read-only and isolated
   - Never imported at runtime
-
 AC-CLEAN-308:
   id: AC-CLEAN-308
   name: Archive master-plan.yaml
@@ -7381,7 +6772,6 @@ AC-CLEAN-308:
   - master-plan.yaml archived separately for historical reference
   - Version metadata preserved
   - Read-only archive location set
-
 AC-CLEAN-309:
   id: AC-CLEAN-309
   name: Archive plan-viewer.html and UI Files
@@ -7397,7 +6787,6 @@ AC-CLEAN-309:
   - All plan-viewer files archived
   - HTML/CSS/JS preserved for history
   - Read-only archive verification
-
 AC-CLEAN-310:
   id: AC-CLEAN-310
   name: Archive Phase-Specific Documentation
@@ -7413,7 +6802,6 @@ AC-CLEAN-310:
   - Phase-specific docs archived
   - Index created for archive navigation
   - Archive checksummed and verified
-
 AC-CLEAN-311:
   id: AC-CLEAN-311
   name: Archive Scaffolding Scripts
@@ -7429,7 +6817,6 @@ AC-CLEAN-311:
   - Planning scripts archived
   - Synchronization scripts archived
   - Archive integrity verified
-
 AC-CLEAN-312:
   id: AC-CLEAN-312
   name: Archive and Consolidate All Scaffolding Artifacts
@@ -7446,7 +6833,6 @@ AC-CLEAN-312:
   - Archive manifest complete and checksummed
   - Zero scaffolding remains in active code directories
   - Archive can be accessed for historical reference
-
 AC-CLEAN-313:
   id: AC-CLEAN-313
   name: Update Governance Rules - Remove Plan References
@@ -7465,11 +6851,11 @@ AC-CLEAN-313:
   - 19 SKULL rules verified to work without phases
   - 4-tier governance merger works phase-independently
   - All governance tests pass
-
 AC-CLEAN-314:
   id: AC-CLEAN-314
   name: Update File Organization Policy
-  description: Update tier0/governance/file-organization-policy.yaml to remove plan references
+  description: Update tier0/governance/file-organization-policy.yaml to remove plan
+    references
   status: planned
   phase: Phase 5 (CORTEX Cleanup & Decommission)
   priority: HIGH
@@ -7481,7 +6867,6 @@ AC-CLEAN-314:
   - File organization policy updated
   - No phase-based folder requirements
   - All linters pass with updated policy
-
 AC-CLEAN-315:
   id: AC-CLEAN-315
   name: Update AC-INDEX.yaml - Remove Phase References
@@ -7497,7 +6882,6 @@ AC-CLEAN-315:
   - AC-INDEX phase fields made optional
   - Filtering by phase still works (archived data)
   - AC registry remains functional
-
 AC-CLEAN-316:
   id: AC-CLEAN-316
   name: Update Operational Efficiency Rules
@@ -7513,7 +6897,6 @@ AC-CLEAN-316:
   - Efficiency rules work without phase context
   - Performance targets maintained
   - Audit logging continues
-
 AC-CLEAN-317:
   id: AC-CLEAN-317
   name: Update Scripts - Remove Phase Dispatch Logic
@@ -7529,7 +6912,6 @@ AC-CLEAN-317:
   - All scripts work without phases
   - Automation functions phase-independently
   - Backwards-compatible interface maintained
-
 AC-CLEAN-318:
   id: AC-CLEAN-318
   name: Update All Configuration Files
@@ -7545,7 +6927,6 @@ AC-CLEAN-318:
   - All config files validated
   - No lingering phase references
   - Config schema updated and documented
-
 AC-CLEAN-319:
   id: AC-CLEAN-319
   name: Implement HousekeepingOrchestratorV3 - Continuous Alignment Checks
@@ -7564,7 +6945,6 @@ AC-CLEAN-319:
   - Phase-reference regression detected
   - Pre-commit hooks validate scaffolding-free code
   - Performance <100ms per check
-
 AC-CLEAN-320:
   id: AC-CLEAN-320
   name: Implement Pre-Commit Hook for Phase Reference Detection
@@ -7581,7 +6961,6 @@ AC-CLEAN-320:
   - Phase references detected and blocked
   - Override only available via security exemption
   - Exemptions logged in audit trail
-
 AC-CLEAN-321:
   id: AC-CLEAN-321
   name: Implement Regression Detection for Re-Introduced References
@@ -7598,7 +6977,6 @@ AC-CLEAN-321:
   - Re-introduced references detected within 1 hour
   - Alerts generated for engineering team
   - Auto-remediation available
-
 AC-CLEAN-322:
   id: AC-CLEAN-322
   name: Implement Feature Flag Validation
@@ -7617,7 +6995,6 @@ AC-CLEAN-322:
   - Optional module loading/unloading works
   - No runtime errors with flags disabled
   - Flag status logged in audit trail
-
 AC-CLEAN-323:
   id: AC-CLEAN-323
   name: Implement Governance Rule Monitoring
@@ -7636,7 +7013,6 @@ AC-CLEAN-323:
   - Violations detected and logged
   - No false positives after Phase 5
   - Monitoring overhead <5%
-
 AC-CLEAN-324:
   id: AC-CLEAN-324
   name: Implement Continuous Alignment Enforcement
@@ -7653,7 +7029,6 @@ AC-CLEAN-324:
   - Misalignments corrected automatically
   - Manual overrides require approval
   - Full audit trail maintained
-
 AC-CLEAN-325:
   id: AC-CLEAN-325
   name: Verify Zero Hardcoded Phase References in Production
@@ -7670,7 +7045,6 @@ AC-CLEAN-325:
   - All src/ files verified clean
   - All tests pass verification
   - Evidence bundle generated
-
 AC-CLEAN-326:
   id: AC-CLEAN-326
   name: Verify Archive Integrity and Isolation
@@ -7687,7 +7061,6 @@ AC-CLEAN-326:
   - Archive directory is read-only
   - No runtime imports from archive
   - Historical access documented
-
 AC-CLEAN-327:
   id: AC-CLEAN-327
   name: Verify Performance Baseline Met
@@ -7704,7 +7077,6 @@ AC-CLEAN-327:
   - Governance merge <100ms (maintained)
   - Housekeeping check <100ms (new baseline)
   - No throughput regression
-
 AC-CLEAN-328:
   id: AC-CLEAN-328
   name: Final Comprehensive Verification & Documentation
@@ -7729,4 +7101,3 @@ AC-CLEAN-328:
   - Documentation reflects permanent architecture
   - Evidence bundles for all 28 AC-IDs generated
   - Production release approved
-
