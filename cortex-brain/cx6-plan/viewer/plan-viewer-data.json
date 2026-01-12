@@ -1,69 +1,84 @@
 {
   "plan_metadata": {
     "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
-    "version": "1.4.0",
-    "updated": "2026-01-12T22:15:49.358831+00:00",
-    "total_ac_ids": 28,
-    "updated_by": "sync_plan_viewer_holistic",
-    "total_tests": 109,
-    "tests_passing": 109,
-    "overall_pass_rate": "109/109 (100%)"
+    "total_ac_ids": 102,
+    "completed_ac_ids": 47,
+    "in_progress_ac_ids": -4,
+    "version": "1.3.0",
+    "updated": "2026-01-12T22:20:53.737714+00:00",
+    "status": "phase_5_complete"
   },
   "phases": [
     {
       "id": 1,
       "name": "Foundation Enhancement",
-      "ac_ids_total": 29,
-      "ac_ids": [
-        "AC-AUDIT-001",
-        "AC-AUDIT-002",
-        "AC-AUDIT-003",
-        "AC-AUDIT-004",
-        "AC-AUDIT-005",
-        "AC-AUDIT-006",
+      "completion_percentage": 75,
+      "ac_ids_complete": 6,
+      "ac_ids_total": 8,
+      "status": "completed",
+      "description": "Build core infrastructure (Audit, Governance, State, Lifecycle, Evidence, Security)",
+      "verified_implemented": [
         "AC-AUDIT-007",
-        "AC-GOV-001",
-        "AC-GOV-002",
-        "AC-GOV-003",
-        "AC-GOV-004",
-        "AC-GOV-005",
-        "AC-STATE-001",
-        "AC-STATE-002",
-        "AC-STATE-003",
+        "AC-SYNC-001",
         "AC-LIFECYCLE-001",
-        "AC-LIFECYCLE-002",
-        "AC-LIFECYCLE-003",
         "AC-EVIDENCE-001",
         "AC-EVIDENCE-002",
-        "AC-EVIDENCE-003",
-        "AC-SECURITY-001",
-        "AC-SECURITY-002",
-        "AC-SECURITY-003",
-        "AC-SECURITY-004",
-        "AC-SECURITY-005",
-        "AC-SECURITY-006",
-        "AC-SECURITY-007",
-        "AC-SECURITY-008"
+        "AC-EVIDENCE-003"
       ],
-      "tests_total": 0,
-      "tests_passing": 0,
-      "pass_rate": "0/0",
-      "completion_percentage": 0,
-      "status": "planned"
+      "capabilities": [
+        {
+          "id": "AC-AUDIT-007",
+          "name": "AC-AUDIT-007",
+          "description": ""
+        },
+        {
+          "id": "AC-SYNC-001",
+          "name": "AC-SYNC-001",
+          "description": ""
+        },
+        {
+          "id": "AC-LIFECYCLE-001",
+          "name": "AC-LIFECYCLE-001",
+          "description": ""
+        },
+        {
+          "id": "AC-EVIDENCE-001",
+          "name": "AC-EVIDENCE-001",
+          "description": ""
+        },
+        {
+          "id": "AC-EVIDENCE-002",
+          "name": "AC-EVIDENCE-002",
+          "description": ""
+        },
+        {
+          "id": "AC-EVIDENCE-003",
+          "name": "AC-EVIDENCE-003",
+          "description": ""
+        }
+      ]
+    },
+    {
+      "id": 1.5,
+      "name": "STS as Capability 0",
+      "completion_percentage": 33,
+      "ac_ids_complete": 1,
+      "ac_ids_total": 3,
+      "status": "completed",
+      "description": "Validate orchestration framework with Golden Corpus"
     },
     {
       "id": 2,
       "name": "Orchestration Core",
-      "ac_ids_total": 46,
-      "ac_ids": [
+      "completion_percentage": 56,
+      "ac_ids_complete": 17,
+      "ac_ids_total": 13,
+      "status": "in_progress",
+      "description": "MasterOrchestrator, TodoManager, TDD-Master, Planning v5",
+      "verified_implemented": [
         "AC-ORCH-001",
-        "AC-ORCH-002",
-        "AC-ORCH-003",
-        "AC-ORCH-004",
-        "AC-ORCH-005",
         "AC-ORCH-006",
         "AC-ORCH-007",
-        "AC-ORCH-008",
         "AC-TODO-001",
         "AC-TODO-002",
         "AC-TODO-003",
@@ -73,164 +88,143 @@
         "AC-TDD-003",
         "AC-TDD-004",
         "AC-TDD-005",
-        "AC-TDD-006",
-        "AC-TDD-007",
-        "AC-TDD-008",
-        "AC-TDD-009",
-        "AC-TDD-010",
         "AC-PLAN-001",
         "AC-PLAN-002",
         "AC-PLAN-003",
         "AC-PLAN-004",
-        "AC-PLAN-005",
-        "AC-PLAN-006",
-        "AC-PLAN-007",
-        "AC-PLAN-008",
-        "AC-TEMPLATE-001",
-        "AC-TEMPLATE-002",
-        "AC-TEMPLATE-003",
-        "AC-TEMPLATE-004",
-        "AC-TEMPLATE-005",
-        "AC-TEMPLATE-006",
-        "AC-TEMPLATE-007",
-        "AC-TEMPLATE-008",
-        "AC-ROUTE-001",
-        "AC-ROUTE-002",
-        "AC-ROUTE-003",
-        "AC-ROUTE-004",
-        "AC-ROUTE-005",
-        "AC-STS-001",
-        "AC-STS-002",
-        "AC-STS-003"
+        "AC-PLAN-005"
       ],
-      "tests_total": 0,
-      "tests_passing": 0,
-      "pass_rate": "0/0",
-      "completion_percentage": 0,
-      "status": "planned"
+      "capabilities": [
+        {
+          "id": "AC-ORCH-001",
+          "name": "AC-ORCH-001",
+          "description": ""
+        },
+        {
+          "id": "AC-ORCH-006",
+          "name": "AC-ORCH-006",
+          "description": ""
+        },
+        {
+          "id": "AC-ORCH-007",
+          "name": "AC-ORCH-007",
+          "description": ""
+        },
+        {
+          "id": "AC-TODO-001",
+          "name": "AC-TODO-001",
+          "description": ""
+        },
+        {
+          "id": "AC-TODO-002",
+          "name": "AC-TODO-002",
+          "description": ""
+        },
+        {
+          "id": "AC-TODO-003",
+          "name": "AC-TODO-003",
+          "description": ""
+        },
+        {
+          "id": "AC-TODO-004",
+          "name": "AC-TODO-004",
+          "description": ""
+        },
+        {
+          "id": "AC-TDD-001",
+          "name": "AC-TDD-001",
+          "description": ""
+        },
+        {
+          "id": "AC-TDD-002",
+          "name": "AC-TDD-002",
+          "description": ""
+        },
+        {
+          "id": "AC-TDD-003",
+          "name": "AC-TDD-003",
+          "description": ""
+        },
+        {
+          "id": "AC-TDD-004",
+          "name": "AC-TDD-004",
+          "description": ""
+        },
+        {
+          "id": "AC-TDD-005",
+          "name": "AC-TDD-005",
+          "description": ""
+        },
+        {
+          "id": "AC-PLAN-001",
+          "name": "AC-PLAN-001",
+          "description": ""
+        },
+        {
+          "id": "AC-PLAN-002",
+          "name": "AC-PLAN-002",
+          "description": ""
+        },
+        {
+          "id": "AC-PLAN-003",
+          "name": "AC-PLAN-003",
+          "description": ""
+        },
+        {
+          "id": "AC-PLAN-004",
+          "name": "AC-PLAN-004",
+          "description": ""
+        },
+        {
+          "id": "AC-PLAN-005",
+          "name": "AC-PLAN-005",
+          "description": ""
+        }
+      ]
     },
     {
       "id": 3,
-      "name": "Feature Orchestrators",
-      "ac_ids_total": 27,
-      "ac_ids": [
-        "AC-ADO-001",
-        "AC-ADO-002",
-        "AC-ADO-003",
-        "AC-ADO-004",
-        "AC-ADO-005",
-        "AC-ADO-006",
-        "AC-VAC-001",
-        "AC-VAC-002",
-        "AC-VAC-003",
-        "AC-CLEAN-001",
-        "AC-CLEAN-002",
-        "AC-CLEAN-003",
-        "AC-CLEAN-201",
-        "AC-CLEAN-202",
-        "AC-INV-001",
-        "AC-INV-002",
-        "AC-INV-003",
-        "AC-SAN-001",
-        "AC-SAN-002",
-        "AC-REF-001",
-        "AC-REF-002",
-        "AC-CRAWLER-001",
-        "AC-CRAWLER-002",
-        "AC-CRAWLER-003",
-        "AC-ROLLOUT-SIMPLE-001",
-        "AC-ROLLOUT-SIMPLE-002",
-        "AC-ROLLOUT-SIMPLE-003"
-      ],
-      "tests_total": 0,
-      "tests_passing": 0,
-      "pass_rate": "0/0",
+      "name": "Feature Orchestrators + Onboarding",
       "completion_percentage": 0,
-      "status": "planned"
+      "ac_ids_complete": 0,
+      "ac_ids_total": 23,
+      "status": "planned",
+      "description": "",
+      "verified_implemented": [],
+      "capabilities": []
     },
     {
       "id": 4,
       "name": "Intelligence Layer",
-      "ac_ids_total": 5,
-      "ac_ids": [
-        "AC-ROUTE-003",
-        "AC-KNOW-001",
-        "AC-KNOW-002",
-        "AC-KNOW-003",
-        "AC-VISION-001"
-      ],
-      "tests_total": 0,
-      "tests_passing": 0,
-      "pass_rate": "0/0",
       "completion_percentage": 0,
-      "status": "planned"
+      "ac_ids_complete": 8,
+      "ac_ids_total": 8,
+      "status": "planned",
+      "description": "",
+      "verified_implemented": [],
+      "capabilities": []
     },
     {
       "id": 5,
-      "name": "Cleanup & Decommission",
-      "ac_ids_total": 28,
-      "ac_ids": [
-        "AC-CLEAN-301",
-        "AC-CLEAN-302",
-        "AC-CLEAN-303",
-        "AC-CLEAN-304",
-        "AC-CLEAN-305",
-        "AC-CLEAN-306",
-        "AC-CLEAN-307",
-        "AC-CLEAN-308",
-        "AC-CLEAN-309",
-        "AC-CLEAN-310",
-        "AC-CLEAN-311",
-        "AC-CLEAN-312",
-        "AC-CLEAN-313",
-        "AC-CLEAN-314",
-        "AC-CLEAN-315",
-        "AC-CLEAN-316",
-        "AC-CLEAN-317",
-        "AC-CLEAN-318",
-        "AC-CLEAN-319",
-        "AC-CLEAN-320",
-        "AC-CLEAN-321",
-        "AC-CLEAN-322",
-        "AC-CLEAN-323",
-        "AC-CLEAN-324",
-        "AC-CLEAN-325",
-        "AC-CLEAN-326",
-        "AC-CLEAN-327",
-        "AC-CLEAN-328"
-      ],
-      "tests_total": 109,
-      "tests_passing": 109,
-      "pass_rate": "109/109",
+      "name": "Legacy Migration",
+      "completion_percentage": 0,
+      "ac_ids_complete": 3,
+      "ac_ids_total": 3,
+      "status": "planned",
+      "description": "",
+      "verified_implemented": [],
+      "capabilities": []
+    },
+    {
+      "id": 4.5,
+      "name": "Phase 4.5: Orchestrator Integration & Audit Validation Suite",
       "completion_percentage": 100,
-      "status": "completed"
-    }
-  ],
-  "phase_summary": {
-    "phase_1": {
-      "status": "planned",
-      "acs": 29,
-      "completion": "0%"
-    },
-    "phase_2": {
-      "status": "planned",
-      "acs": 46,
-      "completion": "0%"
-    },
-    "phase_3": {
-      "status": "planned",
-      "acs": 27,
-      "completion": "0%"
-    },
-    "phase_4": {
-      "status": "planned",
-      "acs": 5,
-      "completion": "0%"
-    },
-    "phase_5": {
+      "ac_ids_complete": 12,
+      "ac_ids_total": 12,
       "status": "completed",
-      "acs": 28,
-      "completion": "100%"
+      "description": "End-to-end testing framework validating all orchestrators",
+      "verified_implemented": [],
+      "capabilities": []
     }
-  }
+  ]
 }
