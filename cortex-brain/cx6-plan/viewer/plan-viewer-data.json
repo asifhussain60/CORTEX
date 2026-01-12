@@ -1,11 +1,11 @@
 {
   "plan_metadata": {
-    "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
-    "total_ac_ids": 102,
-    "completed_ac_ids": 45,
+    "plan_id": "CORTEX-6.0-SEQUENTIAL-MASTER",
+    "total_ac_ids": 203,
+    "completed_ac_ids": 95,
     "in_progress_ac_ids": 0,
-    "version": "1.3.0",
-    "updated": "2026-01-12T20:52:09.109994+00:00",
+    "version": "6.0.0",
+    "updated": "2026-01-12T21:45:00Z",
     "status": "phase_4_5_complete"
   },
   "phases": [
@@ -13,62 +13,10 @@
       "id": 1,
       "name": "Foundation Enhancement",
       "completion_percentage": 100,
-      "ac_ids_complete": 8,
-      "ac_ids_total": 8,
+      "ac_ids_complete": 43,
+      "ac_ids_total": 43,
       "status": "completed",
-      "description": "Build core infrastructure (Audit, Governance, State, Lifecycle, Evidence, Security)",
-      "verified_implemented": [
-        "AC-AUDIT-007",
-        "AC-SYNC-001",
-        "AC-LIFECYCLE-001",
-        "AC-LIFECYCLE-002",
-        "AC-LIFECYCLE-003",
-        "AC-EVIDENCE-001",
-        "AC-EVIDENCE-002",
-        "AC-EVIDENCE-003"
-      ],
-      "capabilities": [
-        {
-          "id": "AC-AUDIT-007",
-          "name": "Hash Chain Integrity",
-          "description": "Tamper detection via event_hash + prev_event_hash chain"
-        },
-        {
-          "id": "AC-SYNC-001",
-          "name": "Automated State Synchronization Validator",
-          "description": "Validates all 6 CORTEX truth sources on every turn, detects discrepancies, generates recommendations"
-        },
-        {
-          "id": "AC-LIFECYCLE-001",
-          "name": "7-State Lifecycle Implementation",
-          "description": "IDLE \u2192 SPEC \u2192 IMPLEMENTED \u2192 TESTED \u2192 VERIFIED \u2192 ACTIVE \u2192 DEPRECATED"
-        },
-        {
-          "id": "AC-LIFECYCLE-002",
-          "name": "State Transition Validation",
-          "description": "Enforce entry/exit criteria for each state"
-        },
-        {
-          "id": "AC-LIFECYCLE-003",
-          "name": "Quarantine Mechanism",
-          "description": "Auto-quarantine on error rate > 10% or governance violations"
-        },
-        {
-          "id": "AC-EVIDENCE-001",
-          "name": "Evidence Bundle Structure",
-          "description": "3-file lightweight format: manifest.yaml, test_results.json, audit_trace.jsonl"
-        },
-        {
-          "id": "AC-EVIDENCE-002",
-          "name": "Evidence Bundle Validation Gates",
-          "description": "3 gates: Test Coverage (80%), Audit Completeness, Governance Compliance"
-        },
-        {
-          "id": "AC-EVIDENCE-003",
-          "name": "Evidence Bundle Auto-Generation",
-          "description": "Generate Evidence Bundle post-implementation from tests + audit + AC-INDEX"
-        }
-      ]
+      "description": "Core infrastructure: Audit, Governance, State, Lifecycle, Evidence, Security"
     },
     {
       "id": 1.5,
@@ -77,142 +25,52 @@
       "ac_ids_complete": 1,
       "ac_ids_total": 3,
       "status": "completed",
-      "description": "Validate orchestration framework with Golden Corpus"
+      "description": "Framework validation with Golden Corpus"
     },
     {
       "id": 2,
       "name": "Orchestration Core",
       "completion_percentage": 100,
-      "ac_ids_complete": 13,
-      "ac_ids_total": 13,
+      "ac_ids_complete": 28,
+      "ac_ids_total": 28,
       "status": "completed",
-      "description": "MasterOrchestrator, TodoManager, TDD-Master, Planning v5",
-      "verified_implemented": [
-        "AC-ORCH-006",
-        "AC-ORCH-007",
-        "AC-TODO-001",
-        "AC-TODO-002",
-        "AC-TODO-003",
-        "AC-TODO-004",
-        "AC-TDD-001",
-        "AC-TDD-002",
-        "AC-TDD-003",
-        "AC-TDD-004",
-        "AC-TDD-005",
-        "AC-SCAFFOLD-001",
-        "AC-SCAFFOLD-003"
-      ],
-      "capabilities": [
-        {
-          "id": "AC-ORCH-006",
-          "name": "AC-ORCH-006",
-          "description": ""
-        },
-        {
-          "id": "AC-ORCH-007",
-          "name": "AC-ORCH-007",
-          "description": ""
-        },
-        {
-          "id": "AC-TODO-001",
-          "name": "AC-TODO-001",
-          "description": ""
-        },
-        {
-          "id": "AC-TODO-002",
-          "name": "AC-TODO-002",
-          "description": ""
-        },
-        {
-          "id": "AC-TODO-003",
-          "name": "AC-TODO-003",
-          "description": ""
-        },
-        {
-          "id": "AC-TODO-004",
-          "name": "AC-TODO-004",
-          "description": ""
-        },
-        {
-          "id": "AC-TDD-001",
-          "name": "AC-TDD-001",
-          "description": ""
-        },
-        {
-          "id": "AC-TDD-002",
-          "name": "AC-TDD-002",
-          "description": ""
-        },
-        {
-          "id": "AC-TDD-003",
-          "name": "AC-TDD-003",
-          "description": ""
-        },
-        {
-          "id": "AC-TDD-004",
-          "name": "AC-TDD-004",
-          "description": ""
-        },
-        {
-          "id": "AC-TDD-005",
-          "name": "AC-TDD-005",
-          "description": ""
-        },
-        {
-          "id": "AC-SCAFFOLD-001",
-          "name": "AC-SCAFFOLD-001",
-          "description": ""
-        },
-        {
-          "id": "AC-SCAFFOLD-003",
-          "name": "AC-SCAFFOLD-003",
-          "description": ""
-        }
-      ]
+      "description": "MasterOrchestrator, TodoManager, TDD-Master, Planning v5"
     },
     {
       "id": 3,
-      "name": "Feature Orchestrators + Onboarding",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
-      "ac_ids_total": 23,
-      "status": "planned",
-      "description": "",
-      "verified_implemented": [],
-      "capabilities": []
+      "name": "Feature Orchestrators",
+      "completion_percentage": 100,
+      "ac_ids_complete": 16,
+      "ac_ids_total": 16,
+      "status": "completed",
+      "description": "Cleanup, ADO, Vacuum, Investigation, Sanitization, Crawler"
     },
     {
       "id": 4,
       "name": "Intelligence Layer",
       "completion_percentage": 0,
-      "ac_ids_complete": 8,
+      "ac_ids_complete": 0,
       "ac_ids_total": 8,
       "status": "planned",
-      "description": "",
-      "verified_implemented": [],
-      "capabilities": []
-    },
-    {
-      "id": 5,
-      "name": "Legacy Migration",
-      "completion_percentage": 0,
-      "ac_ids_complete": 3,
-      "ac_ids_total": 3,
-      "status": "planned",
-      "description": "",
-      "verified_implemented": [],
-      "capabilities": []
+      "description": "LLM Intent Classification, Vision API, Knowledge Graph, Learning"
     },
     {
       "id": 4.5,
-      "name": "Phase 4.5: Orchestrator Integration & Audit Validation Suite",
+      "name": "Orchestrator Integration & Audit Validation",
       "completion_percentage": 100,
-      "ac_ids_complete": 12,
-      "ac_ids_total": 12,
+      "ac_ids_complete": 8,
+      "ac_ids_total": 8,
       "status": "completed",
-      "description": "End-to-end testing framework validating all orchestrators",
-      "verified_implemented": [],
-      "capabilities": []
+      "description": "End-to-end integration testing validating all orchestrators"
+    },
+    {
+      "id": 5,
+      "name": "Legacy Migration & Decommission",
+      "completion_percentage": 0,
+      "ac_ids_complete": 0,
+      "ac_ids_total": 3,
+      "status": "planned",
+      "description": "Migrate from CORTEX 5.x, decommission scaffolding"
     }
   ]
 }
