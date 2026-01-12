@@ -104,19 +104,27 @@ For each issue:
 - **Minimal robust recommendation**: simplest change within existing architecture
 - **Verification**: smallest test/experiment to validate the fix
 
-## 4) Stable finding IDs (idempotency)
-Assign each finding a stable ID based on: `<area>-<component>-<risk>-<short-hash>`
-- Example: `reliability-planning-phase-blocking-a1b2`
-- Use component names from CORTEX: `governance`, `planning`, `tdd`, `ado`, `audit`, `todo`, `master`, `routing`
-- Risk categories: `corruption`, `blocking`, `drift`, `race`, `leak`, `exposure`, `timeout`, `retry`
-Ensure the same underlying issue maps to the same ID on reruns.
+## 4) Generate AC-IDs (not finding IDs)
+All brittleness findings MUST be converted to proper AC-IDs that flow through the governance-to-todo pipeline.
 
-**CORTEX-specific ID patterns:**
-- Encoding: `data-yaml-encoding-corruption-{hash}`
-- State: `state-tracker-sync-drift-{hash}`
-- Governance: `governance-tier0-blocking-{hash}`
-- Testing: `testing-evidence-gap-{hash}`
-- Orchestration: `orchestration-{orchestrator}-{issue}-{hash}`
+**AC-ID Format:** `AC-<CATEGORY>-<NNN>`
+- Examples: `AC-BRITTLE-001`, `AC-RISK-005`, `AC-DEBT-012`
+- Categories: `BRITTLE` (brittleness/fragility), `RISK` (runtime failure risks), `DEBT` (technical debt), `SEC` (security issues)
+- Sequential numbering: Query AC-INDEX.yaml to find highest existing number in category, increment by 1
+
+**Category Mapping (brittleness type → AC category):**
+- Encoding/corruption/data integrity → `AC-BRITTLE-*`
+- Concurrency/race conditions/state loss → `AC-RISK-*`
+- Missing tests/validation gaps/observability → `AC-DEBT-*`
+- Security/secrets/exposure → `AC-SEC-*`
+- Governance/blocking/hardcoded assumptions → `AC-RISK-*`
+
+**Why AC-IDs (not finding IDs)?**
+- Single tracking system (no parallel workflows outside governance)
+- Flows through MasterOrchestrator → TodoManager → progress-tracker.json
+- Test evidence required (CORE-019 TDD enforcement)
+- Audit trail via EnterpriseAuditLogger
+- Phase assignment and prioritization automatic
 
 ---
 
@@ -137,23 +145,26 @@ Use these sections:
 - **Assumptions Challenged** (what defaults seem risky, hidden dependencies)
 
 Each issue should be bullets with: 
-- **ID** (stable identifier)
-- **Severity** (Critical/High/Medium/Low)
+- **AC-ID** (generated identifier, e.g., AC-BRITTLE-015)
+- **Title** (capability-focused, e.g., "YAML encoding repair mechanism")
+- **Priority** (critical|high|medium|low)
 - **What fails** (runtime manifestation)
 - **Where** (file paths, components)
-- **Impact** (data loss, outage, corruption, exposure)
-- **Minimal fix** (smallest change, no architecture expansion)
-- **Verification** (test/experiment to validate)
+- **Risk if unfixed** (data loss, outage, corruption, exposure)
+- **Implementation** (minimal-impact fix, no architecture expansion)
+- **Verification** (test strategy to validate fix)
+- **Phase** (which phase implements this: 1/2/3/4)
 
 **CORTEX-specific analysis focus:**
 - Evidence-based completion tracking (test passing vs metadata claims)
 - Governance rule precedence conflicts (T0 vs T1 vs T2 vs T3)
 - Orchestrator lifecycle state machine gaps (7 states: PENDING → COMPLETE)
 - Progress tracker sync failures (tracker → plan-viewer-data.json → HTML)
-- AC-ID validation chain breaks (AC-INDEX → progress-tracker → evidence bundles)
+- AC-ID validation chain integrity (AC-INDEX → TodoManager → progress-tracker → evidence)
 
-## B) Update payload for `#file:cortex-exec.prompt.md`
-Produce a single YAML (or JSON) object with:
+## B) AC-ID entries for `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml`
+Produce AC-ID entries ready for direct insertion into AC-INDEX.yaml:
+
 - `runMeta`: 
   - `date` (ISO 8601)
   - `reviewer` (agent name or human)
@@ -161,45 +172,52 @@ Produce a single YAML (or JSON) object with:
   - `scopePaths` (list of directories searched)
   - `cortexVersion` (e.g., "6.0.0")
   - `phaseContext` (current phase from progress-tracker.json)
-- `findings[]`: array of finding objects keyed by `id`
-- `findings[].fields`:
-  - `title` (concise, actionable)
-  - `category` (from brittleness analysis categories)
-  - `severity` (Critical/High/Medium/Low)
-  - `impact` (data loss/outage/corruption/exposure/degradation)
-  - `likelihood` (High/Medium/Low based on production realities)
+  - `nextAvailableIDs`: Map of category → next sequential number (e.g., BRITTLE: 15, RISK: 8)
+- `acceptanceCriteria[]`: array of AC-ID objects matching AC-INDEX.yaml schema
+- `acceptanceCriteria[].fields`:
+  - `id` (AC-<CATEGORY>-<NNN>, e.g., AC-BRITTLE-015)
+  - `title` (concise, capability-focused, e.g., "YAML encoding corruption repair")
+  - `description` (detailed acceptance criteria - what "done" means)
+  - `status` (planned|in_progress|implemented|validated - default: planned)
+  - `priority` (critical|high|medium|low)
+  - `phase` (1|2|3|4 - which phase implements this)
+  - `category` (brittleness|reliability|security|observability|testing)
+  - `tests` (list of test file paths that validate this AC)
+  - `dependencies` (list of AC-IDs that must complete first)
   - `evidencePaths` (list of repo paths where issue manifests)
-  - `manifestation` (what operators/users observe at runtime)
-  - `detectionGap` (why it may go unnoticed)
-  - `recommendation` (minimal-impact fix, no architecture expansion)
-  - `verification` (smallest test/experiment to validate fix)
-  - `owner` (component owner if inferable; else `TBD`)
-  - `status` (`open|in_progress|mitigated|accepted_risk|wont_fix`)
-  - `lastReviewed` (ISO 8601 date)
-  - `relatedACIDs` (list of AC-IDs impacted, if applicable)
-  - `regressionRisk` (None/Low/Medium/High - risk of fix breaking existing behavior)
+  - `riskIfUnfixed` (Critical/High/Medium/Low severity)
+  - `implementation` (minimal-impact fix description)
+  - `verification` (how to test/validate the fix)
+  - `estimatedEffort` (hours or story points)
+  - `owner` (component owner if inferable; else TBD)
 - `rollup`: 
-  - `countBySeverity` (Critical/High/Medium/Low counts)
-  - `countByCategory` (category name → count)
-  - `countByStatus` (status → count)
-  - `topRiskAreas` (list of components with most Critical/High findings)
-- `nextActions[]`: ordered list of day-zero implementation tasks
-  - `action` (description)
-  - `priority` (P0/P1/P2/P3)
-  - `estimatedEffort` (hours or days)
-  - `blockedBy` (list of finding IDs that must be resolved first)
+  - `countByPriority` (critical|high|medium|low counts)
+  - `countByCategory` (brittleness|reliability|security|observability counts)
+  - `countByPhase` (Phase 1/2/3/4 counts)
+  - `topRiskAreas` (list of components with most critical/high AC-IDs)
+  - `totalEstimatedEffort` (sum of estimated hours)
+- `implementationPlan[]`: ordered list of AC-IDs for day-zero fixes
+  - `acID` (the AC-ID to implement)
+  - `title` (from AC-ID entry)
+  - `priority` (critical|high|medium|low)
+  - `estimatedEffort` (hours)
+  - `dependencies` (list of AC-IDs that must complete first)
+  - `phase` (which phase implements this)
   - `owner` (if inferable)
 
-**CORTEX-specific payload fields:**
-- `phaseImpact`: Which phases are blocked by this finding (Phase 1/2/3/4)
-- `governanceTier`: Which governance tier is affected (T0/T1/T2/T3)
-- `testEvidence`: Whether finding has test reproduction (true/false)
-- `automationPotential`: Can fix be automated via script (true/false)
+**Integration with Governance Pipeline:**
+1. AC-IDs generated by this prompt append to AC-INDEX.yaml
+2. MasterOrchestrator reads AC-INDEX.yaml via GovernanceMerger
+3. TodoManager creates tasks for AC-IDs with status=planned
+4. TDD-Master enforces test-first implementation (CORE-019)
+5. Completion tracked in progress-tracker.json with test evidence
+6. Audit trail logged via EnterpriseAuditLogger
 
-The payload must be designed so it can be merged into the existing record without creating duplicates:
-- If `id` exists, treat this as an update (refresh fields, add to history if status changed)
-- If new, append to findings array
-- Sort findings by severity (Critical → High → Medium → Low) and then by category
+The AC-IDs must be appended to AC-INDEX.yaml (no duplicates):
+- Query existing AC-IDs in category to get next sequential number
+- If AC-ID exists, treat as update (refresh description, status, tests)
+- If new, append to acceptanceCriteria array
+- Sort by category, then by number within category
 
 Do not include any code/config blocks; only descriptive text.
 
@@ -259,5 +277,41 @@ Before completing the analysis, verify these CORTEX 6-specific patterns:
 
 ---
 
+---
+
+# AC-ID Generation Workflow
+
+When producing brittleness review output:
+
+1. **Query AC-INDEX.yaml** for highest existing AC-ID number in each category:
+   - `grep "^  - id: AC-BRITTLE-" cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml | tail -1`
+   - Extract number, increment by 1 for next AC-ID
+
+2. **Generate AC-ID entries** matching AC-INDEX.yaml schema:
+   - Required fields: id, title, description, status, priority, phase, category, tests
+   - Optional fields: dependencies, evidencePaths, estimatedEffort, owner
+
+3. **Append to AC-INDEX.yaml** (do not modify existing entries):
+   - Insert new AC-IDs at end of acceptanceCriteria array
+   - Update schema metadata: total_ac_count, last_updated
+
+4. **Update progress-tracker.json** to reference new AC-IDs:
+   - Add AC-IDs to appropriate phase's planned_work array
+   - Set initial status to "not_started"
+
+5. **Flow through governance pipeline:**
+   - MasterOrchestrator reads AC-INDEX.yaml via GovernanceMerger
+   - TodoManager creates tasks for new AC-IDs
+   - TDD-Master enforces test-first implementation
+   - Evidence tracked in progress-tracker.json
+
+**Critical Rules:**
+- NEVER create finding IDs or parallel tracking systems
+- ALL brittleness issues MUST become AC-IDs
+- AC-IDs MUST flow through TodoManager (no shortcuts)
+- Test evidence REQUIRED before marking implemented (CORE-019)
+
+---
+
 # Begin the analysis now
-Search across `cortex-brain/cx6-plan/**` and the corresponding implementation and infrastructure. Produce the summary and the idempotent update payload.
+Search across `cortex-brain/cx6-plan/**` and the corresponding implementation and infrastructure. Produce the summary and AC-ID entries ready for AC-INDEX.yaml append.
