@@ -23,6 +23,10 @@ from .todo_orchestrator import TodoOrchestrator
 from .governance_merger import GovernanceMerger
 from ..state_manager import StateManager
 from ..audit_logger import get_audit_logger, AuditCategory
+from ..phase_boundary_cleanup import (
+    PhaseBoundaryCleanup,
+    CleanupEvidenceBundle
+)
 
 
 @dataclass
@@ -436,3 +440,73 @@ class MasterOrchestrator:
                 result={},
                 error=str(e)
             )
+    
+    def complete_phase(self, phase_number: int) -> CleanupEvidenceBundle:
+        """
+        Complete a phase with cleanup (AC-CLEAN-201 Integration)
+        
+        When a phase completes, this method:
+        1. Executes phase-boundary cleanup to remove artifacts
+        2. Generates audit trail of cleanup operations
+        3. Blocks phase transition if cleanup fails
+        4. Returns evidence bundle with full cleanup details
+        
+        Args:
+            phase_number: Phase number (1-4) being completed
+            
+        Returns:
+            CleanupEvidenceBundle with cleanup operation details
+            
+        Raises:
+            ValueError: If phase_number is invalid
+            Exception: If cleanup fails and cannot be recovered
+        """
+        if not isinstance(phase_number, int) or phase_number < 1 or phase_number > 4:
+            raise ValueError(f"Invalid phase_number: {phase_number}. Must be 1-4.")
+        
+        try:
+            # Initialize cleanup orchestrator with workspace root
+            cleanup = PhaseBoundaryCleanup(self.workspace_root)
+            
+            # Execute phase-boundary cleanup
+            self.logger.info(
+                category=AuditCategory.EXECUTION,
+                component='master_orchestrator',
+                operation='complete_phase',
+                message=f'Starting phase {phase_number} cleanup',
+                context={'phase_number': phase_number}
+            )
+            
+            evidence_bundle = cleanup.cleanup_phase_artifacts(phase_number)
+            
+            # Log cleanup completion
+            self.logger.info(
+                category=AuditCategory.EXECUTION,
+                component='master_orchestrator',
+                operation='complete_phase',
+                message=f'Phase {phase_number} cleanup complete',
+                context={
+                    'phase_number': phase_number,
+                    'files_deleted': evidence_bundle.total_files_deleted,
+                    'bytes_freed': evidence_bundle.total_bytes_freed,
+                    'status': evidence_bundle.status
+                }
+            )
+            
+            return evidence_bundle
+            
+        except Exception as e:
+            # Log cleanup failure - this blocks phase transition
+            self.logger.error(
+                category=AuditCategory.EXECUTION,
+                component='master_orchestrator',
+                operation='complete_phase',
+                message=f'Phase {phase_number} cleanup failed: {e}',
+                context={
+                    'phase_number': phase_number,
+                    'error': str(e)
+                }
+            )
+            
+            # Re-raise to block phase transition
+            raise

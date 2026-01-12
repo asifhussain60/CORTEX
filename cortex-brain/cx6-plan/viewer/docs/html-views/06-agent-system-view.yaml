@@ -1,0 +1,407 @@
+schema_version: "1.0"
+view_id: "agent-system"
+view_name: "CORTEX Agent System - Specialist Agents"
+priority: 6
+status: "approved"
+last_updated: "2026-01-12"
+
+theme:
+  base_reference: "plan-viewer.html"
+  inherit_css_variables: true
+  agent_colors:
+    strategic: "#7b2cbf"
+    operational: "#00d4ff"
+    tactical: "#f59e0b"
+    governance: "#ef4444"
+
+navigation:
+  back_link:
+    text: "← Back to Plan Viewer"
+    href: "../plan-viewer.html"
+  breadcrumb: ["CORTEX 6.0", "Architecture", "Agent System"]
+
+content:
+  
+  hero:
+    title: "CORTEX Agent System"
+    subtitle: "9 Specialist Agents with Hemispheric Organization"
+    tagline: "Autonomous agents coordinating across strategic, operational, tactical, and governance domains"
+    
+    key_stats:
+      - label: "Agents"
+        value: "9"
+        description: "Specialist domains"
+      - label: "Hemispheres"
+        value: "4"
+        description: "Strategic, Operational, Tactical, Governance"
+      - label: "Coordination"
+        value: "Master Orchestrator"
+        description: "Central routing and lifecycle"
+  
+  agent_overview:
+    section_title: "9 Specialist Agents"
+    
+    agents:
+      - name: "MasterOrchestrator"
+        description: "Central orchestrator and request router"
+        hemisphere: "GOVERNANCE"
+        color: "#ef4444"
+        icon: "diagram-2"
+        responsibilities:
+          - "Route requests to appropriate agents"
+          - "Manage execution lifecycle"
+          - "Coordinate inter-agent communication"
+          - "Enforce governance rules (SKULL)"
+          - "Update orchestrator registry"
+        
+        integrations:
+          - "Pattern Router (intent classification)"
+          - "Governance Merger (rule precedence)"
+          - "TodoManager (task coordination)"
+      
+      - name: "PlanningOrchestrator v5"
+        description: "Autonomous feature planning with 4-tier routing"
+        hemisphere: "OPERATIONAL"
+        color: "#00d4ff"
+        icon: "card-checklist"
+        responsibilities:
+          - "Parse feature requests"
+          - "Perform pre-planning discovery"
+          - "Tier routing (INSTANT → COMPLEX)"
+          - "Generate markdown plans"
+          - "Track progress in database"
+        
+        integrations:
+          - "Knowledge Graph Query (context discovery)"
+          - "TodoManager (task generation)"
+          - "AST Scanner (code analysis)"
+          - "Duplicate Detector (avoid redundancy)"
+      
+      - name: "TDDMasterOrchestrator"
+        description: "Coordinates planning → TDD workflow"
+        hemisphere: "OPERATIONAL"
+        color: "#00d4ff"
+        icon: "beaker"
+        responsibilities:
+          - "Detect completed plans"
+          - "Transform planning data to TDD context"
+          - "Invoke TDD Orchestrator"
+          - "Validate AC coverage"
+          - "Update dashboard with progress"
+        
+        integrations:
+          - "PlanningOrchestrator (consume plans)"
+          - "TDDOrchestrator (delegate work)"
+          - "Code Smell Detector (refactor triggers)"
+      
+      - name: "ADOOrchestratorV2"
+        description: "Azure DevOps work item generation"
+        hemisphere: "OPERATIONAL"
+        color: "#00d4ff"
+        icon: "kanban"
+        responsibilities:
+          - "Create work items (Epic/Feature/Story/Task)"
+          - "Link work items hierarchically"
+          - "Estimate story points (SWAGGER)"
+          - "Validate DoR/DoD"
+          - "Sync with planning output"
+        
+        integrations:
+          - "PlanningOrchestrator (consume AC-IDs)"
+          - "Knowledge Graph (historical estimation)"
+          - "Azure DevOps API"
+      
+      - name: "TDDOrchestrator"
+        description: "Executes RED-GREEN-REFACTOR workflow"
+        hemisphere: "TACTICAL"
+        color: "#f59e0b"
+        icon: "arrow-repeat"
+        responsibilities:
+          - "RED phase: Generate failing tests"
+          - "GREEN phase: Implement minimal code"
+          - "REFACTOR phase: Improve and clean"
+          - "Detect 11 code smells"
+          - "Apply refactoring patterns"
+        
+        integrations:
+          - "TDDMasterOrchestrator (lifecycle)"
+          - "Code Analyzer (smell detection)"
+          - "Test Generator (RED phase)"
+          - "Pattern Library (REFACTOR phase)"
+      
+      - name: "VacuumOrchestratorV2"
+        description: "Deep filesystem cleanup and organization"
+        hemisphere: "TACTICAL"
+        color: "#f59e0b"
+        icon: "trash"
+        responsibilities:
+          - "Detect orphaned files"
+          - "Find duplicate content"
+          - "Safe reorganization"
+          - "Remove dead code"
+          - "Consolidate duplicate logic"
+        
+        integrations:
+          - "File System Walker"
+          - "Duplicate Detector"
+          - "Knowledge Graph (pattern learning)"
+      
+      - name: "InvestigationOrchestrator v2"
+        description: "Autonomous code investigation and analysis"
+        hemisphere: "TACTICAL"
+        color: "#f59e0b"
+        icon: "search"
+        responsibilities:
+          - "Analyze code structure"
+          - "Find root causes of issues"
+          - "Generate investigation reports"
+          - "Suggest fixes"
+        
+        integrations:
+          - "AST Scanner"
+          - "Call Graph Analyzer"
+          - "Knowledge Graph (pattern matching)"
+      
+      - name: "HealthValidator"
+        description: "Epic and system health monitoring"
+        hemisphere: "STRATEGIC"
+        color: "#7b2cbf"
+        icon: "heart-pulse"
+        responsibilities:
+          - "Check epic completion status"
+          - "Validate governance compliance"
+          - "Monitor test coverage"
+          - "Generate health reports"
+          - "Recommend optimizations"
+        
+        integrations:
+          - "Progress Tracker"
+          - "Governance Layer"
+          - "Test Coverage Reporter"
+      
+      - name: "LLMIntentClassifier"
+        description: "Natural language request routing"
+        hemisphere: "STRATEGIC"
+        color: "#7b2cbf"
+        icon: "chat-dots"
+        responsibilities:
+          - "Parse user natural language requests"
+          - "Classify intent with confidence scores"
+          - "Route to appropriate agent"
+          - "Handle ambiguous requests"
+          - "Fallback to user clarification"
+        
+        confidence_thresholds:
+          high_confidence: "≥0.8"
+          medium_confidence: "0.5-0.8"
+          low_confidence: "<0.5"
+        
+        fallback_chain:
+          - "LLM classification"
+          - "Regex pattern matching"
+          - "Ask user for clarification"
+        
+        integrations:
+          - "OpenAI API (or equivalent)"
+          - "Pattern Router (regex fallback)"
+          - "MasterOrchestrator (final routing)"
+  
+  hemispheric_organization:
+    section_title: "4-Hemisphere Organization"
+    
+    diagram:
+      type: "d3_radial_partition"
+      center: "Master Orchestrator"
+      hemispheres:
+        
+        - hemisphere: "GOVERNANCE"
+          color: "#ef4444"
+          position: "TOP"
+          agents:
+            - "Master Orchestrator"
+          purpose: "Enforce rules, coordinate execution"
+          characteristics:
+            - "Immutable decision-making"
+            - "Precedence over all other hemispheres"
+            - "Audit trail mandatory"
+        
+        - hemisphere: "STRATEGIC"
+          color: "#7b2cbf"
+          position: "BOTTOM-RIGHT"
+          agents:
+            - "Health Validator"
+            - "LLM Intent Classifier"
+          purpose: "Long-term planning, high-level decisions"
+          characteristics:
+            - "Natural language understanding"
+            - "System health monitoring"
+            - "Recommendation engine"
+            - "Cross-cutting concerns"
+        
+        - hemisphere: "OPERATIONAL"
+          color: "#00d4ff"
+          position: "RIGHT"
+          agents:
+            - "Planning Orchestrator v5"
+            - "TDD-Master Orchestrator"
+            - "ADO Orchestrator v2"
+          purpose: "Execute planned work, manage workflows"
+          characteristics:
+            - "Planning and estimation"
+            - "Work item management"
+            - "TDD coordination"
+            - "Deterministic outcomes"
+        
+        - hemisphere: "TACTICAL"
+          color: "#f59e0b"
+          position: "BOTTOM-LEFT"
+          agents:
+            - "TDD Orchestrator"
+            - "Vacuum Orchestrator v2"
+            - "Investigation Orchestrator v2"
+          purpose: "Implementation, optimization, maintenance"
+          characteristics:
+            - "Code generation and refactoring"
+            - "Cleanup and organization"
+            - "Bug investigation"
+            - "Incremental improvements"
+    
+    interactions:
+      - "GOVERNANCE ↔ all: Enforce rules before/after execution"
+      - "STRATEGIC → OPERATIONAL: Request evaluation → planning"
+      - "OPERATIONAL → TACTICAL: Delegate implementation"
+      - "TACTICAL → STRATEGIC: Report status, suggest improvements"
+  
+  llm_intent_classifier_detail:
+    section_title: "LLM Intent Classifier Deep Dive"
+    description: "How natural language requests are routed"
+    
+    workflow:
+      type: "mermaid_flowchart"
+      code: |
+        flowchart TD
+          A[User Natural Language Request] --> B[LLM Classification]
+          B --> C{Confidence ≥0.8?}
+          C -->|Yes| D[Route to Agent]
+          C -->|No| E{Confidence ≥0.5?}
+          E -->|Yes| F[Route with Warning]
+          E -->|No| G[Regex Pattern Matching]
+          G --> H{Pattern Match?}
+          H -->|Yes| I[Route via Pattern]
+          H -->|No| J[Ask User for Clarification]
+          J --> K[Human Approval]
+          K --> D
+    
+    confidence_thresholds:
+      - threshold: "≥0.8"
+        action: "Route immediately"
+        example: "'plan feature' routes to PlanningOrchestrator (0.95 confidence)"
+      
+      - threshold: "0.5-0.8"
+        action: "Route with warning banner"
+        example: "'build something' might route to PlanningOrchestrator or TDDOrchestrator"
+      
+      - threshold: "<0.5"
+        action: "Fall back to regex or ask user"
+        example: "'help' is ambiguous, ask what user needs"
+    
+    routing_rules:
+      rules:
+        - pattern: "^(plan|create.*plan|make.*plan)"
+          agent: "PlanningOrchestrator"
+          confidence: 0.95
+        
+        - pattern: "^(implement|build|code|develop)"
+          agent: "TDDOrchestrator"
+          confidence: 0.85
+        
+        - pattern: "^(test|tdd|test.*driven)"
+          agent: "TDDMasterOrchestrator"
+          confidence: 0.9
+        
+        - pattern: "^(clean|vacuum|organize)"
+          agent: "VacuumOrchestrator"
+          confidence: 0.88
+        
+        - pattern: "^(investigate|debug|analyze|find)"
+          agent: "InvestigationOrchestrator"
+          confidence: 0.82
+  
+  inter_agent_communication:
+    section_title: "Inter-Agent Communication"
+    
+    message_flow:
+      type: "mermaid_sequence"
+      code: |
+        sequenceDiagram
+          participant U as User
+          participant M as Master Orchestrator
+          participant I as LLM Intent Classifier
+          participant P as Planning Orchestrator
+          participant T as TDD-Master
+          participant R as TDD Orchestrator
+          
+          U->>M: "implement user login"
+          M->>I: Classify intent
+          I->>M: Planning (0.75 confidence)
+          M->>P: Route with context
+          P->>P: Create plan
+          P->>M: Plan complete (plan-id: PLAN-001)
+          M->>T: Transform to TDD context
+          T->>R: Execute RED-GREEN-REFACTOR
+          R->>T: Phase complete
+          T->>M: Report results
+          M->>U: Execution summary
+
+external_references:
+  - title: "Multi-Agent System Architecture"
+    url: "https://www.youtube.com/watch?v=a0gf9r1r8YQ"
+    description: "Design patterns for agent-based systems (18:30)"
+    embed: true
+    caption: "Context: How CORTEX agents coordinate"
+  
+  - title: "Natural Language Intent Classification"
+    url: "https://www.youtube.com/watch?v=x0AnzYzb8kE"
+    description: "LLM-based intent routing techniques (15:45)"
+    embed: true
+
+interactivity:
+  
+  agent_selector:
+    enabled: true
+    title: "Which Agent Handles Your Request?"
+    
+    input_form:
+      fields:
+        - name: "request"
+          label: "Describe what you want to do"
+          type: "textarea"
+          placeholder: "e.g., 'implement user authentication'"
+      
+      button:
+        text: "Find Agent"
+    
+    output_display:
+      type: "Card showing agent info"
+      show:
+        - "Agent name"
+        - "Hemisphere"
+        - "Confidence level"
+        - "What it will do"
+
+metadata:
+  target_audience: "Architects, power users, CORTEX contributors"
+  reading_time: "8-10 minutes"
+  complexity_level: "Advanced"
+  
+  implementation_references:
+    - path: "src/orchestrators/master_orchestrator.py"
+    - path: "src/orchestrators/pattern_router.py"
+    - path: "src/agents/llm_intent_classifier.py"
+
+accessibility:
+  wcag_level: "AA"
+
+responsive_design:
+  mobile: "Stack hemispheres vertically"
+  desktop: "4-quadrant layout"
