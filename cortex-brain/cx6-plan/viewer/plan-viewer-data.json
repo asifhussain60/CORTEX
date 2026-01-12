@@ -1,46 +1,23 @@
 {
   "plan_metadata": {
     "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
-    "total_ac_ids": 175,
-    "completed_ac_ids": 92,
+    "total_ac_ids": 203,
+    "completed_ac_ids": 78,
     "in_progress_ac_ids": 0,
-    "version": "1.2.0",
-    "updated": "2026-01-12T15:45:41.401663+00:00",
+    "version": "1.4.0",
+    "updated": "2026-01-12T17:58:41.627200+00:00",
     "status": "phases_1_to_5_defined_4.5_integration_tests_added"
   },
   "phases": [
     {
       "id": 1,
       "name": "Foundation Enhancement",
-      "completion_percentage": 75,
-      "ac_ids_complete": 22,
+      "completion_percentage": 0,
+      "ac_ids_complete": 0,
       "ac_ids_total": 29,
-      "status": "in_progress",
+      "status": "planned",
       "description": "Build the core infrastructure that EVERY other component depends on.\nAll orchestrators log to audit, enforce governance, persist state.\nWithout this foundation, nothing else can reliably operate.\n",
-      "verified_implemented": [
-        "AC-AUDIT-001",
-        "AC-AUDIT-002",
-        "AC-AUDIT-003",
-        "AC-AUDIT-004",
-        "AC-AUDIT-005",
-        "AC-AUDIT-006",
-        "AC-AUDIT-007",
-        "AC-EVIDENCE-001",
-        "AC-EVIDENCE-002",
-        "AC-EVIDENCE-003",
-        "AC-GOV-001",
-        "AC-GOV-002",
-        "AC-GOV-003",
-        "AC-GOV-004",
-        "AC-LIFECYCLE-001",
-        "AC-SECURITY-003",
-        "AC-SECURITY-004",
-        "AC-SECURITY-005",
-        "AC-SECURITY-006",
-        "AC-STATE-001",
-        "AC-STATE-002",
-        "AC-STATE-003"
-      ],
+      "verified_implemented": [],
       "capabilities": [
         {
           "ac_id": "AC-SECURITY-001",
@@ -55,22 +32,22 @@
         {
           "ac_id": "AC-SECURITY-003",
           "name": "",
-          "status": "completed"
+          "status": "planned"
         },
         {
           "ac_id": "AC-SECURITY-004",
           "name": "",
-          "status": "completed"
+          "status": "planned"
         },
         {
           "ac_id": "AC-SECURITY-005",
           "name": "",
-          "status": "completed"
+          "status": "planned"
         },
         {
           "ac_id": "AC-SECURITY-006",
           "name": "",
-          "status": "completed"
+          "status": "planned"
         },
         {
           "ac_id": "AC-SECURITY-007",
@@ -262,71 +239,236 @@
     {
       "id": 4.5,
       "name": "Orchestrator Integration & Audit Validation Suite",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
+      "completion_percentage": 100,
+      "ac_ids_complete": 12,
       "ac_ids_total": 12,
-      "status": "planned",
+      "status": "completed",
       "description": "Comprehensive end-to-end testing framework validating all orchestrators work\ntogether correctly. Tests focus on:\n\n1. Cross-component integration scenarios (Phase 1\u21924 orchestrators)\n2. Audit trail completeness and traceability\n3. Evidence bundle generation and validation\n4. State management under concurrent operations\n5. Governance enforcement across all components\n6. Failure recovery and rollback mechanisms\n7. Performance and load scenarios\n\nThis phase proves system correctness by validating audit logs contain\ncomplete provenance for all operations.\n",
-      "verified_implemented": [],
+      "verified_implemented": [
+        "AC-INTEG-001",
+        "AC-INTEG-002",
+        "AC-INTEG-003",
+        "AC-INTEG-004",
+        "AC-INTEG-005",
+        "AC-INTEG-006",
+        "AC-INTEG-007",
+        "AC-INTEG-008",
+        "AC-INTEG-009",
+        "AC-INTEG-010",
+        "AC-INTEG-011",
+        "AC-INTEG-012"
+      ],
       "capabilities": [
         {
           "ac_id": "AC-INTEG-001",
           "name": "End-to-End Request Lifecycle",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-INTEG-002",
           "name": "Multi-Phase Orchestrator Interaction",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-INTEG-003",
           "name": "Orchestrator Error Propagation & Recovery",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-INTEG-004",
           "name": "Audit Trail Completeness Validation",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-INTEG-005",
           "name": "Correlation ID Traceability",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-INTEG-006",
           "name": "Hash Chain Integrity Validation",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-INTEG-007",
           "name": "Evidence Bundle Generation for All AC-IDs",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-INTEG-008",
           "name": "Evidence Bundle 3-Gate Validation",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-INTEG-009",
           "name": "State Management Under Concurrency & Failure",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-INTEG-010",
           "name": "Governance Rule Enforcement Integration",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-INTEG-011",
           "name": "Performance & Load Testing",
-          "status": "planned"
+          "status": "completed"
         },
         {
           "ac_id": "AC-INTEG-012",
           "name": "Regression & Backwards Compatibility",
+          "status": "completed"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "CORTEX Cleanup & Decommission",
+      "completion_percentage": 0,
+      "ac_ids_complete": 0,
+      "ac_ids_total": 28,
+      "status": "planned",
+      "description": "Remove all temporary scaffolding, planning artifacts, and embedded phase-gating logic.\nPost-CORTEX-6.0 decommissioning of construction infrastructure.\nPermanent CORTEX system operates with zero references to planning phases.\n",
+      "verified_implemented": [],
+      "capabilities": [
+        {
+          "ac_id": "AC-CLEAN-301",
+          "name": "Remove Phase References from MasterOrchestrator",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-302",
+          "name": "Remove Phase References from State Synchronizer",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-303",
+          "name": "Remove Phase References from Atomic State Manager",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-304",
+          "name": "Remove Phase References from Planning State DB",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-305",
+          "name": "Remove Phase References from Housekeeping Tools",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-306",
+          "name": "Remove Phase References from Remediation Executor",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-307",
+          "name": "Archive cortex-brain/cx6-plan/ Directory",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-308",
+          "name": "Archive master-plan.yaml",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-309",
+          "name": "Archive plan-viewer.html and UI Files",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-310",
+          "name": "Archive Phase-Specific Documentation",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-311",
+          "name": "Archive Scaffolding Scripts",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-312",
+          "name": "Archive and Consolidate All Scaffolding Artifacts",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-313",
+          "name": "Update Governance Rules - Remove Plan References",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-314",
+          "name": "Update File Organization Policy",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-315",
+          "name": "Update AC-INDEX.yaml - Remove Phase References",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-316",
+          "name": "Update Operational Efficiency Rules",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-317",
+          "name": "Update Scripts - Remove Phase Dispatch Logic",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-318",
+          "name": "Update All Configuration Files",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-319",
+          "name": "Implement HousekeepingOrchestratorV3 - Continuous Alignment Checks",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-320",
+          "name": "Implement Pre-Commit Hook for Phase Reference Detection",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-321",
+          "name": "Implement Regression Detection for Re-Introduced References",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-322",
+          "name": "Implement Feature Flag Validation",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-323",
+          "name": "Implement Governance Rule Monitoring",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-324",
+          "name": "Implement Continuous Alignment Enforcement",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-325",
+          "name": "Verify Zero Hardcoded Phase References in Production",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-326",
+          "name": "Verify Archive Integrity and Isolation",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-327",
+          "name": "Verify Performance Baseline Met",
+          "status": "planned"
+        },
+        {
+          "ac_id": "AC-CLEAN-328",
+          "name": "Final Comprehensive Verification & Documentation",
           "status": "planned"
         }
       ]

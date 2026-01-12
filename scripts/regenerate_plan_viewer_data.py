@@ -73,11 +73,12 @@ def extract_ac_ids_for_phase(master_plan, phase_num):
     # Map phase number to phase key in master-plan
     phase_keys = {
         1: 'phase_1_foundation',
+        1.5: 'phase_1_5_intelligent_discovery',
         2: 'phase_2_orchestration_core',
         3: 'phase_3_feature_orchestrators',
         4: 'phase_4_intelligence',
-        5: 'phase_5_legacy_migration',
-        4.5: 'phase_4_5_integration_tests'
+        4.5: 'phase_4_5_integration_tests',
+        5: 'phase_5_cortex_cleanup_decommission'
     }
     
     phase_key = phase_keys.get(phase_num)
@@ -113,11 +114,12 @@ def get_phase_info(master_plan, phase_num):
     """Get phase metadata from master-plan"""
     phase_keys = {
         1: 'phase_1_foundation',
+        1.5: 'phase_1_5_intelligent_discovery',
         2: 'phase_2_orchestration_core',
         3: 'phase_3_feature_orchestrators',
         4: 'phase_4_intelligence',
-        5: 'phase_5_legacy_migration',
-        4.5: 'phase_4_5_integration_tests'
+        4.5: 'phase_4_5_integration_tests',
+        5: 'phase_5_cortex_cleanup_decommission'
     }
     
     phase_key = phase_keys.get(phase_num)

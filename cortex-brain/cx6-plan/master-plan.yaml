@@ -1,17 +1,17 @@
 plan_metadata:
   plan_id: CORTEX-6.0-SNOWBALL-MASTER
-  version: 1.2.0
+  version: 1.4.0
   created: '2026-01-10T23:50:00Z'
-  updated: '2026-01-12T16:45:00Z'
+  updated: '2026-01-12T21:00:00Z'
   author: Asif Hussain
-  strategy: Snowball Implementation
-  philosophy: Infrastructure-first compound growth
+  strategy: Snowball Implementation + Permanent Decommission
+  philosophy: Build for operation; decommission construction scaffolding
   design_score: 97
-  total_weeks: 10
-  total_ac_ids: 137
+  total_weeks: 13.5
+  total_ac_ids: 184
   hybrid_approach: true
   gpt_influence: 70% rigor, 30% overhead
-  latest_addition: Phase 4.5 - Orchestrator Integration & Audit Validation Suite (AC-INTEG-001 to 012)
+  latest_addition: Phase 5 - CORTEX Cleanup & Decommission Suite (AC-CLEAN-301 to 328)
 snowball_strategy:
   description: 'Build core infrastructure first; features compound on infrastructure.
 
@@ -52,6 +52,12 @@ snowball_strategy:
     weeks: 2
     dependency: Intelligence Layer (Phase 4)
     critical: Proves system correctness via audit trail completeness
+  - phase: 5
+    name: CORTEX Cleanup & Decommission
+    weeks: 2
+    dependency: Orchestrator Integration (Phase 4.5)
+    critical: Remove all construction scaffolding, permanent operations only
+
 phase_1_foundation:
   name: Foundation Enhancement
   duration: 2 weeks
@@ -1363,6 +1369,101 @@ phase_4_5_integration_tests:
     - Concurrent operations safe (no corruption, no deadlocks)
     - Failure recovery tested and working
     - Backwards compatibility maintained
+
+phase_5_cortex_cleanup_decommission:
+  name: CORTEX Cleanup & Decommission
+  duration: 2 weeks
+  start_date: '2026-03-24'
+  end_date: '2026-04-07'
+  status: planned
+  priority: CRITICAL
+  description: |
+    Remove all temporary scaffolding, planning artifacts, and embedded phase-gating logic.
+    Post-CORTEX-6.0 decommissioning of construction infrastructure.
+    Permanent CORTEX system operates with zero references to planning phases.
+
+  ac_ids:
+    total: 28
+    range: AC-CLEAN-301 to AC-CLEAN-328
+
+  components:
+    reference_removal:
+      ac_ids: [AC-CLEAN-301, AC-CLEAN-302, AC-CLEAN-303, AC-CLEAN-304, AC-CLEAN-305, AC-CLEAN-306]
+      description: Remove hardcoded phase references from production code
+      targets:
+        - src/orchestrators/core/master_orchestrator.py
+        - src/orchestrators/core/state_synchronizer.py
+        - src/infrastructure/atomic_state_manager.py
+        - src/database/planning_state_db.py
+        - src/mcp/housekeeping_tools.py
+        - src/tools/remediation_executor.py
+      outcomes:
+        - All phase numbers 1-5 removed from permanent code
+        - Phase logic extracted to optional PlanningModule
+        - Database schema migrated to module-based
+        - Core operations function without phase references
+
+    artifact_decommission:
+      ac_ids: [AC-CLEAN-307, AC-CLEAN-308, AC-CLEAN-309, AC-CLEAN-310, AC-CLEAN-311, AC-CLEAN-312]
+      description: Archive and remove planning artifacts
+      archive_location: cortex-brain/documents/archives/CORTEX-6.0-construction/
+      artifacts:
+        - cortex-brain/cx6-plan/ complete directory
+        - master-plan.yaml
+        - plan-viewer.html and related UI
+        - Phase-specific documentation
+      strategy:
+        - Create versioned compressed archive
+        - Generate integrity manifest with checksums
+        - Make archive read-only
+        - Never import at runtime
+
+    configuration_cleanup:
+      ac_ids: [AC-CLEAN-313, AC-CLEAN-314, AC-CLEAN-315, AC-CLEAN-316, AC-CLEAN-317, AC-CLEAN-318]
+      description: Update governance rules and configurations
+      files:
+        - cortex-brain/tier0/governance/brittleness-ambiguity-tests.yaml
+        - cortex-brain/tier0/governance/file-organization-policy.yaml
+        - cortex-brain/tier0/governance/operational-efficiency-rules.yaml
+        - cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml
+        - Scripts and automation with phase references
+
+    housekeeping_enhancement:
+      ac_ids: [AC-CLEAN-319, AC-CLEAN-320, AC-CLEAN-321, AC-CLEAN-322, AC-CLEAN-323, AC-CLEAN-324]
+      description: Continuous enforcement of scaffolding-free architecture
+      mechanisms:
+        - Automatic alignment checks on every turn
+        - Pre-commit hooks blocking phase changes
+        - Regression detection for re-introduced references
+        - Feature flag validation
+        - Governance rule monitoring
+
+    verification_validation:
+      ac_ids: [AC-CLEAN-325, AC-CLEAN-326, AC-CLEAN-327, AC-CLEAN-328]
+      description: Final verification suite
+      checks:
+        - Zero hardcoded phase references in production code
+        - Archive integrity and isolation confirmed
+        - Feature flags operating correctly
+        - Performance baseline met
+        - Documentation reflects permanent architecture
+
+  exit_criteria:
+    - Zero phase references in production code
+    - All planning artifacts archived
+    - Archive directory read-only and isolated
+    - Housekeeping alignment at 100%
+    - All tests passing
+    - Documentation updated
+
+  success_metrics:
+    references_removed: 100%
+    artifacts_archived: 100%
+    configuration_updated: 100%
+    housekeeping_enforcement: 100%
+    test_coverage: '>=95%'
+    performance_regression: <1%
+
 llm_cost_strategy:
   overall_approach: Sonnet 4.5 as default; upgrade to Opus only for critical architectural
     decisions

@@ -44,6 +44,7 @@ from src.entry_point.fast_commands import FastCommandHandler, is_fast_command
 
 # Header/Footer injection for CORTEX branding (AC-HEADER-001)
 from src.infrastructure.response_header_footer_manager import wrap_cortex_response
+from src.infrastructure.cortex_output_formatter import cortex_format, cortex_print
 
 # CortexEntry loaded lazily (heavy)
 from src.utils.lazy_loader import lazy_import
@@ -335,7 +336,7 @@ Examples:
             
             return 0
         except Exception as e:
-            print(f"[ERROR] Fast-path handler failed: {e}")
+            print(cortex_format(f"[ERROR] Fast-path handler failed: {e}", operation_type="Error", include_footer=False))
             # Fall through to full initialization
     
     # FULL PATH: Complex operations require full CortexEntry
@@ -350,7 +351,7 @@ Examples:
             init_time = (time.perf_counter() - start_time) * 1000
             print(f"⚙️ Initialization time: {init_time:.2f}ms")
     except Exception as e:
-        print(f"[ERROR] Failed to initialize CORTEX: {e}")
+        print(cortex_format(f"[ERROR] Failed to initialize CORTEX: {e}", operation_type="Error", include_footer=False))
         return 1
     
     # Handle setup mode
