@@ -1,0 +1,274 @@
+schema_version: '4.2.0'
+last_updated: '2026-01-12'
+architecture: 'executive_summary_with_mandatory_header'
+description: |
+  CORTEX Response Template System v4.2.0
+  Executive Summary Mode with Mandatory CORTEX Header
+  
+  All responses must include mandatory CORTEX header with copyright info.
+  Dynamic composition of reusable components based on operation context.
+
+# ============================================================================
+# MANDATORY CORTEX HEADER (v4.2)
+# ============================================================================
+
+mandatory_header:
+  enabled: true
+  description: |
+    All responses from CORTEX orchestrators MUST include this header.
+    Establishes authority, copyright, and version context.
+  
+  template: |
+    # CORTEX {operation_type} Summary
+    **Version:** {version} | **Date:** {iso_date}
+    **Author:** Asif Hussain
+    **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+    ---
+  
+  critical_rules:
+    - "EVERY response must start with this header"
+    - "Header comes BEFORE any summary, sections, or content"
+    - "Copyright line is non-negotiable (legal + brand)"
+    - "Author is always 'Asif Hussain' (never LLM names)"
+    - "Date reflects when response was generated"
+
+# ============================================================================
+# EXECUTIVE SUMMARY CONFIGURATION (v4.2)
+# ============================================================================
+
+executive_summary:
+  enabled: true
+  position: 'after_header'
+  description: |
+    Enforces concise, executive-level responses across all orchestrators.
+    Eliminates verbose narratives and code blocks.
+  
+  format_rules:
+    mandatory:
+      - "Start with 3-5 sentence executive summary"
+      - "Use bullet points for all lists (max 5 per section)"
+      - "NO code snippets unless explicitly requested"
+      - "NO narrative prose - declarative statements only"
+      - "Quantify outcomes (X files, Y AC-IDs, Z% complete)"
+      - "Mandatory header BEFORE all other content"
+    
+    forbidden:
+      - "Code blocks (unless user says 'show code')"
+      - "Step-by-step procedures"
+      - "Explanatory paragraphs"
+      - "Verbose status updates"
+      - "Nested sections >2 levels"
+      - "Missing CORTEX header"
+  
+  structure:
+    sections:
+      - name: "Outcomes"
+        marker: "✅"
+        max_bullets: 5
+        required: true
+        
+      - name: "In Progress"
+        marker: "⚙️"
+        max_bullets: 3
+        required: false
+        
+      - name: "Risks"
+        marker: "⚠️"
+        max_bullets: 3
+        required: false
+        
+      - name: "Impact"
+        marker: "🎯"
+        max_bullets: 3
+        required: false
+
+# ============================================================================
+# CAPABILITY TRANSLATION (v4.2)
+# ============================================================================
+
+capability_translation:
+  enabled: true
+  description: |
+    Translates internal AC-IDs to human-readable business capabilities.
+    Uses get_ac_title.sh script to look up official titles.
+  
+  rules:
+    - "NEVER display raw AC-ID codes to end users"
+    - "ALWAYS translate to plain English capability names"
+    - "Use get_ac_title.sh to retrieve canonical titles"
+    - "Include AC-ID in internal logs ONLY"
+
+# ============================================================================
+# PROGRESS INDICATORS (v4.2)
+# ============================================================================
+
+progress_indicators:
+  enabled: true
+  
+  status_icons:
+    complete: "✅"
+    in_progress: "🔄"
+    pending: "⏳"
+    failed: "❌"
+    blocked: "🚫"
+  
+  section_markers:
+    outcomes: "✅"
+    in_progress: "⚙️"
+    risks: "⚠️"
+    impact: "🎯"
+    continuation: "📋"
+
+# ============================================================================
+# CONTINUATION PROTOCOL (v4.2)
+# ============================================================================
+
+continuation:
+  enabled: true
+  position: "after_sections"
+  format: "📋 Resume Work: `continue {operation}` (see tracking files)"
+  description: "Enables cross-session resume with state reference"
+
+# ============================================================================
+# TIER ROUTING (v4.2)
+# ============================================================================
+
+tier_routing:
+  INSTANT:
+    token_limit: 50
+    sections: 0
+    use_case: "Direct factual answer"
+  
+  FOCUSED:
+    token_limit: 200
+    sections: "1-2"
+    use_case: "Single concept"
+  
+  STRUCTURED:
+    token_limit: 400
+    sections: "2-4"
+    use_case: "Multi-faceted analysis"
+  
+  COMPREHENSIVE:
+    token_limit: 500
+    sections: "4-6"
+    use_case: "Complex system overview"
+
+# ============================================================================
+# OPERATION-SPECIFIC TEMPLATES (v4.2)
+# ============================================================================
+
+operation_templates:
+  
+  execution_operation:
+    description: "TDD-Master, Planning, Implementation"
+    mandatory_header: true
+    sections:
+      - outcomes (required)
+      - in_progress (required)
+      - risks (optional)
+      - impact (optional)
+  
+  analysis_operation:
+    description: "Brittleness Review, Risk Analysis"
+    mandatory_header: true
+    sections:
+      - outcomes (required)
+      - risks (required)
+      - impact (required)
+  
+  validation_operation:
+    description: "Test execution, evidence validation"
+    mandatory_header: true
+    sections:
+      - outcomes (required)
+      - risks (optional)
+
+# ============================================================================
+# COMPOSITION RULES (v4.2)
+# ============================================================================
+
+composition_rules:
+  mandatory_elements:
+    - header: "CORTEX {operation} with copyright"
+    - summary: "3-5 sentence executive summary"
+    - outcomes: "At least 1 quantified bullet"
+  
+  conditional_elements:
+    - in_progress: "If work ongoing"
+    - risks: "If risks exist"
+    - impact: "If strategic importance"
+  
+  forbidden_elements:
+    - code_blocks: "Unless requested"
+    - explanatory_prose: "Use bullets"
+    - nested_sections: "Max 2 levels"
+    - ac_id_codes: "Translate first"
+
+# ============================================================================
+# QUALITY GATES (v4.2)
+# ============================================================================
+
+quality_gates:
+  pre_output:
+    - "Header present and formatted correctly"
+    - "Copyright includes 2025-2026"
+    - "No AC-ID codes visible"
+    - "All metrics quantified"
+    - "No code blocks unless requested"
+    - "No explanatory prose"
+  
+  verification_checklist:
+    - "✓ CORTEX header with version and copyright"
+    - "✓ Executive summary (not under header)"
+    - "✓ Outcomes section with ✅ marker"
+    - "✓ All bullets on separate lines"
+    - "✓ Quantified metrics"
+    - "✓ No AC-ID codes visible"
+    - "✓ No code snippets"
+    - "✓ Section headers properly formatted"
+    - "✓ Within tier word limit"
+
+# ============================================================================
+# EXAMPLES (v4.2)
+# ============================================================================
+
+examples:
+  
+  example_comprehensive: |
+    # CORTEX TDD-Master Execution Summary
+    **Version:** 2.1.0 | **Date:** 2026-01-12
+    **Author:** Asif Hussain
+    **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+    ---
+    
+    Completed test-driven implementation of toolkit consolidation. Phase 2 at 45% with clear path to 100%.
+    
+    ✅ OUTCOMES
+    
+    • Hash chain integrity validation operational (5/5 tests passing)
+    • Audit tool consolidation complete (merged duplicate tools)
+    • Naming standards audit completed (8 violations identified)
+    • @mcp_tool decorator framework applied to 12 public tools
+    • Phase 2 toolkit work at 45% completion
+    
+    ⚙️ IN PROGRESS
+    
+    • Implementing naming standard fixes
+    • Refactoring scripts/ directory into toolkit modules
+    
+    🎯 IMPACT
+    
+    • MasterOrchestrator has complete toolkit visibility
+    • Governance compliance enforced (CORE-022, CORE-024)
+  
+  example_instant: |
+    # CORTEX Version Query Summary
+    **Version:** 2.1.0 | **Date:** 2026-01-12
+    **Author:** Asif Hussain
+    **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+    ---
+    
+    Current CORTEX version is 6.0 (Phase 2 active), brittleness review is v2.1.0.
+
+# END OF RESPONSE TEMPLATES V4.2

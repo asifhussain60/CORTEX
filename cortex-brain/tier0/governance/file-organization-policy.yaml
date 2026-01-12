@@ -1,0 +1,379 @@
+---
+policy_id: FILE-ORG-001
+policy_name: File Organization and Output Standardization
+version: 1.0.0
+date_created: '2026-01-12'
+related_core_rules:
+  - CORE-002 (No Summary Files)
+  - CORE-009 (Plan File Organization)
+  - CORE-022 (Kebab-Case Naming)
+
+---
+
+# File Organization Policy for CORTEX 6.0
+
+## Purpose
+
+Establish consistent rules for where generated artifacts from orchestrators and prompts should be stored, how they should be named, and how they integrate with governance systems.
+
+## Problem Statement
+
+Current state shows files generated across multiple locations with inconsistent naming:
+- Brittleness AC-IDs in separate YAML file instead of AC-INDEX.yaml
+- 400+ TDD reports creating workspace clutter
+- File names violate kebab-case limit (20 chars)
+- Evidence bundles not organized by purpose
+- Progress updates not reflected in plan-viewer
+
+## Output Location Standards
+
+### Primary Categories
+
+| Category | Location | Subdirectories | Purpose |
+|----------|----------|-----------------|---------|
+| **Acceptance Criteria** | `cortex-brain/tier1/acceptance-criteria/` | N/A - single file | AC registry (single source of truth) |
+| **Evidence Bundles** | `cortex-brain/tier1/evidence-bundles/` | By AC-ID: `AC-{CATEGORY}-{NNN}/` | Proof of completion (manifest + tests + audit) |
+| **Progress Tracking** | `cortex-brain/tier1/tracking/` | See below | Phase state, metrics, completion % |
+| **Governance Policies** | `cortex-brain/tier0/governance/` | By policy type | Rules, merger logic, enforcement |
+| **Analysis Reports** | `cortex-brain/documents/reports/` | By category: brittleness/, tdd/, validation/ | Non-critical analysis (archived after use) |
+| **Plan Documents** | `cortex-brain/documents/planning/` | Organized per cx6-plan structure | Roadmaps, strategies, planning artifacts |
+| **Historical Archives** | `cortex-brain/archives/` | By review date: brittleness-2026-01-12/, tdd-2026-01-12/ | Old reports (preserved for audit trail) |
+
+### Tracking Subdirectories
+
+```
+cortex-brain/tier1/tracking/
+├── progress-tracker.json              (Master state - updated live)
+├── phase-states/
+│   ├── phase-1-state.json
+│   ├── phase-2-state.json
+│   └── ...
+├── metrics/
+│   ├── verification-rate.json         (Test pass % by phase)
+│   ├── coverage-metrics.json          (Code coverage by module)
+│   └── technical-debt.json            (Debt items tracked)
+└── ac-index-versions/
+    └── ac-index-2026-01-11-backup.yaml (Versioned backups)
+```
+
+### Evidence Bundle Structure (per AC-ID)
+
+```
+cortex-brain/tier1/evidence-bundles/
+├── AC-AUDIT-001/
+│   ├── manifest.yaml                  (AC metadata, spec hash, governance rules)
+│   ├── test-results.json              (pytest output, coverage %)
+│   └── audit-trace.jsonl              (Correlation chain)
+├── AC-BRITTLE-001/
+│   ├── manifest.yaml
+│   ├── test-results.json
+│   └── audit-trace.jsonl
+└── ...
+```
+
+### Reports Reorganization (Approved)
+
+**Before (Current - Cluttered):**
+```
+cortex-brain/documents/reports/
+├── AC-IDS-BRITTLENESS-2026-01-12.yaml              ❌ 31 chars
+├── BRITTLENESS-REVIEW-EXECUTIVE-SUMMARY-2026-01-12.md  ❌ 54 chars
+├── CORTEX6-BRITTLENESS-REVIEW-2026-01-12.md       ❌ 35 chars
+├── architecture-audit-2026-01-*.json               ✅ Good
+├── implementation-progress-2026-01-*.md            ✅ Good
+└── tdd/
+    └── tdd-report-20260111-154948.md (400+ files)  ❌ Clutter
+```
+
+**After (Proposed - Organized):**
+```
+cortex-brain/documents/reports/
+├── brittleness/
+│   ├── findings-2026-01-12.yaml              ✅ 18 chars
+│   ├── executive-summary-2026-01-12.md       ✅ 27 chars (rounded: 25)
+│   └── analysis-2026-01-12.md                ✅ 19 chars
+├── evidence/
+│   └── validation-2026-01-12.yaml            ✅ 24 chars
+├── tdd/
+│   └── [organized by phase or AC-ID pattern]
+└── validation/
+    └── validation-report-2026-01-12.md       ✅ 27 chars (rounded: 25)
+```
+
+**Archive Old TDD Reports:**
+```
+cortex-brain/archives/
+├── tdd-reports-historical/
+│   ├── 2026-01-10/
+│   ├── 2026-01-11/
+│   └── 2026-01-12/
+└── brittleness-review-2026-01-12/
+    ├── analysis/
+    ├── findings/
+    └── recommendations/
+```
+
+## File Naming Rules
+
+### Rule 1: Kebab-Case (Lowercase, Hyphen-Separated)
+
+**Format:**
+```
+{category}-{type}-{optional-date}.{extension}
+
+Examples:
+- brittleness-findings-2026-01-12.yaml      ✅
+- evidence-validator-2026-01-12.yaml        ✅
+- governance-merger-v001.py                 ✅
+- sync-plan-viewer-data.py                  ✅
+```
+
+**Bad Examples:**
+```
+- BrittlenessFindings_2026_01_12.yaml       ❌ Mixed case + underscores
+- CORTEX6BrittlenessReview.md               ❌ PascalCase
+- tddReport20260111.md                      ❌ camelCase + packed date
+```
+
+### Rule 2: Character Limit
+
+**Standard:**
+- **Normal files:** 20 characters (excluding extension)
+- **Date-versioned reports:** 32 characters (EXCEPTION for `{name}-yyyy-mm-dd` pattern)
+- **Longer names allowed:** Only when approved for evidence/compliance reasons
+
+**Examples:**
+```
+Normal files:
+- governance-merger.py              ✅ 18 chars
+- tdd-orchestrator.py               ✅ 16 chars
+- test-validator.py                 ✅ 15 chars
+
+Date-versioned (32-char exception):
+- brittleness-findings-2026-01-12.yaml     ✅ 28 chars (exception approved)
+- evidence-validator-2026-01-12.yaml       ✅ 28 chars (exception approved)
+- validation-report-2026-01-12.md          ✅ 27 chars (exception approved)
+
+Over limit (NOT allowed):
+- comprehensive-analysis-document-2026-01-12.yaml  ❌ 47 chars
+- extremely-detailed-brittleness-findings-2026-01-12.yaml  ❌ 57 chars
+```
+
+### Rule 3: Date Formatting
+
+**Allowed:**
+- ISO 8601: `{name}-yyyy-mm-dd.ext` (e.g., `findings-2026-01-12.yaml`)
+- Version numbers: `{name}-v001.ext` (e.g., `findings-v001.yaml`)
+
+**NOT Allowed:**
+- Timestamps: `{name}-20260112143000.yaml` ❌ (packed, hard to read)
+- US format: `{name}-01-12-2026.yaml` ❌ (ambiguous)
+- Words: `{name}-jan-twelve.yaml` ❌ (clutter)
+
+## Integration Requirements
+
+### For AC-ID Generation (Critical Path)
+
+**Location Rule:**
+```
+Do NOT create separate AC-ID files. APPEND to official registry.
+
+WRONG:
+- cortex-brain/documents/reports/AC-IDS-BRITTLE-2026-01-12.yaml
+
+RIGHT:
+- cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml
+  (append to acceptanceCriteria[] array, update metadata)
+```
+
+**Integration Steps:**
+1. Query existing AC-INDEX.yaml for next sequential number in category
+2. Append new AC-ID objects to `acceptanceCriteria[]` array
+3. Update metadata: `total_ac_count`, `last_updated`
+4. Validate: No duplicates, schema compliance
+5. Run: MasterOrchestrator to recognize new AC-IDs immediately
+
+**Verification:**
+```bash
+# After append, verify with:
+grep "id: AC-BRITTLE-001" cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml
+python3 -c "import yaml; yaml.safe_load(open('AC-INDEX.yaml'))" # Schema check
+```
+
+### For Evidence Bundles
+
+**Location Rule:**
+```
+cortex-brain/tier1/evidence-bundles/{AC-CATEGORY}-{NNN}/
+```
+
+**File Structure:**
+- `manifest.yaml` - Metadata (spec_hash, ac_ids, governance_rules, routes)
+- `test-results.json` - Pytest output (coverage_percent, total_tests, passing_tests)
+- `audit-trace.jsonl` - Complete event chain (timestamps, correlation_ids, decisions)
+
+**Naming:**
+```
+cortex-brain/tier1/evidence-bundles/
+├── ac-audit-001/
+│   ├── manifest.yaml
+│   ├── test-results.json
+│   └── audit-trace.jsonl
+├── ac-brittle-001/
+│   └── ...
+```
+
+**No separate report files** - evidence is embedded in bundles, not additional reports.
+
+### For Analysis Reports (Non-Critical)
+
+**Location Rule:**
+```
+cortex-brain/documents/reports/{category}/
+```
+
+**Naming:**
+```
+{category}-{type}-{date}.{ext}
+
+Examples:
+- brittleness-findings-2026-01-12.yaml
+- tdd-analysis-2026-01-12.md
+- validation-report-2026-01-12.yaml
+```
+
+**Lifecycle:**
+1. Created during orchestrator execution
+2. Reviewed for governance compliance
+3. Archived to `cortex-brain/archives/{category}-{date}/` after 30 days
+4. Can be deleted after evidence bundle extracted
+
+**NOT stored in:** Root folder, tier0, tier1 (those are reserved)
+
+### For Progress Tracking
+
+**Single Source of Truth:**
+```
+cortex-brain/tier1/tracking/progress-tracker.json
+```
+
+**Integration Rule:**
+- After ANY AC-ID completion, orchestrator MUST update progress-tracker.json
+- Fields: `ac_id`, `status`, `test_count`, `coverage_percent`, `timestamp`
+- Atomicity: Use file locking + atomic rename (prevent corruption)
+
+**Plan-Viewer Sync:**
+```bash
+# After updating progress-tracker.json, RUN:
+python3 scripts/sync_plan_viewer_data.py
+
+# Verify:
+# - plan-viewer-data.json updated with new metrics
+# - No hardcoded status in plan-viewer.html (should read JSON only)
+```
+
+## Governance Enforcement
+
+### CORE-002 Compliance (No Summary Files)
+
+**Allowed:**
+- Organized reports in `cortex-brain/documents/reports/{category}/`
+- Evidence bundles in `cortex-brain/tier1/evidence-bundles/`
+- Technical analysis in `cortex-brain/documents/planning/analysis/`
+
+**NOT Allowed:**
+- Root-level summary files: `EXECUTIVE-SUMMARY.md` ❌
+- Workspace clutter: Multiple `*-summary.md`, `*-report.md` ❌
+- Duplicate summaries: One per category maximum
+
+**Exception:** Required analysis in planning folders (defined by planning processes)
+
+### CORE-009 Compliance (Plan Files in Plan Folder)
+
+**Allowed:**
+- Plan artifacts: `cortex-brain/cx6-plan/{phase}/`
+- Reports: `cortex-brain/documents/reports/`
+- Evidence: `cortex-brain/tier1/evidence-bundles/`
+
+**NOT Allowed:**
+- Root-level plan files: `implementation-plan.yaml` ❌
+- Root-level reports: `PHASE-1-REPORT.md` ❌
+- Scattered across folders: Use organized structure
+
+### CORE-022 Compliance (Kebab-Case, 20-Char Limit)
+
+**Standard (20 chars):**
+```
+✅ governance-merger.py          (18 chars)
+✅ tdd-orchestrator.py            (16 chars)
+✅ test-validator.py              (15 chars)
+```
+
+**Exception (32 chars for date-versioned reports):**
+```
+✅ brittleness-findings-2026-01-12.yaml     (28 chars)
+✅ evidence-validator-2026-01-12.yaml       (28 chars)
+✅ validation-report-2026-01-12.md          (27 chars)
+```
+
+**Enforcement:** Pre-commit hook checks all new files against rules.
+
+## Prompt Output Standards
+
+### All Prompts MUST Specify
+
+```yaml
+output_specification:
+  ac_ids:
+    location: "cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml"
+    action: "APPEND to acceptanceCriteria[] (single source of truth)"
+    validation: "Schema compliance, no duplicates"
+    
+  evidence:
+    location: "cortex-brain/tier1/evidence-bundles/{AC-ID}/"
+    naming: "manifest.yaml, test-results.json, audit-trace.jsonl"
+    action: "Create 3-file bundle after tests pass"
+    
+  analysis_reports:
+    location: "cortex-brain/documents/reports/{category}/"
+    naming: "{category}-{type}-{date}.ext (kebab-case, max 32 chars)"
+    action: "Create optional reports for transparency"
+    
+  progress_tracking:
+    location: "cortex-brain/tier1/tracking/progress-tracker.json"
+    action: "UPDATE after each AC-ID completion (not replace)"
+    
+  synchronization:
+    action: "Run scripts/sync_plan_viewer_data.py after updates"
+    validate: "Verify plan-viewer-data.json updated"
+    report: "Status in response (✅ sync successful)"
+```
+
+## Implementation Checklist
+
+- [ ] Rename brittleness files to kebab-case (20/32 char limit)
+- [ ] Move/archive 400+ TDD reports to cortex-brain/archives/
+- [ ] Reorganize cortex-brain/documents/reports/ by category
+- [ ] Append brittleness AC-IDs to AC-INDEX.yaml (not separate file)
+- [ ] Create cortex-brain/tier1/evidence-bundles/ folder structure
+- [ ] Update all `.github/prompts/` with output specifications
+- [ ] Create pre-commit hook for file naming validation
+- [ ] Document exceptions to CORE-022 (32-char limit)
+- [ ] Verify plan-viewer-data.json syncs after updates
+- [ ] Archive old reports after 30 days (automated)
+
+## Related Governance Rules
+
+- **CORE-002:** No Summary File Generation (except in proper locations)
+- **CORE-009:** Plan File Organization (use designated folders)
+- **CORE-022:** Kebab-Case Naming (20-char standard, 32-char exception for dates)
+- **CORE-006:** Setup Verification (validate outputs before moving)
+- **CORE-007:** Teardown Refactor (clean up after orchestrator execution)
+
+## References
+
+- AC-INDEX.yaml (acceptance criteria registry)
+- progress-tracker.json (phase tracking - single source of truth)
+- cortex-brain/tier1/evidence-bundles/ (evidence storage)
+- .github/prompts/output-standards.md (prompt template)
+- cortex-brain/tier0/governance/core-rules.yaml (CORE rules)
