@@ -257,4 +257,18 @@ class CortexEntry:
             capabilities=["gap_detection", "snowball_analysis", "mcp_validation", "plan_alignment", "remediation_planning", "phase_orchestration"]
         )
         
+        # Autonomous AC Implementor (Direct AC-ID implementation from progress tracker)
+        self.registry.register(
+            id="autonomous_ac_implementor",
+            name="Autonomous AC Implementor",
+            version="1.0.0",
+            type=OrchestratorType.AUTONOMOUS,
+            category=OrchestratorCategory.WORKFLOW,
+            class_name="AutonomousACImplementor",
+            module_path="src.orchestrators.autonomous.autonomous_ac_implementor",
+            manifest_path="cortex-brain/manifests/orchestrators/autonomous-ac-implementor-manifest.yaml",
+            patterns=[r"^(autonomous|implement phase|continue autonomous|carry out|implement plan autonomous).*$"],
+            capabilities=["direct_ac_implementation", "progress_tracking", "sequential_execution", "evidence_generation", "blocker_detection", "phase_completion"]
+        )
+        
         self.logger.info("Registered core orchestrators")

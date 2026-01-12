@@ -1,253 +1,24 @@
 {
   "plan_metadata": {
     "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
-    "total_ac_ids": 203,
-    "completed_ac_ids": 78,
-    "in_progress_ac_ids": 0,
-    "version": "1.4.0",
-    "updated": "2026-01-12T17:58:41.627200+00:00",
-    "status": "phases_1_to_5_defined_4.5_integration_tests_added"
+    "total_ac_ids": 102,
+    "completed_ac_ids": 51,
+    "in_progress_ac_ids": 13,
+    "version": "1.3.0",
+    "updated": "2026-01-12T19:18:02.672936+00:00",
+    "status": "phase_4_5_complete"
   },
   "phases": [
     {
       "id": 1,
       "name": "Foundation Enhancement",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
-      "ac_ids_total": 29,
-      "status": "planned",
-      "description": "Build the core infrastructure that EVERY other component depends on.\nAll orchestrators log to audit, enforce governance, persist state.\nWithout this foundation, nothing else can reliably operate.\n",
-      "verified_implemented": [],
-      "capabilities": [
-        {
-          "ac_id": "AC-SECURITY-001",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-SECURITY-002",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-SECURITY-003",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-SECURITY-004",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-SECURITY-005",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-SECURITY-006",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-SECURITY-007",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-SECURITY-008",
-          "name": "",
-          "status": "planned"
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "name": "Orchestration Core (CORE WORKFLOW)",
-      "completion_percentage": 71,
-      "ac_ids_complete": 33,
-      "ac_ids_total": 46,
-      "status": "in_progress",
-      "description": "Establishes THE DEFAULT WORKING MECHANISM at the core of CORTEX operations.\nMasterOrchestrator is IN CHARGE: evaluates requests, creates tasks, executes.\nThis is the central controller that all user requests flow through.\n",
-      "verified_implemented": [
-        "AC-ORCH-001",
-        "AC-ORCH-002",
-        "AC-ORCH-003",
-        "AC-ORCH-004",
-        "AC-ORCH-005",
-        "AC-ORCH-006",
-        "AC-ORCH-007",
-        "AC-ORCH-008",
-        "AC-PLAN-001",
-        "AC-PLAN-002",
-        "AC-PLAN-003",
-        "AC-PLAN-004",
-        "AC-PLAN-005",
-        "AC-PLAN-006",
-        "AC-PLAN-007",
-        "AC-PLAN-008",
-        "AC-STS-001",
-        "AC-STS-002",
-        "AC-STS-003",
-        "AC-TDD-001",
-        "AC-TDD-002",
-        "AC-TDD-003",
-        "AC-TDD-004",
-        "AC-TDD-005",
-        "AC-TDD-006",
-        "AC-TDD-007",
-        "AC-TDD-008",
-        "AC-TDD-009",
-        "AC-TDD-010",
-        "AC-TODO-001",
-        "AC-TODO-002",
-        "AC-TODO-003",
-        "AC-TODO-004"
-      ],
-      "capabilities": [
-        {
-          "ac_id": "AC-ROUTE-001",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-ROUTE-002",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-ROUTE-003",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-ROUTE-004",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-ROUTE-005",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-TEMPLATE-001",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-TEMPLATE-002",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-TEMPLATE-003",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-TEMPLATE-004",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-TEMPLATE-005",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-TEMPLATE-006",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-TEMPLATE-007",
-          "name": "",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-TEMPLATE-008",
-          "name": "",
-          "status": "planned"
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "name": "Feature Orchestrators",
-      "completion_percentage": 55,
-      "ac_ids_complete": 15,
-      "ac_ids_total": 27,
-      "status": "in_progress",
-      "description": "Build specialized orchestrators that leverage the core workflow.\nEach orchestrator reuses: Audit, Governance, State, Lifecycle, Evidence.\nSnowball effect: implementation becomes easier with solid foundation.\n",
-      "verified_implemented": [
-        "AC-ADO-001",
-        "AC-ADO-002",
-        "AC-ADO-003",
-        "AC-CLEAN-001",
-        "AC-CLEAN-002",
-        "AC-CLEAN-003",
-        "AC-CRAWLER-001",
-        "AC-CRAWLER-002",
-        "AC-CRAWLER-003",
-        "AC-INV-001",
-        "AC-INV-002",
-        "AC-SAN-001",
-        "AC-SAN-002",
-        "AC-VAC-001",
-        "AC-VAC-002"
-      ],
-      "capabilities": [
-        {
-          "ac_id": "AC-CLEAN-001",
-          "name": "",
-          "status": "completed"
-        },
-        {
-          "ac_id": "AC-CLEAN-002",
-          "name": "",
-          "status": "completed"
-        },
-        {
-          "ac_id": "AC-CLEAN-003",
-          "name": "",
-          "status": "completed"
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "name": "Intelligence Layer",
-      "completion_percentage": 60,
-      "ac_ids_complete": 3,
-      "ac_ids_total": 5,
-      "status": "in_progress",
-      "description": "AI-native features that enhance orchestration with intelligence.\nLeverages all previous components: audit history, execution patterns,\ngovernance rules, and orchestrator behaviors.\n",
-      "verified_implemented": [
-        "AC-KNOW-001",
-        "AC-KNOW-002",
-        "AC-KNOW-003"
-      ],
-      "capabilities": [
-        {
-          "ac_id": "AC-ROUTE-003",
-          "name": "",
-          "status": "planned"
-        }
-      ]
-    },
-    {
-      "id": 4.5,
-      "name": "Orchestrator Integration & Audit Validation Suite",
-      "completion_percentage": 100,
-      "ac_ids_complete": 12,
+      "completion_percentage": 83,
+      "ac_ids_complete": 10,
       "ac_ids_total": 12,
       "status": "completed",
-      "description": "Comprehensive end-to-end testing framework validating all orchestrators work\ntogether correctly. Tests focus on:\n\n1. Cross-component integration scenarios (Phase 1\u21924 orchestrators)\n2. Audit trail completeness and traceability\n3. Evidence bundle generation and validation\n4. State management under concurrent operations\n5. Governance enforcement across all components\n6. Failure recovery and rollback mechanisms\n7. Performance and load scenarios\n\nThis phase proves system correctness by validating audit logs contain\ncomplete provenance for all operations.\n",
+      "description": "Build core infrastructure (Audit, Governance, State, Lifecycle, Evidence, Security)",
       "verified_implemented": [
         "AC-INTEG-001",
-        "AC-INTEG-002",
-        "AC-INTEG-003",
         "AC-INTEG-004",
         "AC-INTEG-005",
         "AC-INTEG-006",
@@ -260,218 +31,224 @@
       ],
       "capabilities": [
         {
-          "ac_id": "AC-INTEG-001",
-          "name": "End-to-End Request Lifecycle",
-          "status": "completed"
+          "id": "AC-INTEG-001",
+          "name": "AC-INTEG-001",
+          "description": ""
         },
         {
-          "ac_id": "AC-INTEG-002",
-          "name": "Multi-Phase Orchestrator Interaction",
-          "status": "completed"
+          "id": "AC-INTEG-004",
+          "name": "AC-INTEG-004",
+          "description": ""
         },
         {
-          "ac_id": "AC-INTEG-003",
-          "name": "Orchestrator Error Propagation & Recovery",
-          "status": "completed"
+          "id": "AC-INTEG-005",
+          "name": "AC-INTEG-005",
+          "description": ""
         },
         {
-          "ac_id": "AC-INTEG-004",
-          "name": "Audit Trail Completeness Validation",
-          "status": "completed"
+          "id": "AC-INTEG-006",
+          "name": "AC-INTEG-006",
+          "description": ""
         },
         {
-          "ac_id": "AC-INTEG-005",
-          "name": "Correlation ID Traceability",
-          "status": "completed"
+          "id": "AC-INTEG-007",
+          "name": "AC-INTEG-007",
+          "description": ""
         },
         {
-          "ac_id": "AC-INTEG-006",
-          "name": "Hash Chain Integrity Validation",
-          "status": "completed"
+          "id": "AC-INTEG-008",
+          "name": "AC-INTEG-008",
+          "description": ""
         },
         {
-          "ac_id": "AC-INTEG-007",
-          "name": "Evidence Bundle Generation for All AC-IDs",
-          "status": "completed"
+          "id": "AC-INTEG-009",
+          "name": "AC-INTEG-009",
+          "description": ""
         },
         {
-          "ac_id": "AC-INTEG-008",
-          "name": "Evidence Bundle 3-Gate Validation",
-          "status": "completed"
+          "id": "AC-INTEG-010",
+          "name": "AC-INTEG-010",
+          "description": ""
         },
         {
-          "ac_id": "AC-INTEG-009",
-          "name": "State Management Under Concurrency & Failure",
-          "status": "completed"
+          "id": "AC-INTEG-011",
+          "name": "AC-INTEG-011",
+          "description": ""
         },
         {
-          "ac_id": "AC-INTEG-010",
-          "name": "Governance Rule Enforcement Integration",
-          "status": "completed"
-        },
-        {
-          "ac_id": "AC-INTEG-011",
-          "name": "Performance & Load Testing",
-          "status": "completed"
-        },
-        {
-          "ac_id": "AC-INTEG-012",
-          "name": "Regression & Backwards Compatibility",
-          "status": "completed"
+          "id": "AC-INTEG-012",
+          "name": "AC-INTEG-012",
+          "description": ""
         }
       ]
     },
     {
-      "id": 5,
-      "name": "CORTEX Cleanup & Decommission",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
-      "ac_ids_total": 28,
-      "status": "planned",
-      "description": "Remove all temporary scaffolding, planning artifacts, and embedded phase-gating logic.\nPost-CORTEX-6.0 decommissioning of construction infrastructure.\nPermanent CORTEX system operates with zero references to planning phases.\n",
-      "verified_implemented": [],
+      "id": 1.5,
+      "name": "STS as Capability 0",
+      "completion_percentage": 33,
+      "ac_ids_complete": 1,
+      "ac_ids_total": 3,
+      "status": "completed",
+      "description": "Validate orchestration framework with Golden Corpus"
+    },
+    {
+      "id": 2,
+      "name": "Orchestration Core",
+      "completion_percentage": 56,
+      "ac_ids_complete": 17,
+      "ac_ids_total": 30,
+      "status": "in_progress",
+      "description": "MasterOrchestrator, TodoManager, TDD-Master, Planning v5",
+      "verified_implemented": [
+        "AC-ORCH-001",
+        "AC-ORCH-006",
+        "AC-ORCH-007",
+        "AC-TODO-001",
+        "AC-TODO-002",
+        "AC-TODO-003",
+        "AC-TODO-004",
+        "AC-TDD-001",
+        "AC-TDD-002",
+        "AC-TDD-003",
+        "AC-TDD-004",
+        "AC-TDD-005",
+        "AC-PLAN-001",
+        "AC-PLAN-002",
+        "AC-PLAN-003",
+        "AC-PLAN-004",
+        "AC-PLAN-005"
+      ],
       "capabilities": [
         {
-          "ac_id": "AC-CLEAN-301",
-          "name": "Remove Phase References from MasterOrchestrator",
-          "status": "planned"
+          "id": "AC-ORCH-001",
+          "name": "AC-ORCH-001",
+          "description": ""
         },
         {
-          "ac_id": "AC-CLEAN-302",
-          "name": "Remove Phase References from State Synchronizer",
-          "status": "planned"
+          "id": "AC-ORCH-006",
+          "name": "AC-ORCH-006",
+          "description": ""
         },
         {
-          "ac_id": "AC-CLEAN-303",
-          "name": "Remove Phase References from Atomic State Manager",
-          "status": "planned"
+          "id": "AC-ORCH-007",
+          "name": "AC-ORCH-007",
+          "description": ""
         },
         {
-          "ac_id": "AC-CLEAN-304",
-          "name": "Remove Phase References from Planning State DB",
-          "status": "planned"
+          "id": "AC-TODO-001",
+          "name": "AC-TODO-001",
+          "description": ""
         },
         {
-          "ac_id": "AC-CLEAN-305",
-          "name": "Remove Phase References from Housekeeping Tools",
-          "status": "planned"
+          "id": "AC-TODO-002",
+          "name": "AC-TODO-002",
+          "description": ""
         },
         {
-          "ac_id": "AC-CLEAN-306",
-          "name": "Remove Phase References from Remediation Executor",
-          "status": "planned"
+          "id": "AC-TODO-003",
+          "name": "AC-TODO-003",
+          "description": ""
         },
         {
-          "ac_id": "AC-CLEAN-307",
-          "name": "Archive cortex-brain/cx6-plan/ Directory",
-          "status": "planned"
+          "id": "AC-TODO-004",
+          "name": "AC-TODO-004",
+          "description": ""
         },
         {
-          "ac_id": "AC-CLEAN-308",
-          "name": "Archive master-plan.yaml",
-          "status": "planned"
+          "id": "AC-TDD-001",
+          "name": "AC-TDD-001",
+          "description": ""
         },
         {
-          "ac_id": "AC-CLEAN-309",
-          "name": "Archive plan-viewer.html and UI Files",
-          "status": "planned"
+          "id": "AC-TDD-002",
+          "name": "AC-TDD-002",
+          "description": ""
         },
         {
-          "ac_id": "AC-CLEAN-310",
-          "name": "Archive Phase-Specific Documentation",
-          "status": "planned"
+          "id": "AC-TDD-003",
+          "name": "AC-TDD-003",
+          "description": ""
         },
         {
-          "ac_id": "AC-CLEAN-311",
-          "name": "Archive Scaffolding Scripts",
-          "status": "planned"
+          "id": "AC-TDD-004",
+          "name": "AC-TDD-004",
+          "description": ""
         },
         {
-          "ac_id": "AC-CLEAN-312",
-          "name": "Archive and Consolidate All Scaffolding Artifacts",
-          "status": "planned"
+          "id": "AC-TDD-005",
+          "name": "AC-TDD-005",
+          "description": ""
         },
         {
-          "ac_id": "AC-CLEAN-313",
-          "name": "Update Governance Rules - Remove Plan References",
-          "status": "planned"
+          "id": "AC-PLAN-001",
+          "name": "AC-PLAN-001",
+          "description": ""
         },
         {
-          "ac_id": "AC-CLEAN-314",
-          "name": "Update File Organization Policy",
-          "status": "planned"
+          "id": "AC-PLAN-002",
+          "name": "AC-PLAN-002",
+          "description": ""
         },
         {
-          "ac_id": "AC-CLEAN-315",
-          "name": "Update AC-INDEX.yaml - Remove Phase References",
-          "status": "planned"
+          "id": "AC-PLAN-003",
+          "name": "AC-PLAN-003",
+          "description": ""
         },
         {
-          "ac_id": "AC-CLEAN-316",
-          "name": "Update Operational Efficiency Rules",
-          "status": "planned"
+          "id": "AC-PLAN-004",
+          "name": "AC-PLAN-004",
+          "description": ""
         },
         {
-          "ac_id": "AC-CLEAN-317",
-          "name": "Update Scripts - Remove Phase Dispatch Logic",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-CLEAN-318",
-          "name": "Update All Configuration Files",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-CLEAN-319",
-          "name": "Implement HousekeepingOrchestratorV3 - Continuous Alignment Checks",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-CLEAN-320",
-          "name": "Implement Pre-Commit Hook for Phase Reference Detection",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-CLEAN-321",
-          "name": "Implement Regression Detection for Re-Introduced References",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-CLEAN-322",
-          "name": "Implement Feature Flag Validation",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-CLEAN-323",
-          "name": "Implement Governance Rule Monitoring",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-CLEAN-324",
-          "name": "Implement Continuous Alignment Enforcement",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-CLEAN-325",
-          "name": "Verify Zero Hardcoded Phase References in Production",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-CLEAN-326",
-          "name": "Verify Archive Integrity and Isolation",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-CLEAN-327",
-          "name": "Verify Performance Baseline Met",
-          "status": "planned"
-        },
-        {
-          "ac_id": "AC-CLEAN-328",
-          "name": "Final Comprehensive Verification & Documentation",
-          "status": "planned"
+          "id": "AC-PLAN-005",
+          "name": "AC-PLAN-005",
+          "description": ""
         }
       ]
+    },
+    {
+      "id": 3,
+      "name": "Feature Orchestrators + Onboarding",
+      "completion_percentage": 0,
+      "ac_ids_complete": 0,
+      "ac_ids_total": 23,
+      "status": "planned",
+      "description": "",
+      "verified_implemented": [],
+      "capabilities": []
+    },
+    {
+      "id": 4,
+      "name": "Intelligence Layer",
+      "completion_percentage": 0,
+      "ac_ids_complete": 8,
+      "ac_ids_total": 8,
+      "status": "planned",
+      "description": "",
+      "verified_implemented": [],
+      "capabilities": []
+    },
+    {
+      "id": 5,
+      "name": "Legacy Migration",
+      "completion_percentage": 0,
+      "ac_ids_complete": 3,
+      "ac_ids_total": 3,
+      "status": "planned",
+      "description": "",
+      "verified_implemented": [],
+      "capabilities": []
+    },
+    {
+      "id": 4.5,
+      "name": "Phase 4.5: Orchestrator Integration & Audit Validation Suite",
+      "completion_percentage": 100,
+      "ac_ids_complete": 12,
+      "ac_ids_total": 12,
+      "status": "completed",
+      "description": "End-to-end testing framework validating all orchestrators",
+      "verified_implemented": [],
+      "capabilities": []
     }
   ]
 }
