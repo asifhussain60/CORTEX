@@ -5276,3 +5276,140 @@ acceptanceCriteria:
   riskIfUnfixed: low
   estimatedEffort: 1
   owner: QA
+
+# AC-TOOLKIT Category: CORTEX Toolkit Coherence & Alignment (v2.1.0)
+# New governance category for toolkit consolidation, naming, MCP exposure, and discovery
+# Introduced via cortex-brittleness-review.prompt.md enhancement
+# Correlation ID: c6db1f27
+
+AC-TOOLKIT-001:
+  id: AC-TOOLKIT-001
+  category: toolkit
+  subcategory: consolidation
+  title: Consolidate audit tool family
+  description: |
+    Merge 4 overlapping audit tools (audit_based_evidence_validator.py, audit_log_manager.py,
+    query_audit_trail.py, verify_audit_trail.py) into single src/mcp/audit-tools.py module
+    with @mcp_tool decorated functions and consistent error handling per CORE-024.
+  priority: critical
+  phase: 2
+  status: planned
+  estimatedEffort: 8
+  effort_unit: hours
+  dependencies: []
+  evidencePaths:
+    - scripts/audit_based_evidence_validator.py
+    - scripts/audit_log_manager.py
+    - scripts/query_audit_trail.py
+    - scripts/verify_audit_trail.py
+  testFiles:
+    - tests/mcp/test-audit-tools.py
+  verificationCriteria:
+    - All 4 original audit capabilities present in single src/mcp/audit-tools.py
+    - "@mcp_tool decorators on all public functions per CORE-024"
+    - "Consistent error handling: {status, data, error} format"
+    - "100% test pass rate (tests/mcp/test-audit-tools.py)"
+    - "Registered in capability_registry (auto-discovery)"
+  owner: TDD-Master
+  riskIfUnfixed: medium
+
+AC-TOOLKIT-002:
+  id: AC-TOOLKIT-002
+  category: toolkit
+  subcategory: naming
+  title: Remove adjectives & enforce kebab-case naming per CORE-022
+  description: |
+    Rename all Python tools to remove adjectives and enforce kebab-case naming ≤25 chars.
+    Examples: enhanced-audit-query.py → audit-query.py, ultimate-evidence-validator.py → evidence-validator.py.
+    Enforce CORE-022 compliance across entire src/tools, src/mcp, scripts/ directories.
+  priority: high
+  phase: 2
+  status: planned
+  estimatedEffort: 12
+  effort_unit: hours
+  dependencies:
+    - AC-TOOLKIT-001
+  verificationCriteria:
+    - "All Python files match pattern: ^[a-z0-9]+(-[a-z0-9]+)*\\.py$ (kebab-case)"
+    - "All filenames ≤25 characters (excluding .py extension)"
+    - "No adjectives (enhanced, advanced, ultimate, improved, smart, etc.)"
+    - "All imports updated across codebase"
+    - "No broken imports or circular dependencies"
+  owner: TDD-Master
+  riskIfUnfixed: high
+
+AC-TOOLKIT-003:
+  id: AC-TOOLKIT-003
+  category: toolkit
+  subcategory: mcp_exposure
+  title: Enforce @mcp_tool decorators on all public tools per CORE-024
+  description: |
+    Ensure all public-facing tools have @mcp_tool decorators with complete metadata
+    (name, description, category, parameters, returns). Covers src/tools, src/mcp, 
+    operational scripts that MasterOrchestrator should discover via capability_registry.
+  priority: high
+  phase: 2
+  status: planned
+  estimatedEffort: 6
+  effort_unit: hours
+  dependencies:
+    - AC-TOOLKIT-001
+  verificationCriteria:
+    - "100% of public functions in src/tools/*.py have @mcp_tool decorator"
+    - "100% of public functions in src/mcp/*_tools.py have @mcp_tool decorator"
+    - "All @mcp_tool decorators include: name, description, category, parameters, returns"
+    - "capability_registry.discover() finds all decorated tools"
+    - "Linting passes: ruff check, mypy type validation"
+  owner: TDD-Master
+  riskIfUnfixed: high
+
+AC-TOOLKIT-004:
+  id: AC-TOOLKIT-004
+  category: toolkit
+  subcategory: organization
+  title: Refactor scripts/ organizational structure
+  description: |
+    Move operational scripts from scripts/ directory into proper src/ structure.
+    Scripts currently expose to shell but should be MCP tools or internal utilities.
+    Consolidate related scripts, delete redundant ones, move core logic to src/tools or src/mcp.
+  priority: medium
+  phase: 3
+  status: planned
+  estimatedEffort: 10
+  effort_unit: hours
+  dependencies:
+    - AC-TOOLKIT-001
+    - AC-TOOLKIT-003
+  verificationCriteria:
+    - "scripts/ directory only contains shell entry points (≤5 files, all <100 lines)"
+    - "All operational logic moved to src/tools or src/mcp"
+    - "No code duplication between scripts/ and src/"
+    - "All imports resolvable, no broken dependencies"
+  owner: TDD-Master
+  riskIfUnfixed: medium
+
+AC-TOOLKIT-005:
+  id: AC-TOOLKIT-005
+  category: toolkit
+  subcategory: discovery
+  title: Create toolkit discovery and capability catalog
+  description: |
+    Generate comprehensive catalog of all available tools, orchestrators, capabilities.
+    Build human-readable discovery system so MasterOrchestrator can query available
+    capabilities by category, priority, phase. Include metadata: effort, status, dependencies.
+  priority: medium
+  phase: 3
+  status: planned
+  estimatedEffort: 8
+  effort_unit: hours
+  dependencies:
+    - AC-TOOLKIT-003
+    - AC-TOOLKIT-004
+  verificationCriteria:
+    - "capability_registry.yaml generated with all decorated tools"
+    - "Catalog queryable by: category, priority, status, effort, phase"
+    - "Human-readable format (YAML or markdown)"
+    - "Automatically generated from source (no manual updates needed)"
+    - "Integrated with brittleness review prompt for toolkit health metrics"
+  owner: TDD-Master
+  riskIfUnfixed: low
