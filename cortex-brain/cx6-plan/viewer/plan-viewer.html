@@ -1305,28 +1305,37 @@
             },
             
             getDefaultPlanData() {
-                // Fallback only if JSON load fails - reflects Phase 3 completion (2026-01-12)
+                // Fallback only if JSON load fails - reflects Phase 4.5 completion (2026-01-12)
                 return {
                     plan_metadata: {
                         plan_id: 'CORTEX-6.0-SEQUENTIAL-MASTER',
                         execution_strategy: 'SEQUENTIAL',
                         phase_gate_policy: '100% completion required before next phase',
-                        total_ac_ids: 102,
-                        completed_ac_ids: 87,
+                        total_ac_ids: 203,
+                        completed_ac_ids: 95,
                         in_progress_ac_ids: 0,
                         version: '6.0.0',
-                        updated: '2026-01-12T21:08:00Z',
-                        status: 'phase_3_complete'
+                        updated: '2026-01-12T21:45:00Z',
+                        status: 'phase_4_5_complete'
                     },
                     phases: [
                         {
                             id: 1,
-                            name: 'Phase 1: Foundation',
+                            name: 'Phase 1: Foundation Enhancement',
                             status: 'completed',
                             completion_percentage: 100,
                             ac_ids_total: 43,
                             ac_ids_complete: 43,
-                            description: 'Audit infrastructure, governance merger, state management, lifecycle, evidence bundles, security layer'
+                            description: 'Core infrastructure: Audit, Governance, State, Lifecycle, Evidence, Security'
+                        },
+                        {
+                            id: 1.5,
+                            name: 'Phase 1.5: STS as Capability 0',
+                            status: 'completed',
+                            completion_percentage: 33,
+                            ac_ids_total: 3,
+                            ac_ids_complete: 1,
+                            description: 'Framework validation with Golden Corpus'
                         },
                         {
                             id: 2,
@@ -1335,7 +1344,7 @@
                             completion_percentage: 100,
                             ac_ids_total: 28,
                             ac_ids_complete: 28,
-                            description: 'MasterOrchestrator, TodoManager, TDD-Master, Planning v5, Scaffolder'
+                            description: 'MasterOrchestrator, TodoManager, TDD-Master, Planning v5'
                         },
                         {
                             id: 3,
@@ -1344,16 +1353,34 @@
                             completion_percentage: 100,
                             ac_ids_total: 16,
                             ac_ids_complete: 16,
-                            description: 'Cleanup, ADO, Vacuum, Investigation, Sanitization, Multi-language Crawler (254 tests passing)'
+                            description: 'Cleanup, ADO, Vacuum, Investigation, Sanitization, Multi-language Crawler (1586 tests passing)'
                         },
                         {
                             id: 4,
                             name: 'Phase 4: Intelligence Layer',
                             status: 'planned',
                             completion_percentage: 0,
-                            ac_ids_total: 15,
+                            ac_ids_total: 8,
                             ac_ids_complete: 0,
-                            description: 'LLM Intent Classifier, Vision API, Knowledge Practices, Knowledge Graph'
+                            description: 'LLM Intent Classifier, Vision API, Knowledge Graph, Learning'
+                        },
+                        {
+                            id: 4.5,
+                            name: 'Phase 4.5: Orchestrator Integration & Audit Validation',
+                            status: 'completed',
+                            completion_percentage: 100,
+                            ac_ids_total: 8,
+                            ac_ids_complete: 8,
+                            description: 'End-to-end integration testing (1586 tests passing)'
+                        },
+                        {
+                            id: 5,
+                            name: 'Phase 5: Legacy Migration & Decommission',
+                            status: 'planned',
+                            completion_percentage: 0,
+                            ac_ids_total: 3,
+                            ac_ids_complete: 0,
+                            description: 'Migrate from CORTEX 5.x, decommission scaffolding'
                         }
                     ]
                 };
