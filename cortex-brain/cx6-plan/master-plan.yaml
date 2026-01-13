@@ -1062,6 +1062,154 @@ conclusion:
   readiness: READY TO IMPLEMENT
   confidence: VERY HIGH (97/100)
   next_action: START PHASE 1 ON 2026-01-13
+cortex_toolkit_single_path_enforcement:
+  status: CRITICAL - PERMANENT FIX REQUIRED
+  version: 1.0.0
+  created: '2026-01-13T23:50:00Z'
+  reference_document: cortex-brain/tier0/governance/CORTEX-TOOLKIT-SINGLE-PATH-FIX.md
+  enforcement_rules:
+    - rule_id: CORE-026
+      name: Single Toolkit Path Enforcement
+      description: ALL toolkit invocations MUST route through MasterOrchestrator
+      severity: CRITICAL
+      enforcement: BLOCKED
+      failure_mode: Toolkit invocation bypasses governance/audit trail
+    
+    - rule_id: CORE-027
+      name: No Duplicate Tests
+      description: Each test pattern appears ONCE (in base class or file)
+      severity: HIGH
+      enforcement: BLOCKED
+      failure_mode: Maintenance nightmare, conflicting assertions
+    
+    - rule_id: CORE-028
+      name: Toolkit MCP Single Path
+      description: Toolkit MCP tools ONLY instantiate singleton ToolkitOrchestrator
+      severity: HIGH
+      enforcement: BLOCKED
+      failure_mode: Multiple ToolkitOrchestrator instances created
+  
+  brittleness_findings:
+    finding_1:
+      issue: Toolkit Orchestrator NOT in MasterOrchestrator Registry
+      severity: CRITICAL
+      impact: Toolkit inaccessible from primary execution path
+      current_state: |
+        ToolkitOrchestrator exists ONLY in:
+        - cortex-brain/manifests/orchestrators/toolkit-orchestrator.yaml (manifest)
+        - src/tools/duplicate-detection-toolkit.py (isolated class)
+        - cortex-brain/registry/orchestrators.json (NO ENTRY)
+      why_brittle: |
+        Users cannot invoke toolkit via: python3 -m src.main "toolkit ..."
+        MasterOrchestrator.route() cannot route to toolkit orchestrator
+        Toolkit is ORPHANED from main execution pipeline
+      permanent_fix: |
+        1. Create src/orchestrators/toolkit/toolkit_orchestrator.py
+        2. Register in MasterOrchestrator._initialize_orchestrators()
+        3. Add entry to orchestrators.json (enabled=true)
+        4. Wire all methods to MCP decorators (@mcp_tool)
+    
+    finding_2:
+      issue: Missing toolkit_tools.py (Phase 2 Blocker)
+      severity: CRITICAL
+      impact: 8 AC-TOOLKIT capabilities not exposed
+      missing_tools: |
+        AC-TOOLKIT-001: epic_plan_viewer_generator
+        AC-TOOLKIT-002: knowledge_graph_visualizer
+        AC-TOOLKIT-003: architecture_diagram_generator
+        AC-TOOLKIT-004: audit_log_exporter
+        AC-TOOLKIT-005: glassmorphism_validator
+        AC-TOOLKIT-006: tab_system_generator
+        AC-TOOLKIT-007: mermaid_engine
+        AC-TOOLKIT-008: toolkit_mcp_server
+      why_brittle: |
+        MCP tools/list doesn't show toolkit capabilities
+        IDE extensions can't discover toolkit functions
+        Capability registry incomplete
+        CORE-024 violation (tools not @mcp_tool decorated)
+      permanent_fix: |
+        1. Create src/mcp/toolkit_tools.py
+        2. 8 @mcp_tool functions with singleton pattern
+        3. Register all 8 in CapabilityRegistry
+    
+    finding_3:
+      issue: 5 Circular Dependencies Detected
+      severity: HIGH
+      impact: Import failures under stress
+      circular_paths: |
+        MasterOrchestrator ↔ middleware/mistake_prevention.py
+        MasterOrchestrator ↔ core/governance_to_todo_pipeline.py
+        + 3 more circular chains
+      why_brittle: |
+        Python circular imports cause AttributeError at runtime
+        Load order matters (brittle timing dependencies)
+        Refactoring one module breaks others unexpectedly
+      permanent_fix: |
+        1. Create src/orchestrators/core/dependency_injection.py
+        2. ServiceLocator pattern eliminates circular imports
+        3. All services created ONCE at startup
+    
+    finding_4:
+      issue: 5 Duplicate Test Patterns
+      severity: MEDIUM
+      impact: Maintenance burden, inconsistent coverage
+      duplicates: |
+        test_orchestrator_error_handling in 2 files
+        test_orchestrator_initialization in 5 files
+      why_brittle: |
+        Each orchestrator has own test with same logic
+        Must update in 5+ places if test logic changes
+        Coverage metrics misleading (counted 5x)
+      permanent_fix: |
+        1. Create tests/base/test_orchestrator_base.py
+        2. Each test inherits from OrchestratorTestBase
+        3. Subclass tests only add orchestrator-specific tests
+    
+    finding_5:
+      issue: 93 Test Files Scattered (No Organization)
+      severity: MEDIUM
+      impact: Hard to locate related tests, duplicates hide easily
+      why_brittle: |
+        Tests for orchestrators/toolkit spread across entire tests/ dir
+        No clear organization strategy
+        Unclear test ownership
+      permanent_fix: |
+        1. Create tests/orchestrators/ directory structure
+        2. Organize by: base/, core/, domain/, toolkit/, integration/
+        3. Clear naming convention: test_{component}.py
+  
+  implementation_roadmap:
+    phase_a:
+      name: Single Path Enforcement
+      duration: 2 days
+      tasks:
+        - Create ToolkitOrchestrator + register with Master
+        - Create toolkit_tools.py (8 MCP tools)
+        - Break circular dependencies via ServiceLocator
+    
+    phase_b:
+      name: Test Organization
+      duration: 2 days
+      tasks:
+        - Create base test classes
+        - Reorganize 93 test files
+        - Migrate duplicate tests to base
+    
+    phase_c:
+      name: Governance Enforcement
+      duration: 1 day
+      tasks:
+        - Add CORE-026/27/28 rules
+        - Create pre-commit hook enforcement
+        - Verify all rules block violations
+  
+  success_metrics:
+    toolkit_paths: 1 (single)
+    test_files_organized: 25
+    circular_dependencies: 0
+    duplicate_test_patterns: 0
+    governance_violations_blocked: ALWAYS
+
 governance_infrastructure:
   middleware_implementations:
     CORE-001:

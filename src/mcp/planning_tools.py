@@ -11,8 +11,21 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 import yaml
+from src.mcp.mcp_decorator import mcp_tool
 
 
+@mcp_tool(
+    name="cortex_planning_create",
+    description="Create a new YAML-based plan",
+    category="planning",
+    parameters={
+        "name": {"type": "string", "required": True, "description": "Plan name"},
+        "description": {"type": "string", "required": True, "description": "Plan description"},
+        "workspace_root": {"type": "string", "required": False, "description": "Path to workspace"},
+        "stages": {"type": "array", "required": False, "description": "Optional list of stages"}
+    },
+    returns={"type": "object", "description": "Created plan info"}
+)
 def planning_create(
     name: str,
     description: str,
@@ -68,6 +81,17 @@ def planning_create(
         }
 
 
+@mcp_tool(
+    name="cortex_planning_execute",
+    description="Execute a plan by ID",
+    category="planning",
+    parameters={
+        "plan_id": {"type": "string", "required": True, "description": "Plan ID to execute"},
+        "workspace_root": {"type": "string", "required": False, "description": "Path to workspace"},
+        "dry_run": {"type": "boolean", "required": False, "description": "If True, simulate only"}
+    },
+    returns={"type": "object", "description": "Execution result"}
+)
 def planning_execute(
     plan_id: str,
     workspace_root: str = ".",
@@ -116,6 +140,16 @@ def planning_execute(
         }
 
 
+@mcp_tool(
+    name="cortex_planning_list",
+    description="List all plans in the workspace",
+    category="planning",
+    parameters={
+        "workspace_root": {"type": "string", "required": False, "description": "Path to workspace"},
+        "status": {"type": "string", "required": False, "description": "Filter by status"}
+    },
+    returns={"type": "object", "description": "List of plans"}
+)
 def planning_list(
     workspace_root: str = ".",
     status: Optional[str] = None
@@ -173,6 +207,18 @@ def planning_list(
         }
 
 
+
+
+@mcp_tool(
+    name="cortex_planning_status",
+    description="Get detailed status of a specific plan",
+    category="planning",
+    parameters={
+        "plan_id": {"type": "string", "required": True, "description": "Plan ID to check"},
+        "workspace_root": {"type": "string", "required": False, "description": "Path to workspace"}
+    },
+    returns={"type": "object", "description": "Plan status details"}
+)
 def planning_status(
     plan_id: str,
     workspace_root: str = "."
@@ -229,6 +275,18 @@ def planning_status(
         }
 
 
+@mcp_tool(
+    name="cortex_planning_update",
+    description="Update an existing plan",
+    category="planning",
+    parameters={
+        "plan_id": {"type": "string", "required": True, "description": "Plan ID to update"},
+        "workspace_root": {"type": "string", "required": False, "description": "Path to workspace"},
+        "status": {"type": "string", "required": False, "description": "New status"},
+        "stages": {"type": "array", "required": False, "description": "Updated stages"}
+    },
+    returns={"type": "object", "description": "Update result"}
+)
 def planning_update(
     plan_id: str,
     workspace_root: str = ".",

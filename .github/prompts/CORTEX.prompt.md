@@ -21,27 +21,33 @@
 
 ## 🔗 MASTERORCHESTRATOR DELEGATION
 
-**All implementation delegated to unified orchestrator:**
+**All implementation delegated to unified orchestrator (SINGLE PATH ENFORCEMENT):**
 
 ```bash
 # Execute via MasterOrchestrator (central control)
 python3 -m src.main "{user_intent}" --orchestrator master --format markdown
 ```
 
-**MasterOrchestrator handles:**
+**MasterOrchestrator handles (CRITICAL - NO EXCEPTIONS):**
 - ✅ Load governance rules (tier0/tier1/tier2/tier3)
-- ✅ Validate against SKULL rules
+- ✅ Validate against SKULL rules (CORE-026/27/28 new)
 - ✅ Create TodoManager tasks
 - ✅ Execute tasks in dependency order
 - ✅ Update progress-tracker.json (atomic writes)
 - ✅ Enforce phase gates
+- ✅ Route to ToolkitOrchestrator (CORE-026 enforcement)
 - ✅ Return structured results
 
-**Do NOT:**
+**Do NOT (CORE-026 Governance Blocked):**
 - ❌ Directly modify progress-tracker.json
 - ❌ Directly modify AC-INDEX.yaml
 - ❌ Call sync_plan_viewer_data.py multiple times
 - ❌ Manipulate state outside MasterOrchestrator
+- ❌ Instantiate ToolkitOrchestrator directly (CORE-026)
+- ❌ Create duplicate test patterns (CORE-027)
+- ❌ Create multiple toolkit MCP tool instances (CORE-028)
+
+**Reference:** cortex-brain/tier0/governance/CORTEX-TOOLKIT-SINGLE-PATH-FIX.md (permanent fix guide)
 
 ---
 
