@@ -1,11 +1,11 @@
 {
   "plan_metadata": {
     "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
-    "total_ac_ids": 197,
+    "total_ac_ids": 212,
     "completed_ac_ids": 117,
     "in_progress_ac_ids": 0,
-    "version": "1.8.0",
-    "updated": "2026-01-13T13:57:36.874854+00:00",
+    "version": "1.9.0",
+    "updated": "2026-01-13T14:29:33.136624+00:00",
     "status": "phases_1_to_5_defined_4.5_integration_tests_added"
   },
   "phases": [
@@ -75,9 +75,9 @@
     {
       "id": 2,
       "name": "Orchestration Core (CORE WORKFLOW)",
-      "completion_percentage": 43,
+      "completion_percentage": 32,
       "ac_ids_complete": 20,
-      "ac_ids_total": 46,
+      "ac_ids_total": 61,
       "status": "in_progress",
       "description": "Establishes THE DEFAULT WORKING MECHANISM at the core of CORTEX operations.\nMasterOrchestrator is IN CHARGE: evaluates requests, creates tasks, executes.\nThis is the central controller that all user requests flow through.\n",
       "verified_implemented": [
