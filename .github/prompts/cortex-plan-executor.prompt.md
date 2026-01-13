@@ -1,16 +1,14 @@
-# 🚀 CORTEX-PLAN-EXECUTOR – Autonomous MAC/WIN Execution Engine# 🎯 CORTEX-PLAN-EXECUTIONER – Autonomous Implementation & Validation Loop
+# 🚀 CORTEX-PLAN-EXECUTOR – Autonomous MAC/WIN Execution Engine
 
+**Purpose:** Autonomous implementation of master-plan.yaml with dual-machine orchestration, SSOT enforcement, and reality-based progress tracking with visual ASCII progress bars
 
+**Version:** 4.1.0 (MAC/WIN Dual-Machine Autonomous Executor with ASCII Progress)
 
-**Purpose:** Autonomous implementation of master-plan.yaml with dual-machine orchestration, SSOT enforcement, and reality-based progress tracking  **Purpose:** Autonomous AC-ID implementation, test execution, evidence validation, and progress tracking  
+**Date:** 2026-01-13
 
-**Version:** 4.0.0 (MAC/WIN Dual-Machine Autonomous Executor)  **Version:** 3.0.0 (Plan-Integrated with Regression Prevention)  
+**Governance:** CORE-002, CORE-005, CORE-008, CORE-009, CORE-017, CORE-019, CORE-025
 
-**Date:** 2026-01-13  **Date:** 2026-01-12  
-
-**Governance:** CORE-002, CORE-005, CORE-008, CORE-009, CORE-017, CORE-019, CORE-025  **Governance:** CORE-002 (no root files), CORE-017 (governance enforcement), CORE-009 (plan organization), CORE-025 (intelligent challenge)  
-
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.****Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 
 
@@ -381,9 +379,28 @@ elif current_phase in [1, 2, 3, 8, 9, 10] and current_os != 'Windows':
 
 ---
 
-## 📊 OUTPUT FORMAT (Executive Summary)
+## 📊 OUTPUT FORMAT (Visual Progress Tracker)
 
-**ALL responses MUST follow this format:**
+**Show ASCII progress bar at EACH phase transition:**
+
+```
+┌────────────────────────────────────────────────────────────────────┐
+│          🧠 CORTEX Phase {N} {Name} - PROGRESS TRACKER             │
+├────────────────────────────────────────────────────────────────────┤
+│ Overall Progress: `████████░░` 80% 🔄 In Progress                  │
+├────────────────────────────────────────────────────────────────────┤
+│ Phase {N} - {Name}  `████████░░` 80% 🔄 In Progress                │
+│ AC-IDs: 26/33 | Tests: 142/178                                     │
+└────────────────────────────────────────────────────────────────────┘
+```
+
+**Progress Bar Legend:**
+- `█` = Completed work (filled blocks)
+- `░` = Remaining work (empty blocks)
+- Total bar length: 10 blocks = 100%
+- Status: ✅ Complete | 🔄 In Progress | ⏳ Pending | 🚫 Blocked
+
+**Executive Summary (below progress bar):**
 
 ```
 ✅ OUTCOMES
@@ -404,14 +421,46 @@ elif current_phase in [1, 2, 3, 8, 9, 10] and current_os != 'Windows':
 • {Business impact of completed work}
 ```
 
+**Complete Example:**
+
+```
+┌────────────────────────────────────────────────────────────────────┐
+│          🧠 CORTEX Phase 1 Foundation - PROGRESS TRACKER           │
+├────────────────────────────────────────────────────────────────────┤
+│ Overall Progress: `████████░░` 80% 🔄 In Progress                  │
+├────────────────────────────────────────────────────────────────────┤
+│ Phase 1 - Foundation  `████████░░` 80% 🔄 In Progress              │
+│ AC-IDs: 26/33 | Tests: 142/178                                     │
+└────────────────────────────────────────────────────────────────────┘
+
+✅ OUTCOMES
+
+• Hash chain integrity validation operational (5/5 tests passing)
+• Phase 1 audit infrastructure at 80% (26/33 capabilities)
+
+⚙️ IN PROGRESS
+
+• Implementing lifecycle state management (7-state orchestrator flow)
+
+⚠️ RISKS
+
+• None detected
+
+🎯 IMPACT
+
+• Tamper-proof audit trail now enforceable
+• Orchestrators can validate state transitions
+```
+
 **Rules:**
+- ✅ ASCII progress bar ALWAYS shown first
 - ✅ Each bullet on separate line (no blank lines between bullets)
 - ✅ Human-readable capability names (NO AC-ID codes alone)
 - ✅ Separate facts from recommendations
 - ✅ Blank line after section headers only
 - ✅ Readable in <1 minute
 - ❌ No AC-ID codes in user-facing output (translate to capability names)
-- ❌ No code snippets
+- ❌ No code snippets (unless explicitly requested)
 - ❌ No narrative prose
 
 ---
