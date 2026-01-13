@@ -249,6 +249,318 @@ print(f'Verified ACs: {results[\"summary\"][\"verified_count\"]}/{results[\"summ
 
 ---
 
+## 🛡️ SSOT PROTECTION PROTOCOL (NEW - v1.1)
+
+**CRITICAL:** Prevent corruption like previous reconciliation issues (17 mismatches identified 2026-01-13).
+
+**Root Causes of Previous Failures:**
+1. Hardcoded percentages (all phases showing 100% despite being in-progress)
+2. Missing phases (1.5, 4, 4.5, 10, 11 completely absent from tracker)
+3. Wrong AC counts (Phase 1: 29→30, Phase 2: 13→54, Phase 5: 3→28, Phase 9: 5→29)
+4. No holistic calculation (89% false vs 67.9% actual)
+5. No validation gates (corrupt data accepted without checks)
+6. No reconciliation (no automated verification against AC-INDEX)
+7. No atomic transactions (individual updates could fail partially)
+8. Stale dashboard (displayed "all phases complete" misleadingly)
+
+**Solution: ProgressTrackerManager Component**
+
+### Mandatory Update Protocol (SSOT-PROTECTION-001)
+
+**ALL progress-tracker.json updates MUST follow this pattern:**
+
+```python
+# ✅ CORRECT (Atomic with holistic recalculation)
+from src.infrastructure.progress_tracker_manager import ProgressTrackerManager
+
+manager = ProgressTrackerManager()
+
+# Single AC completion
+manager.update_ac_completion(
+    ac_id="AC-AUDIT-001",
+    status="implemented",
+    test_results={"passed": 5, "failed": 0, "total": 5},
+    evidence_bundle={"commit": "abc123", "tests": [...]}
+)
+# Internally: 
+# 1. Validates AC-ID exists in AC-INDEX.yaml
+# 2. Validates tests passed
+# 3. Updates AC in current phase
+# 4. Recalculates phase completion % (not hardcoded!)
+# 5. Recalculates overall completion % (not hardcoded!)
+# 6. Atomic write with file locking
+# 7. Regenerates plan-viewer-data.json
+# 8. Logs to audit trail with correlation ID
+
+# Phase completion
+manager.mark_phase_complete(
+    phase_number=1,
+    completion_evidence={"all_acs_verified": True, "tests": 45}
+)
+# Internally:
+# 1. Validates all ACs in phase are "implemented"
+# 2. Validates test evidence exists for all ACs
+# 3. Marks phase status = "complete"
+# 4. Recalculates next phase as "queued"
+# 5. Atomic write with file locking
+# 6. Regenerates plan-viewer-data.json
+```
+
+**❌ NEVER do this:**
+```python
+# WRONG: Hardcoding percentages
+tracker["phase_2"]["completion_percentage"] = 80  # FORBIDDEN!
+
+# WRONG: Direct JSON modification
+import json
+data = json.loads(Path("progress-tracker.json").read_text())
+data["phase_1"]["total_ac_count"] = 30  # FORBIDDEN!
+Path("progress-tracker.json").write_text(json.dumps(data))
+
+# WRONG: Partial updates (no recalculation)
+tracker["phase_1"]["verified_implemented"].append("AC-AUDIT-001")
+# Missing: Recalculate phase_1.completion_percentage!
+
+# WRONG: Manual dashboard edit
+# Editing plan-viewer.html directly → Auto-overwritten on next sync!
+```
+
+### Validation Gates (SSOT-PROTECTION-002)
+
+**Before EVERY state update, validate:**
+
+```python
+# Pre-validation (before update)
+manager.validate_ac_for_update(ac_id):
+    ✓ AC-ID exists in AC-INDEX.yaml
+    ✓ AC-ID is in current phase (from master-plan.yaml)
+    ✓ Tests exist (pytest markers)
+    ✓ Tests are passing (test results)
+    ✓ No conflicts with other ACs
+    ✓ Phase gate satisfied (previous phase 100%)
+
+# Post-validation (after atomic write)
+manager.validate_state_integrity():
+    ✓ File write succeeded (no I/O errors)
+    ✓ No corruption (JSON parse succeeds)
+    ✓ All phases have correct AC counts
+    ✓ All completion % values in range [0, 100]
+    ✓ No inconsistent states (e.g., phase 100% but ACs pending)
+    ✓ Audit trail entry created
+```
+
+**If validation fails:** Operation blocked, audit alert triggered, state rolled back.
+
+### Holistic Recalculation (SSOT-PROTECTION-003)
+
+**After EVERY AC update, recalculate EVERYTHING:**
+
+```python
+# Step 1: Recalculate phase metrics
+for each_phase:
+    completed_acs = count(AC where status="implemented" AND tests_passing)
+    total_acs = count(AC in phase from master-plan.yaml)
+    completion_pct = (completed_acs / total_acs) * 100  # CALCULATED, not hardcoded!
+    status = "complete" if completion_pct >= 100 else "in_progress"
+
+# Step 2: Recalculate overall metrics
+overall_completed = sum(completed_acs for all phases)
+overall_total = sum(total_acs for all phases)
+overall_pct = (overall_completed / overall_total) * 100  # CALCULATED, not hardcoded!
+
+# Step 3: Auto-sync dashboard
+run_command("python3 scripts/regenerate_plan_viewer_data.py")
+
+# Step 4: Log to audit trail
+log_event(
+    category="ORCHESTRATOR",
+    action="holistic_recalculation",
+    metrics={
+        "overall_completion_pct": overall_pct,
+        "phases_complete": count(phase.status="complete"),
+        "ac_completed": overall_completed,
+        "ac_total": overall_total
+    }
+)
+```
+
+**GUARANTEE:** If you see a hardcoded percentage in progress-tracker.json, it's a BUG.
+
+### Periodic Reconciliation (SSOT-PROTECTION-004)
+
+**Automatic hourly task verifies state against authorities:**
+
+```python
+# Hourly reconciliation job (runs automatically)
+async def periodic_reconciliation_task():
+    # Load SSOT files
+    ac_index = load_ac_index()  # AC-INDEX.yaml (authority for AC definitions)
+    master_plan = load_master_plan()  # master-plan.yaml (authority for phase definitions)
+    tracker = load_progress_tracker()  # Current state
+    
+    # Check 1: Phase definitions match
+    for phase in master_plan.phases:
+        if phase.number not in tracker.phases:
+            # ISSUE: Phase missing in tracker!
+            log_alert("PHASE MISSING", phase_number=phase.number)
+            # AUTO-FIX: Create missing phase in tracker
+            create_phase(phase)
+        
+        if phase.ac_range != tracker.phases[phase.number].ac_range:
+            # ISSUE: AC count mismatch!
+            log_alert("AC COUNT MISMATCH", phase=phase.number)
+            # AUTO-FIX: Recalculate from AC-INDEX
+            actual_acs = get_acs_for_phase(phase.number, ac_index)
+            tracker.phases[phase.number].total_ac_count = len(actual_acs)
+    
+    # Check 2: AC references exist
+    for ac_id in tracker.all_implemented_ac_ids:
+        if ac_id not in ac_index:
+            # ISSUE: AC-ID not in index!
+            log_alert("INVALID AC-ID", ac_id=ac_id)
+            # ACTION: Investigate, may need to remove from tracker
+    
+    # Check 3: Completion percentages are calculated, not hardcoded
+    for phase in tracker.phases:
+        calculated_pct = (phase.completed_count / phase.total_ac_count) * 100
+        if phase.completion_percentage != calculated_pct:
+            # ISSUE: Percentage doesn't match calculation!
+            log_alert("PERCENTAGE MISMATCH", phase=phase.number,
+                     stored=phase.completion_percentage, calculated=calculated_pct)
+            # AUTO-FIX: Recalculate percentage
+            phase.completion_percentage = calculated_pct
+    
+    # If ANY issues found: Regenerate dashboard, log comprehensive report
+    if issues_found > 0:
+        regenerate_plan_viewer_data()
+        log_reconciliation_report(issues_found, issues_fixed)
+```
+
+**This catches drift BEFORE it becomes corruption.**
+
+### Atomic File Operations (SSOT-PROTECTION-005)
+
+**All state updates use file locking to prevent corruption:**
+
+```python
+import fcntl
+
+def atomic_write_progress_tracker(new_state):
+    """Atomic write with file locking to prevent corruption."""
+    lock_file = Path("cortex-brain/tier1/tracking/.progress-tracker.lock")
+    
+    # Exclusive lock (blocks concurrent writes)
+    with open(lock_file, "w") as lock:
+        fcntl.flock(lock.fileno(), fcntl.LOCK_EX)  # Acquire exclusive lock
+        
+        try:
+            # Validate new state
+            if not validate_state_integrity(new_state):
+                raise ValueError("State validation failed")
+            
+            # Write to temporary file first
+            temp_path = Path("cortex-brain/tier1/tracking/.progress-tracker.tmp")
+            temp_path.write_text(json.dumps(new_state, indent=2))
+            
+            # Atomic rename (filesystem level atomicity)
+            temp_path.replace(Path("cortex-brain/tier1/tracking/progress-tracker.json"))
+            
+            # Write succeeded
+            log_audit_event("state_update_succeeded")
+        
+        except Exception as e:
+            log_audit_event("state_update_failed", error=str(e))
+            raise
+        
+        finally:
+            # Always release lock
+            fcntl.flock(lock.fileno(), fcntl.LOCK_UN)
+```
+
+**Benefits:**
+- ✅ No partial writes (atomic rename)
+- ✅ No concurrent corruption (exclusive lock)
+- ✅ Transaction semantics (all-or-nothing)
+- ✅ Recovery possible (temporary file preserved on failure)
+
+### Enforcement Hooks (SSOT-PROTECTION-006)
+
+**Pre-commit and post-merge hooks enforce SSOT integrity:**
+
+**File:** `.git/hooks/pre-commit`
+```bash
+#!/bin/bash
+# Prevent commits that violate SSOT integrity
+
+# Check 1: No hardcoded percentages in progress-tracker.json
+if git diff --cached cortex-brain/tier1/tracking/progress-tracker.json | \
+   grep -E '"completion_percentage":\s*[0-9]+' | \
+   grep -v '#.*completion_percentage'; then
+    echo "❌ ERROR: Hardcoded percentages detected in progress-tracker.json"
+    echo "Use ProgressTrackerManager for all updates (percentages are calculated)"
+    exit 1
+fi
+
+# Check 2: No direct progress-tracker.json edits (must use ProgressTrackerManager)
+if git log --oneline -1 | grep -i "manual.*tracker\|direct.*json"; then
+    echo "❌ ERROR: Manual progress-tracker.json edit detected"
+    echo "Use: python3 -m src.main 'update ac-completion ...'"
+    exit 1
+fi
+
+# Check 3: All AC-IDs referenced exist in AC-INDEX.yaml
+python3 scripts/validate_ac_ids_in_commit.py || exit 1
+
+exit 0
+```
+
+**File:** `.git/hooks/post-merge`
+```bash
+#!/bin/bash
+# Auto-reconcile after merge conflicts
+
+python3 -m src.main "reconcile from ac-index" --auto-fix
+
+# Regenerate dashboard if changes detected
+if [[ -n $(git diff --name-only HEAD~1 HEAD | grep progress-tracker.json) ]]; then
+    python3 scripts/regenerate_plan_viewer_data.py
+fi
+```
+
+### Monitoring & Alerts (SSOT-PROTECTION-007)
+
+**Track metrics to detect corruption early:**
+
+```python
+# Metrics collected by ProgressTrackerManager
+tracker_metrics = {
+    "tracker_updates_total": 0,  # Total state updates
+    "tracker_validation_failures": 0,  # Pre/post validation failures
+    "reconciliation_mismatches": 0,  # Issues found by periodic task
+    "reconciliation_auto_fixes": 0,  # Issues auto-fixed
+    "dashboard_sync_failures": 0,  # regenerate_plan_viewer_data.py failures
+    "atomic_write_failures": 0,  # File lock or rename failures
+}
+
+# Alert thresholds
+ALERTS = {
+    "validation_failure_rate > 5%": "Block future updates until investigated",
+    "reconciliation_mismatches > 0": "Critical: Corruption detected, regenerate dashboard",
+    "atomic_write_failures > 0": "Critical: File system issue, stop execution",
+}
+```
+
+**Current Status (Post-Reconciliation 2026-01-13):**
+- ✅ 17 issues fixed (100% resolution rate)
+- ✅ 13 phases now tracked (was 8)
+- ✅ Dashboard accuracy restored (67.9% realistic vs 89% false)
+- ✅ 159/234 ACs verified implemented
+- ⏳ ProgressTrackerManager implementation pending
+- ⏳ Integration with MasterOrchestrator pending
+- ⏳ Periodic reconciliation task pending
+
+---
+
 ## 🎬 AUTONOMOUS EXECUTION (MasterOrchestrator Loop)
 
 **When user says "proceed autonomously" or "continue":**
