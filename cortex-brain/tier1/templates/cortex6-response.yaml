@@ -1,0 +1,9 @@
+template_id: CX6-RESPONSE-V1
+version: 1.0.0
+tier: 1
+extends: EXEC-SUMMARY-V1
+epic: CORTEX-6.0
+customizations:
+  phase_tracking: true
+  ac_id_translation: true
+  test_evidence_required: true

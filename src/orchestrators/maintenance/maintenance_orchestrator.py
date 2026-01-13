@@ -33,6 +33,7 @@ from src.orchestrators.base.base_orchestrator_v4 import (
     PhaseResult
 )
 from src.orchestrators.base.base_orchestrator import (
+from src.response_templates.layered_template_renderer import LayeredTemplateRenderer
     OrchestratorResult,
     OrchestratorStatus
 )
@@ -64,6 +65,7 @@ class MaintenanceResult:
         self.timestamp = datetime.now().isoformat()
 
 
+        self.template_renderer = LayeredTemplateRenderer()
 class MaintenanceOrchestratorV2(BaseOrchestratorV4):
     """
     Maintenance Orchestrator v2 - 12-phase maintenance pipeline.

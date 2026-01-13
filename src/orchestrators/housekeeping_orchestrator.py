@@ -20,6 +20,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 import yaml
+from src.response_templates.layered_template_renderer import LayeredTemplateRenderer
 
 
 @dataclass
@@ -153,6 +154,7 @@ class HousekeepingOrchestrator:
         # NO scheduler, file watcher, git hooks (per DOR Q4/Q9)
         # These attributes intentionally NOT defined
     
+        self.template_renderer = LayeredTemplateRenderer()
     def execute(self) -> HousekeepingReport:
         """
         Execute complete 9-phase housekeeping workflow.

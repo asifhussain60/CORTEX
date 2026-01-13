@@ -22,6 +22,7 @@ import yaml
 from pathlib import Path
 from typing import Dict, List, Optional, Any
 from datetime import datetime
+from src.response_templates.layered_template_renderer import LayeredTemplateRenderer
 
 
 class PlanMigrationOrchestrator:
@@ -48,6 +49,7 @@ class PlanMigrationOrchestrator:
         self.mode: Optional[str] = None  # 'EPIC' or 'FEATURE'
         self.migration_log: List[str] = []
         
+        self.template_renderer = LayeredTemplateRenderer()
     def execute(self, dry_run: bool = False) -> Dict[str, Any]:
         """
         Execute migration from v5 to v6.

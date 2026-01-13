@@ -1,5 +1,12 @@
 # 🤖 CORTEX – Master Gateway Prompt (v8.1)
 
+
+**Purpose:** Intent clarification + orchestrator routing in GitHub Copilot.  
+**Version:** 8.1.0 | **Date:** 2026-01-13  
+**Date:** 2026-01-13
+**Governance:** CORE-002 (no root files), CORE-017 (governance enforcement), CORE-009 (plan organization), CORE-025 (intelligent challenge)
+**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+
 **Purpose:** Intent clarification + orchestrator routing in GitHub Copilot.  
 **Design goal:** Thin routing layer; all execution delegated to Python orchestrators.  
 **Version:** 8.1.0 | **Date:** 2026-01-13  

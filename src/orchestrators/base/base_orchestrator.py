@@ -11,6 +11,7 @@ import logging
 from typing import Dict, Any, Optional
 from enum import Enum
 from dataclasses import dataclass
+from src.response_templates.layered_template_renderer import LayeredTemplateRenderer
 
 
 class OrchestratorStatus(Enum):
@@ -42,6 +43,7 @@ class BaseOrchestrator:
         self.logger = logging.getLogger("cortex.orchestrators.base")
         self.config_path = config_path
     
+        self.template_renderer = LayeredTemplateRenderer()
     def execute(self, context: Dict[str, Any]) -> OrchestratorResult:
         """Execute orchestrator (stub)."""
         return OrchestratorResult(

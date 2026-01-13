@@ -1,1042 +1,1185 @@
-schema_version: '1.5'
-last_updated: '2026-01-13T06:29:39.793631+00:00'
-updated_by: Phase 10 Autonomous Execution - AC-TEMPLATE-005 Complete
-description: Acceptance Criteria Index for CORTEX 6.0
+AC-CHALLENGE-001:
+  component: challenge_system
+  description: Detect requests contradicting governance (CORE-025) with pattern matching
+  phase: 11
+  priority: HIGH
+  test_coverage_target: 85
+  title: Challenge Detection Engine
+AC-CHALLENGE-002:
+  component: challenge_system
+  description: Generate educational challenge responses with governance rationale
+    and alternatives
+  phase: 11
+  priority: MEDIUM
+  test_coverage_target: 80
+  title: Challenge Response Generator
+AC-CHALLENGE-003:
+  component: challenge_system
+  description: Learn from challenge outcomes to improve pattern detection (tier3 persistence)
+  phase: 11
+  priority: MEDIUM
+  test_coverage_target: 75
+  title: Challenge Learning Loop
+AC-LENS-001:
+  component: cortex_lens
+  description: Parse Python, JavaScript, TypeScript, Java via AST libraries
+  phase: 11
+  priority: CRITICAL
+  test_coverage_target: 90
+  title: AST-Based Multi-Language Code Parser
+AC-LENS-002:
+  component: cortex_lens
+  description: Build import/dependency graphs from parsed code
+  phase: 11
+  priority: HIGH
+  test_coverage_target: 85
+  title: Dependency Graph Construction
+AC-LENS-003:
+  component: cortex_lens
+  description: Integrate existing git history analyzer into LENS
+  phase: 11
+  priority: HIGH
+  test_coverage_target: 80
+  title: Git History Intelligence Integration
+AC-LENS-004:
+  component: cortex_lens
+  description: SQLite-based knowledge graph with entity relationships
+  phase: 11
+  priority: CRITICAL
+  test_coverage_target: 90
+  title: Knowledge Graph Storage
+AC-LENS-005:
+  component: cortex_lens
+  description: Expose LENS analyzers as MCP tools for orchestrators
+  phase: 11
+  priority: HIGH
+  test_coverage_target: 85
+  title: MCP Tool Exposure
+AC-LENS-006:
+  component: cortex_lens
+  description: D3.js-based visualization of code structure and dependencies
+  phase: 11
+  priority: MEDIUM
+  test_coverage_target: 75
+  title: Real-Time Analysis Dashboard
+AC-ONBOARD-001:
+  component: onboarding_orchestrator
+  description: Automated codebase scanning and structure detection
+  phase: 11
+  priority: HIGH
+  test_coverage_target: 85
+  title: Project Discovery Workflow
+AC-ONBOARD-002:
+  component: onboarding_orchestrator
+  description: Identify frameworks, libraries, build tools automatically
+  phase: 11
+  priority: HIGH
+  test_coverage_target: 85
+  title: Technology Stack Detection
+AC-ONBOARD-003:
+  component: onboarding_orchestrator
+  description: Analyze package.json, requirements.txt, etc. for dependencies
+  phase: 11
+  priority: HIGH
+  test_coverage_target: 85
+  title: Dependency Analysis
+AC-ONBOARD-004:
+  component: onboarding_orchestrator
+  description: Detect MVC, microservices, monolith, etc.
+  phase: 11
+  priority: MEDIUM
+  test_coverage_target: 80
+  title: Architecture Pattern Recognition
+AC-ONBOARD-005:
+  component: onboarding_orchestrator
+  description: Auto-generate README, architecture diagrams from analysis
+  phase: 11
+  priority: MEDIUM
+  test_coverage_target: 75
+  title: Documentation Generator
+AC-ONBOARD-006:
+  component: onboarding_orchestrator
+  description: Store discovered patterns in knowledge graph
+  phase: 11
+  priority: HIGH
+  test_coverage_target: 85
+  title: Knowledge Capture
+AC-ONBOARD-007:
+  component: onboarding_orchestrator
+  description: Guide users through project setup and discovery
+  phase: 11
+  priority: MEDIUM
+  test_coverage_target: 80
+  title: Interactive Onboarding Workflow
+AC-ONBOARD-008:
+  component: onboarding_orchestrator
+  description: Expose onboarding capabilities as MCP tools
+  phase: 11
+  priority: HIGH
+  test_coverage_target: 85
+  title: MCP Tool Integration
+AC-TEMPLATE-006:
+  component: template_system
+  description: Migrate all orchestrator prompts to use standardized CORE-026 headers
+    with validation
+  phase: 11
+  priority: HIGH
+  test_coverage_target: 85
+  title: Orchestrator Header Migration
+AC-TEMPLATE-007:
+  component: template_system
+  description: Integrate 3-layer template system (tier0/tier1/tier2) into all orchestrators
+    with caching
+  phase: 11
+  priority: HIGH
+  test_coverage_target: 85
+  title: Template Layer Integration
+AC-TEMPLATE-008:
+  component: template_system
+  description: Unify all response templates under 3-layer architecture with versioning
+  phase: 11
+  priority: HIGH
+  test_coverage_target: 85
+  title: Response Template Unification
 acceptance_criteria:
-- id: AC-AUDIT-007
-  phase: Phase 9.1
-  category: Audit Infrastructure
-  title: Hash Chain Integrity Validation
-  status: implemented
+- category: Audit Infrastructure
+  evidence: tests/infrastructure/test_hash_chain.py
+  id: AC-AUDIT-007
   implementation_status: GREEN
+  pass_rate: 7/7 (100%)
+  phase: Phase 9.1
+  status: implemented
   test_coverage: 7/7
   tests_passing: 7
   tests_total: 7
-  pass_rate: 7/7 (100%)
+  title: Hash Chain Integrity Validation
   verification_status: verified
   verified_at: '2026-01-12T23:55:00Z'
-  evidence: tests/infrastructure/test_hash_chain.py
-- id: AC-LIFECYCLE-001
-  phase: Phase 9.1
-  category: Lifecycle Management
-  title: Lifecycle State Management
-  status: implemented
-  implementation_status: GREEN
-  test_coverage: 5/5
-  tests_passing: 5
-  tests_total: 5
-  pass_rate: 5/5 (100%)
-  verification_status: verified
-  verified_at: '2026-01-12T23:55:00Z'
+- category: Lifecycle Management
   evidence: tests/infrastructure/test_lifecycle_state_management.py
-- id: AC-LIFECYCLE-002
-  phase: Phase 9.1
-  category: Lifecycle Management
-  title: Phase Transition Hooks
-  status: implemented
+  id: AC-LIFECYCLE-001
   implementation_status: GREEN
+  pass_rate: 5/5 (100%)
+  phase: Phase 9.1
+  status: implemented
   test_coverage: 5/5
   tests_passing: 5
   tests_total: 5
-  pass_rate: 5/5 (100%)
+  title: Lifecycle State Management
   verification_status: verified
   verified_at: '2026-01-12T23:55:00Z'
+- category: Lifecycle Management
   evidence: tests/infrastructure/test_phase_transition_hooks.py
-- id: AC-LIFECYCLE-003
-  phase: Phase 9.1
-  category: Lifecycle Management
-  title: Pre/Post Phase Callbacks
-  status: implemented
+  id: AC-LIFECYCLE-002
   implementation_status: GREEN
+  pass_rate: 5/5 (100%)
+  phase: Phase 9.1
+  status: implemented
+  test_coverage: 5/5
+  tests_passing: 5
+  tests_total: 5
+  title: Phase Transition Hooks
+  verification_status: verified
+  verified_at: '2026-01-12T23:55:00Z'
+- category: Lifecycle Management
+  evidence: tests/infrastructure/test_lifecycle_callbacks.py
+  id: AC-LIFECYCLE-003
+  implementation_status: GREEN
+  pass_rate: 3/3 (100%)
+  phase: Phase 9.1
+  status: implemented
   test_coverage: 3/3
   tests_passing: 3
   tests_total: 3
-  pass_rate: 3/3 (100%)
+  title: Pre/Post Phase Callbacks
   verification_status: verified
   verified_at: '2026-01-12T23:55:00Z'
-  evidence: tests/infrastructure/test_lifecycle_callbacks.py
-- id: AC-ROLLOUT-SIMPLE-001
-  phase: Phase 9.3
-  category: Rollout Gates
-  title: Progressive Rollout Gates
-  status: implemented
+- category: Rollout Gates
+  evidence: tests/orchestrators/test_rollout_gates.py
+  id: AC-ROLLOUT-SIMPLE-001
   implementation_status: GREEN
+  pass_rate: 6/6 (100%)
+  phase: Phase 9.3
+  status: implemented
   test_coverage: 6/6
   tests_passing: 6
   tests_total: 6
-  pass_rate: 6/6 (100%)
+  title: Progressive Rollout Gates
   verification_status: verified
   verified_at: '2026-01-12T23:55:00Z'
-  evidence: tests/orchestrators/test_rollout_gates.py
-- id: AC-ROLLOUT-SIMPLE-002
-  phase: Phase 9.3
-  category: Rollout Gates
-  title: Rollback Strategy
-  status: implemented
-  implementation_status: GREEN
-  test_coverage: 5/5
-  tests_passing: 5
-  tests_total: 5
-  pass_rate: 5/5 (100%)
-  verification_status: verified
-  verified_at: '2026-01-12T23:55:00Z'
+- category: Rollout Gates
   evidence: tests/orchestrators/test_rollback_strategy.py
-- id: AC-ROLLOUT-SIMPLE-003
-  phase: Phase 9.3
-  category: Rollout Gates
-  title: Deployment Monitoring
-  status: implemented
+  id: AC-ROLLOUT-SIMPLE-002
   implementation_status: GREEN
+  pass_rate: 5/5 (100%)
+  phase: Phase 9.3
+  status: implemented
   test_coverage: 5/5
   tests_passing: 5
   tests_total: 5
-  pass_rate: 5/5 (100%)
+  title: Rollback Strategy
   verification_status: verified
   verified_at: '2026-01-12T23:55:00Z'
+- category: Rollout Gates
   evidence: tests/orchestrators/test_deployment_monitoring.py
-- id: AC-ROLLOUT-004
-  phase: Phase 8
-  category: Staged Rollout System
-  title: Rollout Policy Enforcement
-  status: implemented
+  id: AC-ROLLOUT-SIMPLE-003
   implementation_status: GREEN
+  pass_rate: 5/5 (100%)
+  phase: Phase 9.3
+  status: implemented
+  test_coverage: 5/5
+  tests_passing: 5
+  tests_total: 5
+  title: Deployment Monitoring
+  verification_status: verified
+  verified_at: '2026-01-12T23:55:00Z'
+- category: Staged Rollout System
+  evidence: tests/orchestrators/test_rollout_manager.py
+  id: AC-ROLLOUT-004
+  implementation_status: GREEN
+  pass_rate: 4/4 (100%)
+  phase: Phase 8
+  status: implemented
   test_coverage: 4/4
   tests_passing: 4
   tests_total: 4
-  pass_rate: 4/4 (100%)
+  title: Rollout Policy Enforcement
   verification_status: verified
   verified_at: '2026-01-12T22:47:22.755860+00:00'
+- category: Staged Rollout System
   evidence: tests/orchestrators/test_rollout_manager.py
-- id: AC-ROLLOUT-003
-  phase: Phase 8
-  category: Staged Rollout System
-  title: Deployment Metrics & Monitoring
-  status: implemented
+  id: AC-ROLLOUT-003
   implementation_status: GREEN
+  pass_rate: 3/3 (100%)
+  phase: Phase 8
+  status: implemented
   test_coverage: 3/3
   tests_passing: 3
   tests_total: 3
-  pass_rate: 3/3 (100%)
+  title: Deployment Metrics & Monitoring
   verification_status: verified
   verified_at: '2026-01-12T22:47:22.755858+00:00'
+- category: Staged Rollout System
   evidence: tests/orchestrators/test_rollout_manager.py
-- id: AC-ROLLOUT-002
-  phase: Phase 8
-  category: Staged Rollout System
-  title: Safe Rollback Strategy
-  status: implemented
+  id: AC-ROLLOUT-002
   implementation_status: GREEN
+  pass_rate: 4/4 (100%)
+  phase: Phase 8
+  status: implemented
   test_coverage: 4/4
   tests_passing: 4
   tests_total: 4
-  pass_rate: 4/4 (100%)
+  title: Safe Rollback Strategy
   verification_status: verified
   verified_at: '2026-01-12T22:47:22.755856+00:00'
+- category: Staged Rollout System
   evidence: tests/orchestrators/test_rollout_manager.py
-- id: AC-ROLLOUT-001
-  phase: Phase 8
-  category: Staged Rollout System
-  title: Progressive Feature Deployment (Canary)
-  status: implemented
+  id: AC-ROLLOUT-001
   implementation_status: GREEN
+  pass_rate: 4/4 (100%)
+  phase: Phase 8
+  status: implemented
   test_coverage: 4/4
   tests_passing: 4
   tests_total: 4
-  pass_rate: 4/4 (100%)
+  title: Progressive Feature Deployment (Canary)
   verification_status: verified
   verified_at: '2026-01-12T22:47:22.755735+00:00'
-  evidence: tests/orchestrators/test_rollout_manager.py
-- id: AC-COPILOT-012
-  phase: Phase 7
-  category: GitHub Copilot Integration
-  title: Copilot Todo Bridge Capability 12
-  status: implemented
+- category: GitHub Copilot Integration
+  evidence: tests/unit/core/test_github_copilot_todo_bridge.py
+  id: AC-COPILOT-012
   implementation_status: GREEN
+  pass_rate: 29/29 (100%)
+  phase: Phase 7
+  status: implemented
   test_coverage: 29/29
   tests_passing: 29
   tests_total: 29
-  pass_rate: 29/29 (100%)
+  title: Copilot Todo Bridge Capability 12
   verification_status: verified
   verified_at: '2026-01-12T22:44:47.594283+00:00'
+- category: GitHub Copilot Integration
   evidence: tests/unit/core/test_github_copilot_todo_bridge.py
-- id: AC-COPILOT-011
-  phase: Phase 7
-  category: GitHub Copilot Integration
-  title: Copilot Todo Bridge Capability 11
-  status: implemented
+  id: AC-COPILOT-011
   implementation_status: GREEN
+  pass_rate: 29/29 (100%)
+  phase: Phase 7
+  status: implemented
   test_coverage: 29/29
   tests_passing: 29
   tests_total: 29
-  pass_rate: 29/29 (100%)
+  title: Copilot Todo Bridge Capability 11
   verification_status: verified
   verified_at: '2026-01-12T22:44:47.594282+00:00'
+- category: GitHub Copilot Integration
   evidence: tests/unit/core/test_github_copilot_todo_bridge.py
-- id: AC-COPILOT-010
-  phase: Phase 7
-  category: GitHub Copilot Integration
-  title: Copilot Todo Bridge Capability 10
-  status: implemented
+  id: AC-COPILOT-010
   implementation_status: GREEN
+  pass_rate: 29/29 (100%)
+  phase: Phase 7
+  status: implemented
   test_coverage: 29/29
   tests_passing: 29
   tests_total: 29
-  pass_rate: 29/29 (100%)
+  title: Copilot Todo Bridge Capability 10
   verification_status: verified
   verified_at: '2026-01-12T22:44:47.594281+00:00'
+- category: GitHub Copilot Integration
   evidence: tests/unit/core/test_github_copilot_todo_bridge.py
-- id: AC-COPILOT-009
-  phase: Phase 7
-  category: GitHub Copilot Integration
-  title: Copilot Todo Bridge Capability 9
-  status: implemented
+  id: AC-COPILOT-009
   implementation_status: GREEN
+  pass_rate: 29/29 (100%)
+  phase: Phase 7
+  status: implemented
   test_coverage: 29/29
   tests_passing: 29
   tests_total: 29
-  pass_rate: 29/29 (100%)
+  title: Copilot Todo Bridge Capability 9
   verification_status: verified
   verified_at: '2026-01-12T22:44:47.594280+00:00'
+- category: GitHub Copilot Integration
   evidence: tests/unit/core/test_github_copilot_todo_bridge.py
-- id: AC-COPILOT-008
-  phase: Phase 7
-  category: GitHub Copilot Integration
-  title: Copilot Todo Bridge Capability 8
-  status: implemented
+  id: AC-COPILOT-008
   implementation_status: GREEN
+  pass_rate: 29/29 (100%)
+  phase: Phase 7
+  status: implemented
   test_coverage: 29/29
   tests_passing: 29
   tests_total: 29
-  pass_rate: 29/29 (100%)
+  title: Copilot Todo Bridge Capability 8
   verification_status: verified
   verified_at: '2026-01-12T22:44:47.594279+00:00'
+- category: GitHub Copilot Integration
   evidence: tests/unit/core/test_github_copilot_todo_bridge.py
-- id: AC-COPILOT-007
-  phase: Phase 7
-  category: GitHub Copilot Integration
-  title: Copilot Todo Bridge Capability 7
-  status: implemented
+  id: AC-COPILOT-007
   implementation_status: GREEN
+  pass_rate: 29/29 (100%)
+  phase: Phase 7
+  status: implemented
   test_coverage: 29/29
   tests_passing: 29
   tests_total: 29
-  pass_rate: 29/29 (100%)
+  title: Copilot Todo Bridge Capability 7
   verification_status: verified
   verified_at: '2026-01-12T22:44:47.594277+00:00'
+- category: GitHub Copilot Integration
   evidence: tests/unit/core/test_github_copilot_todo_bridge.py
-- id: AC-COPILOT-006
-  phase: Phase 7
-  category: GitHub Copilot Integration
-  title: Copilot Todo Bridge Capability 6
-  status: implemented
+  id: AC-COPILOT-006
   implementation_status: GREEN
+  pass_rate: 29/29 (100%)
+  phase: Phase 7
+  status: implemented
   test_coverage: 29/29
   tests_passing: 29
   tests_total: 29
-  pass_rate: 29/29 (100%)
+  title: Copilot Todo Bridge Capability 6
   verification_status: verified
   verified_at: '2026-01-12T22:44:47.594276+00:00'
+- category: GitHub Copilot Integration
   evidence: tests/unit/core/test_github_copilot_todo_bridge.py
-- id: AC-COPILOT-005
-  phase: Phase 7
-  category: GitHub Copilot Integration
-  title: Copilot Todo Bridge Capability 5
-  status: implemented
+  id: AC-COPILOT-005
   implementation_status: GREEN
+  pass_rate: 29/29 (100%)
+  phase: Phase 7
+  status: implemented
   test_coverage: 29/29
   tests_passing: 29
   tests_total: 29
-  pass_rate: 29/29 (100%)
+  title: Copilot Todo Bridge Capability 5
   verification_status: verified
   verified_at: '2026-01-12T22:44:47.594275+00:00'
+- category: GitHub Copilot Integration
   evidence: tests/unit/core/test_github_copilot_todo_bridge.py
-- id: AC-COPILOT-004
-  phase: Phase 7
-  category: GitHub Copilot Integration
-  title: Copilot Todo Bridge Capability 4
-  status: implemented
+  id: AC-COPILOT-004
   implementation_status: GREEN
+  pass_rate: 29/29 (100%)
+  phase: Phase 7
+  status: implemented
   test_coverage: 29/29
   tests_passing: 29
   tests_total: 29
-  pass_rate: 29/29 (100%)
+  title: Copilot Todo Bridge Capability 4
   verification_status: verified
   verified_at: '2026-01-12T22:44:47.594274+00:00'
+- category: GitHub Copilot Integration
   evidence: tests/unit/core/test_github_copilot_todo_bridge.py
-- id: AC-COPILOT-003
-  phase: Phase 7
-  category: GitHub Copilot Integration
-  title: Copilot Todo Bridge Capability 3
-  status: implemented
+  id: AC-COPILOT-003
   implementation_status: GREEN
+  pass_rate: 29/29 (100%)
+  phase: Phase 7
+  status: implemented
   test_coverage: 29/29
   tests_passing: 29
   tests_total: 29
-  pass_rate: 29/29 (100%)
+  title: Copilot Todo Bridge Capability 3
   verification_status: verified
   verified_at: '2026-01-12T22:44:47.594272+00:00'
+- category: GitHub Copilot Integration
   evidence: tests/unit/core/test_github_copilot_todo_bridge.py
-- id: AC-COPILOT-002
-  phase: Phase 7
-  category: GitHub Copilot Integration
-  title: Copilot Todo Bridge Capability 2
-  status: implemented
+  id: AC-COPILOT-002
   implementation_status: GREEN
+  pass_rate: 29/29 (100%)
+  phase: Phase 7
+  status: implemented
   test_coverage: 29/29
   tests_passing: 29
   tests_total: 29
-  pass_rate: 29/29 (100%)
+  title: Copilot Todo Bridge Capability 2
   verification_status: verified
   verified_at: '2026-01-12T22:44:47.594270+00:00'
+- category: GitHub Copilot Integration
   evidence: tests/unit/core/test_github_copilot_todo_bridge.py
-- id: AC-COPILOT-001
-  phase: Phase 7
-  category: GitHub Copilot Integration
-  title: Copilot Todo Bridge Capability 1
-  status: implemented
+  id: AC-COPILOT-001
   implementation_status: GREEN
+  pass_rate: 29/29 (100%)
+  phase: Phase 7
+  status: implemented
   test_coverage: 29/29
   tests_passing: 29
   tests_total: 29
-  pass_rate: 29/29 (100%)
+  title: Copilot Todo Bridge Capability 1
   verification_status: verified
   verified_at: '2026-01-12T22:44:47.594150+00:00'
-  evidence: tests/unit/core/test_github_copilot_todo_bridge.py
-- id: AC-ROUTE-005
-  phase: Phase 6
-  category: Deterministic Routing
-  title: Route Consistency Testing
-  status: implemented
+- category: Deterministic Routing
+  evidence: tests/sts/test_routing_determinism.py
+  id: AC-ROUTE-005
   implementation_status: GREEN
+  pass_rate: 6/6 (100%)
+  phase: Phase 6
+  status: implemented
   test_coverage: 6/6
   tests_passing: 6
   tests_total: 6
-  pass_rate: 6/6 (100%)
+  title: Route Consistency Testing
   verification_status: verified
   verified_at: '2026-01-12T22:44:18.526846+00:00'
+- category: Deterministic Routing
   evidence: tests/sts/test_routing_determinism.py
-- id: AC-ROUTE-004
-  phase: Phase 6
-  category: Deterministic Routing
-  title: Determinism Verification
-  status: implemented
+  id: AC-ROUTE-004
   implementation_status: GREEN
+  pass_rate: 12/12 (100%)
+  phase: Phase 6
+  status: implemented
   test_coverage: 12/12
   tests_passing: 12
   tests_total: 12
-  pass_rate: 12/12 (100%)
+  title: Determinism Verification
   verification_status: verified
   verified_at: '2026-01-12T22:44:18.526845+00:00'
-  evidence: tests/sts/test_routing_determinism.py
-- id: AC-ROUTE-003
-  phase: Phase 6
-  category: Deterministic Routing
-  title: Confidence-based Routing
-  status: implemented
+- category: Deterministic Routing
+  evidence: tests/unit/test_trie_router.py
+  id: AC-ROUTE-003
   implementation_status: GREEN
+  pass_rate: 6/6 (100%)
+  phase: Phase 6
+  status: implemented
   test_coverage: 6/6
   tests_passing: 6
   tests_total: 6
-  pass_rate: 6/6 (100%)
+  title: Confidence-based Routing
   verification_status: verified
   verified_at: '2026-01-12T22:44:18.526843+00:00'
+- category: Deterministic Routing
   evidence: tests/unit/test_trie_router.py
-- id: AC-ROUTE-002
-  phase: Phase 6
-  category: Deterministic Routing
-  title: Fuzzy Matching Engine
-  status: implemented
+  id: AC-ROUTE-002
   implementation_status: GREEN
+  pass_rate: 8/8 (100%)
+  phase: Phase 6
+  status: implemented
   test_coverage: 8/8
   tests_passing: 8
   tests_total: 8
-  pass_rate: 8/8 (100%)
+  title: Fuzzy Matching Engine
   verification_status: verified
   verified_at: '2026-01-12T22:44:18.526842+00:00'
+- category: Deterministic Routing
   evidence: tests/unit/test_trie_router.py
-- id: AC-ROUTE-001
-  phase: Phase 6
-  category: Deterministic Routing
-  title: Trie-based Intent Routing
-  status: implemented
+  id: AC-ROUTE-001
   implementation_status: GREEN
+  pass_rate: 10/10 (100%)
+  phase: Phase 6
+  status: implemented
   test_coverage: 10/10
   tests_passing: 10
   tests_total: 10
-  pass_rate: 10/10 (100%)
+  title: Trie-based Intent Routing
   verification_status: verified
   verified_at: '2026-01-12T22:44:18.526840+00:00'
-  evidence: tests/unit/test_trie_router.py
-- id: AC-SECURITY-008
-  phase: Phase 6
-  category: Action Security Layer
-  title: Security Policy Enforcement
-  status: implemented
+- category: Action Security Layer
+  evidence: tests/unit/security/
+  id: AC-SECURITY-008
   implementation_status: GREEN
+  pass_rate: 1/1 (100%)
+  phase: Phase 6
+  status: implemented
   test_coverage: 1/1
   tests_passing: 1
   tests_total: 1
-  pass_rate: 1/1 (100%)
+  title: Security Policy Enforcement
   verification_status: verified
   verified_at: '2026-01-12T22:44:18.526839+00:00'
+- category: Action Security Layer
   evidence: tests/unit/security/
-- id: AC-SECURITY-007
-  phase: Phase 6
-  category: Action Security Layer
-  title: Access Control Audit Trail
-  status: implemented
+  id: AC-SECURITY-007
   implementation_status: GREEN
+  pass_rate: 1/1 (100%)
+  phase: Phase 6
+  status: implemented
   test_coverage: 1/1
   tests_passing: 1
   tests_total: 1
-  pass_rate: 1/1 (100%)
+  title: Access Control Audit Trail
   verification_status: verified
   verified_at: '2026-01-12T22:44:18.526838+00:00'
-  evidence: tests/unit/security/
-- id: AC-SECURITY-006
-  phase: Phase 6
-  category: Action Security Layer
-  title: Canonical Path Resolution
-  status: implemented
+- category: Action Security Layer
+  evidence: tests/unit/security/test_canonical_paths.py
+  id: AC-SECURITY-006
   implementation_status: GREEN
+  pass_rate: 5/6 (100%)
+  phase: Phase 6
+  status: implemented
   test_coverage: 5/6
   tests_passing: 5
   tests_total: 6
-  pass_rate: 5/6 (100%)
+  title: Canonical Path Resolution
   verification_status: verified
   verified_at: '2026-01-12T22:44:18.526836+00:00'
-  evidence: tests/unit/security/test_canonical_paths.py
-- id: AC-SECURITY-005
-  phase: Phase 6
-  category: Action Security Layer
-  title: Approval State Machine
-  status: implemented
+- category: Action Security Layer
+  evidence: tests/unit/security/
+  id: AC-SECURITY-005
   implementation_status: GREEN
+  pass_rate: 4/4 (100%)
+  phase: Phase 6
+  status: implemented
   test_coverage: 4/4
   tests_passing: 4
   tests_total: 4
-  pass_rate: 4/4 (100%)
+  title: Approval State Machine
   verification_status: verified
   verified_at: '2026-01-12T22:44:18.526835+00:00'
-  evidence: tests/unit/security/
-- id: AC-SECURITY-004
-  phase: Phase 6
-  category: Action Security Layer
-  title: Secret Redaction in Logs
-  status: implemented
+- category: Action Security Layer
+  evidence: tests/unit/security/test_secret_redaction.py
+  id: AC-SECURITY-004
   implementation_status: GREEN
+  pass_rate: 9/9 (100%)
+  phase: Phase 6
+  status: implemented
   test_coverage: 9/9
   tests_passing: 9
   tests_total: 9
-  pass_rate: 9/9 (100%)
+  title: Secret Redaction in Logs
   verification_status: verified
   verified_at: '2026-01-12T22:44:18.526833+00:00'
-  evidence: tests/unit/security/test_secret_redaction.py
-- id: AC-SECURITY-003
-  phase: Phase 6
-  category: Action Security Layer
-  title: Command Allowlist Enforcement
-  status: implemented
+- category: Action Security Layer
+  evidence: tests/unit/security/test_command_allowlist.py
+  id: AC-SECURITY-003
   implementation_status: GREEN
+  pass_rate: 5/5 (100%)
+  phase: Phase 6
+  status: implemented
   test_coverage: 5/5
   tests_passing: 5
   tests_total: 5
-  pass_rate: 5/5 (100%)
+  title: Command Allowlist Enforcement
   verification_status: verified
   verified_at: '2026-01-12T22:44:18.526832+00:00'
+- category: Action Security Layer
   evidence: tests/unit/security/test_command_allowlist.py
-- id: AC-SECURITY-002
-  phase: Phase 6
-  category: Action Security Layer
-  title: Command Injection Prevention
-  status: implemented
+  id: AC-SECURITY-002
   implementation_status: GREEN
+  pass_rate: 8/8 (100%)
+  phase: Phase 6
+  status: implemented
   test_coverage: 8/8
   tests_passing: 8
   tests_total: 8
-  pass_rate: 8/8 (100%)
+  title: Command Injection Prevention
   verification_status: verified
   verified_at: '2026-01-12T22:44:18.526829+00:00'
-  evidence: tests/unit/security/test_command_allowlist.py
-- id: AC-SECURITY-001
-  phase: Phase 6
-  category: Action Security Layer
-  title: Authentication Token Validation
-  status: implemented
+- category: Action Security Layer
+  evidence: tests/unit/security/test_secret_redaction.py
+  id: AC-SECURITY-001
   implementation_status: GREEN
+  pass_rate: 5/5 (100%)
+  phase: Phase 6
+  status: implemented
   test_coverage: 5/5
   tests_passing: 5
   tests_total: 5
-  pass_rate: 5/5 (100%)
+  title: Authentication Token Validation
   verification_status: verified
   verified_at: '2026-01-12T22:44:18.526694+00:00'
-  evidence: tests/unit/security/test_secret_redaction.py
-- id: AC-CLEAN-301
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: MasterOrchestrator phase reference removal
-  description: MasterOrchestrator phase reference removal. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 10/10 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: MasterOrchestrator phase reference removal. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-301
   implementation_status: GREEN
+  pass_rate: 10/10 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 10/10
   tests_passing: 10
   tests_total: 10
-  pass_rate: 10/10 (100%)
+  title: MasterOrchestrator phase reference removal
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714802+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-302
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: StateSynchronizer phase reference removal
-  description: StateSynchronizer phase reference removal. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 10/10 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: StateSynchronizer phase reference removal. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-302
   implementation_status: GREEN
+  pass_rate: 10/10 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 10/10
   tests_passing: 10
   tests_total: 10
-  pass_rate: 10/10 (100%)
+  title: StateSynchronizer phase reference removal
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714929+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-303
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: AtomicStateManager phase reference removal
-  description: AtomicStateManager phase reference removal. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 9/9 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: AtomicStateManager phase reference removal. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-303
   implementation_status: GREEN
+  pass_rate: 9/9 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 9/9
   tests_passing: 9
   tests_total: 9
-  pass_rate: 9/9 (100%)
+  title: AtomicStateManager phase reference removal
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714933+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-304
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Planning State DB phase reference removal
-  description: Planning State DB phase reference removal. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 10/10 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Planning State DB phase reference removal. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-304
   implementation_status: GREEN
+  pass_rate: 10/10 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 10/10
   tests_passing: 10
   tests_total: 10
-  pass_rate: 10/10 (100%)
+  title: Planning State DB phase reference removal
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714935+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-305
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Housekeeping tools phase dispatch removal
-  description: Housekeeping tools phase dispatch removal. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 10/10 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Housekeeping tools phase dispatch removal. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-305
   implementation_status: GREEN
+  pass_rate: 10/10 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 10/10
   tests_passing: 10
   tests_total: 10
-  pass_rate: 10/10 (100%)
+  title: Housekeeping tools phase dispatch removal
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714937+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-306
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Remediation executor capability-based
-  description: Remediation executor capability-based. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 6/6 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Remediation executor capability-based. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-306
   implementation_status: GREEN
+  pass_rate: 6/6 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 6/6
   tests_passing: 6
   tests_total: 6
-  pass_rate: 6/6 (100%)
+  title: Remediation executor capability-based
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714939+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-307
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Archive cx6-plan directory
-  description: Archive cx6-plan directory. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 5/5 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Archive cx6-plan directory. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-307
   implementation_status: GREEN
+  pass_rate: 5/5 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 5/5
   tests_passing: 5
   tests_total: 5
-  pass_rate: 5/5 (100%)
+  title: Archive cx6-plan directory
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714941+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-308
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Archive master-plan.yaml
-  description: Archive master-plan.yaml. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 4/4 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Archive master-plan.yaml. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-308
   implementation_status: GREEN
+  pass_rate: 4/4 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 4/4
   tests_passing: 4
   tests_total: 4
-  pass_rate: 4/4 (100%)
+  title: Archive master-plan.yaml
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714944+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-309
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Archive evidence bundles
-  description: Archive evidence bundles. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 3/3 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Archive evidence bundles. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-309
   implementation_status: GREEN
+  pass_rate: 3/3 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 3/3
   tests_passing: 3
   tests_total: 3
-  pass_rate: 3/3 (100%)
+  title: Archive evidence bundles
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714946+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-310
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Decommission legacy orchestrators
-  description: Decommission legacy orchestrators. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 4/4 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Decommission legacy orchestrators. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-310
   implementation_status: GREEN
+  pass_rate: 4/4 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 4/4
   tests_passing: 4
   tests_total: 4
-  pass_rate: 4/4 (100%)
+  title: Decommission legacy orchestrators
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714948+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-311
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Cleanup capability mapping
-  description: Cleanup capability mapping. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 3/3 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Cleanup capability mapping. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-311
   implementation_status: GREEN
+  pass_rate: 3/3 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 3/3
   tests_passing: 3
   tests_total: 3
-  pass_rate: 3/3 (100%)
+  title: Cleanup capability mapping
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714950+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-312
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Available tools inventory
-  description: Available tools inventory. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 3/3 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Available tools inventory. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-312
   implementation_status: GREEN
+  pass_rate: 3/3 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 3/3
   tests_passing: 3
   tests_total: 3
-  pass_rate: 3/3 (100%)
+  title: Available tools inventory
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714952+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-313
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Tool execution framework
-  description: Tool execution framework. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 3/3 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Tool execution framework. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-313
   implementation_status: GREEN
+  pass_rate: 3/3 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 3/3
   tests_passing: 3
   tests_total: 3
-  pass_rate: 3/3 (100%)
+  title: Tool execution framework
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714953+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-314
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Cleanup workflow orchestration
-  description: Cleanup workflow orchestration. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 2/2 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Cleanup workflow orchestration. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-314
   implementation_status: GREEN
+  pass_rate: 2/2 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 2/2
   tests_passing: 2
   tests_total: 2
-  pass_rate: 2/2 (100%)
+  title: Cleanup workflow orchestration
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714955+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-315
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Remediation registry
-  description: Remediation registry. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 2/2 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Remediation registry. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-315
   implementation_status: GREEN
+  pass_rate: 2/2 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 2/2
   tests_passing: 2
   tests_total: 2
-  pass_rate: 2/2 (100%)
+  title: Remediation registry
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714957+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-316
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: State validation and integrity
-  description: State validation and integrity. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 2/2 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: State validation and integrity. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-316
   implementation_status: GREEN
+  pass_rate: 2/2 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 2/2
   tests_passing: 2
   tests_total: 2
-  pass_rate: 2/2 (100%)
+  title: State validation and integrity
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714959+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-317
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Database migration status
-  description: Database migration status. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 2/2 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Database migration status. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-317
   implementation_status: GREEN
+  pass_rate: 2/2 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 2/2
   tests_passing: 2
   tests_total: 2
-  pass_rate: 2/2 (100%)
+  title: Database migration status
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714961+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-318
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Atomic transactions support
-  description: Atomic transactions support. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 3/3 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Atomic transactions support. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-318
   implementation_status: GREEN
+  pass_rate: 3/3 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 3/3
   tests_passing: 3
   tests_total: 3
-  pass_rate: 3/3 (100%)
+  title: Atomic transactions support
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714963+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-319
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Batch remediation operations
-  description: Batch remediation operations. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 2/2 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Batch remediation operations. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-319
   implementation_status: GREEN
+  pass_rate: 2/2 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 2/2
   tests_passing: 2
   tests_total: 2
-  pass_rate: 2/2 (100%)
+  title: Batch remediation operations
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714965+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-320
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Remediation registry management
-  description: Remediation registry management. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 2/2 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Remediation registry management. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-320
   implementation_status: GREEN
+  pass_rate: 2/2 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 2/2
   tests_passing: 2
   tests_total: 2
-  pass_rate: 2/2 (100%)
+  title: Remediation registry management
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714967+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-321
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Governance cleanup validation
-  description: Governance cleanup validation. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 2/2 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Governance cleanup validation. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-321
   implementation_status: GREEN
+  pass_rate: 2/2 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 2/2
   tests_passing: 2
   tests_total: 2
-  pass_rate: 2/2 (100%)
+  title: Governance cleanup validation
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714968+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-322
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Main entry point validation
-  description: Main entry point validation. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 1/1 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Main entry point validation. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-322
   implementation_status: GREEN
+  pass_rate: 1/1 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 1/1
   tests_passing: 1
   tests_total: 1
-  pass_rate: 1/1 (100%)
+  title: Main entry point validation
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714970+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-323
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Orchestrator cleanup integration
-  description: Orchestrator cleanup integration. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 1/1 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Orchestrator cleanup integration. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-323
   implementation_status: GREEN
+  pass_rate: 1/1 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 1/1
   tests_passing: 1
   tests_total: 1
-  pass_rate: 1/1 (100%)
+  title: Orchestrator cleanup integration
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714971+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-324
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Remediation library coverage
-  description: Remediation library coverage. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 2/2 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Remediation library coverage. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-324
   implementation_status: GREEN
+  pass_rate: 2/2 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 2/2
   tests_passing: 2
   tests_total: 2
-  pass_rate: 2/2 (100%)
+  title: Remediation library coverage
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714972+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-325
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Phase reference removal completion
-  description: Phase reference removal completion. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 2/2 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Phase reference removal completion. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-325
   implementation_status: GREEN
+  pass_rate: 2/2 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 2/2
   tests_passing: 2
   tests_total: 2
-  pass_rate: 2/2 (100%)
+  title: Phase reference removal completion
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714975+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-326
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Cleanup phase completion tracking
-  description: Cleanup phase completion tracking. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 2/2 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Cleanup phase completion tracking. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-326
   implementation_status: GREEN
+  pass_rate: 2/2 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 2/2
   tests_passing: 2
   tests_total: 2
-  pass_rate: 2/2 (100%)
+  title: Cleanup phase completion tracking
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714977+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-327
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Integration validation suite part 1
-  description: Integration validation suite part 1. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 2/2 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Integration validation suite part 1. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-327
   implementation_status: GREEN
+  pass_rate: 2/2 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 2/2
   tests_passing: 2
   tests_total: 2
-  pass_rate: 2/2 (100%)
+  title: Integration validation suite part 1
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714978+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-CLEAN-328
-  phase: Phase 5
-  category: Cleanup & Decommission
-  title: Integration validation suite part 2
-  description: Integration validation suite part 2. Implemented with TDD methodology.
-  acceptance_criteria:
+- acceptance_criteria:
   - 2/2 tests passing
   - All phase references removed or mapped to capabilities
   - Backward compatibility maintained where needed
-  status: implemented
+  category: Cleanup & Decommission
+  description: Integration validation suite part 2. Implemented with TDD methodology.
+  evidence: tests/cleanup/test_*.py
+  id: AC-CLEAN-328
   implementation_status: GREEN
+  pass_rate: 2/2 (100%)
+  phase: Phase 5
+  status: implemented
   test_coverage: 2/2
   tests_passing: 2
   tests_total: 2
-  pass_rate: 2/2 (100%)
+  title: Integration validation suite part 2
   verification_status: verified
   verified_at: '2026-01-12T22:14:25.714980+00:00'
-  evidence: tests/cleanup/test_*.py
-- id: AC-TEMPLATE-001
-  phase: Phase 9.3
-  category: Response Template Architecture
-  title: 3-Layer Directory Structure
-  status: implemented
+- category: Response Template Architecture
+  evidence: tests/response_templates/test_layered_architecture.py
+  id: AC-TEMPLATE-001
   implementation_status: GREEN
+  pass_rate: 16/16 (100%)
+  phase: Phase 9.3
+  status: implemented
   test_coverage: 16/16
   tests_passing: 16
   tests_total: 16
-  pass_rate: 16/16 (100%)
+  title: 3-Layer Directory Structure
   verification_status: verified
   verified_at: '2026-01-13T06:10:17.971486+00:00'
+- category: Response Template Architecture
   evidence: tests/response_templates/test_layered_architecture.py
-- id: AC-TEMPLATE-002
-  phase: Phase 9.3
-  category: Response Template Architecture
-  title: Layer YAML Structure Validation
-  status: implemented
+  id: AC-TEMPLATE-002
   implementation_status: GREEN
+  pass_rate: 8/8 (100%)
+  phase: Phase 9.3
+  status: implemented
   test_coverage: 8/8
   tests_passing: 8
   tests_total: 8
-  pass_rate: 8/8 (100%)
+  title: Layer YAML Structure Validation
   verification_status: verified
   verified_at: '2026-01-13T06:10:17.971496+00:00'
-  evidence: tests/response_templates/test_layered_architecture.py
-- id: AC-TEMPLATE-003
-  phase: Phase 9.3
-  category: Response Template Architecture
-  title: LayeredTemplateRenderer Implementation
-  status: implemented
+- category: Response Template Architecture
+  evidence: tests/response_templates/test_layered_renderer.py
+  id: AC-TEMPLATE-003
   implementation_status: GREEN
+  pass_rate: 11/11 (100%)
+  phase: Phase 9.3
+  status: implemented
   test_coverage: 11/11
   tests_passing: 11
   tests_total: 11
-  pass_rate: 11/11 (100%)
+  title: LayeredTemplateRenderer Implementation
   verification_status: verified
   verified_at: '2026-01-13T06:10:17.971498+00:00'
+- category: Response Template Architecture
   evidence: tests/response_templates/test_layered_renderer.py
-- id: AC-TEMPLATE-004
-  phase: Phase 9.3
-  category: Response Template Architecture
-  title: Singleton Caching & Lazy Loading
-  status: implemented
+  id: AC-TEMPLATE-004
   implementation_status: GREEN
+  pass_rate: 6/6 (100%)
+  phase: Phase 9.3
+  status: implemented
   test_coverage: 6/6
   tests_passing: 6
   tests_total: 6
-  pass_rate: 6/6 (100%)
+  title: Singleton Caching & Lazy Loading
   verification_status: verified
   verified_at: '2026-01-13T06:10:17.971499+00:00'
-  evidence: tests/response_templates/test_layered_renderer.py
-- id: AC-TEMPLATE-005
-  phase: Phase 10.1
-  category: Response Template Architecture
-  title: Mandatory Header Enforcement (CORE-026)
-  status: implemented
+- category: Response Template Architecture
+  evidence: tests/infrastructure/test_mandatory_headers.py
+  id: AC-TEMPLATE-005
   implementation_status: GREEN
+  pass_rate: 17/17 (100%)
+  phase: Phase 10.1
+  status: implemented
   test_coverage: 17/17
   tests_passing: 17
   tests_total: 17
-  pass_rate: 17/17 (100%)
+  title: Mandatory Header Enforcement (CORE-026)
   verification_status: verified
   verified_at: '2026-01-13T06:29:39.793609+00:00'
-  evidence: tests/infrastructure/test_mandatory_headers.py
+description: Acceptance Criteria Index for CORTEX 6.0
+last_updated: '2026-01-13T06:29:39.793631+00:00'
+schema_version: '1.5'
+updated_by: Phase 10 Autonomous Execution - AC-TEMPLATE-005 Complete

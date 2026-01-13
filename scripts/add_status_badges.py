@@ -6,10 +6,11 @@ Reads current phase status and adds visual badges to all HTML docs
 from pathlib import Path
 import json
 import re
+from src.utils.project_root import get_project_root
 
 def get_phase_status():
     """Read progress tracker to get current phase status"""
-    tracker_path = Path("d:/PROJECTS/CORTEX/cortex-brain/tier1/tracking/progress-tracker.json")
+    tracker_path = Path("get_project_root()/cortex-brain/tier1/tracking/progress-tracker.json")
     with open(tracker_path, 'r', encoding='utf-8') as f:
         data = json.load(f)
     
@@ -130,7 +131,7 @@ def add_badge_to_html_file(filepath):
     return False
 
 def main():
-    docs_dir = Path("d:/PROJECTS/CORTEX/docs/architecture")
+    docs_dir = Path("get_project_root()/docs/architecture")
     
     print("🚀 Adding Implementation Status Badges to Documentation\n")
     print(f"Phase Status:")

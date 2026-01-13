@@ -10,6 +10,7 @@ import os
 import json
 from pathlib import Path
 from datetime import datetime
+from src.utils.project_root import get_project_root
 
 # CSS VARIABLES FROM plan-viewer.html (Design System)
 DESIGN_SYSTEM = {
@@ -80,7 +81,7 @@ class HTMLViewGenerator:
                     }
                 }
             }
-        self.output_dir = Path("d:/PROJECTS/CORTEX/cortex-brain/cx6-plan/viewer/docs/html-views/views")
+        self.output_dir = Path("get_project_root()/cortex-brain/cx6-plan/viewer/docs/html-views/views")
     
     def generate(self):
         """Generate complete HTML file from spec"""
@@ -524,8 +525,8 @@ class HTMLViewGenerator:
 
 def main():
     """Generate all HTML views from YAML specs"""
-    yaml_dir = Path("d:/PROJECTS/CORTEX/cortex-brain/cx6-plan/viewer/docs/html-views")
-    output_dir = Path("d:/PROJECTS/CORTEX/cortex-brain/cx6-plan/viewer/docs/html-views/views")
+    yaml_dir = Path("get_project_root()/cortex-brain/cx6-plan/viewer/docs/html-views")
+    output_dir = Path("get_project_root()/cortex-brain/cx6-plan/viewer/docs/html-views/views")
     
     # Create output directory
     output_dir.mkdir(parents=True, exist_ok=True)

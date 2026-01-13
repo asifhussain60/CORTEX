@@ -14,6 +14,7 @@ from pathlib import Path
 
 from src.orchestrators.core.governance_merger import GovernanceMerger
 from src.orchestrators.base_orchestrator import BaseOrchestrator
+from src.response_templates.layered_template_renderer import LayeredTemplateRenderer
 
 
 class E2EOrchestrator(BaseOrchestrator):
@@ -32,6 +33,7 @@ class E2EOrchestrator(BaseOrchestrator):
 
         self.logger.info(f"{self.__class__.__name__} initialized for domain={self.domain}")
     
+        self.template_renderer = LayeredTemplateRenderer()
     def execute(self, request: Dict[str, Any]) -> Dict[str, Any]:
         """
         Execute orchestrator logic.
