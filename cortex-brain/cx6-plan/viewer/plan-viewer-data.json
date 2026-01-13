@@ -1,10 +1,10 @@
 {
   "plan_metadata": {
     "version": "1.6.0",
-    "updated": "2026-01-13T18:42:23.639120+00:00",
+    "updated": "2026-01-13T19:17:18.664967+00:00",
     "total_phases": 13,
     "total_ac_ids": 208,
-    "completed_ac_ids": 47
+    "completed_ac_ids": 43
   },
   "phases": [
     {
@@ -134,8 +134,8 @@
         "AC-VALIDATE-010"
       ],
       "ac_ids_total": 61,
-      "ac_ids_complete": 15,
-      "completion_percentage": 24,
+      "ac_ids_complete": 11,
+      "completion_percentage": 18,
       "status": "in-progress"
     },
     {
@@ -397,5 +397,5 @@
       "status": "planned"
     }
   ],
-  "current_phase": 2
+  "current_phase": 1
 }

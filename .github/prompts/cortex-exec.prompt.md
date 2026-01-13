@@ -96,133 +96,49 @@ DERIVED FILES (Auto-Generated - NEVER TOUCH):
 
 ---
 
-## 🔄 EXECUTION PROTOCOL (Autonomous Loop)
+## 🔄 EXECUTION PROTOCOL (MasterOrchestrator Delegation)
 
-### Step 1: Load Current State
+**CRITICAL:** All execution flows through MasterOrchestrator. NEVER execute steps manually.
+
+### Single Entry Point (ONLY Way to Execute Phase 2)
+
 ```bash
-# Validate SSOT files exist and are valid
-python3 -c "
-import json, yaml
-from pathlib import Path
-
-# Load master-plan (architecture)
-master_plan = yaml.safe_load(Path('cortex-brain/cx6-plan/master-plan.yaml').read_text())
-
-# Load progress-tracker (execution state)
-tracker = json.loads(Path('cortex-brain/tier1/tracking/progress-tracker.json').read_text())
-
-# Load AC-INDEX (acceptance criteria)
-ac_index = yaml.safe_load(Path('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml').read_text())
-
-# Display current state
-print(f'Phase: {tracker[\"current_phase\"][\"number\"]} - {tracker[\"current_phase\"][\"name\"]}')
-print(f'Status: {tracker[\"current_phase\"][\"status\"]}')
-print(f'Completion: {tracker[\"current_phase\"][\"completion_percentage\"]}%')
-"
+# Delegate EVERYTHING to MasterOrchestrator
+python3 -m src.main "execute phase 2" --format markdown
 ```
 
-### Step 2: Validate Evidence (GATE)
-```bash
-# BLOCK execution if verification rate < 80%
-python3 scripts/audit_based_evidence_validator.py
+**MasterOrchestrator handles internally:**
+1. Load current state from SSOT files (master-plan.yaml, progress-tracker.json, AC-INDEX.yaml)
+2. Validate phase gate (100% Phase 1.5 → Phase 2 ready)
+3. Run evidence validator (≥80% verification rate gate)
+4. Get next incomplete AC-IDs
+5. For each AC-ID:
+   - Check if component exists (don't recreate)
+   - Run TDD implementation (RED→GREEN→REFACTOR)
+   - Execute tests (pytest with AC-ID marker)
+   - Collect evidence bundle
+   - Update progress-tracker.json (atomic writes)
+   - Log to audit trail with correlation ID
+6. Auto-sync dashboard (regenerate_plan_viewer_data.py)
+7. Check phase completion gate (100% → ready for Phase 3)
+8. Report results in executive bullet format
 
-# Check verification rate
-python3 -c "
-import json
-from pathlib import Path
+**You DO NOT:**
+- ❌ Load SSOT files manually
+- ❌ Run tests directly
+- ❌ Update tracker.json
+- ❌ Collect evidence manually
+- ❌ Sync dashboard
+- ❌ Check completion percentages
+- ❌ Create or recreate components (orchestrator detects existing tools)
 
-validator_results = json.loads(Path('cortex-brain/documents/validation/evidence-validation-results.json').read_text())
-verification_rate = validator_results['summary']['verification_rate']
-
-if verification_rate < 80.0:
-    print(f'❌ BLOCKED: Verification rate {verification_rate}% < 80%')
-    print('Fix false positives before proceeding')
-    exit(1)
-else:
-    print(f'✅ GATE PASSED: Verification rate {verification_rate}%')
-"
-```
-
-### Step 3: Get Next AC-IDs to Implement
-```bash
-# Query MasterOrchestrator for next incomplete AC-IDs
-python3 -m src.main "get next incomplete AC-IDs" --format json > /tmp/next_ac_ids.json
-
-# Parse AC-IDs
-python3 -c "
-import json
-next_ac_ids = json.load(open('/tmp/next_ac_ids.json'))
-print('Next AC-IDs to implement:')
-for ac_id in next_ac_ids:
-    print(f'  • {ac_id}')
-"
-```
-
-### Step 4: Execute AC-IDs (TDD Loop)
-```bash
-# For each AC-ID:
-for AC_ID in $(cat /tmp/next_ac_ids.json | jq -r '.[]'); do
-    echo "🔨 Implementing $AC_ID..."
-    
-    # Get AC-ID title for reporting
-    AC_TITLE=$(python3 -c "
-import yaml
-from pathlib import Path
-ac_index = yaml.safe_load(Path('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml').read_text())
-print(ac_index['ac_ids']['$AC_ID']['title'])
-")
-    
-    # TDD implementation via MasterOrchestrator
-    python3 -m src.main "implement $AC_ID" --format markdown
-    
-    # Run tests
-    pytest tests/ -k "$AC_ID" -v --tb=short
-    
-    # Collect evidence
-    python3 scripts/capture_build_evidence.py --ac-id "$AC_ID"
-    
-    # Report progress (with human-readable title)
-    echo "✅ $AC_ID: $AC_TITLE complete"
-done
-```
-
-### Step 5: Sync Dashboard (Automatic)
-```bash
-# MasterOrchestrator automatically triggers regenerate_plan_viewer_data.py
-# No manual intervention required
-
-# Verify sync (optional)
-python3 -c "
-import json
-from pathlib import Path
-from datetime import datetime
-
-viewer_data = json.loads(Path('cortex-brain/cx6-plan/viewer/plan-viewer-data.json').read_text())
-last_updated = viewer_data['plan_metadata']['updated']
-
-print(f'Dashboard last synced: {last_updated}')
-print(f'Sync status: ✅ Current')
-"
-```
-
-### Step 6: Phase Gate Check
-```bash
-# Check if current phase is 100% complete
-python3 -c "
-import json
-from pathlib import Path
-
-tracker = json.loads(Path('cortex-brain/tier1/tracking/progress-tracker.json').read_text())
-current_phase = tracker['current_phase']
-
-if current_phase['completion_percentage'] >= 100.0:
-    print(f'✅ Phase {current_phase[\"number\"]} COMPLETE (100%)')
-    print(f'Ready to proceed to next phase')
-else:
-    print(f'⚙️ Phase {current_phase[\"number\"]} at {current_phase[\"completion_percentage\"]}%')
-    print(f'Continue implementing remaining AC-IDs')
-"
-```
+**Why this design:**
+- ✅ Single source of truth for execution logic
+- ✅ No duplicate tool creation (orchestrator checks existence first)
+- ✅ Atomic state updates (no corruption)
+- ✅ Perfect audit trail (every operation logged)
+- ✅ Automatic dashboard sync (derived files always current)
+- ✅ Governance enforcement (SKULL rules checked before execution)
 
 ---
 
@@ -333,55 +249,84 @@ print(f'Verified ACs: {results[\"summary\"][\"verified_count\"]}/{results[\"summ
 
 ---
 
-## 🎬 AUTONOMOUS EXECUTION (Continuous Loop)
+## 🎬 AUTONOMOUS EXECUTION (MasterOrchestrator Loop)
 
 **When user says "proceed autonomously" or "continue":**
 
+```bash
+# Single command - MasterOrchestrator handles EVERYTHING
+python3 -m src.main "execute phase 2" --format markdown
+```
+
+**MasterOrchestrator's internal autonomous loop:**
+
 ```python
-# Continuous execution loop (don't stop until phase complete)
+# MasterOrchestrator manages this loop internally (NOT in prompt)
 while True:
-    # Load state
-    state = load_ssot_state()
+    # Load state from SSOT
+    state = load_progress_tracker()  # cortex-brain/tier1/tracking/progress-tracker.json
     
-    # Get next AC-IDs
-    next_ac_ids = get_incomplete_ac_ids(state)
-    
-    if not next_ac_ids:
+    # Check phase gate
+    if state.current_phase.completion_percentage >= 100.0:
         print(f"✅ Phase {state.phase} COMPLETE (100%)")
         print(f"Ready to proceed to Phase {state.phase + 1}")
         break
     
-    # Execute each AC-ID
+    # Get next incomplete AC-IDs
+    next_ac_ids = get_incomplete_ac_ids(state)
+    
+    if not next_ac_ids:
+        break  # Phase complete
+    
+    # Execute each AC-ID (NO RECREATION - check existence first)
     for ac_id in next_ac_ids:
-        ac_title = get_ac_title(ac_id)
+        ac_title = get_ac_title_from_index(ac_id)  # From AC-INDEX.yaml
+        
+        # Check if component already exists
+        if component_exists(ac_id):
+            # Skip recreation, mark as verified
+            update_progress(ac_id, "verified_implemented")
+            continue
         
         print(f"🔨 Implementing {ac_id}: {ac_title}...")
         
-        # TDD implementation
-        implement_ac_id(ac_id)
+        # TDD: RED phase
+        create_test_file(ac_id)  # Create failing tests
+        
+        # TDD: GREEN phase
+        implement_component(ac_id)  # Implement to pass tests
+        
+        # TDD: REFACTOR phase
+        refactor_and_optimize(ac_id)
         
         # Run tests
         test_results = run_tests(ac_id)
         
-        # Collect evidence
-        capture_evidence(ac_id)
+        # Collect evidence bundle
+        evidence = capture_evidence_bundle(ac_id, test_results)
+        
+        # Update state (ATOMIC write)
+        update_progress(ac_id, "implemented", evidence)
+        
+        # Log to audit trail (correlation ID)
+        log_audit_event(ac_id, "implementation_complete", evidence)
         
         # Report (human-readable)
         print(f"✅ {ac_title} complete ({test_results.passed}/{test_results.total} tests)")
-        
-        # Update state (MasterOrchestrator)
-        update_progress(ac_id, "implemented")
-        
-        # Auto-sync dashboard (triggered by MasterOrchestrator)
-        # No manual intervention required
     
-    # Re-check phase completion
-    state = load_ssot_state()
-    completion = state.completion_percentage
-    print(f"Phase {state.phase} at {completion}%...")
+    # Auto-sync dashboard after state change
+    regenerate_plan_viewer_data()  # Atomic write to plan-viewer-data.json
+    
+    # Continue to next iteration (NO APPROVAL LOOPS)
 ```
 
-**NO APPROVAL LOOPS.** Execute until phase complete or blocker detected.
+**Key design principles:**
+- ✅ Continuous loop with NO approval gates
+- ✅ Component existence checking (prevents recreation)
+- ✅ Atomic state updates (no corruption)
+- ✅ Evidence collection after each AC-ID
+- ✅ Automatic dashboard sync
+- ✅ Audit trail with correlation IDs
 
 ---
 
@@ -433,15 +378,26 @@ while True:
 
 ---
 
-## 🎯 QUICK REFERENCE
+## 🎯 QUICK REFERENCE (MasterOrchestrator Commands)
 
-| User Says | Agent Does |
-|-----------|------------|
-| "continue" | Execute autonomous loop until phase 100% |
-| "validate evidence" | Run audit_based_evidence_validator.py |
-| "sync dashboard" | Run regenerate_plan_viewer_data.py |
-| "status" | Display current phase + completion % |
-| "next phase" | Check 100% gate → proceed if passed |
+**ALWAYS use MasterOrchestrator. Never execute steps manually.**
+
+| User Wants | Command | MasterOrchestrator Does |
+|-----------|---------|------------------------|
+| Execute Phase 2 | `python3 -m src.main "execute phase 2"` | Full autonomous loop until 100% |
+| Check status | `python3 -m src.main "status"` | Load SSOT, display completion % |
+| Validate evidence | `python3 -m src.main "validate evidence"` | Run evidence validator gate |
+| Sync dashboard | `python3 -m src.main "sync dashboard"` | regenerate_plan_viewer_data.py |
+| Next phase | `python3 -m src.main "proceed to phase 3"` | Check 100% gate, initialize next phase |
+| Get next AC-IDs | `python3 -m src.main "get next AC-IDs"` | Query progress-tracker.json |
+
+**NEVER run these manually:**
+- ❌ `python3 scripts/audit_based_evidence_validator.py` (orchestrator calls internally)
+- ❌ `pytest tests/ -k AC-ID` (orchestrator calls internally)
+- ❌ Load/modify progress-tracker.json directly (orchestrator handles)
+- ❌ Update AC-INDEX.yaml (orchestrator reads only)
+
+**Single entry point:** `python3 -m src.main "{intent}" --format markdown`
 
 ---
 
