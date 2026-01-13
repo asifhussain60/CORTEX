@@ -459,13 +459,26 @@
             },
             renderPhaseCards() {
                 const tracker = this.data.tracker;
-                const phases = tracker.phases || {};
                 const grid = document.getElementById('phases-grid');
-                grid.innerHTML = Object.entries(phases).sort(([aKey], [bKey]) => {
-                    const aNum = parseFloat(aKey.replace('phase_', ''));
-                    const bNum = parseFloat(bKey.replace('phase_', ''));
+                
+                // Build phase data from detailed phase_X objects
+                const phaseData = [];
+                Object.keys(this.phases).forEach(phaseKey => {
+                    const detailedKey = `phase_${phaseKey}`;
+                    const detailedPhase = tracker[detailedKey];
+                    if (detailedPhase) {
+                        phaseData.push([phaseKey, detailedPhase]);
+                    }
+                });
+                
+                // Sort by phase number
+                phaseData.sort(([aKey], [bKey]) => {
+                    const aNum = parseFloat(aKey);
+                    const bNum = parseFloat(bKey);
                     return aNum - bNum;
-                }).map(([key, phase]) => this.createPhaseCard(phase)).join('');
+                });
+                
+                grid.innerHTML = phaseData.map(([key, phase]) => this.createPhaseCard(key, phase)).join('');
             },
             createPhaseCard(phase) {
                 const phaseNum = phase.number || phase.id || Object.keys(this.phases).find(key => this.phases[key].name === phase.name);
