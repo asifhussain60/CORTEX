@@ -1,0 +1,487 @@
+/**
+ * CORTEX Glassmorphism Design System - Base Patterns
+ * Version: 4.0.0
+ * 
+ * Core glassmorphism patterns extracted from glass-patterns.css (1024 lines)
+ * Consolidated to 5 essential patterns with token-based styling
+ * 
+ * Patterns:
+ * 1. Multi-Layer Glass Card (PRIMARY) - Default content containers
+ * 2. Neuglass Card - Dashboard widgets with neumorphism
+ * 3. Morphing Glass Card - Expandable content with animation
+ * 4. Light Leak Glass - Hero sections with ambient lighting
+ * 5. Liquid Blob Glass - Decorative organic shapes
+ * 
+ * Author: Asif Hussain
+ * Copyright: © 2025-2026 Asif Hussain. All rights reserved.
+ * License: Source-Available (Use Allowed, No Contributions)
+ */
+
+/* ============================================
+   PATTERN 1: MULTI-LAYER GLASS CARD (PRIMARY)
+   ============================================ 
+   Use Case: Default card pattern for all content containers
+   Design Tokens: Uses glass-design-tokens.css variables
+*/
+
+.glass-card {
+    /* Layer 1: Frosted background with gradient */
+    position: relative;
+    background: var(--glass-bg-base);
+    backdrop-filter: blur(var(--glass-blur-md)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--glass-blur-md)) saturate(180%);
+    
+    /* Gradient border */
+    border: var(--glass-border-width-md) solid;
+    border-image: var(--glass-gradient-border) 1;
+    
+    /* Depth shadows */
+    box-shadow: var(--shadow-glass-md);
+    
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    
+    /* GPU acceleration */
+    transform: translateZ(0);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    
+    transition: var(--transition-glass);
+}
+
+/* Layer 2: Inner glow (light source simulation) */
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.15) 0%,
+        transparent 100%
+    );
+    border-radius: inherit;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Layer 3: Hover depth effect */
+.glass-card:hover {
+    backdrop-filter: blur(var(--glass-blur-lg)) saturate(200%);
+    -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(200%);
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: var(--shadow-glass-hover);
+}
+
+/* Layer 4: Animated border glow */
+.glass-card::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        var(--accent-cyan-50) 50%,
+        transparent 70%
+    );
+    background-size: 200% 200%;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.glass-card:hover::after {
+    opacity: 1;
+    animation: borderGlowSweep 2s ease-in-out infinite;
+}
+
+@keyframes borderGlowSweep {
+    0%, 100% { background-position: -200% 0; }
+    50% { background-position: 200% 0; }
+}
+
+/* Glass Card Variants */
+.glass-card--sm {
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+}
+
+.glass-card--lg {
+    padding: var(--space-xl);
+    border-radius: var(--radius-xl);
+}
+
+.glass-card--no-hover {
+    transform: none !important;
+}
+
+.glass-card--no-hover:hover {
+    transform: none !important;
+    box-shadow: var(--shadow-glass-md);
+}
+
+/* ============================================
+   PATTERN 2: NEUGLASS CARD
+   ============================================ 
+   Use Case: Dashboard widgets, settings panels, interactive controls
+*/
+
+.neuglass-card {
+    position: relative;
+    background: var(--glass-bg-neuglass);
+    backdrop-filter: blur(15px) saturate(150%);
+    -webkit-backdrop-filter: blur(15px) saturate(150%);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    
+    /* Soft neumorphic shadows */
+    box-shadow: 
+        12px 12px 24px rgba(0, 0, 0, 0.6),
+        -12px -12px 24px rgba(255, 255, 255, 0.05),
+        inset 2px 2px 4px rgba(255, 255, 255, 0.1),
+        inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+    
+    border: 1px solid var(--glass-border-subtle);
+    transition: var(--transition-glass);
+    
+    /* GPU acceleration */
+    transform: translateZ(0);
+    will-change: transform, box-shadow;
+}
+
+.neuglass-card:hover {
+    box-shadow: 
+        6px 6px 12px rgba(0, 0, 0, 0.7),
+        -6px -6px 12px rgba(255, 255, 255, 0.03),
+        inset 4px 4px 8px rgba(0, 0, 0, 0.4),
+        inset -2px -2px 4px rgba(255, 255, 255, 0.1);
+    transform: translateY(2px);
+}
+
+/* Pressed state for interactive neuglass */
+.neuglass-card:active,
+.neuglass-card.pressed {
+    box-shadow:
+        inset 6px 6px 12px rgba(0, 0, 0, 0.6),
+        inset -6px -6px 12px rgba(255, 255, 255, 0.02);
+    transform: scale(0.98);
+}
+
+/* ============================================
+   PATTERN 3: MORPHING GLASS CARD
+   ============================================ 
+   Use Case: Expandable content, detail views, interactive showcases
+*/
+
+.morph-card {
+    position: relative;
+    background: var(--glass-bg-base);
+    backdrop-filter: blur(var(--glass-blur-sm));
+    -webkit-backdrop-filter: blur(var(--glass-blur-sm));
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    cursor: pointer;
+    border: 1px solid var(--glass-border-base);
+    
+    transition: var(--transition-morph);
+    
+    /* GPU acceleration */
+    transform: translateZ(0);
+    will-change: transform, border-radius;
+}
+
+.morph-card:hover {
+    border-radius: 50px;
+    transform: scale(1.05);
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        0 0 40px var(--accent-cyan-50);
+}
+
+.morph-card.expanded {
+    position: fixed;
+    inset: 20px;
+    border-radius: 0;
+    transform: scale(1);
+    z-index: var(--z-modal);
+    animation: morphToFullscreen 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    overflow-y: auto;
+}
+
+@keyframes morphToFullscreen {
+    0% {
+        border-radius: 50px;
+        transform: scale(1.05);
+    }
+    100% {
+        border-radius: 0;
+        transform: scale(1);
+    }
+}
+
+/* Close button for expanded morph card */
+.morph-card__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-primary);
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.morph-card.expanded .morph-card__close {
+    display: flex;
+}
+
+.morph-card__close:hover {
+    background: var(--accent-danger-30);
+    transform: rotate(90deg);
+}
+
+/* ============================================
+   PATTERN 4: LIGHT LEAK GLASS
+   ============================================ 
+   Use Case: Hero sections, feature highlights, ambient backgrounds
+*/
+
+.light-leak-glass {
+    position: relative;
+    background: var(--glass-bg-base);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    border: 1px solid var(--glass-border-base);
+}
+
+/* Light source top-left (cyan) */
+.light-leak-glass::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle at center,
+        var(--accent-cyan-30) 0%,
+        transparent 50%
+    );
+    opacity: 0.5;
+    animation: lightLeakPulse 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Light source bottom-right (purple) */
+.light-leak-glass::after {
+    content: '';
+    position: absolute;
+    bottom: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+        circle at center,
+        var(--accent-purple-30) 0%,
+        transparent 50%
+    );
+    opacity: 0.4;
+    animation: lightLeakPulse 10s ease-in-out infinite reverse;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes lightLeakPulse {
+    0%, 100% { 
+        opacity: 0.3;
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.6;
+        transform: scale(1.1);
+    }
+}
+
+/* Ensure content stays above light leak layers */
+.light-leak-glass > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* ============================================
+   PATTERN 5: LIQUID BLOB GLASS
+   ============================================ 
+   Use Case: Decorative elements, animated backgrounds, ambient effects
+*/
+
+.liquid-blob {
+    position: absolute;
+    background: var(--glass-bg-blob);
+    backdrop-filter: blur(var(--glass-blur-lg));
+    -webkit-backdrop-filter: blur(var(--glass-blur-lg));
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.6;
+    mix-blend-mode: screen;
+    animation: liquidMorph 12s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes liquidMorph {
+    0%, 100% {
+        border-radius: 50% 60% 40% 70% / 60% 50% 70% 40%;
+        transform: rotate(0deg) scale(1);
+    }
+    25% {
+        border-radius: 60% 40% 70% 50% / 50% 70% 40% 60%;
+        transform: rotate(90deg) scale(1.1);
+    }
+    50% {
+        border-radius: 40% 70% 50% 60% / 70% 40% 60% 50%;
+        transform: rotate(180deg) scale(0.9);
+    }
+    75% {
+        border-radius: 70% 50% 60% 40% / 40% 60% 50% 70%;
+        transform: rotate(270deg) scale(1.05);
+    }
+}
+
+/* Blob sizes */
+.liquid-blob--sm {
+    width: 200px;
+    height: 200px;
+}
+
+.liquid-blob--md {
+    width: 400px;
+    height: 400px;
+}
+
+.liquid-blob--lg {
+    width: 600px;
+    height: 600px;
+}
+
+/* Pause animation on reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .liquid-blob {
+        animation-play-state: paused;
+    }
+}
+
+/* Liquid blob color variants */
+.liquid-blob--accent {
+    background: linear-gradient(
+        135deg,
+        var(--accent-cyan-40) 0%,
+        var(--accent-cyan-20) 100%
+    );
+}
+
+.liquid-blob--success {
+    background: linear-gradient(
+        135deg,
+        var(--accent-success-30) 0%,
+        var(--accent-cyan-20) 100%
+    );
+}
+
+/* ============================================
+   GPU ACCELERATION UTILITY
+   ============================================ */
+
+.glass-optimized {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* ============================================
+   PERFORMANCE: CONDITIONAL BLUR
+   ============================================ */
+
+/* Disable blur on low-end devices */
+@media (max-width: 768px) and (max-resolution: 1dppx) {
+    .glass-card,
+    .neuglass-card,
+    .morph-card,
+    .light-leak-glass,
+    .liquid-blob {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background-color: rgba(26, 31, 58, 0.95);
+    }
+}
+
+/* Enhanced blur on high-DPI displays */
+@media (min-resolution: 2dppx) {
+    .glass-card {
+        backdrop-filter: blur(var(--glass-blur-lg)) saturate(200%);
+        -webkit-backdrop-filter: blur(var(--glass-blur-lg)) saturate(200%);
+    }
+}
+
+/* ============================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================ */
+
+@media (max-width: 768px) {
+    .glass-card,
+    .neuglass-card,
+    .morph-card {
+        padding: var(--space-md);
+    }
+    
+    .light-leak-glass,
+    .liquid-blob {
+        padding: var(--space-lg);
+    }
+}
+
+@media (max-width: 480px) {
+    .glass-card,
+    .neuglass-card,
+    .morph-card {
+        padding: var(--space-sm);
+        border-radius: var(--radius-md);
+    }
+}
+
+/* ============================================
+   REDUCED MOTION SUPPORT
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    .glass-card,
+    .neuglass-card,
+    .morph-card,
+    .liquid-blob,
+    .light-leak-glass::before,
+    .light-leak-glass::after {
+        animation: none !important;
+        transition: none !important;
+    }
+    
+    .glass-card:hover,
+    .neuglass-card:hover,
+    .morph-card:hover {
+        transform: none !important;
+    }
+}

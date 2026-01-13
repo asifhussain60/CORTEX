@@ -1,0 +1,104 @@
+schema_version: 1.0
+view:
+  id: sts-solid-html
+  title: "STS: SOLID"
+  target_html: "sts/solid.html"
+  nav_level: 2
+  parent: "index.html"
+  audiences: ["Business leaders", "Product Owners", "Software Engineers"]
+  tagline: "Sharpen The Saw: SOLID"
+design:
+  base_template: "index_gemini.html"
+  look_and_feel:
+    theme: "dark glassmorphism + neon accents (cyan/purple)"
+    typography: ["Inter", "Orbitron"]
+    motion: "subtle, physics-y easing; no obnoxious bounce"
+    accessibility: "WCAG-minded contrast, focus states, reduced-motion support"
+  responsive:
+    breakpoints_px: [1200, 900, 600]
+    targets: ["phone", "tablet", "ipad", "desktop"]
+  shared_components_required:
+    - "sticky top nav with active section highlight"
+    - "breadcrumb trail for level-2 pages"
+    - "page-loading overlay (fast fade)"
+    - "footer quick-links grid"
+    - "glass-card component library"
+    - "tab component (when useful)"
+    - "lightweight animation helpers (IntersectionObserver reveal)"
+assets:
+  allowed_external_cdns:
+    - name: "Font Awesome"
+      url: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    - name: "Google Fonts"
+      url: "https://fonts.googleapis.com"
+    - name: "Mermaid"
+      url: "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"
+    - name: "D3"
+      url: "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"
+  local_assets_expected:
+    - "assets/images/CORTEX-logo-512.png"
+    - "assets/images/Awakening-200.png"
+    - "assets/images/MP4/E2E-Execution.mp4"
+implementation_instructions:
+  keep_text_minimal: true
+  be_visual_first: true
+  avoid_wall_of_text: true
+  diagrams_are_required: true
+  animations_should_be_subtle: true
+  no_framework_required: true
+  preferred_stack: ["HTML", "CSS", "Vanilla JS", "Mermaid", "D3.js"]
+  include: 
+    - "shared layout partials OR a small JS include to keep nav/footer consistent"
+    - "one CSS file for shared tokens + per-page CSS blocks if needed"
+  quality_bar:
+    - "looks like a premium enterprise product site"
+    - "everything aligns, breathes, and responds well on small screens"
+    - "no broken links; nav matches master sitemap"
+
+page:
+  hero:
+    headline: "STS: SOLID"
+    subheadline: "Design principles with visual examples, not lectures."
+    primary_cta: {"label": "Back to Home", "href": "../index.html"}
+    secondary_cta: {"label": "View Orchestrators", "href": "../orchestrators/planning-system.html"}
+  sections:
+    - id: principles
+      title: "Principles (visual cheatsheets)"
+      layout: "grid of cheat cards"
+      content_rules:
+        - "keep copy to 2-4 short lines per card"
+        - "prefer bullets over paragraphs"
+      components:
+        - "Cheat cards with icons and 1\u20132 bullets each"
+        - "Mini 'anti-pattern' cards (1 line each)"
+      visualizations:
+        - type: mermaid
+          diagram_type: "flowchart"
+          label: "Quality feedback loop"
+          content_guidance: "Standards \u2192 Checks \u2192 Fix \u2192 Evidence \u2192 Publish \u2192 Learn"
+          style: "dark theme + neon accents; wrapped in glass-card; copy button"
+        - type: d3
+          widget: "quality_score"
+          label: "Quality score dial"
+          data: "Demo composite score from testing+security+perf+docs."
+          behavior: "lazy-render when in viewport; tooltip on hover; keyboard focusable when feasible"
+    - id: tooling
+      title: "Tooling integration"
+      layout: "diagram + tiles"
+      content_rules:
+        - "keep copy to 2-4 short lines per card"
+        - "prefer bullets over paragraphs"
+      components:
+        - "Tiles: Lint, SAST, DAST, Test Runner, Coverage, Benchmarks, Docs Generator"
+        - "Each tile links back to relevant orchestrator/toolkit page"
+      visualizations:
+        - type: mermaid
+          diagram_type: "sequenceDiagram"
+          label: "Checks in pipeline"
+          content_guidance: "PR \u2192 Checks \u2192 Approve \u2192 Execute \u2192 Audit \u2192 Evidence"
+          style: "dark theme + neon accents; wrapped in glass-card; copy button"
+        - type: d3
+          widget: "trendlines"
+          label: "Trendlines"
+          data: "Demo time series for coverage, perf budget, defects."
+          behavior: "lazy-render when in viewport; tooltip on hover; keyboard focusable when feasible"
