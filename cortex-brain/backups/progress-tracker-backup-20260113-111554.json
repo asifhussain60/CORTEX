@@ -1,6 +1,6 @@
 {
   "schema_version": "1.10",
-  "last_updated": "2026-01-13T16:44:26.026318+00:00",
+  "last_updated": "2026-01-13T15:50:38.818869Z",
   "updated_by": "Hallucination prevention enhancement integrated (v1.9.0)",
   "active_epic": {
     "id": "CORTEX-6.0",
@@ -76,11 +76,107 @@
     "phase_9_gate_status": "FOUNDATION_COMPLETE - Core infrastructure operational"
   },
   "current_phase": {
-    "phase": 1,
-    "name": "Foundation Infrastructure",
-    "status": "completed",
-    "completion_percentage": 100.0,
-    "completed_timestamp": "2026-01-13T16:44:26.026313+00:00"
+    "number": 10,
+    "name": "Phase 10 - Template Migration & Enhancement",
+    "description": "Migrate orchestrators to 3-layer templates, implement CORE-026, complete challenge system (11 deferred ACs)",
+    "started": "2026-01-13T06:19:45.937098+00:00",
+    "target_completion": "2026-02-23",
+    "status": "complete",
+    "ac_ids": [
+      "AC-TEMPLATE-005",
+      "AC-TEMPLATE-006",
+      "AC-TEMPLATE-007",
+      "AC-TEMPLATE-008",
+      "AC-CHALLENGE-001",
+      "AC-CHALLENGE-002",
+      "AC-CHALLENGE-003"
+    ],
+    "total_ac_count": 7,
+    "completed_count": 7,
+    "completion_percentage": 100,
+    "prerequisites": [
+      "Phase 9 (Infrastructure Maturity) \u2705"
+    ],
+    "sub_phases": [
+      {
+        "id": "10.1",
+        "name": "Governance Enforcement",
+        "week": 1,
+        "ac_ids": [
+          "AC-TEMPLATE-005"
+        ],
+        "description": "Implement CORE-026 mandatory header enforcement",
+        "status": "planned"
+      },
+      {
+        "id": "10.2",
+        "name": "Orchestrator Migration",
+        "week": 2,
+        "ac_ids": [
+          "AC-TEMPLATE-006",
+          "AC-TEMPLATE-007"
+        ],
+        "description": "Migrate 10+ core orchestrators to 3-layer templates",
+        "status": "planned"
+      },
+      {
+        "id": "10.3",
+        "name": "Validation & Cleanup",
+        "week": 3,
+        "ac_ids": [
+          "AC-TEMPLATE-008"
+        ],
+        "description": "Performance validation, deprecate v4.yaml, final cleanup",
+        "status": "planned"
+      },
+      {
+        "id": "10.4",
+        "name": "Challenge System",
+        "week": 2,
+        "ac_ids": [
+          "AC-CHALLENGE-001",
+          "AC-CHALLENGE-002",
+          "AC-CHALLENGE-003"
+        ],
+        "description": "Document and validate CORE-025 challenge implementation",
+        "status": "planned"
+      }
+    ],
+    "completed_ac_ids": [
+      "AC-TEMPLATE-005"
+    ],
+    "in_progress": [],
+    "test_results": {
+      "total_tests": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": "0%"
+    },
+    "notes": "Phase 10 focuses on completing deferred work from Phase 9. AC-CHALLENGE-001-003 may be resolved as duplicates of CORE-025.",
+    "deferred_ac_ids": {
+      "AC-TEMPLATE-006-008": {
+        "reason": "Requires cross-cutting orchestrator refactoring (10+ orchestrators)",
+        "ac_ids": [
+          "AC-TEMPLATE-006",
+          "AC-TEMPLATE-007",
+          "AC-TEMPLATE-008"
+        ],
+        "effort": "5 days minimum (separate sprint)",
+        "defer_to": "Phase 11 or dedicated sprint",
+        "documentation": "cortex-brain/documents/future-enhancements/AC-TEMPLATE-005-to-008-deferred.md"
+      },
+      "AC-CHALLENGE-001-003": {
+        "reason": "Already implemented via CORE-025 + RequestValidator",
+        "ac_ids": [
+          "AC-CHALLENGE-001",
+          "AC-CHALLENGE-002",
+          "AC-CHALLENGE-003"
+        ],
+        "status": "duplicate",
+        "implementation": "src/orchestrators/core/request_validator.py (CORTEX-025)",
+        "defer_to": "No action needed (CORE-25 operational)"
+      }
+    }
   },
   "phase_1_5_sts": {
     "number": 1.5,
@@ -1433,47 +1529,6 @@
     "AC-TEMPLATE-008",
     "AC-CHALLENGE-001",
     "AC-CHALLENGE-002",
-    "AC-CHALLENGE-003",
-    "AC-AUDIT-001",
-    "AC-AUDIT-002",
-    "AC-AUDIT-003",
-    "AC-AUDIT-004",
-    "AC-AUDIT-005",
-    "AC-AUDIT-006",
-    "AC-AUDIT-007",
-    "AC-GOV-001",
-    "AC-GOV-002",
-    "AC-GOV-003",
-    "AC-GOV-004",
-    "AC-GOV-005",
-    "AC-STATE-001",
-    "AC-STATE-002",
-    "AC-STATE-003",
-    "AC-LIFECYCLE-001",
-    "AC-LIFECYCLE-002",
-    "AC-LIFECYCLE-003",
-    "AC-EVIDENCE-001",
-    "AC-EVIDENCE-002",
-    "AC-EVIDENCE-003",
-    "AC-SECURITY-001",
-    "AC-SECURITY-002",
-    "AC-SECURITY-003",
-    "AC-SECURITY-004",
-    "AC-SECURITY-005",
-    "AC-SECURITY-006",
-    "AC-SECURITY-007",
-    "AC-SECURITY-008"
-  ],
-  "metadata": {
-    "last_reconciliation": "2026-01-13T16:15:54.182754+00:00",
-    "reconciliation_reason": "State inconsistency fix - realigned to actual implementation",
-    "manual_phase_correction": "Set to Phase 1 for foundation implementation",
-    "correction_timestamp": "2026-01-13T16:32:13.352154+00:00"
-  },
-  "overall_progress": {
-    "completed": 36,
-    "total": 0,
-    "percentage": 0
-  },
-  "last_reconciliation": "2026-01-13T16:44:26.026319+00:00"
+    "AC-CHALLENGE-003"
+  ]
 }
