@@ -1,0 +1,91 @@
+schema_version: 1.0
+view:
+  id: lens-knowledge-graph-html
+  title: "Lens Knowledge Graph"
+  target_html: "lens/knowledge-graph.html"
+  nav_level: 2
+  parent: "lens/index.html"
+  audiences: ["Business leaders", "Product Owners", "Software Engineers"]
+  tagline: "From code to relationships to decisions"
+design:
+  base_template: "index_gemini.html"
+  look_and_feel:
+    theme: "dark glassmorphism + neon accents (cyan/purple)"
+    typography: ["Inter", "Orbitron"]
+    motion: "subtle, physics-y easing; no obnoxious bounce"
+    accessibility: "WCAG-minded contrast, focus states, reduced-motion support"
+  responsive:
+    breakpoints_px: [1200, 900, 600]
+    targets: ["phone", "tablet", "ipad", "desktop"]
+  shared_components_required:
+    - "sticky top nav with active section highlight"
+    - "breadcrumb trail for level-2 pages"
+    - "page-loading overlay (fast fade)"
+    - "footer quick-links grid"
+    - "glass-card component library"
+    - "tab component (when useful)"
+    - "lightweight animation helpers (IntersectionObserver reveal)"
+assets:
+  allowed_external_cdns:
+    - name: "Font Awesome"
+      url: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    - name: "Google Fonts"
+      url: "https://fonts.googleapis.com"
+    - name: "Mermaid"
+      url: "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"
+    - name: "D3"
+      url: "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"
+  local_assets_expected:
+    - "assets/images/CORTEX-logo-512.png"
+    - "assets/images/Awakening-200.png"
+    - "assets/images/MP4/E2E-Execution.mp4"
+implementation_instructions:
+  keep_text_minimal: true
+  be_visual_first: true
+  avoid_wall_of_text: true
+  diagrams_are_required: true
+  animations_should_be_subtle: true
+  no_framework_required: true
+  preferred_stack: ["HTML", "CSS", "Vanilla JS", "Mermaid", "D3.js"]
+  include: 
+    - "shared layout partials OR a small JS include to keep nav/footer consistent"
+    - "one CSS file for shared tokens + per-page CSS blocks if needed"
+  quality_bar:
+    - "looks like a premium enterprise product site"
+    - "everything aligns, breathes, and responds well on small screens"
+    - "no broken links; nav matches master sitemap"
+
+page:
+  hero:
+    headline: "A map of your system"
+    subheadline: "Services, contracts, data flows\u2014connected and queryable."
+    primary_cta: {"label": "Back to Lens", "href": "index.html"}
+    secondary_cta: {"label": "Explore Toolkit", "href": "../toolkit-manager/index.html"}
+  sections:
+    - id: graph-explorer
+      title: "Knowledge Graph Explorer"
+      layout: "full-width graph canvas + right-side inspector"
+      content_rules:
+        - "keep copy to 2-4 short lines per card"
+        - "prefer bullets over paragraphs"
+      components:
+        - "Graph canvas (D3 force-directed) with zoom/pan and search"
+        - "Inspector shows selected node details (type, relationships, risk, owners)"
+        - "Legend chips for node types"
+      visualizations:
+        - type: d3
+          widget: "knowledge_graph"
+          label: "Interactive knowledge graph"
+          data: "Demo nodes: services, APIs, schemas, tickets, tests, orchestrators; edges show dependencies/contracts."
+          behavior: "lazy-render when in viewport; tooltip on hover; keyboard focusable when feasible"
+        - type: mermaid
+          diagram_type: "sequenceDiagram"
+          label: "Questioning the graph"
+          content_guidance: "User query \u2192 graph traversal \u2192 evidence links \u2192 recommended action"
+          style: "dark theme + neon accents; wrapped in glass-card; copy button"
+      interactions:
+        - "Search box highlights nodes"
+        - "Keyboard navigation: cycle nodes, open inspector"
+        - "Prefers-reduced-motion disables force animation after settle"
+      acceptance_criteria:
+        - "Graph remains usable on iPad: pinch/zoom supported; inspector collapses into bottom sheet."

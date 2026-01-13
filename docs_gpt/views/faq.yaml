@@ -1,0 +1,85 @@
+schema_version: 1.0
+view:
+  id: faq-html
+  title: "FAQ"
+  target_html: "faq.html"
+  nav_level: 1
+  parent: "index.html"
+  audiences: ["Business leaders", "Product Owners", "Software Engineers"]
+  tagline: "The questions people ask before they say yes"
+design:
+  base_template: "index_gemini.html"
+  look_and_feel:
+    theme: "dark glassmorphism + neon accents (cyan/purple)"
+    typography: ["Inter", "Orbitron"]
+    motion: "subtle, physics-y easing; no obnoxious bounce"
+    accessibility: "WCAG-minded contrast, focus states, reduced-motion support"
+  responsive:
+    breakpoints_px: [1200, 900, 600]
+    targets: ["phone", "tablet", "ipad", "desktop"]
+  shared_components_required:
+    - "sticky top nav with active section highlight"
+    - "breadcrumb trail for level-2 pages"
+    - "page-loading overlay (fast fade)"
+    - "footer quick-links grid"
+    - "glass-card component library"
+    - "tab component (when useful)"
+    - "lightweight animation helpers (IntersectionObserver reveal)"
+assets:
+  allowed_external_cdns:
+    - name: "Font Awesome"
+      url: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    - name: "Google Fonts"
+      url: "https://fonts.googleapis.com"
+    - name: "Mermaid"
+      url: "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"
+    - name: "D3"
+      url: "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"
+  local_assets_expected:
+    - "assets/images/CORTEX-logo-512.png"
+    - "assets/images/Awakening-200.png"
+    - "assets/images/MP4/E2E-Execution.mp4"
+implementation_instructions:
+  keep_text_minimal: true
+  be_visual_first: true
+  avoid_wall_of_text: true
+  diagrams_are_required: true
+  animations_should_be_subtle: true
+  no_framework_required: true
+  preferred_stack: ["HTML", "CSS", "Vanilla JS", "Mermaid", "D3.js"]
+  include: 
+    - "shared layout partials OR a small JS include to keep nav/footer consistent"
+    - "one CSS file for shared tokens + per-page CSS blocks if needed"
+  quality_bar:
+    - "looks like a premium enterprise product site"
+    - "everything aligns, breathes, and responds well on small screens"
+    - "no broken links; nav matches master sitemap"
+
+page:
+  hero:
+    headline: "FAQ"
+    subheadline: "Short answers. Strong visuals. No fluff."
+    primary_cta: {"label": "Features", "href": "features/index.html"}
+    secondary_cta: {"label": "Site Map", "href": "sitemap.html"}
+  sections:
+    - id: faq
+      title: "FAQ (minimal text, maximal clarity)"
+      layout: "searchable accordion"
+      content_rules:
+        - "keep copy to 2-4 short lines per card"
+        - "prefer bullets over paragraphs"
+      components:
+        - "Search input filters questions"
+        - "Accordion with 10\u201314 questions, each answer 2\u20134 lines max"
+        - "Inline badges: Leadership / PO / Engineer"
+      visualizations:
+        - type: mermaid
+          diagram_type: "flowchart"
+          label: "Where questions land"
+          content_guidance: "Question \u2192 Lens (evidence) \u2192 Orchestrator (action) \u2192 Toolkit (visibility)"
+          style: "dark theme + neon accents; wrapped in glass-card; copy button"
+        - type: d3
+          widget: "faq_interest"
+          label: "FAQ interest"
+          data: "Demo: which topics get most attention across personas."
+          behavior: "lazy-render when in viewport; tooltip on hover; keyboard focusable when feasible"
