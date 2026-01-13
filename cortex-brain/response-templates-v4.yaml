@@ -1,16 +1,18 @@
-schema_version: '4.5.1'
+schema_version: '4.6.0'
 last_updated: '2026-01-13'
 architecture: 'cortex_4_0_ascii_progress_with_visual_tracking'
 description: |
-  CORTEX Response Template System v4.5.1
-  CORTEX-4.0 Style Headers + ASCII Visual Progress Bars
+  CORTEX Response Template System v4.6.0
+  CORTEX-4.0 Style Headers + ASCII Visual Progress Bars + Mandatory Copyright
   
   Key Features:
   1. Mandatory CORTEX-4.0 style header (2 lines, operational)
-  2. ASCII progress bars for visual phase tracking (CORTEX-4.0 style)
-  3. Executive summary sections (Outcomes, In Progress, Risks, Impact)
-  4. Mandatory "Next Steps:" section with MAC/WIN platform selection
-  5. FIXED: Bullets now enforced on separate lines (v4.5.1)
+  2. Mandatory copyright section after header (legal + brand)
+  3. ASCII progress bars for visual phase tracking (CORTEX-4.0 style)
+  4. Executive summary sections (Outcomes, In Progress, Risks, Impact)
+  5. Mandatory "Next Steps:" section with MAC/WIN platform selection
+  6. FIXED: Bullets enforced on separate lines (v4.5.1)
+  7. NEW: Copyright section with separators (v4.6.0)
   
   Header format (CORTEX-4.0 style):
   ## 🧠 CORTEX {work_subtitle}
@@ -36,15 +38,25 @@ mandatory_header:
     CORTEX-4.0 style header - operational, concise, context-aware.
     Shows what's being done, who's doing it, and what phase/orchestrator.
     THIS IS THE AUTHORITATIVE HEADER - appears on EVERY response.
+    
+    MANDATORY COPYRIGHT:
+    Every response MUST include copyright after the header and before content.
   
   template: |
     ## 🧠 CORTEX {operation_type}
     **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+    
+    ---
+    **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+    
+    ---
   
   critical_rules:
     - "EVERY response must start with this header"
     - "Header comes BEFORE any summary, sections, or content"
-    - "Copyright line is non-negotiable (legal + brand)"
+    - "Copyright line MUST appear after header, before any content"
+    - "Copyright format: **Copyright © 2025-2026 Asif Hussain. All rights reserved.**"
+    - "Separator lines (---) before and after copyright for visual separation"
     - "Author is always 'Asif Hussain' (never LLM names)"
     - "Date reflects when response was generated"
 
@@ -345,9 +357,10 @@ operation_templates:
 
 composition_rules:
   mandatory_elements:
-    - header: "🧠 CORTEX {operation} with brain icon and copyright"
+    - header: "🧠 CORTEX {operation} with brain icon"
+    - copyright: "**Copyright © 2025-2026 Asif Hussain. All rights reserved.** with --- separators"
     - summary: "3-5 sentence executive summary"
-    - outcomes: "At least 1 quantified bullet"
+    - outcomes: "At least 1 quantified bullet on separate lines"
     - next_steps: "3-5 action items or sequential path forward (MANDATORY FINAL SECTION)"
   
   conditional_elements:
@@ -360,7 +373,9 @@ composition_rules:
     - explanatory_prose: "Use bullets"
     - nested_sections: "Max 2 levels"
     - ac_id_codes: "Translate first"
+    - missing_copyright: "Copyright section MUST appear after header"
     - missing_next_steps: "ALWAYS include Next Steps as final section"
+    - bullets_same_line: "Each bullet MUST be on separate line"
 
 # ============================================================================
 # QUALITY GATES (v4.2)
@@ -369,7 +384,8 @@ composition_rules:
 quality_gates:
   pre_output:
     - "Header present with 🧠 brain icon"
-    - "Copyright includes 2025-2026"
+    - "Copyright section present after header with separators"
+    - "Copyright format: **Copyright © 2025-2026 Asif Hussain. All rights reserved.**"
     - "No AC-ID codes visible"
     - "All metrics quantified"
     - "No code blocks unless requested"
@@ -379,12 +395,12 @@ quality_gates:
   
   verification_checklist:
     - "✓ CORTEX header with 🧠 brain icon"
-    - "✓ Version and date present"
-    - "✓ Copyright © 2025-2026 Asif Hussain"
+    - "✓ Copyright © 2025-2026 Asif Hussain after header"
+    - "✓ Copyright has separator lines (---) before and after"
     - "✓ Executive summary (3-5 sentences)"
     - "✓ Outcomes section with ✅ marker"
     - "✓ Blank line after section header before first bullet"
-    - "✓ Each bullet on separate line"
+    - "✓ Each bullet on separate line (NOT same line)"
     - "✓ Quantified metrics"
     - "✓ No AC-ID codes visible"
     - "✓ No code snippets"
@@ -402,6 +418,9 @@ examples:
   example_comprehensive: |
     ## 🧠 CORTEX TDD-Master Phase 2 Implementation
     **Author:** Asif Hussain | **Phase:** 2 | **Orchestrator:** TDD-Master ✅
+    
+    ---
+    **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
     
     ---
     
@@ -450,6 +469,9 @@ examples:
   example_instant: |
     ## 🧠 CORTEX Version Query
     **Author:** Asif Hussain | **Phase:** 2 | **Orchestrator:** MasterOrchestrator ✅
+    
+    ---
+    **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
     
     ---
     
