@@ -1,17 +1,17 @@
 plan_metadata:
   plan_id: CORTEX-6.0-SNOWBALL-MASTER
-  version: 1.8.0
+  version: 1.9.0
   created: '2026-01-10T23:50:00Z'
-  updated: '2026-01-13T18:00:00Z'
+  updated: '2026-01-13T22:00:00Z'
   author: Asif Hussain
   strategy: Organic Evolution with JIT Infrastructure Delivery
   philosophy: Build for operation; decommission construction scaffolding
   design_score: 97
-  total_weeks: 16.5
-  total_ac_ids: 184
+  total_weeks: 17.0
+  total_ac_ids: 209
   hybrid_approach: true
   gpt_influence: 70% rigor, 30% overhead
-  latest_addition: v1.8.0 - Multi-machine development protocol with platform badges
+  latest_addition: v1.9.0 - Hallucination prevention enhancement (25 AC-IDs across Phase 2 & 4)
   multi_machine_development:
     enabled: true
     platforms: [MAC, WIN]
@@ -537,9 +537,9 @@ snowball_strategy:
     critical: Universal code intelligence and knowledge discovery system
 phase_2_orchestration_core:
   name: Orchestration Core (CORE WORKFLOW)
-  duration: 2 weeks
+  duration: 2.5 weeks
   start_date: '2026-02-15'
-  end_date: '2026-02-28'
+  end_date: '2026-03-03'
   status: blocked_by_phase_1_5
   priority: CRITICAL
   recommended_llm:
@@ -653,6 +653,66 @@ phase_2_orchestration_core:
       evidence_bundle:
         test_coverage: '>=80%'
         persistence_validated: Atomic writes, no corruption
+    input_validator:
+      name: InputValidator (Hallucination Prevention)
+      ac_ids:
+      - AC-VALIDATE-001
+      - AC-VALIDATE-002
+      - AC-VALIDATE-003
+      - AC-VALIDATE-004
+      - AC-VALIDATE-005
+      - AC-VALIDATE-006
+      - AC-VALIDATE-007
+      - AC-VALIDATE-008
+      - AC-VALIDATE-009
+      - AC-VALIDATE-010
+      priority: HIGH
+      duration: 5.5 days
+      owner: Quality Team
+      platform: 🟢 CROSS-PLATFORM
+      capabilities:
+      - Intent canonicalization (AC-VALIDATE-001)
+      - AC-ID existence check (AC-VALIDATE-002)
+      - Evidence bundle pre-check (AC-VALIDATE-003)
+      - Cross-reference coherence (AC-VALIDATE-004)
+      - Semantic output validation (AC-VALIDATE-005)
+      - AC-ID format validation (AC-VALIDATE-006)
+      - Phase alignment enforcement (AC-VALIDATE-007)
+      - Request contradiction detection (AC-VALIDATE-008)
+      - Resource limit validation (AC-VALIDATE-009)
+      - Prerequisite dependency check (AC-VALIDATE-010)
+      dependencies:
+      - AC-ORCH-001
+      - AC-TODO-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        validation_latency: <200ms per request
+        false_positive_rate: <5%
+    metrics_collector:
+      name: MetricsCollector (Health Monitoring)
+      ac_ids:
+      - AC-METRICS-001
+      - AC-METRICS-002
+      - AC-METRICS-003
+      - AC-METRICS-004
+      - AC-METRICS-005
+      priority: HIGH
+      duration: 3 days
+      owner: Operations Team
+      platform: 🟢 CROSS-PLATFORM
+      capabilities:
+      - Test success rate baseline (AC-METRICS-001)
+      - Execution latency tracking (AC-METRICS-002)
+      - Evidence completeness validation (AC-METRICS-003)
+      - Governance violation alerting (AC-METRICS-004)
+      - Input rejection rate analysis (AC-METRICS-005)
+      dependencies:
+      - AC-VALIDATE-001
+      - AC-ORCH-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        metrics_accuracy: 100%
+        alerting_latency: <1s
     tdd_master:
       name: TDD-Master v1 (Test-Driven Development)
       ac_ids:
@@ -1954,9 +2014,9 @@ archived_phase_1_5_sts_semantic_test_suite:
   note: Original sequential plan - superseded by organic evolution
 archived_phase_4_intelligence:
   name: Intelligence Layer
-  duration: 2 weeks
+  duration: 2.75 weeks
   start_date: '2026-02-24'
-  end_date: '2026-03-07'
+  end_date: '2026-03-14'
   status: ARCHIVED_HISTORICAL_REFERENCE
   priority: MEDIUM
   recommended_llm:
@@ -2059,6 +2119,55 @@ archived_phase_4_intelligence:
       - Visual debugging
       dependencies:
       - AC-ORCH-001
+    coherence_validator:
+      name: CoherenceValidator (Cross-File Hallucination Prevention)
+      ac_ids:
+      - AC-COHERENCE-001
+      - AC-COHERENCE-002
+      - AC-COHERENCE-003
+      - AC-COHERENCE-004
+      priority: HIGH
+      duration: 4 days
+      owner: Quality Team
+      platform: 🟢 CROSS-PLATFORM
+      capabilities:
+      - Multi-file symbol validation (AC-COHERENCE-001)
+      - Import resolution checking (AC-COHERENCE-002)
+      - Type consistency enforcement (AC-COHERENCE-003)
+      - Reference integrity validation (AC-COHERENCE-004)
+      dependencies:
+      - AC-VALIDATE-001
+      - AC-AUDIT-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        validation_accuracy: '>=95%'
+        false_positive_rate: <5%
+    explainability_tracker:
+      name: ExplainabilityTracker (Provenance & Decision Logging)
+      ac_ids:
+      - AC-EXPLAIN-001
+      - AC-EXPLAIN-002
+      - AC-EXPLAIN-003
+      - AC-EXPLAIN-004
+      - AC-EXPLAIN-005
+      priority: HIGH
+      duration: 5.25 days
+      owner: Audit Team
+      platform: 🟢 CROSS-PLATFORM
+      capabilities:
+      - Decision provenance tracking (AC-EXPLAIN-001)
+      - Input→output lineage (AC-EXPLAIN-002)
+      - Governance rule citations (AC-EXPLAIN-003)
+      - Evidence chain validation (AC-EXPLAIN-004)
+      - Human-readable explanation generation (AC-EXPLAIN-005)
+      dependencies:
+      - AC-AUDIT-001
+      - AC-GOV-001
+      - AC-EVIDENCE-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        provenance_completeness: 100%
+        explanation_quality: Human-validated
   phase_4_exit_criteria:
     must_complete:
     - LLM Intent Classifier operational
