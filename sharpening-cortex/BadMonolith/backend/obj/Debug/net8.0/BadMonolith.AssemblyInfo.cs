@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BadMonolith")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f644867aff6d458984e16bc04a1ee764ac4d1eeb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+10ac1df358d5d2e830d6a6b4874f5b4bf3059234")]
 [assembly: System.Reflection.AssemblyProductAttribute("BadMonolith")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BadMonolith")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
