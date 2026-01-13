@@ -20,6 +20,9 @@
 - ✅ Audit-backed evidence validation (≥80% verification rate)
 - ✅ Real-time SSOT synchronization
 - ✅ Tamper-proof governance enforcement
+- ✅ SINGLE TOOLKIT PATH (CORE-026 - no exceptions, BLOCKED at pre-commit)
+- ✅ TEST ORGANIZATION (CORE-027 - no duplicates, BLOCKED at pre-commit)
+- ✅ TOOLKIT SINGLETON (CORE-028 - one instance, BLOCKED at pre-commit)
 
 ---
 

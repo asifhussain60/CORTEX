@@ -1,9 +1,9 @@
-# 🔧 Orchestrator Development Guide (v1.0)
+# 🔧 Orchestrator Development Guide (v1.1)
 
 **Purpose:** Best practices and patterns for creating new CORTEX orchestrators  
-**Version:** 1.0.0 | **Date:** 2026-01-13  
+**Version:** 1.1.0 | **Date:** 2026-01-13  
 **Author:** Asif Hussain  
-**Governance:** CORE-001 (incremental), CORE-008 (TDD), CORE-017 (governance enforcement)  
+**Governance:** CORE-001 (incremental), CORE-008 (TDD), CORE-017 (enforcement), CORE-026/27/28 (NEW)  
 **Reference:** `.github/prompts/CORTEX.prompt.md` (entry point), `src/orchestrators/` (examples)
 
 ---
@@ -13,10 +13,12 @@
 **Each orchestrator is:**
 - ✅ A single, focused responsibility (SRP)
 - ✅ Stateless (receives context via dependency injection)
-- ✅ Testable (supports unit + integration tests)
+- ✅ Testable (supports unit + integration tests with NO duplicates - CORE-027)
 - ✅ Auditable (all operations logged to EnterpriseAuditLogger)
 - ✅ Flexible (supports multiple execution methods)
 - ✅ Observable (returns structured reports)
+- ✅ Single-instance via MasterOrchestrator (CORE-026 - no manual instantiation)
+- ✅ Governed by SKULL rules (CORE-026/27/28 new governance)
 
 ---
 

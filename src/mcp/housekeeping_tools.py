@@ -14,8 +14,22 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 from pathlib import Path
 from typing import Dict, Any, Optional, List
 import yaml
+from src.mcp.mcp_decorator import mcp_tool
 
 
+@mcp_tool(
+    name="cortex_housekeeping_status",
+    description="Get current housekeeping system status and configuration",
+    category="housekeeping",
+    parameters={
+        "workspace_root": {
+            "type": "string",
+            "required": False,
+            "description": "Path to workspace (default: current directory)"
+        }
+    },
+    returns={"type": "object", "description": "Status information"}
+)
 def housekeeping_status(
     workspace_root: str = "."
 ) -> Dict[str, Any]:
@@ -76,6 +90,24 @@ def housekeeping_status(
         }
 
 
+@mcp_tool(
+    name="cortex_housekeeping_execute",
+    description="Execute full housekeeping workflow (9 phases)",
+    category="housekeeping",
+    parameters={
+        "workspace_root": {
+            "type": "string",
+            "required": False,
+            "description": "Path to workspace (default: current directory)"
+        },
+        "dry_run": {
+            "type": "boolean",
+            "required": False,
+            "description": "If True, simulate without making changes"
+        }
+    },
+    returns={"type": "object", "description": "Complete housekeeping report"}
+)
 def housekeeping_execute(
     workspace_root: str = ".",
     dry_run: bool = False
@@ -154,6 +186,24 @@ def housekeeping_execute(
         }
 
 
+@mcp_tool(
+    name="cortex_housekeeping_phase",
+    description="Execute a single housekeeping phase",
+    category="housekeeping",
+    parameters={
+        "phase_number": {
+            "type": "integer",
+            "required": True,
+            "description": "Phase number (1-9) to execute"
+        },
+        "workspace_root": {
+            "type": "string",
+            "required": False,
+            "description": "Path to workspace (default: current directory)"
+        }
+    },
+    returns={"type": "object", "description": "Single phase result"}
+)
 def housekeeping_phase(
     phase_number: int,
     workspace_root: str = "."
@@ -238,6 +288,19 @@ def housekeeping_phase(
         }
 
 
+@mcp_tool(
+    name="cortex_housekeeping_health",
+    description="Get current system health score without running full cleanup",
+    category="housekeeping",
+    parameters={
+        "workspace_root": {
+            "type": "string",
+            "required": False,
+            "description": "Path to workspace (default: current directory)"
+        }
+    },
+    returns={"type": "object", "description": "Health score and component breakdown"}
+)
 def housekeeping_health(
     workspace_root: str = "."
 ) -> Dict[str, Any]:
@@ -333,6 +396,24 @@ def housekeeping_health(
         }
 
 
+@mcp_tool(
+    name="cortex_housekeeping_reports",
+    description="List recent housekeeping reports",
+    category="housekeeping",
+    parameters={
+        "workspace_root": {
+            "type": "string",
+            "required": False,
+            "description": "Path to workspace (default: current directory)"
+        },
+        "limit": {
+            "type": "integer",
+            "required": False,
+            "description": "Maximum number of reports to return (default: 10)"
+        }
+    },
+    returns={"type": "object", "description": "List of recent reports"}
+)
 def housekeeping_reports(
     workspace_root: str = ".",
     limit: int = 10
@@ -395,6 +476,19 @@ def housekeeping_reports(
 
 # AC-CLEAN-305: Phase-independent tool dispatch
 
+@mcp_tool(
+    name="cortex_dispatch_tool",
+    description="Dispatch tool by capability, not phase",
+    category="housekeeping",
+    parameters={
+        "request": {
+            "type": "object",
+            "required": True,
+            "description": "Tool dispatch request with capability"
+        }
+    },
+    returns={"type": "object", "description": "Dispatch result"}
+)
 def dispatch_tool(request: dict) -> dict:
     """AC-CLEAN-305: Dispatch tool by capability, not phase"""
     try:
@@ -404,6 +498,13 @@ def dispatch_tool(request: dict) -> dict:
         return {'success': False, 'error': str(e)}
 
 
+@mcp_tool(
+    name="cortex_get_available_tools",
+    description="Get all available tools (capability-based)",
+    category="housekeeping",
+    parameters={},
+    returns={"type": "array", "description": "List of available tools"}
+)
 def get_available_tools() -> list:
     """AC-CLEAN-305: Get all available tools (capability-based)"""
     return [
@@ -414,6 +515,19 @@ def get_available_tools() -> list:
     ]
 
 
+@mcp_tool(
+    name="cortex_get_tool_for_capability",
+    description="Get tool metadata by capability name",
+    category="housekeeping",
+    parameters={
+        "capability": {
+            "type": "string",
+            "required": True,
+            "description": "Capability name to look up"
+        }
+    },
+    returns={"type": "object", "description": "Tool metadata or null"}
+)
 def get_tool_for_capability(capability: str) -> Optional[dict]:
     """AC-CLEAN-305: Get tool metadata by capability name
     
@@ -434,6 +548,19 @@ def get_tool_for_capability(capability: str) -> Optional[dict]:
     return tools.get(capability)
 
 
+@mcp_tool(
+    name="cortex_execute_tool",
+    description="Execute tool without phase context",
+    category="housekeeping",
+    parameters={
+        "request": {
+            "type": "object",
+            "required": True,
+            "description": "Tool execution request"
+        }
+    },
+    returns={"type": "object", "description": "Execution result"}
+)
 def execute_tool(request: dict) -> dict:
     """AC-CLEAN-305: Execute tool without phase context"""
     try:
@@ -449,6 +576,19 @@ def execute_tool(request: dict) -> dict:
         return {'success': False}
 
 
+@mcp_tool(
+    name="cortex_safe_dispatch",
+    description="Safe dispatch with error handling",
+    category="housekeeping",
+    parameters={
+        "request": {
+            "type": "object",
+            "required": True,
+            "description": "Dispatch request"
+        }
+    },
+    returns={"type": "object", "description": "Dispatch result"}
+)
 def safe_dispatch(request: dict) -> dict:
     """AC-CLEAN-305: Safe dispatch with error handling"""
     try:
@@ -459,6 +599,13 @@ def safe_dispatch(request: dict) -> dict:
         return {'error': 'dispatch_failed', 'success': False}
 
 
+@mcp_tool(
+    name="cortex_get_tool_catalog",
+    description="Get tool catalog (capability-based)",
+    category="housekeeping",
+    parameters={},
+    returns={"type": "object", "description": "Tool catalog"}
+)
 def get_tool_catalog() -> dict:
     """AC-CLEAN-305: Get tool catalog (capability-based)"""
     return {
@@ -468,6 +615,13 @@ def get_tool_catalog() -> dict:
     }
 
 
+@mcp_tool(
+    name="cortex_get_compatibility_map",
+    description="Get compatibility mapping for legacy tools",
+    category="housekeeping",
+    parameters={},
+    returns={"type": "object", "description": "Compatibility map"}
+)
 def get_compatibility_map() -> dict:
     """AC-CLEAN-305: Get compatibility mapping for legacy tools"""
     return {
@@ -478,6 +632,19 @@ def get_compatibility_map() -> dict:
     }
 
 
+@mcp_tool(
+    name="cortex_run_cleanup_workflow",
+    description="Run cleanup workflow without phase dispatch",
+    category="housekeeping",
+    parameters={
+        "config": {
+            "type": "object",
+            "required": True,
+            "description": "Workflow configuration"
+        }
+    },
+    returns={"type": "object", "description": "Workflow results"}
+)
 def run_cleanup_workflow(config: dict) -> dict:
     """AC-CLEAN-305: Run cleanup workflow without phase dispatch"""
     try:
@@ -491,6 +658,19 @@ def run_cleanup_workflow(config: dict) -> dict:
         return {'success': False}
 
 
+@mcp_tool(
+    name="cortex_orchestrate_cleanup",
+    description="Orchestrate multiple tools without phase gating",
+    category="housekeeping",
+    parameters={
+        "config": {
+            "type": "object",
+            "required": True,
+            "description": "Orchestration configuration"
+        }
+    },
+    returns={"type": "object", "description": "Orchestration result"}
+)
 def orchestrate_cleanup(config: dict) -> dict:
     """AC-CLEAN-305: Orchestrate multiple tools without phase gating"""
     try:
@@ -504,6 +684,19 @@ def orchestrate_cleanup(config: dict) -> dict:
         return False
 
 
+@mcp_tool(
+    name="cortex_get_tool_executor_for_capability",
+    description="Map capability to tool execution function",
+    category="housekeeping",
+    parameters={
+        "capability": {
+            "type": "string",
+            "required": True,
+            "description": "Capability name"
+        }
+    },
+    returns={"type": "object", "description": "Tool executor metadata"}
+)
 def get_tool_executor_for_capability(capability: str) -> Optional[callable]:
     """AC-CLEAN-311: Map capability to tool execution function
     

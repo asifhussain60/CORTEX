@@ -1,10 +1,11 @@
-# 🏥 CORTEX Wiring & Architecture Health Check Prompt (v1.0)
+# 🏥 CORTEX Wiring & Architecture Health Check Prompt (v1.1)
 
 **Purpose:** Validate and repair CORTEX architecture if misalignment occurs from pulls or manual changes.  
-**Version:** 1.0.0 | **Date:** 2026-01-13  
+**Version:** 1.1.0 | **Date:** 2026-01-13  
 **Author:** Asif Hussain  
-**Governance:** CORE-001 (incremental), CORE-008 (TDD), CORE-017 (enforcement)  
+**Governance:** CORE-001 (incremental), CORE-008 (TDD), CORE-017 (enforcement), CORE-026/27/28 (NEW)  
 **AC-ID:** AC-CORTEX-001, AC-CORTEX-002, AC-CORTEX-003, AC-CORTEX-004, AC-CORTEX-005  
+**Brittleness Fix Reference:** cortex-brain/tier0/governance/CORTEX-TOOLKIT-SINGLE-PATH-FIX.md
 
 ---
 
@@ -12,11 +13,12 @@
 
 This prompt provides **architecture health checking and auto-repair** for CORTEX 6.0 across all layers:
 
-- **Tier 0:** Governance rules (core-rules.yaml, MCP tool registry)
+- **Tier 0:** Governance rules (core-rules.yaml, MCP tool registry, CORE-026/27/28)
 - **Tier 1:** Execution state (progress-tracker.json, AC-INDEX.yaml)
 - **SQLite:** Database schemas and integrity
-- **MCP:** Registry consistency (orchestrators, tools, capabilities)
+- **MCP:** Registry consistency (orchestrators, tools, capabilities, toolkit singleton)
 - **Config:** All YAML files across cortex-brain/
+- **Toolkit:** Single path enforcement, no duplicates, singleton validation
 
 **Design philosophy:** All logic delegated to Python orchestrators (HealthCheckOrchestratorV1). This prompt is a thin routing layer only.
 
