@@ -141,7 +141,7 @@ cortex-brain/documents/reports/
 **Action:**
 ```bash
 # After ANY progress update, RUN:
-python3 scripts/sync_plan_viewer_data.py
+python3 scripts/regenerate_plan_viewer_data.py
 
 # Verify success:
 # - plan-viewer-data.json updated with new metrics
@@ -186,7 +186,7 @@ Use this checklist when updating prompts:
 - [ ] Specify evidence bundle structure
 - [ ] Specify analysis report location (if applicable)
 - [ ] Specify progress tracking update location
-- [ ] Specify sync requirement (sync_plan_viewer_data.py)
+- [ ] Specify sync requirement (regenerate_plan_viewer_data.py)
 
 ### Code/Execution
 
@@ -194,7 +194,7 @@ Use this checklist when updating prompts:
 - [ ] Validate AC-INDEX.yaml schema after append
 - [ ] Create evidence bundles (manifest + test-results + audit-trace)
 - [ ] Update progress-tracker.json with test results
-- [ ] Run sync_plan_viewer_data.py after tracker update
+- [ ] Run regenerate_plan_viewer_data.py after tracker update
 - [ ] Verify sync succeeded before reporting completion
 
 ### Response Format
@@ -312,7 +312,7 @@ Validation tests update existing evidence bundles:
 ### Dashboard Sync
 
 ```bash
-python3 scripts/sync_plan_viewer_data.py
+python3 scripts/regenerate_plan_viewer_data.py
 ```
 
 **Report in Response:**
@@ -347,7 +347,7 @@ python3 scripts/sync_plan_viewer_data.py
 
 3. **Integration Flow**
    - Update AC-INDEX.yaml → MasterOrchestrator reads immediately
-   - Update progress-tracker.json → sync_plan_viewer_data.py → Dashboard updates
+   - Update progress-tracker.json → regenerate_plan_viewer_data.py → Dashboard updates
    - All operations: Logged to audit trail (correlation tracking)
 
 4. **Verification**
@@ -399,7 +399,7 @@ master-plan.yaml → AC-INDEX.yaml → progress-tracker.json → plan-viewer-dat
 
 1. **AC-IDs always in AC-INDEX.yaml** - No separate files
 2. **Progress always in tracker** - No direct dashboard edits
-3. **Sync always via script** - `python3 scripts/sync_plan_viewer_data.py`
+3. **Sync always via script** - `python3 scripts/regenerate_plan_viewer_data.py`
 4. **Evidence always test-based** - No manual completion claims
 
 ### Conflict Resolution
@@ -458,7 +458,7 @@ EOF
 
 ```bash
 # Every prompt execution must end with:
-python3 scripts/sync_plan_viewer_data.py --check-only
+python3 scripts/regenerate_plan_viewer_data.py --check-only
 ```
 
 ### Regression Response

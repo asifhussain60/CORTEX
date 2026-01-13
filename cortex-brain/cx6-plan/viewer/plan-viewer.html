@@ -1445,11 +1445,11 @@
                     // Update metrics sidebar
                     this.updateMetrics();
                     
-                    // Render main content sections
+                    // Render main content sections IN ORDER
+                    this.renderPhaseOverview();  // MAC/WIN workload moved to TOP
                     this.renderCompletionCharts();
-                    this.renderPhaseOverview();
-                    this.renderGovernanceRules();
                     this.renderActiveCapabilities();
+                    this.renderGovernanceRules();  // Only render once, at bottom
                     this.renderArchitectureView();
                 } catch (error) {
                     console.error('Error rendering dashboard:', error);
@@ -1538,9 +1538,14 @@
                 const plan = this.data.plan;
                 const phases = plan.phases || [];
                 
-                // Split phases by machine assignment
-                const macPhases = phases.filter(p => p.machine && p.machine.machine === 'MAC');
-                const winPhases = phases.filter(p => p.machine && p.machine.machine === 'WIN');
+                // MAC Workload: Phases 4, 6, 9, 10, 11 (high-performance, memory-intensive)
+                // WIN Workload: Phases 2, 3, 5, 7, 8 (I/O-bound, lightweight)
+                // Foundation: Phases 1, 1.5, 4.5 (both machines)
+                const macPhaseIds = [4, 6, 9, 10, 11];
+                const winPhaseIds = [2, 3, 5, 7, 8];
+                
+                const macPhases = phases.filter(p => macPhaseIds.includes(parseFloat(p.id)));
+                const winPhases = phases.filter(p => winPhaseIds.includes(parseFloat(p.id)));
                 
                 // Calculate workload stats
                 const macAcIds = macPhases.reduce((sum, p) => sum + (p.ac_ids_total || 0), 0);

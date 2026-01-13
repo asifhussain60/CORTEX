@@ -385,7 +385,7 @@ def main():
     
     if '--fix' in sys.argv:
         validator.fix_tracker(results)
-        print("\n✅ Run: python3 scripts/sync_plan_viewer_data.py")
+        print("\n✅ Run: python3 scripts/regenerate_plan_viewer_data.py")
     else:
         print("\n💡 To apply fixes: python3 scripts/ultimate_evidence_validator.py --fix")
         print("💡 To generate test stubs: python3 scripts/ultimate_evidence_validator.py --generate-stubs")

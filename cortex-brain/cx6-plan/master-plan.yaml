@@ -1,17 +1,17 @@
 plan_metadata:
   plan_id: CORTEX-6.0-SNOWBALL-MASTER
-  version: 1.9.0
+  version: 2.0.0
   created: '2026-01-10T23:50:00Z'
-  updated: '2026-01-13T22:00:00Z'
+  updated: '2026-01-13T23:00:00Z'
   author: Asif Hussain
   strategy: Organic Evolution with JIT Infrastructure Delivery
   philosophy: Build for operation; decommission construction scaffolding
   design_score: 97
   total_weeks: 17.0
-  total_ac_ids: 209
+  total_ac_ids: 217
   hybrid_approach: true
   gpt_influence: 70% rigor, 30% overhead
-  latest_addition: v1.9.0 - Hallucination prevention enhancement (25 AC-IDs across Phase 2 & 4)
+  latest_addition: 'v2.0.0 - Audit evidence AC-IDs added to all phase exit criteria (8 AC-IDs: AC-AUDIT-EVIDENCE-P1, P1.5, P2, P3, P4, P4.5, P5, P10)'
   multi_machine_development:
     enabled: true
     platforms: [MAC, WIN]
@@ -887,13 +887,22 @@ phase_2_orchestration_core:
     - Deterministic Routing with 100% accuracy
     - STS golden corpus passing (100 intents)
     - First Evidence Bundle generated (proves system works)
+    - Audit trail completeness verified (AC-AUDIT-EVIDENCE-P2)
     gate_validation:
       test_coverage: '>=80% across all core components'
       integration: MasterOrchestrator → TodoManager → TDD-Master pipeline tested
       sts_validation: All 100 golden corpus intents route correctly
+      audit_evidence:
+        ac_id: AC-AUDIT-EVIDENCE-P2
+        requirement: 100% of Phase 2 AC-IDs logged in governance.db with correlation IDs
+        verification_query: "SELECT COUNT(DISTINCT ac_id) FROM audit_logs WHERE phase=2"
+        expected_count: 61
+        min_coverage: 100%
+        verification_method: audit_trace_log_verification
     blocker_prevention:
     - No Phase 3 work starts until core workflow proven
     - 'STS Evidence Bundle is the gate: if it passes, proceed'
+    - Audit trail must show 100% coverage before phase completion
 phase_3_feature_orchestrators:
   name: Feature Orchestrators
   duration: 2 weeks
@@ -1148,9 +1157,16 @@ phase_3_feature_orchestrators:
     - Each orchestrator has Evidence Bundle
     - DRY_RUN mode tested for high-risk ops
     - Approval gates functional
+    - Audit trail completeness verified (AC-AUDIT-EVIDENCE-P3)
     gate_validation:
       test_coverage: '>=80% per orchestrator'
       integration: Each orchestrator uses core workflow
+      audit_evidence:
+        ac_id: AC-AUDIT-EVIDENCE-P3
+        requirement: 100% of Phase 3 orchestrator operations logged in governance.db
+        verification_query: "SELECT COUNT(DISTINCT ac_id) FROM audit_logs WHERE phase=3"
+        min_coverage: 100%
+        verification_method: audit_trace_log_verification
 phase_5_cortex_cleanup_decommission:
   name: CORTEX Cleanup & Decommission
   duration: 2 weeks
@@ -1261,6 +1277,14 @@ phase_5_cortex_cleanup_decommission:
   - Housekeeping alignment at 100%
   - All tests passing
   - Documentation updated
+  - Audit trail completeness verified (AC-AUDIT-EVIDENCE-P5)
+  gate_validation:
+    audit_evidence:
+      ac_id: AC-AUDIT-EVIDENCE-P5
+      requirement: 100% of cleanup/decommission operations logged in governance.db
+      verification_query: "SELECT COUNT(DISTINCT ac_id) FROM audit_logs WHERE phase=5"
+      min_coverage: 100%
+      verification_method: audit_trace_log_verification
   success_metrics:
     references_removed: 100%
     artifacts_archived: 100%
@@ -1864,6 +1888,7 @@ phase_11_intelligent_discovery:
     - End-to-end onboarding flow <2 minutes for typical project
     - Auto-run on setup validated (discovery on first use)
     - 100% glassmorphism design compliance across all views
+    - Audit trail completeness verified (AC-AUDIT-EVIDENCE-P10)
     gate_validation:
       test_coverage: '>=80% for all discovery + visualization components'
       language_support: '>=6 programming languages (CORTEX LENS)'
@@ -1872,6 +1897,12 @@ phase_11_intelligent_discovery:
       performance: <2 minutes end-to-end for typical project (LENS + Onboarding)
       html_dashboards: All 5 viewers <500KB, <2s load, WCAG AA compliant
       visualization_quality: D3.js rendering <1s for 500-node graphs
+      audit_evidence:
+        ac_id: AC-AUDIT-EVIDENCE-P10
+        requirement: 100% of CORTEX LENS operations logged in governance.db
+        verification_query: "SELECT COUNT(DISTINCT ac_id) FROM audit_logs WHERE phase=10"
+        min_coverage: 100%
+        verification_method: audit_trace_log_verification
     blocker_prevention:
     - CORTEX 6.0 core (Phases 1-5) complete before starting Phase 10
     - Crawlers tested independently before integration
@@ -2006,11 +2037,18 @@ archived_phase_1_5_sts_semantic_test_suite:
     - Zero test failures across all test infrastructure
     - 100 golden test intents documented and validated
     - Test generation accuracy >=85%
+    - Audit trail completeness verified (AC-AUDIT-EVIDENCE-P1.5)
     gate_validation:
       test_coverage: '>=90% for all test infrastructure'
       corpus_completeness: 100 golden test intents
       generation_validated: Auto-generated tests pass for 85%+ of ACs
       evidence_validation: All evidence bundles validate correctly
+      audit_evidence:
+        ac_id: AC-AUDIT-EVIDENCE-P1.5
+        requirement: 100% of STS test executions logged in governance.db
+        verification_query: "SELECT COUNT(DISTINCT ac_id) FROM audit_logs WHERE phase=1.5"
+        min_coverage: 100%
+        verification_method: audit_trace_log_verification
   note: Original sequential plan - superseded by organic evolution
 archived_phase_4_intelligence:
   name: Intelligence Layer
@@ -2173,9 +2211,16 @@ archived_phase_4_intelligence:
     - LLM Intent Classifier operational
     - Knowledge Practices extracting patterns
     - Vision API integrated
+    - Audit trail completeness verified (AC-AUDIT-EVIDENCE-P4)
     gate_validation:
       test_coverage: '>=70% (AI components harder to test)'
       integration: Intelligence features enhance orchestration
+      audit_evidence:
+        ac_id: AC-AUDIT-EVIDENCE-P4
+        requirement: 100% of Phase 4 intelligence operations logged in governance.db
+        verification_query: "SELECT COUNT(DISTINCT ac_id) FROM audit_logs WHERE phase=4"
+        min_coverage: 100%
+        verification_method: audit_trace_log_verification
   note: Original sequential plan - superseded by organic evolution
 archived_phase_4_5_integration_tests:
   name: Orchestrator Integration & Audit Validation Suite
@@ -2411,6 +2456,7 @@ archived_phase_4_5_integration_tests:
     - Concurrent operations validated (10+ simultaneous)
     - State management resilience proven
     - Regression suite passing (100% backwards compatibility)
+    - Audit trail completeness verified (AC-AUDIT-EVIDENCE-P4.5)
     gate_validation:
       test_coverage: '>=85% across all integration scenarios'
       audit_completeness: 100% - all operations traced
@@ -2418,6 +2464,12 @@ archived_phase_4_5_integration_tests:
       performance: All targets met (audit <5ms, governance <100ms, hash <10ms)
       evidence_bundles: All 12 AC-INTEG-* have complete evidence bundles
       system_correctness: End-to-end audit logs prove system works correctly
+      audit_evidence:
+        ac_id: AC-AUDIT-EVIDENCE-P4.5
+        requirement: 100% of integration test operations logged in governance.db
+        verification_query: "SELECT COUNT(DISTINCT ac_id) FROM audit_logs WHERE phase=4.5"
+        min_coverage: 100%
+        verification_method: audit_trace_log_verification
     blocker_prevention:
     - Integration tests serve as final validation before production release
     - Audit logs are primary proof of correctness
@@ -2673,12 +2725,21 @@ phase_1_foundation:
     - 'Performance validated: <5ms audit, <100ms governance merge'
     - Hash chain integrity verified
     - Security gates operational
+    - Audit trail completeness verified (AC-AUDIT-EVIDENCE-P1)
     gate_validation:
       test_coverage: '>=80% across all foundation components'
       audit_completeness: 100% for all operations
       governance_compliance: 100% (no violations)
       performance: Meets all latency requirements
+      audit_evidence:
+        ac_id: AC-AUDIT-EVIDENCE-P1
+        requirement: 100% of Phase 1 AC-IDs logged in governance.db with correlation IDs
+        verification_query: "SELECT COUNT(DISTINCT ac_id) FROM audit_logs WHERE phase=1"
+        expected_count: 43
+        min_coverage: 100%
+        verification_method: audit_trace_log_verification
     blocker_prevention:
     - No Phase 2 work starts until ALL Phase 1 complete
     - Evidence Bundles prove completion, not just code commit
     - Integration tests prove components work together
+    - Audit trail must show 100% coverage before phase completion

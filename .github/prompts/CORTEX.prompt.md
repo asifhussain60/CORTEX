@@ -350,6 +350,30 @@ Everything else is owned by Python orchestrators.
 | STRUCTURED | 200-600 | `**Context:**` + `**Changes:**` + `**Next:**` |
 | COMPREHENSIVE | 600+ | Multiple `### {Sections}` |
 
+**Bullet Formatting (CRITICAL):**
+
+Each bullet MUST be on a separate line with blank line after section header:
+
+```markdown
+✅ OUTCOMES
+
+• First outcome
+• Second outcome
+• Third outcome
+```
+
+**INCORRECT (Do NOT use):**
+```markdown
+✅ OUTCOMES
+• First outcome • Second outcome • Third outcome
+```
+
+**Rules:**
+- ✅ Blank line after section header
+- ✅ Each bullet on separate line
+- ✅ NO blank lines between bullets
+- ✅ Section headers use emoji markers (✅ ⚙️ ⚠️ 🎯 📋)
+
 **Next Steps:** EXACTLY ONE action OR `✅ All work complete!`
 
 **Completion (when ALL work done):**
