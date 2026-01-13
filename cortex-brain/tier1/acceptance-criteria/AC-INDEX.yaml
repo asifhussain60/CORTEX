@@ -1,3 +1,68 @@
+AC-AUDIT-001:
+  component: audit_infrastructure
+  description: Dual storage backend with SQLite for queries and JSONL for append-only
+    log
+  implementation_file: src/infrastructure/enhanced_audit_logger.py
+  phase: 1
+  priority: CRITICAL
+  status: implemented
+  test_coverage_target: 90
+  title: SQLite + JSONL Dual Storage
+AC-AUDIT-002:
+  component: audit_infrastructure
+  description: Support for governance, orchestrator, validation, infrastructure, mcp,
+    brain, integration categories
+  implementation_file: src/infrastructure/enhanced_audit_logger.py
+  phase: 1
+  priority: CRITICAL
+  status: implemented
+  test_coverage_target: 85
+  title: 7 Audit Categories
+AC-AUDIT-003:
+  component: audit_infrastructure
+  description: Link audit events to acceptance criteria for compliance tracking
+  implementation_file: src/infrastructure/enhanced_audit_logger.py
+  phase: 1
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: AC-ID Traceability
+AC-AUDIT-004:
+  component: audit_infrastructure
+  description: Configurable flush thresholds for performance optimization
+  implementation_file: src/infrastructure/enhanced_audit_logger.py
+  phase: 1
+  priority: MEDIUM
+  status: implemented
+  test_coverage_target: 80
+  title: Memory Buffer with Flush
+AC-AUDIT-005:
+  component: audit_infrastructure
+  description: Separate audit databases for each repository
+  implementation_file: src/infrastructure/enhanced_audit_logger.py
+  phase: 1
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: Per-Repo Database Isolation
+AC-AUDIT-006:
+  component: audit_infrastructure
+  description: Query by AC-ID, orchestrator, date range, level
+  implementation_file: src/infrastructure/enhanced_audit_logger.py
+  phase: 1
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: Queryable Audit Storage
+AC-AUDIT-007:
+  component: audit_infrastructure
+  description: Tamper detection via event_hash + prev_event_hash chain
+  implementation_file: src/infrastructure/enhanced_audit_logger.py
+  phase: 1
+  priority: CRITICAL
+  status: implemented
+  test_coverage_target: 90
+  title: Hash Chain Integrity
 AC-CHALLENGE-001:
   component: challenge_system
   description: Detect requests contradicting governance (CORE-025) with pattern matching
@@ -20,6 +85,79 @@ AC-CHALLENGE-003:
   priority: MEDIUM
   test_coverage_target: 75
   title: Challenge Learning Loop
+AC-EVIDENCE-001:
+  component: evidence_bundler
+  description: manifest.yaml, test_results.json, audit_trace.jsonl
+  implementation_file: src/tools/evidence_bundle_generator.py
+  phase: 1
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: 3-File Evidence Format
+AC-EVIDENCE-002:
+  component: evidence_bundler
+  description: Generate from pytest + audit logs + AC-INDEX
+  implementation_file: src/infrastructure/evidence_bundle_structure.py
+  phase: 1
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: Auto-Generation from Tests
+AC-EVIDENCE-003:
+  component: evidence_bundler
+  description: Test coverage >=80%, audit 100%, governance 100%
+  implementation_file: src/infrastructure/evidence_bundle_validation_gates.py
+  phase: 1
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: 3 Validation Gates
+AC-GOV-001:
+  component: governance_merger
+  description: Merge Tier 0 (SKULL) + Tier 1 (Business) + Tier 2 (Engineering) + Tier
+    3 (Learned)
+  implementation_file: src/orchestrators/core/governance_merger.py
+  phase: 1
+  priority: CRITICAL
+  status: implemented
+  test_coverage_target: 90
+  title: 4-Tier Governance Merge
+AC-GOV-002:
+  component: governance_merger
+  description: Tier 0 wins all conflicts, hierarchical precedence
+  implementation_file: src/orchestrators/core/governance_merger.py
+  phase: 1
+  priority: CRITICAL
+  status: implemented
+  test_coverage_target: 90
+  title: Precedence Resolution
+AC-GOV-003:
+  component: governance_merger
+  description: Automatic deduplication and validation of merged rules
+  implementation_file: src/orchestrators/core/governance_merger.py
+  phase: 1
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: Rule Deduplication
+AC-GOV-004:
+  component: governance_merger
+  description: Full merge completes in under 100ms
+  implementation_file: src/orchestrators/core/governance_merger.py
+  phase: 1
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 80
+  title: Performance <100ms
+AC-GOV-005:
+  component: governance_merger
+  description: YAML/JSON schema validation for governance files
+  implementation_file: src/orchestrators/core/governance_merger.py
+  phase: 1
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: Schema Validation
 AC-LENS-001:
   component: cortex_lens
   description: Parse Python, JavaScript, TypeScript, Java via AST libraries
@@ -62,6 +200,33 @@ AC-LENS-006:
   priority: MEDIUM
   test_coverage_target: 75
   title: Real-Time Analysis Dashboard
+AC-LIFECYCLE-001:
+  component: lifecycle_system
+  description: IDLE → SPEC → IMPLEMENTED → TESTED → VERIFIED → ACTIVE → DEPRECATED
+  implementation_file: src/orchestrators/middleware/orchestrator_lifecycle.py
+  phase: 1
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: 7-State Orchestrator Lifecycle
+AC-LIFECYCLE-002:
+  component: lifecycle_system
+  description: Enforce state transition criteria and validation
+  implementation_file: src/infrastructure/lifecycle_manager.py
+  phase: 1
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: Entry/Exit Criteria Enforcement
+AC-LIFECYCLE-003:
+  component: lifecycle_system
+  description: Auto-quarantine on violations (error rate > 10%)
+  implementation_file: src/orchestrators/core/todo_lifecycle_manager.py
+  phase: 1
+  priority: MEDIUM
+  status: implemented
+  test_coverage_target: 80
+  title: Quarantine Mechanism
 AC-ONBOARD-001:
   component: onboarding_orchestrator
   description: Automated codebase scanning and structure detection
@@ -118,6 +283,105 @@ AC-ONBOARD-008:
   priority: HIGH
   test_coverage_target: 85
   title: MCP Tool Integration
+AC-SECURITY-001:
+  component: security_layer
+  description: Classify as SAFE, INSPECT, or DESTRUCTIVE
+  implementation_file: distributed across orchestrators
+  phase: 1
+  priority: CRITICAL
+  status: partial
+  test_coverage_target: 90
+  title: Action Classification
+AC-SECURITY-002:
+  component: security_layer
+  description: PENDING → APPROVED/DENIED/TIMEOUT workflow
+  implementation_file: distributed across orchestrators
+  phase: 1
+  priority: CRITICAL
+  status: partial
+  test_coverage_target: 90
+  title: Approval State Machine
+AC-SECURITY-003:
+  component: security_layer
+  description: Resolve symlinks and prevent directory traversal
+  implementation_file: src/utils/project_root.py
+  phase: 1
+  priority: CRITICAL
+  status: partial
+  test_coverage_target: 90
+  title: Canonical Path Resolution
+AC-SECURITY-004:
+  component: security_layer
+  description: Safe file operations on Windows/Mac/Linux
+  implementation_file: src/utils/project_root.py
+  phase: 1
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: Cross-Platform File Operations
+AC-SECURITY-005:
+  component: security_layer
+  description: Validate all user inputs via TDD
+  implementation_file: distributed across orchestrators
+  phase: 1
+  priority: HIGH
+  status: partial
+  test_coverage_target: 85
+  title: Argument Validation
+AC-SECURITY-006:
+  component: security_layer
+  description: Prevent access outside workspace boundaries
+  implementation_file: src/utils/project_root.py
+  phase: 1
+  priority: CRITICAL
+  status: implemented
+  test_coverage_target: 90
+  title: Path Safety Checks
+AC-SECURITY-007:
+  component: security_layer
+  description: Log all security-relevant operations
+  implementation_file: src/infrastructure/enhanced_audit_logger.py
+  phase: 1
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: Operation Audit Trail
+AC-SECURITY-008:
+  component: security_layer
+  description: Check file permissions before operations
+  implementation_file: distributed across orchestrators
+  phase: 1
+  priority: HIGH
+  status: partial
+  test_coverage_target: 85
+  title: Permission Validation
+AC-STATE-001:
+  component: state_manager
+  description: SQLite with Write-Ahead Logging for concurrent access
+  implementation_file: src/database/state_manager.py
+  phase: 1
+  priority: CRITICAL
+  status: implemented
+  test_coverage_target: 90
+  title: SQLite Backend with WAL
+AC-STATE-002:
+  component: state_manager
+  description: Atomic state changes with rollback on failure
+  implementation_file: src/infrastructure/atomic_state_manager.py
+  phase: 1
+  priority: CRITICAL
+  status: implemented
+  test_coverage_target: 90
+  title: Atomic State Transitions
+AC-STATE-003:
+  component: state_manager
+  description: File locking via fcntl (Unix) / msvcrt (Windows)
+  implementation_file: src/database/state_manager.py
+  phase: 1
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: Cross-Platform File Locking
 AC-TEMPLATE-006:
   component: template_system
   description: Migrate all orchestrator prompts to use standardized CORE-026 headers
