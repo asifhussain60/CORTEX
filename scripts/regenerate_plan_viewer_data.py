@@ -172,6 +172,44 @@ def get_platform_metadata(master_plan, phase_num):
     return platform_matrix[phase_key]
 
 
+def get_machine_assignment(master_plan, phase_num):
+    """Get machine assignment (MAC or WIN) for a phase"""
+    if 'multi_machine_development_protocol' not in master_plan:
+        return None
+    
+    protocol = master_plan['multi_machine_development_protocol']
+    
+    # Check machine_assignment section
+    if 'machine_assignment' not in protocol:
+        return None
+    
+    assignments = protocol['machine_assignment']
+    
+    # Check MAC workload
+    if 'mac_workload' in assignments:
+        mac_phases = assignments['mac_workload'].get('phases', [])
+        for phase_info in mac_phases:
+            if phase_info.get('phase') == phase_num:
+                return {
+                    'machine': 'MAC',
+                    'reason': phase_info.get('reason', ''),
+                    'icon': '🍎'
+                }
+    
+    # Check WIN workload
+    if 'win_workload' in assignments:
+        win_phases = assignments['win_workload'].get('phases', [])
+        for phase_info in win_phases:
+            if phase_info.get('phase') == phase_num:
+                return {
+                    'machine': 'WIN',
+                    'reason': phase_info.get('reason', ''),
+                    'icon': '🪟'
+                }
+    
+    return None
+
+
 def build_plan_viewer_data():
     """Build complete plan-viewer-data.json"""
     
@@ -251,6 +289,9 @@ def build_plan_viewer_data():
         # Get platform metadata for this phase
         platform_metadata = get_platform_metadata(master_plan, phase_num)
         
+        # Get machine assignment for this phase
+        machine_assignment = get_machine_assignment(master_plan, phase_num)
+        
         phase_obj = {
             'id': phase_num if phase_num in [1.5, 4.5] else int(phase_num),
             'name': phase_name,
@@ -273,6 +314,10 @@ def build_plan_viewer_data():
                 'win_specific': platform_metadata.get('win_specific', []),
                 'shared_components': platform_metadata.get('shared_components', [])
             }
+        
+        # Add machine assignment if available
+        if machine_assignment:
+            phase_obj['machine'] = machine_assignment
         
         phases.append(phase_obj)
         total_ac_ids_from_phases += total_in_phase  # Accumulate total

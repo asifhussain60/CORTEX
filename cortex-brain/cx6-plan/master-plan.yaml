@@ -187,6 +187,69 @@ multi_machine_development_protocol:
         - HTML View Generators (D3.js visualizations)
         - Onboarding Documentation
   
+  machine_assignment:
+    description: |
+      Each phase is assigned exclusively to either MAC or WIN machine based on 
+      computational requirements. This creates two clear parallel execution paths.
+    
+    mac_workload:
+      machine: MAC
+      rationale: High-performance machine handles memory-intensive and compute-heavy phases
+      phases:
+        - phase: 4
+          name: Intelligence Layer
+          reason: LLM coordination and API orchestration (moderate compute)
+        - phase: 5
+          name: Cleanup & Decommission
+          reason: Large-scale file scanning and cleanup operations
+        - phase: 6
+          name: Security & Routing
+          reason: Security analysis and route optimization
+        - phase: 7
+          name: Copilot Bridge
+          reason: VS Code extension development and testing
+        - phase: 11
+          name: CORTEX LENS
+          reason: Real-time code analysis, knowledge graph, D3.js visualizations
+      total_ac_ids: 92
+      estimated_effort: "8 weeks"
+    
+    win_workload:
+      machine: WIN
+      rationale: Standard-performance machine handles I/O-bound and lightweight phases
+      phases:
+        - phase: 1
+          name: Foundation & Audit
+          reason: SQLite operations and logging (lightweight)
+        - phase: 1.5
+          name: Semantic Test System
+          reason: pytest infrastructure (I/O bound)
+        - phase: 2
+          name: Orchestration Core
+          reason: Business logic coordination (moderate compute)
+        - phase: 3
+          name: Feature Orchestrators
+          reason: API calls and external integrations (I/O bound)
+        - phase: 8
+          name: Staged Rollout
+          reason: Configuration and approval gates (lightweight)
+        - phase: 9
+          name: Infrastructure Maturity
+          reason: Hash chain and state management (moderate)
+        - phase: 10
+          name: Template Migration
+          reason: File operations and template processing (I/O bound)
+      total_ac_ids: 92
+      estimated_effort: "8.5 weeks"
+    
+    integration_points:
+      - milestone: "Phase 3 Complete (WIN)"
+        dependency: "Required before Phase 4 (MAC) - orchestrators must exist"
+      - milestone: "Phase 7 Complete (MAC)"
+        dependency: "Required before Phase 8 (WIN) - Copilot bridge must work"
+      - milestone: "All Phases Complete"
+        action: "Final merge via CI/CD - evidence bundles validated on both platforms"
+  
   merge_strategy:
     approach: Git-Based Continuous Integration
     description: |
