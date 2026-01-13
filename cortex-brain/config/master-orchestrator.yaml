@@ -26,9 +26,30 @@ routing_rules:
         - "Blocker detection"
         - "Phase completion detection"
   
-  # Epic Review - NEW (Health Check & Progress Analysis)
-  # Autonomous health check and progress analysis for CORTEX 6.0 Build Epic
-  - pattern: "^(epic review|review epic|health check|progress report|cortex status|epic status).*$"
+  # Health Check & Architecture Validation (AC-CORTEX-001 to 005)
+  # Autonomous health validation, database integrity checks, auto-repair capability
+  - pattern: "^(health check|repair cortex|wiring|diagnose cortex|architecture health).*$"
+    orchestrator: "health_check_v1"
+    confidence: 1.0
+    match_type: "regex"
+    priority: 6
+    metadata:
+      description: "Architecture health check with auto-repair and audit trail"
+      autonomous: true
+      version: "1.0"
+      features:
+        - "Tier 0 governance validation"
+        - "Tier 1 execution state validation"
+        - "SQLite database integrity checks"
+        - "MCP registry validation"
+        - "Cross-layer consistency checks"
+        - "Auto-repair for safe issues (MEDIUM/LOW severity)"
+        - "Full audit trail of repairs"
+        - "Comprehensive health reporting"
+  
+  # Epic Review - Health Metrics & Progress Analysis
+  # Epic-level progress tracking and gap detection
+  - pattern: "^(epic review|review epic|progress report|cortex status|epic status).*$"
     orchestrator: "epic_review"
     confidence: 1.0
     match_type: "regex"

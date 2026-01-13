@@ -117,6 +117,20 @@ class CortexEntry:
         """Register core CORTEX orchestrators in registry."""
         from src.mcp.metadata import OrchestratorType, OrchestratorCategory
         
+        # Health Check v1 (CORTEX Architecture Validation - AC-CORTEX-001)
+        self.registry.register(
+            id="health_check_v1",
+            name="Health Check Orchestrator v1",
+            version="1.0.0",
+            type=OrchestratorType.AUTONOMOUS,
+            category=OrchestratorCategory.VALIDATION,
+            class_name="HealthCheckOrchestratorV1",
+            module_path="src.orchestrators.health.health_check_orchestrator_v1",
+            manifest_path="cortex-brain/manifests/orchestrators/health-check-orchestrator-v1.yaml",
+            patterns=[r"^(health check|repair cortex|wiring|diagnose cortex|architecture health).*$"],
+            capabilities=["architecture_validation", "database_integrity_check", "registry_validation", "auto_repair", "health_reporting"]
+        )
+        
         # Epic Review
         self.registry.register(
             id="epic_review",
@@ -127,7 +141,7 @@ class CortexEntry:
             class_name="EpicReviewOrchestrator",
             module_path="src.orchestrators.epic_review_orchestrator",
             manifest_path="cortex-brain/manifests/orchestrators/epic-review-orchestrator.yaml",
-            patterns=[r"^(epic review|review epic|health check|progress report|cortex status|epic status).*$"],
+            patterns=[r"^(epic review|review epic|progress report|cortex status|epic status).*$"],
             capabilities=["health_monitoring", "progress_analysis", "gap_detection", "epic_updates"]
         )
         

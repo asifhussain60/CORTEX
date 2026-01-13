@@ -1,4 +1,28 @@
 {
+  "health_check_v1": {
+    "id": "health_check_v1",
+    "name": "Health Check Orchestrator v1",
+    "version": "1.0.0",
+    "type": "autonomous",
+    "category": "validation",
+    "class_name": "HealthCheckOrchestratorV1",
+    "module_path": "src.orchestrators.health.health_check_orchestrator_v1",
+    "description": "CORTEX Architecture Validation and Auto-Repair System",
+    "manifest_path": "cortex-brain/manifests/orchestrators/health-check-orchestrator-v1.yaml",
+    "patterns": [
+      "^(health check|repair cortex|wiring|diagnose cortex|architecture health).*$"
+    ],
+    "dependencies": [],
+    "capabilities": [
+      "architecture_validation",
+      "database_integrity_check",
+      "registry_validation",
+      "auto_repair",
+      "health_reporting"
+    ],
+    "tags": {},
+    "enabled": true
+  },
   "epic_review": {
     "id": "epic_review",
     "name": "Epic Review Orchestrator",
@@ -10,7 +34,7 @@
     "description": "",
     "manifest_path": "cortex-brain/manifests/orchestrators/epic-review-orchestrator.yaml",
     "patterns": [
-      "^(epic review|review epic|health check|progress report|cortex status|epic status).*$"
+      "^(epic review|review epic|progress report|cortex status|epic status).*$"
     ],
     "dependencies": [],
     "capabilities": [
