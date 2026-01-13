@@ -1,7 +1,7 @@
 {
   "schema_version": "1.10",
-  "last_updated": "2026-01-13T16:56:48.431749+00:00",
-  "updated_by": "Hallucination prevention enhancement integrated (v1.9.0)",
+  "last_updated": "2026-01-13T20:02:41.148318+00:00",
+  "updated_by": "Progress Tracker Reconciliation (cortex-exec.prompt.md)",
   "active_epic": {
     "id": "CORTEX-6.0",
     "name": "CORTEX 6.0 Production-Grade Rebuild with Sequential Execution",
@@ -757,8 +757,8 @@
   ],
   "phase_2": {
     "number": 2,
-    "name": "Phase 2: Orchestration Core",
-    "description": "MasterOrchestrator + TodoManager + TDD-Master + Planning v5 (Core Workflow)",
+    "name": "Orchestration Core",
+    "description": "MasterOrchestrator, TodoManager, TDD-Master, Planning v5 (Core Workflow)",
     "ac_ids": [
       "AC-ORCH-006",
       "AC-ORCH-007",
@@ -774,7 +774,7 @@
       "AC-SCAFFOLD-001",
       "AC-SCAFFOLD-003"
     ],
-    "status": "completed",
+    "status": "in_progress",
     "started": "2026-01-11T15:48:35.420580+00:00",
     "completed_at": "2026-01-12T15:47:44.014929+00:00",
     "verified_implemented": [
@@ -793,9 +793,9 @@
       "AC-SCAFFOLD-003"
     ],
     "in_progress": [],
-    "total_ac_count": 13,
-    "completed_count": 13,
-    "completion_percentage": 100
+    "total_ac_count": 54,
+    "completed_count": 43,
+    "completion_percentage": 80
   },
   "recent_activity": [
     {
@@ -858,9 +858,9 @@
   ],
   "phase_3": {
     "number": 3,
-    "name": "Phase 3: Feature Orchestrators",
-    "description": "ADO v2, Vacuum/Cleanup, Investigation, Sanitization, Crawlers - building on core workflow",
-    "status": "completed",
+    "name": "Feature Orchestrators",
+    "description": "ADO v2, Investigation, Crawlers, Sanitization, Gap-Fix, Maintenance",
+    "status": "in_progress",
     "completed_at": "2026-01-12T16:00:35.409759Z",
     "verified_implemented": [
       "AC-CLEAN-001",
@@ -880,9 +880,9 @@
       "AC-CRAWLER-004",
       "AC-CRAWLER-005"
     ],
-    "total_ac_count": 16,
-    "completed_count": 16,
-    "completion_percentage": 100,
+    "total_ac_count": 18,
+    "completed_count": 11,
+    "completion_percentage": 60,
     "tests_passing": 214,
     "notes": [
       "AC-CRAWLER-001: Multi-threaded parallel processor with auto CPU scaling (16 tests)",
@@ -1115,8 +1115,8 @@
   },
   "phase_5": {
     "number": 5,
-    "name": "Legacy Migration & Decommission",
-    "description": "",
+    "name": "CORTEX Cleanup",
+    "description": "Remove scaffolding, decommission construction, folder structure",
     "ac_ids": [
       "AC-CLEAN-301",
       "AC-CLEAN-302",
@@ -1147,12 +1147,12 @@
       "AC-CLEAN-327",
       "AC-CLEAN-328"
     ],
-    "status": "completed",
+    "status": "in_progress",
     "started": null,
     "completed_at": null,
-    "completed_count": 28,
-    "total_ac_count": 3,
-    "completion_percentage": 100,
+    "completed_count": 17,
+    "total_ac_count": 28,
+    "completion_percentage": 60,
     "prerequisites": [],
     "verified_implemented": [
       "AC-CLEAN-301",
@@ -1385,11 +1385,11 @@
   },
   "phase_9": {
     "number": 9,
-    "name": "SDLC Management & Governance",
-    "description": "AC-SDLC-001 to 005 - Software Development Lifecycle governance and compliance tracking",
+    "name": "Infrastructure Maturity & Quality Gates",
+    "description": "Hash chain audit, lifecycle, evidence bundles, rollout, templates, challenge",
     "started": "2026-01-12T22:47:43.047691+00:00",
     "target_completion": "2026-01-22",
-    "status": "active",
+    "status": "in_progress",
     "ac_ids": [
       "AC-SDLC-001",
       "AC-SDLC-002",
@@ -1397,9 +1397,9 @@
       "AC-SDLC-004",
       "AC-SDLC-005"
     ],
-    "total_ac_count": 5,
-    "completed_count": 0,
-    "completion_percentage": 0,
+    "total_ac_count": 29,
+    "completed_count": 14,
+    "completion_percentage": 48,
     "prerequisites": [
       "Phase 1 (Foundation) \u2705",
       "Phase 2 (Orchestration Core) \u2705",
@@ -1483,5 +1483,123 @@
     "total": 208,
     "percentage": 20.7
   },
-  "last_reconciliation": "2026-01-13T16:56:48.431751+00:00"
+  "last_reconciliation": "2026-01-13T16:56:48.431751+00:00",
+  "phase_1_5": {
+    "number": 1.5,
+    "name": "STS (Semantic Test Suite)",
+    "description": "Validate orchestration framework with golden corpus (100 test intents)",
+    "total_ac_count": 1,
+    "completed_count": 1,
+    "completion_percentage": 100.0,
+    "status": "completed",
+    "verified_implemented": [
+      "AC-STS-001"
+    ],
+    "test_results": {
+      "total_tests": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": "0%"
+    },
+    "verification": {
+      "status": "pending",
+      "timestamp": null,
+      "criteria_verified": 0,
+      "criteria_total": 0,
+      "gates_passed": 0,
+      "gates_total": 0
+    }
+  },
+  "phase_4": {
+    "number": 4,
+    "name": "Intelligence Layer",
+    "description": "LLM Intent Classifier, Vision API, Knowledge Practices, Interactive Orchestration",
+    "total_ac_count": 12,
+    "completed_count": 7,
+    "completion_percentage": 60,
+    "status": "in_progress",
+    "test_results": {
+      "total_tests": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": "0%"
+    },
+    "verification": {
+      "status": "pending",
+      "timestamp": null,
+      "criteria_verified": 0,
+      "criteria_total": 0,
+      "gates_passed": 0,
+      "gates_total": 0
+    }
+  },
+  "phase_4_5": {
+    "number": 4.5,
+    "name": "Integration & Audit Validation",
+    "description": "Integration test framework and audit validation suite",
+    "total_ac_count": 8,
+    "completed_count": 8,
+    "completion_percentage": 100.0,
+    "status": "completed",
+    "test_results": {
+      "total_tests": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": "0%"
+    },
+    "verification": {
+      "status": "pending",
+      "timestamp": null,
+      "criteria_verified": 0,
+      "criteria_total": 0,
+      "gates_passed": 0,
+      "gates_total": 0
+    }
+  },
+  "phase_10": {
+    "number": 10,
+    "name": "Template Migration & Enhancement",
+    "description": "Migrate orchestrators to 3-layer templates, response unification",
+    "total_ac_count": 7,
+    "completed_count": 1,
+    "completion_percentage": 14,
+    "status": "in_progress",
+    "test_results": {
+      "total_tests": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": "0%"
+    },
+    "verification": {
+      "status": "pending",
+      "timestamp": null,
+      "criteria_verified": 0,
+      "criteria_total": 0,
+      "gates_passed": 0,
+      "gates_total": 0
+    }
+  },
+  "phase_11": {
+    "number": 11,
+    "name": "CORTEX LENS",
+    "description": "Intelligent discovery and onboarding system",
+    "total_ac_count": 20,
+    "completed_count": 0,
+    "completion_percentage": 0,
+    "status": "not_started",
+    "test_results": {
+      "total_tests": 0,
+      "passed": 0,
+      "failed": 0,
+      "pass_rate": "0%"
+    },
+    "verification": {
+      "status": "pending",
+      "timestamp": null,
+      "criteria_verified": 0,
+      "criteria_total": 0,
+      "gates_passed": 0,
+      "gates_total": 0
+    }
+  }
 }
