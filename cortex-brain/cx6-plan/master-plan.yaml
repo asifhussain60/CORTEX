@@ -1,8 +1,8 @@
 plan_metadata:
   plan_id: CORTEX-6.0-SNOWBALL-MASTER
-  version: 1.7.0
+  version: 1.7.1
   created: '2026-01-10T23:50:00Z'
-  updated: '2026-01-13T14:30:00Z'
+  updated: '2026-01-13T13:16:05Z'
   author: Asif Hussain
   strategy: Organic Evolution with JIT Infrastructure Delivery
   philosophy: Build for operation; decommission construction scaffolding
@@ -11,726 +11,78 @@ plan_metadata:
   total_ac_ids: 184
   hybrid_approach: true
   gpt_influence: 70% rigor, 30% overhead
-  reorganization_note: 'v1.7.0 - Phases reordered to match ACTUAL implementation timeline: Phase 2→3→5→6→7→8→9→10→11 (not sequential 1→2→3→4→5)'
-  latest_addition: Phase 11 - CORTEX LENS & Onboarding (renamed from Phase 10 to avoid collision with actual Phase 10 Template Migration)
-  ssot_declaration: |
-    **SINGLE SOURCE OF TRUTH (SSOT) ARCHITECTURE**
-    
-    This file (master-plan.yaml) is the AUTHORITATIVE source for:
-    - Phase definitions, timelines, and dependencies
-    - AC-ID ranges and component mappings
-    - Exit criteria and success metrics
-    - Architecture and governance rules
-    
-    DATA FLOW GUARANTEE:
-    master-plan.yaml (SSOT - architecture)
-         +
-    progress-tracker.json (SSOT - execution state)
-         ↓
-    regenerate_plan_viewer_data.py (SINGLE sync script)
-         ↓
-    plan-viewer-data.json (derived dashboard feed)
-         ↓
-    plan-viewer.html (browser display)
-    
-    ALL OTHER FILES ARE DERIVED:
-    - phase-X-tracking.json → DELETED (redundant)
-    - Multiple sync scripts → ARCHIVED (use regenerate_plan_viewer_data.py only)
-    - Per-phase YAML files → REFERENCE ONLY (not for tracking)
-    
-    ENFORCEMENT:
-    - MasterOrchestrator is the ONLY writer to progress-tracker.json
-    - All prompts MUST reference this unified architecture
-    - Dashboard always reflects current state from SSOT
-    - No manual state modifications outside orchestrator
-implementation_order:
-  note: 'ACTUAL IMPLEMENTATION ORDER - Phases executed organically, not sequentially'
-  strategy: 'Organic evolution with Just-In-Time (JIT) infrastructure delivery'
-  evolution_model: |
-    CORTEX 6.0 did NOT follow the planned sequential model (Phase 1→2→3→4→5).
-    Instead, it evolved organically based on immediate needs:
-    
-    - Phase 2: Orchestration Core (ACTUAL FIRST - MasterOrchestrator, routing)
-    - Phase 3: Feature Orchestrators (crawlers, investigation)  
-    - Phase 5: Legacy Migration & Decommission (cleanup, decommission)
-    - Phase 6: Security & Routing Foundation (AC-SECURITY, AC-ROUTE)
-    - Phase 7: GitHub Copilot Todo Bridge (AC-COPILOT-001-012)
-    - Phase 8: Staged Rollout System (AC-ROLLOUT-001-004)
-    - Phase 9: Infrastructure Maturity (audit, lifecycle, evidence, STS, templates)
-    - Phase 10: Template Migration & Enhancement (CURRENT - AC-TEMPLATE-005-008)
-    - Phase 11: CORTEX LENS & Onboarding (PLANNED - universal code intelligence)
-    
-    Foundation components (audit, governance, state, lifecycle, evidence) were
-    delivered Just-In-Time as needed by feature phases, not upfront.
-  
+  latest_addition: Phase 10 - CORTEX LENS & Onboarding (moved from 1.5); Phase 1.5
+    - STS (Semantic Test Suite)
+  ssot_declaration: "**SINGLE SOURCE OF TRUTH (SSOT) ARCHITECTURE**\n\nThis file (master-plan.yaml)\
+    \ is the AUTHORITATIVE source for:\n- Phase definitions, timelines, and dependencies\n\
+    - AC-ID ranges and component mappings\n- Exit criteria and success metrics\n-\
+    \ Architecture and governance rules\n\nDATA FLOW GUARANTEE:\nmaster-plan.yaml\
+    \ (SSOT - architecture)\n     +\nprogress-tracker.json (SSOT - execution state)\n\
+    \     ↓\nregenerate_plan_viewer_data.py (SINGLE sync script)\n     ↓\nplan-viewer-data.json\
+    \ (derived dashboard feed)\n     ↓\nplan-viewer.html (browser display)\n\nALL\
+    \ OTHER FILES ARE DERIVED:\n- phase-X-tracking.json → DELETED (redundant)\n- Multiple\
+    \ sync scripts → ARCHIVED (use regenerate_plan_viewer_data.py only)\n- Per-phase\
+    \ YAML files → REFERENCE ONLY (not for tracking)\n\nENFORCEMENT:\n- MasterOrchestrator\
+    \ is the ONLY writer to progress-tracker.json\n- All prompts MUST reference this\
+    \ unified architecture\n- Dashboard always reflects current state from SSOT\n\
+    - No manual state modifications outside orchestrator\n"
+  reorganization_note: v1.7.1 - Complete phase restoration with actual execution status
+    from progress-tracker.json
+snowball_strategy:
+  description: 'Build core infrastructure first; features compound on infrastructure.
+
+    Each phase completes BEFORE the next begins. No parallel development
+
+    across phases to ensure solid foundation. Early phases are smaller,
+
+    later phases leverage completed infrastructure (snowball effect).
+
+    '
   principles:
-  - Build what's needed when it's needed (JIT infrastructure)
+  - Foundation MUST complete before orchestration core
   - Core workflow establishes default mechanism (MasterOrchestrator)
-  - Feature orchestrators drive infrastructure requirements
-  - Infrastructure maturity comes after feature delivery
+  - Feature orchestrators reuse foundation infrastructure
+  - Intelligence layer leverages all previous components
   - Each AC-ID produces Evidence Bundle proving completion
   - Progressive rollout via DRY_RUN + Approval Gates
-  
-  execution_timeline:
-  - phase: 2
-    name: Orchestration Core
+  phases:
+  - phase: 1
+    name: Foundation Enhancement
     weeks: 2
-    status: COMPLETED
-    dependency: None - started first
-    ac_ids: 13
-    description: MasterOrchestrator, TodoManager, deterministic routing
+    dependency: None - builds base infrastructure
+  - phase: 1.5
+    name: STS (Semantic Test Suite)
+    weeks: 3
+    dependency: Foundation (Phase 1)
+    critical: Test infrastructure foundation for all orchestrators
+  - phase: 2
+    name: Orchestration Core (CORE WORKFLOW)
+    weeks: 2
+    dependency: STS (Phase 1.5)
+    critical: Establishes default working mechanism
   - phase: 3
     name: Feature Orchestrators
     weeks: 2
-    status: COMPLETED
-    dependency: Phase 2
-    ac_ids: 0
-    description: Crawlers, investigation, initial feature set
-  - phase: 5
-    name: Legacy Migration & Decommission
-    weeks: 2
-    status: COMPLETED
-    dependency: Phase 3
-    ac_ids: 28
-    description: AC-CLEAN-301-328, cleanup, decommissioning
-  - phase: 6
-    name: Security & Routing Foundation
-    weeks: 2
-    status: COMPLETED
-    dependency: Phase 5
-    ac_ids: 13
-    description: AC-SECURITY-001-008, AC-ROUTE-001-005
-  - phase: 7
-    name: GitHub Copilot Todo Bridge
-    weeks: 2
-    status: COMPLETED
-    dependency: Phase 6
-    ac_ids: 12
-    description: AC-COPILOT-001-012, integration with VS Code
-  - phase: 8
-    name: Staged Rollout System
-    weeks: 2
-    status: COMPLETED
-    dependency: Phase 7
-    ac_ids: 4
-    description: AC-ROLLOUT-001-004, progressive deployment
-  - phase: 9
-    name: Infrastructure Maturity & Quality Gates
-    weeks: 3
-    status: COMPLETED
-    dependency: Phase 8
-    ac_ids: 29
-    description: Audit, lifecycle, evidence, STS, templates foundation
-  - phase: 10
-    name: Template Migration & Enhancement
-    weeks: 3
-    status: IN_PROGRESS
-    dependency: Phase 9
-    ac_ids: 7
-    description: AC-TEMPLATE-005-008, AC-CHALLENGE-001-003, CORE-026
-  - phase: 11
-    name: CORTEX LENS & Onboarding (Future)
-    weeks: 3
-    status: PLANNED
-    dependency: Phase 10
-    ac_ids: 22
-    description: AC-LENS-001-006, AC-ONBOARD-001-008, AC-TOOLKIT-001-008
-
-archived_sequential_plan:
-  note: |
-    The original sequential plan (Phase 1→1.5→2→3→4→4.5→5→10) was superseded
-    by organic evolution. These phases are preserved for historical reference
-    and architectural insights but do NOT represent actual implementation.
-  phases:
-  - phase: 1
-    name: Foundation Enhancement (SUPERSEDED)
-    status: Never executed as standalone phase
-    reality: Components delivered JIT across Phases 6-9
-  - phase: 1.5
-    name: STS (Semantic Test Suite) (SUPERSEDED)
-    status: Delivered in Phase 9.4
-    reality: AC-STS-001-003 implemented within Infrastructure Maturity phase
+    dependency: Core Workflow (Phase 2)
   - phase: 4
-    name: Intelligence Layer (DEFERRED)
-    status: Not yet implemented
-    reality: LLM Intent Classifier, Knowledge Practices, Vision API planned for future
+    name: Intelligence Layer
+    weeks: 2
+    dependency: Feature Orchestrators (Phase 3)
   - phase: 4.5
-    name: Orchestrator Integration & Audit Validation (DEFERRED)
-    status: Partially implemented in Phase 9
-    reality: Evidence validation exists, full integration testing pending
-archived_phase_1_foundation:
-  name: Phase 1 - Foundation Enhancement (ARCHIVED - Historical Reference)
-  original_plan: Sequential foundation with 29 AC-IDs delivered upfront
-  reality: Never executed as standalone phase - components delivered JIT
-  duration: 2 weeks
-  start_date: '2026-01-13'
-  end_date: '2026-01-24'
-  status: SUPERSEDED_BY_ORGANIC_EVOLUTION
-  started_at: '2026-01-10T17:00:00Z'
-  completion_percentage: 0
-  ac_ids_complete: 0
-  ac_ids_total: 29
-  reality_note: |
-    Phase 1 was originally planned as a sequential foundation (29 AC-IDs).
-    In practice, CORTEX 6.0 evolved organically with components implemented 
-    across different phases based on actual needs:
-    
-    - AC-SECURITY-001 to 008 → Implemented in Phase 6 (✅ Complete)
-    - AC-AUDIT, AC-GOV, AC-STATE, AC-LIFECYCLE, AC-EVIDENCE → Partially implemented
-      as needed by other phases, not as a unified "Foundation" phase
-    
-    The sequential "Phase 1 Foundation" concept was replaced by Just-In-Time
-    infrastructure delivery. This master-plan entry remains for historical tracking
-    but does NOT represent actual implementation sequence.
-    
-    See progress-tracker.json phases 2-10 for actual implementation timeline.
-  completed_components:
-    - security_layer (AC-SECURITY-001 to 008) ✅ in Phase 6
-  incomplete_as_standalone_phase:
-    - audit_infrastructure (AC-AUDIT-001 to 007)
-    - governance_merger (AC-GOV-001 to 005)  
-    - state_manager (AC-STATE-001 to 003)
-    - lifecycle_system (AC-LIFECYCLE-001 to 003)
-    - evidence_bundler (AC-EVIDENCE-001 to 003)
-  last_updated: '2026-01-13T14:30:00Z'
-  priority: HISTORICAL_REFERENCE
-  recommended_llm:
-    primary: Claude Sonnet 4.5 (RECOMMENDED)
-    usage: 90% of operations
-    cost_efficiency: 1x (baseline)
-    recommendation: Optional - users can continue with Sonnet 4.5 for entire phase
-    rationale: "Best balance for production-grade infrastructure work:\n\u2705 Extended\
-      \ context window handles large governance ruleset merging (4-tier hierarchy)\n\
-      \u2705 Superior code generation for TDD-Master v1 implementation (RED\u2192\
-      GREEN\u2192REFACTOR cycles)\n\u2705 Excellent at following complex instructions\
-      \ - CORTEX routing protocol, SKULL rules enforcement\n\u2705 Tool use expertise\
-      \ - critical for audit logging, governance validation, evidence bundle generation\n\
-      \u2705 Strong architectural reasoning - needed for challenge protocol and debt\
-      \ detection\n"
-    ideal_for: Phase 1 (Foundation), complex AC-ID validation, multi-step workflows
-    optional_upgrade:
-      model: Claude Opus 4.5
-      usage: 10% of operations (optional)
-      cost: 3x - use sparingly
-      when_to_consider:
-      - "\U0001F9E0 Architectural decisions requiring deep analysis (e.g., hash chain\
-        \ design, Knowledge Graph design)"
-      - "\U0001F50D Critical challenge protocol evaluations - detecting subtle technical\
-        \ debt patterns"
-      - "\U0001F3D7\uFE0F Refactoring legacy CORTEX 5.5 components into 6.0 governance\
-        \ model"
-      - "\U0001F4CA Complex query optimization for audit trail analysis across correlation\
-        \ chains"
-      note: Not required - Sonnet 4.5 handles 95%+ of foundation work effectively
-  description: 'Build the core infrastructure that EVERY other component depends on.
-
-    All orchestrators log to audit, enforce governance, persist state.
-
-    Without this foundation, nothing else can reliably operate.
-
-    '
-  why_first: 'Every orchestrator needs:
-
-    - Audit Infrastructure: Log all operations (AC-AUDIT-001 to 007)
-
-    - Governance Merger: Enforce rules (AC-GOV-001 to 005)
-
-    - State Manager: Persist progress (AC-STATE-001 to 003)
-
-    - Lifecycle: Track execution states (AC-LIFECYCLE-001 to 003)
-
-    - Evidence: Prove completion (AC-EVIDENCE-001 to 003)
-
-    - Security: Protect operations (AC-SECURITY-001 to 008)
-
-    '
-  components:
-    audit_infrastructure:
-      name: Audit Infrastructure with Hash Chain
-      ac_ids:
-      - AC-AUDIT-001
-      - AC-AUDIT-002
-      - AC-AUDIT-003
-      - AC-AUDIT-004
-      - AC-AUDIT-005
-      - AC-AUDIT-006
-      - AC-AUDIT-007
-      priority: CRITICAL
-      duration: 5 days
-      owner: Infrastructure Team
-      capabilities:
-      - EnhancedAuditLogger with <5ms latency
-      - SQLite backend with WAL mode
-      - AC-ID traceability across correlation chains
-      - Category-based filtering (GOVERNANCE, ORCHESTRATOR, VALIDATION)
-      - 'Retention policies (CRITICAL: 90d, ERROR: 60d, INFO: 30d)'
-      - Hash chain integrity (AC-AUDIT-007)
-      - Tamper detection via event_hash verification
-      dependencies: []
-      evidence_bundle:
-        test_coverage: '>=80%'
-        audit_completeness: 100%
-        performance: <5ms per log entry, <10ms hash chain verification
-    governance_merger:
-      name: 4-Tier Governance Merger
-      ac_ids:
-      - AC-GOV-001
-      - AC-GOV-002
-      - AC-GOV-003
-      - AC-GOV-004
-      - AC-GOV-005
-      priority: CRITICAL
-      duration: 4 days
-      owner: Governance Team
-      capabilities:
-      - Merge Tier 0 (SKULL) + Tier 1 (Business) + Tier 2 (Engineering) + Tier 3 (Learned)
-      - Precedence resolution (Tier 0 wins conflicts)
-      - Rule deduplication and validation
-      - Performance <100ms for full merge
-      - YAML/JSON schema validation
-      dependencies:
-      - AC-AUDIT-001
-      evidence_bundle:
-        test_coverage: '>=80%'
-        governance_compliance: 100%
-        performance: <100ms merge time
-    state_manager:
-      name: State Manager with SQLite
-      ac_ids:
-      - AC-STATE-001
-      - AC-STATE-002
-      - AC-STATE-003
-      priority: CRITICAL
-      duration: 3 days
-      owner: Infrastructure Team
-      capabilities:
-      - SQLite backend with WAL mode
-      - Atomic state transitions
-      - Rollback on failure
-      - File locking (fcntl/msvcrt)
-      - Cross-platform compatibility
-      dependencies:
-      - AC-AUDIT-001
-      evidence_bundle:
-        test_coverage: '>=80%'
-        concurrency: Handles 10 concurrent writers
-        integrity: Zero data loss on failure
-    lifecycle_system:
-      name: Extended Orchestrator Lifecycle
-      ac_ids:
-      - AC-LIFECYCLE-001
-      - AC-LIFECYCLE-002
-      - AC-LIFECYCLE-003
-      priority: HIGH
-      duration: 4 days
-      owner: Orchestration Team
-      capabilities:
-      - "7-state lifecycle: IDLE \u2192 SPEC \u2192 IMPLEMENTED \u2192 TESTED \u2192\
-        \ VERIFIED \u2192 ACTIVE \u2192 DEPRECATED"
-      - Entry/exit criteria enforcement
-      - Quarantine mechanism (error rate > 10%)
-      - State transition audit trail
-      dependencies:
-      - AC-AUDIT-001
-      - AC-GOV-001
-      evidence_bundle:
-        test_coverage: '>=80%'
-        states_validated: All 7 states + transitions
-        quarantine_tested: Auto-quarantine on violations
-    evidence_bundler:
-      name: Evidence Bundle Generation
-      ac_ids:
-      - AC-EVIDENCE-001
-      - AC-EVIDENCE-002
-      - AC-EVIDENCE-003
-      priority: HIGH
-      duration: 5 days
-      owner: Infrastructure Team
-      capabilities:
-      - '3-file format: manifest.yaml, test_results.json, audit_trace.jsonl'
-      - Auto-generation from pytest + audit logs + AC-INDEX
-      - '3 validation gates: test coverage >=80%, audit 100%, governance 100%'
-      - Evidence Bundle storage in cortex-brain/evidence-bundles/
-      dependencies:
-      - AC-AUDIT-001
-      - AC-TEST-001
-      evidence_bundle:
-        test_coverage: '>=80%'
-        gates_validated: All 3 gates enforce quality
-        self_documented: Evidence Bundler has its own Evidence Bundle
-    security_layer:
-      name: Action Security Layer
-      ac_ids:
-      - AC-SECURITY-001
-      - AC-SECURITY-002
-      - AC-SECURITY-003
-      - AC-SECURITY-004
-      - AC-SECURITY-005
-      - AC-SECURITY-006
-      - AC-SECURITY-007
-      - AC-SECURITY-008
-      priority: CRITICAL
-      duration: 5 days
-      owner: Security Team
-      capabilities:
-      - Action classification (SAFE, INSPECT, DESTRUCTIVE)
-      - "Approval state machine (PENDING \u2192 APPROVED/DENIED/TIMEOUT)"
-      - Canonical path resolution (AC-SECURITY-006)
-      - Cross-platform file operations (AC-SECURITY-008)
-      - Argument validation (incremental via TDD)
-      dependencies:
-      - AC-AUDIT-001
-      - AC-GOV-001
-      evidence_bundle:
-        test_coverage: '>=80%'
-        approval_tested: All approval flows validated
-        path_safety: Canonical paths prevent directory traversal
-  phase_1_exit_criteria:
-    must_complete:
-    - All 31 AC-IDs implemented (original Foundation)
-    - All 12 hybrid AC-IDs implemented (AUDIT-007, LIFECYCLE-001-003, EVIDENCE-001-003,
-      STS-001-003, ROLLOUT-SIMPLE-001-003)
-    - Zero test failures across all foundation components
-    - Evidence Bundle generated for TodoOrchestrator (proves system works)
-    - 'Performance validated: <5ms audit, <100ms governance merge'
-    - Hash chain integrity verified
-    - Security gates operational
-    gate_validation:
-      test_coverage: '>=80% across all foundation components'
-      audit_completeness: 100% for all operations
-      governance_compliance: 100% (no violations)
-      performance: Meets all latency requirements
-    blocker_prevention:
-    - No Phase 2 work starts until ALL Phase 1 complete
-    - Evidence Bundles prove completion, not just code commit
-    - Integration tests prove components work together
-archived_phase_1_5_sts_semantic_test_suite:
-  name: Phase 1.5 - STS (Semantic Test Suite) (ARCHIVED - Historical Reference)
-  original_plan: Standalone 3-week test infrastructure phase before Phase 2
-  reality: Delivered as sub-phase 9.4 within Infrastructure Maturity
-  duration: 3 weeks
-  start_date: '2026-01-25'
-  end_date: '2026-02-14'
-  status: DELIVERED_IN_PHASE_9
-  priority: HISTORICAL_REFERENCE
-  placement: Was planned between Phase 1 & Phase 2
-  actual_delivery: Phase 9.4 - STS as Capability 0
-  rationale: 'STS (Semantic Test Suite) provides the foundation for all test infrastructure
-
-    in CORTEX 6.0. It establishes:
-
-
-    1. Semantic test intent corpus (100 golden test scenarios)
-
-    2. Test generation frameworks for TDD-Master
-
-    3. Evidence validation infrastructure
-
-    4. Test result aggregation and reporting
-
-    5. Integration test harness for orchestrator validation
-
-
-    This MUST complete before Phase 2 (Orchestration Core) because TDD-Master
-
-    and all orchestrators depend on this test infrastructure.
-
-    '
-  recommended_llm:
-    primary: Claude Sonnet 4.5 (RECOMMENDED)
-    usage: 90% of operations
-    cost_efficiency: 1x (baseline)
-    recommendation: Use Sonnet 4.5 for entire phase
-    rationale: "Test infrastructure and validation:\n✅ Excellent for test generation\
-      \ patterns\n✅ Strong at validation logic\n✅ Good for test harness design\n\
-      ✅ Handles complex assertion patterns\n"
-  description: 'Build comprehensive test infrastructure that all orchestrators depend on:
-
-
-    1. Semantic test corpus (100 golden scenarios)
-
-    2. Test generation frameworks
-
-    3. Evidence validation
-
-    4. Integration test harness
-
-    '
-  components:
-    semantic_test_corpus:
-      name: STS Golden Corpus
-      ac_ids:
-      - AC-STS-001
-      - AC-STS-002
-      - AC-STS-003
-      priority: CRITICAL
-      duration: 1 week
-      owner: Testing Team
-      capabilities:
-      - '100 golden test intents covering all orchestrator patterns'
-      - 'Test intent classifier (simple, rollout, challenge)'
-      - 'Expected outcome definitions'
-      - 'Test data generation'
-      dependencies:
-      - AC-AUDIT-001
-      - AC-STATE-001
-      evidence_bundle:
-        test_coverage: '>=95%'
-        corpus_size: 100 test intents
-        classification_accuracy: '>=95%'
-    test_generation_framework:
-      name: Test Generation Infrastructure
-      ac_ids:
-      - AC-TESTGEN-001
-      - AC-TESTGEN-002
-      - AC-TESTGEN-003
-      priority: CRITICAL
-      duration: 1 week
-      owner: Testing Team
-      capabilities:
-      - 'Auto-generate unit tests from AC criteria'
-      - 'Integration test scaffolding'
-      - 'Mock generation for external dependencies'
-      - 'Test fixture management'
-      dependencies:
-      - AC-STS-001
-      evidence_bundle:
-        test_coverage: '>=90%'
-        generation_accuracy: '>=85%'
-    evidence_validation:
-      name: Evidence Validation Infrastructure
-      ac_ids:
-      - AC-EVIDENCE-VAL-001
-      - AC-EVIDENCE-VAL-002
-      priority: CRITICAL
-      duration: 1 week
-      owner: Testing Team
-      capabilities:
-      - 'Validate evidence bundles against AC criteria'
-      - 'Audit trail verification'
-      - 'Test result aggregation'
-      - 'Coverage reporting'
-      dependencies:
-      - AC-EVIDENCE-001
-      - AC-AUDIT-001
-      evidence_bundle:
-        test_coverage: '>=90%'
-        validation_accuracy: '>=95%'
-  phase_1_5_exit_criteria:
-    must_complete:
-    - All 3 STS ACs implemented (Golden corpus)
-    - All 3 TESTGEN ACs implemented (Test generation)
-    - All 2 EVIDENCE-VAL ACs implemented (Validation)
-    - Zero test failures across all test infrastructure
-    - 100 golden test intents documented and validated
-    - Test generation accuracy >=85%
-    gate_validation:
-      test_coverage: '>=90% for all test infrastructure'
-      corpus_completeness: 100 golden test intents
-      generation_validated: Auto-generated tests pass for 85%+ of ACs
-      evidence_validation: All evidence bundles validate correctly
-phase_10_intelligent_discovery:
-  name: Phase 11 - CORTEX LENS & Onboarding (Intelligent Discovery)
-  duration: 3 weeks
-  start_date: '2026-04-01'
-  end_date: '2026-04-21'
-  status: planned_after_phase_10
-  priority: HIGH
-  placement: After Phase 10 (Template Migration)
-  renamed_from: 'Phase 10 (v1.6.0) → Phase 11 (v1.7.0) to avoid collision with actual Phase 10'
-  rationale: 'CORTEX LENS and Onboarding orchestrators provide intelligent codebase
-
-    discovery and knowledge extraction. Moved to Phase 11 because:
-
-
-    1. Not required for core CORTEX 6.0 operation (Phases 2-10)
-
-    2. Enhances CORTEX with universal code intelligence
-
-    3. Auto-run during project onboarding (discovery on first use)
-
-    4. Expose crawlers/analyzers as MCP tools for all orchestrators
-
-    5. Feed the CORTEX brain with company and domain knowledge
-
-
-    This is NOT a UI dashboard. It''s a universal reverse-engineering and
-
-    knowledge-discovery system that makes CORTEX smarter with each use.
-
-    '
-  recommended_llm:
-    primary: Claude Sonnet 4.5 (RECOMMENDED)
-    usage: 85% of operations
-    cost_efficiency: 1x (baseline)
-    recommendation: Optional Opus for AST parser design decisions
-    rationale: "AST crawlers and code analysis:\n\u2705 Excellent for TDD test generation\n\
-      \u2705 Strong tool integration (MCP exposure)\n\u2705 Good for multi-language\
-      \ parser design\n\u2705 Handles complex knowledge graph structure\n"
-    optional_upgrade:
-      model: Claude Opus 4.5
-      usage: 10-15% of operations (optional)
-      cost: 3x
-      when_to_consider:
-      - "\U0001F9E0 Multi-language AST parser architecture"
-      - "\U0001F4CA Knowledge graph schema design"
-      - "\U0001F50D Domain learning algorithm design"
-  description: 'Build universal code analysis and knowledge discovery system that:
-
-
-    1. CORTEX LENS: Reverse-engineer codebase via AST, crawlers, git history
-
-    2. Onboarding: Guide teams through intelligent project discovery
-
-    3. Knowledge Store: Capture company and domain patterns for reuse
-
-    4. MCP Tools: Expose analyzers so Planning/other orchestrators access findings
-
-    '
-  components:
-    cortex_lens:
-      name: CORTEX LENS - Universal Code Intelligence System
-      ac_ids:
-      - AC-LENS-001
-      - AC-LENS-002
-      - AC-LENS-003
-      - AC-LENS-004
-      - AC-LENS-005
-      - AC-LENS-006
-      priority: CRITICAL
-      duration: 2 weeks
-      owner: Intelligence Team
-      capabilities:
-      - 'AST Analysis: Python, JavaScript/TypeScript, C#, Java, Go, Rust, SQL'
-      - 'Code Crawlers: Architecture, Complexity, Dependencies, Tech Stack'
-      - 'Reverse Engineering: Intent inference, pattern detection, domain extraction'
-      - 'Knowledge Graph: Semantic code representation (nodes, edges, traversal)'
-      - 'Domain Learning: Company practices, naming conventions, patterns'
-      - 'MCP Exposure: All analyzers accessible as tools to other orchestrators'
-      dependencies:
-      - AC-AUDIT-001
-      - AC-EVIDENCE-001
-      - AC-STATE-001
-      evidence_bundle:
-        test_coverage: '>=80%'
-        languages_supported: '>=6 (Python, JS/TS, C#, Java, Go, Rust)'
-        performance: <5s AST analysis per 1000 LOC
-        mcp_tools: All 6 analyzers exposed
-        knowledge_storage: Tier 1 & 3 integration tested
-    onboarding_orchestrator:
-      name: Onboarding Orchestrator - Intelligent Project Setup
-      ac_ids:
-      - AC-ONBOARD-001
-      - AC-ONBOARD-002
-      - AC-ONBOARD-003
-      - AC-ONBOARD-004
-      - AC-ONBOARD-005
-      - AC-ONBOARD-006
-      - AC-ONBOARD-007
-      - AC-ONBOARD-008
-      priority: CRITICAL
-      duration: 1.5 weeks
-      owner: UX/Integration Team
-      capabilities:
-      - "10-Phase Discovery: Metadata \u2192 Quality \u2192 Security \u2192 Tech \u2192\
-        \ Architecture \u2192 Dashboard"
-      - 'Parallel Crawlers: 6 analyzers run simultaneously'
-      - 'Interactive Setup Wizard: Guided onboarding flow'
-      - 'Dashboard Generation: HTML visualization of findings'
-      - 'Knowledge Persistence: Stores tier1/tier3 knowledge files'
-      - 'Production & Test Modes: Embedded vs standalone operation'
-      - 'Auto-run on Setup: Discovery at project initialization'
-      dependencies:
-      - AC-LENS-001
-      - AC-LENS-002
-      - AC-LENS-003
-      - AC-LENS-004
-      - AC-LENS-005
-      - AC-LENS-006
-      - AC-ORCH-001
-      evidence_bundle:
-        test_coverage: '>=80%'
-        output_files: 7 JSON files + HTML dashboard
-        execution_time: <2 minutes for typical project
-        integration: Planning v5, other orchestrators use discovery results
-        auto_run: Auto-executes during CORTEX setup
-  cortex_toolkit:
-    name: CORTEX TOOLKIT - HTML View Generation & Visualization Infrastructure
-    ac_ids:
-    - AC-TOOLKIT-001
-    - AC-TOOLKIT-002
-    - AC-TOOLKIT-003
-    - AC-TOOLKIT-004
-    - AC-TOOLKIT-005
-    - AC-TOOLKIT-006
-    - AC-TOOLKIT-007
-    - AC-TOOLKIT-008
-    priority: HIGH
-    duration: 1.5 weeks
-    owner: Visualization & MCP Team
-    purpose: 'Transform CORTEX LENS outputs and audit logs into interactive static
-      HTML
-
-      dashboards with glassmorphism design, modern tab systems, and D3.js visualizations.
-
-      Expose all generators as MCP tools for Planning v5, Investigation, and other
-
-      orchestrators.
-
-      '
-    capabilities:
-    - 'AC-TOOLKIT-001: Epic Plan Viewer Generator (master-plan + progress as interactive
-      HTML)'
-    - "AC-TOOLKIT-002: Knowledge Graph Visualizer (YAML \u2192 D3.js force-directed\
-      \ graph)"
-    - 'AC-TOOLKIT-003: Architecture Diagram Generator (4-tier brain with glassmorphism)'
-    - "AC-TOOLKIT-004: Audit Log HTML Exporter (JSONL \u2192 searchable timeline viewer)"
-    - 'AC-TOOLKIT-005: Glassmorphism Compliance Engine (validate design standard)'
-    - 'AC-TOOLKIT-006: Modern Tab System (reusable keyboard-accessible tabs)'
-    - 'AC-TOOLKIT-007: Mermaid Diagram Engine (flowcharts, state diagrams in dashboards)'
-    - 'AC-TOOLKIT-008: CORTEX TOOLKIT MCP Server (expose all generators as MCP tools)'
-    dependencies:
-    - AC-LENS-001
-    - AC-LENS-002
-    - AC-LENS-003
-    - AC-LENS-004
-    - AC-ONBOARD-001
-    - AC-ONBOARD-008
-    evidence_bundle:
-      test_coverage: '>=80% for all generators'
-      html_performance: <2s page load time
-      glassmorphism_compliance: 100% compliance with design standard
-      mcp_tools_exposed: All 8 tools callable by other orchestrators
-      design_system: Modern tabs + D3.js + Mermaid integration
-      file_assets: modern-tabs.css (399 lines), modern-tabs.js (200+ lines), html_viewer_generator.py
-        (798 lines)
-  phase_10_exit_criteria:
-    must_complete:
-    - All 6 CORTEX LENS ACs implemented (Universal AST + Crawlers)
-    - All 8 Onboarding ACs implemented (10-phase discovery + dashboard)
-    - All 8 CORTEX TOOLKIT ACs implemented (HTML viewers + MCP exposure)
-    - Zero test failures across all discovery + visualization components
-    - MCP tools registered and accessible to Planning/other orchestrators
-    - Knowledge storage (tier1/tier3) integrated and tested
-    - All 5 interactive dashboards regenerate automatically
-    - End-to-end onboarding flow <2 minutes for typical project
-    - Auto-run on setup validated (discovery on first use)
-    - 100% glassmorphism design compliance across all views
-    gate_validation:
-      test_coverage: '>=80% for all discovery + visualization components'
-      language_support: '>=6 programming languages (CORTEX LENS)'
-      mcp_integration: All 14 tools callable as MCP tools (6 LENS + 8 TOOLKIT)
-      knowledge_persistence: tier1/tier3 files created, queryable, visualized
-      performance: <2 minutes end-to-end for typical project (LENS + Onboarding)
-      html_dashboards: All 5 viewers <500KB, <2s load, WCAG AA compliant
-      visualization_quality: D3.js rendering <1s for 500-node graphs
-    blocker_prevention:
-    - CORTEX 6.0 core (Phases 1-5) complete before starting Phase 10
-    - Crawlers tested independently before integration
-    - Knowledge storage schema validated before scaling
-    - Auto-run capability tested in both production and test modes
-    - Glassmorphism compliance validated by AC-TOOLKIT-005 before go-live
-    - All HTML generators tested on Chrome/Firefox/Safari/Edge
+    name: Orchestrator Integration & Audit Validation
+    weeks: 2
+    dependency: Intelligence Layer (Phase 4)
+    critical: Proves system correctness via audit trail completeness
+  - phase: 5
+    name: CORTEX Cleanup & Decommission
+    weeks: 2
+    dependency: Orchestrator Integration (Phase 4.5)
+    critical: Remove all construction scaffolding, permanent operations only
+  - phase: 10
+    name: CORTEX LENS & Onboarding (Intelligent Discovery)
+    weeks: 3
+    dependency: Phase 5 complete
+    critical: Universal code intelligence and knowledge discovery system
 phase_2_orchestration_core:
   name: Orchestration Core (CORE WORKFLOW)
   duration: 2 weeks
@@ -743,11 +95,19 @@ phase_2_orchestration_core:
     usage: 85% of operations
     cost_efficiency: 1x (baseline)
     recommendation: Optional - users can continue with Sonnet 4.5 for entire phase
-    rationale: "Optimal for orchestration core implementation:\n\u2705 Best balance\
-      \ of cost/performance for production-grade orchestration\n\u2705 Handles complex\
-      \ MasterOrchestrator logic evaluation\n\u2705 Excellent at TDD-Master workflow\
-      \ (RED\u2192GREEN\u2192REFACTOR)\n\u2705 Strong tool use for TodoManager state\
-      \ persistence\n\u2705 Good balance for Planning v5 context-aware generation\n"
+    rationale: 'Optimal for orchestration core implementation:
+
+      ✅ Best balance of cost/performance for production-grade orchestration
+
+      ✅ Handles complex MasterOrchestrator logic evaluation
+
+      ✅ Excellent at TDD-Master workflow (RED→GREEN→REFACTOR)
+
+      ✅ Strong tool use for TodoManager state persistence
+
+      ✅ Good balance for Planning v5 context-aware generation
+
+      '
     ideal_for: Phase 2 (Orchestration Core), MasterOrchestrator implementation, TDD
       cycles
     optional_upgrade:
@@ -755,11 +115,11 @@ phase_2_orchestration_core:
       usage: 15% of operations (optional)
       cost: 3x
       when_to_consider:
-      - "\U0001F9E0 MasterOrchestrator evaluation logic (central controller design)"
-      - "\U0001F4CA TodoManager dependency resolution algorithms"
-      - "\U0001F3AF TDD-Master evidence bundle validation gates"
-      - "\U0001F50D Planning v5 risk assessment and dependency analysis"
-      - "\U0001F4CB STS golden corpus design (100 test intents)"
+      - 🧠 MasterOrchestrator evaluation logic (central controller design)
+      - 📊 TodoManager dependency resolution algorithms
+      - 🎯 TDD-Master evidence bundle validation gates
+      - 🔍 Planning v5 risk assessment and dependency analysis
+      - 📋 STS golden corpus design (100 test intents)
       note: Critical for core workflow correctness, but Sonnet 4.5 can handle most
         scenarios
   description: 'Establishes THE DEFAULT WORKING MECHANISM at the core of CORTEX operations.
@@ -782,9 +142,13 @@ phase_2_orchestration_core:
     Without Foundation + STS, orchestration cannot reliably operate.
 
     '
-  critical_path: "This is THE CORE WORKFLOW:\nRequest \u2192 GovernanceMerger \u2192\
-    \ MasterOrchestrator \u2192 TodoManager \u2192 Execute\nAll other orchestrators\
-    \ are features that plug into this pipeline.\n"
+  critical_path: 'This is THE CORE WORKFLOW:
+
+    Request → GovernanceMerger → MasterOrchestrator → TodoManager → Execute
+
+    All other orchestrators are features that plug into this pipeline.
+
+    '
   components:
     master_orchestrator:
       name: MasterOrchestrator (Central Controller)
@@ -854,7 +218,7 @@ phase_2_orchestration_core:
       duration: 8 days
       owner: Development Team
       capabilities:
-      - "RED\u2192GREEN\u2192REFACTOR workflow"
+      - RED→GREEN→REFACTOR workflow
       - CORE-019 enforcement (no direct coding)
       - Auto-generate tests from acceptance criteria
       - Evidence Bundle with test results
@@ -907,9 +271,9 @@ phase_2_orchestration_core:
       rationale: Replace 2046-line response-templates-v4.yaml (CORE-002 violation)
       capabilities:
       - 'Layer 1: Core blocks (tier0/response-blocks.yaml, 50 lines)'
-      - "Layer 2: Category templates (5 files \xD7 50 lines = 250 lines)"
+      - 'Layer 2: Category templates (5 files × 50 lines = 250 lines)'
       - 'Layer 3: Orchestrator overrides (15 lines per manifest)'
-      - "86% reduction: 2046 lines \u2192 <300 lines"
+      - '86% reduction: 2046 lines → <300 lines'
       - Backwards compatibility during migration
       - Multi-category inheritance support
       phases:
@@ -1013,8 +377,7 @@ phase_2_orchestration_core:
     - First Evidence Bundle generated (proves system works)
     gate_validation:
       test_coverage: '>=80% across all core components'
-      integration: "MasterOrchestrator \u2192 TodoManager \u2192 TDD-Master pipeline\
-        \ tested"
+      integration: MasterOrchestrator → TodoManager → TDD-Master pipeline tested
       sts_validation: All 100 golden corpus intents route correctly
     blocker_prevention:
     - No Phase 3 work starts until core workflow proven
@@ -1032,21 +395,28 @@ phase_3_feature_orchestrators:
     cost_efficiency: 1x (baseline)
     recommendation: Continue with Sonnet 4.5 - snowball effect makes implementation
       easier
-    rationale: "Feature orchestrators are simpler due to snowball effect:\n\u2705\
-      \ Reuse foundation infrastructure (already built)\n\u2705 Follow established\
-      \ patterns from core workflow\n\u2705 Standard CRUD operations for ADO, cleanup,\
-      \ investigation\n\u2705 Good for incremental feature implementation\n"
+    rationale: 'Feature orchestrators are simpler due to snowball effect:
+
+      ✅ Reuse foundation infrastructure (already built)
+
+      ✅ Follow established patterns from core workflow
+
+      ✅ Standard CRUD operations for ADO, cleanup, investigation
+
+      ✅ Good for incremental feature implementation
+
+      '
     ideal_for: Phase 3 (Feature Orchestrators), leveraging established infrastructure
     optional_alternative:
       model: GPT-5 or Claude Haiku 4.5
       usage: 0-30% of operations (evaluate performance)
       cost: 'GPT-5: 1x | Haiku: 0.33x'
       when_to_consider:
-      - "\u26A1 Bulk cleanup operations (Vacuum processing 50+ files)"
-      - "\U0001F4DD Evidence bundle generation for completed orchestrators"
-      - "\u2705 Simple validation checks (folder structure enforcement)"
-      - "\U0001F4CB Documentation generation (updating AC-INDEX.yaml)"
-      - "\U0001F504 Todo management (parsing orchestrator outputs)"
+      - ⚡ Bulk cleanup operations (Vacuum processing 50+ files)
+      - 📝 Evidence bundle generation for completed orchestrators
+      - ✅ Simple validation checks (folder structure enforcement)
+      - 📋 Documentation generation (updating AC-INDEX.yaml)
+      - 🔄 Todo management (parsing orchestrator outputs)
       evaluation_note: Test GPT-5 or Haiku for bulk operations; continue with Sonnet
         if quality issues arise
       avoid_for: TDD-Master execution, governance merger logic, investigation orchestration
@@ -1269,352 +639,6 @@ phase_3_feature_orchestrators:
     gate_validation:
       test_coverage: '>=80% per orchestrator'
       integration: Each orchestrator uses core workflow
-archived_phase_4_intelligence:
-  name: Phase 4 - Intelligence Layer (ARCHIVED - Not Yet Implemented)
-  original_plan: AI-native features after Phase 3 Feature Orchestrators
-  reality: Deferred to future phases - not required for CORTEX 6.0 core
-  duration: 2 weeks
-  start_date: '2026-02-24'
-  end_date: '2026-03-07'
-  status: DEFERRED
-  priority: HISTORICAL_REFERENCE
-  recommended_llm:
-    primary: Claude Sonnet 4.5 (RECOMMENDED)
-    usage: 60-100% of operations
-    cost_efficiency: 1x (baseline)
-    recommendation: Sonnet 4.5 handles most intelligence work; upgrade to Opus for
-      critical architecture
-    rationale: "Sonnet 4.5 capabilities sufficient for intelligence implementation:\n\
-      \u2705 Test generation for intelligence features\n\u2705 Integration with existing\
-      \ orchestrators\n\u2705 Evidence bundle generation\n\u2705 Documentation and\
-      \ API design\n"
-    ideal_for: Phase 4 (Intelligence Layer) implementation after architecture decided
-    optional_upgrade:
-      model: Claude Opus 4.5
-      usage: 0-40% of operations (for complex reasoning)
-      cost: 3x - strategic investment
-      when_to_consider:
-      - "\U0001F9E0 Architectural decisions requiring deep analysis (e.g., Knowledge\
-        \ Graph design)"
-      - "\U0001F3AF LLM Intent Classifier training - requires nuanced semantic understanding"
-      - "\U0001F4CA Knowledge Practices pattern extraction from audit logs"
-      - "\U0001F50D Vision API integration architectural decisions"
-      - "\U0001F4C8 Learning algorithms for operational history analysis"
-      strategic_note: 'This is the ONLY phase where Opus may be beneficial for design.
-
-        Intelligence architecture impacts system behavior long-term.
-
-        However, Sonnet 4.5 can handle implementation after design decisions made.
-
-        '
-    avoid_alternatives: true
-    avoid_reason: Intelligence features require strong reasoning; GPT/Haiku insufficient
-      for AI pattern work
-  description: 'AI-native features that enhance orchestration with intelligence.
-
-    Leverages all previous components: audit history, execution patterns,
-
-    governance rules, and orchestrator behaviors.
-
-    '
-  why_fourth: 'Intelligence requires operational history:
-
-    - LLM Intent Classifier needs routing patterns (from Phase 2)
-
-    - Knowledge Practices needs audit logs (from Phase 1)
-
-    - Vision API needs working orchestrators (from Phase 3)
-
-    Cannot build intelligence without data to learn from.
-
-    '
-  components:
-    llm_intent_classifier:
-      name: LLM Intent Classifier
-      ac_ids:
-      - AC-ROUTE-003
-      priority: MEDIUM
-      duration: 5 days
-      owner: AI Team
-      capabilities:
-      - Fuzzy intent matching
-      - Fallback for unknown patterns
-      - Learning from routing history
-      dependencies:
-      - AC-ROUTE-001
-      - AC-AUDIT-001
-    knowledge_practices:
-      name: Tier 3 Knowledge Practices
-      ac_ids:
-      - AC-KNOW-001
-      - AC-KNOW-002
-      - AC-KNOW-003
-      priority: LOW
-      duration: 4 days
-      owner: Learning Team
-      capabilities:
-      - Pattern extraction from audit logs
-      - Best practice suggestions
-      - Learned optimization rules
-      dependencies:
-      - AC-AUDIT-001
-      - AC-GOV-001
-    vision_api:
-      name: Vision API Integration
-      ac_ids:
-      - AC-VISION-001
-      priority: LOW
-      duration: 3 days
-      owner: AI Team
-      capabilities:
-      - Screenshot analysis
-      - UI understanding
-      - Visual debugging
-      dependencies:
-      - AC-ORCH-001
-  phase_4_exit_criteria:
-    must_complete:
-    - LLM Intent Classifier operational
-    - Knowledge Practices extracting patterns
-    - Vision API integrated
-    gate_validation:
-      test_coverage: '>=70% (AI components harder to test)'
-      integration: Intelligence features enhance orchestration
-archived_phase_4_5_integration_tests:
-  name: Phase 4.5 - Orchestrator Integration & Audit Validation (ARCHIVED - Partial)
-  original_plan: Comprehensive end-to-end testing after Phase 4 Intelligence
-  reality: Evidence validation delivered in Phase 9, full suite deferred
-  duration: 2 weeks
-  start_date: '2026-03-10'
-  end_date: '2026-03-21'
-  status: PARTIALLY_DELIVERED_IN_PHASE_9
-  priority: HISTORICAL_REFERENCE
-  recommended_llm:
-    primary: Claude Sonnet 4.5 (RECOMMENDED)
-    usage: 80-100% of operations
-    cost_efficiency: 1x (baseline)
-    recommendation: Sonnet 4.5 handles all integration test development
-    rationale: "Integration testing requires:\n\u2705 Complex test orchestration (multi-component\
-      \ scenarios)\n\u2705 Audit log analysis and trace validation\n\u2705 Evidence\
-      \ bundle generation and validation\n\u2705 Error scenario simulation\n\u2705\
-      \ End-to-end workflow verification\n"
-    ideal_for: Phase 4.5 (Integration Test Suite), comprehensive validation
-  description: "Comprehensive end-to-end testing framework validating all orchestrators\
-    \ work\ntogether correctly. Tests focus on:\n\n1. Cross-component integration\
-    \ scenarios (Phase 1\u21924 orchestrators)\n2. Audit trail completeness and traceability\n\
-    3. Evidence bundle generation and validation\n4. State management under concurrent\
-    \ operations\n5. Governance enforcement across all components\n6. Failure recovery\
-    \ and rollback mechanisms\n7. Performance and load scenarios\n\nThis phase proves\
-    \ system correctness by validating audit logs contain\ncomplete provenance for\
-    \ all operations.\n"
-  why_after_phase_4: 'Integration tests require:
-
-    - Phase 1 foundation infrastructure (audit, state, governance)
-
-    - Phase 2 core workflow (MasterOrchestrator, TodoManager)
-
-    - Phase 3 feature orchestrators (ADO, Vacuum, Investigation, etc.)
-
-    - Phase 4 intelligence features (routing, knowledge practices)
-
-
-    Cannot test integration without all components. Phase 4.5 validates
-
-    the complete system working together end-to-end.
-
-    '
-  components:
-    end_to_end_workflows:
-      name: End-to-End Orchestrator Workflows
-      ac_ids:
-      - AC-INTEG-001
-      - AC-INTEG-002
-      - AC-INTEG-003
-      priority: CRITICAL
-      duration: 4 days
-      owner: QA Team
-      capabilities:
-      - "Complete request lifecycle (clarification \u2192 governance \u2192 execution\
-        \ \u2192 audit)"
-      - "Multi-phase workflows (Phase 1\u21924 component interaction)"
-      - Orchestrator chaining (one orchestrator calls another)
-      - Error propagation and recovery
-      dependencies:
-      - AC-ORCH-001
-      - AC-AUDIT-001
-      - AC-EVIDENCE-001
-      evidence_bundle:
-        test_coverage: '>=85%'
-        scenarios_tested: 20+ realistic workflows
-        orchestrators_validated: All 8 orchestrators (Audit, Governance, State, Lifecycle,
-          Evidence, Security, Master, Todo)
-    audit_trace_validation:
-      name: Audit Trail Completeness & Traceability
-      ac_ids:
-      - AC-INTEG-004
-      - AC-INTEG-005
-      - AC-INTEG-006
-      priority: CRITICAL
-      duration: 4 days
-      owner: QA Team
-      capabilities:
-      - Verify every operation logged (100% audit completeness)
-      - Validate correlation IDs across operation chains
-      - Trace causality (parent-child operation relationships)
-      - Hash chain integrity verification
-      - Tamper detection via event_hash validation
-      dependencies:
-      - AC-AUDIT-001
-      - AC-AUDIT-007
-      evidence_bundle:
-        test_coverage: '>=85%'
-        audit_scenarios: Completeness, correlation, causality, hash integrity
-        traces_validated: 50+ operation chains with full provenance
-    evidence_bundle_validation:
-      name: Evidence Bundle Generation & Validation Gates
-      ac_ids:
-      - AC-INTEG-007
-      - AC-INTEG-008
-      priority: CRITICAL
-      duration: 3 days
-      owner: QA Team
-      capabilities:
-      - Evidence bundle generation for all AC-IDs
-      - 3-gate validation (test coverage >=80%, audit 100%, governance 100%)
-      - Evidence completeness verification
-      - Cross-orchestrator evidence chain validation
-      - Performance validation (<2s bundle generation)
-      dependencies:
-      - AC-EVIDENCE-001
-      - AC-EVIDENCE-002
-      - AC-EVIDENCE-003
-      evidence_bundle:
-        test_coverage: '>=85%'
-        bundles_generated: 50+ bundles with full validation
-        gates_enforced: All 3 gates validated, bundle rejection tested
-    state_management_resilience:
-      name: State Management Under Concurrency & Failure
-      ac_ids:
-      - AC-INTEG-009
-      priority: HIGH
-      duration: 3 days
-      owner: QA Team
-      capabilities:
-      - Concurrent orchestrator state updates (10+ simultaneous operations)
-      - State corruption recovery (power failure scenarios)
-      - Atomic transaction validation
-      - Rollback mechanism testing
-      - File locking edge cases (race conditions)
-      dependencies:
-      - AC-STATE-001
-      - AC-STATE-002
-      - AC-STATE-003
-      evidence_bundle:
-        test_coverage: '>=80%'
-        concurrency_scenarios: 10+ simultaneous writers
-        failure_scenarios: 15+ failure modes tested
-    governance_enforcement_integration:
-      name: Governance Enforcement Across All Phases
-      ac_ids:
-      - AC-INTEG-010
-      priority: HIGH
-      duration: 3 days
-      owner: QA Team
-      capabilities:
-      - SKULL rule enforcement (CORE-001 through CORE-019)
-      - "4-tier governance merger validation (Tier 0\u21923 precedence)"
-      - Rule violation detection and blocking
-      - Governance bypass prevention
-      - Compliance audit trail
-      dependencies:
-      - AC-GOV-001
-      - AC-GOV-002
-      - AC-GOV-003
-      - AC-GOV-004
-      - AC-GOV-005
-      evidence_bundle:
-        test_coverage: '>=85%'
-        rules_enforced: All 19 SKULL rules tested
-        violations_caught: 30+ violation scenarios
-    performance_and_load:
-      name: Performance & Load Testing
-      ac_ids:
-      - AC-INTEG-011
-      priority: MEDIUM
-      duration: 2 days
-      owner: Performance Team
-      capabilities:
-      - Audit logging latency (<5ms per operation)
-      - Governance merge performance (<100ms)
-      - Hash chain verification (<10ms per 100 events)
-      - Concurrent operation throughput (100+ ops/sec)
-      - Memory stability under sustained load (1000+ operations)
-      dependencies:
-      - AC-AUDIT-001
-      - AC-GOV-001
-      - AC-STATE-001
-      evidence_bundle:
-        test_coverage: '>=80%'
-        performance_metrics: Latency, throughput, memory, CPU
-        load_scenarios: 5+ load profiles (light, medium, heavy, sustained, spike)
-    regression_and_compatibility:
-      name: Regression Testing & Version Compatibility
-      ac_ids:
-      - AC-INTEG-012
-      priority: HIGH
-      duration: 2 days
-      owner: QA Team
-      capabilities:
-      - All prior phase functionality still working
-      - No degradation in performance metrics
-      - Backwards compatibility with previous AC-ID versions
-      - Orchestrator API contract validation
-      - Database schema stability
-      dependencies:
-      - AC-STATE-001
-      - AC-ORCH-001
-      - AC-AUDIT-001
-      evidence_bundle:
-        test_coverage: '>=80%'
-        regression_scenarios: 25+ regression tests
-        version_compatibility: Tested across phases
-  phase_4_5_exit_criteria:
-    must_complete:
-    - All 12 AC-IDs implemented (AC-INTEG-001 through AC-INTEG-012)
-    - End-to-end workflows tested (20+ scenarios passing)
-    - Audit trail 100% complete for all operations
-    - Evidence bundles generated for all AC-IDs
-    - Zero test failures in integration suite
-    - Performance targets met (<5ms audit, <100ms governance)
-    - All governance rules enforced (19/19 SKULL rules)
-    - Concurrent operations validated (10+ simultaneous)
-    - State management resilience proven
-    - Regression suite passing (100% backwards compatibility)
-    gate_validation:
-      test_coverage: '>=85% across all integration scenarios'
-      audit_completeness: 100% - all operations traced
-      governance_compliance: 100% - all rules enforced
-      performance: All targets met (audit <5ms, governance <100ms, hash <10ms)
-      evidence_bundles: All 12 AC-INTEG-* have complete evidence bundles
-      system_correctness: End-to-end audit logs prove system works correctly
-    blocker_prevention:
-    - Integration tests serve as final validation before production release
-    - Audit logs are primary proof of correctness
-    - No Phase 5+ work until integration suite at 100%
-    - All orchestrators must have full audit trail in passing tests
-  success_criteria:
-    description: System correctness proven via audit trail completeness
-    criteria:
-    - 100% audit completeness across 50+ operation chains
-    - Zero untraced operations
-    - All correlation IDs properly linked
-    - Hash chain integrity validated
-    - Evidence bundles sufficient proof of implementation
-    - Performance meets SLA targets
-    - Governance never bypassed
-    - Concurrent operations safe (no corruption, no deadlocks)
-    - Failure recovery tested and working
-    - Backwards compatibility maintained
 phase_5_cortex_cleanup_decommission:
   name: CORTEX Cleanup & Decommission
   duration: 2 weeks
@@ -1754,10 +778,10 @@ llm_cost_strategy:
     '
   switching_guidance:
     stay_with_sonnet: Recommended for 90-100% of operations - best balance for CORTEX
-    when_to_upgrade_opus: "\U0001F9E0 Complex architectural decisions, \U0001F50D\
-      \ subtle technical debt detection, \U0001F4CA algorithm optimization"
-    when_to_evaluate_alternatives: "\u26A1 Bulk operations (Phase 3), \U0001F4DD documentation\
-      \ generation, \u2705 simple validation"
+    when_to_upgrade_opus: 🧠 Complex architectural decisions, 🔍 subtle technical debt
+      detection, 📊 algorithm optimization
+    when_to_evaluate_alternatives: ⚡ Bulk operations (Phase 3), 📝 documentation generation,
+      ✅ simple validation
   model_comparison:
     claude_sonnet_4_5:
       cost: 1x (baseline)
@@ -1921,3 +945,1175 @@ governance_infrastructure:
     phase_2_gate_status: UNLOCKED
     last_updated: '2026-01-12T13:53:45.569483'
     completion_date: '2026-01-12T13:53:45.569484'
+implementation_order:
+  note: ACTUAL IMPLEMENTATION ORDER - Phases executed organically, not sequentially
+  strategy: Organic evolution with Just-In-Time (JIT) infrastructure delivery
+  evolution_model: "CORTEX 6.0 evolved organically based on immediate needs.\n   \
+    \ \n    EXECUTION TIMELINE:\n    - Phase 2: Orchestration Core (COMPLETED - 13\
+    \ AC-IDs)\n    - Phase 3: Feature Orchestrators (COMPLETED - 0 AC-IDs tracked)\
+    \ \n    - Phase 5: Legacy Migration & Decommission (COMPLETED - 28 AC-IDs)\n \
+    \   - Phase 6: Security & Routing Foundation (COMPLETED - 13 AC-IDs)\n    - Phase\
+    \ 7: GitHub Copilot Todo Bridge (COMPLETED - 12 AC-IDs)\n    - Phase 8: Staged\
+    \ Rollout System (COMPLETED - 4 AC-IDs)\n    - Phase 9: Infrastructure Maturity\
+    \ & Quality Gates (COMPLETED - 29 AC-IDs)\n    - Phase 10: Template Migration\
+    \ & Enhancement (IN PROGRESS - 7 AC-IDs)\n    - Phase 11: CORTEX LENS & Onboarding\
+    \ (PLANNED - 22 AC-IDs)\n    \n    Foundation components were delivered JIT, not\
+    \ upfront."
+  execution_timeline:
+  - phase: 2
+    name: Orchestration Core
+    status: COMPLETED
+    weeks: 2
+    ac_ids: 13
+  - phase: 3
+    name: Feature Orchestrators
+    status: COMPLETED
+    weeks: 2
+    ac_ids: 0
+  - phase: 5
+    name: Legacy Migration & Decommission
+    status: COMPLETED
+    weeks: 2
+    ac_ids: 28
+  - phase: 6
+    name: Security & Routing Foundation
+    status: COMPLETED
+    weeks: 2
+    ac_ids: 13
+  - phase: 7
+    name: GitHub Copilot Todo Bridge
+    status: COMPLETED
+    weeks: 2
+    ac_ids: 12
+  - phase: 8
+    name: Staged Rollout System
+    status: COMPLETED
+    weeks: 2
+    ac_ids: 4
+  - phase: 9
+    name: Infrastructure Maturity & Quality Gates
+    status: COMPLETED
+    weeks: 3
+    ac_ids: 29
+  - phase: 10
+    name: Template Migration & Enhancement
+    status: IN_PROGRESS
+    weeks: 3
+    ac_ids: 7
+  - phase: 11
+    name: CORTEX LENS & Onboarding (Future)
+    status: PLANNED
+    weeks: 3
+    ac_ids: 22
+phase_6_security_routing:
+  name: Phase 6 - Security & Routing Foundation
+  duration: 2 weeks
+  status: completed
+  started: '2026-01-11'
+  completed: '2026-01-12'
+  priority: CRITICAL
+  description: Action Security Layer + Deterministic Routing Engine
+  components:
+    security_layer:
+      ac_ids:
+      - AC-SECURITY-001
+      - AC-SECURITY-002
+      - AC-SECURITY-003
+      - AC-SECURITY-004
+      - AC-SECURITY-005
+      - AC-SECURITY-006
+      - AC-SECURITY-007
+      - AC-SECURITY-008
+      status: COMPLETED
+      tests_passing: 79/79 (100%)
+    routing_engine:
+      ac_ids:
+      - AC-ROUTE-001
+      - AC-ROUTE-002
+      - AC-ROUTE-003
+      - AC-ROUTE-004
+      - AC-ROUTE-005
+      status: COMPLETED
+      tests_passing: 79/79 (100%)
+phase_7_copilot_bridge:
+  name: Phase 7 - GitHub Copilot Todo Bridge Integration
+  duration: 2 weeks
+  status: completed
+  started: '2026-01-12'
+  completed: '2026-01-12'
+  priority: HIGH
+  description: Todo Bridge integration with VS Code GitHub Copilot
+  components:
+    copilot_bridge:
+      ac_ids:
+      - AC-COPILOT-001
+      - AC-COPILOT-002
+      - AC-COPILOT-003
+      - AC-COPILOT-004
+      - AC-COPILOT-005
+      - AC-COPILOT-006
+      - AC-COPILOT-007
+      - AC-COPILOT-008
+      - AC-COPILOT-009
+      - AC-COPILOT-010
+      - AC-COPILOT-011
+      - AC-COPILOT-012
+      status: COMPLETED
+      tests_passing: 29/29 (100%)
+phase_8_staged_rollout:
+  name: Phase 8 - Staged Rollout System
+  duration: 2 weeks
+  status: completed
+  started: '2026-01-12'
+  completed: '2026-01-12'
+  priority: HIGH
+  description: Progressive rollout with approval gates
+  components:
+    rollout_system:
+      ac_ids:
+      - AC-ROLLOUT-001
+      - AC-ROLLOUT-002
+      - AC-ROLLOUT-003
+      - AC-ROLLOUT-004
+      status: COMPLETED
+      tests_passing: 15/15 (100%)
+phase_9_infrastructure_maturity:
+  name: Phase 9 - Infrastructure Maturity & Quality Gates
+  duration: 3 weeks
+  status: completed
+  started: '2026-01-12'
+  completed: '2026-01-13'
+  priority: CRITICAL
+  description: Hash chain audit, lifecycle, evidence bundles, STS, templates, rollout
+    gates
+  components:
+    audit_hash_chain:
+      ac_ids:
+      - AC-AUDIT-007
+      status: COMPLETED
+    lifecycle:
+      ac_ids:
+      - AC-LIFECYCLE-001
+      - AC-LIFECYCLE-002
+      - AC-LIFECYCLE-003
+      status: COMPLETED
+    evidence_bundles:
+      ac_ids:
+      - AC-EVIDENCE-001
+      - AC-EVIDENCE-002
+      - AC-EVIDENCE-003
+      status: PARTIAL
+    sts:
+      ac_ids:
+      - AC-STS-001
+      - AC-STS-002
+      - AC-STS-003
+      status: COMPLETED
+    rollout_gates:
+      ac_ids:
+      - AC-ROLLOUT-SIMPLE-001
+      - AC-ROLLOUT-SIMPLE-002
+      - AC-ROLLOUT-SIMPLE-003
+      status: COMPLETED
+    templates:
+      ac_ids:
+      - AC-TEMPLATE-001
+      - AC-TEMPLATE-002
+      - AC-TEMPLATE-003
+      - AC-TEMPLATE-004
+      status: COMPLETED
+  tests_passing: 114/114 (100%)
+phase_10_template_migration:
+  name: Phase 10 - Template Migration & Enhancement
+  duration: 3 weeks
+  status: in_progress
+  started: '2026-01-13'
+  priority: HIGH
+  description: Migrate orchestrators to 3-layer templates, CORE-026 enforcement
+  components:
+    governance_enforcement:
+      ac_ids:
+      - AC-TEMPLATE-005
+      status: COMPLETED
+      tests_passing: 17/17 (100%)
+    orchestrator_migration:
+      ac_ids:
+      - AC-TEMPLATE-006
+      - AC-TEMPLATE-007
+      status: DEFERRED
+      note: Requires cross-cutting refactoring (10+ orchestrators)
+    validation_cleanup:
+      ac_ids:
+      - AC-TEMPLATE-008
+      status: DEFERRED
+    challenge_system:
+      ac_ids:
+      - AC-CHALLENGE-001
+      - AC-CHALLENGE-002
+      - AC-CHALLENGE-003
+      status: DUPLICATE
+      note: Already implemented via CORE-025
+  completion: 1/7 AC-IDs (14%)
+phase_11_intelligent_discovery:
+  name: Phase 11 - CORTEX LENS & Onboarding (Intelligent Discovery)
+  duration: 3 weeks
+  start_date: '2026-04-01'
+  end_date: '2026-04-21'
+  status: ready_after_phase_5
+  priority: HIGH
+  placement: After Phase 5 (Cleanup & Decommission)
+  rationale: 'CORTEX LENS and Onboarding orchestrators provide intelligent codebase
+
+    discovery and knowledge extraction. Moved to Phase 10 because:
+
+
+    1. Not required for core CORTEX 6.0 operation (Phases 1-5)
+
+    2. Enhances CORTEX with universal code intelligence
+
+    3. Auto-run during project onboarding (discovery on first use)
+
+    4. Expose crawlers/analyzers as MCP tools for all orchestrators
+
+    5. Feed the CORTEX brain with company and domain knowledge
+
+
+    This is NOT a UI dashboard. It''s a universal reverse-engineering and
+
+    knowledge-discovery system that makes CORTEX smarter with each use.
+
+    '
+  recommended_llm:
+    primary: Claude Sonnet 4.5 (RECOMMENDED)
+    usage: 85% of operations
+    cost_efficiency: 1x (baseline)
+    recommendation: Optional Opus for AST parser design decisions
+    rationale: 'AST crawlers and code analysis:
+
+      ✅ Excellent for TDD test generation
+
+      ✅ Strong tool integration (MCP exposure)
+
+      ✅ Good for multi-language parser design
+
+      ✅ Handles complex knowledge graph structure
+
+      '
+    optional_upgrade:
+      model: Claude Opus 4.5
+      usage: 10-15% of operations (optional)
+      cost: 3x
+      when_to_consider:
+      - 🧠 Multi-language AST parser architecture
+      - 📊 Knowledge graph schema design
+      - 🔍 Domain learning algorithm design
+  description: 'Build universal code analysis and knowledge discovery system that:
+
+
+    1. CORTEX LENS: Reverse-engineer codebase via AST, crawlers, git history
+
+    2. Onboarding: Guide teams through intelligent project discovery
+
+    3. Knowledge Store: Capture company and domain patterns for reuse
+
+    4. MCP Tools: Expose analyzers so Planning/other orchestrators access findings
+
+    '
+  components:
+    cortex_lens:
+      name: CORTEX LENS - Universal Code Intelligence System
+      ac_ids:
+      - AC-LENS-001
+      - AC-LENS-002
+      - AC-LENS-003
+      - AC-LENS-004
+      - AC-LENS-005
+      - AC-LENS-006
+      priority: CRITICAL
+      duration: 2 weeks
+      owner: Intelligence Team
+      capabilities:
+      - 'AST Analysis: Python, JavaScript/TypeScript, C#, Java, Go, Rust, SQL'
+      - 'Code Crawlers: Architecture, Complexity, Dependencies, Tech Stack'
+      - 'Reverse Engineering: Intent inference, pattern detection, domain extraction'
+      - 'Knowledge Graph: Semantic code representation (nodes, edges, traversal)'
+      - 'Domain Learning: Company practices, naming conventions, patterns'
+      - 'MCP Exposure: All analyzers accessible as tools to other orchestrators'
+      dependencies:
+      - AC-AUDIT-001
+      - AC-EVIDENCE-001
+      - AC-STATE-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        languages_supported: '>=6 (Python, JS/TS, C#, Java, Go, Rust)'
+        performance: <5s AST analysis per 1000 LOC
+        mcp_tools: All 6 analyzers exposed
+        knowledge_storage: Tier 1 & 3 integration tested
+    onboarding_orchestrator:
+      name: Onboarding Orchestrator - Intelligent Project Setup
+      ac_ids:
+      - AC-ONBOARD-001
+      - AC-ONBOARD-002
+      - AC-ONBOARD-003
+      - AC-ONBOARD-004
+      - AC-ONBOARD-005
+      - AC-ONBOARD-006
+      - AC-ONBOARD-007
+      - AC-ONBOARD-008
+      priority: CRITICAL
+      duration: 1.5 weeks
+      owner: UX/Integration Team
+      capabilities:
+      - '10-Phase Discovery: Metadata → Quality → Security → Tech → Architecture →
+        Dashboard'
+      - 'Parallel Crawlers: 6 analyzers run simultaneously'
+      - 'Interactive Setup Wizard: Guided onboarding flow'
+      - 'Dashboard Generation: HTML visualization of findings'
+      - 'Knowledge Persistence: Stores tier1/tier3 knowledge files'
+      - 'Production & Test Modes: Embedded vs standalone operation'
+      - 'Auto-run on Setup: Discovery at project initialization'
+      dependencies:
+      - AC-LENS-001
+      - AC-LENS-002
+      - AC-LENS-003
+      - AC-LENS-004
+      - AC-LENS-005
+      - AC-LENS-006
+      - AC-ORCH-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        output_files: 7 JSON files + HTML dashboard
+        execution_time: <2 minutes for typical project
+        integration: Planning v5, other orchestrators use discovery results
+        auto_run: Auto-executes during CORTEX setup
+  cortex_toolkit:
+    name: CORTEX TOOLKIT - HTML View Generation & Visualization Infrastructure
+    ac_ids:
+    - AC-TOOLKIT-001
+    - AC-TOOLKIT-002
+    - AC-TOOLKIT-003
+    - AC-TOOLKIT-004
+    - AC-TOOLKIT-005
+    - AC-TOOLKIT-006
+    - AC-TOOLKIT-007
+    - AC-TOOLKIT-008
+    priority: HIGH
+    duration: 1.5 weeks
+    owner: Visualization & MCP Team
+    purpose: 'Transform CORTEX LENS outputs and audit logs into interactive static
+      HTML
+
+      dashboards with glassmorphism design, modern tab systems, and D3.js visualizations.
+
+      Expose all generators as MCP tools for Planning v5, Investigation, and other
+
+      orchestrators.
+
+      '
+    capabilities:
+    - 'AC-TOOLKIT-001: Epic Plan Viewer Generator (master-plan + progress as interactive
+      HTML)'
+    - 'AC-TOOLKIT-002: Knowledge Graph Visualizer (YAML → D3.js force-directed graph)'
+    - 'AC-TOOLKIT-003: Architecture Diagram Generator (4-tier brain with glassmorphism)'
+    - 'AC-TOOLKIT-004: Audit Log HTML Exporter (JSONL → searchable timeline viewer)'
+    - 'AC-TOOLKIT-005: Glassmorphism Compliance Engine (validate design standard)'
+    - 'AC-TOOLKIT-006: Modern Tab System (reusable keyboard-accessible tabs)'
+    - 'AC-TOOLKIT-007: Mermaid Diagram Engine (flowcharts, state diagrams in dashboards)'
+    - 'AC-TOOLKIT-008: CORTEX TOOLKIT MCP Server (expose all generators as MCP tools)'
+    dependencies:
+    - AC-LENS-001
+    - AC-LENS-002
+    - AC-LENS-003
+    - AC-LENS-004
+    - AC-ONBOARD-001
+    - AC-ONBOARD-008
+    evidence_bundle:
+      test_coverage: '>=80% for all generators'
+      html_performance: <2s page load time
+      glassmorphism_compliance: 100% compliance with design standard
+      mcp_tools_exposed: All 8 tools callable by other orchestrators
+      design_system: Modern tabs + D3.js + Mermaid integration
+      file_assets: modern-tabs.css (399 lines), modern-tabs.js (200+ lines), html_viewer_generator.py
+        (798 lines)
+  phase_10_exit_criteria:
+    must_complete:
+    - All 6 CORTEX LENS ACs implemented (Universal AST + Crawlers)
+    - All 8 Onboarding ACs implemented (10-phase discovery + dashboard)
+    - All 8 CORTEX TOOLKIT ACs implemented (HTML viewers + MCP exposure)
+    - Zero test failures across all discovery + visualization components
+    - MCP tools registered and accessible to Planning/other orchestrators
+    - Knowledge storage (tier1/tier3) integrated and tested
+    - All 5 interactive dashboards regenerate automatically
+    - End-to-end onboarding flow <2 minutes for typical project
+    - Auto-run on setup validated (discovery on first use)
+    - 100% glassmorphism design compliance across all views
+    gate_validation:
+      test_coverage: '>=80% for all discovery + visualization components'
+      language_support: '>=6 programming languages (CORTEX LENS)'
+      mcp_integration: All 14 tools callable as MCP tools (6 LENS + 8 TOOLKIT)
+      knowledge_persistence: tier1/tier3 files created, queryable, visualized
+      performance: <2 minutes end-to-end for typical project (LENS + Onboarding)
+      html_dashboards: All 5 viewers <500KB, <2s load, WCAG AA compliant
+      visualization_quality: D3.js rendering <1s for 500-node graphs
+    blocker_prevention:
+    - CORTEX 6.0 core (Phases 1-5) complete before starting Phase 10
+    - Crawlers tested independently before integration
+    - Knowledge storage schema validated before scaling
+    - Auto-run capability tested in both production and test modes
+    - Glassmorphism compliance validated by AC-TOOLKIT-005 before go-live
+    - All HTML generators tested on Chrome/Firefox/Safari/Edge
+  renamed_from: Phase 10 (v1.6.0) → Phase 11 (v1.7.1)
+archived_phase_1_foundation:
+  name: Foundation Enhancement
+  duration: 2 weeks
+  start_date: '2026-01-13'
+  end_date: '2026-01-24'
+  status: ARCHIVED_HISTORICAL_REFERENCE
+  started_at: '2026-01-10T17:00:00Z'
+  completion_percentage: 0
+  ac_ids_complete: 0
+  ac_ids_total: 29
+  reality_note: "Phase 1 was originally planned as a sequential foundation (29 AC-IDs).\n\
+    In practice, CORTEX 6.0 evolved organically with components implemented \nacross\
+    \ different phases based on actual needs:\n\n- AC-SECURITY-001 to 008 → Implemented\
+    \ in Phase 6 (✅ Complete)\n- AC-AUDIT, AC-GOV, AC-STATE, AC-LIFECYCLE, AC-EVIDENCE\
+    \ → Partially implemented\n  as needed by other phases, not as a unified \"Foundation\"\
+    \ phase\n\nThe sequential \"Phase 1 Foundation\" concept was replaced by Just-In-Time\n\
+    infrastructure delivery. This master-plan entry remains for historical tracking\n\
+    but does NOT represent actual implementation sequence.\n\nSee progress-tracker.json\
+    \ phases 2-10 for actual implementation timeline.\n"
+  completed_components:
+  - security_layer (AC-SECURITY-001 to 008) ✅ in Phase 6
+  incomplete_as_standalone_phase:
+  - audit_infrastructure (AC-AUDIT-001 to 007)
+  - governance_merger (AC-GOV-001 to 005)
+  - state_manager (AC-STATE-001 to 003)
+  - lifecycle_system (AC-LIFECYCLE-001 to 003)
+  - evidence_bundler (AC-EVIDENCE-001 to 003)
+  last_updated: '2026-01-13T13:00:00Z'
+  priority: HISTORICAL_REFERENCE
+  recommended_llm:
+    primary: Claude Sonnet 4.5 (RECOMMENDED)
+    usage: 90% of operations
+    cost_efficiency: 1x (baseline)
+    recommendation: Optional - users can continue with Sonnet 4.5 for entire phase
+    rationale: 'Best balance for production-grade infrastructure work:
+
+      ✅ Extended context window handles large governance ruleset merging (4-tier hierarchy)
+
+      ✅ Superior code generation for TDD-Master v1 implementation (RED→GREEN→REFACTOR
+      cycles)
+
+      ✅ Excellent at following complex instructions - CORTEX routing protocol, SKULL
+      rules enforcement
+
+      ✅ Tool use expertise - critical for audit logging, governance validation, evidence
+      bundle generation
+
+      ✅ Strong architectural reasoning - needed for challenge protocol and debt detection
+
+      '
+    ideal_for: Phase 1 (Foundation), complex AC-ID validation, multi-step workflows
+    optional_upgrade:
+      model: Claude Opus 4.5
+      usage: 10% of operations (optional)
+      cost: 3x - use sparingly
+      when_to_consider:
+      - 🧠 Architectural decisions requiring deep analysis (e.g., hash chain design,
+        Knowledge Graph design)
+      - 🔍 Critical challenge protocol evaluations - detecting subtle technical debt
+        patterns
+      - 🏗️ Refactoring legacy CORTEX 5.5 components into 6.0 governance model
+      - 📊 Complex query optimization for audit trail analysis across correlation chains
+      note: Not required - Sonnet 4.5 handles 95%+ of foundation work effectively
+  description: 'Build the core infrastructure that EVERY other component depends on.
+
+    All orchestrators log to audit, enforce governance, persist state.
+
+    Without this foundation, nothing else can reliably operate.
+
+    '
+  why_first: 'Every orchestrator needs:
+
+    - Audit Infrastructure: Log all operations (AC-AUDIT-001 to 007)
+
+    - Governance Merger: Enforce rules (AC-GOV-001 to 005)
+
+    - State Manager: Persist progress (AC-STATE-001 to 003)
+
+    - Lifecycle: Track execution states (AC-LIFECYCLE-001 to 003)
+
+    - Evidence: Prove completion (AC-EVIDENCE-001 to 003)
+
+    - Security: Protect operations (AC-SECURITY-001 to 008)
+
+    '
+  components:
+    audit_infrastructure:
+      name: Audit Infrastructure with Hash Chain
+      ac_ids:
+      - AC-AUDIT-001
+      - AC-AUDIT-002
+      - AC-AUDIT-003
+      - AC-AUDIT-004
+      - AC-AUDIT-005
+      - AC-AUDIT-006
+      - AC-AUDIT-007
+      priority: CRITICAL
+      duration: 5 days
+      owner: Infrastructure Team
+      capabilities:
+      - EnhancedAuditLogger with <5ms latency
+      - SQLite backend with WAL mode
+      - AC-ID traceability across correlation chains
+      - Category-based filtering (GOVERNANCE, ORCHESTRATOR, VALIDATION)
+      - 'Retention policies (CRITICAL: 90d, ERROR: 60d, INFO: 30d)'
+      - Hash chain integrity (AC-AUDIT-007)
+      - Tamper detection via event_hash verification
+      dependencies: []
+      evidence_bundle:
+        test_coverage: '>=80%'
+        audit_completeness: 100%
+        performance: <5ms per log entry, <10ms hash chain verification
+    governance_merger:
+      name: 4-Tier Governance Merger
+      ac_ids:
+      - AC-GOV-001
+      - AC-GOV-002
+      - AC-GOV-003
+      - AC-GOV-004
+      - AC-GOV-005
+      priority: CRITICAL
+      duration: 4 days
+      owner: Governance Team
+      capabilities:
+      - Merge Tier 0 (SKULL) + Tier 1 (Business) + Tier 2 (Engineering) + Tier 3 (Learned)
+      - Precedence resolution (Tier 0 wins conflicts)
+      - Rule deduplication and validation
+      - Performance <100ms for full merge
+      - YAML/JSON schema validation
+      dependencies:
+      - AC-AUDIT-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        governance_compliance: 100%
+        performance: <100ms merge time
+    state_manager:
+      name: State Manager with SQLite
+      ac_ids:
+      - AC-STATE-001
+      - AC-STATE-002
+      - AC-STATE-003
+      priority: CRITICAL
+      duration: 3 days
+      owner: Infrastructure Team
+      capabilities:
+      - SQLite backend with WAL mode
+      - Atomic state transitions
+      - Rollback on failure
+      - File locking (fcntl/msvcrt)
+      - Cross-platform compatibility
+      dependencies:
+      - AC-AUDIT-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        concurrency: Handles 10 concurrent writers
+        integrity: Zero data loss on failure
+    lifecycle_system:
+      name: Extended Orchestrator Lifecycle
+      ac_ids:
+      - AC-LIFECYCLE-001
+      - AC-LIFECYCLE-002
+      - AC-LIFECYCLE-003
+      priority: HIGH
+      duration: 4 days
+      owner: Orchestration Team
+      capabilities:
+      - '7-state lifecycle: IDLE → SPEC → IMPLEMENTED → TESTED → VERIFIED → ACTIVE
+        → DEPRECATED'
+      - Entry/exit criteria enforcement
+      - Quarantine mechanism (error rate > 10%)
+      - State transition audit trail
+      dependencies:
+      - AC-AUDIT-001
+      - AC-GOV-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        states_validated: All 7 states + transitions
+        quarantine_tested: Auto-quarantine on violations
+    evidence_bundler:
+      name: Evidence Bundle Generation
+      ac_ids:
+      - AC-EVIDENCE-001
+      - AC-EVIDENCE-002
+      - AC-EVIDENCE-003
+      priority: HIGH
+      duration: 5 days
+      owner: Infrastructure Team
+      capabilities:
+      - '3-file format: manifest.yaml, test_results.json, audit_trace.jsonl'
+      - Auto-generation from pytest + audit logs + AC-INDEX
+      - '3 validation gates: test coverage >=80%, audit 100%, governance 100%'
+      - Evidence Bundle storage in cortex-brain/evidence-bundles/
+      dependencies:
+      - AC-AUDIT-001
+      - AC-TEST-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        gates_validated: All 3 gates enforce quality
+        self_documented: Evidence Bundler has its own Evidence Bundle
+    security_layer:
+      name: Action Security Layer
+      ac_ids:
+      - AC-SECURITY-001
+      - AC-SECURITY-002
+      - AC-SECURITY-003
+      - AC-SECURITY-004
+      - AC-SECURITY-005
+      - AC-SECURITY-006
+      - AC-SECURITY-007
+      - AC-SECURITY-008
+      priority: CRITICAL
+      duration: 5 days
+      owner: Security Team
+      capabilities:
+      - Action classification (SAFE, INSPECT, DESTRUCTIVE)
+      - Approval state machine (PENDING → APPROVED/DENIED/TIMEOUT)
+      - Canonical path resolution (AC-SECURITY-006)
+      - Cross-platform file operations (AC-SECURITY-008)
+      - Argument validation (incremental via TDD)
+      dependencies:
+      - AC-AUDIT-001
+      - AC-GOV-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        approval_tested: All approval flows validated
+        path_safety: Canonical paths prevent directory traversal
+  phase_1_exit_criteria:
+    must_complete:
+    - All 31 AC-IDs implemented (original Foundation)
+    - All 12 hybrid AC-IDs implemented (AUDIT-007, LIFECYCLE-001-003, EVIDENCE-001-003,
+      STS-001-003, ROLLOUT-SIMPLE-001-003)
+    - Zero test failures across all foundation components
+    - Evidence Bundle generated for TodoOrchestrator (proves system works)
+    - 'Performance validated: <5ms audit, <100ms governance merge'
+    - Hash chain integrity verified
+    - Security gates operational
+    gate_validation:
+      test_coverage: '>=80% across all foundation components'
+      audit_completeness: 100% for all operations
+      governance_compliance: 100% (no violations)
+      performance: Meets all latency requirements
+    blocker_prevention:
+    - No Phase 2 work starts until ALL Phase 1 complete
+    - Evidence Bundles prove completion, not just code commit
+    - Integration tests prove components work together
+  note: Original sequential plan - superseded by organic evolution
+archived_phase_1_5_sts_semantic_test_suite:
+  name: Phase 1.5 - STS (Semantic Test Suite)
+  duration: 3 weeks
+  start_date: '2026-01-25'
+  end_date: '2026-02-14'
+  status: ARCHIVED_HISTORICAL_REFERENCE
+  priority: CRITICAL
+  placement: Between Phase 1 & Phase 2
+  rationale: 'STS (Semantic Test Suite) provides the foundation for all test infrastructure
+
+    in CORTEX 6.0. It establishes:
+
+
+    1. Semantic test intent corpus (100 golden test scenarios)
+
+    2. Test generation frameworks for TDD-Master
+
+    3. Evidence validation infrastructure
+
+    4. Test result aggregation and reporting
+
+    5. Integration test harness for orchestrator validation
+
+
+    This MUST complete before Phase 2 (Orchestration Core) because TDD-Master
+
+    and all orchestrators depend on this test infrastructure.
+
+    '
+  recommended_llm:
+    primary: Claude Sonnet 4.5 (RECOMMENDED)
+    usage: 90% of operations
+    cost_efficiency: 1x (baseline)
+    recommendation: Use Sonnet 4.5 for entire phase
+    rationale: 'Test infrastructure and validation:
+
+      ✅ Excellent for test generation patterns
+
+      ✅ Strong at validation logic
+
+      ✅ Good for test harness design
+
+      ✅ Handles complex assertion patterns
+
+      '
+  description: 'Build comprehensive test infrastructure that all orchestrators depend
+    on:
+
+
+    1. Semantic test corpus (100 golden scenarios)
+
+    2. Test generation frameworks
+
+    3. Evidence validation
+
+    4. Integration test harness
+
+    '
+  components:
+    semantic_test_corpus:
+      name: STS Golden Corpus
+      ac_ids:
+      - AC-STS-001
+      - AC-STS-002
+      - AC-STS-003
+      priority: CRITICAL
+      duration: 1 week
+      owner: Testing Team
+      capabilities:
+      - 100 golden test intents covering all orchestrator patterns
+      - Test intent classifier (simple, rollout, challenge)
+      - Expected outcome definitions
+      - Test data generation
+      dependencies:
+      - AC-AUDIT-001
+      - AC-STATE-001
+      evidence_bundle:
+        test_coverage: '>=95%'
+        corpus_size: 100 test intents
+        classification_accuracy: '>=95%'
+    test_generation_framework:
+      name: Test Generation Infrastructure
+      ac_ids:
+      - AC-TESTGEN-001
+      - AC-TESTGEN-002
+      - AC-TESTGEN-003
+      priority: CRITICAL
+      duration: 1 week
+      owner: Testing Team
+      capabilities:
+      - Auto-generate unit tests from AC criteria
+      - Integration test scaffolding
+      - Mock generation for external dependencies
+      - Test fixture management
+      dependencies:
+      - AC-STS-001
+      evidence_bundle:
+        test_coverage: '>=90%'
+        generation_accuracy: '>=85%'
+    evidence_validation:
+      name: Evidence Validation Infrastructure
+      ac_ids:
+      - AC-EVIDENCE-VAL-001
+      - AC-EVIDENCE-VAL-002
+      priority: CRITICAL
+      duration: 1 week
+      owner: Testing Team
+      capabilities:
+      - Validate evidence bundles against AC criteria
+      - Audit trail verification
+      - Test result aggregation
+      - Coverage reporting
+      dependencies:
+      - AC-EVIDENCE-001
+      - AC-AUDIT-001
+      evidence_bundle:
+        test_coverage: '>=90%'
+        validation_accuracy: '>=95%'
+  phase_1_5_exit_criteria:
+    must_complete:
+    - All 3 STS ACs implemented (Golden corpus)
+    - All 3 TESTGEN ACs implemented (Test generation)
+    - All 2 EVIDENCE-VAL ACs implemented (Validation)
+    - Zero test failures across all test infrastructure
+    - 100 golden test intents documented and validated
+    - Test generation accuracy >=85%
+    gate_validation:
+      test_coverage: '>=90% for all test infrastructure'
+      corpus_completeness: 100 golden test intents
+      generation_validated: Auto-generated tests pass for 85%+ of ACs
+      evidence_validation: All evidence bundles validate correctly
+  note: Original sequential plan - superseded by organic evolution
+archived_phase_4_intelligence:
+  name: Intelligence Layer
+  duration: 2 weeks
+  start_date: '2026-02-24'
+  end_date: '2026-03-07'
+  status: ARCHIVED_HISTORICAL_REFERENCE
+  priority: MEDIUM
+  recommended_llm:
+    primary: Claude Sonnet 4.5 (RECOMMENDED)
+    usage: 60-100% of operations
+    cost_efficiency: 1x (baseline)
+    recommendation: Sonnet 4.5 handles most intelligence work; upgrade to Opus for
+      critical architecture
+    rationale: 'Sonnet 4.5 capabilities sufficient for intelligence implementation:
+
+      ✅ Test generation for intelligence features
+
+      ✅ Integration with existing orchestrators
+
+      ✅ Evidence bundle generation
+
+      ✅ Documentation and API design
+
+      '
+    ideal_for: Phase 4 (Intelligence Layer) implementation after architecture decided
+    optional_upgrade:
+      model: Claude Opus 4.5
+      usage: 0-40% of operations (for complex reasoning)
+      cost: 3x - strategic investment
+      when_to_consider:
+      - 🧠 Architectural decisions requiring deep analysis (e.g., Knowledge Graph design)
+      - 🎯 LLM Intent Classifier training - requires nuanced semantic understanding
+      - 📊 Knowledge Practices pattern extraction from audit logs
+      - 🔍 Vision API integration architectural decisions
+      - 📈 Learning algorithms for operational history analysis
+      strategic_note: 'This is the ONLY phase where Opus may be beneficial for design.
+
+        Intelligence architecture impacts system behavior long-term.
+
+        However, Sonnet 4.5 can handle implementation after design decisions made.
+
+        '
+    avoid_alternatives: true
+    avoid_reason: Intelligence features require strong reasoning; GPT/Haiku insufficient
+      for AI pattern work
+  description: 'AI-native features that enhance orchestration with intelligence.
+
+    Leverages all previous components: audit history, execution patterns,
+
+    governance rules, and orchestrator behaviors.
+
+    '
+  why_fourth: 'Intelligence requires operational history:
+
+    - LLM Intent Classifier needs routing patterns (from Phase 2)
+
+    - Knowledge Practices needs audit logs (from Phase 1)
+
+    - Vision API needs working orchestrators (from Phase 3)
+
+    Cannot build intelligence without data to learn from.
+
+    '
+  components:
+    llm_intent_classifier:
+      name: LLM Intent Classifier
+      ac_ids:
+      - AC-ROUTE-003
+      priority: MEDIUM
+      duration: 5 days
+      owner: AI Team
+      capabilities:
+      - Fuzzy intent matching
+      - Fallback for unknown patterns
+      - Learning from routing history
+      dependencies:
+      - AC-ROUTE-001
+      - AC-AUDIT-001
+    knowledge_practices:
+      name: Tier 3 Knowledge Practices
+      ac_ids:
+      - AC-KNOW-001
+      - AC-KNOW-002
+      - AC-KNOW-003
+      priority: LOW
+      duration: 4 days
+      owner: Learning Team
+      capabilities:
+      - Pattern extraction from audit logs
+      - Best practice suggestions
+      - Learned optimization rules
+      dependencies:
+      - AC-AUDIT-001
+      - AC-GOV-001
+    vision_api:
+      name: Vision API Integration
+      ac_ids:
+      - AC-VISION-001
+      priority: LOW
+      duration: 3 days
+      owner: AI Team
+      capabilities:
+      - Screenshot analysis
+      - UI understanding
+      - Visual debugging
+      dependencies:
+      - AC-ORCH-001
+  phase_4_exit_criteria:
+    must_complete:
+    - LLM Intent Classifier operational
+    - Knowledge Practices extracting patterns
+    - Vision API integrated
+    gate_validation:
+      test_coverage: '>=70% (AI components harder to test)'
+      integration: Intelligence features enhance orchestration
+  note: Original sequential plan - superseded by organic evolution
+archived_phase_4_5_integration_tests:
+  name: Orchestrator Integration & Audit Validation Suite
+  duration: 2 weeks
+  start_date: '2026-03-10'
+  end_date: '2026-03-21'
+  status: ARCHIVED_HISTORICAL_REFERENCE
+  priority: CRITICAL
+  recommended_llm:
+    primary: Claude Sonnet 4.5 (RECOMMENDED)
+    usage: 80-100% of operations
+    cost_efficiency: 1x (baseline)
+    recommendation: Sonnet 4.5 handles all integration test development
+    rationale: 'Integration testing requires:
+
+      ✅ Complex test orchestration (multi-component scenarios)
+
+      ✅ Audit log analysis and trace validation
+
+      ✅ Evidence bundle generation and validation
+
+      ✅ Error scenario simulation
+
+      ✅ End-to-end workflow verification
+
+      '
+    ideal_for: Phase 4.5 (Integration Test Suite), comprehensive validation
+  description: 'Comprehensive end-to-end testing framework validating all orchestrators
+    work
+
+    together correctly. Tests focus on:
+
+
+    1. Cross-component integration scenarios (Phase 1→4 orchestrators)
+
+    2. Audit trail completeness and traceability
+
+    3. Evidence bundle generation and validation
+
+    4. State management under concurrent operations
+
+    5. Governance enforcement across all components
+
+    6. Failure recovery and rollback mechanisms
+
+    7. Performance and load scenarios
+
+
+    This phase proves system correctness by validating audit logs contain
+
+    complete provenance for all operations.
+
+    '
+  why_after_phase_4: 'Integration tests require:
+
+    - Phase 1 foundation infrastructure (audit, state, governance)
+
+    - Phase 2 core workflow (MasterOrchestrator, TodoManager)
+
+    - Phase 3 feature orchestrators (ADO, Vacuum, Investigation, etc.)
+
+    - Phase 4 intelligence features (routing, knowledge practices)
+
+
+    Cannot test integration without all components. Phase 4.5 validates
+
+    the complete system working together end-to-end.
+
+    '
+  components:
+    end_to_end_workflows:
+      name: End-to-End Orchestrator Workflows
+      ac_ids:
+      - AC-INTEG-001
+      - AC-INTEG-002
+      - AC-INTEG-003
+      priority: CRITICAL
+      duration: 4 days
+      owner: QA Team
+      capabilities:
+      - Complete request lifecycle (clarification → governance → execution → audit)
+      - Multi-phase workflows (Phase 1→4 component interaction)
+      - Orchestrator chaining (one orchestrator calls another)
+      - Error propagation and recovery
+      dependencies:
+      - AC-ORCH-001
+      - AC-AUDIT-001
+      - AC-EVIDENCE-001
+      evidence_bundle:
+        test_coverage: '>=85%'
+        scenarios_tested: 20+ realistic workflows
+        orchestrators_validated: All 8 orchestrators (Audit, Governance, State, Lifecycle,
+          Evidence, Security, Master, Todo)
+    audit_trace_validation:
+      name: Audit Trail Completeness & Traceability
+      ac_ids:
+      - AC-INTEG-004
+      - AC-INTEG-005
+      - AC-INTEG-006
+      priority: CRITICAL
+      duration: 4 days
+      owner: QA Team
+      capabilities:
+      - Verify every operation logged (100% audit completeness)
+      - Validate correlation IDs across operation chains
+      - Trace causality (parent-child operation relationships)
+      - Hash chain integrity verification
+      - Tamper detection via event_hash validation
+      dependencies:
+      - AC-AUDIT-001
+      - AC-AUDIT-007
+      evidence_bundle:
+        test_coverage: '>=85%'
+        audit_scenarios: Completeness, correlation, causality, hash integrity
+        traces_validated: 50+ operation chains with full provenance
+    evidence_bundle_validation:
+      name: Evidence Bundle Generation & Validation Gates
+      ac_ids:
+      - AC-INTEG-007
+      - AC-INTEG-008
+      priority: CRITICAL
+      duration: 3 days
+      owner: QA Team
+      capabilities:
+      - Evidence bundle generation for all AC-IDs
+      - 3-gate validation (test coverage >=80%, audit 100%, governance 100%)
+      - Evidence completeness verification
+      - Cross-orchestrator evidence chain validation
+      - Performance validation (<2s bundle generation)
+      dependencies:
+      - AC-EVIDENCE-001
+      - AC-EVIDENCE-002
+      - AC-EVIDENCE-003
+      evidence_bundle:
+        test_coverage: '>=85%'
+        bundles_generated: 50+ bundles with full validation
+        gates_enforced: All 3 gates validated, bundle rejection tested
+    state_management_resilience:
+      name: State Management Under Concurrency & Failure
+      ac_ids:
+      - AC-INTEG-009
+      priority: HIGH
+      duration: 3 days
+      owner: QA Team
+      capabilities:
+      - Concurrent orchestrator state updates (10+ simultaneous operations)
+      - State corruption recovery (power failure scenarios)
+      - Atomic transaction validation
+      - Rollback mechanism testing
+      - File locking edge cases (race conditions)
+      dependencies:
+      - AC-STATE-001
+      - AC-STATE-002
+      - AC-STATE-003
+      evidence_bundle:
+        test_coverage: '>=80%'
+        concurrency_scenarios: 10+ simultaneous writers
+        failure_scenarios: 15+ failure modes tested
+    governance_enforcement_integration:
+      name: Governance Enforcement Across All Phases
+      ac_ids:
+      - AC-INTEG-010
+      priority: HIGH
+      duration: 3 days
+      owner: QA Team
+      capabilities:
+      - SKULL rule enforcement (CORE-001 through CORE-019)
+      - 4-tier governance merger validation (Tier 0→3 precedence)
+      - Rule violation detection and blocking
+      - Governance bypass prevention
+      - Compliance audit trail
+      dependencies:
+      - AC-GOV-001
+      - AC-GOV-002
+      - AC-GOV-003
+      - AC-GOV-004
+      - AC-GOV-005
+      evidence_bundle:
+        test_coverage: '>=85%'
+        rules_enforced: All 19 SKULL rules tested
+        violations_caught: 30+ violation scenarios
+    performance_and_load:
+      name: Performance & Load Testing
+      ac_ids:
+      - AC-INTEG-011
+      priority: MEDIUM
+      duration: 2 days
+      owner: Performance Team
+      capabilities:
+      - Audit logging latency (<5ms per operation)
+      - Governance merge performance (<100ms)
+      - Hash chain verification (<10ms per 100 events)
+      - Concurrent operation throughput (100+ ops/sec)
+      - Memory stability under sustained load (1000+ operations)
+      dependencies:
+      - AC-AUDIT-001
+      - AC-GOV-001
+      - AC-STATE-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        performance_metrics: Latency, throughput, memory, CPU
+        load_scenarios: 5+ load profiles (light, medium, heavy, sustained, spike)
+    regression_and_compatibility:
+      name: Regression Testing & Version Compatibility
+      ac_ids:
+      - AC-INTEG-012
+      priority: HIGH
+      duration: 2 days
+      owner: QA Team
+      capabilities:
+      - All prior phase functionality still working
+      - No degradation in performance metrics
+      - Backwards compatibility with previous AC-ID versions
+      - Orchestrator API contract validation
+      - Database schema stability
+      dependencies:
+      - AC-STATE-001
+      - AC-ORCH-001
+      - AC-AUDIT-001
+      evidence_bundle:
+        test_coverage: '>=80%'
+        regression_scenarios: 25+ regression tests
+        version_compatibility: Tested across phases
+  phase_4_5_exit_criteria:
+    must_complete:
+    - All 12 AC-IDs implemented (AC-INTEG-001 through AC-INTEG-012)
+    - End-to-end workflows tested (20+ scenarios passing)
+    - Audit trail 100% complete for all operations
+    - Evidence bundles generated for all AC-IDs
+    - Zero test failures in integration suite
+    - Performance targets met (<5ms audit, <100ms governance)
+    - All governance rules enforced (19/19 SKULL rules)
+    - Concurrent operations validated (10+ simultaneous)
+    - State management resilience proven
+    - Regression suite passing (100% backwards compatibility)
+    gate_validation:
+      test_coverage: '>=85% across all integration scenarios'
+      audit_completeness: 100% - all operations traced
+      governance_compliance: 100% - all rules enforced
+      performance: All targets met (audit <5ms, governance <100ms, hash <10ms)
+      evidence_bundles: All 12 AC-INTEG-* have complete evidence bundles
+      system_correctness: End-to-end audit logs prove system works correctly
+    blocker_prevention:
+    - Integration tests serve as final validation before production release
+    - Audit logs are primary proof of correctness
+    - No Phase 5+ work until integration suite at 100%
+    - All orchestrators must have full audit trail in passing tests
+  success_criteria:
+    description: System correctness proven via audit trail completeness
+    criteria:
+    - 100% audit completeness across 50+ operation chains
+    - Zero untraced operations
+    - All correlation IDs properly linked
+    - Hash chain integrity validated
+    - Evidence bundles sufficient proof of implementation
+    - Performance meets SLA targets
+    - Governance never bypassed
+    - Concurrent operations safe (no corruption, no deadlocks)
+    - Failure recovery tested and working
+    - Backwards compatibility maintained
+  note: Original sequential plan - superseded by organic evolution
