@@ -120,9 +120,10 @@ class MasterOrchestrator:
             f"MasterOrchestrator initialized with context middleware + response pipeline (config={config_path})"
         )
         
-        # Initialize orchestrator registry for AC-SCAFFOLD-003 enforcement
-        from src.orchestrators.master.orchestrator_registry import OrchestratorRegistry
-        self.orchestrator_registry = OrchestratorRegistry(workspace_root=Path.cwd())
+        # Use the registry passed in (via dependency injection) instead of creating a new one
+        # This ensures we use the same registry that was initialized in CortexEntry
+        # AC-SCAFFOLD-003: Validate that orchestrator is registered
+        self.orchestrator_registry = self.registry  # Use injected registry
     
     def _validate_orchestrator_registration(
         self,
@@ -560,19 +561,39 @@ class MasterOrchestrator:
             from datetime import datetime
             import uuid
             
-            # Check if orchestrator has execute method
-            if hasattr(orchestrator, 'execute'):
-                # Direct execution (for simple orchestrators)
-                started_at = datetime.now()
+            # Determine which method to call on orchestrator
+            # Supports: execute(), check(), run(), diagnose()
+            execution_methods = ['execute', 'check', 'run', 'diagnose']
+            execute_method = None
+            for method_name in execution_methods:
+                if hasattr(orchestrator, method_name):
+                    execute_method = getattr(orchestrator, method_name)
+                    break
+            
+            if not execute_method:
+                # No recognized execution method found
+                raise ValueError(
+                    f"Orchestrator {orchestrator_id} has no recognized execution method "
+                    f"({', '.join(execution_methods)})"
+                )
+            
+            # Direct execution (for simple orchestrators)
+            started_at = datetime.now()
+            
+            # Pass params to execute method - intelligently map parameters
+            if params:
+                import inspect
+                sig = inspect.signature(execute_method)
+                execute_params = set(sig.parameters.keys())
                 
-                # Pass params to execute method - intelligently map parameters
-                if params:
-                    import inspect
-                    sig = inspect.signature(orchestrator.execute)
-                    execute_params = set(sig.parameters.keys())
-                    
-                    # Map params to execute method signature
-                    mapped_params = {}
+                # Map params to execute method signature
+                # Only pass parameters that the method actually accepts
+                mapped_params = {}
+                
+                # Remove 'self' from params if present
+                execute_params.discard('self')
+                
+                if execute_params:  # Method accepts parameters
                     if 'context' in execute_params and 'user_request' in params:
                         # Map user_request to context for orchestrators expecting context dict
                         mapped_params['context'] = {'user_request': params['user_request']}
@@ -580,45 +601,36 @@ class MasterOrchestrator:
                         # Pass user_request directly
                         mapped_params['user_request'] = params.get('user_request', '')
                     else:
-                        # Pass all params as-is
-                        mapped_params = params
-                    
-                    result_data = orchestrator.execute(**mapped_params)
-                else:
-                    result_data = orchestrator.execute()
-                    
-                completed_at = datetime.now()
+                        # Only pass params that method expects
+                        for key in execute_params:
+                            if key in params:
+                                mapped_params[key] = params[key]
                 
-                # Wrap in ExecutionResult
-                result = ExecutionResult(
-                    execution_id=str(uuid.uuid4()),
-                    status=ExecutionStatus.SUCCESS,
-                    started_at=started_at,
-                    completed_at=completed_at,
-                    output=result_data,
-                    error=None
-                )
-            elif hasattr(self.execution_engine, 'run'):
-                # Execute with engine (for complex orchestrators)
-                result = self.execution_engine.run(
-                    orchestrator=orchestrator,
-                    params=params,
-                    hooks=self._get_lifecycle_hooks(orchestrator_id)
-                )
+                result_data = execute_method(**mapped_params) if mapped_params else execute_method()
             else:
-                # Fallback - try direct call
-                started_at = datetime.now()
-                result_data = orchestrator(**params) if params else orchestrator()
-                completed_at = datetime.now()
-                
-                result = ExecutionResult(
-                    execution_id=str(uuid.uuid4()),
-                    status=ExecutionStatus.SUCCESS,
-                    started_at=started_at,
-                    completed_at=completed_at,
-                    output=result_data,
-                    error=None
-                )
+                result_data = execute_method()
+            
+            # Convert report objects to markdown if orchestrator has to_markdown method
+            if hasattr(orchestrator, 'to_markdown') and hasattr(result_data, '__class__'):
+                # Check if result is a report-like object (has to_markdown support)
+                class_name = result_data.__class__.__name__
+                if 'Report' in class_name or 'Health' in class_name:
+                    try:
+                        result_data = orchestrator.to_markdown(result_data)
+                    except Exception as e:
+                        self.logger.warning(f"Failed to convert report to markdown: {e}")
+            
+            completed_at = datetime.now()
+            
+            # Wrap in ExecutionResult
+            result = ExecutionResult(
+                execution_id=str(uuid.uuid4()),
+                status=ExecutionStatus.SUCCESS,
+                started_at=started_at,
+                completed_at=completed_at,
+                output=result_data,
+                error=None
+            )
             
             # Complete execution tracking (if supported)
             if hasattr(self.state_manager, 'complete_execution'):

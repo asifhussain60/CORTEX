@@ -8,7 +8,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import logging
-from typing import Dict, List, Optional, Any, Type
+from typing import Dict, List, Optional, Any, Type, Tuple
 from pathlib import Path
 import json
 
@@ -173,6 +173,54 @@ class OrchestratorRegistry:
             OrchestratorMetadata if found, None otherwise
         """
         return self._orchestrators.get(id)
+    
+    def is_registered(self, id: str) -> bool:
+        """
+        Check if an orchestrator is registered.
+        
+        AC-CORTEX-002: Registry validation capability
+        
+        Args:
+            id: Orchestrator identifier
+        
+        Returns:
+            True if registered, False otherwise
+        """
+        return id in self._orchestrators
+    
+    def validate_for_routing(self, orchestrator_id: str) -> Tuple[bool, str]:
+        """
+        Validate that an orchestrator is ready for routing.
+        
+        AC-CORTEX-003: Routing validation
+        
+        Args:
+            orchestrator_id: Orchestrator to validate
+        
+        Returns:
+            (is_valid, reason_or_ok)
+        """
+        # Check if registered
+        if not self.is_registered(orchestrator_id):
+            return False, f"Orchestrator not registered: {orchestrator_id}"
+        
+        metadata = self.get(orchestrator_id)
+        if not metadata:
+            return False, f"Orchestrator metadata not found: {orchestrator_id}"
+        
+        # Check if enabled
+        if not metadata.enabled:
+            return False, f"Orchestrator is disabled: {orchestrator_id}"
+        
+        # Check if has valid patterns
+        if not metadata.patterns or len(metadata.patterns) == 0:
+            return False, f"Orchestrator has no routing patterns: {orchestrator_id}"
+        
+        # Check if class is loadable (basic check)
+        if not metadata.class_name or not metadata.module_path:
+            return False, f"Orchestrator missing class or module: {orchestrator_id}"
+        
+        return True, "OK"
     
     def instantiate(self, orchestrator_id: str, init_args: Optional[Dict[str, Any]] = None) -> Any:
         """
