@@ -72,7 +72,7 @@ def extract_ac_ids_for_phase(master_plan, phase_num):
     
     # Map phase number to phase key in master-plan
     phase_keys = {
-        1: 'archived_phase_1_foundation',
+        1: 'phase_1_foundation',
         1.5: 'archived_phase_1_5_sts_semantic_test_suite',
         2: 'phase_2_orchestration_core',
         3: 'phase_3_feature_orchestrators',
@@ -119,7 +119,7 @@ def count_completed_ac_ids(ac_ids, progress_tracker):
 def get_phase_info(master_plan, phase_num):
     """Get phase metadata from master-plan"""
     phase_keys = {
-        1: 'archived_phase_1_foundation',
+        1: 'phase_1_foundation',
         1.5: 'archived_phase_1_5_sts_semantic_test_suite',
         2: 'phase_2_orchestration_core',
         3: 'phase_3_feature_orchestrators',
@@ -176,7 +176,7 @@ def build_plan_viewer_data():
     
     # Build phases array FIRST to calculate accurate totals
     phases = []
-    phase_numbers = [2, 3, 5, 6, 7, 8, 9, 10, 11]  # Active phases only (archived phases excluded)
+    phase_numbers = [1, 2, 3, 5, 6, 7, 8, 9, 10, 11]  # All phases (completed phases shown as green)
     total_ac_ids_from_phases = 0  # Calculate from actual phase definitions
     
     for phase_num in phase_numbers:
