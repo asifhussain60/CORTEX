@@ -1,0 +1,59 @@
+schema_version: '5.0'
+layer: 1
+enforcement: CORE-026
+description: |
+  CORTEX-4.0 style header - operational, concise, context-aware.
+  THIS IS THE AUTHORITATIVE HEADER - appears on EVERY response.
+  
+  Legal requirement: Copyright and author attribution
+  Operational clarity: Phase and orchestrator context
+  Audit traceability: Responses tied to specific orchestrator
+
+header_template: |
+  ## 🧠 CORTEX {operation_type}
+  **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+
+placeholders:
+  operation_type:
+    required: true
+    description: "Type of operation being performed"
+    examples:
+      - "Plan Generation"
+      - "Test Execution"
+      - "Code Implementation"
+  
+  phase:
+    required: true
+    description: "Current CORTEX phase"
+    examples:
+      - "Phase 9"
+      - "Phase 9.7"
+  
+  orchestrator:
+    required: true
+    description: "Orchestrator performing the operation"
+    examples:
+      - "CORTEX-PLAN"
+      - "TDD-MASTER"
+      - "MasterOrchestrator"
+
+validation_rules:
+  - "Header must appear on line 1 (no content before)"
+  - "All 3 placeholders must be substituted"
+  - "Emoji (🧠) and checkmark (✅) are non-negotiable"
+  - "Author is always 'Asif Hussain' (never LLM names)"
+  - "No unsubstituted placeholders (no '{' or '}' in header)"
+
+examples:
+  valid: |
+    ## 🧠 CORTEX Plan Generation
+    **Author:** Asif Hussain | **Phase:** Phase 9 | **Orchestrator:** CORTEX-PLAN ✅
+  
+  invalid: |
+    **Plan Generated**
+    Author: GitHub Copilot
+
+added_in_phase: Phase 9.7
+related_acs:
+  - AC-TEMPLATE-001
+  - AC-TEMPLATE-005

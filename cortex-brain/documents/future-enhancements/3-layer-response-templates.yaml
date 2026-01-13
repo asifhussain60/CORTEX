@@ -1,0 +1,77 @@
+enhancement_id: ENH-TEMPLATE-001
+title: 3-Layer Response Template Architecture
+status: documented
+priority: medium
+phase: 9.7
+ac_ids:
+  - AC-TEMPLATE-001
+  - AC-TEMPLATE-002
+  - AC-TEMPLATE-003
+  - AC-TEMPLATE-004
+  - AC-TEMPLATE-005
+  - AC-TEMPLATE-006
+  - AC-TEMPLATE-007
+  - AC-TEMPLATE-008
+
+rationale: |
+  Current response-templates-v4.yaml is monolithic. Phase 9.7 requires
+  3-layer separation:
+  - Layer 1: Mandatory headers (copyright, author)
+  - Layer 2: Executive summary format
+  - Layer 3: Orchestrator-specific templates
+  
+  This allows:
+  - Independent evolution of each layer
+  - Cleaner testing (mock individual layers)
+  - Better governance (CORE rules enforce Layer 1)
+
+current_state:
+  - response-templates-v4.yaml: 313 lines, single file
+  - ResponseRenderer: Loads full template, no layer separation
+  - Tests exist for header injection and template loading
+
+proposed_architecture:
+  layer_1:
+    file: cortex-brain/response-templates/mandatory-header.yaml
+    content: Copyright, author, date, version info
+    governance: CORE-026 (mandatory header enforcement)
+  
+  layer_2:
+    file: cortex-brain/response-templates/executive-summary.yaml
+    content: Outcomes/In Progress/Risks/Impact format
+    governance: Output standards compliance
+  
+  layer_3:
+    file: cortex-brain/response-templates/orchestrators/*.yaml
+    content: Per-orchestrator templates (planning, tdd, ado, etc.)
+    governance: Orchestrator-specific rules
+
+migration_strategy:
+  step_1: Create layer structure (3 directories)
+  step_2: Split response-templates-v4.yaml into layers
+  step_3: Update ResponseRenderer to load layers independently
+  step_4: Add layer validation tests
+  step_5: Migrate orchestrators to use layered templates
+  step_6: Deprecate monolithic v4.yaml
+
+test_requirements:
+  - Layer 1 cannot be disabled (enforced by CORE rule)
+  - Layer 2 can be customized per orchestrator
+  - Layer 3 templates validated against Layer 1/2 contracts
+  - Missing Layer 3 template falls back to default
+
+estimated_effort: 2-3 days
+dependencies:
+  - Phase 9 infrastructure complete (audit, lifecycle, evidence)
+  - CORE-026 governance rule defined
+
+blocking_issues:
+  - None - can implement after Phase 9 core complete
+
+next_steps:
+  - Architecture review with user
+  - Approval to proceed with split
+  - Implementation in Phase 9.7
+
+documented_at: '2026-01-12T23:45:00Z'
+documented_by: Phase 9 autonomous execution

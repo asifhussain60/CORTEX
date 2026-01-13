@@ -1,0 +1,73 @@
+schema_version: '5.0'
+layer: 2
+customizable: true
+description: |
+  Enforces concise, executive-level responses across all orchestrators.
+  4-section structure: Outcomes, In Progress, Risks, Impact.
+  Orchestrators can override sections for specific needs.
+
+sections:
+  - name: "Outcomes"
+    marker: "✅"
+    max_bullets: 5
+    required: true
+    description: "Completed work with quantified results"
+    
+  - name: "In Progress"
+    marker: "⚙️"
+    max_bullets: 3
+    required: false
+    description: "Active work with current status"
+    
+  - name: "Risks"
+    marker: "⚠️"
+    max_bullets: 3
+    required: false
+    description: "Blockers, assumptions, dependencies"
+    
+  - name: "Impact"
+    marker: "🎯"
+    max_bullets: 3
+    required: false
+    description: "Business value, technical debt reduction"
+
+format_rules:
+  mandatory:
+    - "Start with 3-5 sentence executive summary"
+    - "Use bullet points for all lists (max 5 per section)"
+    - "NO code snippets unless explicitly requested"
+    - "Quantify outcomes (X files, Y AC-IDs, Z% complete)"
+    - "Each bullet on separate line"
+  
+  forbidden:
+    - "Code blocks (unless user says 'show code')"
+    - "Step-by-step procedures"
+    - "Explanatory paragraphs"
+    - "Narrative prose or filler"
+    - "AC-ID codes in user-facing output (translate to capabilities)"
+
+orchestrator_overrides:
+  CORTEX-PLAN:
+    additional_sections:
+      - name: "Plan Structure"
+        marker: "📋"
+        max_bullets: 5
+        required: false
+  
+  TDD-MASTER:
+    additional_sections:
+      - name: "Test Results"
+        marker: "🧪"
+        max_bullets: 5
+        required: false
+
+quality_gates:
+  - "Executive summary readable in <1 minute"
+  - "No AC-ID codes visible to user"
+  - "Separate facts from recommendations"
+  - "Call out risks, blockers, assumptions explicitly"
+
+added_in_phase: Phase 9.7
+related_acs:
+  - AC-TEMPLATE-002
+  - AC-TEMPLATE-005

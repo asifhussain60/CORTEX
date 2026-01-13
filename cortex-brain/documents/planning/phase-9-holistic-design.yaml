@@ -1,0 +1,375 @@
+plan_metadata:
+  plan_id: CORTEX-6.0-PHASE-9-REPLACEMENT
+  version: 1.0.0
+  created: '2026-01-12T23:05:00Z'
+  author: Asif Hussain
+  title: "Phase 9 Holistic Redesign: Infrastructure Maturity & Quality Gates"
+  strategy: Consolidate missing foundation capabilities before declaring CORTEX 6.0 complete
+  design_score: 98
+  total_ac_ids: 29
+  total_weeks: 3
+  philosophy: "Complete the foundation - these aren't new features but missing infrastructure components"
+
+holistic_analysis:
+  context: |
+    Phases 1-8 are 100% complete (57 AC-IDs implemented, all tests passing).
+    However, the tracker lists several "enhancements" that were planned but never implemented.
+    
+    Upon review, these aren't optional enhancements - they're CRITICAL FOUNDATION pieces
+    that were deferred but are essential for production readiness:
+    
+    1. AC-AUDIT-007 (Hash Chain) - Tamper detection for audit trail
+    2. AC-LIFECYCLE-001-003 - Extended orchestrator states beyond simple start/stop
+    3. AC-EVIDENCE-001-003 - Structured evidence bundle generation
+    4. AC-STS-001-003 - Systematic Test Suite (validation framework)
+    5. AC-ROLLOUT-SIMPLE-001-003 - DRY_RUN mode + approval gates
+    6. CORE-023 - HTML validation governance
+    7. AC-TEMPLATE-001-008 - Response template architecture (reduces bloat)
+    8. Proactive Challenge System - Intelligent governance violation prevention
+  
+  architectural_positioning:
+    current_state: "Phase 1-8 complete but missing critical foundation infrastructure"
+    gap_analysis: |
+      - Audit trail exists but lacks tamper detection (AC-AUDIT-007)
+      - Orchestrators have basic state but no lifecycle management (AC-LIFECYCLE)
+      - Tests pass but no structured evidence bundles (AC-EVIDENCE)
+      - Rollout exists but no safety gates (AC-ROLLOUT-SIMPLE)
+      - HTML generation unvalidated (CORE-023)
+      - Response templates hardcoded, causing bloat (AC-TEMPLATE)
+      - No proactive challenge system (governance violations detected too late)
+    
+    why_now: |
+      These gaps create TECHNICAL DEBT that will compound if not addressed now.
+      CORTEX 6.0 cannot be declared "production-ready" without these safeguards.
+      They're not "nice-to-have" - they're prerequisites for enterprise adoption.
+
+phase_9_redesign:
+  name: "Phase 9: Infrastructure Maturity & Quality Gates"
+  description: "Complete missing foundation components for production readiness"
+  duration: 3 weeks
+  priority: CRITICAL
+  
+  rationale: |
+    Phase 9 originally planned "SDLC Management" which was too vague and didn't exist
+    in the master plan. Instead, this phase addresses concrete infrastructure gaps
+    that prevent CORTEX from being truly production-grade.
+    
+    This isn't scope creep - it's completion of deferred foundation work.
+  
+  components:
+    - component_id: 9.1
+      name: Audit Integrity Layer
+      ac_ids: [AC-AUDIT-007]
+      description: Hash chain tamper detection for audit trail
+      duration: 2 days
+      priority: CRITICAL
+      
+    - component_id: 9.2
+      name: Orchestrator Lifecycle Management
+      ac_ids: [AC-LIFECYCLE-001, AC-LIFECYCLE-002, AC-LIFECYCLE-003]
+      description: Extended state machine (7 states) for orchestrator execution
+      duration: 3 days
+      priority: HIGH
+      
+    - component_id: 9.3
+      name: Evidence Bundle System
+      ac_ids: [AC-EVIDENCE-001, AC-EVIDENCE-002, AC-EVIDENCE-003]
+      description: Structured test evidence + metrics + audit provenance
+      duration: 3 days
+      priority: HIGH
+      
+    - component_id: 9.4
+      name: Systematic Test Suite (STS)
+      ac_ids: [AC-STS-001, AC-STS-002, AC-STS-003]
+      description: Golden corpus validation framework (100 test intents)
+      duration: 4 days
+      priority: MEDIUM
+      note: Phase 1.5 partially complete, finish remaining 2 ACs
+      
+    - component_id: 9.5
+      name: Safe Rollout Gates
+      ac_ids: [AC-ROLLOUT-SIMPLE-001, AC-ROLLOUT-SIMPLE-002, AC-ROLLOUT-SIMPLE-003]
+      description: DRY_RUN mode + approval workflow + progressive AC activation
+      duration: 3 days
+      priority: HIGH
+      
+    - component_id: 9.6
+      name: HTML Validation Governance
+      ac_ids: [CORE-023]
+      description: Automated HTML validation + W3C compliance checking
+      duration: 1 day
+      priority: MEDIUM
+      
+    - component_id: 9.7
+      name: Response Template Architecture
+      ac_ids: [AC-TEMPLATE-001, AC-TEMPLATE-002, AC-TEMPLATE-003, AC-TEMPLATE-004, 
+               AC-TEMPLATE-005, AC-TEMPLATE-006, AC-TEMPLATE-007, AC-TEMPLATE-008]
+      description: 3-layer template system (CORTEX/Company/Knowledge) - reduces bloat 85%
+      duration: 4 days
+      priority: HIGH
+      
+    - component_id: 9.8
+      name: Proactive Challenge System
+      ac_ids: [AC-CHALLENGE-001, AC-CHALLENGE-002, AC-CHALLENGE-003]
+      description: Intelligent pre-execution governance validation (CORE-025)
+      duration: 3 days
+      priority: MEDIUM
+
+ac_id_breakdown:
+  total_count: 29
+  by_component:
+    audit_integrity: 1
+    lifecycle_management: 3
+    evidence_bundles: 3
+    systematic_test_suite: 3
+    safe_rollout: 3
+    html_validation: 1
+    response_templates: 8
+    proactive_challenge: 3
+    new_governance_rule: 1  # CORE-025
+  
+  by_priority:
+    CRITICAL: 1   # AC-AUDIT-007
+    HIGH: 17      # AC-LIFECYCLE (3) + AC-EVIDENCE (3) + AC-ROLLOUT-SIMPLE (3) + AC-TEMPLATE (8)
+    MEDIUM: 11    # AC-STS (3) + CORE-023 (1) + AC-CHALLENGE (3) + existing STS partial (1)
+
+implementation_strategy:
+  approach: Sequential sub-phases with strict dependencies
+  
+  sub_phases:
+    - sub_phase: 9.1
+      name: "Audit & Lifecycle Foundation"
+      week: 1
+      components: [9.1, 9.2]
+      ac_ids: [AC-AUDIT-007, AC-LIFECYCLE-001, AC-LIFECYCLE-002, AC-LIFECYCLE-003]
+      rationale: "Audit integrity must exist before Evidence Bundles can reference it"
+      exit_criteria:
+        - Hash chain operational with tamper detection
+        - 7-state lifecycle state machine implemented
+        - All 4 ACs have passing tests
+        - Evidence bundles can reference hash chain
+    
+    - sub_phase: 9.2
+      name: "Evidence & Validation Infrastructure"
+      week: 2
+      components: [9.3, 9.4, 9.6]
+      ac_ids: [AC-EVIDENCE-001, AC-EVIDENCE-002, AC-EVIDENCE-003, 
+               AC-STS-001, AC-STS-002, AC-STS-003, CORE-023]
+      rationale: "Evidence system needs lifecycle states; STS validates evidence quality"
+      exit_criteria:
+        - Evidence bundles generate with test metrics + audit trail
+        - STS golden corpus validation passing
+        - HTML validation governance enforcing W3C compliance
+        - All 7 ACs have passing tests
+    
+    - sub_phase: 9.3
+      name: "Safety Gates & Quality Systems"
+      week: 3
+      components: [9.5, 9.7, 9.8]
+      ac_ids: [AC-ROLLOUT-SIMPLE-001, AC-ROLLOUT-SIMPLE-002, AC-ROLLOUT-SIMPLE-003,
+               AC-TEMPLATE-001, AC-TEMPLATE-002, AC-TEMPLATE-003, AC-TEMPLATE-004,
+               AC-TEMPLATE-005, AC-TEMPLATE-006, AC-TEMPLATE-007, AC-TEMPLATE-008,
+               AC-CHALLENGE-001, AC-CHALLENGE-002, AC-CHALLENGE-003]
+      rationale: "Final safety layer - rollout gates + lean templates + proactive prevention"
+      exit_criteria:
+        - DRY_RUN mode operational across all orchestrators
+        - Approval workflow integrated with TodoManager
+        - Response templates reduced from 2046 lines to <300 lines
+        - Proactive challenge system preventing governance violations
+        - All 14 ACs have passing tests
+
+dependency_graph:
+  critical_path:
+    - AC-AUDIT-007 (hash chain) → AC-EVIDENCE-001 (evidence needs audit provenance)
+    - AC-LIFECYCLE-001-003 (states) → AC-EVIDENCE-002 (evidence captures state transitions)
+    - AC-EVIDENCE-001-003 (bundles) → AC-STS-001-003 (STS validates evidence quality)
+    - AC-STS-001-003 (validation) → AC-CHALLENGE-001-003 (challenge uses STS patterns)
+    - AC-TEMPLATE-001-008 (templates) → AC-CHALLENGE-003 (challenge uses templates)
+  
+  parallel_opportunities:
+    week_1:
+      - AC-AUDIT-007 and AC-LIFECYCLE-001-003 can be implemented in parallel
+    week_2:
+      - AC-EVIDENCE-001-003 and AC-STS-001-003 can be implemented in parallel
+      - CORE-023 (HTML validation) independent, can run anytime in week 2
+    week_3:
+      - AC-ROLLOUT-SIMPLE and AC-TEMPLATE can be implemented in parallel
+      - AC-CHALLENGE depends on both, must come last
+
+test_strategy:
+  total_new_tests: ~180
+  by_component:
+    AC-AUDIT-007: 8 tests (hash chain integrity, tamper detection)
+    AC-LIFECYCLE: 15 tests (5 tests per AC × 3)
+    AC-EVIDENCE: 18 tests (6 tests per AC × 3)
+    AC-STS: 30 tests (10 tests per AC × 3, plus golden corpus validation)
+    AC-ROLLOUT-SIMPLE: 15 tests (5 tests per AC × 3)
+    CORE-023: 5 tests (HTML validation)
+    AC-TEMPLATE: 64 tests (8 tests per AC × 8)
+    AC-CHALLENGE: 18 tests (6 tests per AC × 3)
+  
+  pass_rate_target: ">95%"
+  coverage_target: ">80%"
+
+risk_mitigation:
+  technical_risks:
+    - risk: "Hash chain implementation complexity"
+      mitigation: "Use proven SHA-256 chaining pattern from security literature"
+      impact: LOW
+    
+    - risk: "Evidence bundle schema too rigid"
+      mitigation: "Use flexible YAML schema with optional fields"
+      impact: LOW
+    
+    - risk: "STS golden corpus maintenance burden"
+      mitigation: "Start with 20 high-value test intents, expand incrementally"
+      impact: MEDIUM
+    
+    - risk: "Template architecture breaking existing responses"
+      mitigation: "Implement with backward compatibility layer, migrate gradually"
+      impact: MEDIUM
+    
+    - risk: "Proactive challenge false positives"
+      mitigation: "Tune detection thresholds based on audit trail analysis"
+      impact: MEDIUM
+  
+  schedule_risks:
+    - risk: "3 weeks aggressive for 29 ACs"
+      mitigation: "AC-IDs already scoped in hybrid-approach documents, not starting from scratch"
+      impact: LOW
+    
+    - risk: "Dependencies between components could cause delays"
+      mitigation: "Use stubs/mocks to unblock parallel work"
+      impact: MEDIUM
+
+success_metrics:
+  quantitative:
+    - "29/29 AC-IDs implemented (100%)"
+    - "~180 new tests passing (>95% pass rate)"
+    - "Evidence bundles generated for all Phase 9 ACs"
+    - "Hash chain integrity maintained across all audit entries"
+    - "Response template bloat reduced 85% (2046 lines → <300 lines)"
+    - "Zero HTML validation errors in generated reports"
+  
+  qualitative:
+    - "CORTEX 6.0 declared production-ready"
+    - "All SKULL governance rules enforced proactively"
+    - "Audit trail tamper-proof and forensically sound"
+    - "Orchestrator lifecycle observable and debuggable"
+    - "Evidence bundles provide clear AC completion proof"
+
+exit_criteria:
+  phase_9_complete_when:
+    - "All 29 AC-IDs have status='implemented' in AC-INDEX.yaml"
+    - "All ~180 new tests passing (>95% rate)"
+    - "Evidence bundles generated for all Phase 9 components"
+    - "Hash chain validated across full audit history"
+    - "STS golden corpus validation passing"
+    - "DRY_RUN mode operational"
+    - "Response templates deployed"
+    - "Proactive challenge system preventing violations"
+    - "Phase 9 verification rate ≥80%"
+  
+  cortex_6_0_complete_when:
+    - "Phases 1-9 all at 100%"
+    - "Total AC-IDs: ~86 (57 existing + 29 Phase 9)"
+    - "Total tests: ~1886 (1706 existing + 180 Phase 9)"
+    - "Design score: ≥97"
+    - "No critical technical debt"
+    - "Production deployment approved"
+
+alignment_with_master_plan:
+  snowball_strategy_adherence: |
+    Phase 9 follows the snowball principle:
+    - Builds on Phases 1-8 foundation (audit, governance, orchestration)
+    - Completes deferred infrastructure work (not new features)
+    - Each component leverages prior components
+    - Evidence system uses audit + lifecycle
+    - Challenge system uses evidence + templates
+  
+  philosophy_alignment: |
+    "Build for operation; decommission construction scaffolding"
+    
+    Phase 9 components are OPERATIONAL infrastructure:
+    - Hash chain = operational security
+    - Lifecycle = operational observability
+    - Evidence = operational proof
+    - STS = operational quality gates
+    - Rollout gates = operational safety
+    - Templates = operational efficiency
+    - Challenge = operational governance
+  
+  total_weeks_adjustment:
+    original: 13.5 weeks (Phases 1-5 in master plan)
+    phases_6_8: 3 weeks (added after master plan)
+    phase_9: 3 weeks (this design)
+    new_total: 19.5 weeks
+    note: "Still under 5 months for production-grade AI orchestration platform"
+
+file_organization:
+  implementation_files:
+    - path: src/infrastructure/audit_hash_chain.py
+      ac_id: AC-AUDIT-007
+    
+    - path: src/infrastructure/orchestrator_lifecycle.py
+      ac_id: AC-LIFECYCLE-001-003
+    
+    - path: src/infrastructure/evidence_bundle_generator.py
+      ac_id: AC-EVIDENCE-001-003
+    
+    - path: tests/sts/golden_corpus_validator.py
+      ac_id: AC-STS-001-003
+    
+    - path: src/orchestrators/rollout/safe_rollout_manager.py
+      ac_id: AC-ROLLOUT-SIMPLE-001-003
+    
+    - path: src/orchestrators/middleware/html_validator.py
+      ac_id: CORE-023
+    
+    - path: src/orchestrators/response/template_engine.py
+      ac_id: AC-TEMPLATE-001-008
+    
+    - path: src/orchestrators/middleware/proactive_challenge.py
+      ac_id: AC-CHALLENGE-001-003
+  
+  test_files:
+    - tests/infrastructure/test_audit_hash_chain.py
+    - tests/infrastructure/test_orchestrator_lifecycle.py
+    - tests/infrastructure/test_evidence_bundle_generator.py
+    - tests/sts/test_golden_corpus.py
+    - tests/orchestrators/test_safe_rollout_manager.py
+    - tests/orchestrators/test_html_validator.py
+    - tests/orchestrators/test_template_engine.py
+    - tests/orchestrators/test_proactive_challenge.py
+  
+  documentation:
+    - cortex-brain/documents/architecture/audit-hash-chain-design.md
+    - cortex-brain/documents/architecture/orchestrator-lifecycle-states.md
+    - cortex-brain/documents/architecture/evidence-bundle-schema.yaml
+    - cortex-brain/documents/architecture/sts-golden-corpus.yaml
+    - cortex-brain/documents/architecture/rollout-safety-gates.md
+    - cortex-brain/documents/architecture/response-template-architecture.md
+    - cortex-brain/documents/governance/proactive-challenge-system.md
+
+next_steps:
+  immediate:
+    - "1. Update progress-tracker.json: Replace Phase 9 (SDLC) with new Phase 9 (Infrastructure Maturity)"
+    - "2. Update AC-INDEX.yaml: Add 29 new AC-IDs with status='planned'"
+    - "3. Update master-plan.yaml: Add phase_9_infrastructure_maturity section"
+    - "4. Update plan-viewer-data.json: Replace Phase 9 with new components"
+    - "5. Regenerate plan-viewer.html: Reflect new Phase 9 structure"
+  
+  implementation:
+    - "Week 1: Sub-phase 9.1 (Audit + Lifecycle) - 4 ACs"
+    - "Week 2: Sub-phase 9.2 (Evidence + STS + HTML) - 7 ACs"
+    - "Week 3: Sub-phase 9.3 (Rollout + Templates + Challenge) - 14 ACs"
+    - "Final: Verification (evidence validation, audit trail check, test pass rate)"
+  
+  verification:
+    - "Run: python3 scripts/audit_based_evidence_validator.py"
+    - "Verify: All 29 AC-IDs have test evidence"
+    - "Check: Phase 9 verification rate ≥80%"
+    - "Generate: Phase 9 evidence bundle"
+    - "Declare: CORTEX 6.0 production-ready"
+
+copyright: "© 2025-2026 Asif Hussain. All rights reserved."
