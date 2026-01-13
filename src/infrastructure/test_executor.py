@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 
 
 @dataclass
-class TestResult:
+class ExecutionResult:
     """Result of running tests for an AC-ID."""
     ac_id: str
     passed: int
@@ -33,7 +33,7 @@ class TestResult:
         return asdict(self)
 
 
-class TestExecutor:
+class TaskExecutor:
     """Execute tests and collect results by AC-ID."""
     
     def __init__(self, test_dir: Path = None):
@@ -48,7 +48,7 @@ class TestExecutor:
         
         self.test_dir = test_dir
     
-    def run_tests_for_ac(self, ac_id: str, verbose: bool = False) -> TestResult:
+    def run_tests_for_ac(self, ac_id: str, verbose: bool = False) -> ExecutionResult:
         """
         Run all tests for a specific AC-ID.
         
@@ -57,7 +57,7 @@ class TestExecutor:
             verbose: Enable verbose output
             
         Returns:
-            TestResult with pass/fail counts
+            ExecutionResult with pass/fail counts
         """
         cmd = [
             "python3", "-m", "pytest",
@@ -80,7 +80,7 @@ class TestExecutor:
         
         success_rate = (passed / total * 100) if total > 0 else 0
         
-        return TestResult(
+        return ExecutionResult(
             ac_id=ac_id,
             passed=passed,
             failed=failed,

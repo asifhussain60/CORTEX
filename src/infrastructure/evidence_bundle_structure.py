@@ -24,7 +24,7 @@ from src.utils.path_utils import project_root
 
 
 @dataclass
-class TestResult:
+class BundleTestResult:
     """Individual test result."""
     test_name: str
     status: str  # "passed", "failed", "skipped"
@@ -33,7 +33,7 @@ class TestResult:
 
 
 @dataclass
-class TestMetrics:
+class BundleMetrics:
     """Test execution metrics."""
     total_tests: int
     passed: int
@@ -97,7 +97,7 @@ class EvidenceBundleStructure:
         self,
         ac_id: str,
         status: str,
-        test_metrics: TestMetrics,
+        test_metrics: BundleMetrics,
         implementation_notes: Optional[str] = None,
         bundle_dir: Optional[Path] = None
     ) -> Dict:
@@ -107,7 +107,7 @@ class EvidenceBundleStructure:
         Args:
             ac_id: Acceptance criteria ID
             status: Status ("implemented", "partial", "planned")
-            test_metrics: TestMetrics object with test results
+            test_metrics: BundleMetrics object with test results
             implementation_notes: Optional implementation notes
             bundle_dir: Bundle directory (auto-created if None)
             
@@ -152,8 +152,8 @@ class EvidenceBundleStructure:
     def create_test_results_file(
         self,
         ac_id: str,
-        test_results: List[TestResult],
-        metrics: TestMetrics,
+        test_results: List[BundleTestResult],
+        metrics: BundleMetrics,
         bundle_dir: Optional[Path] = None
     ) -> Dict:
         """
@@ -161,8 +161,8 @@ class EvidenceBundleStructure:
         
         Args:
             ac_id: Acceptance criteria ID
-            test_results: List of TestResult objects
-            metrics: TestMetrics object
+            test_results: List of BundleTestResult objects
+            metrics: BundleMetrics object
             bundle_dir: Bundle directory (auto-created if None)
             
         Returns:

@@ -1161,7 +1161,9 @@
       "acs_total": 28,
       "tests_total": 105,
       "pass_rate": "100%",
-      "completion_percentage": 100
+      "completion_percentage": 100,
+      "completed_count": 28,
+      "total_count": 28
     }
   },
   "phase_1": {
