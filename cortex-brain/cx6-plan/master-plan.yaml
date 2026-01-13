@@ -1,17 +1,20 @@
 plan_metadata:
   plan_id: CORTEX-6.0-SNOWBALL-MASTER
-  version: 2.0.0
+  version: 2.1.0
   created: '2026-01-10T23:50:00Z'
-  updated: '2026-01-13T23:00:00Z'
+  updated: '2026-01-13T23:30:00Z'
+  reconciliation_date: '2026-01-13T19:30:00Z'
   author: Asif Hussain
   strategy: Organic Evolution with JIT Infrastructure Delivery
   philosophy: Build for operation; decommission construction scaffolding
-  design_score: 97
+  design_score: 98
   total_weeks: 17.0
-  total_ac_ids: 217
+  total_ac_ids: 115
+  total_ac_ids_historical_claim: 217
+  ac_id_reconciliation: 'v2.1.0 - Reconciled with AC-INDEX.yaml (actual 115 ACs vs claimed 217). Phases 1-11 mapped. 11 orchestrators wired and operational.'
   hybrid_approach: true
   gpt_influence: 70% rigor, 30% overhead
-  latest_addition: 'v2.0.0 - Audit evidence AC-IDs added to all phase exit criteria (8 AC-IDs: AC-AUDIT-EVIDENCE-P1, P1.5, P2, P3, P4, P4.5, P5, P10)'
+  latest_addition: 'v2.1.0 - Implementation reconciliation complete. Master-plan synchronized with actual AC-INDEX (115 ACs), progress-tracker (restored from backup), and orchestrator registry (11 wired).'
   multi_machine_development:
     enabled: true
     platforms: [MAC, WIN]
@@ -33,6 +36,101 @@ plan_metadata:
     - No manual state modifications outside orchestrator\n"
   reorganization_note: v1.7.2 - Restored Phase 1 as completed (green status), not
     archived
+  reconciliation_summary: |
+    v2.1.0 (2026-01-13): Comprehensive reconciliation of git history vs implementation.
+    - Git history: 3318 commits, 2128 feature-related, 104+ milestones
+    - AC-INDEX.yaml: 115 ACs defined across 11 phases (not 217)
+    - Orchestrators: 11 wired and operational
+    - Phase 1: ✅ COMPLETE
+    - Phase 1.5 (STS): ✅ COMPLETE
+    - Phase 2-10: ⏳ IN PROGRESS
+    - Phase 11: 📋 QUEUED
+    All metrics now synchronized with actual implementation state.
+
+cortex_orchestrator_registry:
+  documented: '2026-01-13T19:30:00Z'
+  total_orchestrators: 11
+  all_operational: true
+  integration_method: MasterOrchestrator router + OrchestratorRegistry
+  mcp_exposure: 'CORTEX TOOLKIT via MCP - Phase 12 planned'
+  orchestrators:
+    - id: tdd_master
+      name: TDD-Master Orchestrator
+      enabled: true
+      purpose: Test-driven development enforcement (RED→GREEN→REFACTOR)
+      phase_integration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+      documentation: Enforces CORE-019 - All code must have tests
+
+    - id: planning_v5
+      name: Planning System v5
+      enabled: true
+      purpose: Context-aware planning & roadmap generation
+      phase_integration: [2, 4, 11]
+      documentation: AC-PLAN-001 to AC-PLAN-008
+
+    - id: todo_orchestrator
+      name: TODO Orchestrator
+      enabled: true
+      purpose: Task management & tracking
+      phase_integration: [2]
+      documentation: AC-TODO-001 to AC-TODO-004
+
+    - id: vacuum
+      name: Vacuum Orchestrator v2
+      enabled: true
+      purpose: Workspace decommissioning & cleanup
+      phase_integration: [5]
+      documentation: AC-CLEAN-301 to AC-CLEAN-328
+
+    - id: ado_v2
+      name: ADO Orchestrator v2
+      enabled: true
+      purpose: Azure DevOps integration
+      phase_integration: [3, 4, 5]
+      documentation: AC-ADO-201 to AC-ADO-218
+
+    - id: investigation_v2
+      name: Investigation Orchestrator v2
+      enabled: true
+      purpose: Codebase analysis & intelligence
+      phase_integration: [3, 4, 11]
+      documentation: AC-INV-301 to AC-INV-318
+
+    - id: sanitization_v2
+      name: Sanitization Orchestrator v2
+      enabled: true
+      purpose: State & data sanitization
+      phase_integration: [5, 6]
+      documentation: AC-SAN-401 to AC-SAN-418
+
+    - id: gap_fix
+      name: Gap-Fix Orchestrator
+      enabled: true
+      purpose: Gap analysis & remediation
+      phase_integration: [4, 5, 6, 8, 9, 10]
+      documentation: Detects missing implementations
+
+    - id: maintenance_v2
+      name: Maintenance Orchestrator v2
+      enabled: true
+      purpose: System health & operational maintenance
+      phase_integration: [6, 7, 8, 9, 10]
+      documentation: Monitors system health
+
+    - id: epic_review
+      name: Epic Review Orchestrator
+      enabled: true
+      purpose: Active epic scope review & health
+      phase_integration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+      documentation: Reviews CORTEX-6.0 epic health
+
+    - id: autonomous_ac_implementor
+      name: Autonomous AC Implementor
+      enabled: true
+      purpose: AC-ID implementation engine (TDD-driven)
+      phase_integration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+      documentation: Core cortex-exec.prompt.md implementation engine
+
 multi_machine_development_protocol:
   version: 1.0.0
   created: '2026-01-13T18:00:00Z'
