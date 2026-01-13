@@ -5,7 +5,7 @@
     "completed_ac_ids": 117,
     "in_progress_ac_ids": 0,
     "version": "1.8.0",
-    "updated": "2026-01-13T13:49:37.158017+00:00",
+    "updated": "2026-01-13T13:57:36.874854+00:00",
     "status": "phases_1_to_5_defined_4.5_integration_tests_added"
   },
   "phases": [
@@ -65,6 +65,11 @@
           "Evidence Bundles (AC-EVIDENCE-001 to 003)",
           "Security Layer (AC-SECURITY-001 to 008)"
         ]
+      },
+      "machine": {
+        "machine": "WIN",
+        "reason": "SQLite operations and logging (lightweight)",
+        "icon": "\ud83e\ude9f"
       }
     },
     {
@@ -112,6 +117,11 @@
           "TDD-Master (AC-TDD-001 to 010)",
           "Planning v5 (AC-PLAN-001 to 008)"
         ]
+      },
+      "machine": {
+        "machine": "WIN",
+        "reason": "Business logic coordination (moderate compute)",
+        "icon": "\ud83e\ude9f"
       }
     },
     {
@@ -159,6 +169,11 @@
           "Sanitization (AC-SAN-401 to 418) - File operations via pathlib",
           "Crawlers (AC-CRAWLER-501 to 518) - AST parsing, cross-platform"
         ]
+      },
+      "machine": {
+        "machine": "WIN",
+        "reason": "API calls and external integrations (I/O bound)",
+        "icon": "\ud83e\ude9f"
       }
     },
     {
@@ -213,6 +228,11 @@
           "Artifact Decommission (AC-CLEAN-309 to 316)",
           "Configuration Cleanup (AC-CLEAN-317 to 324)"
         ]
+      },
+      "machine": {
+        "machine": "MAC",
+        "reason": "Large-scale file scanning and cleanup operations",
+        "icon": "\ud83c\udf4e"
       }
     },
     {
@@ -246,6 +266,11 @@
           "Action Security Layer (AC-SECURITY-001 to 008)",
           "Deterministic Routing Engine"
         ]
+      },
+      "machine": {
+        "machine": "MAC",
+        "reason": "Security analysis and route optimization",
+        "icon": "\ud83c\udf4e"
       }
     },
     {
@@ -270,6 +295,11 @@
           "Todo Bridge Integration",
           "VS Code Command Palette"
         ]
+      },
+      "machine": {
+        "machine": "MAC",
+        "reason": "VS Code extension development and testing",
+        "icon": "\ud83c\udf4e"
       }
     },
     {
@@ -294,6 +324,11 @@
           "Progressive Rollout System",
           "Approval Gate Middleware"
         ]
+      },
+      "machine": {
+        "machine": "WIN",
+        "reason": "Configuration and approval gates (lightweight)",
+        "icon": "\ud83e\ude9f"
       }
     },
     {
@@ -331,6 +366,11 @@
           "STS Golden Corpus (100 intents)",
           "Template System"
         ]
+      },
+      "machine": {
+        "machine": "WIN",
+        "reason": "Hash chain and state management (moderate)",
+        "icon": "\ud83e\ude9f"
       }
     },
     {
@@ -355,6 +395,11 @@
           "3-Layer Response Templates",
           "CORE-026 Enforcement Middleware"
         ]
+      },
+      "machine": {
+        "machine": "WIN",
+        "reason": "File operations and template processing (I/O bound)",
+        "icon": "\ud83e\ude9f"
       }
     },
     {
@@ -385,6 +430,11 @@
           "HTML View Generators (D3.js visualizations)",
           "Onboarding Documentation"
         ]
+      },
+      "machine": {
+        "machine": "MAC",
+        "reason": "Real-time code analysis, knowledge graph, D3.js visualizations",
+        "icon": "\ud83c\udf4e"
       }
     }
   ]

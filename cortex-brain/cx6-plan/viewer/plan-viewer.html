@@ -1538,14 +1538,123 @@
                 const plan = this.data.plan;
                 const phases = plan.phases || [];
                 
+                // Split phases by machine assignment
+                const macPhases = phases.filter(p => p.machine && p.machine.machine === 'MAC');
+                const winPhases = phases.filter(p => p.machine && p.machine.machine === 'WIN');
+                
+                // Calculate workload stats
+                const macAcIds = macPhases.reduce((sum, p) => sum + (p.ac_ids_total || 0), 0);
+                const winAcIds = winPhases.reduce((sum, p) => sum + (p.ac_ids_total || 0), 0);
+                const macCompleted = macPhases.reduce((sum, p) => sum + (p.ac_ids_complete || 0), 0);
+                const winCompleted = winPhases.reduce((sum, p) => sum + (p.ac_ids_complete || 0), 0);
+                const macProgress = macAcIds > 0 ? Math.round((macCompleted / macAcIds) * 100) : 0;
+                const winProgress = winAcIds > 0 ? Math.round((winCompleted / winAcIds) * 100) : 0;
+                
                 const html = `
                     <div class="section-container">
-                        <h2 class="section-title">Sequential Implementation Phases</h2>
-                        <p class="section-description" style="color: var(--color-text-secondary); margin-bottom: var(--spacing-lg);">
-                            Each phase must reach 100% completion before next phase starts. No parallel execution.
+                        <h2 class="section-title">Dual-Machine Execution Path</h2>
+                        <p class="section-description" style="color: var(--color-text-secondary); margin-bottom: var(--spacing-xl);">
+                            Work distributed across MAC (high-performance) and WIN (standard-performance) machines for optimal execution.
                         </p>
-                        <div class="phases-grid">
-                            ${phases.map(phase => this.renderPhaseCardCompact(phase)).join('')}
+                        
+                        <!-- Workload Summary -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg); margin-bottom: var(--spacing-2xl);">
+                            <!-- MAC Summary -->
+                            <div class="card" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));">
+                                <div style="display: flex; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+                                    <span style="font-size: 2rem;">🍎</span>
+                                    <div>
+                                        <div style="font-size: var(--font-size-xl); font-weight: 700;">MAC Workload</div>
+                                        <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">High-Performance Machine</div>
+                                    </div>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+                                    <div>
+                                        <div style="font-size: var(--font-size-xs); color: var(--color-text-tertiary); text-transform: uppercase;">Phases</div>
+                                        <div style="font-size: var(--font-size-2xl); font-weight: 700; color: #3b82f6;">${macPhases.length}</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: var(--font-size-xs); color: var(--color-text-tertiary); text-transform: uppercase;">AC-IDs</div>
+                                        <div style="font-size: var(--font-size-2xl); font-weight: 700; color: #3b82f6;">${macAcIds}</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: var(--spacing-md);">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: var(--spacing-xs);">
+                                        <span style="font-size: var(--font-size-xs); color: var(--color-text-tertiary);">Progress</span>
+                                        <span style="font-size: var(--font-size-sm); font-weight: 600; color: #3b82f6;">${macProgress}%</span>
+                                    </div>
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar-fill" style="width: ${macProgress}%; background: linear-gradient(90deg, #3b82f6, #06ffa5);"></div>
+                                    </div>
+                                    <div style="font-size: var(--font-size-xs); color: var(--color-text-tertiary); margin-top: var(--spacing-xs);">
+                                        ${macCompleted} / ${macAcIds} capabilities complete
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- WIN Summary -->
+                            <div class="card" style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(139, 92, 246, 0.05));">
+                                <div style="display: flex; align-items: center; gap: var(--spacing-md); margin-bottom: var(--spacing-md);">
+                                    <span style="font-size: 2rem;">🪟</span>
+                                    <div>
+                                        <div style="font-size: var(--font-size-xl); font-weight: 700;">WIN Workload</div>
+                                        <div style="font-size: var(--font-size-sm); color: var(--color-text-secondary);">Standard-Performance Machine</div>
+                                    </div>
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-md); margin-top: var(--spacing-lg);">
+                                    <div>
+                                        <div style="font-size: var(--font-size-xs); color: var(--color-text-tertiary); text-transform: uppercase;">Phases</div>
+                                        <div style="font-size: var(--font-size-2xl); font-weight: 700; color: #8b5cf6;">${winPhases.length}</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: var(--font-size-xs); color: var(--color-text-tertiary); text-transform: uppercase;">AC-IDs</div>
+                                        <div style="font-size: var(--font-size-2xl); font-weight: 700; color: #8b5cf6;">${winAcIds}</div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: var(--spacing-md);">
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: var(--spacing-xs);">
+                                        <span style="font-size: var(--font-size-xs); color: var(--color-text-tertiary);">Progress</span>
+                                        <span style="font-size: var(--font-size-sm); font-weight: 600; color: #8b5cf6;">${winProgress}%</span>
+                                    </div>
+                                    <div class="progress-bar-container">
+                                        <div class="progress-bar-fill" style="width: ${winProgress}%; background: linear-gradient(90deg, #8b5cf6, #06ffa5);"></div>
+                                    </div>
+                                    <div style="font-size: var(--font-size-xs); color: var(--color-text-tertiary); margin-top: var(--spacing-xs);">
+                                        ${winCompleted} / ${winAcIds} capabilities complete
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Two-Panel Phase Display -->
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-2xl);">
+                            <!-- MAC Panel -->
+                            <div>
+                                <div style="display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-lg); padding: var(--spacing-md); background: rgba(59, 130, 246, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(59, 130, 246, 0.3);">
+                                    <span style="font-size: 1.5rem;">🍎</span>
+                                    <div>
+                                        <div style="font-weight: 700; font-size: var(--font-size-lg);">MAC Phases</div>
+                                        <div style="font-size: var(--font-size-xs); color: var(--color-text-secondary);">Memory-intensive & compute-heavy</div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: var(--spacing-lg);">
+                                    ${macPhases.map(phase => this.renderPhaseCardCompact(phase)).join('')}
+                                </div>
+                            </div>
+                            
+                            <!-- WIN Panel -->
+                            <div>
+                                <div style="display: flex; align-items: center; gap: var(--spacing-sm); margin-bottom: var(--spacing-lg); padding: var(--spacing-md); background: rgba(139, 92, 246, 0.1); border-radius: var(--radius-md); border: 1px solid rgba(139, 92, 246, 0.3);">
+                                    <span style="font-size: 1.5rem;">🪟</span>
+                                    <div>
+                                        <div style="font-weight: 700; font-size: var(--font-size-lg);">WIN Phases</div>
+                                        <div style="font-size: var(--font-size-xs); color: var(--color-text-secondary);">I/O-bound & lightweight tasks</div>
+                                    </div>
+                                </div>
+                                <div style="display: flex; flex-direction: column; gap: var(--spacing-lg);">
+                                    ${winPhases.map(phase => this.renderPhaseCardCompact(phase)).join('')}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -1630,6 +1739,11 @@
                 const platformBadge = this.renderPlatformBadge(platform);
                 const platformDetails = this.renderPlatformDetails(platform);
                 
+                // Get machine assignment
+                const machine = phaseData.machine || {};
+                const machineBadge = this.renderMachineBadge(machine);
+                const machineReason = machine.reason || '';
+                
                 return `
                     <div class="phase-card-compact">
                         <div class="card">
@@ -1640,6 +1754,7 @@
                                 <div class="phase-card-subtitle">
                                     ${phaseData.name}
                                 </div>
+                                ${machineBadge}
                                 <div style="margin-top: var(--spacing-sm); display: flex; gap: var(--spacing-xs); flex-wrap: wrap;">
                                     <span class="status-badge ${status}">${statusText}</span>
                                     ${platformBadge}
@@ -1647,6 +1762,7 @@
                                 ${platformDetails}
                             </div>
                             <div class="phase-card-body">
+                                ${machineReason ? `<div style="font-size: var(--font-size-xs); color: var(--color-text-secondary); font-style: italic; margin-bottom: var(--spacing-sm); padding: var(--spacing-xs); background: rgba(0, 212, 255, 0.05); border-radius: 4px; border-left: 2px solid ${machine.machine === 'MAC' ? '#3b82f6' : '#8b5cf6'};">${machineReason}</div>` : ''}
                                 <div class="phase-card-metrics">
                                     <div class="phase-card-metric">
                                         <div class="phase-card-metric-label">Capabilities</div>
@@ -1671,6 +1787,23 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                `;
+            },
+            
+            renderMachineBadge(machine) {
+                if (!machine || !machine.machine) return '';
+                
+                const isMac = machine.machine === 'MAC';
+                const icon = machine.icon || (isMac ? '🍎' : '🪟');
+                const color = isMac ? '#3b82f6' : '#8b5cf6';
+                const bgColor = isMac ? 'rgba(59, 130, 246, 0.15)' : 'rgba(139, 92, 246, 0.15)';
+                const borderColor = isMac ? 'rgba(59, 130, 246, 0.3)' : 'rgba(139, 92, 246, 0.3)';
+                
+                return `
+                    <div style="display: flex; align-items: center; gap: var(--spacing-xs); padding: var(--spacing-xs) var(--spacing-sm); background: ${bgColor}; border: 1px solid ${borderColor}; border-radius: var(--radius-sm); margin-top: var(--spacing-sm); width: fit-content;">
+                        <span style="font-size: 14px;">${icon}</span>
+                        <span style="font-size: 11px; font-weight: 700; color: ${color}; text-transform: uppercase; letter-spacing: 0.05em;">${machine.machine}</span>
                     </div>
                 `;
             },
