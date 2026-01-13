@@ -1,18 +1,17 @@
 plan_metadata:
   plan_id: CORTEX-6.0-SNOWBALL-MASTER
-  version: 1.4.0
+  version: 1.5.0
   created: '2026-01-10T23:50:00Z'
-  updated: '2026-01-12T21:00:00Z'
+  updated: '2026-01-13T12:20:00Z'
   author: Asif Hussain
   strategy: Snowball Implementation + Permanent Decommission
   philosophy: Build for operation; decommission construction scaffolding
   design_score: 97
-  total_weeks: 13.5
+  total_weeks: 16.5
   total_ac_ids: 184
   hybrid_approach: true
   gpt_influence: 70% rigor, 30% overhead
-  latest_addition: Phase 5 - CORTEX Cleanup & Decommission Suite (AC-CLEAN-301 to
-    328)
+  latest_addition: Phase 10 - CORTEX LENS & Onboarding (moved from 1.5); Phase 1.5 - STS (Semantic Test Suite)
 snowball_strategy:
   description: 'Build core infrastructure first; features compound on infrastructure.
 
@@ -35,10 +34,15 @@ snowball_strategy:
     name: Foundation Enhancement
     weeks: 2
     dependency: None - builds base infrastructure
+  - phase: 1.5
+    name: STS (Semantic Test Suite)
+    weeks: 3
+    dependency: Foundation (Phase 1)
+    critical: Test infrastructure foundation for all orchestrators
   - phase: 2
     name: Orchestration Core (CORE WORKFLOW)
     weeks: 2
-    dependency: Foundation (Phase 1)
+    dependency: STS (Phase 1.5)
     critical: Establishes default working mechanism
   - phase: 3
     name: Feature Orchestrators
@@ -58,6 +62,11 @@ snowball_strategy:
     weeks: 2
     dependency: Orchestrator Integration (Phase 4.5)
     critical: Remove all construction scaffolding, permanent operations only
+  - phase: 10
+    name: CORTEX LENS & Onboarding (Intelligent Discovery)
+    weeks: 3
+    dependency: Phase 5 complete
+    critical: Universal code intelligence and knowledge discovery system
 phase_1_foundation:
   name: Foundation Enhancement
   duration: 2 weeks
@@ -280,22 +289,144 @@ phase_1_foundation:
     - No Phase 2 work starts until ALL Phase 1 complete
     - Evidence Bundles prove completion, not just code commit
     - Integration tests prove components work together
-phase_1_5_intelligent_discovery:
-  name: Phase 1.5 - CORTEX LENS & Onboarding (Intelligent Discovery)
+phase_1_5_sts_semantic_test_suite:
+  name: Phase 1.5 - STS (Semantic Test Suite)
   duration: 3 weeks
   start_date: '2026-01-25'
   end_date: '2026-02-14'
   status: ready_after_phase_1
   priority: CRITICAL
   placement: Between Phase 1 & Phase 2
+  rationale: 'STS (Semantic Test Suite) provides the foundation for all test infrastructure
+
+    in CORTEX 6.0. It establishes:
+
+
+    1. Semantic test intent corpus (100 golden test scenarios)
+
+    2. Test generation frameworks for TDD-Master
+
+    3. Evidence validation infrastructure
+
+    4. Test result aggregation and reporting
+
+    5. Integration test harness for orchestrator validation
+
+
+    This MUST complete before Phase 2 (Orchestration Core) because TDD-Master
+
+    and all orchestrators depend on this test infrastructure.
+
+    '
+  recommended_llm:
+    primary: Claude Sonnet 4.5 (RECOMMENDED)
+    usage: 90% of operations
+    cost_efficiency: 1x (baseline)
+    recommendation: Use Sonnet 4.5 for entire phase
+    rationale: "Test infrastructure and validation:\n✅ Excellent for test generation\
+      \ patterns\n✅ Strong at validation logic\n✅ Good for test harness design\n\
+      ✅ Handles complex assertion patterns\n"
+  description: 'Build comprehensive test infrastructure that all orchestrators depend on:
+
+
+    1. Semantic test corpus (100 golden scenarios)
+
+    2. Test generation frameworks
+
+    3. Evidence validation
+
+    4. Integration test harness
+
+    '
+  components:
+    semantic_test_corpus:
+      name: STS Golden Corpus
+      ac_ids:
+      - AC-STS-001
+      - AC-STS-002
+      - AC-STS-003
+      priority: CRITICAL
+      duration: 1 week
+      owner: Testing Team
+      capabilities:
+      - '100 golden test intents covering all orchestrator patterns'
+      - 'Test intent classifier (simple, rollout, challenge)'
+      - 'Expected outcome definitions'
+      - 'Test data generation'
+      dependencies:
+      - AC-AUDIT-001
+      - AC-STATE-001
+      evidence_bundle:
+        test_coverage: '>=95%'
+        corpus_size: 100 test intents
+        classification_accuracy: '>=95%'
+    test_generation_framework:
+      name: Test Generation Infrastructure
+      ac_ids:
+      - AC-TESTGEN-001
+      - AC-TESTGEN-002
+      - AC-TESTGEN-003
+      priority: CRITICAL
+      duration: 1 week
+      owner: Testing Team
+      capabilities:
+      - 'Auto-generate unit tests from AC criteria'
+      - 'Integration test scaffolding'
+      - 'Mock generation for external dependencies'
+      - 'Test fixture management'
+      dependencies:
+      - AC-STS-001
+      evidence_bundle:
+        test_coverage: '>=90%'
+        generation_accuracy: '>=85%'
+    evidence_validation:
+      name: Evidence Validation Infrastructure
+      ac_ids:
+      - AC-EVIDENCE-VAL-001
+      - AC-EVIDENCE-VAL-002
+      priority: CRITICAL
+      duration: 1 week
+      owner: Testing Team
+      capabilities:
+      - 'Validate evidence bundles against AC criteria'
+      - 'Audit trail verification'
+      - 'Test result aggregation'
+      - 'Coverage reporting'
+      dependencies:
+      - AC-EVIDENCE-001
+      - AC-AUDIT-001
+      evidence_bundle:
+        test_coverage: '>=90%'
+        validation_accuracy: '>=95%'
+  phase_1_5_exit_criteria:
+    must_complete:
+    - All 3 STS ACs implemented (Golden corpus)
+    - All 3 TESTGEN ACs implemented (Test generation)
+    - All 2 EVIDENCE-VAL ACs implemented (Validation)
+    - Zero test failures across all test infrastructure
+    - 100 golden test intents documented and validated
+    - Test generation accuracy >=85%
+    gate_validation:
+      test_coverage: '>=90% for all test infrastructure'
+      corpus_completeness: 100 golden test intents
+      generation_validated: Auto-generated tests pass for 85%+ of ACs
+      evidence_validation: All evidence bundles validate correctly
+phase_10_intelligent_discovery:
+  name: Phase 10 - CORTEX LENS & Onboarding (Intelligent Discovery)
+  duration: 3 weeks
+  start_date: '2026-04-01'
+  end_date: '2026-04-21'
+  status: ready_after_phase_5
+  priority: HIGH
+  placement: After Phase 5 (Cleanup & Decommission)
   rationale: 'CORTEX LENS and Onboarding orchestrators provide intelligent codebase
 
-    discovery and knowledge extraction. They:
+    discovery and knowledge extraction. Moved to Phase 10 because:
 
 
-    1. Run AFTER Phase 1 completes (need audit, evidence, state)
+    1. Not required for core CORTEX 6.0 operation (Phases 1-5)
 
-    2. Run BEFORE Phase 2 planning (Planning v5 uses discovered context)
+    2. Enhances CORTEX with universal code intelligence
 
     3. Auto-run during project onboarding (discovery on first use)
 
@@ -454,7 +585,7 @@ phase_1_5_intelligent_discovery:
       design_system: Modern tabs + D3.js + Mermaid integration
       file_assets: modern-tabs.css (399 lines), modern-tabs.js (200+ lines), html_viewer_generator.py
         (798 lines)
-  phase_1_5_exit_criteria:
+  phase_10_exit_criteria:
     must_complete:
     - All 6 CORTEX LENS ACs implemented (Universal AST + Crawlers)
     - All 8 Onboarding ACs implemented (10-phase discovery + dashboard)
@@ -475,8 +606,7 @@ phase_1_5_intelligent_discovery:
       html_dashboards: All 5 viewers <500KB, <2s load, WCAG AA compliant
       visualization_quality: D3.js rendering <1s for 500-node graphs
     blocker_prevention:
-    - Phase 2 uses onboarding + LENS results for context (can proceed after Phase
-      1.5)
+    - CORTEX 6.0 core (Phases 1-5) complete before starting Phase 10
     - Crawlers tested independently before integration
     - Knowledge storage schema validated before scaling
     - Auto-run capability tested in both production and test modes
@@ -485,9 +615,9 @@ phase_1_5_intelligent_discovery:
 phase_2_orchestration_core:
   name: Orchestration Core (CORE WORKFLOW)
   duration: 2 weeks
-  start_date: '2026-01-27'
-  end_date: '2026-02-07'
-  status: blocked_by_phase_1
+  start_date: '2026-02-15'
+  end_date: '2026-02-28'
+  status: blocked_by_phase_1_5
   priority: CRITICAL
   recommended_llm:
     primary: Claude Sonnet 4.5 (RECOMMENDED)
@@ -520,17 +650,17 @@ phase_2_orchestration_core:
     This is the central controller that all user requests flow through.
 
     '
-  why_second: 'Phase 2 depends on Phase 1 infrastructure:
+  why_second: 'Phase 2 depends on Phase 1 + Phase 1.5 infrastructure:
 
     - MasterOrchestrator logs to audit (AC-AUDIT-*)
 
     - TodoManager persists to state (AC-STATE-*)
 
-    - TDD-Master enforces governance (AC-GOV-*)
+    - TDD-Master enforces governance (AC-GOV-*) and uses STS test infrastructure
 
-    - All generate Evidence Bundles (AC-EVIDENCE-*)
+    - All generate Evidence Bundles (AC-EVIDENCE-*) validated by STS
 
-    Without Foundation, orchestration cannot reliably operate.
+    Without Foundation + STS, orchestration cannot reliably operate.
 
     '
   critical_path: "This is THE CORE WORKFLOW:\nRequest \u2192 GovernanceMerger \u2192\

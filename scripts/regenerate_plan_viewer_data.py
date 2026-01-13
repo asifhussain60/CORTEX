@@ -73,12 +73,13 @@ def extract_ac_ids_for_phase(master_plan, phase_num):
     # Map phase number to phase key in master-plan
     phase_keys = {
         1: 'phase_1_foundation',
-        1.5: 'phase_1_5_intelligent_discovery',
+        1.5: 'phase_1_5_sts_semantic_test_suite',
         2: 'phase_2_orchestration_core',
         3: 'phase_3_feature_orchestrators',
         4: 'phase_4_intelligence',
         4.5: 'phase_4_5_integration_tests',
-        5: 'phase_5_cortex_cleanup_decommission'
+        5: 'phase_5_cortex_cleanup_decommission',
+        10: 'phase_10_intelligent_discovery'
     }
     
     phase_key = phase_keys.get(phase_num)
@@ -114,12 +115,13 @@ def get_phase_info(master_plan, phase_num):
     """Get phase metadata from master-plan"""
     phase_keys = {
         1: 'phase_1_foundation',
-        1.5: 'phase_1_5_intelligent_discovery',
+        1.5: 'phase_1_5_sts_semantic_test_suite',
         2: 'phase_2_orchestration_core',
         3: 'phase_3_feature_orchestrators',
         4: 'phase_4_intelligence',
         4.5: 'phase_4_5_integration_tests',
-        5: 'phase_5_cortex_cleanup_decommission'
+        5: 'phase_5_cortex_cleanup_decommission',
+        10: 'phase_10_intelligent_discovery'
     }
     
     phase_key = phase_keys.get(phase_num)
@@ -170,7 +172,7 @@ def build_plan_viewer_data():
     
     # Build phases array
     phases = []
-    phase_numbers = [1, 2, 3, 4, 4.5, 5]
+    phase_numbers = [1, 1.5, 2, 3, 4, 4.5, 5, 10]
     
     for phase_num in phase_numbers:
         phase_info = get_phase_info(master_plan, phase_num)
@@ -211,7 +213,7 @@ def build_plan_viewer_data():
         verified_in_phase = [ac for ac in ac_ids if ac in all_completed_ac_ids]
         
         phase_obj = {
-            'id': int(phase_num) if phase_num != 4.5 else 4.5,
+            'id': phase_num if phase_num in [1.5, 4.5] else int(phase_num),
             'name': phase_name,
             'completion_percentage': int(percentage),
             'ac_ids_complete': ac_completed_in_phase,
