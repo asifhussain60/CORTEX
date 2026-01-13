@@ -599,6 +599,7 @@ Orchestrator code: `src/orchestrators/health/health_check_orchestrator_v1.py`
 | `cortex-wiring.prompt.md` | Health Check (called by MasterOrchestrator) | Architecture validation + repair |
 | `cortex-evidence-validator.prompt.md` | Validator (called by MasterOrchestrator) | Validates evidence |
 | `cortex-brittleness-review.prompt.md` | Analyst (ad-hoc) | Analyzes risks |
+| `ORCHESTRATOR-DEVELOPMENT.md` | Developer Guide | Best practices for creating new orchestrators |
 
 **Single Source of Truth:**
 - `master-plan.yaml` (phase definitions)
@@ -626,6 +627,29 @@ Nothing more. Nothing less.
 
 ---
 
+## 🔨 ORCHESTRATOR DEVELOPMENT REFERENCE
+
+**For developers creating new orchestrators:**
+
+See `.github/prompts/ORCHESTRATOR-DEVELOPMENT.md` for complete guide covering:
+
+- **Interface Patterns:** Flexible execution methods (execute/check/run/diagnose)
+- **Dependency Injection:** Registry consolidation (no duplicate instantiation)
+- **Smart Parameter Passing:** Only pass accepted parameters to methods
+- **Report Conversion:** Automatic markdown conversion for report objects
+- **Testing Patterns:** Unit + integration tests with cross-platform markers
+- **Audit & Logging:** EnterpriseAuditLogger integration
+- **Registration:** Adding orchestrators to registry and routing rules
+- **Best Practices:** Checklist for production-ready orchestrators
+
+**Recent Improvements:**
+- ✅ Flexible orchestrator method resolution (execute/check/run/diagnose)
+- ✅ Smart parameter mapping (only pass accepted params)
+- ✅ Automatic report-to-markdown conversion
+- ✅ SSOT registry consolidation via dependency injection
+
+---
+
 ## QUICK REFERENCE
 
 | Scenario | What You Do |
@@ -639,6 +663,7 @@ Nothing more. Nothing less.
 | User asks question | Answer briefly, then ask if ready to proceed |
 | Errors occur | Pass through orchestrator error message |
 | Phase 100% complete | Orchestrator reports it; you ask user if ready for next phase |
+| Building new orchestrator | Refer to ORCHESTRATOR-DEVELOPMENT.md guide |
 
 ---
 
