@@ -1,23 +1,17 @@
 {
   "plan_metadata": {
-    "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
-    "total_ac_ids": 212,
-    "completed_ac_ids": 117,
-    "in_progress_ac_ids": 0,
-    "version": "1.9.0",
-    "updated": "2026-01-13T14:29:33.136624+00:00",
-    "status": "phases_1_to_5_defined_4.5_integration_tests_added"
+    "version": "1.6.0",
+    "updated": "2026-01-13T15:51:06.741216+00:00",
+    "total_phases": 13,
+    "total_ac_ids": 208,
+    "completed_ac_ids": 7
   },
   "phases": [
     {
       "id": 1,
       "name": "Foundation Enhancement",
-      "completion_percentage": 100,
-      "ac_ids_complete": 29,
-      "ac_ids_total": 29,
-      "status": "completed",
-      "description": "Build the core infrastructure that EVERY other component depends on.\nAll orchestrators log to audit, enforce governance, persist state.\nWithout this foundation, nothing else can reliably operate.\n",
-      "verified_implemented": [
+      "description": "Build the core infrastructure that EVERY other component depends on.\nAll orchestrators log to audit,...",
+      "ac_ids": [
         "AC-AUDIT-001",
         "AC-AUDIT-002",
         "AC-AUDIT-003",
@@ -48,47 +42,61 @@
         "AC-STATE-002",
         "AC-STATE-003"
       ],
-      "capabilities": [],
-      "platform": {
-        "platforms": [
-          "BOTH"
-        ],
-        "badge": "\ud83d\udfe2 CROSS-PLATFORM",
-        "rationale": "Core Python infrastructure (SQLite, pathlib, json) works identically on all platforms",
-        "mac_specific": [],
-        "win_specific": [],
-        "shared_components": [
-          "Audit Infrastructure (AC-AUDIT-001 to 007)",
-          "Governance Merger (AC-GOV-001 to 005)",
-          "State Manager (AC-STATE-001 to 003)",
-          "Lifecycle Management (AC-LIFECYCLE-001 to 003)",
-          "Evidence Bundles (AC-EVIDENCE-001 to 003)",
-          "Security Layer (AC-SECURITY-001 to 008)"
-        ]
-      },
-      "machine": {
-        "machine": "WIN",
-        "reason": "SQLite operations and logging (lightweight)",
-        "icon": "\ud83e\ude9f"
-      }
+      "ac_ids_total": 29,
+      "ac_ids_complete": 0,
+      "completion_percentage": 0,
+      "status": "planned"
+    },
+    {
+      "id": 1.5,
+      "name": "Phase 1.5 - STS (Semantic Test Suite)",
+      "description": "Build comprehensive test infrastructure that all orchestrators depend on:\n\n1. Semantic test corpus (...",
+      "ac_ids": [
+        "AC-EVIDENCE-VAL-001",
+        "AC-EVIDENCE-VAL-002",
+        "AC-STS-001",
+        "AC-STS-002",
+        "AC-STS-003",
+        "AC-TESTGEN-001",
+        "AC-TESTGEN-002",
+        "AC-TESTGEN-003"
+      ],
+      "ac_ids_total": 8,
+      "ac_ids_complete": 0,
+      "completion_percentage": 0,
+      "status": "planned"
     },
     {
       "id": 2,
       "name": "Orchestration Core (CORE WORKFLOW)",
-      "completion_percentage": 32,
-      "ac_ids_complete": 20,
-      "ac_ids_total": 61,
-      "status": "in_progress",
-      "description": "Establishes THE DEFAULT WORKING MECHANISM at the core of CORTEX operations.\nMasterOrchestrator is IN CHARGE: evaluates requests, creates tasks, executes.\nThis is the central controller that all user requests flow through.\n",
-      "verified_implemented": [
+      "description": "Establishes THE DEFAULT WORKING MECHANISM at the core of CORTEX operations.\nMasterOrchestrator is IN...",
+      "ac_ids": [
+        "AC-METRICS-001",
+        "AC-METRICS-002",
+        "AC-METRICS-003",
+        "AC-METRICS-004",
+        "AC-METRICS-005",
         "AC-ORCH-001",
+        "AC-ORCH-002",
+        "AC-ORCH-003",
+        "AC-ORCH-004",
+        "AC-ORCH-005",
         "AC-ORCH-006",
         "AC-ORCH-007",
+        "AC-ORCH-008",
         "AC-PLAN-001",
         "AC-PLAN-002",
         "AC-PLAN-003",
         "AC-PLAN-004",
         "AC-PLAN-005",
+        "AC-PLAN-006",
+        "AC-PLAN-007",
+        "AC-PLAN-008",
+        "AC-ROUTE-001",
+        "AC-ROUTE-002",
+        "AC-ROUTE-003",
+        "AC-ROUTE-004",
+        "AC-ROUTE-005",
         "AC-STS-001",
         "AC-STS-002",
         "AC-STS-003",
@@ -97,94 +105,130 @@
         "AC-TDD-003",
         "AC-TDD-004",
         "AC-TDD-005",
+        "AC-TDD-006",
+        "AC-TDD-007",
+        "AC-TDD-008",
+        "AC-TDD-009",
+        "AC-TDD-010",
+        "AC-TEMPLATE-001",
+        "AC-TEMPLATE-002",
+        "AC-TEMPLATE-003",
+        "AC-TEMPLATE-004",
+        "AC-TEMPLATE-005",
+        "AC-TEMPLATE-006",
+        "AC-TEMPLATE-007",
+        "AC-TEMPLATE-008",
         "AC-TODO-001",
         "AC-TODO-002",
         "AC-TODO-003",
-        "AC-TODO-004"
+        "AC-TODO-004",
+        "AC-VALIDATE-001",
+        "AC-VALIDATE-002",
+        "AC-VALIDATE-003",
+        "AC-VALIDATE-004",
+        "AC-VALIDATE-005",
+        "AC-VALIDATE-006",
+        "AC-VALIDATE-007",
+        "AC-VALIDATE-008",
+        "AC-VALIDATE-009",
+        "AC-VALIDATE-010"
       ],
-      "capabilities": [],
-      "platform": {
-        "platforms": [
-          "BOTH"
-        ],
-        "badge": "\ud83d\udfe2 CROSS-PLATFORM",
-        "rationale": "MasterOrchestrator uses Python stdlib (no OS-specific calls)",
-        "mac_specific": [],
-        "win_specific": [],
-        "shared_components": [
-          "MasterOrchestrator (AC-ORCH-001 to 008)",
-          "TodoManager (AC-TODO-001 to 004)",
-          "TDD-Master (AC-TDD-001 to 010)",
-          "Planning v5 (AC-PLAN-001 to 008)"
-        ]
-      },
-      "machine": {
-        "machine": "WIN",
-        "reason": "Business logic coordination (moderate compute)",
-        "icon": "\ud83e\ude9f"
-      }
+      "ac_ids_total": 61,
+      "ac_ids_complete": 4,
+      "completion_percentage": 6,
+      "status": "in-progress"
     },
     {
       "id": 3,
       "name": "Feature Orchestrators",
-      "completion_percentage": 51,
-      "ac_ids_complete": 14,
-      "ac_ids_total": 27,
-      "status": "in_progress",
-      "description": "Build specialized orchestrators that leverage the core workflow.\nEach orchestrator reuses: Audit, Governance, State, Lifecycle, Evidence.\nSnowball effect: implementation becomes easier with solid foundation.\n",
-      "verified_implemented": [
+      "description": "Build specialized orchestrators that leverage the core workflow.\nEach orchestrator reuses: Audit, Go...",
+      "ac_ids": [
         "AC-ADO-001",
         "AC-ADO-002",
+        "AC-ADO-003",
+        "AC-ADO-004",
+        "AC-ADO-005",
+        "AC-ADO-006",
         "AC-CLEAN-001",
         "AC-CLEAN-002",
         "AC-CLEAN-003",
+        "AC-CLEAN-201",
+        "AC-CLEAN-202",
         "AC-CRAWLER-001",
         "AC-CRAWLER-002",
         "AC-CRAWLER-003",
         "AC-INV-001",
         "AC-INV-002",
+        "AC-INV-003",
+        "AC-REF-001",
+        "AC-REF-002",
+        "AC-ROLLOUT-SIMPLE-001",
+        "AC-ROLLOUT-SIMPLE-002",
+        "AC-ROLLOUT-SIMPLE-003",
         "AC-SAN-001",
         "AC-SAN-002",
         "AC-VAC-001",
-        "AC-VAC-002"
+        "AC-VAC-002",
+        "AC-VAC-003"
       ],
-      "capabilities": [],
-      "platform": {
-        "platforms": [
-          "MIXED"
-        ],
-        "badge": "\ud83d\udfe1 PLATFORM-AWARE",
-        "rationale": "Git operations have minor platform-specific paths (handled by pathlib)",
-        "mac_specific": [
-          "Git binary detection (uses `which git`)",
-          "Bash-based cleanup scripts (optional)"
-        ],
-        "win_specific": [
-          "Git binary detection (uses `where git`)",
-          "PowerShell-based cleanup scripts (optional)"
-        ],
-        "shared_components": [
-          "ADO v2 (AC-ADO-201 to 218) - REST API, platform-agnostic",
-          "Investigation (AC-INV-301 to 318) - Python-based analysis",
-          "Sanitization (AC-SAN-401 to 418) - File operations via pathlib",
-          "Crawlers (AC-CRAWLER-501 to 518) - AST parsing, cross-platform"
-        ]
-      },
-      "machine": {
-        "machine": "WIN",
-        "reason": "API calls and external integrations (I/O bound)",
-        "icon": "\ud83e\ude9f"
-      }
+      "ac_ids_total": 27,
+      "ac_ids_complete": 0,
+      "completion_percentage": 0,
+      "status": "planned"
+    },
+    {
+      "id": 4,
+      "name": "Intelligence Layer",
+      "description": "AI-native features that enhance orchestration with intelligence.\nLeverages all previous components: ...",
+      "ac_ids": [
+        "AC-COHERENCE-001",
+        "AC-COHERENCE-002",
+        "AC-COHERENCE-003",
+        "AC-COHERENCE-004",
+        "AC-EXPLAIN-001",
+        "AC-EXPLAIN-002",
+        "AC-EXPLAIN-003",
+        "AC-EXPLAIN-004",
+        "AC-EXPLAIN-005",
+        "AC-KNOW-001",
+        "AC-KNOW-002",
+        "AC-KNOW-003",
+        "AC-ROUTE-003",
+        "AC-VISION-001"
+      ],
+      "ac_ids_total": 14,
+      "ac_ids_complete": 0,
+      "completion_percentage": 0,
+      "status": "planned"
+    },
+    {
+      "id": 4.5,
+      "name": "Orchestrator Integration & Audit Validation Suite",
+      "description": "Comprehensive end-to-end testing framework validating all orchestrators work\ntogether correctly. Tes...",
+      "ac_ids": [
+        "AC-INTEG-001",
+        "AC-INTEG-002",
+        "AC-INTEG-003",
+        "AC-INTEG-004",
+        "AC-INTEG-005",
+        "AC-INTEG-006",
+        "AC-INTEG-007",
+        "AC-INTEG-008",
+        "AC-INTEG-009",
+        "AC-INTEG-010",
+        "AC-INTEG-011",
+        "AC-INTEG-012"
+      ],
+      "ac_ids_total": 12,
+      "ac_ids_complete": 0,
+      "completion_percentage": 0,
+      "status": "planned"
     },
     {
       "id": 5,
       "name": "CORTEX Cleanup & Decommission",
-      "completion_percentage": 100,
-      "ac_ids_complete": 28,
-      "ac_ids_total": 28,
-      "status": "completed",
-      "description": "Remove all temporary scaffolding, planning artifacts, and embedded phase-gating logic.\nPost-CORTEX-6.0 decommissioning of construction infrastructure.\nPermanent CORTEX system operates with zero references to planning phases.\n",
-      "verified_implemented": [
+      "description": "Remove all temporary scaffolding, planning artifacts, and embedded phase-gating logic.\nPost-CORTEX-6...",
+      "ac_ids": [
         "AC-CLEAN-301",
         "AC-CLEAN-302",
         "AC-CLEAN-303",
@@ -214,36 +258,21 @@
         "AC-CLEAN-327",
         "AC-CLEAN-328"
       ],
-      "capabilities": [],
-      "platform": {
-        "platforms": [
-          "BOTH"
-        ],
-        "badge": "\ud83d\udfe2 CROSS-PLATFORM",
-        "rationale": "File cleanup uses pathlib (CORE-005 enforced)",
-        "mac_specific": [],
-        "win_specific": [],
-        "shared_components": [
-          "Reference Removal (AC-CLEAN-301 to 308)",
-          "Artifact Decommission (AC-CLEAN-309 to 316)",
-          "Configuration Cleanup (AC-CLEAN-317 to 324)"
-        ]
-      },
-      "machine": {
-        "machine": "MAC",
-        "reason": "Large-scale file scanning and cleanup operations",
-        "icon": "\ud83c\udf4e"
-      }
+      "ac_ids_total": 28,
+      "ac_ids_complete": 0,
+      "completion_percentage": 0,
+      "status": "planned"
     },
     {
       "id": 6,
       "name": "Phase 6 - Security & Routing Foundation",
-      "completion_percentage": 61,
-      "ac_ids_complete": 8,
-      "ac_ids_total": 13,
-      "status": "in_progress",
       "description": "Action Security Layer + Deterministic Routing Engine",
-      "verified_implemented": [
+      "ac_ids": [
+        "AC-ROUTE-001",
+        "AC-ROUTE-002",
+        "AC-ROUTE-003",
+        "AC-ROUTE-004",
+        "AC-ROUTE-005",
         "AC-SECURITY-001",
         "AC-SECURITY-002",
         "AC-SECURITY-003",
@@ -253,93 +282,54 @@
         "AC-SECURITY-007",
         "AC-SECURITY-008"
       ],
-      "capabilities": [],
-      "platform": {
-        "platforms": [
-          "BOTH"
-        ],
-        "badge": "\ud83d\udfe2 CROSS-PLATFORM",
-        "rationale": "Security layer uses Python stdlib and pathlib",
-        "mac_specific": [],
-        "win_specific": [],
-        "shared_components": [
-          "Action Security Layer (AC-SECURITY-001 to 008)",
-          "Deterministic Routing Engine"
-        ]
-      },
-      "machine": {
-        "machine": "MAC",
-        "reason": "Security analysis and route optimization",
-        "icon": "\ud83c\udf4e"
-      }
+      "ac_ids_total": 13,
+      "ac_ids_complete": 0,
+      "completion_percentage": 0,
+      "status": "planned"
     },
     {
       "id": 7,
       "name": "Phase 7 - GitHub Copilot Todo Bridge Integration",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
-      "ac_ids_total": 12,
-      "status": "planned",
       "description": "Todo Bridge integration with VS Code GitHub Copilot",
-      "verified_implemented": [],
-      "capabilities": [],
-      "platform": {
-        "platforms": [
-          "BOTH"
-        ],
-        "badge": "\ud83d\udfe2 CROSS-PLATFORM",
-        "rationale": "VS Code extension API is cross-platform (Node.js + TypeScript)",
-        "mac_specific": [],
-        "win_specific": [],
-        "shared_components": [
-          "Todo Bridge Integration",
-          "VS Code Command Palette"
-        ]
-      },
-      "machine": {
-        "machine": "MAC",
-        "reason": "VS Code extension development and testing",
-        "icon": "\ud83c\udf4e"
-      }
+      "ac_ids": [
+        "AC-COPILOT-001",
+        "AC-COPILOT-002",
+        "AC-COPILOT-003",
+        "AC-COPILOT-004",
+        "AC-COPILOT-005",
+        "AC-COPILOT-006",
+        "AC-COPILOT-007",
+        "AC-COPILOT-008",
+        "AC-COPILOT-009",
+        "AC-COPILOT-010",
+        "AC-COPILOT-011",
+        "AC-COPILOT-012"
+      ],
+      "ac_ids_total": 12,
+      "ac_ids_complete": 0,
+      "completion_percentage": 0,
+      "status": "planned"
     },
     {
       "id": 8,
       "name": "Phase 8 - Staged Rollout System",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
-      "ac_ids_total": 4,
-      "status": "planned",
       "description": "Progressive rollout with approval gates",
-      "verified_implemented": [],
-      "capabilities": [],
-      "platform": {
-        "platforms": [
-          "BOTH"
-        ],
-        "badge": "\ud83d\udfe2 CROSS-PLATFORM",
-        "rationale": "Approval gates are Python-based, no OS calls",
-        "mac_specific": [],
-        "win_specific": [],
-        "shared_components": [
-          "Progressive Rollout System",
-          "Approval Gate Middleware"
-        ]
-      },
-      "machine": {
-        "machine": "WIN",
-        "reason": "Configuration and approval gates (lightweight)",
-        "icon": "\ud83e\ude9f"
-      }
+      "ac_ids": [
+        "AC-ROLLOUT-001",
+        "AC-ROLLOUT-002",
+        "AC-ROLLOUT-003",
+        "AC-ROLLOUT-004"
+      ],
+      "ac_ids_total": 4,
+      "ac_ids_complete": 0,
+      "completion_percentage": 0,
+      "status": "planned"
     },
     {
       "id": 9,
       "name": "Phase 9 - Infrastructure Maturity & Quality Gates",
-      "completion_percentage": 58,
-      "ac_ids_complete": 10,
-      "ac_ids_total": 17,
-      "status": "in_progress",
       "description": "Hash chain audit, lifecycle, evidence bundles, STS, templates, rollout gates",
-      "verified_implemented": [
+      "ac_ids": [
         "AC-AUDIT-007",
         "AC-EVIDENCE-001",
         "AC-EVIDENCE-002",
@@ -347,95 +337,65 @@
         "AC-LIFECYCLE-001",
         "AC-LIFECYCLE-002",
         "AC-LIFECYCLE-003",
+        "AC-ROLLOUT-SIMPLE-001",
+        "AC-ROLLOUT-SIMPLE-002",
+        "AC-ROLLOUT-SIMPLE-003",
         "AC-STS-001",
         "AC-STS-002",
-        "AC-STS-003"
+        "AC-STS-003",
+        "AC-TEMPLATE-001",
+        "AC-TEMPLATE-002",
+        "AC-TEMPLATE-003",
+        "AC-TEMPLATE-004"
       ],
-      "capabilities": [],
-      "platform": {
-        "platforms": [
-          "BOTH"
-        ],
-        "badge": "\ud83d\udfe2 CROSS-PLATFORM",
-        "rationale": "Hash chain and SQLite work identically on all platforms",
-        "mac_specific": [],
-        "win_specific": [],
-        "shared_components": [
-          "Hash Chain Audit (AC-AUDIT-007)",
-          "Lifecycle State Management (AC-LIFECYCLE-001 to 003)",
-          "STS Golden Corpus (100 intents)",
-          "Template System"
-        ]
-      },
-      "machine": {
-        "machine": "WIN",
-        "reason": "Hash chain and state management (moderate)",
-        "icon": "\ud83e\ude9f"
-      }
+      "ac_ids_total": 17,
+      "ac_ids_complete": 0,
+      "completion_percentage": 0,
+      "status": "planned"
     },
     {
       "id": 10,
       "name": "Phase 10 - Template Migration & Enhancement",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
-      "ac_ids_total": 7,
-      "status": "planned",
       "description": "Migrate orchestrators to 3-layer templates, CORE-026 enforcement",
-      "verified_implemented": [],
-      "capabilities": [],
-      "platform": {
-        "platforms": [
-          "BOTH"
-        ],
-        "badge": "\ud83d\udfe2 CROSS-PLATFORM",
-        "rationale": "Template files are text-based (YAML/Markdown)",
-        "mac_specific": [],
-        "win_specific": [],
-        "shared_components": [
-          "3-Layer Response Templates",
-          "CORE-026 Enforcement Middleware"
-        ]
-      },
-      "machine": {
-        "machine": "WIN",
-        "reason": "File operations and template processing (I/O bound)",
-        "icon": "\ud83e\ude9f"
-      }
+      "ac_ids": [
+        "AC-CHALLENGE-001",
+        "AC-CHALLENGE-002",
+        "AC-CHALLENGE-003",
+        "AC-TEMPLATE-005",
+        "AC-TEMPLATE-006",
+        "AC-TEMPLATE-007",
+        "AC-TEMPLATE-008"
+      ],
+      "ac_ids_total": 7,
+      "ac_ids_complete": 7,
+      "completion_percentage": 100,
+      "status": "complete"
     },
     {
       "id": 11,
       "name": "Phase 11 - CORTEX LENS & Onboarding (Intelligent Discovery)",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
+      "description": "Build universal code analysis and knowledge discovery system that:\n\n1. CORTEX LENS: Reverse-engineer...",
+      "ac_ids": [
+        "AC-LENS-001",
+        "AC-LENS-002",
+        "AC-LENS-003",
+        "AC-LENS-004",
+        "AC-LENS-005",
+        "AC-LENS-006",
+        "AC-ONBOARD-001",
+        "AC-ONBOARD-002",
+        "AC-ONBOARD-003",
+        "AC-ONBOARD-004",
+        "AC-ONBOARD-005",
+        "AC-ONBOARD-006",
+        "AC-ONBOARD-007",
+        "AC-ONBOARD-008"
+      ],
       "ac_ids_total": 14,
-      "status": "planned",
-      "description": "Build universal code analysis and knowledge discovery system that:\n\n1. CORTEX LENS: Reverse-engineer codebase via AST, crawlers, git history\n2. Onboarding: Guide teams through intelligent project discovery\n3. Knowledge Store: Capture company and domain patterns for reuse\n4. MCP Tools: Expose analyzers so Planning/other orchestrators access findings\n",
-      "verified_implemented": [],
-      "capabilities": [],
-      "platform": {
-        "platforms": [
-          "MIXED"
-        ],
-        "badge": "\ud83d\udfe1 PLATFORM-AWARE",
-        "rationale": "HTML generation cross-platform, IDE project scanning is optional",
-        "mac_specific": [
-          "Xcode project scanning (.xcodeproj files) - OPTIONAL"
-        ],
-        "win_specific": [
-          "Visual Studio project scanning (.sln/.csproj files) - OPTIONAL"
-        ],
-        "shared_components": [
-          "Universal Code Analysis (Python, JavaScript, TypeScript, etc.)",
-          "Knowledge Discovery Engine",
-          "HTML View Generators (D3.js visualizations)",
-          "Onboarding Documentation"
-        ]
-      },
-      "machine": {
-        "machine": "MAC",
-        "reason": "Real-time code analysis, knowledge graph, D3.js visualizations",
-        "icon": "\ud83c\udf4e"
-      }
+      "ac_ids_complete": 0,
+      "completion_percentage": 0,
+      "status": "planned"
     }
-  ]
+  ],
+  "current_phase": 10
 }

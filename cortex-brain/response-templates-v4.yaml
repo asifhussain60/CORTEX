@@ -1,14 +1,15 @@
-schema_version: '4.3.0'
-last_updated: '2026-01-12'
-architecture: 'cortex_4_0_style_header_with_next_steps'
+schema_version: '4.4.0'
+last_updated: '2026-01-13'
+architecture: 'cortex_4_0_style_header_with_platform_selection'
 description: |
-  CORTEX Response Template System v4.3.0
+  CORTEX Response Template System v4.4.0
   CORTEX-4.0 Style Headers (Operational, Concise, Context-Aware)
+  MAC/WIN Platform Selection in Next Steps (v4.4.0 enhancement)
   
   All responses include:
   1. Mandatory CORTEX-4.0 style header (2 lines, operational)
   2. Executive summary sections (Outcomes, In Progress, Risks, Impact)
-  3. Mandatory "Next Steps:" section as final section
+  3. Mandatory "Next Steps:" section with MAC/WIN platform selection (numeric options)
   
   Header format (CORTEX-4.0 style):
   ## 🧠 CORTEX {work_subtitle}
@@ -88,13 +89,32 @@ executive_summary:
       
       - name: "Next Steps"
         marker: "📋"
-        max_bullets: 3
+        max_bullets: 5
         required: true
         description: |
           MANDATORY final section for every response.
-          Provides single sequential path forward with high-value actions.
-          No branching - linear progression only.
-          Max 3 steps (conciseness enforced).
+          Provides platform-specific continuation options (MAC/WIN) with numeric selection.
+          References cortex-plan-executor.prompt.md for autonomous execution.
+          Max 5 options (platform selection + common actions).
+        
+        format: |
+          📋 NEXT STEPS
+          
+          Select continuation option:
+          
+          1. Continue MAC track autonomously (Phase 11: CORTEX LENS)
+             `@workspace /new cortex-plan-executor.prompt.md continue mac track autonomously`
+          
+          2. Continue WIN track autonomously (Phase 10: Template Migration)
+             `@workspace /new cortex-plan-executor.prompt.md continue win track autonomously`
+          
+          3. Validate Phase 11 tests (MAC)
+             `python3 -m pytest tests/ -k "LENS" -v`
+          
+          4. Sync dashboard with current progress
+             `python3 scripts/regenerate_plan_viewer_data.py`
+          
+          5. Custom action (specify)
 
 # ============================================================================
 # CAPABILITY TRANSLATION (v4.2)
@@ -134,14 +154,40 @@ progress_indicators:
     continuation: "📋"
 
 # ============================================================================
-# CONTINUATION PROTOCOL (v4.2)
+# CONTINUATION PROTOCOL (v4.3 - MAC/WIN Platform Selection)
 # ============================================================================
 
 continuation:
   enabled: true
   position: "after_sections"
-  format: "📋 Resume Work: `continue {operation}` (see tracking files)"
-  description: "Enables cross-session resume with state reference"
+  format: |
+    📋 NEXT STEPS
+    
+    Select continuation option:
+    
+    1. Continue MAC track autonomously (Phase {mac_phase})
+       `@workspace /new cortex-plan-executor.prompt.md continue mac track autonomously`
+    
+    2. Continue WIN track autonomously (Phase {win_phase})
+       `@workspace /new cortex-plan-executor.prompt.md continue win track autonomously`
+    
+    3. Validate current phase tests
+       `python3 -m pytest tests/ -k "{phase_marker}" -v`
+    
+    4. Sync dashboard with current progress
+       `python3 scripts/regenerate_plan_viewer_data.py`
+    
+    5. Custom action (specify)
+  
+  description: |
+    Platform-aware continuation with numeric selection.
+    References cortex-plan-executor.prompt.md for autonomous execution.
+    Supports parallel MAC/WIN development workflows.
+  
+  platform_detection:
+    mac_phases: [4, 5, 6, 7, 11]
+    win_phases: [1, 2, 3, 8, 9, 10]
+    current_phase_variable: "{current_phase}"
 
 # ============================================================================
 # TIER ROUTING (v4.2)

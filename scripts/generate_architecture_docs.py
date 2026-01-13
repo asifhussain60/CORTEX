@@ -4,6 +4,7 @@ Creates modern HTML documentation with Google Fonts styling
 """
 
 from pathlib import Path
+from src.utils.project_root import get_project_root
 
 # Base HTML template with styling
 def get_html_template(title, breadcrumb_current, content):
@@ -737,7 +738,7 @@ recommendation: "Use for all SQLite writes"</code></pre>
 }
 
 # Create output directory
-output_dir = Path("d:/PROJECTS/CORTEX/docs/architecture")
+output_dir = Path("get_project_root()/docs/architecture")
 output_dir.mkdir(parents=True, exist_ok=True)
 
 # Generate files

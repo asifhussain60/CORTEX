@@ -25,6 +25,7 @@ from src.orchestrators.base.base_orchestrator_v4 import (
     PhaseResult
 )
 from src.orchestrators.base.base_orchestrator import (
+from src.response_templates.layered_template_renderer import LayeredTemplateRenderer
     OrchestratorResult,
     OrchestratorStatus
 )
@@ -48,6 +49,7 @@ class SanitizationResult:
         self.timestamp = datetime.now().isoformat()
 
 
+        self.template_renderer = LayeredTemplateRenderer()
 class SanitizationOrchestratorV2(BaseOrchestratorV4):
     """
     Sanitization Orchestrator v2 - Data sanitization and compliance.

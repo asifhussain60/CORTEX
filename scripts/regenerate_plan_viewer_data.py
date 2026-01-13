@@ -1,76 +1,43 @@
 #!/usr/bin/env python3
 """
-Regenerate plan-viewer-data.json from master-plan.yaml + AC-INDEX.yaml
+Regenerate plan-viewer-data.json from SSOT sources
 
-This script is the SyncOrchestrator function for rebuilding dashboard JSON.
-Used when Phase definitions or AC-IDs change.
+SSOT ARCHITECTURE v1.6.0:
+- master-plan.yaml: Architecture SSOT (phase definitions, AC-IDs)
+- progress-tracker.json: Execution SSOT (completion state)
+- AC-INDEX.yaml: Definition SSOT (AC-ID metadata)
+
+This script is the SINGLE sync bridge between SSOT sources and dashboard.
 """
 import json
 import yaml
 from pathlib import Path
 from datetime import datetime, timezone
-from collections import defaultdict
 
 
 def load_master_plan():
-    """Load master-plan.yaml to get all phase definitions"""
+    """Load master-plan.yaml (Architecture SSOT)"""
     plan_path = Path('cortex-brain/cx6-plan/master-plan.yaml')
     with open(plan_path, 'r') as f:
         return yaml.safe_load(f)
 
 
+def load_progress_tracker():
+    """Load progress-tracker.json (Execution SSOT)"""
+    tracker_path = Path('cortex-brain/tier1/tracking/progress-tracker.json')
+    with open(tracker_path, 'r') as f:
+        return json.load(f)
+
+
 def load_ac_index():
-    """Load AC-INDEX.yaml to get AC-ID names and metadata"""
+    """Load AC-INDEX.yaml (Definition SSOT)"""
     ac_path = Path('cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml')
     with open(ac_path, 'r') as f:
-        data = yaml.safe_load(f)
-    
-    # Build AC-ID lookup table by scanning entire YAML
-    ac_map = {}
-    
-    # Recursively extract AC-IDs from the entire YAML structure
-    def extract_ac_ids(obj, result_dict):
-        """Recursively find all AC-ID entries in YAML"""
-        if isinstance(obj, dict):
-            for key, value in obj.items():
-                # Check if this looks like an AC-ID (e.g., AC-AUDIT-001, AC-INTEG-001)
-                if isinstance(key, str) and key.startswith('AC-') and key.count('-') >= 2:
-                    if isinstance(value, dict):
-                        # Extract metadata
-                        ac_id = value.get('id', key)
-                        result_dict[ac_id] = {
-                            'name': value.get('name', ''),
-                            'description': value.get('description', ''),
-                            'status': value.get('status', 'planned'),
-                            'phase': value.get('phase', 0)
-                        }
-                
-                # Recurse into nested structures
-                extract_ac_ids(value, result_dict)
-        
-        elif isinstance(obj, list):
-            for item in obj:
-                extract_ac_ids(item, result_dict)
-    
-    extract_ac_ids(data, ac_map)
-    
-    return ac_map, data
-
-
-def load_progress_tracker():
-    """Load progress-tracker.json to get current completion status"""
-    tracker_path = Path('cortex-brain/tier1/tracking/progress-tracker.json')
-    if tracker_path.exists():
-        with open(tracker_path, 'r') as f:
-            return json.load(f)
-    return None
+        return yaml.safe_load(f)
 
 
 def extract_ac_ids_for_phase(master_plan, phase_num):
-    """Extract AC-IDs for a specific phase from master-plan"""
-    ac_ids = []
-    
-    # Map phase number to phase key in master-plan
+    """Extract AC-IDs for a specific phase from master-plan.yaml"""
     phase_keys = {
         1: 'phase_1_foundation',
         1.5: 'archived_phase_1_5_sts_semantic_test_suite',
@@ -89,35 +56,55 @@ def extract_ac_ids_for_phase(master_plan, phase_num):
     
     phase_key = phase_keys.get(phase_num)
     if not phase_key or phase_key not in master_plan:
-        return ac_ids
+        return []
     
     phase_def = master_plan[phase_key]
+    ac_ids = []
     
-    # Extract AC-IDs from components
-    if isinstance(phase_def, dict):
-        if 'components' in phase_def:
-            components = phase_def['components']
-            if isinstance(components, dict):
-                for comp_name, comp_data in components.items():
-                    if isinstance(comp_data, dict) and 'ac_ids' in comp_data:
-                        ac_list = comp_data['ac_ids']
-                        if isinstance(ac_list, list):
-                            ac_ids.extend(ac_list)
+    if isinstance(phase_def, dict) and 'components' in phase_def:
+        for comp_data in phase_def['components'].values():
+            if isinstance(comp_data, dict) and 'ac_ids' in comp_data:
+                ac_ids.extend(comp_data['ac_ids'])
     
-    return sorted(list(set(ac_ids)))  # Remove duplicates, sort
+    return sorted(list(set(ac_ids)))
 
 
-def count_completed_ac_ids(ac_ids, progress_tracker):
-    """Count how many AC-IDs are completed based on progress tracker"""
-    if not progress_tracker:
+def get_completed_ac_ids(progress_tracker):
+    """Get list of completed AC-IDs from progress-tracker.json (FIX: use completed_ac_ids key)"""
+    if 'completed_ac_ids' in progress_tracker:
+        return progress_tracker['completed_ac_ids']
+    if 'verified_implemented' in progress_tracker:
+        return progress_tracker['verified_implemented']
+    if 'current_phase' in progress_tracker:
+        current = progress_tracker['current_phase']
+        if current.get('status') == 'complete' and 'ac_ids' in current:
+            return current['ac_ids']
+    return []
+
+
+def calculate_phase_status(phase_num, master_plan_ac_ids, completed_ac_ids, current_phase_num):
+    """Calculate status for a phase"""
+    completed_count = len([ac for ac in master_plan_ac_ids if ac in completed_ac_ids])
+    total_count = len(master_plan_ac_ids)
+    
+    if completed_count == total_count and total_count > 0:
+        return 'complete'
+    elif phase_num == current_phase_num or completed_count > 0:
+        return 'in-progress'
+    else:
+        return 'planned'
+
+
+def calculate_phase_completion(master_plan_ac_ids, completed_ac_ids):
+    """Calculate completion percentage for a phase"""
+    if not master_plan_ac_ids:
         return 0
-    
-    completed = progress_tracker.get('verified_implemented', [])
-    return len([ac for ac in ac_ids if ac in completed])
+    completed_count = len([ac for ac in master_plan_ac_ids if ac in completed_ac_ids])
+    return int((completed_count / len(master_plan_ac_ids)) * 100)
 
 
-def get_phase_info(master_plan, phase_num):
-    """Get phase metadata from master-plan"""
+def get_phase_metadata(master_plan, phase_num):
+    """Get phase name and description from master-plan"""
     phase_keys = {
         1: 'phase_1_foundation',
         1.5: 'archived_phase_1_5_sts_semantic_test_suite',
@@ -136,238 +123,109 @@ def get_phase_info(master_plan, phase_num):
     
     phase_key = phase_keys.get(phase_num)
     if not phase_key or phase_key not in master_plan:
-        return None
+        return None, None
     
-    return master_plan[phase_key]
+    phase_def = master_plan[phase_key]
+    name = phase_def.get('name', f'Phase {phase_num}')
+    description = phase_def.get('description', '')
+    
+    return name, description
 
 
-def get_platform_metadata(master_plan, phase_num):
-    """Get platform compatibility metadata for a phase"""
-    # Map phase numbers to platform matrix keys
-    platform_keys = {
-        1: 'Phase_1_Foundation',
-        1.5: 'Phase_1_5_STS',
-        2: 'Phase_2_Orchestration_Core',
-        3: 'Phase_3_Feature_Orchestrators',
-        4: 'Phase_4_Intelligence_Layer',
-        5: 'Phase_5_Cleanup',
-        6: 'Phase_6_Security_Routing',
-        7: 'Phase_7_Copilot_Bridge',
-        8: 'Phase_8_Staged_Rollout',
-        9: 'Phase_9_Infrastructure_Maturity',
-        10: 'Phase_10_Template_Migration',
-        11: 'Phase_11_CORTEX_LENS'
-    }
-    
-    # Get platform compatibility matrix from master-plan
-    if 'multi_machine_development_protocol' not in master_plan:
-        return None
-    
-    platform_matrix = master_plan['multi_machine_development_protocol'].get('platform_compatibility_matrix', {})
-    phase_key = platform_keys.get(phase_num)
-    
-    if not phase_key or phase_key not in platform_matrix:
-        return None
-    
-    return platform_matrix[phase_key]
-
-
-def get_machine_assignment(master_plan, phase_num):
-    """Get machine assignment (MAC or WIN) for a phase"""
-    if 'multi_machine_development_protocol' not in master_plan:
-        return None
-    
-    protocol = master_plan['multi_machine_development_protocol']
-    
-    # Check machine_assignment section
-    if 'machine_assignment' not in protocol:
-        return None
-    
-    assignments = protocol['machine_assignment']
-    
-    # Check MAC workload
-    if 'mac_workload' in assignments:
-        mac_phases = assignments['mac_workload'].get('phases', [])
-        for phase_info in mac_phases:
-            if phase_info.get('phase') == phase_num:
-                return {
-                    'machine': 'MAC',
-                    'reason': phase_info.get('reason', ''),
-                    'icon': '🍎'
-                }
-    
-    # Check WIN workload
-    if 'win_workload' in assignments:
-        win_phases = assignments['win_workload'].get('phases', [])
-        for phase_info in win_phases:
-            if phase_info.get('phase') == phase_num:
-                return {
-                    'machine': 'WIN',
-                    'reason': phase_info.get('reason', ''),
-                    'icon': '🪟'
-                }
-    
-    return None
-
-
-def build_plan_viewer_data():
-    """Build complete plan-viewer-data.json"""
+def generate_plan_viewer_data():
+    """Generate plan-viewer-data.json from SSOT sources"""
+    print("🔄 Regenerating plan-viewer-data.json from master-plan.yaml + AC-INDEX.yaml...")
     
     print("📖 Loading master-plan.yaml...")
     master_plan = load_master_plan()
     
     print("📋 Loading AC-INDEX.yaml...")
-    ac_map, ac_index = load_ac_index()
+    ac_index = load_ac_index()
     
     print("📊 Loading progress-tracker.json...")
     progress_tracker = load_progress_tracker()
     
-    # Get all completed AC-IDs from progress-tracker
-    all_completed_ac_ids = set()
-    if progress_tracker:
-        # Check various places where verified_implemented might be
-        if 'current_phase' in progress_tracker and 'verified_implemented' in progress_tracker['current_phase']:
-            all_completed_ac_ids.update(progress_tracker['current_phase']['verified_implemented'])
-        
-        # Check all phase_N sections
-        for phase_key in ['phase_1', 'phase_2', 'phase_3', 'phase_4', 'phase_5', 'phase_1_5_sts', 'phase_2_orchestration', 'phase_3_features', 'phase_4_intelligence', 'completed_phases']:
-            if phase_key in progress_tracker:
-                phase_data = progress_tracker[phase_key]
-                # Handle list of phases (completed_phases)
-                if isinstance(phase_data, list):
-                    for item in phase_data:
-                        if isinstance(item, dict) and 'verified_implemented' in item:
-                            all_completed_ac_ids.update(item['verified_implemented'])
-                # Handle dict phases
-                elif isinstance(phase_data, dict):
-                    if 'verified_implemented' in phase_data:
-                        all_completed_ac_ids.update(phase_data['verified_implemented'])
+    completed_ac_ids = get_completed_ac_ids(progress_tracker)
+    current_phase_num = progress_tracker.get('current_phase', {}).get('number', 1)
     
-    # Build phases array FIRST to calculate accurate totals
     phases = []
-    phase_numbers = [1, 2, 3, 5, 6, 7, 8, 9, 10, 11]  # All phases (completed phases shown as green)
-    total_ac_ids_from_phases = 0  # Calculate from actual phase definitions
+    all_ac_ids = []
+    
+    phase_numbers = [1, 1.5, 2, 3, 4, 4.5, 5, 6, 7, 8, 9, 10, 11]
     
     for phase_num in phase_numbers:
-        phase_info = get_phase_info(master_plan, phase_num)
-        if not phase_info:
+        phase_ac_ids = extract_ac_ids_for_phase(master_plan, phase_num)
+        
+        if not phase_ac_ids:
             continue
         
-        ac_ids = extract_ac_ids_for_phase(master_plan, phase_num)
+        all_ac_ids.extend(phase_ac_ids)
         
-        # Get completed AC-IDs for this phase
-        ac_completed_in_phase = len([ac for ac in ac_ids if ac in all_completed_ac_ids])
+        phase_name, phase_desc = get_phase_metadata(master_plan, phase_num)
         
-        # Get phase name
-        phase_name = phase_info.get('name', f'Phase {phase_num}')
+        completed_count = len([ac for ac in phase_ac_ids if ac in completed_ac_ids])
+        total_count = len(phase_ac_ids)
+        completion_pct = calculate_phase_completion(phase_ac_ids, completed_ac_ids)
+        status = calculate_phase_status(phase_num, phase_ac_ids, completed_ac_ids, current_phase_num)
         
-        # Build capability list with human-readable names
-        capabilities = []
-        for ac_id in ac_ids:
-            if ac_id in ac_map:
-                capabilities.append({
-                    'ac_id': ac_id,
-                    'name': ac_map[ac_id]['name'],
-                    'status': 'completed' if ac_id in all_completed_ac_ids else 'planned'
-                })
-        
-        # Calculate percentage
-        total_in_phase = len(ac_ids)
-        percentage = (ac_completed_in_phase / total_in_phase * 100) if total_in_phase > 0 else 0
-        
-        # Determine phase status
-        if percentage == 100 and total_in_phase > 0:
-            status = 'completed'
-        elif percentage > 0:
-            status = 'in_progress'
-        else:
-            status = 'planned'
-        
-        # Get verified_implemented list for this phase (actual completed AC-IDs)
-        verified_in_phase = [ac for ac in ac_ids if ac in all_completed_ac_ids]
-        
-        # Get platform metadata for this phase
-        platform_metadata = get_platform_metadata(master_plan, phase_num)
-        
-        # Get machine assignment for this phase
-        machine_assignment = get_machine_assignment(master_plan, phase_num)
-        
-        phase_obj = {
-            'id': phase_num if phase_num in [1.5, 4.5] else int(phase_num),
-            'name': phase_name,
-            'completion_percentage': int(percentage),
-            'ac_ids_complete': ac_completed_in_phase,
-            'ac_ids_total': total_in_phase,
-            'status': status,
-            'description': phase_info.get('description', ''),
-            'verified_implemented': verified_in_phase,
-            'capabilities': capabilities
-        }
-        
-        # Add platform metadata if available
-        if platform_metadata:
-            phase_obj['platform'] = {
-                'platforms': platform_metadata.get('platforms', ['BOTH']),
-                'badge': platform_metadata.get('badge', '🟢 CROSS-PLATFORM'),
-                'rationale': platform_metadata.get('rationale', ''),
-                'mac_specific': platform_metadata.get('mac_specific', []),
-                'win_specific': platform_metadata.get('win_specific', []),
-                'shared_components': platform_metadata.get('shared_components', [])
-            }
-        
-        # Add machine assignment if available
-        if machine_assignment:
-            phase_obj['machine'] = machine_assignment
-        
-        phases.append(phase_obj)
-        total_ac_ids_from_phases += total_in_phase  # Accumulate total
+        phases.append({
+            'id': phase_num,
+            'name': phase_name or f'Phase {phase_num}',
+            'description': phase_desc[:100] + '...' if phase_desc and len(phase_desc) > 100 else phase_desc,
+            'ac_ids': phase_ac_ids,
+            'ac_ids_total': total_count,
+            'ac_ids_complete': completed_count,
+            'completion_percentage': completion_pct,
+            'status': status
+        })
     
-    # Calculate accurate totals AFTER processing all phases
-    total_ac_ids = total_ac_ids_from_phases  # Use sum from all phases
-    completed_ac_ids = len(all_completed_ac_ids)  # Total completed across all phases
-    
-    # Build metadata
-    metadata = {
-        'plan_id': master_plan.get('plan_metadata', {}).get('plan_id', 'CORTEX-6.0-SNOWBALL-MASTER'),
-        'total_ac_ids': total_ac_ids,
-        'completed_ac_ids': completed_ac_ids,
-        'in_progress_ac_ids': 0,
-        'version': master_plan.get('plan_metadata', {}).get('version', '1.3.0'),
-        'updated': datetime.now(timezone.utc).isoformat(),
-        'status': 'phases_1_to_5_defined_4.5_integration_tests_added'
+    viewer_data = {
+        'plan_metadata': {
+            'version': '1.6.0',
+            'updated': datetime.now(timezone.utc).isoformat(),
+            'total_phases': len(phases),
+            'total_ac_ids': len(set(all_ac_ids)),
+            'completed_ac_ids': len(set(completed_ac_ids))
+        },
+        'phases': phases,
+        'current_phase': current_phase_num
     }
     
-    result = {
-        'plan_metadata': metadata,
-        'phases': phases
-    }
-    
-    return result
-
-
-def save_plan_viewer_data(data):
-    """Save generated data to plan-viewer-data.json"""
     output_path = Path('cortex-brain/cx6-plan/viewer/plan-viewer-data.json')
     output_path.parent.mkdir(parents=True, exist_ok=True)
     
     with open(output_path, 'w') as f:
-        json.dump(data, f, indent=2)
+        json.dump(viewer_data, f, indent=2)
     
     print(f"✅ Saved to {output_path}")
-    print(f"   Total AC-IDs: {data['plan_metadata']['total_ac_ids']}")
-    print(f"   Completed: {data['plan_metadata']['completed_ac_ids']}")
-    print(f"   Phases: {len(data['phases'])}")
+    print(f"   Total AC-IDs: {viewer_data['plan_metadata']['total_ac_ids']}")
+    print(f"   Completed: {viewer_data['plan_metadata']['completed_ac_ids']}")
+    print(f"   Phases: {viewer_data['plan_metadata']['total_phases']}")
+    
+    return viewer_data
+
+
+def main():
+    """Entry point"""
+    try:
+        viewer_data = generate_plan_viewer_data()
+        
+        print("\n✅ Regeneration complete!")
+        
+        current_phase = viewer_data['current_phase']
+        for phase in viewer_data['phases']:
+            if phase['id'] == current_phase:
+                print(f"   Phase {phase['id']} Integration Tests now included in dashboard")
+                break
+        
+    except Exception as e:
+        print(f"\n❌ Error: {e}")
+        import traceback
+        traceback.print_exc()
+        return 1
+    
+    return 0
 
 
 if __name__ == '__main__':
-    try:
-        print("🔄 Regenerating plan-viewer-data.json from master-plan.yaml + AC-INDEX.yaml...\n")
-        data = build_plan_viewer_data()
-        save_plan_viewer_data(data)
-        print("\n✅ Regeneration complete!")
-        print("   Phase 4.5 Integration Tests now included in dashboard")
-    except Exception as e:
-        print(f"❌ Error: {e}")
-        import traceback
-        traceback.print_exc()
-        exit(1)
+    exit(main())

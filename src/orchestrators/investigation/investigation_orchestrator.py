@@ -26,6 +26,7 @@ from src.orchestrators.base.base_orchestrator_v4 import (
     PhaseResult
 )
 from src.orchestrators.base.base_orchestrator import (
+from src.response_templates.layered_template_renderer import LayeredTemplateRenderer
     OrchestratorResult,
     OrchestratorStatus
 )
@@ -49,6 +50,7 @@ class InvestigationResult:
         self.timestamp = datetime.now().isoformat()
 
 
+        self.template_renderer = LayeredTemplateRenderer()
 class InvestigationOrchestratorV2(BaseOrchestratorV4):
     """
     Investigation Orchestrator v2 - Root cause analysis.

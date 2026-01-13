@@ -1,5 +1,12 @@
 # ✅ Evidence-Based Status Validation Prompt
 
+
+**Purpose:** Fast, automated validation of AC-ID completion claims against test evidence  
+**Version:** 3.0.0  
+**Date:** 2026-01-12  
+**Governance:** CORE-002 (no root files), CORE-017 (governance enforcement), CORE-009 (plan organization), CORE-025 (intelligent challenge)  
+**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+
 **Purpose:** Fast, automated validation of AC-ID completion claims against test evidence  
 **Version:** 3.0.0  
 **Date:** 2026-01-12  

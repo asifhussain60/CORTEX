@@ -17,6 +17,7 @@ import re
 from pathlib import Path
 from typing import List, Tuple, Dict
 import sys
+from src.utils.project_root import get_project_root
 
 # Phrases that imply something is implemented/operational
 IMPLEMENTED_PHRASES = [
@@ -55,7 +56,7 @@ EXCLUDE_PATTERNS = [
 
 def load_progress_tracker() -> Dict:
     """Load current implementation status from progress tracker."""
-    tracker_path = Path("d:/PROJECTS/CORTEX/cortex-brain/tier1/tracking/progress-tracker.json")
+    tracker_path = Path("get_project_root()/cortex-brain/tier1/tracking/progress-tracker.json")
     
     try:
         with open(tracker_path, 'r', encoding='utf-8') as f:
@@ -208,7 +209,7 @@ def scan_documentation(docs_dir: Path, phase_status: Dict[str, str], fix: bool =
     
     # Get all HTML and MD files
     html_files = list(docs_dir.rglob('*.html'))
-    md_files = list(Path("d:/PROJECTS/CORTEX/cortex-brain/documents").rglob('*.md'))
+    md_files = list(Path("get_project_root()/cortex-brain/documents").rglob('*.md'))
     all_files = html_files + md_files
     
     # Filter out excluded files
@@ -229,7 +230,7 @@ def scan_documentation(docs_dir: Path, phase_status: Dict[str, str], fix: bool =
         violations = scan_file_for_violations(filepath, phase_status)
         
         if violations:
-            relative_path = filepath.relative_to(Path("d:/PROJECTS/CORTEX"))
+            relative_path = filepath.relative_to(Path("get_project_root()"))
             print(f"⚠️  {relative_path}")
             
             for line_num, violating_text, suggestion in violations:
@@ -280,7 +281,7 @@ def main():
     phase_status = get_implementation_status(tracker)
     
     # Scan documentation
-    docs_dir = Path("d:/PROJECTS/CORTEX/docs")
+    docs_dir = Path("get_project_root()/docs")
     scan_documentation(docs_dir, phase_status, fix=args.fix, phase_filter=args.phase)
 
 

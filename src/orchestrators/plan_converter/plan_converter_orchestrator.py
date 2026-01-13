@@ -44,6 +44,7 @@ class PlanConverterOrchestrator:
         self.mode: Optional[str] = None  # 'EPIC' or 'FEATURE'
         self.conversion_log: List[str] = []
         
+        self.template_renderer = LayeredTemplateRenderer()
     def execute(self) -> Dict[str, Any]:
         """
         Execute plan conversion.
@@ -367,6 +368,7 @@ import http.server
 import socketserver
 import os
 from pathlib import Path
+from src.response_templates.layered_template_renderer import LayeredTemplateRenderer
 
 def find_available_port(start_port=8000, end_port=8010):
     """Find first available port in range."""

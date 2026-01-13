@@ -32,6 +32,7 @@ from src.orchestrators.crawler.crawler_orchestrator_v1 import (
     CrawlerOrchestratorV1,
 )
 from src.infrastructure.response_header_footer_manager import (
+from src.response_templates.layered_template_renderer import LayeredTemplateRenderer
     ResponseHeaderFooterManager,
     get_header_footer_manager,
     wrap_cortex_response
@@ -73,6 +74,7 @@ class MasterOrchestrator:
         # Initialize sub-orchestrators
         self._initialize_orchestrators()
     
+        self.template_renderer = LayeredTemplateRenderer()
     def _initialize_orchestrators(self) -> None:
         """Initialize all sub-orchestrators"""
         # Initialize state manager

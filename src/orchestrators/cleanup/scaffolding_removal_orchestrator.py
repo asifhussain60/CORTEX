@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Dict, List, Tuple, Optional
 from datetime import datetime
 from dataclasses import dataclass, asdict
+from src.response_templates.layered_template_renderer import LayeredTemplateRenderer
 
 
 @dataclass
@@ -30,7 +31,8 @@ class ScaffoldingRemovalOrchestrator:
     """Orchestrator for removing phase references from production code"""
 
     def __init__(self):
-        self.project_root = Path('/Users/asifhussain/PROJECTS/CORTEX')
+        from src.utils.project_root import get_project_root
+        self.project_root = get_project_root()
         self.backup_dir = self.project_root / 'cortex-brain' / 'backups' / 'phase-removal'
         self.backup_dir.mkdir(parents=True, exist_ok=True)
         self.phase_pattern = re.compile(
@@ -38,6 +40,7 @@ class ScaffoldingRemovalOrchestrator:
             re.IGNORECASE
         )
 
+        self.template_renderer = LayeredTemplateRenderer()
     def find_phase_references(self) -> Dict[str, List[PhaseReference]]:
         """Find all phase references in core files"""
         core_files = [
