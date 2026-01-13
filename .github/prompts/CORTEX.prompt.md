@@ -331,24 +331,34 @@ Everything else is owned by Python orchestrators.
 
 ---
 
-## RESPONSE FORMAT (MANDATORY)
+## 📋 Response Format (v4.0)
 
-**When clarifying intent to user:**
-Executive bullet format (concise, clear, confirmable).
-
-**Example:**
-```
-🎯 YOU WANT TO:
-
-• Continue implementing Phase 1 AC-IDs
-• Run each AC-ID, collect test evidence, update tracker
-• Stop when phase reaches 100% completion
-
-IS THIS CORRECT? (Yes / No / Clarify)
+**Header:**
+- **Introduction only** (`introduce yourself`, `intro`, `hello`): Start with ASCII banner directly — **NO header before banner**
+- **All other responses**: Add standard header:
+```markdown
+## 🧠 CORTEX {Title}
+**Author:** Asif Hussain | **GitHub:** github.com/asifhussain60/CORTEX
 ```
 
-**When presenting orchestrator results:**
-Display result as-is from orchestrator. No reformatting.
+**Body (Adaptive):**
+
+| Tier | Tokens | Structure |
+|------|--------|-----------|
+| INSTANT | <50 | `{answer}` |
+| FOCUSED | 50-200 | `{explanation}` + `**Next:**` |
+| STRUCTURED | 200-600 | `**Context:**` + `**Changes:**` + `**Next:**` |
+| COMPREHENSIVE | 600+ | Multiple `### {Sections}` |
+
+**Next Steps:** EXACTLY ONE action OR `✅ All work complete!`
+
+**Completion (when ALL work done):**
+```markdown
+# 🎉 CONGRATULATIONS
+## 🧠 CORTEX {Operation}
+...
+✅ **All work complete!** No further action required.
+```
 
 ---
 

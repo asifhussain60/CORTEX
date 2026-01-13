@@ -227,6 +227,51 @@ AC-LIFECYCLE-003:
   status: implemented
   test_coverage_target: 80
   title: Quarantine Mechanism
+AC-METRICS-001:
+  component: metrics_collector
+  description: Metrics Collector - Test Success Rate Baseline
+  implementation_file: src/infrastructure/metrics_collector.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Test Success Rate Baseline
+AC-METRICS-002:
+  component: metrics_collector
+  description: Metrics Collector - Execution Latency Tracking
+  implementation_file: src/infrastructure/metrics_collector.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Execution Latency Tracking
+AC-METRICS-003:
+  component: metrics_collector
+  description: Metrics Collector - Evidence Completeness Validation
+  implementation_file: src/infrastructure/metrics_collector.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Evidence Completeness Validation
+AC-METRICS-004:
+  component: metrics_collector
+  description: Metrics Collector - Governance Violation Alerting
+  implementation_file: src/infrastructure/metrics_collector.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Governance Violation Alerting
+AC-METRICS-005:
+  component: metrics_collector
+  description: Metrics Collector - Input Rejection Rate Analysis
+  implementation_file: src/infrastructure/metrics_collector.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Input Rejection Rate Analysis
 AC-ONBOARD-001:
   component: onboarding_orchestrator
   description: Automated codebase scanning and structure detection
@@ -283,6 +328,195 @@ AC-ONBOARD-008:
   priority: HIGH
   test_coverage_target: 85
   title: MCP Tool Integration
+AC-ORCH-001:
+  component: master_orchestrator
+  description: Evaluate user requests against merged governance rules
+  implementation_file: src/orchestrators/core/master_orchestrator.py
+  phase: 2
+  priority: CRITICAL
+  status: partial
+  test_coverage_target: 90
+  title: Central Request Evaluation
+AC-ORCH-002:
+  component: master_orchestrator
+  description: Generate required_actions from governance evaluation
+  implementation_file: src/orchestrators/core/master_orchestrator.py
+  phase: 2
+  priority: CRITICAL
+  status: not_implemented
+  test_coverage_target: 90
+  title: Required Actions Generation
+AC-ORCH-003:
+  component: master_orchestrator
+  description: Execute tasks in correct dependency order
+  implementation_file: src/orchestrators/core/master_orchestrator.py
+  phase: 2
+  priority: CRITICAL
+  status: partial
+  test_coverage_target: 90
+  title: Dependency Order Execution
+AC-ORCH-004:
+  component: master_orchestrator
+  description: Save state checkpoints for recovery
+  implementation_file: src/orchestrators/core/master_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: State Checkpoint Persistence
+AC-ORCH-005:
+  component: master_orchestrator
+  description: Automatic rollback when execution fails
+  implementation_file: src/orchestrators/core/master_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Rollback on Failure
+AC-ORCH-006:
+  component: master_orchestrator
+  description: Generate evidence bundles for completed work
+  implementation_file: src/orchestrators/core/master_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: Evidence Bundle Generation
+AC-ORCH-007:
+  component: master_orchestrator
+  description: Integrate with GovernanceMerger for rule enforcement
+  implementation_file: src/orchestrators/core/master_orchestrator.py
+  phase: 2
+  priority: CRITICAL
+  status: implemented
+  test_coverage_target: 90
+  title: Governance Integration
+AC-ORCH-008:
+  component: master_orchestrator
+  description: Log all orchestrator operations to audit trail
+  implementation_file: src/orchestrators/core/master_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: Audit Logging
+AC-PLAN-001:
+  component: planning_v5
+  description: Planning v5 - Git History Intelligence Integration
+  implementation_file: src/orchestrators/planning/planning_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: Git History Intelligence Integration
+AC-PLAN-002:
+  component: planning_v5
+  description: Planning v5 - Context-Aware Planning
+  implementation_file: src/orchestrators/planning/planning_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: Context-Aware Planning
+AC-PLAN-003:
+  component: planning_v5
+  description: Planning v5 - Task Dependency Analysis
+  implementation_file: src/orchestrators/planning/planning_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: partial
+  test_coverage_target: 85
+  title: Task Dependency Analysis
+AC-PLAN-004:
+  component: planning_v5
+  description: Planning v5 - Risk Assessment
+  implementation_file: src/orchestrators/planning/planning_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: partial
+  test_coverage_target: 85
+  title: Risk Assessment
+AC-PLAN-005:
+  component: planning_v5
+  description: Planning v5 - Evidence-Based Planning
+  implementation_file: src/orchestrators/planning/planning_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: partial
+  test_coverage_target: 85
+  title: Evidence-Based Planning
+AC-PLAN-006:
+  component: planning_v5
+  description: Planning v5 - Multi-Phase Orchestration
+  implementation_file: src/orchestrators/planning/planning_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Multi-Phase Orchestration
+AC-PLAN-007:
+  component: planning_v5
+  description: Planning v5 - Governance Integration
+  implementation_file: src/orchestrators/planning/planning_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: Governance Integration
+AC-PLAN-008:
+  component: planning_v5
+  description: Planning v5 - Audit Logging
+  implementation_file: src/orchestrators/planning/planning_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: Audit Logging
+AC-ROUTE-001:
+  component: deterministic_routing
+  description: Deterministic Routing - Pattern Matching Engine
+  implementation_file: src/orchestrators/core/pattern_router.py
+  phase: 2
+  priority: HIGH
+  status: partial
+  test_coverage_target: 85
+  title: Pattern Matching Engine
+AC-ROUTE-002:
+  component: deterministic_routing
+  description: Deterministic Routing - Priority-Based Routing
+  implementation_file: src/orchestrators/core/pattern_router.py
+  phase: 2
+  priority: HIGH
+  status: partial
+  test_coverage_target: 85
+  title: Priority-Based Routing
+AC-ROUTE-003:
+  component: deterministic_routing
+  description: Deterministic Routing - Tie-Breaking with PREFIX Length
+  implementation_file: src/orchestrators/core/pattern_router.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Tie-Breaking with PREFIX Length
+AC-ROUTE-004:
+  component: deterministic_routing
+  description: Deterministic Routing - LLM Intent Classifier Fallback
+  implementation_file: src/orchestrators/core/pattern_router.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: LLM Intent Classifier Fallback
+AC-ROUTE-005:
+  component: deterministic_routing
+  description: Deterministic Routing - Unicode Normalization
+  implementation_file: src/orchestrators/core/pattern_router.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Unicode Normalization
 AC-SECURITY-001:
   component: security_layer
   description: Classify as SAFE, INSPECT, or DESTRUCTIVE
@@ -382,6 +616,123 @@ AC-STATE-003:
   status: implemented
   test_coverage_target: 85
   title: Cross-Platform File Locking
+AC-STS-001:
+  component: sts_capability_0
+  description: STS Capability 0 - Golden Corpus (100+ Test Intents)
+  implementation_file: tests/sts/golden_corpus.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Golden Corpus (100+ Test Intents)
+AC-STS-002:
+  component: sts_capability_0
+  description: STS Capability 0 - Framework Validation
+  implementation_file: tests/sts/framework_validator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Framework Validation
+AC-STS-003:
+  component: sts_capability_0
+  description: STS Capability 0 - First Evidence Bundle
+  implementation_file: tests/sts/evidence_generator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: First Evidence Bundle
+AC-TDD-001:
+  component: tdd_master
+  description: TDD-Master - RED→GREEN→REFACTOR Workflow
+  implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: partial
+  test_coverage_target: 85
+  title: RED→GREEN→REFACTOR Workflow
+AC-TDD-002:
+  component: tdd_master
+  description: TDD-Master - CORE-019 Enforcement
+  implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: partial
+  test_coverage_target: 85
+  title: CORE-019 Enforcement
+AC-TDD-003:
+  component: tdd_master
+  description: TDD-Master - Auto-generate Tests from AC
+  implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Auto-generate Tests from AC
+AC-TDD-004:
+  component: tdd_master
+  description: TDD-Master - Evidence Bundle Generation
+  implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: partial
+  test_coverage_target: 85
+  title: Evidence Bundle Generation
+AC-TDD-005:
+  component: tdd_master
+  description: TDD-Master - Test Execution Integration
+  implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: partial
+  test_coverage_target: 85
+  title: Test Execution Integration
+AC-TDD-006:
+  component: tdd_master
+  description: TDD-Master - Coverage Enforcement
+  implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Coverage Enforcement
+AC-TDD-007:
+  component: tdd_master
+  description: TDD-Master - RED Phase Detection
+  implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: RED Phase Detection
+AC-TDD-008:
+  component: tdd_master
+  description: TDD-Master - GREEN Phase Validation
+  implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: GREEN Phase Validation
+AC-TDD-009:
+  component: tdd_master
+  description: TDD-Master - REFACTOR Phase Guards
+  implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: REFACTOR Phase Guards
+AC-TDD-010:
+  component: tdd_master
+  description: TDD-Master - Audit Trail Integration
+  implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Audit Trail Integration
 AC-TEMPLATE-006:
   component: template_system
   description: Migrate all orchestrator prompts to use standardized CORE-026 headers
@@ -405,6 +756,134 @@ AC-TEMPLATE-008:
   priority: HIGH
   test_coverage_target: 85
   title: Response Template Unification
+AC-TODO-001:
+  component: todo_manager
+  description: Create tasks from required_actions
+  implementation_file: src/orchestrators/core/todo_orchestrator.py
+  phase: 2
+  priority: CRITICAL
+  status: implemented
+  test_coverage_target: 90
+  title: Create Trackable Tasks
+AC-TODO-002:
+  component: todo_manager
+  description: Save tasks to progress-tracker.json atomically
+  implementation_file: src/orchestrators/core/todo_orchestrator.py
+  phase: 2
+  priority: CRITICAL
+  status: implemented
+  test_coverage_target: 90
+  title: Persist to Tracker
+AC-TODO-003:
+  component: todo_manager
+  description: Track task status (not-started, in-progress, completed)
+  implementation_file: src/orchestrators/core/todo_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: implemented
+  test_coverage_target: 85
+  title: Status Tracking
+AC-TODO-004:
+  component: todo_manager
+  description: Enforce dependency order in task execution
+  implementation_file: src/orchestrators/core/todo_orchestrator.py
+  phase: 2
+  priority: HIGH
+  status: partial
+  test_coverage_target: 85
+  title: Dependency Enforcement
+AC-VALIDATE-001:
+  component: input_validator
+  description: Input Validator (Hallucination Prevention) - Intent Canonicalization
+  implementation_file: src/orchestrators/validation/input_validator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Intent Canonicalization
+AC-VALIDATE-002:
+  component: input_validator
+  description: Input Validator (Hallucination Prevention) - AC-ID Existence Check
+  implementation_file: src/orchestrators/validation/input_validator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: AC-ID Existence Check
+AC-VALIDATE-003:
+  component: input_validator
+  description: Input Validator (Hallucination Prevention) - Evidence Bundle Pre-Check
+  implementation_file: src/orchestrators/validation/input_validator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Evidence Bundle Pre-Check
+AC-VALIDATE-004:
+  component: input_validator
+  description: Input Validator (Hallucination Prevention) - Cross-Reference Coherence
+  implementation_file: src/orchestrators/validation/input_validator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Cross-Reference Coherence
+AC-VALIDATE-005:
+  component: input_validator
+  description: Input Validator (Hallucination Prevention) - Semantic Output Validation
+  implementation_file: src/orchestrators/validation/input_validator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Semantic Output Validation
+AC-VALIDATE-006:
+  component: input_validator
+  description: Input Validator (Hallucination Prevention) - AC-ID Format Validation
+  implementation_file: src/orchestrators/validation/input_validator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: AC-ID Format Validation
+AC-VALIDATE-007:
+  component: input_validator
+  description: Input Validator (Hallucination Prevention) - Phase Alignment Enforcement
+  implementation_file: src/orchestrators/validation/input_validator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Phase Alignment Enforcement
+AC-VALIDATE-008:
+  component: input_validator
+  description: Input Validator (Hallucination Prevention) - Request Contradiction
+    Detection
+  implementation_file: src/orchestrators/validation/input_validator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Request Contradiction Detection
+AC-VALIDATE-009:
+  component: input_validator
+  description: Input Validator (Hallucination Prevention) - Resource Limit Validation
+  implementation_file: src/orchestrators/validation/input_validator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Resource Limit Validation
+AC-VALIDATE-010:
+  component: input_validator
+  description: Input Validator (Hallucination Prevention) - Prerequisite Dependency
+    Check
+  implementation_file: src/orchestrators/validation/input_validator.py
+  phase: 2
+  priority: HIGH
+  status: not_implemented
+  test_coverage_target: 85
+  title: Prerequisite Dependency Check
 acceptance_criteria:
 - category: Audit Infrastructure
   evidence: tests/infrastructure/test_hash_chain.py

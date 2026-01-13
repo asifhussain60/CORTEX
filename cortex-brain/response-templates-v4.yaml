@@ -1,19 +1,29 @@
-schema_version: '4.4.0'
+schema_version: '4.5.0'
 last_updated: '2026-01-13'
-architecture: 'cortex_4_0_style_header_with_platform_selection'
+architecture: 'cortex_4_0_ascii_progress_with_visual_tracking'
 description: |
-  CORTEX Response Template System v4.4.0
-  CORTEX-4.0 Style Headers (Operational, Concise, Context-Aware)
-  MAC/WIN Platform Selection in Next Steps (v4.4.0 enhancement)
+  CORTEX Response Template System v4.5.0
+  CORTEX-4.0 Style Headers + ASCII Visual Progress Bars
   
-  All responses include:
+  Key Features:
   1. Mandatory CORTEX-4.0 style header (2 lines, operational)
-  2. Executive summary sections (Outcomes, In Progress, Risks, Impact)
-  3. Mandatory "Next Steps:" section with MAC/WIN platform selection (numeric options)
+  2. ASCII progress bars for visual phase tracking (CORTEX-4.0 style)
+  3. Executive summary sections (Outcomes, In Progress, Risks, Impact)
+  4. Mandatory "Next Steps:" section with MAC/WIN platform selection
   
   Header format (CORTEX-4.0 style):
   ## 🧠 CORTEX {work_subtitle}
   **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator_name} ✅
+  
+  Progress Bar format (CORTEX-4.0 style):
+  ┌────────────────────────────────────────────────────────────────────┐
+  │            🧠 CORTEX {operation} - PROGRESS TRACKER                │
+  ├────────────────────────────────────────────────────────────────────┤
+  │ Overall Progress: `████████░░` 80% 🔄 In Progress                  │
+  ├────────────────────────────────────────────────────────────────────┤
+  │ Phase {N} - {Name}  `████████░░` 80% 🔄 In Progress                │
+  │ AC-IDs: {X}/{Y} | Tests: {A}/{B}                                   │
+  └────────────────────────────────────────────────────────────────────┘
 
 # ============================================================================
 # MANDATORY CORTEX HEADER (v4.3.0 - CORTEX-4.0 Style)
@@ -133,11 +143,12 @@ capability_translation:
     - "Include AC-ID in internal logs ONLY"
 
 # ============================================================================
-# PROGRESS INDICATORS (v4.2)
+# PROGRESS INDICATORS (v4.5 - CORTEX-4.0 ASCII Progress Bars)
 # ============================================================================
 
 progress_indicators:
   enabled: true
+  ascii_progress_enabled: true
   
   status_icons:
     complete: "✅"
@@ -152,6 +163,49 @@ progress_indicators:
     risks: "⚠️"
     impact: "🎯"
     continuation: "📋"
+  
+  ascii_progress_bar:
+    enabled: true
+    description: |
+      CORTEX-4.0 style visual ASCII progress bars for phase tracking.
+      Shows overall progress and individual phase completion.
+    
+    template: |
+      ```
+      ┌────────────────────────────────────────────────────────────────────┐
+      │            🧠 CORTEX {operation_type} - PROGRESS TRACKER           │
+      ├────────────────────────────────────────────────────────────────────┤
+      │ Overall Progress: `{overall_bar}` {overall_percent}% {overall_status} │
+      ├────────────────────────────────────────────────────────────────────┤
+      │ Phase {phase_num} - {phase_name}  `{phase_bar}` {phase_percent}% {phase_status} │
+      │ AC-IDs: {completed_ac_ids}/{total_ac_ids} | Tests: {passing_tests}/{total_tests} │
+      └────────────────────────────────────────────────────────────────────┘
+      ```
+    
+    bar_characters:
+      filled: "█"
+      empty: "░"
+      length: 10  # Total bar length (10 blocks = 100%)
+    
+    status_display:
+      complete: "✅ Complete"
+      in_progress: "🔄 In Progress"
+      pending: "⏳ Pending"
+      blocked: "🚫 Blocked"
+    
+    usage_example: |
+      When showing phase progress, always include ASCII progress bar:
+      
+      ```
+      ┌────────────────────────────────────────────────────────────────────┐
+      │          🧠 CORTEX Phase 1 Foundation - PROGRESS TRACKER           │
+      ├────────────────────────────────────────────────────────────────────┤
+      │ Overall Progress: `████████░░` 80% 🔄 In Progress                  │
+      ├────────────────────────────────────────────────────────────────────┤
+      │ Phase 1 - Foundation  `████████░░` 80% 🔄 In Progress              │
+      │ AC-IDs: 26/33 | Tests: 142/178                                     │
+      └────────────────────────────────────────────────────────────────────┘
+      ```
 
 # ============================================================================
 # CONTINUATION PROTOCOL (v4.3 - MAC/WIN Platform Selection)
@@ -309,11 +363,21 @@ quality_gates:
 examples:
   
   example_comprehensive: |
-    # 🧠 CORTEX TDD-Master Execution Summary
-    **Version:** 2.1.0 | **Date:** 2026-01-12 14:32:00 UTC
-    **Author:** Asif Hussain
-    **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+    ## 🧠 CORTEX TDD-Master Phase 2 Implementation
+    **Author:** Asif Hussain | **Phase:** 2 | **Orchestrator:** TDD-Master ✅
+    
     ---
+    
+    ```
+    ┌────────────────────────────────────────────────────────────────────┐
+    │        🧠 CORTEX Phase 2 Orchestration Core - PROGRESS TRACKER     │
+    ├────────────────────────────────────────────────────────────────────┤
+    │ Overall Progress: `████░░░░░░` 45% 🔄 In Progress                  │
+    ├────────────────────────────────────────────────────────────────────┤
+    │ Phase 2 - Orchestration Core  `████░░░░░░` 45% 🔄 In Progress      │
+    │ AC-IDs: 18/40 | Tests: 89/178                                      │
+    └────────────────────────────────────────────────────────────────────┘
+    ```
     
     Completed test-driven implementation of toolkit consolidation. Phase 2 at 45% with clear path to 100%.
     
@@ -322,12 +386,12 @@ examples:
     • Hash chain integrity validation operational (5/5 tests passing)
     • Audit tool consolidation complete (merged duplicate tools)
     • Naming standards audit completed (8 violations identified)
-    • @mcp_tool decorator framework applied to 12 public tools
+    • Toolkit decorator framework applied to 12 public tools
     • Phase 2 toolkit work at 45% completion
     
     ⚙️ IN PROGRESS
     
-    • Implementing naming standard fixes
+    • Implementing naming standard fixes (AC-TOOLKIT-005)
     • Refactoring scripts/ directory into toolkit modules
     
     🎯 IMPACT
@@ -337,22 +401,38 @@ examples:
     
     📋 NEXT STEPS
     
-    1. Complete naming standard fixes (estimated 2 hours)
-    2. Execute integration tests to validate refactored modules
-    3. Update progress-tracker.json when all Phase 2 tests pass
+    1. Continue MAC track autonomously (Phase 2: Orchestration Core)
+       `@workspace /new cortex-plan-executor.prompt.md continue mac track autonomously`
+    
+    2. Complete naming standard fixes (estimated 2 hours)
+       `python3 -m src.main "implement AC-TOOLKIT-005" --format markdown`
+    
+    3. Execute integration tests to validate refactored modules
+       `python3 -m pytest tests/ -k "toolkit" -v`
   
   example_instant: |
-    # 🧠 CORTEX Version Query Summary
-    **Version:** 2.1.0 | **Date:** 2026-01-12 14:25:00 UTC
-    **Author:** Asif Hussain
-    **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+    ## 🧠 CORTEX Version Query
+    **Author:** Asif Hussain | **Phase:** 2 | **Orchestrator:** MasterOrchestrator ✅
+    
     ---
+    
+    ```
+    ┌────────────────────────────────────────────────────────────────────┐
+    │              🧠 CORTEX Version Status - PROGRESS TRACKER           │
+    ├────────────────────────────────────────────────────────────────────┤
+    │ Overall Progress: `████░░░░░░` 35% 🔄 In Progress                  │
+    ├────────────────────────────────────────────────────────────────────┤
+    │ Phase 2 - Orchestration Core  `████░░░░░░` 45% 🔄 In Progress      │
+    │ AC-IDs: 18/40 | Tests: 89/178                                      │
+    └────────────────────────────────────────────────────────────────────┘
+    ```
     
     Current CORTEX version is 6.0 (Phase 2 active), brittleness review is v2.1.0.
     
     📋 NEXT STEPS
     
-    1. Review the brittleness findings in cortex-brain/cx6-plan/validation/
+    1. Review brittleness findings in cortex-brain/cx6-plan/validation/
     2. Prioritize critical/high-risk items for Phase 2 implementation
+    3. Continue Phase 2 autonomous execution
 
-# END OF RESPONSE TEMPLATES V4.2.1 - WITH BRAIN ICON AND NEXT STEPS
+# END OF RESPONSE TEMPLATES V4.5.0 - WITH ASCII PROGRESS BARS (CORTEX-4.0 STYLE)
