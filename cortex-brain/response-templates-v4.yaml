@@ -1,8 +1,8 @@
-schema_version: '4.5.0'
+schema_version: '4.5.1'
 last_updated: '2026-01-13'
 architecture: 'cortex_4_0_ascii_progress_with_visual_tracking'
 description: |
-  CORTEX Response Template System v4.5.0
+  CORTEX Response Template System v4.5.1
   CORTEX-4.0 Style Headers + ASCII Visual Progress Bars
   
   Key Features:
@@ -10,6 +10,7 @@ description: |
   2. ASCII progress bars for visual phase tracking (CORTEX-4.0 style)
   3. Executive summary sections (Outcomes, In Progress, Risks, Impact)
   4. Mandatory "Next Steps:" section with MAC/WIN platform selection
+  5. FIXED: Bullets now enforced on separate lines (v4.5.1)
   
   Header format (CORTEX-4.0 style):
   ## 🧠 CORTEX {work_subtitle}
@@ -57,11 +58,27 @@ executive_summary:
   description: |
     Enforces concise, executive-level responses across all orchestrators.
     Eliminates verbose narratives and code blocks.
+    
+    CRITICAL FORMATTING RULE:
+    Each bullet MUST be on a separate line with a blank line after the section header.
+    
+    CORRECT FORMAT:
+    ✅ OUTCOMES
+    
+    • First outcome
+    • Second outcome
+    • Third outcome
+    
+    INCORRECT FORMAT (DO NOT USE):
+    ✅ OUTCOMES
+    • First outcome • Second outcome • Third outcome
   
   format_rules:
     mandatory:
       - "Start with 3-5 sentence executive summary"
       - "Use bullet points for all lists (max 5 per section)"
+      - "Each bullet MUST be on a separate line with blank line before first bullet"
+      - "Format: Section Header → blank line → • Bullet → • Bullet"
       - "NO code snippets unless explicitly requested"
       - "NO narrative prose - declarative statements only"
       - "Quantify outcomes (X files, Y AC-IDs, Z% complete)"
@@ -81,21 +98,39 @@ executive_summary:
         marker: "✅"
         max_bullets: 5
         required: true
+        format: |
+          ✅ OUTCOMES
+          
+          • First outcome
+          • Second outcome
         
       - name: "In Progress"
         marker: "⚙️"
         max_bullets: 3
         required: false
+        format: |
+          ⚙️ IN PROGRESS
+          
+          • Current task
+          • Next task
         
       - name: "Risks"
         marker: "⚠️"
         max_bullets: 3
         required: false
+        format: |
+          ⚠️ RISKS
+          
+          • Risk item
         
       - name: "Impact"
         marker: "🎯"
         max_bullets: 3
         required: false
+        format: |
+          🎯 IMPACT
+          
+          • Impact statement
       
       - name: "Next Steps"
         marker: "📋"
@@ -339,6 +374,7 @@ quality_gates:
     - "All metrics quantified"
     - "No code blocks unless requested"
     - "No explanatory prose"
+    - "Bullets on separate lines with blank line after section header"
     - "Next Steps section present as final section (MANDATORY)"
   
   verification_checklist:
@@ -347,7 +383,8 @@ quality_gates:
     - "✓ Copyright © 2025-2026 Asif Hussain"
     - "✓ Executive summary (3-5 sentences)"
     - "✓ Outcomes section with ✅ marker"
-    - "✓ All bullets on separate lines"
+    - "✓ Blank line after section header before first bullet"
+    - "✓ Each bullet on separate line"
     - "✓ Quantified metrics"
     - "✓ No AC-ID codes visible"
     - "✓ No code snippets"
