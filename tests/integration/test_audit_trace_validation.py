@@ -136,10 +136,14 @@ class TestCorrelationIdTracing:
         # ACT
         parent_entry = self._create_entry_with_correlation(parent_corr_id, 'parent_op')
         
-        # Create child operations with same correlation ID
+        # Create child operations with same correlation ID AND parent reference
         child_entries = []
         for i in range(3):
-            child = self._create_entry_with_correlation(parent_corr_id, f'child_op_{i}')
+            child = self._create_entry_with_correlation(
+                parent_corr_id, 
+                f'child_op_{i}',
+                parent_operation=parent_entry['operation_id']  # Link to parent
+            )
             child_entries.append(child)
         
         # ASSERT
@@ -154,15 +158,15 @@ class TestCorrelationIdTracing:
         import uuid
         return str(uuid.uuid4())
     
-    def _create_entry_with_correlation(self, corr_id, operation):
-        """Create audit entry with correlation ID"""
+    def _create_entry_with_correlation(self, corr_id, operation, parent_operation=None):
+        """Create audit entry with correlation ID and optional parent"""
         import uuid
         return {
             'operation_id': str(uuid.uuid4()),
             'correlation_id': corr_id,
             'operation_type': operation,
             'timestamp': datetime.now(timezone.utc).isoformat(),
-            'parent_operation': None
+            'parent_operation': parent_operation
         }
 
 
@@ -358,15 +362,30 @@ class TestHashChainIntegrity:
         return chain
     
     def _verify_chain_integrity(self, chain):
-        """Verify hash chain integrity"""
+        """Verify hash chain integrity - detects both chain breaks and data tampering"""
         previous_hash = None
         for i, event in enumerate(chain):
+            # Check chain linkage
             if event.get('previous_hash') != previous_hash:
                 return {
                     'valid': False,
                     'tampered': True,
                     'tamper_location': i
                 }
+            
+            # Check data integrity by recalculating hash
+            # Extract original data fields (exclude hash metadata)
+            data_fields = {k: v for k, v in event.items() 
+                          if k not in ('event_hash', 'previous_hash')}
+            recalculated_hash = hashlib.sha256(str(data_fields).encode()).hexdigest()
+            
+            if recalculated_hash != event.get('event_hash'):
+                return {
+                    'valid': False,
+                    'tampered': True,
+                    'tamper_location': i
+                }
+            
             previous_hash = event.get('event_hash')
         
         return {

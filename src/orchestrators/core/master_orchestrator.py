@@ -194,7 +194,23 @@ class MasterOrchestrator:
             if "todo" in self.orchestrators:
                 todo_orch = self.orchestrators["todo"]
                 if hasattr(todo_orch, 'state_manager'):
-                    todo_orch.state_manager.update(state_update)
+                    sm = todo_orch.state_manager
+                    # Handle both StateManager API variants
+                    for key, value in state_update.items():
+                        # Try database StateManager API first (read_state/create_state)
+                        if hasattr(sm, 'read_state'):
+                            existing = sm.read_state(key)
+                            if existing:
+                                sm.update_state(key, value, existing.get('version', 1))
+                            else:
+                                sm.create_state(key, value)
+                        # Fall back to orchestrator StateManager API (get_state/create_state)
+                        elif hasattr(sm, 'get_state'):
+                            existing = sm.get_state(key)
+                            if existing:
+                                sm.update_state(key, value)
+                            else:
+                                sm.create_state(state_id=key, data=value)
             return True
         except Exception as e:
             self.logger.error(
@@ -222,7 +238,22 @@ class MasterOrchestrator:
             if "todo" in self.orchestrators:
                 todo_orch = self.orchestrators["todo"]
                 if hasattr(todo_orch, 'state_manager'):
-                    return todo_orch.state_manager.get(key)
+                    sm = todo_orch.state_manager
+                    # Handle both StateManager API variants
+                    if hasattr(sm, 'read_state'):
+                        result = sm.read_state(key)
+                    elif hasattr(sm, 'get_state'):
+                        result = sm.get_state(key)
+                    else:
+                        return None
+                    
+                    if result and value is not None:
+                        # Filter by value if specified
+                        result_value = result.get('value') or result.get('data', {}).get(key)
+                        if result_value == value:
+                            return result
+                        return None
+                    return result
             return None
         except Exception as e:
             self.logger.error(

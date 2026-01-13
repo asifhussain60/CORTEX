@@ -19,7 +19,7 @@ from enum import Enum
 from datetime import datetime
 import re
 
-from src.orchestrators.audit_logger import EnterpriseAuditLogger
+from src.orchestrators.audit_logger import EnterpriseAuditLogger, AuditLevel, AuditCategory
 
 
 class FileClassification(str, Enum):
@@ -555,10 +555,12 @@ class GitCommitOrchestrator:
 
             # Audit log
             self.audit_logger.log(
-                level="INFO",
-                category="GIT",
+                level=AuditLevel.INFO,
+                category=AuditCategory.EXECUTION,
+                component="git_commit_orchestrator",
+                operation="execute_complete",
                 message="Git commit orchestrator execution complete",
-                details={
+                context={
                     "files_committed": len(commits),
                     "files_ignored": len(ignores),
                     "files_reset": len(resets),
@@ -569,8 +571,8 @@ class GitCommitOrchestrator:
                     "phase": phase_number,
                     "ac_ids": ac_ids,
                     "commit_hash": commit_hash,
-                    "duration_seconds": (datetime.utcnow() - start_time).total_seconds()
-                }
+                },
+                duration_ms=(datetime.utcnow() - start_time).total_seconds() * 1000
             )
 
             return GitCommitResult(
@@ -590,10 +592,12 @@ class GitCommitOrchestrator:
         except Exception as e:
             self.logger.error(f"Git commit orchestrator failed: {e}")
             self.audit_logger.log(
-                level="ERROR",
-                category="GIT",
+                level=AuditLevel.ERROR,
+                category=AuditCategory.EXECUTION,
+                component="git_commit_orchestrator",
+                operation="execute_failed",
                 message="Git commit orchestrator execution failed",
-                details={"error": str(e)}
+                context={"error": str(e)}
             )
             return GitCommitResult(
                 success=False,
