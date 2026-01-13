@@ -15,11 +15,27 @@ from datetime import datetime, timezone
 from typing import Dict, List, Any
 import uuid
 import sys
+import os
+
+
+def get_workspace_root() -> pathlib.Path:
+    """Get workspace root portably (supports MAC/WIN/Linux)."""
+    # Try environment variable first
+    env_root = os.environ.get('CORTEX_ROOT')
+    if env_root:
+        return pathlib.Path(env_root)
+    
+    # Derive from script location
+    script_dir = pathlib.Path(__file__).parent
+    return script_dir.parent
+
 
 class ToolkitActivator:
     """Activates integrated toolkit components in the system."""
     
-    def __init__(self, workspace_root: str = "/Users/asifhussain/PROJECTS/CORTEX"):
+    def __init__(self, workspace_root: str = None):
+        if workspace_root is None:
+            workspace_root = str(get_workspace_root())
         self.workspace_root = pathlib.Path(workspace_root)
         self.cortex_brain = self.workspace_root / "cortex-brain"
         self.tier1_dir = self.cortex_brain / "tier1"
@@ -62,12 +78,13 @@ class ToolkitActivator:
     
     def register_mcp_tools(self) -> Dict:
         """Register all MCP tools in the system."""
-        self.log_event("INFO", "MCP_REGISTRATION", "Registering MCP tools...")
+        self.log_event("INFO", "MCP_REGISTRATION", "Registering MCP tools from authoritative registry...")
         
         mcp_registry = {
-            "registration_id": f"MCP-REG-{self.correlation_id[:8]}",
+            "registration_id": "MCP-REG-CORTEX-6",
             "timestamp": self.timestamp,
             "status": "registered",
+            "authority": "cortex-brain/tier0/governance/mcp-tools-registry.yaml",
             "categories": {
                 "response_templates": {
                     "tools": [
@@ -349,7 +366,7 @@ class ToolkitActivator:
             print(f"• Full system integration complete")
             
             print(f"\n📋 ACTIVATION ARTIFACTS\n")
-            print(f"• MCP Tools Registry: cortex-brain/registry/mcp-tools-registry-{self.correlation_id[:8]}.yaml")
+            print(f"• MCP Tools Registry: cortex-brain/tier0/governance/mcp-tools-registry.yaml (SSOT)")
             print(f"• Activation Manifest: cortex-brain/registry/activation-manifest-{self.correlation_id[:8]}.yaml")
             print(f"• Activation Checklist: cortex-brain/registry/activation-checklist-{self.correlation_id[:8]}.yaml")
             
