@@ -141,6 +141,37 @@ def get_phase_info(master_plan, phase_num):
     return master_plan[phase_key]
 
 
+def get_platform_metadata(master_plan, phase_num):
+    """Get platform compatibility metadata for a phase"""
+    # Map phase numbers to platform matrix keys
+    platform_keys = {
+        1: 'Phase_1_Foundation',
+        1.5: 'Phase_1_5_STS',
+        2: 'Phase_2_Orchestration_Core',
+        3: 'Phase_3_Feature_Orchestrators',
+        4: 'Phase_4_Intelligence_Layer',
+        5: 'Phase_5_Cleanup',
+        6: 'Phase_6_Security_Routing',
+        7: 'Phase_7_Copilot_Bridge',
+        8: 'Phase_8_Staged_Rollout',
+        9: 'Phase_9_Infrastructure_Maturity',
+        10: 'Phase_10_Template_Migration',
+        11: 'Phase_11_CORTEX_LENS'
+    }
+    
+    # Get platform compatibility matrix from master-plan
+    if 'multi_machine_development_protocol' not in master_plan:
+        return None
+    
+    platform_matrix = master_plan['multi_machine_development_protocol'].get('platform_compatibility_matrix', {})
+    phase_key = platform_keys.get(phase_num)
+    
+    if not phase_key or phase_key not in platform_matrix:
+        return None
+    
+    return platform_matrix[phase_key]
+
+
 def build_plan_viewer_data():
     """Build complete plan-viewer-data.json"""
     
@@ -217,6 +248,9 @@ def build_plan_viewer_data():
         # Get verified_implemented list for this phase (actual completed AC-IDs)
         verified_in_phase = [ac for ac in ac_ids if ac in all_completed_ac_ids]
         
+        # Get platform metadata for this phase
+        platform_metadata = get_platform_metadata(master_plan, phase_num)
+        
         phase_obj = {
             'id': phase_num if phase_num in [1.5, 4.5] else int(phase_num),
             'name': phase_name,
@@ -228,6 +262,17 @@ def build_plan_viewer_data():
             'verified_implemented': verified_in_phase,
             'capabilities': capabilities
         }
+        
+        # Add platform metadata if available
+        if platform_metadata:
+            phase_obj['platform'] = {
+                'platforms': platform_metadata.get('platforms', ['BOTH']),
+                'badge': platform_metadata.get('badge', '🟢 CROSS-PLATFORM'),
+                'rationale': platform_metadata.get('rationale', ''),
+                'mac_specific': platform_metadata.get('mac_specific', []),
+                'win_specific': platform_metadata.get('win_specific', []),
+                'shared_components': platform_metadata.get('shared_components', [])
+            }
         
         phases.append(phase_obj)
         total_ac_ids_from_phases += total_in_phase  # Accumulate total
