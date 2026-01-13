@@ -1270,13 +1270,15 @@
     <script>
         /**
          * CORTEX 6.0 Plan Viewer - Application Logic
-         * Loads plan data and renders interactive visualizations
+         * Loads plan data from plan-viewer-data.json and plan-viewer-metrics.json
+         * NO HARDCODED DATA - All state loaded from files
          */
         
         // Global application state
         const app = {
             data: {
                 plan: null,
+                metrics: null,
                 acIndex: null,
                 auditLogs: [],
                 filteredLogs: [],
@@ -1292,33 +1294,47 @@
             },
             
             async init() {
-                console.log('Initializing CORTEX Plan Viewer...');
+                console.log('🚀 Initializing CORTEX Plan Viewer...');
                 this.ui.contentArea = document.getElementById('content-area');
                 
                 try {
-                    // Load plan data
+                    // Load BOTH data files
                     await this.loadPlanData();
+                    await this.loadMetricsData();
                     
-                    // Render UI
+                    // Render UI from loaded data
                     this.renderDashboard();
                     
-                    console.log('✓ CORTEX Plan Viewer initialized');
+                    console.log('✅ CORTEX Plan Viewer initialized successfully');
                 } catch (error) {
-                    console.error('Failed to initialize:', error);
+                    console.error('❌ Failed to initialize:', error);
                     this.showError(error.message);
                 }
             },
             
             async loadPlanData() {
-                console.log('Loading plan data...');
+                console.log('📂 Loading plan data from plan-viewer-data.json...');
                 try {
                     const response = await fetch('plan-viewer-data.json');
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
                     this.data.plan = await response.json();
-                    console.log('✓ Plan data loaded from plan-viewer-data.json:', this.data.plan);
+                    console.log('✅ Plan data loaded:', this.data.plan);
                 } catch (error) {
                     console.error('❌ CRITICAL: Could not load plan-viewer-data.json:', error);
-                    throw new Error('Plan viewer data file not found. Run: python3 scripts/sync_plan_viewer_data.py');
+                    throw new Error('Plan viewer data file not found. Verify: cortex-brain/cx6-plan/viewer/plan-viewer-data.json exists');
+                }
+            },
+            
+            async loadMetricsData() {
+                console.log('📂 Loading metrics data from plan-viewer-metrics.json...');
+                try {
+                    const response = await fetch('plan-viewer-metrics.json');
+                    if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    this.data.metrics = await response.json();
+                    console.log('✅ Metrics data loaded:', this.data.metrics);
+                } catch (error) {
+                    console.warn('⚠️  Metrics file not found (non-critical):', error);
+                    this.data.metrics = { test_statistics: { total_collected: 0, total_passing: 0 } };
                 }
             },
             
