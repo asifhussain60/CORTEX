@@ -370,10 +370,19 @@ Examples:
         try:
             command_start = time.perf_counter()
             
-            # Check for fast utility commands (commit, align, healthcheck, optimize, deploy, system-maintenance)
-            if args.message.lower() in ['commit', 'align', 'healthcheck', 'optimize', 'deploy', 'system-maintenance', 'system maintenance', 'maintenance']:
+            # Check for fast utility commands (commit, align, healthcheck, optimize, deploy, system-maintenance, clear vscode)
+            msg_lower = args.message.lower().strip()
+            
+            # Check for VS Code cache clearing
+            if 'clear vscode' in msg_lower or 'clear vscode cache' in msg_lower or msg_lower in ['vscode-clear', 'vscode cache']:
+                from src.tools.vscode_cache_cleaner import VSCodeCacheCleaner
+                cleaner = VSCodeCacheCleaner()
+                response = cleaner.report(dry_run=False)
+            
+            # Check for other utility commands
+            elif msg_lower in ['commit', 'align', 'healthcheck', 'optimize', 'deploy', 'system-maintenance', 'system maintenance', 'maintenance']:
                 # Normalize system maintenance commands
-                command = args.message.lower()
+                command = msg_lower
                 if command in ['system-maintenance', 'system maintenance', 'maintenance']:
                     command = 'system-maintenance'
                 response = _handle_utility_command(command)
