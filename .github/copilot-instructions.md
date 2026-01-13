@@ -225,19 +225,20 @@ python -m src.tools.git_history_intelligence extract CORTEX-4.0 src/crawlers/git
 
 | Pattern | Orchestrator | Priority | Mode | AC-ID Prefix |
 |---------|--------------|----------|------|--------------|
+| `health check`, `repair cortex`, `wiring`, `diagnose cortex` | **Health Check v1** | **2** | **autonomous** | **AC-CORTEX-\*** |
 | `validate plan`, `check status`, `run tests`, `verify progress` | **CORTEX-PLAN** | **1** | **autonomous** | **AC-VALIDATE-\*** |
 | `git history`, `search branches`, `find existing`, `did we have` | Git History Intel | 5 | autonomous | AC-GIT-* |
-| `epic review`, `health check` | Epic Review | 6 | autonomous | AC-EPIC-* |
+| `epic review` | Epic Review | 6 | autonomous | AC-EPIC-* |
 | `plan`, `create a plan` | Planning v5 | 10 | autonomous | AC-PLAN-* |
 | `implement`, `build`, `create`, `fix` | TDD-Master v1 | 15 | autonomous | AC-TDD-* |
 | `tdd`, `test driven` | TDD-Master v1 | 20 | autonomous | AC-TDD-* |
 | `scaffold`, `create orchestrator`, `new orchestrator` | Orchestrator Scaffolder | 25 | autonomous | AC-SCAFFOLD-* |
 | `ado`, `azure devops` | ADO v2 | 30 | autonomous | AC-ADO-* |
 | `crawl`, `scan code`, `analyze codebase`, `knowledge graph` | Crawler Orchestrator | 35 | autonomous | AC-CRAWLER-* |
+| `sanitize` | Sanitization v2 | 40 | autonomous | AC-SAN-* |
 | `vacuum`, `deep clean` | Vacuum v2 | 45 | autonomous | AC-VAC-* |
 | `cleanup` | Cleanup v2 | 55 | autonomous | AC-CLEAN-* |
 | `investigate` | Investigation | 60 | autonomous | AC-INV-* |
-| `sanitize` | Sanitization v2 | 40 | autonomous | AC-SAN-* |
 | `refine`, `improve` | Refinement v2 | 60 | autonomous | AC-REF-* |
 
 **CORTEX-PLAN:** `.github/prompts/CORTEX-PLAN.prompt.md` - Autonomous test execution, evidence validation, progress tracking with audit verification. Removes hardcoding from plan-viewer.html.
