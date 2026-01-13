@@ -35,6 +35,10 @@ def is_fast_command(message: str) -> bool:
         'introduce yourself',
         'hello',
         'hi cortex',
+        'clear vscode',
+        'clear vscode cache',
+        'vscode-clear',
+        'vscode cache',
     ]
     
     return any(cmd == msg_lower or msg_lower.startswith(cmd + ' ') for cmd in fast_commands)
@@ -77,6 +81,9 @@ class FastCommandHandler:
         elif msg_lower in ['intro', 'introduce yourself', 'hello', 'hi cortex']:
             return self._handle_intro()
         
+        elif 'clear vscode' in msg_lower or msg_lower in ['vscode-clear', 'vscode cache']:
+            return self._handle_clear_vscode()
+        
         return None
     
     def _handle_help(self) -> str:
@@ -97,6 +104,7 @@ class FastCommandHandler:
 - `vacuum` - Deep clean workspace
 - `cleanup` - Remove cache/logs/artifacts
 - `system maintenance` - 12-phase health check
+- `clear vscode` - Clear VS Code cache
 - `refine <module>` - Code improvement pipeline
 
 ## Investigation & Debugging
@@ -185,3 +193,21 @@ Type `help` for full command reference.
             'success': True,
             'message': intro_text
         }
+    
+    def _handle_clear_vscode(self) -> str:
+        """Handle VS Code cache clearing command."""
+        try:
+            from src.tools.vscode_cache_cleaner import VSCodeCacheCleaner
+            cleaner = VSCodeCacheCleaner()
+            return cleaner.report(dry_run=False)
+        except Exception as e:
+            return f"""
+# ❌ VS Code Cache Cleaner Error
+
+Failed to clear VS Code cache: {e}
+
+Try running manually:
+```bash
+python3 clear-vscode-cache.py
+```
+"""
