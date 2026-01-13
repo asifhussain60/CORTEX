@@ -1,0 +1,94 @@
+schema_version: 1.0
+view:
+  id: toolkit-manager-plan-viewer-html
+  title: "Plan Viewer"
+  target_html: "toolkit-manager/plan-viewer.html"
+  nav_level: 2
+  parent: "toolkit-manager/index.html"
+  audiences: ["Business leaders", "Product Owners", "Software Engineers"]
+  tagline: "Interactive plan exploration with evidence hooks"
+design:
+  base_template: "index_gemini.html"
+  look_and_feel:
+    theme: "dark glassmorphism + neon accents (cyan/purple)"
+    typography: ["Inter", "Orbitron"]
+    motion: "subtle, physics-y easing; no obnoxious bounce"
+    accessibility: "WCAG-minded contrast, focus states, reduced-motion support"
+  responsive:
+    breakpoints_px: [1200, 900, 600]
+    targets: ["phone", "tablet", "ipad", "desktop"]
+  shared_components_required:
+    - "sticky top nav with active section highlight"
+    - "breadcrumb trail for level-2 pages"
+    - "page-loading overlay (fast fade)"
+    - "footer quick-links grid"
+    - "glass-card component library"
+    - "tab component (when useful)"
+    - "lightweight animation helpers (IntersectionObserver reveal)"
+assets:
+  allowed_external_cdns:
+    - name: "Font Awesome"
+      url: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    - name: "Google Fonts"
+      url: "https://fonts.googleapis.com"
+    - name: "Mermaid"
+      url: "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"
+    - name: "D3"
+      url: "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"
+  local_assets_expected:
+    - "assets/images/CORTEX-logo-512.png"
+    - "assets/images/Awakening-200.png"
+    - "assets/images/MP4/E2E-Execution.mp4"
+implementation_instructions:
+  keep_text_minimal: true
+  be_visual_first: true
+  avoid_wall_of_text: true
+  diagrams_are_required: true
+  animations_should_be_subtle: true
+  no_framework_required: true
+  preferred_stack: ["HTML", "CSS", "Vanilla JS", "Mermaid", "D3.js"]
+  include: 
+    - "shared layout partials OR a small JS include to keep nav/footer consistent"
+    - "one CSS file for shared tokens + per-page CSS blocks if needed"
+  quality_bar:
+    - "looks like a premium enterprise product site"
+    - "everything aligns, breathes, and responds well on small screens"
+    - "no broken links; nav matches master sitemap"
+
+page:
+  hero:
+    headline: "The plan, but usable"
+    subheadline: "Explore phases, acceptance criteria, and evidence bundles without reading a novel."
+    primary_cta: {"label": "Back to Toolkit", "href": "index.html"}
+    secondary_cta: {"label": "See Orchestrators", "href": "../orchestrators/planning-system.html"}
+  sections:
+    - id: plan-viewer
+      title: "Plan Viewer (CORTEX 6 Master Plan)"
+      layout: "split: left tree + right content"
+      content_rules:
+        - "keep copy to 2-4 short lines per card"
+        - "prefer bullets over paragraphs"
+      components:
+        - "Left: collapsible plan tree (Phases \u2192 Workstreams \u2192 AC IDs)"
+        - "Right: selected item detail with status chips (Not Started/In Progress/Done) + evidence links"
+        - "Top: search box + filters (phase, risk, owner)"
+      visualizations:
+        - type: d3
+          widget: "plan_timeline"
+          label: "Snowball timeline"
+          data: "Demo timeline for phases; hover shows deliverables and gates."
+          behavior: "lazy-render when in viewport; tooltip on hover; keyboard focusable when feasible"
+        - type: mermaid
+          diagram_type: "flowchart"
+          label: "Evidence bundle generation"
+          content_guidance: "AC Done \u2192 Manifest + Tests + Audit \u2192 Bundle \u2192 Publish"
+          style: "dark theme + neon accents; wrapped in glass-card; copy button"
+      interactions:
+        - "Deep-linking via URL hash to plan nodes"
+        - "Sticky header with filters"
+        - "Offline-friendly: plan data loaded from local JSON file"
+      acceptance_criteria:
+        - "Works on iPad: tree collapses into drawer; right panel becomes stacked sections."
+
+notes:
+  - "Source of truth can be the existing cx6-plan/master-plan.yaml transformed to JSON at build time."
