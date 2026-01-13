@@ -54,7 +54,7 @@ print("✅ Regression check passed.")
 
 ```bash
 # Sync dashboard (ONE call per command execution)
-python3 scripts/sync_plan_viewer_data.py || exit 1
+python3 scripts/regenerate_plan_viewer_data.py || exit 1
 echo "✅ Dashboard synced."
 ```
 
@@ -82,7 +82,7 @@ python3 -m src.main "{user_intent}" --orchestrator master --format markdown
 **Do NOT:**
 - ❌ Directly modify progress-tracker.json
 - ❌ Directly modify AC-INDEX.yaml
-- ❌ Call sync_plan_viewer_data.py multiple times
+- ❌ Call regenerate_plan_viewer_data.py multiple times
 - ❌ Manipulate state outside MasterOrchestrator
 
 ---'''
@@ -127,14 +127,14 @@ python3 -m src.main "{user_intent}" --orchestrator master --format markdown
         return new_content, changed
 
     def consolidate_sync_calls(self, content: str) -> Tuple[str, int]:
-        """Replace multiple sync_plan_viewer_data.py calls with unified protocol"""
+        """Replace multiple regenerate_plan_viewer_data.py calls with unified protocol"""
         sync_count = len(re.findall(r'sync_plan_viewer_data\.py', content))
         
         if sync_count == 0:
             # No sync calls, add unified protocol section
             return content, 0
         
-        # Remove all scattered sync_plan_viewer_data.py calls
+        # Remove all scattered regenerate_plan_viewer_data.py calls
         new_content = re.sub(
             r'\n.*?python3\s+scripts/sync_plan_viewer_data\.py.*?\n',
             '\n',

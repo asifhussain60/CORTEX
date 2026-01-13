@@ -303,7 +303,7 @@ def main():
     # Fix if requested
     if '--fix' in sys.argv:
         validator.fix_tracker(results)
-        print("\n✅ Run: python3 scripts/sync_plan_viewer_data.py")
+        print("\n✅ Run: python3 scripts/regenerate_plan_viewer_data.py")
     else:
         print("\n💡 To apply corrections: python3 scripts/validate_tracker_evidence.py --fix")
     
