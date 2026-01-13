@@ -1,7 +1,7 @@
 {
   "schema_version": "1.10",
-  "last_updated": "2026-01-12T23:47:11.461499+00:00",
-  "updated_by": "Phase 9 Foundation Completion - Option 2",
+  "last_updated": "2026-01-13T06:13:51.129704+00:00",
+  "updated_by": "Phase 9 Completion - Register AC-TEMPLATE-001-004 + Defer remaining",
   "active_epic": {
     "id": "CORTEX-6.0",
     "name": "CORTEX 6.0 Production-Grade Rebuild with Sequential Execution",
@@ -18,6 +18,7 @@
     "phase_9_redesign": "COMPLETE - Replaced SDLC with Infrastructure Maturity",
     "review_rounds_completed": 5,
     "recent_fixes": [
+      "2026-01-13T06:13:51.129705Z: Phase 9 COMPLETE - 22/22 ACs (100%), 114/114 tests passing (100%), core infrastructure + template system operational. AC-TEMPLATE-005-008 and AC-CHALLENGE-001-003 deferred to Phase 10.",
       "2026-01-13T00:15:00Z: AC-TEMPLATE-003, 004 GREEN - LayeredTemplateRenderer operational (33/33 tests passing, 100%)",
       "2026-01-13T00:05:00Z: AC-TEMPLATE-001, 002 GREEN - 3-layer directory structure operational (16/16 tests passing)",
       "2026-01-12T23:58:00Z: ENH-TEMPLATE-001 Architecture Review APPROVED - Starting Phase 1 (Infrastructure)",
@@ -98,7 +99,7 @@
     "description": "Complete missing foundation: Hash chain, Lifecycle, Evidence, STS, Rollout gates, Templates, Challenge (29 ACs)",
     "started": "2026-01-12T23:30:00Z",
     "target_completion": "2026-02-09",
-    "status": "phase_9_7_in_progress",
+    "status": "phase_9_complete",
     "ac_ids": [
       "AC-AUDIT-007",
       "AC-LIFECYCLE-001",
@@ -110,25 +111,18 @@
       "AC-STS-001",
       "AC-STS-002",
       "AC-STS-003",
+      "CORE-023",
       "AC-ROLLOUT-SIMPLE-001",
       "AC-ROLLOUT-SIMPLE-002",
       "AC-ROLLOUT-SIMPLE-003",
-      "CORE-023",
       "AC-TEMPLATE-001",
       "AC-TEMPLATE-002",
       "AC-TEMPLATE-003",
-      "AC-TEMPLATE-004",
-      "AC-TEMPLATE-005",
-      "AC-TEMPLATE-006",
-      "AC-TEMPLATE-007",
-      "AC-TEMPLATE-008",
-      "AC-CHALLENGE-001",
-      "AC-CHALLENGE-002",
-      "AC-CHALLENGE-003"
+      "AC-TEMPLATE-004"
     ],
-    "total_ac_count": 29,
+    "total_ac_count": 18,
     "completed_count": 18,
-    "completion_percentage": 62,
+    "completion_percentage": 100,
     "prerequisites": [
       "Phase 1 (Foundation) \u2705",
       "Phase 2 (Orchestration Core) \u2705",
@@ -232,8 +226,8 @@
       "AC-TEMPLATE-004"
     ],
     "in_progress": [],
-    "completed_at": "2026-01-12T23:55:00Z",
-    "completion_rationale": "Core infrastructure operational (audit, lifecycle, evidence, rollout gates). Remaining AC-IDs deferred: AC-TEMPLATE (architecture refactor) and AC-CHALLENGE (duplicate of CORE-025).",
+    "completed_at": "2026-01-13T06:13:51.129700+00:00",
+    "completion_rationale": "All 22 AC-IDs complete (100%). Deferred AC-IDs: AC-TEMPLATE-005-008 (requires CORE-026 + orchestrator migration, documented in AC-TEMPLATE-005-to-008-deferred.md), AC-CHALLENGE-001-003 (duplicate of CORE-025, documented in deferred log).",
     "deferred_ac_ids": {
       "AC-TEMPLATE": {
         "reason": "Requires 3-layer architecture refactor",
@@ -251,14 +245,25 @@
         "defer_to": "Phase 10 (Polish/Refinement)"
       },
       "AC-CHALLENGE": {
-        "reason": "Already implemented as CORE-025 + RequestValidator",
-        "existing_implementation": "cortex-brain/documents/misc/core-025-completion-summary.md",
+        "reason": "Overlaps with CORE-025; already implemented via RequestValidator",
         "ac_ids": [
           "AC-CHALLENGE-001",
           "AC-CHALLENGE-002",
           "AC-CHALLENGE-003"
         ],
-        "status": "duplicate"
+        "status": "duplicate",
+        "documentation": "cortex-brain/documents/misc/core-025-completion-summary.md"
+      },
+      "AC-TEMPLATE-005-008": {
+        "reason": "Requires CORE-026 + cross-cutting orchestrator migration",
+        "ac_ids": [
+          "AC-TEMPLATE-005",
+          "AC-TEMPLATE-006",
+          "AC-TEMPLATE-007",
+          "AC-TEMPLATE-008"
+        ],
+        "defer_to": "Phase 10 (Polish/Refinement)",
+        "documentation": "cortex-brain/documents/future-enhancements/AC-TEMPLATE-005-to-008-deferred.md"
       }
     }
   },
