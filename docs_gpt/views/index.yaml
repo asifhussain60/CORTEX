@@ -1,0 +1,146 @@
+schema_version: 1.0
+view:
+  id: index-html
+  title: "CORTEX"
+  target_html: "index.html"
+  nav_level: 0
+  parent: null
+  audiences: ["Business leaders", "Product Owners", "Software Engineers"]
+  tagline: "Enterprise-Grade AI Development Intelligence"
+design:
+  base_template: "index_gemini.html"
+  look_and_feel:
+    theme: "dark glassmorphism + neon accents (cyan/purple)"
+    typography: ["Inter", "Orbitron"]
+    motion: "subtle, physics-y easing; no obnoxious bounce"
+    accessibility: "WCAG-minded contrast, focus states, reduced-motion support"
+  responsive:
+    breakpoints_px: [1200, 900, 600]
+    targets: ["phone", "tablet", "ipad", "desktop"]
+  shared_components_required:
+    - "sticky top nav with active section highlight"
+    - "breadcrumb trail for level-2 pages"
+    - "page-loading overlay (fast fade)"
+    - "footer quick-links grid"
+    - "glass-card component library"
+    - "tab component (when useful)"
+    - "lightweight animation helpers (IntersectionObserver reveal)"
+assets:
+  allowed_external_cdns:
+    - name: "Font Awesome"
+      url: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    - name: "Google Fonts"
+      url: "https://fonts.googleapis.com"
+    - name: "Mermaid"
+      url: "https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"
+    - name: "D3"
+      url: "https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"
+  local_assets_expected:
+    - "assets/images/CORTEX-logo-512.png"
+    - "assets/images/Awakening-200.png"
+    - "assets/images/MP4/E2E-Execution.mp4"
+implementation_instructions:
+  keep_text_minimal: true
+  be_visual_first: true
+  avoid_wall_of_text: true
+  diagrams_are_required: true
+  animations_should_be_subtle: true
+  no_framework_required: true
+  preferred_stack: ["HTML", "CSS", "Vanilla JS", "Mermaid", "D3.js"]
+  include: 
+    - "shared layout partials OR a small JS include to keep nav/footer consistent"
+    - "one CSS file for shared tokens + per-page CSS blocks if needed"
+  quality_bar:
+    - "looks like a premium enterprise product site"
+    - "everything aligns, breathes, and responds well on small screens"
+    - "no broken links; nav matches master sitemap"
+
+page:
+  hero:
+    headline: "CORTEX"
+    subheadline: "Context-aware Orchestration \u2022 Reasoning \u2022 Testing \u2022 Execution \u2022 Expert"
+    primary_cta: {"label": "Initialize System", "href": "getting-started/index.html"}
+    secondary_cta: {"label": "Watch Demo", "href": "#demo"}
+  sections:
+    - id: value-proposition
+      title: "CORTEX in one screen"
+      layout: "two-column intro grid + persona cards"
+      content_rules:
+        - "keep copy to 2-4 short lines per card"
+        - "prefer bullets over paragraphs"
+      components:
+        - "Intro glass cards: 'What is CORTEX?' and 'Vision'"
+        - "Persona grid (Leadership/Product/Engineer) with outcome-driven bullets"
+        - "Animated 'System Provenance' stats HUD (values labeled 'demo')"
+      visualizations:
+        - type: mermaid
+          diagram_type: "flowchart"
+          label: "Governed AI delivery pipeline"
+          content_guidance: "Request \u2192 Governance Merger \u2192 MasterOrchestrator \u2192 TodoManager \u2192 TDD Engine \u2192 Evidence Bundle"
+          style: "dark theme + neon accents; wrapped in glass-card; copy button"
+        - type: d3
+          widget: "roi_savings_split"
+          label: "Token Optimization Savings"
+          data: "Compare 'Traditional prompts' vs 'CORTEX optimized prompts' showing 60\u201380% token reduction (demo data)."
+          behavior: "lazy-render when in viewport; tooltip on hover; keyboard focusable when feasible"
+      interactions:
+        - "Tabs for Discovery: Lens vs Toolkit"
+        - "Hover micro-interactions on pipeline nodes"
+        - "Reveal-on-scroll animation for cards"
+      acceptance_criteria:
+        - "Matches index_gemini hero + loading overlay vibe (logo, acronym, primary CTA)."
+        - "Two visuals above-the-fold by the time user scrolls 1 viewport."
+        - "All navigation links exist and are clickable."
+    - id: standout-capabilities
+      title: "Standout capabilities (visual-first)"
+      layout: "feature tiles + animated counters"
+      content_rules:
+        - "keep copy to 2-4 short lines per card"
+        - "prefer bullets over paragraphs"
+      components:
+        - "Feature tile grid with icon, 1-line label, and a 'peek' hover tooltip"
+        - "Short 'Proof' strip: Evidence Bundles, Audit Log Hash Chain, Lifecycle States"
+      visualizations:
+        - type: mermaid
+          diagram_type: "sequenceDiagram"
+          label: "End-to-end execution (TDD Mastery)"
+          content_guidance: "PO story \u2192 Plan \u2192 Tests (RED) \u2192 Code (GREEN) \u2192 Refactor \u2192 Audit \u2192 Evidence"
+          style: "dark theme + neon accents; wrapped in glass-card; copy button"
+        - type: d3
+          widget: "lifecycle_state_ring"
+          label: "7-State Lifecycle"
+          data: "Interactive ring showing states: Idle\u2192Draft\u2192Active\u2192Executing\u2192Verifying\u2192Published\u2192Deprecated (demo)."
+          behavior: "lazy-render when in viewport; tooltip on hover; keyboard focusable when feasible"
+      interactions:
+        - "Click tiles to jump to sections or pages"
+        - "Counter animation triggers once per session"
+    - id: demo
+      title: "CORTEX in action"
+      layout: "video stage + sidebar tabs"
+      content_rules:
+        - "keep copy to 2-4 short lines per card"
+        - "prefer bullets over paragraphs"
+      components:
+        - "Reuse index_gemini video layout; if local MP4 missing, show branded placeholder"
+        - "Below video: 3-card 'What you just saw' summary with tiny text"
+      visualizations:
+        - type: d3
+          widget: "cycle_time_waterfall"
+          label: "Delivery acceleration waterfall"
+          data: "Mock delta of cycle time saved across planning, implementation, validation, doc generation (demo data)."
+          behavior: "lazy-render when in viewport; tooltip on hover; keyboard focusable when feasible"
+      interactions:
+        - "Video tab switching; pause other videos"
+        - "Loading overlay on navigation"
+
+cta_links:
+  - label: "Plan Viewer"
+    href: "toolkit-manager/plan-viewer.html"
+  - label: "CORTEX Lens"
+    href: "lens/index.html"
+  - label: "Orchestrator Fleet"
+    href: "orchestrators/planning-system.html"
+
+notes:
+  - "Keep copy tight. Let visuals do the talking."
+  - "Any numeric metrics that are not computed from real data must be labeled as DEMO."
