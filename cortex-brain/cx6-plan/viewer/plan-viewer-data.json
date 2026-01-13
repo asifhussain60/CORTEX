@@ -1,11 +1,11 @@
 {
   "plan_metadata": {
     "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
-    "total_ac_ids": 115,
+    "total_ac_ids": 168,
     "completed_ac_ids": 88,
     "in_progress_ac_ids": 0,
-    "version": "1.7.0",
-    "updated": "2026-01-13T13:09:17.540784+00:00",
+    "version": "1.7.1",
+    "updated": "2026-01-13T13:18:38.476064+00:00",
     "status": "phases_1_to_5_defined_4.5_integration_tests_added"
   },
   "phases": [
@@ -108,7 +108,66 @@
       "capabilities": []
     },
     {
+      "id": 6,
+      "name": "Phase 6 - Security & Routing Foundation",
+      "completion_percentage": 0,
+      "ac_ids_complete": 0,
+      "ac_ids_total": 13,
+      "status": "planned",
+      "description": "Action Security Layer + Deterministic Routing Engine",
+      "verified_implemented": [],
+      "capabilities": []
+    },
+    {
+      "id": 7,
+      "name": "Phase 7 - GitHub Copilot Todo Bridge Integration",
+      "completion_percentage": 0,
+      "ac_ids_complete": 0,
+      "ac_ids_total": 12,
+      "status": "planned",
+      "description": "Todo Bridge integration with VS Code GitHub Copilot",
+      "verified_implemented": [],
+      "capabilities": []
+    },
+    {
+      "id": 8,
+      "name": "Phase 8 - Staged Rollout System",
+      "completion_percentage": 0,
+      "ac_ids_complete": 0,
+      "ac_ids_total": 4,
+      "status": "planned",
+      "description": "Progressive rollout with approval gates",
+      "verified_implemented": [],
+      "capabilities": []
+    },
+    {
+      "id": 9,
+      "name": "Phase 9 - Infrastructure Maturity & Quality Gates",
+      "completion_percentage": 17,
+      "ac_ids_complete": 3,
+      "ac_ids_total": 17,
+      "status": "in_progress",
+      "description": "Hash chain audit, lifecycle, evidence bundles, STS, templates, rollout gates",
+      "verified_implemented": [
+        "AC-STS-001",
+        "AC-STS-002",
+        "AC-STS-003"
+      ],
+      "capabilities": []
+    },
+    {
       "id": 10,
+      "name": "Phase 10 - Template Migration & Enhancement",
+      "completion_percentage": 0,
+      "ac_ids_complete": 0,
+      "ac_ids_total": 7,
+      "status": "planned",
+      "description": "Migrate orchestrators to 3-layer templates, CORE-026 enforcement",
+      "verified_implemented": [],
+      "capabilities": []
+    },
+    {
+      "id": 11,
       "name": "Phase 11 - CORTEX LENS & Onboarding (Intelligent Discovery)",
       "completion_percentage": 0,
       "ac_ids_complete": 0,

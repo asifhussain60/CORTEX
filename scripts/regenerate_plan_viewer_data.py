@@ -72,14 +72,19 @@ def extract_ac_ids_for_phase(master_plan, phase_num):
     
     # Map phase number to phase key in master-plan
     phase_keys = {
-        1: 'phase_1_foundation',
-        1.5: 'phase_1_5_sts_semantic_test_suite',
+        1: 'archived_phase_1_foundation',
+        1.5: 'archived_phase_1_5_sts_semantic_test_suite',
         2: 'phase_2_orchestration_core',
         3: 'phase_3_feature_orchestrators',
-        4: 'phase_4_intelligence',
-        4.5: 'phase_4_5_integration_tests',
+        4: 'archived_phase_4_intelligence',
+        4.5: 'archived_phase_4_5_integration_tests',
         5: 'phase_5_cortex_cleanup_decommission',
-        10: 'phase_10_intelligent_discovery'
+        6: 'phase_6_security_routing',
+        7: 'phase_7_copilot_bridge',
+        8: 'phase_8_staged_rollout',
+        9: 'phase_9_infrastructure_maturity',
+        10: 'phase_10_template_migration',
+        11: 'phase_11_intelligent_discovery'
     }
     
     phase_key = phase_keys.get(phase_num)
@@ -114,14 +119,19 @@ def count_completed_ac_ids(ac_ids, progress_tracker):
 def get_phase_info(master_plan, phase_num):
     """Get phase metadata from master-plan"""
     phase_keys = {
-        1: 'phase_1_foundation',
-        1.5: 'phase_1_5_sts_semantic_test_suite',
+        1: 'archived_phase_1_foundation',
+        1.5: 'archived_phase_1_5_sts_semantic_test_suite',
         2: 'phase_2_orchestration_core',
         3: 'phase_3_feature_orchestrators',
-        4: 'phase_4_intelligence',
-        4.5: 'phase_4_5_integration_tests',
+        4: 'archived_phase_4_intelligence',
+        4.5: 'archived_phase_4_5_integration_tests',
         5: 'phase_5_cortex_cleanup_decommission',
-        10: 'phase_10_intelligent_discovery'
+        6: 'phase_6_security_routing',
+        7: 'phase_7_copilot_bridge',
+        8: 'phase_8_staged_rollout',
+        9: 'phase_9_infrastructure_maturity',
+        10: 'phase_10_template_migration',
+        11: 'phase_11_intelligent_discovery'
     }
     
     phase_key = phase_keys.get(phase_num)
@@ -166,7 +176,7 @@ def build_plan_viewer_data():
     
     # Build phases array FIRST to calculate accurate totals
     phases = []
-    phase_numbers = [1, 1.5, 2, 3, 4, 4.5, 5, 10]
+    phase_numbers = [2, 3, 5, 6, 7, 8, 9, 10, 11]  # Active phases only (archived phases excluded)
     total_ac_ids_from_phases = 0  # Calculate from actual phase definitions
     
     for phase_num in phase_numbers:
