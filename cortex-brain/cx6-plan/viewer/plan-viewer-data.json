@@ -1,236 +1,50 @@
 {
   "plan_metadata": {
-    "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
-    "total_ac_ids": 102,
-    "completed_ac_ids": 59,
-    "in_progress_ac_ids": -4,
-    "version": "1.3.0",
-    "updated": "2026-01-13T11:14:40.596719+00:00",
-    "status": "phase_8_complete_phase_9_planned"
+    "version": "3.0.0",
+    "last_updated": "2026-01-13T06:56:37.317786",
+    "completed_ac_ids": 57,
+    "total_ac_ids": 57,
+    "overall_completion_percentage": 100
+  },
+  "current_phase": {
+    "number": 10,
+    "completion_percentage": 0,
+    "ac_ids_complete": 0,
+    "ac_ids_total": 0,
+    "blockers": []
   },
   "phases": [
     {
-      "id": 1,
-      "name": "Foundation Enhancement",
-      "completion_percentage": 100,
-      "ac_ids_complete": 18,
-      "ac_ids_total": 18,
-      "status": "phase_9_complete",
-      "description": "Build core infrastructure (Audit, Governance, State, Lifecycle, Evidence, Security)",
-      "verified_implemented": [],
-      "capabilities": []
-    },
-    {
-      "id": 1.5,
-      "name": "STS as Capability 0",
-      "completion_percentage": 33,
-      "ac_ids_complete": 1,
-      "ac_ids_total": 3,
-      "status": "completed",
-      "description": "Validate orchestration framework with Golden Corpus"
-    },
-    {
-      "id": 2,
-      "name": "Orchestration Core",
-      "completion_percentage": 56,
-      "ac_ids_complete": 17,
-      "ac_ids_total": 13,
-      "status": "in_progress",
-      "description": "MasterOrchestrator, TodoManager, TDD-Master, Planning v5",
-      "verified_implemented": [
-        "AC-ORCH-001",
-        "AC-ORCH-006",
-        "AC-ORCH-007",
-        "AC-TODO-001",
-        "AC-TODO-002",
-        "AC-TODO-003",
-        "AC-TODO-004",
-        "AC-TDD-001",
-        "AC-TDD-002",
-        "AC-TDD-003",
-        "AC-TDD-004",
-        "AC-TDD-005",
-        "AC-PLAN-001",
-        "AC-PLAN-002",
-        "AC-PLAN-003",
-        "AC-PLAN-004",
-        "AC-PLAN-005"
-      ],
-      "capabilities": [
-        {
-          "id": "AC-ORCH-001",
-          "name": "AC-ORCH-001",
-          "description": ""
-        },
-        {
-          "id": "AC-ORCH-006",
-          "name": "AC-ORCH-006",
-          "description": ""
-        },
-        {
-          "id": "AC-ORCH-007",
-          "name": "AC-ORCH-007",
-          "description": ""
-        },
-        {
-          "id": "AC-TODO-001",
-          "name": "AC-TODO-001",
-          "description": ""
-        },
-        {
-          "id": "AC-TODO-002",
-          "name": "AC-TODO-002",
-          "description": ""
-        },
-        {
-          "id": "AC-TODO-003",
-          "name": "AC-TODO-003",
-          "description": ""
-        },
-        {
-          "id": "AC-TODO-004",
-          "name": "AC-TODO-004",
-          "description": ""
-        },
-        {
-          "id": "AC-TDD-001",
-          "name": "AC-TDD-001",
-          "description": ""
-        },
-        {
-          "id": "AC-TDD-002",
-          "name": "AC-TDD-002",
-          "description": ""
-        },
-        {
-          "id": "AC-TDD-003",
-          "name": "AC-TDD-003",
-          "description": ""
-        },
-        {
-          "id": "AC-TDD-004",
-          "name": "AC-TDD-004",
-          "description": ""
-        },
-        {
-          "id": "AC-TDD-005",
-          "name": "AC-TDD-005",
-          "description": ""
-        },
-        {
-          "id": "AC-PLAN-001",
-          "name": "AC-PLAN-001",
-          "description": ""
-        },
-        {
-          "id": "AC-PLAN-002",
-          "name": "AC-PLAN-002",
-          "description": ""
-        },
-        {
-          "id": "AC-PLAN-003",
-          "name": "AC-PLAN-003",
-          "description": ""
-        },
-        {
-          "id": "AC-PLAN-004",
-          "name": "AC-PLAN-004",
-          "description": ""
-        },
-        {
-          "id": "AC-PLAN-005",
-          "name": "AC-PLAN-005",
-          "description": ""
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "name": "Feature Orchestrators + Onboarding",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
-      "ac_ids_total": 23,
-      "status": "planned",
-      "description": "",
-      "verified_implemented": [],
-      "capabilities": []
-    },
-    {
-      "id": 4,
-      "name": "Intelligence Layer",
-      "completion_percentage": 0,
-      "ac_ids_complete": 8,
-      "ac_ids_total": 8,
-      "status": "planned",
-      "description": "",
-      "verified_implemented": [],
-      "capabilities": []
-    },
-    {
       "id": 5,
-      "name": "Legacy Migration",
-      "completion_percentage": 0,
-      "ac_ids_complete": 3,
-      "ac_ids_total": 3,
-      "status": "planned",
-      "description": "",
-      "verified_implemented": [],
-      "capabilities": []
-    },
-    {
-      "id": 4.5,
-      "name": "Phase 4.5: Orchestrator Integration & Audit Validation Suite",
+      "name": 5,
+      "ac_ids_total": 28,
+      "ac_ids_complete": 28,
       "completion_percentage": 100,
-      "ac_ids_complete": 12,
+      "status": "complete"
+    },
+    {
+      "id": 6,
+      "name": 6,
+      "ac_ids_total": 13,
+      "ac_ids_complete": 13,
+      "completion_percentage": 100,
+      "status": "complete"
+    },
+    {
+      "id": 7,
+      "name": 7,
       "ac_ids_total": 12,
-      "status": "completed",
-      "description": "End-to-end testing framework validating all orchestrators",
-      "verified_implemented": [],
-      "capabilities": []
+      "ac_ids_complete": 12,
+      "completion_percentage": 100,
+      "status": "complete"
     },
     {
-      "id": null,
-      "name": "Legacy Migration & Decommission (AC-CLEAN)",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
-      "ac_ids_total": 0,
-      "status": "planned",
-      "description": "",
-      "verified_implemented": [],
-      "capabilities": []
-    },
-    {
-      "id": null,
-      "name": "Security & Routing Foundation",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
-      "ac_ids_total": 0,
-      "status": "planned",
-      "description": "",
-      "verified_implemented": [],
-      "capabilities": []
-    },
-    {
-      "id": null,
-      "name": "GitHub Copilot Todo Bridge",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
-      "ac_ids_total": 0,
-      "status": "planned",
-      "description": "",
-      "verified_implemented": [],
-      "capabilities": []
-    },
-    {
-      "id": null,
-      "name": "Staged Rollout System",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
-      "ac_ids_total": 0,
-      "status": "planned",
-      "description": "",
-      "verified_implemented": [],
-      "capabilities": []
+      "id": 8,
+      "name": 8,
+      "ac_ids_total": 4,
+      "ac_ids_complete": 4,
+      "completion_percentage": 100,
+      "status": "complete"
     }
   ]
 }
