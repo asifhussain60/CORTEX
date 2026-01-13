@@ -410,16 +410,22 @@
             },
             updateHeroMetrics() {
                 const tracker = this.data.tracker;
-                const phases = tracker.phases || {};
                 let totalCompleted = 0, totalACs = 0, completedPhases = 0;
-                Object.values(phases).forEach(phase => {
-                    const acCount = phase.total_ac_count || phase.acs_total || 0;
-                    if (acCount > 0) {
-                        totalACs += acCount;
-                        totalCompleted += (phase.completed_count || (phase.completion_percentage === 100 ? acCount : 0)) || 0;
+                
+                // Use detailed phase_X objects, not summary phases object
+                Object.keys(this.phases).forEach(phaseKey => {
+                    const detailedKey = `phase_${phaseKey}`;
+                    const phase = tracker[detailedKey];
+                    if (phase) {
+                        const acCount = phase.total_ac_count || 0;
+                        if (acCount > 0) {
+                            totalACs += acCount;
+                            totalCompleted += phase.completed_count || 0;
+                        }
+                        if (phase.status && phase.status.includes('completed')) completedPhases++;
                     }
-                    if (phase.status && phase.status.includes('completed')) completedPhases++;
                 });
+                
                 const completionPct = totalACs > 0 ? Math.round((totalCompleted / totalACs) * 100) : 0;
                 const totalPhases = Object.keys(this.phases).length;
                 document.getElementById('overall-percentage').textContent = `${completionPct}%`;
@@ -433,29 +439,41 @@
             },
             updateMetricsSidebar() {
                 const tracker = this.data.tracker;
-                const phases = tracker.phases || {};
                 let totalCompleted = 0, totalACs = 0, completedPhases = 0;
-                Object.values(phases).forEach(phase => {
-                    const acCount = phase.total_ac_count || phase.acs_total || 0;
-                    if (acCount > 0) {
-                        totalACs += acCount;
-                        totalCompleted += (phase.completed_count || (phase.completion_percentage === 100 ? acCount : 0)) || 0;
+                
+                // Use detailed phase_X objects
+                Object.keys(this.phases).forEach(phaseKey => {
+                    const detailedKey = `phase_${phaseKey}`;
+                    const phase = tracker[detailedKey];
+                    if (phase) {
+                        const acCount = phase.total_ac_count || 0;
+                        if (acCount > 0) {
+                            totalACs += acCount;
+                            totalCompleted += phase.completed_count || 0;
+                        }
+                        if (phase.status && phase.status.includes('completed')) completedPhases++;
                     }
-                    if (phase.status && phase.status.includes('completed')) completedPhases++;
                 });
+                
                 const completionPct = totalACs > 0 ? Math.round((totalCompleted / totalACs) * 100) : 0;
                 const totalPhases = Object.keys(this.phases).length;
                 document.getElementById('health-score').textContent = `${completionPct}%`;
                 document.getElementById('health-bar').style.width = `${completionPct}%`;
                 document.getElementById('completion-pct').textContent = `${completionPct}%`;
                 document.getElementById('health-subtitle').textContent = `${completedPhases} of ${totalPhases} phases complete`;
+                
                 const phaseMetrics = document.getElementById('phase-metrics');
-                phaseMetrics.innerHTML = Object.entries(phases).map(([key, phase]) => {
-                    const acCount = phase.total_ac_count || phase.acs_total || 0;
-                    const pct = acCount > 0 ? Math.round((phase.completion_percentage || ((phase.completed_count || 0) / acCount * 100)) || 0) : 0;
+                const metricsHTML = Object.keys(this.phases).map(phaseKey => {
+                    const detailedKey = `phase_${phaseKey}`;
+                    const phase = tracker[detailedKey];
+                    if (!phase) return '';
+                    
+                    const acCount = phase.total_ac_count || 0;
+                    const pct = acCount > 0 ? Math.round((phase.completed_count || 0) / acCount * 100) : 0;
                     const statusClass = this.getStatusClass(phase.status);
-                    return `<div style="font-size: var(--font-size-sm);"><div class="flex flex-between"><span>Phase ${key.replace('phase_', '')}</span><span style="color: var(--color-${statusClass}); font-weight: 600;">${pct}%</span></div><div class="progress-bar-container" style="margin-top: 4px;"><div class="progress-bar-fill" style="width: ${pct}%; background: var(--color-${statusClass});"></div></div></div>`;
+                    return `<div style="font-size: var(--font-size-sm);"><div class="flex flex-between"><span>Phase ${phaseKey}</span><span style="color: var(--color-${statusClass}); font-weight: 600;">${pct}%</span></div><div class="progress-bar-container" style="margin-top: 4px;"><div class="progress-bar-fill" style="width: ${pct}%; background: var(--color-${statusClass});"></div></div></div>`;
                 }).join('');
+                phaseMetrics.innerHTML = metricsHTML;
             },
             renderPhaseCards() {
                 const tracker = this.data.tracker;
@@ -480,8 +498,8 @@
                 
                 grid.innerHTML = phaseData.map(([key, phase]) => this.createPhaseCard(key, phase)).join('');
             },
-            createPhaseCard(phase) {
-                const phaseNum = phase.number || phase.id || Object.keys(this.phases).find(key => this.phases[key].name === phase.name);
+            createPhaseCard(phaseKey, phase) {
+                const phaseNum = phaseKey;
                 const phaseDef = this.phases[phaseNum] || {};
                 const status = this.getStatusClass(phase.status);
                 const acCount = phase.total_ac_count || phase.acs_total || 0;
