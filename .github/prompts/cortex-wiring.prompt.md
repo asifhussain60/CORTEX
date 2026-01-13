@@ -489,6 +489,41 @@ This health check system embodies CORTEX 6.0 principles:
 
 ---
 
+## 🔨 Extending the Health Check System
+
+To add new validators or enhance health check:
+
+See `.github/prompts/ORCHESTRATOR-DEVELOPMENT.md` for orchestrator patterns:
+- Adding new validation methods
+- Smart parameter passing
+- Report generation with recommendations
+- Integration with MasterOrchestrator
+
+**Example: Adding a new Tier 4 Validator**
+```python
+class Tier4Validator(BaseValidator):
+    """Example: Custom validation logic."""
+    
+    def validate(self) -> List[Issue]:
+        """Add your validation logic here."""
+        issues = []
+        # Check something
+        if something_wrong:
+            issues.append(Issue(
+                id="TIER4-001",
+                severity="MEDIUM",
+                description="...",
+                auto_repairable=True
+            ))
+        return issues
+
+# Add to HealthCheckOrchestratorV1.check()
+tier4_validator = Tier4Validator()
+all_issues.extend(tier4_validator.validate())
+```
+
+---
+
 ## 🎯 Success Criteria
 
 Health check system is successful when:
