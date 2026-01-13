@@ -1,18 +1,17 @@
 plan_metadata:
   plan_id: CORTEX-6.0-SNOWBALL-MASTER
-  version: 1.7.0
+  version: 1.6.0
   created: '2026-01-10T23:50:00Z'
-  updated: '2026-01-13T14:30:00Z'
+  updated: '2026-01-13T12:35:00Z'
   author: Asif Hussain
-  strategy: Organic Evolution with JIT Infrastructure Delivery
+  strategy: Snowball Implementation + Permanent Decommission
   philosophy: Build for operation; decommission construction scaffolding
   design_score: 97
   total_weeks: 16.5
   total_ac_ids: 184
   hybrid_approach: true
   gpt_influence: 70% rigor, 30% overhead
-  reorganization_note: 'v1.7.0 - Phases reordered to match ACTUAL implementation timeline: Phase 2→3→5→6→7→8→9→10→11 (not sequential 1→2→3→4→5)'
-  latest_addition: Phase 11 - CORTEX LENS & Onboarding (renamed from Phase 10 to avoid collision with actual Phase 10 Template Migration)
+  latest_addition: Phase 10 - CORTEX LENS & Onboarding (moved from 1.5); Phase 1.5 - STS (Semantic Test Suite)
   ssot_declaration: |
     **SINGLE SOURCE OF TRUTH (SSOT) ARCHITECTURE**
     
@@ -43,129 +42,67 @@ plan_metadata:
     - All prompts MUST reference this unified architecture
     - Dashboard always reflects current state from SSOT
     - No manual state modifications outside orchestrator
-implementation_order:
-  note: 'ACTUAL IMPLEMENTATION ORDER - Phases executed organically, not sequentially'
-  strategy: 'Organic evolution with Just-In-Time (JIT) infrastructure delivery'
-  evolution_model: |
-    CORTEX 6.0 did NOT follow the planned sequential model (Phase 1→2→3→4→5).
-    Instead, it evolved organically based on immediate needs:
-    
-    - Phase 2: Orchestration Core (ACTUAL FIRST - MasterOrchestrator, routing)
-    - Phase 3: Feature Orchestrators (crawlers, investigation)  
-    - Phase 5: Legacy Migration & Decommission (cleanup, decommission)
-    - Phase 6: Security & Routing Foundation (AC-SECURITY, AC-ROUTE)
-    - Phase 7: GitHub Copilot Todo Bridge (AC-COPILOT-001-012)
-    - Phase 8: Staged Rollout System (AC-ROLLOUT-001-004)
-    - Phase 9: Infrastructure Maturity (audit, lifecycle, evidence, STS, templates)
-    - Phase 10: Template Migration & Enhancement (CURRENT - AC-TEMPLATE-005-008)
-    - Phase 11: CORTEX LENS & Onboarding (PLANNED - universal code intelligence)
-    
-    Foundation components (audit, governance, state, lifecycle, evidence) were
-    delivered Just-In-Time as needed by feature phases, not upfront.
-  
+snowball_strategy:
+  description: 'Build core infrastructure first; features compound on infrastructure.
+
+    Each phase completes BEFORE the next begins. No parallel development
+
+    across phases to ensure solid foundation. Early phases are smaller,
+
+    later phases leverage completed infrastructure (snowball effect).
+
+    '
   principles:
-  - Build what's needed when it's needed (JIT infrastructure)
+  - Foundation MUST complete before orchestration core
   - Core workflow establishes default mechanism (MasterOrchestrator)
-  - Feature orchestrators drive infrastructure requirements
-  - Infrastructure maturity comes after feature delivery
+  - Feature orchestrators reuse foundation infrastructure
+  - Intelligence layer leverages all previous components
   - Each AC-ID produces Evidence Bundle proving completion
   - Progressive rollout via DRY_RUN + Approval Gates
-  
-  execution_timeline:
-  - phase: 2
-    name: Orchestration Core
+  phases:
+  - phase: 1
+    name: Foundation Enhancement
     weeks: 2
-    status: COMPLETED
-    dependency: None - started first
-    ac_ids: 13
-    description: MasterOrchestrator, TodoManager, deterministic routing
+    dependency: None - builds base infrastructure
+  - phase: 1.5
+    name: STS (Semantic Test Suite)
+    weeks: 3
+    dependency: Foundation (Phase 1)
+    critical: Test infrastructure foundation for all orchestrators
+  - phase: 2
+    name: Orchestration Core (CORE WORKFLOW)
+    weeks: 2
+    dependency: STS (Phase 1.5)
+    critical: Establishes default working mechanism
   - phase: 3
     name: Feature Orchestrators
     weeks: 2
-    status: COMPLETED
-    dependency: Phase 2
-    ac_ids: 0
-    description: Crawlers, investigation, initial feature set
-  - phase: 5
-    name: Legacy Migration & Decommission
-    weeks: 2
-    status: COMPLETED
-    dependency: Phase 3
-    ac_ids: 28
-    description: AC-CLEAN-301-328, cleanup, decommissioning
-  - phase: 6
-    name: Security & Routing Foundation
-    weeks: 2
-    status: COMPLETED
-    dependency: Phase 5
-    ac_ids: 13
-    description: AC-SECURITY-001-008, AC-ROUTE-001-005
-  - phase: 7
-    name: GitHub Copilot Todo Bridge
-    weeks: 2
-    status: COMPLETED
-    dependency: Phase 6
-    ac_ids: 12
-    description: AC-COPILOT-001-012, integration with VS Code
-  - phase: 8
-    name: Staged Rollout System
-    weeks: 2
-    status: COMPLETED
-    dependency: Phase 7
-    ac_ids: 4
-    description: AC-ROLLOUT-001-004, progressive deployment
-  - phase: 9
-    name: Infrastructure Maturity & Quality Gates
-    weeks: 3
-    status: COMPLETED
-    dependency: Phase 8
-    ac_ids: 29
-    description: Audit, lifecycle, evidence, STS, templates foundation
-  - phase: 10
-    name: Template Migration & Enhancement
-    weeks: 3
-    status: IN_PROGRESS
-    dependency: Phase 9
-    ac_ids: 7
-    description: AC-TEMPLATE-005-008, AC-CHALLENGE-001-003, CORE-026
-  - phase: 11
-    name: CORTEX LENS & Onboarding (Future)
-    weeks: 3
-    status: PLANNED
-    dependency: Phase 10
-    ac_ids: 22
-    description: AC-LENS-001-006, AC-ONBOARD-001-008, AC-TOOLKIT-001-008
-
-archived_sequential_plan:
-  note: |
-    The original sequential plan (Phase 1→1.5→2→3→4→4.5→5→10) was superseded
-    by organic evolution. These phases are preserved for historical reference
-    and architectural insights but do NOT represent actual implementation.
-  phases:
-  - phase: 1
-    name: Foundation Enhancement (SUPERSEDED)
-    status: Never executed as standalone phase
-    reality: Components delivered JIT across Phases 6-9
-  - phase: 1.5
-    name: STS (Semantic Test Suite) (SUPERSEDED)
-    status: Delivered in Phase 9.4
-    reality: AC-STS-001-003 implemented within Infrastructure Maturity phase
+    dependency: Core Workflow (Phase 2)
   - phase: 4
-    name: Intelligence Layer (DEFERRED)
-    status: Not yet implemented
-    reality: LLM Intent Classifier, Knowledge Practices, Vision API planned for future
+    name: Intelligence Layer
+    weeks: 2
+    dependency: Feature Orchestrators (Phase 3)
   - phase: 4.5
-    name: Orchestrator Integration & Audit Validation (DEFERRED)
-    status: Partially implemented in Phase 9
-    reality: Evidence validation exists, full integration testing pending
-archived_phase_1_foundation:
-  name: Phase 1 - Foundation Enhancement (ARCHIVED - Historical Reference)
-  original_plan: Sequential foundation with 29 AC-IDs delivered upfront
-  reality: Never executed as standalone phase - components delivered JIT
+    name: Orchestrator Integration & Audit Validation
+    weeks: 2
+    dependency: Intelligence Layer (Phase 4)
+    critical: Proves system correctness via audit trail completeness
+  - phase: 5
+    name: CORTEX Cleanup & Decommission
+    weeks: 2
+    dependency: Orchestrator Integration (Phase 4.5)
+    critical: Remove all construction scaffolding, permanent operations only
+  - phase: 10
+    name: CORTEX LENS & Onboarding (Intelligent Discovery)
+    weeks: 3
+    dependency: Phase 5 complete
+    critical: Universal code intelligence and knowledge discovery system
+phase_1_foundation:
+  name: Foundation Enhancement
   duration: 2 weeks
   start_date: '2026-01-13'
   end_date: '2026-01-24'
-  status: SUPERSEDED_BY_ORGANIC_EVOLUTION
+  status: superseded_by_actual_implementation
   started_at: '2026-01-10T17:00:00Z'
   completion_percentage: 0
   ac_ids_complete: 0
@@ -192,7 +129,7 @@ archived_phase_1_foundation:
     - state_manager (AC-STATE-001 to 003)
     - lifecycle_system (AC-LIFECYCLE-001 to 003)
     - evidence_bundler (AC-EVIDENCE-001 to 003)
-  last_updated: '2026-01-13T14:30:00Z'
+  last_updated: '2026-01-13T13:00:00Z'
   priority: HISTORICAL_REFERENCE
   recommended_llm:
     primary: Claude Sonnet 4.5 (RECOMMENDED)
@@ -404,17 +341,14 @@ archived_phase_1_foundation:
     - No Phase 2 work starts until ALL Phase 1 complete
     - Evidence Bundles prove completion, not just code commit
     - Integration tests prove components work together
-archived_phase_1_5_sts_semantic_test_suite:
-  name: Phase 1.5 - STS (Semantic Test Suite) (ARCHIVED - Historical Reference)
-  original_plan: Standalone 3-week test infrastructure phase before Phase 2
-  reality: Delivered as sub-phase 9.4 within Infrastructure Maturity
+phase_1_5_sts_semantic_test_suite:
+  name: Phase 1.5 - STS (Semantic Test Suite)
   duration: 3 weeks
   start_date: '2026-01-25'
   end_date: '2026-02-14'
-  status: DELIVERED_IN_PHASE_9
-  priority: HISTORICAL_REFERENCE
-  placement: Was planned between Phase 1 & Phase 2
-  actual_delivery: Phase 9.4 - STS as Capability 0
+  status: ready_after_phase_1
+  priority: CRITICAL
+  placement: Between Phase 1 & Phase 2
   rationale: 'STS (Semantic Test Suite) provides the foundation for all test infrastructure
 
     in CORTEX 6.0. It establishes:
@@ -530,20 +464,19 @@ archived_phase_1_5_sts_semantic_test_suite:
       generation_validated: Auto-generated tests pass for 85%+ of ACs
       evidence_validation: All evidence bundles validate correctly
 phase_10_intelligent_discovery:
-  name: Phase 11 - CORTEX LENS & Onboarding (Intelligent Discovery)
+  name: Phase 10 - CORTEX LENS & Onboarding (Intelligent Discovery)
   duration: 3 weeks
   start_date: '2026-04-01'
   end_date: '2026-04-21'
-  status: planned_after_phase_10
+  status: ready_after_phase_5
   priority: HIGH
-  placement: After Phase 10 (Template Migration)
-  renamed_from: 'Phase 10 (v1.6.0) → Phase 11 (v1.7.0) to avoid collision with actual Phase 10'
+  placement: After Phase 5 (Cleanup & Decommission)
   rationale: 'CORTEX LENS and Onboarding orchestrators provide intelligent codebase
 
-    discovery and knowledge extraction. Moved to Phase 11 because:
+    discovery and knowledge extraction. Moved to Phase 10 because:
 
 
-    1. Not required for core CORTEX 6.0 operation (Phases 2-10)
+    1. Not required for core CORTEX 6.0 operation (Phases 1-5)
 
     2. Enhances CORTEX with universal code intelligence
 
@@ -1269,15 +1202,13 @@ phase_3_feature_orchestrators:
     gate_validation:
       test_coverage: '>=80% per orchestrator'
       integration: Each orchestrator uses core workflow
-archived_phase_4_intelligence:
-  name: Phase 4 - Intelligence Layer (ARCHIVED - Not Yet Implemented)
-  original_plan: AI-native features after Phase 3 Feature Orchestrators
-  reality: Deferred to future phases - not required for CORTEX 6.0 core
+phase_4_intelligence:
+  name: Intelligence Layer
   duration: 2 weeks
   start_date: '2026-02-24'
   end_date: '2026-03-07'
-  status: DEFERRED
-  priority: HISTORICAL_REFERENCE
+  status: blocked_by_phase_3
+  priority: MEDIUM
   recommended_llm:
     primary: Claude Sonnet 4.5 (RECOMMENDED)
     usage: 60-100% of operations
@@ -1380,15 +1311,13 @@ archived_phase_4_intelligence:
     gate_validation:
       test_coverage: '>=70% (AI components harder to test)'
       integration: Intelligence features enhance orchestration
-archived_phase_4_5_integration_tests:
-  name: Phase 4.5 - Orchestrator Integration & Audit Validation (ARCHIVED - Partial)
-  original_plan: Comprehensive end-to-end testing after Phase 4 Intelligence
-  reality: Evidence validation delivered in Phase 9, full suite deferred
+phase_4_5_integration_tests:
+  name: Orchestrator Integration & Audit Validation Suite
   duration: 2 weeks
   start_date: '2026-03-10'
   end_date: '2026-03-21'
-  status: PARTIALLY_DELIVERED_IN_PHASE_9
-  priority: HISTORICAL_REFERENCE
+  status: blocked_by_phase_4
+  priority: CRITICAL
   recommended_llm:
     primary: Claude Sonnet 4.5 (RECOMMENDED)
     usage: 80-100% of operations

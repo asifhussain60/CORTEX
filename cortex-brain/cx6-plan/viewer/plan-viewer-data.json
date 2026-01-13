@@ -1,40 +1,14 @@
 {
   "plan_metadata": {
     "plan_id": "CORTEX-6.0-SNOWBALL-MASTER",
-    "total_ac_ids": 0,
+    "total_ac_ids": 115,
     "completed_ac_ids": 88,
     "in_progress_ac_ids": 0,
-    "version": "1.5.0",
-    "updated": "2026-01-13T12:20:31.200665+00:00",
+    "version": "1.7.0",
+    "updated": "2026-01-13T13:09:17.540784+00:00",
     "status": "phases_1_to_5_defined_4.5_integration_tests_added"
   },
   "phases": [
-    {
-      "id": 1,
-      "name": "Foundation Enhancement",
-      "completion_percentage": 0,
-      "ac_ids_complete": 0,
-      "ac_ids_total": 29,
-      "status": "planned",
-      "description": "Build the core infrastructure that EVERY other component depends on.\nAll orchestrators log to audit, enforce governance, persist state.\nWithout this foundation, nothing else can reliably operate.\n",
-      "verified_implemented": [],
-      "capabilities": []
-    },
-    {
-      "id": 1.5,
-      "name": "Phase 1.5 - STS (Semantic Test Suite)",
-      "completion_percentage": 37,
-      "ac_ids_complete": 3,
-      "ac_ids_total": 8,
-      "status": "in_progress",
-      "description": "Build comprehensive test infrastructure that all orchestrators depend on:\n\n1. Semantic test corpus (100 golden scenarios)\n2. Test generation frameworks\n3. Evidence validation\n4. Integration test harness\n",
-      "verified_implemented": [
-        "AC-STS-001",
-        "AC-STS-002",
-        "AC-STS-003"
-      ],
-      "capabilities": []
-    },
     {
       "id": 2,
       "name": "Orchestration Core (CORE WORKFLOW)",
@@ -94,45 +68,6 @@
       "capabilities": []
     },
     {
-      "id": 4,
-      "name": "Intelligence Layer",
-      "completion_percentage": 60,
-      "ac_ids_complete": 3,
-      "ac_ids_total": 5,
-      "status": "in_progress",
-      "description": "AI-native features that enhance orchestration with intelligence.\nLeverages all previous components: audit history, execution patterns,\ngovernance rules, and orchestrator behaviors.\n",
-      "verified_implemented": [
-        "AC-KNOW-001",
-        "AC-KNOW-002",
-        "AC-KNOW-003"
-      ],
-      "capabilities": []
-    },
-    {
-      "id": 4.5,
-      "name": "Orchestrator Integration & Audit Validation Suite",
-      "completion_percentage": 100,
-      "ac_ids_complete": 12,
-      "ac_ids_total": 12,
-      "status": "completed",
-      "description": "Comprehensive end-to-end testing framework validating all orchestrators work\ntogether correctly. Tests focus on:\n\n1. Cross-component integration scenarios (Phase 1\u21924 orchestrators)\n2. Audit trail completeness and traceability\n3. Evidence bundle generation and validation\n4. State management under concurrent operations\n5. Governance enforcement across all components\n6. Failure recovery and rollback mechanisms\n7. Performance and load scenarios\n\nThis phase proves system correctness by validating audit logs contain\ncomplete provenance for all operations.\n",
-      "verified_implemented": [
-        "AC-INTEG-001",
-        "AC-INTEG-002",
-        "AC-INTEG-003",
-        "AC-INTEG-004",
-        "AC-INTEG-005",
-        "AC-INTEG-006",
-        "AC-INTEG-007",
-        "AC-INTEG-008",
-        "AC-INTEG-009",
-        "AC-INTEG-010",
-        "AC-INTEG-011",
-        "AC-INTEG-012"
-      ],
-      "capabilities": []
-    },
-    {
       "id": 5,
       "name": "CORTEX Cleanup & Decommission",
       "completion_percentage": 100,
@@ -174,7 +109,7 @@
     },
     {
       "id": 10,
-      "name": "Phase 10 - CORTEX LENS & Onboarding (Intelligent Discovery)",
+      "name": "Phase 11 - CORTEX LENS & Onboarding (Intelligent Discovery)",
       "completion_percentage": 0,
       "ac_ids_complete": 0,
       "ac_ids_total": 14,

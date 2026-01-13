@@ -1,12 +1,10 @@
 # GitHub Copilot Instructions for CORTEX 6.0
 
 **Purpose:** Production-grade AI orchestration with long-term memory, governance enforcement, and audit traceability  
-**Version:** 6.0.0 | **Author:** Asif Hussain | **Updated:** 2026-01-10  
+**Version:** 6.0.1 | **Author:** Asif Hussain | **Updated:** 2026-01-13  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
-
-## 🎯 Entry Point
 
 ## 🎯 Entry Point
 
@@ -17,6 +15,37 @@
 - **User repos**: User operations only (planning, ADO, investigation)
 
 **Philosophy:** GitHub Copilot is an **autonomous executor**. Load state, execute operations continuously via terminal, report progress concisely. NO approval loops. NO stopping after single operations. Execute until phase complete or blocker detected.
+
+---
+
+## 📊 SINGLE SOURCE OF TRUTH (SSOT) ARCHITECTURE v1.6.0
+
+**CRITICAL:** CORTEX 6.0 uses a unified SSOT architecture. All data flows from 4 authoritative sources:
+
+```
+PRIMARY SOURCES (SSOT - Never modify directly):
+├─ master-plan.yaml       → Architecture (phase definitions, AC ranges)
+├─ progress-tracker.json  → Execution (current phase, completion state)
+├─ AC-INDEX.yaml          → Definitions (AC-ID names, criteria)
+└─ core-rules.yaml        → Governance (19 SKULL rules)
+
+AUTOMATIC SYNC:
+MasterOrchestrator → regenerate_plan_viewer_data.py → plan-viewer-data.json
+
+GUARANTEE: Dashboard always reflects current SSOT state
+```
+
+**Key Files:**
+- **Architecture SSOT:** `cortex-brain/cx6-plan/master-plan.yaml`
+- **Execution SSOT:** `cortex-brain/tier1/tracking/progress-tracker.json`
+- **Definition SSOT:** `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml`
+- **Governance SSOT:** `cortex-brain/tier0/governance/core-rules.yaml`
+
+**Derived Files (Auto-Generated):**
+- `cortex-brain/cx6-plan/viewer/plan-viewer-data.json` (dashboard feed)
+- `cortex-brain/cx6-plan/viewer/plan-viewer-metrics.json` (metrics)
+
+**Reference:** See `cortex-brain/cx6-plan/SSOT-ARCHITECTURE.md` for complete specification.
 
 ---
 

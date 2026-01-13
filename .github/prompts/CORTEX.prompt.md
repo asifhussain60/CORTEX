@@ -39,59 +39,62 @@ python3 -m src.main "{user_intent}" --orchestrator master --format markdown
 
 ## 🔄 DATA FLOW & INTEGRATION ARCHITECTURE (CRITICAL)
 
-**Single Source of Truth (SSOT) - Everything Flows From These:**
+**SINGLE SOURCE OF TRUTH (SSOT) - Unified Architecture v1.6.0:**
 
 ```
 PRIMARY SOURCES (SSOT - Never modify directly):
-├─ master-plan.yaml          (phase definitions, AC ranges, dependencies)
-├─ AC-INDEX.yaml             (AC-ID definitions, acceptance criteria)
-├─ progress-tracker.json     (completion state - only MasterOrchestrator writes)
-└─ core-rules.yaml           (19 SKULL governance rules)
+├─ master-plan.yaml          (ARCHITECTURE SSOT: phase definitions, AC ranges, dependencies)
+│                            └─ Location: cortex-brain/cx6-plan/master-plan.yaml
+│                            └─ Updated: Manual (phase design changes only)
+├─ progress-tracker.json     (EXECUTION SSOT: completion state, current phase)
+│                            └─ Location: cortex-brain/tier1/tracking/progress-tracker.json
+│                            └─ Updated: MasterOrchestrator ONLY (atomic writes)
+├─ AC-INDEX.yaml             (DEFINITION SSOT: AC-ID names, acceptance criteria)
+│                            └─ Location: cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml
+│                            └─ Updated: Manual (new AC-ID definitions only)
+└─ core-rules.yaml           (GOVERNANCE SSOT: 19 SKULL rules)
+                             └─ Location: cortex-brain/tier0/governance/core-rules.yaml
+                             └─ Updated: Manual (governance changes only)
 
 AUTOMATIC SYNC TRIGGER:
 └─ MasterOrchestrator completes any state change
-   → Automatically triggers SyncOrchestrator
+   → Automatically runs: scripts/regenerate_plan_viewer_data.py
+   → Reads: master-plan.yaml + progress-tracker.json + AC-INDEX.yaml
+   → Writes: plan-viewer-data.json (atomic)
 
-DERIVED FILES (Auto-regenerated - Never touch these):
-├─ plan-viewer-data.json     (dashboard feed from SSOT)
-├─ docs/html-views/          (per-phase HTML/YAML views)
-├─ audit-logs-aggregated.json (audit dashboard feed)
-└─ .github/prompts/AC-mappings.json (AC-ID lookup for all prompts)
+DERIVED FILES (Auto-regenerated - NEVER TOUCH MANUALLY):
+├─ plan-viewer-data.json     (dashboard feed - regenerated after every state change)
+├─ plan-viewer-metrics.json  (metrics feed - regenerated with data)
+├─ audit-logs-aggregated.json (audit dashboard - aggregated from logs)
+└─ docs/html-views/*.html    (static HTML views - generated on demand)
 
-GUARANTEE: Derived files always in sync with master-plan.yaml + AC-INDEX.yaml
+DELETED FILES (Redundant - Removed in v1.6.0):
+├─ phases/phase-X/phase-X-tracking.json  ❌ DELETED (duplicated progress-tracker.json)
+├─ scripts/sync_plan_viewer_data.py      ❌ ARCHIVED (use regenerate_plan_viewer_data.py)
+└─ scripts/sync_plan_viewer_holistic.py  ❌ ARCHIVED (use regenerate_plan_viewer_data.py)
+
+GUARANTEE: Dashboard (plan-viewer.html) ALWAYS reflects current SSOT state
 ```
 
-**Data Flow Diagram:**
+**Data Flow Diagram (Simplified):**
 ```
-master-plan.yaml + AC-INDEX.yaml + progress-tracker.json
+AUTHORITATIVE SOURCES:
+master-plan.yaml (architecture) + progress-tracker.json (execution)
         ↓ (read by)
-MasterOrchestrator (updates SSOT, then triggers sync)
+regenerate_plan_viewer_data.py (SINGLE sync script)
         ↓ (writes)
-progress-tracker.json (new completion state)
-        ↓ (read by)
-SyncOrchestrator (auto-triggered)
-        ├─→ plan-viewer-data.json
-        ├─→ docs/html-views/*.html/.yaml
-        ├─→ audit-logs-aggregated.json
-        └─→ .github/prompts/AC-mappings.json
-            ↓ (consumed by)
-        Users/Browsers/Prompts (always see current state)
+plan-viewer-data.json (derived feed)
+        ↓ (fetched by)
+plan-viewer.html (browser display)
+
+ENFORCEMENT:
+• Only MasterOrchestrator writes to progress-tracker.json
+• Only regenerate_plan_viewer_data.py writes to plan-viewer-data.json
+• All other files are READ-ONLY for prompts
+• No manual state modifications outside orchestrator
 ```
 
-**Example: Phase 4.5 Addition**
-```
-YESTERDAY: Added to master-plan.yaml + AC-INDEX.yaml ✅
-TODAY: Run MasterOrchestrator (any intent)
-  → Detects changes
-  → Triggers SyncOrchestrator
-  → Regenerates all derived files
-  → Phase 4.5 now visible in:
-     • plan-viewer.html ✅
-     • All CORTEX prompts ✅
-     • AC-mappings.json ✅
-```
-
-**Reference:** See `cortex-brain/documents/CORTEX-INTEGRATION-ARCHITECTURE.md` for full integration spec.
+**Reference:** See `master-plan.yaml → ssot_declaration` for complete SSOT architecture specification.
 
 ---
 
@@ -315,38 +318,69 @@ User request → Intent clarification → Orchestrator delegation:
 
 ---
 
-## STATE MANAGEMENT (Unified SSOT + Auto-Sync Architecture)
+## STATE MANAGEMENT (Unified SSOT Architecture v1.6.0)
 
-**PRIMARY SOURCES (You NEVER modify these - only MasterOrchestrator writes):**
-- `cortex-brain/tier1/tracking/progress-tracker.json` (completion state - atomic writes only)
-- `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml` (AC-ID definitions - merged from tier0/governance)
-- `cortex-brain/cx6-plan/master-plan.yaml` (phase definitions - SSOT for all phases/timelines)
-- `cortex-brain/tier0/governance/core-rules.yaml` (19 SKULL rules - immutable)
+**PRIMARY SOURCES (SSOT - You NEVER modify these):**
 
-**DERIVED FILES (Auto-regenerated by SyncOrchestrator - you NEVER modify these):**
-- `cortex-brain/cx6-plan/viewer/plan-viewer-data.json` (dashboard feed)
-- `cortex-brain/cx6-plan/viewer/docs/html-views/` (per-phase HTML/YAML views)
-- `cortex-brain/documents/audit-logs-aggregated.json` (audit dashboard)
-- `.github/prompts/AC-mappings.json` (AC-ID lookup for all prompts)
+1. **master-plan.yaml** - Architecture SSOT
+   - Location: `cortex-brain/cx6-plan/master-plan.yaml`
+   - Contains: Phase definitions, AC ranges, timelines, dependencies
+   - Updated: Manual (by architects, for phase design changes)
+   - Writer: Humans only (MasterOrchestrator reads)
+
+2. **progress-tracker.json** - Execution SSOT
+   - Location: `cortex-brain/tier1/tracking/progress-tracker.json`
+   - Contains: Current phase, implemented AC-IDs, completion state
+   - Updated: MasterOrchestrator ONLY (atomic writes)
+   - Writer: MasterOrchestrator (all prompts read-only)
+
+3. **AC-INDEX.yaml** - Definition SSOT
+   - Location: `cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml`
+   - Contains: AC-ID names, descriptions, acceptance criteria
+   - Updated: Manual (when new AC-IDs defined)
+   - Writer: Humans only (MasterOrchestrator reads)
+
+4. **core-rules.yaml** - Governance SSOT
+   - Location: `cortex-brain/tier0/governance/core-rules.yaml`
+   - Contains: 19 SKULL rules (immutable)
+   - Updated: Manual (rare governance changes)
+   - Writer: Humans only (enforced by GovernanceMerger)
+
+**DERIVED FILES (Auto-regenerated - NEVER TOUCH MANUALLY):**
+- `cortex-brain/cx6-plan/viewer/plan-viewer-data.json` → Dashboard feed
+- `cortex-brain/cx6-plan/viewer/plan-viewer-metrics.json` → Metrics feed
+- `cortex-brain/documents/audit-logs-aggregated.json` → Audit dashboard
+- Script: `scripts/regenerate_plan_viewer_data.py` (SINGLE sync script)
+
+**DELETED FILES (v1.6.0 Cleanup - These are GONE):**
+- ❌ `phases/phase-X/phase-X-tracking.json` → Duplicated progress-tracker.json
+- ❌ `scripts/sync_plan_viewer_data.py` → Replaced by regenerate script
+- ❌ `scripts/sync_plan_viewer_holistic.py` → Replaced by regenerate script
 
 **Automatic Sync Guarantee:**
 ```
-MasterOrchestrator updates PRIMARY SOURCES
+MasterOrchestrator updates progress-tracker.json (execution state)
     ↓
-Automatically triggers SyncOrchestrator
+Automatically runs: regenerate_plan_viewer_data.py
     ↓
-SyncOrchestrator regenerates ALL DERIVED FILES atomically
+Reads: master-plan.yaml + progress-tracker.json + AC-INDEX.yaml
     ↓
-Browser/Prompt sees current state (zero stale data)
+Writes: plan-viewer-data.json (atomic)
+    ↓
+Browser refreshes → sees current state (zero stale data)
 ```
 
-**Your responsibility:** 
-- ❌ DO NOT read or modify ANY of these files (primary or derived)
+**Your responsibility (THIS PROMPT):** 
+- ❌ DO NOT read SSOT files directly (orchestrator handles)
+- ❌ DO NOT modify ANY state files (progress-tracker.json, AC-INDEX.yaml, etc.)
 - ❌ DO NOT calculate completion percentages (orchestrator does)
-- ❌ DO NOT call sync scripts manually
-- ❌ DO NOT touch plan-viewer-data.json or html-views
-- ✅ Let MasterOrchestrator → SyncOrchestrator handle everything
-- ✅ Display orchestrator results to user (they're always current)
+- ❌ DO NOT call sync scripts manually (orchestrator auto-triggers)
+- ❌ DO NOT touch plan-viewer-data.json (derived file)
+- ✅ Clarify user intent (gateway role)
+- ✅ Invoke: `python3 -m src.main "{intent}"`
+- ✅ Display orchestrator results (they're always current)
+
+**Reference:** See `master-plan.yaml → ssot_declaration` for complete architecture spec.
 
 ---
 
