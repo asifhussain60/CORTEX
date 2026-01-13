@@ -4,18 +4,18 @@ Tests for AC-TEST-002: Test Execution
 
 import pytest
 from pathlib import Path
-from src.infrastructure.test_executor import TestExecutor, TestResult
+from src.infrastructure.test_executor import TaskExecutor, ExecutionResult
 
 
 @pytest.fixture
 def executor():
     """Create test executor instance."""
-    return TestExecutor(test_dir=Path("tests"))
+    return TaskExecutor(test_dir=Path("tests"))
 
 
 def test_test_result_creation():
     """TestResult can be created with data."""
-    result = TestResult(
+    result = ExecutionResult(
         ac_id="AC-TEST-002",
         passed=5,
         failed=0,
@@ -31,7 +31,7 @@ def test_test_result_creation():
 
 def test_test_result_to_dict():
     """TestResult converts to dictionary."""
-    result = TestResult(
+    result = ExecutionResult(
         ac_id="AC-TEST-002",
         passed=3,
         failed=1,
@@ -80,7 +80,7 @@ def test_run_tests_for_ac(executor):
     """run_tests_for_ac returns TestResult for AC-ID."""
     result = executor.run_tests_for_ac("AC-TEST")
     
-    assert isinstance(result, TestResult)
+    assert isinstance(result, ExecutionResult)
     assert result.ac_id == "AC-TEST"
     assert result.total >= 0
     assert result.success_rate >= 0

@@ -8,7 +8,7 @@ import pytest
 from pathlib import Path
 import tempfile
 
-from src.infrastructure.evidence_bundle_structure import EvidenceBundleStructure, TestMetrics, TestResult
+from src.infrastructure.evidence_bundle_structure import EvidenceBundleStructure, BundleMetrics, BundleTestResult
 from src.infrastructure.evidence_bundle_validation_gates import EvidenceBundleValidationGates
 
 
@@ -50,7 +50,7 @@ class TestCoverageGate:
         # Create complete bundle with 85% coverage
         bundle_dir = gates_system.bundle_system.create_bundle_directory("AC-TEST-001")
         
-        metrics = TestMetrics(
+        metrics = BundleMetrics(
             total_tests=10, passed=10, failed=0, skipped=0,
             duration=1.0, coverage_percentage=85.0
         )
@@ -64,7 +64,7 @@ class TestCoverageGate:
         
         gates_system.bundle_system.create_test_results_file(
             ac_id="AC-TEST-001",
-            test_results=[TestResult("test_1", "passed", 0.1)],
+            test_results=[BundleTestResult("test_1", "passed", 0.1)],
             metrics=metrics,
             bundle_dir=bundle_dir
         )
@@ -79,7 +79,7 @@ class TestCoverageGate:
         """Test coverage gate fails with <80%."""
         bundle_dir = gates_system.bundle_system.create_bundle_directory("AC-TEST-002")
         
-        metrics = TestMetrics(
+        metrics = BundleMetrics(
             total_tests=10, passed=7, failed=3, skipped=0,
             duration=1.0, coverage_percentage=70.0
         )
@@ -93,7 +93,7 @@ class TestCoverageGate:
         
         gates_system.bundle_system.create_test_results_file(
             ac_id="AC-TEST-002",
-            test_results=[TestResult("test_1", "failed", 0.1, "Error")],
+            test_results=[BundleTestResult("test_1", "failed", 0.1, "Error")],
             metrics=metrics,
             bundle_dir=bundle_dir
         )
@@ -111,7 +111,7 @@ class TestAuditGate:
         """Test audit gate passes with sufficient events."""
         bundle_dir = gates_system.bundle_system.create_bundle_directory("AC-AUDIT-001")
         
-        metrics = TestMetrics(
+        metrics = BundleMetrics(
             total_tests=5, passed=5, failed=0, skipped=0,
             duration=1.0, coverage_percentage=90.0
         )
@@ -125,7 +125,7 @@ class TestAuditGate:
         
         gates_system.bundle_system.create_test_results_file(
             ac_id="AC-AUDIT-001",
-            test_results=[TestResult("test_1", "passed", 0.1)],
+            test_results=[BundleTestResult("test_1", "passed", 0.1)],
             metrics=metrics,
             bundle_dir=bundle_dir
         )
@@ -152,7 +152,7 @@ class TestGovernanceGate:
         """Test governance gate passes with valid format."""
         bundle_dir = gates_system.bundle_system.create_bundle_directory("AC-TEST-001")
         
-        metrics = TestMetrics(
+        metrics = BundleMetrics(
             total_tests=5, passed=5, failed=0, skipped=0,
             duration=1.0, coverage_percentage=90.0
         )
@@ -166,7 +166,7 @@ class TestGovernanceGate:
         
         gates_system.bundle_system.create_test_results_file(
             ac_id="AC-TEST-001",
-            test_results=[TestResult("test_1", "passed", 0.1)],
+            test_results=[BundleTestResult("test_1", "passed", 0.1)],
             metrics=metrics,
             bundle_dir=bundle_dir
         )
@@ -184,7 +184,7 @@ class TestAllGates:
         """Test all gates pass together."""
         bundle_dir = gates_system.bundle_system.create_bundle_directory("AC-TEST-001")
         
-        metrics = TestMetrics(
+        metrics = BundleMetrics(
             total_tests=10, passed=10, failed=0, skipped=0,
             duration=1.0, coverage_percentage=85.0
         )
@@ -198,7 +198,7 @@ class TestAllGates:
         
         gates_system.bundle_system.create_test_results_file(
             ac_id="AC-TEST-001",
-            test_results=[TestResult("test_1", "passed", 0.1)],
+            test_results=[BundleTestResult("test_1", "passed", 0.1)],
             metrics=metrics,
             bundle_dir=bundle_dir
         )

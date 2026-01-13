@@ -1,0 +1,370 @@
+# AC-BRITTLE-001 through AC-BRITTLE-014 - Entries for AC-INDEX.yaml
+# 
+# Purpose: Brittleness findings from 2026-01-13 comprehensive review
+# Add these entries to cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml
+# under the acceptance_criteria section
+
+acceptance_criteria_entries:
+
+  - id: AC-BRITTLE-001
+    phase: Phase 9.4
+    category: Database Integrity
+    priority: CRITICAL
+    title: Enable SQLite WAL Mode for Governance Database
+    description: |
+      Enable Write-Ahead Logging (WAL) mode on governance.db to prevent
+      data corruption under concurrent writes. Current mode is 'delete'
+      (default), which causes data loss on power failures during writes.
+      
+      CORE-006 setup verification must validate database integrity
+      by checking PRAGMA journal_mode and enabling WAL mode automatically.
+    status: planned
+    implementation_status: PLANNED
+    test_coverage: 0/3
+    tests_passing: 0
+    tests_total: 3
+    pass_rate: 0/3 (0%)
+    verification_status: not_verified
+    evidence: tests/infrastructure/test_database_wal_mode.py
+    dependencies:
+      - CORE-006
+      - AC-SYNC-001
+    owner: Infrastructure Team
+    duration_hours: 0.25
+    
+  - id: AC-BRITTLE-002
+    phase: Phase 9.4
+    category: Database Integrity
+    priority: CRITICAL
+    title: Initialize Audit Database Schema on First Connection
+    description: |
+      EnterpriseAuditLogger must create audit_logs, rule_violations,
+      and evidence_bundles tables automatically on first connection.
+      Currently schema is missing, causing "no such table" errors in
+      evidence validator.
+      
+      Create migration file to establish schema with proper indexes
+      and foreign key constraints. Run migration on startup if tables missing.
+    status: planned
+    implementation_status: PLANNED
+    test_coverage: 0/4
+    tests_passing: 0
+    tests_total: 4
+    pass_rate: 0/4 (0%)
+    verification_status: not_verified
+    evidence: tests/infrastructure/test_audit_schema_init.py
+    dependencies:
+      - AC-BRITTLE-001
+      - AC-SYNC-001
+    owner: Infrastructure Team
+    duration_hours: 0.75
+    
+  - id: AC-BRITTLE-003
+    phase: Phase 9.4
+    category: State Management
+    priority: CRITICAL
+    title: Rebuild Tracker Phase Counts from AC-INDEX
+    description: |
+      progress-tracker.json shows all phase counts as 0/0, making
+      progress tracking impossible. Rebuild from AC-INDEX.yaml
+      actual AC-ID counts. This is prerequisite for phase gate policy.
+      
+      Run evidence validator with --fix flag to populate tracker.phases
+      with accurate completed_count and total_count from registry.
+    status: planned
+    implementation_status: PLANNED
+    test_coverage: 0/2
+    tests_passing: 0
+    tests_total: 2
+    pass_rate: 0/2 (0%)
+    verification_status: not_verified
+    evidence: tests/infrastructure/test_tracker_phase_counts.py
+    dependencies:
+      - AC-SYNC-001
+    owner: Infrastructure Team
+    duration_hours: 0.5
+    
+  - id: AC-BRITTLE-004
+    phase: Phase 9.4
+    category: State Synchronization
+    priority: HIGH
+    title: Mandatory Sync After Tracker Updates
+    description: |
+      plan-viewer-data.json sync lag: tracker updated at
+      2026-01-12T23:47:11Z but plan data timestamp = unknown.
+      
+      Enforce sync_plan_viewer_data.py call after every tracker
+      update. Validate sync succeeded (timestamps match within 2 sec).
+      Report sync status in response.
+    status: planned
+    implementation_status: PLANNED
+    test_coverage: 0/3
+    tests_passing: 0
+    tests_total: 3
+    pass_rate: 0/3 (0%)
+    verification_status: not_verified
+    evidence: tests/integration/test_sync_plan_viewer_data.py
+    dependencies:
+      - AC-BRITTLE-003
+    owner: Integration Team
+    duration_hours: 1.0
+    
+  - id: AC-BRITTLE-005
+    phase: Phase 9.4
+    category: Governance Audit Trail
+    priority: HIGH
+    title: Verify Audit Schema Completeness
+    description: |
+      Audit schema must have all required tables: audit_logs,
+      rule_violations, evidence_bundles, orchestrator_trace,
+      phase_transitions. Validate on startup, fail fast if missing.
+      
+      This validates AC-BRITTLE-002 implementation and ensures
+      governance enforcement is auditable (CORE-017).
+    status: planned
+    implementation_status: PLANNED
+    test_coverage: 0/2
+    tests_passing: 0
+    tests_total: 2
+    pass_rate: 0/2 (0%)
+    verification_status: not_verified
+    evidence: tests/infrastructure/test_audit_schema_complete.py
+    dependencies:
+      - AC-BRITTLE-002
+    owner: Infrastructure Team
+    duration_hours: 0.5
+    
+  - id: AC-BRITTLE-006
+    phase: Phase 9.4
+    category: Test Infrastructure
+    priority: HIGH
+    title: Fix Pytest Collection Warnings (Dataclass Naming)
+    description: |
+      Pytest collection warnings: 6 issues from test-like naming.
+      @dataclass classes TestResult, TestExecutor in src/infrastructure/
+      are incorrectly parsed as test classes.
+      
+      Rename: TestResult → ExecutionResult, TestExecutor → TaskExecutor,
+      TestResult (line 26) → BundleTestResult. Verify pytest --co -q
+      shows 0 collection warnings.
+    status: planned
+    implementation_status: PLANNED
+    test_coverage: 0/1
+    tests_passing: 0
+    tests_total: 1
+    pass_rate: 0/1 (0%)
+    verification_status: not_verified
+    evidence: tests/infrastructure/test_pytest_collection_clean.py
+    dependencies: []
+    owner: Infrastructure Team
+    duration_hours: 0.5
+    
+  - id: AC-BRITTLE-007
+    phase: Phase 9.4
+    category: Test Integrity
+    priority: HIGH
+    title: Fix 13 Cleanup Phase Test Failures
+    description: |
+      tests/cleanup/test_housekeeping_tools_cleanup.py fails with
+      "test_capability_based_tool_dispatch" and 12 other failures.
+      Phase references still in code indicate incomplete AC-CLEAN
+      implementation.
+      
+      Verify AC-CLEAN-301-328 complete, run cleanup orchestrator,
+      re-run tests. All cleanup tests must PASS.
+    status: planned
+    implementation_status: PLANNED
+    test_coverage: 0/13
+    tests_passing: 0
+    tests_total: 13
+    pass_rate: 0/13 (0%)
+    verification_status: not_verified
+    evidence: tests/cleanup/test_housekeeping_tools_cleanup.py
+    dependencies:
+      - AC-CLEAN-301
+      - AC-CLEAN-302
+      - AC-CLEAN-303
+    owner: Integration Team
+    duration_hours: 2.0
+    
+  - id: AC-BRITTLE-008
+    phase: Phase 10
+    category: Pattern Routing
+    priority: MEDIUM
+    title: Add Unmatched Pattern Telemetry to Pattern Router
+    description: |
+      PatternRouter has no logging for unmatched intents. Adds unknown
+      pattern detection, routes to fallback/LLM with latency penalty.
+      
+      Add audit logging for unmatched patterns with confidence scores,
+      track in governance.db.audit_logs, generate weekly coverage report.
+      Enable data-driven routing improvements.
+    status: planned
+    implementation_status: PLANNED
+    test_coverage: 0/2
+    tests_passing: 0
+    tests_total: 2
+    pass_rate: 0/2 (0%)
+    verification_status: not_verified
+    evidence: tests/orchestrators/test_pattern_router_telemetry.py
+    dependencies:
+      - AC-BRITTLE-002
+    owner: Routing Team
+    duration_hours: 1.5
+    
+  - id: AC-BRITTLE-009
+    phase: Phase 10
+    category: Evidence System
+    priority: MEDIUM
+    title: Complete Evidence Bundle Auto-Generation
+    description: |
+      AC-EVIDENCE-003 marked implemented but bundle auto-generation
+      is manual/placeholder. Evidence collection lags actual test
+      completion, requires manual sync.
+      
+      Implement automatic manifest generation post-test-run for all
+      passing AC-IDs. Create evidence bundles directory structure,
+      store test results + audit trail + performance metrics.
+    status: planned
+    implementation_status: PLANNED
+    test_coverage: 0/3
+    tests_passing: 0
+    tests_total: 3
+    pass_rate: 0/3 (0%)
+    verification_status: not_verified
+    evidence: tests/orchestrators/test_evidence_auto_generation.py
+    dependencies:
+      - AC-EVIDENCE-003
+      - AC-BRITTLE-002
+    owner: Evidence Team
+    duration_hours: 2.0
+    
+  - id: AC-BRITTLE-010
+    phase: Phase 10
+    category: Governance Visibility
+    priority: MEDIUM
+    title: Add Governance Tier Conflict Detection
+    description: |
+      GovernanceMerger enforces Tier 0 > Tier 1-3 precedence but doesn't
+      log conflicts for visibility. Silent conflicts cause unpredictable
+      enforcement.
+      
+      Add conflict detection/logging to audit trail when Tier 1-3 rules
+      conflict with CORE rules. Generate weekly governance conflict report.
+      Enable debugging of governance conflicts.
+    status: planned
+    implementation_status: PLANNED
+    test_coverage: 0/2
+    tests_passing: 0
+    tests_total: 2
+    pass_rate: 0/2 (0%)
+    verification_status: not_verified
+    evidence: tests/infrastructure/test_governance_conflict_detection.py
+    dependencies:
+      - AC-BRITTLE-002
+      - AC-GOV-001
+    owner: Governance Team
+    duration_hours: 1.5
+    
+  - id: AC-BRITTLE-011
+    phase: Phase 10
+    category: Performance Optimization
+    priority: MEDIUM
+    title: Benchmark SQLite Synchronous Mode Impact
+    description: |
+      governance.db PRAGMA synchronous = 2 (FULL mode) may impact
+      performance under high-volume operations. Evaluate changing
+      to PRAGMA synchronous = 1 (NORMAL) if benchmarks show lag > 10ms.
+      
+      Benchmark 1000 audit writes, measure latency, compare modes.
+      Only change if performance tests justify trade-off.
+    status: planned
+    implementation_status: PLANNED
+    test_coverage: 0/2
+    tests_passing: 0
+    tests_total: 2
+    pass_rate: 0/2 (0%)
+    verification_status: not_verified
+    evidence: tests/performance/test_audit_write_latency.py
+    dependencies: []
+    owner: Performance Team
+    duration_hours: 1.5
+    
+  - id: AC-BRITTLE-012
+    phase: Phase 9.4
+    category: Database Integrity
+    priority: MEDIUM
+    title: Add Database Health Check to Setup Verification
+    description: |
+      CORE-006 setup verification must check database health before
+      orchestrator execution. Validate WAL mode enabled, schema complete,
+      journaling disabled, no corruption.
+      
+      Implement quick health check (< 100ms) that validates database
+      integrity, enables rollback on failures.
+    status: planned
+    implementation_status: PLANNED
+    test_coverage: 0/2
+    tests_passing: 0
+    tests_total: 2
+    pass_rate: 0/2 (0%)
+    verification_status: not_verified
+    evidence: tests/infrastructure/test_database_health_check.py
+    dependencies:
+      - CORE-006
+      - AC-BRITTLE-001
+    owner: Infrastructure Team
+    duration_hours: 0.75
+    
+  - id: AC-BRITTLE-013
+    phase: Phase 9.4
+    category: Evidence Validation
+    priority: MEDIUM
+    title: Document Evidence Validator Accuracy Levels
+    description: |
+      Audit-based evidence validator reports 3 accuracy levels:
+      - Audit logs (100% if schema complete)
+      - Live tests (97% accuracy, subject to false negatives)
+      - File exists (20% accuracy, prone to false positives)
+      
+      Document accuracy levels, confidence scoring, and when each
+      method applies. Add confidence_score to validation output.
+    status: planned
+    implementation_status: PLANNED
+    test_coverage: 0/1
+    tests_passing: 0
+    tests_total: 1
+    pass_rate: 0/1 (0%)
+    verification_status: not_verified
+    evidence: tests/infrastructure/test_validator_accuracy_levels.py
+    dependencies:
+      - AC-SYNC-001
+    owner: Validation Team
+    duration_hours: 0.5
+    
+  - id: AC-BRITTLE-014
+    phase: Phase 9.4
+    category: Test Infrastructure
+    priority: LOW
+    title: Add Pytest Marker for AC-ID Traceability
+    description: |
+      Current evidence validation uses heuristics (file existence + test
+      execution). Add pytest marker @pytest.mark.ac_id("AC-XXX-NNN") to
+      tests for 100% accuracy mapping.
+      
+      Mark all 1,797 tests with AC-ID markers. Create test validator
+      that confirms tests marked correctly. Enable zero-heuristic
+      evidence validation.
+    status: planned
+    implementation_status: PLANNED
+    test_coverage: 0/2
+    tests_passing: 0
+    tests_total: 2
+    pass_rate: 0/2 (0%)
+    verification_status: not_verified
+    evidence: tests/infrastructure/test_ac_id_marker_coverage.py
+    dependencies:
+      - AC-SYNC-001
+    owner: Test Team
+    duration_hours: 3.0
+    scope: Phase 10 (65+ tests need marking, long-tail item)

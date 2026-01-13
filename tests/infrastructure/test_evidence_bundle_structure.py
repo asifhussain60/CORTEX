@@ -13,8 +13,8 @@ import yaml
 
 from src.infrastructure.evidence_bundle_structure import (
     EvidenceBundleStructure,
-    TestResult,
-    TestMetrics,
+    BundleTestResult,
+    BundleMetrics,
 )
 
 
@@ -45,7 +45,7 @@ def bundle_system(temp_bundle_base, monkeypatch):
 @pytest.fixture
 def sample_metrics():
     """Create sample test metrics."""
-    return TestMetrics(
+    return BundleMetrics(
         total_tests=10,
         passed=9,
         failed=1,
@@ -59,10 +59,10 @@ def sample_metrics():
 def sample_test_results():
     """Create sample test results."""
     return [
-        TestResult("test_valid_input", "passed", 0.1),
-        TestResult("test_empty_input", "passed", 0.08),
-        TestResult("test_invalid_format", "failed", 0.15, "AssertionError: expected X"),
-        TestResult("test_edge_case", "passed", 0.12),
+        BundleTestResult("test_valid_input", "passed", 0.1),
+        BundleTestResult("test_empty_input", "passed", 0.08),
+        BundleTestResult("test_invalid_format", "failed", 0.15, "AssertionError: expected X"),
+        BundleTestResult("test_edge_case", "passed", 0.12),
     ]
 
 
@@ -130,7 +130,7 @@ class TestManifestCreation:
     
     def test_manifest_success_rate_calculation(self, bundle_system):
         """Test success rate calculation in manifest."""
-        metrics = TestMetrics(
+        metrics = BundleMetrics(
             total_tests=10,
             passed=7,
             failed=3,
@@ -151,7 +151,7 @@ class TestManifestCreation:
         assert manifest["metrics"]["success_rate"] == 70.0  # 7/10 * 100
 
 
-class TestResultsFileCreation:
+class BundleResultsFileCreation:
     """Tests for test_results.json creation."""
     
     def test_create_test_results_file(self, bundle_system, sample_test_results, sample_metrics):
