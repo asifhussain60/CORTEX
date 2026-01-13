@@ -532,6 +532,62 @@ python3 -m src.main "show current status" --format markdown
 
 ---
 
+## HEALTH CHECK WIRING (AC-CORTEX-001 through 005)
+
+**INTEGRATED:** HealthCheckOrchestratorV1 is now part of the execution pipeline.
+
+### Intent Patterns Recognized
+
+When you say ANY of these, MasterOrchestrator routes to HealthCheckOrchestratorV1:
+
+```
+"health check"           → Run read-only architecture validation
+"repair cortex"          → Run auto-repair for safe issues (MEDIUM/LOW)
+"diagnose cortex"        → Full diagnostics with recommendations
+"diagnose cortex health" → Full diagnostics with recommendations
+"wire cortex"            → Alias for health check + report
+"wiring"                 → Alias for health check + report
+"health check tier0"     → Check governance layer only
+"health check tier1"     → Check execution state only
+"health check database"  → Check SQLite integrity only
+"health check mcp"       → Check MCP registry only
+```
+
+### Execution
+
+```bash
+# User says any of the above
+# CORTEX.prompt.md recognizes it
+# Routes to MasterOrchestrator
+# MasterOrchestrator calls HealthCheckOrchestratorV1
+
+python3 -m src.main "{user_intent}" --format markdown
+```
+
+### What Gets Validated (28 Health Checks)
+
+✅ **Tier 0** (Governance) - core-rules.yaml, MCP registry  
+✅ **Tier 1** (Execution) - progress-tracker.json, AC-INDEX.yaml  
+✅ **Database** (SQLite) - governance.db, audit.db, planning_state.db integrity  
+✅ **MCP** (Registry) - mcp-server.yaml, orchestrator loadability  
+✅ **Cross-Layer** (Consistency) - Tier directories, AC-ID alignment  
+
+### Result
+
+Returns structured report with:
+- Issues found (severity: CRITICAL/HIGH/MEDIUM/LOW)
+- Auto-repairs applied (if repair mode)
+- Manual interventions needed
+- Audit trail correlation ID
+- Recommendations
+
+### Reference
+
+Full documentation: `.github/prompts/cortex-wiring.prompt.md`  
+Orchestrator code: `src/orchestrators/health/health_check_orchestrator_v1.py`
+
+---
+
 ## PROMPT ARCHITECTURE (v8.0)
 
 **All prompts coordinate via MasterOrchestrator:**
@@ -540,6 +596,7 @@ python3 -m src.main "show current status" --format markdown
 |--------|------|--------------|
 | `CORTEX.prompt.md` | Gateway | Clarifies intent → calls `python3 -m src.main` |
 | `cortex-exec.prompt.md` | Executor (called by MasterOrchestrator) | Implements AC-IDs via TDD |
+| `cortex-wiring.prompt.md` | Health Check (called by MasterOrchestrator) | Architecture validation + repair |
 | `cortex-evidence-validator.prompt.md` | Validator (called by MasterOrchestrator) | Validates evidence |
 | `cortex-brittleness-review.prompt.md` | Analyst (ad-hoc) | Analyzes risks |
 

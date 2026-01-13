@@ -203,6 +203,47 @@ python3 -m src.main "execute phase 2" --format markdown
 
 ---
 
+## 🏥 HEALTH CHECK INTEGRATION (AC-CORTEX-001-005)
+
+**MasterOrchestrator PRE-EXECUTION CHECK:**
+
+Before any phase execution:
+```
+MasterOrchestrator startup
+    ↓
+MANDATORY: Run health check
+    python3 -m src.main "health check" (read-only)
+    ↓
+IF critical issues found:
+    BLOCK execution
+    Display diagnostics
+    Recommend: python3 -m src.main "repair cortex"
+    ↓
+    User must fix OR approve repairs
+ELSE:
+    Continue with normal execution
+```
+
+**Health Check Validates:**
+- ✅ Tier 0 Governance (core-rules.yaml, MCP registry, CORE-026 compliance)
+- ✅ Tier 1 Execution (progress-tracker.json, AC-INDEX.yaml consistency)
+- ✅ Database (SQLite integrity on governance.db, audit.db, planning_state.db)
+- ✅ MCP Registry (orchestrator loadability, no UUID suffixes)
+- ✅ Cross-Layer (Tier directories exist, AC-IDs aligned)
+
+**Auto-Repairs (if requested):**
+- UUID suffix removal (CORE-026)
+- Completion count capping
+- Missing tier directories creation
+- Database rebuild from schema
+- Registry deduplication
+
+**Reference:** 
+- Full documentation: `.github/prompts/cortex-wiring.prompt.md`
+- Orchestrator: `src/orchestrators/health/health_check_orchestrator_v1.py`
+
+---
+
 ## 🔍 AUDIT INTEGRATION
 
 **All operations log to `EnterpriseAuditLogger`:**
