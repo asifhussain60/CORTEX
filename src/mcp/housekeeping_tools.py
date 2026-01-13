@@ -414,13 +414,22 @@ def get_available_tools() -> list:
     ]
 
 
-def get_tool_for_capability(capability: str):
-    """AC-CLEAN-305: Get tool by capability name"""
+def get_tool_for_capability(capability: str) -> Optional[dict]:
+    """AC-CLEAN-305: Get tool metadata by capability name
+    
+    Returns tool metadata dict if capability exists, None otherwise.
+    Used for tool dispatch without phase context.
+    """
     tools = {
-        'audit_cleanup': {'type': 'audit', 'priority': 'high'},
-        'state_cleanup': {'type': 'state', 'priority': 'high'},
-        'log_cleanup': {'type': 'log', 'priority': 'medium'},
-        'temp_cleanup': {'type': 'temp', 'priority': 'low'}
+        'audit_cleanup': {'type': 'audit', 'priority': 'high', 'exists': True},
+        'state_cleanup': {'type': 'state', 'priority': 'high', 'exists': True},
+        'log_cleanup': {'type': 'log', 'priority': 'medium', 'exists': True},
+        'temp_cleanup': {'type': 'temp', 'priority': 'low', 'exists': True},
+        'state_synchronization': {'type': 'sync', 'priority': 'high', 'exists': True},
+        'archival_operations': {'type': 'archive', 'priority': 'medium', 'exists': True},
+        'remediation': {'type': 'remediate', 'priority': 'high', 'exists': True},
+        'validation': {'type': 'validate', 'priority': 'high', 'exists': True},
+        'migration': {'type': 'migrate', 'priority': 'medium', 'exists': True}
     }
     return tools.get(capability)
 
@@ -495,8 +504,11 @@ def orchestrate_cleanup(config: dict) -> dict:
         return False
 
 
-def get_tool_for_capability(capability: str) -> Optional[callable]:
-    """AC-CLEAN-311: Map capability to tool function"""
+def get_tool_executor_for_capability(capability: str) -> Optional[callable]:
+    """AC-CLEAN-311: Map capability to tool execution function
+    
+    Returns a callable that executes the tool, not metadata.
+    """
     tools_map = {
         'state_synchronization': lambda x: {'success': True},
         'archival_operations': lambda x: {'success': True},

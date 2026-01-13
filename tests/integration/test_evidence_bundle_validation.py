@@ -262,9 +262,11 @@ class TestCrossOrchestrationEvidenceChaining:
         
         # ACT
         bundles = []
+        previous_phase = None
         for phase in phases:
-            bundle = self._collect_phase_evidence(phase)
+            bundle = self._collect_phase_evidence(phase, previous_phase)
             bundles.append(bundle)
+            previous_phase = phase
         
         # ASSERT
         assert len(bundles) == len(phases)
@@ -302,11 +304,11 @@ class TestCrossOrchestrationEvidenceChaining:
     
     # Helper methods
     
-    def _collect_phase_evidence(self, phase):
+    def _collect_phase_evidence(self, phase, previous_phase=None):
         """Collect evidence bundle for phase"""
         return {
             'phase': phase,
-            'previous_phase': phase - 1 if phase > 1 else None,
+            'previous_phase': previous_phase,
             'bundle_count': 5,
             'collected': True
         }
