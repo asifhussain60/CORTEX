@@ -1,11 +1,12 @@
-# 🤖 CORTEX – Master Gateway Prompt (v8.0)
+# 🤖 CORTEX – Master Gateway Prompt (v8.1)
 
 **Purpose:** Intent clarification + orchestrator routing in GitHub Copilot.  
 **Design goal:** Thin routing layer; all execution delegated to Python orchestrators.  
-**Version:** 8.0.0 | **Date:** 2026-01-12  
+**Version:** 8.1.0 | **Date:** 2026-01-13  
 **Architecture:** Prompt = Gateway + Clarification. Python = Execution via MasterOrchestrator.  
 **Phase:** 2 (Orchestration Core) – Full LLM intent routing planned for Phase 4 (Intelligence Layer).  
 **Governance:** CORE-002 (no root files), CORE-017 (governance enforcement), CORE-009 (plan organization), CORE-025 (intelligent challenge)
+**Multi-Machine:** ✅ ENABLED - CORTEX 6.0 supports parallel development on MAC + WIN (90% cross-platform)
 
 ---
 
@@ -183,7 +184,59 @@ This prompt integrates with the CORTEX 6.0 plan via orchestrator delegation:
 
 ---
 
-## 🎬 INTENT CLARIFICATION PROTOCOL
+## � MULTI-MACHINE DEVELOPMENT PROTOCOL (v1.8.0+)
+
+**Enabled:** ✅ YES - CORTEX 6.0 supports parallel development on MAC + WIN machines
+
+**Platform Compatibility:** 90% cross-platform (9/11 phases fully portable)
+- 🟢 **CROSS-PLATFORM:** Phases 1, 1.5, 2, 4-10 (work identically on MAC/WIN)
+- 🟡 **PLATFORM-AWARE:** Phases 3, 11 (minor platform-specific components, all optional)
+
+**Merge Strategy:** Git-based continuous integration
+- Feature branches: `git checkout -b feat/AC-{ID}`
+- Implement + test on local platform (MAC or WIN)
+- Push to origin: `git push origin feat/AC-{ID}`
+- CI/CD runs tests on BOTH platforms (GitHub Actions)
+- Merge after cross-platform validation passes
+
+**Protection Mechanisms:**
+- CORE-005 (Path Portability) prevents hardcoded paths (`/Users/`, `C:\\`)
+- Pre-commit hooks block platform-specific patterns
+- `.gitattributes` enforces LF line endings
+- CI/CD matrix: [ubuntu-latest, windows-latest, macos-latest]
+
+**Integration Tests Required:**
+```python
+@pytest.mark.unit
+@pytest.mark.cross_platform
+def test_audit_infrastructure():
+    # Must pass on BOTH MAC and WIN before merge
+    pass
+
+@pytest.mark.mac  # Only runs on MAC (skipped on WIN)
+def test_xcode_project_scanning():
+    pass
+
+@pytest.mark.win  # Only runs on WIN (skipped on MAC)
+def test_visual_studio_scanning():
+    pass
+```
+
+**Best Practices:**
+- ✅ Use `pathlib.Path` for ALL file operations
+- ✅ Test on BOTH platforms before pushing
+- ✅ Use platform detection for optional features
+- ❌ Never hardcode `/Users/` or `C:\\` paths
+- ❌ Never skip cross-platform testing
+
+**Reference:** 
+- Complete specification: `master-plan.yaml → multi_machine_development_protocol`
+- Executive summary: `cortex-brain/documents/implementation/multi-machine-development-protocol.md`
+- Platform matrix: Dashboard shows 🟢/🟡 badges per phase
+
+---
+
+## �🎬 INTENT CLARIFICATION PROTOCOL
 
 **ALWAYS execute this protocol first, before invoking orchestrator:**
 

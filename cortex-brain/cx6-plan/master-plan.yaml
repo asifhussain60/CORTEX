@@ -1,8 +1,8 @@
 plan_metadata:
   plan_id: CORTEX-6.0-SNOWBALL-MASTER
-  version: 1.7.2
+  version: 1.8.0
   created: '2026-01-10T23:50:00Z'
-  updated: '2026-01-13T13:30:00Z'
+  updated: '2026-01-13T18:00:00Z'
   author: Asif Hussain
   strategy: Organic Evolution with JIT Infrastructure Delivery
   philosophy: Build for operation; decommission construction scaffolding
@@ -11,8 +11,13 @@ plan_metadata:
   total_ac_ids: 184
   hybrid_approach: true
   gpt_influence: 70% rigor, 30% overhead
-  latest_addition: Phase 10 - CORTEX LENS & Onboarding (moved from 1.5); Phase 1.5
-    - STS (Semantic Test Suite)
+  latest_addition: v1.8.0 - Multi-machine development protocol with platform badges
+  multi_machine_development:
+    enabled: true
+    platforms: [MAC, WIN]
+    merge_strategy: git_based_continuous_integration
+    integration_tests_required: true
+    cross_platform_compatibility: 90%  # 10/11 phases fully cross-platform
   ssot_declaration: "**SINGLE SOURCE OF TRUTH (SSOT) ARCHITECTURE**\n\nThis file (master-plan.yaml)\
     \ is the AUTHORITATIVE source for:\n- Phase definitions, timelines, and dependencies\n\
     - AC-ID ranges and component mappings\n- Exit criteria and success metrics\n-\
@@ -28,6 +33,390 @@ plan_metadata:
     - No manual state modifications outside orchestrator\n"
   reorganization_note: v1.7.2 - Restored Phase 1 as completed (green status), not
     archived
+multi_machine_development_protocol:
+  version: 1.0.0
+  created: '2026-01-13T18:00:00Z'
+  overview: |
+    CORTEX 6.0 supports parallel development across multiple machines (MAC + WIN).
+    90% of phases are fully cross-platform. Platform-specific work is isolated
+    to optional components in Phases 3 and 11.
+  
+  platform_compatibility_matrix:
+    Phase_1_Foundation:
+      platforms: [BOTH]
+      badge: 🟢 CROSS-PLATFORM
+      rationale: Core Python infrastructure (SQLite, pathlib, json) works identically on all platforms
+      mac_specific: []
+      win_specific: []
+      shared_components:
+        - Audit Infrastructure (AC-AUDIT-001 to 007)
+        - Governance Merger (AC-GOV-001 to 005)
+        - State Manager (AC-STATE-001 to 003)
+        - Lifecycle Management (AC-LIFECYCLE-001 to 003)
+        - Evidence Bundles (AC-EVIDENCE-001 to 003)
+        - Security Layer (AC-SECURITY-001 to 008)
+    
+    Phase_1_5_STS:
+      platforms: [BOTH]
+      badge: 🟢 CROSS-PLATFORM
+      rationale: pytest and test infrastructure are platform-agnostic
+      mac_specific: []
+      win_specific: []
+      shared_components:
+        - Semantic Test Corpus
+        - Test Runner Engine
+        - Evidence Validator
+    
+    Phase_2_Orchestration_Core:
+      platforms: [BOTH]
+      badge: 🟢 CROSS-PLATFORM
+      rationale: MasterOrchestrator uses Python stdlib (no OS-specific calls)
+      mac_specific: []
+      win_specific: []
+      shared_components:
+        - MasterOrchestrator (AC-ORCH-001 to 008)
+        - TodoManager (AC-TODO-001 to 004)
+        - TDD-Master (AC-TDD-001 to 010)
+        - Planning v5 (AC-PLAN-001 to 008)
+    
+    Phase_3_Feature_Orchestrators:
+      platforms: [MIXED]
+      badge: 🟡 PLATFORM-AWARE
+      rationale: Git operations have minor platform-specific paths (handled by pathlib)
+      mac_specific:
+        - Git binary detection (uses `which git`)
+        - Bash-based cleanup scripts (optional)
+      win_specific:
+        - Git binary detection (uses `where git`)
+        - PowerShell-based cleanup scripts (optional)
+      shared_components:
+        - ADO v2 (AC-ADO-201 to 218) - REST API, platform-agnostic
+        - Investigation (AC-INV-301 to 318) - Python-based analysis
+        - Sanitization (AC-SAN-401 to 418) - File operations via pathlib
+        - Crawlers (AC-CRAWLER-501 to 518) - AST parsing, cross-platform
+      integration_strategy: |
+        Platform-specific components are OPTIONAL enhancements.
+        Core functionality works identically on both platforms.
+        Use CORE-005 (pathlib) for all file operations.
+    
+    Phase_4_Intelligence_Layer:
+      platforms: [BOTH]
+      badge: 🟢 CROSS-PLATFORM
+      rationale: LLM APIs (OpenAI, Anthropic) are platform-agnostic HTTP calls
+      mac_specific: []
+      win_specific: []
+      shared_components:
+        - LLM Intent Classifier
+        - Vision API Integration
+        - Knowledge Graph Builder
+    
+    Phase_5_Cleanup:
+      platforms: [BOTH]
+      badge: 🟢 CROSS-PLATFORM
+      rationale: File cleanup uses pathlib (CORE-005 enforced)
+      mac_specific: []
+      win_specific: []
+      shared_components:
+        - Reference Removal (AC-CLEAN-301 to 308)
+        - Artifact Decommission (AC-CLEAN-309 to 316)
+        - Configuration Cleanup (AC-CLEAN-317 to 324)
+    
+    Phase_6_Security_Routing:
+      platforms: [BOTH]
+      badge: 🟢 CROSS-PLATFORM
+      rationale: Security layer uses Python stdlib and pathlib
+      mac_specific: []
+      win_specific: []
+      shared_components:
+        - Action Security Layer (AC-SECURITY-001 to 008)
+        - Deterministic Routing Engine
+    
+    Phase_7_Copilot_Bridge:
+      platforms: [BOTH]
+      badge: 🟢 CROSS-PLATFORM
+      rationale: VS Code extension API is cross-platform (Node.js + TypeScript)
+      mac_specific: []
+      win_specific: []
+      shared_components:
+        - Todo Bridge Integration
+        - VS Code Command Palette
+    
+    Phase_8_Staged_Rollout:
+      platforms: [BOTH]
+      badge: 🟢 CROSS-PLATFORM
+      rationale: Approval gates are Python-based, no OS calls
+      mac_specific: []
+      win_specific: []
+      shared_components:
+        - Progressive Rollout System
+        - Approval Gate Middleware
+    
+    Phase_9_Infrastructure_Maturity:
+      platforms: [BOTH]
+      badge: 🟢 CROSS-PLATFORM
+      rationale: Hash chain and SQLite work identically on all platforms
+      mac_specific: []
+      win_specific: []
+      shared_components:
+        - Hash Chain Audit (AC-AUDIT-007)
+        - Lifecycle State Management (AC-LIFECYCLE-001 to 003)
+        - STS Golden Corpus (100 intents)
+        - Template System
+    
+    Phase_10_Template_Migration:
+      platforms: [BOTH]
+      badge: 🟢 CROSS-PLATFORM
+      rationale: Template files are text-based (YAML/Markdown)
+      mac_specific: []
+      win_specific: []
+      shared_components:
+        - 3-Layer Response Templates
+        - CORE-026 Enforcement Middleware
+    
+    Phase_11_CORTEX_LENS:
+      platforms: [MIXED]
+      badge: 🟡 PLATFORM-AWARE
+      rationale: HTML generation cross-platform, IDE project scanning is optional
+      mac_specific:
+        - Xcode project scanning (.xcodeproj files) - OPTIONAL
+      win_specific:
+        - Visual Studio project scanning (.sln/.csproj files) - OPTIONAL
+      shared_components:
+        - Universal Code Analysis (Python, JavaScript, TypeScript, etc.)
+        - Knowledge Discovery Engine
+        - HTML View Generators (D3.js visualizations)
+        - Onboarding Documentation
+  
+  merge_strategy:
+    approach: Git-Based Continuous Integration
+    description: |
+      Work done on MAC and WIN machines merges seamlessly via standard git workflow.
+      CORTEX enforces CORE-005 (portable paths) to prevent merge conflicts.
+    
+    workflow:
+      step_1_feature_branch:
+        action: Create feature branch for AC-ID implementation
+        command: git checkout -b feat/AC-{CATEGORY}-{NNN}
+        example: git checkout -b feat/AC-AUDIT-001
+      
+      step_2_implement_test:
+        action: Implement AC-ID with TDD on local machine (MAC or WIN)
+        platform: [BOTH]
+        validation: Tests must pass on implementation platform
+      
+      step_3_commit_push:
+        action: Commit with evidence bundle and push
+        command: |
+          git add .
+          git commit -m "feat(AC-{ID}): {title} - Evidence bundle attached"
+          git push origin feat/AC-{ID}
+      
+      step_4_integration_tests:
+        action: CI/CD runs integration tests on BOTH platforms
+        platforms: [MAC, WIN]
+        gate: Tests must pass on BOTH platforms before merge
+        tools:
+          - GitHub Actions (runs on ubuntu-latest, windows-latest, macos-latest)
+          - pytest with platform markers (@pytest.mark.mac, @pytest.mark.win)
+      
+      step_5_merge_main:
+        action: Merge to main/CORTEX6 after cross-platform validation
+        command: git merge feat/AC-{ID} --no-ff
+        requirement: All integration tests passed on both platforms
+    
+    conflict_resolution:
+      path_conflicts:
+        cause: Hardcoded paths (violation of CORE-005)
+        prevention: CORE-005 middleware blocks hardcoded paths at commit time
+        detection: pre-commit hook scans for /Users/, C:\, etc.
+        fix: Replace with pathlib.Path(__file__).resolve() or get_project_root()
+      
+      platform_specific_imports:
+        cause: Using platform-specific libraries (e.g., winreg on Windows)
+        prevention: Import guards with try/except or platform detection
+        example: |
+          import platform
+          if platform.system() == 'Windows':
+              import winreg  # Windows-only
+          elif platform.system() == 'Darwin':
+              import objc  # macOS-only (if needed)
+      
+      line_ending_conflicts:
+        cause: CRLF (Windows) vs LF (Unix) line endings
+        prevention: .gitattributes enforces LF for all text files
+        config: |
+          # .gitattributes
+          * text=auto eol=lf
+          *.py text eol=lf
+          *.yaml text eol=lf
+          *.json text eol=lf
+  
+  integration_test_requirements:
+    purpose: Prove cross-platform compatibility before merge
+    framework: pytest with platform markers
+    
+    test_structure:
+      unit_tests:
+        scope: Individual components (orchestrators, utilities)
+        platform: [BOTH]
+        requirement: Must pass on both MAC and WIN
+        markers:
+          - "@pytest.mark.unit"
+          - "@pytest.mark.cross_platform"
+      
+      integration_tests:
+        scope: End-to-end workflows (full AC-ID implementation)
+        platform: [BOTH]
+        requirement: Must pass on both MAC and WIN
+        markers:
+          - "@pytest.mark.integration"
+          - "@pytest.mark.cross_platform"
+      
+      platform_specific_tests:
+        scope: Optional platform-specific features
+        platform: [CONDITIONAL]
+        requirement: Only runs on target platform
+        markers:
+          - "@pytest.mark.mac - skipped on WIN"
+          - "@pytest.mark.win - skipped on MAC"
+        examples:
+          - Xcode project scanning - MAC only
+          - Visual Studio project scanning - WIN only
+    
+    ci_cd_pipeline:
+      tool: GitHub Actions
+      workflow_file: .github/workflows/cortex-ci.yml
+      strategy:
+        matrix:
+          os: [ubuntu-latest, windows-latest, macos-latest]
+          python: ['3.11', '3.12']
+        steps:
+          - Checkout code
+          - Setup Python
+          - Install dependencies (pip install -r requirements.txt)
+          - Run unit tests (pytest tests/unit --cross-platform)
+          - Run integration tests (pytest tests/integration --cross-platform)
+          - Generate evidence bundle
+          - Upload artifacts
+      
+      failure_policy:
+        if_mac_fails: Block merge, investigate platform-specific issue
+        if_win_fails: Block merge, investigate platform-specific issue
+        if_both_fail: Block merge, core logic error
+    
+    evidence_bundle_validation:
+      requirement: Evidence bundles must validate on BOTH platforms
+      validator: scripts/audit_based_evidence_validator.py
+      acceptance_criteria:
+        - Test results JSON parseable on both platforms
+        - Audit trail complete and hash chain valid
+        - No platform-specific paths in evidence
+  
+  dashboard_visualization:
+    plan_viewer_enhancements:
+      file: cortex-brain/cx6-plan/viewer/plan-viewer.html
+      new_features:
+        platform_badges:
+          description: Visual indicators showing platform compatibility
+          location: Phase card headers
+          badges:
+            - text: "🟢 CROSS-PLATFORM"
+              condition: phase.platforms == "BOTH"
+              color: "#10b981"
+            - text: "🟡 PLATFORM-AWARE"
+              condition: phase.platforms == "MIXED"
+              color: "#f59e0b"
+            - text: "🍎 MAC"
+              condition: phase.mac_specific.length > 0
+              color: "#3b82f6"
+            - text: "🪟 WIN"
+              condition: phase.win_specific.length > 0
+              color: "#8b5cf6"
+        
+        platform_filter:
+          description: Filter phases by platform
+          location: Left sidebar
+          options:
+            - "All Phases"
+            - "Cross-Platform Only (10/11)"
+            - "Platform-Aware (2/11)"
+            - "MAC-Specific Components"
+            - "WIN-Specific Components"
+        
+        machine_progress_tracking:
+          description: Track which machine completed which AC-IDs
+          location: Phase detail view
+          display: |
+            AC-AUDIT-001 ✅ (MAC) - Implemented on MacBook Pro
+            AC-AUDIT-002 ✅ (WIN) - Implemented on Windows Desktop
+            AC-AUDIT-003 ✅ (BOTH) - Tested on both platforms
+        
+        merge_conflict_alerts:
+          description: Show potential merge conflicts
+          location: Top banner
+          triggers:
+            - Same AC-ID modified on both machines (needs manual review)
+            - Hardcoded path detected (CORE-005 violation)
+            - Platform-specific import without guards
+  
+  best_practices:
+    do:
+      - "✅ Use pathlib.Path for ALL file operations (CORE-005)"
+      - "✅ Test on BOTH platforms before pushing"
+      - "✅ Use platform detection for optional features"
+      - "✅ Commit evidence bundles with platform metadata"
+      - "✅ Run integration tests in CI/CD on all platforms"
+      - "✅ Use .gitattributes to enforce line endings"
+    
+    dont:
+      - "❌ Hardcode /Users/ or C:\\ paths (CORE-005 violation)"
+      - "❌ Use platform-specific libraries without guards"
+      - "❌ Skip cross-platform testing"
+      - "❌ Merge without CI/CD validation"
+      - "❌ Assume 'works on my machine' = cross-platform"
+  
+  troubleshooting:
+    issue_path_not_found:
+      symptom: Code works on MAC, fails on WIN with "Path not found"
+      cause: Hardcoded Unix path (/Users/...) or path separator (/)
+      fix: Use pathlib.Path and CORE-005 utilities
+      example: |
+        # ❌ BAD (hardcoded)
+        path = "/Users/asif/CORTEX/cortex-brain"
+        
+        # ✅ GOOD (portable)
+        from src.utils.project_root import get_project_root
+        path = get_project_root() / "cortex-brain"
+    
+    issue_import_error:
+      symptom: Import works on one platform, fails on other
+      cause: Platform-specific library used without guards
+      fix: Add platform detection or make import optional
+      example: |
+        # ✅ GOOD (guarded import)
+        import platform
+        if platform.system() == 'Windows':
+            try:
+                import winreg
+            except ImportError:
+                winreg = None
+    
+    issue_line_ending_conflicts:
+      symptom: Git shows entire file changed (CRLF vs LF)
+      cause: Missing .gitattributes configuration
+      fix: Add .gitattributes with eol=lf for text files
+      example: |
+        # .gitattributes
+        * text=auto eol=lf
+        *.py text eol=lf
+  
+  success_metrics:
+    cross_platform_test_coverage: ">=80% on BOTH platforms"
+    merge_conflict_rate: "<5% of PRs"
+    platform_compatibility_score: ">=90%"
+    ci_cd_pass_rate: ">=95% on all platforms"
+
+
 snowball_strategy:
   description: 'Build core infrastructure first; features compound on infrastructure.
 

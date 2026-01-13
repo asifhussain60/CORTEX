@@ -4,8 +4,8 @@
     "total_ac_ids": 197,
     "completed_ac_ids": 117,
     "in_progress_ac_ids": 0,
-    "version": "1.7.2",
-    "updated": "2026-01-13T13:29:37.382375+00:00",
+    "version": "1.8.0",
+    "updated": "2026-01-13T13:49:37.158017+00:00",
     "status": "phases_1_to_5_defined_4.5_integration_tests_added"
   },
   "phases": [
@@ -48,7 +48,24 @@
         "AC-STATE-002",
         "AC-STATE-003"
       ],
-      "capabilities": []
+      "capabilities": [],
+      "platform": {
+        "platforms": [
+          "BOTH"
+        ],
+        "badge": "\ud83d\udfe2 CROSS-PLATFORM",
+        "rationale": "Core Python infrastructure (SQLite, pathlib, json) works identically on all platforms",
+        "mac_specific": [],
+        "win_specific": [],
+        "shared_components": [
+          "Audit Infrastructure (AC-AUDIT-001 to 007)",
+          "Governance Merger (AC-GOV-001 to 005)",
+          "State Manager (AC-STATE-001 to 003)",
+          "Lifecycle Management (AC-LIFECYCLE-001 to 003)",
+          "Evidence Bundles (AC-EVIDENCE-001 to 003)",
+          "Security Layer (AC-SECURITY-001 to 008)"
+        ]
+      }
     },
     {
       "id": 2,
@@ -80,7 +97,22 @@
         "AC-TODO-003",
         "AC-TODO-004"
       ],
-      "capabilities": []
+      "capabilities": [],
+      "platform": {
+        "platforms": [
+          "BOTH"
+        ],
+        "badge": "\ud83d\udfe2 CROSS-PLATFORM",
+        "rationale": "MasterOrchestrator uses Python stdlib (no OS-specific calls)",
+        "mac_specific": [],
+        "win_specific": [],
+        "shared_components": [
+          "MasterOrchestrator (AC-ORCH-001 to 008)",
+          "TodoManager (AC-TODO-001 to 004)",
+          "TDD-Master (AC-TDD-001 to 010)",
+          "Planning v5 (AC-PLAN-001 to 008)"
+        ]
+      }
     },
     {
       "id": 3,
@@ -106,7 +138,28 @@
         "AC-VAC-001",
         "AC-VAC-002"
       ],
-      "capabilities": []
+      "capabilities": [],
+      "platform": {
+        "platforms": [
+          "MIXED"
+        ],
+        "badge": "\ud83d\udfe1 PLATFORM-AWARE",
+        "rationale": "Git operations have minor platform-specific paths (handled by pathlib)",
+        "mac_specific": [
+          "Git binary detection (uses `which git`)",
+          "Bash-based cleanup scripts (optional)"
+        ],
+        "win_specific": [
+          "Git binary detection (uses `where git`)",
+          "PowerShell-based cleanup scripts (optional)"
+        ],
+        "shared_components": [
+          "ADO v2 (AC-ADO-201 to 218) - REST API, platform-agnostic",
+          "Investigation (AC-INV-301 to 318) - Python-based analysis",
+          "Sanitization (AC-SAN-401 to 418) - File operations via pathlib",
+          "Crawlers (AC-CRAWLER-501 to 518) - AST parsing, cross-platform"
+        ]
+      }
     },
     {
       "id": 5,
@@ -146,7 +199,21 @@
         "AC-CLEAN-327",
         "AC-CLEAN-328"
       ],
-      "capabilities": []
+      "capabilities": [],
+      "platform": {
+        "platforms": [
+          "BOTH"
+        ],
+        "badge": "\ud83d\udfe2 CROSS-PLATFORM",
+        "rationale": "File cleanup uses pathlib (CORE-005 enforced)",
+        "mac_specific": [],
+        "win_specific": [],
+        "shared_components": [
+          "Reference Removal (AC-CLEAN-301 to 308)",
+          "Artifact Decommission (AC-CLEAN-309 to 316)",
+          "Configuration Cleanup (AC-CLEAN-317 to 324)"
+        ]
+      }
     },
     {
       "id": 6,
@@ -166,7 +233,20 @@
         "AC-SECURITY-007",
         "AC-SECURITY-008"
       ],
-      "capabilities": []
+      "capabilities": [],
+      "platform": {
+        "platforms": [
+          "BOTH"
+        ],
+        "badge": "\ud83d\udfe2 CROSS-PLATFORM",
+        "rationale": "Security layer uses Python stdlib and pathlib",
+        "mac_specific": [],
+        "win_specific": [],
+        "shared_components": [
+          "Action Security Layer (AC-SECURITY-001 to 008)",
+          "Deterministic Routing Engine"
+        ]
+      }
     },
     {
       "id": 7,
@@ -177,7 +257,20 @@
       "status": "planned",
       "description": "Todo Bridge integration with VS Code GitHub Copilot",
       "verified_implemented": [],
-      "capabilities": []
+      "capabilities": [],
+      "platform": {
+        "platforms": [
+          "BOTH"
+        ],
+        "badge": "\ud83d\udfe2 CROSS-PLATFORM",
+        "rationale": "VS Code extension API is cross-platform (Node.js + TypeScript)",
+        "mac_specific": [],
+        "win_specific": [],
+        "shared_components": [
+          "Todo Bridge Integration",
+          "VS Code Command Palette"
+        ]
+      }
     },
     {
       "id": 8,
@@ -188,7 +281,20 @@
       "status": "planned",
       "description": "Progressive rollout with approval gates",
       "verified_implemented": [],
-      "capabilities": []
+      "capabilities": [],
+      "platform": {
+        "platforms": [
+          "BOTH"
+        ],
+        "badge": "\ud83d\udfe2 CROSS-PLATFORM",
+        "rationale": "Approval gates are Python-based, no OS calls",
+        "mac_specific": [],
+        "win_specific": [],
+        "shared_components": [
+          "Progressive Rollout System",
+          "Approval Gate Middleware"
+        ]
+      }
     },
     {
       "id": 9,
@@ -210,7 +316,22 @@
         "AC-STS-002",
         "AC-STS-003"
       ],
-      "capabilities": []
+      "capabilities": [],
+      "platform": {
+        "platforms": [
+          "BOTH"
+        ],
+        "badge": "\ud83d\udfe2 CROSS-PLATFORM",
+        "rationale": "Hash chain and SQLite work identically on all platforms",
+        "mac_specific": [],
+        "win_specific": [],
+        "shared_components": [
+          "Hash Chain Audit (AC-AUDIT-007)",
+          "Lifecycle State Management (AC-LIFECYCLE-001 to 003)",
+          "STS Golden Corpus (100 intents)",
+          "Template System"
+        ]
+      }
     },
     {
       "id": 10,
@@ -221,7 +342,20 @@
       "status": "planned",
       "description": "Migrate orchestrators to 3-layer templates, CORE-026 enforcement",
       "verified_implemented": [],
-      "capabilities": []
+      "capabilities": [],
+      "platform": {
+        "platforms": [
+          "BOTH"
+        ],
+        "badge": "\ud83d\udfe2 CROSS-PLATFORM",
+        "rationale": "Template files are text-based (YAML/Markdown)",
+        "mac_specific": [],
+        "win_specific": [],
+        "shared_components": [
+          "3-Layer Response Templates",
+          "CORE-026 Enforcement Middleware"
+        ]
+      }
     },
     {
       "id": 11,
@@ -232,7 +366,26 @@
       "status": "planned",
       "description": "Build universal code analysis and knowledge discovery system that:\n\n1. CORTEX LENS: Reverse-engineer codebase via AST, crawlers, git history\n2. Onboarding: Guide teams through intelligent project discovery\n3. Knowledge Store: Capture company and domain patterns for reuse\n4. MCP Tools: Expose analyzers so Planning/other orchestrators access findings\n",
       "verified_implemented": [],
-      "capabilities": []
+      "capabilities": [],
+      "platform": {
+        "platforms": [
+          "MIXED"
+        ],
+        "badge": "\ud83d\udfe1 PLATFORM-AWARE",
+        "rationale": "HTML generation cross-platform, IDE project scanning is optional",
+        "mac_specific": [
+          "Xcode project scanning (.xcodeproj files) - OPTIONAL"
+        ],
+        "win_specific": [
+          "Visual Studio project scanning (.sln/.csproj files) - OPTIONAL"
+        ],
+        "shared_components": [
+          "Universal Code Analysis (Python, JavaScript, TypeScript, etc.)",
+          "Knowledge Discovery Engine",
+          "HTML View Generators (D3.js visualizations)",
+          "Onboarding Documentation"
+        ]
+      }
     }
   ]
 }

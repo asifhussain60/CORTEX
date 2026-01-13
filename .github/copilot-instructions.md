@@ -1,8 +1,9 @@
 # GitHub Copilot Instructions for CORTEX 6.0
 
 **Purpose:** Production-grade AI orchestration with long-term memory, governance enforcement, and audit traceability  
-**Version:** 6.0.1 | **Author:** Asif Hussain | **Updated:** 2026-01-13  
+**Version:** 6.1.0 | **Author:** Asif Hussain | **Updated:** 2026-01-13  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+**Multi-Machine:** ✅ ENABLED - Parallel development on MAC + WIN (90% cross-platform)
 
 ---
 
@@ -109,6 +110,90 @@ EXTRACT: If found, bring in and transform rather than recreate
 ```
 
 **If ANY file is missing or corrupted:** Create/repair before proceeding. Do NOT route with stale state.
+
+---
+
+## 🌐 Multi-Machine Development Protocol (v1.8.0+)
+
+**CORTEX 6.0 supports parallel development across multiple machines (MAC + WIN).**
+
+### Platform Compatibility Matrix
+
+| Phase | Badge | Platform | MAC-Specific | WIN-Specific |
+|-------|-------|----------|--------------|--------------|
+| 1-2, 4-10 | 🟢 CROSS-PLATFORM | BOTH | None | None |
+| 3, 11 | 🟡 PLATFORM-AWARE | MIXED | Optional components | Optional components |
+
+**90% of CORTEX 6.0 is fully cross-platform.** Only Phases 3 (Feature Orchestrators) and 11 (CORTEX LENS) have minor platform-specific components (all optional).
+
+### Merge Strategy
+
+**Workflow:**
+1. **Feature Branch:** `git checkout -b feat/AC-{ID}`
+2. **Implement + Test:** On local platform (MAC or WIN)
+3. **Commit:** `git commit -m "feat(AC-{ID}): {title}"`
+4. **Push:** `git push origin feat/AC-{ID}`
+5. **CI/CD Validation:** Tests run on BOTH platforms
+6. **Merge:** After cross-platform tests pass
+
+### Protection Mechanisms
+
+**CORE-005 Enforcement:**
+- ✅ Use `pathlib.Path` for ALL file operations
+- ❌ Never hardcode `/Users/` or `C:\\` paths
+- Pre-commit hooks block platform-specific patterns
+
+**Cross-Platform Testing:**
+```python
+@pytest.mark.cross_platform  # Must pass on BOTH MAC and WIN
+@pytest.mark.mac             # Only runs on MAC (skipped on WIN)
+@pytest.mark.win             # Only runs on WIN (skipped on MAC)
+```
+
+**CI/CD Matrix:** GitHub Actions runs on [ubuntu-latest, windows-latest, macos-latest]
+
+### Best Practices
+
+**DO:**
+- ✅ Use `pathlib.Path` for all file operations (CORE-005)
+- ✅ Test on BOTH platforms before pushing
+- ✅ Use platform detection for optional features: `platform.system()` → 'Darwin', 'Windows', 'Linux'
+- ✅ Commit evidence bundles with platform metadata
+- ✅ Run integration tests in CI/CD on all platforms
+
+**DON'T:**
+- ❌ Hardcode `/Users/` or `C:\\` paths (CORE-005 violation)
+- ❌ Use platform-specific libraries without guards
+- ❌ Skip cross-platform testing
+- ❌ Merge without CI/CD validation
+- ❌ Assume "works on my machine" = cross-platform
+
+### Troubleshooting
+
+**Path Not Found Error:**
+```python
+# ❌ BAD (hardcoded)
+path = "/Users/asif/CORTEX/cortex-brain"
+
+# ✅ GOOD (portable)
+from src.utils.project_root import get_project_root
+path = get_project_root() / "cortex-brain"
+```
+
+**Import Error (Platform-Specific):**
+```python
+# ✅ GOOD (guarded import)
+import platform
+if platform.system() == 'Windows':
+    import winreg  # Windows-only
+elif platform.system() == 'Darwin':
+    import objc  # macOS-only (if needed)
+```
+
+**Reference:**
+- Complete spec: `master-plan.yaml → multi_machine_development_protocol`
+- Executive summary: `cortex-brain/documents/implementation/multi-machine-development-protocol.md`
+- Dashboard: Plan viewer shows 🟢/🟡 badges per phase
 
 ---
 

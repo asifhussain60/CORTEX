@@ -334,6 +334,71 @@
         }
         
         /* ============================================================================
+           PLATFORM BADGES
+           ============================================================================ */
+        .platform-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            width: fit-content;
+        }
+        
+        .platform-badge.cross-platform {
+            background: rgba(16, 185, 129, 0.15);
+            color: #10b981;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+        
+        .platform-badge.platform-aware {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        
+        .platform-icon {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+        
+        .platform-details {
+            display: flex;
+            gap: var(--spacing-xs);
+            margin-top: var(--spacing-xs);
+            flex-wrap: wrap;
+        }
+        
+        .platform-detail-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--color-text-tertiary);
+        }
+        
+        .platform-detail-badge.mac {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+            color: #3b82f6;
+        }
+        
+        .platform-detail-badge.win {
+            background: rgba(139, 92, 246, 0.15);
+            border-color: rgba(139, 92, 246, 0.3);
+            color: #8b5cf6;
+        }
+        
+        /* ============================================================================
            CONTAINER & CARD STYLES
            ============================================================================ */
         .section-container {
@@ -1560,6 +1625,11 @@
                 const status = this.getStatusClass(phaseData.status);
                 const statusText = this.getStatusText(phaseData.status);
                 
+                // Get platform metadata
+                const platform = phaseData.platform || {};
+                const platformBadge = this.renderPlatformBadge(platform);
+                const platformDetails = this.renderPlatformDetails(platform);
+                
                 return `
                     <div class="phase-card-compact">
                         <div class="card">
@@ -1570,9 +1640,11 @@
                                 <div class="phase-card-subtitle">
                                     ${phaseData.name}
                                 </div>
-                                <div style="margin-top: var(--spacing-sm);">
+                                <div style="margin-top: var(--spacing-sm); display: flex; gap: var(--spacing-xs); flex-wrap: wrap;">
                                     <span class="status-badge ${status}">${statusText}</span>
+                                    ${platformBadge}
                                 </div>
+                                ${platformDetails}
                             </div>
                             <div class="phase-card-body">
                                 <div class="phase-card-metrics">
@@ -1601,6 +1673,36 @@
                         </div>
                     </div>
                 `;
+            },
+            
+            renderPlatformBadge(platform) {
+                if (!platform || !platform.badge) return '';
+                
+                const badge = platform.badge;
+                const isCrossPlatform = badge.includes('CROSS-PLATFORM');
+                const badgeClass = isCrossPlatform ? 'cross-platform' : 'platform-aware';
+                
+                return `<span class="platform-badge ${badgeClass}">${badge}</span>`;
+            },
+            
+            renderPlatformDetails(platform) {
+                if (!platform) return '';
+                
+                const details = [];
+                
+                // Show MAC-specific components
+                if (platform.mac_specific && platform.mac_specific.length > 0) {
+                    details.push(`<span class="platform-detail-badge mac">🍎 MAC</span>`);
+                }
+                
+                // Show WIN-specific components
+                if (platform.win_specific && platform.win_specific.length > 0) {
+                    details.push(`<span class="platform-detail-badge win">🪟 WIN</span>`);
+                }
+                
+                if (details.length === 0) return '';
+                
+                return `<div class="platform-details">${details.join('')}</div>`;
             },
             
             renderGovernanceRules() {
