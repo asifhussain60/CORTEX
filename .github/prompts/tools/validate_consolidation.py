@@ -14,16 +14,16 @@ Responsibilities:
 
 Usage:
     # Pre-consolidation baseline (run before consolidate.py)
-    python validate_consolidation.py --folder SSOT/analysis --baseline
+    python validate_consolidation.py --folder <target-folder> --baseline
     
     # Post-consolidation validation (run after consolidate.py)
-    python validate_consolidation.py --folder SSOT/analysis --validate
+    python validate_consolidation.py --folder <target-folder> --validate
     
     # Full audit report with recovery manifest
-    python validate_consolidation.py --folder SSOT/analysis --audit
+    python validate_consolidation.py --folder <target-folder> --audit
     
     # Strict mode: fail on any anomaly
-    python validate_consolidation.py --folder SSOT/analysis --validate --strict
+    python validate_consolidation.py --folder <target-folder> --validate --strict
 """
 
 import json
@@ -501,16 +501,16 @@ def main():
         epilog="""
 Examples:
   # Capture baseline before consolidation
-  python validate_consolidation.py --folder SSOT/analysis --baseline
+  python validate_consolidation.py --folder <target-folder> --baseline
   
   # Validate consolidated file after consolidation
-  python validate_consolidation.py --folder SSOT/analysis --validate
+  python validate_consolidation.py --folder <target-folder> --validate
   
   # Full audit with recovery manifest
-  python validate_consolidation.py --folder SSOT/analysis --audit
+  python validate_consolidation.py --folder <target-folder> --audit
   
   # Strict mode: fail on any warnings
-  python validate_consolidation.py --folder SSOT/analysis --validate --strict
+  python validate_consolidation.py --folder <target-folder> --validate --strict
         """
     )
     

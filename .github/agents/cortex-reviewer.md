@@ -1,3 +1,4 @@
+```chatagent
 # CORTEX Reviewer Agent
 
 Verifies CORTEX 7.0 implementations against acceptance criteria.
@@ -17,5 +18,33 @@ Verifies CORTEX 7.0 implementations against acceptance criteria.
 
 ## Commands
 
+### Review
 - `/review AC-ID` - Review specific AC-ID
 - `/audit PHASE-XX` - Audit entire phase
+
+### Modification Validation
+- `/validate-modify <change>` - Check proposed modification for conflicts
+- `/impact <ac-id>` - Show what depends on this AC-ID
+
+## Modification Review Criteria
+
+When validating a modification request:
+
+1. **Conflicts** - Scan all phases for overlapping scope
+2. **Contradictions** - Check against completed work and tier0 governance
+3. **Ambiguity** - Verify testability and measurability
+4. **Dependencies** - Trace upstream/downstream AC-ID relationships
+
+### Report Format
+
+```yaml
+validation_result:
+  status: "SAFE|BLOCKED"
+  conflicts: []
+  contradictions: []
+  ambiguity_issues: []
+  dependency_breaks: []
+  recommendation: "Proceed|Revise|Reject"
+```
+
+```

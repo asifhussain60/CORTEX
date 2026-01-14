@@ -12,7 +12,7 @@
 ### Preview Consolidation (No Changes)
 ```bash
 cd D:\PROJECTS\CORTEX
-python .github/prompts/tools/consolidate.py --folder SSOT/analysis --format yaml
+python .github/prompts/tools/consolidate.py --folder <target-folder> --format yaml
 ```
 
 **Result**: Generates `.yaml` files showing what consolidation will look like. All source files preserved.
@@ -20,14 +20,14 @@ python .github/prompts/tools/consolidate.py --folder SSOT/analysis --format yaml
 ### Full Consolidation with Cleanup
 ```bash
 cd D:\PROJECTS\CORTEX
-echo "yes" | python .github/prompts/tools/consolidate.py --folder SSOT/analysis --format yaml --cleanup
+echo "yes" | python .github/prompts/tools/consolidate.py --folder <target-folder> --format yaml --cleanup
 ```
 
 **Result**: 
-- Creates `analysis.yaml` (root folder consolidation)
-- Creates `reqs.yaml` (subfolder consolidation)
-- **Deletes 14 source files**
-- **Preserves 2 consolidation files** (`.yaml`)
+- Creates `<folder-name>.yaml` (root folder consolidation)
+- Creates subfolder `.yaml` files for each subfolder
+- **Deletes source files**
+- **Preserves consolidation files** (`.yaml`)
 - **Deletes empty subfolders**
 
 ---
@@ -138,13 +138,13 @@ Display:
 
 ## Output Format
 
-### Consolidation File Example (analysis.yaml)
+### Consolidation File Example (folder.yaml)
 
 ```yaml
 metadata:
   consolidation_timestamp: "2026-01-14T12:28:00.123456"
-  source_folder: "D:\PROJECTS\CORTEX\SSOT\analysis"
-  folder_name: "analysis"
+  source_folder: "D:\PROJECTS\CORTEX\<target-folder>"
+  folder_name: "<folder-name>"
   total_files: 5
   total_size_bytes: 64000
   file_type_summary:
@@ -205,7 +205,7 @@ files:
 
 ### Case 1: Preview Structure
 ```bash
-python consolidate.py --folder SSOT/analysis --format yaml
+python consolidate.py --folder <target-folder> --format yaml
 ```
 - Generates consolidation files
 - Shows what cleanup will look like
@@ -213,7 +213,7 @@ python consolidate.py --folder SSOT/analysis --format yaml
 
 ### Case 2: Full Production Consolidation
 ```bash
-python consolidate.py --folder SSOT/analysis --format yaml --cleanup
+python consolidate.py --folder <target-folder> --format yaml --cleanup
 ```
 - Creates consolidated files
 - Deletes source files
@@ -221,7 +221,7 @@ python consolidate.py --folder SSOT/analysis --format yaml --cleanup
 
 ### Case 3: JSON Format
 ```bash
-python consolidate.py --folder SSOT/analysis --format json --cleanup
+python consolidate.py --folder <target-folder> --format json --cleanup
 ```
 - Same behavior
 - Output format is `.json` instead of `.yaml`
@@ -265,35 +265,27 @@ Extracts:
 
 ## File Structure After Consolidation
 
-### Before Consolidation
+### Before Consolidation (Example)
 ```
-SSOT/analysis/
-├── CONSOLIDATION-COMPLETE.md
-├── DOCUMENT-INDEX.md
-├── PHASE-5-ANALYSIS-CONSOLIDATION.md
-├── quick-reference.md
+target-folder/
+├── document-1.md
+├── document-2.md
 ├── README.md
-└── reqs/
-    ├── 00-consolidation-summary.md
-    ├── consolidated-requirements.md
-    ├── custom-response-templates.md
-    ├── folder-structure-design.md
-    ├── framework-arch-spec.md
-    ├── implementation-roadmap.md
-    ├── IMPLEMENTATION-SUMMARY.md
-    ├── prod-readiness-analysis.md
-    └── README.md
+└── subfolder/
+    ├── file-a.md
+    ├── file-b.md
+    └── file-c.md
 ```
 
 ### After Consolidation with --cleanup
 ```
-SSOT/analysis/
-├── analysis.yaml              ← Root consolidation (60 KB)
-└── reqs/
-    └── reqs.yaml              ← Reqs subfolder consolidation (216 KB)
+target-folder/
+├── target-folder.yaml    ← Root consolidation
+└── subfolder/
+    └── subfolder.yaml    ← Subfolder consolidation
 ```
 
-All 14 source files deleted. Only 2 consolidation files remain.
+All source files deleted. Only consolidation files remain.
 
 ---
 
@@ -313,44 +305,40 @@ All 14 source files deleted. Only 2 consolidation files remain.
 
 ### Preview Run
 ```
-$ python consolidate.py --folder SSOT/analysis --format yaml
+$ python consolidate.py --folder <target-folder> --format yaml
 
 ======================================================================
-RECURSIVE CONSOLIDATION: D:\PROJECTS\CORTEX\SSOT\analysis
+RECURSIVE CONSOLIDATION: D:\PROJECTS\CORTEX\<target-folder>
 ======================================================================
 
 ======================================================================
-Consolidating: analysis
+Consolidating: <folder-name>
 ======================================================================
-✓ Found 5 file(s)
-  ✓ CONSOLIDATION-COMPLETE.md (7.1 KB)
-  ✓ DOCUMENT-INDEX.md (12.4 KB)
-  ✓ PHASE-5-ANALYSIS-CONSOLIDATION.md (12.2 KB)
-  ✓ quick-reference.md (9.5 KB)
-  ✓ README.md (7.5 KB)
-✓ Consolidation: analysis.yaml (60.4 KB)
+✓ Found N file(s)
+  ✓ file1.md (X KB)
+  ✓ file2.md (X KB)
+  ... (more files)
+✓ Consolidation: <folder-name>.yaml (X KB)
 
 ======================================================================
-Consolidating: reqs
+Consolidating: <subfolder>
 ======================================================================
-✓ Found 9 file(s)
-  ✓ 00-consolidation-summary.md (15.2 KB)
-  ✓ consolidated-requirements.md (16.1 KB)
-  ... (7 more files)
-✓ Consolidation: reqs.yaml (216.0 KB)
+✓ Found M file(s)
+  ✓ subfile1.md (X KB)
+  ... (more files)
+✓ Consolidation: <subfolder>.yaml (X KB)
 
 ======================================================================
 CONSOLIDATION SUMMARY
 ======================================================================
-✓ Successfully consolidated 2 folder(s)
-✓ Total files: 14
-✓ Total size: 0.2 MB
-  ✓ analysis/
+✓ Successfully consolidated N folder(s)
+✓ Total files: X
+✓ Total size: X MB
 ```
 
 ### Cleanup Run
 ```
-$ echo "yes" | python consolidate.py --folder SSOT/analysis --format yaml --cleanup
+$ echo "yes" | python consolidate.py --folder <target-folder> --format yaml --cleanup
 
                              ⚠️  WARNING
           All source files and empty folders will be DELETED
@@ -363,14 +351,14 @@ $ echo "yes" | python consolidate.py --folder SSOT/analysis --format yaml --clea
 ======================================================================
 CLEANUP PHASE
 ======================================================================
-🗑 Deleted 14 source file(s)
+🗑 Deleted N source file(s)
 
 ======================================================================
 CONSOLIDATION SUMMARY
 ======================================================================
-✓ Successfully consolidated 2 folder(s)
-✓ Total files: 14
-✓ Total size: 0.2 MB
+✓ Successfully consolidated N folder(s)
+✓ Total files: X
+✓ Total size: X MB
 ```
 
 ---
@@ -410,14 +398,13 @@ CONSOLIDATION SUMMARY
 - External: `pyyaml` (for YAML support)
 
 ### Performance
-- **5 files (root)**: ~100 ms consolidation, ~50 ms cleanup
-- **9 files (subfolder)**: ~150 ms consolidation, ~100 ms cleanup
-- **Total**: ~250 ms for analysis folder consolidation + cleanup
+- Typical folder: ~100-250 ms consolidation
+- Cleanup: ~50-100 ms additional
+- Scales linearly with file count
 
 ### Resource Usage
 - Memory: ~50 MB for typical operations
-- Disk: Consolidation files ~300 KB for 14 files
-- Overhead: ~30% increase vs. original file size (due to metadata + intelligence)
+- Disk: Consolidation overhead ~30% vs original file size (due to metadata + intelligence)
 
 ---
 
@@ -449,13 +436,6 @@ CONSOLIDATION SUMMARY
 ✅ **Tested**: 2026-01-14  
 ✅ **Verified**: Consolidation file protection working correctly  
 
-**Test Results:**
-```
-Generated: analysis.yaml (60 KB) + reqs.yaml (216 KB)
-Deleted: 14 source files
-Result: Both consolidation files preserved ✓
-```
-
 ---
 
-**Next Steps**: Run preview consolidation with `--folder SSOT/analysis --format yaml` to see results before cleanup.
+**Next Steps**: Run preview consolidation with `--folder <target-folder> --format yaml` to see results before cleanup.

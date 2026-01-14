@@ -42,8 +42,9 @@ CORTEX/
 ├── tests/                 # Test suite
 │   ├── unit/              # Unit tests
 │   └── integration/       # Integration tests
-└── SSOT/                  # Single Source of Truth
-    └── roadmap/           # Roadmap & findings
+└── .github/roadmap/       # Implementation roadmap
+    ├── cortex-master.yaml # Single Source of Truth
+    └── phases/            # Phase definitions
 ```
 
 ## Governance Tiers
