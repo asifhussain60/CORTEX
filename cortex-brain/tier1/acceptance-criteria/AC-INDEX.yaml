@@ -332,7 +332,7 @@ AC-METRICS-001:
   implementation_file: src/infrastructure/metrics_collector.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Test Success Rate Baseline
 AC-METRICS-002:
@@ -341,7 +341,7 @@ AC-METRICS-002:
   implementation_file: src/infrastructure/metrics_collector.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Execution Latency Tracking
 AC-METRICS-003:
@@ -350,7 +350,7 @@ AC-METRICS-003:
   implementation_file: src/infrastructure/metrics_collector.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Evidence Completeness Validation
 AC-METRICS-004:
@@ -359,7 +359,7 @@ AC-METRICS-004:
   implementation_file: src/infrastructure/metrics_collector.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Governance Violation Alerting
 AC-METRICS-005:
@@ -368,7 +368,7 @@ AC-METRICS-005:
   implementation_file: src/infrastructure/metrics_collector.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Input Rejection Rate Analysis
 AC-ONBOARD-001:
@@ -442,7 +442,7 @@ AC-ORCH-002:
   implementation_file: src/orchestrators/core/master_orchestrator.py
   phase: 2
   priority: CRITICAL
-  status: not_implemented
+  status: implemented
   test_coverage_target: 90
   title: Required Actions Generation
 AC-ORCH-003:
@@ -469,7 +469,7 @@ AC-ORCH-005:
   implementation_file: src/orchestrators/core/master_orchestrator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Rollback on Failure
 AC-ORCH-006:
@@ -532,7 +532,7 @@ AC-PLAN-004:
   implementation_file: src/orchestrators/planning/planning_orchestrator.py
   phase: 2
   priority: HIGH
-  status: partial
+  status: implemented
   test_coverage_target: 85
   title: Risk Assessment
 AC-PLAN-005:
@@ -541,7 +541,7 @@ AC-PLAN-005:
   implementation_file: src/orchestrators/planning/planning_orchestrator.py
   phase: 2
   priority: HIGH
-  status: partial
+  status: implemented
   test_coverage_target: 85
   title: Evidence-Based Planning
 AC-PLAN-006:
@@ -550,7 +550,7 @@ AC-PLAN-006:
   implementation_file: src/orchestrators/planning/planning_orchestrator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Multi-Phase Orchestration
 AC-PLAN-007:
@@ -577,7 +577,7 @@ AC-ROUTE-001:
   implementation_file: src/orchestrators/core/pattern_router.py
   phase: 2
   priority: HIGH
-  status: partial
+  status: implemented
   test_coverage_target: 85
   title: Pattern Matching Engine
 AC-ROUTE-002:
@@ -586,7 +586,7 @@ AC-ROUTE-002:
   implementation_file: src/orchestrators/core/pattern_router.py
   phase: 2
   priority: HIGH
-  status: partial
+  status: implemented
   test_coverage_target: 85
   title: Priority-Based Routing
 AC-ROUTE-003:
@@ -595,7 +595,7 @@ AC-ROUTE-003:
   implementation_file: src/orchestrators/core/pattern_router.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Tie-Breaking with PREFIX Length
 AC-ROUTE-004:
@@ -604,7 +604,7 @@ AC-ROUTE-004:
   implementation_file: src/orchestrators/core/pattern_router.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: LLM Intent Classifier Fallback
 AC-ROUTE-005:
@@ -613,7 +613,7 @@ AC-ROUTE-005:
   implementation_file: src/orchestrators/core/pattern_router.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Unicode Normalization
 AC-SECURITY-001:
@@ -721,7 +721,7 @@ AC-STS-001:
   implementation_file: tests/sts/golden_corpus.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Golden Corpus (100+ Test Intents)
 AC-STS-002:
@@ -730,7 +730,7 @@ AC-STS-002:
   implementation_file: tests/sts/framework_validator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Framework Validation
 AC-STS-003:
@@ -739,7 +739,7 @@ AC-STS-003:
   implementation_file: tests/sts/evidence_generator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: First Evidence Bundle
 AC-TDD-001:
@@ -748,7 +748,7 @@ AC-TDD-001:
   implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
   phase: 2
   priority: HIGH
-  status: partial
+  status: implemented
   test_coverage_target: 85
   title: "RED\u2192GREEN\u2192REFACTOR Workflow"
 AC-TDD-002:
@@ -757,7 +757,7 @@ AC-TDD-002:
   implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
   phase: 2
   priority: HIGH
-  status: partial
+  status: implemented
   test_coverage_target: 85
   title: CORE-019 Enforcement
 AC-TDD-003:
@@ -766,7 +766,7 @@ AC-TDD-003:
   implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Auto-generate Tests from AC
 AC-TDD-004:
@@ -775,7 +775,7 @@ AC-TDD-004:
   implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
   phase: 2
   priority: HIGH
-  status: partial
+  status: implemented
   test_coverage_target: 85
   title: Evidence Bundle Generation
 AC-TDD-005:
@@ -784,7 +784,7 @@ AC-TDD-005:
   implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
   phase: 2
   priority: HIGH
-  status: partial
+  status: implemented
   test_coverage_target: 85
   title: Test Execution Integration
 AC-TDD-006:
@@ -793,7 +793,7 @@ AC-TDD-006:
   implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Coverage Enforcement
 AC-TDD-007:
@@ -802,7 +802,7 @@ AC-TDD-007:
   implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: RED Phase Detection
 AC-TDD-008:
@@ -811,7 +811,7 @@ AC-TDD-008:
   implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: GREEN Phase Validation
 AC-TDD-009:
@@ -820,7 +820,7 @@ AC-TDD-009:
   implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: REFACTOR Phase Guards
 AC-TDD-010:
@@ -829,7 +829,7 @@ AC-TDD-010:
   implementation_file: src/orchestrators/tdd/tdd_orchestrator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Audit Trail Integration
 AC-TEMPLATE-006:
@@ -888,7 +888,7 @@ AC-TODO-004:
   implementation_file: src/orchestrators/core/todo_orchestrator.py
   phase: 2
   priority: HIGH
-  status: partial
+  status: implemented
   test_coverage_target: 85
   title: Dependency Enforcement
 AC-VALIDATE-001:
@@ -897,7 +897,7 @@ AC-VALIDATE-001:
   implementation_file: src/orchestrators/validation/input_validator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Intent Canonicalization
 AC-VALIDATE-002:
@@ -906,7 +906,7 @@ AC-VALIDATE-002:
   implementation_file: src/orchestrators/validation/input_validator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: AC-ID Existence Check
 AC-VALIDATE-003:
@@ -915,7 +915,7 @@ AC-VALIDATE-003:
   implementation_file: src/orchestrators/validation/input_validator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Evidence Bundle Pre-Check
 AC-VALIDATE-004:
@@ -924,7 +924,7 @@ AC-VALIDATE-004:
   implementation_file: src/orchestrators/validation/input_validator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Cross-Reference Coherence
 AC-VALIDATE-005:
@@ -933,7 +933,7 @@ AC-VALIDATE-005:
   implementation_file: src/orchestrators/validation/input_validator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Semantic Output Validation
 AC-VALIDATE-006:
@@ -942,7 +942,7 @@ AC-VALIDATE-006:
   implementation_file: src/orchestrators/validation/input_validator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: AC-ID Format Validation
 AC-VALIDATE-007:
@@ -951,7 +951,7 @@ AC-VALIDATE-007:
   implementation_file: src/orchestrators/validation/input_validator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Phase Alignment Enforcement
 AC-VALIDATE-008:
@@ -961,7 +961,7 @@ AC-VALIDATE-008:
   implementation_file: src/orchestrators/validation/input_validator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Request Contradiction Detection
 AC-VALIDATE-009:
@@ -970,7 +970,7 @@ AC-VALIDATE-009:
   implementation_file: src/orchestrators/validation/input_validator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Resource Limit Validation
 AC-VALIDATE-010:
@@ -980,6 +980,6 @@ AC-VALIDATE-010:
   implementation_file: src/orchestrators/validation/input_validator.py
   phase: 2
   priority: HIGH
-  status: not_implemented
+  status: implemented
   test_coverage_target: 85
   title: Prerequisite Dependency Check
