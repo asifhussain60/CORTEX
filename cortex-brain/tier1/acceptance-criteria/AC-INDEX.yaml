@@ -639,7 +639,7 @@ AC-SECURITY-001:
   implementation_file: distributed across orchestrators
   phase: 1
   priority: CRITICAL
-  status: partial
+  status: implemented
   test_coverage_target: 90
   title: Action Classification
 AC-SECURITY-002:
@@ -648,7 +648,7 @@ AC-SECURITY-002:
   implementation_file: distributed across orchestrators
   phase: 1
   priority: CRITICAL
-  status: partial
+  status: implemented
   test_coverage_target: 90
   title: Approval State Machine
 AC-SECURITY-003:
@@ -657,7 +657,7 @@ AC-SECURITY-003:
   implementation_file: src/utils/project_root.py
   phase: 1
   priority: CRITICAL
-  status: partial
+  status: implemented
   test_coverage_target: 90
   title: Canonical Path Resolution
 AC-SECURITY-004:
@@ -675,7 +675,7 @@ AC-SECURITY-005:
   implementation_file: distributed across orchestrators
   phase: 1
   priority: HIGH
-  status: partial
+  status: implemented
   test_coverage_target: 85
   title: Argument Validation
 AC-SECURITY-006:
@@ -702,7 +702,7 @@ AC-SECURITY-008:
   implementation_file: distributed across orchestrators
   phase: 1
   priority: HIGH
-  status: partial
+  status: implemented
   test_coverage_target: 85
   title: Permission Validation
 AC-STATE-001:
