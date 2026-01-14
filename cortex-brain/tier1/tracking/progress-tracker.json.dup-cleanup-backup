@@ -1,6 +1,6 @@
 {
   "schema_version": "1.10",
-  "last_updated": "2026-01-14T02:28:20.930968Z",
+  "last_updated": "2026-01-14T02:27:09.032667Z",
   "updated_by": "CORTEX: Hallucination Recovery (SSOT Restoration from Clean State)",
   "active_epic": {
     "id": "CORTEX-6.0",
@@ -143,6 +143,17 @@
         "AC-TEMPLATE-008"
       ]
     },
+    "phase_1_5": {
+      "name": "Phase 1.5: Security & Audit",
+      "status": "not_started",
+      "total_ac_count": 1,
+      "completed_ac_count": 0,
+      "completion_percentage": 0.0,
+      "ac_ids": [
+        "AC-AUDIT-EVIDENCE-P1.5"
+      ],
+      "implemented_ac_ids": []
+    },
     "phase_2": {
       "name": "Phase 2: Orchestration Core",
       "status": "completed",
@@ -246,6 +257,17 @@
         "AC-AUDIT-EVIDENCE-P4"
       ]
     },
+    "phase_4_5": {
+      "name": "Phase 4.5: Extended Intelligence",
+      "status": "not_started",
+      "total_ac_count": 1,
+      "completed_ac_count": 0,
+      "completion_percentage": 0.0,
+      "ac_ids": [
+        "AC-AUDIT-EVIDENCE-P4.5"
+      ],
+      "implemented_ac_ids": []
+    },
     "phase_5": {
       "name": "Phase 5: Intelligence",
       "status": "completed",
@@ -286,8 +308,8 @@
       ]
     }
   },
-  "overall_completion_percentage": 100.0,
+  "overall_completion_percentage": 98.21428571428571,
   "total_acs_implemented": 78,
-  "total_acs": 110,
+  "total_acs": 112,
   "total_acs_completed": 110
 }
