@@ -16,7 +16,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import functools
-from typing import Callable, Optional
+from typing import Any, Callable, Dict, Optional
 
 
 # Global registry for decorated tools
@@ -26,7 +26,8 @@ _REGISTERED_TOOLS = {}
 def mcp_tool(
     name: str,
     description: str,
-    category: Optional[str] = None
+    category: Optional[str] = None,
+    parameters: Optional[Dict[str, Any]] = None
 ):
     """
     Decorator to register a function as an MCP tool.
@@ -35,6 +36,7 @@ def mcp_tool(
         name: Tool name (must be unique)
         description: Human-readable description
         category: Optional category for grouping
+        parameters: Optional parameter schema for MCP
     
     Returns:
         Decorated function registered as MCP tool
@@ -49,13 +51,15 @@ def mcp_tool(
         wrapper._mcp_name = name
         wrapper._mcp_description = description
         wrapper._mcp_category = category
+        wrapper._mcp_parameters = parameters or {}
         
         # Register in global registry
         _REGISTERED_TOOLS[name] = {
             "func": wrapper,
             "name": name,
             "description": description,
-            "category": category
+            "category": category,
+            "parameters": parameters or {}
         }
         
         return wrapper

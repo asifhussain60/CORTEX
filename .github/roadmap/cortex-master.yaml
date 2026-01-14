@@ -13,7 +13,7 @@ metadata:
   dor_score: 85
   start_date: null
   end_date: null
-  total_ac_ids: 98
+  total_ac_ids: 101  # Was 98, added 3 for AR-011 Reference Orchestrator Validation
 
 # =============================================================================
 # PHASE TRACKER - SINGLE SOURCE OF TRUTH
@@ -25,9 +25,9 @@ metadata:
 phase_tracker:
   PHASE-01:
     title: "Foundation"
-    description: "3-Tier Governance, SQLite Index, Audit-First Pattern, State Machine"
-    ac_ids: 33
-    status: "NOT_STARTED"  # NOT_STARTED | IN_PROGRESS | COMPLETED
+    description: "3-Tier Governance, SQLite Index, Audit-First Pattern, State Machine, Reference Orchestrator"
+    ac_ids: 36  # Was 33, added 3 for reference orchestrator validation
+    status: "IN_PROGRESS"  # NOT_STARTED | IN_PROGRESS | COMPLETED
     locked: false          # Once true, phase cannot be reimplemented
     completed_at: null
     audit_verification:    # REQUIRED before locking
@@ -388,6 +388,39 @@ architecture_decisions:
       - "PathResolver"
       - "ImportUpdater"
     dependencies: []
+
+  AR-011:
+    id: "AR-011"
+    title: "Reference Orchestrator Validation"
+    status: "APPROVED"
+    priority: "CRITICAL"
+    phase: 1
+    description: |
+      Scaffold one domain orchestrator (PlanningOrchestrator) end-to-end to validate
+      the full chain BEFORE scaling to 20+ orchestrators:
+      - Registry registration via @orchestrator decorator
+      - IOrchestrator interface implementation
+      - MCP tool exposure via @mcp_tool
+      - Audit logging on all operations
+      - Governance enforcement integration
+      This creates the reference implementation and catches integration bugs early.
+    acceptance_criteria:
+      - ac_id: "AC-AR-011-01"
+        description: "PlanningOrchestrator registered in OrchestratorRegistry"
+        test: "test_planning_orchestrator_registered"
+      - ac_id: "AC-AR-011-02"
+        description: "PlanningOrchestrator exposed as MCP tools (plan_status, next_ac, enforce_phase_lock)"
+        test: "test_planning_mcp_tools_exposed"
+      - ac_id: "AC-AR-011-03"
+        description: "All PlanningOrchestrator operations audit-logged with hash chain"
+        test: "test_planning_operations_audited"
+    components:
+      - "PlanningOrchestrator"
+      - "OrchestratorRegistry"
+      - "MCPToolRegistry"
+    dependencies:
+      - "AR-002"
+      - "AR-003"
 
 # =============================================================================
 # FUNCTIONAL REQUIREMENTS (FR-001 through FR-006)
@@ -786,6 +819,7 @@ phases:
       - "SQLite-Based AC Index"
       - "Audit-First Pattern"
       - "State Machine Management"
+      - "Reference Orchestrator Validation"
     ac_ids:
       - "AC-AR-001-01"
       - "AC-AR-001-02"
@@ -820,6 +854,9 @@ phases:
       - "AC-AR-008-01"
       - "AC-AR-008-02"
       - "AC-AR-008-03"
+      - "AC-AR-011-01"
+      - "AC-AR-011-02"
+      - "AC-AR-011-03"
     
   phase_02:
     id: "PHASE-02"
