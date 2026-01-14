@@ -1,1 +1,0 @@
-"""Cleanup tests for CORTEX"""

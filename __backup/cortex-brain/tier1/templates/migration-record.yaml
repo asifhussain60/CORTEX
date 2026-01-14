@@ -1,6 +1,0 @@
-migration_id: RESPONSE-TEMPLATE-V4-TO-3LAYER
-date: '2026-01-13T10:36:40.156657'
-source: response-templates-v4.yaml
-destination: 3-layer structure (tier0/tier1/tier2)
-status: complete
-templates_migrated: 0
