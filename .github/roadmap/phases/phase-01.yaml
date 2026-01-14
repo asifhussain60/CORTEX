@@ -1,0 +1,462 @@
+# =============================================================================
+# PHASE 01: FOUNDATION
+# =============================================================================
+# Duration: 5 days
+# Focus: 3-Tier Governance, SQLite Index, Audit-First, State Machine
+# =============================================================================
+
+metadata:
+  phase_id: "PHASE-01"
+  title: "Foundation"
+  duration: "5 days"
+  status: "NOT_STARTED"
+  start_date: null
+  end_date: null
+  predecessor: null
+  successor: "PHASE-02"
+
+# =============================================================================
+# DAY-BY-DAY BREAKDOWN
+# =============================================================================
+
+days:
+  day_0:
+    title: "Pre-Tasks"
+    duration: "4 hours"
+    tasks:
+      - task_id: "TASK-01-00-01"
+        title: "Create nested folder structure"
+        effort: "1 hour"
+        status: "NOT_STARTED"
+        acceptance_criteria: []
+        
+      - task_id: "TASK-01-00-02"
+        title: "Create response template schema"
+        effort: "2 hours"
+        status: "NOT_STARTED"
+        acceptance_criteria: []
+        
+      - task_id: "TASK-01-00-03"
+        title: "Create initial template files"
+        effort: "1 hour"
+        status: "NOT_STARTED"
+        acceptance_criteria: []
+
+  day_1:
+    title: "Governance Foundation"
+    duration: "8 hours"
+    focus:
+      - "AR-001: 3-Tier Governance Model"
+      - "AR-005: Production Mode Control"
+      - "FR-001: Audit-First Pattern (Start)"
+    
+    tasks:
+      - task_id: "TASK-01-01-01"
+        title: "Implement 3-Tier Governance Model"
+        requirement_id: "AR-001"
+        effort: "4 hours"
+        status: "NOT_STARTED"
+        components:
+          - "GovernanceRegistry"
+          - "TierResolver"
+          - "RuleLoader"
+        files_to_create:
+          - "src/core/governance_registry.py"
+          - "src/core/tier_resolver.py"
+          - "src/core/rule_loader.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-AR-001-01"
+            description: "Tier 0 rules loaded from cortex-brain/tier0/governance/core-rules.yaml"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_governance_registry.py"
+            test_name: "test_tier0_rules_loaded"
+          - ac_id: "AC-AR-001-02"
+            description: "Tier precedence enforced (0 > 1 > 2)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_tier_resolver.py"
+            test_name: "test_tier_precedence"
+          - ac_id: "AC-AR-001-03"
+            description: "Tier 0 rules immutable (modification attempts rejected)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_governance_registry.py"
+            test_name: "test_tier0_immutable"
+
+      - task_id: "TASK-01-01-02"
+        title: "Implement Production Mode Control"
+        requirement_id: "AR-005"
+        effort: "2 hours"
+        status: "NOT_STARTED"
+        components:
+          - "ModeController"
+          - "EnvironmentConfig"
+        files_to_create:
+          - "src/core/mode_controller.py"
+        files_to_modify:
+          - "src/core/config.py"
+        acceptance_criteria:
+          - ac_id: "AC-AR-005-01"
+            description: "Mode determined from CORTEX_ENV environment variable"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_mode_controller.py"
+            test_name: "test_env_mode_detection"
+          - ac_id: "AC-AR-005-02"
+            description: "PRODUCTION mode prevents all governance bypass"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_mode_controller.py"
+            test_name: "test_production_no_bypass"
+          - ac_id: "AC-AR-005-03"
+            description: "Mode logged at startup"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_mode_controller.py"
+            test_name: "test_mode_logged_startup"
+
+      - task_id: "TASK-01-01-03"
+        title: "Start Audit-First Pattern Implementation"
+        requirement_id: "FR-001"
+        effort: "2 hours"
+        status: "NOT_STARTED"
+        components:
+          - "EnhancedAuditLogger"
+        files_to_create:
+          - "src/infrastructure/enhanced_audit_logger.py"
+        files_to_modify:
+          - "src/infrastructure/audit_logger.py"
+        acceptance_criteria:
+          - ac_id: "AC-FR-001-01"
+            description: "Operations logged before execution"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_enhanced_audit_logger.py"
+            test_name: "test_pre_execution_logging"
+
+  day_2:
+    title: "Data Layer"
+    duration: "8 hours"
+    sequencing_note: "AR-003 depends on AR-002 - must complete AR-002 before starting AR-003"
+    focus:
+      - "AR-002: SQLite-Based AC Index"
+      - "AR-003: Auto-Wired Governance Decorators"
+      - "AR-004: Tiered Logging Architecture"
+    
+    tasks:
+      - task_id: "TASK-01-02-01"
+        title: "Implement SQLite-Based AC Index"
+        requirement_id: "AR-002"
+        effort: "4 hours"
+        status: "NOT_STARTED"
+        components:
+          - "DatabaseManager"
+          - "ACIndexRepository"
+        files_to_create:
+          - "src/infrastructure/database_manager.py"
+          - "src/infrastructure/ac_index_repository.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-AR-002-01"
+            description: "governance.db created with correct schema"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_database_manager.py"
+            test_name: "test_governance_db_schema"
+          - ac_id: "AC-AR-002-02"
+            description: "WAL mode enabled for concurrent access"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_database_manager.py"
+            test_name: "test_wal_mode_enabled"
+          - ac_id: "AC-AR-002-03"
+            description: "Query performance <1ms"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_database_manager.py"
+            test_name: "test_query_performance"
+
+      - task_id: "TASK-01-02-02"
+        title: "Implement Auto-Wired Governance Decorators"
+        requirement_id: "AR-003"
+        effort: "4 hours"
+        status: "NOT_STARTED"
+        components:
+          - "GovernanceDecorator"
+          - "AuditDecorator"
+          - "EvidenceDecorator"
+        files_to_create:
+          - "src/core/decorators/governance_decorator.py"
+          - "src/core/decorators/audit_decorator.py"
+          - "src/core/decorators/evidence_decorator.py"
+          - "src/core/decorators/__init__.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-AR-003-01"
+            description: "@governance_enforced decorator validates all rules"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_decorators.py"
+            test_name: "test_governance_decorator"
+          - ac_id: "AC-AR-003-02"
+            description: "@audit_logged decorator records to governance.db"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_decorators.py"
+            test_name: "test_audit_decorator"
+          - ac_id: "AC-AR-003-03"
+            description: "Decorators composable (@governance_enforced + @audit_logged)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_decorators.py"
+            test_name: "test_decorator_composition"
+
+      - task_id: "TASK-01-02-03"
+        title: "Implement Tiered Logging Architecture"
+        requirement_id: "AR-004"
+        effort: "2 hours"
+        status: "NOT_STARTED"
+        components:
+          - "TieredLogger"
+          - "AuditLogWriter"
+        files_to_create:
+          - "src/infrastructure/tiered_logger.py"
+        files_to_modify:
+          - "src/infrastructure/audit_logger.py"
+        acceptance_criteria:
+          - ac_id: "AC-AR-004-01"
+            description: "AUDIT logs written to governance.db"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_tiered_logger.py"
+            test_name: "test_audit_to_db"
+          - ac_id: "AC-AR-004-02"
+            description: "Log levels configurable per tier"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_tiered_logger.py"
+            test_name: "test_log_level_config"
+          - ac_id: "AC-AR-004-03"
+            description: "Structured JSON format for all logs"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_tiered_logger.py"
+            test_name: "test_structured_logging"
+
+  day_3:
+    title: "State Management"
+    duration: "8 hours"
+    focus:
+      - "FR-003: State Machine Management"
+      - "FR-001: Audit-First Pattern (Continued)"
+    
+    tasks:
+      - task_id: "TASK-01-03-01"
+        title: "Implement State Machine Management"
+        requirement_id: "FR-003"
+        effort: "6 hours"
+        status: "NOT_STARTED"
+        components:
+          - "LifecycleManager"
+          - "StateMachine"
+          - "TransitionValidator"
+        files_to_create:
+          - "src/core/lifecycle_manager.py"
+          - "src/core/state_machine.py"
+          - "src/core/transition_validator.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-FR-003-01"
+            description: "State transitions atomic"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_lifecycle_manager.py"
+            test_name: "test_atomic_transitions"
+          - ac_id: "AC-FR-003-02"
+            description: "Invalid transitions rejected"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_state_machine.py"
+            test_name: "test_invalid_transition_rejection"
+          - ac_id: "AC-FR-003-03"
+            description: "State history maintained"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_lifecycle_manager.py"
+            test_name: "test_state_history"
+
+      - task_id: "TASK-01-03-02"
+        title: "Complete Audit-First Pattern"
+        requirement_id: "FR-001"
+        effort: "2 hours"
+        status: "NOT_STARTED"
+        components:
+          - "HashChainManager"
+        files_to_create:
+          - "src/infrastructure/hash_chain_manager.py"
+        files_to_modify:
+          - "src/infrastructure/enhanced_audit_logger.py"
+        acceptance_criteria:
+          - ac_id: "AC-FR-001-02"
+            description: "Hash chain integrity maintained"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_hash_chain_manager.py"
+            test_name: "test_hash_chain_integrity"
+          - ac_id: "AC-FR-001-03"
+            description: "Audit logs queryable by AC-ID"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_enhanced_audit_logger.py"
+            test_name: "test_audit_query_by_ac_id"
+
+  day_4:
+    title: "Evidence & Progress"
+    duration: "8 hours"
+    focus:
+      - "FR-004: Evidence Bundle Capture"
+      - "FR-005: Progress Tracking"
+      - "Critical Brittleness Fixes"
+    
+    tasks:
+      - task_id: "TASK-01-04-01"
+        title: "Implement Evidence Bundle Capture"
+        requirement_id: "FR-004"
+        effort: "6 hours"
+        status: "NOT_STARTED"
+        components:
+          - "EvidenceBundleGenerator"
+          - "ArtifactCollector"
+        files_to_create:
+          - "src/core/evidence_bundle_generator.py"
+          - "src/core/artifact_collector.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-FR-004-01"
+            description: "Evidence bundle contains all required artifacts"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_evidence_bundle.py"
+            test_name: "test_evidence_bundle_complete"
+          - ac_id: "AC-FR-004-02"
+            description: "Evidence bundle JSON-serializable"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_evidence_bundle.py"
+            test_name: "test_evidence_serialization"
+          - ac_id: "AC-FR-004-03"
+            description: "Evidence capture <500ms"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_evidence_bundle.py"
+            test_name: "test_evidence_capture_performance"
+
+      - task_id: "TASK-01-04-02"
+        title: "Implement Progress Tracking"
+        requirement_id: "FR-005"
+        effort: "4 hours"
+        status: "NOT_STARTED"
+        components:
+          - "ProgressTrackerManager"
+          - "BlockerDetector"
+        files_to_create:
+          - "src/infrastructure/progress_tracker_manager.py"
+          - "src/core/blocker_detector.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-FR-005-01"
+            description: "Progress queryable by phase"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_progress_tracker.py"
+            test_name: "test_progress_by_phase"
+          - ac_id: "AC-FR-005-02"
+            description: "Blockers identified automatically"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_blocker_detector.py"
+            test_name: "test_blocker_detection"
+          - ac_id: "AC-FR-005-03"
+            description: "Progress persisted to governance.db"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_progress_tracker.py"
+            test_name: "test_progress_persistence"
+
+      # NOTE: Critical brittleness fixes (AC-BRITTLE-001 to 004) moved to Phase 5
+      # WAL mode and schema creation are handled as part of AR-002 (SQLite-Based AC Index)
+
+  day_5:
+    title: "Continuation & Adaptation"
+    duration: "8 hours"
+    focus:
+      - "FR-006: Autonomous Continuation"
+      - "AR-008: CORTEX 6.0 Adaptation"
+    
+    tasks:
+      - task_id: "TASK-01-05-01"
+        title: "Implement Autonomous Continuation"
+        requirement_id: "FR-006"
+        effort: "4 hours"
+        status: "NOT_STARTED"
+        components:
+          - "CheckpointManager"
+          - "ResumptionHandler"
+        files_to_create:
+          - "src/core/checkpoint_manager.py"
+          - "src/core/resumption_handler.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-FR-006-01"
+            description: "State checkpointed before long operations"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_checkpoint_manager.py"
+            test_name: "test_state_checkpoint"
+          - ac_id: "AC-FR-006-02"
+            description: "Operations resumable after interruption"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_resumption_handler.py"
+            test_name: "test_operation_resumption"
+          - ac_id: "AC-FR-006-03"
+            description: "Partial completion preserved"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_checkpoint_manager.py"
+            test_name: "test_partial_completion"
+
+      - task_id: "TASK-01-05-02"
+        title: "CORTEX 6.0 Adaptation"
+        requirement_id: "AR-008"
+        effort: "4 hours"
+        status: "NOT_STARTED"
+        components:
+          - "CompatibilityLayer"
+          - "SchemaAdapter"
+        files_to_create:
+          - "src/core/compatibility_layer.py"
+          - "src/core/schema_adapter.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-AR-008-01"
+            description: "Evidence bundle schema compatible with CORTEX 6.0"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_compatibility.py"
+            test_name: "test_evidence_schema_compatibility"
+          - ac_id: "AC-AR-008-02"
+            description: "Audit log format matches CORTEX 6.0"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_compatibility.py"
+            test_name: "test_audit_format_compatibility"
+          - ac_id: "AC-AR-008-03"
+            description: "Migration path documented for CORTEX 6.0 users"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_compatibility.py"
+            test_name: "test_migration_docs_exist"
+
+# =============================================================================
+# SUMMARY
+# =============================================================================
+
+summary:
+  total_tasks: 13
+  total_ac_ids: 33
+  components_to_create: 20
+  files_to_create: 22
+  files_to_modify: 5
+  
+  requirements_covered:
+    architecture_decisions: ["AR-001", "AR-002", "AR-003", "AR-004", "AR-005", "AR-008"]
+    functional_requirements: ["FR-001", "FR-003", "FR-004", "FR-005", "FR-006"]
+
+  exit_criteria:
+    - "All 33 AC-IDs pass verification"
+    - "Unit tests pass with ≥80% coverage"
+    - "governance.db operational with WAL mode"
+    - "State machine transitions working"
+    - "Evidence bundles generated successfully"
+
+# =============================================================================
+# TRACKING
+# =============================================================================
+
+tracking:
+  started_at: null
+  completed_at: null
+  current_day: 0
+  current_task: null
+  blockers: []
+  notes: []

@@ -1,0 +1,296 @@
+# =============================================================================
+# PHASE 05: BRITTLENESS FIXES & STABILIZATION
+# =============================================================================
+# Duration: 5 days
+# Focus: Critical Brittleness Fixes, High Priority Fixes
+#        Test Stabilization, Final Verification
+# =============================================================================
+
+metadata:
+  phase_id: "PHASE-05"
+  title: "Brittleness Fixes & Stabilization"
+  duration: "5 days"
+  status: "NOT_STARTED"
+  start_date: null
+  end_date: null
+  predecessor: "PHASE-04"
+  successor: null
+
+# =============================================================================
+# DAY-BY-DAY BREAKDOWN
+# =============================================================================
+
+days:
+  day_1:
+    title: "Critical Fixes (Already done in Phase 1)"
+    duration: "8 hours"
+    focus:
+      - "Verify AC-BRITTLE-001 through AC-BRITTLE-004"
+      - "AC-BRITTLE-005: Import Brittleness"
+      - "AC-BRITTLE-006: Test Collection Brittleness"
+    
+    tasks:
+      - task_id: "TASK-05-01-01"
+        title: "Verify Critical Fixes from Phase 1"
+        requirement_id: "BRITTLENESS"
+        effort: "1 hour"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create: []
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-BRITTLE-001"
+            description: "WAL mode verified operational"
+            status: "PENDING_VERIFICATION"
+          - ac_id: "AC-BRITTLE-002"
+            description: "Audit table schema verified"
+            status: "PENDING_VERIFICATION"
+          - ac_id: "AC-BRITTLE-003"
+            description: "Progress tracker verified"
+            status: "PENDING_VERIFICATION"
+          - ac_id: "AC-BRITTLE-004"
+            description: "Pytest collection warnings resolved"
+            status: "PENDING_VERIFICATION"
+
+      - task_id: "TASK-05-01-02"
+        title: "Fix Import Brittleness"
+        requirement_id: "AC-BRITTLE-005"
+        effort: "3 hours"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create: []
+        files_to_modify:
+          - "src/orchestrators/core/*.py"
+        acceptance_criteria:
+          - ac_id: "AC-BRITTLE-005"
+            description: "All imports converted to absolute paths"
+            status: "NOT_STARTED"
+
+      - task_id: "TASK-05-01-03"
+        title: "Fix Test Collection Brittleness"
+        requirement_id: "AC-BRITTLE-006"
+        effort: "4 hours"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create: []
+        files_to_modify:
+          - "tests/**/*.py"
+        acceptance_criteria:
+          - ac_id: "AC-BRITTLE-006"
+            description: "All 46 test files collect successfully"
+            status: "NOT_STARTED"
+
+  day_2:
+    title: "Package & Path Fixes"
+    duration: "8 hours"
+    focus:
+      - "AC-BRITTLE-007: Package Path Brittleness"
+      - "AC-BRITTLE-010: Portability Brittleness"
+    
+    tasks:
+      - task_id: "TASK-05-02-01"
+        title: "Fix Package Path Brittleness"
+        requirement_id: "AC-BRITTLE-007"
+        effort: "4 hours"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create: []
+        files_to_modify:
+          - "src/**/*.py"
+        acceptance_criteria:
+          - ac_id: "AC-BRITTLE-007"
+            description: "All paths use get_project_root() utility"
+            status: "NOT_STARTED"
+
+      - task_id: "TASK-05-02-02"
+        title: "Fix Portability Brittleness"
+        requirement_id: "AC-BRITTLE-010"
+        effort: "4 hours"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create: []
+        files_to_modify:
+          - "src/**/*.py"
+        acceptance_criteria:
+          - ac_id: "AC-BRITTLE-010"
+            description: "All paths use pathlib, OS-specific code guarded"
+            status: "NOT_STARTED"
+
+  day_3:
+    title: "AC & Evidence Fixes"
+    duration: "8 hours"
+    focus:
+      - "AC-BRITTLE-008: AC Completeness Brittleness"
+      - "AC-BRITTLE-009: Evidence Generation Brittleness"
+    
+    tasks:
+      - task_id: "TASK-05-03-01"
+        title: "Fix AC Completeness Brittleness"
+        requirement_id: "AC-BRITTLE-008"
+        effort: "4 hours"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create: []
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-BRITTLE-008"
+            description: "All AC-IDs have implementations"
+            status: "NOT_STARTED"
+
+      - task_id: "TASK-05-03-02"
+        title: "Fix Evidence Generation Brittleness"
+        requirement_id: "AC-BRITTLE-009"
+        effort: "4 hours"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create: []
+        files_to_modify:
+          - "src/core/evidence_bundle_generator.py"
+        acceptance_criteria:
+          - ac_id: "AC-BRITTLE-009"
+            description: "Evidence bundles generated from test results, code changes, audit logs"
+            status: "NOT_STARTED"
+
+  day_4:
+    title: "State & Governance Fixes"
+    duration: "8 hours"
+    focus:
+      - "AC-BRITTLE-011: State Management Brittleness"
+      - "AC-BRITTLE-012: Governance Enforcement Brittleness"
+    
+    tasks:
+      - task_id: "TASK-05-04-01"
+        title: "Fix State Management Brittleness"
+        requirement_id: "AC-BRITTLE-011"
+        effort: "4 hours"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create:
+          - "src/core/distributed_lock.py"
+        files_to_modify:
+          - "src/core/lifecycle_manager.py"
+        acceptance_criteria:
+          - ac_id: "AC-BRITTLE-011"
+            description: "Distributed locking for state transitions"
+            status: "NOT_STARTED"
+
+      - task_id: "TASK-05-04-02"
+        title: "Fix Governance Enforcement Brittleness"
+        requirement_id: "AC-BRITTLE-012"
+        effort: "4 hours"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create: []
+        files_to_modify:
+          - "src/core/governance_registry.py"
+        acceptance_criteria:
+          - ac_id: "AC-BRITTLE-012"
+            description: "All 25 governance rules enforced"
+            status: "NOT_STARTED"
+
+  day_5:
+    title: "Test Linking & Verification"
+    duration: "8 hours"
+    focus:
+      - "AC-BRITTLE-013: Test-AC Linking Brittleness"
+      - "AC-BRITTLE-014: Verification Rate Brittleness"
+      - "Final Verification"
+    
+    tasks:
+      - task_id: "TASK-05-05-01"
+        title: "Fix Test-AC Linking Brittleness"
+        requirement_id: "AC-BRITTLE-013"
+        effort: "2 hours"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create:
+          - "src/infrastructure/test_ac_linker.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-BRITTLE-013"
+            description: "Test discovery by AC-ID implemented"
+            status: "NOT_STARTED"
+
+      - task_id: "TASK-05-05-02"
+        title: "Fix Verification Rate Brittleness"
+        requirement_id: "AC-BRITTLE-014"
+        effort: "2 hours"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create: []
+        files_to_modify:
+          - "src/infrastructure/audit_based_evidence_validator.py"
+        acceptance_criteria:
+          - ac_id: "AC-BRITTLE-014"
+            description: "Verification rate ≥80%"
+            status: "NOT_STARTED"
+
+      - task_id: "TASK-05-05-03"
+        title: "Final Integration Verification"
+        requirement_id: "VERIFICATION"
+        effort: "4 hours"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create:
+          - "tests/integration/test_final_verification.py"
+        files_to_modify: []
+        acceptance_criteria: []
+
+      - task_id: "TASK-05-05-04"
+        title: "NFR-001 Maintainability Verification"
+        requirement_id: "NFR-001"
+        effort: "2 hours"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create: []
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-NFR-001-01"
+            description: "Code coverage ≥80%"
+            status: "NOT_STARTED"
+            test_command: "pytest --cov=src --cov-fail-under=80"
+          - ac_id: "AC-NFR-001-02"
+            description: "Cyclomatic complexity <10"
+            status: "NOT_STARTED"
+            test_command: "radon cc src --average --total-average"
+          - ac_id: "AC-NFR-001-03"
+            description: "Public API documented"
+            status: "NOT_STARTED"
+            test_command: "pydocstyle src"
+
+# =============================================================================
+# SUMMARY
+# =============================================================================
+
+summary:
+  total_tasks: 12
+  total_ac_ids: 17
+  components_to_create: 0
+  files_to_create: 3
+  files_to_modify: 12
+  
+  requirements_covered:
+    brittleness_fixes: ["AC-BRITTLE-001", "AC-BRITTLE-002", "AC-BRITTLE-003", "AC-BRITTLE-004", "AC-BRITTLE-005", "AC-BRITTLE-006", "AC-BRITTLE-007", "AC-BRITTLE-008", "AC-BRITTLE-009", "AC-BRITTLE-010", "AC-BRITTLE-011", "AC-BRITTLE-012", "AC-BRITTLE-013", "AC-BRITTLE-014"]
+    non_functional_requirements: ["AC-NFR-001-01", "AC-NFR-001-02", "AC-NFR-001-03"]
+
+  exit_criteria:
+    - "All 14 AC-BRITTLE IDs pass verification"
+    - "All 3 AC-NFR-001 IDs pass verification"
+    - "All test files collect successfully"
+    - "Import system stable across platforms"
+    - "All 25 governance rules enforced"
+    - "Verification rate ≥80%"
+    - "Code coverage ≥80%"
+    - "Test-AC linking working"
+
+# =============================================================================
+# TRACKING
+# =============================================================================
+
+tracking:
+  started_at: null
+  completed_at: null
+  current_day: 0
+  current_task: null
+  blockers: []
+  notes: []
