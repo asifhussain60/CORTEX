@@ -467,3 +467,315 @@ class TestComprehensiveValidation:
         
         # Should complete without error (audit logging occurs internally)
         assert result.valid or result.has_errors()
+
+
+class TestACIDFormatValidation:
+    """Tests for AC-VALIDATE-006: AC-ID format validation"""
+
+    def test_valid_two_segment_ac_id(self):
+        """Test validation of valid 2-segment AC-ID"""
+        validator = InputValidator()
+        ac_ids = {"AC-AR-006"}
+        
+        assert validator._validate_ac_id_format(ac_ids)
+
+    def test_valid_three_segment_ac_id(self):
+        """Test validation of valid 3-segment AC-ID with sub-requirement"""
+        validator = InputValidator()
+        ac_ids = {"AC-AR-006-01"}
+        
+        assert validator._validate_ac_id_format(ac_ids)
+
+    def test_valid_multiple_ac_ids(self):
+        """Test validation of multiple valid AC-IDs"""
+        validator = InputValidator()
+        ac_ids = {"AC-AR-006", "AC-AR-007", "AC-VALIDATE-001", "AC-VALIDATE-002-05"}
+        
+        assert validator._validate_ac_id_format(ac_ids)
+
+    def test_invalid_ac_id_lowercase_category(self):
+        """Test that lowercase category is rejected"""
+        validator = InputValidator()
+        ac_ids = {"AC-ar-006"}
+        
+        assert not validator._validate_ac_id_format(ac_ids)
+
+    def test_invalid_ac_id_wrong_segment_count(self):
+        """Test that AC-IDs with wrong segment count are rejected"""
+        validator = InputValidator()
+        ac_ids = {"AC-AR"}
+        
+        assert not validator._validate_ac_id_format(ac_ids)
+
+    def test_invalid_ac_id_non_numeric_requirement(self):
+        """Test that non-numeric requirement number is rejected"""
+        validator = InputValidator()
+        ac_ids = {"AC-AR-ABC"}
+        
+        assert not validator._validate_ac_id_format(ac_ids)
+
+    def test_empty_ac_id_set(self):
+        """Test that empty AC-ID set is valid"""
+        validator = InputValidator()
+        ac_ids: set = set()
+        
+        assert validator._validate_ac_id_format(ac_ids)
+
+    def test_ac_id_format_with_spaces(self):
+        """Test that AC-IDs with spaces are stripped and validated"""
+        validator = InputValidator()
+        ac_ids = {"  AC-AR-006  "}
+        
+        assert validator._validate_ac_id_format(ac_ids)
+
+
+class TestPhaseAlignmentValidation:
+    """Tests for AC-VALIDATE-007: Phase alignment enforcement"""
+
+    def test_phase_alignment_with_matching_phase(self):
+        """Test AC-IDs from same phase pass validation"""
+        validator = InputValidator()
+        ac_ids = {"AC-AR-006"}  # From PHASE-02
+        current_phase = "PHASE-02"
+        
+        # Should pass or default to True if not found in registry
+        result = validator._validate_phase_alignment(ac_ids, current_phase)
+        assert result is True
+
+    def test_phase_alignment_with_no_current_phase(self):
+        """Test that no current phase defaults to True"""
+        validator = InputValidator()
+        ac_ids = {"AC-AR-006"}
+        current_phase = None
+        
+        assert validator._validate_phase_alignment(ac_ids, current_phase)
+
+    def test_phase_alignment_with_empty_ac_ids(self):
+        """Test that empty AC-ID set passes"""
+        validator = InputValidator()
+        ac_ids: set = set()
+        current_phase = "PHASE-02"
+        
+        assert validator._validate_phase_alignment(ac_ids, current_phase)
+
+    def test_phase_alignment_with_invalid_phase_format(self):
+        """Test that invalid phase format defaults to True"""
+        validator = InputValidator()
+        ac_ids = {"AC-AR-006"}
+        current_phase = "INVALID-PHASE"
+        
+        # Should default to True when phase format is invalid
+        result = validator._validate_phase_alignment(ac_ids, current_phase)
+        assert result is True
+
+    def test_phase_alignment_with_earlier_phase_ac_ids(self):
+        """Test that AC-IDs from earlier phases are allowed (backward compat)"""
+        validator = InputValidator()
+        # AC-IDs from PHASE-01 should be allowed in PHASE-02
+        ac_ids = {"AC-AR-001"}  # From PHASE-01
+        current_phase = "PHASE-02"
+        
+        result = validator._validate_phase_alignment(ac_ids, current_phase)
+        # Should pass if registry allows it
+        assert result is True
+
+
+class TestACIDConflictDetection:
+    """Tests for AC-VALIDATE-008: Request contradiction detection"""
+
+    def test_no_conflicts_single_ac_id(self):
+        """Test that single AC-ID has no conflicts"""
+        validator = InputValidator()
+        ac_ids = {"AC-AR-006"}
+        
+        assert validator._validate_no_ac_id_conflicts(ac_ids)
+
+    def test_no_conflicts_multiple_independent_ac_ids(self):
+        """Test that multiple independent AC-IDs have no conflicts"""
+        validator = InputValidator()
+        ac_ids = {"AC-AR-006", "AC-AR-007", "AC-VALIDATE-001"}
+        
+        assert validator._validate_no_ac_id_conflicts(ac_ids)
+
+    def test_empty_ac_id_set_no_conflicts(self):
+        """Test that empty AC-ID set has no conflicts"""
+        validator = InputValidator()
+        ac_ids: set = set()
+        
+        assert validator._validate_no_ac_id_conflicts(ac_ids)
+
+    def test_conflict_detection_defaults_to_true_on_error(self):
+        """Test that conflict detection defaults to True on error"""
+        validator = InputValidator()
+        # Use AC-IDs that may not exist in registry (triggers exception handling)
+        ac_ids = {"AC-UNKNOWN-999", "AC-FAKE-888"}
+        
+        # Should default to True on error
+        result = validator._validate_no_ac_id_conflicts(ac_ids)
+        assert result is True
+
+
+class TestSchemaValidation:
+    """Tests for AC-VALIDATE-009: Schema validation"""
+
+    def test_valid_dict_schema(self):
+        """Test validation of valid dict schema with required fields"""
+        validator = InputValidator()
+        request_data = {
+            "action": "execute",
+            "context": {"param1": "value1"}
+        }
+        
+        assert validator._validate_schema_compliance(request_data)
+
+    def test_valid_dict_schema_minimal(self):
+        """Test validation of minimal valid schema"""
+        validator = InputValidator()
+        request_data = {
+            "action": "execute",
+            "context": {}
+        }
+        
+        assert validator._validate_schema_compliance(request_data)
+
+    def test_valid_dict_schema_no_context(self):
+        """Test validation of schema with None context"""
+        validator = InputValidator()
+        request_data = {
+            "action": "execute",
+            "context": None
+        }
+        
+        assert validator._validate_schema_compliance(request_data)
+
+    def test_invalid_schema_missing_action(self):
+        """Test that schema missing 'action' field is invalid"""
+        validator = InputValidator()
+        request_data = {
+            "context": {"param1": "value1"}
+        }
+        
+        assert not validator._validate_schema_compliance(request_data)
+
+    def test_invalid_schema_missing_context(self):
+        """Test that schema missing 'context' field is invalid"""
+        validator = InputValidator()
+        request_data = {
+            "action": "execute"
+        }
+        
+        assert not validator._validate_schema_compliance(request_data)
+
+    def test_invalid_schema_empty_action(self):
+        """Test that schema with empty action is invalid"""
+        validator = InputValidator()
+        request_data = {
+            "action": "",
+            "context": {}
+        }
+        
+        assert not validator._validate_schema_compliance(request_data)
+
+    def test_valid_json_string_schema(self):
+        """Test validation of valid JSON string"""
+        validator = InputValidator()
+        request_data = '{"action": "execute", "context": {}}'
+        
+        assert validator._validate_schema_compliance(request_data)
+
+    def test_valid_plain_string_schema(self):
+        """Test that plain (non-JSON) strings are valid"""
+        validator = InputValidator()
+        request_data = "just a plain string"
+        
+        assert validator._validate_schema_compliance(request_data)
+
+    def test_valid_list_schema(self):
+        """Test validation of list with valid items"""
+        validator = InputValidator()
+        request_data = [
+            {"action": "execute"},
+            {"action": "validate"}
+        ]
+        
+        assert validator._validate_schema_compliance(request_data)
+
+    def test_invalid_list_schema(self):
+        """Test that list with invalid items is invalid"""
+        validator = InputValidator()
+        request_data = [
+            {"action": "execute"},
+            {"no_action": "invalid"}
+        ]
+        
+        assert not validator._validate_schema_compliance(request_data)
+
+    def test_invalid_context_type(self):
+        """Test that non-dict context is invalid"""
+        validator = InputValidator()
+        request_data = {
+            "action": "execute",
+            "context": "not a dict"
+        }
+        
+        assert not validator._validate_schema_compliance(request_data)
+
+
+class TestBackwardCompatibilityValidation:
+    """Tests for AC-VALIDATE-010: Backward compatibility checks"""
+
+    def test_no_version_specified(self):
+        """Test that no version defaults to compatible"""
+        validator = InputValidator()
+        
+        assert validator._validate_backward_compatibility(None)
+        assert validator._validate_backward_compatibility("")
+
+    def test_compatible_exact_version(self):
+        """Test exact current version is compatible"""
+        validator = InputValidator()
+        
+        assert validator._validate_backward_compatibility("1.0")
+
+    def test_compatible_patch_version(self):
+        """Test patch version in current major.minor is compatible"""
+        validator = InputValidator()
+        
+        assert validator._validate_backward_compatibility("1.0.0")
+        assert validator._validate_backward_compatibility("1.0.5")
+
+    def test_incompatible_major_version_mismatch(self):
+        """Test that different major version is incompatible"""
+        validator = InputValidator()
+        
+        assert not validator._validate_backward_compatibility("2.0")
+        assert not validator._validate_backward_compatibility("0.9")
+
+    def test_incompatible_future_minor_version(self):
+        """Test that future minor version is incompatible"""
+        validator = InputValidator()
+        
+        assert not validator._validate_backward_compatibility("1.1")
+        assert not validator._validate_backward_compatibility("1.5")
+
+    def test_invalid_version_format(self):
+        """Test that invalid version format is rejected"""
+        validator = InputValidator()
+        
+        assert not validator._validate_backward_compatibility("1")
+        assert not validator._validate_backward_compatibility("1.0.0.0")
+        assert not validator._validate_backward_compatibility("not.a.version")
+        assert not validator._validate_backward_compatibility("v1.0")
+
+    def test_version_with_whitespace(self):
+        """Test that version with whitespace is trimmed and validated"""
+        validator = InputValidator()
+        
+        assert validator._validate_backward_compatibility("  1.0  ")
+
+    def test_version_zero_patch(self):
+        """Test that zero patch version is compatible"""
+        validator = InputValidator()
+        
+        assert validator._validate_backward_compatibility("1.0.0")
+
