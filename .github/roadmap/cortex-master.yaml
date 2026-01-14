@@ -111,7 +111,7 @@ phase_tracker:
     title: "Brittleness Fixes"
     description: "Import Fixes, Path Resolution, Test Stabilization, Final Verification"
     ac_ids: 17
-    status: "NOT_STARTED"
+    status: "IN_PROGRESS"
     locked: false
     completed_at: null
     cleanup_required: true   # Execute cleanup protocol before phase lock
@@ -121,7 +121,7 @@ phase_tracker:
       entry_count: null
       hash_chain_valid: null
       verified_at: null
-    git_checkpoint: null
+    git_checkpoint: "725b38fa6"
   PHASE-PARALLEL:
     title: "Folder Migration"
     description: "Nested Folder Organization, Import Updates (Non-Blocking)"
