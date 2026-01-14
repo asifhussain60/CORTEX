@@ -450,6 +450,32 @@ days:
             test_name: "test_planning_operations_audited"
 
 # =============================================================================
+# RISKS & MITIGATIONS
+# =============================================================================
+
+risks:
+  - risk_id: "RISK-01-001"
+    description: "SQLite WAL mode may cause issues on network drives"
+    severity: "HIGH"
+    probability: "LOW"
+    mitigation: "Enforce local filesystem for governance.db; document limitation"
+  - risk_id: "RISK-01-002"
+    description: "Hash chain implementation complexity may delay audit logging"
+    severity: "MEDIUM"
+    probability: "MEDIUM"
+    mitigation: "Use proven SHA-256 pattern; implement incrementally with tests"
+  - risk_id: "RISK-01-003"
+    description: "State machine may have edge cases in concurrent access"
+    severity: "MEDIUM"
+    probability: "MEDIUM"
+    mitigation: "Use database transactions for atomicity; extensive edge case testing"
+  - risk_id: "RISK-01-004"
+    description: "Reference orchestrator may expose integration issues late"
+    severity: "HIGH"
+    probability: "LOW"
+    mitigation: "Day 6 dedicated to AR-011; catches issues before Phase 2 scaling"
+
+# =============================================================================
 # SUMMARY
 # =============================================================================
 
@@ -459,6 +485,8 @@ summary:
   components_to_create: 22
   files_to_create: 24
   files_to_modify: 6
+  estimated_hours: 56
+  buffer_hours: 12
   
   requirements_covered:
     architecture_decisions: ["AR-001", "AR-002", "AR-003", "AR-004", "AR-005", "AR-008", "AR-011"]

@@ -10,10 +10,27 @@ metadata:
   description: "AI-Powered Development Orchestration System - Foundation through Production"
   project: "CORTEX"
   status: "IMPLEMENTATION_READY"
-  dor_score: 85
+  dor_score: 100
   start_date: null
   end_date: null
   total_ac_ids: 101  # Was 98, added 3 for AR-011 Reference Orchestrator Validation
+  
+  # Velocity & Estimation Assumptions
+  velocity:
+    hours_per_day: 8
+    productivity_factor: 0.7  # Account for meetings, context switching
+    effective_hours_per_day: 5.6
+  
+  estimation_summary:
+    phase_01_hours: 56
+    phase_02_hours: 40
+    phase_03_hours: 28
+    phase_04_hours: 32
+    phase_05_hours: 36
+    phase_parallel_hours: 16
+    total_estimated_hours: 208
+    total_buffer_hours: 44
+    total_with_buffer: 252
 
 # =============================================================================
 # PHASE TRACKER - SINGLE SOURCE OF TRUTH

@@ -136,6 +136,22 @@ tasks:
     acceptance_criteria: []
 
 # =============================================================================
+# RISKS & MITIGATIONS
+# =============================================================================
+
+risks:
+  - risk_id: "RISK-PAR-001"
+    description: "Import updates may conflict with parallel phase development"
+    severity: "HIGH"
+    probability: "MEDIUM"
+    mitigation: "Coordinate with active phase; use feature branch for migration"
+  - risk_id: "RISK-PAR-002"
+    description: "Cross-platform path resolution may have edge cases"
+    severity: "MEDIUM"
+    probability: "MEDIUM"
+    mitigation: "Test on all target platforms before merge; use pathlib exclusively"
+
+# =============================================================================
 # SUMMARY
 # =============================================================================
 
@@ -143,6 +159,8 @@ summary:
   total_tasks: 8
   total_ac_ids: 3
   blocking: false
+  estimated_hours: 16
+  buffer_hours: 4
   
   requirements_covered:
     architecture_decisions: ["AR-010"]

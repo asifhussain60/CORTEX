@@ -101,15 +101,23 @@ days:
           - ac_id: "AC-COHERENCE-001"
             description: "File-to-file requirement coherence (no conflicting requirements)"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_coherence_validator.py"
+            test_name: "test_file_to_file_coherence"
           - ac_id: "AC-COHERENCE-002"
             description: "AC-ID naming consistency (same AC-ID consistent across files)"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_coherence_validator.py"
+            test_name: "test_ac_id_naming_consistency"
           - ac_id: "AC-COHERENCE-003"
             description: "Reference validity (all internal references resolve)"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_coherence_validator.py"
+            test_name: "test_reference_validity"
           - ac_id: "AC-COHERENCE-004"
             description: "Contradiction detection (conflicting AC-IDs flagged)"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_coherence_validator.py"
+            test_name: "test_contradiction_detection"
 
   day_4:
     title: "Provenance Tracking"
@@ -130,18 +138,28 @@ days:
           - ac_id: "AC-EXPLAIN-001"
             description: "Requirement source tracking (where did this requirement come from?)"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_provenance_tracker.py"
+            test_name: "test_requirement_source_tracking"
           - ac_id: "AC-EXPLAIN-002"
             description: "Decision justification capture (why was this decision made?)"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_provenance_tracker.py"
+            test_name: "test_decision_justification"
           - ac_id: "AC-EXPLAIN-003"
             description: "Architecture decision rationale (why this architecture?)"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_provenance_tracker.py"
+            test_name: "test_architecture_rationale"
           - ac_id: "AC-EXPLAIN-004"
             description: "Test coverage justification (why this test coverage?)"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_provenance_tracker.py"
+            test_name: "test_coverage_justification"
           - ac_id: "AC-EXPLAIN-005"
             description: "Evidence bundle provenance (what evidence supports this AC-ID?)"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_provenance_tracker.py"
+            test_name: "test_evidence_provenance"
 
   day_5:
     title: "Performance & Integration"
@@ -182,6 +200,27 @@ days:
         acceptance_criteria: []
 
 # =============================================================================
+# RISKS & MITIGATIONS
+# =============================================================================
+
+risks:
+  - risk_id: "RISK-04-001"
+    description: "Secret detection regex may have false positives/negatives"
+    severity: "HIGH"
+    probability: "MEDIUM"
+    mitigation: "Build comprehensive test suite with known secret patterns; use established library (detect-secrets)"
+  - risk_id: "RISK-04-002"
+    description: "Hash verification on large audit logs may impact read performance"
+    severity: "MEDIUM"
+    probability: "LOW"
+    mitigation: "Implement incremental verification; cache verification results"
+  - risk_id: "RISK-04-003"
+    description: "Cross-file coherence validation may be computationally expensive"
+    severity: "MEDIUM"
+    probability: "MEDIUM"
+    mitigation: "Implement caching; validate only changed files incrementally"
+
+# =============================================================================
 # SUMMARY
 # =============================================================================
 
@@ -191,6 +230,8 @@ summary:
   components_to_create: 7
   files_to_create: 10
   files_to_modify: 0
+  estimated_hours: 32
+  buffer_hours: 6
   
   requirements_covered:
     non_functional_requirements: ["NFR-003"]

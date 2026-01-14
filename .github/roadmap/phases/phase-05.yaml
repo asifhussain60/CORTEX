@@ -39,15 +39,23 @@ days:
           - ac_id: "AC-BRITTLE-001"
             description: "WAL mode verified operational"
             status: "PENDING_VERIFICATION"
+            test_file: "tests/unit/test_brittleness_fixes.py"
+            test_name: "test_wal_mode_operational"
           - ac_id: "AC-BRITTLE-002"
             description: "Audit table schema verified"
             status: "PENDING_VERIFICATION"
+            test_file: "tests/unit/test_brittleness_fixes.py"
+            test_name: "test_audit_schema_complete"
           - ac_id: "AC-BRITTLE-003"
             description: "Progress tracker verified"
             status: "PENDING_VERIFICATION"
+            test_file: "tests/unit/test_brittleness_fixes.py"
+            test_name: "test_progress_tracker_operational"
           - ac_id: "AC-BRITTLE-004"
             description: "Pytest collection warnings resolved"
             status: "PENDING_VERIFICATION"
+            test_file: "tests/unit/test_brittleness_fixes.py"
+            test_name: "test_no_collection_warnings"
 
       - task_id: "TASK-05-01-02"
         title: "Fix Import Brittleness"
@@ -61,6 +69,8 @@ days:
           - ac_id: "AC-BRITTLE-005"
             description: "All imports converted to absolute paths"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_brittleness_fixes.py"
+            test_name: "test_absolute_imports"
 
       - task_id: "TASK-05-01-03"
         title: "Fix Test Collection Brittleness"
@@ -74,6 +84,8 @@ days:
           - ac_id: "AC-BRITTLE-006"
             description: "All 46 test files collect successfully"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_brittleness_fixes.py"
+            test_name: "test_all_tests_collect"
 
   day_2:
     title: "Package & Path Fixes"
@@ -94,6 +106,8 @@ days:
           - ac_id: "AC-BRITTLE-007"
             description: "All paths use get_project_root() utility"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_brittleness_fixes.py"
+            test_name: "test_project_root_paths"
 
       - task_id: "TASK-05-02-02"
         title: "Fix Portability Brittleness"
@@ -107,6 +121,8 @@ days:
           - ac_id: "AC-BRITTLE-010"
             description: "All paths use pathlib, OS-specific code guarded"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_brittleness_fixes.py"
+            test_name: "test_pathlib_usage"
 
   day_3:
     title: "AC & Evidence Fixes"
@@ -126,6 +142,8 @@ days:
           - ac_id: "AC-BRITTLE-008"
             description: "All AC-IDs have implementations"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_brittleness_fixes.py"
+            test_name: "test_ac_completeness"
 
       - task_id: "TASK-05-03-02"
         title: "Fix Evidence Generation Brittleness"
@@ -139,6 +157,8 @@ days:
           - ac_id: "AC-BRITTLE-009"
             description: "Evidence bundles generated from test results, code changes, audit logs"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_brittleness_fixes.py"
+            test_name: "test_evidence_generation"
 
   day_4:
     title: "State & Governance Fixes"
@@ -160,6 +180,8 @@ days:
           - ac_id: "AC-BRITTLE-011"
             description: "Distributed locking for state transitions"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_brittleness_fixes.py"
+            test_name: "test_distributed_locking"
 
       - task_id: "TASK-05-04-02"
         title: "Fix Governance Enforcement Brittleness"
@@ -173,6 +195,8 @@ days:
           - ac_id: "AC-BRITTLE-012"
             description: "All 25 governance rules enforced"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_brittleness_fixes.py"
+            test_name: "test_all_rules_enforced"
 
   day_5:
     title: "Test Linking & Verification"
@@ -194,6 +218,8 @@ days:
           - ac_id: "AC-BRITTLE-013"
             description: "Test discovery by AC-ID implemented"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_brittleness_fixes.py"
+            test_name: "test_ac_discovery"
 
       - task_id: "TASK-05-05-02"
         title: "Fix Verification Rate Brittleness"
@@ -207,6 +233,8 @@ days:
           - ac_id: "AC-BRITTLE-014"
             description: "Verification rate ≥80%"
             status: "NOT_STARTED"
+            test_file: "tests/unit/test_brittleness_fixes.py"
+            test_name: "test_verification_rate"
 
       - task_id: "TASK-05-05-03"
         title: "Final Integration Verification"
@@ -240,6 +268,32 @@ days:
             test_command: "pydocstyle src"
 
 # =============================================================================
+# RISKS & MITIGATIONS
+# =============================================================================
+
+risks:
+  - risk_id: "RISK-05-001"
+    description: "Import refactoring may break existing functionality"
+    severity: "HIGH"
+    probability: "MEDIUM"
+    mitigation: "Run full test suite after each import change; use IDE refactoring tools"
+  - risk_id: "RISK-05-002"
+    description: "Cross-platform path issues may surface late"
+    severity: "MEDIUM"
+    probability: "MEDIUM"
+    mitigation: "Test on Windows/macOS/Linux CI; use pathlib consistently"
+  - risk_id: "RISK-05-003"
+    description: "Coverage target (80%) may be difficult to achieve"
+    severity: "LOW"
+    probability: "LOW"
+    mitigation: "Track coverage incrementally; prioritize critical path coverage"
+  - risk_id: "RISK-05-004"
+    description: "Distributed locking complexity for state management"
+    severity: "HIGH"
+    probability: "LOW"
+    mitigation: "Use SQLite advisory locks; avoid external dependencies"
+
+# =============================================================================
 # SUMMARY
 # =============================================================================
 
@@ -249,6 +303,8 @@ summary:
   components_to_create: 0
   files_to_create: 3
   files_to_modify: 12
+  estimated_hours: 36
+  buffer_hours: 8
   
   requirements_covered:
     brittleness_fixes: ["AC-BRITTLE-001", "AC-BRITTLE-002", "AC-BRITTLE-003", "AC-BRITTLE-004", "AC-BRITTLE-005", "AC-BRITTLE-006", "AC-BRITTLE-007", "AC-BRITTLE-008", "AC-BRITTLE-009", "AC-BRITTLE-010", "AC-BRITTLE-011", "AC-BRITTLE-012", "AC-BRITTLE-013", "AC-BRITTLE-014"]
