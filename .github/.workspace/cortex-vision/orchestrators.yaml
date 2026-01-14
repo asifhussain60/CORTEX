@@ -1,0 +1,204 @@
+# CORTEX Orchestrators - Discovered from Git History
+# Source: Commit messages from CORTEX-4.0 through CORTEX6
+# Date: 2026-01-14
+
+metadata:
+  total_discovered: 20+
+  source_branch: "CORTEX-4.0"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# CORE ORCHESTRATORS
+# ═══════════════════════════════════════════════════════════════════════════
+
+orchestrators:
+  planning:
+    name: "Planning Orchestrator"
+    purpose: "Manage implementation plans and phases"
+    evidence:
+      - "feat: Complete Task 7.1 - Manifest audit and consolidation strategy"
+      - "feat(planning): Add Planning System v5 and orchestrator enhancement plans"
+      - "feat(planning): Implement Planning System 4.0 hierarchical folder structure"
+    capabilities:
+      - manifest_compliance
+      - tdd_integration
+      - dor_dod_validation
+      
+  maintenance:
+    name: "Maintenance Orchestrator"
+    purpose: "System health and cleanup"
+    evidence:
+      - "feat(maintenance): Complete Phase 10 & 11 - LLM intent routing enhancements"
+      - "feat(maintenance): add Phase 2.5 Data Preservation Rules"
+      - "chore: complete 10-phase maintenance cycle (Dec 30, 2025)"
+    versions: ["v3.0"]
+    
+  documentation:
+    name: "Documentation Orchestrator"
+    purpose: "Auto-generate and maintain docs"
+    evidence:
+      - "feat: Add DocumentationOrchestrator with self-documentation capability"
+      - "feat(documentation): upgrade orchestrator to v3.0 with comprehensive generation"
+    versions: ["v3.0"]
+    
+  execution:
+    name: "Execution Orchestrator"
+    purpose: "Run autonomous workflows"
+    evidence:
+      - "Phase 3 Week 7 Days 1-3 Complete: ExecutionOrchestrator Foundation"
+      - "feat: Wire visual progress templates and set autonomous execution as default"
+    
+  tdd:
+    name: "TDD Orchestrator"
+    purpose: "Test-driven development workflow"
+    evidence:
+      - "feat(tdd): Add comprehensive test suite for TDD Orchestrator v4.0"
+      - "Phase 3 Week 7 Days 6-7 Complete: TDD Orchestrator v4.0"
+    versions: ["v4.0"]
+    capabilities:
+      - red_green_refactor
+      - test_coverage_tracking
+      
+  sanitization:
+    name: "Sanitization Orchestrator"
+    purpose: "Code cleanup and security scanning"
+    evidence:
+      - "Task 1: Sanitization Orchestrator Foundation (9/9 tests passing)"
+      - "feat: Code sanitization with auto-delete backup"
+    features:
+      - ast_based_analysis
+      - auto_backup_cleanup
+
+# ═══════════════════════════════════════════════════════════════════════════
+# SPECIALIZED ORCHESTRATORS
+# ═══════════════════════════════════════════════════════════════════════════
+
+  ado_operations:
+    name: "ADO Operations Orchestrator"
+    purpose: "Azure DevOps integration"
+    evidence:
+      - "feat: ADO Orchestrator Migration Complete - Week 10 Day 1-2"
+      - "ADO Orchestrator: Coverage Enhancement (87.23% → 91.44%)"
+      
+  vacuum:
+    name: "Vacuum Orchestrator"
+    purpose: "Deep cleanup and consolidation"
+    evidence:
+      - "feat(vacuum): add comprehensive filesystem cleanup orchestrator"
+      - "feat(cortex5): Add Generic Vacuum Orchestrator v3 to epic"
+      - "VACUUM v1.3.0: Add orchestrator discovery intelligence"
+    versions: ["v1.3.0", "v3.0"]
+    
+  lens_dashboard:
+    name: "CORTEX Lens Orchestrator"
+    purpose: "Visual dashboard and metrics"
+    evidence:
+      - "feat(cortex-lens): Complete mobile UX enhancements"
+      - "[CORTEX-LENS][PHASE-2] Navigation & Visualization Complete"
+      - "feat(cortex-lens): Add CORTEX Lens V2 planning"
+    versions: ["v2.0", "v3.0"]
+    
+  checkpoint:
+    name: "Checkpoint Orchestrator"
+    purpose: "Git checkpoint management"
+    evidence:
+      - "feat(phase-12): Task 13.4 Complete: Git Checkpoint Enhancement"
+      - "Checkpoint: Test Phase - 50% [tags: stable, pre-migration]"
+    capabilities:
+      - tagged_checkpoints
+      - recovery_points
+      
+  rollback:
+    name: "Rollback Orchestrator"
+    purpose: "Safe state recovery"
+    evidence:
+      - "docs: Add Cleanup, Intelligent Dashboard, and Rollback orchestrators"
+    
+  system_integrity:
+    name: "System Integrity Orchestrator"
+    purpose: "Health validation"
+    evidence:
+      - "feat(cortex-4.0): System Integrity Orchestrator + Planning Reorganization"
+      - "docs: Add System Integrity Orchestrator page"
+      
+  pre_flight:
+    name: "Pre-Flight Orchestrator"
+    purpose: "Pre-execution validation"
+    evidence:
+      - "feat: Add orchestration enhancements with LLM intent routing and pre-flight orchestrator"
+      
+  refinement:
+    name: "Refinement Orchestrator"
+    purpose: "Code improvement cycles"
+    evidence:
+      - "feat(refinement): Add Refinement Orchestrator v1.0"
+    versions: ["v1.0"]
+    
+  discovery:
+    name: "Discovery Orchestrator"
+    purpose: "Codebase analysis"
+    evidence:
+      - "feat: Discovery orchestrator with dependency intelligence and multi-language AST parsing"
+    capabilities:
+      - dependency_analysis
+      - ast_parsing
+      
+  cicd:
+    name: "CI/CD Orchestrator"
+    purpose: "Pipeline integration"
+    evidence:
+      - "feat(phase-5): Task 5.12 - CI/CD Orchestrator Brain Integration"
+      - "feat: Complete Phase 6 Tasks 6.13-6.14 - DevOps & CI/CD Self-Healing Orchestrators"
+      
+  housekeeping:
+    name: "Housekeeping Orchestrator"
+    purpose: "Routine maintenance tasks"
+    evidence:
+      - "feat(cortex6): Stage 1 Phase 1.4 - Housekeeping Orchestrator (AC-ORC-HOUSE-001 to 009)"
+      
+  architectural_review:
+    name: "Architectural Review Orchestrator"
+    purpose: "Architecture validation"
+    evidence:
+      - "Capability 6 (Architectural Review) Validated - Phase 13B 44% Complete"
+      
+  intelligence:
+    name: "Intelligence Orchestrator"
+    purpose: "AI-driven insights"
+    evidence:
+      - "Week 9 Day 4-5 Complete: Intelligence Orchestrator and Documentation"
+      
+  upgrade:
+    name: "Upgrade Orchestrator"
+    purpose: "Version migration"
+    evidence:
+      - "feat(upgrade): complete cortex-upgrade orchestrator enhancements"
+      - "feat(upgrade): add git commit intelligence analysis"
+    versions: ["v2.1"]
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ORCHESTRATOR ARCHITECTURE
+# ═══════════════════════════════════════════════════════════════════════════
+
+architecture:
+  base_class: "BaseOrchestrator"
+  evidence:
+    - "feat(tests): Complete BaseOrchestrator comprehensive test suite (Task 8.2)"
+    - "feat(orchestration): BaseOrchestrator adaptive execution integration"
+    
+  adaptive_execution:
+    description: "Context-aware execution modes"
+    evidence:
+      - "feat(orchestration): Adaptive Execution Framework Day 1-2 Complete"
+      - "Phase 5 Package 5: GREEN phase complete - Adaptive Execution Modes"
+      
+  registry:
+    description: "Central orchestrator registration"
+    evidence:
+      - "Fix OrchestratorRegistry tests (5/5 passing)"
+      - "Phase 13A COMPLETE: 100% (6/6 Tasks) - Registry Consolidation"
+      
+  manifest:
+    description: "Orchestrator configuration"
+    evidence:
+      - "feat(manifest): Task 7.3 - CoreManifest with 16 orchestrators, JSON schema, and 53 tests"
+      - "Complete Phase 7 - 3-Tier Manifest Architecture & ManifestLoader"

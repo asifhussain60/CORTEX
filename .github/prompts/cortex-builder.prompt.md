@@ -30,10 +30,63 @@ phase_tracker:
 
 ## Commands
 
+### Implementation
 - `/implement` - Implement next AC-ID (checks phase_tracker first)
 - `/status` - Show phase_tracker status
 - `/phase N` - Show details for phase N
 - `/lock PHASE-XX` - Mark phase as locked (only after ALL AC-IDs verified)
+
+### Plan Modification
+- `/modify <target>` - Modify plan component (AC-ID, phase, dependency)
+- `/add-ac <phase> <title>` - Add new acceptance criteria to phase
+- `/remove-ac <ac-id>` - Remove AC-ID (must not break dependencies)
+- `/move-ac <ac-id> <to-phase>` - Move AC-ID to different phase
+- `/reorder <ac-id> <after-ac-id>` - Change AC-ID sequence
+
+## Modification Rules (HOLISTIC VALIDATION)
+
+**Before ANY modification, validate:**
+
+```yaml
+validation_checklist:
+  conflicts:
+    - Does this duplicate existing AC-ID scope?
+    - Does this contradict another AC-ID's requirements?
+    - Does this break existing dependencies?
+  
+  contradictions:
+    - Does this reverse a decision made elsewhere?
+    - Does this conflict with tier0 governance rules?
+    - Does this invalidate already-completed work?
+  
+  ambiguity:
+    - Is the AC-ID criteria measurable and testable?
+    - Are dependencies explicitly stated?
+    - Is success/failure clearly defined?
+
+  phase_integrity:
+    - Does phase still have coherent scope after change?
+    - Are inter-phase dependencies still valid?
+    - Does total AC-ID count remain accurate in phase_tracker?
+```
+
+### Modification Response Format
+
+```yaml
+modification:
+  type: "add|remove|move|reorder|update"
+  target: "AC-XXX-XXX or PHASE-XX"
+  validation:
+    conflicts: []      # List any found, empty = pass
+    contradictions: [] # List any found, empty = pass  
+    ambiguity: []      # List any found, empty = pass
+  approved: true|false
+  changes_made:
+    - file: "path"
+      change: "description"
+  ripple_effects:      # Other files/AC-IDs affected
+    - "Updated phase_tracker.PHASE-XX.ac_count"
+```
 
 ## Files
 

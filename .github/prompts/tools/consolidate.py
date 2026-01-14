@@ -562,10 +562,10 @@ def main():
         epilog="""
 Examples:
   # Consolidate preview (no cleanup)
-  python consolidate.py --folder SSOT/analysis --format yaml
+  python consolidate.py --folder <target-folder> --format yaml
   
   # Full consolidation with cleanup
-  python consolidate.py --folder SSOT/analysis --format yaml --cleanup
+  python consolidate.py --folder <target-folder> --format yaml --cleanup
         """
     )
     
