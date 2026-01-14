@@ -1,0 +1,413 @@
+# ==============================================================================
+# CORTEX 7.0 PRODUCTION MODE REQUIREMENTS
+# ==============================================================================
+# Purpose: Controlled audit logging for production deployments
+# Version: 1.0.0
+# Date: 2026-01-14
+# Author: Asif Hussain
+# Status: APPROVED - User Requirement
+# ==============================================================================
+
+metadata:
+  feature_name: Production Mode Audit Control
+  user_requirement: "Audit logger should have ability to switch off or have controlled logging when released to production"
+  rationale: "Detailed logging only needed for developing CORTEX efficiently, not in production"
+  impact: Performance optimization, disk space savings, user privacy
+
+# ==============================================================================
+# CORE REQUIREMENT
+# ==============================================================================
+
+core_requirement:
+  statement: |
+    The Audit-First architecture MUST support three logging modes:
+    1. Development mode (full detailed logging for CORTEX development)
+    2. Production mode (minimal logging for production deployments)
+    3. Hybrid mode (selective logging for user-facing operations)
+  
+  non_negotiable:
+    - Audit-First pattern remains enforced (operations still require AuditContext)
+    - Critical events ALWAYS logged regardless of mode (errors, violations, security)
+    - Evidence bundles captured in all modes (needed for compliance)
+    - Users can override mode for troubleshooting
+
+# ==============================================================================
+# MODE SPECIFICATIONS
+# ==============================================================================
+
+logging_modes:
+  development:
+    id: DEV
+    description: Full detailed logging for CORTEX internal development
+    use_case: CORTEX 6.0/7.0 development, debugging, architecture validation
+    log_levels: [TRACE, DEBUG, INFO, WARNING, ERROR, CRITICAL]
+    captures:
+      - Full context and metadata (inputs, outputs, duration)
+      - AST analysis details (duplicate detection, similarity scores)
+      - Knowledge Graph reasoning steps (node traversals, edge weights)
+      - Challenger pipeline internals (confidence scores, stage results)
+      - Test evidence bundles (pytest results, coverage metrics)
+      - Performance metrics (query latency, memory usage)
+      - Dependency graphs (for brittleness detection)
+      - Hash chain integrity (event_hash, prev_event_hash)
+    retention:
+      hot: 7 days (Redis + SQLite)
+      warm: 30 days (SQLite)
+      cold: Unlimited (JSONL.gz archives)
+    performance_impact: ~1-5ms per operation
+    disk_usage: ~10MB per 1000 operations (detailed context)
+    
+  production:
+    id: PROD
+    description: Minimal logging for production deployments
+    use_case: Released CORTEX instances, end-user environments
+    log_levels: [WARNING, ERROR, CRITICAL]
+    captures:
+      - Errors and failures only (exception traces)
+      - Governance violations (SKULL rule breaches)
+      - Security events (unauthorized access, tampering)
+      - Critical state changes (phase transitions, epic completions)
+      - Evidence bundles (minimal - AC-ID + pass/fail only)
+    retention:
+      hot: 7 days (SQLite only, no Redis)
+      cold: 90 days (JSONL.gz archives)
+    performance_impact: ~0.1-0.5ms per operation
+    disk_usage: ~1MB per 1000 operations (errors only)
+    
+  hybrid:
+    id: HYB
+    description: Selective detailed logging for user-facing operations
+    use_case: User-deployed instances with occasional detailed debugging
+    log_levels: [INFO, WARNING, ERROR, CRITICAL]
+    captures:
+      - User-facing operations (INFO) - orchestrator start/end, AC-ID implementation
+      - Orchestrator lifecycle (INFO) - phase transitions, task creation
+      - Evidence bundles (INFO) - test results, validation outcomes
+      - All errors and warnings (full context)
+      - No AST/KG/Challenger internals (unless error)
+    retention:
+      hot: 7 days (Redis + SQLite)
+      warm: 30 days (SQLite)
+      cold: 90 days (JSONL.gz archives)
+    performance_impact: ~0.5-2ms per operation
+    disk_usage: ~3MB per 1000 operations (user-facing only)
+
+# ==============================================================================
+# CONFIGURATION MECHANISM
+# ==============================================================================
+
+configuration:
+  environment_variable:
+    name: CORTEX_AUDIT_MODE
+    values: [development, production, hybrid]
+    default: development
+    validation: Must be one of allowed values
+    
+  configuration_file:
+    path: cortex-brain/config/audit-config.yaml
+    schema:
+      mode: development | production | hybrid
+      overrides:
+        categories: [GOVERNANCE, ORCHESTRATOR, etc.]
+        forced_levels: [ERROR, CRITICAL]  # Always log these
+    example: |
+      mode: production
+      overrides:
+        categories: [GOVERNANCE, SECURITY]
+        forced_levels: [ERROR, CRITICAL]
+  
+  runtime_override:
+    method: AuditContext constructor parameter
+    syntax: AuditContext(mode='production')
+    scope: Single operation (context-specific)
+    use_case: Temporarily switch to detailed logging for troubleshooting
+    
+  programmatic_api:
+    global_setter: AuditManager.set_mode('production')
+    global_getter: AuditManager.get_mode()
+    temporary_override: |
+      with AuditManager.temporary_mode('development'):
+          # Full logging for this block only
+          pass
+
+# ==============================================================================
+# IMPLEMENTATION REQUIREMENTS
+# ==============================================================================
+
+implementation:
+  audit_driven_decorator:
+    current_behavior: |
+      @audit_driven(category=AuditCategory.ORCHESTRATOR, operation="implement_ac")
+      def implement_ac(ac_id, audit_context: AuditContext):
+          # Always enforces AuditContext presence
+          # Currently logs all levels
+    
+    new_behavior: |
+      @audit_driven(category=AuditCategory.ORCHESTRATOR, operation="implement_ac")
+      def implement_ac(ac_id, audit_context: AuditContext):
+          # Still enforces AuditContext presence (non-negotiable)
+          # Logging detail varies based on audit_context.mode
+          # Critical events ALWAYS logged (errors, violations)
+    
+    changes_required:
+      - Check audit_context.mode before logging DEBUG/TRACE/INFO
+      - Always log WARNING/ERROR/CRITICAL regardless of mode
+      - Always capture evidence bundles (mode controls detail level)
+      - Always maintain hash chain (integrity guarantee)
+  
+  audit_context_manager:
+    current_behavior: |
+      with AuditContext(ac_id="AC-XXX-001", correlation_id=uuid):
+          # Captures all context and metadata
+          # Logs all levels
+    
+    new_behavior: |
+      with AuditContext(ac_id="AC-XXX-001", correlation_id=uuid, mode='production'):
+          # Still captures all context (in memory)
+          # Filters what gets persisted based on mode
+          # Critical events always persisted
+    
+    changes_required:
+      - Add mode parameter (default from env/config)
+      - Filter log entries before persisting to SQLite
+      - Always persist: errors, violations, evidence bundles
+      - Compress context metadata in production mode
+  
+  tiered_memory_manager:
+    development_mode:
+      hot_zone: Redis enabled (full caching)
+      warm_zone: SQLite with full context
+      cold_zone: JSONL.gz with full metadata
+    
+    production_mode:
+      hot_zone: Redis disabled (save RAM)
+      warm_zone: Skipped (errors go directly to cold)
+      cold_zone: JSONL.gz with minimal metadata
+    
+    changes_required:
+      - Conditional Redis initialization based on mode
+      - Skip warm zone in production mode
+      - Compress metadata in cold zone for production
+
+# ==============================================================================
+# GUARANTEES (NON-NEGOTIABLE)
+# ==============================================================================
+
+guarantees:
+  audit_first_enforcement:
+    requirement: Operations MUST still require AuditContext
+    rationale: Audit-First pattern is foundational, not optional
+    behavior: Decorator blocks operations without audit context regardless of mode
+    
+  critical_event_logging:
+    requirement: Errors, violations, security events ALWAYS logged
+    rationale: Compliance, debugging, security audit trails
+    levels_always_logged: [ERROR, CRITICAL]
+    categories_always_logged: [GOVERNANCE, SECURITY]
+    
+  evidence_bundle_capture:
+    requirement: Test evidence MUST be captured in all modes
+    rationale: Compliance, hallucination detection, brittleness analysis
+    production_mode_detail: Minimal (AC-ID + pass/fail + count)
+    development_mode_detail: Full (test names, line numbers, coverage, traces)
+    
+  hash_chain_integrity:
+    requirement: Hash chains MUST be maintained in all modes
+    rationale: Tamper detection, audit trail integrity
+    behavior: event_hash and prev_event_hash always computed and stored
+    
+  user_override_capability:
+    requirement: Users MUST be able to switch to development mode
+    rationale: Troubleshooting, debugging user-specific issues
+    mechanism: Environment variable, config file, runtime API
+
+# ==============================================================================
+# MIGRATION STRATEGY
+# ==============================================================================
+
+migration:
+  phase_1_cortex_6_development:
+    timeline: Current (CORTEX 6.0 development)
+    mode: development (default)
+    reason: Full logging needed for architecture validation
+    
+  phase_2_cortex_7_testing:
+    timeline: CORTEX 7.0 beta testing
+    mode: hybrid (default)
+    reason: Validate production mode behavior, tune performance
+    
+  phase_3_production_release:
+    timeline: CORTEX 7.0 GA (general availability)
+    mode: production (default)
+    reason: Optimize for end-user performance
+    
+  phase_4_user_deployments:
+    timeline: Post-release
+    mode: production (recommended default)
+    user_control: Users can override via CORTEX_AUDIT_MODE env var
+
+# ==============================================================================
+# PERFORMANCE BENCHMARKS
+# ==============================================================================
+
+performance_targets:
+  development_mode:
+    overhead_per_operation: <5ms
+    disk_usage_per_1000_ops: <10MB
+    acceptable_for: CORTEX internal development
+    
+  production_mode:
+    overhead_per_operation: <0.5ms
+    disk_usage_per_1000_ops: <1MB
+    acceptable_for: End-user deployments
+    
+  hybrid_mode:
+    overhead_per_operation: <2ms
+    disk_usage_per_1000_ops: <3MB
+    acceptable_for: User-facing operations with debugging capability
+
+# ==============================================================================
+# TESTING REQUIREMENTS
+# ==============================================================================
+
+testing:
+  unit_tests:
+    - Test mode detection (env var, config file, runtime override)
+    - Test log filtering (DEBUG/INFO filtered in production)
+    - Test critical event bypass (ERROR/CRITICAL always logged)
+    - Test evidence bundle capture (all modes)
+    - Test hash chain integrity (all modes)
+    
+  integration_tests:
+    - Test MasterOrchestrator in production mode
+    - Test ChallengerPipeline with minimal logging
+    - Test TieredMemoryManager mode switching
+    - Test mode override during troubleshooting
+    
+  performance_tests:
+    - Benchmark overhead per mode (development vs production)
+    - Measure disk usage per mode (1000 operations)
+    - Validate <5ms target (development)
+    - Validate <0.5ms target (production)
+
+# ==============================================================================
+# DOCUMENTATION REQUIREMENTS
+# ==============================================================================
+
+documentation:
+  user_guide:
+    title: "CORTEX Production Mode Configuration"
+    sections:
+      - What is Production Mode?
+      - When to use each mode (development, production, hybrid)
+      - How to configure via environment variable
+      - How to configure via config file
+      - How to override at runtime for troubleshooting
+      - Performance comparison (overhead, disk usage)
+      
+  developer_guide:
+    title: "Implementing Production Mode Support"
+    sections:
+      - AuditContext mode parameter
+      - Filtering log entries before persistence
+      - Guaranteeing critical event logging
+      - Testing mode behavior
+      
+  architecture_doc:
+    title: "Audit-First Architecture with Production Mode"
+    sections:
+      - Why Audit-First pattern remains enforced
+      - How mode control works (capture vs persist)
+      - Non-negotiable guarantees (errors, evidence, hash chains)
+      - Migration strategy from development to production
+
+# ==============================================================================
+# ACCEPTANCE CRITERIA
+# ==============================================================================
+
+acceptance_criteria:
+  AC_PROD_001:
+    title: Mode Configuration
+    criteria:
+      - CORTEX_AUDIT_MODE env var controls mode (development/production/hybrid)
+      - Config file cortex-brain/config/audit-config.yaml overrides env var
+      - Runtime override via AuditContext(mode='production') works
+      - Invalid mode values raise ValidationError
+      
+  AC_PROD_002:
+    title: Development Mode Logging
+    criteria:
+      - All log levels captured (TRACE, DEBUG, INFO, WARNING, ERROR, CRITICAL)
+      - Full context metadata stored (inputs, outputs, duration)
+      - AST/KG/Challenger details logged
+      - Hot/Warm/Cold zones all active
+      - Redis caching enabled
+      
+  AC_PROD_003:
+    title: Production Mode Logging
+    criteria:
+      - Only WARNING/ERROR/CRITICAL logged
+      - Minimal context metadata (error traces only)
+      - No AST/KG/Challenger details (unless error)
+      - Hot zone SQLite-only (no Redis)
+      - Cold zone archives only
+      
+  AC_PROD_004:
+    title: Critical Event Guarantee
+    criteria:
+      - ERROR/CRITICAL always logged regardless of mode
+      - Governance violations always logged
+      - Security events always logged
+      - Evidence bundles always captured
+      - Hash chains always maintained
+      
+  AC_PROD_005:
+    title: Performance Targets
+    criteria:
+      - Development mode overhead <5ms per operation
+      - Production mode overhead <0.5ms per operation
+      - Hybrid mode overhead <2ms per operation
+      - Production mode disk usage 10x less than development
+      
+  AC_PROD_006:
+    title: User Override Capability
+    criteria:
+      - User can set CORTEX_AUDIT_MODE=development at any time
+      - Runtime override via AuditContext(mode='development') works
+      - Override scope limited to specific operation (context)
+      - Global mode switching via AuditManager.set_mode() works
+
+# ==============================================================================
+# RISKS & MITIGATIONS
+# ==============================================================================
+
+risks:
+  risk_1_audit_first_confusion:
+    description: Users think production mode "turns off" audit logging
+    impact: Misunderstanding of Audit-First guarantees
+    mitigation: Clear documentation - mode controls detail, not presence
+    
+  risk_2_missing_debug_info:
+    description: Production mode hides info needed for troubleshooting
+    impact: Harder to debug user-reported issues
+    mitigation: User override capability (CORTEX_AUDIT_MODE=development)
+    
+  risk_3_performance_overhead:
+    description: Production mode still too slow for some deployments
+    impact: User complaints about performance
+    mitigation: Benchmark and optimize (target <0.5ms overhead)
+    
+  risk_4_critical_event_bypass:
+    description: Bug causes critical events to be filtered in production
+    impact: Compliance violations, missing security audit trails
+    mitigation: Comprehensive testing, pre-commit hooks, audit verification
+
+# ==============================================================================
+# REFERENCES
+# ==============================================================================
+
+references:
+  architecture_spec: .asif/cortex7-req/final/audit-driven-rag-architecture.yaml
+  executive_summary: .asif/cortex7-req/final/AUDIT-DRIVEN-RAG-SUMMARY.md
+  code_snippets: .asif/cortex7-req/final/snippets-rag/audit-first-decorator.py
+  governance_rules: cortex-brain/tier0/governance/core-rules.yaml
