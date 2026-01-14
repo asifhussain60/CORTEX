@@ -1,9 +1,9 @@
 # Phase-02 Progress Report: Orchestration Core
 
 **Date:** January 14, 2026  
-**Status:** IN_PROGRESS (12/27 AC-IDs Complete, 44%)  
-**Velocity:** 12 AC-IDs completed in continuous session  
-**Remote:** Fully Synchronized (d8996b707)
+**Status:** IN_PROGRESS (17/27 AC-IDs Complete, 63%)  
+**Velocity:** 17 AC-IDs completed in continuous session  
+**Remote:** Fully Synchronized (1c51f3dec)
 
 ---
 
@@ -209,6 +209,104 @@ stats = registry.get_stats()
 
 ---
 
+### ✅ AC-VALIDATE-001/002/003/004/005: Input Validation Framework
+**Status:** COMPLETE  
+**Tests:** 38/38 PASSING  
+**Commit:** 2a4c54b0a  
+
+**Implementation:**
+- `src/core/input_validator.py` (535+ lines)
+  - InputValidator main orchestrator
+  - ValidationResult, ValidationError types
+  - CanonicalIntent standardized intent representation
+  - SeverityLevel error severity enumeration
+  - Comprehensive error reporting with remediation
+
+**AC-VALIDATE-001 (Intent Canonicalization):**
+- Colloquial term mapping (impl→implement, debug→fix, etc.)
+- Word boundary aware matching
+- Confidence scoring (0.0-1.0)
+- Ambiguity resolution tracking
+
+**AC-VALIDATE-002 (AC-ID Existence Check):**
+- AC-ID pattern matching (AC-{ALPHANUM}-{NNN})
+- Registry lookup validation
+- Invalid AC-ID detection with remediation
+
+**AC-VALIDATE-003 (Evidence Bundle Pre-check):**
+- JSON structure detection and validation
+- Malformed JSON error reporting
+- Multiple bundle support
+
+**AC-VALIDATE-004 (Cross-reference Coherence):**
+- Cross-reference resolution from governance registry
+- Missing reference detection
+- Reference context preservation
+
+**AC-VALIDATE-005 (Semantic Output Validation):**
+- Contradiction detection in text
+- Circular reference detection using DFS
+- Semantic correctness validation
+
+**Key Features:**
+- 5 sequential validation checks in single call
+- Comprehensive error messages with remediation
+- Warning system for low-confidence results
+- Performance optimized validation
+- Audit logging integration (AC-ID lifecycle tracking)
+
+---
+
+### ✅ AC-METRICS-001/002/003/004/005: Health Metrics Tracker
+**Status:** COMPLETE  
+**Tests:** 36/36 PASSING  
+**Commit:** 1c51f3dec  
+
+**Implementation:**
+- `src/core/health_metrics.py` (535+ lines)
+  - HealthMetrics singleton metrics collector
+  - MetricEntry individual data point storage
+  - MetricSummary aggregated statistics
+  - MetricType enumeration for metrics
+
+**AC-METRICS-001 (Validation Success Rate):**
+- Record successful/failed validations
+- Component-based filtering
+- Success rate calculation (percentage)
+- Time-windowed metrics (customizable hours)
+
+**AC-METRICS-002 (Semantic Accuracy Tracking):**
+- Record accuracy scores (0.0-1.0)
+- Mean accuracy calculation
+- Per-component accuracy tracking
+- Validation on score bounds
+
+**AC-METRICS-003 (Cross-reference Success Rate):**
+- Track cross-reference check results
+- Success rate percentage calculation
+- Component isolation
+
+**AC-METRICS-004 (Phase Alignment Enforcement):**
+- Phase alignment check recording
+- Alignment rate percentage calculation
+- Phase metadata tracking
+
+**AC-METRICS-005 (Anomaly Detection):**
+- Z-score based outlier detection
+- Configurable threshold (default 2.0 = ~95% confidence)
+- Severity classification (medium/high)
+- Multiple component analysis
+
+**Key Features:**
+- Singleton with thread-safe state management
+- Comprehensive statistics (mean, min, max, median, std_dev)
+- Time-based retention (default 24 hours)
+- Old metrics cleanup with configurable windows
+- Per-component metric filtering
+- Dict serialization support for logging
+
+---
+
 ## Test Summary
 
 | AC-ID | Tests | Status | File |
@@ -219,7 +317,9 @@ stats = registry.get_stats()
 | AR-007-01/02/03 | 22 | ✅ PASSING | test_mcp_server.py |
 | AR-009-01/02/03 | 21 | ✅ PASSING | test_template_engine.py |
 | FR-002-01/02/03 | 25 | ✅ PASSING | test_rule_evaluator.py |
-| **TOTAL** | **130** | **✅ PASSING** | - |
+| AC-VALIDATE-001/002/003/004/005 | 38 | ✅ PASSING | test_input_validator.py |
+| AC-METRICS-001/002/003/004/005 | 36 | ✅ PASSING | test_health_metrics.py |
+| **TOTAL** | **204** | **✅ PASSING** | - |
 
 ### Test Coverage Details
 
