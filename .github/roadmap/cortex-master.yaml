@@ -13,7 +13,7 @@ metadata:
   dor_score: 100
   start_date: null
   end_date: null
-  total_ac_ids: 101  # Was 98, added 3 for AR-011 Reference Orchestrator Validation
+  total_ac_ids: 125  # 101 from PHASE-01-05 + PHASE-PARALLEL + 24 from PHASE-VISION-CORE
   
   # Velocity & Estimation Assumptions
   velocity:
@@ -141,6 +141,23 @@ phase_tracker:
       hash_chain_valid: true
       verified_at: "2026-01-14T23:50:00Z"
     git_checkpoint: "181624052"
+  PHASE-VISION-CORE:
+    title: "Orchestrator Plugin Ecosystem & Brain Activation"
+    description: "Extensible orchestrator framework, brain tier population, hallucination prevention enforcement, vision governance"
+    ac_ids: 24
+    status: "NOT_STARTED"
+    locked: false
+    requires: "PHASE-PARALLEL"
+    cleanup_required: true
+    estimated_hours: 152
+    estimated_days: 27
+    audit_verification:
+      verified: false
+      entry_count: 0
+      hash_chain_valid: false
+      verified_at: null
+    git_checkpoint: null
+    notes: "Establishes orchestrator plugin ecosystem, populates brain tiers, and enforces hallucination prevention. Foundation for custom orchestrators."
 
 # =============================================================================
 # ARCHITECTURE DECISIONS (AR-001 through AR-010)
@@ -456,8 +473,137 @@ architecture_decisions:
       - "AR-002"
       - "AR-003"
 
+  AR-012:
+    id: "AR-012"
+    title: "Orchestrator Plugin Framework"
+    status: "NOT_STARTED"
+    priority: "CRITICAL"
+    phase: 6
+    description: |
+      Extensible framework for building and registering domain-specific orchestrators:
+      - Base orchestrator interface with standardized lifecycle
+      - Auto-discovery and registration via decorators
+      - MCP tool exposure with context injection
+      - TDD scaffolding for new orchestrators
+      - Dependency declaration (tier access, rule sets)
+      
+      This enables third-party orchestrator development without modifying core.
+    acceptance_criteria:
+      - ac_id: "AC-AR-012-01"
+        description: "Base Orchestrator abstract class with lifecycle hooks"
+        test: "test_orchestrator_base_interface"
+      - ac_id: "AC-AR-012-02"
+        description: "@orchestrator decorator auto-registers with context injection"
+        test: "test_orchestrator_decorator_registration"
+      - ac_id: "AC-AR-012-03"
+        description: "Orchestrator can declare tier dependencies (0/1/2/3)"
+        test: "test_orchestrator_tier_dependency"
+    components:
+      - "OrchestratorBase"
+      - "OrchestratorRegistry"
+      - "TierAccessControl"
+    dependencies:
+      - "AR-006"
+      - "AR-001"
+
+  AR-013:
+    id: "AR-013"
+    title: "Brain Tier Activation & Population"
+    status: "NOT_STARTED"
+    priority: "CRITICAL"
+    phase: 6
+    description: |
+      Populate brain tiers with domain-specific governance, acceptance criteria,
+      response templates, and knowledge library:
+      - Tier 0: Domain-specific SKULL rules (security, performance, compliance)
+      - Tier 1: Domain-to-AC mappings, tracking schemas
+      - Tier 2: Domain response templates with inheritance
+      - Tier 3: Domain knowledge library (patterns, examples, best practices)
+      
+      Enables orchestrators to access governance rules without hardcoding.
+    acceptance_criteria:
+      - ac_id: "AC-AR-013-01"
+        description: "Tier 0: Domain SKULL rules loaded for 4+ domains"
+        test: "test_tier0_domain_rules_loaded"
+      - ac_id: "AC-AR-013-02"
+        description: "Tier 1: AC-to-domain mappings queryable"
+        test: "test_tier1_ac_domain_mappings"
+      - ac_id: "AC-AR-013-03"
+        description: "Tier 2: Response templates with inheritance working"
+        test: "test_tier2_template_inheritance"
+    components:
+      - "BrainPopulator"
+      - "TierContentLoader"
+      - "DomainRuleRegistry"
+    dependencies:
+      - "AR-001"
+      - "AR-009"
+
+  AR-014:
+    id: "AR-014"
+    title: "Hallucination Prevention Enforcement Layer"
+    status: "NOT_STARTED"
+    priority: "CRITICAL"
+    phase: 6
+    description: |
+      Prevent AI agents from modifying locked phases or reimplementing completed work:
+      - Phase lock immutability verification (read-only after locked: true)
+      - AC-ID completeness validation (cannot mark AC complete without audit entries)
+      - Holistic change validation (modification must verify no phase dependencies broken)
+      - Governance rule immutability (Tier 0 changes rejected)
+      
+      Guarantees: If a phase is locked, it CANNOT be reimplemented.
+    acceptance_criteria:
+      - ac_id: "AC-AR-014-01"
+        description: "Locked phase modifications blocked with audit trail"
+        test: "test_locked_phase_immutable"
+      - ac_id: "AC-AR-014-02"
+        description: "AC completion requires MIN 3 audit entries (START/EXECUTE/COMPLETE)"
+        test: "test_ac_completion_audit_requirement"
+      - ac_id: "AC-AR-014-03"
+        description: "Phase dependency modification triggers holistic validation"
+        test: "test_holistic_dependency_validation"
+    components:
+      - "MutationGuard"
+      - "AuditRequiredValidator"
+      - "DependencyValidator"
+    dependencies:
+      - "AR-001"
+      - "FR-001"
+
+  AR-015:
+    id: "AR-015"
+    title: "Vision Evolution Protocol"
+    status: "NOT_STARTED"
+    priority: "HIGH"
+    phase: 6
+    description: |
+      Governance protocol for evolving cortex-vision:
+      - Vision mutations audited with motivation and impact analysis
+      - Tier-to-orchestrator dependency registry
+      - Change validation before vision update
+      - Rollback capability for vision changes
+      
+      Prevents vision drift and maintains alignment between vision and implementation.
+    acceptance_criteria:
+      - ac_id: "AC-AR-015-01"
+        description: "Vision mutations logged with orchestrator impact analysis"
+        test: "test_vision_mutation_audit"
+      - ac_id: "AC-AR-015-02"
+        description: "Tier-to-orchestrator dependency registry queryable"
+        test: "test_tier_orchestrator_dependency_registry"
+      - ac_id: "AC-AR-015-03"
+        description: "Vision rollback capability tested"
+        test: "test_vision_rollback"
+    components:
+      - "VisionMutationTracker"
+      - "DependencyRegistry"
+      - "VisionValidator"
+    dependencies:
+      - "AR-001"
+
 # =============================================================================
-# FUNCTIONAL REQUIREMENTS (FR-001 through FR-006)
+# FUNCTIONAL REQUIREMENTS (FR-001 through FR-009)
 # =============================================================================
 
 functional_requirements:
@@ -629,8 +775,67 @@ functional_requirements:
     dependencies:
       - "FR-003"
 
+  FR-008:
+    id: "FR-008"
+    title: "E2E Orchestrator Plugin Validation"
+    status: "NOT_STARTED"
+    priority: "CRITICAL"
+    phase: 6
+    description: |
+      End-to-end test demonstrating:
+      1. Create new orchestrator (minimal viable)
+      2. Declare tier dependencies
+      3. Auto-register via decorator
+      4. Expose as MCP tool
+      5. Execute with governance context
+      6. Audit trail captures full lifecycle
+    acceptance_criteria:
+      - ac_id: "AC-FR-008-01"
+        description: "E2E test: minimal orchestrator → registration → MCP → execution"
+        test: "test_e2e_orchestrator_plugin"
+      - ac_id: "AC-FR-008-02"
+        description: "Orchestrator execution audited (START → EXECUTE → COMPLETE)"
+        test: "test_orchestrator_execution_audit"
+      - ac_id: "AC-FR-008-03"
+        description: "Governance context available to orchestrator (tiers 0-3)"
+        test: "test_orchestrator_governance_context"
+    components:
+      - "MinimalOrchestratorExample"
+      - "E2ETestSuite"
+    dependencies:
+      - "AR-012"
+      - "AR-013"
+
+  FR-009:
+    id: "FR-009"
+    title: "Brain Tier Consistency Validation"
+    status: "NOT_STARTED"
+    priority: "MEDIUM"
+    phase: 6
+    description: |
+      Validate brain tier consistency across all domains:
+      - No orphaned AC-IDs (all referenced in Tier 1)
+      - No broken tier references (all tier references exist)
+      - No conflicting rules (no two rules contradict)
+      - Response templates cover all orchestrator response types
+    acceptance_criteria:
+      - ac_id: "AC-FR-009-01"
+        description: "Query detects orphaned AC-IDs in Tier 1"
+        test: "test_orphaned_ac_detection"
+      - ac_id: "AC-FR-009-02"
+        description: "Tier reference validation catches broken links"
+        test: "test_broken_tier_references"
+      - ac_id: "AC-FR-009-03"
+        description: "Rule conflict detection identifies contradictions"
+        test: "test_rule_conflict_detection"
+    components:
+      - "BrainConsistencyValidator"
+      - "TierReferenceVerifier"
+    dependencies:
+      - "AR-013"
+
 # =============================================================================
-# NON-FUNCTIONAL REQUIREMENTS (NFR-001 through NFR-004)
+# NON-FUNCTIONAL REQUIREMENTS (NFR-001 through NFR-006)
 # =============================================================================
 
 non_functional_requirements:
@@ -717,6 +922,57 @@ non_functional_requirements:
       - ac_id: "AC-NFR-004-03"
         description: "Alerts triggered on threshold breach"
         test: "test_alert_triggers"
+
+  NFR-005:
+    id: "NFR-005"
+    title: "Orchestrator Plugin Performance"
+    status: "NOT_STARTED"
+    priority: "MEDIUM"
+    phase: 6
+    targets:
+      plugin_registration: "<50ms per plugin"
+      context_injection: "<10ms per tier"
+      plugin_discovery: "<500ms for 1000 plugins"
+    acceptance_criteria:
+      - ac_id: "AC-NFR-005-01"
+        description: "Plugin registration benchmark <50ms"
+        test: "test_plugin_registration_performance"
+      - ac_id: "AC-NFR-005-02"
+        description: "Governance context injection <10ms per tier"
+        test: "test_governance_context_performance"
+      - ac_id: "AC-NFR-005-03"
+        description: "Plugin discovery scan <500ms"
+        test: "test_plugin_discovery_performance"
+    components:
+      - "PerformanceBenchmarks"
+    dependencies:
+      - "AR-012"
+
+  NFR-006:
+    id: "NFR-006"
+    title: "Brain Tier Extensibility"
+    status: "NOT_STARTED"
+    priority: "MEDIUM"
+    phase: 6
+    targets:
+      dynamic_loading: "New YAML files auto-loaded"
+      versioning: "Content changes tracked"
+      validation: "Schema validation on load"
+    acceptance_criteria:
+      - ac_id: "AC-NFR-006-01"
+        description: "New tier YAML auto-loaded without restart"
+        test: "test_tier_dynamic_loading"
+      - ac_id: "AC-NFR-006-02"
+        description: "Tier content versioning tracks changes"
+        test: "test_tier_versioning"
+      - ac_id: "AC-NFR-006-03"
+        description: "Invalid tier content rejected with helpful error"
+        test: "test_tier_schema_validation"
+    components:
+      - "DynamicTierLoader"
+      - "TierVersioning"
+    dependencies:
+      - "AR-013"
 
 # =============================================================================
 # GOVERNANCE RULES (25 SKULL RULES)
@@ -1012,18 +1268,58 @@ phases:
       - "AC-AR-010-02"
       - "AC-AR-010-03"
 
+  phase_vision_core:
+    id: "PHASE-VISION-CORE"
+    title: "Orchestrator Plugin Ecosystem & Brain Activation"
+    file: "phases/phase-vision-core.yaml"
+    focus:
+      - "Orchestrator Plugin Framework (AR-012)"
+      - "Brain Tier Population (AR-013)"
+      - "Hallucination Prevention Enforcement (AR-014)"
+      - "Vision Evolution Protocol (AR-015)"
+      - "E2E Plugin Validation (FR-008)"
+      - "Brain Consistency (FR-009)"
+      - "Plugin Performance (NFR-005)"
+      - "Brain Extensibility (NFR-006)"
+    ac_ids:
+      - "AC-AR-012-01"
+      - "AC-AR-012-02"
+      - "AC-AR-012-03"
+      - "AC-AR-013-01"
+      - "AC-AR-013-02"
+      - "AC-AR-013-03"
+      - "AC-AR-014-01"
+      - "AC-AR-014-02"
+      - "AC-AR-014-03"
+      - "AC-AR-015-01"
+      - "AC-AR-015-02"
+      - "AC-AR-015-03"
+      - "AC-FR-008-01"
+      - "AC-FR-008-02"
+      - "AC-FR-008-03"
+      - "AC-FR-009-01"
+      - "AC-FR-009-02"
+      - "AC-FR-009-03"
+      - "AC-NFR-005-01"
+      - "AC-NFR-005-02"
+      - "AC-NFR-005-03"
+      - "AC-NFR-006-01"
+      - "AC-NFR-006-02"
+      - "AC-NFR-006-03"
+
 # =============================================================================
 # SUCCESS METRICS
 # =============================================================================
 
 success_metrics:
   completion:
-    architecture_decisions: "10/10 implemented"
-    functional_requirements: "6/6 implemented"
-    non_functional_requirements: "4/4 met"
+    architecture_decisions: "15/15 implemented (AR-001 through AR-015)"
+    functional_requirements: "9/9 implemented (FR-001 through FR-009)"
+    non_functional_requirements: "6/6 met (NFR-001 through NFR-006)"
     governance_rules: "25/25 enforced"
     brittleness_fixes: "14/14 completed"
-    hallucination_prevention: "25/25 scheduled"
+    hallucination_prevention: "24 AC-IDs (AR-014 enforcement layer)"
+    orchestrator_plugins: "4 reference implementations"
 
   quality:
     test_pass_rate: "≥98%"

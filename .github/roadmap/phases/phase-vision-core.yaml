@@ -1,0 +1,1008 @@
+# =============================================================================
+# PHASE VISION-CORE: ORCHESTRATOR PLUGIN ECOSYSTEM & BRAIN ACTIVATION
+# =============================================================================
+# Focus: Orchestrator Plugin Framework, Brain Tier Population,
+#        E2E Validation, Vision Governance Protocol
+# =============================================================================
+
+metadata:
+  phase_id: "PHASE-VISION-CORE"
+  title: "Orchestrator Plugin Ecosystem & Brain Activation"
+  description: "Extensible orchestrator framework, brain tier population, hallucination prevention enforcement, vision governance"
+  status: "NOT_STARTED"
+  start_date: null
+  end_date: null
+  predecessor: "PHASE-PARALLEL"
+  successor: "PHASE-VISION-ADVANCED"
+  
+  # Estimation
+  estimated_hours: 152
+  estimated_days: 27
+  ac_count: 24
+  
+  # Dependencies
+  requires_phases:
+    - "PHASE-01"
+    - "PHASE-02"
+    - "PHASE-03"
+    - "PHASE-04"
+    - "PHASE-05"
+    - "PHASE-PARALLEL"
+
+# =============================================================================
+# ARCHITECTURE DECISIONS (Continuation from AR-014+)
+# =============================================================================
+
+architecture_decisions:
+  AR-012:
+    id: "AR-012"
+    title: "Orchestrator Plugin Framework"
+    status: "NOT_STARTED"
+    priority: "CRITICAL"
+    description: |
+      Extensible framework for building and registering domain-specific orchestrators:
+      - Base orchestrator interface with standardized lifecycle
+      - Auto-discovery and registration via decorators
+      - MCP tool exposure with context injection
+      - TDD scaffolding for new orchestrators
+      - Dependency declaration (tier access, rule sets)
+      
+      This enables third-party orchestrator development without modifying core.
+    acceptance_criteria:
+      - ac_id: "AC-AR-012-01"
+        description: "Base Orchestrator abstract class with lifecycle hooks"
+        test: "test_orchestrator_base_interface"
+      - ac_id: "AC-AR-012-02"
+        description: "@orchestrator decorator auto-registers with context injection"
+        test: "test_orchestrator_decorator_registration"
+      - ac_id: "AC-AR-012-03"
+        description: "Orchestrator can declare tier dependencies (0/1/2/3)"
+        test: "test_orchestrator_tier_dependency"
+    components:
+      - "OrchestratorBase"
+      - "OrchestratorRegistry"
+      - "TierAccessControl"
+    dependencies:
+      - "AR-006"
+      - "AR-001"
+
+  AR-013:
+    id: "AR-013"
+    title: "Brain Tier Activation & Population"
+    status: "NOT_STARTED"
+    priority: "CRITICAL"
+    description: |
+      Populate brain tiers with domain-specific governance, acceptance criteria,
+      response templates, and knowledge library:
+      - Tier 0: Domain-specific SKULL rules (security, performance, compliance)
+      - Tier 1: Domain-to-AC mappings, tracking schemas
+      - Tier 2: Domain response templates with inheritance
+      - Tier 3: Domain knowledge library (patterns, examples, best practices)
+      
+      Enables orchestrators to access governance rules without hardcoding.
+    acceptance_criteria:
+      - ac_id: "AC-AR-013-01"
+        description: "Tier 0: Domain SKULL rules loaded for 4+ domains"
+        test: "test_tier0_domain_rules_loaded"
+      - ac_id: "AC-AR-013-02"
+        description: "Tier 1: AC-to-domain mappings queryable"
+        test: "test_tier1_ac_domain_mappings"
+      - ac_id: "AC-AR-013-03"
+        description: "Tier 2: Response templates with inheritance working"
+        test: "test_tier2_template_inheritance"
+    components:
+      - "BrainPopulator"
+      - "TierContentLoader"
+      - "DomainRuleRegistry"
+    dependencies:
+      - "AR-001"
+      - "AR-009"
+
+  AR-014:
+    id: "AR-014"
+    title: "Hallucination Prevention Enforcement Layer"
+    status: "NOT_STARTED"
+    priority: "CRITICAL"
+    description: |
+      Prevent AI agents from modifying locked phases or reimplementing completed work:
+      - Phase lock immutability verification (read-only after locked: true)
+      - AC-ID completeness validation (cannot mark AC complete without audit entries)
+      - Holistic change validation (modification must verify no phase dependencies broken)
+      - Governance rule immutability (Tier 0 changes rejected)
+      
+      Guarantees: If a phase is locked, it CANNOT be reimplemented.
+    acceptance_criteria:
+      - ac_id: "AC-AR-014-01"
+        description: "Locked phase modifications blocked with audit trail"
+        test: "test_locked_phase_immutable"
+      - ac_id: "AC-AR-014-02"
+        description: "AC completion requires MIN 3 audit entries (START/EXECUTE/COMPLETE)"
+        test: "test_ac_completion_audit_requirement"
+      - ac_id: "AC-AR-014-03"
+        description: "Phase dependency modification triggers holistic validation"
+        test: "test_holistic_dependency_validation"
+    components:
+      - "MutationGuard"
+      - "AuditRequiredValidator"
+      - "DependencyValidator"
+    dependencies:
+      - "AR-001"
+      - "FR-001"
+
+  AR-015:
+    id: "AR-015"
+    title: "Vision Evolution Protocol"
+    status: "NOT_STARTED"
+    priority: "HIGH"
+    description: |
+      Governance protocol for evolving cortex-vision:
+      - Vision mutations audited with motivation and impact analysis
+      - Tier-to-orchestrator dependency registry
+      - Change validation before vision update
+      - Rollback capability for vision changes
+      
+      Prevents vision drift and maintains alignment between vision and implementation.
+    acceptance_criteria:
+      - ac_id: "AC-AR-015-01"
+        description: "Vision mutations logged with orchestrator impact analysis"
+        test: "test_vision_mutation_audit"
+      - ac_id: "AC-AR-015-02"
+        description: "Tier-to-orchestrator dependency registry queryable"
+        test: "test_tier_orchestrator_dependency_registry"
+      - ac_id: "AC-AR-015-03"
+        description: "Vision rollback capability tested"
+        test: "test_vision_rollback"
+    components:
+      - "VisionMutationTracker"
+      - "DependencyRegistry"
+      - "VisionValidator"
+    dependencies:
+      - "AR-001"
+
+# =============================================================================
+# FUNCTIONAL REQUIREMENTS (Continuation from FR-008+)
+# =============================================================================
+
+functional_requirements:
+  FR-008:
+    id: "FR-008"
+    title: "E2E Orchestrator Plugin Validation"
+    status: "NOT_STARTED"
+    priority: "CRITICAL"
+    description: |
+      End-to-end test demonstrating:
+      1. Create new orchestrator (minimal viable)
+      2. Declare tier dependencies
+      3. Auto-register via decorator
+      4. Expose as MCP tool
+      5. Execute with governance context
+      6. Audit trail captures full lifecycle
+    acceptance_criteria:
+      - ac_id: "AC-FR-008-01"
+        description: "E2E test: minimal orchestrator → registration → MCP → execution"
+        test: "test_e2e_orchestrator_plugin"
+      - ac_id: "AC-FR-008-02"
+        description: "Orchestrator execution audited (START → EXECUTE → COMPLETE)"
+        test: "test_orchestrator_execution_audit"
+      - ac_id: "AC-FR-008-03"
+        description: "Governance context available to orchestrator (tiers 0-3)"
+        test: "test_orchestrator_governance_context"
+    components:
+      - "MinimalOrchestratorExample"
+      - "E2ETestSuite"
+    dependencies:
+      - "AR-012"
+      - "AR-013"
+
+  FR-009:
+    id: "FR-009"
+    title: "Brain Tier Consistency Validation"
+    status: "NOT_STARTED"
+    priority: "MEDIUM"
+    description: |
+      Validate brain tier consistency across all domains:
+      - No orphaned AC-IDs (all referenced in Tier 1)
+      - No broken tier references (all tier references exist)
+      - No conflicting rules (no two rules contradict)
+      - Response templates cover all orchestrator response types
+    acceptance_criteria:
+      - ac_id: "AC-FR-009-01"
+        description: "Query detects orphaned AC-IDs in Tier 1"
+        test: "test_orphaned_ac_detection"
+      - ac_id: "AC-FR-009-02"
+        description: "Tier reference validation catches broken links"
+        test: "test_broken_tier_references"
+      - ac_id: "AC-FR-009-03"
+        description: "Rule conflict detection identifies contradictions"
+        test: "test_rule_conflict_detection"
+    components:
+      - "BrainConsistencyValidator"
+      - "TierReferenceVerifier"
+    dependencies:
+      - "AR-013"
+
+# =============================================================================
+# NON-FUNCTIONAL REQUIREMENTS
+# =============================================================================
+
+non_functional_requirements:
+  NFR-005:
+    id: "NFR-005"
+    title: "Orchestrator Plugin Performance"
+    status: "NOT_STARTED"
+    priority: "MEDIUM"
+    description: |
+      Orchestrator plugins must perform within acceptable bounds:
+      - Orchestrator registration: <50ms
+      - MCP tool exposure: <100ms
+      - Governance context injection: <10ms per tier
+      - Plugin discovery scan: <500ms (max 1000 plugins)
+    acceptance_criteria:
+      - ac_id: "AC-NFR-005-01"
+        description: "Plugin registration benchmark <50ms"
+        test: "test_plugin_registration_performance"
+      - ac_id: "AC-NFR-005-02"
+        description: "Governance context injection <10ms per tier"
+        test: "test_governance_context_performance"
+      - ac_id: "AC-NFR-005-03"
+        description: "Plugin discovery scan <500ms"
+        test: "test_plugin_discovery_performance"
+    components:
+      - "PerformanceBenchmarks"
+    dependencies:
+      - "AR-012"
+
+  NFR-006:
+    id: "NFR-006"
+    title: "Brain Tier Extensibility"
+    status: "NOT_STARTED"
+    priority: "MEDIUM"
+    description: |
+      Brain tiers must support dynamic content addition without code changes:
+      - New YAML files in tier directories automatically loaded
+      - No cache invalidation delay (streaming load)
+      - Tier content versioning (track evolution)
+      - Tier content validation on load (schema verification)
+    acceptance_criteria:
+      - ac_id: "AC-NFR-006-01"
+        description: "New tier YAML auto-loaded without restart"
+        test: "test_tier_dynamic_loading"
+      - ac_id: "AC-NFR-006-02"
+        description: "Tier content versioning tracks changes"
+        test: "test_tier_versioning"
+      - ac_id: "AC-NFR-006-03"
+        description: "Invalid tier content rejected with helpful error"
+        test: "test_tier_schema_validation"
+    components:
+      - "DynamicTierLoader"
+      - "TierVersioning"
+    dependencies:
+      - "AR-013"
+
+# =============================================================================
+# DOMAIN-SPECIFIC ORCHESTRATORS (4-Phase Implementation)
+# =============================================================================
+
+orchestrator_implementations:
+  phase_1_tdd:
+    name: "TDD Orchestrator"
+    purpose: "Test-Driven Development workflow automation"
+    tier_dependencies:
+      - tier: 0
+        rules: "test-naming", "test-coverage", "assertion-patterns"
+      - tier: 1
+        ac_ids: "AC-FR-*-01, AC-FR-*-02"
+      - tier: 2
+        templates: "test-result", "coverage-report"
+    ac_ids:
+      - "AC-ORCH-TDD-01"
+      - "AC-ORCH-TDD-02"
+      - "AC-ORCH-TDD-03"
+    
+  phase_2_planning:
+    name: "Planning Orchestrator"
+    purpose: "Acceptance Criteria planning and scope management"
+    tier_dependencies:
+      - tier: 0
+        rules: "ac-completeness", "dependency-checking", "scope-limits"
+      - tier: 1
+        ac_ids: "AC-AR-*, AC-FR-*, AC-NFR-*"
+      - tier: 2
+        templates: "plan-analysis", "dependency-graph"
+    ac_ids:
+      - "AC-ORCH-PLAN-01"
+      - "AC-ORCH-PLAN-02"
+      - "AC-ORCH-PLAN-03"
+    
+  phase_3_ado:
+    name: "Azure DevOps Orchestrator"
+    purpose: "Work item synchronization and pipeline orchestration"
+    tier_dependencies:
+      - tier: 0
+        rules: "work-item-format", "pipeline-safety"
+      - tier: 1
+        ac_ids: "AC-AR-*, AC-FR-*"
+      - tier: 2
+        templates: "ado-sync", "pipeline-status"
+    ac_ids:
+      - "AC-ORCH-ADO-01"
+      - "AC-ORCH-ADO-02"
+      - "AC-ORCH-ADO-03"
+    
+  phase_4_interaction:
+    name: "User Interaction Orchestrator"
+    purpose: "Multi-turn conversation management and intent classification"
+    tier_dependencies:
+      - tier: 0
+        rules: "conversation-history", "intent-validation"
+      - tier: 1
+        ac_ids: "AC-VALIDATE-*"
+      - tier: 2
+        templates: "conversation-summary", "intent-clarification"
+    ac_ids:
+      - "AC-ORCH-INTERACTION-01"
+      - "AC-ORCH-INTERACTION-02"
+      - "AC-ORCH-INTERACTION-03"
+
+# =============================================================================
+# ACCEPTANCE CRITERIA
+# =============================================================================
+
+acceptance_criteria:
+  AR-012:
+    - ac_id: "AC-AR-012-01"
+      title: "Base Orchestrator Abstract Class"
+      description: |
+        Implement OrchestratorBase abstract class with:
+        - execute() method (abstract)
+        - validate_context() hook
+        - on_start() hook
+        - on_complete() hook
+        - get_tier_access() method returning accessible tiers
+      test_file: "tests/unit/test_orchestrator_base.py"
+      test_name: "test_orchestrator_base_interface"
+      components_created:
+        - "src/core/orchestrator_base.py"
+      
+    - ac_id: "AC-AR-012-02"
+      title: "@orchestrator Decorator Auto-Registration"
+      description: |
+        Decorator that:
+        - Registers orchestrator in OrchestratorRegistry
+        - Extracts tier dependencies from class definition
+        - Injects governance context on instantiation
+        - Exposes execute() method signature to MCP
+      test_file: "tests/unit/test_orchestrator_decorator.py"
+      test_name: "test_orchestrator_decorator_registration"
+      components_created:
+        - "src/core/decorators/orchestrator.py"
+      
+    - ac_id: "AC-AR-012-03"
+      title: "Orchestrator Tier Dependency Declaration"
+      description: |
+        Allow orchestrators to declare:
+        - Tier access requirements (0/1/2/3)
+        - Required SKULL rules
+        - Required AC-ID types
+        - Validation: declaration must match actual usage or reject at registration
+      test_file: "tests/unit/test_orchestrator_tier_access.py"
+      test_name: "test_orchestrator_tier_dependency"
+      components_created:
+        - "src/core/tier_access_control.py"
+
+  AR-013:
+    - ac_id: "AC-AR-013-01"
+      title: "Tier 0: Domain-Specific SKULL Rules"
+      description: |
+        Load domain-specific governance rules into Tier 0:
+        - Add rule files: cortex-brain/tier0/domains/*.yaml
+        - Domains: tdd, planning, ado, interaction, infrastructure
+        - Rules: 5+ rules per domain covering security, performance, compliance
+        - Verify: Zero hardcoded rules in orchestrators
+      test_file: "tests/unit/test_brain_tier0_domains.py"
+      test_name: "test_tier0_domain_rules_loaded"
+      components_created:
+        - "cortex-brain/tier0/domains/tdd-rules.yaml"
+        - "cortex-brain/tier0/domains/planning-rules.yaml"
+        - "cortex-brain/tier0/domains/ado-rules.yaml"
+        - "cortex-brain/tier0/domains/interaction-rules.yaml"
+      
+    - ac_id: "AC-AR-013-02"
+      title: "Tier 1: AC-to-Domain Mappings"
+      description: |
+        Create queryable AC-to-domain mappings:
+        - Schema: domain → [ac_ids], ac_id → [domains]
+        - Populate: All existing AC-IDs categorized
+        - Index: SQLite indexes for fast lookup
+        - Verify: No orphaned AC-IDs
+      test_file: "tests/unit/test_brain_tier1_mappings.py"
+      test_name: "test_tier1_ac_domain_mappings"
+      components_created:
+        - "cortex-brain/tier1/domain-mappings.yaml"
+      
+    - ac_id: "AC-AR-013-03"
+      title: "Tier 2: Response Templates with Inheritance"
+      description: |
+        Implement template inheritance for response templates:
+        - Base templates: cortex-brain/tier2/base/
+        - Domain templates: cortex-brain/tier2/domains/
+        - Inheritance: domain templates extend base templates
+        - Verification: All templates validate against schema
+      test_file: "tests/unit/test_brain_tier2_templates.py"
+      test_name: "test_tier2_template_inheritance"
+      components_created:
+        - "cortex-brain/tier2/base/*.yaml"
+        - "cortex-brain/tier2/domains/tdd/*.yaml"
+        - "cortex-brain/tier2/domains/planning/*.yaml"
+
+  AR-014:
+    - ac_id: "AC-AR-014-01"
+      title: "Locked Phase Immutability Enforcement"
+      description: |
+        Prevent modifications to locked phases:
+        - Detect: phase_tracker.PHASE-*.locked == true
+        - Block: Any modification to AC-IDs in locked phase
+        - Audit: Log attempt with AI agent identity
+        - Guarantee: locked: true means read-only forever
+      test_file: "tests/unit/test_mutation_guard.py"
+      test_name: "test_locked_phase_immutable"
+      components_created:
+        - "src/core/mutation_guard.py"
+      
+    - ac_id: "AC-AR-014-02"
+      title: "AC Completion Audit Requirement"
+      description: |
+        Enforce minimum audit entries for AC completion:
+        - Require: START, EXECUTE, COMPLETE entries in audit_log
+        - Validate: Before marking AC-ID status: COMPLETED
+        - Reject: Attempt to complete AC-ID without MIN 3 entries
+        - Audit: Log all completion attempts (successful and rejected)
+      test_file: "tests/unit/test_audit_required_validator.py"
+      test_name: "test_ac_completion_audit_requirement"
+      components_created:
+        - "src/core/audit_required_validator.py"
+      
+    - ac_id: "AC-AR-014-03"
+      title: "Holistic Dependency Validation"
+      description: |
+        Validate all phase dependencies before allowing changes:
+        - Detect: Change to AC-ID dependency
+        - Validate: No broken dependencies in downstream phases
+        - Check: All requires conditions still met
+        - Reject: Change if dependency chain broken
+      test_file: "tests/unit/test_dependency_validator.py"
+      test_name: "test_holistic_dependency_validation"
+      components_created:
+        - "src/core/dependency_validator.py"
+
+  AR-015:
+    - ac_id: "AC-AR-015-01"
+      title: "Vision Mutation Audit Tracking"
+      description: |
+        Track all cortex-vision.yaml changes:
+        - Log: Every mutation with timestamp and agent identity
+        - Capture: Impact analysis (orchestrators affected, tiers affected)
+        - Validate: Change against phase_tracker consistency
+        - Archive: Old versions in .github/evidence/vision-history/
+      test_file: "tests/unit/test_vision_mutation_audit.py"
+      test_name: "test_vision_mutation_audit"
+      components_created:
+        - "src/core/vision_mutation_tracker.py"
+      
+    - ac_id: "AC-AR-015-02"
+      title: "Tier-Orchestrator Dependency Registry"
+      description: |
+        Maintain queryable registry:
+        - Schema: tier → [orchestrators], orchestrator → [tiers]
+        - Load: From @orchestrator decorator declarations
+        - Query: What orchestrators access tier X? What tiers does orchestrator Y access?
+        - Verify: No tier 0 modifications by non-core orchestrators
+      test_file: "tests/unit/test_tier_orchestrator_registry.py"
+      test_name: "test_tier_orchestrator_dependency_registry"
+      components_created:
+        - "src/core/dependency_registry.py"
+      
+    - ac_id: "AC-AR-015-03"
+      title: "Vision Rollback Capability"
+      description: |
+        Enable rollback of vision changes:
+        - Capture: Before/after state of cortex-vision.yaml
+        - Store: In version control with tagged commits
+        - Test: Rollback to previous vision version
+        - Validate: Rollback doesn't break phase_tracker
+      test_file: "tests/unit/test_vision_rollback.py"
+      test_name: "test_vision_rollback"
+      components_created: []
+
+  FR-008:
+    - ac_id: "AC-FR-008-01"
+      title: "E2E Orchestrator Plugin Test"
+      description: |
+        Create and test minimal orchestrator that:
+        1. Inherits from OrchestratorBase
+        2. Declares tier dependencies
+        3. Decorated with @orchestrator
+        4. Registered in OrchestratorRegistry
+        5. Exposed as MCP tool
+        6. Executed via MCP with governance context
+        7. Audit trail captures START → EXECUTE → COMPLETE
+      test_file: "tests/integration/test_e2e_orchestrator_plugin.py"
+      test_name: "test_e2e_orchestrator_plugin"
+      components_created:
+        - "tests/fixtures/minimal_orchestrator.py"
+      
+    - ac_id: "AC-FR-008-02"
+      title: "Orchestrator Execution Audit Trail"
+      description: |
+        Verify audit trail captures orchestrator lifecycle:
+        - START: Before execute()
+        - EXECUTE: During execute() (progress updates)
+        - COMPLETE: After execute() with result summary
+        - Verify: Timestamp, status, result, error (if any)
+      test_file: "tests/integration/test_orchestrator_audit_trail.py"
+      test_name: "test_orchestrator_execution_audit"
+      components_created: []
+      
+    - ac_id: "AC-FR-008-03"
+      title: "Governance Context Availability"
+      description: |
+        Verify orchestrator can access all governance tiers:
+        - Tier 0: SKULL rules for domain
+        - Tier 1: AC-IDs and tracking
+        - Tier 2: Response templates
+        - Tier 3: Knowledge library
+        - Verify: All tiers accessible via get_tier_access()
+      test_file: "tests/integration/test_orchestrator_governance_context.py"
+      test_name: "test_orchestrator_governance_context"
+      components_created: []
+
+  FR-009:
+    - ac_id: "AC-FR-009-01"
+      title: "Orphaned AC-ID Detection"
+      description: |
+        Detect AC-IDs not referenced in any tier:
+        - Query: SELECT ac_id FROM phase_tracker WHERE ac_id NOT IN (SELECT ac_id FROM tier1_mappings)
+        - Validation: All 101 AC-IDs must be in Tier 1
+        - Fail: If any orphaned AC-IDs found
+      test_file: "tests/unit/test_brain_consistency.py"
+      test_name: "test_orphaned_ac_detection"
+      components_created:
+        - "src/infrastructure/brain_consistency_validator.py"
+      
+    - ac_id: "AC-FR-009-02"
+      title: "Broken Tier References Detection"
+      description: |
+        Detect tier references to non-existent items:
+        - Check: All Tier 1 references to Tier 0 rules exist
+        - Check: All Tier 2 templates reference valid AC-ID types
+        - Check: All Tier 3 links reference valid domains
+        - Fail: If any broken references found
+      test_file: "tests/unit/test_tier_reference_verification.py"
+      test_name: "test_broken_tier_references"
+      components_created: []
+      
+    - ac_id: "AC-FR-009-03"
+      title: "Rule Conflict Detection"
+      description: |
+        Identify contradictory governance rules:
+        - Detect: Two rules with conflicting requirements (e.g., "must use X" and "must not use X")
+        - Classify: Conflict severity (CRITICAL, HIGH, MEDIUM)
+        - Report: With conflicting rules listed
+        - Fail: If CRITICAL conflicts found
+      test_file: "tests/unit/test_rule_conflict_detection.py"
+      test_name: "test_rule_conflict_detection"
+      components_created: []
+
+  NFR-005:
+    - ac_id: "AC-NFR-005-01"
+      title: "Plugin Registration Performance"
+      description: |
+        Benchmark plugin registration:
+        - Test: Register 100 plugins sequentially
+        - Measure: Average time per plugin
+        - Requirement: <50ms per plugin
+        - Pass: If avg <50ms
+      test_file: "tests/performance/test_plugin_performance.py"
+      test_name: "test_plugin_registration_performance"
+      components_created: []
+      
+    - ac_id: "AC-NFR-005-02"
+      title: "Governance Context Injection Performance"
+      description: |
+        Benchmark context injection:
+        - Test: Inject context for all 4 tiers
+        - Measure: Time per tier injection
+        - Requirement: <10ms per tier
+        - Pass: If all tiers <10ms
+      test_file: "tests/performance/test_governance_context_performance.py"
+      test_name: "test_governance_context_performance"
+      components_created: []
+      
+    - ac_id: "AC-NFR-005-03"
+      title: "Plugin Discovery Performance"
+      description: |
+        Benchmark plugin discovery scan:
+        - Test: Discover 1000 mock plugins
+        - Measure: Total discovery time
+        - Requirement: <500ms
+        - Pass: If discovery <500ms
+      test_file: "tests/performance/test_plugin_discovery_performance.py"
+      test_name: "test_plugin_discovery_performance"
+      components_created: []
+
+  NFR-006:
+    - ac_id: "AC-NFR-006-01"
+      title: "Dynamic Tier Content Loading"
+      description: |
+        Verify new tier files auto-loaded:
+        - Create: New YAML file in cortex-brain/tier0/domains/
+        - Verify: Loaded without restart
+        - Measure: Load latency <100ms
+        - Pass: If content available in <100ms
+      test_file: "tests/unit/test_dynamic_tier_loading.py"
+      test_name: "test_tier_dynamic_loading"
+      components_created:
+        - "src/core/dynamic_tier_loader.py"
+      
+    - ac_id: "AC-NFR-006-02"
+      title: "Tier Content Versioning"
+      description: |
+        Track tier content evolution:
+        - Capture: Version hash for each tier file
+        - Store: Version history in SQLite
+        - Query: What changed in tier 0 between version X and Y?
+        - Verify: No version loss or corruption
+      test_file: "tests/unit/test_tier_versioning.py"
+      test_name: "test_tier_versioning"
+      components_created:
+        - "src/infrastructure/tier_versioning.py"
+      
+    - ac_id: "AC-NFR-006-03"
+      title: "Tier Schema Validation on Load"
+      description: |
+        Reject invalid tier content:
+        - Validate: YAML syntax, required fields, type checks
+        - On error: Log detailed schema validation error
+        - Fail: Don't load invalid tier content
+        - Pass: If invalid content rejected with helpful error
+      test_file: "tests/unit/test_tier_schema_validation.py"
+      test_name: "test_tier_schema_validation"
+      components_created: []
+
+# =============================================================================
+# DAY-BY-DAY BREAKDOWN
+# =============================================================================
+
+days:
+  day_1:
+    title: "Orchestrator Plugin Framework Foundation"
+    focus:
+      - "AR-012: Orchestrator Plugin Framework"
+    
+    tasks:
+      - task_id: "TASK-VISION-01-01"
+        title: "OrchestratorBase Abstract Class"
+        requirement_id: "AC-AR-012-01"
+        components:
+          - "src/core/orchestrator_base.py"
+        files_to_create:
+          - "src/core/orchestrator_base.py"
+        acceptance_criteria:
+          - ac_id: "AC-AR-012-01"
+            description: "Base class with lifecycle hooks"
+      
+      - task_id: "TASK-VISION-01-02"
+        title: "@orchestrator Decorator Implementation"
+        requirement_id: "AC-AR-012-02"
+        components:
+          - "src/core/decorators/orchestrator.py"
+        files_to_create:
+          - "src/core/decorators/orchestrator.py"
+        acceptance_criteria:
+          - ac_id: "AC-AR-012-02"
+            description: "Decorator auto-registers and injects context"
+
+  day_2:
+    title: "Orchestrator Tier Access Control"
+    focus:
+      - "AR-012: Tier Dependency Declaration"
+    
+    tasks:
+      - task_id: "TASK-VISION-02-01"
+        title: "Tier Access Control System"
+        requirement_id: "AC-AR-012-03"
+        components:
+          - "src/core/tier_access_control.py"
+        files_to_create:
+          - "src/core/tier_access_control.py"
+        acceptance_criteria:
+          - ac_id: "AC-AR-012-03"
+            description: "Tier dependencies declared and validated"
+
+  day_3_5:
+    title: "Brain Tier Population (3 Days)"
+    focus:
+      - "AR-013: Brain Tier Activation"
+    
+    tasks:
+      - task_id: "TASK-VISION-03-01"
+        title: "Domain-Specific SKULL Rules (Tier 0)"
+        requirement_id: "AC-AR-013-01"
+        components: []
+        files_to_create:
+          - "cortex-brain/tier0/domains/tdd-rules.yaml"
+          - "cortex-brain/tier0/domains/planning-rules.yaml"
+          - "cortex-brain/tier0/domains/ado-rules.yaml"
+          - "cortex-brain/tier0/domains/interaction-rules.yaml"
+        acceptance_criteria:
+          - ac_id: "AC-AR-013-01"
+            description: "Domain rules loaded for 4+ domains"
+      
+      - task_id: "TASK-VISION-03-02"
+        title: "AC-to-Domain Mappings (Tier 1)"
+        requirement_id: "AC-AR-013-02"
+        components: []
+        files_to_create:
+          - "cortex-brain/tier1/domain-mappings.yaml"
+        acceptance_criteria:
+          - ac_id: "AC-AR-013-02"
+            description: "All AC-IDs mapped to domains"
+      
+      - task_id: "TASK-VISION-03-03"
+        title: "Response Templates with Inheritance (Tier 2)"
+        requirement_id: "AC-AR-013-03"
+        components: []
+        files_to_create:
+          - "cortex-brain/tier2/base/success-response.yaml"
+          - "cortex-brain/tier2/base/error-response.yaml"
+          - "cortex-brain/tier2/domains/tdd/test-result.yaml"
+          - "cortex-brain/tier2/domains/planning/plan-analysis.yaml"
+        acceptance_criteria:
+          - ac_id: "AC-AR-013-03"
+            description: "Templates with inheritance working"
+
+  day_6_8:
+    title: "Hallucination Prevention Enforcement (3 Days)"
+    focus:
+      - "AR-014: Mutation Guard & Validation"
+    
+    tasks:
+      - task_id: "TASK-VISION-06-01"
+        title: "Phase Lock Immutability"
+        requirement_id: "AC-AR-014-01"
+        components:
+          - "src/core/mutation_guard.py"
+        files_to_create:
+          - "src/core/mutation_guard.py"
+        acceptance_criteria:
+          - ac_id: "AC-AR-014-01"
+            description: "Locked phases read-only"
+      
+      - task_id: "TASK-VISION-06-02"
+        title: "AC Completion Audit Requirement"
+        requirement_id: "AC-AR-014-02"
+        components:
+          - "src/core/audit_required_validator.py"
+        files_to_create:
+          - "src/core/audit_required_validator.py"
+        acceptance_criteria:
+          - ac_id: "AC-AR-014-02"
+            description: "AC completion requires audit entries"
+      
+      - task_id: "TASK-VISION-06-03"
+        title: "Holistic Dependency Validation"
+        requirement_id: "AC-AR-014-03"
+        components:
+          - "src/core/dependency_validator.py"
+        files_to_create:
+          - "src/core/dependency_validator.py"
+        acceptance_criteria:
+          - ac_id: "AC-AR-014-03"
+            description: "Dependency changes validated holistically"
+
+  day_9_11:
+    title: "Vision Evolution Protocol (3 Days)"
+    focus:
+      - "AR-015: Vision Governance"
+    
+    tasks:
+      - task_id: "TASK-VISION-09-01"
+        title: "Vision Mutation Audit Tracking"
+        requirement_id: "AC-AR-015-01"
+        components:
+          - "src/core/vision_mutation_tracker.py"
+        files_to_create:
+          - "src/core/vision_mutation_tracker.py"
+        acceptance_criteria:
+          - ac_id: "AC-AR-015-01"
+            description: "Vision mutations audited"
+      
+      - task_id: "TASK-VISION-09-02"
+        title: "Tier-Orchestrator Dependency Registry"
+        requirement_id: "AC-AR-015-02"
+        components:
+          - "src/core/dependency_registry.py"
+        files_to_create:
+          - "src/core/dependency_registry.py"
+        acceptance_criteria:
+          - ac_id: "AC-AR-015-02"
+            description: "Registry queryable"
+      
+      - task_id: "TASK-VISION-09-03"
+        title: "Vision Rollback Capability"
+        requirement_id: "AC-AR-015-03"
+        components: []
+        files_to_create: []
+        acceptance_criteria:
+          - ac_id: "AC-AR-015-03"
+            description: "Vision rollback tested"
+
+  day_12_15:
+    title: "E2E Orchestrator Validation (4 Days)"
+    focus:
+      - "FR-008: E2E Plugin Test"
+      - "FR-009: Brain Tier Consistency"
+    
+    tasks:
+      - task_id: "TASK-VISION-12-01"
+        title: "Minimal Orchestrator Example"
+        requirement_id: "AC-FR-008-01"
+        components: []
+        files_to_create:
+          - "tests/fixtures/minimal_orchestrator.py"
+        acceptance_criteria:
+          - ac_id: "AC-FR-008-01"
+            description: "E2E test passing"
+      
+      - task_id: "TASK-VISION-12-02"
+        title: "Orchestrator Audit Trail Verification"
+        requirement_id: "AC-FR-008-02"
+        components: []
+        files_to_create: []
+        acceptance_criteria:
+          - ac_id: "AC-FR-008-02"
+            description: "Audit trail captures lifecycle"
+      
+      - task_id: "TASK-VISION-12-03"
+        title: "Governance Context Availability"
+        requirement_id: "AC-FR-008-03"
+        components: []
+        files_to_create: []
+        acceptance_criteria:
+          - ac_id: "AC-FR-008-03"
+            description: "All tiers accessible"
+      
+      - task_id: "TASK-VISION-12-04"
+        title: "Brain Consistency Validation"
+        requirement_id: "AC-FR-009-01, AC-FR-009-02, AC-FR-009-03"
+        components:
+          - "src/infrastructure/brain_consistency_validator.py"
+        files_to_create:
+          - "src/infrastructure/brain_consistency_validator.py"
+        acceptance_criteria:
+          - ac_id: "AC-FR-009-01"
+            description: "No orphaned AC-IDs"
+          - ac_id: "AC-FR-009-02"
+            description: "No broken tier references"
+          - ac_id: "AC-FR-009-03"
+            description: "No rule conflicts"
+
+  day_16_19:
+    title: "Performance & Extensibility (4 Days)"
+    focus:
+      - "NFR-005: Plugin Performance"
+      - "NFR-006: Brain Extensibility"
+    
+    tasks:
+      - task_id: "TASK-VISION-16-01"
+        title: "Plugin Performance Benchmarks"
+        requirement_id: "AC-NFR-005-01, AC-NFR-005-02, AC-NFR-005-03"
+        components: []
+        files_to_create: []
+        acceptance_criteria:
+          - ac_id: "AC-NFR-005-01"
+            description: "Registration <50ms"
+          - ac_id: "AC-NFR-005-02"
+            description: "Context injection <10ms per tier"
+          - ac_id: "AC-NFR-005-03"
+            description: "Discovery <500ms"
+      
+      - task_id: "TASK-VISION-16-02"
+        title: "Dynamic Tier Loading"
+        requirement_id: "AC-NFR-006-01"
+        components:
+          - "src/core/dynamic_tier_loader.py"
+        files_to_create:
+          - "src/core/dynamic_tier_loader.py"
+        acceptance_criteria:
+          - ac_id: "AC-NFR-006-01"
+            description: "Auto-load new tier content"
+      
+      - task_id: "TASK-VISION-16-03"
+        title: "Tier Versioning"
+        requirement_id: "AC-NFR-006-02"
+        components:
+          - "src/infrastructure/tier_versioning.py"
+        files_to_create:
+          - "src/infrastructure/tier_versioning.py"
+        acceptance_criteria:
+          - ac_id: "AC-NFR-006-02"
+            description: "Version history tracked"
+      
+      - task_id: "TASK-VISION-16-04"
+        title: "Tier Schema Validation"
+        requirement_id: "AC-NFR-006-03"
+        components: []
+        files_to_create: []
+        acceptance_criteria:
+          - ac_id: "AC-NFR-006-03"
+            description: "Invalid content rejected"
+
+  day_20_27:
+    title: "Domain Orchestrators Phase 1-4 (8 Days)"
+    focus:
+      - "AC-ORCH-TDD-01, AC-ORCH-TDD-02, AC-ORCH-TDD-03"
+      - "AC-ORCH-PLAN-01, AC-ORCH-PLAN-02, AC-ORCH-PLAN-03"
+      - "AC-ORCH-ADO-01, AC-ORCH-ADO-02, AC-ORCH-ADO-03"
+      - "AC-ORCH-INTERACTION-01, AC-ORCH-INTERACTION-02, AC-ORCH-INTERACTION-03"
+    
+    tasks:
+      - task_id: "TASK-VISION-20-01"
+        title: "TDD Orchestrator Implementation (Day 20-22)"
+        requirement_id: "AC-ORCH-TDD-01, AC-ORCH-TDD-02, AC-ORCH-TDD-03"
+        components:
+          - "src/orchestrators/custom/tdd_orchestrator.py"
+        files_to_create:
+          - "src/orchestrators/custom/tdd_orchestrator.py"
+        acceptance_criteria:
+          - ac_id: "AC-ORCH-TDD-01"
+            description: "TDD orchestrator implemented"
+          - ac_id: "AC-ORCH-TDD-02"
+            description: "Tier dependencies declared"
+          - ac_id: "AC-ORCH-TDD-03"
+            description: "E2E test passing"
+      
+      - task_id: "TASK-VISION-20-02"
+        title: "Planning Orchestrator Implementation (Day 23-24)"
+        requirement_id: "AC-ORCH-PLAN-01, AC-ORCH-PLAN-02, AC-ORCH-PLAN-03"
+        components:
+          - "src/orchestrators/custom/planning_orchestrator.py"
+        files_to_create:
+          - "src/orchestrators/custom/planning_orchestrator.py"
+        acceptance_criteria:
+          - ac_id: "AC-ORCH-PLAN-01"
+            description: "Planning orchestrator implemented"
+          - ac_id: "AC-ORCH-PLAN-02"
+            description: "Tier dependencies declared"
+          - ac_id: "AC-ORCH-PLAN-03"
+            description: "E2E test passing"
+      
+      - task_id: "TASK-VISION-20-03"
+        title: "Azure DevOps Orchestrator Implementation (Day 25)"
+        requirement_id: "AC-ORCH-ADO-01, AC-ORCH-ADO-02, AC-ORCH-ADO-03"
+        components:
+          - "src/orchestrators/custom/ado_orchestrator.py"
+        files_to_create:
+          - "src/orchestrators/custom/ado_orchestrator.py"
+        acceptance_criteria:
+          - ac_id: "AC-ORCH-ADO-01"
+            description: "ADO orchestrator implemented"
+          - ac_id: "AC-ORCH-ADO-02"
+            description: "Tier dependencies declared"
+          - ac_id: "AC-ORCH-ADO-03"
+            description: "E2E test passing"
+      
+      - task_id: "TASK-VISION-20-04"
+        title: "User Interaction Orchestrator Implementation (Day 26-27)"
+        requirement_id: "AC-ORCH-INTERACTION-01, AC-ORCH-INTERACTION-02, AC-ORCH-INTERACTION-03"
+        components:
+          - "src/orchestrators/custom/interaction_orchestrator.py"
+        files_to_create:
+          - "src/orchestrators/custom/interaction_orchestrator.py"
+        acceptance_criteria:
+          - ac_id: "AC-ORCH-INTERACTION-01"
+            description: "Interaction orchestrator implemented"
+          - ac_id: "AC-ORCH-INTERACTION-02"
+            description: "Tier dependencies declared"
+          - ac_id: "AC-ORCH-INTERACTION-03"
+            description: "E2E test passing"
