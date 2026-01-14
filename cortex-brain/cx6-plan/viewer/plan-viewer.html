@@ -412,19 +412,20 @@
                 const tracker = this.data.tracker;
                 let totalCompleted = 0, totalACs = 0, completedPhases = 0;
                 
-                // Use detailed phase_X objects, not summary phases object
-                Object.keys(this.phases).forEach(phaseKey => {
-                    const detailedKey = `phase_${phaseKey}`;
-                    const phase = tracker[detailedKey];
-                    if (phase) {
-                        const acCount = phase.total_ac_count || 0;
-                        if (acCount > 0) {
+                // Iterate through actual phases in tracker (not the definitions)
+                if (tracker.phases) {
+                    Object.keys(tracker.phases).forEach(phaseKey => {
+                        const phase = tracker.phases[phaseKey];
+                        if (phase) {
+                            // Use acs_total if total_ac_count is 0 (for backward compatibility)
+                            const acCount = phase.total_ac_count || phase.acs_total || 0;
                             totalACs += acCount;
                             totalCompleted += phase.completed_count || 0;
+                            
+                            if (phase.status && phase.status.includes('completed')) completedPhases++;
                         }
-                        if (phase.status && phase.status.includes('completed')) completedPhases++;
-                    }
-                });
+                    });
+                }
                 
                 const completionPct = totalACs > 0 ? Math.round((totalCompleted / totalACs) * 100) : 0;
                 const totalPhases = Object.keys(this.phases).length;
@@ -441,19 +442,20 @@
                 const tracker = this.data.tracker;
                 let totalCompleted = 0, totalACs = 0, completedPhases = 0;
                 
-                // Use detailed phase_X objects
-                Object.keys(this.phases).forEach(phaseKey => {
-                    const detailedKey = `phase_${phaseKey}`;
-                    const phase = tracker[detailedKey];
-                    if (phase) {
-                        const acCount = phase.total_ac_count || 0;
-                        if (acCount > 0) {
+                // Iterate through actual phases in tracker (not the definitions)
+                if (tracker.phases) {
+                    Object.keys(tracker.phases).forEach(phaseKey => {
+                        const phase = tracker.phases[phaseKey];
+                        if (phase) {
+                            // Use acs_total if total_ac_count is 0 (for backward compatibility)
+                            const acCount = phase.total_ac_count || phase.acs_total || 0;
                             totalACs += acCount;
                             totalCompleted += phase.completed_count || 0;
+                            
+                            if (phase.status && phase.status.includes('completed')) completedPhases++;
                         }
-                        if (phase.status && phase.status.includes('completed')) completedPhases++;
-                    }
-                });
+                    });
+                }
                 
                 const completionPct = totalACs > 0 ? Math.round((totalCompleted / totalACs) * 100) : 0;
                 const totalPhases = Object.keys(this.phases).length;
@@ -463,15 +465,14 @@
                 document.getElementById('health-subtitle').textContent = `${completedPhases} of ${totalPhases} phases complete`;
                 
                 const phaseMetrics = document.getElementById('phase-metrics');
-                const metricsHTML = Object.keys(this.phases).map(phaseKey => {
-                    const detailedKey = `phase_${phaseKey}`;
-                    const phase = tracker[detailedKey];
+                const metricsHTML = Object.keys(tracker.phases || {}).map(phaseKey => {
+                    const phase = tracker.phases[phaseKey];
                     if (!phase) return '';
                     
-                    const acCount = phase.total_ac_count || 0;
+                    const acCount = phase.total_ac_count || phase.acs_total || 0;
                     const pct = acCount > 0 ? Math.round((phase.completed_count || 0) / acCount * 100) : 0;
                     const statusClass = this.getStatusClass(phase.status);
-                    return `<div style="font-size: var(--font-size-sm);"><div class="flex flex-between"><span>Phase ${phaseKey}</span><span style="color: var(--color-${statusClass}); font-weight: 600;">${pct}%</span></div><div class="progress-bar-container" style="margin-top: 4px;"><div class="progress-bar-fill" style="width: ${pct}%; background: var(--color-${statusClass});"></div></div></div>`;
+                    return `<div style="font-size: var(--font-size-sm);"><div class="flex flex-between"><span>${phaseKey}</span><span style="color: var(--color-${statusClass}); font-weight: 600;">${pct}%</span></div><div class="progress-bar-container" style="margin-top: 4px;"><div class="progress-bar-fill" style="width: ${pct}%; background: var(--color-${statusClass});"></div></div></div>`;
                 }).join('');
                 phaseMetrics.innerHTML = metricsHTML;
             },
@@ -479,11 +480,11 @@
                 const tracker = this.data.tracker;
                 const grid = document.getElementById('phases-grid');
                 
-                // Build phase data from detailed phase_X objects
+                // Build phase data from detailed phase_X objects - check both locations
                 const phaseData = [];
                 Object.keys(this.phases).forEach(phaseKey => {
-                    const detailedKey = `phase_${phaseKey}`;
-                    const detailedPhase = tracker[detailedKey];
+                    const phaseKey_formatted = `phase_${phaseKey}`;
+                    const detailedPhase = (tracker.phases && tracker.phases[phaseKey_formatted]) || tracker[phaseKey_formatted];
                     if (detailedPhase) {
                         phaseData.push([phaseKey, detailedPhase]);
                     }
