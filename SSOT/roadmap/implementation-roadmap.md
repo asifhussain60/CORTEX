@@ -15,6 +15,59 @@
 
 ---
 
+### Week 1 Pre-Tasks (Mon 1/13 Morning) - Folder Structure & Templates Setup
+**Time Budget:** 4 hours | **Tests Required:** 0 (structural)
+
+#### Pre-Task 1: Create Nested Folder Structure
+**Acceptance Criteria:**
+- [ ] All directories created (no files moved yet)
+- [ ] cortex-brain/tier2/response-templates/ with sub-folders (_schema, core, domain, custom)
+- [ ] src/orchestrators/core/, domain/, custom/, middleware/, registry/, response/
+- [ ] src/infrastructure/audit-logger/, governance/, state/, execution/
+- [ ] src/mcp/tools/
+- [ ] tests/unit/, integration/, fixtures/
+- [ ] scripts/admin/, generate/, tools/
+- [ ] Verify no conflicts with existing folders
+- [ ] Ready for file migration (Phase 3)
+
+**Implementation:**
+- Use: PowerShell mkdir commands (provided in folder-structure-design.md)
+- Duration: 30 minutes
+- Verification: Tree command shows complete structure
+
+---
+
+#### Pre-Task 2: Create Standard Response Template Schema
+**Acceptance Criteria:**
+- [ ] File: cortex-brain/tier2/response-templates/_schema/standard-schema.yaml
+- [ ] Content: CORTEX 4.0 schema (extracted from response-templates-v4.yaml)
+- [ ] Includes: mandatory_header, executive_summary, custom_sections sections
+- [ ] Version: 4.6.0
+- [ ] Documentation: Schema comments explaining each field
+
+**Implementation:**
+- Extract from: __backup/cortex-brain/response-templates-v4.yaml
+- Lines: ~150-200 lines
+- Files: standard-schema.yaml (new)
+
+---
+
+#### Pre-Task 3: Create Template Files for Core Orchestrators
+**Acceptance Criteria:**
+- [ ] File: cortex-brain/tier2/response-templates/core/master-orch.yaml (standard template)
+- [ ] File: cortex-brain/tier2/response-templates/core/tdd-master.yaml (custom with test metrics)
+- [ ] File: cortex-brain/tier2/response-templates/core/planning-orch.yaml (standard)
+- [ ] File: cortex-brain/tier2/response-templates/core/governance-orch.yaml (standard)
+- [ ] All reference standard schema
+- [ ] All conform to CORTEX 4.0 mandatory header format
+
+**Implementation:**
+- Create: 4 YAML files (~40 lines each)
+- Content: From custom-response-templates.md examples
+- Verification: YAML validation passes
+
+---
+
 ### Week 1 Day 1 (Mon 1/13) - Governance Foundation
 **Time Budget:** 8 hours | **Tests Required:** 20
 
@@ -353,34 +406,70 @@
 
 ---
 
-### Week 2 Day 4 (Thu 1/23) - Response Templates
-**Time Budget:** 8 hours | **Tests Required:** 30
+### Week 2 Day 4 (Thu 1/23) - Custom Response Templates & Rendering
+**Time Budget:** 8 hours | **Tests Required:** 40
 
-#### Task 4.1: Create Response Template Types
+#### Task 4.1: Create TemplateResolver (Custom Template System)
 **Acceptance Criteria:**
-- [ ] SuccessResponse, ErrorResponse, PartialResponse
-- [ ] JSON serializable
-- [ ] Include execution timing, evidence links
-- [ ] Error messages with recovery suggestions
-- [ ] Unit tests: All response types
+- [ ] Load response templates from YAML files
+- [ ] Validate schema (must match CORTEX 4.0 schema version 4.6.0)
+- [ ] Implement fallback chain: custom → parent → standard
+- [ ] Cache templates in memory (<5ms resolution time)
+- [ ] Handle missing/invalid templates gracefully (fallback to standard)
+- [ ] Unit tests: All fallback scenarios, schema validation, caching
 
 **Implementation:**
-- File: `src/infrastructure/response_template.py` (200 lines)
-- Test file: `tests/test_response_template.py` (300 lines)
+- File: `src/orchestrators/response/template-resolver.py` (200 lines)
+- Dependencies: yaml, pathlib, logging
+- Test file: `tests/unit/test-template-resolver.py` (350 lines)
+- Test coverage: Custom template, fallback chain, invalid schema, missing file
 
 ---
 
-#### Task 4.2: Create Response Rendering
+#### Task 4.2: Update ResponseRenderer for Custom Templates
 **Acceptance Criteria:**
-- [ ] Render response as JSON
-- [ ] Render response as human-readable text (for user display)
-- [ ] Redact secrets in error messages
-- [ ] Include correlation_id for tracing
-- [ ] Unit tests: Rendering accuracy
+- [ ] ResponseRenderer calls TemplateResolver before rendering
+- [ ] Supports custom sections defined in template
+- [ ] Enforces mandatory header and executive summary (CORTEX 4.0)
+- [ ] Custom fields substituted from ExecutionResult metadata
+- [ ] Unit tests: Render success/error/partial with custom template
 
 **Implementation:**
-- File: `src/infrastructure/response_renderer.py` (150 lines)
-- Test file: `tests/test_response_renderer.py` (250 lines)
+- File: `src/orchestrators/response/response-renderer.py` (updated, 250 lines)
+- Dependencies: template-resolver, jinja2 (for template rendering)
+- Test file: `tests/unit/test-response-renderer.py` (400 lines)
+- Test coverage: All response types, custom sections, mandatory validation
+
+---
+
+#### Task 4.3: Create Template Registry (Auto-Discovery)
+**Acceptance Criteria:**
+- [ ] Auto-load all templates from tier2/response-templates/ at startup
+- [ ] Register template for each orchestrator
+- [ ] Detect missing/invalid templates at startup (log, don't crash)
+- [ ] Provide template introspection API: get_template(orchestrator_name)
+- [ ] Unit tests: Discovery, validation, retrieval
+
+**Implementation:**
+- File: `src/orchestrators/registry/template-registry.py` (200 lines)
+- Test file: `tests/unit/test-template-registry.py` (300 lines)
+- Startup integration: Called from MasterOrchestrator.__init__()
+
+---
+
+#### Task 4.4: Integrate Custom Templates into BaseOrchestrator
+**Acceptance Criteria:**
+- [ ] OrchestratorMetadata extended with custom_template: CustomTemplateConfig
+- [ ] CustomTemplateConfig: enabled, path, schema_version, fallback_on_error
+- [ ] BaseOrchestrator.get_metadata() includes custom_template
+- [ ] render_response() uses TemplateResolver
+- [ ] Child orchestrators inherit parent template (if not explicitly overridden)
+- [ ] Unit tests: Metadata, template resolution, inheritance
+
+**Implementation:**
+- File: `src/orchestrators/core/base-orchestrator.py` (updated, 200 lines)
+- Test file: `tests/unit/test-base-orchestrator.py` (updated, 400 lines)
+- Test coverage: Template resolution, inheritance, fallback
 
 ---
 
@@ -635,6 +724,268 @@
 - ✅ Chaos tests pass (random failure scenarios)
 
 **Gate:** User approval before Phase 4
+
+---
+
+## Phase 3.5: Folder Structure Migration (Mid-Week 2 → End of Week 3) - Parallel Track
+
+**Goal:** Reorganize source code into clean nested structure while maintaining development continuity
+
+**Deliverables:** All files migrated, imports updated, SSOT consolidated, 18 root files deleted
+
+**Critical:** This is a PARALLEL track that can be done incrementally without blocking Phase 2-3
+
+---
+
+### Migration Task 1: Pre-Migration Validation (Mon 1/20)
+**Time Budget:** 1 hour
+
+**Acceptance Criteria:**
+- [ ] Create feature branch: `git checkout -b feat/folder-restructure`
+- [ ] Backup all code (git commit)
+- [ ] List all files to be moved (dry-run)
+- [ ] Identify all imports that need updating
+- [ ] Document any dependencies
+
+**Execution:**
+- `git status` (clean)
+- `find src -name "*.py" \| wc -l` (count files)
+- `grep -r "from src\." tests/ \| wc -l` (count imports to update)
+
+---
+
+### Migration Task 2: Create Directory Structure (Tue 1/21)
+**Time Budget:** 1 hour
+
+**Acceptance Criteria:**
+- [ ] All directories created (Phase 1 Pre-Tasks already done)
+- [ ] No file moves yet
+- [ ] Verify structure matches folder-structure-design.md
+- [ ] Backup new structure in git
+
+**Execution:**
+- See folder-structure-design.md Part 3.1 for mkdir commands
+- Run: `tree cortex-brain/`, `tree src/`, `tree tests/` (verify structure)
+- `git add .` (stage empty directories with .gitkeep)
+
+---
+
+### Migration Task 3: Migrate Files by Category (Wed 1/22 - Fri 1/24)
+**Time Budget:** 6 hours total (1-2 hours per category, parallel with Phase 2)
+
+**Category 1: Response Templates (Wed 1/22, 30 min)**
+- Move: cortex-brain/response-templates-v4.yaml → tier2/response-templates/_schema/standard-schema.yaml
+- Create: tier2/response-templates/core/*.yaml (from custom-response-templates.md)
+- Verify: No YAML syntax errors
+- Commit: "chore(templates): move response templates to tier2"
+
+**Category 2: Orchestrator Files (Wed 1/22 - 1/23, 2 hours)**
+- Move: src/orchestrators/master.py → src/orchestrators/core/master-orchestrator.py
+- Move: src/orchestrators/tdd/ files → src/orchestrators/core/tdd-master-orchestrator.py
+- Move: src/orchestrators/planning/ → src/orchestrators/core/planning-orchestrator.py
+- Move: src/orchestrators/ado/ → src/orchestrators/domain/ado-orchestrator.py
+- Move: src/orchestrators/vacuum/ → src/orchestrators/domain/vacuum-orchestrator.py
+- Commit: "chore(orchestrators): reorganize into core/domain/custom"
+
+**Category 3: Infrastructure Files (Thu 1/23, 1 hour)**
+- Move: src/infrastructure/audit-*.py → src/infrastructure/audit-logger/
+- Move: src/infrastructure/governance-*.py → src/infrastructure/governance/
+- Move: src/infrastructure/state-*.py → src/infrastructure/state/
+- Move: src/infrastructure/execution-*.py → src/infrastructure/execution/
+- Commit: "chore(infrastructure): organize by subdomain"
+
+**Category 4: Test Files (Thu 1/23 - Fri 1/24, 1 hour)**
+- Move: tests/test-*.py → tests/unit/test-*.py
+- Move: tests/integration-*.py → tests/integration/
+- Move: tests/fixtures/*.py → tests/fixtures/
+- Commit: "chore(tests): organize by layer"
+
+**Category 5: Scripts (Fri 1/24, 30 min)**
+- Move: scripts/admin-*.py → scripts/admin/
+- Move: scripts/gen-*.py → scripts/generate/
+- Move: scripts/*.sh → scripts/tools/
+- Commit: "chore(scripts): organize by purpose"
+
+---
+
+### Migration Task 4: Update All Imports (Fri 1/24 - Mon 1/27)
+**Time Budget:** 4 hours
+
+**Acceptance Criteria:**
+- [ ] All Python imports point to new paths
+- [ ] No "module not found" errors
+- [ ] All tests still pass
+- [ ] No circular imports
+
+**Execution (Batch by Category):**
+
+**Batch 1: Orchestrator Imports** (Fri 1/24, 1 hour)
+```
+Find: grep -r "from src\.orchestrators\.master" src/ tests/
+Replace: from src.orchestrators.core.master_orchestrator
+Similar for: tdd_master, planning, ado, vacuum, etc.
+Test: python -m pytest tests/ -q --co (check imports load)
+Commit: "refactor(imports): update orchestrator imports"
+```
+
+**Batch 2: Infrastructure Imports** (Sat 1/25, 1 hour)
+```
+Find: grep -r "from src\.infrastructure\.audit" src/ tests/
+Replace: from src.infrastructure.audit_logger.logger (or appropriate submodule)
+Similar for: governance, state, execution, etc.
+Test: python -m pytest tests/ -q --co
+Commit: "refactor(imports): update infrastructure imports"
+```
+
+**Batch 3: Test Imports** (Sun 1/26, 1 hour)
+```
+Find: grep -r "from tests\." tests/
+Replace: Adjust based on new structure
+Test: python -m pytest tests/ -q --co
+Commit: "refactor(imports): update test imports"
+```
+
+**Batch 4: Validation** (Mon 1/27, 1 hour)
+```
+Run: python -m pytest tests/unit/ -v (all unit tests)
+Run: python -m pytest tests/integration/ -v (all integration tests)
+Verify: No import errors, all tests still pass
+Commit: "refactor(imports): validate all imports working"
+```
+
+---
+
+### Migration Task 5: SSOT Documentation Consolidation (Mon 1/27 - Tue 1/28)
+**Time Budget:** 2 hours
+
+**Acceptance Criteria:**
+- [ ] All decision/analysis from SSOT/ root files verified in roadmap/
+- [ ] 18 root files ready for deletion
+- [ ] roadmap/ folder is now SSOT
+- [ ] quick-reference.md, README.md, DOCUMENT-INDEX.md kept as reference
+
+**Verification:**
+- Read: Each SSOT root file
+- Verify: Content consolidated in roadmap/ files
+- Checklist: 00-START-HERE.md → covered in framework-arch-spec.md
+- Checklist: cortex7-arch-decisions.md → covered in consolidated-requirements.md + framework-arch-spec.md
+- Checklist: All 18 files accounted for
+
+**Commit:** "docs(SSOT): verify all consolidation complete"
+
+---
+
+### Migration Task 6: Delete Consolidated SSOT Root Files (Tue 1/28)
+**Time Budget:** 30 minutes
+
+**Acceptance Criteria:**
+- [ ] 18 root files deleted (listed below)
+- [ ] 3 reference files kept (quick-reference.md, README.md, DOCUMENT-INDEX.md)
+- [ ] roadmap/ is now the primary documentation folder
+- [ ] Git diff shows clean deletion (no accidental changes)
+
+**Delete These 18 Files:**
+1. SSOT/00-START-HERE.md
+2. SSOT/anti-breakage-executive-summary.md
+3. SSOT/before-and-after.md
+4. SSOT/cortex7-arch-decisions.md
+5. SSOT/CORTEX7-DOR-ASSESSMENT.md
+6. SSOT/cortex7-governance-spec.md
+7. SSOT/cortex7-ssot-reqs.yaml
+8. SSOT/executive-summary.md
+9. SSOT/findings-and-design-decision.md
+10. SSOT/governance-registry-implementation.md
+11. SSOT/governance-rule-evaluation.md
+12. SSOT/governance-wiring-solution.md
+13. SSOT/SOLUTION-COMPLETE.md
+14. SSOT/what-prevents-breakage.md
+15. SSOT/safety-executive-summary.md
+
+**Keep These 3 Files (Reference):**
+- SSOT/quick-reference.md
+- SSOT/README.md
+- SSOT/DOCUMENT-INDEX.md
+
+**Execution:**
+```powershell
+Remove-Item SSOT\00-START-HERE.md
+Remove-Item SSOT\anti-breakage-executive-summary.md
+# ... (repeat for all 15 files)
+
+# Verify
+Get-ChildItem SSOT\*.md  # Should show only 3 files
+git status  # Should show 15 deletions
+git add SSOT/
+git commit -m "docs(SSOT): delete consolidated root files, roadmap/ now primary"
+```
+
+---
+
+### Migration Task 7: Final Validation & Cleanup (Tue 1/28 - Wed 1/29)
+**Time Budget:** 2 hours
+
+**Acceptance Criteria:**
+- [ ] All tests passing (unit, integration, platform)
+- [ ] Code coverage ≥95%
+- [ ] No import errors
+- [ ] Git history clean (one commit per category + consolidation + cleanup)
+- [ ] No unintended files deleted
+- [ ] Cross-platform tested (Windows + macOS)
+
+**Execution:**
+```bash
+# Run all tests
+python -m pytest tests/ -v --cov=src/
+
+# Check for broken imports
+python -m py_compile src/**/*.py
+
+# Validate git log
+git log --oneline feat/folder-restructure | head -10
+
+# Verify structure
+tree src/ -L 3
+tree cortex-brain/ -L 3
+tree SSOT/ -L 2
+```
+
+---
+
+### Migration Task 8: Merge & Close (Wed 1/29)
+**Time Budget:** 30 minutes
+
+**Acceptance Criteria:**
+- [ ] Feature branch ready for merge
+- [ ] Pull request created with description
+- [ ] User review + approval
+- [ ] Merged to main (CORTEX6)
+
+**Execution:**
+```bash
+git push origin feat/folder-restructure
+# Create PR on GitHub
+
+# After approval:
+git checkout main
+git merge feat/folder-restructure
+git push origin main
+```
+
+---
+
+### Migration Success Criteria
+- ✅ All directories created and organized
+- ✅ All files migrated to new locations
+- ✅ All imports updated and working
+- ✅ All tests passing (500+)
+- ✅ Code coverage ≥95%
+- ✅ Cross-platform tested
+- ✅ 18 SSOT root files deleted
+- ✅ roadmap/ is now the primary documentation
+- ✅ Git log shows clean incremental commits
+- ✅ No files lost (checksum verification)
+
+**Note:** This migration is a PARALLEL track. It doesn't block Phase 2-4 implementation. Can be done incrementally alongside other phases. Tests should be updated as files are migrated to avoid breaking anything.
 
 ---
 
