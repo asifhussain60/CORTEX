@@ -1,14 +1,13 @@
 # =============================================================================
 # PHASE 01: FOUNDATION
 # =============================================================================
-# Duration: 5 days
 # Focus: 3-Tier Governance, SQLite Index, Audit-First, State Machine
 # =============================================================================
 
 metadata:
   phase_id: "PHASE-01"
   title: "Foundation"
-  duration: "5 days"
+  description: "3-Tier Governance, SQLite Index, Audit-First Pattern, State Machine"
   status: "NOT_STARTED"
   start_date: null
   end_date: null
@@ -22,29 +21,24 @@ metadata:
 days:
   day_0:
     title: "Pre-Tasks"
-    duration: "4 hours"
     tasks:
       - task_id: "TASK-01-00-01"
         title: "Create nested folder structure"
-        effort: "1 hour"
         status: "NOT_STARTED"
         acceptance_criteria: []
         
       - task_id: "TASK-01-00-02"
         title: "Create response template schema"
-        effort: "2 hours"
         status: "NOT_STARTED"
         acceptance_criteria: []
         
       - task_id: "TASK-01-00-03"
         title: "Create initial template files"
-        effort: "1 hour"
         status: "NOT_STARTED"
         acceptance_criteria: []
 
   day_1:
     title: "Governance Foundation"
-    duration: "8 hours"
     focus:
       - "AR-001: 3-Tier Governance Model"
       - "AR-005: Production Mode Control"
@@ -54,7 +48,6 @@ days:
       - task_id: "TASK-01-01-01"
         title: "Implement 3-Tier Governance Model"
         requirement_id: "AR-001"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components:
           - "GovernanceRegistry"
@@ -85,7 +78,6 @@ days:
       - task_id: "TASK-01-01-02"
         title: "Implement Production Mode Control"
         requirement_id: "AR-005"
-        effort: "2 hours"
         status: "NOT_STARTED"
         components:
           - "ModeController"
@@ -114,7 +106,6 @@ days:
       - task_id: "TASK-01-01-03"
         title: "Start Audit-First Pattern Implementation"
         requirement_id: "FR-001"
-        effort: "2 hours"
         status: "NOT_STARTED"
         components:
           - "EnhancedAuditLogger"
@@ -131,7 +122,6 @@ days:
 
   day_2:
     title: "Data Layer"
-    duration: "8 hours"
     sequencing_note: "AR-003 depends on AR-002 - must complete AR-002 before starting AR-003"
     focus:
       - "AR-002: SQLite-Based AC Index"
@@ -142,7 +132,6 @@ days:
       - task_id: "TASK-01-02-01"
         title: "Implement SQLite-Based AC Index"
         requirement_id: "AR-002"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components:
           - "DatabaseManager"
@@ -171,7 +160,6 @@ days:
       - task_id: "TASK-01-02-02"
         title: "Implement Auto-Wired Governance Decorators"
         requirement_id: "AR-003"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components:
           - "GovernanceDecorator"
@@ -203,7 +191,6 @@ days:
       - task_id: "TASK-01-02-03"
         title: "Implement Tiered Logging Architecture"
         requirement_id: "AR-004"
-        effort: "2 hours"
         status: "NOT_STARTED"
         components:
           - "TieredLogger"
@@ -231,7 +218,6 @@ days:
 
   day_3:
     title: "State Management"
-    duration: "8 hours"
     focus:
       - "FR-003: State Machine Management"
       - "FR-001: Audit-First Pattern (Continued)"
@@ -240,7 +226,6 @@ days:
       - task_id: "TASK-01-03-01"
         title: "Implement State Machine Management"
         requirement_id: "FR-003"
-        effort: "6 hours"
         status: "NOT_STARTED"
         components:
           - "LifecycleManager"
@@ -271,7 +256,6 @@ days:
       - task_id: "TASK-01-03-02"
         title: "Complete Audit-First Pattern"
         requirement_id: "FR-001"
-        effort: "2 hours"
         status: "NOT_STARTED"
         components:
           - "HashChainManager"
@@ -293,7 +277,6 @@ days:
 
   day_4:
     title: "Evidence & Progress"
-    duration: "8 hours"
     focus:
       - "FR-004: Evidence Bundle Capture"
       - "FR-005: Progress Tracking"
@@ -303,7 +286,6 @@ days:
       - task_id: "TASK-01-04-01"
         title: "Implement Evidence Bundle Capture"
         requirement_id: "FR-004"
-        effort: "6 hours"
         status: "NOT_STARTED"
         components:
           - "EvidenceBundleGenerator"
@@ -332,7 +314,6 @@ days:
       - task_id: "TASK-01-04-02"
         title: "Implement Progress Tracking"
         requirement_id: "FR-005"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components:
           - "ProgressTrackerManager"
@@ -363,16 +344,14 @@ days:
 
   day_5:
     title: "Continuation & Adaptation"
-    duration: "8 hours"
     focus:
       - "FR-006: Autonomous Continuation"
-      - "AR-008: CORTEX 6.0 Adaptation"
+      - "AR-008: Legacy Pattern Adaptation"
     
     tasks:
       - task_id: "TASK-01-05-01"
         title: "Implement Autonomous Continuation"
         requirement_id: "FR-006"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components:
           - "CheckpointManager"
@@ -399,9 +378,8 @@ days:
             test_name: "test_partial_completion"
 
       - task_id: "TASK-01-05-02"
-        title: "CORTEX 6.0 Adaptation"
+        title: "Legacy Pattern Adaptation"
         requirement_id: "AR-008"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components:
           - "CompatibilityLayer"
@@ -412,17 +390,17 @@ days:
         files_to_modify: []
         acceptance_criteria:
           - ac_id: "AC-AR-008-01"
-            description: "Evidence bundle schema compatible with CORTEX 6.0"
+            description: "Evidence bundle schema compatible with established patterns"
             status: "NOT_STARTED"
             test_file: "tests/unit/test_compatibility.py"
             test_name: "test_evidence_schema_compatibility"
           - ac_id: "AC-AR-008-02"
-            description: "Audit log format matches CORTEX 6.0"
+            description: "Audit log format follows established patterns"
             status: "NOT_STARTED"
             test_file: "tests/unit/test_compatibility.py"
             test_name: "test_audit_format_compatibility"
           - ac_id: "AC-AR-008-03"
-            description: "Migration path documented for CORTEX 6.0 users"
+            description: "Migration path documented for existing users"
             status: "NOT_STARTED"
             test_file: "tests/unit/test_compatibility.py"
             test_name: "test_migration_docs_exist"

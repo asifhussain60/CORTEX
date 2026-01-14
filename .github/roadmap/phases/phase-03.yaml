@@ -1,7 +1,6 @@
 # =============================================================================
 # PHASE 03: SAFETY & OBSERVABILITY
 # =============================================================================
-# Duration: 5 days
 # Focus: Reliability (NFR-002), Observability (NFR-004)
 #        Error Handling, Dashboard
 # =============================================================================
@@ -9,7 +8,7 @@
 metadata:
   phase_id: "PHASE-03"
   title: "Safety & Observability"
-  duration: "5 days"
+  description: "Reliability, Graceful Degradation, Circuit Breaker, OpenTelemetry Metrics"
   status: "NOT_STARTED"
   start_date: null
   end_date: null
@@ -23,7 +22,6 @@ metadata:
 days:
   day_1:
     title: "Error Handling Foundation"
-    duration: "8 hours"
     focus:
       - "NFR-002: Reliability - Graceful Degradation"
     
@@ -31,7 +29,6 @@ days:
       - task_id: "TASK-03-01-01"
         title: "Implement Graceful Degradation"
         requirement_id: "NFR-002"
-        effort: "8 hours"
         status: "NOT_STARTED"
         components:
           - "GracefulDegradationHandler"
@@ -49,7 +46,6 @@ days:
 
   day_2:
     title: "Retry & Circuit Breaker"
-    duration: "8 hours"
     focus:
       - "NFR-002: Reliability - Retry & Circuit Breaker"
     
@@ -57,7 +53,6 @@ days:
       - task_id: "TASK-03-02-01"
         title: "Implement Retry with Exponential Backoff"
         requirement_id: "NFR-002"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components:
           - "RetryHandler"
@@ -74,7 +69,6 @@ days:
       - task_id: "TASK-03-02-02"
         title: "Implement Circuit Breaker Pattern"
         requirement_id: "NFR-002"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components:
           - "CircuitBreaker"
@@ -90,7 +84,6 @@ days:
 
   day_3:
     title: "OpenTelemetry Integration"
-    duration: "8 hours"
     focus:
       - "NFR-004: Observability - Metrics"
     
@@ -98,7 +91,6 @@ days:
       - task_id: "TASK-03-03-01"
         title: "Implement OpenTelemetry Metrics"
         requirement_id: "NFR-004"
-        effort: "8 hours"
         status: "NOT_STARTED"
         components:
           - "MetricsExporter"
@@ -116,7 +108,6 @@ days:
 
   day_4:
     title: "Dashboard Implementation"
-    duration: "8 hours"
     focus:
       - "NFR-004: Observability - Dashboard"
     
@@ -124,7 +115,6 @@ days:
       - task_id: "TASK-03-04-01"
         title: "Implement Real-Time Progress Dashboard"
         requirement_id: "NFR-004"
-        effort: "8 hours"
         status: "NOT_STARTED"
         components:
           - "DashboardService"
@@ -142,7 +132,6 @@ days:
 
   day_5:
     title: "Alerting & Integration"
-    duration: "8 hours"
     focus:
       - "NFR-004: Observability - Alerting"
       - "Phase 3 Integration Testing"
@@ -151,7 +140,6 @@ days:
       - task_id: "TASK-03-05-01"
         title: "Implement Alerting Rules"
         requirement_id: "NFR-004"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components:
           - "AlertManager"
@@ -170,7 +158,6 @@ days:
       - task_id: "TASK-03-05-02"
         title: "Phase 3 Integration Testing"
         requirement_id: "TESTING"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components: []
         files_to_create:

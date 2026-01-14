@@ -1,7 +1,6 @@
 # =============================================================================
 # PHASE 04: PRODUCTION HARDENING
 # =============================================================================
-# Duration: 5 days
 # Focus: Security (NFR-003), Performance Tuning, Compliance
 #        Cross-File Coherence (Hallucination Prevention)
 # =============================================================================
@@ -9,7 +8,7 @@
 metadata:
   phase_id: "PHASE-04"
   title: "Production Hardening"
-  duration: "5 days"
+  description: "Security, Secret Redaction, Hash Verification, Cross-File Coherence"
   status: "NOT_STARTED"
   start_date: null
   end_date: null
@@ -23,7 +22,6 @@ metadata:
 days:
   day_1:
     title: "Security Foundation"
-    duration: "8 hours"
     focus:
       - "NFR-003: Security - Secret Redaction"
     
@@ -31,7 +29,6 @@ days:
       - task_id: "TASK-04-01-01"
         title: "Implement Secret Redaction"
         requirement_id: "NFR-003"
-        effort: "8 hours"
         status: "NOT_STARTED"
         components:
           - "SecretRedactor"
@@ -49,7 +46,6 @@ days:
 
   day_2:
     title: "Integrity & Compliance"
-    duration: "8 hours"
     focus:
       - "NFR-003: Security - Hash Verification & Compliance"
     
@@ -57,7 +53,6 @@ days:
       - task_id: "TASK-04-02-01"
         title: "Implement Hash Chain Verification"
         requirement_id: "NFR-003"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components:
           - "HashVerifier"
@@ -74,7 +69,6 @@ days:
       - task_id: "TASK-04-02-02"
         title: "Implement Compliance Markers"
         requirement_id: "NFR-003"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components:
           - "ComplianceMarker"
@@ -90,7 +84,6 @@ days:
 
   day_3:
     title: "Cross-File Coherence"
-    duration: "8 hours"
     focus:
       - "AC-COHERENCE-001 through AC-COHERENCE-004"
     
@@ -98,7 +91,6 @@ days:
       - task_id: "TASK-04-03-01"
         title: "Implement Coherence Validator"
         requirement_id: "HALLUCINATION-PREVENTION"
-        effort: "8 hours"
         status: "NOT_STARTED"
         components:
           - "CoherenceValidator"
@@ -121,7 +113,6 @@ days:
 
   day_4:
     title: "Provenance Tracking"
-    duration: "8 hours"
     focus:
       - "AC-EXPLAIN-001 through AC-EXPLAIN-005"
     
@@ -129,7 +120,6 @@ days:
       - task_id: "TASK-04-04-01"
         title: "Implement Provenance Tracker"
         requirement_id: "HALLUCINATION-PREVENTION"
-        effort: "8 hours"
         status: "NOT_STARTED"
         components:
           - "ProvenanceTracker"
@@ -155,7 +145,6 @@ days:
 
   day_5:
     title: "Performance & Integration"
-    duration: "8 hours"
     focus:
       - "Performance Tuning"
       - "Phase 4 Integration Testing"
@@ -164,7 +153,6 @@ days:
       - task_id: "TASK-04-05-01"
         title: "Performance Optimization"
         requirement_id: "PERFORMANCE"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components:
           - "PerformanceOptimizer"
@@ -176,7 +164,6 @@ days:
       - task_id: "TASK-04-05-02"
         title: "Load Testing"
         requirement_id: "TESTING"
-        effort: "2 hours"
         status: "NOT_STARTED"
         components: []
         files_to_create:
@@ -187,7 +174,6 @@ days:
       - task_id: "TASK-04-05-03"
         title: "Phase 4 Integration Testing"
         requirement_id: "TESTING"
-        effort: "2 hours"
         status: "NOT_STARTED"
         components: []
         files_to_create:
