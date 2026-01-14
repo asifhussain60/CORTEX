@@ -449,3 +449,370 @@ class TestRegistryQuery:
         assert query.results == []
         assert query.total_count == 0
         assert query.matched_count == 0
+
+
+# =============================================================================
+# Tests for AC-AR-012-02: @orchestrator Decorator (Tier-Based Registry)
+# =============================================================================
+
+class TestOrchestratorDecoratorRegistration:
+    """
+    Test @orchestrator decorator for AC-AR-012-02
+    
+    Tests auto-registration, tier dependency declaration, context injection,
+    and registry queries for the new tier/rule-based decorator.
+    """
+    
+    def setup_method(self):
+        """Clear and setup registry before each test"""
+        # Import here to avoid import conflicts
+        from src.core.decorators.orchestrator import get_registry
+        registry = get_registry()
+        registry.clear()
+    
+    def test_decorator_imports(self):
+        """Test that decorator and registry can be imported"""
+        from src.core.decorators.orchestrator import (
+            orchestrator,
+            OrchestratorRegistry,
+            get_registry,
+        )
+        
+        assert orchestrator is not None
+        assert OrchestratorRegistry is not None
+        assert get_registry is not None
+    
+    def test_tier_based_registry_singleton(self):
+        """Test that tier-based registry is a singleton"""
+        from src.core.decorators.orchestrator import get_registry
+        
+        reg1 = get_registry()
+        reg2 = get_registry()
+        
+        assert reg1 is reg2
+    
+    def test_create_simple_decorated_orchestrator(self):
+        """Test creating a simple decorated orchestrator"""
+        from src.core.decorators.orchestrator import orchestrator
+        from src.core.orchestrator_base import OrchestratorBase
+        
+        @orchestrator(
+            orchestrator_id="test-orch-001",
+            description="Test orchestrator"
+        )
+        class TestOrchestrator(OrchestratorBase):
+            def execute(self):
+                return {"status": "success"}
+        
+        assert TestOrchestrator._is_registered is True  # type: ignore
+        assert TestOrchestrator._orchestrator_id == "test-orch-001"  # type: ignore
+    
+    def test_decorated_orchestrator_with_tier_dependencies(self):
+        """Test decorated orchestrator with tier dependencies"""
+        from src.core.decorators.orchestrator import orchestrator, get_registry
+        from src.core.orchestrator_base import OrchestratorBase
+        
+        reg = get_registry()
+        reg.clear()
+        
+        @orchestrator(
+            orchestrator_id="tier-test-001",
+            tier_dependencies={0, 1},
+            description="Tier test"
+        )
+        class TierTestOrchestrator(OrchestratorBase):
+            def execute(self):
+                return {"tiers": list(self.get_tier_access())}
+        
+        entry = reg.get("tier-test-001")
+        assert entry is not None
+        assert entry["tier_dependencies"] == {0, 1}
+    
+    def test_decorated_orchestrator_with_required_rules(self):
+        """Test decorated orchestrator with required rules"""
+        from src.core.decorators.orchestrator import orchestrator, get_registry
+        from src.core.orchestrator_base import OrchestratorBase
+        
+        reg = get_registry()
+        reg.clear()
+        
+        @orchestrator(
+            orchestrator_id="rules-test-001",
+            required_rules=["RULE-A", "RULE-B"],
+            description="Rules test"
+        )
+        class RulesTestOrchestrator(OrchestratorBase):
+            def execute(self):
+                return {"rules": self.get_required_rules()}
+        
+        entry = reg.get("rules-test-001")
+        assert entry is not None
+        assert entry["required_rules"] == ["RULE-A", "RULE-B"]
+    
+    def test_registry_query_by_tier_new_decorator(self):
+        """Test querying registry by tier (new decorator)"""
+        from src.core.decorators.orchestrator import orchestrator, get_registry
+        from src.core.orchestrator_base import OrchestratorBase
+        
+        reg = get_registry()
+        reg.clear()
+        
+        @orchestrator(
+            orchestrator_id="tier-query-1",
+            tier_dependencies={0}
+        )
+        class TierOrch1(OrchestratorBase):
+            def execute(self):
+                return {}
+        
+        @orchestrator(
+            orchestrator_id="tier-query-2",
+            tier_dependencies={0, 1, 2}
+        )
+        class TierOrch2(OrchestratorBase):
+            def execute(self):
+                return {}
+        
+        # Get orchestrators accessing tier 0
+        tier_0_orchs = reg.get_by_tier(0)
+        tier_0_ids = [o["id"] for o in tier_0_orchs]
+        
+        assert "tier-query-1" in tier_0_ids
+        assert "tier-query-2" in tier_0_ids
+        
+        # Get orchestrators accessing tier 2
+        tier_2_orchs = reg.get_by_tier(2)
+        tier_2_ids = [o["id"] for o in tier_2_orchs]
+        
+        assert "tier-query-1" not in tier_2_ids
+        assert "tier-query-2" in tier_2_ids
+    
+    def test_instantiate_decorated_orchestrator(self):
+        """Test instantiating a decorated orchestrator"""
+        from src.core.decorators.orchestrator import (
+            orchestrator,
+            instantiate_orchestrator,
+            get_registry,
+        )
+        from src.core.orchestrator_base import OrchestratorBase
+        
+        reg = get_registry()
+        reg.clear()
+        
+        @orchestrator(
+            orchestrator_id="instantiate-test-001",
+            tier_dependencies={0},
+            description="Instantiation test"
+        )
+        class InstantiateTestOrch(OrchestratorBase):
+            def execute(self):
+                return {
+                    "id": self.context.orchestrator_id,
+                    "tiers": list(self.get_tier_access()),
+                }
+        
+        # Instantiate the orchestrator
+        orch = instantiate_orchestrator(
+            "instantiate-test-001",
+            parameters={"key": "value"}
+        )
+        
+        assert orch is not None
+        assert isinstance(orch, InstantiateTestOrch)
+        assert orch.context.orchestrator_id == "instantiate-test-001"
+        assert orch.context.parameters == {"key": "value"}
+    
+    def test_instantiated_orchestrator_execution(self):
+        """Test executing an instantiated decorated orchestrator"""
+        from src.core.decorators.orchestrator import (
+            orchestrator,
+            instantiate_orchestrator,
+            get_registry,
+        )
+        from src.core.orchestrator_base import OrchestratorBase
+        
+        reg = get_registry()
+        reg.clear()
+        
+        @orchestrator(
+            orchestrator_id="exec-test-001",
+            tier_dependencies={1},
+            required_rules=["RULE-X"]
+        )
+        class ExecTestOrch(OrchestratorBase):
+            def execute(self):
+                return {
+                    "status": "executed",
+                    "tier_accessible": self.can_access_tier(1),
+                    "rules": self.get_required_rules(),
+                }
+        
+        orch = instantiate_orchestrator("exec-test-001")
+        result = orch.run()
+        
+        assert result.success is True
+        assert result.output["status"] == "executed"
+        assert result.output["tier_accessible"] is True
+        assert "RULE-X" in result.output["rules"]
+    
+    def test_tier_access_control_enforcement(self):
+        """Test that tier access control is enforced"""
+        from src.core.decorators.orchestrator import (
+            orchestrator,
+            instantiate_orchestrator,
+            get_registry,
+        )
+        from src.core.orchestrator_base import OrchestratorBase
+        
+        reg = get_registry()
+        reg.clear()
+        
+        @orchestrator(
+            orchestrator_id="access-control-test",
+            tier_dependencies={0, 1},
+            description="Access control test"
+        )
+        class AccessControlOrch(OrchestratorBase):
+            def execute(self):
+                return {
+                    "can_access_0": self.can_access_tier(0),
+                    "can_access_1": self.can_access_tier(1),
+                    "can_access_2": self.can_access_tier(2),
+                    "can_access_3": self.can_access_tier(3),
+                }
+        
+        orch = instantiate_orchestrator("access-control-test")
+        result = orch.run()
+        
+        assert result.success is True
+        assert result.output["can_access_0"] is True
+        assert result.output["can_access_1"] is True
+        assert result.output["can_access_2"] is False
+        assert result.output["can_access_3"] is False
+    
+    def test_mcp_tools_metadata(self):
+        """Test MCP tools metadata storage"""
+        from src.core.decorators.orchestrator import orchestrator, get_registry
+        from src.core.orchestrator_base import OrchestratorBase
+        
+        reg = get_registry()
+        reg.clear()
+        
+        @orchestrator(
+            orchestrator_id="mcp-test-001",
+            mcp_tools=["tool1", "tool2", "tool3"],
+            description="MCP tools test"
+        )
+        class MCPTestOrch(OrchestratorBase):
+            def execute(self):
+                return {}
+        
+        entry = reg.get("mcp-test-001")
+        assert entry is not None
+        assert entry["mcp_tools"] == ["tool1", "tool2", "tool3"]
+    
+    def test_decorator_rejects_non_base_class(self):
+        """Test that decorator rejects non-OrchestratorBase classes"""
+        from src.core.decorators.orchestrator import orchestrator
+        
+        with pytest.raises(TypeError):
+            @orchestrator(orchestrator_id="invalid-001")
+            class InvalidClass:  # type: ignore
+                pass
+    
+    def test_duplicate_orchestrator_id_raises_error(self):
+        """Test that registering duplicate IDs raises error"""
+        from src.core.decorators.orchestrator import orchestrator, get_registry
+        from src.core.orchestrator_base import OrchestratorBase
+        
+        reg = get_registry()
+        reg.clear()
+        
+        @orchestrator(orchestrator_id="duplicate-test")
+        class FirstOrch(OrchestratorBase):
+            def execute(self):
+                return {}
+        
+        with pytest.raises(ValueError, match="already registered"):
+            @orchestrator(orchestrator_id="duplicate-test")
+            class SecondOrch(OrchestratorBase):
+                def execute(self):
+                    return {}
+    
+    def test_registry_list_all(self):
+        """Test listing all orchestrators"""
+        from src.core.decorators.orchestrator import orchestrator, get_registry
+        from src.core.orchestrator_base import OrchestratorBase
+        
+        reg = get_registry()
+        reg.clear()
+        
+        @orchestrator(orchestrator_id="list-test-1")
+        class ListOrch1(OrchestratorBase):
+            def execute(self):
+                return {}
+        
+        @orchestrator(orchestrator_id="list-test-2")
+        class ListOrch2(OrchestratorBase):
+            def execute(self):
+                return {}
+        
+        all_orchs = reg.list_all()
+        
+        assert len(all_orchs) == 2
+        ids = [o["id"] for o in all_orchs]
+        assert "list-test-1" in ids
+        assert "list-test-2" in ids
+    
+    def test_registry_count(self):
+        """Test registry count method"""
+        from src.core.decorators.orchestrator import orchestrator, get_registry
+        from src.core.orchestrator_base import OrchestratorBase
+        
+        reg = get_registry()
+        reg.clear()
+        
+        assert reg.count() == 0
+        
+        @orchestrator(orchestrator_id="count-test-1")
+        class CountOrch1(OrchestratorBase):
+            def execute(self):
+                return {}
+        
+        assert reg.count() == 1
+        
+        @orchestrator(orchestrator_id="count-test-2")
+        class CountOrch2(OrchestratorBase):
+            def execute(self):
+                return {}
+        
+        assert reg.count() == 2
+    
+    def test_get_orchestrator_class_by_id(self):
+        """Test getting orchestrator class by ID"""
+        from src.core.decorators.orchestrator import (
+            orchestrator,
+            get_orchestrator_class,
+            get_registry,
+        )
+        from src.core.orchestrator_base import OrchestratorBase
+        
+        reg = get_registry()
+        reg.clear()
+        
+        @orchestrator(orchestrator_id="get-class-test")
+        class GetClassTestOrch(OrchestratorBase):
+            def execute(self):
+                return {}
+        
+        cls = get_orchestrator_class("get-class-test")
+        
+        assert cls is GetClassTestOrch
+    
+    def test_get_nonexistent_orchestrator_class(self):
+        """Test getting nonexistent orchestrator class returns None"""
+        from src.core.decorators.orchestrator import get_orchestrator_class
+        
+        cls = get_orchestrator_class("nonexistent-id")
+        
+        assert cls is None
