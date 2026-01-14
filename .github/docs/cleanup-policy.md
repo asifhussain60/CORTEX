@@ -82,28 +82,40 @@ Root-level markdown files create clutter. All project documentation must follow 
 
 **Mandatory Cleanup Checklist:**
 
-1. ✅ **No temporary files in root**
+1. ✅ **Delete ALL redundant root files**
+   - ❌ DELETE: `PHASE-XX-*.md` (all phase-specific markdown)
+   - ❌ DELETE: `AC-*.md` (all AC completion reports)
+   - ❌ DELETE: `*-SUMMARY.md`, `*-REVIEW.md` (executive reports, unless moved)
+   - ❌ DELETE: `STATUS.md`, `PLAN-VS-ACTUAL.md`, `QUICK-SCORECARD.md`
+   - ❌ DELETE: `ARTIFACTS-INDEX.md`, `PHASE-LOCK-REPORT.md`
+   - ✅ KEEP: `README.md`, `pytest.ini`, `requirements.txt`
+   - Command: `git rm *.md` (except README.md)
+
+2. ✅ **No temporary files in root**
    - Verify no phase-specific `.md` files exist in root
    - Example: Delete `PHASE-02-PROGRESS.md`, `PHASE-02-STARTUP-CHECKLIST.md`
+   - Verify only: `README.md`, `pytest.ini`, `requirements.txt` remain
 
-2. ✅ **Evidence captured in governance.db**
+3. ✅ **Evidence captured in governance.db**
    - All AC-ID progress recorded in audit_log
    - Evidence bundles stored in evidence_bundle table
    - No standalone markdown AC reports in root
 
-3. ✅ **Documentation consolidated**
+4. ✅ **Documentation consolidated**
    - If summary documents created, move to `.github/docs/`
    - Use kebab-case naming
    - Keep under 20 characters
 
-4. ✅ **Status.md updated**
+5. ✅ **Status tracking centralized**
    - Single source for current project status
-   - Updated via script, not manual file creation
-   - Stored at `.github/docs/current-status.md` (after migration)
+   - Updated via `.github/docs/current-status.md`
+   - Query cortex-master.yaml phase_tracker for status
+   - Query governance.db for audit trail
 
-5. ✅ **Git cleanup**
+6. ✅ **Git cleanup**
    - All changes committed with clear messages
    - Phase checkpoint created: `git commit -m "phase-XX: COMPLETED - cleanup done"`
+   - Final verification: `ls -1 *.md` should show ONLY `README.md`
 
 ### Cleanup Automation (Optional)
 
