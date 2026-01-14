@@ -1,9 +1,9 @@
 # Phase-02 Progress Report: Orchestration Core
 
 **Date:** January 14, 2026  
-**Status:** IN_PROGRESS (9/27 AC-IDs Complete, 33%)  
-**Velocity:** 9 AC-IDs completed in continuous session  
-**Remote:** Fully Synchronized (32b81600c)
+**Status:** IN_PROGRESS (12/27 AC-IDs Complete, 44%)  
+**Velocity:** 12 AC-IDs completed in continuous session  
+**Remote:** Fully Synchronized (d8996b707)
 
 ---
 
@@ -173,6 +173,42 @@ stats = registry.get_stats()
 
 ---
 
+### ✅ AC-FR-002-01/02/03: Governance Rule Evaluation
+**Status:** COMPLETE  
+**Tests:** 25/25 PASSING  
+**Commit:** d8996b707  
+
+**Implementation:**
+- `src/core/rule_evaluator.py` (380+ lines)
+  - RuleEvaluator for rule evaluation
+  - ViolationReporter for violation reporting
+  - RuleViolation dataclass for violations
+  - EvaluationResult dataclass for results
+  - Tier priority enforcement (0 > 1 > 2)
+  - Tier filtering and category filtering
+
+**AC-FR-002-01 Features:**
+- Rules evaluated in tier priority order
+- Tier 0 violations block further evaluation
+- Tier filtering support
+- Category filtering support
+- Performance optimized
+
+**AC-FR-002-02 Features:**
+- Violations returned with rule ID and message
+- Rule name and severity included
+- Context preservation
+- Severity-based grouping (blocked, warning, info)
+- Human-readable formatting
+
+**AC-FR-002-03 Features:**
+- Performance <5ms per rule requirement
+- Evaluation time tracking
+- Bulk evaluation support
+- Performance testing included
+
+---
+
 ## Test Summary
 
 | AC-ID | Tests | Status | File |
@@ -182,7 +218,8 @@ stats = registry.get_stats()
 | AR-006-03 | 24 | ✅ PASSING | test_orchestrator_registry.py |
 | AR-007-01/02/03 | 22 | ✅ PASSING | test_mcp_server.py |
 | AR-009-01/02/03 | 21 | ✅ PASSING | test_template_engine.py |
-| **TOTAL** | **105** | **✅ PASSING** | - |
+| FR-002-01/02/03 | 25 | ✅ PASSING | test_rule_evaluator.py |
+| **TOTAL** | **130** | **✅ PASSING** | - |
 
 ### Test Coverage Details
 
