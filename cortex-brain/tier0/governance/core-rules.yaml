@@ -391,6 +391,47 @@ rules:
     implementation:
       module: src.core.result
 
+  # --------------------------------------------------------------------------
+  # CORE-026: Git Checkpoint Before Modify
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-026
+    category: development_workflow
+    severity: blocked
+    name: Git Checkpoint Required
+    description: |
+      Git checkpoint MUST be created before every major action.
+      Enables efficient rollback on failures.
+    validation:
+      - Checkpoint before AC-ID start
+      - Checkpoint before file modification
+      - Commit after successful test pass
+    commit_patterns:
+      before_ac_id: "checkpoint: before AC-XXX-XXX"
+      pre_modify: "checkpoint: pre-modify"
+      tests_pass: "AC-XXX-XXX: [description] - tests passing"
+      phase_complete: "phase-XX: COMPLETED - audit verified"
+
+  # --------------------------------------------------------------------------
+  # CORE-027: Audit Trail for Phase Completion
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-027
+    category: auditability
+    severity: blocked
+    name: Audit Verification Required
+    description: |
+      Phase completion MUST be validated by audit trail verification.
+      No phase lock without queryable audit entries.
+    validation:
+      - Each AC-ID has AC_START, AC_EXECUTE, AC_COMPLETE entries
+      - Hash chain integrity verified
+      - audit_verification.verified: true before locked: true
+    required_entries:
+      per_ac_id: 3  # Minimum entries per AC-ID
+      operations:
+        - AC_START
+        - AC_EXECUTE
+        - AC_COMPLETE
+
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION
 # ==============================================================================
