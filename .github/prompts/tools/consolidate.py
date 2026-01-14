@@ -1,21 +1,19 @@
 #!/usr/bin/env python3
 """
-Intelligent Folder Consolidation Tool with Recursive LLM-Powered Refinement
-Recursively consolidates each folder into a single machine-readable file.
-Deletes all source files and empty folders, leaving only consolidated machine files.
+Intelligent Folder Consolidation Tool - Refactored with SOLID Principles
 
-Features:
-  - Recursive: Consolidates all folders including subfolders
-  - LLM-Powered: Intelligently extracts and refines content
-  - Safe Cleanup: Deletes all source files and empty folders
-  - Machine-Ready: One YAML/JSON file per folder named after the folder
+Architecture:
+- Single Responsibility: Each class has one reason to change
+- Open/Closed: Open for extension, closed for modification
+- Liskov Substitution: Content extractors are interchangeable
+- Interface Segregation: Small, focused interfaces
+- Dependency Inversion: Depend on abstractions, not implementations
 
-Usage:
-    # Consolidate single folder
-    python consolidate.py --folder SSOT/analysis --format yaml
-    
-    # Recursive consolidation with cleanup (requires confirmation)
-    python consolidate.py --folder SSOT/analysis --format yaml --cleanup
+Key improvements:
+- File filtering separates source files from consolidation files
+- Content extraction is strategy-based
+- Cleanup is explicit and safe
+- File handling is isolated and testable
 """
 
 import os
@@ -24,173 +22,309 @@ import yaml
 import base64
 import argparse
 import sys
-import shutil
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Any, Tuple, Optional, Set
-from collections import defaultdict
+from typing import Dict, List, Any, Optional, Set, Protocol
+from abc import ABC, abstractmethod
 
 
+# ============================================================================
+# ABSTRACTION: Content Extraction Strategy Pattern
+# ============================================================================
 
-class ContentExtractor:
-    """LLM-powered intelligent content extraction and refinement."""
+class ContentExtractor(ABC):
+    """Abstract base for content extraction strategies."""
     
-    @staticmethod
-    def extract_intelligence(content: str, filename: str) -> Dict[str, Any]:
-        """Extract intelligent information from content."""
-        ext = Path(filename).suffix.lower()
+    @abstractmethod
+    def can_extract(self, filename: str) -> bool:
+        """Check if this extractor handles this file type."""
+        pass
+    
+    @abstractmethod
+    def extract(self, content: str, filename: str) -> Dict[str, Any]:
+        """Extract intelligence from content."""
+        pass
+
+
+class MarkdownExtractor(ContentExtractor):
+    """Extracts structure from markdown files."""
+    
+    def can_extract(self, filename: str) -> bool:
+        return Path(filename).suffix.lower() in ['.md', '.markdown']
+    
+    def extract(self, content: str, filename: str) -> Dict[str, Any]:
         intelligence = {
-            "file_type": ext or "text",
-            "structure": "text",
+            "structure": "markdown",
             "key_sections": [],
-            "key_terms": [],
-            "has_code": False,
-            "has_structured_data": False
+            "key_terms": []
         }
-        
-        # Markdown analysis
-        if ext in ['.md', '.markdown']:
-            intelligence["structure"] = "markdown"
-            lines = content.split('\n')
-            for line in lines:
-                if line.startswith('#'):
-                    level = len(line) - len(line.lstrip('#'))
-                    text = line.lstrip('# ').strip()
-                    intelligence["key_sections"].append({
-                        "level": level,
-                        "text": text
-                    })
-            intelligence["key_sections"] = intelligence["key_sections"][:20]
-        
-        # Code analysis
-        elif ext in ['.py', '.js', '.ts', '.java', '.cpp', '.cs', '.go', '.rb', '.php']:
-            intelligence["structure"] = "code"
-            intelligence["has_code"] = True
-            intelligence["language"] = ext.lstrip('.')
-            intelligence["has_classes"] = "class " in content
-            intelligence["has_functions"] = "def " in content or "function " in content
-            intelligence["has_imports"] = "import " in content or "require " in content
-        
-        # JSON analysis
-        elif ext == '.json':
-            intelligence["structure"] = "json"
-            intelligence["has_structured_data"] = True
-            try:
-                data = json.loads(content)
-                if isinstance(data, dict):
-                    intelligence["keys"] = list(data.keys())[:15]
-                intelligence["valid"] = True
-            except:
-                intelligence["valid"] = False
-        
-        # YAML analysis
-        elif ext in ['.yaml', '.yml']:
-            intelligence["structure"] = "yaml"
-            intelligence["has_structured_data"] = True
-            try:
-                data = yaml.safe_load(content)
-                if isinstance(data, dict):
-                    intelligence["keys"] = list(data.keys())[:15]
-                intelligence["valid"] = True
-            except:
-                intelligence["valid"] = False
-        
-        # Extract key terms from any text
-        words = content.split()
-        key_terms = set()
-        for word in words[:100]:
-            # Capture quoted phrases and uppercase terms
-            if (word.startswith('"') and word.endswith('"')) or (len(word) > 3 and word.isupper()):
-                key_terms.add(word.strip('"'))
-        intelligence["key_terms"] = sorted(list(key_terms))[:20]
-        
+        lines = content.split('\n')
+        for line in lines:
+            if line.startswith('#'):
+                level = len(line) - len(line.lstrip('#'))
+                text = line.lstrip('# ').strip()
+                intelligence["key_sections"].append({"level": level, "text": text})
+        intelligence["key_sections"] = intelligence["key_sections"][:20]
         return intelligence
 
 
-class FolderConsolidator:
-    """Consolidates a single folder's files into a machine-readable format."""
+class CodeExtractor(ContentExtractor):
+    """Extracts structure from code files."""
     
-    def __init__(self, folder_path: Path, output_format: str = "yaml", cleanup: bool = False):
-        """Initialize folder consolidator."""
-        self.folder_path = folder_path
-        self.output_format = output_format
-        self.cleanup = cleanup
-        self.files_data = []
-        self.errors = []
-        self.files_to_delete: Set[Path] = set()
-        self.folders_to_delete: Set[Path] = set()
+    CODE_EXTENSIONS = {'.py', '.js', '.ts', '.java', '.cpp', '.cs', '.go', '.rb', '.php'}
     
-    def consolidate(self) -> Tuple[bool, Optional[Path]]:
-        """Consolidate all files in this folder (not subfolders)."""
-        print(f"\n{'='*70}")
-        print(f"Consolidating: {self.folder_path.name}")
-        print(f"{'='*70}")
-        
-        # Get files directly in this folder (not subfolders)
-        files = [f for f in self.folder_path.iterdir() 
-                if f.is_file() and not f.name.startswith('.')]
-        
-        if not files:
-            print(f"⚠ No files to consolidate in {self.folder_path.name}/")
-            return False, None
-        
-        print(f"✓ Found {len(files)} file(s)")
-        
-        # Read and extract from each file
-        for file_path in sorted(files):
-            self._process_file(file_path)
-        
-        if not self.files_data:
-            print(f"❌ No files could be read")
-            return False, None
-        
-        # Write consolidation
-        output_file = self._write_consolidation()
-        
-        # Cleanup if requested
-        if output_file and self.cleanup:
-            self._cleanup_files()
-            self._cleanup_empty_folders()
-        
-        return bool(output_file), output_file
+    def can_extract(self, filename: str) -> bool:
+        return Path(filename).suffix.lower() in self.CODE_EXTENSIONS
     
-    def _process_file(self, file_path: Path) -> None:
-        """Process and read a single file."""
+    def extract(self, content: str, filename: str) -> Dict[str, Any]:
+        ext = Path(filename).suffix.lower()
+        return {
+            "structure": "code",
+            "language": ext.lstrip('.'),
+            "has_classes": "class " in content,
+            "has_functions": "def " in content or "function " in content,
+            "has_imports": "import " in content or "require " in content
+        }
+
+
+class JSONYAMLExtractor(ContentExtractor):
+    """Extracts structure from JSON and YAML files."""
+    
+    def can_extract(self, filename: str) -> bool:
+        ext = Path(filename).suffix.lower()
+        return ext in {'.json', '.yaml', '.yml'}
+    
+    def extract(self, content: str, filename: str) -> Dict[str, Any]:
+        ext = Path(filename).suffix.lower()
+        is_json = ext == '.json'
+        parser = json.loads if is_json else yaml.safe_load
+        
         try:
-            # Read content
+            data = parser(content)
+            keys = list(data.keys())[:15] if isinstance(data, dict) else []
+            return {
+                "structure": "json" if is_json else "yaml",
+                "format": "json" if is_json else "yaml",
+                "keys": keys,
+                "valid": True
+            }
+        except Exception:
+            return {"structure": "json" if is_json else "yaml", "valid": False}
+
+
+class DefaultExtractor(ContentExtractor):
+    """Default extractor for any other file type."""
+    
+    def can_extract(self, filename: str) -> bool:
+        return True  # Matches anything
+    
+    def extract(self, content: str, filename: str) -> Dict[str, Any]:
+        words = content.split()[:100]
+        key_terms = {word.strip('"') for word in words 
+                    if (word.startswith('"') and word.endswith('"')) or 
+                       (len(word) > 3 and word.isupper())}
+        return {
+            "structure": "text",
+            "key_terms": sorted(list(key_terms))[:20]
+        }
+
+
+class IntelligenceExtractor:
+    """Coordinator for content extraction strategies (Strategy Pattern)."""
+    
+    def __init__(self):
+        self.extractors: List[ContentExtractor] = [
+            MarkdownExtractor(),
+            CodeExtractor(),
+            JSONYAMLExtractor(),
+            DefaultExtractor()
+        ]
+    
+    def extract(self, content: str, filename: str) -> Dict[str, Any]:
+        """Find appropriate extractor and extract intelligence."""
+        for extractor in self.extractors:
+            if extractor.can_extract(filename):
+                return extractor.extract(content, filename)
+        return {}
+
+
+# ============================================================================
+# FILE HANDLING: File Discovery and Filtering
+# ============================================================================
+
+class FileFilter:
+    """Determines which files should be consolidated vs preserved."""
+    
+    CONSOLIDATION_EXTENSIONS = {'.yaml', '.json'}
+    HIDDEN_PREFIX = '.'
+    
+    @classmethod
+    def is_consolidation_file(cls, path: Path) -> bool:
+        """Check if file is a consolidation output file."""
+        return path.suffix in cls.CONSOLIDATION_EXTENSIONS
+    
+    @classmethod
+    def is_source_file(cls, path: Path) -> bool:
+        """Check if file should be consolidated (not a consolidation file)."""
+        return not cls.is_consolidation_file(path)
+    
+    @classmethod
+    def is_hidden(cls, path: Path) -> bool:
+        """Check if file should be ignored."""
+        return path.name.startswith(cls.HIDDEN_PREFIX)
+
+
+class FileDiscovery:
+    """Discovers files in a folder (Single Responsibility)."""
+    
+    def __init__(self, folder_path: Path):
+        self.folder_path = folder_path
+        self.filter = FileFilter()
+    
+    def get_source_files(self) -> List[Path]:
+        """Get all source files (not consolidation files, not hidden)."""
+        files = []
+        for item in sorted(self.folder_path.iterdir()):
+            if item.is_file() and not self.filter.is_hidden(item) and self.filter.is_source_file(item):
+                files.append(item)
+        return files
+    
+    def get_all_files(self) -> List[Path]:
+        """Get all files including consolidation files."""
+        files = []
+        for item in sorted(self.folder_path.iterdir()):
+            if item.is_file() and not self.filter.is_hidden(item):
+                files.append(item)
+        return files
+
+
+# ============================================================================
+# FILE READING: Content Loading with Error Handling
+# ============================================================================
+
+class FileContentLoader:
+    """Loads file content with graceful fallback (Single Responsibility)."""
+    
+    @staticmethod
+    def load(file_path: Path) -> tuple[str, bool]:
+        """Load file content. Returns (content, is_binary)."""
+        try:
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                return f.read(), False
+        except Exception:
             try:
-                with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
-                    content = f.read()
-                is_binary = False
-            except:
                 with open(file_path, 'rb') as f:
-                    content = base64.b64encode(f.read()).decode('ascii')
-                is_binary = True
-            
+                    return base64.b64encode(f.read()).decode('ascii'), True
+            except Exception:
+                return "", True
+
+
+class FileMetadataExtractor:
+    """Extracts file metadata (Single Responsibility)."""
+    
+    @staticmethod
+    def extract(file_path: Path) -> Dict[str, Any]:
+        """Extract file metadata."""
+        try:
             stat_info = file_path.stat()
-            
-            file_entry = {
+            return {
                 "filename": file_path.name,
                 "size_bytes": stat_info.st_size,
                 "modified_time": datetime.fromtimestamp(stat_info.st_mtime).isoformat(),
-                "extension": file_path.suffix,
+                "extension": file_path.suffix
+            }
+        except Exception as e:
+            return {"filename": file_path.name, "error": str(e)}
+
+
+# ============================================================================
+# CONSOLIDATION: File Processing
+# ============================================================================
+
+class FileProcessor:
+    """Processes individual files for consolidation."""
+    
+    def __init__(self):
+        self.intelligence_extractor = IntelligenceExtractor()
+        self.content_loader = FileContentLoader()
+        self.metadata_extractor = FileMetadataExtractor()
+    
+    def process(self, file_path: Path) -> tuple[Optional[Dict[str, Any]], Optional[Exception]]:
+        """Process a single file. Returns (file_entry, error)."""
+        try:
+            # Load metadata
+            metadata = self.metadata_extractor.extract(file_path)
+            if "error" in metadata:
+                return None, Exception(f"Metadata error: {metadata['error']}")
+            
+            # Load content
+            content, is_binary = self.content_loader.load(file_path)
+            
+            # Extract intelligence
+            intelligence = self.intelligence_extractor.extract(content, file_path.name)
+            
+            file_entry = {
+                **metadata,
                 "is_binary": is_binary,
                 "content": content,
-                "intelligence": ContentExtractor.extract_intelligence(content, file_path.name)
+                "intelligence": intelligence
             }
             
-            self.files_data.append(file_entry)
-            self.files_to_delete.add(file_path)
-            
-            size_kb = stat_info.st_size / 1024
-            print(f"  ✓ {file_path.name} ({size_kb:.1f} KB)")
+            return file_entry, None
             
         except Exception as e:
-            self.errors.append({"file": file_path.name, "error": str(e)})
-            print(f"  ⚠ Error reading {file_path.name}: {e}")
+            return None, e
+
+
+class FolderConsolidator:
+    """Consolidates a single folder into a machine-readable file."""
     
-    def _write_consolidation(self) -> Optional[Path]:
-        """Write consolidated data to file."""
+    def __init__(self, folder_path: Path, output_format: str = "yaml"):
+        self.folder_path = folder_path
+        self.output_format = output_format
+        
+        # Dependencies (Dependency Injection)
+        self.discovery = FileDiscovery(folder_path)
+        self.processor = FileProcessor()
+        
+        # State
+        self.files_data: List[Dict[str, Any]] = []
+        self.errors: List[Dict[str, str]] = []
+        self.consolidation_file: Optional[Path] = None
+    
+    def consolidate(self) -> bool:
+        """Consolidate folder files. Returns success status."""
+        # Phase 1: Discover source files
+        source_files = self.discovery.get_source_files()
+        if not source_files:
+            self.errors.append({"phase": "discovery", "error": "No source files found"})
+            return False
+        
+        print(f"✓ Found {len(source_files)} file(s)")
+        
+        # Phase 2: Process files
+        for file_path in source_files:
+            file_entry, error = self.processor.process(file_path)
+            if error:
+                self.errors.append({"file": file_path.name, "error": str(error)})
+                print(f"  ⚠ Error: {file_path.name}: {error}")
+            else:
+                self.files_data.append(file_entry)
+                size_kb = file_entry["size_bytes"] / 1024
+                print(f"  ✓ {file_path.name} ({size_kb:.1f} KB)")
+        
+        if not self.files_data:
+            self.errors.append({"phase": "processing", "error": "No files successfully processed"})
+            return False
+        
+        # Phase 3: Write consolidation
+        if not self._write_consolidation():
+            return False
+        
+        return True
+    
+    def _write_consolidation(self) -> bool:
+        """Write consolidation file. Returns success status."""
         try:
             metadata = {
                 "consolidation_timestamp": datetime.now().isoformat(),
@@ -198,112 +332,202 @@ class FolderConsolidator:
                 "folder_name": self.folder_path.name,
                 "total_files": len(self.files_data),
                 "total_size_bytes": sum(f["size_bytes"] for f in self.files_data),
-                "file_type_summary": {},
-                "extraction_enabled": True,
+                "file_type_summary": self._build_file_type_summary(),
                 "errors": self.errors
             }
             
-            # Build file type summary
-            for file_entry in self.files_data:
-                ext = file_entry["extension"] or "no_extension"
-                metadata["file_type_summary"][ext] = metadata["file_type_summary"].get(ext, 0) + 1
+            output = {"metadata": metadata, "files": self.files_data}
             
-            output = {
-                "metadata": metadata,
-                "files": self.files_data
-            }
-            
-            # Output filename: same as folder name
-            output_filename = self.folder_path / f"{self.folder_path.name}.{self.output_format}"
+            self.consolidation_file = self.folder_path / f"{self.folder_path.name}.{self.output_format}"
             
             if self.output_format == "yaml":
-                with open(output_filename, 'w', encoding='utf-8') as f:
+                with open(self.consolidation_file, 'w', encoding='utf-8') as f:
                     yaml.dump(output, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
-            else:  # json
-                with open(output_filename, 'w', encoding='utf-8') as f:
+            else:
+                with open(self.consolidation_file, 'w', encoding='utf-8') as f:
                     json.dump(output, f, indent=2, ensure_ascii=False)
             
-            size_kb = output_filename.stat().st_size / 1024
-            print(f"✓ Consolidation: {output_filename.name} ({size_kb:.1f} KB)")
-            
-            return output_filename
+            size_kb = self.consolidation_file.stat().st_size / 1024
+            print(f"✓ Consolidation: {self.consolidation_file.name} ({size_kb:.1f} KB)")
+            return True
             
         except Exception as e:
+            self.errors.append({"phase": "write", "error": str(e)})
             print(f"❌ Error writing consolidation: {e}")
-            self.errors.append({"phase": "output", "error": str(e)})
-            return None
+            return False
     
-    def _cleanup_files(self) -> None:
-        """Delete source files."""
+    def _build_file_type_summary(self) -> Dict[str, int]:
+        """Build summary of file types."""
+        summary: Dict[str, int] = {}
+        for file_entry in self.files_data:
+            ext = file_entry["extension"] or "no_extension"
+            summary[ext] = summary.get(ext, 0) + 1
+        return summary
+    
+    def get_source_files_to_delete(self) -> List[Path]:
+        """Get source files that should be deleted during cleanup."""
+        return self.discovery.get_source_files()
+    
+    def get_consolidation_file(self) -> Optional[Path]:
+        """Get path to consolidation file (to protect from deletion)."""
+        return self.consolidation_file
+
+
+# ============================================================================
+# CLEANUP: Safe Deletion with Manifest
+# ============================================================================
+
+class CleanupManager:
+    """Manages safe cleanup of source files and folders."""
+    
+    def __init__(self, consolidators: List[FolderConsolidator]):
+        self.consolidators = consolidators
+        self.deletion_manifest: List[Dict[str, Any]] = []
+    
+    def cleanup(self) -> bool:
+        """Delete source files and empty folders. Returns success status."""
+        # Phase 1: Collect files to delete (excluding consolidation files)
+        all_files_to_delete = set()
+        consolidation_files = set()
+        
+        for consolidator in self.consolidators:
+            cons_file = consolidator.get_consolidation_file()
+            if cons_file:
+                consolidation_files.add(cons_file)
+            
+            for file_path in consolidator.get_source_files_to_delete():
+                all_files_to_delete.add(file_path)
+        
+        # Phase 2: Delete files (excluding consolidation files)
         deleted = 0
         failed = 0
         
-        for file_path in self.files_to_delete:
+        for file_path in sorted(all_files_to_delete):
+            if file_path in consolidation_files:
+                print(f"  ⊘ Skipping consolidation file: {file_path.name}")
+                continue
+            
             try:
                 file_path.unlink()
                 deleted += 1
+                self.deletion_manifest.append({
+                    "file": str(file_path),
+                    "status": "deleted",
+                    "time": datetime.now().isoformat()
+                })
             except Exception as e:
                 failed += 1
+                self.deletion_manifest.append({
+                    "file": str(file_path),
+                    "status": "failed",
+                    "error": str(e),
+                    "time": datetime.now().isoformat()
+                })
                 print(f"  ⚠ Failed to delete {file_path.name}: {e}")
         
         if deleted > 0:
             print(f"🗑 Deleted {deleted} source file(s)")
         if failed > 0:
             print(f"⚠ Failed to delete {failed} file(s)")
+        
+        # Phase 3: Delete empty folders (bottom-up)
+        return self._cleanup_empty_folders()
     
-    def _cleanup_empty_folders(self) -> None:
-        """Remove empty subfolders."""
-        # Walk subfolders and delete empty ones
-        for item in sorted(self.folder_path.iterdir()):
-            if item.is_dir() and not item.name.startswith('.'):
-                try:
-                    # Only delete if empty
-                    if not any(item.iterdir()):
-                        item.rmdir()
-                        print(f"🗑 Deleted empty folder: {item.name}/")
-                except Exception as e:
-                    pass
+    def _cleanup_empty_folders(self) -> bool:
+        """Delete empty folders recursively."""
+        deleted = 0
+        failed = 0
+        
+        # Collect all folders from all consolidators
+        all_folders = set()
+        for consolidator in self.consolidators:
+            self._collect_folders(consolidator.folder_path, all_folders)
+        
+        # Delete from deepest to shallowest
+        for folder_path in sorted(all_folders, key=lambda x: len(x.parts), reverse=True):
+            try:
+                if not any(folder_path.iterdir()):
+                    folder_path.rmdir()
+                    deleted += 1
+            except Exception as e:
+                failed += 1
+        
+        if deleted > 0:
+            print(f"🗑 Deleted {deleted} empty folder(s)")
+        if failed > 0:
+            print(f"⚠ Failed to delete {failed} folder(s)")
+        
+        return True
+    
+    def _collect_folders(self, folder_path: Path, folders: Set[Path]) -> None:
+        """Recursively collect all subfolders."""
+        try:
+            for item in folder_path.iterdir():
+                if item.is_dir() and not item.name.startswith('.'):
+                    folders.add(item)
+                    self._collect_folders(item, folders)
+        except Exception:
+            pass
 
 
-class RecursiveConsolidator:
-    """Recursively consolidates all folders in a directory tree."""
+# ============================================================================
+# ORCHESTRATION: Main Coordinator
+# ============================================================================
+
+class ConsolidationOrchestrator:
+    """Orchestrates the entire consolidation process."""
     
-    def __init__(self, root_path: Path, output_format: str = "yaml", cleanup: bool = False):
-        """Initialize recursive consolidator."""
-        self.root_path = root_path
+    def __init__(self, root_folder: Path, output_format: str, cleanup: bool = False):
+        self.root_folder = root_folder
         self.output_format = output_format
         self.cleanup = cleanup
-        self.results: List[Tuple[Path, bool]] = []
+        self.consolidators: List[FolderConsolidator] = []
     
-    def consolidate_all(self) -> List[Tuple[Path, bool]]:
-        """Recursively consolidate all folders."""
+    def execute(self) -> bool:
+        """Execute full consolidation workflow. Returns success status."""
         print(f"\n{'='*70}")
-        print(f"RECURSIVE CONSOLIDATION: {self.root_path}")
+        print(f"RECURSIVE CONSOLIDATION: {self.root_folder}")
         print(f"{'='*70}")
         
-        # Process root folder first
-        self._consolidate_folder(self.root_path)
+        # Phase 1: Consolidate root and all subfolders
+        if not self._consolidate_recursively(self.root_folder):
+            return False
         
-        # Then process subfolders (recursively)
-        self._process_subfolders(self.root_path)
+        # Phase 2: Cleanup if requested
+        if self.cleanup:
+            print(f"\n{'='*70}")
+            print("CLEANUP PHASE")
+            print(f"{'='*70}")
+            cleanup_manager = CleanupManager(self.consolidators)
+            if not cleanup_manager.cleanup():
+                return False
         
-        return self.results
+        return True
     
-    def _process_subfolders(self, parent_path: Path) -> None:
-        """Recursively process subfolders."""
-        for item in sorted(parent_path.iterdir()):
-            if item.is_dir() and not item.name.startswith('.'):
-                self._consolidate_folder(item)
-                self._process_subfolders(item)
-    
-    def _consolidate_folder(self, folder_path: Path) -> None:
-        """Consolidate a single folder."""
-        consolidator = FolderConsolidator(folder_path, self.output_format, self.cleanup)
-        success, output_file = consolidator.consolidate()
-        if success:
-            self.results.append((folder_path, True))
-        else:
-            self.results.append((folder_path, False))
+    def _consolidate_recursively(self, folder_path: Path) -> bool:
+        """Recursively consolidate folder and all subfolders."""
+        # Consolidate this folder
+        print(f"\n{'='*70}")
+        print(f"Consolidating: {folder_path.name}")
+        print(f"{'='*70}")
+        
+        consolidator = FolderConsolidator(folder_path, self.output_format)
+        if not consolidator.consolidate():
+            return False
+        
+        self.consolidators.append(consolidator)
+        
+        # Recursively consolidate subfolders
+        try:
+            for item in sorted(folder_path.iterdir()):
+                if item.is_dir() and not item.name.startswith('.'):
+                    if not self._consolidate_recursively(item):
+                        return False
+        except Exception as e:
+            print(f"❌ Error recursing into subfolders: {e}")
+            return False
+        
+        return True
     
     def print_summary(self) -> None:
         """Print consolidation summary."""
@@ -311,57 +535,43 @@ class RecursiveConsolidator:
         print("CONSOLIDATION SUMMARY")
         print(f"{'='*70}")
         
-        successful = sum(1 for _, success in self.results if success)
-        failed = len(self.results) - successful
+        successful = len(self.consolidators)
+        total_files = sum(len(c.files_data) for c in self.consolidators)
+        total_size = sum(sum(f["size_bytes"] for f in c.files_data) for c in self.consolidators)
         
-        if successful > 0:
-            print(f"✓ Successfully consolidated {successful} folder(s):")
-            for folder, success in self.results:
-                if success:
-                    rel_path = folder.relative_to(self.root_path) if folder != self.root_path else folder.name
-                    print(f"  ✓ {rel_path}/")
+        print(f"✓ Successfully consolidated {successful} folder(s)")
+        print(f"✓ Total files: {total_files}")
+        print(f"✓ Total size: {total_size / 1024 / 1024:.1f} MB")
         
-        if failed > 0:
-            print(f"❌ Failed: {failed} folder(s)")
+        for consolidator in self.consolidators:
+            rel_path = consolidator.folder_path.relative_to(self.root_folder) \
+                if consolidator.folder_path != self.root_folder \
+                else consolidator.folder_path.name
+            print(f"  ✓ {rel_path}/")
 
+
+# ============================================================================
+# CLI: Command Line Interface
+# ============================================================================
 
 def main():
     """Main CLI entry point."""
     parser = argparse.ArgumentParser(
-        description="Intelligently consolidate all folders into machine-readable files",
+        description="Intelligently consolidate folders into machine-readable files",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Consolidate single folder (preview)
+  # Consolidate preview (no cleanup)
   python consolidate.py --folder SSOT/analysis --format yaml
   
-  # Consolidate with source cleanup
-  python consolidate.py --folder SSOT/analysis --format yaml --cleanup
-  
-  # Full recursive consolidation of root and all subfolders
+  # Full consolidation with cleanup
   python consolidate.py --folder SSOT/analysis --format yaml --cleanup
         """
     )
     
-    parser.add_argument(
-        "--folder", "-f",
-        required=True,
-        type=str,
-        help="Root directory to consolidate"
-    )
-    
-    parser.add_argument(
-        "--format",
-        choices=["json", "yaml"],
-        default="yaml",
-        help="Output format: json or yaml (default: yaml)"
-    )
-    
-    parser.add_argument(
-        "--cleanup", "-c",
-        action="store_true",
-        help="Delete source files and empty folders after consolidation (requires confirmation)"
-    )
+    parser.add_argument("--folder", "-f", required=True, help="Root directory to consolidate")
+    parser.add_argument("--format", choices=["yaml", "json"], default="yaml", help="Output format")
+    parser.add_argument("--cleanup", "-c", action="store_true", help="Delete source files after consolidation")
     
     args = parser.parse_args()
     
@@ -372,7 +582,7 @@ Examples:
         return 1
     
     if not folder_path.is_dir():
-        print(f"❌ Path is not a directory: {folder_path}")
+        print(f"❌ Not a directory: {folder_path}")
         return 1
     
     # Confirm cleanup if requested
@@ -380,7 +590,7 @@ Examples:
         print("\n" + "⚠️  WARNING".center(70))
         print("All source files and empty folders will be DELETED".center(70))
         print("This operation is IRREVERSIBLE".center(70))
-        print("\nRemaining files: Only consolidated machine files (*.yaml or *.json)".center(70))
+        print("Consolidation files (.yaml/.json) will be PRESERVED".center(70))
         print("=" * 70)
         response = input("\nContinue? (yes/no): ").strip().lower()
         if response not in ['yes', 'y']:
@@ -388,12 +598,12 @@ Examples:
             return 0
         print()
     
-    # Execute recursive consolidation
-    consolidator = RecursiveConsolidator(folder_path, args.format, args.cleanup)
-    consolidator.consolidate_all()
-    consolidator.print_summary()
+    # Execute consolidation
+    orchestrator = ConsolidationOrchestrator(folder_path, args.format, args.cleanup)
+    success = orchestrator.execute()
+    orchestrator.print_summary()
     
-    return 0
+    return 0 if success else 1
 
 
 if __name__ == "__main__":
