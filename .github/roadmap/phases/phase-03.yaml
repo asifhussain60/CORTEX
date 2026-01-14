@@ -166,6 +166,27 @@ days:
         acceptance_criteria: []
 
 # =============================================================================
+# RISKS & MITIGATIONS
+# =============================================================================
+
+risks:
+  - risk_id: "RISK-03-001"
+    description: "Circuit breaker thresholds may need tuning in production"
+    severity: "MEDIUM"
+    probability: "HIGH"
+    mitigation: "Make thresholds configurable; implement monitoring for tuning"
+  - risk_id: "RISK-03-002"
+    description: "OpenTelemetry integration may add latency overhead"
+    severity: "LOW"
+    probability: "MEDIUM"
+    mitigation: "Use async export; benchmark before/after; make optional in dev mode"
+  - risk_id: "RISK-03-003"
+    description: "Dashboard real-time updates may overload system under load"
+    severity: "MEDIUM"
+    probability: "LOW"
+    mitigation: "Implement throttling; use WebSocket with backpressure"
+
+# =============================================================================
 # SUMMARY
 # =============================================================================
 
@@ -175,6 +196,8 @@ summary:
   components_to_create: 10
   files_to_create: 11
   files_to_modify: 0
+  estimated_hours: 28
+  buffer_hours: 6
   
   requirements_covered:
     non_functional_requirements: ["NFR-002", "NFR-004"]
