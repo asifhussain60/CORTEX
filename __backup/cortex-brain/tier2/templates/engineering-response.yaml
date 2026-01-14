@@ -1,9 +1,0 @@
-template_id: ENG-RESPONSE-V1
-version: 1.0.0
-tier: 2
-extends: EXEC-SUMMARY-V1
-engineering_practices:
-  include_test_counts: true
-  include_code_coverage: true
-  include_risk_assessment: true
-  max_response_length: 1_minute_read

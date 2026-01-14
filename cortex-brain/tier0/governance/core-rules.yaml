@@ -1,0 +1,408 @@
+# ==============================================================================
+# CORTEX 7.0 TIER 0 GOVERNANCE - SKULL RULES
+# ==============================================================================
+# Purpose: Immutable core rules that define CORTEX's operational boundaries
+# Status: ACTIVE - Migrated from __backup with cleanup
+# Version: 7.0.0
+# Created: 2026-01-15 (CORTEX 7.0 Clean Scaffold)
+#
+# CRITICAL: These rules are IMMUTABLE and take precedence over all other tiers.
+# Tier 0 = SKULL rules - cannot be overridden.
+# ==============================================================================
+
+schema_version: '7.0'
+governance_tier: 0
+category: CORTEX_CORE
+precedence: HIGHEST
+
+metadata:
+  version: "7.0.0"
+  created: "2026-01-15"
+  source: "__backup/cortex-brain/tier0/governance/core-rules.yaml"
+  rule_count: 25
+  author: "Asif Hussain"
+  copyright: "© 2025-2026 Asif Hussain. All rights reserved."
+
+categories:
+  - orchestration_lifecycle
+  - response_formatting
+  - portability
+  - development_workflow
+  - architecture_integrity
+  - quality_gates
+  - security_privacy
+
+# ==============================================================================
+# RULE DEFINITIONS
+# ==============================================================================
+rules:
+  # --------------------------------------------------------------------------
+  # CORE-001: Incremental Execution
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-001
+    category: orchestration_lifecycle
+    severity: blocked
+    name: Incremental Autonomous Execution
+    description: |
+      ALL orchestrators MUST work in small increments (<500 lines per turn)
+      to prevent token limit errors. State MUST persist between increments.
+    validation:
+      - Operations split into <500 line increments
+      - State persisted between turns
+      - Token usage capped at 80%
+
+  # --------------------------------------------------------------------------
+  # CORE-002: No Summary Files
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-002
+    category: response_formatting
+    severity: blocked
+    name: No Summary File Creation
+    description: |
+      Do NOT create *-summary.md, *-report.md files. Summaries go in chat.
+    validation:
+      - No *-summary.md files
+      - No *-report.md files
+      - No completion-*.md files
+
+  # --------------------------------------------------------------------------
+  # CORE-003: Visual Progress Bars
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-003
+    category: response_formatting
+    severity: blocked
+    name: Visual Progress Format
+    description: |
+      Responses MUST use visual progress bars (█████░░░░░) not code blocks.
+    validation:
+      - Progress bars present
+      - No code snippets in summaries
+      - Response ≤40 lines
+
+  # --------------------------------------------------------------------------
+  # CORE-004: Minimal Continuation
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-004
+    category: response_formatting
+    severity: blocked
+    name: Minimal Continuation Prompts
+    description: |
+      CONTINUATION-PROMPT.md MUST be <500 tokens. Use pointer pattern.
+    validation:
+      - Line count ≤12
+      - Token count <500
+      - File size <2KB
+
+  # --------------------------------------------------------------------------
+  # CORE-005: Path Portability (CRITICAL)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-005
+    category: portability
+    severity: blocked
+    name: No Hardcoded Paths
+    description: |
+      NEVER use hardcoded absolute paths. Use src.core.path_resolver.
+      WRONG: /Users/asifhussain/PROJECTS/CORTEX
+      RIGHT: get_project_root() / "cortex-brain"
+    validation:
+      - No /Users/... paths
+      - No C:\Users\... paths
+      - Use get_project_root()
+    implementation:
+      utility: src.core.path_resolver
+
+  # --------------------------------------------------------------------------
+  # CORE-006: Setup Verification
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-006
+    category: orchestration_lifecycle
+    severity: blocked
+    name: Phase -2 Setup Verification
+    description: |
+      ALL orchestrators MUST verify dependencies before execution.
+    validation:
+      - Dependencies pass tests (not just file exists)
+      - VSCode cache checked
+      - Governance compliance validated
+
+  # --------------------------------------------------------------------------
+  # CORE-007: Teardown Refactor
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-007
+    category: orchestration_lifecycle
+    severity: blocked
+    name: Phase N+1 Teardown
+    description: |
+      ALL orchestrators MUST refactor and commit after completion.
+    validation:
+      - Refactor runs on modified files
+      - Git commit follows pattern
+      - Unused code removed
+
+  # --------------------------------------------------------------------------
+  # CORE-008: TDD Enforcement
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-008
+    category: development_workflow
+    severity: blocked
+    name: Test-First Development
+    description: |
+      Tests MUST exist BEFORE implementation (RED → GREEN → REFACTOR).
+    validation:
+      - Test file exists first
+      - Test fails initially (RED)
+      - Implementation makes test pass (GREEN)
+
+  # --------------------------------------------------------------------------
+  # CORE-009: Plan File Organization
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-009
+    category: architecture_integrity
+    severity: blocked
+    name: Files in Plan Folders
+    description: |
+      Plan artifacts MUST live in plan folder structure, not root.
+    validation:
+      - No plan files in workspace root
+      - Artifacts in plan_folder/artifacts/
+      - Tracking in plan_folder/tracking/
+
+  # --------------------------------------------------------------------------
+  # CORE-010: Script Consolidation
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-010
+    category: architecture_integrity
+    severity: blocked
+    name: No Duplicate Scripts
+    description: |
+      Scripts MUST be consolidated. No duplicate functionality.
+    validation:
+      - Scripts cataloged
+      - Duplicate detection runs
+      - Similar scripts consolidated
+
+  # --------------------------------------------------------------------------
+  # CORE-011: Type Hints
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-011
+    category: quality_gates
+    severity: blocked
+    name: Python Type Hints Required
+    description: |
+      ALL Python functions MUST have complete type hints.
+    validation:
+      - Parameters have type hints
+      - Return types specified
+      - No bare Any
+
+  # --------------------------------------------------------------------------
+  # CORE-012: Docstrings
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-012
+    category: quality_gates
+    severity: blocked
+    name: Docstrings Required
+    description: |
+      ALL public functions/classes MUST have Google-style docstrings.
+    validation:
+      - Public APIs documented
+      - Args/Returns/Raises sections
+      - Google style format
+
+  # --------------------------------------------------------------------------
+  # CORE-013: Error Handling
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-013
+    category: quality_gates
+    severity: blocked
+    name: Explicit Error Handling
+    description: |
+      NO bare except. NO catching generic Exception.
+    validation:
+      - Specific exception types
+      - Custom exceptions for domain
+      - Error context preserved
+
+  # --------------------------------------------------------------------------
+  # CORE-014: SOLID Principles
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-014
+    category: architecture_integrity
+    severity: blocked
+    name: SOLID Required
+    description: |
+      Code MUST follow SOLID principles (SRP, OCP, LSP, ISP, DIP).
+    validation:
+      - Single responsibility
+      - Open/closed
+      - Liskov substitution
+      - Interface segregation
+      - Dependency inversion
+
+  # --------------------------------------------------------------------------
+  # CORE-015: Import Organization
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-015
+    category: quality_gates
+    severity: warning
+    name: PEP 8 Imports
+    description: |
+      Imports grouped: stdlib, third-party, local. Sorted alphabetically.
+    validation:
+      - 3 import sections
+      - Blank line between sections
+      - No wildcard imports
+
+  # --------------------------------------------------------------------------
+  # CORE-016: Code Formatting
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-016
+    category: quality_gates
+    severity: warning
+    name: Black Formatting
+    description: |
+      Python code MUST be Black formatted (line length 100).
+    validation:
+      - Black --line-length=100
+      - Double quotes
+      - Trailing commas
+
+  # --------------------------------------------------------------------------
+  # CORE-017: Governance Enforcement
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-017
+    category: security_privacy
+    severity: blocked
+    name: Strict Governance
+    description: |
+      ALL rules enforced strictly. No overrides. All violations logged.
+    validation:
+      - Enforcement = strict
+      - Override = false
+      - Audit logging enabled
+
+  # --------------------------------------------------------------------------
+  # CORE-018: YAML-First
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-018
+    category: architecture_integrity
+    severity: blocked
+    name: YAML-First Design
+    description: |
+      Plans and configs MUST use YAML, not markdown. Machine-readable.
+    validation:
+      - No *-PLAN.md files
+      - Use YAML for tracking
+      - Exception: README.md, docs/
+
+  # --------------------------------------------------------------------------
+  # CORE-019: TDD-Master Required
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-019
+    category: development_workflow
+    severity: blocked
+    name: Route Through TDD-Master
+    description: |
+      ALL implementation requests route to TDD-Master orchestrator.
+    validation:
+      - "implement X" → TDD-Master
+      - "build X" → TDD-Master
+      - Never write code directly
+
+  # --------------------------------------------------------------------------
+  # CORE-020: No Markdown in cortex-brain
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-020
+    category: response_formatting
+    severity: blocked
+    name: No Markdown in Brain
+    description: |
+      cortex-brain/ MUST be YAML/JSON only. No .md files.
+    validation:
+      - cortex-brain/**/*.md blocked
+      - Use YAML for all configs
+      - Exception: None in brain
+
+  # --------------------------------------------------------------------------
+  # CORE-021: Scaffolder Required
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-021
+    category: architecture_integrity
+    severity: blocked
+    name: Use Orchestrator Scaffolder
+    description: |
+      NEW orchestrators MUST be created via scaffolder, not manually.
+    validation:
+      - Extends BaseOrchestratorV4
+      - Has @register_with_master
+      - Manifest created
+
+  # --------------------------------------------------------------------------
+  # CORE-022: Kebab-Case Naming
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-022
+    category: architecture_integrity
+    severity: blocked
+    name: Kebab-Case Files
+    description: |
+      File names MUST be kebab-case, ≤20 chars (excl. extension).
+    validation:
+      - Lowercase with hyphens
+      - No underscores (except Python)
+      - Max 20 characters
+
+  # --------------------------------------------------------------------------
+  # CORE-023: Pre-Commit Validation
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-023
+    category: quality_gates
+    severity: blocked
+    name: File Type Validation
+    description: |
+      Modified files MUST pass type-specific validation before commit.
+    validation:
+      - HTML: html5lib + WCAG AA
+      - YAML: schema validation
+      - Python: pytest pass
+
+  # --------------------------------------------------------------------------
+  # CORE-024: MCP Tool Decorator
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-024
+    category: architecture_integrity
+    severity: blocked
+    name: "@mcp_tool Required"
+    description: |
+      ALL MCP tools MUST use @mcp_tool decorator for registration.
+    validation:
+      - Decorator on all tools
+      - Registered in manifest
+      - No manual registration
+
+  # --------------------------------------------------------------------------
+  # CORE-025: Result Pattern
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-025
+    category: quality_gates
+    severity: blocked
+    name: Result[T] Pattern Required
+    description: |
+      Functions MUST return Result[T] for explicit error handling.
+      Use Ok(value) for success, Err(message) for failure.
+    validation:
+      - Return Result, not exceptions
+      - Check is_ok() before unwrap()
+      - No silent failures
+    implementation:
+      module: src.core.result
+
+# ==============================================================================
+# ENFORCEMENT CONFIGURATION
+# ==============================================================================
+enforcement:
+  mode: strict
+  override_allowed: false
+  audit_logging: true
+  git_hooks:
+    pre_commit: true
+    pre_push: true
