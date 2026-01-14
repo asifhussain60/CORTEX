@@ -997,10 +997,137 @@
         "Runtime discovery: ~100ms (imports all tool modules once)"
       ],
       "rationale": "Prevents registration drift - the #1 failure mode in MCP exposure:\n\nWITHOUT decorator:\n1. Developer creates tool function\n2. Forgets manual registry.register() call\n3. Code merges, tests pass (no detection)\n4. Tool exists but not discoverable via MCP\n5. Silent failure - users can't find tool\n6. Remediation required (audit finds drift 3 days later)\n\nWITH decorator:\n1. Developer creates tool function\n2. Pre-commit hook detects missing decorator \u2192 blocks commit\n3. Developer adds decorator\n4. Import triggers auto-registration (no manual call)\n5. Tool immediately discoverable via MCP\n6. Zero drift possible\n\nDecorator pattern is PROACTIVE (prevents wrong code) vs. governance\nvalidation which is REACTIVE (detects wrong code after merge).\n\nMulti-layer defense:\n- Layer 1: SKULL rule (this) - blocks at commit time\n- Layer 2: Template scaffolder (AC-MCP-PROTOCOL-002) - generates correct code\n- Layer 3: Cross-repo plugin (AC-MCP-PROTOCOL-003) - portable protocol\n- Layer 4: Documentation - developer guidance\n"
+    },
+    {
+      "rule_id": "CORE-026",
+      "category": "architecture_integrity",
+      "severity": "blocked",
+      "name": "MCP Server Unity - Single Registry, No Duplicates",
+      "description": "CORTEX must have ONE authoritative MCP tools registry. Multiple registries,\nUUID-suffixed filenames, or duplicate tool definitions cause:\n- Tool discovery confusion (which registry is current?)\n- Registration drift (tools defined in multiple places)\n- Deployment uncertainty (which file gets deployed?)\n- Maintenance nightmare (updates must sync across files)\n\nThis rule enforces a unified, governance-first MCP architecture.\n",
+      "rules": [
+        {
+          "Only ONE file": "cortex-brain/tier0/governance/mcp-tools-registry.yaml"
+        },
+        {
+          "No UUID suffixes": "mcp-tools-registry-XXXXX.yaml is FORBIDDEN"
+        },
+        {
+          "No duplicate definitions": "All tools defined exactly once"
+        },
+        {
+          "Orchestrators separate": "cortex-brain/config/mcp-server.yaml (unchanged)"
+        },
+        {
+          "Tier 0 location": "Registry lives in governance tier (same as core-rules)"
+        },
+        {
+          "Governance-first": "Tool registry treated as governance, not data"
+        }
+      ],
+      "enforcement": {
+        "trigger": "git_pre_commit",
+        "actions": [
+          "detect_multiple_mcp_registries",
+          "block_uuid_suffixed_files",
+          "validate_single_authority",
+          "enforce_tier0_location"
+        ]
+      },
+      "validation": [
+        "Count *.mcp.yaml files in workspace \u2192 must be \u22641",
+        "Verify no files matching mcp-tools-registry-*.yaml (UUID pattern)",
+        "Verify no files matching cortex-holistic-*.mcp.yaml (individual tools)",
+        {
+          "Assert registry location": "cortex-brain/tier0/governance/mcp-tools-registry.yaml"
+        },
+        {
+          "Verify orchestrators unchanged": "cortex-brain/config/mcp-server.yaml"
+        },
+        "Check no duplicate tool definitions within registry"
+      ],
+      "implementation": {
+        "middleware": "src.orchestrators.middleware.mcp_unity_enforcer.MCPUnityEnforcer",
+        "hook": "pre_commit",
+        "priority": 9,
+        "enforcement_hooks": [
+          "git_pre_commit_hook",
+          "orchestrator_load_time",
+          "mcp_server_initialization"
+        ]
+      },
+      "violations": [
+        "Multiple *.mcp.yaml files in workspace",
+        "Registry with UUID suffix (mcp-tools-registry-6160caae.yaml)",
+        "Individual tool definitions (cortex-holistic-review.mcp.yaml)",
+        "Registry outside tier0/governance/",
+        "Tool defined in multiple places"
+      ],
+      "remediation": {
+        "single_registry": [
+          "Identify all MCP registry files",
+          "Keep only: cortex-brain/tier0/governance/mcp-tools-registry.yaml",
+          "Archive others: cortex-brain/archive/deleted-registries/",
+          "Consolidate all tool definitions into single file",
+          "Update all references in code",
+          "Delete obsolete files"
+        ],
+        "remove_uuid_suffixes": [
+          "Find: mcp-tools-registry-*.yaml",
+          "Rename to: mcp-tools-registry.yaml",
+          "Update scripts/activate_toolkit_systems.py (remove UUID generation)",
+          "Update cortex-brain/config/master-orchestrator.yaml (hardcode path)"
+        ],
+        "delete_duplicates": [
+          "Delete: cortex-brain/tier1/mcp-registry/cortex-holistic-review.mcp.yaml",
+          "Delete: cortex-brain/config/mcp-server.yaml (if it defines tools - it only defines orchestrators)",
+          "Keep: cortex-brain/tier0/governance/mcp-tool-usage-rules.yaml (governance policy)",
+          "Keep: cortex-brain/config/mcp-server.yaml (orchestrator registry only)"
+        ]
+      },
+      "examples": {
+        "pass": [
+          "Single registry: cortex-brain/tier0/governance/mcp-tools-registry.yaml",
+          "All tools defined once in registry YAML",
+          "Code references: config_path = cortex-brain/tier0/governance/mcp-tools-registry.yaml",
+          "All *.mcp.yaml files deleted (archives backed up)"
+        ],
+        "fail": [
+          "Multiple registries: mcp-tools-registry-6160caae.yaml AND mcp-tools-registry-aabbccdd.yaml",
+          "Registry with UUID: cortex-brain/registry/mcp-tools-registry-6160caae.yaml",
+          "Duplicate tools: Tool defined in registry.yaml AND cortex-holistic-review.mcp.yaml",
+          "Registry outside governance: cortex-brain/registry/ (should be tier0/)",
+          "Obsolete files: cortex-brain/tier1/mcp-registry/cortex-holistic-review.mcp.yaml"
+        ]
+      },
+      "integration_points": [
+        "MasterOrchestrator: Load from cortex-brain/tier0/governance/mcp-tools-registry.yaml",
+        "CapabilityRegistry: Single source for tool discovery",
+        "Pre-commit hook: MCPUnityEnforcer validates before merge",
+        "Documentation: CORTEX.prompt.md references tier0/governance/ location"
+      ],
+      "cross_platform_support": {
+        "platforms": [
+          "MAC",
+          "WIN",
+          "Linux"
+        ],
+        "portability": [
+          "Use pathlib.Path for file operations (not hardcoded paths)",
+          "YAML loading works identically on all platforms",
+          "UUID removal improves reproducibility (same file everywhere)"
+        ]
+      },
+      "performance": [
+        "Pre-commit check: ~10ms (single file validation)",
+        "Registry load: ~5ms (single YAML parse)",
+        "Tool discovery: ~2ms (no scanning needed, direct lookup)"
+      ],
+      "rationale": "MCP Server Unity prevents operational failures:\n\nWITHOUT unity (current state):\n- 4 separate MCP YAML files scattered across workspace\n- UUID-suffixed registry makes it non-deterministic\n- 188 AC-IDs scattered across multiple authorities\n- Confusion: \"Which file is authoritative?\"\n- Bugs: Different modules reading different registries\n- Maintenance: Updates must sync across files\n\nWITH unity (Option B):\n- 1 authoritative registry (tier0/governance/)\n- Deterministic file location (no UUIDs)\n- Single source of truth for all tools\n- Clarity: All code references same file\n- Reliability: Tools auto-discovered from one place\n- Maintainability: One file to update\n\nPhase 10 AC-ID mapping (Template Migration & Enhancement):\n- AC-TEMPLATE-006: Consolidate registries + move to tier0/\n- AC-TEMPLATE-007: Implement MCPUnityEnforcer + register CORE-026\n\nThis enhancement advances Phase 10 from 14% (1/7 ACs) to 43% (3/7 ACs).\n",
+      "bypass": "git commit --no-verify (EMERGENCY ONLY - creates audit alert CORE-026-BYPASS)"
     }
   ],
   "metadata": {
-    "created_at": "2026-01-13T13:32:27.338038",
+    "created_at": "2026-01-13T17:56:47.786494",
     "version": "1.0.0",
     "source": "TDDMasterOrchestrator"
   }

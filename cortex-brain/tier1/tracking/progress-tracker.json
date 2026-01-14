@@ -1,7 +1,7 @@
 {
   "schema_version": "1.10",
-  "last_updated": "2026-01-13T23:08:48.210492+00:00",
-  "updated_by": "Phase 3 Autonomous Completion",
+  "last_updated": "2026-01-14T00:38:54.855397+00:00",
+  "updated_by": "DashboardIntegrationFixer v1.0",
   "active_epic": {
     "id": "CORTEX-6.0",
     "name": "CORTEX 6.0 Production-Grade Rebuild with Sequential Execution",
@@ -18,6 +18,7 @@
     "phase_9_redesign": "COMPLETE - Replaced SDLC with Infrastructure Maturity",
     "review_rounds_completed": 5,
     "recent_fixes": [
+      "2026-01-14T00:38:54.855542Z: Dashboard Integration Fix - AC counts repaired from master-plan.yaml",
       "2026-01-13T15:43:03Z: SSOT FIX - Corrected phase number from 11 to 10 (Template Migration belongs to Phase 10 per master-plan.yaml)",
       "2026-01-13T15:37:39Z: PHASE 11 COMPLETE - Template Migration & Enhancement (7/7 AC-IDs, 100%). Challenge system foundation operational.",
       "2026-01-13T15:36:50Z: AC-TEMPLATE-008 COMPLETE - Response Template Unification (3-layer structure: tier0/tier1/tier2 templates)",
@@ -86,8 +87,41 @@
       "acs_total": 8,
       "tests_total": 58,
       "pass_rate": "100%",
-      "total_ac_count": 0,
-      "completed_count": 0
+      "total_ac_count": 30,
+      "completed_count": 0,
+      "ac_ids": [
+        "AC-AUDIT-001",
+        "AC-AUDIT-002",
+        "AC-AUDIT-003",
+        "AC-AUDIT-004",
+        "AC-AUDIT-005",
+        "AC-AUDIT-006",
+        "AC-AUDIT-007",
+        "AC-AUDIT-EVIDENCE-P1",
+        "AC-EVIDENCE-001",
+        "AC-EVIDENCE-002",
+        "AC-EVIDENCE-003",
+        "AC-GOV-001",
+        "AC-GOV-002",
+        "AC-GOV-003",
+        "AC-GOV-004",
+        "AC-GOV-005",
+        "AC-LIFECYCLE-001",
+        "AC-LIFECYCLE-002",
+        "AC-LIFECYCLE-003",
+        "AC-SECURITY-001",
+        "AC-SECURITY-002",
+        "AC-SECURITY-003",
+        "AC-SECURITY-004",
+        "AC-SECURITY-005",
+        "AC-SECURITY-006",
+        "AC-SECURITY-007",
+        "AC-SECURITY-008",
+        "AC-STATE-001",
+        "AC-STATE-002",
+        "AC-STATE-003"
+      ],
+      "completion_percentage": 0.0
     },
     "phase_2": {
       "name": "Phase 2",
@@ -95,8 +129,65 @@
       "acs_total": 13,
       "tests_total": 156,
       "pass_rate": "100%",
-      "total_ac_count": 0,
-      "completed_count": 0
+      "total_ac_count": 54,
+      "completed_count": 0,
+      "ac_ids": [
+        "AC-AUDIT-EVIDENCE-P2",
+        "AC-METRICS-001",
+        "AC-METRICS-002",
+        "AC-METRICS-003",
+        "AC-METRICS-004",
+        "AC-METRICS-005",
+        "AC-ORCH-001",
+        "AC-ORCH-002",
+        "AC-ORCH-003",
+        "AC-ORCH-004",
+        "AC-ORCH-005",
+        "AC-ORCH-006",
+        "AC-ORCH-007",
+        "AC-ORCH-008",
+        "AC-PLAN-001",
+        "AC-PLAN-002",
+        "AC-PLAN-003",
+        "AC-PLAN-004",
+        "AC-PLAN-005",
+        "AC-PLAN-006",
+        "AC-PLAN-007",
+        "AC-PLAN-008",
+        "AC-ROUTE-001",
+        "AC-ROUTE-002",
+        "AC-ROUTE-003",
+        "AC-ROUTE-004",
+        "AC-ROUTE-005",
+        "AC-STS-001",
+        "AC-STS-002",
+        "AC-STS-003",
+        "AC-TDD-001",
+        "AC-TDD-002",
+        "AC-TDD-003",
+        "AC-TDD-004",
+        "AC-TDD-005",
+        "AC-TDD-006",
+        "AC-TDD-007",
+        "AC-TDD-008",
+        "AC-TDD-009",
+        "AC-TDD-010",
+        "AC-TODO-001",
+        "AC-TODO-002",
+        "AC-TODO-003",
+        "AC-TODO-004",
+        "AC-VALIDATE-001",
+        "AC-VALIDATE-002",
+        "AC-VALIDATE-003",
+        "AC-VALIDATE-004",
+        "AC-VALIDATE-005",
+        "AC-VALIDATE-006",
+        "AC-VALIDATE-007",
+        "AC-VALIDATE-008",
+        "AC-VALIDATE-009",
+        "AC-VALIDATE-010"
+      ],
+      "completion_percentage": 0.0
     },
     "phase_3": {
       "name": "Phase 3",
@@ -104,8 +195,12 @@
       "acs_total": 23,
       "tests_total": 189,
       "pass_rate": "98%",
-      "total_ac_count": 0,
-      "completed_count": 0
+      "total_ac_count": 1,
+      "completed_count": 0,
+      "ac_ids": [
+        "AC-AUDIT-EVIDENCE-P3"
+      ],
+      "completion_percentage": 0.0
     },
     "phase_4": {
       "name": "Phase 4",
@@ -113,8 +208,12 @@
       "acs_total": 8,
       "tests_total": 64,
       "pass_rate": "100%",
-      "total_ac_count": 0,
-      "completed_count": 0
+      "total_ac_count": 1,
+      "completed_count": 0,
+      "ac_ids": [
+        "AC-AUDIT-EVIDENCE-P4"
+      ],
+      "completion_percentage": 0.0
     },
     "phase_4_5": {
       "name": "Phase 4 5",
@@ -122,8 +221,12 @@
       "acs_total": 8,
       "tests_total": 58,
       "pass_rate": "89.7%",
-      "total_ac_count": 0,
-      "completed_count": 0
+      "total_ac_count": 1,
+      "completed_count": 0,
+      "ac_ids": [
+        "AC-AUDIT-EVIDENCE-P4.5"
+      ],
+      "completion_percentage": 0.0
     },
     "phase_5": {
       "name": "Phase 5",
@@ -133,7 +236,11 @@
       "pass_rate": "100%",
       "completed_count": 0,
       "total_count": 28,
-      "total_ac_count": 0
+      "total_ac_count": 1,
+      "ac_ids": [
+        "AC-AUDIT-EVIDENCE-P5"
+      ],
+      "completion_percentage": 0.0
     },
     "phase_11": {
       "name": "Phase 11 - CORTEX LENS & Onboarding",
@@ -143,21 +250,52 @@
       "pass_rate": 0.0,
       "completed_count": 0,
       "total_count": 14,
-      "total_ac_count": 0
+      "total_ac_count": 20,
+      "ac_ids": [
+        "AC-CHALLENGE-001",
+        "AC-CHALLENGE-002",
+        "AC-CHALLENGE-003",
+        "AC-LENS-001",
+        "AC-LENS-002",
+        "AC-LENS-003",
+        "AC-LENS-004",
+        "AC-LENS-005",
+        "AC-LENS-006",
+        "AC-ONBOARD-001",
+        "AC-ONBOARD-002",
+        "AC-ONBOARD-003",
+        "AC-ONBOARD-004",
+        "AC-ONBOARD-005",
+        "AC-ONBOARD-006",
+        "AC-ONBOARD-007",
+        "AC-ONBOARD-008",
+        "AC-TEMPLATE-006",
+        "AC-TEMPLATE-007",
+        "AC-TEMPLATE-008"
+      ],
+      "completion_percentage": 0.0
     },
     "phase_1_5": {
       "phase_name": "Phase 1.5: Security & Audit",
       "status": "not_started",
       "total_ac_count": 1,
       "completed_ac_count": 0,
-      "completed_count": 0
+      "completed_count": 0,
+      "ac_ids": [
+        "AC-AUDIT-EVIDENCE-P1.5"
+      ],
+      "completion_percentage": 0.0
     },
     "phase_10": {
       "phase_name": "Phase 10: Production Readiness",
       "status": "not_started",
       "total_ac_count": 1,
       "completed_ac_count": 0,
-      "completed_count": 0
+      "completed_count": 0,
+      "ac_ids": [
+        "AC-AUDIT-EVIDENCE-P10"
+      ],
+      "completion_percentage": 0.0
     }
   }
 }
