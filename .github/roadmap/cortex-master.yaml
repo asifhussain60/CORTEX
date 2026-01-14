@@ -1,18 +1,18 @@
 # =============================================================================
-# CORTEX 7.0 MASTER IMPLEMENTATION PLAN
+# CORTEX MASTER IMPLEMENTATION PLAN
 # =============================================================================
 # Source: This file IS the Single Source of Truth (SSOT folder deleted)
-# Generated: 2026-01-15
 # Status: READY FOR IMPLEMENTATION (DoR Score: 85/100)
 # =============================================================================
 
 metadata:
-  version: "7.0"
+  title: "CORTEX Implementation Roadmap"
+  description: "AI-Powered Development Orchestration System - Foundation through Production"
   project: "CORTEX"
   status: "IMPLEMENTATION_READY"
   dor_score: 85
-  total_duration: "5 weeks + 2 parallel enhancements"
-  start_date: "2026-01-15"
+  start_date: null
+  end_date: null
   total_ac_ids: 98
 
 # =============================================================================
@@ -25,12 +25,14 @@ metadata:
 phase_tracker:
   PHASE-01:
     title: "Foundation"
+    description: "3-Tier Governance, SQLite Index, Audit-First Pattern, State Machine"
     ac_ids: 33
     status: "NOT_STARTED"  # NOT_STARTED | IN_PROGRESS | COMPLETED
     locked: false          # Once true, phase cannot be reimplemented
     completed_at: null
   PHASE-02:
     title: "Orchestration Core"
+    description: "Orchestrator Architecture, MCP Integration, Governance Evaluation, Response Templates"
     ac_ids: 27
     status: "NOT_STARTED"
     locked: false
@@ -38,6 +40,7 @@ phase_tracker:
     requires: "PHASE-01"
   PHASE-03:
     title: "Safety & Observability"
+    description: "Reliability, Graceful Degradation, Circuit Breaker, OpenTelemetry Metrics"
     ac_ids: 6
     status: "NOT_STARTED"
     locked: false
@@ -45,6 +48,7 @@ phase_tracker:
     requires: "PHASE-02"
   PHASE-04:
     title: "Production Hardening"
+    description: "Security, Secret Redaction, Hash Verification, Cross-File Coherence"
     ac_ids: 12
     status: "NOT_STARTED"
     locked: false
@@ -52,6 +56,7 @@ phase_tracker:
     requires: "PHASE-03"
   PHASE-05:
     title: "Brittleness Fixes"
+    description: "Import Fixes, Path Resolution, Test Stabilization, Final Verification"
     ac_ids: 17
     status: "NOT_STARTED"
     locked: false
@@ -59,6 +64,7 @@ phase_tracker:
     requires: "PHASE-04"
   PHASE-PARALLEL:
     title: "Folder Migration"
+    description: "Nested Folder Organization, Import Updates (Non-Blocking)"
     ac_ids: 3
     status: "NOT_STARTED"
     locked: false
@@ -77,8 +83,6 @@ architecture_decisions:
     status: "APPROVED"
     priority: "CRITICAL"
     phase: 1
-    day: 1
-    effort: "4 hours"
     description: |
       Implement 3-tier governance hierarchy:
       - Tier 0: Immutable SKULL rules (25 rules, YAML-based, cannot be overridden)
@@ -106,8 +110,6 @@ architecture_decisions:
     status: "APPROVED"
     priority: "HIGH"
     phase: 1
-    day: 2
-    effort: "4 hours"
     description: |
       Single-file SQLite database (governance.db) for:
       - AC-ID tracking and status
@@ -136,8 +138,6 @@ architecture_decisions:
     status: "APPROVED"
     priority: "HIGH"
     phase: 1
-    day: 2
-    effort: "4 hours"
     description: |
       Python decorators that auto-wire governance evaluation:
       @governance_enforced - Applies all applicable rules
@@ -167,8 +167,6 @@ architecture_decisions:
     status: "APPROVED"
     priority: "MEDIUM"
     phase: 1
-    day: 2
-    effort: "2 hours"
     description: |
       Structured logging with tiers:
       - AUDIT: Immutable audit trail (goes to governance.db)
@@ -196,8 +194,6 @@ architecture_decisions:
     status: "APPROVED"
     priority: "CRITICAL"
     phase: 1
-    day: 1
-    effort: "2 hours"
     description: |
       Environment-based mode control:
       - PRODUCTION: All governance enforced, no bypass
@@ -224,8 +220,6 @@ architecture_decisions:
     status: "APPROVED"
     priority: "CRITICAL"
     phase: 2
-    day: 1
-    effort: "8 hours"
     description: |
       Layered orchestrator architecture:
       - MasterOrchestrator: Coordinates all sub-orchestrators
@@ -255,8 +249,6 @@ architecture_decisions:
     status: "APPROVED"
     priority: "HIGH"
     phase: 2
-    day: 2
-    effort: "6 hours"
     description: |
       Model Context Protocol server for LLM integration:
       - Exposes orchestrators as MCP tools
@@ -281,27 +273,25 @@ architecture_decisions:
 
   AR-008:
     id: "AR-008"
-    title: "CORTEX 6.0 Adaptation"
+    title: "Legacy Pattern Adaptation"
     status: "APPROVED"
     priority: "MEDIUM"
     phase: 1
-    day: 5
-    effort: "4 hours"
     description: |
-      Adapt proven patterns from CORTEX 6.0:
+      Adapt proven patterns from previous iterations:
       - Evidence bundle structure
       - Audit log format
       - Governance rule schema
       - State machine patterns
     acceptance_criteria:
       - ac_id: "AC-AR-008-01"
-        description: "Evidence bundle schema compatible with CORTEX 6.0"
+        description: "Evidence bundle schema compatible with legacy format"
         test: "test_evidence_schema_compatibility"
       - ac_id: "AC-AR-008-02"
-        description: "Audit log format matches CORTEX 6.0"
+        description: "Audit log format follows established patterns"
         test: "test_audit_format_compatibility"
       - ac_id: "AC-AR-008-03"
-        description: "Migration path documented for CORTEX 6.0 users"
+        description: "Migration path documented for existing users"
         test: "test_migration_docs_exist"
     components:
       - "CompatibilityLayer"
@@ -314,8 +304,6 @@ architecture_decisions:
     status: "APPROVED"
     priority: "MEDIUM"
     phase: 2
-    day: 4
-    effort: "4 hours"
     description: |
       Templated response system:
       - JSON/YAML response templates
@@ -342,8 +330,7 @@ architecture_decisions:
     title: "Nested Folder Organization"
     status: "APPROVED"
     priority: "LOW"
-    phase: "3.5"
-    effort: "16 hours (PARALLEL)"
+    phase: "PARALLEL"
     blocking: false
     description: |
       Migrate to nested folder structure:
@@ -377,8 +364,6 @@ functional_requirements:
     status: "APPROVED"
     priority: "CRITICAL"
     phase: 1
-    days: [1, 3]
-    effort: "8 hours"
     description: |
       All operations audit-logged BEFORE execution:
       1. Log intent
@@ -408,8 +393,6 @@ functional_requirements:
     status: "APPROVED"
     priority: "CRITICAL"
     phase: 2
-    day: 3
-    effort: "6 hours"
     description: |
       Evaluate governance rules against operations:
       - Load applicable rules by context
@@ -438,8 +421,6 @@ functional_requirements:
     status: "APPROVED"
     priority: "HIGH"
     phase: 1
-    day: 3
-    effort: "6 hours"
     description: |
       State machine for AC-ID lifecycle:
       - States: PENDING, IN_PROGRESS, BLOCKED, COMPLETED, VERIFIED
@@ -468,8 +449,6 @@ functional_requirements:
     status: "APPROVED"
     priority: "HIGH"
     phase: 1
-    day: 4
-    effort: "6 hours"
     description: |
       Capture evidence bundles for AC-ID completion:
       - Code changes (git diff)
@@ -498,8 +477,6 @@ functional_requirements:
     status: "APPROVED"
     priority: "HIGH"
     phase: 1
-    day: 4
-    effort: "4 hours"
     description: |
       Track implementation progress:
       - Phase completion percentage
@@ -528,8 +505,6 @@ functional_requirements:
     status: "APPROVED"
     priority: "MEDIUM"
     phase: 1
-    day: 5
-    effort: "4 hours"
     description: |
       Enable autonomous operation continuation:
       - State checkpoint/restore
@@ -674,12 +649,10 @@ governance_rules:
 hallucination_prevention:
   status: "APPROVED FOR PHASE 2+4"
   total_ac_ids: 24
-  effort: "+8.75 days total"
   
   phase_2_enhancements:
     title: "WIN Machine Enhancement"
     ac_count: 15
-    effort: "+3.5 days"
     components:
       input_validation:
         ac_ids: ["AC-VALIDATE-001", "AC-VALIDATE-002", "AC-VALIDATE-003", "AC-VALIDATE-004", "AC-VALIDATE-005", "AC-VALIDATE-006", "AC-VALIDATE-007", "AC-VALIDATE-008", "AC-VALIDATE-009", "AC-VALIDATE-010"]
@@ -693,7 +666,6 @@ hallucination_prevention:
   phase_4_enhancements:
     title: "MAC Machine Enhancement"
     ac_count: 9
-    effort: "+5.25 days"
     components:
       cross_file_coherence:
         ac_ids: ["AC-COHERENCE-001", "AC-COHERENCE-002", "AC-COHERENCE-003", "AC-COHERENCE-004"]
@@ -713,72 +685,56 @@ brittleness_fixes:
   total_ac_ids: 14
   
   critical_blockers:
-    phase: "9.4 (Day 0 - 2 hours)"
     ac_ids:
       - id: "AC-BRITTLE-001"
         problem: "SQLite Journal Mode"
         severity: "CRITICAL"
-        effort: "15 minutes"
         solution: "Enable WAL mode (PRAGMA journal_mode=WAL)"
       - id: "AC-BRITTLE-002"
         problem: "Audit Database Schema Missing"
         severity: "CRITICAL"
-        effort: "45 minutes"
         solution: "Create schema migration, auto-initialize"
       - id: "AC-BRITTLE-003"
         problem: "Progress Tracker Broken"
         severity: "CRITICAL"
-        effort: "30 minutes"
         solution: "Rebuild tracker from AC-INDEX"
       - id: "AC-BRITTLE-004"
         problem: "Pytest Collection Warnings"
         severity: "CRITICAL"
-        effort: "5 minutes"
         solution: "Rename dataclasses to remove 'Test' prefix"
 
   high_priority:
-    phase: "9.4 (Week 1 - 5 days)"
     ac_ids:
       - id: "AC-BRITTLE-005"
         problem: "Import Brittleness"
         severity: "HIGH"
-        effort: "2 hours"
       - id: "AC-BRITTLE-006"
         problem: "Test Collection Brittleness"
         severity: "HIGH"
-        effort: "3 hours"
       - id: "AC-BRITTLE-007"
         problem: "Package Path Brittleness"
         severity: "HIGH"
-        effort: "2 hours"
       - id: "AC-BRITTLE-008"
         problem: "AC Completeness Brittleness"
         severity: "HIGH"
-        effort: "5 days"
       - id: "AC-BRITTLE-009"
         problem: "Evidence Generation Brittleness"
         severity: "HIGH"
-        effort: "3 days"
       - id: "AC-BRITTLE-010"
         problem: "Portability Brittleness"
         severity: "HIGH"
-        effort: "2 days"
       - id: "AC-BRITTLE-011"
         problem: "State Management Brittleness"
         severity: "HIGH"
-        effort: "1.5 days"
       - id: "AC-BRITTLE-012"
         problem: "Governance Enforcement Brittleness"
         severity: "HIGH"
-        effort: "2 days"
       - id: "AC-BRITTLE-013"
         problem: "Test-AC Linking Brittleness"
         severity: "HIGH"
-        effort: "2 hours"
       - id: "AC-BRITTLE-014"
         problem: "Verification Rate Brittleness"
         severity: "HIGH"
-        effort: "2 days"
 
 # =============================================================================
 # IMPLEMENTATION PHASES
@@ -788,7 +744,6 @@ phases:
   phase_01:
     id: "PHASE-01"
     title: "Foundation"
-    duration: "5 days"
     file: "phases/phase-01.yaml"
     focus:
       - "3-Tier Governance Model"
@@ -833,7 +788,6 @@ phases:
   phase_02:
     id: "PHASE-02"
     title: "Orchestration Core"
-    duration: "5 days"
     file: "phases/phase-02.yaml"
     focus:
       - "Orchestrator Architecture"
@@ -873,7 +827,6 @@ phases:
   phase_03:
     id: "PHASE-03"
     title: "Safety & Observability"
-    duration: "5 days"
     file: "phases/phase-03.yaml"
     focus:
       - "Reliability (NFR-002)"
@@ -891,7 +844,6 @@ phases:
   phase_04:
     id: "PHASE-04"
     title: "Production Hardening"
-    duration: "5 days"
     file: "phases/phase-04.yaml"
     focus:
       - "Security (NFR-003)"
@@ -915,7 +867,6 @@ phases:
   phase_05:
     id: "PHASE-05"
     title: "Brittleness Fixes & Stabilization"
-    duration: "5 days"
     file: "phases/phase-05.yaml"
     focus:
       - "Critical Brittleness Fixes"
@@ -945,7 +896,6 @@ phases:
   phase_parallel:
     id: "PHASE-PARALLEL"
     title: "Folder Structure Migration"
-    duration: "16 hours"
     blocking: false
     file: "phases/phase-parallel.yaml"
     focus:

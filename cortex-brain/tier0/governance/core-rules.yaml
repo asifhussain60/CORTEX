@@ -1,24 +1,19 @@
 # ==============================================================================
-# CORTEX 7.0 TIER 0 GOVERNANCE - SKULL RULES
+# CORTEX TIER 0 GOVERNANCE - SKULL RULES
 # ==============================================================================
 # Purpose: Immutable core rules that define CORTEX's operational boundaries
-# Status: ACTIVE - Migrated from __backup with cleanup
-# Version: 7.0.0
-# Created: 2026-01-15 (CORTEX 7.0 Clean Scaffold)
+# Status: ACTIVE
 #
 # CRITICAL: These rules are IMMUTABLE and take precedence over all other tiers.
 # Tier 0 = SKULL rules - cannot be overridden.
 # ==============================================================================
 
-schema_version: '7.0'
+schema_version: '1.0'
 governance_tier: 0
 category: CORTEX_CORE
 precedence: HIGHEST
 
 metadata:
-  version: "7.0.0"
-  created: "2026-01-15"
-  source: "__backup/cortex-brain/tier0/governance/core-rules.yaml"
   rule_count: 25
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."

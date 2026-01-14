@@ -1,7 +1,6 @@
 # =============================================================================
 # PHASE 02: ORCHESTRATION CORE
 # =============================================================================
-# Duration: 5 days
 # Focus: Orchestrator Architecture, MCP Integration, Governance Evaluation
 #        Response Templates, Input Validation (Hallucination Prevention)
 # =============================================================================
@@ -9,7 +8,7 @@
 metadata:
   phase_id: "PHASE-02"
   title: "Orchestration Core"
-  duration: "5 days"
+  description: "Orchestrator Architecture, MCP Integration, Governance Evaluation, Response Templates"
   status: "NOT_STARTED"
   start_date: null
   end_date: null
@@ -23,7 +22,6 @@ metadata:
 days:
   day_1:
     title: "Orchestrator Architecture"
-    duration: "8 hours"
     focus:
       - "AR-006: Orchestrator Architecture"
     
@@ -31,7 +29,6 @@ days:
       - task_id: "TASK-02-01-01"
         title: "Implement Master Orchestrator"
         requirement_id: "AR-006"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components:
           - "MasterOrchestrator"
@@ -48,7 +45,6 @@ days:
       - task_id: "TASK-02-01-02"
         title: "Implement Orchestrator Registry"
         requirement_id: "AR-006"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components:
           - "OrchestratorRegistry"
@@ -71,7 +67,6 @@ days:
 
   day_2:
     title: "MCP Integration"
-    duration: "8 hours"
     focus:
       - "AR-007: MCP Server Integration"
       - "FR-006: Autonomous Continuation (Continued)"
@@ -80,7 +75,6 @@ days:
       - task_id: "TASK-02-02-01"
         title: "Implement MCP Server"
         requirement_id: "AR-007"
-        effort: "6 hours"
         status: "NOT_STARTED"
         components:
           - "MCPServer"
@@ -111,7 +105,6 @@ days:
       - task_id: "TASK-02-02-02"
         title: "Continue Autonomous Continuation"
         requirement_id: "FR-006"
-        effort: "2 hours"
         status: "NOT_STARTED"
         components: []
         files_to_create: []
@@ -122,7 +115,6 @@ days:
 
   day_3:
     title: "Governance Evaluation"
-    duration: "8 hours"
     focus:
       - "AR-006: Orchestrator Registry (Continued)"
       - "FR-002: Governance Rule Evaluation"
@@ -131,7 +123,6 @@ days:
       - task_id: "TASK-02-03-01"
         title: "Complete Orchestrator Registry"
         requirement_id: "AR-006"
-        effort: "2 hours"
         status: "NOT_STARTED"
         components: []
         files_to_create: []
@@ -142,7 +133,6 @@ days:
       - task_id: "TASK-02-03-02"
         title: "Implement Governance Rule Evaluation"
         requirement_id: "FR-002"
-        effort: "6 hours"
         status: "NOT_STARTED"
         components:
           - "RuleEvaluator"
@@ -170,7 +160,6 @@ days:
 
   day_4:
     title: "Templates & Validation"
-    duration: "8 hours"
     focus:
       - "AR-009: Custom Response Templates"
       - "AC-VALIDATE-001 through AC-VALIDATE-005"
@@ -180,7 +169,6 @@ days:
       - task_id: "TASK-02-04-01"
         title: "Implement Custom Response Templates"
         requirement_id: "AR-009"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components:
           - "TemplateEngine"
@@ -209,7 +197,6 @@ days:
       - task_id: "TASK-02-04-02"
         title: "Implement Input Validation (Part 1)"
         requirement_id: "HALLUCINATION-PREVENTION"
-        effort: "4 hours"
         status: "NOT_STARTED"
         components:
           - "InputValidator"
@@ -241,18 +228,16 @@ days:
 
   day_5:
     title: "Integration & Testing"
-    duration: "8 hours"
     focus:
       - "Orchestrator Integration"
       - "AC-VALIDATE-006 through AC-VALIDATE-010"
       - "AC-METRICS-003 through AC-METRICS-005"
-      - "Testing Week 1-2 AC-IDs"
+      - "Testing Phase 1-2 AC-IDs"
     
     tasks:
       - task_id: "TASK-02-05-01"
         title: "Complete Input Validation (Part 2)"
         requirement_id: "HALLUCINATION-PREVENTION"
-        effort: "3 hours"
         status: "NOT_STARTED"
         components:
           - "HealthMetricsCollector"
@@ -289,7 +274,6 @@ days:
       - task_id: "TASK-02-05-02"
         title: "Orchestrator Integration"
         requirement_id: "INTEGRATION"
-        effort: "3 hours"
         status: "NOT_STARTED"
         components: []
         files_to_create: []
@@ -300,7 +284,6 @@ days:
       - task_id: "TASK-02-05-03"
         title: "Phase 1-2 Integration Testing"
         requirement_id: "TESTING"
-        effort: "2 hours"
         status: "NOT_STARTED"
         components: []
         files_to_create:
