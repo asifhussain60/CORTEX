@@ -1,0 +1,110 @@
+date: 2026-01-14
+topic: Database alternatives for CORTEX 7
+user_intent: Evaluate SQLite vs alternatives (DuckDB, TinyDB, Redis, LMDB) for brain storage and resolve chat file bloat issue
+orchestrator: Investigation + Analysis
+decision: Keep SQLite for Phase 1-2, add DuckDB for audit analytics in Phase 4
+rationale: |
+  SQLite is optimal for transactional workloads (audit writes, state management) with ACID guarantees,
+  cross-platform compatibility (CORE-005), and zero new dependencies (stdlib). DuckDB provides 10-100x 
+  faster analytical queries for audit log aggregations and better compression for cold storage.
+  
+  Chat file bloat (chat01.md at 4016 lines) identified as Copilot context pollution. Solution: gitignore 
+  .cortex/ and use structured session summaries instead of raw chat transcripts.
+
+ac_ids_referenced:
+  - AC-AUDIT-001  # Queryable Audit Storage
+  - AC-AUDIT-002  # Audit Query Interface
+  - AC-AUDIT-007  # Hash Chain Integrity
+
+ac_ids_implemented: []
+
+alternatives_evaluated:
+  DuckDB:
+    verdict: "Excellent for audit analytics"
+    recommendation: "Add in Phase 4 (Intelligence Layer)"
+    pros: "10-100x faster aggregations, columnar storage, better compression"
+    cons: "OLAP-focused, larger binary (50MB)"
+  
+  TinyDB:
+    verdict: "Not suitable"
+    reason: "Poor performance at scale (>1000 records), no ACID"
+  
+  Redis:
+    verdict: "Optional for hot cache"
+    recommendation: "Add in Phase 7+ for multi-user scenarios"
+    pros: "Microsecond latency, built-in TTL, production-proven"
+    cons: "Requires server process, overkill for single-user tools"
+  
+  LMDB:
+    verdict: "Alternative if write locking becomes issue"
+    reason: "Key-value only, no SQL, not needed yet"
+  
+  Shelve:
+    verdict: "Not suitable"
+    reason: "Violates CORE-005 (not cross-platform), no queries"
+
+next_steps:
+  - Implement tiered memory with SQLite (hot/warm/cold partitions)
+  - Optimize SQLite (WITHOUT ROWID, PRAGMA optimize, JSONB)
+  - Add .cortex/ to .gitignore (completed)
+  - Create CORE-033 governance rule (IDE state gitignored)
+  - Plan DuckDB integration for Phase 4 (audit analytics)
+
+blockers: None
+
+artifacts_created:
+  - file: .asif/cortex7-req/final/DATABASE-DECISION.md
+    purpose: Comprehensive database architecture decision document with alternatives analysis
+  
+  - file: cortex-brain/tier1/sessions/README.md
+    purpose: Session summary template and guidelines
+  
+  - file: .gitignore
+    purpose: Added .cortex/ to prevent chat file bloat
+
+correlations:
+  - epic: CORTEX-7.0
+    phase: Planning
+    context: Architecture decisions for audit-driven RAG system
+  
+  - epic: CORTEX-6.0
+    phase: 1 (Foundation)
+    context: Current SQLite implementation in AC-AUDIT-001 to AC-AUDIT-007
+
+governance_implications:
+  - rule: CORE-005 (Path Portability)
+    impact: All evaluated alternatives checked for cross-platform compatibility (MAC+WIN)
+  
+  - rule: CORE-033 (NEW)
+    impact: IDE state (.cortex/, .vscode/settings.json) MUST be gitignored
+    enforcement: Pre-commit hook checks
+
+performance_targets:
+  hot_zone: "<5ms query latency (SQLite + optional Redis cache)"
+  warm_zone: "<50ms query latency (SQLite)"
+  cold_zone: "<500ms query latency (SQLite + DuckDB for analytics)"
+
+storage_allocation:
+  audit_logs: "SQLite (writes) + DuckDB (analytics, Phase 4+)"
+  knowledge_graph: "NetworkX (in-memory) + SQLite (persistence)"
+  vector_index: "FAISS (in-memory) + SQLite (metadata)"
+  evidence_bundles: "SQLite (JSONB column type)"
+  state_tracking: "SQLite (progress-tracker.json backup)"
+
+migration_strategy:
+  phase_1_2: "SQLite only (current implementation)"
+  phase_4: "Add DuckDB for audit analytics (nightly replication from SQLite)"
+  phase_7: "Add Redis cache for hot zone (optional, multi-user only)"
+
+key_insights:
+  - "Hybrid architecture beats monolithic - use best tool for each job"
+  - "SQLite excellent for transactional, DuckDB excellent for analytical"
+  - "Chat file bloat was consuming valuable Copilot context window"
+  - "Structured session summaries (10-20 lines) > raw chat transcripts (4000+ lines)"
+  - "DuckDB provides 90% disk savings via compression (cold storage benefit)"
+
+references:
+  - .asif/cortex7-req/final/CORTEX7-FINAL-ARCHITECTURE.yaml
+  - .asif/cortex7-req/final/AUDIT-DRIVEN-RAG-SUMMARY.md
+  - cortex-brain/tier0/governance/core-rules.yaml
+  - src/infrastructure/enhanced_audit_logger.py
