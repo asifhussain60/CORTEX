@@ -26,10 +26,18 @@ phase_tracker:
   PHASE-01:
     title: "Foundation"
     description: "3-Tier Governance, SQLite Index, Audit-First Pattern, State Machine, Reference Orchestrator"
-    ac_ids: 36  # Was 33, added 3 for reference orchestrator validation
-    status: "IN_PROGRESS"  # NOT_STARTED | IN_PROGRESS | COMPLETED
+    ac_ids: 36  # AR-001(3) + AR-002(3) + AR-003(3) + AR-004(3) + AR-005(3) + AR-008(3) + AR-011(3) + FR-001(3) + FR-003(3) + FR-004(3) + FR-005(3) + FR-006(3) = 36
+    status: "NOT_STARTED"  # NOT_STARTED | IN_PROGRESS | COMPLETED
     locked: false          # Once true, phase cannot be reimplemented
     completed_at: null
+    day_sequence:
+      day_0: "Scaffolding (folders, __init__.py)"
+      day_1: "AR-002 (SQLite), AR-005 (Mode Control)"
+      day_2: "AR-001 (Governance), AR-004 (Logging), FR-001 (Audit+Hash)"
+      day_3: "AR-003 (Decorators), FR-003 (State Machine)"
+      day_4: "FR-004 (Evidence), FR-005 (Progress)"
+      day_5: "FR-006 (Continuation), AR-008 (Legacy)"
+      day_6: "AR-011 (Reference Orchestrator Validation)"
     audit_verification:    # REQUIRED before locking
       verified: false
       entry_count: null    # Must be >= ac_ids * 3
@@ -100,7 +108,10 @@ phase_tracker:
     locked: false
     completed_at: null
     requires: "PHASE-01"
+    can_start_after: "PHASE-01 completion"
+    must_complete_before: "PHASE-05"
     blocking: false
+    notes: "Runs parallel with PHASE-02 through PHASE-04, but must finish before PHASE-05"
     audit_verification:
       verified: false
       entry_count: null

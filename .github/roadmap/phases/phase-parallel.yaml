@@ -15,8 +15,13 @@ metadata:
   end_date: null
   predecessor: "PHASE-01"
   successor: null
+  can_start_after: "PHASE-01.day_6"
   must_complete_before: "PHASE-05"
-  notes: "This phase runs in parallel with Phases 2-4 but must complete before Phase 5 brittleness fixes"
+  notes: |
+    This phase runs in parallel with Phases 2-4 but:
+    - Cannot start until PHASE-01 is fully complete (Day 6)
+    - Must complete before PHASE-05 brittleness fixes
+    - Non-blocking means it doesn't block other phases from starting
 
 # =============================================================================
 # TASK BREAKDOWN

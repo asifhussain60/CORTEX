@@ -20,11 +20,21 @@ metadata:
 
 days:
   day_0:
-    title: "Pre-Tasks"
+    title: "Pre-Tasks & Scaffolding"
+    description: "Create all directories and __init__.py files needed for Phase 1"
     tasks:
       - task_id: "TASK-01-00-01"
         title: "Create nested folder structure"
         status: "NOT_STARTED"
+        folders_to_create:
+          - "src/core/decorators/"
+          - "src/orchestrators/core/"
+          - "src/orchestrators/domain/"
+          - "cortex-brain/state/"
+        files_to_create:
+          - "src/core/decorators/__init__.py"
+          - "src/orchestrators/core/__init__.py"
+          - "src/orchestrators/domain/__init__.py"
         acceptance_criteria: []
         
       - task_id: "TASK-01-00-02"
@@ -38,42 +48,42 @@ days:
         acceptance_criteria: []
 
   day_1:
-    title: "Governance Foundation"
+    title: "Data Foundation"
+    rationale: "SQLite database MUST exist before any audit logging can occur"
     focus:
-      - "AR-001: 3-Tier Governance Model"
+      - "AR-002: SQLite-Based AC Index (CRITICAL - enables all audit logging)"
       - "AR-005: Production Mode Control"
-      - "FR-001: Audit-First Pattern (Start)"
     
     tasks:
       - task_id: "TASK-01-01-01"
-        title: "Implement 3-Tier Governance Model"
-        requirement_id: "AR-001"
+        title: "Implement SQLite-Based AC Index"
+        requirement_id: "AR-002"
         status: "NOT_STARTED"
+        priority: "CRITICAL"
+        rationale: "Database must exist before audit logging, decorators, or state machine"
         components:
-          - "GovernanceRegistry"
-          - "TierResolver"
-          - "RuleLoader"
+          - "DatabaseManager"
+          - "ACIndexRepository"
         files_to_create:
-          - "src/core/governance_registry.py"
-          - "src/core/tier_resolver.py"
-          - "src/core/rule_loader.py"
+          - "src/infrastructure/database_manager.py"
+          - "src/infrastructure/ac_index_repository.py"
         files_to_modify: []
         acceptance_criteria:
-          - ac_id: "AC-AR-001-01"
-            description: "Tier 0 rules loaded from cortex-brain/tier0/governance/core-rules.yaml"
+          - ac_id: "AC-AR-002-01"
+            description: "governance.db created with correct schema"
             status: "NOT_STARTED"
-            test_file: "tests/unit/test_governance_registry.py"
-            test_name: "test_tier0_rules_loaded"
-          - ac_id: "AC-AR-001-02"
-            description: "Tier precedence enforced (0 > 1 > 2)"
+            test_file: "tests/unit/test_database_manager.py"
+            test_name: "test_governance_db_schema"
+          - ac_id: "AC-AR-002-02"
+            description: "WAL mode enabled for concurrent access"
             status: "NOT_STARTED"
-            test_file: "tests/unit/test_tier_resolver.py"
-            test_name: "test_tier_precedence"
-          - ac_id: "AC-AR-001-03"
-            description: "Tier 0 rules immutable (modification attempts rejected)"
+            test_file: "tests/unit/test_database_manager.py"
+            test_name: "test_wal_mode_enabled"
+          - ac_id: "AC-AR-002-03"
+            description: "Query performance <1ms"
             status: "NOT_STARTED"
-            test_file: "tests/unit/test_governance_registry.py"
-            test_name: "test_tier0_immutable"
+            test_file: "tests/unit/test_database_manager.py"
+            test_name: "test_query_performance"
 
       - task_id: "TASK-01-01-02"
         title: "Implement Production Mode Control"
@@ -103,92 +113,46 @@ days:
             test_file: "tests/unit/test_mode_controller.py"
             test_name: "test_mode_logged_startup"
 
-      - task_id: "TASK-01-01-03"
-        title: "Start Audit-First Pattern Implementation"
-        requirement_id: "FR-001"
-        status: "NOT_STARTED"
-        components:
-          - "EnhancedAuditLogger"
-        files_to_create:
-          - "src/infrastructure/enhanced_audit_logger.py"
-        files_to_modify:
-          - "src/infrastructure/audit_logger.py"
-        acceptance_criteria:
-          - ac_id: "AC-FR-001-01"
-            description: "Operations logged before execution"
-            status: "NOT_STARTED"
-            test_file: "tests/unit/test_enhanced_audit_logger.py"
-            test_name: "test_pre_execution_logging"
-
   day_2:
-    title: "Data Layer"
-    sequencing_note: "AR-003 depends on AR-002 - must complete AR-002 before starting AR-003"
+    title: "Governance & Logging"
+    depends_on: "day_1 (AR-002 database must exist)"
     focus:
-      - "AR-002: SQLite-Based AC Index"
-      - "AR-003: Auto-Wired Governance Decorators"
+      - "AR-001: 3-Tier Governance Model"
       - "AR-004: Tiered Logging Architecture"
+      - "FR-001: Audit-First Pattern (Start)"
     
     tasks:
       - task_id: "TASK-01-02-01"
-        title: "Implement SQLite-Based AC Index"
-        requirement_id: "AR-002"
+        title: "Implement 3-Tier Governance Model"
+        requirement_id: "AR-001"
         status: "NOT_STARTED"
         components:
-          - "DatabaseManager"
-          - "ACIndexRepository"
+          - "GovernanceRegistry"
+          - "TierResolver"
+          - "RuleLoader"
         files_to_create:
-          - "src/infrastructure/database_manager.py"
-          - "src/infrastructure/ac_index_repository.py"
+          - "src/core/governance_registry.py"
+          - "src/core/tier_resolver.py"
+          - "src/core/rule_loader.py"
         files_to_modify: []
         acceptance_criteria:
-          - ac_id: "AC-AR-002-01"
-            description: "governance.db created with correct schema"
+          - ac_id: "AC-AR-001-01"
+            description: "Tier 0 rules loaded from cortex-brain/tier0/governance/core-rules.yaml"
             status: "NOT_STARTED"
-            test_file: "tests/unit/test_database_manager.py"
-            test_name: "test_governance_db_schema"
-          - ac_id: "AC-AR-002-02"
-            description: "WAL mode enabled for concurrent access"
+            test_file: "tests/unit/test_governance_registry.py"
+            test_name: "test_tier0_rules_loaded"
+          - ac_id: "AC-AR-001-02"
+            description: "Tier precedence enforced (0 > 1 > 2)"
             status: "NOT_STARTED"
-            test_file: "tests/unit/test_database_manager.py"
-            test_name: "test_wal_mode_enabled"
-          - ac_id: "AC-AR-002-03"
-            description: "Query performance <1ms"
+            test_file: "tests/unit/test_tier_resolver.py"
+            test_name: "test_tier_precedence"
+          - ac_id: "AC-AR-001-03"
+            description: "Tier 0 rules immutable (modification attempts rejected)"
             status: "NOT_STARTED"
-            test_file: "tests/unit/test_database_manager.py"
-            test_name: "test_query_performance"
+            test_file: "tests/unit/test_governance_registry.py"
+            test_name: "test_tier0_immutable"
 
       - task_id: "TASK-01-02-02"
-        title: "Implement Auto-Wired Governance Decorators"
-        requirement_id: "AR-003"
-        status: "NOT_STARTED"
-        components:
-          - "GovernanceDecorator"
-          - "AuditDecorator"
-          - "EvidenceDecorator"
-        files_to_create:
-          - "src/core/decorators/governance_decorator.py"
-          - "src/core/decorators/audit_decorator.py"
-          - "src/core/decorators/evidence_decorator.py"
-          - "src/core/decorators/__init__.py"
-        files_to_modify: []
-        acceptance_criteria:
-          - ac_id: "AC-AR-003-01"
-            description: "@governance_enforced decorator validates all rules"
-            status: "NOT_STARTED"
-            test_file: "tests/unit/test_decorators.py"
-            test_name: "test_governance_decorator"
-          - ac_id: "AC-AR-003-02"
-            description: "@audit_logged decorator records to governance.db"
-            status: "NOT_STARTED"
-            test_file: "tests/unit/test_decorators.py"
-            test_name: "test_audit_decorator"
-          - ac_id: "AC-AR-003-03"
-            description: "Decorators composable (@governance_enforced + @audit_logged)"
-            status: "NOT_STARTED"
-            test_file: "tests/unit/test_decorators.py"
-            test_name: "test_decorator_composition"
-
-      - task_id: "TASK-01-02-03"
         title: "Implement Tiered Logging Architecture"
         requirement_id: "AR-004"
         status: "NOT_STARTED"
@@ -216,17 +180,79 @@ days:
             test_file: "tests/unit/test_tiered_logger.py"
             test_name: "test_structured_logging"
 
+      - task_id: "TASK-01-02-03"
+        title: "Start Audit-First Pattern with Hash Chain"
+        requirement_id: "FR-001"
+        status: "NOT_STARTED"
+        rationale: "Hash chain implemented from Day 1 to ensure all entries have integrity"
+        components:
+          - "EnhancedAuditLogger"
+          - "HashChainManager"
+        files_to_create:
+          - "src/infrastructure/enhanced_audit_logger.py"
+          - "src/infrastructure/hash_chain_manager.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-FR-001-01"
+            description: "Operations logged before execution"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_enhanced_audit_logger.py"
+            test_name: "test_pre_execution_logging"
+          - ac_id: "AC-FR-001-02"
+            description: "Hash chain integrity maintained"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_hash_chain_manager.py"
+            test_name: "test_hash_chain_integrity"
+          - ac_id: "AC-FR-001-03"
+            description: "Audit logs queryable by AC-ID"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_enhanced_audit_logger.py"
+            test_name: "test_audit_query_by_ac_id"
+
   day_3:
-    title: "State Management"
+    title: "Decorators & State Management"
+    depends_on: "day_2 (AR-001 governance, AR-004 logging, FR-001 audit)"
     focus:
+      - "AR-003: Auto-Wired Governance Decorators"
       - "FR-003: State Machine Management"
-      - "FR-001: Audit-First Pattern (Continued)"
     
     tasks:
       - task_id: "TASK-01-03-01"
+        title: "Implement Auto-Wired Governance Decorators"
+        requirement_id: "AR-003"
+        status: "NOT_STARTED"
+        depends_on: ["AR-001", "AR-002"]
+        components:
+          - "GovernanceDecorator"
+          - "AuditDecorator"
+          - "EvidenceDecorator"
+        files_to_create:
+          - "src/core/decorators/governance_decorator.py"
+          - "src/core/decorators/audit_decorator.py"
+          - "src/core/decorators/evidence_decorator.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-AR-003-01"
+            description: "@governance_enforced decorator validates all rules"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_decorators.py"
+            test_name: "test_governance_decorator"
+          - ac_id: "AC-AR-003-02"
+            description: "@audit_logged decorator records to governance.db"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_decorators.py"
+            test_name: "test_audit_decorator"
+          - ac_id: "AC-AR-003-03"
+            description: "Decorators composable (@governance_enforced + @audit_logged)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_decorators.py"
+            test_name: "test_decorator_composition"
+
+      - task_id: "TASK-01-03-02"
         title: "Implement State Machine Management"
         requirement_id: "FR-003"
         status: "NOT_STARTED"
+        depends_on: ["AR-002"]
         components:
           - "LifecycleManager"
           - "StateMachine"
@@ -252,28 +278,6 @@ days:
             status: "NOT_STARTED"
             test_file: "tests/unit/test_lifecycle_manager.py"
             test_name: "test_state_history"
-
-      - task_id: "TASK-01-03-02"
-        title: "Complete Audit-First Pattern"
-        requirement_id: "FR-001"
-        status: "NOT_STARTED"
-        components:
-          - "HashChainManager"
-        files_to_create:
-          - "src/infrastructure/hash_chain_manager.py"
-        files_to_modify:
-          - "src/infrastructure/enhanced_audit_logger.py"
-        acceptance_criteria:
-          - ac_id: "AC-FR-001-02"
-            description: "Hash chain integrity maintained"
-            status: "NOT_STARTED"
-            test_file: "tests/unit/test_hash_chain_manager.py"
-            test_name: "test_hash_chain_integrity"
-          - ac_id: "AC-FR-001-03"
-            description: "Audit logs queryable by AC-ID"
-            status: "NOT_STARTED"
-            test_file: "tests/unit/test_enhanced_audit_logger.py"
-            test_name: "test_audit_query_by_ac_id"
 
   day_4:
     title: "Evidence & Progress"
@@ -405,27 +409,77 @@ days:
             test_file: "tests/unit/test_compatibility.py"
             test_name: "test_migration_docs_exist"
 
+  day_6:
+    title: "Reference Orchestrator Validation"
+    description: "Scaffold PlanningOrchestrator end-to-end to validate full chain before scaling"
+    rationale: "AR-011 validates the complete integration path before building 20+ orchestrators"
+    depends_on: "day_3 (AR-003 decorators), day_2 (FR-001 audit logging)"
+    focus:
+      - "AR-011: Reference Orchestrator Validation"
+    
+    tasks:
+      - task_id: "TASK-01-06-01"
+        title: "Implement PlanningOrchestrator"
+        requirement_id: "AR-011"
+        status: "NOT_STARTED"
+        priority: "CRITICAL"
+        rationale: "Validates full integration chain: registry → interface → MCP → audit → governance"
+        components:
+          - "PlanningOrchestrator"
+          - "IOrchestrator"
+        files_to_create:
+          - "src/orchestrators/domain/planning_orchestrator.py"
+          - "src/core/interfaces/i_orchestrator.py"
+        files_to_modify:
+          - "src/mcp/registry.py"
+        acceptance_criteria:
+          - ac_id: "AC-AR-011-01"
+            description: "PlanningOrchestrator registered in OrchestratorRegistry"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_planning_orchestrator.py"
+            test_name: "test_planning_orchestrator_registered"
+          - ac_id: "AC-AR-011-02"
+            description: "PlanningOrchestrator exposed as MCP tools (plan_status, next_ac, enforce_phase_lock)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_planning_orchestrator.py"
+            test_name: "test_planning_mcp_tools_exposed"
+          - ac_id: "AC-AR-011-03"
+            description: "All PlanningOrchestrator operations audit-logged with hash chain"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_planning_orchestrator.py"
+            test_name: "test_planning_operations_audited"
+
 # =============================================================================
 # SUMMARY
 # =============================================================================
 
 summary:
-  total_tasks: 13
-  total_ac_ids: 33
-  components_to_create: 20
-  files_to_create: 22
-  files_to_modify: 5
+  total_tasks: 14
+  total_ac_ids: 36
+  components_to_create: 22
+  files_to_create: 24
+  files_to_modify: 6
   
   requirements_covered:
-    architecture_decisions: ["AR-001", "AR-002", "AR-003", "AR-004", "AR-005", "AR-008"]
+    architecture_decisions: ["AR-001", "AR-002", "AR-003", "AR-004", "AR-005", "AR-008", "AR-011"]
     functional_requirements: ["FR-001", "FR-003", "FR-004", "FR-005", "FR-006"]
 
+  day_sequence:
+    day_0: "Scaffolding (folders, __init__.py)"
+    day_1: "AR-002 (SQLite), AR-005 (Mode Control) — foundational, no deps"
+    day_2: "AR-001 (Governance), AR-004 (Logging), FR-001 (Audit+Hash) — needs AR-002"
+    day_3: "AR-003 (Decorators), FR-003 (State Machine) — needs AR-001, AR-002"
+    day_4: "FR-004 (Evidence), FR-005 (Progress) — needs FR-001, FR-003"
+    day_5: "FR-006 (Continuation), AR-008 (Legacy) — needs FR-003"
+    day_6: "AR-011 (Reference Orchestrator) — validates full integration chain"
+
   exit_criteria:
-    - "All 33 AC-IDs pass verification"
+    - "All 36 AC-IDs pass verification"
     - "Unit tests pass with ≥80% coverage"
     - "governance.db operational with WAL mode"
     - "State machine transitions working"
     - "Evidence bundles generated successfully"
+    - "PlanningOrchestrator validates full integration chain"
 
 # =============================================================================
 # TRACKING
