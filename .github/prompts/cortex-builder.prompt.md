@@ -20,15 +20,142 @@ phase_tracker:
 | `false` | `false` | 🚫 REFUSE - Predecessor incomplete |
 | `false` | `true` or N/A | ✅ PROCEED |
 
+---
+
+## EXECUTIVE SUMMARY PROTOCOL
+
+**MANDATORY: Display executive summary BEFORE starting any phase and AFTER completing any phase.**
+
+### Phase Initiation Summary (Display BEFORE starting phase)
+
+```yaml
+executive_summary_start:
+  phase: "PHASE-XX"
+  title: "[Phase Title from cortex-master.yaml]"
+  
+  # WHAT IS BEING IMPLEMENTED
+  scope:
+    - "[Focus area 1 from phases.phase_XX.focus]"
+    - "[Focus area 2]"
+    - "[Focus area N]"
+  
+  # ACCEPTANCE CRITERIA OVERVIEW
+  acceptance_criteria:
+    total_ac_ids: N
+    critical_acs:
+      - "[AC-ID]: [Description] — CRITICAL for [reason]"
+    verification_method: "Each AC-ID requires START → EXECUTE → COMPLETE audit entries"
+  
+  # AUDIT & SAFETY VALIDATION
+  audit_validation:
+    minimum_entries_required: "N × 3 (one per AC-ID lifecycle event)"
+    hash_chain_enforcement: "Tamper-evident chain must remain unbroken"
+    verification_query: "SELECT ac_id, COUNT(*) FROM audit_log WHERE ac_id LIKE 'AC-%-XX%' GROUP BY ac_id"
+  
+  # DETERMINISM & SAFETY
+  determinism:
+    state_source: "SQLite governance.db (WAL mode)"
+    idempotency: "Re-running phase with same inputs produces same state"
+    rollback_point: "Git checkpoint created before first AC-ID"
+  
+  # ASSUMPTIONS (Facts vs. Expectations)
+  assumptions:
+    - "[Assumption 1] — Source: [where this is defined]"
+    - "[Assumption 2] — Source: [where this is defined]"
+  
+  # RISKS & BLOCKERS
+  risks:
+    - severity: "HIGH|MEDIUM|LOW"
+      description: "[Risk description]"
+      mitigation: "[How to address]"
+  blockers:
+    - "[Blocker if any — empty if none]"
+  
+  # DEPENDENCIES
+  dependencies:
+    required_phases: "[PHASE-XX or 'None']"
+    required_components: "[List components that must exist]"
+  
+  # IMPACT ASSESSMENT
+  impact:
+    files_affected: "[Estimated count or list]"
+    new_components: "[Components to be created]"
+    governance_rules_enforced: "[SKULL rules applied]"
+  
+  # RECOMMENDATION (Separated from facts)
+  recommendation: |
+    [Clear, actionable next step. e.g., "PROCEED with AC-AR-001-01" or "RESOLVE blocker X first"]
+```
+
+### Phase Completion Summary (Display AFTER completing phase)
+
+```yaml
+executive_summary_complete:
+  phase: "PHASE-XX"
+  title: "[Phase Title]"
+  status: "COMPLETED"
+  
+  # WHAT WAS DELIVERED
+  delivered:
+    ac_ids_completed: N
+    components_created:
+      - "[Component 1]"
+      - "[Component N]"
+    tests_passing: N
+  
+  # AUDIT VERIFICATION RESULTS
+  audit_verification:
+    total_entries: N
+    entries_per_ac_id_avg: N
+    hash_chain_valid: true|false
+    verification_timestamp: "ISO-8601"
+    anomalies_detected: "[None or list]"
+  
+  # SAFETY CONFIRMATION
+  safety:
+    governance_violations: 0
+    tier0_rules_enforced: "[SKULL-XXX through SKULL-YYY]"
+    production_mode_tested: true|false
+  
+  # EVIDENCE CAPTURED
+  evidence:
+    git_checkpoint: "[commit-hash]"
+    evidence_bundles: N
+    audit_log_entries: N
+  
+  # FACTS (Verified outcomes)
+  facts:
+    - "[Fact 1 — verifiable from audit logs]"
+    - "[Fact 2 — verifiable from test results]"
+  
+  # RISKS REALIZED (If any)
+  risks_realized:
+    - "[Risk that materialized] — Resolution: [how resolved]"
+  
+  # OPEN ITEMS (Deferred or discovered)
+  open_items:
+    - "[Item] — Deferred to: [PHASE-XX]"
+  
+  # NEXT PHASE READINESS
+  next_phase:
+    id: "PHASE-XX"
+    title: "[Title]"
+    prerequisites_met: true|false
+    recommendation: "[PROCEED or WAIT for X]"
+```
+
+---
+
 ## Workflow
 
 1. **Read** `cortex-master.yaml` → check `phase_tracker`
-2. **Read** `phases/phase-XX.yaml` → get AC-IDs for current phase
-3. **GIT CHECKPOINT** → Create checkpoint before starting AC-ID
-4. **Implement** one AC-ID at a time with tests (audit logging ACTIVE)
-5. **Verify Audit Trail** → Query audit logs for AC-ID entries
-6. **Update** phase YAML status when AC-ID complete
-7. **When phase done**: Validate audit trace → Update `phase_tracker` → `status: "COMPLETED"`, `locked: true`
+2. **DISPLAY EXECUTIVE SUMMARY** → Phase Initiation Summary (MANDATORY)
+3. **Read** `phases/phase-XX.yaml` → get AC-IDs for current phase
+4. **GIT CHECKPOINT** → Create checkpoint before starting AC-ID
+5. **Implement** one AC-ID at a time with tests (audit logging ACTIVE)
+6. **Verify Audit Trail** → Query audit logs for AC-ID entries
+7. **Update** phase YAML status when AC-ID complete
+8. **When phase done**: Validate audit trace → **DISPLAY COMPLETION SUMMARY** → Update `phase_tracker` → `status: "COMPLETED"`, `locked: true`
 
 ## Git Checkpoint Protocol
 
@@ -64,6 +191,41 @@ git reset --hard HEAD~1
 # Restore from stash
 git stash pop
 ```
+
+---
+
+## Executive Summary Generation Rules
+
+**When generating executive summaries, follow these principles:**
+
+### Content Rules
+1. **Bullet points only** — No paragraphs, no code blocks in summary body
+2. **Under 1 minute read** — Maximum 25 bullet points total
+3. **Actionable** — Every summary ends with a clear next action
+4. **Deterministic language** — Use "WILL", "MUST", "SHALL" not "might", "could", "should"
+
+### Separation of Concerns
+| Category | Content Type | Source |
+|----------|--------------|--------|
+| **Facts** | Verified, measurable | `cortex-master.yaml`, audit logs, test results |
+| **Assumptions** | Expected but not yet verified | Phase requirements, dependencies |
+| **Risks** | Potential issues | Historical patterns, complexity analysis |
+| **Recommendations** | Suggested actions | Builder judgment based on facts |
+
+### Safety & Auditability Emphasis
+- Always state hash chain status
+- Always state audit entry counts
+- Always confirm governance tier enforcement
+- Always reference git checkpoint
+- Always note any governance bypasses (should be 0)
+
+### Impact Assessment Rules
+- List all files that WILL be modified (not might)
+- List all new components to be created
+- State which SKULL rules will be enforced
+- Note any breaking changes
+
+---
 
 ## Commands
 
@@ -216,3 +378,125 @@ phase_completion:
   git_commit: "phase-XX: COMPLETED - audit verified"
   locked: true
 ```
+
+---
+
+## Example Executive Summaries
+
+### Example: Phase 1 Initiation Summary
+
+```
+═══════════════════════════════════════════════════════════════════════════════
+                    PHASE-01 EXECUTIVE SUMMARY — INITIATION
+═══════════════════════════════════════════════════════════════════════════════
+
+PHASE: PHASE-01 — Foundation
+STATUS: INITIATING
+
+▸ SCOPE (What will be implemented)
+  • 3-Tier Governance Model (Tier 0 immutable, Tier 1 project, Tier 2 engineering)
+  • SQLite-Based AC Index (governance.db with WAL mode)
+  • Audit-First Pattern (log intent → execute → log result)
+  • State Machine Management (PENDING → IN_PROGRESS → COMPLETED → VERIFIED)
+  • Reference Orchestrator Validation (PlanningOrchestrator end-to-end)
+
+▸ ACCEPTANCE CRITERIA
+  • Total AC-IDs: 36
+  • Critical: AC-AR-002-01 (governance.db schema) — blocks all audit logging
+  • Critical: AC-FR-001-02 (hash chain integrity) — ensures tamper evidence
+  • Verification: Each AC-ID requires START, EXECUTE, COMPLETE audit entries
+
+▸ AUDIT VALIDATION REQUIREMENTS
+  • Minimum audit entries: 108 (36 AC-IDs × 3 lifecycle events)
+  • Hash chain: Must remain unbroken throughout phase
+  • Verification query ready for phase lock validation
+
+▸ DETERMINISM & SAFETY
+  • State stored in: SQLite governance.db (WAL mode for concurrency)
+  • Idempotent: Re-running with same inputs produces identical state
+  • Rollback: Git checkpoint created before first AC-ID
+
+▸ ASSUMPTIONS
+  • SQLite available in Python environment — Source: requirements.txt
+  • cortex-brain/tier0/ structure exists — Source: workspace structure
+  • No prior governance.db state to migrate — Source: fresh implementation
+
+▸ RISKS
+  • HIGH: Database schema changes mid-phase may require migration
+    └─ Mitigation: Lock schema after AC-AR-002-01 complete
+  • MEDIUM: WAL mode may cause issues on network drives
+    └─ Mitigation: Enforce local filesystem for governance.db
+
+▸ BLOCKERS
+  • None identified
+
+▸ DEPENDENCIES
+  • Required phases: None (PHASE-01 has no prerequisites)
+  • Required components: None (foundation phase creates all)
+
+▸ IMPACT
+  • New files: ~15 Python modules, 1 SQLite database
+  • New components: GovernanceRegistry, DatabaseManager, AuditLogger, StateMachine
+  • SKULL rules enforced: SKULL-001 through SKULL-025
+
+▸ RECOMMENDATION
+  PROCEED with AC-AR-001-01 (Tier 0 rules loading)
+  Create git checkpoint first: `git add -A && git commit -m "checkpoint: before PHASE-01"`
+
+═══════════════════════════════════════════════════════════════════════════════
+```
+
+### Example: Phase 1 Completion Summary
+
+```
+═══════════════════════════════════════════════════════════════════════════════
+                   PHASE-01 EXECUTIVE SUMMARY — COMPLETION
+═══════════════════════════════════════════════════════════════════════════════
+
+PHASE: PHASE-01 — Foundation
+STATUS: COMPLETED ✓
+
+▸ DELIVERED
+  • AC-IDs completed: 36/36 (100%)
+  • Components created: GovernanceRegistry, TierResolver, DatabaseManager,
+    AuditLogger, HashChainManager, StateMachine, PlanningOrchestrator
+  • Tests passing: 108 (all green)
+
+▸ AUDIT VERIFICATION RESULTS
+  • Total audit entries: 127
+  • Entries per AC-ID (avg): 3.5
+  • Hash chain valid: TRUE ✓
+  • Verification timestamp: 2026-01-14T10:30:00Z
+  • Anomalies detected: None
+
+▸ SAFETY CONFIRMATION
+  • Governance violations: 0
+  • Tier 0 rules enforced: SKULL-001 through SKULL-025 (all 25)
+  • Production mode tested: TRUE ✓
+
+▸ EVIDENCE CAPTURED
+  • Git checkpoint: abc123def (tagged: phase-01-complete)
+  • Evidence bundles: 36 (one per AC-ID)
+  • Audit log entries: 127
+
+▸ FACTS (Verified)
+  • All 36 AC-IDs have START, EXECUTE, COMPLETE entries in audit_log
+  • Hash chain integrity verified via SQL query
+  • All tests pass with 100% success rate
+  • governance.db created with correct schema and WAL mode
+
+▸ RISKS REALIZED
+  • None — all identified risks were mitigated successfully
+
+▸ OPEN ITEMS
+  • None — all Phase 1 scope items completed
+
+▸ NEXT PHASE READINESS
+  • Next: PHASE-02 — Orchestration Core
+  • Prerequisites met: TRUE ✓
+  • Recommendation: PROCEED with PHASE-02 initiation
+
+═══════════════════════════════════════════════════════════════════════════════
+```
+
+---
