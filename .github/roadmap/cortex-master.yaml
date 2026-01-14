@@ -1,0 +1,998 @@
+# =============================================================================
+# CORTEX 7.0 MASTER IMPLEMENTATION PLAN
+# =============================================================================
+# Source: Consolidated from SSOT/roadmap/roadmap.yaml and SSOT/analysis/reqs/reqs.yaml
+# Generated: 2026-01-15
+# Status: READY FOR IMPLEMENTATION (DoR Score: 85/100)
+# =============================================================================
+
+metadata:
+  version: "7.0"
+  project: "CORTEX"
+  status: "IMPLEMENTATION_READY"
+  dor_score: 85
+  total_duration: "5 weeks + 2 parallel enhancements"
+  start_date: "2026-01-15"
+  total_ac_ids: 98
+
+# =============================================================================
+# PHASE TRACKER - SINGLE SOURCE OF TRUTH
+# =============================================================================
+# Check this BEFORE implementing any phase.
+# Once locked: true, that phase is DONE - do not reimplement.
+# =============================================================================
+
+phase_tracker:
+  PHASE-01:
+    title: "Foundation"
+    ac_ids: 33
+    status: "NOT_STARTED"  # NOT_STARTED | IN_PROGRESS | COMPLETED
+    locked: false          # Once true, phase cannot be reimplemented
+    completed_at: null
+  PHASE-02:
+    title: "Orchestration Core"
+    ac_ids: 27
+    status: "NOT_STARTED"
+    locked: false
+    completed_at: null
+    requires: "PHASE-01"
+  PHASE-03:
+    title: "Safety & Observability"
+    ac_ids: 6
+    status: "NOT_STARTED"
+    locked: false
+    completed_at: null
+    requires: "PHASE-02"
+  PHASE-04:
+    title: "Production Hardening"
+    ac_ids: 12
+    status: "NOT_STARTED"
+    locked: false
+    completed_at: null
+    requires: "PHASE-03"
+  PHASE-05:
+    title: "Brittleness Fixes"
+    ac_ids: 17
+    status: "NOT_STARTED"
+    locked: false
+    completed_at: null
+    requires: "PHASE-04"
+  PHASE-PARALLEL:
+    title: "Folder Migration"
+    ac_ids: 3
+    status: "NOT_STARTED"
+    locked: false
+    completed_at: null
+    requires: "PHASE-01"
+    blocking: false
+
+# =============================================================================
+# ARCHITECTURE DECISIONS (AR-001 through AR-010)
+# =============================================================================
+
+architecture_decisions:
+  AR-001:
+    id: "AR-001"
+    title: "3-Tier Governance Model"
+    status: "APPROVED"
+    priority: "CRITICAL"
+    phase: 1
+    day: 1
+    effort: "4 hours"
+    description: |
+      Implement 3-tier governance hierarchy:
+      - Tier 0: Immutable SKULL rules (25 rules, YAML-based, cannot be overridden)
+      - Tier 1: Project governance (YAML + SQLite, can extend Tier 0)
+      - Tier 2: Engineering standards (team conventions, lowest priority)
+    acceptance_criteria:
+      - ac_id: "AC-AR-001-01"
+        description: "Tier 0 rules loaded from cortex-brain/tier0/governance/core-rules.yaml"
+        test: "test_tier0_rules_loaded"
+      - ac_id: "AC-AR-001-02"
+        description: "Tier precedence enforced (0 > 1 > 2)"
+        test: "test_tier_precedence"
+      - ac_id: "AC-AR-001-03"
+        description: "Tier 0 rules immutable (modification attempts rejected)"
+        test: "test_tier0_immutable"
+    components:
+      - "GovernanceRegistry"
+      - "TierResolver"
+      - "RuleLoader"
+    dependencies: []
+
+  AR-002:
+    id: "AR-002"
+    title: "SQLite-Based AC Index"
+    status: "APPROVED"
+    priority: "HIGH"
+    phase: 1
+    day: 2
+    effort: "4 hours"
+    description: |
+      Single-file SQLite database (governance.db) for:
+      - AC-ID tracking and status
+      - Audit log storage
+      - Progress tracking
+      - Evidence bundle references
+    acceptance_criteria:
+      - ac_id: "AC-AR-002-01"
+        description: "governance.db created with correct schema"
+        test: "test_governance_db_schema"
+      - ac_id: "AC-AR-002-02"
+        description: "WAL mode enabled for concurrent access"
+        test: "test_wal_mode_enabled"
+      - ac_id: "AC-AR-002-03"
+        description: "Query performance <1ms"
+        test: "test_query_performance"
+    components:
+      - "DatabaseManager"
+      - "ACIndexRepository"
+    dependencies:
+      - "AR-001"
+
+  AR-003:
+    id: "AR-003"
+    title: "Auto-Wired Governance Decorators"
+    status: "APPROVED"
+    priority: "HIGH"
+    phase: 1
+    day: 2
+    effort: "4 hours"
+    description: |
+      Python decorators that auto-wire governance evaluation:
+      @governance_enforced - Applies all applicable rules
+      @audit_logged - Records operation to audit trail
+      @evidence_captured - Captures evidence bundle
+    acceptance_criteria:
+      - ac_id: "AC-AR-003-01"
+        description: "@governance_enforced decorator validates all rules"
+        test: "test_governance_decorator"
+      - ac_id: "AC-AR-003-02"
+        description: "@audit_logged decorator records to governance.db"
+        test: "test_audit_decorator"
+      - ac_id: "AC-AR-003-03"
+        description: "Decorators composable (@governance_enforced + @audit_logged)"
+        test: "test_decorator_composition"
+    components:
+      - "GovernanceDecorator"
+      - "AuditDecorator"
+      - "EvidenceDecorator"
+    dependencies:
+      - "AR-001"
+      - "AR-002"
+
+  AR-004:
+    id: "AR-004"
+    title: "Tiered Logging Architecture"
+    status: "APPROVED"
+    priority: "MEDIUM"
+    phase: 1
+    day: 2
+    effort: "2 hours"
+    description: |
+      Structured logging with tiers:
+      - AUDIT: Immutable audit trail (goes to governance.db)
+      - TRACE: Detailed operation tracing (for debugging)
+      - STANDARD: Normal application logging
+    acceptance_criteria:
+      - ac_id: "AC-AR-004-01"
+        description: "AUDIT logs written to governance.db"
+        test: "test_audit_to_db"
+      - ac_id: "AC-AR-004-02"
+        description: "Log levels configurable per tier"
+        test: "test_log_level_config"
+      - ac_id: "AC-AR-004-03"
+        description: "Structured JSON format for all logs"
+        test: "test_structured_logging"
+    components:
+      - "TieredLogger"
+      - "AuditLogWriter"
+    dependencies:
+      - "AR-002"
+
+  AR-005:
+    id: "AR-005"
+    title: "Production Mode Control"
+    status: "APPROVED"
+    priority: "CRITICAL"
+    phase: 1
+    day: 1
+    effort: "2 hours"
+    description: |
+      Environment-based mode control:
+      - PRODUCTION: All governance enforced, no bypass
+      - STAGING: Governance enforced, warnings logged
+      - DEVELOPMENT: Governance advisory, can be bypassed with explicit flag
+    acceptance_criteria:
+      - ac_id: "AC-AR-005-01"
+        description: "Mode determined from CORTEX_ENV environment variable"
+        test: "test_env_mode_detection"
+      - ac_id: "AC-AR-005-02"
+        description: "PRODUCTION mode prevents all governance bypass"
+        test: "test_production_no_bypass"
+      - ac_id: "AC-AR-005-03"
+        description: "Mode logged at startup"
+        test: "test_mode_logged_startup"
+    components:
+      - "ModeController"
+      - "EnvironmentConfig"
+    dependencies: []
+
+  AR-006:
+    id: "AR-006"
+    title: "Orchestrator Architecture"
+    status: "APPROVED"
+    priority: "CRITICAL"
+    phase: 2
+    day: 1
+    effort: "8 hours"
+    description: |
+      Layered orchestrator architecture:
+      - MasterOrchestrator: Coordinates all sub-orchestrators
+      - DomainOrchestrators: Domain-specific logic (governance, audit, evidence)
+      - TaskOrchestrators: Individual task execution
+      All orchestrators auto-registered via decorator pattern.
+    acceptance_criteria:
+      - ac_id: "AC-AR-006-01"
+        description: "MasterOrchestrator coordinates domain orchestrators"
+        test: "test_master_orchestrator_coordination"
+      - ac_id: "AC-AR-006-02"
+        description: "Orchestrators auto-registered via @orchestrator decorator"
+        test: "test_orchestrator_auto_registration"
+      - ac_id: "AC-AR-006-03"
+        description: "Orchestrator registry queryable by domain"
+        test: "test_registry_query_by_domain"
+    components:
+      - "MasterOrchestrator"
+      - "OrchestratorRegistry"
+      - "OrchestratorDecorator"
+    dependencies:
+      - "AR-003"
+
+  AR-007:
+    id: "AR-007"
+    title: "MCP Server Integration"
+    status: "APPROVED"
+    priority: "HIGH"
+    phase: 2
+    day: 2
+    effort: "6 hours"
+    description: |
+      Model Context Protocol server for LLM integration:
+      - Exposes orchestrators as MCP tools
+      - Provides governance context to LLM
+      - Enables structured communication
+    acceptance_criteria:
+      - ac_id: "AC-AR-007-01"
+        description: "MCP server starts and accepts connections"
+        test: "test_mcp_server_startup"
+      - ac_id: "AC-AR-007-02"
+        description: "Orchestrators exposed as MCP tools"
+        test: "test_orchestrators_as_mcp_tools"
+      - ac_id: "AC-AR-007-03"
+        description: "Governance context included in MCP responses"
+        test: "test_governance_in_mcp_response"
+    components:
+      - "MCPServer"
+      - "ToolRegistry"
+      - "ContextProvider"
+    dependencies:
+      - "AR-006"
+
+  AR-008:
+    id: "AR-008"
+    title: "CORTEX 6.0 Adaptation"
+    status: "APPROVED"
+    priority: "MEDIUM"
+    phase: 1
+    day: 5
+    effort: "4 hours"
+    description: |
+      Adapt proven patterns from CORTEX 6.0:
+      - Evidence bundle structure
+      - Audit log format
+      - Governance rule schema
+      - State machine patterns
+    acceptance_criteria:
+      - ac_id: "AC-AR-008-01"
+        description: "Evidence bundle schema compatible with CORTEX 6.0"
+        test: "test_evidence_schema_compatibility"
+      - ac_id: "AC-AR-008-02"
+        description: "Audit log format matches CORTEX 6.0"
+        test: "test_audit_format_compatibility"
+      - ac_id: "AC-AR-008-03"
+        description: "Migration path documented for CORTEX 6.0 users"
+        test: "test_migration_docs_exist"
+    components:
+      - "CompatibilityLayer"
+      - "SchemaAdapter"
+    dependencies: []
+
+  AR-009:
+    id: "AR-009"
+    title: "Custom Response Templates"
+    status: "APPROVED"
+    priority: "MEDIUM"
+    phase: 2
+    day: 4
+    effort: "4 hours"
+    description: |
+      Templated response system:
+      - JSON/YAML response templates
+      - Domain-specific templates (governance, audit, evidence)
+      - Template inheritance for customization
+    acceptance_criteria:
+      - ac_id: "AC-AR-009-01"
+        description: "Response templates loaded from cortex-brain/tier2/"
+        test: "test_template_loading"
+      - ac_id: "AC-AR-009-02"
+        description: "Templates support variable substitution"
+        test: "test_template_variables"
+      - ac_id: "AC-AR-009-03"
+        description: "Template inheritance working"
+        test: "test_template_inheritance"
+    components:
+      - "TemplateEngine"
+      - "TemplateRegistry"
+    dependencies:
+      - "AR-001"
+
+  AR-010:
+    id: "AR-010"
+    title: "Nested Folder Organization"
+    status: "APPROVED"
+    priority: "LOW"
+    phase: "3.5"
+    effort: "16 hours (PARALLEL)"
+    blocking: false
+    description: |
+      Migrate to nested folder structure:
+      - src/orchestrators/core/ - Core orchestrators
+      - src/orchestrators/domain/ - Domain orchestrators
+      - src/orchestrators/custom/ - Custom orchestrators
+      - src/infrastructure/ - Infrastructure components
+    acceptance_criteria:
+      - ac_id: "AC-AR-010-01"
+        description: "New folder structure created"
+        test: "test_folder_structure_exists"
+      - ac_id: "AC-AR-010-02"
+        description: "All imports updated to new paths"
+        test: "test_imports_updated"
+      - ac_id: "AC-AR-010-03"
+        description: "Cross-platform path resolution working"
+        test: "test_cross_platform_paths"
+    components:
+      - "PathResolver"
+      - "ImportUpdater"
+    dependencies: []
+
+# =============================================================================
+# FUNCTIONAL REQUIREMENTS (FR-001 through FR-006)
+# =============================================================================
+
+functional_requirements:
+  FR-001:
+    id: "FR-001"
+    title: "Audit-First Pattern"
+    status: "APPROVED"
+    priority: "CRITICAL"
+    phase: 1
+    days: [1, 3]
+    effort: "8 hours"
+    description: |
+      All operations audit-logged BEFORE execution:
+      1. Log intent
+      2. Execute operation
+      3. Log result
+      Hash chain ensures tamper evidence.
+    acceptance_criteria:
+      - ac_id: "AC-FR-001-01"
+        description: "Operations logged before execution"
+        test: "test_pre_execution_logging"
+      - ac_id: "AC-FR-001-02"
+        description: "Hash chain integrity maintained"
+        test: "test_hash_chain_integrity"
+      - ac_id: "AC-FR-001-03"
+        description: "Audit logs queryable by AC-ID"
+        test: "test_audit_query_by_ac_id"
+    components:
+      - "EnhancedAuditLogger"
+      - "HashChainManager"
+    dependencies:
+      - "AR-002"
+      - "AR-004"
+
+  FR-002:
+    id: "FR-002"
+    title: "Governance Rule Evaluation"
+    status: "APPROVED"
+    priority: "CRITICAL"
+    phase: 2
+    day: 3
+    effort: "6 hours"
+    description: |
+      Evaluate governance rules against operations:
+      - Load applicable rules by context
+      - Evaluate rules in priority order
+      - Return pass/fail with violations
+    acceptance_criteria:
+      - ac_id: "AC-FR-002-01"
+        description: "Rules evaluated in tier priority order"
+        test: "test_tier_priority_evaluation"
+      - ac_id: "AC-FR-002-02"
+        description: "Violations returned with rule ID and message"
+        test: "test_violation_details"
+      - ac_id: "AC-FR-002-03"
+        description: "Evaluation performance <5ms per rule"
+        test: "test_evaluation_performance"
+    components:
+      - "RuleEvaluator"
+      - "ViolationReporter"
+    dependencies:
+      - "AR-001"
+      - "AR-003"
+
+  FR-003:
+    id: "FR-003"
+    title: "State Machine Management"
+    status: "APPROVED"
+    priority: "HIGH"
+    phase: 1
+    day: 3
+    effort: "6 hours"
+    description: |
+      State machine for AC-ID lifecycle:
+      - States: PENDING, IN_PROGRESS, BLOCKED, COMPLETED, VERIFIED
+      - Transitions validated against governance rules
+      - State persisted to governance.db
+    acceptance_criteria:
+      - ac_id: "AC-FR-003-01"
+        description: "State transitions atomic"
+        test: "test_atomic_transitions"
+      - ac_id: "AC-FR-003-02"
+        description: "Invalid transitions rejected"
+        test: "test_invalid_transition_rejection"
+      - ac_id: "AC-FR-003-03"
+        description: "State history maintained"
+        test: "test_state_history"
+    components:
+      - "LifecycleManager"
+      - "StateMachine"
+      - "TransitionValidator"
+    dependencies:
+      - "AR-002"
+
+  FR-004:
+    id: "FR-004"
+    title: "Evidence Bundle Capture"
+    status: "APPROVED"
+    priority: "HIGH"
+    phase: 1
+    day: 4
+    effort: "6 hours"
+    description: |
+      Capture evidence bundles for AC-ID completion:
+      - Code changes (git diff)
+      - Test results (pytest output)
+      - Audit logs (filtered by AC-ID)
+      - Governance evaluation results
+    acceptance_criteria:
+      - ac_id: "AC-FR-004-01"
+        description: "Evidence bundle contains all required artifacts"
+        test: "test_evidence_bundle_complete"
+      - ac_id: "AC-FR-004-02"
+        description: "Evidence bundle JSON-serializable"
+        test: "test_evidence_serialization"
+      - ac_id: "AC-FR-004-03"
+        description: "Evidence capture <500ms"
+        test: "test_evidence_capture_performance"
+    components:
+      - "EvidenceBundleGenerator"
+      - "ArtifactCollector"
+    dependencies:
+      - "FR-001"
+
+  FR-005:
+    id: "FR-005"
+    title: "Progress Tracking"
+    status: "APPROVED"
+    priority: "HIGH"
+    phase: 1
+    day: 4
+    effort: "4 hours"
+    description: |
+      Track implementation progress:
+      - Phase completion percentage
+      - AC-ID status by phase
+      - Blockers and dependencies
+    acceptance_criteria:
+      - ac_id: "AC-FR-005-01"
+        description: "Progress queryable by phase"
+        test: "test_progress_by_phase"
+      - ac_id: "AC-FR-005-02"
+        description: "Blockers identified automatically"
+        test: "test_blocker_detection"
+      - ac_id: "AC-FR-005-03"
+        description: "Progress persisted to governance.db"
+        test: "test_progress_persistence"
+    components:
+      - "ProgressTrackerManager"
+      - "BlockerDetector"
+    dependencies:
+      - "AR-002"
+      - "FR-003"
+
+  FR-006:
+    id: "FR-006"
+    title: "Autonomous Continuation"
+    status: "APPROVED"
+    priority: "MEDIUM"
+    phase: 1
+    day: 5
+    effort: "4 hours"
+    description: |
+      Enable autonomous operation continuation:
+      - State checkpoint/restore
+      - Partial completion recovery
+      - Operation resumption
+    acceptance_criteria:
+      - ac_id: "AC-FR-006-01"
+        description: "State checkpointed before long operations"
+        test: "test_state_checkpoint"
+      - ac_id: "AC-FR-006-02"
+        description: "Operations resumable after interruption"
+        test: "test_operation_resumption"
+      - ac_id: "AC-FR-006-03"
+        description: "Partial completion preserved"
+        test: "test_partial_completion"
+    components:
+      - "CheckpointManager"
+      - "ResumptionHandler"
+    dependencies:
+      - "FR-003"
+
+# =============================================================================
+# NON-FUNCTIONAL REQUIREMENTS (NFR-001 through NFR-004)
+# =============================================================================
+
+non_functional_requirements:
+  NFR-001:
+    id: "NFR-001"
+    title: "Maintainability"
+    status: "APPROVED"
+    priority: "HIGH"
+    phase: "ALL"
+    targets:
+      code_coverage: "≥80%"
+      cyclomatic_complexity: "<10 per function"
+      documentation: "100% public API documented"
+    acceptance_criteria:
+      - ac_id: "AC-NFR-001-01"
+        description: "Code coverage ≥80%"
+        test: "pytest --cov"
+      - ac_id: "AC-NFR-001-02"
+        description: "Cyclomatic complexity <10"
+        test: "radon cc --average"
+      - ac_id: "AC-NFR-001-03"
+        description: "Public API documented"
+        test: "pydoc verification"
+
+  NFR-002:
+    id: "NFR-002"
+    title: "Reliability"
+    status: "APPROVED"
+    priority: "CRITICAL"
+    phase: 3
+    targets:
+      uptime: "99.9%"
+      mttr: "<1 hour"
+      error_rate: "<0.1%"
+    acceptance_criteria:
+      - ac_id: "AC-NFR-002-01"
+        description: "Graceful degradation on component failure"
+        test: "test_graceful_degradation"
+      - ac_id: "AC-NFR-002-02"
+        description: "Automatic retry with exponential backoff"
+        test: "test_retry_backoff"
+      - ac_id: "AC-NFR-002-03"
+        description: "Circuit breaker pattern implemented"
+        test: "test_circuit_breaker"
+
+  NFR-003:
+    id: "NFR-003"
+    title: "Security"
+    status: "APPROVED"
+    priority: "CRITICAL"
+    phase: 4
+    targets:
+      secret_redaction: "100%"
+      compliance: "HIPAA/SOX/PCI-DSS ready"
+      audit_integrity: "Hash chain verified"
+    acceptance_criteria:
+      - ac_id: "AC-NFR-003-01"
+        description: "Secrets redacted from all logs"
+        test: "test_secret_redaction"
+      - ac_id: "AC-NFR-003-02"
+        description: "Hash chain integrity verified on read"
+        test: "test_hash_verification"
+      - ac_id: "AC-NFR-003-03"
+        description: "Compliance markers in audit logs"
+        test: "test_compliance_markers"
+
+  NFR-004:
+    id: "NFR-004"
+    title: "Observability"
+    status: "APPROVED"
+    priority: "HIGH"
+    phase: 3
+    targets:
+      metrics_collection: "OpenTelemetry compatible"
+      dashboard: "Real-time progress dashboard"
+      alerting: "Configurable alert rules"
+    acceptance_criteria:
+      - ac_id: "AC-NFR-004-01"
+        description: "OpenTelemetry metrics exported"
+        test: "test_otel_metrics"
+      - ac_id: "AC-NFR-004-02"
+        description: "Dashboard shows real-time progress"
+        test: "test_dashboard_realtime"
+      - ac_id: "AC-NFR-004-03"
+        description: "Alerts triggered on threshold breach"
+        test: "test_alert_triggers"
+
+# =============================================================================
+# GOVERNANCE RULES (25 SKULL RULES)
+# =============================================================================
+
+governance_rules:
+  skull_rules:
+    count: 25
+    tier: 0
+    immutable: true
+    location: "cortex-brain/tier0/governance/core-rules.yaml"
+    categories:
+      auditability:
+        rules: ["SKULL-001", "SKULL-002", "SKULL-003", "SKULL-004", "SKULL-005"]
+        description: "Audit logging requirements"
+      governance:
+        rules: ["SKULL-006", "SKULL-007", "SKULL-008", "SKULL-009", "SKULL-010"]
+        description: "Governance enforcement rules"
+      evidence:
+        rules: ["SKULL-011", "SKULL-012", "SKULL-013", "SKULL-014", "SKULL-015"]
+        description: "Evidence capture rules"
+      lifecycle:
+        rules: ["SKULL-016", "SKULL-017", "SKULL-018", "SKULL-019", "SKULL-020"]
+        description: "AC-ID lifecycle rules"
+      integrity:
+        rules: ["SKULL-021", "SKULL-022", "SKULL-023", "SKULL-024", "SKULL-025"]
+        description: "Data integrity rules"
+
+# =============================================================================
+# HALLUCINATION PREVENTION (25 AC-IDs)
+# =============================================================================
+
+hallucination_prevention:
+  status: "APPROVED FOR PHASE 2+4"
+  total_ac_ids: 24
+  effort: "+8.75 days total"
+  
+  phase_2_enhancements:
+    title: "WIN Machine Enhancement"
+    ac_count: 15
+    effort: "+3.5 days"
+    components:
+      input_validation:
+        ac_ids: ["AC-VALIDATE-001", "AC-VALIDATE-002", "AC-VALIDATE-003", "AC-VALIDATE-004", "AC-VALIDATE-005", "AC-VALIDATE-006", "AC-VALIDATE-007", "AC-VALIDATE-008", "AC-VALIDATE-009", "AC-VALIDATE-010"]
+        component: "InputValidator"
+        description: "Intent canonicalization, AC-ID existence check, evidence pre-check, cross-reference coherence, semantic validation, format validation, phase alignment, contradiction detection, schema validation, backward compatibility"
+      health_metrics:
+        ac_ids: ["AC-METRICS-001", "AC-METRICS-002", "AC-METRICS-003", "AC-METRICS-004", "AC-METRICS-005"]
+        component: "HealthMetricsCollector"
+        description: "Validation success rate, semantic accuracy, cross-reference success, phase alignment rate, anomaly detection"
+
+  phase_4_enhancements:
+    title: "MAC Machine Enhancement"
+    ac_count: 9
+    effort: "+5.25 days"
+    components:
+      cross_file_coherence:
+        ac_ids: ["AC-COHERENCE-001", "AC-COHERENCE-002", "AC-COHERENCE-003", "AC-COHERENCE-004"]
+        component: "CoherenceValidator"
+        description: "File-to-file coherence, naming consistency, reference validity, contradiction detection"
+      provenance_tracking:
+        ac_ids: ["AC-EXPLAIN-001", "AC-EXPLAIN-002", "AC-EXPLAIN-003", "AC-EXPLAIN-004", "AC-EXPLAIN-005"]
+        component: "ProvenanceTracker"
+        description: "Source tracking, decision justification, architecture rationale, test coverage justification, evidence provenance"
+
+# =============================================================================
+# BRITTLENESS FIXES (14 AC-IDs)
+# =============================================================================
+
+brittleness_fixes:
+  status: "APPROVED FOR PHASE 5"
+  total_ac_ids: 14
+  
+  critical_blockers:
+    phase: "9.4 (Day 0 - 2 hours)"
+    ac_ids:
+      - id: "AC-BRITTLE-001"
+        problem: "SQLite Journal Mode"
+        severity: "CRITICAL"
+        effort: "15 minutes"
+        solution: "Enable WAL mode (PRAGMA journal_mode=WAL)"
+      - id: "AC-BRITTLE-002"
+        problem: "Audit Database Schema Missing"
+        severity: "CRITICAL"
+        effort: "45 minutes"
+        solution: "Create schema migration, auto-initialize"
+      - id: "AC-BRITTLE-003"
+        problem: "Progress Tracker Broken"
+        severity: "CRITICAL"
+        effort: "30 minutes"
+        solution: "Rebuild tracker from AC-INDEX"
+      - id: "AC-BRITTLE-004"
+        problem: "Pytest Collection Warnings"
+        severity: "CRITICAL"
+        effort: "5 minutes"
+        solution: "Rename dataclasses to remove 'Test' prefix"
+
+  high_priority:
+    phase: "9.4 (Week 1 - 5 days)"
+    ac_ids:
+      - id: "AC-BRITTLE-005"
+        problem: "Import Brittleness"
+        severity: "HIGH"
+        effort: "2 hours"
+      - id: "AC-BRITTLE-006"
+        problem: "Test Collection Brittleness"
+        severity: "HIGH"
+        effort: "3 hours"
+      - id: "AC-BRITTLE-007"
+        problem: "Package Path Brittleness"
+        severity: "HIGH"
+        effort: "2 hours"
+      - id: "AC-BRITTLE-008"
+        problem: "AC Completeness Brittleness"
+        severity: "HIGH"
+        effort: "5 days"
+      - id: "AC-BRITTLE-009"
+        problem: "Evidence Generation Brittleness"
+        severity: "HIGH"
+        effort: "3 days"
+      - id: "AC-BRITTLE-010"
+        problem: "Portability Brittleness"
+        severity: "HIGH"
+        effort: "2 days"
+      - id: "AC-BRITTLE-011"
+        problem: "State Management Brittleness"
+        severity: "HIGH"
+        effort: "1.5 days"
+      - id: "AC-BRITTLE-012"
+        problem: "Governance Enforcement Brittleness"
+        severity: "HIGH"
+        effort: "2 days"
+      - id: "AC-BRITTLE-013"
+        problem: "Test-AC Linking Brittleness"
+        severity: "HIGH"
+        effort: "2 hours"
+      - id: "AC-BRITTLE-014"
+        problem: "Verification Rate Brittleness"
+        severity: "HIGH"
+        effort: "2 days"
+
+# =============================================================================
+# IMPLEMENTATION PHASES
+# =============================================================================
+
+phases:
+  phase_01:
+    id: "PHASE-01"
+    title: "Foundation"
+    duration: "5 days"
+    file: "phases/phase-01.yaml"
+    focus:
+      - "3-Tier Governance Model"
+      - "SQLite-Based AC Index"
+      - "Audit-First Pattern"
+      - "State Machine Management"
+    ac_ids:
+      - "AC-AR-001-01"
+      - "AC-AR-001-02"
+      - "AC-AR-001-03"
+      - "AC-AR-002-01"
+      - "AC-AR-002-02"
+      - "AC-AR-002-03"
+      - "AC-AR-003-01"
+      - "AC-AR-003-02"
+      - "AC-AR-003-03"
+      - "AC-AR-004-01"
+      - "AC-AR-004-02"
+      - "AC-AR-004-03"
+      - "AC-AR-005-01"
+      - "AC-AR-005-02"
+      - "AC-AR-005-03"
+      - "AC-FR-001-01"
+      - "AC-FR-001-02"
+      - "AC-FR-001-03"
+      - "AC-FR-003-01"
+      - "AC-FR-003-02"
+      - "AC-FR-003-03"
+      - "AC-FR-004-01"
+      - "AC-FR-004-02"
+      - "AC-FR-004-03"
+      - "AC-FR-005-01"
+      - "AC-FR-005-02"
+      - "AC-FR-005-03"
+      - "AC-FR-006-01"
+      - "AC-FR-006-02"
+      - "AC-FR-006-03"
+      - "AC-AR-008-01"
+      - "AC-AR-008-02"
+      - "AC-AR-008-03"
+    
+  phase_02:
+    id: "PHASE-02"
+    title: "Orchestration Core"
+    duration: "5 days"
+    file: "phases/phase-02.yaml"
+    focus:
+      - "Orchestrator Architecture"
+      - "MCP Integration"
+      - "Governance Evaluation"
+      - "Response Templates"
+      - "Input Validation (Hallucination Prevention)"
+    ac_ids:
+      - "AC-AR-006-01"
+      - "AC-AR-006-02"
+      - "AC-AR-006-03"
+      - "AC-AR-007-01"
+      - "AC-AR-007-02"
+      - "AC-AR-007-03"
+      - "AC-FR-002-01"
+      - "AC-FR-002-02"
+      - "AC-FR-002-03"
+      - "AC-AR-009-01"
+      - "AC-AR-009-02"
+      - "AC-AR-009-03"
+      - "AC-VALIDATE-001"
+      - "AC-VALIDATE-002"
+      - "AC-VALIDATE-003"
+      - "AC-VALIDATE-004"
+      - "AC-VALIDATE-005"
+      - "AC-VALIDATE-006"
+      - "AC-VALIDATE-007"
+      - "AC-VALIDATE-008"
+      - "AC-VALIDATE-009"
+      - "AC-VALIDATE-010"
+      - "AC-METRICS-001"
+      - "AC-METRICS-002"
+      - "AC-METRICS-003"
+      - "AC-METRICS-004"
+      - "AC-METRICS-005"
+
+  phase_03:
+    id: "PHASE-03"
+    title: "Safety & Observability"
+    duration: "5 days"
+    file: "phases/phase-03.yaml"
+    focus:
+      - "Reliability (NFR-002)"
+      - "Observability (NFR-004)"
+      - "Error Handling"
+      - "Dashboard"
+    ac_ids:
+      - "AC-NFR-002-01"
+      - "AC-NFR-002-02"
+      - "AC-NFR-002-03"
+      - "AC-NFR-004-01"
+      - "AC-NFR-004-02"
+      - "AC-NFR-004-03"
+
+  phase_04:
+    id: "PHASE-04"
+    title: "Production Hardening"
+    duration: "5 days"
+    file: "phases/phase-04.yaml"
+    focus:
+      - "Security (NFR-003)"
+      - "Performance Tuning"
+      - "Compliance"
+      - "Cross-File Coherence (Hallucination Prevention)"
+    ac_ids:
+      - "AC-NFR-003-01"
+      - "AC-NFR-003-02"
+      - "AC-NFR-003-03"
+      - "AC-COHERENCE-001"
+      - "AC-COHERENCE-002"
+      - "AC-COHERENCE-003"
+      - "AC-COHERENCE-004"
+      - "AC-EXPLAIN-001"
+      - "AC-EXPLAIN-002"
+      - "AC-EXPLAIN-003"
+      - "AC-EXPLAIN-004"
+      - "AC-EXPLAIN-005"
+
+  phase_05:
+    id: "PHASE-05"
+    title: "Brittleness Fixes & Stabilization"
+    duration: "5 days"
+    file: "phases/phase-05.yaml"
+    focus:
+      - "Critical Brittleness Fixes"
+      - "High Priority Fixes"
+      - "Test Stabilization"
+      - "Final Verification"
+      - "NFR-001 Maintainability Verification"
+    ac_ids:
+      - "AC-NFR-001-01"
+      - "AC-NFR-001-02"
+      - "AC-NFR-001-03"
+      - "AC-BRITTLE-001"
+      - "AC-BRITTLE-002"
+      - "AC-BRITTLE-003"
+      - "AC-BRITTLE-004"
+      - "AC-BRITTLE-005"
+      - "AC-BRITTLE-006"
+      - "AC-BRITTLE-007"
+      - "AC-BRITTLE-008"
+      - "AC-BRITTLE-009"
+      - "AC-BRITTLE-010"
+      - "AC-BRITTLE-011"
+      - "AC-BRITTLE-012"
+      - "AC-BRITTLE-013"
+      - "AC-BRITTLE-014"
+
+  phase_parallel:
+    id: "PHASE-PARALLEL"
+    title: "Folder Structure Migration"
+    duration: "16 hours"
+    blocking: false
+    file: "phases/phase-parallel.yaml"
+    focus:
+      - "Nested Folder Organization (AR-010)"
+    ac_ids:
+      - "AC-AR-010-01"
+      - "AC-AR-010-02"
+      - "AC-AR-010-03"
+
+# =============================================================================
+# SUCCESS METRICS
+# =============================================================================
+
+success_metrics:
+  completion:
+    architecture_decisions: "10/10 implemented"
+    functional_requirements: "6/6 implemented"
+    non_functional_requirements: "4/4 met"
+    governance_rules: "25/25 enforced"
+    brittleness_fixes: "14/14 completed"
+    hallucination_prevention: "25/25 scheduled"
+
+  quality:
+    test_pass_rate: "≥98%"
+    code_coverage: "≥80%"
+    verification_rate: "≥80%"
+
+  performance:
+    governance_evaluation: "<5ms per rule"
+    sqlite_query: "<1ms"
+    state_transition: "<10ms"
+    evidence_capture: "<500ms"
+    audit_logging: "<5ms"
+
+  security:
+    governance_bypass: "0 violations"
+    hash_chain_integrity: "100%"
+    secrets_redaction: "100%"
+    compliance: "HIPAA/SOX/PCI-DSS supported"
+
+# =============================================================================
+# TRACKING
+# =============================================================================
+
+tracking:
+  progress_file: "progress.json"
+  last_updated: null
+  current_phase: "PHASE-01"
+  current_day: 0
+  blockers: []
