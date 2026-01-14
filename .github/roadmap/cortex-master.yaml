@@ -47,6 +47,7 @@ phase_tracker:
     status: "COMPLETED"    # NOT_STARTED | IN_PROGRESS | COMPLETED
     locked: true           # Once true, phase cannot be reimplemented
     completed_at: "2026-01-14T00:00:00Z"
+    cleanup_required: true   # Execute cleanup protocol before phase lock
     day_sequence:
       day_0: "Scaffolding (folders, __init__.py)"
       day_1: "AR-002 (SQLite), AR-005 (Mode Control)"
@@ -68,6 +69,7 @@ phase_tracker:
     status: "COMPLETED"
     locked: true
     completed_at: "2026-01-14T00:00:00Z"
+    cleanup_required: true   # Execute cleanup protocol before phase lock
     requires: "PHASE-01"
     audit_verification:
       verified: true
@@ -82,6 +84,7 @@ phase_tracker:
     status: "NOT_STARTED"
     locked: false
     completed_at: null
+    cleanup_required: true   # Execute cleanup protocol before phase lock
     requires: "PHASE-02"
     audit_verification:
       verified: false
@@ -96,6 +99,7 @@ phase_tracker:
     status: "NOT_STARTED"
     locked: false
     completed_at: null
+    cleanup_required: true   # Execute cleanup protocol before phase lock
     requires: "PHASE-03"
     audit_verification:
       verified: false
@@ -110,6 +114,7 @@ phase_tracker:
     status: "NOT_STARTED"
     locked: false
     completed_at: null
+    cleanup_required: true   # Execute cleanup protocol before phase lock
     requires: "PHASE-04"
     audit_verification:
       verified: false
@@ -124,6 +129,7 @@ phase_tracker:
     status: "NOT_STARTED"
     locked: false
     completed_at: null
+    cleanup_required: true   # Execute cleanup protocol before phase lock
     requires: "PHASE-01"
     can_start_after: "PHASE-01 completion"
     must_complete_before: "PHASE-05"

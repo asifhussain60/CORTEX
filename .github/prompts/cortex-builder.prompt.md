@@ -155,7 +155,31 @@ executive_summary_complete:
 5. **Implement** one AC-ID at a time with tests (audit logging ACTIVE)
 6. **Verify Audit Trail** → Query audit logs for AC-ID entries
 7. **Update** phase YAML status when AC-ID complete
-8. **When phase done**: Validate audit trace → **DISPLAY COMPLETION SUMMARY** → Update `phase_tracker` → `status: "COMPLETED"`, `locked: true`
+8. **BEFORE PHASE LOCK**: Execute cleanup (see Cleanup Protocol below)
+9. **When phase done**: Validate audit trace → **DISPLAY COMPLETION SUMMARY** → Update `phase_tracker` → `status: "COMPLETED"`, `locked: true`
+
+## Cleanup Protocol (REQUIRED BEFORE PHASE LOCK)
+
+**Mandatory cleanup checklist before setting `locked: true`:**
+
+### File Organization (Kebab-Case, Max 20 chars)
+- ✅ No phase-specific `.md` files in root (`PHASE-XX-*.md` → DELETE)
+- ✅ No temporary AC reports in root (`AC-*.md` → DELETE)
+- ✅ If summary docs created → Move to `.github/docs/` with kebab-case names
+- ✅ Root contains ONLY: `README.md`, `pytest.ini`, `requirements.txt`
+
+### Documentation Standards
+- ✅ Status updates in `.github/docs/current-status.md` (not STATUS.md in root)
+- ✅ Structured data as YAML/JSON, not Markdown
+- ✅ Evidence captured in `governance.db`, not separate files
+- ✅ Archive old phase transcripts to `.github/evidence/chat-archive/`
+
+### Git Cleanup
+- ✅ All changes committed with clear messages
+- ✅ Final checkpoint: `git commit -m "phase-XX: COMPLETED - cleanup done"`
+- ✅ No uncommitted changes before phase lock
+
+**Reference:** `.github/docs/cleanup-policy.md` for detailed guidelines
 
 ## Git Checkpoint Protocol
 
@@ -178,7 +202,8 @@ git stash push -m "pre-modify-checkpoint" || git add -A && git commit -m "checkp
 | Start AC-ID | YES | `checkpoint: before AC-XXX-XXX` |
 | File modification | YES | `checkpoint: pre-modify` |
 | Tests pass | YES | `AC-XXX-XXX: [desc] - tests passing` |
-| Phase complete | YES | `phase-XX: COMPLETED - audit verified` |
+| Phase cleanup | YES | `phase-XX: cleanup done` |
+| Phase complete | YES | `phase-XX: COMPLETED - audit verified, cleanup done` |
 
 ### Rollback Commands
 ```bash

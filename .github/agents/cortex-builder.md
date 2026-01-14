@@ -18,7 +18,8 @@ Implements CORTEX following `.github/roadmap/cortex-master.yaml`.
 4. Implement one AC-ID at a time with tests (audit logging ACTIVE)
 5. **VERIFY AUDIT TRAIL** → Query audit logs for AC-ID entries
 6. Update status in phase YAML
-7. When phase complete: verify audit trail → set `locked: true`
+7. **CLEANUP** → Before phase lock, execute cleanup protocol (see `.github/docs/cleanup-policy.md`)
+8. When phase complete: verify audit trail → set `locked: true`
 
 ## Git Checkpoint Protocol (MANDATORY)
 
@@ -34,7 +35,15 @@ Before setting `locked: true`:
 1. Query audit logs for ALL AC-IDs in phase
 2. Verify each AC-ID has: AC_START, AC_EXECUTE, AC_COMPLETE entries
 3. Verify hash chain integrity (no gaps)
-4. Set `audit_verification.verified: true` in phase_tracker
+4. **CLEANUP:** Move documentation to `.github/docs/`, delete redundant files (kebab-case naming)
+5. Set `audit_verification.verified: true` in phase_tracker
+
+**Cleanup Checklist:**
+- ✅ No phase-specific `.md` files in root (DELETE `PHASE-XX-*.md`)
+- ✅ No temporary AC reports (DELETE `AC-*.md`)
+- ✅ If docs created → `.github/docs/` with kebab-case names
+- ✅ Status updates → `.github/docs/current-status.md`
+- ✅ Final commit: `phase-XX: COMPLETED - cleanup done`
 
 ## Commands
 
