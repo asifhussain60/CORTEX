@@ -6,6 +6,26 @@
 
 ---
 
+## 🚀 **NEW: Governance Wiring Solution** (2026-01-14)
+
+**START HERE:** `00-START-HERE.md` ← Complete analysis + decision package
+
+**Problem Identified:** 28 governance rules; only 4 working (14%)  
+**Root Cause:** Functionality exists but not wired (12 partial, 12 broken)  
+**Solution Designed:** Declarative auto-wired governance system  
+**Implementation:** Ready-to-code Phase 1 (12 days total, 4 phases)  
+
+**Quick Links:**
+- ⚡ **5 min decision:** `SOLUTION-COMPLETE.md` + `quick-reference.md`
+- 📊 **15 min overview:** `executive-summary.md` + `before-and-after.md`
+- 🔧 **Complete spec:** `governance-wiring-solution.md` (8 parts)
+- 💻 **Ready to code:** `governance-registry-implementation.md` (Phase 1 starter)
+- 📑 **Navigation:** `DOCUMENT-INDEX.md` (all docs + reading paths)
+
+---
+
+---
+
 ## 📋 Document Inventory
 
 ### 1. Requirements & Architecture
@@ -21,6 +41,19 @@
 | Document | Size | Purpose | Status |
 |----------|------|---------|--------|
 | **cortex7-governance-spec.md** | ~48KB | **CONSOLIDATED** governance specification (Parts 1-8) | ✅ READY FOR APPROVAL |
+| **governance-rule-evaluation.md** | ~15KB | Rule status audit (3 working, 12 partial, 12 broken) + root cause analysis | ✅ ANALYSIS COMPLETE |
+
+### 3. Governance Wiring Solution (NEW - 2026-01-14)
+
+**Problem:** Rules exist but aren't wired to enforcement; brittleness on clone  
+**Solution:** Declarative auto-wired governance system
+
+| Document | Size | Purpose | Status |
+|----------|------|---------|--------|
+| **executive-summary.md** | ~8KB | High-level overview of problem, solution, roadmap | ✅ START HERE |
+| **governance-wiring-solution.md** | ~25KB | Complete design specification (8 parts, code examples) | ✅ DETAILED DESIGN |
+| **governance-registry-implementation.md** | ~12KB | Phase 1 ready-to-code (base classes, schema, examples) | ✅ READY TO IMPLEMENT |
+| **findings-and-design-decision.md** | ~10KB | Analysis of root causes + architectural decision rationale | ✅ DECISION RECORD |
 
 ---
 
@@ -46,6 +79,22 @@
 
 **"Is this ready to build?"**
 → Read: `CORTEX7-DOR-ASSESSMENT.md` → Assessment: 87/100 (proceed approved)
+
+---
+
+## 🆕 Governance Wiring: The Brittleness Problem
+
+**Q: Why do rules exist but enforcement is missing?**
+→ Read: `executive-summary.md` (2 min overview)
+
+**Q: What's the root cause? What are the alternatives?**
+→ Read: `findings-and-design-decision.md` (detailed analysis + challenge document)
+
+**Q: How does the solution work? Show me the architecture.**
+→ Read: `governance-wiring-solution.md` (complete design, 8 parts)
+
+**Q: I'm ready to code. What do I implement first?**
+→ Read: `governance-registry-implementation.md` (Phase 1, step-by-step, copy-paste code)
 
 ---
 
