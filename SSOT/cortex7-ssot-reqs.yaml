@@ -8,10 +8,30 @@
 # Version: 2.0.0-FINAL
 # Sources: 64 files analyzed (25,580+ lines)
 # ==============================================================================
+#
+# ⚠️  CRITICAL NOTICE - REFERENCE FOLDER WARNING
+# ==============================================================================
+# The __backup/ folder contains CORTEX 6.0 code for REFERENCE ONLY.
+# 
+# DO NOT:
+#   ❌ Restore any __backup/ files to root directory
+#   ❌ Copy old implementations without review
+#   ❌ Bring back root-level clutter (CORE-009 violation)
+#   ❌ Assume old code is correct (verification rate was 22.7%)
+#
+# INSTEAD:
+#   ✅ Build cortex-brain/ from scratch per this SSOT
+#   ✅ Reference __backup/ for pattern ideas only
+#   ✅ Implement via TDD with proper evidence bundles
+#   ✅ Follow 3-tier governance model (see ARCHITECTURE-CHALLENGE.md)
+#
+# SSOT/ folder is the FINAL AUTHORITY. All design decisions and requirements
+# are defined here. Start fresh, build clean.
+# ==============================================================================
 
 metadata:
   project: CORTEX_7_SSOT
-  version: 2.0.0-FINAL
+  version: 2.1.0-FINAL
   generated: "2026-01-14T12:00:00Z"
   author: Asif Hussain
   status: APPROVED_READY_FOR_IMPLEMENTATION
@@ -122,6 +142,219 @@ production_mode:
     - "Evidence bundles captured in all modes (compliance requirement)"
     - "Users can override to development mode for troubleshooting"
     - "Hash chain integrity maintained in all modes"
+
+# ==============================================================================
+# TIERED LOGGING ARCHITECTURE (CRITICAL DESIGN)
+# ==============================================================================
+# RATIONALE: AC-IDs are CORTEX development concepts (acceptance criteria),
+# NOT user production concepts (payments, API calls, database queries).
+# Forcing AC-ID schema on user production logs creates semantic mismatch.
+# Solution: Separate loggers for different purposes.
+# ==============================================================================
+tiered_logging_architecture:
+  design_decision:
+    challenge: "AC-ID logger forces semantic mismatch on user production code"
+    analysis: "See CORTEX7-DOR-ASSESSMENT.md Section 14 (Critical Challenge)"
+    verdict: "Tiered architecture (3 systems) for semantic correctness"
+    rejected_alternatives:
+      - "Unified logger (semantic mismatch, performance overhead, storage cost)"
+      - "Orchestrator pattern (conceptually wrong, over-engineered)"
+  
+  tier1_cortex_internal:
+    purpose: "CORTEX development only (AC-ID tracking)"
+    use_case: "Building CORTEX 7.0 itself"
+    schema:
+      required_fields: ["ac_id", "correlation_id", "operation", "timestamp"]
+      optional_fields: ["test_status", "evidence_path", "phase"]
+    technology:
+      storage: "SQLite (cortex-brain/database/cortex-audit.db)"
+      hash_chain: true
+      retention: "7 years (compliance requirement for CORTEX development)"
+    implementation:
+      file: "src/infrastructure/cortex_audit_logger.py"
+      class: "CortexAuditLogger"
+      decorator: "@cortex_audit (requires AC-ID parameter)"
+    performance:
+      latency: "<5ms (low volume, CORTEX operations only)"
+      volume: "~1,000 operations/day (CORTEX development)"
+    guarantees:
+      - "AC-ID required (first-class field, indexed)"
+      - "Hash chain integrity (tamper-proof)"
+      - "Test execution tracking (log_test_execution())"
+      - "Evidence bundle integration (log_ac_implementation())"
+  
+  tier2_user_application:
+    purpose: "User production logging (general events)"
+    use_case: "User's software project (Django, React, ML pipelines, etc.)"
+    schema:
+      required_fields: ["event_type", "correlation_id", "timestamp"]
+      optional_fields: ["user_id", "order_id", "amount", "metadata"]
+      no_ac_id: "AC-ID not applicable to user production events"
+    technology:
+      interface: "Python logging compatible (standard library)"
+      backend: "User-defined (CloudWatch, file, Datadog, Splunk)"
+      hash_chain: false  # Performance priority
+      retention: "User-defined (typically 30-90 days)"
+    implementation:
+      file: "src/infrastructure/application_logger.py"
+      class: "ApplicationLogger"
+      interface: "logger.info('payment.processed', extra={...})"
+    performance:
+      latency: "<0.1ms (no hash chain, no SQLite)"
+      volume: "~100,000 operations/day (user production scale)"
+    backends:
+      cloudwatch:
+        enabled: true
+        cost: "~$5/month for 10GB ingestion"
+      file:
+        enabled: true
+        rotation: "100MB per file, 30 days retention"
+      datadog:
+        enabled: false
+        cost: "~$500/month (enterprise)"
+        note: "Optional, if user already has Datadog"
+      splunk:
+        enabled: false
+        cost: "~$1000/month (enterprise)"
+        note: "Optional, if user already has Splunk"
+  
+  tier3_compliance_audit:
+    purpose: "Compliance-critical events only (opt-in)"
+    use_case: "Healthcare (HIPAA), Finance (SOX), Government (FedRAMP)"
+    schema:
+      required_fields: ["event_type", "correlation_id", "timestamp", "user", "resource"]
+      optional_fields: ["reviewer", "commit_sha", "deployment_id"]
+      no_ac_id: "Uses correlation IDs instead (broader applicability)"
+    technology:
+      storage: "SQLite (cortex-brain/compliance/audit.db)"
+      hash_chain: true  # Compliance requirement
+      retention: "7 years (HIPAA/SOX requirement)"
+    implementation:
+      file: "src/infrastructure/compliance_logger.py"
+      class: "ComplianceAuditLogger"
+      decorator: "@compliance_audit (opt-in, filtered events)"
+    performance:
+      latency: "<5ms (hash chain, but low volume)"
+      volume: "~500 operations/day (compliance events only)"
+    filtered_events:
+      - "deploy (code deployment to production)"
+      - "review (code review approval)"
+      - "test (test execution pass/fail)"
+      - "merge (PR merge to main branch)"
+      - "delete (data deletion operations)"
+      - "access (PHI/PII access in healthcare/finance)"
+    opt_in_control:
+      env_variable: "CORTEX_COMPLIANCE_LOGGING=enabled|disabled"
+      default: "disabled (users must explicitly enable)"
+      configuration: "cortex-brain/config/compliance-config.yaml"
+  
+  integration_architecture:
+    unified_interface:
+      description: "Single import, three loggers behind the scenes"
+      usage: |
+        from cortex import logger
+        
+        # Tier 1 (CORTEX internal, requires AC-ID):
+        logger.cortex(ac_id='AC-GOV-001', message='Implemented')
+        
+        # Tier 2 (User application, no AC-ID):
+        logger.info('payment.processed', extra={'order_id': '12345'})
+        
+        # Tier 3 (Compliance audit, opt-in):
+        logger.compliance('code.deployed', extra={'version': 'v2.3.1'})
+    
+    automatic_routing:
+      description: "Logger automatically routes based on context"
+      rules:
+        - "If ac_id parameter present → Tier 1 (CortexAuditLogger)"
+        - "If logger.compliance() called → Tier 3 (ComplianceAuditLogger)"
+        - "Otherwise → Tier 2 (ApplicationLogger)"
+    
+    cross_tier_correlation:
+      description: "Correlation IDs link events across all tiers"
+      example: |
+        correlation_id = uuid.uuid4()
+        logger.cortex(ac_id='AC-TDD-001', correlation_id=correlation_id)  # Tier 1
+        logger.info('test.executed', extra={'correlation_id': correlation_id})  # Tier 2
+        logger.compliance('test.passed', extra={'correlation_id': correlation_id})  # Tier 3
+        # Query: SELECT * FROM audit_logs WHERE correlation_id = '...' (all tiers)
+  
+  migration_from_unified:
+    current_state: "__backup/ has unified EnhancedAuditLogger (AC-ID for everything)"
+    migration_path:
+      week_1_day_1_2:
+        - "Extract CortexAuditLogger from EnhancedAuditLogger (keep AC-ID schema)"
+        - "Implement ApplicationLogger (Python logging wrapper, no AC-ID)"
+        - "Implement ComplianceLogger (filtered hash chain, no AC-ID)"
+        - "Create TieredAuditSystem (routing coordinator)"
+      week_1_day_3_4:
+        - "Update all CORTEX orchestrators to use logger.cortex()"
+        - "Add user-facing examples for logger.info() and logger.compliance()"
+        - "Update tests (200 tests for tiered system)"
+      week_1_day_5:
+        - "Integration testing (3 tiers working together)"
+        - "Performance validation (<0.1ms Tier 2, <5ms Tier 1/3)"
+        - "Documentation update (user guide for tiered logging)"
+    
+    backward_compatibility:
+      description: "Old EnhancedAuditLogger calls redirect to TieredAuditSystem"
+      deprecation: "EnhancedAuditLogger marked deprecated, removed in CORTEX 8.0"
+  
+  cost_benefit_analysis:
+    unified_logger:
+      development_effort: "8 hours (enhance existing)"
+      semantic_correctness: "POOR (forces AC-ID on users)"
+      user_experience: "POOR (unfamiliar interface)"
+      performance: "POOR (hash chain overhead on user logs)"
+      storage_cost: "HIGH ($57.50/month for 2.5TB/7yr)"
+    
+    tiered_architecture:
+      development_effort: "20 hours (+12 hours for correctness)"
+      semantic_correctness: "EXCELLENT (purpose-fit schemas)"
+      user_experience: "EXCELLENT (familiar Python logging)"
+      performance: "EXCELLENT (no overhead Tier 2, <0.1ms)"
+      storage_cost: "LOW ($5/month Tier 2, Tier 3 opt-in)"
+    
+    verdict: "Accept 12-hour additional effort for architectural correctness"
+  
+  failure_scenarios_addressed:
+    scenario_a_semantic_mismatch:
+      problem: "User payment logs forced to have AC-ID='PAYMENT-001' (meaningless)"
+      solution: "Tier 2 uses event_type='payment.processed' (semantic match)"
+    
+    scenario_b_performance_bottleneck:
+      problem: "Hash chain at 100k logs/day causes SQLite lock contention"
+      solution: "Tier 2 no hash chain (standard logging, <0.1ms)"
+    
+    scenario_c_storage_explosion:
+      problem: "2.5TB per project for 7-year retention (all logs)"
+      solution: "Tier 2 user-defined retention (30-90 days), Tier 3 opt-in only"
+    
+    scenario_d_compliance_lost:
+      problem: "Separate loggers lose compliance value (no tamper-proof guarantee)"
+      solution: "Tier 3 provides opt-in hash chain for compliance events"
+  
+  competitive_advantage:
+    differentiation: |
+      CORTEX is the ONLY AI coding agent with:
+      1. Native AC-ID tracking for development (Tier 1)
+      2. Standard Python logging for users (Tier 2)
+      3. Opt-in compliance audit trail (Tier 3)
+      
+      Competitors (GitHub Copilot, Cursor, Devin) provide NONE of this.
+    
+    target_markets:
+      startups:
+        need: "Tier 2 only (no compliance requirements)"
+        value: "Free, familiar, fast logging"
+      
+      mid_size:
+        need: "Tier 2 + Tier 3 (SOC 2 compliance)"
+        value: "$20k/year savings vs external audit tooling"
+      
+      enterprise:
+        need: "Tier 2 + Tier 3 + external forwarding (Splunk/Datadog)"
+        value: "Dual benefit (SQLite tamper-proof + centralized ops)"
 
 # ==============================================================================
 # GOVERNANCE RULES (23 SKULL RULES - TIER 0)
@@ -543,7 +776,7 @@ references:
 # VERSION HISTORY
 # ==============================================================================
 version_history:
-  - version: "2.0.0-FINAL"
+  - version: "2.1.0-FINAL"
     date: "2026-01-14"
     changes:
       - "Consolidated ALL 64 requirement files from .asif/cortex7-req/"
@@ -555,3 +788,7 @@ version_history:
       - "NetworkX + FAISS implementation confirmed"
       - "Multi-machine development protocol included"
       - "Complete roadmap with 3-phase timeline"
+      - "Tiered logging architecture added (3 systems: CORTEX internal, User app, Compliance)"
+      - "Semantic correctness analysis (AC-ID vs event-type schemas)"
+      - "Migration path from unified logger defined (20 hours Week 1)"
+      - "Competitive advantage positioning (compliance-grade audit trail)"
