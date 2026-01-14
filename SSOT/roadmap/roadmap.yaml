@@ -1,0 +1,1137 @@
+################################################################################
+# CORTEX 7.0 MASTER REQUIREMENTS ROADMAP
+################################################################################
+# Purpose: Single source of truth for all requirements, organized by category
+# Date: 2026-01-14
+# Version: 1.0.0
+# Status: DRAFT - READY FOR REVIEW
+# Scope: Architecture decisions (10), Functional (6), Non-Functional (4), 
+#        Governance (25), Hallucination Prevention (25), Brittleness Fixes (14)
+# Total: 84 consolidated requirements
+################################################################################
+
+metadata:
+  version: "1.0.0"
+  created: "2026-01-14"
+  updated: "2026-01-14"
+  source_documents:
+    - "consolidated-requirements.md"
+    - "framework-arch-spec.md"
+    - "custom-response-templates.md"
+    - "folder-structure-design.md"
+    - "hallucination-prevention-integration-2026-01-13.md"
+    - "brittleness-executive-briefing.md"
+    - "brittleness-fix-summary.md"
+    - "brittleness-scorecard.md"
+  total_requirements: 84
+  status: "APPROVED FOR IMPLEMENTATION"
+
+################################################################################
+# PART 1: ARCHITECTURE DECISIONS (10 AR-IDs)
+################################################################################
+
+architecture_decisions:
+
+  AR-001:
+    title: "3-Tier Governance Model"
+    status: "APPROVED"
+    confidence: "100%"
+    description: "Governance organized into three immutable tiers: Tier 0 (CORTEX CORE with 25 SKULL rules), Tier 1 (Business Rules via YAML + SQLite), Tier 2 (Engineering Standards). Tier 3 (Knowledge Practices) separated into advisory system via RAG."
+    phase: "Week 1 Days 1-2"
+    effort: "2 days"
+    components:
+      - "GovernanceRegistry"
+      - "cortex-brain/tier0/"
+      - "cortex-brain/tier1/"
+    related_requirements:
+      - "AR-002"
+      - "AR-003"
+      - "FR-002"
+    acceptance_criteria:
+      - "Tier 0 immutable at runtime (write-protected)"
+      - "Tier 1 YAML files auto-indexed to SQLite on startup"
+      - "25 SKULL rules auto-instantiated via reflection"
+      - "Query latency: <1ms per rule via SQLite index"
+    rationale: "Separates governance layers for scalability, compliance, and extension. Tier 0 never changes; Tier 1 mutable for business rules; Tier 2 standards enforced via convention."
+
+  AR-002:
+    title: "Business Rules SQLite Index Architecture"
+    status: "APPROVED"
+    confidence: "95%"
+    description: "Business rules (Tier 1) stored as human-readable YAML files; auto-indexed to SQLite for high-performance queries. Hybrid approach combines version control with sub-millisecond lookups."
+    phase: "Week 1 Days 1-2"
+    effort: "1.5 days"
+    components:
+      - "cortex-brain/tier1/governance/ (YAML source)"
+      - "cortex-brain/tier1/governance/.index/business-rules.db"
+      - "GovernanceIndexer"
+    related_requirements:
+      - "AR-001"
+      - "AR-003"
+      - "NFR-001"
+    acceptance_criteria:
+      - "Schema: governance_rules(rule_id, category, severity, domain, file_path, name, enforcement_trigger, file_hash, last_indexed)"
+      - "Indexes: idx_category_severity, idx_domain, idx_severity"
+      - "Query performance: <1ms for single rule, <100ms for all rules in category"
+      - "File change detection: Hash-based invalidation triggers reindex"
+      - "Scalability: Supports 10,000+ rules without bloat"
+    rationale: "YAML stays version-controllable and human-readable; SQLite provides production query speed. File hashes detect stale cache; avoids manual cache invalidation."
+
+  AR-003:
+    title: "Declarative Auto-Wired Governance"
+    status: "APPROVED"
+    confidence: "100%"
+    description: "Rules configured in YAML with embedded enforcement metadata. GovernanceRegistry auto-instantiates middleware classes at startup via reflection. Auto-injects checks into MasterOrchestrator execution."
+    phase: "Week 1 Days 1-3"
+    effort: "2 days"
+    components:
+      - "GovernanceRegistry"
+      - "MasterOrchestrator"
+    related_requirements:
+      - "AR-001"
+      - "AR-006"
+      - "FR-002"
+    acceptance_criteria:
+      - "Zero manual wiring required (enforced via reflection)"
+      - "New YAML rule file → auto-enforced on next startup"
+      - "Portable across machines (git clone → enforcement active)"
+      - "Testable in isolation (registry tested separately)"
+      - "Extendable: Adding new rule type requires only YAML + middleware class"
+    rationale: "Eliminates brittleness from manual wiring. 'Once configured in CORTEX, enforcement stays configured.' Reflection-based auto-instantiation guarantees consistency."
+
+  AR-004:
+    title: "Tiered Logging Architecture"
+    status: "APPROVED"
+    confidence: "95%"
+    description: "Three independent logging systems for different purposes: Tier 1 (CORTEX Internal, AC-ID tracking, 7-year retention), Tier 2 (User Application, general events, user-defined retention), Tier 3 (Compliance Audit, HIPAA/SOX/PCI-DSS events, opt-in, 7-year retention)."
+    phase: "Week 1 Days 2-3"
+    effort: "1.5 days"
+    components:
+      - "EnhancedAuditLogger (Tier 1)"
+      - "UserApplicationLogger (Tier 2)"
+      - "ComplianceAuditLogger (Tier 3)"
+      - "cortex-brain/audit-logs/ (storage)"
+    related_requirements:
+      - "AR-005"
+      - "FR-001"
+      - "NFR-003"
+      - "NFR-004"
+    acceptance_criteria:
+      - "Single import, three loggers auto-routed by event type"
+      - "Tier 1: <5ms latency, SQLite + hash chain storage"
+      - "Tier 2: <0.1ms latency, user backend (CloudWatch/file/etc)"
+      - "Tier 3: <5ms latency, SQLite storage, opt-in via CORTEX_COMPLIANCE_LOGGING env"
+      - "Cross-platform support (MAC/WIN/Linux)"
+      - "No PII in logs (automatic masking)"
+    rationale: "Allows flexible logging for different audiences. CORTEX logs go to verified hash chain; users log to their infrastructure; compliance logs stay internal. Single import simplifies client code."
+
+  AR-005:
+    title: "Production Mode Control"
+    status: "APPROVED"
+    confidence: "100%"
+    description: "CORTEX_AUDIT_MODE env var (development|production|hybrid) controls log verbosity, NOT audit capture. AuditContext ALWAYS captures metadata (operation, AC-ID, correlation_id, timestamp) regardless of mode."
+    phase: "Week 1 Days 1-2"
+    effort: "0.5 days"
+    components:
+      - "EnhancedAuditLogger"
+      - "AuditContext"
+    related_requirements:
+      - "AR-004"
+      - "FR-001"
+    acceptance_criteria:
+      - "Development mode: Verbose logs, full debug output"
+      - "Production mode: Minimal logs, critical-only output"
+      - "Hybrid mode: Balanced logging"
+      - "Guarantee: Critical events (errors, violations, security) ALWAYS logged regardless of mode"
+      - "Metadata: operation, AC-ID, correlation_id, timestamp ALWAYS captured"
+    rationale: "Log verbosity is tunable; audit guarantee is not. Ensures production safety without oversharing in logs."
+
+  AR-006:
+    title: "Orchestrator Architecture"
+    status: "APPROVED"
+    confidence: "95%"
+    description: "Composite pattern with parent-child orchestrator tree. Strategy pattern for selection via can_handle() predicate. Chain of Responsibility for delegation. Plugin system for custom orchestrators."
+    phase: "Week 2 Days 1-3"
+    effort: "2 days"
+    components:
+      - "BaseOrchestrator"
+      - "MasterOrchestrator"
+      - "OrchestratorRegistry"
+      - "src/orchestrators/core/, /domain/, /custom/"
+    related_requirements:
+      - "AR-007"
+      - "FR-002"
+      - "FR-003"
+    acceptance_criteria:
+      - "Composite pattern: MasterOrchestrator → parent-child tree"
+      - "Delegation: First child returning can_handle()=true executes"
+      - "Plugin system: Auto-discovery from custom/ directory"
+      - "Isolation: Custom orchestrators in separate process (multiprocessing)"
+      - "Error handling: Child exceptions caught at boundary, don't propagate"
+      - "Dependency resolution: Circular dependencies detected at startup (startup fails if cycle detected)"
+    rationale: "Composite pattern scales to many orchestrators. Strategy pattern allows flexible selection. Plugin system enables user-defined orchestrators without modifying core."
+
+  AR-007:
+    title: "MCP Integration Strategy"
+    status: "APPROVED"
+    confidence: "90%"
+    description: "Use standard MCP servers (Filesystem, Git, SQLite) for common operations. Build 5 custom CORTEX tools (Audit, Governance, Orchestrator, Evidence, State) for CORTEX-specific functionality."
+    phase: "Week 2 Days 2-3"
+    effort: "1.5 days"
+    components:
+      - "MCP Tool Registration"
+      - "MCP Schema Validation"
+      - "src/mcp/ (custom tools)"
+    related_requirements:
+      - "AR-006"
+      - "FR-002"
+    acceptance_criteria:
+      - "Standard tools: Filesystem, Git, SQLite registered"
+      - "Custom tools: Audit, Governance, Orchestrator, Evidence, State"
+      - "Schema validation: All tools have input/output schemas"
+      - "Error handling: Tool exceptions caught, don't crash parent"
+      - "Security: Tool invocation sandboxed (no arbitrary code execution)"
+    rationale: "Standard MCP servers provide baseline functionality. Custom tools provide CORTEX-specific capabilities like AC-ID validation and governance enforcement."
+
+  AR-008:
+    title: "Adaptation from CORTEX 6.0"
+    status: "APPROVED"
+    confidence: "95%"
+    description: "Reuse proven CORTEX 6.0 components (audit logger, lifecycle manager, progress tracker, hash chain, evidence bundle, MCP tools). Remove over-engineered components (response manager, brittleness validator, 14+ unused orchestrators). Net: 74% code reduction (25K → 6.5K LOC)."
+    phase: "Week 1 Days 1-2"
+    effort: "1 day"
+    components:
+      - "EnhancedAuditLogger (from CORTEX 6.0)"
+      - "LifecycleManager (from CORTEX 6.0)"
+      - "ProgressTrackerManager (from CORTEX 6.0)"
+      - "HashChainIntegrity (from CORTEX 6.0)"
+      - "EvidenceBundle (from CORTEX 6.0)"
+    related_requirements:
+      - "AR-001"
+      - "AR-006"
+    acceptance_criteria:
+      - "Adapted: 4 core orchestrators, 18 MCP tools, 1,862 audit logger assertions"
+      - "Removed: response_header_footer_manager, brittleness_ambiguity_validator, 14+ unused orchestrators"
+      - "Code reduction: 25K → 6.5K LOC (74% reduction)"
+      - "Test pass rate: Maintain 98%+ (from CORTEX 6.0)"
+      - "Documentation: All adaptations traced to source (CORTEX 6.0 → CORTEX 7.0)"
+    rationale: "CORTEX 6.0 components are proven, tested, and documented. Removing unused code reduces maintenance burden and improves clarity."
+
+  AR-009:
+    title: "Custom Response Templates (NEW)"
+    status: "APPROVED"
+    confidence: "95%"
+    description: "Orchestrators can optionally define custom response templates. Custom template path in OrchestratorMetadata. Fallback chain: Custom → Parent → Standard (always available). Child orchestrators inherit parent template unless overridden."
+    phase: "Week 2 Day 4"
+    effort: "1.5 days"
+    components:
+      - "CustomTemplateConfig (OrchestratorMetadata extension)"
+      - "TemplateResolver (fallback chain)"
+      - "TemplateRegistry (auto-discovery)"
+      - "ResponseRenderer (updated for custom sections)"
+      - "cortex-brain/tier2/response-templates/ (template storage)"
+    related_requirements:
+      - "AR-010"
+      - "NFR-001"
+    acceptance_criteria:
+      - "Optional custom templates per orchestrator"
+      - "Fallback chain: Custom → Parent → Standard (guarantees no broken responses)"
+      - "All templates comply with CORTEX 4.0 schema (mandatory headers, executive summary)"
+      - "Child inheritance: Child inherits parent template unless explicitly overridden"
+      - "Template resolution: <5ms cached resolution time"
+      - "Backwards compatible: Orchestrators without custom templates use standard"
+    rationale: "Flexibility for domain-specific formats without breaking consistency. Fallback chain guarantees all responses are valid. Inheritance reduces duplication for similar orchestrators."
+
+  AR-010:
+    title: "Nested Folder Organization (NEW)"
+    status: "APPROVED"
+    confidence: "95%"
+    description: "Clean nested folder structure: cortex-brain/ (tiers 0-3), src/ (orchestrators, infrastructure, mcp), tests/ (unit, integration, fixtures), scripts/ (admin, generate, tools). Kebab-case naming, max 25 characters."
+    phase: "Week 1 Pre-Tasks + Phase 3.5"
+    effort: "16 hours (Phase 3.5 parallel, non-blocking)"
+    components:
+      - "cortex-brain/tier0/, tier1/, tier2/, tier3/"
+      - "src/orchestrators/core/, domain/, custom/, response/, registry/"
+      - "src/infrastructure/"
+      - "tests/unit/, integration/, fixtures/"
+      - "scripts/admin/, generate/, tools/"
+    related_requirements:
+      - "AR-009"
+      - "CORTEX-005 (path portability)"
+    acceptance_criteria:
+      - "Nested structure: All tiers, orchestrators, infrastructure, tests organized"
+      - "Naming: Kebab-case (e.g., tdd-master-orchestrator.py), max 25 chars"
+      - "Response templates: cortex-brain/tier2/response-templates/ (_schema/, core/, domain/, custom/)"
+      - "Cross-platform support: pathlib.Path for all file operations"
+      - "No hardcoded paths: All paths relative to project root"
+      - "Migration plan: 8 detailed tasks in folder-structure-design.md"
+    rationale: "Clear organization enables scaling. Kebab-case + length limit improves readability. pathlib ensures cross-platform support. Phase 3.5 migration is parallel, non-blocking."
+
+################################################################################
+# PART 2: FUNCTIONAL REQUIREMENTS (6 FR-IDs)
+################################################################################
+
+functional_requirements:
+
+  FR-001:
+    title: "Audit-First Pattern"
+    status: "APPROVED"
+    confidence: "100%"
+    category: "Core Pattern"
+    description: "Every operation MUST capture audit context before executing. AuditContext required as first parameter to any async orchestrator method. Metadata captured: operation, AC-ID, correlation_id, timestamp. Hash chain maintained for tamper-proof trail."
+    phase: "Week 1 Days 1-2"
+    effort: "1 day"
+    components:
+      - "AuditContext"
+      - "EnhancedAuditLogger"
+      - "HashChainIntegrity"
+    related_requirements:
+      - "AR-001"
+      - "AR-004"
+      - "NFR-003"
+      - "NFR-004"
+    acceptance_criteria:
+      - "AuditContext: Required first parameter to async methods"
+      - "Metadata: operation, AC-ID, correlation_id, timestamp captured"
+      - "Hash chain: Maintained for tamper detection"
+      - "Guarantee: No operation executes without audit entry"
+      - "Performance: <5ms audit capture latency"
+      - "Test: 100% of async methods have audit entry tests"
+    mapped_ac_ids:
+      - "AC-AUDIT-001 through AC-AUDIT-006"
+
+  FR-002:
+    title: "Governance Evaluation"
+    status: "APPROVED"
+    confidence: "100%"
+    category: "Enforcement"
+    description: "All operations evaluated against loaded ruleset before and after execution. Pre-execution: Evaluate all Tier 0 + Tier 1 rules. Post-execution: Final audit logged with result. Violations block operation; warnings logged."
+    phase: "Week 1 Days 1-3"
+    effort: "1.5 days"
+    components:
+      - "GovernanceRegistry"
+      - "MasterOrchestrator"
+      - "EnhancedAuditLogger"
+    related_requirements:
+      - "AR-001"
+      - "AR-003"
+      - "AR-006"
+      - "FR-001"
+    acceptance_criteria:
+      - "Pre-execution: All Tier 0 + Tier 1 rules evaluated"
+      - "Blocking: Violations with severity='blocked' stop operation"
+      - "Warnings: Severity='warning' or 'info' logged but allow execution"
+      - "Post-execution: Final audit entry includes result (success/failure/blocked)"
+      - "Performance: <125ms for all Tier 0 rules (<5ms per rule)"
+      - "Test: 100% rule coverage in test suite"
+    mapped_ac_ids:
+      - "AC-GOV-001 through AC-GOV-005"
+
+  FR-003:
+    title: "State Management"
+    status: "APPROVED"
+    confidence: "100%"
+    category: "Lifecycle"
+    description: "Orchestrator execution modeled as 7-state FSM: PENDING → RUNNING → PAUSED → COMPLETED/FAILED/CANCELLED. State transitions atomic (distributed lock for concurrency). Callbacks fired on state enter/exit."
+    phase: "Week 1 Days 2-3"
+    effort: "1 day"
+    components:
+      - "LifecycleManager"
+      - "StateTransition"
+      - "OrchestrationStateCallback"
+    related_requirements:
+      - "AR-006"
+      - "FR-001"
+      - "NFR-002"
+    acceptance_criteria:
+      - "States: PENDING, RUNNING, PAUSED, COMPLETED, FAILED, CANCELLED"
+      - "Atomic transitions: Distributed lock prevents race conditions"
+      - "Callbacks: on_enter, on_exit fired for each state"
+      - "Cancel support: Graceful shutdown via cancel() method"
+      - "Performance: <10ms state transition time"
+      - "Test: FSM transitions tested for all paths"
+    mapped_ac_ids:
+      - "AC-LIFECYCLE-001 through AC-LIFECYCLE-003"
+
+  FR-004:
+    title: "Evidence Capture"
+    status: "APPROVED"
+    confidence: "100%"
+    category: "Validation"
+    description: "Every AC-ID implementation captured with proof: test results linked (pass/fail, coverage %), code changes captured (diffs, commits), audit logs included. Bundle created in cortex-brain/evidence/{ac_id}/."
+    phase: "Week 1 Days 4-5"
+    effort: "1.5 days"
+    components:
+      - "EvidenceBundle"
+      - "EvidenceValidator"
+      - "ProgressTrackerManager"
+    related_requirements:
+      - "FR-001"
+      - "FR-002"
+      - "NFR-003"
+      - "NFR-004"
+    acceptance_criteria:
+      - "Test results: Linked to AC-ID with pass/fail status, coverage %"
+      - "Code changes: Diffs and commit hashes captured"
+      - "Audit logs: AuditContext entries included"
+      - "Bundle structure: ac_id/, tests/, code/, audit/ subdirectories"
+      - "Performance: <500ms capture latency"
+      - "Guarantee: 100% of AC implementations have evidence bundle"
+    mapped_ac_ids:
+      - "AC-EVIDENCE-001 through AC-EVIDENCE-003"
+
+  FR-005:
+    title: "Intent Clarification"
+    status: "APPROVED"
+    confidence: "95%"
+    category: "Intelligence"
+    description: "Temporary knowledge graph loaded for disambiguating intent. Built on startup (or on-demand). Sub-second query latency. Auto-destroyed at operation end. Graceful degradation if KG load fails."
+    phase: "Week 2 Days 3-4"
+    effort: "1.5 days"
+    components:
+      - "KnowledgeGraph"
+      - "IntentDisambiguator"
+      - "InputValidator"
+    related_requirements:
+      - "AR-006"
+      - "NFR-001"
+    acceptance_criteria:
+      - "Loaded: On startup or on-demand"
+      - "Query latency: <1 second per query"
+      - "Auto-destroyed: Freed at operation end"
+      - "Graceful degradation: Continues without intent clarity if KG fails"
+      - "Performance: Knowledge graph queries <100ms"
+      - "Test: Intent disambiguation tests for ambiguous requests"
+    mapped_ac_ids:
+      - "AC-INTENT-001 (future enhancement)"
+
+  FR-006:
+    title: "Autonomous Continuation"
+    status: "APPROVED"
+    confidence: "100%"
+    category: "Execution"
+    description: "TodoManager enables autonomous operation loops. Plan → execute AC-ID 1 → AC-ID 2 → AC-ID 3 (without user between steps). User provides single command; system completes phase autonomously. Audit trail shows each step. User can interrupt."
+    phase: "Week 2 Days 2-3"
+    effort: "1 day"
+    components:
+      - "TodoManager"
+      - "MasterOrchestrator"
+      - "EnhancedAuditLogger"
+    related_requirements:
+      - "AR-006"
+      - "FR-001"
+      - "FR-002"
+    acceptance_criteria:
+      - "Autonomous loops: No user intervention between AC-ID steps"
+      - "Audit trail: Each step logged with operation, AC-ID, result"
+      - "Interruption: User can cancel via cancel_flag"
+      - "No race conditions: Distributed lock prevents concurrent attempts"
+      - "Performance: <100ms between AC-ID execution steps"
+      - "Test: Multi-AC autonomous execution tests"
+    mapped_ac_ids:
+      - "AC-TODO-001 through AC-TODO-004"
+
+################################################################################
+# PART 3: NON-FUNCTIONAL REQUIREMENTS (4 NFR-IDs)
+################################################################################
+
+non_functional_requirements:
+
+  NFR-001:
+    title: "Performance"
+    status: "APPROVED"
+    confidence: "100%"
+    category: "Quality"
+    description: "All critical operations must meet strict latency targets. Governance evaluation <5ms per rule; SQLite query <1ms; state transition <10ms; evidence capture <500ms; audit logging <5ms."
+    phase: "Week 1 throughout"
+    effort: "Integrated into all tasks"
+    components:
+      - "GovernanceRegistry"
+      - "ProgressTrackerManager"
+      - "EnhancedAuditLogger"
+    related_requirements:
+      - "AR-002"
+      - "AR-004"
+      - "FR-001"
+      - "FR-002"
+    acceptance_criteria:
+      - "Governance evaluation: <5ms per rule, <125ms for all Tier 0 (25 rules)"
+      - "SQLite query: <1ms per rule lookup (via B-tree index)"
+      - "State transition: <10ms (distributed lock timeout)"
+      - "Evidence capture: <500ms (async write)"
+      - "Audit logging: <5ms (SQLite + hash chain)"
+      - "Orchestrator timeout: 30s hard limit (fail gracefully)"
+      - "Measurement: Performance tests for each operation"
+      - "Dashboard: Real-time latency monitoring"
+    metrics:
+      - "p50: <target"
+      - "p95: <1.5 * target"
+      - "p99: <2 * target"
+
+  NFR-002:
+    title: "Reliability"
+    status: "APPROVED"
+    confidence: "95%"
+    category: "Quality"
+    description: "System must maintain high availability and graceful degradation. 98% test pass rate (from CORTEX 6.0). 95% uptime target. Graceful degradation on partial failures. No cascade failures."
+    phase: "Week 1 + Week 3-4"
+    effort: "2 weeks"
+    components:
+      - "LifecycleManager"
+      - "ErrorHandler"
+      - "FallbackChain"
+    related_requirements:
+      - "AR-006"
+      - "FR-003"
+    acceptance_criteria:
+      - "Test pass rate: 98% (1,800+ tests passing, <30 failures)"
+      - "Uptime target: 95% during development"
+      - "Graceful degradation: Failed component doesn't stop others"
+      - "No cascade failures: One broken orchestrator doesn't crash parent"
+      - "Error recovery: Automatic retry with exponential backoff"
+      - "Circuit breaker: Failing services short-circuit after N errors"
+    failure_modes:
+      - "AC-BRITTLE-001: Database corruption (WAL mode mitigates)"
+      - "AC-BRITTLE-002: Audit schema missing (auto-initialize mitigates)"
+      - "AC-BRITTLE-003: Tracker progress broken (rebuild from AC-INDEX mitigates)"
+      - "AC-BRITTLE-004: Pytest warnings (dataclass rename mitigates)"
+
+  NFR-003:
+    title: "Security"
+    status: "APPROVED"
+    confidence: "100%"
+    category: "Quality"
+    description: "All operations must be secure and governance-enforced. Secrets redacted in logs. Governance enforcement mandatory (not optional). SSOT Tier 0 immutable. Hash chain integrity verifiable. HIPAA/SOX/PCI-DSS compliance support."
+    phase: "Week 1 Days 1-2 + Week 3"
+    effort: "3 days"
+    components:
+      - "GovernanceRegistry"
+      - "EnhancedAuditLogger"
+      - "HashChainIntegrity"
+    related_requirements:
+      - "AR-001"
+      - "AR-004"
+      - "AR-005"
+      - "FR-001"
+      - "FR-002"
+    acceptance_criteria:
+      - "Secrets redacted: PII masking in logs (auto-detect patterns)"
+      - "Governance enforcement: Mandatory for all operations (no bypass)"
+      - "SSOT Tier 0 immutable: Write-protected at runtime (filesystem + code)"
+      - "Hash chain integrity: Verifiable end-to-end audit trail"
+      - "Compliance: HIPAA/SOX/PCI-DSS support via tiered logging"
+      - "Key rotation: Automatic secret rotation policy"
+      - "Audit trail: 7-year retention for compliance"
+    related_ac_ids:
+      - "AC-SECURITY-001 through AC-SECURITY-006"
+
+  NFR-004:
+    title: "Observability"
+    status: "APPROVED"
+    confidence: "100%"
+    category: "Quality"
+    description: "All operations must be observable and traceable. Correlation IDs trace from start to end. Orchestrator execution visible (graph visualization). Governance evaluations timed and logged. Alerts on issues. OpenTelemetry instrumentation."
+    phase: "Week 1 + Week 3"
+    effort: "2 days"
+    components:
+      - "EnhancedAuditLogger"
+      - "CorrelationIdContext"
+      - "OpenTelemetryExporter"
+    related_requirements:
+      - "AR-004"
+      - "FR-001"
+    acceptance_criteria:
+      - "Correlation IDs: Unique per operation, traced throughout"
+      - "Orchestrator graph: Visualization of execution tree"
+      - "Governance timing: Each rule evaluated and timing recorded"
+      - "Alerts: Automated on governance inconsistency, slow rules, broken chains"
+      - "OpenTelemetry: Standard instrumentation for all components"
+      - "Dashboard: Real-time view of orchestrator executions"
+      - "Tracing: Full request/response trace available for each operation"
+
+################################################################################
+# PART 4: GOVERNANCE RULES (25 SKULL Rules - CORTEX CORE)
+################################################################################
+
+governance_rules:
+  title: "25 SKULL Rules - CORTEX CORE (Immutable)"
+  tier: "Tier 0"
+  status: "ENFORCED"
+  total_rules: 25
+  categories:
+    - "Test-Driven Development"
+    - "Code Quality"
+    - "Security"
+    - "Portability"
+    - "Governance"
+    - "Documentation"
+    - "Performance"
+    - "Reliability"
+
+  rules:
+    CORE-001:
+      title: "Incremental Execution"
+      severity: "BLOCKED"
+      category: "Performance"
+      description: "Operations must be incremental (<500 lines per iteration)"
+
+    CORE-002:
+      title: "No Summary Files"
+      severity: "BLOCKED"
+      category: "Documentation"
+      description: "No root-level summary files in workspace root"
+
+    CORE-005:
+      title: "Path Portability"
+      severity: "BLOCKED"
+      category: "Portability"
+      description: "All file operations use pathlib.Path (no hardcoded /Users/ or C:\\ paths)"
+
+    CORE-008:
+      title: "TDD Enforcement"
+      severity: "BLOCKED"
+      category: "Testing"
+      description: "All code must have tests; untested code is blocked"
+
+    CORE-009:
+      title: "Plan File Organization"
+      severity: "BLOCKED"
+      category: "Organization"
+      description: "Plans organized in cortex-brain/, not root-level"
+
+    CORE-017:
+      title: "Governance Enforcement"
+      severity: "BLOCKED"
+      category: "Governance"
+      description: "Bypassing governance rules triggers alert and blocks operation"
+
+    CORE-019:
+      title: "TDD-Master Required"
+      severity: "BLOCKED"
+      category: "Testing"
+      description: "Direct coding without TDD is blocked (must use TDD-Master orchestrator)"
+
+    "CORE-010":
+      title: "AC-ID Format Validation"
+      severity: "WARNING"
+      category: "Quality"
+      description: "All AC-IDs must match format AC-{CATEGORY}-{NNN}"
+
+    "CORE-011":
+      title: "Governance Completeness"
+      severity: "WARNING"
+      category: "Governance"
+      description: "All rules must have enforcement code mapped"
+
+    "CORE-012":
+      title: "Test Coverage Minimum"
+      severity: "WARNING"
+      category: "Testing"
+      description: "Minimum 80% code coverage required for production code"
+
+    "CORE-013":
+      title: "Evidence Bundle Required"
+      severity: "BLOCKED"
+      category: "Testing"
+      description: "All completed AC-IDs must have evidence bundle"
+
+    "CORE-014":
+      title: "Audit Trail Integrity"
+      severity: "BLOCKED"
+      category: "Security"
+      description: "Hash chain integrity must be verifiable"
+
+    "CORE-015":
+      title: "Secret Redaction"
+      severity: "WARNING"
+      category: "Security"
+      description: "PII and secrets automatically redacted from logs"
+
+    "CORE-016":
+      title: "Cross-Platform Testing"
+      severity: "WARNING"
+      category: "Portability"
+      description: "Tests must pass on MAC, WIN, and Linux"
+
+    "CORE-018":
+      title: "MCP Tool Schema"
+      severity: "WARNING"
+      category: "Integration"
+      description: "All MCP tools must have input/output schema validation"
+
+    "CORE-020":
+      title: "Graceful Degradation"
+      severity: "WARNING"
+      category: "Reliability"
+      description: "Failed components must not cascade failures"
+
+    "CORE-021":
+      title: "Performance SLA"
+      severity: "WARNING"
+      category: "Performance"
+      description: "Critical operations must meet latency targets (governance <5ms, audit <5ms)"
+
+    "CORE-022":
+      title: "Governance Immutability"
+      severity: "BLOCKED"
+      category: "Governance"
+      description: "Tier 0 CORTEX CORE rules cannot be modified at runtime"
+
+    "CORE-023":
+      title: "AC-ID Uniqueness"
+      severity: "BLOCKED"
+      category: "Quality"
+      description: "No duplicate AC-IDs allowed in AC-INDEX.yaml"
+
+    "CORE-024":
+      title: "Audit Context Required"
+      severity: "BLOCKED"
+      category: "Audit"
+      description: "All async operations must have AuditContext parameter"
+
+    "CORE-025":
+      title: "Evidence Verification"
+      severity: "WARNING"
+      category: "Quality"
+      description: "Evidence validator must achieve 80%+ verification rate for all AC-IDs"
+
+################################################################################
+# PART 5: HALLUCINATION PREVENTION (25 AC-IDs - Enhancement)
+################################################################################
+
+hallucination_prevention:
+  title: "Hallucination Prevention Enhancement"
+  status: "APPROVED FOR PHASE 2+4"
+  total_ac_ids: 25
+  effort: "+8.75 days total (Phase 2: +3.5 days, Phase 4: +5.25 days)"
+  implementation_phases:
+    phase_2_win:
+      title: "Phase 2 WIN Machine Enhancement"
+      ac_ids: 15
+      effort: "3.5 days"
+      new_duration: "17.5 days (was 14 days)"
+      components:
+        - "InputValidator"
+        - "HealthMetricsCollector"
+        - "AnomalyDetector"
+
+      ac_groups:
+        input_validation:
+          title: "Input Validation (AC-VALIDATE-001 through AC-VALIDATE-010)"
+          ac_ids: 10
+          component: "InputValidator"
+          acceptance_criteria: "100% of user requests validated against 10 checks"
+          description: |
+            AC-VALIDATE-001: Intent canonicalization (resolve intent ambiguity)
+            AC-VALIDATE-002: AC-ID existence check (verify AC-IDs are real)
+            AC-VALIDATE-003: Evidence bundle pre-check (validate evidence structure)
+            AC-VALIDATE-004: Cross-reference coherence (verify AC-ID references resolve)
+            AC-VALIDATE-005: Semantic output validation (validate semantic correctness)
+            AC-VALIDATE-006: AC-ID format validation (AC-{CATEGORY}-{NNN})
+            AC-VALIDATE-007: Phase alignment enforcement (request AC matches current phase)
+            AC-VALIDATE-008: Request contradiction detection (detect conflicting AC-IDs)
+            AC-VALIDATE-009: Schema validation (request matches orchestrator input schema)
+            AC-VALIDATE-010: Backward compatibility checks (validate version compatibility)
+
+        health_metrics:
+          title: "Health Metrics (AC-METRICS-001 through AC-METRICS-005)"
+          ac_ids: 5
+          component: "HealthMetricsCollector"
+          acceptance_criteria: "Metrics collected and reported for all 5 categories"
+          description: |
+            AC-METRICS-001: Input validation success rate (% requests passing validation)
+            AC-METRICS-002: Semantic validation accuracy (% semantically valid)
+            AC-METRICS-003: Cross-reference success rate (% references resolving)
+            AC-METRICS-004: Phase alignment enforcement rate (% requests phase-aligned)
+            AC-METRICS-005: Anomaly detection (trigger alerts on unusual patterns)
+
+    phase_4_mac:
+      title: "Phase 4 MAC Machine Enhancement"
+      ac_ids: 10
+      effort: "5.25 days"
+      new_duration: "19.25 days (was 14 days)"
+      components:
+        - "CoherenceValidator"
+        - "ProvenanceTracker"
+
+      ac_groups:
+        cross_file_coherence:
+          title: "Cross-File Coherence (AC-COHERENCE-001 through AC-COHERENCE-004)"
+          ac_ids: 4
+          component: "CoherenceValidator"
+          acceptance_criteria: "100% of files validated for coherence"
+          description: |
+            AC-COHERENCE-001: File-to-file requirement coherence (no conflicting requirements)
+            AC-COHERENCE-002: AC-ID naming consistency (same AC-ID consistent across files)
+            AC-COHERENCE-003: Reference validity (all internal references resolve)
+            AC-COHERENCE-004: Contradiction detection (conflicting AC-IDs flagged)
+
+        provenance_tracking:
+          title: "Provenance Tracking (AC-EXPLAIN-001 through AC-EXPLAIN-005)"
+          ac_ids: 5
+          component: "ProvenanceTracker"
+          acceptance_criteria: "100% of requirements have provenance documented"
+          description: |
+            AC-EXPLAIN-001: Requirement source tracking (where did this requirement come from?)
+            AC-EXPLAIN-002: Decision justification capture (why was this decision made?)
+            AC-EXPLAIN-003: Architecture decision rationale (why this architecture?)
+            AC-EXPLAIN-004: Test coverage justification (why this test coverage?)
+            AC-EXPLAIN-005: Evidence bundle provenance (what evidence supports this AC-ID?)
+
+################################################################################
+# PART 6: BRITTLENESS FIXES (14 AC-IDs - Bug Fixes)
+################################################################################
+
+brittleness_fixes:
+  title: "Brittleness Prevention & Fixes"
+  status: "APPROVED FOR PHASE 9.4+10"
+  total_ac_ids: 14
+  total_problems: 4
+  critical_issues: 4
+  high_priority_fixes: 10
+
+  critical_production_blockers:
+    phase: "9.4 (Day 0 - 2 hours)"
+    issues: 4
+
+    issue_1:
+      problem_id: "BRITTLE-001"
+      title: "Database Concurrency (SQLite Journal Mode)"
+      severity: "CRITICAL"
+      component: "ProgressTrackerManager"
+      root_cause: "SQLite journal mode = 'delete' (default) instead of WAL"
+      impact: "Power failure during concurrent writes → Silent data corruption, lost audit trail"
+      solution: "Enable WAL mode on startup (1 line: PRAGMA journal_mode=WAL)"
+      prevention_ac_id: "AC-BRITTLE-001"
+      effort: "15 minutes"
+      acceptance_criteria:
+        - "WAL mode enabled on startup"
+        - "governance.db has -wal and -shm files"
+        - "Concurrent writes safe (tested)"
+      test: "Verify governance.db has -wal and -shm files"
+
+    issue_2:
+      problem_id: "BRITTLE-002"
+      title: "Audit Database Schema Missing"
+      severity: "CRITICAL"
+      component: "EnhancedAuditLogger"
+      root_cause: "audit_logs table not created in governance.db"
+      impact: "'no such table: audit_logs' error in validator; 97% verification rate becomes 0%; evidence collection unusable"
+      solution: "Create schema migration, auto-initialize on first connection"
+      prevention_ac_id: "AC-BRITTLE-002"
+      effort: "45 minutes"
+      acceptance_criteria:
+        - "Schema migration created"
+        - "Auto-initialization on first connection"
+        - "Table has correct columns (id, operation, ac_id, timestamp, etc.)"
+      test: "Query SELECT COUNT(*) FROM audit_logs (no error)"
+
+    issue_3:
+      problem_id: "BRITTLE-003"
+      title: "Tracker Progress Broken (0/0 Phase Counts)"
+      severity: "CRITICAL"
+      component: "ProgressTrackerManager"
+      root_cause: "progress-tracker.json shows 0/0 for all phases"
+      impact: "Dashboard shows 0%, phase gates unenforceable, cannot determine actual progress"
+      solution: "Rebuild tracker from AC-INDEX using evidence validator --fix"
+      prevention_ac_id: "AC-BRITTLE-003"
+      effort: "30 minutes"
+      acceptance_criteria:
+        - "Tracker rebuilt from AC-INDEX"
+        - "All phases have correct counts"
+        - "Dashboard reflects actual progress"
+      test: "Verify tracker.phases.*.completed_count > 0 (if phase has AC-IDs)"
+
+    issue_4:
+      problem_id: "BRITTLE-004"
+      title: "Pytest Collection Warnings (Hidden Test Failures Risk)"
+      severity: "CRITICAL"
+      component: "Test Infrastructure"
+      root_cause: "Dataclass naming (TestResult, TestExecutor) confuses pytest"
+      impact: "Tests may be silently skipped, false confidence in coverage"
+      solution: "Rename dataclasses to remove 'Test' prefix (3 renames, <5 min)"
+      prevention_ac_id: "AC-BRITTLE-004"
+      effort: "5 minutes"
+      acceptance_criteria:
+        - "Dataclass names changed (TestResult → Result, etc.)"
+        - "Pytest collects with 0 warnings"
+        - "All 1,498 tests collected successfully"
+      test: "Run pytest --co -q, verify 0 warnings and all 1,498 tests collected"
+
+  high_priority_fixes:
+    phase: "9.4 (Week 1 - 5 days)"
+    issues: 10
+
+    issue_5:
+      problem_id: "BRITTLE-005"
+      title: "Import Brittleness (Relative Imports)"
+      severity: "HIGH"
+      component: "src/orchestrators/core/"
+      root_cause: "Relative imports assume incorrect package paths (../infrastructure/ when actually at src/infrastructure/)"
+      impact: "Test collection fails with ImportError, Phase 4.5 integration testing blocked"
+      solution: "Replace relative imports with absolute imports (explicit pathlib-based approach)"
+      prevention_ac_id: "AC-BRITTLE-005"
+      effort: "2 hours"
+      acceptance_criteria:
+        - "8 import statements in master_orchestrator.py converted to absolute"
+        - "All tests collect successfully (1,498+ tests)"
+        - "Integration tests pass (15/15)"
+      test: "pytest --co -q succeeds with 1,498+ tests collected"
+
+    issue_6:
+      problem_id: "BRITTLE-006"
+      title: "Test Collection Brittleness"
+      severity: "HIGH"
+      component: "tests/"
+      root_cause: "11 of 46 test files fail to collect (24% failure rate)"
+      impact: "Partial test execution impossible, evidence validation blocked"
+      solution: "Fix syntax errors and missing module imports in test files"
+      prevention_ac_id: "AC-BRITTLE-006"
+      effort: "3 hours"
+      acceptance_criteria:
+        - "All 46 test files collect successfully"
+        - "0 collection errors"
+        - "1,498+ tests collected"
+
+    issue_7:
+      problem_id: "BRITTLE-007"
+      title: "Package Path Brittleness"
+      severity: "HIGH"
+      component: "src/"
+      root_cause: "Package structure assumptions in imports and code"
+      impact: "Code breaks when folder structure changes"
+      solution: "Standardize all paths using get_project_root() utility"
+      prevention_ac_id: "AC-BRITTLE-007"
+      effort: "2 hours"
+
+    issue_8:
+      problem_id: "BRITTLE-008"
+      title: "AC Completeness Brittleness"
+      severity: "HIGH"
+      component: "AC-INDEX.yaml"
+      root_cause: "11 AC-IDs missing implementation (32% incomplete)"
+      impact: "Cannot complete phase if AC-IDs unimplemented"
+      solution: "Implement missing AC-IDs with TDD (Red → Green → Refactor)"
+      prevention_ac_id: "AC-BRITTLE-008"
+      effort: "5 days"
+
+    issue_9:
+      problem_id: "BRITTLE-009"
+      title: "Evidence Generation Brittleness"
+      severity: "HIGH"
+      component: "EvidenceBundleGenerator"
+      root_cause: "Evidence capture returns 0/100 (0% implemented)"
+      impact: "Cannot verify AC completion"
+      solution: "Implement evidence bundle generation from test results, code changes, audit logs"
+      prevention_ac_id: "AC-BRITTLE-009"
+      effort: "3 days"
+
+    issue_10:
+      problem_id: "BRITTLE-010"
+      title: "Portability Brittleness"
+      severity: "HIGH"
+      component: "src/ (all modules)"
+      root_cause: "Hardcoded paths, platform-specific code without guards"
+      impact: "Code fails on different platforms (MAC vs WIN vs Linux)"
+      solution: "Standardize all paths with pathlib, use platform.system() for OS-specific code"
+      prevention_ac_id: "AC-BRITTLE-010"
+      effort: "2 days"
+
+    issue_11:
+      problem_id: "BRITTLE-011"
+      title: "State Management Brittleness"
+      severity: "HIGH"
+      component: "LifecycleManager"
+      root_cause: "State machine incomplete (50/100)"
+      impact: "State transitions not atomic, race conditions possible"
+      solution: "Implement distributed locking for state transitions"
+      prevention_ac_id: "AC-BRITTLE-011"
+      effort: "1.5 days"
+
+    issue_12:
+      problem_id: "BRITTLE-012"
+      title: "Governance Enforcement Brittleness"
+      severity: "HIGH"
+      component: "GovernanceRegistry"
+      root_cause: "Only 40% of governance rules enforced (10 of 25 active)"
+      impact: "15 rules not enforced, violations undetected"
+      solution: "Wire remaining 15 rules into GovernanceRegistry"
+      prevention_ac_id: "AC-BRITTLE-012"
+      effort: "2 days"
+
+    issue_13:
+      problem_id: "BRITTLE-013"
+      title: "Test-AC Linking Brittleness"
+      severity: "HIGH"
+      component: "test infrastructure"
+      root_cause: "Tests not organized by AC-ID (0/100)"
+      impact: "Cannot link test results to AC-IDs automatically"
+      solution: "Implement test discovery by AC-ID"
+      prevention_ac_id: "AC-BRITTLE-013"
+      effort: "2 hours"
+
+    issue_14:
+      problem_id: "BRITTLE-014"
+      title: "Verification Rate Brittleness"
+      severity: "HIGH"
+      component: "AuditBasedEvidenceValidator"
+      root_cause: "Verification rate 0% (target 80%+)"
+      impact: "Cannot prove AC completion, DoR assessment impossible"
+      solution: "Implement evidence validation from AC-INDEX"
+      prevention_ac_id: "AC-BRITTLE-014"
+      effort: "2 days"
+
+################################################################################
+# PART 7: IMPLEMENTATION TIMELINE
+################################################################################
+
+implementation_timeline:
+  total_duration: "5 weeks + 2 parallel enhancements"
+  start_date: "2026-01-15"
+  phases:
+
+    week_1:
+      title: "Foundation (Week 1)"
+      duration: "5 days"
+      days:
+        pre_tasks:
+          day: "Day 0 (Pre)"
+          duration: "4 hours"
+          tasks:
+            - "Create nested folder structure"
+            - "Create response template schema"
+            - "Create template files"
+
+        day_1:
+          day: "Day 1"
+          tasks:
+            - "AR-001: 3-Tier Governance"
+            - "AR-005: Production Mode Control"
+            - "FR-001: Audit-First Pattern"
+
+        day_2:
+          day: "Day 2"
+          tasks:
+            - "AR-002: SQLite Index"
+            - "AR-003: Auto-Wired Governance"
+            - "AR-004: Tiered Logging"
+
+        day_3:
+          day: "Day 3"
+          tasks:
+            - "FR-003: State Management"
+            - "FR-001: Audit-First (continued)"
+
+        day_4:
+          day: "Day 4"
+          tasks:
+            - "FR-004: Evidence Capture"
+            - "AC-BRITTLE-001-004: Critical fixes"
+
+        day_5:
+          day: "Day 5"
+          tasks:
+            - "FR-006: Autonomous Continuation"
+            - "AR-008: Adaptation from CORTEX 6.0"
+
+    week_2:
+      title: "Orchestration Core (Week 2)"
+      duration: "5 days"
+      days:
+        day_1:
+          day: "Day 1"
+          tasks:
+            - "AR-006: Orchestrator Architecture"
+
+        day_2:
+          day: "Day 2"
+          tasks:
+            - "AR-007: MCP Integration"
+            - "FR-006: Autonomous Continuation (continued)"
+
+        day_3:
+          day: "Day 3"
+          tasks:
+            - "AR-006: Orchestrator Registry"
+            - "FR-002: Governance Evaluation"
+
+        day_4:
+          day: "Day 4"
+          tasks:
+            - "AR-009: Custom Response Templates"
+            - "AC-VALIDATE-001-005: Input validation (Phase 2 WIN enhancement)"
+            - "AC-METRICS-001-002: Health metrics"
+
+        day_5:
+          day: "Day 5"
+          tasks:
+            - "Orchestrator integration"
+            - "Testing Week 1-2 AC-IDs"
+
+    week_3:
+      title: "Safety & Observability (Week 3)"
+      duration: "5 days"
+      focus: "NFR-002 (Reliability), NFR-004 (Observability)"
+      tasks:
+        - "Error handling and graceful degradation"
+        - "OpenTelemetry instrumentation"
+        - "Dashboard implementation"
+        - "Alerting rules"
+
+    week_4:
+      title: "Production Hardening (Week 4)"
+      duration: "5 days"
+      focus: "NFR-003 (Security), Performance tuning"
+      tasks:
+        - "Secret redaction"
+        - "HIPAA/SOX/PCI-DSS compliance integration"
+        - "Performance optimization"
+        - "Load testing"
+
+    phase_3_5:
+      title: "Folder Structure Migration (Phase 3.5 - PARALLEL)"
+      duration: "16 hours"
+      blocking: "NO (parallel, non-blocking)"
+      implementation: "AR-010: Nested Folder Organization"
+      tasks:
+        - "Create nested folder structure"
+        - "Migrate core orchestrators"
+        - "Migrate infrastructure components"
+        - "Migrate tests"
+        - "Update imports throughout"
+        - "Delete old folder structure"
+        - "Validate cross-platform imports"
+        - "Final testing"
+
+################################################################################
+# PART 8: SUCCESS METRICS
+################################################################################
+
+success_metrics:
+  completion:
+    - "All 10 AR decisions implemented"
+    - "All 6 FR requirements implemented"
+    - "All 4 NFR requirements met"
+    - "All 25 SKULL governance rules enforced"
+    - "All 14 brittleness fixes completed"
+    - "25 hallucination prevention AC-IDs scheduled (Phase 2+4)"
+
+  quality:
+    - "Test pass rate: ≥98%"
+    - "Code coverage: ≥80%"
+    - "Verification rate: ≥80% (from AC evidence)"
+
+  performance:
+    - "Governance evaluation: <5ms per rule"
+    - "SQLite query: <1ms"
+    - "State transition: <10ms"
+    - "Evidence capture: <500ms"
+    - "Audit logging: <5ms"
+
+  security:
+    - "Zero governance bypass violations"
+    - "Hash chain integrity: 100%"
+    - "Secrets redaction: 100%"
+    - "HIPAA/SOX/PCI-DSS compliance: Supported"
+
+################################################################################
