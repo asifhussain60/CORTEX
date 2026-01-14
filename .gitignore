@@ -82,3 +82,4 @@ test-results.xml
 .cortex/*.md
 # Auto-generated backup files
 cortex-brain/cx6-plan/viewer/*-backup-*.json
+.cortex/

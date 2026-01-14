@@ -22,5 +22,13 @@
         "workspaceRoot": "/Users/asifhussain/PROJECTS/CORTEX",
         "workspacePath": "docs",
         "id": "Whb9UmqHzdRrl2cD"
+    },
+    {
+        "type": "Directory",
+        "name": "/Users/asifhussain/PROJECTS/CORTEX/.asif/cortex7-req",
+        "parent_id": null,
+        "workspaceRoot": "/Users/asifhussain/PROJECTS/CORTEX",
+        "workspacePath": ".asif/cortex7-req",
+        "id": "fsz9YvogBlFI2Sjp"
     }
 ]
