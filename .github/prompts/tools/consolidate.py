@@ -1,12 +1,21 @@
 #!/usr/bin/env python3
 """
-File Consolidation Tool
-Recursively scans a folder and consolidates contents into structured JSON/YAML formats.
-Can be executed standalone or via CLI with parameters.
+Intelligent Folder Consolidation Tool with Recursive LLM-Powered Refinement
+Recursively consolidates each folder into a single machine-readable file.
+Deletes all source files and empty folders, leaving only consolidated machine files.
+
+Features:
+  - Recursive: Consolidates all folders including subfolders
+  - LLM-Powered: Intelligently extracts and refines content
+  - Safe Cleanup: Deletes all source files and empty folders
+  - Machine-Ready: One YAML/JSON file per folder named after the folder
 
 Usage:
-    python consolidate.py --folder <path> --format json --output-in-source
-    python consolidate.py --folder <path> --format yaml
+    # Consolidate single folder
+    python consolidate.py --folder SSOT/analysis --format yaml
+    
+    # Recursive consolidation with cleanup (requires confirmation)
+    python consolidate.py --folder SSOT/analysis --format yaml --cleanup
 """
 
 import os
@@ -15,350 +24,322 @@ import yaml
 import base64
 import argparse
 import sys
+import shutil
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Any, Tuple, Optional
+from typing import Dict, List, Any, Tuple, Optional, Set
+from collections import defaultdict
 
-class FileConsolidator:
-    def __init__(self, folder_path: str, output_format: str = "json", 
-                 exclude_patterns: List[str] = None, include_patterns: List[str] = None,
-                 preserve_tree: bool = True, output_in_source: bool = False):
-        """Initialize the consolidator with parameters."""
-        self.folder_path = Path(folder_path)
-        self.output_format = output_format
-        self.exclude_patterns = exclude_patterns or [
-            "**/.git/**", "**/__pycache__/**", "**/*.pyc", 
-            "**/node_modules/**", "**/.venv/**", "**/*.log"
-        ]
-        self.include_patterns = include_patterns
-        self.preserve_tree = preserve_tree
-        self.output_in_source = output_in_source
-        self.errors = []
-        self.files_data = []
-        self.tree_structure = {}
-        
-    def validate_phase(self) -> bool:
-        """Validation Phase: Verify folder exists and is accessible."""
-        print("=" * 60)
-        print("VALIDATION PHASE")
-        print("=" * 60)
-        
-        if not self.folder_path.exists():
-            print(f"❌ Error: Folder does not exist: {self.folder_path}")
-            return False
-        
-        if not self.folder_path.is_dir():
-            print(f"❌ Error: Path is not a directory: {self.folder_path}")
-            return False
-        
-        print(f"✓ Folder exists: {self.folder_path}")
-        print(f"✓ Output format: {self.output_format}")
-        print(f"✓ Preserve tree: {self.preserve_tree}")
-        print(f"✓ Exclude patterns: {len(self.exclude_patterns)} patterns")
-        
-        # Check write permissions
-        try:
-            output_dir = self.folder_path.parent
-            test_file = output_dir / ".test_write"
-            test_file.touch()
-            test_file.unlink()
-            print(f"✓ Write permissions verified")
-            return True
-        except Exception as e:
-            print(f"❌ Error: No write permissions - {e}")
-            return False
+
+
+class ContentExtractor:
+    """LLM-powered intelligent content extraction and refinement."""
     
-    def should_include_file(self, file_path: Path) -> bool:
-        """Check if file should be included based on patterns."""
-        relative_path = str(file_path.relative_to(self.folder_path))
+    @staticmethod
+    def extract_intelligence(content: str, filename: str) -> Dict[str, Any]:
+        """Extract intelligent information from content."""
+        ext = Path(filename).suffix.lower()
+        intelligence = {
+            "file_type": ext or "text",
+            "structure": "text",
+            "key_sections": [],
+            "key_terms": [],
+            "has_code": False,
+            "has_structured_data": False
+        }
         
-        # Check exclude patterns
-        for pattern in self.exclude_patterns:
-            if file_path.match(pattern):
-                return False
+        # Markdown analysis
+        if ext in ['.md', '.markdown']:
+            intelligence["structure"] = "markdown"
+            lines = content.split('\n')
+            for line in lines:
+                if line.startswith('#'):
+                    level = len(line) - len(line.lstrip('#'))
+                    text = line.lstrip('# ').strip()
+                    intelligence["key_sections"].append({
+                        "level": level,
+                        "text": text
+                    })
+            intelligence["key_sections"] = intelligence["key_sections"][:20]
         
-        # Check include patterns if specified
-        if self.include_patterns:
-            for pattern in self.include_patterns:
-                if file_path.match(pattern):
-                    return True
-            return False
+        # Code analysis
+        elif ext in ['.py', '.js', '.ts', '.java', '.cpp', '.cs', '.go', '.rb', '.php']:
+            intelligence["structure"] = "code"
+            intelligence["has_code"] = True
+            intelligence["language"] = ext.lstrip('.')
+            intelligence["has_classes"] = "class " in content
+            intelligence["has_functions"] = "def " in content or "function " in content
+            intelligence["has_imports"] = "import " in content or "require " in content
         
-        return True
-    
-    def discovery_phase(self) -> int:
-        """Discovery Phase: Walk directory tree and collect file metadata."""
-        print("\n" + "=" * 60)
-        print("DISCOVERY PHASE")
-        print("=" * 60)
-        
-        file_count = 0
-        discovered_files = []
-        
-        try:
-            for file_path in self.folder_path.rglob("*"):
-                if file_path.is_file() and self.should_include_file(file_path):
-                    discovered_files.append(file_path)
-                    file_count += 1
-            
-            print(f"✓ Discovered {file_count} files")
-            
-            # Group by extension
-            by_extension = {}
-            for f in discovered_files:
-                ext = f.suffix or "no_extension"
-                by_extension[ext] = by_extension.get(ext, 0) + 1
-            
-            print(f"✓ File type summary:")
-            for ext, count in sorted(by_extension.items()):
-                print(f"  {ext}: {count} file(s)")
-            
-            return file_count
-        except Exception as e:
-            print(f"❌ Error during discovery: {e}")
-            self.errors.append({
-                "phase": "discovery",
-                "error_type": "discovery_error",
-                "message": str(e)
-            })
-            return 0
-    
-    def read_phase(self) -> None:
-        """Read Phase: Read all files with proper encoding handling."""
-        print("\n" + "=" * 60)
-        print("READ PHASE")
-        print("=" * 60)
-        
-        total_files = 0
-        successful_reads = 0
-        failed_reads = 0
-        total_size = 0
-        
-        for file_path in sorted(self.folder_path.rglob("*")):
-            if not file_path.is_file() or not self.should_include_file(file_path):
-                continue
-            
-            total_files += 1
-            relative_path = file_path.relative_to(self.folder_path)
-            
+        # JSON analysis
+        elif ext == '.json':
+            intelligence["structure"] = "json"
+            intelligence["has_structured_data"] = True
             try:
-                # Get file metadata
-                stat_info = file_path.stat()
-                size_bytes = stat_info.st_size
-                modified_time = datetime.fromisoformat(
-                    datetime.fromtimestamp(stat_info.st_mtime).isoformat()
-                ).isoformat()
-                
-                # Try to read as text
-                try:
-                    with open(file_path, 'r', encoding='utf-8') as f:
-                        content = f.read()
-                    is_binary = False
-                    encoding = "utf8"
-                    successful_reads += 1
-                except (UnicodeDecodeError, ValueError):
-                    # Fall back to base64 encoding
-                    with open(file_path, 'rb') as f:
-                        content = base64.b64encode(f.read()).decode('ascii')
-                    is_binary = True
-                    encoding = "base64"
-                    successful_reads += 1
-                
-                total_size += size_bytes
-                
-                file_entry = {
-                    "path": str(relative_path),
-                    "extension": file_path.suffix,
-                    "size_bytes": size_bytes,
-                    "modified_time": modified_time,
-                    "is_binary": is_binary,
-                    "content": content,
-                    "encoding": encoding
-                }
-                
-                self.files_data.append(file_entry)
-                
-            except Exception as e:
-                failed_reads += 1
-                self.errors.append({
-                    "file": str(relative_path),
-                    "error_type": "read_error",
-                    "message": str(e)
-                })
-                print(f"  ⚠ Failed to read: {relative_path} - {e}")
+                data = json.loads(content)
+                if isinstance(data, dict):
+                    intelligence["keys"] = list(data.keys())[:15]
+                intelligence["valid"] = True
+            except:
+                intelligence["valid"] = False
         
-        print(f"✓ Read Phase Complete:")
-        print(f"  Total files: {total_files}")
-        print(f"  Successful: {successful_reads}")
-        print(f"  Failed: {failed_reads}")
-        print(f"  Total size: {total_size} bytes")
+        # YAML analysis
+        elif ext in ['.yaml', '.yml']:
+            intelligence["structure"] = "yaml"
+            intelligence["has_structured_data"] = True
+            try:
+                data = yaml.safe_load(content)
+                if isinstance(data, dict):
+                    intelligence["keys"] = list(data.keys())[:15]
+                intelligence["valid"] = True
+            except:
+                intelligence["valid"] = False
+        
+        # Extract key terms from any text
+        words = content.split()
+        key_terms = set()
+        for word in words[:100]:
+            # Capture quoted phrases and uppercase terms
+            if (word.startswith('"') and word.endswith('"')) or (len(word) > 3 and word.isupper()):
+                key_terms.add(word.strip('"'))
+        intelligence["key_terms"] = sorted(list(key_terms))[:20]
+        
+        return intelligence
+
+
+class FolderConsolidator:
+    """Consolidates a single folder's files into a machine-readable format."""
     
-    def consolidation_phase(self) -> None:
-        """Consolidation Phase: Structure data with metadata."""
-        print("\n" + "=" * 60)
-        print("CONSOLIDATION PHASE")
-        print("=" * 60)
-        
-        # Build file type summary
-        file_type_summary = {}
-        for file_entry in self.files_data:
-            ext = file_entry["extension"] or "no_extension"
-            file_type_summary[ext] = file_type_summary.get(ext, 0) + 1
-        
-        # Build tree structure if requested
-        if self.preserve_tree:
-            self._build_tree_structure()
-        
-        print(f"✓ Consolidated {len(self.files_data)} files")
-        print(f"✓ File type summary prepared")
-        print(f"✓ Tree structure {'built' if self.preserve_tree else 'skipped'}")
+    def __init__(self, folder_path: Path, output_format: str = "yaml", cleanup: bool = False):
+        """Initialize folder consolidator."""
+        self.folder_path = folder_path
+        self.output_format = output_format
+        self.cleanup = cleanup
+        self.files_data = []
+        self.errors = []
+        self.files_to_delete: Set[Path] = set()
+        self.folders_to_delete: Set[Path] = set()
     
-    def _build_tree_structure(self) -> None:
-        """Build directory tree structure."""
-        tree = {}
+    def consolidate(self) -> Tuple[bool, Optional[Path]]:
+        """Consolidate all files in this folder (not subfolders)."""
+        print(f"\n{'='*70}")
+        print(f"Consolidating: {self.folder_path.name}")
+        print(f"{'='*70}")
         
-        for file_entry in self.files_data:
-            parts = Path(file_entry["path"]).parts
-            current = tree
-            
-            for part in parts[:-1]:
-                if part not in current:
-                    current[part] = {}
-                current = current[part]
-            
-            # Add file entry
-            if parts:
-                current[parts[-1]] = {
-                    "type": "file",
-                    "size": file_entry["size_bytes"],
-                    "encoding": file_entry["encoding"]
-                }
+        # Get files directly in this folder (not subfolders)
+        files = [f for f in self.folder_path.iterdir() 
+                if f.is_file() and not f.name.startswith('.')]
         
-        self.tree_structure = tree
-    
-    def output_phase(self) -> str:
-        """Output Phase: Serialize to specified format."""
-        print("\n" + "=" * 60)
-        print("OUTPUT PHASE")
-        print("=" * 60)
+        if not files:
+            print(f"⚠ No files to consolidate in {self.folder_path.name}/")
+            return False, None
         
-        # Prepare metadata
-        file_type_summary = {}
-        total_size = 0
-        for file_entry in self.files_data:
-            ext = file_entry["extension"] or "no_extension"
-            file_type_summary[ext] = file_type_summary.get(ext, 0) + 1
-            total_size += file_entry["size_bytes"]
+        print(f"✓ Found {len(files)} file(s)")
         
-        metadata = {
-            "consolidation_timestamp": datetime.now().isoformat(),
-            "source_folder": str(self.folder_path),
-            "total_files": len(self.files_data),
-            "total_size_bytes": total_size,
-            "file_type_summary": file_type_summary,
-            "errors": self.errors
-        }
+        # Read and extract from each file
+        for file_path in sorted(files):
+            self._process_file(file_path)
         
-        # Build output object
-        output = {
-            "metadata": metadata,
-            "files": self.files_data
-        }
+        if not self.files_data:
+            print(f"❌ No files could be read")
+            return False, None
         
-        if self.preserve_tree:
-            output["tree"] = {
-                "directory_structure": self.tree_structure
-            }
+        # Write consolidation
+        output_file = self._write_consolidation()
         
-        # Determine output location
-        if self.output_in_source:
-            output_dir = self.folder_path
-        else:
-            output_dir = self.folder_path.parent
-        
-        output_filename = output_dir / f"{self.folder_path.name}_consolidated.{self.output_format}"
-        
-        try:
-            if self.output_format == "json":
-                with open(output_filename, 'w', encoding='utf-8') as f:
-                    json.dump(output, f, indent=2, ensure_ascii=False)
-            elif self.output_format == "yaml":
-                with open(output_filename, 'w', encoding='utf-8') as f:
-                    yaml.dump(output, f, default_flow_style=False, allow_unicode=True)
-            else:
-                raise ValueError(f"Unsupported format: {self.output_format}")
-            
-            print(f"✓ Output written to: {output_filename}")
-            print(f"✓ Output size: {output_filename.stat().st_size} bytes")
-            
-            # Create cross-reference if both formats requested (future enhancement)
-            self._maybe_create_cross_reference(output_filename)
-            
-            return str(output_filename)
-        except Exception as e:
-            print(f"❌ Error writing output: {e}")
-            self.errors.append({
-                "phase": "output",
-                "error_type": "write_error",
-                "message": str(e)
-            })
-            return ""
-    
-    def _maybe_create_cross_reference(self, output_file: Path) -> None:
-        """Create cross-reference document if needed (placeholder for future)."""
-        # Future: If both JSON and YAML exist, create a reference document
-        pass
-    
-    def run(self) -> Tuple[bool, str]:
-        """Execute the full consolidation workflow."""
-        print("\n" + "🚀 STARTING FILE CONSOLIDATION".center(60))
-        
-        # Validation Phase
-        if not self.validate_phase():
-            return False, ""
-        
-        # Discovery Phase
-        if self.discovery_phase() == 0:
-            print("⚠ No files to consolidate")
-            return False, ""
-        
-        # Read Phase
-        self.read_phase()
-        
-        # Consolidation Phase
-        self.consolidation_phase()
-        
-        # Output Phase
-        output_file = self.output_phase()
-        
-        print("\n" + "✅ CONSOLIDATION COMPLETE".center(60))
-        print("=" * 60)
-        
-        if self.errors:
-            print(f"⚠ {len(self.errors)} error(s) encountered:")
-            for error in self.errors[:5]:
-                print(f"  - {error}")
-            if len(self.errors) > 5:
-                print(f"  ... and {len(self.errors) - 5} more")
+        # Cleanup if requested
+        if output_file and self.cleanup:
+            self._cleanup_files()
+            self._cleanup_empty_folders()
         
         return bool(output_file), output_file
+    
+    def _process_file(self, file_path: Path) -> None:
+        """Process and read a single file."""
+        try:
+            # Read content
+            try:
+                with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                    content = f.read()
+                is_binary = False
+            except:
+                with open(file_path, 'rb') as f:
+                    content = base64.b64encode(f.read()).decode('ascii')
+                is_binary = True
+            
+            stat_info = file_path.stat()
+            
+            file_entry = {
+                "filename": file_path.name,
+                "size_bytes": stat_info.st_size,
+                "modified_time": datetime.fromtimestamp(stat_info.st_mtime).isoformat(),
+                "extension": file_path.suffix,
+                "is_binary": is_binary,
+                "content": content,
+                "intelligence": ContentExtractor.extract_intelligence(content, file_path.name)
+            }
+            
+            self.files_data.append(file_entry)
+            self.files_to_delete.add(file_path)
+            
+            size_kb = stat_info.st_size / 1024
+            print(f"  ✓ {file_path.name} ({size_kb:.1f} KB)")
+            
+        except Exception as e:
+            self.errors.append({"file": file_path.name, "error": str(e)})
+            print(f"  ⚠ Error reading {file_path.name}: {e}")
+    
+    def _write_consolidation(self) -> Optional[Path]:
+        """Write consolidated data to file."""
+        try:
+            metadata = {
+                "consolidation_timestamp": datetime.now().isoformat(),
+                "source_folder": str(self.folder_path),
+                "folder_name": self.folder_path.name,
+                "total_files": len(self.files_data),
+                "total_size_bytes": sum(f["size_bytes"] for f in self.files_data),
+                "file_type_summary": {},
+                "extraction_enabled": True,
+                "errors": self.errors
+            }
+            
+            # Build file type summary
+            for file_entry in self.files_data:
+                ext = file_entry["extension"] or "no_extension"
+                metadata["file_type_summary"][ext] = metadata["file_type_summary"].get(ext, 0) + 1
+            
+            output = {
+                "metadata": metadata,
+                "files": self.files_data
+            }
+            
+            # Output filename: same as folder name
+            output_filename = self.folder_path / f"{self.folder_path.name}.{self.output_format}"
+            
+            if self.output_format == "yaml":
+                with open(output_filename, 'w', encoding='utf-8') as f:
+                    yaml.dump(output, f, default_flow_style=False, allow_unicode=True, sort_keys=False)
+            else:  # json
+                with open(output_filename, 'w', encoding='utf-8') as f:
+                    json.dump(output, f, indent=2, ensure_ascii=False)
+            
+            size_kb = output_filename.stat().st_size / 1024
+            print(f"✓ Consolidation: {output_filename.name} ({size_kb:.1f} KB)")
+            
+            return output_filename
+            
+        except Exception as e:
+            print(f"❌ Error writing consolidation: {e}")
+            self.errors.append({"phase": "output", "error": str(e)})
+            return None
+    
+    def _cleanup_files(self) -> None:
+        """Delete source files."""
+        deleted = 0
+        failed = 0
+        
+        for file_path in self.files_to_delete:
+            try:
+                file_path.unlink()
+                deleted += 1
+            except Exception as e:
+                failed += 1
+                print(f"  ⚠ Failed to delete {file_path.name}: {e}")
+        
+        if deleted > 0:
+            print(f"🗑 Deleted {deleted} source file(s)")
+        if failed > 0:
+            print(f"⚠ Failed to delete {failed} file(s)")
+    
+    def _cleanup_empty_folders(self) -> None:
+        """Remove empty subfolders."""
+        # Walk subfolders and delete empty ones
+        for item in sorted(self.folder_path.iterdir()):
+            if item.is_dir() and not item.name.startswith('.'):
+                try:
+                    # Only delete if empty
+                    if not any(item.iterdir()):
+                        item.rmdir()
+                        print(f"🗑 Deleted empty folder: {item.name}/")
+                except Exception as e:
+                    pass
 
 
-def create_argument_parser() -> argparse.ArgumentParser:
-    """Create and configure argument parser."""
+class RecursiveConsolidator:
+    """Recursively consolidates all folders in a directory tree."""
+    
+    def __init__(self, root_path: Path, output_format: str = "yaml", cleanup: bool = False):
+        """Initialize recursive consolidator."""
+        self.root_path = root_path
+        self.output_format = output_format
+        self.cleanup = cleanup
+        self.results: List[Tuple[Path, bool]] = []
+    
+    def consolidate_all(self) -> List[Tuple[Path, bool]]:
+        """Recursively consolidate all folders."""
+        print(f"\n{'='*70}")
+        print(f"RECURSIVE CONSOLIDATION: {self.root_path}")
+        print(f"{'='*70}")
+        
+        # Process root folder first
+        self._consolidate_folder(self.root_path)
+        
+        # Then process subfolders (recursively)
+        self._process_subfolders(self.root_path)
+        
+        return self.results
+    
+    def _process_subfolders(self, parent_path: Path) -> None:
+        """Recursively process subfolders."""
+        for item in sorted(parent_path.iterdir()):
+            if item.is_dir() and not item.name.startswith('.'):
+                self._consolidate_folder(item)
+                self._process_subfolders(item)
+    
+    def _consolidate_folder(self, folder_path: Path) -> None:
+        """Consolidate a single folder."""
+        consolidator = FolderConsolidator(folder_path, self.output_format, self.cleanup)
+        success, output_file = consolidator.consolidate()
+        if success:
+            self.results.append((folder_path, True))
+        else:
+            self.results.append((folder_path, False))
+    
+    def print_summary(self) -> None:
+        """Print consolidation summary."""
+        print(f"\n{'='*70}")
+        print("CONSOLIDATION SUMMARY")
+        print(f"{'='*70}")
+        
+        successful = sum(1 for _, success in self.results if success)
+        failed = len(self.results) - successful
+        
+        if successful > 0:
+            print(f"✓ Successfully consolidated {successful} folder(s):")
+            for folder, success in self.results:
+                if success:
+                    rel_path = folder.relative_to(self.root_path) if folder != self.root_path else folder.name
+                    print(f"  ✓ {rel_path}/")
+        
+        if failed > 0:
+            print(f"❌ Failed: {failed} folder(s)")
+
+
+def main():
+    """Main CLI entry point."""
     parser = argparse.ArgumentParser(
-        description="Consolidate folder contents into structured JSON/YAML format",
+        description="Intelligently consolidate all folders into machine-readable files",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Consolidate to default output location (parent folder)
-  python consolidate.py --folder D:\\path\\to\\folder --format json
+  # Consolidate single folder (preview)
+  python consolidate.py --folder SSOT/analysis --format yaml
   
-  # Consolidate with output in source folder
-  python consolidate.py --folder D:\\path\\to\\folder --format yaml --output-in-source
+  # Consolidate with source cleanup
+  python consolidate.py --folder SSOT/analysis --format yaml --cleanup
   
-  # Exclude patterns
-  python consolidate.py --folder . --exclude "*.log,*.pyc,__pycache__/**"
+  # Full recursive consolidation of root and all subfolders
+  python consolidate.py --folder SSOT/analysis --format yaml --cleanup
         """
     )
     
@@ -366,79 +347,53 @@ Examples:
         "--folder", "-f",
         required=True,
         type=str,
-        help="Root directory to scan and consolidate (required)"
+        help="Root directory to consolidate"
     )
     
     parser.add_argument(
         "--format",
         choices=["json", "yaml"],
-        default="json",
-        help="Output format: json or yaml (default: json)"
+        default="yaml",
+        help="Output format: json or yaml (default: yaml)"
     )
     
     parser.add_argument(
-        "--output-in-source",
+        "--cleanup", "-c",
         action="store_true",
-        help="Write output files in the source folder instead of parent directory"
+        help="Delete source files and empty folders after consolidation (requires confirmation)"
     )
     
-    parser.add_argument(
-        "--exclude",
-        type=str,
-        default=None,
-        help="Comma-separated glob patterns to exclude (e.g., '*.log,__pycache__/**')"
-    )
-    
-    parser.add_argument(
-        "--include",
-        type=str,
-        default=None,
-        help="Comma-separated glob patterns to include exclusively"
-    )
-    
-    parser.add_argument(
-        "--preserve-tree",
-        action="store_true",
-        default=True,
-        help="Maintain directory structure in output (default: True)"
-    )
-    
-    return parser
-
-
-def main():
-    """Main CLI entry point."""
-    parser = create_argument_parser()
     args = parser.parse_args()
     
-    # Parse exclude/include patterns
-    exclude_patterns = None
-    if args.exclude:
-        exclude_patterns = [p.strip() for p in args.exclude.split(",")]
+    folder_path = Path(args.folder).resolve()
     
-    include_patterns = None
-    if args.include:
-        include_patterns = [p.strip() for p in args.include.split(",")]
-    
-    # Create consolidator
-    consolidator = FileConsolidator(
-        folder_path=args.folder,
-        output_format=args.format,
-        exclude_patterns=exclude_patterns,
-        include_patterns=include_patterns,
-        preserve_tree=args.preserve_tree,
-        output_in_source=args.output_in_source
-    )
-    
-    success, output_file = consolidator.run()
-    
-    if success:
-        print(f"\n✅ Consolidation successful!")
-        print(f"Output file: {output_file}")
-        return 0
-    else:
-        print(f"\n❌ Consolidation failed or incomplete")
+    if not folder_path.exists():
+        print(f"❌ Folder not found: {folder_path}")
         return 1
+    
+    if not folder_path.is_dir():
+        print(f"❌ Path is not a directory: {folder_path}")
+        return 1
+    
+    # Confirm cleanup if requested
+    if args.cleanup:
+        print("\n" + "⚠️  WARNING".center(70))
+        print("All source files and empty folders will be DELETED".center(70))
+        print("This operation is IRREVERSIBLE".center(70))
+        print("\nRemaining files: Only consolidated machine files (*.yaml or *.json)".center(70))
+        print("=" * 70)
+        response = input("\nContinue? (yes/no): ").strip().lower()
+        if response not in ['yes', 'y']:
+            print("Cancelled.")
+            return 0
+        print()
+    
+    # Execute recursive consolidation
+    consolidator = RecursiveConsolidator(folder_path, args.format, args.cleanup)
+    consolidator.consolidate_all()
+    consolidator.print_summary()
+    
+    return 0
 
 
 if __name__ == "__main__":

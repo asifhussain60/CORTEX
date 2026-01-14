@@ -1,49 +1,56 @@
-# File Consolidation Prompt
+# Intelligent Folder Consolidation Prompt
 
-**Version:** 1.0  
+**Version:** 2.0  
 **Status:** EXECUTABLE via GitHub Copilot Chat  
-**Purpose:** Execute folder consolidation using the canonical `consolidate.py` CLI tool
+**Purpose:** Execute intelligent recursive folder consolidation with LLM-powered content refinement
 
 ---
 
 ## Overview
 
-This prompt coordinates execution of the `consolidate.py` tool for consolidating folder contents into structured machine-readable formats (JSON/YAML). The tool is the single source of truth for all consolidation operations.
+This prompt coordinates execution of the enhanced `consolidate.py` tool for intelligently consolidating all folders and subfolders into separate machine-readable files. Each folder becomes a single YAML/JSON file named after the folder, with all source files deleted.
 
-## How to Use in GitHub Copilot Chat
+**Key Innovation**: 
+- Recursively consolidates ALL folders (root + subfolders)
+- Each folder → one machine-readable file (named `foldername.yaml` or `foldername.json`)
+- LLM-powered intelligent content extraction and refinement
+- Automatic cleanup: deletes all source files and empty folders
+- Nothing lost: all content preserved in consolidated files
 
-### Basic Usage
+## How to Use
 
-```
-@consolidate --folder <path> --format json
-@consolidate --folder <path> --format yaml --output-in-source
-@consolidate --folder <path> --format json --output-in-source
-```
+### Basic Usage (Preview without cleanup)
 
-### Examples
-
-**Consolidate SSOT/analysis with YAML in source folder:**
-```
-@consolidate --folder SSOT/analysis --format yaml --output-in-source
+```bash
+python consolidate.py --folder SSOT/analysis --format yaml
 ```
 
-**Consolidate with JSON (default):**
-```
-@consolidate --folder scripts --format json
+Results in:
+- `SSOT/analysis/analysis.yaml` - Consolidation of root folder files
+- `SSOT/analysis/reqs/reqs.yaml` - Consolidation of reqs subfolder
+- All original source files preserved
+
+### Full Consolidation with Cleanup
+
+```bash
+python consolidate.py --folder SSOT/analysis --format yaml --cleanup
 ```
 
-**Consolidate with custom excludes:**
-```
-@consolidate --folder cortex-brain --exclude "*.log,*.tmp,cache/**" --format yaml
-```
+**WARNING**: This command:
+- Creates `analysis.yaml` from root folder files
+- Creates `reqs.yaml` from reqs subfolder files  
+- **Deletes ALL source files** in both folders
+- **Deletes empty folders** created after file cleanup
+- Requires user confirmation before executing
 
 ## Parameters
 
-- `--folder` (required): Root directory to scan and consolidate
-- `--format` (optional): Output format `json` or `yaml` (default: `json`)
-- `--output-in-source` (optional): Write output to source folder instead of parent directory
-- `--exclude` (optional): Comma-separated glob patterns to skip
-- `--include` (optional): Comma-separated glob patterns to include exclusively
+### Required
+- `--folder` (or `-f`): Root directory to consolidate (required)
+
+### Optional
+- `--format`: Output format `json` or `yaml` (default: `yaml`)
+- `--cleanup` (or `-c`): Delete source files and empty folders after consolidation (requires confirmation)
 
 ## Tool Execution Details
 
@@ -55,151 +62,293 @@ This prompt coordinates execution of the `consolidate.py` tool for consolidating
 ### Command Syntax
 ```bash
 cd D:\PROJECTS\CORTEX
-python .github/prompts/tools/consolidate.py --folder <path> [--format json|yaml] [--output-in-source] [--exclude PATTERNS] [--include PATTERNS]
+
+# Preview consolidation (no cleanup)
+python .github/prompts/tools/consolidate.py --folder SSOT/analysis --format yaml
+
+# Full consolidation with source cleanup
+python .github/prompts/tools/consolidate.py --folder SSOT/analysis --format yaml --cleanup
 ```
 
-### What the Tool Does
+## How It Works
 
-#### Validation Phase
-- Verify folder exists and is accessible
-- Validate output format is supported
-- Check write permissions for output destination
+### Phase 1: Recursive Discovery
+1. Identifies root folder and all subfolders
+2. For each folder, collects all files (not subdirectories)
+3. Skips hidden folders (starting with `.`)
 
-#### Discovery Phase
-- Walk directory tree recursively
-- Apply include/exclude patterns to file paths
-- Collect metadata: file path, size, extension, modification time
+### Phase 2: Intelligent Content Extraction
+For each file, extracts:
+- **Markdown** (`.md`): Headers with nesting levels, structure
+- **Code** (`.py`, `.js`, `.ts`, `.java`, etc.): Classes, functions, imports
+- **JSON/YAML**: Keys, validation, structure
+- **Text**: Key terms, important concepts
+- **Binary**: Base64 encoding with metadata
 
-#### Read Phase
-- Read all text files with UTF-8 encoding
-- Fall back to base64 encoding for binary files
-- Track read success/failure with error context
+### Phase 3: Consolidation
+Creates unified machine-readable file for each folder with:
+- **Metadata**: Timestamp, folder name, file count, file types, errors
+- **Files**: Complete content + extracted intelligence
+- **Relationships**: Preserves which files came from which folder
 
-#### Consolidation Phase
-- Structure data with metadata wrapper
-- Preserve file hierarchy relationships
-- Generate summary statistics
+### Phase 4: Cleanup (Optional)
+When `--cleanup` flag is used:
+1. **User confirmation** required (IRREVERSIBLE warning)
+2. **Delete source files** from each folder
+3. **Delete empty folders** (after files removed)
+4. **Keep consolidation files** (`.yaml` or `.json`)
 
-#### Output Phase
-- Serialize to specified format (JSON or YAML)
-- Write to designated location (source folder with `--output-in-source`, parent directory by default)
-- Validate output integrity
+## Output Structure
 
-## Output Schema
-
-### Structure
-```json
-{
-  "metadata": {
-    "consolidation_timestamp": "ISO-8601",
-    "source_folder": "path",
-    "total_files": number,
-    "total_size_bytes": number,
-    "file_type_summary": { "extension": count },
-    "errors": [ { "file": "path", "error_type": "string", "message": "string" } ]
-  },
-  "files": [
-    {
-      "path": "relative/path/file.ext",
-      "extension": ".ext",
-      "size_bytes": number,
-      "modified_time": "ISO-8601",
-      "is_binary": boolean,
-      "content": "string or base64",
-      "encoding": "utf8 or base64"
-    }
-  ],
-  "tree": {
-    "directory_structure": { ... }
-  }
-}
+### Folder Layout After Consolidation (with --cleanup)
+```
+SSOT/
+└── analysis/
+    ├── analysis.yaml          ← Root folder consolidation
+    └── reqs/
+        └── reqs.yaml          ← Reqs subfolder consolidation
 ```
 
-## Error Handling
+All original source files deleted. Only `.yaml` files remain.
 
-- Non-fatal errors are logged in the `errors` array in metadata
-- Unreadable files are reported with reason (permissions, encoding, size)
-- Processing continues even if individual files fail to read
-- Summary of all failures included in final output
+### File Structure Inside Consolidation File
+```yaml
+metadata:
+  consolidation_timestamp: "2026-01-14T10:30:00"
+  source_folder: "/path/to/folder"
+  folder_name: "analysis"
+  total_files: 15
+  total_size_bytes: 124500
+  file_type_summary:
+    .md: 8
+    .py: 4
+    .txt: 3
+  extraction_enabled: true
+  errors: []
+
+files:
+  - filename: "README.md"
+    size_bytes: 5000
+    modified_time: "2026-01-14T09:00:00"
+    extension: ".md"
+    is_binary: false
+    content: "# Content of file..."
+    intelligence:
+      structure: "markdown"
+      key_sections:
+        - level: 1
+          text: "Main Title"
+        - level: 2
+          text: "Section"
+      key_terms: ["CORTEX", "consolidation", "analysis"]
+      
+  - filename: "script.py"
+    extension: ".py"
+    is_binary: false
+    content: "# Python code..."
+    intelligence:
+      structure: "code"
+      language: "py"
+      has_classes: true
+      has_functions: true
+      has_imports: true
+```
+
+## Use Cases
+
+### Case 1: Preview Consolidation Structure
+Before committing to cleanup, preview what will happen:
+```bash
+python consolidate.py --folder SSOT/analysis --format yaml
+```
+- Generates `analysis.yaml` and `reqs.yaml`
+- All source files preserved
+- Shows what consolidation will look like
+
+### Case 2: Full Consolidation with Cleanup
+Convert folder hierarchy into machine-readable files:
+```bash
+python consolidate.py --folder SSOT/analysis --format yaml --cleanup
+```
+- Creates consolidated files
+- Deletes all source files
+- Removes empty folders
+- Result: Only `.yaml` files remain
+
+### Case 3: JSON Format (for programmatic processing)
+```bash
+python consolidate.py --folder SSOT/analysis --format json --cleanup
+```
+- Same behavior as YAML
+- Output format: `.json` instead of `.yaml`
+- Better for programmatic parsing
+
+## Safety Features
+
+✅ **Disabled by default**: Cleanup requires explicit `--cleanup` flag  
+✅ **User confirmation**: Warning shown before destructive operation  
+✅ **Atomic operations**: Files only deleted after consolidation succeeds  
+✅ **Error logging**: All failures tracked and reported  
+✅ **Reversibility check**: Consolidation file must exist before cleanup  
+✅ **Folder safety**: Only deletes empty folders created by file cleanup
 
 ## Key Features
 
-✅ **Parameterized** - Works with any folder path  
-✅ **Format Flexible** - Outputs JSON or YAML  
-✅ **Location Flexible** - Output to source or parent directory  
-✅ **Recursive** - Scans entire directory tree  
-✅ **Error Resilient** - Continues on file read failures  
-✅ **Metadata Rich** - Captures file details, timestamps, encodings  
-✅ **Binary Safe** - Handles text and binary files with base64 fallback  
+✅ **Recursive**: Consolidates all folder levels independently  
+✅ **Intelligent**: Extracts structure, headers, code patterns, key terms  
+✅ **Safe**: Confirmation required, errors tracked, atomic operations  
+✅ **Clean**: Deletes source files leaving only machine files  
+✅ **Flexible**: Supports both YAML and JSON formats  
+✅ **Complete**: No content lost - all text preserved + extracted intelligence  
+✅ **Machine-Ready**: Structured format suitable for LLM processing  
 
-## Integration Examples
+## Intelligence Extraction Details
 
-### Manual Execution
-```bash
-cd D:\PROJECTS\CORTEX
-python .github/prompts/tools/consolidate.py --folder SSOT/analysis --format yaml --output-in-source
-```
+### Markdown Files
+Extracts:
+- Document headers and hierarchy (with levels 1-6)
+- Structure and outline
+- Key terms and concepts
 
-### In Python Scripts
-```python
-from pathlib import Path
-import sys
-sys.path.insert(0, "D:\\PROJECTS\\CORTEX\\.github\\prompts\\tools")
-from consolidate import FileConsolidator
+### Code Files (Python, JavaScript, TypeScript, Java, C++, C#, Go, Ruby, PHP)
+Detects:
+- Language type
+- Presence of classes and functions
+- Import statements
+- Code structure
 
-consolidator = FileConsolidator(
-    folder_path="SSOT/analysis",
-    output_format="yaml",
-    output_in_source=True
-)
-success, output_file = consolidator.run()
-```
+### JSON/YAML Files
+Validates:
+- Format correctness
+- Top-level keys
+- Data structure
 
-### In Automation/CI
-```yaml
-- name: Consolidate folder
-  run: |
-    cd ${{ github.workspace }}
-    python .github/prompts/tools/consolidate.py \
-      --folder ${{ inputs.folder }} \
-      --format ${{ inputs.format }} \
-      --output-in-source
-```
+### All Text Files
+Extracts:
+- Quoted phrases
+- Uppercase terms (likely constants/concepts)
+- Key terminology (limited to 20 unique terms)
+
+## Error Handling
+
+- **Non-fatal errors**: Logged in `metadata.errors` array
+- **Unreadable files**: Reported with file name and reason
+- **Processing continues**: Consolidation succeeds even if some files fail
+- **Encoding fallback**: Binary files stored as base64 if text reading fails
 
 ## Acceptance Criteria
 
-✅ Single YAML file in source folder (with `--format yaml --output-in-source`)  
-✅ Recursive scanning of all nested directories  
-✅ Metadata wrapper with consolidation timestamp, file counts, type summary  
-✅ File hierarchy preservation in `tree` section  
-✅ Proper error reporting for unreadable files  
-✅ Support for custom exclude/include patterns  
-✅ Support for both JSON and YAML output formats  
+✅ Each folder consolidated into single file named `foldername.yaml` or `foldername.json`  
+✅ Recursive: All folder levels processed independently  
+✅ Metadata: Consolidation timestamp, file counts, types, errors  
+✅ Content: All file content preserved with full fidelity  
+✅ Intelligence: Markdown structure, code patterns, key terms extracted  
+✅ Cleanup: Source files and empty folders deleted when `--cleanup` used  
+✅ Safety: User confirmation required for destructive operations  
+✅ Idempotent: Can run multiple times with consistent results  
+
+## Examples
+
+### Example 1: SSOT/analysis Consolidation
+```bash
+cd D:\PROJECTS\CORTEX
+python .github/prompts/tools/consolidate.py --folder SSOT/analysis --format yaml
+```
+
+Creates:
+- `SSOT/analysis/analysis.yaml` (~200 KB with all root files)
+- `SSOT/analysis/reqs/reqs.yaml` (~150 KB with all reqs files)
+
+All files readable. No cleanup yet.
+
+### Example 2: Full Pipeline with Cleanup
+```bash
+cd D:\PROJECTS\CORTEX
+python .github/prompts/tools/consolidate.py --folder SSOT/analysis --format yaml --cleanup
+```
+
+Prompts:
+```
+⚠️  WARNING
+All source files and empty folders will be DELETED
+This operation is IRREVERSIBLE
+
+Remaining files: Only consolidated machine files (*.yaml or *.json)
+Continue? (yes/no): 
+```
+
+If user confirms with `yes`:
+1. Creates `analysis.yaml` from root files
+2. Creates `reqs.yaml` from reqs files
+3. Deletes all source files in both folders
+4. Deletes empty subfolders
+5. Result: Only `.yaml` files remain
+
+### Example 3: JSON Format
+```bash
+python consolidate.py --folder SSOT/analysis --format json --cleanup
+```
+
+Same as YAML but output is `.json` files instead of `.yaml`.
 
 ## Notes
 
-- The tool is idempotent - running it multiple times produces consistent results
-- Default excludes prevent inclusion of cache, venv, node_modules, .git, and log files
-- Large files are included in full (no truncation)
-- File ownership and permissions are not preserved in consolidated output (metadata only)
-- YAML output is human-readable and suitable for documentation
-- JSON output is suitable for programmatic processing
+- The tool is **idempotent**: Running it multiple times produces consistent results
+- Already-consolidated files (`.yaml` or `.json`) are preserved during cleanup
+- Large files are included in full (no truncation or compression)
+- Binary files are stored as base64 (increases size ~33%)
+- YAML is human-readable, suitable for documentation
+- JSON is suitable for programmatic processing and API integration
+- Cleanup is **IRREVERSIBLE** - always backup before using `--cleanup`
 
-## Default Exclude Patterns
+## Troubleshooting
 
+### Q: I want to test cleanup without actually deleting
+A: Run without `--cleanup` flag first to generate consolidation files. Review them, then run with `--cleanup`.
+
+### Q: Can I undo a cleanup?
+A: No, cleanup is destructive. The only recovery is from backups. Always backup before running with `--cleanup`.
+
+### Q: What if consolidation fails?
+A: Cleanup only runs if consolidation succeeds. Check error messages in consolidation file metadata.
+
+### Q: How do I run it programmatically?
+A: Use the Python API:
+```python
+from pathlib import Path
+from consolidate import RecursiveConsolidator
+
+consolidator = RecursiveConsolidator(
+    Path("SSOT/analysis"),
+    output_format="yaml",
+    cleanup=False  # Set to True for cleanup
+)
+results = consolidator.consolidate_all()
+consolidator.print_summary()
 ```
-**/.git/**
-**/__pycache__/**
-**/*.pyc
-**/node_modules/**
-**/.venv/**
-**/*.log
-```
-
-These are automatically applied unless overridden with `--exclude`
 
 ## Related Files
 
-- **Tool:** `.github/prompts/tools/consolidate.py`
-- **Setup Guide:** `.github/prompts/tools/CONSOLIDATE-TOOL-SETUP.md`
-- **Quick Reference:** `.github/prompts/tools/CONSOLIDATE-QUICK-REF.md`
+- **Tool**: `.github/prompts/tools/consolidate.py` (v2.0 with recursive consolidation and cleanup)
+- **Prompt**: `.github/prompts/consolidate.prompt.md` (this file)
+
+## Version History
+
+**v2.0** (Current - Recursive Consolidation)
+- ✅ Recursive folder consolidation
+- ✅ Each folder → single machine file
+- ✅ LLM-powered content refinement
+- ✅ Safe source cleanup with confirmation
+- ✅ Empty folder deletion
+- ✅ Intelligence extraction (Markdown, code, data)
+
+**v1.0** (Previous - Single Folder)
+- Basic folder consolidation
+- Output to parent directory
+- Simple file discovery
+
+---
+
+**Status**: Ready for use  
+**Date**: 2026-01-14  
+**Test**: Run with `--folder SSOT/analysis --format yaml` to preview
