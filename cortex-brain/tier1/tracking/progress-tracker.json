@@ -149,13 +149,15 @@
       "phase_name": "Phase 1.5: Security & Audit",
       "status": "not_started",
       "total_ac_count": 1,
-      "completed_ac_count": 0
+      "completed_ac_count": 0,
+      "completed_count": 0
     },
     "phase_10": {
       "phase_name": "Phase 10: Production Readiness",
       "status": "not_started",
       "total_ac_count": 1,
-      "completed_ac_count": 0
+      "completed_ac_count": 0,
+      "completed_count": 0
     }
   }
 }
