@@ -1,0 +1,813 @@
+# ==============================================================================
+# CORTEX 7.0 FINAL ARCHITECTURE - APPROVED DESIGN
+# ==============================================================================
+# Purpose: Production RAG system with audit-driven development
+# Version: 2.0.0-FINAL
+# Date: 2026-01-14
+# Author: Asif Hussain
+# Status: APPROVED - READY FOR IMPLEMENTATION
+# ==============================================================================
+
+metadata:
+  project: CORTEX_7_PRODUCTION_RAG
+  version: 2.0.0-FINAL
+  date: 2026-01-14
+  author: Asif Hussain
+  status: APPROVED
+  decisions_finalized: true
+  
+  approved_architecture:
+    audit_strategy: "Audit-First (Option A)"
+    memory_strategy: "Tiered Memory (Option A)"
+    challenger_strategy: "Full 5-Stage Pipeline (Option A)"
+    graph_engine: "NetworkX (Option A)"
+    vector_store: "FAISS (Option A)"
+
+# ==============================================================================
+# DECISION 1: AUDIT-FIRST ARCHITECTURE (APPROVED)
+# ==============================================================================
+
+audit_first_architecture:
+  decision: "Option A - Audit-First (operations impossible without audit context)"
+  status: APPROVED
+  
+  implementation:
+    pattern: "@audit_driven decorator mandatory"
+    enforcement: "Runtime blocking for operations without audit context"
+    migration: "All tier1+ functions MUST use @audit_driven"
+    
+  decorator_specification:
+    name: "@audit_driven"
+    parameters:
+      - category: AuditCategory enum
+      - operation: str
+      - component: Optional[str]
+    automatic_capture:
+      - start_timestamp
+      - end_timestamp
+      - duration_ms
+      - input_parameters
+      - output_result
+      - exceptions
+      - execution_path
+      - correlation_id
+    
+  context_manager:
+    name: "AuditContext"
+    usage: "with AuditContext(ac_id, correlation_id) as ctx"
+    auto_commit: true
+    hash_chain: true
+    
+  enforcement_rules:
+    CORE-032:
+      name: "Audit-First Enforcement"
+      severity: blocked
+      description: "All tier1+ operations MUST use @audit_driven decorator"
+      validation: "AST analysis checks for decorator presence"
+      failure_action: "Block deployment, fail pre-commit hook"
+      
+  guarantees:
+    - "Every operation has audit trail by construction"
+    - "Evidence collected automatically (no manual logging)"
+    - "Tamper detection via hash chains"
+    - "End-to-end traceability via correlation IDs"
+    - "Hallucination detection enabled"
+    - "Brittleness detection enabled"
+
+# ==============================================================================
+# DECISION 2: TIERED MEMORY ARCHITECTURE (APPROVED)
+# ==============================================================================
+
+tiered_memory_architecture:
+  decision: "Option A - Hot/Warm/Cold zones with Redis + SQLite + JSONL.gz"
+  status: APPROVED
+  
+  hot_zone:
+    age_range: "0-7 days"
+    storage: "Redis (in-memory cache) + SQLite (hot partition)"
+    latency_target: "<5ms"
+    use_cases:
+      - "Active phase execution"
+      - "Current AC implementation"
+      - "Real-time dashboard queries"
+      - "Frequent audit lookups"
+    size_limits:
+      ram: "100MB"
+      disk: "1GB"
+    eviction_policy: "LRU (Least Recently Used)"
+    
+  warm_zone:
+    age_range: "7-30 days"
+    storage: "SQLite (warm partition, no cache)"
+    latency_target: "<50ms"
+    use_cases:
+      - "Recent history analysis"
+      - "Debugging past issues"
+      - "Evidence verification"
+      - "Weekly reports"
+    size_limits:
+      disk: "10GB"
+    cleanup_policy: "Compress to cold after 30 days"
+    
+  cold_zone:
+    age_range: "30+ days"
+    storage: "JSONL.gz (compressed archives) + SQLite index"
+    latency_target: "<500ms (includes decompression)"
+    use_cases:
+      - "Historical pattern analysis"
+      - "Compliance audits"
+      - "Long-term trend analysis"
+      - "Cross-version comparisons"
+    size_limits:
+      disk: "Unlimited (archival)"
+    compression_ratio: "~90% disk savings"
+    
+  query_optimizer:
+    routing_logic:
+      - "IF query mentions 'today' OR 'current' → Hot zone"
+      - "IF query mentions 'last week' OR 'recent' → Warm zone"
+      - "IF query mentions version OR >30 days → Cold zone"
+      - "ELSE fallback: Hot → Warm → Cold cascade"
+    performance_target:
+      - "95% queries served from Hot zone (<5ms)"
+      - "4% queries served from Warm zone (<50ms)"
+      - "1% queries served from Cold zone (<500ms)"
+    
+  migration_policy:
+    hot_to_warm: "Automatic after 7 days, runs daily at 02:00 UTC"
+    warm_to_cold: "Automatic after 30 days, runs weekly Sunday 03:00 UTC"
+    compression: "GZIP level 6 (balance speed/size)"
+    index_maintenance: "SQLite index updated during migration"
+    
+  redis_configuration:
+    host: "localhost"
+    port: 6379
+    max_memory: "100MB"
+    eviction_policy: "allkeys-lru"
+    persistence: "RDB snapshot every 5 minutes"
+    
+  advantages:
+    - "10x faster hot queries (Redis cache)"
+    - "90% disk space savings (cold compression)"
+    - "Automatic aging policy (hot→warm→cold)"
+    - "Query optimizer routes to correct zone"
+    - "Unlimited archival storage"
+
+# ==============================================================================
+# DECISION 3: 5-STAGE CHALLENGER PIPELINE (APPROVED)
+# ==============================================================================
+
+five_stage_challenger_pipeline:
+  decision: "Option A - Full 5-stage pipeline (AST, KG, Historical, RAG, Merger)"
+  status: APPROVED
+  latency_target: "2-5 seconds per challenge request"
+  accuracy_target: "95%+ issue detection rate"
+  
+  stage_1_ast_analyzer:
+    name: "AST Analyzer"
+    implementation: "src/intelligence/ast_analyzer.py"
+    technology: "Python ast module + difflib"
+    
+    capabilities:
+      duplicate_detection:
+        method: "AST difflib + function signature matching"
+        threshold: 0.80
+        output: "List of similar functions with similarity scores"
+        
+      governance_violation_detection:
+        method: "AST pattern matching against SKULL rules"
+        rules_checked:
+          - "CORE-005: Detect hardcoded paths"
+          - "CORE-008: Check if tests exist"
+          - "CORE-019: Verify TDD-Master invocation"
+          - "CORE-032: Check @audit_driven decorator"
+        output: "List of violations with line numbers"
+        
+      error_handling_analysis:
+        method: "AST visitor checking try/except coverage"
+        metric: "Percentage of functions with exception handling"
+        target: "≥80% coverage"
+        
+    confidence_scoring:
+      range: "0.0 to 1.0"
+      factors:
+        - "Static analysis certainty"
+        - "Pattern match strength"
+        - "Rule violation severity"
+      weight_in_merger: 0.25
+      
+  stage_2_knowledge_graph_reasoner:
+    name: "Knowledge Graph Reasoner"
+    implementation: "src/intelligence/knowledge_graph_reasoner.py"
+    technology: "NetworkX (Python native)"
+    
+    graph_structure:
+      nodes:
+        - "AC-IDs (110 nodes from AC-INDEX.yaml)"
+        - "Tools (toolkit registry)"
+        - "Patterns (tier3 domain patterns)"
+        - "Orchestrators (11 orchestrators)"
+      edges:
+        - "implements (AC → Tool)"
+        - "depends_on (AC → AC)"
+        - "uses (Tool → Tool)"
+        - "applies_to (Pattern → AC)"
+        - "executes (Orchestrator → AC)"
+        
+    query_types:
+      find_related_acs:
+        cypher_equivalent: "MATCH path from AC with depth 1-3"
+        output: "Related AC-IDs with relationship types"
+        
+      find_implementing_tools:
+        cypher_equivalent: "MATCH AC ← Tool relationship"
+        output: "Tools that implement this AC"
+        
+      find_similar_patterns:
+        cypher_equivalent: "MATCH Pattern → AC by category"
+        output: "Applicable patterns sorted by success rate"
+        
+    confidence_scoring:
+      range: "0.0 to 1.0"
+      factors:
+        - "Semantic distance in graph"
+        - "Relationship strength"
+        - "Pattern success rate"
+      weight_in_merger: 0.30
+      
+  stage_3_historical_pattern_matcher:
+    name: "Historical Pattern Matcher"
+    implementation: "src/intelligence/historical_pattern_matcher.py"
+    technology: "Git history analysis + audit log queries"
+    
+    data_sources:
+      - "Git history (all branches: CORTEX-1.0 through CORTEX-6.0)"
+      - "Audit logs (all operations with outcomes)"
+      - "Evidence bundles (test results)"
+      - "Governance violation logs"
+      
+    analysis_types:
+      success_patterns:
+        query: "Find operations with passed tests and high usage"
+        metric: "Success rate = passed / (passed + failed)"
+        threshold: "≥80% success rate"
+        
+      failure_patterns:
+        query: "Find operations with repeated failures"
+        metric: "Failure rate = failed / (passed + failed)"
+        threshold: "≥50% failure rate"
+        action: "Recommend avoiding this approach"
+        
+      evolution_analysis:
+        method: "Track capability across versions"
+        example: "Authentication: CORTEX-3 → CORTEX-4 → CORTEX-5 → CORTEX-6"
+        output: "What changed, what improved, what failed"
+        
+    confidence_scoring:
+      range: "0.0 to 1.0"
+      factors:
+        - "Outcome success rate"
+        - "Sample size (number of attempts)"
+        - "Recency (newer attempts weighted higher)"
+      weight_in_merger: 0.25
+      
+  stage_4_rag_semantic_search:
+    name: "RAG Semantic Search Engine"
+    implementation: "src/intelligence/rag_semantic_search.py"
+    technology: "FAISS + sentence-transformers"
+    
+    vector_store:
+      engine: "FAISS (Facebook AI Similarity Search)"
+      embedding_model: "sentence-transformers/all-MiniLM-L6-v2"
+      dimension: 384
+      index_type: "IVF_FLAT (inverted file index)"
+      
+    indexed_content:
+      - "All YAML files in cortex-brain/ (500+ files)"
+      - "All AC-ID descriptions from AC-INDEX.yaml (110 ACs)"
+      - "All domain patterns from tier3/ (50+ patterns)"
+      - "Audit log messages (last 30 days, hot+warm zones)"
+      - "Git commit messages (all branches)"
+      
+    query_process:
+      step_1: "Embed user query (384-dim vector)"
+      step_2: "FAISS similarity search (top-k=20)"
+      step_3: "Re-rank by relevance + recency + success rate"
+      step_4: "Return top-3 with source citations"
+      
+    confidence_scoring:
+      range: "0.0 to 1.0"
+      factors:
+        - "Cosine similarity score"
+        - "Document recency"
+        - "Source authority (SSOT files ranked higher)"
+      weight_in_merger: 0.20
+      
+  stage_5_merger_and_ranker:
+    name: "Challenge Merger & Ranker"
+    implementation: "src/intelligence/challenge_merger.py"
+    
+    deduplication:
+      method: "Cosine similarity of challenge embeddings"
+      threshold: 0.85
+      action: "Merge similar challenges, keep highest confidence"
+      
+    weighting:
+      ast_analyzer: 0.25
+      knowledge_graph: 0.30
+      historical_matcher: 0.25
+      rag_search: 0.20
+      multi_source_bonus: "+10% if agreement from 3+ stages"
+      
+    ranking_formula: |
+      combined_score = (
+        ast_confidence * 0.25 +
+        kg_confidence * 0.30 +
+        hist_confidence * 0.25 +
+        rag_confidence * 0.20
+      ) * (1 + 0.1 * source_count)
+      
+    filtering:
+      min_confidence: 0.30
+      max_challenges: 3
+      
+    output_format:
+      challenge_1:
+        rank: 1
+        title: "Concise challenge title"
+        description: "Detailed explanation"
+        evidence: ["Source 1", "Source 2", "Source 3"]
+        recommendation: "Specific actionable advice"
+        confidence: 0.92
+        source_stages: ["ast_analyzer", "knowledge_graph_reasoner"]
+        
+  integration_with_intent_router:
+    workflow:
+      step_1: "User request arrives at IntentRouter"
+      step_2: "IntentRouter calls ChallengerPipeline.analyze(request)"
+      step_3: "ChallengerPipeline runs 5 stages in parallel (ThreadPoolExecutor)"
+      step_4: "Merger deduplicates and ranks by confidence"
+      step_5: "IntentRouter presents top 3 challenges to user"
+      step_6: "User reviews: Accept / Reject / Modify"
+      step_7_accept: "Route with enhanced context (challenge insights)"
+      step_7_reject: "Route original request, log rejection reason to challenge_history"
+      step_8: "Store outcome in challenge_history for learning"
+      
+  performance_optimization:
+    parallel_execution: "5 stages run concurrently via ThreadPoolExecutor"
+    caching: "Cache graph queries for 5 minutes"
+    embedding_cache: "Cache embeddings in vector_index table"
+    timeout: "5 seconds max, return partial results if timeout"
+
+# ==============================================================================
+# DECISION 4: NETWORKX GRAPH ENGINE (APPROVED)
+# ==============================================================================
+
+knowledge_graph_engine:
+  decision: "Option A - NetworkX (Python library, no server)"
+  status: APPROVED
+  
+  rationale:
+    - "Simple Python-native implementation"
+    - "No server infrastructure required"
+    - "Fast graph queries for <100k nodes"
+    - "Sufficient for CORTEX scale (110 ACs, ~500 tools)"
+    - "Easy to migrate to Neo4j if needed later"
+    
+  implementation:
+    library: "networkx>=3.0"
+    graph_type: "DiGraph (directed graph)"
+    persistence: "Pickle file + SQLite backup"
+    
+  node_types:
+    ac_id:
+      count: 110
+      properties: ["id", "title", "category", "status", "dependencies"]
+      
+    tool:
+      count: "~500 (growing)"
+      properties: ["name", "tier", "capabilities", "usage_count"]
+      
+    pattern:
+      count: "~50"
+      properties: ["name", "category", "success_rate", "source"]
+      
+    orchestrator:
+      count: 11
+      properties: ["name", "phase", "status", "ac_range"]
+      
+  edge_types:
+    implements: "Tool → AC-ID (tool implements this AC)"
+    depends_on: "AC-ID → AC-ID (AC depends on another)"
+    uses: "Tool → Tool (tool uses another tool)"
+    applies_to: "Pattern → AC-ID (pattern applies to this AC)"
+    executes: "Orchestrator → AC-ID (orchestrator executes this AC)"
+    
+  query_performance:
+    simple_queries: "<10ms (find neighbors)"
+    path_queries: "<50ms (shortest path, depth 3)"
+    subgraph_queries: "<100ms (connected components)"
+    
+  population_strategy:
+    initial_load:
+      - "Parse AC-INDEX.yaml → create AC-ID nodes"
+      - "Parse tool_registry.yaml → create Tool nodes"
+      - "Parse tier3/domain-patterns.yaml → create Pattern nodes"
+      - "Parse master-plan.yaml → create Orchestrator nodes"
+      - "Parse dependencies → create edges"
+      
+    incremental_updates:
+      - "When AC implemented → add implements edge"
+      - "When tool created → add Tool node + uses edges"
+      - "When pattern learned → add Pattern node + applies_to edges"
+      
+  migration_path_to_neo4j:
+    when: "If node count exceeds 100k or query latency >200ms"
+    how: "Export NetworkX to Neo4j via py2neo"
+    effort: "~2 days (mostly testing)"
+
+# ==============================================================================
+# DECISION 5: FAISS VECTOR STORE (APPROVED)
+# ==============================================================================
+
+vector_store:
+  decision: "Option A - FAISS (Facebook AI Similarity Search)"
+  status: APPROVED
+  
+  rationale:
+    - "Fast similarity search (CPU/GPU support)"
+    - "Battle-tested (used by Facebook, industry standard)"
+    - "Handles <1M vectors efficiently"
+    - "Local deployment (no cloud dependency)"
+    - "Python bindings well-maintained"
+    
+  implementation:
+    library: "faiss-cpu>=1.7.4 (or faiss-gpu if GPU available)"
+    index_type: "IndexIVFFlat (inverted file index)"
+    embedding_model: "sentence-transformers/all-MiniLM-L6-v2"
+    dimension: 384
+    
+  indexed_content_types:
+    yaml_files:
+      count: "~500"
+      source: "cortex-brain/**/*.yaml"
+      update_frequency: "Daily"
+      
+    ac_descriptions:
+      count: 110
+      source: "AC-INDEX.yaml"
+      update_frequency: "On AC addition/modification"
+      
+    domain_patterns:
+      count: "~50"
+      source: "cortex-brain/tier3/domain-patterns.yaml"
+      update_frequency: "On pattern addition"
+      
+    audit_logs:
+      count: "~10k-100k (last 30 days)"
+      source: "Hot + Warm zones"
+      update_frequency: "Hourly"
+      
+    git_commits:
+      count: "~5k"
+      source: "All branches"
+      update_frequency: "On commit"
+      
+  index_configuration:
+    nlist: 100  # Number of clusters
+    nprobe: 10  # Number of clusters to search
+    metric: "Inner Product (cosine similarity)"
+    
+  query_performance:
+    embedding_generation: "~10ms per query"
+    similarity_search: "~5ms for top-20 results"
+    re_ranking: "~5ms"
+    total_latency: "<50ms (cached embeddings)"
+    
+  persistence:
+    index_file: "cortex-brain/intelligence/faiss_index.bin"
+    metadata_db: "vector_index table in cortex-unified.db"
+    backup_frequency: "Daily"
+    
+  embedding_cache:
+    storage: "vector_index.embedding (BLOB)"
+    hit_rate_target: "≥90%"
+    eviction: "LRU after 30 days"
+    
+  scaling_strategy:
+    current_capacity: "<1M vectors"
+    if_exceeds_1M: "Migrate to IndexIVFPQ (product quantization)"
+    if_exceeds_10M: "Consider Pinecone (cloud) or Milvus (distributed)"
+
+# ==============================================================================
+# ENHANCED DATABASE SCHEMA (FINAL)
+# ==============================================================================
+
+database_schema:
+  database_file: "cortex-brain/database/cortex-unified.db"
+  schema_version: "2.0.0-FINAL"
+  wal_mode: true
+  
+  tables:
+    audit_logs:
+      description: "Primary audit trail (hot zone)"
+      columns:
+        id: "INTEGER PRIMARY KEY AUTOINCREMENT"
+        timestamp: "TEXT NOT NULL"
+        level: "TEXT NOT NULL CHECK(level IN ('TRACE','DEBUG','INFO','WARNING','ERROR','CRITICAL'))"
+        category: "TEXT NOT NULL"
+        component: "TEXT NOT NULL"
+        operation: "TEXT NOT NULL"
+        message: "TEXT"
+        ac_id: "TEXT"
+        correlation_id: "TEXT NOT NULL"
+        duration_ms: "REAL"
+        context: "JSON"
+        metadata: "JSON"
+        event_hash: "TEXT NOT NULL"
+        prev_event_hash: "TEXT"
+      indexes:
+        - "CREATE INDEX idx_timestamp ON audit_logs(timestamp)"
+        - "CREATE INDEX idx_correlation ON audit_logs(correlation_id)"
+        - "CREATE INDEX idx_ac_id ON audit_logs(ac_id)"
+        - "CREATE INDEX idx_category_level ON audit_logs(category, level)"
+        - "CREATE INDEX idx_event_hash ON audit_logs(event_hash)"
+        
+    audit_logs_warm:
+      description: "Warm zone (7-30 days, same schema as audit_logs)"
+      
+    evidence_bundles:
+      description: "Captured test evidence"
+      columns:
+        id: "INTEGER PRIMARY KEY AUTOINCREMENT"
+        ac_id: "TEXT NOT NULL"
+        correlation_id: "TEXT NOT NULL"
+        timestamp: "TEXT NOT NULL"
+        test_framework: "TEXT"
+        total_tests: "INTEGER NOT NULL"
+        passed_tests: "INTEGER NOT NULL"
+        failed_tests: "INTEGER NOT NULL"
+        skipped_tests: "INTEGER"
+        coverage_percentage: "REAL"
+        test_results: "JSON NOT NULL"
+        evidence_file: "TEXT"
+      indexes:
+        - "CREATE INDEX idx_eb_ac_id ON evidence_bundles(ac_id)"
+        - "CREATE INDEX idx_eb_timestamp ON evidence_bundles(timestamp)"
+        - "CREATE INDEX idx_eb_correlation ON evidence_bundles(correlation_id)"
+        
+    knowledge_graph_nodes:
+      description: "Graph nodes for KG reasoning"
+      columns:
+        id: "INTEGER PRIMARY KEY AUTOINCREMENT"
+        node_type: "TEXT NOT NULL CHECK(node_type IN ('ac_id','tool','pattern','orchestrator'))"
+        node_id: "TEXT UNIQUE NOT NULL"
+        properties: "JSON NOT NULL"
+        embedding: "BLOB"
+        created_at: "TEXT NOT NULL"
+        updated_at: "TEXT"
+      indexes:
+        - "CREATE INDEX idx_node_type ON knowledge_graph_nodes(node_type)"
+        - "CREATE INDEX idx_node_id ON knowledge_graph_nodes(node_id)"
+        
+    knowledge_graph_edges:
+      description: "Graph edges for relationships"
+      columns:
+        id: "INTEGER PRIMARY KEY AUTOINCREMENT"
+        from_node_id: "TEXT NOT NULL"
+        to_node_id: "TEXT NOT NULL"
+        edge_type: "TEXT NOT NULL CHECK(edge_type IN ('implements','depends_on','uses','applies_to','executes'))"
+        properties: "JSON"
+        created_at: "TEXT NOT NULL"
+      indexes:
+        - "CREATE INDEX idx_from_to ON knowledge_graph_edges(from_node_id, to_node_id)"
+        - "CREATE INDEX idx_edge_type ON knowledge_graph_edges(edge_type)"
+        - "CREATE UNIQUE INDEX idx_unique_edge ON knowledge_graph_edges(from_node_id, to_node_id, edge_type)"
+        
+    vector_index:
+      description: "FAISS index metadata"
+      columns:
+        id: "INTEGER PRIMARY KEY AUTOINCREMENT"
+        content_type: "TEXT NOT NULL CHECK(content_type IN ('yaml','ac_id','pattern','audit_log','git_commit'))"
+        content_id: "TEXT NOT NULL"
+        content_text: "TEXT NOT NULL"
+        embedding: "BLOB NOT NULL"
+        timestamp: "TEXT NOT NULL"
+      indexes:
+        - "CREATE INDEX idx_content_type ON vector_index(content_type)"
+        - "CREATE INDEX idx_content_id ON vector_index(content_id)"
+        - "CREATE INDEX idx_timestamp ON vector_index(timestamp)"
+        
+    challenge_history:
+      description: "Track user responses to challenges"
+      columns:
+        id: "INTEGER PRIMARY KEY AUTOINCREMENT"
+        timestamp: "TEXT NOT NULL"
+        challenge_type: "TEXT NOT NULL"
+        challenge_description: "TEXT NOT NULL"
+        recommendation: "TEXT NOT NULL"
+        confidence: "REAL NOT NULL CHECK(confidence BETWEEN 0.0 AND 1.0)"
+        user_response: "TEXT NOT NULL CHECK(user_response IN ('accepted','rejected','modified'))"
+        user_rationale: "TEXT"
+        correlation_id: "TEXT NOT NULL"
+      indexes:
+        - "CREATE INDEX idx_ch_timestamp ON challenge_history(timestamp)"
+        - "CREATE INDEX idx_ch_response ON challenge_history(user_response)"
+        - "CREATE INDEX idx_ch_correlation ON challenge_history(correlation_id)"
+
+# ==============================================================================
+# IMPLEMENTATION ROADMAP
+# ==============================================================================
+
+implementation_roadmap:
+  
+  phase_1_audit_foundation:
+    duration: "Week 1 (5 days)"
+    priority: CRITICAL
+    deliverables:
+      - "AuditContext context manager implementation"
+      - "@audit_driven decorator with hash chain support"
+      - "TieredMemoryManager (Hot/Warm/Cold zones)"
+      - "Redis integration and configuration"
+      - "EvidenceCollector auto-capture"
+      - "IntegrityVerifier (AC-AUDIT-007 hash chains)"
+      - "Database schema migration to v2.0.0-FINAL"
+      - "CORE-032 governance rule implementation"
+    success_criteria:
+      - "All tests pass with @audit_driven decorator"
+      - "Audit entries visible in Hot zone (<5ms latency)"
+      - "Hash chain validation working"
+      - "Redis caching operational"
+      
+  phase_2_intelligence_layer:
+    duration: "Week 2 (5 days)"
+    priority: HIGH
+    deliverables:
+      - "ASTAnalyzer implementation with duplicate detection"
+      - "KnowledgeGraphReasoner using NetworkX"
+      - "Knowledge graph population from SSOT files"
+      - "HistoricalPatternMatcher with git integration"
+      - "RAGSemanticSearchEngine with FAISS"
+      - "Vector index generation for all content"
+      - "ConfidenceScorer implementation"
+    success_criteria:
+      - "AST analyzer detects duplicates with 80%+ accuracy"
+      - "Knowledge graph contains 110 AC nodes + 500 tool nodes"
+      - "Historical matcher finds patterns in git history"
+      - "RAG search returns relevant results in <50ms"
+      
+  phase_3_challenger_pipeline:
+    duration: "Week 3 (5 days)"
+    priority: HIGH
+    deliverables:
+      - "5-stage ChallengerPipeline orchestrator"
+      - "Challenge merger and deduplication logic"
+      - "Confidence-weighted ranking system"
+      - "IntentRouter integration (pre-routing challenge)"
+      - "User challenge workflow (Accept/Reject/Modify)"
+      - "challenge_history tracking"
+    success_criteria:
+      - "Pipeline returns 3 challenges in <5 seconds"
+      - "95%+ issue detection rate (validated via test cases)"
+      - "User acceptance rate ≥70%"
+      
+  phase_4_evidence_framework:
+    duration: "Week 4 (5 days)"
+    priority: MEDIUM
+    deliverables:
+      - "Hallucination detection system"
+      - "Brittleness analyzer with dependency graphs"
+      - "Evidence verification automation"
+      - "Dependency graph visualization"
+      - "Monitoring dashboards (Grafana)"
+      - "Alerting system (Slack integration)"
+    success_criteria:
+      - "Hallucination detection catches 99%+ false claims"
+      - "Brittleness score calculated for all components"
+      - "Dashboards show real-time metrics"
+
+# ==============================================================================
+# SUCCESS METRICS (FINAL TARGETS)
+# ==============================================================================
+
+success_metrics:
+  
+  audit_coverage:
+    metric: "Percentage of operations with audit entries"
+    target: "100%"
+    current: "TBD"
+    measurement: "SELECT COUNT(DISTINCT correlation_id) FROM audit_logs / expected_operations"
+    
+  evidence_verification_rate:
+    metric: "Percentage of implemented ACs with test evidence"
+    target: "≥95%"
+    current: "32.7%"
+    measurement: "SELECT COUNT(DISTINCT ac_id) FROM evidence_bundles / implemented_acs"
+    
+  hallucination_detection_rate:
+    metric: "Percentage of hallucinations caught"
+    target: "≥99%"
+    current: "TBD"
+    measurement: "Detected hallucinations / total false claims"
+    
+  brittleness_score_avg:
+    metric: "Average brittleness score across components"
+    target: "≤0.30 (robust)"
+    current: "TBD"
+    measurement: "AVG(brittleness_score) from dependency analysis"
+    
+  challenger_acceptance_rate:
+    metric: "Percentage of challenges accepted by users"
+    target: "≥70%"
+    current: "TBD"
+    measurement: "SELECT COUNT(*) FROM challenge_history WHERE user_response='accepted' / total"
+    
+  rag_query_accuracy:
+    metric: "Percentage of RAG queries returning relevant results"
+    target: "≥90%"
+    current: "TBD"
+    measurement: "User feedback on RAG search results"
+    
+  hot_zone_hit_rate:
+    metric: "Percentage of queries served from Hot zone"
+    target: "≥95%"
+    current: "TBD"
+    measurement: "Hot zone queries / total queries"
+    
+  average_query_latency:
+    metric: "P95 query latency for audit lookups"
+    target: "<10ms"
+    current: "TBD"
+    measurement: "P95 latency from Redis + SQLite queries"
+
+# ==============================================================================
+# GOVERNANCE ALIGNMENT
+# ==============================================================================
+
+governance_alignment:
+  
+  existing_skull_rules:
+    - CORE-001: "Incremental Autonomous Execution"
+    - CORE-002: "No Summary File Generation"
+    - CORE-005: "Path Portability (Cross-Platform)"
+    - CORE-008: "TDD Enforcement"
+    - CORE-009: "Plan File Organization"
+    - CORE-017: "Governance Enforcement"
+    - CORE-019: "TDD-Master Required"
+    - CORE-024: "MCP Tool Decorator Required"
+    - CORE-026: "ToolkitOrchestrator Single Path"
+    - CORE-027: "Test Pattern Consolidation"
+    - CORE-028: "MCP Tool Instance Uniqueness"
+    
+  new_skull_rules:
+    CORE-032:
+      name: "Audit-First Enforcement"
+      severity: blocked
+      category: audit_integrity
+      description: "All tier1+ operations MUST use @audit_driven decorator"
+      enforcement: "AST analysis in pre-commit hook + CI/CD"
+      failure_mode: "Silent failures, no evidence trail"
+      validation: "Check for decorator presence on all tier1+ functions"
+      
+    CORE-033:
+      name: "Tiered Memory Compliance"
+      severity: blocked
+      category: performance
+      description: "All queries MUST use TieredMemoryManager (no direct DB access)"
+      enforcement: "Runtime interception"
+      failure_mode: "Slow queries, cache misses"
+      
+    CORE-034:
+      name: "Challenge Acknowledgment"
+      severity: warning
+      category: intelligence
+      description: "Users MUST acknowledge challenges (Accept/Reject/Modify)"
+      enforcement: "IntentRouter blocks until response"
+      failure_mode: "Missed optimization opportunities"
+
+# ==============================================================================
+# REFERENCES
+# ==============================================================================
+
+references:
+  source_documents:
+    - "audit-driven-rag-architecture.yaml (this file)"
+    - "AUDIT-DRIVEN-RAG-SUMMARY.md"
+    - "cortex7-requirements.yaml"
+    - "cortex-toolkit-architecture.yaml (v1.0.0 baseline)"
+    
+  code_snippets:
+    - "snippets-rag/audit-first-decorator.py"
+    - "snippets-rag/tiered-memory-manager.py (TODO)"
+    - "snippets-rag/ast-analyzer.py (TODO)"
+    - "snippets-rag/knowledge-graph-reasoner.py (TODO)"
+    - "snippets-rag/challenger-pipeline.py (TODO)"
+    - "snippets-rag/hallucination-detector.py (TODO)"
+    - "snippets-rag/brittleness-analyzer.py (TODO)"
+    
+  ssot_files:
+    - "cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml"
+    - "cortex-brain/cx6-plan/master-plan.yaml"
+    - "cortex-brain/tier0/governance/core-rules.yaml"
+    - "cortex-brain/tier1/tracking/progress-tracker.json"
+

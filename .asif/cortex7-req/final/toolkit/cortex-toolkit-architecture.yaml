@@ -1,0 +1,562 @@
+# ==============================================================================
+# CORTEX TOOLKIT - Production Architecture Specification
+# ==============================================================================
+# Purpose: Centralized tool library with persistent memory and RAG capabilities
+# Version: 1.0.0
+# Date: 2026-01-14
+# Author: Asif Hussain
+# Status: DESIGN_APPROVED
+# ==============================================================================
+
+metadata:
+  project: CORTEX_TOOLKIT
+  version: 1.0.0
+  date: 2026-01-14
+  author: Asif Hussain
+  status: design_approved
+  description: |
+    Centralized Python tool library with:
+    - Persistent memory via SQLite
+    - RAG-enabled semantic search
+    - Real-time duplicate detection
+    - MCP exposure for orchestrators
+    - TDD-enforced quality gates
+
+# ==============================================================================
+# TIERING STRATEGY (ENHANCED 4-TIER)
+# ==============================================================================
+tiering_strategy:
+  philosophy: "Separation of concerns with clear dependency hierarchy"
+  
+  tier0_primitives:
+    name: "System Primitives"
+    description: "Atomic operations with zero dependencies"
+    examples:
+      - file_ops (pathlib-based, CORE-005 compliant)
+      - process_ops (subprocess management)
+      - git_ops (git primitives via GitPython)
+      - db_ops (SQLite operations with WAL mode)
+      - json_ops (JSON parsing/serialization)
+      - yaml_ops (YAML parsing/serialization)
+      - text_ops (string manipulation, regex)
+    rules:
+      - Must use pathlib.Path for all file operations
+      - Must be cross-platform (MAC/WIN/LINUX)
+      - Must have 100% test coverage
+      - Must be stateless (no side effects)
+      - Must document complexity (O(n) notation)
+    auto_creation: true
+    approval_required: false
+    
+  tier1_composed:
+    name: "Composed Tools"
+    description: "Higher-level operations using tier0 primitives"
+    examples:
+      - config_manager (YAML + JSON + validation)
+      - file_scanner (recursive walk + filtering)
+      - diff_calculator (file comparison)
+      - template_renderer (Jinja2 + YAML data)
+      - log_aggregator (multi-file log parsing)
+    rules:
+      - Must compose tier0 tools only
+      - Must declare dependencies explicitly
+      - Must handle errors gracefully
+      - Must log operations to audit trail
+    auto_creation: false
+    approval_required: true
+    approval_type: "propose_spec"
+    
+  tier2_domain:
+    name: "Domain-Specific Tools"
+    description: "Business logic for CORTEX operations"
+    examples:
+      - audit_tools (audit log queries, evidence bundles)
+      - planning_tools (plan generation, AC validation)
+      - validation_tools (AC criteria checking)
+      - evidence_tools (test result aggregation)
+      - governance_tools (SKULL rule enforcement)
+    rules:
+      - Must integrate with cortex-brain tiers
+      - Must enforce governance rules
+      - Must update persistent memory
+      - Must generate audit trail entries
+    auto_creation: false
+    approval_required: true
+    approval_type: "full_review"
+    
+  tier3_orchestrators:
+    name: "Orchestrator Utilities"
+    description: "Tools specifically for orchestrator workflows"
+    examples:
+      - state_manager (progress-tracker.json updates)
+      - todo_manager (task queue operations)
+      - route_resolver (intent → orchestrator mapping)
+      - lifecycle_tracker (phase transitions)
+    rules:
+      - Must integrate with MasterOrchestrator
+      - Must maintain SSOT integrity
+      - Must enforce sequential execution
+      - Must validate against governance
+    auto_creation: false
+    approval_required: true
+    approval_type: "full_review"
+
+  dependency_rules:
+    tier0: []  # No dependencies
+    tier1: [tier0]
+    tier2: [tier0, tier1]
+    tier3: [tier0, tier1, tier2]
+    
+  challenge_rationale: |
+    ENHANCED: Added tier3 for orchestrator-specific utilities.
+    WHY: Separates orchestration logic from domain logic, enables
+    orchestrators to evolve independently without breaking domain tools.
+
+# ==============================================================================
+# CONSOLIDATION STRATEGY (REAL-TIME)
+# ==============================================================================
+consolidation_strategy:
+  trigger: real_time
+  threshold: 80  # Similarity percentage
+  
+  detection_method:
+    step_1: "AST analysis (compare function signatures)"
+    step_2: "Semantic similarity (cosine distance of docstrings)"
+    step_3: "Usage pattern analysis (call graphs)"
+    
+  workflow:
+    - event: "ToolCreator about to create new tool"
+    - action: "ConsolidationAgent.check_similarity(new_tool_spec)"
+    - if_similarity_gt_80:
+        - log: "audit.db → duplicate_detection"
+        - notify: "Similar tool exists: {existing_tool}"
+        - propose: "Consolidation plan with diff"
+        - if_tier0:
+            - auto_merge: true
+            - rationale: "Primitives should be DRY"
+        - if_tier1_or_higher:
+            - require_approval: true
+            - show_diff: true
+            - options: ["merge", "keep_both", "refactor"]
+    - if_approved:
+        - execute: "Merge tools → update registry"
+        - deprecate: "Old tool redirects to new"
+        - update: "All dependent tools"
+        
+  ast_analysis:
+    compare:
+      - function_names
+      - parameter_signatures
+      - return_types
+      - docstring_similarity
+    tools:
+      - ast.parse (Python AST)
+      - difflib.SequenceMatcher
+      
+  semantic_similarity:
+    method: "sentence-transformers/all-MiniLM-L6-v2"
+    embedding_dim: 384
+    similarity_metric: cosine
+    threshold: 0.8
+    fallback: "keyword_matching"
+    
+  usage_pattern_analysis:
+    track:
+      - call_frequency (from usage_analytics.db)
+      - parameter_patterns
+      - error_rates
+      - performance_metrics
+
+# ==============================================================================
+# TOOL CREATION APPROVAL (HYBRID)
+# ==============================================================================
+tool_creation_approval:
+  tier0_primitives:
+    auto_create: true
+    rationale: "Primitives are well-defined, low risk"
+    governance:
+      - Must pass TDD cycle (RED → GREEN → REFACTOR)
+      - Must have docstring with examples
+      - Must be cross-platform
+    post_creation:
+      - Register in tool_registry.yaml
+      - Add to usage_analytics.db
+      - Expose via MCP (tier0 namespace)
+      
+  tier1_composed:
+    auto_create: false
+    approval_type: "propose_spec"
+    workflow:
+      - ToolCreator generates tool spec
+      - Spec includes: purpose, inputs, outputs, dependencies
+      - User reviews spec (approve/reject/modify)
+      - If approved → ToolCreator implements via TDD
+      - Register + expose via MCP
+    rationale: "Composed tools have complexity, need review"
+    
+  tier2_domain:
+    auto_create: false
+    approval_type: "full_review"
+    workflow:
+      - ToolCreator generates tool spec + implementation
+      - Implementation includes tests
+      - User reviews: spec + code + tests
+      - User can modify before approval
+      - If approved → register + expose
+    rationale: "Domain tools affect business logic, require scrutiny"
+    
+  tier3_orchestrators:
+    auto_create: false
+    approval_type: "full_review"
+    workflow:
+      - Same as tier2
+      - Additional: validate against orchestrator contracts
+    rationale: "Orchestrator tools affect system integrity"
+
+# ==============================================================================
+# SEMANTIC SEARCH (HYBRID)
+# ==============================================================================
+semantic_search:
+  strategy: hybrid
+  
+  phase_1_keyword:
+    method: "Fast keyword matching"
+    index: "tool_registry.yaml → capability_keywords"
+    algorithm: "Inverted index with TF-IDF scoring"
+    speed: "<10ms"
+    accuracy: "~70%"
+    use_when: "Simple queries (1-3 words)"
+    
+  phase_2_llm_fallback:
+    trigger: "No results from keyword OR confidence <0.5"
+    method: "Sentence transformer embeddings"
+    model: "sentence-transformers/all-MiniLM-L6-v2"
+    embedding_cache: "capability_embeddings.db (SQLite)"
+    algorithm: "Cosine similarity search"
+    speed: "<200ms (cached), <2s (uncached)"
+    accuracy: "~95%"
+    use_when: "Complex queries or keyword failure"
+    
+  query_expansion:
+    synonyms: true
+    related_terms: true
+    domain_specific: true
+    source: "cortex-brain/tier3/domain-patterns.yaml"
+    
+  capability_resolver:
+    input: "Natural language capability request"
+    output: "Ranked list of matching tools"
+    ranking_factors:
+      - semantic_similarity: 0.4
+      - usage_frequency: 0.3
+      - recency: 0.2
+      - user_preference: 0.1
+
+# ==============================================================================
+# MCP EXPOSURE (BY TIER - SELECTIVE)
+# ==============================================================================
+mcp_exposure:
+  strategy: by_tier
+  rationale: |
+    Selective exposure enables:
+    - Scalability (large toolkits don't overwhelm MCP registry)
+    - Extensibility (add tiers without breaking existing)
+    - Security (control which tools exposed to which users)
+    - Performance (lazy load tools on demand)
+  
+  tier0_exposure:
+    namespace: "cortex.toolkit.primitives"
+    expose: all
+    load_strategy: eager
+    rationale: "Primitives are lightweight, always needed"
+    mcp_config: "cortex-toolkit/mcp/tier0-primitives.yaml"
+    
+  tier1_exposure:
+    namespace: "cortex.toolkit.composed"
+    expose: on_demand
+    load_strategy: lazy
+    rationale: "Composed tools loaded when requested"
+    mcp_config: "cortex-toolkit/mcp/tier1-composed.yaml"
+    
+  tier2_exposure:
+    namespace: "cortex.toolkit.domain"
+    expose: selective
+    load_strategy: lazy
+    filter_by:
+      - user_role (engineer, pm, business_user)
+      - orchestrator_context
+    rationale: "Domain tools filtered by access control"
+    mcp_config: "cortex-toolkit/mcp/tier2-domain.yaml"
+    
+  tier3_exposure:
+    namespace: "cortex.toolkit.orchestrators"
+    expose: orchestrators_only
+    load_strategy: lazy
+    access_control: strict
+    rationale: "Only orchestrators can use these tools"
+    mcp_config: "cortex-toolkit/mcp/tier3-orchestrators.yaml"
+    
+  mcp_server_architecture:
+    primary_server: "cortex-toolkit-server"
+    port: 5678
+    protocol: "HTTP + WebSocket"
+    discovery: "Dynamic registration via tool_registry.yaml"
+    health_check: "/health (every 10s)"
+    
+  extensibility:
+    new_tier_addition:
+      - Create tier4/ directory
+      - Add tier4_exposure config
+      - Update mcp_bridge.py routing
+      - Register in tool_registry.yaml
+      - No changes to existing tiers required
+
+# ==============================================================================
+# TOOL VERSIONING (BREAKING CHANGES)
+# ==============================================================================
+tool_versioning:
+  strategy: semantic_versioning
+  format: "MAJOR.MINOR.PATCH"
+  
+  version_policy:
+    major_bump:
+      trigger: "Breaking changes (API signature change)"
+      action:
+        - Increment MAJOR (1.0 → 2.0)
+        - Deprecate v1.0 immediately
+        - Create v2.0 with new implementation
+        - Update all dependent tools
+        - Log deprecation to audit.db
+      retention: "v1.0 deleted after 30 days"
+      migration_guide: auto_generated
+      
+    minor_bump:
+      trigger: "New features (backward compatible)"
+      action:
+        - Increment MINOR (1.0 → 1.1)
+        - Keep existing functionality
+        - Add new capabilities
+      retention: "Indefinite"
+      
+    patch_bump:
+      trigger: "Bug fixes (no API change)"
+      action:
+        - Increment PATCH (1.0.0 → 1.0.1)
+        - Fix implementation only
+      retention: "Indefinite"
+  
+  deprecation_workflow:
+    day_0:
+      - Mark tool as deprecated in registry
+      - Add deprecation warning to docstring
+      - Log all usage to audit.db
+      
+    day_15:
+      - Send notification to all users
+      - Show migration guide in help text
+      
+    day_30:
+      - Delete old tool version
+      - Redirect calls to new version
+      - Archive code in git history
+      
+  migration_automation:
+    detect: "Find all usages of deprecated tool"
+    analyze: "Check if auto-migration possible"
+    if_safe:
+      - auto_migrate: true
+      - update_code: true
+      - run_tests: true
+    if_unsafe:
+      - notify_user: true
+      - provide_migration_guide: true
+
+# ==============================================================================
+# PERSISTENT MEMORY (SQLITE + RAG)
+# ==============================================================================
+persistent_memory:
+  database: cortex-brain/database/toolkit.db
+  schema_version: "1.0"
+  
+  tables:
+    tool_registry:
+      columns:
+        - id (INTEGER PRIMARY KEY)
+        - name (TEXT UNIQUE NOT NULL)
+        - tier (TEXT NOT NULL)
+        - version (TEXT NOT NULL)
+        - capability_description (TEXT)
+        - file_path (TEXT NOT NULL)
+        - created_at (TEXT NOT NULL)
+        - updated_at (TEXT)
+        - deprecated_at (TEXT)
+        - usage_count (INTEGER DEFAULT 0)
+        - avg_execution_time_ms (REAL)
+      indexes:
+        - idx_name ON tool_registry(name)
+        - idx_tier ON tool_registry(tier)
+        - idx_capability ON tool_registry(capability_description)
+        
+    capability_embeddings:
+      columns:
+        - tool_id (INTEGER FOREIGN KEY)
+        - embedding (BLOB)  # 384-dim float32 array
+        - model_version (TEXT)
+        - created_at (TEXT)
+      indexes:
+        - idx_tool_id ON capability_embeddings(tool_id)
+        
+    tool_dependencies:
+      columns:
+        - tool_id (INTEGER)
+        - depends_on_tool_id (INTEGER)
+        - dependency_type (TEXT)
+      indexes:
+        - idx_composite ON tool_dependencies(tool_id, depends_on_tool_id)
+        
+    usage_analytics:
+      columns:
+        - id (INTEGER PRIMARY KEY)
+        - tool_id (INTEGER)
+        - timestamp (TEXT)
+        - orchestrator (TEXT)
+        - execution_time_ms (REAL)
+        - success (BOOLEAN)
+        - error_message (TEXT)
+      indexes:
+        - idx_tool_timestamp ON usage_analytics(tool_id, timestamp)
+        
+    consolidation_history:
+      columns:
+        - id (INTEGER PRIMARY KEY)
+        - old_tool_id (INTEGER)
+        - new_tool_id (INTEGER)
+        - similarity_score (REAL)
+        - merged_at (TEXT)
+        - rationale (TEXT)
+      indexes:
+        - idx_merged_at ON consolidation_history(merged_at)
+
+# ==============================================================================
+# IMPLEMENTATION PHASES
+# ==============================================================================
+implementation_phases:
+  phase_1_foundation:
+    duration: "Week 1"
+    deliverables:
+      - cortex-toolkit/ directory structure
+      - tier0 primitives (10 tools)
+      - tool_registry.yaml schema
+      - toolkit.db SQLite schema
+      - ToolkitManager orchestrator
+      - ToolCreator orchestrator (basic)
+      - @toolkit_tool decorator
+      - Unit tests (100% coverage)
+      
+  phase_2_intelligence:
+    duration: "Week 2"
+    deliverables:
+      - CapabilityResolver (keyword + LLM)
+      - ConsolidationAgent (AST + semantic)
+      - Embedding generation pipeline
+      - Usage analytics tracking
+      - Real-time duplicate detection
+      - Integration tests
+      
+  phase_3_mcp_integration:
+    duration: "Week 3"
+    deliverables:
+      - MCP server (tier-based exposure)
+      - MCP bridge (Python tools → MCP)
+      - Dynamic registration system
+      - Health monitoring
+      - Load testing (1000 tools)
+      
+  phase_4_production:
+    duration: "Week 4"
+    deliverables:
+      - MasterOrchestrator integration
+      - Migration of existing scripts/
+      - Deprecation of old scripts
+      - Documentation + examples
+      - Performance benchmarks
+      - Monitoring dashboards
+
+# ==============================================================================
+# GOVERNANCE ALIGNMENT
+# ==============================================================================
+governance_alignment:
+  skull_rules:
+    CORE-005: "All tier0 tools use pathlib.Path"
+    CORE-008: "All tools created via TDD"
+    CORE-024: "All tools use @toolkit_tool decorator"
+    CORE-026: "ToolkitOrchestrator single path access"
+    CORE-027: "Test pattern consolidation enforced"
+    CORE-028: "One MCP tool instance per category"
+    
+  new_rules:
+    CORE-029:
+      name: "Toolkit Registry Authority"
+      severity: blocked
+      description: "tool_registry.yaml is SSOT for all tools"
+      enforcement: "Block tool creation if not registered"
+      
+    CORE-030:
+      name: "Real-Time Consolidation"
+      severity: blocked
+      description: "Similarity >80% triggers merge workflow"
+      enforcement: "Block duplicate tool creation"
+      
+    CORE-031:
+      name: "Tiered Approval Gates"
+      severity: blocked
+      description: "Tier1+ requires approval before creation"
+      enforcement: "Block auto-creation for tier1+"
+
+# ==============================================================================
+# SUCCESS METRICS
+# ==============================================================================
+success_metrics:
+  tool_quality:
+    - test_coverage: "100% for tier0, >=95% for tier1+"
+    - code_quality: "pylint score >=9.0"
+    - documentation: "All tools have docstrings + examples"
+    
+  consolidation_effectiveness:
+    - duplicate_detection_rate: ">=95%"
+    - false_positive_rate: "<=5%"
+    - merge_success_rate: ">=90%"
+    
+  performance:
+    - keyword_search_latency: "<10ms"
+    - llm_search_latency: "<200ms (cached)"
+    - tool_creation_time: "<5 minutes (tier0)"
+    - mcp_response_time: "<50ms"
+    
+  adoption:
+    - scripts_migrated: "100% by end of Phase 4"
+    - orchestrator_usage: "100% via toolkit by Phase 4"
+    - user_satisfaction: ">=90% positive feedback"
+
+# ==============================================================================
+# REFERENCES
+# ==============================================================================
+references:
+  specifications:
+    - file: cortex-toolkit-schemas.json
+      purpose: JSON schemas for validation
+      
+    - file: cortex-toolkit-snippets-index.yaml
+      purpose: Code snippet cross-reference
+      
+  related_documents:
+    - cortex-brain/tier0/governance/core-rules.yaml
+    - cortex-brain/tier3/domain-patterns.yaml
+    - .asif/cortex7-req/final/cortex7-requirements.yaml
+    
+  implementation_guides:
+    - snippets/tier0-primitive-template.py
+    - snippets/tier1-composed-template.py
+    - snippets/toolkit-manager-implementation.py
+    - snippets/mcp-bridge-implementation.py
+

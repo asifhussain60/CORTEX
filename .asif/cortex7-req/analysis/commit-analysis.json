@@ -1,0 +1,191 @@
+{
+  "git_analysis": {
+    "total_commits_analyzed": 500,
+    "total_commits_repo": 3318,
+    "unique_ac_ids_mentioned": 40,
+    "unique_phases_mentioned": [
+      "0",
+      "1",
+      "1.1",
+      "1.2",
+      "1.3",
+      "1.4",
+      "1.5",
+      "10",
+      "10.1",
+      "100",
+      "2",
+      "2.1",
+      "2.2",
+      "2.3",
+      "3",
+      "4",
+      "4.5",
+      "5",
+      "7",
+      "8",
+      "9",
+      "9.4",
+      "90"
+    ],
+    "key_milestones_count": 104,
+    "orchestrators_found": [
+      "Cleanup",
+      "MasterOrchestrator",
+      "Planning",
+      "TDD-Master",
+      "TodoOrchestrator",
+      "Vacuum"
+    ]
+  },
+  "ac_ids_by_category": {
+    "VALIDATE": [
+      "VALIDATE-001"
+    ],
+    "IDs": [
+      "IDs"
+    ],
+    "GIT": [
+      "GIT-001",
+      "GIT-002",
+      "GIT-003"
+    ],
+    "TEMPLATE": [
+      "TEMPLATE-005",
+      "TEMPLATE-001-004",
+      "TEMPLATE-005-008"
+    ],
+    "CHALLENGE": [
+      "CHALLENGE-001-003"
+    ],
+    "BRITTLE": [
+      "BRITTLE-001-006"
+    ],
+    "ROLLOUT": [
+      "ROLLOUT-001"
+    ],
+    "CLEAN": [
+      "CLEAN-301",
+      "CLEAN-328",
+      "CLEAN-316",
+      "CLEAN-311",
+      "CLEAN-307",
+      "CLEAN-306",
+      "CLEAN-201"
+    ],
+    "INDEX": [
+      "INDEX"
+    ],
+    "HEADER": [
+      "HEADER-001"
+    ],
+    "TOOLKIT": [
+      "TOOLKIT",
+      "TOOLKIT-001",
+      "TOOLKIT-005"
+    ],
+    "LENS": [
+      "LENS"
+    ],
+    "ONBOARD": [
+      "ONBOARD"
+    ],
+    "index": [
+      "index"
+    ],
+    "TODO": [
+      "TODO-002"
+    ],
+    "ORCH": [
+      "ORCH-007"
+    ],
+    "SCAFFOLD": [
+      "SCAFFOLD-003"
+    ],
+    "AUDIT": [
+      "AUDIT-008",
+      "AUDIT-007",
+      "AUDIT-001",
+      "AUDIT-006"
+    ],
+    "SYNC": [
+      "SYNC-001"
+    ],
+    "VERSION": [
+      "VERSION-001"
+    ],
+    "QUALITY": [
+      "QUALITY-001"
+    ],
+    "ORC": [
+      "ORC-HOUSE-001",
+      "ORC-PLAN-002"
+    ],
+    "TRACE": [
+      "TRACE-001",
+      "TRACE-005"
+    ]
+  },
+  "top_milestones": [
+    [
+      "4fd6469de",
+      "feat(phase1): Complete Phase 1 foundation infrastructure with audit verification"
+    ],
+    [
+      "a12bba9b7",
+      "MASTER-PLAN v1.7.2: Restore Phase 1 as completed (green status)"
+    ],
+    [
+      "6b553dde8",
+      "MASTER-PLAN v1.7.1: Complete reorganization with all 9 active phases"
+    ],
+    [
+      "4ae7d34de",
+      "docs: Add Git Commit Orchestrator delivery summary (Phase 10.1 complete)"
+    ],
+    [
+      "8c4ac53dd",
+      "feat: Add cleanup-reports directory with operational artifacts"
+    ],
+    [
+      "4764efd42",
+      "Phase 9 Complete: Register AC-TEMPLATE-001-004, mark 18/18 ACs (100%), defer AC-TEMPLATE-005-008 and"
+    ],
+    [
+      "c88d8e1b7",
+      "feat(phase-9): Complete Phase 9 infrastructure at 62% with template architecture"
+    ],
+    [
+      "43f0bccb5",
+      "Phase 8 Complete: Staged Rollout System (AC-ROLLOUT-001 to 004)"
+    ],
+    [
+      "b61f6c775",
+      "Holistic Plan-Viewer Sync: Phase 5 COMPLETE (28/28 ACs, 105/105 tests, 100% pass rate)"
+    ],
+    [
+      "3a35f38eb",
+      "Phase 5 COMPLETE: AC-CLEAN-301 through AC-CLEAN-328 (28/28 ACs GREEN, 105 tests passing)"
+    ],
+    [
+      "ea66b99b4",
+      "Phase 5: AC-CLEAN-316/317/318/319/320 GREEN (11 tests passing)"
+    ],
+    [
+      "7701a35c8",
+      "Phase 5: AC-CLEAN-311/312/313/314/315 GREEN (13 tests passing)"
+    ],
+    [
+      "29288a977",
+      "Phase 5: AC-CLEAN-307/308/309/310 GREEN (16 tests passing)"
+    ],
+    [
+      "96dfe362f",
+      "Phase 5: AC-CLEAN-301 through AC-CLEAN-306 complete (91.7% test pass rate)"
+    ],
+    [
+      "0ff55a8df",
+      "Add holistic tracker updater + synchronized metrics (95% complete)"
+    ]
+  ]
+}

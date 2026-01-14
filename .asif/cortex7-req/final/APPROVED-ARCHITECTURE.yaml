@@ -1,0 +1,237 @@
+# ==============================================================================
+# CORTEX 7.0 FINAL APPROVED ARCHITECTURE
+# ==============================================================================
+# Purpose: Approved architecture decisions for CORTEX 7.0 implementation
+# Version: 1.0.0
+# Date: 2026-01-14
+# Author: Asif Hussain
+# Status: APPROVED - Ready for Implementation
+# ==============================================================================
+
+metadata:
+  project: CORTEX_7_APPROVED_ARCHITECTURE
+  approval_date: 2026-01-14
+  approver: Asif Hussain (Product Owner)
+  implementation_target: Phase 1 Week 1-2
+
+# ==============================================================================
+# APPROVED DECISIONS
+# ==============================================================================
+
+approved_decisions:
+  question_1_audit_enforcement:
+    decision: A) Audit-First Pattern
+    rationale: Operations impossible without audit context (zero-assumption guarantee)
+    modification: Production mode control added per user requirement
+    implementation: '@audit_driven decorator + AuditContext with mode parameter'
+    
+  question_2_memory_architecture:
+    decision: C) Hybrid Tiered Memory
+    rationale: Balance speed and complexity (hot zone for active development only)
+    implementation: 'Hot zone (Redis 0-7 days) + Cold zone (JSONL.gz 30+ days)'
+    
+  question_3_challenger_pipeline:
+    decision: C) Progressive Challenger Pipeline
+    rationale: Start simple (2-stage), add stages incrementally based on value
+    implementation: 'Phase 1: AST + KG, Phase 2: Add Historical, Phase 3: Add RAG'
+    
+  question_4_knowledge_graph:
+    decision: A) NetworkX
+    rationale: Python-native, no server required, sufficient for <100k nodes
+    implementation: 'Store nodes/edges in SQLite, load into NetworkX for queries'
+    
+  question_5_vector_store:
+    decision: A) FAISS
+    rationale: Battle-tested, fast CPU/GPU support, proven at scale
+    implementation: 'FAISS IndexFlatIP + Sentence-transformers embeddings'
+
+# ==============================================================================
+# USER MODIFICATION: PRODUCTION MODE CONTROL
+# ==============================================================================
+
+user_modification:
+  requirement: |
+    "The audit logger should have the ability to switch off or have controlled 
+    logging when released to production. The detailed logging is only for 
+    developing CORTEX efficiently."
+  
+  approved_implementation:
+    modes:
+      development:
+        description: Full detailed logging for CORTEX development
+        log_levels: [TRACE, DEBUG, INFO, WARNING, ERROR, CRITICAL]
+        use_case: Internal CORTEX 6.0/7.0 development
+        performance_overhead: ~1-5ms per operation
+        
+      production:
+        description: Minimal logging for production deployments
+        log_levels: [WARNING, ERROR, CRITICAL]
+        use_case: Released CORTEX instances, end-users
+        performance_overhead: ~0.1-0.5ms per operation
+        
+      hybrid:
+        description: Selective detailed logging
+        log_levels: [INFO, WARNING, ERROR, CRITICAL]
+        use_case: User-facing operations with debugging capability
+        performance_overhead: ~0.5-2ms per operation
+    
+    configuration:
+      env_variable: CORTEX_AUDIT_MODE=development|production|hybrid
+      config_file: cortex-brain/config/audit-config.yaml
+      runtime_override: AuditContext(mode='production')
+      default: development (CORTEX development), production (user deployments)
+    
+    guarantees:
+      - Audit-First pattern remains enforced (AuditContext still required)
+      - Critical events ALWAYS logged (errors, violations, security)
+      - Evidence bundles captured in all modes (compliance requirement)
+      - Users can override to development mode for troubleshooting
+      - Hash chain integrity maintained in all modes
+
+# ==============================================================================
+# IMPLEMENTATION ROADMAP
+# ==============================================================================
+
+implementation_roadmap:
+  phase_1_foundation:
+    timeline: Week 1-2
+    deliverables:
+      - Audit-First decorator with production mode support
+      - SQLite schema (audit_logs, knowledge_graph, vector_index)
+      - NetworkX integration (load graphs from SQLite)
+      - FAISS integration (embed + index AC-IDs, tools, patterns)
+      - Production mode configuration (env var, config file, runtime)
+    acceptance_criteria:
+      - AC-PROD-001: Mode configuration working
+      - AC-PROD-002: Development mode logging complete
+      - AC-PROD-003: Production mode logging optimized
+      - AC-PROD-004: Critical event guarantee verified
+      - AC-PROD-005: Performance targets met
+      - AC-PROD-006: User override capability working
+      
+  phase_2_hybrid_memory:
+    timeline: Week 3
+    deliverables:
+      - Hot zone (Redis cache for 0-7 days)
+      - Query router (check Redis → fallback SQLite)
+      - Cold zone compression (JSONL.gz for 30+ days)
+      - Automatic aging policy
+    acceptance_criteria:
+      - Hot zone queries <5ms (Redis hit)
+      - Cold zone queries <500ms (decompress + read)
+      - Disk space 90% less (cold compression)
+      
+  phase_3_challenger_stage_1:
+    timeline: Week 4
+    deliverables:
+      - AST Analyzer (duplicate detection, rule violations)
+      - Knowledge Graph Reasoner (semantic similarity, pattern matching)
+      - Integration with IntentRouter
+      - Confidence scoring
+    acceptance_criteria:
+      - AST detects 80%+ duplicate code
+      - KG finds related AC-IDs with >0.8 similarity
+      - Challenger recommendations <500ms latency
+      
+  phase_4_evidence_framework:
+    timeline: Week 5
+    deliverables:
+      - Hallucination detector (audit verification)
+      - Brittleness analyzer (dependency graphs)
+      - Auto-generated reports
+      - Dashboard integration
+    acceptance_criteria:
+      - Hallucination detection 95%+ accuracy
+      - Brittleness scores correlate with failure rates
+      - Reports generated <1s
+      
+  phase_5_progressive_expansion:
+    timeline: Week 6+
+    deliverables:
+      - Historical Pattern Matcher (if Stage 1-2 misses >20% issues)
+      - RAG Semantic Search (if documentation search needed)
+      - Merger/Ranker (if multiple stages produce conflicts)
+    acceptance_criteria:
+      - Each stage adds >10% issue detection (otherwise stop)
+      - Combined pipeline <2s latency
+      - User acceptance rate >80%
+
+# ==============================================================================
+# ARCHITECTURE SUMMARY
+# ==============================================================================
+
+architecture_summary:
+  foundation_layer:
+    - Audit-First pattern (operations impossible without AuditContext)
+    - Production mode control (development/production/hybrid)
+    - Tiered memory (Hot Redis + Cold JSONL.gz)
+    - Hash chain integrity (tamper detection)
+    
+  intelligence_layer:
+    - AST Analyzer (Python ast module)
+    - Knowledge Graph Reasoner (NetworkX)
+    - Progressive expansion (Historical → RAG → Merger as needed)
+    - Confidence scoring (weighted recommendations)
+    
+  evidence_layer:
+    - Hallucination detection (audit verification)
+    - Brittleness analysis (dependency graphs)
+    - Evidence bundles (test results, coverage)
+    - Auto-generated reports
+    
+  storage_layer:
+    - SQLite unified database (audit_logs, knowledge_graph, vector_index)
+    - NetworkX in-memory graphs (loaded from SQLite)
+    - FAISS vector index (384-dim embeddings)
+    - Redis hot cache (0-7 days, development mode only)
+
+# ==============================================================================
+# SUCCESS METRICS
+# ==============================================================================
+
+success_metrics:
+  performance:
+    - Development mode overhead <5ms per operation
+    - Production mode overhead <0.5ms per operation
+    - Hot zone queries <5ms (Redis hit)
+    - Challenger pipeline <2s latency
+    
+  quality:
+    - Hallucination detection 95%+ accuracy
+    - AST duplicate detection 80%+ recall
+    - KG semantic similarity >0.8 precision
+    - User acceptance rate >80%
+    
+  efficiency:
+    - Disk space 90% savings (cold compression)
+    - Production mode 10x less disk usage
+    - Redis RAM usage <100MB (hot zone)
+    - FAISS index <500MB (1M vectors)
+
+# ==============================================================================
+# REFERENCES
+# ==============================================================================
+
+references:
+  detailed_architecture: audit-driven-rag-architecture.yaml
+  executive_summary: AUDIT-DRIVEN-RAG-SUMMARY.md
+  production_mode_spec: production-mode-requirements.yaml
+  code_snippets: snippets-rag/
+  governance_rules: ../../tier0/governance/core-rules.yaml
+  master_plan: ../../cx6-plan/master-plan.yaml
+
+# ==============================================================================
+# APPROVAL SIGNATURES
+# ==============================================================================
+
+approvals:
+  product_owner:
+    name: Asif Hussain
+    date: 2026-01-14
+    decision: APPROVED with production mode modification
+    
+  next_steps:
+    1: Create AC-IDs for Phase 1 implementation (AC-AUDIT-PROD-001 to AC-AUDIT-PROD-006)
+    2: Update master-plan.yaml with CORTEX 7.0 roadmap
+    3: Delegate to MasterOrchestrator for Phase 1 execution
+    4: Track progress in progress-tracker.json

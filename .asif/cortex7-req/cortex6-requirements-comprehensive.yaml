@@ -1,0 +1,1836 @@
+# ==============================================================================
+# CORTEX 6.0 COMPREHENSIVE REQUIREMENTS SPECIFICATION
+# ==============================================================================
+# Purpose: Complete requirements gathered from CORTEX6 branch development
+# Source: cx6-plan, cx6-plan-cleanup-backup, AC-INDEX, core-rules, git history
+# Created: 2026-01-14
+# Author: Asif Hussain
+# Branch: CORTEX6
+# Version: 1.0.0
+# ==============================================================================
+
+metadata:
+  project: CORTEX 6.0
+  branch: CORTEX6
+  created: "2026-01-14"
+  total_ac_ids: 110
+  total_governance_rules: 23
+  phases: 11
+  source_files:
+    - cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml
+    - cortex-brain/cx6-plan/master-plan.yaml
+    - cortex-brain/tier0/governance/core-rules.yaml
+    - cortex-brain/tier1/tracking/progress-tracker.json
+    - cortex-brain/cx6-plan-cleanup-backup/validation/holistic-review.yaml
+    - cortex-brain/cx6-plan-cleanup-backup/analysis/FINAL-RECONCILIATION-SUMMARY.md
+
+# ==============================================================================
+# PHASE DEFINITIONS (11 Phases)
+# ==============================================================================
+phases:
+  phase_1:
+    id: phase_1
+    name: "Foundation"
+    description: "Core infrastructure - audit, governance, state management, security"
+    total_acs: 30
+    target_completion: "2026-02-01"
+    components:
+      - audit_infrastructure
+      - governance_merger
+      - state_manager
+      - lifecycle_system
+      - evidence_bundler
+      - security_layer
+
+  phase_1_5:
+    id: phase_1_5
+    name: "Security & Audit Extension"
+    description: "Audit trail completeness verification"
+    total_acs: 1
+    target_completion: "2026-02-01"
+    components:
+      - audit_evidence_validation
+
+  phase_2:
+    id: phase_2
+    name: "Orchestration Core"
+    description: "MasterOrchestrator, TodoManager, TDD-Master, Planning, Routing"
+    total_acs: 54
+    target_completion: "2026-02-01"
+    components:
+      - master_orchestrator
+      - todo_manager
+      - tdd_master
+      - planning_v5
+      - deterministic_routing
+      - metrics_collector
+      - input_validator
+      - sts_capability_0
+
+  phase_3:
+    id: phase_3
+    name: "Feature Orchestrators"
+    description: "Feature-specific orchestrators (ADO, Vacuum, Investigation)"
+    total_acs: 1
+    target_completion: "2026-02-01"
+    components:
+      - ado_v2
+      - vacuum_v2
+      - investigation_v2
+      - sanitization_v2
+
+  phase_4:
+    id: phase_4
+    name: "Intelligence & Planning"
+    description: "LLM integration and planning enhancements"
+    total_acs: 1
+    target_completion: "2026-02-01"
+    components:
+      - llm_intent_classifier
+      - planning_enhancements
+
+  phase_4_5:
+    id: phase_4_5
+    name: "Extended Intelligence"
+    description: "Extended intelligence and integration testing"
+    total_acs: 1
+    target_completion: "2026-02-01"
+    components:
+      - integration_testing
+
+  phase_5:
+    id: phase_5
+    name: "Analysis & Knowledge"
+    description: "Knowledge graph and analysis capabilities"
+    total_acs: 1
+    target_completion: "2026-02-01"
+    components:
+      - knowledge_graph
+      - analysis_tools
+
+  phase_10:
+    id: phase_10
+    name: "Production Readiness"
+    description: "Production hardening and audit trail verification"
+    total_acs: 1
+    target_completion: "2026-02-01"
+    components:
+      - production_audit
+
+  phase_11:
+    id: phase_11
+    name: "CORTEX LENS"
+    description: "Intelligent code analysis, onboarding, challenge system"
+    total_acs: 20
+    target_completion: "2026-02-01"
+    components:
+      - cortex_lens
+      - onboarding_orchestrator
+      - challenge_system
+      - template_system
+
+# ==============================================================================
+# ACCEPTANCE CRITERIA BY CATEGORY (110 Total)
+# ==============================================================================
+acceptance_criteria:
+
+  # ============================================================================
+  # AUDIT INFRASTRUCTURE (AC-AUDIT-*)
+  # ============================================================================
+  audit_infrastructure:
+    category: AUDIT
+    phase: 1
+    total: 7
+    requirements:
+      - id: AC-AUDIT-001
+        title: "SQLite + JSONL Dual Storage"
+        description: "Dual storage backend with SQLite for queries and JSONL for append-only log"
+        priority: CRITICAL
+        implementation_file: "src/infrastructure/enhanced_audit_logger.py"
+        test_coverage_target: 90
+
+      - id: AC-AUDIT-002
+        title: "7 Audit Categories"
+        description: "Support for governance, orchestrator, validation, infrastructure, mcp, brain, integration categories"
+        priority: CRITICAL
+        implementation_file: "src/infrastructure/enhanced_audit_logger.py"
+        test_coverage_target: 85
+
+      - id: AC-AUDIT-003
+        title: "AC-ID Traceability"
+        description: "Link audit events to acceptance criteria for compliance tracking"
+        priority: HIGH
+        implementation_file: "src/infrastructure/enhanced_audit_logger.py"
+        test_coverage_target: 85
+
+      - id: AC-AUDIT-004
+        title: "Memory Buffer with Flush"
+        description: "Configurable flush thresholds for performance optimization"
+        priority: MEDIUM
+        implementation_file: "src/infrastructure/enhanced_audit_logger.py"
+        test_coverage_target: 80
+
+      - id: AC-AUDIT-005
+        title: "Per-Repo Database Isolation"
+        description: "Separate audit databases for each repository"
+        priority: HIGH
+        implementation_file: "src/infrastructure/enhanced_audit_logger.py"
+        test_coverage_target: 85
+
+      - id: AC-AUDIT-006
+        title: "Queryable Audit Storage"
+        description: "Query by AC-ID, orchestrator, date range, level"
+        priority: HIGH
+        implementation_file: "src/infrastructure/enhanced_audit_logger.py"
+        test_coverage_target: 85
+
+      - id: AC-AUDIT-007
+        title: "Hash Chain Integrity"
+        description: "Tamper detection via event_hash + prev_event_hash chain"
+        priority: CRITICAL
+        implementation_file: "src/infrastructure/enhanced_audit_logger.py"
+        test_coverage_target: 90
+
+  # ============================================================================
+  # AUDIT EVIDENCE VALIDATION (AC-AUDIT-EVIDENCE-*)
+  # ============================================================================
+  audit_evidence_validation:
+    category: AUDIT-EVIDENCE
+    phases: [1, 1.5, 2, 3, 4, 4.5, 5, 10]
+    total: 8
+    requirements:
+      - id: AC-AUDIT-EVIDENCE-P1
+        title: "Phase 1 Audit Trail Completeness"
+        description: "100% of Phase 1 AC-IDs must have audit log entries with correlation IDs"
+        priority: CRITICAL
+        phase: 1
+
+      - id: AC-AUDIT-EVIDENCE-P1.5
+        title: "Phase 1.5 Audit Trail Completeness"
+        description: "100% of STS AC-IDs must have audit log entries proving test execution"
+        priority: CRITICAL
+        phase: 1.5
+
+      - id: AC-AUDIT-EVIDENCE-P2
+        title: "Phase 2 Audit Trail Completeness"
+        description: "100% of Phase 2 AC-IDs must have audit log entries proving orchestration operations"
+        priority: CRITICAL
+        phase: 2
+
+      - id: AC-AUDIT-EVIDENCE-P3
+        title: "Phase 3 Audit Trail Completeness"
+        description: "100% of Phase 3 feature orchestrator operations must have audit log entries"
+        priority: CRITICAL
+        phase: 3
+
+      - id: AC-AUDIT-EVIDENCE-P4
+        title: "Phase 4 Audit Trail Completeness"
+        description: "100% of Phase 4 intelligence operations must have audit log entries"
+        priority: CRITICAL
+        phase: 4
+
+      - id: AC-AUDIT-EVIDENCE-P4.5
+        title: "Phase 4.5 Audit Trail Completeness"
+        description: "100% of Phase 4.5 integration test operations must have audit log entries"
+        priority: CRITICAL
+        phase: 4.5
+
+      - id: AC-AUDIT-EVIDENCE-P5
+        title: "Phase 5 Audit Trail Completeness"
+        description: "100% of cleanup/decommission operations must have audit log entries"
+        priority: CRITICAL
+        phase: 5
+
+      - id: AC-AUDIT-EVIDENCE-P10
+        title: "Phase 10 Audit Trail Completeness"
+        description: "100% of CORTEX LENS operations must have audit log entries"
+        priority: CRITICAL
+        phase: 10
+
+  # ============================================================================
+  # GOVERNANCE MERGER (AC-GOV-*)
+  # ============================================================================
+  governance_merger:
+    category: GOV
+    phase: 1
+    total: 5
+    requirements:
+      - id: AC-GOV-001
+        title: "4-Tier Governance Merge"
+        description: "Merge Tier 0 (SKULL) + Tier 1 (Business) + Tier 2 (Engineering) + Tier 3 (Learned)"
+        priority: CRITICAL
+        implementation_file: "src/orchestrators/core/governance_merger.py"
+        test_coverage_target: 90
+
+      - id: AC-GOV-002
+        title: "Precedence Resolution"
+        description: "Tier 0 wins all conflicts, hierarchical precedence"
+        priority: CRITICAL
+        implementation_file: "src/orchestrators/core/governance_merger.py"
+        test_coverage_target: 90
+
+      - id: AC-GOV-003
+        title: "Rule Deduplication"
+        description: "Automatic deduplication and validation of merged rules"
+        priority: HIGH
+        implementation_file: "src/orchestrators/core/governance_merger.py"
+        test_coverage_target: 85
+
+      - id: AC-GOV-004
+        title: "Performance <100ms"
+        description: "Full merge completes in under 100ms"
+        priority: HIGH
+        implementation_file: "src/orchestrators/core/governance_merger.py"
+        test_coverage_target: 80
+
+      - id: AC-GOV-005
+        title: "Schema Validation"
+        description: "YAML/JSON schema validation for governance files"
+        priority: HIGH
+        implementation_file: "src/orchestrators/core/governance_merger.py"
+        test_coverage_target: 85
+
+  # ============================================================================
+  # STATE MANAGER (AC-STATE-*)
+  # ============================================================================
+  state_manager:
+    category: STATE
+    phase: 1
+    total: 3
+    requirements:
+      - id: AC-STATE-001
+        title: "SQLite Backend with WAL"
+        description: "SQLite with Write-Ahead Logging for concurrent access"
+        priority: CRITICAL
+        implementation_file: "src/database/state_manager.py"
+        test_coverage_target: 90
+
+      - id: AC-STATE-002
+        title: "Atomic State Transitions"
+        description: "Atomic state changes with rollback on failure"
+        priority: CRITICAL
+        implementation_file: "src/infrastructure/atomic_state_manager.py"
+        test_coverage_target: 90
+
+      - id: AC-STATE-003
+        title: "Cross-Platform File Locking"
+        description: "File locking via fcntl (Unix) / msvcrt (Windows)"
+        priority: HIGH
+        implementation_file: "src/database/state_manager.py"
+        test_coverage_target: 85
+
+  # ============================================================================
+  # LIFECYCLE SYSTEM (AC-LIFECYCLE-*)
+  # ============================================================================
+  lifecycle_system:
+    category: LIFECYCLE
+    phase: 1
+    total: 3
+    requirements:
+      - id: AC-LIFECYCLE-001
+        title: "7-State Orchestrator Lifecycle"
+        description: "IDLE → SPEC → IMPLEMENTED → TESTED → VERIFIED → ACTIVE → DEPRECATED"
+        priority: HIGH
+        implementation_file: "src/orchestrators/middleware/orchestrator_lifecycle.py"
+        test_coverage_target: 85
+
+      - id: AC-LIFECYCLE-002
+        title: "Entry/Exit Criteria Enforcement"
+        description: "Enforce state transition criteria and validation"
+        priority: HIGH
+        implementation_file: "src/infrastructure/lifecycle_manager.py"
+        test_coverage_target: 85
+
+      - id: AC-LIFECYCLE-003
+        title: "Quarantine Mechanism"
+        description: "Auto-quarantine on violations (error rate > 10%)"
+        priority: MEDIUM
+        implementation_file: "src/orchestrators/core/todo_lifecycle_manager.py"
+        test_coverage_target: 80
+
+  # ============================================================================
+  # EVIDENCE BUNDLER (AC-EVIDENCE-*)
+  # ============================================================================
+  evidence_bundler:
+    category: EVIDENCE
+    phase: 1
+    total: 3
+    requirements:
+      - id: AC-EVIDENCE-001
+        title: "3-File Evidence Format"
+        description: "manifest.yaml, test_results.json, audit_trace.jsonl"
+        priority: HIGH
+        implementation_file: "src/tools/evidence_bundle_generator.py"
+        test_coverage_target: 85
+
+      - id: AC-EVIDENCE-002
+        title: "Auto-Generation from Tests"
+        description: "Generate from pytest + audit logs + AC-INDEX"
+        priority: HIGH
+        implementation_file: "src/infrastructure/evidence_bundle_structure.py"
+        test_coverage_target: 85
+
+      - id: AC-EVIDENCE-003
+        title: "3 Validation Gates"
+        description: "Test coverage >=80%, audit 100%, governance 100%"
+        priority: HIGH
+        implementation_file: "src/infrastructure/evidence_bundle_validation_gates.py"
+        test_coverage_target: 85
+
+  # ============================================================================
+  # SECURITY LAYER (AC-SECURITY-*)
+  # ============================================================================
+  security_layer:
+    category: SECURITY
+    phase: 1
+    total: 8
+    requirements:
+      - id: AC-SECURITY-001
+        title: "Action Classification"
+        description: "Classify as SAFE, INSPECT, or DESTRUCTIVE"
+        priority: CRITICAL
+        test_coverage_target: 90
+
+      - id: AC-SECURITY-002
+        title: "Approval State Machine"
+        description: "PENDING → APPROVED/DENIED/TIMEOUT workflow"
+        priority: CRITICAL
+        test_coverage_target: 90
+
+      - id: AC-SECURITY-003
+        title: "Canonical Path Resolution"
+        description: "Resolve symlinks and prevent directory traversal"
+        priority: CRITICAL
+        implementation_file: "src/utils/project_root.py"
+        test_coverage_target: 90
+
+      - id: AC-SECURITY-004
+        title: "Cross-Platform File Operations"
+        description: "Safe file operations on Windows/Mac/Linux"
+        priority: HIGH
+        implementation_file: "src/utils/project_root.py"
+        test_coverage_target: 85
+
+      - id: AC-SECURITY-005
+        title: "Argument Validation"
+        description: "Validate all user inputs via TDD"
+        priority: HIGH
+        test_coverage_target: 85
+
+      - id: AC-SECURITY-006
+        title: "Path Safety Checks"
+        description: "Prevent access outside workspace boundaries"
+        priority: CRITICAL
+        implementation_file: "src/utils/project_root.py"
+        test_coverage_target: 90
+
+      - id: AC-SECURITY-007
+        title: "Operation Audit Trail"
+        description: "Log all security-relevant operations"
+        priority: HIGH
+        implementation_file: "src/infrastructure/enhanced_audit_logger.py"
+        test_coverage_target: 85
+
+      - id: AC-SECURITY-008
+        title: "Permission Validation"
+        description: "Check file permissions before operations"
+        priority: HIGH
+        test_coverage_target: 85
+
+  # ============================================================================
+  # MASTER ORCHESTRATOR (AC-ORCH-*)
+  # ============================================================================
+  master_orchestrator:
+    category: ORCH
+    phase: 2
+    total: 8
+    requirements:
+      - id: AC-ORCH-001
+        title: "Central Request Evaluation"
+        description: "Evaluate user requests against merged governance rules"
+        priority: CRITICAL
+        implementation_file: "src/orchestrators/core/master_orchestrator.py"
+        test_coverage_target: 90
+
+      - id: AC-ORCH-002
+        title: "Required Actions Generation"
+        description: "Generate required_actions from governance evaluation"
+        priority: CRITICAL
+        implementation_file: "src/orchestrators/core/master_orchestrator.py"
+        test_coverage_target: 90
+
+      - id: AC-ORCH-003
+        title: "Dependency Order Execution"
+        description: "Execute tasks in correct dependency order"
+        priority: CRITICAL
+        implementation_file: "src/orchestrators/core/master_orchestrator.py"
+        test_coverage_target: 90
+
+      - id: AC-ORCH-004
+        title: "State Checkpoint Persistence"
+        description: "Save state checkpoints for recovery"
+        priority: HIGH
+        implementation_file: "src/orchestrators/core/master_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-ORCH-005
+        title: "Rollback on Failure"
+        description: "Automatic rollback when execution fails"
+        priority: HIGH
+        implementation_file: "src/orchestrators/core/master_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-ORCH-006
+        title: "Evidence Bundle Generation"
+        description: "Generate evidence bundles for completed work"
+        priority: HIGH
+        implementation_file: "src/orchestrators/core/master_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-ORCH-007
+        title: "Governance Integration"
+        description: "Integrate with GovernanceMerger for rule enforcement"
+        priority: CRITICAL
+        implementation_file: "src/orchestrators/core/master_orchestrator.py"
+        test_coverage_target: 90
+
+      - id: AC-ORCH-008
+        title: "Audit Logging"
+        description: "Log all orchestrator operations to audit trail"
+        priority: HIGH
+        implementation_file: "src/orchestrators/core/master_orchestrator.py"
+        test_coverage_target: 85
+
+  # ============================================================================
+  # TODO MANAGER (AC-TODO-*)
+  # ============================================================================
+  todo_manager:
+    category: TODO
+    phase: 2
+    total: 4
+    requirements:
+      - id: AC-TODO-001
+        title: "Create Trackable Tasks"
+        description: "Create tasks from required_actions"
+        priority: CRITICAL
+        implementation_file: "src/orchestrators/core/todo_orchestrator.py"
+        test_coverage_target: 90
+
+      - id: AC-TODO-002
+        title: "Persist to Tracker"
+        description: "Save tasks to progress-tracker.json atomically"
+        priority: CRITICAL
+        implementation_file: "src/orchestrators/core/todo_orchestrator.py"
+        test_coverage_target: 90
+
+      - id: AC-TODO-003
+        title: "Status Tracking"
+        description: "Track task status (not-started, in-progress, completed)"
+        priority: HIGH
+        implementation_file: "src/orchestrators/core/todo_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-TODO-004
+        title: "Dependency Enforcement"
+        description: "Enforce dependency order in task execution"
+        priority: HIGH
+        implementation_file: "src/orchestrators/core/todo_orchestrator.py"
+        test_coverage_target: 85
+
+  # ============================================================================
+  # TDD MASTER (AC-TDD-*)
+  # ============================================================================
+  tdd_master:
+    category: TDD
+    phase: 2
+    total: 10
+    requirements:
+      - id: AC-TDD-001
+        title: "RED→GREEN→REFACTOR Workflow"
+        description: "TDD-Master enforces TDD workflow"
+        priority: HIGH
+        implementation_file: "src/orchestrators/tdd/tdd_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-TDD-002
+        title: "CORE-019 Enforcement"
+        description: "Enforce all development through TDD-Master"
+        priority: HIGH
+        implementation_file: "src/orchestrators/tdd/tdd_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-TDD-003
+        title: "Auto-generate Tests from AC"
+        description: "Generate test stubs from acceptance criteria"
+        priority: HIGH
+        implementation_file: "src/orchestrators/tdd/tdd_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-TDD-004
+        title: "Evidence Bundle Generation"
+        description: "Generate evidence bundles after test completion"
+        priority: HIGH
+        implementation_file: "src/orchestrators/tdd/tdd_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-TDD-005
+        title: "Test Execution Integration"
+        description: "Integrate with pytest for test execution"
+        priority: HIGH
+        implementation_file: "src/orchestrators/tdd/tdd_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-TDD-006
+        title: "Coverage Enforcement"
+        description: "Enforce minimum test coverage thresholds"
+        priority: HIGH
+        implementation_file: "src/orchestrators/tdd/tdd_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-TDD-007
+        title: "RED Phase Detection"
+        description: "Detect and validate RED phase (tests fail initially)"
+        priority: HIGH
+        implementation_file: "src/orchestrators/tdd/tdd_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-TDD-008
+        title: "GREEN Phase Validation"
+        description: "Validate GREEN phase (tests pass after implementation)"
+        priority: HIGH
+        implementation_file: "src/orchestrators/tdd/tdd_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-TDD-009
+        title: "REFACTOR Phase Guards"
+        description: "Ensure refactoring doesn't break tests"
+        priority: HIGH
+        implementation_file: "src/orchestrators/tdd/tdd_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-TDD-010
+        title: "Audit Trail Integration"
+        description: "Log all TDD operations to audit trail"
+        priority: HIGH
+        implementation_file: "src/orchestrators/tdd/tdd_orchestrator.py"
+        test_coverage_target: 85
+
+  # ============================================================================
+  # PLANNING V5 (AC-PLAN-*)
+  # ============================================================================
+  planning_v5:
+    category: PLAN
+    phase: 2
+    total: 8
+    requirements:
+      - id: AC-PLAN-001
+        title: "Git History Intelligence Integration"
+        description: "Integrate git history analysis into planning"
+        priority: HIGH
+        implementation_file: "src/orchestrators/planning/planning_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-PLAN-002
+        title: "Context-Aware Planning"
+        description: "Use workspace context for planning decisions"
+        priority: HIGH
+        implementation_file: "src/orchestrators/planning/planning_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-PLAN-003
+        title: "Task Dependency Analysis"
+        description: "Analyze and map task dependencies"
+        priority: HIGH
+        implementation_file: "src/orchestrators/planning/planning_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-PLAN-004
+        title: "Risk Assessment"
+        description: "Assess risk for planned tasks"
+        priority: HIGH
+        implementation_file: "src/orchestrators/planning/planning_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-PLAN-005
+        title: "Evidence-Based Planning"
+        description: "Use evidence bundles to inform planning"
+        priority: HIGH
+        implementation_file: "src/orchestrators/planning/planning_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-PLAN-006
+        title: "Multi-Phase Orchestration"
+        description: "Plan across multiple phases"
+        priority: HIGH
+        implementation_file: "src/orchestrators/planning/planning_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-PLAN-007
+        title: "Governance Integration"
+        description: "Ensure plans comply with governance"
+        priority: HIGH
+        implementation_file: "src/orchestrators/planning/planning_orchestrator.py"
+        test_coverage_target: 85
+
+      - id: AC-PLAN-008
+        title: "Audit Logging"
+        description: "Log all planning operations"
+        priority: HIGH
+        implementation_file: "src/orchestrators/planning/planning_orchestrator.py"
+        test_coverage_target: 85
+
+  # ============================================================================
+  # DETERMINISTIC ROUTING (AC-ROUTE-*)
+  # ============================================================================
+  deterministic_routing:
+    category: ROUTE
+    phase: 2
+    total: 5
+    requirements:
+      - id: AC-ROUTE-001
+        title: "Pattern Matching Engine"
+        description: "Deterministic pattern matching for routing"
+        priority: HIGH
+        implementation_file: "src/orchestrators/core/pattern_router.py"
+        test_coverage_target: 85
+
+      - id: AC-ROUTE-002
+        title: "Priority-Based Routing"
+        description: "Route based on pattern priority"
+        priority: HIGH
+        implementation_file: "src/orchestrators/core/pattern_router.py"
+        test_coverage_target: 85
+
+      - id: AC-ROUTE-003
+        title: "Tie-Breaking with PREFIX Length"
+        description: "Use prefix length to break routing ties"
+        priority: HIGH
+        implementation_file: "src/orchestrators/core/pattern_router.py"
+        test_coverage_target: 85
+
+      - id: AC-ROUTE-004
+        title: "LLM Intent Classifier Fallback"
+        description: "Fall back to LLM for ambiguous routing"
+        priority: HIGH
+        implementation_file: "src/orchestrators/core/pattern_router.py"
+        test_coverage_target: 85
+
+      - id: AC-ROUTE-005
+        title: "Unicode Normalization"
+        description: "Normalize unicode for consistent routing"
+        priority: HIGH
+        implementation_file: "src/orchestrators/core/pattern_router.py"
+        test_coverage_target: 85
+
+  # ============================================================================
+  # METRICS COLLECTOR (AC-METRICS-*)
+  # ============================================================================
+  metrics_collector:
+    category: METRICS
+    phase: 2
+    total: 5
+    requirements:
+      - id: AC-METRICS-001
+        title: "Test Success Rate Baseline"
+        description: "Track test success rate metrics"
+        priority: HIGH
+        implementation_file: "src/infrastructure/metrics_collector.py"
+        test_coverage_target: 85
+
+      - id: AC-METRICS-002
+        title: "Execution Latency Tracking"
+        description: "Track execution latency for operations"
+        priority: HIGH
+        implementation_file: "src/infrastructure/metrics_collector.py"
+        test_coverage_target: 85
+
+      - id: AC-METRICS-003
+        title: "Evidence Completeness Validation"
+        description: "Validate evidence bundle completeness"
+        priority: HIGH
+        implementation_file: "src/infrastructure/metrics_collector.py"
+        test_coverage_target: 85
+
+      - id: AC-METRICS-004
+        title: "Governance Violation Alerting"
+        description: "Alert on governance violations"
+        priority: HIGH
+        implementation_file: "src/infrastructure/metrics_collector.py"
+        test_coverage_target: 85
+
+      - id: AC-METRICS-005
+        title: "Input Rejection Rate Analysis"
+        description: "Track input rejection rates"
+        priority: HIGH
+        implementation_file: "src/infrastructure/metrics_collector.py"
+        test_coverage_target: 85
+
+  # ============================================================================
+  # INPUT VALIDATOR (AC-VALIDATE-*)
+  # ============================================================================
+  input_validator:
+    category: VALIDATE
+    phase: 2
+    total: 10
+    requirements:
+      - id: AC-VALIDATE-001
+        title: "Intent Canonicalization"
+        description: "Canonicalize user intents for consistent processing"
+        priority: HIGH
+        implementation_file: "src/orchestrators/validation/input_validator.py"
+        test_coverage_target: 85
+
+      - id: AC-VALIDATE-002
+        title: "AC-ID Existence Check"
+        description: "Verify referenced AC-IDs exist"
+        priority: HIGH
+        implementation_file: "src/orchestrators/validation/input_validator.py"
+        test_coverage_target: 85
+
+      - id: AC-VALIDATE-003
+        title: "Evidence Bundle Pre-Check"
+        description: "Pre-validate evidence bundle structure"
+        priority: HIGH
+        implementation_file: "src/orchestrators/validation/input_validator.py"
+        test_coverage_target: 85
+
+      - id: AC-VALIDATE-004
+        title: "Cross-Reference Coherence"
+        description: "Validate cross-references are coherent"
+        priority: HIGH
+        implementation_file: "src/orchestrators/validation/input_validator.py"
+        test_coverage_target: 85
+
+      - id: AC-VALIDATE-005
+        title: "Semantic Output Validation"
+        description: "Validate output semantics"
+        priority: HIGH
+        implementation_file: "src/orchestrators/validation/input_validator.py"
+        test_coverage_target: 85
+
+      - id: AC-VALIDATE-006
+        title: "AC-ID Format Validation"
+        description: "Validate AC-ID format (AC-XXX-NNN)"
+        priority: HIGH
+        implementation_file: "src/orchestrators/validation/input_validator.py"
+        test_coverage_target: 85
+
+      - id: AC-VALIDATE-007
+        title: "Phase Alignment Enforcement"
+        description: "Enforce phase alignment for AC-IDs"
+        priority: HIGH
+        implementation_file: "src/orchestrators/validation/input_validator.py"
+        test_coverage_target: 85
+
+      - id: AC-VALIDATE-008
+        title: "Request Contradiction Detection"
+        description: "Detect contradictory requests"
+        priority: HIGH
+        implementation_file: "src/orchestrators/validation/input_validator.py"
+        test_coverage_target: 85
+
+      - id: AC-VALIDATE-009
+        title: "Resource Limit Validation"
+        description: "Validate resource limits not exceeded"
+        priority: HIGH
+        implementation_file: "src/orchestrators/validation/input_validator.py"
+        test_coverage_target: 85
+
+      - id: AC-VALIDATE-010
+        title: "Prerequisite Dependency Check"
+        description: "Check prerequisite dependencies are met"
+        priority: HIGH
+        implementation_file: "src/orchestrators/validation/input_validator.py"
+        test_coverage_target: 85
+
+  # ============================================================================
+  # STS CAPABILITY 0 (AC-STS-*)
+  # ============================================================================
+  sts_capability_0:
+    category: STS
+    phase: 2
+    total: 3
+    requirements:
+      - id: AC-STS-001
+        title: "Golden Corpus (100+ Test Intents)"
+        description: "Create golden corpus with 100+ test intents"
+        priority: HIGH
+        implementation_file: "tests/sts/golden_corpus.py"
+        test_coverage_target: 85
+
+      - id: AC-STS-002
+        title: "Framework Validation"
+        description: "Validate framework with STS tests"
+        priority: HIGH
+        implementation_file: "tests/sts/framework_validator.py"
+        test_coverage_target: 85
+
+      - id: AC-STS-003
+        title: "First Evidence Bundle"
+        description: "Generate first evidence bundle from STS"
+        priority: HIGH
+        implementation_file: "tests/sts/evidence_generator.py"
+        test_coverage_target: 85
+
+  # ============================================================================
+  # CORTEX LENS (AC-LENS-*)
+  # ============================================================================
+  cortex_lens:
+    category: LENS
+    phase: 11
+    total: 6
+    requirements:
+      - id: AC-LENS-001
+        title: "AST-Based Multi-Language Code Parser"
+        description: "Parse Python, JavaScript, TypeScript, Java via AST libraries"
+        priority: CRITICAL
+        test_coverage_target: 90
+
+      - id: AC-LENS-002
+        title: "Dependency Graph Construction"
+        description: "Build import/dependency graphs from parsed code"
+        priority: HIGH
+        test_coverage_target: 85
+
+      - id: AC-LENS-003
+        title: "Git History Intelligence Integration"
+        description: "Integrate existing git history analyzer into LENS"
+        priority: HIGH
+        test_coverage_target: 80
+
+      - id: AC-LENS-004
+        title: "Knowledge Graph Storage"
+        description: "SQLite-based knowledge graph with entity relationships"
+        priority: CRITICAL
+        test_coverage_target: 90
+
+      - id: AC-LENS-005
+        title: "MCP Tool Exposure"
+        description: "Expose LENS analyzers as MCP tools for orchestrators"
+        priority: HIGH
+        test_coverage_target: 85
+
+      - id: AC-LENS-006
+        title: "Real-Time Analysis Dashboard"
+        description: "D3.js-based visualization of code structure and dependencies"
+        priority: MEDIUM
+        test_coverage_target: 75
+
+  # ============================================================================
+  # ONBOARDING ORCHESTRATOR (AC-ONBOARD-*)
+  # ============================================================================
+  onboarding_orchestrator:
+    category: ONBOARD
+    phase: 11
+    total: 8
+    requirements:
+      - id: AC-ONBOARD-001
+        title: "Project Discovery Workflow"
+        description: "Automated codebase scanning and structure detection"
+        priority: HIGH
+        test_coverage_target: 85
+
+      - id: AC-ONBOARD-002
+        title: "Technology Stack Detection"
+        description: "Identify frameworks, libraries, build tools automatically"
+        priority: HIGH
+        test_coverage_target: 85
+
+      - id: AC-ONBOARD-003
+        title: "Dependency Analysis"
+        description: "Analyze package.json, requirements.txt, etc. for dependencies"
+        priority: HIGH
+        test_coverage_target: 85
+
+      - id: AC-ONBOARD-004
+        title: "Architecture Pattern Recognition"
+        description: "Detect MVC, microservices, monolith, etc."
+        priority: MEDIUM
+        test_coverage_target: 80
+
+      - id: AC-ONBOARD-005
+        title: "Documentation Generator"
+        description: "Auto-generate README, architecture diagrams from analysis"
+        priority: MEDIUM
+        test_coverage_target: 75
+
+      - id: AC-ONBOARD-006
+        title: "Knowledge Capture"
+        description: "Store discovered patterns in knowledge graph"
+        priority: HIGH
+        test_coverage_target: 85
+
+      - id: AC-ONBOARD-007
+        title: "Interactive Onboarding Workflow"
+        description: "Guide users through project setup and discovery"
+        priority: MEDIUM
+        test_coverage_target: 80
+
+      - id: AC-ONBOARD-008
+        title: "MCP Tool Integration"
+        description: "Expose onboarding capabilities as MCP tools"
+        priority: HIGH
+        test_coverage_target: 85
+
+  # ============================================================================
+  # CHALLENGE SYSTEM (AC-CHALLENGE-*)
+  # ============================================================================
+  challenge_system:
+    category: CHALLENGE
+    phase: 11
+    total: 3
+    requirements:
+      - id: AC-CHALLENGE-001
+        title: "Challenge Detection Engine"
+        description: "Detect requests contradicting governance (CORE-025) with pattern matching"
+        priority: HIGH
+        test_coverage_target: 85
+
+      - id: AC-CHALLENGE-002
+        title: "Challenge Response Generator"
+        description: "Generate educational challenge responses with governance rationale and alternatives"
+        priority: MEDIUM
+        test_coverage_target: 80
+
+      - id: AC-CHALLENGE-003
+        title: "Challenge Learning Loop"
+        description: "Learn from challenge outcomes to improve pattern detection (tier3 persistence)"
+        priority: MEDIUM
+        test_coverage_target: 75
+
+  # ============================================================================
+  # TEMPLATE SYSTEM (AC-TEMPLATE-*)
+  # ============================================================================
+  template_system:
+    category: TEMPLATE
+    phase: 11
+    total: 3
+    requirements:
+      - id: AC-TEMPLATE-006
+        title: "Orchestrator Header Migration"
+        description: "Migrate all orchestrator prompts to use standardized CORE-026 headers with validation"
+        priority: HIGH
+        test_coverage_target: 85
+
+      - id: AC-TEMPLATE-007
+        title: "Template Layer Integration"
+        description: "Integrate 3-layer template system (tier0/tier1/tier2) into all orchestrators with caching"
+        priority: HIGH
+        test_coverage_target: 85
+
+      - id: AC-TEMPLATE-008
+        title: "Response Template Unification"
+        description: "Unify all response templates under 3-layer architecture with versioning"
+        priority: HIGH
+        test_coverage_target: 85
+
+# ==============================================================================
+# GOVERNANCE RULES (23 CORE RULES - SKULL)
+# ==============================================================================
+governance_rules:
+  tier: 0
+  category: CORTEX_CORE
+  precedence: HIGHEST
+  total_rules: 23
+  
+  rules:
+    - rule_id: CORE-001
+      name: "Small Incremental Autonomous Operations Required"
+      category: orchestration_lifecycle
+      severity: blocked
+      description: "Operations split into <500 line increments per execution"
+
+    - rule_id: CORE-002
+      name: "Block Summary/Report/Explanation File Creation"
+      category: response_formatting
+      severity: blocked
+      description: "No *-summary.md, *-report.md, *-explanation.md files"
+
+    - rule_id: CORE-003
+      name: "Executive Summary with Visual Progress Bars Required"
+      category: response_formatting
+      severity: blocked
+      description: "Visual progress bars in responses, no code snippets"
+
+    - rule_id: CORE-004
+      name: "Minimal Continuation Prompt Token Budget"
+      category: response_formatting
+      severity: blocked
+      description: "CONTINUATION-PROMPT.md under 12 lines, 500 tokens"
+
+    - rule_id: CORE-005
+      name: "Portable Path Resolution Required"
+      category: portability
+      severity: blocked
+      description: "No hardcoded paths, use get_project_root()"
+
+    - rule_id: CORE-006
+      name: "Phase -2: Setup Verification Mandatory"
+      category: orchestration_lifecycle
+      severity: blocked
+      description: "Verify dependencies before execution"
+
+    - rule_id: CORE-007
+      name: "Phase N+1: Teardown + REFACTOR + Commit Mandatory"
+      category: orchestration_lifecycle
+      severity: blocked
+      description: "Cleanup and refactor after execution"
+
+    - rule_id: CORE-008
+      name: "Test-Driven Development Mandatory"
+      category: development_workflow
+      severity: blocked
+      description: "RED → GREEN → REFACTOR workflow"
+
+    - rule_id: CORE-009
+      name: "Plan Files Must Live Within Plan Folder Structure"
+      category: architecture_integrity
+      severity: blocked
+      description: "No plan files in workspace root"
+
+    - rule_id: CORE-010
+      name: "Script Consolidation & Cataloging Required"
+      category: architecture_integrity
+      severity: blocked
+      description: "Scripts managed via Cortex Toolkit Orchestrator"
+
+    - rule_id: CORE-011
+      name: "Type Hints Required for All Functions/Methods"
+      category: quality_gates
+      severity: blocked
+      description: "Complete type hints for all Python code"
+
+    - rule_id: CORE-012
+      name: "Docstrings Required for All Public APIs"
+      category: quality_gates
+      severity: blocked
+      description: "Google-style docstrings for public APIs"
+
+    - rule_id: CORE-013
+      name: "Explicit Error Handling with Custom Exceptions"
+      category: quality_gates
+      severity: blocked
+      description: "No bare except, custom exceptions required"
+
+    - rule_id: CORE-014
+      name: "SOLID Principles Enforcement"
+      category: architecture_integrity
+      severity: blocked
+      description: "Single Responsibility, Open/Closed, LSP, ISP, DIP"
+
+    - rule_id: CORE-015
+      name: "Import Organization (PEP 8)"
+      category: quality_gates
+      severity: warning
+      description: "3 groups: stdlib, third-party, local"
+
+    - rule_id: CORE-016
+      name: "Black Code Formatting"
+      category: quality_gates
+      severity: warning
+      description: "Black with line-length=100"
+
+    - rule_id: CORE-017
+      name: "Strict Governance Enforcement"
+      category: security_privacy
+      severity: blocked
+      description: "No overrides, all violations logged"
+
+    - rule_id: CORE-018
+      name: "YAML-First Design Mandatory"
+      category: architecture_integrity
+      severity: blocked
+      description: "No *-PLAN.md files, use YAML"
+
+    - rule_id: CORE-019
+      name: "All Development Must Go Through TDD-Master Orchestrator"
+      category: development_workflow
+      severity: blocked
+      description: "GitHub Copilot cannot write implementation code directly"
+
+    - rule_id: CORE-020
+      name: "Orchestrators Must Not Create Markdown Work Products"
+      category: response_formatting
+      severity: blocked
+      description: "Use YAML/JSON/Python, no markdown in cortex-brain/"
+
+    - rule_id: CORE-021
+      name: "New Orchestrators MUST Use Scaffolder"
+      category: architecture_integrity
+      severity: blocked
+      description: "All new orchestrators via orchestrator_scaffolder.py"
+
+    - rule_id: CORE-022
+      name: "Kebab-Case File Naming with 20-Character Limit"
+      category: architecture_integrity
+      severity: blocked
+      description: "lowercase, hyphen-separated, max 20 chars"
+
+    - rule_id: CORE-023
+      name: "File Type-Specific Validation Before Commit"
+      category: quality_gates
+      severity: blocked
+      description: "HTML5, WCAG AA, YAML schema validation pre-commit"
+
+    - rule_id: CORE-024
+      name: "All MCP Tools MUST Use @mcp_tool Decorator"
+      category: architecture_integrity
+      severity: blocked
+      description: "Prevents registration drift"
+
+    - rule_id: CORE-026
+      name: "MCP Server Unity - Single Registry Authority"
+      category: architecture_integrity
+      severity: blocked
+      description: "One authoritative MCP tools registry"
+
+# ==============================================================================
+# SSOT ARCHITECTURE (Single Source of Truth)
+# ==============================================================================
+ssot_architecture:
+  version: "1.6.0"
+  primary_sources:
+    architecture_ssot:
+      file: "cortex-brain/cx6-plan/master-plan.yaml"
+      purpose: "Phase definitions, AC-ID ranges, timelines"
+      updated_by: "Humans (architects)"
+
+    execution_ssot:
+      file: "cortex-brain/tier1/tracking/progress-tracker.json"
+      purpose: "Current phase, implemented ACs, execution state"
+      updated_by: "MasterOrchestrator ONLY"
+
+    definition_ssot:
+      file: "cortex-brain/tier1/acceptance-criteria/AC-INDEX.yaml"
+      purpose: "AC-ID definitions, acceptance criteria"
+      updated_by: "Humans (architects)"
+
+    governance_ssot:
+      file: "cortex-brain/tier0/governance/core-rules.yaml"
+      purpose: "23 SKULL rules, governance enforcement"
+      updated_by: "Humans (governance team)"
+
+# ==============================================================================
+# REGISTERED ORCHESTRATORS (11 Total)
+# ==============================================================================
+registered_orchestrators:
+  - id: epic_review
+    name: "Epic Review Orchestrator"
+    enabled: true
+    phase_integration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+
+  - id: planning_v5
+    name: "Planning System v5"
+    enabled: true
+    phase_integration: [2, 4, 11]
+
+  - id: vacuum
+    name: "Vacuum Orchestrator v2"
+    enabled: true
+    phase_integration: [5]
+
+  - id: maintenance_v2
+    name: "Maintenance Orchestrator v2"
+    enabled: true
+    phase_integration: [6, 7, 8, 9, 10]
+
+  - id: ado_v2
+    name: "ADO Orchestrator v2"
+    enabled: true
+    phase_integration: [3, 4, 5]
+
+  - id: investigation_v2
+    name: "Investigation Orchestrator v2"
+    enabled: true
+    phase_integration: [3, 4, 11]
+
+  - id: sanitization_v2
+    name: "Sanitization Orchestrator v2"
+    enabled: true
+    phase_integration: [5, 6]
+
+  - id: todo_orchestrator
+    name: "TODO Orchestrator"
+    enabled: true
+    phase_integration: [2]
+
+  - id: tdd_master
+    name: "TDD-Master Orchestrator"
+    enabled: true
+    phase_integration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+
+  - id: gap_fix
+    name: "Gap-Fix Orchestrator"
+    enabled: true
+    phase_integration: [4, 5, 6, 8, 9, 10]
+
+  - id: autonomous_ac_implementor
+    name: "Autonomous AC Implementor"
+    enabled: true
+    phase_integration: [2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+
+  - id: health_check_v1
+    name: "Health Check Orchestrator v1"
+    enabled: true
+    phase_integration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+
+  - id: master_orchestrator
+    name: "MasterOrchestrator (Central Controller)"
+    enabled: true
+    phase_integration: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+
+  - id: orchestrator_scaffolder
+    name: "Orchestrator Scaffolder"
+    enabled: true
+    phase_integration: [3, 4, 5, 6, 7, 8, 9, 10, 11]
+
+# ==============================================================================
+# CORTEX 7.0 VISION REQUIREMENTS (Missing from v6 - Carried Forward)
+# ==============================================================================
+cortex7_vision_requirements:
+
+  # ============================================================================
+  # 1. INTENT MANAGEMENT & CLARIFICATION PROTOCOL
+  # ============================================================================
+  intent_management:
+    category: CORE_PROTOCOL
+    priority: CRITICAL
+    description: "Echo user intent back and get confirmation before execution"
+    current_implementation:
+      file: ".github/prompts/CORTEX.prompt.md"
+      section: "INTENT CLARIFICATION PROTOCOL"
+    requirements:
+      - id: REQ-INTENT-001
+        title: "Intent Echo Protocol"
+        description: |
+          ALWAYS execute intent clarification protocol before any orchestrator invocation:
+          1. Parse user request into structured intent
+          2. Echo intent back in executive bullet format
+          3. Ask "IS THIS CORRECT? (Yes / No / Clarify)"
+          4. Only proceed after user confirms
+        acceptance_criteria:
+          - User intent echoed in bullets before execution
+          - User explicitly confirms with "Yes" before proceeding
+          - "No" triggers re-parse and re-clarification
+          - "Clarify" triggers follow-up questions
+        
+      - id: REQ-INTENT-002
+        title: "Intent Parse Structure"
+        description: |
+          Convert natural language to structured intent:
+          - Primary action (implement, validate, plan, investigate, etc.)
+          - Scope (single AC-ID, phase, epic, etc.)
+          - Constraints/context (dependencies, blockers)
+          - Expected outcome
+        
+      - id: REQ-INTENT-003
+        title: "Executive Summary Format"
+        description: |
+          Response format for intent echo:
+          🎯 YOU WANT TO:
+          • {Primary action in plain English}
+          • {Scope description}
+          • {Expected outcome}
+          
+          IS THIS CORRECT? (Yes / No / Clarify)
+
+  # ============================================================================
+  # 2. MASTERORCHESTRATOR - CENTRAL CONTROL
+  # ============================================================================
+  master_orchestrator_central:
+    category: CORE_ARCHITECTURE
+    priority: CRITICAL
+    description: "MasterOrchestrator is IN CHARGE of all orchestration - Single entry point"
+    current_implementation:
+      file: "src/orchestrators/core/master_orchestrator.py"
+      main_entry: "src/main.py"
+    requirements:
+      - id: REQ-MASTER-001
+        title: "Single Entry Point Enforcement"
+        description: |
+          ALL orchestration MUST go through MasterOrchestrator:
+          - GitHub Copilot NEVER executes code directly
+          - NEVER instantiate orchestrators directly (use MasterOrchestrator)
+          - NEVER manipulate state outside MasterOrchestrator
+        invocation: |
+          python3 -m src.main "{user_intent}" --orchestrator master --format markdown
+        
+      - id: REQ-MASTER-002
+        title: "MasterOrchestrator Responsibilities"
+        description: |
+          MasterOrchestrator owns ALL execution:
+          - Load governance rules (tier0/tier1/tier2/tier3)
+          - Validate against SKULL rules
+          - Create TodoManager tasks
+          - Execute tasks in dependency order
+          - Update progress-tracker.json (atomic writes)
+          - Enforce phase gates
+          - Route to feature orchestrators
+          - Return structured results
+        
+      - id: REQ-MASTER-003
+        title: "Governance Integration"
+        description: |
+          Default workflow:
+          Request → GovernanceMerger → MasterOrchestrator → TodoManager → Execute
+                    (merge rules)     (evaluate)          (create tasks)
+        
+      - id: REQ-MASTER-004
+        title: "Orchestrator Routing"
+        description: |
+          MasterOrchestrator routes to sub-orchestrators based on intent:
+          - "plan" → PlanningOrchestratorV5
+          - "implement" → TDD-Master
+          - "health check" → HealthCheckOrchestratorV1
+          - "validate" → ValidationOrchestrator
+          - "ado" → ADOOrchestratorV2
+          - "vacuum" → VacuumOrchestrator
+          - Phase 4 adds LLM Intent Classifier for fuzzy routing
+
+  # ============================================================================
+  # 3. COMPREHENSIVE INTELLIGENCE LAYER (Phase 4)
+  # ============================================================================
+  intelligence_layer:
+    category: INTELLIGENCE
+    phase: 4
+    priority: HIGH
+    description: "LLM-based intent classification and intelligent routing"
+    current_implementation:
+      file: "src/orchestrators/middleware/intelligence_middleware.py"
+      classifier: "src/orchestrators/master_orchestrator.py (llm_fallback)"
+    requirements:
+      - id: REQ-INTEL-001
+        title: "LLM Intent Classifier"
+        description: |
+          Fallback classifier for ambiguous routing:
+          - Pattern-based routing fails → LLM classifies intent
+          - Returns confidence score + recommended orchestrator
+          - Supports multi-intent detection
+          - Learning from user feedback (tier3 persistence)
+        
+      - id: REQ-INTEL-002
+        title: "Intelligence Middleware"
+        description: |
+          Mistake prevention layer:
+          - Detects potentially harmful requests
+          - Validates against governance rules
+          - Provides suggestions for improvement
+          - Blocks requests that violate SKULL rules
+        
+      - id: REQ-INTEL-003
+        title: "Knowledge Graph Integration"
+        description: |
+          Query knowledge graph for context:
+          - Find related code patterns
+          - Identify similar implementations
+          - Suggest reusable components
+          - Track learned patterns in tier3
+        
+      - id: REQ-INTEL-004
+        title: "Vision API Integration"
+        description: |
+          Optional image understanding:
+          - Analyze architecture diagrams
+          - Parse UI mockups
+          - Extract requirements from screenshots
+          - Support for multi-modal input
+
+  # ============================================================================
+  # 4. CORTEX TOOLKIT VIA MCP - MULTI-REPO SUPPORT
+  # ============================================================================
+  cortex_toolkit_mcp:
+    category: MCP_INTEGRATION
+    priority: HIGH
+    description: "All CORTEX tools exposed via MCP for cross-repo usage"
+    current_implementation:
+      mcp_server: "src/mcp/mcp_server.py"
+      multi_repo: "src/mcp/multi_repo_manager.py"
+      tools_registry: "cortex-brain/tier0/governance/mcp-tools-registry.yaml"
+    requirements:
+      - id: REQ-MCP-001
+        title: "MCP Server Implementation"
+        description: |
+          Model Context Protocol server exposing CORTEX capabilities:
+          - tools/list: Returns all registered MCP tools
+          - tools/call: Executes tool with arguments
+          - JSON-RPC 2.0 compliant
+          - Registry-driven tool discovery
+        implementation: "src/mcp/mcp_server.py"
+        
+      - id: REQ-MCP-002
+        title: "Multi-Repository Manager"
+        description: |
+          Single CORTEX installation works across multiple repositories:
+          - Repository Discovery: Find all repos in workspace
+          - CORTEX-Enabled Detection: Identify repos with cortex-brain/
+          - Cross-Repo Operations: Search, analyze across repos
+          - Per-Repo Database Isolation: Separate audit/state DBs
+        implementation: "src/mcp/multi_repo_manager.py"
+        
+      - id: REQ-MCP-003
+        title: "MCP Tool Categories"
+        description: |
+          5 MCP tool categories registered:
+          1. governance_tools: Query/validate governance rules
+          2. housekeeping_tools: System maintenance, health checks
+          3. planning_tools: Create/execute YAML plans
+          4. todo_tools: Task management
+          5. tdd_tools: Test-driven development
+        
+      - id: REQ-MCP-004
+        title: "@mcp_tool Decorator (CORE-024)"
+        description: |
+          All MCP tools MUST use @mcp_tool decorator:
+          - Prevents registration drift
+          - Automatic parameter extraction
+          - Consistent tool schema
+          - Audit trail integration
+        example: |
+          @mcp_tool(
+              name="cortex_planning_create",
+              description="Create a new YAML-based plan",
+              category="planning"
+          )
+          def planning_create(name: str, description: str) -> Dict:
+              pass
+        
+      - id: REQ-MCP-005
+        title: "Cross-Repo Search & Analysis"
+        description: |
+          Search patterns across all repositories:
+          - Pattern search with file filters
+          - Aggregate statistics across repos
+          - Find similar code across projects
+          - Knowledge sharing between projects
+        
+      - id: REQ-MCP-006
+        title: "MCP Server Unity (CORE-026)"
+        description: |
+          Single authoritative MCP tools registry:
+          - One registry file: mcp-tools-registry.yaml
+          - No duplicate tool registrations
+          - ToolkitOrchestrator accessed via MasterOrchestrator only
+
+  # ============================================================================
+  # 5. ORCHESTRATOR SCAFFOLDING SYSTEM
+  # ============================================================================
+  orchestrator_scaffolding:
+    category: DEVELOPMENT_INFRASTRUCTURE
+    priority: HIGH
+    description: "Custom orchestrator creation via scaffolder"
+    current_implementation:
+      scaffolder: "src/orchestrators/master/scaffolder.py"
+      rule: "CORE-021"
+      custom_loader: "src/mcp/loader.py (CustomOrchestratorLoader)"
+    requirements:
+      - id: REQ-SCAFFOLD-001
+        title: "Orchestrator Scaffolder CLI"
+        description: |
+          Create complete orchestrators via CLI:
+          - Generates implementation file
+          - Creates test file with fixtures
+          - Generates documentation
+          - Updates __init__.py imports
+          - Supports custom templates
+          - Dry-run mode available
+        invocation: |
+          python -m src.tools.orchestrator_scaffolder --name "MyOrchestrator" --category feature
+        
+      - id: REQ-SCAFFOLD-002
+        title: "Scaffolded Orchestrator Structure"
+        description: |
+          Each scaffolded orchestrator includes:
+          - Implementation: src/orchestrators/{category}/{snake_name}.py
+          - Tests: tests/orchestrators/test_{snake_name}.py
+          - Documentation: docs/orchestrators/{kebab-name}.md
+          - Registration in __init__.py
+        
+      - id: REQ-SCAFFOLD-003
+        title: "MasterOrchestrator Registration"
+        description: |
+          Automatic routing rule registration:
+          - Add pattern to routing table
+          - Register with CapabilityRegistry
+          - Update MCP tools if needed
+        
+      - id: REQ-SCAFFOLD-004
+        title: "Custom Orchestrator Loader"
+        description: |
+          Dynamic loading of custom orchestrators:
+          - Search paths for user-defined orchestrators
+          - Hot-reload capability
+          - Isolated execution context
+        implementation: "src/mcp/loader.py (CustomOrchestratorLoader)"
+        
+      - id: REQ-SCAFFOLD-005
+        title: "CORE-021 Enforcement"
+        description: |
+          ALL new orchestrators MUST use scaffolder:
+          - Pre-commit hook validates scaffolder compliance
+          - Ensures consistent structure
+          - Test generation included
+          - Audit trail compliance built-in
+
+  # ============================================================================
+  # 6. INTERACTIVE PLANNING WITH AST ANALYSIS
+  # ============================================================================
+  interactive_planning:
+    category: PLANNING_SYSTEM
+    phase: 2
+    priority: HIGH
+    description: "Interactive planning orchestrator with AST scanning and epic/feature support"
+    current_implementation:
+      orchestrator: "src/orchestrators/planning/planning_orchestrator.py"
+      ast_scanner: "src/orchestrators/planning/ast_scanner.py"
+      knowledge_graph: "src/orchestrators/planning/knowledge_graph_query.py"
+    requirements:
+      - id: REQ-PLAN-001
+        title: "Planning Orchestrator v5"
+        description: |
+          Pure autonomous planning system:
+          - Zero natural language in manifest
+          - Config-only YAML generation
+          - Template-driven plan generation
+          - Database state tracking
+        
+      - id: REQ-PLAN-002
+        title: "Plan Types Supported"
+        description: |
+          4 plan types supported:
+          - feature: Single feature implementation
+          - epic: Multi-feature epic plan
+          - phase: Phase-level planning
+          - sub-plan: Nested sub-plans
+        
+      - id: REQ-PLAN-003
+        title: "AST-Based Code Analysis"
+        description: |
+          Parse existing codebase before planning:
+          - Extract function/class signatures
+          - Identify patterns and dependencies
+          - Find integration points
+          - Avoid duplicate implementations
+        implementation: "src/orchestrators/planning/ast_scanner.py"
+        
+      - id: REQ-PLAN-004
+        title: "Knowledge Graph Query"
+        description: |
+          Query knowledge graph during planning:
+          - Find related implementations
+          - Identify reusable components
+          - Suggest best practices
+          - Track historical decisions
+        implementation: "src/orchestrators/planning/knowledge_graph_query.py"
+        
+      - id: REQ-PLAN-005
+        title: "Execution Phases"
+        description: |
+          5-phase planning execution:
+          Phase 0: Context Discovery - Search workspace
+          Phase 1: Architecture Analysis - AST parsing
+          Phase 2: Plan Generation - Template rendering
+          Phase 3: Folder Creation - Filesystem operations
+          Phase 4: Validation - Automated checks
+        
+      - id: REQ-PLAN-006
+        title: "Duplicate Detection"
+        description: |
+          Prevent duplicate plans and implementations:
+          - Check existing plans in database
+          - Search codebase for similar implementations
+          - Suggest reuse over recreation
+        implementation: "src/orchestrators/planning/duplicate_detector.py"
+        
+      - id: REQ-PLAN-007
+        title: "TodoManager Integration"
+        description: |
+          Real-time task tracking during planning:
+          - Create tasks for each plan phase
+          - Track progress automatically
+          - Update progress-tracker.json
+          - Audit trail for all operations
+        
+      - id: REQ-PLAN-008
+        title: "MCP Planning Tools"
+        description: |
+          5 MCP tools for planning:
+          1. cortex_planning_create: Create new plan
+          2. cortex_planning_execute: Execute plan
+          3. cortex_planning_list: List all plans
+          4. cortex_planning_status: Get plan status
+          5. cortex_planning_validate: Validate plan structure
+        implementation: "src/mcp/planning_tools.py"
+
+  # ============================================================================
+  # 7. CORTEX LENS - INTELLIGENT CODE ANALYSIS
+  # ============================================================================
+  cortex_lens_comprehensive:
+    category: INTELLIGENCE_SYSTEM
+    phase: 11
+    priority: HIGH
+    description: "Intelligent code analysis, onboarding, and challenge system"
+    current_implementation:
+      phase_11_acs: ["AC-LENS-001 to AC-LENS-006", "AC-ONBOARD-001 to AC-ONBOARD-008", 
+                    "AC-CHALLENGE-001 to AC-CHALLENGE-003", "AC-TEMPLATE-006 to AC-TEMPLATE-008"]
+    requirements:
+      - id: REQ-LENS-001
+        title: "Multi-Language AST Parser"
+        description: |
+          Parse code across 6 languages:
+          - Python: ast module
+          - JavaScript/TypeScript: Babel parser
+          - Java: JavaParser
+          - C#: Roslyn
+          - Go: go/ast
+          - Rust: syn crate
+        acceptance_criteria:
+          - AC-LENS-001: AST-Based Multi-Language Code Parser
+        
+      - id: REQ-LENS-002
+        title: "Dependency Graph Construction"
+        description: |
+          Build import/dependency graphs:
+          - Extract imports from parsed code
+          - Build directed graph of dependencies
+          - Detect circular dependencies
+          - Identify external vs internal deps
+        acceptance_criteria:
+          - AC-LENS-002: Dependency Graph Construction
+        
+      - id: REQ-LENS-003
+        title: "Git History Intelligence"
+        description: |
+          Integrate git history analysis:
+          - Search historical branches for implementations
+          - Extract learned patterns
+          - Track code evolution
+          - Reuse proven solutions
+        acceptance_criteria:
+          - AC-LENS-003: Git History Intelligence Integration
+        
+      - id: REQ-LENS-004
+        title: "Knowledge Graph Storage"
+        description: |
+          SQLite-based knowledge graph:
+          - Entity relationships (files, functions, classes)
+          - Pattern storage and retrieval
+          - Cross-project knowledge sharing
+          - Query optimization with indexes
+        acceptance_criteria:
+          - AC-LENS-004: Knowledge Graph Storage
+        
+      - id: REQ-LENS-005
+        title: "MCP Tool Exposure"
+        description: |
+          Expose LENS as MCP tools:
+          - cortex_lens_analyze: Analyze file/directory
+          - cortex_lens_dependencies: Get dependency graph
+          - cortex_lens_patterns: Find code patterns
+          - cortex_lens_history: Query git history
+        acceptance_criteria:
+          - AC-LENS-005: MCP Tool Exposure
+        
+      - id: REQ-LENS-006
+        title: "Real-Time Visualization"
+        description: |
+          D3.js-based dashboard:
+          - Code structure visualization
+          - Dependency graph rendering
+          - Pattern highlight and navigation
+          - Interactive exploration
+        acceptance_criteria:
+          - AC-LENS-006: Real-Time Analysis Dashboard
+
+  # ============================================================================
+  # 8. ONBOARDING ORCHESTRATOR
+  # ============================================================================
+  onboarding_system:
+    category: DEVELOPER_EXPERIENCE
+    phase: 11
+    priority: MEDIUM
+    description: "12-phase automated project discovery and onboarding"
+    requirements:
+      - id: REQ-ONBOARD-001
+        title: "Project Discovery Workflow"
+        description: |
+          Automated codebase scanning:
+          - Directory structure analysis
+          - File pattern recognition
+          - Project type detection
+        acceptance_criteria:
+          - AC-ONBOARD-001: Project Discovery Workflow
+        
+      - id: REQ-ONBOARD-002
+        title: "Technology Stack Detection"
+        description: |
+          Identify frameworks and tools:
+          - Package managers (npm, pip, cargo)
+          - Frameworks (React, Django, Spring)
+          - Build tools (webpack, maven, make)
+          - Testing frameworks (pytest, jest)
+        acceptance_criteria:
+          - AC-ONBOARD-002: Technology Stack Detection
+        
+      - id: REQ-ONBOARD-003
+        title: "Architecture Pattern Recognition"
+        description: |
+          Detect architecture patterns:
+          - MVC/MVP/MVVM
+          - Microservices vs Monolith
+          - Event-driven architecture
+          - Clean/Hexagonal architecture
+        acceptance_criteria:
+          - AC-ONBOARD-004: Architecture Pattern Recognition
+        
+      - id: REQ-ONBOARD-004
+        title: "Documentation Generation"
+        description: |
+          Auto-generate project documentation:
+          - README.md from analysis
+          - Architecture diagrams
+          - Dependency documentation
+          - API documentation stubs
+        acceptance_criteria:
+          - AC-ONBOARD-005: Documentation Generator
+
+  # ============================================================================
+  # 9. CHALLENGE SYSTEM (CORE-025)
+  # ============================================================================
+  challenge_system_comprehensive:
+    category: GOVERNANCE_ENFORCEMENT
+    phase: 11
+    priority: HIGH
+    description: "Intelligent challenge protocol for governance enforcement"
+    current_implementation:
+      engine: "src/infrastructure/challenge_detection_engine.py"
+      rule: "CORE-025"
+    requirements:
+      - id: REQ-CHALLENGE-001
+        title: "Challenge Detection Engine"
+        description: |
+          Detect requests contradicting governance:
+          - Pattern matching against SKULL rules
+          - Risk level assessment (BLOCK/ADVISE/ENHANCE/APPROVE)
+          - Educational response generation
+        acceptance_criteria:
+          - AC-CHALLENGE-001: Challenge Detection Engine
+        
+      - id: REQ-CHALLENGE-002
+        title: "Response Levels"
+        description: |
+          4 challenge response levels:
+          - BLOCK (CHALLENGE): Tier 0 violations, must stop
+          - ADVISE (CHALLENGE): Governance concerns with alternatives
+          - ENHANCE (SUGGEST): Best practices available
+          - APPROVE (PROCEED): No blockers, ready to execute
+        
+      - id: REQ-CHALLENGE-003
+        title: "Learning Loop"
+        description: |
+          Learn from challenge outcomes:
+          - Track challenge triggers and resolutions
+          - Improve pattern detection over time
+          - Store learned patterns in tier3
+        acceptance_criteria:
+          - AC-CHALLENGE-003: Challenge Learning Loop
+

@@ -1,0 +1,334 @@
+metadata:
+  project: CORTEX_7_RAG_ARCHITECTURE
+  version: 2.0.0
+  date: '2026-01-14'
+  author: Asif Hussain
+  status: design_proposal_with_challenges
+  key_enhancements:
+  - Audit logging baked into every layer
+  - Hard evidence requirement via audit trails
+  - Intelligence Challenger layer for AST/KG-based recommendations
+  - RAG-optimized persistent memory
+  - End-to-end workflow traceability
+  - Hallucination detection via audit verification
+  - Brittleness detection via dependency graphs
+your_requirements:
+  audit_logging:
+    requirement: Baked into architecture
+    goal: Hard evidence from audit logs
+    detection: Brittleness, breaks, hallucinations
+  challenger_system:
+    requirement: Intelligence layer for intent router
+    goal: Challenge user with better alternatives
+    basis: AST analysis + knowledge graphs
+my_challenge_better_design:
+  challenge_1_audit_first_pattern:
+    your_approach: Add audit logging to existing architecture
+    better_approach: Audit-First Architecture Pattern
+    rationale: 'Invert dependency: code depends on audit, not vice versa'
+    comparison:
+      traditional:
+        pattern: "Execute \u2192 Log to audit"
+        problem: Logging optional, can be skipped
+        failure_mode: Silent failures, no evidence trail
+      audit_first:
+        pattern: "Create AuditContext \u2192 Execute within context \u2192 Auto-commit"
+        benefit: Impossible to execute without audit trail
+        guarantee: Every operation has evidence by construction
+    implementation:
+      decorator: '@audit_driven(category, operation)'
+      context_manager: with AuditContext(ac_id, correlation_id)
+      enforcement: Operations without audit context blocked at runtime
+  challenge_2_tiered_memory:
+    your_approach: SQLite + embeddings for semantic search
+    better_approach: Tiered Memory Architecture (Hot/Warm/Cold Zones)
+    rationale: RAG systems need different storage strategies
+    tiered_memory_model:
+      hot_zone:
+        description: Last 7 days, in-memory + SQLite
+        storage: Redis cache + SQLite hot partition
+        latency: <5ms
+        use_case: Active development
+        size_limit: 100MB RAM, 1GB disk
+      warm_zone:
+        description: Last 30 days, SQLite only
+        latency: <50ms
+        use_case: Recent history, debugging
+        size_limit: 10GB disk
+      cold_zone:
+        description: Older than 30 days, compressed
+        storage: JSONL.gz with index
+        latency: <500ms
+        use_case: Historical analysis
+        size_limit: Unlimited (archival)
+    advantages:
+    - 10x faster hot queries (Redis cache)
+    - 90% disk space savings (cold compression)
+    - Automatic aging policy
+    - Query optimizer routes to correct zone
+  challenge_3_challenger_pipeline:
+    your_approach: Challenger in intelligence layer
+    better_approach: Multi-Stage Challenge Pipeline with Confidence Scoring
+    rationale: Single challenger can't detect all issues
+    pipeline_stages:
+      stage_1_ast_analyzer:
+        input: User request + current codebase AST
+        analysis:
+        - Detect duplicate logic (similarity >80%)
+        - Find better existing implementations
+        - Identify missing error handling
+        - Check SKULL rule violations
+        output: AST-based recommendations with line numbers
+        confidence_score: 0.0 to 1.0
+      stage_2_knowledge_graph_reasoner:
+        input: User request + CORTEX knowledge graph
+        analysis:
+        - 'Query graph: ''Has this been solved before?'''
+        - Find related AC-IDs (semantic similarity)
+        - Detect architectural patterns
+        - Suggest design patterns from tier3/
+        output: KG-based recommendations with AC-ID links
+        confidence_score: 0.0 to 1.0
+      stage_3_historical_pattern_matcher:
+        input: User request + git history + audit logs
+        analysis:
+        - Search git history for similar implementations
+        - 'Check audit logs: ''Did we try this before?'''
+        - Find failed attempts (what NOT to do)
+        - Identify successful patterns (what worked)
+        output: Historical recommendations with git refs
+        confidence_score: 0.0 to 1.0
+      stage_4_rag_semantic_search:
+        input: User request embeddings + vector store
+        analysis:
+        - Semantic search across all CORTEX documentation
+        - Find relevant SSOT files
+        - Retrieve similar user queries
+        - Match against tier3 learned patterns
+        output: RAG-based recommendations with sources
+        confidence_score: 0.0 to 1.0
+      stage_5_merger_and_ranker:
+        input: All stage outputs + confidence scores
+        process:
+        - Deduplicate recommendations
+        - Weight by confidence scores
+        - Rank by combined score + user context
+        - Filter low-confidence (<0.3)
+        output: Top 3 challenges with justifications
+    integration_with_intent_router:
+      workflow:
+      - User request arrives
+      - IntentRouter calls ChallengerPipeline.analyze(request)
+      - ChallengerPipeline runs 5 stages in parallel
+      - Merger ranks challenges by confidence
+      - IntentRouter presents top 3 challenges to user
+      - 'User reviews: Accept / Reject / Modify'
+      - "If accepted \u2192 Route with enhanced context"
+      - "If rejected \u2192 Route original (log rejection)"
+architecture_layers:
+  philosophy: Audit-First, RAG-Optimized, Intelligence-Enhanced
+  layer_0_audit_foundation:
+    name: Audit Foundation Layer
+    description: All operations flow through audit context
+    components:
+    - AuditContext (context manager)
+    - AuditDrivenDecorator (@audit_driven)
+    - TieredMemoryManager (hot/warm/cold)
+    - EvidenceCollector (auto-capture)
+    - IntegrityVerifier (hash chains)
+    - ProductionModeController (logging level control)
+    guarantees:
+    - Every operation has audit trail (by construction)
+    - Evidence collected automatically
+    - Tamper detection via hash chains
+    - End-to-end traceability (correlation IDs)
+    production_mode:
+      purpose: Controlled logging for production deployments
+      rationale: Detailed logging only needed during CORTEX development
+      modes:
+        development:
+          description: Full detailed logging for CORTEX development
+          log_levels: [TRACE, DEBUG, INFO, WARNING, ERROR, CRITICAL]
+          captures:
+          - Full context and metadata
+          - AST analysis details
+          - KG reasoning steps
+          - Challenger pipeline internals
+          - Test evidence bundles
+          - Performance metrics
+          retention: Hot 7 days, Warm 30 days, Cold unlimited
+        production:
+          description: Minimal logging for production use
+          log_levels: [WARNING, ERROR, CRITICAL]
+          captures:
+          - Errors and failures only
+          - Governance violations
+          - Security events
+          - Critical state changes
+          retention: Hot 7 days, Cold 90 days
+        hybrid:
+          description: Selective detailed logging
+          log_levels: [INFO, WARNING, ERROR, CRITICAL]
+          captures:
+          - User-facing operations (INFO)
+          - Orchestrator lifecycle (INFO)
+          - Evidence bundles (INFO)
+          - All errors and warnings
+          retention: Hot 7 days, Warm 30 days, Cold 90 days
+      configuration:
+        env_variable: CORTEX_AUDIT_MODE
+        values: [development, production, hybrid]
+        default: development
+        runtime_override: Supported via AuditContext(mode='production')
+      implementation:
+        decorator_behavior: '@audit_driven still enforces context, but logging detail varies'
+        context_manager_behavior: 'AuditContext captures all, filters based on mode'
+        audit_trail_guarantee: 'Critical events (errors, violations) ALWAYS logged regardless of mode'
+        evidence_collection: 'Evidence bundles captured in all modes (needed for compliance)'
+      migration_strategy:
+        phase_1: All CORTEX 6.0 development uses development mode
+        phase_2: Production deployments default to hybrid mode
+        phase_3: User-deployed instances use production mode
+        override: Users can set CORTEX_AUDIT_MODE=development for troubleshooting
+  layer_2_intelligence_layer:
+    name: Intelligence & Challenge Layer (NEW)
+    description: AST analysis, KG reasoning, challenger pipeline
+    components:
+    - ASTAnalyzer (Python ast module)
+    - KnowledgeGraphReasoner (NetworkX/Neo4j)
+    - HistoricalPatternMatcher (git + audit)
+    - RAGSemanticSearchEngine (FAISS)
+    - ChallengerPipeline (5-stage orchestrator)
+    - ConfidenceScorer (weighted ranker)
+    integration_points:
+    - IntentRouter calls ChallengerPipeline before routing
+    - ToolCreator queries KnowledgeGraph before creating
+    - ConsolidationAgent uses ASTAnalyzer for duplicates
+    - PlanningOrchestrator uses RAG for plan generation
+evidence_framework:
+  philosophy: Success determined by audit trail, not self-reporting
+  level_5_hallucination_detection:
+    requirement: Claimed capabilities have implementation evidence
+    detection_method:
+      step_1: Parse orchestrator response
+      step_2: Query audit.db for AC-ID entries
+      step_3: Check for test execution + evidence bundle
+      step_4: Verify test results actually passed
+    hallucination_if:
+    - No audit entries for claimed AC-ID
+    - Test execution logged but failed
+    - Evidence bundle missing
+    - Timestamp mismatch (claimed before implemented)
+    action:
+    - 'Alert user: ''Hallucination detected'''
+    - Show evidence gap
+    - Downgrade completion status
+  level_6_brittleness_detection:
+    requirement: Dependency graph reveals fragile connections
+    brittleness_indicators:
+    - Tool called by 50+ operations (single point of failure)
+    - Circular dependencies detected
+    - No error handling (exceptions not caught)
+    - Hard-coded paths (violates CORE-005)
+    - No test coverage (no validation entries)
+    brittleness_score: score = 0.3*fan_in + 0.3*circular + 0.2*(1-coverage) + 0.2*violations
+    action_if_high:
+    - 'Alert user: ''High brittleness detected'''
+    - Show dependency graph visualization
+    - Recommend refactoring plan
+database_schema:
+  database_file: cortex-brain/database/cortex-unified.db
+  schema_version: 2.0.0
+  tables:
+    audit_logs:
+      description: Primary audit trail (hot zone)
+      columns:
+      - id
+      - timestamp
+      - level
+      - category
+      - component
+      - operation
+      - message
+      - ac_id
+      - correlation_id
+      - duration_ms
+      - context
+      - metadata
+      - event_hash
+      - prev_event_hash
+    evidence_bundles:
+      description: Captured test evidence
+      columns:
+      - id
+      - ac_id
+      - correlation_id
+      - timestamp
+      - test_framework
+      - total_tests
+      - passed_tests
+      - failed_tests
+      - coverage_percentage
+      - test_results
+    knowledge_graph_nodes:
+      description: Graph nodes for KG reasoning
+      columns:
+      - id
+      - node_type
+      - node_id
+      - properties
+      - embedding
+      - created_at
+    knowledge_graph_edges:
+      description: Graph edges for relationships
+      columns:
+      - id
+      - from_node_id
+      - to_node_id
+      - edge_type
+      - properties
+    vector_index:
+      description: FAISS index metadata
+      columns:
+      - id
+      - content_type
+      - content_id
+      - content_text
+      - embedding
+      - timestamp
+    challenge_history:
+      description: Track user responses to challenges
+      columns:
+      - id
+      - timestamp
+      - challenge_type
+      - challenge_description
+      - recommendation
+      - confidence
+      - user_response
+      - user_rationale
+challenge_questions_for_you:
+  question_1_audit_first:
+    your_requirement: Audit logging baked into architecture
+    my_proposal: Audit-First pattern (@audit_driven decorator)
+    question: 'Do you prefer: A) Audit-First (required), B) Audit-Added (optional), C) Hybrid'
+  question_2_tiered_memory:
+    your_requirement: Persistent memory via SQLite
+    my_proposal: Hot/Warm/Cold tiered memory (Redis + SQLite + JSONL.gz)
+    question: 'Do you prefer: A) Tiered (10x faster), B) Flat SQLite (simple), C) Hybrid'
+  question_3_challenger_complexity:
+    your_requirement: Intelligence challenger with AST + KG
+    my_proposal: 5-stage pipeline (AST, KG, Historical, RAG, Merger)
+    question: 'Do you prefer: A) Full 5-stage (~2-5s), B) 2-stage (~500ms), C) Progressive'
+  question_4_knowledge_graph_engine:
+    alternatives:
+      networkx: Python library, no server, <100k nodes
+      neo4j: Production-grade, requires Docker
+      sqlite: Leverage existing DB, recursive CTEs
+    question: Which graph engine? A) NetworkX, B) Neo4j, C) SQLite CTEs
+  question_5_rag_vector_store:
+    alternatives:
+      faiss: Fast, local, battle-tested, <1M vectors
+      chromadb: Simpler API, slower
+      sqlite_vss: Experimental, all-in-one
+    question: Which vector store? A) FAISS, B) ChromaDB, C) SQLite-VSS
