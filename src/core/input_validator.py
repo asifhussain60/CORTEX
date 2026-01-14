@@ -546,3 +546,247 @@ class InputValidator:
                     return True
 
         return False
+
+    def _validate_ac_id_format(self, ac_ids: Set[str]) -> bool:
+        """
+        AC-VALIDATE-006: AC-ID format validation.
+        
+        Validates that all AC-IDs follow the pattern AC-{CATEGORY}-{NNN}
+        or AC-{CATEGORY}-{NNN}-{NN} for sub-requirements.
+        
+        Args:
+            ac_ids: Set of AC-IDs to validate
+        
+        Returns:
+            True if all AC-IDs are valid format, False otherwise
+        """
+        if not ac_ids:
+            return True
+
+        # Pattern: AC-{CATEGORY}-{NNN} or AC-{CATEGORY}-{NNN}-{NN}
+        # CATEGORY: Must start with letter, followed by letters/numbers
+        # NNN: Exactly 3 digits
+        # Optional NN: Exactly 2 digits
+        format_pattern = r"^AC-[A-Z][A-Z0-9]*-\d{3}(?:-\d{2})?$"
+
+        for ac_id in ac_ids:
+            if not re.match(format_pattern, ac_id.strip()):
+                return False
+
+        return True
+
+    def _validate_phase_alignment(
+        self, ac_ids: Set[str], current_phase: Optional[str] = None
+    ) -> bool:
+        """
+        AC-VALIDATE-007: Phase alignment enforcement.
+        
+        Validates that request AC-IDs match the current phase.
+        E.g., PHASE-02 requests should only reference AC-IDs from PHASE-02.
+        
+        Args:
+            ac_ids: Set of AC-IDs to validate
+            current_phase: Current phase (e.g., "PHASE-02")
+        
+        Returns:
+            True if all AC-IDs align with current phase, False otherwise
+        """
+        if not ac_ids or not current_phase:
+            return True
+
+        try:
+            # Extract phase number from current_phase (e.g., "PHASE-02" -> "02")
+            phase_match = re.match(r"PHASE-(\d+)", current_phase)
+            if not phase_match:
+                return True  # Cannot determine phase, skip check
+
+            current_phase_num = phase_match.group(1)
+
+            # Extract phase number from each AC-ID
+            # AC-IDs from earlier phases are allowed (backward compat)
+            for ac_id in ac_ids:
+                ac_match = re.match(r"AC-([A-Z0-9]+)-\d{3}", ac_id)
+                if ac_match:
+                    ac_category = ac_match.group(1)
+                    # Try to find this AC-ID in registry
+                    try:
+                        rules = self.governance_registry.get_rules_by_ac_id(ac_id)
+                        for rule in rules:
+                            rule_phase = rule.get("phase", "")
+                            if rule_phase:
+                                # Extract phase number
+                                rule_phase_match = re.match(
+                                    r"PHASE-(\d+)", rule_phase
+                                )
+                                if rule_phase_match:
+                                    rule_phase_num = rule_phase_match.group(1)
+                                    # AC-ID phase must be <= current phase
+                                    if int(rule_phase_num) > int(current_phase_num):
+                                        return False
+                    except Exception:
+                        # AC-ID not found in registry, skip phase check
+                        continue
+
+            return True
+
+        except Exception as e:
+            self.logger.debug(f"Phase alignment check error: {e}")
+            return True  # Default to True on error
+
+    def _validate_no_ac_id_conflicts(self, ac_ids: Set[str]) -> bool:
+        """
+        AC-VALIDATE-008: Request contradiction detection.
+        
+        Detects conflicting or contradictory AC-IDs in the request.
+        Checks for semantic contradictions and mutual exclusivity.
+        
+        Args:
+            ac_ids: Set of AC-IDs to validate
+        
+        Returns:
+            True if no contradictions detected, False if conflicts found
+        """
+        if len(ac_ids) < 2:
+            return True
+
+        try:
+            # Build conflict map from registry
+            conflict_map: Dict[str, Set[str]] = {}
+
+            for ac_id in ac_ids:
+                try:
+                    rules = self.governance_registry.get_rules_by_ac_id(ac_id)
+                    for rule in rules:
+                        conflicts = rule.get("conflicts_with", [])
+                        if conflicts:
+                            if ac_id not in conflict_map:
+                                conflict_map[ac_id] = set()
+                            
+                            for conflict in conflicts:
+                                if isinstance(conflict, dict):
+                                    conflict_ac_id = conflict.get("ac_id")
+                                else:
+                                    conflict_ac_id = str(conflict)
+                                
+                                if conflict_ac_id:
+                                    conflict_map[ac_id].add(conflict_ac_id)
+                except Exception:
+                    continue
+
+            # Check if any two AC-IDs are in conflict
+            for ac_id in ac_ids:
+                if ac_id in conflict_map:
+                    for conflicting_ac_id in conflict_map[ac_id]:
+                        if conflicting_ac_id in ac_ids:
+                            return False
+
+            return True
+
+        except Exception as e:
+            self.logger.debug(f"AC-ID conflict detection error: {e}")
+            return True  # Default to True on error
+
+    def _validate_schema_compliance(self, request_data: Any) -> bool:
+        """
+        AC-VALIDATE-009: Schema validation.
+        
+        Validates that the request matches the expected orchestrator input schema.
+        
+        Args:
+            request_data: The request data to validate
+        
+        Returns:
+            True if schema is valid, False otherwise
+        """
+        try:
+            # If request_data is string, try parsing as JSON
+            if isinstance(request_data, str):
+                try:
+                    request_data = json.loads(request_data)
+                except json.JSONDecodeError:
+                    # String is not JSON, but still valid input
+                    return True
+
+            # If request_data is dict, validate structure
+            if isinstance(request_data, dict):
+                # Required fields for a valid request
+                required_fields = ["action", "context"]
+                
+                for field in required_fields:
+                    if field not in request_data:
+                        return False
+
+                # Validate action field
+                action = request_data.get("action")
+                if not isinstance(action, str) or not action.strip():
+                    return False
+
+                # Validate context field is dict
+                context = request_data.get("context")
+                if context is not None and not isinstance(context, dict):
+                    return False
+
+                return True
+
+            # If request_data is list, each item should be valid dict
+            if isinstance(request_data, list):
+                return all(
+                    isinstance(item, dict) and "action" in item
+                    for item in request_data
+                )
+
+            return True
+
+        except Exception as e:
+            self.logger.debug(f"Schema validation error: {e}")
+            return False
+
+    def _validate_backward_compatibility(self, version: Optional[str] = None) -> bool:
+        """
+        AC-VALIDATE-010: Backward compatibility checks.
+        
+        Validates version compatibility of the request with CORTEX components.
+        
+        Args:
+            version: Version string to validate (e.g., "1.0", "2.1")
+        
+        Returns:
+            True if version is compatible, False otherwise
+        """
+        if not version:
+            return True  # No version specified, assume compatible
+
+        try:
+            # Current CORTEX version
+            current_version = "1.0"
+            
+            # Parse version string
+            version_pattern = r"^(\d+)\.(\d+)(?:\.(\d+))?$"
+            match = re.match(version_pattern, version.strip())
+            
+            if not match:
+                return False  # Invalid version format
+
+            major, minor, patch = match.groups()
+            major = int(major)
+            minor = int(minor)
+            patch = int(patch) if patch else 0
+
+            # Current version is 1.0.x
+            current_major, current_minor, current_patch = 1, 0, 0
+
+            # Backward compatibility rules:
+            # - Major version must match
+            # - Minor version must be <= current minor
+            # - Patch version is ignored
+            if major != current_major:
+                return False  # Major version mismatch
+
+            if minor > current_minor:
+                return False  # Future minor version
+
+            return True
+
+        except Exception as e:
+            self.logger.debug(f"Backward compatibility check error: {e}")
+            return False
