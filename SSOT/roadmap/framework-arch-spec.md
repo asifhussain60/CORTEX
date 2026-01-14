@@ -220,6 +220,166 @@ response_templates:
 
 ---
 
+## Part 2.5: Custom Response Templates (NEW)
+
+### 2.5.1 Optional Custom Templates Per Orchestrator
+
+**Feature:** Orchestrators can define optional custom response templates while maintaining automatic fallback to standard CORTEX 4.0 template.
+
+**Use Case:** Specialized orchestrators need domain-specific response formats (e.g., TDD Master shows test coverage metrics, ADO Orchestrator shows work item links).
+
+**Architecture:**
+
+```
+Orchestrator Response Generation Flow:
+  1. Orchestrator generates ExecutionResult
+  2. render_response() called with result
+  3. TemplateResolver checks for custom_template_path
+  4. If custom template exists + valid: use it
+  5. Else if child orchestrator: try parent's template
+  6. Else: use standard CORTEX template (fallback)
+  7. Render with result data
+  8. Return formatted response
+```
+
+### 2.5.2 Orchestrator Metadata Extension
+
+**BaseOrchestrator.get_metadata() now includes:**
+
+```python
+class OrchestratorMetadata:
+    name: str                          # "TDD Master"
+    version: str                       # "1.0.0"
+    category: str                      # "core", "domain", "custom"
+    
+    # NEW: Custom template support
+    custom_template: Optional[CustomTemplateConfig] = None
+    
+class CustomTemplateConfig:
+    enabled: bool = False              # Set True to use custom template
+    path: str                          # "cortex-brain/tier2/response-templates/..."
+    schema_version: str = "4.6.0"     # Must match standard schema version
+    fallback_on_error: bool = True     # Use standard if custom fails
+```
+
+### 2.5.3 Template Resolution Algorithm
+
+```
+def resolve_response_template(orchestrator: BaseOrchestrator) -> ResponseTemplate:
+    """Resolve template with fallback chain: custom → parent → standard"""
+    
+    # Step 1: Check custom template
+    if orchestrator.metadata.custom_template?.enabled:
+        try:
+            template = load_template(orchestrator.metadata.custom_template.path)
+            if validate_schema(template, schema_version="4.6.0"):
+                return template
+        except Exception as e:
+            log.warning(f"Custom template failed: {e}; falling back...")
+    
+    # Step 2: Try parent template (if child orchestrator)
+    if hasattr(orchestrator, 'parent_orchestrator') and orchestrator.parent_orchestrator:
+        return resolve_response_template(orchestrator.parent_orchestrator)
+    
+    # Step 3: Standard template (always available)
+    return load_standard_template()
+```
+
+### 2.5.4 Template File Organization
+
+**Location:** `cortex-brain/tier2/response-templates/`
+
+```
+_schema/                               (immutable standard schema)
+  └── standard-schema.yaml             (CORTEX 4.0 schema reference)
+
+core/                                  (core CORTEX orchestrators)
+  ├── master-orch.yaml
+  ├── tdd-master.yaml                 (custom template example)
+  ├── planning-orch.yaml
+  └── governance-orch.yaml
+
+domain/                                (domain-specific orchestrators)
+  ├── ado-orch.yaml
+  ├── vacuum-orch.yaml
+  └── investigation-orch.yaml
+
+custom/                                (user-defined orchestrators)
+  └── .gitkeep
+```
+
+**Naming:** All files follow kebab-case, max 25 characters
+
+### 2.5.5 Custom Template Example (TDD Master)
+
+File: `cortex-brain/tier2/response-templates/core/tdd-master.yaml`
+
+```yaml
+schema_version: '4.6.0'
+orchestrator: "TddMasterOrchestrator"
+description: "TDD Master with test coverage metrics"
+
+mandatory_header:
+  enabled: true
+  # Uses standard header format
+
+executive_summary:
+  enabled: true
+  sections:
+    - name: "Outcomes"
+      marker: "✅"
+      required: true
+    - name: "In Progress"
+      marker: "⚙️"
+      required: false
+    - name: "Risks"
+      marker: "⚠️"
+      required: false
+
+custom_sections:
+  enabled: true
+  sections:
+    - name: "Test Results"
+      marker: "📊"
+      required: true
+      format: |
+        📊 TEST RESULTS
+        
+        • Unit Tests: {unit_passed}/{unit_total} passed
+        • Integration Tests: {int_passed}/{int_total} passed
+        • Code Coverage: {coverage}%
+```
+
+### 2.5.6 New Components
+
+1. **TemplateResolver** (`src/orchestrators/response/template-resolver.py`)
+   - Loads/validates templates from YAML files
+   - Implements fallback chain
+   - Caches in memory (<5ms resolution)
+
+2. **ResponseRenderer** (updated `src/orchestrators/response/response-renderer.py`)
+   - Resolves template before rendering
+   - Enforces mandatory sections
+   - Validates output format
+
+3. **TemplateRegistry** (`src/orchestrators/registry/template-registry.py`)
+   - Auto-loads all templates at startup
+   - Detects and logs missing/invalid templates
+   - Provides template introspection API
+
+### 2.5.7 Acceptance Criteria
+
+- [ ] CustomTemplateConfig extends OrchestratorMetadata
+- [ ] TemplateResolver fallback chain: custom → parent → standard
+- [ ] Child orchestrators inherit parent templates
+- [ ] Invalid templates don't crash system (logged + fallback)
+- [ ] All templates in tier2/response-templates/ with kebab-case naming
+- [ ] Schema validation enforces CORTEX 4.0 format
+- [ ] <5ms template resolution (cached)
+- [ ] Tests cover: custom template, inheritance, fallback, invalid schema
+
+---
+
 ## Part 3: MCP Integration Strategy
 
 ### 3.1 Standard MCP Tools (Use These)

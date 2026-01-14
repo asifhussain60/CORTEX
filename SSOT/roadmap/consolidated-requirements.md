@@ -151,6 +151,47 @@ Indexes:
 
 ---
 
+### AR-009: Custom Response Templates (NEW)
+**Status:** APPROVED | **Confidence:** 95%
+
+- Orchestrators can define optional custom response templates
+- Custom template path specified in OrchestratorMetadata
+- Fallback chain: Custom → Parent → Standard (always available)
+- All templates conform to CORTEX 4.0 schema (mandatory headers, executive summary)
+- Child orchestrators inherit parent's template unless explicitly overridden
+
+**Benefits:**
+- Flexibility for domain-specific response formats
+- Automatic fallback ensures no broken responses
+- Inheritance reduces duplication
+- Standard template always available (safety)
+
+---
+
+### AR-010: Nested Folder Organization (NEW)
+**Status:** APPROVED | **Confidence:** 95%
+
+**Structure:**
+- `cortex-brain/`: Governance, configuration, state (organized by tier)
+- `cortex-brain/tier2/response-templates/`: All response templates (new location)
+- `src/orchestrators/core/`, `src/orchestrators/domain/`, `src/orchestrators/custom/`: Orchestrators
+- `src/orchestrators/response/`: Response rendering (new)
+- `src/orchestrators/registry/`: Discovery and registration (new)
+- `src/infrastructure/`: Audit, governance, state, execution (organized)
+- `tests/unit/`, `tests/integration/`, `tests/fixtures/`: Tests (organized)
+- `scripts/admin/`, `scripts/generate/`, `scripts/tools/`: Scripts (organized)
+- `SSOT/roadmap/`: All documentation consolidated (18 files → here)
+
+**Naming:** Kebab-case, max 25 characters (e.g., `tdd-master-orchestrator.py`)
+
+**Benefits:**
+- Clear component organization
+- Easy navigation and discovery
+- Scalable for future plugins
+- Clean source structure for production deployment
+
+---
+
 ## Part 2: Functional Requirements (What the System Must Do)
 
 ### FR-001: Audit-First Pattern
