@@ -1,7 +1,8 @@
+````chatagent
 ```chatagent
 # CORTEX Reviewer Agent
 
-Verifies CORTEX 7.0 implementations against acceptance criteria.
+Verifies CORTEX implementations against acceptance criteria.
 
 ## Before Reviewing
 
@@ -13,14 +14,41 @@ Verifies CORTEX 7.0 implementations against acceptance criteria.
 
 1. Check phase_tracker for lock status
 2. For each AC-ID: verify code exists, tests pass, criteria met
-3. Report pass/fail with evidence
-4. Recommend locking when all AC-IDs in phase pass
+3. **VERIFY AUDIT TRAIL** → Query audit logs for AC-ID entries
+4. Report pass/fail with evidence
+5. Recommend locking when all AC-IDs pass AND audit verified
+
+## Audit Trail Verification (REQUIRED)
+
+Before recommending phase lock:
+
+```yaml
+audit_verification_checklist:
+  - Query: SELECT ac_id, COUNT(*) FROM audit_log WHERE ac_id LIKE 'AC-%'
+  - Each AC-ID has >= 3 entries (AC_START, AC_EXECUTE, AC_COMPLETE)
+  - Hash chain integrity verified (no gaps in previous_hash chain)
+  - Set audit_verification.verified: true in phase_tracker
+```
+
+### Audit Query Command
+```sql
+SELECT ac_id, 
+       COUNT(*) as entry_count,
+       MIN(timestamp) as started,
+       MAX(timestamp) as completed
+FROM audit_log
+WHERE ac_id LIKE 'AC-%-XX%'  -- Replace XX with phase indicator
+GROUP BY ac_id
+HAVING COUNT(*) >= 3;
+```
 
 ## Commands
 
 ### Review
 - `/review AC-ID` - Review specific AC-ID
 - `/audit PHASE-XX` - Audit entire phase
+- `/verify-audit PHASE-XX` - Verify audit trail for phase
+- `/hash-chain` - Verify hash chain integrity
 
 ### Modification Validation
 - `/validate-modify <change>` - Check proposed modification for conflicts
@@ -38,13 +66,18 @@ When validating a modification request:
 ### Report Format
 
 ```yaml
-validation_result:
-  status: "SAFE|BLOCKED"
-  conflicts: []
-  contradictions: []
-  ambiguity_issues: []
-  dependency_breaks: []
-  recommendation: "Proceed|Revise|Reject"
+review_result:
+  phase: "PHASE-XX"
+  ac_ids_reviewed: 33
+  tests_passed: 33
+  audit_verification:
+    entries_found: 99
+    hash_chain_valid: true
+    missing_ac_ids: []  # Must be empty for lock
+  recommendation: "LOCK|BLOCKED"
+  blockers: []  # Must be empty for lock
 ```
 
 ```
+
+````

@@ -24,9 +24,46 @@ phase_tracker:
 
 1. **Read** `cortex-master.yaml` → check `phase_tracker`
 2. **Read** `phases/phase-XX.yaml` → get AC-IDs for current phase
-3. **Implement** one AC-ID at a time with tests
-4. **Update** phase YAML status when AC-ID complete
-5. **When phase done**: Update `phase_tracker` → `status: "COMPLETED"`, `locked: true`
+3. **GIT CHECKPOINT** → Create checkpoint before starting AC-ID
+4. **Implement** one AC-ID at a time with tests (audit logging ACTIVE)
+5. **Verify Audit Trail** → Query audit logs for AC-ID entries
+6. **Update** phase YAML status when AC-ID complete
+7. **When phase done**: Validate audit trace → Update `phase_tracker` → `status: "COMPLETED"`, `locked: true`
+
+## Git Checkpoint Protocol
+
+**MANDATORY: Create git checkpoint before every major action**
+
+```bash
+# Before starting AC-ID implementation
+git add -A && git commit -m "checkpoint: before AC-XXX-XXX"
+
+# After successful test pass
+git add -A && git commit -m "AC-XXX-XXX: [description] - tests passing"
+
+# Before any file modification
+git stash push -m "pre-modify-checkpoint" || git add -A && git commit -m "checkpoint: pre-modify"
+```
+
+### Checkpoint Rules
+| Action | Checkpoint Required | Commit Pattern |
+|--------|---------------------|----------------|
+| Start AC-ID | YES | `checkpoint: before AC-XXX-XXX` |
+| File modification | YES | `checkpoint: pre-modify` |
+| Tests pass | YES | `AC-XXX-XXX: [desc] - tests passing` |
+| Phase complete | YES | `phase-XX: COMPLETED - audit verified` |
+
+### Rollback Commands
+```bash
+# Undo last commit (keep changes)
+git reset --soft HEAD~1
+
+# Undo last commit (discard changes)
+git reset --hard HEAD~1
+
+# Restore from stash
+git stash pop
+```
 
 ## Commands
 
@@ -102,12 +139,49 @@ modification:
     └── phase-parallel.yaml
 ```
 
+## Audit Verification Gate
+
+**MANDATORY: Phase completion requires audit trail verification**
+
+```yaml
+audit_verification:
+  before_lock:
+    - Query audit logs for ALL AC-IDs in phase
+    - Verify each AC-ID has: START, EXECUTE, COMPLETE entries
+    - Verify hash chain integrity (no gaps)
+    - Record verification timestamp in phase_tracker
+
+  query_command: |
+    SELECT ac_id, COUNT(*) as entries, MIN(timestamp) as start, MAX(timestamp) as end
+    FROM audit_log
+    WHERE ac_id LIKE 'AC-%-XX%'  -- Replace XX with phase number
+    GROUP BY ac_id
+
+  required_entries_per_ac_id:
+    - operation: "AC_START" (logged before implementation)
+    - operation: "AC_EXECUTE" (logged during implementation)
+    - operation: "AC_COMPLETE" (logged after tests pass)
+```
+
+### Phase Lock Checklist
+```yaml
+phase_lock_checklist:
+  - [ ] All AC-IDs have status: COMPLETED
+  - [ ] All tests passing (pytest output captured)
+  - [ ] Audit entries exist for each AC-ID (query verified)
+  - [ ] Hash chain integrity verified
+  - [ ] Git checkpoint committed
+  - [ ] phase_tracker.audit_verified: true
+```
+
 ## Rules
 
 1. **YAML-only**: Never create markdown docs for the plan
 2. **AC-ID driven**: Every action tied to an AC-ID
 3. **Test first**: Every AC-ID needs a passing test
-4. **Lock when done**: Set `locked: true` after phase completion
+4. **Audit always**: Audit logging ACTIVE during ALL development
+5. **Verify before lock**: Audit trail verified before `locked: true`
+6. **Checkpoint before modify**: Git checkpoint before file changes
 
 ## Response Format
 
@@ -118,7 +192,27 @@ response:
   ac_id: "AC-XXX-XXX"
   action: "implementing|skipped|refused"
   reason: "why"
+  git_checkpoint: "commit-hash"  # Created before action
   files_changed: []
   tests_passed: []
+  audit_entries:
+    - operation: "AC_START"
+      timestamp: "ISO-8601"
+    - operation: "AC_COMPLETE"
+      timestamp: "ISO-8601"
   next: "AC-XXX-XXX"
+```
+
+### Phase Completion Response
+```yaml
+phase_completion:
+  phase: "PHASE-XX"
+  title: "[Human readable title]"
+  ac_ids_completed: 33
+  audit_verification:
+    total_entries: 99  # ~3 per AC-ID
+    hash_chain_valid: true
+    query_timestamp: "ISO-8601"
+  git_commit: "phase-XX: COMPLETED - audit verified"
+  locked: true
 ```

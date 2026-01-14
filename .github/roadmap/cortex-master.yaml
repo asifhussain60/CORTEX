@@ -30,6 +30,12 @@ phase_tracker:
     status: "NOT_STARTED"  # NOT_STARTED | IN_PROGRESS | COMPLETED
     locked: false          # Once true, phase cannot be reimplemented
     completed_at: null
+    audit_verification:    # REQUIRED before locking
+      verified: false
+      entry_count: null    # Must be >= ac_ids * 3
+      hash_chain_valid: null
+      verified_at: null
+    git_checkpoint: null   # Commit hash when phase completed
   PHASE-02:
     title: "Orchestration Core"
     description: "Orchestrator Architecture, MCP Integration, Governance Evaluation, Response Templates"
@@ -38,6 +44,12 @@ phase_tracker:
     locked: false
     completed_at: null
     requires: "PHASE-01"
+    audit_verification:
+      verified: false
+      entry_count: null
+      hash_chain_valid: null
+      verified_at: null
+    git_checkpoint: null
   PHASE-03:
     title: "Safety & Observability"
     description: "Reliability, Graceful Degradation, Circuit Breaker, OpenTelemetry Metrics"
@@ -46,6 +58,12 @@ phase_tracker:
     locked: false
     completed_at: null
     requires: "PHASE-02"
+    audit_verification:
+      verified: false
+      entry_count: null
+      hash_chain_valid: null
+      verified_at: null
+    git_checkpoint: null
   PHASE-04:
     title: "Production Hardening"
     description: "Security, Secret Redaction, Hash Verification, Cross-File Coherence"
@@ -54,6 +72,12 @@ phase_tracker:
     locked: false
     completed_at: null
     requires: "PHASE-03"
+    audit_verification:
+      verified: false
+      entry_count: null
+      hash_chain_valid: null
+      verified_at: null
+    git_checkpoint: null
   PHASE-05:
     title: "Brittleness Fixes"
     description: "Import Fixes, Path Resolution, Test Stabilization, Final Verification"
@@ -62,6 +86,12 @@ phase_tracker:
     locked: false
     completed_at: null
     requires: "PHASE-04"
+    audit_verification:
+      verified: false
+      entry_count: null
+      hash_chain_valid: null
+      verified_at: null
+    git_checkpoint: null
   PHASE-PARALLEL:
     title: "Folder Migration"
     description: "Nested Folder Organization, Import Updates (Non-Blocking)"
@@ -71,6 +101,12 @@ phase_tracker:
     completed_at: null
     requires: "PHASE-01"
     blocking: false
+    audit_verification:
+      verified: false
+      entry_count: null
+      hash_chain_valid: null
+      verified_at: null
+    git_checkpoint: null
 
 # =============================================================================
 # ARCHITECTURE DECISIONS (AR-001 through AR-010)
