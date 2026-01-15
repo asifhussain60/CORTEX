@@ -63,12 +63,13 @@ acceptance_criteria:
   - ac_id: "AR-017-01"
     title: "Orchestrator Registration & Discovery"
     description: "Implement orchestrator registry with discovery protocol."
-    status: "NOT_STARTED"
+    status: "COMPLETED"
     acceptance_tests:
-      - "Registry stores orchestrator metadata"
-      - "Discovery API returns orchestrators by domain/capability"
-      - "Registration validates required interfaces"
-    git_checkpoint: "AR-017-01-registration"
+      - "Registry stores orchestrator metadata" ✓
+      - "Discovery API returns orchestrators by domain/capability" ✓
+      - "Registration validates required interfaces" ✓
+    git_checkpoint: "9e640058d"
+    completed_at: "2026-01-16T00:00:00Z"
     
   - ac_id: "AR-017-02"
     title: "Orchestrator Composition Patterns"
