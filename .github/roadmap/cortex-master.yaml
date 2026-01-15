@@ -736,6 +736,12 @@ phase_tracker:
       Three-pillar architecture: Brain Observatory (metrics), Temporal Cortex (audit),
       Orchestrator Constellation (status). React + FastAPI + WebSocket stack.
       PARALLEL TRACK: Can be developed independently on separate machine.
+      
+      FULLY INDEPENDENT SPA:
+      - Reads EXISTING data sources (governance.db, cortex-master.yaml, registry/)
+      - Zero dependency on PHASE-07 or CORTEX LENS
+      - All core features work with current CORTEX6 state
+      - Pure visualization layer over existing SSOT data
     ac_ids: 12
     status: "NOT_STARTED"
     locked: false
@@ -754,7 +760,7 @@ phase_tracker:
     git_checkpoint: null
     notes: |
       NO-001 (3 ACs): Brain Observatory - Tier visualization, neural pulse, SSOT metrics
-      NO-002 (3 ACs): Temporal Cortex - Audit timeline, hash chain viz, correlation clustering
+      NO-002 (3 ACs): Temporal Cortex - Audit timeline, hash chain viz, AC context cards
       NO-003 (3 ACs): Orchestrator Constellation - Live status, dependency graph, health indicators
       NO-004 (3 ACs): Portal Infrastructure - FastAPI backend, WebSocket streaming, plan hub
       
@@ -765,17 +771,25 @@ phase_tracker:
       - Backend: FastAPI (Python, reads existing governance.db)
       - Real-time: WebSocket for live audit streaming
       
+      DATA SOURCES (All exist TODAY - no dependencies):
+      - governance.db: Audit logs, hash chain, phase status
+      - cortex-master.yaml: Phase tracker, AC counts, progress
+      - rollback-history.json: Rollback timeline events
+      - cortex-brain/registry/: Orchestrator registration data
+      - Phase YAMLs: Individual phase details
+      
       MULTI-MACHINE STRATEGY:
       - Reads from cortex-brain/ and cortex-master.yaml (SSOT)
       - No write conflicts with backend phases
       - Sync via git pull + init_db.py --sync-only
       - Can be developed fully independently
       
-      INTEGRATION POINTS:
-      - governance.db: Read audit logs, phase status
-      - cortex-master.yaml: Read phase_tracker for metrics
-      - rollback-history.json: Display rollback timeline
-      - orchestrators: Display registry status
+      FUTURE ENHANCEMENT (Optional, Post PHASE-07):
+      - When CORTEX LENS (PHASE-07) is complete, Observatory can add:
+        • Knowledge Graph Visualization
+        • Code Structure Explorer
+        • Change Heatmap
+      - These are OPTIONAL add-ons, not core features
     phase_yaml: "docs/phases/phase-15-neural-observatory.yaml"
   
   PHASE-ENHANCEMENT-03-MARKER:

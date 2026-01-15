@@ -6,6 +6,12 @@
 # Requires: PHASE-06-ECOSYSTEM (existing brain structure only)
 # Estimated Duration: 6 days (48 hours)
 # PARALLEL TRACK: Can be developed on separate machine
+#
+# FULLY INDEPENDENT SPA:
+# - Pure visualization layer over existing SSOT data
+# - Reads governance.db, cortex-master.yaml, registry/ (all exist TODAY)
+# - Zero dependency on PHASE-07 or CORTEX LENS
+# - 100% buildable with current CORTEX6 state
 # =============================================================================
 
 phase:
@@ -23,6 +29,10 @@ phase:
     - Plan Hub (replaces static plan-viewer.html files)
     - Governance Shield (Tier-0 rule enforcement status)
     - Rollback Timeline (visual history from rollback-history.json)
+    
+    DESIGN PRINCIPLE:
+    Observatory is a standalone SPA that visualizes EXISTING CORTEX data.
+    All data sources already exist in CORTEX6. No external dependencies.
   
   order: 15
   status: "NOT_STARTED"
@@ -31,6 +41,33 @@ phase:
   # DEPENDENCY: Only needs completed brain structure from PHASE-06
   requires: "PHASE-06-ECOSYSTEM"
   required_for: null  # End-user facing, not blocking other phases
+  
+  # DATA SOURCES (All exist TODAY - no new infrastructure needed)
+  data_sources:
+    - source: "governance.db"
+      location: "cortex-brain/state/governance.db"
+      provides: "Audit logs, hash chain, operation history"
+      exists: true
+      
+    - source: "cortex-master.yaml"
+      location: ".github/roadmap/cortex-master.yaml"
+      provides: "Phase tracker, AC counts, progress metrics"
+      exists: true
+      
+    - source: "rollback-history.json"
+      location: "cortex-brain/audit-logs/rollback-history.json"
+      provides: "Rollback events timeline"
+      exists: true
+      
+    - source: "Orchestrator Registry"
+      location: "cortex-brain/registry/"
+      provides: "Registered orchestrators, dependencies"
+      exists: true
+      
+    - source: "Phase YAMLs"
+      location: "docs/phases/*.yaml"
+      provides: "Individual phase details, AC descriptions"
+      exists: true
   
   # PARALLEL EXECUTION
   blocking: false
@@ -54,6 +91,7 @@ phase:
       - ".github/roadmap/cortex-master.yaml"
       - "cortex-brain/audit-logs/rollback-history.json"
       - "cortex-brain/registry/"
+      - "docs/phases/"
     write_targets:
       - "src/dashboard/"  # New directory for dashboard code
       - "tests/unit/dashboard/"
@@ -66,6 +104,16 @@ phase:
   ac_ids: 12
   completed_ac_ids: 0
   progress_percentage: 0.0
+
+  # FUTURE ENHANCEMENT (Optional, Post PHASE-07)
+  future_enhancements:
+    note: "When CORTEX LENS (PHASE-07) is available, Observatory can add optional views"
+    optional_features:
+      - "Knowledge Graph Visualization"
+      - "Code Structure Explorer"
+      - "Change Heatmap"
+    status: "NOT_IN_SCOPE"
+    dependency: "PHASE-07-INTENT-ROUTER"
 
 # =============================================================================
 # TECH STACK (Glassmorphism v4.1.0 Compliant)
