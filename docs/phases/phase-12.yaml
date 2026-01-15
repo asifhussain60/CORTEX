@@ -30,8 +30,8 @@ phase:
   estimated_days: 4.5
   
   ac_ids: 7
-  completed_ac_ids: 1
-  progress_percentage: 14.3
+  completed_ac_ids: 2
+  progress_percentage: 28.6
 
 acceptance_criteria:
   - ac_id: "KN-001-01"
@@ -49,12 +49,14 @@ acceptance_criteria:
   - ac_id: "KN-001-02"
     title: "Auto-Indexing System"
     description: "Automatically index knowledge entries by domain and AC-ID"
-    status: "NOT_STARTED"
+    status: "COMPLETED"
+    completion_timestamp: "2026-01-16T18:28:23Z"
+    test_results: "33/33 tests passing (100%)"
     acceptance_tests:
-      - "Index built on commit"
-      - "AC-ID → domain mapping maintained"
-      - "Index searchable via API"
-    git_checkpoint: "KN-001-02-auto-indexing"
+      - "Index built on commit ✓"
+      - "AC-ID → domain mapping maintained ✓"
+      - "Index searchable via API ✓"
+    git_checkpoint: "254a99e05"
     
   - ac_id: "KN-002-01"
     title: "AI-Assisted Knowledge Curation"
