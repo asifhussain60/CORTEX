@@ -22,6 +22,7 @@ from src.core.state_machine import (
 from src.infrastructure.database import DatabaseManager, DatabaseConfig
 
 
+@pytest.mark.ac("FR-003-01")
 class TestAtomicTransitions:
     """Test AC-FR-003-01: Atomic transitions (validate → lock → commit)"""
     
@@ -158,6 +159,7 @@ class TestAtomicTransitions:
         assert snapshot.is_locked is True
 
 
+@pytest.mark.ac("FR-003-02")
 class TestInvalidTransitions:
     """Test AC-FR-003-02: Invalid transition rejection with audit trail"""
     
@@ -253,6 +255,7 @@ class TestInvalidTransitions:
         assert snapshot.current_state == "IMPLEMENTING"
 
 
+@pytest.mark.ac("FR-003-03")
 class TestStateHistory:
     """Test AC-FR-003-03: State history tracking (previous → current → next)"""
     

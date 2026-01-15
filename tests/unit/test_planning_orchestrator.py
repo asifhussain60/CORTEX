@@ -15,6 +15,7 @@ from src.orchestrators.domain.planning_orchestrator import PlanningOrchestrator
 from src.core.interfaces.i_orchestrator import OperationMode
 
 
+@pytest.mark.ac("AR-011-01")
 class TestOrchestratorInterface:
     """Test AC-AR-011-01: Interface compliance"""
     
@@ -74,6 +75,7 @@ class TestOrchestratorInterface:
         assert mode == OperationMode.PLANNING
 
 
+@pytest.mark.ac("AR-011-02")
 class TestMCPToolExposure:
     """Test AC-AR-011-02: MCP tools exposed"""
     
@@ -168,6 +170,7 @@ class TestMCPToolExposure:
         assert "locked_at" in lock_data
 
 
+@pytest.mark.ac("AR-011-03")
 class TestAuditLogging:
     """Test AC-AR-011-03: Audit logging with hash chain"""
     

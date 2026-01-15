@@ -19,6 +19,7 @@ from src.core.governance_registry import GovernanceRegistry
 from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 
+@pytest.mark.ac("NFR-005-01")
 class TestPerformanceBenchmarks:
     """Performance benchmarks for CORTEX core operations."""
 

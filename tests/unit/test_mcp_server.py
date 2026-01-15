@@ -49,6 +49,7 @@ class MockOrchestrator(IOrchestrator):
         return Ok([])
 
 
+@pytest.mark.ac("AR-007-01")
 class TestMCPServerStartup:
     """Test AC-AR-007-01: MCP server starts and accepts connections"""
     
@@ -270,6 +271,7 @@ class TestMCPServerConnections:
         assert any(c["client_id"] == "client1" for c in connections)
 
 
+@pytest.mark.ac("AR-007-02")
 class TestMCPServerTools:
     """Test AC-AR-007-02: Orchestrators exposed as MCP tools"""
     
@@ -350,6 +352,7 @@ class TestMCPServerTools:
         assert tool is None
 
 
+@pytest.mark.ac("AR-007-03")
 class TestMCPServerGovernance:
     """Test AC-AR-007-03: Governance context included in responses"""
     

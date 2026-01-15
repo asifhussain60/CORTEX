@@ -23,6 +23,7 @@ from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from src.infrastructure.database import DatabaseManager
 
 
+@pytest.mark.ac("FR-008-01")
 class TestE2EOrchestratorPluginIntegration:
     """AC-FR-008-01: E2E orchestrator plugin integration"""
     
@@ -59,6 +60,7 @@ class TestE2EOrchestratorPluginIntegration:
         assert rules is not None
 
 
+@pytest.mark.ac("FR-008-02")
 class TestOrchestratorExecutionAuditTrail:
     """AC-FR-008-02: Execution audit trail (START/EXECUTE/COMPLETE)"""
     
@@ -101,6 +103,7 @@ class TestOrchestratorExecutionAuditTrail:
         )
 
 
+@pytest.mark.ac("FR-008-03")
 class TestGovernanceContextAvailability:
     """AC-FR-008-03: Governance context availability (tiers 0-3)"""
     

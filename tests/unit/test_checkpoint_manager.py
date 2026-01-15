@@ -18,6 +18,7 @@ from src.core.checkpoint_manager import (
 )
 
 
+@pytest.mark.ac("FR-006-01")
 class TestCheckpointCreation:
     """Test AC-FR-006-01: State checkpoint before long operations"""
     
@@ -110,6 +111,7 @@ class TestCheckpointCreation:
         assert cp1.checkpoint_id != cp2.checkpoint_id
 
 
+@pytest.mark.ac("FR-006-03")
 class TestPartialCompletion:
     """Test AC-FR-006-03: Partial completion preserved"""
     

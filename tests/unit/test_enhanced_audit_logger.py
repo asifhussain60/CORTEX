@@ -18,6 +18,7 @@ from src.infrastructure.database import DatabaseManager, DatabaseConfig
 from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 
+@pytest.mark.ac("FR-001-01")
 class TestPreExecutionLogging:
     """Test that operations are logged before execution."""
     
@@ -94,6 +95,7 @@ class TestPreExecutionLogging:
         db.close()
 
 
+@pytest.mark.ac("FR-001-02")
 class TestHashChainIntegrity:
     """Test that hash chain integrity is maintained."""
     
@@ -177,6 +179,7 @@ class TestHashChainIntegrity:
         db.close()
 
 
+@pytest.mark.ac("FR-001-03")
 class TestAuditQueryByAcId:
     """Test that audit logs are queryable by AC-ID."""
     

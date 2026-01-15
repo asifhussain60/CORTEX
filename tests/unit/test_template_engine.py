@@ -121,6 +121,7 @@ class TestTemplateRegistry:
         assert gov_templates[0].name == "gov_template"
 
 
+@pytest.mark.ac("AR-009-01")
 class TestTemplateLoading:
     """Test AC-AR-009-01: Template loading"""
     
@@ -171,6 +172,7 @@ class TestTemplateLoading:
         assert result.is_ok()
 
 
+@pytest.mark.ac("AR-009-02")
 class TestTemplateSubstitution:
     """Test AC-AR-009-02: Variable substitution"""
     
@@ -271,6 +273,7 @@ class TestTemplateSubstitution:
         assert "Total: 42" in rendered
 
 
+@pytest.mark.ac("AR-009-03")
 class TestTemplateInheritance:
     """Test AC-AR-009-03: Template inheritance"""
     

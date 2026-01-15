@@ -455,6 +455,7 @@ class TestRegistryQuery:
 # Tests for AC-AR-012-02: @orchestrator Decorator (Tier-Based Registry)
 # =============================================================================
 
+@pytest.mark.ac("AR-012-02")
 class TestOrchestratorDecoratorRegistration:
     """
     Test @orchestrator decorator for AC-AR-012-02

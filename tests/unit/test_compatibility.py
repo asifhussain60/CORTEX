@@ -23,6 +23,7 @@ from src.core.schema_adapter import (
 )
 
 
+@pytest.mark.ac("AR-008-01")
 class TestFormatDetection:
     """Test AC-AR-008-01: Format detection"""
     
@@ -105,6 +106,7 @@ class TestFormatDetection:
         assert result.is_err()
 
 
+@pytest.mark.ac("AR-008-01")
 class TestSchemaValidation:
     """Test AC-AR-008-01: Schema validation"""
     
@@ -182,6 +184,7 @@ class TestSchemaValidation:
         assert result.is_ok()
 
 
+@pytest.mark.ac("AR-008-01")
 class TestFormatConversion:
     """Test AC-AR-008-01: Format conversion"""
     
@@ -226,6 +229,7 @@ class TestFormatConversion:
         assert v2_data["actor_id"] == "USER-01"
 
 
+@pytest.mark.ac("AR-008-02")
 class TestAuditLogSchema:
     """Test AC-AR-008-02: Audit log schema validation"""
     
@@ -281,6 +285,7 @@ class TestAuditLogSchema:
         assert result.is_err()
 
 
+@pytest.mark.ac("AR-008-02")
 class TestSchemaConversion:
     """Test AC-AR-008-02: Schema conversion"""
     
@@ -329,6 +334,7 @@ class TestSchemaConversion:
         assert legacy.action == "CREATE"
 
 
+@pytest.mark.ac("AR-008-02")
 class TestHashChainVerification:
     """Test AC-AR-008-02: Hash chain verification"""
     
@@ -413,6 +419,7 @@ class TestTimestampNormalization:
         assert "T" in normalized["entry_time"]  # ISO format has T
 
 
+@pytest.mark.ac("AR-008-03")
 class TestMigrationGuide:
     """Test AC-AR-008-03: Migration documentation"""
     

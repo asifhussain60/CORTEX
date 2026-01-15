@@ -26,6 +26,7 @@ def header_config():
     return HeaderConfigurationManager.get_instance()
 
 
+@pytest.mark.ac("ENH-001-01")
 class TestPlanningOrchestratorHeaders:
     """AC-ENH-001-01: Reference orchestrator header integration."""
     
@@ -222,6 +223,7 @@ class TestPlanningOrchestratorIntegration:
             assert "current_hash" in entry
 
 
+@pytest.mark.ac("ENH-001-04")
 class TestBackwardCompatibility:
     """AC-ENH-001-04: Verify no regressions."""
     
@@ -279,6 +281,7 @@ class TestBackwardCompatibility:
         assert "enforce_phase_lock" in tools
 
 
+@pytest.mark.ac("ENH-001-02")
 class TestOperationResponsesWithHeaders:
     """AC-ENH-001-02: Verify headers appear in orchestrator operation responses."""
     
@@ -386,6 +389,7 @@ class TestOperationResponsesWithHeaders:
         assert "Copyright ©" in wrapped
 
 
+@pytest.mark.ac("ENH-001-02")
 class TestHeaderVariableSubstitution:
     """AC-ENH-001-02: Verify header variables are correctly substituted."""
     
@@ -446,6 +450,7 @@ class TestHeaderVariableSubstitution:
         assert "{notice}" not in wrapped
 
 
+@pytest.mark.ac("ENH-001-02")
 class TestCustomTemplateIndependence:
     """AC-ENH-001-02: Verify custom templates work independently of headers."""
     
@@ -537,6 +542,7 @@ All systems operational. No blockers identified."""
         assert "Copyright ©" in wrapped
 
 
+@pytest.mark.ac("ENH-001-02")
 class TestHeaderStructureWithOperations:
     """AC-ENH-001-02: Verify complete header structure with real operations."""
     

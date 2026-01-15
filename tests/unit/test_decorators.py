@@ -25,6 +25,7 @@ from src.infrastructure.database import DatabaseManager, DatabaseConfig
 from src.core.result import Ok, Err
 
 
+@pytest.mark.ac("AR-003-01")
 class TestGovernanceDecorator:
     """Test @governance_enforced decorator."""
     
@@ -112,6 +113,7 @@ class TestGovernanceDecorator:
         db.close()
 
 
+@pytest.mark.ac("AR-003-02")
 class TestAuditDecorator:
     """Test @audit_logged decorator."""
     
@@ -190,6 +192,7 @@ class TestAuditDecorator:
         assert result.unwrap() == "success"
 
 
+@pytest.mark.ac("AR-003-03")
 class TestDecoratorComposition:
     """Test composable decorators."""
     

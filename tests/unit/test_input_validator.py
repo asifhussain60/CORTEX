@@ -102,6 +102,7 @@ class TestIntentCanonicalization:
             )
 
 
+@pytest.mark.ac("AR-006-01")
 class TestACIDExistenceCheck:
     """Tests for AC-VALIDATE-002: AC-ID existence checking"""
 
@@ -163,6 +164,7 @@ class TestACIDExistenceCheck:
         assert result.has_errors()
 
 
+@pytest.mark.ac("AR-006-01")
 class TestEvidenceBundlePrecheck:
     """Tests for AC-VALIDATE-003: Evidence bundle pre-check"""
 
@@ -204,6 +206,7 @@ class TestEvidenceBundlePrecheck:
         assert "evidence_bundles_checked" in result.metadata
 
 
+@pytest.mark.ac("AR-006-01")
 class TestCrossReferenceCoherence:
     """Tests for AC-VALIDATE-004: Cross-reference coherence"""
 
@@ -408,6 +411,7 @@ class TestValidationError:
         assert error_dict["remediation"] == "Fix it"
 
 
+@pytest.mark.ac("AR-006-01")
 class TestComprehensiveValidation:
     """Integration tests for comprehensive validation"""
 

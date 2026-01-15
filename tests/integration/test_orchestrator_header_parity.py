@@ -39,6 +39,7 @@ def master_orch():
     yield orch
 
 
+@pytest.mark.ac("ENH-003-01")
 class TestOrchestratorHeaderParity:
     """AC-ENH-003-01: Verify feature parity in header integration."""
     
@@ -216,6 +217,7 @@ Multi-line response"""
         assert unicode_response in wrapped
 
 
+@pytest.mark.ac("ENH-003-01")
 class TestOrchestratorHeaderIntegration:
     """AC-ENH-003-01: Integration tests for header system completion."""
     
@@ -283,6 +285,7 @@ class TestOrchestratorHeaderIntegration:
         assert "timestamp" in trail[0]
 
 
+@pytest.mark.ac("ENH-003-01")
 class TestHeaderSystemCompletion:
     """AC-ENH-003-01: Verify header system is complete and production-ready."""
     
@@ -341,6 +344,7 @@ class TestHeaderSystemCompletion:
         assert callable(master_orch.get_response_with_headers)
 
 
+@pytest.mark.ac("ENH-003-01")
 class TestBackwardCompatibility:
     """AC-ENH-003-01: Ensure no regressions in existing functionality."""
     
@@ -391,6 +395,7 @@ class TestBackwardCompatibility:
             assert "timestamp" in entry
 
 
+@pytest.mark.ac("ENH-003-01")
 class TestProductionReadiness:
     """AC-ENH-003-01: Production readiness verification."""
     

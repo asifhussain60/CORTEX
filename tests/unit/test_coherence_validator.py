@@ -19,6 +19,7 @@ import pytest
 from src.core.coherence_validator import CoherenceValidator, CoherenceIssue
 
 
+@pytest.mark.ac("NFR-003-01")
 class TestCoherenceValidator:
     """Test suite for CoherenceValidator."""
     

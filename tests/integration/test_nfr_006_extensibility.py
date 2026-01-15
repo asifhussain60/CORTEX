@@ -21,6 +21,7 @@ from src.orchestrators.core.master_orchestrator import MasterOrchestrator
 from src.core.governance_registry import GovernanceRegistry
 
 
+@pytest.mark.ac("NFR-006-01")
 class TestExtensibilityFeatures:
     """Extensibility tests for CORTEX tier system."""
 

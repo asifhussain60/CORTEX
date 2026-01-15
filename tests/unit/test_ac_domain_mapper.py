@@ -25,6 +25,7 @@ from src.core.ac_domain_mapper import (
 # ACMetadata Tests
 # =============================================================================
 
+@pytest.mark.ac("AR-001-01")
 class TestACMetadata:
     """Test AC metadata dataclass."""
     
