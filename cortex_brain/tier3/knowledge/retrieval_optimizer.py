@@ -47,8 +47,8 @@ class RetrievalOptimizer:
     def __init__(self):
         """Initialize retrieval optimizer."""
         self.ac_id = "KN-002-02"
-        self.config_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge/retrieval-config.yaml")
-        self.db_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db")
+        self.config_path = Path(__file__).parent / "retrieval-config.yaml"
+        self.db_path = Path(__file__).parent.parent.parent / "state" / "governance.db"
         
         self.config = {}
         self.ranking_rules = []

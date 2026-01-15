@@ -58,8 +58,8 @@ class ExpertRegistry:
     def __init__(self):
         """Initialize expert registry."""
         self.ac_id = "KN-003-02"
-        self.registry_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge/expert-registry.yaml")
-        self.db_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db")
+        self.registry_path = Path(__file__).parent / "expert-registry.yaml"
+        self.db_path = Path(__file__).parent.parent.parent / "state" / "governance.db"
         
         self.experts: Dict[str, Expert] = {}
         self.domain_index: Dict[str, List[str]] = {}

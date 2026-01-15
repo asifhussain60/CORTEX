@@ -47,8 +47,8 @@ class AICurator:
     def __init__(self):
         """Initialize AI curator."""
         self.ac_id = "KN-002-01"
-        self.config_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge/curation-config.yaml")
-        self.db_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db")
+        self.config_path = Path(__file__).parent / "curation-config.yaml"
+        self.db_path = Path(__file__).parent.parent.parent / "state" / "governance.db"
         
         self.config = {}
         self.quality_rules = []
