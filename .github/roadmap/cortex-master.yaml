@@ -37,6 +37,64 @@ metadata:
     prompts_using_governance:
       - "cortex-builder.prompt.md" # See .github/prompts/cortex-builder.prompt.md
   
+  # AUDIT TRAIL REMEDIATION INITIATIVE (2026-01-15)
+  audit_remediation:
+    status: "IN_PROGRESS"
+    initiative_id: "AUDIT-REMEDIATION-2026-01-15"
+    purpose: "Fix CORE-027 compliance: Ensure all phases 1-13 have complete audit trail evidence (AC_START, AC_EXECUTE, AC_COMPLETE) properly logged during test execution"
+    
+    rollback_point: "pre-audit-remediation-2026-01-15"  # Git tag for emergency rollback
+    
+    scope:
+      affected_phases:
+        - PHASE-01 (36 ACs, locked: false)
+        - PHASE-02 (27 ACs, locked: false)
+        - PHASE-03 (6 ACs, locked: false)
+        - PHASE-04 (12 ACs, locked: false)
+        - PHASE-05 (17 ACs, locked: false)
+        - PHASE-PARALLEL (3 ACs, locked: false)
+        - PHASE-06-ECOSYSTEM (24 ACs, locked: false)
+        - PHASE-ENHANCEMENT-01 (4 ACs, locked: false)
+        - PHASE-ENHANCEMENT-02 (2 ACs, locked: false)
+        - PHASE-ENHANCEMENT-03 (1 AC, locked: false)
+        - PHASE-07-INTENT-ROUTER (14 ACs, locked: false)
+        - PHASE-08-CORE-ORCHESTRATORS (6 ACs, locked: false)
+        - PHASE-09-GOVERNANCE-TOOLS (8 ACs, locked: false)
+        - PHASE-10-ADAPTIVE-EXECUTION (5 ACs, locked: true) ✓ Already locked
+        - PHASE-11-HALLUCINATION-PREVENTION (6 ACs, locked: false)
+        - PHASE-12-KNOWLEDGE-ECOSYSTEM (7 ACs, locked: false)
+        - PHASE-13-OBSERVABILITY-MATURITY (5 ACs, locked: false)
+      total_phases_affected: 17
+      total_acs_requiring_remediation: 176 (excluding PHASE-10 which is locked)
+    
+    remediation_strategy: "SYSTEMATIC & HOLISTIC"
+    approach: |
+      1. For EACH phase (starting PHASE-01 through PHASE-13):
+         a. Identify all AC-IDs in the phase
+         b. Verify test suite exists for each AC-ID
+         c. Re-run tests with audit logging ENABLED (cortex-builder mode: STRICT)
+         d. Capture audit trail logs (AC_START, AC_EXECUTE, AC_COMPLETE)
+         e. Validate logs match expected lifecycle pattern
+         f. Assert logs are NOT malformed or fake
+         g. Update phase_tracker audit_verification: { verified: true, entry_count: N, hash_chain_valid: true }
+         h. Lock phase: { locked: true }
+      2. Create integration test: test_audit_trail_integrity.py
+         - Validates all AC-ID audit entries chronologically
+         - Verifies hash chain unbroken
+         - Confirms NO retroactive/fake entries
+      3. Update cortex-builder.md with pre-implementation checklist
+    
+    completion_criteria:
+      - ALL phases 1-13 have complete audit trails OR are marked remediation_required: false
+      - EVERY AC-ID has 3+ lifecycle entries (AC_START, AC_EXECUTE, AC_COMPLETE minimum)
+      - Hash chain integrity verified and unbroken
+      - Integration test: test_audit_trail_integrity.py passes 100%
+      - All phases updated: locked: true (or locked: false with explicit remediation_required: false reason)
+      - cortex-builder.md reflects new audit-first enforcement pattern
+    
+    estimated_hours: 40
+    estimated_days: 5
+  
   # Velocity & Estimation Assumptions
   velocity:
     hours_per_day: 8
