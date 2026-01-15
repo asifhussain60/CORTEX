@@ -11,6 +11,7 @@ Comprehensive test suite for:
 
 import pytest
 from pathlib import Path
+from src.core.path_resolver import resolve_path
 from src.core.ac_domain_mapper import (
     ACDomainRegistry,
     ACMetadata,
@@ -405,7 +406,7 @@ class TestACDomainLoader:
     
     def test_loader_creation(self):
         """Test creating loader instance."""
-        tier1_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1")
+        tier1_path = resolve_path("cortex-brain", "tier1")
         loader = ACDomainLoader(tier1_path)
         
         assert loader.tier1_path == tier1_path
@@ -413,7 +414,7 @@ class TestACDomainLoader:
     
     def test_load_mappings(self):
         """Test loading mappings from actual YAML file."""
-        tier1_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1")
+        tier1_path = resolve_path("cortex-brain", "tier1")
         loader = ACDomainLoader(tier1_path)
         
         registry = loader.load_mappings()
@@ -448,14 +449,14 @@ class TestACDomainPopulator:
     
     def test_populator_creation(self):
         """Test creating populator instance."""
-        tier1_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1")
+        tier1_path = resolve_path("cortex-brain", "tier1")
         populator = ACDomainPopulator(tier1_path)
         
         assert populator.tier1_path == tier1_path
     
     def test_populate(self):
         """Test populating AC-to-domain mappings."""
-        tier1_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1")
+        tier1_path = resolve_path("cortex-brain", "tier1")
         populator = ACDomainPopulator(tier1_path)
         
         registry = populator.populate()
@@ -464,7 +465,7 @@ class TestACDomainPopulator:
     
     def test_get_registry(self):
         """Test getting registry after population."""
-        tier1_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1")
+        tier1_path = resolve_path("cortex-brain", "tier1")
         populator = ACDomainPopulator(tier1_path)
         
         populator.populate()
@@ -475,7 +476,7 @@ class TestACDomainPopulator:
     
     def test_get_registry_before_populate(self):
         """Test error when getting registry before population."""
-        tier1_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1")
+        tier1_path = resolve_path("cortex-brain", "tier1")
         populator = ACDomainPopulator(tier1_path)
         
         with pytest.raises(RuntimeError):
@@ -483,7 +484,7 @@ class TestACDomainPopulator:
     
     def test_get_populated_domains(self):
         """Test getting list of populated domains."""
-        tier1_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1")
+        tier1_path = resolve_path("cortex-brain", "tier1")
         populator = ACDomainPopulator(tier1_path)
         
         populator.populate()
@@ -497,7 +498,7 @@ class TestACDomainPopulator:
     
     def test_get_mappings_summary(self):
         """Test getting summary of mappings."""
-        tier1_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1")
+        tier1_path = resolve_path("cortex-brain", "tier1")
         populator = ACDomainPopulator(tier1_path)
         
         populator.populate()
@@ -508,7 +509,7 @@ class TestACDomainPopulator:
     
     def test_query_domain_for_ac(self):
         """Test querying domain for specific AC."""
-        tier1_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1")
+        tier1_path = resolve_path("cortex-brain", "tier1")
         populator = ACDomainPopulator(tier1_path)
         
         populator.populate()
@@ -518,7 +519,7 @@ class TestACDomainPopulator:
     
     def test_query_orchestrator_for_ac(self):
         """Test querying orchestrator for specific AC."""
-        tier1_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1")
+        tier1_path = resolve_path("cortex-brain", "tier1")
         populator = ACDomainPopulator(tier1_path)
         
         populator.populate()
@@ -528,7 +529,7 @@ class TestACDomainPopulator:
     
     def test_query_acs_for_domain(self):
         """Test querying all ACs for a domain."""
-        tier1_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1")
+        tier1_path = resolve_path("cortex-brain", "tier1")
         populator = ACDomainPopulator(tier1_path)
         
         populator.populate()
@@ -538,7 +539,7 @@ class TestACDomainPopulator:
     
     def test_query_acs_for_orchestrator(self):
         """Test querying all ACs for an orchestrator."""
-        tier1_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1")
+        tier1_path = resolve_path("cortex-brain", "tier1")
         populator = ACDomainPopulator(tier1_path)
         
         populator.populate()
@@ -563,7 +564,7 @@ class TestACDomainMappingIntegration:
     
     def test_full_ac_domain_population(self):
         """Test full population and query cycle."""
-        tier1_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1")
+        tier1_path = resolve_path("cortex-brain", "tier1")
         populator = ACDomainPopulator(tier1_path)
         
         # Populate
@@ -580,7 +581,7 @@ class TestACDomainMappingIntegration:
     
     def test_ac_domain_consistency(self):
         """Test that AC-to-domain index is consistent with domain-to-AC."""
-        tier1_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1")
+        tier1_path = resolve_path("cortex-brain", "tier1")
         populator = ACDomainPopulator(tier1_path)
         
         populator.populate()
@@ -595,7 +596,7 @@ class TestACDomainMappingIntegration:
     
     def test_orchestrator_ac_mappings(self):
         """Test orchestrator-to-AC mappings are correct."""
-        tier1_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1")
+        tier1_path = resolve_path("cortex-brain", "tier1")
         populator = ACDomainPopulator(tier1_path)
         
         populator.populate()
@@ -616,7 +617,7 @@ class TestACDomainMappingIntegration:
     
     def test_specific_ac_mappings(self):
         """Test specific AC mappings are correct."""
-        tier1_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1")
+        tier1_path = resolve_path("cortex-brain", "tier1")
         populator = ACDomainPopulator(tier1_path)
         
         populator.populate()

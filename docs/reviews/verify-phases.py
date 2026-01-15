@@ -9,15 +9,15 @@ from collections import defaultdict
 import sys
 
 # Expand the import path
-sys.path.insert(0, str(Path(__file__).parent))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+
+from src.core.path_resolver import resolve_path
 
 def verify_phase_tracker():
     """Verify phase tracker status from cortex-master.yaml"""
     import yaml
     
-    master_path = Path("/.github/roadmap/cortex-master.yaml")
-    if not master_path.exists():
-        master_path = Path("/Users/asifhussain/PROJECTS/CORTEX/.github/roadmap/cortex-master.yaml")
+    master_path = resolve_path(".github", "roadmap", "cortex-master.yaml")
     
     with open(master_path) as f:
         master = yaml.safe_load(f)
