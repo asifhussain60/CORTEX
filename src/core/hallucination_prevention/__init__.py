@@ -48,6 +48,14 @@ from src.core.hallucination_prevention.vision_mutations import (
     MutationSnapshot,
 )
 
+from src.core.hallucination_prevention.confidence_scoring import (
+    ConfidenceScorer,
+    ConfidenceAssessment,
+    ScoringFactor,
+    ScoringModel,
+    ReviewTrigger,
+)
+
 __all__ = [
     "ExtendedIntentCanonicalizer",
     "ExtendedCanonicalIntent",
@@ -69,4 +77,9 @@ __all__ = [
     "VisionMutation",
     "MutationType",
     "MutationSnapshot",
+    "ConfidenceScorer",
+    "ConfidenceAssessment",
+    "ScoringFactor",
+    "ScoringModel",
+    "ReviewTrigger",
 ]
