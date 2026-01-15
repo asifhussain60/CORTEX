@@ -16,7 +16,7 @@ category: DOMAIN_ORCHESTRATOR
 precedence: HIGH
 
 metadata:
-  rule_count: 8
+  rule_count: 9
   domain_id: "interaction"
   domain_name: "User Interaction & Communication"
   author: "Asif Hussain"
@@ -223,6 +223,54 @@ rules:
       - Breach escalated appropriately
       - Resolution follows severity timeline
 
+  # --------------------------------------------------------------------------
+  # INT-RULE-009: Mandatory Intelligent Challenge (AUTO-CHALLENGE)
+  # --------------------------------------------------------------------------
+  - rule_id: INT-RULE-009
+    category: knowledge_capture
+    severity: blocked
+    name: Mandatory Intelligent Challenge
+    description: |
+      Every user request processed by InteractionOrchestrator MUST be 
+      intelligently challenged BEFORE execution. User should NOT need 
+      to ask to be challenged - it happens automatically.
+      
+      Challenge Types (at least ONE must be generated):
+      - BREAKING_CHANGE: Dependencies/consumers affected
+      - TEST_GAP: Coverage may drop below threshold
+      - GOVERNANCE_CONFLICT: May violate CORTEX+Company rules
+      - HISTORICAL_ISSUE: Similar pattern caused issues before
+      - SECURITY_RISK: Potential vulnerability
+      - ALTERNATIVE_APPROACH: Better solution exists (advisory)
+      - SCOPE_CREEP: Work beyond stated intent
+      
+      Challenges use MERGED knowledge (CORTEX + Company additive merge).
+      User can dismiss challenges but dismissals are LOGGED for learning.
+      Fast-track mode for trivial requests (query, status).
+    
+    rationale: |
+      Proactive challenge prevents breaking changes, test degradation,
+      governance violations, and repeated mistakes. Embodies CORTEX's
+      "challenge-first" philosophy.
+    
+    validation:
+      - Every request has ≥1 challenge or recommendation
+      - Challenges based on merged CORTEX+Company rules
+      - Challenge confidence ≥ 0.3 to be shown
+      - User dismissals logged with reason
+      - Dismissal patterns tracked for false positive detection
+      - Alert if same challenge type dismissed >5 times
+    
+    implementation:
+      file: src/core/intent/auto_challenger.py
+      class: AutoChallenger
+      entry_point: InteractionOrchestrator.comprehend()
+      timing: BEFORE comprehension YAML generation
+    
+    exceptions:
+      - Fast-track mode for query/status intents (lighter challenge)
+      - System-initiated requests (internal orchestrator calls)
+
 # ==============================================================================
 # DOMAIN ORCHESTRATOR REQUIREMENTS
 # ==============================================================================
@@ -234,18 +282,21 @@ interaction_orchestrator_requirements:
     - INT-RULE-003
     - INT-RULE-004
     - INT-RULE-007
+    - INT-RULE-009  # Mandatory Intelligent Challenge
   mcp_tools:
     - log_interaction
     - capture_decision
     - create_feedback_item
     - escalate_issue
     - generate_knowledge_article
+    - auto_challenge  # NEW: Generate intelligent challenges
   capabilities:
     - context_preservation
     - decision_tracking
     - feedback_management
     - knowledge_base_integration
     - stakeholder_communication
+    - intelligent_challenge  # NEW: Proactive challenge generation
   performance_sla:
     interaction_logging_timeout: 5000  # milliseconds
     decision_capture_timeout: 10000
@@ -270,8 +321,15 @@ domain_ac_mappings:
 # METADATA & VERSIONING
 # ==============================================================================
 versioning:
-  version: "1.0"
+  version: "1.1"
   created_at: "2026-01-15T00:00:00Z"
-  last_updated_at: "2026-01-15T00:00:00Z"
+  last_updated_at: "2026-01-15T12:00:00Z"
   status: "ACTIVE"
   enforcement_mode: "STRICT"  # STRICT | WARNING | LOGGING
+  changelog:
+    - version: "1.1"
+      date: "2026-01-15"
+      changes:
+        - "Added INT-RULE-009: Mandatory Intelligent Challenge"
+        - "Added auto_challenge MCP tool"
+        - "Added intelligent_challenge capability"

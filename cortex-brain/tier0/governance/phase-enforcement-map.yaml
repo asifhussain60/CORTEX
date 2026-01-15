@@ -404,6 +404,171 @@ PHASE-ENHANCEMENT-01:
       max_length: 25
 
 # ==============================================================================
+# PHASE-07: INTENT ROUTER INTELLIGENCE
+# ==============================================================================
+
+PHASE-07-INTENT-ROUTER:
+  title: "Holistic Intent Router Intelligence"
+  phase_id: "PHASE-07-INTENT-ROUTER"
+  status_link: "phase_tracker.PHASE-07-INTENT-ROUTER"
+  requires_phase: "PHASE-ENHANCEMENT-03"
+  
+  mandatory_rules:
+    # Core development rules
+    - rule_id: CORE-008
+      name: "Test-First Development"
+      enforcement: "blocked"
+      applies_to: "ALL IR-XXX ACs"
+    
+    - rule_id: CORE-011
+      name: "Python Type Hints Required"
+      enforcement: "blocked"
+    
+    - rule_id: CORE-012
+      name: "Docstrings Required"
+      enforcement: "blocked"
+    
+    - rule_id: CORE-013
+      name: "Explicit Error Handling"
+      enforcement: "blocked"
+    
+    - rule_id: CORE-014
+      name: "SOLID Required"
+      enforcement: "blocked"
+    
+    - rule_id: CORE-005
+      name: "No Hardcoded Paths"
+      enforcement: "blocked"
+      description: "Paths via get_project_root() for AST/Git analysis"
+    
+    # Interaction-specific rules
+    - rule_id: INT-RULE-001
+      name: "Context Preservation"
+      enforcement: "blocked"
+      applies_to: "IR-001, IR-004 (context intelligence)"
+      source: "cortex-brain/tier0/governance/interaction-rules.yaml"
+    
+    - rule_id: INT-RULE-003
+      name: "Decision Capture & Rationale"
+      enforcement: "blocked"
+      applies_to: "IR-002, IR-005 (intent reflection & routing)"
+      source: "cortex-brain/tier0/governance/interaction-rules.yaml"
+    
+    - rule_id: INT-RULE-009
+      name: "Mandatory Intelligent Challenge"
+      enforcement: "blocked"
+      applies_to: "ALL user requests processed by InteractionOrchestrator"
+      source: "cortex-brain/tier0/governance/interaction-rules.yaml"
+      description: |
+        Every request MUST be challenged before execution.
+        Challenges based on MERGED knowledge (CORTEX + Company).
+        User does NOT need to ask - challenge is automatic.
+  
+  domain_rules:
+    - rule_id: IR-RULE-001
+      name: "Additive Merge Required"
+      enforcement: "blocked"
+      description: "CORTEX + Company rules merged additively (IR-006)"
+    
+    - rule_id: IR-RULE-002
+      name: "CRITICAL Rules Protected"
+      enforcement: "blocked"
+      description: "CORTEX CRITICAL rules cannot be overridden by Company"
+    
+    - rule_id: IR-RULE-003
+      name: "Early Merge Timing"
+      enforcement: "blocked"
+      description: "Merge BEFORE comprehension, not after"
+  
+  ac_id_rules:
+    "IR-001-01":
+      description: "AST-Based Code Intelligence"
+      enforcement_checks:
+        - "AST parsing uses ast module (stdlib)"
+        - "Graceful degradation on syntax errors"
+        - Governance: "CORE-008, CORE-011, CORE-012"
+    
+    "IR-004-02":
+      description: "Comprehension Loop with YAML Condensation"
+      enforcement_checks:
+        - "YAML output validated against schema"
+        - "User approval gate enforced"
+        - "Temp files cleaned on approval"
+        - Governance: "INT-RULE-009 (auto-challenge in YAML)"
+    
+    "IR-006-02":
+      description: "Additive Merge with Selective Override"
+      enforcement_checks:
+        - "Non-conflicting CORTEX rules preserved"
+        - "CRITICAL rules cannot be overridden"
+        - "Override audit trail maintained"
+        - Governance: "IR-RULE-001, IR-RULE-002"
+
+# ==============================================================================
+# PHASE-08 through PHASE-14 (Summary - Expand as needed)
+# ==============================================================================
+
+PHASE-08-CORE-ORCHESTRATORS:
+  title: "Domain Orchestrator Ecosystem"
+  phase_id: "PHASE-08-CORE-ORCHESTRATORS"
+  requires_phase: "PHASE-07-INTENT-ROUTER"
+  mandatory_rules:
+    - rule_id: CORE-008
+    - rule_id: CORE-011
+    - rule_id: CORE-012
+    - rule_id: CORE-021
+      name: "Use Orchestrator Scaffolder"
+
+PHASE-09-GOVERNANCE-TOOLS:
+  title: "Developer Governance Tooling"
+  phase_id: "PHASE-09-GOVERNANCE-TOOLS"
+  requires_phase: "PHASE-08-CORE-ORCHESTRATORS"
+  mandatory_rules:
+    - rule_id: CORE-008
+    - rule_id: CORE-011
+    - rule_id: CORE-012
+
+PHASE-10-ADAPTIVE-EXECUTION:
+  title: "Adaptive Execution Framework"
+  phase_id: "PHASE-10-ADAPTIVE-EXECUTION"
+  requires_phase: "PHASE-09-GOVERNANCE-TOOLS"
+  mandatory_rules:
+    - rule_id: CORE-008
+    - rule_id: CORE-011
+
+PHASE-11-HALLUCINATION-PREVENTION:
+  title: "Hallucination Prevention System"
+  phase_id: "PHASE-11-HALLUCINATION-PREVENTION"
+  requires_phase: "PHASE-09-GOVERNANCE-TOOLS"
+  mandatory_rules:
+    - rule_id: CORE-008
+    - rule_id: CORE-011
+    - rule_id: CORE-013
+
+PHASE-12-KNOWLEDGE-ECOSYSTEM:
+  title: "Knowledge Ecosystem Expansion"
+  phase_id: "PHASE-12-KNOWLEDGE-ECOSYSTEM"
+  requires_phase: "PHASE-11-HALLUCINATION-PREVENTION"
+  mandatory_rules:
+    - rule_id: CORE-008
+    - rule_id: CORE-018
+
+PHASE-13-OBSERVABILITY-MATURITY:
+  title: "Observability & Telemetry Maturity"
+  phase_id: "PHASE-13-OBSERVABILITY-MATURITY"
+  requires_phase: "PHASE-10-ADAPTIVE-EXECUTION"
+  mandatory_rules:
+    - rule_id: CORE-008
+    - rule_id: CORE-011
+
+PHASE-14-PRODUCTION-MIGRATION:
+  title: "Production Rollout & Adoption"
+  phase_id: "PHASE-14-PRODUCTION-MIGRATION"
+  requires_phase: "PHASE-13-OBSERVABILITY-MATURITY"
+  mandatory_rules:
+    - rule_id: CORE-008
+
+# ==============================================================================
 # ENFORCEMENT ACTIONS
 # ==============================================================================
 

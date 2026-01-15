@@ -2,7 +2,7 @@
 # CORTEX MASTER IMPLEMENTATION PLAN
 # =============================================================================
 # Source: This file IS the Single Source of Truth (SSOT folder deleted)
-# Status: READY FOR IMPLEMENTATION (DoR Score: 85/100)
+# Status: READY FOR IMPLEMENTATION (DoR Score: 100/100) ✅
 # =============================================================================
 
 metadata:
@@ -13,7 +13,14 @@ metadata:
   dor_score: 100
   start_date: null
   end_date: null
-  total_ac_ids: 125  # 101 from PHASE-01-05 + PHASE-PARALLEL + 24 from PHASE-06-ECOSYSTEM
+  total_ac_ids: 194  # 125 locked + 7 enhancement + 62 new phases (07-14)
+  
+  # AC-ID Breakdown
+  ac_breakdown:
+    locked_phases: 125        # PHASE-01 through PHASE-06-ECOSYSTEM
+    enhancement_phases: 7     # ENH-01 (4) + ENH-02 (2) + ENH-03 (1)
+    new_phases: 62            # PHASE-07 (14) + 08 (6) + 09 (8) + 10 (5) + 11 (6) + 12 (7) + 13 (5) + 14 (4) + completed from 09 (2 already counted)
+    total: 194
   
   # GOVERNANCE INTEGRATION
   governance:
@@ -35,15 +42,37 @@ metadata:
     effective_hours_per_day: 5.6
   
   estimation_summary:
+    # Locked phases (completed)
     phase_01_hours: 56
     phase_02_hours: 40
     phase_03_hours: 28
     phase_04_hours: 32
     phase_05_hours: 36
     phase_parallel_hours: 16
-    total_estimated_hours: 208
-    total_buffer_hours: 44
-    total_with_buffer: 252
+    phase_06_hours: 152
+    locked_total: 360
+    
+    # Enhancement phases (completed)
+    enhancement_01_hours: 6
+    enhancement_02_hours: 2
+    enhancement_03_hours: 2.5
+    enhancement_total: 10.5
+    
+    # New phases (pending)
+    phase_07_hours: 64
+    phase_08_hours: 24
+    phase_09_hours: 28
+    phase_10_hours: 20
+    phase_11_hours: 28
+    phase_12_hours: 36
+    phase_13_hours: 20
+    phase_14_hours: 20
+    new_phases_total: 240
+    
+    # Summary
+    total_estimated_hours: 610.5
+    total_buffer_hours: 122    # 20% buffer
+    total_with_buffer: 732.5
 
 # =============================================================================
 # PHASE TRACKER - SINGLE SOURCE OF TRUTH
@@ -171,8 +200,7 @@ phase_tracker:
       verified: true
       entry_count: 1239  # 1189 unit + 50 integration (13+11+5+6)
       hash_chain_valid: true
-      verified_at: "2026-01-15T15:30:00Z"
-      verified_at: "2026-01-15T23:30:00Z"
+      verified_at: "2026-01-15T23:30:00Z"  # Final verification timestamp
     git_checkpoint: "730ed0e4e"
     notes: "AR-012: 3 ACs, 90 tests. AR-013: 3 ACs, 99 tests. AR-014: 3 ACs, 79 tests. AR-015: 3 ACs, 113 tests (40+35+38). Total: 12/24 ACs (50%), 1189 unit tests passing. Vision evolution protocol complete: mutation tracking, orchestrator dependency registry, rollback capability."
   PHASE-ENHANCEMENT-01:
@@ -372,6 +400,7 @@ phase_tracker:
       hash_chain_valid: true
       verified_at: "2026-01-16T00:20:00Z"
     git_checkpoint: "33694cefc"
+    acceptance_criteria:
       - ac_id: "AC-ENH-002-01"
         description: "MasterOrchestrator integrated with ResponseHeaderInjector"
         status: "COMPLETED"
@@ -498,6 +527,211 @@ phase_tracker:
       verified_at: "2026-01-16T00:31:00Z"
     git_checkpoint: "7f350ff14"
     acceptance_criteria:
+      - ac_id: "AC-ENH-003-01"
+  
+  # =========================================================================
+  # NEW PHASES - Sequential Numbering from PHASE-07 onwards
+  # =========================================================================
+  
+  PHASE-07-INTENT-ROUTER:
+    title: "Holistic Intent Router Intelligence"
+    description: |
+      CORTEX5.5 pattern: Master + Interaction Orchestrator collaboration.
+      Three-stage architecture: Comprehension → Routing → Knowledge Integration.
+      CORTEX LENS knowledge graph, comprehension loop, company override mechanism.
+      ADDITIVE MERGE: CORTEX + Company (best of both, selective override).
+      INT-RULE-009: Mandatory Auto-Challenge on every request.
+    ac_ids: 14
+    status: "NOT_STARTED"
+    locked: false
+    requires: "PHASE-ENHANCEMENT-03"
+    estimated_hours: 64
+    estimated_days: 8
+    progress_percentage: 0.0
+    blocking: true  # Critical - defines how orchestrators interact
+    audit_verification:
+      verified: false
+      entry_count: null
+      hash_chain_valid: null
+      verified_at: null
+    git_checkpoint: null
+    notes: |
+      IR-001 (4 ACs): Context Intelligence Sources - AST, Git, Comments, Relationships
+      IR-002 (3 ACs): Intent Reflection System - Canonicalization, Challenges, Recommendations
+      IR-003 (1 AC): Master + Interaction Protocol - Collaborative intent processing
+      IR-004 (2 ACs): Knowledge Graph & Comprehension Loop - CORTEX LENS, YAML approval
+      IR-005 (2 ACs): Intent-Based Routing - TDD, Planning, ADO routing
+      IR-006 (2 ACs): Additive Merge with Selective Override - Priority protection, scope-aware
+      
+      KEY ENHANCEMENTS:
+      - Additive Merge: CORTEX + Company (keeps all non-conflicting)
+      - Priority Levels: CRITICAL CORTEX rules cannot be overridden
+      - Scope-Aware Override: Partial overrides respected
+      - Early Merge: Merge before comprehension (user sees final rules)
+      - INT-RULE-009: Auto-Challenge governance (mandatory, no user prompt needed)
+      
+      Origin: CORTEX5.5 LLM Intent Routing Intelligence
+    phase_yaml: "docs/phases/phase-07-intent-router.yaml"
+  
+  PHASE-08-CORE-ORCHESTRATORS:
+    title: "Domain Orchestrator Ecosystem"
+    description: "Transform 20+ discovered orchestrators into systematic, scalable framework"
+    ac_ids: 6
+    status: "NOT_STARTED"
+    locked: false
+    requires: "PHASE-07-INTENT-ROUTER"
+    estimated_hours: 24
+    estimated_days: 3
+    progress_percentage: 0.0
+    blocking: true
+    audit_verification:
+      verified: false
+      entry_count: null
+      hash_chain_valid: null
+      verified_at: null
+    git_checkpoint: null
+    notes: "AR-016 (Classification & Templates), AR-017 (Registration & Composition), CR-001 (Naming & Capabilities)"
+    phase_yaml: "docs/phases/phase-08.yaml"
+  
+  PHASE-09-GOVERNANCE-TOOLS:
+    title: "Developer Governance Tooling"
+    description: "Integrate governance utilities into developer workflows"
+    ac_ids: 8
+    completed_ac_ids: 2  # GV-002-01 and GV-002-02 completed in previous session
+    status: "NOT_STARTED"
+    locked: false
+    requires: "PHASE-08-CORE-ORCHESTRATORS"
+    started_at: null
+    estimated_hours: 28
+    estimated_days: 3.5
+    progress_percentage: 25.0  # 2/8 = 25%
+    blocking: true
+    audit_verification:
+      verified: false
+      entry_count: null
+      hash_chain_valid: null
+      verified_at: null
+    git_checkpoint: null
+    notes: |
+      GV-001 (CLI Query/Validate): NOT_STARTED
+      GV-002 (Agent Prompts): 2/2 COMPLETED (builder + planner prompts updated)
+      GV-003 (Pre-commit/IDE): NOT_STARTED
+      GV-004 (Dashboard/Readiness): NOT_STARTED
+      
+      Completed ACs (from previous session):
+      - GV-002-01: cortex-builder.prompt.md updated with governance tools
+      - GV-002-02: cortex-planner.md updated with governance commands
+    phase_yaml: "docs/phases/phase-09.yaml"
+  
+  PHASE-10-ADAPTIVE-EXECUTION:
+    title: "Adaptive Execution Framework"
+    description: "Context-aware orchestrator routing and optimization"
+    ac_ids: 5
+    status: "NOT_STARTED"
+    locked: false
+    requires: "PHASE-09-GOVERNANCE-TOOLS"
+    estimated_hours: 20
+    estimated_days: 2.5
+    progress_percentage: 0.0
+    blocking: false
+    audit_verification:
+      verified: false
+      entry_count: null
+      hash_chain_valid: null
+      verified_at: null
+    git_checkpoint: null
+    notes: "EX-001 (Context Analyzer & Routing), EX-002 (Execution Modes & Optimization), EX-003 (Performance Profiling)"
+    phase_yaml: "docs/phases/phase-10.yaml"
+  
+  PHASE-11-HALLUCINATION-PREVENTION:
+    title: "Hallucination Prevention System"
+    description: "Behavioral boundaries and intent canonicalization for AI agents"
+    ac_ids: 6
+    status: "NOT_STARTED"
+    locked: false
+    requires: "PHASE-09-GOVERNANCE-TOOLS"
+    estimated_hours: 28
+    estimated_days: 3.5
+    progress_percentage: 0.0
+    blocking: false
+    audit_verification:
+      verified: false
+      entry_count: null
+      hash_chain_valid: null
+      verified_at: null
+    git_checkpoint: null
+    notes: "HP-001 (Intent Canonicalization & Boundaries), HP-002 (Execution Sandbox & Detection), HP-003 (Vision Mutation & Confidence)"
+    phase_yaml: "docs/phases/phase-11.yaml"
+  
+  PHASE-12-KNOWLEDGE-ECOSYSTEM:
+    title: "Knowledge Ecosystem Expansion"
+    description: "Expand Tier 3 knowledge library with auto-indexing"
+    ac_ids: 7
+    status: "NOT_STARTED"
+    locked: false
+    requires: "PHASE-11-HALLUCINATION-PREVENTION"
+    estimated_hours: 36
+    estimated_days: 4.5
+    progress_percentage: 0.0
+    blocking: false
+    audit_verification:
+      verified: false
+      entry_count: null
+      hash_chain_valid: null
+      verified_at: null
+    git_checkpoint: null
+    notes: "KN-001 (Repository Structure & Auto-indexing), KN-002 (AI Curation & Retrieval), KN-003/004 (Governance & Synthesis)"
+    phase_yaml: "docs/phases/phase-12.yaml"
+  
+  PHASE-13-OBSERVABILITY-MATURITY:
+    title: "Observability & Telemetry Maturity"
+    description: "Production-grade observability for CORTEX runtime"
+    ac_ids: 5
+    status: "NOT_STARTED"
+    locked: false
+    requires: "PHASE-10-ADAPTIVE-EXECUTION"
+    estimated_hours: 20
+    estimated_days: 2.5
+    progress_percentage: 0.0
+    blocking: true
+    audit_verification:
+      verified: false
+      entry_count: null
+      hash_chain_valid: null
+      verified_at: null
+    git_checkpoint: null
+    notes: "OB-001 (OpenTelemetry & Dashboard), OB-002 (Alerting & Profiling), OB-003 (Audit Trail Enhancement)"
+    phase_yaml: "docs/phases/phase-13.yaml"
+  
+  PHASE-14-PRODUCTION-MIGRATION:
+    title: "Production Rollout & Adoption"
+    description: "Multi-team migration and operational readiness"
+    ac_ids: 4
+    status: "NOT_STARTED"
+    locked: false
+    requires: "PHASE-13-OBSERVABILITY-MATURITY"
+    estimated_hours: 20
+    estimated_days: 2.5
+    progress_percentage: 0.0
+    blocking: false
+    audit_verification:
+      verified: false
+      entry_count: null
+      hash_chain_valid: null
+      verified_at: null
+    git_checkpoint: null
+    notes: "PR-001 (Operational Readiness), PR-002 (Training & Gradual Rollout), PR-003 (Support & Incident Response)"
+    phase_yaml: "docs/phases/phase-14.yaml"
+  
+  PHASE-ENHANCEMENT-03-MARKER:
+    title: "Marker - Prior Phases Completed"
+    description: "All prior phases (PHASE-01 through PHASE-ENHANCEMENT-03) are locked and verified"
+    ac_ids: 0
+    status: "REFERENCE"
+    locked: true
+    notes: "135 ACs implemented with 100% audit verification. New phases begin at PHASE-07-CORE-ORCHESTRATORS"
+
+acceptance_criteria:
       - ac_id: "AC-ENH-003-01"
         description: "Feature parity verification - all core orchestrators have consistent header integration"
         status: "COMPLETED"
