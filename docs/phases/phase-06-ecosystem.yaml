@@ -1,19 +1,19 @@
 # =============================================================================
-# PHASE VISION-CORE: ORCHESTRATOR PLUGIN ECOSYSTEM & BRAIN ACTIVATION
+# PHASE 06-ECOSYSTEM: ORCHESTRATOR PLUGIN ECOSYSTEM & BRAIN ACTIVATION
 # =============================================================================
 # Focus: Orchestrator Plugin Framework, Brain Tier Population,
 #        E2E Validation, Vision Governance Protocol
 # =============================================================================
 
 metadata:
-  phase_id: "PHASE-VISION-CORE"
+  phase_id: "PHASE-06-ECOSYSTEM"
   title: "Orchestrator Plugin Ecosystem & Brain Activation"
   description: "Extensible orchestrator framework, brain tier population, hallucination prevention enforcement, vision governance"
   status: "NOT_STARTED"
   start_date: null
   end_date: null
   predecessor: "PHASE-PARALLEL"
-  successor: "PHASE-VISION-ADVANCED"
+  successor: null
   
   # Estimation
   estimated_hours: 152

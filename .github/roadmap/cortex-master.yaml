@@ -13,7 +13,7 @@ metadata:
   dor_score: 100
   start_date: null
   end_date: null
-  total_ac_ids: 125  # 101 from PHASE-01-05 + PHASE-PARALLEL + 24 from PHASE-VISION-CORE
+  total_ac_ids: 125  # 101 from PHASE-01-05 + PHASE-PARALLEL + 24 from PHASE-06-ECOSYSTEM
   
   # Velocity & Estimation Assumptions
   velocity:
@@ -141,7 +141,7 @@ phase_tracker:
       hash_chain_valid: true
       verified_at: "2026-01-14T23:50:00Z"
     git_checkpoint: "181624052"
-  PHASE-VISION-CORE:
+  PHASE-06-ECOSYSTEM:
     title: "Orchestrator Plugin Ecosystem & Brain Activation"
     description: "Extensible orchestrator framework, brain tier population, hallucination prevention enforcement, vision governance"
     ac_ids: 24
@@ -170,8 +170,8 @@ phase_tracker:
     status: "IN_PROGRESS"
     locked: false
     started_at: "2026-01-15T18:00:00Z"
-    requires: "PHASE-VISION-CORE"
-    can_start_after: "PHASE-VISION-CORE completion"
+    requires: "PHASE-06-ECOSYSTEM"
+    can_start_after: "PHASE-06-ECOSYSTEM completion"
     must_complete_before: null
     blocking: false
     estimated_hours: 6
@@ -1328,10 +1328,10 @@ phases:
       - "AC-AR-010-02"
       - "AC-AR-010-03"
 
-  phase_vision_core:
-    id: "PHASE-VISION-CORE"
+  phase_06_ecosystem:
+    id: "PHASE-06-ECOSYSTEM"
     title: "Orchestrator Plugin Ecosystem & Brain Activation"
-    file: "phases/phase-vision-core.yaml"
+    file: "phases/phase-06-ecosystem.yaml"
     focus:
       - "Orchestrator Plugin Framework (AR-012)"
       - "Brain Tier Population (AR-013)"
