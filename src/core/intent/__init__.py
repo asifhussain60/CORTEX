@@ -23,6 +23,12 @@ from .lens_context_builder import (
     ContextNode,
     ContextEdge,
 )
+from .lens_response_formatter import (
+    LENSResponseFormatter,
+    ResponseFormat,
+    SeverityColor,
+    FormattedResponse,
+)
 
 __all__ = [
     # Intent canonicalizer
@@ -52,4 +58,9 @@ __all__ = [
     "KnowledgeGraph",
     "ContextNode",
     "ContextEdge",
+    # LENS response formatter
+    "LENSResponseFormatter",
+    "ResponseFormat",
+    "SeverityColor",
+    "FormattedResponse",
 ]
