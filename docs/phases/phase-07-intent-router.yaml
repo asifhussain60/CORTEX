@@ -118,7 +118,8 @@ acceptance_criteria:
       Implement AST parsing to understand code structure, relationships, and
       semantic meaning. Supports Python as primary language with extensibility.
     
-    status: "NOT_STARTED"
+    status: "COMPLETED"
+    completed_at: "2026-01-15T10:00:00Z"
     
     acceptance_tests:
       - "Parse Python files into AST representation"
@@ -141,20 +142,23 @@ acceptance_criteria:
       - Decorator chains (governance, audit, etc.)
       - Cross-file relationships (imports, usages)
       
-      Files to Create:
+      Files Created:
       - src/core/intelligence/ast_intelligence.py
       - src/core/intelligence/call_graph.py
       - src/core/intelligence/pattern_detector.py
+      - src/core/intelligence/dependency_mapper.py
     
     verification_method: |
       Tests in tests/unit/core/intelligence/test_ast_intelligence.py:
-      - TestASTParsing: Basic file parsing
-      - TestCallGraphConstruction: Cross-function relationships
-      - TestPatternDetection: Singleton, factory, decorator patterns
-      - TestDependencyMapping: Import graph building
-      - TestGracefulDegradation: Syntax error handling
+      - TestASTParsing: 11 tests
+      - TestCallGraphConstruction: 5 tests
+      - TestPatternDetection: 4 tests
+      - TestDependencyMapping: 3 tests
+      - TestGracefulDegradation: 5 tests
+      - TestASTIntelligenceIntegration: 3 tests
+      TOTAL: 31/31 PASSING
     
-    git_checkpoint: "IR-001-01-ast-intelligence"
+    git_checkpoint: "2e058c2d9"
     
   - ac_id: "IR-001-02"
     title: "Git History Intelligence"

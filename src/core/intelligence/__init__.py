@@ -34,6 +34,20 @@ from src.core.intelligence.dependency_mapper import (
     DependencyMap,
     ImportInfo,
 )
+from src.core.intelligence.git_history_analyzer import (
+    GitHistoryAnalyzer,
+    CommitInfo,
+    RenameInfo,
+)
+from src.core.intelligence.change_frequency import (
+    ChangeFrequencyMapper,
+    HotSpot,
+)
+from src.core.intelligence.author_context import (
+    AuthorContextBuilder,
+    Author,
+    AuthorContribution,
+)
 
 __all__ = [
     # AST Intelligence
@@ -54,4 +68,15 @@ __all__ = [
     "DependencyMapper",
     "DependencyMap",
     "ImportInfo",
+    # Git History
+    "GitHistoryAnalyzer",
+    "CommitInfo",
+    "RenameInfo",
+    # Change Frequency
+    "ChangeFrequencyMapper",
+    "HotSpot",
+    # Author Context
+    "AuthorContextBuilder",
+    "Author",
+    "AuthorContribution",
 ]
