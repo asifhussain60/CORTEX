@@ -162,6 +162,61 @@ phase_tracker:
       verified_at: "2026-01-15T23:30:00Z"
     git_checkpoint: "730ed0e4e"
     notes: "AR-012: 3 ACs, 90 tests. AR-013: 3 ACs, 99 tests. AR-014: 3 ACs, 79 tests. AR-015: 3 ACs, 113 tests (40+35+38). Total: 12/24 ACs (50%), 1189 unit tests passing. Vision evolution protocol complete: mutation tracking, orchestrator dependency registry, rollback capability."
+  PHASE-ENHANCEMENT-01:
+    title: "Response Header Injection System Integration"
+    description: "Integrate ResponseHeaderInjector into orchestrators for global CORTEX header management. Hybrid rollout: reference implementation first, then pattern-based adoption."
+    ac_ids: 4  # AC-ENH-001-01 through AC-ENH-001-04
+    completed_ac_ids: 0
+    status: "IN_PROGRESS"
+    locked: false
+    started_at: "2026-01-15T18:00:00Z"
+    requires: "PHASE-VISION-CORE"
+    can_start_after: "PHASE-VISION-CORE completion"
+    must_complete_before: null
+    blocking: false
+    estimated_hours: 6
+    estimated_days: 1
+    progress_percentage: 0.0
+    notes: |
+      Enhancement to AR-009 (Response Templates). System independently developed and tested.
+      Implementation Strategy: HYBRID APPROACH
+      - Step 1: Reference Integration (PlanningOrchestrator) - 1-2 hours
+      - Step 2: Documentation & Pattern Definition - 0.5-1 hour
+      - Step 3: Future orchestrator updates follow pattern (0 additional overhead)
+      
+      Components:
+      - cortex-brain/tier0/response-headers.yaml (195 lines) - Tier 0 config
+      - src/core/response_header_config.py (487 lines) - Singleton manager
+      - src/core/response_header_injector.py (319 lines) - Composition wrapper
+      - tests/unit/test_response_headers.py (557 lines) - 29/29 tests passing
+      
+      Non-invasive: Uses composition pattern, does not modify ResponseTemplateEngine
+      Global scope: Single YAML modification point affects all orchestrators
+      
+      Commit: 723b0c37e (Response header system foundation)
+    acceptance_criteria:
+      - ac_id: "AC-ENH-001-01"
+        description: "PlanningOrchestrator integrated with ResponseHeaderInjector"
+        status: "IN_PROGRESS"
+        test: "test_planning_orchestrator_headers"
+      - ac_id: "AC-ENH-001-02"
+        description: "Headers appear in orchestrator responses with correct variables"
+        status: "PENDING"
+        test: "test_orchestrator_response_headers"
+      - ac_id: "AC-ENH-001-03"
+        description: "Integration pattern documented for other orchestrators"
+        status: "PENDING"
+        test: "test_integration_pattern_clarity"
+      - ac_id: "AC-ENH-001-04"
+        description: "Zero test regressions in orchestrator suite"
+        status: "PENDING"
+        test: "test_orchestrator_backward_compatibility"
+    audit_verification:
+      verified: false
+      entry_count: 0
+      hash_chain_valid: false
+      verified_at: null
+    git_checkpoint: null
 
 # =============================================================================
 # ARCHITECTURE DECISIONS (AR-001 through AR-010)
