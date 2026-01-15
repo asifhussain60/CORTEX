@@ -15,6 +15,8 @@ from datetime import datetime
 
 from src.core.interfaces import IOrchestrator, OperationMode
 from src.core.result import Result, Ok, Err
+from src.core.response_header_injector import ResponseHeaderInjector
+from src.core.response_header_config import HeaderConfigurationManager
 from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from src.infrastructure.database import DatabaseManager
 from src.mcp.decorator import mcp_tool
@@ -51,6 +53,33 @@ class MasterOrchestrator(IOrchestrator):
         self.db = DatabaseManager()
         self.domain_orchestrators: Dict[str, OrchestratorMetadata] = {}
         self.operation_history: List[Dict[str, Any]] = []
+        
+        # Track current operation context for header variables
+        self.current_operation: Optional[str] = None
+        self.current_phase: Optional[str] = None
+        
+        # AC-ENH-002-01: Initialize ResponseHeaderInjector for header wrapping
+        try:
+            config_manager = HeaderConfigurationManager.get_instance()
+            config_manager.load_configuration('cortex-brain/tier0/response-headers.yaml')
+            
+            # Create ResponseHeaderInjector instance
+            # Uses composition pattern - injector wraps a template engine
+            # For orchestrators that don't use templates, pass None as engine
+            self.header_injector = ResponseHeaderInjector(
+                template_engine=None,  # Optional: None for orchestrators without templates
+                config_manager=config_manager
+            )
+        except Exception as e:
+            # Log but don't fail - headers are enhancement, not blocking
+            self.logger.log_operation_complete(
+                ac_id="AC-ENH-002-01",
+                operation="HEADER_INJECTOR_INIT",
+                success=False,
+                details={"error": f"Failed to initialize header injector: {str(e)}"}
+            )
+            # Graceful degradation: continue without header injection
+            self.header_injector = None
         
     @classmethod
     def instance(cls) -> 'MasterOrchestrator':
@@ -90,6 +119,63 @@ class MasterOrchestrator(IOrchestrator):
     def get_mode(self) -> OperationMode:
         """Get current operation mode."""
         return OperationMode.PLANNING
+    
+    def get_response_with_headers(self, response: str) -> str:
+        """
+        Wrap response with CORTEX headers.
+        
+        AC-ENH-002-01: Integrate ResponseHeaderInjector into MasterOrchestrator
+        
+        Applies header injection if injector is available, otherwise returns
+        response unchanged (graceful degradation).
+        
+        Args:
+            response: Response text to wrap
+            
+        Returns:
+            Response wrapped with CORTEX headers
+        """
+        if not self.header_injector:
+            return response
+        
+        try:
+            # Build context from orchestrator state
+            context = {
+                "operation": self.current_operation or "coordination",
+                "orchestrator": self.get_name(),
+                "phase": self.current_phase or "coordination",
+                "mode": self.get_mode().name,
+                "author": "CORTEX",  # Master orchestrator is system-authored
+            }
+            
+            # AC-ENH-002-01: Build header section using injector pattern
+            header_section = self.header_injector._build_header_section(context)
+            
+            # AC-ENH-002-01: Build copyright section (appears after content)
+            copyright_section = self.header_injector._build_copyright_section(context)
+            
+            # Assemble: header + content + copyright (NOT including footer for orchestrators)
+            sections = []
+            if header_section:
+                sections.append(header_section)
+            sections.append(response)
+            if copyright_section:
+                sections.append(copyright_section)
+            
+            # Use injector's assembly logic for consistent spacing
+            wrapped_response = self.header_injector._assemble_sections(sections)
+            
+            return wrapped_response
+            
+        except Exception as e:
+            # Graceful degradation: log error and return unwrapped response
+            self.logger.log_operation_complete(
+                ac_id="AC-ENH-002-01",
+                operation="HEADER_INJECTION",
+                success=False,
+                details={"error": f"Header injection failed: {str(e)}"}
+            )
+            return response
     
     def get_mcp_tools(self) -> Result[Dict[str, Any]]:
         """AC-AR-011-02: Get exposed MCP tools."""
