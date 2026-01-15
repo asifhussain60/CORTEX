@@ -19,8 +19,17 @@ from src.core.hallucination_prevention.intent_canonicalization import (
     ActionType,
 )
 
+from src.core.hallucination_prevention.behavioral_boundaries import (
+    BehavioralBoundaryRules,
+    BoundaryViolation,
+    ViolationType,
+)
+
 __all__ = [
     "ExtendedIntentCanonicalizer",
     "ExtendedCanonicalIntent",
     "ActionType",
+    "BehavioralBoundaryRules",
+    "BoundaryViolation",
+    "ViolationType",
 ]
