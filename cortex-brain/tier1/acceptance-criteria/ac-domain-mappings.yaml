@@ -1,0 +1,851 @@
+# =============================================================================
+# TIER 1: AC-TO-DOMAIN MAPPINGS
+# =============================================================================
+# Maps all 87 unique Acceptance Criteria to 4 orchestrator domains:
+# - TDD: Test-Driven Development & Quality Assurance
+# - PLANNING: Phase Management & Strategic Planning  
+# - ADO: Work Item Management & DevOps Integration
+# - INTERACTION: Communication, Feedback & Knowledge Sharing
+# =============================================================================
+
+metadata:
+  tier: 1
+  title: "Acceptance Criteria to Domain Mappings"
+  description: "Bidirectional mapping between AC-IDs and orchestrator domains for governance query"
+  created_at: "2026-01-15T12:00:00Z"
+  ac_count: 87
+  domain_count: 4
+  mapping_strategy: "Architecture-driven with semantic clustering"
+  notes: |
+    Mapping rationale:
+    - AR-001-005: Governance & Foundation → PLANNING (phase/tier mgmt) + ADO (work tracking)
+    - AR-006-009: Core Infrastructure → TDD (testing, validation) + ADO (operations)
+    - AR-010-011: Advanced Testing → TDD (test frameworks, performance)
+    - AR-012: Orchestrator Framework → ADO (work item linkage) + PLANNING (phase control)
+    - AR-013: Brain Tier Activation → PLANNING (tier management) + ADO (AC tracking)
+    - AR-014: Hallucination Prevention → PLANNING (phase immutability) + INTERACTION (audit logging)
+    - AR-015: Vision Evolution → PLANNING (vision governance) + INTERACTION (decision tracking)
+    - FR-001-006: Foundation Features → Mixed (based on concern)
+    - FR-008-009: Orchestrator Features → ADO + TDD (based on nature)
+    - NFR-* : Cross-cutting → All domains (performance, security, reliability)
+
+# =============================================================================
+# DOMAIN-CENTRIC MAPPING (Query: Get all ACs for a domain)
+# =============================================================================
+
+domains:
+  tdd:
+    domain_id: "tdd"
+    domain_name: "Test-Driven Development"
+    orchestrator: "TDDOrchestrator"
+    tier_access: [0, 1, 2]
+    primary_rules: ["TDD-RULE-001", "TDD-RULE-002", "TDD-RULE-003", "TDD-RULE-004", "TDD-RULE-005", "TDD-RULE-006", "TDD-RULE-007", "TDD-RULE-008"]
+    ac_count: 28
+    acceptance_criteria:
+      # AR-006: Test Framework & TDD Scaffolding (3 ACs)
+      - ac_id: "AC-AR-006-01"
+        title: "pytest plugin architecture"
+        description: "Test execution framework with plugin discovery"
+        categories: ["test_execution", "code_coverage"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-006-02"
+        title: "Test scaffolding & fixtures"
+        description: "Automated test structure generation with parameterized fixtures"
+        categories: ["fixtures", "test_isolation"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-006-03"
+        title: "Coverage reporting & gaps"
+        description: "Code coverage metrics with gap identification"
+        categories: ["code_coverage", "mutation_testing"]
+        severity: "HIGH"
+      
+      # AR-007: Performance Testing Framework (3 ACs)
+      - ac_id: "AC-AR-007-01"
+        title: "Benchmark tests"
+        description: "Performance baseline establishment"
+        categories: ["performance_testing"]
+        severity: "MEDIUM"
+        
+      - ac_id: "AC-AR-007-02"
+        title: "Profiling integration"
+        description: "CPU/memory profiling with bottleneck detection"
+        categories: ["performance_testing"]
+        severity: "MEDIUM"
+        
+      - ac_id: "AC-AR-007-03"
+        title: "Performance regression detection"
+        description: "Automated detection of performance degradation"
+        categories: ["performance_testing", "mutation_testing"]
+        severity: "MEDIUM"
+      
+      # FR-001: Audit Logging (3 ACs) - partial TDD testing
+      - ac_id: "AC-FR-001-01"
+        title: "Audit log test suite"
+        description: "Comprehensive test coverage for audit events"
+        categories: ["test_execution", "assertion_validation"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-FR-001-02"
+        title: "Audit data validation"
+        description: "Test validation of audit event data integrity"
+        categories: ["assertion_validation", "documentation"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-FR-001-03"
+        title: "Audit event mutation testing"
+        description: "Mutation testing for audit event capture"
+        categories: ["mutation_testing"]
+        severity: "MEDIUM"
+      
+      # AR-011: Reference Orchestrator (3 ACs) - orchestrator testing
+      - ac_id: "AC-AR-011-01"
+        title: "Orchestrator base class tests"
+        description: "Comprehensive unit tests for orchestrator lifecycle"
+        categories: ["test_execution", "test_isolation"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-011-02"
+        title: "Orchestrator integration tests"
+        description: "Integration tests for orchestrator with other components"
+        categories: ["test_execution"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-011-03"
+        title: "Orchestrator performance tests"
+        description: "Performance validation for orchestrator operations"
+        categories: ["performance_testing"]
+        severity: "MEDIUM"
+      
+      # AR-012: Orchestrator Plugin Framework (3 ACs)
+      - ac_id: "AC-AR-012-01"
+        title: "Base Orchestrator interface tests"
+        description: "Unit tests for orchestrator base class"
+        categories: ["test_execution", "test_isolation"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-012-02"
+        title: "Orchestrator decorator tests"
+        description: "Tests for auto-registration decorator"
+        categories: ["test_execution", "fixtures"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-012-03"
+        title: "Orchestrator tier dependency tests"
+        description: "Tests for tier access validation"
+        categories: ["test_execution"]
+        severity: "HIGH"
+      
+      # AR-013: Brain Tier Activation (1 AC - AC-AR-013-01 test suite)
+      - ac_id: "AC-AR-013-01"
+        title: "Domain rules loading tests"
+        description: "Comprehensive tests for tier 0 domain rules"
+        categories: ["test_execution", "test_isolation"]
+        severity: "HIGH"
+      
+      # NFR-001: Performance (3 ACs)
+      - ac_id: "AC-NFR-001-01"
+        title: "Performance baseline tests"
+        description: "Benchmark tests for critical paths"
+        categories: ["performance_testing"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-NFR-001-02"
+        title: "Performance degradation tests"
+        description: "Tests to detect performance regressions"
+        categories: ["performance_testing"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-NFR-001-03"
+        title: "Scalability tests"
+        description: "Tests for system scalability under load"
+        categories: ["performance_testing"]
+        severity: "HIGH"
+      
+      # NFR-004: Test Quality (3 ACs)
+      - ac_id: "AC-NFR-004-01"
+        title: "Test isolation validation"
+        description: "Tests to ensure test independence"
+        categories: ["test_isolation"]
+        severity: "MEDIUM"
+        
+      - ac_id: "AC-NFR-004-02"
+        title: "Test assertion quality"
+        description: "Validation of assertion message quality"
+        categories: ["assertion_validation", "documentation"]
+        severity: "MEDIUM"
+        
+      - ac_id: "AC-NFR-004-03"
+        title: "Test documentation compliance"
+        description: "Validation of test documentation standards"
+        categories: ["documentation"]
+        severity: "MEDIUM"
+
+  planning:
+    domain_id: "planning"
+    domain_name: "Strategic Planning"
+    orchestrator: "PlanningOrchestrator"
+    tier_access: [0, 1, 2, 3]
+    primary_rules: ["PLAN-RULE-001", "PLAN-RULE-002", "PLAN-RULE-003", "PLAN-RULE-004", "PLAN-RULE-005", "PLAN-RULE-006", "PLAN-RULE-007", "PLAN-RULE-008"]
+    ac_count: 25
+    acceptance_criteria:
+      # AR-001: 3-Tier Governance (3 ACs)
+      - ac_id: "AC-AR-001-01"
+        title: "Tier 0 immutable rules"
+        description: "SKULL rules defined and locked"
+        categories: ["phase_management"]
+        severity: "CRITICAL"
+        
+      - ac_id: "AC-AR-001-02"
+        title: "Tier 1 extensible governance"
+        description: "Project-level governance extending Tier 0"
+        categories: ["phase_management"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-001-03"
+        title: "Tier 2 team conventions"
+        description: "Team-level conventions building on Tiers 0-1"
+        categories: ["phase_management"]
+        severity: "MEDIUM"
+      
+      # AR-002: SQLite Index (3 ACs) - phase tracking
+      - ac_id: "AC-AR-002-01"
+        title: "SQLite schema design"
+        description: "Normalized schema for governance data"
+        categories: ["dependency_resolution"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-002-02"
+        title: "Indexing strategy"
+        description: "Performance-optimized indices"
+        categories: ["dependency_resolution"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-002-03"
+        title: "Query optimization"
+        description: "Efficient governance queries"
+        categories: ["dependency_resolution"]
+        severity: "HIGH"
+      
+      # AR-003: Audit-First Pattern (3 ACs)
+      - ac_id: "AC-AR-003-01"
+        title: "Audit event schema"
+        description: "Immutable event log structure"
+        categories: ["risk_management"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-003-02"
+        title: "Event sourcing"
+        description: "State reconstruction from event log"
+        categories: ["risk_management"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-003-03"
+        title: "Audit query interface"
+        description: "Query and analysis of audit events"
+        categories: ["risk_management"]
+        severity: "HIGH"
+      
+      # AR-004: State Machine (3 ACs)
+      - ac_id: "AC-AR-004-01"
+        title: "State transitions"
+        description: "Valid state transitions defined"
+        categories: ["milestone_tracking"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-004-02"
+        title: "State validation"
+        description: "Enforcement of state machine rules"
+        categories: ["milestone_tracking"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-004-03"
+        title: "State history tracking"
+        description: "Tracking of all state changes"
+        categories: ["milestone_tracking"]
+        severity: "MEDIUM"
+      
+      # AR-005: Configuration Management (3 ACs)
+      - ac_id: "AC-AR-005-01"
+        title: "Config schema definition"
+        description: "Structured configuration format"
+        categories: ["phase_management"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-005-02"
+        title: "Config validation"
+        description: "Schema-based configuration validation"
+        categories: ["phase_management"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-005-03"
+        title: "Config evolution"
+        description: "Safe configuration schema evolution"
+        categories: ["phase_management"]
+        severity: "MEDIUM"
+      
+      # AR-013: Brain Tier Activation (2 ACs)
+      - ac_id: "AC-AR-013-02"
+        title: "AC-to-domain mappings"
+        description: "Queryable mapping of all ACs to domains"
+        categories: ["phase_management", "milestone_tracking"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-013-03"
+        title: "Tier 2 response templates"
+        description: "Domain response templates with inheritance"
+        categories: ["phase_management"]
+        severity: "HIGH"
+      
+      # AR-014: Hallucination Prevention (3 ACs)
+      - ac_id: "AC-AR-014-01"
+        title: "Phase lock immutability"
+        description: "Locked phases cannot be reimplemented"
+        categories: ["phase_management"]
+        severity: "CRITICAL"
+        
+      - ac_id: "AC-AR-014-02"
+        title: "AC completion audit"
+        description: "AC requires audit entries to complete"
+        categories: ["milestone_tracking"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-014-03"
+        title: "Dependency holistic validation"
+        description: "Modifications validated against all dependencies"
+        categories: ["dependency_resolution", "risk_management"]
+        severity: "HIGH"
+      
+      # AR-015: Vision Evolution (3 ACs)
+      - ac_id: "AC-AR-015-01"
+        title: "Vision mutation audit"
+        description: "Changes to vision logged with impact"
+        categories: ["phase_management"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-015-02"
+        title: "Tier-orchestrator dependency registry"
+        description: "Registry of tier-to-orchestrator dependencies"
+        categories: ["dependency_resolution"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-015-03"
+        title: "Vision rollback capability"
+        description: "Ability to rollback vision changes safely"
+        categories: ["risk_management"]
+        severity: "HIGH"
+      
+      # FR-002: Checkpoints (3 ACs) - phase management
+      - ac_id: "AC-FR-002-01"
+        title: "Checkpoint creation"
+        description: "Ability to create phase checkpoints"
+        categories: ["phase_management"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-FR-002-02"
+        title: "Checkpoint restoration"
+        description: "Ability to restore from checkpoints"
+        categories: ["phase_management", "risk_management"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-FR-002-03"
+        title: "Checkpoint verification"
+        description: "Verification of checkpoint integrity"
+        categories: ["phase_management"]
+        severity: "MEDIUM"
+
+  ado:
+    domain_id: "ado"
+    domain_name: "Azure DevOps Integration"
+    orchestrator: "ADOOrchestrator"
+    tier_access: [0, 1, 2]
+    primary_rules: ["ADO-RULE-001", "ADO-RULE-002", "ADO-RULE-003", "ADO-RULE-004", "ADO-RULE-005", "ADO-RULE-006", "ADO-RULE-007", "ADO-RULE-008"]
+    ac_count: 24
+    acceptance_criteria:
+      # AR-008: Reference Orchestrator - ADO aspects (2 ACs)
+      - ac_id: "AC-AR-008-01"
+        title: "Work item linkage"
+        description: "Reference orchestrator links to work items"
+        categories: ["work_item_management", "traceability"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-008-02"
+        title: "Status tracking"
+        description: "Orchestrator status updates work item boards"
+        categories: ["board_automation"]
+        severity: "HIGH"
+      
+      # AR-009: Orchestrator Resolver (3 ACs)
+      - ac_id: "AC-AR-009-01"
+        title: "Orchestrator discovery"
+        description: "Runtime discovery of available orchestrators"
+        categories: ["work_item_management"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-009-02"
+        title: "Orchestrator selection"
+        description: "Selection of orchestrator for task"
+        categories: ["board_automation"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-009-03"
+        title: "Orchestrator coordination"
+        description: "Coordination between multiple orchestrators"
+        categories: ["devops_integration"]
+        severity: "HIGH"
+      
+      # AR-010: Domain-Specific Orchestrators (3 ACs)
+      - ac_id: "AC-AR-010-01"
+        title: "TDD orchestrator"
+        description: "TDD domain orchestrator implementation"
+        categories: ["work_item_management", "traceability"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-010-02"
+        title: "Planning orchestrator"
+        description: "Planning domain orchestrator implementation"
+        categories: ["board_automation"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-AR-010-03"
+        title: "ADO orchestrator"
+        description: "ADO domain orchestrator implementation"
+        categories: ["devops_integration"]
+        severity: "HIGH"
+      
+      # FR-003: Orchestrator Lifecycle (3 ACs)
+      - ac_id: "AC-FR-003-01"
+        title: "Orchestrator activation"
+        description: "Orchestrator startup and initialization"
+        categories: ["work_item_management"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-FR-003-02"
+        title: "Orchestrator health check"
+        description: "Health monitoring of orchestrators"
+        categories: ["devops_integration"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-FR-003-03"
+        title: "Orchestrator graceful shutdown"
+        description: "Safe orchestrator shutdown"
+        categories: ["work_item_management"]
+        severity: "HIGH"
+      
+      # FR-004: Telemetry (3 ACs)
+      - ac_id: "AC-FR-004-01"
+        title: "Telemetry events"
+        description: "Telemetry event collection"
+        categories: ["devops_integration"]
+        severity: "MEDIUM"
+        
+      - ac_id: "AC-FR-004-02"
+        title: "Telemetry aggregation"
+        description: "Telemetry data aggregation"
+        categories: ["devops_integration"]
+        severity: "MEDIUM"
+        
+      - ac_id: "AC-FR-004-03"
+        title: "Telemetry dashboards"
+        description: "Telemetry visualization and dashboards"
+        categories: ["devops_integration"]
+        severity: "MEDIUM"
+      
+      # FR-008: Orchestrator Ecosystem (3 ACs)
+      - ac_id: "AC-FR-008-01"
+        title: "Orchestrator plugin interface"
+        description: "Plugin API for third-party orchestrators"
+        categories: ["work_item_management", "traceability"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-FR-008-02"
+        title: "Plugin marketplace"
+        description: "Registry and discovery of community orchestrators"
+        categories: ["work_item_management"]
+        severity: "MEDIUM"
+        
+      - ac_id: "AC-FR-008-03"
+        title: "Plugin validation"
+        description: "Validation of third-party orchestrator plugins"
+        categories: ["board_automation"]
+        severity: "MEDIUM"
+      
+      # NFR-002: Security (3 ACs) - partial ADO aspects
+      - ac_id: "AC-NFR-002-01"
+        title: "Access control"
+        description: "Role-based access control for orchestrators"
+        categories: ["devops_integration"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-NFR-002-02"
+        title: "Data encryption"
+        description: "Encryption of sensitive data in transit"
+        categories: ["devops_integration"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-NFR-002-03"
+        title: "Audit trail"
+        description: "Audit trail of all orchestrator operations"
+        categories: ["traceability"]
+        severity: "HIGH"
+      
+      # NFR-005: Reliability (3 ACs)
+      - ac_id: "AC-NFR-005-01"
+        title: "Fault tolerance"
+        description: "System resilience to component failures"
+        categories: ["devops_integration"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-NFR-005-02"
+        title: "Recovery mechanisms"
+        description: "Automated recovery from failures"
+        categories: ["devops_integration"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-NFR-005-03"
+        title: "Failure alerting"
+        description: "Real-time alerts for system failures"
+        categories: ["devops_integration"]
+        severity: "HIGH"
+
+  interaction:
+    domain_id: "interaction"
+    domain_name: "Communication & Knowledge"
+    orchestrator: "InteractionOrchestrator"
+    tier_access: [0, 1, 2, 3]
+    primary_rules: ["INT-RULE-001", "INT-RULE-002", "INT-RULE-003", "INT-RULE-004", "INT-RULE-005", "INT-RULE-006", "INT-RULE-007", "INT-RULE-008"]
+    ac_count: 10
+    acceptance_criteria:
+      # AR-008: Reference Orchestrator - interaction (1 AC)
+      - ac_id: "AC-AR-008-03"
+        title: "Orchestrator event logging"
+        description: "Interaction logging of orchestrator events"
+        categories: ["decision_logging", "context_sharing"]
+        severity: "MEDIUM"
+      
+      # FR-005: Feedback & Capture (3 ACs)
+      - ac_id: "AC-FR-005-01"
+        title: "Feedback collection"
+        description: "Mechanism to collect user feedback"
+        categories: ["user_feedback"]
+        severity: "MEDIUM"
+        
+      - ac_id: "AC-FR-005-02"
+        title: "Feedback analysis"
+        description: "Analysis of collected feedback patterns"
+        categories: ["knowledge_capture"]
+        severity: "MEDIUM"
+        
+      - ac_id: "AC-FR-005-03"
+        title: "Feedback action items"
+        description: "Conversion of feedback to action items"
+        categories: ["knowledge_capture"]
+        severity: "MEDIUM"
+      
+      # FR-006: Documentation (3 ACs)
+      - ac_id: "AC-FR-006-01"
+        title: "Auto-generated docs"
+        description: "Automatic documentation generation"
+        categories: ["knowledge_capture"]
+        severity: "MEDIUM"
+        
+      - ac_id: "AC-FR-006-02"
+        title: "Doc versioning"
+        description: "Documentation version control"
+        categories: ["knowledge_capture"]
+        severity: "MEDIUM"
+        
+      - ac_id: "AC-FR-006-03"
+        title: "Doc publishing"
+        description: "Documentation publishing pipeline"
+        categories: ["communication_protocol"]
+        severity: "MEDIUM"
+      
+      # FR-009: Decision Capture (3 ACs)
+      - ac_id: "AC-FR-009-01"
+        title: "Decision logging"
+        description: "Structured logging of decisions"
+        categories: ["decision_logging"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-FR-009-02"
+        title: "Decision rationale"
+        description: "Capture of decision rationale and alternatives"
+        categories: ["decision_logging", "knowledge_capture"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-FR-009-03"
+        title: "Decision review"
+        description: "Mechanism for decision review and appeal"
+        categories: ["decision_logging"]
+        severity: "MEDIUM"
+      
+      # NFR-003: Correctness (cross-domain, but interaction-centric)
+      - ac_id: "AC-NFR-003-01"
+        title: "Input validation"
+        description: "Strict validation of all inputs"
+        categories: ["communication_protocol"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-NFR-003-02"
+        title: "Output correctness"
+        description: "Verification of output correctness"
+        categories: ["communication_protocol"]
+        severity: "HIGH"
+        
+      - ac_id: "AC-NFR-003-03"
+        title: "Error handling"
+        description: "Comprehensive error handling and reporting"
+        categories: ["communication_protocol"]
+        severity: "HIGH"
+      
+      # NFR-006: Maintainability (cross-domain, but interaction-centric)
+      - ac_id: "AC-NFR-006-01"
+        title: "Code readability"
+        description: "High code readability and maintainability"
+        categories: ["stakeholder_management"]
+        severity: "MEDIUM"
+        
+      - ac_id: "AC-NFR-006-02"
+        title: "Code structure"
+        description: "Clean architecture and module organization"
+        categories: ["stakeholder_management"]
+        severity: "MEDIUM"
+        
+      - ac_id: "AC-NFR-006-03"
+        title: "Code documentation"
+        description: "Comprehensive code-level documentation"
+        categories: ["stakeholder_management"]
+        severity: "MEDIUM"
+
+# =============================================================================
+# AC-CENTRIC MAPPING (Query: Get domain for a specific AC)
+# =============================================================================
+
+ac_to_domain_index:
+  # AR-001: Governance Model
+  "AC-AR-001-01": "planning"
+  "AC-AR-001-02": "planning"
+  "AC-AR-001-03": "planning"
+  
+  # AR-002: SQLite Index
+  "AC-AR-002-01": "planning"
+  "AC-AR-002-02": "planning"
+  "AC-AR-002-03": "planning"
+  
+  # AR-003: Audit-First Pattern
+  "AC-AR-003-01": "planning"
+  "AC-AR-003-02": "planning"
+  "AC-AR-003-03": "planning"
+  
+  # AR-004: State Machine
+  "AC-AR-004-01": "planning"
+  "AC-AR-004-02": "planning"
+  "AC-AR-004-03": "planning"
+  
+  # AR-005: Configuration Management
+  "AC-AR-005-01": "planning"
+  "AC-AR-005-02": "planning"
+  "AC-AR-005-03": "planning"
+  
+  # AR-006: Test Framework & TDD Scaffolding
+  "AC-AR-006-01": "tdd"
+  "AC-AR-006-02": "tdd"
+  "AC-AR-006-03": "tdd"
+  
+  # AR-007: Performance Testing Framework
+  "AC-AR-007-01": "tdd"
+  "AC-AR-007-02": "tdd"
+  "AC-AR-007-03": "tdd"
+  
+  # AR-008: Reference Orchestrator
+  "AC-AR-008-01": "ado"
+  "AC-AR-008-02": "ado"
+  "AC-AR-008-03": "interaction"
+  
+  # AR-009: Orchestrator Resolver
+  "AC-AR-009-01": "ado"
+  "AC-AR-009-02": "ado"
+  "AC-AR-009-03": "ado"
+  
+  # AR-010: Domain-Specific Orchestrators
+  "AC-AR-010-01": "ado"
+  "AC-AR-010-02": "ado"
+  "AC-AR-010-03": "ado"
+  
+  # AR-011: Reference Orchestrator (1 was ado, rest are tdd testing)
+  "AC-AR-011-01": "tdd"
+  "AC-AR-011-02": "tdd"
+  "AC-AR-011-03": "tdd"
+  
+  # AR-012: Orchestrator Plugin Framework
+  "AC-AR-012-01": "tdd"
+  "AC-AR-012-02": "tdd"
+  "AC-AR-012-03": "tdd"
+  
+  # AR-013: Brain Tier Activation
+  "AC-AR-013-01": "tdd"  # Testing the loader
+  "AC-AR-013-02": "planning"
+  "AC-AR-013-03": "planning"
+  
+  # AR-014: Hallucination Prevention
+  "AC-AR-014-01": "planning"
+  "AC-AR-014-02": "planning"
+  "AC-AR-014-03": "planning"
+  
+  # AR-015: Vision Evolution
+  "AC-AR-015-01": "planning"
+  "AC-AR-015-02": "planning"
+  "AC-AR-015-03": "planning"
+  
+  # FR-001: Audit Logging
+  "AC-FR-001-01": "tdd"
+  "AC-FR-001-02": "tdd"
+  "AC-FR-001-03": "tdd"
+  
+  # FR-002: Checkpoints
+  "AC-FR-002-01": "planning"
+  "AC-FR-002-02": "planning"
+  "AC-FR-002-03": "planning"
+  
+  # FR-003: Orchestrator Lifecycle
+  "AC-FR-003-01": "ado"
+  "AC-FR-003-02": "ado"
+  "AC-FR-003-03": "ado"
+  
+  # FR-004: Telemetry
+  "AC-FR-004-01": "ado"
+  "AC-FR-004-02": "ado"
+  "AC-FR-004-03": "ado"
+  
+  # FR-005: Feedback & Capture
+  "AC-FR-005-01": "interaction"
+  "AC-FR-005-02": "interaction"
+  "AC-FR-005-03": "interaction"
+  
+  # FR-006: Documentation
+  "AC-FR-006-01": "interaction"
+  "AC-FR-006-02": "interaction"
+  "AC-FR-006-03": "interaction"
+  
+  # FR-008: Orchestrator Ecosystem
+  "AC-FR-008-01": "ado"
+  "AC-FR-008-02": "ado"
+  "AC-FR-008-03": "ado"
+  
+  # FR-009: Decision Capture
+  "AC-FR-009-01": "interaction"
+  "AC-FR-009-02": "interaction"
+  "AC-FR-009-03": "interaction"
+  
+  # NFR-001: Performance
+  "AC-NFR-001-01": "tdd"
+  "AC-NFR-001-02": "tdd"
+  "AC-NFR-001-03": "tdd"
+  
+  # NFR-002: Security
+  "AC-NFR-002-01": "ado"
+  "AC-NFR-002-02": "ado"
+  "AC-NFR-002-03": "ado"
+  
+  # NFR-003: Correctness
+  "AC-NFR-003-01": "interaction"
+  "AC-NFR-003-02": "interaction"
+  "AC-NFR-003-03": "interaction"
+  
+  # NFR-004: Test Quality
+  "AC-NFR-004-01": "tdd"
+  "AC-NFR-004-02": "tdd"
+  "AC-NFR-004-03": "tdd"
+  
+  # NFR-005: Reliability
+  "AC-NFR-005-01": "ado"
+  "AC-NFR-005-02": "ado"
+  "AC-NFR-005-03": "ado"
+  
+  # NFR-006: Maintainability
+  "AC-NFR-006-01": "interaction"
+  "AC-NFR-006-02": "interaction"
+  "AC-NFR-006-03": "interaction"
+
+# =============================================================================
+# STATISTICS & SUMMARY
+# =============================================================================
+
+summary:
+  total_acs: 87
+  total_domains: 4
+  domains_breakdown:
+    tdd:
+      count: 22
+      percentage: 25.3
+      primary_categories: ["test_execution", "code_coverage", "performance_testing", "assertion_validation"]
+    planning:
+      count: 26
+      percentage: 29.9
+      primary_categories: ["phase_management", "dependency_resolution", "milestone_tracking", "risk_management"]
+    ado:
+      count: 23
+      percentage: 26.4
+      primary_categories: ["work_item_management", "board_automation", "devops_integration", "traceability"]
+    interaction:
+      count: 16
+      percentage: 18.4
+      primary_categories: ["decision_logging", "knowledge_capture", "communication_protocol", "user_feedback"]
+  
+  category_distribution:
+    test_execution: 10
+    phase_management: 8
+    work_item_management: 5
+    devops_integration: 8
+    decision_logging: 4
+    performance_testing: 6
+    code_coverage: 2
+    dependency_resolution: 5
+    milestone_tracking: 3
+    board_automation: 4
+    risk_management: 3
+    knowledge_capture: 6
+    communication_protocol: 3
+    user_feedback: 1
+    fixtures: 2
+    assertion_validation: 2
+    documentation: 2
+    traceability: 4
+    stakeholder_management: 3
+
+# =============================================================================
+# QUERY PATTERNS
+# =============================================================================
+
+query_patterns:
+  get_acs_for_domain: |
+    # Usage: Get all ACs assigned to a domain
+    # Example: domains['tdd']['acceptance_criteria'] → 28 TDD ACs
+    # Pattern: domains[domain_id].acceptance_criteria[*].ac_id
+  
+  get_domain_for_ac: |
+    # Usage: Get the domain responsible for an AC
+    # Example: ac_to_domain_index['AC-AR-006-01'] → 'tdd'
+    # Pattern: ac_to_domain_index[ac_id]
+  
+  get_orchestrator_for_ac: |
+    # Usage: Get the orchestrator handling an AC
+    # Example: ac_id='AC-AR-006-01' → orchestrator='TDDOrchestrator'
+    # Pattern: domain=ac_to_domain_index[ac_id]; orchestrator=domains[domain].orchestrator
+  
+  get_category_stats: |
+    # Usage: Understand category distribution
+    # Pattern: summary.category_distribution[category]
+  
+  get_orchestrator_coverage: |
+    # Usage: Understand which ACs an orchestrator must handle
+    # Example: domains['tdd'].acceptance_criteria → all 28 TDD ACs
+    # Pattern: domains[orchestrator_domain].acceptance_criteria
+
+versioning:
+  schema_version: "1.0"
+  created_at: "2026-01-15T12:00:00Z"
+  updated_at: "2026-01-15T12:00:00Z"
+  notes: "Initial mapping of all 87 ACs to 4 orchestrator domains"
