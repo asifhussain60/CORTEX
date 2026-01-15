@@ -21,10 +21,18 @@ from .routing_engine import (
     RoutingDecision,
     RoutingEngine,
 )
+from .execution_modes import (
+    ExecutionMode,
+    ModeConfiguration,
+    AdaptiveExecutor,
+)
 
 __all__ = [
     "ExecutionContext",
     "ExecutionContextAnalyzer",
     "RoutingDecision",
     "RoutingEngine",
+    "ExecutionMode",
+    "ModeConfiguration",
+    "AdaptiveExecutor",
 ]
