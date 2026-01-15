@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Neural Observatory - Real-time brain visualization dashboard">
+    <title>CORTEX Neural Observatory</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js for metrics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    
+    <!-- D3.js for graphs -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/glassmorphism.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #e2e8f0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-white">
+    <!-- Navigation Bar -->
+    <nav id="navbar" class="glass-panel border-b bg-slate-900/50 sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex-between">
+            <div class="flex items-center gap-3">
+                <div class="text-2xl font-bold bg-gradient-to-r from-cyan-500 to-sky-500 bg-clip-text text-transparent">
+                    CORTEX
+                </div>
+                <span class="text-sm opacity-75">Neural Observatory</span>
+            </div>
+            <div class="flex items-center gap-6">
+                <button class="px-4 py-2 rounded-lg hover:bg-slate-700/50 transition">Observatory</button>
+                <button class="px-4 py-2 rounded-lg hover:bg-slate-700/50 transition">Audit</button>
+                <button class="px-4 py-2 rounded-lg hover:bg-slate-700/50 transition">Orchestrators</button>
+                <button class="px-4 py-2 rounded-lg hover:bg-slate-700/50 transition">Plans</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container mx-auto px-6 py-8">
+        <!-- Welcome Section -->
+        <section class="mb-8">
+            <h1 class="text-4xl font-bold mb-2">CORTEX Brain Observatory</h1>
+            <p class="text-slate-400">Real-time visualization of system architecture, audit intelligence, and orchestration status</p>
+        </section>
+
+        <!-- Brain Observatory - Tier Visualization (NO-001-01) -->
+        <section id="brain-observatory" class="mb-8">
+            <h2 class="text-2xl font-bold mb-6">Brain Architecture</h2>
+            <div id="tier-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Tiers will be loaded here -->
+            </div>
+        </section>
+
+        <!-- Neural Pulse Status (NO-001-02) -->
+        <section id="neural-pulse" class="mb-8">
+            <div class="glass-panel">
+                <div class="flex items-center gap-4 mb-4">
+                    <h3 class="text-xl font-bold">System Health</h3>
+                    <div id="pulse-indicator" class="pulse-indicator healthy"></div>
+                    <span id="status-badge" class="badge badge-success">OPTIMAL</span>
+                </div>
+                <p id="status-message" class="text-slate-400">All systems operational. Hash chain verified.</p>
+            </div>
+        </section>
+
+        <!-- SSOT Metrics (NO-001-03) -->
+        <section id="ssot-metrics" class="mb-8">
+            <h2 class="text-2xl font-bold mb-6">SSOT Metrics</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="glass-panel">
+                    <h4 class="text-sm opacity-75 mb-2">Phases</h4>
+                    <div class="text-3xl font-bold">8/15</div>
+                    <p class="text-sm opacity-50 mt-2">Completed / Total</p>
+                </div>
+                <div class="glass-panel">
+                    <h4 class="text-sm opacity-75 mb-2">Acceptance Criteria</h4>
+                    <div class="text-3xl font-bold">135/206</div>
+                    <p class="text-sm opacity-50 mt-2">Completed / Total (65.5%)</p>
+                </div>
+                <div class="glass-panel">
+                    <h4 class="text-sm opacity-75 mb-2">Audit Entries</h4>
+                    <div class="text-3xl font-bold">3,447</div>
+                    <p class="text-sm opacity-50 mt-2">Hash chain valid</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Audit Timeline (NO-002-01) -->
+        <section id="audit-timeline" class="mb-8">
+            <h2 class="text-2xl font-bold mb-6">Audit Timeline</h2>
+            <div class="glass-panel">
+                <div id="audit-list" class="space-y-3">
+                    <!-- Audit entries will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Orchestrator Grid (NO-003-01) -->
+        <section id="orchestrator-constellation" class="mb-8">
+            <h2 class="text-2xl font-bold mb-6">Orchestrator Constellation</h2>
+            <div id="orchestrator-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Orchestrator cards will be loaded here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/js/utils/api-client.js"></script>
+    <script src="/js/components/brain/brain-map.js"></script>
+    <script src="/js/components/neural/neural-pulse.js"></script>
+    <script src="/js/components/temporal/audit-timeline.js"></script>
+    <script src="/js/components/orchestrator/orchestrator-grid.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
