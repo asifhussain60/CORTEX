@@ -1,9 +1,10 @@
 # CORTEX Anti-Patterns & Lessons - From Git History
 # Source: Failures and corrections observed in commit messages
-# Date: 2026-01-14
+# Date: 2026-01-15 (Updated)
 
 metadata:
   purpose: "Document what NOT to do based on historical failures"
+  last_updated: "2026-01-15"
 
 # ═══════════════════════════════════════════════════════════════════════════
 # CRITICAL FAILURES
@@ -49,7 +50,19 @@ failures:
     examples:
       - "Python lock file CLI tool → simple YAML property"
       - "Multiple tracking files → single phase_tracker"
+      - "CORTEX LENS dependency for Observatory → Observatory reads existing data"
     solution: "Simplest viable approach first"
+    
+  tooling_duplication:
+    severity: "MEDIUM"
+    description: "Building same capability in multiple places"
+    evidence:
+      - "Initial Neural Observatory plan included CORTEX LENS integration as dependency"
+      - "User correction: Observatory is independent SPA reading existing data"
+    examples:
+      - "AST scanning in both LENS and Observatory → LENS only"
+      - "Knowledge graph in multiple places → LENS only"
+    solution: "One implementation per capability, others consume output"
 
 # ═══════════════════════════════════════════════════════════════════════════
 # ANTI-PATTERNS DISCOVERED

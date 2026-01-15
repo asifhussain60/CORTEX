@@ -1,6 +1,6 @@
 # CORTEX Vision - Consolidated Understanding
 # Source: Git commit history analysis from CORTEX-3.0 through CORTEX6
-# Date: 2026-01-14
+# Date: 2026-01-15 (Updated)
 
 metadata:
   version: "7.0"
@@ -11,6 +11,7 @@ metadata:
     - CORTEX-5.5
     - CORTEX6
   total_commits_reviewed: 750+
+  last_updated: "2026-01-15"
 
 # ═══════════════════════════════════════════════════════════════════════════
 # CORE IDENTITY
@@ -102,13 +103,25 @@ evolution:
     period: "January 2026"
     focus: "SSOT Rebuild & Simplification"
     key_achievements:
-      - "110 ACs implemented (100%)"
+      - "135 ACs implemented (PHASE-01 through PHASE-ENHANCEMENT-03)"
       - "SSOT restoration from hallucination"
       - "Single source of truth enforcement"
       - "Phase tracker in cortex-master.yaml"
       - "Holistic validation rules"
-      - "Plan modification commands"
-    commits: ~50
+      - "Response header injection system"
+    commits: ~100
+
+  cortex_7_0:
+    branch: "CORTEX6"  # Same branch, conceptual version
+    period: "January 2026"
+    focus: "Production Roadmap & Visualization"
+    key_achievements:
+      - "206 total ACs planned (15 phases)"
+      - "PHASE-07 CORTEX LENS (code intelligence tooling)"
+      - "PHASE-15 Neural Observatory (visualization SPA)"
+      - "Multi-machine development strategy"
+      - "Tooling centralization principles"
+    status: "IN_PROGRESS"
 
 # ═══════════════════════════════════════════════════════════════════════════
 # ARCHITECTURE
@@ -216,7 +229,7 @@ current_state:
   single_source_of_truth:
     master_plan: ".github/roadmap/cortex-master.yaml"
     phase_tracker: "phase_tracker property in cortex-master.yaml"
-    phase_details: ".github/roadmap/phases/phase-*.yaml"
+    phase_details: "docs/phases/phase-*.yaml"
     
   entry_points:
     builder: ".github/prompts/cortex-builder.prompt.md"
@@ -226,15 +239,61 @@ current_state:
       - cortex-planner.md
 
   implementation_status:
-    total_phases: 6
-    total_ac_ids: 98
+    total_phases: 15
+    locked_phases: 9  # PHASE-01 through PHASE-ENHANCEMENT-03
+    pending_phases: 6  # PHASE-07 through PHASE-14
+    parallel_track: 1  # PHASE-15 Neural Observatory
+    
+    total_ac_ids: 206
+    completed_ac_ids: 135
+    pending_ac_ids: 71
+    
     phase_breakdown:
-      PHASE_01: 33
-      PHASE_02: 27
-      PHASE_03: 6
-      PHASE_04: 12
-      PHASE_05: 17
-      PHASE_PARALLEL: 3
+      locked:
+        PHASE_01: 36
+        PHASE_02: 27
+        PHASE_03: 6
+        PHASE_04: 12
+        PHASE_05: 17
+        PHASE_PARALLEL: 3
+        PHASE_06_ECOSYSTEM: 24
+        PHASE_ENHANCEMENT_01: 4
+        PHASE_ENHANCEMENT_02: 2
+        PHASE_ENHANCEMENT_03: 1
+      pending:
+        PHASE_07_INTENT_ROUTER: 14
+        PHASE_08_CORE_ORCHESTRATORS: 6
+        PHASE_09_GOVERNANCE_TOOLS: 8
+        PHASE_10_ADAPTIVE_EXECUTION: 5
+        PHASE_11_HALLUCINATION_PREVENTION: 6
+        PHASE_12_KNOWLEDGE_ECOSYSTEM: 7
+        PHASE_13_OBSERVABILITY_MATURITY: 5
+        PHASE_14_PRODUCTION_MIGRATION: 4
+      parallel:
+        PHASE_15_NEURAL_OBSERVATORY: 12
+
+  key_systems:
+    cortex_lens:
+      phase: "PHASE-07-INTENT-ROUTER (IR-004)"
+      purpose: "Centralized code intelligence tooling"
+      tools:
+        - lens_scan_ast
+        - lens_scan_git
+        - lens_scan_comments
+        - lens_scan_apis
+        - lens_build_graph
+      status: "NOT_STARTED"
+      
+    neural_observatory:
+      phase: "PHASE-15-NEURAL-OBSERVATORY"
+      purpose: "Visualization SPA for CORTEX brain"
+      data_sources:
+        - governance.db
+        - cortex-master.yaml
+        - rollback-history.json
+        - orchestrator registry
+      status: "NOT_STARTED"
+      independence: "100% independent - reads existing data only"
 
 # ═══════════════════════════════════════════════════════════════════════════
 # GUIDING PRINCIPLES
@@ -258,3 +317,43 @@ principles:
     - "Brain protection prevents destructive actions"
     - "Audit logging for all significant operations"
     - "Pre-flight checks before execution"
+    
+  tooling_centralization:
+    principle: "One implementation per capability"
+    examples:
+      - "AST scanning → CORTEX LENS (PHASE-07)"
+      - "Knowledge graph → CORTEX LENS (PHASE-07)"
+      - "Visualization → Neural Observatory (PHASE-15)"
+    anti_pattern: "Duplicating tools across components"
+    
+  simplicity:
+    principle: "Simplest viable approach first"
+    examples:
+      - "YAML property over Python CLI tool"
+      - "Single phase_tracker over multiple tracking files"
+      - "Read existing data over new infrastructure"
+    anti_pattern: "Over-engineering solutions"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# COMPONENT RELATIONSHIPS
+# ═══════════════════════════════════════════════════════════════════════════
+
+component_relationships:
+  cortex_lens_vs_neural_observatory:
+    cortex_lens:
+      type: "Tooling / Analysis Layer"
+      purpose: "Code intelligence, AST scanning, knowledge graph building"
+      phase: "PHASE-07-INTENT-ROUTER"
+      produces: "Analysis data, knowledge graphs, relationships"
+      
+    neural_observatory:
+      type: "Visualization Layer"
+      purpose: "Dashboard SPA for CORTEX brain visualization"
+      phase: "PHASE-15-NEURAL-OBSERVATORY"
+      consumes: "Existing SSOT data (governance.db, cortex-master.yaml)"
+      
+    relationship: |
+      Neural Observatory is INDEPENDENT of CORTEX LENS.
+      Observatory reads existing data that already exists today.
+      LENS (when built) will add optional enhanced views to Observatory.
+      Observatory does NOT depend on LENS for core functionality.

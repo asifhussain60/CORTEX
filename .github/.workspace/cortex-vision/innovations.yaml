@@ -1,9 +1,10 @@
 # CORTEX Key Innovations - Distilled from Git History
 # Source: Commit analysis of 750+ commits across CORTEX branches
-# Date: 2026-01-14
+# Date: 2026-01-15 (Updated)
 
 metadata:
   purpose: "Capture significant innovations and patterns"
+  last_updated: "2026-01-15"
   
 # ═══════════════════════════════════════════════════════════════════════════
 # BRAIN TIER ARCHITECTURE
@@ -232,3 +233,82 @@ admin_governor:
     - root_folder_policy
     - test_cleanup_rules
     - anti_restoration_rules
+
+# ═══════════════════════════════════════════════════════════════════════════
+# CORTEX 7.0 INNOVATIONS
+# ═══════════════════════════════════════════════════════════════════════════
+
+cortex_lens:
+  description: |
+    Centralized code intelligence tooling for AST scanning, knowledge graph
+    building, and workspace analysis. TOOLING layer, not visualization.
+    
+  phase: "PHASE-07-INTENT-ROUTER (IR-004)"
+  status: "PLANNED"
+  
+  tools:
+    - lens_scan_ast: "Recursive AST analysis"
+    - lens_scan_git: "Git history & patterns"
+    - lens_scan_comments: "Code comments & docs"
+    - lens_scan_apis: "API relationship discovery"
+    - lens_build_graph: "Unified graph construction"
+    
+  principle: |
+    All code intelligence tooling is CENTRALIZED in CORTEX LENS.
+    Other components CONSUME LENS output, they don't duplicate tooling.
+
+neural_observatory:
+  description: |
+    Unified glassmorphism dashboard for CORTEX brain visualization.
+    Pure VISUALIZATION layer over existing SSOT data.
+    
+  phase: "PHASE-15-NEURAL-OBSERVATORY"
+  status: "PLANNED"
+  
+  independence: |
+    Neural Observatory is 100% INDEPENDENT of CORTEX LENS.
+    It reads data that EXISTS TODAY:
+    - governance.db (audit logs, hash chain)
+    - cortex-master.yaml (phase tracker, AC counts)
+    - rollback-history.json (rollback events)
+    - orchestrator registry (registered orchestrators)
+    
+  pillars:
+    - brain_observatory: "Tier visualization, neural pulse, SSOT metrics"
+    - temporal_cortex: "Audit timeline, hash chain viz"
+    - orchestrator_constellation: "Live status, dependency graph"
+    
+  design_standard: "Glassmorphism v4.1.0"
+
+tooling_centralization:
+  description: |
+    Principle that each capability has ONE implementation, consumed by
+    multiple components. Prevents duplication and ensures consistency.
+    
+  examples:
+    - "AST scanning → CORTEX LENS only"
+    - "Knowledge graph → CORTEX LENS only"
+    - "Brain visualization → Neural Observatory only"
+    - "Audit logging → governance.db only"
+    
+  anti_pattern: |
+    Building AST scanning into Neural Observatory would duplicate CORTEX LENS.
+    Observatory should CONSUME LENS output (when available), not rebuild it.
+
+multi_machine_development:
+  description: |
+    Strategy for developing phases on separate machines without conflicts.
+    
+  implementation:
+    location: ".github/roadmap/MULTI_MACHINE_STRATEGY.md"
+    
+  key_concepts:
+    - "Parallel phases: Non-blocking work streams"
+    - "Read-only sources: governance.db, cortex-master.yaml"
+    - "Write targets: Phase-specific directories"
+    - "Sync protocol: git pull + init_db.py --sync-only"
+    
+  example: |
+    PHASE-15 Neural Observatory can be developed on Machine B while
+    PHASE-07 through PHASE-14 are developed on Machine A. No conflicts
+    because Observatory only READS existing data.

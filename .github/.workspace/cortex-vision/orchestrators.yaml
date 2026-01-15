@@ -1,10 +1,11 @@
 # CORTEX Orchestrators - Discovered from Git History
 # Source: Commit messages from CORTEX-4.0 through CORTEX6
-# Date: 2026-01-14
+# Date: 2026-01-15 (Updated)
 
 metadata:
   total_discovered: 20+
   source_branch: "CORTEX-4.0"
+  last_updated: "2026-01-15"
 
 # ═══════════════════════════════════════════════════════════════════════════
 # CORE ORCHESTRATORS
@@ -89,13 +90,20 @@ orchestrators:
     versions: ["v1.3.0", "v3.0"]
     
   lens_dashboard:
-    name: "CORTEX Lens Orchestrator"
-    purpose: "Visual dashboard and metrics"
+    name: "CORTEX Lens Dashboard"
+    purpose: "Visual dashboard and metrics (CORTEX 4.0 legacy)"
+    status: "SUPERSEDED"
+    successor: "PHASE-15-NEURAL-OBSERVATORY"
     evidence:
       - "feat(cortex-lens): Complete mobile UX enhancements"
       - "[CORTEX-LENS][PHASE-2] Navigation & Visualization Complete"
       - "feat(cortex-lens): Add CORTEX Lens V2 planning"
     versions: ["v2.0", "v3.0"]
+    note: |
+      This was the CORTEX 4.0 dashboard. The concept is now split:
+      - CORTEX LENS (PHASE-07): Code intelligence TOOLING (AST, knowledge graph)
+      - Neural Observatory (PHASE-15): Visualization SPA
+      The naming collision is historical - PHASE-07 LENS is different from this.
     
   checkpoint:
     name: "Checkpoint Orchestrator"
@@ -202,3 +210,41 @@ architecture:
     evidence:
       - "feat(manifest): Task 7.3 - CoreManifest with 16 orchestrators, JSON schema, and 53 tests"
       - "Complete Phase 7 - 3-Tier Manifest Architecture & ManifestLoader"
+
+# ═══════════════════════════════════════════════════════════════════════════
+# CORTEX 7.0 ORCHESTRATOR LANDSCAPE
+# ═══════════════════════════════════════════════════════════════════════════
+
+cortex_7_orchestrator_landscape:
+  reference_implementation:
+    name: "PlanningOrchestrator"
+    location: "src/orchestrators/domain/planning_orchestrator.py"
+    purpose: "Reference implementation demonstrating MCP, audit, and header patterns"
+    patterns_demonstrated:
+      - MCP tool exposure
+      - Audit-first logging
+      - Response header injection
+      - Governance compliance
+    
+  master_orchestrator:
+    name: "MasterOrchestrator"
+    location: "src/orchestrators/master_orchestrator.py"
+    purpose: "Delegation hub for all domain orchestrators"
+    future_enhancement: "Three-stage architecture (PHASE-07)"
+    
+  planned_orchestrators:
+    phase_07:
+      - name: "InteractionOrchestrator"
+        purpose: "Intent comprehension and YAML condensation"
+      - name: "CORTEX LENS Tools"
+        purpose: "AST scanning, knowledge graph building"
+        note: "TOOLING, not visualization"
+        
+    phase_08:
+      - name: "Domain Orchestrators (20+)"
+        purpose: "Systematic framework for discovered orchestrators"
+        
+  superseded:
+    - name: "CORTEX Lens Dashboard (v2/v3)"
+      replaced_by: "Neural Observatory (PHASE-15)"
+      reason: "Conceptual split - LENS became tooling, Observatory became visualization"
