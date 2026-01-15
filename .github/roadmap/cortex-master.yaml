@@ -668,14 +668,14 @@ phase_tracker:
     title: "Developer Governance Tooling"
     description: "Integrate governance utilities into developer workflows"
     ac_ids: 8
-    completed_ac_ids: 4  # GV-001-01, GV-001-02, GV-002-01, GV-002-02
+    completed_ac_ids: 5  # GV-001-01, GV-001-02, GV-002-01, GV-002-02, GV-003-01
     status: "IN_PROGRESS"
     locked: false
     requires: "PHASE-08-CORE-ORCHESTRATORS"
     started_at: "2026-01-16T00:00:00Z"
     estimated_hours: 28
     estimated_days: 3.5
-    progress_percentage: 50.0  # 4/8 = 50%
+    progress_percentage: 62.5  # 5/8 = 62.5%
     blocking: true
     audit_verification:
       verified: false
@@ -703,10 +703,21 @@ phase_tracker:
       - GV-002-01: cortex-builder.prompt.md updated with governance tools
       - GV-002-02: cortex-planner.md updated with governance commands
       
-      GV-003 (Pre-commit/IDE): NOT_STARTED (2 ACs)
+      GV-003 (Pre-commit/IDE): 1/2 COMPLETED ✓
+      - GV-003-01: Pre-Commit Hook Validation - COMPLETED
+        * AC-ID format validation in commit messages
+        * Governance rule violation prevention
+        * .pre-commit-config.yaml configuration
+        * 25 unit tests passing (format validation, hook execution, config)
+        * 3 acceptance criteria met
+        * Supports: multiple AC-IDs, optional AC-IDs, domain validation
+        * Commit: cc7f174c1
+      
+      - GV-003-02: VS Code IDE Integration - NOT_STARTED (next)
+      
       GV-004 (Dashboard/Readiness): NOT_STARTED (2 ACs)
       
-      Total Tests: 32/32 PASSING (21 unit + 11 integration)
+      Total Tests: 57/57 PASSING (9 unit + 11 integration + 25 unit + 12 AC)
     phase_yaml: "docs/phases/phase-09.yaml"
   
   PHASE-10-ADAPTIVE-EXECUTION:
