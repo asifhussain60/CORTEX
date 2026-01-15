@@ -46,8 +46,8 @@ class SynthesisEngine:
     def __init__(self):
         """Initialize synthesis engine."""
         self.ac_id = "KN-004-01"
-        self.config_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge/synthesis-config.yaml")
-        self.db_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db")
+        self.config_path = Path(__file__).parent / "synthesis-config.yaml"
+        self.db_path = Path(__file__).parent.parent.parent / "state" / "governance.db"
         
         self.config = {}
         self.relationships = []

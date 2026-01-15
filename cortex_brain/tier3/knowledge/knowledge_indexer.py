@@ -57,7 +57,7 @@ class KnowledgeIndexer:
                           Defaults to cortex-brain/tier3/knowledge/
         """
         if knowledge_dir is None:
-            knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+            knowledge_dir = Path(__file__).parent
         
         self.knowledge_dir = Path(knowledge_dir)
         self.index_file = self.knowledge_dir / ".knowledge-index.json"
