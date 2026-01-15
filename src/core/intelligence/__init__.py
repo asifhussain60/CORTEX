@@ -59,6 +59,20 @@ from src.core.intelligence.comment_analyzer import (
     ArgInfo,
     RaisesInfo,
 )
+from src.core.intelligence.relationship_traversal import (
+    RelationshipEngine,
+    RelationshipAnalysisResult,
+    APIEndpoint,
+    DatabaseModel,
+    EnvReference,
+    ConfigReference,
+    FileDependency,
+    DependencyGraph,
+    ModelGraph,
+    ImpactAnalysis,
+    ForeignKeyRef,
+    ModelRelationship,
+)
 
 __all__ = [
     # AST Intelligence
@@ -100,4 +114,17 @@ __all__ = [
     "CommentIndex",
     "ArgInfo",
     "RaisesInfo",
+    # Relationship Traversal
+    "RelationshipEngine",
+    "RelationshipAnalysisResult",
+    "APIEndpoint",
+    "DatabaseModel",
+    "EnvReference",
+    "ConfigReference",
+    "FileDependency",
+    "DependencyGraph",
+    "ModelGraph",
+    "ImpactAnalysis",
+    "ForeignKeyRef",
+    "ModelRelationship",
 ]
