@@ -668,14 +668,14 @@ phase_tracker:
     title: "Developer Governance Tooling"
     description: "Integrate governance utilities into developer workflows"
     ac_ids: 8
-    completed_ac_ids: 2  # GV-002-01 and GV-002-02 completed in previous session
-    status: "NOT_STARTED"
+    completed_ac_ids: 4  # GV-001-01, GV-001-02, GV-002-01, GV-002-02
+    status: "IN_PROGRESS"
     locked: false
     requires: "PHASE-08-CORE-ORCHESTRATORS"
-    started_at: null
+    started_at: "2026-01-16T00:00:00Z"
     estimated_hours: 28
     estimated_days: 3.5
-    progress_percentage: 25.0  # 2/8 = 25%
+    progress_percentage: 50.0  # 4/8 = 50%
     blocking: true
     audit_verification:
       verified: false
@@ -684,14 +684,29 @@ phase_tracker:
       verified_at: null
     git_checkpoint: null
     notes: |
-      GV-001 (CLI Query/Validate): NOT_STARTED
-      GV-002 (Agent Prompts): 2/2 COMPLETED (builder + planner prompts updated)
-      GV-003 (Pre-commit/IDE): NOT_STARTED
-      GV-004 (Dashboard/Readiness): NOT_STARTED
+      GV-001 (CLI Query/Validate): 2/2 COMPLETED ✓
+      - GV-001-01: Governance CLI Query Interface - COMPLETED
+        * cortex-governance query <rule-id|--domain|--phase>
+        * 9 unit tests passing (rule loader, caching, performance)
+        * 3 acceptance criteria met
+        * Performance: <200ms including process overhead
+        * Commit: c3bd857c6
       
-      Completed ACs (from previous session):
+      - GV-001-02: Governance CLI Validation Interface - COMPLETED
+        * cortex-governance validate <path> [--phase] [--ac-id] [--strict] [--fix]
+        * 11 integration tests passing (file/dir validation, format options)
+        * 3 acceptance criteria met
+        * Supports: phase context, AC-ID filtering, strict mode, auto-fix
+        * Commit: fcd25b881
+      
+      GV-002 (Agent Prompts): 2/2 COMPLETED (from previous session)
       - GV-002-01: cortex-builder.prompt.md updated with governance tools
       - GV-002-02: cortex-planner.md updated with governance commands
+      
+      GV-003 (Pre-commit/IDE): NOT_STARTED (2 ACs)
+      GV-004 (Dashboard/Readiness): NOT_STARTED (2 ACs)
+      
+      Total Tests: 32/32 PASSING (21 unit + 11 integration)
     phase_yaml: "docs/phases/phase-09.yaml"
   
   PHASE-10-ADAPTIVE-EXECUTION:
