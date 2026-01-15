@@ -1,0 +1,101 @@
+{
+  "name": "cortex-governance",
+  "displayName": "CORTEX Governance",
+  "description": "Real-time governance compliance diagnostics for CORTEX projects",
+  "version": "1.0.0",
+  "publisher": "cortex",
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "categories": [
+    "Linters",
+    "Other"
+  ],
+  "activationEvents": [
+    "workspaceContains:cortex-brain/tier0/governance",
+    "onLanguage:python"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "cortex-governance.analyze",
+        "title": "CORTEX: Analyze File",
+        "description": "Run governance analysis on the current file"
+      },
+      {
+        "command": "cortex-governance.clearCache",
+        "title": "CORTEX: Clear Cache",
+        "description": "Clear governance diagnostics cache"
+      },
+      {
+        "command": "cortex-governance.showRules",
+        "title": "CORTEX: Show Governance Rules",
+        "description": "Display governance rules reference"
+      }
+    ],
+    "configuration": {
+      "title": "CORTEX Governance",
+      "properties": {
+        "cortex-governance.enable": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable CORTEX governance diagnostics"
+        },
+        "cortex-governance.severity": {
+          "type": "string",
+          "enum": [
+            "error",
+            "warning",
+            "info"
+          ],
+          "default": "warning",
+          "description": "Minimum severity level for diagnostics"
+        },
+        "cortex-governance.autoAnalyze": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically analyze files on save"
+        },
+        "cortex-governance.validateOnOpen": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run validation when file is opened"
+        },
+        "cortex-governance.showQuickFixes": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show quick fix suggestions in code actions"
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "cortex-governance.analyze",
+        "key": "ctrl+shift+g",
+        "mac": "cmd+shift+g",
+        "when": "editorLangId == python"
+      }
+    ]
+  },
+  "scripts": {
+    "test": "node ./test/runTest.js",
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.70.0",
+    "@types/node": "16.x",
+    "typescript": "^4.7.0"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asifhussain60/CORTEX.git"
+  },
+  "author": "Asif Hussain",
+  "license": "MIT"
+}
