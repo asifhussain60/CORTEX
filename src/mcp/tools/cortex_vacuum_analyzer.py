@@ -313,24 +313,86 @@ class CortexVacuumAnalyzer:
         )
 
     def _determine_destination(self, file_path: str) -> Tuple[str, str]:
-        """Determine the destination folder for a file."""
+        """Determine the destination folder for a file with intelligent routing.
+        
+        Routing logic (evaluated in order):
+        1. Executive documents (high-level decision/brief documents)
+        2. Phase documentation (phase planning, vision, strategy)
+        3. Review/verification documents (QA, analysis, verification)
+        4. Implementation & status (technical reference, status tracking)
+        5. Reports (completion, analysis, other reports)
+        """
         filename = Path(file_path).name
+        name_lower = filename.lower()
         ext = Path(filename).suffix.lower()
 
-        # Executive docs
+        # Only process markdown files for intelligent routing
+        if ext != '.md' and ext != '.txt':
+            pass  # Fall through to non-markdown handling below
+
+        # INTELLIGENT ROUTING FOR DOCUMENTATION FILES
+        
+        # 1. EXECUTIVE DOCUMENTS → docs/executive/
+        # High-level decision and brief documents
+        executive_patterns = ['executive', 'decision', '-brief', 'brief.md']
+        if any(pattern in name_lower for pattern in executive_patterns):
+            if 'decision' in name_lower or 'executive' in name_lower or 'brief' in name_lower:
+                return 'docs/executive', 'Executive/decision documentation'
+
+        # 2. PHASE DOCUMENTATION → docs/phases/
+        # Phase planning, vision, roadmap, strategy
+        phase_patterns = ['phase-', 'phase_', 'vision-', 'vision_', '-roadmap', '-plan', '-strategy']
+        if any(pattern in name_lower for pattern in phase_patterns):
+            if 'phase' in name_lower or 'vision' in name_lower:
+                return 'docs/phases', 'Phase planning and vision documentation'
+
+        # 3. REVIEW/VERIFICATION DOCUMENTS → docs/reviews/
+        # QA, analysis, verification focused documents
+        review_patterns = ['review', 'verification', 'verify', '-analysis', 'assessment']
+        if any(pattern in name_lower for pattern in review_patterns):
+            if 'review' in name_lower or 'verify' in name_lower or 'assessment' in name_lower:
+                return 'docs/reviews', 'Review and verification documentation'
+
+        # 4. IMPLEMENTATION & STATUS → docs/
+        # Technical reference and status tracking
+        impl_patterns = ['implementation', 'status', 'naming', '-fix', 'correction']
+        if any(pattern in name_lower for pattern in impl_patterns):
+            if 'implementation' in name_lower or 'status' in name_lower or 'naming' in name_lower:
+                return 'docs', 'Implementation and status documentation'
+
+        # 5. STRATEGY & ANALYSIS → docs/ or docs/reviews/
+        # Strategic and technical analysis
+        if 'strategy' in name_lower:
+            return 'docs', 'Strategy documentation'
+        if 'analysis' in name_lower and 'review' not in name_lower:
+            return 'docs', 'Analysis documentation'
+
+        # 6. REPORTS → reports/ or categorize to more specific location
+        if 'report' in name_lower:
+            if 'completion' in name_lower:
+                return 'reports', 'Completion report'
+            if 'handoff' in name_lower:
+                return 'reports', 'Handoff documentation'
+            if any(x in name_lower for x in ['ar-0', 'ac-', 'fr-0', 'nfr-0']):
+                # AC/AR/FR reports stay in reports/
+                return 'reports', 'Acceptance criteria report'
+            # Default reports location
+            return 'docs/reviews', 'Report documentation'
+
+        # LEGACY ROUTING (for non-markdown or previously handled patterns)
+        
+        # Explicitly stated patterns (legacy)
         if filename.startswith('EXECUTIVE'):
             return 'docs/executive', 'Executive documentation'
 
-        # Phase docs
         if filename.startswith('PHASE'):
             return 'docs/phases', 'Phase documentation'
 
-        # Review docs
-        if filename.startswith('REVIEW') or 'review' in filename.lower():
+        if filename.startswith('REVIEW') or 'review' in name_lower:
             return 'docs/reviews', 'Review documentation'
 
         # Status docs
-        if 'status' in filename.lower() and filename.endswith('.md'):
+        if 'status' in name_lower and filename.endswith('.md'):
             return 'docs', 'Status documentation'
 
         # Reports
@@ -338,11 +400,11 @@ class CortexVacuumAnalyzer:
             return 'reports', 'Report or analysis document'
 
         # Completion reports
-        if 'completion' in filename.lower() and filename.endswith('.md'):
+        if 'completion' in name_lower and filename.endswith('.md'):
             return 'reports', 'Completion report'
 
         # Handoff docs
-        if 'handoff' in filename.lower():
+        if 'handoff' in name_lower:
             return 'reports', 'Handoff documentation'
 
         # Python scripts in root
