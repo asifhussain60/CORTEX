@@ -51,13 +51,14 @@ acceptance_criteria:
     description: |
       Create base templates for each domain.
       Each template includes governance integration, response headers, audit logging.
-    status: "NOT_STARTED"
+    status: "COMPLETED"
     acceptance_tests:
-      - "5 domain templates exist and are usable"
-      - "Each template includes governance rule loading"
-      - "Each template includes response header injection"
-      - "Each template includes audit logging hooks"
-    git_checkpoint: "AR-016-02-templates"
+      - "5 domain templates exist and are usable" ✓
+      - "Each template includes governance rule loading" ✓
+      - "Each template includes response header injection" ✓
+      - "Each template includes audit logging hooks" ✓
+    git_checkpoint: "885bcc0f0"
+    completed_at: "2026-01-15T23:45:00Z"
     
   - ac_id: "AR-017-01"
     title: "Orchestrator Registration & Discovery"
