@@ -48,6 +48,17 @@ from src.core.intelligence.author_context import (
     Author,
     AuthorContribution,
 )
+from src.core.intelligence.comment_analyzer import (
+    CommentAnalyzer,
+    CommentAnalysisResult,
+    ParsedDocstring,
+    InlineComment,
+    TechDebtItem,
+    QualityIssue,
+    CommentIndex,
+    ArgInfo,
+    RaisesInfo,
+)
 
 __all__ = [
     # AST Intelligence
@@ -79,4 +90,14 @@ __all__ = [
     "AuthorContextBuilder",
     "Author",
     "AuthorContribution",
+    # Comment Analysis
+    "CommentAnalyzer",
+    "CommentAnalysisResult",
+    "ParsedDocstring",
+    "InlineComment",
+    "TechDebtItem",
+    "QualityIssue",
+    "CommentIndex",
+    "ArgInfo",
+    "RaisesInfo",
 ]
