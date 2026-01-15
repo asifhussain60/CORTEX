@@ -54,8 +54,8 @@ phase:
   
   # Tracking
   ac_ids: 14  # Full coverage: IR-001 (4) + IR-002 (4) + IR-003 (4) + IR-004 (2)
-  completed_ac_ids: 10
-  progress_percentage: 71.4
+  completed_ac_ids: 11
+  progress_percentage: 78.6
   
   # CORTEX5.5 Reference
   origin:
@@ -720,9 +720,94 @@ acceptance_criteria:
     
     git_checkpoint: "9becfdc40"
 
+  - ac_id: "IR-003-03"
+    title: "LENS Response Formatter"
+    description: |
+      Format comprehension output for user presentation in multiple formats
+      (YAML, Markdown, JSON). Ensures consistent, readable presentation of
+      challenges, recommendations, and intent summaries.
+    
+    status: "COMPLETED"
+    completed_at: "2026-01-15T18:00:00Z"
+    
+    acceptance_tests:
+      - "Format reflection response as YAML, Markdown, and JSON"
+      - "Sort challenges by severity (CRITICAL, HIGH, MEDIUM, LOW)"
+      - "Sort recommendations by priority"
+      - "Validate all required response fields present"
+      - "Convert between different output formats"
+      - "Customize output with templates and options"
+      - "Support audit trail inclusion/exclusion"
+      - "Handle special characters and edge cases"
+      - "Maintain readability for user review"
+    
+    implementation_details: |
+      Components:
+      - LENSResponseFormatter: Main formatter class
+      - ResponseFormat: Enum (JSON, YAML, Markdown)
+      - SeverityColor: Color mappings for terminal output
+      - FormattedResponse: Result wrapper
+      
+      Output Formats:
+      
+      **Markdown (Human-Readable)**
+      - Headers for each section (Intent, Challenges, Recommendations)
+      - Emoji indicators for severity levels (🔴 CRITICAL, 🟠 HIGH, etc.)
+      - Structured lists with clear remediation guidance
+      - Approval workflow indicators
+      
+      **YAML (Machine-Readable)**
+      - Structured key-value representation
+      - Maintains hierarchical relationships
+      - Compatible with comprehension YAML standard
+      - Easy to parse and validate
+      
+      **JSON (API-Compatible)**
+      - Standard JSON structure for protocol transmission
+      - Type-safe field representation
+      - Compatible with web APIs and integrations
+      
+      Formatting Features:
+      - Automatic severity sorting (CRITICAL → HIGH → MEDIUM → LOW)
+      - Priority sorting for recommendations
+      - Optional audit trail inclusion
+      - Metadata preservation
+      - Multi-format conversion support
+      - Individual component formatting (challenges, recommendations, intent)
+      - Summary statistics generation
+      
+      Customization Options:
+      - sort_challenges_by_severity: Enable/disable severity sorting
+      - sort_recommendations_by_priority: Enable/disable priority sorting
+      - include_audit_trail: Include/exclude audit trail
+      - include_metadata: Include/exclude metadata
+      - markdown_severity_emoji: Use emoji indicators in Markdown
+      - max_line_length: Control text wrapping
+      
+      Files Created:
+      - src/core/intent/lens_response_formatter.py
+      - tests/unit/core/intent/test_lens_response_formatter.py
+    
+    verification_method: |
+      Tests in tests/unit/core/intent/test_lens_response_formatter.py:
+      - TestYAMLResponseFormatting (4 tests): YAML output validation
+      - TestMarkdownResponseFormatting (4 tests): Markdown readability
+      - TestJSONResponseFormatting (3 tests): JSON structure
+      - TestResponseFieldValidation (4 tests): Required fields
+      - TestSeverityPrioritySorting (3 tests): Correct ordering
+      - TestTemplateCustomization (4 tests): Configuration options
+      - TestMultiFormatConversion (3 tests): Format conversion
+      - TestEdgeCasesAndErrors (4 tests): Special characters, edge cases
+      - TestIntegrationWithReflectionProtocol (3 tests): Protocol integration
+      - TestPerformanceOptimization (2 tests): Performance characteristics
+      TOTAL: 34/34 PASSING
+    
+    git_checkpoint: "6fb276852"
+
   # ---------------------------------------------------------------------------
-  # IR-004: Knowledge Graph & Comprehension Loop (CORTEX LENS)
+  # IR-003-04 through IR-004: NOT_STARTED
   # ---------------------------------------------------------------------------
+
   - ac_id: "IR-004-01"
     title: "CORTEX LENS Knowledge Graph Builder"
     description: |
