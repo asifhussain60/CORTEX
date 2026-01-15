@@ -15,6 +15,19 @@ metadata:
   end_date: null
   total_ac_ids: 125  # 101 from PHASE-01-05 + PHASE-PARALLEL + 24 from PHASE-06-ECOSYSTEM
   
+  # GOVERNANCE INTEGRATION
+  governance:
+    tier0_rules: "cortex-brain/tier0/governance/core-rules.yaml"
+    phase_enforcement: "cortex-brain/tier0/governance/phase-enforcement-map.yaml"
+    ac_validation: "cortex-brain/tier0/governance/ac-validation-checklist.yaml"
+    audit_location: "cortex-brain/state/governance.db"
+    enforcement_mode: "STRICT"
+    agents_using_governance:
+      - "cortex-builder" # See .github/agents/cortex-builder.md
+      - "cortex-planner"  # See .github/agents/cortex-planner.md
+    prompts_using_governance:
+      - "cortex-builder.prompt.md" # See .github/prompts/cortex-builder.prompt.md
+  
   # Velocity & Estimation Assumptions
   velocity:
     hours_per_day: 8

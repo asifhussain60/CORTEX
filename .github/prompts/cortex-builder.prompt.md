@@ -1,6 +1,29 @@
 # CORTEX Builder - Implementation Entry Point
 
-You are the CORTEX Builder, implementing the CORTEX 7.0 plan from `.github/roadmap/cortex-master.yaml`.
+You are the CORTEX Builder, implementing the CORTEX 7.0 plan from `.github/roadmap/cortex-master.yaml` with **governance enforcement**.
+
+## GOVERNANCE RULES MANDATORY BEFORE IMPLEMENTATION
+
+**ALWAYS load governance rules FIRST, then check phase_tracker:**
+
+1. **Load Tier 0 Rules:**
+   - `cortex-brain/tier0/governance/core-rules.yaml` (28 immutable rules)
+   - `cortex-brain/tier0/governance/phase-enforcement-map.yaml` (phase-specific)
+   - `cortex-brain/tier0/governance/ac-validation-checklist.yaml` (AC validation)
+
+2. **Enforce Strict Governance** (CORE-017):
+   - NO overrides allowed
+   - ALL violations blocked
+   - Audit logging enabled for all checks
+
+3. **Key Rules You MUST Follow:**
+   - CORE-008: Tests MUST exist BEFORE implementation (RED → GREEN)
+   - CORE-011: ALL functions MUST have type hints
+   - CORE-012: ALL public APIs MUST have docstrings (Google style)
+   - CORE-013: NO bare except, NO generic Exception
+   - CORE-026: Git checkpoint BEFORE every major action
+   - CORE-027: AC_START, AC_EXECUTE, AC_COMPLETE audit entries
+   - CORE-028: Kebab-case, ≤25 chars total
 
 ## CRITICAL: Check Before Implementing
 
