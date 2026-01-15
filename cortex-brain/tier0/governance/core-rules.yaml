@@ -14,7 +14,7 @@ category: CORTEX_CORE
 precedence: HIGHEST
 
 metadata:
-  rule_count: 25
+  rule_count: 28
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
 
@@ -300,9 +300,9 @@ rules:
     description: |
       ALL implementation requests route to TDD-Master orchestrator.
     validation:
-      - "implement X" → TDD-Master
-      - "build X" → TDD-Master
-      - Never write code directly
+      - '"implement X" routes to TDD-Master'
+      - '"build X" routes to TDD-Master'
+      - "Never write code directly"
 
   # --------------------------------------------------------------------------
   # CORE-020: No Markdown in cortex-brain
@@ -424,13 +424,124 @@ rules:
     validation:
       - Each AC-ID has AC_START, AC_EXECUTE, AC_COMPLETE entries
       - Hash chain integrity verified
-      - audit_verification.verified: true before locked: true
+      - "audit_verification.verified: true before locked: true"
     required_entries:
       per_ac_id: 3  # Minimum entries per AC-ID
       operations:
         - AC_START
         - AC_EXECUTE
         - AC_COMPLETE
+
+  # --------------------------------------------------------------------------
+  # CORE-028: Intelligent Kebab-Case File Naming (25-Char Limit)
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-028
+    category: architecture_integrity
+    severity: blocked
+    name: Intelligent Kebab-Case Naming with 25-Char Limit
+    description: |
+      ALL file names MUST follow intelligent kebab-case naming with strategic
+      acronyms to keep names meaningful yet concise. Total length including
+      extension MUST NOT exceed 25 characters. Names must be self-documenting
+      without sacrificing clarity.
+    
+    naming_principles:
+      - Use kebab-case (lowercase with hyphens, no underscores)
+      - Employ semantic acronyms for common terms (e.g., cfg=config, mgr=manager)
+      - "Order: [domain]-[component]-[purpose].[ext]"
+      - "Max 25 chars total (e.g., cortex-vacuum-exec.py = 20 chars)"
+      - "Avoid articles (a, the), conjunctions (and), prepositions (in, on, of)"
+    
+    acronym_dictionary:
+      # Infrastructure
+      cfg: config
+      db: database
+      mgr: manager
+      svc: service
+      util: utility
+      
+      # Operations
+      exec: execution
+      impl: implementation
+      ver: verification
+      sync: synchronization
+      gen: generator
+      
+      # Analysis & Reporting
+      rpt: report
+      ana: analysis
+      audit: audit log
+      trc: trace
+      diag: diagnostic
+      
+      # Governance & State
+      gov: governance
+      state: state machine
+      ac: acceptance criteria
+      ar: action record
+      
+      # Naming/Conventions
+      conv: convention
+      std: standard
+      pat: pattern
+      fmt: format
+      
+      # Testing & Quality
+      test: test
+      chk: check
+      val: validation
+      
+      # Directories
+      docs: documentation
+      src: source
+      lib: library
+      etc: etc
+    
+    examples:
+      valid:
+        - "cortex-vacuum-exec.py"        # VALID: 20 chars (domain-component-purpose.ext)
+        - "cortex-gov-core-rules.yaml"   # VALID: 22 chars (tier 0 rules file)
+        - "plan-ac-tracker.db"           # VALID: 16 chars (plan AC tracking database)
+        - "audit-hash-chain.py"          # VALID: 18 chars (audit hash chain manager)
+        - "phase-completion-rpt.md"      # VALID: 21 chars (phase completion report)
+        - "gov-cache-mgr.py"             # VALID: 14 chars (governance cache manager)
+        
+      invalid:
+        - "cortex_vacuum_executor.py"    # INVALID: underscores instead of hyphens
+        - "cortex-vacuum-implementation-executor.py"  # INVALID: 41 chars (exceeds 25 limit)
+        - "CortexVacuumExecutor.py"      # INVALID: PascalCase instead of kebab-case
+        - "cortex vacuum exec.py"        # INVALID: spaces instead of hyphens
+    
+    validation:
+      - Matches regex pattern for kebab-case names
+      - "Length check: strlen(filename) <= 25 (including extension)"
+      - "No underscores except in Python files for internal/private symbols"
+      - "Semantic check: name clearly indicates file purpose"
+      - "Acronym check: non-standard acronyms documented in code comments"
+    
+    regex_pattern: '^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]+)?$'
+    
+    enforcement:
+      when: pre-commit
+      action: reject
+      message: |
+        File naming violates CORE-028:
+        - Must use kebab-case (lowercase-with-hyphens)
+        - Must not exceed 25 characters including extension
+        - Must use semantic acronyms from CORE-028 dictionary
+        - Must be self-documenting of purpose
+        
+        See core-rules.yaml CORE-028 for examples and acronym dictionary.
+    
+    exceptions:
+      - Python modules using _private naming for internal symbols (allowed)
+      - Third-party libraries (not subject to renaming)
+      - Generated files (if auto-generated by tools)
+    
+    implementation:
+      check_script: "src/governance/validators/name-validator.py"
+      git_hook: "pre-commit"
+      audit_logging: true
 
 # ==============================================================================
 # ENFORCEMENT CONFIGURATION
