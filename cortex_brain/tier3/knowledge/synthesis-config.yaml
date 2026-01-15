@@ -1,0 +1,201 @@
+metadata:
+  ac_id: "KN-004-01"
+  title: "Cross-Domain Knowledge Synthesis"
+  version: 1.0
+  created_at: "2024-01-15T00:00:00Z"
+  description: "Synthesize knowledge across multiple domains with source attribution"
+
+domain_relationships:
+  - source_domain: "GOVERNANCE"
+    target_domains:
+      - domain: "SECURITY"
+        strength: 0.9
+        description: "Governance rules include security policies"
+      - domain: "COMPLIANCE"
+        strength: 0.85
+        description: "Governance enforces compliance"
+      - domain: "DOCUMENTATION"
+        strength: 0.7
+        description: "Governance requires documentation"
+  
+  - source_domain: "INTENT-ROUTING"
+    target_domains:
+      - domain: "EXECUTION-ORCHESTRATION"
+        strength: 0.95
+        description: "Intent routing guides orchestration"
+      - domain: "API-DESIGN"
+        strength: 0.8
+        description: "Intent routing defines API contracts"
+      - domain: "ARCHITECTURE"
+        strength: 0.75
+        description: "Intent routing informs architecture"
+  
+  - source_domain: "HALLUCINATION-PREVENTION"
+    target_domains:
+      - domain: "DATA-MANAGEMENT"
+        strength: 0.85
+        description: "Truth grounding uses managed data"
+      - domain: "ML-MODELS"
+        strength: 0.9
+        description: "Model validation prevents hallucinations"
+      - domain: "TESTING-VALIDATION"
+        strength: 0.8
+        description: "Validation catches hallucinations"
+  
+  - source_domain: "EXECUTION-ORCHESTRATION"
+    target_domains:
+      - domain: "DEPLOYMENT"
+        strength: 0.85
+        description: "Orchestration guides deployment"
+      - domain: "OBSERVABILITY"
+        strength: 0.8
+        description: "Orchestration enables monitoring"
+      - domain: "ERROR-HANDLING"
+        strength: 0.75
+        description: "Orchestration manages errors"
+  
+  - source_domain: "DATA-MANAGEMENT"
+    target_domains:
+      - domain: "PERFORMANCE"
+        strength: 0.8
+        description: "Data management affects performance"
+      - domain: "OBSERVABILITY"
+        strength: 0.75
+        description: "Data management provides metrics"
+  
+  - source_domain: "SECURITY"
+    target_domains:
+      - domain: "API-DESIGN"
+        strength: 0.9
+        description: "Security requirements in APIs"
+      - domain: "ARCHITECTURE"
+        strength: 0.85
+        description: "Security shapes architecture"
+      - domain: "DEPLOYMENT"
+        strength: 0.8
+        description: "Security governs deployment"
+  
+  - source_domain: "API-DESIGN"
+    target_domains:
+      - domain: "ERROR-HANDLING"
+        strength: 0.8
+        description: "API design defines error responses"
+      - domain: "DOCUMENTATION"
+        strength: 0.85
+        description: "API design requires documentation"
+  
+  - source_domain: "ML-MODELS"
+    target_domains:
+      - domain: "TESTING-VALIDATION"
+        strength: 0.85
+        description: "Model validation tests"
+      - domain: "PERFORMANCE"
+        strength: 0.8
+        description: "Model performance tracking"
+  
+  - source_domain: "KNOWLEDGE-CURATION"
+    target_domains:
+      - domain: "DOCUMENTATION"
+        strength: 0.9
+        description: "Curation produces documentation"
+      - domain: "QUALITY"
+        strength: 0.95
+        description: "Curation ensures quality"
+  
+  - source_domain: "TESTING-VALIDATION"
+    target_domains:
+      - domain: "DEPLOYMENT"
+        strength: 0.85
+        description: "Validation gates deployment"
+      - domain: "QUALITY"
+        strength: 0.9
+        description: "Testing ensures quality"
+
+attribution:
+  structure:
+    synthesis_id: "SYNTH-UNIQUE-ID"
+    source_entries: "List of entry_ids used"
+    source_domains: "List of domains contributing"
+    confidence_score: "Overall confidence 0.0-1.0"
+    timestamp: "ISO timestamp"
+    relationships_used: "Relationships leveraged"
+  
+  requirements:
+    - "Every synthesized knowledge must cite sources"
+    - "Domain relationships must be documented"
+    - "Confidence scores must be calculated"
+    - "Traceability must be maintained"
+
+synthesis_rules:
+  - rule_id: "SR-001"
+    name: "Multi-domain Requirement"
+    description: "Synthesis should combine at least 2 domains"
+    severity: "warning"
+  
+  - rule_id: "SR-002"
+    name: "Source Attribution"
+    description: "All sources must be cited"
+    severity: "critical"
+  
+  - rule_id: "SR-003"
+    name: "Confidence Threshold"
+    description: "Synthesis must exceed minimum confidence"
+    severity: "warning"
+    threshold: 0.65
+  
+  - rule_id: "SR-004"
+    name: "Relationship Validation"
+    description: "Used relationships must be defined"
+    severity: "critical"
+  
+  - rule_id: "SR-005"
+    name: "Content Quality"
+    description: "Synthesized content must be coherent"
+    severity: "warning"
+
+synthesis_techniques:
+  - technique_id: "ST-001"
+    name: "Relationship-Based Synthesis"
+    description: "Combine knowledge using domain relationships"
+    applies_to: ["any"]
+  
+  - technique_id: "ST-002"
+    name: "Complementary Knowledge"
+    description: "Find and combine complementary concepts"
+    applies_to: ["SECURITY", "API-DESIGN"]
+  
+  - technique_id: "ST-003"
+    name: "Dependency-Based Synthesis"
+    description: "Synthesize along known dependencies"
+    applies_to: ["EXECUTION-ORCHESTRATION", "DEPLOYMENT"]
+  
+  - technique_id: "ST-004"
+    name: "Validation-Based Synthesis"
+    description: "Combine validation and testing knowledge"
+    applies_to: ["TESTING-VALIDATION", "ML-MODELS"]
+
+query_optimization:
+  index_types:
+    - "domain_index"
+    - "relationship_index"
+    - "keyword_index"
+  
+  search_strategies:
+    - "direct_domain_search"
+    - "relationship_traversal"
+    - "semantic_similarity"
+  
+  caching:
+    enabled: true
+    ttl_seconds: 3600
+    max_cache_entries: 1000
+
+performance_targets:
+  cross_domain_query_ms: 500
+  synthesis_time_ms: 300
+  relationship_lookup_ms: 50
+
+quality_thresholds:
+  high_confidence: 0.85
+  medium_confidence: 0.65
+  low_confidence: 0.40
