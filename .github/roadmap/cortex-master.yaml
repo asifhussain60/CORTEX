@@ -13,7 +13,7 @@ metadata:
   dor_score: 100
   start_date: null
   end_date: null
-  total_ac_ids: 206  # 125 locked + 7 enhancement + 62 new phases (07-14) + 12 PHASE-15
+  total_ac_ids: 215  # 125 locked + 7 enhancement + 62 new phases (07-14) + 12 PHASE-15 + 9 PHASE-16
   
   # AC-ID Breakdown
   ac_breakdown:
@@ -21,7 +21,8 @@ metadata:
     enhancement_phases: 7     # ENH-01 (4) + ENH-02 (2) + ENH-03 (1)
     new_phases: 62            # PHASE-07 (14) + 08 (6) + 09 (8) + 10 (5) + 11 (6) + 12 (7) + 13 (5) + 14 (4)
     neural_observatory: 12    # PHASE-15 (12 ACs) - PARALLEL TRACK
-    total: 206
+    business_domain: 9        # PHASE-16 (9 ACs) - ENHANCEMENT TRACK
+    total: 215
   
   # GOVERNANCE INTEGRATION
   governance:
@@ -1011,6 +1012,37 @@ phase_tracker:
         • Change Heatmap
       - These are OPTIONAL add-ons, not core features
     phase_yaml: ".github/roadmap/phases/phase-15-neural-observatory.yaml"
+  
+  PHASE-16-BUSINESS-DOMAIN:
+    title: "Business Domain Knowledge Ecosystem"
+    description: "Extend 4-tier architecture to support optional business domain knowledge (financial, healthcare, compliance) through graceful progressive enhancement"
+    ac_ids: 9
+    completed_ac_ids: 0
+    status: "NOT_STARTED"
+    locked: false
+    requires: "PHASE-14-PRODUCTION-MIGRATION"
+    estimated_hours: 2
+    estimated_days: 1
+    progress_percentage: 0.0
+    blocking: false
+    notes: |
+      Progressive Enhancement Strategy:
+      • Domain registry (Tier 3) signals availability
+      • Dashboard extensibility (Tier 1) adds optional context
+      • Zero breaking changes (new files only)
+      • 100% backward compatible (domain optional)
+      • Works without domain brain (graceful degradation)
+      
+      9 ACs Focus:
+      AC-01: Domain Registry Schema | AC-02: Domain Documentation | AC-03: Endpoint Config
+      AC-04: Zero Breaking Changes | AC-05: Dashboard No-Domain | AC-06: Dashboard With-Domain
+      AC-07: Timeout Resilience | AC-08: Backward Compatibility | AC-09: Audit Trail
+      
+      Deliverables:
+      • cortex-brain/tier3/domain-registry.yaml
+      • src/observability/dashboard_extensibility.py
+      • 90%+ test coverage
+    phase_yaml: ".github/roadmap/phases/phase-16-business-domain.yaml"
   
   PHASE-ENHANCEMENT-03-MARKER:
     title: "Marker - Prior Phases Completed"
