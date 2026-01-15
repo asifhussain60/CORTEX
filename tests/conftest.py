@@ -22,8 +22,13 @@ import pytest
 # Add src to Python path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-# Import audit logger to ensure it's loaded
+# Import the test audit logger plugin
 from src.testing.test_audit_logger import TestAuditLogger
+
+# Register the audit logger plugin with pytest
+def pytest_configure(config):
+    """Register the audit logger plugin."""
+    config.pluginmanager.register(TestAuditLogger(), "audit_logger_plugin")
 
 
 @pytest.fixture
