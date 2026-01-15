@@ -3,6 +3,11 @@ Pytest Configuration
 
 Shared fixtures and configuration for all tests.
 
+Integrates:
+- Test audit logging (governance audit trail generation)
+- Common fixtures for temp dirs, mock configs, sample files
+- Orchestrator registry cleanup
+
 Author: Asif Hussain
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
@@ -16,6 +21,9 @@ import pytest
 
 # Add src to Python path
 sys.path.insert(0, str(Path(__file__).parent.parent))
+
+# Import audit logger to ensure it's loaded
+from src.testing.test_audit_logger import TestAuditLogger
 
 
 @pytest.fixture
@@ -93,3 +101,17 @@ def clean_registry():
     
     # Clean up after test
     OrchestratorRegistry.reset()
+
+
+@pytest.fixture
+def audit_logger(request):
+    """
+    Provide access to the test audit logger instance.
+    
+    Allows tests to query audit logging status or manually add entries if needed.
+    """
+    # Get the audit logger instance from the plugin manager
+    plugin = request.config.pluginmanager.get_plugin("TestAuditLogger")
+    if plugin and isinstance(plugin, TestAuditLogger):
+        return plugin
+    return None
