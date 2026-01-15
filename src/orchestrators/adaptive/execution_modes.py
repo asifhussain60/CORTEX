@@ -1,10 +1,10 @@
-"""Adaptive Execution Modes for performance/quality trade-offs.
+"""Adaptive Execution Modes for task optimization.
 
-This module implements three execution modes (FAST, BALANCED, THOROUGH)
-that optimize orchestrator execution for different scenarios.
+This module implements execution modes (FAST, BALANCED, THOROUGH) that provide
+different performance/quality trade-offs for orchestrator task execution.
 
-AC-EX-002-01: FAST mode minimizes overhead, BALANCED mode optimizes for
-common cases, THOROUGH mode maximizes validation.
+AC-EX-002-01: FAST mode minimizes overhead, BALANCED mode optimizes for common
+cases, THOROUGH mode maximizes validation.
 
 Author: Asif Hussain
 Copyright: © 2025-2026 Asif Hussain. All rights reserved.
@@ -56,14 +56,14 @@ class AdaptiveExecutor:
     """Executes tasks with configurable performance/quality trade-offs.
     
     Provides three execution modes:
-    - FAST: Minimizes overhead and latency (timeout: 2s, validation: 0.2)
-    - BALANCED: Optimizes for common use cases (timeout: 5s, validation: 0.6)
-    - THOROUGH: Maximizes validation and reliability (timeout: 15s, validation: 1.0)
+    - FAST: Minimizes overhead and latency
+    - BALANCED: Optimizes for common use cases
+    - THOROUGH: Maximizes validation and reliability
     
     Example:
         >>> executor = AdaptiveExecutor()
         >>> executor.set_execution_mode(ExecutionMode.FAST)
-        >>> result = executor.execute(task_data)
+        >>> result = executor.execute({"task": "example"})
     """
     
     def __init__(self) -> None:
@@ -120,7 +120,10 @@ class AdaptiveExecutor:
         """
         return self._current_mode
     
-    def get_mode_config(self, mode: Optional[ExecutionMode] = None) -> ModeConfiguration:
+    def get_mode_config(
+        self,
+        mode: Optional[ExecutionMode] = None,
+    ) -> ModeConfiguration:
         """Get configuration for a mode.
         
         Args:
@@ -131,14 +134,14 @@ class AdaptiveExecutor:
         """
         if mode is None:
             mode = self._current_mode
-        
         return self._mode_configs[mode]
     
-    def execute(self, task: Any, context: Optional[Dict[str, Any]] = None) -> Any:
+    def execute(
+        self,
+        task: Any,
+        context: Optional[Dict[str, Any]] = None,
+    ) -> Any:
         """Execute a task with current mode configuration.
-        
-        Executes a task applying the settings from the current execution mode,
-        including validation level, retries, caching, and logging.
         
         Args:
             task: Task to execute
@@ -146,9 +149,6 @@ class AdaptiveExecutor:
             
         Returns:
             Task result
-            
-        Raises:
-            ValueError: If task is None or invalid
         """
         if context is None:
             context = {}
@@ -160,7 +160,11 @@ class AdaptiveExecutor:
             self._validate_task(task)
         
         if config.retry_count > 0:
-            return self._execute_with_retries(task, config.retry_count, context)
+            return self._execute_with_retries(
+                task,
+                config.retry_count,
+                context,
+            )
         else:
             return self._execute_once(task, context)
     
@@ -176,7 +180,11 @@ class AdaptiveExecutor:
         if not task:
             raise ValueError("Task cannot be None or empty")
     
-    def _execute_once(self, task: Any, context: Dict[str, Any]) -> Any:
+    def _execute_once(
+        self,
+        task: Any,
+        context: Dict[str, Any],
+    ) -> Any:
         """Execute task once without retries.
         
         Args:
@@ -186,14 +194,23 @@ class AdaptiveExecutor:
         Returns:
             Execution result
         """
-        return {"status": "success", "task": task, "mode": self._current_mode.value}
+        return {
+            "status": "success",
+            "task": task,
+            "mode": self._current_mode.value,
+        }
     
-    def _execute_with_retries(self, task: Any, retries: int, context: Dict[str, Any]) -> Any:
+    def _execute_with_retries(
+        self,
+        task: Any,
+        retries: int,
+        context: Dict[str, Any],
+    ) -> Any:
         """Execute task with retries on failure.
         
         Args:
             task: Task to execute
-            retries: Number of retries
+            retries: Number of retries allowed
             context: Execution context
             
         Returns:
