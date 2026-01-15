@@ -80,7 +80,7 @@ copyright_section:
   # Applied after template rendering for brand consistency
   formatting:
     separator_before: true    # --- before copyright
-    separator_after: true     # --- after copyright
+    separator_after: false    # No separator after copyright (content or footer follows)
     bold: true                # Make copyright text bold
     emphasis: "**"            # Use ** for markdown bold
 

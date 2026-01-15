@@ -66,17 +66,24 @@ class PlanningOrchestrator(IOrchestrator):
         self._phase_data: Dict[str, Any] = {}
         self._initialized = False
         
-        # AC-ENH-001-01: Initialize header system (ResponseHeaderInjector)
+        # AC-ENH-001-01: Initialize header system (ResponseHeaderInjector composition)
         try:
             config_manager = HeaderConfigurationManager.get_instance()
             config_manager.load_configuration('cortex-brain/tier0/response-headers.yaml')
-            # Note: Injector not needed for current implementation
-            # Will be used when responses are rendered through templates
             self._header_config = config_manager
+            
+            # Create ResponseHeaderInjector instance
+            # Uses composition pattern - injector wraps a template engine
+            # For orchestrators that don't use templates, pass None as engine
+            self._header_injector = ResponseHeaderInjector(
+                template_engine=None,  # Optional: None for orchestrators without templates
+                config_manager=config_manager
+            )
         except Exception as e:
             # Log but don't fail - headers are enhancement, not blocking
             print(f"Warning: Failed to initialize header system: {e}")
             self._header_config = None
+            self._header_injector = None
     
     @classmethod
     def instance(cls) -> "PlanningOrchestrator":
@@ -401,41 +408,58 @@ class PlanningOrchestrator(IOrchestrator):
         """
         AC-ENH-001-01: Wrap response content with CORTEX headers.
         
-        This method demonstrates the ResponseHeaderInjector integration.
-        Headers include author info and copyright notice.
+        This method demonstrates ResponseHeaderInjector integration pattern.
+        Uses the injector's header/footer building capabilities without
+        requiring a ResponseTemplateEngine instance.
+        
+        Headers include author info, orchestrator details, and copyright notice.
+        Orchestrators can optionally use custom response templates.
         
         Args:
             response_content: The response body to wrap
         
         Returns:
-            Response with CORTEX header and copyright footer
+            Response with CORTEX header + content + copyright footer
+            
+        Note:
+            This is the reference implementation pattern for integrating
+            ResponseHeaderInjector into orchestrators. Other orchestrators
+            can follow this same composition approach and specify custom
+            response templates via ResponseTemplateRegistry.
         """
-        if not self._header_config:
+        if not self._header_injector or not self._header_config:
             return response_content
         
         try:
-            # Build header with header template
-            header_template = self._header_config.get_header_template()
-            author = self._header_config.get_author_name()
-            copyright_notice = self._header_config.get_copyright_notice()
+            # Prepare context for header variable substitution
+            context = {
+                "operation": "GetPlanStatus",
+                "orchestrator": self._name,
+                "phase": "PHASE-PLANNING",
+                "mode": self._mode.name,
+                "timestamp": datetime.now(timezone.utc).isoformat(),
+            }
             
-            # Substitute variables
-            header = header_template.format(
-                operation="GetPlanStatus",
-                author=author,
-                phase="PHASE-PLANNING",
-                orchestrator=self._name,
-            )
+            # AC-ENH-001-01: Build header section using injector pattern
+            header_section = self._header_injector._build_header_section(context)
             
-            # Build copyright footer
-            copyright_template = self._header_config.get_copyright_template()
-            footer = copyright_template.format(notice=copyright_notice)
+            # AC-ENH-001-01: Build copyright section (appears after content)
+            copyright_section = self._header_injector._build_copyright_section(context)
             
-            # Assemble: header + content + footer
-            result = f"{header}\n\n{response_content}\n\n{footer}"
+            # Assemble: header + content + copyright (NOT including footer for orchestrators)
+            # Footer is left optional for specific use cases
+            sections = []
+            if header_section:
+                sections.append(header_section)
+            sections.append(response_content)
+            if copyright_section:
+                sections.append(copyright_section)
+            
+            # Use injector's assembly logic for consistent spacing
+            result = self._header_injector._assemble_sections(sections)
             
             return result
         except Exception as e:
-            # If header generation fails, return original content
+            # If header generation fails, return original content (graceful degradation)
             print(f"Warning: Failed to add headers: {e}")
             return response_content
