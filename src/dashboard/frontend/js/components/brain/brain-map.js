@@ -39,8 +39,16 @@ async function renderBrainTiers() {
             </div>
         `).join('');
         
+        console.log('✓ Brain tiers rendered:', data.tiers.length);
+        
     } catch (error) {
-        grid.innerHTML = '<div class="text-red-400">Failed to load tier data</div>';
+        console.error('✗ Error loading brain tiers:', error);
+        grid.innerHTML = `
+            <div class="col-span-full glass-panel p-4 text-amber-400 border-l-2 border-amber-500">
+                <p class="text-sm">⚠️ Unable to load brain architecture</p>
+                <p class="text-xs opacity-75 mt-1">Make sure FastAPI backend is running on port 8000</p>
+            </div>
+        `;
     }
 }
 
@@ -71,4 +79,9 @@ function formatMetricValue(value) {
 }
 
 // Render on page load
-document.addEventListener('DOMContentLoaded', renderBrainTiers);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderBrainTiers);
+} else {
+    // Already loaded
+    renderBrainTiers().catch(e => console.error('Brain tier render failed:', e));
+}

@@ -54,13 +54,13 @@ class APIClient {
     }
 
     /**
-     * Connect to WebSocket audit stream
+     * Connect to WebSocket audit stream with retry logic
      */
     connectAuditStream(onMessage, onError = null) {
         const ws = new WebSocket(`${this.wsUrl}/ws/audit`);
         
         ws.onopen = () => {
-            console.log('Connected to audit stream');
+            console.log('✓ Connected to audit stream');
         };
         
         ws.onmessage = (event) => {
@@ -73,12 +73,17 @@ class APIClient {
         };
         
         ws.onerror = (error) => {
-            console.error('WebSocket error:', error);
+            console.error('✗ WebSocket error:', error);
             if (onError) onError(error);
         };
         
         ws.onclose = () => {
-            console.log('Disconnected from audit stream');
+            console.log('Disconnected from audit stream. Will retry in 5 seconds...');
+            // Auto-reconnect after 5 seconds
+            setTimeout(() => {
+                console.log('Attempting to reconnect to audit stream...');
+                this.connectAuditStream(onMessage, onError);
+            }, 5000);
         };
         
         return ws;

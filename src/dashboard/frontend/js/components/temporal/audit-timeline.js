@@ -52,12 +52,19 @@ async function renderAuditTimeline() {
                         list.removeChild(list.lastChild);
                     }
                 }
+            }, (error) => {
+                console.warn('WebSocket connection issue, but REST API is working. Real-time updates unavailable.');
             });
         }
         
     } catch (error) {
         console.error('Error loading audit timeline:', error);
-        list.innerHTML = '<div class="text-red-400">Failed to load audit data</div>';
+        list.innerHTML = `
+            <div class="glass-panel p-4 text-amber-400 border-l-2 border-amber-500">
+                <p class="text-sm">⚠️ Unable to load audit timeline</p>
+                <p class="text-xs opacity-75 mt-1">Make sure FastAPI backend is running on port 8000</p>
+            </div>
+        `;
     }
 }
 
@@ -67,4 +74,9 @@ function formatTimeStamp(timestamp) {
 }
 
 // Render on page load
-document.addEventListener('DOMContentLoaded', renderAuditTimeline);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderAuditTimeline);
+} else {
+    // Already loaded
+    renderAuditTimeline().catch(e => console.error('Audit timeline render failed:', e));
+}

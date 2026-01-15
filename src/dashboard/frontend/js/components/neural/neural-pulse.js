@@ -61,14 +61,26 @@ async function updateNeuralPulse() {
         
         // Update message
         message.textContent = config.message;
+        console.log('✓ Neural pulse updated:', status);
         
     } catch (error) {
-        console.error('Error updating neural pulse:', error);
+        console.warn('⚠️ Error updating neural pulse:', error);
+        // Keep pulse visible even if metrics fail
+        const indicator = document.getElementById('pulse-indicator');
+        if (indicator) {
+            indicator.className = 'pulse-indicator nominal';
+        }
     }
 }
 
 // Update on page load and every 5 seconds
-document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        updateNeuralPulse();
+        setInterval(updateNeuralPulse, 5000);
+    });
+} else {
+    // Already loaded
     updateNeuralPulse();
     setInterval(updateNeuralPulse, 5000);
-});
+}
