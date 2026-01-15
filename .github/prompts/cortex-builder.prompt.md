@@ -93,6 +93,38 @@ VS Code extension shows:
 
 ---
 
+## PHASE-13 Implementation Context
+
+### Current Phase: Observability & Telemetry Maturity ⏳
+
+**What's Completed (12 phases locked + 2 enhancement phases):**
+- ✅ PHASE-01 through PHASE-12: Foundation → Knowledge Ecosystem
+- ✅ PHASE-ENHANCEMENT-01, 02: Response header injection system
+- ✅ Total: 243 tier3 tests passing (KN-001 through KN-004)
+
+**What's Next (PHASE-13, 5 ACs):**
+1. **OB-001-01**: OpenTelemetry Integration
+2. **OB-001-02**: Metrics Dashboard
+3. **OB-002-01**: Alerting & Health Monitoring
+4. **OB-002-02**: Performance Profiling & Optimization
+5. **OB-003-01**: Audit Trail Enhancement
+
+**Governance Rules for OB-IDs:**
+- CORE-008: Tests first (RED → GREEN) - MANDATORY
+- CORE-011: Type hints MANDATORY on all functions
+- CORE-012: Docstrings MANDATORY (Google style)
+- CORE-024: Observability must log to audit trail
+- CORE-028: Kebab-case, ≤25 chars (e.g., `otel_exporter.py`, NOT `open_telemetry_exporter_system.py`)
+
+**Before Starting OB-001-01:**
+1. Load `.github/roadmap/phases/phase-13.yaml`
+2. Verify prerequisites: PHASE-10-ADAPTIVE-EXECUTION locked ✅
+3. Create git checkpoint: `git commit -m "checkpoint: before OB-001-01"`
+4. Load phase-specific rules: `phase-enforcement-map.yaml`
+5. Display Phase Initiation Summary
+
+---
+
 ## EXECUTIVE SUMMARY PROTOCOL
 
 **MANDATORY: Display executive summary BEFORE starting any phase and AFTER completing any phase.**
@@ -214,6 +246,68 @@ executive_summary_complete:
     prerequisites_met: true|false
     recommendation: "[PROCEED or WAIT for X]"
 ```
+
+---
+
+## Path Portability Patterns (CORE-028)
+
+**After PHASE-12 Fix:** All paths MUST be portable across machines.
+
+### What Was Fixed in PHASE-12
+- 5 tier3 knowledge modules hardcoded `/Users/asifhussain/PROJECTS/CORTEX/` paths
+- All converted to `Path(__file__).parent` patterns  
+- Commit: `54fe9ad91` - "fix(CORE-028): Replace absolute paths with portable Path(__file__).parent patterns"
+- All 243 tier3 tests validated - zero regressions
+
+### Correct Patterns by File Type
+
+**Python Source Code (cortex_brain/, cortex_brain/, src/):**
+
+```python
+# ✅ CORRECT - Module initialization paths (use this in __init__ methods)
+config_path = Path(__file__).parent / "config.yaml"              # Same directory
+db_path = Path(__file__).parent.parent.parent / "state" / "db.db" # Up 3 dirs
+
+# Example from expert_registry.py (post-fix):
+self.registry_path = Path(__file__).parent / "expert-registry.yaml"
+self.db_path = Path(__file__).parent.parent.parent / "state" / "governance.db"
+
+# ✅ CORRECT - For tests, use path resolution
+from pathlib import Path
+test_path = Path(__file__).parent / "fixtures" / "data.yaml"
+
+# ❌ WRONG - Breaks on other machines / CI/CD systems
+path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/config.yaml")
+```
+
+**YAML Configuration Files:**
+
+```yaml
+# ✅ CORRECT - Relative paths only
+paths:
+  database: "cortex-brain/state/governance.db"
+  rules: "cortex-brain/tier0/governance/core-rules.yaml"
+  logs: "cortex-brain/state/audit.log"
+
+# ❌ WRONG - Absolute paths lock to one machine
+paths:
+  database: "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db"
+```
+
+### Validation
+
+**Pre-commit hook ensures CORE-028 compliance:**
+```bash
+# This is automatically run during git commit
+grep -rn '/Users/\|/home/' --include="*.py" --include="*.yaml" . | grep -v '.git/' | grep -v 'prompt.md' | grep -v '.venv/'
+# If output is empty → ✅ PASS
+# If output found → ❌ FAIL - Must fix before committing
+```
+
+**If violations found:**
+1. Replace with portable patterns using `Path(__file__).parent`
+2. Commit with: `git commit -m "fix(CORE-028): [description]"`
+3. Validate: `pytest tests/unit/tier3/ -q --tb=no`
 
 ---
 

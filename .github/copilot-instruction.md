@@ -191,26 +191,29 @@ Check `.github/roadmap/cortex-master.yaml` for:
 
 ## Important Files to Reference
 
-1. **Master Plan**: `.github/roadmap/cortex-master.yaml`
-2. **Current Phase**: `docs/phases/phase-XX.yaml`
-3. **Governance Rules**: `cortex-brain/tier0/governance/core-rules.yaml`
-4. **Builder Prompt**: `.github/prompts/cortex-builder.prompt.md`
-5. **Vision Files**: `cortex-vision/*.yaml`
+1. **Master Plan**: `.github/roadmap/cortex-master.yaml` (SSOT - Single Source of Truth)
+2. **Phase Specifications**: `.github/roadmap/phases/phase-NN.yaml` (current & next phases)
+3. **Governance Rules**: `cortex-brain/tier0/governance/core-rules.yaml` (Tier 0 immutable)
+4. **Phase Enforcement**: `cortex-brain/tier0/governance/phase-enforcement-map.yaml`
+5. **Builder Prompt**: `.github/prompts/cortex-builder.prompt.md`
+6. **Git Commit Protocol**: `.github/prompts/cortex-git-commit.prompt.md`
+7. **Builder Agent**: `.github/agents/cortex-builder.md`
+8. **Planner Agent**: `.github/agents/cortex-planner.md`
 
-## Do NOT
+## Current Phase Context (2026-01-15)
 
-- Create markdown files for the implementation plan (YAML only)
-- Skip AC-ID verification
-- Implement without corresponding tests
-- Modify governance rules in Tier 0
-- Bypass the audit-first pattern
-- Mark AC-IDs complete without evidence
+**Current Phase:** PHASE-13-OBSERVABILITY-MATURITY  
+**Status:** NOT_STARTED (Ready to begin)
 
-## Do
+| Phase | Title | ACs | Status | Locked |
+|-------|-------|-----|--------|--------|
+| 12 | Knowledge Ecosystem | 7 | COMPLETED | ✅ |
+| **13** | **Observability & Telemetry** | **5** | **NOT_STARTED** | ❌ |
+| 14 | Production Migration | 4 | NOT_STARTED | ❌ |
 
-- Always read the relevant YAML files first
-- Follow the day-by-day breakdown in phase files
-- Update tracking sections after completing tasks
-- Generate evidence bundles for completed AC-IDs
-- Report blockers immediately
-- Ask for clarification when requirements are unclear
+**PHASE-13 Details:**
+- **AC-IDs:** OB-001-01, OB-001-02, OB-002-01, OB-002-02, OB-003-01
+- **Governance Rules:** CORE-008 (TDD), CORE-011 (types), CORE-012 (docs), CORE-024 (obs logs)
+- **Estimated:** 20 hours (2.5 days)
+- **Requires:** PHASE-10-ADAPTIVE-EXECUTION (locked ✅)
+- **Command:** Check status with: `grep "PHASE-13" .github/roadmap/cortex-master.yaml`
