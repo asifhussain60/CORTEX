@@ -1,0 +1,211 @@
+# CORTEX Vacuum Configuration
+
+# File Classification Rules
+# Maps file patterns to destination locations
+
+file_classifications:
+  
+  # Executive Documentation
+  executive_docs:
+    pattern: "^EXECUTIVE.*\\.md$"
+    destination: "docs/executive"
+    reason: "Executive-level documentation"
+  
+  # Phase Documentation
+  phase_docs:
+    pattern: "^PHASE.*\\.md$"
+    destination: "docs/phases"
+    reason: "Phase-specific documentation"
+  
+  # Review Documentation
+  review_docs:
+    pattern: ".*[Rr]eview.*\\.md$"
+    destination: "docs/reviews"
+    reason: "Review and audit documentation"
+  
+  # Status Documentation
+  status_docs:
+    pattern: ".*[Ss]tatus.*\\.md$"
+    destination: "docs"
+    reason: "Current status documentation"
+  
+  # Reports and Analysis
+  reports:
+    pattern: ".*(REPORT|ANALYSIS|COMPLETION|HANDOFF)\\.md$"
+    destination: "reports"
+    reason: "Reports and analysis documents"
+  
+  # Utility Scripts (Root)
+  root_scripts:
+    pattern: "^[^/]*\\.py$"
+    destination: "scripts"
+    reason: "Root-level utility scripts"
+  
+  # Configuration Files
+  config_files:
+    pattern: "(pytest\\.ini|requirements\\.txt)"
+    destination: "."
+    reason: "Project-critical configuration"
+  
+  # JSON/YAML in root
+  root_json:
+    pattern: "^[^/]*\\.(json|yaml|yml)$"
+    destination: "config"
+    reason: "Configuration/metadata files"
+
+# Files to Delete
+# These files should be removed during vacuum
+
+deletions:
+  backup_files:
+    pattern: ".*\\.(bak|backup|tmp|temp)$"
+    reason: "Temporary backup files"
+  
+  version_suffixes:
+    pattern: ".*-(old|new|fixed|enhanced|backup|temp|v\\d+).*"
+    reason: "Files with version/state suffixes"
+  
+  python_cache:
+    pattern: ".*\\.pyc$"
+    reason: "Python bytecode"
+  
+  pycache_dirs:
+    pattern: "__pycache__"
+    reason: "Python cache directory"
+
+# Protected Files
+# These files should NEVER be modified or moved
+
+protected_files:
+  - "pytest.ini"
+  - "requirements.txt"
+  - "README.md"
+  - ".gitignore"
+  - "cortex-brain/state/governance.db"
+  - "cortex-brain/state/governance.db-shm"
+  - "cortex-brain/state/governance.db-wal"
+
+# Naming Conventions
+
+naming_rules:
+  format: "kebab-case"
+  max_length: 20
+  min_words: 2
+  
+  # Words to avoid
+  forbidden_words:
+    - "old"
+    - "new"
+    - "fixed"
+    - "enhanced"
+    - "current"
+    - "latest"
+    - "final"
+    - "draft"
+    - "temp"
+    - "backup"
+  
+  # Abbreviations to apply
+  abbreviations:
+    "completion": "completion"
+    "verification": "verify"
+    "implementation": "impl"
+    "executive": "exec"
+    "analysis": "analysis"
+    "report": "report"
+    "documentation": "doc"
+    "configuration": "config"
+    "acceptance": "ac"
+    "architecture": "arch"
+
+# Report Consolidation Rules
+# How to handle multiple related reports
+
+report_consolidation:
+  enabled: true
+  
+  grouping:
+    # Group reports by prefix
+    by_prefix: true
+    
+    # Create index files
+    create_index: true
+    
+    # Archive old versions
+    archive_old: true
+    archive_path: "reports/archive"
+
+# Folder Structure Target
+# Expected final structure
+
+target_structure:
+  - "."
+  - "docs/"
+  - "docs/executive/"
+  - "docs/phases/"
+  - "docs/reviews/"
+  - "reports/"
+  - "reports/archive/"
+  - "config/"
+  - "scripts/"
+  - "cortex-brain/"
+  - "cortex-brain/tier0/"
+  - "cortex-brain/tier1/"
+  - "cortex-brain/tier2/"
+  - "cortex-brain/tier3/"
+  - "cortex-brain/audit-logs/"
+  - "cortex-brain/audit-logs/vacuum-logs/"
+  - "cortex-brain/state/"
+  - "cortex-brain/vacuum/"
+  - "cortex-brain/snapshots/"
+  - "src/"
+  - "src/core/"
+  - "src/infrastructure/"
+  - "src/mcp/"
+  - "src/mcp/tools/"
+  - "src/orchestrators/"
+  - "tests/"
+  - "tests/unit/"
+  - "tests/integration/"
+  - "tests/fixtures/"
+
+# Safety Settings
+
+safety:
+  # Create snapshots before execution
+  create_snapshots: true
+  
+  # Enable dry-run by default
+  default_dry_run: true
+  
+  # Require confirmation
+  require_confirmation: true
+  
+  # Maximum files to process in single batch
+  batch_size: 50
+  
+  # Wait time between operations (ms)
+  operation_delay: 100
+
+# Logging Configuration
+
+logging:
+  level: "INFO"
+  format: "%(timestamp)s [%(level)s] %(message)s"
+  
+  # Log files
+  audit_log: "cortex-brain/audit-logs/vacuum-logs/vacuum.log"
+  error_log: "cortex-brain/audit-logs/vacuum-logs/vacuum-errors.log"
+  
+  # Verbosity
+  verbose: false
+  debug: false
+
+# Version & Metadata
+
+metadata:
+  version: "1.0"
+  created: "2026-01-15"
+  updated: "2026-01-15"
+  author: "Asif Hussain"
+  status: "Production"

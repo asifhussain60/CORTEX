@@ -1,0 +1,1228 @@
+{
+  "timestamp": "2026-01-15T04:58:59.128751",
+  "plans": [
+    {
+      "source_path": "cortex-brain/tier2/response-templates/response-templates.yaml",
+      "destination_path": "",
+      "is_delete": true,
+      "is_rename": false,
+      "is_move": false,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [],
+      "reason": "Backup/temp file: Backup/temp file: response-templates.yaml"
+    },
+    {
+      "source_path": ".github/.workspace/PHASE-1-4-DETAILED-MATRIX.md",
+      "destination_path": "docs/phases/phase-1-4-detaile....md",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [
+        {
+          "source_file": ".github/.workspace/phase-copilot-chats/review-02-ph1-4.md",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)",
+          "line_number": 648,
+          "line_content": "Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)",
+          "new_reference": ""
+        }
+      ],
+      "reason": "Phase documentation"
+    },
+    {
+      "source_path": ".github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md",
+      "destination_path": "docs/phases/phase-1-4-exec-su....md",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [
+        {
+          "source_file": ".github/.workspace/phase-copilot-chats/review-02-ph1-4.md",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)",
+          "line_number": 656,
+          "line_content": "Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)",
+          "new_reference": ""
+        },
+        {
+          "source_file": ".github/.workspace/phase-copilot-chats/review-02-ph1-4.md",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 664,
+          "line_content": "Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        }
+      ],
+      "reason": "Phase documentation"
+    },
+    {
+      "source_path": ".github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md",
+      "destination_path": "docs/phases/phase-1-4-verify-....md",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [
+        {
+          "source_file": ".github/.workspace/phase-copilot-chats/review-02-ph1-4.md",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)",
+          "line_number": 644,
+          "line_content": "Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)",
+          "new_reference": ""
+        }
+      ],
+      "reason": "Phase documentation"
+    },
+    {
+      "source_path": ".github/.workspace/phase-copilot-chats/review-01-ph1-ph2.md",
+      "destination_path": "docs/reviews/review-01-ph1-ph2.md",
+      "is_delete": false,
+      "is_rename": false,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [
+        {
+          "source_file": "src/core/template_engine.py",
+          "target_file": "re",
+          "line_number": 11,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/coherence_validator.py",
+          "target_file": "re",
+          "line_number": 17,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/response_template_engine.py",
+          "target_file": "re",
+          "line_number": 18,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/governance_enforcer.py",
+          "target_file": "re",
+          "line_number": 16,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/input_validator.py",
+          "target_file": "re",
+          "line_number": 14,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/mcp/tools/cortex_vacuum_analyzer.py",
+          "target_file": "re",
+          "line_number": 13,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/mcp/tools/cortex_vacuum_executor.py",
+          "target_file": "re",
+          "line_number": 13,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/orchestrators/core/orchestrator_registry.py",
+          "target_file": "re",
+          "line_number": 29,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/secret_redactor.py",
+          "target_file": "re",
+          "line_number": 18,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/test_ac_linker.py",
+          "target_file": "re",
+          "line_number": 17,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        }
+      ],
+      "reason": "Review documentation"
+    },
+    {
+      "source_path": ".github/.workspace/phase-copilot-chats/review-02-ph1-4.md",
+      "destination_path": "docs/reviews/review-02-ph1-4.md",
+      "is_delete": false,
+      "is_rename": false,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [
+        {
+          "source_file": "src/core/template_engine.py",
+          "target_file": "re",
+          "line_number": 11,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/coherence_validator.py",
+          "target_file": "re",
+          "line_number": 17,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/response_template_engine.py",
+          "target_file": "re",
+          "line_number": 18,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/governance_enforcer.py",
+          "target_file": "re",
+          "line_number": 16,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/input_validator.py",
+          "target_file": "re",
+          "line_number": 14,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/mcp/tools/cortex_vacuum_analyzer.py",
+          "target_file": "re",
+          "line_number": 13,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/mcp/tools/cortex_vacuum_executor.py",
+          "target_file": "re",
+          "line_number": 13,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/orchestrators/core/orchestrator_registry.py",
+          "target_file": "re",
+          "line_number": 29,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/secret_redactor.py",
+          "target_file": "re",
+          "line_number": 18,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/test_ac_linker.py",
+          "target_file": "re",
+          "line_number": 17,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        }
+      ],
+      "reason": "Review documentation"
+    },
+    {
+      "source_path": ".github/agents/cortex-reviewer.md",
+      "destination_path": "docs/reviews/cortex-reviewer.md",
+      "is_delete": false,
+      "is_rename": false,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [
+        {
+          "source_file": "src/core/template_engine.py",
+          "target_file": "re",
+          "line_number": 11,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/coherence_validator.py",
+          "target_file": "re",
+          "line_number": 17,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/response_template_engine.py",
+          "target_file": "re",
+          "line_number": 18,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/governance_enforcer.py",
+          "target_file": "re",
+          "line_number": 16,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/input_validator.py",
+          "target_file": "re",
+          "line_number": 14,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/mcp/tools/cortex_vacuum_analyzer.py",
+          "target_file": "re",
+          "line_number": 13,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/mcp/tools/cortex_vacuum_executor.py",
+          "target_file": "re",
+          "line_number": 13,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/orchestrators/core/orchestrator_registry.py",
+          "target_file": "re",
+          "line_number": 29,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/secret_redactor.py",
+          "target_file": "re",
+          "line_number": 18,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/test_ac_linker.py",
+          "target_file": "re",
+          "line_number": 17,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        }
+      ],
+      "reason": "Review documentation"
+    },
+    {
+      "source_path": ".github/docs/ar-012-completion.md",
+      "destination_path": "reports/ar-012-completion.md",
+      "is_delete": false,
+      "is_rename": false,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [
+        {
+          "source_file": ".github/.workspace/phase-copilot-chats/phase-vision-01.md",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)",
+          "line_number": 1654,
+          "line_content": "Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)",
+          "new_reference": ""
+        }
+      ],
+      "reason": "Completion report"
+    },
+    {
+      "source_path": ".github/docs/current-status.md",
+      "destination_path": "docs/status.md",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [
+        {
+          "source_file": "src/core/template_engine.py",
+          "target_file": "re",
+          "line_number": 11,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/coherence_validator.py",
+          "target_file": "re",
+          "line_number": 17,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/response_template_engine.py",
+          "target_file": "re",
+          "line_number": 18,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/governance_enforcer.py",
+          "target_file": "re",
+          "line_number": 16,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/input_validator.py",
+          "target_file": "re",
+          "line_number": 14,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/mcp/tools/cortex_vacuum_analyzer.py",
+          "target_file": "re",
+          "line_number": 13,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/mcp/tools/cortex_vacuum_executor.py",
+          "target_file": "re",
+          "line_number": 13,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/orchestrators/core/orchestrator_registry.py",
+          "target_file": "re",
+          "line_number": 29,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/secret_redactor.py",
+          "target_file": "re",
+          "line_number": 18,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/test_ac_linker.py",
+          "target_file": "re",
+          "line_number": 17,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        }
+      ],
+      "reason": "Status documentation"
+    },
+    {
+      "source_path": "AR-015-HANDOFF.md",
+      "destination_path": "reports/ar-015-handoff.md",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [
+        {
+          "source_file": ".github/.workspace/phase-copilot-chats/phase-vision-01.md",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)",
+          "line_number": 3806,
+          "line_content": "Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)",
+          "new_reference": ""
+        },
+        {
+          "source_file": ".github/.workspace/phase-copilot-chats/phase-vision-01.md",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 4431,
+          "line_content": "Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": ".github/.workspace/phase-copilot-chats/phase-vision-01.md",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 4995,
+          "line_content": "Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        }
+      ],
+      "reason": "Handoff documentation"
+    },
+    {
+      "source_path": "CORTEX-MASTER-COMPLETION-ANALYSIS.md",
+      "destination_path": "reports/cortex-master-com....md",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [],
+      "reason": "Report or analysis document"
+    },
+    {
+      "source_path": "CURRENT-STATUS.md",
+      "destination_path": "docs/status.md",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [
+        {
+          "source_file": ".github/.workspace/phase-copilot-chats/phase-vision-01.md",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 4964,
+          "line_content": "Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": ".github/.workspace/phase-copilot-chats/phase-vision-01.md",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 5808,
+          "line_content": "Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        }
+      ],
+      "reason": "Status documentation"
+    },
+    {
+      "source_path": "EXECUTIVE-BRIEF-FOR-DECISION.md",
+      "destination_path": "docs/executive/exec-brief-for-de....md",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [],
+      "reason": "Executive documentation"
+    },
+    {
+      "source_path": "EXECUTIVE-DECISION-SUMMARY.md",
+      "destination_path": "docs/executive/exec-decision-sum....md",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [],
+      "reason": "Executive documentation"
+    },
+    {
+      "source_path": "IMPLEMENTATION-STATUS-BRIEF.md",
+      "destination_path": "docs/impl-status-brief.md",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [],
+      "reason": "Status documentation"
+    },
+    {
+      "source_path": "PHASE-CHAT-VERIFICATION-REPORT.md",
+      "destination_path": "docs/phases/phase-chat-verify....md",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [],
+      "reason": "Phase documentation"
+    },
+    {
+      "source_path": "PHASE-VISION-ADVANCED-PLAN.md",
+      "destination_path": "docs/phases/phase-vision-adva....md",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [
+        {
+          "source_file": ".github/.workspace/phase-copilot-chats/phase-vision-01.md",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)",
+          "line_number": 5841,
+          "line_content": "Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)",
+          "new_reference": ""
+        }
+      ],
+      "reason": "Phase documentation"
+    },
+    {
+      "source_path": "PHASE-VISION-CORE-COMPLETION.md",
+      "destination_path": "docs/phases/phase-vision-core....md",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [
+        {
+          "source_file": ".github/.workspace/phase-copilot-chats/phase-vision-01.md",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)",
+          "line_number": 5732,
+          "line_content": "Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)",
+          "new_reference": ""
+        }
+      ],
+      "reason": "Phase documentation"
+    },
+    {
+      "source_path": "REVIEW-COMPLETION-INDEX.md",
+      "destination_path": "docs/reviews/review-completion....md",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [],
+      "reason": "Review documentation"
+    },
+    {
+      "source_path": "ar-013-trilogy-completion-report.md",
+      "destination_path": "reports/ar-013-trilogy-co....md",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [
+        {
+          "source_file": ".github/.workspace/phase-copilot-chats/phase-vision-01.md",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)",
+          "line_number": 2835,
+          "line_content": "Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/template_engine.py",
+          "target_file": "re",
+          "line_number": 11,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/coherence_validator.py",
+          "target_file": "re",
+          "line_number": 17,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/response_template_engine.py",
+          "target_file": "re",
+          "line_number": 18,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/governance_enforcer.py",
+          "target_file": "re",
+          "line_number": 16,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/input_validator.py",
+          "target_file": "re",
+          "line_number": 14,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/mcp/tools/cortex_vacuum_analyzer.py",
+          "target_file": "re",
+          "line_number": 13,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/mcp/tools/cortex_vacuum_executor.py",
+          "target_file": "re",
+          "line_number": 13,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/orchestrators/core/orchestrator_registry.py",
+          "target_file": "re",
+          "line_number": 29,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/secret_redactor.py",
+          "target_file": "re",
+          "line_number": 18,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/test_ac_linker.py",
+          "target_file": "re",
+          "line_number": 17,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        }
+      ],
+      "reason": "Completion report"
+    },
+    {
+      "source_path": "reports/AC-AR-014-01-STATUS-REPORT.md",
+      "destination_path": "docs/ac-ar-014-01-stat....md",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [
+        {
+          "source_file": "src/core/template_engine.py",
+          "target_file": "re",
+          "line_number": 11,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/coherence_validator.py",
+          "target_file": "re",
+          "line_number": 17,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/response_template_engine.py",
+          "target_file": "re",
+          "line_number": 18,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/governance_enforcer.py",
+          "target_file": "re",
+          "line_number": 16,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/input_validator.py",
+          "target_file": "re",
+          "line_number": 14,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/mcp/tools/cortex_vacuum_analyzer.py",
+          "target_file": "re",
+          "line_number": 13,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/mcp/tools/cortex_vacuum_executor.py",
+          "target_file": "re",
+          "line_number": 13,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/orchestrators/core/orchestrator_registry.py",
+          "target_file": "re",
+          "line_number": 29,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/secret_redactor.py",
+          "target_file": "re",
+          "line_number": 18,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/test_ac_linker.py",
+          "target_file": "re",
+          "line_number": 17,
+          "line_content": "import re",
+          "ref_type": "import",
+          "old_reference": "re",
+          "new_reference": ""
+        }
+      ],
+      "reason": "Status documentation"
+    },
+    {
+      "source_path": "rollback_history.json",
+      "destination_path": "cortex-brain/audit-logs/rollback-history.json",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [
+        {
+          "source_file": "verify_phases.py",
+          "target_file": "json",
+          "line_number": 6,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "tests/conftest.py",
+          "target_file": "json",
+          "line_number": 71,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "tests/unit/test_audit_required_validator.py",
+          "target_file": "json",
+          "line_number": 13,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "tests/unit/test_orchestrator_dependency_registry.py",
+          "target_file": "json",
+          "line_number": 17,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "tests/unit/test_tiered_logger.py",
+          "target_file": "json",
+          "line_number": 13,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "tests/unit/test_config.py",
+          "target_file": "json",
+          "line_number": 98,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "tests/unit/test_evidence_bundle.py",
+          "target_file": "json",
+          "line_number": 13,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "tests/unit/test_template_engine.py",
+          "target_file": "json",
+          "line_number": 10,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "tests/unit/test_vision_mutation_tracker.py",
+          "target_file": "json",
+          "line_number": 17,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "tests/unit/test_vision_rollback_manager.py",
+          "target_file": "json",
+          "line_number": 17,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "scripts/run-cortex-vacuum.py",
+          "target_file": "json",
+          "line_number": 18,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": ".github/prompts/tools/validate_consolidation.py",
+          "target_file": "json",
+          "line_number": 29,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": ".github/prompts/tools/consolidate.py",
+          "target_file": "json",
+          "line_number": 20,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/config.py",
+          "target_file": "json",
+          "line_number": 11,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/template_engine.py",
+          "target_file": "json",
+          "line_number": 10,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/orchestrator_dependency_registry.py",
+          "target_file": "json",
+          "line_number": 19,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/vision_mutation_tracker.py",
+          "target_file": "json",
+          "line_number": 19,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/vision_rollback_manager.py",
+          "target_file": "json",
+          "line_number": 22,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/input_validator.py",
+          "target_file": "json",
+          "line_number": 19,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/audit_required_validator.py",
+          "target_file": "json",
+          "line_number": 158,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/core/checkpoint_manager.py",
+          "target_file": "json",
+          "line_number": 24,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/mcp/tools/cortex_vacuum_analyzer.py",
+          "target_file": "json",
+          "line_number": 11,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/mcp/tools/cortex_vacuum_executor.py",
+          "target_file": "json",
+          "line_number": 11,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/evidence_bundle.py",
+          "target_file": "json",
+          "line_number": 22,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/hash_verifier.py",
+          "target_file": "json",
+          "line_number": 18,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/database.py",
+          "target_file": "json",
+          "line_number": 20,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/secret_redactor.py",
+          "target_file": "json",
+          "line_number": 17,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/tiered_logger.py",
+          "target_file": "json",
+          "line_number": 21,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/metrics_exporter.py",
+          "target_file": "json",
+          "line_number": 11,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/enhanced_audit_logger.py",
+          "target_file": "json",
+          "line_number": 19,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/audit_logger.py",
+          "target_file": "json",
+          "line_number": 16,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        },
+        {
+          "source_file": "src/infrastructure/test_ac_linker.py",
+          "target_file": "json",
+          "line_number": 245,
+          "line_content": "import json",
+          "ref_type": "import",
+          "old_reference": "json",
+          "new_reference": ""
+        }
+      ],
+      "reason": "Rollback history"
+    },
+    {
+      "source_path": "verify_phases.py",
+      "destination_path": "scripts/verify-phases.py",
+      "is_delete": false,
+      "is_rename": true,
+      "is_move": true,
+      "is_consolidate": false,
+      "consolidated_with": [],
+      "references_to_update": [
+        {
+          "source_file": ".github/.workspace/phase-copilot-chats/review-02-ph1-4.md",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)",
+          "line_number": 34,
+          "line_content": "Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)",
+          "new_reference": ""
+        }
+      ],
+      "reason": "Utility script"
+    }
+  ]
+}
