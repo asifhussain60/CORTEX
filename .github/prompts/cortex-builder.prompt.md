@@ -45,6 +45,54 @@ phase_tracker:
 
 ---
 
+## Governance Tools Integration (PHASE-08 Feature)
+
+**New governance tools available for developer workflows:**
+
+### Governance CLI Commands
+
+```bash
+# Query governance rules
+cortex-governance query CORE-008                    # Query specific rule
+cortex-governance query --domain tdd --phase PHASE-01  # Filter by domain/phase
+cortex-governance query --tier 0 --format json     # Immutable rules in JSON
+
+# Validate compliance
+cortex-governance validate --path src/              # Validate directory
+cortex-governance validate --phase PHASE-01         # Validate phase compliance
+cortex-governance validate --ac-id AC-AR-001-01     # Check AC completion
+cortex-governance validate --strict --fix           # Fix auto-fixable violations
+```
+
+### Agent Commands (Governance-Aware)
+
+**Use these commands in your workflow to integrate governance:**
+
+```
+/governance-query              # Interactive rule query
+/governance-validate <path>    # Validate compliance
+/governance-compliance <phase> # Generate compliance report
+/governance-violations <phase> # List violations by severity
+/phase-readiness <phase>       # Complete readiness assessment
+```
+
+### Pre-Commit Hook
+
+Git commits are validated automatically:
+- AC-ID format checked (AC-DOMAIN-NNN-NN)
+- Governance violations prevent commit
+- Use `git commit --no-verify` to bypass (use with caution)
+
+### IDE Integration (PHASE-08 Feature)
+
+VS Code extension shows:
+- Governance violations inline (squiggly lines)
+- Hover shows violation details and remediation
+- Quick-fix suggestions for auto-fixable issues
+- Configurable per-rule severity
+
+---
+
 ## EXECUTIVE SUMMARY PROTOCOL
 
 **MANDATORY: Display executive summary BEFORE starting any phase and AFTER completing any phase.**

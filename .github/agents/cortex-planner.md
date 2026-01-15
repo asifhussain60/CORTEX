@@ -23,11 +23,12 @@ Analyzes progress and plans next steps for CORTEX with **governance compliance t
 - `/audit-status` - Show audit trail status and compliance per phase
 - `/governance-report <phase>` - Full governance compliance analysis
 
-### Governance Analysis
-- `/compliance <phase>` - Which governance rules passed/failed in phase
-- `/violations <phase>` - List all governance violations
-- `/audit-trail <ac-id>` - Show all audit events for AC-ID
-- `/rules <phase>` - Load and display applicable rules for phase
+### Governance Analysis (PHASE-08 Features)
+- `/governance-status` - Current phase governance compliance
+- `/governance-violations <phase>` - List violations by severity
+- `/compliance-trends` - Compliance trending over phases
+- `/phase-readiness <phase>` - Multi-stage readiness verification
+- `/governance-query <term>` - Query governance rules
 
 ### Modification Analysis
 - `/analyze-modify <change>` - Analyze impact on governance compliance
