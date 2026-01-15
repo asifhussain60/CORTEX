@@ -33,6 +33,14 @@ from src.core.hallucination_prevention.execution_sandbox import (
     ExecutionState,
 )
 
+from src.core.hallucination_prevention.hallucination_detection import (
+    HallucinationDetector,
+    CorruptionDetectionResult,
+    CorruptionType,
+    RecoveryStrategy,
+    IncidentReport,
+)
+
 __all__ = [
     "ExtendedIntentCanonicalizer",
     "ExtendedCanonicalIntent",
@@ -45,4 +53,9 @@ __all__ = [
     "SandboxSnapshot",
     "ExecutionMode",
     "ExecutionState",
+    "HallucinationDetector",
+    "CorruptionDetectionResult",
+    "CorruptionType",
+    "RecoveryStrategy",
+    "IncidentReport",
 ]
