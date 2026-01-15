@@ -213,7 +213,8 @@ acceptance_criteria:
       Extract semantic meaning from code comments, docstrings, and inline
       documentation. Build understanding of developer intent.
     
-    status: "NOT_STARTED"
+    status: "COMPLETED"
+    completed_at: "2026-01-15T12:00:00Z"
     
     acceptance_tests:
       - "Extract docstrings from functions/classes"
@@ -225,10 +226,10 @@ acceptance_criteria:
     
     implementation_details: |
       Components:
-      - DocstringExtractor: Parse Google/NumPy/Sphinx style
-      - CommentAnalyzer: Inline comment classification
-      - TechDebtTracker: TODO/FIXME/HACK identification
-      - SemanticIndexer: Build searchable comment index
+      - CommentAnalyzer: Main analyzer for comments and docstrings
+      - DocstringExtractor: Parse Google/NumPy/Sphinx style (integrated)
+      - TechDebtTracker: TODO/FIXME/HACK/XXX/WARNING/NOTE identification
+      - CommentIndex: Build searchable comment index
       
       Comment Categories:
       - Intent comments (WHY)
@@ -236,19 +237,20 @@ acceptance_criteria:
       - Technical debt (TODO, FIXME, HACK)
       - Reference comments (SEE ALSO, RELATED)
       
-      Files to Create:
+      Files Created:
       - src/core/intelligence/comment_analyzer.py
-      - src/core/intelligence/docstring_extractor.py
-      - src/core/intelligence/tech_debt_tracker.py
     
     verification_method: |
       Tests in tests/unit/core/intelligence/test_comment_analyzer.py:
-      - TestDocstringExtraction: Multiple formats
-      - TestCommentClassification: Category assignment
-      - TestTechDebtDetection: TODO/FIXME tracking
-      - TestSemanticIndexing: Concept search
+      - TestDocstringExtraction: 6 tests
+      - TestInlineCommentAnalysis: 3 tests
+      - TestTechDebtTracking: 5 tests
+      - TestSemanticIndexing: 2 tests
+      - TestCommentQuality: 1 test
+      - TestCommentAnalyzerIntegration: 3 tests
+      TOTAL: 20/20 PASSING
     
-    git_checkpoint: "IR-001-03-comment-intelligence"
+    git_checkpoint: "5b33a0545"
     
   - ac_id: "IR-001-04"
     title: "Relationship Traversal Engine"
@@ -256,7 +258,8 @@ acceptance_criteria:
       Traverse linked relationships across APIs, databases, and configuration
       files to build complete system understanding.
     
-    status: "NOT_STARTED"
+    status: "COMPLETED"
+    completed_at: "2026-01-15T13:00:00Z"
     
     acceptance_tests:
       - "Map API endpoint → handler → service → database relationships"
@@ -268,10 +271,12 @@ acceptance_criteria:
     
     implementation_details: |
       Components:
-      - RelationshipTraverser: Core traversal engine
-      - APIEndpointMapper: Route → handler mapping
-      - DatabaseSchemaAnalyzer: Table/column relationships
-      - ConfigurationLinker: YAML → code usage mapping
+      - RelationshipEngine: Core traversal and analysis engine
+      - APIEndpointDetector: Flask/FastAPI route detection
+      - DatabaseModelAnalyzer: SQLAlchemy model/FK/relationship extraction
+      - ConfigurationLinker: Environment and settings reference tracking
+      - DependencyGraph/ModelGraph: Graph data structures
+      - ImpactAnalysis: Calculate change impact across codebase
       
       Traversal Strategy:
       1. Start from user's focal point (file, function, AC-ID)
@@ -279,20 +284,21 @@ acceptance_criteria:
       3. Continue to transitive dependencies (configurable depth)
       4. Build complete context graph
       
-      Files to Create:
-      - src/core/intelligence/relationship_traverser.py
-      - src/core/intelligence/api_mapper.py
-      - src/core/intelligence/database_analyzer.py
-      - src/core/intelligence/config_linker.py
+      Files Created:
+      - src/core/intelligence/relationship_traversal.py
     
     verification_method: |
-      Tests in tests/unit/core/intelligence/test_relationship_traverser.py:
-      - TestAPITraversal: Endpoint → database path
-      - TestDatabaseRelationships: Schema analysis
-      - TestConfigurationLinking: YAML → code mapping
-      - TestCircularDetection: Cycle identification
+      Tests in tests/unit/core/intelligence/test_relationship_traversal.py:
+      - TestAPIEndpointRelationships: 3 tests
+      - TestDatabaseSchemaRelationships: 3 tests
+      - TestConfigurationReferences: 2 tests
+      - TestCrossFileDependencies: 2 tests
+      - TestImpactAnalysis: 2 tests
+      - TestRelationshipGraph: 2 tests
+      - TestRelationshipEngineIntegration: 3 tests
+      TOTAL: 17/17 PASSING
     
-    git_checkpoint: "IR-001-04-relationship-traversal"
+    git_checkpoint: "bf37e7967"
 
   # ---------------------------------------------------------------------------
   # IR-002: Intent Reflection System
