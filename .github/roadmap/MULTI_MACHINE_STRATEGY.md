@@ -201,6 +201,30 @@ This strategy aligns with:
 3. **PHASE-13-PRODUCTION-MIGRATION** (PR-001: Operational Readiness)
    - Multi-machine audit federation
 
+4. **PHASE-15-NEURAL-OBSERVATORY** (Parallel Track) ⭐ NEW
+   - Designed specifically for multi-machine development
+   - Read-only from brain sources (no write conflicts)
+   - Full isolation: `src/dashboard/` directory
+   - See `docs/phases/phase-15-neural-observatory.yaml` for setup guide
+
+---
+
+## PHASE-15 Multi-Machine Example
+
+The Neural Observatory phase demonstrates ideal multi-machine workflow:
+
+| Machine A (Backend) | Machine B (Dashboard) |
+|---------------------|----------------------|
+| PHASE-07 → PHASE-14 | PHASE-15 only |
+| Writes to `src/core/`, `src/orchestrators/` | Writes to `src/dashboard/` |
+| Updates `governance.db` | Reads `governance.db` (read-only) |
+| Updates `cortex-master.yaml` phase_tracker | Reads `cortex-master.yaml` |
+
+**No conflicts possible** because:
+- Different write targets
+- Dashboard reads from SSOT, doesn't modify it
+- Git merge is clean on separate directories
+
 ---
 
 ## Summary

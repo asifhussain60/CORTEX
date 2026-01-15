@@ -13,14 +13,15 @@ metadata:
   dor_score: 100
   start_date: null
   end_date: null
-  total_ac_ids: 194  # 125 locked + 7 enhancement + 62 new phases (07-14)
+  total_ac_ids: 206  # 125 locked + 7 enhancement + 62 new phases (07-14) + 12 PHASE-15
   
   # AC-ID Breakdown
   ac_breakdown:
     locked_phases: 125        # PHASE-01 through PHASE-06-ECOSYSTEM
     enhancement_phases: 7     # ENH-01 (4) + ENH-02 (2) + ENH-03 (1)
-    new_phases: 62            # PHASE-07 (14) + 08 (6) + 09 (8) + 10 (5) + 11 (6) + 12 (7) + 13 (5) + 14 (4) + completed from 09 (2 already counted)
-    total: 194
+    new_phases: 62            # PHASE-07 (14) + 08 (6) + 09 (8) + 10 (5) + 11 (6) + 12 (7) + 13 (5) + 14 (4)
+    neural_observatory: 12    # PHASE-15 (12 ACs) - PARALLEL TRACK
+    total: 206
   
   # GOVERNANCE INTEGRATION
   governance:
@@ -67,12 +68,13 @@ metadata:
     phase_12_hours: 36
     phase_13_hours: 20
     phase_14_hours: 20
-    new_phases_total: 240
+    phase_15_hours: 48       # Neural Observatory (PARALLEL TRACK)
+    new_phases_total: 288    # 240 + 48
     
     # Summary
-    total_estimated_hours: 610.5
-    total_buffer_hours: 122    # 20% buffer
-    total_with_buffer: 732.5
+    total_estimated_hours: 658.5  # 610.5 + 48
+    total_buffer_hours: 132       # 20% buffer
+    total_with_buffer: 790.5
 
 # =============================================================================
 # PHASE TRACKER - SINGLE SOURCE OF TRUTH
@@ -722,6 +724,59 @@ phase_tracker:
     git_checkpoint: null
     notes: "PR-001 (Operational Readiness), PR-002 (Training & Gradual Rollout), PR-003 (Support & Incident Response)"
     phase_yaml: "docs/phases/phase-14.yaml"
+  
+  # =========================================================================
+  # PARALLEL TRACK - Can be developed on separate machine
+  # =========================================================================
+  
+  PHASE-15-NEURAL-OBSERVATORY:
+    title: "CORTEX Neural Observatory"
+    description: |
+      Unified glassmorphism dashboard for CORTEX brain visualization.
+      Three-pillar architecture: Brain Observatory (metrics), Temporal Cortex (audit),
+      Orchestrator Constellation (status). React + FastAPI + WebSocket stack.
+      PARALLEL TRACK: Can be developed independently on separate machine.
+    ac_ids: 12
+    status: "NOT_STARTED"
+    locked: false
+    requires: "PHASE-06-ECOSYSTEM"  # Only needs existing brain structure
+    estimated_hours: 48
+    estimated_days: 6
+    progress_percentage: 0.0
+    blocking: false
+    parallel_capable: true  # Can run parallel with PHASE-07 through PHASE-14
+    multi_machine: true     # Designed for separate machine development
+    audit_verification:
+      verified: false
+      entry_count: null
+      hash_chain_valid: null
+      verified_at: null
+    git_checkpoint: null
+    notes: |
+      NO-001 (3 ACs): Brain Observatory - Tier visualization, neural pulse, SSOT metrics
+      NO-002 (3 ACs): Temporal Cortex - Audit timeline, hash chain viz, correlation clustering
+      NO-003 (3 ACs): Orchestrator Constellation - Live status, dependency graph, health indicators
+      NO-004 (3 ACs): Portal Infrastructure - FastAPI backend, WebSocket streaming, plan hub
+      
+      TECH STACK (Glassmorphism v4.1.0 compliant):
+      - Frontend: React 18 + TypeScript + Tailwind CSS
+      - State: Zustand (lightweight, CORTEX-philosophy aligned)
+      - Visualization: Framer Motion + D3.js + Recharts
+      - Backend: FastAPI (Python, reads existing governance.db)
+      - Real-time: WebSocket for live audit streaming
+      
+      MULTI-MACHINE STRATEGY:
+      - Reads from cortex-brain/ and cortex-master.yaml (SSOT)
+      - No write conflicts with backend phases
+      - Sync via git pull + init_db.py --sync-only
+      - Can be developed fully independently
+      
+      INTEGRATION POINTS:
+      - governance.db: Read audit logs, phase status
+      - cortex-master.yaml: Read phase_tracker for metrics
+      - rollback-history.json: Display rollback timeline
+      - orchestrators: Display registry status
+    phase_yaml: "docs/phases/phase-15-neural-observatory.yaml"
   
   PHASE-ENHANCEMENT-03-MARKER:
     title: "Marker - Prior Phases Completed"
