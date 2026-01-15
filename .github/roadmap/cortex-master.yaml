@@ -631,7 +631,7 @@ phase_tracker:
       - Ready to unblock PHASE-08-CORE-ORCHESTRATORS
       
       Origin: CORTEX5.5 LLM Intent Routing Intelligence
-    phase_yaml: "docs/phases/phase-07-intent-router.yaml"
+    phase_yaml: ".github/roadmap/phases/phase-07-intent-router.yaml"
   
   PHASE-08-CORE-ORCHESTRATORS:
     title: "Domain Orchestrator Ecosystem"
@@ -662,7 +662,7 @@ phase_tracker:
       CR-001-02 COMPLETED: Capability Documentation System (25 tests)
       Total: 161 tests passing, 100% complete
       Next: PHASE-09-GOVERNANCE-TOOLS (8 ACs)
-    phase_yaml: "docs/phases/phase-08.yaml"
+    phase_yaml: ".github/roadmap/phases/phase-08.yaml"
   
   PHASE-09-GOVERNANCE-TOOLS:
     title: "Developer Governance Tooling"
@@ -754,7 +754,7 @@ phase_tracker:
       Phase Progress: 100% (8/8 ACs completed) ✅
       
       PHASE-09 COMPLETE: Ready to proceed to PHASE-10
-    phase_yaml: "docs/phases/phase-09.yaml"
+    phase_yaml: ".github/roadmap/phases/phase-09.yaml"
   
   PHASE-10-ADAPTIVE-EXECUTION:
     title: "Adaptive Execution Framework"
@@ -777,7 +777,7 @@ phase_tracker:
       verified_at: "2026-01-15T17:19:25.734055Z"
     git_checkpoint: "b39214599"
     notes: "EX-001 (Context Analyzer & Routing), EX-002 (Execution Modes & Optimization), EX-003 (Performance Profiling) - ALL COMPLETE. 106 tests passing (41+21+18+14+12). Governance compliance verified. Ready for PHASE-11."
-    phase_yaml: "docs/phases/phase-10.yaml"
+    phase_yaml: ".github/roadmap/phases/phase-10.yaml"
   
   PHASE-11-HALLUCINATION-PREVENTION:
     title: "Hallucination Prevention System"
@@ -800,7 +800,7 @@ phase_tracker:
       verified_at: null
     git_checkpoint: "8905be21d"
     notes: "ALL 6 ACS COMPLETED ✓ HP-001-01 (36/36), HP-001-02 (28/28), HP-002-01 (26/26), HP-002-02 (23/23), HP-003-01 (23/23), HP-003-02 (24/24). PHASE-11 LOCKED. Total: 160/160 tests passing (100%)."
-    phase_yaml: "docs/phases/phase-11.yaml"
+    phase_yaml: ".github/roadmap/phases/phase-11.yaml"
   
   PHASE-12-KNOWLEDGE-ECOSYSTEM:
     title: "Knowledge Ecosystem Expansion"
@@ -822,7 +822,7 @@ phase_tracker:
       verified_at: "2026-01-16T18:28:23Z"
     git_checkpoint: "254a99e05"
     notes: "KN-001-01 COMPLETED (36/36 tests). KN-001-02 COMPLETED (33/33 tests). 16 domains indexed with AC-ID mapping. KN-002-01 through KN-004-01 pending."
-    phase_yaml: "docs/phases/phase-12.yaml"
+    phase_yaml: ".github/roadmap/phases/phase-12.yaml"
   
   PHASE-13-OBSERVABILITY-MATURITY:
     title: "Observability & Telemetry Maturity"
@@ -842,7 +842,7 @@ phase_tracker:
       verified_at: null
     git_checkpoint: null
     notes: "OB-001 (OpenTelemetry & Dashboard), OB-002 (Alerting & Profiling), OB-003 (Audit Trail Enhancement)"
-    phase_yaml: "docs/phases/phase-13.yaml"
+    phase_yaml: ".github/roadmap/phases/phase-13.yaml"
   
   PHASE-14-PRODUCTION-MIGRATION:
     title: "Production Rollout & Adoption"
@@ -862,7 +862,7 @@ phase_tracker:
       verified_at: null
     git_checkpoint: null
     notes: "PR-001 (Operational Readiness), PR-002 (Training & Gradual Rollout), PR-003 (Support & Incident Response)"
-    phase_yaml: "docs/phases/phase-14.yaml"
+    phase_yaml: ".github/roadmap/phases/phase-14.yaml"
   
   # =========================================================================
   # PARALLEL TRACK - Can be developed on separate machine
@@ -1010,7 +1010,7 @@ phase_tracker:
         • Code Structure Explorer
         • Change Heatmap
       - These are OPTIONAL add-ons, not core features
-    phase_yaml: "docs/phases/phase-15-neural-observatory.yaml"
+    phase_yaml: ".github/roadmap/phases/phase-15-neural-observatory.yaml"
   
   PHASE-ENHANCEMENT-03-MARKER:
     title: "Marker - Prior Phases Completed"

@@ -1,0 +1,184 @@
+# =============================================================================
+# PHASE PARALLEL: FOLDER STRUCTURE MIGRATION
+# =============================================================================
+# Focus: Nested Folder Organization (AR-010)
+# Can run in parallel with Phases 2-5 (NON-BLOCKING)
+# =============================================================================
+
+metadata:
+  phase_id: "PHASE-PARALLEL"
+  title: "Folder Structure Migration"
+  description: "Nested Folder Organization, Import Updates (Non-Blocking)"
+  blocking: false
+  status: "NOT_STARTED"
+  start_date: null
+  end_date: null
+  predecessor: "PHASE-01"
+  successor: null
+  can_start_after: "PHASE-01.day_6"
+  must_complete_before: "PHASE-05"
+  notes: |
+    This phase runs in parallel with Phases 2-4 but:
+    - Cannot start until PHASE-01 is fully complete (Day 6)
+    - Must complete before PHASE-05 brittleness fixes
+    - Non-blocking means it doesn't block other phases from starting
+
+# =============================================================================
+# TASK BREAKDOWN
+# =============================================================================
+
+tasks:
+  - task_id: "TASK-PARALLEL-01"
+    title: "Create Nested Folder Structure"
+    requirement_id: "AR-010"
+    status: "NOT_STARTED"
+    description: |
+      Create the new nested folder structure:
+      - src/orchestrators/core/
+      - src/orchestrators/domain/
+      - src/orchestrators/custom/
+      - src/infrastructure/
+    files_to_create:
+      - "src/orchestrators/core/__init__.py"
+      - "src/orchestrators/domain/__init__.py"
+      - "src/orchestrators/custom/__init__.py"
+    files_to_modify: []
+    acceptance_criteria:
+      - ac_id: "AC-AR-010-01"
+        description: "New folder structure created"
+        status: "NOT_STARTED"
+        test_file: "tests/unit/test_folder_structure.py"
+        test_name: "test_folder_structure_exists"
+
+  - task_id: "TASK-PARALLEL-02"
+    title: "Migrate Core Orchestrators"
+    requirement_id: "AR-010"
+    status: "NOT_STARTED"
+    description: |
+      Move core orchestrator files to new locations and update imports
+    files_to_create: []
+    files_to_modify:
+      - "src/orchestrators/core/*.py"
+    acceptance_criteria: []
+
+  - task_id: "TASK-PARALLEL-03"
+    title: "Migrate Infrastructure Components"
+    requirement_id: "AR-010"
+    status: "NOT_STARTED"
+    description: |
+      Move infrastructure files to new locations and update imports
+    files_to_create: []
+    files_to_modify:
+      - "src/infrastructure/*.py"
+    acceptance_criteria: []
+
+  - task_id: "TASK-PARALLEL-04"
+    title: "Migrate Tests"
+    requirement_id: "AR-010"
+    status: "NOT_STARTED"
+    description: |
+      Update test imports to match new folder structure
+    files_to_create: []
+    files_to_modify:
+      - "tests/**/*.py"
+    acceptance_criteria: []
+
+  - task_id: "TASK-PARALLEL-05"
+    title: "Update Imports Throughout"
+    requirement_id: "AR-010"
+    status: "NOT_STARTED"
+    description: |
+      Update all imports throughout the codebase to use new paths
+    files_to_create: []
+    files_to_modify:
+      - "src/**/*.py"
+      - "tests/**/*.py"
+    acceptance_criteria:
+      - ac_id: "AC-AR-010-02"
+        description: "All imports updated to new paths"
+        status: "NOT_STARTED"
+        test_file: "tests/unit/test_imports.py"
+        test_name: "test_imports_updated"
+
+  - task_id: "TASK-PARALLEL-06"
+    title: "Delete Old Folder Structure"
+    requirement_id: "AR-010"
+    status: "NOT_STARTED"
+    description: |
+      Remove old folder structure after migration is complete and verified
+    files_to_create: []
+    files_to_modify: []
+    acceptance_criteria: []
+
+  - task_id: "TASK-PARALLEL-07"
+    title: "Validate Cross-Platform Imports"
+    requirement_id: "AR-010"
+    status: "NOT_STARTED"
+    description: |
+      Verify imports work on Windows, macOS, and Linux
+    files_to_create: []
+    files_to_modify: []
+    acceptance_criteria:
+      - ac_id: "AC-AR-010-03"
+        description: "Cross-platform path resolution working"
+        status: "NOT_STARTED"
+        test_file: "tests/unit/test_cross_platform.py"
+        test_name: "test_cross_platform_paths"
+
+  - task_id: "TASK-PARALLEL-08"
+    title: "Final Testing"
+    requirement_id: "AR-010"
+    status: "NOT_STARTED"
+    description: |
+      Run full test suite to verify migration success
+    files_to_create: []
+    files_to_modify: []
+    acceptance_criteria: []
+
+# =============================================================================
+# RISKS & MITIGATIONS
+# =============================================================================
+
+risks:
+  - risk_id: "RISK-PAR-001"
+    description: "Import updates may conflict with parallel phase development"
+    severity: "HIGH"
+    probability: "MEDIUM"
+    mitigation: "Coordinate with active phase; use feature branch for migration"
+  - risk_id: "RISK-PAR-002"
+    description: "Cross-platform path resolution may have edge cases"
+    severity: "MEDIUM"
+    probability: "MEDIUM"
+    mitigation: "Test on all target platforms before merge; use pathlib exclusively"
+
+# =============================================================================
+# SUMMARY
+# =============================================================================
+
+summary:
+  total_tasks: 8
+  total_ac_ids: 3
+  blocking: false
+  estimated_hours: 16
+  buffer_hours: 4
+  
+  requirements_covered:
+    architecture_decisions: ["AR-010"]
+
+  exit_criteria:
+    - "All 3 AC-IDs pass verification"
+    - "New folder structure in place"
+    - "All imports updated"
+    - "Full test suite passing"
+    - "Cross-platform imports verified"
+
+# =============================================================================
+# TRACKING
+# =============================================================================
+
+tracking:
+  started_at: null
+  completed_at: null
+  current_task: null
+  blockers: []
+  notes: []
