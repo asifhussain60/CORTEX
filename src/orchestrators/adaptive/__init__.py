@@ -1,10 +1,10 @@
-"""Adaptive Execution Framework.
+"""Adaptive Execution Framework
 
 Implements context-aware orchestrator routing and optimization for CORTEX.
 
 Modules:
     execution_context_analyzer: ExecutionContextAnalyzer for task analysis
-    routing_engine: RoutingEngine for intelligent orchestrator selection
+    routing_engine: OrchestratorRoutingEngine for intelligent orchestrator selection
     execution_modes: ExecutionMode enums and mode handlers
     caching_layer: CachingLayer for result caching with TTL
     performance_profiler: PerformanceProfiler for execution profiling
@@ -19,7 +19,7 @@ from .execution_context_analyzer import (
 )
 from .routing_engine import (
     RoutingDecision,
-    RoutingEngine,
+    OrchestratorRoutingEngine,
 )
 from .execution_modes import (
     ExecutionMode,
@@ -40,7 +40,7 @@ __all__ = [
     "ExecutionContext",
     "ExecutionContextAnalyzer",
     "RoutingDecision",
-    "RoutingEngine",
+    "OrchestratorRoutingEngine",
     "ExecutionMode",
     "ModeConfiguration",
     "AdaptiveExecutor",
