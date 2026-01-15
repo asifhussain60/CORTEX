@@ -33,6 +33,7 @@ from src.infrastructure.database import DatabaseManager, DatabaseConfig
 from src.core.path_resolver import get_project_root
 
 
+@pytest.mark.ac("BRITTLE-001")
 class TestBrittleness001WALMode:
     """AC-BRITTLE-001: WAL mode operational."""
     
@@ -82,6 +83,7 @@ class TestBrittleness001WALMode:
         db.close()
 
 
+@pytest.mark.ac("BRITTLE-002")
 class TestBrittleness002AuditSchema:
     """AC-BRITTLE-002: Audit table schema complete."""
     
@@ -139,6 +141,7 @@ class TestBrittleness002AuditSchema:
         db.close()
 
 
+@pytest.mark.ac("BRITTLE-003")
 class TestBrittleness003ProgressTracker:
     """AC-BRITTLE-003: Progress tracker operational."""
     
@@ -150,6 +153,7 @@ class TestBrittleness003ProgressTracker:
         assert progress_file.parent.exists(), "Tracking directory should exist"
 
 
+@pytest.mark.ac("BRITTLE-004")
 class TestBrittleness004CollectionWarnings:
     """AC-BRITTLE-004: Pytest collection warnings resolved."""
     
@@ -170,6 +174,7 @@ class TestBrittleness004CollectionWarnings:
         assert result.returncode in [0, 5], f"Pytest collection failed: {result.stderr}"
 
 
+@pytest.mark.ac("BRITTLE-005")
 class TestBrittleness005AbsoluteImports:
     """AC-BRITTLE-005: All imports converted to absolute paths."""
     
@@ -191,6 +196,7 @@ class TestBrittleness005AbsoluteImports:
             assert "import ." not in content, f"Relative import found in {py_file.name}"
 
 
+@pytest.mark.ac("BRITTLE-006")
 class TestBrittleness006TestCollection:
     """AC-BRITTLE-006: All test files collect successfully."""
     
@@ -211,6 +217,7 @@ class TestBrittleness006TestCollection:
             f"Collection errors found: {output}"
 
 
+@pytest.mark.ac("BRITTLE-007")
 class TestBrittleness007PackagePaths:
     """AC-BRITTLE-007: All paths use get_project_root() utility."""
     
@@ -236,6 +243,7 @@ class TestBrittleness007PackagePaths:
             f"Hardcoded paths found in: {hardcoded_paths_found}"
 
 
+@pytest.mark.ac("BRITTLE-008")
 class TestBrittleness008ACCompleteness:
     """AC-BRITTLE-008: All AC-IDs have implementations."""
     
@@ -250,6 +258,7 @@ class TestBrittleness008ACCompleteness:
         assert len(test_files) > 30, f"Expected 30+ test files, found {len(test_files)}"
 
 
+@pytest.mark.ac("BRITTLE-009")
 class TestBrittleness009EvidenceGeneration:
     """AC-BRITTLE-009: Evidence bundles generated correctly."""
     
@@ -263,6 +272,7 @@ class TestBrittleness009EvidenceGeneration:
         assert evidence_module.exists(), "Evidence bundle module should exist"
 
 
+@pytest.mark.ac("BRITTLE-010")
 class TestBrittleness010Portability:
     """AC-BRITTLE-010: All paths use pathlib, OS-specific code guarded."""
     
@@ -288,6 +298,7 @@ class TestBrittleness010Portability:
                     pass  # Don't fail on this
 
 
+@pytest.mark.ac("BRITTLE-011")
 class TestBrittleness011StateLocking:
     """AC-BRITTLE-011: Distributed locking for state transitions."""
     
@@ -298,6 +309,7 @@ class TestBrittleness011StateLocking:
         assert state_machine_file.exists(), "State machine module should exist"
 
 
+@pytest.mark.ac("BRITTLE-012")
 class TestBrittleness012GovernanceEnforcement:
     """AC-BRITTLE-012: All 25 governance rules enforced."""
     
@@ -312,6 +324,7 @@ class TestBrittleness012GovernanceEnforcement:
         assert "SKULL" in content, "Governance rules should define SKULL rules"
 
 
+@pytest.mark.ac("BRITTLE-013")
 class TestBrittleness013TestACLinking:
     """AC-BRITTLE-013: Test discovery by AC-ID implemented."""
     
@@ -324,6 +337,7 @@ class TestBrittleness013TestACLinking:
         assert test_dir.exists(), "Tests directory should exist"
 
 
+@pytest.mark.ac("BRITTLE-014")
 class TestBrittleness014VerificationRate:
     """AC-BRITTLE-014: Verification rate ≥80%."""
     
