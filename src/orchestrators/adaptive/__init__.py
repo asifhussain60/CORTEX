@@ -26,6 +26,10 @@ from .execution_modes import (
     ModeConfiguration,
     AdaptiveExecutor,
 )
+from .caching_layer import (
+    CacheEntry,
+    CachingLayer,
+)
 
 __all__ = [
     "ExecutionContext",
@@ -35,4 +39,6 @@ __all__ = [
     "ExecutionMode",
     "ModeConfiguration",
     "AdaptiveExecutor",
+    "CacheEntry",
+    "CachingLayer",
 ]
