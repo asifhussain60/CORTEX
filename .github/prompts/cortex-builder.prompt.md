@@ -221,7 +221,7 @@ executive_summary_complete:
 
 1. **Read** `cortex-master.yaml` → check `phase_tracker`
 2. **DISPLAY EXECUTIVE SUMMARY** → Phase Initiation Summary (MANDATORY)
-3. **Read** `phases/phase-XX.yaml` → get AC-IDs for current phase
+3. **Read** `docs/phases/phase-XX.yaml` → get AC-IDs for current phase
 4. **GIT CHECKPOINT** → Create checkpoint before starting AC-ID
 5. **Implement** one AC-ID at a time with tests (audit logging ACTIVE)
 6. **Verify Audit Trail** → Query audit logs for AC-ID entries
@@ -388,13 +388,31 @@ modification:
 ```
 .github/roadmap/
 ├── cortex-master.yaml      # Master plan + phase_tracker (SINGLE SOURCE OF TRUTH)
-└── phases/
-    ├── phase-01.yaml       # Detailed AC-IDs for Phase 1
-    ├── phase-02.yaml
-    ├── phase-03.yaml
-    ├── phase-04.yaml
-    ├── phase-05.yaml
-    └── phase-parallel.yaml
+
+docs/phases/                 # Phase specifications
+├── phase-01.yaml            # PHASE-01: Archive & Governance Foundation ✅
+├── phase-02.yaml            # PHASE-02: Validation & Testing ✅
+├── phase-03.yaml            # PHASE-03: File Management & Iteration ✅
+├── phase-04.yaml            # PHASE-04: Sprint Review Cleanup ✅
+├── phase-05.yaml            # PHASE-05: Build Completion ✅
+├── phase-06-ecosystem.yaml             # PHASE-06: Ecosystem
+├── phase-07-intent-router.yaml         # PHASE-07: Intent Router + CORTEX LENS
+├── phase-08.yaml            # PHASE-08: Developer Tooling
+├── phase-09.yaml            # PHASE-09: AI Agent Reliability
+├── phase-10.yaml            # PHASE-10: Hallucination Prevention
+├── phase-11.yaml            # PHASE-11: Knowledge Ecosystem
+├── phase-12.yaml            # PHASE-12: Observability
+├── phase-13.yaml            # PHASE-13: Production Readiness
+├── phase-14.yaml            # PHASE-14: Framework Hardening
+├── phase-15-neural-observatory.yaml    # PHASE-15: Neural Observatory SPA ⭐
+└── phase-enhancement-*.yaml # Enhancement phases (01-03) ✅
+
+cortex-vision/               # Vision & Architecture Files
+├── cortex-vision.yaml       # Project metrics & key systems
+├── orchestrators.yaml       # Orchestrator ecosystem
+├── innovations.yaml         # Innovation catalog (LENS, Observatory)
+├── anti-patterns.yaml       # Anti-pattern registry
+└── branch-evolution.yaml    # Branch strategy & CORTEX 7.0
 ```
 
 ## Audit Verification Gate

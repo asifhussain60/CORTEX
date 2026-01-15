@@ -192,9 +192,10 @@ Check `.github/roadmap/cortex-master.yaml` for:
 ## Important Files to Reference
 
 1. **Master Plan**: `.github/roadmap/cortex-master.yaml`
-2. **Current Phase**: `.github/roadmap/phases/phase-XX.yaml`
+2. **Current Phase**: `docs/phases/phase-XX.yaml`
 3. **Governance Rules**: `cortex-brain/tier0/governance/core-rules.yaml`
 4. **Builder Prompt**: `.github/prompts/cortex-builder.prompt.md`
+5. **Vision Files**: `cortex-vision/*.yaml`
 
 ## Do NOT
 
