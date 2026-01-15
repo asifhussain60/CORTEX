@@ -10,6 +10,12 @@ from .comprehension_yaml import (
     ChallengeSection,
     RecommendationSection,
 )
+from .intent_reflection_protocol import (
+    IntentReflectionEngine,
+    ReflectionRequest,
+    ReflectionResponse,
+    ReflectionStatus,
+)
 
 __all__ = [
     # Intent canonicalizer
@@ -28,4 +34,9 @@ __all__ = [
     "IntentSection",
     "ChallengeSection",
     "RecommendationSection",
+    # Intent reflection protocol
+    "IntentReflectionEngine",
+    "ReflectionRequest",
+    "ReflectionResponse",
+    "ReflectionStatus",
 ]
