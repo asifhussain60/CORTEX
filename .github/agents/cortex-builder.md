@@ -27,16 +27,55 @@ Implements CORTEX following `.github/roadmap/cortex-master.yaml` with **governan
 
 ## Current Phase Status (2026-01-15)
 
-**Completed & Locked:** PHASE-01 through PHASE-12 (12 phases) + PHASE-ENHANCEMENT-01/02  
-**Ready to Start:** 🔄 **PHASE-13** (Observability & Telemetry) - 5 ACs (OB-001 through OB-003)  
-**Prerequisites:** PHASE-10 locked ✅ | **Recommendation:** PROCEED with PHASE-13
+⚠️ **CRITICAL STATUS UPDATE: AUDIT REMEDIATION INITIATIVE**
 
-## Before Any Implementation
+**Initiative:** `AUDIT-REMEDIATION-2026-01-15` (See `cortex-master.yaml` → `audit_remediation` section)
 
-**Check `phase_tracker` in `cortex-master.yaml`:**
-- If `locked: true` → Phase is DONE, do not reimplement
-- If predecessor not locked → Cannot start this phase yet
-- Current: PHASE-13 not locked, PHASE-10 locked → ✅ PROCEED
+**Background:** 
+- PHASE-01 through PHASE-13 marked as "COMPLETED" but lack proper audit trail evidence
+- PHASE-10 is locked ✓ but lacks AC_COMPLETE entries in governance.db
+- Root cause: Tests pass ✓ but audit logging events (AC_START, AC_EXECUTE, AC_COMPLETE) not captured
+- Violation of CORE-027: "AC_START, AC_EXECUTE, AC_COMPLETE MANDATORY"
+
+**Current State:**
+- 176 ACs across 16 phases need remediation
+- Test suites exist and pass ✓
+- Audit trail missing ✗
+
+**Pre-Implementation Checklist (UPDATED):**
+
+```yaml
+before_implementing_any_ac_id:
+  1. CHECK audit_remediation status in cortex-master.yaml
+     - If status: "IN_PROGRESS" → You are in REMEDIATION MODE
+     - All previous phases must verify audit trails BEFORE new work
+  
+  2. VERIFY phase audit compliance:
+     query = "SELECT ac_id, COUNT(*) as entry_count FROM audit_log 
+              WHERE phase_id = ? AND operation IN ('AC_START', 'AC_EXECUTE', 'AC_COMPLETE')
+              GROUP BY ac_id HAVING entry_count >= 3"
+     - EVERY AC-ID MUST have entry_count >= 3
+     - If < 3: Phase is NOT ready for next phase implementation
+  
+  3. If starting NEW phase (not remediation):
+     - Verify CURRENT phase audit trail is COMPLETE
+     - If not: Cannot start new phase until remediation done
+  
+  4. AUDIT LOGGING ENFORCEMENT (MANDATORY):
+     - ALL test execution in STRICT mode must log:
+       a. AC_START before test suite runs
+       b. AC_EXECUTE as tests execute
+       c. AC_COMPLETE when all tests pass
+     - Logs MUST be written to governance.db (not printed, not faked)
+     - Logs MUST have proper hash chain linkage
+```
+
+**Recommendation:** 
+Start with **PHASE-01 audit remediation** - systematically re-run tests with audit logging enabled.
+
+**Completed & Locked:** PHASE-10 (5 ACs) ✓ - But still needs AC_COMPLETE audit entry verification  
+**Ready to Start (After Remediation):** PHASE-14  
+**In Progress:** 🔧 PHASE-01 through PHASE-13 audit trail fixes
 
 ## AC-ID Lifecycle with Governance
 
@@ -49,6 +88,14 @@ Implements CORTEX following `.github/roadmap/cortex-master.yaml` with **governan
 
 ### Phase 1: IMPLEMENTATION (with Continuous Validation)
 
+**DURING REMEDIATION MODE (audit_remediation.status = "IN_PROGRESS"):**
+- Tests MUST run with `audit_mode: STRICT` enabled
+- Audit events MUST be logged to governance.db during execution
+- Event sequence: AC_START → AC_EXECUTE (during test run) → AC_COMPLETE (on success)
+- **CRITICAL:** Do NOT manually insert audit entries (except explicit remediation scripts)
+- Validate logs with: `SELECT * FROM audit_log WHERE ac_id = ? ORDER BY timestamp`
+- Assert: entry_hash chain is unbroken (each entry references previous entry's hash)
+
 **For each file created/modified:**
 - **Type Hints Check** (CORE-011): All function parameters and returns have types
 - **Docstring Check** (CORE-012): All public functions/classes have Google-style docstrings
@@ -56,6 +103,7 @@ Implements CORTEX following `.github/roadmap/cortex-master.yaml` with **governan
 - **Naming Check** (CORE-028): Kebab-case, ≤25 chars total
 - **Path Check** (CORE-005): No hardcoded absolute paths
 - **Test-First Check** (CORE-008): Tests exist and initially fail
+- **Audit Trail Check** (CORE-027): AC_START, AC_EXECUTE, AC_COMPLETE logged to governance.db
 
 All blocking rules violations → REFUSE continuation
 
