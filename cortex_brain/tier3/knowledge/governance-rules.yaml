@@ -1,0 +1,244 @@
+metadata:
+  ac_id: "KN-003-01"
+  title: "Tier 3 Knowledge Governance Rules"
+  version: "1.0"
+  created_at: "2024-01-15T18:30:00Z"
+  description: "Governance rules for all Tier 3 knowledge domains"
+
+rules:
+  # GOVERNANCE Domain Rules
+  - rule_id: "GV-001"
+    domain: "GOVERNANCE"
+    rule_type: "required_field"
+    description: "All GOVERNANCE entries must have entry_id"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "GV-002"
+    domain: "GOVERNANCE"
+    rule_type: "validation"
+    description: "GOVERNANCE entries must reference at least one AC-ID"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "GV-003"
+    domain: "GOVERNANCE"
+    rule_type: "constraint"
+    description: "GOVERNANCE entry titles must be at least 10 characters"
+    severity: "warning"
+    enabled: true
+  
+  # INTENT-ROUTING Domain Rules
+  - rule_id: "IR-001"
+    domain: "INTENT-ROUTING"
+    rule_type: "required_field"
+    description: "All INTENT-ROUTING entries must have routing_type"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "IR-002"
+    domain: "INTENT-ROUTING"
+    rule_type: "validation"
+    description: "INTENT-ROUTING entries must have confidence score"
+    severity: "warning"
+    enabled: true
+  
+  # HALLUCINATION-PREVENTION Domain Rules
+  - rule_id: "HP-001"
+    domain: "HALLUCINATION-PREVENTION"
+    rule_type: "required_field"
+    description: "All HALLUCINATION-PREVENTION entries must have prevention_mechanism"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "HP-002"
+    domain: "HALLUCINATION-PREVENTION"
+    rule_type: "constraint"
+    description: "HALLUCINATION-PREVENTION entries must have test coverage"
+    severity: "critical"
+    enabled: true
+  
+  # EXECUTION-ORCHESTRATION Domain Rules
+  - rule_id: "EO-001"
+    domain: "EXECUTION-ORCHESTRATION"
+    rule_type: "required_field"
+    description: "All EXECUTION-ORCHESTRATION entries must have orchestration_pattern"
+    severity: "critical"
+    enabled: true
+  
+  # DATA-MANAGEMENT Domain Rules
+  - rule_id: "DM-001"
+    domain: "DATA-MANAGEMENT"
+    rule_type: "required_field"
+    description: "All DATA-MANAGEMENT entries must have data_model"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "DM-002"
+    domain: "DATA-MANAGEMENT"
+    rule_type: "validation"
+    description: "DATA-MANAGEMENT entries should reference schema"
+    severity: "warning"
+    enabled: true
+  
+  # OBSERVABILITY Domain Rules
+  - rule_id: "OB-001"
+    domain: "OBSERVABILITY"
+    rule_type: "required_field"
+    description: "All OBSERVABILITY entries must have metric_type"
+    severity: "critical"
+    enabled: true
+  
+  # SECURITY Domain Rules
+  - rule_id: "SE-001"
+    domain: "SECURITY"
+    rule_type: "required_field"
+    description: "All SECURITY entries must have security_category"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "SE-002"
+    domain: "SECURITY"
+    rule_type: "validation"
+    description: "SECURITY entries must specify threat model"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "SE-003"
+    domain: "SECURITY"
+    rule_type: "constraint"
+    description: "SECURITY entries must have mitigation strategy"
+    severity: "warning"
+    enabled: true
+  
+  # API-DESIGN Domain Rules
+  - rule_id: "AD-001"
+    domain: "API-DESIGN"
+    rule_type: "required_field"
+    description: "All API-DESIGN entries must have endpoint_pattern"
+    severity: "critical"
+    enabled: true
+  
+  # ML-MODELS Domain Rules
+  - rule_id: "MM-001"
+    domain: "ML-MODELS"
+    rule_type: "required_field"
+    description: "All ML-MODELS entries must have model_type"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "MM-002"
+    domain: "ML-MODELS"
+    rule_type: "validation"
+    description: "ML-MODELS entries must specify performance_metric"
+    severity: "warning"
+    enabled: true
+  
+  # KNOWLEDGE-CURATION Domain Rules
+  - rule_id: "KC-001"
+    domain: "KNOWLEDGE-CURATION"
+    rule_type: "required_field"
+    description: "All KNOWLEDGE-CURATION entries must have curation_method"
+    severity: "critical"
+    enabled: true
+  
+  # TESTING-VALIDATION Domain Rules
+  - rule_id: "TV-001"
+    domain: "TESTING-VALIDATION"
+    rule_type: "required_field"
+    description: "All TESTING-VALIDATION entries must have test_type"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "TV-002"
+    domain: "TESTING-VALIDATION"
+    rule_type: "validation"
+    description: "TESTING-VALIDATION entries should specify coverage requirement"
+    severity: "warning"
+    enabled: true
+  
+  # DEPLOYMENT Domain Rules
+  - rule_id: "DP-001"
+    domain: "DEPLOYMENT"
+    rule_type: "required_field"
+    description: "All DEPLOYMENT entries must have deployment_target"
+    severity: "critical"
+    enabled: true
+  
+  # DOCUMENTATION Domain Rules
+  - rule_id: "DC-001"
+    domain: "DOCUMENTATION"
+    rule_type: "required_field"
+    description: "All DOCUMENTATION entries must have doc_type"
+    severity: "critical"
+    enabled: true
+  
+  # PERFORMANCE Domain Rules
+  - rule_id: "PF-001"
+    domain: "PERFORMANCE"
+    rule_type: "required_field"
+    description: "All PERFORMANCE entries must have performance_metric"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "PF-002"
+    domain: "PERFORMANCE"
+    rule_type: "validation"
+    description: "PERFORMANCE entries must have baseline_value"
+    severity: "warning"
+    enabled: true
+  
+  # ARCHITECTURE Domain Rules
+  - rule_id: "AR-001"
+    domain: "ARCHITECTURE"
+    rule_type: "required_field"
+    description: "All ARCHITECTURE entries must have architectural_pattern"
+    severity: "critical"
+    enabled: true
+  
+  # ERROR-HANDLING Domain Rules
+  - rule_id: "EH-001"
+    domain: "ERROR-HANDLING"
+    rule_type: "required_field"
+    description: "All ERROR-HANDLING entries must have error_category"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "EH-002"
+    domain: "ERROR-HANDLING"
+    rule_type: "validation"
+    description: "ERROR-HANDLING entries must specify recovery_strategy"
+    severity: "warning"
+    enabled: true
+
+# Global Rules (Apply to All Domains)
+global_rules:
+  - rule_id: "GLOBAL-001"
+    rule_type: "required_field"
+    description: "All entries must have valid entry_id (KE-*)"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "GLOBAL-002"
+    rule_type: "required_field"
+    description: "All entries must belong to one of 16 valid domains"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "GLOBAL-003"
+    rule_type: "validation"
+    description: "All entries must have title"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "GLOBAL-004"
+    rule_type: "validation"
+    description: "All AC-IDs must match pattern AC-[A-Z]+-\\d{3}-\\d{2}"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "GLOBAL-005"
+    rule_type: "constraint"
+    description: "No duplicate entries allowed within same domain"
+    severity: "critical"
+    enabled: true
