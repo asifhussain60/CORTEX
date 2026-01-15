@@ -1,0 +1,180 @@
+# CORTEX Domain Registry
+# Purpose: Register CORTEX core domains and optional business domains
+# Version: 1.0
+# Created: January 15, 2026
+# Acceptance Criteria: BD-001-01
+
+---
+
+# Metadata
+metadata:
+  version: "1.0"
+  created_date: "2026-01-15"
+  last_updated: "2026-01-15"
+  acceptance_criteria: "BD-001-01"
+  description: "Central registry for CORTEX domains (core) and business domains (extensible)"
+  status: "active"
+  maintainer: "CORTEX Architecture Team"
+
+---
+
+# Core CORTEX Domains (Immutable)
+core_domains:
+  cortex:
+    domain_name: "CORTEX"
+    domain_id: "cortex-core"
+    tier: 0
+    description: "Core AI-powered orchestration system"
+    features:
+      - phase_management
+      - acceptance_criteria_tracking
+      - governance_enforcement
+      - audit_trail
+    read_only: true
+    status: "active"
+
+  observability:
+    domain_name: "Observability & Telemetry"
+    domain_id: "observability-telemetry"
+    tier: 1
+    description: "System observability, metrics, and tracing"
+    features:
+      - opentelemetry_integration
+      - metrics_dashboard
+      - alerting
+      - health_monitoring
+    read_only: true
+    status: "active"
+
+  governance:
+    domain_name: "Governance & Compliance"
+    domain_id: "governance-compliance"
+    tier: 0
+    description: "Governance rules, compliance tracking, and enforcement"
+    features:
+      - rule_engine
+      - audit_logging
+      - compliance_verification
+      - policy_management
+    read_only: true
+    status: "active"
+
+---
+
+# Business Domain Extension
+# Purpose: Optional business context integration
+# This domain is registered but optional - CORTEX functions without it
+business_domain:
+  enabled: true
+  domain_name: "Business Domain Framework"
+  domain_id: "business-domain"
+  tier: 3
+  description: "Optional business context enrichment for dashboard and logging"
+  endpoint_env_var: "DOMAIN_BRAIN_ENDPOINT"
+  
+  # Configuration
+  configuration:
+    mode: "configurable"  # Can be disabled without breaking changes
+    fallback: "graceful"  # Gracefully degrades if endpoint unavailable
+    timeout_seconds: 5
+    retry_attempts: 1
+    cache_ttl_seconds: 300
+
+  # Features available when enabled
+  features:
+    - business_context_enrichment
+    - dashboard_insights
+    - audit_trail_enhancement
+    - governance_context
+
+  # Integration points
+  integration_points:
+    dashboard:
+      file: "src/observability/dashboard_extensibility.py"
+      function: "enrich_dashboard_context"
+      required: false
+      fallback: "basic_mode"
+    
+    audit_trail:
+      file: "cortex-brain/tier0/audit-log-enhanced.yaml"
+      function: "enrich_audit_entry"
+      required: false
+      fallback: "standard_logging"
+
+  # Status tracking
+  status: "active"
+  optional: true
+  breaking_changes: false
+  
+  # Documentation
+  documentation:
+    file: "cortex-brain/tier3/README-DOMAIN-INTEGRATION.md"
+    location: "See domain integration guide"
+    examples: "See dashboard_extensibility.py"
+
+---
+
+# Registry Verification Tests
+# These tests verify the registry is correctly structured and functional
+registry_tests:
+  test_schema_valid:
+    description: "Verify YAML schema is valid"
+    command: "python -m yamllint domain-registry.yaml"
+    expected_result: "valid"
+
+  test_core_domains_present:
+    description: "Verify all 3 core domains registered"
+    command: "python -c 'import yaml; d=yaml.safe_load(open(\"domain-registry.yaml\")); assert len(d[\"core_domains\"]) == 3'"
+    expected_result: "3 core domains found"
+
+  test_business_domain_optional:
+    description: "Verify business domain is marked optional"
+    command: "python -c 'import yaml; d=yaml.safe_load(open(\"domain-registry.yaml\")); assert d[\"business_domain\"][\"optional\"] == True'"
+    expected_result: "business_domain.optional = True"
+
+  test_no_breaking_changes:
+    description: "Verify no breaking changes declared"
+    command: "python -c 'import yaml; d=yaml.safe_load(open(\"domain-registry.yaml\")); assert d[\"business_domain\"][\"breaking_changes\"] == False'"
+    expected_result: "breaking_changes = False"
+
+  test_all_endpoints_configured:
+    description: "Verify all integration points configured"
+    command: "python -c 'import yaml; d=yaml.safe_load(open(\"domain-registry.yaml\")); assert \"dashboard\" in d[\"business_domain\"][\"integration_points\"] and \"audit_trail\" in d[\"business_domain\"][\"integration_points\"]'"
+    expected_result: "2 integration points configured"
+
+  test_graceful_degradation:
+    description: "Verify graceful degradation mode"
+    command: "python -c 'import yaml; d=yaml.safe_load(open(\"domain-registry.yaml\")); assert d[\"business_domain\"][\"configuration\"][\"fallback\"] == \"graceful\"'"
+    expected_result: "fallback = graceful"
+
+  test_core_domains_immutable:
+    description: "Verify core domains marked read_only"
+    command: "python -c 'import yaml; d=yaml.safe_load(open(\"domain-registry.yaml\")); assert all(dom.get(\"read_only\") for dom in d[\"core_domains\"].values())'"
+    expected_result: "All core domains read_only = True"
+
+---
+
+# Usage Examples
+
+# Example 1: Load registry in Python
+# from cortex_brain.tier3 import domain_registry
+# domains = domain_registry.load_registry()
+# print(domains['core_domains'])
+
+# Example 2: Check if business domain is enabled
+# if domains['business_domain']['enabled']:
+#     endpoint = os.getenv(domains['business_domain']['endpoint_env_var'])
+#     context = get_business_context(endpoint)
+
+# Example 3: Verify no breaking changes
+# assert domains['business_domain']['breaking_changes'] == False
+# print("✅ All integrations backward compatible")
+
+---
+
+# Notes
+# - Core domains (CORTEX, Observability, Governance) are immutable and always active
+# - Business domain is optional - system works without it
+# - No existing code is modified - only new extensions added
+# - All integration points have fallback modes (graceful degradation)
+# - Environment variable (DOMAIN_BRAIN_ENDPOINT) controls business domain activation
