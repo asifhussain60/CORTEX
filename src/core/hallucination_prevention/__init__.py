@@ -41,6 +41,13 @@ from src.core.hallucination_prevention.hallucination_detection import (
     IncidentReport,
 )
 
+from src.core.hallucination_prevention.vision_mutations import (
+    VisionMutationTracker,
+    VisionMutation,
+    MutationType,
+    MutationSnapshot,
+)
+
 __all__ = [
     "ExtendedIntentCanonicalizer",
     "ExtendedCanonicalIntent",
@@ -58,4 +65,8 @@ __all__ = [
     "CorruptionType",
     "RecoveryStrategy",
     "IncidentReport",
+    "VisionMutationTracker",
+    "VisionMutation",
+    "MutationType",
+    "MutationSnapshot",
 ]
