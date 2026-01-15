@@ -8,7 +8,8 @@ import sys
 import os
 
 # Add src to path for imports
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../src'))
+project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+sys.path.insert(0, os.path.join(project_root, 'src'))
 
 from dashboard.api.main import app
 
