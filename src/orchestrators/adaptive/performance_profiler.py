@@ -1,10 +1,10 @@
-"""Orchestrator Performance Profiling Module.
+"""Orchestrator Performance Profiling.
 
-This module implements performance profiling for orchestrator execution tracking,
-bottleneck identification, and trend analysis.
+This module implements performance profiling for orchestrators, tracking
+execution metrics and identifying optimization opportunities.
 
-AC-EX-003-01: Execution time tracked per orchestrator, bottlenecks identifiable
-from profiles, and historical trends available.
+AC-EX-003-01: Execution time tracked per orchestrator, bottlenecks
+identifiable from profiles, and historical trends available.
 
 Author: Asif Hussain
 Copyright: © 2025-2026 Asif Hussain. All rights reserved.
@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional
 
 @dataclass
 class ExecutionMetrics:
-    """Metrics for a single orchestrator execution.
+    """Metrics for a single execution.
     
     Attributes:
         orchestrator: Orchestrator name
@@ -43,14 +43,12 @@ class PerformanceProfile:
     Attributes:
         orchestrator: Orchestrator name
         executions: List of execution metrics
-    
-    Properties:
-        total_executions: Total number of executions
-        successful_executions: Number of successful executions
-        average_duration: Average execution duration
-        min_duration: Minimum execution duration
-        max_duration: Maximum execution duration
-        success_rate: Success rate as percentage
+        total_executions: Total number of executions (property)
+        successful_executions: Number of successful executions (property)
+        average_duration: Average execution duration (property)
+        min_duration: Minimum execution duration (property)
+        max_duration: Maximum execution duration (property)
+        success_rate: Success rate as percentage (property)
     """
     
     orchestrator: str
@@ -58,17 +56,29 @@ class PerformanceProfile:
     
     @property
     def total_executions(self) -> int:
-        """Get total execution count."""
+        """Get total execution count.
+        
+        Returns:
+            Number of recorded executions
+        """
         return len(self.executions)
     
     @property
     def successful_executions(self) -> int:
-        """Get count of successful executions."""
+        """Get count of successful executions.
+        
+        Returns:
+            Number of successful executions
+        """
         return sum(1 for e in self.executions if e.success)
     
     @property
     def average_duration(self) -> float:
-        """Get average execution duration."""
+        """Get average duration.
+        
+        Returns:
+            Average execution duration in seconds
+        """
         if not self.executions:
             return 0.0
         durations = [e.duration_seconds for e in self.executions]
@@ -76,21 +86,33 @@ class PerformanceProfile:
     
     @property
     def min_duration(self) -> float:
-        """Get minimum execution duration."""
+        """Get minimum duration.
+        
+        Returns:
+            Minimum execution duration in seconds
+        """
         if not self.executions:
             return 0.0
         return min(e.duration_seconds for e in self.executions)
     
     @property
     def max_duration(self) -> float:
-        """Get maximum execution duration."""
+        """Get maximum duration.
+        
+        Returns:
+            Maximum execution duration in seconds
+        """
         if not self.executions:
             return 0.0
         return max(e.duration_seconds for e in self.executions)
     
     @property
     def success_rate(self) -> float:
-        """Get success rate as percentage."""
+        """Get success rate as percentage.
+        
+        Returns:
+            Success rate from 0.0 to 100.0
+        """
         if not self.executions:
             return 0.0
         return (self.successful_executions / self.total_executions) * 100
@@ -108,10 +130,15 @@ class PerformanceProfiler:
     
     Example:
         >>> profiler = PerformanceProfiler()
-        >>> metrics = ExecutionMetrics("Orch1", "task", 1.5, 128, True)
+        >>> metrics = ExecutionMetrics(
+        ...     orchestrator="PlanningOrch",
+        ...     task_type="planning",
+        ...     duration_seconds=2.5,
+        ...     memory_mb=256,
+        ...     success=True
+        ... )
         >>> profiler.record_execution(metrics)
-        >>> profile = profiler.get_profile("Orch1")
-        >>> bottlenecks = profiler.identify_bottlenecks()
+        >>> profile = profiler.get_profile("PlanningOrch")
     """
     
     def __init__(self) -> None:
@@ -127,12 +154,15 @@ class PerformanceProfiler:
         """
         if metrics.orchestrator not in self._profiles:
             self._profiles[metrics.orchestrator] = PerformanceProfile(
-                orchestrator=metrics.orchestrator
+                orchestrator=metrics.orchestrator,
             )
         
         self._profiles[metrics.orchestrator].executions.append(metrics)
     
-    def get_profile(self, orchestrator: str) -> Optional[PerformanceProfile]:
+    def get_profile(
+        self,
+        orchestrator: str,
+    ) -> Optional[PerformanceProfile]:
         """Get performance profile for an orchestrator.
         
         Args:
@@ -152,10 +182,7 @@ class PerformanceProfiler:
         return self._profiles
     
     def identify_bottlenecks(self) -> Dict[str, List[Dict[str, Any]]]:
-        """Identify performance bottlenecks across orchestrators.
-        
-        Identifies slow executions (above the bottleneck threshold) for each
-        orchestrator with sufficient execution history.
+        """Identify performance bottlenecks.
         
         Returns:
             Dictionary mapping orchestrators to lists of bottleneck info
@@ -188,11 +215,12 @@ class PerformanceProfiler:
         
         return bottlenecks
     
-    def get_historical_trends(self, orchestrator: str, window_size: int = 10) -> Dict[str, Any]:
-        """Get historical performance trends for an orchestrator.
-        
-        Analyzes recent execution performance to identify trends such as
-        improving or degrading performance.
+    def get_historical_trends(
+        self,
+        orchestrator: str,
+        window_size: int = 10,
+    ) -> Dict[str, Any]:
+        """Get historical performance trends.
         
         Args:
             orchestrator: Orchestrator name
@@ -210,21 +238,25 @@ class PerformanceProfiler:
         durations = [e.duration_seconds for e in recent]
         
         avg_duration = mean(durations)
-        duration_variance = stdev(durations) if len(durations) > 1 else 0.0
+        duration_variance = (
+            stdev(durations) if len(durations) > 1 else 0.0
+        )
         
         return {
             "orchestrator": orchestrator,
             "sample_count": len(recent),
             "average_duration": avg_duration,
             "variance": duration_variance,
-            "trend": "improving" if durations[-1] < avg_duration else "degrading",
+            "trend": "improving"
+            if durations[-1] < avg_duration
+            else "degrading",
         }
     
     def get_comparison(self) -> Dict[str, Dict[str, Any]]:
         """Get performance comparison across orchestrators.
         
         Returns:
-            Dictionary with comparative metrics for each orchestrator
+            Dictionary with comparative metrics
         """
         comparison = {}
         
