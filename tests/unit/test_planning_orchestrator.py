@@ -352,7 +352,9 @@ class TestIntegration:
         tools_result = orchestrator.get_mcp_tools()
         assert tools_result.is_ok()
         tools = tools_result.unwrap()
-        assert len(tools) == 3
+        # 4 tools: plan_status, next_ac, enforce_phase_lock, get_plan_data_for_observatory
+        assert len(tools) == 4
+        assert "get_plan_data_for_observatory" in tools  # Neural Observatory data provider
         
         # Execute operations
         status_result = orchestrator.execute_operation(
@@ -373,11 +375,21 @@ class TestIntegration:
         )
         assert lock_result.is_ok()
         
+        # Test new Observatory data provider
+        observatory_result = orchestrator.execute_operation(
+            "get_plan_data_for_observatory",
+            {"phase_id": "PHASE-01"},
+        )
+        assert observatory_result.is_ok()
+        observatory_data = observatory_result.unwrap()
+        assert "visualization_target" in observatory_data
+        assert observatory_data["visualization_target"] == "Neural Observatory Plan Hub"
+        
         # Verify audit trail
         audit_result = orchestrator.get_audit_trail()
         assert audit_result.is_ok()
         trail = audit_result.unwrap()
-        assert len(trail) >= 5  # init + 3 ops + get_mcp_tools
+        assert len(trail) >= 6  # init + 4 ops + get_mcp_tools
         
         # Verify chain
         verify_result = orchestrator.verify_audit_chain()
