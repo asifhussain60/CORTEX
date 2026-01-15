@@ -43,23 +43,46 @@ The CORTEX Vacuum system is a three-phase repository reorganization framework th
 
 ### Root-Level Files → Destination Mapping
 
-#### Documentation Files
+#### Documentation Files - Intelligent Nested Organization
 - **Pattern**: `*.md` files that are high-level or organizational
-- **Destination**: `docs/`
-- **Examples**:
+- **Root-Level Logic**:
   - `README.md` → stays in root (project-level)
-  - `EXECUTIVE-*.md` → `docs/executive/`
-  - `PHASE-*.md` → `docs/phases/`
-  - `REVIEW-*.md` → `docs/reviews/`
-  - `CURRENT-STATUS.md` → `docs/status.md`
+  - All other documentation → organized by content type and purpose
+  
+- **Intelligent Routing** (evaluated in order):
+  1. **Executive Documents** → `docs/executive/`
+     - Pattern: `*executive*`, `*decision*`, `*brief*`, `*summary*` (high-level)
+     - Examples: `exec-decision-summary.md`, `executive-brief.md`
+     - Purpose: Board/stakeholder-level documents
+
+  2. **Phase Documentation** → `docs/phases/`
+     - Pattern: `*phase*`, `*vision*`, `*roadmap*`, `*plan*`, `*strategy*`
+     - Examples: `phase-vision-core.md`, `phase-1-4-status.md`
+     - Purpose: Phase implementation, planning, and execution
+
+  3. **Review Documents** → `docs/reviews/`
+     - Pattern: `*review*`, `*verification*`, `*analysis*`, `*assessment*` (QA-focused)
+     - Examples: `review-completion-index.md`, `phase-chat-verification.md`
+     - Purpose: Verification, QA, and review documentation
+
+  4. **Implementation & Status** → `docs/`
+     - Pattern: `*implementation*`, `*status*`, `*naming*`, `*fix*`, `*correction*`
+     - Examples: `implementation-status.md`, `naming-fix-summary.md`
+     - Purpose: Technical reference and status tracking
+
+  5. **Strategy & Analysis** → `docs/`
+     - Pattern: `*strategy*`, `*analysis*`, `*report*` (detailed technical)
+     - Examples: `fr-008-strategy.md`, `cortex-completion-analysis.md`
+     - Purpose: Strategic and technical analysis documents
 
 #### Reports & Analysis
 - **Pattern**: `*-REPORT.md`, `*-ANALYSIS.md`, `*-COMPLETION.md`
-- **Destination**: `reports/` (consolidated by category)
+- **Destination**: `reports/` or `docs/` (see Documentation Files routing above for nested structure)
 - **Strategy**:
-  - Group by prefix (AR-013, AR-014, etc.)
-  - Create index files for related reports
-  - Keep separate if they cover distinct phases/topics
+  - Group reports by category (completion, analysis, decision)
+  - Review documents go to `docs/reviews/`
+  - Executive summaries go to `docs/executive/`
+  - Phase-related analysis goes to `docs/phases/`
 
 #### Configuration & Infrastructure
 - **Pattern**: `pytest.ini`, `requirements.txt`, `.env*`, config files
@@ -364,7 +387,7 @@ python scripts/run-cortex-vacuum.py rollback \
 ### Controlled Execution
 - ✅ Snapshots created before each phase
 - ✅ Rollback capability built-in
-- ✅ Reference updates verified before commit
+- ✅ Reference updates verified and logged
 
 ### Audit Trail
 - ✅ Every change logged with timestamp
