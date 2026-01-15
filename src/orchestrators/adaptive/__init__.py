@@ -30,6 +30,11 @@ from .caching_layer import (
     CacheEntry,
     CachingLayer,
 )
+from .performance_profiler import (
+    ExecutionMetrics,
+    PerformanceProfile,
+    PerformanceProfiler,
+)
 
 __all__ = [
     "ExecutionContext",
@@ -41,4 +46,7 @@ __all__ = [
     "AdaptiveExecutor",
     "CacheEntry",
     "CachingLayer",
+    "ExecutionMetrics",
+    "PerformanceProfile",
+    "PerformanceProfiler",
 ]
