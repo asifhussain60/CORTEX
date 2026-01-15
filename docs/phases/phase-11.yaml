@@ -68,12 +68,16 @@ acceptance_criteria:
   - ac_id: "HP-002-01"
     title: "Agent Execution Sandbox"
     description: "Isolated execution with rollback and dry-run capabilities"
-    status: "NOT_STARTED"
+    status: "COMPLETED"
+    notes: "Sandbox isolates side effects, captures state snapshots, enables rollback, and provides dry-run preview. 26/26 tests passing."
     acceptance_tests:
       - "Sandbox isolates side effects"
       - "Rollback restores pre-execution state"
       - "Dry-run mode available"
     git_checkpoint: "HP-002-01-sandbox"
+    completed_at: "2026-01-16T13:15:00Z"
+    test_count: 26
+    test_pass_rate: 1.0
     
   - ac_id: "HP-002-02"
     title: "Hallucination Detection & Recovery"
