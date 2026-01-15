@@ -109,12 +109,15 @@ acceptance_criteria:
   - ac_id: "HP-003-02"
     title: "Agent Confidence Scoring"
     description: "Score agent confidence in proposed actions"
-    status: "NOT_STARTED"
+    status: "COMPLETED"
     acceptance_tests:
       - "Confidence score calculated for actions"
       - "Low confidence triggers review"
       - "Scoring model documented"
-    git_checkpoint: "HP-003-02-confidence"
+    git_checkpoint: "8905be21d"
+    test_count: 24
+    test_pass_rate: 1.0
+    completed_at: "2026-01-16T14:45:00Z"
 
 metadata:
   author: "Asif Hussain"
