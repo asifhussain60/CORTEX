@@ -20,6 +20,14 @@ import logging
 from src.core.observability.metrics_aggregator import MetricsAggregator, MetricPoint
 
 
+# Import audit logger if available
+try:
+    from src.core.governance.audit_logger import get_audit_logger
+    _audit_logger = get_audit_logger()
+except (ImportError, Exception):
+    _audit_logger = None
+
+
 @dataclass
 class DashboardConfig:
     """Configuration for metrics dashboard.
