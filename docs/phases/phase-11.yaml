@@ -96,12 +96,15 @@ acceptance_criteria:
   - ac_id: "HP-003-01"
     title: "Vision Mutation Tracking"
     description: "Track vision mutations from PHASE-06 protocol"
-    status: "NOT_STARTED"
+    status: "COMPLETED"
     acceptance_tests:
       - "Mutations tracked with timestamp"
       - "Rollback available for mutations"
       - "Mutation history queryable"
-    git_checkpoint: "HP-003-01-mutation-tracking"
+    git_checkpoint: "0c9babe8b"
+    test_count: 23
+    test_pass_rate: 1.0
+    completed_at: "2026-01-16T14:30:00Z"
     
   - ac_id: "HP-003-02"
     title: "Agent Confidence Scoring"
