@@ -30,8 +30,8 @@ phase:
   estimated_days: 2.5
   
   ac_ids: 5
-  completed_ac_ids: 1
-  progress_percentage: 20.0
+  completed_ac_ids: 2
+  progress_percentage: 40.0
 
 acceptance_criteria:
   - ac_id: "OB-001-01"
@@ -44,6 +44,17 @@ acceptance_criteria:
       - "Context propagation working" ✓
     git_checkpoint: "09ee4a418"
     tests_passing: 21
+    
+  - ac_id: "OB-001-02"
+    title: "Metrics Dashboard"
+    description: "Dashboard visualizing CORTEX runtime metrics"
+    status: "COMPLETED"
+    acceptance_tests:
+      - "Dashboard displays key metrics" ✓
+      - "Real-time updates working" ✓
+      - "Historical data queryable" ✓
+    git_checkpoint: "f3ab51d33"
+    tests_passing: 19
     
   - ac_id: "OB-001-02"
     title: "Metrics Dashboard"
