@@ -54,8 +54,8 @@ phase:
   
   # Tracking
   ac_ids: 14  # Full coverage: IR-001 (4) + IR-002 (4) + IR-003 (4) + IR-004 (2)
-  completed_ac_ids: 9
-  progress_percentage: 64.3
+  completed_ac_ids: 10
+  progress_percentage: 71.4
   
   # CORTEX5.5 Reference
   origin:
@@ -637,84 +637,88 @@ acceptance_criteria:
     title: "LENS Context Builder"
     description: |
       Build holistic context from multiple intelligence sources and aggregate
-      findings into unified knowledge graph.
+      findings into unified knowledge graph representing the codebase state.
     
-    status: "NOT_STARTED"
+    status: "COMPLETED"
+    completed_at: "2026-01-15T17:00:00Z"
     
     acceptance_tests:
-      - "Master orchestrator intercepts all user requests"
-      - "Master delegates to Interaction orchestrator for context building"
-      - "Interaction builds holistic context from all intelligence sources"
-      - "Interaction generates intent reflection (canonicalized intent + challenges + recommendations)"
-      - "Reflection presented to user for confirmation/refinement"
-      - "Only after confirmation does Master proceed to execution"
-      - "Audit trail captures entire flow"
+      - "Aggregate findings from all four intelligence sources"
+      - "Build knowledge graph with nodes (functions, classes, APIs, tables)"
+      - "Create edges representing relationships (calls, imports, dependencies)"
+      - "Filter context by file, type, and other criteria"
+      - "Prioritize context by change frequency, complexity, risk"
+      - "Serialize/deserialize context to JSON for transmission"
+      - "Enrich context with computed trends, risk scores, impact analysis"
+      - "Query context for specific functions, relationships, expertise"
+      - "Handle edge cases: large contexts, malformed data, null findings"
     
     implementation_details: |
-      Protocol Flow:
-      ```
-      User Request
-           │
-           ▼
-      ┌─────────────────┐
-      │ MasterOrchestrator │
-      └────────┬────────┘
-               │ delegate
-               ▼
-      ┌─────────────────────┐
-      │ InteractionOrchestrator │
-      └────────┬────────────┘
-               │ build context
-               ▼
-      ┌─────────────────────────┐
-      │ HolisticContextBuilder  │
-      │  ├─ AST Intelligence    │
-      │  ├─ Git Intelligence    │
-      │  ├─ Comment Intelligence│
-      │  └─ Relationship Engine │
-      └────────┬────────────────┘
-               │ analyze
-               ▼
-      ┌─────────────────────────┐
-      │ IntentReflector         │
-      │  ├─ Canonicalize Intent │
-      │  ├─ Generate Challenges │
-      │  └─ Generate Recommendations │
-      └────────┬────────────────┘
-               │ return
-               ▼
-      ┌─────────────────────────┐
-      │ Intent Reflection Response │
-      │  ├─ Canonicalized Intent   │
-      │  ├─ Challenges (prioritized)│
-      │  ├─ Recommendations        │
-      │  └─ Confidence Score       │
-      └────────┬────────────────┘
-               │ present to user
-               ▼
-      User Confirmation / Refinement
-               │
-               ▼
-      Execution (if confirmed)
-      ```
+      Components:
+      - LENSContextBuilder: Main builder orchestrating aggregation
+      - LENSContext: Unified context from all sources
+      - KnowledgeGraph: Graph representation with nodes and edges
+      - ContextNode: Individual entity in graph (function, class, API, etc.)
+      - ContextEdge: Relationship between nodes (calls, imports, etc.)
       
-      Files to Create:
-      - src/core/intent/intent_reflection_protocol.py
-      - src/core/intent/holistic_context_builder.py
-      - src/core/intent/intent_reflector.py
-      - src/orchestrators/interaction_orchestrator.py (update)
-      - src/orchestrators/master_orchestrator.py (update)
+      Aggregation Pipeline:
+      1. Add findings from AST Intelligence module
+      2. Add findings from Git History Analyzer module
+      3. Add findings from Comment Analyzer module
+      4. Add findings from Relationship Traversal Engine
+      5. Build knowledge graph from aggregated findings
+      6. Apply filtering criteria if needed
+      7. Prioritize based on strategy (frequency, complexity, risk)
+      8. Enrich with computed data (trends, scores, analysis)
+      9. Serialize for protocol transmission or storage
+      
+      Knowledge Graph Structure:
+      - Nodes: Functions, classes, modules, API endpoints, DB models, patterns
+      - Edges: Call relationships, inheritance, imports, dependencies
+      - Metadata: Source of discovery, confidence, timestamps
+      
+      Filtering Capabilities:
+      - By file: Restrict to specific source files
+      - By type: Focus on specific entity types
+      - By marker: Find tech debt, deprecated code, etc.
+      
+      Prioritization Strategies:
+      - CHANGE_FREQUENCY: Sort by how often changed
+      - COMPLEXITY: Sort by cyclomatic complexity
+      - EXPERTISE_CONCENTRATION: Sort by author concentration
+      - RISK_LEVEL: Sort by computed risk score
+      - RECENCY: Sort by recent modifications
+      
+      Enrichment Types:
+      - trends: Time-series analysis from git
+      - risk_scores: Computed risk ratings
+      - impact_analysis: Change impact assessment
+      - tech_debt_analysis: Debt item summary
+      
+      Query Types Supported:
+      - function_by_name: Find specific functions
+      - functions_in_file: All functions in a file
+      - call_graph: Relationship analysis
+      - expertise_by_file: Author expertise map
+      
+      Files Created:
+      - src/core/intent/lens_context_builder.py
+      - tests/unit/core/intent/test_lens_context_builder.py
     
     verification_method: |
-      Tests in tests/integration/test_intent_reflection_protocol.py:
-      - TestProtocolFlow: End-to-end flow
-      - TestMasterDelegation: Delegation to Interaction
-      - TestContextBuilding: Intelligence aggregation
-      - TestReflectionGeneration: Intent + challenges + recommendations
-      - TestUserConfirmation: Confirmation gate
-      - TestAuditTrail: Complete logging
+      Tests in tests/unit/core/intent/test_lens_context_builder.py:
+      - TestContextAggregation (4 tests): Source aggregation
+      - TestKnowledgeGraphConstruction (5 tests): Graph building
+      - TestContextFilteringAndPrioritization (5 tests): Filtering/sorting
+      - TestContextSerialization (4 tests): JSON round-trip
+      - TestContextEnrichment (4 tests): Computed data
+      - TestContextQuery (4 tests): Data retrieval
+      - TestEdgeCasesAndErrors (6 tests): Error handling
+      - TestIntegrationWithReflectionProtocol (4 tests): Integration
+      - TestPerformanceOptimization (3 tests): Performance
+      TOTAL: 38/38 PASSING
     
-    git_checkpoint: "IR-003-01-intent-reflection-protocol"
+    git_checkpoint: "9becfdc40"
 
   # ---------------------------------------------------------------------------
   # IR-004: Knowledge Graph & Comprehension Loop (CORTEX LENS)
