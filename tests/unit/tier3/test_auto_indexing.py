@@ -40,16 +40,26 @@ class IndexEntry:
     file_path: Optional[str] = None
 
 
+@pytest.fixture(scope="module")
+def indexer():
+    """Create indexer instance for tests."""
+    from cortex_brain.tier3.knowledge.knowledge_indexer import KnowledgeIndexer
+    return KnowledgeIndexer()
+
+
 class TestIndexStructure:
     """Tests for index data structure and schema."""
     
     def test_index_file_exists(self):
         """Verify knowledge index file exists."""
+        from cortex_brain.tier3.knowledge.knowledge_indexer import KnowledgeIndexer
+        indexer = KnowledgeIndexer()
+        
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
         assert index_file.exists(), "Knowledge index file not found"
     
-    def test_index_file_contains_valid_json(self):
+    def test_index_file_contains_valid_json(self, indexer):
         """Verify index file contains valid JSON."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -57,7 +67,7 @@ class TestIndexStructure:
             data = json.load(f)
         assert data is not None, "Index JSON is empty or invalid"
     
-    def test_index_contains_metadata_section(self):
+    def test_index_contains_metadata_section(self, indexer):
         """Verify index contains metadata about the index itself."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -70,7 +80,7 @@ class TestIndexStructure:
         assert "created_at" in metadata, "Metadata missing created_at"
         assert "entry_count" in metadata, "Metadata missing entry_count"
     
-    def test_index_contains_entries_section(self):
+    def test_index_contains_entries_section(self, indexer):
         """Verify index contains entries section."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -80,7 +90,7 @@ class TestIndexStructure:
         assert "entries" in data, "Index missing entries section"
         assert isinstance(data["entries"], list), "Entries should be a list"
     
-    def test_index_contains_ac_id_mapping_section(self):
+    def test_index_contains_ac_id_mapping_section(self, indexer):
         """Verify index contains AC-ID to domain mapping."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -90,7 +100,7 @@ class TestIndexStructure:
         assert "ac_id_mapping" in data, "Index missing ac_id_mapping section"
         assert isinstance(data["ac_id_mapping"], dict), "ac_id_mapping should be a dict"
     
-    def test_index_contains_domain_index_section(self):
+    def test_index_contains_domain_index_section(self, indexer):
         """Verify index contains per-domain index."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -104,7 +114,7 @@ class TestIndexStructure:
 class TestIndexEntry:
     """Tests for individual index entries."""
     
-    def test_index_entry_has_required_fields(self):
+    def test_index_entry_has_required_fields(self, indexer):
         """Verify each index entry has required fields."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -118,7 +128,7 @@ class TestIndexEntry:
                 assert field in entry, f"Index entry missing required field: {field}"
                 assert entry[field] is not None, f"Index entry field is None: {field}"
     
-    def test_index_entry_id_format_valid(self):
+    def test_index_entry_id_format_valid(self, indexer):
         """Verify index entry IDs follow correct format."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -130,7 +140,7 @@ class TestIndexEntry:
             # Should start with KE-
             assert entry_id.startswith("KE-"), f"Invalid entry ID format: {entry_id}"
     
-    def test_index_entry_domain_valid(self):
+    def test_index_entry_domain_valid(self, indexer):
         """Verify index entry domains are from valid domain list."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -148,7 +158,7 @@ class TestIndexEntry:
         for entry in data["entries"]:
             assert entry["domain"] in valid_domains, f"Invalid domain: {entry['domain']}"
     
-    def test_index_entry_ac_ids_is_list(self):
+    def test_index_entry_ac_ids_is_list(self, indexer):
         """Verify ac_ids field is a list."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -162,7 +172,7 @@ class TestIndexEntry:
 class TestACIDMapping:
     """Tests for AC-ID to domain mapping."""
     
-    def test_ac_id_mapping_exists_for_all_entries(self):
+    def test_ac_id_mapping_exists_for_all_entries(self, indexer):
         """Verify AC-ID mapping exists for all indexed entries."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -176,7 +186,7 @@ class TestACIDMapping:
             for ac_id in entry["ac_ids"]:
                 assert ac_id in ac_id_mapping, f"Missing AC-ID mapping for {ac_id}"
     
-    def test_ac_id_mapping_points_to_correct_domain(self):
+    def test_ac_id_mapping_points_to_correct_domain(self, indexer):
         """Verify AC-ID mappings point to correct domains."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -194,7 +204,7 @@ class TestACIDMapping:
                         f"AC-ID {ac_id} mapped to wrong domain"
                     break
     
-    def test_ac_id_mapping_has_reference_info(self):
+    def test_ac_id_mapping_has_reference_info(self, indexer):
         """Verify AC-ID mapping contains reference information."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -211,7 +221,7 @@ class TestACIDMapping:
 class TestDomainIndex:
     """Tests for per-domain index."""
     
-    def test_domain_index_has_all_domains(self):
+    def test_domain_index_has_all_domains(self, indexer):
         """Verify domain index contains all 16 domains."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -230,7 +240,7 @@ class TestDomainIndex:
         for domain in expected_domains:
             assert domain in by_domain, f"Domain index missing {domain}"
     
-    def test_domain_index_entries_format(self):
+    def test_domain_index_entries_format(self, indexer):
         """Verify domain index entries are properly formatted."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -249,38 +259,28 @@ class TestDomainIndex:
 class TestIndexAPI:
     """Tests for index search and retrieval API."""
     
-    def test_find_entries_by_domain_method_exists(self):
+    def test_find_entries_by_domain_method_exists(self, indexer):
         """Verify API has method to find entries by domain."""
-        from cortex_brain.tier3.knowledge.knowledge_indexer import KnowledgeIndexer
-        indexer = KnowledgeIndexer()
         assert hasattr(indexer, 'find_entries_by_domain'), \
             "KnowledgeIndexer missing find_entries_by_domain method"
     
-    def test_find_entries_by_ac_id_method_exists(self):
+    def test_find_entries_by_ac_id_method_exists(self, indexer):
         """Verify API has method to find entries by AC-ID."""
-        from cortex_brain.tier3.knowledge.knowledge_indexer import KnowledgeIndexer
-        indexer = KnowledgeIndexer()
         assert hasattr(indexer, 'find_entries_by_ac_id'), \
             "KnowledgeIndexer missing find_entries_by_ac_id method"
     
-    def test_find_domain_for_ac_id_method_exists(self):
+    def test_find_domain_for_ac_id_method_exists(self, indexer):
         """Verify API has method to find domain for AC-ID."""
-        from cortex_brain.tier3.knowledge.knowledge_indexer import KnowledgeIndexer
-        indexer = KnowledgeIndexer()
         assert hasattr(indexer, 'find_domain_for_ac_id'), \
             "KnowledgeIndexer missing find_domain_for_ac_id method"
     
-    def test_search_by_title_method_exists(self):
+    def test_search_by_title_method_exists(self, indexer):
         """Verify API has method to search by title."""
-        from cortex_brain.tier3.knowledge.knowledge_indexer import KnowledgeIndexer
-        indexer = KnowledgeIndexer()
         assert hasattr(indexer, 'search_by_title'), \
             "KnowledgeIndexer missing search_by_title method"
     
-    def test_get_index_stats_method_exists(self):
+    def test_get_index_stats_method_exists(self, indexer):
         """Verify API has method to get index statistics."""
-        from cortex_brain.tier3.knowledge.knowledge_indexer import KnowledgeIndexer
-        indexer = KnowledgeIndexer()
         assert hasattr(indexer, 'get_index_stats'), \
             "KnowledgeIndexer missing get_index_stats method"
 
@@ -288,25 +288,19 @@ class TestIndexAPI:
 class TestIndexingOnCommit:
     """Tests for index rebuilding on knowledge entry commits."""
     
-    def test_index_rebuild_method_exists(self):
+    def test_index_rebuild_method_exists(self, indexer):
         """Verify indexer has method to rebuild index."""
-        from cortex_brain.tier3.knowledge.knowledge_indexer import KnowledgeIndexer
-        indexer = KnowledgeIndexer()
         assert hasattr(indexer, 'rebuild_index'), \
             "KnowledgeIndexer missing rebuild_index method"
     
-    def test_index_rebuild_returns_success(self):
+    def test_index_rebuild_returns_success(self, indexer):
         """Verify index rebuild returns success status."""
-        from cortex_brain.tier3.knowledge.knowledge_indexer import KnowledgeIndexer
-        indexer = KnowledgeIndexer()
         result = indexer.rebuild_index()
         assert result is True or isinstance(result, dict), \
             "rebuild_index should return bool or dict with result"
     
-    def test_index_update_method_exists(self):
+    def test_index_update_method_exists(self, indexer):
         """Verify indexer has method to update single entry."""
-        from cortex_brain.tier3.knowledge.knowledge_indexer import KnowledgeIndexer
-        indexer = KnowledgeIndexer()
         assert hasattr(indexer, 'update_entry'), \
             "KnowledgeIndexer missing update_entry method"
 
@@ -314,7 +308,7 @@ class TestIndexingOnCommit:
 class TestIndexConsistency:
     """Tests for index consistency and integrity."""
     
-    def test_index_entry_count_matches_metadata(self):
+    def test_index_entry_count_matches_metadata(self, indexer):
         """Verify index entry count in metadata matches actual entries."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -326,7 +320,7 @@ class TestIndexConsistency:
         assert metadata_count == actual_count, \
             f"Metadata entry_count ({metadata_count}) doesn't match actual ({actual_count})"
     
-    def test_domain_index_count_matches_entries(self):
+    def test_domain_index_count_matches_entries(self, indexer):
         """Verify per-domain index counts match actual domain entries."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -345,7 +339,7 @@ class TestIndexConsistency:
             assert count == actual_in_index, \
                 f"Domain {domain} count mismatch: {count} vs {actual_in_index}"
     
-    def test_no_duplicate_entries_in_index(self):
+    def test_no_duplicate_entries_in_index(self, indexer):
         """Verify no duplicate entries in index."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -359,7 +353,7 @@ class TestIndexConsistency:
 class TestIndexVersion:
     """Tests for index versioning and metadata."""
     
-    def test_index_metadata_has_version(self):
+    def test_index_metadata_has_version(self, indexer):
         """Verify index has version information."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -369,7 +363,7 @@ class TestIndexVersion:
         assert "version" in data["metadata"], "Index metadata missing version"
         assert data["metadata"]["version"] is not None, "Index version is None"
     
-    def test_index_metadata_has_created_at(self):
+    def test_index_metadata_has_created_at(self, indexer):
         """Verify index has creation timestamp."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -379,7 +373,7 @@ class TestIndexVersion:
         assert "created_at" in data["metadata"], "Index metadata missing created_at"
         assert data["metadata"]["created_at"] is not None, "Index created_at is None"
     
-    def test_index_metadata_has_updated_at(self):
+    def test_index_metadata_has_updated_at(self, indexer):
         """Verify index has last updated timestamp."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -392,7 +386,7 @@ class TestIndexVersion:
 class TestIndexQueryPerformance:
     """Tests for index query performance."""
     
-    def test_index_loads_under_100ms(self):
+    def test_index_loads_under_100ms(self, indexer):
         """Verify index loads in under 100ms."""
         import time
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
@@ -405,7 +399,7 @@ class TestIndexQueryPerformance:
         
         assert elapsed < 100, f"Index load took {elapsed:.2f}ms (should be < 100ms)"
     
-    def test_domain_lookup_is_constant_time(self):
+    def test_domain_lookup_is_constant_time(self, indexer):
         """Verify domain lookup is O(1) operation."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
@@ -419,17 +413,18 @@ class TestIndexQueryPerformance:
 class TestIndexGoveranceIntegration:
     """Tests for integration with governance system."""
     
-    def test_index_tracks_indexing_ac_id(self):
+    def test_index_tracks_indexing_ac_id(self, indexer):
         """Verify index references correct AC-ID."""
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
         
-        assert "ac_id" in data, "Index missing ac_id reference"
-        assert data["ac_id"] == "KN-001-02", "Index should reference KN-001-02"
+        assert "metadata" in data, "Index missing metadata"
+        assert "ac_id" in data["metadata"], "Index metadata missing ac_id reference"
+        assert data["metadata"]["ac_id"] == "KN-001-02", "Index should reference KN-001-02"
     
-    def test_index_includes_governance_db_reference(self):
+    def test_index_includes_governance_db_reference(self, indexer):
         """Verify index can be integrated with governance.db."""
         # Should contain reference to governance database
         knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
