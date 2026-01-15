@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-15T05:09:41.436282",
+  "timestamp": "2026-01-15T05:15:07.462315",
   "plans": [
     {
       "source_path": "cortex-brain/tier2/response-templates/response-templates.yaml",
@@ -40,9 +40,99 @@
           "new_reference": ""
         },
         {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "line_number": 37,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "line_number": 46,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "line_number": 55,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "line_number": 64,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
+          "line_number": 73,
+          "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
+          "new_reference": ""
+        },
+        {
           "source_file": "cortex-brain/vacuum/reference-map.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
-          "line_number": 4895,
+          "line_number": 3176,
+          "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "line_number": 3212,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "line_number": 4967,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "line_number": 10592,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "line_number": 14579,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
+          "line_number": 16757,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
@@ -51,7 +141,52 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
-          "line_number": 5551,
+          "line_number": 3601,
+          "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "line_number": 3637,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "line_number": 5392,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "line_number": 11017,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "line_number": 15004,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
+          "line_number": 17182,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
@@ -60,7 +195,52 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
-          "line_number": 16104,
+          "line_number": 28021,
+          "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "line_number": 28030,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "line_number": 28039,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "line_number": 28048,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "line_number": 28057,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
+          "line_number": 28066,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-DETAILED-MATRIX.md)\",",
@@ -108,7 +288,7 @@
         {
           "source_file": "cortex-brain/vacuum/migration-plan.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
-          "line_number": 49,
+          "line_number": 94,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
@@ -117,7 +297,97 @@
         {
           "source_file": "cortex-brain/vacuum/migration-plan.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
-          "line_number": 58,
+          "line_number": 103,
+          "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "line_number": 112,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 121,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "line_number": 130,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 139,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "line_number": 148,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 157,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "line_number": 166,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 175,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
+          "line_number": 184,
+          "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 193,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
@@ -126,7 +396,7 @@
         {
           "source_file": "cortex-brain/vacuum/reference-map.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
-          "line_number": 4904,
+          "line_number": 3185,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
@@ -135,7 +405,97 @@
         {
           "source_file": "cortex-brain/vacuum/reference-map.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
-          "line_number": 4913,
+          "line_number": 3194,
+          "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "line_number": 3221,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 3230,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "line_number": 4976,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 4985,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "line_number": 10601,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 10610,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "line_number": 14588,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 14597,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
+          "line_number": 16766,
+          "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 16775,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
@@ -144,7 +504,7 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
-          "line_number": 5560,
+          "line_number": 3610,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
@@ -153,7 +513,97 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
-          "line_number": 5569,
+          "line_number": 3619,
+          "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "line_number": 3646,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 3655,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "line_number": 5401,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 5410,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "line_number": 11026,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 11035,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "line_number": 15013,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 15022,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
+          "line_number": 17191,
+          "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 17200,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
@@ -162,7 +612,7 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
-          "line_number": 16125,
+          "line_number": 28087,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
@@ -171,7 +621,97 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
-          "line_number": 16134,
+          "line_number": 28096,
+          "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "line_number": 28105,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 28114,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "line_number": 28123,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 28132,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "line_number": 28141,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 28150,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "line_number": 28159,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 28168,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
+          "line_number": 28177,
+          "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md)\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
+          "line_number": 28186,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1), lines 1 to 150\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-EXECUTIVE-SUMMARY.md#1-1),",
@@ -219,7 +759,52 @@
         {
           "source_file": "cortex-brain/vacuum/migration-plan.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
-          "line_number": 79,
+          "line_number": 214,
+          "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "line_number": 223,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "line_number": 232,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "line_number": 241,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "line_number": 250,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
+          "line_number": 259,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
@@ -228,7 +813,52 @@
         {
           "source_file": "cortex-brain/vacuum/reference-map.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
-          "line_number": 4886,
+          "line_number": 3167,
+          "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "line_number": 3239,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "line_number": 4958,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "line_number": 10583,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "line_number": 14606,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
+          "line_number": 16748,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
@@ -237,7 +867,52 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
-          "line_number": 5542,
+          "line_number": 3592,
+          "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "line_number": 3664,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "line_number": 5383,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "line_number": 11008,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "line_number": 15031,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
+          "line_number": 17173,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
@@ -246,7 +921,52 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
-          "line_number": 16155,
+          "line_number": 28207,
+          "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "line_number": 28216,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "line_number": 28225,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "line_number": 28234,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "line_number": 28243,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
+          "line_number": 28252,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/.workspace/PHASE-1-4-VERIFICATION-REPORT.md)\",",
@@ -581,8 +1301,44 @@
       "references_to_update": [
         {
           "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "line_number": 586,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "line_number": 595,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "line_number": 604,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "line_number": 613,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\",",
-          "line_number": 406,
+          "line_number": 622,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\",",
@@ -590,8 +1346,44 @@
         },
         {
           "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "line_number": 3248,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "line_number": 5489,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "line_number": 11114,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "line_number": 14615,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\",",
-          "line_number": 5606,
+          "line_number": 17468,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\",",
@@ -599,8 +1391,44 @@
         },
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "line_number": 3673,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "line_number": 5914,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "line_number": 11539,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "line_number": 15040,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\",",
-          "line_number": 6262,
+          "line_number": 17893,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\",",
@@ -608,8 +1436,44 @@
         },
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "line_number": 28579,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "line_number": 28588,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "line_number": 28597,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "line_number": 28606,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\",",
-          "line_number": 16482,
+          "line_number": 28615,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/.github/docs/ar-012-completion.md)\",",
@@ -740,8 +1604,116 @@
       "references_to_update": [
         {
           "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "line_number": 745,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 754,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 763,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "line_number": 772,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 781,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 790,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "line_number": 799,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 808,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 817,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "line_number": 826,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 835,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 844,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\",",
-          "line_number": 529,
+          "line_number": 853,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\",",
@@ -750,7 +1722,7 @@
         {
           "source_file": "cortex-brain/vacuum/migration-plan.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
-          "line_number": 538,
+          "line_number": 862,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
@@ -759,7 +1731,7 @@
         {
           "source_file": "cortex-brain/vacuum/migration-plan.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
-          "line_number": 547,
+          "line_number": 871,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
@@ -767,8 +1739,116 @@
         },
         {
           "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "line_number": 3257,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 3266,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 3275,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "line_number": 6011,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 6074,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 6218,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "line_number": 11636,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 11699,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 11843,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "line_number": 14624,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 14633,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 14642,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\",",
-          "line_number": 6128,
+          "line_number": 17990,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\",",
@@ -777,7 +1857,7 @@
         {
           "source_file": "cortex-brain/vacuum/reference-map.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
-          "line_number": 6263,
+          "line_number": 18125,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
@@ -786,7 +1866,7 @@
         {
           "source_file": "cortex-brain/vacuum/reference-map.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
-          "line_number": 6407,
+          "line_number": 18269,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
@@ -794,8 +1874,116 @@
         },
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "line_number": 3682,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 3691,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 3700,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "line_number": 6436,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 6499,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 6643,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "line_number": 12061,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 12124,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 12268,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "line_number": 15049,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 15058,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 15067,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\",",
-          "line_number": 6784,
+          "line_number": 18415,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\",",
@@ -804,7 +1992,7 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
-          "line_number": 6919,
+          "line_number": 18550,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
@@ -813,7 +2001,7 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
-          "line_number": 7063,
+          "line_number": 18694,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
@@ -821,8 +2009,116 @@
         },
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "line_number": 28738,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 28747,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 28756,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "line_number": 28765,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 28774,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 28783,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "line_number": 28792,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 28801,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 28810,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "line_number": 28819,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "line_number": 28828,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "line_number": 28837,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\",",
-          "line_number": 16605,
+          "line_number": 28846,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md)\",",
@@ -831,7 +2127,7 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
-          "line_number": 16614,
+          "line_number": 28855,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60), lines 60 to 100\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#60-60),",
@@ -840,7 +2136,7 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
-          "line_number": 16623,
+          "line_number": 28864,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1), lines 1 to 100\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/AR-015-HANDOFF.md#1-1),",
@@ -910,7 +2206,79 @@
         {
           "source_file": "cortex-brain/vacuum/migration-plan.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
-          "line_number": 579,
+          "line_number": 914,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 923,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 932,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 941,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 950,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 959,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 968,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 977,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 986,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
@@ -919,7 +2287,7 @@
         {
           "source_file": "cortex-brain/vacuum/migration-plan.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
-          "line_number": 588,
+          "line_number": 995,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
@@ -928,7 +2296,79 @@
         {
           "source_file": "cortex-brain/vacuum/reference-map.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
-          "line_number": 6362,
+          "line_number": 3284,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 3293,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 6173,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 6551,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 11798,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 12176,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 14651,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 14660,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 18224,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
@@ -937,7 +2377,7 @@
         {
           "source_file": "cortex-brain/vacuum/reference-map.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
-          "line_number": 6740,
+          "line_number": 18602,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
@@ -946,7 +2386,79 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
-          "line_number": 7018,
+          "line_number": 3709,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 3718,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 6598,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 6976,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 12223,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 12601,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 15076,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 15085,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 18649,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
@@ -955,7 +2467,7 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
-          "line_number": 7396,
+          "line_number": 19027,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
@@ -964,7 +2476,79 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
-          "line_number": 16655,
+          "line_number": 28907,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 28916,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 28925,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 28934,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 28943,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 28952,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 28961,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 28970,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
+          "line_number": 28979,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
@@ -973,7 +2557,7 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
-          "line_number": 16664,
+          "line_number": 28988,
           "line_content": "\"line_content\": \"Read [](file:///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1), lines 1 to 50\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md#1-1),",
@@ -1055,8 +2639,44 @@
       "references_to_update": [
         {
           "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "line_number": 1060,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "line_number": 1069,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "line_number": 1078,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "line_number": 1087,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\",",
-          "line_number": 653,
+          "line_number": 1096,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\",",
@@ -1064,8 +2684,44 @@
         },
         {
           "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "line_number": 3302,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "line_number": 6578,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "line_number": 12203,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "line_number": 14669,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\",",
-          "line_number": 6767,
+          "line_number": 18629,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\",",
@@ -1073,8 +2729,44 @@
         },
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "line_number": 3727,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "line_number": 7003,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "line_number": 12628,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "line_number": 15094,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\",",
-          "line_number": 7423,
+          "line_number": 19054,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\",",
@@ -1082,8 +2774,44 @@
         },
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "line_number": 29053,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "line_number": 29062,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "line_number": 29071,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "line_number": 29080,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\",",
-          "line_number": 16729,
+          "line_number": 29089,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-ADVANCED-PLAN.md)\",",
@@ -1112,8 +2840,44 @@
       "references_to_update": [
         {
           "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "line_number": 1117,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "line_number": 1126,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "line_number": 1135,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "line_number": 1144,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\",",
-          "line_number": 674,
+          "line_number": 1153,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\",",
@@ -1121,8 +2885,44 @@
         },
         {
           "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "line_number": 3311,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "line_number": 6506,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "line_number": 12131,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "line_number": 14678,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\",",
-          "line_number": 6695,
+          "line_number": 18557,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\",",
@@ -1130,8 +2930,44 @@
         },
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "line_number": 3736,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "line_number": 6931,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "line_number": 12556,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "line_number": 15103,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\",",
-          "line_number": 7351,
+          "line_number": 18982,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\",",
@@ -1139,8 +2975,44 @@
         },
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "line_number": 29110,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "line_number": 29119,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "line_number": 29128,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "line_number": 29137,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\",",
-          "line_number": 16750,
+          "line_number": 29146,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/PHASE-VISION-CORE-COMPLETION.md)\",",
@@ -1180,8 +3052,44 @@
       "references_to_update": [
         {
           "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "line_number": 1185,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "line_number": 1194,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "line_number": 1203,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "line_number": 1212,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\",",
-          "line_number": 706,
+          "line_number": 1221,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\",",
@@ -1189,8 +3097,44 @@
         },
         {
           "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "line_number": 3320,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "line_number": 5777,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "line_number": 11402,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "line_number": 14687,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\",",
-          "line_number": 5894,
+          "line_number": 17756,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\",",
@@ -1198,8 +3142,44 @@
         },
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "line_number": 3745,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "line_number": 6202,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "line_number": 11827,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "line_number": 15112,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\",",
-          "line_number": 6550,
+          "line_number": 18181,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\",",
@@ -1207,8 +3187,44 @@
         },
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "line_number": 29178,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "line_number": 29187,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "line_number": 29196,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "line_number": 29205,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\",",
-          "line_number": 16782,
+          "line_number": 29214,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/ar-013-trilogy-completion-report.md)\",",
@@ -1748,7 +3764,52 @@
         {
           "source_file": "cortex-brain/vacuum/migration-plan.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
-          "line_number": 1219,
+          "line_number": 1743,
+          "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "line_number": 1752,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "line_number": 1761,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "line_number": 1770,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "line_number": 1779,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/migration-plan.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
+          "line_number": 1788,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
@@ -1757,7 +3818,52 @@
         {
           "source_file": "cortex-brain/vacuum/reference-map.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
-          "line_number": 4724,
+          "line_number": 3005,
+          "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "line_number": 3329,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "line_number": 4877,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "line_number": 10502,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "line_number": 14696,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/reference-map.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
+          "line_number": 16586,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
@@ -1766,7 +3872,52 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
-          "line_number": 5380,
+          "line_number": 3430,
+          "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "line_number": 3754,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "line_number": 5302,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "line_number": 10927,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "line_number": 15121,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
+          "line_number": 17011,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
@@ -1775,7 +3926,52 @@
         {
           "source_file": "cortex-brain/vacuum/analysis-report.json",
           "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
-          "line_number": 17295,
+          "line_number": 29736,
+          "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "line_number": 29745,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "line_number": 29754,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "line_number": 29763,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "line_number": 29772,
+          "line_content": "\"line_content\": \"\\\"line_content\\\": \\\"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "ref_type": "yaml",
+          "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\\\",\",",
+          "new_reference": ""
+        },
+        {
+          "source_file": "cortex-brain/vacuum/analysis-report.json",
+          "target_file": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
+          "line_number": 29781,
           "line_content": "\"line_content\": \"Created [](file:///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
           "ref_type": "yaml",
           "old_reference": "///Users/asifhussain/PROJECTS/CORTEX/verify_phases.py)\",",
