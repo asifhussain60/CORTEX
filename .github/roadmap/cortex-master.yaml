@@ -909,14 +909,25 @@ phase_tracker:
       ✓ NO-004-02: WebSocket Audit Streaming - Real-time audit updates
       ✓ NO-004-03: Plan Hub - Unified phase viewer
       
-      Tech Stack (Simplified):
-      - Frontend: HTML5 + vanilla JavaScript ES6+ (no build, no npm)
+      Tech Stack (Intentionally Simple & Lightweight):
+      - Frontend: HTML5 + Vanilla JavaScript or jQuery (NO TypeScript)
       - Styling: Tailwind CSS via CDN + custom glassmorphism utilities
       - Visualization: D3.js + Chart.js (loaded via CDN)
-      - Animations: CSS + vanilla JS (neural pulse effects)
-      - Backend: FastAPI (Python 3.11+)
-      - Real-time: WebSocket for live audit streaming
+      - Icons: Heroicons (loaded via CDN)
+      - Animations: CSS animations + jQuery for interactions
+      - Backend: Direct REST API calls to Python governance tools
+      - Build Process: NONE (pure static files - no compilation)
+      - Dependencies: ZERO npm packages (CDN-only approach)
       - Database: SQLite (read-only access to governance.db)
+      
+      Design Philosophy:
+      - Sophisticated UI (glassmorphism) with minimal footprint
+      - No build tools or compilation overhead
+      - No TypeScript complexity
+      - No npm/node_modules
+      - Zero framework abstraction layers
+      - Pure static HTML/CSS/JS deployable anywhere
+      - Faster development iteration and easier debugging
       
       Test Results:
       - Unit tests: 19/19 PASSING ✓
@@ -961,12 +972,16 @@ phase_tracker:
       NO-003 (3 ACs): Orchestrator Constellation - Live status, dependency graph, health indicators
       NO-004 (3 ACs): Portal Infrastructure - FastAPI backend, WebSocket streaming, plan hub
       
-      TECH STACK (Glassmorphism v4.1.0 compliant):
-      - Frontend: React 18 + TypeScript + Tailwind CSS
-      - State: Zustand (lightweight, CORTEX-philosophy aligned)
-      - Visualization: Framer Motion + D3.js + Recharts
-      - Backend: FastAPI (Python, reads existing governance.db)
-      - Real-time: WebSocket for live audit streaming
+      TECH STACK (Lightweight & Sophisticated):
+      - Frontend: HTML5 + Vanilla JavaScript or jQuery (NO TypeScript)
+      - Styling: Tailwind CSS via CDN + custom glassmorphism utilities
+      - Visualization: D3.js + Chart.js (via CDN)
+      - Icons: Heroicons (via CDN)
+      - Animations: CSS + jQuery for interactions
+      - Backend: Direct REST API to Python governance tools
+      - Build Process: NONE (pure static files)
+      - Dependencies: ZERO npm packages (CDN-only)
+      - Database: SQLite (read-only, governance.db)
       
       DATA SOURCES (All exist TODAY - no dependencies):
       - governance.db: Audit logs, hash chain, phase status

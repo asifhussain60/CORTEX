@@ -153,15 +153,32 @@ tech_stack:
       - "sky-500"
       - "lime-500"
   
+  tech_stack:
+    frontend:
+      html: "HTML5 (semantic structure)"
+      css: "Tailwind CSS (CDN - no build process)"
+      javascript: "Vanilla JavaScript + jQuery (for DOM manipulation)"
+      visualization: "D3.js (CDN), Chart.js (CDN)"
+      icons: "Heroicons (CDN)"
+      animations: "CSS animations + jQuery for interactions"
+    backend_integration: "Direct REST API calls to Python backend"
+    build_process: "NONE - pure static files"
+    dependencies: "Zero npm dependencies (CDN only)"
+  
   rationale: |
-    Simplified tech stack removes TypeScript/React/Node.js dependencies:
-    - Zero build process required
-    - Faster development (no compilation)
-    - Easier debugging (vanilla JS)
-    - No npm/node_modules overhead
-    - Pure HTML + Tailwind CDN + vanilla JS
-    - Maintains glassmorphism design language
-    - D3.js and Chart.js loaded via CDN
+    Intentionally simple tech stack for maximum maintainability:
+    - NO TypeScript (complexity overhead)
+    - NO build process or compilation
+    - NO npm/node_modules
+    - NO framework abstraction layers (React/Vue/Angular)
+    - Pure HTML5 + Tailwind CSS (via CDN)
+    - Vanilla JavaScript or jQuery for interactivity
+    - All external libraries via CDN (D3, Chart.js, etc.)
+    - Zero footprint increase
+    - Faster development iteration
+    - Easier debugging (pure JavaScript)
+    - Glassmorphism UI via Tailwind + custom CSS
+    - Static files can be deployed anywhere
 
 # =============================================================================
 # ACCEPTANCE CRITERIA
