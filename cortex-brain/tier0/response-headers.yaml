@@ -1,0 +1,194 @@
+# =============================================================================
+# CORTEX RESPONSE HEADERS CONFIGURATION
+# =============================================================================
+# Single Source of Truth for all response headers across all domains
+# Location: cortex-brain/tier0/response-headers.yaml
+# Status: Version 1.0 - Production Ready
+# Last Updated: 2026-01-15
+# =============================================================================
+# MODIFICATION IMPACT: Changes here affect ALL responses globally
+# DO NOT duplicate header information in individual templates
+# =============================================================================
+
+metadata:
+  version: "1.0"
+  created_at: "2026-01-15T00:00:00Z"
+  updated_at: "2026-01-15T00:00:00Z"
+  description: "Global response header configuration for CORTEX system"
+  tier: 0  # Tier 0 = immutable, requires governance approval to modify
+  immutable: true
+  global_scope: true  # Single source of truth for all domains
+
+# =============================================================================
+# AUTHOR & ATTRIBUTION
+# =============================================================================
+
+author:
+  name: "Asif Hussain"
+  github_handle: "asifhussain60"
+  repository: "https://github.com/asifhussain60/CORTEX"
+  github_pages: "https://github.com/asifhussain60/CORTEX"
+
+# =============================================================================
+# COPYRIGHT & LICENSING
+# =============================================================================
+
+copyright:
+  start_year: 2025
+  end_year: 2026
+  holder: "Asif Hussain"
+  notice: "Copyright © {start_year}-{end_year} {holder}. All rights reserved."
+  license: "Source-Available"
+  license_url: "https://github.com/asifhussain60/CORTEX/blob/main/LICENSE"
+
+# =============================================================================
+# HEADER TEMPLATE (Appears at START of every response)
+# =============================================================================
+
+header:
+  enabled: true
+  position: "before_content"  # before_content | after_content | none
+  description: "CORTEX-4.0 style operational header"
+  
+  # Template string with variable placeholders
+  # Variables: {operation}, {author}, {phase}, {orchestrator}, {timestamp}
+  template: |
+    ## 🧠 CORTEX {operation}
+    **Author:** {author} | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+
+  # Formatting rules
+  formatting:
+    section_separator: "---"
+    separator_before_header: false  # Don't put --- before header
+    separator_after_header: true    # Put --- after header
+    blank_line_after_header: true   # Blank line between header and copyright
+    blank_line_after_copyright: true  # Blank line between copyright and content
+
+# =============================================================================
+# COPYRIGHT SECTION (Appears immediately after header)
+# =============================================================================
+
+copyright_section:
+  enabled: true
+  position: "after_header"  # Immediately follows header
+  description: "Mandatory copyright notice"
+  
+  # Template string for copyright display
+  template: |
+    **{notice}**
+  
+  # Applied after template rendering for brand consistency
+  formatting:
+    separator_before: true    # --- before copyright
+    separator_after: true     # --- after copyright
+    bold: true                # Make copyright text bold
+    emphasis: "**"            # Use ** for markdown bold
+
+# =============================================================================
+# FOOTER TEMPLATE (Appears at END of every response) [OPTIONAL]
+# =============================================================================
+
+footer:
+  enabled: false
+  position: "after_content"
+  description: "Optional footer (disabled by default)"
+  template: |
+    ---
+    **Reference:** {repository} | **License:** {license}
+
+# =============================================================================
+# VARIABLE SUBSTITUTION RULES
+# =============================================================================
+
+variables:
+  # Standard variables that must be provided by caller
+  mandatory:
+    - name: "operation"
+      type: "string"
+      example: "Governance Evaluation"
+      description: "Current operation being performed"
+    
+    - name: "phase"
+      type: "string"
+      example: "PHASE-02"
+      description: "Current implementation phase"
+    
+    - name: "orchestrator"
+      type: "string"
+      example: "PlanningOrchestrator"
+      description: "Orchestrator executing the operation"
+  
+  # Auto-populated variables from configuration
+  auto_populated:
+    - name: "author"
+      source: "author.name"
+      value: "Asif Hussain"
+    
+    - name: "notice"
+      source: "copyright.notice"
+      value: "Copyright © 2025-2026 Asif Hussain. All rights reserved."
+    
+    - name: "repository"
+      source: "author.repository"
+      value: "https://github.com/asifhussain60/CORTEX"
+    
+    - name: "license"
+      source: "copyright.license"
+      value: "Source-Available"
+
+# =============================================================================
+# DOMAIN-SPECIFIC OVERRIDES (Optional)
+# =============================================================================
+# Domains can customize header variables without changing structure
+
+domain_overrides:
+  governance:
+    enabled: false  # Use global header
+  audit:
+    enabled: false  # Use global header
+  evidence:
+    enabled: false  # Use global header
+  orchestration:
+    enabled: false  # Use global header
+
+# =============================================================================
+# ENFORCEMENT RULES
+# =============================================================================
+
+enforcement:
+  require_on_all_responses: true
+  audit_missing_headers: true
+  log_header_injection: false  # Set to true for debugging
+  validate_all_variables: true
+  fail_on_missing_variable: false  # Log warning but don't fail render
+
+# =============================================================================
+# VERSIONING & EVOLUTION
+# =============================================================================
+
+versioning:
+  current_version: "1.0"
+  compatibility:
+    min_engine_version: "1.0"
+    max_engine_version: "2.0"
+  breaking_changes: []
+  future_versions:
+    "1.1": "Add support for custom domain headers"
+    "2.0": "Support dynamic header templates with conditional sections"
+
+# =============================================================================
+# AUDIT & GOVERNANCE TRACKING
+# =============================================================================
+
+audit:
+  rule_id: "CORE-009-EXTENDED"  # References governance rule
+  requires_approval: true
+  approval_required_for: ["author", "copyright.notice", "author.repository"]
+  changelog:
+    - version: "1.0"
+      date: "2026-01-15"
+      author: "System"
+      changes:
+        - "Initial implementation from CORTEX-4.0 branch"
+        - "Implements copyright header across all response templates"
+        - "Provides single source of truth for global header"
