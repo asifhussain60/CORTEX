@@ -1,7 +1,7 @@
 """Performance Optimization & Caching Layer.
 
-This module implements the CachingLayer for result caching with TTL and
-performance optimization through intelligent invalidation.
+This module implements a caching layer with TTL support and dependency tracking
+for intelligent cache invalidation.
 
 AC-EX-002-02: Results cached with TTL, cache invalidation on relevant changes,
 and performance improvement measurable.
@@ -36,7 +36,7 @@ class CacheEntry:
         """Check if entry has expired.
         
         Returns:
-            True if the entry has exceeded its TTL
+            True if entry has exceeded TTL
         """
         current_time = time.time()
         return (current_time - self.timestamp) > self.ttl_seconds
@@ -49,14 +49,13 @@ class CachingLayer:
     - TTL-based cache expiration
     - Manual cache invalidation
     - Dependency tracking for smart invalidation
-    - Pattern-based invalidation
     - Cache statistics tracking
     
     Example:
         >>> cache = CachingLayer()
-        >>> cache.set("user_123", user_data, ttl_seconds=300)
-        >>> cached_user = cache.get("user_123")
-        >>> cache.invalidate_pattern("user_*")  # Invalidate all users
+        >>> cache.set("result_1", {"data": "value"}, ttl_seconds=300)
+        >>> result = cache.get("result_1")
+        >>> cache.invalidate("result_1")
     """
     
     def __init__(self) -> None:
@@ -72,9 +71,6 @@ class CachingLayer:
     
     def get(self, key: str, default: Any = None) -> Any:
         """Get value from cache.
-        
-        Checks if the key exists and has not expired. Returns the cached
-        value or the default if not found or expired.
         
         Args:
             key: Cache key
@@ -97,13 +93,18 @@ class CachingLayer:
         self._stats["hits"] += 1
         return entry.value
     
-    def set(self, key: str, value: Any, ttl_seconds: float = 60.0) -> None:
+    def set(
+        self,
+        key: str,
+        value: Any,
+        ttl_seconds: float = 60.0,
+    ) -> None:
         """Set value in cache with TTL.
         
         Args:
             key: Cache key
             value: Value to cache
-            ttl_seconds: Time to live in seconds (default: 60)
+            ttl_seconds: Time to live in seconds
         """
         self._cache[key] = CacheEntry(
             key=key,
@@ -117,7 +118,7 @@ class CachingLayer:
         
         Args:
             key: Cache key to invalidate
-            cascade: Whether to cascade invalidation to dependent keys
+            cascade: Whether to cascade invalidation to dependents
         """
         if key in self._cache:
             del self._cache[key]
@@ -130,10 +131,8 @@ class CachingLayer:
     def invalidate_pattern(self, pattern: str) -> int:
         """Invalidate all keys matching a pattern.
         
-        Uses fnmatch for pattern matching (e.g., "user_*", "cache_*_data").
-        
         Args:
-            pattern: Pattern to match
+            pattern: Pattern to match (e.g., "user_*")
             
         Returns:
             Number of keys invalidated
@@ -152,9 +151,6 @@ class CachingLayer:
     def set_dependency(self, key: str, depends_on: str) -> None:
         """Register that key depends on another key.
         
-        When the dependency is invalidated, this key will also be
-        invalidated if cascade is enabled.
-        
         Args:
             key: Dependent key
             depends_on: Key this depends on
@@ -164,7 +160,7 @@ class CachingLayer:
         self._dependencies[depends_on].add(key)
     
     def clear(self) -> None:
-        """Clear all cache entries and dependencies."""
+        """Clear all cache entries."""
         self._cache.clear()
         self._dependencies.clear()
         self._stats["invalidations"] += 1
