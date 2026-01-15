@@ -13,6 +13,13 @@ Features:
 - Comprehensive audit trail
 - MCP tool integration
 
+Plan Visualization:
+- Static plan-viewer.html files are DEPRECATED
+- Plan viewing has moved to CORTEX Neural Observatory (PHASE-15)
+- See: docs/phases/phase-15-neural-observatory.yaml
+- The Observatory provides unified Plan Hub with dynamic rendering
+- This orchestrator provides DATA via MCP tools; Observatory provides UI
+
 Author: Asif Hussain
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
@@ -137,6 +144,10 @@ class PlanningOrchestrator(IOrchestrator):
         """
         AC-AR-011-02: Get exposed MCP tools.
         
+        Note: These tools provide DATA for plan management.
+        Plan VISUALIZATION has moved to Neural Observatory (PHASE-15).
+        Static plan-viewer.html files are deprecated.
+        
         Returns:
             Result containing MCP tool definitions
         """
@@ -148,6 +159,7 @@ class PlanningOrchestrator(IOrchestrator):
                     "phase_id": "Phase identifier",
                 },
                 "returns": "Phase planning status and progress",
+                "ui_note": "Visualized in Neural Observatory /plans route",
             },
             "next_ac": {
                 "type": "function",
@@ -156,6 +168,7 @@ class PlanningOrchestrator(IOrchestrator):
                     "phase_id": "Phase identifier",
                 },
                 "returns": "Next AC-ID with context",
+                "ui_note": "Visualized in Neural Observatory AC context cards",
             },
             "enforce_phase_lock": {
                 "type": "function",
@@ -165,6 +178,15 @@ class PlanningOrchestrator(IOrchestrator):
                     "reason": "Lock reason",
                 },
                 "returns": "Lock confirmation with hash",
+            },
+            "get_plan_data_for_observatory": {
+                "type": "function",
+                "description": "Get comprehensive plan data for Neural Observatory rendering",
+                "parameters": {
+                    "phase_id": "Phase identifier (optional, returns all if omitted)",
+                },
+                "returns": "Full plan data suitable for Observatory Plan Hub",
+                "ui_note": "Primary data source for Neural Observatory Plan Hub",
             },
         }
         
@@ -269,6 +291,72 @@ class PlanningOrchestrator(IOrchestrator):
         
         return Ok(lock_data)
     
+    def get_plan_data_for_observatory(
+        self,
+        phase_id: Optional[str] = None,
+    ) -> Result[Dict[str, Any]]:
+        """
+        Get comprehensive plan data for Neural Observatory.
+        
+        This method replaces static plan-viewer.html generation.
+        The Neural Observatory's Plan Hub component consumes this data
+        for dynamic rendering with glassmorphism styling.
+        
+        Args:
+            phase_id: Specific phase to get (None returns all phases)
+        
+        Returns:
+            Result containing plan data suitable for Observatory rendering
+        """
+        # Comprehensive plan data structure for Observatory
+        plan_data = {
+            "metadata": {
+                "source": "PlanningOrchestrator",
+                "version": self._version,
+                "generated_at": datetime.now(timezone.utc).isoformat(),
+                "ssot_file": ".github/roadmap/cortex-master.yaml",
+            },
+            "visualization_target": "Neural Observatory Plan Hub",
+            "deprecated": {
+                "static_html": True,
+                "reason": "Replaced by unified Observatory (PHASE-15)",
+                "migration_path": "Data flows to /api/plans endpoint",
+            },
+            "phases": {},
+        }
+        
+        # Example phase data (in production, read from cortex-master.yaml)
+        if phase_id is None or phase_id == "PHASE-01":
+            plan_data["phases"]["PHASE-01"] = {
+                "title": "Foundation",
+                "status": "COMPLETED",
+                "locked": True,
+                "ac_ids": 36,
+                "completed_ac_ids": 36,
+                "progress_percentage": 100.0,
+            }
+        
+        if phase_id is None or phase_id == "PHASE-15":
+            plan_data["phases"]["PHASE-15"] = {
+                "title": "Neural Observatory",
+                "status": "NOT_STARTED",
+                "locked": False,
+                "ac_ids": 12,
+                "completed_ac_ids": 0,
+                "progress_percentage": 0.0,
+                "note": "This phase creates the UI that displays this data",
+            }
+        
+        # Log operation
+        self._log_audit_entry(
+            operation="GET_PLAN_DATA_FOR_OBSERVATORY",
+            actor="NEURAL_OBSERVATORY",
+            parameters={"phase_id": phase_id},
+            result="SUCCESS",
+        )
+        
+        return Ok(plan_data)
+
     def execute_operation(
         self,
         operation_name: str,
@@ -294,6 +382,10 @@ class PlanningOrchestrator(IOrchestrator):
                 return self.enforce_phase_lock(
                     parameters.get("phase_id", "PHASE-01"),
                     parameters.get("reason", ""),
+                )
+            elif operation_name == "get_plan_data_for_observatory":
+                return self.get_plan_data_for_observatory(
+                    parameters.get("phase_id"),
                 )
             else:
                 return Err(f"Unknown operation: {operation_name}")
