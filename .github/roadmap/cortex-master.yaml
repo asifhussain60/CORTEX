@@ -544,22 +544,22 @@ phase_tracker:
       ADDITIVE MERGE: CORTEX + Company (best of both, selective override).
       INT-RULE-009: Mandatory Auto-Challenge on every request.
     ac_ids: 14
-    completed_ac_ids: 12  # IR-001 (4) + IR-002 (4) + IR-003 (4) completed
+    completed_ac_ids: 13  # IR-001 (4) + IR-002 (4) + IR-003 (4) + IR-004-01 (1) completed
     status: "IN_PROGRESS"
     locked: false
     started_at: "2026-01-15T10:00:00Z"
     requires: "PHASE-ENHANCEMENT-03"
     estimated_hours: 64
     estimated_days: 8
-    actual_hours: 6
-    progress_percentage: 85.7  # 12/14 = 85.7%
+    actual_hours: 7
+    progress_percentage: 92.9  # 13/14 = 92.9%
     blocking: true  # Critical - defines how orchestrators interact
     audit_verification:
       verified: false
-      entry_count: 328  # 31 + 20 + 20 + 17 + 21 + 17 + 21 + 35 + 41 + 38 + 34 + 13 tests
+      entry_count: 364  # 31 + 20 + 20 + 17 + 21 + 17 + 21 + 35 + 41 + 38 + 34 + 13 + 36 tests
       hash_chain_valid: true
-      verified_at: "2026-01-15T19:00:00Z"
-    git_checkpoint: "10faf9932"
+      verified_at: "2026-01-15T20:00:00Z"
+    git_checkpoint: "fa9fa144e"
     notes: |
       IR-001 (4 ACs): Context Intelligence Sources - COMPLETE ✓
       - IR-001-01: AST Intelligence - COMPLETED (31 tests) ✓
@@ -579,13 +579,26 @@ phase_tracker:
       - IR-003-03: LENS Response Formatter - COMPLETED (34 tests) ✓
       - IR-003-04: LENS Integration & Testing - COMPLETED (13 tests) ✓
       
-      IR-004 (2 ACs): Intent Router Integration - PENDING
-      - IR-004-01: Intent Router Implementation - NOT_STARTED
-      - IR-004-02: LENS Integration with Router - NOT_STARTED
+      IR-004 (2 ACs): Intent Router Integration - IN_PROGRESS
+      - IR-004-01: CORTEX LENS Knowledge Graph Builder - COMPLETED (36 tests) ✓
+      - IR-004-02: Comprehension Loop with YAML Condensation - PENDING
       
-      LENS PROTOCOL COMPLETE: All 3 components (Context Builder, Reflection Protocol,
-      Response Formatter) tested with 13 end-to-end integration tests. Ready for
-      Intent Router stage. Only 2 ACs remain for PHASE-07 lock (14/14 = 100%).
+      KNOWLEDGE GRAPH BUILDER COMPLETE: Full graph implementation with:
+      - GraphNode: Represents entities (functions, classes, APIs, tables, etc.)
+      - GraphEdge: Represents relationships (calls, imports, depends_on, etc.)
+      - KnowledgeGraph: Query and traversal operations
+      - KnowledgeGraphBuilder: Multi-source intelligence aggregation
+      - 36 integration tests covering all core functionality
+      
+      KEY COMPONENTS DELIVERED:
+      - Node/Edge creation and serialization (5 tests)
+      - Graph construction and queries (11 tests)
+      - Builder orchestration (6 tests)
+      - Graph traversal and reachability (4 tests)
+      - Incremental updates (4 tests)
+      - Persistence/JSON serialization (3 tests)
+      
+      NEXT: IR-004-02 (Comprehension Loop) - only 1 AC remaining for PHASE-07 lock.
       
       KEY ENHANCEMENTS:
       - Additive Merge: CORTEX + Company (keeps all non-conflicting)
