@@ -189,31 +189,46 @@ phase_tracker:
     blocking: false
     estimated_hours: 6
     estimated_days: 1
-    progress_percentage: 0.0
+    progress_percentage: 25.0  # AC-ENH-001-01 in progress
     notes: |
       Enhancement to AR-009 (Response Templates). System independently developed and tested.
       Implementation Strategy: HYBRID APPROACH
-      - Step 1: Reference Integration (PlanningOrchestrator) - 1-2 hours
-      - Step 2: Documentation & Pattern Definition - 0.5-1 hour
+      - Step 1: Reference Integration (PlanningOrchestrator) - IN PROGRESS
+      - Step 2: Documentation & Pattern Definition - PENDING
       - Step 3: Future orchestrator updates follow pattern (0 additional overhead)
+      
+      Architecture Principles:
+      - Non-invasive: Uses composition pattern, does not modify ResponseTemplateEngine
+      - Optional: Each orchestrator can optionally specify custom response templates
+      - Orthogonal: Header injection independent of template system
+      - Backward compatible: Orchestrators without custom templates use defaults
       
       Components:
       - cortex-brain/tier0/response-headers.yaml (195 lines) - Tier 0 config
+      - cortex-brain/tier2/response-templates/ - Domain-specific templates (optional)
       - src/core/response_header_config.py (487 lines) - Singleton manager
       - src/core/response_header_injector.py (319 lines) - Composition wrapper
+      - src/orchestrators/domain/planning_orchestrator.py - Reference implementation
       - tests/unit/test_response_headers.py (557 lines) - 29/29 tests passing
-      
-      Non-invasive: Uses composition pattern, does not modify ResponseTemplateEngine
-      Global scope: Single YAML modification point affects all orchestrators
+      - tests/integration/test_planning_orchestrator_headers.py - 18 tests (17 passing, 1 minor fix needed)
       
       Commit: 723b0c37e (Response header system foundation)
+      Current checkpoint: before AC-ENH-001-01 (clean working tree)
     acceptance_criteria:
       - ac_id: "AC-ENH-001-01"
-        description: "PlanningOrchestrator integrated with ResponseHeaderInjector"
+        description: "PlanningOrchestrator integrated with ResponseHeaderInjector using composition pattern"
         status: "IN_PROGRESS"
-        test: "test_planning_orchestrator_headers"
+        test: "test_planning_orchestrator_headers (17/18 passing)"
+        implementation_details: |
+          - ResponseHeaderInjector instance created in __init__
+          - get_response_with_headers() uses injector's internal methods
+          - Header + copyright sections assembled (without footer by design)
+          - Context variables populated from orchestrator state
+          - Graceful degradation on header generation failure
+          - Optional custom templates: orchestrators can define domain-specific templates
+          - Default templates used if custom not specified
       - ac_id: "AC-ENH-001-02"
-        description: "Headers appear in orchestrator responses with correct variables"
+        description: "Headers appear in orchestrator responses with correct variables and custom templates work"
         status: "PENDING"
         test: "test_orchestrator_response_headers"
       - ac_id: "AC-ENH-001-03"
