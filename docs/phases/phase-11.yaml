@@ -20,7 +20,7 @@ phase:
     - Confidence scoring
   
   order: 11
-  status: "NOT_STARTED"
+  status: "IN_PROGRESS"
   locked: false
   
   requires: "PHASE-09-GOVERNANCE-TOOLS"
@@ -31,20 +31,25 @@ phase:
   estimated_days: 3.5
   
   ac_ids: 6
-  completed_ac_ids: 0
-  progress_percentage: 0.0
+  completed_ac_ids: 1
+  progress_percentage: 16.7
+  
+  started_at: "2026-01-16T12:30:00Z"
 
 acceptance_criteria:
   - ac_id: "HP-001-01"
     title: "Intent Canonicalization Engine"
     description: "Extended canonicalization with AC-ID, phase, and action type extraction"
-    status: "NOT_STARTED"
-    notes: "Extends PHASE-07 IR-002-01 with production hardening"
+    status: "COMPLETED"
+    notes: "Extends PHASE-07 IR-002-01 with production hardening. 36/36 tests passing."
     acceptance_tests:
       - "Extract AC-ID from varied formats"
       - "Identify phase from context"
       - "Classify action type accurately"
     git_checkpoint: "HP-001-01-canonicalization"
+    completed_at: "2026-01-16T12:30:00Z"
+    test_count: 36
+    test_pass_rate: 1.0
     
   - ac_id: "HP-001-02"
     title: "Behavioral Boundary Rules"
