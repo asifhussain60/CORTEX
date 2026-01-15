@@ -37,7 +37,7 @@ Comprehensive analysis mapping vision concerns to new phases with:
 - Success metrics & verification methods
 
 ### 2. Seven New Phase YAML Files
-Created detailed specifications in `.github/docs/phases/`:
+Created detailed specifications in `docs/phases/`:
 
 | Phase | File | ACs | Purpose |
 |-------|------|-----|---------|
