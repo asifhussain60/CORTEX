@@ -76,6 +76,15 @@ with **71 acceptance criteria**, properly named and prioritized.
    └─ NO-003: Orchestrator Constellation (Live status, dependency graph)
    └─ NO-004: Portal Infrastructure (FastAPI backend, WebSocket, Plan Hub)
    └─ 100% INDEPENDENT - reads existing SSOT data only
+   
+   **Tech Stack (Lightweight & Sophisticated):**
+   ├─ Frontend: HTML5 + Tailwind CSS (CDN) + Vanilla JavaScript/jQuery
+   ├─ Visualization: D3.js + Chart.js (via CDN)
+   ├─ Icons: Heroicons (via CDN)
+   ├─ Backend: Direct REST API to Python governance tools
+   ├─ Build Process: NONE (pure static files)
+   ├─ Dependencies: Zero npm packages (CDN-only approach)
+   └─ UI: Glassmorphism design via Tailwind + custom CSS
 
 ### 3. UPDATED MASTER ROADMAP
    📄 `.github/roadmap/cortex-master.yaml`
