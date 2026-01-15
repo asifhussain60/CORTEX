@@ -38,7 +38,7 @@ phase:
     with company intelligence seamlessly integrated.
   
   order: 7
-  status: "NOT_STARTED"  # NOT_STARTED | IN_PROGRESS | COMPLETED
+  status: "IN_PROGRESS"  # NOT_STARTED | IN_PROGRESS | COMPLETED
   locked: false
   
   # Dependencies
@@ -50,12 +50,12 @@ phase:
   # Estimation (expanded for comprehensive 14-AC scope)
   estimated_hours: 64
   estimated_days: 8
-  actual_hours: null
+  actual_hours: 4
   
   # Tracking
-  ac_ids: 14  # Full coverage: IR-001 (4) + IR-002 (3) + IR-003 (1) + IR-004 (2) + IR-005 (2) + IR-006 (2)
-  completed_ac_ids: 0
-  progress_percentage: 0.0
+  ac_ids: 14  # Full coverage: IR-001 (4) + IR-002 (4) + IR-003 (4) + IR-004 (2)
+  completed_ac_ids: 8
+  progress_percentage: 57.1
   
   # CORTEX5.5 Reference
   origin:
@@ -451,7 +451,110 @@ acceptance_criteria:
       - TestTestStrategySuggestion: Testing approaches
       - TestRecommendationPrioritization: Impact ranking
     
-    git_checkpoint: "IR-002-03-recommendation-engine"
+    status: "COMPLETED"
+    completed_at: "2026-01-15T14:00:00Z"
+    git_checkpoint: "RECOMMEND-ENGINE-CHECKPOINT"  # Latest from recent session
+
+  - ac_id: "IR-002-04"
+    title: "Comprehension YAML Generation"
+    description: |
+      Transform canonicalized intents, challenges, and recommendations into
+      structured YAML comprehension documents for user approval before execution.
+      This enables the CORTEX LENS protocol to present holistic context.
+    
+    status: "COMPLETED"
+    completed_at: "2026-01-15T15:30:00Z"
+    
+    acceptance_tests:
+      - "Compose comprehension YAML from intent + challenges + recommendations"
+      - "Automatic severity sorting (CRITICAL → HIGH → MEDIUM → LOW)"
+      - "Automatic priority sorting (HIGH → MEDIUM → LOW)"
+      - "Include metadata (version, timestamp, tool info, phase)"
+      - "Round-trip conversion (YAML ↔ dict ↔ object)"
+      - "File I/O support (write to/read from disk)"
+      - "Handle edge cases (empty lists, unicode, long descriptions)"
+      - "Generate summary statistics (counts by severity/category/priority)"
+    
+    implementation_details: |
+      Components:
+      - CanonicalIntentComposer: Orchestrates YAML generation
+      - ComprehensionYAML: Complete document structure
+      - IntentSection: Canonicalized intent with confidence
+      - ChallengeSection: Risks/governance issues with summary
+      - RecommendationSection: Best practices with summary
+      - ChallengeItem/RecommendationItem: Individual entries
+      
+      YAML Structure:
+      ```yaml
+      metadata:
+        version: "1.0"
+        generated_at: ISO timestamp
+        tool: "CORTEX-LENS"
+        phase: "PHASE-07-Intent-Router"
+        intent_id: UUID
+        schema: "cortex-comprehension-v1"
+      
+      intent:
+        type: IMPLEMENT|FIX|REFACTOR|QUERY|ANALYZE|VALIDATE|MIGRATE
+        scope:
+          target_type: file|function|class|module
+          target_name: string
+          file_path: string
+          ac_ids: [AC-001, ...]
+        confidence: 0.0-1.0
+        keywords: [list]
+        needs_clarification: bool
+      
+      challenges:
+        summary:
+          total: N
+          critical: N
+          high: N
+          medium: N
+          low: N
+          by_category: {...}
+        items:
+          - id: CHALLENGE_001
+            category: BREAKING_CHANGE|TEST_GAP|GOVERNANCE_RISK|...
+            severity: CRITICAL|HIGH|MEDIUM|LOW
+            description: string
+            affected_code: string
+            remediation: string
+            confidence: 0.0-1.0
+      
+      recommendations:
+        summary:
+          total: N
+          high_priority: N
+          medium_priority: N
+          low_priority: N
+          by_category: {...}
+        items:
+          - id: REC_001
+            category: BEST_PRACTICE|ALTERNATIVE_APPROACH|TEST_STRATEGY|...
+            priority: HIGH|MEDIUM|LOW
+            title: string
+            description: string
+            code_context: string
+            alternative: string
+            rationale: string
+      ```
+      
+      Files Created:
+      - src/core/intent/comprehension_yaml.py
+      - tests/unit/core/intent/test_comprehension_yaml.py
+    
+    verification_method: |
+      Tests in tests/unit/core/intent/test_comprehension_yaml.py:
+      - TestYAMLStructureGeneration (8 tests): Verify YAML format/hierarchy
+      - TestContentIntegration (6 tests): Combine intent/challenges/recommendations
+      - TestSerialization (4 tests): to_dict(), to_yaml_string()
+      - TestRoundTripConversion (3 tests): YAML ↔ dict ↔ object
+      - TestValidation (8 tests): Schema requirements
+      - TestEdgeCases (6 tests): Empty lists, unicode, long descriptions
+      TOTAL: 35/35 PASSING
+    
+    git_checkpoint: "9a3f01c25"
 
   # ---------------------------------------------------------------------------
   # IR-003: Master + Interaction Orchestrator Integration
