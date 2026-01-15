@@ -298,7 +298,34 @@ AR-014 provides three layers of protection:
 
 ---
 
+## Test Fixes Applied (This Session)
+
+### 1. Dashboard Tests Hanging Issue
+- **Problem**: Module-level `TestClient` caused app initialization on import, blocking pytest
+- **Fix**: Converted to `@pytest.fixture(scope="module")` for lazy initialization
+- **File**: `tests/unit/dashboard/test_api_endpoints.py`
+- **Result**: 17/19 tests pass (2 WebSocket tests skipped - need async fixtures)
+
+### 2. Recommendation Engine Missing Module
+- **Problem**: `src/core/intent/recommendation_engine.py` was missing (16 test failures)
+- **Fix**: Implemented full recommendation engine with:
+  - `RecommendationEngine` class with pattern detection
+  - `Recommendation` and `RecommendationResult` dataclasses
+  - Detection for: singleton, error handling, context managers, list comprehension, dict.get, API tests, documentation, type hints
+- **File**: `src/core/intent/recommendation_engine.py` (312 lines)
+- **Result**: All 16/16 recommendation engine tests pass
+
+### Post-Fix Test Results
+| Test Suite | Passed | Skipped | Total |
+|------------|--------|---------|-------|
+| Core + Dashboard Unit Tests | 320 | 2 | 322 |
+| Recommendation Engine | 16 | 0 | 16 |
+| Dashboard API | 17 | 2 | 19 |
+
+---
+
 **Report Generated:** 2026-01-15  
+**Report Updated:** 2026-01-15 (Test Fixes Applied)  
 **Verification Method:** Automated analysis of chat files, roadmap, audit logs, and test results  
 **Confidence Level:** HIGH (98%)
 
