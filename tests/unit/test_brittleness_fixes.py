@@ -335,6 +335,7 @@ class TestBrittleness014VerificationRate:
 
 
 # NFR Tests
+@pytest.mark.ac("AC-NFR-001-01")
 class TestNFR001Maintainability:
     """AC-NFR-001: Code quality metrics."""
     
@@ -344,12 +345,14 @@ class TestNFR001Maintainability:
         # This test serves as documentation of the requirement
         pass
     
+    @pytest.mark.ac("AC-NFR-001-02")
     def test_nfr_001_02_complexity_target(self):
         """AC-NFR-001-02: Cyclomatic complexity <10."""
         # Complexity is checked via radon in CI
         # This test serves as documentation of the requirement
         pass
     
+    @pytest.mark.ac("AC-NFR-001-03")
     def test_nfr_001_03_documentation_target(self):
         """AC-NFR-001-03: Public API documented."""
         # Documentation is checked via pydocstyle in CI

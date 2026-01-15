@@ -20,6 +20,7 @@ import pytest
 from src.core.path_resolver import get_project_root
 
 
+@pytest.mark.ac("AC-AR-010-01")
 class TestAC_AR_010_01_FolderStructure:
     """AC-AR-010-01: New folder structure created."""
     
@@ -67,6 +68,7 @@ class TestAC_AR_010_01_FolderStructure:
             assert module.is_file(), f"Expected file but got directory: {module}"
 
 
+@pytest.mark.ac("AC-AR-010-02")
 class TestAC_AR_010_02_ImportsUpdated:
     """AC-AR-010-02: All imports updated to new paths."""
     
@@ -109,6 +111,7 @@ class TestAC_AR_010_02_ImportsUpdated:
             pytest.fail(f"Import failed: {e}")
 
 
+@pytest.mark.ac("AC-AR-010-03")
 class TestAC_AR_010_03_CrossPlatformPaths:
     """AC-AR-010-03: Cross-platform path resolution working."""
     
