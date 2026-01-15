@@ -17,6 +17,10 @@ from src.mcp.tools.governance_tools import (
     initialize_governance_tools,
 )
 
+from src.mcp.tools.cortex_vacuum_analyzer import CortexVacuumAnalyzer
+from src.mcp.tools.cortex_vacuum_executor import CortexVacuumExecutor
+from src.mcp.tools.cortex_vacuum_registration import register_vacuum_tools
+
 __all__ = [
     "check_phase_lock",
     "validate_ac_id",
@@ -25,4 +29,7 @@ __all__ = [
     "get_phase_status",
     "get_tool_registry",
     "initialize_governance_tools",
+    "CortexVacuumAnalyzer",
+    "CortexVacuumExecutor",
+    "register_vacuum_tools",
 ]
