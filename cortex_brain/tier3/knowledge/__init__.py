@@ -9,5 +9,6 @@ from .knowledge_governance import KnowledgeGovernanceManager
 from .expert_registry import ExpertRegistry
 from .ai_curator import AICurator
 from .synthesis_engine import SynthesisEngine
+from .retrieval_optimizer import RetrievalOptimizer
 
-__all__ = ["KnowledgeIndexer", "KnowledgeGovernanceManager", "ExpertRegistry", "AICurator", "SynthesisEngine"]
+__all__ = ["KnowledgeIndexer", "KnowledgeGovernanceManager", "ExpertRegistry", "AICurator", "SynthesisEngine", "RetrievalOptimizer"]

@@ -1,0 +1,162 @@
+metadata:
+  ac_id: "KN-002-02"
+  title: "Knowledge Retrieval Optimization"
+  version: 1.0
+  created_at: "2024-01-15T00:00:00Z"
+  description: "Optimized semantic search and intelligent ranking"
+
+ranking_rules:
+  - rule_id: "RR-001"
+    name: "Quality Score"
+    weight: 0.35
+    description: "Higher quality entries rank better"
+  
+  - rule_id: "RR-002"
+    name: "Relevance Score"
+    weight: 0.30
+    description: "Better semantic match ranks higher"
+  
+  - rule_id: "RR-003"
+    name: "Recency"
+    weight: 0.10
+    description: "Newer entries get slight boost"
+  
+  - rule_id: "RR-004"
+    name: "Domain Match"
+    weight: 0.15
+    description: "Preferred domain entries rank higher"
+  
+  - rule_id: "RR-005"
+    name: "Expert Rating"
+    weight: 0.10
+    description: "Expert-reviewed entries rank higher"
+
+ranking_factors:
+  quality_score_weight: 0.35
+  relevance_weight: 0.30
+  recency_boost: 0.05
+  domain_preference: 0.15
+  expert_rating_weight: 0.15
+
+semantic_search:
+  algorithm: "cosine_similarity"
+  embedding_model: "sentence-transformers"
+  similarity_threshold: 0.5
+  top_k: 10
+  max_results: 100
+
+query_optimization:
+  normalize_queries: true
+  remove_stop_words: true
+  stemming: true
+  expand_synonyms: false
+  stop_words:
+    - "the"
+    - "is"
+    - "at"
+    - "which"
+    - "on"
+    - "a"
+    - "an"
+    - "as"
+    - "are"
+    - "was"
+    - "were"
+
+caching:
+  enabled: true
+  ttl_seconds: 3600
+  max_cache_entries: 5000
+  cache_strategy: "lru"
+  cache_miss_strategy: "compute_and_store"
+
+performance_targets:
+  semantic_search_ms: 1000
+  ranking_ms: 200
+  query_optimization_ms: 50
+  cache_lookup_ms: 10
+  batch_search_ms: 300
+
+result_formatting:
+  include_score: true
+  include_domain: true
+  include_excerpt: true
+  excerpt_length: 200
+  max_results_default: 10
+  max_results_max: 100
+
+indexing:
+  index_type: "inverted_index"
+  update_frequency: "on_change"
+  rebuild_schedule: "daily"
+  incremental_updates: true
+
+search_profiles:
+  strict:
+    similarity_threshold: 0.85
+    max_results: 5
+    use_cache: true
+    ranking_boost: 1.0
+  
+  balanced:
+    similarity_threshold: 0.65
+    max_results: 20
+    use_cache: true
+    ranking_boost: 1.0
+  
+  broad:
+    similarity_threshold: 0.40
+    max_results: 50
+    use_cache: true
+    ranking_boost: 0.8
+
+domain_priority:
+  GOVERNANCE: 1.0
+  INTENT-ROUTING: 1.0
+  HALLUCINATION-PREVENTION: 1.0
+  EXECUTION-ORCHESTRATION: 0.95
+  DATA-MANAGEMENT: 0.9
+  OBSERVABILITY: 0.85
+  SECURITY: 0.95
+  API-DESIGN: 0.9
+  ML-MODELS: 0.85
+  KNOWLEDGE-CURATION: 0.9
+  TESTING-VALIDATION: 0.85
+  DEPLOYMENT: 0.85
+  DOCUMENTATION: 0.8
+  PERFORMANCE: 0.75
+  ARCHITECTURE: 0.85
+  ERROR-HANDLING: 0.8
+
+optimization_strategies:
+  - strategy_id: "OS-001"
+    name: "Caching Common Queries"
+    effectiveness: 0.85
+    enabled: true
+  
+  - strategy_id: "OS-002"
+    name: "Index Compression"
+    effectiveness: 0.7
+    enabled: true
+  
+  - strategy_id: "OS-003"
+    name: "Batch Processing"
+    effectiveness: 0.8
+    enabled: true
+  
+  - strategy_id: "OS-004"
+    name: "Query Rewriting"
+    effectiveness: 0.6
+    enabled: true
+  
+  - strategy_id: "OS-005"
+    name: "Result Deduplication"
+    effectiveness: 0.75
+    enabled: true
+
+monitoring:
+  track_query_times: true
+  track_cache_hits: true
+  track_ranking_factors: true
+  metrics_retention_days: 30
+  sample_rate: 0.1
