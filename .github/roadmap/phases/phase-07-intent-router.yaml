@@ -1,1802 +1,1526 @@
-# PHASE-07-INTENT-ROUTER: Holistic Intent Router Intelligence
-# =============================================================================
-# Purpose: Master + Interaction Orchestrator pattern from CORTEX5.5
-#          Combines AST, git history, code comments, and relationship traversal
-#          to build holistic context and reflect user intent with recommendations
-# Status: NOT_STARTED
-# Requires: PHASE-ENHANCEMENT-03
-# Estimated Duration: 8 days (64 hours) - expanded for full intelligence scope
-# Origin: CORTEX5.5 LLM Intent Routing Intelligence
-# =============================================================================
-
 phase:
-  id: "PHASE-07-INTENT-ROUTER"
-  title: "Holistic Intent Router Intelligence"
-  description: |
-    Implement the CORTEX5.5 intelligence pattern where the Master Orchestrator 
-    operates through THREE STAGES:
-    
-    STAGE 1 - INTENT COMPREHENSION (InteractionOrchestrator):
-    - Use CORTEX LENS tools to build knowledge graph from multiple sources
-    - Condense gathered context into comprehension YAMLs
-    - Present to user for approval (repeat until approved)
-    - On approval, intelligently push to brain tiers, delete temps
-    
-    STAGE 2 - INTENT ROUTING:
-    - Planning/ADO intent → PlanningOrchestrator/ADOOrchestrator
-    - Code/implement/fix intent → TDDOrchestrator
-    - Query/status → Direct response
-    - Ambiguous → Back to Interaction for clarification (DEFAULT)
-    
-    STAGE 3 - KNOWLEDGE INTEGRATION:
-    - Load company domain specifications from cortex-brain/
-    - Load CORTEX rules from tier0/governance/
-    - COMPANY OVERRIDES CORTEX (intelligent merge)
-    - Pass merged context to execution orchestrator (TDD, etc.)
-    
-    Vision: Transform ad-hoc user requests into well-understood, validated intents
-    with company intelligence seamlessly integrated.
-  
+  id: PHASE-07-INTENT-ROUTER
+  title: Holistic Intent Router Intelligence
+  description: "Implement the CORTEX5.5 intelligence pattern where the Master Orchestrator\
+    \ \noperates through THREE STAGES:\n\nSTAGE 1 - INTENT COMPREHENSION (InteractionOrchestrator):\n\
+    - Use CORTEX LENS tools to build knowledge graph from multiple sources\n- Condense\
+    \ gathered context into comprehension YAMLs\n- Present to user for approval (repeat\
+    \ until approved)\n- On approval, intelligently push to brain tiers, delete temps\n\
+    \nSTAGE 2 - INTENT ROUTING:\n- Planning/ADO intent → PlanningOrchestrator/ADOOrchestrator\n\
+    - Code/implement/fix intent → TDDOrchestrator\n- Query/status → Direct response\n\
+    - Ambiguous → Back to Interaction for clarification (DEFAULT)\n\nSTAGE 3 - KNOWLEDGE\
+    \ INTEGRATION:\n- Load company domain specifications from cortex-brain/\n- Load\
+    \ CORTEX rules from tier0/governance/\n- COMPANY OVERRIDES CORTEX (intelligent\
+    \ merge)\n- Pass merged context to execution orchestrator (TDD, etc.)\n\nVision:\
+    \ Transform ad-hoc user requests into well-understood, validated intents\nwith\
+    \ company intelligence seamlessly integrated.\n"
   order: 7
-  status: "IN_PROGRESS"  # NOT_STARTED | IN_PROGRESS | COMPLETED
+  status: IN_PROGRESS
   locked: false
-  
-  # Dependencies
-  requires: "PHASE-ENHANCEMENT-03"
-  required_for: "PHASE-08-CORE-ORCHESTRATORS"
+  requires: PHASE-ENHANCEMENT-03
+  required_for: PHASE-08-CORE-ORCHESTRATORS
   can_run_parallel_with: []
-  blocking: true  # Blocks downstream phases - defines orchestrator interaction pattern
-  
-  # Estimation (expanded for comprehensive 14-AC scope)
+  blocking: true
   estimated_hours: 64
   estimated_days: 8
   actual_hours: 4
-  
-  # Tracking
-  ac_ids: 14  # Full coverage: IR-001 (4) + IR-002 (4) + IR-003 (4) + IR-004 (2)
+  ac_ids: 14
   completed_ac_ids: 13
   progress_percentage: 92.9
-  last_updated: "2026-01-15T20:00:00Z"
-  completion_status: "Knowledge Graph Builder complete (IR-004-01), awaiting Comprehension Loop (IR-004-02)"
-  
-  # CORTEX5.5 Reference
+  last_updated: '2026-01-15T20:00:00Z'
+  completion_status: Knowledge Graph Builder complete (IR-004-01), awaiting Comprehension
+    Loop (IR-004-02)
   origin:
-    branch: "CORTEX-5.5"
+    branch: CORTEX-5.5
     evidence:
-      - "feat: Add orchestration enhancements with LLM intent routing and pre-flight orchestrator"
-      - "feat(maintenance): Complete Phase 10 & 11 - LLM intent routing enhancements"
-      - "feat: Discovery orchestrator with dependency intelligence and multi-language AST parsing"
-    pattern: "Master orchestrator delegates to Interaction orchestrator for context building"
-
-# =============================================================================
-# ARCHITECTURE: THREE-STAGE MASTER ORCHESTRATOR
-# =============================================================================
-#
-#   User Request
-#        │
-#        ▼
-#   ┌─────────────────────────────────────────────────────────────────┐
-#   │                    MASTER ORCHESTRATOR                          │
-#   │  ┌──────────────────────────────────────────────────────────┐  │
-#   │  │  STAGE 1: INTENT COMPREHENSION (InteractionOrchestrator) │  │
-#   │  │  • CORTEX LENS context gathering                         │  │
-#   │  │  • Multi-source knowledge graph                          │  │
-#   │  │  • YAML condensation loop                                │  │
-#   │  │  • User approval gate                                    │  │
-#   │  └──────────────────────────────────────────────────────────┘  │
-#   │                          │                                      │
-#   │                          ▼                                      │
-#   │  ┌──────────────────────────────────────────────────────────┐  │
-#   │  │  STAGE 2: INTENT ROUTING (Based on approved YAML)        │  │
-#   │  │  • planning/ado → PlanningOrchestrator/ADOOrchestrator   │  │
-#   │  │  • code/implement/fix → TDDOrchestrator                  │  │
-#   │  │  • query/status → Direct response                        │  │
-#   │  │  • DEFAULT → Back to Interaction for clarification       │  │
-#   │  └──────────────────────────────────────────────────────────┘  │
-#   │                          │                                      │
-#   │                          ▼                                      │
-#   │  ┌──────────────────────────────────────────────────────────┐  │
-#   │  │  STAGE 3: KNOWLEDGE INTEGRATION (Parallel)               │  │
-#   │  │  • Load company domain YAMLs from cortex-brain/          │  │
-#   │  │  • Load CORTEX rules from tier0/governance/              │  │
-#   │  │  • COMPANY OVERRIDES CORTEX (intelligent merge)          │  │
-#   │  │  • TDD receives merged context                           │  │
-#   │  └──────────────────────────────────────────────────────────┘  │
-#   └─────────────────────────────────────────────────────────────────┘
-#
-# =============================================================================
-
-# =============================================================================
-# ACCEPTANCE CRITERIA
-# =============================================================================
-
+    - 'feat: Add orchestration enhancements with LLM intent routing and pre-flight
+      orchestrator'
+    - 'feat(maintenance): Complete Phase 10 & 11 - LLM intent routing enhancements'
+    - 'feat: Discovery orchestrator with dependency intelligence and multi-language
+      AST parsing'
+    pattern: Master orchestrator delegates to Interaction orchestrator for context
+      building
 acceptance_criteria:
-  # ---------------------------------------------------------------------------
-  # IR-001: Context Intelligence Sources (CORTEX LENS Integration)
-  # ---------------------------------------------------------------------------
-  - ac_id: "IR-001-01"
-    title: "AST-Based Code Intelligence"
-    description: |
-      Implement AST parsing to understand code structure, relationships, and
-      semantic meaning. Supports Python as primary language with extensibility.
-    
-    status: "COMPLETED"
-    completed_at: "2026-01-15T10:00:00Z"
-    
-    acceptance_tests:
-      - "Parse Python files into AST representation"
-      - "Extract function/class definitions, signatures, decorators"
-      - "Identify imports, dependencies, and call relationships"
-      - "Build call graph for impact analysis"
-      - "Detect patterns: singletons, factories, decorators"
-      - "Handle syntax errors gracefully (partial parsing)"
-    
-    implementation_details: |
-      Components:
-      - ASTIntelligenceEngine: Core parsing and analysis
-      - CallGraphBuilder: Builds relationships between functions/classes
-      - PatternDetector: Identifies architectural patterns
-      - DependencyMapper: Maps import relationships
-      
-      Supported Analysis:
-      - Function signatures (params, return types, docstrings)
-      - Class hierarchies (inheritance, mixins)
-      - Decorator chains (governance, audit, etc.)
-      - Cross-file relationships (imports, usages)
-      
-      Files Created:
-      - src/core/intelligence/ast_intelligence.py
-      - src/core/intelligence/call_graph.py
-      - src/core/intelligence/pattern_detector.py
-      - src/core/intelligence/dependency_mapper.py
-    
-    verification_method: |
-      Tests in tests/unit/core/intelligence/test_ast_intelligence.py:
-      - TestASTParsing: 11 tests
-      - TestCallGraphConstruction: 5 tests
-      - TestPatternDetection: 4 tests
-      - TestDependencyMapping: 3 tests
-      - TestGracefulDegradation: 5 tests
-      - TestASTIntelligenceIntegration: 3 tests
-      TOTAL: 31/31 PASSING
-    
-    git_checkpoint: "2e058c2d9"
-    
-  - ac_id: "IR-001-02"
-    title: "Git History Intelligence"
-    description: |
-      Extract context from git commit history, comments, and change patterns.
-      Understand WHY code exists in its current form.
-    
-    status: "COMPLETED"
-    completed_at: "2026-01-15T11:00:00Z"
-    
-    acceptance_tests:
-      - "Parse git log for file/function history"
-      - "Extract commit messages and link to code changes"
-      - "Identify change frequency (hot spots)"
-      - "Detect refactoring patterns from history"
-      - "Map authors/reviewers to code sections"
-      - "Build temporal context (when/why changed)"
-    
-    implementation_details: |
-      Components:
-      - GitHistoryAnalyzer: Parse git log and commits
-      - ChangeFrequencyMapper: Identify hot spots
-      - RefactoringDetector: Detect rename, move, extract patterns
-      - AuthorContextBuilder: Map expertise to code areas
-      
-      Integration:
-      - Uses subprocess for git operations
-      - Caches results for performance
-      - Respects .gitignore for analysis scope
-      
-      Files Created:
-      - src/core/intelligence/git_history_analyzer.py
-      - src/core/intelligence/change_frequency.py
-      - src/core/intelligence/author_context.py
-    
-    verification_method: |
-      Tests in tests/unit/core/intelligence/test_git_history.py:
-      - TestGitLogParsing: 6 tests
-      - TestChangeFrequency: 3 tests
-      - TestAuthorMapping: 3 tests
-      - TestRefactoringDetection: 2 tests
-      - TestTemporalContext: 2 tests
-      - TestGitHistoryErrorHandling: 2 tests
-      - TestGitHistoryIntegration: 2 tests
-      TOTAL: 20/20 PASSING
-    
-    git_checkpoint: "1e6548c82"
-    
-  - ac_id: "IR-001-03"
-    title: "Code Comment Intelligence"
-    description: |
-      Extract semantic meaning from code comments, docstrings, and inline
-      documentation. Build understanding of developer intent.
-    
-    status: "COMPLETED"
-    completed_at: "2026-01-15T12:00:00Z"
-    
-    acceptance_tests:
-      - "Extract docstrings from functions/classes"
-      - "Parse inline comments for context"
-      - "Identify TODO/FIXME/HACK markers"
-      - "Link comments to related code sections"
-      - "Detect outdated comments (code changed, comment not)"
-      - "Build semantic index of documented concepts"
-    
-    implementation_details: |
-      Components:
-      - CommentAnalyzer: Main analyzer for comments and docstrings
-      - DocstringExtractor: Parse Google/NumPy/Sphinx style (integrated)
-      - TechDebtTracker: TODO/FIXME/HACK/XXX/WARNING/NOTE identification
-      - CommentIndex: Build searchable comment index
-      
-      Comment Categories:
-      - Intent comments (WHY)
-      - Warning comments (GOTCHA, CAUTION)
-      - Technical debt (TODO, FIXME, HACK)
-      - Reference comments (SEE ALSO, RELATED)
-      
-      Files Created:
-      - src/core/intelligence/comment_analyzer.py
-    
-    verification_method: |
-      Tests in tests/unit/core/intelligence/test_comment_analyzer.py:
-      - TestDocstringExtraction: 6 tests
-      - TestInlineCommentAnalysis: 3 tests
-      - TestTechDebtTracking: 5 tests
-      - TestSemanticIndexing: 2 tests
-      - TestCommentQuality: 1 test
-      - TestCommentAnalyzerIntegration: 3 tests
-      TOTAL: 20/20 PASSING
-    
-    git_checkpoint: "5b33a0545"
-    
-  - ac_id: "IR-001-04"
-    title: "Relationship Traversal Engine"
-    description: |
-      Traverse linked relationships across APIs, databases, and configuration
-      files to build complete system understanding.
-    
-    status: "COMPLETED"
-    completed_at: "2026-01-15T13:00:00Z"
-    
-    acceptance_tests:
-      - "Map API endpoint → handler → service → database relationships"
-      - "Traverse SQLite/database schema relationships"
-      - "Link YAML configurations to code that uses them"
-      - "Build dependency graph across system boundaries"
-      - "Detect circular dependencies"
-      - "Identify unused code paths"
-    
-    implementation_details: |
-      Components:
-      - RelationshipEngine: Core traversal and analysis engine
-      - APIEndpointDetector: Flask/FastAPI route detection
-      - DatabaseModelAnalyzer: SQLAlchemy model/FK/relationship extraction
-      - ConfigurationLinker: Environment and settings reference tracking
-      - DependencyGraph/ModelGraph: Graph data structures
-      - ImpactAnalysis: Calculate change impact across codebase
-      
-      Traversal Strategy:
-      1. Start from user's focal point (file, function, AC-ID)
-      2. Expand outward through direct dependencies
-      3. Continue to transitive dependencies (configurable depth)
-      4. Build complete context graph
-      
-      Files Created:
-      - src/core/intelligence/relationship_traversal.py
-    
-    verification_method: |
-      Tests in tests/unit/core/intelligence/test_relationship_traversal.py:
-      - TestAPIEndpointRelationships: 3 tests
-      - TestDatabaseSchemaRelationships: 3 tests
-      - TestConfigurationReferences: 2 tests
-      - TestCrossFileDependencies: 2 tests
-      - TestImpactAnalysis: 2 tests
-      - TestRelationshipGraph: 2 tests
-      - TestRelationshipEngineIntegration: 3 tests
-      TOTAL: 17/17 PASSING
-    
-    git_checkpoint: "bf37e7967"
+- ac_id: IR-001-01
+  title: AST-Based Code Intelligence
+  description: 'Implement AST parsing to understand code structure, relationships,
+    and
 
-  # ---------------------------------------------------------------------------
-  # IR-002: Intent Reflection System
-  # ---------------------------------------------------------------------------
-  - ac_id: "IR-002-01"
-    title: "Intent Understanding & Canonicalization"
-    description: |
-      Transform raw user requests into canonicalized, unambiguous intents.
-      Leverage context intelligence to disambiguate vague requests.
-    
-    status: "NOT_STARTED"
-    
-    acceptance_tests:
-      - "Parse natural language intent from user request"
-      - "Canonicalize to standard intent types (IMPLEMENT, FIX, REFACTOR, etc.)"
-      - "Extract target scope (file, function, class, AC-ID)"
-      - "Identify implicit constraints from context"
-      - "Assign confidence score to interpretation"
-      - "Request clarification when confidence < threshold"
-    
-    implementation_details: |
-      Intent Types (Extended):
-      - IMPLEMENT: Create new functionality
-      - FIX: Resolve defect or error
-      - REFACTOR: Improve without changing behavior
-      - QUERY: Information retrieval
-      - ANALYZE: Deep investigation
-      - VALIDATE: Verify correctness
-      - MIGRATE: Move/transform existing
-      
-      Canonicalization Process:
-      1. Extract keywords and patterns from request
-      2. Match against intent type patterns
-      3. Use context intelligence to disambiguate
-      4. Assign confidence score
-      5. If confidence < 0.7, generate clarification prompt
-      
-      Files to Create:
-      - src/core/intent/intent_canonicalizer.py
-      - src/core/intent/scope_extractor.py
-      - src/core/intent/confidence_scorer.py
-    
-    verification_method: |
-      Tests in tests/unit/core/intent/test_intent_canonicalizer.py:
-      - TestIntentExtraction: NL → intent type
-      - TestScopeExtraction: Target identification
-      - TestConfidenceScoring: Ambiguity handling
-      - TestClarificationGeneration: Low confidence prompts
-    
-    git_checkpoint: "IR-002-01-intent-canonicalization"
-    
-  - ac_id: "IR-002-02"
-    title: "Challenge Generation System"
-    description: |
-      Generate challenges (potential issues, risks, edge cases) based on
-      holistic context analysis. Proactive problem identification.
-    
-    status: "NOT_STARTED"
-    
-    acceptance_tests:
-      - "Identify potential breaking changes from dependency analysis"
-      - "Detect test coverage gaps for proposed changes"
-      - "Flag governance violations before execution"
-      - "Highlight historical issues in similar code areas"
-      - "Identify performance implications"
-      - "Generate prioritized challenge list"
-    
-    implementation_details: |
-      Challenge Categories:
-      - BREAKING_CHANGE: Dependencies may break
-      - TEST_GAP: Insufficient test coverage
-      - GOVERNANCE_RISK: Rule violation potential
-      - HISTORICAL_ISSUE: Similar past problems
-      - PERFORMANCE_RISK: Scalability concerns
-      - SECURITY_RISK: Vulnerability potential
-      
-      Challenge Structure:
-      ```python
-      @dataclass
-      class Challenge:
-          category: ChallengeCategory
-          severity: Severity  # LOW, MEDIUM, HIGH, CRITICAL
-          description: str
-          affected_scope: List[str]  # Files/functions
-          evidence: List[str]  # Why this is a concern
-          mitigation: str  # Suggested approach
-      ```
-      
-      Files to Create:
-      - src/core/intent/challenge_generator.py
-      - src/core/intent/risk_analyzer.py
-      - src/core/intent/historical_issue_finder.py
-    
-    verification_method: |
-      Tests in tests/unit/core/intent/test_challenge_generator.py:
-      - TestBreakingChangeDetection: Dependency analysis
-      - TestTestGapIdentification: Coverage analysis
-      - TestGovernanceRiskDetection: Rule checking
-      - TestHistoricalIssueMatching: Pattern recognition
-    
-    git_checkpoint: "IR-002-02-challenge-generation"
-    
-  - ac_id: "IR-002-03"
-    title: "Recommendation Engine"
-    description: |
-      Generate recommendations (best practices, alternative approaches,
-      optimization suggestions) based on holistic context.
-    
-    status: "NOT_STARTED"
-    
-    acceptance_tests:
-      - "Suggest best practices from knowledge library"
-      - "Recommend alternative implementations"
-      - "Propose test strategies for changes"
-      - "Suggest related documentation updates"
-      - "Recommend governance rule compliance steps"
-      - "Prioritize recommendations by impact"
-    
-    implementation_details: |
-      Recommendation Categories:
-      - BEST_PRACTICE: Apply known pattern
-      - ALTERNATIVE_APPROACH: Different solution
-      - TEST_STRATEGY: Testing approach
-      - DOCUMENTATION: Doc updates needed
-      - GOVERNANCE_COMPLIANCE: Rule adherence steps
-      - OPTIMIZATION: Performance improvements
-      
-      Recommendation Structure:
-      ```python
-      @dataclass
-      class Recommendation:
-          category: RecommendationCategory
-          priority: Priority  # LOW, MEDIUM, HIGH
-          title: str
-          description: str
-          rationale: str  # Why recommended
-          implementation_hint: str  # How to apply
-          references: List[str]  # Knowledge library links
-      ```
-      
-      Files to Create:
-      - src/core/intent/recommendation_engine.py
-      - src/core/intent/best_practice_matcher.py
-      - src/core/intent/alternative_finder.py
-    
-    verification_method: |
-      Tests in tests/unit/core/intent/test_recommendation_engine.py:
-      - TestBestPracticeMatching: Pattern application
-      - TestAlternativeFinding: Solution variants
-      - TestTestStrategySuggestion: Testing approaches
-      - TestRecommendationPrioritization: Impact ranking
-    
-    status: "COMPLETED"
-    completed_at: "2026-01-15T14:00:00Z"
-    git_checkpoint: "RECOMMEND-ENGINE-CHECKPOINT"  # Latest from recent session
+    semantic meaning. Supports Python as primary language with extensibility.
 
-  - ac_id: "IR-002-04"
-    title: "Comprehension YAML Generation"
-    description: |
-      Transform canonicalized intents, challenges, and recommendations into
-      structured YAML comprehension documents for user approval before execution.
-      This enables the CORTEX LENS protocol to present holistic context.
-    
-    status: "COMPLETED"
-    completed_at: "2026-01-15T15:30:00Z"
-    
-    acceptance_tests:
-      - "Compose comprehension YAML from intent + challenges + recommendations"
-      - "Automatic severity sorting (CRITICAL → HIGH → MEDIUM → LOW)"
-      - "Automatic priority sorting (HIGH → MEDIUM → LOW)"
-      - "Include metadata (version, timestamp, tool info, phase)"
-      - "Round-trip conversion (YAML ↔ dict ↔ object)"
-      - "File I/O support (write to/read from disk)"
-      - "Handle edge cases (empty lists, unicode, long descriptions)"
-      - "Generate summary statistics (counts by severity/category/priority)"
-    
-    implementation_details: |
-      Components:
-      - CanonicalIntentComposer: Orchestrates YAML generation
-      - ComprehensionYAML: Complete document structure
-      - IntentSection: Canonicalized intent with confidence
-      - ChallengeSection: Risks/governance issues with summary
-      - RecommendationSection: Best practices with summary
-      - ChallengeItem/RecommendationItem: Individual entries
-      
-      YAML Structure:
-      ```yaml
-      metadata:
-        version: "1.0"
-        generated_at: ISO timestamp
-        tool: "CORTEX-LENS"
-        phase: "PHASE-07-Intent-Router"
-        intent_id: UUID
-        schema: "cortex-comprehension-v1"
-      
-      intent:
-        type: IMPLEMENT|FIX|REFACTOR|QUERY|ANALYZE|VALIDATE|MIGRATE
-        scope:
-          target_type: file|function|class|module
-          target_name: string
-          file_path: string
-          ac_ids: [AC-001, ...]
-        confidence: 0.0-1.0
-        keywords: [list]
-        needs_clarification: bool
-      
-      challenges:
-        summary:
-          total: N
-          critical: N
-          high: N
-          medium: N
-          low: N
-          by_category: {...}
-        items:
-          - id: CHALLENGE_001
-            category: BREAKING_CHANGE|TEST_GAP|GOVERNANCE_RISK|...
-            severity: CRITICAL|HIGH|MEDIUM|LOW
-            description: string
-            affected_code: string
-            remediation: string
-            confidence: 0.0-1.0
-      
-      recommendations:
-        summary:
-          total: N
-          high_priority: N
-          medium_priority: N
-          low_priority: N
-          by_category: {...}
-        items:
-          - id: REC_001
-            category: BEST_PRACTICE|ALTERNATIVE_APPROACH|TEST_STRATEGY|...
-            priority: HIGH|MEDIUM|LOW
-            title: string
-            description: string
-            code_context: string
-            alternative: string
-            rationale: string
-      ```
-      
-      Files Created:
-      - src/core/intent/comprehension_yaml.py
-      - tests/unit/core/intent/test_comprehension_yaml.py
-    
-    verification_method: |
-      Tests in tests/unit/core/intent/test_comprehension_yaml.py:
-      - TestYAMLStructureGeneration (8 tests): Verify YAML format/hierarchy
-      - TestContentIntegration (6 tests): Combine intent/challenges/recommendations
-      - TestSerialization (4 tests): to_dict(), to_yaml_string()
-      - TestRoundTripConversion (3 tests): YAML ↔ dict ↔ object
-      - TestValidation (8 tests): Schema requirements
-      - TestEdgeCases (6 tests): Empty lists, unicode, long descriptions
-      TOTAL: 35/35 PASSING
-    
-    git_checkpoint: "9a3f01c25"
+    '
+  status: COMPLETED
+  completed_at: '2026-01-15T10:00:00Z'
+  acceptance_tests:
+  - Parse Python files into AST representation
+  - Extract function/class definitions, signatures, decorators
+  - Identify imports, dependencies, and call relationships
+  - Build call graph for impact analysis
+  - 'Detect patterns: singletons, factories, decorators'
+  - Handle syntax errors gracefully (partial parsing)
+  implementation_details: 'Components:
 
-  # ---------------------------------------------------------------------------
-  # IR-003: Master + Interaction Orchestrator Integration
-  # ---------------------------------------------------------------------------
-  - ac_id: "IR-003-01"
-    title: "Intent Reflection Protocol"
-    description: |
-      Implement the Master + Interaction Orchestrator collaboration protocol.
-      Master delegates intent understanding to Interaction, which reflects
-      back with challenges and recommendations BEFORE execution.
-    
-    status: "COMPLETED"
-    completed_at: "2026-01-15T16:00:00Z"
-    
-    acceptance_tests:
-      - "Master orchestrator intercepts all user requests"
-      - "Master delegates to Interaction orchestrator for context building"
-      - "Interaction builds holistic context from all intelligence sources"
-      - "Interaction generates intent reflection (canonicalized intent + challenges + recommendations)"
-      - "Reflection presented to user for confirmation/refinement"
-      - "Only after confirmation does Master proceed to execution"
-      - "Audit trail captures entire flow"
-    
-    implementation_details: |
-      Components:
-      - IntentReflectionEngine: Core orchestrator for protocol
-      - ReflectionRequest: User request with focal point
-      - ReflectionResponse: Complete comprehension with approval status
-      - ReflectionStatus: PENDING, APPROVED, REJECTED, NEEDS_CLARIFICATION
-      
-      Protocol Flow:
-      1. User submits request to Master Orchestrator
-      2. Master delegates to Interaction Orchestrator
-      3. Interaction builds holistic context from:
-         - AST Intelligence
-         - Git History Intelligence
-         - Code Comment Intelligence
-         - Relationship Traversal Engine
-      4. Interaction identifies challenges and generates recommendations
-      5. Comprehension YAML generated with all three components
-      6. User presented with comprehension for approval/rejection/clarification
-      7. Only on approval does execution proceed
-      8. Audit trail captures all lifecycle events with hash chain
-      
-      User Approval Gate:
-      - approve(): Mark reflection as approved
-      - reject(reason): Mark reflection as rejected
-      - request_clarification(question): Request additional details
-      
-      Audit Trail:
-      - REFLECTION_START: Initial request received
-      - CONTEXT_AGGREGATION: Context sources gathered
-      - REFLECTION_COMPLETE: Comprehension generated
-      - USER_APPROVAL: User approved reflection
-      - USER_REJECTION: User rejected reflection
-      - CLARIFICATION_REQUESTED: User requested clarification
-      
-      Files Created:
-      - src/core/intent/intent_reflection_protocol.py
-      - tests/unit/core/intent/test_intent_reflection_protocol.py
-    
-    verification_method: |
-      Tests in tests/unit/core/intent/test_intent_reflection_protocol.py:
-      - TestProtocolFlow (6 tests): Master delegation, flow execution
-      - TestContextAggregation (4 tests): Intelligence source integration
-      - TestChallengeDetection (4 tests): Risk identification
-      - TestRecommendationGeneration (3 tests): Best practice suggestions
-      - TestUserConfirmationGate (5 tests): Approval workflows
-      - TestAuditTrail (6 tests): Logging with hash chain
-      - TestEdgeCases (8 tests): Simple/complex/ambiguous requests
-      - TestIntegrationScenarios (5 tests): End-to-end workflows
-      TOTAL: 41/41 PASSING
-    
-    git_checkpoint: "27efe9d8b"
-  
-  # ---------------------------------------------------------------------------
-  # IR-003-02 through IR-004: NOT_STARTED
-  # ---------------------------------------------------------------------------
-  - ac_id: "IR-003-02"
-    title: "LENS Context Builder"
-    description: |
-      Build holistic context from multiple intelligence sources and aggregate
-      findings into unified knowledge graph representing the codebase state.
-    
-    status: "COMPLETED"
-    completed_at: "2026-01-15T17:00:00Z"
-    
-    acceptance_tests:
-      - "Aggregate findings from all four intelligence sources"
-      - "Build knowledge graph with nodes (functions, classes, APIs, tables)"
-      - "Create edges representing relationships (calls, imports, dependencies)"
-      - "Filter context by file, type, and other criteria"
-      - "Prioritize context by change frequency, complexity, risk"
-      - "Serialize/deserialize context to JSON for transmission"
-      - "Enrich context with computed trends, risk scores, impact analysis"
-      - "Query context for specific functions, relationships, expertise"
-      - "Handle edge cases: large contexts, malformed data, null findings"
-    
-    implementation_details: |
-      Components:
-      - LENSContextBuilder: Main builder orchestrating aggregation
-      - LENSContext: Unified context from all sources
-      - KnowledgeGraph: Graph representation with nodes and edges
-      - ContextNode: Individual entity in graph (function, class, API, etc.)
-      - ContextEdge: Relationship between nodes (calls, imports, etc.)
-      
-      Aggregation Pipeline:
-      1. Add findings from AST Intelligence module
-      2. Add findings from Git History Analyzer module
-      3. Add findings from Comment Analyzer module
-      4. Add findings from Relationship Traversal Engine
-      5. Build knowledge graph from aggregated findings
-      6. Apply filtering criteria if needed
-      7. Prioritize based on strategy (frequency, complexity, risk)
-      8. Enrich with computed data (trends, scores, analysis)
-      9. Serialize for protocol transmission or storage
-      
-      Knowledge Graph Structure:
-      - Nodes: Functions, classes, modules, API endpoints, DB models, patterns
-      - Edges: Call relationships, inheritance, imports, dependencies
-      - Metadata: Source of discovery, confidence, timestamps
-      
-      Filtering Capabilities:
-      - By file: Restrict to specific source files
-      - By type: Focus on specific entity types
-      - By marker: Find tech debt, deprecated code, etc.
-      
-      Prioritization Strategies:
-      - CHANGE_FREQUENCY: Sort by how often changed
-      - COMPLEXITY: Sort by cyclomatic complexity
-      - EXPERTISE_CONCENTRATION: Sort by author concentration
-      - RISK_LEVEL: Sort by computed risk score
-      - RECENCY: Sort by recent modifications
-      
-      Enrichment Types:
-      - trends: Time-series analysis from git
-      - risk_scores: Computed risk ratings
-      - impact_analysis: Change impact assessment
-      - tech_debt_analysis: Debt item summary
-      
-      Query Types Supported:
-      - function_by_name: Find specific functions
-      - functions_in_file: All functions in a file
-      - call_graph: Relationship analysis
-      - expertise_by_file: Author expertise map
-      
-      Files Created:
-      - src/core/intent/lens_context_builder.py
-      - tests/unit/core/intent/test_lens_context_builder.py
-    
-    verification_method: |
-      Tests in tests/unit/core/intent/test_lens_context_builder.py:
-      - TestContextAggregation (4 tests): Source aggregation
-      - TestKnowledgeGraphConstruction (5 tests): Graph building
-      - TestContextFilteringAndPrioritization (5 tests): Filtering/sorting
-      - TestContextSerialization (4 tests): JSON round-trip
-      - TestContextEnrichment (4 tests): Computed data
-      - TestContextQuery (4 tests): Data retrieval
-      - TestEdgeCasesAndErrors (6 tests): Error handling
-      - TestIntegrationWithReflectionProtocol (4 tests): Integration
-      - TestPerformanceOptimization (3 tests): Performance
-      TOTAL: 38/38 PASSING
-    
-    git_checkpoint: "9becfdc40"
+    - ASTIntelligenceEngine: Core parsing and analysis
 
-  - ac_id: "IR-003-03"
-    title: "LENS Response Formatter"
-    description: |
-      Format comprehension output for user presentation in multiple formats
-      (YAML, Markdown, JSON). Ensures consistent, readable presentation of
-      challenges, recommendations, and intent summaries.
-    
-    status: "COMPLETED"
-    completed_at: "2026-01-15T18:00:00Z"
-    
-    acceptance_tests:
-      - "Format reflection response as YAML, Markdown, and JSON"
-      - "Sort challenges by severity (CRITICAL, HIGH, MEDIUM, LOW)"
-      - "Sort recommendations by priority"
-      - "Validate all required response fields present"
-      - "Convert between different output formats"
-      - "Customize output with templates and options"
-      - "Support audit trail inclusion/exclusion"
-      - "Handle special characters and edge cases"
-      - "Maintain readability for user review"
-    
-    implementation_details: |
-      Components:
-      - LENSResponseFormatter: Main formatter class
-      - ResponseFormat: Enum (JSON, YAML, Markdown)
-      - SeverityColor: Color mappings for terminal output
-      - FormattedResponse: Result wrapper
-      
-      Output Formats:
-      
-      **Markdown (Human-Readable)**
-      - Headers for each section (Intent, Challenges, Recommendations)
-      - Emoji indicators for severity levels (🔴 CRITICAL, 🟠 HIGH, etc.)
-      - Structured lists with clear remediation guidance
-      - Approval workflow indicators
-      
-      **YAML (Machine-Readable)**
-      - Structured key-value representation
-      - Maintains hierarchical relationships
-      - Compatible with comprehension YAML standard
-      - Easy to parse and validate
-      
-      **JSON (API-Compatible)**
-      - Standard JSON structure for protocol transmission
-      - Type-safe field representation
-      - Compatible with web APIs and integrations
-      
-      Formatting Features:
-      - Automatic severity sorting (CRITICAL → HIGH → MEDIUM → LOW)
-      - Priority sorting for recommendations
-      - Optional audit trail inclusion
-      - Metadata preservation
-      - Multi-format conversion support
-      - Individual component formatting (challenges, recommendations, intent)
-      - Summary statistics generation
-      
-      Customization Options:
-      - sort_challenges_by_severity: Enable/disable severity sorting
-      - sort_recommendations_by_priority: Enable/disable priority sorting
-      - include_audit_trail: Include/exclude audit trail
-      - include_metadata: Include/exclude metadata
-      - markdown_severity_emoji: Use emoji indicators in Markdown
-      - max_line_length: Control text wrapping
-      
-      Files Created:
-      - src/core/intent/lens_response_formatter.py
-      - tests/unit/core/intent/test_lens_response_formatter.py
-    
-    verification_method: |
-      Tests in tests/unit/core/intent/test_lens_response_formatter.py:
-      - TestYAMLResponseFormatting (4 tests): YAML output validation
-      - TestMarkdownResponseFormatting (4 tests): Markdown readability
-      - TestJSONResponseFormatting (3 tests): JSON structure
-      - TestResponseFieldValidation (4 tests): Required fields
-      - TestSeverityPrioritySorting (3 tests): Correct ordering
-      - TestTemplateCustomization (4 tests): Configuration options
-      - TestMultiFormatConversion (3 tests): Format conversion
-      - TestEdgeCasesAndErrors (4 tests): Special characters, edge cases
-      - TestIntegrationWithReflectionProtocol (3 tests): Protocol integration
-      - TestPerformanceOptimization (2 tests): Performance characteristics
-      TOTAL: 34/34 PASSING
-    
-    git_checkpoint: "6fb276852"
+    - CallGraphBuilder: Builds relationships between functions/classes
 
-  - ac_id: "IR-003-04"
-    title: "LENS Integration & Testing"
-    description: |
-      End-to-end integration testing of complete CORTEX LENS protocol.
-      Validates that Context Builder, Reflection Protocol, and Response
-      Formatter work together seamlessly through user approval gate.
-    
-    status: "COMPLETED"
-    completed_at: "2026-01-15T19:00:00Z"
-    
-    acceptance_tests:
-      - "Context builder aggregates all intelligence sources"
-      - "Reflection protocol orchestrates complete flow"
-      - "Response formatter presents results in all formats"
-      - "Complete pipeline executes in reasonable time"
-      - "User approval workflows function correctly"
-      - "Serialization works throughout pipeline"
-      - "Multiple output formats produce valid output"
-      - "Context filtering affects reflection"
-      - "Context enrichment provides computed data"
-      - "Knowledge graph building succeeds"
-    
-    implementation_details: |
-      Integration Tests:
-      1. Context Building
-         - LENSContextBuilder aggregates all sources
-         - Creates queryable context representation
-         - Produces valid serialized output
-      
-      2. Reflection Processing
-         - ReflectionEngine accepts built context
-         - Produces ReflectionResponse with status
-         - Supports different request types
-      
-      3. Response Formatting
-         - Accepts reflection responses
-         - Produces valid JSON/YAML/Markdown
-         - Maintains data integrity
-      
-      4. Complete Pipeline
-         - Flows: Build → Reflect → Format
-         - All components compatible
-         - Performance within bounds (<1 second)
-      
-      5. User Workflows
-         - Approval workflow functional
-         - Rejection workflow functional
-         - Serialization throughout
-      
-      6. Quality Checks
-         - Multiple format validity
-         - Context filtering works
-         - Enrichment computes data
-         - Graph building succeeds
-      
-      Files Created:
-      - tests/unit/core/intent/test_lens_integration.py
-    
-    verification_method: |
-      Tests in tests/unit/core/intent/test_lens_integration.py:
-      - TestLENSIntegration (13 tests):
-        - test_context_builder_creates_queryable_context
-        - test_reflection_engine_accepts_built_context
-        - test_formatter_accepts_reflection_response
-        - test_complete_pipeline
-        - test_approval_workflow
-        - test_rejection_workflow
-        - test_serialization_throughout_pipeline
-        - test_multiple_format_output
-        - test_context_filtering_affects_reflection
-        - test_context_enrichment_in_pipeline
-        - test_knowledge_graph_building
-        - test_performance_of_complete_pipeline
-        - test_all_response_formats_valid
-      TOTAL: 13/13 PASSING
-    
-    git_checkpoint: "10faf9932"
+    - PatternDetector: Identifies architectural patterns
 
-  # ---------------------------------------------------------------------------
-  # IR-004: Intent Router Integration (PENDING - 2 ACs remaining)
-  # ---------------------------------------------------------------------------
+    - DependencyMapper: Maps import relationships
 
-    title: "CORTEX LENS Knowledge Graph Builder"
-    description: |
-      CORTEX LENS tools gather context from multiple sources and build a 
-      unified knowledge graph. This graph serves as the foundation for 
-      holistic understanding of the user's intent and workspace state.
-    
-    status: "NOT_STARTED"
-    
-    acceptance_tests:
-      - "CORTEX LENS scans AST structure across entire workspace"
-      - "CORTEX LENS analyzes git history and commit patterns"
-      - "CORTEX LENS extracts code comments and documentation"
-      - "CORTEX LENS discovers API relationships (REST, GraphQL, DB)"
-      - "CORTEX LENS maps database schema relationships"
-      - "Knowledge graph unifies all sources into queryable structure"
-      - "Graph updates incrementally on workspace changes"
-    
-    implementation_details: |
-      CORTEX LENS Tools:
-      - lens_scan_ast: Recursive AST analysis
-      - lens_scan_git: Git history & patterns
-      - lens_scan_comments: Code comments & docs
-      - lens_scan_apis: API relationship discovery
-      - lens_scan_database: DB schema analysis
-      - lens_build_graph: Unified graph construction
-      
-      Knowledge Graph Structure:
-      ```python
-      @dataclass
-      class KnowledgeGraph:
-          nodes: Dict[str, GraphNode]  # id -> node
-          edges: List[GraphEdge]  # relationships
-          metadata: GraphMetadata  # timestamps, sources
-          
-      @dataclass
-      class GraphNode:
-          id: str
-          type: NodeType  # FILE, FUNCTION, CLASS, API, TABLE, etc.
-          name: str
-          source: str  # Which lens discovered it
-          properties: Dict[str, Any]
-          
-      @dataclass
-      class GraphEdge:
-          source_id: str
-          target_id: str
-          relationship: RelationType  # CALLS, IMPORTS, REFERENCES, etc.
-          weight: float  # Strength of relationship
-      ```
-      
-      Files to Create/Update:
-      - src/tools/cortex_lens/graph_builder.py
-      - src/tools/cortex_lens/ast_scanner.py
-      - src/tools/cortex_lens/git_scanner.py
-      - src/tools/cortex_lens/api_scanner.py
-      - src/tools/cortex_lens/db_scanner.py
-      - src/core/knowledge/knowledge_graph.py
-    
-    verification_method: |
-      Tests in tests/integration/test_cortex_lens_graph.py:
-      - TestASTScanning: Full workspace AST analysis
-      - TestGitScanning: History extraction
-      - TestAPIDiscovery: Relationship mapping
-      - TestGraphConstruction: Unified graph building
-      - TestIncrementalUpdate: Change propagation
-    
-    git_checkpoint: "IR-004-01-cortex-lens-knowledge-graph"
 
-  - ac_id: "IR-004-02"
-    title: "Comprehension Loop with YAML Condensation"
-    description: |
-      CORTEX reviews all gathered datasets holistically and condenses 
-      understanding into a structured YAML. User reviews the YAML, 
-      requests refinements, and the loop repeats until approval.
-      Approved YAMLs are pushed to appropriate brain tiers.
-    
-    status: "NOT_STARTED"
-    
-    acceptance_tests:
-      - "Knowledge graph is analyzed holistically"
-      - "Understanding condensed to structured YAML format"
-      - "YAML presented to user for review"
-      - "User can request refinements or clarifications"
-      - "Loop repeats until user explicitly approves"
-      - "Approved YAMLs pushed to appropriate brain tier"
-      - "Temporary/working YAMLs cleaned up after approval"
-      - "Rejection returns to gathering phase"
-    
-    implementation_details: |
-      Comprehension Loop Flow:
-      ```
-      ┌──────────────────────────────────────────────────────────────┐
-      │                    COMPREHENSION LOOP                        │
-      │                                                              │
-      │   ┌─────────────┐     ┌─────────────┐     ┌─────────────┐   │
-      │   │ Knowledge   │ ──▶ │ YAML        │ ──▶ │ User        │   │
-      │   │ Graph       │     │ Condenser   │     │ Review      │   │
-      │   └─────────────┘     └─────────────┘     └──────┬──────┘   │
-      │                                                   │          │
-      │         ┌────────────────────────────────────────┤          │
-      │         │                                        │          │
-      │         ▼                                        ▼          │
-      │   ┌─────────────┐                         ┌─────────────┐   │
-      │   │ REFINE      │ ◀── Request Changes ◀── │ APPROVE     │   │
-      │   │ (Loop Back) │                         │ (Exit Loop) │   │
-      │   └─────────────┘                         └──────┬──────┘   │
-      │                                                   │          │
-      └───────────────────────────────────────────────────┼──────────┘
-                                                          ▼
-                                              ┌─────────────────────┐
-                                              │ Brain Tier Push     │
-                                              │  ├─ tier0: governance│
-                                              │  ├─ tier1: AC mapping│
-                                              │  ├─ tier2: standards │
-                                              │  └─ tier3: knowledge │
-                                              └─────────────────────┘
-                                                          │
-                                                          ▼
-                                              ┌─────────────────────┐
-                                              │ Cleanup Temp YAMLs  │
-                                              └─────────────────────┘
-      ```
-      
-      Comprehension YAML Structure:
-      ```yaml
-      comprehension:
-        session_id: "uuid"
-        timestamp: "ISO8601"
-        
-        intent_understanding:
-          primary_intent: "IMPLEMENT"
-          scope: ["src/api/users.py", "tests/test_users.py"]
-          confidence: 0.92
-          
-        context_summary:
-          affected_files: 5
-          affected_functions: 12
-          related_apis: 2
-          related_tables: 1
-          
-        knowledge_extracted:
-          patterns_found:
-            - "REST API controller pattern"
-            - "SQLAlchemy ORM usage"
-          dependencies:
-            - "flask>=2.0"
-            - "sqlalchemy>=1.4"
-          test_coverage: "78%"
-          
-        challenges:
-          - category: "BREAKING_CHANGE"
-            description: "User API change affects 3 consumers"
-            severity: "HIGH"
-            
-        recommendations:
-          - category: "BEST_PRACTICE"
-            description: "Add API versioning"
-            priority: "HIGH"
-            
-        approval_status: "PENDING"  # PENDING, APPROVED, REJECTED
-        revision_history:
-          - revision: 1
-            changes: "Initial comprehension"
-          - revision: 2
-            changes: "Added test coverage analysis per user request"
-      ```
-      
-      Files to Create:
-      - src/core/intent/comprehension_loop.py
-      - src/core/intent/yaml_condenser.py
-      - src/core/intent/user_approval_gate.py
-      - src/core/intent/brain_tier_pusher.py
-    
-    verification_method: |
-      Tests in tests/integration/test_comprehension_loop.py:
-      - TestYAMLCondensation: Graph → YAML conversion
-      - TestUserReview: Presentation and feedback capture
-      - TestRefinementLoop: Multiple iteration handling
-      - TestApprovalGate: Exit condition verification
-      - TestBrainTierPush: Correct tier placement
-      - TestTempCleanup: Working file removal
-    
-    git_checkpoint: "IR-004-02-comprehension-loop"
+    Supported Analysis:
 
-  # ---------------------------------------------------------------------------
-  # IR-005: Intent-Based Orchestrator Routing
-  # ---------------------------------------------------------------------------
-  - ac_id: "IR-005-01"
-    title: "Three-Stage Master Orchestrator Architecture"
-    description: |
-      Master Orchestrator operates in three stages:
-      Stage 1: Intent Comprehension (InteractionOrchestrator as preprocessor)
-      Stage 2: Intent-Based Routing (delegate to specialized orchestrators)
-      Stage 3: Knowledge Integration (company overrides merged)
-    
-    status: "NOT_STARTED"
-    
-    acceptance_tests:
-      - "Master orchestrator ALWAYS starts with Stage 1 (Comprehension)"
-      - "InteractionOrchestrator is the FIRST-STAGE PREPROCESSOR (not default)"
-      - "Stage 1 produces approved comprehension YAML before routing"
-      - "Stage 2 routes based on canonicalized intent type"
-      - "Stage 3 loads and merges knowledge context before execution"
-      - "All three stages are audited"
-    
-    implementation_details: |
-      Three-Stage Architecture:
-      ```
-      ┌─────────────────────────────────────────────────────────────────┐
-      │                    MASTER ORCHESTRATOR                          │
-      │                                                                 │
-      │  ╔═══════════════════════════════════════════════════════════╗ │
-      │  ║ STAGE 1: INTENT COMPREHENSION                             ║ │
-      │  ║   InteractionOrchestrator as Preprocessor                 ║ │
-      │  ║                                                           ║ │
-      │  ║   1. CORTEX LENS gathers context (knowledge graph)        ║ │
-      │  ║   2. Holistic analysis of all sources                     ║ │
-      │  ║   3. YAML condensation of understanding                   ║ │
-      │  ║   4. User review loop until approval                      ║ │
-      │  ║   5. Output: Approved Comprehension YAML                  ║ │
-      │  ╚═══════════════════════════════════════════════════════════╝ │
-      │                            │                                   │
-      │                            ▼                                   │
-      │  ╔═══════════════════════════════════════════════════════════╗ │
-      │  ║ STAGE 2: INTENT-BASED ROUTING                             ║ │
-      │  ║                                                           ║ │
-      │  ║   Intent Type → Target Orchestrator:                      ║ │
-      │  ║   ─────────────────────────────────────                   ║ │
-      │  ║   • planning, ado_work  → PlanningOrchestrator            ║ │
-      │  ║   • code, implement,                                      ║ │
-      │  ║     fix, refactor       → TDDOrchestrator                 ║ │
-      │  ║   • query, status       → Direct Response (no delegation) ║ │
-      │  ║   • analyze, review     → AnalysisOrchestrator            ║ │
-      │  ║   • UNCLEAR/LOW_CONF    → Back to Stage 1 (clarification) ║ │
-      │  ╚═══════════════════════════════════════════════════════════╝ │
-      │                            │                                   │
-      │                            ▼                                   │
-      │  ╔═══════════════════════════════════════════════════════════╗ │
-      │  ║ STAGE 3: KNOWLEDGE INTEGRATION (Parallel with Stage 2)    ║ │
-      │  ║                                                           ║ │
-      │  ║   1. Load company domain YAMLs from cortex-brain/         ║ │
-      │  ║   2. Load CORTEX rules from tier0/governance/             ║ │
-      │  ║   3. MERGE: Company OVERRIDES CORTEX                      ║ │
-      │  ║   4. Pass merged context to target orchestrator           ║ │
-      │  ╚═══════════════════════════════════════════════════════════╝ │
-      │                                                                 │
-      └─────────────────────────────────────────────────────────────────┘
-      ```
-      
-      Why This Architecture (Not "Interaction as Default"):
-      - Avoids circular delegation (Master → Interaction → Master)
-      - Clear separation: Comprehension vs Routing vs Execution
-      - Interaction is a STAGE, not a fallback
-      - Every request gets comprehension (no exceptions)
-      - Routing happens AFTER understanding is confirmed
-      
-      Files to Create/Update:
-      - src/orchestrators/master_orchestrator.py (major update)
-      - src/orchestrators/stages/comprehension_stage.py
-      - src/orchestrators/stages/routing_stage.py
-      - src/orchestrators/stages/knowledge_stage.py
-      - src/orchestrators/routing/intent_router.py
-    
-    verification_method: |
-      Tests in tests/integration/test_three_stage_master.py:
-      - TestStage1Comprehension: Always executes first
-      - TestStage2Routing: Correct orchestrator selection
-      - TestStage3Knowledge: Override merging
-      - TestStageSequencing: Proper order enforcement
-      - TestAuditTrail: All stages logged
-    
-    git_checkpoint: "IR-005-01-three-stage-master"
+    - Function signatures (params, return types, docstrings)
 
-  - ac_id: "IR-005-02"
-    title: "TDD Orchestrator Routing for Code Work"
-    description: |
-      All code-related work (implement, fix, refactor) MUST be routed 
-      to TDDOrchestrator. No exceptions. TDD receives merged context 
-      from Stage 3.
-    
-    status: "NOT_STARTED"
-    
-    acceptance_tests:
-      - "Intent types [IMPLEMENT, FIX, REFACTOR, CODE] route to TDDOrchestrator"
-      - "TDDOrchestrator receives comprehension YAML from Stage 1"
-      - "TDDOrchestrator receives merged knowledge from Stage 3"
-      - "TDD flow enforced: Test First → Implement → Verify"
-      - "No code changes without TDD (governance enforced)"
-      - "Routing decision audited with intent classification"
-    
-    implementation_details: |
-      TDD Routing Logic:
-      ```python
-      CODE_INTENTS = {
-          IntentType.IMPLEMENT,
-          IntentType.FIX,
-          IntentType.REFACTOR,
-          IntentType.CODE,
-          IntentType.TEST,
-          IntentType.DEBUG,
-      }
-      
-      def route_to_orchestrator(intent: CanonicalIntent) -> Orchestrator:
-          if intent.type in CODE_INTENTS:
-              return TDDOrchestrator(
-                  comprehension=intent.comprehension_yaml,
-                  knowledge_context=intent.merged_knowledge
-              )
-          elif intent.type in {IntentType.PLANNING, IntentType.ADO_WORK}:
-              return PlanningOrchestrator(...)
-          elif intent.type in {IntentType.QUERY, IntentType.STATUS}:
-              return DirectResponse(...)  # No delegation needed
-          else:
-              # Low confidence or unclear
-              return Stage1Comprehension(request_clarification=True)
-      ```
-      
-      TDDOrchestrator Flow:
-      ```
-      Comprehension YAML + Merged Knowledge
-                    │
-                    ▼
-      ┌─────────────────────────────────────┐
-      │ TDDOrchestrator                     │
-      │                                     │
-      │   1. Extract test requirements      │
-      │   2. Generate test cases FIRST      │
-      │   3. Run tests (expect failure)     │
-      │   4. Implement minimal solution     │
-      │   5. Run tests (expect pass)        │
-      │   6. Refactor if needed             │
-      │   7. Final test verification        │
-      └─────────────────────────────────────┘
-      ```
-      
-      Files to Update:
-      - src/orchestrators/routing/intent_router.py
-      - src/orchestrators/tdd_orchestrator.py (receive merged context)
-    
-    verification_method: |
-      Tests in tests/integration/test_tdd_routing.py:
-      - TestCodeIntentRouting: All code intents → TDD
-      - TestTDDContextInjection: Comprehension + knowledge passed
-      - TestTDDFlowEnforcement: Test-first verified
-      - TestNoBypass: Cannot skip TDD for code work
-    
-    git_checkpoint: "IR-005-02-tdd-routing"
+    - Class hierarchies (inheritance, mixins)
 
-  # ---------------------------------------------------------------------------
-  # IR-006: Company Domain Override System
-  # ---------------------------------------------------------------------------
-  - ac_id: "IR-006-01"
-    title: "Domain Rule Loading from cortex-brain/"
-    description: |
-      Load company-specific domain rules from cortex-brain/ tiers.
-      These rules represent company standards, conventions, and 
-      business logic that may differ from CORTEX defaults.
-    
-    status: "NOT_STARTED"
-    
-    acceptance_tests:
-      - "Load domain YAMLs from cortex-brain/tier0/ (governance)"
-      - "Load domain YAMLs from cortex-brain/tier1/ (AC mappings)"
-      - "Load domain YAMLs from cortex-brain/tier2/ (standards)"
-      - "Load domain YAMLs from cortex-brain/tier3/ (advisory)"
-      - "Parse and validate YAML structure"
-      - "Cache loaded rules for performance"
-      - "Detect and handle YAML syntax errors gracefully"
-    
-    implementation_details: |
-      Domain Rule Structure:
-      ```yaml
-      # cortex-brain/tier0/governance/company-rules.yaml
-      domain_rules:
-        rule_set_id: "COMPANY-RULES"
-        version: "1.0"
-        priority: 100  # Higher = more important (company > cortex)
-        
-        rules:
-          - rule_id: "COMPANY-001"
-            description: "All APIs must use company auth middleware"
-            applies_to: ["api", "endpoint", "route"]
-            enforcement: "STRICT"
-            
-          - rule_id: "COMPANY-002"
-            description: "Database models must use company base class"
-            applies_to: ["model", "orm", "database"]
-            enforcement: "STRICT"
-            
-          - rule_id: "COMPANY-003"
-            description: "Prefer async handlers for I/O operations"
-            applies_to: ["handler", "function"]
-            enforcement: "ADVISORY"
-      ```
-      
-      Loading Hierarchy:
-      ```
-      cortex-brain/
-      ├── tier0/governance/     # HIGHEST priority (immutable)
-      │   ├── cortex-core-rules.yaml
-      │   └── company-rules.yaml     # Company governance
-      ├── tier1/acceptance-criteria/ # Project-specific
-      ├── tier2/                     # Standards
-      └── tier3/                     # LOWEST priority (advisory)
-      ```
-      
-      Files to Create/Update:
-      - src/core/knowledge/domain_rule_loader.py
-      - src/core/knowledge/yaml_validator.py
-      - src/core/knowledge/rule_cache.py
-    
-    verification_method: |
-      Tests in tests/unit/core/knowledge/test_domain_rule_loader.py:
-      - TestTierLoading: Load from each tier
-      - TestYAMLParsing: Valid structure extraction
-      - TestCaching: Performance verification
-      - TestErrorHandling: Graceful failure
-    
-    git_checkpoint: "IR-006-01-domain-rule-loading"
+    - Decorator chains (governance, audit, etc.)
 
-  - ac_id: "IR-006-02"
-    title: "Additive Merge with Selective Override & Priority Protection"
-    description: |
-      ENHANCED MERGE ALGORITHM: Additive merge with selective override.
-      - All non-conflicting CORTEX rules are ALWAYS applied
-      - Company overrides ONLY where there's a conflict
-      - CRITICAL CORTEX rules cannot be overridden
-      - Scope-aware override (partial overrides supported)
-      - Merge happens BEFORE comprehension (not after)
-    
-    status: "NOT_STARTED"
-    
-    acceptance_tests:
-      - "CORTEX rules loaded as baseline (Set A)"
-      - "Company rules loaded for overlay (Set B)"
-      - "Non-conflicting CORTEX rules ALWAYS preserved"
-      - "Conflicting rules: Company wins UNLESS CORTEX is CRITICAL"
-      - "CRITICAL CORTEX rules cannot be overridden by Company"
-      - "Scope-aware: partial override respects applies_to boundaries"
-      - "Merge happens at START of Stage 1 (before comprehension)"
-      - "User sees FINAL merged ruleset in comprehension YAML"
-      - "Override audit trail with rationale for each decision"
-    
-    implementation_details: |
-      ADDITIVE MERGE WITH SELECTIVE OVERRIDE
-      ======================================
-      
-      Example:
-      ```
-      CORTEX (Set A): [A1, A2, A3, A4, A5]  (5 rules)
-      COMPANY (Set B): [B2, B4]              (2 overrides)
-      
-      Result: [A1, B2, A3, B4, A5]  ← 5 rules total!
-      NOT:    [B2, B4]              ← WRONG (replacement)
-      ```
-      
-      Priority Levels:
-      ```python
-      class RulePriority(Enum):
-          CRITICAL = 100    # CORTEX: Cannot be overridden (security, compliance)
-          MANDATORY = 80    # CORTEX: Can be overridden with warning
-          STANDARD = 50     # Normal rules, freely overridable
-          ADVISORY = 20     # Suggestions, easily overridable
-      ```
-      
-      Enhanced Merge Algorithm:
-      ```python
-      def additive_merge_with_selective_override(
-          cortex_rules: List[DomainRule],
-          company_rules: List[DomainRule]
-      ) -> MergedRuleset:
-          """
-          ADDITIVE merge - keeps ALL non-conflicting rules from BOTH sets.
-          SELECTIVE override - Company wins conflicts (except CRITICAL).
-          SCOPE-AWARE - partial overrides respect applies_to boundaries.
-          """
-          merged = MergedRuleset()
-          audit = MergeAuditLog()
-          
-          # Index by (rule_category, applies_to_scope)
-          cortex_index = index_by_scope(cortex_rules)
-          company_index = index_by_scope(company_rules)
-          
-          all_scopes = set(cortex_index.keys()) | set(company_index.keys())
-          
-          for scope in all_scopes:
-              cortex_rule = cortex_index.get(scope)
-              company_rule = company_index.get(scope)
-              
-              if cortex_rule and company_rule:
-                  # CONFLICT detected
-                  if cortex_rule.priority == RulePriority.CRITICAL:
-                      # CRITICAL cannot be overridden
-                      merged.add(cortex_rule)
-                      audit.log(MergeDecision(
-                          scope=scope,
-                          winner="CORTEX",
-                          reason="CRITICAL rule - cannot override",
-                          cortex_rule=cortex_rule,
-                          company_rule=company_rule,
-                          company_rule_rejected=True
-                      ))
-                  else:
-                      # Company wins (selective override)
-                      merged.add(company_rule)
-                      audit.log(MergeDecision(
-                          scope=scope,
-                          winner="COMPANY",
-                          reason="Company override accepted",
-                          cortex_rule=cortex_rule,
-                          company_rule=company_rule
-                      ))
-              elif cortex_rule:
-                  # Only CORTEX has rule - ALWAYS include (additive)
-                  merged.add(cortex_rule)
-                  audit.log(MergeDecision(
-                      scope=scope,
-                      winner="CORTEX",
-                      reason="No company override - CORTEX preserved"
-                  ))
-              else:
-                  # Only Company has rule - include (additive)
-                  merged.add(company_rule)
-                  audit.log(MergeDecision(
-                      scope=scope,
-                      winner="COMPANY",
-                      reason="New company rule - added to merged set"
-                  ))
-          
-          merged.audit_log = audit
-          merged.stats = MergeStats(
-              cortex_preserved=audit.count_cortex_preserved(),
-              company_overrides=audit.count_company_wins(),
-              company_additions=audit.count_company_new(),
-              critical_protected=audit.count_critical_protected()
-          )
-          return merged
-      ```
-      
-      Scope-Aware Override Example:
-      ```yaml
-      # CORTEX rule (broad scope)
-      - rule_id: "CORTEX-TEST-001"
-        description: "Test coverage >= 80%"
-        applies_to: ["all_code"]
-        priority: STANDARD
-        
-      # Company rule (narrow scope override)
-      - rule_id: "COMPANY-TEST-001"
-        description: "Test coverage >= 95%"
-        applies_to: ["production_code"]  # Narrower!
-        priority: STANDARD
-      
-      # MERGED RESULT:
-      # - production_code: 95% (Company override)
-      # - non_production_code: 80% (CORTEX still applies!)
-      ```
-      
-      Merge Timing (CRITICAL):
-      ```
-      ┌─────────────────────────────────────────────────────────┐
-      │  ★ MERGE HAPPENS FIRST (Before ANY comprehension)      │
-      │                                                         │
-      │  1. Load CORTEX rules from tier0/governance/            │
-      │  2. Load Company rules from cortex-brain/               │
-      │  3. Execute additive_merge_with_selective_override()    │
-      │  4. MERGED_RULES available for entire request lifecycle │
-      └─────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-      ┌─────────────────────────────────────────────────────────┐
-      │  STAGE 1: Comprehension (uses MERGED_RULES)             │
-      │  - User sees final merged ruleset                       │
-      │  - No surprises between comprehension and execution     │
-      └─────────────────────────────────────────────────────────┘
-      ```
-      
-      Files to Create:
-      - src/core/knowledge/additive_merger.py
-      - src/core/knowledge/rule_priority.py
-      - src/core/knowledge/scope_matcher.py
-      - src/core/knowledge/merge_audit_log.py
-    
-    verification_method: |
-      Tests in tests/unit/core/knowledge/test_additive_merger.py:
-      - TestAdditivePreservation: Non-conflicting CORTEX rules kept
-      - TestSelectiveOverride: Company wins conflicts
-      - TestCriticalProtection: CRITICAL rules cannot be overridden
-      - TestScopeAwareOverride: Partial override respects boundaries
-      - TestMergeTiming: Merge before comprehension verified
-      - TestAuditLogging: All decisions logged with rationale
-    
-    git_checkpoint: "IR-006-02-additive-merge"
+    - Cross-file relationships (imports, usages)
 
-# =============================================================================
-# RISKS & MITIGATIONS
-# =============================================================================
 
+    Files Created:
+
+    - src/core/intelligence/ast_intelligence.py
+
+    - src/core/intelligence/call_graph.py
+
+    - src/core/intelligence/pattern_detector.py
+
+    - src/core/intelligence/dependency_mapper.py
+
+    '
+  verification_method: 'Tests in tests/unit/core/intelligence/test_ast_intelligence.py:
+
+    - TestASTParsing: 11 tests
+
+    - TestCallGraphConstruction: 5 tests
+
+    - TestPatternDetection: 4 tests
+
+    - TestDependencyMapping: 3 tests
+
+    - TestGracefulDegradation: 5 tests
+
+    - TestASTIntelligenceIntegration: 3 tests
+
+    TOTAL: 31/31 PASSING
+
+    '
+  git_checkpoint: 2e058c2d9
+- ac_id: IR-001-02
+  title: Git History Intelligence
+  description: 'Extract context from git commit history, comments, and change patterns.
+
+    Understand WHY code exists in its current form.
+
+    '
+  status: COMPLETED
+  completed_at: '2026-01-15T11:00:00Z'
+  acceptance_tests:
+  - Parse git log for file/function history
+  - Extract commit messages and link to code changes
+  - Identify change frequency (hot spots)
+  - Detect refactoring patterns from history
+  - Map authors/reviewers to code sections
+  - Build temporal context (when/why changed)
+  implementation_details: 'Components:
+
+    - GitHistoryAnalyzer: Parse git log and commits
+
+    - ChangeFrequencyMapper: Identify hot spots
+
+    - RefactoringDetector: Detect rename, move, extract patterns
+
+    - AuthorContextBuilder: Map expertise to code areas
+
+
+    Integration:
+
+    - Uses subprocess for git operations
+
+    - Caches results for performance
+
+    - Respects .gitignore for analysis scope
+
+
+    Files Created:
+
+    - src/core/intelligence/git_history_analyzer.py
+
+    - src/core/intelligence/change_frequency.py
+
+    - src/core/intelligence/author_context.py
+
+    '
+  verification_method: 'Tests in tests/unit/core/intelligence/test_git_history.py:
+
+    - TestGitLogParsing: 6 tests
+
+    - TestChangeFrequency: 3 tests
+
+    - TestAuthorMapping: 3 tests
+
+    - TestRefactoringDetection: 2 tests
+
+    - TestTemporalContext: 2 tests
+
+    - TestGitHistoryErrorHandling: 2 tests
+
+    - TestGitHistoryIntegration: 2 tests
+
+    TOTAL: 20/20 PASSING
+
+    '
+  git_checkpoint: 1e6548c82
+- ac_id: IR-001-03
+  title: Code Comment Intelligence
+  description: 'Extract semantic meaning from code comments, docstrings, and inline
+
+    documentation. Build understanding of developer intent.
+
+    '
+  status: COMPLETED
+  completed_at: '2026-01-15T12:00:00Z'
+  acceptance_tests:
+  - Extract docstrings from functions/classes
+  - Parse inline comments for context
+  - Identify TODO/FIXME/HACK markers
+  - Link comments to related code sections
+  - Detect outdated comments (code changed, comment not)
+  - Build semantic index of documented concepts
+  implementation_details: 'Components:
+
+    - CommentAnalyzer: Main analyzer for comments and docstrings
+
+    - DocstringExtractor: Parse Google/NumPy/Sphinx style (integrated)
+
+    - TechDebtTracker: TODO/FIXME/HACK/XXX/WARNING/NOTE identification
+
+    - CommentIndex: Build searchable comment index
+
+
+    Comment Categories:
+
+    - Intent comments (WHY)
+
+    - Warning comments (GOTCHA, CAUTION)
+
+    - Technical debt (TODO, FIXME, HACK)
+
+    - Reference comments (SEE ALSO, RELATED)
+
+
+    Files Created:
+
+    - src/core/intelligence/comment_analyzer.py
+
+    '
+  verification_method: 'Tests in tests/unit/core/intelligence/test_comment_analyzer.py:
+
+    - TestDocstringExtraction: 6 tests
+
+    - TestInlineCommentAnalysis: 3 tests
+
+    - TestTechDebtTracking: 5 tests
+
+    - TestSemanticIndexing: 2 tests
+
+    - TestCommentQuality: 1 test
+
+    - TestCommentAnalyzerIntegration: 3 tests
+
+    TOTAL: 20/20 PASSING
+
+    '
+  git_checkpoint: 5b33a0545
+- ac_id: IR-001-04
+  title: Relationship Traversal Engine
+  description: 'Traverse linked relationships across APIs, databases, and configuration
+
+    files to build complete system understanding.
+
+    '
+  status: COMPLETED
+  completed_at: '2026-01-15T13:00:00Z'
+  acceptance_tests:
+  - Map API endpoint → handler → service → database relationships
+  - Traverse SQLite/database schema relationships
+  - Link YAML configurations to code that uses them
+  - Build dependency graph across system boundaries
+  - Detect circular dependencies
+  - Identify unused code paths
+  implementation_details: 'Components:
+
+    - RelationshipEngine: Core traversal and analysis engine
+
+    - APIEndpointDetector: Flask/FastAPI route detection
+
+    - DatabaseModelAnalyzer: SQLAlchemy model/FK/relationship extraction
+
+    - ConfigurationLinker: Environment and settings reference tracking
+
+    - DependencyGraph/ModelGraph: Graph data structures
+
+    - ImpactAnalysis: Calculate change impact across codebase
+
+
+    Traversal Strategy:
+
+    1. Start from user''s focal point (file, function, AC-ID)
+
+    2. Expand outward through direct dependencies
+
+    3. Continue to transitive dependencies (configurable depth)
+
+    4. Build complete context graph
+
+
+    Files Created:
+
+    - src/core/intelligence/relationship_traversal.py
+
+    '
+  verification_method: 'Tests in tests/unit/core/intelligence/test_relationship_traversal.py:
+
+    - TestAPIEndpointRelationships: 3 tests
+
+    - TestDatabaseSchemaRelationships: 3 tests
+
+    - TestConfigurationReferences: 2 tests
+
+    - TestCrossFileDependencies: 2 tests
+
+    - TestImpactAnalysis: 2 tests
+
+    - TestRelationshipGraph: 2 tests
+
+    - TestRelationshipEngineIntegration: 3 tests
+
+    TOTAL: 17/17 PASSING
+
+    '
+  git_checkpoint: bf37e7967
+- ac_id: IR-002-01
+  title: Intent Understanding & Canonicalization
+  description: 'Transform raw user requests into canonicalized, unambiguous intents.
+
+    Leverage context intelligence to disambiguate vague requests.
+
+    '
+  status: NOT_STARTED
+  acceptance_tests:
+  - Parse natural language intent from user request
+  - Canonicalize to standard intent types (IMPLEMENT, FIX, REFACTOR, etc.)
+  - Extract target scope (file, function, class, AC-ID)
+  - Identify implicit constraints from context
+  - Assign confidence score to interpretation
+  - Request clarification when confidence < threshold
+  implementation_details: 'Intent Types (Extended):
+
+    - IMPLEMENT: Create new functionality
+
+    - FIX: Resolve defect or error
+
+    - REFACTOR: Improve without changing behavior
+
+    - QUERY: Information retrieval
+
+    - ANALYZE: Deep investigation
+
+    - VALIDATE: Verify correctness
+
+    - MIGRATE: Move/transform existing
+
+
+    Canonicalization Process:
+
+    1. Extract keywords and patterns from request
+
+    2. Match against intent type patterns
+
+    3. Use context intelligence to disambiguate
+
+    4. Assign confidence score
+
+    5. If confidence < 0.7, generate clarification prompt
+
+
+    Files to Create:
+
+    - src/core/intent/intent_canonicalizer.py
+
+    - src/core/intent/scope_extractor.py
+
+    - src/core/intent/confidence_scorer.py
+
+    '
+  verification_method: 'Tests in tests/unit/core/intent/test_intent_canonicalizer.py:
+
+    - TestIntentExtraction: NL → intent type
+
+    - TestScopeExtraction: Target identification
+
+    - TestConfidenceScoring: Ambiguity handling
+
+    - TestClarificationGeneration: Low confidence prompts
+
+    '
+  git_checkpoint: IR-002-01-intent-canonicalization
+- ac_id: IR-002-02
+  title: Challenge Generation System
+  description: 'Generate challenges (potential issues, risks, edge cases) based on
+
+    holistic context analysis. Proactive problem identification.
+
+    '
+  status: NOT_STARTED
+  acceptance_tests:
+  - Identify potential breaking changes from dependency analysis
+  - Detect test coverage gaps for proposed changes
+  - Flag governance violations before execution
+  - Highlight historical issues in similar code areas
+  - Identify performance implications
+  - Generate prioritized challenge list
+  implementation_details: "Challenge Categories:\n- BREAKING_CHANGE: Dependencies\
+    \ may break\n- TEST_GAP: Insufficient test coverage\n- GOVERNANCE_RISK: Rule violation\
+    \ potential\n- HISTORICAL_ISSUE: Similar past problems\n- PERFORMANCE_RISK: Scalability\
+    \ concerns\n- SECURITY_RISK: Vulnerability potential\n\nChallenge Structure:\n\
+    ```python\n@dataclass\nclass Challenge:\n    category: ChallengeCategory\n   \
+    \ severity: Severity  # LOW, MEDIUM, HIGH, CRITICAL\n    description: str\n  \
+    \  affected_scope: List[str]  # Files/functions\n    evidence: List[str]  # Why\
+    \ this is a concern\n    mitigation: str  # Suggested approach\n```\n\nFiles to\
+    \ Create:\n- src/core/intent/challenge_generator.py\n- src/core/intent/risk_analyzer.py\n\
+    - src/core/intent/historical_issue_finder.py\n"
+  verification_method: 'Tests in tests/unit/core/intent/test_challenge_generator.py:
+
+    - TestBreakingChangeDetection: Dependency analysis
+
+    - TestTestGapIdentification: Coverage analysis
+
+    - TestGovernanceRiskDetection: Rule checking
+
+    - TestHistoricalIssueMatching: Pattern recognition
+
+    '
+  git_checkpoint: IR-002-02-challenge-generation
+- ac_id: IR-002-03
+  title: Recommendation Engine
+  description: 'Generate recommendations (best practices, alternative approaches,
+
+    optimization suggestions) based on holistic context.
+
+    '
+  status: COMPLETED
+  acceptance_tests:
+  - Suggest best practices from knowledge library
+  - Recommend alternative implementations
+  - Propose test strategies for changes
+  - Suggest related documentation updates
+  - Recommend governance rule compliance steps
+  - Prioritize recommendations by impact
+  implementation_details: "Recommendation Categories:\n- BEST_PRACTICE: Apply known\
+    \ pattern\n- ALTERNATIVE_APPROACH: Different solution\n- TEST_STRATEGY: Testing\
+    \ approach\n- DOCUMENTATION: Doc updates needed\n- GOVERNANCE_COMPLIANCE: Rule\
+    \ adherence steps\n- OPTIMIZATION: Performance improvements\n\nRecommendation\
+    \ Structure:\n```python\n@dataclass\nclass Recommendation:\n    category: RecommendationCategory\n\
+    \    priority: Priority  # LOW, MEDIUM, HIGH\n    title: str\n    description:\
+    \ str\n    rationale: str  # Why recommended\n    implementation_hint: str  #\
+    \ How to apply\n    references: List[str]  # Knowledge library links\n```\n\n\
+    Files to Create:\n- src/core/intent/recommendation_engine.py\n- src/core/intent/best_practice_matcher.py\n\
+    - src/core/intent/alternative_finder.py\n"
+  verification_method: 'Tests in tests/unit/core/intent/test_recommendation_engine.py:
+
+    - TestBestPracticeMatching: Pattern application
+
+    - TestAlternativeFinding: Solution variants
+
+    - TestTestStrategySuggestion: Testing approaches
+
+    - TestRecommendationPrioritization: Impact ranking
+
+    '
+  completed_at: '2026-01-15T14:00:00Z'
+  git_checkpoint: RECOMMEND-ENGINE-CHECKPOINT
+- ac_id: IR-002-04
+  title: Comprehension YAML Generation
+  description: 'Transform canonicalized intents, challenges, and recommendations into
+
+    structured YAML comprehension documents for user approval before execution.
+
+    This enables the CORTEX LENS protocol to present holistic context.
+
+    '
+  status: COMPLETED
+  completed_at: '2026-01-15T15:30:00Z'
+  acceptance_tests:
+  - Compose comprehension YAML from intent + challenges + recommendations
+  - Automatic severity sorting (CRITICAL → HIGH → MEDIUM → LOW)
+  - Automatic priority sorting (HIGH → MEDIUM → LOW)
+  - Include metadata (version, timestamp, tool info, phase)
+  - Round-trip conversion (YAML ↔ dict ↔ object)
+  - File I/O support (write to/read from disk)
+  - Handle edge cases (empty lists, unicode, long descriptions)
+  - Generate summary statistics (counts by severity/category/priority)
+  implementation_details: "Components:\n- CanonicalIntentComposer: Orchestrates YAML\
+    \ generation\n- ComprehensionYAML: Complete document structure\n- IntentSection:\
+    \ Canonicalized intent with confidence\n- ChallengeSection: Risks/governance issues\
+    \ with summary\n- RecommendationSection: Best practices with summary\n- ChallengeItem/RecommendationItem:\
+    \ Individual entries\n\nYAML Structure:\n```yaml\nmetadata:\n  version: \"1.0\"\
+    \n  generated_at: ISO timestamp\n  tool: \"CORTEX-LENS\"\n  phase: \"PHASE-07-Intent-Router\"\
+    \n  intent_id: UUID\n  schema: \"cortex-comprehension-v1\"\n\nintent:\n  type:\
+    \ IMPLEMENT|FIX|REFACTOR|QUERY|ANALYZE|VALIDATE|MIGRATE\n  scope:\n    target_type:\
+    \ file|function|class|module\n    target_name: string\n    file_path: string\n\
+    \    ac_ids: [AC-001, ...]\n  confidence: 0.0-1.0\n  keywords: [list]\n  needs_clarification:\
+    \ bool\n\nchallenges:\n  summary:\n    total: N\n    critical: N\n    high: N\n\
+    \    medium: N\n    low: N\n    by_category: {...}\n  items:\n    - id: CHALLENGE_001\n\
+    \      category: BREAKING_CHANGE|TEST_GAP|GOVERNANCE_RISK|...\n      severity:\
+    \ CRITICAL|HIGH|MEDIUM|LOW\n      description: string\n      affected_code: string\n\
+    \      remediation: string\n      confidence: 0.0-1.0\n\nrecommendations:\n  summary:\n\
+    \    total: N\n    high_priority: N\n    medium_priority: N\n    low_priority:\
+    \ N\n    by_category: {...}\n  items:\n    - id: REC_001\n      category: BEST_PRACTICE|ALTERNATIVE_APPROACH|TEST_STRATEGY|...\n\
+    \      priority: HIGH|MEDIUM|LOW\n      title: string\n      description: string\n\
+    \      code_context: string\n      alternative: string\n      rationale: string\n\
+    ```\n\nFiles Created:\n- src/core/intent/comprehension_yaml.py\n- tests/unit/core/intent/test_comprehension_yaml.py\n"
+  verification_method: 'Tests in tests/unit/core/intent/test_comprehension_yaml.py:
+
+    - TestYAMLStructureGeneration (8 tests): Verify YAML format/hierarchy
+
+    - TestContentIntegration (6 tests): Combine intent/challenges/recommendations
+
+    - TestSerialization (4 tests): to_dict(), to_yaml_string()
+
+    - TestRoundTripConversion (3 tests): YAML ↔ dict ↔ object
+
+    - TestValidation (8 tests): Schema requirements
+
+    - TestEdgeCases (6 tests): Empty lists, unicode, long descriptions
+
+    TOTAL: 35/35 PASSING
+
+    '
+  git_checkpoint: 9a3f01c25
+- ac_id: IR-003-01
+  title: Intent Reflection Protocol
+  description: 'Implement the Master + Interaction Orchestrator collaboration protocol.
+
+    Master delegates intent understanding to Interaction, which reflects
+
+    back with challenges and recommendations BEFORE execution.
+
+    '
+  status: COMPLETED
+  completed_at: '2026-01-15T16:00:00Z'
+  acceptance_tests:
+  - Master orchestrator intercepts all user requests
+  - Master delegates to Interaction orchestrator for context building
+  - Interaction builds holistic context from all intelligence sources
+  - Interaction generates intent reflection (canonicalized intent + challenges + recommendations)
+  - Reflection presented to user for confirmation/refinement
+  - Only after confirmation does Master proceed to execution
+  - Audit trail captures entire flow
+  implementation_details: "Components:\n- IntentReflectionEngine: Core orchestrator\
+    \ for protocol\n- ReflectionRequest: User request with focal point\n- ReflectionResponse:\
+    \ Complete comprehension with approval status\n- ReflectionStatus: PENDING, APPROVED,\
+    \ REJECTED, NEEDS_CLARIFICATION\n\nProtocol Flow:\n1. User submits request to\
+    \ Master Orchestrator\n2. Master delegates to Interaction Orchestrator\n3. Interaction\
+    \ builds holistic context from:\n   - AST Intelligence\n   - Git History Intelligence\n\
+    \   - Code Comment Intelligence\n   - Relationship Traversal Engine\n4. Interaction\
+    \ identifies challenges and generates recommendations\n5. Comprehension YAML generated\
+    \ with all three components\n6. User presented with comprehension for approval/rejection/clarification\n\
+    7. Only on approval does execution proceed\n8. Audit trail captures all lifecycle\
+    \ events with hash chain\n\nUser Approval Gate:\n- approve(): Mark reflection\
+    \ as approved\n- reject(reason): Mark reflection as rejected\n- request_clarification(question):\
+    \ Request additional details\n\nAudit Trail:\n- REFLECTION_START: Initial request\
+    \ received\n- CONTEXT_AGGREGATION: Context sources gathered\n- REFLECTION_COMPLETE:\
+    \ Comprehension generated\n- USER_APPROVAL: User approved reflection\n- USER_REJECTION:\
+    \ User rejected reflection\n- CLARIFICATION_REQUESTED: User requested clarification\n\
+    \nFiles Created:\n- src/core/intent/intent_reflection_protocol.py\n- tests/unit/core/intent/test_intent_reflection_protocol.py\n"
+  verification_method: 'Tests in tests/unit/core/intent/test_intent_reflection_protocol.py:
+
+    - TestProtocolFlow (6 tests): Master delegation, flow execution
+
+    - TestContextAggregation (4 tests): Intelligence source integration
+
+    - TestChallengeDetection (4 tests): Risk identification
+
+    - TestRecommendationGeneration (3 tests): Best practice suggestions
+
+    - TestUserConfirmationGate (5 tests): Approval workflows
+
+    - TestAuditTrail (6 tests): Logging with hash chain
+
+    - TestEdgeCases (8 tests): Simple/complex/ambiguous requests
+
+    - TestIntegrationScenarios (5 tests): End-to-end workflows
+
+    TOTAL: 41/41 PASSING
+
+    '
+  git_checkpoint: 27efe9d8b
+- ac_id: IR-003-02
+  title: LENS Context Builder
+  description: 'Build holistic context from multiple intelligence sources and aggregate
+
+    findings into unified knowledge graph representing the codebase state.
+
+    '
+  status: COMPLETED
+  completed_at: '2026-01-15T17:00:00Z'
+  acceptance_tests:
+  - Aggregate findings from all four intelligence sources
+  - Build knowledge graph with nodes (functions, classes, APIs, tables)
+  - Create edges representing relationships (calls, imports, dependencies)
+  - Filter context by file, type, and other criteria
+  - Prioritize context by change frequency, complexity, risk
+  - Serialize/deserialize context to JSON for transmission
+  - Enrich context with computed trends, risk scores, impact analysis
+  - Query context for specific functions, relationships, expertise
+  - 'Handle edge cases: large contexts, malformed data, null findings'
+  implementation_details: 'Components:
+
+    - LENSContextBuilder: Main builder orchestrating aggregation
+
+    - LENSContext: Unified context from all sources
+
+    - KnowledgeGraph: Graph representation with nodes and edges
+
+    - ContextNode: Individual entity in graph (function, class, API, etc.)
+
+    - ContextEdge: Relationship between nodes (calls, imports, etc.)
+
+
+    Aggregation Pipeline:
+
+    1. Add findings from AST Intelligence module
+
+    2. Add findings from Git History Analyzer module
+
+    3. Add findings from Comment Analyzer module
+
+    4. Add findings from Relationship Traversal Engine
+
+    5. Build knowledge graph from aggregated findings
+
+    6. Apply filtering criteria if needed
+
+    7. Prioritize based on strategy (frequency, complexity, risk)
+
+    8. Enrich with computed data (trends, scores, analysis)
+
+    9. Serialize for protocol transmission or storage
+
+
+    Knowledge Graph Structure:
+
+    - Nodes: Functions, classes, modules, API endpoints, DB models, patterns
+
+    - Edges: Call relationships, inheritance, imports, dependencies
+
+    - Metadata: Source of discovery, confidence, timestamps
+
+
+    Filtering Capabilities:
+
+    - By file: Restrict to specific source files
+
+    - By type: Focus on specific entity types
+
+    - By marker: Find tech debt, deprecated code, etc.
+
+
+    Prioritization Strategies:
+
+    - CHANGE_FREQUENCY: Sort by how often changed
+
+    - COMPLEXITY: Sort by cyclomatic complexity
+
+    - EXPERTISE_CONCENTRATION: Sort by author concentration
+
+    - RISK_LEVEL: Sort by computed risk score
+
+    - RECENCY: Sort by recent modifications
+
+
+    Enrichment Types:
+
+    - trends: Time-series analysis from git
+
+    - risk_scores: Computed risk ratings
+
+    - impact_analysis: Change impact assessment
+
+    - tech_debt_analysis: Debt item summary
+
+
+    Query Types Supported:
+
+    - function_by_name: Find specific functions
+
+    - functions_in_file: All functions in a file
+
+    - call_graph: Relationship analysis
+
+    - expertise_by_file: Author expertise map
+
+
+    Files Created:
+
+    - src/core/intent/lens_context_builder.py
+
+    - tests/unit/core/intent/test_lens_context_builder.py
+
+    '
+  verification_method: 'Tests in tests/unit/core/intent/test_lens_context_builder.py:
+
+    - TestContextAggregation (4 tests): Source aggregation
+
+    - TestKnowledgeGraphConstruction (5 tests): Graph building
+
+    - TestContextFilteringAndPrioritization (5 tests): Filtering/sorting
+
+    - TestContextSerialization (4 tests): JSON round-trip
+
+    - TestContextEnrichment (4 tests): Computed data
+
+    - TestContextQuery (4 tests): Data retrieval
+
+    - TestEdgeCasesAndErrors (6 tests): Error handling
+
+    - TestIntegrationWithReflectionProtocol (4 tests): Integration
+
+    - TestPerformanceOptimization (3 tests): Performance
+
+    TOTAL: 38/38 PASSING
+
+    '
+  git_checkpoint: 9becfdc40
+- ac_id: IR-003-03
+  title: LENS Response Formatter
+  description: 'Format comprehension output for user presentation in multiple formats
+
+    (YAML, Markdown, JSON). Ensures consistent, readable presentation of
+
+    challenges, recommendations, and intent summaries.
+
+    '
+  status: COMPLETED
+  completed_at: '2026-01-15T18:00:00Z'
+  acceptance_tests:
+  - Format reflection response as YAML, Markdown, and JSON
+  - Sort challenges by severity (CRITICAL, HIGH, MEDIUM, LOW)
+  - Sort recommendations by priority
+  - Validate all required response fields present
+  - Convert between different output formats
+  - Customize output with templates and options
+  - Support audit trail inclusion/exclusion
+  - Handle special characters and edge cases
+  - Maintain readability for user review
+  implementation_details: 'Components:
+
+    - LENSResponseFormatter: Main formatter class
+
+    - ResponseFormat: Enum (JSON, YAML, Markdown)
+
+    - SeverityColor: Color mappings for terminal output
+
+    - FormattedResponse: Result wrapper
+
+
+    Output Formats:
+
+
+    **Markdown (Human-Readable)**
+
+    - Headers for each section (Intent, Challenges, Recommendations)
+
+    - Emoji indicators for severity levels (🔴 CRITICAL, 🟠 HIGH, etc.)
+
+    - Structured lists with clear remediation guidance
+
+    - Approval workflow indicators
+
+
+    **YAML (Machine-Readable)**
+
+    - Structured key-value representation
+
+    - Maintains hierarchical relationships
+
+    - Compatible with comprehension YAML standard
+
+    - Easy to parse and validate
+
+
+    **JSON (API-Compatible)**
+
+    - Standard JSON structure for protocol transmission
+
+    - Type-safe field representation
+
+    - Compatible with web APIs and integrations
+
+
+    Formatting Features:
+
+    - Automatic severity sorting (CRITICAL → HIGH → MEDIUM → LOW)
+
+    - Priority sorting for recommendations
+
+    - Optional audit trail inclusion
+
+    - Metadata preservation
+
+    - Multi-format conversion support
+
+    - Individual component formatting (challenges, recommendations, intent)
+
+    - Summary statistics generation
+
+
+    Customization Options:
+
+    - sort_challenges_by_severity: Enable/disable severity sorting
+
+    - sort_recommendations_by_priority: Enable/disable priority sorting
+
+    - include_audit_trail: Include/exclude audit trail
+
+    - include_metadata: Include/exclude metadata
+
+    - markdown_severity_emoji: Use emoji indicators in Markdown
+
+    - max_line_length: Control text wrapping
+
+
+    Files Created:
+
+    - src/core/intent/lens_response_formatter.py
+
+    - tests/unit/core/intent/test_lens_response_formatter.py
+
+    '
+  verification_method: 'Tests in tests/unit/core/intent/test_lens_response_formatter.py:
+
+    - TestYAMLResponseFormatting (4 tests): YAML output validation
+
+    - TestMarkdownResponseFormatting (4 tests): Markdown readability
+
+    - TestJSONResponseFormatting (3 tests): JSON structure
+
+    - TestResponseFieldValidation (4 tests): Required fields
+
+    - TestSeverityPrioritySorting (3 tests): Correct ordering
+
+    - TestTemplateCustomization (4 tests): Configuration options
+
+    - TestMultiFormatConversion (3 tests): Format conversion
+
+    - TestEdgeCasesAndErrors (4 tests): Special characters, edge cases
+
+    - TestIntegrationWithReflectionProtocol (3 tests): Protocol integration
+
+    - TestPerformanceOptimization (2 tests): Performance characteristics
+
+    TOTAL: 34/34 PASSING
+
+    '
+  git_checkpoint: 6fb276852
+- ac_id: IR-003-04
+  title: CORTEX LENS Knowledge Graph Builder
+  description: "CORTEX LENS tools gather context from multiple sources and build a\
+    \ \nunified knowledge graph. This graph serves as the foundation for \nholistic\
+    \ understanding of the user's intent and workspace state.\n"
+  status: NOT_STARTED
+  completed_at: '2026-01-15T19:00:00Z'
+  acceptance_tests:
+  - CORTEX LENS scans AST structure across entire workspace
+  - CORTEX LENS analyzes git history and commit patterns
+  - CORTEX LENS extracts code comments and documentation
+  - CORTEX LENS discovers API relationships (REST, GraphQL, DB)
+  - CORTEX LENS maps database schema relationships
+  - Knowledge graph unifies all sources into queryable structure
+  - Graph updates incrementally on workspace changes
+  implementation_details: "CORTEX LENS Tools:\n- lens_scan_ast: Recursive AST analysis\n\
+    - lens_scan_git: Git history & patterns\n- lens_scan_comments: Code comments &\
+    \ docs\n- lens_scan_apis: API relationship discovery\n- lens_scan_database: DB\
+    \ schema analysis\n- lens_build_graph: Unified graph construction\n\nKnowledge\
+    \ Graph Structure:\n```python\n@dataclass\nclass KnowledgeGraph:\n    nodes: Dict[str,\
+    \ GraphNode]  # id -> node\n    edges: List[GraphEdge]  # relationships\n    metadata:\
+    \ GraphMetadata  # timestamps, sources\n    \n@dataclass\nclass GraphNode:\n \
+    \   id: str\n    type: NodeType  # FILE, FUNCTION, CLASS, API, TABLE, etc.\n \
+    \   name: str\n    source: str  # Which lens discovered it\n    properties: Dict[str,\
+    \ Any]\n    \n@dataclass\nclass GraphEdge:\n    source_id: str\n    target_id:\
+    \ str\n    relationship: RelationType  # CALLS, IMPORTS, REFERENCES, etc.\n  \
+    \  weight: float  # Strength of relationship\n```\n\nFiles to Create/Update:\n\
+    - src/tools/cortex_lens/graph_builder.py\n- src/tools/cortex_lens/ast_scanner.py\n\
+    - src/tools/cortex_lens/git_scanner.py\n- src/tools/cortex_lens/api_scanner.py\n\
+    - src/tools/cortex_lens/db_scanner.py\n- src/core/knowledge/knowledge_graph.py\n"
+  verification_method: 'Tests in tests/integration/test_cortex_lens_graph.py:
+
+    - TestASTScanning: Full workspace AST analysis
+
+    - TestGitScanning: History extraction
+
+    - TestAPIDiscovery: Relationship mapping
+
+    - TestGraphConstruction: Unified graph building
+
+    - TestIncrementalUpdate: Change propagation
+
+    '
+  git_checkpoint: IR-004-01-cortex-lens-knowledge-graph
+- ac_id: IR-004-02
+  title: Comprehension Loop with YAML Condensation
+  description: "CORTEX reviews all gathered datasets holistically and condenses \n\
+    understanding into a structured YAML. User reviews the YAML, \nrequests refinements,\
+    \ and the loop repeats until approval.\nApproved YAMLs are pushed to appropriate\
+    \ brain tiers.\n"
+  status: NOT_STARTED
+  acceptance_tests:
+  - Knowledge graph is analyzed holistically
+  - Understanding condensed to structured YAML format
+  - YAML presented to user for review
+  - User can request refinements or clarifications
+  - Loop repeats until user explicitly approves
+  - Approved YAMLs pushed to appropriate brain tier
+  - Temporary/working YAMLs cleaned up after approval
+  - Rejection returns to gathering phase
+  implementation_details: "Comprehension Loop Flow:\n```\n┌──────────────────────────────────────────────────────────────┐\n\
+    │                    COMPREHENSION LOOP                        │\n│          \
+    \                                                    │\n│   ┌─────────────┐  \
+    \   ┌─────────────┐     ┌─────────────┐   │\n│   │ Knowledge   │ ──▶ │ YAML  \
+    \      │ ──▶ │ User        │   │\n│   │ Graph       │     │ Condenser   │    \
+    \ │ Review      │   │\n│   └─────────────┘     └─────────────┘     └──────┬──────┘\
+    \   │\n│                                                   │          │\n│   \
+    \      ┌────────────────────────────────────────┤          │\n│         │    \
+    \                                    │          │\n│         ▼               \
+    \                         ▼          │\n│   ┌─────────────┐                  \
+    \       ┌─────────────┐   │\n│   │ REFINE      │ ◀── Request Changes ◀── │ APPROVE\
+    \     │   │\n│   │ (Loop Back) │                         │ (Exit Loop) │   │\n\
+    │   └─────────────┘                         └──────┬──────┘   │\n│           \
+    \                                        │          │\n└───────────────────────────────────────────────────┼──────────┘\n\
+    \                                                    ▼\n                     \
+    \                   ┌─────────────────────┐\n                                \
+    \        │ Brain Tier Push     │\n                                        │  ├─\
+    \ tier0: governance│\n                                        │  ├─ tier1: AC\
+    \ mapping│\n                                        │  ├─ tier2: standards │\n\
+    \                                        │  └─ tier3: knowledge │\n          \
+    \                              └─────────────────────┘\n                     \
+    \                               │\n                                          \
+    \          ▼\n                                        ┌─────────────────────┐\n\
+    \                                        │ Cleanup Temp YAMLs  │\n           \
+    \                             └─────────────────────┘\n```\n\nComprehension YAML\
+    \ Structure:\n```yaml\ncomprehension:\n  session_id: \"uuid\"\n  timestamp: \"\
+    ISO8601\"\n  \n  intent_understanding:\n    primary_intent: \"IMPLEMENT\"\n  \
+    \  scope: [\"src/api/users.py\", \"tests/test_users.py\"]\n    confidence: 0.92\n\
+    \    \n  context_summary:\n    affected_files: 5\n    affected_functions: 12\n\
+    \    related_apis: 2\n    related_tables: 1\n    \n  knowledge_extracted:\n  \
+    \  patterns_found:\n      - \"REST API controller pattern\"\n      - \"SQLAlchemy\
+    \ ORM usage\"\n    dependencies:\n      - \"flask>=2.0\"\n      - \"sqlalchemy>=1.4\"\
+    \n    test_coverage: \"78%\"\n    \n  challenges:\n    - category: \"BREAKING_CHANGE\"\
+    \n      description: \"User API change affects 3 consumers\"\n      severity:\
+    \ \"HIGH\"\n      \n  recommendations:\n    - category: \"BEST_PRACTICE\"\n  \
+    \    description: \"Add API versioning\"\n      priority: \"HIGH\"\n      \n \
+    \ approval_status: \"PENDING\"  # PENDING, APPROVED, REJECTED\n  revision_history:\n\
+    \    - revision: 1\n      changes: \"Initial comprehension\"\n    - revision:\
+    \ 2\n      changes: \"Added test coverage analysis per user request\"\n```\n\n\
+    Files to Create:\n- src/core/intent/comprehension_loop.py\n- src/core/intent/yaml_condenser.py\n\
+    - src/core/intent/user_approval_gate.py\n- src/core/intent/brain_tier_pusher.py\n"
+  verification_method: 'Tests in tests/integration/test_comprehension_loop.py:
+
+    - TestYAMLCondensation: Graph → YAML conversion
+
+    - TestUserReview: Presentation and feedback capture
+
+    - TestRefinementLoop: Multiple iteration handling
+
+    - TestApprovalGate: Exit condition verification
+
+    - TestBrainTierPush: Correct tier placement
+
+    - TestTempCleanup: Working file removal
+
+    '
+  git_checkpoint: IR-004-02-comprehension-loop
+- ac_id: IR-005-01
+  title: Three-Stage Master Orchestrator Architecture
+  description: 'Master Orchestrator operates in three stages:
+
+    Stage 1: Intent Comprehension (InteractionOrchestrator as preprocessor)
+
+    Stage 2: Intent-Based Routing (delegate to specialized orchestrators)
+
+    Stage 3: Knowledge Integration (company overrides merged)
+
+    '
+  status: NOT_STARTED
+  acceptance_tests:
+  - Master orchestrator ALWAYS starts with Stage 1 (Comprehension)
+  - InteractionOrchestrator is the FIRST-STAGE PREPROCESSOR (not default)
+  - Stage 1 produces approved comprehension YAML before routing
+  - Stage 2 routes based on canonicalized intent type
+  - Stage 3 loads and merges knowledge context before execution
+  - All three stages are audited
+  implementation_details: 'Three-Stage Architecture:
+
+    ```
+
+    ┌─────────────────────────────────────────────────────────────────┐
+
+    │                    MASTER ORCHESTRATOR                          │
+
+    │                                                                 │
+
+    │  ╔═══════════════════════════════════════════════════════════╗ │
+
+    │  ║ STAGE 1: INTENT COMPREHENSION                             ║ │
+
+    │  ║   InteractionOrchestrator as Preprocessor                 ║ │
+
+    │  ║                                                           ║ │
+
+    │  ║   1. CORTEX LENS gathers context (knowledge graph)        ║ │
+
+    │  ║   2. Holistic analysis of all sources                     ║ │
+
+    │  ║   3. YAML condensation of understanding                   ║ │
+
+    │  ║   4. User review loop until approval                      ║ │
+
+    │  ║   5. Output: Approved Comprehension YAML                  ║ │
+
+    │  ╚═══════════════════════════════════════════════════════════╝ │
+
+    │                            │                                   │
+
+    │                            ▼                                   │
+
+    │  ╔═══════════════════════════════════════════════════════════╗ │
+
+    │  ║ STAGE 2: INTENT-BASED ROUTING                             ║ │
+
+    │  ║                                                           ║ │
+
+    │  ║   Intent Type → Target Orchestrator:                      ║ │
+
+    │  ║   ─────────────────────────────────────                   ║ │
+
+    │  ║   • planning, ado_work  → PlanningOrchestrator            ║ │
+
+    │  ║   • code, implement,                                      ║ │
+
+    │  ║     fix, refactor       → TDDOrchestrator                 ║ │
+
+    │  ║   • query, status       → Direct Response (no delegation) ║ │
+
+    │  ║   • analyze, review     → AnalysisOrchestrator            ║ │
+
+    │  ║   • UNCLEAR/LOW_CONF    → Back to Stage 1 (clarification) ║ │
+
+    │  ╚═══════════════════════════════════════════════════════════╝ │
+
+    │                            │                                   │
+
+    │                            ▼                                   │
+
+    │  ╔═══════════════════════════════════════════════════════════╗ │
+
+    │  ║ STAGE 3: KNOWLEDGE INTEGRATION (Parallel with Stage 2)    ║ │
+
+    │  ║                                                           ║ │
+
+    │  ║   1. Load company domain YAMLs from cortex-brain/         ║ │
+
+    │  ║   2. Load CORTEX rules from tier0/governance/             ║ │
+
+    │  ║   3. MERGE: Company OVERRIDES CORTEX                      ║ │
+
+    │  ║   4. Pass merged context to target orchestrator           ║ │
+
+    │  ╚═══════════════════════════════════════════════════════════╝ │
+
+    │                                                                 │
+
+    └─────────────────────────────────────────────────────────────────┘
+
+    ```
+
+
+    Why This Architecture (Not "Interaction as Default"):
+
+    - Avoids circular delegation (Master → Interaction → Master)
+
+    - Clear separation: Comprehension vs Routing vs Execution
+
+    - Interaction is a STAGE, not a fallback
+
+    - Every request gets comprehension (no exceptions)
+
+    - Routing happens AFTER understanding is confirmed
+
+
+    Files to Create/Update:
+
+    - src/orchestrators/master_orchestrator.py (major update)
+
+    - src/orchestrators/stages/comprehension_stage.py
+
+    - src/orchestrators/stages/routing_stage.py
+
+    - src/orchestrators/stages/knowledge_stage.py
+
+    - src/orchestrators/routing/intent_router.py
+
+    '
+  verification_method: 'Tests in tests/integration/test_three_stage_master.py:
+
+    - TestStage1Comprehension: Always executes first
+
+    - TestStage2Routing: Correct orchestrator selection
+
+    - TestStage3Knowledge: Override merging
+
+    - TestStageSequencing: Proper order enforcement
+
+    - TestAuditTrail: All stages logged
+
+    '
+  git_checkpoint: IR-005-01-three-stage-master
+- ac_id: IR-005-02
+  title: TDD Orchestrator Routing for Code Work
+  description: "All code-related work (implement, fix, refactor) MUST be routed \n\
+    to TDDOrchestrator. No exceptions. TDD receives merged context \nfrom Stage 3.\n"
+  status: NOT_STARTED
+  acceptance_tests:
+  - Intent types [IMPLEMENT, FIX, REFACTOR, CODE] route to TDDOrchestrator
+  - TDDOrchestrator receives comprehension YAML from Stage 1
+  - TDDOrchestrator receives merged knowledge from Stage 3
+  - 'TDD flow enforced: Test First → Implement → Verify'
+  - No code changes without TDD (governance enforced)
+  - Routing decision audited with intent classification
+  implementation_details: "TDD Routing Logic:\n```python\nCODE_INTENTS = {\n    IntentType.IMPLEMENT,\n\
+    \    IntentType.FIX,\n    IntentType.REFACTOR,\n    IntentType.CODE,\n    IntentType.TEST,\n\
+    \    IntentType.DEBUG,\n}\n\ndef route_to_orchestrator(intent: CanonicalIntent)\
+    \ -> Orchestrator:\n    if intent.type in CODE_INTENTS:\n        return TDDOrchestrator(\n\
+    \            comprehension=intent.comprehension_yaml,\n            knowledge_context=intent.merged_knowledge\n\
+    \        )\n    elif intent.type in {IntentType.PLANNING, IntentType.ADO_WORK}:\n\
+    \        return PlanningOrchestrator(...)\n    elif intent.type in {IntentType.QUERY,\
+    \ IntentType.STATUS}:\n        return DirectResponse(...)  # No delegation needed\n\
+    \    else:\n        # Low confidence or unclear\n        return Stage1Comprehension(request_clarification=True)\n\
+    ```\n\nTDDOrchestrator Flow:\n```\nComprehension YAML + Merged Knowledge\n   \
+    \           │\n              ▼\n┌─────────────────────────────────────┐\n│ TDDOrchestrator\
+    \                     │\n│                                     │\n│   1. Extract\
+    \ test requirements      │\n│   2. Generate test cases FIRST      │\n│   3. Run\
+    \ tests (expect failure)     │\n│   4. Implement minimal solution     │\n│   5.\
+    \ Run tests (expect pass)        │\n│   6. Refactor if needed             │\n\
+    │   7. Final test verification        │\n└─────────────────────────────────────┘\n\
+    ```\n\nFiles to Update:\n- src/orchestrators/routing/intent_router.py\n- src/orchestrators/tdd_orchestrator.py\
+    \ (receive merged context)\n"
+  verification_method: 'Tests in tests/integration/test_tdd_routing.py:
+
+    - TestCodeIntentRouting: All code intents → TDD
+
+    - TestTDDContextInjection: Comprehension + knowledge passed
+
+    - TestTDDFlowEnforcement: Test-first verified
+
+    - TestNoBypass: Cannot skip TDD for code work
+
+    '
+  git_checkpoint: IR-005-02-tdd-routing
+- ac_id: IR-006-01
+  title: Domain Rule Loading from cortex-brain/
+  description: "Load company-specific domain rules from cortex-brain/ tiers.\nThese\
+    \ rules represent company standards, conventions, and \nbusiness logic that may\
+    \ differ from CORTEX defaults.\n"
+  status: NOT_STARTED
+  acceptance_tests:
+  - Load domain YAMLs from cortex-brain/tier0/ (governance)
+  - Load domain YAMLs from cortex-brain/tier1/ (AC mappings)
+  - Load domain YAMLs from cortex-brain/tier2/ (standards)
+  - Load domain YAMLs from cortex-brain/tier3/ (advisory)
+  - Parse and validate YAML structure
+  - Cache loaded rules for performance
+  - Detect and handle YAML syntax errors gracefully
+  implementation_details: "Domain Rule Structure:\n```yaml\n# cortex-brain/tier0/governance/company-rules.yaml\n\
+    domain_rules:\n  rule_set_id: \"COMPANY-RULES\"\n  version: \"1.0\"\n  priority:\
+    \ 100  # Higher = more important (company > cortex)\n  \n  rules:\n    - rule_id:\
+    \ \"COMPANY-001\"\n      description: \"All APIs must use company auth middleware\"\
+    \n      applies_to: [\"api\", \"endpoint\", \"route\"]\n      enforcement: \"\
+    STRICT\"\n      \n    - rule_id: \"COMPANY-002\"\n      description: \"Database\
+    \ models must use company base class\"\n      applies_to: [\"model\", \"orm\"\
+    , \"database\"]\n      enforcement: \"STRICT\"\n      \n    - rule_id: \"COMPANY-003\"\
+    \n      description: \"Prefer async handlers for I/O operations\"\n      applies_to:\
+    \ [\"handler\", \"function\"]\n      enforcement: \"ADVISORY\"\n```\n\nLoading\
+    \ Hierarchy:\n```\ncortex-brain/\n├── tier0/governance/     # HIGHEST priority\
+    \ (immutable)\n│   ├── cortex-core-rules.yaml\n│   └── company-rules.yaml    \
+    \ # Company governance\n├── tier1/acceptance-criteria/ # Project-specific\n├──\
+    \ tier2/                     # Standards\n└── tier3/                     # LOWEST\
+    \ priority (advisory)\n```\n\nFiles to Create/Update:\n- src/core/knowledge/domain_rule_loader.py\n\
+    - src/core/knowledge/yaml_validator.py\n- src/core/knowledge/rule_cache.py\n"
+  verification_method: 'Tests in tests/unit/core/knowledge/test_domain_rule_loader.py:
+
+    - TestTierLoading: Load from each tier
+
+    - TestYAMLParsing: Valid structure extraction
+
+    - TestCaching: Performance verification
+
+    - TestErrorHandling: Graceful failure
+
+    '
+  git_checkpoint: IR-006-01-domain-rule-loading
+- ac_id: IR-006-02
+  title: Additive Merge with Selective Override & Priority Protection
+  description: 'ENHANCED MERGE ALGORITHM: Additive merge with selective override.
+
+    - All non-conflicting CORTEX rules are ALWAYS applied
+
+    - Company overrides ONLY where there''s a conflict
+
+    - CRITICAL CORTEX rules cannot be overridden
+
+    - Scope-aware override (partial overrides supported)
+
+    - Merge happens BEFORE comprehension (not after)
+
+    '
+  status: NOT_STARTED
+  acceptance_tests:
+  - CORTEX rules loaded as baseline (Set A)
+  - Company rules loaded for overlay (Set B)
+  - Non-conflicting CORTEX rules ALWAYS preserved
+  - 'Conflicting rules: Company wins UNLESS CORTEX is CRITICAL'
+  - CRITICAL CORTEX rules cannot be overridden by Company
+  - 'Scope-aware: partial override respects applies_to boundaries'
+  - Merge happens at START of Stage 1 (before comprehension)
+  - User sees FINAL merged ruleset in comprehension YAML
+  - Override audit trail with rationale for each decision
+  implementation_details: "ADDITIVE MERGE WITH SELECTIVE OVERRIDE\n======================================\n\
+    \nExample:\n```\nCORTEX (Set A): [A1, A2, A3, A4, A5]  (5 rules)\nCOMPANY (Set\
+    \ B): [B2, B4]              (2 overrides)\n\nResult: [A1, B2, A3, B4, A5]  ← 5\
+    \ rules total!\nNOT:    [B2, B4]              ← WRONG (replacement)\n```\n\nPriority\
+    \ Levels:\n```python\nclass RulePriority(Enum):\n    CRITICAL = 100    # CORTEX:\
+    \ Cannot be overridden (security, compliance)\n    MANDATORY = 80    # CORTEX:\
+    \ Can be overridden with warning\n    STANDARD = 50     # Normal rules, freely\
+    \ overridable\n    ADVISORY = 20     # Suggestions, easily overridable\n```\n\n\
+    Enhanced Merge Algorithm:\n```python\ndef additive_merge_with_selective_override(\n\
+    \    cortex_rules: List[DomainRule],\n    company_rules: List[DomainRule]\n) ->\
+    \ MergedRuleset:\n    \"\"\"\n    ADDITIVE merge - keeps ALL non-conflicting rules\
+    \ from BOTH sets.\n    SELECTIVE override - Company wins conflicts (except CRITICAL).\n\
+    \    SCOPE-AWARE - partial overrides respect applies_to boundaries.\n    \"\"\"\
+    \n    merged = MergedRuleset()\n    audit = MergeAuditLog()\n    \n    # Index\
+    \ by (rule_category, applies_to_scope)\n    cortex_index = index_by_scope(cortex_rules)\n\
+    \    company_index = index_by_scope(company_rules)\n    \n    all_scopes = set(cortex_index.keys())\
+    \ | set(company_index.keys())\n    \n    for scope in all_scopes:\n        cortex_rule\
+    \ = cortex_index.get(scope)\n        company_rule = company_index.get(scope)\n\
+    \        \n        if cortex_rule and company_rule:\n            # CONFLICT detected\n\
+    \            if cortex_rule.priority == RulePriority.CRITICAL:\n             \
+    \   # CRITICAL cannot be overridden\n                merged.add(cortex_rule)\n\
+    \                audit.log(MergeDecision(\n                    scope=scope,\n\
+    \                    winner=\"CORTEX\",\n                    reason=\"CRITICAL\
+    \ rule - cannot override\",\n                    cortex_rule=cortex_rule,\n  \
+    \                  company_rule=company_rule,\n                    company_rule_rejected=True\n\
+    \                ))\n            else:\n                # Company wins (selective\
+    \ override)\n                merged.add(company_rule)\n                audit.log(MergeDecision(\n\
+    \                    scope=scope,\n                    winner=\"COMPANY\",\n \
+    \                   reason=\"Company override accepted\",\n                  \
+    \  cortex_rule=cortex_rule,\n                    company_rule=company_rule\n \
+    \               ))\n        elif cortex_rule:\n            # Only CORTEX has rule\
+    \ - ALWAYS include (additive)\n            merged.add(cortex_rule)\n         \
+    \   audit.log(MergeDecision(\n                scope=scope,\n                winner=\"\
+    CORTEX\",\n                reason=\"No company override - CORTEX preserved\"\n\
+    \            ))\n        else:\n            # Only Company has rule - include\
+    \ (additive)\n            merged.add(company_rule)\n            audit.log(MergeDecision(\n\
+    \                scope=scope,\n                winner=\"COMPANY\",\n         \
+    \       reason=\"New company rule - added to merged set\"\n            ))\n  \
+    \  \n    merged.audit_log = audit\n    merged.stats = MergeStats(\n        cortex_preserved=audit.count_cortex_preserved(),\n\
+    \        company_overrides=audit.count_company_wins(),\n        company_additions=audit.count_company_new(),\n\
+    \        critical_protected=audit.count_critical_protected()\n    )\n    return\
+    \ merged\n```\n\nScope-Aware Override Example:\n```yaml\n# CORTEX rule (broad\
+    \ scope)\n- rule_id: \"CORTEX-TEST-001\"\n  description: \"Test coverage >= 80%\"\
+    \n  applies_to: [\"all_code\"]\n  priority: STANDARD\n  \n# Company rule (narrow\
+    \ scope override)\n- rule_id: \"COMPANY-TEST-001\"\n  description: \"Test coverage\
+    \ >= 95%\"\n  applies_to: [\"production_code\"]  # Narrower!\n  priority: STANDARD\n\
+    \n# MERGED RESULT:\n# - production_code: 95% (Company override)\n# - non_production_code:\
+    \ 80% (CORTEX still applies!)\n```\n\nMerge Timing (CRITICAL):\n```\n┌─────────────────────────────────────────────────────────┐\n\
+    │  ★ MERGE HAPPENS FIRST (Before ANY comprehension)      │\n│                \
+    \                                         │\n│  1. Load CORTEX rules from tier0/governance/\
+    \            │\n│  2. Load Company rules from cortex-brain/               │\n\
+    │  3. Execute additive_merge_with_selective_override()    │\n│  4. MERGED_RULES\
+    \ available for entire request lifecycle │\n└─────────────────────────────────────────────────────────┘\n\
+    \                        │\n                        ▼\n┌─────────────────────────────────────────────────────────┐\n\
+    │  STAGE 1: Comprehension (uses MERGED_RULES)             │\n│  - User sees final\
+    \ merged ruleset                       │\n│  - No surprises between comprehension\
+    \ and execution     │\n└─────────────────────────────────────────────────────────┘\n\
+    ```\n\nFiles to Create:\n- src/core/knowledge/additive_merger.py\n- src/core/knowledge/rule_priority.py\n\
+    - src/core/knowledge/scope_matcher.py\n- src/core/knowledge/merge_audit_log.py\n"
+  verification_method: 'Tests in tests/unit/core/knowledge/test_additive_merger.py:
+
+    - TestAdditivePreservation: Non-conflicting CORTEX rules kept
+
+    - TestSelectiveOverride: Company wins conflicts
+
+    - TestCriticalProtection: CRITICAL rules cannot be overridden
+
+    - TestScopeAwareOverride: Partial override respects boundaries
+
+    - TestMergeTiming: Merge before comprehension verified
+
+    - TestAuditLogging: All decisions logged with rationale
+
+    '
+  git_checkpoint: IR-006-02-additive-merge
 risks:
-  - risk_id: "RISK-IR-001"
-    description: "AST parsing may be slow for large codebases"
-    severity: "MEDIUM"
-    mitigation: "Implement incremental parsing with caching, only re-parse changed files"
-    
-  - risk_id: "RISK-IR-002"
-    description: "Git history analysis may timeout on repositories with long history"
-    severity: "MEDIUM"
-    mitigation: "Implement pagination and depth limits, cache results"
-    
-  - risk_id: "RISK-IR-003"
-    description: "Challenge generation may produce false positives"
-    severity: "LOW"
-    mitigation: "Include confidence scores, allow user to dismiss, learn from dismissals"
-    
-  - risk_id: "RISK-IR-004"
-    description: "User may find reflection step annoying for simple requests"
-    severity: "MEDIUM"
-    mitigation: "Implement fast-track mode for high-confidence simple intents (configurable)"
-    
-  - risk_id: "RISK-IR-005"
-    description: "Knowledge graph may become stale if not updated incrementally"
-    severity: "HIGH"
-    mitigation: "Implement file watcher and incremental graph updates on workspace changes"
-    
-  - risk_id: "RISK-IR-006"
-    description: "Comprehension loop may create user fatigue with too many iterations"
-    severity: "MEDIUM"
-    mitigation: "Set maximum iteration limit (3), offer 'accept as-is' option after limit"
-    
-  - risk_id: "RISK-IR-007"
-    description: "Company domain YAMLs may have syntax errors causing load failures"
-    severity: "MEDIUM"
-    mitigation: "Implement graceful degradation - fall back to CORTEX rules if company fails"
-    
-  - risk_id: "RISK-IR-008"
-    description: "Override conflicts may silently suppress important CORTEX rules"
-    severity: "HIGH"
-    mitigation: "Always log overrides to audit trail, allow 'strict mode' that warns on override"
-
-# =============================================================================
-# BLOCKERS
-# =============================================================================
-
-blockers: []  # No current blockers
-
-# =============================================================================
-# GOVERNANCE RULES
-# =============================================================================
-
+- risk_id: RISK-IR-001
+  description: AST parsing may be slow for large codebases
+  severity: MEDIUM
+  mitigation: Implement incremental parsing with caching, only re-parse changed files
+- risk_id: RISK-IR-002
+  description: Git history analysis may timeout on repositories with long history
+  severity: MEDIUM
+  mitigation: Implement pagination and depth limits, cache results
+- risk_id: RISK-IR-003
+  description: Challenge generation may produce false positives
+  severity: LOW
+  mitigation: Include confidence scores, allow user to dismiss, learn from dismissals
+- risk_id: RISK-IR-004
+  description: User may find reflection step annoying for simple requests
+  severity: MEDIUM
+  mitigation: Implement fast-track mode for high-confidence simple intents (configurable)
+- risk_id: RISK-IR-005
+  description: Knowledge graph may become stale if not updated incrementally
+  severity: HIGH
+  mitigation: Implement file watcher and incremental graph updates on workspace changes
+- risk_id: RISK-IR-006
+  description: Comprehension loop may create user fatigue with too many iterations
+  severity: MEDIUM
+  mitigation: Set maximum iteration limit (3), offer 'accept as-is' option after limit
+- risk_id: RISK-IR-007
+  description: Company domain YAMLs may have syntax errors causing load failures
+  severity: MEDIUM
+  mitigation: Implement graceful degradation - fall back to CORTEX rules if company
+    fails
+- risk_id: RISK-IR-008
+  description: Override conflicts may silently suppress important CORTEX rules
+  severity: HIGH
+  mitigation: Always log overrides to audit trail, allow 'strict mode' that warns
+    on override
+blockers: []
 governance:
   tier0_rules:
-    - "CORE-008: TDD required for all implementations"
-    - "CORE-011: Type hints on all functions"
-    - "CORE-012: Docstrings on all public APIs"
-    - "CORE-026: Git checkpoint before major action"
-    - "CORE-027: Audit entry for AC lifecycle"
-  
+  - 'CORE-008: TDD required for all implementations'
+  - 'CORE-011: Type hints on all functions'
+  - 'CORE-012: Docstrings on all public APIs'
+  - 'CORE-026: Git checkpoint before major action'
+  - 'CORE-027: Audit entry for AC lifecycle'
   tier1_rules:
-    - "INT-RULE-001: Context Preservation"
-    - "INT-RULE-003: Decision Capture & Rationale"
-  
+  - 'INT-RULE-001: Context Preservation'
+  - 'INT-RULE-003: Decision Capture & Rationale'
   domain_rules:
-    - "interaction-rules.yaml: Interaction orchestrator governance"
-  
-  # =========================================================================
-  # NEW: MANDATORY AUTO-CHALLENGE GOVERNANCE RULE (INT-RULE-009)
-  # =========================================================================
+  - 'interaction-rules.yaml: Interaction orchestrator governance'
   auto_challenge_rule:
-    rule_id: "INT-RULE-009"
-    title: "Mandatory Intelligent Challenge"
-    enforcement: "STRICT"
-    tier: "tier0"  # Core governance - cannot be disabled
-    
-    description: |
-      Every user request processed by InteractionOrchestrator MUST be 
-      intelligently challenged BEFORE execution. User should NOT need 
-      to ask to be challenged - it happens automatically as part of
-      the comprehension stage.
-    
-    rationale: |
-      Proactive challenge prevents:
+    rule_id: INT-RULE-009
+    title: Mandatory Intelligent Challenge
+    enforcement: STRICT
+    tier: tier0
+    description: "Every user request processed by InteractionOrchestrator MUST be\
+      \ \nintelligently challenged BEFORE execution. User should NOT need \nto ask\
+      \ to be challenged - it happens automatically as part of\nthe comprehension\
+      \ stage.\n"
+    rationale: 'Proactive challenge prevents:
+
       - Breaking changes that slip through
+
       - Test coverage degradation
+
       - Governance violations
+
       - Repeated mistakes from historical patterns
+
       - Scope creep and misunderstood intent
-      
-      This embodies CORTEX's "challenge-first" philosophy where the system
+
+
+      This embodies CORTEX''s "challenge-first" philosophy where the system
+
       acts as an intelligent reviewer, not just an executor.
-    
+
+      '
     requirements:
-      - "Every request receives at least ONE challenge or recommendation"
-      - "Challenges based on MERGED knowledge (CORTEX + Company)"
-      - "Challenge includes: potential issues, edge cases, alternatives"
-      - "If no genuine challenges found, provide optimization recommendations"
-      - "Challenge confidence score included (skip individual challenge if < 0.3)"
-      - "User can dismiss challenges but dismissal is LOGGED for learning"
-      - "Fast-track mode for trivial requests (query, status) - lighter challenge"
-      - "Challenges presented IN comprehension YAML (single review point)"
-    
+    - Every request receives at least ONE challenge or recommendation
+    - Challenges based on MERGED knowledge (CORTEX + Company)
+    - 'Challenge includes: potential issues, edge cases, alternatives'
+    - If no genuine challenges found, provide optimization recommendations
+    - Challenge confidence score included (skip individual challenge if < 0.3)
+    - User can dismiss challenges but dismissal is LOGGED for learning
+    - Fast-track mode for trivial requests (query, status) - lighter challenge
+    - Challenges presented IN comprehension YAML (single review point)
     challenge_categories:
-      - category: "BREAKING_CHANGE"
-        trigger: "Proposed change affects dependencies or consumers"
-        severity_default: "HIGH"
-        required: true
-        
-      - category: "TEST_GAP"
-        trigger: "Insufficient test coverage for affected code"
-        severity_default: "MEDIUM"
-        required: true
-        
-      - category: "GOVERNANCE_CONFLICT"
-        trigger: "Request may violate merged CORTEX+Company ruleset"
-        severity_default: "HIGH"
-        required: true
-        
-      - category: "HISTORICAL_ISSUE"
-        trigger: "Similar code/pattern caused issues before (git history)"
-        severity_default: "MEDIUM"
-        required: true
-        
-      - category: "PERFORMANCE_RISK"
-        trigger: "Scalability or efficiency concerns detected"
-        severity_default: "LOW"
-        required: false  # Advisory
-        
-      - category: "SECURITY_RISK"
-        trigger: "Potential vulnerability or data exposure"
-        severity_default: "CRITICAL"
-        required: true
-        
-      - category: "ALTERNATIVE_APPROACH"
-        trigger: "Better solution exists in knowledge base"
-        severity_default: "LOW"
-        required: false  # Advisory
-        
-      - category: "SCOPE_CREEP"
-        trigger: "Request implies work beyond stated intent"
-        severity_default: "MEDIUM"
-        required: true
-    
+    - category: BREAKING_CHANGE
+      trigger: Proposed change affects dependencies or consumers
+      severity_default: HIGH
+      required: true
+    - category: TEST_GAP
+      trigger: Insufficient test coverage for affected code
+      severity_default: MEDIUM
+      required: true
+    - category: GOVERNANCE_CONFLICT
+      trigger: Request may violate merged CORTEX+Company ruleset
+      severity_default: HIGH
+      required: true
+    - category: HISTORICAL_ISSUE
+      trigger: Similar code/pattern caused issues before (git history)
+      severity_default: MEDIUM
+      required: true
+    - category: PERFORMANCE_RISK
+      trigger: Scalability or efficiency concerns detected
+      severity_default: LOW
+      required: false
+    - category: SECURITY_RISK
+      trigger: Potential vulnerability or data exposure
+      severity_default: CRITICAL
+      required: true
+    - category: ALTERNATIVE_APPROACH
+      trigger: Better solution exists in knowledge base
+      severity_default: LOW
+      required: false
+    - category: SCOPE_CREEP
+      trigger: Request implies work beyond stated intent
+      severity_default: MEDIUM
+      required: true
     implementation:
-      file: "src/core/intent/auto_challenger.py"
-      class: "AutoChallenger"
-      method: "generate_challenges(intent, merged_rules, holistic_context)"
-      
-      integration_point: |
-        InteractionOrchestrator.comprehend() calls AutoChallenger BEFORE
+      file: src/core/intent/auto_challenger.py
+      class: AutoChallenger
+      method: generate_challenges(intent, merged_rules, holistic_context)
+      integration_point: 'InteractionOrchestrator.comprehend() calls AutoChallenger
+        BEFORE
+
         generating comprehension YAML. Challenges are embedded in YAML.
-      
-      flow_diagram: |
-        ┌─────────────────────────────────────────────────────────────┐
+
+        '
+      flow_diagram: '┌─────────────────────────────────────────────────────────────┐
+
         │ EVERY REQUEST → InteractionOrchestrator.comprehend()       │
+
         │                                                             │
+
         │  1. Load MERGED_RULES (additive merge - happens first)     │
+
         │  2. Build holistic context (CORTEX LENS knowledge graph)   │
+
         │  3. ★ AUTO-CHALLENGE (INT-RULE-009 - mandatory)            │
+
         │     │                                                       │
+
         │     ├─ AutoChallenger.generate_challenges()                │
+
         │     │   ├─ Analyze intent against merged rules             │
+
         │     │   ├─ Check git history for similar patterns          │
+
         │     │   ├─ Detect breaking changes via dependency graph    │
+
         │     │   ├─ Calculate test coverage impact                  │
+
         │     │   ├─ Find alternatives in knowledge base             │
+
         │     │   └─ Score each challenge (confidence >= 0.3)        │
+
         │     │                                                       │
+
         │     └─ Output: ChallengeSet (min 1 item guaranteed)        │
+
         │                                                             │
+
         │  4. Generate comprehension YAML WITH embedded challenges   │
+
         │  5. Present to user (single review point)                  │
+
         │  6. User approves/refines (can dismiss challenges)         │
+
         │  7. Log dismissals → feed back to learning system          │
+
         │  8. Proceed to Stage 2 (Routing)                           │
+
         └─────────────────────────────────────────────────────────────┘
-      
-      challenge_yaml_structure: |
-        ```yaml
-        comprehension:
-          session_id: "uuid"
-          timestamp: "2026-01-15T10:30:00Z"
-          
-          intent_understanding:
-            primary_intent: "IMPLEMENT"
-            scope: ["src/api/users.py"]
-            confidence: 0.92
-          
-          # ... other comprehension fields ...
-          
-          # ========================================
-          # AUTO-CHALLENGES (INT-RULE-009)
-          # ========================================
-          auto_challenges:
-            rule_applied: "INT-RULE-009"
-            challenge_count: 3
-            knowledge_source: "MERGED (CORTEX + COMPANY)"
-            
-            challenges:
-              - id: "CHG-001"
-                category: "BREAKING_CHANGE"
-                severity: "HIGH"
-                confidence: 0.87
-                title: "API change affects 3 downstream consumers"
-                description: |
-                  The proposed change to UserController.get_user() 
-                  modifies the response schema. 3 services depend on
-                  current schema: billing-service, notification-service,
-                  analytics-service.
-                evidence:
-                  - "API call graph shows 3 consumers"
-                  - "git log: billing-service integrated 2024-06-15"
-                mitigation: |
-                  Consider API versioning (v2) to avoid breaking consumers.
-                action_required: true
-                user_dismissed: false
-                
-              - id: "CHG-002"
-                category: "TEST_GAP"
-                severity: "MEDIUM"
-                confidence: 0.92
-                title: "Coverage drops below 80% threshold"
-                description: |
-                  Current: 85%, After changes: ~72%
-                  CORTEX-TEST-001 requires >= 80%
-                evidence:
-                  - "coverage report: 85% current"
-                  - "3 new code paths uncovered"
-                mitigation: |
-                  Add tests for error handling, empty list edge case.
-                action_required: true
-                user_dismissed: false
-                
-              - id: "CHG-003"
-                category: "ALTERNATIVE_APPROACH"
-                severity: "LOW"
-                confidence: 0.65
-                title: "Repository pattern recommended"
-                description: |
-                  Knowledge base shows Repository pattern improves
-                  testability for data access code.
-                evidence:
-                  - "tier3/patterns/repository.yaml"
-                mitigation: |
-                  Extract to UserRepository class (optional).
-                action_required: false  # Advisory
-                user_dismissed: false
-            
-            dismissal_log: []  # Populated when user dismisses
-            
-          approval_status: "PENDING"
-        ```
-    
+
+        '
+      challenge_yaml_structure: "```yaml\ncomprehension:\n  session_id: \"uuid\"\n\
+        \  timestamp: \"2026-01-15T10:30:00Z\"\n  \n  intent_understanding:\n    primary_intent:\
+        \ \"IMPLEMENT\"\n    scope: [\"src/api/users.py\"]\n    confidence: 0.92\n\
+        \  \n  # ... other comprehension fields ...\n  \n  # ========================================\n\
+        \  # AUTO-CHALLENGES (INT-RULE-009)\n  # ========================================\n\
+        \  auto_challenges:\n    rule_applied: \"INT-RULE-009\"\n    challenge_count:\
+        \ 3\n    knowledge_source: \"MERGED (CORTEX + COMPANY)\"\n    \n    challenges:\n\
+        \      - id: \"CHG-001\"\n        category: \"BREAKING_CHANGE\"\n        severity:\
+        \ \"HIGH\"\n        confidence: 0.87\n        title: \"API change affects\
+        \ 3 downstream consumers\"\n        description: |\n          The proposed\
+        \ change to UserController.get_user() \n          modifies the response schema.\
+        \ 3 services depend on\n          current schema: billing-service, notification-service,\n\
+        \          analytics-service.\n        evidence:\n          - \"API call graph\
+        \ shows 3 consumers\"\n          - \"git log: billing-service integrated 2024-06-15\"\
+        \n        mitigation: |\n          Consider API versioning (v2) to avoid breaking\
+        \ consumers.\n        action_required: true\n        user_dismissed: false\n\
+        \        \n      - id: \"CHG-002\"\n        category: \"TEST_GAP\"\n     \
+        \   severity: \"MEDIUM\"\n        confidence: 0.92\n        title: \"Coverage\
+        \ drops below 80% threshold\"\n        description: |\n          Current:\
+        \ 85%, After changes: ~72%\n          CORTEX-TEST-001 requires >= 80%\n  \
+        \      evidence:\n          - \"coverage report: 85% current\"\n         \
+        \ - \"3 new code paths uncovered\"\n        mitigation: |\n          Add tests\
+        \ for error handling, empty list edge case.\n        action_required: true\n\
+        \        user_dismissed: false\n        \n      - id: \"CHG-003\"\n      \
+        \  category: \"ALTERNATIVE_APPROACH\"\n        severity: \"LOW\"\n       \
+        \ confidence: 0.65\n        title: \"Repository pattern recommended\"\n  \
+        \      description: |\n          Knowledge base shows Repository pattern improves\n\
+        \          testability for data access code.\n        evidence:\n        \
+        \  - \"tier3/patterns/repository.yaml\"\n        mitigation: |\n         \
+        \ Extract to UserRepository class (optional).\n        action_required: false\
+        \  # Advisory\n        user_dismissed: false\n    \n    dismissal_log: []\
+        \  # Populated when user dismisses\n    \n  approval_status: \"PENDING\"\n\
+        ```\n"
     dismissal_learning:
-      description: |
-        When user dismisses a challenge, log it for pattern analysis.
+      description: 'When user dismisses a challenge, log it for pattern analysis.
+
         If same challenge TYPE dismissed > 5 times consecutively,
+
         flag as potential false positive for review.
-      
-      log_structure: |
-        ```yaml
-        dismissal:
-          challenge_id: "CHG-001"
-          category: "BREAKING_CHANGE"
-          timestamp: "2026-01-15T10:35:00Z"
-          user_reason: "Internal API only, no external consumers"
-          consecutive_dismissals_this_type: 2
-          flagged_for_review: false
-        ```
-    
+
+        '
+      log_structure: "```yaml\ndismissal:\n  challenge_id: \"CHG-001\"\n  category:\
+        \ \"BREAKING_CHANGE\"\n  timestamp: \"2026-01-15T10:35:00Z\"\n  user_reason:\
+        \ \"Internal API only, no external consumers\"\n  consecutive_dismissals_this_type:\
+        \ 2\n  flagged_for_review: false\n```\n"
     audit_requirements:
-      - "Log ALL generated challenges (even if confidence < threshold)"
-      - "Log user dismissals with timestamp and optional reason"
-      - "Track dismissal patterns for challenge quality improvement"
-      - "Alert if same challenge type dismissed > 5 times (false positive?)"
-      - "Monthly report: challenge acceptance rate by category"
-
-# =============================================================================
-# AC SUMMARY
-# =============================================================================
-
+    - Log ALL generated challenges (even if confidence < threshold)
+    - Log user dismissals with timestamp and optional reason
+    - Track dismissal patterns for challenge quality improvement
+    - Alert if same challenge type dismissed > 5 times (false positive?)
+    - 'Monthly report: challenge acceptance rate by category'
 summary:
   total_acs: 14
   by_group:
-    IR-001: 4  # Context Intelligence Sources
-    IR-002: 3  # Intent Reflection System
-    IR-003: 1  # Master + Interaction Protocol
-    IR-004: 2  # Knowledge Graph & Comprehension Loop
-    IR-005: 2  # Intent-Based Orchestrator Routing
-    IR-006: 2  # Company Domain Override System
-  
+    IR-001: 4
+    IR-002: 3
+    IR-003: 1
+    IR-004: 2
+    IR-005: 2
+    IR-006: 2
   estimated_effort:
     hours: 64
     days: 8
-    
   key_deliverables:
-    - "CORTEX LENS knowledge graph builder"
-    - "Comprehension loop with YAML approval gate"
-    - "Three-stage Master Orchestrator architecture"
-    - "Intent-based routing to TDD/Planning/ADO"
-    - "Company domain override mechanism"
-
-# =============================================================================
-# METADATA
-# =============================================================================
-
+  - CORTEX LENS knowledge graph builder
+  - Comprehension loop with YAML approval gate
+  - Three-stage Master Orchestrator architecture
+  - Intent-based routing to TDD/Planning/ADO
+  - Company domain override mechanism
 metadata:
-  author: "Asif Hussain"
-  copyright: "© 2025-2026 Asif Hussain. All rights reserved."
-  created_at: "2026-01-15T00:00:00Z"
-  updated_at: "2026-01-15T12:00:00Z"
-  origin_branch: "CORTEX-5.5"
-  phase_yaml: ".github/roadmap/phases/phase-07-intent-router.yaml"
-  version: "2.0"  # Updated for comprehensive 14-AC scope
+  author: Asif Hussain
+  copyright: © 2025-2026 Asif Hussain. All rights reserved.
+  created_at: '2026-01-15T00:00:00Z'
+  updated_at: '2026-01-15T12:00:00Z'
+  origin_branch: CORTEX-5.5
+  phase_yaml: .github/roadmap/phases/phase-07-intent-router.yaml
+  version: '2.0'
