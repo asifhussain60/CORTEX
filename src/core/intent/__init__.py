@@ -16,6 +16,13 @@ from .intent_reflection_protocol import (
     ReflectionResponse,
     ReflectionStatus,
 )
+from .lens_context_builder import (
+    LENSContextBuilder,
+    LENSContext,
+    KnowledgeGraph,
+    ContextNode,
+    ContextEdge,
+)
 
 __all__ = [
     # Intent canonicalizer
@@ -39,4 +46,10 @@ __all__ = [
     "ReflectionRequest",
     "ReflectionResponse",
     "ReflectionStatus",
+    # LENS context builder
+    "LENSContextBuilder",
+    "LENSContext",
+    "KnowledgeGraph",
+    "ContextNode",
+    "ContextEdge",
 ]
