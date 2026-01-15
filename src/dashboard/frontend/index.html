@@ -9,11 +9,11 @@
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Chart.js for metrics -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <!-- Chart.js from unpkg (tracking-friendly CDN) -->
+    <script src="https://unpkg.com/chart.js@4.4.0/dist/chart.umd.js" onerror="console.warn('✗ Chart.js unavailable - static charts only')"></script>
     
     <!-- D3.js for graphs -->
-    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/d3@7.8.5/dist/d3.min.js" onerror="console.warn('✗ D3.js unavailable - basic visualization')"></script>
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/glassmorphism.css">

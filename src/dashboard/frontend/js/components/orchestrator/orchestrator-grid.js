@@ -47,9 +47,16 @@ async function renderOrchestratorGrid() {
             </div>
         `).join('');
         
+        console.log('✓ Orchestrator grid rendered:', data.orchestrators.length);
+        
     } catch (error) {
-        console.error('Error loading orchestrators:', error);
-        grid.innerHTML = '<div class="text-red-400">Failed to load orchestrator data</div>';
+        console.error('✗ Error loading orchestrators:', error);
+        grid.innerHTML = `
+            <div class="col-span-full glass-panel p-4 text-amber-400 border-l-2 border-amber-500">
+                <p class="text-sm">⚠️ Unable to load orchestrator status</p>
+                <p class="text-xs opacity-75 mt-1">Make sure FastAPI backend is running on port 8000</p>
+            </div>
+        `;
     }
 }
 
@@ -69,4 +76,9 @@ function formatTimeStamp(timestamp) {
 }
 
 // Render on page load
-document.addEventListener('DOMContentLoaded', renderOrchestratorGrid);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderOrchestratorGrid);
+} else {
+    // Already loaded
+    renderOrchestratorGrid().catch(e => console.error('Orchestrator grid render failed:', e));
+}
