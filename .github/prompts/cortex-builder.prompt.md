@@ -221,7 +221,7 @@ executive_summary_complete:
 
 1. **Read** `cortex-master.yaml` → check `phase_tracker`
 2. **DISPLAY EXECUTIVE SUMMARY** → Phase Initiation Summary (MANDATORY)
-3. **Read** `docs/phases/phase-XX.yaml` → get AC-IDs for current phase
+3. **Read** `.github/roadmap/phases/phase-XX.yaml` → get AC-IDs for current phase
 4. **GIT CHECKPOINT** → Create checkpoint before starting AC-ID
 5. **Implement** one AC-ID at a time with tests (audit logging ACTIVE)
 6. **Verify Audit Trail** → Query audit logs for AC-ID entries
@@ -389,7 +389,7 @@ modification:
 .github/roadmap/
 ├── cortex-master.yaml      # Master plan + phase_tracker (SINGLE SOURCE OF TRUTH)
 
-docs/phases/                 # Phase specifications
+.github/roadmap/phases/      # Phase specifications (consolidated SSOT)
 ├── phase-01.yaml            # PHASE-01: Archive & Governance Foundation ✅
 ├── phase-02.yaml            # PHASE-02: Validation & Testing ✅
 ├── phase-03.yaml            # PHASE-03: File Management & Iteration ✅
@@ -405,7 +405,7 @@ docs/phases/                 # Phase specifications
 ├── phase-13.yaml            # PHASE-13: Production Readiness
 ├── phase-14.yaml            # PHASE-14: Framework Hardening
 ├── phase-15-neural-observatory.yaml    # PHASE-15: Neural Observatory SPA ⭐
-└── phase-enhancement-*.yaml # Enhancement phases (01-03) ✅
+└── phase-parallel.yaml      # PHASE-PARALLEL: Folder Migration ✅
 
 cortex-vision/               # Vision & Architecture Files
 ├── cortex-vision.yaml       # Project metrics & key systems
