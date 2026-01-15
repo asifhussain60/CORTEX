@@ -48,6 +48,7 @@ class TestPhaseProgressInitialization:
         assert "already initialized" in str(result).lower()
 
 
+@pytest.mark.ac("FR-005-01")
 class TestProgressTracking:
     """Test AC-FR-005-01: Progress tracking and calculation"""
     
@@ -144,6 +145,7 @@ class TestProgressTracking:
         assert progress.get_status() == "BLOCKED"
 
 
+@pytest.mark.ac("FR-005-02")
 class TestBlockerDetection:
     """Test AC-FR-005-02: Blocker detection and management"""
     
@@ -316,6 +318,7 @@ class TestBlockerDetection:
         assert tracker.get_phase_progress("PHASE-01").unwrap().active_blockers == 0
 
 
+@pytest.mark.ac("FR-005-02")
 class TestAlertEscalation:
     """Test AC-FR-005-02: Alert escalation"""
     
@@ -424,6 +427,7 @@ class TestAlertEscalation:
         assert len(ack_alerts) == 1
 
 
+@pytest.mark.ac("FR-005-03")
 class TestProgressPersistence:
     """Test AC-FR-005-03: Progress persistence to database"""
     

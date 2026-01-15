@@ -92,6 +92,7 @@ class TestDatabaseSchema:
         db.close()
 
 
+@pytest.mark.ac("AR-002-02")
 class TestWALMode:
     """Test WAL mode configuration (AC-AR-002-02)."""
     
@@ -130,6 +131,7 @@ class TestWALMode:
         db.close()
 
 
+@pytest.mark.ac("AR-002-03")
 class TestQueryPerformance:
     """Test query performance requirements (AC-AR-002-03)."""
     

@@ -19,6 +19,7 @@ import pytest
 from src.core.mode_controller import ModeController, RuntimeMode
 
 
+@pytest.mark.ac("AR-005-01")
 class TestEnvModeDetection:
     """Test mode detection from CORTEX_ENV environment variable."""
     
@@ -67,6 +68,7 @@ class TestEnvModeDetection:
             assert controller.get_mode() == RuntimeMode.DEVELOPMENT
 
 
+@pytest.mark.ac("AR-005-02")
 class TestProductionNoBypass:
     """Test that production mode prevents all governance bypass."""
     
@@ -92,6 +94,7 @@ class TestProductionNoBypass:
         assert controller.allows_bypass()
 
 
+@pytest.mark.ac("AR-005-03")
 class TestModeLogging:
     """Test mode logging at startup."""
     

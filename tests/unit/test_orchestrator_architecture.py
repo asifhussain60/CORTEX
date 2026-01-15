@@ -71,6 +71,7 @@ class MockOrchestrator(IOrchestrator):
         return {"domain": self.domain, "status": "executed"}
 
 
+@pytest.mark.ac("AR-006-01")
 class TestMasterOrchestratorRegistration:
     """Test AC-AR-006-01: Orchestrator registration"""
     
@@ -195,6 +196,7 @@ class TestMasterOrchestratorQuerying:
         assert all("type" in d for d in status["domains"])
 
 
+@pytest.mark.ac("AR-006-01")
 class TestMasterOrchestratorCoordination:
     """Test AC-AR-006-01: Operation coordination"""
     
@@ -265,6 +267,7 @@ class TestMasterOrchestratorCoordination:
         assert history[1]["operation"] == "enforce"
 
 
+@pytest.mark.ac("AR-006-01")
 class TestMasterOrchestratorAuditLogging:
     """Test AC-AR-006-01: Audit logging for all operations"""
     

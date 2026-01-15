@@ -126,6 +126,7 @@ class TestRuleEvaluator:
         assert eval_result is not None
 
 
+@pytest.mark.ac("FR-002-01")
 class TestTierPriority:
     """Test AC-FR-002-01: Tier priority evaluation"""
     
@@ -191,6 +192,7 @@ class TestTierPriority:
         assert eval_result.passed is not None
 
 
+@pytest.mark.ac("FR-002-02")
 class TestRuleViolation:
     """Test AC-FR-002-02: Rule violation details"""
     
@@ -225,6 +227,7 @@ class TestRuleViolation:
         assert "warning" in repr_str
 
 
+@pytest.mark.ac("FR-002-02")
 class TestViolationReporter:
     """Test AC-FR-002-02: Violation reporting"""
     
@@ -417,6 +420,7 @@ class TestEvaluationResult:
         assert "time=2.5ms" in repr_str
 
 
+@pytest.mark.ac("FR-002-03")
 class TestPerformance:
     """Test AC-FR-002-03: Evaluation performance"""
     

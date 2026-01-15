@@ -21,6 +21,7 @@ from pathlib import Path
 from src.core.brain_populator import BrainPopulator
 
 
+@pytest.mark.ac("FR-009-01")
 class TestBrainTierConsistencyValidation:
     """FR-009: Brain tier consistency validation"""
     
@@ -146,6 +147,7 @@ class TestBrainTierConsistencyValidation:
                     pass
 
 
+@pytest.mark.ac("FR-009-02")
 class TestTierReferenceVerification:
     """AC-FR-009-02: Tier reference validation"""
     
@@ -174,6 +176,7 @@ class TestTierReferenceVerification:
         assert len(template_files) > 0
 
 
+@pytest.mark.ac("FR-009-03")
 class TestRuleConflictDetection:
     """AC-FR-009-03: Rule conflict detection"""
     

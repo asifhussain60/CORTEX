@@ -45,6 +45,7 @@ class MockDomainOrchestrator(IOrchestrator):
         return Ok([])
 
 
+@pytest.mark.ac("ENH-002-01")
 class TestMasterOrchestratorHeaders:
     """Test MasterOrchestrator header injection"""
     
@@ -132,6 +133,7 @@ class TestMasterOrchestratorHeaders:
             pytest.fail(f"get_response_with_headers should not raise: {e}")
 
 
+@pytest.mark.ac("ENH-002-02")
 class TestMasterOrchestratorHeaderVariables:
     """Test header variable substitution in MasterOrchestrator"""
     
@@ -174,6 +176,7 @@ class TestMasterOrchestratorHeaderVariables:
         assert isinstance(wrapped, str), "Should return a string"
 
 
+@pytest.mark.ac("ENH-002-02")
 class TestMasterOrchestratorIntegrationWithDelegation:
     """Test MasterOrchestrator headers with delegation"""
     
@@ -221,6 +224,7 @@ class TestMasterOrchestratorIntegrationWithDelegation:
         assert isinstance(wrapped, str), "Should return wrapped string"
 
 
+@pytest.mark.ac("ENH-002-02")
 class TestMasterOrchestratorBackwardCompatibility:
     """Test backward compatibility of MasterOrchestrator with headers"""
     
@@ -270,6 +274,7 @@ class TestMasterOrchestratorBackwardCompatibility:
         assert result.is_ok(), "Coordination should succeed"
 
 
+@pytest.mark.ac("ENH-002-02")
 class TestMasterOrchestratorHeaderStructure:
     """Test header structure consistency in MasterOrchestrator"""
     
@@ -302,6 +307,7 @@ class TestMasterOrchestratorHeaderStructure:
             assert isinstance(wrapped, str), "All should return strings"
 
 
+@pytest.mark.ac("ENH-002-01")
 class TestMasterOrchestratorEdgeCases:
     """Test edge cases for MasterOrchestrator header injection"""
     

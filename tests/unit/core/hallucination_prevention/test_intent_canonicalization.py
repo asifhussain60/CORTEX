@@ -362,6 +362,7 @@ class TestActionTypeClassification:
 # =============================================================================
 
 
+@pytest.mark.ac("HP-001-01")
 class TestExtendedCanonicalIntent:
     """Test ExtendedCanonicalIntent dataclass."""
     
@@ -432,6 +433,7 @@ class TestExtendedCanonicalIntent:
 # =============================================================================
 
 
+@pytest.mark.ac("HP-001-01")
 class TestExtendedCanonicalizationIntegration:
     """Integration tests for extended canonicalization."""
     
@@ -542,6 +544,7 @@ class TestEdgeCasesAndRobustness:
 # =============================================================================
 
 
+@pytest.mark.ac("HP-001-01")
 class TestBackwardCompatibility:
     """Test backward compatibility with PHASE-07 IntentCanonicalizer."""
     

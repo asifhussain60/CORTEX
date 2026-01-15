@@ -72,6 +72,7 @@ architecture_decisions:
     return yaml_path
 
 
+@pytest.mark.ac("AR-001-01")
 class TestACPopulator:
     """Test AC populator functionality."""
     

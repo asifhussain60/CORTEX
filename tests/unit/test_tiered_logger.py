@@ -20,6 +20,7 @@ from src.infrastructure.database import DatabaseManager, DatabaseConfig
 from src.infrastructure.tiered_logger import TieredLogger, LogLevel, LogEntry
 
 
+@pytest.mark.ac("AR-004-01")
 class TestAuditToDb:
     """Test that AUDIT logs are written to governance.db."""
     
@@ -74,6 +75,7 @@ class TestAuditToDb:
         db.close()
 
 
+@pytest.mark.ac("AR-004-02")
 class TestLogLevelConfig:
     """Test that log levels are configurable per tier."""
     
@@ -142,6 +144,7 @@ class TestLogLevelConfig:
         assert "Invalid tier" in str(result)
 
 
+@pytest.mark.ac("AR-004-03")
 class TestStructuredJsonLogging:
     """Test that logs are in structured JSON format."""
     

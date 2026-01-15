@@ -87,6 +87,7 @@ class TestPhaseLockEnforcement:
         assert result.metadata.get("git_checkpoint") == "abc123"
 
 
+@pytest.mark.ac("AR-001-01")
 class TestACIDValidation:
     """Test AC-ID existence validation (AC-VALIDATE-002)."""
     
@@ -125,6 +126,7 @@ class TestACIDValidation:
         assert enforcer.is_valid_ac_format("AC-001") is False
 
 
+@pytest.mark.ac("AR-001-01")
 class TestIntentCanonicalization:
     """Test intent canonicalization (AC-VALIDATE-001)."""
     
@@ -222,6 +224,7 @@ class TestPhaseGating:
         assert result.allowed is True
 
 
+@pytest.mark.ac("AR-001-01")
 class TestOperationEnforcement:
     """Test full operation enforcement."""
     

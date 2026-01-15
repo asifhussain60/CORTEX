@@ -25,6 +25,7 @@ from src.infrastructure.evidence_bundle import (
 from src.infrastructure.database import DatabaseManager, DatabaseConfig
 
 
+@pytest.mark.ac("FR-004-01")
 class TestBundleCreation:
     """Test AC-FR-004-01: Bundle creation with <500ms capture"""
     
@@ -107,6 +108,7 @@ class TestBundleCreation:
         assert bundle.evidence_level == EvidenceLevel.CRITICAL
 
 
+@pytest.mark.ac("FR-004-03")
 class TestArtifactCollection:
     """Test AC-FR-004-03: Artifact collection with AC-ID linkage"""
     
@@ -223,6 +225,7 @@ class TestArtifactCollection:
         assert artifact.content == content
 
 
+@pytest.mark.ac("FR-004-02")
 class TestBundleSerialization:
     """Test AC-FR-004-02: JSON serialization and integrity"""
     
@@ -344,6 +347,7 @@ class TestBundleSerialization:
         assert "artifact_count" in data
 
 
+@pytest.mark.ac("FR-004-02")
 class TestBundleIntegrity:
     """Test AC-FR-004-02: Integrity verification"""
     

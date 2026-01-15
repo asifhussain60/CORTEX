@@ -82,6 +82,7 @@ class TestCheckPhaseLockTool:
         assert result.is_err()
 
 
+@pytest.mark.ac("AR-001-01")
 class TestValidateACIDTool:
     """Test validate_ac_id MCP tool."""
     
@@ -113,6 +114,7 @@ class TestValidateACIDTool:
         assert "invalid format" in data["reason"].lower()
 
 
+@pytest.mark.ac("AR-001-01")
 class TestCanonicalizeIntentTool:
     """Test canonicalize_intent MCP tool."""
     
@@ -142,6 +144,7 @@ class TestCanonicalizeIntentTool:
         assert data["intent_type"] == "UNKNOWN"
 
 
+@pytest.mark.ac("AR-001-01")
 class TestEnforceOperationTool:
     """Test enforce_operation MCP tool."""
     

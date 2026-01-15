@@ -16,6 +16,7 @@ from src.core.governance_registry import GovernanceRegistry, GovernanceRule
 from src.core.tier_resolver import TierResolver
 
 
+@pytest.mark.ac("AR-001-01")
 class TestTier0RulesLoaded:
     """Test that Tier 0 rules are loaded from core-rules.yaml."""
     
@@ -78,6 +79,7 @@ class TestTier0RulesLoaded:
             pytest.skip(f"YAML file has syntax issues: {result}")
 
 
+@pytest.mark.ac("AR-001-02")
 class TestTierPrecedence:
     """Test that tier precedence is enforced (0 > 1 > 2)."""
     
@@ -172,6 +174,7 @@ class TestTierPrecedence:
         assert rule.tier == 2
 
 
+@pytest.mark.ac("AR-001-03")
 class TestTier0Immutability:
     """Test that Tier 0 rules are immutable."""
     

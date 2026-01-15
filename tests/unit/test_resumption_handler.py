@@ -19,6 +19,7 @@ from src.core.resumption_handler import (
 )
 
 
+@pytest.mark.ac("FR-006-02")
 class TestResumptionInitiation:
     """Test AC-FR-006-02: Operations resumable after interruption"""
     
@@ -121,6 +122,7 @@ class TestResumptionInitiation:
         assert validation.is_err()
 
 
+@pytest.mark.ac("FR-006-03")
 class TestStateReconstruction:
     """Test AC-FR-006-03: Partial completion preserved"""
     

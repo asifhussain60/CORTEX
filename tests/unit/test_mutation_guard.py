@@ -309,6 +309,7 @@ class TestRuleImmutabilityValidator:
 # TEST: ACCompletenessValidator
 # =============================================================================
 
+@pytest.mark.ac("AR-014-01")
 class TestACCompletenessValidator:
     """Test AC-ID audit requirement validation."""
     
