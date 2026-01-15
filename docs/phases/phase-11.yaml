@@ -31,8 +31,8 @@ phase:
   estimated_days: 3.5
   
   ac_ids: 6
-  completed_ac_ids: 1
-  progress_percentage: 16.7
+  completed_ac_ids: 2
+  progress_percentage: 33.3
   
   started_at: "2026-01-16T12:30:00Z"
 
@@ -54,12 +54,16 @@ acceptance_criteria:
   - ac_id: "HP-001-02"
     title: "Behavioral Boundary Rules"
     description: "Prevent locked phase modification, AC deletion, governance bypass"
-    status: "NOT_STARTED"
+    status: "COMPLETED"
+    notes: "Prevents locked phase modification, AC deletion without approval, and governance bypass attempts. 28/28 tests passing."
     acceptance_tests:
       - "Locked phase operations blocked"
       - "AC deletion prevented without approval"
       - "Governance bypass attempts logged"
     git_checkpoint: "HP-001-02-boundaries"
+    completed_at: "2026-01-16T13:00:00Z"
+    test_count: 28
+    test_pass_rate: 1.0
     
   - ac_id: "HP-002-01"
     title: "Agent Execution Sandbox"
