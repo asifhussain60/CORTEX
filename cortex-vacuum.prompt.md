@@ -89,56 +89,61 @@ The CORTEX Vacuum system is a three-phase repository reorganization framework th
 
 ## File Naming Rules
 
-### Convention: Kebab-Case (max 20 chars)
+### Convention: Kebab-Case (max 25 chars)
 
-**Format**: `noun-descriptor-type`
+**Format**: `subject-descriptor-action` (meaningful, readable, complete)
 
 **Examples**:
 ```
-❌ ac-ar-013-03-status-report.md
-✅ ar-013-status.md (12 chars)
+❌ ac-ar-013-03-status-report.md (too many prefixes)
+✅ ar-013-status-report.md (19 chars) - Clear and complete
 
-❌ CORTEX-MASTER-COMPLETION-ANALYSIS.md
-✅ cortex-analysis.md (15 chars)
+❌ CORTEX-MASTER-COMPLETION-ANALYSIS.md (36 chars, truncates badly)
+✅ cortex-completion-analysis.md (25 chars) - Precise
 
-❌ PHASE-CHAT-VERIFICATION-REPORT.md
-✅ phase-chat-verify.md (16 chars)
+❌ PHASE-CHAT-VERIFICATION-REPORT.md (too long, unclear abbreviation)
+✅ phase-chat-verification.md (25 chars) - Complete meaning
 
-❌ EXECUTIVE-BRIEF-FOR-DECISION.md
-✅ executive-brief.md (16 chars)
+❌ EXECUTIVE-BRIEF-FOR-DECISION.md (truncates to "exec-brief-for-de...")
+✅ exec-decision-brief.md (19 chars) - Meaningful and readable
 
-❌ IMPLEMENTATION-STATUS-BRIEF.md
-✅ impl-status.md (11 chars)
+❌ IMPLEMENTATION-STATUS-BRIEF.md (loses meaning when abbreviated)
+✅ implementation-status.md (24 chars) - Full semantic meaning
 ```
 
 ### Naming Principles
 
-1. **No adjectives/pronouns**: Remove "old", "new", "fixed", "enhanced", "current", "latest"
-2. **Use abbreviations**: "implementation" → "impl", "verification" → "verify"
-3. **Semantic clarity**: Keep enough words to identify the file's purpose
-4. **Lowercase throughout**: All kebab-case, never MixedCase or SCREAMING_SNAKE_CASE
-5. **Type suffix optional**: Use only if ambiguous
-   - `report.md` for reports
-   - `config.yaml` for configs
-   - No suffix for general docs
+1. **Prioritize Readability**: Never truncate words mid-syllable; create abbreviated filenames that are still pronounceable and meaningful
+2. **Selective Abbreviations**: Only abbreviate when necessary:
+   - `executive` → `exec` (widely understood)
+   - `implementation` → can stay full (24 chars is acceptable)
+   - `analysis` → can stay full (8 chars)
+   - `completion` → can stay full (10 chars)
+   - Do NOT abbreviate domain-specific terms
+3. **Remove Only Nonsemantic Words**: Remove "old", "new", "fixed", "enhanced", "current", "latest", "draft", "final", "updated"
+4. **Maintain Complete Meaning**: A filename should convey its content without additional context
+5. **Lowercase throughout**: All kebab-case, never MixedCase or SCREAMING_SNAKE_CASE
+6. **Type suffix**: Include when helpful for clarity
+   - `*-report.md` for reports
+   - `*-config.yaml` for configs
+   - `*-analysis.md` for analysis
+   - Omit if name is already clear
 
 ### Folder Naming Rules
 
-Same as files: kebab-case, max 20 chars, no adjectives.
+Same as files: kebab-case, max 25 chars, no nonsemantic adjectives. Prioritize readability and complete meaning.
 
 **Examples**:
 ```
-❌ acceptance-criteria
-✅ ac-criteria (9 chars)
+❌ acceptance-criteria (18 chars) → Keep as-is ✓
+✅ ac-criteria (11 chars) - Good abbreviation
 
-❌ response-templates
-✅ responses (9 chars)
+❌ response-templates (19 chars) → Keep as-is ✓
+✅ response-templates (19 chars) - Clear and descriptive
 
-❌ governance
-✅ governance (10 chars) ✓ OK as-is
+✅ governance (10 chars) ✓ OK as-is - Concise and clear
 
-❌ audit-logs
-✅ audit-logs (10 chars) ✓ OK as-is
+✅ audit-logs (10 chars) ✓ OK as-is - Semantic and complete
 ```
 
 ---

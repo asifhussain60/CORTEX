@@ -195,13 +195,13 @@ class CortexVacuumAnalyzer:
 
         # Check for excessive length
         name_no_ext = Path(filename).stem
-        if len(name_no_ext) > 20:
+        if len(name_no_ext) > 25:
             self.issues.append(FileIssue(
                 file_path=file_path,
                 issue_type='name_violation',
                 severity='warning',
                 description=f"Filename too long ({len(name_no_ext)} chars): {filename}",
-                suggested_action=f'Abbreviate to ≤20 chars'
+                suggested_action=f'Shorten to ≤25 chars with meaningful names'
             ))
 
     def _find_all_references(self) -> None:
@@ -364,34 +364,66 @@ class CortexVacuumAnalyzer:
         return str(Path(file_path).parent), 'No relocation needed'
 
     def _suggest_filename(self, name_stem: str, ext: str) -> str:
-        """Suggest a kebab-case filename."""
-        # Remove common adjectives
-        remove_words = {'old', 'new', 'fixed', 'enhanced', 'current', 'latest', 'final', 'draft'}
+        """
+        Suggest an intelligently abbreviated kebab-case filename (max 25 chars).
+        
+        Strategy:
+        1. Remove nonsemantic words (old, new, fixed, etc.)
+        2. Keep complete words unless they cause > 25 char overflow
+        3. Only abbreviate when necessary to stay under 25 chars
+        4. Prioritize semantic meaning over brevity
+        5. Maintain logical word order; remove least important trailing words
+        """
+        # Words that add no semantic meaning - removed because they're descriptive fluff
+        remove_words = {'old', 'new', 'fixed', 'enhanced', 'current', 'latest', 'final', 'draft', 'updated', 'brief', 'the', 'for', 'a', 'an'}
 
         # Split and clean
         words = re.split(r'[-_\s]+', name_stem.lower())
         words = [w for w in words if w and w not in remove_words]
+        
+        if not words:
+            return f'untitled{ext}'
 
-        # Abbreviate long words
-        abbrev = {
-            'completion': 'completion',
-            'completion': 'completion',
-            'verification': 'verify',
-            'implementation': 'impl',
-            'executive': 'exec',
-            'analysis': 'analysis',
-            'report': 'report',
+        # Selective abbreviations: only abbreviate long words when needed
+        abbrev_map = {
+            'executive': 'exec',                    # 10→4 chars (must abbreviate)
+            'verification': 'verify',               # 12→6 chars (must abbreviate)
+            'implementation': 'implementation',     # Keep: important semantic
+            'completion': 'completion',             # Keep: important semantic
+            'decision': 'decision',                 # Keep: important semantic
+            'summary': 'summary',                   # Keep: common, clear
+            'trilogy': 'trilogy',                   # Keep: specific
+            'handoff': 'handoff',                   # Keep: specific
+            'rollback': 'rollback',                 # Keep: specific
+            'governance': 'governance',             # Keep: specific
         }
 
-        words = [abbrev.get(w, w) for w in words]
+        # First pass: use primary abbreviation map
+        words_pass1 = [abbrev_map.get(w, w) for w in words]
+        suggested = '-'.join(words_pass1)
 
-        # Join
-        suggested = '-'.join(words)
+        # Check length - if under 25 chars, we're done
+        if len(suggested) <= 25:
+            return suggested + ext
 
-        # Truncate if too long
-        if len(suggested) > 20:
-            suggested = suggested[:17] + '...'  # Will be adjusted manually
+        # Second pass: aggressive abbreviations only if necessary
+        aggressive_abbrev = {
+            'completion': 'comp',
+            'implementation': 'impl',
+            'verification': 'verify',
+            'executive': 'exec',
+        }
+        
+        words_pass2 = [aggressive_abbrev.get(w, w) for w in words]
+        suggested = '-'.join(words_pass2)
 
+        # Third pass: intelligent removal of trailing words to fit 25 chars
+        if len(suggested) > 25:
+            # Remove words from the end (least important trailing descriptors first)
+            while len(suggested) > 25 and len(words_pass2) > 1:
+                words_pass2 = words_pass2[:-1]
+                suggested = '-'.join(words_pass2)
+                
         return suggested + ext
 
     def _is_marked_for_deletion(self, file_path: str) -> bool:
