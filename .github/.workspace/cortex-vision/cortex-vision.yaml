@@ -229,7 +229,7 @@ current_state:
   single_source_of_truth:
     master_plan: ".github/roadmap/cortex-master.yaml"
     phase_tracker: "phase_tracker property in cortex-master.yaml"
-    phase_details: "docs/phases/phase-*.yaml"
+    phase_details: ".github/roadmap/phases/phase-*.yaml"
     
   entry_points:
     builder: ".github/prompts/cortex-builder.prompt.md"
