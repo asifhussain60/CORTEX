@@ -25,6 +25,14 @@ from src.core.hallucination_prevention.behavioral_boundaries import (
     ViolationType,
 )
 
+from src.core.hallucination_prevention.execution_sandbox import (
+    ExecutionSandbox,
+    SandboxExecution,
+    SandboxSnapshot,
+    ExecutionMode,
+    ExecutionState,
+)
+
 __all__ = [
     "ExtendedIntentCanonicalizer",
     "ExtendedCanonicalIntent",
@@ -32,4 +40,9 @@ __all__ = [
     "BehavioralBoundaryRules",
     "BoundaryViolation",
     "ViolationType",
+    "ExecutionSandbox",
+    "SandboxExecution",
+    "SandboxSnapshot",
+    "ExecutionMode",
+    "ExecutionState",
 ]
