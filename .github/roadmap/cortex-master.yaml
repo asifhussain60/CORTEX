@@ -315,6 +315,62 @@ phase_tracker:
       verified_at: "2026-01-15T23:55:00Z"
     git_checkpoint: "f5cb10e71"
 
+  PHASE-ENHANCEMENT-02:
+    title: "Orchestrator Adoption - Multi-Orchestrator Header Injection"
+    description: "Apply ResponseHeaderInjector pattern to remaining orchestrators (MasterOrchestrator, future domain orchestrators). Leverage pattern guide from PHASE-ENHANCEMENT-01."
+    ac_ids: 2  # AC-ENH-002-01 (MasterOrchestrator), AC-ENH-002-02 (Validation)
+    completed_ac_ids: 0
+    status: "NOT_STARTED"
+    locked: false
+    started_at: null
+    requires: "PHASE-ENHANCEMENT-01"
+    can_start_after: "PHASE-ENHANCEMENT-01 completion"
+    must_complete_before: null
+    blocking: false
+    estimated_hours: 2
+    estimated_days: 0.5
+    progress_percentage: 0.0
+    notes: |
+      Orchestrator Adoption Strategy:
+      - Step 1: Apply pattern to MasterOrchestrator
+      - Step 2: Validate multi-orchestrator header consistency
+      - Step 3: Document results and adoption metrics
+      - Future: Apply to domain orchestrators as they are created
+      
+      Pattern Reusability: 100% (established in PHASE-ENHANCEMENT-01)
+      Implementation Guide: .github/docs/orchestrator-header-injection-pattern.md
+      
+      Orchestrators requiring adoption:
+      ✓ MasterOrchestrator (AC-ENH-002-01) - NOT_STARTED
+      ⏳ Future domain orchestrators - Deferred
+      
+    acceptance_criteria:
+      - ac_id: "AC-ENH-002-01"
+        description: "MasterOrchestrator integrated with ResponseHeaderInjector"
+        status: "NOT_STARTED"
+        test: "test_master_orchestrator_headers"
+        implementation_details: |
+          - Apply composition pattern from AC-ENH-001-01
+          - Initialize ResponseHeaderInjector in __init__
+          - Add get_response_with_headers() method
+          - Verify header wrapping on all delegated operations
+          - Expected: ~20 minutes implementation + tests
+      - ac_id: "AC-ENH-002-02"
+        description: "Multi-orchestrator header consistency validation"
+        status: "NOT_STARTED"
+        test: "test_multi_orchestrator_header_consistency"
+        implementation_details: |
+          - Verify headers consistent across PlanningOrchestrator + MasterOrchestrator
+          - Test orchestrator variable substitution
+          - Verify nested delegation maintains header structure
+          - Expected: ~10 minutes for validation tests
+    audit_verification:
+      verified: false
+      entry_count: 0
+      hash_chain_valid: false
+      verified_at: null
+    git_checkpoint: null
+
 # =============================================================================
 # ARCHITECTURE DECISIONS (AR-001 through AR-010)
 # =============================================================================
