@@ -2,8 +2,8 @@
 CORTEX Observability Package
 
 Provides OpenTelemetry integration for distributed tracing, metrics collection,
-alerting, health monitoring, performance profiling, and operational visibility
-across the CORTEX system.
+alerting, health monitoring, performance profiling, audit trail, and operational
+visibility across the CORTEX system.
 
 Modules:
     otel_exporter: OpenTelemetry exporter for trace collection and export
@@ -13,6 +13,7 @@ Modules:
     alerting: Alert rules, notifications, and routing
     health_monitor: Health checks and status reporting
     performance_profiler: Performance analysis and optimization recommendations
+    audit_trail: Searchable audit history with retention and export
 """
 
 from src.core.observability.otel_exporter import OtelExporter, TraceConfig
@@ -36,6 +37,12 @@ from src.core.observability.performance_profiler import (
     Bottleneck,
     OptimizationRecommendation,
 )
+from src.core.observability.audit_trail import (
+    AuditTrail,
+    AuditEntry,
+    RetentionPolicy,
+    AuditExporter,
+)
 
 __all__ = [
     "OtelExporter",
@@ -57,4 +64,8 @@ __all__ = [
     "BottleneckDetector",
     "Bottleneck",
     "OptimizationRecommendation",
+    "AuditTrail",
+    "AuditEntry",
+    "RetentionPolicy",
+    "AuditExporter",
 ]
