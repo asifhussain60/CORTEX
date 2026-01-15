@@ -17,8 +17,14 @@ from .execution_context_analyzer import (
     ExecutionContext,
     ExecutionContextAnalyzer,
 )
+from .routing_engine import (
+    RoutingDecision,
+    RoutingEngine,
+)
 
 __all__ = [
     "ExecutionContext",
     "ExecutionContextAnalyzer",
+    "RoutingDecision",
+    "RoutingEngine",
 ]
