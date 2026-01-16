@@ -1,0 +1,220 @@
+# =============================================================================
+# CORTEX TIER 2 - ERROR RESPONSE TEMPLATE
+# =============================================================================
+# Purpose: Standard template for error/failure responses
+# Tier: 2 (Engineering Standards - can be customized per team)
+# Inherits: Header from cortex-brain/tier0/response-headers.yaml
+# =============================================================================
+
+metadata:
+  template_id: "error-response"
+  version: "1.0"
+  created_at: "2026-01-16T00:00:00Z"
+  author: "Asif Hussain"
+  description: "Base template for error and failure responses"
+  tier: 2
+  category: "base"
+
+# =============================================================================
+# TEMPLATE STRUCTURE
+# =============================================================================
+
+template:
+  # Header is automatically injected from tier0/response-headers.yaml
+  # DO NOT duplicate header configuration here
+  
+  structure:
+    - section: "header"
+      source: "tier0/response-headers.yaml"
+      required: true
+    
+    - section: "error_summary"
+      required: true
+      format: |
+        ### ❌ {error_title}
+        
+        **Error:** {error_message}
+        
+        **Severity:** {severity}
+    
+    - section: "details"
+      required: false
+      format: |
+        ### Error Details
+        
+        **Context:** {context}
+        
+        **Stack Trace:**
+        ```
+        {stack_trace}
+        ```
+    
+    - section: "resolution"
+      required: true
+      format: |
+        ### Resolution
+        
+        **Suggested Fix:**
+        {suggested_fix}
+        
+        **Fallback Options:**
+        {fallback_options}
+    
+    - section: "footer"
+      source: "tier0/response-headers.yaml"
+      required: false
+
+# =============================================================================
+# VARIABLE DEFINITIONS
+# =============================================================================
+
+variables:
+  mandatory:
+    - name: "error_title"
+      type: "string"
+      description: "Brief error title"
+      example: "Governance Violation Detected"
+    
+    - name: "error_message"
+      type: "string"
+      description: "Human-readable error message"
+      example: "CORE-013 violation: Bare except clause found"
+    
+    - name: "severity"
+      type: "enum"
+      values: ["CRITICAL", "HIGH", "MEDIUM", "LOW"]
+      description: "Error severity level"
+      example: "HIGH"
+    
+    - name: "suggested_fix"
+      type: "string"
+      description: "How to fix the error"
+      example: "Replace bare except with specific exception type"
+  
+  optional:
+    - name: "context"
+      type: "string"
+      description: "Where the error occurred"
+      default: "Unknown context"
+    
+    - name: "stack_trace"
+      type: "string"
+      description: "Technical stack trace"
+      default: "No stack trace available"
+    
+    - name: "fallback_options"
+      type: "list"
+      description: "Alternative approaches if fix fails"
+      default: []
+
+# =============================================================================
+# SEVERITY DEFINITIONS
+# =============================================================================
+
+severity_levels:
+  CRITICAL:
+    description: "System cannot continue, immediate action required"
+    emoji: "🔴"
+    action: "Stop all operations, escalate immediately"
+  
+  HIGH:
+    description: "Major functionality impacted, fix before proceeding"
+    emoji: "🟠"
+    action: "Fix before next commit"
+  
+  MEDIUM:
+    description: "Functionality works but with issues"
+    emoji: "🟡"
+    action: "Fix within current phase"
+  
+  LOW:
+    description: "Minor issue, cosmetic or non-blocking"
+    emoji: "🟢"
+    action: "Fix when convenient"
+
+# =============================================================================
+# EXAMPLE OUTPUT
+# =============================================================================
+
+example:
+  input:
+    operation: "Governance Evaluation"
+    phase: "PHASE-13"
+    orchestrator: "GovernanceOrchestrator"
+    error_title: "Governance Violation Detected"
+    error_message: "CORE-013 violation: Bare except clause found in src/utils/helper.py:45"
+    severity: "HIGH"
+    context: "Pre-commit validation"
+    stack_trace: |
+      File: src/utils/helper.py
+      Line: 45
+      Code: except:
+    suggested_fix: |
+      Replace:
+        except:
+            pass
+      With:
+        except SpecificError as e:
+            logger.error(f"Error: {e}")
+            raise
+    fallback_options:
+      - "Add # noqa: CORE-013 comment (requires governance approval)"
+      - "Refactor to avoid try/except entirely"
+  
+  output: |
+    ## 🧠 CORTEX Governance Evaluation
+    **Author:** Asif Hussain | **Phase:** PHASE-13 | **Orchestrator:** GovernanceOrchestrator ✅
+    
+    ---
+    **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+    
+    ### ❌ Governance Violation Detected
+    
+    **Error:** CORE-013 violation: Bare except clause found in src/utils/helper.py:45
+    
+    **Severity:** HIGH 🟠
+    
+    ### Error Details
+    
+    **Context:** Pre-commit validation
+    
+    **Stack Trace:**
+    ```
+    File: src/utils/helper.py
+    Line: 45
+    Code: except:
+    ```
+    
+    ### Resolution
+    
+    **Suggested Fix:**
+    Replace:
+        except:
+            pass
+    With:
+        except SpecificError as e:
+            logger.error(f"Error: {e}")
+            raise
+    
+    **Fallback Options:**
+    - Add # noqa: CORE-013 comment (requires governance approval)
+    - Refactor to avoid try/except entirely
+
+# =============================================================================
+# USAGE NOTES
+# =============================================================================
+
+usage:
+  when_to_use:
+    - "Operation failed"
+    - "Governance violation detected"
+    - "Test failure"
+    - "Validation error"
+    - "System error"
+  
+  best_practices:
+    - "Always provide a suggested fix"
+    - "Include severity to help prioritize"
+    - "Show context where error occurred"
+    - "Offer fallback options when possible"
+    - "Never show raw exception without explanation"

@@ -1,0 +1,260 @@
+# =============================================================================
+# CORTEX TIER 2 - RESPONSE TEMPLATES INDEX
+# =============================================================================
+# Purpose: Central index of all response templates
+# Location: cortex-brain/tier2/response-templates-index.yaml
+# Updated: 2026-01-16
+# =============================================================================
+
+metadata:
+  version: "1.0"
+  created_at: "2026-01-16T00:00:00Z"
+  updated_at: "2026-01-16T00:00:00Z"
+  author: "Asif Hussain"
+  description: "Central index of all Tier 2 response templates"
+  tier: 2
+
+# =============================================================================
+# TEMPLATE HIERARCHY
+# =============================================================================
+
+hierarchy:
+  tier0:
+    description: "Immutable headers and footers - inherited by all templates"
+    source: "cortex-brain/tier0/response-headers.yaml"
+    components:
+      - header: "CORTEX brain icon header with operation/author/phase"
+      - copyright: "Copyright notice (mandatory on all responses)"
+      - footer: "Optional footer (disabled by default)"
+  
+  tier2_base:
+    description: "Base templates for common response types"
+    path: "cortex-brain/tier2/base/"
+    inherits: "tier0"
+  
+  tier2_domains:
+    description: "Domain-specific templates"
+    path: "cortex-brain/tier2/domains/"
+    inherits: "tier2_base"
+
+# =============================================================================
+# BASE TEMPLATES
+# =============================================================================
+
+base_templates:
+  - id: "success-response"
+    path: "cortex-brain/tier2/base/success-response.yaml"
+    description: "Standard template for successful operation responses"
+    use_when:
+      - "Operation completed successfully"
+      - "AC-ID implementation complete"
+      - "Tests passing"
+      - "Validation successful"
+    key_sections:
+      - "✅ title and summary"
+      - "Details (optional)"
+      - "Next steps (optional)"
+  
+  - id: "error-response"
+    path: "cortex-brain/tier2/base/error-response.yaml"
+    description: "Standard template for error/failure responses"
+    use_when:
+      - "Operation failed"
+      - "Governance violation detected"
+      - "Test failure"
+      - "Validation error"
+    key_sections:
+      - "❌ error title and message"
+      - "Severity level"
+      - "Error details and stack trace"
+      - "Resolution and fallback options"
+  
+  - id: "warning-response"
+    path: "cortex-brain/tier2/base/warning-response.yaml"
+    description: "Standard template for warning/caution responses"
+    use_when:
+      - "Operation can proceed but with caveats"
+      - "Non-blocking governance concerns"
+      - "Performance implications"
+      - "Deprecation notices"
+    key_sections:
+      - "⚠️ warning title and message"
+      - "Impact description"
+      - "Recommendations"
+      - "Proceed/Fix/Defer options"
+
+# =============================================================================
+# DOMAIN TEMPLATES
+# =============================================================================
+
+domain_templates:
+  governance:
+    description: "Templates for governance domain operations"
+    path: "cortex-brain/tier2/domains/governance/"
+    templates:
+      - id: "evaluation-result"
+        path: "cortex-brain/tier2/domains/governance/evaluation-result.yaml"
+        description: "Governance compliance evaluation summary"
+        use_when:
+          - "Evaluating code against governance rules"
+          - "Pre-commit validation"
+          - "Compliance audit"
+        key_variables:
+          - "rules_evaluated, rules_passed, rules_failed"
+          - "compliance_rate"
+          - "violations_table"
+      
+      - id: "rule-violation"
+        path: "cortex-brain/tier2/domains/governance/rule-violation.yaml"
+        description: "Detailed governance rule violation report"
+        use_when:
+          - "Specific rule violation detected"
+          - "Showing how to fix violation"
+        key_variables:
+          - "rule_id, rule_name, severity"
+          - "file_path, line_number"
+          - "violation_code, fix_code"
+  
+  planning:
+    description: "Templates for planning domain operations"
+    path: "cortex-brain/tier2/domains/planning/"
+    templates:
+      - id: "recommendations"
+        path: "cortex-brain/tier2/domains/planning/recommendations.yaml"
+        description: "Implementation planning recommendations"
+        use_when:
+          - "Planning a new phase"
+          - "Breaking down AC-IDs"
+          - "Estimating work"
+        key_variables:
+          - "plan_title, phase, ac_count"
+          - "estimated_hours"
+          - "ac_table, dependencies, risks"
+      
+      - id: "impact-assessment"
+        path: "cortex-brain/tier2/domains/planning/impact-assessment.yaml"
+        description: "Change impact assessment"
+        use_when:
+          - "Assessing risk of changes"
+          - "Planning rollback"
+          - "Analyzing dependencies"
+        key_variables:
+          - "change_title, overall_risk"
+          - "files_affected, tests_impacted"
+          - "rollback_steps"
+  
+  tdd:
+    description: "Templates for TDD domain operations"
+    path: "cortex-brain/tier2/domains/tdd/"
+    templates:
+      - id: "test-result"
+        path: "cortex-brain/tier2/domains/tdd/test-result.yaml"
+        description: "Test execution result report"
+        use_when:
+          - "Running tests"
+          - "Reporting test outcomes"
+          - "RED/GREEN/REFACTOR status"
+        key_variables:
+          - "test_suite, total_tests"
+          - "passed, failed, skipped"
+          - "duration, coverage_table"
+      
+      - id: "coverage-report"
+        path: "cortex-brain/tier2/domains/tdd/coverage-report.yaml"
+        description: "Code coverage analysis report"
+        use_when:
+          - "Analyzing test coverage"
+          - "Identifying uncovered code"
+          - "Coverage improvement planning"
+        key_variables:
+          - "scope, overall_coverage"
+          - "target_coverage, status"
+          - "module_table, uncovered_details"
+
+# =============================================================================
+# TEMPLATE SELECTION GUIDE
+# =============================================================================
+
+selection_guide:
+  by_operation:
+    "Code Analysis": ["success-response", "warning-response"]
+    "Governance Evaluation": ["evaluation-result", "rule-violation"]
+    "Implementation Plan": ["recommendations", "impact-assessment"]
+    "AC Execution": ["success-response", "error-response"]
+    "Test Results": ["test-result", "coverage-report"]
+    "Code Review": ["evaluation-result", "warning-response"]
+    "Debugging": ["error-response"]
+    "General Response": ["success-response"]
+  
+  by_outcome:
+    "success": "success-response"
+    "failure": "error-response"
+    "warning": "warning-response"
+    "governance_pass": "evaluation-result"
+    "governance_fail": "rule-violation"
+    "tests_pass": "test-result"
+    "tests_fail": "test-result"
+
+# =============================================================================
+# VALIDATION RULES
+# =============================================================================
+
+validation:
+  required_for_all:
+    - "Header from tier0/response-headers.yaml"
+    - "Copyright notice"
+  
+  template_structure:
+    - "Must have metadata section"
+    - "Must have template.structure"
+    - "Must have variables section"
+    - "Must have example section"
+  
+  variable_rules:
+    - "Mandatory variables must be provided"
+    - "Optional variables have defaults"
+    - "Variables use {name} placeholder syntax"
+
+# =============================================================================
+# USAGE INSTRUCTIONS
+# =============================================================================
+
+usage:
+  loading_templates:
+    description: "How to load and use templates"
+    code: |
+      from src.core.response_template_engine import ResponseTemplateEngine
+      
+      engine = ResponseTemplateEngine()
+      
+      # Load and render a template
+      response = engine.render(
+          template_id="success-response",
+          variables={
+              "operation": "AC Execution",
+              "phase": "PHASE-DOC-REMEDIATION",
+              "orchestrator": "MasterOrchestrator",
+              "title": "AC-DOC-001-01 Complete",
+              "summary": "Response header section added"
+          }
+      )
+  
+  creating_new_templates:
+    description: "How to add new templates"
+    steps:
+      - "Create YAML file in appropriate directory"
+      - "Follow template structure from existing templates"
+      - "Add entry to this index file"
+      - "Test template rendering"
+      - "Update documentation"
+
+# =============================================================================
+# STATISTICS
+# =============================================================================
+
+statistics:
+  total_templates: 9
+  base_templates: 3
+  domain_templates: 6
+  domains_covered: 3
+  last_updated: "2026-01-16T00:00:00Z"
