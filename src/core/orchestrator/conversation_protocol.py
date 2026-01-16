@@ -28,7 +28,7 @@ from src.core.orchestrator.terminal_events import (
     UserApprovalRejectedEvent,
 )
 from src.core.result import Result, Ok, Err
-from src.core.governance_registry import GovernanceRegistry
+from src.core.governance_registry import GovernanceRegistry, GovernanceViolationError
 from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
 from src.core.intelligence.call_graph import CallGraphBuilder
 from src.core.intelligence.dependency_mapper import DependencyMapper
@@ -234,23 +234,93 @@ class ConversationProtocol:
         """
         Pre-turn governance validation gate (CORE-017).
         
-        Checks:
-        - No governance violations pending
-        - Phase lock status appropriate
-        - Audit trail integrity
+        Validates governance state before executing each turn:
+        1. Initialize GovernanceRegistry if not already done
+        2. Call should_proceed() with current turn number and orchestrator ID
+        3. Return Ok(True) if validation passes
+        4. Raise GovernanceViolationError on violation
+        
+        This method is called BEFORE each turn to enforce:
+        - TIER-0 immutability (AR-001-03)
+        - Strict governance enforcement (CORE-017)
+        - Per-turn audit trail (CORE-027)
+        
+        Implementation for AC-REM-002-02.
         
         Returns:
-            Result[bool] - True if OK to proceed, error if governance block
+            Result[bool] - Ok(True) if OK to proceed, Err(message) on violation
+        
+        Raises:
+            GovernanceViolationError if governance violations detected
         """
         try:
-            # Check governance compliance if registry available
-            if self._governance_registry:
-                if not self._governance_registry.should_proceed():
-                    return Err("Governance rule violation detected")
+            # Initialize registry if needed
+            if not self._governance_registry:
+                self._governance_registry = GovernanceRegistry.instance()
+                init_result = self._governance_registry.initialize()
+                if init_result.is_err():
+                    return Err(f"Failed to initialize governance registry: {init_result.error}")
             
-            return Ok(True)
+            # Get orchestrator ID for governance validation
+            # Try multiple attribute names to find ID
+            orchestrator_id = None
+            if hasattr(self.orchestrator, 'id'):
+                orchestrator_id = self.orchestrator.id
+            elif hasattr(self.orchestrator, 'domain'):
+                orchestrator_id = self.orchestrator.domain
+            elif hasattr(self.orchestrator, '__class__'):
+                orchestrator_id = self.orchestrator.__class__.__name__
+            else:
+                orchestrator_id = str(type(self.orchestrator))
+            
+            # Validate governance state for this turn
+            validation_result = self._governance_registry.should_proceed(
+                turn_number=self.turn_number,
+                orchestrator_id=orchestrator_id
+            )
+            
+            # Handle validation result
+            if validation_result.is_ok():
+                # Governance validation passed
+                # Log to audit trail if logger available
+                if self._audit_logger:
+                    self._audit_logger.log_operation_start(
+                        ac_id="AC-REM-002-02",
+                        operation="GOVERNANCE_VALIDATION_BEFORE_TURN",
+                        context={
+                            "turn_number": self.turn_number,
+                            "orchestrator_id": orchestrator_id,
+                            "status": "PASSED"
+                        }
+                    )
+                return Ok(True)
+            else:
+                # Governance violation detected
+                violation_message = validation_result.error
+                
+                if self._audit_logger:
+                    self._audit_logger.log_operation_complete(
+                        ac_id="AC-REM-002-02",
+                        operation="GOVERNANCE_VIOLATION_DETECTED",
+                        success=False,
+                        details={
+                            "turn_number": self.turn_number,
+                            "orchestrator_id": orchestrator_id,
+                            "violation": violation_message
+                        }
+                    )
+                
+                # Raise exception to halt execution
+                raise GovernanceViolationError(violation_message)
+        
+        except GovernanceViolationError as e:
+            # Re-raise governance violations
+            raise e
+        
         except Exception as e:
-            return Err(f"Governance check failed: {str(e)}")
+            # Wrap other exceptions
+            error_msg = f"Governance validation failed: {str(e)}"
+            return Err(error_msg)
 
     def _create_round_context(
         self, user_input: str, previous_context: Dict[str, Any]
