@@ -1485,6 +1485,245 @@ phase_tracker:
     
     phase_yaml: ".github/roadmap/phases/phase-16-orchestrator-continuation.yaml"
 
+  PHASE-17-DOMAIN-BRAIN:
+    title: "Domain Brain: Strategic Knowledge Centralization"
+    description: "Implement Domain Brain architecture consolidating business knowledge from multiple sources (AST Intelligence, Git, Comments, Relationships, Business Knowledge Ingestion) into unified Tier 3 registry. Four-phase implementation over 3-4 weeks (~140 hours)."
+    ac_ids: 6
+    completed_ac_ids: 0
+    status: "NOT_STARTED"
+    locked: false
+    requires: "PHASE-13-OBSERVABILITY-MATURITY"
+    required_for: "PHASE-18-PRODUCTION-MIGRATION"
+    estimated_hours: 140
+    estimated_days: 17.5
+    progress_percentage: 0.0
+    blocking: true
+    priority: "P0"
+    can_run_parallel: false
+    
+    # Strategic Context
+    origin:
+      date: "2026-01-16"
+      source_document: ".github/roadmap/issues/issue-report-02.yaml"
+      analysis_documents:
+        - "ANALYSIS-README.md"
+        - "EXECUTIVE-SUMMARY-issue-report-02.md"
+        - "REVIEW-issue-report-02.md"
+        - "TECHNICAL-IMPLEMENTATION-GUIDE.md"
+        - "EXECUTION-CHECKLIST.md"
+      decision: "Integrate Domain Brain as strategic Tier 3 enhancement post-PHASE-13"
+      rationale: "PHASE-13 establishes observability + domain registry foundation; PHASE-17 builds knowledge architecture on this foundation"
+    
+    # Acceptance Criteria Breakdown
+    acceptance_criteria:
+      - ac_id: "AC-DB-001-01"
+        description: "Domain Brain Foundation: Core API, Data Models, Storage"
+        priority: "CRITICAL"
+        estimated_hours: 40
+        test_count: 60
+        status: "NOT_STARTED"
+      - ac_id: "AC-DB-002-01"
+        description: "Integration Adapters: AST, Git, Comments, Relationships"
+        priority: "CRITICAL"
+        estimated_hours: 35
+        test_count: 55
+        status: "NOT_STARTED"
+      - ac_id: "AC-DB-003-01"
+        description: "BusinessKnowledgeIngestionOrchestrator (BKIO) Implementation"
+        priority: "CRITICAL"
+        estimated_hours: 40
+        test_count: 70
+        status: "NOT_STARTED"
+      - ac_id: "AC-DB-004-01"
+        description: "LENS Integration: Orchestrator Routing & Knowledge Graph Updates"
+        priority: "HIGH"
+        estimated_hours: 25
+        test_count: 40
+        status: "NOT_STARTED"
+      - ac_id: "AC-DB-005-01"
+        description: "End-to-End Integration Testing: Full Domain Brain Workflow"
+        priority: "HIGH"
+        estimated_hours: 15
+        test_count: 30
+        status: "NOT_STARTED"
+      - ac_id: "AC-DB-006-01"
+        description: "Documentation & Governance Integration: Phase Completion"
+        priority: "MEDIUM"
+        estimated_hours: 10
+        test_count: 10
+        status: "NOT_STARTED"
+    
+    # Implementation Timeline
+    timeline:
+      week_1:
+        title: "Domain Brain Foundation & Core API"
+        hours: 40
+        acs: ["AC-DB-001-01"]
+        milestones:
+          - "DomainBrainAPI designed and implemented (~300 lines)"
+          - "ConsistencyValidator designed (~250 lines)"
+          - "AuditLogger with hash chain designed (~200 lines)"
+          - "60 unit tests written and passing"
+          - "API documentation complete"
+      week_2:
+        title: "Integration Adapters"
+        hours: 35
+        acs: ["AC-DB-002-01"]
+        milestones:
+          - "ASTAdapter connects to IR-001-01 (AST Intelligence)"
+          - "GitAdapter connects to IR-001-02 (Git History)"
+          - "CommentsAdapter connects to IR-001-03 (Code Comments)"
+          - "RelationshipsAdapter connects to IR-001-04 (Code Relationships)"
+          - "55 integration tests passing"
+          - "Conflict detection tested"
+      week_3:
+        title: "BKIO Orchestrator & Conflict Resolution"
+        hours: 40
+        acs: ["AC-DB-003-01"]
+        milestones:
+          - "BusinessKnowledgeIngestionOrchestrator inherits OrchestratorBase"
+          - "Document parser for YAML/JSON/Markdown/CSV"
+          - "Conflict resolver with hierarchy + LENS synthesis"
+          - "70 tests passing (BKIO lifecycle, document parsing, conflict resolution)"
+          - "BKIO registered in OrchestratorRegistry"
+          - "BKIO exposed as MCP tool"
+      week_4:
+        title: "LENS Integration, E2E Testing, Documentation"
+        hours: 50
+        acs: ["AC-DB-004-01", "AC-DB-005-01", "AC-DB-006-01"]
+        milestones:
+          - "LENS integration layer connects Domain Brain to IR-004"
+          - "40 LENS integration tests passing"
+          - "30 E2E workflow tests passing"
+          - "No regressions to existing phases"
+          - "10 documentation tests passing"
+          - "Phase complete and ready for PHASE-18"
+    
+    # Governance Compliance
+    governance:
+      core_rules_enforced:
+        - "CORE-008: TDD pattern (tests first, RED → GREEN)"
+        - "CORE-011: Type hints on all functions"
+        - "CORE-012: Docstrings mandatory (Google style)"
+        - "CORE-013: Exception handling strict"
+        - "CORE-026: Git checkpoints before major actions"
+        - "CORE-027: Audit trail (AC_START/EXECUTE/COMPLETE)"
+        - "CORE-028: Kebab-case, ≤25 chars filenames"
+      
+      audit_verification:
+        minimum_entries: "18 (6 ACs × 3 entries each)"
+        hash_chain_enforcement: "Immutable, tamper-evident"
+        verification_query: "SELECT ac_id, COUNT(*) FROM audit_log WHERE ac_id LIKE 'AC-DB-%' GROUP BY ac_id"
+    
+    # Component Architecture
+    architecture:
+      tier_integration: "Tier 3 enhancement (additive, no breaking changes)"
+      orchestrator_pattern: "BKIO inherits OrchestratorBase (proven pattern)"
+      intelligence_sources: "4 IR-001-XX sources (all complete, PHASE-07 locked)"
+      lens_integration: "Per-turn execution model (IR-004)"
+      storage_strategy: "File-based YAML in Git (recommendation from technical guide)"
+      conflict_resolution: "Hierarchy (BKIO > RELATIONSHIPS > AST > GIT > LENS) + LENS synthesis"
+    
+    # Performance Targets
+    performance:
+      query_latency: "<100ms for domain queries"
+      batch_ingestion: "<5s for 100+ documents"
+      validation_overhead: "Negligible (<50ms)"
+      audit_logging: "<10ms per entry"
+    
+    # Testing Strategy
+    testing:
+      total_tests: "225"
+      categories:
+        - name: "API Tests (AC-DB-001-01)"
+          count: 60
+          coverage: ">85%"
+        - name: "Adapter Tests (AC-DB-002-01)"
+          count: 55
+          coverage: ">85%"
+        - name: "BKIO Tests (AC-DB-003-01)"
+          count: 70
+          coverage: ">85%"
+        - name: "LENS Integration Tests (AC-DB-004-01)"
+          count: 40
+          coverage: ">80%"
+        - name: "E2E Workflow Tests (AC-DB-005-01)"
+          count: 30
+          coverage: ">75%"
+        - name: "Documentation Tests (AC-DB-006-01)"
+          count: 10
+          coverage: ">70%"
+      regression_criteria: "All 225 tests passing; zero regressions to PHASE-13 and prior"
+    
+    # Success Criteria
+    success_criteria:
+      - "225/225 tests passing (100% pass rate)"
+      - ">85% code coverage for domain_brain and orchestrators"
+      - "All 6 AC-IDs fully implemented and verified"
+      - "Audit trail complete (18+ entries, hash chain verified)"
+      - "BKIO successfully registered and exposed as MCP tool"
+      - "LENS integration tested end-to-end"
+      - "Zero governance violations"
+      - "Complete documentation (API guide + architecture)"
+      - "Git history clean with checkpoints"
+    
+    # Git Checkpoints
+    git_checkpoints:
+      before_phase: "checkpoint: before PHASE-17-DOMAIN-BRAIN"
+      after_ac_001: "checkpoint: AC-DB-001-01 complete (Foundation)"
+      after_ac_002: "checkpoint: AC-DB-002-01 complete (Adapters)"
+      after_ac_003: "checkpoint: AC-DB-003-01 complete (BKIO Orchestrator)"
+      after_ac_004: "checkpoint: AC-DB-004-01 complete (LENS Integration)"
+      phase_complete: "checkpoint: PHASE-17 complete (ready for PHASE-18)"
+    
+    # Risk Assessment
+    risks:
+      - severity: "MEDIUM"
+        description: "LENS integration requires coordination with PHASE-07 (already locked)"
+        mitigation: "Use published IR-004 API; LENS locked so no conflicts"
+      - severity: "MEDIUM"
+        description: "BrainTierPusher (from IR-004-02) is incomplete"
+        mitigation: "Complete BrainTierPusher as first task; minimal additional work (~4 hours)"
+      - severity: "LOW"
+        description: "Conflict resolution hierarchy might need tuning"
+        mitigation: "Start conservative; adjust based on testing; fully reversible"
+    
+    # Phase Yaml Reference
+    phase_yaml: ".github/roadmap/phases/phase-17-domain-brain.yaml"
+    
+    # Notes
+    notes: |
+      PHASE-17: Domain Brain Implementation (Strategic Knowledge Centralization)
+      
+      DECISION RATIONALE (January 16, 2026):
+      - Issue-report-02.yaml proposed Domain Brain but implementation was incomplete
+      - Analysis found: 5 critical gaps (API, Validator, Logger, BKIO, Adapters)
+      - Timeline: 9 weeks proposed → 12-14 weeks realistic (+30-40% contingency)
+      - Strategic fit: Perfectly aligns with PHASE-13 observability foundation
+      
+      ARCHITECTURAL ADVANTAGES:
+      - Tier 3 enhancement (additive, no breaking changes)
+      - BKIO leverages proven OrchestratorBase pattern (PHASE-06, 07)
+      - Builds on 4 complete intelligence sources (IR-001-01 through IR-001-04)
+      - Integrates with LENS via per-turn execution model (IR-004)
+      - Governance-compliant (all CORE rules addressed)
+      
+      IMPLEMENTATION STRATEGY:
+      - Week 1: Foundation (40h) - API, storage, validators, loggers
+      - Week 2: Adapters (35h) - Connect to 4 intelligence sources
+      - Week 3: BKIO (40h) - Document ingestion orchestrator
+      - Week 4: Integration (50h) - LENS, E2E testing, documentation
+      - Total: ~140 hours (17.5 days at 8h/day)
+      
+      DELIVERABLES:
+      - 6 AC-IDs (DB-001 through DB-006) with 225+ tests
+      - Domain Brain API (12 methods, fully typed, documented)
+      - 4 integration adapters (AST, Git, Comments, Relationships)
+      - BKIO orchestrator (inherits OrchestratorBase, document parsing, conflict resolution)
+      - LENS integration layer (per-turn execution)
+      - Complete documentation and architecture guides
+      - Clean git history with checkpoints at each AC completion
+
 # =============================================================================
 # ARCHITECTURE DECISIONS (AR-001 through AR-010)
 # =============================================================================
