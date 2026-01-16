@@ -16,6 +16,40 @@ metadata:
   status: "COMPLETED"
   priority: "P0 - CRITICAL"
   completed_at: "2026-01-16T12:00:00Z"
+  
+  # PROMPT EVALUATION REQUIREMENT (2026-01-16)
+  prompt_maintenance_required: true
+  prompt_evaluation_instructions: |
+    This phase IS the prompt maintenance phase. After completion:
+    
+    1. **Evaluate CORTEX.prompt.md Completeness**
+       - Verify Response Header Integration section comprehensive
+       - Check all response examples include headers
+       - Confirm governance integration documentation complete
+    
+    2. **Evaluate copilot-instruction.md Completeness**
+       - Verify Response Format Standards detailed
+       - Check copyright notice requirements documented
+       - Confirm examples follow format
+    
+    3. **Evaluate Future Phase Prompts**
+       - Identify what will change in PHASE-13 enhancements
+       - Plan prompt updates needed for PHASE-13 completion
+       - Document expected prompt maintenance for PHASE-14
+    
+    4. **Document in Report**
+       - Create .github/roadmap/reports/PHASE-DOC-REMEDIATION-PROMPT-REVIEW.md
+       - Verify all prompts cover response headers
+       - Verify all prompts document governance integration
+       - List future phases' expected prompt enhancements
+  
+  documentation_output:
+    directory: ".github/roadmap/reports"
+    rule: "All remediation reports must go to centralized reports directory"
+    examples:
+      - "PHASE-DOC-REMEDIATION-COMPLETION-REPORT.md"
+      - "PHASE-DOC-REMEDIATION-PROMPT-REVIEW.md"
+      - "PHASE-DOC-REMEDIATION-VALIDATION-LOG.md"
 
 overview:
   description: |

@@ -23,6 +23,55 @@ phase:
   ac_ids: 4
   completed_ac_ids: 0
   progress_percentage: 0.0
+
+metadata:
+  author: "Asif Hussain"
+  copyright: "© 2025-2026 Asif Hussain. All rights reserved."
+  created_at: "2026-01-16T00:00:00Z"
+  
+  # PROMPT EVALUATION REQUIREMENT (2026-01-16)
+  prompt_maintenance_required: true
+  prompt_evaluation_instructions: |
+    AFTER completing all ACs in this production phase, BEFORE locking:
+    
+    1. **Holistic Review of Production Features**
+       - Analyze all operational readiness features
+       - Review training and onboarding enhancements
+       - Understand rollout strategy and support capabilities
+    
+    2. **Update CORTEX.prompt.md for Production**
+       - Add section on Production Readiness Workflow
+       - Document team onboarding patterns
+       - Update Real Repository Workflow for production scenarios
+       - Add examples for operational readiness checks
+    
+    3. **Update copilot-instruction.md for Production**
+       - Add Production Phase Context section
+       - Update Current Phase Context with production workflows
+       - Document training and adoption patterns
+    
+    4. **Ensure Prompt Coverage**
+       - All 4 PR AC-IDs should be referenced in prompts
+       - Production readiness workflow fully documented
+       - Training and rollout strategy explained
+    
+    5. **Document Comprehensive Summary**
+       - Create .github/roadmap/reports/PHASE-14-PROMPT-MAINTENANCE.md
+       - List all prompt changes made
+       - Verify prompts ready for production users
+    
+    **Why**: Production users will rely on accurate documentation.
+    Prompts MUST guide them through readiness and adoption.
+  
+  documentation_output:
+    directory: ".github/roadmap/reports"
+    rule: "All production phase reports must go to centralized reports directory"
+    examples:
+      - "PHASE-14-COMPLETION-REPORT.md"
+      - "PHASE-14-PROMPT-MAINTENANCE.md"
+      - "PHASE-14-PRODUCTION-READINESS-SUMMARY.md"
+      - "PHASE-14-TRAINING-STRATEGY.md"
+
 acceptance_criteria:
 - ac_id: PR-001-01
   title: Operational Readiness Assessment
