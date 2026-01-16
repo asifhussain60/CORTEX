@@ -1,7 +1,16 @@
 /*
- * Glassmorphism CSS Variables & Utilities
+ * DO-001-03: Glassmorphism CSS Variables & Utilities (Enhanced)
  * CORTEX Neural Observatory v4.1.0
  * Compliant with CORTEX 7.0 design language
+ * 
+ * Features:
+ * - Consistent 16px backdrop blur
+ * - Gradient borders for visual hierarchy
+ * - Shadow layering (3-level z-depth system)
+ * - Smooth 200-300ms transitions
+ * 
+ * AC-ID: DO-001-03
+ * Phase: PHASE-15-DASHBOARD-ENHANCEMENT
  */
 
 :root {
@@ -14,11 +23,29 @@
   --sky-500: #0ea5e9;
   --lime-500: #84cc16;
   
-  /* Glassmorphism Base */
-  --glass-blur: blur(16px);
-  --glass-bg: rgba(15, 23, 42, 0.75);
-  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
-  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  /* Glassmorphism Base (DO-001-03) */
+  --glass-blur: blur(16px);                              /* Consistent 16px blur */
+  --glass-bg: rgba(15, 23, 42, 0.75);                   /* 75% opacity background */
+  --glass-bg-light: rgba(15, 23, 42, 0.60);             /* Light intensity */
+  --glass-bg-strong: rgba(15, 23, 42, 0.85);            /* Strong intensity */
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);  /* Subtle border */
+  --glass-border-hover: 1px solid rgba(255, 255, 255, 0.15); /* Hover border */
+  
+  /* Shadow Layering System (DO-001-03: Z-Depth) */
+  --glass-shadow-depth-1: 0 4px 16px rgba(0, 0, 0, 0.15);    /* Low elevation */
+  --glass-shadow-depth-2: 0 8px 32px rgba(0, 0, 0, 0.25);    /* Medium elevation */
+  --glass-shadow-depth-3: 0 16px 48px rgba(0, 0, 0, 0.35);   /* High elevation */
+  --glass-shadow: var(--glass-shadow-depth-2);                /* Default shadow */
+  
+  /* Gradient Borders (DO-001-03) */
+  --glass-gradient-primary: linear-gradient(135deg, var(--color-primary, #0ea5e9), var(--color-secondary, #10b981));
+  --glass-gradient-accent: linear-gradient(135deg, var(--color-accent, #a78bfa), var(--color-primary, #0ea5e9));
+  --glass-gradient-subtle: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  
+  /* Transitions (DO-001-03: Smooth 200-300ms) */
+  --transition-fast: 200ms ease-in-out;
+  --transition-normal: 250ms ease-in-out;
+  --transition-smooth: 300ms ease-in-out;
   
   /* Spacing */
   --spacing-xs: 4px;
@@ -54,20 +81,147 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Glass Panel Base Component */
+/* Glass Panel Base Component (DO-001-03: Enhanced) */
 .glass-panel {
   background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
+  backdrop-filter: blur(16px);                    /* Consistent 16px blur */
+  -webkit-backdrop-filter: blur(16px);            /* Safari support */
   border: var(--glass-border);
   border-radius: 12px;
   box-shadow: var(--glass-shadow);
   padding: var(--spacing-md);
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);       /* Smooth 250ms transition */
 }
 
 .glass-panel:hover {
+  border: var(--glass-border-hover);
+  background: var(--glass-bg-strong);
+  transform: translateY(-2px);                    /* Subtle lift */
+  box-shadow: var(--glass-shadow-depth-3);        /* Enhanced shadow on hover */
+}
+
+/* Glass Panel Variants (DO-001-03: Intensity Levels) */
+.glass-panel-light {
+  background: var(--glass-bg-light);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: var(--glass-border);
+  border-radius: 12px;
+  box-shadow: var(--glass-shadow-depth-1);
+  padding: var(--spacing-md);
+  transition: all var(--transition-normal);
+}
+
+.glass-panel-strong {
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: var(--glass-border);
+  border-radius: 12px;
+  box-shadow: var(--glass-shadow-depth-3);
+  padding: var(--spacing-md);
+  transition: all var(--transition-normal);
+}
+
+/* Glass Card Component (DO-001-03) */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: var(--glass-border);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow-depth-2);
+  padding: var(--spacing-lg);
+  transition: all var(--transition-smooth);        /* Smooth 300ms */
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--glass-gradient-subtle);
+  opacity: 0.5;
+}
+
+.glass-card:hover {
   border-color: rgba(255, 255, 255, 0.15);
-  background: rgba(15, 23, 42, 0.85);
+  box-shadow: var(--glass-shadow-depth-3);
+  transform: translateY(-4px);
+}
+
+/* Glass Modal/Overlay (DO-001-03) */
+.glass-modal {
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: var(--glass-border-hover);
+  border-radius: 16px;
+  box-shadow: var(--glass-shadow-depth-3);
+  padding: var(--spacing-xl);
+  transition: all var(--transition-smooth);
+  z-index: var(--z-modal);
+}
+
+/* Shadow Depth Classes (DO-001-03: Z-Depth System) */
+.glass-depth-1 {
+  box-shadow: var(--glass-shadow-depth-1);
+}
+
+.glass-depth-2 {
+  box-shadow: var(--glass-shadow-depth-2);
+}
+
+.glass-depth-3 {
+  box-shadow: var(--glass-shadow-depth-3);
+}
+
+/* Gradient Border Classes (DO-001-03) */
+.glass-border-gradient-primary {
+  border: 2px solid transparent;
+  background-image: 
+    linear-gradient(var(--glass-bg), var(--glass-bg)),
+    var(--glass-gradient-primary);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.glass-border-gradient-accent {
+  border: 2px solid transparent;
+  background-image: 
+    linear-gradient(var(--glass-bg), var(--glass-bg)),
+    var(--glass-gradient-accent);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+/* Color-Tinted Glass Variants (DO-001-03) */
+.glass-primary {
+  background: rgba(14, 165, 233, 0.15);           /* Cyan tint */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(14, 165, 233, 0.3);
+  box-shadow: 0 8px 32px rgba(14, 165, 233, 0.2);
+}
+
+.glass-secondary {
+  background: rgba(16, 185, 129, 0.15);           /* Emerald tint */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.2);
+}
+
+.glass-accent {
+  background: rgba(167, 139, 250, 0.15);          /* Violet tint */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  box-shadow: 0 8px 32px rgba(167, 139, 250, 0.2);
 }
 
 /* Grid Layout */

@@ -6,6 +6,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     console.log('✓ CORTEX Neural Observatory initializing');
     
+    // Initialize common UI components (DO-001-01, DO-001-04, DO-002-01, DO-002-02)
+    initializeLogoComponent();
+    initializeHamburgerMenu();
+    initializeSidebar();
+    initializeTabSwitcher();
+    
     // Verify API connectivity
     api.get('/api/health')
         .then(response => {
