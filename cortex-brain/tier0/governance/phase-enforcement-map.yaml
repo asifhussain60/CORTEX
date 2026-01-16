@@ -505,7 +505,7 @@ PHASE-07-INTENT-ROUTER:
         - Governance: "IR-RULE-001, IR-RULE-002"
 
 # ==============================================================================
-# PHASE-08 through PHASE-14 (Summary - Expand as needed)
+# PHASE-08 through PHASE-13 (Summary - Expand as needed)
 # ==============================================================================
 
 PHASE-08-CORE-ORCHESTRATORS:
@@ -561,10 +561,10 @@ PHASE-13-OBSERVABILITY-MATURITY:
     - rule_id: CORE-008
     - rule_id: CORE-011
 
-PHASE-14-PRODUCTION-MIGRATION:
-  title: "Production Rollout & Adoption"
-  phase_id: "PHASE-14-PRODUCTION-MIGRATION"
-  requires_phase: "PHASE-13-OBSERVABILITY-MATURITY"
+PHASE-15-NEURAL-OBSERVATORY:
+  title: "CORTEX Neural Observatory Dashboard"
+  phase_id: "PHASE-15-NEURAL-OBSERVATORY"
+  requires_phase: "PHASE-06-ECOSYSTEM"
   mandatory_rules:
     - rule_id: CORE-008
 

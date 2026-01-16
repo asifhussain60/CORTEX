@@ -37,7 +37,7 @@ phase:
   locked: false
   
   requires: "PHASE-10-ADAPTIVE-EXECUTION"
-  required_for: "PHASE-14-PRODUCTION-MIGRATION"
+  required_for: "PHASE-16-ORCHESTRATOR-CONTINUATION"
   blocking: true
   
   estimated_hours: 22  # Updated from 20 (added 2 hours for domain)

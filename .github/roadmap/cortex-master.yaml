@@ -13,17 +13,17 @@ metadata:
   dor_score: 100
   start_date: null
   end_date: null
-  total_ac_ids: 231  # 125 locked + 7 enhancement + 62 new phases (07-14) + 12 PHASE-15 + 8 PHASE-16-CONTINUATION + 8 DOC-REMEDIATION
+  total_ac_ids: 227  # 125 locked + 7 enhancement + 58 new phases (07-13) + 12 PHASE-15 + 8 PHASE-16-CONTINUATION + 8 DOC-REMEDIATION
   
   # AC-ID Breakdown
   ac_breakdown:
     locked_phases: 125        # PHASE-01 through PHASE-06-ECOSYSTEM
     enhancement_phases: 7     # ENH-01 (4) + ENH-02 (2) + ENH-03 (1)
-    new_phases: 71            # PHASE-07 (14) + 08 (6) + 09 (8) + 10 (5) + 11 (6) + 12 (7) + 13 (5+9) + 14 (4)
+    new_phases: 67            # PHASE-07 (14) + 08 (6) + 09 (8) + 10 (5) + 11 (6) + 12 (7) + 13 (5+9) [PHASE-14 REMOVED]
     neural_observatory: 12    # PHASE-15 (12 ACs) - PARALLEL TRACK
     orchestrator_continuation: 8  # PHASE-16 (8 ACs) - ConversationProtocol Architecture (New - Jan 16, 2026)
     doc_remediation: 8        # PHASE-DOC-REMEDIATION (8 ACs) - GAP FIX (Jan 16, 2026)
-    total: 231
+    total: 227
   
   # GOVERNANCE INTEGRATION
   governance:
@@ -197,15 +197,14 @@ metadata:
     phase_11_hours: 28
     phase_12_hours: 36
     phase_13_hours: 22       # Updated from 20 (+2 hours for domain integration)
-    phase_14_hours: 20
     phase_15_hours: 48       # Neural Observatory (PARALLEL TRACK)
     phase_16_hours: 40       # Orchestrator Continuation - ConversationProtocol (NEW: Jan 16, 2026)
-    new_phases_total: 330    # Updated from 290 (+40 hours for PHASE-16)
+    new_phases_total: 310    # Updated from 330 (removed 20 hours from PHASE-14)
     
     # Summary
-    total_estimated_hours: 700.5  # Updated from 660.5 (+40 hours PHASE-16)
-    total_buffer_hours: 140       # 20% buffer
-    total_with_buffer: 840.5
+    total_estimated_hours: 680.5  # Updated from 700.5 (removed 20 hours for PHASE-14)
+    total_buffer_hours: 136       # 20% buffer
+    total_with_buffer: 816.5
 
 # =============================================================================
 # PHASE TRACKER - SINGLE SOURCE OF TRUTH
@@ -1160,31 +1159,6 @@ phase_tracker:
       
       Reference: docs/ROADMAP-GAP-ANALYSIS.md
     phase_yaml: ".github/roadmap/phases/phase-doc-remediation.yaml"
-  
-  PHASE-14-PRODUCTION-MIGRATION:
-    title: "Production Rollout & Adoption"
-    description: "Multi-team migration and operational readiness"
-    ac_ids: 4
-    completed_ac_ids: 4
-    status: "COMPLETED"
-    locked: true
-    requires: 
-      - "PHASE-13-OBSERVABILITY-MATURITY"
-      - "PHASE-DOC-REMEDIATION"  # GAP-FIX: Documentation must be complete before production
-    estimated_hours: 20
-    estimated_days: 2.5
-    actual_hours: 1
-    actual_days: 0.04
-    progress_percentage: 100.0
-    blocking: false
-    audit_verification:
-      verified: true
-      entry_count: 12
-      hash_chain_valid: true
-      verified_at: "2026-01-16T10:00:00Z"
-    git_checkpoint: "a1dcd4a85"
-    notes: "PR-001-01 ✓ (Readiness: 3 tests, 5 workflow steps), PR-002-01 ✓ (Training: 2 tests, 10 modules), PR-002-02 ✓ (Rollout: 5 tests, 3-phase strategy), PR-003-01 ✓ (Support: 4 tests, 24/7 coverage). All 14 acceptance tests passing. 12 audit entries verified. Production migration workflow complete."
-    phase_yaml: ".github/roadmap/phases/phase-14.yaml"
   
   # =========================================================================
   # PARALLEL TRACK - Can be developed on separate machine

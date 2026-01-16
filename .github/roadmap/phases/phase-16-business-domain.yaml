@@ -37,12 +37,11 @@ phase:
     - ✅ Progressive deployment (company controls rollout)
 
     - ✅ Company owns domain knowledge (external system)
-
     '
   order: 16
   status: NOT_STARTED
   locked: false
-  requires: PHASE-14-PRODUCTION-MIGRATION
+  requires: PHASE-13-OBSERVABILITY-MATURITY
   required_for: None (enhancement track)
   can_run_parallel_with: []
   blocking: false

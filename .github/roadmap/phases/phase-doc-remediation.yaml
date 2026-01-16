@@ -3,7 +3,7 @@
 # =============================================================================
 # Purpose: Fix systematic gaps where code exists but documentation/content missing
 # Gap Analysis: docs/ROADMAP-GAP-ANALYSIS.md (2026-01-16)
-# Priority: P0 - CRITICAL (Must complete before PHASE-14 production rollout)
+# Priority: P0 - CRITICAL (Must complete before production deployment)
 # Estimated: 6 hours (1 day)
 # =============================================================================
 
@@ -35,7 +35,7 @@ metadata:
     3. **Evaluate Future Phase Prompts**
        - Identify what will change in PHASE-13 enhancements
        - Plan prompt updates needed for PHASE-13 completion
-       - Document expected prompt maintenance for PHASE-14
+       - Document expected prompt maintenance for future phases
     
     4. **Document in Report**
        - Create .github/roadmap/reports/PHASE-DOC-REMEDIATION-PROMPT-REVIEW.md
@@ -105,8 +105,8 @@ dependencies:
     - phase: "PHASE-12-KNOWLEDGE-ECOSYSTEM"
       reason: "Tier 3 knowledge must be populated before tier 2 templates reference it"
   required_for:
-    - phase: "PHASE-14-PRODUCTION-MIGRATION"
-      reason: "Documentation must be complete before production rollout"
+    - phase: "PHASE-16-ORCHESTRATOR-CONTINUATION"
+      reason: "Documentation must be complete for orchestrator implementation"
   can_run_parallel_with:
     - phase: "PHASE-13-OBSERVABILITY-MATURITY"
       reason: "No code dependencies, only documentation"
