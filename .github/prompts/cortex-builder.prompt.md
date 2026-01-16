@@ -417,6 +417,22 @@ git stash pop
 
 ---
 
+## Issue Review & Remediation Pattern
+
+**NEW (Jan 16, 2026): Structured pattern for addressing discovered issues holistically.**
+
+When reviewing issues from `.github/roadmap/issues/`:
+
+1. **Holistic Review**: Read entire cortex-master.yaml + full issue-report-NN.yaml (not sections)
+2. **Verification**: Grep codebase to verify claims; check audit trail
+3. **Decision**: REMEDIATION | ACCEPT-KNOWN | DEFER | ARCHITECTURE-FIX
+4. **Remediation**: Create AC-REM-XXX-XX acceptance criteria with audit evidence
+5. **Closure**: Rename issue-report-NN.yaml → issue-report-NN-done.yaml
+
+**See**: `.github/prompts/cortex-builder-issue-remediation-pattern.md` for complete pattern
+
+**Agents**: Create new agents as needed with `.github/agents/cortex-XXX.md` format (kebab-case, ≤25 chars)
+
 ## Commands
 
 ### Implementation

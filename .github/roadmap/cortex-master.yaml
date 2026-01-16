@@ -1485,6 +1485,184 @@ phase_tracker:
     
     phase_yaml: ".github/roadmap/phases/phase-16-orchestrator-continuation.yaml"
 
+  PHASE-REMEDIATION-01:
+    title: "Critical Architecture Issues Remediation"
+    description: |
+      Fix 4 critical issues identified in post-implementation review (Jan 16, 2026):
+      
+      ISSUE-001: AST Scanning Not Used - Intent Router bypassed analysis phase
+      - Problem: No ASTIntelligenceEngine, CallGraphBuilder, DependencyMapper usage
+      - Fix: Integrate deep code analysis into Interaction Orchestrator LENS protocol
+      - Impact: 6 ACs covering comprehension loop, approval gate, impact analysis
+      
+      ISSUE-003: Response Verbosity & Header Injection Gap
+      - Problem: Copilot responses violate communication guidelines (300-500% too long)
+      - Fix: System prompt alignment + header injection wrapper for chat interface
+      - Impact: 3 ACs covering verbosity enforcement, header wrapper, compliance
+      
+      ISSUE-004: Critical Bare Except Clauses & Hardcoded Paths
+      - Problem: CORE-013 violations + platform portability breaks
+      - Fix: Replace bare except with specific exceptions, fix hardcoded paths
+      - Impact: 2 ACs covering error handling + path resolution
+      
+      ISSUE-002 (Business Knowledge) deferred to PHASE-17 (less critical, design phase required)
+    ac_ids: 11
+    completed_ac_ids: 0
+    status: "READY_FOR_IMPLEMENTATION"
+    locked: false
+    requires: "PHASE-16-ORCHESTRATOR-CONTINUATION"
+    required_for: "PHASE-17-DOMAIN-BRAIN"
+    estimated_hours: 32
+    estimated_days: 4
+    progress_percentage: 0.0
+    blocking: true
+    priority: "P0"
+    can_run_parallel: false
+    
+    # Remediation Origin
+    origin:
+      date: "2026-01-16"
+      source_documents:
+        - ".github/roadmap/issues/issue-report-01.yaml (ISSUE-001)"
+        - ".github/roadmap/issues/issue-report-03.yaml (ISSUE-003)"
+        - ".github/roadmap/issues/issue-report-04.yaml (ISSUE-004)"
+      decision: "Create critical remediation phase BEFORE continuing to PHASE-17"
+      rationale: "3 critical issues (AST scanning, verbosity, bare except) block production readiness"
+    
+    # Acceptance Criteria
+    acceptance_criteria:
+      # ISSUE-001: AST Scanning & Intent Router
+      - ac_id: "AC-REM-001-01"
+        description: "ASTIntelligenceEngine integrated into Interaction Orchestrator LENS comprehension phase"
+        issue_id: "ISSUE-001"
+        severity: "CRITICAL"
+        test: "test_ast_scanning_enabled_on_comprehension"
+        verification: "ASTIntelligenceEngine.parse_file() called for every target file identified"
+        estimated_hours: 3
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-REM-001-02"
+        description: "CallGraphBuilder used to trace layer-to-layer relationships in Intent Router"
+        issue_id: "ISSUE-001"
+        severity: "CRITICAL"
+        test: "test_call_graph_built_for_comprehension"
+        verification: "CallGraph.build_from_parse_result() traces 3+ layer transitions"
+        estimated_hours: 3
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-REM-001-03"
+        description: "DependencyMapper creates import classification for impact analysis"
+        issue_id: "ISSUE-001"
+        severity: "CRITICAL"
+        test: "test_dependency_map_generated"
+        verification: "DependencyMapper identifies transitive dependencies 3+ levels deep"
+        estimated_hours: 2
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-REM-001-04"
+        description: "PatternDetector identifies architectural patterns (singleton, factory, etc.)"
+        issue_id: "ISSUE-001"
+        severity: "CRITICAL"
+        test: "test_pattern_detection_in_comprehension"
+        verification: "PatternDetector.detect_patterns() finds ≥1 patterns or reports 'none found'"
+        estimated_hours: 2
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-REM-001-05"
+        description: "Holistic context YAML generated and presented for approval before execution"
+        issue_id: "ISSUE-001"
+        severity: "CRITICAL"
+        test: "test_comprehension_approval_gate"
+        verification: "YAML contains parsed_files, call_graphs, dependencies, patterns, impact_map"
+        estimated_hours: 3
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-REM-001-06"
+        description: "Intent Router executes on EVERY request (not just first request)"
+        issue_id: "ISSUE-001"
+        severity: "CRITICAL"
+        test: "test_intent_router_continuous_execution"
+        verification: "4+ sequential requests show comprehension loop on each turn"
+        estimated_hours: 2
+        status: "NOT_STARTED"
+      
+      # ISSUE-003: Response Verbosity & Header Injection
+      - ac_id: "AC-REM-003-01"
+        description: "Copilot system prompt enforces CORTEX communication guidelines (<500 words simple)"
+        issue_id: "ISSUE-003"
+        severity: "HIGH"
+        test: "test_copilot_verbosity_enforcement"
+        verification: "10 sample responses average <500 words; no 'Let me' or 'I will' phrases"
+        estimated_hours: 2
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-REM-003-02"
+        description: "Chat interface wrapper applies response header injection at boundary"
+        issue_id: "ISSUE-003"
+        severity: "HIGH"
+        test: "test_chat_header_injection_wrapper"
+        verification: "ChatResponseFormatter class exists with unit tests; all responses include headers"
+        estimated_hours: 4
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-REM-003-03"
+        description: "Copyright notice appears in all chat responses"
+        issue_id: "ISSUE-003"
+        severity: "HIGH"
+        test: "test_copyright_in_chat_responses"
+        verification: "All responses include 'Copyright © 2025-2026 Asif Hussain'"
+        estimated_hours: 1
+        status: "NOT_STARTED"
+      
+      # ISSUE-004: Bare Except Clauses & Hardcoded Paths
+      - ac_id: "AC-REM-004-01"
+        description: "All bare except clauses replaced with specific exception types (CORE-013 compliance)"
+        issue_id: "ISSUE-004"
+        severity: "CRITICAL"
+        test: "test_no_bare_except_clauses"
+        verification: "grep -rn 'except:' src/ returns 0 matches; all replaced with specific exceptions"
+        estimated_hours: 3
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-REM-004-02"
+        description: "All hardcoded /Users paths replaced with dynamic path resolution (CORE-005 compliance)"
+        issue_id: "ISSUE-004"
+        severity: "CRITICAL"
+        test: "test_no_hardcoded_paths"
+        verification: "grep -rn '/Users/' tests/ returns 0 matches; all use Path(__file__).parent"
+        estimated_hours: 3
+        status: "NOT_STARTED"
+    
+    git_checkpoint: "pre-PHASE-REMEDIATION-01"
+    
+    notes: |
+      PHASE-REMEDIATION-01: Critical Issues Remediation
+      
+      VALIDATION OF ISSUES:
+      ✓ ISSUE-001: VALID - Intent Router never calls ASTIntelligenceEngine, blocking LENS comprehension
+      ✓ ISSUE-003: VALID - Chat responses lack header injection, violate communication style guide
+      ✓ ISSUE-004: VALID - 3 bare except clauses violate CORE-013; 18 hardcoded paths violate CORE-005
+      ✗ ISSUE-002: DEFERRED - Valid but requires design phase; scheduled for PHASE-17
+      
+      CRITICAL BLOCKER ANALYSIS:
+      - ISSUE-001: Blocks PHASE-17 (Domain Brain needs working Intent Router)
+      - ISSUE-003: Blocks production deployment (governance compliance required)
+      - ISSUE-004: Blocks CI/CD automation (hardcoded paths break on CI systems)
+      
+      RESOLUTION STRATEGY:
+      1. Fix bare except + hardcoded paths (quick wins, 6 hours) - unblock CI/CD
+      2. Integrate AST scanning into Intent Router (8 hours) - unblock comprehension
+      3. Enforce verbosity + add header wrapper (7 hours) - unblock production compliance
+      4. 100% testing (11 unit tests, each 1-2 hours) - verify all fixes
+      
+      TOTAL EFFORT: 32 hours over 4 days
+      
+      GOVERNANCE COMPLIANCE:
+      - CORE-008: TDD (tests first, RED → GREEN)
+      - CORE-013: Specific exception handling (bare except replaced)
+      - CORE-027: Audit trail (all ACs logged with START/EXECUTE/COMPLETE)
+      - CORE-028: Kebab-case filenames
+
   PHASE-17-DOMAIN-BRAIN:
     title: "Domain Brain: Strategic Knowledge Centralization"
     description: "Implement Domain Brain architecture consolidating business knowledge from multiple sources (AST Intelligence, Git, Comments, Relationships, Business Knowledge Ingestion) into unified Tier 3 registry. Four-phase implementation over 3-4 weeks (~140 hours)."
@@ -1492,7 +1670,7 @@ phase_tracker:
     completed_ac_ids: 0
     status: "NOT_STARTED"
     locked: false
-    requires: "PHASE-13-OBSERVABILITY-MATURITY"
+    requires: "PHASE-REMEDIATION-01"
     required_for: "PHASE-18-PRODUCTION-MIGRATION"
     estimated_hours: 140
     estimated_days: 17.5
@@ -1500,19 +1678,6 @@ phase_tracker:
     blocking: true
     priority: "P0"
     can_run_parallel: false
-    
-    # Strategic Context
-    origin:
-      date: "2026-01-16"
-      source_document: ".github/roadmap/issues/issue-report-02.yaml"
-      analysis_documents:
-        - "ANALYSIS-README.md"
-        - "EXECUTIVE-SUMMARY-issue-report-02.md"
-        - "REVIEW-issue-report-02.md"
-        - "TECHNICAL-IMPLEMENTATION-GUIDE.md"
-        - "EXECUTION-CHECKLIST.md"
-      decision: "Integrate Domain Brain as strategic Tier 3 enhancement post-PHASE-13"
-      rationale: "PHASE-13 establishes observability + domain registry foundation; PHASE-17 builds knowledge architecture on this foundation"
     
     # Acceptance Criteria Breakdown
     acceptance_criteria:
