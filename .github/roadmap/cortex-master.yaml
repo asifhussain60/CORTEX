@@ -27,9 +27,10 @@ metadata:
     orchestrator_continuation: 9  # PHASE-16 (9 ACs)
     doc_remediation: 8        # PHASE-DOC-REMEDIATION (8 ACs)
     remediation_01: 11        # PHASE-REMEDIATION-01 (11 ACs)
-    remediation_02: 11        # PHASE-REMEDIATION-02 (11 ACs) ✅ NOW COMPLETE
+    remediation_02: 11        # PHASE-REMEDIATION-02 (11 ACs) ✅ COMPLETE
+    remediation_03: 8         # PHASE-REMEDIATION-03 (8 ACs) 🆕 NEW - ISSUE-005 remediation
     domain_brain: 12          # PHASE-17 (12 ACs)
-    total: 253
+    total: 261
     
   # FINAL STATUS
   final_status:
@@ -1895,6 +1896,45 @@ phase_tracker:
         tests_passing: "1/1"
     
     phase_yaml: ".github/roadmap/phases/phase-remediation-02.yaml"
+
+  PHASE-REMEDIATION-03:
+    title: "Critical Architecture Issues Remediation from ISSUE-005"
+    description: |
+      Remediation of 8 findings from ISSUE-005: Comprehensive Architecture Review
+      
+      CRITICAL BLOCKERS (must fix before production):
+      - FINDING-001: Orchestrator state management non-atomic
+      - FINDING-002: Governance validation post-execution (should be pre-)
+      
+      HIGH PRIORITY (prevent cascading failures):
+      - FINDING-003: Exception handler error suppression
+      - FINDING-004: Prompt injection in response templates
+      - FINDING-005: Type hint coverage gap (CORE-011)
+      - FINDING-006: SQLite connection lifecycle
+      
+      MEDIUM PRIORITY (technical debt):
+      - FINDING-007: Documentation drift in Tier3 knowledge
+      - FINDING-008: Test naming conventions (CORE-028)
+    
+    ac_ids: 8
+    completed_ac_ids: 0
+    status: "NOT_STARTED"
+    locked: false
+    requires: "PHASE-REMEDIATION-02"
+    estimated_hours: 14.25
+    estimated_days: 2.5
+    completion_target: "2026-01-19"
+    priority: "P0"
+    blocking: true
+    phase_yaml: ".github/roadmap/phases/phase-remediation-03.yaml"
+    
+    ac_breakdown:
+      critical_blockers: 2  # AC-FIX-001-01, AC-FIX-002-01
+      high_priority: 4      # AC-FIX-003-01 through AC-FIX-006-01
+      medium_priority: 2    # AC-DOC-007-01, AC-MINOR-008-01
+    
+    evidence_location: ".github/roadmap/issues/issue-report-05.yaml"
+    review_commit: "1559c1bee"
 
   PHASE-17-DOMAIN-BRAIN:
     title: "Domain Brain: Strategic Knowledge Centralization with Edge Case Remediation"
