@@ -157,7 +157,7 @@ class AuditOperationsTracker:
                 try:
                     import json
                     details = json.loads(row[5]) if row[5] else {}
-                except:
+                except (ValueError, TypeError):
                     details = {}
                 
                 entry = AuditEntry(
@@ -422,7 +422,7 @@ class ACCompletionAuditValidator:
                 start = datetime.fromisoformat(start_time.replace('Z', '+00:00'))
                 complete = datetime.fromisoformat(complete_time.replace('Z', '+00:00'))
                 duration = (complete - start).total_seconds() / 60.0
-            except:
+            except (ValueError, TypeError):
                 pass
         
         return start_time, execute_time, complete_time, duration

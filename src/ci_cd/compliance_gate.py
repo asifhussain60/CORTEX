@@ -181,7 +181,7 @@ class ContinuousMonitor:
             count = cursor.fetchone()[0] or 0
             conn.close()
             return count
-        except:
+        except (sqlite3.Error, TypeError):
             return 0
     
     def get_compliance_history(self, limit: int = 10) -> Dict[str, Any]:
