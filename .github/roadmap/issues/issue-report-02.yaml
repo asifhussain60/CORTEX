@@ -2,8 +2,11 @@
 # Issue Report 02: Centralized Domain Knowledge Coordination
 # 
 # Date: January 16, 2026
-# Status: STRATEGIC PLANNING
+# Status: DECISION APPROVED - ACCELERATED BK ORCHESTRATOR PATH
 # Orchestrator: MasterOrchestrator
+# Decision: Implement BusinessKnowledgeIngestionOrchestrator NOW (Phase 2)
+#           REJECT external CLI tool (governance violation)
+#           ACCEPT lightweight parser library (parallel, optional)
 # Copyright © 2025-2026 Asif Hussain. All rights reserved.
 
 ---
@@ -27,11 +30,17 @@ executive_summary:
   
   # THE SOLUTION
   recommendation: |
-    SINGLE CENTRAL KNOWLEDGE REPOSITORY (Tier 3 - "Domain Brain"):
+    SINGLE CENTRAL KNOWLEDGE REPOSITORY (Tier 3 - "Domain Brain") with ACCELERATED ORCHESTRATOR:
     • Tier 3 becomes unified knowledge hub for business & CORTEX domains
     • All 5 components WRITE to this single repository
     • All 5 components READ from this single repository
     • Deterministic, auditable, consistent
+    
+    KEY DECISION (Governance Compliance):
+    ✅ Implement BusinessKnowledgeIngestionOrchestrator IMMEDIATELY (Phase 2)
+    ✗ DO NOT create external CLI tool (violates CORE-010, CORE-005, CORE-026)
+    ✅ BK Orchestrator is governance-compliant, audited, production-ready
+    └─ Reasoning: Prevents duplication, ensures audit trails, maintains single source of truth
   
   # IMPACT
   impact:
@@ -41,13 +50,19 @@ executive_summary:
     ✅ **Auditability**: Every domain knowledge update traced + timestamped
     ✅ **Governance**: All CORE rules applied uniformly across all sources
   
-  # TIMELINE & SCOPE
+  # TIMELINE & SCOPE (ACCELERATED PATH)
   scope: |
+    CRITICAL PATH (Sequential):
     • Phase 1: Create "Domain Brain" architecture (Tier 3 enhancement) — 2 weeks
-    • Phase 2: Migrate existing knowledge sources to Domain Brain — 2 weeks  
-    • Phase 3: Implement Business Knowledge Ingestion → Domain Brain — 2 weeks
-    • Phase 4: Integrate all 5 components with Domain Brain — 3 weeks
-    • Total: ~9 weeks for production-ready centralized knowledge
+    • Phase 2: Implement Business Knowledge Ingestion Orchestrator (BD-002-04) — 2 weeks
+      └─ ACCELERATED: Move from Phase 4 → Phase 2 to unblock business knowledge ingestion NOW
+    • Phase 3: Migrate existing 4 components to Domain Brain — 2 weeks  
+    • Phase 4: LENS Context Builder integration with Domain Brain — 2 weeks
+    • Total: ~8 weeks for production-ready centralized knowledge
+    
+    PARALLEL OPTIONAL:
+    • Lightweight Business Document Parser library (reusable) — 1 week
+      └─ Can start immediately, used by BK Orchestrator in Phase 2
   
   # DETERMINISM & SAFETY
   determinism: |
@@ -95,12 +110,20 @@ executive_summary:
     CORE-027: "✅ AC_START, AC_EXECUTE, AC_COMPLETE audit entries"
     CORE-028: "✅ Kebab-case naming (domain-brain.py, not domainBrain.py)"
   
-  # NEXT STEPS (IMMEDIATELY ACTIONABLE)
+  # NEXT STEPS (IMMEDIATELY ACTIONABLE - ACCELERATED PATH)
   next_steps:
-    - step_1: "Review this architecture doc with team — decision point"
-    - step_2: "If approved: Create AC-BD-001-01 'Domain Brain Architecture'"
-    - step_3: "Start Phase 1: Design Domain Brain schema + API"
-    - step_4: "Parallel: Build integration adapters for 5 components"
+    - step_1: "✅ DECISION APPROVED: Implement BK Orchestrator NOW (Phase 2)"
+    - step_2: "Create AC-BD-002-01 'Domain Brain Architecture Foundation'"
+    - step_3: "Start Phase 1: Design Domain Brain schema + API (Tier 3 tier0 rules)"
+    - step_4: "Parallel: Build lightweight Business Document Parser library (reusable, no governance overhead)"
+    - step_5: "Phase 2 START: Implement BusinessKnowledgeIngestionOrchestrator (AC-BD-002-04)"
+      - sub_1: "Create orchestrator_base implementation with full lifecycle"
+      - sub_2: "Implement deterministic parsers (PDF, YAML, Markdown, OpenAPI)"
+      - sub_3: "Add schema validation + human approval gate"
+      - sub_4: "Write tests (RED → GREEN pattern per CORE-008)"
+      - sub_5: "Verify governance compliance (all CORE rules checked)"
+    - step_6: "Phase 3: Integrate existing 4 intelligence sources to Domain Brain"
+    - step_7: "Phase 4: LENS integration with Domain Brain (knowledge accumulation)"
 
 ---
 
@@ -501,6 +524,164 @@ tier3_domain_brain_schema:
          • One customer can have many lifecycle stages ✓
          • One service cannot serve multiple customers? ✗ (business violation)
 
+## ARCHITECTURAL DECISIONS & REJECTED ALTERNATIVES
+
+rejected_alternatives:
+  
+  alternative_1_external_cli_tool:
+    name: "Create External CLI Utility (REJECTED)"
+    description: |
+      Proposal: Create standalone CLI tool external to CORTEX that:
+      • Takes folder path as input
+      • Reads human-readable files recursively
+      • Converts to machine-readable format
+      • Outputs for BK Orchestrator to consume
+    
+    why_rejected: |
+      CRITICAL GOVERNANCE VIOLATIONS:
+      ✗ CORE-010 violation: Script consolidation - creates duplicate functionality
+        └─ Both CLI and BK Orchestrator do extraction/parsing (duplication)
+      
+      ✗ CORE-005 violation: No hardcoded paths
+        └─ External CLI requires hardcoded folder paths (not portable)
+      
+      ✗ CORE-026 violation: Git checkpoints & governance audit trails
+        └─ CLI operations not tracked in CORTEX audit log
+      
+      ✗ CORE-001 violation: Incremental execution & state persistence
+        └─ External CLI loses state between runs (no learning)
+      
+      ADDITIONAL PROBLEMS:
+      ✗ Sync nightmare: Two tools doing same job, different schemas
+      ✗ Maintenance burden: Update CLI separately from CORTEX when Domain Brain schema changes
+      ✗ Knowledge orphaned: CLI output bypasses Domain Brain schema validation
+      ✗ No approval gate: CLI extracts knowledge without human approval mechanism
+      ✗ No versioning: External files not version-controlled in Domain Brain
+    
+    concrete_failure_scenarios: |
+      Scenario 1 - Duplication:
+        Day 1: CLI extracts revenue-operations → revenue-ops.json (external)
+        Day 2: BK Orchestrator extracts same → tier3/revenue-operations.yaml (Domain Brain)
+        Day 10: Two versions of "revenue-operations" exist. Which is source of truth?
+                CORTEX cannot decide. Consistency broken.
+      
+      Scenario 2 - Context Loss:
+        CLI produces: {"domain": "revenue-operations", "entities": [...]}
+        BK Orchestrator expects: {"domain_id": "...", "source": "BKIO", "ac_id": "...", "approved_by": "..."}
+        If CLI produces output: WHO provides ac_id? approved_by?
+        External tool has no governance context. Knowledge orphaned.
+      
+      Scenario 3 - No Incremental State:
+        Run 1 (CLI): Scans /path/to/docs → Extracts 50 entities → Writes file → Exit
+        Run 2 (CLI): Same folder → Extracts same 50 entities again (REDUNDANT!)
+                     → File overwritten
+        
+        Compare to BK Orchestrator:
+        Run 1: Extract 50, publish to Domain Brain with audit entry
+        Run 2: Query Domain Brain "revenue-operations already ingested?"
+               Answer: YES (as of 2026-01-16)
+               Result: SKIP redundant work (deterministic, efficient)
+      
+      Scenario 4 - Orphaned Tool:
+        6 months later:
+        • Domain Brain schema evolves
+        • BK Orchestrator updated to match new schema
+        • External CLI still produces old format
+        • Integration breaks
+        • Two separate maintenance burdens
+    
+    decision: "DO NOT IMPLEMENT - Violates Tier 0 governance rules"
+  
+  alternative_2_simple_parser_library:
+    name: "Lightweight Business Document Parser Library (ACCEPTED - OPTIONAL PARALLEL)"
+    description: |
+      Lightweight, reusable library with ZERO orchestration overhead:
+      • Does ONE job: Parse document format → structured entities
+      • Pure functions (stateless, deterministic)
+      • Zero dependencies on CORTEX orchestration
+      • Lives in src/core/parsers/business_document_parser.py
+    
+    benefits: |
+      ✅ Can start immediately (no dependencies)
+      ✅ Reusable: BK Orchestrator uses this library
+      ✅ Testable: Simple unit tests on extraction logic
+      ✅ No governance overhead: Pure parsing code
+    
+    limitations: |
+      ✗ Incomplete solution (parser alone cannot handle governance)
+      ✗ No audit trails (parser is stateless)
+      ✗ No approval gates (parser has no lifecycle)
+      ✗ Must be wrapped by orchestrator for production use
+    
+    recommendation: |
+      Build parser library in parallel with Phase 1 (Domain Brain foundation).
+      Provides quick win for business document extraction logic.
+      Later wrapped by BK Orchestrator with governance layer.
+    
+    timeline: "1 week (can start immediately)"
+    
+    code_structure: |
+      src/core/parsers/
+      ├── business_document_parser.py
+      ├── formats/
+      │   ├── pdf_parser.py
+      │   ├── yaml_parser.py
+      │   ├── markdown_parser.py
+      │   └── openapi_parser.py
+      └── tests/
+          ├── test_business_document_parser.py
+          └── test_pdf_parser.py
+    
+    decision: "ACCEPTED - Implement in parallel for reusability"
+  
+  alternative_3_integrated_bk_orchestrator:
+    name: "Integrated Business Knowledge Ingestion Orchestrator (RECOMMENDED - NOW)"
+    description: |
+      Implement BK Orchestrator as part of CORTEX framework IMMEDIATELY (Phase 2)
+      instead of waiting for phases 2-3 to complete.
+    
+    benefits: |
+      ✅ Governance compliant: All CORE rules enforced automatically
+      ✅ No duplication: Single responsible component for business knowledge ingestion
+      ✅ Audit trails: All operations tracked in Domain Brain with AC-ID
+      ✅ Incremental state: Knows what's already been processed
+      ✅ Human approval gate: Builtin orchestrator lifecycle
+      ✅ Versioning: All changes tracked in Domain Brain (git-backed)
+      ✅ Deterministic: Same input always produces same output (reproducible)
+    
+    tradeoffs: |
+      (+) Medium complexity (orchestrator pattern established)
+      (-) Requires Domain Brain to exist first (BD-002-01 blocker)
+      (+) Can start as soon as Domain Brain schema defined
+    
+    timeline: "2 weeks after Domain Brain foundation (Phase 2)"
+    
+    orchestrator_implementation: |
+      Class: BusinessKnowledgeIngestionOrchestrator extends OrchestratorBase
+      Location: src/orchestrators/business_knowledge_ingestion_orchestrator.py
+      
+      Lifecycle:
+      1. validate_context() - Check folder_path, format preferences
+      2. on_start() - Initialize parser, set governance context
+      3. execute() - Main logic:
+         • Scan folder recursively
+         • Parse using deterministic extractors
+         • Validate against schema
+         • Request human approval
+         • Publish to Domain Brain with audit entry
+      4. on_complete() - Log completion, record metrics
+    
+    governance_compliance: |
+      CORE-008: ✅ Tests written first (RED → GREEN)
+      CORE-011: ✅ Type hints on all functions
+      CORE-012: ✅ Docstrings (Google style)
+      CORE-013: ✅ Specific exception handling
+      CORE-026: ✅ Git checkpoints before/after
+      CORE-027: ✅ AC audit entries (AC_START, AC_EXECUTE, AC_COMPLETE)
+      CORE-028: ✅ Kebab-case naming (business-knowledge-ingestion-orchestrator.py)
+    
+    decision: "RECOMMENDED - Implement NOW (Phase 2, not Phase 4)"
+
 ## OPERATIONAL MODEL: How Components Interact
 
 operational_flow:
@@ -703,29 +884,115 @@ implementation_roadmap:
       - "Conflict resolution tested (if 2 sources disagree, LENS resolves)"
       - "Performance: query returns < 100ms (with cache)"
   
-  phase_4_business_knowledge_ingestion:
-    name: "Phase 4: Business Knowledge Ingestion Orchestrator"
+  phase_2_business_knowledge_ingestion_accelerated:
+    name: "Phase 2: Business Knowledge Ingestion Orchestrator [ACCELERATED]"
     duration: "2 weeks"
     ac_id: "BD-002-04"
+    status: "PRIORITY - MOVE TO PHASE 2 (from Phase 4)"
+    
+    description: |
+      CRITICAL DECISION: Implement BK Orchestrator IMMEDIATELY after Domain Brain foundation
+      (Phase 1) to unblock business knowledge ingestion NOW instead of waiting for phases 2-3.
+      
+      Why accelerated:
+      ✅ Governance compliance: Orchestrator pattern enforces CORE rules
+      ✗ CLI tool violates: CORE-010 (no duplication), CORE-005 (hardcoded paths), CORE-026 (audit trails)
+      ✅ Prevents: Orphaned knowledge, sync problems, maintenance burden
+      ✅ Enables: Deterministic extraction, versioning, rollback capability
     
     deliverables:
-      - "BusinessKnowledgeIngestionOrchestrator created"
+      - "BusinessKnowledgeIngestionOrchestrator created (src/orchestrators/business_knowledge_ingestion_orchestrator.py)"
       - "Supports 4 formats: PDF, YAML, Markdown, OpenAPI"
-      - "Deterministic parser for each format"
-      - "Schema validator + human approval gate"
-      - "Publishes to Domain Brain (business domains)"
+      - "Deterministic parser for each format (reusable library)"
+      - "Schema validator + human approval gate (builtin orchestrator lifecycle)"
+      - "Publishes to Domain Brain (business domains with full audit trail)"
+      - "Tests: RED → GREEN pattern (CORE-008 compliant)"
+      - "Type hints + Docstrings (CORE-011, CORE-012 compliant)"
     
     dependencies:
-      - "BD-002-01, BD-002-02, BD-002-03 must be COMPLETED"
+      - "BD-002-01 (Domain Brain foundation) MUST BE COMPLETED first"
+      - "BD-002-02 (AST Integration) can run in parallel"
     
     success_criteria:
       - "Can ingest sample business documents"
       - "Extracted entities match manual review (accuracy > 95%)"
-      - "All published domains appear in domain-registry.yaml"
-      - "Audit trail shows BKIO as source + human approver"
+      - "All published domains appear in domain-registry.yaml with audit entries"
+      - "Audit trail shows BKIO as source + human approver + AC-ID trace"
+      - "Orchestrator lifecycle: validate → on_start → execute → on_complete"
+      - "All tests pass (RED → GREEN pattern verified)"
+      - "Governance compliance: All CORE rules checked ✓"
+    
+    orchestrator_implementation:
+      class_name: "BusinessKnowledgeIngestionOrchestrator"
+      extends: "OrchestratorBase"
+      location: "src/orchestrators/business_knowledge_ingestion_orchestrator.py"
+      
+      lifecycle:
+        - phase: "validate_context()"
+          action: "Validate folder_path, format preferences, approval settings"
+        - phase: "on_start()"
+          action: "Initialize parser, set governance context, log AC-ID"
+        - phase: "execute()"
+          action: |
+            1. Scan folder recursively for documents
+            2. Parse documents using deterministic extractors
+            3. Validate extracted entities against schema
+            4. Request human approval (builtin approval gate)
+            5. Publish to Domain Brain with audit entries
+            6. Record: source=BKIO, ac_id=BD-002-04, approved_by=<human>
+        - phase: "on_complete()"
+          action: "Log completion, record metrics (domains ingested, audit entries)"
+      
+      parameters:
+        - name: "folder_path"
+          type: "str"
+          description: "Path to business documents (required)"
+        - name: "formats"
+          type: "List[str]"
+          description: "Document formats to parse: ['pdf', 'yaml', 'markdown', 'openapi']"
+        - name: "ac_id"
+          type: "str"
+          description: "Acceptance Criteria ID (required for audit trail)"
+        - name: "approved_by"
+          type: "str"
+          description: "Human approver email (required for approval gate)"
+        - name: "require_approval"
+          type: "bool"
+          description: "If true, request user approval before publishing (default: true)"
+      
+      return_type: "OrchestrationResult"
+      
+      governance_compliance:
+        CORE-008: "✅ Tests written first (RED → GREEN for each component)"
+        CORE-011: "✅ All functions have type hints"
+        CORE-012: "✅ All functions have docstrings (Google style)"
+        CORE-013: "✅ Specific exception handling (no bare except)"
+        CORE-026: "✅ Git checkpoint before/after orchestrator creation"
+        CORE-027: "✅ AC_START, AC_EXECUTE, AC_COMPLETE audit entries"
+        CORE-028: "✅ Naming: business-knowledge-ingestion-orchestrator.py"
   
-  phase_5_lens_integration:
-    name: "Phase 5: LENS Context Builder Integration"
+  phase_3_integrate_existing_sources:
+    name: "Phase 3: Integrate Git, Comments, Relationships [FORMERLY PHASE 2-3]"
+    duration: "2 weeks"
+    ac_id: "BD-002-02, BD-002-03"
+    
+    deliverables:
+      - "Git History publishes to Domain Brain"
+      - "Comment Analyzer publishes to Domain Brain"
+      - "Relationship Traversal publishes + enriches existing domains"
+      - "Cross-source queries working (can combine knowledge from 4 sources)"
+    
+    dependencies:
+      - "BD-002-01, BD-002-04 must be COMPLETED first"
+      - "BD-002-02-01 (AST Integration) can run in parallel with BD-002-04"
+    
+    success_criteria:
+      - "All 4 intelligence sources publishing successfully"
+      - "Conflict resolution tested (if 2 sources disagree, LENS resolves)"
+      - "Performance: query returns < 100ms (with cache)"
+  
+  phase_4_lens_integration:
+    name: "Phase 4: LENS Context Builder Integration [FORMERLY PHASE 5]"
     duration: "1.5 weeks"
     ac_id: "BD-002-05"
     
@@ -743,8 +1010,8 @@ implementation_roadmap:
       - "Approved comprehensions persisted in Domain Brain"
       - "Second LENS run finds existing knowledge (skip redundant scanning)"
   
-  phase_6_onboarding_orchestrator:
-    name: "Phase 6: Onboarding Orchestrator Integration [FUTURE]"
+  phase_5_onboarding_orchestrator:
+    name: "Phase 5: Onboarding Orchestrator Integration [FUTURE - FORMERLY PHASE 6]"
     duration: "1.5 weeks"
     ac_id: "BD-002-06"
     planned_for: "PHASE-15+"
