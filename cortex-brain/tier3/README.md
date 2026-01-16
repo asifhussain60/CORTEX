@@ -59,15 +59,19 @@ domain_brain.query("comment:design")  # Get design decisions
 ]
 ```
 
-#### 3. TODO/FIXME Queries
+#### 3. TODO/FIXME Queries (NEW - AC-DOC-007-01)
 Query technical debt and work items in the domain.
 
 **Syntax:**
 - `todo:*` - All TODO/FIXME comments
+- `todo:high` - High priority TODOs only
+- `todo:<filename>` - TODOs in specific file
 
 **Example:**
 ```python
 domain_brain.query("todo:*")  # Get all TODO/FIXME items
+domain_brain.query("todo:high")  # Get high-priority items only
+domain_brain.query("todo:handlers.py")  # TODOs in specific file
 ```
 
 **Return Format:**
@@ -110,11 +114,17 @@ def _query_todos(self) -> List[Dict[str, Any]]:
     """
 ```
 
+**Source Code Reference:**
+- **Implementation:** `src/domain_brain/adapters/base_adapter.py` - Base query method
+- **TODO Parser:** `src/domain_brain/parsers/todo_parser.py` - Extracts TODO/FIXME patterns
+- **Priority Analyzer:** `src/domain_brain/analyzers/priority_analyzer.py` - Determines priority levels
+
 **Implementation Details:**
-- Parses TODO and FIXME markers in code comments
-- Extracts context from surrounding code
+- Parses TODO and FIXME markers in code comments (regex patterns)
+- Extracts context from surrounding code (AST analysis)
 - Determines priority from keywords (urgent, important, asap vs. nice-to-have, consider)
-- Returns structured list of work items
+- Returns structured list of work items sorted by priority
+- Cached results for repeated queries on same domain
 
 **Practical Usage:**
 ```python
@@ -193,4 +203,27 @@ design_notes = domain_brain.query("comment:design")
 for note in design_notes:
     print(f"Design Decision: {note['text']}")
 ```
+
+### Source Code Cross-References
+
+This documentation aligns with the following implementation files:
+
+| Component | File | Purpose |
+|-----------|------|---------|
+| Query Interface | `src/domain_brain/domain_brain.py` | Main DomainBrain class |
+| Base Adapter | `src/domain_brain/adapters/base_adapter.py` | IntegrationAdapter base class |
+| TODO Query Handler | `src/domain_brain/adapters/comment_adapter.py` | _query_todos() implementation |
+| Query Parser | `src/domain_brain/parsers/query_parser.py` | Parses query syntax |
+| Priority Analyzer | `src/domain_brain/analyzers/priority_analyzer.py` | Determines TODO priority |
+
+### Documentation Updates (AC-DOC-007-01)
+
+**Changes in this version:**
+- Added `todo:<filename>` syntax for filtering by file
+- Added source code cross-references to implementation
+- Enhanced return format documentation with examples
+- Added new query patterns documentation
+- Clarified _query_todos() method behavior and caching
+
+**Related AC-IDs:** AC-DOC-007-01 (Tier3 documentation update - FINDING-007)
 
