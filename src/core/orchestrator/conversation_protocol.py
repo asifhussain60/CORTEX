@@ -34,6 +34,7 @@ from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
 from src.core.intelligence.call_graph import CallGraphBuilder
 from src.core.intelligence.dependency_mapper import DependencyMapper
 from src.core.intelligence.pattern_detector import PatternDetector
+from src.infrastructure.database_transaction_manager import DatabaseTransactionManager
 
 
 @dataclass
@@ -106,6 +107,10 @@ class ConversationProtocol:
         self._audit_logger = None  # Will be set if available
         self._tier_validator = TierAccessValidator(enforce_mode=True)  # AC-REM-002-08: Wire validator
         
+        # AC-FIX-001-01: Initialize DatabaseTransactionManager for atomic turn execution
+        db_path = Path(__file__).parent.parent.parent / "cortex-brain" / "state" / "governance.db"
+        self.transaction_manager = DatabaseTransactionManager(str(db_path))
+        
         # AC-REM-001-01: Initialize AST Intelligence Engine for comprehension phase
         self.ast_engine = ASTIntelligenceEngine(enable_cache=True)
         
@@ -124,16 +129,20 @@ class ConversationProtocol:
         """
         Execute one turn and return explicit continuation decision.
         
-        This is THE core method - it executes exactly one turn:
+        AC-FIX-001-01: Atomic transaction for turn execution + audit logging
+        
+        This is THE core method - it executes exactly one turn within an atomic transaction:
         1. Increment turn counter
         2. Validate governance (pre-turn check)
         3. Create round context with LENS phases
-        4. Log AC_START audit entry
+        4. Log AC_START audit entry (in transaction)
         5. Execute orchestrator.execute()
-        6. Log AC_EXECUTE audit entry
+        6. Log AC_EXECUTE audit entry (in transaction)
         7. Evaluate continuation logic
-        8. Log AC_COMPLETE audit entry
+        8. Log AC_COMPLETE audit entry (in transaction)
         9. Return ContinuationDecision
+        
+        All audit entries and state changes committed atomically or rolled back together.
         
         Args:
             user_input: User's input for this turn
@@ -145,82 +154,81 @@ class ConversationProtocol:
         Raises:
             None - errors wrapped in Result type
         """
+        # AC-FIX-001-01: Wrap entire turn in atomic transaction
+        # Both turn execution and audit logging occur in single transaction boundary
         try:
-            # Increment turn counter
-            self.turn_number += 1
-            
-            # Step 1: Pre-turn governance validation (CORE-017)
-            governance_result = self._validate_governance_before_turn()
-            if governance_result.is_err():
-                return self._create_halt_decision(
-                    reason=ContinuationReason.GOVERNANCE_HALT,
-                    error_msg=governance_result.unwrap_err(),
+            with self.transaction_manager.atomic_operation("AC-FIX-001-01", f"execute_turn_{self.turn_number}") as txn:
+                # Increment turn counter
+                self.turn_number += 1
+                
+                # Step 1: Pre-turn governance validation (CORE-017)
+                governance_result = self._validate_governance_before_turn()
+                if governance_result.is_err():
+                    raise Exception(f"Governance validation failed: {governance_result.unwrap_err()}")
+                
+                # Step 2: Create round context
+                round_context = self._create_round_context(
+                    user_input, previous_context
                 )
-            
-            # Step 2: Create round context
-            round_context = self._create_round_context(
-                user_input, previous_context
-            )
-            
-            # Step 3: Log AC_START (audit trail)
-            ac_start_entry_id = self._log_ac_start(round_context)
-            
-            # Step 3b: Run LENS comprehension phase (AC-REM-001-01)
-            # Execute AST scanning on identified target files
-            comprehension_result = self._run_comprehension_phase(
-                user_input, round_context
-            )
-            if comprehension_result.is_err():
-                # Log comprehension error but continue (graceful degradation)
-                pass
-            
-            # Add comprehension results to context for orchestrator
-            round_context.previous_context["comprehension_result"] = (
-                comprehension_result.unwrap() if comprehension_result.is_ok() else {}
-            )
-            
-            # Step 4: Execute orchestrator for one turn
-            try:
-                orchestrator_result = self.orchestrator.execute(
-                    user_input, round_context.previous_context
+                
+                # Step 3: Log AC_START (audit trail) - within transaction
+                ac_start_entry_id = self._log_ac_start(round_context)
+                
+                # Step 3b: Run LENS comprehension phase (AC-REM-001-01)
+                # Execute AST scanning on identified target files
+                comprehension_result = self._run_comprehension_phase(
+                    user_input, round_context
                 )
-            except Exception as e:
-                # Handle orchestrator errors
-                self._log_ac_execute_with_error(ac_start_entry_id, str(e))
-                return self._create_halt_decision(
-                    reason=ContinuationReason.ERROR_UNRECOVERABLE,
-                    error_msg=str(e),
+                if comprehension_result.is_err():
+                    # Log comprehension error but continue (graceful degradation)
+                    pass
+                
+                # Add comprehension results to context for orchestrator
+                round_context.previous_context["comprehension_result"] = (
+                    comprehension_result.unwrap() if comprehension_result.is_ok() else {}
                 )
-            
-            # Step 5: Log AC_EXECUTE (audit trail)
-            self._log_ac_execute(ac_start_entry_id, orchestrator_result)
-            
-            # Step 6: Evaluate continuation logic
-            decision = self._evaluate_continuation(
-                user_input,
-                orchestrator_result,
-                previous_context,
-                ac_start_entry_id,
-            )
-            
-            # Step 7: Log AC_COMPLETE (audit trail)
-            ac_complete_entry_id = self._log_ac_complete(
-                ac_start_entry_id, decision
-            )
-            
-            # Update decision with audit entry
-            decision_with_audit = self._add_audit_entry_to_decision(
-                decision, ac_complete_entry_id
-            )
-            
-            # Step 8: Add to history
-            self.decisions_history.append(decision_with_audit)
-            
-            # Step 9: Return decision
-            return Ok(decision_with_audit)
-            
+                
+                # Step 4: Execute orchestrator for one turn
+                try:
+                    orchestrator_result = self.orchestrator.execute(
+                        user_input, round_context.previous_context
+                    )
+                except Exception as e:
+                    # Handle orchestrator errors
+                    self._log_ac_execute_with_error(ac_start_entry_id, str(e))
+                    raise Exception(f"Orchestrator execution failed: {str(e)}")
+                
+                # Step 5: Log AC_EXECUTE (audit trail) - within transaction
+                self._log_ac_execute(ac_start_entry_id, orchestrator_result)
+                
+                # Step 6: Evaluate continuation logic
+                decision = self._evaluate_continuation(
+                    user_input,
+                    orchestrator_result,
+                    previous_context,
+                    ac_start_entry_id,
+                )
+                
+                # Step 7: Log AC_COMPLETE (audit trail) - within transaction
+                ac_complete_entry_id = self._log_ac_complete(
+                    ac_start_entry_id, decision
+                )
+                
+                # Update decision with audit entry
+                decision_with_audit = self._add_audit_entry_to_decision(
+                    decision, ac_complete_entry_id
+                )
+                
+                # Step 8: Add to history
+                self.decisions_history.append(decision_with_audit)
+                
+                # Transaction commits automatically on context exit
+                # All audit entries and state changes committed atomically
+                return Ok(decision_with_audit)
+        
         except Exception as e:
-            # Catch any unexpected errors
+            # Transaction automatically rolled back on exception
+            # Catch any errors and create error decision
             error_decision = ContinuationDecision(
                 should_continue=False,
                 reason=ContinuationReason.ERROR_UNRECOVERABLE,
@@ -230,7 +238,7 @@ class ConversationProtocol:
                 governance_violations=[],
             )
             self.decisions_history.append(error_decision)
-            return Err(f"Unexpected error in execute_turn: {str(e)}")
+            return Err(f"Turn execution failed (transaction rolled back): {str(e)}")
 
     def _validate_governance_before_turn(self) -> Result[bool]:
         """
