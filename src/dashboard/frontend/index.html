@@ -6,6 +6,38 @@
     <meta name="description" content="CORTEX Neural Observatory - Real-time brain visualization dashboard">
     <title>CORTEX Neural Observatory</title>
     
+    <!-- Tailwind CSS Configuration (DO-001-02) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cortex: {
+                            primary: {
+                                DEFAULT: '#0ea5e9',
+                                hover: '#0284c7',
+                                light: '#38bdf8',
+                                dark: '#0369a1',
+                            },
+                            secondary: {
+                                DEFAULT: '#10b981',
+                                hover: '#059669',
+                                light: '#34d399',
+                                dark: '#047857',
+                            },
+                            accent: {
+                                DEFAULT: '#a78bfa',
+                                hover: '#8b5cf6',
+                                light: '#c4b5fd',
+                                dark: '#7c3aed',
+                            },
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -15,7 +47,9 @@
     <!-- D3.js for graphs -->
     <script src="https://unpkg.com/d3@7.8.5/dist/d3.min.js" onerror="console.warn('✗ D3.js unavailable - basic visualization')"></script>
     
-    <!-- Custom CSS -->
+    <!-- Custom CSS (DO-001-02: Brand Colors) -->
+    <link rel="stylesheet" href="/css/colors.css">
+    <link rel="stylesheet" href="/css/tailwind-custom.css">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/glassmorphism.css">
     <link rel="stylesheet" href="/css/animations.css">
