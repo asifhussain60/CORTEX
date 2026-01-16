@@ -95,7 +95,7 @@ def find_processes_on_port(port: int) -> List[psutil.Process]:
         List of psutil.Process objects using the port
     """
     processes = []
-    for proc in psutil.process_iter(['pid', 'name', 'connections']):
+    for proc in psutil.process_iter(['pid', 'name']):
         try:
             connections = proc.connections(kind='inet')
             for conn in connections:
