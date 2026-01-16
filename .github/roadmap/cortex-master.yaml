@@ -13,7 +13,7 @@ metadata:
   dor_score: 100
   start_date: null
   end_date: null
-  total_ac_ids: 246  # 125 locked + 7 enhancement + 58 new phases (07-13) + 12 PHASE-15 + 8 PHASE-16-CONTINUATION + 8 DOC-REMEDIATION + 11 PHASE-REM-01 + 8 PHASE-REM-02
+  total_ac_ids: 247  # 125 locked + 7 enhancement + 58 new phases (07-13) + 12 PHASE-15 + 9 PHASE-16-CONTINUATION (added OC-005-01 context management) + 8 DOC-REMEDIATION + 11 PHASE-REM-01 + 8 PHASE-REM-02
   
   # AC-ID Breakdown
   ac_breakdown:
@@ -21,11 +21,11 @@ metadata:
     enhancement_phases: 7     # ENH-01 (4) + ENH-02 (2) + ENH-03 (1)
     new_phases: 67            # PHASE-07 (14) + 08 (6) + 09 (8) + 10 (5) + 11 (6) + 12 (7) + 13 (5+9) [PHASE-14 REMOVED]
     neural_observatory: 12    # PHASE-15 (12 ACs) - PARALLEL TRACK
-    orchestrator_continuation: 8  # PHASE-16 (8 ACs) - ConversationProtocol Architecture (New - Jan 16, 2026)
+    orchestrator_continuation: 9  # PHASE-16 (9 ACs) - ConversationProtocol + Context Carryover (OC-005-01 added Jan 16, 2026)
     doc_remediation: 8        # PHASE-DOC-REMEDIATION (8 ACs) - GAP FIX (Jan 16, 2026)
     remediation_01: 11        # PHASE-REMEDIATION-01 (11 ACs) - AST Scanning, Response Verbosity, Code Quality (Jan 16, 2026)
     remediation_02: 8         # PHASE-REMEDIATION-02 (8 ACs) - Per-Turn Governance Enforcement (Jan 16, 2026)
-    total: 246
+    total: 247
   
   # GOVERNANCE INTEGRATION
   governance:
@@ -1371,6 +1371,12 @@ phase_tracker:
       KEY INNOVATION: Each turn returns ContinuationDecision with clear reason (COMPLETION, 
       TOKEN_LIMIT, USER_REJECTION, GOVERNANCE_HALT, etc.) instead of hidden loop state.
       
+      CONTEXT CARRYOVER MANAGEMENT (NEW - Jan 16, 2026):
+      - Recognized insight: AI context is ⚠️ CONDITIONAL across turns (not automatic)
+      - Solution: ConversationSession with explicit state tracking + governance.db recovery
+      - Ensures: Turn N+1 has COMPLETE context from prior turns (explicit, not implicit)
+      - Enables: Resilient multi-turn conversations despite context window limits
+      
       BENEFITS:
       - Every turn independently testable
       - Clear continuation reasons (not fragile "if" conditions)
@@ -1378,12 +1384,13 @@ phase_tracker:
       - Token tracking per turn (CORE-001 incremental execution)
       - Governance validation per turn (CORE-027 audit trail)
       - Full LENS re-execution per turn (CORE-019 routing)
+      - Explicit context carryover management across turns
       
       SCOPE: All 20+ orchestrators (Planning, ADO, TDD, Interaction, Master, etc.)
-    ac_ids: 8
-    completed_ac_ids: 8
+    ac_ids: 9
+    completed_ac_ids: 9
     status: "COMPLETED"
-    locked: true           # VERIFIED 2026-01-16: All 8 ACs complete and audited
+    locked: true           # VERIFIED 2026-01-16: All 9 ACs complete and audited (including context management)
     requires: "PHASE-07-INTENT-ROUTER"
     required_for: "PHASE-DOC-REMEDIATION"
     can_run_parallel_with: ["PHASE-15-NEURAL-OBSERVATORY"]
