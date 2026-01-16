@@ -44,13 +44,13 @@ class TestExpertRegistryStructure:
     
     def test_expert_registry_file_exists(self, expert_registry):
         """Verify expert registry file exists."""
-        tier3_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge")
+        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
         registry_file = tier3_path / "expert-registry.yaml"
         assert registry_file.exists(), "Expert registry file not found"
     
     def test_expert_registry_contains_metadata(self, expert_registry):
         """Verify registry contains metadata."""
-        tier3_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge")
+        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
         registry_file = tier3_path / "expert-registry.yaml"
         
         import yaml
@@ -63,7 +63,7 @@ class TestExpertRegistryStructure:
     
     def test_expert_registry_contains_experts(self, expert_registry):
         """Verify registry contains experts list."""
-        tier3_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge")
+        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
         registry_file = tier3_path / "expert-registry.yaml"
         
         import yaml
@@ -79,7 +79,7 @@ class TestExpertData:
     
     def test_expert_has_required_fields(self, expert_registry):
         """Verify each expert has required fields."""
-        tier3_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge")
+        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
         registry_file = tier3_path / "expert-registry.yaml"
         
         import yaml
@@ -102,7 +102,7 @@ class TestExpertData:
             "PERFORMANCE", "ARCHITECTURE", "ERROR-HANDLING"
         ]
         
-        tier3_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge")
+        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
         registry_file = tier3_path / "expert-registry.yaml"
         
         import yaml
@@ -117,7 +117,7 @@ class TestExpertData:
         """Verify expertise levels are valid."""
         valid_levels = ["expert", "advanced", "intermediate"]
         
-        tier3_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge")
+        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
         registry_file = tier3_path / "expert-registry.yaml"
         
         import yaml
@@ -177,7 +177,7 @@ class TestExpertDomainMapping:
     
     def test_domain_mapping_includes_expertise_level(self, expert_registry):
         """Verify domain mapping includes expertise levels."""
-        tier3_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge")
+        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
         registry_file = tier3_path / "expert-registry.yaml"
         
         import yaml
@@ -222,7 +222,7 @@ class TestExpertGovernanceIntegration:
     
     def test_expert_registry_links_to_governance_rules(self, expert_registry):
         """Verify registry links to governance rules."""
-        tier3_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge")
+        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
         registry_file = tier3_path / "expert-registry.yaml"
         
         import yaml
@@ -243,7 +243,7 @@ class TestExpertRegistryInitialization:
     
     def test_registry_initializes_with_default_experts(self, expert_registry):
         """Verify registry initializes with default experts."""
-        tier3_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge")
+        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
         registry_file = tier3_path / "expert-registry.yaml"
         
         import yaml
@@ -254,7 +254,7 @@ class TestExpertRegistryInitialization:
     
     def test_registry_has_proper_metadata(self, expert_registry):
         """Verify registry has proper metadata."""
-        tier3_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge")
+        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
         registry_file = tier3_path / "expert-registry.yaml"
         
         import yaml

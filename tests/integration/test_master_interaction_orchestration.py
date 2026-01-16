@@ -109,7 +109,7 @@ class TestMasterInteractionOrchestratorIntegration:
             target_name="x.py",
             context={
                 "file_path": "src/features/x.py",
-                "project_root": "/Users/asifhussain/PROJECTS/CORTEX",
+                "project_root": str(Path(__file__).parent.parent.parent),
                 "technology": "Python",
             },
             timestamp=datetime.utcnow().isoformat() + "Z",
@@ -146,7 +146,7 @@ class TestMasterInteractionOrchestratorIntegration:
             target_name="x.py",
             context={
                 "file_path": "src/features/x.py",
-                "project_root": "/Users/asifhussain/PROJECTS/CORTEX",
+                "project_root": str(Path(__file__).parent.parent.parent),
             },
             timestamp=datetime.utcnow().isoformat() + "Z",
         )
@@ -370,7 +370,7 @@ class TestMasterInteractionOrchestratorIntegration:
             target_name="oauth2.py",
             context={
                 "file_path": "src/auth/oauth2.py",
-                "project_root": "/Users/asifhussain/PROJECTS/CORTEX",
+                "project_root": str(Path(__file__).parent.parent.parent),
                 "technology": "Python",
                 "framework": "Flask",
             },

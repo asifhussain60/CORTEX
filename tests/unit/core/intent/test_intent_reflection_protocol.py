@@ -21,6 +21,7 @@ import pytest
 from datetime import datetime
 from dataclasses import dataclass
 from typing import Dict, List, Any, Optional
+from pathlib import Path
 
 from src.core.intent.intent_reflection_protocol import (
     IntentReflectionEngine,
@@ -44,7 +45,7 @@ def basic_reflection_request():
         target_name="calculate_total",
         context={
             "file_path": "src/billing/calculator.py",
-            "project_root": "/Users/asifhussain/PROJECTS/CORTEX",
+            "project_root": str(Path(__file__).parent.parent.parent.parent),
             "language": "python",
         },
         timestamp="2026-01-15T10:30:00Z",
