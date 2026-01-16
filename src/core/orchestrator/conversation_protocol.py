@@ -29,6 +29,7 @@ from src.core.orchestrator.terminal_events import (
 from src.core.result import Result, Ok, Err
 from src.core.governance_registry import GovernanceRegistry
 from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+from src.core.intelligence.call_graph import CallGraphBuilder
 
 
 @dataclass
@@ -102,6 +103,9 @@ class ConversationProtocol:
         
         # AC-REM-001-01: Initialize AST Intelligence Engine for comprehension phase
         self.ast_engine = ASTIntelligenceEngine(enable_cache=True)
+        
+        # AC-REM-001-02: Initialize CallGraphBuilder for layer tracing
+        self.call_graph_builder = CallGraphBuilder()
 
     def execute_turn(
         self, user_input: str, previous_context: Dict[str, Any]
@@ -686,6 +690,30 @@ class ConversationProtocol:
                 r.to_dict() for r in parse_results
             ]
             
+            # AC-REM-001-02: Build call graphs for layer tracing
+            call_graphs = []
+            for parse_result in parse_results:
+                try:
+                    call_graph = self.call_graph_builder.build(parse_result)
+                    call_graphs.append(call_graph)
+                except Exception as e:
+                    # Graceful error handling for call graph building
+                    if self._audit_logger:
+                        self._audit_logger.log_operation_complete(
+                            ac_id="AC-REM-001-02",
+                            operation="CALL_GRAPH_BUILD_ERROR",
+                            success=False,
+                            details={"error": str(e)},
+                        )
+            
+            # Store call graphs (serialize to dicts for JSON compatibility)
+            comprehension_data["call_graphs"] = [
+                g.to_dict() for g in call_graphs
+            ]
+            
+            # Count layer transitions across all call graphs
+            total_layer_transitions = sum(g.edge_count for g in call_graphs)
+            
             # Build comprehension summary
             comprehension_data["summary"] = {
                 "files_analyzed": len(target_files),
@@ -697,7 +725,20 @@ class ConversationProtocol:
                 ),
                 "total_classes_found": sum(len(r.classes) for r in parse_results),
                 "total_imports_found": sum(len(r.imports) for r in parse_results),
+                "call_graphs_built": len(call_graphs),
+                "layer_transitions_identified": total_layer_transitions,
             }
+            
+            if self._audit_logger:
+                self._audit_logger.log_operation_complete(
+                    ac_id="AC-REM-001-02",
+                    operation="CALL_GRAPH_BUILDING",
+                    success=True,
+                    details={
+                        "graphs_built": len(call_graphs),
+                        "transitions": total_layer_transitions,
+                    },
+                )
             
             if self._audit_logger:
                 self._audit_logger.log_operation_complete(
