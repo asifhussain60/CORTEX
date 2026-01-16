@@ -618,3 +618,115 @@ html {
     display: none;
   }
 }
+
+/* =========================================================================
+   DO-001-01: CORTEX LOGO COMPONENT STYLES
+   Responsive logo with dark mode, hover effects, and accessibility
+   ========================================================================= */
+
+/* Logo link wrapper */
+.cortex-logo-link {
+  cursor: pointer;
+  text-decoration: none;
+  outline: none;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  transition: all 200ms ease-in-out;
+}
+
+/* Logo image base styles */
+.cortex-logo {
+  display: block;
+  object-fit: contain;
+  transition: transform 200ms ease-in-out, filter 200ms ease-in-out;
+}
+
+/* Responsive sizing - Mobile (320-767px): 96px */
+@media (max-width: 767px) {
+  .cortex-logo {
+    width: 96px !important;
+    height: 96px !important;
+  }
+}
+
+/* Responsive sizing - Tablet (768-1023px): 128px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .cortex-logo {
+    width: 128px !important;
+    height: 128px !important;
+  }
+}
+
+/* Responsive sizing - Desktop (≥1024px): 200px */
+@media (min-width: 1024px) {
+  .cortex-logo {
+    width: 200px !important;
+    height: 200px !important;
+  }
+}
+
+/* Hover effects */
+.cortex-logo-link:hover .cortex-logo {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 12px rgba(14, 165, 233, 0.6));
+}
+
+/* Focus effects for keyboard navigation */
+.cortex-logo-link:focus {
+  outline: 2px solid #0ea5e9; /* Cyan */
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+.cortex-logo-link:focus .cortex-logo {
+  transform: scale(1.05);
+  filter: drop-shadow(0 0 12px rgba(14, 165, 233, 0.6));
+}
+
+/* Active/pressed state */
+.cortex-logo-link:active .cortex-logo {
+  transform: scale(0.98);
+}
+
+/* Touch target enhancement for mobile */
+@media (max-width: 767px) {
+  .cortex-logo-link {
+    min-width: 44px; /* WCAG minimum touch target */
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Dark mode specific adjustments */
+.dark .cortex-logo {
+  filter: brightness(1.1);
+}
+
+.dark .cortex-logo-link:hover .cortex-logo,
+.dark .cortex-logo-link:focus .cortex-logo {
+  filter: brightness(1.2) drop-shadow(0 0 12px rgba(255, 255, 255, 0.4));
+}
+
+/* Prefers reduced motion - disable animations */
+@media (prefers-reduced-motion: reduce) {
+  .cortex-logo,
+  .cortex-logo-link {
+    transition: none;
+  }
+  
+  .cortex-logo-link:hover .cortex-logo,
+  .cortex-logo-link:focus .cortex-logo {
+    transform: none;
+  }
+}
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+  .cortex-logo-link:focus {
+    outline-width: 3px;
+    outline-color: currentColor;
+  }
+}
+
