@@ -47,12 +47,13 @@
     <!-- D3.js for graphs -->
     <script src="https://unpkg.com/d3@7.8.5/dist/d3.min.js" onerror="console.warn('✗ D3.js unavailable - basic visualization')"></script>
     
-    <!-- Custom CSS (DO-001-02: Brand Colors) -->
+    <!-- Custom CSS (DO-001-02: Brand Colors, DO-001-04: Responsive) -->
     <link rel="stylesheet" href="/css/colors.css">
     <link rel="stylesheet" href="/css/tailwind-custom.css">
     <link rel="stylesheet" href="/css/header.css">
     <link rel="stylesheet" href="/css/glassmorphism.css">
     <link rel="stylesheet" href="/css/animations.css">
+    <link rel="stylesheet" href="/css/responsive.css">
     
     <style>
         body {
@@ -88,13 +89,37 @@
                 </div>
             </a>
             
-            <!-- Navigation Links -->
-            <div class="flex items-center gap-4 md:gap-6">
+            <!-- Desktop Navigation Links (DO-001-04) -->
+            <div class="nav-desktop flex items-center gap-4 md:gap-6">
                 <button class="px-3 md:px-4 py-2 text-sm md:text-base rounded-lg hover:bg-slate-700/50 transition">Observatory</button>
                 <button class="px-3 md:px-4 py-2 text-sm md:text-base rounded-lg hover:bg-slate-700/50 transition">Audit</button>
-                <button class="px-3 md:px-4 py-2 text-sm md:text-base rounded-lg hover:bg-slate-700/50 transition hidden md:block">Orchestrators</button>
-                <button class="px-3 md:px-4 py-2 text-sm md:text-base rounded-lg hover:bg-slate-700/50 transition hidden md:block">Plans</button>
+                <button class="px-3 md:px-4 py-2 text-sm md:text-base rounded-lg hover:bg-slate-700/50 transition">Orchestrators</button>
+                <button class="px-3 md:px-4 py-2 text-sm md:text-base rounded-lg hover:bg-slate-700/50 transition">Plans</button>
             </div>
+            
+            <!-- Hamburger Menu (DO-001-04: Mobile/Tablet) -->
+            <button id="hamburger-menu" class="hamburger-menu" aria-label="Toggle navigation menu">
+                <div class="hamburger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </button>
+        </div>
+    </nav>
+    
+    <!-- Mobile Navigation Overlay (DO-001-04) -->
+    <div id="nav-mobile-overlay" class="nav-mobile-overlay"></div>
+    
+    <!-- Mobile Navigation Panel (DO-001-04) -->
+    <nav id="nav-mobile" class="nav-mobile">
+        <div class="flex flex-col gap-4">
+            <button class="px-4 py-3 text-left rounded-lg hover:bg-slate-700/50 transition text-base">Observatory</button>
+            <button class="px-4 py-3 text-left rounded-lg hover:bg-slate-700/50 transition text-base">Audit</button>
+            <button class="px-4 py-3 text-left rounded-lg hover:bg-slate-700/50 transition text-base">Orchestrators</button>
+            <button class="px-4 py-3 text-left rounded-lg hover:bg-slate-700/50 transition text-base">Plans</button>
+            <button class="px-4 py-3 text-left rounded-lg hover:bg-slate-700/50 transition text-base">Governance</button>
+            <button class="px-4 py-3 text-left rounded-lg hover:bg-slate-700/50 transition text-base">Reports</button>
         </div>
     </nav>
 
@@ -169,6 +194,7 @@
 
     <!-- JavaScript -->
     <script src="/js/components/common/header-logo.js"></script>
+    <script src="/js/components/common/hamburger-menu.js"></script>
     <script src="/js/utils/api-client.js"></script>
     <script src="/js/components/brain/brain-map.js"></script>
     <script src="/js/components/neural/neural-pulse.js"></script>
