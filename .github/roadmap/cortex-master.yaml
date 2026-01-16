@@ -1917,8 +1917,8 @@ phase_tracker:
       - FINDING-008: Test naming conventions (CORE-028)
     
     ac_ids: 8
-    completed_ac_ids: 1  # AC-FIX-001-01 COMPLETE ✅
-    status: "IN_PROGRESS"  # 1/8 ACs complete (12.5%)
+    completed_ac_ids: 2  # AC-FIX-001-01 ✅ COMPLETE, AC-FIX-002-01 ✅ COMPLETE
+    status: "IN_PROGRESS"  # 2/8 ACs complete (25%)
     locked: false
     requires: "PHASE-REMEDIATION-02"
     estimated_hours: 14.25
@@ -1929,7 +1929,7 @@ phase_tracker:
     phase_yaml: ".github/roadmap/phases/phase-remediation-03.yaml"
     
     ac_breakdown:
-      critical_blockers: 2  # AC-FIX-001-01 ✅ COMPLETE, AC-FIX-002-01 (pending)
+      critical_blockers: 2  # AC-FIX-001-01 ✅ COMPLETE, AC-FIX-002-01 ✅ COMPLETE
       high_priority: 4      # AC-FIX-003-01 through AC-FIX-006-01 (pending)
       medium_priority: 2    # AC-DOC-007-01, AC-MINOR-008-01 (pending)
     
@@ -1954,6 +1954,31 @@ phase_tracker:
       audit_entries_created: "AC_START/AC_EXECUTE/AC_COMPLETE per turn"
       finding_addressed: "FINDING-001 (CRITICAL)"
       completion_report: "AC-FIX-001-01-COMPLETION-REPORT.md"
+    
+    # AC-FIX-002-01: Governance Pre-Execution Gates ✅ COMPLETE
+    ac_fix_002_01:
+      status: "COMPLETED"
+      timestamp: "2026-01-17T02:15:00Z"
+      git_checkpoint: "f214482ee"
+      tests_passing: 25
+      tests_target: 20
+      code_coverage: ">90%"
+      components_created:
+        - "GovernancePregate abstract interface (~380 lines) - Pre-gate validation"
+        - "DefaultGovernancePregate implementation - Resource quota, authorization, tier access"
+        - "PreGateDecision dataclass - Gate decision structure"
+      integration_points:
+        - "ConversationProtocol._check_pre_execution_gates()"
+        - "Executed BEFORE orchestrator.execute_turn()"
+      audit_entries_created: "PREGATE_CHECK per turn (ALLOWED/BLOCKED)"
+      finding_addressed: "FINDING-002 (CRITICAL)"
+      key_features:
+        - "Prevents unauthorized operations BEFORE execution (not after)"
+        - "Resource quota validation (token budget enforcement)"
+        - "Authorization validation (actor permission checks)"
+        - "Tier access validation (TIER-0 immutability enforcement)"
+        - "Thread-safe concurrent operation handling"
+        - "Performance optimized (<50ms for all gates)"
 
   PHASE-17-DOMAIN-BRAIN:
     title: "Domain Brain: Strategic Knowledge Centralization with Edge Case Remediation"
