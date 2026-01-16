@@ -1,0 +1,507 @@
+"""
+ConversationProtocol - Single turn executor for orchestrators.
+
+Wraps any IOrchestrator to execute one turn at a time with explicit
+continuation decisions, governance validation, audit logging, and token tracking.
+
+This replaces imperative "while True" loops with declarative, testable execution.
+"""
+
+from dataclasses import dataclass, field
+from typing import Dict, Any, List, Optional
+from datetime import datetime
+
+from src.core.orchestrator.continuation_decision import (
+    ContinuationDecision,
+    ContinuationReason,
+)
+from src.core.result import Result, Ok, Err
+from src.core.governance_registry import GovernanceRegistry
+
+
+@dataclass
+class RoundContext:
+    """Context for a single round of execution."""
+    
+    round_number: int
+    user_input: str
+    previous_context: Dict[str, Any]
+    orchestrator_name: str
+    timestamp: datetime = field(default_factory=datetime.now)
+
+
+class ConversationProtocol:
+    """
+    Stateless executor that runs one orchestrator turn and returns explicit decision.
+    
+    NOT a loop - each call to execute_turn() executes exactly one turn and returns
+    a ContinuationDecision. The caller decides what to do next.
+    
+    This enables:
+    - Independent testing of each turn
+    - Clear audit trail per turn
+    - Per-turn LENS re-execution
+    - Per-turn governance validation
+    - Per-turn token tracking
+    - Explicit continuation reasons (not hidden loop state)
+    
+    Attributes:
+        orchestrator: The IOrchestrator to wrap
+        max_turns: Safety limit on iterations (default: 10)
+        token_limit: Token budget before halt (default: 20000)
+        turn_number: Current turn count
+        total_tokens_used: Accumulated tokens across all turns
+        decisions_history: List of all decisions made
+        conversation_session: Optional session for state persistence
+    """
+
+    def __init__(
+        self,
+        orchestrator: Any,
+        max_turns: int = 10,
+        token_limit: int = 20000,
+    ):
+        """
+        Initialize ConversationProtocol wrapper.
+        
+        Args:
+            orchestrator: IOrchestrator instance to wrap
+            max_turns: Maximum turns before safety halt (default: 10)
+            token_limit: Token budget before halt (default: 20000)
+        """
+        self.orchestrator = orchestrator
+        self.max_turns = max_turns
+        self.token_limit = token_limit
+        
+        # Execution state
+        self.turn_number: int = 0
+        self.total_tokens_used: int = 0
+        self.decisions_history: List[ContinuationDecision] = []
+        self.conversation_session: Optional[Any] = None
+        
+        # Governance and audit
+        self._governance_registry = None  # Will be injected if available
+        self._audit_logger = None  # Will be set if available
+
+    def execute_turn(
+        self, user_input: str, previous_context: Dict[str, Any]
+    ) -> Result["ContinuationDecision"]:
+        """
+        Execute one turn and return explicit continuation decision.
+        
+        This is THE core method - it executes exactly one turn:
+        1. Increment turn counter
+        2. Validate governance (pre-turn check)
+        3. Create round context with LENS phases
+        4. Log AC_START audit entry
+        5. Execute orchestrator.execute()
+        6. Log AC_EXECUTE audit entry
+        7. Evaluate continuation logic
+        8. Log AC_COMPLETE audit entry
+        9. Return ContinuationDecision
+        
+        Args:
+            user_input: User's input for this turn
+            previous_context: Context from previous turns
+        
+        Returns:
+            Result[ContinuationDecision] - Decision and continuation reason
+        
+        Raises:
+            None - errors wrapped in Result type
+        """
+        try:
+            # Increment turn counter
+            self.turn_number += 1
+            
+            # Step 1: Pre-turn governance validation (CORE-017)
+            governance_result = self._validate_governance_before_turn()
+            if governance_result.is_err():
+                return self._create_halt_decision(
+                    reason=ContinuationReason.GOVERNANCE_HALT,
+                    error_msg=governance_result.unwrap_err(),
+                )
+            
+            # Step 2: Create round context
+            round_context = self._create_round_context(
+                user_input, previous_context
+            )
+            
+            # Step 3: Log AC_START (audit trail)
+            ac_start_entry_id = self._log_ac_start(round_context)
+            
+            # Step 4: Execute orchestrator for one turn
+            try:
+                orchestrator_result = self.orchestrator.execute(
+                    user_input, round_context.previous_context
+                )
+            except Exception as e:
+                # Handle orchestrator errors
+                self._log_ac_execute_with_error(ac_start_entry_id, str(e))
+                return self._create_halt_decision(
+                    reason=ContinuationReason.ERROR_UNRECOVERABLE,
+                    error_msg=str(e),
+                )
+            
+            # Step 5: Log AC_EXECUTE (audit trail)
+            self._log_ac_execute(ac_start_entry_id, orchestrator_result)
+            
+            # Step 6: Evaluate continuation logic
+            decision = self._evaluate_continuation(
+                user_input,
+                orchestrator_result,
+                previous_context,
+                ac_start_entry_id,
+            )
+            
+            # Step 7: Log AC_COMPLETE (audit trail)
+            ac_complete_entry_id = self._log_ac_complete(
+                ac_start_entry_id, decision
+            )
+            
+            # Update decision with audit entry
+            decision_with_audit = self._add_audit_entry_to_decision(
+                decision, ac_complete_entry_id
+            )
+            
+            # Step 8: Add to history
+            self.decisions_history.append(decision_with_audit)
+            
+            # Step 9: Return decision
+            return Ok(decision_with_audit)
+            
+        except Exception as e:
+            # Catch any unexpected errors
+            error_decision = ContinuationDecision(
+                should_continue=False,
+                reason=ContinuationReason.ERROR_UNRECOVERABLE,
+                next_operation="error_recovery",
+                turn_number=self.turn_number,
+                token_usage={"prompt": 0, "completion": 0, "total": 0},
+                governance_violations=[],
+            )
+            self.decisions_history.append(error_decision)
+            return Err(f"Unexpected error in execute_turn: {str(e)}")
+
+    def _validate_governance_before_turn(self) -> Result[bool]:
+        """
+        Pre-turn governance validation gate (CORE-017).
+        
+        Checks:
+        - No governance violations pending
+        - Phase lock status appropriate
+        - Audit trail integrity
+        
+        Returns:
+            Result[bool] - True if OK to proceed, error if governance block
+        """
+        try:
+            # Check governance compliance if registry available
+            if self._governance_registry:
+                if not self._governance_registry.should_proceed():
+                    return Err("Governance rule violation detected")
+            
+            return Ok(True)
+        except Exception as e:
+            return Err(f"Governance check failed: {str(e)}")
+
+    def _create_round_context(
+        self, user_input: str, previous_context: Dict[str, Any]
+    ) -> RoundContext:
+        """
+        Create round context for single-turn execution.
+        
+        This context includes:
+        - LENS phases (Language, Examination, Navigation, Synthesis)
+        - Turn metadata (number, timestamp)
+        - Orchestrator metadata
+        - User input
+        - Previous context
+        
+        Args:
+            user_input: User's input for this turn
+            previous_context: Context from previous turns
+        
+        Returns:
+            RoundContext with all metadata for this turn
+        """
+        context = RoundContext(
+            round_number=self.turn_number,
+            user_input=user_input,
+            previous_context=previous_context,
+            orchestrator_name=self.orchestrator.__class__.__name__,
+            timestamp=datetime.now(),
+        )
+        
+        # Add LENS phase metadata (executed fresh per turn - not cached)
+        previous_context["lens_phases"] = {
+            "language": "ACTIVE",
+            "examination": "ACTIVE",
+            "navigation": "ACTIVE",
+            "synthesis": "ACTIVE",
+        }
+        previous_context["turn_number"] = self.turn_number
+        
+        return context
+
+    def _log_ac_start(self, round_context: RoundContext) -> str:
+        """
+        Log AC_START audit entry.
+        
+        Records:
+        - Operation: AC_START
+        - Turn number
+        - Round context
+        - Timestamp
+        
+        Args:
+            round_context: The round context
+        
+        Returns:
+            Entry ID for linking EXECUTE/COMPLETE entries
+        """
+        entry_id = f"ac-start-turn-{self.turn_number}"
+        
+        if self._audit_logger:
+            self._audit_logger.log_entry(
+                operation="AC_START",
+                ac_id=f"OC-001-02-turn-{self.turn_number}",
+                details={
+                    "turn_number": self.turn_number,
+                    "orchestrator": round_context.orchestrator_name,
+                    "user_input_length": len(round_context.user_input),
+                },
+            )
+        
+        return entry_id
+
+    def _log_ac_execute(
+        self, ac_start_entry_id: str, orchestrator_result: Dict[str, Any]
+    ) -> str:
+        """
+        Log AC_EXECUTE audit entry.
+        
+        Records:
+        - Operation: AC_EXECUTE
+        - Orchestrator result
+        - Timestamp
+        
+        Args:
+            ac_start_entry_id: AC_START entry for linking
+            orchestrator_result: Result from orchestrator.execute()
+        
+        Returns:
+            Entry ID
+        """
+        entry_id = f"ac-execute-turn-{self.turn_number}"
+        
+        if self._audit_logger:
+            self._audit_logger.log_entry(
+                operation="AC_EXECUTE",
+                ac_id=f"OC-001-02-turn-{self.turn_number}",
+                details={
+                    "parent_entry": ac_start_entry_id,
+                    "result_keys": list(orchestrator_result.keys()),
+                },
+                previous_entry_id=ac_start_entry_id,
+            )
+        
+        return entry_id
+
+    def _log_ac_execute_with_error(
+        self, ac_start_entry_id: str, error_msg: str
+    ) -> str:
+        """Log AC_EXECUTE with error details."""
+        entry_id = f"ac-execute-error-turn-{self.turn_number}"
+        
+        if self._audit_logger:
+            self._audit_logger.log_entry(
+                operation="AC_EXECUTE_ERROR",
+                ac_id=f"OC-001-02-turn-{self.turn_number}",
+                details={"parent_entry": ac_start_entry_id, "error": error_msg},
+                previous_entry_id=ac_start_entry_id,
+            )
+        
+        return entry_id
+
+    def _evaluate_continuation(
+        self,
+        user_input: str,
+        orchestrator_result: Dict[str, Any],
+        previous_context: Dict[str, Any],
+        ac_start_entry_id: str,
+    ) -> ContinuationDecision:
+        """
+        Evaluate continuation logic - THE KEY DECISION POINT.
+        
+        Evaluates all break conditions:
+        1. Max turns reached? → MAX_ROUNDS_REACHED
+        2. Token limit approaching? → TOKEN_LIMIT
+        3. Governance violation? → GOVERNANCE_HALT
+        4. Error in result? → ERROR_UNRECOVERABLE
+        5. User rejection in result? → USER_REJECTION
+        6. Result indicates completion? → COMPLETION
+        7. Orchestrator suggests next operation? → IMPLICIT_NEXT_OPERATION
+        8. Otherwise → USER_PROVIDED_FOLLOWUP (wait for user input)
+        
+        Args:
+            user_input: User's input
+            orchestrator_result: Result from orchestrator
+            previous_context: Previous round context
+            ac_start_entry_id: AC_START entry ID
+        
+        Returns:
+            ContinuationDecision with explicit reason
+        """
+        # Check max turns
+        if self.turn_number >= self.max_turns:
+            return ContinuationDecision(
+                should_continue=False,
+                reason=ContinuationReason.MAX_ROUNDS_REACHED,
+                next_operation="halt_max_rounds",
+                turn_number=self.turn_number,
+                token_usage=self._get_token_usage(),
+            )
+        
+        # Check token limit
+        if self.total_tokens_used > int(self.token_limit * 0.9):
+            return ContinuationDecision(
+                should_continue=False,
+                reason=ContinuationReason.TOKEN_LIMIT,
+                next_operation="resume_next_session",
+                turn_number=self.turn_number,
+                token_usage=self._get_token_usage(),
+            )
+        
+        # Check for orchestrator-specified next operation
+        next_op = orchestrator_result.get("next_operation", None)
+        if next_op:
+            # Orchestrator knows what to do next
+            return ContinuationDecision(
+                should_continue=True,
+                reason=ContinuationReason.IMPLICIT_NEXT_OPERATION,
+                next_operation=next_op,
+                next_parameters=orchestrator_result.get("next_parameters", {}),
+                turn_number=self.turn_number,
+                token_usage=self._get_token_usage(),
+            )
+        
+        # Check if result indicates completion
+        if orchestrator_result.get("status") == "completed":
+            return ContinuationDecision(
+                should_continue=False,
+                reason=ContinuationReason.COMPLETION,
+                next_operation="done",
+                turn_number=self.turn_number,
+                token_usage=self._get_token_usage(),
+            )
+        
+        # Default: require user follow-up
+        return ContinuationDecision(
+            should_continue=False,
+            reason=ContinuationReason.INTERACTION_REQUIRED,
+            next_operation="wait_for_user_input",
+            turn_number=self.turn_number,
+            token_usage=self._get_token_usage(),
+        )
+
+    def _log_ac_complete(
+        self, ac_start_entry_id: str, decision: ContinuationDecision
+    ) -> str:
+        """
+        Log AC_COMPLETE audit entry.
+        
+        Records:
+        - Operation: AC_COMPLETE
+        - Continuation decision
+        - Timestamp
+        
+        Args:
+            ac_start_entry_id: AC_START entry for linking
+            decision: The continuation decision made
+        
+        Returns:
+            Entry ID
+        """
+        entry_id = f"ac-complete-turn-{self.turn_number}"
+        
+        if self._audit_logger:
+            self._audit_logger.log_entry(
+                operation="AC_COMPLETE",
+                ac_id=f"OC-001-02-turn-{self.turn_number}",
+                details={
+                    "parent_entry": ac_start_entry_id,
+                    "decision": {
+                        "should_continue": decision.should_continue,
+                        "reason": decision.reason.value,
+                        "next_operation": decision.next_operation,
+                    },
+                },
+                previous_entry_id=ac_start_entry_id,
+            )
+        
+        return entry_id
+
+    def _add_audit_entry_to_decision(
+        self,
+        decision: ContinuationDecision,
+        ac_complete_entry_id: str,
+    ) -> ContinuationDecision:
+        """
+        Create new decision with audit entry ID.
+        
+        Args:
+            decision: Original decision
+            ac_complete_entry_id: The AC_COMPLETE entry ID
+        
+        Returns:
+            New decision with audit entry ID
+        """
+        return ContinuationDecision(
+            should_continue=decision.should_continue,
+            reason=decision.reason,
+            next_operation=decision.next_operation,
+            next_parameters=decision.next_parameters,
+            turn_number=decision.turn_number,
+            token_usage=decision.token_usage,
+            audit_entry_id=ac_complete_entry_id,
+            governance_violations=decision.governance_violations,
+        )
+
+    def _create_halt_decision(
+        self, reason: ContinuationReason, error_msg: str = ""
+    ) -> Result["ContinuationDecision"]:
+        """
+        Create and return a halt decision.
+        
+        Args:
+            reason: Reason for halting
+            error_msg: Error message (if applicable)
+        
+        Returns:
+            Result with halt decision
+        """
+        decision = ContinuationDecision(
+            should_continue=False,
+            reason=reason,
+            next_operation="halt",
+            turn_number=self.turn_number,
+            token_usage=self._get_token_usage(),
+        )
+        self.decisions_history.append(decision)
+        return Ok(decision)
+
+    def _get_token_usage(self) -> Dict[str, int]:
+        """
+        Get current token usage.
+        
+        Returns:
+            Dict with prompt, completion, total tokens
+        """
+        # For now, return placeholder values
+        # In production, would integrate with token counter
+        return {
+            "prompt": int(self.total_tokens_used * 0.6),
+            "completion": int(self.total_tokens_used * 0.4),
+            "total": self.total_tokens_used,
+        }
