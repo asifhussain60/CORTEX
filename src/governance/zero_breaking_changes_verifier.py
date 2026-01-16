@@ -340,7 +340,11 @@ except ImportError:
 
 def main():
     """Run zero breaking changes verification."""
-    project_root = os.getenv("PROJECT_ROOT", "/Users/asifhussain/PROJECTS/CORTEX")
+    # Use PROJECT_ROOT env var, or detect from script location
+    project_root = os.getenv("PROJECT_ROOT")
+    if not project_root:
+        from src.core.path_resolver import get_project_root
+        project_root = str(get_project_root())
     
     verifier = ZeroBreakingChangesVerifier(project_root)
     all_passed, summary = verifier.run_all_verifications()
