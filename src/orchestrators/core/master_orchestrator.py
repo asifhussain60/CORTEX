@@ -17,6 +17,7 @@ from src.core.interfaces import IOrchestrator, OperationMode
 from src.core.result import Result, Ok, Err
 from src.core.response_header_injector import ResponseHeaderInjector
 from src.core.response_header_config import HeaderConfigurationManager
+from src.core.governance_registry import GovernanceRegistry, GovernanceViolationError
 from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from src.infrastructure.database import DatabaseManager
 from src.mcp.decorator import mcp_tool
@@ -53,6 +54,10 @@ class MasterOrchestrator(IOrchestrator):
         self.db = DatabaseManager()
         self.domain_orchestrators: Dict[str, OrchestratorMetadata] = {}
         self.operation_history: List[Dict[str, Any]] = []
+        
+        # AC-REM-002-04: Initialize GovernanceRegistry for per-turn validation
+        self._governance_registry: Optional[GovernanceRegistry] = None
+        self._turn_number: int = 0  # Track turn count for governance validation
         
         # Track current operation context for header variables
         self.current_operation: Optional[str] = None
@@ -393,6 +398,7 @@ class MasterOrchestrator(IOrchestrator):
         Coordinate operation across domain orchestrators.
         
         AC-AR-006-01: Coordinate operations across domain orchestrators
+        AC-REM-002-04: Add governance validation before delegation
         
         Args:
             operation: Operation name (e.g., "validate", "enforce")
@@ -401,16 +407,55 @@ class MasterOrchestrator(IOrchestrator):
         
         Returns:
             Result with aggregated results from orchestrators
+        
+        Governance Enforcement:
+        - CORE-017: Strict Governance Enforcement
+        - CORE-019: TDD-Master Routing (per-turn validation)
+        - CORE-027: Audit Trail Per Turn
         """
         try:
-            # Log coordination start
+            # AC-REM-002-04: Pre-coordination governance validation
+            # Increment turn counter
+            self._turn_number += 1
+            
+            # Initialize governance registry if needed
+            if not self._governance_registry:
+                self._governance_registry = GovernanceRegistry.instance()
+                init_result = self._governance_registry.initialize()
+                if init_result.is_err():
+                    return Err(f"Failed to initialize governance registry: {init_result.error}")
+            
+            # Validate governance before delegation (CORE-019 per-turn validation)
+            governance_result = self._governance_registry.should_proceed(
+                turn_number=self._turn_number,
+                orchestrator_id="master-orchestrator"
+            )
+            
+            if governance_result.is_err():
+                # Governance violation detected
+                violation_msg = governance_result.error
+                self.logger.log_operation_complete(
+                    ac_id="AC-REM-002-04",
+                    operation="GOVERNANCE_VIOLATION",
+                    success=False,
+                    details={
+                        "turn_number": self._turn_number,
+                        "violation": violation_msg,
+                        "requested_operation": operation
+                    }
+                )
+                raise GovernanceViolationError(violation_msg)
+            
+            # Governance validation passed - proceed with coordination
             self.logger.log_operation_start(
                 ac_id="AC-AR-006-01",
                 operation="COORDINATION",
                 details={
                     "operation": operation,
                     "target_domains": target_domains,
-                    "total_orchestrators": len(self.domain_orchestrators)
+                    "total_orchestrators": len(self.domain_orchestrators),
+                    "turn_number": self._turn_number,
+                    "governance_validated": True
                 }
             )
             
@@ -448,6 +493,7 @@ class MasterOrchestrator(IOrchestrator):
             aggregated = {
                 "operation": operation,
                 "timestamp": datetime.now().isoformat(),
+                "turn_number": self._turn_number,
                 "orchestrators_involved": len(domains_to_use),
                 "results": results,
                 "errors": errors if errors else None
@@ -464,18 +510,24 @@ class MasterOrchestrator(IOrchestrator):
                 details={
                     "orchestrators_involved": len(domains_to_use),
                     "successful": len(results),
-                    "failed": len(errors)
+                    "failed": len(errors),
+                    "turn_number": self._turn_number,
+                    "governance_enforced": True
                 }
             )
             
             return Ok(aggregated)
             
+        except GovernanceViolationError as e:
+            # Re-raise governance violations
+            raise e
+        
         except Exception as e:
             self.logger.log_operation_complete(
                 ac_id="AC-AR-006-01",
                 operation="COORDINATION",
                 success=False,
-                details={"error": str(e)}
+                details={"error": str(e), "turn_number": self._turn_number}
             )
             return Err(f"Coordination failed: {str(e)}")
     
