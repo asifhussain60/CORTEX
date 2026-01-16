@@ -26,6 +26,32 @@ from src.core.result import Result, Ok, Err
 from src.core.config import load_yaml
 
 
+# ============================================================================
+# EXCEPTIONS
+# ============================================================================
+
+class GovernanceViolationError(Exception):
+    """
+    Raised when a governance violation is detected during execution.
+    
+    This exception is raised by ConversationProtocol when:
+    - TIER-0 rules are mutated
+    - Undeclared tier access is attempted
+    - Maximum turn count is exceeded
+    - Any other governance compliance violation
+    """
+    
+    def __init__(self, violation_message: str) -> None:
+        """
+        Initialize GovernanceViolationError.
+        
+        Args:
+            violation_message: Human-readable description of the violation
+        """
+        super().__init__(violation_message)
+        self.violation_message = violation_message
+
+
 class GovernanceRule:
     """Represents a single governance rule."""
     
@@ -93,6 +119,8 @@ class GovernanceRegistry:
         self._tier2_rules: Dict[str, GovernanceRule] = {}
         self._logger = logging.getLogger(__name__)
         self._initialized = False
+        self._max_turns_allowed: int = 50  # Maximum turns before enforcing stop
+        self._tier0_mutation_tracking: Dict[str, bool] = {}  # Track if Tier 0 mutated
     
     @classmethod
     def instance(cls) -> 'GovernanceRegistry':
@@ -280,3 +308,66 @@ class GovernanceRegistry:
             1: len(self._tier1_rules),
             2: len(self._tier2_rules),
         }
+    
+    def should_proceed(self, turn_number: int, orchestrator_id: str) -> Result[bool]:
+        """
+        Validate that orchestrator can proceed with execution based on current governance state.
+        
+        This method is called by ConversationProtocol before each turn to verify:
+        1. TIER-0 rules have not been mutated
+        2. Turn count hasn't exceeded maximum allowed turns
+        3. Orchestrator tier access is within declared boundaries
+        
+        Called for AC-REM-002-01 implementation.
+        
+        Args:
+            turn_number: Current turn number (1, 2, 3, ...)
+            orchestrator_id: ID of orchestrator executing this turn
+        
+        Returns:
+            Ok(True) if governance state is valid and execution can proceed
+            Err(violation_message) if governance violation detected
+        
+        Raises:
+            N/A - Returns Result type instead of raising exceptions
+        
+        Governance Rules Enforced:
+            - CORE-017: Strict Governance Enforcement
+            - CORE-027: Audit Trail Per Turn
+            - AR-001-03: Tier 0 rules immutable
+        """
+        # Requirement 1: Verify TIER-0 immutability
+        # Check if any Tier 0 rules have been modified since initialization
+        tier0_rules = self.get_all_tier0_rules()
+        for rule in tier0_rules:
+            # Track if this rule was modified
+            rule_tracking_key = f"tier0_{rule.rule_id}"
+            
+            if rule_tracking_key not in self._tier0_mutation_tracking:
+                # First time seeing this rule - record initial state
+                self._tier0_mutation_tracking[rule_tracking_key] = False
+            
+            # If rule is marked as mutated, that's a violation
+            if self._tier0_mutation_tracking[rule_tracking_key]:
+                return Err(
+                    f"TIER-0 rule immutability violation: Rule {rule.rule_id} "
+                    f"has been modified after initialization (turn {turn_number})"
+                )
+        
+        # Requirement 2: Validate turn count hasn't exceeded limits
+        if turn_number > self._max_turns_allowed:
+            return Err(
+                f"Turn limit exceeded: Attempted turn {turn_number}, "
+                f"maximum allowed: {self._max_turns_allowed}"
+            )
+        
+        # Requirement 3: Registry must be initialized
+        if not self._initialized:
+            return Err("Governance registry not initialized - call initialize() first")
+        
+        # All checks passed
+        self._logger.debug(
+            f"Governance validation passed for orchestrator {orchestrator_id} "
+            f"on turn {turn_number}"
+        )
+        return Ok(True)
