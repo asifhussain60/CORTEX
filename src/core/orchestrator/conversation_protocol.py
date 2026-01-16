@@ -10,6 +10,7 @@ This replaces imperative "while True" loops with declarative, testable execution
 from dataclasses import dataclass, field
 from typing import Dict, Any, List, Optional
 from datetime import datetime
+from pathlib import Path
 
 from src.core.orchestrator.continuation_decision import (
     ContinuationDecision,
@@ -27,6 +28,7 @@ from src.core.orchestrator.terminal_events import (
 )
 from src.core.result import Result, Ok, Err
 from src.core.governance_registry import GovernanceRegistry
+from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
 
 
 @dataclass
@@ -97,6 +99,9 @@ class ConversationProtocol:
         # Governance and audit
         self._governance_registry = None  # Will be injected if available
         self._audit_logger = None  # Will be set if available
+        
+        # AC-REM-001-01: Initialize AST Intelligence Engine for comprehension phase
+        self.ast_engine = ASTIntelligenceEngine(enable_cache=True)
 
     def execute_turn(
         self, user_input: str, previous_context: Dict[str, Any]
@@ -144,6 +149,20 @@ class ConversationProtocol:
             
             # Step 3: Log AC_START (audit trail)
             ac_start_entry_id = self._log_ac_start(round_context)
+            
+            # Step 3b: Run LENS comprehension phase (AC-REM-001-01)
+            # Execute AST scanning on identified target files
+            comprehension_result = self._run_comprehension_phase(
+                user_input, round_context
+            )
+            if comprehension_result.is_err():
+                # Log comprehension error but continue (graceful degradation)
+                pass
+            
+            # Add comprehension results to context for orchestrator
+            round_context.previous_context["comprehension_result"] = (
+                comprehension_result.unwrap() if comprehension_result.is_ok() else {}
+            )
             
             # Step 4: Execute orchestrator for one turn
             try:
@@ -581,3 +600,128 @@ class ConversationProtocol:
             "completion": int(self.total_tokens_used * 0.4),
             "total": self.total_tokens_used,
         }
+
+    def _run_comprehension_phase(
+        self, user_input: str, round_context: "RoundContext"
+    ) -> Result[Dict[str, Any]]:
+        """
+        AC-REM-001-01: Execute LENS comprehension phase with AST scanning.
+        
+        This phase:
+        1. Identifies target files from user input context
+        2. Uses ASTIntelligenceEngine to parse each target file
+        3. Collects parse results for downstream phases
+        4. Stores comprehension results in context
+        
+        This runs on EVERY turn (per AC-REM-001-06 requirement).
+        
+        Args:
+            user_input: User's input for this turn
+            round_context: Round context with previous context
+        
+        Returns:
+            Result[Dict] with comprehension results:
+            - target_files: List of analyzed files
+            - parse_results: List of ParseResult objects
+            - summary: High-level comprehension summary
+        """
+        try:
+            comprehension_data: Dict[str, Any] = {
+                "target_files": [],
+                "parse_results": [],
+                "summary": {},
+                "turn_number": round_context.round_number,
+            }
+            
+            # Try to extract target files from previous context or current round
+            target_files: List[Path] = []
+            
+            # Check if orchestrator result from previous turn contains target files
+            prev_result = round_context.previous_context.get(
+                "last_orchestrator_result", {}
+            )
+            if isinstance(prev_result, dict):
+                prev_targets = prev_result.get("target_files", [])
+                if isinstance(prev_targets, list):
+                    for t in prev_targets:
+                        if isinstance(t, (str, Path)):
+                            target_files.append(Path(t))
+            
+            # If no explicit targets, try to identify files from project context
+            if not target_files:
+                # Fallback: Look for common source directories
+                project_root = Path.cwd()
+                for source_dir in ["src", "cortex-brain", "tests"]:
+                    potential_dir = project_root / source_dir
+                    if potential_dir.exists() and potential_dir.is_dir():
+                        # For now, limit to first few Python files to avoid overhead
+                        py_files = list(potential_dir.glob("**/*.py"))[:5]
+                        target_files.extend(py_files)
+                        if len(target_files) >= 5:
+                            break
+            
+            # AC-REM-001-01: Parse each target file with ASTIntelligenceEngine
+            parse_results = []
+            for target_file in target_files:
+                try:
+                    parse_result = self.ast_engine.parse_file(target_file)
+                    parse_results.append(parse_result)
+                    
+                    comprehension_data["target_files"].append(str(target_file))
+                except Exception as e:
+                    # Graceful error handling per AC-REM-001-01
+                    if self._audit_logger:
+                        self._audit_logger.log_operation_complete(
+                            ac_id="AC-REM-001-01",
+                            operation="AST_SCANNING_ERROR",
+                            success=False,
+                            details={
+                                "file": str(target_file),
+                                "error": str(e),
+                            },
+                        )
+            
+            # Store parse results (serialize to dicts for JSON compatibility)
+            comprehension_data["parse_results"] = [
+                r.to_dict() for r in parse_results
+            ]
+            
+            # Build comprehension summary
+            comprehension_data["summary"] = {
+                "files_analyzed": len(target_files),
+                "files_parsed_successfully": sum(
+                    1 for r in parse_results if r.success
+                ),
+                "total_functions_found": sum(
+                    len(r.functions) for r in parse_results
+                ),
+                "total_classes_found": sum(len(r.classes) for r in parse_results),
+                "total_imports_found": sum(len(r.imports) for r in parse_results),
+            }
+            
+            if self._audit_logger:
+                self._audit_logger.log_operation_complete(
+                    ac_id="AC-REM-001-01",
+                    operation="COMPREHENSION_PHASE",
+                    success=True,
+                    details=comprehension_data["summary"],
+                )
+            
+            return Ok(comprehension_data)
+            
+        except Exception as e:
+            # Graceful error handling - comprehension errors don't block execution
+            if self._audit_logger:
+                self._audit_logger.log_operation_complete(
+                    ac_id="AC-REM-001-01",
+                    operation="COMPREHENSION_PHASE",
+                    success=False,
+                    details={"error": str(e)},
+                )
+            
+            # Return empty comprehension data to allow execution to continue
+            return Ok({
+                "target_files": [],
+                "parse_results": [],
+                "summary": {"error": str(e)},
+            })
