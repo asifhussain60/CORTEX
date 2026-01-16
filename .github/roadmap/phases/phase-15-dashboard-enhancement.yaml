@@ -102,7 +102,6 @@ phase:
     - "PHASE-11-HALLUCINATION-PREVENTION"
     - "PHASE-12-KNOWLEDGE-ECOSYSTEM"
     - "PHASE-13-OBSERVABILITY-MATURITY"
-    - "PHASE-14-PRODUCTION-MIGRATION"
   
   # MULTI-MACHINE SUPPORT
   multi_machine:
@@ -247,7 +246,7 @@ branding:
       tooltips: "Dark background with shadow"
     
     screenshots_and_demos:
-      resolution: "1920x1080 (full HD)"
+c      resolution: "1920x1080 (full HD)"
       format: "PNG for web, PDF for docs"
       branding: "CORTEX watermark in bottom-right corner"
 
