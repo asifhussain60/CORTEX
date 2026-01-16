@@ -117,11 +117,11 @@ metadata:
       3. Update cortex-builder.md with pre-implementation checklist
     
     completion_criteria:
-      - ALL phases 1-13 have complete audit trails OR are marked remediation_required: false
-      - EVERY AC-ID has 3+ lifecycle entries (AC_START, AC_EXECUTE, AC_COMPLETE minimum)
+      - "ALL phases 1-13 have complete audit trails OR are marked remediation_required: false"
+      - "EVERY AC-ID has 3+ lifecycle entries (AC_START, AC_EXECUTE, AC_COMPLETE minimum)"
       - Hash chain integrity verified and unbroken
       - Integration test: test_audit_trail_integrity.py passes 100%
-      - All phases updated: locked: true (or locked: false with explicit remediation_required: false reason)
+      - "All phases updated: locked: true (or locked: false with explicit remediation_required: false reason)"
       - cortex-builder.md reflects new audit-first enforcement pattern
     
     estimated_hours: 40

@@ -53,9 +53,9 @@ acceptance_criteria:
     description: "Integrate OpenTelemetry for distributed tracing and metrics"
     status: "COMPLETED"
     acceptance_tests:
-      - "Traces exported to backend" ✓
-      - "Spans created for key operations" ✓
-      - "Context propagation working" ✓
+      - "Traces exported to backend ✓"
+      - "Spans created for key operations ✓"
+      - "Context propagation working ✓"
     git_checkpoint: "09ee4a418"
     tests_passing: 21
     
@@ -64,21 +64,11 @@ acceptance_criteria:
     description: "Dashboard visualizing CORTEX runtime metrics"
     status: "COMPLETED"
     acceptance_tests:
-      - "Dashboard displays key metrics" ✓
-      - "Real-time updates working" ✓
-      - "Historical data queryable" ✓
+      - "Dashboard displays key metrics ✓"
+      - "Real-time updates working ✓"
+      - "Historical data queryable ✓"
     git_checkpoint: "f3ab51d33"
     tests_passing: 19
-    
-  - ac_id: "OB-001-02"
-    title: "Metrics Dashboard"
-    description: "Dashboard visualizing CORTEX runtime metrics"
-    status: "NOT_STARTED"
-    acceptance_tests:
-      - "Dashboard displays key metrics"
-      - "Real-time updates working"
-      - "Historical data queryable"
-    git_checkpoint: "OB-001-02-dashboard"
     
   - ac_id: "OB-002-01"
     title: "Alerting & Health Monitoring"
@@ -127,13 +117,13 @@ acceptance_criteria:
     status: "COMPLETED"
     estimated_hours: 0.5
     acceptance_tests:
-      - "Domain registry file exists at cortex-brain/tier3/domain-registry.yaml" ✓
-      - "File contains metadata with version, tier, purpose" ✓
-      - "Tier designation is '3' (knowledge/reference)" ✓
-      - "cortex_domains section lists all 16 CORTEX domains" ✓
-      - "business_domains_ready section present and extensible" ✓
-      - "Integration endpoint documented" ✓
-      - "YAML validates against schema" ✓
+      - "Domain registry file exists at cortex-brain/tier3/domain-registry.yaml ✓"
+      - "File contains metadata with version, tier, purpose ✓"
+      - "Tier designation is '3' (knowledge/reference) ✓"
+      - "cortex_domains section lists all 16 CORTEX domains ✓"
+      - "business_domains_ready section present and extensible ✓"
+      - "Integration endpoint documented ✓"
+      - "YAML validates against schema ✓"
     git_checkpoint: "894f55b40"
     tests_passing: 9
     
@@ -146,12 +136,12 @@ acceptance_criteria:
     status: "COMPLETED"
     estimated_hours: 0.5
     acceptance_tests:
-      - "All 16 CORTEX domains documented with descriptions" ✓
-      - "Business domain schema provided for company configuration" ✓
-      - "Integration examples show how to add FINANCIAL, HEALTHCARE, COMPLIANCE" ✓
-      - "Fallback guarantee documented (works with endpoint = null)" ✓
-      - "Query patterns provided for each tier" ✓
-      - "README file created at cortex-brain/tier3/README-DOMAIN-INTEGRATION.md" ✓
+      - "All 16 CORTEX domains documented with descriptions ✓"
+      - "Business domain schema provided for company configuration ✓"
+      - "Integration examples show how to add FINANCIAL, HEALTHCARE, COMPLIANCE ✓"
+      - "Fallback guarantee documented (works with endpoint = null) ✓"
+      - "Query patterns provided for each tier ✓"
+      - "README file created at cortex-brain/tier3/README-DOMAIN-INTEGRATION.md ✓"
     git_checkpoint: "acdbf355e"
     tests_passing: 7
     
@@ -164,13 +154,13 @@ acceptance_criteria:
     status: "COMPLETED"
     estimated_hours: 1.0
     acceptance_tests:
-      - "DOMAIN_BRAIN_ENDPOINT environment variable supported" ✓
-      - "Defaults to null if not set" ✓
-      - "Type validation for string (URL or service reference)" ✓
-      - "Timeout configurable (default 2 seconds)" ✓
-      - "Fallback strategy documented and tested" ✓
-      - "No changes to existing CORTEX configuration" ✓
-      - "dashboard_extensibility.py module created in src/observability/" ✓
+      - "DOMAIN_BRAIN_ENDPOINT environment variable supported ✓"
+      - "Defaults to null if not set ✓"
+      - "Type validation for string (URL or service reference) ✓"
+      - "Timeout configurable (default 2 seconds) ✓"
+      - "Fallback strategy documented and tested ✓"
+      - "No changes to existing CORTEX configuration ✓"
+      - "dashboard_extensibility.py module created in src/observability/ ✓"
     git_checkpoint: "pre-existing"
     tests_passing: 9
     
@@ -183,13 +173,13 @@ acceptance_criteria:
     status: "COMPLETED"
     estimated_hours: 0.5
     acceptance_tests:
-      - "Only NEW files created (no modifications to existing Python files)" ✓
-      - "No changes to existing YAML configs" ✓
-      - "All existing tests pass unchanged" ✓
-      - "Backward compatibility guaranteed" ✓
-      - "git diff shows only additions (A flag), no modifications (M flag)" ✓
-      - "Existing ACs remain unaffected" ✓
-      - "No deprecations or removals" ✓
+      - "Only NEW files created (no modifications to existing Python files) ✓"
+      - "No changes to existing YAML configs ✓"
+      - "All existing tests pass unchanged ✓"
+      - "Backward compatibility guaranteed ✓"
+      - "git diff shows only additions (A flag), no modifications (M flag) ✓"
+      - "Existing ACs remain unaffected ✓"
+      - "No deprecations or removals ✓"
     git_checkpoint: "verified-in-session"
     tests_passing: 7
 
