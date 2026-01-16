@@ -1,0 +1,507 @@
+# =============================================================================
+# PHASE-17: DOMAIN BRAIN ARCHITECTURE IMPLEMENTATION
+# =============================================================================
+# Strategic Knowledge Centralization: Single Source of Truth for Business Logic
+# 
+# ORIGIN: issue-report-02.yaml analysis + strategic decision to consolidate
+#         5 knowledge sources (AST Intelligence, Git History, Comments, 
+#         Relationships, Business Documents) into unified Domain Brain
+#
+# RATIONALE:
+#   - Prevents knowledge duplication across LENS, INTERACTION, MASTER orchestrators
+#   - Enables conflict resolution between sources (BKIO > RELATIONSHIPS > AST > GIT > LENS)
+#   - Provides queryable business domain registry (Tier 3 enhancement)
+#   - Integrates seamlessly with existing OrchestratorBase pattern (proven, tested)
+#
+# GOVERNANCE COMPLIANCE:
+#   - CORE-008: TDD pattern (tests first, RED → GREEN)
+#   - CORE-011: Type hints mandatory on all functions
+#   - CORE-012: Docstrings mandatory (Google style)
+#   - CORE-027: Audit trail required (AC_START → AC_EXECUTE → AC_COMPLETE)
+#   - CORE-028: Kebab-case, ≤25 chars per filename
+#
+# =============================================================================
+
+phase_id: "PHASE-17"
+title: "Domain Brain: Strategic Knowledge Centralization"
+description: |
+  Implementation of Domain Brain architecture as described in issue-report-02.yaml.
+  Consolidates business knowledge from multiple sources (AST Intelligence, Git,
+  Comments, Relationships, Business Knowledge Ingestion) into unified registry.
+  
+  Four-phase implementation:
+  1. PHASE-17-01 (Week 1): Foundation & Core API (~40 hours)
+  2. PHASE-17-02 (Week 2): Integration Adapters (~35 hours)
+  3. PHASE-17-03 (Week 3): Business Knowledge Ingestion Orchestrator (~40 hours)
+  4. PHASE-17-04 (Week 4): LENS Integration & Completion (~25 hours)
+  
+  Total: ~140 hours (12-14 weeks realistic vs. 9 weeks proposed in issue-report-02)
+
+# Acceptance Criteria (6 AC-IDs)
+acceptance_criteria:
+  - ac_id: "AC-DB-001-01"
+    description: "Domain Brain Foundation: Core API, Data Models, Storage"
+    priority: "CRITICAL"
+    week: 1
+    estimated_hours: 40
+    components:
+      - name: "DomainBrainAPI"
+        description: "Query/write interface for domain coordination (~300 lines)"
+        methods:
+          - "query_domain(domain_id) -> Domain"
+          - "list_domains() -> List[Domain]"
+          - "search_entities(query) -> List[Entity]"
+          - "upsert_domain(domain) -> void"
+          - "delete_domain(domain_id) -> void"
+          - "get_conflicts(domain_id) -> List[Conflict]"
+          - "resolve_conflict(conflict_id, resolution) -> void"
+          - "audit_domain(domain_id) -> List[AuditEntry]"
+          - "validate_domain(domain) -> ValidationResult"
+      - name: "ConsistencyValidator"
+        description: "Schema validation + conflict detection (~250 lines)"
+        validations:
+          - "JSON Schema validation against domain-schema.json"
+          - "Referential integrity (all referenced entities exist)"
+          - "Circular dependency detection (A -> B -> A is invalid)"
+          - "Conflict detection (multiple sources disagree on same attribute)"
+      - name: "AuditLogger"
+        description: "Immutable hash chain logger (~200 lines)"
+        features:
+          - "SHA-256 hash chain (immutable append-only)"
+          - "TTL cache for recent entries (<100ms query)"
+          - "Per-domain audit trail"
+    
+    test_spec:
+      total_tests: 60
+      categories:
+        - name: "DomainBrainAPI Tests"
+          count: 25
+          tests:
+            - "test_query_existing_domain"
+            - "test_list_domains"
+            - "test_search_entities"
+            - "test_upsert_new_domain"
+            - "test_delete_domain"
+            - "test_get_conflicts"
+            - "test_resolve_conflict"
+            - "test_audit_domain"
+            - "test_validate_domain"
+        - name: "ConsistencyValidator Tests"
+          count: 20
+          tests:
+            - "test_schema_validation_valid"
+            - "test_schema_validation_invalid"
+            - "test_referential_integrity_valid"
+            - "test_referential_integrity_broken"
+            - "test_circular_dependency_detection"
+            - "test_conflict_detection"
+        - name: "AuditLogger Tests"
+          count: 15
+          tests:
+            - "test_hash_chain_integrity"
+            - "test_append_only_enforcement"
+            - "test_ttl_cache_performance"
+            - "test_audit_trail_queryable"
+    
+    acceptance_tests:
+      - "AC-DB-001-01-01: 60/60 tests passing ✓"
+      - "AC-DB-001-01-02: Hash chain verified (SELECT COUNT(*) FROM audit_log WHERE hash_valid = true) >= 50"
+      - "AC-DB-001-01-03: API latency benchmarked (<100ms for queries)"
+    
+    success_criteria:
+      - "All 60 tests passing (100% pass rate)"
+      - "Code coverage >85% for core classes"
+      - "Documentation complete (API guide + architecture)"
+      - "Zero known issues or TODOs"
+      - "Git checkpoint created and verified"
+
+  - ac_id: "AC-DB-002-01"
+    description: "Integration Adapters: AST, Git, Comments, Relationships"
+    priority: "CRITICAL"
+    week: 2
+    estimated_hours: 35
+    components:
+      - name: "ASTAdapter"
+        description: "Extracts domain metadata from AST Intelligence (IR-001-01)"
+        features:
+          - "Query AST Intelligence for function/class signatures"
+          - "Map AST entities to domain entities"
+          - "Extract semantic relationships from code structure"
+      - name: "GitAdapter"
+        description: "Extracts domain history from Git (IR-001-02)"
+        features:
+          - "Query Git commit history for domain-related changes"
+          - "Extract blame information (who changed what)"
+          - "Timeline reconstruction from commits"
+      - name: "CommentsAdapter"
+        description: "Extracts domain knowledge from code comments (IR-001-03)"
+        features:
+          - "Parse docstrings for domain context"
+          - "Extract design decisions from comments"
+          - "Link comments to domain entities"
+      - name: "RelationshipsAdapter"
+        description: "Extracts relationships from code graph (IR-001-04)"
+        features:
+          - "Query code relationship graph"
+          - "Extract service dependencies"
+          - "Build domain interaction map"
+    
+    test_spec:
+      total_tests: 55
+      categories:
+        - name: "ASTAdapter Tests"
+          count: 15
+          tests:
+            - "test_query_ast_intelligence"
+            - "test_entity_mapping"
+            - "test_relationship_extraction"
+        - name: "GitAdapter Tests"
+          count: 12
+          tests:
+            - "test_commit_history_query"
+            - "test_blame_extraction"
+            - "test_timeline_reconstruction"
+        - name: "CommentsAdapter Tests"
+          count: 14
+          tests:
+            - "test_docstring_parsing"
+            - "test_design_decision_extraction"
+            - "test_comment_linking"
+        - name: "RelationshipsAdapter Tests"
+          count: 14
+          tests:
+            - "test_relationship_graph_query"
+            - "test_dependency_extraction"
+            - "test_interaction_mapping"
+    
+    acceptance_tests:
+      - "AC-DB-002-01-01: 55/55 tests passing ✓"
+      - "AC-DB-002-01-02: Each adapter queries successfully (SELECT COUNT(*) FROM adapter_metrics)"
+      - "AC-DB-002-01-03: Conflict detection working (adapters discover disagreements)"
+    
+    success_criteria:
+      - "All 55 tests passing (100% pass rate)"
+      - "Each adapter successfully queries its source"
+      - "Conflicts detected between adapters"
+      - "Performance benchmarked (all queries <200ms)"
+
+  - ac_id: "AC-DB-003-01"
+    description: "BusinessKnowledgeIngestionOrchestrator (BKIO): Document Parsing & Integration"
+    priority: "CRITICAL"
+    week: 3
+    estimated_hours: 40
+    components:
+      - name: "BusinessKnowledgeIngestionOrchestrator"
+        description: "Orchestrator for ingesting business documents (~400 lines)"
+        inherits: "OrchestratorBase (proven pattern from PHASE-07)"
+        methods:
+          - "validate_context() -> bool"
+          - "on_start() -> void"
+          - "execute(documents: List[Document]) -> void"
+          - "on_complete() -> void"
+        features:
+          - "Document format support: YAML, JSON, Markdown, CSV"
+          - "Batch ingestion with progress tracking"
+          - "Conflict handling per decision matrix"
+          - "Audit trail per document"
+          - "Rollback capability"
+      - name: "DocumentParser"
+        description: "Parses business documents to entities (~150 lines)"
+        formats:
+          - "YAML: domain-registry.yaml"
+          - "JSON: business-domains.json"
+          - "Markdown: domain-documentation.md"
+          - "CSV: domain-mappings.csv"
+      - name: "ConflictResolver"
+        description: "Resolves conflicts using hierarchy + LENS (~200 lines)"
+        logic:
+          - "Apply hierarchy (BKIO > RELATIONSHIPS > AST > GIT > LENS)"
+          - "If tie: query LENS for synthesis"
+          - "If LENS defers: mark for manual review"
+    
+    test_spec:
+      total_tests: 70
+      categories:
+        - name: "BKIO Orchestrator Tests"
+          count: 25
+          tests:
+            - "test_validate_context"
+            - "test_on_start_lifecycle"
+            - "test_execute_single_document"
+            - "test_execute_batch_documents"
+            - "test_on_complete_lifecycle"
+            - "test_audit_trail_created"
+            - "test_rollback_capability"
+        - name: "DocumentParser Tests"
+          count: 20
+          tests:
+            - "test_parse_yaml"
+            - "test_parse_json"
+            - "test_parse_markdown"
+            - "test_parse_csv"
+            - "test_invalid_format_handling"
+        - name: "ConflictResolver Tests"
+          count: 25
+          tests:
+            - "test_hierarchy_applied"
+            - "test_tie_breaking_lens_query"
+            - "test_lens_deferral_marking"
+            - "test_manual_review_workflow"
+    
+    acceptance_tests:
+      - "AC-DB-003-01-01: 70/70 tests passing ✓"
+      - "AC-DB-003-01-02: BKIO registered in OrchestratorRegistry (SELECT name FROM orchestrator_registry WHERE name = 'bkio')"
+      - "AC-DB-003-01-03: BKIO exposed as MCP tool (orchestrator registry check)"
+      - "AC-DB-003-01-04: Batch ingestion processes 100+ documents with <5s overhead"
+    
+    success_criteria:
+      - "All 70 tests passing (100% pass rate)"
+      - "BKIO follows OrchestratorBase pattern (lifecycle verified)"
+      - "MCP tool exposure confirmed"
+      - "Conflict resolution tested end-to-end"
+      - "Performance meets targets (batch processing <5s)"
+
+  - ac_id: "AC-DB-004-01"
+    description: "LENS Integration: Orchestrator Routing & Knowledge Graph Updates"
+    priority: "HIGH"
+    week: 4
+    estimated_hours: 25
+    components:
+      - name: "LENSIntegrationLayer"
+        description: "Integrates Domain Brain with LENS (Phase 7) (~150 lines)"
+        features:
+          - "Per-turn LENS execution (Comprehension → Routing → Knowledge → Response)"
+          - "Knowledge graph updates after BKIO completion"
+          - "LENS auto-challenge on domain conflicts"
+          - "LENS synthesis for conflict resolution"
+      - name: "DomainBrainLENSAdapter"
+        description: "Adapter connecting DomainBrain to LENS IR-004-01 (~100 lines)"
+        features:
+          - "Convert Domain Brain entities to GraphNodes"
+          - "Convert domain relationships to GraphEdges"
+          - "Query LENS for domain insights"
+    
+    test_spec:
+      total_tests: 40
+      categories:
+        - name: "LENSIntegration Tests"
+          count: 25
+          tests:
+            - "test_per_turn_lens_execution"
+            - "test_knowledge_graph_update"
+            - "test_auto_challenge_on_conflict"
+            - "test_lens_synthesis_conflict"
+        - name: "LENSAdapter Tests"
+          count: 15
+          tests:
+            - "test_entity_to_graphnode_conversion"
+            - "test_relationship_to_graphedge_conversion"
+            - "test_query_lens_for_insights"
+    
+    acceptance_tests:
+      - "AC-DB-004-01-01: 40/40 tests passing ✓"
+      - "AC-DB-004-01-02: LENS integration tested end-to-end"
+      - "AC-DB-004-01-03: Knowledge graph reflects domain brain updates"
+    
+    success_criteria:
+      - "All 40 tests passing (100% pass rate)"
+      - "LENS integration functional"
+      - "Knowledge graph updated correctly"
+
+  - ac_id: "AC-DB-005-01"
+    description: "End-to-End Integration Testing: Full Domain Brain Workflow"
+    priority: "HIGH"
+    week: 4
+    estimated_hours: 15
+    components:
+      - name: "IntegrationTestSuite"
+        description: "E2E tests validating complete Domain Brain workflow"
+        workflow:
+          - "1. Ingest business document (BKIO)"
+          - "2. Query AST Intelligence (IR-001-01)"
+          - "3. Query Git History (IR-001-02)"
+          - "4. Resolve conflicts using hierarchy"
+          - "5. LENS synthesis for remaining conflicts"
+          - "6. Update Domain Brain registry"
+          - "7. Verify audit trail (AC_START → AC_EXECUTE → AC_COMPLETE)"
+    
+    test_spec:
+      total_tests: 30
+      categories:
+        - name: "E2E Workflow Tests"
+          count: 15
+          tests:
+            - "test_full_ingestion_workflow"
+            - "test_multi_source_conflict_resolution"
+            - "test_lens_synthesis_workflow"
+            - "test_audit_trail_complete"
+        - name: "Regression Tests"
+          count: 15
+          tests:
+            - "test_orchestrator_registry_unaffected"
+            - "test_phase_locks_respected"
+            - "test_governance_rules_enforced"
+    
+    acceptance_tests:
+      - "AC-DB-005-01-01: 30/30 tests passing ✓"
+      - "AC-DB-005-01-02: Full workflow executes successfully"
+      - "AC-DB-005-01-03: No regressions to existing phases"
+
+  - ac_id: "AC-DB-006-01"
+    description: "Documentation & Governance Integration: Phase Completion"
+    priority: "MEDIUM"
+    week: 4
+    estimated_hours: 10
+    components:
+      - name: "DomainBrainArchitectureGuide"
+        description: "Complete implementation guide (~50 pages)"
+        sections:
+          - "Quick Start: 5-minute walkthrough"
+          - "API Reference: All 12 methods documented"
+          - "Data Model: All dataclasses explained"
+          - "Adapter Integration: How each adapter works"
+          - "BKIO Workflow: Step-by-step orchestrator logic"
+          - "Troubleshooting: Common issues and fixes"
+          - "Performance Tuning: Optimization strategies"
+      - name: "GovernanceIntegration"
+        description: "Domain Brain governance compliance documentation"
+        covers:
+          - "CORE-008: TDD pattern validation"
+          - "CORE-011: Type hints verification"
+          - "CORE-012: Docstring compliance"
+          - "CORE-027: Audit trail requirements"
+          - "CORE-028: Naming conventions"
+    
+    test_spec:
+      total_tests: 10
+      categories:
+        - name: "Documentation Tests"
+          count: 5
+          tests:
+            - "test_api_documentation_complete"
+            - "test_quick_start_guide_executable"
+            - "test_troubleshooting_guide_comprehensive"
+        - name: "Governance Tests"
+          count: 5
+          tests:
+            - "test_governance_compliance_verified"
+            - "test_all_rules_addressed"
+    
+    acceptance_tests:
+      - "AC-DB-006-01-01: 10/10 tests passing ✓"
+      - "AC-DB-006-01-02: Documentation complete and reviewed"
+      - "AC-DB-006-01-03: Governance compliance verified"
+
+# Phase Requirements
+requires: "PHASE-13-OBSERVABILITY-MATURITY"
+required_for: "PHASE-18-PRODUCTION-MIGRATION"
+estimated_hours: 140
+estimated_days: 17.5  # Accounting for ~8 hours per day
+total_ac_ids: 6
+completed_ac_ids: 0
+
+# Scheduling
+priority: "P0"  # Critical for Domain Brain architecture
+blocking: true  # Enables subsequent phases
+can_run_parallel: false
+
+# Progress Tracking
+status: "NOT_STARTED"
+progress_percentage: 0.0
+started_at: null
+completed_at: null
+
+# Governance Requirements
+governance:
+  core_rules_enforced:
+    - "CORE-008: Tests first (RED → GREEN)"
+    - "CORE-011: Type hints mandatory"
+    - "CORE-012: Docstrings mandatory (Google style)"
+    - "CORE-013: Exception handling strict"
+    - "CORE-026: Git checkpoints required"
+    - "CORE-027: Audit trail (AC_START/EXECUTE/COMPLETE)"
+    - "CORE-028: Kebab-case, ≤25 chars"
+  
+  audit_verification:
+    minimum_entries_required: "6 ACs × 3 entries (START/EXECUTE/COMPLETE) = 18 minimum"
+    hash_chain_enforcement: "Immutable chain, tamper-evident"
+    verification_query: "SELECT ac_id, COUNT(*) FROM audit_log WHERE ac_id LIKE 'AC-DB-%' GROUP BY ac_id"
+
+# Risk Assessment
+risks:
+  - severity: "MEDIUM"
+    description: "Integration with LENS (Phase 7) requires coordination"
+    mitigation: "Use published IR-004 API; LENS already locked"
+  - severity: "MEDIUM"
+    description: "BrainTierPusher (from IR-004-02) is incomplete"
+    mitigation: "Complete BrainTierPusher first; minimal additional work"
+  - severity: "LOW"
+    description: "Conflict resolution hierarchy might need tuning"
+    mitigation: "Start with conservative hierarchy; adjust based on testing"
+
+# Dependencies
+dependencies:
+  phases:
+    - "PHASE-07-INTENT-ROUTER (IR-004 - Knowledge Graph Builder)"
+    - "PHASE-13-OBSERVABILITY-MATURITY (BD ACs - domain registry foundation)"
+  components:
+    - "OrchestratorBase (from PHASE-06)"
+    - "AST Intelligence (IR-001-01, PHASE-07)"
+    - "Git Intelligence (IR-001-02, PHASE-07)"
+    - "Comments Intelligence (IR-001-03, PHASE-07)"
+    - "Relationships Intelligence (IR-001-04, PHASE-07)"
+    - "Knowledge Graph (IR-004-01)"
+    - "ComprehensionLoop (IR-004-02)"
+
+# Success Metrics
+success_criteria:
+  completion: "6/6 ACs fully implemented and verified"
+  testing: "225/225 tests passing (100% pass rate)"
+  coverage: ">85% code coverage for all components"
+  performance: "All queries <100ms; batch processing <5s"
+  documentation: "Complete API guide + architecture guide"
+  governance: "Zero governance violations; audit trail verified"
+  integration: "Seamless integration with LENS, Orchestrator pattern, Tier 3"
+
+# Git Checkpoints
+git_checkpoints:
+  before_phase_start: "checkpoint: before PHASE-17-DOMAIN-BRAIN"
+  after_db_001: "checkpoint: AC-DB-001-01 complete (Foundation)"
+  after_db_002: "checkpoint: AC-DB-002-01 complete (Adapters)"
+  after_db_003: "checkpoint: AC-DB-003-01 complete (BKIO)"
+  after_db_004: "checkpoint: AC-DB-004-01 complete (LENS Integration)"
+  phase_complete: "checkpoint: PHASE-17 complete (ready for PHASE-18)"
+
+# Notes
+notes: |
+  PHASE-17: Domain Brain Implementation
+  
+  STRATEGIC DECISION: Integrate Domain Brain as new PHASE-17 (post-PHASE-13)
+  
+  RATIONALE:
+  - PHASE-13 establishes foundational observability + business domain registry (BD ACs)
+  - PHASE-17 builds on this foundation with strategic knowledge centralization
+  - Creates separation of concerns (Observability vs. Knowledge Architecture)
+  - Aligns with 12-14 week realistic timeline (not 9 weeks)
+  
+  ARCHITECTURAL FIT:
+  - Domain Brain is Tier 3 enhancement (additive, not breaking)
+  - Uses established OrchestratorBase pattern (BKIO inherits it)
+  - Integrates with LENS per-turn execution model
+  - Respects all governance rules
+  - Builds on 4 completed intelligence sources (IR-001-01 through IR-001-04)
+  
+  IMPLEMENTATION STRATEGY:
+  - Week 1: Foundation (API, storage, consistency validator, audit logger)
+  - Week 2: Integration adapters (AST, Git, Comments, Relationships)
+  - Week 3: BKIO orchestrator (document parsing, conflict resolution)
+  - Week 4: LENS integration + E2E testing + documentation
+  
+  DELIVERABLES:
+  - 6 AC-IDs (DB-001 through DB-006)
+  - 225+ unit and integration tests
+  - Complete API documentation
+  - Architecture guide with examples
+  - Git history with checkpoints
+  
+  NEXT PHASE: PHASE-18-PRODUCTION-MIGRATION (Domain Brain graduation)
