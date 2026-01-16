@@ -270,28 +270,34 @@ All review findings MUST be documented in `.github/roadmap/issues/`:
 
 ```
 .github/roadmap/issues/
-├── review-YYYY-MM-DD.yaml       # Main findings YAML
-├── review-YYYY-MM-DD.json       # Machine-readable summary
-├── REVIEW-YYYY-MM-DD.md         # Human-readable executive summary
+├── issue-report-NN.yaml         # Main findings YAML (follows existing format)
 └── evidence/
-    ├── audit-snapshot-YYYYMMDD.sql
-    ├── test-results-YYYYMMDD.txt
-    └── coverage-YYYYMMDD/
+    ├── issue-NN-audit-snapshot-YYYYMMDD.json
+    ├── issue-NN-test-results-YYYYMMDD.json
+    └── issue-NN-coverage-YYYYMMDD.json
 ```
+
+**IMPORTANT:** 
+- NO markdown files in `.github/roadmap/issues/` root
+- Use `issue-report-NN.yaml` format (consistent with existing issue-report-01.yaml, issue-report-02.yaml)
+- Evidence files go in `evidence/` subfolder with `issue-NN-` prefix
+- Markdown outputs can be generated elsewhere or viewed via the YAML content
 
 ### Main YAML Structure
 
 ```yaml
-# .github/roadmap/issues/review-YYYY-MM-DD.yaml
+# .github/roadmap/issues/issue-report-NN.yaml
 
 metadata:
-  review_id: "REVIEW-2026-01-16"
-  initiated_by: "cortex-review"
-  timestamp: "2026-01-16T10:00:00Z"
-  git_checkpoint: "abc123def"
-  scope: "FULL_ARCHITECTURE|PHASE_XX|COMPONENT_XX"
+  issue_id: "ISSUE-NNN"
+  report_date: "2026-01-16"
+  reviewer: "cortex-review"
+  review_scope: "FULL_ARCHITECTURE|PHASE_XX|COMPONENT_XX"
+  repository: "CORTEX"
+  branch: "CORTEX6"
 
 executive_summary:
+  status: "FINDINGS IDENTIFIED"
   total_findings: N
   by_severity:
     critical: N
@@ -356,24 +362,50 @@ governance_compliance:
   CORE-028: { status: "PASS|FAIL", violations: N, details: "" }
 ```
 
-### JSON Summary Structure
+### Evidence JSON Structure
+
+Evidence files are stored separately in `evidence/` folder:
 
 ```json
+// evidence/issue-NN-audit-snapshot-20260116.json
 {
-  "review_id": "REVIEW-2026-01-16",
+  "evidence_type": "audit_trail",
+  "issue_id": "ISSUE-NNN",
   "timestamp": "2026-01-16T10:00:00Z",
-  "score": {
-    "overall": 85,
-    "brittleness": 80,
-    "hallucination": 90,
-    "governance": 95,
-    "assumptions": 75,
-    "debt": 70
-  },
-  "critical_findings": 2,
-  "blocking_issues": 1,
-  "quick_wins": 5,
-  "next_review_recommended": "2026-01-23"
+  "query": "SELECT COUNT(*) FROM audit_log",
+  "results": {
+    "total_entries": 2921,
+    "unique_acs": 246,
+    "hash_chain_valid": true
+  }
+}
+```
+
+```json
+// evidence/issue-NN-test-results-20260116.json
+{
+  "evidence_type": "test_results",
+  "issue_id": "ISSUE-NNN",
+  "timestamp": "2026-01-16T10:00:00Z",
+  "total_tests": 3262,
+  "passed": 3200,
+  "failed": 62,
+  "skipped": 0
+}
+```
+
+```json
+// evidence/issue-NN-coverage-20260116.json
+{
+  "evidence_type": "coverage",
+  "issue_id": "ISSUE-NNN",
+  "timestamp": "2026-01-16T10:00:00Z",
+  "overall_coverage": 75.5,
+  "by_module": {
+    "src/core": 80.2,
+    "src/api": 72.1,
+    "src/governance": 88.5
+  }
 }
 ```
 
