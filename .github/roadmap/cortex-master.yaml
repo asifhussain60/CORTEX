@@ -1917,8 +1917,8 @@ phase_tracker:
       - FINDING-008: Test naming conventions (CORE-028)
     
     ac_ids: 8
-    completed_ac_ids: 4  # AC-FIX-001-01 ✅ AC-FIX-002-01 ✅ AC-FIX-003-01 ✅ AC-FIX-004-01 ✅
-    status: "IN_PROGRESS"  # 4/8 ACs complete (50%)
+    completed_ac_ids: 6  # AC-FIX-001-01 ✅ AC-FIX-002-01 ✅ AC-FIX-003-01 ✅ AC-FIX-004-01 ✅ AC-DOC-007-01 ✅ AC-MINOR-008-01 ✅
+    status: "IN_PROGRESS"  # 6/8 ACs complete (75%)
     locked: false
     requires: "PHASE-REMEDIATION-02"
     estimated_hours: 14.25
@@ -1930,8 +1930,8 @@ phase_tracker:
     
     ac_breakdown:
       critical_blockers: 2  # AC-FIX-001-01 ✅ AC-FIX-002-01 ✅
-      high_priority: 5      # AC-FIX-003-01 ✅ AC-FIX-004-01 ✅ AC-FIX-005/006 (pending)
-      medium_priority: 2    # AC-DOC-007-01, AC-MINOR-008-01 (pending)
+      high_priority: 4      # AC-FIX-003-01 ✅ AC-FIX-004-01 ✅ AC-FIX-005/006 (pending)
+      medium_priority: 2    # AC-DOC-007-01 ✅ AC-MINOR-008-01 ✅
     
     evidence_location: ".github/roadmap/issues/issue-report-05.yaml"
     review_commit: "1559c1bee"
@@ -2060,6 +2060,64 @@ phase_tracker:
         - "All YAML injection vectors covered"
         - "All AC-ID injection attempts rejected"
         - "Performance: <1ms for sanitization on typical inputs"
+
+    # AC-DOC-007-01: Tier3 Documentation Update ✅ COMPLETE
+    ac_doc_007_01:
+      status: "COMPLETED"
+      timestamp: "2026-01-17T03:30:00Z"
+      git_checkpoint: "e245c78a8"
+      documentation_file: "cortex-brain/tier3/README.md"
+      finding_addressed: "FINDING-007 (MEDIUM)"
+      documentation_updates:
+        - "Added source code cross-references for adapters"
+        - "Enhanced TODO query syntax documentation"
+        - "Added file filtering examples (todo:<filename>)"
+        - "Documented _query_todos() method behavior"
+        - "Added priority levels and filtering examples"
+        - "Added implementation file references"
+        - "Added AC-DOC-007-01 changelog"
+      key_changes:
+        - "New query patterns: todo:high, todo:<filename>"
+        - "Source code cross-references to base_adapter.py, todo_parser.py, priority_analyzer.py"
+        - "Enhanced return format examples"
+        - "Clarified caching behavior"
+      verification:
+        - "README documents all query patterns"
+        - "New 'todo:' syntax examples provided"
+        - "_query_todos() fully documented"
+        - "Cross-references to source code added"
+        - "Documentation matches implementation"
+
+    # AC-MINOR-008-01: Test Naming Conventions ✅ COMPLETE
+    ac_minor_008_01:
+      status: "COMPLETED"
+      timestamp: "2026-01-17T03:45:00Z"
+      git_checkpoint: "456c84e86"
+      tests_passing: 4
+      tests_target: 4
+      code_coverage: "100%"
+      finding_addressed: "FINDING-008 (MEDIUM)"
+      governance_rule: "CORE-028"
+      components_created:
+        - "Test compliance verification suite (test-core-028-naming.py)"
+        - "Naming migration strategy documentation"
+        - "Compliance examples and patterns"
+      test_file: "tests/unit/test-core-028-naming.py"
+      test_breakdown:
+        - "test_core_028_naming_compliance - File naming compliance check"
+        - "test_compliance_documentation - CORE-028 pattern examples"
+        - "test_pytest_discovery - Pytest collection verification"
+        - "test_naming_migration_strategy - Migration documentation"
+      naming_compliance:
+        - "CORE-028: Kebab-case naming convention enforced"
+        - "File name length: ≤25 characters (test-core-028-naming.py = 23 chars)"
+        - "No underscores in filenames (hyphens used instead)"
+        - "Pattern: test-[component]-[feature].py"
+      key_validation:
+        - "4/4 tests PASSING (100%)"
+        - "Test discovery working with both test_* and test-* patterns"
+        - "New files use compliant naming"
+        - "No breaking changes to existing tests"
 
   PHASE-17-DOMAIN-BRAIN:
     title: "Domain Brain: Strategic Knowledge Centralization with Edge Case Remediation"
