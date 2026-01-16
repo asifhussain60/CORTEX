@@ -1,0 +1,165 @@
+# =============================================================================
+# CORTEX TIER 2 - TDD COVERAGE REPORT TEMPLATE
+# =============================================================================
+# Purpose: Template for code coverage analysis responses
+# Domain: TDD (Test-Driven Development)
+# Inherits: Header from cortex-brain/tier0/response-headers.yaml
+# =============================================================================
+
+metadata:
+  template_id: "tdd-coverage-report"
+  version: "1.0"
+  created_at: "2026-01-16T00:00:00Z"
+  author: "Asif Hussain"
+  description: "Template for code coverage analysis reports"
+  tier: 2
+  category: "domain"
+  domain: "tdd"
+
+# =============================================================================
+# TEMPLATE STRUCTURE
+# =============================================================================
+
+template:
+  structure:
+    - section: "header"
+      source: "tier0/response-headers.yaml"
+      required: true
+    
+    - section: "summary"
+      required: true
+      format: |
+        ### Coverage Report: {scope}
+        
+        **Overall Coverage:** {overall_coverage}%
+        **Target:** {target_coverage}%
+        **Status:** {status}
+    
+    - section: "breakdown"
+      required: true
+      format: |
+        ### Coverage by Module
+        
+        {module_table}
+    
+    - section: "uncovered"
+      required: false
+      condition: "has_uncovered_lines"
+      format: |
+        ### Uncovered Code
+        
+        {uncovered_details}
+    
+    - section: "recommendations"
+      required: true
+      format: |
+        ### Recommendations
+        
+        {recommendations}
+
+# =============================================================================
+# VARIABLE DEFINITIONS
+# =============================================================================
+
+variables:
+  mandatory:
+    - name: "scope"
+      type: "string"
+      description: "What was measured (module, package, all)"
+    
+    - name: "overall_coverage"
+      type: "float"
+      description: "Overall coverage percentage"
+    
+    - name: "target_coverage"
+      type: "float"
+      description: "Target coverage percentage"
+      default: 80.0
+    
+    - name: "status"
+      type: "enum"
+      values: ["PASSING", "FAILING", "WARNING"]
+      description: "Whether target is met"
+    
+    - name: "module_table"
+      type: "string"
+      description: "Markdown table of module coverage"
+    
+    - name: "recommendations"
+      type: "list"
+      description: "Coverage improvement recommendations"
+  
+  optional:
+    - name: "has_uncovered_lines"
+      type: "boolean"
+      default: false
+    
+    - name: "uncovered_details"
+      type: "string"
+      description: "Details of uncovered code"
+
+# =============================================================================
+# COVERAGE THRESHOLDS
+# =============================================================================
+
+thresholds:
+  excellent:
+    min: 90
+    emoji: "🟢"
+    message: "Excellent coverage"
+  
+  good:
+    min: 80
+    emoji: "🟡"
+    message: "Meets target"
+  
+  needs_improvement:
+    min: 60
+    emoji: "🟠"
+    message: "Needs improvement"
+  
+  critical:
+    min: 0
+    emoji: "🔴"
+    message: "Critical - add tests"
+
+# =============================================================================
+# EXAMPLE OUTPUT
+# =============================================================================
+
+example:
+  output: |
+    ## 🧠 CORTEX Coverage Report
+    **Author:** Asif Hussain | **Phase:** PHASE-13 | **Orchestrator:** TDDOrchestrator ✅
+    
+    ---
+    **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+    
+    ### Coverage Report: src/observability/
+    
+    **Overall Coverage:** 87%
+    **Target:** 80%
+    **Status:** PASSING 🟢
+    
+    ### Coverage by Module
+    
+    | Module | Statements | Missing | Coverage | Status |
+    |--------|------------|---------|----------|--------|
+    | metrics.py | 45 | 4 | 91% | 🟢 |
+    | tracing.py | 38 | 5 | 87% | 🟢 |
+    | logging.py | 52 | 8 | 85% | 🟢 |
+    | health.py | 28 | 6 | 79% | 🟡 |
+    | **Total** | **163** | **23** | **87%** | **🟢** |
+    
+    ### Uncovered Code
+    
+    | File | Lines | Reason |
+    |------|-------|--------|
+    | health.py | 45-48 | Edge case: network timeout |
+    | health.py | 52-54 | Edge case: invalid response |
+    
+    ### Recommendations
+    
+    1. Add test for network timeout in health.py (lines 45-48)
+    2. Add test for invalid response handling (lines 52-54)
+    3. Consider adding integration tests for tracing.py
