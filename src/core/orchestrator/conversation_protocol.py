@@ -15,6 +15,16 @@ from src.core.orchestrator.continuation_decision import (
     ContinuationDecision,
     ContinuationReason,
 )
+from src.core.orchestrator.terminal_events import (
+    EventRegistry,
+    PhaseCompletedEvent,
+    UserCancelledEvent,
+    MaxTurnsReachedEvent,
+    ErrorOccurredEvent,
+    TokenLimitEvent,
+    GovernanceViolationEvent,
+    UserApprovalRejectedEvent,
+)
 from src.core.result import Result, Ok, Err
 from src.core.governance_registry import GovernanceRegistry
 
@@ -60,6 +70,7 @@ class ConversationProtocol:
         orchestrator: Any,
         max_turns: int = 10,
         token_limit: int = 20000,
+        event_registry: EventRegistry = None,
     ):
         """
         Initialize ConversationProtocol wrapper.
@@ -68,10 +79,14 @@ class ConversationProtocol:
             orchestrator: IOrchestrator instance to wrap
             max_turns: Maximum turns before safety halt (default: 10)
             token_limit: Token budget before halt (default: 20000)
+            event_registry: Optional EventRegistry for event handling
         """
         self.orchestrator = orchestrator
         self.max_turns = max_turns
         self.token_limit = token_limit
+        
+        # Event handling
+        self.event_registry = event_registry or EventRegistry()
         
         # Execution state
         self.turn_number: int = 0
@@ -334,15 +349,15 @@ class ConversationProtocol:
         """
         Evaluate continuation logic - THE KEY DECISION POINT.
         
-        Evaluates all break conditions:
-        1. Max turns reached? → MAX_ROUNDS_REACHED
-        2. Token limit approaching? → TOKEN_LIMIT
-        3. Governance violation? → GOVERNANCE_HALT
-        4. Error in result? → ERROR_UNRECOVERABLE
-        5. User rejection in result? → USER_REJECTION
-        6. Result indicates completion? → COMPLETION
+        Evaluates all break conditions and fires terminal events:
+        1. Max turns reached? → MaxTurnsReachedEvent → MAX_ROUNDS_REACHED
+        2. Token limit approaching? → TokenLimitEvent → TOKEN_LIMIT
+        3. Governance violation? → GovernanceViolationEvent → GOVERNANCE_HALT
+        4. Error in result? → ErrorOccurredEvent → ERROR_UNRECOVERABLE
+        5. User rejection in result? → UserApprovalRejectedEvent → USER_REJECTION
+        6. Result indicates completion? → PhaseCompletedEvent → COMPLETION
         7. Orchestrator suggests next operation? → IMPLICIT_NEXT_OPERATION
-        8. Otherwise → USER_PROVIDED_FOLLOWUP (wait for user input)
+        8. Otherwise → INTERACTION_REQUIRED (wait for user input)
         
         Args:
             user_input: User's input
@@ -355,6 +370,13 @@ class ConversationProtocol:
         """
         # Check max turns
         if self.turn_number >= self.max_turns:
+            event = MaxTurnsReachedEvent(
+                turn_number=self.turn_number,
+                max_turns=self.max_turns,
+                current_turn=self.turn_number,
+                reason="Max turns exceeded",
+            )
+            self.event_registry.fire_event(event)
             return ContinuationDecision(
                 should_continue=False,
                 reason=ContinuationReason.MAX_ROUNDS_REACHED,
@@ -365,10 +387,74 @@ class ConversationProtocol:
         
         # Check token limit
         if self.total_tokens_used > int(self.token_limit * 0.9):
+            tokens_percentage = int(
+                (self.total_tokens_used / self.token_limit) * 100
+            )
+            event = TokenLimitEvent(
+                turn_number=self.turn_number,
+                tokens_used=self.total_tokens_used,
+                token_limit=self.token_limit,
+                percentage_used=tokens_percentage,
+            )
+            self.event_registry.fire_event(event)
             return ContinuationDecision(
                 should_continue=False,
                 reason=ContinuationReason.TOKEN_LIMIT,
                 next_operation="resume_next_session",
+                turn_number=self.turn_number,
+                token_usage=self._get_token_usage(),
+            )
+        
+        # Check for orchestrator errors
+        if orchestrator_result.get("error"):
+            error_msg = orchestrator_result.get("error", "Unknown error")
+            event = ErrorOccurredEvent(
+                turn_number=self.turn_number,
+                error_message=error_msg,
+                error_type="orchestrator_error",
+                recoverable=False,
+            )
+            self.event_registry.fire_event(event)
+            return ContinuationDecision(
+                should_continue=False,
+                reason=ContinuationReason.ERROR_UNRECOVERABLE,
+                next_operation="error_recovery",
+                turn_number=self.turn_number,
+                token_usage=self._get_token_usage(),
+            )
+        
+        # Check for user approval rejection
+        if orchestrator_result.get("requires_approval") and orchestrator_result.get(
+            "approval_rejected"
+        ):
+            event = UserApprovalRejectedEvent(
+                turn_number=self.turn_number,
+                approval_request=orchestrator_result.get("approval_request", ""),
+                rejection_reason=orchestrator_result.get(
+                    "rejection_reason", "User rejected"
+                ),
+            )
+            self.event_registry.fire_event(event)
+            return ContinuationDecision(
+                should_continue=False,
+                reason=ContinuationReason.USER_REJECTION,
+                next_operation="wait_for_user_input",
+                turn_number=self.turn_number,
+                token_usage=self._get_token_usage(),
+            )
+        
+        # Check if result indicates completion
+        if orchestrator_result.get("status") == "completed":
+            event = PhaseCompletedEvent(
+                turn_number=self.turn_number,
+                operation=orchestrator_result.get("operation", "phase"),
+                result=orchestrator_result.get("result", {}),
+            )
+            self.event_registry.fire_event(event)
+            return ContinuationDecision(
+                should_continue=False,
+                reason=ContinuationReason.COMPLETION,
+                next_operation="done",
                 turn_number=self.turn_number,
                 token_usage=self._get_token_usage(),
             )
@@ -382,16 +468,6 @@ class ConversationProtocol:
                 reason=ContinuationReason.IMPLICIT_NEXT_OPERATION,
                 next_operation=next_op,
                 next_parameters=orchestrator_result.get("next_parameters", {}),
-                turn_number=self.turn_number,
-                token_usage=self._get_token_usage(),
-            )
-        
-        # Check if result indicates completion
-        if orchestrator_result.get("status") == "completed":
-            return ContinuationDecision(
-                should_continue=False,
-                reason=ContinuationReason.COMPLETION,
-                next_operation="done",
                 turn_number=self.turn_number,
                 token_usage=self._get_token_usage(),
             )
