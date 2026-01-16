@@ -826,7 +826,7 @@ edge_case_acceptance_criteria:
 
 # End of acceptance criteria (12 total: 6 main + 6 edge case)
 requires: "PHASE-13-OBSERVABILITY-MATURITY"
-required_for: "PHASE-18-PRODUCTION-MIGRATION"
+required_for: null
 estimated_hours: 180  # 140 base + 40 edge case remediation
 estimated_days: 22.5  # 17.5 base + 5 edge case remediation
 total_ac_ids: 12  # 6 main + 6 edge case remediations

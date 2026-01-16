@@ -7,13 +7,13 @@
 
 metadata:
   title: "CORTEX Implementation Roadmap"
-  description: "AI-Powered Development Orchestration System - Foundation through Production"
+  description: "AI-Powered Development Orchestration System - Foundation through Full Remediation"
   project: "CORTEX"
-  status: "IMPLEMENTATION_READY"
+  status: "REMEDIATION_PHASE"
   dor_score: 100
   start_date: null
   end_date: null
-  total_ac_ids: 253  # 125 locked + 7 enhancement + 58 new phases (07-13) + 12 PHASE-15 + 9 PHASE-16-CONTINUATION + 8 DOC-REMEDIATION + 11 PHASE-REM-01 + 8 PHASE-REM-02 + 12 PHASE-17 (6 main + 6 edge cases)
+  total_ac_ids: 253  # 125 locked + 7 enhancement + 58 new phases (07-13) + 12 PHASE-15 + 9 PHASE-16-CONTINUATION + 8 DOC-REMEDIATION + 11 PHASE-REM-01 + 11 PHASE-REM-02 + 12 PHASE-17 (6 main + 6 edge cases)
   
   # AC-ID Breakdown
   ac_breakdown:
@@ -24,7 +24,7 @@ metadata:
     orchestrator_continuation: 9  # PHASE-16 (9 ACs) - ConversationProtocol + Context Carryover (OC-005-01 added Jan 16, 2026)
     doc_remediation: 8        # PHASE-DOC-REMEDIATION (8 ACs) - GAP FIX (Jan 16, 2026)
     remediation_01: 11        # PHASE-REMEDIATION-01 (11 ACs) - AST Scanning, Response Verbosity, Code Quality (Jan 16, 2026)
-    remediation_02: 8         # PHASE-REMEDIATION-02 (8 ACs) - Per-Turn Governance Enforcement (Jan 16, 2026)
+    remediation_02: 11        # PHASE-REMEDIATION-02 (11 ACs) - Per-Turn Governance Enforcement + Audit Trail Completion (Jan 16, 2026)
     domain_brain: 12          # PHASE-17 (6 main + 6 edge case ACs) - Strategic Knowledge Centralization with Edge Case Coverage (Jan 16, 2026)
     total: 253
   
@@ -192,7 +192,7 @@ metadata:
     enhancement_03_hours: 2.5
     enhancement_total: 10.5
     
-    # New phases (pending)
+    # New phases (completed/in-progress)
     phase_07_hours: 64
     phase_08_hours: 24
     phase_09_hours: 28
@@ -202,12 +202,16 @@ metadata:
     phase_13_hours: 22       # Updated from 20 (+2 hours for domain integration)
     phase_15_hours: 48       # Neural Observatory (PARALLEL TRACK)
     phase_16_hours: 40       # Orchestrator Continuation - ConversationProtocol (NEW: Jan 16, 2026)
-    new_phases_total: 310    # Updated from 330 (removed 20 hours from PHASE-14)
+    doc_remediation_hours: 6  # Documentation Remediation (Jan 16, 2026)
+    remediation_01_hours: 24  # Critical Architecture Issues Remediation (Jan 16, 2026)
+    remediation_02_hours: 28  # Per-Turn Governance Enforcement + Audit Trail Completion (Jan 16, 2026)
+    phase_17_hours: 32        # Domain Brain Strategic Knowledge (Jan 16, 2026)
+    new_phases_total: 376     # Updated: includes remediation phases
     
     # Summary
-    total_estimated_hours: 680.5  # Updated from 700.5 (removed 20 hours for PHASE-14)
-    total_buffer_hours: 136       # 20% buffer
-    total_with_buffer: 816.5
+    total_estimated_hours: 752.5  # Updated: includes all remediation phases
+    total_buffer_hours: 150       # 20% buffer
+    total_with_buffer: 902.5
 
 # =============================================================================
 # PHASE TRACKER - SINGLE SOURCE OF TRUTH
@@ -939,7 +943,6 @@ phase_tracker:
     status: "COMPLETED"  # Domain ACs now complete
     locked: true         # Ready for phase lock
     requires: "PHASE-10-ADAPTIVE-EXECUTION"
-    required_for: "PHASE-14-PRODUCTION-MIGRATION"
     estimated_hours: 22  # Updated from 20 (added 2 hours for domain integration)
     estimated_days: 2.5
     progress_percentage: 100.0  # Updated from 35.7 (now 9/9 ACs complete)
@@ -991,7 +994,7 @@ phase_tracker:
       - GAP-3/4/5: Prompts not updated when features shipped
       - GAP-9/10: Response header system implemented but undocumented in prompts
       
-      CRITICAL: This phase MUST complete BEFORE PHASE-14 production rollout.
+      CRITICAL: This phase MUST complete for full system documentation compliance.
       Without this fix, AI agents won't know about implemented features.
     ac_ids: 8
     completed_ac_ids: 8
@@ -999,12 +1002,11 @@ phase_tracker:
     locked: true
     completed_at: "2026-01-16T12:00:00Z"
     requires: "PHASE-12-KNOWLEDGE-ECOSYSTEM"  # Can run parallel to PHASE-13
-    required_for: "PHASE-14-PRODUCTION-MIGRATION"
     estimated_hours: 6
     estimated_days: 1
     actual_hours: 2
     progress_percentage: 100.0
-    blocking: true  # MUST complete before production
+    blocking: true  # MUST complete before full release
     priority: "P0 - CRITICAL"
     
     # Gap References (from docs/ROADMAP-GAP-ANALYSIS.md)
@@ -1698,32 +1700,34 @@ phase_tracker:
       2. Master Orchestrator governance enforcement (SOL-GOV-002) - 2 ACs
       3. Database-level tier enforcement schema (SOL-GOV-003) - 2 ACs
       4. TierAccessValidator integration (SOL-GOV-004) - 1 AC
+      5. Audit Trail Completion (SOL-AUD-001) - 3 ACs
       
       CRITICAL PATH DEPENDENCIES:
       - Must complete before PHASE-17-DOMAIN-BRAIN
       - Unblocks multi-turn conversation governance protection
       - Resolves CORTEX6 regression vs CORTEX5.5
+      - Validates all issue remediation from issue-report-01 through 04
       
-      TOTAL EFFORT: 19 hours over 4 days
+      TOTAL EFFORT: 28 hours over 5 days
       
       GOVERNANCE COMPLIANCE:
       - CORE-017: Strict Governance Enforcement (per-turn)
       - CORE-019: TDD-Master Routing (per-turn validation)
       - CORE-027: Audit Trail Per Turn (governance context)
+      - CORE-027: Complete audit trail for all phases (17 failed AC entries)
       - AR-001-03: Tier 0 rules immutable (enforced per-turn)
     
-    ac_ids: 8
-    completed_ac_ids: 8
-    status: "COMPLETED"
-    locked: true           # VERIFIED 2026-01-16: All 8 ACs complete, 56/56 tests passing
-    completed_at: "2026-01-16T22:30:00Z"
+    ac_ids: 11
+    completed_ac_ids: 8  # PHASE-REMEDIATION-02 core ACs complete; 3 audit trail ACs pending
+    status: "IN_PROGRESS"
+    locked: false        # Pending completion of 3 audit trail resolution ACs
+    completed_at: null
     requires: "PHASE-16-ORCHESTRATOR-CONTINUATION"
-    required_for: "PHASE-17-DOMAIN-BRAIN"
-    estimated_hours: 19
-    estimated_days: 4
+    estimated_hours: 28
+    estimated_days: 5
     actual_hours: 2
     actual_days: 0.17
-    progress_percentage: 100.0
+    progress_percentage: 72.7  # 8/11 ACs complete
     blocking: true
     priority: "P0"
     can_run_parallel: false
@@ -1837,6 +1841,40 @@ phase_tracker:
         actual_hours: 0.3
         status: "COMPLETED"
         tests_passing: "16/16"
+      
+      # SOL-AUD-001: Audit Trail Completion (Issue Remediation Validation)
+      - ac_id: "AC-REM-002-09"
+        description: "Investigate and resolve 17 incomplete AC execution entries from audit trail"
+        issue_id: "ISSUE-001"
+        severity: "HIGH"
+        test: "test_audit_trail_completion_investigation"
+        verification: "All 17 AC_EXECUTE_FAILED entries resolved with AC_RESOLVED or documentation"
+        estimated_hours: 4
+        actual_hours: 0
+        status: "PENDING"
+        tests_passing: "0/0"
+      
+      - ac_id: "AC-REM-002-10"
+        description: "Verify remediation of all issues from issue-report-01 through issue-report-04"
+        issue_id: "ISSUE-001,ISSUE-002,ISSUE-003"
+        severity: "HIGH"
+        test: "test_issue_remediation_verification_suite"
+        verification: "All 4 issues validated as resolved; remediation mapping documented"
+        estimated_hours: 3
+        actual_hours: 0
+        status: "PENDING"
+        tests_passing: "0/0"
+      
+      - ac_id: "AC-REM-002-11"
+        description: "Create comprehensive issue remediation status report (already completed)"
+        issue_id: "ISSUE-001,ISSUE-002,ISSUE-003,ISSUE-004"
+        severity: "MEDIUM"
+        test: "test_issue_remediation_report_validation"
+        verification: "Report at .github/roadmap/reports/ISSUE-REMEDIATION-STATUS-REPORT.md with verification checklist"
+        estimated_hours: 2
+        actual_hours: 1.5
+        status: "COMPLETED"
+        tests_passing: "1/1"
     
     phase_yaml: ".github/roadmap/phases/phase-remediation-02.yaml"
 
@@ -1863,7 +1901,6 @@ phase_tracker:
     locked: true
     
     requires: ["PHASE-REMEDIATION-01", "PHASE-REMEDIATION-02"]
-    required_for: "PHASE-18-PRODUCTION-MIGRATION"
     
     estimated_hours: 180  # 140 base + 40 edge case remediation
     estimated_days: 22.5  # 17.5 base + 5 edge case remediation
@@ -1967,7 +2004,7 @@ phase_tracker:
       critical_severity: 3      # E01, E02, E03
       medium_severity: 4        # E04, E05, E06 + incomplete spec
       remediation_added: 6
-      remaining_incomplete: 1   # Incomplete spec - deferred to phase-18
+      remaining_incomplete: 1   # Incomplete spec - deferred to future enhancement phase
       
       risk_reduction:
         before_remediation: "HIGH (7 unaddressed edge cases)"
@@ -2129,7 +2166,7 @@ phase_tracker:
           - "30 E2E workflow tests passing"
           - "No regressions to existing phases"
           - "10 documentation tests passing"
-          - "Phase complete and ready for PHASE-18"
+          - "Phase complete with full remediation coverage"
     
     # Governance Compliance
     governance:
@@ -2206,7 +2243,7 @@ phase_tracker:
       after_ac_002: "checkpoint: AC-DB-002-01 complete (Adapters)"
       after_ac_003: "checkpoint: AC-DB-003-01 complete (BKIO Orchestrator)"
       after_ac_004: "checkpoint: AC-DB-004-01 complete (LENS Integration)"
-      phase_complete: "checkpoint: PHASE-17 complete (ready for PHASE-18)"
+      phase_complete: "checkpoint: PHASE-17 complete (fully remediated)"
     
     # Risk Assessment
     risks:

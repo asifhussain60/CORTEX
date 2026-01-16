@@ -1,17 +1,18 @@
-# PHASE-REMEDIATION-02: Per-Turn Governance Tier Enforcement
+# PHASE-REMEDIATION-02: Per-Turn Governance Tier Enforcement + Audit Trail Completion
 # =============================================================================
-# Purpose: Fix critical governance tier enforcement gap in ConversationProtocol
-# Status: READY_FOR_IMPLEMENTATION
+# Purpose: Fix governance tier enforcement gap + complete audit trail remediation
+# Status: IN_PROGRESS (8/11 ACs complete)
 # Requires: PHASE-16-ORCHESTRATOR-CONTINUATION
-# Estimated Duration: 4 days (19 hours)
-# Issue: ISSUE-002 (CORTEX-2026-002) - Governance Tier Enforcement Missing on Per-Turn Execution
+# Estimated Duration: 5 days (28 hours)
+# Issues: ISSUE-002 (CORTEX-2026-002) + ISSUE-001 audit trail gaps
 # =============================================================================
 
 phase:
   id: "PHASE-REMEDIATION-02"
-  title: "Per-Turn Governance Tier Enforcement"
+  title: "Per-Turn Governance Tier Enforcement + Audit Trail Completion"
   description: |
     Fix critical governance tier enforcement gap in ConversationProtocol execution.
+    Complete audit trail remediation and issue validation.
     
     ISSUE-002: Governance Tier Enforcement Missing on Per-Turn Execution
     - Root Cause: TIER-0 immutability enforced only at config load, not per-turn
@@ -20,26 +21,32 @@ phase:
     - Fix: 8 ACs implementing per-turn governance validation at all layers
     - Severity: CRITICAL - Governance regression from CORTEX5.5
     
+    ISSUE-001 Audit Trail Gap: 17 incomplete AC execution entries
+    - Root Cause: Some ACs have AC_START/COMPLETE but no AC_EXECUTE entries
+    - Impact: Audit trail incomplete, compliance metrics inaccurate
+    - Fix: Investigate each failure and add AC_RESOLVED entries
+    - Severity: HIGH - Affects CORE-027 compliance
+    
     Implementation Strategy:
-    1. ConversationProtocol per-turn governance validation (SOL-GOV-001)
-    2. Master Orchestrator governance enforcement (SOL-GOV-002)
-    3. Database-level tier enforcement schema (SOL-GOV-003)
-    4. TierAccessValidator integration into execution flow (SOL-GOV-004)
+    1. ConversationProtocol per-turn governance validation (SOL-GOV-001) - 3 ACs
+    2. Master Orchestrator governance enforcement (SOL-GOV-002) - 2 ACs
+    3. Database-level tier enforcement schema (SOL-GOV-003) - 2 ACs
+    4. TierAccessValidator integration into execution flow (SOL-GOV-004) - 1 AC
+    5. Audit Trail Completion (SOL-AUD-001) - 3 ACs
   
   order: 19
-  status: "READY_FOR_IMPLEMENTATION"
+  status: "IN_PROGRESS"
   locked: false
   
   requires: "PHASE-16-ORCHESTRATOR-CONTINUATION"
-  required_for: "PHASE-17-DOMAIN-BRAIN"
   blocking: true
   
-  estimated_hours: 19
-  estimated_days: 4
+  estimated_hours: 28
+  estimated_days: 5
   
-  ac_ids: 8
-  completed_ac_ids: 0
-  progress_percentage: 0.0
+  ac_ids: 11
+  completed_ac_ids: 8
+  progress_percentage: 72.7
   
   # Issue Remediation Mapping
   issue_remediation:
@@ -48,7 +55,11 @@ phase:
       title: "Governance Tier Enforcement Missing on Per-Turn Execution"
       severity: "CRITICAL"
       compliance_violations: ["AR-001-03", "CORE-017", "CORE-019", "CORE-027"]
-      acs: ["AC-REM-002-01", "AC-REM-002-02", "AC-REM-002-03", "AC-REM-002-04", "AC-REM-002-05", "AC-REM-002-06", "AC-REM-002-07", "AC-REM-002-08"]
+    - issue_id: "ISSUE-001"
+      title: "Audit Trail Completion (17 incomplete entries)"
+      severity: "HIGH"
+      compliance_violations: ["CORE-027"]
+      acs: ["AC-REM-002-01", "AC-REM-002-02", "AC-REM-002-03", "AC-REM-002-04", "AC-REM-002-05", "AC-REM-002-06", "AC-REM-002-07", "AC-REM-002-08", "AC-REM-002-09", "AC-REM-002-10", "AC-REM-002-11"]
       hours: 19
 
 # =============================================================================
@@ -404,6 +415,118 @@ acceptance_criteria:
     governance_alignment:
       - "CORE-013: Exception Handling"
       - "CORE-017: Strict Governance Enforcement"
+  
+  # =========================================================================
+  # SOL-AUD-001: Audit Trail Completion (3 ACs)
+  # =========================================================================
+  
+  - ac_id: "AC-REM-002-09"
+    title: "Investigate and resolve 17 incomplete AC execution entries from audit trail"
+    priority: "HIGH"
+    category: "Audit Trail Remediation"
+    estimated_hours: 4
+    
+    description: |
+      From ISSUE-001 audit trail analysis: 17 ACs have AC_START and AC_COMPLETE
+      events but are missing AC_EXECUTE events. Investigate root cause of each
+      failure and add appropriate resolution entries (AC_RESOLVED, AC_DEFERRED, etc.)
+      per CORE-027 audit trail requirements.
+      
+      Impacts: Phase-01 through Phase-13 AC execution tracking.
+    
+    acceptance_tests:
+      - "Query: SELECT ac_id, COUNT(*) FROM audit_log WHERE ac_id IN (...17 ACs...) GROUP BY ac_id"
+      - "All 17 ACs now have AC_START, AC_EXECUTE, AC_COMPLETE, or AC_RESOLVED entries"
+      - "No orphaned entries (START without COMPLETE)"
+      - "Hash chain integrity maintained throughout investigation"
+      - "Remediation document created: .github/roadmap/reports/AUDIT-TRAIL-REMEDIATION-17-ACS.md"
+    
+    implementation_notes: |
+      1. Query governance.db for all AC_EXECUTE_FAILED and incomplete entries
+      2. For each failed entry, determine reason:
+         a. Test failure (add AC_RESOLVED with test fix reference)
+         b. Deferred work (add AC_DEFERRED to next phase)
+         c. Implementation gap (add AC_REMEDIATED)
+      3. Add audit entry for each resolution
+      4. Update phase_tracker with findings
+    
+    git_checkpoint: "audit-trail-17-acs-resolved"
+    
+    governance_alignment:
+      - "CORE-027: Complete Audit Trail"
+      - "CORE-028: Deterministic Record Keeping"
+  
+  - ac_id: "AC-REM-002-10"
+    title: "Verify remediation of all issues from issue-report-01 through issue-report-04"
+    priority: "HIGH"
+    category: "Issue Remediation Verification"
+    estimated_hours: 3
+    
+    description: |
+      Validate that all issues identified in the 4 issue-report files have been
+      properly remediated. Create mapping of issue → remediation AC → phase.
+      Identify any remaining gaps requiring future work.
+      
+      Issues to validate:
+      - ISSUE-001: Governance Compliance (45% → target 95%+)
+      - ISSUE-002: Business Knowledge Integration (resolved via PHASE-17)
+      - ISSUE-003: Response Verbosity (resolved via REM-02)
+      - ISSUE-004: Governance Tier Enforcement (REM-02 core ACs + this AC)
+    
+    acceptance_tests:
+      - "ISSUE-001 remediation verified: AST scanning integrated, Intent Router working"
+      - "ISSUE-002 remediation verified: Domain Brain operational"
+      - "ISSUE-003 remediation verified: Header injection working"
+      - "ISSUE-004 remediation verified: Per-turn governance enforced"
+      - "Compliance metrics: All > 85% (target 95%+)"
+      - "Verification report created: .github/roadmap/reports/ISSUE-REMEDIATION-VERIFICATION.md"
+    
+    implementation_notes: |
+      Use ISSUE-REMEDIATION-STATUS-REPORT.md as baseline and verify each claim with:
+      1. Grep codebase for implementation (AST usage, BKIO instantiation, etc.)
+      2. Check test coverage and pass rates
+      3. Verify audit trail entries for remediation ACs
+      4. Cross-reference governance rule enforcement
+      5. Document any gaps for post-PHASE-17 work
+    
+    git_checkpoint: "issue-remediation-verification-complete"
+    
+    governance_alignment:
+      - "CORE-027: Audit Trail Traceability"
+      - "CORE-017: Governance Enforcement Verification"
+  
+  - ac_id: "AC-REM-002-11"
+    title: "Create comprehensive issue remediation status report"
+    priority: "MEDIUM"
+    category: "Documentation"
+    estimated_hours: 2
+    status: "COMPLETED"
+    completed_at: "2026-01-16T23:00:00Z"
+    
+    description: |
+      Create consolidated report documenting all issues identified, remediation
+      work completed, and remaining gaps. Already completed as:
+      .github/roadmap/reports/ISSUE-REMEDIATION-STATUS-REPORT.md
+      
+      This AC validates and formalizes that report into phase records.
+    
+    acceptance_tests:
+      - "Report file exists: ISSUE-REMEDIATION-STATUS-REPORT.md"
+      - "Report contains: Issue summary, remediation mapping, compliance metrics"
+      - "Report identifies: 6 issues fully resolved, 4 partially resolved"
+      - "Report identifies: 1 critical gap requiring AC-REM-002-09/10 work"
+      - "Report includes: Blocking/non-blocking issue classification for PHASE-18"
+      - "Report has: Verified source code evidence for each claim"
+    
+    implementation_notes: |
+      Report already created. This AC formalizes its acceptance as phase evidence.
+      Ensures issue remediation work is properly tracked in audit trail.
+    
+    git_checkpoint: "issue-remediation-report-formalized"
+    
+    governance_alignment:
+      - "CORE-027: Complete Documentation Trail"
+      - "CORE-024: Observability & Traceability"
 
 # =============================================================================
 # ACCEPTANCE CRITERIA SUMMARY
