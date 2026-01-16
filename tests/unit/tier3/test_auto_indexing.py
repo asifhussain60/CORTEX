@@ -28,6 +28,11 @@ from datetime import datetime
 from dataclasses import dataclass, asdict
 
 
+def get_knowledge_dir() -> Path:
+    """Get knowledge directory using portable path resolution (CORE-028)."""
+    return Path(__file__).parent.parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+
+
 @dataclass
 class IndexEntry:
     """Represents an indexed knowledge entry."""
@@ -55,13 +60,13 @@ class TestIndexStructure:
         from cortex_brain.tier3.knowledge.knowledge_indexer import KnowledgeIndexer
         indexer = KnowledgeIndexer()
         
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         assert index_file.exists(), "Knowledge index file not found"
     
     def test_index_file_contains_valid_json(self, indexer):
         """Verify index file contains valid JSON."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -69,7 +74,7 @@ class TestIndexStructure:
     
     def test_index_contains_metadata_section(self, indexer):
         """Verify index contains metadata about the index itself."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -82,7 +87,7 @@ class TestIndexStructure:
     
     def test_index_contains_entries_section(self, indexer):
         """Verify index contains entries section."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -92,7 +97,7 @@ class TestIndexStructure:
     
     def test_index_contains_ac_id_mapping_section(self, indexer):
         """Verify index contains AC-ID to domain mapping."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -102,7 +107,7 @@ class TestIndexStructure:
     
     def test_index_contains_domain_index_section(self, indexer):
         """Verify index contains per-domain index."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -116,7 +121,7 @@ class TestIndexEntry:
     
     def test_index_entry_has_required_fields(self, indexer):
         """Verify each index entry has required fields."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -130,7 +135,7 @@ class TestIndexEntry:
     
     def test_index_entry_id_format_valid(self, indexer):
         """Verify index entry IDs follow correct format."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -142,7 +147,7 @@ class TestIndexEntry:
     
     def test_index_entry_domain_valid(self, indexer):
         """Verify index entry domains are from valid domain list."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -160,7 +165,7 @@ class TestIndexEntry:
     
     def test_index_entry_ac_ids_is_list(self, indexer):
         """Verify ac_ids field is a list."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -174,7 +179,7 @@ class TestACIDMapping:
     
     def test_ac_id_mapping_exists_for_all_entries(self, indexer):
         """Verify AC-ID mapping exists for all indexed entries."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -188,7 +193,7 @@ class TestACIDMapping:
     
     def test_ac_id_mapping_points_to_correct_domain(self, indexer):
         """Verify AC-ID mappings point to correct domains."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -206,7 +211,7 @@ class TestACIDMapping:
     
     def test_ac_id_mapping_has_reference_info(self, indexer):
         """Verify AC-ID mapping contains reference information."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -223,7 +228,7 @@ class TestDomainIndex:
     
     def test_domain_index_has_all_domains(self, indexer):
         """Verify domain index contains all 16 domains."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -242,7 +247,7 @@ class TestDomainIndex:
     
     def test_domain_index_entries_format(self, indexer):
         """Verify domain index entries are properly formatted."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -310,7 +315,7 @@ class TestIndexConsistency:
     
     def test_index_entry_count_matches_metadata(self, indexer):
         """Verify index entry count in metadata matches actual entries."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -322,7 +327,7 @@ class TestIndexConsistency:
     
     def test_domain_index_count_matches_entries(self, indexer):
         """Verify per-domain index counts match actual domain entries."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -341,7 +346,7 @@ class TestIndexConsistency:
     
     def test_no_duplicate_entries_in_index(self, indexer):
         """Verify no duplicate entries in index."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -355,7 +360,7 @@ class TestIndexVersion:
     
     def test_index_metadata_has_version(self, indexer):
         """Verify index has version information."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -365,7 +370,7 @@ class TestIndexVersion:
     
     def test_index_metadata_has_created_at(self, indexer):
         """Verify index has creation timestamp."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -375,7 +380,7 @@ class TestIndexVersion:
     
     def test_index_metadata_has_updated_at(self, indexer):
         """Verify index has last updated timestamp."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -389,7 +394,7 @@ class TestIndexQueryPerformance:
     def test_index_loads_under_100ms(self, indexer):
         """Verify index loads in under 100ms."""
         import time
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         
         start = time.time()
@@ -401,7 +406,7 @@ class TestIndexQueryPerformance:
     
     def test_domain_lookup_is_constant_time(self, indexer):
         """Verify domain lookup is O(1) operation."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -415,7 +420,7 @@ class TestIndexGoveranceIntegration:
     
     def test_index_tracks_indexing_ac_id(self, indexer):
         """Verify index references correct AC-ID."""
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)
@@ -427,7 +432,7 @@ class TestIndexGoveranceIntegration:
     def test_index_includes_governance_db_reference(self, indexer):
         """Verify index can be integrated with governance.db."""
         # Should contain reference to governance database
-        knowledge_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge")
+        knowledge_dir = get_knowledge_dir()
         index_file = knowledge_dir / ".knowledge-index.json"
         with open(index_file, 'r') as f:
             data = json.load(f)

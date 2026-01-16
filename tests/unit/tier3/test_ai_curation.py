@@ -46,13 +46,13 @@ class TestAICuratorStructure:
     
     def test_curation_config_file_exists(self, ai_curator):
         """Verify curation config file exists."""
-        tier3_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge")
+        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
         config_file = tier3_path / "curation-config.yaml"
         assert config_file.exists(), "Curation config file not found"
     
     def test_curation_config_contains_metadata(self, ai_curator):
         """Verify config contains metadata."""
-        tier3_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge")
+        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
         config_file = tier3_path / "curation-config.yaml"
         
         import yaml
@@ -64,7 +64,7 @@ class TestAICuratorStructure:
     
     def test_quality_scoring_rules_defined(self, ai_curator):
         """Verify quality scoring rules are defined."""
-        tier3_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge")
+        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
         config_file = tier3_path / "curation-config.yaml"
         
         import yaml
@@ -134,7 +134,7 @@ class TestQualityScoringSystem:
     
     def test_quality_rules_defined_in_config(self, ai_curator):
         """Verify quality rules are defined in config."""
-        tier3_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge")
+        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
         config_file = tier3_path / "curation-config.yaml"
         
         import yaml
