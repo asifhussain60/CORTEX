@@ -12,6 +12,7 @@ AC-AR-006-01: MasterOrchestrator coordinates domain orchestrators
 from typing import Dict, List, Any, Optional, Set, Union
 from dataclasses import dataclass, field
 from datetime import datetime
+from pathlib import Path
 
 from src.core.interfaces import IOrchestrator, OperationMode
 from src.core.result import Result, Ok, Err
@@ -20,6 +21,7 @@ from src.core.response_header_config import HeaderConfigurationManager
 from src.core.governance_registry import GovernanceRegistry, GovernanceViolationError
 from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from src.infrastructure.database import DatabaseManager
+from src.infrastructure.database_transaction_manager import DatabaseTransactionManager
 from src.mcp.decorator import mcp_tool
 
 
@@ -54,6 +56,10 @@ class MasterOrchestrator(IOrchestrator):
         self.db = DatabaseManager()
         self.domain_orchestrators: Dict[str, OrchestratorMetadata] = {}
         self.operation_history: List[Dict[str, Any]] = []
+        
+        # AC-FIX-001-01: Initialize DatabaseTransactionManager for atomic operations
+        db_path = Path(__file__).parent.parent.parent.parent / "cortex-brain" / "state" / "governance.db"
+        self.transaction_manager = DatabaseTransactionManager(str(db_path))
         
         # AC-REM-002-04: Initialize GovernanceRegistry for per-turn validation
         self._governance_registry: Optional[GovernanceRegistry] = None
@@ -399,6 +405,7 @@ class MasterOrchestrator(IOrchestrator):
         
         AC-AR-006-01: Coordinate operations across domain orchestrators
         AC-REM-002-04: Add governance validation before delegation
+        AC-FIX-001-01: Atomic operation + audit logging in single transaction
         
         Args:
             operation: Operation name (e.g., "validate", "enforce")
@@ -412,114 +419,121 @@ class MasterOrchestrator(IOrchestrator):
         - CORE-017: Strict Governance Enforcement
         - CORE-019: TDD-Master Routing (per-turn validation)
         - CORE-027: Audit Trail Per Turn
+        - AC-FIX-001-01: Atomic state + audit logging
         """
+        # AC-FIX-001-01: Wrap entire operation in atomic transaction
+        # Both coordination execution and audit logging occur in single transaction
         try:
-            # AC-REM-002-04: Pre-coordination governance validation
-            # Increment turn counter
-            self._turn_number += 1
-            
-            # Initialize governance registry if needed
-            if not self._governance_registry:
-                self._governance_registry = GovernanceRegistry.instance()
-                init_result = self._governance_registry.initialize()
-                if init_result.is_err():
-                    return Err(f"Failed to initialize governance registry: {init_result.error}")
-            
-            # Validate governance before delegation (CORE-019 per-turn validation)
-            governance_result = self._governance_registry.should_proceed(
-                turn_number=self._turn_number,
-                orchestrator_id="master-orchestrator"
-            )
-            
-            if governance_result.is_err():
-                # Governance violation detected
-                violation_msg = governance_result.error
-                self.logger.log_operation_complete(
-                    ac_id="AC-REM-002-04",
-                    operation="GOVERNANCE_VIOLATION",
-                    success=False,
+            with self.transaction_manager.atomic_operation("AC-FIX-001-01", f"coordinate_{operation}") as txn:
+                # AC-REM-002-04: Pre-coordination governance validation
+                # Increment turn counter
+                self._turn_number += 1
+                
+                # Initialize governance registry if needed
+                if not self._governance_registry:
+                    self._governance_registry = GovernanceRegistry.instance()
+                    init_result = self._governance_registry.initialize()
+                    if init_result.is_err():
+                        raise Exception(f"Failed to initialize governance registry: {init_result.error}")
+                
+                # Validate governance before delegation (CORE-019 per-turn validation)
+                governance_result = self._governance_registry.should_proceed(
+                    turn_number=self._turn_number,
+                    orchestrator_id="master-orchestrator"
+                )
+                
+                if governance_result.is_err():
+                    # Governance violation detected
+                    violation_msg = governance_result.error
+                    self.logger.log_operation_complete(
+                        ac_id="AC-REM-002-04",
+                        operation="GOVERNANCE_VIOLATION",
+                        success=False,
+                        details={
+                            "turn_number": self._turn_number,
+                            "violation": violation_msg,
+                            "requested_operation": operation
+                        }
+                    )
+                    raise GovernanceViolationError(violation_msg)
+                
+                # Governance validation passed - proceed with coordination
+                self.logger.log_operation_start(
+                    ac_id="AC-AR-006-01",
+                    operation="COORDINATION",
                     details={
+                        "operation": operation,
+                        "target_domains": target_domains,
+                        "total_orchestrators": len(self.domain_orchestrators),
                         "turn_number": self._turn_number,
-                        "violation": violation_msg,
-                        "requested_operation": operation
+                        "governance_validated": True,
+                        "transaction_id": txn.transaction_id
                     }
                 )
-                raise GovernanceViolationError(violation_msg)
-            
-            # Governance validation passed - proceed with coordination
-            self.logger.log_operation_start(
-                ac_id="AC-AR-006-01",
-                operation="COORDINATION",
-                details={
-                    "operation": operation,
-                    "target_domains": target_domains,
-                    "total_orchestrators": len(self.domain_orchestrators),
-                    "turn_number": self._turn_number,
-                    "governance_validated": True
-                }
-            )
-            
-            # Determine target orchestrators
-            domains_to_use = target_domains if target_domains else list(self.domain_orchestrators.keys())
-            
-            # Validate target domains
-            invalid_domains = set(domains_to_use) - set(self.domain_orchestrators.keys())
-            if invalid_domains:
-                return Err(f"Invalid domains: {invalid_domains}")
-            
-            # Delegate to orchestrators and collect results
-            results = {}
-            errors = {}
-            
-            for domain in domains_to_use:
-                metadata = self.domain_orchestrators[domain]
-                orchestrator = metadata.orchestrator
                 
-                try:
-                    # Delegate operation to orchestrator
-                    # Note: This assumes orchestrators have a common execute method
-                    # Actual implementation depends on orchestrator interface
-                    result = {
-                        "domain": domain,
-                        "status": "delegated",
-                        "timestamp": datetime.now().isoformat()
-                    }
-                    results[domain] = result
+                # Determine target orchestrators
+                domains_to_use = target_domains if target_domains else list(self.domain_orchestrators.keys())
+                
+                # Validate target domains
+                invalid_domains = set(domains_to_use) - set(self.domain_orchestrators.keys())
+                if invalid_domains:
+                    raise Exception(f"Invalid domains: {invalid_domains}")
+                
+                # Delegate to orchestrators and collect results
+                results = {}
+                errors = {}
+                
+                for domain in domains_to_use:
+                    metadata = self.domain_orchestrators[domain]
+                    orchestrator = metadata.orchestrator
                     
-                except Exception as e:
-                    errors[domain] = str(e)
-            
-            # Aggregate results
-            aggregated = {
-                "operation": operation,
-                "timestamp": datetime.now().isoformat(),
-                "turn_number": self._turn_number,
-                "orchestrators_involved": len(domains_to_use),
-                "results": results,
-                "errors": errors if errors else None
-            }
-            
-            # Store in history
-            self.operation_history.append(aggregated)
-            
-            # Log coordination complete
-            self.logger.log_operation_complete(
-                ac_id="AC-AR-006-01",
-                operation="COORDINATION",
-                success=len(errors) == 0,
-                details={
-                    "orchestrators_involved": len(domains_to_use),
-                    "successful": len(results),
-                    "failed": len(errors),
+                    try:
+                        # Delegate operation to orchestrator
+                        # Note: This assumes orchestrators have a common execute method
+                        # Actual implementation depends on orchestrator interface
+                        result = {
+                            "domain": domain,
+                            "status": "delegated",
+                            "timestamp": datetime.now().isoformat()
+                        }
+                        results[domain] = result
+                        
+                    except Exception as e:
+                        errors[domain] = str(e)
+                
+                # Aggregate results
+                aggregated = {
+                    "operation": operation,
+                    "timestamp": datetime.now().isoformat(),
                     "turn_number": self._turn_number,
-                    "governance_enforced": True
+                    "orchestrators_involved": len(domains_to_use),
+                    "results": results,
+                    "errors": errors if errors else None,
+                    "transaction_id": txn.transaction_id
                 }
-            )
-            
-            return Ok(aggregated)
-            
+                
+                # Store in history
+                self.operation_history.append(aggregated)
+                
+                # Log coordination complete
+                self.logger.log_operation_complete(
+                    ac_id="AC-AR-006-01",
+                    operation="COORDINATION",
+                    success=len(errors) == 0,
+                    details={
+                        "orchestrators_involved": len(domains_to_use),
+                        "successful": len(results),
+                        "failed": len(errors),
+                        "turn_number": self._turn_number,
+                        "governance_enforced": True,
+                        "transaction_id": txn.transaction_id
+                    }
+                )
+                
+                return Ok(aggregated)
+        
         except GovernanceViolationError as e:
-            # Re-raise governance violations
+            # Re-raise governance violations (transaction already rolled back)
             raise e
         
         except Exception as e:
