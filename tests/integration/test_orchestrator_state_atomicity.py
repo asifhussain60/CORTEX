@@ -26,11 +26,28 @@ from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 import pytest
 
-# These imports will be mocked until implementation
-from src.orchestrators.core.master_orchestrator import MasterOrchestrator
-from src.core.orchestrator.conversation_protocol import ConversationProtocol
-from src.infrastructure.audit_logger import AuditLogger
-from src.core.governance_registry import GovernanceRegistry
+# Import transaction manager for testing
+from src.infrastructure.database_transaction_manager import (
+    DatabaseTransactionManager,
+    TransactionContext,
+    StateAtomicityManager
+)
+
+# These will be tested for integration
+try:
+    from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+except ImportError:
+    MasterOrchestrator = None
+
+try:
+    from src.core.orchestrator.conversation_protocol import ConversationProtocol
+except ImportError:
+    ConversationProtocol = None
+
+try:
+    from src.core.governance_registry import GovernanceRegistry
+except ImportError:
+    GovernanceRegistry = None
 
 
 class TestOrchestratorStateAtomicity:
