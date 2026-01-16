@@ -30,6 +30,8 @@ from src.core.result import Result, Ok, Err
 from src.core.governance_registry import GovernanceRegistry
 from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
 from src.core.intelligence.call_graph import CallGraphBuilder
+from src.core.intelligence.dependency_mapper import DependencyMapper
+from src.core.intelligence.pattern_detector import PatternDetector
 
 
 @dataclass
@@ -106,6 +108,12 @@ class ConversationProtocol:
         
         # AC-REM-001-02: Initialize CallGraphBuilder for layer tracing
         self.call_graph_builder = CallGraphBuilder()
+        
+        # AC-REM-001-03: Initialize DependencyMapper for import classification
+        self.dependency_mapper = DependencyMapper()
+        
+        # AC-REM-001-04: Initialize PatternDetector for architectural patterns
+        self.pattern_detector = PatternDetector()
 
     def execute_turn(
         self, user_input: str, previous_context: Dict[str, Any]
@@ -711,6 +719,58 @@ class ConversationProtocol:
                 g.to_dict() for g in call_graphs
             ]
             
+            # AC-REM-001-03: Map dependencies for impact analysis
+            dependency_maps = []
+            for parse_result in parse_results:
+                try:
+                    dep_map = self.dependency_mapper.map_dependencies(parse_result)
+                    dependency_maps.append(dep_map)
+                except Exception as e:
+                    # Graceful error handling for dependency mapping
+                    if self._audit_logger:
+                        self._audit_logger.log_operation_complete(
+                            ac_id="AC-REM-001-03",
+                            operation="DEPENDENCY_MAP_ERROR",
+                            success=False,
+                            details={"error": str(e)},
+                        )
+            
+            # Store dependency maps (serialize to dicts for JSON compatibility)
+            comprehension_data["dependency_maps"] = [
+                m.to_dict() for m in dependency_maps
+            ]
+            
+            # Aggregate dependency statistics
+            all_stdlib = set()
+            all_third_party = set()
+            all_local = set()
+            
+            for dep_map in dependency_maps:
+                all_stdlib.update(dep_map.get_standard_library())
+                all_third_party.update(dep_map.get_third_party())
+                all_local.update(dep_map.get_local())
+            
+            # AC-REM-001-04: Detect architectural patterns
+            patterns_detected = []
+            for parse_result in parse_results:
+                try:
+                    patterns = self.pattern_detector.detect_patterns(parse_result)
+                    patterns_detected.extend(patterns)
+                except Exception as e:
+                    # Graceful error handling for pattern detection
+                    if self._audit_logger:
+                        self._audit_logger.log_operation_complete(
+                            ac_id="AC-REM-001-04",
+                            operation="PATTERN_DETECTION_ERROR",
+                            success=False,
+                            details={"error": str(e)},
+                        )
+            
+            # Store detected patterns (serialize to dicts for JSON compatibility)
+            comprehension_data["patterns_detected"] = [
+                p.to_dict() for p in patterns_detected
+            ]
+            
             # Count layer transitions across all call graphs
             total_layer_transitions = sum(g.edge_count for g in call_graphs)
             
@@ -727,7 +787,37 @@ class ConversationProtocol:
                 "total_imports_found": sum(len(r.imports) for r in parse_results),
                 "call_graphs_built": len(call_graphs),
                 "layer_transitions_identified": total_layer_transitions,
+                "stdlib_dependencies": len(all_stdlib),
+                "third_party_dependencies": len(all_third_party),
+                "local_dependencies": len(all_local),
+                "patterns_detected": len(patterns_detected),
             }
+            
+            if self._audit_logger:
+                self._audit_logger.log_operation_complete(
+                    ac_id="AC-REM-001-04",
+                    operation="PATTERN_DETECTION",
+                    success=True,
+                    details={
+                        "patterns_found": len(patterns_detected),
+                        "pattern_types": list(set(
+                            p.pattern_type for p in patterns_detected
+                        )),
+                    },
+                )
+            
+            if self._audit_logger:
+                self._audit_logger.log_operation_complete(
+                    ac_id="AC-REM-001-03",
+                    operation="DEPENDENCY_MAPPING",
+                    success=True,
+                    details={
+                        "maps_built": len(dependency_maps),
+                        "stdlib": len(all_stdlib),
+                        "third_party": len(all_third_party),
+                        "local": len(all_local),
+                    },
+                )
             
             if self._audit_logger:
                 self._audit_logger.log_operation_complete(
