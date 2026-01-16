@@ -14,7 +14,7 @@ category: CORTEX_CORE
 precedence: HIGHEST
 
 metadata:
-  rule_count: 28
+  rule_count: 29
   author: "Asif Hussain"
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
 
@@ -26,6 +26,7 @@ categories:
   - architecture_integrity
   - quality_gates
   - security_privacy
+  - auditability
 
 # ==============================================================================
 # RULE DEFINITIONS
@@ -540,6 +541,58 @@ rules:
     
     implementation:
       check_script: "src/governance/validators/name-validator.py"
+      git_hook: "pre-commit"
+      audit_logging: true
+
+  # --------------------------------------------------------------------------
+  # CORE-029: Documentation Drift Prevention
+  # --------------------------------------------------------------------------
+  - rule_id: CORE-029
+    category: quality_gates
+    severity: blocked
+    name: Documentation Drift Prevention
+    description: |
+      User-facing features MUST be documented in prompts BEFORE phase lock.
+      Implementation code alone is insufficient - prompts must teach usage.
+      
+      This rule addresses the systematic gap where features are built but
+      never documented, rendering them invisible to users.
+    
+    affected_prompts:
+      - ".github/prompts/CORTEX.prompt.md"
+      - ".github/prompts/copilot-instruction.md"
+      - ".github/prompts/cortex-builder.prompt.md"
+    
+    validation:
+      - New features have prompt documentation section
+      - Response templates referenced in prompts
+      - Phase lock blocked if prompt updates missing
+      - Pre-lock validation script runs successfully
+    
+    ac_pattern:
+      description: |
+        Every feature AC (like FR-*, HP-*, etc.) that ships user-facing
+        functionality MUST have a companion documentation AC.
+      
+      format: "AC-DOC-XXX-XX: Update [prompt file] with [feature] section"
+      
+      example: |
+        # Feature AC
+        AC-HP-003-01: Implement response header injection
+        
+        # Required Companion AC
+        AC-DOC-003-01: Update CORTEX.prompt.md with Response Header section
+    
+    validation_script:
+      path: "scripts/validate_phase_deliverables.py"
+      required_checks:
+        - files_to_create exist
+        - files_to_modify exist
+        - prompt sections documented
+        - tier2 templates populated
+    
+    implementation:
+      pre_lock_check: "python scripts/validate_phase_deliverables.py --phase {PHASE_ID} --strict"
       git_hook: "pre-commit"
       audit_logging: true
 
