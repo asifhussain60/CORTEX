@@ -13,7 +13,7 @@ metadata:
   dor_score: 100
   start_date: null
   end_date: null
-  total_ac_ids: 223  # 125 locked + 7 enhancement + 62 new phases (07-14) + 12 PHASE-15 + 9 (PHASE-16→PHASE-13) + 8 DOC-REMEDIATION
+  total_ac_ids: 231  # 125 locked + 7 enhancement + 62 new phases (07-14) + 12 PHASE-15 + 8 PHASE-16-CONTINUATION + 8 DOC-REMEDIATION
   
   # AC-ID Breakdown
   ac_breakdown:
@@ -21,9 +21,9 @@ metadata:
     enhancement_phases: 7     # ENH-01 (4) + ENH-02 (2) + ENH-03 (1)
     new_phases: 71            # PHASE-07 (14) + 08 (6) + 09 (8) + 10 (5) + 11 (6) + 12 (7) + 13 (5+9) + 14 (4)
     neural_observatory: 12    # PHASE-15 (12 ACs) - PARALLEL TRACK
-    business_domain: 0        # PHASE-16 (9 ACs) - INTEGRATED INTO PHASE-13 (Decision: Jan 15, 2026)
+    orchestrator_continuation: 8  # PHASE-16 (8 ACs) - ConversationProtocol Architecture (New - Jan 16, 2026)
     doc_remediation: 8        # PHASE-DOC-REMEDIATION (8 ACs) - GAP FIX (Jan 16, 2026)
-    total: 223
+    total: 231
   
   # GOVERNANCE INTEGRATION
   governance:
@@ -199,13 +199,13 @@ metadata:
     phase_13_hours: 22       # Updated from 20 (+2 hours for domain integration)
     phase_14_hours: 20
     phase_15_hours: 48       # Neural Observatory (PARALLEL TRACK)
-    phase_16_hours: 0        # Integrated into PHASE-13 (Decision: Jan 15, 2026)
-    new_phases_total: 290    # Updated from 288 (+2 hours domain work in PHASE-13)
+    phase_16_hours: 40       # Orchestrator Continuation - ConversationProtocol (NEW: Jan 16, 2026)
+    new_phases_total: 330    # Updated from 290 (+40 hours for PHASE-16)
     
     # Summary
-    total_estimated_hours: 660.5  # Updated from 658.5 (+2 hours)
-    total_buffer_hours: 132       # 20% buffer
-    total_with_buffer: 792.5
+    total_estimated_hours: 700.5  # Updated from 660.5 (+40 hours PHASE-16)
+    total_buffer_hours: 140       # 20% buffer
+    total_with_buffer: 840.5
 
 # =============================================================================
 # PHASE TRACKER - SINGLE SOURCE OF TRUTH
@@ -1391,6 +1391,123 @@ phase_tracker:
       No longer tracked as separate phase. Completion tracked in PHASE-13.
     
     phase_yaml: ".github/roadmap/phases/phase-16-business-domain.yaml (DEPRECATED - see phase-13.yaml)"
+  
+  PHASE-16-ORCHESTRATOR-CONTINUATION:
+    title: "Event-Driven Orchestrator Lifecycle Management"
+    description: |
+      Replace imperative loops with declarative ConversationProtocol pattern.
+      
+      PROBLEM: Orchestrators need multi-turn execution, but simple loops violate CORTEX architecture.
+      
+      SOLUTION: ConversationProtocol - explicit, testable, auditable turn-by-turn orchestration.
+      
+      KEY INNOVATION: Each turn returns ContinuationDecision with clear reason (COMPLETION, 
+      TOKEN_LIMIT, USER_REJECTION, GOVERNANCE_HALT, etc.) instead of hidden loop state.
+      
+      BENEFITS:
+      - Every turn independently testable
+      - Clear continuation reasons (not fragile "if" conditions)
+      - Per-turn audit logging (AC_START/EXECUTE/COMPLETE)
+      - Token tracking per turn (CORE-001 incremental execution)
+      - Governance validation per turn (CORE-027 audit trail)
+      - Full LENS re-execution per turn (CORE-019 routing)
+      
+      SCOPE: All 20+ orchestrators (Planning, ADO, TDD, Interaction, Master, etc.)
+    ac_ids: 8
+    completed_ac_ids: 0
+    status: "NOT_STARTED"
+    locked: false
+    requires: "PHASE-07-INTENT-ROUTER"
+    required_for: "PHASE-DOC-REMEDIATION"
+    can_run_parallel_with: ["PHASE-15-NEURAL-OBSERVATORY"]
+    estimated_hours: 40
+    estimated_days: 5
+    actual_hours: 0
+    progress_percentage: 0.0
+    blocking: false
+    priority: "P1"
+    
+    # Architecture Challenge Date
+    origin:
+      date: "2026-01-16"
+      challenge_document: ".github/roadmap/reports/ORCHESTRATOR-CONTINUATION-ARCHITECTURE-CHALLENGE-2026-01-16.md"
+      pattern: "ConversationProtocol wrapper around IOrchestrator"
+      innovation: "Explicit ContinuationDecision replaces hidden loop state"
+    
+    # CORTEX Alignment
+    cortex_alignment:
+      CORE_001_incremental_execution: "Each turn explicitly bounded; token usage visible"
+      CORE_019_tdd_master_routing: "Decision includes next_operation for Master routing"
+      CORE_027_audit_trail: "AC_START/EXECUTE/COMPLETE logged per turn with hash chain"
+      LENS_protocol: "Executed per turn (not cached) - all 4 phases"
+      governance_enforcement: "Pre/post-turn validation gates"
+      state_persistence: "State via ConversationSession across turns"
+    
+    # Acceptance Criteria Categories
+    ac_categories:
+      - category: "Core Infrastructure (OC-001)"
+        acs: 2
+        description: "ContinuationDecision dataclass + ConversationProtocol executor"
+      - category: "Terminal Events (OC-002)"
+        acs: 2
+        description: "Event registry + orchestrator integration"
+      - category: "Multi-Orchestrator Support (OC-003)"
+        acs: 2
+        description: "Wrap Planning/ADO/TDD + update Master loop"
+      - category: "Testing & Documentation (OC-004)"
+        acs: 2
+        description: "140+ tests + architecture guide + dashboard UI"
+    
+    audit_verification:
+      verified: false
+      entry_count: 0
+      hash_chain_valid: false
+      verified_at: null
+      remediation_required: false
+      notes: "Phase not yet started (2026-01-16)"
+    
+    notes: |
+      ARCHITECTURE CHALLENGE RESOLUTION (2026-01-16)
+      
+      User Request: "Keep orchestrators running in a loop until an event breaks it"
+      
+      Challenge Response: "YES, but NOT with imperative loops"
+      - Simple while loops violate CORTEX architecture (hidden state, not testable)
+      - ConversationProtocol pattern is better (explicit, testable, auditable)
+      
+      Implementation Strategy:
+      1. Week 1: Create ContinuationDecision + ConversationProtocol core (15h)
+      2. Week 2: Wrap all orchestrators + update Master loop (15h)
+      3. Week 3: Tests + documentation + dashboard UI (10h)
+      
+      Terminal Events (Break Conditions):
+      - COMPLETION (goal achieved)
+      - USER_REJECTION (user rejected result)
+      - TOKEN_LIMIT (approaching budget)
+      - GOVERNANCE_HALT (rule violation)
+      - MAX_ROUNDS_REACHED (safety limit)
+      - ERROR_UNRECOVERABLE (fatal error)
+      - INTERACTION_REQUIRED (waiting for user)
+      
+      Test Coverage:
+      - Unit: 50+ tests (ContinuationDecision, ConversationProtocol, events)
+      - Integration: 60+ tests (orchestrator multi-turn workflows)
+      - E2E: 30+ tests (Master orchestrator continuation)
+      - Coverage: >95% for core classes
+      
+      Governance Compliance:
+      ✅ CORE-001: Incremental execution <500 lines per turn
+      ✅ CORE-008: TDD (tests first, RED → GREEN)
+      ✅ CORE-011: Type hints mandatory
+      ✅ CORE-012: Docstrings (Google style)
+      ✅ CORE-019: Master routing per turn
+      ✅ CORE-027: Audit trail per turn (AC_START/EXECUTE/COMPLETE)
+      ✅ CORE-028: Kebab-case naming
+      ✅ LENS Protocol: Per-turn execution
+      
+      See phase-16-orchestrator-continuation.yaml for detailed AC breakdown.
+    
+    phase_yaml: ".github/roadmap/phases/phase-16-orchestrator-continuation.yaml"
 
 # =============================================================================
 # ARCHITECTURE DECISIONS (AR-001 through AR-010)

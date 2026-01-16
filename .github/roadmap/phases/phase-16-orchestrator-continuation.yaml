@@ -1,0 +1,712 @@
+# =============================================================================
+# PHASE-16-ORCHESTRATOR-CONTINUATION: Event-Driven Orchestrator Lifecycle
+# =============================================================================
+# Purpose: Implement ConversationProtocol - declarative, testable, auditable
+#          orchestrator continuation across multiple turns
+# Status: NOT_STARTED
+# Requires: PHASE-07-INTENT-ROUTER, PHASE-08-CORE-ORCHESTRATORS
+# Estimated Duration: 5 days (40 hours)
+# Origin: Architecture Challenge Analysis - 2026-01-16
+# CORTEX Alignment: CORE-001, CORE-019, CORE-027, LENS Protocol
+# =============================================================================
+
+phase:
+  id: "PHASE-16-ORCHESTRATOR-CONTINUATION"
+  title: "Event-Driven Orchestrator Lifecycle Management"
+  description: |
+    Replace imperative loops with declarative ConversationProtocol pattern.
+    
+    KEY INNOVATION: Each turn is explicit, testable, and auditable.
+    
+    CURRENT ANTI-PATTERN:
+      while True:
+          result = orchestrator.execute()
+          if should_stop():
+              break
+    
+    BETTER SOLUTION:
+      decision = protocol.execute_turn(input)
+      if decision.should_continue == False:
+          break  # Explicit reason in decision.reason
+    
+    BENEFITS:
+    - Every turn independently testable
+    - Clear continuation reasons (COMPLETION, TOKEN_LIMIT, ERROR, USER_REJECTION, etc.)
+    - Per-turn audit logging (AC_START/EXECUTE/COMPLETE)
+    - Token tracking per turn (CORE-001 incremental execution)
+    - Governance validation per turn (CORE-027 audit trail)
+    - Full LENS re-execution per turn (CORE-019 routing)
+  
+  order: 16
+  status: "NOT_STARTED"
+  locked: false
+  
+  # Dependencies
+  requires: "PHASE-07-INTENT-ROUTER"
+  required_for: "PHASE-DOC-REMEDIATION"
+  can_run_parallel_with: ["PHASE-15-NEURAL-OBSERVATORY"]
+  blocking: false  # Does not block other phases; enhances orchestrator internals
+  
+  # Estimation (40 hours for 8 ACs)
+  estimated_hours: 40
+  estimated_days: 5
+  actual_hours: 0
+  
+  # Tracking
+  ac_ids: 8
+  completed_ac_ids: 0
+  progress_percentage: 0.0
+  last_updated: "2026-01-16T16:00:00Z"
+  completion_status: "NOT_STARTED - Ready for implementation"
+  
+  # Architecture Reference
+  origin:
+    branch: "CORTEX6"
+    analysis_document: ".github/roadmap/reports/ORCHESTRATOR-CONTINUATION-ARCHITECTURE-CHALLENGE-2026-01-16.md"
+    pattern: "ConversationProtocol wrapper around IOrchestrator"
+    innovation: "Explicit ContinuationDecision replaces hidden loop state"
+
+# =============================================================================
+# ARCHITECTURE OVERVIEW
+# =============================================================================
+#
+# PROBLEM: Orchestrators need to run across multiple user turns, but simple
+#          imperative loops violate CORTEX architecture principles.
+#
+# SOLUTION: ConversationProtocol - a stateless executor that:
+#   1. Takes one turn as input (user_input, previous_context)
+#   2. Executes that one turn through LENS protocol
+#   3. Returns explicit ContinuationDecision (not hidden loop state)
+#   4. Caller decides what to do next based on decision
+#   5. Each turn is independently auditable and testable
+#
+# PRINCIPLE: "Explicit > Implicit, Declarative > Imperative"
+#
+# =============================================================================
+
+acceptance_criteria:
+  # ---------------------------------------------------------------------------
+  # OC-001: ContinuationDecision Infrastructure
+  # ---------------------------------------------------------------------------
+  - ac_id: "OC-001-01"
+    title: "ContinuationDecision Dataclass & Event Enums"
+    description: |
+      Create ContinuationDecision dataclass that explicitly specifies:
+      - should_continue: bool (continue or stop)
+      - reason: ContinuationReason enum (WHY we're continuing/stopping)
+      - next_operation: str (what to do next)
+      - next_parameters: dict (parameters for next operation)
+      - turn_number: int (which turn produced this decision)
+      - token_usage: dict (tokens used: prompt, completion, total)
+      - audit_entry_id: str (link to AC_COMPLETE audit entry)
+      - governance_violations: list (any governance rule violations)
+      
+      Create ContinuationReason enum with values:
+      - IMPLICIT_NEXT_OPERATION (orchestrator knows what's next)
+      - USER_PROVIDED_FOLLOWUP (user gave follow-up input)
+      - AUTO_REFINEMENT_LOOP (auto-refining, e.g., hallucination fix)
+      - COMPLETION (goal achieved, user satisfied)
+      - USER_REJECTION (user explicitly rejected result)
+      - TOKEN_LIMIT (approaching token budget)
+      - GOVERNANCE_HALT (governance rule violation)
+      - MAX_ROUNDS_REACHED (safety limit on iterations)
+      - ERROR_UNRECOVERABLE (error that can't be recovered)
+      - INTERACTION_REQUIRED (waiting for user approval)
+    
+    status: "NOT_STARTED"
+    estimated_hours: 3
+    
+    acceptance_tests:
+      - "ContinuationDecision has all required fields with type hints"
+      - "ContinuationReason enum defined with 9+ values"
+      - "ContinuationDecision has property methods: is_halt_by_governance, is_user_action_required, is_safe_to_resume"
+      - "All fields are immutable (frozen=True)"
+      - "Dataclass serializable to JSON for audit logging"
+    
+    files_to_create:
+      - "src/core/orchestrator/continuation_decision.py"
+    
+    files_to_modify: []
+    
+    verification_method: |
+      Unit tests in tests/unit/core/orchestrator/test_continuation_decision.py:
+      - TestContinuationDecision: 10 tests
+      - TestContinuationReason: 5 tests
+      - TestSerializationDeserialization: 4 tests
+    
+    compliance:
+      - CORE-011: Type hints mandatory ✓
+      - CORE-012: Docstrings (Google style) ✓
+      - CORE-028: Kebab-case naming ✓
+  
+  # ---------------------------------------------------------------------------
+  # OC-001: ConversationProtocol Core Implementation
+  # ---------------------------------------------------------------------------
+  - ac_id: "OC-001-02"
+    title: "ConversationProtocol Class - Single Turn Executor"
+    description: |
+      Create ConversationProtocol wrapper that:
+      - Wraps any IOrchestrator instance
+      - Has one core public method: execute_turn(user_input, previous_context)
+      - Returns Result[ContinuationDecision]
+      - NOT a loop - caller decides continuation
+      
+      Key methods:
+      - __init__(orchestrator, max_turns=10, token_limit=20000)
+      - execute_turn(user_input, previous_context) → Result[ContinuationDecision]
+      - _validate_governance_before_turn() → Result
+      - _create_turn_context() → dict with LENS phases
+      - _log_ac_start() → audit entry
+      - _log_ac_execute() → audit entry
+      - _evaluate_continuation() → ContinuationDecision (THE KEY LOGIC)
+      
+      State tracking:
+      - turn_number: increments per call
+      - total_tokens_used: accumulates across turns
+      - decisions_history: stores all decisions for replay/debug
+      - conversation_session: optional ConversationSession for state persistence
+    
+    status: "NOT_STARTED"
+    estimated_hours: 5
+    
+    acceptance_tests:
+      - "Protocol wraps any IOrchestrator"
+      - "execute_turn executes exactly one turn and returns ContinuationDecision"
+      - "Pre-turn governance validation gate called (CORE-017)"
+      - "Max turns safety limit enforced"
+      - "Token limit tracking per turn (CORE-001)"
+      - "Audit logging (AC_START/EXECUTE/COMPLETE) per turn (CORE-027)"
+      - "LENS context created per turn (not cached)"
+      - "Continuation logic evaluates all break conditions"
+      - "Each decision added to decisions_history"
+      - "Result[T] pattern used for error handling"
+    
+    files_to_create:
+      - "src/core/orchestrator/conversation_protocol.py"
+    
+    files_to_modify:
+      - "src/core/orchestrator/__init__.py"  # Export ConversationProtocol
+    
+    verification_method: |
+      Unit tests in tests/unit/core/orchestrator/test_conversation_protocol.py:
+      - TestConversationProtocolInitialization: 3 tests
+      - TestSingleTurnExecution: 8 tests
+      - TestGovernanceValidation: 4 tests
+      - TestTokenTracking: 4 tests
+      - TestAuditLogging: 5 tests
+      - TestContinuationLogic: 6 tests
+      - Total: 30 tests
+    
+    compliance:
+      - CORE-001: Incremental <500 lines per turn ✓
+      - CORE-011: Type hints mandatory ✓
+      - CORE-012: Docstrings (Google style) ✓
+      - CORE-017: Governance validation ✓
+      - CORE-019: Per-turn LENS ✓
+      - CORE-027: Audit trail ✓
+      - CORE-028: Kebab-case naming ✓
+  
+  # ---------------------------------------------------------------------------
+  # OC-002: Terminal Event Registry
+  # ---------------------------------------------------------------------------
+  - ac_id: "OC-002-01"
+    title: "Terminal Events & Break Condition Handlers"
+    description: |
+      Create event registry that orchestrators can subscribe to.
+      
+      Terminal Events:
+      - PhaseCompletedEvent: Operation reached completion state
+      - UserCancelledEvent: User explicitly cancelled
+      - MaxTurnsReachedEvent: Safety limit on iterations
+      - ErrorOccurredEvent: Unrecoverable error during execution
+      - TokenLimitEvent: Approaching or exceeding token budget
+      - GovernanceViolationEvent: Governance rule violation detected
+      - UserApprovalRejectedEvent: User rejected result in approval gate
+      
+      Handler Pattern:
+      - Each event has Listener interface
+      - Orchestrators register listeners via register_event_listener()
+      - When event occurs, all registered listeners are notified
+      - Listeners return "continue" or "break" decision
+      - Protocol evaluates all listener decisions, breaks if ANY says break
+      
+      Audit Trail:
+      - Every event logged with timestamp, turn number, reason, hash
+      - Event audit linked to AC_COMPLETE entry
+    
+    status: "NOT_STARTED"
+    estimated_hours: 4
+    
+    acceptance_tests:
+      - "7+ terminal events defined as dataclasses"
+      - "EventListener interface defined"
+      - "Registry allows registration of listeners per event"
+      - "Events are fire-and-forget (async would be overkill)"
+      - "Event handlers can veto continuation"
+      - "All events auditable with proper logging"
+      - "Event audit entries linked to turn audit trail"
+    
+    files_to_create:
+      - "src/core/orchestrator/terminal_events.py"
+      - "src/core/orchestrator/event_registry.py"
+    
+    files_to_modify:
+      - "src/core/orchestrator/conversation_protocol.py"  # Integrate event firing
+    
+    verification_method: |
+      Unit tests in tests/unit/core/orchestrator/test_terminal_events.py:
+      - TestEventDefinitions: 7 tests (one per event)
+      - TestEventRegistry: 5 tests
+      - TestEventListeners: 6 tests
+      - TestEventAuditTrail: 4 tests
+      - Total: 22 tests
+    
+    compliance:
+      - CORE-012: Docstrings (Google style) ✓
+      - CORE-027: Audit trail per event ✓
+      - CORE-028: Kebab-case naming ✓
+  
+  # ---------------------------------------------------------------------------
+  # OC-002: Integration with All Orchestrators
+  # ---------------------------------------------------------------------------
+  - ac_id: "OC-002-02"
+    title: "Wrap PlanningOrchestrator with ConversationProtocol"
+    description: |
+      Apply ConversationProtocol wrapper pattern to PlanningOrchestrator.
+      
+      Changes:
+      - PlanningOrchestrator.execute() remains unchanged (core logic)
+      - New method: execute_with_continuation() wraps with ConversationProtocol
+      - Update MasterOrchestrator routing to use execute_with_continuation()
+      - Validate multi-turn planning workflow works end-to-end
+      
+      Multi-Turn Scenario:
+      1. User: "Get phase 01 status" → Turn 1 completes, suggests "next AC"
+      2. User: "Show next AC" → Turn 2 completes, suggests "plan it"
+      3. User: "Plan it" → Turn 3 completes, suggests "execute"
+      4. User: "execute" → Turn 4 completes, COMPLETION reason (done)
+      
+      Validation:
+      - Each turn has clear ContinuationDecision
+      - State persists across turns (via ConversationSession)
+      - Audit trail shows Turn 1, 2, 3, 4 progression
+      - LENS executes per turn (not cached)
+      - Token usage visible per turn
+    
+    status: "NOT_STARTED"
+    estimated_hours: 3
+    
+    acceptance_tests:
+      - "PlanningOrchestrator wrapped with ConversationProtocol"
+      - "execute_with_continuation() returns ContinuationDecision"
+      - "4+ turn planning workflow works end-to-end"
+      - "State persists across turns"
+      - "Audit trail shows all turns"
+      - "MasterOrchestrator routes to wrapped version"
+      - "All existing PlanningOrchestrator tests still pass"
+    
+    files_to_modify:
+      - "src/orchestrators/domain/planning_orchestrator.py"  # Add wrapper method
+      - "src/orchestrators/master/master_orchestrator.py"   # Route to wrapper
+    
+    verification_method: |
+      Integration tests in tests/integration/test_planning_orchestrator_multi_turn.py:
+      - TestPlanningOrchestrationMultiTurn: 8 tests
+      - TestContinuationDecisionPropagation: 4 tests
+      - TestStatePersistence: 4 tests
+      - TestAuditTrailPerTurn: 4 tests
+      - Total: 20 tests
+    
+    compliance:
+      - CORE-001: Incremental execution per turn ✓
+      - CORE-019: Per-turn routing ✓
+      - CORE-027: Audit trail per turn ✓
+  
+  # ---------------------------------------------------------------------------
+  # OC-003: Additional Orchestrator Integrations
+  # ---------------------------------------------------------------------------
+  - ac_id: "OC-003-01"
+    title: "Wrap ADOOrchestrator, TDDOrchestrator with ConversationProtocol"
+    description: |
+      Apply ConversationProtocol pattern to remaining orchestrators.
+      
+      Orchestrators to wrap:
+      - ADOOrchestrator: ADO planning + tracking across turns
+      - TDDOrchestrator: Test-driven development across turns
+      - InteractionOrchestrator: Context building with multi-turn clarification
+      
+      Each wrapped orchestrator:
+      - Has execute_with_continuation() method
+      - Returns ContinuationDecision with domain-specific next operations
+      - Integrates with MasterOrchestrator routing
+      - Tested with 4+ turn end-to-end workflows
+      
+      Multi-Turn Examples:
+      - ADO: Track Sprint → Create Story → Add Tasks → Review Plan → COMPLETION
+      - TDD: Red Phase → Green Phase → Refactor → Verify → COMPLETION
+      - Interaction: Build Context → Present to User → Approve → Done → COMPLETION
+    
+    status: "NOT_STARTED"
+    estimated_hours: 4
+    
+    acceptance_tests:
+      - "ADOOrchestrator wrapped and tested (4+ turns)"
+      - "TDDOrchestrator wrapped and tested (4+ turns)"
+      - "InteractionOrchestrator wrapped and tested (4+ turns)"
+      - "All wrapped orchestrators work with MasterOrchestrator"
+      - "Multi-turn workflows achieve COMPLETION state"
+      - "Continuation decisions reflect domain-specific operations"
+    
+    files_to_modify:
+      - "src/orchestrators/domain/ado_orchestrator.py"
+      - "src/orchestrators/domain/tdd_orchestrator.py"
+      - "src/orchestrators/domain/interaction_orchestrator.py"
+      - "src/orchestrators/master/master_orchestrator.py"  # Route to all wrappers
+    
+    verification_method: |
+      Integration tests in:
+      - tests/integration/test_ado_orchestrator_multi_turn.py (8 tests)
+      - tests/integration/test_tdd_orchestrator_multi_turn.py (8 tests)
+      - tests/integration/test_interaction_orchestrator_multi_turn.py (8 tests)
+      - Total: 24 tests
+    
+    compliance:
+      - CORE-019: Per-turn routing all orchestrators ✓
+  
+  # ---------------------------------------------------------------------------
+  # OC-003: Master Orchestrator Continuation Loop
+  # ---------------------------------------------------------------------------
+  - ac_id: "OC-003-02"
+    title: "Master Orchestrator Continuation Loop Pattern"
+    description: |
+      Update MasterOrchestrator to use ConversationProtocol pattern.
+      
+      Current Pattern (❌ ANTI-PATTERN):
+        while True:
+            result = route_to_orchestrator(intent)
+            if should_stop(result):
+                break
+      
+      Better Pattern (✅ CORTEX-ALIGNED):
+        protocol = ConversationProtocol(selected_orchestrator)
+        turn = 1
+        while True:
+            decision = protocol.execute_turn(user_input, context)
+            if decision.should_continue == False:
+                break
+            turn += 1
+      
+      Key changes:
+      - MasterOrchestrator uses explicit ContinuationDecision
+      - Each turn routed to appropriate domain orchestrator (wrapped)
+      - Continuation reasons clear and auditable
+      - Token budget visible per turn
+      - User informed of why orchestrator is stopping
+      
+      UI Integration:
+      - Dashboard shows per-turn continuation decisions
+      - User sees reason why orchestrator stopped
+      - Can resume if decision.is_safe_to_resume == True
+    
+    status: "NOT_STARTED"
+    estimated_hours: 4
+    
+    acceptance_tests:
+      - "MasterOrchestrator uses ConversationProtocol"
+      - "Multi-turn workflow from user request to COMPLETION"
+      - "Each turn shows clear ContinuationDecision"
+      - "Token usage visible per turn"
+      - "Continuation reason shown to user"
+      - "Can resume workflow if decision.is_safe_to_resume"
+      - "Dashboard displays per-turn progression"
+    
+    files_to_modify:
+      - "src/orchestrators/master/master_orchestrator.py"  # Main loop
+      - "src/dashboard/server.py"  # Show decisions
+    
+    verification_method: |
+      Integration tests in tests/integration/test_master_orchestrator_continuation.py:
+      - TestMasterOrchestrationLoop: 6 tests
+      - TestContinuationDecisionDisplay: 4 tests
+      - TestResumableWorkflows: 4 tests
+      - Total: 14 tests
+    
+    compliance:
+      - CORE-001: Incremental <500 lines per turn ✓
+      - CORE-019: Master routing ✓
+      - CORE-027: Audit trail ✓
+  
+  # ---------------------------------------------------------------------------
+  # OC-004: Test Suite for Multi-Round Orchestration
+  # ---------------------------------------------------------------------------
+  - ac_id: "OC-004-01"
+    title: "Comprehensive Multi-Round Orchestration Tests"
+    description: |
+      Create comprehensive test suite validating ConversationProtocol across:
+      - Unit tests: ContinuationDecision, ConversationProtocol, events
+      - Integration tests: Planning, ADO, TDD, Interaction orchestrators
+      - End-to-end tests: Master orchestrator multi-turn workflows
+      
+      Test Scenarios:
+      1. Single Turn (execute one request, COMPLETION)
+      2. Multiple Turns (5+ turns, final COMPLETION)
+      3. User Rejection (COMPLETION after user rejects and tries again)
+      4. Token Limit (approaching limit, graceful halt)
+      5. Governance Violation (halt on rule violation)
+      6. Max Turns Reached (safety limit enforced)
+      7. Error Recovery (error in turn 3, graceful handling)
+      8. State Persistence (Turn 5 has access to Turn 1-4 context)
+      
+      Test Patterns:
+      - ConversationSession for state tracking
+      - RoundContext for single-turn input/output
+      - ContinuityValidator for multi-round assertions
+      - AuditTrailValidator for integrity checking
+    
+    status: "NOT_STARTED"
+    estimated_hours: 6
+    
+    acceptance_tests:
+      - "50+ unit tests for core classes"
+      - "60+ integration tests for orchestrators"
+      - "30+ end-to-end tests for workflows"
+      - "All test scenarios pass with >95% code coverage"
+      - "Audit trail validation framework present"
+      - "State persistence across turns verified"
+      - "Token tracking per turn validated"
+      - "Governance enforcement per turn validated"
+    
+    files_to_create:
+      - "tests/unit/core/orchestrator/test_continuation_decision.py"
+      - "tests/unit/core/orchestrator/test_conversation_protocol.py"
+      - "tests/unit/core/orchestrator/test_terminal_events.py"
+      - "tests/integration/test_planning_orchestrator_multi_turn.py"
+      - "tests/integration/test_ado_orchestrator_multi_turn.py"
+      - "tests/integration/test_tdd_orchestrator_multi_turn.py"
+      - "tests/integration/test_interaction_orchestrator_multi_turn.py"
+      - "tests/integration/test_master_orchestrator_continuation.py"
+      - "tests/support/multi_round_test_framework.py"  # Shared utilities
+    
+    verification_method: |
+      All tests pass with:
+      - pytest with -v (verbose) flag
+      - Coverage >95% for orchestrator core classes
+      - No flaky tests (run 3x, all pass)
+      - CI/CD integration successful
+    
+    compliance:
+      - CORE-008: TDD (tests first, RED → GREEN) ✓
+      - CORE-001: Tests validate incremental execution ✓
+  
+  # ---------------------------------------------------------------------------
+  # OC-004: Documentation & Dashboard Integration
+  # ---------------------------------------------------------------------------
+  - ac_id: "OC-004-02"
+    title: "Documentation, Dashboard UI, and User Guidance"
+    description: |
+      Create comprehensive documentation and UI for ConversationProtocol pattern.
+      
+      Documentation:
+      1. Architecture Guide (.github/docs/orchestrator-continuation-pattern.md)
+         - Problem statement (why not simple loops)
+         - Solution architecture (ConversationProtocol)
+         - ContinuationDecision reference
+         - Integration guide for new orchestrators
+         - Examples: Planning, ADO, TDD, Interaction workflows
+      
+      2. Developer Guide (.github/docs/multi-turn-orchestration-development.md)
+         - How to wrap an orchestrator
+         - How to define next_operation
+         - How to handle continuation reasons
+         - Testing multi-turn workflows
+      
+      3. API Reference
+         - ConversationProtocol class reference
+         - ContinuationDecision reference
+         - ContinuationReason enum reference
+      
+      Dashboard UI:
+      1. Workflow Progress Panel
+         - Shows current turn number (e.g., "Turn 3 of 10")
+         - Shows continuation decision for last turn
+         - Shows reason why orchestrator stopped
+      
+      2. Token Budget Panel
+         - Shows tokens used per turn
+         - Shows total tokens used
+         - Shows % of token budget remaining
+      
+      3. Audit Trail Panel
+         - Shows all turns in reverse chronological order
+         - Expandable: AC_START, AC_EXECUTE, AC_COMPLETE
+         - Shows continuation reason per turn
+      
+      User Guidance:
+      - "Your orchestrator is on Turn 3 of 10"
+      - "Reason: Waiting for your approval"
+      - "Can resume? Yes" / "No"
+      - "Next operation: review_plan"
+    
+    status: "NOT_STARTED"
+    estimated_hours: 4
+    
+    acceptance_tests:
+      - "Architecture guide written and reviewed"
+      - "Developer guide written with examples"
+      - "API reference complete and accurate"
+      - "Dashboard UI shows workflow progress"
+      - "Dashboard UI shows token budget"
+      - "Dashboard UI shows audit trail"
+      - "User guidance clear and actionable"
+      - "All documentation links work"
+    
+    files_to_create:
+      - ".github/docs/orchestrator-continuation-pattern.md"
+      - ".github/docs/multi-turn-orchestration-development.md"
+      - "src/dashboard/components/WorkflowProgressPanel.tsx" (or similar)
+      - "src/dashboard/components/TokenBudgetPanel.tsx"
+      - "src/dashboard/components/AuditTrailPanel.tsx"
+    
+    files_to_modify:
+      - "README.md"  # Add link to new documentation
+      - "src/dashboard/server.py"  # Add endpoints for UI data
+    
+    verification_method: |
+      Manual review of:
+      - Documentation clarity and completeness
+      - Dashboard UI usability and correctness
+      - User guidance actionability
+    
+    compliance:
+      - CORE-012: Docstrings in code ✓
+      - Documentation standards ✓
+
+# =============================================================================
+# IMPLEMENTATION ROADMAP
+# =============================================================================
+
+implementation_roadmap:
+  week_1:
+    days: 3
+    effort: "15 hours"
+    tasks:
+      - "OC-001-01: Create ContinuationDecision + ContinuationReason"
+      - "OC-001-02: Create ConversationProtocol core class"
+      - "OC-002-01: Create terminal events infrastructure"
+    deliverable: "Core orchestrator continuation framework"
+  
+  week_2:
+    days: 2
+    effort: "15 hours"
+    tasks:
+      - "OC-002-02: Wrap PlanningOrchestrator"
+      - "OC-003-01: Wrap ADO, TDD, Interaction orchestrators"
+      - "OC-003-02: Update MasterOrchestrator loop"
+    deliverable: "All orchestrators support ConversationProtocol"
+  
+  week_3:
+    days: 2
+    effort: "10 hours"
+    tasks:
+      - "OC-004-01: Create comprehensive test suite (140+ tests)"
+      - "OC-004-02: Documentation + Dashboard UI"
+      - "Phase lock + Audit verification"
+    deliverable: "Complete, tested, documented phase"
+
+# =============================================================================
+# CORTEX ARCHITECTURE ALIGNMENT
+# =============================================================================
+
+cortex_alignment:
+  CORE-001_incremental_execution:
+    principle: "Execute <500 lines per turn"
+    how: "Each turn explicitly bounded; ConversationProtocol.execute_turn() processes exactly one turn"
+    verification: "Token usage visible in ContinuationDecision.token_usage per turn"
+  
+  CORE-019_tdd_master_routing:
+    principle: "Master orchestrator routes via TDD routing engine"
+    how: "MasterOrchestrator receives ContinuationDecision.next_operation from orchestrator"
+    verification: "MasterOrchestrator tests validate routing based on continuation reasons"
+  
+  CORE-027_audit_trail:
+    principle: "AC_START, AC_EXECUTE, AC_COMPLETE logged per lifecycle event"
+    how: "ConversationProtocol calls _log_ac_*() methods per turn"
+    verification: "Audit entries linked to ContinuationDecision.audit_entry_id"
+  
+  LENS_protocol:
+    principle: "Language → Examination → Navigation → Synthesis executed per turn"
+    how: "Turn context includes all LENS phases, re-executed per turn (not cached)"
+    verification: "Integration tests validate LENS execution per turn"
+  
+  governance_enforcement:
+    principle: "Governance validation before every turn"
+    how: "_validate_governance_before_turn() called; halts if violations detected"
+    verification: "Tests validate halt on GOVERNANCE_HALT reason"
+  
+  state_persistence:
+    principle: "State carried forward across turns via ConversationSession"
+    how: "execute_turn(user_input, previous_context) maintains context"
+    verification: "State persistence tests validate Turn N accesses Turn 1..N-1 context"
+
+# =============================================================================
+# SUCCESS CRITERIA
+# =============================================================================
+
+success_criteria:
+  functional:
+    - "ConversationProtocol successfully wraps IOrchestrator"
+    - "All 8 ACs completed and tested"
+    - "140+ tests pass with >95% coverage"
+    - "All orchestrators support multi-turn workflows"
+    - "Master orchestrator loop pattern established"
+  
+  quality:
+    - "Zero anti-patterns (no hidden loop state)"
+    - "Every continuation decision explicit and auditable"
+    - "Token tracking per turn operational"
+    - "Governance validation per turn operational"
+  
+  documentation:
+    - "Architecture guide comprehensive and clear"
+    - "Developer guide with 5+ examples"
+    - "Dashboard UI fully functional"
+    - "All links working, no broken references"
+  
+  testing:
+    - "Unit: 50+ tests, all passing"
+    - "Integration: 60+ tests, all passing"
+    - "E2E: 30+ tests, all passing"
+    - "Coverage: >95% for orchestrator core"
+  
+  governance:
+    - "CORE-001: Per-turn incremental execution ✓"
+    - "CORE-008: TDD pattern (tests first) ✓"
+    - "CORE-011: Type hints mandatory ✓"
+    - "CORE-012: Docstrings (Google style) ✓"
+    - "CORE-019: Master orchestrator routing ✓"
+    - "CORE-027: Audit trail per turn ✓"
+    - "CORE-028: Kebab-case naming ✓"
+
+# =============================================================================
+# RISK MITIGATION
+# =============================================================================
+
+risks:
+  - risk: "ConversationProtocol adds complexity"
+    mitigation: "Pattern is simpler than managing hidden loop state; tests prove it"
+  
+  - risk: "Orchestrators need refactoring"
+    mitigation: "Wrapper pattern - no changes to existing orchestrator logic"
+  
+  - risk: "Performance impact from per-turn re-evaluation"
+    mitigation: "Caching at ConversationSession level if needed; measure first"
+  
+  - risk: "Token limit accuracy"
+    mitigation: "Integration with LLM token counter; validate against actual usage"
+
+metadata:
+  author: "Asif Hussain"
+  copyright: "© 2025-2026 Asif Hussain. All rights reserved."
+  created_at: "2026-01-16T16:00:00Z"
+  architecture_challenge_date: "2026-01-16T16:15:00Z"
+  llm_design_time_minutes: 45
