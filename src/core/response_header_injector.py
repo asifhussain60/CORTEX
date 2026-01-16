@@ -15,6 +15,184 @@ from typing import Dict, Any, Optional
 from datetime import datetime
 from .response_header_config import HeaderConfigurationManager
 from .response_template_engine import ResponseTemplateEngine
+import re
+import yaml
+
+
+# =============================================================================
+# SANITIZATION HELPER FUNCTIONS (AC-FIX-004-01: Prompt Injection Prevention)
+# =============================================================================
+
+def escape_yaml_string(value: str) -> str:
+    """
+    Escape a string to be safe for YAML value contexts.
+    
+    Prevents prompt injection attacks by escaping YAML special characters.
+    Special characters that need escaping in YAML:
+    - : (colon) - indicates key/value pairs
+    - - (dash) - indicates list items
+    - ? (question mark) - explicit keys
+    - [ ] (brackets) - flow sequences
+    - { } (braces) - flow mappings
+    - , (comma) - flow separators
+    - & (ampersand) - anchors
+    - * (asterisk) - aliases
+    - # (hash) - comments
+    - | (pipe) - block scalars
+    - > (greater) - folded scalars
+    
+    Strategy: Quote the entire string if it contains any special characters.
+    This ensures the entire value is treated as a literal string.
+    
+    Args:
+        value: String value to escape
+        
+    Returns:
+        Escaped string safe for YAML contexts
+    """
+    if not isinstance(value, str):
+        value = str(value)
+    
+    # Check if string contains any YAML special characters
+    yaml_special_chars = r'[:\-\?[\]{},&*#|>\'\"@`]|^-|^---'
+    
+    if re.search(yaml_special_chars, value) or value.startswith(' ') or value.endswith(' '):
+        # Quote the string to treat it as a literal
+        # Escape any quotes within the string
+        escaped = value.replace('\\', '\\\\').replace('"', '\\"')
+        return f'"{escaped}"'
+    
+    return value
+
+
+def validate_ac_id(ac_id: str) -> bool:
+    """
+    Validate AC-ID format against whitelist pattern.
+    
+    Valid formats:
+    - AC-FIX-001-01
+    - AC-DOC-007-01
+    - AC-MINOR-008-01
+    - CORE-001
+    - FINDING-001
+    
+    Args:
+        ac_id: AC-ID string to validate
+        
+    Returns:
+        True if valid format, False otherwise
+    """
+    # Allow alphanumeric and hyphens, but nothing else
+    if not isinstance(ac_id, str):
+        return False
+    
+    # Pattern: Uppercase letters, numbers, hyphens only
+    # Must start and end with alphanumeric
+    pattern = r'^[A-Z][A-Z0-9]*([-][A-Z0-9]+)*$'
+    return bool(re.match(pattern, ac_id))
+
+
+def validate_operation_name(operation: str) -> bool:
+    """
+    Validate operation name against whitelist.
+    
+    Valid operations (from typical governance domains):
+    create, read, update, delete, execute, query, backup, restore, validate, etc.
+    
+    Args:
+        operation: Operation name to validate
+        
+    Returns:
+        True if valid, False otherwise
+    """
+    if not isinstance(operation, str):
+        return False
+    
+    # Allow lowercase alphanumeric and underscores only
+    pattern = r'^[a-z][a-z0-9_]{0,31}$'
+    return bool(re.match(pattern, operation))
+
+
+def validate_domain_name(domain: str) -> bool:
+    """
+    Validate domain name against whitelist.
+    
+    Valid domains: governance, security, compliance, operations, infrastructure
+    
+    Args:
+        domain: Domain name to validate
+        
+    Returns:
+        True if valid, False otherwise
+    """
+    if not isinstance(domain, str):
+        return False
+    
+    # Allow lowercase alphanumeric and underscores only
+    pattern = r'^[a-z][a-z0-9_]{0,31}$'
+    return bool(re.match(pattern, domain))
+
+
+def sanitize_context_value(var_name: str, value: Any, is_mandatory: bool = False) -> str:
+    """
+    Sanitize a context value before interpolation.
+    
+    Strategy:
+    1. For known fields with whitelists (ac_id, operation_name, domain),
+       validate against whitelist
+    2. For all values, apply YAML-safe escaping
+    3. Reject if whitelist validation fails (for mandatory fields)
+    
+    Args:
+        var_name: Variable name to determine validation rules
+        value: Value to sanitize
+        is_mandatory: Whether this is a mandatory variable
+        
+    Returns:
+        Sanitized, escaped string value
+        
+    Raises:
+        ValueError: If whitelist validation fails for mandatory field
+    """
+    if value is None:
+        return ""
+    
+    value_str = str(value)
+    
+    # Apply whitelist validation for known fields
+    if var_name.lower() in ('ac_id', 'ac-id', 'acid'):
+        if not validate_ac_id(value_str):
+            msg = f"Invalid AC-ID format: {value_str}"
+            if is_mandatory:
+                raise ValueError(msg)
+            # For optional, log warning but continue
+            value_str = escape_yaml_string(value_str)
+        else:
+            value_str = escape_yaml_string(value_str)
+    
+    elif var_name.lower() in ('operation_name', 'operation', 'op_name'):
+        if not validate_operation_name(value_str):
+            msg = f"Invalid operation name: {value_str}"
+            if is_mandatory:
+                raise ValueError(msg)
+            value_str = escape_yaml_string(value_str)
+        else:
+            value_str = escape_yaml_string(value_str)
+    
+    elif var_name.lower() in ('domain_name', 'domain'):
+        if not validate_domain_name(value_str):
+            msg = f"Invalid domain name: {value_str}"
+            if is_mandatory:
+                raise ValueError(msg)
+            value_str = escape_yaml_string(value_str)
+        else:
+            value_str = escape_yaml_string(value_str)
+    
+    else:
+        # For unknown fields, just apply escaping
+        value_str = escape_yaml_string(value_str)
+    
+    return value_str
 
 
 # =============================================================================
@@ -236,6 +414,11 @@ class ResponseHeaderInjector:
         """
         Substitute template variables with context values.
 
+        SECURITY: All values are sanitized to prevent prompt injection attacks.
+        - Mandatory variables: Validated against whitelists where applicable
+        - All values: YAML-safe escaped to prevent injection
+        - Special characters: Quoted to treat as literal strings
+
         Handles both mandatory and auto-populated variables.
 
         Args:
@@ -243,7 +426,10 @@ class ResponseHeaderInjector:
             context: Variable values from caller
 
         Returns:
-            Template with variables substituted
+            Template with variables substituted (sanitized and escaped)
+            
+        Raises:
+            ValueError: If mandatory field validation fails (ac_id, operation, domain)
         """
         result = template
 
@@ -251,8 +437,10 @@ class ResponseHeaderInjector:
         for var_name in self.config_manager.get_mandatory_variables():
             placeholder = f"{{{var_name}}}"
             if var_name in context:
-                value = str(context[var_name])
-                result = result.replace(placeholder, value)
+                value = context[var_name]
+                # Sanitize and escape the value (prevents prompt injection)
+                sanitized_value = sanitize_context_value(var_name, value, is_mandatory=True)
+                result = result.replace(placeholder, sanitized_value)
             else:
                 # Use empty string if not provided (after logging if configured)
                 enforcement = self.config_manager.get_enforcement_config()
@@ -264,7 +452,9 @@ class ResponseHeaderInjector:
         auto_vars = self.config_manager.get_auto_populated_variables()
         for var_name, value in auto_vars.items():
             placeholder = f"{{{var_name}}}"
-            result = result.replace(placeholder, str(value))
+            # Sanitize and escape auto-populated values too
+            sanitized_value = sanitize_context_value(var_name, value, is_mandatory=False)
+            result = result.replace(placeholder, sanitized_value)
 
         return result
 
