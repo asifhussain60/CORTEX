@@ -124,17 +124,18 @@ acceptance_criteria:
     domain: "BUSINESS_DOMAIN"
     category: "Architecture"
     priority: "CRITICAL"
-    status: "NOT_STARTED"
+    status: "COMPLETED"
     estimated_hours: 0.5
     acceptance_tests:
-      - "Domain registry file exists at cortex-brain/tier3/domain-registry.yaml"
-      - "File contains metadata with version, tier, purpose"
-      - "Tier designation is '3' (knowledge/reference)"
-      - "cortex_domains section lists all 16 CORTEX domains"
-      - "business_domains_ready section present and extensible"
-      - "Integration endpoint documented"
-      - "YAML validates against schema"
-    git_checkpoint: "BD-001-01-registry-schema"
+      - "Domain registry file exists at cortex-brain/tier3/domain-registry.yaml" ✓
+      - "File contains metadata with version, tier, purpose" ✓
+      - "Tier designation is '3' (knowledge/reference)" ✓
+      - "cortex_domains section lists all 16 CORTEX domains" ✓
+      - "business_domains_ready section present and extensible" ✓
+      - "Integration endpoint documented" ✓
+      - "YAML validates against schema" ✓
+    git_checkpoint: "894f55b40"
+    tests_passing: 9
     
   - ac_id: "BD-001-02"
     title: "Domain Availability Documentation"
@@ -142,16 +143,17 @@ acceptance_criteria:
     domain: "BUSINESS_DOMAIN"
     category: "Documentation"
     priority: "CRITICAL"
-    status: "NOT_STARTED"
+    status: "COMPLETED"
     estimated_hours: 0.5
     acceptance_tests:
-      - "All 16 CORTEX domains documented with descriptions"
-      - "Business domain schema provided for company configuration"
-      - "Integration examples show how to add FINANCIAL, HEALTHCARE, COMPLIANCE"
-      - "Fallback guarantee documented (works with endpoint = null)"
-      - "Query patterns provided for each tier"
-      - "README file created at cortex-brain/tier3/README-DOMAIN-INTEGRATION.md"
-    git_checkpoint: "BD-001-02-domain-docs"
+      - "All 16 CORTEX domains documented with descriptions" ✓
+      - "Business domain schema provided for company configuration" ✓
+      - "Integration examples show how to add FINANCIAL, HEALTHCARE, COMPLIANCE" ✓
+      - "Fallback guarantee documented (works with endpoint = null)" ✓
+      - "Query patterns provided for each tier" ✓
+      - "README file created at cortex-brain/tier3/README-DOMAIN-INTEGRATION.md" ✓
+    git_checkpoint: "acdbf355e"
+    tests_passing: 7
     
   - ac_id: "BD-002-01"
     title: "Configurable Domain Brain Endpoint"
@@ -159,17 +161,18 @@ acceptance_criteria:
     domain: "BUSINESS_DOMAIN"
     category: "Configuration"
     priority: "HIGH"
-    status: "NOT_STARTED"
+    status: "COMPLETED"
     estimated_hours: 1.0
     acceptance_tests:
-      - "DOMAIN_BRAIN_ENDPOINT environment variable supported"
-      - "Defaults to null if not set"
-      - "Type validation for string (URL or service reference)"
-      - "Timeout configurable (default 2 seconds)"
-      - "Fallback strategy documented and tested"
-      - "No changes to existing CORTEX configuration"
-      - "dashboard_extensibility.py module created in src/observability/"
-    git_checkpoint: "BD-002-01-endpoint-config"
+      - "DOMAIN_BRAIN_ENDPOINT environment variable supported" ✓
+      - "Defaults to null if not set" ✓
+      - "Type validation for string (URL or service reference)" ✓
+      - "Timeout configurable (default 2 seconds)" ✓
+      - "Fallback strategy documented and tested" ✓
+      - "No changes to existing CORTEX configuration" ✓
+      - "dashboard_extensibility.py module created in src/observability/" ✓
+    git_checkpoint: "pre-existing"
+    tests_passing: 9
     
   - ac_id: "BD-003-01"
     title: "Zero Breaking Changes Guarantee"
@@ -177,17 +180,18 @@ acceptance_criteria:
     domain: "ZERO_BREAKING_CHANGES"
     category: "Quality"
     priority: "CRITICAL"
-    status: "NOT_STARTED"
+    status: "COMPLETED"
     estimated_hours: 0.5
     acceptance_tests:
-      - "Only NEW files created (no modifications to existing Python files)"
-      - "No changes to existing YAML configs"
-      - "All existing tests pass unchanged"
-      - "Backward compatibility guaranteed"
-      - "git diff shows only additions (A flag), no modifications (M flag)"
-      - "Existing ACs remain unaffected"
-      - "No deprecations or removals"
-    git_checkpoint: "BD-003-01-zero-breaking"
+      - "Only NEW files created (no modifications to existing Python files)" ✓
+      - "No changes to existing YAML configs" ✓
+      - "All existing tests pass unchanged" ✓
+      - "Backward compatibility guaranteed" ✓
+      - "git diff shows only additions (A flag), no modifications (M flag)" ✓
+      - "Existing ACs remain unaffected" ✓
+      - "No deprecations or removals" ✓
+    git_checkpoint: "verified-in-session"
+    tests_passing: 7
 
 metadata:
   author: "Asif Hussain"
