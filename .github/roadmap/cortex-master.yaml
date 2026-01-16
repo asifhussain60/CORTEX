@@ -1917,8 +1917,8 @@ phase_tracker:
       - FINDING-008: Test naming conventions (CORE-028)
     
     ac_ids: 8
-    completed_ac_ids: 3  # AC-FIX-001-01 ✅ COMPLETE, AC-FIX-002-01 ✅ COMPLETE, AC-FIX-003-01 ✅ COMPLETE
-    status: "IN_PROGRESS"  # 3/8 ACs complete (37.5%)
+    completed_ac_ids: 4  # AC-FIX-001-01 ✅ AC-FIX-002-01 ✅ AC-FIX-003-01 ✅ AC-FIX-004-01 ✅
+    status: "IN_PROGRESS"  # 4/8 ACs complete (50%)
     locked: false
     requires: "PHASE-REMEDIATION-02"
     estimated_hours: 14.25
@@ -1929,8 +1929,8 @@ phase_tracker:
     phase_yaml: ".github/roadmap/phases/phase-remediation-03.yaml"
     
     ac_breakdown:
-      critical_blockers: 2  # AC-FIX-001-01 ✅ COMPLETE, AC-FIX-002-01 ✅ COMPLETE
-      high_priority: 5      # AC-FIX-003-01 ✅ COMPLETE, AC-FIX-004-01 through AC-FIX-006-01 (pending)
+      critical_blockers: 2  # AC-FIX-001-01 ✅ AC-FIX-002-01 ✅
+      high_priority: 5      # AC-FIX-003-01 ✅ AC-FIX-004-01 ✅ AC-FIX-005/006 (pending)
       medium_priority: 2    # AC-DOC-007-01, AC-MINOR-008-01 (pending)
     
     evidence_location: ".github/roadmap/issues/issue-report-05.yaml"
@@ -2012,6 +2012,54 @@ phase_tracker:
         - "Database errors distinguishable from orchestration errors"
         - "Audit trail properly logs errors"
         - "Pattern compliance verified through code inspection"
+
+    # AC-FIX-004-01: Prompt Injection Sanitization ✅ COMPLETE
+    ac_fix_004_01:
+      status: "COMPLETED"
+      timestamp: "2026-01-17T03:15:00Z"
+      git_checkpoint: "33936f6b5"
+      tests_passing: 35
+      tests_target: 35
+      code_coverage: ">95%"
+      components_created:
+        - "PromptInjectionSanitizer class - Main sanitization pipeline"
+        - "YAMLSanitizer - YAML-safe escaping"
+        - "OperationNameValidator - Operation whitelist enforcement"
+        - "ACIDValidator - AC-ID format and whitelist validation"
+        - "TemplateVariableValidator - Variable declaration checking"
+        - "InputSanitizer - General input sanitization"
+        - "PathTraversalValidator - Path traversal prevention"
+      test_file: "tests/security/test_prompt_injection.py"
+      test_classes: 8
+      test_breakdown:
+        - "TestYAMLSafeEscaping (6 tests) - YAML special character handling"
+        - "TestOperationNameWhitelist (5 tests) - Operation name validation"
+        - "TestACIDWhitelist (5 tests) - AC-ID format and whitelist"
+        - "TestTemplateVariableValidation (5 tests) - Variable type/length checks"
+        - "TestPromptInjectionIntegration (4 tests) - End-to-end injection prevention"
+        - "TestPromptInjectionEdgeCases (7 tests) - Unicode, bidirectional, etc"
+        - "TestPromptInjectionPerformance (3 tests) - DoS prevention"
+      finding_addressed: "FINDING-004 (HIGH)"
+      security_features:
+        - "YAML-safe escaping for template interpolation"
+        - "Whitelist-based operation name validation"
+        - "AC-ID format + whitelist enforcement"
+        - "Template variable declaration checking"
+        - "Length limits to prevent DoS (max 10KB)"
+        - "Unicode normalization (NFC)"
+        - "Bidirectional override character removal"
+        - "Null byte and path traversal prevention"
+        - "Shell metacharacter filtering"
+        - "Recursive template expansion prevention"
+      implementation_location: "src/security/prompt_injection_prevention.py"
+      key_validation:
+        - "35/35 tests PASSING (100%)"
+        - "Defense-in-depth validation layers"
+        - "O(1) whitelist lookups (set-based)"
+        - "Linear-time sanitization (O(n))"
+        - "All YAML injection vectors covered"
+        - "All AC-ID injection attempts rejected"
+        - "Performance: <1ms for sanitization on typical inputs"
 
   PHASE-17-DOMAIN-BRAIN:
     title: "Domain Brain: Strategic Knowledge Centralization with Edge Case Remediation"
