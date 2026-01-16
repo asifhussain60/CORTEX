@@ -29,6 +29,7 @@ from src.core.orchestrator.terminal_events import (
 )
 from src.core.result import Result, Ok, Err
 from src.core.governance_registry import GovernanceRegistry, GovernanceViolationError
+from src.core.tier_validator import TierAccessValidator
 from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
 from src.core.intelligence.call_graph import CallGraphBuilder
 from src.core.intelligence.dependency_mapper import DependencyMapper
@@ -103,6 +104,7 @@ class ConversationProtocol:
         # Governance and audit
         self._governance_registry = None  # Will be injected if available
         self._audit_logger = None  # Will be set if available
+        self._tier_validator = TierAccessValidator(enforce_mode=True)  # AC-REM-002-08: Wire validator
         
         # AC-REM-001-01: Initialize AST Intelligence Engine for comprehension phase
         self.ast_engine = ASTIntelligenceEngine(enable_cache=True)
@@ -282,6 +284,51 @@ class ConversationProtocol:
             # Handle validation result
             if validation_result.is_ok():
                 # Governance validation passed
+                # AC-REM-002-08: Validate tier access via TierAccessValidator
+                # Check if orchestrator declares tier access
+                if hasattr(self.orchestrator, 'get_tier_access'):
+                    try:
+                        # Validate tier access for this turn
+                        tier_access_result = self._tier_validator.validate_access_attempt(
+                            orchestrator=self.orchestrator,
+                            tier=1,  # Default tier for infrastructure operations
+                            governance_rules=None
+                        )
+                        
+                        if not tier_access_result:
+                            # Tier access validation failed (non-enforcing mode returned False)
+                            violation_message = (
+                                f"Tier access validation failed for orchestrator {orchestrator_id} "
+                                f"on turn {self.turn_number}"
+                            )
+                            if self._audit_logger:
+                                self._audit_logger.log_operation_complete(
+                                    ac_id="AC-REM-002-08",
+                                    operation="TIER_VALIDATION_FAILED",
+                                    success=False,
+                                    details={
+                                        "turn_number": self.turn_number,
+                                        "orchestrator_id": orchestrator_id,
+                                        "violation": violation_message
+                                    }
+                                )
+                            return Err(violation_message)
+                    except (PermissionError, ValueError) as e:
+                        # Tier access validation failed (enforcing mode raised exception)
+                        violation_message = f"Tier access violation: {str(e)}"
+                        if self._audit_logger:
+                            self._audit_logger.log_operation_complete(
+                                ac_id="AC-REM-002-08",
+                                operation="TIER_VALIDATION_FAILED",
+                                success=False,
+                                details={
+                                    "turn_number": self.turn_number,
+                                    "orchestrator_id": orchestrator_id,
+                                    "violation": violation_message
+                                }
+                            )
+                        raise GovernanceViolationError(violation_message)
+                
                 # Log to audit trail if logger available
                 if self._audit_logger:
                     self._audit_logger.log_operation_start(
@@ -290,7 +337,8 @@ class ConversationProtocol:
                         context={
                             "turn_number": self.turn_number,
                             "orchestrator_id": orchestrator_id,
-                            "status": "PASSED"
+                            "status": "PASSED",
+                            "tier_validation": "PASSED"  # AC-REM-002-08
                         }
                     )
                 return Ok(True)
