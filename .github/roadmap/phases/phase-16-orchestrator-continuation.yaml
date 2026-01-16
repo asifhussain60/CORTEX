@@ -47,13 +47,13 @@ phase:
   can_run_parallel_with: ["PHASE-15-NEURAL-OBSERVATORY"]
   blocking: false  # Does not block other phases; enhances orchestrator internals
   
-  # Estimation (40 hours for 8 ACs)
-  estimated_hours: 40
-  estimated_days: 5
+  # Estimation (40 hours for 8 ACs + Context Carryover)
+  estimated_hours: 45
+  estimated_days: 6
   actual_hours: 0
   
   # Tracking
-  ac_ids: 8
+  ac_ids: 9
   completed_ac_ids: 0
   progress_percentage: 0.0
   last_updated: "2026-01-16T16:00:00Z"
@@ -581,6 +581,155 @@ acceptance_criteria:
       - CORE-012: Docstrings in code ✓
       - Documentation standards ✓
 
+  # ---------------------------------------------------------------------------
+  # OC-005: Context Carryover Management (NEW - Jan 16, 2026)
+  # ---------------------------------------------------------------------------
+  - ac_id: "OC-005-01"
+    title: "Explicit Context Carryover Framework for Multi-Turn Conversations"
+    description: |
+      Address critical insight: Context is ⚠️ CONDITIONAL in multi-turn conversations.
+      
+      PROBLEM STATEMENT:
+      When using AI agents across multiple conversation turns:
+      - Turn N+1 does NOT automatically inherit Turn N's context
+      - Context window limits may cause prior knowledge loss
+      - Implicit assumptions about "context carrying over" lead to bugs
+      
+      CORTEX SOLUTION: ConversationSession with explicit context management
+      
+      ConversationSession must:
+      1. **Explicit State Tracking**: Maintain comprehensive state dict
+         - Turn history (all previous inputs/outputs)
+         - Accumulated knowledge (facts learned, decisions made)
+         - Execution context (AC-ID, phase, user, timestamp)
+         - Governance state (rules checked, violations, approvals)
+      
+      2. **Context Recovery Mechanisms**: 
+         - Primary: Re-load from ConversationSession (persistent)
+         - Fallback: Query audit logs from governance.db (deterministic recovery)
+         - Safety: Hash chain verification (tamper-evident)
+      
+      3. **Per-Turn Context Injection**:
+         - Before execute_turn() executes, inject full ConversationSession
+         - Orchestrator receives COMPLETE context (not fragmented)
+         - No assumptions about "hidden" prior context
+         - Each turn is fully autonomous yet informed
+      
+      4. **Context Window Management**:
+         - Track context window size per turn
+         - If context threatens to exceed limits, summarize older turns
+         - Maintain summary chains (Turn 1-3 summary → Feed to Turn 4+)
+         - Log all summarization decisions in audit trail
+      
+      5. **Deterministic Context Restoration**:
+         - If context lost mid-conversation, restore from governance.db
+         - Query: SELECT * FROM audit_log WHERE conversation_id = ?
+         - Verify hash chain integrity during restoration
+         - Resume from exact prior state (no gaps, no duplicates)
+      
+      Implementation Details:
+      
+      ConversationSession class:
+        __init__(conversation_id, user, phase, orchestrator_type)
+        - conversation_id: UUID for entire multi-turn conversation
+        - turn_number: Increments per turn (1, 2, 3, ...)
+        - state_dict: {turn_1: {input, output, decisions}, turn_2: {...}, ...}
+        - context_summary: Condensed version for context-limited scenarios
+        - hash_chain: Linked hashes for integrity (AC_START → AC_EXECUTE → AC_COMPLETE)
+        
+        Methods:
+        - get_full_context() → dict (everything)
+        - get_context_summary() → str (condensed, ~500 words max)
+        - add_turn(turn_number, input, output, decision)
+        - verify_integrity() → bool (check hash chain)
+        - summarize_old_turns(keep_recent_n=3) → summary_str
+        - restore_from_audit_logs(conversation_id) → ConversationSession
+        
+      Per-Turn Pattern:
+        ```
+        session = ConversationSession.restore_if_exists(conversation_id)
+        full_context = session.get_full_context()  # NOT assumed, explicit
+        decision = orchestrator.execute_turn(user_input, full_context)
+        session.add_turn(turn_number, user_input, output, decision)
+        session.verify_integrity()  # Ensure no tampering
+        return decision
+        ```
+      
+      Governance Alignment:
+      - CORE-027: AC_START → AC_EXECUTE → AC_COMPLETE per turn (auditable)
+      - CORE-019: Master knows full context per routing decision
+      - AR-001-03: Governance rules immutable; context can't bypass rules
+      
+      Testing Strategy:
+      - Test 1: Single turn (context minimal)
+      - Test 2: 5 turns (context accumulates)
+      - Test 3: Context window limit (triggers summarization)
+      - Test 4: Context loss & recovery (restore from audit logs)
+      - Test 5: Concurrency (multiple conversations, sessions isolated)
+      - Test 6: Hash chain verification (detect tampering)
+      - Test 7: State mutations (ensure immutability where expected)
+    
+    status: "NOT_STARTED"
+    estimated_hours: 5
+    
+    acceptance_tests:
+      - "ConversationSession class exists with full state tracking"
+      - "Per-turn context injection works (no implicit assumptions)"
+      - "Context recovery from governance.db successful after loss"
+      - "Hash chain integrity verified per turn"
+      - "Context summarization triggered at window limits"
+      - "Multi-turn workflow (5 turns) maintains complete audit trail"
+      - "Concurrent conversations don't share session state"
+      - "All tests pass with >95% coverage"
+    
+    files_to_create:
+      - "src/core/orchestrator/conversation_session.py"
+      - "tests/unit/core/orchestrator/test_conversation_session.py"
+      - "tests/integration/test_context_carryover_scenarios.py"
+    
+    files_to_modify:
+      - "src/core/orchestrator/conversation_protocol.py"  # Integrate session
+      - "src/orchestrators/master/master_orchestrator.py"  # Use session
+    
+    verification_method: |
+      Unit tests in tests/unit/core/orchestrator/test_conversation_session.py:
+      - TestConversationSessionInitialization: 3 tests
+      - TestStateTracking: 5 tests
+      - TestContextInjection: 4 tests
+      - TestContextRecovery: 4 tests
+      - TestHashChainIntegrity: 3 tests
+      - TestContextSummarization: 3 tests
+      - Total: 22 tests
+      
+      Integration tests in tests/integration/test_context_carryover_scenarios.py:
+      - TestMultiTurnContextFlow: 8 tests
+      - TestConcurrentConversations: 4 tests
+      - TestContextWindowManagement: 4 tests
+      - Total: 16 tests
+      
+      Coverage: >95% for session classes
+    
+    compliance:
+      - CORE-001: Per-turn context explicit (not implicit) ✓
+      - CORE-011: Type hints mandatory ✓
+      - CORE-012: Docstrings (Google style) ✓
+      - CORE-019: Master has full context for routing ✓
+      - CORE-027: Context changes auditable ✓
+      - AR-001-03: Governance context immutable ✓
+    
+    architecture_insight: |
+      This AC embodies the discovery that "context in multi-turn AI conversations 
+      is ⚠️ CONDITIONAL". By implementing ConversationSession, we make this condition 
+      explicit and manageable rather than hiding it in fragile implicit assumptions.
+      
+      BEFORE (fragile):
+        Turn 2: "Assume Turn 1 context is somehow available"
+        Result: Bugs, context loss, implicit dependencies
+      
+      AFTER (robust):
+        Turn 2: "Here's EVERYTHING you need from prior turns"
+        Result: Explicit, testable, auditable, resilient to context window limits
+
 # =============================================================================
 # IMPLEMENTATION ROADMAP
 # =============================================================================
@@ -612,6 +761,15 @@ implementation_roadmap:
       - "OC-004-02: Documentation + Dashboard UI"
       - "Phase lock + Audit verification"
     deliverable: "Complete, tested, documented phase"
+  
+  week_4:
+    days: 1
+    effort: "5 hours"
+    tasks:
+      - "OC-005-01: ConversationSession with explicit context carryover management"
+      - "Integrate into ConversationProtocol + MasterOrchestrator"
+      - "Context recovery tests from governance.db"
+    deliverable: "Robust context management across turns"
 
 # =============================================================================
 # CORTEX ARCHITECTURE ALIGNMENT
@@ -655,10 +813,12 @@ cortex_alignment:
 success_criteria:
   functional:
     - "ConversationProtocol successfully wraps IOrchestrator"
-    - "All 8 ACs completed and tested"
+    - "ConversationSession manages explicit context across turns"
+    - "All 9 ACs completed and tested"
     - "140+ tests pass with >95% coverage"
     - "All orchestrators support multi-turn workflows"
     - "Master orchestrator loop pattern established"
+    - "Context recovery from governance.db operational"
   
   quality:
     - "Zero anti-patterns (no hidden loop state)"
