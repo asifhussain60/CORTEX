@@ -29,6 +29,7 @@ from src.core.orchestrator.terminal_events import (
 )
 from src.core.result import Result, Ok, Err
 from src.core.governance_registry import GovernanceRegistry, GovernanceViolationError
+from src.core.governance_pregate import get_governance_pregate, PreGateDecision
 from src.core.tier_validator import TierAccessValidator
 from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
 from src.core.intelligence.call_graph import CallGraphBuilder
@@ -187,6 +188,26 @@ class ConversationProtocol:
                 round_context.previous_context["comprehension_result"] = (
                     comprehension_result.unwrap() if comprehension_result.is_ok() else {}
                 )
+                
+                # Step 3c: Check pre-execution governance gates (AC-FIX-002-01)
+                # FINDING-002: Governance must prevent (not just log) unauthorized operations
+                pregate_result = self._check_pre_execution_gates()
+                if pregate_result.is_err():
+                    # Pre-gate blocked execution - return GOVERNANCE_HALT
+                    error_msg = pregate_result.unwrap_err()
+                    self._log_ac_execute_with_error(ac_start_entry_id, error_msg)
+                    
+                    # Return governance halt decision
+                    halt_decision = ContinuationDecision(
+                        reason=ContinuationReason.GOVERNANCE_HALT,
+                        can_continue=False,
+                        turn_number=self.turn_number,
+                        explanation=f"Pre-execution governance gate blocked: {error_msg}",
+                        next_operation=None,
+                        governance_violations=[error_msg],
+                    )
+                    self.decisions_history.append(halt_decision)
+                    return Ok(halt_decision)
                 
                 # Step 4: Execute orchestrator for one turn
                 try:
@@ -376,6 +397,104 @@ class ConversationProtocol:
         except Exception as e:
             # Wrap other exceptions
             error_msg = f"Governance validation failed: {str(e)}"
+            return Err(error_msg)
+
+    def _check_pre_execution_gates(self) -> Result[bool]:
+        """
+        Check pre-execution governance gates (AC-FIX-002-01).
+        
+        This method is called AFTER governance validation but BEFORE orchestrator execution.
+        It applies pre-gates that can prevent the orchestrator from running based on:
+        
+        1. Resource quota availability
+        2. Actor authorization
+        3. Tier access declarations
+        
+        Returns:
+            Ok(True) if all gates pass (execution allowed)
+            Err(message) if any gate blocks (execution prevented)
+        """
+        try:
+            # Get pre-gate instance
+            pregate = get_governance_pregate()
+            
+            # Get orchestrator ID
+            orchestrator_id = "unknown"
+            if hasattr(self.orchestrator, 'id'):
+                orchestrator_id = self.orchestrator.id
+            elif hasattr(self.orchestrator, 'domain'):
+                orchestrator_id = self.orchestrator.domain
+            elif hasattr(self.orchestrator, '__class__'):
+                orchestrator_id = self.orchestrator.__class__.__name__
+            
+            # Prepare gate context
+            context = {
+                "actor_id": orchestrator_id,
+                "turn_number": self.turn_number,
+                "timestamp": datetime.utcnow().isoformat(),
+            }
+            
+            # Get declared tier access if available
+            declared_tiers = []
+            if hasattr(self.orchestrator, 'get_tier_access'):
+                try:
+                    declared_tiers = self.orchestrator.get_tier_access()
+                except Exception:
+                    declared_tiers = []
+            
+            # Evaluate all gates
+            gate_decision: PreGateDecision = pregate.evaluate_all_gates(
+                operation_id=f"turn_{self.turn_number}",
+                actor_id=orchestrator_id,
+                target_resource="orchestrator_execution",
+                estimated_token_cost=1000,  # Default estimate
+                tier_access=declared_tiers if declared_tiers else None,
+                context=context
+            )
+            
+            # Log gate decision to audit trail if logger available
+            if self._audit_logger:
+                self._audit_logger.log_operation_start(
+                    ac_id="AC-FIX-002-01",
+                    operation="PREGATE_CHECK",
+                    context={
+                        "turn_number": self.turn_number,
+                        "orchestrator_id": orchestrator_id,
+                        "decision": "ALLOWED" if gate_decision.allowed else "BLOCKED",
+                        "reason": gate_decision.reason,
+                        "violation_type": gate_decision.violation_type,
+                    }
+                )
+            
+            # Handle gate decision
+            if not gate_decision.allowed:
+                error_msg = f"Pre-execution gate blocked: {gate_decision.reason}"
+                
+                if self._audit_logger:
+                    self._audit_logger.log_operation_complete(
+                        ac_id="AC-FIX-002-01",
+                        operation="PREGATE_BLOCK",
+                        success=False,
+                        details={
+                            "reason": gate_decision.reason,
+                            "violation_type": gate_decision.violation_type,
+                            "audit_context": gate_decision.audit_context,
+                        }
+                    )
+                
+                return Err(error_msg)
+            
+            return Ok(True)
+        
+        except Exception as e:
+            error_msg = f"Pre-execution gate check failed: {str(e)}"
+            if self._audit_logger:
+                self._audit_logger.log_operation_complete(
+                    ac_id="AC-FIX-002-01",
+                    operation="PREGATE_ERROR",
+                    success=False,
+                    details={"error": str(e)}
+                )
             return Err(error_msg)
 
     def _create_round_context(
