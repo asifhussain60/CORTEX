@@ -1,0 +1,372 @@
+{
+  "version": "1.0",
+  "created": "2025-12-25",
+  "total_flaws": 40,
+  "categories": {
+    "security": 10,
+    "solid_violations": 8,
+    "code_quality": 10,
+    "performance": 6,
+    "testing": 4,
+    "documentation": 2
+  },
+  "flaws": {
+    "security": [
+      {
+        "id": "SEC-01",
+        "location": "src/api/auth.py",
+        "description": "Hardcoded JWT secret key",
+        "severity": "critical",
+        "mapped_capability": "code_sanitization"
+      },
+      {
+        "id": "SEC-02",
+        "location": "src/api/auth.py",
+        "description": "Weak password hashing (MD5)",
+        "severity": "critical",
+        "mapped_capability": "code_sanitization"
+      },
+      {
+        "id": "SEC-03",
+        "location": "src/data/database.py",
+        "description": "SQL injection vulnerability (string concatenation)",
+        "severity": "critical",
+        "mapped_capability": "architectural_review"
+      },
+      {
+        "id": "SEC-04",
+        "location": "src/api/products.py",
+        "description": "No input validation on API endpoints",
+        "severity": "high",
+        "mapped_capability": "system_refinement"
+      },
+      {
+        "id": "SEC-05",
+        "location": "src/app.py",
+        "description": "Debug mode enabled (debug=True)",
+        "severity": "high",
+        "mapped_capability": "code_sanitization"
+      },
+      {
+        "id": "SEC-06",
+        "location": ".env.example",
+        "description": "Database credentials committed to repo",
+        "severity": "critical",
+        "mapped_capability": "code_sanitization"
+      },
+      {
+        "id": "SEC-07",
+        "location": "src/api/users.py",
+        "description": "No rate limiting on authentication endpoints",
+        "severity": "medium",
+        "mapped_capability": "system_refinement"
+      },
+      {
+        "id": "SEC-08",
+        "location": "src/business/payment.py",
+        "description": "Payment processor API keys in code",
+        "severity": "critical",
+        "mapped_capability": "code_sanitization"
+      },
+      {
+        "id": "SEC-09",
+        "location": "src/api/orders.py",
+        "description": "Missing CSRF protection",
+        "severity": "high",
+        "mapped_capability": "architectural_review"
+      },
+      {
+        "id": "SEC-10",
+        "location": "src/data/cache.py",
+        "description": "Sensitive data cached without encryption",
+        "severity": "medium",
+        "mapped_capability": "system_refinement"
+      }
+    ],
+    "solid_violations": [
+      {
+        "id": "SOL-01",
+        "location": "src/api/users.py",
+        "description": "God class (800+ lines, handles auth + CRUD + validation)",
+        "severity": "high",
+        "principle": "SRP",
+        "mapped_capability": "architectural_review"
+      },
+      {
+        "id": "SOL-02",
+        "location": "src/business/payment.py",
+        "description": "Tight coupling to 3 payment processors (no interface)",
+        "severity": "medium",
+        "principle": "DIP",
+        "mapped_capability": "planning_system"
+      },
+      {
+        "id": "SOL-03",
+        "location": "src/data/repositories.py",
+        "description": "No repository interface, direct DB coupling",
+        "severity": "medium",
+        "principle": "DIP",
+        "mapped_capability": "architectural_review"
+      },
+      {
+        "id": "SOL-04",
+        "location": "src/business/pricing.py",
+        "description": "Open/Closed violation (hardcoded pricing rules)",
+        "severity": "low",
+        "principle": "OCP",
+        "mapped_capability": "planning_system"
+      },
+      {
+        "id": "SOL-05",
+        "location": "src/api/orders.py",
+        "description": "Interface segregation violation (fat interface)",
+        "severity": "low",
+        "principle": "ISP",
+        "mapped_capability": "system_refinement"
+      },
+      {
+        "id": "SOL-06",
+        "location": "src/business/inventory.py",
+        "description": "Liskov substitution violation (derived class breaks contract)",
+        "severity": "medium",
+        "principle": "LSP",
+        "mapped_capability": "architectural_review"
+      },
+      {
+        "id": "SOL-07",
+        "location": "src/utils/helpers.py",
+        "description": "God object (500+ lines, mixed responsibilities)",
+        "severity": "high",
+        "principle": "SRP",
+        "mapped_capability": "system_refinement"
+      },
+      {
+        "id": "SOL-08",
+        "location": "src/business/shipping.py",
+        "description": "Tight coupling to external APIs (no abstraction)",
+        "severity": "medium",
+        "principle": "DIP",
+        "mapped_capability": "planning_system"
+      }
+    ],
+    "code_quality": [
+      {
+        "id": "CQ-01",
+        "location": "src/api/orders.py",
+        "description": "Cyclomatic complexity 85 (should be <15)",
+        "severity": "high",
+        "metric": "complexity",
+        "mapped_capability": "system_refinement"
+      },
+      {
+        "id": "CQ-02",
+        "location": "src/business/payment.py",
+        "description": "Duplicate code (3 payment processors, 90% identical)",
+        "severity": "medium",
+        "metric": "duplication",
+        "mapped_capability": "holistic_discovery"
+      },
+      {
+        "id": "CQ-03",
+        "location": "src/utils/helpers.py",
+        "description": "Dead code (8 unused functions)",
+        "severity": "low",
+        "metric": "coverage",
+        "mapped_capability": "holistic_discovery"
+      },
+      {
+        "id": "CQ-04",
+        "location": "src/data/models.py",
+        "description": "Anemic domain model (data only, no behavior)",
+        "severity": "medium",
+        "metric": "design",
+        "mapped_capability": "architectural_review"
+      },
+      {
+        "id": "CQ-05",
+        "location": "src/api/products.py",
+        "description": "Long method (250+ lines, should be <50)",
+        "severity": "medium",
+        "metric": "length",
+        "mapped_capability": "system_refinement"
+      },
+      {
+        "id": "CQ-06",
+        "location": "src/business/inventory.py",
+        "description": "No error handling (bare except clauses)",
+        "severity": "high",
+        "metric": "reliability",
+        "mapped_capability": "tdd_mastery"
+      },
+      {
+        "id": "CQ-07",
+        "location": "src/utils/formatters.py",
+        "description": "Brittle string operations (no validation)",
+        "severity": "medium",
+        "metric": "robustness",
+        "mapped_capability": "tdd_mastery"
+      },
+      {
+        "id": "CQ-08",
+        "location": "src/data/database.py",
+        "description": "Magic numbers (no constants)",
+        "severity": "low",
+        "metric": "maintainability",
+        "mapped_capability": "system_refinement"
+      },
+      {
+        "id": "CQ-09",
+        "location": "src/api/auth.py",
+        "description": "Inconsistent naming conventions",
+        "severity": "low",
+        "metric": "style",
+        "mapped_capability": "system_maintenance"
+      },
+      {
+        "id": "CQ-10",
+        "location": "src/business/pricing.py",
+        "description": "Missing type hints (0% coverage)",
+        "severity": "low",
+        "metric": "documentation",
+        "mapped_capability": "system_refinement"
+      }
+    ],
+    "performance": [
+      {
+        "id": "PERF-01",
+        "location": "src/data/database.py",
+        "description": "N+1 queries in loops (100x slower)",
+        "severity": "high",
+        "impact": "latency",
+        "mapped_capability": "performance_baseline"
+      },
+      {
+        "id": "PERF-02",
+        "location": "src/api/products.py",
+        "description": "No pagination (loads all records into memory)",
+        "severity": "high",
+        "impact": "memory",
+        "mapped_capability": "performance_baseline"
+      },
+      {
+        "id": "PERF-03",
+        "location": "src/data/cache.py",
+        "description": "Memory leak (no cache cleanup, infinite growth)",
+        "severity": "critical",
+        "impact": "memory",
+        "mapped_capability": "brain_persistence"
+      },
+      {
+        "id": "PERF-04",
+        "location": "src/data/database.py",
+        "description": "No connection pooling (creates new connection per request)",
+        "severity": "medium",
+        "impact": "connections",
+        "mapped_capability": "performance_baseline"
+      },
+      {
+        "id": "PERF-05",
+        "location": "src/utils/helpers.py",
+        "description": "Unnecessary list copies (memory waste)",
+        "severity": "low",
+        "impact": "memory",
+        "mapped_capability": "system_refinement"
+      },
+      {
+        "id": "PERF-06",
+        "location": "src/api/orders.py",
+        "description": "Synchronous external API calls (timeout issues)",
+        "severity": "high",
+        "impact": "latency",
+        "mapped_capability": "end_to_end_workflows"
+      }
+    ],
+    "testing": [
+      {
+        "id": "TEST-01",
+        "location": "tests/test_api.py",
+        "description": "Placeholder tests (assert True, 0% real coverage)",
+        "severity": "critical",
+        "mapped_capability": "tdd_mastery"
+      },
+      {
+        "id": "TEST-02",
+        "location": "tests/test_business.py",
+        "description": "Happy path only (no edge cases, error scenarios)",
+        "severity": "high",
+        "mapped_capability": "tdd_mastery"
+      },
+      {
+        "id": "TEST-03",
+        "location": "tests/",
+        "description": "Missing test_data.py file entirely",
+        "severity": "high",
+        "mapped_capability": "tdd_mastery"
+      },
+      {
+        "id": "TEST-04",
+        "location": "tests/",
+        "description": "No mocking (tests hit real database)",
+        "severity": "medium",
+        "mapped_capability": "tdd_mastery"
+      }
+    ],
+    "documentation": [
+      {
+        "id": "DOC-01",
+        "location": "README.md",
+        "description": "Minimal documentation (50 lines, no setup instructions)",
+        "severity": "medium",
+        "mapped_capability": "system_refinement"
+      },
+      {
+        "id": "DOC-02",
+        "location": "docs/architecture.md",
+        "description": "Outdated documentation (contradicts actual code)",
+        "severity": "low",
+        "mapped_capability": "system_refinement"
+      }
+    ]
+  },
+  "capability_mapping": {
+    "code_sanitization": ["SEC-01", "SEC-02", "SEC-05", "SEC-06", "SEC-08"],
+    "planning_system": ["SOL-02", "SOL-04", "SOL-08"],
+    "tdd_mastery": ["CQ-06", "CQ-07", "TEST-01", "TEST-02", "TEST-03", "TEST-04"],
+    "system_maintenance": ["CQ-09"],
+    "system_refinement": ["SEC-04", "SEC-07", "SEC-10", "SOL-05", "SOL-07", "CQ-01", "CQ-05", "CQ-08", "CQ-10", "PERF-05", "DOC-01", "DOC-02"],
+    "architectural_review": ["SEC-03", "SEC-09", "SOL-01", "SOL-03", "SOL-06", "CQ-04"],
+    "holistic_discovery": ["CQ-02", "CQ-03"],
+    "deployment_pipeline": ["SEC-05"],
+    "multi_workspace": [],
+    "upgrade_path": [],
+    "end_to_end_workflows": ["PERF-06"],
+    "brain_persistence": ["PERF-03"],
+    "agent_collaboration": [],
+    "performance_baseline": ["PERF-01", "PERF-02", "PERF-04"],
+    "regression_detection": []
+  },
+  "baseline_metrics": {
+    "security_score": 2.0,
+    "solid_compliance": 3.0,
+    "code_quality": 3.0,
+    "test_coverage": 15.0,
+    "documentation_grade": "D",
+    "avg_complexity": 55,
+    "max_complexity": 85,
+    "duplicate_code_pct": 30,
+    "dead_code_lines": 500,
+    "performance_score": 2.5
+  },
+  "target_metrics": {
+    "security_score": 9.0,
+    "solid_compliance": 8.0,
+    "code_quality": 8.0,
+    "test_coverage": 85.0,
+    "documentation_grade": "B+",
+    "avg_complexity": 15,
+    "max_complexity": 25,
+    "duplicate_code_pct": 5,
+    "dead_code_lines": 0,
+    "performance_score": 8.5
+  }
+}
