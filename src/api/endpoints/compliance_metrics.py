@@ -39,20 +39,18 @@ async def get_coverage_metrics() -> Dict[str, Any]:
         - timestamp: Current timestamp
     """
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        
-        # Get total unique ACs
-        cursor.execute("SELECT COUNT(DISTINCT ac_id) FROM audit_log")
-        total_acs = cursor.fetchone()[0] or 0
-        
-        # Get completed ACs
-        cursor.execute(
-            "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation = 'AC_COMPLETE'"
-        )
-        covered_acs = cursor.fetchone()[0] or 0
-        
-        conn.close()
+        with sqlite3.connect(DB_PATH, timeout=10.0) as conn:
+            cursor = conn.cursor()
+            
+            # Get total unique ACs
+            cursor.execute("SELECT COUNT(DISTINCT ac_id) FROM audit_log")
+            total_acs = cursor.fetchone()[0] or 0
+            
+            # Get completed ACs
+            cursor.execute(
+                "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation = 'AC_COMPLETE'"
+            )
+            covered_acs = cursor.fetchone()[0] or 0
         
         coverage_percentage = (covered_acs / total_acs * 100) if total_acs > 0 else 0
         
@@ -75,42 +73,41 @@ async def get_coverage_by_domain() -> Dict[str, Dict[str, Any]]:
         Dictionary with domain codes as keys and coverage stats as values
     """
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        
-        # Get all unique domains
-        cursor.execute(
-            "SELECT DISTINCT SUBSTR(ac_id, 1, INSTR(ac_id, '-')-1) as domain FROM audit_log"
-        )
-        domains_raw = cursor.fetchall()
-        
-        domains_result = {}
-        
-        for domain_row in domains_raw:
-            domain = domain_row[0]
+        with sqlite3.connect(DB_PATH, timeout=10.0) as conn:
+            cursor = conn.cursor()
             
-            # Get total ACs for domain
+            # Get all unique domains
             cursor.execute(
-                f"SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE ac_id LIKE '{domain}-%'"
+                "SELECT DISTINCT SUBSTR(ac_id, 1, INSTR(ac_id, '-')-1) as domain FROM audit_log"
             )
-            total = cursor.fetchone()[0] or 0
+            domains_raw = cursor.fetchall()
             
-            # Get covered ACs for domain
-            cursor.execute(
-                f"SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE ac_id LIKE '{domain}-%' AND operation = 'AC_COMPLETE'"
-            )
-            covered = cursor.fetchone()[0] or 0
+            domains_result = {}
             
-            percentage = (covered / total * 100) if total > 0 else 0
-            
-            domains_result[domain] = {
-                "total": total,
-                "covered": covered,
-                "percentage": round(percentage, 1),
-                "status": "COMPLETE" if percentage == 100 else "IN_PROGRESS"
-            }
+            for domain_row in domains_raw:
+                domain = domain_row[0]
+                
+                # Get total ACs for domain
+                cursor.execute(
+                    f"SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE ac_id LIKE '{domain}-%'"
+                )
+                total = cursor.fetchone()[0] or 0
+                
+                # Get covered ACs for domain
+                cursor.execute(
+                    f"SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE ac_id LIKE '{domain}-%' AND operation = 'AC_COMPLETE'"
+                )
+                covered = cursor.fetchone()[0] or 0
+                
+                percentage = (covered / total * 100) if total > 0 else 0
+                
+                domains_result[domain] = {
+                    "total": total,
+                    "covered": covered,
+                    "percentage": round(percentage, 1),
+                    "status": "COMPLETE" if percentage == 100 else "IN_PROGRESS"
+                }
         
-        conn.close()
         return domains_result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -185,31 +182,30 @@ async def get_ac_details(ac_id: str) -> Dict[str, Any]:
         AC details including entries, status, history
     """
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        
-        # Get AC entries
-        cursor.execute(
-            "SELECT operation, context, timestamp FROM audit_log WHERE ac_id = ? ORDER BY timestamp",
-            (ac_id,)
-        )
-        entries = [dict(row) for row in cursor.fetchall()]
-        
-        if not entries:
-            raise HTTPException(status_code=404, detail=f"AC {ac_id} not found")
-        
-        # Determine status
-        statuses = [e['operation'] for e in entries]
-        status = "COMPLETE" if "AC_COMPLETE" in statuses else "IN_PROGRESS"
-        
-        conn.close()
-        
-        return {
-            "ac_id": ac_id,
-            "status": status,
-            "total_entries": len(entries),
-            "history": entries
-        }
+        with sqlite3.connect(DB_PATH, timeout=10.0) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            
+            # Get AC entries
+            cursor.execute(
+                "SELECT operation, context, timestamp FROM audit_log WHERE ac_id = ? ORDER BY timestamp",
+                (ac_id,)
+            )
+            entries = [dict(row) for row in cursor.fetchall()]
+            
+            if not entries:
+                raise HTTPException(status_code=404, detail=f"AC {ac_id} not found")
+            
+            # Determine status
+            statuses = [e['operation'] for e in entries]
+            status = "COMPLETE" if "AC_COMPLETE" in statuses else "IN_PROGRESS"
+            
+            return {
+                "ac_id": ac_id,
+                "status": status,
+                "total_entries": len(entries),
+                "history": entries
+            }
     except sqlite3.OperationalError as e:
         raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
@@ -220,36 +216,34 @@ async def get_overall_stats() -> Dict[str, Any]:
     Get comprehensive overall statistics about the governance framework.
     """
     try:
-        conn = get_db_connection()
-        cursor = conn.cursor()
-        
-        # Total entries
-        cursor.execute("SELECT COUNT(*) FROM audit_log")
-        total_entries = cursor.fetchone()[0] or 0
-        
-        # Total unique ACs
-        cursor.execute("SELECT COUNT(DISTINCT ac_id) FROM audit_log")
-        total_acs = cursor.fetchone()[0] or 0
-        
-        # Completed ACs
-        cursor.execute(
-            "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation = 'AC_COMPLETE'"
-        )
-        completed_acs = cursor.fetchone()[0] or 0
-        
-        # Operations breakdown
-        cursor.execute(
-            "SELECT operation, COUNT(*) FROM audit_log GROUP BY operation"
-        )
-        operations = {row[0]: row[1] for row in cursor.fetchall()}
-        
-        # Unique domains
-        cursor.execute(
-            "SELECT COUNT(DISTINCT SUBSTR(ac_id, 1, INSTR(ac_id, '-')-1)) FROM audit_log"
-        )
-        domains_count = cursor.fetchone()[0] or 0
-        
-        conn.close()
+        with sqlite3.connect(DB_PATH, timeout=10.0) as conn:
+            cursor = conn.cursor()
+            
+            # Total entries
+            cursor.execute("SELECT COUNT(*) FROM audit_log")
+            total_entries = cursor.fetchone()[0] or 0
+            
+            # Total unique ACs
+            cursor.execute("SELECT COUNT(DISTINCT ac_id) FROM audit_log")
+            total_acs = cursor.fetchone()[0] or 0
+            
+            # Completed ACs
+            cursor.execute(
+                "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation = 'AC_COMPLETE'"
+            )
+            completed_acs = cursor.fetchone()[0] or 0
+            
+            # Operations breakdown
+            cursor.execute(
+                "SELECT operation, COUNT(*) FROM audit_log GROUP BY operation"
+            )
+            operations = {row[0]: row[1] for row in cursor.fetchall()}
+            
+            # Unique domains
+            cursor.execute(
+                "SELECT COUNT(DISTINCT SUBSTR(ac_id, 1, INSTR(ac_id, '-')-1)) FROM audit_log"
+            )
+            domains_count = cursor.fetchone()[0] or 0
         
         coverage = (completed_acs / total_acs * 100) if total_acs > 0 else 0
         

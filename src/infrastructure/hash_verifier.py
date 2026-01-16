@@ -197,21 +197,20 @@ class HashVerifier:
             if not db_path.exists():
                 return Err(f"Database not found: {db_path}")
             
-            conn = sqlite3.connect(db_path)
-            conn.row_factory = sqlite3.Row
-            cursor = conn.cursor()
-            
-            # Get all entries ordered by timestamp
-            cursor.execute(f"""
-                SELECT entry_hash, data_hash, previous_hash, id
-                FROM {table_name}
-                ORDER BY timestamp ASC
-            """)
-            
-            entries = [dict(row) for row in cursor.fetchall()]
-            conn.close()
-            
-            return self.verify_chain(entries)
+            with sqlite3.connect(db_path) as conn:
+                conn.row_factory = sqlite3.Row
+                cursor = conn.cursor()
+                
+                # Get all entries ordered by timestamp
+                cursor.execute(f"""
+                    SELECT entry_hash, data_hash, previous_hash, id
+                    FROM {table_name}
+                    ORDER BY timestamp ASC
+                """)
+                
+                entries = [dict(row) for row in cursor.fetchall()]
+                
+                return self.verify_chain(entries)
         
         except sqlite3.DatabaseError as e:
             return Err(f"Database error: {e}")
