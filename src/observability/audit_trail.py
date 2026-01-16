@@ -121,45 +121,44 @@ class AuditTrail:
     def _init_db(self) -> None:
         """Initialize database schema."""
         try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS audit_trail (
-                    event_id TEXT PRIMARY KEY,
-                    event_type TEXT NOT NULL,
-                    component TEXT NOT NULL,
-                    action TEXT NOT NULL,
-                    user TEXT NOT NULL,
-                    timestamp TEXT NOT NULL,
-                    severity TEXT NOT NULL,
-                    details TEXT,
-                    resource_id TEXT,
-                    status TEXT,
-                    indexed_timestamp TIMESTAMP
-                )
-            """)
-            
-            # Create indexes for common queries
-            cursor.execute("""
-                CREATE INDEX IF NOT EXISTS idx_timestamp
-                ON audit_trail(timestamp DESC)
-            """)
-            cursor.execute("""
-                CREATE INDEX IF NOT EXISTS idx_component
-                ON audit_trail(component)
-            """)
-            cursor.execute("""
-                CREATE INDEX IF NOT EXISTS idx_user
-                ON audit_trail(user)
-            """)
-            cursor.execute("""
-                CREATE INDEX IF NOT EXISTS idx_severity
-                ON audit_trail(severity)
-            """)
-            
-            conn.commit()
-            conn.close()
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                
+                cursor.execute("""
+                    CREATE TABLE IF NOT EXISTS audit_trail (
+                        event_id TEXT PRIMARY KEY,
+                        event_type TEXT NOT NULL,
+                        component TEXT NOT NULL,
+                        action TEXT NOT NULL,
+                        user TEXT NOT NULL,
+                        timestamp TEXT NOT NULL,
+                        severity TEXT NOT NULL,
+                        details TEXT,
+                        resource_id TEXT,
+                        status TEXT,
+                        indexed_timestamp TIMESTAMP
+                    )
+                """)
+                
+                # Create indexes for common queries
+                cursor.execute("""
+                    CREATE INDEX IF NOT EXISTS idx_timestamp
+                    ON audit_trail(timestamp DESC)
+                """)
+                cursor.execute("""
+                    CREATE INDEX IF NOT EXISTS idx_component
+                    ON audit_trail(component)
+                """)
+                cursor.execute("""
+                    CREATE INDEX IF NOT EXISTS idx_user
+                    ON audit_trail(user)
+                """)
+                cursor.execute("""
+                    CREATE INDEX IF NOT EXISTS idx_severity
+                    ON audit_trail(severity)
+                """)
+                
+                conn.commit()
             logger.info(f"Initialized audit trail database: {self.db_path}")
         except Exception as e:
             logger.error(f"Error initializing audit trail DB: {str(e)}")
@@ -208,30 +207,29 @@ class AuditTrail:
     def _persist_event(self, event: AuditEvent) -> None:
         """Persist event to database."""
         try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            
-            cursor.execute("""
-                INSERT INTO audit_trail
-                (event_id, event_type, component, action, user, timestamp,
-                 severity, details, resource_id, status, indexed_timestamp)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (
-                event.event_id,
-                event.event_type.value,
-                event.component,
-                event.action,
-                event.user,
-                event.timestamp.isoformat(),
-                event.severity.value,
-                json.dumps(event.details),
-                event.resource_id,
-                event.status,
-                event.timestamp
-            ))
-            
-            conn.commit()
-            conn.close()
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                
+                cursor.execute("""
+                    INSERT INTO audit_trail
+                    (event_id, event_type, component, action, user, timestamp,
+                     severity, details, resource_id, status, indexed_timestamp)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                    event.event_id,
+                    event.event_type.value,
+                    event.component,
+                    event.action,
+                    event.user,
+                    event.timestamp.isoformat(),
+                    event.severity.value,
+                    json.dumps(event.details),
+                    event.resource_id,
+                    event.status,
+                    event.timestamp
+                ))
+                
+                conn.commit()
         except Exception as e:
             logger.error(f"Error persisting audit event: {str(e)}")
     
@@ -253,69 +251,68 @@ class AuditTrail:
     ) -> List[AuditEvent]:
         """Search audit trail with filters."""
         try:
-            conn = sqlite3.connect(self.db_path)
-            conn.row_factory = sqlite3.Row
-            cursor = conn.cursor()
-            
-            query = "SELECT * FROM audit_trail WHERE 1=1"
-            params = []
-            
-            if component:
-                query += " AND component = ?"
-                params.append(component)
-            
-            if user:
-                query += " AND user = ?"
-                params.append(user)
-            
-            if severity:
-                query += " AND severity = ?"
-                params.append(severity.value)
-            
-            if event_type:
-                query += " AND event_type = ?"
-                params.append(event_type.value)
-            
-            if start_date:
-                query += " AND timestamp >= ?"
-                params.append(start_date.isoformat())
-            
-            if end_date:
-                query += " AND timestamp <= ?"
-                params.append(end_date.isoformat())
-            
-            if resource_id:
-                query += " AND resource_id = ?"
-                params.append(resource_id)
-            
-            if status:
-                query += " AND status = ?"
-                params.append(status)
-            
-            query += " ORDER BY timestamp DESC LIMIT ?"
-            params.append(limit)
-            
-            cursor.execute(query, params)
-            rows = cursor.fetchall()
-            
-            events = []
-            for row in rows:
-                event = AuditEvent(
-                    event_id=row["event_id"],
-                    event_type=AuditEventType(row["event_type"]),
-                    component=row["component"],
-                    action=row["action"],
-                    user=row["user"],
-                    timestamp=datetime.fromisoformat(row["timestamp"]),
-                    severity=AuditSeverity(row["severity"]),
-                    details=json.loads(row["details"]) if row["details"] else {},
-                    resource_id=row["resource_id"],
-                    status=row["status"]
-                )
-                events.append(event)
-            
-            conn.close()
-            return events
+            with sqlite3.connect(self.db_path) as conn:
+                conn.row_factory = sqlite3.Row
+                cursor = conn.cursor()
+                
+                query = "SELECT * FROM audit_trail WHERE 1=1"
+                params = []
+                
+                if component:
+                    query += " AND component = ?"
+                    params.append(component)
+                
+                if user:
+                    query += " AND user = ?"
+                    params.append(user)
+                
+                if severity:
+                    query += " AND severity = ?"
+                    params.append(severity.value)
+                
+                if event_type:
+                    query += " AND event_type = ?"
+                    params.append(event_type.value)
+                
+                if start_date:
+                    query += " AND timestamp >= ?"
+                    params.append(start_date.isoformat())
+                
+                if end_date:
+                    query += " AND timestamp <= ?"
+                    params.append(end_date.isoformat())
+                
+                if resource_id:
+                    query += " AND resource_id = ?"
+                    params.append(resource_id)
+                
+                if status:
+                    query += " AND status = ?"
+                    params.append(status)
+                
+                query += " ORDER BY timestamp DESC LIMIT ?"
+                params.append(limit)
+                
+                cursor.execute(query, params)
+                rows = cursor.fetchall()
+                
+                events = []
+                for row in rows:
+                    event = AuditEvent(
+                        event_id=row["event_id"],
+                        event_type=AuditEventType(row["event_type"]),
+                        component=row["component"],
+                        action=row["action"],
+                        user=row["user"],
+                        timestamp=datetime.fromisoformat(row["timestamp"]),
+                        severity=AuditSeverity(row["severity"]),
+                        details=json.loads(row["details"]) if row["details"] else {},
+                        resource_id=row["resource_id"],
+                        status=row["status"]
+                    )
+                    events.append(event)
+                
+                return events
         except Exception as e:
             logger.error(f"Error searching audit trail: {str(e)}")
             return []
@@ -384,17 +381,16 @@ class AuditTrail:
         try:
             cutoff = self.retention_policy.get_retention_cutoff()
             
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            
-            cursor.execute(
-                "DELETE FROM audit_trail WHERE timestamp < ?",
-                (cutoff.isoformat(),)
-            )
-            
-            deleted_count = cursor.rowcount
-            conn.commit()
-            conn.close()
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                
+                cursor.execute(
+                    "DELETE FROM audit_trail WHERE timestamp < ?",
+                    (cutoff.isoformat(),)
+                )
+                
+                deleted_count = cursor.rowcount
+                conn.commit()
             
             logger.info(f"Cleaned up {deleted_count} expired audit entries")
             return deleted_count
@@ -405,48 +401,46 @@ class AuditTrail:
     def get_statistics(self) -> Dict[str, Any]:
         """Get audit trail statistics."""
         try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            
-            # Total events
-            cursor.execute("SELECT COUNT(*) FROM audit_trail")
-            total_events = cursor.fetchone()[0]
-            
-            # Events by severity
-            cursor.execute("""
-                SELECT severity, COUNT(*) as count
-                FROM audit_trail
-                GROUP BY severity
-            """)
-            severity_counts = {row[0]: row[1] for row in cursor.fetchall()}
-            
-            # Events by component
-            cursor.execute("""
-                SELECT component, COUNT(*) as count
-                FROM audit_trail
-                GROUP BY component
-                LIMIT 10
-            """)
-            component_counts = {row[0]: row[1] for row in cursor.fetchall()}
-            
-            # Events by user (top 10)
-            cursor.execute("""
-                SELECT user, COUNT(*) as count
-                FROM audit_trail
-                GROUP BY user
-                ORDER BY count DESC
-                LIMIT 10
-            """)
-            user_counts = {row[0]: row[1] for row in cursor.fetchall()}
-            
-            conn.close()
-            
-            return {
-                "total_events": total_events,
-                "severity_distribution": severity_counts,
-                "top_components": component_counts,
-                "top_users": user_counts
-            }
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                
+                # Total events
+                cursor.execute("SELECT COUNT(*) FROM audit_trail")
+                total_events = cursor.fetchone()[0]
+                
+                # Events by severity
+                cursor.execute("""
+                    SELECT severity, COUNT(*) as count
+                    FROM audit_trail
+                    GROUP BY severity
+                """)
+                severity_counts = {row[0]: row[1] for row in cursor.fetchall()}
+                
+                # Events by component
+                cursor.execute("""
+                    SELECT component, COUNT(*) as count
+                    FROM audit_trail
+                    GROUP BY component
+                    LIMIT 10
+                """)
+                component_counts = {row[0]: row[1] for row in cursor.fetchall()}
+                
+                # Events by user (top 10)
+                cursor.execute("""
+                    SELECT user, COUNT(*) as count
+                    FROM audit_trail
+                    GROUP BY user
+                    ORDER BY count DESC
+                    LIMIT 10
+                """)
+                user_counts = {row[0]: row[1] for row in cursor.fetchall()}
+                
+                return {
+                    "total_events": total_events,
+                    "severity_distribution": severity_counts,
+                    "top_components": component_counts,
+                    "top_users": user_counts
+                }
         except Exception as e:
             logger.error(f"Error getting audit statistics: {str(e)}")
             return {}
