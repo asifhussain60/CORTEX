@@ -1551,7 +1551,9 @@ phase_tracker:
         test: "test_dependency_map_generated"
         verification: "DependencyMapper identifies transitive dependencies 3+ levels deep"
         estimated_hours: 2
-        status: "NOT_STARTED"
+        status: "COMPLETED"
+        completed_at: "2026-01-17T00:00:00Z"
+        git_commit: "7585f3fc0"
       
       - ac_id: "AC-REM-001-04"
         description: "PatternDetector identifies architectural patterns (singleton, factory, etc.)"
