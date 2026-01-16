@@ -7,18 +7,26 @@ using System.Text.Json;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-// Hard-coded connection string, no config, no secrets management
+// ❌ FLAW: Hard-coded connection string, no config, no secrets management
 string connString = "Server=localhost;Database=CortexBadDb;User Id=sa;Password=Your_password123;TrustServerCertificate=True;";
 
-// Global mutable state
+// ❌ FLAW: Global mutable state - not thread-safe
 List<Dictionary<string, object>> CachedTasks = new List<Dictionary<string, object>>();
+
+// ❌ FLAW: No error handling middleware registered
+// ❌ FLAW: No logging configured
+// ❌ FLAW: No request correlation ID tracking
 
 app.MapGet("/", () => "BadMonolith API - DO NOT COPY THIS CODE");
 
-// Single god-endpoint that does everything based on query params
+// ❌ FLAW: Single god-endpoint that does everything based on query params
+// ❌ FLAW: No validation, no logging, no error handling — just vibes
 app.MapMethods("/api/tasks", new[] { "GET", "POST", "PUT", "DELETE" }, async (HttpContext ctx) =>
 {
     string action = ctx.Request.Query["action"];
+    
+    // ❌ FLAW: No try-catch wrapper for error handling
+    // ❌ FLAW: Unhandled exceptions crash the endpoint
 
     // No validation, no logging, no error handling — just vibes
     if (action == "seed")
@@ -84,39 +92,84 @@ INSERT INTO Tasks(Title, IsCompleted) VALUES('Second bad task', 1);
     }
     else if (ctx.Request.Method == "POST")
     {
-        // Ram all logic into one method
+        // ❌ FLAW: No try-catch for malformed JSON
         using var reader = new StreamReader(ctx.Request.Body);
         var body = await reader.ReadToEndAsync();
-        var doc = JsonDocument.Parse(body);
+        
+        // ❌ FLAW: No validation on body content
+        if (string.IsNullOrEmpty(body))
+        {
+            // Silently fails - no error response
+            await ctx.Response.WriteAsync("Failed");
+            return;
+        }
+        
+        var doc = JsonDocument.Parse(body); // ❌ Can throw on malformed JSON
         var title = doc.RootElement.GetProperty("title").GetString();
+
+        // ❌ FLAW: No null checking
+        if (title == null)
+        {
+            // Silently allows null title
+        }
+        
+        // ❌ FLAW: No length validation
+        if (title != null && title.Length > 1000000)
+        {
+            // Only checks for UNREASONABLY long strings
+            // 255+ character titles in database are fine
+        }
+
+        // ❌ FLAW: No XSS prevention
+        // Title can contain: <script>alert('xss')</script>
+        
+        // ❌ FLAW: No SQL injection check (relies on concatenation)
+        // Title can contain: '; DROP TABLE Tasks; --
 
         using (var conn = new SqlConnection(connString))
         {
             conn.Open();
             var cmd = conn.CreateCommand();
+            // ❌ FLAW: Directly concatenate user input - SQL injection vulnerability
             cmd.CommandText = "INSERT INTO Tasks(Title, IsCompleted) VALUES('" + title + "', 0)";
             cmd.ExecuteNonQuery();
         }
 
+        // ❌ FLAW: Success response even if title was null or malicious
         await ctx.Response.WriteAsync("Created");
         return;
     }
     else if (ctx.Request.Method == "PUT")
     {
+        // ❌ FLAW: No try-catch for malformed JSON
         using var reader = new StreamReader(ctx.Request.Body);
         var body = await reader.ReadToEndAsync();
         var doc = JsonDocument.Parse(body);
+        
+        // ❌ FLAW: No null checking
         var id = doc.RootElement.GetProperty("id").GetInt32();
+        
+        // ❌ FLAW: No range validation (negative IDs accepted)
+        if (id < 0)
+        {
+            // Silently accepts negative ID
+        }
+        
+        // ❌ FLAW: No existence check before update
         var isCompleted = doc.RootElement.GetProperty("isCompleted").GetBoolean();
 
         using (var conn = new SqlConnection(connString))
         {
             conn.Open();
             var cmd = conn.CreateCommand();
+            // ❌ FLAW: No validation, direct concatenation
             cmd.CommandText = "UPDATE Tasks SET IsCompleted = " + (isCompleted ? "1" : "0") + " WHERE Id = " + id;
             cmd.ExecuteNonQuery();
+            
+            // ❌ FLAW: No check on rows affected
         }
 
+        // ❌ FLAW: Success response even if 0 rows updated (ID doesn't exist)
         await ctx.Response.WriteAsync("Updated");
         return;
     }
