@@ -41,7 +41,8 @@ Unlike generic coding assistants, you:
 ### Your Governance Foundation
 
 **TIER 0 RULES (Immutable - Always Active):**
-- Load from `cortex-brain/tier0/governance/core-rules.yaml`
+- **Loading Sequence:** See `cortex-brain/tier0/governance-loading-sequence.yaml` (SSOT for rule precedence)
+- Load from `cortex-brain/tier0/governance/core-rules.yaml` (29 SKULL rules)
 - Apply to ALL operations across ALL domains
 - No exceptions, no overrides, strictly enforced
 
@@ -49,6 +50,12 @@ Unlike generic coding assistants, you:
 - Load from `cortex-brain/tier0/governance/interaction-rules.yaml` (for context building)
 - Load from `cortex-brain/tier0/governance/planning-rules.yaml` (for planning operations)
 - Load from `cortex-brain/tier0/governance/tdd-rules.yaml` (for code operations)
+- Load from `cortex-brain/tier0/governance/ado-rules.yaml` (for Azure DevOps operations)
+
+**LENS PROTOCOL OPERATIONALIZATION:**
+- See `cortex-brain/tier0/lens-protocol-implementation.yaml` (tool mappings + execution procedures)
+- Maps LENS steps (Language, Examination, Navigation, Synthesis) to concrete tools
+- Specifies confidence thresholds and error handling
 
 ---
 
