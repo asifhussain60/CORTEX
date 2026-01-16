@@ -5,7 +5,9 @@
 **Acceptance Criteria:** BD-001-02  
 **Status:** Production Ready  
 **Created:** January 15, 2026  
-**Version:** 1.0
+**Updated:** January 16, 2026  
+**Version:** 1.1  
+**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 
 ---
 
@@ -18,6 +20,48 @@ The business domain framework is an **optional** extension to CORTEX that provid
 - ✅ Zero breaking changes (new code only, no modifications)
 - ✅ Graceful degradation (works without endpoint)
 - ✅ Production ready (full test coverage)
+
+---
+
+## All 16 CORTEX Domains
+
+CORTEX is organized into 16 domains across 4 tiers:
+
+### Tier 0: Immutable Governance (2 Domains)
+
+| Domain | ID | Description | Read-Only |
+|--------|-----|-------------|-----------|
+| **Governance** | `GOVERNANCE` | Core governance rules and enforcement including phase management, AC validation, and 29 governance rules | ✅ Yes |
+| **Response Headers** | `RESPONSE_HEADERS` | Global response header configuration for header injection, copyright notices, and author attribution | ✅ Yes |
+
+### Tier 1: Project Orchestration (8 Domains)
+
+| Domain | ID | Description | Orchestrator |
+|--------|-----|-------------|--------------|
+| **Master Orchestrator** | `MASTER_ORCHESTRATOR` | Primary orchestration and intent routing for all CORTEX operations | `MasterOrchestrator` |
+| **Planning** | `PLANNING` | Implementation planning and AC-ID management including roadmap tracking and dependency analysis | `PlanningOrchestrator` |
+| **TDD** | `TDD` | Test-driven development workflow with red-green-refactor cycle and coverage tracking | `TDDOrchestrator` |
+| **Audit** | `AUDIT` | Audit trail and compliance logging with hash chain integrity and evidence capture | Uses `governance.db` |
+| **Interaction** | `INTERACTION` | User interaction and context building with comprehension display and approval gates | `InteractionOrchestrator` |
+| **Intent Router** | `INTENT_ROUTER` | LENS protocol for multi-source intelligence gathering including AST, git history, and comments | LENS Protocol |
+| **Hallucination Prevention** | `HALLUCINATION_PREVENTION` | Behavioral boundaries for AI agents with intent canonicalization and output validation | Boundary Engine |
+| **Adaptive Execution** | `ADAPTIVE_EXECUTION` | Context-aware orchestrator routing with execution modes and performance profiling | Context Analyzer |
+
+### Tier 2: Engineering Standards (1 Domain)
+
+| Domain | ID | Description | Content |
+|--------|-----|-------------|---------|
+| **Templates** | `TEMPLATES` | Response templates for consistent output formatting including 3 base templates and 6 domain-specific templates | Index: `response-templates-index.yaml` |
+
+### Tier 3: Knowledge/Reference (5 Domains)
+
+| Domain | ID | Description | Purpose |
+|--------|-----|-------------|---------|
+| **Knowledge** | `KNOWLEDGE` | Domain knowledge and reference data across 17 directories with auto-indexing | Semantic search, quality curation |
+| **Observability** | `OBSERVABILITY` | System metrics, tracing, and monitoring with OpenTelemetry integration | Dashboards, alerting, health monitoring |
+| **Vision** | `VISION` | Architecture evolution and innovation tracking with orchestrator registry | Innovation catalog, branch evolution |
+| **Neural Observatory** | `NEURAL_OBSERVATORY` | Glassmorphism dashboard for brain visualization with real-time monitoring | SSOT navigator, metrics display |
+| **Domain Registry** | `DOMAIN_REGISTRY` | Central registry of all 16 domains and business integration configuration | This document references it |
 
 ---
 
