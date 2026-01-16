@@ -13,7 +13,7 @@ metadata:
   dor_score: 100
   start_date: null
   end_date: null
-  total_ac_ids: 227  # 125 locked + 7 enhancement + 58 new phases (07-13) + 12 PHASE-15 + 8 PHASE-16-CONTINUATION + 8 DOC-REMEDIATION
+  total_ac_ids: 246  # 125 locked + 7 enhancement + 58 new phases (07-13) + 12 PHASE-15 + 8 PHASE-16-CONTINUATION + 8 DOC-REMEDIATION + 11 PHASE-REM-01 + 8 PHASE-REM-02
   
   # AC-ID Breakdown
   ac_breakdown:
@@ -23,7 +23,9 @@ metadata:
     neural_observatory: 12    # PHASE-15 (12 ACs) - PARALLEL TRACK
     orchestrator_continuation: 8  # PHASE-16 (8 ACs) - ConversationProtocol Architecture (New - Jan 16, 2026)
     doc_remediation: 8        # PHASE-DOC-REMEDIATION (8 ACs) - GAP FIX (Jan 16, 2026)
-    total: 227
+    remediation_01: 11        # PHASE-REMEDIATION-01 (11 ACs) - AST Scanning, Response Verbosity, Code Quality (Jan 16, 2026)
+    remediation_02: 8         # PHASE-REMEDIATION-02 (8 ACs) - Per-Turn Governance Enforcement (Jan 16, 2026)
+    total: 246
   
   # GOVERNANCE INTEGRATION
   governance:
@@ -1663,6 +1665,137 @@ phase_tracker:
       - CORE-027: Audit trail (all ACs logged with START/EXECUTE/COMPLETE)
       - CORE-028: Kebab-case filenames
 
+  PHASE-REMEDIATION-02:
+    title: "Per-Turn Governance Tier Enforcement"
+    description: |
+      Fix critical governance tier enforcement gap in ConversationProtocol execution.
+      
+      ISSUE-002 (CORTEX-2026-002): Governance Tier Enforcement Missing on Per-Turn Execution
+      - Problem: TIER-0 immutability enforced only at config load, not per-turn
+      - Gap: Multi-turn orchestrator sessions vulnerable to governance violations
+      - Violations: AR-001-03, CORE-017, CORE-019, CORE-027
+      - Fix: 8 ACs implementing per-turn governance validation at all layers
+      - Severity: CRITICAL - Governance regression from CORTEX5.5
+      
+      Implementation Strategy:
+      1. Per-turn governance validation framework (SOL-GOV-001) - 3 ACs
+      2. Master Orchestrator governance enforcement (SOL-GOV-002) - 2 ACs
+      3. Database-level tier enforcement schema (SOL-GOV-003) - 2 ACs
+      4. TierAccessValidator integration (SOL-GOV-004) - 1 AC
+      
+      CRITICAL PATH DEPENDENCIES:
+      - Must complete before PHASE-17-DOMAIN-BRAIN
+      - Unblocks multi-turn conversation governance protection
+      - Resolves CORTEX6 regression vs CORTEX5.5
+      
+      TOTAL EFFORT: 19 hours over 4 days
+      
+      GOVERNANCE COMPLIANCE:
+      - CORE-017: Strict Governance Enforcement (per-turn)
+      - CORE-019: TDD-Master Routing (per-turn validation)
+      - CORE-027: Audit Trail Per Turn (governance context)
+      - AR-001-03: Tier 0 rules immutable (enforced per-turn)
+    
+    ac_ids: 8
+    completed_ac_ids: 0
+    status: "READY_FOR_IMPLEMENTATION"
+    locked: false
+    requires: "PHASE-16-ORCHESTRATOR-CONTINUATION"
+    required_for: "PHASE-17-DOMAIN-BRAIN"
+    estimated_hours: 19
+    estimated_days: 4
+    progress_percentage: 0.0
+    blocking: true
+    priority: "P0"
+    can_run_parallel: false
+    
+    # Remediation Origin
+    origin:
+      date: "2026-01-16"
+      source_document: ".github/roadmap/issues/issue-report-04.yaml (ISSUE-002)"
+      decision: "Create critical remediation phase BEFORE continuing to PHASE-17"
+      rationale: "Governance regression from CORTEX5.5 blocks multi-turn execution safety"
+    
+    # Acceptance Criteria Summary
+    acceptance_criteria:
+      # SOL-GOV-001: Per-Turn Governance Validation Framework
+      - ac_id: "AC-REM-002-01"
+        description: "Implement GovernanceRegistry.should_proceed() method"
+        issue_id: "ISSUE-002"
+        severity: "CRITICAL"
+        test: "test_governance_registry_should_proceed"
+        verification: "Method validates TIER-0 immutability and tier access per turn"
+        estimated_hours: 2
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-REM-002-02"
+        description: "Implement ConversationProtocol._validate_governance_before_turn()"
+        issue_id: "ISSUE-002"
+        severity: "CRITICAL"
+        test: "test_conversation_protocol_governance_validation"
+        verification: "Governance validation called every turn, halts on violation"
+        estimated_hours: 3
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-REM-002-03"
+        description: "Add per-turn governance validation unit tests"
+        issue_id: "ISSUE-002"
+        severity: "HIGH"
+        test_file: "tests/unit/test_governance_per_turn.py"
+        verification: "6+ tests PASSING covering Turn 1, Turn 2+, violations"
+        estimated_hours: 2
+        status: "NOT_STARTED"
+      
+      # SOL-GOV-002: Master Orchestrator Per-Turn Validation
+      - ac_id: "AC-REM-002-04"
+        description: "Add governance validation to MasterOrchestrator.coordinate_operation()"
+        issue_id: "ISSUE-002"
+        severity: "CRITICAL"
+        test: "test_master_orchestrator_governance_validation"
+        verification: "Master validates CORE-019 routing before delegation"
+        estimated_hours: 2
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-REM-002-05"
+        description: "Add Master Orchestrator per-turn governance integration tests"
+        issue_id: "ISSUE-002"
+        severity: "HIGH"
+        test_file: "tests/integration/test_master_governance_per_turn.py"
+        verification: "5+ integration tests PASSING across multi-turn scenarios"
+        estimated_hours: 2
+        status: "NOT_STARTED"
+      
+      # SOL-GOV-003: Database-Level Tier Enforcement
+      - ac_id: "AC-REM-002-06"
+        description: "Add tier_access_log table and TIER-0 immutability constraint to governance.db"
+        issue_id: "ISSUE-002"
+        severity: "CRITICAL"
+        test: "test_governance_db_schema_tier_enforcement"
+        verification: "Schema created with triggers, constraints, indexes verified"
+        estimated_hours: 3
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-REM-002-07"
+        description: "Log per-turn tier access to database and enforce constraints"
+        issue_id: "ISSUE-002"
+        severity: "CRITICAL"
+        test: "test_tier_access_logging_and_enforcement"
+        verification: "Tier access logged per turn, TIER-0 modification blocked by trigger"
+        estimated_hours: 2
+        status: "NOT_STARTED"
+      
+      # SOL-GOV-004: TierAccessValidator Integration
+      - ac_id: "AC-REM-002-08"
+        description: "Wire TierAccessValidator into ConversationProtocol execution flow"
+        issue_id: "ISSUE-002"
+        severity: "HIGH"
+        test: "test_tier_validator_integration"
+        verification: "TierAccessValidator called per-turn, undeclared access blocked"
+        estimated_hours: 2
+        status: "NOT_STARTED"
+    
+    phase_yaml: ".github/roadmap/phases/phase-remediation-02.yaml"
+
   PHASE-17-DOMAIN-BRAIN:
     title: "Domain Brain: Strategic Knowledge Centralization"
     description: "Implement Domain Brain architecture consolidating business knowledge from multiple sources (AST Intelligence, Git, Comments, Relationships, Business Knowledge Ingestion) into unified Tier 3 registry. Four-phase implementation over 3-4 weeks (~140 hours)."
@@ -1670,7 +1803,7 @@ phase_tracker:
     completed_ac_ids: 0
     status: "NOT_STARTED"
     locked: false
-    requires: "PHASE-REMEDIATION-01"
+    requires: ["PHASE-REMEDIATION-01", "PHASE-REMEDIATION-02"]
     required_for: "PHASE-18-PRODUCTION-MIGRATION"
     estimated_hours: 140
     estimated_days: 17.5
