@@ -188,6 +188,58 @@ metadata:
   copyright: "© 2025-2026 Asif Hussain. All rights reserved."
   created_at: "2026-01-15T00:00:00Z"
   
+  # PROMPT EVALUATION REQUIREMENT (2026-01-16)
+  prompt_maintenance_required: true
+  prompt_evaluation_instructions: |
+    AFTER completing all ACs in this phase, BEFORE locking the phase:
+    
+    1. **Holistic Review**
+       - Analyze all implemented features and enhancements
+       - Understand how they change CORTEX capabilities
+       - Identify what users need to know about new functionality
+    
+    2. **Evaluate CORTEX.prompt.md**
+       - Review sections on Response Headers (PHASE-13 added enhancements)
+       - Review sections on Observability capabilities
+       - Review sections on Business Domain integration
+       - Update Intent Router examples for observability scenarios
+       - Update Real Repository Workflow section if domain registry affects it
+    
+    3. **Evaluate copilot-instruction.md**
+       - Review Response Format Standards section
+       - Ensure all new response types are documented
+       - Update Implementation Workflow section if needed
+       - Add observability examples to Current Phase Context
+    
+    4. **Document Changes**
+       - Create .github/roadmap/reports/PHASE-13-PROMPT-MAINTENANCE.md
+       - List what changed in CORTEX.prompt.md
+       - List what changed in copilot-instruction.md
+       - Explain rationale for each change
+    
+    5. **Reference Updates**
+       - Update cortex-builder.prompt.md with observability patterns
+       - Update Response Header configurations if needed
+       - Ensure all new AC-IDs documented in prompts
+    
+    **Why**: Users will use the prompts to leverage your new capabilities.
+    Prompts MUST reflect the latest enhancements to be useful.
+  
+  prompt_files_to_sync:
+    - ".github/prompts/CORTEX.prompt.md"
+    - ".github/copilot-instruction.md"
+    - ".github/prompts/cortex-builder.prompt.md"
+  
+  documentation_output:
+    directory: ".github/roadmap/reports"
+    rule: "All phase reports must go to centralized reports directory"
+    examples:
+      - "PHASE-13-COMPLETION-REPORT.md"
+      - "PHASE-13-PROMPT-MAINTENANCE.md"
+      - "PHASE-13-GAP-ANALYSIS.md"
+      - "OB-001-01-analysis.md"
+      - "BD-001-01-analysis.md"
+  
   # PHASE-16 Integration Tracking
   phase_16_integration:
     status: "APPROVED"

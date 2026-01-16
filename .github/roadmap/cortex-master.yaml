@@ -58,6 +58,28 @@ metadata:
             - "Response Header Output Format"
       enforcement: "AC cannot be marked COMPLETED without prompt updates"
     
+    # PROMPT EVALUATION & ENHANCEMENT REQUIREMENT (2026-01-16)
+    prompt_evaluation:
+      rule: "Each phase MUST trigger holistic reevaluation of CORTEX.prompt.md and copilot-instruction.md"
+      requirement: |
+        After implementing all ACs in a phase:
+        1. Review the phase implementation holistically
+        2. Evaluate CORTEX.prompt.md for relevance to new capabilities
+        3. Evaluate copilot-instruction.md for documentation updates
+        4. Update, enhance, or recreate prompt sections as needed
+        5. Ensure prompts reflect latest phase enhancements
+        6. Document what changed in prompt maintenance log
+      scope: "ALL phases (including PHASE-DOC-REMEDIATION)"
+      frequency: "At end of each phase, before phase lock"
+      enforcement: "Phase cannot be locked until prompt evaluation complete"
+      areas_requiring_updates:
+        - "New AC-IDs and their capabilities"
+        - "New response template structures"
+        - "New governance rules introduced"
+        - "New orchestrator capabilities"
+        - "New tier0/tier1/tier2 enhancements"
+        - "Response header configurations"
+    
     # CONTENT DELIVERY VALIDATION (GAP-FIX-2026-01-16)
     content_validation:
       rule: "files_to_create in phase YAML MUST exist before phase lock"
@@ -67,6 +89,23 @@ metadata:
         - "All files_to_create actually exist on filesystem"
         - "Template directories not empty (only .gitkeep = FAIL)"
         - "Prompt sections match implemented features"
+    
+    # DOCUMENTATION OUTPUT DIRECTORY (2026-01-16)
+    documentation:
+      output_directory: ".github/roadmap/reports"
+      rule: "All markdown reports generated during phase execution MUST go to centralized reports directory"
+      not_in_root: true
+      not_in_docs: true
+      examples:
+        - "Phase completion reports → .github/roadmap/reports/PHASE-XX-COMPLETION-REPORT.md"
+        - "AC analysis documents → .github/roadmap/reports/AC-XXX-YY-analysis.md"
+        - "Implementation summaries → .github/roadmap/reports/PHASE-XX-*-SUMMARY.md"
+        - "Gap analysis → .github/roadmap/reports/PHASE-XX-GAP-ANALYSIS.md"
+      validation:
+        - "No .md files created in project root"
+        - "No .md files created in /docs/"
+        - "All phase reports indexed in .github/roadmap/reports/INDEX.md"
+      enforcement: "Phase cannot be locked if reports found outside designated directory"
   
   # AUDIT TRAIL REMEDIATION INITIATIVE (2026-01-15)
   audit_remediation:
