@@ -1,0 +1,205 @@
+metadata:
+  issue_id: "ISSUE-003"
+  report_date: "2026-01-17"
+  reviewer: "cortex-review-brittleness"
+  review_scope: "TEST_RACE_CONDITIONS"
+  repository: "CORTEX"
+  branch: "CORTEX6"
+
+executive_summary:
+  status: "CRITICAL_FINDINGS_IDENTIFIED"
+  total_findings: 3
+  by_severity:
+    critical: 2
+    high: 1
+    medium: 0
+    low: 0
+  by_category:
+    brittleness: 3
+    hallucination: 0
+    governance: 0
+    assumption: 0
+    debt: 0
+  quick_wins: 1  # MAX_ITERATIONS safety in ConversationProtocol
+  blocking_issues: 2  # Infinite loops in tests
+
+findings:
+  - id: "FINDING-001"
+    agent: "cortex-review-brittleness"
+    severity: "CRITICAL"
+    category: "brittleness"
+    
+    title: "Infinite while True loops in test mock orchestrators without safety limits"
+    description: |
+      Multiple test files contain `while True:` loops in mock orchestrators and wrapper
+      classes that have no maximum iteration count, timeout, or guaranteed termination
+      condition. This causes test hangs when mocks don't properly signal completion.
+      
+      Affected files:
+      - tests/unit/core/orchestrator/test_master_orchestrator.py (lines 112, 167)
+      - tests/unit/core/orchestrator/test_wrapped_orchestrators.py (line 91)
+      
+      The loops depend entirely on external signals (decision.should_continue) without
+      any fallback safety mechanism. If a mock returns malformed data or fails to set
+      completion flags, the test hangs indefinitely.
+    
+    evidence:
+      source: "code_analysis"
+      query_or_command: "grep -r 'while True:' tests/unit/core/orchestrator/ --include='*.py'"
+      result: |
+        test_master_orchestrator.py:112:        while self.current_domain is not None:
+        test_master_orchestrator.py:167:            while True:
+        test_wrapped_orchestrators.py:91:        while True:
+      files_affected:
+        - path: "tests/unit/core/orchestrator/test_master_orchestrator.py"
+          lines: "112-148, 167-207"
+        - path: "tests/unit/core/orchestrator/test_wrapped_orchestrators.py"
+          lines: "91-107"
+    
+    impact:
+      production_risk: "Tests hang indefinitely requiring manual kill, blocking CI/CD pipelines"
+      user_impact: "Developers waste time waiting for hung tests, lose confidence in test suite"
+      maintenance_burden: "Difficult to diagnose which test is hanging, manual intervention required"
+    
+    remediation:
+      effort: "2h"
+      approach: |
+        1. Add MAX_ITERATIONS constant to all while True loops (default: 100)
+        2. Add iteration counter and break condition
+        3. Raise explicit error when max iterations exceeded
+        4. Update all mock orchestrators to properly signal completion
+        5. Add pytest-timeout markers to all orchestrator tests
+      blockers: "None"
+      ac_id_suggested: "AC-FIX-007-01"
+    
+    traceability:
+      related_acs: ["AC-OC-003-01", "AC-OC-003-02"]
+      related_phases: ["PHASE-03"]
+      related_rules: ["CORE-008"]
+
+  - id: "FINDING-002"
+    agent: "cortex-review-brittleness"
+    severity: "CRITICAL"
+    category: "brittleness"
+    
+    title: "ConversationProtocol execute_turn lacks maximum iteration safety guard"
+    description: |
+      The ConversationProtocol.execute_turn() method uses while True loops without
+      explicit maximum iteration guards. While it has max_turns protection, there's
+      no guarantee that the loop will terminate within a reasonable number of
+      iterations if the orchestrator malfunctions.
+      
+      Test evidence shows 17 failed tests in test_conversation_protocol.py, all with
+      "unable to open database file" errors, suggesting the loops are retrying
+      database operations indefinitely without proper backoff or iteration limits.
+    
+    evidence:
+      source: "test_results"
+      query_or_command: "python -m pytest tests/unit/core/orchestrator/test_conversation_protocol.py -v 2>&1 | tail -40"
+      result: |
+        17 failed, 7 passed in 0.08s
+        All failures show: "Turn execution failed (transaction rolled back): 
+        unable to open database file"
+      files_affected:
+        - path: "src/core/orchestrator/conversation_protocol.py"
+          lines: "unknown (needs inspection)"
+    
+    impact:
+      production_risk: "Production orchestrators could hang on database connection issues"
+      user_impact: "User requests timeout without clear error messages"
+      maintenance_burden: "Difficult to debug hung orchestrations in production"
+    
+    remediation:
+      effort: "4h"
+      approach: |
+        1. Add MAX_LOOP_ITERATIONS constant to ConversationProtocol class
+        2. Add iteration counter in all internal loops
+        3. Add explicit error when max iterations exceeded
+        4. Implement exponential backoff for database retry logic
+        5. Add comprehensive logging at each iteration
+        6. Update tests to handle database connection errors gracefully
+      blockers: "Need to inspect actual ConversationProtocol implementation"
+      ac_id_suggested: "AC-FIX-007-02"
+    
+    traceability:
+      related_acs: ["AC-CP-001-01", "AC-FIX-001-01"]
+      related_phases: ["PHASE-03", "PHASE-REMEDIATION-03"]
+      related_rules: ["CORE-008", "CORE-027"]
+
+  - id: "FINDING-003"
+    agent: "cortex-review-brittleness"
+    severity: "HIGH"
+    category: "brittleness"
+    
+    title: "No pytest-timeout configuration in pytest.ini for orchestrator tests"
+    description: |
+      The test suite lacks global timeout configuration, allowing tests to hang
+      indefinitely. While pytest-timeout was installed, no default timeout is
+      configured in pytest.ini, and individual test files don't have timeout markers.
+      
+      This is especially critical for orchestrator tests which use conversation
+      protocols and multi-turn workflows that could potentially loop forever.
+    
+    evidence:
+      source: "code_analysis"
+      query_or_command: "cat pytest.ini"
+      result: |
+        No timeout configuration found in pytest.ini
+      files_affected:
+        - path: "pytest.ini"
+          lines: "all"
+        - path: "tests/unit/core/orchestrator/*.py"
+          lines: "missing @pytest.mark.timeout decorators"
+    
+    impact:
+      production_risk: "CI/CD pipelines can hang indefinitely on test failures"
+      user_impact: "Developers must manually kill hung test processes"
+      maintenance_burden: "Difficult to identify which test is hanging without timeout"
+    
+    remediation:
+      effort: "1h"
+      approach: |
+        1. Add global timeout=30 to pytest.ini [pytest] section
+        2. Add timeout=60 for integration tests
+        3. Add @pytest.mark.timeout(10) to all orchestrator unit tests
+        4. Document timeout strategy in testing documentation
+      blockers: "None - quick win"
+      ac_id_suggested: "AC-FIX-007-03"
+    
+    traceability:
+      related_acs: []
+      related_phases: ["PHASE-03"]
+      related_rules: ["CORE-008"]
+
+recommendations:
+  immediate_actions:
+    - action: "Add pytest-timeout configuration to pytest.ini"
+      effort: "30m"
+      finding_refs: ["FINDING-003"]
+    
+    - action: "Add MAX_ITERATIONS safety guards to all while True loops in tests"
+      effort: "1h"
+      finding_refs: ["FINDING-001"]
+  
+  short_term:
+    - action: "Inspect and fix ConversationProtocol database retry logic"
+      effort: "4h"
+      finding_refs: ["FINDING-002"]
+    
+    - action: "Add iteration guards to production ConversationProtocol code"
+      effort: "2h"
+      finding_refs: ["FINDING-002"]
+  
+  long_term:
+    - action: "Implement comprehensive timeout strategy for all async operations"
+      effort: "1w"
+      finding_refs: ["FINDING-001", "FINDING-002", "FINDING-003"]
+
+governance_compliance:
+  CORE-005: { status: "PASS", violations: 0, details: "Path portability maintained" }
+  CORE-008: { status: "FAIL", violations: 3, details: "Tests with infinite loops violate TDD safety principles" }
+  CORE-011: { status: "PASS", violations: 0, details: "Type hints present" }
+  CORE-012: { status: "PASS", violations: 0, details: "Docstrings present" }
+  CORE-013: { status: "PASS", violations: 0, details: "Test markers present" }
+  CORE-027: { status: "FAIL", violations: 17, details: "17 conversation protocol tests failing on database access" }
+  CORE-028: { status: "PASS", violations: 0, details: "Circuit breakers not applicable here" }

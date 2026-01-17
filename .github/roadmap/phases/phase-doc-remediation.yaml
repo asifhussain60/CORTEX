@@ -1,0 +1,464 @@
+# =============================================================================
+# PHASE-DOC-REMEDIATION: Documentation & Content Remediation
+# =============================================================================
+# Purpose: Fix systematic gaps where code exists but documentation/content missing
+# Gap Analysis: docs/ROADMAP-GAP-ANALYSIS.md (2026-01-16)
+# Priority: P0 - CRITICAL (Must complete before production deployment)
+# Estimated: 6 hours (1 day)
+# =============================================================================
+
+metadata:
+  phase_id: "PHASE-DOC-REMEDIATION"
+  title: "Documentation & Content Remediation"
+  version: "1.0"
+  created: "2026-01-16"
+  author: "CORTEX Gap Analysis"
+  status: "COMPLETED"
+  priority: "P0 - CRITICAL"
+  completed_at: "2026-01-16T12:00:00Z"
+  
+  # PROMPT EVALUATION REQUIREMENT (2026-01-16)
+  prompt_maintenance_required: true
+  prompt_evaluation_instructions: |
+    This phase IS the prompt maintenance phase. After completion:
+    
+    1. **Evaluate CORTEX.prompt.md Completeness**
+       - Verify Response Header Integration section comprehensive
+       - Check all response examples include headers
+       - Confirm governance integration documentation complete
+    
+    2. **Evaluate copilot-instruction.md Completeness**
+       - Verify Response Format Standards detailed
+       - Check copyright notice requirements documented
+       - Confirm examples follow format
+    
+    3. **Evaluate Future Phase Prompts**
+       - Identify what will change in PHASE-13 enhancements
+       - Plan prompt updates needed for PHASE-13 completion
+       - Document expected prompt maintenance for future phases
+    
+    4. **Document in Report**
+       - Create .github/roadmap/reports/PHASE-DOC-REMEDIATION-PROMPT-REVIEW.md
+       - Verify all prompts cover response headers
+       - Verify all prompts document governance integration
+       - List future phases' expected prompt enhancements
+  
+  documentation_output:
+    directory: ".github/roadmap/reports"
+    rule: "All remediation reports must go to centralized reports directory"
+    examples:
+      - "PHASE-DOC-REMEDIATION-COMPLETION-REPORT.md"
+      - "PHASE-DOC-REMEDIATION-PROMPT-REVIEW.md"
+      - "PHASE-DOC-REMEDIATION-VALIDATION-LOG.md"
+
+overview:
+  description: |
+    This phase addresses 10 systematic gaps identified in the ROADMAP-GAP-ANALYSIS:
+    
+    CATEGORY A: Prompt/Documentation Maintenance Gaps
+    - GAP-3: CORTEX.prompt.md missing Response Header Integration
+    - GAP-4: copilot-instruction.md missing Response Format Standards
+    - GAP-5: Enhancement phases shipped without prompt updates
+    
+    CATEGORY B: Content vs. Code Delivery Gaps
+    - GAP-1: Template engine exists, templates don't
+    - GAP-2: Template inheritance tested, templates empty
+    - GAP-6: files_to_create specifications never enforced
+    
+    CATEGORY C: Documentation Reference Gaps
+    - GAP-9: response-headers.yaml not referenced in prompts
+    - GAP-10: MasterOrchestrator header integration undocumented
+    
+    ROOT CAUSE: ACs marked complete based on code delivery, not content/documentation delivery.
+    
+  root_cause_analysis: |
+    The CORTEX roadmap has a systematic pattern:
+    1. Code is implemented and tests pass ✅
+    2. But prompts are not updated to document new features ❌
+    3. And content files (templates) are never created ❌
+    
+    This results in:
+    - AI agents using prompts don't know about implemented features
+    - Engines have code but nothing to load
+    - Infrastructure ready but unusable
+    
+  impact:
+    agents_affected:
+      - "CORTEX.prompt.md users don't know about response headers"
+      - "copilot-instruction.md users don't generate compliant code"
+      - "cortex-builder.prompt.md users miss output format requirements"
+    features_affected:
+      - "ResponseHeaderInjector - implemented but undocumented"
+      - "Tier 2 Response Templates - engine exists, templates empty"
+      - "Copyright headers - configured but not used"
+      
+  success_criteria:
+    - "All 8 AC-IDs completed and verified"
+    - "CORTEX.prompt.md contains Response Header Integration section"
+    - "copilot-instruction.md contains Response Format Standards section"
+    - "Tier 2 directory populated with 10+ template files"
+    - "Validation script passes with exit code 0"
+    - "No files_to_create specifications remain unimplemented"
+
+dependencies:
+  requires:
+    - phase: "PHASE-12-KNOWLEDGE-ECOSYSTEM"
+      reason: "Tier 3 knowledge must be populated before tier 2 templates reference it"
+  required_for:
+    - phase: "PHASE-16-ORCHESTRATOR-CONTINUATION"
+      reason: "Documentation must be complete for orchestrator implementation"
+  can_run_parallel_with:
+    - phase: "PHASE-13-OBSERVABILITY-MATURITY"
+      reason: "No code dependencies, only documentation"
+
+governance_rules:
+  applicable:
+    - "CORE-012: Documentation required (this phase IS documentation)"
+    - "CORE-027: Audit trail for all AC completions"
+    - "CORE-028: Kebab-case file naming"
+  enforced:
+    - "files_to_create MUST exist before phase lock"
+    - "Validation script MUST pass before phase lock"
+
+# =============================================================================
+# ACCEPTANCE CRITERIA
+# =============================================================================
+
+acceptance_criteria:
+  
+  # -------------------------------------------------------------------------
+  # AC-DOC-001: CORTEX.prompt.md Updates (P0 - 75 minutes)
+  # -------------------------------------------------------------------------
+  
+  AC-DOC-001-01:
+    id: "AC-DOC-001-01"
+    title: "CORTEX.prompt.md Response Header Integration Section"
+    description: |
+      Add comprehensive Response Header Integration section to CORTEX.prompt.md.
+      This section must explain:
+      - What response headers are
+      - How to use ResponseHeaderInjector
+      - Copyright notice requirements
+      - Example responses with headers
+    priority: "P0"
+    status: "COMPLETED"
+    completed_at: "2026-01-16T11:30:00Z"
+    estimated_minutes: 60
+    
+    files_to_modify:
+      - path: ".github/prompts/CORTEX.prompt.md"
+        changes:
+          - "Add 'Response Header Integration' section (~150 lines)"
+          - "Document ResponseHeaderInjector pattern"
+          - "Include copyright header template"
+          - "Show example responses with headers"
+    
+    acceptance_tests:
+      - test: "grep -c 'Response Header' .github/prompts/CORTEX.prompt.md"
+        expected: ">= 5"
+        description: "Section header and references exist"
+      - test: "grep 'ResponseHeaderInjector' .github/prompts/CORTEX.prompt.md"
+        expected: "match found"
+        description: "Injector class documented"
+      - test: "grep 'Copyright.*Asif Hussain' .github/prompts/CORTEX.prompt.md"
+        expected: "match found"
+        description: "Copyright template included"
+    
+    content_template: |
+      ## Response Header Integration
+      
+      ### Overview
+      All responses generated must comply with CORTEX response header standards
+      defined in Tier 0: `cortex-brain/tier0/response-headers.yaml`
+      
+      ### Header Format
+      [Document the header structure]
+      
+      ### Using ResponseHeaderInjector
+      [Document the pattern]
+      
+      ### Example Response
+      [Show formatted example with headers]
+  
+  AC-DOC-001-02:
+    id: "AC-DOC-001-02"
+    title: "CORTEX.prompt.md References response-headers.yaml"
+    description: |
+      Ensure CORTEX.prompt.md explicitly references the response headers
+      configuration file so agents know where to load config from.
+    priority: "P0"
+    status: "COMPLETED"
+    completed_at: "2026-01-16T11:30:00Z"
+    estimated_minutes: 15
+    
+    files_to_modify:
+      - path: ".github/prompts/CORTEX.prompt.md"
+        changes:
+          - "Add reference to cortex-brain/tier0/response-headers.yaml"
+          - "Add reference to cortex-brain/tier2/response-templates/"
+    
+    acceptance_tests:
+      - test: "grep 'response-headers.yaml' .github/prompts/CORTEX.prompt.md"
+        expected: "match found"
+        description: "Tier 0 headers config referenced"
+      - test: "grep 'tier2/response-templates' .github/prompts/CORTEX.prompt.md"
+        expected: "match found"
+        description: "Tier 2 templates directory referenced"
+  
+  # -------------------------------------------------------------------------
+  # AC-DOC-002: copilot-instruction.md Updates (P0 - 60 minutes)
+  # -------------------------------------------------------------------------
+  
+  AC-DOC-002-01:
+    id: "AC-DOC-002-01"
+    title: "copilot-instruction.md Response Format Standards Section"
+    description: |
+      Add Response Format Standards section to copilot-instruction.md.
+      This section must explain:
+      - Required response header format
+      - Copyright notice requirements
+      - Code examples for implementation
+    priority: "P0"
+    status: "COMPLETED"
+    completed_at: "2026-01-16T11:45:00Z"
+    estimated_minutes: 45
+    
+    files_to_modify:
+      - path: ".github/copilot-instruction.md"
+        changes:
+          - "Add 'Response Format Standards' section (~100 lines)"
+          - "Document header format requirements"
+          - "Include code example for ResponseHeaderInjector"
+    
+    acceptance_tests:
+      - test: "grep -c 'Response Format' .github/copilot-instruction.md"
+        expected: ">= 3"
+        description: "Section exists with multiple references"
+      - test: "grep 'CORTEX.*header' .github/copilot-instruction.md"
+        expected: "match found"
+        description: "Header format documented"
+  
+  AC-DOC-002-02:
+    id: "AC-DOC-002-02"
+    title: "copilot-instruction.md Copyright Header Template"
+    description: |
+      Include copyright header template example so developers know
+      exactly what format to use.
+    priority: "P0"
+    status: "COMPLETED"
+    completed_at: "2026-01-16T11:45:00Z"
+    estimated_minutes: 15
+    
+    files_to_modify:
+      - path: ".github/copilot-instruction.md"
+        changes:
+          - "Add copyright header template"
+          - "Reference response-headers.yaml as source"
+    
+    acceptance_tests:
+      - test: "grep 'Copyright.*2025-2026.*Asif Hussain' .github/copilot-instruction.md"
+        expected: "match found"
+        description: "Copyright template included"
+  
+  # -------------------------------------------------------------------------
+  # AC-DOC-003: Tier 2 Response Templates (P1 - 135 minutes)
+  # -------------------------------------------------------------------------
+  
+  AC-DOC-003-01:
+    id: "AC-DOC-003-01"
+    title: "Tier 2 Base Response Templates"
+    description: |
+      Create base response templates that all domain templates can inherit from.
+      These provide consistent structure for success, error, and warning responses.
+    priority: "P1"
+    status: "COMPLETED"
+    completed_at: "2026-01-16T12:00:00Z"
+    estimated_minutes: 45
+    
+    files_to_create:
+      - path: "cortex-brain/tier2/base/success-response.yaml"
+        content_type: "template"
+        description: "Base template for successful operation responses"
+      - path: "cortex-brain/tier2/base/error-response.yaml"
+        content_type: "template"
+        description: "Base template for error responses"
+      - path: "cortex-brain/tier2/base/warning-response.yaml"
+        content_type: "template"
+        description: "Base template for warning responses"
+    
+    acceptance_tests:
+      - test: "ls cortex-brain/tier2/base/*.yaml | wc -l"
+        expected: ">= 3"
+        description: "At least 3 base templates exist"
+      - test: "test -f cortex-brain/tier2/base/success-response.yaml"
+        expected: "true"
+        description: "Success template exists"
+      - test: "test -f cortex-brain/tier2/base/error-response.yaml"
+        expected: "true"
+        description: "Error template exists"
+  
+  AC-DOC-003-02:
+    id: "AC-DOC-003-02"
+    title: "Tier 2 Domain Response Templates"
+    description: |
+      Create domain-specific response templates for governance, planning, and TDD domains.
+      These inherit from base templates and add domain-specific fields.
+    priority: "P1"
+    status: "COMPLETED"
+    completed_at: "2026-01-16T12:00:00Z"
+    estimated_minutes: 60
+    
+    files_to_create:
+      - path: "cortex-brain/tier2/domains/governance/evaluation-result.yaml"
+        content_type: "template"
+        description: "Template for governance evaluation results"
+      - path: "cortex-brain/tier2/domains/governance/rule-violation.yaml"
+        content_type: "template"
+        description: "Template for governance rule violation reports"
+      - path: "cortex-brain/tier2/domains/planning/recommendations.yaml"
+        content_type: "template"
+        description: "Template for planning recommendations"
+      - path: "cortex-brain/tier2/domains/planning/impact-assessment.yaml"
+        content_type: "template"
+        description: "Template for change impact assessments"
+      - path: "cortex-brain/tier2/domains/tdd/test-result.yaml"
+        content_type: "template"
+        description: "Template for test execution results"
+      - path: "cortex-brain/tier2/domains/tdd/coverage-report.yaml"
+        content_type: "template"
+        description: "Template for code coverage reports"
+    
+    acceptance_tests:
+      - test: "find cortex-brain/tier2/domains -name '*.yaml' | wc -l"
+        expected: ">= 6"
+        description: "At least 6 domain templates exist"
+      - test: "test -d cortex-brain/tier2/domains/governance"
+        expected: "true"
+        description: "Governance domain directory exists"
+      - test: "test -d cortex-brain/tier2/domains/planning"
+        expected: "true"
+        description: "Planning domain directory exists"
+      - test: "test -d cortex-brain/tier2/domains/tdd"
+        expected: "true"
+        description: "TDD domain directory exists"
+  
+  AC-DOC-003-03:
+    id: "AC-DOC-003-03"
+    title: "Tier 2 Response Templates Index"
+    description: |
+      Create master index file for all tier 2 response templates.
+      This enables template discovery and validation.
+    priority: "P1"
+    status: "COMPLETED"
+    completed_at: "2026-01-16T12:00:00Z"
+    estimated_minutes: 30
+    
+    files_to_create:
+      - path: "cortex-brain/tier2/response-templates-index.yaml"
+        content_type: "index"
+        description: "Master index of all tier 2 templates"
+    
+    acceptance_tests:
+      - test: "test -f cortex-brain/tier2/response-templates-index.yaml"
+        expected: "true"
+        description: "Index file exists"
+      - test: "grep 'templates:' cortex-brain/tier2/response-templates-index.yaml"
+        expected: "match found"
+        description: "Index contains templates section"
+  
+  # -------------------------------------------------------------------------
+  # AC-DOC-004: Validation Tooling (P2 - 45 minutes)
+  # -------------------------------------------------------------------------
+  
+  AC-DOC-004-01:
+    id: "AC-DOC-004-01"
+    title: "Content Validation Script"
+    description: |
+      Create validation script that checks:
+      - All files_to_create actually exist
+      - Prompt sections contain required content
+      - Template directories are not empty
+      
+      This script will be used in phase completion validation.
+    priority: "P2"
+    status: "COMPLETED"
+    completed_at: "2026-01-16T10:00:00Z"
+    estimated_minutes: 45
+    
+    files_to_create:
+      - path: "scripts/validate_phase_deliverables.py"
+        content_type: "script"
+        description: "Validation script for phase deliverables"
+    
+    acceptance_tests:
+      - test: "test -f scripts/validate_phase_deliverables.py"
+        expected: "true"
+        description: "Script exists"
+      - test: "python scripts/validate_phase_deliverables.py --phase DOC-REMEDIATION"
+        expected: "exit code 0"
+        description: "Validation passes for this phase"
+
+# =============================================================================
+# IMPLEMENTATION SCHEDULE
+# =============================================================================
+
+schedule:
+  total_estimated_hours: 6
+  total_estimated_days: 1
+  
+  day_1:
+    title: "Documentation & Templates"
+    focus:
+      - "AC-DOC-001: CORTEX.prompt.md updates (75 min)"
+      - "AC-DOC-002: copilot-instruction.md updates (60 min)"
+      - "AC-DOC-003: Tier 2 templates (135 min)"
+      - "AC-DOC-004: Validation script (45 min)"
+    
+    tasks:
+      - task_id: "TASK-DOC-01"
+        title: "Update CORTEX.prompt.md"
+        ac_ids: ["AC-DOC-001-01", "AC-DOC-001-02"]
+        estimated_minutes: 75
+        
+      - task_id: "TASK-DOC-02"
+        title: "Update copilot-instruction.md"
+        ac_ids: ["AC-DOC-002-01", "AC-DOC-002-02"]
+        estimated_minutes: 60
+        
+      - task_id: "TASK-DOC-03"
+        title: "Create Tier 2 Templates"
+        ac_ids: ["AC-DOC-003-01", "AC-DOC-003-02", "AC-DOC-003-03"]
+        estimated_minutes: 135
+        
+      - task_id: "TASK-DOC-04"
+        title: "Create Validation Script"
+        ac_ids: ["AC-DOC-004-01"]
+        estimated_minutes: 45
+
+# =============================================================================
+# COMPLETION CHECKLIST
+# =============================================================================
+
+completion_checklist:
+  before_phase_lock:
+    - check: "All 8 AC-IDs marked COMPLETED"
+      required: true
+    - check: "CORTEX.prompt.md contains Response Header Integration section"
+      required: true
+    - check: "copilot-instruction.md contains Response Format Standards section"
+      required: true
+    - check: "cortex-brain/tier2/base/ contains 3+ template files"
+      required: true
+    - check: "cortex-brain/tier2/domains/ contains 6+ template files"
+      required: true
+    - check: "response-templates-index.yaml exists and is valid"
+      required: true
+    - check: "validate_phase_deliverables.py passes with exit 0"
+      required: true
+    - check: "Git checkpoint committed"
+      required: true
+    - check: "Audit entries for all 8 ACs"
+      required: true
+
+  validation_command: |
+    python scripts/validate_phase_deliverables.py --phase DOC-REMEDIATION --strict
