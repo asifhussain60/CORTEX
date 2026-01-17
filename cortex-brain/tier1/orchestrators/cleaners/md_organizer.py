@@ -113,6 +113,8 @@ class MDOrganizerCleaner(CleanerInterface):
         self._md_files: Dict[str, Path] = {}
         self._categories: Dict[str, List[str]] = {}
         self._issues: List[Tuple[str, MDFileNamingIssue]] = []
+        self._snapshot: Optional[Dict[str, Any]] = None
+        self._executed_moves: List[Dict[str, str]] = []
 
     @property
     def name(self) -> str:
@@ -245,11 +247,26 @@ class MDOrganizerCleaner(CleanerInterface):
                 self.logger.info("Dry run complete")
                 return report
 
+            # Create snapshot before execution
+            logs.append("Creating pre-execution snapshot...")
+            snapshot_data = self._create_snapshot()
+            self._snapshot = snapshot_data
+            logs.append(f"Snapshot created with {len(snapshot_data.get('files', {}))} files")
+
             # Execute moves from plan
+            moves_executed = []
             for move in plan.get("moves", []):
                 try:
                     source = Path(move["source"])
                     target = Path(move["target"])
+
+                    # Verify source exists
+                    if not source.exists():
+                        error_msg = f"Source file not found: {move['source']}"
+                        errors.append(error_msg)
+                        logs.append(f"ERROR: {error_msg}")
+                        self.logger.warning(error_msg)
+                        continue
 
                     # Create target directory if needed
                     target.parent.mkdir(parents=True, exist_ok=True)
@@ -257,6 +274,7 @@ class MDOrganizerCleaner(CleanerInterface):
                     # Move file
                     source.rename(target)
                     actions_taken += 1
+                    moves_executed.append(move)
                     logs.append(f"Moved: {move['source']} → {move['target']}")
 
                 except Exception as e:
@@ -264,6 +282,9 @@ class MDOrganizerCleaner(CleanerInterface):
                     errors.append(error_msg)
                     logs.append(f"ERROR: {error_msg}")
                     self.logger.error(error_msg)
+
+            # Store executed moves for rollback
+            self._executed_moves = moves_executed
 
             # Build report
             status = "SUCCESS" if len(errors) == 0 else (
@@ -275,7 +296,7 @@ class MDOrganizerCleaner(CleanerInterface):
                 timestamp=datetime.now().isoformat(),
                 status=status,
                 actions_taken=actions_taken,
-                changes={"files_moved": actions_taken, "moves": plan.get("moves", [])},
+                changes={"files_moved": actions_taken, "moves": moves_executed},
                 errors=errors,
                 logs=logs,
             )
@@ -292,8 +313,8 @@ class MDOrganizerCleaner(CleanerInterface):
     def rollback(self) -> RollbackResult:
         """Restore files from pre-execution snapshot.
 
-        Note: Current implementation requires snapshot to be created
-        before execute() is called. Rollback restores from that snapshot.
+        Restores files to their original locations before execute() was called.
+        Uses snapshot created at execute() start time.
 
         Returns:
             RollbackResult: Contains:
@@ -305,27 +326,86 @@ class MDOrganizerCleaner(CleanerInterface):
             ValueError: If rollback fails
         """
         self.logger.info("Starting MD file rollback")
-        logs: List[str] = []
         errors: List[str] = []
+        files_restored = 0
 
-        # TODO: Implement rollback from snapshot
-        # This will be fully implemented in VAC-001-03
+        try:
+            # Check if snapshot exists
+            if not hasattr(self, "_snapshot") or self._snapshot is None:
+                error_msg = "No snapshot available for rollback"
+                self.logger.warning(error_msg)
+                errors.append(error_msg)
+                return RollbackResult(
+                    cleaner_id=self.cleaner_id,
+                    timestamp=datetime.now().isoformat(),
+                    status="FAILED",
+                    files_restored=0,
+                    errors=errors,
+                )
 
-        error_msg = "Rollback not yet implemented (planned for VAC-001-03)"
-        self.logger.warning(error_msg)
-        errors.append(error_msg)
+            # Reverse the executed moves
+            if hasattr(self, "_executed_moves"):
+                for move in reversed(self._executed_moves):
+                    try:
+                        source = Path(move["target"])
+                        target = Path(move["source"])
 
-        return RollbackResult(
-            cleaner_id=self.cleaner_id,
-            timestamp=datetime.now().isoformat(),
-            status="FAILED",
-            files_restored=0,
-            errors=errors,
-        )
+                        if source.exists():
+                            target.parent.mkdir(parents=True, exist_ok=True)
+                            source.rename(target)
+                            files_restored += 1
+                            self.logger.info(f"Restored: {source} → {target}")
+                        else:
+                            warning_msg = f"File not found for restoration: {source}"
+                            self.logger.warning(warning_msg)
+                            errors.append(warning_msg)
+
+                    except Exception as e:
+                        error_msg = f"Failed to restore {move['source']}: {str(e)}"
+                        errors.append(error_msg)
+                        self.logger.error(error_msg)
+
+            status = "SUCCESS" if len(errors) == 0 else "PARTIAL"
+
+            result = RollbackResult(
+                cleaner_id=self.cleaner_id,
+                timestamp=datetime.now().isoformat(),
+                status=status,
+                files_restored=files_restored,
+                errors=errors,
+            )
+
+            self.logger.info(f"Rollback complete: {files_restored} files restored")
+            return result
+
+        except Exception as e:
+            self.logger.error(f"Rollback failed: {str(e)}")
+            errors.append(f"CRITICAL: {str(e)}")
+            raise ValueError(f"MD file rollback failed: {str(e)}") from e
 
     # =========================================================================
     # PRIVATE HELPER METHODS
     # =========================================================================
+
+    def _create_snapshot(self) -> Dict[str, Any]:
+        """Create pre-execution snapshot of file state.
+
+        Creates a snapshot of current file locations for rollback support.
+
+        Returns:
+            Snapshot dictionary with file state information
+        """
+        snapshot: Dict[str, Any] = {
+            "timestamp": datetime.now().isoformat(),
+            "files": {},
+        }
+
+        # Store current file locations
+        for filename, filepath in self._md_files.items():
+            snapshot["files"][filename] = str(filepath)
+
+        self.logger.info(f"Snapshot created with {len(snapshot['files'])} files")
+        return snapshot
 
     def _resolve_repo_root(self) -> Path:
         """Resolve the repository root directory.

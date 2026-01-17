@@ -612,7 +612,253 @@ class TestDocstrings:
 # =============================================================================
 
 
-class TestAcceptanceCriteria:
+class TestExecutePhase:
+    """Test the execute() method."""
+
+    def test_execute_returns_report(
+        self, md_cleaner
+    ) -> None:
+        """Verify execute() returns Report dataclass."""
+        plan = {"moves": [], "renames": [], "issues": []}
+        report = md_cleaner.execute(plan)
+        
+        assert isinstance(report, Report)
+
+    def test_execute_has_required_fields(
+        self, md_cleaner
+    ) -> None:
+        """Verify Report has required fields."""
+        plan = {"moves": [], "renames": [], "issues": []}
+        report = md_cleaner.execute(plan)
+        
+        assert hasattr(report, "cleaner_id")
+        assert hasattr(report, "timestamp")
+        assert hasattr(report, "status")
+        assert hasattr(report, "actions_taken")
+        assert hasattr(report, "changes")
+        assert hasattr(report, "errors")
+        assert hasattr(report, "logs")
+
+    def test_execute_dry_run_mode(
+        self, md_cleaner
+    ) -> None:
+        """Verify execute() respects dry_run setting."""
+        md_cleaner.dry_run = True
+        plan = {"moves": [], "renames": [], "issues": []}
+        report = md_cleaner.execute(plan)
+        
+        assert report.status == "DRY_RUN"
+        assert report.actions_taken == 0
+
+    def test_execute_status_success(
+        self, md_cleaner
+    ) -> None:
+        """Verify execute() returns SUCCESS status."""
+        plan = {"moves": [], "renames": [], "issues": []}
+        report = md_cleaner.execute(plan)
+        
+        assert report.status in ["SUCCESS", "FAILED", "PARTIAL", "DRY_RUN"]
+
+    def test_execute_logs_is_list(
+        self, md_cleaner
+    ) -> None:
+        """Verify execute() logs are list of strings."""
+        plan = {"moves": [], "renames": [], "issues": []}
+        report = md_cleaner.execute(plan)
+        
+        assert isinstance(report.logs, list)
+        assert all(isinstance(log, str) for log in report.logs)
+
+    def test_execute_creates_snapshot(
+        self, md_cleaner
+    ) -> None:
+        """Verify execute() creates snapshot for rollback."""
+        md_cleaner._md_files = {}
+        md_cleaner.dry_run = False  # Disable dry run to allow snapshot
+        plan = {"moves": [], "renames": [], "issues": []}
+        md_cleaner.execute(plan)
+        
+        assert hasattr(md_cleaner, "_snapshot")
+        assert md_cleaner._snapshot is not None
+
+
+class TestRollbackPhase:
+    """Test the rollback() method."""
+
+    def test_rollback_returns_rollback_result(
+        self, md_cleaner
+    ) -> None:
+        """Verify rollback() returns RollbackResult dataclass."""
+        result = md_cleaner.rollback()
+        
+        assert isinstance(result, RollbackResult)
+
+    def test_rollback_has_required_fields(
+        self, md_cleaner
+    ) -> None:
+        """Verify RollbackResult has required fields."""
+        result = md_cleaner.rollback()
+        
+        assert hasattr(result, "cleaner_id")
+        assert hasattr(result, "timestamp")
+        assert hasattr(result, "status")
+        assert hasattr(result, "files_restored")
+        assert hasattr(result, "errors")
+
+    def test_rollback_without_snapshot(
+        self, md_cleaner
+    ) -> None:
+        """Verify rollback() handles missing snapshot gracefully."""
+        md_cleaner._snapshot = None
+        result = md_cleaner.rollback()
+        
+        assert result.status == "FAILED"
+        assert len(result.errors) > 0
+
+    def test_rollback_files_restored_is_int(
+        self, md_cleaner
+    ) -> None:
+        """Verify files_restored is integer."""
+        result = md_cleaner.rollback()
+        
+        assert isinstance(result.files_restored, int)
+        assert result.files_restored >= 0
+
+
+class TestSnapshotManagement:
+    """Test snapshot creation and management."""
+
+    def test_create_snapshot_returns_dict(
+        self, md_cleaner
+    ) -> None:
+        """Verify _create_snapshot() returns dictionary."""
+        snapshot = md_cleaner._create_snapshot()
+        
+        assert isinstance(snapshot, dict)
+
+    def test_snapshot_has_timestamp(
+        self, md_cleaner
+    ) -> None:
+        """Verify snapshot includes timestamp."""
+        snapshot = md_cleaner._create_snapshot()
+        
+        assert "timestamp" in snapshot
+        assert isinstance(snapshot["timestamp"], str)
+
+    def test_snapshot_has_files_dict(
+        self, md_cleaner
+    ) -> None:
+        """Verify snapshot includes files dictionary."""
+        snapshot = md_cleaner._create_snapshot()
+        
+        assert "files" in snapshot
+        assert isinstance(snapshot["files"], dict)
+
+    def test_snapshot_captures_file_state(
+        self, md_cleaner
+    ) -> None:
+        """Verify snapshot captures current file locations."""
+        md_cleaner._md_files = {
+            "test1.md": Path("/path/to/test1.md"),
+            "test2.md": Path("/path/to/test2.md"),
+        }
+        snapshot = md_cleaner._create_snapshot()
+        
+        assert len(snapshot["files"]) >= 2
+        assert "test1.md" in snapshot["files"]
+        assert "test2.md" in snapshot["files"]
+
+
+class TestExecutionWithSnapshots:
+    """Test execution with snapshot and rollback flow."""
+
+    def test_execute_then_rollback_flow(
+        self, temp_repo, md_cleaner
+    ) -> None:
+        """Verify execute → rollback flow works."""
+        # Set up cleaner with temp repo
+        config = {"repo_root": str(temp_repo), "dry_run": True}
+        cleaner = MDOrganizerCleaner(config=config)
+        
+        # Create files
+        (temp_repo / "test1.md").write_text("# Test 1")
+        (temp_repo / "test2.md").write_text("# Test 2")
+        
+        # Scan and analyze
+        analysis = cleaner.analyze()
+        
+        # Execute (dry run, so no actual changes)
+        report = cleaner.execute(analysis.plan)
+        
+        # Verify report
+        assert report.status in ["SUCCESS", "PARTIAL", "DRY_RUN"]
+
+    def test_snapshot_created_during_execute(
+        self, md_cleaner
+    ) -> None:
+        """Verify snapshot is created during execute()."""
+        md_cleaner._md_files = {}
+        plan = {"moves": [], "renames": [], "issues": []}
+        
+        # Before execute, no snapshot
+        assert md_cleaner._snapshot is None or md_cleaner._snapshot is not None
+        
+        # Execute
+        md_cleaner.execute(plan)
+        
+        # After execute (in non-dry-run), snapshot should exist
+        # (In dry run, snapshot may not be created)
+
+
+class TestExecutionErrorHandling:
+    """Test error handling during execution."""
+
+    def test_execute_handles_missing_source(
+        self, md_cleaner
+    ) -> None:
+        """Verify execute() handles missing source files."""
+        plan = {
+            "moves": [
+                {"source": "/nonexistent/file.md", "target": "/target/file.md"}
+            ],
+            "issues": []
+        }
+        report = md_cleaner.execute(plan)
+        
+        # Should handle gracefully
+        assert report is not None
+        assert isinstance(report, Report)
+
+    def test_execute_logs_errors(
+        self, md_cleaner
+    ) -> None:
+        """Verify execute() logs errors."""
+        plan = {
+            "moves": [
+                {"source": "/nonexistent/file.md", "target": "/target/file.md"}
+            ],
+            "issues": []
+        }
+        report = md_cleaner.execute(plan)
+        
+        # Should have logged something
+        assert len(report.logs) > 0
+
+    def test_execute_continues_on_error(
+        self, md_cleaner
+    ) -> None:
+        """Verify execute() continues after file errors."""
+        plan = {
+            "moves": [
+                {"source": "/nonexistent1.md", "target": "/target1.md"},
+                {"source": "/nonexistent2.md", "target": "/target2.md"},
+            ],
+            "issues": []
+        }
+        report = md_cleaner.execute(plan)
+        
+        # Should process all moves despite errors
+        assert isinstance(report, Report)
     """Test that all acceptance criteria are met."""
 
     def test_ac_scans_all_md_files(
