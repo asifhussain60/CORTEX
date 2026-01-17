@@ -212,10 +212,46 @@ class DatabaseManager:
             return Err(f"Query failed: {e}")
     
     def close(self) -> None:
-        """Close the database connection."""
-        if hasattr(self._local, 'connection') and self._local.connection:
-            self._local.connection.close()
-            self._local.connection = None
+        """
+        Close the database connection.
+        
+        Properly cleans up thread-local connection resource.
+        Safe to call multiple times.
+        """
+        try:
+            if hasattr(self._local, 'connection') and self._local.connection:
+                try:
+                    self._local.connection.close()
+                except sqlite3.Error:
+                    pass  # Already closed or error closing
+                finally:
+                    self._local.connection = None
+        except Exception:
+            pass  # Ensure close never raises
+    
+    def __enter__(self) -> "DatabaseManager":
+        """
+        Context manager entry.
+        
+        Returns:
+            self for use in with statement
+        """
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb) -> bool:
+        """
+        Context manager exit - closes connection.
+        
+        Args:
+            exc_type: Exception type if one occurred
+            exc_val: Exception value if one occurred
+            exc_tb: Exception traceback if one occurred
+        
+        Returns:
+            False to propagate exceptions
+        """
+        self.close()
+        return False
     
     # =========================================================================
     # AC-ID Operations
