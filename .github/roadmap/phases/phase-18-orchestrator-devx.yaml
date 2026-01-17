@@ -1,0 +1,46 @@
+# =============================================================================
+# PHASE-18: ORCHESTRATOR DEVELOPMENT EXPERIENCE (DevX)
+# =============================================================================
+# Status: NOT_STARTED
+# Estimated Hours: 12 (3 hours net-new with 75% reuse)
+# =============================================================================
+
+phase:
+  id: "PHASE-18"
+  title: "Orchestrator Development Experience (DevX)"
+  description: |
+    Interactive development tools for orchestrator testing and integration.
+    HYBRID APPROACH - Extends existing PHASE-09 CLI and PHASE-11 Sandbox (75% code reuse).
+  
+  status: "NOT_STARTED"
+  locked: false
+  
+  metadata:
+    created: "2026-01-17"
+    version: "1.0"
+  
+  ac_ids:
+    - "ODX-001-01"  # Hot-reload orchestrator
+    - "ODX-001-02"  # Scenario library
+    - "ODX-002-01"  # Integration validation
+    - "ODX-002-02"  # DevX dashboard
+
+  total_ac_ids: 4
+  completed_ac_ids: 0
+
+  dependencies:
+    - "PHASE-PRODUCTION-READINESS"
+    - "PHASE-09-GOVERNANCE-TOOLS"
+    - "PHASE-11-HALLUCINATION-PREVENTION"
+
+  duplication_prevention:
+    reuse_percentage: 75
+    effort_saved_hours: 9
+    net_new_hours: 3
+
+  notes: |
+    HYBRID APPROACH: Extends GovernanceCLI and AgentExecutionSandbox
+    - Hot-reload for instant feedback
+    - Scenario library for test cases
+    - Integration validation
+    - Zero-friction orchestrator development
