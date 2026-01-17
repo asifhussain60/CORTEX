@@ -25,6 +25,9 @@ import pytest
 # Add src to Python path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+# Add cortex-brain to Python path for tier2 hallucination_prevention imports
+sys.path.insert(0, str(Path(__file__).parent.parent / "cortex-brain"))
+
 # Import the test audit logger plugin
 from src.testing.test_audit_logger import TestAuditLogger
 
