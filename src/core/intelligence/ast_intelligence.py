@@ -241,15 +241,19 @@ class ASTIntelligenceEngine:
         self.enable_cache = enable_cache
         self._cache: Dict[str, ParseResult] = {}
     
-    def parse_file(self, file_path: Path) -> ParseResult:
+    def parse_file(self, file_path: Path | str) -> ParseResult:
         """Parse a Python file and extract code intelligence.
         
         Args:
-            file_path: Path to the Python file to parse
+            file_path: Path to the Python file to parse (accepts str or Path)
             
         Returns:
             ParseResult containing extracted information or error details
         """
+        # Ensure file_path is a Path object
+        if isinstance(file_path, str):
+            file_path = Path(file_path)
+        
         if not file_path.exists():
             return ParseResult(
                 success=False,
