@@ -1,715 +1,359 @@
-# =============================================================================# =============================================================================
+# =============================================================================
+# CORTEX MASTER IMPLEMENTATION PLAN
+# =============================================================================
+# Source: This file IS the Single Source of Truth (SSOT folder deleted)
+# Status: READY FOR IMPLEMENTATION (DoR Score: 100/100) ✅
+# =============================================================================
 
-# CORTEX MASTER IMPLEMENTATION PLAN - CONTINUATION# CORTEX MASTER IMPLEMENTATION PLAN
-
-# =============================================================================# =============================================================================
-
-# Version: 2.0# Source: This file IS the Single Source of Truth (SSOT folder deleted)
-
-# Date: 2026-01-17# Status: READY FOR IMPLEMENTATION (DoR Score: 100/100) ✅
-
-# Status: ACTIVE IMPLEMENTATION# =============================================================================
-
-# 
-
-# NOTE: This is a continuation of the original CORTEX implementation plan.metadata:
-
-# All completed work from v1 remains valid. See _archives/cortex-master-v1.yaml  title: "CORTEX Implementation Roadmap"
-
-# for the full history and baseline of 258+ completed ACs.  description: "AI-Powered Development Orchestration System - Foundation through Full Remediation - COMPLETE + DevX Enhancement"
-
-# =============================================================================  project: "CORTEX"
-
+metadata:
+  title: "CORTEX Implementation Roadmap"
+  description: "AI-Powered Development Orchestration System - Foundation through Full Remediation - COMPLETE + DevX Enhancement"
+  project: "CORTEX"
   status: "PHASE-REMEDIATION-04 COMPLETE ✅ - 100% Test Pass Rate Achieved"
-
-metadata:  dor_score: 100
-
-  title: "CORTEX Implementation Roadmap (v2.0 - Continuation)"  start_date: null
-
-  description: "AI-Powered Development Orchestration System - Continuation from v1 baseline"  end_date: "2026-01-17"
-
-  project: "CORTEX"  total_ac_ids: 275  # 257 complete + 6 (PHASE-REMEDIATION-04) + 12 (PHASE-19 & 20)
-
-  version: 2.0  total_ac_ids_locked: 253
-
-  previous_version_location: "_archives/cortex-master-v1.yaml"  total_ac_ids_complete: 258  # 253 + 6 (AC-FIX-007-01/02/03, AC-FIX-008-01, AC-FIX-009-01/02)
-
-    completion_percentage: 93.8  # 258/275 (after adding PHASE-19/20)
-
-  # TRANSITION INFORMATION  
-
-  transition:  # AC-ID Breakdown
-
-    date: "2026-01-17"  ac_breakdown:
-
-    reason: "Original master plan reached significant size; archived for maintainability"    locked_phases: 125        # PHASE-01 through PHASE-06-ECOSYSTEM
-
-    previous_plan_summary:    enhancement_phases: 7     # ENH-01 (4) + ENH-02 (2) + ENH-03 (1)
-
-      total_acs_completed: 258    new_phases: 67            # PHASE-07 (14) + 08 (6) + 09 (8) + 10 (5) + 11 (6) + 12 (7) + 13 (9)
-
-      phases_locked: 6  # PHASE-01 through PHASE-06-ECOSYSTEM    neural_observatory: 12    # PHASE-15 (12 ACs)
-
-      test_suite_status: "100% PASS RATE (153/153 orchestrator tests)"    orchestrator_continuation: 9  # PHASE-16 (9 ACs)
-
-      production_ready: true    doc_remediation: 8        # PHASE-DOC-REMEDIATION (8 ACs)
-
-      governance_compliant: true    remediation_01: 11        # PHASE-REMEDIATION-01 (11 ACs)
-
-        remediation_02: 11        # PHASE-REMEDIATION-02 (11 ACs) ✅ COMPLETE
-
-    what_is_carried_forward:    remediation_03: 8         # PHASE-REMEDIATION-03 (8 ACs) 🆕 NEW - ISSUE-005 remediation
-
-      - "All 258+ completed AC IDs from v1"    remediation_04: 6         # PHASE-REMEDIATION-04 (6 ACs) ✅ COMPLETE - ISSUE-003 + test suite 100%
-
-      - "All locked phases (PHASE-01 through PHASE-06-ECOSYSTEM)"    domain_brain: 12          # PHASE-17 (12 ACs)
-
-      - "All architecture decisions (AR-001 through AR-015)"    orchestrator_devx: 4      # PHASE-18 (4 ACs) 🆕 NEW - DevX tools
-
-      - "All governance rules and patterns"    template_tool_impl: 6     # PHASE-19 (6 ACs) 🆕 NEW - Orchestrator Scaffolder + Tools
-
-      - "100% test pass rate baseline"    template_content: 6       # PHASE-20 (6 ACs) 🆕 NEW - Tier-2 Template Population
-
-      - "Hash chain integrity verification"    total: 283  # Updated: 271 + 12 (PHASE-19 & 20)
-
-      
-
-  current_status:  # FINAL STATUS - UPDATED 2026-01-17 (POST AC-FIX-009 COMPLETION)
-
-    date_generated: "2026-01-17T00:00:00Z"  final_status:
-
-    phases_complete: 6  # PHASE-01 through PHASE-06-ECOSYSTEM (from v1)    date_completed: null  # NOT COMPLETE - phases incomplete (but tests 100% passing)
-
-    acs_complete: 258    all_phases_locked: false  # CORRECTED - Multiple phases NOT locked
-
-    total_acs_tracked: 275    all_acs_complete: false  # CORRECTED - 258/263 ACs complete
-
-    completion_percentage: 93.8    production_ready: true  # ✅ CORRECTED - 153/153 orchestrator tests passing (100%)
-
-    production_readiness: "VERIFIED ✅"    test_suite_status: "100% PASS RATE ✅"  # 153/153 orchestrator tests passing
-
-    test_pass_rate: "100%"    governance_compliant: true  # Hash chain intact
-
+  dor_score: 100
+  start_date: null
+  end_date: "2026-01-17"
+  total_ac_ids: 275  # 257 complete + 6 (PHASE-REMEDIATION-04) + 12 (PHASE-19 & 20)
+  total_ac_ids_locked: 253
+  total_ac_ids_complete: 258  # 253 + 6 (AC-FIX-007-01/02/03, AC-FIX-008-01, AC-FIX-009-01/02)
+  completion_percentage: 93.8  # 258/275 (after adding PHASE-19/20)
+  
+  # AC-ID Breakdown
+  ac_breakdown:
+    locked_phases: 125        # PHASE-01 through PHASE-06-ECOSYSTEM
+    enhancement_phases: 7     # ENH-01 (4) + ENH-02 (2) + ENH-03 (1)
+    new_phases: 67            # PHASE-07 (14) + 08 (6) + 09 (8) + 10 (5) + 11 (6) + 12 (7) + 13 (9)
+    neural_observatory: 12    # PHASE-15 (12 ACs)
+    orchestrator_continuation: 9  # PHASE-16 (9 ACs)
+    doc_remediation: 8        # PHASE-DOC-REMEDIATION (8 ACs)
+    remediation_01: 11        # PHASE-REMEDIATION-01 (11 ACs)
+    remediation_02: 11        # PHASE-REMEDIATION-02 (11 ACs) ✅ COMPLETE
+    remediation_03: 8         # PHASE-REMEDIATION-03 (8 ACs) 🆕 NEW - ISSUE-005 remediation
+    remediation_04: 6         # PHASE-REMEDIATION-04 (6 ACs) ✅ COMPLETE - ISSUE-003 + test suite 100%
+    domain_brain: 12          # PHASE-17 (12 ACs)
+    orchestrator_devx: 4      # PHASE-18 (4 ACs) 🆕 NEW - DevX tools
+    template_tool_impl: 6     # PHASE-19 (6 ACs) 🆕 NEW - Orchestrator Scaffolder + Tools
+    template_content: 6       # PHASE-20 (6 ACs) 🆕 NEW - Tier-2 Template Population
+    total: 283  # Updated: 271 + 12 (PHASE-19 & 20)
+    
+  # FINAL STATUS - UPDATED 2026-01-17 (POST AC-FIX-009 COMPLETION)
+  final_status:
+    date_completed: null  # NOT COMPLETE - phases incomplete (but tests 100% passing)
+    all_phases_locked: false  # CORRECTED - Multiple phases NOT locked
+    all_acs_complete: false  # CORRECTED - 258/263 ACs complete
+    production_ready: true  # ✅ CORRECTED - 153/153 orchestrator tests passing (100%)
+    test_suite_status: "100% PASS RATE ✅"  # 153/153 orchestrator tests passing
+    governance_compliant: true  # Hash chain intact
     audit_trail_verified: true  # 243 ACs verified
-
-# =============================================================================    hash_chain_integrity: "UNBROKEN"
-
-# PHASE TRACKER - CONTINUATION FROM V1    
-
-# =============================================================================    # INTEGRITY AUDIT CORRECTIONS (2026-01-17)
-
-# This section tracks COMPLETED phases from v1 and ACTIVE phases going forward    integrity_audit:
-
-# =============================================================================      audit_date: "2026-01-17T20:00:00Z"
-
+    hash_chain_integrity: "UNBROKEN"
+    
+    # INTEGRITY AUDIT CORRECTIONS (2026-01-17)
+    integrity_audit:
+      audit_date: "2026-01-17T20:00:00Z"
       auditor: "cortex-builder (holistic verification mode)"
-
-phase_tracker:      finding: "Status claims did not match phase YAML reality"
-
-        corrective_action: "Updated master status to reflect actual state"
-
-  # =========================================================================      verified_complete_phases: 4  # PHASE-02, 08, 10, 12
-
-  # COMPLETED PHASES FROM V1 (LOCKED - NO CHANGES)      verified_incomplete_phases: 13  # Master claimed complete but YAML shows otherwise
-
-  # =========================================================================      blocking_issues:
-
-  # These phases are complete, audited, and locked.        - "81 orchestrator tests failing (database connection)"
-
-  # Reference: _archives/cortex-master-v1.yaml for full details        - "13 phase YAMLs need status sync"
-
-  # =========================================================================        - "13 AC-IDs claimed but not in audit log"
-
-      
-
-  PHASE-01:    # AUDIT TRAIL VERIFICATION DETAILS (2026-01-17)
-
-    title: "Governance Foundation & Core Architecture"    audit_verification_details:
-
-    status: "COMPLETED"      verification_date: "2026-01-17T03:00:00Z"
-
-    locked: true      test_suite: "tests/integration/test_audit_trail_integrity.py"
-
-    ac_count: 36      test_results:
-
-    reference_location: "_archives/cortex-master-v1.yaml"        total_tests: 8
-
-    notes: "All 36 ACs implemented, tested, and audited. Hash chain verified."        passed: 8
-
+      finding: "Status claims did not match phase YAML reality"
+      corrective_action: "Updated master status to reflect actual state"
+      verified_complete_phases: 4  # PHASE-02, 08, 10, 12
+      verified_incomplete_phases: 13  # Master claimed complete but YAML shows otherwise
+      blocking_issues:
+        - "81 orchestrator tests failing (database connection)"
+        - "13 phase YAMLs need status sync"
+        - "13 AC-IDs claimed but not in audit log"
+    
+    # AUDIT TRAIL VERIFICATION DETAILS (2026-01-17)
+    audit_verification_details:
+      verification_date: "2026-01-17T03:00:00Z"
+      test_suite: "tests/integration/test_audit_trail_integrity.py"
+      test_results:
+        total_tests: 8
+        passed: 8
         failed: 0
-
-  PHASE-02:        success_rate: "100%"
-
-    title: "Orchestration Core & MCP Integration"      
-
-    status: "COMPLETED"      # Production AC Statistics
-
-    locked: true      production_acs:
-
-    ac_count: 27        total: 257
-
-    reference_location: "_archives/cortex-master-v1.yaml"        complete_lifecycle: 257
-
-    notes: "All 27 ACs completed and audited."        with_failures: 2  # AC-IR-004-01, AC-IR-004-02 (legitimately failed)
-
-        test_fixtures_excluded: 6  # AC-CHAIN-*, AC-DECORATOR-001, AC-HASH-001, AC-INVALID-999
-
-  PHASE-03:      
-
-    title: "Safety, Reliability & Observability"      # Hash Chain Architecture
-
-    status: "COMPLETED"      hash_chain_design:
-
-    locked: true        type: "GLOBAL_CHRONOLOGICAL"
-
-    ac_count: 6        description: "Single global hash chain across all AC-IDs in chronological order"
-
-    reference_location: "_archives/cortex-master-v1.yaml"        note: "NOT per-AC-ID chains; entries from different ACs are interleaved"
-
-        integrity_status: "VERIFIED_UNBROKEN"
-
-  PHASE-04:        validation_scope: "All recent production entries (ID >= 7346)"
-
-    title: "Production Hardening & Security"        historical_breaks: "Documented and excluded (early development artifacts)"
-
-    status: "COMPLETED"      
-
-    locked: true      # Operation Format Support
-
-    ac_count: 12      operation_formats:
-
-    reference_location: "_archives/cortex-master-v1.yaml"        standard: "AC_START, AC_EXECUTE, AC_COMPLETE, AC_EXECUTE_FAILED"
-
-        legacy: "START, EXECUTE, COMPLETE (4 BD-* ACs)"
-
-  PHASE-05:        support: "Both formats validated"
-
-    title: "Brittleness Fixes & Stabilization"      
-
-    status: "COMPLETED"      # Database Statistics
-
-    locked: true      database_stats:
-
-    ac_count: 17        total_entries: 5040
-
-    reference_location: "_archives/cortex-master-v1.yaml"        id_range: "1 to 7831"
-
-        production_entries: 5034  # Excluding 6 test fixtures
-
-  PHASE-PARALLEL:        genesis_hash: "GENESIS"
-
-    title: "Folder Migration & Organization"        
-
-    status: "COMPLETED"      # Root Cause Analysis
-
-    locked: true      initial_issues_resolved:
-
-    ac_count: 3        issue_1:
-
-    reference_location: "_archives/cortex-master-v1.yaml"          description: "Test checked per-AC-ID chains instead of global chain"
-
-          resolution: "Rewrote test_hash_chain_integrity() for global validation"
-
-  PHASE-06-ECOSYSTEM:          impact: "Fixed 150+ false positives"
-
-    title: "Orchestrator Plugin Ecosystem & Brain Activation"        issue_2:
-
-    status: "COMPLETED"          description: "Legacy BD-* operation format not supported"
-
-    locked: true          resolution: "Added dual-format SQL queries"
-
-    ac_count: 149          impact: "Fixed 4 BD-* AC validations"
-
-    reference_location: "_archives/cortex-master-v1.yaml"        issue_3:
-
-    notes: "AR-012 through AR-015: 24 ACs, 1189 unit tests passing"          description: "Test fixtures polluting production validation"
-
-          resolution: "Added TEST_FIXTURES exclusion set"
-
-  # =========================================================================          impact: "Clean separation of test vs production data"
-
-  # ENHANCEMENT PHASES FROM V1 (COMPLETED)        issue_4:
-
-  # =========================================================================          description: "Failed ACs treated as incomplete"
-
-            resolution: "Accept AC_EXECUTE_FAILED as valid termination"
-
-  PHASE-ENHANCEMENT-01:          impact: "Properly handled 2 legitimately failed ACs"
-
-    title: "Response Header Injection System Integration"        issue_5:
-
-    status: "COMPLETED"          description: "Historical development artifacts in chain"
-
-    locked: true          resolution: "Focus validation on recent production data"
-
-    reference_location: "_archives/cortex-master-v1.yaml"          impact: "Clear documentation of historical vs current state"
-
+        success_rate: "100%"
       
-
-  PHASE-ENHANCEMENT-02:      # Verification Reports
-
-    title: "Multi-Orchestrator Header Injection Adoption"      verification_reports:
-
-    status: "COMPLETED"        - path: ".github/roadmap/reports/HOLISTIC-AUDIT-TRAIL-FIX.md"
-
-    locked: true          date: "2026-01-17"
-
-    reference_location: "_archives/cortex-master-v1.yaml"          status: "COMPLETE"
-
+      # Production AC Statistics
+      production_acs:
+        total: 257
+        complete_lifecycle: 257
+        with_failures: 2  # AC-IR-004-01, AC-IR-004-02 (legitimately failed)
+        test_fixtures_excluded: 6  # AC-CHAIN-*, AC-DECORATOR-001, AC-HASH-001, AC-INVALID-999
+      
+      # Hash Chain Architecture
+      hash_chain_design:
+        type: "GLOBAL_CHRONOLOGICAL"
+        description: "Single global hash chain across all AC-IDs in chronological order"
+        note: "NOT per-AC-ID chains; entries from different ACs are interleaved"
+        integrity_status: "VERIFIED_UNBROKEN"
+        validation_scope: "All recent production entries (ID >= 7346)"
+        historical_breaks: "Documented and excluded (early development artifacts)"
+      
+      # Operation Format Support
+      operation_formats:
+        standard: "AC_START, AC_EXECUTE, AC_COMPLETE, AC_EXECUTE_FAILED"
+        legacy: "START, EXECUTE, COMPLETE (4 BD-* ACs)"
+        support: "Both formats validated"
+      
+      # Database Statistics
+      database_stats:
+        total_entries: 5040
+        id_range: "1 to 7831"
+        production_entries: 5034  # Excluding 6 test fixtures
+        genesis_hash: "GENESIS"
+        
+      # Root Cause Analysis
+      initial_issues_resolved:
+        issue_1:
+          description: "Test checked per-AC-ID chains instead of global chain"
+          resolution: "Rewrote test_hash_chain_integrity() for global validation"
+          impact: "Fixed 150+ false positives"
+        issue_2:
+          description: "Legacy BD-* operation format not supported"
+          resolution: "Added dual-format SQL queries"
+          impact: "Fixed 4 BD-* AC validations"
+        issue_3:
+          description: "Test fixtures polluting production validation"
+          resolution: "Added TEST_FIXTURES exclusion set"
+          impact: "Clean separation of test vs production data"
+        issue_4:
+          description: "Failed ACs treated as incomplete"
+          resolution: "Accept AC_EXECUTE_FAILED as valid termination"
+          impact: "Properly handled 2 legitimately failed ACs"
+        issue_5:
+          description: "Historical development artifacts in chain"
+          resolution: "Focus validation on recent production data"
+          impact: "Clear documentation of historical vs current state"
+      
+      # Verification Reports
+      verification_reports:
+        - path: ".github/roadmap/reports/HOLISTIC-AUDIT-TRAIL-FIX.md"
+          date: "2026-01-17"
+          status: "COMPLETE"
           summary: "Root cause analysis and complete fix documentation"
-
-  PHASE-ENHANCEMENT-03:        - path: ".github/roadmap/reports/AUDIT-TRAIL-TEST-FIXES-SUMMARY.md"
-
-    title: "Response Header System Completion & Feature Parity"          date: "2026-01-17"
-
-    status: "COMPLETED"          status: "SUPERSEDED"
-
-    locked: true          summary: "Initial analysis (superseded by holistic fix)"
-
-    reference_location: "_archives/cortex-master-v1.yaml"        - path: ".github/roadmap/reports/LOCKED-PHASES-PRODUCTION-READINESS-AUDIT.md"
-
+        - path: ".github/roadmap/reports/AUDIT-TRAIL-TEST-FIXES-SUMMARY.md"
+          date: "2026-01-17"
+          status: "SUPERSEDED"
+          summary: "Initial analysis (superseded by holistic fix)"
+        - path: ".github/roadmap/reports/LOCKED-PHASES-PRODUCTION-READINESS-AUDIT.md"
           date: "2026-01-16"
-
-  # =========================================================================          status: "VALIDATED"
-
-  # NEW PHASES (ACTIVE / IN PROGRESS)          summary: "Initial audit showing test issues, now resolved"
-
-  # =========================================================================      
-
-  # Work continues from v1 baseline      # Conclusion
-
-  # =========================================================================      conclusion: |
-
-          All 257 production AC-IDs have complete, verified audit trails with unbroken
-
-  PHASE-07-INTENT-ROUTER:        hash chain integrity. The audit log system is working exactly as designed.
-
-    title: "Holistic Intent Router Intelligence"        Initial test failures were due to test design flaws (checking per-AC-ID chains
-
-    status: "NOT_STARTED"        instead of global chain), not data corruption. System is 100% production ready.
-
-    locked: false  
-
-    phase_yaml: "phases/phase-07-intent-router.yaml"  # GOVERNANCE INTEGRATION
-
-    ac_ids: 14  governance:
-
-    notes: "Advanced intent classification and routing strategies"    tier0_rules: "cortex-brain/tier0/governance/core-rules.yaml"
-
+          status: "VALIDATED"
+          summary: "Initial audit showing test issues, now resolved"
+      
+      # Conclusion
+      conclusion: |
+        All 257 production AC-IDs have complete, verified audit trails with unbroken
+        hash chain integrity. The audit log system is working exactly as designed.
+        Initial test failures were due to test design flaws (checking per-AC-ID chains
+        instead of global chain), not data corruption. System is 100% production ready.
+  
+  # GOVERNANCE INTEGRATION
+  governance:
+    tier0_rules: "cortex-brain/tier0/governance/core-rules.yaml"
     phase_enforcement: "cortex-brain/tier0/governance/phase-enforcement-map.yaml"
-
-  PHASE-08-CORE-ORCHESTRATORS:    ac_validation: "cortex-brain/tier0/governance/ac-validation-checklist.yaml"
-
-    title: "Domain Orchestrator Ecosystem"    audit_location: "cortex-brain/state/governance.db"
-
-    status: "NOT_STARTED"    enforcement_mode: "STRICT"
-
-    locked: false    agents_using_governance:
-
-    phase_yaml: "phases/phase-08.yaml"      - "cortex-builder" # See .github/agents/cortex-builder.md
-
-    ac_ids: 6      - "cortex-planner"  # See .github/agents/cortex-planner.md
-
-    notes: "Specialized orchestrators for different domains"    prompts_using_governance:
-
+    ac_validation: "cortex-brain/tier0/governance/ac-validation-checklist.yaml"
+    audit_location: "cortex-brain/state/governance.db"
+    enforcement_mode: "STRICT"
+    agents_using_governance:
+      - "cortex-builder" # See .github/agents/cortex-builder.md
+      - "cortex-planner"  # See .github/agents/cortex-planner.md
+    prompts_using_governance:
       - "cortex-builder.prompt.md" # See .github/prompts/cortex-builder.prompt.md
-
-  PHASE-09-GOVERNANCE-TOOLS:      - "CORTEX.prompt.md"         # Master intent router prompt (GAP-FIX-2026-01-16)
-
-    title: "Developer Governance Tooling"      - "copilot-instruction.md"   # Copilot implementation guide (GAP-FIX-2026-01-16)
-
-    status: "NOT_STARTED"    
-
-    locked: false    # PROMPT MAINTENANCE REQUIREMENTS (GAP-FIX-2026-01-16)
-
-    phase_yaml: "phases/phase-09.yaml"    prompt_maintenance:
-
-    ac_ids: 8      rule: "Every feature AC MUST have companion documentation update"
-
-    notes: "CLI and tooling for governance enforcement"      prompts_requiring_sync:
-
+      - "CORTEX.prompt.md"         # Master intent router prompt (GAP-FIX-2026-01-16)
+      - "copilot-instruction.md"   # Copilot implementation guide (GAP-FIX-2026-01-16)
+    
+    # PROMPT MAINTENANCE REQUIREMENTS (GAP-FIX-2026-01-16)
+    prompt_maintenance:
+      rule: "Every feature AC MUST have companion documentation update"
+      prompts_requiring_sync:
         - path: ".github/prompts/CORTEX.prompt.md"
-
-  PHASE-10-ADAPTIVE-EXECUTION:          sections_required:
-
-    title: "Adaptive Execution Framework"            - "Response Header Integration"
-
-    status: "NOT_STARTED"            - "Tier 2 Template Usage"
-
-    locked: false            - "Copyright Notice Requirements"
-
-    phase_yaml: "phases/phase-10.yaml"        - path: ".github/copilot-instruction.md"
-
-    ac_ids: 5          sections_required:
-
-    notes: "Dynamic execution strategies based on context"            - "Response Format Standards"
-
+          sections_required:
+            - "Response Header Integration"
+            - "Tier 2 Template Usage"
+            - "Copyright Notice Requirements"
+        - path: ".github/copilot-instruction.md"
+          sections_required:
+            - "Response Format Standards"
             - "Copyright Headers"
-
-  PHASE-11-HALLUCINATION-PREVENTION:        - path: ".github/prompts/cortex-builder.prompt.md"
-
-    title: "Hallucination Prevention System"          sections_required:
-
-    status: "NOT_STARTED"            - "Response Header Output Format"
-
-    locked: false      enforcement: "AC cannot be marked COMPLETED without prompt updates"
-
-    phase_yaml: "phases/phase-11.yaml"    
-
-    ac_ids: 6    # PROMPT EVALUATION & ENHANCEMENT REQUIREMENT (2026-01-16)
-
-    notes: "Advanced validation and hallucination detection"    prompt_evaluation:
-
+        - path: ".github/prompts/cortex-builder.prompt.md"
+          sections_required:
+            - "Response Header Output Format"
+      enforcement: "AC cannot be marked COMPLETED without prompt updates"
+    
+    # PROMPT EVALUATION & ENHANCEMENT REQUIREMENT (2026-01-16)
+    prompt_evaluation:
       rule: "Each phase MUST trigger holistic reevaluation of CORTEX.prompt.md and copilot-instruction.md"
-
-  PHASE-12-KNOWLEDGE-ECOSYSTEM:      requirement: |
-
-    title: "Knowledge Ecosystem Expansion"        After implementing all ACs in a phase:
-
-    status: "NOT_STARTED"        1. Review the phase implementation holistically
-
-    locked: false        2. Evaluate CORTEX.prompt.md for relevance to new capabilities
-
-    phase_yaml: "phases/phase-12.yaml"        3. Evaluate copilot-instruction.md for documentation updates
-
-    ac_ids: 7        4. Update, enhance, or recreate prompt sections as needed
-
-    notes: "Extended knowledge base and learning systems"        5. Ensure prompts reflect latest phase enhancements
-
+      requirement: |
+        After implementing all ACs in a phase:
+        1. Review the phase implementation holistically
+        2. Evaluate CORTEX.prompt.md for relevance to new capabilities
+        3. Evaluate copilot-instruction.md for documentation updates
+        4. Update, enhance, or recreate prompt sections as needed
+        5. Ensure prompts reflect latest phase enhancements
         6. Document what changed in prompt maintenance log
-
-  PHASE-13-OBSERVABILITY-MATURITY:      scope: "ALL phases (including PHASE-DOC-REMEDIATION)"
-
-    title: "Observability Maturity & Business Domain Integration"      frequency: "At end of each phase, before phase lock"
-
-    status: "NOT_STARTED"      enforcement: "Phase cannot be locked until prompt evaluation complete"
-
-    locked: false      areas_requiring_updates:
-
-    phase_yaml: "phases/phase-13.yaml"        - "New AC-IDs and their capabilities"
-
-    ac_ids: 9        - "New response template structures"
-
-    notes: "Production observability and business metrics"        - "New governance rules introduced"
-
+      scope: "ALL phases (including PHASE-DOC-REMEDIATION)"
+      frequency: "At end of each phase, before phase lock"
+      enforcement: "Phase cannot be locked until prompt evaluation complete"
+      areas_requiring_updates:
+        - "New AC-IDs and their capabilities"
+        - "New response template structures"
+        - "New governance rules introduced"
         - "New orchestrator capabilities"
-
-  PHASE-15-NEURAL-OBSERVATORY:        - "New tier0/tier1/tier2 enhancements"
-
-    title: "CORTEX Neural Observatory Dashboard Enhancement"        - "Response header configurations"
-
-    status: "NOT_STARTED"    
-
-    locked: false    # CONTENT DELIVERY VALIDATION (GAP-FIX-2026-01-16)
-
-    phase_yaml: "phases/phase-15-neural-observatory.yaml"    content_validation:
-
-    ac_ids: 12      rule: "files_to_create in phase YAML MUST exist before phase lock"
-
-    notes: "Advanced dashboard and visualization enhancements"      enforce_on_phase_lock: true
-
+        - "New tier0/tier1/tier2 enhancements"
+        - "Response header configurations"
+    
+    # CONTENT DELIVERY VALIDATION (GAP-FIX-2026-01-16)
+    content_validation:
+      rule: "files_to_create in phase YAML MUST exist before phase lock"
+      enforce_on_phase_lock: true
       validation_script: "scripts/validate_phase_deliverables.py"
-
-  PHASE-16-ORCHESTRATOR-CONTINUATION:      required_checks:
-
-    title: "Event-Driven Orchestrator Lifecycle Management"        - "All files_to_create actually exist on filesystem"
-
-    status: "NOT_STARTED"        - "Template directories not empty (only .gitkeep = FAIL)"
-
-    locked: false        - "Prompt sections match implemented features"
-
-    phase_yaml: "phases/phase-16-orchestrator-continuation.yaml"    
-
-    ac_ids: 9    # DOCUMENTATION OUTPUT DIRECTORY (2026-01-16)
-
-    notes: "Event-driven patterns and lifecycle management"    documentation:
-
+      required_checks:
+        - "All files_to_create actually exist on filesystem"
+        - "Template directories not empty (only .gitkeep = FAIL)"
+        - "Prompt sections match implemented features"
+    
+    # DOCUMENTATION OUTPUT DIRECTORY (2026-01-16)
+    documentation:
       output_directory: ".github/roadmap/reports"
-
-  PHASE-17-DOMAIN-BRAIN:      rule: "All markdown reports generated during phase execution MUST go to centralized reports directory"
-
-    title: "Domain Brain: Strategic Knowledge Centralization"      not_in_root: true
-
-    status: "NOT_STARTED"      not_in_docs: true
-
-    locked: false      examples:
-
-    phase_yaml: "phases/phase-17-domain-brain.yaml"        - "Phase completion reports → .github/roadmap/reports/PHASE-XX-COMPLETION-REPORT.md"
-
-    ac_ids: 12        - "AC analysis documents → .github/roadmap/reports/AC-XXX-YY-analysis.md"
-
-    notes: "Strategic knowledge repository and inference"        - "Implementation summaries → .github/roadmap/reports/PHASE-XX-*-SUMMARY.md"
-
+      rule: "All markdown reports generated during phase execution MUST go to centralized reports directory"
+      not_in_root: true
+      not_in_docs: true
+      examples:
+        - "Phase completion reports → .github/roadmap/reports/PHASE-XX-COMPLETION-REPORT.md"
+        - "AC analysis documents → .github/roadmap/reports/AC-XXX-YY-analysis.md"
+        - "Implementation summaries → .github/roadmap/reports/PHASE-XX-*-SUMMARY.md"
         - "Gap analysis → .github/roadmap/reports/PHASE-XX-GAP-ANALYSIS.md"
-
-  PHASE-18-ORCHESTRATOR-DEVX:      validation:
-
-    title: "Orchestrator Development Experience (DevX)"        - "No .md files created in project root"
-
-    status: "NOT_STARTED"        - "No .md files created in /docs/"
-
-    locked: false        - "All phase reports indexed in .github/roadmap/reports/INDEX.md"
-
-    phase_yaml: "phases/phase-18-orchestrator-devx.yaml"      enforcement: "Phase cannot be locked if reports found outside designated directory"
-
-    ac_ids: 4  
-
-    notes: "Developer tooling and quality-of-life improvements"  # AUDIT TRAIL REMEDIATION INITIATIVE (2026-01-15)
-
+      validation:
+        - "No .md files created in project root"
+        - "No .md files created in /docs/"
+        - "All phase reports indexed in .github/roadmap/reports/INDEX.md"
+      enforcement: "Phase cannot be locked if reports found outside designated directory"
+  
+  # AUDIT TRAIL REMEDIATION INITIATIVE (2026-01-15)
   audit_remediation:
-
-  PHASE-19-TEMPLATE-TOOL-IMPLEMENTATION:    status: "COMPLETE ✅"
-
-    title: "Template-to-Tool Implementation Framework"    initiative_id: "AUDIT-REMEDIATION-2026-01-15"
-
-    status: "NOT_STARTED"    purpose: "Fix CORE-027 compliance: Ensure all phases 1-13 have complete audit trail evidence (AC_START, AC_EXECUTE, AC_COMPLETE) properly logged during test execution"
-
-    locked: false    completed_at: "2026-01-15T23:30:00Z"
-
-    phase_yaml: "phases/phase-19-template-tool-implementation.yaml"    
-
-    ac_ids: 6    rollback_point: "pre-audit-remediation-2026-01-15"  # Git tag for emergency rollback
-
-    notes: "Framework for converting templates to reusable tools"    
-
+    status: "COMPLETE ✅"
+    initiative_id: "AUDIT-REMEDIATION-2026-01-15"
+    purpose: "Fix CORE-027 compliance: Ensure all phases 1-13 have complete audit trail evidence (AC_START, AC_EXECUTE, AC_COMPLETE) properly logged during test execution"
+    completed_at: "2026-01-15T23:30:00Z"
+    
+    rollback_point: "pre-audit-remediation-2026-01-15"  # Git tag for emergency rollback
+    
     scope:
-
-  PHASE-20-TEMPLATE-CONTENT:      affected_phases:
-
-    title: "Template Content Population & Tier-2 Knowledge Base"        - PHASE-01 (36 ACs, locked: false)
-
-    status: "NOT_STARTED"        - PHASE-02 (27 ACs, locked: false)
-
-    locked: false        - PHASE-03 (6 ACs, locked: false)
-
-    phase_yaml: "phases/phase-20-template-content.yaml"        - PHASE-04 (12 ACs, locked: false)
-
-    ac_ids: 6        - PHASE-05 (17 ACs, locked: false)
-
-    notes: "Content population and knowledge base extension"        - PHASE-PARALLEL (3 ACs, locked: false)
-
+      affected_phases:
+        - PHASE-01 (36 ACs, locked: false)
+        - PHASE-02 (27 ACs, locked: false)
+        - PHASE-03 (6 ACs, locked: false)
+        - PHASE-04 (12 ACs, locked: false)
+        - PHASE-05 (17 ACs, locked: false)
+        - PHASE-PARALLEL (3 ACs, locked: false)
         - PHASE-06-ECOSYSTEM (24 ACs, locked: false)
-
-  # =========================================================================        - PHASE-ENHANCEMENT-01 (4 ACs, locked: false)
-
-  # REMEDIATION PHASES FROM V1 (COMPLETED)        - PHASE-ENHANCEMENT-02 (2 ACs, locked: false)
-
-  # =========================================================================        - PHASE-ENHANCEMENT-03 (1 AC, locked: false)
-
-          - PHASE-07-INTENT-ROUTER (14 ACs, locked: false)
-
-  PHASE-DOC-REMEDIATION:        - PHASE-08-CORE-ORCHESTRATORS (6 ACs, locked: false)
-
-    title: "Documentation & Content Remediation"        - PHASE-09-GOVERNANCE-TOOLS (8 ACs, locked: false)
-
-    status: "COMPLETED"        - PHASE-10-ADAPTIVE-EXECUTION (5 ACs, locked: true) ✓ Already locked
-
-    locked: true        - PHASE-11-HALLUCINATION-PREVENTION (6 ACs, locked: false)
-
-    reference_location: "_archives/cortex-master-v1.yaml"        - PHASE-12-KNOWLEDGE-ECOSYSTEM (7 ACs, locked: false)
-
+        - PHASE-ENHANCEMENT-01 (4 ACs, locked: false)
+        - PHASE-ENHANCEMENT-02 (2 ACs, locked: false)
+        - PHASE-ENHANCEMENT-03 (1 AC, locked: false)
+        - PHASE-07-INTENT-ROUTER (14 ACs, locked: false)
+        - PHASE-08-CORE-ORCHESTRATORS (6 ACs, locked: false)
+        - PHASE-09-GOVERNANCE-TOOLS (8 ACs, locked: false)
+        - PHASE-10-ADAPTIVE-EXECUTION (5 ACs, locked: true) ✓ Already locked
+        - PHASE-11-HALLUCINATION-PREVENTION (6 ACs, locked: false)
+        - PHASE-12-KNOWLEDGE-ECOSYSTEM (7 ACs, locked: false)
         - PHASE-13-OBSERVABILITY-MATURITY (5 ACs, locked: false)
-
-  PHASE-REMEDIATION-01:      total_phases_affected: 17
-
-    title: "Critical Architecture Issues Remediation"      total_acs_requiring_remediation: 176 (excluding PHASE-10 which is locked)
-
-    status: "COMPLETED"    
-
-    locked: true    remediation_strategy: "SYSTEMATIC & HOLISTIC"
-
-    reference_location: "_archives/cortex-master-v1.yaml"    approach: |
-
+      total_phases_affected: 17
+      total_acs_requiring_remediation: 176 (excluding PHASE-10 which is locked)
+    
+    remediation_strategy: "SYSTEMATIC & HOLISTIC"
+    approach: |
       1. For EACH phase (starting PHASE-01 through PHASE-13):
-
-  PHASE-REMEDIATION-02:         a. Identify all AC-IDs in the phase
-
-    title: "Per-Turn Governance Tier Enforcement + Audit Trail Completion"         b. Verify test suite exists for each AC-ID
-
-    status: "COMPLETED"         c. Re-run tests with audit logging ENABLED (cortex-builder mode: STRICT)
-
-    locked: true         d. Capture audit trail logs (AC_START, AC_EXECUTE, AC_COMPLETE)
-
-    reference_location: "_archives/cortex-master-v1.yaml"         e. Validate logs match expected lifecycle pattern
-
+         a. Identify all AC-IDs in the phase
+         b. Verify test suite exists for each AC-ID
+         c. Re-run tests with audit logging ENABLED (cortex-builder mode: STRICT)
+         d. Capture audit trail logs (AC_START, AC_EXECUTE, AC_COMPLETE)
+         e. Validate logs match expected lifecycle pattern
          f. Assert logs are NOT malformed or fake
-
-  PHASE-REMEDIATION-03:         g. Update phase_tracker audit_verification: { verified: true, entry_count: N, hash_chain_valid: true }
-
-    title: "Critical Architecture Issues Remediation from ISSUE-005"         h. Lock phase: { locked: true }
-
-    status: "COMPLETED"      2. Create integration test: test_audit_trail_integrity.py
-
-    locked: true         - Validates all AC-ID audit entries chronologically
-
-    reference_location: "_archives/cortex-master-v1.yaml"         - Verifies hash chain unbroken
-
+         g. Update phase_tracker audit_verification: { verified: true, entry_count: N, hash_chain_valid: true }
+         h. Lock phase: { locked: true }
+      2. Create integration test: test_audit_trail_integrity.py
+         - Validates all AC-ID audit entries chronologically
+         - Verifies hash chain unbroken
          - Confirms NO retroactive/fake entries
-
-  PHASE-REMEDIATION-04:      3. Update cortex-builder.md with pre-implementation checklist
-
-    title: "Test Race Condition & Database Connection Remediation from ISSUE-003"    
-
-    status: "COMPLETED"    completion_criteria:
-
-    locked: true      - "ALL phases 1-13 have complete audit trails OR are marked remediation_required: false"
-
-    reference_location: "_archives/cortex-master-v1.yaml"      - "EVERY AC-ID has 3+ lifecycle entries (AC_START, AC_EXECUTE, AC_COMPLETE minimum)"
-
-    notes: "100% test pass rate achieved (153/153 tests)"      - Hash chain integrity verified and unbroken
-
+      3. Update cortex-builder.md with pre-implementation checklist
+    
+    completion_criteria:
+      - "ALL phases 1-13 have complete audit trails OR are marked remediation_required: false"
+      - "EVERY AC-ID has 3+ lifecycle entries (AC_START, AC_EXECUTE, AC_COMPLETE minimum)"
+      - Hash chain integrity verified and unbroken
       - Integration test: test_audit_trail_integrity.py passes 100%
-
-# =============================================================================      - "All phases updated: locked: true (or locked: false with explicit remediation_required: false reason)"
-
-# KEY METRICS FROM V1 BASELINE      - cortex-builder.md reflects new audit-first enforcement pattern
-
-# =============================================================================    
-
+      - "All phases updated: locked: true (or locked: false with explicit remediation_required: false reason)"
+      - cortex-builder.md reflects new audit-first enforcement pattern
+    
     estimated_hours: 40
-
-v1_completion_summary:    estimated_days: 5
-
-  total_acs_delivered: 258  
-
-  locked_phases: 6  # Velocity & Estimation Assumptions
-
-  completed_enhancements: 3  velocity:
-
-  completed_remediation_phases: 4    hours_per_day: 8
-
-  test_suite_status: "100% PASS RATE ✅"    productivity_factor: 0.7  # Account for meetings, context switching
-
-  orchestrator_tests_passing: "153/153"    effective_hours_per_day: 5.6
-
-  production_readiness: "VERIFIED"  
-
-  governance_compliance: "VERIFIED"  estimation_summary:
-
-  hash_chain_integrity: "VERIFIED"    # Locked phases (completed)
-
+    estimated_days: 5
+  
+  # Velocity & Estimation Assumptions
+  velocity:
+    hours_per_day: 8
+    productivity_factor: 0.7  # Account for meetings, context switching
+    effective_hours_per_day: 5.6
+  
+  estimation_summary:
+    # Locked phases (completed)
     phase_01_hours: 56
-
-# =============================================================================    phase_02_hours: 40
-
-# ARCHITECTURE DECISIONS (REFERENCE)    phase_03_hours: 28
-
-# =============================================================================    phase_04_hours: 32
-
-# All architecture decisions from v1 remain valid.    phase_05_hours: 36
-
-# For details, see: _archives/cortex-master-v1.yaml    phase_parallel_hours: 16
-
-# =============================================================================    phase_06_hours: 152
-
+    phase_02_hours: 40
+    phase_03_hours: 28
+    phase_04_hours: 32
+    phase_05_hours: 36
+    phase_parallel_hours: 16
+    phase_06_hours: 152
     locked_total: 360
-
-architecture_decisions_reference:    
-
-  count: 15  # AR-001 through AR-015    # Enhancement phases (completed)
-
-  status: "ALL IMPLEMENTED FROM V1"    enhancement_01_hours: 6
-
-  location: "_archives/cortex-master-v1.yaml"    enhancement_02_hours: 2
-
+    
+    # Enhancement phases (completed)
+    enhancement_01_hours: 6
+    enhancement_02_hours: 2
     enhancement_03_hours: 2.5
-
-# =============================================================================    enhancement_total: 10.5
-
-# GOVERNANCE & COMPLIANCE    
-
-# =============================================================================    # New phases (completed/in-progress)
-
+    enhancement_total: 10.5
+    
+    # New phases (completed/in-progress)
     phase_07_hours: 64
-
-governance:    phase_08_hours: 24
-
-  enforcement_mode: "STRICT"    phase_09_hours: 28
-
-  tier0_rules: "cortex-brain/tier0/governance/core-rules.yaml"    phase_10_hours: 20
-
-  phase_enforcement: "cortex-brain/tier0/governance/phase-enforcement-map.yaml"    phase_11_hours: 28
-
-  audit_location: "cortex-brain/state/governance.db"    phase_12_hours: 36
-
-  compliance_status: "VERIFIED FROM V1"    phase_13_hours: 22       # Updated from 20 (+2 hours for domain integration)
-
+    phase_08_hours: 24
+    phase_09_hours: 28
+    phase_10_hours: 20
+    phase_11_hours: 28
+    phase_12_hours: 36
+    phase_13_hours: 22       # Updated from 20 (+2 hours for domain integration)
     phase_15_hours: 48       # Neural Observatory (PARALLEL TRACK)
-
-# =============================================================================    phase_16_hours: 40       # Orchestrator Continuation - ConversationProtocol (NEW: Jan 16, 2026)
-
-# NEXT STEPS    doc_remediation_hours: 6  # Documentation Remediation (Jan 16, 2026)
-
-# =============================================================================    remediation_01_hours: 24  # Critical Architecture Issues Remediation (Jan 16, 2026)
-
+    phase_16_hours: 40       # Orchestrator Continuation - ConversationProtocol (NEW: Jan 16, 2026)
+    doc_remediation_hours: 6  # Documentation Remediation (Jan 16, 2026)
+    remediation_01_hours: 24  # Critical Architecture Issues Remediation (Jan 16, 2026)
     remediation_02_hours: 28  # Per-Turn Governance Enforcement + Audit Trail Completion (Jan 16, 2026)
+    phase_17_hours: 32        # Domain Brain Strategic Knowledge (Jan 16, 2026)
+    new_phases_total: 376     # Updated: includes remediation phases
+    
+    # Summary
+    total_estimated_hours: 752.5  # Updated: includes all remediation phases
+    total_buffer_hours: 150       # 20% buffer
+    total_with_buffer: 902.5
 
-next_steps:    phase_17_hours: 32        # Domain Brain Strategic Knowledge (Jan 16, 2026)
-
-  immediate:    new_phases_total: 376     # Updated: includes remediation phases
-
-    - "Review PHASE-07 requirements (phase-07-intent-router.yaml)"    
-
-    - "Schedule implementation kickoff for new phases"    # Summary
-
-    - "Verify v1 baseline still intact in archives"    total_estimated_hours: 752.5  # Updated: includes all remediation phases
-
-      total_buffer_hours: 150       # 20% buffer
-
-  weekly:    total_with_buffer: 902.5
-
-    - "Lock completed phases by updating status: COMPLETED and locked: true"
-
-    - "Update completion percentages"# =============================================================================
-
-    - "Verify test pass rates for new implementations"# PHASE TRACKER - SINGLE SOURCE OF TRUTH
-
-  # =============================================================================
-
-  maintenance:# Check this BEFORE implementing any phase.
-
-    - "Archive each phase YAML to _archives/phases-v1/ when v2 starts"# Once locked: true, that phase is DONE - do not reimplement.
-
-    - "Keep this master file clean and focused on active work"# =============================================================================
-
-    - "Reference v1 for completed phase details"
+# =============================================================================
+# PHASE TRACKER - SINGLE SOURCE OF TRUTH
+# =============================================================================
+# Check this BEFORE implementing any phase.
+# Once locked: true, that phase is DONE - do not reimplement.
+# =============================================================================
 
 phase_tracker:
-
-# =============================================================================  PHASE-01:
-
-# DOCUMENT HISTORY    title: "Governance Foundation & Core Architecture"
-
-# =============================================================================    description: "3-Tier Governance Model, SQLite-based AC Index, Audit-First Pattern, State Machine Management, Reference Orchestrator Validation"
-
+  PHASE-01:
+    title: "Governance Foundation & Core Architecture"
+    description: "3-Tier Governance Model, SQLite-based AC Index, Audit-First Pattern, State Machine Management, Reference Orchestrator Validation"
     ac_ids: 36  # AR-001(3) + AR-002(3) + AR-003(3) + AR-004(3) + AR-005(3) + AR-008(3) + AR-011(3) + FR-001(3) + FR-003(3) + FR-004(3) + FR-005(3) + FR-006(3) = 36
-
-document_history:    completed_ac_ids: 36
-
-  v1:    status: "COMPLETED"    # NOT_STARTED | IN_PROGRESS | COMPLETED
-
-    date_created: "2026-01-XX"    locked: true           # VERIFIED 2026-01-16: All 36 ACs implemented, tested, and audited
-
-    date_archived: "2026-01-17"    completed_at: "2026-01-14T00:00:00Z"
-
-    location: "_archives/cortex-master-v1.yaml"    cleanup_required: false
-
-    status: "ARCHIVED - Reference Only"    day_sequence:
-
-    acs_delivered: 258      day_0: "Scaffolding (folders, __init__.py)"
-
-        day_1: "AR-002 (SQLite), AR-005 (Mode Control)"
-
-  v2:      day_2: "AR-001 (Governance), AR-004 (Logging), FR-001 (Audit+Hash)"
-
-    date_created: "2026-01-17"      day_3: "AR-003 (Decorators), FR-003 (State Machine)"
-
-    status: "ACTIVE"      day_4: "FR-004 (Evidence), FR-005 (Progress)"
-
-    baseline_from: "v1 (258 ACs completed)"      day_5: "FR-006 (Continuation), AR-008 (Legacy)"
-
-    continuation: true      day_6: "AR-011 (Reference Orchestrator Validation)"
-
+    completed_ac_ids: 36
+    status: "COMPLETED"    # NOT_STARTED | IN_PROGRESS | COMPLETED
+    locked: true           # VERIFIED 2026-01-16: All 36 ACs implemented, tested, and audited
+    completed_at: "2026-01-14T00:00:00Z"
+    cleanup_required: false
+    day_sequence:
+      day_0: "Scaffolding (folders, __init__.py)"
+      day_1: "AR-002 (SQLite), AR-005 (Mode Control)"
+      day_2: "AR-001 (Governance), AR-004 (Logging), FR-001 (Audit+Hash)"
+      day_3: "AR-003 (Decorators), FR-003 (State Machine)"
+      day_4: "FR-004 (Evidence), FR-005 (Progress)"
+      day_5: "FR-006 (Continuation), AR-008 (Legacy)"
+      day_6: "AR-011 (Reference Orchestrator Validation)"
     audit_verification:
       verified: true       # VERIFIED: All 36 ACs have legitimate audit trail entries
       entry_count: 940     # 36 ACs × ~26 entries per AC (START/EXECUTE/COMPLETE + infrastructure)

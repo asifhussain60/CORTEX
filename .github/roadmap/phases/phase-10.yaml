@@ -1,75 +1,61 @@
+# =============================================================================
+# PHASE-10: ADAPTIVE EXECUTION FRAMEWORK
+# =============================================================================
+# Reference: Continuation from cortex-master-v1.yaml
+# Status: NOT_STARTED
+# Estimated Hours: 20
+# =============================================================================
+
 phase:
-  id: PHASE-10-ADAPTIVE-EXECUTION
-  title: Adaptive Execution Framework
-  description: 'Enable intelligent orchestrator selection and routing based on:
-
-    - Execution context analysis
-
-    - Task complexity assessment
-
-    - Resource availability
-
-    - Historical performance data
-
-    '
-  order: 10
-  status: COMPLETED
+  id: "PHASE-10"
+  title: "Adaptive Execution Framework"
+  description: "Dynamic execution strategies and context-aware orchestration"
+  
+  status: "NOT_STARTED"
   locked: false
-  requires: PHASE-09-GOVERNANCE-TOOLS
-  required_for: PHASE-13-OBSERVABILITY-MATURITY
-  blocking: false
-  estimated_hours: 20
-  estimated_days: 2.5
-  ac_ids: 5
-  completed_ac_ids: 5
-  progress_percentage: 100.0
-acceptance_criteria:
-- ac_id: EX-001-01
-  title: Execution Context Analyzer
-  description: 'Analyze execution context: complexity, resources, capabilities'
-  status: COMPLETED
-  acceptance_tests:
-  - Context analysis extracts task complexity
-  - Resource requirements estimated
-  - Required capabilities identified
-  git_checkpoint: EX-001-01-context-analyzer
-- ac_id: EX-001-02
-  title: Orchestrator Selection & Routing Engine
-  description: Route tasks to appropriate orchestrators based on context
-  status: COMPLETED
-  acceptance_tests:
-  - Routing considers task type and complexity
-  - Multiple orchestrators can be selected for composition
-  - Routing decisions logged for analysis
-  git_checkpoint: EX-001-02-routing
-- ac_id: EX-002-01
-  title: Adaptive Execution Modes
-  description: Implement FAST/BALANCED/THOROUGH execution modes
-  status: COMPLETED
-  acceptance_tests:
-  - FAST mode minimizes overhead
-  - BALANCED mode optimizes for common cases
-  - THOROUGH mode maximizes validation
-  git_checkpoint: EX-002-01-execution-modes
-- ac_id: EX-002-02
-  title: Performance Optimization & Caching
-  description: Cache execution results and optimize repeated operations
-  status: COMPLETED
-  acceptance_tests:
-  - Results cached with TTL
-  - Cache invalidation on relevant changes
-  - Performance improvement measurable
-  git_checkpoint: EX-002-02-caching
-- ac_id: EX-003-01
-  title: Orchestrator Performance Profiling
-  description: Profile orchestrator execution for optimization
-  status: COMPLETED
-  acceptance_tests:
-  - Execution time tracked per orchestrator
-  - Bottlenecks identifiable from profiles
-  - Historical trends available
-  git_checkpoint: EX-003-01-profiling
-metadata:
-  author: Asif Hussain
-  copyright: © 2025-2026 Asif Hussain. All rights reserved.
-  created_at: '2026-01-15T00:00:00Z'
+  
+  metadata:
+    created: "2026-01-17"
+    version: "1.0"
+    reference_from_v1: "_archives/cortex-master-v1.yaml"
+    baseline_knowledge: "260 ACs completed from v1 baseline"
+  
+  ac_ids:
+    - "AC-PHX-010-01"  # Execution strategy selector
+    - "AC-PHX-010-02"  # Context analyzer
+    - "AC-PHX-010-03"  # Adaptive routing
+    - "AC-PHX-010-04"  # Performance feedback loop
+    - "AC-PHX-010-05"  # Testing framework
+
+  total_ac_ids: 5
+
+  dependencies:
+    - "PHASE-06-ECOSYSTEM (COMPLETED in v1)"
+    - "PHASE-07-INTENT-ROUTER"
+
+  files_to_create:
+    - "cortex/execution/adaptive/__init__.py"
+    - "cortex/execution/adaptive/strategy_selector.py"
+    - "cortex/execution/adaptive/context_analyzer.py"
+    - "cortex/execution/adaptive/router.py"
+    - "cortex/execution/adaptive/feedback_loop.py"
+    - "cortex/execution/adaptive/tests/test_strategies.py"
+    - "docs/adaptive-execution-guide.md"
+
+  testing:
+    unit_tests_expected: 20
+    integration_tests_expected: 12
+    e2e_tests_expected: 8
+    pass_rate_target: "≥98%"
+
+  success_criteria:
+    - "All 5 ACs implemented and tested"
+    - "Execution strategies dynamically selected"
+    - "Context awareness functional"
+    - "All documentation complete"
+    - "100% test pass rate achieved"
+
+  notes:
+    - "Build on base orchestrator from PHASE-06"
+    - "Integrate with intent router from PHASE-07"
+    - "Maintain governance compliance"

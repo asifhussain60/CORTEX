@@ -1,0 +1,154 @@
+phase:
+  id: PHASE-09-GOVERNANCE-TOOLS
+  title: Developer Governance Tooling
+  description: 'Make governance utilities discoverable and usable through:
+
+    - CLI commands (query, validate)
+
+    - Agent prompts integration
+
+    - Pre-commit hooks
+
+    - VS Code IDE integration
+
+    - Dashboard visualization
+
+    '
+  order: 9
+  status: NOT_STARTED
+  locked: false
+  requires: PHASE-08-CORE-ORCHESTRATORS
+  required_for: PHASE-10-ADAPTIVE-EXECUTION
+  blocking: true
+  estimated_hours: 28
+  estimated_days: 3.5
+  ac_ids: 8
+  completed_ac_ids: 0
+  progress_percentage: 0.0
+acceptance_criteria:
+- ac_id: GV-001-01
+  title: Governance CLI - Query Interface
+  description: Implement cortex-governance query <rule-id|domain|phase>
+  status: NOT_STARTED
+  acceptance_tests:
+  - cortex-governance query CORE-008 returns rule details
+  - cortex-governance query --domain tdd returns all TDD rules
+  - All queries execute in <100ms
+  git_checkpoint: GV-001-01-cli-query
+  acceptance_criteria_detail:
+    criterion: AC-XXX-XX criterion
+    what_proves_it: []
+    how_to_test: []
+    audit_evidence:
+      operation: AC_EXECUTE
+    workflow_validation: []
+- ac_id: GV-001-02
+  title: Governance CLI - Validation Interface
+  description: Implement cortex-governance validate <path> [--phase] [--ac-id]
+  status: NOT_STARTED
+  acceptance_tests:
+  - cortex-governance validate src/ returns violations
+  - Validation respects phase context
+  - Exit code reflects validation result
+  git_checkpoint: GV-001-02-cli-validate
+  acceptance_criteria_detail:
+    criterion: AC-XXX-XX criterion
+    what_proves_it: []
+    how_to_test: []
+    audit_evidence:
+      operation: AC_EXECUTE
+    workflow_validation: []
+- ac_id: GV-002-01
+  title: Agent Prompts - Builder Integration
+  description: Update cortex-builder.prompt.md with governance tools section
+  status: COMPLETED
+  notes: Completed in previous session
+  git_checkpoint: GV-002-01-builder-prompt
+  acceptance_criteria_detail:
+    criterion: AC-XXX-XX criterion
+    what_proves_it: []
+    how_to_test: []
+    audit_evidence:
+      operation: AC_EXECUTE
+    workflow_validation: []
+- ac_id: GV-002-02
+  title: Agent Prompts - Planner Integration
+  description: Update cortex-planner.md with governance commands
+  status: COMPLETED
+  notes: Completed in previous session
+  git_checkpoint: GV-002-02-planner-prompt
+  acceptance_criteria_detail:
+    criterion: AC-XXX-XX criterion
+    what_proves_it: []
+    how_to_test: []
+    audit_evidence:
+      operation: AC_EXECUTE
+    workflow_validation: []
+- ac_id: GV-003-01
+  title: Pre-Commit Hook Validation
+  description: Implement pre-commit hook for AC-ID format and governance validation
+  status: NOT_STARTED
+  acceptance_tests:
+  - Pre-commit validates AC-ID format
+  - Pre-commit prevents governance violations
+  - Configurable via .pre-commit-config.yaml
+  git_checkpoint: GV-003-01-precommit
+  acceptance_criteria_detail:
+    criterion: AC-XXX-XX criterion
+    what_proves_it: []
+    how_to_test: []
+    audit_evidence:
+      operation: AC_EXECUTE
+    workflow_validation: []
+- ac_id: GV-003-02
+  title: VS Code IDE Integration
+  description: Real-time governance diagnostics in VS Code
+  status: NOT_STARTED
+  acceptance_tests:
+  - Governance violations shown as diagnostics
+  - Quick fixes available for common issues
+  - Integration via language server protocol
+  git_checkpoint: GV-003-02-vscode
+  acceptance_criteria_detail:
+    criterion: AC-XXX-XX criterion
+    what_proves_it: []
+    how_to_test: []
+    audit_evidence:
+      operation: AC_EXECUTE
+    workflow_validation: []
+- ac_id: GV-004-01
+  title: Governance Rule Dashboard
+  description: Visual dashboard showing rule compliance heatmap
+  status: NOT_STARTED
+  acceptance_tests:
+  - Heatmap shows compliance by domain
+  - AC-ID coverage displayed
+  - Readiness indicators per phase
+  git_checkpoint: GV-004-01-dashboard
+  acceptance_criteria_detail:
+    criterion: AC-XXX-XX criterion
+    what_proves_it: []
+    how_to_test: []
+    audit_evidence:
+      operation: AC_EXECUTE
+    workflow_validation: []
+- ac_id: GV-004-02
+  title: Phase Readiness Checker
+  description: '4-stage readiness check: governance, audit, tests, docs'
+  status: NOT_STARTED
+  acceptance_tests:
+  - Readiness checker validates all 4 stages
+  - Clear pass/fail report generated
+  - Integrates with phase lock mechanism
+  git_checkpoint: GV-004-02-readiness
+  acceptance_criteria_detail:
+    criterion: AC-XXX-XX criterion
+    what_proves_it: []
+    how_to_test: []
+    audit_evidence:
+      operation: AC_EXECUTE
+    workflow_validation: []
+metadata:
+  author: Asif Hussain
+  copyright: © 2025-2026 Asif Hussain. All rights reserved.
+  created_at: '2026-01-15T00:00:00Z'
