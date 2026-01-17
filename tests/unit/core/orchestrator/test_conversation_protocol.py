@@ -81,10 +81,10 @@ class TestConversationProtocolInitialization:
 class TestSingleTurnExecution:
     """Test single-turn execution logic."""
 
-    def test_execute_turn_increments_turn_number(self):
+    def test_execute_turn_increments_turn_number(self, test_db_path):
         """Test that execute_turn increments turn_number."""
         orchestrator = MockIOrchestrator()
-        protocol = ConversationProtocol(orchestrator)
+        protocol = ConversationProtocol(orchestrator, db_path=str(test_db_path))
         
         assert protocol.turn_number == 0
         
@@ -98,7 +98,7 @@ class TestSingleTurnExecution:
         assert result.is_ok()
         assert protocol.turn_number == 2
 
-    def test_execute_turn_returns_continuation_decision(self):
+    def test_execute_turn_returns_continuation_decision(self, test_db_path):
         """Test that execute_turn returns ContinuationDecision."""
         orchestrator = MockIOrchestrator()
         protocol = ConversationProtocol(orchestrator)

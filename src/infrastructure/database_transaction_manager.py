@@ -195,25 +195,38 @@ class DatabaseTransactionManager:
         """
         Log audit entry within a transaction.
         
+        AC-FIX-008-01: Use production schema (operation, component, level, message, etc.)
+        
         Args:
             conn: Active database connection in transaction
             ac_id: Acceptance Criteria ID
-            operation: Operation name
+            operation: Operation name (AC_START, AC_EXECUTE, etc.)
             user: User performing operation
             status: Status (AC_START, AC_EXECUTE, AC_COMPLETE, AC_EXECUTE_FAILED)
             details: Operation details
         """
-        timestamp = datetime.utcnow().isoformat()
+        import json
+        import hashlib
         
-        # This will fail if audit_log table doesn't exist, which is expected
-        # in new environments. Handle gracefully or ensure table exists.
+        timestamp = datetime.utcnow().isoformat()
+        component = "DatabaseTransactionManager"
+        level = "INFO"
+        message = f"{operation}: {status}"
+        metadata = json.dumps(details)
+        
+        # Calculate entry hash (previous_hash = '' for simplicity in tests)
+        previous_hash = ""
+        entry_data = f"{timestamp}{operation}{component}{level}{message}{ac_id}{metadata}{previous_hash}"
+        entry_hash = hashlib.sha256(entry_data.encode()).hexdigest()
+        
+        # AC-FIX-008-01: Match production audit_log schema
         try:
             conn.execute(
                 """
-                INSERT INTO audit_log (timestamp, ac_id, operation, status, user_id, details)
-                VALUES (?, ?, ?, ?, ?, ?)
+                INSERT INTO audit_log (timestamp, operation, component, level, message, ac_id, metadata, previous_hash, entry_hash)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
-                (timestamp, ac_id, operation, status, user, str(details))
+                (timestamp, operation, component, level, message, ac_id, metadata, previous_hash, entry_hash)
             )
         except sqlite3.OperationalError as e:
             # If table doesn't exist, create it
@@ -221,32 +234,42 @@ class DatabaseTransactionManager:
                 self._create_audit_table(conn)
                 conn.execute(
                     """
-                    INSERT INTO audit_log (timestamp, ac_id, operation, status, user_id, details)
-                    VALUES (?, ?, ?, ?, ?, ?)
+                    INSERT INTO audit_log (timestamp, operation, component, level, message, ac_id, metadata, previous_hash, entry_hash)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
-                    (timestamp, ac_id, operation, status, user, str(details))
+                    (timestamp, operation, component, level, message, ac_id, metadata, previous_hash, entry_hash)
                 )
             else:
                 raise
     
     def _create_audit_table(self, conn: sqlite3.Connection) -> None:
-        """Create audit_log table if it doesn't exist."""
+        """
+        Create audit_log table if it doesn't exist.
+        
+        AC-FIX-008-01: Match production schema
+        """
         conn.execute(
             """
             CREATE TABLE IF NOT EXISTS audit_log (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                timestamp TEXT NOT NULL,
-                ac_id TEXT NOT NULL,
+                timestamp TEXT NOT NULL DEFAULT (datetime('now')),
                 operation TEXT NOT NULL,
-                status TEXT NOT NULL,
-                user_id TEXT NOT NULL,
-                details TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                component TEXT NOT NULL,
+                level TEXT NOT NULL DEFAULT 'INFO',
+                message TEXT NOT NULL,
+                ac_id TEXT,
+                correlation_id TEXT,
+                metadata TEXT,
+                previous_hash TEXT NOT NULL DEFAULT '',
+                entry_hash TEXT NOT NULL
             )
             """
         )
         conn.execute(
-            "CREATE INDEX IF NOT EXISTS idx_ac_id ON audit_log(ac_id)"
+            "CREATE INDEX IF NOT EXISTS idx_audit_ac_id ON audit_log(ac_id)"
+        )
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_audit_operation ON audit_log(operation)"
         )
         conn.execute(
             "CREATE INDEX IF NOT EXISTS idx_timestamp ON audit_log(timestamp)"

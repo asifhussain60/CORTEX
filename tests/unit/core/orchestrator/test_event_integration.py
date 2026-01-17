@@ -16,6 +16,7 @@ Test Classes:
     - TestMultiEventScenarios: Complex multi-event workflows
 """
 
+from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict
 from unittest.mock import Mock, MagicMock
@@ -41,12 +42,29 @@ from src.core.orchestrator.terminal_events import (
 from src.core.result import Ok, Err
 
 
+@dataclass
+class MockIOrchestrator:
+    """Mock IOrchestrator for testing - matches structure from test_conversation_protocol.py"""
+    
+    name: str = "MockOrchestrator"
+    
+    def execute(
+        self, user_input: str, context: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Mock execute method."""
+        return {
+            "result": "mock_result",
+            "user_input": user_input,
+            "turn": context.get("turn_number", 1),
+        }
+
+
 class TestEventRegistryIntegration:
     """Test EventRegistry initialization and integration with ConversationProtocol."""
 
     def test_event_registry_created_by_default(self):
         """ConversationProtocol creates default EventRegistry if not provided."""
-        mock_orchestrator = Mock()
+        mock_orchestrator = MockIOrchestrator()
         protocol = ConversationProtocol(mock_orchestrator)
         
         assert protocol.event_registry is not None
@@ -54,7 +72,7 @@ class TestEventRegistryIntegration:
 
     def test_custom_event_registry_injected(self):
         """ConversationProtocol accepts custom EventRegistry in constructor."""
-        mock_orchestrator = Mock()
+        mock_orchestrator = MockIOrchestrator()
         custom_registry = EventRegistry()
         
         protocol = ConversationProtocol(
@@ -66,7 +84,7 @@ class TestEventRegistryIntegration:
 
     def test_event_registry_methods_accessible(self):
         """EventRegistry methods are accessible via protocol."""
-        mock_orchestrator = Mock()
+        mock_orchestrator = MockIOrchestrator()
         protocol = ConversationProtocol(mock_orchestrator)
         
         # Should be able to register listeners
@@ -79,7 +97,7 @@ class TestEventRegistryIntegration:
 
     def test_event_registry_persists_across_turns(self):
         """EventRegistry persists state across multiple turns."""
-        mock_orchestrator = Mock()
+        mock_orchestrator = MockIOrchestrator()
         mock_orchestrator.execute = Mock(
             return_value={"status": "pending", "next_operation": "continue"}
         )
@@ -108,8 +126,8 @@ class TestEventFiringOnMaxTurns:
 
     def test_max_turns_event_fired(self):
         """MaxTurnsReachedEvent fires when turn_number >= max_turns."""
-        mock_orchestrator = Mock()
-        mock_orchestrator.execute = Mock(return_value={})
+        mock_orchestrator = MockIOrchestrator()
+        
         
         protocol = ConversationProtocol(mock_orchestrator, max_turns=1)
         fired_events = []
@@ -133,8 +151,8 @@ class TestEventFiringOnMaxTurns:
 
     def test_max_turns_event_contains_metadata(self):
         """MaxTurnsReachedEvent includes turn and reason metadata."""
-        mock_orchestrator = Mock()
-        mock_orchestrator.execute = Mock(return_value={})
+        mock_orchestrator = MockIOrchestrator()
+        
         
         protocol = ConversationProtocol(mock_orchestrator, max_turns=1)
         fired_events = []
@@ -153,8 +171,8 @@ class TestEventFiringOnMaxTurns:
 
     def test_max_turns_decision_has_correct_reason(self):
         """Decision after max turns has MAX_ROUNDS_REACHED reason."""
-        mock_orchestrator = Mock()
-        mock_orchestrator.execute = Mock(return_value={})
+        mock_orchestrator = MockIOrchestrator()
+        
         
         protocol = ConversationProtocol(mock_orchestrator, max_turns=1)
         
@@ -172,8 +190,8 @@ class TestEventFiringOnTokenLimit:
 
     def test_token_limit_event_fired(self):
         """TokenLimitEvent fires when tokens > 90% of limit."""
-        mock_orchestrator = Mock()
-        mock_orchestrator.execute = Mock(return_value={})
+        mock_orchestrator = MockIOrchestrator()
+        
         
         token_limit = 1000
         protocol = ConversationProtocol(
@@ -195,8 +213,8 @@ class TestEventFiringOnTokenLimit:
 
     def test_token_limit_event_contains_usage_info(self):
         """TokenLimitEvent includes token usage and percentage."""
-        mock_orchestrator = Mock()
-        mock_orchestrator.execute = Mock(return_value={})
+        mock_orchestrator = MockIOrchestrator()
+        
         
         token_limit = 1000
         protocol = ConversationProtocol(
@@ -220,8 +238,8 @@ class TestEventFiringOnTokenLimit:
 
     def test_token_limit_decision_has_correct_reason(self):
         """Decision after token limit has TOKEN_LIMIT reason."""
-        mock_orchestrator = Mock()
-        mock_orchestrator.execute = Mock(return_value={})
+        mock_orchestrator = MockIOrchestrator()
+        
         
         protocol = ConversationProtocol(mock_orchestrator, token_limit=1000)
         protocol.total_tokens_used = 950
@@ -239,7 +257,7 @@ class TestEventFiringOnCompletion:
 
     def test_phase_completed_event_fired(self):
         """PhaseCompletedEvent fires when orchestrator status='completed'."""
-        mock_orchestrator = Mock()
+        mock_orchestrator = MockIOrchestrator()
         mock_orchestrator.execute = Mock(
             return_value={
                 "status": "completed",
@@ -263,7 +281,7 @@ class TestEventFiringOnCompletion:
 
     def test_phase_completed_event_contains_result(self):
         """PhaseCompletedEvent includes operation and result."""
-        mock_orchestrator = Mock()
+        mock_orchestrator = MockIOrchestrator()
         expected_result = {"plan": "detailed plan", "steps": 5}
         mock_orchestrator.execute = Mock(
             return_value={
@@ -289,7 +307,7 @@ class TestEventFiringOnCompletion:
 
     def test_completion_decision_has_correct_reason(self):
         """Decision after completion has COMPLETION reason."""
-        mock_orchestrator = Mock()
+        mock_orchestrator = MockIOrchestrator()
         mock_orchestrator.execute = Mock(
             return_value={"status": "completed", "operation": "phase"}
         )
@@ -308,7 +326,7 @@ class TestEventFiringOnError:
 
     def test_error_event_fired(self):
         """ErrorOccurredEvent fires when orchestrator result contains error."""
-        mock_orchestrator = Mock()
+        mock_orchestrator = MockIOrchestrator()
         mock_orchestrator.execute = Mock(
             return_value={"error": "Failed to parse input"}
         )
@@ -328,7 +346,7 @@ class TestEventFiringOnError:
 
     def test_error_event_contains_details(self):
         """ErrorOccurredEvent includes error message and type."""
-        mock_orchestrator = Mock()
+        mock_orchestrator = MockIOrchestrator()
         error_msg = "Connection timeout"
         mock_orchestrator.execute = Mock(
             return_value={"error": error_msg}
@@ -351,7 +369,7 @@ class TestEventFiringOnError:
 
     def test_error_decision_has_correct_reason(self):
         """Decision after error has ERROR_UNRECOVERABLE reason."""
-        mock_orchestrator = Mock()
+        mock_orchestrator = MockIOrchestrator()
         mock_orchestrator.execute = Mock(
             return_value={"error": "Something failed"}
         )
@@ -370,7 +388,7 @@ class TestEventFiringOnApprovalRejection:
 
     def test_approval_rejected_event_fired(self):
         """UserApprovalRejectedEvent fires when approval is rejected."""
-        mock_orchestrator = Mock()
+        mock_orchestrator = MockIOrchestrator()
         mock_orchestrator.execute = Mock(
             return_value={
                 "requires_approval": True,
@@ -395,7 +413,7 @@ class TestEventFiringOnApprovalRejection:
 
     def test_approval_rejected_event_contains_details(self):
         """UserApprovalRejectedEvent includes request and reason."""
-        mock_orchestrator = Mock()
+        mock_orchestrator = MockIOrchestrator()
         request = "Execute migration?"
         reason = "Blocked by governance"
         mock_orchestrator.execute = Mock(
@@ -423,7 +441,7 @@ class TestEventFiringOnApprovalRejection:
 
     def test_rejection_decision_has_correct_reason(self):
         """Decision after rejection has USER_REJECTION reason."""
-        mock_orchestrator = Mock()
+        mock_orchestrator = MockIOrchestrator()
         mock_orchestrator.execute = Mock(
             return_value={
                 "requires_approval": True,
@@ -447,8 +465,8 @@ class TestEventListenerVeto:
 
     def test_listener_veto_blocks_continuation(self):
         """Listener returning False prevents continuation."""
-        mock_orchestrator = Mock()
-        mock_orchestrator.execute = Mock(return_value={})
+        mock_orchestrator = MockIOrchestrator()
+        
         
         protocol = ConversationProtocol(mock_orchestrator, max_turns=10)
         
@@ -468,8 +486,8 @@ class TestEventListenerVeto:
 
     def test_listener_allows_continuation(self):
         """Listener returning True allows continuation."""
-        mock_orchestrator = Mock()
-        mock_orchestrator.execute = Mock(return_value={})
+        mock_orchestrator = MockIOrchestrator()
+        
         
         protocol = ConversationProtocol(mock_orchestrator)
         
@@ -490,8 +508,8 @@ class TestEventAuditIntegration:
 
     def test_event_turn_number_matches_protocol_turn(self):
         """Terminal event turn_number matches protocol.turn_number."""
-        mock_orchestrator = Mock()
-        mock_orchestrator.execute = Mock(return_value={})
+        mock_orchestrator = MockIOrchestrator()
+        
         
         protocol = ConversationProtocol(mock_orchestrator, max_turns=1)
         fired_events = []
@@ -509,8 +527,8 @@ class TestEventAuditIntegration:
 
     def test_event_timestamp_is_set(self):
         """Terminal events include timestamp for audit trail."""
-        mock_orchestrator = Mock()
-        mock_orchestrator.execute = Mock(return_value={})
+        mock_orchestrator = MockIOrchestrator()
+        
         
         protocol = ConversationProtocol(mock_orchestrator, max_turns=1)
         fired_events = []
@@ -535,8 +553,8 @@ class TestMultiEventScenarios:
 
     def test_only_first_break_condition_fires_event(self):
         """When multiple conditions met, first one fires event."""
-        mock_orchestrator = Mock()
-        mock_orchestrator.execute = Mock(return_value={})
+        mock_orchestrator = MockIOrchestrator()
+        
         
         protocol = ConversationProtocol(mock_orchestrator, max_turns=1, token_limit=100)
         
@@ -559,8 +577,8 @@ class TestMultiEventScenarios:
 
     def test_event_registry_state_preserved_across_turns(self):
         """EventRegistry state persists across multiple turns."""
-        mock_orchestrator = Mock()
-        mock_orchestrator.execute = Mock(return_value={})
+        mock_orchestrator = MockIOrchestrator()
+        
         
         protocol = ConversationProtocol(mock_orchestrator, max_turns=3)
         
@@ -580,8 +598,8 @@ class TestMultiEventScenarios:
 
     def test_multiple_event_types_can_be_registered(self):
         """Multiple event types can have listeners simultaneously."""
-        mock_orchestrator = Mock()
-        mock_orchestrator.execute = Mock(return_value={})
+        mock_orchestrator = MockIOrchestrator()
+        
         
         protocol = ConversationProtocol(mock_orchestrator)
         
@@ -607,8 +625,8 @@ class TestEventIntegrationWithDecisions:
 
     def test_max_turns_event_and_decision_align(self):
         """MaxTurnsReachedEvent and MAX_ROUNDS_REACHED decision are synchronized."""
-        mock_orchestrator = Mock()
-        mock_orchestrator.execute = Mock(return_value={})
+        mock_orchestrator = MockIOrchestrator()
+        
         
         protocol = ConversationProtocol(mock_orchestrator, max_turns=1)
         
@@ -629,7 +647,7 @@ class TestEventIntegrationWithDecisions:
 
     def test_completion_event_and_decision_align(self):
         """PhaseCompletedEvent and COMPLETION decision are synchronized."""
-        mock_orchestrator = Mock()
+        mock_orchestrator = MockIOrchestrator()
         mock_orchestrator.execute = Mock(
             return_value={"status": "completed", "operation": "phase"}
         )

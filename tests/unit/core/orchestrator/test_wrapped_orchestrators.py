@@ -27,6 +27,10 @@ from src.core.orchestrator.terminal_events import EventRegistry
 from src.core.result import Ok, Err, Result
 
 
+# Apply timeout to all tests in this module to prevent hangs
+pytestmark = pytest.mark.timeout(10)
+
+
 class MockOrchestrator:
     """Mock orchestrator for testing wrapping pattern."""
 
@@ -57,6 +61,9 @@ class MockOrchestrator:
 
 class WrappedOrchestrator:
     """Base wrapper for orchestrators with ConversationProtocol."""
+    
+    # Safety guard: Maximum iterations to prevent infinite loops
+    MAX_TURN_ITERATIONS = 50
 
     def __init__(
         self,
@@ -87,12 +94,22 @@ class WrappedOrchestrator:
         self.decisions = []
         current_input = user_input
         current_context = context
+        
+        # Safety guard: Track iterations to prevent infinite loops
+        turn_iterations = 0
 
         while True:
+            turn_iterations += 1
+            if turn_iterations > self.MAX_TURN_ITERATIONS:
+                return Err(
+                    f"Orchestrator exceeded maximum turn iterations ({self.MAX_TURN_ITERATIONS}). "
+                    f"Possible infinite loop in conversation protocol."
+                )
+            
             result = self.protocol.execute_turn(current_input, current_context)
 
             if result.is_err():
-                return Err(result.unwrap_err())
+                return Err(result.error)
 
             decision = result.unwrap()
             self.decisions.append(decision)

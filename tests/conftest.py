@@ -7,6 +7,7 @@ Integrates:
 - Test audit logging (governance audit trail generation)
 - Common fixtures for temp dirs, mock configs, sample files
 - Orchestrator registry cleanup
+- AC-FIX-008-01: Isolated test database per test
 
 Author: Asif Hussain
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
@@ -15,7 +16,9 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 import os
 import sys
 import tempfile
+import sqlite3
 from pathlib import Path
+from typing import Generator
 
 import pytest
 
@@ -120,3 +123,194 @@ def audit_logger(request):
     if plugin and isinstance(plugin, TestAuditLogger):
         return plugin
     return None
+
+
+# =============================================================================
+# AC-FIX-008-01: Isolated Test Database Fixtures
+# =============================================================================
+# PROBLEM: 81 orchestrator tests failing with "unable to open database file"
+# SOLUTION: Provide isolated test database per test with proper cleanup
+# =============================================================================
+
+
+@pytest.fixture
+def test_db_path(tmp_path: Path) -> Generator[Path, None, None]:
+    """
+    Provide isolated test database path for each test.
+    
+    Creates a unique temp directory with initialized governance.db
+    for each test. Ensures no state leakage between tests.
+    
+    AC-FIX-008-01: Database connection management
+    
+    Args:
+        tmp_path: pytest fixture for temp directory
+        
+    Yields:
+        Path to test database
+        
+    Usage:
+    ```python
+    def test_something(test_db_path):
+        protocol = ConversationProtocol(orchestrator, db_path=test_db_path)
+        # Test uses isolated database
+    ```
+    """
+    # Create test database path
+    db_path = tmp_path / "cortex-brain" / "state" / "governance.db"
+    db_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    # Initialize schema
+    conn = sqlite3.connect(str(db_path), timeout=10.0)
+    conn.execute("PRAGMA journal_mode=WAL")
+    conn.execute("PRAGMA foreign_keys=ON")
+    
+    # Create ac_index table
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS ac_index (
+            ac_id TEXT PRIMARY KEY,
+            phase TEXT NOT NULL,
+            status TEXT NOT NULL DEFAULT 'PENDING',
+            title TEXT NOT NULL,
+            description TEXT,
+            test_file TEXT,
+            evidence_hash TEXT,
+            created_at TEXT NOT NULL DEFAULT (datetime('now')),
+            updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+        )
+    """)
+    
+    # Create audit_log table (AC-FIX-008-01: Match production schema)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS audit_log (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            timestamp TEXT NOT NULL DEFAULT (datetime('now')),
+            operation TEXT NOT NULL,
+            component TEXT NOT NULL,
+            level TEXT NOT NULL DEFAULT 'INFO',
+            message TEXT NOT NULL,
+            ac_id TEXT,
+            correlation_id TEXT,
+            metadata TEXT,
+            previous_hash TEXT NOT NULL DEFAULT '',
+            entry_hash TEXT NOT NULL
+        )
+    """)
+    
+    # Create phase_locks table
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS phase_locks (
+            phase_id TEXT PRIMARY KEY,
+            locked_at TEXT NOT NULL DEFAULT (datetime('now')),
+            locked_by TEXT NOT NULL
+        )
+    """)
+    
+    conn.commit()
+    conn.close()
+    
+    # Yield path to test
+    yield db_path
+    
+    # Cleanup: close any open connections
+    try:
+        if db_path.exists():
+            conn = sqlite3.connect(str(db_path))
+            conn.close()
+    except Exception:
+        pass
+
+
+@pytest.fixture
+def isolated_transaction_manager(test_db_path: Path):
+    """
+    Provide DatabaseTransactionManager with isolated test database.
+    
+    AC-FIX-008-01: Database connection management
+    
+    Args:
+        test_db_path: Isolated test database path
+        
+    Returns:
+        DatabaseTransactionManager instance for test
+    """
+    from src.infrastructure.database_transaction_manager import DatabaseTransactionManager
+    return DatabaseTransactionManager(str(test_db_path), timeout=10.0)
+
+
+@pytest.fixture
+def isolated_database_manager(test_db_path: Path):
+    """
+    Provide DatabaseManager with isolated test database.
+    
+    AC-FIX-008-01: Database connection management
+    
+    Args:
+        test_db_path: Isolated test database path
+        
+    Returns:
+        DatabaseManager instance for test
+    """
+    from src.infrastructure.database import DatabaseManager, DatabaseConfig
+    config = DatabaseConfig(db_path=test_db_path, wal_mode=True, timeout=10.0)
+    return DatabaseManager(config)
+
+
+@pytest.fixture(autouse=True, scope="function")
+def patch_conversation_protocol_db(test_db_path: Path, monkeypatch):
+    """
+    Auto-patch ConversationProtocol to use test database for all tests.
+    
+    AC-FIX-008-01: Database connection management
+    
+    This fixture automatically applies to ALL tests and ensures
+    ConversationProtocol uses isolated test database instead of production.
+    
+    Args:
+        test_db_path: Isolated test database path (from test_db_path fixture)
+        monkeypatch: pytest monkeypatch fixture
+    """
+    # Import here to avoid circular dependencies
+    from src.core.orchestrator import conversation_protocol
+    from src.infrastructure import database_transaction_manager
+    
+    # Store original __init__
+    original_conversation_init = conversation_protocol.ConversationProtocol.__init__
+    
+    def patched_conversation_init(self, orchestrator, max_turns=10, token_limit=20000, event_registry=None, db_path=None):
+        """Patched __init__ that defaults db_path to test database."""
+        if db_path is None:
+            db_path = str(test_db_path)
+        return original_conversation_init(self, orchestrator, max_turns, token_limit, event_registry, db_path)
+    
+    # Apply monkey patch
+    monkeypatch.setattr(
+        conversation_protocol.ConversationProtocol,
+        "__init__",
+        patched_conversation_init
+    )
+
+
+@pytest.fixture(autouse=True, scope="function")
+def reset_governance_singleton():
+    """
+    Reset GovernanceRegistry singleton between tests to prevent state leakage.
+    
+    AC-FIX-009-01: Fix test isolation issues
+    """
+    # Reset before test
+    try:
+        from src.core.governance_registry import GovernanceRegistry
+        GovernanceRegistry.reset_instance()
+    except Exception:
+        pass  # Ignore if registry doesn't exist yet
+    
+    yield
+    
+    # Reset after test
+    try:
+        from src.core.governance_registry import GovernanceRegistry
+        GovernanceRegistry.reset_instance()
+    except Exception:
+        pass
+

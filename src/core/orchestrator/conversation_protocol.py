@@ -80,6 +80,7 @@ class ConversationProtocol:
         max_turns: int = 10,
         token_limit: int = 20000,
         event_registry: EventRegistry = None,
+        db_path: Optional[str] = None,  # AC-FIX-008-01: Allow test database injection
     ):
         """
         Initialize ConversationProtocol wrapper.
@@ -89,6 +90,7 @@ class ConversationProtocol:
             max_turns: Maximum turns before safety halt (default: 10)
             token_limit: Token budget before halt (default: 20000)
             event_registry: Optional EventRegistry for event handling
+            db_path: Optional database path (for testing, defaults to production path)
         """
         self.orchestrator = orchestrator
         self.max_turns = max_turns
@@ -109,8 +111,10 @@ class ConversationProtocol:
         self._tier_validator = TierAccessValidator(enforce_mode=True)  # AC-REM-002-08: Wire validator
         
         # AC-FIX-001-01: Initialize DatabaseTransactionManager for atomic turn execution
-        db_path = Path(__file__).parent.parent.parent / "cortex-brain" / "state" / "governance.db"
-        self.transaction_manager = DatabaseTransactionManager(str(db_path))
+        # AC-FIX-008-01: Use provided db_path for tests, default for production
+        if db_path is None:
+            db_path = str(Path(__file__).parent.parent.parent / "cortex-brain" / "state" / "governance.db")
+        self.transaction_manager = DatabaseTransactionManager(db_path)
         
         # AC-REM-001-01: Initialize AST Intelligence Engine for comprehension phase
         self.ast_engine = ASTIntelligenceEngine(enable_cache=True)
@@ -165,7 +169,7 @@ class ConversationProtocol:
                 # Step 1: Pre-turn governance validation (CORE-017)
                 governance_result = self._validate_governance_before_turn()
                 if governance_result.is_err():
-                    raise Exception(f"Governance validation failed: {governance_result.unwrap_err()}")
+                    raise Exception(f"Governance validation failed: {governance_result.error}")
                 
                 # Step 2: Create round context
                 round_context = self._create_round_context(
@@ -194,7 +198,7 @@ class ConversationProtocol:
                 pregate_result = self._check_pre_execution_gates()
                 if pregate_result.is_err():
                     # Pre-gate blocked execution - return GOVERNANCE_HALT
-                    error_msg = pregate_result.unwrap_err()
+                    error_msg = pregate_result.error
                     self._log_ac_execute_with_error(ac_start_entry_id, error_msg)
                     
                     # Return governance halt decision
