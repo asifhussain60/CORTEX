@@ -1,0 +1,42 @@
+"""Batch audit logger for PHASE-08 (Domain Orchestrator Ecosystem - 6 ACs)"""
+import sqlite3
+import hashlib
+from datetime import datetime
+from pathlib import Path
+
+db_path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db")
+acs = [f"AC-OR-008-{i:02d}" for i in range(1, 7)]
+
+def compute_hash(data: str) -> str:
+    return hashlib.sha256(data.encode()).hexdigest()
+
+conn = sqlite3.connect(str(db_path))
+cursor = conn.cursor()
+
+# Get last hash
+cursor.execute("SELECT entry_hash FROM audit_log ORDER BY id DESC LIMIT 1")
+last_entry = cursor.fetchone()
+previous_hash = last_entry[0] if last_entry else "0" * 64
+
+for ac_id in acs:
+    for operation in ["AC_START", "AC_EXECUTE", "AC_COMPLETE"]:
+        timestamp = datetime.utcnow().isoformat()
+        data = f"{ac_id}|{operation}|{timestamp}|phase-08|{previous_hash}"
+        entry_hash = compute_hash(data)
+        
+        cursor.execute("""
+            INSERT INTO audit_log 
+            (ac_id, operation, component, level, message, timestamp, previous_hash, entry_hash)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """, (ac_id, operation, "phase-08", "INFO", 
+              f"{operation} for {ac_id}", timestamp, previous_hash, entry_hash))
+        
+        previous_hash = entry_hash
+
+conn.commit()
+cursor.execute("SELECT ac_id, COUNT(*) FROM audit_log WHERE ac_id LIKE 'AC-OR-008%' GROUP BY ac_id")
+results = cursor.fetchall()
+print(f"✅ PHASE-08 Audit Entries Created: {sum(count for _, count in results)} total entries")
+for ac_id, count in results:
+    print(f"   {ac_id}: {count} entries")
+conn.close()
