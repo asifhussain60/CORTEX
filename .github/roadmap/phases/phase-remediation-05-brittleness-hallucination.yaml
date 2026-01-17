@@ -1,9 +1,10 @@
-# CORTEX PHASE-REMEDIATION-05: Brittleness & Hallucination Prevention Remediation
+# =============================================================================
+# PHASE-REMEDIATION-05: BRITTLENESS & HALLUCINATION PREVENTION REMEDIATION
+# =============================================================================
 # Version: 1.0
 # Date: 2026-01-17
 # Status: READY FOR IMPLEMENTATION
-
----
+# =============================================================================
 
 metadata:
   id: "PHASE-REMEDIATION-05-BRITTLENESS-HALLUCINATION"
@@ -16,8 +17,6 @@ metadata:
   estimated_hours: 24
   estimated_days: 5
   completion_target: "2026-02-07"
-
----
 
 # ===========================================================================================
 # FINDINGS BREAKDOWN (12 AC-IDs)
@@ -120,7 +119,6 @@ findings:
         - "src/core/intent_parser.py"
       effort: 2
 
----
 
 # ===========================================================================================
 # ACCEPTANCE CRITERIA BY PRIORITY
@@ -314,7 +312,6 @@ acceptance_criteria:
       verification: |
         pytest tests/unit/core/test_intent_parsing_fuzzing.py -v
 
----
 
 # ===========================================================================================
 # TESTING STRATEGY
@@ -339,7 +336,6 @@ testing:
     - "Performance test: no regressions vs baseline (6.09s)"
     - "Staging deployment: 24-hour monitoring"
 
----
 
 # ===========================================================================================
 # GIT CHECKPOINTS
@@ -361,7 +357,6 @@ git_checkpoints:
   ac_012: "checkpoint: AC-HALLUCINATION-INTENT-FUZZING-004 complete"
   phase_complete: "checkpoint: PHASE-REMEDIATION-05-BRITTLENESS-HALLUCINATION COMPLETE"
 
----
 
 # ===========================================================================================
 # SUCCESS METRICS
@@ -395,7 +390,6 @@ success_criteria:
     - "24-hour monitoring stable"
     - "Ready for production deployment"
 
----
 
 # ===========================================================================================
 # PHASE COMPLETION SUMMARY
