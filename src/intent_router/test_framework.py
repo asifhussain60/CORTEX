@@ -2,7 +2,12 @@
 from typing import Dict, List, Any
 
 class TestFramework:
-    """Testing framework for intent router."""
+    """Testing framework for intent router.
+    
+    Note: This class is named TestFramework for clarity but is NOT a pytest test class.
+    The __test__ = False marker prevents pytest from collecting it as a test.
+    """
+    __test__ = False  # Prevents pytest collection
     
     def __init__(self) -> None:
         self.test_suites: Dict[str, List[Any]] = {}

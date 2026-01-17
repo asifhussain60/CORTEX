@@ -20,6 +20,7 @@ import hashlib
 import json
 import sqlite3
 import threading
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -43,6 +44,8 @@ class DatabaseManager:
     
     Thread-safe with connection pooling per thread.
     Implements hash chain for audit log integrity.
+    
+    AC-FIX-BRITTLENESS-001: Added context manager support for connection lifecycle.
     """
     
     _local = threading.local()
@@ -57,6 +60,7 @@ class DatabaseManager:
         self.config = config or DatabaseConfig()
         self._last_audit_hash: Optional[str] = None
         self._lock = threading.Lock()
+        self._closed = False
     
     @property
     def _connection(self) -> sqlite3.Connection:
@@ -64,6 +68,43 @@ class DatabaseManager:
         if not hasattr(self._local, 'connection') or self._local.connection is None:
             self._local.connection = self._create_connection()
         return self._local.connection
+    
+    @contextmanager
+    def get_connection(self):
+        """
+        Get a database connection as a context manager.
+        
+        AC-FIX-BRITTLENESS-001: Ensures connections are properly managed.
+        
+        Usage:
+            with db.get_connection() as conn:
+                conn.execute("SELECT 1")
+        
+        Yields:
+            sqlite3.Connection: Active database connection
+        """
+        conn = self._connection
+        try:
+            yield conn
+        except Exception:
+            conn.rollback()
+            raise
+        else:
+            conn.commit()
+    
+    def close(self) -> None:
+        """
+        Close database connections and release resources.
+        
+        AC-FIX-BRITTLENESS-001: Explicit cleanup method.
+        """
+        self._closed = True
+        if hasattr(self._local, 'connection') and self._local.connection is not None:
+            try:
+                self._local.connection.close()
+            except Exception:
+                pass
+            self._local.connection = None
     
     def _create_connection(self) -> sqlite3.Connection:
         """Create a new database connection."""
