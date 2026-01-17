@@ -7,6 +7,9 @@ AC-AR-006-01: MasterOrchestrator coordinates domain orchestrators
 - Delegates to appropriate orchestrator(s)
 - Aggregates results
 - Logs all delegation decisions to audit trail
+
+AC-FIX-HALLUCINATION-001: Boundary enforcement integration
+- Validates operations against behavioral boundaries before delegation
 """
 
 from typing import Dict, List, Any, Optional, Set, Union
@@ -19,6 +22,7 @@ from src.core.result import Result, Ok, Err
 from src.core.response_header_injector import ResponseHeaderInjector
 from src.core.response_header_config import HeaderConfigurationManager
 from src.core.governance_registry import GovernanceRegistry, GovernanceViolationError
+from src.core.hallucination_prevention.behavioral_boundaries import BehavioralBoundaryRules
 from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from src.infrastructure.database import DatabaseManager
 from src.infrastructure.database_transaction_manager import DatabaseTransactionManager
@@ -64,6 +68,9 @@ class MasterOrchestrator(IOrchestrator):
         # AC-REM-002-04: Initialize GovernanceRegistry for per-turn validation
         self._governance_registry: Optional[GovernanceRegistry] = None
         self._turn_number: int = 0  # Track turn count for governance validation
+        
+        # AC-FIX-HALLUCINATION-001: Initialize boundary enforcement
+        self._boundary_rules = BehavioralBoundaryRules()
         
         # Track current operation context for header variables
         self.current_operation: Optional[str] = None
