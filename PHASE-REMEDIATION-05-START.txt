@@ -1,0 +1,221 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                ║
+║              PHASE-REMEDIATION-05 INITIATION - START POINT                    ║
+║                                                                                ║
+║  Status: ✅ READY FOR IMMEDIATE IMPLEMENTATION                                 ║
+║  Date: January 17, 2026 20:15 UTC                                             ║
+║  Next: AC-FIX-BRITTLENESS-001 (Database Connection Lifecycle)                 ║
+║                                                                                ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+✅ PHASE INITIATION COMPLETE
+
+All preparations done per cortex-builder.prompt.md:
+
+1. ✅ Phase Specification: Read from cortex-master.yaml phase_tracker
+2. ✅ Documentation: 12 files created and committed to repository
+3. ✅ Executive Summary: Displayed (scope, risks, timeline, dependencies)
+4. ✅ Team Ready: Assignments documented and clear
+5. ✅ Git Checkpoint: Pre-implementation state saved
+6. ✅ Governance: All CORE rules loaded and ready for enforcement
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+🎯 WHAT'S BEING IMPLEMENTED
+
+PHASE-REMEDIATION-05: Brittleness & Hallucination Prevention
+
+Purpose: Achieve 100% production readiness by addressing 12 blocking issues
+Timeline: January 18 - February 7 (3-4 weeks, 27 hours total effort)
+Impact: 93.8% → 98.2% → 100% AC completion (staging enabled Week 1)
+
+12 Acceptance Criteria:
+├─ CRITICAL (3): Database connections, thread safety, boundary enforcement
+├─ HIGH (3): Sandbox locking, timeout config, isolation docs
+└─ MEDIUM/LOW (6): Path audit, AC tracking, config, naming, confidence, fuzzing
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+📋 STARTING POINT: AC-FIX-BRITTLENESS-001
+
+Title: Database Connection Lifecycle Management
+Priority: CRITICAL (Staging Enabler)
+Effort: 4 hours
+Status: Ready to start
+
+Problem:
+  • 81 tests failing due to unclosed database connections
+  • sqlite3.connect() calls not wrapped in context managers
+  • Connection leaks accumulating over test runs
+
+Solution:
+  • Implement context managers for all sqlite3.connect() calls
+  • Add exception handling with proper cleanup
+  • Ensure test fixture isolation (one DB per test)
+
+Files to Modify:
+  1. src/infrastructure/database.py (main implementation)
+  2. src/infrastructure/audit_logger.py (cleanup pattern reference)
+  3. tests/ (update 40+ affected tests)
+
+Acceptance Criteria:
+  ✓ All sqlite3.connect() calls wrapped in context managers
+  ✓ Exception handling with proper cleanup
+  ✓ Test fixture isolation (one DB per test)
+  ✓ All 81 previously failing tests pass
+  ✓ Load test: 100 rapid sequential connections successful
+  ✓ No connection leaks detected
+
+Governance Requirements:
+  ✓ CORE-008: Tests first (RED → GREEN) - create tests before code
+  ✓ CORE-011: Type hints on all functions
+  ✓ CORE-012: Docstrings using Google style
+  ✓ CORE-027: Audit trail (AC_START, AC_EXECUTE, AC_COMPLETE)
+  ✓ CORE-028: Kebab-case naming ≤25 characters
+
+Implementation Pattern:
+  1. Create: tests/unit/infrastructure/test_connection_lifecycle.py (RED)
+  2. Code: src/infrastructure/database.py (GREEN)
+  3. Verify: pytest tests/unit/infrastructure/ -v (all pass)
+  4. Audit: AC_START → AC_EXECUTE → AC_COMPLETE to governance.db
+  5. Commit: git commit -m "AC-FIX-BRITTLENESS-001: Database connections - tests passing"
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+📚 DOCUMENTATION & RESOURCES
+
+Quick Reference:
+  • Phase Spec: .github/roadmap/phases/phase-remediation-05-brittleness-hallucination.yaml
+  • Quick Ref: QUICK-REFERENCE.txt (1 page overview)
+  • Timeline: CORTEX-REMEDIATION-ROADMAP-2026-01-17.md
+
+Detailed Guides:
+  • Full Integration: CORTEX-MASTER-PLAN-INTEGRATION-REMEDIATION-05.md
+  • Exec Summary: CORTEX-REMEDIATION-EXECUTIVE-SUMMARY.md
+  • Findings: CORTEX-REVIEW-BRITTLENESS-HALLUCINATION-2026-01-17.md
+
+Team Assignments:
+  Infrastructure (2): AC-001, AC-002, AC-004, AC-005
+  Architecture (1): AC-001 (boundary enforcement)
+  Hallucination (2): AC-003, AC-006, AC-011
+  QA/Testing (1): AC-012
+  DevOps (1): AC-008, AC-009, AC-010
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+🚀 HOW TO GET STARTED
+
+Step 1: Verify Setup (5 min)
+  $ pytest --version          # Should be pytest 7.x+
+  $ python -c "import sqlite3; print(sqlite3.version)"
+  $ ls -la cortex-brain/state/governance.db  # Should exist
+
+Step 2: Read AC Specification (10 min)
+  • Open: .github/roadmap/phases/phase-remediation-05-brittleness-hallucination.yaml
+  • Review: Lines for AC-FIX-BRITTLENESS-001 section
+  • Understand: Problem, solution, acceptance criteria
+
+Step 3: Create RED Test (20 min)
+  • File: tests/unit/infrastructure/test_connection_lifecycle.py
+  • Write: Test that verifies all connections close properly
+  • Run: pytest tests/unit/infrastructure/test_connection_lifecycle.py
+  • Result: Should FAIL (RED state per CORE-008)
+
+Step 4: Implement GREEN Code (2 hours)
+  • File: src/infrastructure/database.py
+  • Add: Context managers and cleanup patterns
+  • Run: pytest tests/unit/infrastructure/ -v
+  • Result: All tests should PASS (GREEN state)
+
+Step 5: Verify & Audit (30 min)
+  • Run: Full test suite to check for regressions
+  • Verify: 100% pass rate maintained
+  • Log: AC_START, AC_EXECUTE, AC_COMPLETE to audit log
+  • Check: git diff to confirm changes
+
+Step 6: Commit (5 min)
+  • Command: git add -A
+  • Commit: git commit -m "AC-FIX-BRITTLENESS-001: Database connections - tests passing"
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+⏰ MILESTONE TIMELINE
+
+Week 1 (Jan 18-24) - CRITICAL FIXES (Staging Enabler):
+  Mon Jan 18: Start AC-FIX-BRITTLENESS-001 (database)
+  Tue Jan 19: Start AC-FIX-BRITTLENESS-002 (thread safety)
+  Wed Jan 20: Start AC-HALLUCINATION-ENFORCEMENT-001 (governance)
+  Thu Jan 21: Testing & validation
+  Fri Jan 24: ✅ STAGING DEPLOYMENT ENABLED
+
+Week 2-3 (Jan 25-31) - HIGH PRIORITY FIXES (Robustness):
+  ├─ AC-FIX-BRITTLENESS-003 (2h)
+  ├─ AC-FIX-BRITTLENESS-004 (3h)
+  └─ AC-HALLUCINATION-ISOLATION-DOC-002 (4h)
+
+Week 4+ (Feb 1-7) - MEDIUM/LOW FIXES (Polish):
+  ├─ Path resolution, AC tracking, pytest config, test naming
+  ├─ Confidence scoring, intent fuzzing
+  └─ Feb 7: ✅ 100% PRODUCTION READINESS ACHIEVED
+
+Feb 10: Production Deployment 🚀
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+📊 SUCCESS METRICS
+
+Week 1 Success (Jan 24):
+  ✓ All 81 previously failing tests pass
+  ✓ Load test: 100 sequential connections successful
+  ✓ 0 new test failures
+  ✓ 36 audit log entries (12 ACs × 3 events - future state)
+  ✓ STAGING DEPLOYMENT APPROVED
+
+Production Ready Success (Feb 7):
+  ✓ 270/275 ACs complete (98.2%)
+  ✓ 100% test pass rate maintained
+  ✓ 0 CRITICAL issues remaining
+  ✓ 0 HIGH issues remaining
+  ✓ Hash chain integrity verified
+  ✓ PRODUCTION DEPLOYMENT APPROVED
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+💡 KEY REMINDERS
+
+1. Test First: Always write RED test BEFORE implementation (CORE-008)
+2. Type Hints: Every function must have type hints (CORE-011)
+3. Docstrings: Every public function must have Google-style docstring (CORE-012)
+4. Audit Trail: Log AC_START before, AC_EXECUTE during, AC_COMPLETE after (CORE-027)
+5. Naming: All functions/variables kebab-case, ≤25 characters (CORE-028)
+6. Git Checkpoints: Create checkpoints before and after each AC (CORE-026)
+7. No Bare Except: Never use bare `except:` (CORE-013)
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+🎯 READY TO START
+
+All prerequisites met:
+  ✅ Phase specification complete
+  ✅ Documentation complete
+  ✅ Team assignments clear
+  ✅ Governance rules loaded
+  ✅ Test framework ready
+  ✅ Git repository clean
+
+Next Action: Begin AC-FIX-BRITTLENESS-001 implementation
+
+Start with: Create RED test in tests/unit/infrastructure/test_connection_lifecycle.py
+
+═══════════════════════════════════════════════════════════════════════════════════
+
+Generated: 2026-01-17 20:15 UTC
+Phase: PHASE-REMEDIATION-05 - Brittleness & Hallucination Prevention
+Status: ✅ INITIATION COMPLETE - READY FOR AC IMPLEMENTATION
+Target: 100% Production Readiness by February 7, 2026
+
+🚀 PROCEED WITH AC-FIX-BRITTLENESS-001 🚀
+
+═══════════════════════════════════════════════════════════════════════════════════
