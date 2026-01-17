@@ -149,13 +149,21 @@ class TelemetryProvider:
         batch_size: int = 10,
         use_async: bool = True
     ):
+        """
+        Initialize telemetry provider.
+        
+        Args:
+            exporters: List of metrics exporters
+            batch_size: Metrics per batch before auto-flush
+            use_async: Whether to use async export (default: True)
+        """
         self.exporters = exporters or []
         self.batch_size = batch_size
         self.use_async = use_async
         self.metrics_buffer: List[MetricData] = []
         self.metrics_lock = threading.Lock()
         self.batch_queue: queue.Queue = queue.Queue()
-        self.running = False
+        self._running = threading.Event()  # Atomic state flag
         self.export_thread: Optional[threading.Thread] = None
         
         if use_async:
@@ -217,8 +225,13 @@ class TelemetryProvider:
         return True
     
     def _start_async_export(self):
-        """Start async export thread."""
-        self.running = True
+        """
+        Start async export thread.
+        
+        Creates and starts background thread for metric export.
+        Uses threading.Event() for atomic state management.
+        """
+        self._running.set()  # Atomic state transition
         self.export_thread = threading.Thread(
             target=self._async_export_worker,
             daemon=True
@@ -227,8 +240,13 @@ class TelemetryProvider:
         logger.info("Started async metrics exporter")
     
     def _async_export_worker(self):
-        """Worker thread for async export."""
-        while self.running:
+        """
+        Worker thread for async metric export.
+        
+        Continuously exports batches from queue until shutdown signal.
+        Uses threading.Event() for atomic shutdown detection.
+        """
+        while self._running.is_set():  # Atomic check
             try:
                 batch = self.batch_queue.get(timeout=5.0)
                 self._export_batch(batch)
@@ -251,15 +269,29 @@ class TelemetryProvider:
         return success
     
     def shutdown(self):
-        """Shutdown telemetry provider."""
+        """
+        Shutdown telemetry provider gracefully.
+        
+        1. Flush remaining buffered metrics
+        2. Signal async export worker to stop
+        3. Wait for worker thread to terminate (with timeout)
+        4. Shutdown all exporters
+        
+        Uses threading.Event() for atomic state management.
+        """
+        logger.info("Shutting down telemetry provider...")
+        
         # Flush remaining metrics
         self.flush(force=True)
         
-        # Stop async export
+        # Stop async export with graceful shutdown
         if self.use_async:
-            self.running = False
+            self._running.clear()  # Atomic shutdown signal
             if self.export_thread:
+                # Wait with timeout to avoid infinite hang
                 self.export_thread.join(timeout=5.0)
+                if self.export_thread.is_alive():
+                    logger.warning("Export thread did not shutdown within 5 seconds")
         
         # Shutdown exporters
         for exporter in self.exporters:
@@ -280,5 +312,12 @@ class TelemetryProvider:
         return self.exporters.copy()
     
     def is_running(self) -> bool:
-        """Check if async export is running."""
-        return self.running if self.use_async else True
+        """
+        Check if async export is running.
+        
+        Returns:
+            True if async mode and export thread is active, False otherwise
+        """
+        if not self.use_async:
+            return True  # Sync mode always "running"
+        return self._running.is_set()  # Atomic check
