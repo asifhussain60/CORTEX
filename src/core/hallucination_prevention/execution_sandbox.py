@@ -171,6 +171,8 @@ class ExecutionSandbox:
     - Dry-run mode: Preview changes without committing
     - Execution tracking: Full audit trail of all operations
     - Exception handling: Graceful error handling and recording
+    
+    AC-FIX-BRITTLENESS-003: Added thread-safe history access with RLock.
     """
 
     def __init__(self, db_path: str = "cortex-brain/state/governance.db"):
@@ -181,6 +183,7 @@ class ExecutionSandbox:
         """
         self.db_path = db_path
         self._execution_history: List[SandboxExecution] = []
+        self._history_lock = threading.RLock()  # AC-FIX-BRITTLENESS-003: Thread-safe history
         self._active_snapshots: Dict[str, SandboxSnapshot] = {}
         self._side_effect_tracking: Dict[str, List[str]] = {}
         self._init_execution_table()
@@ -404,9 +407,12 @@ class ExecutionSandbox:
         Args:
             execution: Execution result to log.
             description: Operation description.
+            
+        AC-FIX-BRITTLENESS-003: Thread-safe history access.
         """
-        # Add to in-memory history
-        self._execution_history.append(execution)
+        # Add to in-memory history (thread-safe)
+        with self._history_lock:
+            self._execution_history.append(execution)
 
         # Store in database
         try:
@@ -448,9 +454,12 @@ class ExecutionSandbox:
             
         Returns:
             List of execution records (most recent first).
+            
+        AC-FIX-BRITTLENESS-003: Thread-safe history access.
         """
-        # Filter history
-        history = self._execution_history
+        # Filter history (thread-safe)
+        with self._history_lock:
+            history = list(self._execution_history)  # Copy to avoid modification during iteration
 
         if mode_filter:
             history = [e for e in history if e.mode == mode_filter]
@@ -472,11 +481,14 @@ class ExecutionSandbox:
             
         Returns:
             List of recent executions.
+            
+        AC-FIX-BRITTLENESS-003: Thread-safe history access.
         """
         from datetime import timedelta
 
         cutoff = datetime.utcnow() - timedelta(minutes=minutes)
-        recent = [e for e in self._execution_history if e.timestamp > cutoff]
+        with self._history_lock:
+            recent = [e for e in self._execution_history if e.timestamp > cutoff]
 
         return [e.to_dict() for e in recent]
 
@@ -492,5 +504,8 @@ class ExecutionSandbox:
         """Clear execution history from memory.
         
         Note: Database history is not cleared.
+        
+        AC-FIX-BRITTLENESS-003: Thread-safe history access.
         """
-        self._execution_history.clear()
+        with self._history_lock:
+            self._execution_history.clear()
