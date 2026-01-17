@@ -29,6 +29,10 @@ from src.core.orchestrator.terminal_events import EventRegistry, TerminalEvent
 from src.core.result import Ok, Err, Result
 
 
+# Apply timeout to all tests in this module to prevent hangs
+pytestmark = pytest.mark.timeout(10)
+
+
 class OrchestrationDomain(Enum):
     """Enumeration of orchestration domains."""
     PLANNING = "planning"
@@ -64,6 +68,10 @@ class MockDomainOrchestrator:
 
 class MasterOrchestrator:
     """Master orchestrator coordinating multi-domain workflows."""
+    
+    # Safety guard: Maximum iterations to prevent infinite loops
+    MAX_WORKFLOW_ITERATIONS = 100
+    MAX_DOMAIN_ITERATIONS = 50
 
     def __init__(self):
         """Initialize master orchestrator."""
@@ -108,8 +116,18 @@ class MasterOrchestrator:
         self.current_domain = initial_domain
         current_input = user_input
         current_context = context
+        
+        # Safety guard: Track iterations to prevent infinite loops
+        workflow_iterations = 0
 
         while self.current_domain is not None:
+            workflow_iterations += 1
+            if workflow_iterations > self.MAX_WORKFLOW_ITERATIONS:
+                return Err(
+                    f"Workflow exceeded maximum iterations ({self.MAX_WORKFLOW_ITERATIONS}). "
+                    f"Possible infinite loop in domain transitions."
+                )
+            
             if self.current_domain not in self.orchestrators:
                 return Err(f"No orchestrator for domain {self.current_domain}")
 
@@ -121,7 +139,7 @@ class MasterOrchestrator:
             )
 
             if protocol_result.is_err():
-                return Err(protocol_result.unwrap_err())
+                return Err(protocol_result.error)
 
             decisions = protocol_result.unwrap()
             self.domain_decisions[self.current_domain] = decisions
@@ -163,8 +181,18 @@ class MasterOrchestrator:
             current_input = user_input
             current_context = context
             next_domain_suggestion = None
+            
+            # Safety guard: Track iterations to prevent infinite loops
+            domain_iterations = 0
 
             while True:
+                domain_iterations += 1
+                if domain_iterations > self.MAX_DOMAIN_ITERATIONS:
+                    return Err(
+                        f"Domain {domain.value} exceeded maximum iterations "
+                        f"({self.MAX_DOMAIN_ITERATIONS}). Possible infinite loop in turn execution."
+                    )
+                
                 # Get raw orchestrator result to check for domain routing
                 raw_result = orchestrator.execute(current_input, current_context)
                 
@@ -178,7 +206,7 @@ class MasterOrchestrator:
                 result = protocol.execute_turn(current_input, current_context)
 
                 if result.is_err():
-                    return Err(result.unwrap_err())
+                    return Err(result.error)
 
                 decision = result.unwrap()
                 

@@ -47,6 +47,7 @@ class MockDomainOrchestrator:
             failure_on_turn: Simulate failure on specific turn (-1 = no failure)
         """
         self.domain = domain
+        self.name = f"MockDomainOrchestrator_{domain.value}"  # AC-FIX-009-01: Add name for governance
         self.turn_count = 0
         self.failure_on_turn = failure_on_turn
 
