@@ -1,0 +1,309 @@
+---
+phase:
+  id: PHASE-11-HALLUCINATION-PREVENTION
+  title: Hallucination Prevention System
+  description: |
+    Prevent AI agent hallucinations through:
+    - Intent canonicalization (extended from PHASE-07)
+    - Behavioral boundary rules
+    - Execution sandbox
+    - Detection and recovery mechanisms
+    - Vision mutation tracking
+    - Confidence scoring
+  order: 11
+  status: IN_PROGRESS
+  locked: false
+  requires: PHASE-09-GOVERNANCE-TOOLS
+  required_for: PHASE-12-KNOWLEDGE-ECOSYSTEM
+  blocking: false
+  estimated_hours: 28
+  estimated_days: 3.5
+  ac_ids: 6
+  completed_ac_ids: 0
+  progress_percentage: 0.0
+  started_at: '2026-01-17T00:00:00Z'
+
+# =========================================================================
+# ACCEPTANCE CRITERIA
+# =========================================================================
+
+acceptance_criteria:
+
+  # AC-HP-001-01: Intent Canonicalization Engine
+  - ac_id: HP-001-01
+    title: Intent Canonicalization Engine
+    description: Extended canonicalization with AC-ID, phase, and action type extraction
+    status: NOT_STARTED
+    notes: Extends PHASE-07 IR-002-01 with production hardening. Target 36/36 tests passing.
+    acceptance_tests:
+      - Extract AC-ID from varied formats (strict, loose, malformed)
+      - Identify phase from context and content
+      - Classify action type accurately
+      - Handle edge cases and invalid inputs
+      - Maintain backward compatibility with PHASE-07
+    
+    acceptance_criteria_detail:
+      criterion: "Canonicalization engine extends IR-002-01 with full AC-ID extraction"
+      what_proves_it:
+        - "36/36 unit tests pass"
+        - "AC-ID extraction accuracy >99%"
+        - "Audit trail shows AC_START, AC_EXECUTE, AC_COMPLETE"
+      how_to_test:
+        - "pytest tests/unit/tier2/hallucination_prevention/test_hp_001_01_canonicalization.py -v"
+        - "Verify output against golden fixtures"
+        - "Check governance.db for audit entries"
+      audit_evidence:
+        operation: AC_EXECUTE
+        ac_id: HP-001-01
+        expected_entries: 3  # START, EXECUTE, COMPLETE
+    
+    files_to_create:
+      - cortex-brain/tier2/hallucination_prevention/__init__.py
+      - cortex-brain/tier2/hallucination_prevention/canonicalization_engine.py
+      - cortex-brain/tier2/hallucination_prevention/canonicalization_fixtures.yaml
+      - tests/unit/tier2/hallucination_prevention/__init__.py
+      - tests/unit/tier2/hallucination_prevention/test_hp_001_01_canonicalization.py
+    
+    test_count: 36
+    test_pass_rate: null
+    git_checkpoint: null
+    completed_at: null
+    estimated_minutes: 480
+
+  # AC-HP-001-02: Behavioral Boundary Rules
+  - ac_id: HP-001-02
+    title: Behavioral Boundary Rules
+    description: Prevent locked phase modification, AC deletion, governance bypass
+    status: NOT_STARTED
+    notes: |
+      Prevents locked phase modification, AC deletion without approval, and governance
+      bypass attempts. Target 28/28 tests passing.
+    acceptance_tests:
+      - Locked phase operations blocked
+      - AC deletion prevented without approval
+      - Governance bypass attempts logged
+      - Unauthorized modifications rejected
+      - Recovery mechanisms triggered on violations
+
+    acceptance_criteria_detail:
+      criterion: "Behavioral boundary enforcement prevents unauthorized modifications"
+      what_proves_it:
+        - "28/28 unit tests pass"
+        - "All violation attempts logged"
+        - "Audit trail shows AC_START, AC_EXECUTE, AC_COMPLETE"
+      how_to_test:
+        - "pytest tests/unit/tier2/hallucination_prevention/test_hp_001_02_boundaries.py -v"
+        - "Verify boundary violations trigger recovery"
+        - "Check audit log for rejection entries"
+      audit_evidence:
+        operation: AC_EXECUTE
+        ac_id: HP-001-02
+        expected_entries: 3
+
+    files_to_create:
+      - cortex-brain/tier2/hallucination_prevention/boundary_rules.py
+      - cortex-brain/tier2/hallucination_prevention/boundary_fixtures.yaml
+      - tests/unit/tier2/hallucination_prevention/test_hp_001_02_boundaries.py
+
+    test_count: 28
+    test_pass_rate: null
+    git_checkpoint: null
+    completed_at: null
+    estimated_minutes: 420
+
+  # AC-HP-002-01: Agent Execution Sandbox
+  - ac_id: HP-002-01
+    title: Agent Execution Sandbox
+    description: Isolated execution with rollback and dry-run capabilities
+    status: NOT_STARTED
+    notes: |
+      Sandbox isolates side effects, captures state snapshots, enables rollback,
+      and provides dry-run preview. Target 26/26 tests passing.
+    acceptance_tests:
+      - Sandbox isolates side effects
+      - Rollback restores pre-execution state
+      - Dry-run mode available
+      - State snapshots captured
+      - Transaction support for atomic operations
+
+    acceptance_criteria_detail:
+      criterion: "Execution sandbox provides isolated, transactional execution"
+      what_proves_it:
+        - "26/26 unit tests pass"
+        - "State recovery verified"
+        - "Audit trail shows AC_START, AC_EXECUTE, AC_COMPLETE"
+      how_to_test:
+        - "pytest tests/unit/tier2/hallucination_prevention/test_hp_002_01_sandbox.py -v"
+        - "Verify rollback restores exact state"
+        - "Test dry-run mode accuracy"
+      audit_evidence:
+        operation: AC_EXECUTE
+        ac_id: HP-002-01
+        expected_entries: 3
+
+    files_to_create:
+      - cortex-brain/tier2/hallucination_prevention/execution_sandbox.py
+      - cortex-brain/tier2/hallucination_prevention/sandbox_fixtures.yaml
+      - tests/unit/tier2/hallucination_prevention/test_hp_002_01_sandbox.py
+
+    test_count: 26
+    test_pass_rate: null
+    git_checkpoint: null
+    completed_at: null
+    estimated_minutes: 390
+
+  # AC-HP-002-02: Hallucination Detection & Recovery
+  - ac_id: HP-002-02
+    title: Hallucination Detection & Recovery
+    description: Detect SSOT corruption and trigger recovery
+    status: NOT_STARTED
+    notes: |
+      Detects SSOT corruption through state mismatch, checksum failure, temporal
+      anomaly, and referential integrity checks. Triggers appropriate recovery strategies
+      and logs all incidents. Target 23/23 tests passing.
+    acceptance_tests:
+      - SSOT corruption detected automatically
+      - Recovery triggered on detection
+      - Incident logged for analysis
+      - Multiple detection methods available
+      - Recovery strategies documented
+
+    acceptance_criteria_detail:
+      criterion: "Hallucination detection identifies SSOT corruption and triggers recovery"
+      what_proves_it:
+        - "23/23 unit tests pass"
+        - "All corruption scenarios handled"
+        - "Audit trail shows AC_START, AC_EXECUTE, AC_COMPLETE"
+      how_to_test:
+        - "pytest tests/unit/tier2/hallucination_prevention/test_hp_002_02_detection.py -v"
+        - "Inject SSOT corruption"
+        - "Verify detection and recovery"
+      audit_evidence:
+        operation: AC_EXECUTE
+        ac_id: HP-002-02
+        expected_entries: 3
+
+    files_to_create:
+      - cortex-brain/tier2/hallucination_prevention/detection_recovery.py
+      - cortex-brain/tier2/hallucination_prevention/detection_fixtures.yaml
+      - tests/unit/tier2/hallucination_prevention/test_hp_002_02_detection.py
+
+    test_count: 23
+    test_pass_rate: null
+    git_checkpoint: null
+    completed_at: null
+    estimated_minutes: 345
+
+  # AC-HP-003-01: Vision Mutation Tracking
+  - ac_id: HP-003-01
+    title: Vision Mutation Tracking
+    description: Track vision mutations from PHASE-06 protocol
+    status: NOT_STARTED
+    notes: |
+      Track vision mutations with timestamp, support rollback of mutations,
+      and provide queryable mutation history. Target 23/23 tests passing.
+    acceptance_tests:
+      - Mutations tracked with timestamp
+      - Rollback available for mutations
+      - Mutation history queryable
+      - Mutation impact analyzed
+      - Mutation log persistent
+
+    acceptance_criteria_detail:
+      criterion: "Vision mutation tracking maintains immutable, queryable history"
+      what_proves_it:
+        - "23/23 unit tests pass"
+        - "All mutations auditable"
+        - "Audit trail shows AC_START, AC_EXECUTE, AC_COMPLETE"
+      how_to_test:
+        - "pytest tests/unit/tier2/hallucination_prevention/test_hp_003_01_mutations.py -v"
+        - "Query mutation history"
+        - "Verify rollback accuracy"
+      audit_evidence:
+        operation: AC_EXECUTE
+        ac_id: HP-003-01
+        expected_entries: 3
+
+    files_to_create:
+      - cortex-brain/tier2/hallucination_prevention/mutation_tracking.py
+      - cortex-brain/tier2/hallucination_prevention/mutation_fixtures.yaml
+      - tests/unit/tier2/hallucination_prevention/test_hp_003_01_mutations.py
+
+    test_count: 23
+    test_pass_rate: null
+    git_checkpoint: null
+    completed_at: null
+    estimated_minutes: 345
+
+  # AC-HP-003-02: Agent Confidence Scoring
+  - ac_id: HP-003-02
+    title: Agent Confidence Scoring
+    description: Score agent confidence in proposed actions
+    status: NOT_STARTED
+    notes: |
+      Score agent confidence in proposed actions, trigger review on low confidence,
+      and document scoring model. Target 24/24 tests passing.
+    acceptance_tests:
+      - Confidence score calculated for actions
+      - Low confidence triggers review
+      - Scoring model documented
+      - Score justification provided
+      - Historical confidence tracked
+
+    acceptance_criteria_detail:
+      criterion: "Confidence scoring provides explainable agent action evaluation"
+      what_proves_it:
+        - "24/24 unit tests pass"
+        - "All actions scored"
+        - "Audit trail shows AC_START, AC_EXECUTE, AC_COMPLETE"
+      how_to_test:
+        - "pytest tests/unit/tier2/hallucination_prevention/test_hp_003_02_confidence.py -v"
+        - "Verify scoring accuracy"
+        - "Check justification completeness"
+      audit_evidence:
+        operation: AC_EXECUTE
+        ac_id: HP-003-02
+        expected_entries: 3
+
+    files_to_create:
+      - cortex-brain/tier2/hallucination_prevention/confidence_scoring.py
+      - cortex-brain/tier2/hallucination_prevention/confidence_fixtures.yaml
+      - tests/unit/tier2/hallucination_prevention/test_hp_003_02_confidence.py
+
+    test_count: 24
+    test_pass_rate: null
+    git_checkpoint: null
+    completed_at: null
+    estimated_minutes: 360
+
+# =========================================================================
+# PHASE SUMMARY
+# =========================================================================
+
+summary:
+  total_acs: 6
+  total_tests: 160  # 36+28+26+23+23+24
+  expected_audit_entries: 18  # 6 ACs × 3 operations (START, EXECUTE, COMPLETE)
+  
+  implementation_order:
+    - HP-001-01
+    - HP-001-02
+    - HP-002-01
+    - HP-002-02
+    - HP-003-01
+    - HP-003-02
+  
+  success_criteria:
+    - All 160 unit tests passing
+    - All 18 audit entries created and verified
+    - Hash chain integrity maintained
+    - All acceptance criteria met
+    - Code review approved
+    - Ready for PHASE-12
+
+metadata:
+  author: Asif Hussain
+  copyright: © 2025-2026 Asif Hussain. All rights reserved.
+  created_at: '2026-01-17T00:00:00Z'
+  updated_at: '2026-01-17T00:00:00Z'
+  status: ACTIVE
