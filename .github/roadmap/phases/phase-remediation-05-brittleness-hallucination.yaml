@@ -1,0 +1,427 @@
+# CORTEX PHASE-REMEDIATION-05: Brittleness & Hallucination Prevention Remediation
+# Version: 1.0
+# Date: 2026-01-17
+# Status: READY FOR IMPLEMENTATION
+
+---
+
+metadata:
+  id: "PHASE-REMEDIATION-05-BRITTLENESS-HALLUCINATION"
+  title: "Brittleness & Hallucination Prevention Remediation"
+  description: "12 AC-IDs addressing brittleness and hallucination prevention gaps from enhanced review"
+  source: "CORTEX-REVIEW-BRITTLENESS-HALLUCINATION-2026-01-17.md"
+  priority: "P1"
+  blocking: true
+  requires: "PHASE-REMEDIATION-04"
+  estimated_hours: 24
+  estimated_days: 5
+  completion_target: "2026-02-07"
+
+---
+
+# ===========================================================================================
+# FINDINGS BREAKDOWN (12 AC-IDs)
+# ===========================================================================================
+
+findings:
+  critical_count: 3
+  high_count: 3
+  medium_count: 4
+  low_count: 2
+  total: 12
+  
+  critical:
+    - id: "AC-FIX-BRITTLENESS-001"
+      title: "Database Connection Lifecycle Management"
+      problem: "81 tests failing due to unclosed database connections"
+      files:
+        - "src/infrastructure/database.py"
+        - "src/infrastructure/audit_logger.py"
+      effort: 4
+      
+    - id: "AC-FIX-BRITTLENESS-002"
+      title: "Telemetry Thread Safety"
+      problem: "Race condition on startup, self.running flag not atomic"
+      files:
+        - "src/infrastructure/metrics_exporter.py"
+      effort: 3
+      
+    - id: "AC-HALLUCINATION-ENFORCEMENT-001"
+      title: "MasterOrchestrator Boundary Enforcement Integration"
+      problem: "BoundaryEnforcer not called, governance rules bypassed"
+      files:
+        - "src/orchestrators/core/master_orchestrator.py"
+      effort: 3
+
+  high:
+    - id: "AC-FIX-BRITTLENESS-003"
+      title: "ExecutionSandbox History Locking"
+      problem: "No thread safety on history list, race condition possible"
+      files:
+        - "src/core/hallucination_prevention/execution_sandbox.py"
+      effort: 2
+      
+    - id: "AC-FIX-BRITTLENESS-004"
+      title: "Timeout Configuration"
+      problem: "No timeout on blocking operations, potential indefinite hangs"
+      files:
+        - "src/infrastructure/config.py"
+        - "src/infrastructure/metrics_exporter.py"
+      effort: 3
+      
+    - id: "AC-HALLUCINATION-ISOLATION-DOC-002"
+      title: "Sandbox Isolation Documentation"
+      problem: "Boundaries unclear, external calls not intercepted"
+      files:
+        - "src/core/hallucination_prevention/execution_sandbox.py"
+      effort: 4
+
+  medium:
+    - id: "AC-BRITTLENESS-PATH-RESOLUTION-005"
+      title: "Path Resolution Portability Audit"
+      problem: "Potential hardcoded paths, CI/CD portability risk"
+      files:
+        - "src/"  # Entire source tree audit
+      effort: 2
+      
+    - id: "AC-TRACKING-STATUS-GAP-001"
+      title: "AC Status Tracking Reconciliation"
+      problem: "FIX category shows 0% completion anomaly"
+      files:
+        - "governance.db"  # Audit trail investigation
+      effort: 2
+      
+    - id: "AC-PYTEST-CONFIG-GAP-002"
+      title: "Pytest Configuration"
+      problem: "6 unknown pytest marks warnings"
+      files:
+        - "pytest.ini"
+      effort: 0.5
+      
+    - id: "AC-TEST-NAMING-GAP-003"
+      title: "TestFramework Naming"
+      problem: "pytest naming collision (TestFramework)"
+      files:
+        - "tests/"  # Test framework files
+      effort: 0.5
+
+  low:
+    - id: "AC-HALLUCINATION-CONFIDENCE-SCORING-003"
+      title: "Confidence Scoring Review"
+      problem: "Scoring algorithm needs validation"
+      files:
+        - "src/core/hallucination_prevention/confidence_scorer.py"
+      effort: 2
+      
+    - id: "AC-HALLUCINATION-INTENT-FUZZING-004"
+      title: "Intent Parsing Fuzzing"
+      problem: "Loose format grammar may have parsing gaps"
+      files:
+        - "src/core/intent_parser.py"
+      effort: 2
+
+---
+
+# ===========================================================================================
+# ACCEPTANCE CRITERIA BY PRIORITY
+# ===========================================================================================
+
+acceptance_criteria:
+  
+  week_1_critical:
+    title: "CRITICAL Fixes (Staging Enabler)"
+    days: 1
+    effort: 9
+    
+    ac_001_database_connections:
+      id: "AC-FIX-BRITTLENESS-001"
+      priority: "CRITICAL"
+      effort: 4
+      acceptance:
+        - "All sqlite3.connect() wrapped in context managers"
+        - "Exception handling with proper cleanup"
+        - "Test fixture isolation (one DB per test)"
+        - "All 81 previously failing tests now pass"
+        - "Load test: 100 rapid sequential connections successful"
+        - "No connection leaks detected"
+      tests:
+        - "tests/unit/infrastructure/test_connection_lifecycle.py"
+        - "Existing database tests"
+      verification: |
+        pytest tests/unit/infrastructure/test_connection_lifecycle.py -v
+        # All 20+ tests passing
+    
+    ac_002_telemetry_thread_safety:
+      id: "AC-FIX-BRITTLENESS-002"
+      priority: "CRITICAL"
+      effort: 3
+      acceptance:
+        - "Replace self.running boolean with threading.Event()"
+        - "Atomic state transitions using event.set()/clear()"
+        - "Graceful shutdown with timeout"
+        - "Stress test passes (high metric throughput + shutdown)"
+        - "All metrics exported before shutdown"
+      tests:
+        - "tests/unit/infrastructure/test_telemetry_concurrency.py"
+      verification: |
+        pytest tests/unit/infrastructure/test_telemetry_concurrency.py::test_concurrent_startup -v
+        # All 15+ tests passing
+    
+    ac_003_boundary_enforcement:
+      id: "AC-HALLUCINATION-ENFORCEMENT-001"
+      priority: "CRITICAL"
+      effort: 2
+      acceptance:
+        - "BoundaryEnforcer check called before delegation"
+        - "Boundary violations prevent operation execution"
+        - "Clean error messages for violations"
+        - "Integration test validates orchestrator→boundary flow"
+      tests:
+        - "tests/integration/test_orchestrator_boundary_enforcement.py"
+      verification: |
+        pytest tests/integration/test_orchestrator_boundary_enforcement.py -v
+        # All 12+ tests passing
+  
+  week_2_3_high:
+    title: "HIGH Priority Fixes (Robustness)"
+    days: 2
+    effort: 8
+    
+    ac_004_sandbox_locking:
+      id: "AC-FIX-BRITTLENESS-003"
+      priority: "HIGH"
+      effort: 2
+      acceptance:
+        - "Add self.history_lock = threading.RLock()"
+        - "Protect all history access with lock"
+        - "Concurrent access test (10+ threads) passes"
+        - "History integrity maintained under concurrency"
+      tests:
+        - "tests/unit/core/hallucination_prevention/test_sandbox_concurrency.py"
+      verification: |
+        pytest tests/unit/core/hallucination_prevention/test_sandbox_concurrency.py::test_concurrent_history -v
+    
+    ac_005_timeout_configuration:
+      id: "AC-FIX-BRITTLENESS-004"
+      priority: "HIGH"
+      effort: 3
+      acceptance:
+        - "All thread.join() calls have timeout"
+        - "Configuration class for timeout values"
+        - "Documentation of timeout rationale"
+        - "No indefinite hangs possible"
+      tests:
+        - "tests/unit/infrastructure/test_timeout_enforcement.py"
+      verification: |
+        pytest tests/unit/infrastructure/test_timeout_enforcement.py -v
+    
+    ac_006_sandbox_isolation_docs:
+      id: "AC-HALLUCINATION-ISOLATION-DOC-002"
+      priority: "HIGH"
+      effort: 4
+      acceptance:
+        - "Document sandbox isolation boundaries"
+        - "Clarify in-process only, no external API interception (yet)"
+        - "Add warning about external calls"
+        - "Implement request patching for future"
+        - "External call test passes"
+      tests:
+        - "tests/integration/test_sandbox_external_calls.py"
+      documentation:
+        - "docs/sandbox-isolation-guide.md"
+      verification: |
+        pytest tests/integration/test_sandbox_external_calls.py -v
+  
+  week_4_medium_low:
+    title: "MEDIUM & LOW Priority (Polish & Edge Cases)"
+    days: 2
+    effort: 7
+    
+    ac_007_path_resolution:
+      id: "AC-BRITTLENESS-PATH-RESOLUTION-005"
+      priority: "MEDIUM"
+      effort: 2
+      acceptance:
+        - "Audit all hardcoded paths in src/"
+        - "Convert to Path(__file__).parent-relative patterns"
+        - "Test from multiple working directories"
+        - "CI/CD paths verified"
+      verification: |
+        grep -rn '/Users/\|/home/' --include='*.py' src/ | wc -l
+        # Should output: 0
+    
+    ac_008_ac_tracking:
+      id: "AC-TRACKING-STATUS-GAP-001"
+      priority: "MEDIUM"
+      effort: 2
+      acceptance:
+        - "Investigate FIX category 0% anomaly"
+        - "Reconcile audit_log vs roadmap.yaml"
+        - "Fix logging for AC-FIX completions"
+        - "All ~250 ACs properly logged"
+      verification: |
+        SELECT ac_id, COUNT(*) FROM audit_log WHERE ac_id LIKE 'AC-FIX-%' GROUP BY ac_id;
+    
+    ac_009_pytest_config:
+      id: "AC-PYTEST-CONFIG-GAP-002"
+      priority: "LOW"
+      effort: 0.5
+      acceptance:
+        - "Add custom marks to pytest.ini"
+        - "Register dashboard, phase15, tdd_red, ac marks"
+        - "No warnings on test collection"
+      verification: |
+        pytest --collect-only -q 2>&1 | grep -i 'unknown' | wc -l
+        # Should output: 0
+    
+    ac_010_test_naming:
+      id: "AC-TEST-NAMING-GAP-003"
+      priority: "LOW"
+      effort: 0.5
+      acceptance:
+        - "Rename TestFramework OR add __test__ = False"
+        - "pytest collection clean"
+        - "No naming conflicts"
+      verification: |
+        pytest --collect-only tests/ 2>&1 | grep -i 'warning\|error' | wc -l
+        # Should output: 0
+    
+    ac_011_confidence_scoring:
+      id: "AC-HALLUCINATION-CONFIDENCE-SCORING-003"
+      priority: "LOW"
+      effort: 2
+      acceptance:
+        - "Review scoring algorithm"
+        - "Compare against calibration data"
+        - "Add edge case tests"
+        - "Document scoring model"
+      tests:
+        - "tests/unit/core/hallucination_prevention/test_confidence_scoring_edge_cases.py"
+      verification: |
+        pytest tests/unit/core/hallucination_prevention/test_confidence_scoring_edge_cases.py -v
+    
+    ac_012_intent_fuzzing:
+      id: "AC-HALLUCINATION-INTENT-FUZZING-004"
+      priority: "LOW"
+      effort: 2
+      acceptance:
+        - "Document loose format grammar"
+        - "Add fuzzing tests"
+        - "Identify and fix parsing gaps"
+        - "Validate numeric limits"
+      tests:
+        - "tests/unit/core/test_intent_parsing_fuzzing.py"
+      verification: |
+        pytest tests/unit/core/test_intent_parsing_fuzzing.py -v
+
+---
+
+# ===========================================================================================
+# TESTING STRATEGY
+# ===========================================================================================
+
+testing:
+  pre_remediation:
+    - "Run full test suite: document baseline (should be 100%)"
+    - "Note any intermittent failures"
+    - "Capture current timings (baseline 6.09s)"
+  
+  during_remediation:
+    - "Each fix includes unit tests (TDD: RED → GREEN)"
+    - "Each fix includes integration tests if applicable"
+    - "Run full suite after each fix: verify no regressions"
+    - "Cumulative testing prevents cascading issues"
+  
+  post_remediation:
+    - "Full test suite: must be 100% passing"
+    - "Load test: 5-minute duration, 10x normal throughput"
+    - "Concurrency test: all findings validated for thread safety"
+    - "Performance test: no regressions vs baseline (6.09s)"
+    - "Staging deployment: 24-hour monitoring"
+
+---
+
+# ===========================================================================================
+# GIT CHECKPOINTS
+# ===========================================================================================
+
+git_checkpoints:
+  before_phase: "checkpoint: pre-PHASE-REMEDIATION-05-BRITTLENESS-HALLUCINATION"
+  ac_001: "checkpoint: AC-FIX-BRITTLENESS-001 complete"
+  ac_002: "checkpoint: AC-FIX-BRITTLENESS-002 complete"
+  ac_003: "checkpoint: AC-HALLUCINATION-ENFORCEMENT-001 complete"
+  ac_004: "checkpoint: AC-FIX-BRITTLENESS-003 complete"
+  ac_005: "checkpoint: AC-FIX-BRITTLENESS-004 complete"
+  ac_006: "checkpoint: AC-HALLUCINATION-ISOLATION-DOC-002 complete"
+  ac_007: "checkpoint: AC-BRITTLENESS-PATH-RESOLUTION-005 complete"
+  ac_008: "checkpoint: AC-TRACKING-STATUS-GAP-001 complete"
+  ac_009: "checkpoint: AC-PYTEST-CONFIG-GAP-002 complete"
+  ac_010: "checkpoint: AC-TEST-NAMING-GAP-003 complete"
+  ac_011: "checkpoint: AC-HALLUCINATION-CONFIDENCE-SCORING-003 complete"
+  ac_012: "checkpoint: AC-HALLUCINATION-INTENT-FUZZING-004 complete"
+  phase_complete: "checkpoint: PHASE-REMEDIATION-05-BRITTLENESS-HALLUCINATION COMPLETE"
+
+---
+
+# ===========================================================================================
+# SUCCESS METRICS
+# ===========================================================================================
+
+success_criteria:
+  all_acs_complete:
+    - "12/12 AC-IDs complete"
+    - "All CRITICAL fixes resolved"
+    - "All HIGH priority fixes resolved"
+    - "All MEDIUM/LOW fixes resolved"
+  
+  test_suite:
+    - "100% test pass rate maintained"
+    - "Zero hanging tests or indefinite waits"
+    - "Execution time <= baseline (6.09s)"
+  
+  production_readiness:
+    - "Load test passed (5 minutes, 10x throughput)"
+    - "Concurrency tests all pass"
+    - "Performance baseline maintained"
+    - "All governance rules enforced"
+  
+  audit_trail:
+    - "36 audit log entries (12 ACs × 3 lifecycle events)"
+    - "Hash chain integrity maintained"
+    - "Zero governance violations"
+  
+  deployment_readiness:
+    - "Staging deployment enabled"
+    - "24-hour monitoring stable"
+    - "Ready for production deployment"
+
+---
+
+# ===========================================================================================
+# PHASE COMPLETION SUMMARY
+# ===========================================================================================
+
+completion_summary: |
+  PHASE-REMEDIATION-05: Brittleness & Hallucination Prevention Remediation (12 AC-IDs)
+  
+  FINDINGS ADDRESSED:
+  ✅ 3 CRITICAL fixes (database, telemetry, boundary enforcement)
+  ✅ 3 HIGH priority fixes (sandbox locking, timeouts, documentation)
+  ✅ 4 MEDIUM priority fixes (path resolution, AC tracking, pytest config, test naming)
+  ✅ 2 LOW priority fixes (confidence scoring, intent fuzzing)
+  
+  TIMELINE: 3 weeks (5 effective days)
+  - Week 1: CRITICAL fixes (staging enabler)
+  - Week 2-3: HIGH priority fixes (robustness)
+  - Week 4+: MEDIUM/LOW fixes (polish)
+  
+  PRODUCTION READINESS IMPACT:
+  • Before: 93.8% AC completion, 100% test pass rate, staging blocked
+  • After: 100% production readiness, all findings resolved, staging enabled
+  
+  SIGN-OFF REQUIRED:
+  • Architecture review
+  • Team consensus  
+  • Staging deployment approval
+  • Production deployment approval
+
