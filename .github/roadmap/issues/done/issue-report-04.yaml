@@ -1,0 +1,952 @@
+---
+issue_id: CORTEX-2026-002
+title: "Governance Tier Enforcement Missing on Per-Turn Execution"
+severity: critical
+phase: PHASE-16
+created_date: 2026-01-16
+status: open
+labels:
+  - governance
+  - architecture
+  - tier-enforcement
+  - critical
+
+# ============================================================================
+# EXECUTIVE SUMMARY
+# ============================================================================
+
+summary: |
+  CRITICAL GOVERNANCE GAP: TIER-0 immutability and governance rules are enforced
+  at configuration load time but NOT validated on every orchestrator turn. 
+  ConversationProtocol has stub implementation, Master Orchestrator doesn't validate, 
+  and database-level enforcement is missing. This violates AR-001-03 (Tier 0 immutable),
+  CORE-017 (Strict Governance), CORE-019 (TDD-Master routing), and CORE-027 (Audit trail).
+
+problem_type: "Architecture Gap - Governance Enforcement"
+affected_components:
+  - "ConversationProtocol (src/core/orchestrator/conversation_protocol.py)"
+  - "MasterOrchestrator (src/orchestrators/master/master_orchestrator.py)"
+  - "GovernanceRegistry (src/core/governance_registry.py)"
+  - "governance.db (SQLite database)"
+  - "TierAccessValidator (implemented but unused)"
+
+# ============================================================================
+# PROBLEM STATEMENT
+# ============================================================================
+
+problem:
+  title: "TIER-0 Governance Not Enforced Per-Turn"
+  
+  description: |
+    CORTEX.prompt.md § Governance Integration specifies that governance tiers
+    (TIER-0 immutable, TIER-1 project, TIER-2 engineering) MUST be enforced on
+    ALL turns when interacting with Master Orchestrator.
+    
+    ACTUAL BEHAVIOR:
+    - Turn 1: ✅ TIER-0 immutability enforced at configuration load
+    - Turn 2: ⚠️ No re-validation (immutability could be violated)
+    - Turn 3: ⚠️ No re-validation (immutability could be violated)
+    - Turn N: ⚠️ No re-validation (immutability could be violated)
+    
+    ROOT CAUSES:
+    1. ConversationProtocol._validate_governance_before_turn() is STUB
+       - Only returns Ok(True) without checking anything
+       - GovernanceRegistry.should_proceed() never implemented
+       - self._governance_registry always None
+    
+    2. Master Orchestrator doesn't validate governance per turn
+       - No call to governance registry before delegation
+       - CORE-019 (per-turn routing) not enforced
+       - CORE-027 (per-turn audit) not validated for governance
+    
+    3. Database-level tier enforcement missing
+       - governance.db audits operations but doesn't enforce tiers
+       - No tier_access_log table tracking what tier accessed what
+       - No immutability constraints at database layer
+       - No per-turn tier boundary validation in queries
+    
+    4. TierAccessValidator implemented but unused
+       - Class exists (28/28 tests PASSING)
+       - Never called from ConversationProtocol.execute_turn()
+       - Tier boundary validation available but "dead code"
+  
+  current_state: |
+    ✅ TIER-0 rules loaded from cortex-brain/tier0/governance/core-rules.yaml (29 rules)
+    ✅ Tier precedence enforced (0 > 1 > 2) via TierResolver
+    ✅ Rule registration prevents TIER-0 override (add_tier1/2_rule checks)
+    ✅ In-memory tier enforcement framework complete
+    
+    ❌ Per-turn governance validation MISSING (ConversationProtocol stub)
+    ❌ Master Orchestrator governance checks MISSING
+    ❌ Database-level tier enforcement MISSING
+    ❌ TIER-0 immutability NOT enforced during execution
+    ❌ TierAccessValidator NOT wired into execution flow
+  
+  expected_state: |
+    ✅ Turn 1: Governance validated before orchestrator execution
+    ✅ Turn 2: Governance re-validated (TIER-0 immutability re-checked)
+    ✅ Turn 3: Governance re-validated (TIER-0 immutability re-checked)
+    ✅ Turn N: Governance re-validated every single turn
+    
+    ✅ Master Orchestrator validates before delegating to domain orchestrators
+    ✅ Per-turn tier access logged to database with enforcement decision
+    ✅ Database constraints prevent TIER-0 modification after Turn 1
+    ✅ TierAccessValidator integrated into ConversationProtocol execution
+    ✅ Audit trail shows governance_violations for each turn
+  
+  impact: |
+    SEVERITY: CRITICAL
+    
+    GOVERNANCE VIOLATIONS:
+    - AR-001-03: "Tier 0 rules immutable" - NOT enforced per turn
+    - CORE-017: "Strict governance enforcement" - Only Turn 1, not subsequent turns
+    - CORE-019: "TDD-Master routing" - Not validated per turn
+    - CORE-027: "Audit trail per turn" - Logs exist but not validated for governance
+    
+    OPERATIONAL RISKS:
+    - Orchestrator could mutate TIER-0 rules after Turn 1 (undetected)
+    - Orchestrator could access undeclared tiers after Turn 1 (undetected)
+    - TIER-0 immutability could be violated mid-conversation (undetected)
+    - No audit trail of "which tier did this orchestrator access on this turn"
+    - Master routing violations go undetected across multi-turn conversations
+    
+    USER IMPACT:
+    - Conversations longer than Turn 1 lose governance protection
+    - Complex workflows (5+ turns) vulnerable to governance violations
+    - No database record of tier enforcement decisions
+    - Regression from CORTEX5.5 where governance worked per-turn
+  
+  scope: |
+    - Master Orchestrator multi-turn conversations (all turns after Turn 1)
+    - All domain orchestrators (Planning, Design, Implementation, Interaction)
+    - All wrapped orchestrators using ConversationProtocol
+    - All master routing decisions requiring CORE-019/CORE-027 compliance
+
+# ============================================================================
+# ROOT CAUSE ANALYSIS
+# ============================================================================
+
+root_causes:
+  - cause_id: "ROOT-001"
+    title: "ConversationProtocol Governance Validation is Stub"
+    description: |
+      File: src/core/orchestrator/conversation_protocol.py
+      Method: _validate_governance_before_turn() [lines 200-214]
+      
+      Current Implementation:
+        def _validate_governance_before_turn(self) -> Result[bool]:
+            try:
+                if self._governance_registry:  # ⚠️ Always None
+                    if not self._governance_registry.should_proceed():  # ⚠️ Never called
+                        return Err("Governance rule violation detected")
+                return Ok(True)  # ⚠️ ALWAYS RETURNS TRUE
+            except Exception as e:
+                return Err(f"Governance check failed: {str(e)}")
+      
+      Issues:
+      - self._governance_registry initialized to None, never set
+      - GovernanceRegistry.should_proceed() method doesn't exist
+      - No actual TIER-0 validation happening
+      - Framework calls this but receives always-True
+      
+      Impact: Per-turn governance validation is NO-OP
+    
+    evidence:
+      - File: src/core/orchestrator/conversation_protocol.py:200-214
+      - File: src/core/governance_registry.py (no should_proceed method)
+      - Pattern: Framework exists but implementation is stub
+      - Tests: test_pre_turn_governance_validation_called() patches registry
+  
+  - cause_id: "ROOT-002"
+    title: "Master Orchestrator Doesn't Call Governance Validation"
+    description: |
+      File: src/orchestrators/master/master_orchestrator.py
+      Method: coordinate_operation()
+      
+      Current Pattern:
+        def coordinate_operation(self, operation, context):
+            # NO governance validation here
+            result = self._delegate_to_domain_orchestrator(operation, context)
+            return result
+      
+      Expected Pattern (from CORTEX.prompt.md):
+        def coordinate_operation(self, operation, context):
+            # NEW: Validate governance before every delegation
+            governance = GovernanceRegistry.instance()
+            if not governance.validate_per_turn():
+                return Err("Governance violation")
+            
+            # THEN delegate
+            result = self._delegate_to_domain_orchestrator(operation, context)
+            return result
+      
+      Issues:
+      - No governance registry initialized in Master
+      - No per-turn validation check before delegation
+      - No governance violations in ContinuationDecision returned
+      
+      Impact: Master doesn't enforce CORE-019/CORE-027 governance requirements
+    
+    evidence:
+      - Pattern: Master delegates without governance check
+      - Spec: CORTEX.prompt.md § Master Orchestrator 4-Stage Pattern
+      - Tests: test_master_orchestrator_validates_governance_per_turn() not implemented
+  
+  - cause_id: "ROOT-003"
+    title: "Database-Level Tier Enforcement Missing"
+    description: |
+      Database: cortex-brain/state/governance.db (SQLite)
+      
+      Current Schema:
+      - audit_log table: Logs operations (AC_START, AC_EXECUTE, AC_COMPLETE)
+      - governance_rules table: Stores TIER-0/1/2 rules
+      - Missing: tier_access_log, immutability constraints
+      
+      Missing Components:
+      1. No tier_access_log table:
+         CREATE TABLE tier_access_log (
+             id INTEGER PRIMARY KEY,
+             turn_number INTEGER,
+             orchestrator_id TEXT,
+             accessed_tier INTEGER,
+             operation TEXT,
+             rule_id TEXT,
+             enforcement_action TEXT,  -- ALLOW, BLOCK, WARN
+             timestamp DATETIME,
+             UNIQUE(turn_number, orchestrator_id, rule_id)
+         );
+      
+      2. No immutability constraint:
+         CREATE TRIGGER tier0_immutability_check
+         BEFORE UPDATE ON governance_rules
+         WHEN NEW.tier = 0
+         BEGIN
+             SELECT RAISE(ABORT, 'TIER-0 cannot be modified')
+             WHERE (SELECT COUNT(*) FROM tier_access_log 
+                    WHERE rule_id=NEW.id) > 0;
+         END;
+      
+      3. No per-turn validation queries
+      
+      Impact: Tier violations not enforced at database layer
+    
+    evidence:
+      - File: cortex-brain/state/governance.db (no tier_access_log table)
+      - Pattern: Audit-only database, no enforcement
+      - Missing: Schema definition for tier enforcement
+  
+  - cause_id: "ROOT-004"
+    title: "TierAccessValidator Implemented But Unused"
+    description: |
+      Implementation Status: ✅ COMPLETE (28/28 tests PASSING)
+      File: src/core/tier_validator.py
+      
+      What EXISTS:
+      - TierAccessValidator class: validate_tier_declaration(), validate_access_attempt()
+      - TierAccessEnforcer class: enforce_on_orchestrator()
+      - TierViolation tracking: with violation types and actions
+      - Comprehensive tests: All 28 tests PASSING
+      
+      What's MISSING:
+      - No call from ConversationProtocol.execute_turn()
+      - Not wired into per-turn governance validation
+      - Never initialized in MasterOrchestrator
+      - Dead code: exists but never executed
+      
+      Expected Integration:
+        def _validate_governance_before_turn(self) -> Result[bool]:
+            validator = TierAccessValidator()
+            enforcer = TierAccessEnforcer(validator)
+            
+            result = enforcer.enforce_on_orchestrator(
+                orchestrator=self.orchestrator,
+                mode="strict"
+            )
+            return result
+      
+      Impact: Tier boundary enforcement available but not used
+    
+    evidence:
+      - File: src/core/tier_validator.py (TierAccessValidator, TierAccessEnforcer)
+      - Tests: tests/unit/test_tier_validator.py (28/28 PASSING)
+      - Usage: grep -r "TierAccessValidator" in execute_turn context = 0 matches
+      - Status: Complete implementation, zero usage
+
+# ============================================================================
+# CRITICAL FINDINGS
+# ============================================================================
+
+critical_finding: |
+  TIER-0 IMMUTABILITY ENFORCEMENT INCOMPLETE
+  
+  Enforcement Status by Lifecycle Stage:
+  
+  ✅ STAGE 1: Configuration Load (Turn 0)
+     - TIER-0 rules loaded from cortex-brain/tier0/governance/core-rules.yaml
+     - GovernanceRegistry._load_tier0_rules() executes
+     - 29 SKULL rules loaded into memory
+     - Immutability flag set: rule.is_immutable = True for tier 0
+  
+  ✅ STAGE 2: Rule Registration (Turn 0)
+     - add_tier1_rule() checks: "Cannot override Tier 0 rule {rule_id}"
+     - add_tier2_rule() checks: "Cannot override Tier 0 rule {rule_id}"
+     - New rule registration prevented if TIER-0 conflict
+  
+  ⚠️ STAGE 3: Master Initialization (Turn 1)
+     - Master Orchestrator initialized
+     - Domain orchestrators registered
+     - NO governance validation at this point
+  
+  ❌ STAGE 4: Per-Turn Execution (Turn 1+)
+     - ConversationProtocol.execute_turn() called
+     - _validate_governance_before_turn() returns Ok(True) WITHOUT CHECKING
+     - NO re-validation of TIER-0 immutability
+     - NO check that orchestrator still only accessing declared tiers
+     - NO database validation
+  
+  ⚠️ STAGE 5: Post-Turn Audit (Turn 1+)
+     - Audit trail logged (AC_START/EXECUTE/COMPLETE)
+     - Governance violations NOT validated
+     - TIER-0 could have been mutated, audit shows nothing
+  
+  Result: TIER-0 rules vulnerable to mutation after Turn 1
+  
+  Comparison to CORTEX5.5:
+  - CORTEX5.5: Governance validated per-turn ✅
+  - CORTEX6: Governance validated only at load time ❌
+  - Regression: 100% (per-turn enforcement removed)
+
+# ============================================================================
+# AFFECTED COMPONENTS
+# ============================================================================
+
+affected_components:
+  - component: "ConversationProtocol"
+    file: "src/core/orchestrator/conversation_protocol.py"
+    methods:
+      - "_validate_governance_before_turn() [STUB]"
+      - "execute_turn() [calls stub]"
+    impact: "Governance validation disabled for all turns"
+    status: "BROKEN"
+  
+  - component: "MasterOrchestrator"
+    file: "src/orchestrators/master/master_orchestrator.py"
+    methods:
+      - "coordinate_operation() [no governance check]"
+    impact: "No per-turn governance enforcement at orchestration boundary"
+    status: "MISSING"
+  
+  - component: "GovernanceRegistry"
+    file: "src/core/governance_registry.py"
+    methods:
+      - "should_proceed() [MISSING - never implemented]"
+    impact: "ConversationProtocol calls non-existent method"
+    status: "INCOMPLETE"
+  
+  - component: "governance.db"
+    file: "cortex-brain/state/governance.db"
+    tables:
+      - "tier_access_log [MISSING]"
+    constraints:
+      - "tier0_immutability_check trigger [MISSING]"
+    impact: "No database-level tier enforcement"
+    status: "MISSING"
+  
+  - component: "TierAccessValidator"
+    file: "src/core/tier_validator.py"
+    classes:
+      - "TierAccessValidator [IMPLEMENTED but UNUSED]"
+      - "TierAccessEnforcer [IMPLEMENTED but UNUSED]"
+    tests: "28/28 PASSING"
+    impact: "Tier validation available but not wired into execution"
+    status: "DEAD_CODE"
+
+# ============================================================================
+# COMPLIANCE VIOLATIONS
+# ============================================================================
+
+compliance_violations:
+  - rule_id: "AR-001-03"
+    rule_name: "Tier 0 rules immutable (modification attempts rejected)"
+    spec: "CORTEX Architecture Decisions: 3-Tier Governance Model"
+    status: "VIOLATED"
+    violation_detail: |
+      ✅ Modification attempts rejected at rule registration
+      ❌ Modification attempts NOT rejected during per-turn execution
+      ❌ No re-check of immutability on Turn 2+
+      
+      Current: Only enforced once at configuration load
+      Required: Enforced on EVERY turn
+  
+  - rule_id: "CORE-017"
+    rule_name: "Strict Governance Enforcement"
+    spec: "cortex-brain/tier0/governance/core-rules.yaml"
+    status: "VIOLATED"
+    violation_detail: |
+      ❌ Governance validation is STUB (returns Ok(True) without checking)
+      ❌ No per-turn validation on Turn 2+
+      ❌ Master Orchestrator doesn't validate before delegation
+      
+      Current: Turn 1 only
+      Required: Every turn, every orchestrator
+  
+  - rule_id: "CORE-019"
+    rule_name: "TDD-Master Routing (LENS on every turn)"
+    spec: "cortex-brain/tier0/governance/core-rules.yaml"
+    status: "VIOLATED"
+    violation_detail: |
+      ❌ Master doesn't validate CORE-019 compliance per-turn
+      ❌ Routing decisions not validated against TIER-0 rules
+      
+      Current: No per-turn routing validation
+      Required: Validate routing against CORE-019 TIER-0 rule every turn
+  
+  - rule_id: "CORE-027"
+    rule_name: "Audit Trail Per Turn (AC_START/EXECUTE/COMPLETE)"
+    spec: "cortex-brain/tier0/governance/core-rules.yaml"
+    status: "PARTIALLY_VIOLATED"
+    violation_detail: |
+      ✅ Audit entries logged (AC_START/EXECUTE/COMPLETE)
+      ❌ Audit entries don't validate governance during logging
+      ❌ No governance_violations field in audit log
+      
+      Current: Operations logged but not validated
+      Required: Audit validates governance on each operation
+
+# ============================================================================
+# ACCEPTANCE CRITERIA - INVESTIGATION COMPLETE
+# ============================================================================
+
+acceptance_criteria:
+  - ac_id: "AC-GOV-2026-02-01"
+    description: "Per-turn governance validation framework documented"
+    status: "COMPLETED"
+    evidence: "GOVERNANCE-TIER-ENFORCEMENT-INVESTIGATION.md created with 8 sections"
+  
+  - ac_id: "AC-GOV-2026-02-02"
+    description: "Root causes identified (4 root causes documented)"
+    status: "COMPLETED"
+    evidence: |
+      1. ConversationProtocol stub implementation
+      2. Master Orchestrator missing checks
+      3. Database-level enforcement missing
+      4. TierAccessValidator not wired
+  
+  - ac_id: "AC-GOV-2026-02-03"
+    description: "Compliance violations documented (4 rules violated)"
+    status: "COMPLETED"
+    evidence: "AR-001-03, CORE-017, CORE-019, CORE-027 violations detailed"
+  
+  - ac_id: "AC-GOV-2026-02-04"
+    description: "Impact assessment completed (CRITICAL severity)"
+    status: "COMPLETED"
+    evidence: "Risks documented: rule mutation, tier boundary violations, audit gaps"
+  
+  - ac_id: "AC-GOV-2026-02-05"
+    description: "Required fixes documented (4 P0 fixes identified)"
+    status: "COMPLETED"
+    evidence: |
+      FIX-GOVERNANCE-001: Per-turn validation (4-6 hrs)
+      FIX-GOVERNANCE-002: Master validation (3-4 hrs)
+      FIX-GOVERNANCE-003: Database schema (5-6 hrs)
+      FIX-GOVERNANCE-004: Validator wiring (2-3 hrs)
+
+# ============================================================================
+# PROPOSED SOLUTIONS
+# ============================================================================
+
+proposed_solutions:
+  solution_1:
+    id: "SOL-GOV-001"
+    title: "Implement Per-Turn Governance Validation in ConversationProtocol"
+    priority: "P0"
+    effort_hours: "4-6"
+    files_to_modify:
+      - "src/core/orchestrator/conversation_protocol.py"
+    implementation: |
+      Replace stub _validate_governance_before_turn() with:
+      
+      def _validate_governance_before_turn(self) -> Result[bool]:
+          # Initialize registry if needed
+          if not self._governance_registry:
+              self._governance_registry = GovernanceRegistry.instance()
+              self._governance_registry.initialize()
+          
+          # Check TIER-0 immutability
+          tier0_rules = self._governance_registry.get_all_tier0_rules()
+          for rule in tier0_rules:
+              # Query database: has this rule been modified?
+              if self._has_tier0_been_modified(rule.rule_id):
+                  return Err(f"TIER-0 rule {rule.rule_id} immutability violated")
+          
+          # Check orchestrator tier access (wire TierAccessValidator)
+          validator = TierAccessValidator()
+          enforcer = TierAccessEnforcer(validator)
+          
+          result = enforcer.enforce_on_orchestrator(
+              orchestrator=self.orchestrator,
+              mode="strict"  # Raise exception on violation
+          )
+          
+          return result
+    acceptance_tests:
+      - "test_governance_validated_per_turn_returns_true_on_turn_1"
+      - "test_governance_validated_per_turn_checks_tier0_turn_2"
+      - "test_governance_validation_halts_on_tier_violation"
+      - "test_tier_access_validator_called_per_turn"
+    dependencies: "GovernanceRegistry should_proceed() implementation, TierAccessValidator"
+  
+  solution_2:
+    id: "SOL-GOV-002"
+    title: "Add Master Orchestrator Per-Turn Governance Checks"
+    priority: "P0"
+    effort_hours: "3-4"
+    files_to_modify:
+      - "src/orchestrators/master/master_orchestrator.py"
+    implementation: |
+      Update coordinate_operation() to validate governance:
+      
+      def coordinate_operation(self, operation, context):
+          # NEW: Per-turn governance validation
+          governance = GovernanceRegistry.instance()
+          if not governance.is_initialized():
+              governance.initialize()
+          
+          # Validate CORE-019 compliance
+          valid_ops = self._get_core019_valid_operations()
+          if operation not in valid_ops:
+              return Err(f"CORE-019 violation: {operation} not in valid set")
+          
+          # Log AC_START with governance context
+          audit = EnhancedAuditLogger()
+          audit.log_entry(
+              operation="AC_START",
+              ac_id=f"MASTER-ORCH-TURN-{self.turn_number}",
+              governance_context=governance.get_all_rules()
+          )
+          
+          # Delegate to domain orchestrator
+          result = self._delegate_to_domain_orchestrator(operation, context)
+          
+          # Log AC_COMPLETE with governance validation
+          audit.log_entry(
+              operation="AC_COMPLETE",
+              ac_id=f"MASTER-ORCH-TURN-{self.turn_number}",
+              governance_validated=True
+          )
+          
+          return result
+    acceptance_tests:
+      - "test_master_validates_core019_per_turn"
+      - "test_master_halts_on_governance_violation"
+      - "test_master_logs_governance_context_ac_start"
+      - "test_master_validates_governance_ac_complete"
+    dependencies: "SOL-GOV-001 (ConversationProtocol validation must work first)"
+  
+  solution_3:
+    id: "SOL-GOV-003"
+    title: "Add Database-Level Tier Enforcement Schema"
+    priority: "P0"
+    effort_hours: "5-6"
+    files_to_create:
+      - "src/core/database/tier_enforcement_schema.sql"
+      - "src/core/database/tier_enforcement_queries.py"
+    implementation: |
+      Create tier_enforcement_schema.sql:
+      
+      -- Table: Track per-turn tier access
+      CREATE TABLE tier_access_log (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          turn_number INTEGER NOT NULL,
+          orchestrator_id TEXT NOT NULL,
+          accessed_tier INTEGER NOT NULL,
+          operation TEXT NOT NULL,
+          rule_id TEXT,
+          enforcement_action TEXT,  -- ALLOW, BLOCK, WARN
+          timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+          UNIQUE(turn_number, orchestrator_id, rule_id)
+      );
+      
+      -- Constraint: TIER-0 immutability
+      CREATE TRIGGER tier0_immutability_check
+      BEFORE UPDATE ON governance_rules
+      WHEN NEW.tier = 0
+      BEGIN
+          SELECT RAISE(ABORT, 'TIER-0 rule cannot be modified after Turn 1')
+          WHERE (SELECT COUNT(*) FROM tier_access_log WHERE rule_id=NEW.id) > 0;
+      END;
+      
+      -- Index for performance
+      CREATE INDEX idx_tier_access_turn ON tier_access_log(turn_number);
+      CREATE INDEX idx_tier_access_orchestrator ON tier_access_log(orchestrator_id);
+    acceptance_tests:
+      - "test_tier_access_log_created_per_turn"
+      - "test_tier0_immutability_enforced_database_level"
+      - "test_tier_access_constraint_prevents_override"
+      - "test_tier_access_log_indexes_exist"
+    dependencies: "ConversationProtocol, MasterOrchestrator must log tier access"
+  
+  solution_4:
+    id: "SOL-GOV-004"
+    title: "Wire TierAccessValidator Into Execution Flow"
+    priority: "P0"
+    effort_hours: "2-3"
+    files_to_modify:
+      - "src/core/orchestrator/conversation_protocol.py"
+    implementation: |
+      Update _validate_governance_before_turn() to use TierAccessValidator:
+      
+      # Add import
+      from src.core.tier_validator import TierAccessValidator, TierAccessEnforcer
+      
+      # Update validation
+      def _validate_governance_before_turn(self) -> Result[bool]:
+          # ... existing tier-0 checks ...
+          
+          # NEW: Wire TierAccessValidator
+          validator = TierAccessValidator()
+          enforcer = TierAccessEnforcer(validator)
+          
+          # Validate orchestrator tier access
+          result = enforcer.enforce_on_orchestrator(
+              orchestrator=self.orchestrator,
+              mode="strict"  # Raise exception on tier violation
+          )
+          
+          if not result.is_ok():
+              # Record violation in tier_access_log
+              self._log_tier_violation(result.unwrap_err())
+              return result
+          
+          return Ok(True)
+    acceptance_tests:
+      - "test_tier_access_validator_called_per_turn"
+      - "test_tier_validator_blocks_undeclared_access"
+      - "test_tier_violation_logged_database"
+    dependencies: "SOL-GOV-001, SOL-GOV-003"
+
+# ============================================================================
+# IMPLEMENTATION PLAN & TIMELINE
+# ============================================================================
+
+implementation_plan:
+  phase_1:
+    name: "Per-Turn Governance Validation Framework"
+    duration_hours: "4-6"
+    tasks:
+      - task: "Implement GovernanceRegistry.should_proceed() method"
+        effort: "1-2 hours"
+        file: "src/core/governance_registry.py"
+      
+      - task: "Implement ConversationProtocol._validate_governance_before_turn()"
+        effort: "2-3 hours"
+        file: "src/core/orchestrator/conversation_protocol.py"
+      
+      - task: "Add unit tests for governance validation"
+        effort: "1 hour"
+        file: "tests/unit/test_governance_per_turn.py"
+    
+    deliverables:
+      - "should_proceed() method implemented"
+      - "_validate_governance_before_turn() validates TIER-0"
+      - "6+ unit tests PASSING"
+    
+    acceptance_criteria:
+      - "ConversationProtocol calls actual governance validation"
+      - "TIER-0 immutability re-checked per turn"
+      - "Governance violations halt execution"
+  
+  phase_2:
+    name: "Master Orchestrator Governance Integration"
+    duration_hours: "3-4"
+    tasks:
+      - task: "Update MasterOrchestrator.coordinate_operation()"
+        effort: "2 hours"
+        file: "src/orchestrators/master/master_orchestrator.py"
+      
+      - task: "Add governance context to audit logging"
+        effort: "1 hour"
+        file: "src/core/audit_logger.py"
+      
+      - task: "Add integration tests"
+        effort: "1 hour"
+        file: "tests/integration/test_master_governance_per_turn.py"
+    
+    deliverables:
+      - "Master validates governance before delegation"
+      - "Audit log includes governance context"
+      - "4+ integration tests PASSING"
+    
+    acceptance_criteria:
+      - "Master Orchestrator calls governance validation per turn"
+      - "CORE-019 compliance validated per turn"
+      - "Governance violations prevent delegation"
+  
+  phase_3:
+    name: "Database-Level Tier Enforcement"
+    duration_hours: "5-6"
+    tasks:
+      - task: "Create tier_enforcement_schema.sql"
+        effort: "2 hours"
+        file: "src/core/database/tier_enforcement_schema.sql"
+      
+      - task: "Create tier_enforcement_queries.py"
+        effort: "2 hours"
+        file: "src/core/database/tier_enforcement_queries.py"
+      
+      - task: "Migrate governance.db with new schema"
+        effort: "1 hour"
+        file: "scripts/migrate_governance_db.py"
+      
+      - task: "Add database constraint tests"
+        effort: "1 hour"
+        file: "tests/unit/test_tier_enforcement_database.py"
+    
+    deliverables:
+      - "tier_access_log table created"
+      - "TIER-0 immutability constraint added"
+      - "Indexes created for performance"
+      - "5+ database tests PASSING"
+    
+    acceptance_criteria:
+      - "tier_access_log table exists with correct schema"
+      - "TIER-0 immutability enforced at database level"
+      - "Per-turn tier access logged"
+  
+  phase_4:
+    name: "TierAccessValidator Integration"
+    duration_hours: "2-3"
+    tasks:
+      - task: "Update _validate_governance_before_turn() to use validator"
+        effort: "1 hour"
+        file: "src/core/orchestrator/conversation_protocol.py"
+      
+      - task: "Add tier violation logging"
+        effort: "1 hour"
+        file: "src/core/orchestrator/conversation_protocol.py"
+      
+      - task: "Add integration tests with validator"
+        effort: "1 hour"
+        file: "tests/integration/test_tier_validator_integration.py"
+    
+    deliverables:
+      - "TierAccessValidator called per turn"
+      - "Tier violations logged to database"
+      - "3+ integration tests PASSING"
+    
+    acceptance_criteria:
+      - "TierAccessValidator stops dead code status"
+      - "Undeclared tier access blocked"
+      - "Tier violations visible in audit trail"
+
+total_effort: "14-19 hours"
+priority_sequence: "SOL-GOV-001 → SOL-GOV-002 → SOL-GOV-003 → SOL-GOV-004"
+dependencies: |
+  - Phase 1 must complete before Phase 2 (governance validation framework must exist)
+  - Phase 1-2 must complete before Phase 3 (must be logging tier access before storing it)
+  - Phases 1-3 must complete before Phase 4 (validator needs populated tier_access_log)
+
+# ============================================================================
+# VERIFICATION STRATEGY
+# ============================================================================
+
+verification:
+  test_1:
+    name: "Per-Turn Governance Validation"
+    test_file: "tests/unit/test_governance_per_turn.py"
+    test_cases:
+      - |
+        def test_governance_validated_every_turn():
+            protocol = ConversationProtocol(mock_orchestrator)
+            
+            # Turn 1: Validate called
+            decision1 = protocol.execute_turn("input1", {})
+            assert protocol._governance_validated_turn[1] == True
+            
+            # Turn 2: Validate called AGAIN
+            decision2 = protocol.execute_turn("input2", {})
+            assert protocol._governance_validated_turn[2] == True
+            
+            # Turn 3: Validate called AGAIN
+            decision3 = protocol.execute_turn("input3", {})
+            assert protocol._governance_validated_turn[3] == True
+      
+      - |
+        def test_tier0_immutability_enforced_per_turn():
+            protocol = ConversationProtocol(mock_orchestrator)
+            
+            # Get baseline
+            tier0_before = protocol._governance_registry.get_all_tier0_rules()
+            
+            # Execute Turn 1
+            protocol.execute_turn("input", {})
+            
+            # Attempt mutation on Turn 2
+            mock_orchestrator.attempt_mutation("CORE-001", "modified")
+            decision = protocol.execute_turn("mutate", {})
+            
+            # Should halt with GOVERNANCE_HALT
+            assert decision.reason == ContinuationReason.GOVERNANCE_HALT
+            
+            # TIER-0 unchanged
+            tier0_after = protocol._governance_registry.get_all_tier0_rules()
+            assert tier0_before == tier0_after
+  
+  test_2:
+    name: "Master Orchestrator Per-Turn Validation"
+    test_file: "tests/integration/test_master_governance_per_turn.py"
+    test_cases:
+      - |
+        def test_master_orchestrator_validates_governance_per_turn():
+            master = MasterOrchestrator()
+            
+            # Turn 1: Initialize and validate
+            decision1 = master.coordinate_operation("plan", context1)
+            assert decision1.governance_validated == True
+            assert decision1.audit_entry_id.startswith("MO-AC_START-1")
+            
+            # Turn 2: Validate AGAIN
+            decision2 = master.coordinate_operation("design", decision1.next_parameters)
+            assert decision2.governance_validated == True
+            assert decision2.audit_entry_id.startswith("MO-AC_START-2")
+  
+  test_3:
+    name: "Database Tier Enforcement"
+    test_file: "tests/unit/test_tier_enforcement_database.py"
+    test_cases:
+      - |
+        def test_tier0_immutability_enforced_database():
+            db = governance_db
+            
+            # Verify tier_access_log exists
+            tables = db.query("SELECT name FROM sqlite_master WHERE type='table'")
+            assert any(t['name'] == 'tier_access_log' for t in tables)
+            
+            # Log a tier access (Turn 1)
+            db.execute("""
+                INSERT INTO tier_access_log (turn_number, orchestrator_id, 
+                    accessed_tier, operation, rule_id, enforcement_action)
+                VALUES (1, 'TestOrch', 0, 'read', 'CORE-001', 'ALLOW')
+            """)
+            
+            # Attempt to modify TIER-0 rule (should fail)
+            try:
+                db.execute("""
+                    UPDATE governance_rules 
+                    SET description='MODIFIED' 
+                    WHERE tier=0 LIMIT 1
+                """)
+                pytest.fail("Should have raised immutability constraint")
+            except sqlite3.IntegrityError as e:
+                assert "TIER-0 rule cannot be modified" in str(e)
+  
+  test_4:
+    name: "TierAccessValidator Integration"
+    test_file: "tests/integration/test_tier_validator_integration.py"
+    test_cases:
+      - |
+        def test_tier_validator_blocks_undeclared_access():
+            protocol = ConversationProtocol(mock_orchestrator)
+            
+            # Orchestrator declares TIER-0, TIER-1
+            mock_orchestrator.declare_tier_access([0, 1])
+            
+            # Turn 1: Try to access TIER-2 (undeclared)
+            mock_orchestrator.attempt_access(tier=2)
+            
+            decision = protocol.execute_turn("access-tier2", {})
+            
+            # Should halt
+            assert decision.reason == ContinuationReason.GOVERNANCE_HALT
+            assert "TIER-2" in str(decision.governance_violations)
+
+  verification_gate: |
+    ALL tests must PASS before considering fixes complete:
+    - test_per_turn_governance_validation.py: 6+ tests
+    - test_master_governance_per_turn.py: 4+ tests
+    - test_tier_enforcement_database.py: 5+ tests
+    - test_tier_validator_integration.py: 3+ tests
+    
+    Total: 18+ new tests, all PASSING
+
+# ============================================================================
+# REGRESSION PREVENTION
+# ============================================================================
+
+regression_prevention:
+  - measure: "Add per-turn governance validation tests to PHASE-16 AC"
+    status: "TODO"
+  
+  - measure: "Add Master Orchestrator governance checks to PHASE-16 AC"
+    status: "TODO"
+  
+  - measure: "Database schema migrations to governance.db must include tier_access_log"
+    status: "TODO"
+  
+  - measure: "TierAccessValidator tests must run in every build"
+    status: "TODO"
+  
+  - measure: "Multi-turn conversation tests must validate governance on EVERY turn"
+    status: "TODO"
+
+# ============================================================================
+# REFERENCES
+# ============================================================================
+
+references:
+  - title: "GOVERNANCE-TIER-ENFORCEMENT-INVESTIGATION.md"
+    path: ".github/roadmap/reports/"
+    type: "Investigation Report"
+    relevance: "Complete findings from governance tier investigation"
+  
+  - title: "CORTEX.prompt.md"
+    path: ".github/prompts/"
+    lines: "Governance Integration § (lines TBD)"
+    relevance: "Specifies per-turn governance validation requirement"
+  
+  - title: "phase-07-intent-router.yaml"
+    path: ".github/roadmap/phases/"
+    relevance: "Governance framework architecture"
+  
+  - title: "core-rules.yaml"
+    path: "cortex-brain/tier0/governance/"
+    relevance: "TIER-0 SKULL rules definition"
+  
+  - title: "conversation_protocol.py"
+    path: "src/core/orchestrator/"
+    relevance: "Per-turn execution framework (stub governance validation)"
+  
+  - title: "governance_registry.py"
+    path: "src/core/"
+    relevance: "TIER-0/1/2 rule management and precedence"
+  
+  - title: "test_governance_registry.py"
+    path: "tests/unit/"
+    relevance: "Tier immutability tests (28/28 PASSING)"
+  
+  - title: "tier_validator.py"
+    path: "src/core/"
+    relevance: "TierAccessValidator implementation (28/28 tests PASSING, 0 usage)"
+
+# ============================================================================
+# AUDIT TRAIL
+# ============================================================================
+
+audit_trail:
+  - timestamp: "2026-01-16T18:30:00Z"
+    action: "Issue investigation initiated"
+    investigator: "GitHub Copilot (CORTEX Agent)"
+    findings: "Per-turn governance validation missing"
+    status: "Investigation Complete"
+  
+  - timestamp: "2026-01-16T19:00:00Z"
+    action: "Created GOVERNANCE-TIER-ENFORCEMENT-INVESTIGATION.md"
+    investigator: "GitHub Copilot"
+    findings: "4 root causes identified, 4 P0 fixes documented"
+    evidence: ".github/roadmap/reports/GOVERNANCE-TIER-ENFORCEMENT-INVESTIGATION.md"
+  
+  - timestamp: "2026-01-16T19:15:00Z"
+    action: "Created issue-report-04.yaml (this report)"
+    investigator: "GitHub Copilot"
+    findings: "CRITICAL severity, AR-001-03/CORE-017/019/027 violations"
+    status: "Ready for review"

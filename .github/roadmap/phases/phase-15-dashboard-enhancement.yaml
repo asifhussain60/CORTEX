@@ -1,0 +1,873 @@
+# =============================================================================
+# PHASE-15-DASHBOARD-ENHANCEMENT: CORTEX Neural Observatory Dashboard v2
+# =============================================================================
+# Purpose: Production-grade dashboard with enhanced UX, branding, and analytics
+# Status: ENHANCEMENT (replacing initial Neural Observatory phase)
+# Requires: PHASE-06-ECOSYSTEM (existing brain structure only)
+# Estimated Duration: 4 days (32 hours)
+# PARALLEL TRACK: Can be developed on separate machine
+#
+# ENHANCEMENT GOALS:
+# - Add CORTEX branding (logo + visual identity)
+# - Enhance UX with improved navigation and layouts
+# - Add export/reporting capabilities
+# - Implement performance monitoring dashboard
+# - Create admin control panel for governance
+# - Add notification system for critical events
+#
+# FULLY INDEPENDENT SPA:
+# - Pure visualization layer over existing SSOT data
+# - Reads governance.db, cortex-master.yaml, registry/ (all exist TODAY)
+# - Zero dependency on PHASE-07 or CORTEX LENS
+# - 100% buildable with current CORTEX6 state
+# =============================================================================
+
+phase:
+  id: "PHASE-15-DASHBOARD-ENHANCEMENT"
+  title: "CORTEX Neural Observatory Dashboard Enhancement"
+  description: |
+    Production-grade dashboard for CORTEX brain visualization with professional
+    branding, enhanced user experience, and administrative capabilities.
+    
+    FOUR-PILLAR ARCHITECTURE:
+    1. Brain Observatory - Tier metrics, neural pulse, health monitoring
+    2. Temporal Cortex - Audit intelligence, hash chain verification, traceability
+    3. Orchestrator Constellation - Live orchestrator status, dependency graph
+    4. Administrative Control Panel - Governance rules, notifications, exports
+    
+    ENHANCEMENT FEATURES:
+    - CORTEX Logo (200x200px) in navigation header
+    - Brand-consistent color palette and glassmorphism
+    - Real-time notifications for critical events
+    - Export capabilities (PDF, CSV, JSON)
+    - Performance analytics dashboard
+    - Governance rule management interface
+    - Custom report builder
+    - Dark mode toggle
+    - Responsive mobile-first design
+    - Accessibility (WCAG 2.1 AA)
+    
+    DESIGN PRINCIPLE:
+    Dashboard is a sophisticated yet lightweight SPA that visualizes EXISTING
+    CORTEX data. All data sources already exist. Pure CSS + JavaScript (no build).
+  
+  order: 15
+  status: "ACTIVE"
+  locked: false
+  
+  # DEPENDENCY: Only needs completed brain structure from PHASE-06
+  requires: "PHASE-06-ECOSYSTEM"
+  required_for: null  # End-user facing, not blocking other phases
+  
+  # DATA SOURCES (All exist TODAY - no new infrastructure needed)
+  data_sources:
+    - source: "governance.db"
+      location: "cortex-brain/state/governance.db"
+      provides: "Audit logs, hash chain, operation history, metrics"
+      exists: true
+      
+    - source: "cortex-master.yaml"
+      location: ".github/roadmap/cortex-master.yaml"
+      provides: "Phase tracker, AC counts, progress metrics, governance rules"
+      exists: true
+      
+    - source: "rollback-history.json"
+      location: "cortex-brain/audit-logs/rollback-history.json"
+      provides: "Rollback events timeline"
+      exists: true
+      
+    - source: "Orchestrator Registry"
+      location: "cortex-brain/registry/"
+      provides: "Registered orchestrators, dependencies, status"
+      exists: true
+      
+    - source: "Phase YAMLs"
+      location: ".github/roadmap/phases/*.yaml"
+      provides: "Individual phase details, AC descriptions, timelines"
+      exists: true
+      
+    - source: "Governance Rules"
+      location: "cortex-brain/tier0/governance/"
+      provides: "CORE rules, phase enforcement, validation rules"
+      exists: true
+  
+  # PARALLEL EXECUTION
+  blocking: false
+  parallel_capable: true
+  can_run_parallel_with:
+    - "PHASE-07-INTENT-ROUTER"
+    - "PHASE-08-CORE-ORCHESTRATORS"
+    - "PHASE-09-GOVERNANCE-TOOLS"
+    - "PHASE-10-ADAPTIVE-EXECUTION"
+    - "PHASE-11-HALLUCINATION-PREVENTION"
+    - "PHASE-12-KNOWLEDGE-ECOSYSTEM"
+    - "PHASE-13-OBSERVABILITY-MATURITY"
+  
+  # MULTI-MACHINE SUPPORT
+  multi_machine:
+    enabled: true
+    sync_strategy: "git-pull-init-db"
+    read_only_sources:
+      - "cortex-brain/state/governance.db"
+      - ".github/roadmap/cortex-master.yaml"
+      - "cortex-brain/audit-logs/rollback-history.json"
+      - "cortex-brain/registry/"
+      - ".github/roadmap/phases/"
+      - "cortex-brain/tier0/governance/"
+    write_targets:
+      - "src/dashboard/"
+      - "tests/unit/dashboard/"
+      - "tests/integration/dashboard/"
+      - ".github/branding/"
+    conflict_risk: "LOW"  # Read-only from brain, write to isolated dashboard/branding dirs
+  
+  estimated_hours: 32
+  estimated_days: 4
+  
+  ac_ids: 16
+  completed_ac_ids: 0
+  progress_percentage: 0.0
+
+# =============================================================================
+# TECH STACK - Lightweight Yet Sophisticated
+# =============================================================================
+
+tech_stack:
+  frontend:
+    html: "HTML5 (semantic, accessibility-first)"
+    css: "Tailwind CSS v3.4 (CDN) + custom glassmorphism utilities"
+    javascript: "Vanilla JavaScript ES6+ (no frameworks)"
+    libraries:
+      - "D3.js v7 (CDN) - Data visualization, dependency graphs"
+      - "Chart.js v4 (CDN) - Metrics charts, time series"
+      - "Heroicons (CDN) - Professional iconography"
+      - "Luxon (CDN) - Date/time handling"
+    
+    design_system: "Glassmorphism v4.1.0 with CORTEX branding"
+    color_palette:
+      primary: "#0ea5e9"           # cyan-500 (CORTEX brand)
+      secondary: "#10b981"         # emerald-500 (health/success)
+      accent: "#a78bfa"            # violet-500 (intelligence/AI)
+      warning: "#f59e0b"           # amber-500 (alerts)
+      danger: "#ef4444"            # red-500 (critical)
+      background: "rgba(15, 23, 42, 0.75)" # slate-950 with transparency
+      border: "rgba(255, 255, 255, 0.08)"
+      glassmorphism_blur: "blur(16px)"
+    
+    animations:
+      neural_pulse: "2s infinite pulse-neural"
+      data_flow: "8s linear scroll-data"
+      indicator_glow: "2.5s infinite glow-state"
+  
+  backend:
+    framework: "FastAPI 0.104+"
+    language: "Python 3.11+"
+    database: "SQLite (read existing governance.db)"
+    real_time: "WebSocket for audit streaming"
+    caching: "Redis (optional for large deployments)"
+    monitoring: "OpenTelemetry metrics export"
+  
+  build_process:
+    type: "NONE (pure static files)"
+    deployment: "Copy src/dashboard/frontend/ to web server"
+    ci_cd: "GitHub Actions for linting/validation only"
+  
+  dependencies:
+    npm_packages: 0
+    system_requirements:
+      - "Python 3.11+"
+      - "Modern browser (Chrome/Firefox/Safari/Edge)"
+      - "SQLite 3.36+"
+  
+  rationale: |
+    Intentionally simple tech stack:
+    ✓ NO TypeScript (complexity overhead)
+    ✓ NO build process or compilation
+    ✓ NO npm/node_modules or build tools
+    ✓ NO framework abstraction layers
+    ✓ Pure HTML5 + Tailwind CSS (CDN-only)
+    ✓ Vanilla JavaScript for interactivity
+    ✓ All libraries via CDN (D3, Chart.js, etc.)
+    ✓ Zero npm footprint
+    ✓ Faster development and iteration
+    ✓ Easier debugging (pure JavaScript)
+    ✓ Static files deploy anywhere
+    ✓ Sophisticated UI (glassmorphism) with minimal complexity
+    ✓ Professional appearance without bloat
+
+# =============================================================================
+# BRANDING & VISUAL IDENTITY
+# =============================================================================
+
+branding:
+  logo:
+    location: ".github/branding/cortex-logo.png"
+    dimensions:
+      primary: "200x200px"        # Header logo
+      secondary: "128x128px"      # Sidebar and cards
+      icon: "32x32px"             # Favicon and shortcuts
+    placement:
+      header: "Left of 'CORTEX Neural Observatory' text"
+      sidebar: "Top of sidebar (128x128px)"
+      favicon: "Browser tab (32x32px)"
+      about_page: "Center (256x256px)"
+    color_variants:
+      light_bg: "Full color logo on light backgrounds"
+      dark_bg: "White/light variant for dark backgrounds"
+      grayscale: "For print/export scenarios"
+  
+  color_system:
+    brand_color: "#0ea5e9"  # Cyan-500 (primary brand)
+    gradient_overlay: "linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(16, 185, 129, 0.1))"
+    glassmorphism:
+      primary: "rgba(15, 23, 42, 0.75)"
+      secondary: "rgba(30, 41, 59, 0.8)"
+      tertiary: "rgba(51, 65, 85, 0.6)"
+  
+  typography:
+    primary_font: "system-ui, -apple-system, sans-serif"
+    monospace_font: "ui-monospace, 'Courier New', monospace"
+    sizes:
+      h1: "2.5rem (40px)"
+      h2: "2rem (32px)"
+      h3: "1.5rem (24px)"
+      body: "1rem (16px)"
+      small: "0.875rem (14px)"
+  
+  spacing_system:
+    base_unit: "4px"
+    scale: [4, 8, 12, 16, 24, 32, 48, 64, 96, 128]
+  
+  imagery:
+    icons: "Heroicons 2.0 (24px and 32px sizes)"
+    charts:
+      theme: "Dark mode compatible (light grid, light axes)"
+      legend: "Positioned right or bottom"
+      tooltips: "Dark background with shadow"
+    
+    screenshots_and_demos:
+c      resolution: "1920x1080 (full HD)"
+      format: "PNG for web, PDF for docs"
+      branding: "CORTEX watermark in bottom-right corner"
+
+# =============================================================================
+# ACCEPTANCE CRITERIA (16 AC-IDs)
+# =============================================================================
+
+acceptance_criteria:
+  
+  # =========================================================================
+  # DO-001: Branding & Visual Identity (4 ACs)
+  # =========================================================================
+  
+  - ac_id: "DO-001-01"
+    title: "Logo Integration in Header"
+    description: |
+      CORTEX logo (200x200px) positioned in header left side:
+      - Clickable logo → returns to dashboard home
+      - Logo scales responsively on mobile
+      - Tooltip shows "CORTEX v2.0" on hover
+      - Dark/light mode variants handled automatically
+    acceptance_tests:
+      - "Logo displays at 200x200px on desktop"
+      - "Logo scales to 128px on tablet"
+      - "Logo scales to 96px on mobile"
+      - "Logo click navigates to dashboard home"
+      - "Logo has hover effects"
+      - "Dark mode variant loads correctly"
+    components:
+      - "src/dashboard/frontend/assets/cortex-logo.png"
+      - "src/dashboard/frontend/assets/cortex-logo-white.png"
+      - "src/dashboard/frontend/js/components/common/header.js"
+      - "src/dashboard/frontend/css/header.css"
+    priority: "HIGH"
+    
+  - ac_id: "DO-001-02"
+    title: "Brand Color Palette Implementation"
+    description: |
+      Implement CORTEX brand color system:
+      - Primary cyan (#0ea5e9) for main interactive elements
+      - Secondary emerald (#10b981) for success states
+      - Accent violet (#a78bfa) for AI/intelligence features
+      - Consistent color usage across all components
+    acceptance_tests:
+      - "Primary color applied to buttons, links, primary elements"
+      - "Secondary color used for success indicators, charts"
+      - "Accent color used for intelligence/AI indicators"
+      - "Color contrast meets WCAG AA standards"
+      - "Color works in both light and dark modes"
+    components:
+      - "src/dashboard/frontend/css/colors.css"
+      - "src/dashboard/frontend/css/tailwind-custom.css"
+    priority: "HIGH"
+    
+  - ac_id: "DO-001-03"
+    title: "Glassmorphism Refinement"
+    description: |
+      Enhance glassmorphism design system:
+      - Backdrop blur (16px) with consistent opacity
+      - Gradient borders for visual hierarchy
+      - Shadow layering (z-depth system)
+      - Smooth transitions and animations
+    acceptance_tests:
+      - "All cards have glassmorphism background"
+      - "Blur effect consistent (16px)"
+      - "Gradients present on primary cards"
+      - "Shadow layering visible (min 3 shadow depths)"
+      - "Transitions smooth (200-300ms)"
+    components:
+      - "src/dashboard/frontend/css/glassmorphism.css"
+      - "src/dashboard/frontend/css/animations.css"
+    priority: "MEDIUM"
+    
+  - ac_id: "DO-001-04"
+    title: "Responsive Design Validation"
+    description: |
+      Ensure dashboard works perfectly on all screen sizes:
+      - Mobile (320px), Tablet (768px), Desktop (1920px)
+      - Navigation adapts: full menu → hamburger menu → stacked
+      - Charts resize without distortion
+      - Tables become horizontal-scroll on mobile
+    acceptance_tests:
+      - "Renders correctly at 320px, 768px, 1024px, 1920px"
+      - "Navigation hamburger appears at 768px breakpoint"
+      - "Charts maintain aspect ratio on resize"
+      - "Touch targets ≥44px on mobile"
+      - "Text readable without zoom at 320px"
+    components:
+      - "src/dashboard/frontend/css/responsive.css"
+      - "Multiple breakpoint configurations in Tailwind"
+    priority: "HIGH"
+
+  # =========================================================================
+  # DO-002: Navigation & UX Enhancement (3 ACs)
+  # =========================================================================
+  
+  - ac_id: "DO-002-01"
+    title: "Sidebar Navigation with Active States"
+    description: |
+      Persistent sidebar with navigation:
+      - Main sections: Brain Observatory, Temporal Cortex, Orchestrators, Plan Hub, Admin
+      - Active section highlighted with brand color
+      - Collapse/expand toggle
+      - Smooth transitions
+    acceptance_tests:
+      - "All 5 main sections present in sidebar"
+      - "Active section has distinct styling"
+      - "Sidebar collapse/expand works"
+      - "Navigation transitions smooth"
+      - "Mobile: hamburger menu instead of sidebar"
+    components:
+      - "src/dashboard/frontend/js/components/common/sidebar.js"
+      - "src/dashboard/frontend/css/sidebar.css"
+    priority: "HIGH"
+    
+  - ac_id: "DO-002-02"
+    title: "Tab-based View Switching"
+    description: |
+      Tab interface for switching between views:
+      - Tabs: Overview, Audit Log, Metrics, Settings (per section)
+      - Tab state persisted in URL (fragment navigation)
+      - Tab content lazy-loaded
+    acceptance_tests:
+      - "Tabs switch content smoothly"
+      - "Active tab has underline indicator"
+      - "Tab state visible in URL (#tab-name)"
+      - "Refreshing page returns to same tab"
+      - "Tab transitions are smooth (200ms)"
+    components:
+      - "src/dashboard/frontend/js/components/common/tab-switcher.js"
+      - "src/dashboard/frontend/css/tabs.css"
+    priority: "MEDIUM"
+    
+  - ac_id: "DO-002-03"
+    title: "Search and Filter Bar"
+    description: |
+      Global search bar for filtering dashboard content:
+      - Search AC-IDs, phase names, orchestrator names
+      - Real-time filtering (debounced at 300ms)
+      - Quick filters (completed, in-progress, blocked)
+    acceptance_tests:
+      - "Search returns results in <300ms"
+      - "Filters can be combined"
+      - "Search highlights matches"
+      - "Clear button resets all filters"
+      - "Search state visible in URL query params"
+    components:
+      - "src/dashboard/frontend/js/components/common/search-bar.js"
+      - "src/dashboard/frontend/css/search.css"
+    priority: "MEDIUM"
+
+  # =========================================================================
+  # DO-003: Analytics & Monitoring Dashboard (3 ACs)
+  # =========================================================================
+  
+  - ac_id: "DO-003-01"
+    title: "Performance Metrics Dashboard"
+    description: |
+      Real-time performance monitoring:
+      - API response time histogram
+      - Database query performance
+      - WebSocket latency
+      - Error rate trending
+      - System health score (0-100)
+    acceptance_tests:
+      - "Response time chart updates every 5 seconds"
+      - "Error rate graph shows trend over 1 hour"
+      - "Health score calculated from all metrics"
+      - "Threshold breaches trigger alert"
+      - "Metric history retained for 24 hours"
+    components:
+      - "src/dashboard/frontend/js/components/admin/performance-dashboard.js"
+      - "src/dashboard/api/metrics.py"
+    priority: "MEDIUM"
+    
+  - ac_id: "DO-003-02"
+    title: "Event Notification System"
+    description: |
+      In-app notifications for critical events:
+      - Toast notifications (top-right corner)
+      - Notification center showing last 100 events
+      - Types: INFO, WARNING, ERROR, SUCCESS
+      - Auto-dismiss INFO after 5 seconds
+    acceptance_tests:
+      - "Toast appears for new events"
+      - "Notification center lists all events"
+      - "Click event navigates to relevant context"
+      - "Dismiss removes notification"
+      - "ERROR notifications persist until clicked"
+    components:
+      - "src/dashboard/frontend/js/components/common/notification-center.js"
+      - "src/dashboard/frontend/css/notifications.css"
+    priority: "HIGH"
+    
+  - ac_id: "DO-003-03"
+    title: "System Health & Alerts Panel"
+    description: |
+      Dedicated admin panel showing system health:
+      - Brain tier health (0-100 per tier)
+      - Database integrity status
+      - Hash chain verification status
+      - Active alerts with remediation recommendations
+    acceptance_tests:
+      - "All 4 tiers have health score"
+      - "Database integrity shows checksums"
+      - "Hash chain shows last verification time"
+      - "Alerts include recommended actions"
+      - "Panel refreshes every 10 seconds"
+    components:
+      - "src/dashboard/frontend/js/components/admin/health-panel.js"
+      - "src/dashboard/api/health.py"
+    priority: "HIGH"
+
+  # =========================================================================
+  # DO-004: Export & Reporting (3 ACs)
+  # =========================================================================
+  
+  - ac_id: "DO-004-01"
+    title: "PDF Export Functionality"
+    description: |
+      Export dashboard views to PDF:
+      - Export current view (Brain Observatory, Audit Log, etc.)
+      - Include CORTEX logo and branding
+      - Timestamp and metadata in footer
+      - A4 page size with margins
+    acceptance_tests:
+      - "PDF export button present on all views"
+      - "Generated PDF has correct dimensions (A4)"
+      - "CORTEX logo appears in PDF header"
+      - "Timestamp and metadata in footer"
+      - "Charts render correctly in PDF"
+    components:
+      - "src/dashboard/frontend/js/utils/pdf-export.js"
+      - "html2pdf library (CDN)"
+    priority: "MEDIUM"
+    
+  - ac_id: "DO-004-02"
+    title: "CSV Export for Data Tables"
+    description: |
+      Export table data to CSV:
+      - Audit log export
+      - Phase status export
+      - Orchestrator inventory export
+      - Preserves column headers and formatting
+    acceptance_tests:
+      - "CSV export button on all data tables"
+      - "CSV has proper escaping and quoting"
+      - "Headers included as first row"
+      - "Exported file named with timestamp"
+      - "Handles large datasets (>10k rows)"
+    components:
+      - "src/dashboard/frontend/js/utils/csv-export.js"
+    priority: "MEDIUM"
+    
+  - ac_id: "DO-004-03"
+    title: "Custom Report Builder"
+    description: |
+      Create custom reports from dashboard data:
+      - Select sections: Brain Observatory, Audit Log, Orchestrators
+      - Choose date range
+      - Select format: PDF or Markdown
+      - Generate and download
+    acceptance_tests:
+      - "Report builder interface easy to use"
+      - "All combinations of sections work"
+      - "Generated reports include all selected data"
+      - "Report generated in <2 seconds"
+      - "Report file named descriptively with timestamp"
+    components:
+      - "src/dashboard/frontend/js/components/admin/report-builder.js"
+      - "src/dashboard/api/reports.py"
+    priority: "LOW"
+
+  # =========================================================================
+  # DO-005: Governance Administration (3 ACs)
+  # =========================================================================
+  
+  - ac_id: "DO-005-01"
+    title: "Governance Rules Viewer"
+    description: |
+      Display and manage CORTEX governance rules:
+      - List all CORE rules (25 total)
+      - Show rule metadata: ID, tier, severity, description
+      - Filter by tier (0, 1, 2)
+      - Search by rule name or description
+    acceptance_tests:
+      - "All 25 CORE rules listed"
+      - "Rules sortable by tier, severity"
+      - "Search works on rule name and description"
+      - "Rule detail view shows full description"
+      - "Tier 0 rules marked as immutable"
+    components:
+      - "src/dashboard/frontend/js/components/admin/rules-viewer.js"
+      - "src/dashboard/api/governance.py"
+    priority: "MEDIUM"
+    
+  - ac_id: "DO-005-02"
+    title: "Tier 0 Rule Enforcement Status"
+    description: |
+      Monitor Tier 0 rule enforcement:
+      - Show which rules are actively enforced
+      - Display last 50 rule violations
+      - Violation details: rule ID, operation, reason
+      - Enforcement audit trail
+    acceptance_tests:
+      - "Active enforced rules highlighted"
+      - "Violation history loaded from governance.db"
+      - "Each violation shows cause and context"
+      - "Audit trail shows who enforced rule"
+      - "View refreshes automatically every 30 seconds"
+    components:
+      - "src/dashboard/frontend/js/components/admin/enforcement-monitor.js"
+      - "src/dashboard/api/enforcement.py"
+    priority: "MEDIUM"
+    
+  - ac_id: "DO-005-03"
+    title: "Phase Lock Management Interface"
+    description: |
+      Admin interface for phase lifecycle:
+      - View all phases and current lock status
+      - Display unlock prerequisites
+      - Show audit trail for phase locks
+      - (Read-only: no actual unlock capability)
+    acceptance_tests:
+      - "All phases listed with lock status"
+      - "Locked phases show lock timestamp"
+      - "Locked phases show who locked them"
+      - "Prerequisites listed for locked phases"
+      - "Audit trail shows locking events"
+    components:
+      - "src/dashboard/frontend/js/components/admin/phase-management.js"
+      - "src/dashboard/api/phase_status.py"
+    priority: "MEDIUM"
+
+# =============================================================================
+# DIRECTORY STRUCTURE
+# =============================================================================
+
+directory_structure:
+  src/dashboard:
+    api:
+      __init__.py
+      main.py                    # FastAPI app entry point
+      brain_metrics.py           # Tier status, health checks
+      audit_stream.py            # Audit log endpoints + WebSocket
+      orchestrator_status.py     # Orchestrator registry
+      phase_status.py            # Phase tracker endpoints
+      metrics.py                 # Performance metrics
+      governance.py              # Governance rules, enforcement
+      health.py                  # System health status
+      reports.py                 # Report generation
+      websocket_manager.py       # WebSocket connection manager
+    
+    frontend:
+      index.html                 # Main entry point
+      observatory.html           # Brain Observatory view
+      temporal.html              # Temporal Cortex view
+      constellation.html         # Orchestrator Constellation
+      plans.html                 # Plan Hub
+      admin.html                 # Admin control panel
+      
+      assets:
+        cortex-logo.png          # Primary logo (200x200px)
+        cortex-logo-white.png    # White variant for dark BG
+        cortex-logo-icon.png     # Icon variant (32x32px)
+        cortex-favicon.ico       # Favicon
+      
+      js:
+        app.js                   # Main initialization
+        
+        components:
+          common:
+            header.js            # Navigation header with logo
+            sidebar.js           # Sidebar navigation
+            tab-switcher.js      # Tab interface
+            search-bar.js        # Global search
+            notification-center.js  # Notifications
+            glass-panel.js       # Reusable glassmorphism container
+          
+          brain:
+            brain-map.js         # 4-tier visualization
+            tier-card.js         # Tier card component
+            tier-detail.js       # Tier detail panel
+          
+          neural:
+            neural-pulse.js      # Health indicator animation
+            status-indicator.js  # Status badge
+          
+          temporal:
+            audit-timeline.js    # Searchable audit log
+            audit-entry.js       # Single audit entry
+            audit-filters.js     # Filter controls
+            hash-chain-viz.js    # Hash chain visualization
+            ac-context-card.js   # AC-ID context cards
+          
+          orchestrator:
+            orchestrator-grid.js # Grid view
+            orchestrator-card.js # Card component
+            dependency-graph.js  # D3.js dependency graph
+            health-indicator.js  # Health status
+          
+          admin:
+            performance-dashboard.js  # Performance metrics
+            health-panel.js           # System health
+            rules-viewer.js           # Governance rules
+            enforcement-monitor.js    # Rule enforcement
+            phase-management.js       # Phase lifecycle
+            report-builder.js         # Custom reports
+          
+          plan:
+            plan-hub.js          # Unified plan viewer
+            phase-selector.js    # Phase dropdown
+            phase-timeline.js    # Timeline view
+            ac-grid.js           # AC status grid
+        
+        utils:
+          api-client.js          # Fetch wrapper for API
+          websocket-client.js    # WebSocket manager
+          date-formatter.js      # Date/time utilities
+          csv-export.js          # CSV export utility
+          pdf-export.js          # PDF export utility
+      
+      css:
+        index.css                # Main stylesheet
+        header.css               # Header styles
+        sidebar.css              # Sidebar styles
+        glassmorphism.css        # Glassmorphism utilities
+        animations.css           # Animation definitions
+        responsive.css           # Responsive breakpoints
+        colors.css               # Color system
+        tabs.css                 # Tab component styles
+        search.css               # Search bar styles
+        notifications.css        # Notification styles
+        tables.css               # Table styles
+        forms.css                # Form styles
+        tailwind-custom.css      # Custom Tailwind extensions
+
+  .github/branding:
+    cortex-logo.png             # Primary CORTEX logo (200x200px)
+    cortex-logo-white.png       # White variant
+    cortex-logo-dark.png        # Dark variant
+    cortex-logo-icon.png        # Icon version (32x32px)
+    cortex-logo-small.png       # Small version (128x128px)
+    BRANDING-GUIDELINES.md      # Branding usage guidelines
+    LOGO-PLACEMENT-GUIDE.md     # Logo placement recommendations
+
+  tests:
+    unit/dashboard:
+      test_ui_components.py      # Component unit tests
+      test_api_endpoints.py      # API endpoint tests
+      test_data_transformations.py  # Data formatting tests
+    
+    integration/dashboard:
+      test_frontend_integration.py   # Frontend integration
+      test_websocket_streaming.py    # WebSocket tests
+      test_export_functionality.py   # Export features
+      test_responsive_design.py      # Responsive design tests
+
+# =============================================================================
+# IMPLEMENTATION SEQUENCE
+# =============================================================================
+
+implementation_sequence:
+  day_1:
+    focus: "Branding & Base Infrastructure"
+    description: "Set up logo assets, color system, basic component framework"
+    tasks:
+      - "Create .github/branding/ directory structure"
+      - "Add CORTEX logo variants (200px, 128px, 32px)"
+      - "Set up Tailwind CDN with custom color palette"
+      - "Create glassmorphism CSS utility classes"
+      - "Build header component with logo"
+      - "Create sidebar navigation skeleton"
+    ac_ids: ["DO-001-01", "DO-001-02", "DO-001-03"]
+    
+  day_2:
+    focus: "Navigation & UX Polish"
+    description: "Implement responsive navigation and view switching"
+    tasks:
+      - "Build responsive sidebar with hamburger menu"
+      - "Implement tab-based view switching"
+      - "Create global search/filter bar"
+      - "Test responsive design at multiple breakpoints"
+      - "Add smooth transitions throughout"
+    ac_ids: ["DO-001-04", "DO-002-01", "DO-002-02", "DO-002-03"]
+    
+  day_3:
+    focus: "Analytics & Admin Features"
+    description: "Add monitoring, notifications, and governance management"
+    tasks:
+      - "Build performance metrics dashboard"
+      - "Implement notification system"
+      - "Create system health panel"
+      - "Build governance rules viewer"
+      - "Implement enforcement status monitor"
+      - "Create phase management interface"
+    ac_ids: ["DO-003-01", "DO-003-02", "DO-003-03", "DO-005-01", "DO-005-02", "DO-005-03"]
+    
+  day_4:
+    focus: "Export & Testing"
+    description: "Add export capabilities and comprehensive testing"
+    tasks:
+      - "Implement PDF export functionality"
+      - "Build CSV export for data tables"
+      - "Create custom report builder"
+      - "Run comprehensive responsive design tests"
+      - "Test all export formats"
+      - "Final cleanup and documentation"
+    ac_ids: ["DO-004-01", "DO-004-02", "DO-004-03"]
+
+# =============================================================================
+# LOGO PLACEMENT STRATEGY
+# =============================================================================
+
+logo_placement:
+  header:
+    position: "Top-left, before 'CORTEX Neural Observatory' text"
+    size: "200x200px on desktop, scales down on mobile"
+    background: "Subtle gradient overlay (optional)"
+    click_action: "Return to dashboard home page"
+    hover_effect: "Subtle scale (1.05x) and glow effect"
+  
+  sidebar:
+    position: "Top of sidebar (after logo, before nav items)"
+    size: "128x128px, centered"
+    background: "Glassmorphic frame"
+    spacing: "20px margin below sidebar logo"
+  
+  about_page:
+    position: "Center page, prominent display"
+    size: "256x256px"
+    context: "Product information and team credits"
+  
+  exports:
+    pdf_header: "Left side of PDF header (3cm x 3cm)"
+    pdf_footer: "Small CORTEX watermark (bottom-right, 25% opacity)"
+    csv_header: "First line as comment (# Generated by CORTEX v2.0)"
+
+# =============================================================================
+# QUALITY REQUIREMENTS
+# =============================================================================
+
+quality_requirements:
+  performance:
+    page_load: "<2 seconds (cached)"
+    initial_load: "<3 seconds (uncached)"
+    api_response: "<100ms average"
+    websocket_latency: "<50ms"
+    
+  accessibility:
+    wcag_level: "WCAG 2.1 AA minimum"
+    keyboard_nav: "Full keyboard navigation support"
+    screen_reader: "ARIA labels on all interactive elements"
+    color_contrast: ">4.5:1 for normal text, >3:1 for large text"
+    
+  browser_support:
+    chrome: "Latest 2 versions"
+    firefox: "Latest 2 versions"
+    safari: "Latest 2 versions"
+    edge: "Latest 2 versions"
+    mobile: "iOS Safari 13+, Chrome Mobile 90+"
+    
+  testing:
+    unit_coverage: "≥80%"
+    integration_tests: "All major flows tested"
+    responsive_breakpoints: "320px, 768px, 1024px, 1920px"
+    accessibility_audit: "Automated + manual review"
+
+# =============================================================================
+# DEPLOYMENT & MULTI-MACHINE SETUP
+# =============================================================================
+
+deployment:
+  static_files: "Copy src/dashboard/frontend/ to web server"
+  backend_server: "Run FastAPI from src/dashboard/api/main.py"
+  environment_variables:
+    - "DATABASE_PATH: ../../../cortex-brain/state/governance.db"
+    - "CORTEX_MASTER_PATH: ../../../.github/roadmap/cortex-master.yaml"
+    - "API_PORT: 8000"
+    - "CORS_ORIGINS: ['http://localhost:3000', 'http://localhost:8080']"
+  
+  docker_deployment: |
+    # Optional: Dockerfile for containerized deployment
+    FROM python:3.11-slim
+    WORKDIR /app
+    COPY src/dashboard/api requirements.txt ./
+    RUN pip install -r requirements.txt
+    COPY cortex-brain ../cortex-brain
+    COPY .github/roadmap ../.github/roadmap
+    EXPOSE 8000
+    CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+multi_machine:
+  setup:
+    step_1: "Clone repo and checkout CORTEX6"
+    step_2: "Copy CORTEX logo files to .github/branding/"
+    step_3: "Set up Python venv and install dashboard dependencies"
+    step_4: "Run FastAPI backend: python src/dashboard/api/main.py"
+    step_5: "Open src/dashboard/frontend/index.html in browser"
+  
+  sync_protocol:
+    before_work: "git pull origin CORTEX6"
+    after_work: "git commit -m 'DO-XXX-XX: [description]' && git push"
+    conflict_resolution: "Always merge, never force-push"
+
+# =============================================================================
+# METADATA
+# =============================================================================
+
+metadata:
+  author: "Asif Hussain"
+  copyright: "© 2025-2026 Asif Hussain. All rights reserved."
+  created_at: "2026-01-16T18:00:00Z"
+  version: "2.0"
+  enhancement_focus: "Branding, UX, Analytics, Governance Administration"
+  glassmorphism_version: "4.1.0"
+  ssot_alignment: "Reads from cortex-master.yaml, governance.db - no duplication"
+  dependencies:
+    - "PHASE-06-ECOSYSTEM (brain structure)"
+  
+  future_enhancements:
+    phase_16: "Knowledge graph visualization (post PHASE-07)"
+    phase_17: "Machine learning insights and predictions"
+    phase_18: "Mobile native app (React Native)"
