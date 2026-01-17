@@ -2558,6 +2558,493 @@ phase_tracker:
     status: "COMPLETED"  # 12/12 ACs complete (100%)
     locked: true
   
+  # =========================================================================
+  # NEW PHASE - PRODUCTION READINESS (15 AC-IDs across 5-week timeline)
+  # =========================================================================
+  # User Approved: CORTEX Gap Analysis Remediation (chat01.md)
+  # Decision: User approved comprehensive 5-week implementation plan (chat01.md)
+  # Authorization: "Follow instructions in cortex-builder.prompt.md. Approved. Proceed with fixes"
+  # =========================================================================
+  
+  PHASE-PRODUCTION-READINESS:
+    title: "CORTEX Production Readiness: Master Orchestrator 4-Stage Workflow, Intent Router, LENS Integration"
+    description: |
+      Complete 5 critical blocking issues identified in CORTEX Gap Analysis (2026-01-17):
+      
+      1. ❌ ISSUE-001: Intent Router MISSING entirely (blocks LENS + Master routing)
+      2. ❌ ISSUE-002: LENS protocol NOT integrated (blocks comprehension phase)
+      3. ❌ ISSUE-003: Master 4-stage workflow INCOMPLETE (blocks orchestration)
+      4. ❌ ISSUE-004: Approval gates UNUSED (blocks user validation)
+      5. ❌ ISSUE-005: Relationship analysis MISSING (blocks impact analysis)
+      
+      COMPLETION CRITERIA: All 5 issues resolved + 100% test pass rate maintained
+      
+      TIMELINE: 5 weeks (120-200 hours)
+      WEEK 1: Quick Wins - Intent Router Foundation (6 days)
+      WEEK 2: LENS Integration - Knowledge Graph + Relationship Analysis (9 days)
+      WEEK 3: 4-Stage Workflow - Orchestrator Execution (9 days)
+      WEEK 4-5: Repository Scanner + Testing + Hardening (10 days)
+      
+      GOVERNANCE COMPLIANCE:
+      - CORE-008: TDD (tests first, RED → GREEN) ✓
+      - CORE-011: Type hints mandatory ✓
+      - CORE-012: Docstrings (Google style) ✓
+      - CORE-027: Audit trail (AC_START/EXECUTE/COMPLETE) ✓
+      - CORE-028: Kebab-case naming ✓
+    
+    ac_ids: 15
+    completed_ac_ids: 0
+    status: "NOT_STARTED"
+    locked: false
+    priority: "P0"
+    blocking: true
+    
+    started_at: null
+    estimated_hours: 160  # 120-200 range, using 160 as midpoint
+    estimated_days: 20    # 5 weeks × 4 days/week effective
+    completion_target: "2026-02-21"  # 5 weeks from now
+    
+    # Critical Path Dependencies
+    requires: "PHASE-17-DOMAIN-BRAIN"
+    required_for: "PRODUCTION_DEPLOYMENT"
+    blocking_issues: ["ISSUE-001", "ISSUE-002", "ISSUE-003", "ISSUE-004", "ISSUE-005"]
+    
+    # Weekly Breakdown
+    weeks:
+      week_1:
+        title: "Quick Wins: Intent Router Foundation"
+        hours: 20
+        days: 6
+        ac_ids: ["AC-PROD-001-02", "AC-PROD-001-03"]
+        focus:
+          - "Intent Router class (inherits OrchestratorBase)"
+          - "Routing decision logic (IMPLEMENT/FIX/REFACTOR → TDD)"
+          - "MasterOrchestrator integration"
+          - "20+ unit tests"
+        blocking_issue: "ISSUE-001"
+      
+      week_2:
+        title: "LENS Integration & Relationship Analysis"
+        hours: 35
+        days: 9
+        ac_ids: ["AC-PROD-002-01", "AC-PROD-002-02", "AC-PROD-002-03"]
+        focus:
+          - "LENS synthesis (Stage 1 comprehension)"
+          - "Relationship traversal (impact analysis)"
+          - "LENS integration into Master workflow"
+          - "30+ integration tests"
+        blocking_issues: ["ISSUE-002", "ISSUE-005"]
+      
+      week_3:
+        title: "4-Stage Workflow Implementation"
+        hours: 35
+        days: 9
+        ac_ids: ["AC-PROD-003-01", "AC-PROD-003-02", "AC-PROD-003-03", "AC-PROD-003-04"]
+        focus:
+          - "Stage 1: Comprehension (LENS auto-execution)"
+          - "Stage 2: Routing (Intent Router decisions)"
+          - "Stage 3: Knowledge integration"
+          - "Stage 4: Approval gate (IntentReflectionEngine)"
+          - "40+ E2E tests"
+        blocking_issue: "ISSUE-003"
+      
+      week_4_5:
+        title: "Repository Scanner + Testing + Hardening"
+        hours: 40
+        days: 10
+        ac_ids: ["AC-PROD-004-01", "AC-PROD-004-02", "AC-PROD-005-01", "AC-PROD-005-02", "AC-PROD-005-03", "AC-PROD-005-04"]
+        focus:
+          - "Repository scanner (system-wide analysis)"
+          - "Workflow integration"
+          - "E2E testing (all 5 components)"
+          - "Master orchestrator testing"
+          - "Hardening & documentation"
+          - "30+ additional tests"
+        blocking_issue: "ISSUE-004"
+    
+    # Acceptance Criteria by AC-ID
+    acceptance_criteria:
+      # WEEK 1: Intent Router
+      - ac_id: "AC-PROD-001-02"
+        description: "Intent Router basic structure (inherits OrchestratorBase, routing logic)"
+        priority: "CRITICAL"
+        hours: 10
+        days: 2
+        blocking_issue: "ISSUE-001"
+        test_count: 20
+        acceptance_criteria_items:
+          - "IntentRouter class created (inherits OrchestratorBase)"
+          - "Routing decision logic for IMPLEMENT/FIX/REFACTOR"
+          - "TDD pattern (tests first, RED → GREEN)"
+          - "Type hints on all functions (CORE-011)"
+          - "Google-style docstrings (CORE-012)"
+          - "20+ unit tests passing"
+          - "Governance audit trail (AC_START/EXECUTE/COMPLETE)"
+      
+      - ac_id: "AC-PROD-001-03"
+        description: "Intent Router integration with MasterOrchestrator"
+        priority: "CRITICAL"
+        hours: 10
+        days: 1
+        blocking_issue: "ISSUE-001"
+        test_count: 15
+        acceptance_criteria_items:
+          - "IntentRouter wired into MasterOrchestrator.coordinate_operation()"
+          - "Routing decisions flow into orchestration"
+          - "Response headers include routing decision"
+          - "15+ integration tests"
+          - "Zero regression to existing 153 tests"
+      
+      # WEEK 2: LENS Integration
+      - ac_id: "AC-PROD-002-01"
+        description: "Real LENS synthesis (Stage 1 comprehension)"
+        priority: "CRITICAL"
+        hours: 12
+        days: 2
+        blocking_issue: "ISSUE-002"
+        test_count: 30
+        acceptance_criteria_items:
+          - "ASTIntelligenceEngine called on every comprehension"
+          - "GitHistory queried for context"
+          - "CodeComments extracted and analyzed"
+          - "Relationships queried for impact"
+          - "YAML comprehension summary generated"
+          - "30+ unit + integration tests"
+          - "Confidence scoring on findings"
+      
+      - ac_id: "AC-PROD-002-02"
+        description: "Relationship traversal & impact analysis"
+        priority: "HIGH"
+        hours: 15
+        days: 3
+        blocking_issue: "ISSUE-005"
+        test_count: 25
+        acceptance_criteria_items:
+          - "RelationshipAnalyzer for impact analysis"
+          - "API endpoint mapping (what calls what)"
+          - "Call graph traversal (3+ levels)"
+          - "Dependency identification"
+          - "Risk assessment (CRITICAL/HIGH/MEDIUM/LOW)"
+          - "25+ tests covering traversal patterns"
+      
+      - ac_id: "AC-PROD-002-03"
+        description: "LENS integration into Master workflow"
+        priority: "HIGH"
+        hours: 8
+        days: 2
+        blocking_issue: "ISSUE-002"
+        test_count: 20
+        acceptance_criteria_items:
+          - "Stage 1 (Comprehension) fully operational"
+          - "LENS auto-executed on every request"
+          - "Results presented to user for approval"
+          - "20+ integration tests (multi-turn)"
+      
+      # WEEK 3: 4-Stage Workflow
+      - ac_id: "AC-PROD-003-01"
+        description: "Stage 1 - Comprehension (LENS auto-execution)"
+        priority: "CRITICAL"
+        hours: 8
+        days: 2
+        blocking_issue: "ISSUE-003"
+        test_count: 12
+        acceptance_criteria_items:
+          - "Stage 1 method fully implemented"
+          - "LENS protocol executed (all 4 phases)"
+          - "Results in structured YAML format"
+          - "12+ tests for comprehension phase"
+      
+      - ac_id: "AC-PROD-003-02"
+        description: "Stage 2 - Routing (Intent Router decisions)"
+        priority: "CRITICAL"
+        hours: 6
+        days: 1
+        blocking_issue: "ISSUE-003"
+        test_count: 10
+        acceptance_criteria_items:
+          - "Stage 2 method routes to appropriate handler"
+          - "TDD/Interaction/Governance/Planning orchestrators selected"
+          - "Context passed from Stage 1"
+          - "10+ routing tests (different operation types)"
+      
+      - ac_id: "AC-PROD-003-03"
+        description: "Stage 3 - Knowledge integration"
+        priority: "HIGH"
+        hours: 8
+        days: 2
+        blocking_issue: "ISSUE-003"
+        test_count: 10
+        acceptance_criteria_items:
+          - "Stage 3 integrates Tier 3 knowledge"
+          - "Domain brain consulted for patterns/examples"
+          - "Context enriched before execution"
+          - "10+ integration tests"
+      
+      - ac_id: "AC-PROD-003-04"
+        description: "Stage 4 - Approval gate (IntentReflectionEngine)"
+        priority: "HIGH"
+        hours: 8
+        days: 2
+        blocking_issue: "ISSUE-004"
+        test_count: 12
+        acceptance_criteria_items:
+          - "Stage 4 presents summary to user"
+          - "IntentReflectionEngine.approve() called for critical operations"
+          - "Rejection handled gracefully"
+          - "Audit trail captures approval decision"
+          - "12+ tests (approve/reject/clarify workflows)"
+      
+      # WEEK 4-5: Repository Scanner + Testing
+      - ac_id: "AC-PROD-004-01"
+        description: "Repository Scanner (system-wide code analysis)"
+        priority: "MEDIUM"
+        hours: 15
+        days: 3
+        blocking_issue: null
+        test_count: 20
+        acceptance_criteria_items:
+          - "RepositoryScanner class created"
+          - "Scans all Python files in workspace"
+          - "Identifies: files, classes, functions, imports, patterns"
+          - "Reports structure and relationships"
+          - "20+ tests (various repository structures)"
+      
+      - ac_id: "AC-PROD-004-02"
+        description: "Workflow integration (all 5 components)"
+        priority: "MEDIUM"
+        hours: 10
+        days: 2
+        blocking_issue: null
+        test_count: 15
+        acceptance_criteria_items:
+          - "All 5 components wired into master flow"
+          - "Data flows correctly between stages"
+          - "Error handling at each stage"
+          - "15+ E2E workflow tests"
+      
+      - ac_id: "AC-PROD-005-01"
+        description: "E2E integration testing (all 5 components)"
+        priority: "HIGH"
+        hours: 10
+        days: 2
+        blocking_issue: null
+        test_count: 20
+        acceptance_criteria_items:
+          - "End-to-end tests covering all 5 issues"
+          - "LENS + Intent Router + 4-Stage + Approval tested together"
+          - "20+ complex scenarios tested"
+          - "Integration test suite"
+      
+      - ac_id: "AC-PROD-005-02"
+        description: "Master Orchestrator comprehensive testing"
+        priority: "HIGH"
+        hours: 10
+        days: 2
+        blocking_issue: null
+        test_count: 25
+        acceptance_criteria_items:
+          - "MasterOrchestrator 4-stage workflow 100% tested"
+          - "All orchestrator integration paths tested"
+          - "25+ Master-specific tests"
+          - "ConversationProtocol multi-turn verified"
+      
+      - ac_id: "AC-PROD-005-03"
+        description: "Hardening & edge case handling"
+        priority: "MEDIUM"
+        hours: 6
+        days: 1
+        blocking_issue: null
+        test_count: 15
+        acceptance_criteria_items:
+          - "Error scenarios handled gracefully"
+          - "LENS failures don't crash Master"
+          - "Router fallback for unknown operations"
+          - "Approval bypass with explicit governance"
+          - "15+ edge case tests"
+      
+      - ac_id: "AC-PROD-005-04"
+        description: "Production documentation & validation"
+        priority: "MEDIUM"
+        hours: 4
+        days: 1
+        blocking_issue: null
+        test_count: 5
+        acceptance_criteria_items:
+          - "Architecture documentation (4-stage workflow)"
+          - "Intent Router design document"
+          - "API documentation for all new components"
+          - "Deployment checklist"
+          - "Production validation suite (5 final tests)"
+    
+    # Test Coverage Targets
+    test_coverage:
+      total_unit_tests: 80
+      total_integration_tests: 60
+      total_e2e_tests: 40
+      total_tests: 180
+      target_pass_rate: "100%"
+      target_coverage: ">85%"
+    
+    # Governance Compliance
+    governance_compliance:
+      core_008_tdd: "Tests first, RED → GREEN for all 15 ACs"
+      core_011_type_hints: "All functions have complete type hints"
+      core_012_docstrings: "Google-style docstrings on all public APIs"
+      core_013_exception_handling: "Specific exceptions, no bare except"
+      core_026_git_checkpoints: "Checkpoint before each major AC completion"
+      core_027_audit_trail: "AC_START → AC_EXECUTE → AC_COMPLETE for each AC"
+      core_028_naming: "Kebab-case files, ≤25 character limit"
+    
+    # Success Criteria
+    success_criteria:
+      - "All 15 AC-IDs implemented (100%)"
+      - "180 tests passing (100% pass rate)"
+      - "Zero regressions to existing 153 orchestrator tests"
+      - "All 5 blocking issues resolved"
+      - "Master Orchestrator 4-stage workflow fully operational"
+      - "Intent Router routing correctly"
+      - "LENS auto-executing on every request"
+      - "Approval gates working and audited"
+      - "Production documentation complete"
+      - "Governance audit trail verified (15+ AC-START/EXECUTE/COMPLETE entries)"
+    
+    # Deliverables
+    deliverables:
+      code_components:
+        - "src/orchestrators/core/intent_router.py"
+        - "src/orchestrators/core/lens_integration.py"
+        - "src/orchestrators/core/relationship_analyzer.py"
+        - "src/orchestrators/core/repository_scanner.py"
+        - "Updated MasterOrchestrator (4-stage workflow)"
+      test_files:
+        - "tests/unit/test_intent_router.py"
+        - "tests/unit/test_relationship_analyzer.py"
+        - "tests/integration/test_master_4stage_workflow.py"
+        - "tests/integration/test_lens_integration.py"
+        - "tests/integration/test_e2e_production_readiness.py"
+      documentation:
+        - ".github/roadmap/reports/PHASE-PRODUCTION-READINESS-COMPLETION.md"
+        - ".github/docs/production-readiness-guide.md"
+        - ".github/docs/master-orchestrator-4stage-design.md"
+        - ".github/docs/intent-router-architecture.md"
+    
+    # Git Checkpoints (one per AC)
+    git_checkpoints:
+      before_phase: "checkpoint: pre-PHASE-PRODUCTION-READINESS"
+      ac_prod_001_02: "checkpoint: AC-PROD-001-02 (Intent Router)"
+      ac_prod_001_03: "checkpoint: AC-PROD-001-03 (Router Integration)"
+      ac_prod_002_01: "checkpoint: AC-PROD-002-01 (LENS Synthesis)"
+      ac_prod_002_02: "checkpoint: AC-PROD-002-02 (Relationship Analysis)"
+      ac_prod_002_03: "checkpoint: AC-PROD-002-03 (LENS Integration)"
+      ac_prod_003_01: "checkpoint: AC-PROD-003-01 (Stage 1)"
+      ac_prod_003_02: "checkpoint: AC-PROD-003-02 (Stage 2)"
+      ac_prod_003_03: "checkpoint: AC-PROD-003-03 (Stage 3)"
+      ac_prod_003_04: "checkpoint: AC-PROD-003-04 (Stage 4)"
+      ac_prod_004_01: "checkpoint: AC-PROD-004-01 (Repository Scanner)"
+      ac_prod_004_02: "checkpoint: AC-PROD-004-02 (Workflow Integration)"
+      ac_prod_005_01: "checkpoint: AC-PROD-005-01 (E2E Testing)"
+      ac_prod_005_02: "checkpoint: AC-PROD-005-02 (Master Testing)"
+      ac_prod_005_03: "checkpoint: AC-PROD-005-03 (Hardening)"
+      ac_prod_005_04: "checkpoint: AC-PROD-005-04 (Documentation)"
+      phase_complete: "checkpoint: PHASE-PRODUCTION-READINESS COMPLETE"
+    
+    audit_verification:
+      verified: false
+      entry_count: 0
+      hash_chain_valid: null
+      verified_at: null
+      remediation_required: false
+    
+    phase_yaml: ".github/roadmap/phases/phase-production-readiness.yaml"
+    notes: |
+      PHASE-PRODUCTION-READINESS: User-Approved Production Readiness Implementation
+      
+      AUTHORIZATION:
+      - From chat01.md: User approved comprehensive 5-week implementation plan
+      - From user message: "Follow instructions in cortex-builder.prompt.md. Approved. Proceed with fixes"
+      - Gap analysis source: .github/.chats/chat01.md (initial production readiness assessment)
+      
+      BLOCKING ISSUES ADDRESSED:
+      1. ISSUE-001: Intent Router MISSING
+         → AC-PROD-001-02/03: IntentRouter class + MasterOrchestrator integration
+      
+      2. ISSUE-002: LENS NOT integrated
+         → AC-PROD-002-01/03: LENS synthesis + Integration
+      
+      3. ISSUE-003: Master 4-stage workflow INCOMPLETE
+         → AC-PROD-003-01/02/03/04: All 4 stages fully implemented
+      
+      4. ISSUE-004: Approval gates UNUSED
+         → AC-PROD-003-04: IntentReflectionEngine approval integration
+      
+      5. ISSUE-005: Relationship analysis MISSING
+         → AC-PROD-002-02: RelationshipAnalyzer for impact analysis
+      
+      CRITICAL PATH:
+      AC-PROD-001-02 → AC-PROD-002-01 → AC-PROD-003-01 (blocks everything after)
+      (7 days total)
+      
+      TOTAL EFFORT: 160 hours over 20 days (4 weeks)
+      COMPLETION TARGET: 2026-02-21
+      
+      This phase transitions CORTEX from 40% to 100% production ready.
+
+  PHASE-PRODUCTION-READINESS:
+    title: "CORTEX Production Readiness (15 AC-IDs, 5-week timeline)"
+    description: "Complete 5 critical blocking issues from gap analysis: Intent Router, LENS integration, 4-stage workflow, approval gates, relationship analysis"
+    ac_ids: 15
+    completed_ac_ids: 0
+    status: "NOT_STARTED"
+    locked: false
+    requires: "PHASE-17-DOMAIN-BRAIN"
+    required_for: "PRODUCTION_DEPLOYMENT"
+    estimated_hours: 160
+    estimated_days: 20
+    progress_percentage: 0.0
+    blocking: true
+    priority: "P0"
+    completion_target: "2026-02-21"
+    
+    # Breakdown by week
+    ac_breakdown:
+      week_1:
+        ac_ids: ["AC-PROD-001-02", "AC-PROD-001-03"]
+        title: "Intent Router (Quick Wins)"
+        hours: 20
+      week_2:
+        ac_ids: ["AC-PROD-002-01", "AC-PROD-002-02", "AC-PROD-002-03"]
+        title: "LENS Integration & Relationship Analysis"
+        hours: 35
+      week_3:
+        ac_ids: ["AC-PROD-003-01", "AC-PROD-003-02", "AC-PROD-003-03", "AC-PROD-003-04"]
+        title: "4-Stage Workflow Implementation"
+        hours: 35
+      week_4_5:
+        ac_ids: ["AC-PROD-004-01", "AC-PROD-004-02", "AC-PROD-005-01", "AC-PROD-005-02", "AC-PROD-005-03", "AC-PROD-005-04"]
+        title: "Repository Scanner + Testing + Hardening"
+        hours: 40
+    
+    test_coverage:
+      total_tests: 180
+      target_pass_rate: "100%"
+      unit_tests: 80
+      integration_tests: 60
+      e2e_tests: 40
+    
+    blocking_issues:
+      - "ISSUE-001: Intent Router MISSING"
+      - "ISSUE-002: LENS NOT integrated"
+      - "ISSUE-003: Master 4-stage workflow INCOMPLETE"
+      - "ISSUE-004: Approval gates UNUSED"
+      - "ISSUE-005: Relationship analysis MISSING"
+    
+    git_checkpoint: null
+    audit_verification:
+      verified: false
+      entry_count: 0
+      hash_chain_valid: null
+      verified_at: null
+
   PHASE-18-ORCHESTRATOR-DEVX:
     title: "Orchestrator Development Experience (DevX)"
     description: |
@@ -2571,7 +3058,7 @@ phase_tracker:
     status: "NOT_STARTED"
     locked: false
     
-    requires: "PHASE-17-DOMAIN-BRAIN"
+    requires: "PHASE-PRODUCTION-READINESS"
     depends_on:
       - "PHASE-09-GOVERNANCE-TOOLS"  # Extends GovernanceCLI
       - "PHASE-11-HALLUCINATION-PREVENTION"  # Reuses AgentExecutionSandbox
