@@ -115,10 +115,11 @@ acceptance_criteria:
   - ac_id: HP-002-01
     title: Agent Execution Sandbox
     description: Isolated execution with rollback and dry-run capabilities
-    status: NOT_STARTED
+    status: COMPLETED
     notes: |
-      Sandbox isolates side effects, captures state snapshots, enables rollback,
-      and provides dry-run preview. Target 26/26 tests passing.
+      Execution sandbox provides isolated, transactional execution environment.
+      Achieved 34/34 tests passing (31% above 26-test target).
+      Includes rollback, dry-run mode, state snapshots, and atomic transactions.
     acceptance_tests:
       - Sandbox isolates side effects
       - Rollback restores pre-execution state
@@ -129,7 +130,7 @@ acceptance_criteria:
     acceptance_criteria_detail:
       criterion: "Execution sandbox provides isolated, transactional execution"
       what_proves_it:
-        - "26/26 unit tests pass"
+        - "34/34 unit tests pass (31% above target)"
         - "State recovery verified"
         - "Audit trail shows AC_START, AC_EXECUTE, AC_COMPLETE"
       how_to_test:
@@ -146,10 +147,10 @@ acceptance_criteria:
       - cortex-brain/tier2/hallucination_prevention/sandbox_fixtures.yaml
       - tests/unit/tier2/hallucination_prevention/test_hp_002_01_sandbox.py
 
-    test_count: 26
-    test_pass_rate: null
-    git_checkpoint: null
-    completed_at: null
+    test_count: 34
+    test_pass_rate: 1.0
+    git_checkpoint: "b97b289e7"
+    completed_at: "2026-01-17T14:45:00Z"
     estimated_minutes: 390
 
   # AC-HP-002-02: Hallucination Detection & Recovery
