@@ -25,6 +25,8 @@ import logging
 from contextlib import contextmanager
 import threading
 from pathlib import Path
+import random
+import time
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -494,4 +496,292 @@ __all__ = [
     "ComponentState",
     "FallbackStrategy",
     "FailureHandler",
+    "ExponentialBackoffRetry",
+    "RetryPolicy",
+    "RetryResult",
+    "RetryPolicyBuilder",
+]
+
+
+# ============================================================================
+# AC-NFR-002-02: Automatic Retry with Exponential Backoff
+# ============================================================================
+
+@dataclass
+class RetryPolicy:
+    """
+    Configuration for retry behavior.
+    
+    Attributes:
+        max_retries: Maximum number of retry attempts
+        initial_delay: Initial delay between retries (seconds)
+        max_delay: Maximum delay between retries (seconds)
+        exponential_base: Base for exponential calculation
+        jitter: Whether to add random jitter to delays
+    """
+    max_retries: int
+    initial_delay: float
+    max_delay: float
+    exponential_base: float = 2.0
+    jitter: bool = True
+
+
+@dataclass
+class RetryResult:
+    """
+    Result of a retry operation.
+    
+    Attributes:
+        success: Whether operation succeeded
+        value: Returned value if successful
+        error: Exception if failed
+        attempts: Total number of attempts made
+        total_delay: Total delay accumulated (seconds)
+    """
+    success: bool
+    value: Any = None
+    error: Optional[Exception] = None
+    attempts: int = 0
+    total_delay: float = 0.0
+
+
+class ExponentialBackoffRetry:
+    """
+    Implements exponential backoff retry strategy with jitter.
+    
+    This class provides retry logic with:
+    - Exponential backoff delays
+    - Configurable maximum delays
+    - Optional jitter to prevent thundering herd
+    - Comprehensive retry tracking
+    
+    Attributes:
+        policy: RetryPolicy configuration
+        attempt_count: Current attempt number
+        total_delay: Accumulated delay time
+    """
+    
+    def __init__(self, policy: RetryPolicy) -> None:
+        """
+        Initialize retry mechanism.
+        
+        Args:
+            policy: RetryPolicy configuration
+        """
+        self.policy = policy
+        self.attempt_count = 0
+        self.total_delay = 0.0
+        logger.debug(
+            f"ExponentialBackoffRetry initialized with policy: "
+            f"max_retries={policy.max_retries}, "
+            f"initial_delay={policy.initial_delay}s"
+        )
+    
+    def calculate_delay(self, attempt: int) -> float:
+        """
+        Calculate delay for given attempt number using exponential backoff.
+        
+        Formula: delay = min(initial_delay * (base ^ attempt), max_delay)
+        With optional jitter: ±10% random variation
+        
+        Args:
+            attempt: Attempt number (0-indexed)
+            
+        Returns:
+            Delay in seconds
+            
+        Raises:
+            ValueError: If attempt is negative
+        """
+        if attempt < 0:
+            raise ValueError("Attempt number cannot be negative")
+        
+        # Exponential calculation
+        delay = self.policy.initial_delay * (
+            self.policy.exponential_base ** attempt
+        )
+        # Cap at maximum
+        delay = min(delay, self.policy.max_delay)
+        
+        # Add jitter if enabled
+        if self.policy.jitter:
+            jitter_amount = random.uniform(0, delay * 0.1)
+            delay += jitter_amount
+        
+        return delay
+    
+    def should_retry(self, attempt: int, error: Exception) -> bool:
+        """
+        Determine if retry should happen.
+        
+        Args:
+            attempt: Current attempt number
+            error: The error that occurred
+            
+        Returns:
+            True if should retry, False otherwise
+        """
+        return attempt < self.policy.max_retries
+    
+    def execute(
+        self, fn: Callable, *args: Any, **kwargs: Any
+    ) -> RetryResult:
+        """
+        Execute function with automatic retries and exponential backoff.
+        
+        Args:
+            fn: Function to execute
+            *args: Positional arguments for function
+            **kwargs: Keyword arguments for function
+            
+        Returns:
+            RetryResult with success status and details
+            
+        Example:
+            policy = RetryPolicy(
+                max_retries=3,
+                initial_delay=0.1,
+                max_delay=10.0
+            )
+            retry = ExponentialBackoffRetry(policy)
+            result = retry.execute(risky_function, arg1, arg2)
+            if result.success:
+                print(f"Success after {result.attempts} attempts")
+            else:
+                print(f"Failed: {result.error}")
+        """
+        self.attempt_count = 0
+        self.total_delay = 0.0
+        last_error = None
+        
+        # Attempt loop
+        for attempt in range(self.policy.max_retries + 1):
+            try:
+                self.attempt_count = attempt + 1
+                result = fn(*args, **kwargs)
+                logger.debug(
+                    f"Success on attempt {self.attempt_count} "
+                    f"(total delay: {self.total_delay:.2f}s)"
+                )
+                return RetryResult(
+                    success=True,
+                    value=result,
+                    attempts=self.attempt_count,
+                    total_delay=self.total_delay
+                )
+            except Exception as e:
+                last_error = e
+                
+                # Check if we should retry
+                if not self.should_retry(attempt, e):
+                    logger.warning(
+                        f"Max retries ({self.policy.max_retries}) exhausted. "
+                        f"Last error: {e}"
+                    )
+                    break
+                
+                # Calculate and apply delay
+                delay = self.calculate_delay(attempt)
+                self.total_delay += delay
+                logger.debug(
+                    f"Attempt {attempt + 1} failed: {e}. "
+                    f"Retrying in {delay:.3f}s..."
+                )
+                time.sleep(delay)
+        
+        # All retries exhausted
+        return RetryResult(
+            success=False,
+            error=last_error,
+            attempts=self.attempt_count,
+            total_delay=self.total_delay
+        )
+
+
+class RetryPolicyBuilder:
+    """
+    Builder for creating RetryPolicy instances with fluent API.
+    
+    Simplifies policy creation with sensible defaults and chainable methods.
+    
+    Example:
+        policy = (RetryPolicyBuilder()
+                 .with_max_retries(5)
+                 .with_initial_delay(0.1)
+                 .with_max_delay(30.0)
+                 .build())
+    """
+    
+    def __init__(self) -> None:
+        """Initialize builder with defaults."""
+        self.max_retries = 3
+        self.initial_delay = 0.1
+        self.max_delay = 10.0
+        self.exponential_base = 2.0
+        self.jitter = True
+    
+    def with_max_retries(self, n: int) -> "RetryPolicyBuilder":
+        """Set maximum number of retries."""
+        if n < 0:
+            raise ValueError("max_retries cannot be negative")
+        self.max_retries = n
+        return self
+    
+    def with_initial_delay(self, delay: float) -> "RetryPolicyBuilder":
+        """Set initial retry delay."""
+        if delay < 0:
+            raise ValueError("initial_delay cannot be negative")
+        self.initial_delay = delay
+        return self
+    
+    def with_max_delay(self, delay: float) -> "RetryPolicyBuilder":
+        """Set maximum retry delay."""
+        if delay < 0:
+            raise ValueError("max_delay cannot be negative")
+        self.max_delay = delay
+        return self
+    
+    def with_exponential_base(self, base: float) -> "RetryPolicyBuilder":
+        """Set exponential base for backoff calculation."""
+        if base <= 1.0:
+            raise ValueError("exponential_base must be > 1.0")
+        self.exponential_base = base
+        return self
+    
+    def with_jitter(self, enabled: bool) -> "RetryPolicyBuilder":
+        """Enable/disable random jitter in retry delays."""
+        self.jitter = enabled
+        return self
+    
+    def build(self) -> RetryPolicy:
+        """Build and return the RetryPolicy."""
+        if self.initial_delay > self.max_delay:
+            logger.warning(
+                f"initial_delay ({self.initial_delay}) > "
+                f"max_delay ({self.max_delay})"
+            )
+        
+        return RetryPolicy(
+            max_retries=self.max_retries,
+            initial_delay=self.initial_delay,
+            max_delay=self.max_delay,
+            exponential_base=self.exponential_base,
+            jitter=self.jitter
+        )
+
+
+__all__ = [
+    "GracefulDegradationFramework",
+    "PartialFunctionalityMode",
+    "ComponentFailure",
+    "DegradedResponse",
+    "ComponentMetrics",
+    "DegradationLevel",
+    "ComponentState",
+    "FallbackStrategy",
+    "FailureHandler",
+    "ExponentialBackoffRetry",
+    "RetryPolicy",
+    "RetryResult",
+    "RetryPolicyBuilder",
 ]
