@@ -52,16 +52,18 @@ The LENS protocol (Language, Examination, Navigation, Synthesis) now has concret
 
 All implementation details are in YAML format:
 ```
-.github/roadmap/
-├── cortex-master.yaml          # Master plan with all requirements
+_workspaces/roadmap/
+├── cortex-master.yaml          # Master plan with all requirements (SSOT)
 ├── phases/
-│   ├── phase-01.yaml           # Foundation (5 days)
-│   ├── phase-02.yaml           # Orchestration Core (5 days)
-│   ├── phase-03.yaml           # Safety & Observability (5 days)
-│   ├── phase-04.yaml           # Production Hardening (5 days)
-│   ├── phase-05.yaml           # Brittleness Fixes (5 days)
-│   └── phase-parallel.yaml     # Folder Migration (16 hours, non-blocking)
-└── docs/                       # Documentation (reference only)
+│   ├── phase-01.yaml           # Foundation (36 ACs)
+│   ├── phase-02.yaml           # Orchestration Core (27 ACs)
+│   ├── phase-03.yaml           # Safety & Observability (6 ACs)
+│   ├── phase-04.yaml           # Production Hardening (12 ACs)
+│   ├── phase-05.yaml           # Brittleness Fixes (17 ACs)
+│   └── phase-parallel.yaml     # Folder Migration (3 ACs)
+├── _archives/
+│   └── cortex-master-v1.yaml   # Historical reference (258+ ACs)
+└── reports/                    # Phase completion reports
 ```
 
 ## Code Organization
@@ -328,15 +330,15 @@ pytest --co -q
 
 ## Current Status
 
-Check `.github/roadmap/cortex-master.yaml` for:
-- `tracking.current_phase` - Current implementation phase
-- `tracking.current_day` - Current day within phase
-- `tracking.blockers` - Any blocking issues
+Check `_workspaces/roadmap/cortex-master.yaml` for:
+- `phase_tracker` section - Current implementation phase and status
+- `metadata.completion_percentage` - Overall progress
+- `phase_tracker.PHASE-XX.locked` - Whether phase is complete
 
 ## Important Files to Reference
 
-1. **Master Plan**: `.github/roadmap/cortex-master.yaml` (SSOT - Single Source of Truth)
-2. **Phase Specifications**: `.github/roadmap/phases/phase-NN.yaml` (current & next phases)
+1. **Master Plan**: `_workspaces/roadmap/cortex-master.yaml` (SSOT - Single Source of Truth)
+2. **Phase Specifications**: `_workspaces/roadmap/phases/phase-NN.yaml` (detailed AC specs)
 3. **Governance Rules**: `cortex-brain/tier0/governance/core-rules.yaml` (Tier 0 immutable)
 4. **Phase Enforcement**: `cortex-brain/tier0/governance/phase-enforcement-map.yaml`
 5. **Builder Prompt**: `.github/prompts/cortex-builder.prompt.md`
