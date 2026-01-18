@@ -21,6 +21,15 @@ from .protocol_integration import (
     ConversationProtocolIntegration,
 )
 
+from .governance import (
+    GovernanceRuleType,
+    AuditEventType,
+    GovernanceRule,
+    AuditEntry,
+    ComplianceReport,
+    GovernanceEngine,
+)
+
 __all__ = [
     'ApprovalDecision',
     'ReviewRoutingTeam',
@@ -37,4 +46,10 @@ __all__ = [
     'Stage2Point5Output',
     'ConversationProtocolStage2Point5',
     'ConversationProtocolIntegration',
+    'GovernanceRuleType',
+    'AuditEventType',
+    'GovernanceRule',
+    'AuditEntry',
+    'ComplianceReport',
+    'GovernanceEngine',
 ]
