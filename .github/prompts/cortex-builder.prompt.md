@@ -124,6 +124,278 @@ You are the CORTEX Builder, implementing the CORTEX plan from `_workspaces/roadm
    - CORE-027: AC_START, AC_EXECUTE, AC_COMPLETE audit entries
    - CORE-028: Kebab-case, ≤25 chars total
 
+## ⚠️ INTEGRATION PATTERN: Review Gaps → Master Plan (DEFAULT BEHAVIOR)
+
+**NEW (2026-01-18):** Review gaps MUST be systematically integrated into cortex-master.yaml as default behavior. This section defines the integration protocol.
+
+### When This Activates
+
+Automatic trigger when any of these files appear in `_workspaces/roadmap/issues/`:
+- ✅ `REVIEW-GAPS-EXTRACTED-YYYYMMDD.yaml` (output from cortex-review.prompt.md Phase 3)
+- ✅ `REVIEW-INVESTIGATION-REPORT-YYYYMMDD.yaml` (surgical investigation findings)
+- ✅ `DECISION-GATE-YYYYMMDD.yaml` (investigation decision framework)
+
+**Action:** cortex-builder MUST read these files and integrate gaps into `cortex-master.yaml` BEFORE starting phase implementation.
+
+### Integration Protocol (Step-by-Step)
+
+#### Step A: Pre-Integration Verification
+
+```bash
+# 1. Check if gap files exist
+if [ -f "_workspaces/roadmap/issues/REVIEW-GAPS-EXTRACTED-*.yaml" ]; then
+  # 2. Verify cortex-master.yaml is up to date
+  git status cortex-master.yaml
+  
+  # 3. If modified locally: STASH before integration
+  git stash push cortex-master.yaml -m "pre-gap-integration"
+  
+  # 4. Read gap file to understand scope
+  # 5. Identify affected phases from cortex_master_yaml_updates section
+fi
+```
+
+#### Step B: Gap Extraction & Classification
+
+For each gap in `REVIEW-GAPS-EXTRACTED-YYYYMMDD.yaml`:
+
+```yaml
+# Read gap entry
+gap_entry:
+  gap_id: "GAP-XXX-XXX-001"
+  severity: "CRITICAL|HIGH|MEDIUM|LOW"
+  evidence_grade: "A|B|C"
+  
+  # Extract phase target
+  target_phase: "PHASE-REMEDIATION-03"  # From cortex_master_yaml_updates
+  
+  # Get remedy AC
+  remedy_ac_id: "AC-FIX-001-02"
+  remedy_effort: "1h"
+  remedy_priority: "P0 - CRITICAL"
+
+# Classify for integration
+integration_action:
+  if severity == "CRITICAL" AND evidence_grade in ["A", "B"]:
+    priority: "IMMEDIATE"
+    action: "Add to phase gaps_addressed"
+  elif severity == "HIGH" AND evidence_grade == "A":
+    priority: "NEXT SPRINT"
+    action: "Add to phase gaps_addressed"
+  else:
+    priority: "BACKLOG"
+    action: "Document in gaps_addressed for future reference"
+```
+
+#### Step C: Phase Updates in cortex-master.yaml
+
+For each affected phase, apply these updates:
+
+```yaml
+# Before (from phase_tracker or phase YAML)
+PHASE-REMEDIATION-03:
+  status: "COMPLETED"
+  locked: true
+  ac_ids: 8
+  blocking: false
+
+# After (integrated gaps)
+PHASE-REMEDIATION-03:
+  status: "IN_PROGRESS"          # CHANGED: New ACs to implement
+  locked: false                  # CHANGED: Allow modifications
+  ac_ids: 10                     # CHANGED: 8 + 2 new (AC-FIX-001-02, AC-FIX-001-03)
+  completed_ac_ids: 8            # UNCHANGED: Original ACs remain complete
+  blocking: true                 # CHANGED: Critical path for test suite
+  
+  # NEW SECTION: Add gaps_addressed
+  gaps_addressed:
+    - gap_id: "GAP-HASH-CHAIN-001"
+      severity: "CRITICAL"
+      evidence_grade: "A"
+      description: "[from gap entry]"
+      remedy_ac_id: "AC-FIX-001-02"
+    
+    - gap_id: "GAP-HASH-VALIDATE-001"
+      severity: "CRITICAL"
+      evidence_grade: "A"
+      description: "[from gap entry]"
+      remedy_ac_id: "AC-FIX-001-03"
+  
+  # UPDATE ac_breakdown
+  ac_breakdown:
+    critical_blockers: 4         # CHANGED: 2 → 4 (added AC-FIX-001-02, AC-FIX-001-03)
+    
+  # ADD investigation metadata
+  metadata:
+    review_investigation_date: "2026-01-18"
+    review_investigation_report: "_workspaces/roadmap/issues/REVIEW-INVESTIGATION-REPORT-20260118.yaml"
+    decision_gate: "_workspaces/roadmap/issues/DECISION-GATE-20260118.yaml"
+```
+
+#### Step D: Add New AC Specifications
+
+For each remedy AC (e.g., AC-FIX-001-02), add full specification to phase:
+
+```yaml
+# In PHASE-REMEDIATION-03 ac_ids section, ADD:
+ac_fix_001_02:
+  status: "NOT_STARTED"
+  priority: "P0 - CRITICAL"
+  issue_discovered: "2026-01-18"
+  issue_id: "ISSUE-005B"
+  root_cause: "Design defect: previous_hash hardcoded to '' in DatabaseTransactionManager._log_audit_entry()"
+  evidence_grade: "A (95% confidence - direct code inspection + SQL verification)"
+  
+  task: "Fix hash chain calculation"
+  description: |
+    Replace hardcoded empty string with calculation from prior entry's entry_hash
+    Current: previous_hash = "" (line ~220, marked "for simplicity in tests")
+    Fix: previous_hash = prior_entry.entry_hash
+  
+  acceptance_criteria:
+    - "previous_hash correctly calculated from prior entry"
+    - "Hash chain linkage verified in unit tests"
+    - "test_hash_chain_integrity passes"
+    - "All governance rules compliant"
+  
+  estimated_effort: "1 hour"
+  blocking_for:
+    - "test_hash_chain_integrity"
+    - "AC-FIX-001-03"
+    - "PHASE-REMEDIATION-04"
+  depends_on:
+    - "AC-FIX-001-01"
+  
+  governance_rules:
+    - "CORE-008: Tests first (RED → GREEN)"
+    - "CORE-011: Type hints mandatory"
+    - "CORE-012: Docstrings mandatory"
+    - "CORE-025: Hash chain integrity"
+    - "CORE-027: Audit trail lifecycle"
+
+ac_fix_001_03:
+  status: "NOT_STARTED"
+  priority: "P0 - CRITICAL"
+  issue_discovered: "2026-01-18"
+  issue_id: "ISSUE-005B"
+  root_cause: "Missing validation layer - no validation gate before commit"
+  evidence_grade: "A (95% confidence - architectural necessity)"
+  
+  task: "Add hash chain validation gate"
+  description: |
+    Add _validate_hash_chain(entry, prior) → bool method
+    Raises HashChainIntegrityError if broken linkage detected
+    Called before transaction commit to prevent bad entries
+    Prevents regression after AC-FIX-001-02 implementation
+  
+  acceptance_criteria:
+    - "_validate_hash_chain() method exists and called pre-commit"
+    - "Validation blocks bad entries (raises exception)"
+    - "test_hash_chain_validation_gate passes"
+    - "Integration tests verify no broken chain possible"
+    - "All governance rules compliant"
+  
+  estimated_effort: "45 minutes"
+  blocking_for:
+    - "clean_audit_log_regeneration"
+    - "PHASE-REMEDIATION-04"
+  depends_on:
+    - "AC-FIX-001-02"
+  
+  governance_rules:
+    - "CORE-008: Tests first"
+    - "CORE-011: Type hints"
+    - "CORE-012: Docstrings"
+    - "CORE-025: Hash chain integrity"
+    - "CORE-027: Audit trail lifecycle"
+```
+
+#### Step E: Validation Before Commit
+
+```bash
+# 1. Verify phase YAML is syntactically valid
+yamllint cortex-master.yaml
+
+# 2. Verify ac_ids count matches
+grep -c "ac_fix_001\|ac_fix_002\|ac_fix_003" cortex-master.yaml
+
+# 3. Verify blocking_for dependencies don't create cycles
+# (if AC-FIX-X blocks AC-FIX-Y, then AC-FIX-Y cannot be in depends_on of AC-FIX-X)
+
+# 4. Verify all referenced rule IDs exist
+for rule in CORE-008 CORE-011 CORE-012 CORE-025 CORE-027; do
+  grep -q "$rule" cortex-brain/tier0/governance/core-rules.yaml || echo "Missing: $rule"
+done
+
+# 5. Run test to verify audit log still valid
+pytest tests/integration/test_audit_trail_integrity.py -v
+```
+
+#### Step F: Git Commit
+
+```bash
+# Commit with traceable message linking gaps to implementation
+git add cortex-master.yaml
+git commit -m "integrate-review-gaps: ISSUE-005B remediation ACs added
+
+- Added AC-FIX-001-02: Fix hash chain calculation (1h)
+- Added AC-FIX-001-03: Add hash chain validation gate (45m)
+- Updated PHASE-REMEDIATION-03: status IN_PROGRESS, locked: false
+- Added gaps_addressed section with evidence traceability
+- Integrated REVIEW-INVESTIGATION-REPORT-20260118.yaml findings
+
+Root cause: Design defect in DatabaseTransactionManager._log_audit_entry()
+Evidence grade: A (95% confidence, direct code inspection + SQL verification)
+Blocking status: CRITICAL (test_hash_chain_integrity cannot pass)
+
+See: _workspaces/roadmap/issues/REVIEW-INVESTIGATION-REPORT-20260118.yaml
+See: _workspaces/roadmap/issues/DECISION-GATE-20260118.yaml"
+```
+
+### Holistic Refactoring Patterns
+
+**When integrating multiple gaps, analyze for:**
+
+1. **Root Cause Clustering** - Multiple gaps from single defect?
+   - Example: 78 hash chain breaks from 1 line of code
+   - Result: 2 ACs (fix + validation) not 78 separate ACs
+   - Integration: Add cluster_analysis metadata to gaps_addressed
+
+2. **Pattern Recognition** - Same issue in multiple places?
+   - Example: Bare except clauses in 5 files
+   - Result: Single refactoring AC vs 5 separate fixes
+   - Integration: Create AC-REFACTOR-XXX instead of individual fixes
+
+3. **Dependency Optimization** - Can ACs be parallelized?
+   - Example: AC-FIX-A and AC-FIX-B independent?
+   - Result: Can implement in parallel, faster delivery
+   - Integration: Remove unnecessary blocking_for relationships
+
+4. **Evidence Grading** - Higher confidence → Higher priority
+   - Grade A (95%): P0 - IMMEDIATE
+   - Grade B (85%): P1 - Next sprint
+   - Grade C (70%): P2 - Backlog (NOT for critical findings)
+   - Integration: Priority field must match evidence_grade
+
+### Systematic vs Ad-Hoc Gap Integration
+
+**REQUIRED (Default Behavior):**
+✅ Every review produces REVIEW-GAPS-EXTRACTED file
+✅ Every gap file triggers cortex-builder integration
+✅ Integration follows Phase B-F protocol above
+✅ Holistic analysis prevents duplicate/redundant ACs
+✅ All integration commits are traceable to review reports
+✅ No manual "add gaps later" - it's automatic
+
+**FORBIDDEN (Anti-Pattern):**
+❌ Manual additions of AC-FIX entries without review file
+❌ Skipping holistic refactoring analysis
+❌ Creating 10 ACs for 1 root cause
+❌ Leaving review findings unintegrated
+❌ Adding gaps without evidence metadata
+
+---
+
 ## CRITICAL: Check Before Implementing
 
 **ALWAYS read `cortex-master.yaml` (Current) → `phase_tracker` section FIRST.**

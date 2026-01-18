@@ -2102,13 +2102,17 @@ phase_tracker:
     phase_yaml: "_workspaces/roadmap/phases/phase-remediation-02.yaml"
 
   PHASE-REMEDIATION-03:
-    title: "Critical Architecture Issues Remediation from ISSUE-005"
+    title: "Critical Architecture Issues Remediation from ISSUE-005 + Hash Chain Defect (ISSUE-005B)"
     description: |
       Remediation of 8 findings from ISSUE-005: Comprehensive Architecture Review
+      PLUS NEW FINDINGS from Review Investigation (2026-01-18):
+      - HASH-CHAIN-BREAK: Design defect in DatabaseTransactionManager hash calculation
+      - VALIDATION-GAP: Hash chain validation missing from audit log
       
       CRITICAL BLOCKERS (must fix before production):
       - FINDING-001: Orchestrator state management non-atomic
       - FINDING-002: Governance validation post-execution (should be pre-)
+      - HASH-CHAIN: previous_hash hardcoded to empty string in _log_audit_entry()
       
       HIGH PRIORITY (prevent cascading failures):
       - FINDING-003: Exception handler error suppression
@@ -2119,28 +2123,49 @@ phase_tracker:
       MEDIUM PRIORITY (technical debt):
       - FINDING-007: Documentation drift in Tier3 knowledge
       - FINDING-008: Test naming conventions (CORE-028)
+      - HASH-VALIDATE: Add hash chain validation gate after AC-FIX-001-02
     
-    ac_ids: 8
-    completed_ac_ids: 8  # ALL 8 ACs COMPLETE ✅
-    status: "COMPLETED"  # 8/8 ACs complete (100%)
-    locked: true
+    ac_ids: 10  # Updated from 8: +2 new ACs for hash chain fix
+    completed_ac_ids: 8
+    status: "IN_PROGRESS"  # Updated from COMPLETED - new ACs added from review
+    locked: false  # Updated from true - new ACs require completion
     requires: "PHASE-REMEDIATION-02"
-    estimated_hours: 14.25
+    estimated_hours: 16.25  # Updated from 14.25 (+2 hours for hash chain fix)
     estimated_days: 2.5
     actual_hours: 3.75
     actual_days: 0.19
     completion_target: "2026-01-19"
     priority: "P0"
-    blocking: false
+    blocking: true  # CRITICAL - hash chain blocks test suite
     phase_yaml: "_workspaces/roadmap/phases/phase-remediation-03.yaml"
     
+    # NEW GAPS DISCOVERED (2026-01-18 Review Investigation)
+    gaps_addressed:
+      - gap_id: "GAP-HASH-CHAIN-001"
+        description: "AC-FIX-001-01 Hash Chain Integrity - previous_hash hardcoded to empty string in DatabaseTransactionManager._log_audit_entry()"
+        severity: "CRITICAL"
+        issue_id: "ISSUE-005B"
+        root_cause: "Design defect: line ~220 hardcodes `previous_hash = ''` with comment 'for simplicity in tests'"
+        impact: "78 hash chain violations detected in audit log, breaks CORE-025 compliance"
+        remedy_ac_id: "AC-FIX-001-02"
+      - gap_id: "GAP-HASH-VALIDATE-001"
+        description: "AC-FIX-001-02 Hash Chain Validation Gate - add _validate_hash_chain() method to prevent recurrence"
+        severity: "CRITICAL"
+        issue_id: "ISSUE-005B"
+        root_cause: "Missing validation layer after AC-FIX-001-01 fix implementation"
+        impact: "Future entries could reintroduce hash chain breaks if validation gate missing"
+        remedy_ac_id: "AC-FIX-001-03"
+    
     ac_breakdown:
-      critical_blockers: 2  # AC-FIX-001-01 ✅ AC-FIX-002-01 ✅
+      critical_blockers: 4  # AC-FIX-001-01 ✅ AC-FIX-001-02 (NEW) AC-FIX-001-03 (NEW) AC-FIX-002-01 ✅
       high_priority: 4      # AC-FIX-003-01 ✅ AC-FIX-004-01 ✅ AC-FIX-005-01 ✅ AC-FIX-006-01 ✅
       medium_priority: 2    # AC-DOC-007-01 ✅ AC-MINOR-008-01 ✅
     
     evidence_location: "_workspaces/roadmap/issues/issue-report-05.yaml"
     review_commit: "1559c1bee"
+    review_investigation_date: "2026-01-18"
+    review_investigation_report: "_workspaces/roadmap/issues/REVIEW-INVESTIGATION-REPORT-20260118.yaml"
+    decision_gate: "_workspaces/roadmap/issues/DECISION-GATE-20260118.yaml"
     
     # AC-FIX-001-01: State Management Atomicity ✅ COMPLETE
     ac_fix_001_01:
@@ -2161,6 +2186,83 @@ phase_tracker:
       finding_addressed: "FINDING-001 (CRITICAL)"
       completion_report: "AC-FIX-001-01-COMPLETION-REPORT.md"
     
+    # AC-FIX-001-02: Fix Hash Chain Calculation 🆕 NEW (from review investigation 2026-01-18)
+    ac_fix_001_02:
+      status: "NOT_STARTED"
+      priority: "P0 - CRITICAL"
+      issue_discovered: "2026-01-18"
+      investigation_report: "REVIEW-INVESTIGATION-REPORT-20260118.yaml"
+      root_cause: |
+        In DatabaseTransactionManager._log_audit_entry() (line ~220):
+        - previous_hash is hardcoded to empty string: `previous_hash = ""`
+        - Comment in code indicates "for simplicity in tests" (incomplete implementation)
+        - Breaks hash chain linkage: each entry.previous_hash doesn't match prior entry.entry_hash
+        - Consequence: 78 hash chain violations detected in audit_log for AC-FIX-001-01 entries
+      
+      task_description: |
+        Replace hardcoded previous_hash with calculation from prior entry.
+        1. Query database for previous entry's entry_hash
+        2. Store as previous_hash in new entry  
+        3. Update hash calculation to include correct previous_hash
+        4. Add unit test to verify chain linkage
+        5. Verify locally before committing
+      
+      acceptance_criteria:
+        - "previous_hash correctly calculated from prior entry"
+        - "Hash chain linkage verified in unit tests"
+        - "TDD: write failing test first, implement fix, test passes"
+        - "test_hash_chain_calculation() added to test suite"
+        - "All governance rules verified (CORE-008, CORE-011, CORE-012)"
+      
+      estimated_effort: "1 hour"
+      blocking_for: ["test_hash_chain_integrity", "AC-FIX-001-03", "PHASE-REMEDIATION-04"]
+      evidence_grade: "A (95% confidence - direct code inspection + SQL verification)"
+      governance_rules:
+        - "CORE-008: TDD (tests first)"
+        - "CORE-011: Type hints mandatory"
+        - "CORE-012: Docstrings mandatory"
+        - "CORE-025: Hash chain integrity"
+        - "CORE-027: Audit lifecycle"
+    
+    # AC-FIX-001-03: Add Hash Chain Validation Gate 🆕 NEW (from review investigation 2026-01-18)
+    ac_fix_001_03:
+      status: "NOT_STARTED"
+      priority: "P0 - CRITICAL"
+      issue_discovered: "2026-01-18"
+      investigation_report: "REVIEW-INVESTIGATION-REPORT-20260118.yaml"
+      root_cause: |
+        Missing validation layer after hash chain fix.
+        - AC-FIX-001-02 fixes the calculation, but no gate prevents regression
+        - Future entries could reintroduce hash chain breaks if validation missing
+        - Need: _validate_hash_chain() method called before transaction commit
+      
+      task_description: |
+        Add hash chain validation method to DatabaseTransactionManager.
+        1. Add method: _validate_hash_chain(entry: AuditLogEntry, prior: AuditLogEntry) -> bool
+        2. Verify entry.previous_hash matches prior.entry_hash
+        3. Raise HashChainIntegrityError if chain broken
+        4. Call validation before committing transaction
+        5. Add unit tests for validation gate
+      
+      acceptance_criteria:
+        - "_validate_hash_chain() method exists and is called"
+        - "Validation blocks bad entries (raises HashChainIntegrityError)"
+        - "Unit tests: test_hash_chain_validation_gate()"
+        - "Integration tests: verify no entries with broken chain possible"
+        - "All governance rules verified (CORE-008, CORE-011, CORE-012)"
+      
+      estimated_effort: "45 minutes"
+      depends_on: "AC-FIX-001-02"
+      blocking_for: ["clean_audit_log_regeneration", "PHASE-REMEDIATION-04"]
+      evidence_grade: "A (95% confidence - architectural necessity)"
+      governance_rules:
+        - "CORE-008: TDD (tests first)"
+        - "CORE-011: Type hints mandatory"
+        - "CORE-012: Docstrings mandatory"
+        - "CORE-025: Hash chain integrity (validation layer)"
+        - "CORE-027: Audit lifecycle (per-entry validation)"
+    
+
     # AC-FIX-002-01: Governance Pre-Execution Gates ✅ COMPLETE
     ac_fix_002_01:
       status: "COMPLETED"

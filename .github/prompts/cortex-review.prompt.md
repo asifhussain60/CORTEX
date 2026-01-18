@@ -1,10 +1,21 @@
 # CORTEX Review System - Unified & Surgical
 ## Complete Review Protocol with Investigation & Implementation Support
 
-**Version:** 3.0 (Jan 18, 2026)  
+**Version:** 3.1 (Jan 18, 2026) - NOW WITH SYSTEMATIC GAP INTEGRATION ⭐  
 **Status:** PRODUCTION READY ✅  
 **Efficiency:** 4.5 hours (investigation + fix + review + delivery)  
 **Confidence:** A-grade evidence (95%+)
+
+**🆕 NEW (2026-01-18): Systematic Gap Identification & Remediation**
+
+Every review AUTOMATICALLY produces actionable gaps that are:
+- ✅ Extracted from findings (Phase 3A)
+- ✅ Analyzed holistically (Phase 3B)
+- ✅ Generated as structured YAML (Phase 3C)
+- ✅ Integrated into cortex-master.yaml (cortex-builder.prompt.md automatic)
+- ✅ No manual gap management needed
+
+**Result:** From findings to master plan remediation in single workflow.
 
 ---
 
@@ -665,54 +676,256 @@ Score = (PASS rules × 10) / Total rules
 
 ---
 
-## PHASE 3: REMEDIATION HANDOFF (Immediate)
+## PHASE 3: REMEDIATION INTEGRATION (Systematic Gap → Master Plan)
 
-### If Findings Exist
+### ⚠️ CRITICAL: DEFAULT BEHAVIOR - ALWAYS INTEGRATE GAPS
 
-**Create:** `_workspaces/roadmap/phases/phase-remediation-NNN.yaml`
+**MANDATE:** Every review MUST produce gap identifications that are automatically integrated into `cortex-master.yaml` via cortex-builder.prompt.md. This is NOT optional.
+
+**Default Workflow:**
+```
+Phase 2 Output: REVIEW-FINDINGS-CONSOLIDATED-YYYYMMDD.yaml
+            ↓ (contains all findings with severity/evidence/remediation)
+Phase 3: Automatic Gap Extraction
+            ↓ (classify by type: implementation_flaw, integration_issue, design_weakness)
+      Holistic Refactor Analysis
+            ↓ (analyze interdependencies across findings)
+      YAML Generation: gaps_addressed + ac_breakdown updates
+            ↓ (structured for cortex-builder.prompt.md integration)
+cortex-builder.prompt.md Integration
+            ↓ (read phase_tracker, identify gaps section)
+      Update cortex-master.yaml
+            ↓ (ADD gaps_addressed + NEW AC-FIX ACs to phase)
+COMPLETE: Phase status IN_PROGRESS, locked: false, ready for implementation
+```
+
+### Step 1: Extract Gaps from Consolidated Findings
+
+**Input:** `REVIEW-FINDINGS-CONSOLIDATED-YYYYMMDD.yaml`
+
+**Process:** For EACH finding with severity >= MEDIUM:
+
+```yaml
+# Map finding to gap entry format
+gap_extraction:
+  finding_id: "F001"
+  severity: "CRITICAL"
+  evidence_grade: "A"
+  
+  # Convert to gaps_addressed format
+  gap_id: "GAP-HASH-CHAIN-001"  # Systematic ID: GAP-{DOMAIN}-{NNN}
+  description: "Hash chain integrity - [specific issue from finding]"
+  root_cause: "IMPLEMENTATION_FLAW|INTEGRATION_ISSUE|DESIGN_WEAKNESS"
+  affected_ac_ids: ["AC-FIX-001-01", "AC-DECORATOR-001"]  # Which ACs have this issue
+  
+  # Remediation mapping
+  remedy_ac_id: "AC-FIX-001-02"  # New AC to create for fix
+  remedy_effort: "1h"
+  remedy_priority: "P0 - CRITICAL"
+  
+  # Cross-dependencies
+  blocking_for: ["AC-FIX-001-03", "test_hash_chain_integrity"]
+  depends_on: ["AC-FIX-001-01"]
+  
+  # Governance
+  related_skull_rules: ["CORE-025", "CORE-027", "CORE-008"]
+  
+  # Traceability
+  issue_id: "ISSUE-005B"
+  investigation_report: "_workspaces/roadmap/issues/REVIEW-INVESTIGATION-REPORT-20260118.yaml"
+```
+
+### Step 2: Holistic Refactoring Analysis
+
+**Systematic Review Pattern:**
+
+Before creating individual AC-FIX entries, analyze ALL gaps for:
+
+#### A. Interdependencies
+```yaml
+dependency_matrix:
+  # Do multiple gaps stem from single root cause?
+  # Example: 5 gaps from single hash chain design defect
+  - root_cause_cluster: "Hash Chain Design"
+    gaps_affected: ["GAP-HASH-CHAIN-001", "GAP-HASH-VALIDATE-001"]
+    single_fix_addresses: 2
+    combined_effort: "1.75h"
+    
+  # Separate concerns (independent gaps need separate ACs)
+  - root_cause_cluster: "Test Isolation"
+    gaps_affected: ["GAP-TEST-FIXTURE-001"]
+    single_fix_addresses: 1
+    combined_effort: "45m"
+```
+
+#### B. Pattern Recognition
+```yaml
+pattern_analysis:
+  # Brittle patterns appearing in multiple files?
+  - pattern: "Bare except clauses"
+    files_affected: 3
+    potential_consolidation: "AC-REFACTOR-ERROR-HANDLING-001"
+    
+  # Missing abstractions?
+  - pattern: "Duplicated logic in X locations"
+    refactoring_opportunity: "AC-REFACTOR-ABSTRACTION-001"
+```
+
+#### C. Evidence-Based Decision Making
+```yaml
+evidence_based_decisions:
+  # CRITICAL gaps (Grade A evidence) → P0 ACs, immediate remediation
+  - gap: "GAP-HASH-CHAIN-001"
+    evidence_grade: "A (95% confidence)"
+    decision: "IMMEDIATE - Blocks test_hash_chain_integrity"
+    priority: "P0 - CRITICAL"
+    
+  # HIGH gaps (Grade B evidence) → P1 ACs, prioritized
+  - gap: "GAP-BARE-EXCEPT-001"
+    evidence_grade: "B (85% confidence)"
+    decision: "NEXT SPRINT - Production risk but not blocking"
+    priority: "P1 - HIGH"
+    
+  # MEDIUM gaps (Grade B evidence) → P2 ACs, planned
+  - gap: "GAP-CODE-DUPLICATION-001"
+    evidence_grade: "B (80% confidence)"
+    decision: "REFACTORING PHASE - Technical debt"
+    priority: "P2 - MEDIUM"
+```
+
+### Step 3: Generate Structured YAML for cortex-builder Integration
+
+**Output File:** `_workspaces/roadmap/issues/REVIEW-GAPS-EXTRACTED-YYYYMMDD.yaml`
 
 ```yaml
 metadata:
-  created_from_review: "REVIEW-FINDINGS-CONSOLIDATED-YYYYMMDD.yaml"
-  blocking_criteria: "All CRITICAL findings must be remediated"
+  review_date: "2026-01-18"
+  consolidated_findings_source: "REVIEW-FINDINGS-CONSOLIDATED-YYYYMMDD.yaml"
+  total_findings: 15
+  gaps_extracted: 8
+  critical_gaps: 2
+  high_gaps: 4
+  medium_gaps: 2
 
-ac_ids:
-  - ac_id: "AC-FIX-001-02"
-    source_finding: "F001"
+gap_summary:
+  total_affected_acs: 12
+  total_new_acs_needed: 8
+  combined_effort: "8.5 hours"
+  blocking_status: "CRITICAL (2 gaps block test suite)"
+
+gaps_addressed:
+  - gap_id: "GAP-HASH-CHAIN-001"
     severity: "CRITICAL"
-    title: "Fix hash chain calculation in DatabaseTransactionManager"
-    description: "Replace hardcoded previous_hash with calculation from prior entry"
-    ac_before: "AC-FIX-001-01"
-    ac_after: null  # None - this is a fix
-    effort: "1h"
+    evidence_grade: "A"
+    description: "Hash chain integrity - previous_hash hardcoded to empty string"
+    root_cause: "IMPLEMENTATION_FLAW in DatabaseTransactionManager._log_audit_entry()"
+    affected_ac_ids: ["AC-FIX-001-01"]
+    affected_tests: ["test_hash_chain_integrity"]
     
-  - ac_id: "AC-FIX-001-03"
-    source_finding: "F001"
+    remedy:
+      ac_id: "AC-FIX-001-02"
+      title: "Fix Hash Chain Calculation"
+      description: "Replace hardcoded previous_hash with calculation from prior entry"
+      effort: "1 hour"
+      priority: "P0 - CRITICAL"
+      blocking_for: ["AC-FIX-001-03", "PHASE-REMEDIATION-04"]
+      depends_on: ["AC-FIX-001-01"]
+      related_skull_rules: ["CORE-008", "CORE-011", "CORE-012", "CORE-025", "CORE-027"]
+      issue_id: "ISSUE-005B"
+    
+    # Holistic refactoring context
+    holistic_context:
+      root_cause_cluster: "Hash Chain Architecture"
+      cluster_gaps: ["GAP-HASH-CHAIN-001", "GAP-HASH-VALIDATE-001"]
+      cluster_effort_total: "1.75 hours"
+      cluster_priority: "CRITICAL PATH"
+      cluster_blocking: "test_hash_chain_integrity cannot pass until both ACs complete"
+  
+  - gap_id: "GAP-HASH-VALIDATE-001"
     severity: "CRITICAL"
-    title: "Add hash chain validation gate"
-    description: "Add _validate_hash_chain() method to prevent recurrence"
-    ac_before: "AC-FIX-001-02"
-    ac_after: null
-    effort: "45m"
+    evidence_grade: "A"
+    description: "Hash chain validation gate missing - no validation before commit"
+    root_cause: "DESIGN_WEAKNESS - missing validation layer after hash calculation"
+    affected_ac_ids: []  # New gap from investigation
+    affected_tests: ["test_hash_chain_integrity"]
+    
+    remedy:
+      ac_id: "AC-FIX-001-03"
+      title: "Add Hash Chain Validation Gate"
+      description: "Add _validate_hash_chain() method, call before transaction commit"
+      effort: "45 minutes"
+      priority: "P0 - CRITICAL"
+      blocking_for: ["clean_audit_log_regeneration", "PHASE-REMEDIATION-04"]
+      depends_on: ["AC-FIX-001-02"]
+      related_skull_rules: ["CORE-008", "CORE-011", "CORE-012", "CORE-025", "CORE-027"]
+      issue_id: "ISSUE-005B"
+    
+    holistic_context:
+      root_cause_cluster: "Hash Chain Architecture"
+      cluster_gaps: ["GAP-HASH-CHAIN-001", "GAP-HASH-VALIDATE-001"]
+      cluster_effort_total: "1.75 hours"
+      cluster_priority: "CRITICAL PATH"
+      cluster_blocking: "test_hash_chain_integrity cannot pass until both ACs complete"
 
-blocking_criteria:
-  - "CRITICAL: Hash chain must be unbroken (test_hash_chain_integrity PASSES)"
-  - "CRITICAL: All type hints must be 100% (mypy clean)"
-  - "CRITICAL: All governance rules must pass"
+# Additional gaps follow same pattern...
 
-unlock_criteria:
-  - "All CRITICAL AC-FIX-XXX-XX complete"
-  - "Production readiness score >= 7/10"
-  - "All governance rules: PASS"
+cortex_master_yaml_updates:
+  # These updates MUST be applied by cortex-builder.prompt.md
+  # See cortex-builder.prompt.md → "INTEGRATION PATTERN: Review Gaps → Master Plan"
+  
+  affected_phase: "PHASE-REMEDIATION-03"
+  current_phase_status: "COMPLETED"  # Need to change to IN_PROGRESS
+  
+  phase_changes:
+    title: "Add ISSUE-005B reference"
+    status: "IN_PROGRESS"  # Was: COMPLETED
+    locked: false  # Was: true
+    ac_ids: "8 → 10"  # Adding AC-FIX-001-02 and AC-FIX-001-03
+    completed_ac_ids: "8 (unchanged)"
+    blocking: true  # Critical path
+    
+  gaps_addressed_section:
+    # Add this new section with all gaps from this review
+    gaps: "[see gaps_addressed array above]"
+    
+  ac_breakdown:
+    critical_blockers: "2 → 4"  # Adding new blocker ACs
+    
+  metadata:
+    review_investigation_date: "2026-01-18"
+    review_investigation_report: "_workspaces/roadmap/issues/REVIEW-INVESTIGATION-REPORT-YYYYMMDD.yaml"
+    decision_gate: "_workspaces/roadmap/issues/DECISION-GATE-YYYYMMDD.yaml"
 ```
+
+### Step 4: Trigger cortex-builder Integration
+
+**Command:** 
+```bash
+/cortex-builder integrate-gaps \
+  --findings-file REVIEW-FINDINGS-CONSOLIDATED-YYYYMMDD.yaml \
+  --gaps-file REVIEW-GAPS-EXTRACTED-YYYYMMDD.yaml \
+  --master-plan cortex-master.yaml
+```
+
+**cortex-builder.prompt.md will:**
+1. Read gaps_addressed from REVIEW-GAPS-EXTRACTED file
+2. Identify affected phase in phase_tracker
+3. Update phase status, ac_ids, gaps_addressed section
+4. Add new AC-FIX entries with full specifications
+5. Update ac_breakdown with new critical blockers
+6. Add investigation references (dates, reports)
+7. Set phase status to IN_PROGRESS and locked: false
+8. Commit with: `git commit -m "integrate-review-gaps: ISSUE-XXX remediation ACs added"`
 
 ### If No Critical Findings
 
 ```yaml
 decision: "READY FOR PRODUCTION DEPLOYMENT"
-findings: "No CRITICAL or blocking issues"
+findings_summary: "No CRITICAL or blocking issues identified"
 next_phase: "PHASE-NEXT (from cortex-master.yaml)"
-documentation: "All assumptions documented, no unknowns"
+production_readiness: "9/10 (all governance compliant)"
+documentation_complete: true
+assumptions_documented: true
 ```
 
 ---
@@ -828,6 +1041,245 @@ BLOCKERS BEFORE PHASE 1: 0 (AC-FIX remediation complete)
 PRODUCTION READINESS: 95% (governance compliant)
 ```
 
+### Phase 3 Continuation: Gap Extraction & Integration (NEW - 2026-01-18)
+
+```bash
+# After Phase 2 consolidation:
+/review consolidate
+# Output: REVIEW-FINDINGS-CONSOLIDATED-20260118.yaml
+
+# Phase 3A: Extract gaps from consolidated findings
+/review extract-gaps --findings REVIEW-FINDINGS-CONSOLIDATED-20260118.yaml
+# Output: REVIEW-GAPS-EXTRACTED-20260118.yaml
+# Time: ~10 min
+
+# Phase 3B: Holistic refactoring analysis
+/review refactor-holistic --gaps REVIEW-GAPS-EXTRACTED-20260118.yaml
+# Updates REVIEW-GAPS-EXTRACTED-20260118.yaml with:
+#   - Holistic context for each gap
+#   - Root cause clustering analysis
+#   - Pattern recognition recommendations
+#   - Dependency optimization suggestions
+# Time: ~5 min
+
+# Phase 3C: Generate structured YAML for cortex-builder
+/review remediation --gaps REVIEW-GAPS-EXTRACTED-20260118.yaml --master cortex-master.yaml
+# Validates gaps are ready for integration
+# Generates cortex_master_yaml_updates section
+# Time: ~5 min
+
+# AUTOMATIC (cortex-builder integration)
+# cortex-builder.prompt.md detects REVIEW-GAPS-EXTRACTED file and:
+#   1. Reads gap entries from REVIEW-GAPS-EXTRACTED-20260118.yaml
+#   2. Updates cortex-master.yaml phase_tracker
+#   3. Adds gaps_addressed section with evidence metadata
+#   4. Creates new AC-FIX entries with full specifications
+#   5. Updates ac_breakdown with new critical blockers
+#   6. Adds investigation references (dates, reports)
+#   7. Commits with traceable message
+
+TOTAL TIME (Phase 3): 20 min (gap extraction + analysis + yaml generation)
+INTEGRATION TIME: Automatic (cortex-builder triggered)
+RESULT: cortex-master.yaml updated, phase ready for implementation
+```
+
+---
+
+## SYSTEMATIC GAP IDENTIFICATION & REMEDIATION (Default Workflow)
+
+### Purpose
+
+**MANDATE:** Every review AUTOMATICALLY produces:
+1. REVIEW-FINDINGS-CONSOLIDATED (Phase 2 output)
+2. REVIEW-GAPS-EXTRACTED (Phase 3A output) ← NEW
+3. cortex_master_yaml_updates section (Phase 3B/3C output) ← NEW
+4. Integration into cortex-master.yaml (cortex-builder.prompt.md) ← AUTOMATIC
+
+**Outcome:** Zero manual gap management. Systematic, traceable, actionable.
+
+### Key Principles
+
+**1. Holistic Analysis Before AC Creation**
+```
+Instead of: Finding detected → Create AC immediately
+Principle:  Analyze all findings → Cluster by root cause → Create minimal AC set
+Result:     78 violations from 1 defect = 2 ACs (fix + validation), not 78 ACs
+```
+
+**2. Evidence-Based Prioritization**
+```
+Grade A (95% confidence) → P0 - CRITICAL → Implement immediately
+Grade B (85% confidence) → P1 - HIGH → Next sprint
+Grade C (70% confidence) → P2 - MEDIUM → Backlog (NOT for critical findings)
+```
+
+**3. Systematic Root Cause Classification**
+```
+IMPLEMENTATION_FLAW  → Code bug, usually fixable in 1-2 ACs
+INTEGRATION_ISSUE    → Component mismatch, may need refactoring
+DESIGN_WEAKNESS      → Architectural issue, often needs multiple ACs
+```
+
+**4. Automatic Integration into Master Plan**
+```
+Review findings → Extract gaps → cortex-builder reads files → Master plan updated
+No manual "add to roadmap" needed - it's automatic on file detection
+```
+
+### Gap Extraction Algorithm (Phase 3A)
+
+```yaml
+for each finding in REVIEW-FINDINGS-CONSOLIDATED:
+  if finding.severity >= MEDIUM AND finding.evidence_grade in ["A", "B"]:
+    # Extract gap entry
+    gap_id = "GAP-" + finding.domain.upper() + "-" + counter
+    
+    # Map to remedy AC
+    remedy_ac_id = "AC-FIX-" + ac_domain + "-" + counter
+    remedy_effort = estimate_from_root_cause(finding.root_cause)
+    remedy_priority = map_evidence_to_priority(finding.evidence_grade)
+    
+    # Identify dependencies
+    blocking_for = identify_blocked_tests_and_acs(finding)
+    depends_on = identify_prerequisite_acs(finding)
+    
+    # Add to gaps_addressed
+    gaps_addressed.append({
+      gap_id, severity, evidence_grade, description,
+      remedy_ac_id, remedy_effort, remedy_priority,
+      blocking_for, depends_on, related_skull_rules,
+      issue_id, investigation_report
+    })
+```
+
+### Holistic Refactoring Analysis (Phase 3B)
+
+For all gaps extracted, systematically analyze:
+
+```yaml
+holistic_analysis:
+
+  # 1. Root Cause Clustering
+  root_cause_clusters:
+    - cluster_name: "Hash Chain Architecture"
+      cluster_gaps: ["GAP-HASH-CHAIN-001", "GAP-HASH-VALIDATE-001"]
+      cluster_root_cause: "Design defect in DatabaseTransactionManager"
+      cluster_effort_total: "1.75 hours"
+      cluster_priority: "CRITICAL PATH"
+      cluster_ac_count: 2
+      single_root_cause_benefit: "Fixes 2 gaps with unified approach"
+      
+      action: "Keep both ACs - they're sequential (fix then validate)"
+  
+  # 2. Pattern Recognition
+  pattern_analysis:
+    - pattern: "Bare except clauses"
+      occurrences: 5
+      files_affected: ["src/file1.py", "src/file2.py", "src/file3.py"]
+      consolidation_opportunity: "AC-REFACTOR-ERROR-HANDLING-001"
+      effort: "2 hours"
+      priority: "P1 - HIGH"
+      
+      recommendation: "Single refactoring AC instead of 5 separate fixes"
+      action: "Create AC-REFACTOR-ERROR-HANDLING-001 with 5 locations"
+  
+  # 3. Dependency Optimization
+  dependency_graph:
+    - node: "AC-FIX-001-02"
+      depends_on: ["AC-FIX-001-01"]
+      blocking_for: ["AC-FIX-001-03"]
+      can_parallelize_with: []
+      
+      analysis: "Sequential - AC-FIX-001-02 must complete before AC-FIX-001-03"
+      optimization: "No parallelization possible"
+    
+    - node: "AC-REFACTOR-ERROR-HANDLING-001"
+      depends_on: []
+      blocking_for: []
+      can_parallelize_with: ["AC-FIX-001-02", "AC-FIX-001-03"]
+      
+      analysis: "Independent - can be done in parallel with hash chain fixes"
+      optimization: "Recommend parallel execution for faster delivery"
+  
+  # 4. Evidence Grading Summary
+  evidence_distribution:
+    grade_a: 2  # 95% confidence
+    grade_b: 4  # 85% confidence
+    grade_c: 0  # 70% confidence (NOT allowed for critical)
+    
+    by_severity:
+      critical: {a: 2, b: 0, c: 0}
+      high: {a: 0, b: 4, c: 0}
+      medium: {a: 0, b: 0, c: 0}
+    
+    analysis: "All critical findings have Grade A evidence ✅"
+    compliance: "APPROVED for remediation"
+
+  # 5. AC Deduplication Check
+  ac_deduplication:
+    - potential_duplicate: "AC-REFACTOR-ERROR-HANDLING-001"
+      consolidates_gaps: 5
+      separate_ac_count_avoided: 5
+      effort_saved: "~1 hour"
+      
+      recommendation: "Consolidate 5 error handling gaps into 1 AC"
+      action: "Create unified AC instead of 5 separate ACs"
+  
+  # 6. Governance Coverage
+  governance_coverage:
+    rules_referenced: ["CORE-008", "CORE-011", "CORE-012", "CORE-025", "CORE-027", "CORE-028"]
+    rules_covered_by_remediation_acs: ["CORE-008", "CORE-011", "CORE-012", "CORE-025", "CORE-027"]
+    rules_not_addressed: []
+    
+    coverage: "100% of relevant governance rules"
+    compliance: "All ACs include governance rules in specifications"
+```
+
+### Integration Validation (Before cortex-builder commits)
+
+```bash
+# Run these checks in cortex-builder BEFORE committing gap integration
+
+# 1. Syntax validation
+yamllint cortex-master.yaml
+
+# 2. Gap-to-AC mapping validation
+python3 << 'EOF'
+import yaml
+with open('cortex-master.yaml') as f:
+  master = yaml.safe_load(f)
+
+for phase in master['phase_tracker'].values():
+  if 'gaps_addressed' in phase:
+    for gap in phase['gaps_addressed']:
+      # Verify remedy AC exists in phase
+      remedy_id = gap['remedy_ac_id']
+      ac_snake = remedy_id.lower().replace('-', '_')
+      if ac_snake not in phase:
+        print(f"ERROR: {remedy_id} referenced in gaps but AC spec missing")
+      else:
+        print(f"✅ {remedy_id} found and specified")
+EOF
+
+# 3. Dependency cycle detection
+python3 << 'EOF'
+# Check for circular dependencies in blocking_for / depends_on
+# If AC-X depends_on AC-Y and AC-Y blocking_for AC-X → CYCLE ERROR
+EOF
+
+# 4. Governance rule verification
+for phase in cortex-master.yaml:
+  for ac in phase.ac_ids:
+    for rule in ac.governance_rules:
+      if rule not in cortex-brain/tier0/governance/core-rules.yaml:
+        echo "ERROR: Unknown rule $rule in $ac"
+
+# 5. Evidence grading check
+for gap in gaps_addressed:
+  if gap.severity == "CRITICAL" AND gap.evidence_grade not in ["A", "B"]:
+    echo "ERROR: CRITICAL gap must have A or B evidence grade"
+```
+
 ---
 
 ## COMMANDS REFERENCE
@@ -850,7 +1302,9 @@ PRODUCTION READINESS: 95% (governance compliant)
 /review phase 0.5 --ac-id AC-FIX-001-01 # Surgical investigation
 /review agent --name brittleness         # Single agent
 /review consolidate                      # Phase 2 consolidation
-/review remediation                      # Phase 3 handoff
+/review extract-gaps                     # Phase 3A: Extract gaps from consolidation
+/review refactor-holistic                # Phase 3B: Holistic refactoring analysis
+/review remediation                      # Phase 3C: Generate YAML for integration
 ```
 
 ### Investigation Tools
