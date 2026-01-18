@@ -3365,8 +3365,8 @@ phase_tracker:
 
         '
       estimated_hours: 4
-      test_count: 20
-      status: NOT_STARTED
+      test_count: 22
+      status: COMPLETED
     - ac_id: AC-IKP-002-02
       title: Router Integration with MasterOrchestrator
       description: 'Replace dual parallel evaluation in coordinate_operation() with
@@ -6097,10 +6097,10 @@ phases:
         title: IntelligentKnowledgeRouter Implementation
         description: Create query-aware router with confidence scoring; Support multiple
           backends; Aggregate results
-        status: NOT_STARTED
+        status: COMPLETED
         testing:
-          unit_tests_expected: 20
-          integration_tests_expected: 5
+          unit_tests_expected: 22
+          integration_tests_expected: 8
         success_criteria:
         - Router works reliably
         - Confidence scoring accurate
