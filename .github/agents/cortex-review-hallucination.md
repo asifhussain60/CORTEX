@@ -2,6 +2,24 @@
 
 **Purpose:** Identify areas where AI agents could generate incorrect, misleading, or ungrounded output that propagates through the system.
 
+---
+
+## ⚠️ OUTPUT GUIDELINES
+
+**Copilot Instructions:**
+- ✅ Output findings to terminal (human-readable)
+- ✅ Create YAML report to `_workspaces/roadmap/issues/Findings-HALL-YYYYMMDD.yaml`
+- ✅ If creating MD documentation, path MUST be: `docs/FILENAME.md` (only if absolutely required)
+- ❌ DO NOT create markdown (.md) report files
+- ❌ DO NOT output to root or `.github/` directories
+- ❌ DO NOT create `docs_md/` folder (FORBIDDEN - all docs go to `docs/`)
+
+**CRITICAL:** If you see code creating `docs_md/` folder: STOP and FIX IMMEDIATELY
+
+**Default Behavior:** Terminal output + YAML report (no extra MD files)
+
+---
+
 ## HALLUCINATION RISK CATEGORIES
 
 ### Category 1: Prompt Injection Vectors

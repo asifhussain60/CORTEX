@@ -196,6 +196,7 @@ class DatabaseTransactionManager:
         Log audit entry within a transaction.
         
         AC-FIX-008-01: Use production schema (operation, component, level, message, etc.)
+        AC-FIX-001-02: Calculate previous_hash from prior entry (CORE-025 compliance)
         
         Args:
             conn: Active database connection in transaction
@@ -214,8 +215,11 @@ class DatabaseTransactionManager:
         message = f"{operation}: {status}"
         metadata = json.dumps(details)
         
-        # Calculate entry hash (previous_hash = '' for simplicity in tests)
-        previous_hash = ""
+        # AC-FIX-001-02: ✅ FIXED - Get previous_hash from prior entry (not hardcoded empty string)
+        # This creates an unbroken cryptographic hash chain (CORE-025)
+        previous_hash = self._get_prior_entry_hash(conn, ac_id)
+        
+        # Calculate entry hash using CORRECT previous_hash
         entry_data = f"{timestamp}{operation}{component}{level}{message}{ac_id}{metadata}{previous_hash}"
         entry_hash = hashlib.sha256(entry_data.encode()).hexdigest()
         
@@ -241,6 +245,59 @@ class DatabaseTransactionManager:
                 )
             else:
                 raise
+    
+    def _get_prior_entry_hash(self, conn: sqlite3.Connection, ac_id: str) -> str:
+        """
+        Get the entry_hash of the prior audit entry for this AC-ID.
+        
+        AC-FIX-001-02: CORE-025 compliance - enables cryptographic chain linkage.
+        
+        This method returns the previous entry's entry_hash so that the current
+        entry can use it as its previous_hash, creating an unbroken chain.
+        
+        Args:
+            conn: Database connection
+            ac_id: Acceptance Criteria ID
+            
+        Returns:
+            str: entry_hash of prior entry, or "" (empty string) for GENESIS entry
+            
+        CORE-025 Compliance:
+        - First entry: returns "" (GENESIS - no prior entry)
+        - Subsequent entries: returns prior entry's entry_hash (unbroken chain)
+        - Hash chain can be validated: current.previous_hash == prior.entry_hash
+        
+        Example:
+            Entry 1 (GENESIS):
+              previous_hash = ""
+              entry_hash = sha256(...) = "abc123..."
+              
+            Entry 2 (links to Entry 1):
+              previous_hash = "abc123..." (from _get_prior_entry_hash)
+              entry_hash = sha256(...) = "def456..."
+              
+            Entry 3 (links to Entry 2):
+              previous_hash = "def456..." (from _get_prior_entry_hash)
+              entry_hash = sha256(...) = "ghi789..."
+              
+            Chain Validation: Each entry's previous_hash matches prior entry's entry_hash ✅
+        """
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT entry_hash
+            FROM audit_log
+            WHERE ac_id = ?
+            ORDER BY id DESC
+            LIMIT 1
+        """, (ac_id,))
+        
+        row = cursor.fetchone()
+        if row:
+            # Return prior entry's entry_hash
+            return row[0]
+        else:
+            # GENESIS entry (first entry for this AC-ID)
+            return ""
     
     def _create_audit_table(self, conn: sqlite3.Connection) -> None:
         """

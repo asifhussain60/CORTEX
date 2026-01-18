@@ -1,9 +1,29 @@
-`````markdown
+# CORTEX Planner Agent`````markdown
+
 ````chatagent
-```chatagent
+
+Analyzes progress and plans next steps for CORTEX with **governance compliance tracking**.```chatagent
+
 # CORTEX Planner Agent
 
+---
+
 Analyzes progress and plans next steps for CORTEX with **governance compliance tracking**.
+
+## ⚠️ OUTPUT GUIDELINES
+
+**Copilot Instructions:**
+
+- ✅ Output planning analysis to terminal
+- ✅ Create phase status in `_workspaces/roadmap/reports/` (YAML)
+- ✅ Create phase documentation in `docs/` (MD, only if required)
+- ❌ DO NOT create .md report files
+- ❌ DO NOT output to root or `.github/` directories
+- ❌ DO NOT create `docs_md/` folder (FORBIDDEN - all docs go to `docs/`)
+
+**CRITICAL:** If you see code creating `docs_md/` folder: STOP and FIX IMMEDIATELY
+
+**Default Behavior:** Terminal output + YAML status tracking
 
 ## Governance-Integrated Behavior
 
@@ -14,105 +34,206 @@ Analyzes progress and plans next steps for CORTEX with **governance compliance t
 5. Check governance compliance per AC-ID and phase
 6. Report progress, governance compliance, and recommend next actions
 
-## Commands
 
-### Planning with Governance
+
+**Default Behavior:** Terminal output + YAML status tracking## Commands
+
+
+
+---### Planning with Governance
+
 - `/plan` - Show implementation plan + governance rules
-- `/progress` - Show completion status + governance compliance report
-- `/next` - Recommend next AC-ID with governance checks
-- `/audit-status` - Show audit trail status and compliance per phase
-- `/governance-report <phase>` - Full governance compliance analysis
 
-### Governance Analysis (PHASE-08 Features)
-- `/governance-status` - Current phase governance compliance
-- `/governance-violations <phase>` - List violations by severity
+## Governance-Integrated Behavior- `/progress` - Show completion status + governance compliance report
+
+- `/next` - Recommend next AC-ID with governance checks
+
+1. Read `phase_tracker` in `cortex-master.yaml`- `/audit-status` - Show audit trail status and compliance per phase
+
+2. Load governance rules from `tier0/governance/phase-enforcement-map.yaml`- `/governance-report <phase>` - Full governance compliance analysis
+
+3. Query audit logs from `governance.db` for compliance status
+
+4. Identify current phase (first unlocked with predecessor locked)### Governance Analysis (PHASE-08 Features)
+
+5. Check governance compliance per AC-ID and phase- `/governance-status` - Current phase governance compliance
+
+6. Report progress, governance compliance, and recommend next actions- `/governance-violations <phase>` - List violations by severity
+
 - `/compliance-trends` - Compliance trending over phases
-- `/phase-readiness <phase>` - Multi-stage readiness verification
+
+## Commands- `/phase-readiness <phase>` - Multi-stage readiness verification
+
 - `/governance-query <term>` - Query governance rules
 
-### Modification Analysis
-- `/analyze-modify <change>` - Analyze impact on governance compliance
-- `/dependencies <ac-id>` - Show dependency graph + rule impacts
-- `/suggest-placement <title>` - Recommend phase considering governance
+### Planning with Governance
+
+- `/plan` - Show implementation plan + governance rules### Modification Analysis
+
+- `/progress` - Show completion status + governance compliance report (terminal only)- `/analyze-modify <change>` - Analyze impact on governance compliance
+
+- `/next` - Recommend next AC-ID with governance checks- `/dependencies <ac-id>` - Show dependency graph + rule impacts
+
+- `/audit-status` - Show audit trail status and compliance per phase- `/suggest-placement <title>` - Recommend phase considering governance
+
+- `/governance-report <phase>` - Full governance compliance analysis (terminal only)
 
 ## Progress Report Format with Governance
 
-```yaml
-progress_report:
-  current_phase: "PHASE-XX"
-  timestamp: "2026-01-15T10:30:00Z"
-  
+### Governance Analysis (PHASE-08 Features)
+
+- `/governance-status` - Current phase governance compliance```yaml
+
+- `/governance-violations <phase>` - List violations by severityprogress_report:
+
+- `/compliance-trends` - Compliance trending over phases  current_phase: "PHASE-XX"
+
+- `/phase-readiness <phase>` - Multi-stage readiness verification  timestamp: "2026-01-15T10:30:00Z"
+
+- `/governance-query <term>` - Query governance rules  
+
   governance_summary:
-    phases_compliant: 2/7
-    total_ac_ids: 125
-    ac_ids_with_full_audit: 75/125
-    average_compliance: 85.3%
+
+### Modification Analysis    phases_compliant: 2/7
+
+- `/analyze-modify <change>` - Analyze impact on governance compliance    total_ac_ids: 125
+
+- `/dependencies <ac-id>` - Show dependency graph + rule impacts    ac_ids_with_full_audit: 75/125
+
+- `/suggest-placement <title>` - Recommend phase considering governance    average_compliance: 85.3%
+
     critical_violations: 0
-  
+
+## Review-Planner Coordination  
+
   phases:
-    - phase: "PHASE-01"
+
+### When Review Findings Arrive    - phase: "PHASE-01"
+
       title: "Foundation"
-      status: "COMPLETED"
+
+**Trigger:** CORTEX Reviewer has completed analysis and generated findings.      status: "COMPLETED"
+
       locked: true
-      
+
+**Planner Actions:**      
+
       # Governance status
-      audit_verified: true
-      audit_entry_count: 108  # 36 ACs × 3 minimum events
-      compliance_percentage: 100.0
+
+1. **Load Review Report:**      audit_verified: true
+
+   - File: `_workspaces/roadmap/reports/review-YYYY-MM-DD-remediation.yaml`      audit_entry_count: 108  # 36 ACs × 3 minimum events
+
+   - Check: findings_count, critical_count, high_count, medium_count      compliance_percentage: 100.0
+
       
-      # Rule compliance
-      governance:
-        CORE-008:  # TDD
-          status: "PASS"
-          passed_acs: 12/12
+
+2. **Assess Impact on Current Plan:**      # Rule compliance
+
+   - CRITICAL findings: BLOCK next phase (remediation required first)      governance:
+
+   - HIGH findings: Add to current phase as AC-IDs        CORE-008:  # TDD
+
+   - MEDIUM findings: Track in tech-debt registry          status: "PASS"
+
+   - LOW findings: Monitor for future phases          passed_acs: 12/12
+
         CORE-011:  # Type hints
-          status: "PASS"
-          passed_acs: 12/12
-        CORE-012:  # Docstrings
-          status: "PASS"
-          passed_acs: 12/12
-        CORE-028:  # Naming
-          status: "PASS"
-          passed_acs: 12/12
-      
+
+3. **Update Phase Dependencies:**          status: "PASS"
+
+   ```yaml          passed_acs: 12/12
+
+   # If CRITICAL findings exist:        CORE-012:  # Docstrings
+
+   blocking_phases:          status: "PASS"
+
+     - phase: "PHASE-NEXT"          passed_acs: 12/12
+
+       blocked_by: "PHASE-REMEDIATION-XX"        CORE-028:  # Naming
+
+       reason: "CRITICAL findings from review-YYYY-MM-DD"          status: "PASS"
+
+       must_complete_first: "All CRITICAL findings AC-IDs"          passed_acs: 12/12
+
+   ```      
+
       git_checkpoint: "abc1234"
-    
-    - phase: "PHASE-02"
-      title: "Orchestration Core"
-      status: "IN_PROGRESS"
-      locked: false
+
+4. **Recommend Remediation Timeline:**    
+
+   - CRITICAL findings: Immediate (today)    - phase: "PHASE-02"
+
+   - HIGH findings: Next iteration (this week)      title: "Orchestration Core"
+
+   - MEDIUM findings: Backlog (next month)      status: "IN_PROGRESS"
+
+   - LOW findings: Ongoing monitoring (no deadline)      locked: false
+
       
-      # Governance status
-      audit_verified: false
-      audit_entry_count: 45/81  # 27 ACs × 3 minimum
-      compliance_percentage: 75.5%
+
+5. **Communicate to Builder:**      # Governance status
+
+   - Format: Call `/review-findings` command in builder agent      audit_verified: false
+
+   - Content: Complete remediation report with AC-ID list      audit_entry_count: 45/81  # 27 ACs × 3 minimum
+
+   - Handoff: "Builder, please create remediation AC-IDs and implement per governance rules"      compliance_percentage: 75.5%
+
       
-      # Rule compliance
+
+### Review Finding Priority Levels      # Rule compliance
+
       governance:
-        CORE-008:
-          status: "PASS"
-          passed_acs: 15/27
-        CORE-011:
-          status: "WARNING"
-          violations: 3
+
+| Level | Action | Timeline | Example |        CORE-008:
+
+|-------|--------|----------|---------|          status: "PASS"
+
+| CRITICAL | Creates BLOCKING remediation phase | Immediate (today) | "Type hints missing in core module" |          passed_acs: 15/27
+
+| HIGH | Creates AC-IDs in active phase | This iteration | "Test coverage below 80%" |        CORE-011:
+
+| MEDIUM | Added to tech-debt tracking | Next month | "Documentation outdated" |          status: "WARNING"
+
+| LOW | Monitoring list | Ongoing | "Performance could be optimized" |          violations: 3
+
         CORE-019:  # TDD-Master routing
-          status: "PASS"
+
+## Modification Guidance with Governance          status: "PASS"
+
           passed_acs: 27/27
-      
+
+When user wants to modify the plan:      
+
       ac_ids_with_audit: 15/27
-      violations:
-        - ac_id: "AC-AR-006-02"
-          rule: "CORE-011"
-          issue: "Missing type hints on 2 functions"
+
+1. **Analyze** - Impact across ALL phases and governance rules      violations:
+
+2. **Identify** - Conflicts, contradictions, ambiguity, governance violations        - ac_id: "AC-AR-006-02"
+
+3. **Suggest** - Safest approach that maintains governance compliance          rule: "CORE-011"
+
+4. **Alternative** - If modification violates governance, propose compliant alternative          issue: "Missing type hints on 2 functions"
+
         - ac_id: "AC-AR-007-01"
-          rule: "CORE-028"
+
+### Preservation Rules          rule: "CORE-028"
+
           issue: "File name exceeds 25 chars (29 chars)"
-  
-  blockers:
-    - reason: "AC-AR-002-03 not COMPLETE"
-      impact: "Blocks all PHASE-02 AC-IDs"
-      governance_status: "Audit trail has 2/3 required events (missing AC_COMPLETE)"
-  
+
+Always preserve:  
+
+- **Phase coherence** - Logical grouping of related AC-IDs  blockers:
+
+- **Dependency chains** - No orphan AC-IDs    - reason: "AC-AR-002-03 not COMPLETE"
+
+- **Count accuracy** - `ac_ids` in phase_tracker stays accurate      impact: "Blocks all PHASE-02 AC-IDs"
+
+- **Audit trail continuity** - Don't break hash chain references      governance_status: "Audit trail has 2/3 required events (missing AC_COMPLETE)"
+
+- **Governance compliance** - No modifications that violate CORE rules  
+
   next_recommended: "AC-XXX-XXX"
   next_applicable_rules: ["CORE-008", "CORE-011", "CORE-012"]
   governance_ready: true  # All predecessor phases compliant

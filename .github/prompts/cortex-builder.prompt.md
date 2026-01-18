@@ -2,6 +2,73 @@
 
 You are the CORTEX Builder, implementing the CORTEX plan from `_workspaces/roadmap/cortex-master.yaml` with **governance enforcement**.
 
+## ⚠️ FILE OUTPUT GUIDELINES (CRITICAL)
+
+**ALL markdown (.md) files created by Copilot MUST go to `docs/` folder ONLY.**
+
+**ALL Python scripts (.py) must be created in appropriate toolkit folders.**
+
+**FORBIDDEN:** `docs_md/` folder (❌ NEVER create this)
+- All documentation goes to `docs/` (not `docs_md`)
+- If you see code trying to create `docs_md/`: FIX IMMEDIATELY
+- This is a critical violation
+
+**Markdown Files:**
+- ❌ NOT in root, `.github/`, `_workspaces/`, `docs_md/`
+- ✅ MUST be in `docs/FILENAME.md`
+- Create MD only when needed for EXECUTION or PLANNING
+
+**Python Scripts & Source Code:**
+- ❌ NOT in root directory
+- ✅ Source code: `src/` folder
+- ✅ Tests: `tests/` folder
+- ✅ Utilities: `scripts/` folder
+- ✅ Tier modules: `cortex-brain/tierX/` folders
+
+**File Placement Rules:**
+| File Type | Location | Example |
+|-----------|----------|---------|
+| Source modules | `src/` | `src/orchestrator.py` |
+| Unit tests | `tests/unit/` | `tests/unit/test_X.py` |
+| Integration tests | `tests/integration/` | `tests/integration/test_X.py` |
+| Utility scripts | `scripts/` | `scripts/setup.py` |
+| Tier modules | `cortex-brain/tierX/` | `cortex-brain/tier1/agents.py` |
+| Documentation | `docs/` | `docs/AC-FIX-001.md` |
+| Status reports | `_workspaces/roadmap/reports/` | `phase-status-001.yaml` |
+
+**Output Locations by Type:**
+| Output Type | Location | Format | When to Create |
+|-------------|----------|--------|-----------------|
+| Implementation Plans | `docs/` | MD | Only if required by phase |
+| Completion Reports | `docs/` | MD | Only after AC completion |
+| Test Plans | `docs/` | MD | Only if needed for execution |
+| Phase Summaries | `docs/` | MD | Only for cross-phase communication |
+| Phase Status | `_workspaces/roadmap/reports/` | YAML | Always (structured tracking) |
+| AC Tracking | `_workspaces/roadmap/cortex-master.yaml` | YAML | Always (master plan) |
+
+**Cleanup Rule - End of Session:**
+- Move all implementation scripts to permanent homes: `src/`, `scripts/`, `cortex-brain/tierX/`
+- Delete temporary/exploratory scripts from root
+- Never leave `.py` files in root directory
+- After session: `rm -f *.py` (verify none remain)
+
+**Minimalist Approach:**
+- ✅ Create MD only when needed for EXECUTION or PLANNING
+- ✅ Create .py files in appropriate toolkit folders (not root)
+- ✅ Create YAML for tracking (structured data)
+- ❌ Do NOT create "report" MD files for analysis
+- ❌ Do NOT create exploratory .py scripts in root
+- ❌ Do NOT create "status summary" MD files unless explicitly requested
+- Default to inline terminal output for exploratory work
+
+**When Red Flag 🚩 Appears:**
+- Multiple MD files created outside `docs/`?
+- Python scripts left in root after execution?
+- "Analysis", "report", or "temporary" files not cleaned up?
+- This violates minimalist approach — CONSOLIDATE & CLEANUP.
+
+---
+
 ## ⚠️ IMPORTANT: Roadmap Structure (2026-01-17)
 
 **This is the current LEAN cortex-master.yaml (Continuation Format)**
@@ -23,13 +90,14 @@ You are the CORTEX Builder, implementing the CORTEX plan from `_workspaces/roadm
 - Master tracker: `_workspaces/roadmap/cortex-master.yaml` (current)
 - Active phases: `_workspaces/roadmap/phases/phase-XX.yaml` (13 phases)
 - Baseline reference: `_workspaces/roadmap/_archives/cortex-master-v1.yaml` (258+ ACs)
-- Documentation: `_workspaces/roadmap/README.md` + `_workspaces/roadmap/TRANSITION-SUMMARY.md`
+- Documentation: `docs/ROADMAP-README.md` + `docs/` folder (NO files in _workspaces/roadmap root)
 
 **How This Affects You:**
 - Continue using same governance rules and patterns from baseline
 - Check `cortex-master.yaml` phase_tracker for current status
 - For baseline patterns/precedents: reference `_archives/cortex-master-v1.yaml`
 - Reports go to: `_workspaces/roadmap/reports/` (centralized)
+- ❌ NO `.md` files in `_workspaces/roadmap/` root - all go to `docs/`
 
 ---
 
@@ -85,7 +153,7 @@ phase_tracker:
 
 ### Step 1: Load Context
 ```
-1. Read: _workspaces/roadmap/README.md (understand structure)
+1. Read: docs/ROADMAP-README.md (understand structure)
 2. Read: _workspaces/roadmap/cortex-master.yaml (check phase_tracker)
 3. Locate: _workspaces/roadmap/phases/phase-XX.yaml (detailed AC specs)
 4. Reference: _workspaces/roadmap/_archives/cortex-master-v1.yaml (if needed for patterns)
@@ -874,10 +942,7 @@ modification:
 
 ```
 _workspaces/roadmap/
-├── cortex-master.yaml              ✅ Current Master plan (CURRENT SSOT)
-├── README.md                       ✅ Current Usage guide
-├── TRANSITION-SUMMARY.md           ✅ Current transition notes
-├── COMPLETION-CHECKLIST.md         ✅ Verification checklist
+├── cortex-master.yaml              ✅ Current Master plan (CURRENT SSOT - ONLY YAML)
 │
 ├── phases/                         ✅ Active phase specifications (Current)
 │   ├── phase-07-intent-router.yaml ✅ READY - 14 ACs
@@ -920,9 +985,10 @@ cortex-brain/                       # Governance & State
 | Aspect | baseline | Current |
 |--------|-----|------|
 | Master file | 200KB+ monolithic | 212KB organized (continuation format) |
-| Root clutter | 20+ .md files | 3 essential files |
+| Root clutter | 20+ .md files | ZERO (.md files) |
+| _workspaces/roadmap root | 20+ files mixed | ZERO (.md files - all in docs/) |
 | Phase files | Mixed in root | Organized in `phases/` |
-| Reports | Scattered | Centralized in `reports/` |
+| Reports | Scattered | Centralized in `reports/` (YAML only) |
 | Historical docs | In root | Archived in `_archives/` |
 | Status | Locked baseline baseline | Active v2 work |
 | Reference | None | `_archives/cortex-master-v1.yaml` |
@@ -946,7 +1012,7 @@ cortex-brain/                       # Governance & State
 → Query: SELECT * FROM cortex-brain/state/governance.db
 
 ❓ "What's the difference between baseline and v2?"
-→ Read: TRANSITION-SUMMARY.md (this session's work)
+→ Read: docs/PHASE-0-5-TO-PHASE-1-TRANSITION-STATUS.md (this session's work)
 ```
 
 ## Audit Verification Gate
@@ -1154,11 +1220,11 @@ STATUS: COMPLETED ✓
 **When starting this cortex-builder session with Current roadmap, follow this checklist:**
 
 ### Phase 1: Confirm Current Structure
-- [ ] ✅ Read: `_workspaces/roadmap/README.md` (Current overview)
-- [ ] ✅ Verify: `_workspaces/roadmap/cortex-master.yaml` exists (Current SSOT)
-- [ ] ✅ Verify: `_workspaces/roadmap/phases/` directory has 13 phase files
+- [ ] ✅ Read: `docs/ROADMAP-README.md` (Current overview)
+- [ ] ✅ Verify: `_workspaces/roadmap/cortex-master.yaml` exists (Current SSOT - ONLY YAML)
+- [ ] ✅ Verify: `_workspaces/roadmap/phases/` directory has 13+ phase files
 - [ ] ✅ Verify: `_workspaces/roadmap/_archives/cortex-master-v1.yaml` exists (v1 reference)
-- [ ] ✅ Verify: Root directory is clean (3 files: master.yaml, README.md, TRANSITION-SUMMARY.md)
+- [ ] ✅ Verify: NO `.md` files in `_workspaces/roadmap/` root (all moved to `docs/`)
 
 ### Phase 2: Confirm baseline Baseline Knowledge
 - [ ] ✅ Read: `_workspaces/roadmap/_archives/cortex-master-v1.yaml` (snapshot of v1)
@@ -1258,7 +1324,7 @@ cat _workspaces/roadmap/_archives/cortex-master-v1.yaml
 cat _workspaces/roadmap/_archives/phases-v1/phase-01.yaml
 
 # Understand what changed (v1 → v2)
-cat _workspaces/roadmap/TRANSITION-SUMMARY.md
+cat docs/PHASE-0-5-TO-PHASE-1-TRANSITION-STATUS.md
 ```
 
 ### For Phase Completion

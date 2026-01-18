@@ -226,9 +226,39 @@ metadata:
         - "Gap analysis → _workspaces/roadmap/reports/PHASE-XX-GAP-ANALYSIS.md"
       validation:
         - "No .md files created in project root"
-        - "No .md files created in /docs/"
+        - "No .md files created in _workspaces/roadmap/ root"
         - "All phase reports indexed in _workspaces/roadmap/reports/INDEX.md"
       enforcement: "Phase cannot be locked if reports found outside designated directory"
+    
+    # MCP TOOLKIT & PYTHON SCRIPTS PLACEMENT (2026-01-18)
+    mcp_toolkit:
+      status: "ACTIVE"
+      rule: "All Python scripts & utilities MUST be organized in MCP-exposed toolkit folders, NOT in root"
+      locations:
+        toolkit_root: "src/mcp/tools/"
+        toolkit_utilities: "src/mcp/utilities/"
+        analysis_tools: "src/mcp/tools/analysis/"
+        core_tools: "src/mcp/tools/core/"
+        validation_tools: "src/mcp/tools/validation/"
+      forbidden_locations:
+        - "Root directory (./*.py)"
+        - "_workspaces/ root"
+        - "_workspaces/roadmap/ root"
+        - ".github/ root"
+      examples:
+        - "consolidate.py → src/mcp/tools/consolidate.py"
+        - "validate_consolidation.py → src/mcp/tools/validation/validate_consolidation.py"
+        - "Utility scripts → src/mcp/utilities/"
+        - "Analysis tools → src/mcp/tools/analysis/"
+      enforcement: "Python scripts in forbidden locations MUST be moved before phase lock"
+      cleanup_rule: "End of session: rm -f *.py (verify none remain in root)"
+  
+  # DOCUMENTATION OUTPUT GUIDELINES (2026-01-18)
+  documentation_guidelines:
+    status: "ACTIVE"
+    rule: "ALL .md files created during implementation MUST go to docs/ folder ONLY"
+    exceptions: "Phase reports (YAML only) go to _workspaces/roadmap/reports/"
+    enforcement: "Pre-commit check: find . -path ./docs -prune -o -name '*.md' -type f -print (should be empty)"
   
   # AUDIT TRAIL REMEDIATION INITIATIVE (2026-01-15)
   audit_remediation:

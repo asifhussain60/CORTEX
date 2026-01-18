@@ -4,6 +4,74 @@ You are the **CORTEX System Agent**, operating the Master Orchestrator with Inte
 
 ---
 
+## ⚠️ FILE OUTPUT GUIDELINES (CRITICAL)
+
+**ALL markdown (.md) files created by Copilot MUST go to `docs/` folder ONLY.**
+
+**FORBIDDEN:** `docs_md/` folder (❌ NEVER create this)
+- This folder is a violation of file organization
+- If you see code creating `docs_md/`: FIX IT IMMEDIATELY
+- All documentation goes to `docs/` (not `docs_md`)
+
+**ALL Python scripts (.py) must be created in appropriate toolkit folders:**
+
+**Markdown Files:**
+- ❌ NOT in root, `.github/`, `_workspaces/`, `docs_md/`
+- ✅ MUST be in `docs/FILENAME.md`
+- Create MD only when needed for EXECUTION or PLANNING
+
+**Python Scripts & Source Code:**
+- ❌ NOT in root directory
+- ✅ Source code: `src/` folder
+- ✅ Tests: `tests/` folder
+- ✅ Utilities: `scripts/` folder
+- ✅ Tier modules: `cortex-brain/tierX/` folders
+- ✅ Toolkit: `_workspaces/roadmap/tools/` or appropriate subdirectory
+
+**YAML Reports & Configuration:**
+- ✅ Reports: `_workspaces/roadmap/reports/`
+- ✅ Issues/Findings: `_workspaces/roadmap/issues/`
+- ✅ Governance: `cortex-brain/tier0/governance/`
+- ✅ Phase tracking: `_workspaces/roadmap/phases/`
+
+**File Placement Rules by Type:**
+| File Type | Location | Guideline | Example |
+|-----------|----------|-----------|---------|
+| Source modules | `src/` | Permanent toolkit code | `src/orchestrator.py` |
+| Unit tests | `tests/unit/` | Permanent test suite | `tests/unit/test_X.py` |
+| Integration tests | `tests/integration/` | Integration testing | `tests/integration/test_X.py` |
+| Utility scripts | `scripts/` | One-off or build scripts | `scripts/setup.py` |
+| MCP toolkit | `src/mcp/tools/` | MCP-exposed toolkit (NOT root/roadmap) | `src/mcp/tools/consolidate.py` |
+| Tier modules | `cortex-brain/tierX/` | Governance tier code | `cortex-brain/tier1/agents.py` |
+| Documentation | `docs/` | Human-readable guides | `docs/AC-FIX-001.md` |
+| Status reports | `_workspaces/roadmap/reports/` | YAML tracking (NOT .md) | `phase-status-001.yaml` |
+| Investigation findings | `_workspaces/roadmap/issues/` | YAML findings (NOT .md) | `REVIEW-FINDINGS-*.yaml` |
+
+**Cleanup Rule:**
+- When script execution completes, move files to appropriate home locations
+- Delete temporary/exploratory scripts from root
+- ❌ NEVER leave `.py` files in root directory
+- ❌ NEVER create `.py` files in `_workspaces/roadmap/tools/` (use `src/mcp/tools/` instead)
+- After session: `rm -f *.py` (verify none remain in root)
+
+**Minimalist Approach:**
+- ✅ Create code only when needed for functionality
+- ✅ Create scripts in toolkit folders (not root)
+- ✅ Create YAML for tracking (structured data)
+- ✅ Create MD for execution guides (human-readable)
+- ❌ Do NOT create exploratory scripts and leave them in root
+- ❌ Do NOT create "analysis.py", "test_run.py", etc. in root
+- Default: Keep root clean, organize everything in subdirectories
+
+**Red Flag 🚩 Detection:**
+- `.py` files appearing in root (except whitelisted)?
+- `.md` files outside `docs/` folder?
+- Multiple temporary scripts not cleaned up?
+- Files created but never used?
+- These indicate violation — CLEANUP IMMEDIATELY.
+
+---
+
 ## Table of Contents
 
 1. [Core Identity](#core-identity)

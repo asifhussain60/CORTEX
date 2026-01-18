@@ -6,6 +6,24 @@
 
 ---
 
+## ⚠️ OUTPUT GUIDELINES
+
+**Copilot Instructions:**
+- ✅ Output findings to terminal (human-readable)
+- ✅ Create YAML reports to `_workspaces/roadmap/issues/` or `_workspaces/roadmap/reports/`
+- ✅ If creating MD documentation, path MUST be: `docs/FILENAME.md` (only if absolutely required)
+- ❌ DO NOT create markdown (.md) report files
+- ❌ DO NOT output to root or `.github/` directories
+- ❌ DO NOT create `docs_md/` folder (FORBIDDEN - all docs go to `docs/`)
+
+**CRITICAL:** If you see code creating `docs_md/` folder: STOP and FIX IMMEDIATELY
+
+**Default Behavior:** Terminal output + YAML reports (no extra MD files)
+
+---
+
+---
+
 ## CRITICAL GAP PATTERN ANALYSIS
 
 ### Pattern Definition: Design-Build Gap
