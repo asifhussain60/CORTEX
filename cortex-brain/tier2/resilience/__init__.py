@@ -770,6 +770,270 @@ class RetryPolicyBuilder:
         )
 
 
+@dataclass
+class CircuitBreakerConfig:
+    """
+    Configuration for circuit breaker behavior.
+    
+    Attributes:
+        failure_threshold: Number of failures before opening circuit
+        success_threshold: Number of successes before closing from half-open
+        timeout: Seconds before attempting recovery from open state
+    """
+    failure_threshold: int
+    success_threshold: int
+    timeout: float
+    
+    def __post_init__(self) -> None:
+        """Validate configuration."""
+        if self.failure_threshold < 1:
+            raise ValueError("failure_threshold must be >= 1")
+        if self.success_threshold < 1:
+            raise ValueError("success_threshold must be >= 1")
+        if self.timeout < 0:
+            raise ValueError("timeout cannot be negative")
+
+
+@dataclass
+class CircuitBreakerMetrics:
+    """
+    Metrics for circuit breaker operations.
+    
+    Attributes:
+        total_calls: Total number of calls attempted
+        successful_calls: Number of successful calls
+        failed_calls: Number of failed calls
+        rejected_calls: Number of calls rejected due to open circuit
+        state_changes: Number of state transitions
+    """
+    total_calls: int = 0
+    successful_calls: int = 0
+    failed_calls: int = 0
+    rejected_calls: int = 0
+    state_changes: int = 0
+
+
+class CircuitBreakerOpen(Exception):
+    """
+    Exception raised when circuit breaker is open.
+    
+    Raised to prevent cascading failures by immediately rejecting
+    requests when a service is known to be failing.
+    """
+    pass
+
+
+class CircuitBreakerState(IntEnum):
+    """States of the circuit breaker."""
+    CLOSED = 0      # Normal operation, all requests pass through
+    OPEN = 1        # Failing, requests rejected immediately
+    HALF_OPEN = 2   # Testing recovery, limited requests pass through
+
+
+class CircuitBreaker:
+    """
+    Circuit breaker implementation following the State pattern.
+    
+    Prevents cascading failures by:
+    1. Monitoring call success/failure rates
+    2. Opening circuit when failures exceed threshold
+    3. Rejecting requests while circuit is open
+    4. Testing recovery with limited requests in half-open state
+    5. Automatically closing when service recovers
+    
+    States:
+    - CLOSED: Normal operation, all requests pass through
+    - OPEN: Failing, requests are rejected immediately (fail-fast)
+    - HALF_OPEN: Testing recovery, limited requests pass through
+    
+    AC-ID: AC-NFR-002-03
+    Title: Circuit Breaker Pattern Implementation
+    
+    Example:
+        config = CircuitBreakerConfig(
+            failure_threshold=5,
+            success_threshold=2,
+            timeout=30.0
+        )
+        breaker = CircuitBreaker(config)
+        
+        try:
+            result = breaker.call(unreliable_service)
+        except CircuitBreakerOpen:
+            # Handle open circuit - use fallback
+            result = fallback_value
+    
+    Thread Safety: Protected with RLock for concurrent access
+    """
+    
+    def __init__(self, config: CircuitBreakerConfig) -> None:
+        """
+        Initialize circuit breaker.
+        
+        Args:
+            config: CircuitBreakerConfig with threshold and timeout settings
+        """
+        self.config = config
+        self.state = CircuitBreakerState.CLOSED
+        self.metrics = CircuitBreakerMetrics()
+        self.failure_count = 0
+        self.success_count = 0
+        self.last_failure_time: Optional[float] = None
+        self._lock = threading.RLock()
+    
+    def call(self, fn: Callable, *args: Any, **kwargs: Any) -> Any:
+        """
+        Execute function through circuit breaker.
+        
+        Implements the circuit breaker pattern:
+        - CLOSED: Execute function normally
+        - OPEN: Reject immediately (fail-fast)
+        - HALF_OPEN: Execute with automatic transition to OPEN/CLOSED
+        
+        Args:
+            fn: Callable to execute
+            *args: Positional arguments to pass to function
+            **kwargs: Keyword arguments to pass to function
+        
+        Returns:
+            Return value from fn if successful
+            
+        Raises:
+            CircuitBreakerOpen: If circuit is open and timeout not exceeded
+            Any exception raised by fn
+        
+        Complexity: O(1) - constant time operation
+        """
+        with self._lock:
+            # Handle OPEN state
+            if self.state == CircuitBreakerState.OPEN:
+                if self._should_attempt_reset():
+                    # Transition to HALF_OPEN
+                    self.state = CircuitBreakerState.HALF_OPEN
+                    self.success_count = 0
+                    self.metrics.state_changes += 1
+                else:
+                    # Reject call immediately
+                    self.metrics.rejected_calls += 1
+                    raise CircuitBreakerOpen(
+                        f"Circuit breaker is OPEN (retry after {self.config.timeout}s)"
+                    )
+        
+        # Execute the function
+        try:
+            result = fn(*args, **kwargs)
+            self._on_success()
+            return result
+        except Exception as e:
+            self._on_failure()
+            raise
+    
+    def _on_success(self) -> None:
+        """
+        Handle successful call.
+        
+        Updates metrics and handles state transitions:
+        - HALF_OPEN: Increment success count, close if threshold met
+        - CLOSED: Reset failure count
+        """
+        with self._lock:
+            self.metrics.successful_calls += 1
+            self.metrics.total_calls += 1
+            self.failure_count = 0
+            
+            if self.state == CircuitBreakerState.HALF_OPEN:
+                self.success_count += 1
+                if self.success_count >= self.config.success_threshold:
+                    self._close_circuit()
+    
+    def _on_failure(self) -> None:
+        """
+        Handle failed call.
+        
+        Updates metrics and handles state transitions:
+        - CLOSED → OPEN: If failure threshold exceeded
+        - HALF_OPEN → OPEN: Any failure in half-open opens circuit
+        """
+        with self._lock:
+            self.metrics.failed_calls += 1
+            self.metrics.total_calls += 1
+            self.failure_count += 1
+            self.last_failure_time = time.time()
+            
+            # Increment failure threshold triggers opening
+            if self.failure_count >= self.config.failure_threshold:
+                if self.state != CircuitBreakerState.OPEN:
+                    self._open_circuit()
+            
+            # Any failure in half-open state returns to open
+            if self.state == CircuitBreakerState.HALF_OPEN:
+                self._open_circuit()
+    
+    def _open_circuit(self) -> None:
+        """
+        Open the circuit (transition to OPEN state).
+        
+        Sets failure count to 0 to track from this point.
+        Increments state change counter.
+        """
+        self.state = CircuitBreakerState.OPEN
+        self.failure_count = 0
+        self.success_count = 0
+        self.metrics.state_changes += 1
+    
+    def _close_circuit(self) -> None:
+        """
+        Close the circuit (transition to CLOSED state).
+        
+        Resets all counters to pristine state.
+        Increments state change counter.
+        """
+        self.state = CircuitBreakerState.CLOSED
+        self.failure_count = 0
+        self.success_count = 0
+        self.metrics.state_changes += 1
+    
+    def _should_attempt_reset(self) -> bool:
+        """
+        Check if enough time has passed to attempt recovery.
+        
+        Returns:
+            True if timeout has elapsed since last failure
+            
+        Complexity: O(1) - single comparison
+        """
+        if self.last_failure_time is None:
+            return True
+        elapsed = time.time() - self.last_failure_time
+        return elapsed >= self.config.timeout
+    
+    def get_state(self) -> CircuitBreakerState:
+        """
+        Get current circuit state.
+        
+        Returns:
+            Current state: CLOSED, OPEN, or HALF_OPEN
+        """
+        with self._lock:
+            return self.state
+    
+    def get_metrics(self) -> CircuitBreakerMetrics:
+        """
+        Get circuit breaker metrics.
+        
+        Returns:
+            Copy of current metrics (thread-safe)
+        """
+        with self._lock:
+            return CircuitBreakerMetrics(
+                total_calls=self.metrics.total_calls,
+                successful_calls=self.metrics.successful_calls,
+                failed_calls=self.metrics.failed_calls,
+                rejected_calls=self.metrics.rejected_calls,
+                state_changes=self.metrics.state_changes
+            )
+
+
 __all__ = [
     "GracefulDegradationFramework",
     "PartialFunctionalityMode",
@@ -784,4 +1048,9 @@ __all__ = [
     "RetryPolicy",
     "RetryResult",
     "RetryPolicyBuilder",
+    "CircuitBreaker",
+    "CircuitBreakerConfig",
+    "CircuitBreakerMetrics",
+    "CircuitBreakerOpen",
+    "CircuitBreakerState",
 ]
