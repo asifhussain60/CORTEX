@@ -27,6 +27,11 @@ from .resilience import (
     RetryPolicy,
     RetryPolicyBuilder,
     RetryResult,
+    CircuitBreaker,
+    CircuitBreakerConfig,
+    CircuitBreakerMetrics,
+    CircuitBreakerState,
+    CircuitBreakerOpen,
 )
 
 __all__ = [
@@ -40,4 +45,9 @@ __all__ = [
     "RetryPolicy",
     "RetryPolicyBuilder",
     "RetryResult",
+    "CircuitBreaker",
+    "CircuitBreakerConfig",
+    "CircuitBreakerMetrics",
+    "CircuitBreakerState",
+    "CircuitBreakerOpen",
 ]
