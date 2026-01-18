@@ -34,6 +34,13 @@ from cortex.infrastructure.database import DatabaseManager
 from cortex.infrastructure.database_transaction_manager import DatabaseTransactionManager
 from cortex.brain.mcp.decorator import mcp_tool
 
+# AC-IKP-002-02: Import IntelligentKnowledgeRouter for knowledge backend coordination
+try:
+    from src.core.knowledge.router import IntelligentKnowledgeRouter
+except ImportError:
+    # Fallback if module not accessible
+    IntelligentKnowledgeRouter = None
+
 
 @dataclass
 class OrchestratorMetadata:
@@ -120,6 +127,40 @@ class MasterOrchestrator(IOrchestrator):
                 operation="BUSINESS_KNOWLEDGE_REPOSITORY_INIT",
                 success=False,
                 details={"error": f"Business knowledge repository not available: {str(e)}"}
+            )
+        
+        # AC-IKP-002-02: Initialize IntelligentKnowledgeRouter for backend coordination
+        self.router = None
+        try:
+            if IntelligentKnowledgeRouter is not None:
+                # Initialize router with available knowledge backends
+                backends = {}
+                if self._knowledge_repository is not None:
+                    backends['knowledge'] = self._knowledge_repository
+                if self._business_knowledge_repository is not None:
+                    backends['business'] = self._business_knowledge_repository
+                
+                if backends:
+                    self.router = IntelligentKnowledgeRouter(
+                        backends=backends,
+                        confidence_threshold=0.5
+                    )
+                    self.logger.log_operation_complete(
+                        ac_id="AC-IKP-002-02",
+                        operation="ROUTER_INIT",
+                        success=True,
+                        details={
+                            "backends": list(backends.keys()),
+                            "confidence_threshold": 0.5
+                        }
+                    )
+        except Exception as e:
+            # Log but don't fail - router is enhancement, not blocking
+            self.logger.log_operation_complete(
+                ac_id="AC-IKP-002-02",
+                operation="ROUTER_INIT",
+                success=False,
+                details={"error": f"Router initialization failed: {str(e)}"}
             )
         
         # Track current operation context for header variables
