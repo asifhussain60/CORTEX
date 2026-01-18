@@ -53,3 +53,4 @@ Thumbs.db
 *.log
 .knowledge-index.json
 *.db.backup*
+tests/test_ac_nfr_003_02_secrets.py
