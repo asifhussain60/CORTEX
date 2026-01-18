@@ -103,6 +103,24 @@ def main():
         "Circuit breaker pattern implemented"
     )
     
+    # AC-NFR-004-01: OpenTelemetry Metrics (COMPLETED)
+    log_ac_audit_trail(
+        "AC-NFR-004-01",
+        "OpenTelemetry metrics exported"
+    )
+    
+    # AC-NFR-004-02: Dashboard (COMPLETED)
+    log_ac_audit_trail(
+        "AC-NFR-004-02",
+        "Dashboard shows real-time progress"
+    )
+    
+    # AC-NFR-004-03: Alerting (COMPLETED)
+    log_ac_audit_trail(
+        "AC-NFR-004-03",
+        "Alerts triggered on threshold breach"
+    )
+    
     print("\n" + "=" * 70)
     print("Audit logging completed successfully")
     print("=" * 70)
