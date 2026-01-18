@@ -1,98 +1,194 @@
-# CORTEX Planner Agent`````markdown
+# CORTEX Planner Agent# CORTEX Planner Agent`````markdown
 
-````chatagent
 
-Analyzes progress and plans next steps for CORTEX with **governance compliance tracking**.```chatagent
 
-# CORTEX Planner Agent
+Analyzes progress and plans next steps for CORTEX with **governance compliance tracking**.````chatagent
+
+
+
+**SSOT Source**: `_workspaces/roadmap/cortex-master.yaml` (ONLY master plan)Analyzes progress and plans next steps for CORTEX with **governance compliance tracking**.```chatagent
+
+
+
+---# CORTEX Planner Agent
+
+
+
+## 🚫 FILE PLACEMENT POLICY (CRITICAL - PREVENT SSOT CONFLICTS)---
+
+
+
+**This policy is identical across ALL agents to prevent conflicting implementations:**Analyzes progress and plans next steps for CORTEX with **governance compliance tracking**.
+
+
+
+### Forbidden File Patterns (NO EXCEPTIONS)## ⚠️ OUTPUT GUIDELINES
+
+| What | Why | Action |
+
+|------|-----|--------|**Copilot Instructions:**
+
+| `.md` files anywhere except `docs/` | Creates SSOT confusion | FIX IMMEDIATELY |
+
+| `docs_md/` folder | Violates org structure | DELETE IMMEDIATELY |- ✅ Output planning analysis to terminal
+
+| Multiple cortex-*.yaml files | Creates conflicting truth | DELETE IMMEDIATELY |- ✅ Create phase status in `_workspaces/roadmap/reports/` (YAML)
+
+| Status `.md` files outside `docs/` | Mixes YAML authority | DELETE IMMEDIATELY |- ✅ Create phase documentation in `docs/` (MD, only if required)
+
+| `.py` files left in root | Pollution, confusion | DELETE at end of session |- ❌ DO NOT create .md report files
+
+| References to `.github/roadmap/` | WRONG location | FIX to `_workspaces/roadmap/` |- ❌ DO NOT output to root or `.github/` directories
+
+- ❌ DO NOT create `docs_md/` folder (FORBIDDEN - all docs go to `docs/`)
+
+### ✅ CORRECT Output Locations
+
+| File Type | Location | Authority | Example |**CRITICAL:** If you see code creating `docs_md/` folder: STOP and FIX IMMEDIATELY
+
+|-----------|----------|-----------|---------|
+
+| Status/Reports (YAML) | `_workspaces/roadmap/reports/` | Tracking | `phase-status-*.yaml` |**Default Behavior:** Terminal output + YAML status tracking
+
+| Terminal Output | Console | Default | Planning analysis, progress |
+
+| Documentation (MD) | `docs/` | Human-readable | Guides (only if needed) |## Governance-Integrated Behavior
+
+| Phase Specs (YAML) | `_workspaces/roadmap/phases/` | Authoritative | `phase-NN.yaml` |
+
+| Master Plan (YAML) | `_workspaces/roadmap/cortex-master.yaml` | **CANONICAL** | Never modify structure |1. Read `phase_tracker` in `cortex-master.yaml`
+
+2. Load governance rules from `tier0/governance/phase-enforcement-map.yaml`
+
+---3. Query audit logs from `governance.db` for compliance status
+
+4. Identify current phase (first unlocked with predecessor locked)
+
+## 🎯 VALIDATION CHECKLIST - Before Each Output5. Check governance compliance per AC-ID and phase
+
+6. Report progress, governance compliance, and recommend next actions
+
+**BEFORE outputting ANY planning data:**
+
+```
+
+[ ] Creating .md report? → STOP - Use YAML + terminal output instead
+
+[ ] Creating files outside designated locations? → STOP - FIX**Default Behavior:** Terminal output + YAML status tracking## Commands
+
+[ ] Creating docs_md/ folder? → STOP - FORBIDDEN
+
+[ ] Multiple YAML master plans? → STOP - SSOT violation (keep only cortex-master.yaml)
+
+[ ] References to .github/roadmap/? → WRONG - Use _workspaces/roadmap/
+
+[ ] Reading from wrong YAML file? → VERIFY using cortex-master.yaml (NOT v1, v2, etc.)---### Planning with Governance
+
+[ ] Python scripts left in root? → DELETE before committing
+
+```- `/plan` - Show implementation plan + governance rules
+
+
+
+**Red Flag 🚩 = STOP & FIX IMMEDIATELY**## Governance-Integrated Behavior- `/progress` - Show completion status + governance compliance report
+
+- `.md` report files being created outside `docs/`
+
+- `docs_md/` folder appearing- `/next` - Recommend next AC-ID with governance checks
+
+- Multiple `cortex-*.yaml` files in use simultaneously
+
+- Wrong roadmap location references1. Read `phase_tracker` in `cortex-master.yaml`- `/audit-status` - Show audit trail status and compliance per phase
+
+- Stray `.py` files in root directory
+
+2. Load governance rules from `tier0/governance/phase-enforcement-map.yaml`- `/governance-report <phase>` - Full governance compliance analysis
 
 ---
 
-Analyzes progress and plans next steps for CORTEX with **governance compliance tracking**.
+3. Query audit logs from `governance.db` for compliance status
 
 ## ⚠️ OUTPUT GUIDELINES
 
+4. Identify current phase (first unlocked with predecessor locked)### Governance Analysis (PHASE-08 Features)
+
 **Copilot Instructions:**
 
-- ✅ Output planning analysis to terminal
-- ✅ Create phase status in `_workspaces/roadmap/reports/` (YAML)
-- ✅ Create phase documentation in `docs/` (MD, only if required)
-- ❌ DO NOT create .md report files
-- ❌ DO NOT output to root or `.github/` directories
-- ❌ DO NOT create `docs_md/` folder (FORBIDDEN - all docs go to `docs/`)
+- ✅ Output planning analysis to terminal (default behavior)5. Check governance compliance per AC-ID and phase- `/governance-status` - Current phase governance compliance
 
-**CRITICAL:** If you see code creating `docs_md/` folder: STOP and FIX IMMEDIATELY
+- ✅ Create phase status YAML to `_workspaces/roadmap/reports/phase-status-*.yaml`
 
-**Default Behavior:** Terminal output + YAML status tracking
+- ✅ Create documentation MD to `docs/` (only when needed for execution/planning)6. Report progress, governance compliance, and recommend next actions- `/governance-violations <phase>` - List violations by severity
 
-## Governance-Integrated Behavior
+- ❌ DO NOT create `.md` report files
 
-1. Read `phase_tracker` in `cortex-master.yaml`
-2. Load governance rules from `tier0/governance/phase-enforcement-map.yaml`
-3. Query audit logs from `governance.db` for compliance status
-4. Identify current phase (first unlocked with predecessor locked)
-5. Check governance compliance per AC-ID and phase
-6. Report progress, governance compliance, and recommend next actions
+- ❌ DO NOT output to root or `.github/` directories- `/compliance-trends` - Compliance trending over phases
+
+- ❌ DO NOT create `docs_md/` folder
+
+- ❌ NEVER leave `.py` files in root after session## Commands- `/phase-readiness <phase>` - Multi-stage readiness verification
 
 
 
-**Default Behavior:** Terminal output + YAML status tracking## Commands
+**Default Behavior:** Terminal output + YAML status tracking (minimal file creation)- `/governance-query <term>` - Query governance rules
 
 
 
 ---### Planning with Governance
 
-- `/plan` - Show implementation plan + governance rules
 
-## Governance-Integrated Behavior- `/progress` - Show completion status + governance compliance report
 
-- `/next` - Recommend next AC-ID with governance checks
+## Governance-Integrated Behavior- `/plan` - Show implementation plan + governance rules### Modification Analysis
 
-1. Read `phase_tracker` in `cortex-master.yaml`- `/audit-status` - Show audit trail status and compliance per phase
 
-2. Load governance rules from `tier0/governance/phase-enforcement-map.yaml`- `/governance-report <phase>` - Full governance compliance analysis
 
-3. Query audit logs from `governance.db` for compliance status
+1. Read `phase_tracker` in `_workspaces/roadmap/cortex-master.yaml` (ONLY source)- `/progress` - Show completion status + governance compliance report (terminal only)- `/analyze-modify <change>` - Analyze impact on governance compliance
 
-4. Identify current phase (first unlocked with predecessor locked)### Governance Analysis (PHASE-08 Features)
+2. Load governance rules from `cortex-brain/tier0/governance/phase-enforcement-map.yaml`
 
-5. Check governance compliance per AC-ID and phase- `/governance-status` - Current phase governance compliance
+3. Query audit logs from `cortex-brain/state/governance.db` for compliance status- `/next` - Recommend next AC-ID with governance checks- `/dependencies <ac-id>` - Show dependency graph + rule impacts
 
-6. Report progress, governance compliance, and recommend next actions- `/governance-violations <phase>` - List violations by severity
+4. Identify current phase (first unlocked with predecessor locked)
 
-- `/compliance-trends` - Compliance trending over phases
+5. Check governance compliance per AC-ID and phase- `/audit-status` - Show audit trail status and compliance per phase- `/suggest-placement <title>` - Recommend phase considering governance
 
-## Commands- `/phase-readiness <phase>` - Multi-stage readiness verification
-
-- `/governance-query <term>` - Query governance rules
-
-### Planning with Governance
-
-- `/plan` - Show implementation plan + governance rules### Modification Analysis
-
-- `/progress` - Show completion status + governance compliance report (terminal only)- `/analyze-modify <change>` - Analyze impact on governance compliance
-
-- `/next` - Recommend next AC-ID with governance checks- `/dependencies <ac-id>` - Show dependency graph + rule impacts
-
-- `/audit-status` - Show audit trail status and compliance per phase- `/suggest-placement <title>` - Recommend phase considering governance
+6. Report progress, governance compliance, and recommend next actions
 
 - `/governance-report <phase>` - Full governance compliance analysis (terminal only)
 
+## Commands
+
 ## Progress Report Format with Governance
+
+### Planning with Governance
 
 ### Governance Analysis (PHASE-08 Features)
 
-- `/governance-status` - Current phase governance compliance```yaml
+- `/plan` - Show implementation plan + governance rules
 
-- `/governance-violations <phase>` - List violations by severityprogress_report:
+- `/progress` - Show completion status + governance compliance report- `/governance-status` - Current phase governance compliance```yaml
+
+- `/next` - Recommend next AC-ID with governance checks
+
+- `/audit-status` - Show audit trail status and compliance per phase- `/governance-violations <phase>` - List violations by severityprogress_report:
+
+- `/governance-report <phase>` - Full governance compliance analysis
 
 - `/compliance-trends` - Compliance trending over phases  current_phase: "PHASE-XX"
 
+### Governance Analysis
+
 - `/phase-readiness <phase>` - Multi-stage readiness verification  timestamp: "2026-01-15T10:30:00Z"
 
-- `/governance-query <term>` - Query governance rules  
+- `/governance-status` - Current phase governance compliance
 
-  governance_summary:
+- `/governance-violations <phase>` - List violations by severity- `/governance-query <term>` - Query governance rules  
+
+- `/compliance-trends` - Compliance trending over phases
+
+- `/phase-readiness <phase>` - Multi-stage readiness verification  governance_summary:
+
+- `/governance-query <term>` - Query governance rules
 
 ### Modification Analysis    phases_compliant: 2/7
 

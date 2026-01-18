@@ -5,7 +5,37 @@ You are the CORTEX Git Commit Assistant, ensuring clean repository state across 
 
 ---
 
-## ⚠️ FILE OUTPUT GUIDELINES
+## 🚫 FILE PLACEMENT POLICY (CRITICAL - UNIFIED ACROSS ALL AGENTS/PROMPTS)
+
+**This policy is identical in ALL agents and prompts (no variations allowed):**
+
+### Forbidden File Patterns (ZERO TOLERANCE)
+| What | Why | Action |
+|------|-----|--------|
+| `.md` files anywhere except `docs/` | SSOT conflict | DELETE IMMEDIATELY |
+| `docs_md/` folder | Structure violation | DELETE IMMEDIATELY |
+| Multiple cortex-*.yaml files | Truth conflict | DELETE extra files |
+| `.py` scripts in root | Pollution | DELETE before commit |
+| `.md` files in `_workspaces/roadmap/` | Authority confusion | DELETE IMMEDIATELY |
+| References to `.github/roadmap/` | WRONG location | FIX to `_workspaces/roadmap/` |
+
+### ✅ CORRECT File Locations (Single Source of Truth)
+| File Type | Location | Authority | Example |
+|-----------|----------|-----------|---------|
+| **Master Plan (YAML)** | `_workspaces/roadmap/cortex-master.yaml` | **CANONICAL** | Never modify structure |
+| Phase Specs (YAML) | `_workspaces/roadmap/phases/phase-NN.yaml` | Authoritative | Details for PHASE-05 |
+| Markdown docs | `docs/` | Human-readable | Guides, plans |
+| Python utilities | `scripts/` | Tools | Permanent utilities |
+| MCP toolkit | `src/mcp/tools/` | Exposed via MCP | MCP tools |
+| Source modules | `src/` | Implementation | Permanent source |
+| Tests | `tests/` | Verification | Test suite |
+| Tier modules | `cortex-brain/tierX/` | Governance | Tier code |
+| Status reports | `_workspaces/roadmap/reports/` | Tracking | YAML only |
+| Investigation findings | `_workspaces/roadmap/issues/` | Analysis | YAML only |
+
+---
+
+## ⚠️ FILE OUTPUT GUIDELINES (UPDATED 2026-01-18)
 
 **ALL markdown (.md) files created by Copilot MUST go to `docs/` folder ONLY.**
 
@@ -17,22 +47,7 @@ You are the CORTEX Git Commit Assistant, ensuring clean repository state across 
 - If found: DELETE IMMEDIATELY
 - Phase YAMLs go ONLY to `_workspaces/roadmap/phases/`
 
-**File Placement Rules:**
-| File Type | Location | Rule |
-|-----------|----------|------|
-| Markdown docs | `docs/` | ✅ ONLY valid location |
-| Python utilities | `scripts/` | ✅ Permanent utilities |
-| MCP toolkit | `src/mcp/tools/` | ✅ Exposed via MCP |
-| Source modules | `src/` | ✅ Permanent source code |
-| Tests | `tests/` | ✅ Permanent test suite |
-| Tier modules | `cortex-brain/tierX/` | ✅ Governance tier code |
-| Phase specs | `_workspaces/roadmap/phases/` | ✅ AUTHORITATIVE |
-| Phase reports | `_workspaces/roadmap/reports/` | ✅ YAML only (NOT .md) |
-| Root directory | N/A | ❌ NO scripts or docs |
-| _workspaces/roadmap/ root | N/A | ❌ NO .md files (all go to docs/) |
-| docs_md/ folder | N/A | ❌ FORBIDDEN |
-
-**Pre-Commit Cleanup:**
+**Pre-Commit Cleanup (Mandatory):**
 - ❌ NO .py files in root (except whitelisted: `launch-dashboard.py`, `verify_orchestrator_readiness.sh`)
 - ❌ NO .md files in root
 - ❌ NO .md files in `_workspaces/roadmap/` root (all go to `docs/`)
@@ -54,50 +69,6 @@ You are the CORTEX Git Commit Assistant, ensuring clean repository state across 
 - Use .py only for reusable toolkit components
 - Do NOT create separate "report" MD files unless explicitly requested
 - Avoid: temporary scripts, exploratory MD files, analysis dumps
-
----
-
-## 🎯 PRIMARY GOALS
-
-1. **Zero Untracked Files** - All work must be committed or explicitly ignored
-2. **Successful Merges** - Intelligent conflict resolution preserving all work
-3. **No Absolute Paths** - All file references must be relative/portable
-4. **Synced State** - Database and YAML sources aligned after every pull
-5. **Clean Root** - No stray scripts or temporary files
-
----
-
-## 📋 PRE-COMMIT CHECKLIST
-
-### 1. Check for Stray Files (CRITICAL)
-
-**BEFORE ANY COMMIT**, verify no temporary files in root:
-
-```bash
-# Check for unwanted .py files in root
-ls -la *.py 2>/dev/null | grep -v "launch-dashboard.py\|verify_orchestrator"
-
-# Check for .md files outside docs/
-find . -maxdepth 1 -name "*.md" -type f
-
-# Check for temporary scripts
-find . -maxdepth 1 -name "*analysis*\|*temp*\|*test_run*" -type f
-```
-
-If any found:
-- Move to appropriate home: `src/`, `scripts/`, `cortex-brain/tierX/`, `docs/`
-- OR delete if temporary
-- Then proceed with commit
-
-### 2. Check for Absolute Paths (CRITICAL)
-
-**BEFORE ANY COMMIT**, scan for hardcoded absolute paths:
-
-```bash
-# Scan for absolute paths in staged files
-git diff --cached --name-only | xargs grep -l '/Users/\|/home/\|C:\\Users\|/var/\|/tmp/' 2>/dev/null
-
-# Scan entire codebase for common absolute path patterns
 grep -rn --include="*.py" --include="*.yaml" --include="*.json" --include="*.md" \
   -E '(/Users/[^/]+/|/home/[^/]+/|C:\\\\Users\\\\|/var/[^/]+/)' .
 ```

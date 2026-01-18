@@ -2,21 +2,63 @@
 
 **Purpose:** Identify areas where AI agents could generate incorrect, misleading, or ungrounded output that propagates through the system.
 
+**SSOT Source**: `_workspaces/roadmap/cortex-master.yaml` (ONLY master plan)
+
+---
+
+## 🚫 FILE PLACEMENT POLICY (CRITICAL - PREVENT SSOT CONFLICTS)
+
+**Unified policy enforced across ALL review agents:**
+
+### Forbidden File Patterns (ZERO TOLERANCE)
+| What | Why | Action |
+|------|-----|--------|
+| `.md` report files outside `docs/` | SSOT conflict | DELETE IMMEDIATELY |
+| `docs_md/` folder | Structure violation | DELETE IMMEDIATELY |
+| Multiple cortex-*.yaml files | Truth conflict | DELETE extra files |
+| `.py` scripts in root | Pollution | DELETE at end of session |
+| Hallucination findings as `.md` | Authority confusion | Use YAML only |
+
+### ✅ Correct Findings Output Locations
+- Primary: `_workspaces/roadmap/issues/Findings-HALL-YYYYMMDD.yaml` (YAML only)
+- Documentation: `docs/FILENAME.md` (only if needed for execution)
+- Terminal: Default (human-readable analysis)
+
+---
+
+## 🎯 VALIDATION CHECKLIST - Before Each Output
+
+```
+BEFORE creating hallucination findings:
+[ ] Creating .md report? → STOP - Use YAML + terminal instead
+[ ] Creating docs_md/? → STOP - FORBIDDEN
+[ ] Multiple cortex-*.yaml? → STOP - SSOT violation
+[ ] Wrong output locations? → STOP - FIX paths
+[ ] .py files in root? → DELETE before commit
+[ ] Reading from archived/old YAML? → STOP - Use cortex-master.yaml ONLY
+```
+
+**Red Flag 🚩 = FIX IMMEDIATELY**
+- `.md` findings outside `docs/`
+- `docs_md/` folder
+- Multiple cortex-*.yaml
+- Stray files in root
+- Old YAML references
+
 ---
 
 ## ⚠️ OUTPUT GUIDELINES
 
 **Copilot Instructions:**
-- ✅ Output findings to terminal (human-readable)
-- ✅ Create YAML report to `_workspaces/roadmap/issues/Findings-HALL-YYYYMMDD.yaml`
-- ✅ If creating MD documentation, path MUST be: `docs/FILENAME.md` (only if absolutely required)
+- ✅ Output findings to terminal (human-readable, default)
+- ✅ Create YAML findings to `_workspaces/roadmap/issues/Findings-HALL-YYYYMMDD.yaml`
+- ✅ Create MD documentation to `docs/` (only if absolutely required)
 - ❌ DO NOT create markdown (.md) report files
 - ❌ DO NOT output to root or `.github/` directories
-- ❌ DO NOT create `docs_md/` folder (FORBIDDEN - all docs go to `docs/`)
+- ❌ DO NOT create `docs_md/` folder
+- ❌ NEVER leave `.py` scripts in root
 
-**CRITICAL:** If you see code creating `docs_md/` folder: STOP and FIX IMMEDIATELY
-
-**Default Behavior:** Terminal output + YAML report (no extra MD files)
+**Default Behavior:** Terminal output + optional YAML findings
 
 ---
 
@@ -98,317 +140,89 @@ grep -rn "{{ai_content}}\|{generated}\|<!-- AI -->" --include="*.yaml" --include
 
 **What to Flag:**
 - Templates with unconstrained AI sections — HIGH
-- Missing template schema validation — MEDIUM
-- Templates allowing arbitrary code execution — CRITICAL
-- No output format verification — HIGH
+- Dynamic template generation without limits — HIGH
+- Missing template validation — MEDIUM
+- No fallback for failed generation — MEDIUM
 
-### Category 5: Code Generation Risks
+### Category 5: Knowledge Base Staleness
 
 **Detection Approach:**
 ```bash
-# Find eval/exec usage
-grep -rn "eval(\|exec(" --include="*.py" src/
+# Find hardcoded dates/versions
+grep -rn "[0-9]{4}-[0-9]{2}-[0-9]{2}\|version.*=[0-9]\+" --include="*.py" src/ | head -20
 
-# Find dynamic code execution
-grep -rn "subprocess\|os.system\|Popen" --include="*.py" src/
+# Find cache/memoization without TTL
+grep -rn "@cache\|@lru_cache\|\.cache" --include="*.py" src/ | head -20
 
-# Find code generation patterns
-grep -rn "generate.*code\|code.*generation\|ast.parse" --include="*.py" src/
+# Find knowledge graph inconsistencies
 ```
 
 **What to Flag:**
-- `eval()` or `exec()` with AI output — CRITICAL
-- Running AI-generated commands — CRITICAL
-- No sandboxing for generated code — HIGH
-- Missing syntax validation — MEDIUM
+- Hardcoded dates without update mechanism — MEDIUM
+- Cached knowledge without expiration — HIGH
+- No knowledge versioning — MEDIUM
+- Inconsistent facts across modules — HIGH
 
----
+### Category 6: Recursive AI Calls (AI-Generated AI Prompts)
 
-## AUDIT LOG QUERIES FOR HALLUCINATION DETECTION
-
-```sql
--- Find operations that might involve AI generation
-SELECT operation, component, COUNT(*) as count
-FROM audit_log
-WHERE message LIKE '%generat%' 
-   OR message LIKE '%LLM%'
-   OR message LIKE '%AI%'
-   OR message LIKE '%completion%'
-GROUP BY operation, component
-ORDER BY count DESC;
-
--- Find human approval operations (or lack thereof)
-SELECT ac_id, operation, timestamp
-FROM audit_log
-WHERE operation LIKE '%APPROV%'
-   OR operation LIKE '%REVIEW%'
-   OR operation LIKE '%CONFIRM%'
-ORDER BY timestamp DESC
-LIMIT 50;
-
--- Find rapid successive operations (potential automation without review)
-SELECT a1.ac_id, a1.timestamp as start, a2.timestamp as complete,
-       (julianday(a2.timestamp) - julianday(a1.timestamp)) * 24 * 60 as minutes
-FROM audit_log a1
-JOIN audit_log a2 ON a1.ac_id = a2.ac_id
-WHERE a1.operation = 'AC_START' 
-  AND a2.operation = 'AC_COMPLETE'
-  AND minutes < 1  -- Less than 1 minute: suspiciously fast
-ORDER BY minutes ASC
-LIMIT 20;
-
--- Find failed validations (potential hallucination catches)
-SELECT ac_id, message, timestamp
-FROM audit_log
-WHERE message LIKE '%invalid%'
-   OR message LIKE '%validation failed%'
-   OR message LIKE '%schema%'
-ORDER BY timestamp DESC
-LIMIT 50;
-```
-
----
-
-## HALLUCINATION PREVENTION CHECKLIST
-
-### For Every LLM Integration Point:
-
-- [ ] **Input Sanitization**: User input cleaned before prompt inclusion?
-- [ ] **Prompt Injection Defense**: System prompts separated from user content?
-- [ ] **Output Validation**: AI response validated against schema?
-- [ ] **Confidence Threshold**: Low-confidence responses flagged?
-- [ ] **Source Attribution**: Generated facts traced to sources?
-- [ ] **Human Gate**: Critical operations require human approval?
-- [ ] **Audit Trail**: AI operations logged with context?
-- [ ] **Token Limits**: Context window overflow prevented?
-- [ ] **Code Safety**: Generated code sandboxed before execution?
-- [ ] **Rollback Capability**: AI-generated changes reversible?
-
-### Verification Queries:
-
-```python
-# Check if LENS has grounding requirements
-grep -rn "source\|citation\|reference" src/core/intelligence/lens/
-
-# Check if orchestrators have approval gates
-grep -rn "approval\|confirm\|human_review" src/orchestrators/
-
-# Check if templates have output validation
-grep -rn "validate\|schema\|verify" src/core/templates/
-```
-
----
-
-## FINDING TEMPLATE
-
-```yaml
-finding:
-  id: "HALLUC-XXX"
-  agent: "cortex-review-hallucination"
-  severity: "CRITICAL|HIGH|MEDIUM|LOW"
-  category: "prompt_injection|ungrounded|context_overflow|template|code_generation"
-  
-  title: "[Specific hallucination risk description]"
-  
-  location:
-    file: "src/path/to/file.py"
-    lines: "123-145"
-    function: "function_name"
-  
-  evidence:
-    detection_method: "code_analysis|audit_query|prompt_review|manual_inspection"
-    command_or_query: |
-      [The exact command or query used]
-    output: |
-      [The actual output proving this finding]
-  
-  attack_vector: |
-    How an attacker or bad data could exploit this:
-    1. Input: [malicious input]
-    2. System processes without validation
-    3. AI generates [problematic output]
-    4. Output is [used in harmful way]
-  
-  hallucination_scenario: |
-    How incorrect AI output could propagate:
-    1. AI generates [incorrect information]
-    2. System accepts as truth
-    3. Information propagates to [where]
-    4. User/system acts on false information
-    5. Consequence: [what happens]
-  
-  current_mitigation: "None|Partial|Adequate"
-  mitigation_details: |
-    What safeguards currently exist (if any).
-  
-  impact:
-    data_integrity_risk: "AI-generated data persisted as fact"
-    user_trust_risk: "Users may act on incorrect information"
-    security_risk: "Prompt injection could escalate privileges"
-    blast_radius: "Single response|Stored data|Propagated knowledge"
-  
-  remediation:
-    effort: "1h|4h|1d|1w"
-    approach: |
-      1. Add input sanitization at [location]
-      2. Implement output validation against [schema]
-      3. Add human approval gate for [operation]
-      4. Add audit logging for AI operations
-    validation_required: true
-    validation_description: "Test with known adversarial inputs"
-  
-  related_rules:
-    - "CORE-019"  # TDD-Master routing (hallucination prevention)
-    - "CORE-024"  # Observability (audit trail)
-  
-  llm_integration_point: "LENS|IntentRouter|CodeGenerator|TemplateEngine|Other"
-```
-
----
-
-## KNOWN HALLUCINATION PATTERNS FROM HISTORY
-
-### Pattern 1: Unvalidated Code Generation
-
-**From CORTEX 5.0:**
-- AI generated code snippets without syntax validation
-- Broken imports propagated to user
-- **CHECK:** Is AST validation mandatory for generated code?
-
-### Pattern 2: Intent Misclassification
-
-**From CORTEX 4.0/5.0:**
-- Keyword-based intent matching (not LLM)
-- Wrong orchestrator invoked
-- **CHECK:** Is LLMIntentClassifier with confidence threshold primary?
-
-### Pattern 3: Context Accumulation Overflow
-
-**From CORTEX 5.5:**
-- LENS accumulated unlimited context
-- Token limit exceeded → truncated responses
-- **CHECK:** Is context windowing implemented?
-
-### Pattern 4: Template Interpolation Without Escape
-
-**From CORTEX 4.0:**
-- User input in YAML templates
-- YAML injection possible
-- **CHECK:** Are template inputs sanitized?
-
----
-
-## HUMAN-IN-THE-LOOP GATES
-
-### Required Gates:
-
-| Operation | Gate Requirement | Implementation |
-|-----------|------------------|----------------|
-| Code deployment | Human approval | PR review + CI gate |
-| Schema changes | Human approval | Migration review |
-| Knowledge ingestion | Human validation | Business domain approval |
-| AC completion | Test evidence | Automated + human sign-off |
-| Production changes | Change approval | Deployment gate |
-
-### Verification:
-
+**Detection Approach:**
 ```bash
-# Check for approval gates in orchestrators
-grep -rn "approval\|confirm\|human\|manual" src/orchestrators/ --include="*.py"
+# Find code that generates prompts programmatically
+grep -rn "f\"{.*prompt.*}\"\|build.*prompt\|generate.*instruction" --include="*.py" src/ | head -20
 
-# Check for gates in critical operations
-grep -rn "require.*approval\|must.*confirm\|human_gate" src/ --include="*.py"
+# Find nested AI calls
+grep -rn "llm.*llm\|ai.*ai" --include="*.py" src/
+
+# Find string interpolation in prompt context
+grep -rn "\${.*}\|{.*{.*}.*}" --include="*.py" src/ | grep -i "prompt"
 ```
 
----
-
-## SEVERITY GUIDELINES
-
-| Severity | Definition | Examples |
-|----------|------------|----------|
-| CRITICAL | Direct security risk or data corruption | Prompt injection, code execution |
-| HIGH | Significant user impact | Wrong information persisted |
-| MEDIUM | Workarounds available | Confidence scores missing |
-| LOW | Edge cases only | Verbose AI responses |
+**What to Flag:**
+- AI generating prompts for other AI — CRITICAL
+- Recursive LLM calls without depth limit — CRITICAL
+- String interpolation in nested prompts — HIGH
+- No circuit breaker for cascading failures — HIGH
 
 ---
 
-## QUICK CHECK SCRIPT
+## Hallucination Mitigation Strategies
 
-```python
-#!/usr/bin/env python3
-"""
-Hallucination risk checks for CORTEX.
-Run: python scripts/hallucination_check.py
-"""
+### Strategy 1: Input Validation
+- Sanitize all user inputs before LLM use
+- Validate prompt structure and length
+- Check for injection patterns
 
-import subprocess
-from pathlib import Path
+### Strategy 2: Output Verification
+- Require source attribution for facts
+- Implement confidence thresholds
+- Use human-in-the-loop for critical decisions
+- Cross-reference facts with knowledge base
 
-def check_prompt_injection():
-    """Find potential prompt injection vectors."""
-    result = subprocess.run(
-        ["grep", "-rn", ".format(\\|f\".*{.*}", "--include=*.py", "src/"],
-        capture_output=True, text=True
-    )
-    risky = [
-        line for line in result.stdout.split('\n')
-        if 'prompt' in line.lower() or 'template' in line.lower()
-    ]
-    return {
-        "check": "prompt_injection",
-        "potential_vectors": len(risky),
-        "details": risky[:10]
-    }
+### Strategy 3: Context Management
+- Implement token counting
+- Truncate context when needed
+- Version knowledge base entries
+- Track context drift
 
-def check_eval_exec():
-    """Find dangerous eval/exec usage."""
-    result = subprocess.run(
-        ["grep", "-rn", "eval(\\|exec(", "--include=*.py", "src/"],
-        capture_output=True, text=True
-    )
-    violations = [line for line in result.stdout.split('\n') if line]
-    return {
-        "check": "eval_exec",
-        "violations": len(violations),
-        "details": violations
-    }
+### Strategy 4: Guardrails
+- Limit template generation flexibility
+- Use constrained templates with validation
+- Disable recursive AI calls
+- Implement circuit breakers
 
-def check_ai_output_validation():
-    """Check if AI outputs are validated."""
-    result = subprocess.run(
-        ["grep", "-rn", "completion\\|response", "--include=*.py", "src/"],
-        capture_output=True, text=True
-    )
-    lines_with_response = [l for l in result.stdout.split('\n') if l]
-    
-    validation_result = subprocess.run(
-        ["grep", "-rn", "validate\\|schema\\|verify", "--include=*.py", "src/"],
-        capture_output=True, text=True
-    )
-    validation_lines = len([l for l in validation_result.stdout.split('\n') if l])
-    
-    return {
-        "check": "ai_output_validation",
-        "response_handlers": len(lines_with_response),
-        "validation_calls": validation_lines,
-        "ratio": round(validation_lines / max(len(lines_with_response), 1), 2)
-    }
-
-if __name__ == "__main__":
-    import json
-    
-    checks = [
-        check_prompt_injection(),
-        check_eval_exec(),
-        check_ai_output_validation(),
-    ]
-    
-    print(json.dumps({"hallucination_checks": checks}, indent=2))
-```
+### Strategy 5: Audit Trail
+- Log all LLM prompts and responses
+- Track hallucination detection events
+- Record confidence scores
+- Enable hallucination pattern detection
 
 ---
 
-## COPYRIGHT
+## Hallucination Severity Levels
 
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
+| Level | Definition | Impact |
+|-------|-----------|--------|
+| CRITICAL | System generates false information | Immediate escalation |
+| HIGH | Hallucination vectors present | Fix before deployment |
+| MEDIUM | Potential for hallucination | Add safeguards |
+| LOW | Theoretical risk | Monitor and address |

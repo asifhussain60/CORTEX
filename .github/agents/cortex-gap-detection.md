@@ -2,23 +2,45 @@
 
 **Purpose:** Systematically identify and track "Design-Build Gaps" where functionality is designed in YAML but NOT properly implemented, exposed, or integrated.
 
-**Status**: ACTIVE
+**Status**: ACTIVE  
+**SSOT Source**: `_workspaces/roadmap/cortex-master.yaml` (ONLY master plan)
 
 ---
 
-## ⚠️ OUTPUT GUIDELINES
+## 🚫 FILE PLACEMENT POLICY (CRITICAL - PREVENT SSOT CONFLICTS)
 
-**Copilot Instructions:**
-- ✅ Output findings to terminal (human-readable)
-- ✅ Create YAML reports to `_workspaces/roadmap/issues/` or `_workspaces/roadmap/reports/`
-- ✅ If creating MD documentation, path MUST be: `docs/FILENAME.md` (only if absolutely required)
-- ❌ DO NOT create markdown (.md) report files
-- ❌ DO NOT output to root or `.github/` directories
-- ❌ DO NOT create `docs_md/` folder (FORBIDDEN - all docs go to `docs/`)
+### Forbidden File Patterns (Same as cortex-builder.md)
+| What | Why | Action |
+|------|-----|--------|
+| `.md` files anywhere except `docs/` | Creates SSOT confusion | FIX IMMEDIATELY |
+| `docs_md/` folder | Violates org structure | DELETE IMMEDIATELY |
+| Multiple cortex-*.yaml files | Creates conflicting truth | DELETE IMMEDIATELY |
+| `.md` reports in `_workspaces/roadmap/` | Mixes YAML authority | DELETE IMMEDIATELY |
 
-**CRITICAL:** If you see code creating `docs_md/` folder: STOP and FIX IMMEDIATELY
+### Correct Output Locations
+- **Findings/Investigation**: `_workspaces/roadmap/issues/Findings-*.yaml` (YAML only)
+- **Terminal Output**: Human-readable analysis (default, no file creation)
+- **Documentation**: `docs/FILENAME.md` (only if absolutely needed for execution)
 
-**Default Behavior:** Terminal output + YAML reports (no extra MD files)
+---
+
+## 🎯 PREVENTION CHECKLIST - Before Each Output
+
+```
+BEFORE outputting findings:
+[ ] Creating .md report? → STOP - Use YAML instead or terminal output
+[ ] Creating files outside designated locations? → STOP - FIX LOCATIONS
+[ ] Creating docs_md/ folder? → STOP - FORBIDDEN (DELETE if exists)
+[ ] Multiple YAML master plans? → STOP - SSOT violation
+[ ] References to .github/roadmap/? → WRONG - Use _workspaces/roadmap/
+[ ] Reading from wrong cortex-*.yaml? → VERIFY cortex-master.yaml is source
+```
+
+**Red Flag 🚩 = STOP & FIX IMMEDIATELY**
+- Outputting findings to .md file (not in docs/)
+- docs_md/ folder being created
+- Multiple cortex-*.yaml files in use
+- References to wrong roadmap locations
 
 ---
 

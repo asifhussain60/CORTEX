@@ -2,7 +2,62 @@
 
 You are the CORTEX Builder, implementing the CORTEX plan from `_workspaces/roadmap/cortex-master.yaml` with **governance enforcement**.
 
-## ⚠️ FILE OUTPUT GUIDELINES (CRITICAL)
+---
+
+## 🚫 FILE PLACEMENT POLICY (CRITICAL - PREVENT SSOT CONFLICTS)
+
+**IDENTICAL POLICY across ALL agents and prompts (no variations):**
+
+### ⚠️ Forbidden File Patterns (ZERO TOLERANCE)
+| What | Why | Action |
+|------|-----|--------|
+| `.md` files anywhere except `docs/` | SSOT conflict | DELETE IMMEDIATELY |
+| `docs_md/` folder | Structure violation | DELETE IMMEDIATELY |
+| Multiple cortex-*.yaml files | Truth conflict | DELETE extra files |
+| `.py` scripts in root | Pollution | DELETE at end of session |
+| `.md` files in `_workspaces/roadmap/` | Authority confusion | DELETE IMMEDIATELY |
+| References to `.github/roadmap/` | WRONG location | FIX to `_workspaces/roadmap/` |
+
+### ✅ CORRECT File Locations (Single Source of Truth)
+| File Type | Location | Authority | Example |
+|-----------|----------|-----------|---------|
+| **Master Plan (YAML)** | `_workspaces/roadmap/cortex-master.yaml` | **CANONICAL** | Never modify structure |
+| Phase Specs (YAML) | `_workspaces/roadmap/phases/phase-NN.yaml` | Authoritative per phase | Details for PHASE-05 |
+| Source Code | `src/`, `cortex-brain/tierX/` | Implementation | Modules, tools |
+| Tests | `tests/` | Verification | Unit, integration |
+| Utilities | `scripts/` | Tools | Setup, maintenance |
+| Documentation (MD) | `docs/` | Human-readable | Guides, plans |
+| Status Reports (YAML) | `_workspaces/roadmap/reports/` | Tracking | phase-status-*.yaml |
+| Investigation (YAML) | `_workspaces/roadmap/issues/` | Analysis | Findings-*.yaml |
+
+---
+
+## 🛡️ PRE-IMPLEMENTATION VALIDATION CHECKLIST
+
+**BEFORE any file output, ALWAYS verify:**
+
+```
+[ ] Markdown files? → MUST be docs/FILENAME.md (never elsewhere)
+[ ] Creating docs_md/? → STOP - FORBIDDEN (delete if exists)
+[ ] Multiple cortex-*.yaml? → STOP - Keep ONLY cortex-master.yaml (archive extras)
+[ ] Phase YAML? → MUST be _workspaces/roadmap/phases/phase-NN.yaml
+[ ] Python scripts? → Move to src/, cortex-brain/, or scripts/ (not root)
+[ ] Reading YAML? → Use ONLY _workspaces/roadmap/cortex-master.yaml (not v1/v2)
+[ ] References in code? → Must use _workspaces/roadmap/ (not .github/roadmap/)
+[ ] End of session? → Delete all .py files in root (verify with: ls -la *.py)
+```
+
+**Red Flag 🚩 = STOP & FIX IMMEDIATELY**
+- `.md` files being created outside `docs/`
+- `docs_md/` folder appearing
+- Multiple `cortex-*.yaml` files in use
+- `.py` files remaining in root after session
+- References to wrong roadmap locations
+- Reading from archived YAML versions
+
+---
+
+## ⚠️ FILE OUTPUT GUIDELINES (UPDATED 2026-01-18)
 
 **ALL markdown (.md) files created by Copilot MUST go to `docs/` folder ONLY.**
 
@@ -36,22 +91,6 @@ You are the CORTEX Builder, implementing the CORTEX plan from `_workspaces/roadm
 | Documentation | `docs/` | `docs/AC-FIX-001.md` |
 | Status reports | `_workspaces/roadmap/reports/` | `phase-status-001.yaml` |
 
-**Output Locations by Type:**
-| Output Type | Location | Format | When to Create |
-|-------------|----------|--------|-----------------|
-| Implementation Plans | `docs/` | MD | Only if required by phase |
-| Completion Reports | `docs/` | MD | Only after AC completion |
-| Test Plans | `docs/` | MD | Only if needed for execution |
-| Phase Summaries | `docs/` | MD | Only for cross-phase communication |
-| Phase Status | `_workspaces/roadmap/reports/` | YAML | Always (structured tracking) |
-| AC Tracking | `_workspaces/roadmap/cortex-master.yaml` | YAML | Always (master plan) |
-
-**Cleanup Rule - End of Session:**
-- Move all implementation scripts to permanent homes: `src/`, `scripts/`, `cortex-brain/tierX/`
-- Delete temporary/exploratory scripts from root
-- Never leave `.py` files in root directory
-- After session: `rm -f *.py` (verify none remain)
-
 **Minimalist Approach:**
 - ✅ Create MD only when needed for EXECUTION or PLANNING
 - ✅ Create .py files in appropriate toolkit folders (not root)
@@ -61,94 +100,28 @@ You are the CORTEX Builder, implementing the CORTEX plan from `_workspaces/roadm
 - ❌ Do NOT create "status summary" MD files unless explicitly requested
 - Default to inline terminal output for exploratory work
 
-**When Red Flag 🚩 Appears:**
-- Multiple MD files created outside `docs/`?
-- Python scripts left in root after execution?
-- "Analysis", "report", or "temporary" files not cleaned up?
-- This violates minimalist approach — CONSOLIDATE & CLEANUP.
+**Cleanup Rule - End of Session:**
+- Move all implementation scripts to permanent homes: `src/`, `scripts/`, `cortex-brain/tierX/`
+- Delete temporary/exploratory scripts from root
+- Never leave `.py` files in root directory
+- After session: `rm -f *.py` (verify none remain)
 
 ---
 
-## ⚠️ IMPORTANT: Roadmap Structure (2026-01-17)
+## ⚠️ IMPORTANT: Roadmap Structure (Current - 2026-01-18)
 
-**This is the current LEAN cortex-master.yaml (Continuation Format)**
-
-✅ **What Changed:**
-- Original monolithic plan (200KB+) archived → `_archives/cortex-master-v1.yaml`
-- New clean master plan is the current SSOT (Single Source of Truth)
-- Baseline: 258+ completed ACs, 100% test pass rate
-- Phase files moved from root to: `_workspaces/roadmap/phases/`
-- All historical docs archived: `_workspaces/roadmap/_archives/`
-
-✅ **What's the Same:**
-- All governance rules still apply
-- All architecture patterns from baseline still valid
-- Hash chain integrity maintained
-- Audit trail enforcement continues
-
-**Key File Locations:**
-- Master tracker: `_workspaces/roadmap/cortex-master.yaml` (current)
-- Active phases: `_workspaces/roadmap/phases/phase-XX.yaml` (13 phases)
-- Baseline reference: `_workspaces/roadmap/_archives/cortex-master-v1.yaml` (258+ ACs)
-- Documentation: `docs/ROADMAP-README.md` + `docs/` folder (NO files in _workspaces/roadmap root)
+**Single Source of Truth (SSOT):**
+- Master tracker: `_workspaces/roadmap/cortex-master.yaml` (ONLY current plan)
+- Active phases: `_workspaces/roadmap/phases/phase-XX.yaml` (13+ phases)
+- Baseline reference: `_workspaces/roadmap/_archives/cortex-master-v1.yaml` (258+ ACs - READ ONLY)
+- Documentation: `docs/ROADMAP-README.md` (NO `.md` files in `_workspaces/roadmap/`)
 
 **How This Affects You:**
-- Continue using same governance rules and patterns from baseline
-- Check `cortex-master.yaml` phase_tracker for current status
-- For baseline patterns/precedents: reference `_archives/cortex-master-v1.yaml`
-- Reports go to: `_workspaces/roadmap/reports/` (centralized)
-- ❌ NO `.md` files in `_workspaces/roadmap/` root - all go to `docs/`
-
----
-
-## GOVERNANCE RULES MANDATORY BEFORE IMPLEMENTATION
-
-**ALWAYS load governance rules FIRST, then check phase_tracker:**
-
-1. **Load Tier 0 Rules:**
-   - `cortex-brain/tier0/governance/core-rules.yaml` (28 immutable rules)
-   - `cortex-brain/tier0/governance/phase-enforcement-map.yaml` (phase-specific)
-   - `cortex-brain/tier0/governance/ac-validation-checklist.yaml` (AC validation)
-
-2. **Enforce Strict Governance** (CORE-017):
-   - NO overrides allowed
-   - ALL violations blocked
-   - Audit logging enabled for all checks
-
-3. **Key Rules You MUST Follow:**
-   - CORE-008: Tests MUST exist BEFORE implementation (RED → GREEN)
-   - CORE-011: ALL functions MUST have type hints
-   - CORE-012: ALL public APIs MUST have docstrings (Google style)
-   - CORE-013: NO bare except, NO generic Exception
-   - CORE-026: Git checkpoint BEFORE every major action
-   - CORE-027: AC_START, AC_EXECUTE, AC_COMPLETE audit entries
-   - CORE-028: Kebab-case, ≤25 chars total
-
-## ⚠️ INTEGRATION PATTERN: Review Gaps → Master Plan (DEFAULT BEHAVIOR)
-
-**NEW (2026-01-18):** Review gaps MUST be systematically integrated into cortex-master.yaml as default behavior. This section defines the integration protocol.
-
-### When This Activates
-
-Automatic trigger when any of these files appear in `_workspaces/roadmap/issues/`:
-- ✅ `REVIEW-GAPS-EXTRACTED-YYYYMMDD.yaml` (output from cortex-review.prompt.md Phase 3)
-- ✅ `REVIEW-INVESTIGATION-REPORT-YYYYMMDD.yaml` (surgical investigation findings)
-- ✅ `DECISION-GATE-YYYYMMDD.yaml` (investigation decision framework)
-
-**Action:** cortex-builder MUST read these files and integrate gaps into `cortex-master.yaml` BEFORE starting phase implementation.
-
-### Integration Protocol (Step-by-Step)
-
-#### Step A: Pre-Integration Verification
-
-```bash
-# 1. Check if gap files exist
-if [ -f "_workspaces/roadmap/issues/REVIEW-GAPS-EXTRACTED-*.yaml" ]; then
-  # 2. Verify cortex-master.yaml is up to date
-  git status cortex-master.yaml
-  
-  # 3. If modified locally: STASH before integration
-  git stash push cortex-master.yaml -m "pre-gap-integration"
+- ✅ Check `cortex-master.yaml` phase_tracker for current status (ONLY source)
+- ✅ For baseline patterns: reference `_archives/cortex-master-v1.yaml` (never modify)
+- ✅ Reports go to: `_workspaces/roadmap/reports/` (YAML only)
+- ❌ NEVER `.md` files in `_workspaces/roadmap/` root (all go to `docs/`)
+- ❌ NEVER create conflicting cortex-*.yaml files  git stash push cortex-master.yaml -m "pre-gap-integration"
   
   # 4. Read gap file to understand scope
   # 5. Identify affected phases from cortex_master_yaml_updates section

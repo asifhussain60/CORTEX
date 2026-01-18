@@ -1,41 +1,60 @@
 # CORTEX Builder Agent
 
-Implements CORTEX following `_workspaces/roadmap/cortex-master.yaml` with **governance enforcement** via tier0 rules.
+Implements CORTEX from the **single, authoritative source of truth:**
+- **`_workspaces/roadmap/cortex-master.yaml`** ← ONLY master plan file
+- Read `phase_tracker` section for current phase status
+- Reference `_workspaces/roadmap/phases/phase-NN.yaml` for phase details
+
+Enforce **tier0 governance rules** from `cortex-brain/tier0/governance/core-rules.yaml` (28 IMMUTABLE rules).
 
 ---
 
-## ⚠️ OUTPUT GUIDELINES
+## ⚠️ FILE PLACEMENT POLICY (CRITICAL - PREVENT SSOT CONFLICTS)
 
-**Copilot Instructions:**
-- ✅ Create code and test files in `src/`, `tests/`, etc. (source tree)
-- ✅ Create phase documentation in `docs/` folder (MD files)
-- ✅ Create status reports in `_workspaces/roadmap/reports/` (YAML files)
-- ✅ Create phase specs in `_workspaces/roadmap/phases/` (YAML files, AUTHORITATIVE)
-- ❌ DO NOT create .md files outside of `docs/` folder
-- ❌ DO NOT create `docs_md/` folder (FORBIDDEN - all docs go to `docs/`)
-- ❌ DO NOT create files in root, `.github/`, or `_workspaces/` directories (except reports/, phases/, tools/)
-- Minimize MD file creation: Only create when needed for execution/planning
+### 🚫 FORBIDDEN LOCATIONS
+| What | Why | Action |
+|------|-----|--------|
+| `.md` files anywhere except `docs/` | Creates SSOT confusion | FIX IMMEDIATELY |
+| `docs_md/` folder | Violates org structure | DELETE IMMEDIATELY |
+| `.md` files in `_workspaces/roadmap/` | Mixes YAML authority | DELETE IMMEDIATELY |
+| `.md` files in root directory | Creates confusion | DELETE IMMEDIATELY |
+| Phase specs outside `_workspaces/roadmap/phases/` | Breaks SSOT | DELETE IMMEDIATELY |
+| Multiple cortex-*.yaml files (except archives) | Creates conflicting truth | DELETE IMMEDIATELY |
 
-**CRITICAL:** If you see code creating `docs_md/` folder: STOP and FIX IMMEDIATELY
+### ✅ CORRECT LOCATIONS
+| File Type | Location | Authority | Example |
+|-----------|----------|-----------|---------|
+| **MASTER PLAN** | `_workspaces/roadmap/cortex-master.yaml` | **CANONICAL** | Contains `phase_tracker` |
+| Phase Specs (YAML) | `_workspaces/roadmap/phases/phase-NN.yaml` | Authoritative per phase | Details for PHASE-05 |
+| Implementation Code | `src/`, `cortex-brain/tierX/` | Execution | Source modules |
+| Test Code | `tests/` | Verification | Test suites |
+| Utilities | `scripts/` | Tools | Permanent scripts |
+| Documentation (MD) | `docs/` ONLY | Human-readable | Guides, plans |
+| Status Reports (YAML) | `_workspaces/roadmap/reports/` | Tracking | phase-status-*.yaml |
+| Findings (YAML) | `_workspaces/roadmap/issues/` | Analysis | Findings-*.yaml |
 
-**File Location Rules:**
-| File Type | Correct Location | Example |
-|-----------|------------------|---------|
-| Implementation | `src/`, `tests/` | `src/models/user.py` |
-| Documentation | `docs/` | `docs/AC-FIX-001-02.md` |
-| Status Tracking | `_workspaces/roadmap/reports/` | `phase-status-005.yaml` |
-| Configuration | Root or subdirs | `pytest.ini`, `pyproject.toml` |
+### 🔍 VALIDATION RULES - CHECK BEFORE COMMITTING
+Before outputting ANY file, verify:
+
+1. **MD files**: Path MUST be `docs/FILENAME.md` (NEVER root, NEVER `_workspaces/`, NEVER `docs_md/`)
+2. **YAML reports**: Path MUST be `_workspaces/roadmap/reports/FILENAME.yaml`
+3. **Phase YAML**: Path MUST be `_workspaces/roadmap/phases/phase-NN.yaml`
+4. **No `docs_md/` folder**: This folder is FORBIDDEN (check: does it exist? DELETE)
+5. **No conflicting SSOT**: Only ONE `cortex-master.yaml` in active use
+6. **Reference check**: All references must point to `_workspaces/roadmap/cortex-master.yaml`
+
+**If ANY file violates these rules: STOP, FIX, VERIFY BEFORE PROCEEDING**
 
 ---
 
-## GOVERNANCE INTEGRATION (MANDATORY)
+## 🛡️ GOVERNANCE INTEGRATION (MANDATORY)
 
 **Before implementing ANY AC-ID, load governance rules:**
 
 1. **Tier 0 Governance Rules:**
-   - Load: `cortex-brain/tier0/governance/core-rules.yaml` (28 rules)
-   - Purpose: IMMUTABLE operational boundaries
-   - Enforcement: STRICT (no overrides)
+   - Load: `cortex-brain/tier0/governance/core-rules.yaml` (28 IMMUTABLE rules)
+   - Enforcement: STRICT (no overrides, no exceptions)
+   - Violation = Failed implementation
 
 2. **Phase Enforcement Map:**
    - Load: `cortex-brain/tier0/governance/phase-enforcement-map.yaml`
@@ -45,9 +64,34 @@ Implements CORTEX following `_workspaces/roadmap/cortex-master.yaml` with **gove
 3. **AC-ID Validation Checklist:**
    - Load: `cortex-brain/tier0/governance/ac-validation-checklist.yaml`
    - Purpose: Pre-start, during, and post-completion validation
+   - MUST PASS all checks before marking complete
 
-**Audit Trail Required:**
-- Location: `cortex-brain/state/governance.db`
+4. **Audit Trail Recording:**
+   - Location: `cortex-brain/state/governance.db`
+   - REQUIRED: AC_START, AC_EXECUTE, AC_COMPLETE entries
+   - Hash chain integrity: Every entry includes previous_hash for tamper detection
+
+---
+
+## 🎯 PREVENTION CHECKLIST - Before Each File Output
+
+```
+BEFORE writing ANY file:
+[ ] Is this a .md file? → MUST go to docs/ (nowhere else)
+[ ] Is this a .yaml report? → MUST go to _workspaces/roadmap/reports/
+[ ] Is this a phase spec? → MUST go to _workspaces/roadmap/phases/phase-NN.yaml
+[ ] Am I creating docs_md/? → STOP - FORBIDDEN (DELETE if exists)
+[ ] Are there multiple cortex-*.yaml files? → STOP - SSOT violation (archive extras)
+[ ] Do all references point to _workspaces/roadmap/cortex-master.yaml? → YES?
+[ ] Root directory has .py/.md files? → STOP - DELETE before commit
+```
+
+**Red Flag 🚩 = STOP & FIX IMMEDIATELY**
+- docs_md/ folder exists or being created
+- Multiple .md files outside docs/
+- .py files left in root after session
+- References to .github/roadmap/ (wrong location)
+- Conflicting cortex-*.yaml files
 - Events: AC_START, AC_EXECUTE, AC_COMPLETE (minimum 3 per AC-ID)
 - Queries: Compliance reports, violation tracking, phase readiness checks
 
