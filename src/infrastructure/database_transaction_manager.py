@@ -223,6 +223,22 @@ class DatabaseTransactionManager:
         entry_data = f"{timestamp}{operation}{component}{level}{message}{ac_id}{metadata}{previous_hash}"
         entry_hash = hashlib.sha256(entry_data.encode()).hexdigest()
         
+        # AC-FIX-001-03: VALIDATE hash chain before insert (prevents regression)
+        # Get prior entry to validate linkage
+        prior_entry_hash = self._get_prior_entry_hash(conn, ac_id)
+        if prior_entry_hash or ac_id:  # Not a GENESIS entry for this AC-ID
+            # Create entry object for validation
+            class AuditEntry:
+                def __init__(self, prev_hash, entry_h):
+                    self.previous_hash = prev_hash
+                    self.entry_hash = entry_h
+            
+            current = AuditEntry(previous_hash, entry_hash)
+            prior = AuditEntry("", prior_entry_hash) if prior_entry_hash else None
+            
+            # Validate before insert
+            self._validate_hash_chain(current, prior)
+        
         # AC-FIX-008-01: Match production audit_log schema
         try:
             conn.execute(
@@ -298,6 +314,53 @@ class DatabaseTransactionManager:
         else:
             # GENESIS entry (first entry for this AC-ID)
             return ""
+    
+    def _validate_hash_chain(self, current_entry: Any, prior_entry: Optional[Any] = None) -> bool:
+        """
+        Validate hash chain integrity before committing entry.
+        
+        AC-FIX-001-03: Hash chain validation gate (CORE-025 compliance)
+        
+        This method validates that the current entry's previous_hash matches
+        the prior entry's entry_hash, ensuring an unbroken cryptographic chain.
+        
+        Args:
+            current_entry: Entry to validate (must have .previous_hash and .entry_hash)
+            prior_entry: Previous entry in chain (must have .entry_hash), or None for GENESIS
+            
+        Returns:
+            bool: True if valid
+            
+        Raises:
+            ValueError: If chain is broken (previous_hash doesn't match prior.entry_hash)
+            
+        CORE-025 Compliance:
+        - GENESIS entry: current.previous_hash == "" (no prior entry)
+        - Linked entry: current.previous_hash == prior.entry_hash
+        - Raises ValueError if linkage broken (prevents bad entries)
+        - Called before transaction commit (prevents regression)
+        
+        Example:
+            prior_entry has entry_hash = "abc123..."
+            current_entry has previous_hash = "abc123..." → VALID ✓
+            current_entry has previous_hash = "xyz789..." → INVALID ✗ (raises ValueError)
+        """
+        # GENESIS entry (no prior entry) - previous_hash must be empty string
+        if prior_entry is None:
+            if current_entry.previous_hash != "":
+                raise ValueError(
+                    f"GENESIS entry must have empty previous_hash, got '{current_entry.previous_hash}'"
+                )
+            return True
+        
+        # Linked entry - previous_hash must match prior's entry_hash
+        if current_entry.previous_hash != prior_entry.entry_hash:
+            raise ValueError(
+                f"Hash chain broken: entry.previous_hash ('{current_entry.previous_hash}') "
+                f"does not match prior.entry_hash ('{prior_entry.entry_hash}')"
+            )
+        
+        return True
     
     def _create_audit_table(self, conn: sqlite3.Connection) -> None:
         """
