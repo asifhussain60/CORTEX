@@ -205,7 +205,7 @@ import sqlite3
 from pathlib import Path
 
 # Load phase tracker
-with open('.github/roadmap/cortex-master.yaml') as f:
+with open('_workspaces/roadmap/cortex-master.yaml') as f:
     master = yaml.safe_load(f)
 
 phase_tracker = master.get('phase_tracker', {})
