@@ -24,6 +24,11 @@ from src.core.response_header_config import HeaderConfigurationManager
 from src.core.governance_registry import GovernanceRegistry, GovernanceViolationError
 from src.core.hallucination_prevention.behavioral_boundaries import BehavioralBoundaryRules
 from src.core.knowledge.knowledge_repository import KnowledgeRepository, KnowledgeEntry
+from src.domain_brain.business_knowledge_repository import (
+    BusinessKnowledgeRepository,
+    BusinessKnowledgeEntry,
+    get_business_knowledge_repository
+)
 from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from src.infrastructure.database import DatabaseManager
 from src.infrastructure.database_transaction_manager import DatabaseTransactionManager
@@ -93,6 +98,28 @@ class MasterOrchestrator(IOrchestrator):
                 operation="KNOWLEDGE_REPOSITORY_INIT",
                 success=False,
                 details={"error": f"Knowledge repository not available: {str(e)}"}
+            )
+        
+        # AC-KN-003-01: Initialize Business Knowledge Repository for domain brain access
+        self._business_knowledge_repository: Optional[BusinessKnowledgeRepository] = None
+        try:
+            self._business_knowledge_repository = BusinessKnowledgeRepository()
+            self.logger.log_operation_complete(
+                ac_id="AC-KN-003-01",
+                operation="BUSINESS_KNOWLEDGE_REPOSITORY_INIT",
+                success=True,
+                details={
+                    "domains": self._business_knowledge_repository.domains,
+                    "entry_count": self._business_knowledge_repository.entry_count
+                }
+            )
+        except Exception as e:
+            # Log but don't fail - business knowledge is enhancement, not blocking
+            self.logger.log_operation_complete(
+                ac_id="AC-KN-003-01",
+                operation="BUSINESS_KNOWLEDGE_REPOSITORY_INIT",
+                success=False,
+                details={"error": f"Business knowledge repository not available: {str(e)}"}
             )
         
         # Track current operation context for header variables
@@ -501,8 +528,15 @@ class MasterOrchestrator(IOrchestrator):
                     }
                 )
                 
-                # AC-KN-002-01: Evaluate knowledge for request composition
+                # AC-KN-002-01: Evaluate technical knowledge for request composition
                 knowledge_context = self._evaluate_knowledge_for_request(
+                    operation=operation,
+                    context=context,
+                    target_domains=target_domains
+                )
+                
+                # AC-KN-003-01: Evaluate business knowledge for request composition
+                business_knowledge_context = self._evaluate_business_knowledge_for_request(
                     operation=operation,
                     context=context,
                     target_domains=target_domains
@@ -538,7 +572,7 @@ class MasterOrchestrator(IOrchestrator):
                     except Exception as e:
                         errors[domain] = str(e)
                 
-                # Aggregate results with knowledge context (AC-KN-002-01)
+                # Aggregate results with knowledge context (AC-KN-002-01, AC-KN-003-01)
                 aggregated = {
                     "operation": operation,
                     "timestamp": datetime.now().isoformat(),
@@ -547,8 +581,10 @@ class MasterOrchestrator(IOrchestrator):
                     "results": results,
                     "errors": errors if errors else None,
                     "transaction_id": txn.transaction_id,
-                    # AC-KN-002-01: Include knowledge context in composite request
-                    "knowledge_context": knowledge_context
+                    # AC-KN-002-01: Include technical knowledge context in composite request
+                    "knowledge_context": knowledge_context,
+                    # AC-KN-003-01: Include business knowledge context in composite request
+                    "business_knowledge_context": business_knowledge_context
                 }
                 
                 # Store in history
@@ -567,7 +603,9 @@ class MasterOrchestrator(IOrchestrator):
                         "governance_enforced": True,
                         "transaction_id": txn.transaction_id,
                         "knowledge_evaluated": knowledge_context.get("knowledge_evaluated", False),
-                        "knowledge_entries_used": knowledge_context.get("entries_count", 0)
+                        "knowledge_entries_used": knowledge_context.get("entries_count", 0),
+                        "business_knowledge_evaluated": business_knowledge_context.get("business_knowledge_evaluated", False),
+                        "business_knowledge_entries_used": business_knowledge_context.get("entries_count", 0)
                     }
                 )
                 
@@ -896,4 +934,237 @@ class MasterOrchestrator(IOrchestrator):
             
         except Exception:
             return knowledge_context
-
+    
+    # ==========================================================================
+    # BUSINESS KNOWLEDGE REPOSITORY INTEGRATION (AC-KN-003-01)
+    # ==========================================================================
+    
+    @property
+    def has_business_knowledge_repository(self) -> bool:
+        """Check if business knowledge repository is available."""
+        return self._business_knowledge_repository is not None
+    
+    @mcp_tool(
+        name="get_business_knowledge_summary",
+        description="Get summary of available business domain knowledge"
+    )
+    def get_business_knowledge_summary(self) -> Result[Dict[str, Any]]:
+        """
+        Get summary of available business knowledge in Domain Brain.
+        
+        AC-KN-003-01: Business Knowledge Repository Access
+        
+        Returns:
+            Result with business knowledge summary including domains and entry counts
+        """
+        if not self._business_knowledge_repository:
+            return Err("Business knowledge repository not initialized")
+        
+        try:
+            summary = self._business_knowledge_repository.get_knowledge_summary()
+            return Ok(summary)
+        except Exception as e:
+            return Err(f"Failed to get business knowledge summary: {str(e)}")
+    
+    @mcp_tool(
+        name="query_business_knowledge",
+        description="Query business domain knowledge by domain, entity type, or keywords"
+    )
+    def query_business_knowledge(
+        self,
+        domains: Optional[List[str]] = None,
+        entity_types: Optional[List[str]] = None,
+        keywords: Optional[List[str]] = None
+    ) -> Result[List[Dict[str, Any]]]:
+        """
+        Query the business knowledge repository.
+        
+        AC-KN-003-01: Business Knowledge Repository Query
+        
+        Args:
+            domains: Filter by domain IDs (e.g., ["payments", "compliance"])
+            entity_types: Filter by entity types (e.g., ["service", "api"])
+            keywords: Search keywords in name/description
+        
+        Returns:
+            Result with list of matching business knowledge entries
+        """
+        if not self._business_knowledge_repository:
+            return Err("Business knowledge repository not initialized")
+        
+        try:
+            result = self._business_knowledge_repository.query(
+                domains=domains,
+                entity_types=entity_types,
+                keywords=keywords
+            )
+            
+            # Convert entries to dicts for serialization
+            entries = [
+                {
+                    "id": entry.id,
+                    "domain_id": entry.domain_id,
+                    "domain_name": entry.domain_name,
+                    "entity_type": entry.entity_type,
+                    "name": entry.name,
+                    "description": entry.description,
+                    "source": entry.source
+                }
+                for entry in result.entries
+            ]
+            
+            return Ok(entries)
+        except Exception as e:
+            return Err(f"Failed to query business knowledge: {str(e)}")
+    
+    @mcp_tool(
+        name="get_relevant_business_knowledge",
+        description="Get relevant business knowledge for request composition"
+    )
+    def get_relevant_business_knowledge_for_operation(
+        self,
+        operation: str,
+        context: Dict[str, Any],
+        max_entries: int = 5
+    ) -> Result[List[Dict[str, Any]]]:
+        """
+        Get relevant business knowledge entries for composing a request.
+        
+        AC-KN-003-01: Business Knowledge Evaluation for Request Composition
+        
+        Args:
+            operation: The operation being performed
+            context: Operation context for relevance matching
+            max_entries: Maximum entries to return
+        
+        Returns:
+            Result with relevant business knowledge entries
+        """
+        if not self._business_knowledge_repository:
+            return Ok([])  # Graceful degradation
+        
+        try:
+            # Extract keywords from operation and context
+            keywords = [operation]
+            if "keywords" in context:
+                keywords.extend(context["keywords"])
+            if "intent" in context:
+                keywords.append(context["intent"])
+            
+            # Extract domain hints from context
+            domain_hints = []
+            if "business_domain" in context:
+                domain_hints.append(context["business_domain"])
+            if "domain" in context:
+                domain_hints.append(context["domain"])
+            
+            # Query business knowledge
+            entries = self._business_knowledge_repository.get_relevant_knowledge(
+                domains=domain_hints if domain_hints else None,
+                keywords=keywords,
+                max_entries=max_entries
+            )
+            
+            # Convert to serializable format
+            result = [
+                {
+                    "id": entry.id,
+                    "domain_id": entry.domain_id,
+                    "domain_name": entry.domain_name,
+                    "entity_type": entry.entity_type,
+                    "name": entry.name,
+                    "description": entry.description,
+                    "source": entry.source,
+                    "relevance_context": {
+                        "matched_domains": domain_hints,
+                        "matched_keywords": keywords
+                    }
+                }
+                for entry in entries
+            ]
+            
+            self.logger.log_operation_complete(
+                ac_id="AC-KN-003-01",
+                operation="BUSINESS_KNOWLEDGE_RETRIEVAL",
+                success=True,
+                details={
+                    "operation": operation,
+                    "entries_found": len(result),
+                    "domains_searched": domain_hints,
+                    "keywords_used": keywords
+                }
+            )
+            
+            return Ok(result)
+        except Exception as e:
+            self.logger.log_operation_complete(
+                ac_id="AC-KN-003-01",
+                operation="BUSINESS_KNOWLEDGE_RETRIEVAL",
+                success=False,
+                details={"error": str(e)}
+            )
+            return Ok([])  # Graceful degradation
+    
+    def _evaluate_business_knowledge_for_request(
+        self,
+        operation: str,
+        context: Dict[str, Any],
+        target_domains: Optional[List[str]] = None
+    ) -> Dict[str, Any]:
+        """
+        Evaluate business knowledge and compose context for request.
+        
+        AC-KN-003-01: Business Knowledge Evaluation During Request Composition
+        
+        Args:
+            operation: Operation being performed
+            context: Operation context
+            target_domains: Target orchestrator domains
+            
+        Returns:
+            Dict with business knowledge context for request composition
+        """
+        business_context = {
+            "business_knowledge_evaluated": False,
+            "business_domains": [],
+            "services": [],
+            "apis": [],
+            "workflows": [],
+            "entities": []
+        }
+        
+        if not self._business_knowledge_repository:
+            return business_context
+        
+        try:
+            # Get relevant business knowledge
+            result = self.get_relevant_business_knowledge_for_operation(operation, context)
+            if result.is_err():
+                return business_context
+            
+            entries = result.unwrap()
+            business_context["business_knowledge_evaluated"] = True
+            business_context["entries_count"] = len(entries)
+            
+            # Categorize by entity type
+            for entry in entries:
+                entity_type = entry.get("entity_type", "").lower()
+                name = entry.get("name", "")
+                domain = entry.get("domain_name", "")
+                
+                if domain and domain not in business_context["business_domains"]:
+                    business_context["business_domains"].append(domain)
+                
+                if entity_type == "service":
+                    business_context["services"].append(name)
+                elif entity_type == "api":
+                    business_context["apis"].append(name)
+                elif entity_type == "workflow":
+                    business_context["workflows"].append(name)
+                else:
+                    business_context["entities"].append(f"{entity_type}: {name}")
+            
+            return business_context
+            
+        except Exception:
+            return business_context
