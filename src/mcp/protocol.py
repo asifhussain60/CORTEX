@@ -147,6 +147,30 @@ class ToolDefinition:
             "timeout_ms": self.timeout_ms,
         }
 
+class MCPTool(Protocol):
+    """Protocol for MCP-compliant tools."""
+    
+    def get_definition(self) -> ToolDefinition:
+        """Get the tool's MCP definition."""
+        ...
+    
+    def execute(self, **params) -> Dict[str, Any]:
+        """Execute the tool with given parameters."""
+        ...
+    
+    def call(self, **params) -> Dict[str, Any]:
+        """Execute the tool with given parameters (alias for execute)."""
+        ...
+    
+    def validate_params(self, params: Dict[str, Any]) -> tuple[bool, str]:
+        """Validate parameters for this tool."""
+        ...
+    
+    def get_error_code(self) -> 'ErrorCode':
+        """Get error code for this tool."""
+        ...
+
+
 @dataclass
 class MCPError:
     """MCP error response per JSON-RPC 2.0."""
