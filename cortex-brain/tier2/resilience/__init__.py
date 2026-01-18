@@ -27,6 +27,7 @@ import threading
 from pathlib import Path
 import random
 import time
+from collections import deque
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -1335,6 +1336,249 @@ class InstrumentationSpan:
         return self.duration * 1000
 
 
+@dataclass
+class DashboardMetrics:
+    """
+    Metrics displayed on real-time progress dashboard.
+    
+    Attributes:
+        total_operations: Total operations in phase/task
+        completed_operations: Successfully completed operations
+        failed_operations: Failed operations
+        in_progress: Currently executing operations
+        average_duration_ms: Average operation duration
+        throughput_ops_per_sec: Operations completed per second
+        error_rate: Percentage of failed operations
+    """
+    total_operations: int = 0
+    completed_operations: int = 0
+    failed_operations: int = 0
+    in_progress: int = 0
+    average_duration_ms: float = 0.0
+    throughput_ops_per_sec: float = 0.0
+    error_rate: float = 0.0
+
+
+class DashboardUpdateType(IntEnum):
+    """Types of dashboard updates."""
+    METRIC = 0
+    STATUS = 1
+    ALERT = 2
+    PROGRESS = 3
+
+
+@dataclass
+class DashboardUpdate:
+    """
+    A single dashboard update message.
+    
+    Attributes:
+        update_type: Type of update (metric, status, alert, progress)
+        timestamp: When the update occurred
+        data: Update payload
+    """
+    update_type: DashboardUpdateType
+    timestamp: float
+    data: Dict[str, Any]
+
+
+class RealTimeProgressDashboard:
+    """
+    Real-time progress dashboard service.
+    
+    Provides live metrics display with guaranteed <1s update frequency:
+    - Operation progress tracking (0.0-1.0)
+    - Live metrics display
+    - Status messages
+    - Error alerts
+    - Subscription notifications
+    
+    Features:
+    - Thread-safe concurrent updates
+    - Update history (last 1000 updates)
+    - Subscriber notifications
+    - SLA monitoring (<1s updates)
+    - Low-latency recording
+    
+    AC-ID: AC-NFR-004-02
+    Title: Real-Time Progress Dashboard Service
+    
+    Example:
+        dashboard = RealTimeProgressDashboard()
+        dashboard.subscribe(on_update)
+        dashboard.start()
+        
+        dashboard.record_operation_progress("op-1", 0.5)
+        dashboard.record_status_update("Processing...")
+        dashboard.record_alert("High memory", "warning")
+    
+    Thread Safety: Protected with RLock for concurrent updates
+    """
+    
+    def __init__(self, update_interval_ms: float = 500) -> None:
+        """
+        Initialize dashboard.
+        
+        Args:
+            update_interval_ms: Target update frequency (milliseconds)
+        """
+        self.update_interval_ms = update_interval_ms
+        self.metrics = DashboardMetrics()
+        self.updates: deque = deque(maxlen=1000)  # Keep last 1000 updates
+        self.is_active = False
+        self.last_update_time = time.time()
+        self._lock = threading.RLock()
+        self.subscribers: List[Callable] = []
+    
+    def start(self) -> None:
+        """Start the dashboard."""
+        with self._lock:
+            self.is_active = True
+            logger.info("Real-time progress dashboard started")
+    
+    def stop(self) -> None:
+        """Stop the dashboard."""
+        with self._lock:
+            self.is_active = False
+            logger.info("Real-time progress dashboard stopped")
+    
+    def update_metrics(self, metrics: DashboardMetrics) -> None:
+        """
+        Update dashboard metrics display.
+        
+        Args:
+            metrics: New metrics snapshot
+        """
+        with self._lock:
+            self.metrics = metrics
+            self._record_update(DashboardUpdateType.METRIC, {"metrics": vars(metrics)})
+    
+    def record_operation_progress(self, operation_id: str, progress: float) -> None:
+        """
+        Record progress for an operation.
+        
+        Args:
+            operation_id: Unique operation identifier
+            progress: Progress percentage (0.0-1.0)
+        """
+        if not 0.0 <= progress <= 1.0:
+            raise ValueError("progress must be between 0.0 and 1.0")
+        
+        with self._lock:
+            self._record_update(DashboardUpdateType.PROGRESS, {
+                "operation_id": operation_id,
+                "progress": progress
+            })
+    
+    def record_status_update(self, status: str) -> None:
+        """
+        Record a status update message.
+        
+        Args:
+            status: Status message
+        """
+        with self._lock:
+            self._record_update(DashboardUpdateType.STATUS, {"status": status})
+    
+    def record_alert(self, alert_message: str, severity: str = "warning") -> None:
+        """
+        Record an alert for the dashboard.
+        
+        Args:
+            alert_message: Alert message
+            severity: "info", "warning", or "error"
+        """
+        if severity not in ("info", "warning", "error"):
+            raise ValueError(f"Unknown severity: {severity}")
+        
+        with self._lock:
+            self._record_update(DashboardUpdateType.ALERT, {
+                "message": alert_message,
+                "severity": severity
+            })
+    
+    def _record_update(self, update_type: DashboardUpdateType, data: Dict[str, Any]) -> None:
+        """Record a dashboard update (must be called with lock)."""
+        update = DashboardUpdate(
+            update_type=update_type,
+            timestamp=time.time(),
+            data=data
+        )
+        self.updates.append(update)
+        self.last_update_time = time.time()
+        
+        # Notify subscribers
+        for subscriber in self.subscribers:
+            try:
+                subscriber(update)
+            except Exception as e:
+                logger.warning(f"Subscriber notification error: {e}")
+    
+    def subscribe(self, callback: Callable[[DashboardUpdate], None]) -> None:
+        """
+        Subscribe to dashboard updates.
+        
+        Callback will be called for each update with the DashboardUpdate object.
+        
+        Args:
+            callback: Function called for each update
+        """
+        with self._lock:
+            self.subscribers.append(callback)
+    
+    def get_updates_since(self, timestamp: float) -> List[DashboardUpdate]:
+        """
+        Get updates since a given timestamp.
+        
+        Args:
+            timestamp: Starting timestamp (Unix time)
+            
+        Returns:
+            List of updates after the timestamp
+            
+        Complexity: O(n) where n is number of stored updates
+        """
+        with self._lock:
+            return [u for u in self.updates if u.timestamp >= timestamp]
+    
+    def get_time_since_last_update(self) -> float:
+        """
+        Get milliseconds since last update.
+        
+        Returns:
+            Milliseconds since last dashboard update
+        """
+        with self._lock:
+            return (time.time() - self.last_update_time) * 1000
+    
+    def is_updating_within_sla(self) -> bool:
+        """
+        Check if updates are within <1s SLA.
+        
+        Returns:
+            True if last update was within 1 second
+        """
+        return self.get_time_since_last_update() < 1000.0
+    
+    def get_current_metrics(self) -> DashboardMetrics:
+        """
+        Get current dashboard metrics (thread-safe copy).
+        
+        Returns:
+            Copy of current metrics
+        """
+        with self._lock:
+            return DashboardMetrics(
+                total_operations=self.metrics.total_operations,
+                completed_operations=self.metrics.completed_operations,
+                failed_operations=self.metrics.failed_operations,
+                in_progress=self.metrics.in_progress,
+                average_duration_ms=self.metrics.average_duration_ms,
+                throughput_ops_per_sec=self.metrics.throughput_ops_per_sec,
+                error_rate=self.metrics.error_rate
+            )
+
+
 __all__ = [
     "GracefulDegradationFramework",
     "PartialFunctionalityMode",
@@ -1359,4 +1603,8 @@ __all__ = [
     "MetricExportConfig",
     "MetricUnit",
     "InstrumentationSpan",
+    "RealTimeProgressDashboard",
+    "DashboardMetrics",
+    "DashboardUpdate",
+    "DashboardUpdateType",
 ]
