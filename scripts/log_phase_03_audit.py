@@ -91,6 +91,12 @@ def main():
         "Graceful degradation on component failure"
     )
     
+    # AC-NFR-002-02: Retry Handler (COMPLETED)
+    log_ac_audit_trail(
+        "AC-NFR-002-02",
+        "Automatic retry with exponential backoff"
+    )
+    
     print("\n" + "=" * 70)
     print("Audit logging completed successfully")
     print("=" * 70)
