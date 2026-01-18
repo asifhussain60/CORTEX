@@ -338,6 +338,77 @@ echo "=== END AUDIT ==="
 
 ---
 
+## REVIEW FINDINGS INTEGRATION
+
+### Gap Detection Output for CORTEX Reviewer
+
+**When review process is triggered, gap detection provides findings in this format:**
+
+```yaml
+# Location: _workspaces/roadmap/reports/gap-detection-findings-YYYY-MM-DD.yaml
+gap_detection_summary:
+  timestamp: "2026-01-18T10:00:00Z"
+  total_gaps_found: [COUNT]
+  
+  critical_gaps: [COUNT]  # Will be marked for CRITICAL remediation
+  high_gaps: [COUNT]      # Will be marked for HIGH remediation  
+  medium_gaps: [COUNT]    # Will be marked for MEDIUM remediation
+  
+  gap_categories:
+    - category: "Design-Build Gaps"
+      count: [COUNT]
+      examples: ["MCP SDK Not Exposed", "Tool Registry Incomplete"]
+      recommendation: "Create AC-IDs for integration layer"
+    
+    - category: "Infrastructure Gaps"
+      count: [COUNT]
+      examples: ["Configuration Files Missing"]
+      recommendation: "Create configuration management AC-IDs"
+    
+    - category: "Governance Enforcement Gaps"
+      count: [COUNT]
+      examples: ["Partial Rule Enforcement"]
+      recommendation: "Harden governance rule application"
+
+findings:
+  - gap_id: "GAP-001"
+    severity: "CRITICAL"
+    category: "Design-Build Gap"
+    component: "MCP Integration"
+    phase: "PHASE-02"
+    description: "MCP server built but NOT properly exposed/integrated"
+    evidence:
+      - "mcp package missing from requirements.txt"
+      - "Custom HTTP used instead of JSON-RPC stdio"
+      - "17/40+ tools exposed (42% coverage)"
+    recommended_ac: "AC-FIX-MCP-001-01"
+    estimated_effort: "8 hours"
+    blocking: true
+
+remediation_handoff:
+  reviewer_findings: "[reference to review findings]"
+  gap_detection_findings: "[reference to gap detection findings]"
+  combined_ac_list: "[AC-IDs to create from both sources]"
+  note: "Submit to CORTEX Builder for implementation"
+```
+
+### Commands
+
+- `/detect-gaps` - Run full gap detection analysis
+- `/gaps-by-category` - Group gaps by type
+- `/gap-severity <level>` - Show gaps by severity (CRITICAL|HIGH|MEDIUM)
+- `/gap-timeline <component>` - Show design-build gap timeline
+- `/export-for-review` - Export findings in format for CORTEX Reviewer
+
+### Coordination with CORTEX Reviewer
+
+1. **Gap Detection runs independently** - Identifies design-build gaps
+2. **Review process incorporates findings** - Reviews architecture holistically
+3. **Combined findings sent to Builder** - Gap detection + review findings = complete remediation list
+4. **Builder creates integrated AC-IDs** - Addresses all gaps from both sources
+
+---
+
 ## SUCCESS CRITERIA
 
 A component has **NO gap** when:

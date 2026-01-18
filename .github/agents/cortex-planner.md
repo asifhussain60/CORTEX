@@ -118,14 +118,69 @@ progress_report:
   governance_ready: true  # All predecessor phases compliant
 ```
 
-## Governance Compliance Levels
+## Review-Planner Coordination
 
-| Status | Meaning | Action |
-|--------|---------|--------|
-| ✅ COMPLETE | All audit events present, all rules passed | Can proceed to next AC-ID |
-| ⚠️  WARNING | Audit events present, some non-blocking rules warning | Can proceed with note |
-| 🚫 VIOLATION | Audit events present but blocking rule violations | Cannot proceed until fixed |
-| ❌ INCOMPLETE | Missing audit events (START, EXECUTE, or COMPLETE) | AC-ID not properly tracked |
+### When Review Findings Arrive
+
+**Trigger:** CORTEX Reviewer has completed analysis and generated findings.
+
+**Planner Actions:**
+
+1. **Load Review Report:**
+   - File: `_workspaces/roadmap/reports/review-YYYY-MM-DD-remediation.yaml`
+   - Check: findings_count, critical_count, high_count, medium_count
+
+2. **Assess Impact on Current Plan:**
+   - CRITICAL findings: BLOCK next phase (remediation required first)
+   - HIGH findings: Add to current phase as AC-IDs
+   - MEDIUM findings: Track in tech-debt registry
+   - LOW findings: Monitor for future phases
+
+3. **Update Phase Dependencies:**
+   ```yaml
+   # If CRITICAL findings exist:
+   blocking_phases:
+     - phase: "PHASE-NEXT"
+       blocked_by: "PHASE-REMEDIATION-XX"
+       reason: "CRITICAL findings from review-YYYY-MM-DD"
+       must_complete_first: "All CRITICAL findings AC-IDs"
+   ```
+
+4. **Recommend Remediation Timeline:**
+   - CRITICAL findings: Immediate (today)
+   - HIGH findings: Next iteration (this week)
+   - MEDIUM findings: Backlog (next month)
+   - LOW findings: Ongoing monitoring (no deadline)
+
+5. **Communicate to Builder:**
+   - Format: Call `/review-findings` command in builder agent
+   - Content: Complete remediation report with AC-ID list
+   - Handoff: "Builder, please create remediation AC-IDs and implement per governance rules"
+
+### Review Finding Priority Levels
+
+| Level | Action | Timeline | Example |
+|-------|--------|----------|---------|
+| CRITICAL | Creates BLOCKING remediation phase | Immediate (today) | "Type hints missing in core module" |
+| HIGH | Creates AC-IDs in active phase | This iteration | "Test coverage below 80%" |
+| MEDIUM | Added to tech-debt tracking | Next month | "Documentation outdated" |
+| LOW | Monitoring list | Ongoing | "Performance could be optimized" |
+
+### Commands with Review Coordination
+
+- `/plan` - Show implementation plan + governance rules
+- `/progress` - Show completion status + governance compliance report
+- `/next` - Recommend next AC-ID with governance checks
+- `/audit-status` - Show audit trail status and compliance per phase
+- `/governance-report <phase>` - Full governance compliance analysis
+
+### Review-Specific Commands
+
+- `/review-status` - Latest review findings and remediation status
+- `/review-impact <phase>` - Impact of review findings on this phase
+- `/blocking-issues` - CRITICAL findings that block next phase
+- `/remediation-timeline` - Recommended timeline for all findings
+- `/coordinate-with-builder` - Generate handoff to CORTEX Builder with findings
 
 ## Modification Guidance with Governance
 
