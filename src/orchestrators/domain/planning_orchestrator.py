@@ -34,6 +34,7 @@ from src.core.result import Result, Ok, Err
 from src.core.interfaces.i_orchestrator import IOrchestrator, OperationMode
 from src.core.response_header_config import HeaderConfigurationManager
 from src.core.response_header_injector import ResponseHeaderInjector
+from src.mcp.decorator import mcp_tool
 
 
 @dataclass
@@ -200,6 +201,10 @@ class PlanningOrchestrator(IOrchestrator):
         
         return Ok(tools)
     
+    @mcp_tool(
+        name="plan_status",
+        description="Get phase planning status including AC count and completion metrics"
+    )
     def plan_status(self, phase_id: str) -> Result[Dict[str, Any]]:
         """
         Get phase planning status.
@@ -230,6 +235,10 @@ class PlanningOrchestrator(IOrchestrator):
         
         return Ok(status)
     
+    @mcp_tool(
+        name="next_ac",
+        description="Get next acceptance criterion to work on in a phase"
+    )
     def next_ac(self, phase_id: str) -> Result[Dict[str, Any]]:
         """
         Get next AC to work on.
@@ -259,6 +268,10 @@ class PlanningOrchestrator(IOrchestrator):
         
         return Ok(next_ac_data)
     
+    @mcp_tool(
+        name="enforce_phase_lock",
+        description="Enforce a phase-level lock to prevent future modifications"
+    )
     def enforce_phase_lock(
         self,
         phase_id: str,
@@ -400,6 +413,10 @@ class PlanningOrchestrator(IOrchestrator):
             )
             return Err(f"Operation failed: {str(e)}")
     
+    @mcp_tool(
+        name="get_audit_trail",
+        description="Retrieve audit trail with complete hash chain for verification"
+    )
     def get_audit_trail(self, limit: int = 100) -> Result[List[Dict[str, Any]]]:
         """
         AC-AR-011-03: Get audit trail with hash chain.
