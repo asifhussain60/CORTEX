@@ -197,6 +197,8 @@ class TestIsolationCleanup:
     def execute_cleanup_handlers(self, handlers: List[Callable], timeout: Optional[float] = None) -> bool:
         """Execute cleanup handlers in reverse order (LIFO).
         
+        Thread-safe LIFO execution with protection against concurrent modification.
+        
         Args:
             handlers: List of cleanup functions
             timeout: Optional timeout for cleanup
@@ -207,8 +209,11 @@ class TestIsolationCleanup:
         with self._lock:
             success = True
             
+            # Create a copy to prevent race condition if handlers list modified during iteration
+            handlers_copy = list(handlers) if handlers else []
+            
             # Execute in reverse order (LIFO)
-            for handler in reversed(handlers):
+            for handler in reversed(handlers_copy):
                 try:
                     if callable(handler):
                         handler()
@@ -303,18 +308,21 @@ class TestIsolationCleanup:
     def resolve_fixture_dependencies(self, fixtures: Dict[str, Dict[str, List[str]]]) -> List[str]:
         """Resolve fixture dependency order (topological sort).
         
+        Uses depth-first search without nested lock acquisition to avoid deadlocks.
+        
         Args:
             fixtures: Dict of fixtures with dependencies
 
         Returns:
             Ordered list of fixture names for execution
         """
+        # Acquire lock only once at start, not in recursive calls
         with self._lock:
-            # Simple topological sort
             visited = set()
             order = []
             
             def visit(name: str):
+                """DFS visit without lock re-acquisition."""
                 if name in visited:
                     return
                 visited.add(name)
@@ -325,13 +333,16 @@ class TestIsolationCleanup:
                 
                 order.append(name)
             
-            for name in fixtures.keys():
+            # Process all fixtures
+            for name in list(fixtures.keys()):
                 visit(name)
             
             return order
 
     def detect_circular_dependencies(self, fixtures: Dict[str, Dict[str, List[str]]]) -> bool:
         """Detect circular dependencies in fixtures.
+        
+        Uses DFS with atomic state management to prevent race conditions.
         
         Args:
             fixtures: Dict of fixtures with dependencies
@@ -344,21 +355,29 @@ class TestIsolationCleanup:
             rec_stack = set()
             
             def has_cycle(name: str) -> bool:
+                """DFS cycle detection with atomic state management."""
+                # Check recursion stack first (higher priority)
+                if name in rec_stack:
+                    return True  # Cycle detected
+                
+                # Already visited in another branch
+                if name in visited:
+                    return False
+                
+                # Mark as visited and add to recursion stack
                 visited.add(name)
                 rec_stack.add(name)
                 
                 deps = fixtures.get(name, {}).get("depends_on", [])
                 for dep in deps:
-                    if dep not in visited:
-                        if has_cycle(dep):
-                            return True
-                    elif dep in rec_stack:
+                    if has_cycle(dep):
                         return True
                 
-                rec_stack.remove(name)
+                # Safe to remove (no concurrent modification of rec_stack in this lock context)
+                rec_stack.discard(name)
                 return False
             
-            for name in fixtures.keys():
+            for name in list(fixtures.keys()):
                 if name not in visited:
                     if has_cycle(name):
                         return True
