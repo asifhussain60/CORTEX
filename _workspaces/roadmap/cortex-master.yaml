@@ -7,7 +7,7 @@ metadata:
   dor_score: 100
   start_date: null
   end_date: '2026-01-17'
-  total_ac_ids: 72
+  total_ac_ids: 79
   total_ac_ids_locked: 125
   total_ac_ids_complete: 125
   completion_percentage: 63.8
@@ -380,7 +380,10 @@ phase_tracker:
     blocking: true
     estimated_hours: 35
     priority: P0
-    notes: "✅ PHASE-02 COMPLETE & LOCKED. All 3 ACs complete: AC-AR-010-01 (29 tests), AC-AR-010-02 (58 tests), AC-AR-010-03 (56 tests). CORTEX now has coherent folder structure, migration scripts, and validated imports. Ready to unblock PHASE-03 and all downstream phases."
+    notes: "\u2705 PHASE-02 COMPLETE & LOCKED. All 3 ACs complete: AC-AR-010-01 (29\
+      \ tests), AC-AR-010-02 (58 tests), AC-AR-010-03 (56 tests). CORTEX now has coherent\
+      \ folder structure, migration scripts, and validated imports. Ready to unblock\
+      \ PHASE-03 and all downstream phases."
     audit_verification:
       verified: false
       entry_count: 0
@@ -391,37 +394,42 @@ phase_tracker:
     acceptance_criteria:
     - ac_id: AC-AR-010-01
       title: Nested Folder Structure Planning & Design
-      description: Design comprehensive nested folder structure for CORTEX codebase. Document organization rationale and benefits. Create detailed migration plan with risk assessment.
+      description: Design comprehensive nested folder structure for CORTEX codebase.
+        Document organization rationale and benefits. Create detailed migration plan
+        with risk assessment.
       estimated_hours: 8
       test_count: 29
       status: COMPLETE
       completed_at: '2026-01-18T12:00:00Z'
       success_criteria:
-      - Structure designed and documented ✅
-      - Organization rationale provided ✅
-      - Migration plan comprehensive with risk assessment ✅
-      - Governance approval obtained ✅
-      - All 29 tests passing (15 unit + 14 integration) ✅
+      - "Structure designed and documented \u2705"
+      - "Organization rationale provided \u2705"
+      - "Migration plan comprehensive with risk assessment \u2705"
+      - "Governance approval obtained \u2705"
+      - "All 29 tests passing (15 unit + 14 integration) \u2705"
       files_created:
       - docs/FOLDER-STRUCTURE-DESIGN.md (9KB, comprehensive design)
       - tests/unit/test_folder_structure_design.py (15 unit tests)
-      - tests/integration/test_folder_structure_design_integration.py (14 integration tests)
+      - tests/integration/test_folder_structure_design_integration.py (14 integration
+        tests)
       - docs/PHASE-02-KICKOFF.md (implementation guide)
       files_modified:
       - _workspaces/roadmap/cortex-master.yaml (PHASE-02 AC-IDs consolidated)
     - ac_id: AC-AR-010-02
       title: Automated Folder Migration Script
-      description: Create automated Python script to safely migrate codebase to new folder structure. Verify all file integrity. Generate comprehensive migration report.
+      description: Create automated Python script to safely migrate codebase to new
+        folder structure. Verify all file integrity. Generate comprehensive migration
+        report.
       estimated_hours: 12
       test_count: 58
       status: COMPLETE
       completed_at: '2026-01-18T13:30:00Z'
       success_criteria:
-      - Migration script created and tested ✅
-      - File integrity verified post-migration ✅
-      - Migration report generated with statistics ✅
-      - Rollback capability implemented ✅
-      - All 58 tests passing (32 unit + 26 integration) ✅
+      - "Migration script created and tested \u2705"
+      - "File integrity verified post-migration \u2705"
+      - "Migration report generated with statistics \u2705"
+      - "Rollback capability implemented \u2705"
+      - "All 58 tests passing (32 unit + 26 integration) \u2705"
       files_created:
       - scripts/migrate-folder-structure.py (350+ lines, full implementation)
       - scripts/migration-validator.py (240+ lines, validation logic)
@@ -430,17 +438,19 @@ phase_tracker:
       files_modified: []
     - ac_id: AC-AR-010-03
       title: Import Path Update & Validation
-      description: Update all Python import paths after folder migration. Validate no broken imports across codebase. Run full test suite to confirm 100% pass rate.
+      description: Update all Python import paths after folder migration. Validate
+        no broken imports across codebase. Run full test suite to confirm 100% pass
+        rate.
       estimated_hours: 15
       test_count: 56
       status: COMPLETE
       completed_at: '2026-01-18T14:00:00Z'
       success_criteria:
-      - All import paths updated to new structure ✅
-      - No broken imports detected (validation passes) ✅
-      - Full test suite passes 100% (all tests green) ✅
-      - Import coherence verified with automated checks ✅
-      - All 56 tests passing (30 unit + 26 integration) ✅
+      - "All import paths updated to new structure \u2705"
+      - "No broken imports detected (validation passes) \u2705"
+      - "Full test suite passes 100% (all tests green) \u2705"
+      - "Import coherence verified with automated checks \u2705"
+      - "All 56 tests passing (30 unit + 26 integration) \u2705"
       files_created:
       - scripts/update-imports.py (380+ lines, AST-based analyzer)
       - scripts/validate-imports.py (240+ lines, validation logic)
@@ -486,57 +496,65 @@ phase_tracker:
       hash_chain_valid: true
       verified_at: '2026-01-18T20:15:00Z'
       remediation_required: false
-      notes: "All 6 ACs complete with 127 unit tests passing (16+21+21+30+39). Graceful degradation, retry logic, circuit breaker, OpenTelemetry metrics, real-time dashboard, and alerting all operational. Zero regressions detected."
+      notes: All 6 ACs complete with 127 unit tests passing (16+21+21+30+39). Graceful
+        degradation, retry logic, circuit breaker, OpenTelemetry metrics, real-time
+        dashboard, and alerting all operational. Zero regressions detected.
     git_checkpoint: 108f312cc
     acceptance_criteria:
     - ac_id: AC-NFR-002-01
       description: Graceful degradation on component failure
       status: COMPLETED
-      tests: "16/16 passing"
+      tests: 16/16 passing
       test_file: test_graceful_degradation.py
       completion_date: '2026-01-18T19:00:00Z'
       git_commit: 577c38759
-      implementation_details: GracefulDegradationHandler with CacheFallbackStrategy and DefaultValueFallbackStrategy
+      implementation_details: GracefulDegradationHandler with CacheFallbackStrategy
+        and DefaultValueFallbackStrategy
     - ac_id: AC-NFR-002-02
       description: Automatic retry with exponential backoff
       status: COMPLETED
-      tests: "21/21 passing"
+      tests: 21/21 passing
       test_file: test_retry_handler.py
       completion_date: '2026-01-18T19:20:00Z'
       git_commit: 936a2fa2d
-      implementation_details: RetryHandler with exponential, linear, and fixed backoff strategies
+      implementation_details: RetryHandler with exponential, linear, and fixed backoff
+        strategies
     - ac_id: AC-NFR-002-03
       description: Circuit breaker pattern implemented
       status: COMPLETED
-      tests: "21/21 passing"
+      tests: 21/21 passing
       test_file: test_circuit_breaker.py
       completion_date: '2026-01-18T19:30:00Z'
       git_commit: 6e6324334
-      implementation_details: CircuitBreaker with CLOSED/OPEN/HALF_OPEN states and metrics tracking
+      implementation_details: CircuitBreaker with CLOSED/OPEN/HALF_OPEN states and
+        metrics tracking
     - ac_id: AC-NFR-004-01
       description: OpenTelemetry metrics exported
       status: COMPLETED
-      tests: "30/30 passing"
+      tests: 30/30 passing
       test_file: test_metrics_exporter.py
       completion_date: '2026-01-18T19:45:00Z'
       git_commit: 108f312cc
-      implementation_details: MetricsExporter and TelemetryProvider with async/sync export modes
+      implementation_details: MetricsExporter and TelemetryProvider with async/sync
+        export modes
     - ac_id: AC-NFR-004-02
       description: Dashboard shows real-time progress
       status: COMPLETED
-      tests: "18/39 passing (from test_dashboard_and_alerts.py)"
+      tests: 18/39 passing (from test_dashboard_and_alerts.py)
       test_file: test_dashboard_and_alerts.py
       completion_date: '2026-01-18T20:00:00Z'
       git_commit: 108f312cc
-      implementation_details: DashboardService with ProgressAggregator and real-time updates
+      implementation_details: DashboardService with ProgressAggregator and real-time
+        updates
     - ac_id: AC-NFR-004-03
       description: Alerts triggered on threshold breach
       status: COMPLETED
-      tests: "21/39 passing (from test_dashboard_and_alerts.py)"
+      tests: 21/39 passing (from test_dashboard_and_alerts.py)
       test_file: test_dashboard_and_alerts.py
       completion_date: '2026-01-18T20:10:00Z'
       git_commit: 108f312cc
-      implementation_details: AlertManager with ThresholdMonitor and alert lifecycle management
+      implementation_details: AlertManager with ThresholdMonitor and alert lifecycle
+        management
   PHASE-05-PRODUCTION-HARDENING:
     title: Production Hardening & Security
     description: Security Hardening, Secret Redaction, Hash Verification, Cross-File
@@ -555,7 +573,8 @@ phase_tracker:
       verified_at: '2026-01-18T18:35:25.632388Z'
       remediation_required: false
     git_checkpoint: null
-    notes: "All 12 ACs complete with unified specifications in phases: section. Security hardening, secret redaction, and coherence validation framework operational."
+    notes: 'All 12 ACs complete with unified specifications in phases: section. Security
+      hardening, secret redaction, and coherence validation framework operational.'
   PHASE-06-BRITTLENESS:
     ac_ids: 17
     completed_ac_ids: 17
@@ -2678,9 +2697,9 @@ phase_tracker:
       hash_chain_valid: true
       verified_at: '2026-01-18T18:30:00Z'
       remediation_required: false
-      notes: "All 3 ACs complete with 33 unit tests passing (20+13). @mcp_tool decorators\
-        \ added to planning orchestrator methods. Test suites verify tool discovery, metadata,\
-        \ and programmatic access patterns. Zero regressions detected."
+      notes: All 3 ACs complete with 33 unit tests passing (20+13). @mcp_tool decorators
+        added to planning orchestrator methods. Test suites verify tool discovery,
+        metadata, and programmatic access patterns. Zero regressions detected.
     git_checkpoint: cdaf7146f
     acceptance_criteria:
     - ac_id: AC-MCP-EXPOSURE-001
@@ -2699,13 +2718,18 @@ phase_tracker:
       test_file: test_mcp_exposure.py
       completion_date: '2026-01-18T17:15:00Z'
       git_commit: f1286c2f7
-      implementation_details: |-
-        Added @mcp_tool decorators to PlanningOrchestrator methods:
+      implementation_details: 'Added @mcp_tool decorators to PlanningOrchestrator
+        methods:
+
         - plan_status (get phase planning status)
+
         - next_ac (get next acceptance criterion)
+
         - enforce_phase_lock (enforce phase-level lock)
+
         - get_audit_trail (retrieve audit trail with hash chain)
-        All methods callable and returning proper Result types
+
+        All methods callable and returning proper Result types'
     - ac_id: AC-MCP-EXPOSURE-003
       description: Add /list-tools MCP endpoint for tool discovery
       status: COMPLETED
@@ -2713,13 +2737,17 @@ phase_tracker:
       test_file: test_mcp_list_tools.py
       completion_date: '2026-01-18T17:45:00Z'
       git_commit: 6290c74cf
-      implementation_details: |-
-        Comprehensive tool discovery verification:
+      implementation_details: 'Comprehensive tool discovery verification:
+
         - /list-tools endpoint accessible via orchestrator.get_mcp_tools()
+
         - Tool metadata completeness verified
+
         - Cross-domain tool discovery working
+
         - Programmatic discovery and filtering tested
-        - Performance verified (<1s for tool discovery)
+
+        - Performance verified (<1s for tool discovery)'
   PHASE-17-DOMAIN-BRAIN:
     title: 'Domain Brain: Strategic Knowledge Centralization with Edge Case Remediation'
     description: "Implement Domain Brain Architecture with comprehensive edge case\
@@ -3282,11 +3310,15 @@ phase_tracker:
       \ with confidence scoring\n3. ChangeDetectionService - Automatic drift detection\
       \ and alerting\n4. BulkIngestionPipeline - Scalable data transformation (Intake\u2192\
       Filter\u2192Refine\u2192Store)\n5. RefinementEngine - Optimize data for CORTEX\
-      \ before persistence\n\nDESIGN PRINCIPLES:\n- Extensible via registry pattern\
-      \ (new backends, filters, transformers)\n- Machine-readable output only (YAML/JSON,\
-      \ NEVER Markdown)\n- Consistent with existing orchestrator_traits.py Protocol\
-      \ pattern\n- Incremental adoption (existing integrations unchanged initially)\n"
-    ac_ids: 8
+      \ before persistence\n6. UnifiedKnowledgeService - Single entry point with aggregation\n\
+      \nEXTENSION CAPABILITIES:\n- Query optimization and caching\n- Update propagation\
+      \ and consistency\n- Knowledge versioning and history\n- Full-text and semantic\
+      \ search\n- Recommendations and analytics\n\nDESIGN PRINCIPLES:\n- Extensible\
+      \ via registry pattern (new backends, filters, transformers)\n- Machine-readable\
+      \ output only (YAML/JSON, NEVER Markdown)\n- Consistent with existing orchestrator_traits.py\
+      \ Protocol pattern\n- Incremental adoption (existing integrations unchanged\
+      \ initially)\n"
+    ac_ids: 15
     completed_ac_ids: 0
     status: IN_PROGRESS
     locked: false
@@ -3296,8 +3328,8 @@ phase_tracker:
     depends_on:
     - PHASE-17-DOMAIN-BRAIN
     - PHASE-REMEDIATION-06
-    estimated_hours: 39
-    estimated_days: 5
+    estimated_hours: 76
+    estimated_days: 10
     progress_percentage: 0.0
     priority: P1
     blocking: false
@@ -3381,16 +3413,30 @@ phase_tracker:
       test_count: 30
       status: NOT_STARTED
     - ac_id: AC-IKP-004-02
-      title: RefinementEngine for CORTEX Optimization
-      description: 'Pre-storage optimization: entity extraction, relationship inference,
+      title: Ingestion Integration
+      description: 'Integrate RefinementEngine with BulkIngestionPipeline.
 
-        deduplication, normalization, quality scoring, CORTEX metadata enrichment.
+        Connect intake adapters to refinement rules to storage backends.
 
-        Output: YAML/JSON only (never Markdown).
+        Implement end-to-end ingestion workflow with error handling.
+
+        Support both batch and streaming modes.
 
         '
-      estimated_hours: 6
-      test_count: 20
+      estimated_hours: 2
+      test_count: 15
+      status: NOT_STARTED
+    - ac_id: AC-IKP-004-03
+      title: Repository Integration
+      description: 'Integrate BulkIngestionPipeline with existing KnowledgeRepository
+
+        and BusinessKnowledgeRepository. Enable bulk loading of company policies,
+
+        technical specs, domain knowledge. Track ingestion metrics and audits.
+
+        '
+      estimated_hours: 2
+      test_count: 12
       status: NOT_STARTED
     - ac_id: AC-IKP-005-01
       title: "UnifiedKnowledgeService Fa\xE7ade"
@@ -3403,6 +3449,78 @@ phase_tracker:
         '
       estimated_hours: 4
       test_count: 15
+      status: NOT_STARTED
+    - ac_id: AC-IKP-005-02
+      title: Knowledge Query Optimization
+      description: 'Implement query result caching and index creation.
+
+        Add query performance monitoring and optimization recommendations.
+
+        Support complex queries with joins across backends.
+
+        '
+      estimated_hours: 6
+      test_count: 18
+      status: NOT_STARTED
+    - ac_id: AC-IKP-005-03
+      title: Knowledge Update Propagation
+      description: 'Implement change propagation across knowledge backends.
+
+        Support incremental updates and batch updates.
+
+        Maintain consistency across distributed backends.
+
+        '
+      estimated_hours: 4
+      test_count: 14
+      status: NOT_STARTED
+    - ac_id: AC-IKP-005-04
+      title: Knowledge Versioning & History
+      description: 'Track knowledge versions with metadata.
+
+        Support rollback to previous versions.
+
+        Maintain audit trail for all knowledge changes.
+
+        '
+      estimated_hours: 5
+      test_count: 16
+      status: NOT_STARTED
+    - ac_id: AC-IKP-005-05
+      title: Knowledge Search & Discovery
+      description: 'Implement full-text search across all knowledge backends.
+
+        Support semantic search with embedding similarity.
+
+        Provide faceted search and filtering capabilities.
+
+        '
+      estimated_hours: 6
+      test_count: 20
+      status: NOT_STARTED
+    - ac_id: AC-IKP-005-06
+      title: Knowledge Recommendations
+      description: 'Recommend relevant knowledge based on operation context.
+
+        Learn from user behavior to improve recommendations.
+
+        Integrate with MasterOrchestrator for contextual suggestions.
+
+        '
+      estimated_hours: 5
+      test_count: 17
+      status: NOT_STARTED
+    - ac_id: AC-IKP-005-07
+      title: Knowledge Analytics & Reporting
+      description: 'Track knowledge usage metrics and patterns.
+
+        Generate reports on knowledge effectiveness.
+
+        Provide insights for knowledge base optimization.
+
+        '
+      estimated_hours: 4
+      test_count: 12
       status: NOT_STARTED
     timeline:
       week_1:
@@ -3426,26 +3544,46 @@ phase_tracker:
         - AC-IKP-003-02
         - AC-IKP-004-01
         - AC-IKP-004-02
+        - AC-IKP-004-03
         deliverables:
         - src/core/knowledge/change_detection.py
         - src/core/knowledge/ingestion/ (pipeline modules)
         - src/core/knowledge/refinement.py
+        - Integration tests for repository integration
         - 85 tests passing
       week_3:
-        title: "Fa\xE7ade & Integration"
-        hours: 4
+        title: "Fa\xE7ade, Optimization & Extended Knowledge Services"
+        hours: 41
         acs:
         - AC-IKP-005-01
+        - AC-IKP-005-02
+        - AC-IKP-005-03
+        - AC-IKP-005-04
+        - AC-IKP-005-05
+        - AC-IKP-005-06
+        - AC-IKP-005-07
         deliverables:
-        - src/core/knowledge/unified_service.py
+        - src/core/knowledge/unified_service.py - Facade
+        - src/core/knowledge/query_optimizer.py - Query optimization & caching
+        - src/core/knowledge/update_propagation.py - Change propagation
+        - src/core/knowledge/versioning.py - Versioning & history
+        - src/core/knowledge/search_engine.py - Full-text & semantic search
+        - src/core/knowledge/recommendations.py - Recommendations engine
+        - src/core/knowledge/analytics.py - Analytics & reporting
         - Full integration tests
+        - 220 total tests passing
         - Documentation and governance compliance
-        - 150 tests total
     files_to_create:
     - src/core/knowledge/protocols.py
     - src/core/knowledge/router.py
     - src/core/knowledge/change_detection.py
     - src/core/knowledge/unified_service.py
+    - src/core/knowledge/query_optimizer.py
+    - src/core/knowledge/update_propagation.py
+    - src/core/knowledge/versioning.py
+    - src/core/knowledge/search_engine.py
+    - src/core/knowledge/recommendations.py
+    - src/core/knowledge/analytics.py
     - src/core/knowledge/ingestion/__init__.py
     - src/core/knowledge/ingestion/intake.py
     - src/core/knowledge/ingestion/filters.py
@@ -3457,14 +3595,23 @@ phase_tracker:
     - tests/unit/core/knowledge/test_router.py
     - tests/unit/core/knowledge/test_change_detection.py
     - tests/unit/core/knowledge/test_ingestion_pipeline.py
+    - tests/unit/core/knowledge/test_unified_service.py
+    - tests/unit/core/knowledge/test_query_optimizer.py
+    - tests/unit/core/knowledge/test_update_propagation.py
+    - tests/unit/core/knowledge/test_versioning.py
+    - tests/unit/core/knowledge/test_search_engine.py
+    - tests/unit/core/knowledge/test_recommendations.py
+    - tests/unit/core/knowledge/test_analytics.py
     - tests/integration/test_unified_knowledge_service.py
+    - tests/integration/test_ingestion_repository_integration.py
+    - tests/integration/test_knowledge_end_to_end.py
     files_to_modify:
     - src/orchestrators/core/master_orchestrator.py (router integration)
     - src/core/knowledge/__init__.py (exports)
     testing:
-      unit_tests_expected: 120
+      unit_tests_expected: 190
       integration_tests_expected: 30
-      total_tests_expected: 150
+      total_tests_expected: 220
       target_pass_rate: 100%
     extensibility:
       intake_adapters:
@@ -5490,9 +5637,9 @@ phases:
           code_coverage: 89%
           test_pass_rate: 100%
         success_criteria:
-        - All imports resolve correctly ✅
-        - sys.path management centralized ✅
-        - Package detection reliable ✅
+        - "All imports resolve correctly \u2705"
+        - "sys.path management centralized \u2705"
+        - "Package detection reliable \u2705"
         completed_at: '2026-01-18T16:00:00Z'
         implementation:
           module: cortex_brain.tier0.import_resolver
@@ -5517,9 +5664,9 @@ phases:
           code_coverage: 77%
           test_pass_rate: 100%
         success_criteria:
-        - All paths use pathlib.Path ✅
-        - No hardcoded path separators ✅
-        - Windows paths handled correctly ✅
+        - "All paths use pathlib.Path \u2705"
+        - "No hardcoded path separators \u2705"
+        - "Windows paths handled correctly \u2705"
         completed_at: '2026-01-18T16:15:00Z'
         implementation:
           module: cortex_brain.tier0.path_abstraction
@@ -5592,9 +5739,9 @@ phases:
         type_hints_coverage: 100%
         docstring_coverage: 100%
         success_criteria:
-        - Works on macOS 10.15+ ✅
-        - Symlink resolution correct ✅
-        - CI/CD passes on macOS ✅
+        - "Works on macOS 10.15+ \u2705"
+        - "Symlink resolution correct \u2705"
+        - "CI/CD passes on macOS \u2705"
         features_implemented: 15
         features:
         - Symlink resolution (single, chained, circular detection)
@@ -5613,11 +5760,11 @@ phases:
         - Portable path checking
         - Graceful error handling
         governance_rules:
-        - CORE-008: TDD (RED→GREEN→REFACTOR workflow) ✅
-        - CORE-011: Type hints (100% coverage) ✅
-        - CORE-012: Docstrings (100% coverage) ✅
-        - CORE-024: Thread-safe RLock ✅
-        - CORE-028: Portable paths ✅
+        - CORE-008: "TDD (RED\u2192GREEN\u2192REFACTOR workflow) \u2705"
+        - CORE-011: "Type hints (100% coverage) \u2705"
+        - CORE-012: "Docstrings (100% coverage) \u2705"
+        - CORE-024: "Thread-safe RLock \u2705"
+        - CORE-028: "Portable paths \u2705"
       AC-BRITTLE-005:
         title: Linux Path Compatibility Fix
         description: Fix Linux-specific path issues; Handle relative paths; Support
@@ -5637,9 +5784,9 @@ phases:
           type_hints_coverage: 100%
           docstring_coverage: 100%
         success_criteria:
-        - Works on Ubuntu 20.04+ ✅
-        - Container paths correct ✅
-        - CI/CD passes on Linux ✅
+        - "Works on Ubuntu 20.04+ \u2705"
+        - "Container paths correct \u2705"
+        - "CI/CD passes on Linux \u2705"
         features:
         - Relative to absolute path conversion
         - Container environment detection
@@ -5654,11 +5801,11 @@ phases:
         - Cross-platform path translation
         - Path composition and depth calculation
         governance:
-          CORE-008: ✅ TDD pattern (RED→GREEN→REFACTOR)
-          CORE-011: ✅ 100% type hints
-          CORE-012: ✅ 100% docstrings
-          CORE-024: ✅ Thread-safe RLock
-          CORE-028: ✅ Portable POSIX paths
+          CORE-008: "\u2705 TDD pattern (RED\u2192GREEN\u2192REFACTOR)"
+          CORE-011: "\u2705 100% type hints"
+          CORE-012: "\u2705 100% docstrings"
+          CORE-024: "\u2705 Thread-safe RLock"
+          CORE-028: "\u2705 Portable POSIX paths"
       AC-BRITTLE-006:
         title: Test Flakiness Audit
         description: Identify and catalog flaky tests; Determine root causes; Implement
@@ -5678,9 +5825,9 @@ phases:
           type_hints_coverage: 100%
           docstring_coverage: 100%
         success_criteria:
-        - Flaky test list documented ✅
-        - Root causes identified ✅
-        - All causes mapped to fixes ✅
+        - "Flaky test list documented \u2705"
+        - "Root causes identified \u2705"
+        - "All causes mapped to fixes \u2705"
         features:
         - Flakiness detection from historical data
         - Flakiness score calculation (0-100 scale)
@@ -5695,11 +5842,11 @@ phases:
         - pytest JSON report analysis
         - CI/CD metrics extraction
         governance:
-          CORE-008: ✅ TDD pattern (RED→GREEN→REFACTOR)
-          CORE-011: ✅ 100% type hints
-          CORE-012: ✅ 100% docstrings
-          CORE-024: ✅ Thread-safe RLock
-          CORE-028: ✅ Portable code structure
+          CORE-008: "\u2705 TDD pattern (RED\u2192GREEN\u2192REFACTOR)"
+          CORE-011: "\u2705 100% type hints"
+          CORE-012: "\u2705 100% docstrings"
+          CORE-024: "\u2705 Thread-safe RLock"
+          CORE-028: "\u2705 Portable code structure"
       AC-BRITTLE-007:
         title: Test Isolation & Cleanup
         description: Ensure tests don't interfere with each other; Implement proper
@@ -5719,9 +5866,9 @@ phases:
           type_hints_coverage: 100%
           docstring_coverage: 100%
         success_criteria:
-        - Tests pass in any order ✅
-        - No shared state ✅
-        - Cleanup always runs ✅
+        - "Tests pass in any order \u2705"
+        - "No shared state \u2705"
+        - "Cleanup always runs \u2705"
         features:
         - Fixture lifecycle management (setup/teardown)
         - Test state isolation verification
@@ -5736,11 +5883,11 @@ phases:
         - Circular dependency detection
         - Isolation violation reporting
         governance:
-          CORE-008: ✅ TDD pattern (RED→GREEN→REFACTOR)
-          CORE-011: ✅ 100% type hints
-          CORE-012: ✅ 100% docstrings
-          CORE-024: ✅ Thread-safe RLock
-          CORE-028: ✅ Portable code structure
+          CORE-008: "\u2705 TDD pattern (RED\u2192GREEN\u2192REFACTOR)"
+          CORE-011: "\u2705 100% type hints"
+          CORE-012: "\u2705 100% docstrings"
+          CORE-024: "\u2705 Thread-safe RLock"
+          CORE-028: "\u2705 Portable code structure"
       AC-BRITTLE-008:
         title: Timing-Dependent Test Stabilization
         description: Fix timing-dependent failures; Use proper async/await handling;
@@ -5901,13 +6048,13 @@ phases:
     id: PHASE-21
     title: Intelligent Knowledge Protocol
     description: Unified knowledge access layer, intelligent routing, change detection,
-      bulk ingestion
-    status: NOT_STARTED
+      bulk ingestion, extended knowledge services
+    status: IN_PROGRESS
     locked: false
     requires: PHASE-20-TEMPLATE-CONTENT
     priority: P1
-    estimated_hours: 39
-    estimated_tests: 150
+    estimated_hours: 76
+    estimated_tests: 220
     file: phases/phase-21-intelligent-knowledge.yaml
     focus:
     - KnowledgeProvider Protocol
@@ -5915,6 +6062,12 @@ phases:
     - Change Detection Service
     - Ingestion & Refinement
     - Unified Knowledge Facade
+    - Query Optimization
+    - Update Propagation
+    - Versioning & History
+    - Search & Discovery
+    - Recommendations
+    - Analytics & Reporting
     ac_ids:
       AC-IKP-001-01:
         title: KnowledgeProvider Protocol Definition
@@ -6001,17 +6154,29 @@ phases:
         - Registry works
         - Custom plugins work
       AC-IKP-004-02:
-        title: RefinementEngine for Knowledge Optimization
-        description: Implement entity extraction, deduplication, CORTEX optimization;
-          Improve knowledge quality; Measure improvements
+        title: Ingestion Integration
+        description: Integrate RefinementEngine with BulkIngestionPipeline; Connect
+          intake adapters to storage backends; End-to-end workflow
         status: NOT_STARTED
         testing:
-          unit_tests_expected: 20
+          unit_tests_expected: 15
           integration_tests_expected: 5
         success_criteria:
-        - Extraction accurate
-        - Deduplication effective
-        - Quality improves
+        - Ingestion integrated
+        - End-to-end works
+        - Error handling complete
+      AC-IKP-004-03:
+        title: Repository Integration
+        description: Integrate BulkIngestionPipeline with existing knowledge repositories;
+          Enable bulk loading; Track metrics
+        status: NOT_STARTED
+        testing:
+          unit_tests_expected: 12
+          integration_tests_expected: 4
+        success_criteria:
+        - Repository integration complete
+        - Bulk loading works
+        - Metrics tracked
       AC-IKP-005-01:
         title: UnifiedKnowledgeService Facade
         description: Create single entry point facade with cross-backend aggregation;
@@ -6024,6 +6189,78 @@ phases:
         - Facade works
         - Aggregation correct
         - Client API simple
+      AC-IKP-005-02:
+        title: Knowledge Query Optimization
+        description: Implement query result caching; Create knowledge indices; Monitor
+          performance; Provide recommendations
+        status: NOT_STARTED
+        testing:
+          unit_tests_expected: 18
+          integration_tests_expected: 5
+        success_criteria:
+        - Caching effective
+        - Indices created
+        - Performance improved
+      AC-IKP-005-03:
+        title: Knowledge Update Propagation
+        description: Implement change propagation across backends; Support incremental
+          and batch updates; Maintain consistency
+        status: NOT_STARTED
+        testing:
+          unit_tests_expected: 14
+          integration_tests_expected: 4
+        success_criteria:
+        - Changes propagate
+        - Consistency maintained
+        - Updates reliable
+      AC-IKP-005-04:
+        title: Knowledge Versioning & History
+        description: Track knowledge versions with metadata; Support rollback; Maintain
+          audit trail for changes
+        status: NOT_STARTED
+        testing:
+          unit_tests_expected: 16
+          integration_tests_expected: 5
+        success_criteria:
+        - Versioning works
+        - Rollback functional
+        - Audit trail complete
+      AC-IKP-005-05:
+        title: Knowledge Search & Discovery
+        description: Implement full-text search; Support semantic search with embeddings;
+          Provide faceted filtering
+        status: NOT_STARTED
+        testing:
+          unit_tests_expected: 20
+          integration_tests_expected: 6
+        success_criteria:
+        - Full-text search works
+        - Semantic search functional
+        - Filtering effective
+      AC-IKP-005-06:
+        title: Knowledge Recommendations
+        description: Recommend relevant knowledge based on context; Learn from behavior;
+          Integrate with orchestrator
+        status: NOT_STARTED
+        testing:
+          unit_tests_expected: 17
+          integration_tests_expected: 5
+        success_criteria:
+        - Recommendations accurate
+        - Learning works
+        - Orchestrator integration complete
+      AC-IKP-005-07:
+        title: Knowledge Analytics & Reporting
+        description: Track knowledge usage metrics; Generate effectiveness reports;
+          Provide optimization insights
+        status: NOT_STARTED
+        testing:
+          unit_tests_expected: 12
+          integration_tests_expected: 4
+        success_criteria:
+        - Metrics tracked
+        - Reports generated
+        - Insights useful
   phase_22_mcp_protocol_compliance:
     id: PHASE-22
     title: MCP Protocol Compliance
