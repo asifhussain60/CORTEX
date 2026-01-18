@@ -3495,11 +3495,7 @@ phase_tracker:
       \  - Maintains STRICT governance enforcement (no overrides)\n  - Integrates\
       \ with existing governance.db audit logging\n  - Tests: Rule enforcement, audit\
       \ trail integrity, governance verification (4 tests)\n"
-    ac_ids:
-    - AC-CONF-001-01
-    - AC-CONF-002-01
-    - AC-CONF-003-01
-    - AC-CONF-004-01
+    ac_ids: 4
     completed_ac_ids: []
     status: NOT_STARTED
     locked: false
