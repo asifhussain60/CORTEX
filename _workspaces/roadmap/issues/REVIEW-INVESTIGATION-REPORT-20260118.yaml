@@ -1,0 +1,196 @@
+---
+metadata:
+  investigation_id: "INV-001-HASH-CHAIN-BREAKS"
+  report_date: "2026-01-18"
+  investigator: "cortex-review-surgical"
+  investigation_scope: "AC-FIX-001-01 Hash Chain Issue"
+  repository: "CORTEX"
+  branch: "CORTEX6"
+
+executive_summary:
+  status: "ROOT CAUSE IDENTIFIED"
+  issue: "78 Hash chain integrity violations in audit log"
+  root_cause: "Design defect in DatabaseTransactionManager hash calculation"
+  severity: "HIGH"
+  confidence: "95%"
+  remediation_effort: "2 hours"
+  blocking: true
+
+investigation_findings:
+  ac_fix_001_01_nature:
+    status: "PRODUCTION AC-ID"
+    category: "State Management Atomicity"
+    purpose: "Implements atomic transaction handling for orchestrator operations"
+    location: "src/infrastructure/database_transaction_manager.py"
+    is_test_fixture: false
+    evidence:
+      - "AC-FIX-001-01 referenced in cortex-brain/tier0/governance/"
+      - "Implementation in master_orchestrator.py (production)"
+      - "Implementation in conversation_protocol.py (production)"
+      - "Used for transaction coordination, not testing"
+  
+  operation_names_analysis:
+    custom_operations:
+      - coordinate_test_op
+      - coordinate_validate
+      - coordinate_enforce
+    standard_lifecycle:
+      - AC_START
+      - AC_EXECUTE
+      - AC_COMPLETE
+    problem: "Custom operations logged with standard schema but different semantics"
+    impact: "Hash chain validator treats custom ops as violations"
+  
+  hash_chain_break_root_cause:
+    location: "src/infrastructure/database_transaction_manager.py::_log_audit_entry()"
+    issue_line: "Calculate entry hash (previous_hash = '' for simplicity in tests)"
+    current_code: |
+      previous_hash = ""
+      entry_data = f"{timestamp}{operation}{component}{level}{message}..."
+      entry_hash = hashlib.sha256(entry_data.encode()).hexdigest()
+    problem: "previous_hash hardcoded to empty string, breaks chain linkage"
+    consequence: "Each entry's previous_hash doesn't match prior entry's entry_hash"
+    error_severity: "CRITICAL - breaks hash chain integrity proof"
+  
+  evidence:
+    database_query: |
+      SELECT id, ac_id, operation, previous_hash, entry_hash 
+      FROM audit_log 
+      WHERE ac_id = 'AC-FIX-001-01' 
+      ORDER BY id 
+      LIMIT 5
+    result: |
+      10523 | AC-FIX-001-01 | coordinate_test_op  | NULL/empty | sha256(...)
+      10524 | AC-FIX-001-01 | coordinate_test_op  | NULL/empty | sha256(...)
+      10528 | AC-FIX-001-01 | coordinate_validate | NULL/empty | sha256(...)
+      ...
+    pattern: "All coordinate_* operations have incorrect previous_hash"
+  
+  hash_chain_test_validation:
+    test_location: "tests/integration/test_audit_trail_integrity.py::test_hash_chain_integrity()"
+    test_behavior: "Iterates through ALL entries, checks previous_hash = prior_entry.entry_hash"
+    test_result: "FAILS with 78 violations"
+    violations_by_ac:
+      - ac_id: AC-FIX-001-01
+        count: 74
+        percentage: "94.8%"
+      - ac_id: AC-DECORATOR-001
+        count: 2
+        percentage: "2.6%"
+      - ac_id: AC-INVALID-999
+        count: 2
+        percentage: "2.6%"
+    all_violations_from_same_pattern: "Yes - all have previous_hash mismatch"
+
+root_cause_analysis:
+  root_cause_type: "IMPLEMENTATION_FLAW"
+  chain_of_causation:
+    step_1: "Developer AC-FIX-001-01 creates DatabaseTransactionManager"
+    step_2: "Method _log_audit_entry() hardcodes previous_hash = ''"
+    step_3: "Comment says 'for simplicity in tests' (indicates incomplete implementation)"
+    step_4: "Code uses simplified hash calculation, not production-ready"
+    step_5: "Hash chain test fails when comparing entry.previous_hash"
+  
+  why_not_test_artifact:
+    ac_id_in_production: "Yes - in src/orchestrators/core/master_orchestrator.py"
+    ac_id_in_test_fixtures: "No - NOT in TEST_FIXTURES list"
+    operations_legitimate: "Yes - coordinate_test_op/validate/enforce are valid operations"
+    defect_reproducible_fresh: "Yes - would recur if regenerated"
+  
+  why_not_test_data_contamination:
+    ac_fix_001_01_marked_production: true
+    test_fixtures_explicitly_excluded: true
+    custom_operations_legitimate: true
+    problem_not_in_test_design: true
+
+recommendations:
+  immediate_actions:
+    action_1:
+      title: "Fix previous_hash calculation in DatabaseTransactionManager"
+      priority: "CRITICAL"
+      effort: "30 minutes"
+      approach: |
+        1. Query database for previous entry's entry_hash
+        2. Store as previous_hash in new entry
+        3. Update hash calculation to include correct previous_hash
+        4. Add test to verify chain linkage
+      blockers: "None"
+      ac_id_suggested: "AC-FIX-001-02"
+    
+    action_2:
+      title: "Add hash chain validation to DatabaseTransactionManager"
+      priority: "HIGH"
+      effort: "1 hour"
+      approach: |
+        1. Add method: validate_hash_chain()
+        2. Verify previous entry exists and hash matches
+        3. Raise exception if chain broken
+        4. Call before committing transaction
+      blockers: "Depends on action_1"
+      ac_id_suggested: "AC-FIX-001-03"
+    
+    action_3:
+      title: "Create test for hash chain integrity within AC-FIX-001-01"
+      priority: "HIGH"
+      effort: "45 minutes"
+      approach: |
+        1. Add unit test: test_hash_chain_calculation()
+        2. Verify previous_hash matches prior entry
+        3. Test sequence: insert 3 entries, validate chain
+        4. Add to AC-FIX-001-01 acceptance criteria
+      blockers: "Depends on action_1"
+      ac_id_suggested: "Extend AC-FIX-001-01"
+
+phase_impact:
+  affected_phases:
+    - PHASE-REMEDIATION-03
+    - PHASE-20
+  
+  current_status: "AC-FIX-001-01 Incomplete (design flaw found)"
+  
+  remediation_path: |
+    1. Fix DatabaseTransactionManager hash calculation (AC-FIX-001-02)
+    2. Add hash chain validation (AC-FIX-001-03)
+    3. Add unit tests for hash chain
+    4. Clean regenerate audit log
+    5. Verify hash chain test PASSES
+    6. Mark AC-FIX-001-01 COMPLETE
+
+governance_compliance_impact:
+  CORE-027: "❌ FAIL - AC_START/EXECUTE/COMPLETE not in standard format"
+  CORE-008: "❌ FAIL - Tests exist but don't catch hash chain issue"
+  CORE-025: "❌ FAIL - Hash chain broken (transaction integrity violated)"
+  
+  violations_found: 3
+  required_fixes: 3
+
+next_steps:
+  immediate: "Do NOT regenerate audit log yet - would mask the design flaw"
+  surgical_fix: "Fix DatabaseTransactionManager, then test locally"
+  verification: "Unit test must pass before regeneration"
+  clean_regeneration: "After fix verified, fresh audit log will have correct hashes"
+
+decision_path:
+  option_a_continue_as_is:
+    outcome: "Review incomplete, findings unreliable"
+    risk: "CRITICAL"
+    recommendation: "❌ NOT RECOMMENDED"
+  
+  option_b_regenerate_now:
+    outcome: "Deletes evidence of design flaw"
+    risk: "HIGH - masks systematic issue"
+    recommendation: "❌ NOT RECOMMENDED"
+  
+  option_c_surgical_fix_first:
+    outcome: "Root cause fixed, then clean regeneration"
+    risk: "LOW"
+    recommendation: "✅ RECOMMENDED"
+    timeline: "2 hours"
+
+---
+investigation_metadata:
+  evidence_preserved: true
+  evidence_location: "_workspaces/roadmap/issues/evidence/inv-001-*.json"
+  backup_location: "cortex-brain/state/governance.db.backup-20260118"
+  reproducibility: "High - issue will recur after fix without tests"
+  confidence_level: "95% - evidence graded A (direct code inspection + empirical query results)"

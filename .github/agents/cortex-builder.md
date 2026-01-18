@@ -189,6 +189,114 @@ Before setting `locked: true`:
    locked: true
    ```
 
+## Review Remediation Integration
+
+### Receiving Review Findings
+
+**Activation Trigger:** CORTEX Reviewer calls this builder with findings:
+
+```
+"CORTEX Reviewer has completed analysis. 
+FINDINGS SUMMARY:
+- Critical findings: [COUNT] → Require immediate implementation
+- High findings: [COUNT] → Require remediation AC-IDs  
+- Medium findings: [COUNT] → Track as technical debt
+- Low findings: [COUNT] → Monitor for future phases
+
+GENERATED REMEDIATION REQUIREMENTS:
+[List of AC-IDs from remediation report]"
+```
+
+### Processing Review Findings
+
+**REQUIRED ACTIONS (in order):**
+
+1. **Load Review Report:**
+   ```bash
+   Read: _workspaces/roadmap/reports/review-YYYY-MM-DD-remediation.yaml
+   ```
+
+2. **Prioritize Findings:**
+   - CRITICAL findings: Create BLOCKING AC-IDs (prevent next phase)
+   - HIGH findings: Create remediation AC-IDs (include in current phase)
+   - MEDIUM findings: Create tech-debt tracking AC-IDs (future phase)
+   - LOW findings: Monitor list (included in reports, no AC-ID needed)
+
+3. **Create Remediation Phase (if needed):**
+   ```yaml
+   # If no PHASE-REMEDIATION-[XX] exists for this severity level
+   new_phase:
+     name: "PHASE-REMEDIATION-[XX]"
+     title: "[Finding Summary] - [Source Finding List]"
+     description: "Remediation of findings from review-YYYY-MM-DD"
+     ac_ids: [list of AC-FIX-XXX-XX]
+     requires: "PHASE-YY" (preceding phase)
+     blocking: true (for CRITICAL) or false (for HIGH/MEDIUM)
+   ```
+
+4. **Update cortex-master.yaml:**
+   - Add new phase to phase_tracker
+   - Mark blocking phases with `blocking: true`
+   - Add phase dependency relationships
+   - Create git checkpoint: `git commit -m "checkpoint: review findings remediation"`
+
+5. **Implement AC-IDs (with Governance):**
+   - For each AC-ID from findings, follow standard TDD flow
+   - Apply all governance rules (CORE-008 through CORE-028)
+   - Create audit trail entries (AC_START → AC_EXECUTE → AC_COMPLETE)
+   - Verify hash chain integrity after each AC
+
+6. **Generate Completion Report:**
+   ```bash
+   Create: _workspaces/roadmap/reports/review-remediation-completion.yaml
+   Contents:
+     - Findings processed: [count]
+     - New ACs created: [count]
+     - New phases created: [count]
+     - Governance compliance: 100% (or issues listed)
+     - Blocking issues: [list if any]
+     - Estimated effort: [total hours]
+     - Timeline: [target completion date]
+   ```
+
+7. **Update Hash Chain:**
+   - Verify unbroken: AC_START → AC_EXECUTE → AC_COMPLETE
+   - Create final git checkpoint: `git commit -m "phase-remediation-XX: COMPLETED - audit verified"`
+
+### Remediation Workflow Example
+
+```yaml
+# From review finding:
+finding_id: "FINDING-042"
+severity: "HIGH"
+title: "Type hint coverage gap (CORE-011)"
+affected_files: ["src/core/ast_intelligence.py"]
+estimated_effort: "4 hours"
+
+# Builder creates remediation AC:
+ac_id: "AC-FIX-042-01"
+phase: "PHASE-REMEDIATION-08"
+title: "Add complete type hints to ast_intelligence.py"
+acceptance_criteria:
+  - All function parameters have type annotations
+  - All return types are annotated
+  - No 'Any' types without documentation
+  - mypy --strict passes
+  - Test coverage maintained ≥85%
+tests: 8
+status: "PENDING"
+
+# Builder then implements:
+1. Create test file: test_type_hints_ast.py
+2. Write tests: 8 tests covering type hint scenarios
+3. Run tests: 8/8 FAIL (RED phase)
+4. Implement: Add all type hints to ast_intelligence.py
+5. Run tests: 8/8 PASS (GREEN phase)
+6. Create audit entry: AC_COMPLETE with verification
+7. Create git checkpoint: git commit -m "AC-FIX-042-01: Type hints complete"
+8. Verify: mypy --strict passes
+```
+
 ## Commands
 
 ### Implementation
@@ -198,6 +306,12 @@ Before setting `locked: true`:
 - `/lock PHASE-XX` - Lock phase (requires audit verification)
 - `/checkpoint` - Create git checkpoint
 - `/rollback` - Undo last checkpoint
+
+### Review Integration
+- `/review-findings` - Load latest review findings
+- `/process-findings <severity>` - Process findings (CRITICAL|HIGH|MEDIUM|LOW)
+- `/create-remediation-phase <source-phase>` - Create remediation phase for review findings
+- `/report-remediation` - Generate remediation completion report
 
 ### Governance & Audit
 - `/compliance <phase>` - Show governance compliance report

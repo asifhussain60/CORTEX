@@ -107,11 +107,65 @@ Start with **PHASE-01 audit remediation** - systematically re-run tests with aud
 
 All blocking rules violations → REFUSE continuation
 
-### Phase 1.5: DESIGN-BUILD GAP DETECTION (NEW - MANDATORY)
+### Phase 1.5: DESIGN-BUILD GAP DETECTION & SURGICAL INVESTIGATION (NEW - MANDATORY)
 
-**CRITICAL:** Before completion, verify component is properly exposed and integrated.
+**CRITICAL:** Before completion, identify defects early via surgical investigation.
 
-**Gap Detection Checklist** (per cortex-gap-detection.md):
+#### 1. Surgical Investigation Protocol (NEW)
+
+**Trigger:** If standard acceptance criteria test FAILS:
+
+```yaml
+surgical_investigation:
+  step_1_isolate_problem:
+    action: "Reproduce failure in isolation"
+    query_db: "WHERE ac_id = ? AND operation = ?"
+    inspect_code: "grep -r AC-XXX-XXX src/"
+    determine: "Is this test artifact or design defect?"
+  
+  step_2_root_cause_analysis:
+    if_test_artifact:
+      - Move to TEST_FIXTURES list
+      - Add filtering rule
+      - Regenerate data
+    
+    if_design_defect:
+      - Document in REVIEW-INVESTIGATION-REPORT-*.yaml
+      - Create AC-FIX-XXX-XX for remediation
+      - Do NOT regenerate (masks problem)
+      - Fix code, then test locally, THEN regenerate
+  
+  step_3_verification:
+    local_unit_test: "Verify fix passes isolated test"
+    integration_test: "Verify fix passes full test suite"
+    audit_trail: "Verify hash chain unbroken (if applicable)"
+    decision: "Safe to commit and regenerate"
+
+surgical_investigation_decision_tree:
+  q1_fresh_data_clean_env:
+    question: "Does defect exist on FRESH data, clean environment?"
+    if_no: "→ TEST_ARTIFACT: Move to fixtures, regenerate"
+    if_yes: "→ Continue to Q2"
+  
+  q2_unit_test_catches:
+    question: "Does component unit test reproducibly fail?"
+    if_yes: "→ IMPLEMENTATION_FLAW: Fix code, verify, regenerate"
+    if_no: "→ Continue to Q3"
+  
+  q3_code_inspection:
+    question: "Does code inspection show incomplete implementation?"
+    evidence: "grep for TODO, NotImplementedError, pass statements"
+    if_yes: "→ INCOMPLETE_IMPLEMENTATION: Create AC-FIX, fix, verify, regenerate"
+    if_no: "→ Continue to Q4"
+  
+  q4_is_test_design_issue:
+    question: "Is test itself flawed or making wrong assumptions?"
+    evidence: "Compare test expectations vs actual behavior"
+    if_yes: "→ TEST_DESIGN_ISSUE: Fix test, re-verify, regenerate"
+    if_no: "→ UNKNOWN: Escalate for manual analysis"
+```
+
+#### 2. Gap Detection Checklist (EXISTING)
 
 1. **Design Phase Check:**
    - ✅ Component designed in phase YAML with clear AC-IDs
@@ -177,14 +231,28 @@ All blocking rules violations → REFUSE continuation
 
 | Rule | Level | Description |
 |------|-------|-------------|
-| CORE-008 | blocked | Tests MUST exist BEFORE implementation |
+| CORE-008 | blocked | Tests MUST exist BEFORE implementation (TDD) |
 | CORE-011 | blocked | ALL functions MUST have type hints |
 | CORE-012 | blocked | ALL public APIs MUST have docstrings |
 | CORE-013 | blocked | NO bare except, NO generic Exception |
 | CORE-005 | blocked | NO hardcoded absolute paths |
+| CORE-025 | blocked | Hash chain integrity - previous_hash must match prior entry |
 | CORE-026 | blocked | Git checkpoint BEFORE major action |
 | CORE-027 | blocked | AC_START, AC_EXECUTE, AC_COMPLETE required |
 | CORE-028 | blocked | Kebab-case, ≤25 chars total |
+
+## Data Quality Validation (NEW - CRITICAL)
+
+**Before proceeding with ANY analysis, verify data is production-ready:**
+
+| Check | Rule | Pass Criteria | Action if Fail |
+|-------|------|---------------|----------------|
+| Hash Chain Integrity | CORE-025 | `test_hash_chain_integrity()` PASSES | HALT - run surgical investigation |
+| Audit Trail Completeness | CORE-027 | All ACs have AC_START/EXECUTE/COMPLETE | HALT - regenerate or fix entries |
+| Data Freshness | CORE-999 | Timestamp < 24 hours old | HALT - regenerate data |
+| Test Fixture Isolation | CORE-998 | Production ACs NOT contaminated by test data | HALT - verify filtering rules |
+
+**Post-Validation Checkpoint:** Only proceed if ALL checks PASS
 
 ## Git Checkpoint Protocol (MANDATORY)
 
