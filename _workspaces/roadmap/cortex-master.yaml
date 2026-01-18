@@ -3341,7 +3341,7 @@ phase_tracker:
         domains, query(), get_by_domain(), get_relevant_knowledge().\n"
       estimated_hours: 2
       test_count: 10
-      status: NOT_STARTED
+      status: COMPLETED
     - ac_id: AC-IKP-001-02
       title: Protocol Compliance Verification
       description: 'Verify both repositories satisfy KnowledgeProvider Protocol.
@@ -6073,7 +6073,7 @@ phases:
         title: KnowledgeProvider Protocol Definition
         description: Define typing.Protocol interface for knowledge backends; Ensure
           type safety; Document expected methods
-        status: NOT_STARTED
+        status: COMPLETED
         testing:
           unit_tests_expected: 10
           integration_tests_expected: 2
