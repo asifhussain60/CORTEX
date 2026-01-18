@@ -23,6 +23,7 @@ from src.core.response_header_injector import ResponseHeaderInjector
 from src.core.response_header_config import HeaderConfigurationManager
 from src.core.governance_registry import GovernanceRegistry, GovernanceViolationError
 from src.core.hallucination_prevention.behavioral_boundaries import BehavioralBoundaryRules
+from src.core.knowledge.knowledge_repository import KnowledgeRepository, KnowledgeEntry
 from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 from src.infrastructure.database import DatabaseManager
 from src.infrastructure.database_transaction_manager import DatabaseTransactionManager
@@ -71,6 +72,28 @@ class MasterOrchestrator(IOrchestrator):
         
         # AC-FIX-HALLUCINATION-001: Initialize boundary enforcement
         self._boundary_rules = BehavioralBoundaryRules()
+        
+        # AC-KN-002-01: Initialize Knowledge Repository for best practices access
+        self._knowledge_repository: Optional[KnowledgeRepository] = None
+        try:
+            self._knowledge_repository = KnowledgeRepository()
+            self.logger.log_operation_complete(
+                ac_id="AC-KN-002-01",
+                operation="KNOWLEDGE_REPOSITORY_INIT",
+                success=True,
+                details={
+                    "entry_count": self._knowledge_repository.entry_count,
+                    "domains": self._knowledge_repository.domains
+                }
+            )
+        except FileNotFoundError as e:
+            # Log but don't fail - knowledge is enhancement, not blocking
+            self.logger.log_operation_complete(
+                ac_id="AC-KN-002-01",
+                operation="KNOWLEDGE_REPOSITORY_INIT",
+                success=False,
+                details={"error": f"Knowledge repository not available: {str(e)}"}
+            )
         
         # Track current operation context for header variables
         self.current_operation: Optional[str] = None
@@ -478,6 +501,13 @@ class MasterOrchestrator(IOrchestrator):
                     }
                 )
                 
+                # AC-KN-002-01: Evaluate knowledge for request composition
+                knowledge_context = self._evaluate_knowledge_for_request(
+                    operation=operation,
+                    context=context,
+                    target_domains=target_domains
+                )
+                
                 # Determine target orchestrators
                 domains_to_use = target_domains if target_domains else list(self.domain_orchestrators.keys())
                 
@@ -508,7 +538,7 @@ class MasterOrchestrator(IOrchestrator):
                     except Exception as e:
                         errors[domain] = str(e)
                 
-                # Aggregate results
+                # Aggregate results with knowledge context (AC-KN-002-01)
                 aggregated = {
                     "operation": operation,
                     "timestamp": datetime.now().isoformat(),
@@ -516,7 +546,9 @@ class MasterOrchestrator(IOrchestrator):
                     "orchestrators_involved": len(domains_to_use),
                     "results": results,
                     "errors": errors if errors else None,
-                    "transaction_id": txn.transaction_id
+                    "transaction_id": txn.transaction_id,
+                    # AC-KN-002-01: Include knowledge context in composite request
+                    "knowledge_context": knowledge_context
                 }
                 
                 # Store in history
@@ -533,7 +565,9 @@ class MasterOrchestrator(IOrchestrator):
                         "failed": len(errors),
                         "turn_number": self._turn_number,
                         "governance_enforced": True,
-                        "transaction_id": txn.transaction_id
+                        "transaction_id": txn.transaction_id,
+                        "knowledge_evaluated": knowledge_context.get("knowledge_evaluated", False),
+                        "knowledge_entries_used": knowledge_context.get("entries_count", 0)
                     }
                 )
                 
@@ -604,3 +638,262 @@ class MasterOrchestrator(IOrchestrator):
             return Ok(status)
         except Exception as e:
             return Err(f"Failed to get registry status: {str(e)}")
+    
+    # ==========================================================================
+    # KNOWLEDGE REPOSITORY INTEGRATION (AC-KN-002-01)
+    # ==========================================================================
+    
+    @property
+    def has_knowledge_repository(self) -> bool:
+        """Check if knowledge repository is available."""
+        return self._knowledge_repository is not None
+    
+    @mcp_tool(
+        name="get_knowledge_summary",
+        description="Get summary of available knowledge repository"
+    )
+    def get_knowledge_summary(self) -> Result[Dict[str, Any]]:
+        """
+        Get summary of available knowledge in the repository.
+        
+        AC-KN-002-01: Knowledge Repository Access
+        
+        Returns:
+            Result with knowledge summary including domains and entry counts
+        """
+        if not self._knowledge_repository:
+            return Err("Knowledge repository not initialized")
+        
+        try:
+            summary = self._knowledge_repository.get_knowledge_summary()
+            return Ok(summary)
+        except Exception as e:
+            return Err(f"Failed to get knowledge summary: {str(e)}")
+    
+    @mcp_tool(
+        name="query_knowledge",
+        description="Query knowledge repository by domain, tags, or keywords"
+    )
+    def query_knowledge(
+        self,
+        domains: Optional[List[str]] = None,
+        tags: Optional[List[str]] = None,
+        keywords: Optional[List[str]] = None
+    ) -> Result[List[Dict[str, Any]]]:
+        """
+        Query the knowledge repository.
+        
+        AC-KN-002-01: Knowledge Repository Query
+        
+        Args:
+            domains: Filter by domains (e.g., ["SECURITY", "ARCHITECTURE"])
+            tags: Filter by tags (e.g., ["api", "authentication"])
+            keywords: Search keywords in title/description
+        
+        Returns:
+            Result with list of matching knowledge entries
+        """
+        if not self._knowledge_repository:
+            return Err("Knowledge repository not initialized")
+        
+        try:
+            result = self._knowledge_repository.query(
+                domains=domains,
+                tags=tags,
+                keywords=keywords
+            )
+            
+            # Convert entries to dicts for serialization
+            entries = [
+                {
+                    "id": entry.id,
+                    "domain": entry.domain,
+                    "title": entry.title,
+                    "description": entry.description,
+                    "file_path": entry.file_path,
+                    "tags": entry.tags,
+                    "version": entry.version
+                }
+                for entry in result.entries
+            ]
+            
+            return Ok(entries)
+        except Exception as e:
+            return Err(f"Failed to query knowledge: {str(e)}")
+    
+    @mcp_tool(
+        name="get_relevant_knowledge",
+        description="Get relevant knowledge for request composition"
+    )
+    def get_relevant_knowledge_for_operation(
+        self,
+        operation: str,
+        context: Dict[str, Any],
+        max_entries: int = 5
+    ) -> Result[List[Dict[str, Any]]]:
+        """
+        Get relevant knowledge entries for composing a request.
+        
+        AC-KN-002-01: Knowledge Evaluation for Request Composition
+        
+        This method is called during coordinate_operation to fetch
+        best practices and guidelines relevant to the operation.
+        
+        Args:
+            operation: The operation being performed
+            context: Operation context for relevance matching
+            max_entries: Maximum entries to return
+        
+        Returns:
+            Result with relevant knowledge entries
+        """
+        if not self._knowledge_repository:
+            return Ok([])  # Graceful degradation - no knowledge available
+        
+        try:
+            # Extract keywords from operation and context
+            keywords = [operation]
+            if "keywords" in context:
+                keywords.extend(context["keywords"])
+            if "intent" in context:
+                keywords.append(context["intent"])
+            if "domain" in context:
+                keywords.append(context["domain"])
+            
+            # Map operation context to knowledge domains
+            domain_mapping = {
+                "security": ["SECURITY"],
+                "auth": ["SECURITY"],
+                "api": ["ARCHITECTURE", "SECURITY"],
+                "database": ["DATA-MANAGEMENT"],
+                "persistence": ["DATA-MANAGEMENT", "ARCHITECTURE"],
+                "test": ["TESTING-VALIDATION"],
+                "validate": ["TESTING-VALIDATION"],
+                "deploy": ["DEPLOYMENT"],
+                "performance": ["PERFORMANCE"],
+                "architecture": ["ARCHITECTURE"],
+            }
+            
+            # Determine relevant domains from operation/context
+            relevant_domains = []
+            operation_lower = operation.lower()
+            context_str = str(context).lower()
+            
+            for key, domains in domain_mapping.items():
+                if key in operation_lower or key in context_str:
+                    relevant_domains.extend(domains)
+            
+            # Remove duplicates while preserving order
+            seen = set()
+            unique_domains = [d for d in relevant_domains if d not in seen and not seen.add(d)]
+            
+            # Query knowledge repository
+            entries = self._knowledge_repository.get_relevant_knowledge(
+                domains=unique_domains if unique_domains else None,
+                keywords=keywords,
+                max_entries=max_entries
+            )
+            
+            # Convert to serializable format
+            result = [
+                {
+                    "id": entry.id,
+                    "domain": entry.domain,
+                    "title": entry.title,
+                    "description": entry.description,
+                    "relevance_context": {
+                        "matched_domains": unique_domains,
+                        "matched_keywords": keywords
+                    }
+                }
+                for entry in entries
+            ]
+            
+            self.logger.log_operation_complete(
+                ac_id="AC-KN-002-01",
+                operation="KNOWLEDGE_RETRIEVAL",
+                success=True,
+                details={
+                    "operation": operation,
+                    "entries_found": len(result),
+                    "domains_searched": unique_domains,
+                    "keywords_used": keywords
+                }
+            )
+            
+            return Ok(result)
+        except Exception as e:
+            self.logger.log_operation_complete(
+                ac_id="AC-KN-002-01",
+                operation="KNOWLEDGE_RETRIEVAL",
+                success=False,
+                details={"error": str(e)}
+            )
+            return Ok([])  # Graceful degradation
+    
+    def _evaluate_knowledge_for_request(
+        self,
+        operation: str,
+        context: Dict[str, Any],
+        target_domains: Optional[List[str]] = None
+    ) -> Dict[str, Any]:
+        """
+        Evaluate knowledge and compose guidelines for request.
+        
+        AC-KN-002-01: Knowledge Evaluation During Request Composition
+        
+        This internal method is called by coordinate_operation to:
+        1. Fetch relevant knowledge from repository
+        2. Extract applicable guidelines and best practices
+        3. Compose knowledge context for the operation
+        
+        Args:
+            operation: Operation being performed
+            context: Operation context
+            target_domains: Target orchestrator domains
+            
+        Returns:
+            Dict with knowledge context for request composition
+        """
+        knowledge_context = {
+            "knowledge_evaluated": False,
+            "guidelines": [],
+            "best_practices": [],
+            "security_considerations": [],
+            "architecture_patterns": []
+        }
+        
+        if not self._knowledge_repository:
+            return knowledge_context
+        
+        try:
+            # Get relevant knowledge
+            result = self.get_relevant_knowledge_for_operation(operation, context)
+            if result.is_err():
+                return knowledge_context
+            
+            entries = result.unwrap()
+            knowledge_context["knowledge_evaluated"] = True
+            knowledge_context["entries_count"] = len(entries)
+            
+            # Categorize knowledge by domain
+            for entry in entries:
+                domain = entry.get("domain", "")
+                title = entry.get("title", "")
+                
+                if domain == "SECURITY":
+                    knowledge_context["security_considerations"].append(title)
+                elif domain == "ARCHITECTURE":
+                    knowledge_context["architecture_patterns"].append(title)
+                elif domain == "TESTING-VALIDATION":
+                    knowledge_context["best_practices"].append(f"Testing: {title}")
+                elif domain == "PERFORMANCE":
+                    knowledge_context["best_practices"].append(f"Performance: {title}")
+                else:
+                    knowledge_context["guidelines"].append(f"{domain}: {title}")
+            
+            return knowledge_context
+            
+        except Exception:
+            return knowledge_context
+
