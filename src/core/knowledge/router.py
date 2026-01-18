@@ -18,6 +18,26 @@ import re
 from collections import defaultdict
 
 
+# Domain keywords mapping (cached at module level for performance)
+DOMAIN_KEYWORDS = {
+    'technical': [
+        'python', 'java', 'javascript', 'database', 'sql', 'api', 'rest',
+        'microservice', 'architecture', 'docker', 'kubernetes', 'deploy',
+        'bug', 'debug', 'optimize', 'performance', 'memory', 'latency'
+    ],
+    'business': [
+        'budget', 'revenue', 'sales', 'marketing', 'roi', 'strategy',
+        'goal', 'objective', 'metric', 'kpi', 'forecast', 'plan',
+        'deadline', 'resource', 'team', 'organization'
+    ],
+    'policy': [
+        'policy', 'rule', 'regulation', 'compliance', 'legal', 'hr',
+        'benefits', 'leave', 'vacation', 'conduct', 'ethics',
+        'procedure', 'guideline', 'requirement', 'approval'
+    ],
+}
+
+
 @dataclass
 class RoutingDecision:
     """Represents a routing decision with metadata."""
@@ -37,25 +57,6 @@ class IntelligentKnowledgeRouter:
     Analyzes query intent and routes to appropriate backend with confidence scoring.
     Provides fallback to parallel queries for ambiguous queries.
     """
-
-    # Domain keywords for detection
-    DOMAIN_KEYWORDS = {
-        'technical': [
-            'python', 'java', 'javascript', 'database', 'sql', 'api', 'rest',
-            'microservice', 'architecture', 'docker', 'kubernetes', 'deploy',
-            'bug', 'debug', 'optimize', 'performance', 'memory', 'latency'
-        ],
-        'business': [
-            'budget', 'revenue', 'sales', 'marketing', 'roi', 'strategy',
-            'goal', 'objective', 'metric', 'kpi', 'forecast', 'plan',
-            'deadline', 'resource', 'team', 'organization'
-        ],
-        'policy': [
-            'policy', 'rule', 'regulation', 'compliance', 'legal', 'hr',
-            'benefits', 'leave', 'vacation', 'conduct', 'ethics',
-            'procedure', 'guideline', 'requirement', 'approval'
-        ],
-    }
 
     def __init__(
         self,
@@ -146,10 +147,10 @@ class IntelligentKnowledgeRouter:
         domain_hint_match = re.match(r'^\[(\w+)\]', query_lower)
         if domain_hint_match:
             hint = domain_hint_match.group(1)
-            if hint in self.DOMAIN_KEYWORDS:
+            if hint in DOMAIN_KEYWORDS:
                 return [hint]
         
-        for domain, keywords in self.DOMAIN_KEYWORDS.items():
+        for domain, keywords in DOMAIN_KEYWORDS.items():
             for keyword in keywords:
                 if keyword in query_lower:
                     detected.append(domain)
@@ -171,27 +172,49 @@ class IntelligentKnowledgeRouter:
         detected_domains = self.detect_domain_keywords(query)
         
         for backend_name in self.backends.keys():
-            score = 0.0
-            
-            # Match detected domains with backend specialization
-            if detected_domains:
-                if any(domain in backend_name.lower() for domain in detected_domains):
-                    score += 0.7
-                else:
-                    score += 0.3
-            else:
-                # Default score for ambiguous queries
-                score = 0.5
-            
-            # Adjust based on query length (very short or very long are less clear)
-            if len(query) < 10:
-                score *= 0.8
-            elif len(query) > 500:
-                score *= 0.9
-            
+            score = self._calculate_backend_score(
+                backend_name, detected_domains, query
+            )
             scores[backend_name] = min(1.0, score)
         
         return scores
+
+    def _calculate_backend_score(
+        self,
+        backend_name: str,
+        detected_domains: List[str],
+        query: str
+    ) -> float:
+        """
+        Calculate confidence score for a specific backend.
+        
+        Args:
+            backend_name: Name of the backend.
+            detected_domains: Detected domains in query.
+            query: Original query text.
+            
+        Returns:
+            Confidence score (0-1).
+        """
+        score = 0.0
+        
+        # Match detected domains with backend specialization
+        if detected_domains:
+            if any(domain in backend_name.lower() for domain in detected_domains):
+                score += 0.7
+            else:
+                score += 0.3
+        else:
+            # Default score for ambiguous queries
+            score = 0.5
+        
+        # Adjust based on query length (very short or very long are less clear)
+        if len(query) < 10:
+            score *= 0.8
+        elif len(query) > 500:
+            score *= 0.9
+        
+        return score
 
     def select_best_backend(self, query: str) -> Tuple[str, float]:
         """
@@ -282,22 +305,47 @@ class IntelligentKnowledgeRouter:
         if confidence < self.confidence_threshold:
             # Use parallel query fallback
             self.fallback_count += 1
-            results = []
-            
-            for backend_name, backend_obj in self.backends.items():
-                if hasattr(backend_obj, 'query') and callable(backend_obj.query):
-                    try:
-                        result = backend_obj.query(query)
-                        results.extend(result if isinstance(result, list) else [result])
-                    except Exception:
-                        pass
-            
-            return results
+            return self._query_all_backends(query)
         else:
             # Use selected backend
-            if hasattr(backend, 'query') and callable(backend.query):
-                return backend.query(query)
-            return []
+            return self._query_backend(backend, query)
+
+    def _query_backend(self, backend: Any, query: str) -> List[Dict[str, Any]]:
+        """
+        Query a specific backend.
+        
+        Args:
+            backend: Backend object to query.
+            query: Query text.
+            
+        Returns:
+            List of results.
+        """
+        if hasattr(backend, 'query') and callable(backend.query):
+            result = backend.query(query)
+            return result if isinstance(result, list) else [result]
+        return []
+
+    def _query_all_backends(self, query: str) -> List[Dict[str, Any]]:
+        """
+        Query all backends in parallel mode.
+        
+        Args:
+            query: Query text.
+            
+        Returns:
+            List of results from all backends.
+        """
+        results = []
+        
+        for backend_name, backend_obj in self.backends.items():
+            try:
+                result = self._query_backend(backend_obj, query)
+                results.extend(result)
+            except Exception:
+                pass
+        
+        return results
 
     def get_routing_history(self) -> List[RoutingDecision]:
         """
@@ -318,12 +366,22 @@ class IntelligentKnowledgeRouter:
         return {
             'queries_routed': self.query_count,
             'fallback_queries': self.fallback_count,
-            'avg_confidence': (
-                sum(d.confidence for d in self.routing_history) / len(self.routing_history)
-                if self.routing_history else 0.0
-            ),
+            'avg_confidence': self._calculate_avg_confidence(),
             'backend_usage': self._calculate_backend_usage(),
         }
+
+    def _calculate_avg_confidence(self) -> float:
+        """
+        Calculate average confidence score.
+        
+        Returns:
+            Average confidence (0-1).
+        """
+        if not self.routing_history:
+            return 0.0
+        
+        total = sum(d.confidence for d in self.routing_history)
+        return total / len(self.routing_history)
 
     def _calculate_backend_usage(self) -> Dict[str, int]:
         """
