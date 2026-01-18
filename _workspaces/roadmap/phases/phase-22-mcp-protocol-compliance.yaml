@@ -1,0 +1,520 @@
+# =============================================================================
+# PHASE-22: MCP PROTOCOL COMPLIANCE & FULL TOOL EXPOSURE
+# =============================================================================
+# Model Context Protocol Standard Implementation
+# Status: NOT_STARTED
+# AC-IDs: 8 (AC-MCP-001-01 through AC-MCP-008-01)
+# Estimated Hours: 29
+# Priority: P0 (CRITICAL - Blocks Production Usability)
+# =============================================================================
+
+metadata:
+  phase_id: "PHASE-22-MCP-PROTOCOL-COMPLIANCE"
+  title: "MCP Protocol Compliance: Standard Implementation & Full Tool Exposure"
+  version: "1.0.0"
+  created: "2026-01-18"
+  author: "cortex-reviewer"
+  status: "NOT_STARTED"
+  priority: "P0"
+  blocking: true
+
+# =============================================================================
+# PROBLEM STATEMENT
+# =============================================================================
+
+problem_statement:
+  summary: |
+    CORTEX has a custom MCP-like server implementation that does NOT comply with
+    the Model Context Protocol specification. This prevents integration with 
+    Claude Desktop, VS Code Copilot, and other MCP clients. Additionally, 60%+ 
+    of CORTEX capabilities are not exposed as MCP tools.
+  
+  gaps_identified:
+    - id: "GAP-MCP-001"
+      title: "No MCP SDK Integration"
+      impact: "Cannot function as MCP server for standard clients"
+      current_state: "Custom HTTP-style server in src/mcp/server.py"
+      severity: "CRITICAL"
+    
+    - id: "GAP-MCP-002"
+      title: "Missing STDIO Transport"
+      impact: "Claude Desktop requires stdio-based JSON-RPC"
+      current_state: "TCP/HTTP server only"
+      severity: "CRITICAL"
+    
+    - id: "GAP-MCP-003"
+      title: "Incomplete Tool Exposure"
+      impact: "17 of 40+ tools have @mcp_tool decorators"
+      current_state: "Only governance_tools.py and master_orchestrator.py decorated"
+      severity: "HIGH"
+    
+    - id: "GAP-MCP-004"
+      title: "No MCP Configuration Files"
+      impact: "Cannot be added to Claude Desktop or VS Code"
+      current_state: "No claude_desktop_config.json or similar"
+      severity: "HIGH"
+    
+    - id: "GAP-MCP-005"
+      title: "Protocol Compliance Tests Missing"
+      impact: "Cannot verify MCP message format compliance"
+      current_state: "Tests only check internal state, not protocol"
+      severity: "MEDIUM"
+
+# =============================================================================
+# SOLUTION ARCHITECTURE
+# =============================================================================
+
+solution_architecture:
+  components:
+    - name: "MCP SDK Server"
+      purpose: "Standard MCP server using official Python SDK"
+      implementation:
+        package: "mcp>=0.9.0"
+        transport: "stdio (JSON-RPC 2.0)"
+        entrypoint: "python -m src.mcp.server"
+      protocol_endpoints:
+        - "initialize"
+        - "tools/list"
+        - "tools/call"
+        - "resources/list"
+        - "resources/read"
+        - "notifications"
+    
+    - name: "Tool Registry Enhancement"
+      purpose: "Auto-discovery and registration of all @mcp_tool functions"
+      features:
+        - "Decorator-based registration (existing)"
+        - "Tool metadata extraction"
+        - "Parameter schema generation"
+        - "Category-based grouping"
+    
+    - name: "MCP Configuration Generator"
+      purpose: "Generate client configurations"
+      outputs:
+        - "claude_desktop_config.json"
+        - "vscode-mcp-settings.json"
+        - "README-MCP-INTEGRATION.md"
+    
+    - name: "Protocol Compliance Test Suite"
+      purpose: "Validate MCP message format compliance"
+      coverage:
+        - "JSON-RPC 2.0 request format"
+        - "Tool listing response schema"
+        - "Tool call request/response"
+        - "Error response format"
+
+# =============================================================================
+# ACCEPTANCE CRITERIA
+# =============================================================================
+
+acceptance_criteria:
+  # Component 1: MCP SDK Integration (CRITICAL)
+  - ac_id: "AC-MCP-001-01"
+    title: "MCP SDK Server Implementation"
+    description: |
+      Replace custom MCPServer with official MCP SDK server implementation.
+      Support stdio transport for Claude Desktop compatibility.
+      Preserve all existing @mcp_tool decorated functions.
+    priority: "CRITICAL"
+    estimated_hours: 8
+    test_count: 20
+    status: "NOT_STARTED"
+    deliverables:
+      - "requirements.txt (add mcp>=0.9.0)"
+      - "src/mcp/server.py (refactored)"
+      - "src/mcp/__main__.py (entrypoint)"
+      - "tests/unit/test_mcp_protocol.py"
+    governance:
+      - "CORE-008: TDD"
+      - "CORE-011: Type hints"
+      - "CORE-024: @mcp_tool Required"
+    implementation_guide: |
+      from mcp.server import Server, NotificationOptions
+      from mcp.server.models import InitializationOptions
+      from mcp.server.stdio import stdio_server
+      from mcp.types import Tool, TextContent
+      
+      server = Server("cortex-mcp")
+      
+      @server.list_tools()
+      async def list_tools() -> list[Tool]:
+          from src.mcp.decorator import get_registered_tools
+          tools = []
+          for name, info in get_registered_tools().items():
+              tools.append(Tool(
+                  name=name,
+                  description=info["description"],
+                  inputSchema=info["parameters"]
+              ))
+          return tools
+      
+      @server.call_tool()
+      async def call_tool(name: str, arguments: dict) -> list[TextContent]:
+          from src.mcp.decorator import get_tool
+          tool = get_tool(name)
+          if not tool:
+              raise ValueError(f"Unknown tool: {name}")
+          result = tool["func"](**arguments)
+          return [TextContent(type="text", text=str(result))]
+      
+      async def main():
+          async with stdio_server() as (read_stream, write_stream):
+              await server.run(
+                  read_stream, write_stream,
+                  InitializationOptions(
+                      server_name="cortex-mcp",
+                      server_version="1.0.0"
+                  )
+              )
+
+  # Component 2: Critical Tool Exposure
+  - ac_id: "AC-MCP-002-01"
+    title: "Critical Tool MCP Exposure"
+    description: |
+      Add @mcp_tool decorator to highest-priority tools:
+      - OrchestratorScaffolder.scaffold()
+      - TemplateValidator.validate()
+      - PhaseReadinessChecker.check_phase()
+      - BKIOOrchestrator.ingest_knowledge()
+      - AuditLogManager.query_audit_trail()
+    priority: "CRITICAL"
+    estimated_hours: 4
+    test_count: 15
+    status: "NOT_STARTED"
+    deliverables:
+      - "Updated src/tools/orchestrator_scaffolder.py"
+      - "Updated src/tools/template_validator.py"
+      - "Updated src/tools/phase_readiness_checker.py"
+      - "Updated src/domain_brain/bkio_orchestrator.py"
+      - "Updated src/domain_brain/audit_log_manager.py"
+    tool_definitions:
+      - name: "scaffold_orchestrator"
+        description: "Generate a new orchestrator from template"
+        parameters:
+          template_name: { type: "string", required: true }
+          orchestrator_name: { type: "string", required: true }
+          domain: { type: "string", required: true }
+          output_dir: { type: "string", required: false }
+      - name: "validate_template"
+        description: "Validate an orchestrator template for correctness"
+        parameters:
+          template_path: { type: "string", required: true }
+      - name: "check_phase_readiness"
+        description: "Check if a phase is ready to start"
+        parameters:
+          phase_id: { type: "string", required: true }
+      - name: "ingest_business_knowledge"
+        description: "Ingest business knowledge document"
+        parameters:
+          content: { type: "string", required: true }
+          domain: { type: "string", required: true }
+          metadata: { type: "object", required: false }
+      - name: "query_audit_trail"
+        description: "Query the governance audit trail"
+        parameters:
+          ac_id: { type: "string", required: false }
+          operation: { type: "string", required: false }
+          limit: { type: "integer", required: false }
+
+  # Component 3: MCP Configuration Files
+  - ac_id: "AC-MCP-003-01"
+    title: "MCP Configuration Files"
+    description: |
+      Create configuration files for Claude Desktop and VS Code integration.
+      Include setup documentation and usage examples.
+    priority: "HIGH"
+    estimated_hours: 1
+    test_count: 5
+    status: "NOT_STARTED"
+    deliverables:
+      - "mcp-config/claude-desktop.json"
+      - "mcp-config/vscode-mcp.json"
+      - "mcp-config/README.md"
+      - "docs/MCP-INTEGRATION-GUIDE.md"
+    configuration_template: |
+      # Claude Desktop Configuration (~/.config/claude/claude_desktop_config.json)
+      {
+        "mcpServers": {
+          "cortex": {
+            "command": "python",
+            "args": ["-m", "src.mcp.server"],
+            "cwd": "/path/to/CORTEX",
+            "env": {
+              "CORTEX_DB_PATH": "./cortex-brain/state/governance.db"
+            }
+          }
+        }
+      }
+
+  # Component 4: Protocol Compliance Tests
+  - ac_id: "AC-MCP-004-01"
+    title: "MCP Protocol Compliance Tests"
+    description: |
+      Add test suite validating MCP protocol compliance:
+      - JSON-RPC 2.0 message format
+      - Tool listing response schema
+      - Tool invocation request/response
+      - Error response format
+    priority: "HIGH"
+    estimated_hours: 4
+    test_count: 20
+    status: "NOT_STARTED"
+    deliverables:
+      - "tests/unit/test_mcp_protocol_compliance.py"
+      - "tests/integration/test_mcp_end_to_end.py"
+    test_cases:
+      - "test_tools_list_returns_valid_schema"
+      - "test_tool_call_with_valid_params_succeeds"
+      - "test_tool_call_with_invalid_params_returns_error"
+      - "test_unknown_tool_returns_error"
+      - "test_jsonrpc_request_format"
+      - "test_jsonrpc_response_format"
+
+  # Component 5: Vacuum Tool Integration
+  - ac_id: "AC-MCP-005-01"
+    title: "Vacuum Tool MCP Exposure"
+    description: |
+      Properly integrate CortexVacuumAnalyzer and CortexVacuumExecutor
+      as MCP tools. Ensure they're registered on server startup.
+    priority: "MEDIUM"
+    estimated_hours: 2
+    test_count: 8
+    status: "NOT_STARTED"
+    deliverables:
+      - "Updated src/mcp/tools/cortex_vacuum_analyzer.py"
+      - "Updated src/mcp/tools/cortex_vacuum_executor.py"
+      - "Updated src/mcp/tools/cortex_vacuum_registration.py"
+    tool_definitions:
+      - name: "analyze_vacuum"
+        description: "Analyze codebase for vacuum state (unused code)"
+      - name: "execute_vacuum"
+        description: "Execute vacuum cleanup operations"
+
+  # Component 6: Full Tool Catalog
+  - ac_id: "AC-MCP-006-01"
+    title: "Complete Tool Exposure"
+    description: |
+      Add @mcp_tool to all remaining public tool-worthy functions:
+      - IntentRouter
+      - RelationshipAnalyzer
+      - DomainClassifier
+      - LensSynthesis
+      - DependencyValidator
+      - And others
+    priority: "MEDIUM"
+    estimated_hours: 6
+    test_count: 25
+    status: "NOT_STARTED"
+    deliverables:
+      - "Updated orchestrator files"
+      - "Updated core tool files"
+    target_files:
+      - "src/orchestrators/core/intent_router.py"
+      - "src/orchestrators/core/relationship_analyzer.py"
+      - "src/orchestrators/domains/domain_classifier.py"
+      - "src/orchestrators/core/lens_synthesis.py"
+      - "src/core/dependency_validator.py"
+
+  # Component 7: Tool Discovery Endpoint
+  - ac_id: "AC-MCP-007-01"
+    title: "Enhanced Tool Discovery"
+    description: |
+      Implement comprehensive tool discovery with:
+      - Tool categories
+      - Parameter validation hints
+      - Usage examples
+      - Version information
+    priority: "MEDIUM"
+    estimated_hours: 2
+    test_count: 10
+    status: "NOT_STARTED"
+    deliverables:
+      - "Enhanced src/mcp/decorator.py"
+      - "Tool metadata schema"
+
+  # Component 8: Documentation
+  - ac_id: "AC-MCP-008-01"
+    title: "MCP Integration Documentation"
+    description: |
+      Complete documentation for MCP integration:
+      - Setup guide for Claude Desktop
+      - Setup guide for VS Code
+      - Tool reference documentation
+      - Troubleshooting guide
+    priority: "LOW"
+    estimated_hours: 2
+    test_count: 0
+    status: "NOT_STARTED"
+    deliverables:
+      - "docs/MCP-SETUP-GUIDE.md"
+      - "docs/MCP-TOOL-REFERENCE.md"
+      - "docs/MCP-TROUBLESHOOTING.md"
+
+# =============================================================================
+# IMPLEMENTATION TIMELINE
+# =============================================================================
+
+timeline:
+  day_1:
+    title: "MCP SDK Integration"
+    hours: 8
+    acs: ["AC-MCP-001-01"]
+    milestones:
+      - "MCP SDK added to requirements.txt"
+      - "Server refactored to use stdio transport"
+      - "Basic protocol compliance"
+      - "20 tests passing"
+  
+  day_2:
+    title: "Critical Tool Exposure + Configuration"
+    hours: 5
+    acs: ["AC-MCP-002-01", "AC-MCP-003-01"]
+    milestones:
+      - "Top 5 tools exposed"
+      - "Claude Desktop config created"
+      - "VS Code config created"
+      - "35 tests passing"
+  
+  day_3:
+    title: "Protocol Tests + Vacuum Integration"
+    hours: 6
+    acs: ["AC-MCP-004-01", "AC-MCP-005-01"]
+    milestones:
+      - "Protocol compliance test suite"
+      - "Vacuum tools integrated"
+      - "63 tests passing"
+  
+  day_4:
+    title: "Full Tool Catalog + Discovery"
+    hours: 8
+    acs: ["AC-MCP-006-01", "AC-MCP-007-01"]
+    milestones:
+      - "All tools exposed"
+      - "Enhanced discovery"
+      - "98 tests passing"
+  
+  day_5:
+    title: "Documentation"
+    hours: 2
+    acs: ["AC-MCP-008-01"]
+    milestones:
+      - "Complete documentation"
+      - "103 tests passing"
+      - "Phase complete"
+
+# =============================================================================
+# DEPENDENCIES
+# =============================================================================
+
+dependencies:
+  packages:
+    - name: "mcp"
+      version: ">=0.9.0"
+      purpose: "Official MCP Python SDK"
+    
+  internal:
+    - component: "src/mcp/decorator.py"
+      status: "EXISTS"
+      changes: "Minor enhancement for metadata"
+    
+    - component: "src/mcp/tools/"
+      status: "EXISTS"
+      changes: "Add @mcp_tool to more functions"
+
+# =============================================================================
+# TESTING REQUIREMENTS
+# =============================================================================
+
+testing:
+  unit_tests_expected: 83
+  integration_tests_expected: 20
+  total_tests_expected: 103
+  target_pass_rate: "100%"
+  
+  test_categories:
+    - category: "Protocol Compliance"
+      tests: 20
+      files: ["test_mcp_protocol_compliance.py"]
+    
+    - category: "Tool Registration"
+      tests: 25
+      files: ["test_mcp_tool_registration.py"]
+    
+    - category: "Tool Invocation"
+      tests: 30
+      files: ["test_mcp_tool_invocation.py"]
+    
+    - category: "Configuration"
+      tests: 8
+      files: ["test_mcp_configuration.py"]
+    
+    - category: "End-to-End"
+      tests: 20
+      files: ["test_mcp_end_to_end.py"]
+
+# =============================================================================
+# SUCCESS CRITERIA
+# =============================================================================
+
+success_criteria:
+  - id: "SC-001"
+    description: "CORTEX can be started as MCP server"
+    verification: "python -m src.mcp.server runs without error"
+  
+  - id: "SC-002"
+    description: "Claude Desktop can connect to CORTEX"
+    verification: "Add config, restart Claude, verify tools listed"
+  
+  - id: "SC-003"
+    description: "All 40+ tools are MCP-accessible"
+    verification: "tools/list returns 40+ tools"
+  
+  - id: "SC-004"
+    description: "Tool invocation works correctly"
+    verification: "Call each tool, verify response"
+  
+  - id: "SC-005"
+    description: "103 tests passing"
+    verification: "pytest passes with 100% success rate"
+
+# =============================================================================
+# RISKS & MITIGATIONS
+# =============================================================================
+
+risks:
+  - risk: "MCP SDK version incompatibility"
+    likelihood: "LOW"
+    impact: "MEDIUM"
+    mitigation: "Pin SDK version, test with multiple versions"
+  
+  - risk: "Performance overhead from stdio transport"
+    likelihood: "LOW"
+    impact: "LOW"
+    mitigation: "Benchmark, optimize if needed"
+  
+  - risk: "Breaking existing tool interfaces"
+    likelihood: "MEDIUM"
+    impact: "MEDIUM"
+    mitigation: "Preserve existing APIs, add MCP wrapper"
+
+# =============================================================================
+# NOTES
+# =============================================================================
+
+notes: |
+  This phase is CRITICAL for CORTEX production usability. Without proper MCP
+  protocol compliance, CORTEX cannot be used as an AI tool provider for:
+  - Claude Desktop
+  - VS Code Copilot
+  - Other MCP-compatible clients
+  
+  The existing @mcp_tool decorator and tool registration infrastructure is
+  solid - the gap is primarily in the transport layer (stdio vs HTTP) and
+  the breadth of tool coverage.
+  
+  Reference: https://modelcontextprotocol.io/docs/
+  MCP SDK: https://github.com/modelcontextprotocol/python-sdk
+
+# =============================================================================
+# Copyright © 2025-2026 Asif Hussain. All rights reserved.
+# =============================================================================
