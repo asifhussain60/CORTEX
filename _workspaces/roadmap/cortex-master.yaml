@@ -364,7 +364,32 @@ phase_tracker:
       notes: Audit logs verified as authentic (not fake). 2,825 total entries across
         all phases with proper hash chain.
     git_checkpoint: phase-01-lock
-  PHASE-02:
+  PHASE-02-CODEBASE-COHERENCE:
+    title: Codebase Coherence & Import Foundation
+    description: Nested Folder Structure Organization, Import Path Resolution, Cross-Platform
+      Compatibility, Code Organization Standardization
+    ac_ids: 3
+    completed_ac_ids: 0
+    status: NOT_STARTED
+    locked: false
+    started_at: null
+    completed_at: null
+    cleanup_required: false
+    requires: PHASE-01
+    must_complete_before: PHASE-03
+    blocking: true
+    estimated_hours: 35
+    priority: P0
+    notes: "FOUNDATIONAL PRIORITY: Establishes import coherence and folder structure before core architecture. Unblocks all downstream phases. HIGH VALUE - reduces import bugs, improves maintainability, enables cross-platform reliability."
+    audit_verification:
+      verified: false
+      entry_count: 0
+      hash_chain_valid: false
+      verified_at: null
+      remediation_required: false
+    git_checkpoint: null
+    acceptance_criteria: []
+  PHASE-03-CORE-ARCHITECTURE:
     title: Orchestration Core & MCP Integration
     description: Orchestrator Architecture Framework, Model Context Protocol Integration,
       Governance Evaluation Engine, Response Templates System
@@ -374,7 +399,7 @@ phase_tracker:
     locked: true
     completed_at: '2026-01-14T00:00:00Z'
     cleanup_required: false
-    requires: PHASE-01
+    requires: PHASE-02-CODEBASE-COHERENCE
     audit_verification:
       verified: true
       entry_count: 810
@@ -382,7 +407,7 @@ phase_tracker:
       verified_at: '2026-01-16T03:35:00Z'
       remediation_required: false
     git_checkpoint: cdbd823fb
-  PHASE-03:
+  PHASE-04-SAFETY-RELIABILITY:
     title: Safety, Reliability & Observability
     description: Production Reliability, Graceful Degradation, Circuit Breaker Patterns,
       OpenTelemetry Metrics Integration
@@ -393,7 +418,7 @@ phase_tracker:
     started_at: '2026-01-18T18:45:00Z'
     completed_at: '2026-01-18T20:15:00Z'
     cleanup_required: false
-    requires: PHASE-02
+    requires: PHASE-03-CORE-ARCHITECTURE
     estimated_hours: 28
     actual_hours: 1.5
     audit_verification:
@@ -453,7 +478,7 @@ phase_tracker:
       completion_date: '2026-01-18T20:10:00Z'
       git_commit: 108f312cc
       implementation_details: AlertManager with ThresholdMonitor and alert lifecycle management
-  PHASE-04:
+  PHASE-05-PRODUCTION-HARDENING:
     title: Production Hardening & Security
     description: Security Hardening, Secret Redaction, Hash Verification, Cross-File
       Coherence Validation
@@ -463,7 +488,7 @@ phase_tracker:
     locked: true
     completed_at: '2026-01-18T18:35:25.632388Z'
     cleanup_required: false
-    requires: PHASE-03
+    requires: PHASE-04-SAFETY-RELIABILITY
     audit_verification:
       verified: true
       entry_count: 45
@@ -472,38 +497,16 @@ phase_tracker:
       remediation_required: false
     git_checkpoint: null
     notes: "All 12 ACs complete with unified specifications in phases: section. Security hardening, secret redaction, and coherence validation framework operational."
-  PHASE-05:
+  PHASE-06-BRITTLENESS:
     ac_ids: 17
     completed_ac_ids: 17
     status: COMPLETED
     locked: true
     started_at: '2026-01-18T16:41:00.687455Z'
     completed_at: '2026-01-18T16:41:00.687455Z'
+    requires: PHASE-05-PRODUCTION-HARDENING
     git_checkpoint: d6511b1ac
-  PHASE-PARALLEL:
-    title: Folder Migration & Organization
-    description: Nested Folder Structure Organization, Import Updates, Non-Blocking
-      Parallel Execution
-    ac_ids: 3
-    completed_ac_ids: 0
-    status: NOT_STARTED
-    locked: false
-    completed_at: null
-    cleanup_required: false
-    requires: PHASE-01
-    can_start_after: PHASE-01 completion
-    must_complete_before: PHASE-05
-    blocking: false
-    notes: Runs in parallel with PHASE-02 through PHASE-04, but must finish before
-      PHASE-05
-    audit_verification:
-      verified: false
-      entry_count: 0
-      hash_chain_valid: false
-      verified_at: null
-      remediation_required: false
-    git_checkpoint: null
-  PHASE-06-ECOSYSTEM:
+  PHASE-07-ECOSYSTEM:
     title: Orchestrator Plugin Ecosystem & Brain Activation
     description: Extensible Orchestrator Framework, Brain Tier Population, Hallucination
       Prevention Enforcement, Vision Governance Protocol
@@ -512,7 +515,7 @@ phase_tracker:
     status: COMPLETED
     locked: true
     started_at: '2026-01-15T00:00:00Z'
-    requires: PHASE-PARALLEL
+    requires: PHASE-06-BRITTLENESS
     cleanup_required: false
     estimated_hours: 152
     estimated_days: 27
@@ -538,8 +541,8 @@ phase_tracker:
     locked: true
     started_at: '2026-01-15T18:00:00Z'
     completed_at: '2026-01-15T23:55:00Z'
-    requires: PHASE-06-ECOSYSTEM
-    can_start_after: PHASE-06-ECOSYSTEM completion
+    requires: PHASE-07-ECOSYSTEM
+    can_start_after: PHASE-07-ECOSYSTEM completion
     must_complete_before: null
     blocking: false
     estimated_hours: 6
