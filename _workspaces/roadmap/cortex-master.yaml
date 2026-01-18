@@ -13,14 +13,16 @@ metadata:
   dor_score: 100
   start_date: null
   end_date: "2026-01-17"
-  total_ac_ids: 299  # 279 + 8 (PHASE-21) + 8 (PHASE-22-MCP-PROTOCOL-COMPLIANCE) + 4 (PHASE-23-COMPLEXITY-AWARE-CONFIRMATION-GATE)
-  total_ac_ids_locked: 269  # +4 from PHASE-REMEDIATION-06
-  total_ac_ids_complete: 274  # 270 + 4 (PHASE-REMEDIATION-06)
-  completion_percentage: 91.6  # 274/299 (PHASE-21 + PHASE-22 + PHASE-23 added)
+  total_ac_ids: 302  # 279 + 8 (PHASE-21) + 8 (PHASE-22-MCP-PROTOCOL-COMPLIANCE) + 4 (PHASE-23-COMPLEXITY-AWARE-CONFIRMATION-GATE) + 3 (PHASE-REMEDIATION-07-MCP-TOOL-EXPOSURE)
+  total_ac_ids_locked: 258  # CORRECTED: PHASE-03,04,05,PARALLEL NOT locked (12+6+17+3 = 38 ACs not locked) - was 269
+  total_ac_ids_complete: 274  # 270 + 4 (PHASE-REMEDIATION-06) - unchanged (PHASE-03/04/05/PARALLEL marked NOT_STARTED so 0 complete)
+  completion_percentage: 74.2  # 224/302 CORRECTED: was 90.7% (lost 50 completed ACs from PHASE-03,04,05,PARALLEL)
   
   # AC-ID Breakdown
   ac_breakdown:
-    locked_phases: 125        # PHASE-01 through PHASE-06-ECOSYSTEM
+    locked_phases: 125        # PHASE-01, 02, 06-ECOSYSTEM, ENHANCEMENT-01/02/03
+    phase_03_04_05: 35        # NOT_STARTED: PHASE-03 (6) + PHASE-04 (12) + PHASE-05 (17)
+    phase_parallel: 3         # NOT_STARTED
     enhancement_phases: 7     # ENH-01 (4) + ENH-02 (2) + ENH-03 (1)
     new_phases: 67            # PHASE-07 (14) + 08 (6) + 09 (8) + 10 (5) + 11 (6) + 12 (7) + 13 (9)
     neural_observatory: 12    # PHASE-15 (12 ACs)
@@ -32,6 +34,7 @@ metadata:
     remediation_04: 6         # PHASE-REMEDIATION-04 (6 ACs) ✅ COMPLETE - ISSUE-003 + test suite 100%
     remediation_05: 6         # PHASE-REMEDIATION-05 (6 ACs) ✅ COMPLETE - Brittleness fixes
     remediation_06: 4         # PHASE-REMEDIATION-06 (4 ACs) ✅ COMPLETE - Hallucination hardening
+    remediation_07: 3         # PHASE-REMEDIATION-07 (3 ACs) 🆕 NEW - MCP Tool Exposure Gap
     domain_brain: 12          # PHASE-17 (12 ACs)
     orchestrator_devx: 4      # PHASE-18 (4 ACs) 🆕 NEW - DevX tools
     template_tool_impl: 6     # PHASE-19 (6 ACs) ✅ COMPLETE - Orchestrator Scaffolder + Tools
@@ -39,18 +42,38 @@ metadata:
     intelligent_knowledge: 8  # PHASE-21 (8 ACs) 🆕 NEW - Intelligent Knowledge Protocol
     mcp_protocol_compliance: 8  # PHASE-22 (8 ACs) 🚨 CRITICAL - MCP Protocol Compliance
     complexity_aware_confirmation: 4  # PHASE-23 (4 ACs) 🆕 NEW - Stage 2.5 Intelligence Gate
-    total: 307  # Updated: 295 + 8 (PHASE-22-MCP-PROTOCOL-COMPLIANCE) + 4 (PHASE-23)
+    total: 310  # Updated: 295 + 8 (PHASE-22-MCP-PROTOCOL-COMPLIANCE) + 4 (PHASE-23) + 3 (PHASE-REMEDIATION-07)
     
-  # FINAL STATUS - UPDATED 2026-01-21 (POST PHASE-REMEDIATION-06 COMPLETION)
+  # FINAL STATUS - UPDATED 2026-01-18 (PHASE YAML AUDIT & SYNC)
   final_status:
-    date_completed: null  # NOT COMPLETE - phases incomplete (but tests 100% passing)
-    all_phases_locked: false  # CORRECTED - Multiple phases NOT locked
-    all_acs_complete: false  # CORRECTED - 274/287 ACs complete
-    production_ready: true  # ✅ CORRECTED - Tests passing
-    test_suite_status: "100% PASS RATE ✅"  # All tests passing
-    governance_compliant: true  # Hash chain intact
-    audit_trail_verified: true  # 243 ACs verified
+    date_completed: null  # NOT COMPLETE - multiple phases NOT_STARTED
+    all_phases_locked: false  # CORRECTED: PHASE-03,04,05,PARALLEL not locked; PHASE-12,13 IN_PROGRESS
+    all_acs_complete: false  # CORRECTED: 224/302 ACs complete (74.2%) - PHASE-03,04,05,PARALLEL NOT_STARTED (0 ACs)
+    production_ready: false  # CORRECTED: Core foundation phases (03-05) NOT_STARTED blocks production
+    test_suite_status: "100% PASS RATE ✅ (for completed phases)"
+    governance_compliant: true  # Hash chain intact for completed phases
+    audit_trail_verified: true  # 243 ACs verified in completed phases
     hash_chain_integrity: "UNBROKEN"
+    
+    # PHASE STATUS AUDIT (2026-01-18)
+    phase_audit:
+      audit_date: "2026-01-18T00:00:00Z"
+      auditor: "cortex-builder (phase YAML vs cortex-master sync)"
+      finding: "Multiple phases marked COMPLETED in cortex-master but showing NOT_STARTED in phase YAML files"
+      action: "Synchronized phase_tracker with actual phase YAML status"
+      
+      locked_phases_verified: 13
+        # COMPLETED and LOCKED: PHASE-01, 02, 06, ENHANCEMENT-01/02/03, PHASE-07/08/09/10/11, PHASE-16/17/18/19/20
+      
+      not_started_phases: 5
+        # NOT_STARTED: PHASE-03, 04, 05, PARALLEL, PHASE-21, 22, 23
+      
+      in_progress_phases: 2
+        # IN_PROGRESS: PHASE-12, 13
+      
+      remediation_phases: 2
+        # PHASE-REMEDIATION-05: READY FOR IMPLEMENTATION
+        # PHASE-REMEDIATION-07: NOT_STARTED (NEW - MCP Tool Exposure Gap)
     
     # INTEGRITY AUDIT CORRECTIONS (2026-01-17)
     integrity_audit:
@@ -418,81 +441,81 @@ phase_tracker:
     title: "Safety, Reliability & Observability"
     description: "Production Reliability, Graceful Degradation, Circuit Breaker Patterns, OpenTelemetry Metrics Integration"
     ac_ids: 6
-    completed_ac_ids: 6
-    status: "COMPLETED"
-    locked: true           # VERIFIED 2026-01-16
-    completed_at: "2026-01-14T22:52:00Z"
+    completed_ac_ids: 0
+    status: "NOT_STARTED"  # CORRECTED: Phase YAML shows NOT_STARTED, not COMPLETED
+    locked: false
+    completed_at: null
     cleanup_required: false
     requires: "PHASE-02"
     audit_verification:
-      verified: true
-      entry_count: 180
-      hash_chain_valid: true
-      verified_at: "2026-01-16T03:40:00Z"
+      verified: false
+      entry_count: 0
+      hash_chain_valid: false
+      verified_at: null
       remediation_required: false
-    git_checkpoint: "a2c6956d4"
+    git_checkpoint: null
   PHASE-04:
     title: "Production Hardening & Security"
     description: "Security Hardening, Secret Redaction, Hash Verification, Cross-File Coherence Validation"
     ac_ids: 12
-    completed_ac_ids: 12
-    status: "COMPLETED"
-    locked: true           # VERIFIED 2026-01-16
-    completed_at: "2026-01-14T23:15:00Z"
+    completed_ac_ids: 0
+    status: "NOT_STARTED"  # CORRECTED: Phase YAML shows NOT_STARTED, not COMPLETED
+    locked: false
+    completed_at: null
     cleanup_required: false
     requires: "PHASE-03"
     audit_verification:
-      verified: true
-      entry_count: 360
-      hash_chain_valid: true
-      verified_at: "2026-01-16T03:45:00Z"
+      verified: false
+      entry_count: 0
+      hash_chain_valid: false
+      verified_at: null
       remediation_required: false
-    git_checkpoint: "1045e3d03"
+    git_checkpoint: null
   PHASE-05:
     title: "Brittleness Fixes & Stabilization"
     description: "Import Path Resolution, Cross-Platform Compatibility, Test Stabilization, Final Verification"
     ac_ids: 17
-    completed_ac_ids: 17
-    status: "COMPLETED"
-    locked: true           # VERIFIED 2026-01-16
-    completed_at: "2026-01-14T23:45:00Z"
+    completed_ac_ids: 0
+    status: "NOT_STARTED"  # CORRECTED: Phase YAML shows NOT_STARTED, not COMPLETED
+    locked: false
+    completed_at: null
     cleanup_required: false
     requires: "PHASE-04"
     audit_verification:
-      verified: true
-      entry_count: 510
-      hash_chain_valid: true
-      verified_at: "2026-01-16T03:50:00Z"
+      verified: false
+      entry_count: 0
+      hash_chain_valid: false
+      verified_at: null
       remediation_required: false
-    git_checkpoint: "5bb88ba5c"
+    git_checkpoint: null
   PHASE-PARALLEL:
     title: "Folder Migration & Organization"
     description: "Nested Folder Structure Organization, Import Updates, Non-Blocking Parallel Execution"
     ac_ids: 3
-    completed_ac_ids: 3
-    status: "COMPLETED"
-    locked: true           # VERIFIED 2026-01-16
-    completed_at: "2026-01-14T23:50:00Z"
+    completed_ac_ids: 0
+    status: "NOT_STARTED"  # CORRECTED: Phase YAML shows NOT_STARTED, not COMPLETED
+    locked: false
+    completed_at: null
     cleanup_required: false
     requires: "PHASE-01"
     can_start_after: "PHASE-01 completion"
     must_complete_before: "PHASE-05"
     blocking: false
-    notes: "Runs parallel with PHASE-02 through PHASE-04, but must finish before PHASE-05"
+    notes: "Runs in parallel with PHASE-02 through PHASE-04, but must finish before PHASE-05"
     audit_verification:
-      verified: true
-      entry_count: 90
-      hash_chain_valid: true
-      verified_at: "2026-01-16T03:55:00Z"
+      verified: false
+      entry_count: 0
+      hash_chain_valid: false
+      verified_at: null
       remediation_required: false
-    git_checkpoint: "181624052"
+    git_checkpoint: null
   PHASE-06-ECOSYSTEM:
     title: "Orchestrator Plugin Ecosystem & Brain Activation"
     description: "Extensible Orchestrator Framework, Brain Tier Population, Hallucination Prevention Enforcement, Vision Governance Protocol"
     ac_ids: 24
     completed_ac_ids: 24  # AR-012/013/014/015 (12) + FR-008/009 (6) + NFR-005/006 (6)
     status: "COMPLETED"
-    locked: true           # VERIFIED 2026-01-16
+    locked: true           # VERIFIED - Phase YAML matches
     started_at: "2026-01-15T00:00:00Z"
     requires: "PHASE-PARALLEL"
     cleanup_required: false
@@ -2896,6 +2919,61 @@ phase_tracker:
       - Sandbox isolation documentation validated ✅
       
       PRODUCTION READINESS: ✅ VERIFIED
+
+  PHASE-REMEDIATION-07:
+    title: "MCP Tool Exposure Gap Remediation"
+    description: |
+      Remediation of MCP Tool Exposure Gaps Identified in Issue MCP-EXPOSURE-GAP-001 (2026-01-18)
+      
+      GAPS FIXED:
+      - AC-MCP-EXPOSURE-001: Add @mcp_tool decorator to get_relevant_business_knowledge_for_operation()
+      - AC-MCP-EXPOSURE-002: Expose domain orchestrator operations as MCP tools (15+ methods)
+      - AC-MCP-EXPOSURE-003: Add /list-tools MCP endpoint for tool discovery
+      
+      IMPACT:
+      - MCP tool count: 16 → 32+ tools
+      - Programmatic tool discovery enabled
+      - Domain orchestrators fully exposed via MCP protocol
+      - LLM clients can dynamically discover all CORTEX capabilities
+    
+    ac_ids: 3
+    completed_ac_ids: 0  # Not started yet
+    status: "NOT_STARTED"
+    locked: false
+    requires: "PHASE-REMEDIATION-06"
+    estimated_hours: 8
+    estimated_days: 2
+    priority: "P1"
+    blocking: false
+    issue_reference: "MCP-TOOLS-EXPOSURE-GAP-20260118"
+    evidence_location: "_workspaces/roadmap/issues/MCP-TOOLS-EXPOSURE-GAP-20260118.yaml"
+    
+    phase_yaml: "_workspaces/roadmap/phases/phase-remediation-07-mcp-tool-exposure.yaml"
+    
+    audit_verification:
+      verified: false
+      entry_count: 0
+      hash_chain_valid: false
+      verified_at: null
+      remediation_required: false
+    
+    git_checkpoint: null
+    
+    acceptance_criteria:
+      - ac_id: "AC-MCP-EXPOSURE-001"
+        description: "Add @mcp_tool decorator to get_relevant_business_knowledge_for_operation"
+        status: "NOT_STARTED"
+        tests: "4+ unit tests"
+      
+      - ac_id: "AC-MCP-EXPOSURE-002"
+        description: "Expose domain orchestrator operations as MCP tools"
+        status: "NOT_STARTED"
+        tests: "10+ unit tests"
+      
+      - ac_id: "AC-MCP-EXPOSURE-003"
+        description: "Add /list-tools MCP endpoint for tool discovery"
+        status: "NOT_STARTED"
+        tests: "5+ unit tests, 1+ integration test"
 
   PHASE-17-DOMAIN-BRAIN:
     title: "Domain Brain: Strategic Knowledge Centralization with Edge Case Remediation"
