@@ -3377,8 +3377,8 @@ phase_tracker:
 
         '
       estimated_hours: 2
-      test_count: 12
-      status: NOT_STARTED
+      test_count: 25
+      status: COMPLETED
     - ac_id: AC-IKP-003-01
       title: ChangeDetectionService Implementation
       description: 'Monitor ingestion events for schema drift, semantic shift, coverage
@@ -6109,10 +6109,10 @@ phases:
         title: MasterOrchestrator Knowledge Integration
         description: Integrate IntelligentKnowledgeRouter into MasterOrchestrator;
           Route queries intelligently; Verify behavior
-        status: NOT_STARTED
+        status: COMPLETED
         testing:
-          unit_tests_expected: 12
-          integration_tests_expected: 4
+          unit_tests_expected: 25
+          integration_tests_expected: 10
         success_criteria:
         - Router integrated
         - Queries route correctly
