@@ -529,3 +529,362 @@ class GracefulDegradationFramework:
                 }
                 for name, state in self._component_states.items()
             }
+
+
+# ===== AC-NFR-002-02: Automatic Retry with Exponential Backoff =====
+
+class RetryPolicy:
+    """
+    Configuration for retry behavior with exponential backoff.
+    
+    Defines how many times to retry, backoff parameters, and which
+    exceptions should trigger retries.
+    
+    Attributes:
+        max_retries: Maximum number of retry attempts
+        initial_backoff_ms: Initial backoff duration in milliseconds
+        max_backoff_ms: Maximum backoff duration in milliseconds
+        backoff_multiplier: Multiplier for exponential backoff
+        use_jitter: Whether to add randomness to backoff
+        non_retryable_exceptions: Exceptions to not retry on
+    """
+    
+    def __init__(
+        self,
+        max_retries: int = 3,
+        initial_backoff_ms: int = 100,
+        max_backoff_ms: int = 32000,
+        backoff_multiplier: float = 2.0,
+        use_jitter: bool = False,
+    ):
+        """
+        Initialize retry policy.
+        
+        Args:
+            max_retries: Maximum number of retries (3 by default)
+            initial_backoff_ms: Initial backoff in ms (100 by default)
+            max_backoff_ms: Maximum backoff in ms (32s by default)
+            backoff_multiplier: Multiplier for exponential backoff (2.0 by default)
+            use_jitter: Add randomness to backoff (False by default)
+        """
+        self.max_retries = max_retries
+        self.initial_backoff_ms = initial_backoff_ms
+        self.max_backoff_ms = max_backoff_ms
+        self.backoff_multiplier = backoff_multiplier
+        self.use_jitter = use_jitter
+        self.non_retryable_exceptions: List[type] = []
+    
+    def calculate_backoff(self, attempt: int) -> float:
+        """
+        Calculate backoff time for given attempt number.
+        
+        Args:
+            attempt: Attempt number (1-based)
+        
+        Returns:
+            Backoff time in milliseconds
+        """
+        import random
+        
+        backoff = self.initial_backoff_ms * (self.backoff_multiplier ** (attempt - 1))
+        backoff = min(backoff, self.max_backoff_ms)
+        
+        if self.use_jitter:
+            jitter = random.uniform(0, backoff * 0.1)
+            backoff += jitter
+        
+        return backoff
+
+
+class RetryPolicyBuilder:
+    """
+    Builder for creating RetryPolicy instances with fluent API.
+    
+    Allows chainable configuration of retry behavior.
+    """
+    
+    def __init__(self):
+        """Initialize builder with default values."""
+        self._max_retries = 3
+        self._initial_backoff = 100
+        self._max_backoff = 32000
+        self._multiplier = 2.0
+        self._use_jitter = False
+    
+    def with_max_retries(self, max_retries: int) -> RetryPolicyBuilder:
+        """
+        Set maximum number of retries.
+        
+        Args:
+            max_retries: Maximum retry count
+        
+        Returns:
+            Self for chaining
+        """
+        self._max_retries = max_retries
+        return self
+    
+    def with_initial_backoff(self, backoff_ms: int) -> RetryPolicyBuilder:
+        """
+        Set initial backoff duration.
+        
+        Args:
+            backoff_ms: Initial backoff in milliseconds
+        
+        Returns:
+            Self for chaining
+        """
+        self._initial_backoff = backoff_ms
+        return self
+    
+    def with_max_backoff(self, backoff_ms: int) -> RetryPolicyBuilder:
+        """
+        Set maximum backoff duration.
+        
+        Args:
+            backoff_ms: Maximum backoff in milliseconds
+        
+        Returns:
+            Self for chaining
+        """
+        self._max_backoff = backoff_ms
+        return self
+    
+    def with_multiplier(self, multiplier: float) -> RetryPolicyBuilder:
+        """
+        Set backoff multiplier.
+        
+        Args:
+            multiplier: Exponential backoff multiplier
+        
+        Returns:
+            Self for chaining
+        """
+        self._multiplier = multiplier
+        return self
+    
+    def with_jitter(self, use_jitter: bool) -> RetryPolicyBuilder:
+        """
+        Enable/disable jitter in backoff.
+        
+        Args:
+            use_jitter: Whether to add jitter
+        
+        Returns:
+            Self for chaining
+        """
+        self._use_jitter = use_jitter
+        return self
+    
+    def build(self) -> RetryPolicy:
+        """
+        Build the RetryPolicy instance.
+        
+        Returns:
+            Configured RetryPolicy
+        """
+        policy = RetryPolicy(
+            max_retries=self._max_retries,
+            initial_backoff_ms=self._initial_backoff,
+            max_backoff_ms=self._max_backoff,
+            backoff_multiplier=self._multiplier,
+            use_jitter=self._use_jitter,
+        )
+        return policy
+
+
+class RetryResult:
+    """
+    Result of a retry operation.
+    
+    Captures success status, number of attempts, timing, and any exception.
+    
+    Attributes:
+        success: Whether operation succeeded
+        attempt_count: Number of attempts made
+        total_time_ms: Total time spent in retries
+        exception: Exception if failed (None if succeeded)
+        data: Returned data if successful (None if failed)
+    """
+    
+    def __init__(
+        self,
+        success: bool,
+        attempt_count: int,
+        total_time_ms: float,
+        exception: Optional[Exception] = None,
+        data: Any = None,
+    ):
+        """
+        Initialize retry result.
+        
+        Args:
+            success: Whether retry succeeded
+            attempt_count: Total attempts made
+            total_time_ms: Total time in milliseconds
+            exception: Exception if failed
+            data: Result data if successful
+        """
+        self.success = success
+        self.attempt_count = attempt_count
+        self.total_time_ms = total_time_ms
+        self.exception = exception
+        self.data = data
+    
+    def is_success(self) -> bool:
+        """
+        Check if operation succeeded.
+        
+        Returns:
+            True if successful, False otherwise
+        """
+        return self.success
+    
+    def get_data(self) -> Any:
+        """
+        Get result data.
+        
+        Returns:
+            Data from successful operation
+        """
+        return self.data
+    
+    def get_exception(self) -> Optional[Exception]:
+        """
+        Get exception if failed.
+        
+        Returns:
+            Exception or None
+        """
+        return self.exception
+
+
+class ExponentialBackoffRetry:
+    """
+    Retry handler with exponential backoff strategy.
+    
+    Executes operations with automatic retries on failure, using
+    exponential backoff between attempts. Thread-safe with RLock.
+    
+    Provides:
+    - Configurable retry policies
+    - Exponential backoff with optional jitter
+    - Non-retryable exception handling
+    - Comprehensive retry tracking
+    """
+    
+    def __init__(
+        self,
+        max_retries: int = 3,
+        initial_backoff_ms: int = 100,
+        max_backoff_ms: int = 32000,
+    ):
+        """
+        Initialize retry handler.
+        
+        Args:
+            max_retries: Default maximum retries (3)
+            initial_backoff_ms: Default initial backoff (100ms)
+            max_backoff_ms: Default maximum backoff (32s)
+        """
+        self.max_retries = max_retries
+        self.initial_backoff_ms = initial_backoff_ms
+        self.max_backoff_ms = max_backoff_ms
+        self._lock = RLock()
+        self._retry_count: Dict[str, int] = {}
+        
+        logger.debug(
+            f"ExponentialBackoffRetry initialized: "
+            f"max_retries={max_retries}, initial_backoff_ms={initial_backoff_ms}"
+        )
+    
+    def execute_with_retry(
+        self,
+        operation: Callable[..., Any],
+        policy: Optional[RetryPolicy] = None,
+        args: Tuple[Any, ...] = (),
+        kwargs: Optional[Dict[str, Any]] = None,
+        raise_on_retry_failure: bool = True,
+    ) -> Any:
+        """
+        Execute operation with retry and exponential backoff.
+        
+        Args:
+            operation: Callable to execute
+            policy: RetryPolicy to apply (None = use defaults)
+            args: Positional arguments for operation
+            kwargs: Keyword arguments for operation
+            raise_on_retry_failure: Whether to raise on all failures
+        
+        Returns:
+            Result from operation on success
+        
+        Raises:
+            Exception: If operation fails after all retries (when raise_on_retry_failure=True)
+        """
+        import time
+        
+        if policy is None:
+            policy = RetryPolicy(
+                max_retries=self.max_retries,
+                initial_backoff_ms=self.initial_backoff_ms,
+                max_backoff_ms=self.max_backoff_ms,
+            )
+        
+        if kwargs is None:
+            kwargs = {}
+        
+        last_exception: Optional[Exception] = None
+        start_time = time.time()
+        
+        for attempt in range(policy.max_retries + 1):
+            try:
+                result = operation(*args, **kwargs)
+                
+                elapsed_ms = (time.time() - start_time) * 1000
+                logger.info(
+                    f"Operation succeeded on attempt {attempt + 1}, "
+                    f"elapsed: {elapsed_ms:.2f}ms"
+                )
+                
+                return result
+            
+            except Exception as exc:
+                last_exception = exc
+                
+                # Check if exception should not be retried
+                if any(isinstance(exc, exc_type) for exc_type in policy.non_retryable_exceptions):
+                    logger.warning(
+                        f"Non-retryable exception on attempt {attempt + 1}: {type(exc).__name__}: {exc}"
+                    )
+                    raise
+                
+                # If this was the last attempt, stop
+                if attempt >= policy.max_retries:
+                    elapsed_ms = (time.time() - start_time) * 1000
+                    logger.error(
+                        f"Operation failed after {attempt + 1} attempts, "
+                        f"total time: {elapsed_ms:.2f}ms"
+                    )
+                    
+                    if raise_on_retry_failure:
+                        raise
+                    else:
+                        return None
+                
+                # Calculate backoff before next attempt
+                backoff_ms = policy.calculate_backoff(attempt + 1)
+                logger.warning(
+                    f"Attempt {attempt + 1} failed: {exc}. "
+                    f"Retrying in {backoff_ms:.2f}ms..."
+                )
+                
+                # Wait before retry
+                time.sleep(backoff_ms / 1000.0)
+        
+        # Should not reach here
+        if raise_on_retry_failure and last_exception:
+            raise last_exception
+        
+        return None
+

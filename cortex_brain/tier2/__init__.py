@@ -23,6 +23,10 @@ from .resilience import (
     ComponentFailure,
     DegradedResponse,
     StrategyExecutionException,
+    ExponentialBackoffRetry,
+    RetryPolicy,
+    RetryPolicyBuilder,
+    RetryResult,
 )
 
 __all__ = [
@@ -32,4 +36,8 @@ __all__ = [
     "ComponentFailure",
     "DegradedResponse",
     "StrategyExecutionException",
+    "ExponentialBackoffRetry",
+    "RetryPolicy",
+    "RetryPolicyBuilder",
+    "RetryResult",
 ]
