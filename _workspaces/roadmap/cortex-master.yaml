@@ -1286,29 +1286,78 @@ phase_tracker:
   # PARALLEL TRACK - Can be developed on separate machine
   # =========================================================================
   
-  PHASE-15-DASHBOARD-ENHANCEMENT:
-    title: "CORTEX Neural Observatory Dashboard Enhancement"
+  PHASE-15-DASHBOARD-UNIVERSAL:
+    title: "Universal CORTEX Dashboard - Multi-Repo Visualization"
     description: |
-      Production-Grade Dashboard, Professional Branding, Enhanced User Experience, 
-      Administrative Capabilities, Real-Time Metrics Visualization.
+      Production-grade dashboard for visualizing CORTEX operations across ANY repo 
+      utilizing the system, with single-click setup and universal tool access.
       
-      ENHANCEMENT FEATURES:
-      - CORTEX Logo (200x200px) in navigation header with dark mode support
-      - Brand-consistent glassmorphism design system
-      - Real-time notification system with alerts
-      - Export capabilities (PDF, CSV, JSON, custom reports)
-      - Performance analytics dashboard
-      - Governance rule management interface
-      - Multi-tier responsive design (mobile-first)
-      - WCAG 2.1 AA accessibility compliance
-      - Dark mode toggle with persistence
+      REDESIGNED FOR MULTI-REPO ARCHITECTURE:
+      - Universal dashboard operates from CORTEX/ folder
+      - Accessible from any company repo where CORTEX is cloned
+      - Zero setup required - works immediately post-init
+      - Repo-agnostic metrics (files, tests, commits, CORTEX ops)
+      - Real-time MCP tool status and usage statistics
       
-      PARALLEL TRACK: Can be developed independently on separate machine.
-      FULLY INDEPENDENT SPA: Reads EXISTING data sources, pure visualization layer.
+      ARCHITECTURE CHANGES (v2.0):
+      - Single HTML file + embedded JavaScript (no build step)
+      - Operates on ANY repo, not just CORTEX internal metrics
+      - Dashboard reads parent repo structure auto-magically
+      - Multi-repo context switching support
+      - Responsive design: mobile/tablet/desktop all supported
+      - Dark/light theme toggle with persistence
+      
+      SECTION A - Foundation (4 ACs):
+      - AC-DASH-001-01: Universal dashboard shell (HTML + embedded JS)
+      - AC-DASH-001-02: Repo detection & configuration auto-discovery
+      - AC-DASH-001-03: Real-time metrics collection interface
+      - AC-DASH-001-04: Multi-repo context switching
+      
+      SECTION B - Visualization Layers (4 ACs):
+      - AC-DASH-002-01: Repository health overview (files, tests, commits)
+      - AC-DASH-002-02: CORTEX operation dashboard (last 100 AI operations)
+      - AC-DASH-002-03: MCP tool status & usage statistics
+      - AC-DASH-002-04: Governance compliance heatmap (SKULL rules)
+      
+      SECTION C - Real-Time Features (4 ACs):
+      - AC-DASH-003-01: WebSocket connection to CORTEX backend
+      - AC-DASH-003-02: Live audit trail streaming
+      - AC-DASH-003-03: Real-time test execution tracking
+      - AC-DASH-003-04: Alert & notification system
+      
+      SECTION D - User Experience (4 ACs):
+      - AC-DASH-004-01: Dark/light theme toggle with persistence
+      - AC-DASH-004-02: Export reports (PDF, JSON, CSV)
+      - AC-DASH-004-03: Custom dashboard layouts
+      - AC-DASH-004-04: Search & filter across all metrics
+      
+      BASELINE (12 ACs) PRESERVED: All original functionality remains stable and locked.
+      ENHANCEMENT (16 new ACs): Universal architecture added when system ready.
+      
+      File Location: CORTEX/dashboard/index.html (universal, single file)
     ac_ids: 16
-    completed_ac_ids: 16
-    status: "COMPLETED"
-    locked: true
+    completed_ac_ids: 0
+    status: "ENHANCEMENT_READY"
+    locked: false
+    
+    # NEW PROPERTY (2026-01-18): Enhancement Phase Gating
+    enhancement_phase: true
+    implement_when_ready: true
+    implementation_prerequisite: |
+      cortex-builder.prompt.md MUST implement this phase ONLY when:
+      - ALL OTHER phases in phase_tracker have: locked: true
+      - This phase is the ONLY phase with: locked: false AND implement_when_ready: true
+      - ALL mandatory phases (PHASE-01 through PHASE-22) are COMPLETED and LOCKED
+      - System audit trail is fully verified and unbroken
+      - Production baseline is established and stable
+      
+      Gating Logic for cortex-builder:
+        PHASE_READY = (ALL other phases have locked: true) AND
+                      (NO other phases have implement_when_ready: true) AND
+                      (PHASE-15 is ONLY enhancement phase ready)
+      IF PHASE_READY: implement PHASE-15 enhancement
+      ELSE: skip to next mandatory locked: true phase
+    
     started_at: "2026-01-16T08:00:00Z"
     completed_at: "2026-01-16T08:15:00Z"
     requires: "PHASE-06-ECOSYSTEM"
@@ -1327,10 +1376,29 @@ phase_tracker:
       verified_at: "2026-01-16T08:15:00Z"
       remediation_required: false
     git_checkpoint: "7450616ad"
-    notes: |
-      ✅ PHASE-15-NEURAL-OBSERVATORY: 100% COMPLETE (12/12 ACs)
+    enhancement_rationale: |
+      PHASE-07 through PHASE-22 introduced 80+ new AC-IDs with capabilities not visible in
+      original dashboard. This enhancement integrates:
+      - MCP Protocol Compliance monitoring (PHASE-22: 8 ACs)
+      - Knowledge Graph visualization (PHASE-21: 8 ACs)
+      - Domain Brain strategic views (PHASE-17: 12 ACs)
+      - Remediation tracking (PHASE-REMEDIATION-05/06: 12 ACs)
+      - Governance compliance heatmaps (updated CORE rules: 28 rules)
+      - Real-time performance analytics (tier execution visibility)
       
-      All Acceptance Criteria Completed:
+      Enhancement Status: UNLOCKED for implementation when:
+      ✓ All mandatory phases completed and locked
+      ✓ System audit trail fully verified
+      ✓ No other pending work in roadmap
+      ✓ Production baseline established
+      
+      The 12 original ACs remain stable and locked. Enhancement adds 8 new DO-XXX-04+ ACs.
+    
+    notes: |
+      ✅ PHASE-15-NEURAL-OBSERVATORY: BASELINE COMPLETE (12/12 ACs LOCKED)
+      🔓 ENHANCEMENT PHASE UNLOCKED: Ready for implementation when system ready
+      
+      BASELINE - All Acceptance Criteria Completed:
       ✓ NO-001-01: Brain Tier Visualization - 4-tier architecture rendered
       ✓ NO-001-02: Neural Pulse System - Health indicators with status animation
       ✓ NO-001-03: SSOT Metrics Dashboard - Phase and AC tracking
@@ -4048,6 +4116,361 @@ phase_tracker:
       remediation_required: false
     
     git_checkpoint: null
+
+  PHASE-22-MCP-PROTOCOL-COMPLIANCE:
+    title: "Model Context Protocol (MCP) Compliance & Integration"
+    description: |
+      PHASE-22: Ensures full MCP protocol compliance across all orchestrators and
+      verifies proper tool exposure, resource management, and client integration.
+      
+      PROBLEM STATEMENT:
+      - Orchestrators expose MCP tools but compliance verification missing
+      - Tool resource lifecycle management incomplete
+      - Client-side integration patterns not documented
+      - MCP spec compliance not formally validated
+      - Sampling toolset for MCP servers not maintained
+      
+      SOLUTION:
+      1. MCP Compliance Framework - Structured validation against MCP spec
+      2. Tool Lifecycle Manager - Resource acquisition, usage, cleanup
+      3. MCP Client Integration - Reference implementation for clients
+      4. Sampling Tool Maintenance - Keep example tools synchronized
+      5. Documentation & Governance - Full compliance documentation
+      
+      GOVERNANCE:
+      - CORE-008: TDD pattern throughout
+      - CORE-011: Type hints mandatory (strict MCP typing)
+      - CORE-012: Google-style docstrings
+      - CORE-027: Audit trail per tool execution
+      - CORE-028: Kebab-case naming
+    
+    ac_ids: 9  # MCP-001 through MCP-009
+    completed_ac_ids: 0
+    status: "NOT_STARTED"
+    locked: false
+    
+    requires: "PHASE-21-INTELLIGENT-KNOWLEDGE-PROTOCOL"
+    priority: "P1"
+    blocking: false
+    
+    estimated_hours: 48
+    estimated_days: 6
+    progress_percentage: 0.0
+    
+    # ACCEPTANCE CRITERIA
+    acceptance_criteria:
+      - ac_id: "AC-MCP-001-01"
+        title: "MCP Compliance Framework Implementation"
+        description: "Structured validation layer for MCP spec compliance"
+        estimated_hours: 6
+        test_count: 15
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-MCP-001-02"
+        title: "MCP Protocol Version Support"
+        description: "Support multiple MCP versions with compatibility matrix"
+        estimated_hours: 3
+        test_count: 10
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-MCP-002-01"
+        title: "Tool Lifecycle Manager Implementation"
+        description: "Resource acquisition, usage tracking, cleanup orchestration"
+        estimated_hours: 8
+        test_count: 20
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-MCP-002-02"
+        title: "Tool Resource Limits & Quota Management"
+        description: "Per-tool and global resource quotas with enforcement"
+        estimated_hours: 6
+        test_count: 15
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-MCP-003-01"
+        title: "MCP Client Integration Reference"
+        description: "Complete reference implementation for MCP clients"
+        estimated_hours: 8
+        test_count: 18
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-MCP-003-02"
+        title: "Client Error Handling & Resilience"
+        description: "Comprehensive error handling and fallback strategies"
+        estimated_hours: 5
+        test_count: 12
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-MCP-004-01"
+        title: "Sampling Tool Maintenance Framework"
+        description: "Keep example tools synchronized with protocol changes"
+        estimated_hours: 4
+        test_count: 10
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-MCP-005-01"
+        title: "MCP Compliance Documentation"
+        description: "Complete documentation of MCP compliance status"
+        estimated_hours: 4
+        test_count: 8
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-MCP-005-02"
+        title: "MCP Integration Testing Suite"
+        description: "Full E2E testing of MCP protocol compliance"
+        estimated_hours: 4
+        test_count: 12
+        status: "NOT_STARTED"
+    
+    # FILES TO CREATE
+    files_to_create:
+      - "src/core/mcp/compliance_framework.py"
+      - "src/core/mcp/tool_lifecycle_manager.py"
+      - "src/core/mcp/resource_limits.py"
+      - "src/core/mcp/client_integration.py"
+      - "src/core/mcp/error_handling.py"
+      - "src/core/mcp/sampling_tool_manager.py"
+      - "tests/unit/core/mcp/test_compliance_framework.py"
+      - "tests/unit/core/mcp/test_tool_lifecycle.py"
+      - "tests/integration/test_mcp_protocol_compliance.py"
+      - ".github/docs/mcp-compliance-guide.md"
+      - ".github/docs/mcp-client-integration.md"
+    
+    # GOVERNANCE
+    governance:
+      core_rules:
+        - "CORE-008: TDD (tests first, RED → GREEN)"
+        - "CORE-011: Type hints mandatory (strict MCP typing)"
+        - "CORE-012: Docstrings mandatory (Google style)"
+        - "CORE-027: Audit trail per tool execution"
+        - "CORE-028: Kebab-case, ≤25 chars filenames"
+    
+    # AUDIT VERIFICATION
+    audit_verification:
+      verified: false
+      entry_count: 0
+      hash_chain_valid: null
+      verified_at: null
+      remediation_required: false
+    
+    git_checkpoint: null
+
+  PHASE-DEPLOYMENT:
+    title: "CORTEX Universal Deployment & Multi-Repo Distribution"
+    description: |
+      PHASE-DEPLOYMENT REDESIGNED (2026-01-18):
+      Single-command installation, multi-repo deployment, upgrade capability, and 
+      production distribution of CORTEX as universal development tool accessible 
+      across all company repos.
+      
+      NEW ARCHITECTURE:
+      - CORTEX clones into any company repo as CORTEX/ folder
+      - CORTEX operates entirely from CORTEX/ but reads/modifies parent repo
+      - MCP tools exposed universally via CORTEX.prompt.md from ANY repo context
+      - Single install command: git clone + cortex init
+      - Single upgrade command: cortex upgrade (pulls from main branch)
+      - No setup required - production-ready immediately post-clone
+      
+      SECTION A - Installation & Bootstrap (3 ACs):
+      - AC-DEPLOY-001-01: `cortex init` command - single-step setup
+      - AC-DEPLOY-001-02: Auto-detection of company repo structure
+      - AC-DEPLOY-001-03: MCP tool registration in user's MCP client
+      
+      SECTION B - Multi-Repo Architecture (3 ACs):
+      - AC-DEPLOY-002-01: CORTEX operates from isolated folder, reads/modifies parent repo
+      - AC-DEPLOY-002-02: Context switching between repos
+      - AC-DEPLOY-002-03: Shared state management (audit trail, cache)
+      
+      SECTION C - Upgrade & Distribution (2 ACs):
+      - AC-DEPLOY-003-01: `cortex upgrade` - pull latest from main branch
+      - AC-DEPLOY-003-02: Backward-compatible versioning & migration
+      
+      SECTION D - Production Readiness (2 ACs):
+      - AC-DEPLOY-004-01: Security hardening (no secrets in CORTEX folder)
+      - AC-DEPLOY-004-02: Performance optimization & resource limits
+      
+      DEPLOYMENT MODEL:
+      Parent Repo Structure (UNCHANGED except CORTEX/ folder):
+        company-repo/
+        ├── .git/
+        ├── src/
+        ├── tests/
+        ├── [user's existing files]
+        └── CORTEX/  (NEW - separate .git, independent version history)
+            ├── cortex (CLI entry point)
+            ├── dashboard/
+            ├── cortex-brain/ (governance engine)
+            ├── .env.example
+            └── [CORTEX files]
+      
+      USAGE PATTERN:
+        $ cd company-repo
+        $ git clone https://github.com/cortex-ai/cortex.git CORTEX
+        $ cd CORTEX
+        $ ./cortex init
+        $ cortex dashboard                # Opens dashboard showing parent repo metrics
+        $ cortex upgrade                  # Pulls latest features from main branch
+    
+    ac_ids: 10
+    completed_ac_ids: 0
+    status: "NOT_STARTED"
+    locked: false
+    
+    # NEW PROPERTY (2026-01-18): Enhancement Phase Gating
+    enhancement_phase: true
+    implement_when_ready: true
+    implementation_prerequisite: |
+      cortex-builder.prompt.md MUST implement this deployment phase ONLY when:
+      - ALL OTHER phases in phase_tracker have: locked: true
+      - This phase is the ONLY phase with: locked: false AND implement_when_ready: true
+      - PHASE-15-DASHBOARD-UNIVERSAL is completed and locked
+      - ALL 22 active phases are COMPLETED and LOCKED
+      - System audit trail fully verified
+      
+      Gating Logic:
+        PHASE_READY = (ALL other phases have locked: true) AND
+                      (PHASE-15 is COMPLETED) AND
+                      (NO other phases have implement_when_ready: true) AND
+                      (PHASE-DEPLOYMENT is ONLY deployment phase ready)
+      IF PHASE_READY: implement PHASE-DEPLOYMENT
+      ELSE: skip to next mandatory locked: true phase
+    
+    requires: "PHASE-22-MCP-PROTOCOL-COMPLIANCE"
+    required_for: "PRODUCTION_LAUNCH"
+    blocking: false
+    priority: "P0"
+    
+    estimated_hours: 60
+    estimated_days: 7
+    progress_percentage: 0.0
+    
+    # ACCEPTANCE CRITERIA
+    acceptance_criteria:
+      - ac_id: "AC-DEPLOY-001-01"
+        title: "Deployment Configuration Management"
+        description: "Environment-specific configs (dev, staging, prod) with secrets management"
+        estimated_hours: 8
+        test_count: 12
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-DEPLOY-001-02"
+        title: "Blue-Green Deployment Infrastructure"
+        description: "Dual environment setup for zero-downtime deployments"
+        estimated_hours: 12
+        test_count: 15
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-DEPLOY-002-01"
+        title: "Deployment Orchestration & Automation"
+        description: "CI/CD pipeline for automated production deployment"
+        estimated_hours: 10
+        test_count: 18
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-DEPLOY-002-02"
+        title: "Rollback Procedures & Contingency Plans"
+        description: "Emergency rollback with point-in-time recovery options"
+        estimated_hours: 8
+        test_count: 14
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-DEPLOY-003-01"
+        title: "Production Monitoring & Alerting Setup"
+        description: "Real-time metrics, logging, and alert configuration"
+        estimated_hours: 12
+        test_count: 16
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-DEPLOY-003-02"
+        title: "Health Check & Readiness Validation"
+        description: "Automated health checks and production readiness gates"
+        estimated_hours: 6
+        test_count: 10
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-DEPLOY-004-01"
+        title: "Release Notes & User Documentation"
+        description: "Complete release documentation and user guides"
+        estimated_hours: 8
+        test_count: 8
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-DEPLOY-004-02"
+        title: "User Training & Communication Plan"
+        description: "Stakeholder communication and training materials"
+        estimated_hours: 4
+        test_count: 6
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-DEPLOY-005-01"
+        title: "Compliance Verification & Audit Trail"
+        description: "Final governance compliance check before production"
+        estimated_hours: 6
+        test_count: 10
+        status: "NOT_STARTED"
+      
+      - ac_id: "AC-DEPLOY-005-02"
+        title: "Post-Deployment Validation & Sign-Off"
+        description: "Final production acceptance testing and stakeholder sign-off"
+        estimated_hours: 6
+        test_count: 8
+        status: "NOT_STARTED"
+    
+    # FILES TO CREATE
+    files_to_create:
+      - "src/deployment/config_manager.py"
+      - "src/deployment/environment_provisioner.py"
+      - "src/deployment/health_checker.py"
+      - "src/deployment/monitoring_setup.py"
+      - "scripts/deploy-to-production.sh"
+      - "scripts/rollback-deployment.sh"
+      - "scripts/health-check.sh"
+      - ".github/deployment/production-checklist.md"
+      - ".github/deployment/runbook.md"
+      - "docs/deployment-guide.md"
+      - "tests/deployment/test_deployment_procedures.py"
+    
+    # GOVERNANCE
+    governance:
+      core_rules:
+        - "CORE-008: TDD (tests first, RED → GREEN)"
+        - "CORE-011: Type hints mandatory"
+        - "CORE-012: Docstrings mandatory (Google style)"
+        - "CORE-027: Audit trail per deployment step"
+        - "CORE-028: Kebab-case, ≤25 chars filenames"
+    
+    # AUDIT VERIFICATION
+    audit_verification:
+      verified: false
+      entry_count: 0
+      hash_chain_valid: null
+      verified_at: null
+      remediation_required: false
+    
+    git_checkpoint: null
+    
+    notes: |
+      PHASE-DEPLOYMENT: Production Deployment Phase (Enhancement Phase Gated)
+      
+      USER REQUEST (2026-01-18):
+      "Add a deployment phase with the same property" (enhancement_only_when_ready)
+      
+      GATING CRITERIA:
+      ✓ Same property as PHASE-15: enhancement_only_when_ready: true
+      ✓ Prevents deployment until all prerequisites complete
+      ✓ Ensures production readiness before rollout
+      ✓ 100% governance compliance enforced
+      
+      DEPLOYMENT WORKFLOW:
+      1. Pre-deployment: Environment preparation (AC-DEPLOY-001-01/02)
+      2. Deployment: Orchestration & automation (AC-DEPLOY-002-01/02)
+      3. Monitoring: Production setup (AC-DEPLOY-003-01/02)
+      4. Communication: Release & training (AC-DEPLOY-004-01/02)
+      5. Validation: Compliance & sign-off (AC-DEPLOY-005-01/02)
+      
+      TOTAL EFFORT: 60 hours over 7 days
+      
+      This phase completes the CORTEX production deployment capability.
     phase_yaml: "_workspaces/roadmap/phases/phase-21-intelligent-knowledge-protocol.yaml"
     
     # ROI ANALYSIS
