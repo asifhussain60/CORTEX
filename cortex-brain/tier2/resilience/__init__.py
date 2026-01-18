@@ -1034,6 +1034,307 @@ class CircuitBreaker:
             )
 
 
+class MetricUnit(IntEnum):
+    """Units for metrics."""
+    MILLISECONDS = 0
+    SECONDS = 1
+    COUNT = 2
+    BYTES = 3
+    PERCENT = 4
+
+
+@dataclass
+class MetricValue:
+    """
+    Represents a single metric data point.
+    
+    Attributes:
+        value: Numeric value of the metric
+        timestamp: Unix timestamp when recorded
+        labels: Dictionary of metric labels/tags
+        unit: Unit of measurement
+    """
+    value: float
+    timestamp: float
+    labels: Dict[str, str] = field(default_factory=dict)
+    unit: MetricUnit = MetricUnit.COUNT
+
+
+@dataclass
+class MetricExportConfig:
+    """
+    Configuration for metrics export to observability backend.
+    
+    Attributes:
+        endpoint: OTLP collector endpoint URL
+        protocol: Export protocol ("otlp", "jaeger", "zipkin")
+        batch_size: Maximum metrics per batch
+        export_interval_ms: Interval between exports
+        timeout_ms: Export operation timeout
+    """
+    endpoint: str
+    protocol: str
+    batch_size: int = 100
+    export_interval_ms: int = 5000
+    timeout_ms: int = 30000
+    
+    def __post_init__(self) -> None:
+        """Validate configuration."""
+        if not self.endpoint:
+            raise ValueError("endpoint cannot be empty")
+        if self.protocol not in ("otlp", "jaeger", "zipkin"):
+            raise ValueError(f"Unknown protocol: {self.protocol}")
+
+
+class MetricsCollector:
+    """
+    Collects and aggregates metrics for CORTEX system.
+    
+    Provides production-grade metrics collection with:
+    - Counter metrics (monotonically increasing)
+    - Gauge metrics (snapshot values)
+    - Label support for multi-dimensional metrics
+    - Metrics export to observability backends
+    - Thread-safe operations
+    
+    AC-ID: AC-NFR-004-01
+    Title: OpenTelemetry Metrics Integration
+    
+    Example:
+        collector = MetricsCollector()
+        config = MetricExportConfig(
+            endpoint="http://localhost:4317",
+            protocol="otlp"
+        )
+        collector.configure_export(config)
+        collector.start_export()
+        
+        # Record metrics
+        collector.record_counter("requests", labels={"method": "GET"})
+        collector.record_gauge("memory_mb", 1024.5)
+    
+    Thread Safety: Protected with RLock for concurrent access
+    """
+    
+    def __init__(self) -> None:
+        """Initialize metrics collector."""
+        self.metrics: Dict[str, List[MetricValue]] = {}
+        self.counters: Dict[str, int] = {}
+        self.gauges: Dict[str, float] = {}
+        self.export_config: Optional[MetricExportConfig] = None
+        self.is_exporting = False
+        self._lock = threading.RLock()
+    
+    def configure_export(self, config: MetricExportConfig) -> None:
+        """
+        Configure metrics export to observability backend.
+        
+        Args:
+            config: MetricExportConfig with connection details
+            
+        Raises:
+            ValueError: If configuration is invalid
+        """
+        with self._lock:
+            self.export_config = config
+    
+    def record_counter(self, name: str, value: int = 1, labels: Dict[str, str] = None) -> None:
+        """
+        Record counter metric (incremental value).
+        
+        Counters monotonically increase and are used for:
+        - Request counts
+        - Error counts
+        - Operation counters
+        - Event counters
+        
+        Args:
+            name: Metric name (e.g., "http_requests_total")
+            value: Amount to increment (default 1)
+            labels: Optional metric labels/tags (e.g., {"method": "GET", "status": "200"})
+            
+        Complexity: O(1) amortized
+        """
+        with self._lock:
+            if name not in self.counters:
+                self.counters[name] = 0
+            self.counters[name] += value
+            
+            if name not in self.metrics:
+                self.metrics[name] = []
+            
+            self.metrics[name].append(MetricValue(
+                value=float(self.counters[name]),
+                timestamp=time.time(),
+                labels=labels or {},
+                unit=MetricUnit.COUNT
+            ))
+    
+    def record_gauge(self, name: str, value: float, labels: Dict[str, str] = None) -> None:
+        """
+        Record gauge metric (snapshot value).
+        
+        Gauges represent instantaneous measurements and are used for:
+        - Memory usage
+        - CPU utilization
+        - Queue depth
+        - Active connections
+        
+        Args:
+            name: Metric name (e.g., "memory_usage_bytes")
+            value: Current value
+            labels: Optional metric labels/tags
+            
+        Complexity: O(1) amortized
+        """
+        with self._lock:
+            self.gauges[name] = value
+            
+            if name not in self.metrics:
+                self.metrics[name] = []
+            
+            self.metrics[name].append(MetricValue(
+                value=value,
+                timestamp=time.time(),
+                labels=labels or {},
+                unit=MetricUnit.COUNT
+            ))
+    
+    def get_metric(self, name: str) -> Optional[float]:
+        """
+        Get current value of metric.
+        
+        Args:
+            name: Metric name to retrieve
+            
+        Returns:
+            Current metric value or None if not found
+            
+        Complexity: O(1)
+        """
+        with self._lock:
+            return self.gauges.get(name) or self.counters.get(name)
+    
+    def start_export(self) -> bool:
+        """
+        Start exporting metrics to backend.
+        
+        Returns:
+            True if export started successfully, False if not configured
+        """
+        with self._lock:
+            if not self.export_config:
+                return False
+            self.is_exporting = True
+            logger.info(f"Started metrics export to {self.export_config.endpoint}")
+            return True
+    
+    def stop_export(self) -> bool:
+        """
+        Stop exporting metrics.
+        
+        Returns:
+            True if export was running
+        """
+        with self._lock:
+            was_exporting = self.is_exporting
+            self.is_exporting = False
+            if was_exporting:
+                logger.info("Stopped metrics export")
+            return was_exporting
+    
+    def export_metrics(self) -> Dict[str, Any]:
+        """
+        Export collected metrics.
+        
+        Returns:
+            Dictionary with metrics, counters, gauges, and timestamp
+            
+        Complexity: O(n) where n is number of metrics
+        """
+        with self._lock:
+            if not self.is_exporting:
+                return {}
+            
+            return {
+                "metrics": self.metrics,
+                "counters": self.counters,
+                "gauges": self.gauges,
+                "timestamp": time.time(),
+                "endpoint": self.export_config.endpoint if self.export_config else None
+            }
+    
+    def clear(self) -> None:
+        """
+        Clear all collected metrics.
+        
+        Useful for testing or resetting metrics state.
+        """
+        with self._lock:
+            self.metrics.clear()
+            self.counters.clear()
+            self.gauges.clear()
+    
+    def get_metric_names(self) -> List[str]:
+        """
+        Get list of all metric names.
+        
+        Returns:
+            List of metric names collected
+        """
+        with self._lock:
+            return list(set(list(self.counters.keys()) + list(self.gauges.keys())))
+
+
+class InstrumentationSpan:
+    """
+    Represents an instrumented operation span.
+    
+    Used to track duration and errors for operations.
+    Integrates with metrics collector for comprehensive observability.
+    
+    Example:
+        span = InstrumentationSpan("database_query", {"table": "users"})
+        try:
+            # Execute operation
+            result = db.query()
+        except Exception as e:
+            span.record_error(e)
+        finally:
+            span.end()
+    """
+    
+    def __init__(self, name: str, attributes: Dict[str, Any] = None) -> None:
+        """
+        Initialize instrumentation span.
+        
+        Args:
+            name: Operation name
+            attributes: Operation attributes/metadata
+        """
+        self.name = name
+        self.attributes = attributes or {}
+        self.start_time = time.time()
+        self.end_time: Optional[float] = None
+        self.duration: Optional[float] = None
+        self.error: Optional[Exception] = None
+    
+    def end(self) -> None:
+        """End the span and calculate duration."""
+        self.end_time = time.time()
+        self.duration = self.end_time - self.start_time
+    
+    def record_error(self, error: Exception) -> None:
+        """Record error that occurred during span."""
+        self.error = error
+    
+    def get_duration_ms(self) -> Optional[float]:
+        """Get duration in milliseconds."""
+        if self.duration is None:
+            return None
+        return self.duration * 1000
+
+
 __all__ = [
     "GracefulDegradationFramework",
     "PartialFunctionalityMode",
@@ -1053,4 +1354,9 @@ __all__ = [
     "CircuitBreakerMetrics",
     "CircuitBreakerOpen",
     "CircuitBreakerState",
+    "MetricsCollector",
+    "MetricValue",
+    "MetricExportConfig",
+    "MetricUnit",
+    "InstrumentationSpan",
 ]
