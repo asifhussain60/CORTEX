@@ -1,0 +1,81 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Updater_CreatePaymentTransactionInvoices API",
+    "description": "Reverse-engineered API specification from legacy Updater_CreatePaymentTransactionInvoices",
+    "version": "1.0.0",
+    "contact": {
+      "name": "CORTEX Lens",
+      "url": "https://github.com/asifhussain60/CORTEX"
+    },
+    "x-legacy-source": {
+      "file": "C:\\PROJECTS\\Platform.Classic\\HealthEquity\\Libs\\PaymentInteraction\\Services\\Updaters\\Updater_CreatePaymentTransactionInvoices.cs",
+      "class": "Updater_CreatePaymentTransactionInvoices",
+      "namespace": "PaymentInteraction",
+      "generated": "2025-12-15T15:42:27.658120"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.example.com/v1",
+      "description": "Production server (placeholder)"
+    }
+  ],
+  "paths": {
+    "/api/ra/create-ratransaction-invoices": {
+      "post": {
+        "operationId": "Updater_CreatePaymentTransactionInvoices",
+        "summary": "Updater_ Create Payment Processor Transaction Invoices operation for PaymentProcessor transaction management",
+        "tags": [
+          "PaymentProcessor Operations"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "responses": {
+      "ValidationError": {
+        "description": "Validation error response",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                },
+                "field": {
+                  "type": "string"
+                },
+                "code": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

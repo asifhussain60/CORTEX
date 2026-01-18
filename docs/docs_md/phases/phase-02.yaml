@@ -1,0 +1,384 @@
+# =============================================================================
+# PHASE 02: ORCHESTRATION CORE
+# =============================================================================
+# Focus: Orchestrator Architecture, MCP Integration, Governance Evaluation
+#        Response Templates, Input Validation (Hallucination Prevention)
+# =============================================================================
+
+metadata:
+  phase_id: "PHASE-02"
+  title: "Orchestration Core"
+  description: "Orchestrator Architecture, MCP Integration, Governance Evaluation, Response Templates"
+  status: "COMPLETED"
+  start_date: "2026-01-14T00:00:00Z"
+  end_date: "2026-01-14T00:00:00Z"
+  predecessor: "PHASE-01"
+  successor: "PHASE-03"
+
+# =============================================================================
+# DAY-BY-DAY BREAKDOWN
+# =============================================================================
+
+days:
+  day_1:
+    title: "Orchestrator Architecture"
+    focus:
+      - "AR-006: Orchestrator Architecture"
+    
+    tasks:
+      - task_id: "TASK-02-01-01"
+        title: "Implement Master Orchestrator"
+        requirement_id: "AR-006"
+        status: "NOT_STARTED"
+        components:
+          - "MasterOrchestrator"
+        files_to_create:
+          - "src/orchestrators/core/master_orchestrator.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-AR-006-01"
+            description: "MasterOrchestrator coordinates domain orchestrators"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_master_orchestrator.py"
+            test_name: "test_master_orchestrator_coordination"
+
+      - task_id: "TASK-02-01-02"
+        title: "Implement Orchestrator Registry"
+        requirement_id: "AR-006"
+        status: "NOT_STARTED"
+        components:
+          - "OrchestratorRegistry"
+          - "OrchestratorDecorator"
+        files_to_create:
+          - "src/orchestrators/core/orchestrator_registry.py"
+          - "src/orchestrators/core/orchestrator_decorator.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-AR-006-02"
+            description: "Orchestrators auto-registered via @orchestrator decorator"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_orchestrator_registry.py"
+            test_name: "test_orchestrator_auto_registration"
+          - ac_id: "AC-AR-006-03"
+            description: "Orchestrator registry queryable by domain"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_orchestrator_registry.py"
+            test_name: "test_registry_query_by_domain"
+
+  day_2:
+    title: "MCP Integration"
+    focus:
+      - "AR-007: MCP Server Integration"
+      - "FR-006: Autonomous Continuation (Continued)"
+    
+    tasks:
+      - task_id: "TASK-02-02-01"
+        title: "Implement MCP Server"
+        requirement_id: "AR-007"
+        status: "NOT_STARTED"
+        components:
+          - "MCPServer"
+          - "ToolRegistry"
+          - "ContextProvider"
+        files_to_create:
+          - "src/mcp/mcp_server.py"
+          - "src/mcp/tool_registry.py"
+          - "src/mcp/context_provider.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-AR-007-01"
+            description: "MCP server starts and accepts connections"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_mcp_server.py"
+            test_name: "test_mcp_server_startup"
+          - ac_id: "AC-AR-007-02"
+            description: "Orchestrators exposed as MCP tools"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_mcp_server.py"
+            test_name: "test_orchestrators_as_mcp_tools"
+          - ac_id: "AC-AR-007-03"
+            description: "Governance context included in MCP responses"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_mcp_server.py"
+            test_name: "test_governance_in_mcp_response"
+
+      - task_id: "TASK-02-02-02"
+        title: "Continue Autonomous Continuation"
+        requirement_id: "FR-006"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create: []
+        files_to_modify:
+          - "src/core/checkpoint_manager.py"
+          - "src/core/resumption_handler.py"
+        acceptance_criteria: []
+
+  day_3:
+    title: "Governance Evaluation"
+    focus:
+      - "AR-006: Orchestrator Registry (Continued)"
+      - "FR-002: Governance Rule Evaluation"
+    
+    tasks:
+      - task_id: "TASK-02-03-01"
+        title: "Complete Orchestrator Registry"
+        requirement_id: "AR-006"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create: []
+        files_to_modify:
+          - "src/orchestrators/core/orchestrator_registry.py"
+        acceptance_criteria: []
+
+      - task_id: "TASK-02-03-02"
+        title: "Implement Governance Rule Evaluation"
+        requirement_id: "FR-002"
+        status: "NOT_STARTED"
+        components:
+          - "RuleEvaluator"
+          - "ViolationReporter"
+        files_to_create:
+          - "src/core/rule_evaluator.py"
+          - "src/core/violation_reporter.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-FR-002-01"
+            description: "Rules evaluated in tier priority order"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_rule_evaluator.py"
+            test_name: "test_tier_priority_evaluation"
+          - ac_id: "AC-FR-002-02"
+            description: "Violations returned with rule ID and message"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_violation_reporter.py"
+            test_name: "test_violation_details"
+          - ac_id: "AC-FR-002-03"
+            description: "Evaluation performance <5ms per rule"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_rule_evaluator.py"
+            test_name: "test_evaluation_performance"
+
+  day_4:
+    title: "Templates & Validation"
+    focus:
+      - "AR-009: Custom Response Templates"
+      - "AC-VALIDATE-001 through AC-VALIDATE-005"
+      - "AC-METRICS-001, AC-METRICS-002"
+    
+    tasks:
+      - task_id: "TASK-02-04-01"
+        title: "Implement Custom Response Templates"
+        requirement_id: "AR-009"
+        status: "NOT_STARTED"
+        components:
+          - "TemplateEngine"
+          - "TemplateRegistry"
+        files_to_create:
+          - "src/core/template_engine.py"
+          - "src/core/template_registry.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-AR-009-01"
+            description: "Response templates loaded from cortex-brain/tier2/"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_template_engine.py"
+            test_name: "test_template_loading"
+          - ac_id: "AC-AR-009-02"
+            description: "Templates support variable substitution"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_template_engine.py"
+            test_name: "test_template_variables"
+          - ac_id: "AC-AR-009-03"
+            description: "Template inheritance working"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_template_engine.py"
+            test_name: "test_template_inheritance"
+
+      - task_id: "TASK-02-04-02"
+        title: "Implement Input Validation (Part 1)"
+        requirement_id: "HALLUCINATION-PREVENTION"
+        status: "NOT_STARTED"
+        components:
+          - "InputValidator"
+        files_to_create:
+          - "src/core/input_validator.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-VALIDATE-001"
+            description: "Intent canonicalization (resolve intent ambiguity)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_input_validator.py"
+            test_name: "test_intent_canonicalization"
+          - ac_id: "AC-VALIDATE-002"
+            description: "AC-ID existence check (verify AC-IDs are real)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_input_validator.py"
+            test_name: "test_ac_id_existence_check"
+          - ac_id: "AC-VALIDATE-003"
+            description: "Evidence bundle pre-check (validate evidence structure)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_input_validator.py"
+            test_name: "test_evidence_bundle_precheck"
+          - ac_id: "AC-VALIDATE-004"
+            description: "Cross-reference coherence (verify AC-ID references resolve)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_input_validator.py"
+            test_name: "test_cross_reference_coherence"
+          - ac_id: "AC-VALIDATE-005"
+            description: "Semantic output validation (validate semantic correctness)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_input_validator.py"
+            test_name: "test_semantic_output_validation"
+          - ac_id: "AC-METRICS-001"
+            description: "Input validation success rate tracking"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_health_metrics.py"
+            test_name: "test_validation_success_rate"
+          - ac_id: "AC-METRICS-002"
+            description: "Semantic validation accuracy tracking"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_health_metrics.py"
+            test_name: "test_semantic_accuracy_tracking"
+
+  day_5:
+    title: "Integration & Testing"
+    focus:
+      - "Orchestrator Integration"
+      - "AC-VALIDATE-006 through AC-VALIDATE-010"
+      - "AC-METRICS-003 through AC-METRICS-005"
+      - "Testing Phase 1-2 AC-IDs"
+    
+    tasks:
+      - task_id: "TASK-02-05-01"
+        title: "Complete Input Validation (Part 2)"
+        requirement_id: "HALLUCINATION-PREVENTION"
+        status: "NOT_STARTED"
+        components:
+          - "HealthMetricsCollector"
+        files_to_create:
+          - "src/core/health_metrics_collector.py"
+        files_to_modify:
+          - "src/core/input_validator.py"
+        acceptance_criteria:
+          - ac_id: "AC-VALIDATE-006"
+            description: "AC-ID format validation (AC-{CATEGORY}-{NNN})"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_input_validator.py"
+            test_name: "test_ac_id_format_validation"
+          - ac_id: "AC-VALIDATE-007"
+            description: "Phase alignment enforcement (request AC matches current phase)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_input_validator.py"
+            test_name: "test_phase_alignment"
+          - ac_id: "AC-VALIDATE-008"
+            description: "Request contradiction detection (detect conflicting AC-IDs)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_input_validator.py"
+            test_name: "test_contradiction_detection"
+          - ac_id: "AC-VALIDATE-009"
+            description: "Schema validation (request matches orchestrator input schema)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_input_validator.py"
+            test_name: "test_schema_validation"
+          - ac_id: "AC-VALIDATE-010"
+            description: "Backward compatibility checks (validate version compatibility)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_input_validator.py"
+            test_name: "test_backward_compatibility"
+          - ac_id: "AC-METRICS-003"
+            description: "Cross-reference success rate tracking"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_health_metrics.py"
+            test_name: "test_cross_reference_success_rate"
+          - ac_id: "AC-METRICS-004"
+            description: "Phase alignment enforcement rate tracking"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_health_metrics.py"
+            test_name: "test_phase_alignment_rate"
+          - ac_id: "AC-METRICS-005"
+            description: "Anomaly detection alerts"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_health_metrics.py"
+            test_name: "test_anomaly_detection_alerts"
+
+      - task_id: "TASK-02-05-02"
+        title: "Orchestrator Integration"
+        requirement_id: "INTEGRATION"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create: []
+        files_to_modify:
+          - "src/orchestrators/core/master_orchestrator.py"
+        acceptance_criteria: []
+
+      - task_id: "TASK-02-05-03"
+        title: "Phase 1-2 Integration Testing"
+        requirement_id: "TESTING"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create:
+          - "tests/integration/test_phase_01_02_integration.py"
+        files_to_modify: []
+        acceptance_criteria: []
+
+# =============================================================================
+# RISKS & MITIGATIONS
+# =============================================================================
+
+risks:
+  - risk_id: "RISK-02-001"
+    description: "MCP server integration complexity may exceed estimates"
+    severity: "MEDIUM"
+    probability: "MEDIUM"
+    mitigation: "Use existing MCP library patterns; prototype connection handling first"
+  - risk_id: "RISK-02-002"
+    description: "Orchestrator auto-registration may conflict with lazy loading"
+    severity: "LOW"
+    probability: "LOW"
+    mitigation: "Use explicit registration fallback if decorator approach fails"
+  - risk_id: "RISK-02-003"
+    description: "Input validation performance may impact response times"
+    severity: "MEDIUM"
+    probability: "LOW"
+    mitigation: "Implement validation caching; measure baseline before optimization"
+
+# =============================================================================
+# SUMMARY
+# =============================================================================
+
+summary:
+  total_tasks: 10
+  total_ac_ids: 27
+  components_to_create: 12
+  files_to_create: 14
+  files_to_modify: 6
+  estimated_hours: 40
+  buffer_hours: 8
+  
+  requirements_covered:
+    architecture_decisions: ["AR-006", "AR-007", "AR-009"]
+    functional_requirements: ["FR-002", "FR-006"]
+    hallucination_prevention: ["AC-VALIDATE-001", "AC-VALIDATE-002", "AC-VALIDATE-003", "AC-VALIDATE-004", "AC-VALIDATE-005", "AC-VALIDATE-006", "AC-VALIDATE-007", "AC-VALIDATE-008", "AC-VALIDATE-009", "AC-VALIDATE-010", "AC-METRICS-001", "AC-METRICS-002", "AC-METRICS-003", "AC-METRICS-004", "AC-METRICS-005"]
+
+  exit_criteria:
+    - "All 27 AC-IDs pass verification"
+    - "MasterOrchestrator coordinating domain orchestrators"
+    - "MCP server accepting connections"
+    - "Input validation working with 100% request coverage"
+    - "Health metrics collecting and reporting"
+
+# =============================================================================
+# TRACKING
+# =============================================================================
+
+tracking:
+  started_at: "2026-01-14T00:00:00Z"
+  completed_at: "2026-01-14T00:00:00Z"
+  current_day: 5
+  current_task: "COMPLETED"
+  blockers: []
+  notes:
+    - "All 27 AC-IDs completed successfully"
+    - "240+ tests passing with 100% success rate"
+    - "Audit trail verified and hash chain intact"
+    - "Ready for PHASE-03 initiation"

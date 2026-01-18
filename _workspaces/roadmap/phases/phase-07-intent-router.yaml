@@ -1,0 +1,82 @@
+# =============================================================================
+# PHASE-07: HOLISTIC INTENT ROUTER INTELLIGENCE
+# =============================================================================
+# Reference: Continuation from cortex-master-v1.yaml
+# Status: COMPLETED
+# Estimated Hours: 64
+# Completed: 2026-01-16
+# =============================================================================
+
+phase:
+  id: "PHASE-07"
+  title: "Holistic Intent Router Intelligence"
+  description: "Advanced intent classification, routing strategies, and multi-modal intent processing"
+  
+  status: "COMPLETED"
+  locked: true
+  
+  metadata:
+    created: "2026-01-17"
+    version: "1.0"
+    reference_from_v1: "_archives/cortex-master-v1.yaml"
+    baseline_knowledge: "260 ACs completed from v1 baseline"
+  
+  # AC IDs for this phase
+  ac_ids:
+    - "AC-PHX-007-01"  # Intent classification framework
+    - "AC-PHX-007-02"  # Multi-modal intent processing
+    - "AC-PHX-007-03"  # Intent disambiguation system
+    - "AC-PHX-007-04"  # Confidence scoring mechanism
+    - "AC-PHX-007-05"  # Intent context preservation
+    - "AC-PHX-007-06"  # Routing decision logic
+    - "AC-PHX-007-07"  # Fallback strategies
+    - "AC-PHX-007-08"  # Intent learning loop
+    - "AC-PHX-007-09"  # Performance metrics
+    - "AC-PHX-007-10"  # Integration with PHASE-06
+    - "AC-PHX-007-11"  # Testing framework
+    - "AC-PHX-007-12"  # Documentation updates
+    - "AC-PHX-007-13"  # Observability instrumentation
+    - "AC-PHX-007-14"  # Edge case handling
+
+  total_ac_ids: 14
+
+  # Dependencies
+  dependencies:
+    - "PHASE-06-ECOSYSTEM (COMPLETED in v1)"
+    - "PHASE-01 through PHASE-05 (COMPLETED in v1)"
+  
+  # Files to create
+  files_to_create:
+    - "cortex/intent_router/classifier.py"
+    - "cortex/intent_router/router.py"
+    - "cortex/intent_router/disambiguator.py"
+    - "cortex/intent_router/confidence_scorer.py"
+    - "cortex/intent_router/context_manager.py"
+    - "cortex/intent_router/tests/test_classifier.py"
+    - "cortex/intent_router/tests/test_router.py"
+    - "cortex/intent_router/tests/test_disambiguator.py"
+    - "docs/intent-router-specification.md"
+    - "docs/intent-router-usage-guide.md"
+
+  # Test requirements
+  testing:
+    unit_tests_expected: 45
+    integration_tests_expected: 20
+    e2e_tests_expected: 10
+    pass_rate_target: "≥98%"
+
+  # Success criteria
+  success_criteria:
+    - "All 14 ACs implemented and tested"
+    - "Intent classification accuracy ≥95%"
+    - "Routing latency <100ms p99"
+    - "All documentation updated"
+    - "100% test pass rate achieved"
+    - "Phase locked and baseline created"
+
+  # Implementation notes
+  notes:
+    - "Build on existing PHASE-06 orchestrator ecosystem"
+    - "Leverage governance layer from PHASE-01"
+    - "Maintain hash chain integrity"
+    - "Follow v1 established patterns and conventions"

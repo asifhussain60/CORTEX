@@ -1,0 +1,68 @@
+# =============================================================================
+# PHASE-09: DEVELOPER GOVERNANCE TOOLING
+# =============================================================================
+# Reference: Continuation from cortex-master-v1.yaml
+# Status: COMPLETED
+# Estimated Hours: 28
+# Completed: 2026-01-16
+# =============================================================================
+
+phase:
+  id: "PHASE-09"
+  title: "Developer Governance Tooling"
+  description: "CLI and tooling infrastructure for developers to interact with governance layer"
+  
+  status: "COMPLETED"
+  locked: true
+  
+  metadata:
+    created: "2026-01-17"
+    version: "1.0"
+    reference_from_v1: "_archives/cortex-master-v1.yaml"
+    baseline_knowledge: "260 ACs completed from v1 baseline"
+  
+  ac_ids:
+    - "AC-PHX-009-01"  # CLI framework
+    - "AC-PHX-009-02"  # Governance audit command
+    - "AC-PHX-009-03"  # AC validation tool
+    - "AC-PHX-009-04"  # Phase management CLI
+    - "AC-PHX-009-05"  # Governance reporting
+    - "AC-PHX-009-06"  # IDE integration helpers
+    - "AC-PHX-009-07"  # Documentation and help system
+    - "AC-PHX-009-08"  # Testing framework
+
+  total_ac_ids: 8
+
+  dependencies:
+    - "PHASE-01 governance framework (COMPLETED in v1)"
+    - "PHASE-06-ECOSYSTEM (COMPLETED in v1)"
+
+  files_to_create:
+    - "cortex/cli/__init__.py"
+    - "cortex/cli/main.py"
+    - "cortex/cli/commands/governance.py"
+    - "cortex/cli/commands/ac_validate.py"
+    - "cortex/cli/commands/phase_mgmt.py"
+    - "cortex/cli/commands/report.py"
+    - "cortex/cli/ide_integration.py"
+    - "cortex/cli/tests/test_cli.py"
+    - "docs/governance-cli-guide.md"
+    - "docs/cli-api-reference.md"
+
+  testing:
+    unit_tests_expected: 30
+    integration_tests_expected: 15
+    e2e_tests_expected: 10
+    pass_rate_target: "≥98%"
+
+  success_criteria:
+    - "All 8 ACs implemented and tested"
+    - "CLI fully functional with all commands"
+    - "IDE integration working"
+    - "All documentation complete"
+    - "100% test pass rate achieved"
+
+  notes:
+    - "Leverage governance database from PHASE-01"
+    - "Ensure compliance with governance rules"
+    - "Follow established command patterns"
