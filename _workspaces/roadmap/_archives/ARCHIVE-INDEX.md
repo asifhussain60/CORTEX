@@ -1,17 +1,17 @@
-# Archive Index - CORTEX Roadmap v1 Historical Documents
+# Archive Index - CORTEX Roadmap Historical Documents
 
 **Created:** 2026-01-17  
-**Purpose:** Reference and baseline for CORTEX v2 implementation
+**Purpose:** Reference and baseline for CORTEX implementation
 
 ---
 
 ## 📦 What's Archived
 
-All v1 materials have been systematically archived to maintain historical context while keeping the active roadmap clean.
+All historical materials have been systematically archived to maintain context while keeping the active roadmap clean.
 
 ### Core Plans
 
-- **`cortex-master-v1.yaml`** - Original comprehensive master implementation plan
+- **`cortex-master-v1.yaml`** - Previous master implementation plan
   - 258+ completed ACs
   - 6 locked core phases
   - 3 completed enhancement phases
@@ -19,11 +19,11 @@ All v1 materials have been systematically archived to maintain historical contex
   - Complete architecture decisions (AR-001 through AR-015)
   - All governance rules and patterns
 
-- **`cortex-consolidated.yaml`** - Consolidated version from previous iteration
+- **`cortex-consolidated.yaml`** - Previous consolidated version
 
 ### Phase Definitions
 
-- **`phases-v1/`** - All original phase YAML files
+- **`phases-v1/`** - Previous phase YAML files
   - `phase-01.yaml` through `phase-20.yaml`
   - Enhancement and remediation phases
   - Full AC-ID specifications
@@ -32,7 +32,7 @@ All v1 materials have been systematically archived to maintain historical contex
 
 ### Historical Documentation
 
-- **`docs/`** - All markdown documentation from v1
+- **`docs/`** - Historical markdown documentation
   - Executive summaries and status reports
   - Completion reports for phases
   - Implementation plans and guides
@@ -47,7 +47,7 @@ All v1 materials have been systematically archived to maintain historical contex
 
 ### Issue Tracking
 
-- **`issues/`** - Issue-related documents from v1
+- **`issues/`** - Historical issue-related documents
   - Issue completion summaries
   - Executive briefs
   - Remediation creation logs
@@ -81,7 +81,7 @@ cat docs/EXECUTIVE-SUMMARY.md
 
 ### Understand Completed Work
 
-The v1 archive contains the complete context of:
+The archive contains the complete context of:
 - How governance was implemented (PHASE-01)
 - How orchestration was designed (PHASE-02)
 - What safety patterns were used (PHASE-03)
@@ -99,7 +99,7 @@ Review remediation phases to understand:
 
 ---
 
-## 📊 v1 Completion Summary
+## 📊 Completion Summary
 
 ### Completed Phases: 13
 
@@ -133,16 +133,16 @@ Review remediation phases to understand:
 
 ---
 
-## 🔄 Transitioning to v2
+## 🔄 Continuing Development
 
-The new `cortex-master.yaml` (v2.0) incorporates:
+The current `cortex-master.yaml` incorporates:
 
-✅ All completed work from v1  
-✅ Reference to v1 baseline  
+✅ All completed work from previous iteration  
+✅ Reference to historical baseline  
 ✅ Knowledge that work is continuation  
-✅ Architecture decisions from v1  
-✅ Governance patterns from v1  
-✅ Test infrastructure from v1  
+✅ Architecture decisions from previous work  
+✅ Governance patterns from previous work  
+✅ Test infrastructure from previous work  
 
 To continue development:
 

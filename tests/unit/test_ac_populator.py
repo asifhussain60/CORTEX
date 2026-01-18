@@ -141,7 +141,7 @@ class TestACPopulatorWithRealMaster:
     
     def test_parses_real_master_yaml(self, db):
         """Should parse real cortex-master.yaml."""
-        master_path = Path("d:/PROJECTS/CORTEX/.github/roadmap/cortex-master.yaml")
+        master_path = Path("d:/PROJECTS/CORTEX/_workspaces/roadmap/cortex-master.yaml")
         if not master_path.exists():
             pytest.skip("cortex-master.yaml not found")
         
@@ -153,7 +153,7 @@ class TestACPopulatorWithRealMaster:
     
     def test_populates_from_real_master(self, db):
         """Should populate database from real master."""
-        master_path = Path("d:/PROJECTS/CORTEX/.github/roadmap/cortex-master.yaml")
+        master_path = Path("d:/PROJECTS/CORTEX/_workspaces/roadmap/cortex-master.yaml")
         if not master_path.exists():
             pytest.skip("cortex-master.yaml not found")
         

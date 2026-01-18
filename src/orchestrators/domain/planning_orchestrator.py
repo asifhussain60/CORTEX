@@ -314,7 +314,7 @@ class PlanningOrchestrator(IOrchestrator):
                 "source": "PlanningOrchestrator",
                 "version": self._version,
                 "generated_at": datetime.now(timezone.utc).isoformat(),
-                "ssot_file": ".github/roadmap/cortex-master.yaml",
+                "ssot_file": "_workspaces/roadmap/cortex-master.yaml",
             },
             "visualization_target": "Neural Observatory Plan Hub",
             "deprecated": {

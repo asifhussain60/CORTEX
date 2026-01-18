@@ -281,10 +281,10 @@ File Artifacts Created:
 ✅ tests/unit/production/test_phase_14_all_acs.py (test suite)
 
 Documentation Artifacts:
-✅ .github/roadmap/reports/PHASE-14-COMPLETION-REPORT.md (this report)
-✅ .github/roadmap/reports/PHASE-14-PROMPT-MAINTENANCE.md (prompt updates)
-✅ .github/roadmap/reports/PHASE-14-PRODUCTION-READINESS-SUMMARY.md (exec summary)
-✅ .github/roadmap/reports/PHASE-14-TRAINING-STRATEGY.md (training plan)
+✅ _workspaces/roadmap/reports/PHASE-14-COMPLETION-REPORT.md (this report)
+✅ _workspaces/roadmap/reports/PHASE-14-PROMPT-MAINTENANCE.md (prompt updates)
+✅ _workspaces/roadmap/reports/PHASE-14-PRODUCTION-READINESS-SUMMARY.md (exec summary)
+✅ _workspaces/roadmap/reports/PHASE-14-TRAINING-STRATEGY.md (training plan)
 
 ───────────────────────────────────────────────────────────────────────────────
 GOVERNANCE COMPLIANCE VERIFICATION
@@ -407,7 +407,7 @@ def main() -> int:
         print(report)
         
         # Save report to file
-        reports_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/.github/roadmap/reports")
+        reports_dir = Path("/Users/asifhussain/PROJECTS/CORTEX/_workspaces/roadmap/reports")
         reports_dir.mkdir(parents=True, exist_ok=True)
         
         report_file = reports_dir / "PHASE-14-COMPLETION-REPORT.md"

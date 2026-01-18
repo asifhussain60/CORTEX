@@ -51,8 +51,8 @@ class ZeroBreakingChangesVerifier:
         - cortex-brain/tier3/README-DOMAIN-INTEGRATION.md (NEW)
         
         Expected modified (tracking only):
-        - .github/roadmap/phases/phase-13.yaml (METADATA ONLY)
-        - .github/roadmap/cortex-master.yaml (TRACKING ONLY)
+        - _workspaces/roadmap/phases/phase-13.yaml (METADATA ONLY)
+        - _workspaces/roadmap/cortex-master.yaml (TRACKING ONLY)
         """
         test_name = "No Modified Existing Files"
         try:

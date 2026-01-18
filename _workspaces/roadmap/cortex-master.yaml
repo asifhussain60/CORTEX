@@ -128,15 +128,15 @@ metadata:
       
       # Verification Reports
       verification_reports:
-        - path: ".github/roadmap/reports/HOLISTIC-AUDIT-TRAIL-FIX.md"
+        - path: "_workspaces/roadmap/reports/HOLISTIC-AUDIT-TRAIL-FIX.md"
           date: "2026-01-17"
           status: "COMPLETE"
           summary: "Root cause analysis and complete fix documentation"
-        - path: ".github/roadmap/reports/AUDIT-TRAIL-TEST-FIXES-SUMMARY.md"
+        - path: "_workspaces/roadmap/reports/AUDIT-TRAIL-TEST-FIXES-SUMMARY.md"
           date: "2026-01-17"
           status: "SUPERSEDED"
           summary: "Initial analysis (superseded by holistic fix)"
-        - path: ".github/roadmap/reports/LOCKED-PHASES-PRODUCTION-READINESS-AUDIT.md"
+        - path: "_workspaces/roadmap/reports/LOCKED-PHASES-PRODUCTION-READINESS-AUDIT.md"
           date: "2026-01-16"
           status: "VALIDATED"
           summary: "Initial audit showing test issues, now resolved"
@@ -215,19 +215,19 @@ metadata:
     
     # DOCUMENTATION OUTPUT DIRECTORY (2026-01-16)
     documentation:
-      output_directory: ".github/roadmap/reports"
+      output_directory: "_workspaces/roadmap/reports"
       rule: "All markdown reports generated during phase execution MUST go to centralized reports directory"
       not_in_root: true
       not_in_docs: true
       examples:
-        - "Phase completion reports → .github/roadmap/reports/PHASE-XX-COMPLETION-REPORT.md"
-        - "AC analysis documents → .github/roadmap/reports/AC-XXX-YY-analysis.md"
-        - "Implementation summaries → .github/roadmap/reports/PHASE-XX-*-SUMMARY.md"
-        - "Gap analysis → .github/roadmap/reports/PHASE-XX-GAP-ANALYSIS.md"
+        - "Phase completion reports → _workspaces/roadmap/reports/PHASE-XX-COMPLETION-REPORT.md"
+        - "AC analysis documents → _workspaces/roadmap/reports/AC-XXX-YY-analysis.md"
+        - "Implementation summaries → _workspaces/roadmap/reports/PHASE-XX-*-SUMMARY.md"
+        - "Gap analysis → _workspaces/roadmap/reports/PHASE-XX-GAP-ANALYSIS.md"
       validation:
         - "No .md files created in project root"
         - "No .md files created in /docs/"
-        - "All phase reports indexed in .github/roadmap/reports/INDEX.md"
+        - "All phase reports indexed in _workspaces/roadmap/reports/INDEX.md"
       enforcement: "Phase cannot be locked if reports found outside designated directory"
   
   # AUDIT TRAIL REMEDIATION INITIATIVE (2026-01-15)
@@ -869,7 +869,7 @@ phase_tracker:
       - Ready to unblock PHASE-08-CORE-ORCHESTRATORS
       
       Origin: CORTEX5.5 LLM Intent Routing Intelligence
-    phase_yaml: ".github/roadmap/phases/phase-07-intent-router.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-07-intent-router.yaml"
   
   PHASE-08-CORE-ORCHESTRATORS:
     title: "Domain Orchestrator Ecosystem"
@@ -896,7 +896,7 @@ phase_tracker:
       PHASE-08 COMPLETE: 6/6 ACs - 100% ✅
       All AR-016, AR-017, and CR-001 acceptance criteria fully implemented.
       161 tests passing with zero regressions.
-    phase_yaml: ".github/roadmap/phases/phase-08.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-08.yaml"
   
   PHASE-09-GOVERNANCE-TOOLS:
     title: "Developer Governance Tooling"
@@ -978,7 +978,7 @@ phase_tracker:
       Phase Progress: 100% (8/8 ACs completed) ✅
       
       PHASE-09 COMPLETE: Ready to proceed to PHASE-10
-    phase_yaml: ".github/roadmap/phases/phase-09.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-09.yaml"
   
   PHASE-10-ADAPTIVE-EXECUTION:
     title: "Adaptive Execution Framework"
@@ -1002,7 +1002,7 @@ phase_tracker:
       verified_at: "2026-01-15T17:19:25.734055Z"
     git_checkpoint: "b39214599"
     notes: "EX-001 (Context Analyzer & Routing), EX-002 (Execution Modes & Optimization), EX-003 (Performance Profiling) - ALL COMPLETE. 106 tests passing (41+21+18+14+12). Governance compliance verified. Ready for PHASE-11."
-    phase_yaml: ".github/roadmap/phases/phase-10.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-10.yaml"
   
   PHASE-11-HALLUCINATION-PREVENTION:
     title: "Hallucination Prevention System"
@@ -1029,7 +1029,7 @@ phase_tracker:
       PHASE-11 COMPLETE: 6/6 ACs - 100% ✅
       ALL HP-001 through HP-003 acceptance criteria fully implemented.
       Total: 160/160 tests passing (36+28+26+23+23+24).
-    phase_yaml: ".github/roadmap/phases/phase-11.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-11.yaml"
   
   PHASE-12-KNOWLEDGE-ECOSYSTEM:
     title: "Knowledge Ecosystem Expansion"
@@ -1053,7 +1053,7 @@ phase_tracker:
       remediation_required: false
     git_checkpoint: "d608261ee"
     notes: "ALL 7 ACs COMPLETED ✓ KN-001-01 (36/36), KN-001-02 (33/33), KN-002-01 (38/38), KN-002-02 (38/38), KN-003-01 (38/38), KN-003-02 (24/24), KN-004-01 (36/36). Total: 243 tests passing (100%). Full Tier 3 knowledge ecosystem operational with quality curation, semantic search, governance, expert validation, and cross-domain synthesis."
-    phase_yaml: ".github/roadmap/phases/phase-12.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-12.yaml"
   
   PHASE-13-OBSERVABILITY-MATURITY:
     title: "Observability Maturity & Business Domain Integration"
@@ -1092,7 +1092,7 @@ phase_tracker:
     actual_days: 0.27
     notes: "OB-001-01 ✓ (21/21), OB-001-02 ✓ (19/19), OB-002-01 ✓ (22/22), OB-002-02 ✓ (20/20), OB-003-01 ✓ (26/26) = 108/108 tests. Domain ACs: BD-001-01 ✓ (6 tests), BD-001-02 ✓ (5 tests), BD-002-01 ✓ (6 tests), BD-003-01 ✓ (7 tests) = 33 tests passing. Total: 141/141 tests. 12 domain audit entries created with hash chain integrity maintained."
     completed_at: "2026-01-16T08:32:36Z"  # Domain ACs completion timestamp
-    phase_yaml: ".github/roadmap/phases/phase-13.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-13.yaml"
   
   # =========================================================================
   # DOCUMENTATION REMEDIATION PHASE - GAP FIX (2026-01-16)
@@ -1280,7 +1280,7 @@ phase_tracker:
       - .github/copilot-instruction.md
       
       Reference: docs/ROADMAP-GAP-ANALYSIS.md
-    phase_yaml: ".github/roadmap/phases/phase-doc-remediation.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-doc-remediation.yaml"
   
   # =========================================================================
   # PARALLEL TRACK - Can be developed on separate machine
@@ -1437,7 +1437,7 @@ phase_tracker:
         • Code Structure Explorer
         • Change Heatmap
       - These are OPTIONAL add-ons, not core features
-    phase_yaml: ".github/roadmap/phases/phase-15-neural-observatory.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-15-neural-observatory.yaml"
   
   PHASE-16-BUSINESS-DOMAIN:
     title: "Business Domain Knowledge Ecosystem (INTEGRATED INTO PHASE-13)"
@@ -1485,7 +1485,7 @@ phase_tracker:
       
       No longer tracked as separate phase. Completion tracked in PHASE-13.
     
-    phase_yaml: ".github/roadmap/phases/phase-16-business-domain.yaml (DEPRECATED - see phase-13.yaml)"
+    phase_yaml: "_workspaces/roadmap/phases/phase-16-business-domain.yaml (DEPRECATED - see phase-13.yaml)"
   
   PHASE-16-ORCHESTRATOR-CONTINUATION:
     title: "Event-Driven Orchestrator Lifecycle Management"
@@ -1534,7 +1534,7 @@ phase_tracker:
     # Architecture Challenge Date
     origin:
       date: "2026-01-16"
-      challenge_document: ".github/roadmap/reports/ORCHESTRATOR-CONTINUATION-ARCHITECTURE-CHALLENGE-2026-01-16.md"
+      challenge_document: "_workspaces/roadmap/reports/ORCHESTRATOR-CONTINUATION-ARCHITECTURE-CHALLENGE-2026-01-16.md"
       pattern: "ConversationProtocol wrapper around IOrchestrator"
       innovation: "Explicit ContinuationDecision replaces hidden loop state"
     
@@ -1611,7 +1611,7 @@ phase_tracker:
       
       See phase-16-orchestrator-continuation.yaml for detailed AC breakdown.
     
-    phase_yaml: ".github/roadmap/phases/phase-16-orchestrator-continuation.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-16-orchestrator-continuation.yaml"
 
   PHASE-REMEDIATION-01:
     title: "Critical Architecture Issues Remediation"
@@ -1641,9 +1641,9 @@ phase_tracker:
     origin:
       date: "2026-01-16"
       source_documents:
-        - ".github/roadmap/issues/issue-report-01.yaml (ISSUE-001)"
-        - ".github/roadmap/issues/issue-report-03.yaml (ISSUE-003)"
-        - ".github/roadmap/issues/issue-report-04.yaml (ISSUE-004)"
+        - "_workspaces/roadmap/issues/issue-report-01.yaml (ISSUE-001)"
+        - "_workspaces/roadmap/issues/issue-report-03.yaml (ISSUE-003)"
+        - "_workspaces/roadmap/issues/issue-report-04.yaml (ISSUE-004)"
       decision: "Create critical remediation phase BEFORE continuing to PHASE-17"
       rationale: "3 critical issues (AST scanning, verbosity, bare except) block production readiness"
     
@@ -1860,7 +1860,7 @@ phase_tracker:
     # Remediation Origin
     origin:
       date: "2026-01-16"
-      source_document: ".github/roadmap/issues/issue-report-04.yaml (ISSUE-002)"
+      source_document: "_workspaces/roadmap/issues/issue-report-04.yaml (ISSUE-002)"
       decision: "Create critical remediation phase BEFORE continuing to PHASE-17"
       rationale: "Governance regression from CORTEX5.5 blocks multi-turn execution safety"
     
@@ -1995,13 +1995,13 @@ phase_tracker:
         issue_id: "ISSUE-001,ISSUE-002,ISSUE-003,ISSUE-004"
         severity: "MEDIUM"
         test: "test_issue_remediation_report_validation"
-        verification: "Report at .github/roadmap/reports/ISSUE-REMEDIATION-STATUS-REPORT.md with verification checklist"
+        verification: "Report at _workspaces/roadmap/reports/ISSUE-REMEDIATION-STATUS-REPORT.md with verification checklist"
         estimated_hours: 2
         actual_hours: 1.5
         status: "COMPLETED"
         tests_passing: "1/1"
     
-    phase_yaml: ".github/roadmap/phases/phase-remediation-02.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-remediation-02.yaml"
 
   PHASE-REMEDIATION-03:
     title: "Critical Architecture Issues Remediation from ISSUE-005"
@@ -2034,14 +2034,14 @@ phase_tracker:
     completion_target: "2026-01-19"
     priority: "P0"
     blocking: false
-    phase_yaml: ".github/roadmap/phases/phase-remediation-03.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-remediation-03.yaml"
     
     ac_breakdown:
       critical_blockers: 2  # AC-FIX-001-01 ✅ AC-FIX-002-01 ✅
       high_priority: 4      # AC-FIX-003-01 ✅ AC-FIX-004-01 ✅ AC-FIX-005-01 ✅ AC-FIX-006-01 ✅
       medium_priority: 2    # AC-DOC-007-01 ✅ AC-MINOR-008-01 ✅
     
-    evidence_location: ".github/roadmap/issues/issue-report-05.yaml"
+    evidence_location: "_workspaces/roadmap/issues/issue-report-05.yaml"
     review_commit: "1559c1bee"
     
     # AC-FIX-001-01: State Management Atomicity ✅ COMPLETE
@@ -2332,7 +2332,7 @@ phase_tracker:
     completion_target: "2026-01-18"
     priority: "P0"
     blocking: false  # No longer blocking - phase complete ✅
-    phase_yaml: ".github/roadmap/phases/phase-remediation-04.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-remediation-04.yaml"
     
     ac_breakdown:
       critical_issues: 2  # FINDING-001 ✅ FINDING-002 ✅
@@ -2351,7 +2351,7 @@ phase_tracker:
       target_pass_rate: 100.0
       execution_time: "6.09 seconds"
     
-    evidence_location: ".github/roadmap/issues/done/issue-report-03.yaml"
+    evidence_location: "_workspaces/roadmap/issues/done/issue-report-03.yaml"
     completion_reports:
       - "AC-FIX-007-01-COMPLETION-REPORT.md"
       - "RACE-CONDITION-FIX-COMPLETE-SUMMARY.md"
@@ -3109,7 +3109,7 @@ phase_tracker:
         - "tests/integration/test_lens_integration.py"
         - "tests/integration/test_e2e_production_readiness.py"
       documentation:
-        - ".github/roadmap/reports/PHASE-PRODUCTION-READINESS-COMPLETION.md"
+        - "_workspaces/roadmap/reports/PHASE-PRODUCTION-READINESS-COMPLETION.md"
         - ".github/docs/production-readiness-guide.md"
         - ".github/docs/master-orchestrator-4stage-design.md"
         - ".github/docs/intent-router-architecture.md"
@@ -3141,7 +3141,7 @@ phase_tracker:
       verified_at: null
       remediation_required: false
     
-    phase_yaml: ".github/roadmap/phases/phase-production-readiness.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-production-readiness.yaml"
     notes: |
       PHASE-PRODUCTION-READINESS: User-Approved Production Readiness Implementation
       
@@ -3258,7 +3258,7 @@ phase_tracker:
     progress_percentage: 100.0
     
     duplication_prevention:
-      analysis_document: ".github/roadmap/reports/PHASE-DUPLICATION-ANALYSIS-ORCHESTRATOR-DEVX.md"
+      analysis_document: "_workspaces/roadmap/reports/PHASE-DUPLICATION-ANALYSIS-ORCHESTRATOR-DEVX.md"
       reuse_percentage: 75
       effort_saved_hours: 9
     
@@ -3270,7 +3270,7 @@ phase_tracker:
       remediation_required: false
     
     git_checkpoint: null
-    phase_yaml: ".github/roadmap/phases/phase-18-orchestrator-devx.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-18-orchestrator-devx.yaml"
     
     started_at: "2026-01-17T20:00:00Z"
     completed_at: "2026-01-17T22:30:00Z"
@@ -3618,7 +3618,7 @@ phase_tracker:
         mitigation: "Start conservative; adjust based on testing; fully reversible"
     
     # Phase Yaml Reference
-    phase_yaml: ".github/roadmap/phases/phase-17-domain-brain.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-17-domain-brain.yaml"
     
     # Notes
     notes: |
@@ -3693,7 +3693,7 @@ phase_tracker:
       remediation_required: false
     
     git_checkpoint: "phase-19-complete"
-    phase_yaml: ".github/roadmap/phases/phase-19-template-tool-implementation.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-19-template-tool-implementation.yaml"
     
     completion_summary:
       date: "2026-01-17"
@@ -3761,7 +3761,7 @@ phase_tracker:
       remediation_required: false
     
     git_checkpoint: "9e03b20ca"
-    phase_yaml: ".github/roadmap/phases/phase-20-template-content.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-20-template-content.yaml"
     
     deliverables:
       - src/templates/__init__.py
@@ -4048,7 +4048,7 @@ phase_tracker:
       remediation_required: false
     
     git_checkpoint: null
-    phase_yaml: ".github/roadmap/phases/phase-21-intelligent-knowledge-protocol.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-21-intelligent-knowledge-protocol.yaml"
     
     # ROI ANALYSIS
     roi_analysis:
@@ -4134,7 +4134,7 @@ phase_tracker:
       remediation_required: true  # CRITICAL gap identified
     
     git_checkpoint: null
-    phase_yaml: ".github/roadmap/phases/phase-22-mcp-protocol-compliance.yaml"
+    phase_yaml: "_workspaces/roadmap/phases/phase-22-mcp-protocol-compliance.yaml"
     
     review_findings:
       finding_date: "2026-01-18"
@@ -4149,7 +4149,7 @@ phase_tracker:
         - No Claude Desktop/VS Code configuration files
     
     notes: |
-      PHASE-22: NOT STARTED (CRITICAL - Identified by cortex-review-enhanced v2.0)
+      PHASE-22: NOT STARTED (CRITICAL - MCP Protocol Compliance)
       
       KEY DELIVERABLES:
       - MCP SDK server (replace custom server.py)

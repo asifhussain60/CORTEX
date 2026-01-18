@@ -271,7 +271,7 @@ def main():
     print("=" * 80)
     print()
     
-    phases_dir = Path(".github/roadmap/phases")
+    phases_dir = Path("_workspaces/roadmap/phases")
     
     if not phases_dir.exists():
         print(f"❌ Phases directory not found: {phases_dir}")
