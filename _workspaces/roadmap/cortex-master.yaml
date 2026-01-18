@@ -13,10 +13,10 @@ metadata:
   dor_score: 100
   start_date: null
   end_date: "2026-01-17"
-  total_ac_ids: 295  # 279 + 8 (PHASE-21) + 8 (PHASE-22-MCP-PROTOCOL-COMPLIANCE)
+  total_ac_ids: 299  # 279 + 8 (PHASE-21) + 8 (PHASE-22-MCP-PROTOCOL-COMPLIANCE) + 4 (PHASE-23-COMPLEXITY-AWARE-CONFIRMATION-GATE)
   total_ac_ids_locked: 269  # +4 from PHASE-REMEDIATION-06
   total_ac_ids_complete: 274  # 270 + 4 (PHASE-REMEDIATION-06)
-  completion_percentage: 92.5  # 274/295 (PHASE-21 + PHASE-22 added)
+  completion_percentage: 91.6  # 274/299 (PHASE-21 + PHASE-22 + PHASE-23 added)
   
   # AC-ID Breakdown
   ac_breakdown:
@@ -38,7 +38,8 @@ metadata:
     template_content: 6       # PHASE-20 (6 ACs) ✅ COMPLETE - Tier-2 Template Population
     intelligent_knowledge: 8  # PHASE-21 (8 ACs) 🆕 NEW - Intelligent Knowledge Protocol
     mcp_protocol_compliance: 8  # PHASE-22 (8 ACs) 🚨 CRITICAL - MCP Protocol Compliance
-    total: 303  # Updated: 295 + 8 (PHASE-22-MCP-PROTOCOL-COMPLIANCE)
+    complexity_aware_confirmation: 4  # PHASE-23 (4 ACs) 🆕 NEW - Stage 2.5 Intelligence Gate
+    total: 307  # Updated: 295 + 8 (PHASE-22-MCP-PROTOCOL-COMPLIANCE) + 4 (PHASE-23)
     
   # FINAL STATUS - UPDATED 2026-01-21 (POST PHASE-REMEDIATION-06 COMPLETION)
   final_status:
@@ -4376,6 +4377,186 @@ phase_tracker:
         - "CORE-012: Docstrings mandatory (Google style)"
         - "CORE-027: Audit trail per tool execution"
         - "CORE-028: Kebab-case, ≤25 chars filenames"
+    
+    # AUDIT VERIFICATION
+    audit_verification:
+      verified: false
+      entry_count: 0
+      hash_chain_valid: null
+      verified_at: null
+      remediation_required: false
+    
+    git_checkpoint: null
+
+  PHASE-23-COMPLEXITY-AWARE-CONFIRMATION-GATE:
+    title: "Complexity-Aware Confirmation Gate with Master Orchestrator Intelligence"
+    description: |
+      PHASE-23 IMPLEMENTATION (2026-01-18):
+      Intelligent confirmation mechanism that evaluates operation complexity and 
+      provides context-aware approval/recommendation decisions before execution. 
+      Integrates Stage 2.5 complexity assessment layer into ConversationProtocol 
+      for zero-friction handling of trivial operations while escalating complex 
+      changes for user confirmation.
+      
+      COMPLEXITY-AWARE APPROVAL MATRIX:
+      - TRIVIAL (score ≤0.15): Auto-approve, no user interaction needed
+      - SIMPLE (score 0.15-0.35): Auto-approve with summary confirmation
+      - MODERATE (score 0.35-0.60): Request user confirmation before execution
+      - COMPLEX (score 0.60-0.85): Request confirmation + show alternatives
+      - CRITICAL (score ≥0.85): Escalate with executive summary + best recommendation
+      
+      COMPLEXITY SCORING SIGNALS (Aggregated):
+      - LENS confidence score: 25% weight (Language phase + Examination phase)
+      - Files affected (CallGraph traversal): 35% weight (depth, count, criticality)
+      - Dependency depth (RelationshipEngine): 25% weight (circular deps, tight coupling)
+      - Operation scope (AST analysis): 15% weight (local vs cross-layer vs global)
+      
+      MASTER ORCHESTRATOR ENHANCEMENT:
+      - Stage 2.5 insertion point: After routing (Stage 2), before delegation (Stage 3)
+      - Reuses existing LENS confidence from Stage 2 routing
+      - Aggregates relationship analysis for impact assessment
+      - Produces recommendation rationale with alternatives evaluation
+      - Maintains audit trail with complexity factors and approval decision
+      
+      GOVERNANCE RULES (5 Rules - Tier 1 Architectural):
+      - CONF-GATE-001: Trivial operations auto-approve (≤0.15 score threshold)
+      - CONF-GATE-002: Confidence-based approval matrix enforcement
+      - CONF-GATE-003: Alternative recommendations (top 3 for COMPLEX/CRITICAL)
+      - CONF-GATE-004: User goal enhancement (propose better approach if available)
+      - CONF-GATE-005: Audit trail enrichment with complexity factors
+      
+      ACCEPTANCE CRITERIA BY AC-ID:
+      
+      AC-CONF-001-01: Complexity Assessment Engine (8 hours)
+        - Aggregates LENS confidence + relationship analysis signals
+        - Produces 5-level complexity score (0.0-1.0 scale)
+        - Caches complexity calculations per (intent_type, context_hash)
+        - Tests: AST analysis, CallGraph traversal, circular dep detection (12 tests)
+      
+      AC-CONF-002-01: Approval Gate Logic (6 hours)
+        - Implements approval matrix with thresholds (0.15, 0.35, 0.60, 0.85)
+        - Auto-approves TRIVIAL/SIMPLE (no user interaction)
+        - Returns ConfirmationRequest for MODERATE (with context)
+        - Escalates COMPLEX/CRITICAL (with impact analysis)
+        - Tests: Threshold crossing, fallback logic, edge cases (8 tests)
+      
+      AC-CONF-003-01: Master Orchestrator Integration (5 hours)
+        - Inserts Stage 2.5 gate into ConversationProtocol.execute_turn()
+        - Extends ContinuationDecision with CONFIRMATION_REQUESTED reason
+        - Produces ConfirmationContext dataclass (complexity_score, reasons, alternatives)
+        - Passes confirmation decision back to turn executor
+        - Tests: Stage ordering, context passing, continuation logic (6 tests)
+      
+      AC-CONF-004-01: Governance Rules + Audit Logging (4 hours)
+        - Implements 5 governance rules (CONF-GATE-001 through 005)
+        - Extends audit_trail entry with complexity_factors + approval_decision
+        - Maintains STRICT governance enforcement (no overrides)
+        - Integrates with existing governance.db audit logging
+        - Tests: Rule enforcement, audit trail integrity, governance verification (4 tests)
+    
+    ac_ids:
+      - "AC-CONF-001-01"
+      - "AC-CONF-002-01"
+      - "AC-CONF-003-01"
+      - "AC-CONF-004-01"
+    
+    completed_ac_ids: []
+    
+    status: "NOT_STARTED"
+    locked: false
+    
+    requires:
+      - "PHASE-22-MCP-PROTOCOL-COMPLIANCE"
+    
+    acceptance_criteria:
+      - ac_id: "AC-CONF-001-01"
+        title: "Complexity Assessment Engine"
+        description: "Aggregate LENS confidence + relationship analysis into 5-level complexity score"
+        estimated_hours: 8
+        test_count: 12
+        status: "NOT_STARTED"
+        tests:
+          - "test_lens_confidence_aggregation"
+          - "test_ast_complexity_scoring"
+          - "test_callgraph_traversal_depth"
+          - "test_circular_dependency_detection"
+          - "test_scope_analysis_local_vs_global"
+          - "test_criticality_scoring_cached"
+          - "test_complexity_cache_invalidation"
+          - "test_edge_case_empty_relationship_graph"
+          - "test_edge_case_single_file_operation"
+          - "test_edge_case_cross_layer_integration"
+          - "test_performance_caching_efficiency"
+          - "test_complexity_score_normalization"
+      
+      - ac_id: "AC-CONF-002-01"
+        title: "Approval Gate Logic"
+        description: "Implement confidence-based approval matrix with auto-approval for trivial ops"
+        estimated_hours: 6
+        test_count: 8
+        status: "NOT_STARTED"
+        tests:
+          - "test_trivial_threshold_auto_approve"
+          - "test_simple_threshold_auto_approve"
+          - "test_moderate_threshold_confirmation_request"
+          - "test_complex_threshold_escalation"
+          - "test_critical_threshold_executive_summary"
+          - "test_threshold_boundary_crossing"
+          - "test_approval_decision_consistency"
+          - "test_fallback_logic_missing_signals"
+      
+      - ac_id: "AC-CONF-003-01"
+        title: "Master Orchestrator Integration"
+        description: "Insert Stage 2.5 gate into ConversationProtocol.execute_turn() execution flow"
+        estimated_hours: 5
+        test_count: 6
+        status: "NOT_STARTED"
+        tests:
+          - "test_stage_2_5_insertion_after_routing"
+          - "test_continuation_decision_confirmation_reason"
+          - "test_confirmation_context_dataclass_structure"
+          - "test_turn_execution_with_confirmation_gate"
+          - "test_per_turn_gate_isolation"
+          - "test_gate_does_not_block_low_complexity_ops"
+      
+      - ac_id: "AC-CONF-004-01"
+        title: "Governance Rules + Audit Logging"
+        description: "Implement 5 governance rules (CONF-GATE-001 to 005) with audit trail enrichment"
+        estimated_hours: 4
+        test_count: 4
+        status: "NOT_STARTED"
+        tests:
+          - "test_conf_gate_001_trivial_auto_approval"
+          - "test_conf_gate_002_approval_matrix_enforcement"
+          - "test_conf_gate_003_alternative_recommendations"
+          - "test_conf_gate_004_005_audit_trail_enrichment"
+    
+    # FILES TO CREATE
+    files_to_create:
+      - "src/core/orchestrator/complexity_assessment.py"
+      - "src/core/orchestrator/approval_gate.py"
+      - "src/core/orchestrator/confirmation_context.py"
+      - "src/orchestrators/core/stage_2_5_gate.py"
+      - "cortex-brain/tier1/governance/conf-gate-rules.yaml"
+      - "tests/unit/core/orchestrator/test_complexity_assessment.py"
+      - "tests/unit/core/orchestrator/test_approval_gate.py"
+      - "tests/integration/orchestrator/test_confirmation_gate_integration.py"
+      - "docs/PHASE-23-COMPLEXITY-AWARE-CONFIRMATION.md"
+    
+    # GOVERNANCE
+    governance:
+      core_rules:
+        - "CORE-008: TDD (tests first, RED → GREEN)"
+        - "CORE-011: Type hints mandatory"
+        - "CORE-012: Docstrings mandatory (Google style)"
+        - "CORE-027: Audit trail per decision"
+        - "CORE-028: Kebab-case, ≤25 chars filenames"
+      architectural_rules:
+        - "CONF-GATE-001: Trivial operations auto-approve (complexity ≤0.15)"
+        - "CONF-GATE-002: Confidence-based approval matrix enforcement"
+        - "CONF-GATE-003: Alternative recommendations for COMPLEX/CRITICAL"
+        - "CONF-GATE-004: User goal enhancement with best recommendation"
+        - "CONF-GATE-005: Audit trail enrichment with complexity factors"
     
     # AUDIT VERIFICATION
     audit_verification:
