@@ -370,13 +370,13 @@ phase_tracker:
       Compatibility, Code Organization Standardization
     ac_ids: 3
     completed_ac_ids: 0
-    status: NOT_STARTED
+    status: IN_PROGRESS
     locked: false
-    started_at: null
+    started_at: '2026-01-18T00:00:00Z'
     completed_at: null
     cleanup_required: false
     requires: PHASE-01
-    must_complete_before: PHASE-03
+    must_complete_before: PHASE-03-CORE-ARCHITECTURE
     blocking: true
     estimated_hours: 35
     priority: P0
@@ -388,7 +388,56 @@ phase_tracker:
       verified_at: null
       remediation_required: false
     git_checkpoint: null
-    acceptance_criteria: []
+    acceptance_criteria:
+    - ac_id: AC-AR-010-01
+      title: Nested Folder Structure Planning & Design
+      description: Design comprehensive nested folder structure for CORTEX codebase. Document organization rationale and benefits. Create detailed migration plan with risk assessment.
+      estimated_hours: 8
+      test_count: 7
+      status: NOT_STARTED
+      success_criteria:
+      - Structure designed and documented
+      - Organization rationale provided
+      - Migration plan comprehensive with risk assessment
+      - Governance approval obtained
+      files_to_create:
+      - docs/FOLDER-STRUCTURE-DESIGN.md
+      - scripts/folder-structure-validator.py
+      files_to_modify:
+      - cortex-master.yaml (phase metadata)
+    - ac_id: AC-AR-010-02
+      title: Automated Folder Migration Script
+      description: Create automated Python script to safely migrate codebase to new folder structure. Verify all file integrity. Generate comprehensive migration report.
+      estimated_hours: 12
+      test_count: 14
+      status: NOT_STARTED
+      success_criteria:
+      - Migration script created and tested
+      - File integrity verified post-migration
+      - Migration report generated with statistics
+      - Rollback capability implemented
+      files_to_create:
+      - scripts/migrate-folder-structure.py
+      - scripts/migration-validator.py
+      - docs/MIGRATION-REPORT.md
+      files_to_modify: []
+    - ac_id: AC-AR-010-03
+      title: Import Path Update & Validation
+      description: Update all Python import paths after folder migration. Validate no broken imports across codebase. Run full test suite to confirm 100% pass rate.
+      estimated_hours: 15
+      test_count: 14
+      status: NOT_STARTED
+      success_criteria:
+      - All import paths updated to new structure
+      - No broken imports detected (validation passes)
+      - Full test suite passes 100% (all tests green)
+      - Import coherence verified with automated checks
+      files_to_create:
+      - scripts/update-imports.py
+      - scripts/validate-imports.py
+      files_to_modify:
+      - All Python source files (import statements)
+      - All test files (import statements)
   PHASE-03-CORE-ARCHITECTURE:
     title: Orchestration Core & MCP Integration
     description: Orchestrator Architecture Framework, Model Context Protocol Integration,
