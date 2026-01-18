@@ -3288,8 +3288,10 @@ phase_tracker:
       \ pattern\n- Incremental adoption (existing integrations unchanged initially)\n"
     ac_ids: 8
     completed_ac_ids: 0
-    status: NOT_STARTED
+    status: IN_PROGRESS
     locked: false
+    started_at: '2026-01-18T14:30:00Z'
+    completed_at: null
     requires: PHASE-20-TEMPLATE-CONTENT
     depends_on:
     - PHASE-17-DOMAIN-BRAIN
