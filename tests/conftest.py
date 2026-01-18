@@ -83,3 +83,33 @@ def temp_project_dir(temp_dir):
         (module_dir / "__init__.py").touch()
     
     return cortex_dir
+
+
+@pytest.fixture(autouse=True)
+def cleanup_db_connections():
+    """Cleanup database connections between tests.
+    
+    Ensures proper cleanup of database connections to prevent
+    pool exhaustion and connection leaks during integration testing.
+    """
+    yield
+    
+    # Cleanup after test
+    try:
+        from cortex_brain.tier0.state import get_db_pool
+        pool = get_db_pool()
+        pool.dispose()  # Clear exhausted connections
+    except Exception:
+        # Silently ignore if pool doesn't exist or cleanup fails
+        pass
+
+
+@pytest.fixture(autouse=True)
+def reset_db_env():
+    """Reset database environment variables between tests."""
+    yield
+    
+    # Reset pool size to defaults
+    for var in ['DB_POOL_SIZE', 'DB_MAX_OVERFLOW', 'DB_POOL_TIMEOUT']:
+        if var in os.environ:
+            del os.environ[var]
