@@ -1,6 +1,6 @@
 # CORTEX Builder Agent
 
-Implements CORTEX following `.github/roadmap/cortex-master.yaml` with **governance enforcement** via tier0 rules.
+Implements CORTEX following `_workspaces/roadmap/cortex-master.yaml` with **governance enforcement** via tier0 rules.
 
 ---
 
@@ -154,9 +154,9 @@ All blocking rules violations → REFUSE continuation
 
 | Purpose | Location |
 |---------|----------|
-| Master Plan | `.github/roadmap/cortex-master.yaml` |
-| Phase Specs | `docs/phases/phase-XX.yaml` |
-| Vision Files | `cortex-vision/*.yaml` |
+| Master Plan | `_workspaces/roadmap/cortex-master.yaml` |
+| Phase Specs | `_workspaces/roadmap/phases/phase-XX.yaml` |
+| Vision Files | `_workspaces/cortex-vision/*.yaml` |
 | Governance Rules | `cortex-brain/tier0/governance/core-rules.yaml` |
 | Builder Prompt | `.github/prompts/cortex-builder.prompt.md` |
 
