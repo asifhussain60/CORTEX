@@ -431,6 +431,253 @@ grep -rn '/Users/\|/home/' --include="*.py" --include="*.yaml" . | grep -v '.git
 8. **BEFORE PHASE LOCK**: Execute cleanup (see Cleanup Protocol below)
 9. **When phase done**: Validate audit trace → **DISPLAY COMPLETION SUMMARY** → Update `phase_tracker` → `status: "COMPLETED"`, `locked: true`
 
+---
+
+## Enhancement Phases (Optional Refinement Phases)
+
+**NEW CONCEPT (2026-01-18): Optional phases that extend locked phases with new capabilities**
+
+### Purpose
+Enhancement phases allow strategic refinement and modernization of previously completed phases. They capture new requirements that emerge after a phase is locked, WITHOUT disrupting the baseline implementation.
+
+### When to Use Enhancement Phases
+Enhancement phases are **ONLY** considered for implementation when:
+1. ✅ ALL OTHER phases in phase_tracker have: `locked: true`
+2. ✅ This phase is the ONLY phase with: `locked: false` AND `implement_when_ready: true`
+3. ✅ ALL mandatory phases from `cortex-master.yaml` phase_tracker are COMPLETED
+4. ✅ NO other pending work exists in phase_tracker
+5. ✅ System is in a stable, production-ready state
+
+### Enhancement Phase Property (Updated 2026-01-18)
+
+Enhancement phases have a special metadata property in `cortex-master.yaml`:
+
+```yaml
+PHASE-XX-ENHANCEMENT:
+  title: "Enhancement Phase Title"
+  description: "Description of enhancements"
+  
+  # UPDATED PROPERTY (2026-01-18) - Indicates this is an enhancement phase
+  enhancement_phase: true
+  implement_when_ready: true  # BLOCKS execution until gating conditions met
+  
+  # Standard properties
+  status: "NOT_STARTED"
+  locked: false  # ONLY this phase has locked: false
+  requires: "PHASE-XX"  # References the original phase being enhanced
+  estimated_hours: N
+  
+  # Enhancement-specific notes
+  enhancement_rationale: |
+    Why this enhancement is valuable and what changed since original phase
+  
+  implementation_prerequisite: |
+    cortex-builder.prompt.md MUST implement this phase ONLY when:
+    - ALL OTHER phases in phase_tracker have: locked: true
+    - This phase is the ONLY phase with: locked: false AND implement_when_ready: true
+    - ALL mandatory phases (PHASE-01 through PHASE-22) are COMPLETED and LOCKED
+    - System audit trail is fully verified and unbroken
+    - Production baseline is established and stable
+```
+
+### Decision Logic for cortex-builder (Updated 2026-01-18)
+
+When evaluating phases for implementation:
+
+```yaml
+# PSEUDOCODE for phase selection logic with implement_when_ready
+if cortex-master.yaml.phase_tracker contains phases with locked: false:
+  # Count phases with locked: false
+  unlocked_phases = filter phase_tracker where locked == false
+  
+  if len(unlocked_phases) == 1 AND unlocked_phases[0].implement_when_ready == true:
+    # Single enhancement phase with gating property
+    enhancement_phase = unlocked_phases[0]
+    
+    if all_other_phases_locked_true AND system_audit_verified:
+      # Gating conditions met
+      return enhancement_phase for implementation
+    else:
+      # Conditions not met - wait
+      return "DEFER: Waiting for all mandatory phases to complete"
+  
+  else:
+    # Multiple unlocked phases or wrong phase - implement mandatory phases first
+    for each phase in unlocked_phases:
+      if phase.implement_when_ready != true:
+        # Mandatory phase
+        return phase
+    
+    # Should not reach here
+    return "ERROR: Multiple phases with implement_when_ready==true"
+  
+else:
+  # All phases are locked
+  return "SYSTEM COMPLETE - All phases locked, ready for deployment"
+```
+
+### Implementation Pattern for Enhancements (Updated)
+
+When implementing an enhancement phase with `implement_when_ready: true`:
+
+1. **Verify Gating** - Confirm ALL other phases have `locked: true`
+2. **Check Audit Trail** - Verify production baseline is established
+3. **Unlock Original Phase** - Set `locked: false` on the phase being enhanced
+4. **Create New AC-IDs** - Prefix new ACs with enhanced domain (e.g., `DO-002-04` after `DO-002-03`)
+5. **Reference Baseline** - Link to patterns from original phase implementation
+6. **Test Everything** - Follow CORE-008 (tests first) for ALL new AC-IDs
+7. **Re-Lock Original** - Set `locked: true` after enhancement complete (versioned)
+
+### Example 1: PHASE-15-DASHBOARD-UNIVERSAL with `implement_when_ready: true`
+
+**NEW REDESIGN (2026-01-18)**: Universal multi-repo dashboard architecture
+
+```yaml
+# Current baseline phase (stays locked)
+PHASE-15-NEURAL-OBSERVATORY:
+  status: "COMPLETED"
+  locked: true
+  ac_ids: 12  # All original features locked
+
+# NEW PHASE-15-DASHBOARD-UNIVERSAL (enhancement with universal deployment)
+PHASE-15-DASHBOARD-UNIVERSAL:
+  title: "Universal CORTEX Dashboard - Multi-Repo Visualization"
+  description: |
+    Dashboard operates from CORTEX/ folder, works in ANY repo where CORTEX is cloned.
+    Zero setup required, MCP tools exposed universally.
+  
+  enhancement_phase: true
+  implement_when_ready: true
+  
+  status: "NOT_STARTED"
+  locked: false
+  
+  ac_ids: 16  # New universal architecture ACs
+  
+  # SECTIONS (4 ACs each)
+  # Section A: Foundation (AC-DASH-001-01 through 001-04)
+  # Section B: Visualization (AC-DASH-002-01 through 002-04)
+  # Section C: Real-Time (AC-DASH-003-01 through 003-04)
+  # Section D: UX (AC-DASH-004-01 through 004-04)
+```
+
+**Implementation Pattern**:
+```
+Week 1: AC-DASH-001-01/02/03/04 - Universal shell, repo detection, metrics, context switching
+Week 2: AC-DASH-002-01/02/03/04 - Health dashboard, CORTEX ops, MCP tools, compliance
+Week 3: AC-DASH-003-01/02/03/04 - WebSocket, audit streaming, test tracking, alerts
+Week 4: AC-DASH-004-01/02/03/04 - Dark/light theme, export, layouts, search
+```
+
+**Success Criteria**:
+- ✅ Dashboard loads in <2 seconds
+- ✅ Works in any repo without setup
+- ✅ All 16 ACs with passing tests
+- ✅ MCP tools visible and functional
+- ✅ Multi-repo context switching works
+
+### Example 2: PHASE-DEPLOYMENT with `implement_when_ready: true`
+
+**NEW REDESIGN (2026-01-18)**: Universal multi-repo deployment & distribution
+
+```yaml
+# NEW PHASE-DEPLOYMENT (enhancement with multi-repo distribution)
+PHASE-DEPLOYMENT:
+  title: "CORTEX Universal Deployment & Multi-Repo Distribution"
+  description: |
+    Single-command installation, multi-repo deployment, upgrade capability.
+    CORTEX operates from its own folder, reads/modifies parent repo.
+  
+  enhancement_phase: true
+  implement_when_ready: true
+  
+  status: "NOT_STARTED"
+  locked: false
+  
+  ac_ids: 10  # Multi-repo deployment ACs
+  
+  # SECTIONS (2-3 ACs each)
+  # Section A: Bootstrap (AC-DEPLOY-001-01 through 001-03)
+  # Section B: Multi-Repo (AC-DEPLOY-002-01 through 002-03)
+  # Section C: Upgrade (AC-DEPLOY-003-01 through 003-02)
+  # Section D: Production (AC-DEPLOY-004-01 through 004-02)
+```
+
+**Installation Flow**:
+```bash
+# Single command installation
+cd company-repo
+git clone https://github.com/cortex-ai/cortex.git CORTEX
+cd CORTEX
+./cortex init
+cortex dashboard  # Opens dashboard showing parent repo metrics
+```
+
+**Implementation Pattern**:
+```
+Week 1: AC-DEPLOY-001-01/02/03 - Init command, auto-detection, MCP registration
+Week 2: AC-DEPLOY-002-01/02/03 - Path isolation, context switching, shared state
+Week 3: AC-DEPLOY-003-01/02 - Upgrade mechanism, versioning
+Week 4: AC-DEPLOY-004-01/02 - Security hardening, performance optimization
+```
+
+**Success Criteria**:
+- ✅ `git clone + cortex init` works in <5 minutes
+- ✅ Parent repo completely unchanged (except CORTEX/ folder)
+- ✅ Dashboard accessible immediately after init
+- ✅ MCP tools available in any repo context
+- ✅ `cortex upgrade` pulls latest without breaking
+- ✅ All 10 ACs with passing tests
+
+### Critical Interdependency
+
+**PHASE-15-DASHBOARD-UNIVERSAL** MUST complete before **PHASE-DEPLOYMENT** begins:
+
+```
+1. PHASE-15-DASHBOARD-UNIVERSAL (16 ACs) → universal dashboard foundation
+           ↓ (MUST be locked: true)
+2. PHASE-DEPLOYMENT (10 ACs) → uses dashboard in deployment package
+```
+
+**Reason**: PHASE-DEPLOYMENT includes dashboard in installation package. Dashboard must be production-ready before packaging.
+
+### Gating Logic for Both Enhancement Phases
+
+Both PHASE-15-DASHBOARD-UNIVERSAL and PHASE-DEPLOYMENT use the SAME gating mechanism:
+
+```python
+def can_implement_enhancement_phase(phase_name):
+    """Check if enhancement phase with implement_when_ready should be implemented"""
+    
+    # 1. Verify only ONE phase has locked: false
+    unlocked = [p for p in all_phases if p.locked == false]
+    if len(unlocked) != 1:
+        return False, f"ERROR: {len(unlocked)} unlocked phases, expected 1"
+    
+    # 2. Verify that one phase has implement_when_ready: true
+    if unlocked[0].implement_when_ready != true:
+        return False, "ERROR: Only unlocked phase doesn't have implement_when_ready"
+    
+    # 3. Verify ALL other phases have locked: true
+    if not all(p.locked == true for p in all_phases if p != unlocked[0]):
+        return False, "ERROR: Not all other phases are locked"
+    
+    # 4. Verify audit trail is verified
+    if not audit_trail.is_verified():
+        return False, "ERROR: Audit trail not verified"
+    
+    # 5. All checks passed - phase ready for implementation
+    return True, f"READY: {phase_name} approved for implementation"
+```
+
+**How cortex-builder Uses This**:
+1. Before each planning cycle, call `can_implement_enhancement_phase()`
+2. If returns True: Implement the enhancement phase with full priority
+3. If returns False: Focus on completing mandatory phases instead
+
+
+---
+
 ## Cleanup Protocol (REQUIRED BEFORE PHASE LOCK)
 
 **Mandatory cleanup checklist before setting `locked: true`:**
