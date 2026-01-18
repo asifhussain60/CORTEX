@@ -1579,6 +1579,328 @@ class RealTimeProgressDashboard:
             )
 
 
+class AlertSeverity(IntEnum):
+    """Severity levels for alerts."""
+    INFO = 0
+    WARNING = 1
+    CRITICAL = 2
+
+
+class AlertState(IntEnum):
+    """State of an alert in its lifecycle."""
+    ACTIVE = 0
+    ACKNOWLEDGED = 1
+    RESOLVED = 2
+
+
+@dataclass
+class Threshold:
+    """
+    Configuration for alert threshold.
+    
+    Attributes:
+        name: Threshold identifier
+        metric: Metric name to monitor
+        operator: Comparison operator (>, <, >=, <=, ==)
+        value: Threshold value
+        severity: Alert severity when violated
+        enabled: Whether threshold is active
+    """
+    name: str
+    metric: str
+    operator: str
+    value: float
+    severity: "AlertSeverity"
+    enabled: bool = True
+    
+    def __post_init__(self) -> None:
+        """Validate threshold configuration."""
+        if self.operator not in (">", "<", ">=", "<=", "=="):
+            raise ValueError(f"Invalid operator: {self.operator}")
+
+
+@dataclass
+class Alert:
+    """
+    An alert notification.
+    
+    Attributes:
+        alert_id: Unique alert identifier
+        metric_name: Name of metric that triggered alert
+        threshold_name: Name of violated threshold
+        severity: Alert severity level
+        state: Current alert lifecycle state
+        message: Human-readable alert message
+        timestamp: When alert was created
+        value: Actual metric value
+        acknowledged_at: When alert was acknowledged
+    """
+    alert_id: str
+    metric_name: str
+    threshold_name: str
+    severity: AlertSeverity
+    state: AlertState
+    message: str
+    timestamp: float
+    value: Optional[float] = None
+    acknowledged_at: Optional[float] = None
+
+
+class NotificationChannel:
+    """
+    Base class for alert notification channels.
+    
+    Subclass for email, Slack, PagerDuty, etc.
+    """
+    
+    def send(self, alert: Alert) -> bool:
+        """
+        Send alert notification.
+        
+        Args:
+            alert: Alert to send
+            
+        Returns:
+            True if sent successfully
+        """
+        raise NotImplementedError
+
+
+class AlertManager:
+    """
+    Manages alerts with configurable thresholds and notifications.
+    
+    Provides:
+    - Threshold configuration (>/</>=/<=​/==)
+    - Automatic alert triggering on violations
+    - Multiple notification channels
+    - Alert lifecycle management (active/acknowledged/resolved)
+    - Metric history tracking
+    
+    AC-ID: AC-NFR-004-03
+    Title: Alert Management & Threshold Monitoring
+    
+    Example:
+        manager = AlertManager()
+        
+        # Configure threshold
+        threshold = Threshold(
+            name="high_cpu",
+            metric="cpu_usage",
+            operator=">",
+            value=80.0,
+            severity=AlertSeverity.WARNING
+        )
+        manager.add_threshold(threshold)
+        
+        # Add notification channel
+        manager.add_channel(EmailChannel("admin@example.com"))
+        
+        # Record metrics (alerts triggered automatically)
+        manager.record_metric("cpu_usage", 85.0)
+    
+    Thread Safety: Use external locking for multi-threaded access
+    """
+    
+    def __init__(self) -> None:
+        """Initialize alert manager."""
+        self.thresholds: Dict[str, Threshold] = {}
+        self.channels: List[NotificationChannel] = []
+        self.alerts: Dict[str, Alert] = {}
+        self.alert_counter = 0
+        self.metrics_history: Dict[str, List[float]] = {}
+        self._lock = threading.RLock()
+    
+    def add_threshold(self, threshold: Threshold) -> str:
+        """
+        Add alert threshold configuration.
+        
+        Args:
+            threshold: Threshold configuration
+            
+        Returns:
+            Threshold name
+            
+        Raises:
+            ValueError: If configuration invalid
+        """
+        with self._lock:
+            self.thresholds[threshold.name] = threshold
+            logger.info(f"Added threshold: {threshold.name} ({threshold.metric} {threshold.operator} {threshold.value})")
+            return threshold.name
+    
+    def remove_threshold(self, threshold_name: str) -> bool:
+        """
+        Remove threshold by name.
+        
+        Args:
+            threshold_name: Name of threshold to remove
+            
+        Returns:
+            True if threshold existed and was removed
+        """
+        with self._lock:
+            if threshold_name in self.thresholds:
+                del self.thresholds[threshold_name]
+                return True
+            return False
+    
+    def add_channel(self, channel: NotificationChannel) -> None:
+        """
+        Add notification channel.
+        
+        Args:
+            channel: Notification channel implementation
+        """
+        with self._lock:
+            self.channels.append(channel)
+    
+    def record_metric(self, metric_name: str, value: float) -> List[Alert]:
+        """
+        Record metric value and check against thresholds.
+        
+        Args:
+            metric_name: Name of metric
+            value: Metric value
+            
+        Returns:
+            List of alerts triggered by this metric
+            
+        Complexity: O(n) where n is number of thresholds
+        """
+        with self._lock:
+            # Store metric history
+            if metric_name not in self.metrics_history:
+                self.metrics_history[metric_name] = []
+            self.metrics_history[metric_name].append(value)
+            
+            triggered_alerts = []
+            
+            # Check all thresholds for this metric
+            for threshold in self.thresholds.values():
+                if threshold.metric == metric_name and threshold.enabled:
+                    if self._check_threshold(threshold, value):
+                        alert = self._create_alert(threshold, metric_name, value)
+                        self.alerts[alert.alert_id] = alert
+                        triggered_alerts.append(alert)
+                        self._notify_channels(alert)
+            
+            return triggered_alerts
+    
+    def _check_threshold(self, threshold: Threshold, value: float) -> bool:
+        """Check if metric value violates threshold."""
+        if threshold.operator == ">":
+            return value > threshold.value
+        elif threshold.operator == "<":
+            return value < threshold.value
+        elif threshold.operator == ">=":
+            return value >= threshold.value
+        elif threshold.operator == "<=":
+            return value <= threshold.value
+        elif threshold.operator == "==":
+            return value == threshold.value
+        return False
+    
+    def _create_alert(self, threshold: Threshold, metric: str, value: float) -> Alert:
+        """Create alert from threshold violation."""
+        self.alert_counter += 1
+        alert_id = f"alert-{self.alert_counter}"
+        
+        return Alert(
+            alert_id=alert_id,
+            metric_name=metric,
+            threshold_name=threshold.name,
+            severity=threshold.severity,
+            state=AlertState.ACTIVE,
+            message=f"{metric} {threshold.operator} {threshold.value} (actual: {value})",
+            timestamp=time.time(),
+            value=value
+        )
+    
+    def _notify_channels(self, alert: Alert) -> None:
+        """Send alert to all notification channels."""
+        for channel in self.channels:
+            try:
+                channel.send(alert)
+            except Exception as e:
+                logger.warning(f"Channel notification error: {e}")
+    
+    def acknowledge_alert(self, alert_id: str) -> bool:
+        """
+        Acknowledge an alert.
+        
+        Args:
+            alert_id: Alert to acknowledge
+            
+        Returns:
+            True if alert acknowledged
+        """
+        with self._lock:
+            if alert_id in self.alerts:
+                self.alerts[alert_id].state = AlertState.ACKNOWLEDGED
+                self.alerts[alert_id].acknowledged_at = time.time()
+                return True
+            return False
+    
+    def resolve_alert(self, alert_id: str) -> bool:
+        """
+        Resolve an alert.
+        
+        Args:
+            alert_id: Alert to resolve
+            
+        Returns:
+            True if alert resolved
+        """
+        with self._lock:
+            if alert_id in self.alerts:
+                self.alerts[alert_id].state = AlertState.RESOLVED
+                return True
+            return False
+    
+    def get_active_alerts(self) -> List[Alert]:
+        """
+        Get all active (not acknowledged/resolved) alerts.
+        
+        Returns:
+            List of active alerts
+        """
+        with self._lock:
+            return [a for a in self.alerts.values() if a.state == AlertState.ACTIVE]
+    
+    def enable_threshold(self, threshold_name: str) -> bool:
+        """
+        Enable a threshold.
+        
+        Args:
+            threshold_name: Threshold to enable
+            
+        Returns:
+            True if threshold enabled
+        """
+        with self._lock:
+            if threshold_name in self.thresholds:
+                self.thresholds[threshold_name].enabled = True
+                return True
+            return False
+    
+    def disable_threshold(self, threshold_name: str) -> bool:
+        """
+        Disable a threshold.
+        
+        Args:
+            threshold_name: Threshold to disable
+            
+        Returns:
+            True if threshold disabled
+        """
+        with self._lock:
+            if threshold_name in self.thresholds:
+                self.thresholds[threshold_name].enabled = False
+                return True
+            return False
+
+
 __all__ = [
     "GracefulDegradationFramework",
     "PartialFunctionalityMode",
@@ -1607,4 +1929,10 @@ __all__ = [
     "DashboardMetrics",
     "DashboardUpdate",
     "DashboardUpdateType",
+    "AlertManager",
+    "Alert",
+    "AlertSeverity",
+    "AlertState",
+    "Threshold",
+    "NotificationChannel",
 ]
