@@ -298,21 +298,24 @@ class DatabaseTransactionManager:
               
             Chain Validation: Each entry's previous_hash matches prior entry's entry_hash ✅
         """
+        # AC-FIX-001-05: GLOBAL hash chain (not per-AC-ID)
+        # Removed "WHERE ac_id = ?" to create continuous global chain
+        # Every entry links to the previous entry chronologically (regardless of AC-ID)
         cursor = conn.cursor()
         cursor.execute("""
             SELECT entry_hash
             FROM audit_log
-            WHERE ac_id = ?
             ORDER BY id DESC
             LIMIT 1
-        """, (ac_id,))
+        """)
+        # NOTE: No WHERE clause - queries LAST entry overall (global chain)
         
         row = cursor.fetchone()
         if row:
-            # Return prior entry's entry_hash
+            # Return prior entry's entry_hash (link to LAST entry globally)
             return row[0]
         else:
-            # GENESIS entry (first entry for this AC-ID)
+            # GENESIS entry (first entry in entire audit log)
             return ""
     
     def _validate_hash_chain(self, current_entry: Any, prior_entry: Optional[Any] = None) -> bool:

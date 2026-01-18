@@ -35,7 +35,7 @@ class TestAuditTrailIntegrity:
     @pytest.fixture
     def db_connection(self) -> sqlite3.Connection:
         """Connect to governance database."""
-        db_path = Path(__file__).parent.parent.parent / "cortex-brain" / "state" / "governance.db"
+        db_path = Path(__file__).parent.parent.parent / "cortex" / "core" / "state" / "governance.db"
         assert db_path.exists(), f"Database not found at {db_path}"
         
         conn = sqlite3.connect(str(db_path))
