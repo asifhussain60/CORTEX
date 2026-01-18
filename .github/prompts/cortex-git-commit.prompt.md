@@ -250,11 +250,11 @@ paths:
 **In markdown/docs, use:**
 ```markdown
 <!-- ✅ CORRECT - Relative links -->
-See [roadmap](/.github/roadmap/cortex-master.yaml)
+See [roadmap](/_workspaces/roadmap/cortex-master.yaml)
 Database at `cortex-brain/state/governance.db`
 
 <!-- ❌ WRONG - Absolute paths -->
-See `/Users/asifhussain/PROJECTS/CORTEX/.github/roadmap/cortex-master.yaml`
+See `/Users/asifhussain/PROJECTS/CORTEX/_workspaces/roadmap/cortex-master.yaml`
 ```
 
 ---
@@ -524,8 +524,8 @@ echo "✅ All checks passed - safe to push"
 
 ## 📚 RELATED DOCUMENTATION
 
-- **Multi-Machine Strategy:** `.github/roadmap/MULTI_MACHINE_STRATEGY.md`
-- **Master Roadmap:** `.github/roadmap/cortex-master.yaml`
+- **Multi-Machine Strategy:** `_workspaces/roadmap/MULTI_MACHINE_STRATEGY.md`
+- **Master Roadmap:** `_workspaces/roadmap/cortex-master.yaml`
 - **Database Init:** `scripts/init_db.py --help`
 - **Governance Rules:** `cortex-brain/tier0/governance/core-rules.yaml`
 - **Builder Prompt:** `.github/prompts/cortex-builder.prompt.md`
@@ -546,5 +546,4 @@ A successful commit/merge meets ALL of these:
 ---
 
 *Last Updated: January 15, 2026*
-*Version: 1.0*
 *Integrates with: PHASE-09 (Governance Tools), PHASE-13 (Production Rollout)*

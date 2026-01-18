@@ -1,18 +1,18 @@
-# CORTEX Roadmap v2.0
+# CORTEX Roadmap
 
 **Date Created:** 2026-01-17  
 **Status:** Active Implementation  
-**Baseline:** 258 Completed ACs from v1
+**Baseline:** 258 Completed ACs from previous iteration
 
 ---
 
 ## 📋 Overview
 
-This is the **continuation** of the CORTEX implementation roadmap. The original master plan (`cortex-master-v1.yaml`) has been archived for maintainability while preserving all historical context.
+This is the **continuation** of the CORTEX implementation roadmap. The original master plan has been archived for maintainability while preserving all historical context.
 
 ### What This Directory Contains
 
-- **`cortex-master.yaml`** - Master roadmap tracker (this version, v2.0)
+- **`cortex-master.yaml`** - Master roadmap tracker (current)
 - **`phases/`** - Individual phase definitions (YAML files)
 - **`reports/`** - Generated phase completion reports
 - **`_archives/`** - Previous versions and historical documentation
@@ -21,14 +21,14 @@ This is the **continuation** of the CORTEX implementation roadmap. The original 
 
 All documentation and historical files have been moved to `_archives/` to keep the roadmap directory clean:
 
-- `_archives/cortex-master-v1.yaml` - Original comprehensive master plan
-- `_archives/phases-v1/` - All original phase definitions
+- `_archives/cortex-master-v1.yaml` - Previous master plan
+- `_archives/phases-v1/` - Previous phase definitions
 - `_archives/docs/` - All historical markdown documentation
 - `_archives/cortex-consolidated.yaml` - Previous consolidation file
 
 ---
 
-## ✅ Completed Work (From v1)
+## ✅ Completed Work (From Previous Iteration)
 
 ### Locked Phases (6 total)
 
@@ -74,9 +74,9 @@ All documentation and historical files have been moved to `_archives/` to keep t
 
 ---
 
-## 🚀 Active Phases (From v2 onwards)
+## 🚀 Active Phases (Continuation)
 
-These phases build on the completed v1 baseline:
+These phases build on the completed baseline:
 
 ### In Development
 
@@ -104,7 +104,7 @@ These phases build on the completed v1 baseline:
 
 ```
 roadmap/
-├── cortex-master.yaml                    # Master tracker (v2.0 - THIS FILE)
+├── cortex-master.yaml                    # Master tracker (current)
 ├── cortex-master.yaml.bak                # Backup
 │
 ├── phases/                               # Active phase definitions
@@ -126,11 +126,11 @@ roadmap/
 │   └── (reports generated during phase completion)
 │
 └── _archives/                            # Historical files (reference only)
-    ├── cortex-master-v1.yaml             # Original comprehensive plan
+    ├── cortex-master-v1.yaml             # Previous master plan
     ├── cortex-consolidated.yaml          # Previous consolidation
-    ├── phases-v1/                        # Original phase definitions
+    ├── phases-v1/                        # Previous phase definitions
     │   ├── phase-01.yaml through phase-20.yaml
-    │   └── (all other original phases)
+    │   └── (all other previous phases)
     └── docs/                             # Historical markdown documentation
         ├── AC-PROD-SESSION-001-SUMMARY.md
         ├── EXECUTIVE-SUMMARY.md
@@ -140,7 +140,7 @@ roadmap/
 
 ---
 
-## 🔄 How This v2 Structure Works
+## 🔄 How This Structure Works
 
 ### For Active Development
 
@@ -157,22 +157,22 @@ roadmap/
 
 ### For Maintenance
 
-- **When v2 is complete:** Archive this directory to `_archives/cortex-master-v2/`
-- **Start v3** with the same clean structure
-- **Always reference previous versions** for baseline knowledge
+- **When current iteration is complete:** Archive this directory to `_archives/cortex-master-archive/`
+- **Start next iteration** with the same clean structure
+- **Always reference previous iterations** for baseline knowledge
 
 ---
 
 ## 📊 Key Metrics
 
-### v1 Baseline (Completed)
+### Baseline (Completed)
 - **ACs Completed:** 258+
 - **Phases Locked:** 6 core + 3 enhancements + 4 remediations
 - **Test Pass Rate:** 100% (153/153 tests)
 - **Production Ready:** Yes ✅
 - **Governance Compliant:** Yes ✅
 
-### v2 Target (In Progress)
+### Current Target (In Progress)
 - **ACs to Complete:** 104 (PHASE-07 through PHASE-20)
 - **Estimated Hours:** ~400
 - **Target Completion:** Q2 2026 (estimated)
@@ -234,18 +234,17 @@ reports/phase-08-progress-2026-01-25.md
 
 ---
 
-## ✨ Key Features of v2 Structure
+## ✨ Key Features of Current Structure
 
 - ✅ Clean, maintainable roadmap directory
 - ✅ Historical context preserved in `_archives/`
-- ✅ Easy to reference v1 baseline
+- ✅ Easy to reference baseline
 - ✅ Clear separation of active work vs. historical docs
-- ✅ Scalable for future versions (v3, v4, etc.)
-- ✅ Continues all governance and compliance patterns from v1
+- ✅ Scalable for future iterations
+- ✅ Continues all governance and compliance patterns
 - ✅ Hash chain integrity maintained
 
 ---
 
 **Created:** 2026-01-17  
-**Version:** 2.0  
 **Status:** Ready for Phase 7 Implementation
