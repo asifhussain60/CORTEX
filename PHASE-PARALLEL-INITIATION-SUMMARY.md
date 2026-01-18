@@ -1,13 +1,19 @@
-# PHASE-PARALLEL: Folder Structure Migration & Organization
+# PHASE-02-CODEBASE-COHERENCE: Codebase Coherence & Import Foundation
 **Initiation Summary - 2026-01-18**
 
-## Executive Summary
-PHASE-PARALLEL is a parallel execution phase that organizes and migrates the CORTEX codebase into a comprehensive nested folder structure. This phase runs non-blocking alongside PHASE-02 through PHASE-04 but must complete before PHASE-05.
+**[PHASE PROMOTED & RENAMED]** From: PHASE-PARALLEL → To: PHASE-02-CODEBASE-COHERENCE (Position 2 in execution sequence)
 
-**Phase Dependency Chain:**
-- ✅ **Requires**: PHASE-01 (completed)
-- ✅ **Blocks**: PHASE-05 (not yet started)
-- 🔄 **Parallel With**: PHASE-02, PHASE-03, PHASE-04
+## Executive Summary
+PHASE-02-CODEBASE-COHERENCE is now a foundational phase that establishes critical import coherence and folder structure *before* all core architecture work. This strategic promotion ensures maximum downstream stability by validating coherent imports early, reducing technical debt propagation, and improving maintainability at the foundation level.
+
+**Phase Dependency Chain (New Sequence):**
+- ✅ **PHASE-01**: Governance Foundation (completed)
+- 🚀 **PHASE-02-CODEBASE-COHERENCE**: Import Foundation (current - NOT_STARTED)
+- ✅ **PHASE-03-CORE-ARCHITECTURE**: Orchestrator Core (blocks on this phase)
+- ✅ **PHASE-04-SAFETY-RELIABILITY**: Safety & Reliability (downstream)
+- ✅ **PHASE-05-PRODUCTION-HARDENING**: Production Hardening (downstream)
+- ✅ **PHASE-06-BRITTLENESS**: Brittleness Fixes (downstream)
+- ✅ **PHASE-07-ECOSYSTEM**: Orchestrator Plugins (downstream)
 
 ---
 
@@ -15,23 +21,23 @@ PHASE-PARALLEL is a parallel execution phase that organizes and migrates the COR
 
 ### Metadata
 ```yaml
-id: PHASE-PARALLEL
+id: PHASE-02-CODEBASE-COHERENCE
 status: NOT_STARTED
 locked: false
+priority: P0
+blocking: true
 requires: PHASE-01
-must_complete_before: PHASE-05
-blocking: false
-parallel_with:
-  - PHASE-02
-  - PHASE-03
-  - PHASE-04
+must_complete_before: PHASE-03-CORE-ARCHITECTURE
+estimated_hours: 35
 ```
 
-### Focus Areas
-- Nested Folder Structure Organization (AR-010)
-- Organized codebase layout
-- Coherent import paths
-- Clear separation of concerns
+### Strategic Rationale
+**Why Promote to Position 2?**
+1. **Highest-Risk Foundation**: Import coherence failures cascade through entire system
+2. **Early Validation**: Establish clean codebase foundation before architecture complexity multiplies
+3. **Unblock Parallel Velocity**: All downstream phases execute with confidence on stable imports
+4. **Preventive Over Reactive**: Fix import risks in Week 1, not Week 4-5
+5. **Governance Alignment**: Directly supports CORE-004 (Organization) and CORE-028 (Portable Paths)
 
 ### Acceptance Criteria (3 ACs)
 
@@ -119,10 +125,11 @@ This phase aligns with:
 
 ---
 
-## Timeline Estimate
-- **Total Estimated Hours**: ~35 hours (based on individual AC estimates)
+## Timeline & Sequencing
+- **Total Estimated Hours**: ~35 hours
 - **Suggested Duration**: 5-7 days
-- **Parallel Execution**: Can run alongside PHASE-02, PHASE-03, PHASE-04
+- **Blocker**: Must complete before PHASE-03-CORE-ARCHITECTURE starts
+- **Priority Signal**: P0 (Foundational - highest priority for resource allocation)
 
 ---
 
@@ -145,7 +152,7 @@ This phase aligns with:
 
 ---
 
-**Initiated**: 2026-01-18
-**Initiated By**: cortex-builder
-**Authority**: cortex-builder.prompt.md (SSOT workflow)
-**Tracking**: cortex-master.yaml phases: section (lines 5781+)
+**Initiated**: 2026-01-18 (Promoted & Prioritized)
+**Initiated By**: cortex-builder (Strategic Phase Prioritization)
+**Authority**: cortex-builder.prompt.md (SSOT workflow) + Strategic Value Analysis
+**Tracking**: cortex-master.yaml phase_tracker section (PHASE-02-CODEBASE-COHERENCE)
