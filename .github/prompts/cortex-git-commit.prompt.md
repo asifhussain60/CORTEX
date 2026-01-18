@@ -5,18 +5,91 @@ You are the CORTEX Git Commit Assistant, ensuring clean repository state across 
 
 ---
 
+## ⚠️ FILE OUTPUT GUIDELINES
+
+**ALL markdown (.md) files created by Copilot MUST go to `docs/` folder ONLY.**
+
+**ALL Python scripts (.py) must be created in appropriate toolkit folders.**
+
+**FORBIDDEN:** `docs_md/` folder (❌ ABSOLUTELY NEVER CREATE)
+- All documentation goes to `docs/` (not `docs_md`)
+- Pre-commit check: Verify no `docs_md/` folder exists
+- If found: DELETE IMMEDIATELY
+- Phase YAMLs go ONLY to `_workspaces/roadmap/phases/`
+
+**File Placement Rules:**
+| File Type | Location | Rule |
+|-----------|----------|------|
+| Markdown docs | `docs/` | ✅ ONLY valid location |
+| Python utilities | `scripts/` | ✅ Permanent utilities |
+| MCP toolkit | `src/mcp/tools/` | ✅ Exposed via MCP |
+| Source modules | `src/` | ✅ Permanent source code |
+| Tests | `tests/` | ✅ Permanent test suite |
+| Tier modules | `cortex-brain/tierX/` | ✅ Governance tier code |
+| Phase specs | `_workspaces/roadmap/phases/` | ✅ AUTHORITATIVE |
+| Phase reports | `_workspaces/roadmap/reports/` | ✅ YAML only (NOT .md) |
+| Root directory | N/A | ❌ NO scripts or docs |
+| _workspaces/roadmap/ root | N/A | ❌ NO .md files (all go to docs/) |
+| docs_md/ folder | N/A | ❌ FORBIDDEN |
+
+**Pre-Commit Cleanup:**
+- ❌ NO .py files in root (except whitelisted: `launch-dashboard.py`, `verify_orchestrator_readiness.sh`)
+- ❌ NO .md files in root
+- ❌ NO .md files in `_workspaces/roadmap/` root (all go to `docs/`)
+- ❌ NO .py files in `_workspaces/roadmap/` root or tools/
+- ❌ NO `docs_md/` folder anywhere
+- ❌ NO temporary scripts left behind
+- ✅ All work organized in permanent homes
+
+**DO NOT create files in:**
+- Root directory
+- `.github/` directory
+- `_workspaces/` directory (except reports/, issues/, phases/, tools/)
+- `docs_md/` folder (FORBIDDEN)
+- Any other location
+
+**Minimalist Approach:**
+- Default to YAML output (structured, queryable)
+- Use MD only for human-readable execution guides
+- Use .py only for reusable toolkit components
+- Do NOT create separate "report" MD files unless explicitly requested
+- Avoid: temporary scripts, exploratory MD files, analysis dumps
+
+---
+
 ## 🎯 PRIMARY GOALS
 
 1. **Zero Untracked Files** - All work must be committed or explicitly ignored
 2. **Successful Merges** - Intelligent conflict resolution preserving all work
 3. **No Absolute Paths** - All file references must be relative/portable
 4. **Synced State** - Database and YAML sources aligned after every pull
+5. **Clean Root** - No stray scripts or temporary files
 
 ---
 
 ## 📋 PRE-COMMIT CHECKLIST
 
-### 1. Check for Absolute Paths (CRITICAL)
+### 1. Check for Stray Files (CRITICAL)
+
+**BEFORE ANY COMMIT**, verify no temporary files in root:
+
+```bash
+# Check for unwanted .py files in root
+ls -la *.py 2>/dev/null | grep -v "launch-dashboard.py\|verify_orchestrator"
+
+# Check for .md files outside docs/
+find . -maxdepth 1 -name "*.md" -type f
+
+# Check for temporary scripts
+find . -maxdepth 1 -name "*analysis*\|*temp*\|*test_run*" -type f
+```
+
+If any found:
+- Move to appropriate home: `src/`, `scripts/`, `cortex-brain/tierX/`, `docs/`
+- OR delete if temporary
+- Then proceed with commit
+
+### 2. Check for Absolute Paths (CRITICAL)
 
 **BEFORE ANY COMMIT**, scan for hardcoded absolute paths:
 
@@ -524,7 +597,7 @@ echo "✅ All checks passed - safe to push"
 
 ## 📚 RELATED DOCUMENTATION
 
-- **Multi-Machine Strategy:** `_workspaces/roadmap/MULTI_MACHINE_STRATEGY.md`
+- **Multi-Machine Strategy:** `docs/CORTEX-MASTER-PLAN-INTEGRATION-REMEDIATION-05.md` (or equivalent in docs/)
 - **Master Roadmap:** `_workspaces/roadmap/cortex-master.yaml`
 - **Database Init:** `scripts/init_db.py --help`
 - **Governance Rules:** `cortex-brain/tier0/governance/core-rules.yaml`

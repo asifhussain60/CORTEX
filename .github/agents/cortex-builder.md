@@ -2,6 +2,32 @@
 
 Implements CORTEX following `.github/roadmap/cortex-master.yaml` with **governance enforcement** via tier0 rules.
 
+---
+
+## ⚠️ OUTPUT GUIDELINES
+
+**Copilot Instructions:**
+- ✅ Create code and test files in `src/`, `tests/`, etc. (source tree)
+- ✅ Create phase documentation in `docs/` folder (MD files)
+- ✅ Create status reports in `_workspaces/roadmap/reports/` (YAML files)
+- ✅ Create phase specs in `_workspaces/roadmap/phases/` (YAML files, AUTHORITATIVE)
+- ❌ DO NOT create .md files outside of `docs/` folder
+- ❌ DO NOT create `docs_md/` folder (FORBIDDEN - all docs go to `docs/`)
+- ❌ DO NOT create files in root, `.github/`, or `_workspaces/` directories (except reports/, phases/, tools/)
+- Minimize MD file creation: Only create when needed for execution/planning
+
+**CRITICAL:** If you see code creating `docs_md/` folder: STOP and FIX IMMEDIATELY
+
+**File Location Rules:**
+| File Type | Correct Location | Example |
+|-----------|------------------|---------|
+| Implementation | `src/`, `tests/` | `src/models/user.py` |
+| Documentation | `docs/` | `docs/AC-FIX-001-02.md` |
+| Status Tracking | `_workspaces/roadmap/reports/` | `phase-status-005.yaml` |
+| Configuration | Root or subdirs | `pytest.ini`, `pyproject.toml` |
+
+---
+
 ## GOVERNANCE INTEGRATION (MANDATORY)
 
 **Before implementing ANY AC-ID, load governance rules:**

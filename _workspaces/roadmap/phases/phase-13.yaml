@@ -1,54 +1,90 @@
+# PHASE-13-OBSERVABILITY-MATURITY: Observability & Telemetry Maturity
 # =============================================================================
-# PHASE-13: OBSERVABILITY MATURITY & BUSINESS DOMAIN INTEGRATION
+# Purpose: Production-grade observability for CORTEX runtime
+# Status: NOT_STARTED
+# Requires: PHASE-10-ADAPTIVE-EXECUTION
+# Estimated Duration: 2.5 days (20 hours)
 # =============================================================================
-# Status: COMPLETED
-# Completed: 2026-01-16
-# =============================================================================
+# NOTE: This was previously PHASE-12-OBSERVABILITY-MATURITY, renumbered for sequential ordering
 
 phase:
-  id: "PHASE-13"
-  title: "Observability Maturity & Business Domain Integration"
-  description: "Production-Grade Observability, Telemetry System, Audit Trail Visualization, Business Domain Framework Integration"
+  id: "PHASE-13-OBSERVABILITY-MATURITY"
+  title: "Observability & Telemetry Maturity"
+  description: |
+    Implement production-grade observability:
+    - OpenTelemetry integration
+    - Metrics dashboard
+    - Alerting and health monitoring
+    - Performance profiling
+    - Audit trail enhancement
   
-  status: "COMPLETED"
-  locked: true
+  order: 13
+  status: "NOT_STARTED"
+  locked: false
   
-  metadata:
-    created: "2026-01-17"
-    version: "1.0"
-    completed_at: "2026-01-16T08:32:36Z"
+  requires: "PHASE-10-ADAPTIVE-EXECUTION"
+  required_for: "PHASE-16-ORCHESTRATOR-CONTINUATION"
+  blocking: true
   
-  ac_ids:
-    - "OB-001-01"  # Observability Metrics
-    - "OB-001-02"  # Telemetry System
-    - "OB-002-01"  # Audit Visualization
-    - "OB-002-02"  # Dashboard Integration
-    - "OB-003-01"  # Production Monitoring
-    - "BD-001-01"  # Business Domain Framework
-    - "BD-001-02"  # Domain Configuration
-    - "BD-002-01"  # Domain Validation
-    - "BD-003-01"  # Domain Integration
+  estimated_hours: 20
+  estimated_days: 2.5
+  
+  ac_ids: 5
+  completed_ac_ids: 0
+  progress_percentage: 0.0
 
-  total_ac_ids: 9
-  completed_ac_ids: 9
+acceptance_criteria:
+  - ac_id: "OB-001-01"
+    title: "OpenTelemetry Integration"
+    description: "Integrate OpenTelemetry for distributed tracing and metrics"
+    status: "NOT_STARTED"
+    acceptance_tests:
+      - "Traces exported to backend"
+      - "Spans created for key operations"
+      - "Context propagation working"
+    git_checkpoint: "OB-001-01-opentelemetry"
+    
+  - ac_id: "OB-001-02"
+    title: "Metrics Dashboard"
+    description: "Dashboard visualizing CORTEX runtime metrics"
+    status: "NOT_STARTED"
+    acceptance_tests:
+      - "Dashboard displays key metrics"
+      - "Real-time updates working"
+      - "Historical data queryable"
+    git_checkpoint: "OB-001-02-dashboard"
+    
+  - ac_id: "OB-002-01"
+    title: "Alerting & Health Monitoring"
+    description: "Alert on anomalies and health issues"
+    status: "NOT_STARTED"
+    acceptance_tests:
+      - "Alerts triggered on threshold breaches"
+      - "Health checks implemented"
+      - "Notification channels configured"
+    git_checkpoint: "OB-002-01-alerting"
+    
+  - ac_id: "OB-002-02"
+    title: "Performance Profiling & Optimization"
+    description: "Identify bottlenecks and generate recommendations"
+    status: "NOT_STARTED"
+    acceptance_tests:
+      - "Bottlenecks identifiable from data"
+      - "Optimization recommendations generated"
+      - "Before/after comparison available"
+    git_checkpoint: "OB-002-02-profiling"
+    
+  - ac_id: "OB-003-01"
+    title: "Audit Trail Enhancement"
+    description: "Enhanced audit trail with searchable history"
+    status: "NOT_STARTED"
+    acceptance_tests:
+      - "Audit trail searchable"
+      - "Retention policy configurable"
+      - "Export functionality available"
+    git_checkpoint: "OB-003-01-audit-trail"
 
-  dependencies:
-    - "PHASE-10-ADAPTIVE-EXECUTION"
-
-  testing:
-    unit_tests_expected: 141
-    unit_tests_actual: 141
-    pass_rate_actual: "100%"
-
-  notes: |
-    ALL 9 ACs COMPLETED ✓
-    - OB-001-01 (21/21)
-    - OB-001-02 (19/19)
-    - OB-002-01 (22/22)
-    - OB-002-02 (20/20)
-    - OB-003-01 (26/26)
-    - BD-001-01 (6/6)
-    - BD-001-02 (5/5)
-    - BD-002-01 (6/6)
-    - BD-003-01 (7/7)
-    Total: 141 tests passing (100%)
+metadata:
+  author: "Asif Hussain"
+  copyright: "© 2025-2026 Asif Hussain. All rights reserved."
+  created_at: "2026-01-15T00:00:00Z"

@@ -4,7 +4,63 @@
 **Version:** 3.0 (Jan 18, 2026)  
 **Status:** PRODUCTION READY ✅  
 **Efficiency:** 4.5 hours (investigation + fix + review + delivery)  
-**Confidence:** A-grade evidence (95%+)  
+**Confidence:** A-grade evidence (95%+)
+
+---
+
+## ⚠️ FILE OUTPUT GUIDELINES (CRITICAL)
+
+**ALL markdown (.md) files created by Copilot MUST go to `docs/` folder.**
+
+**ALL Python scripts (.py) must be created in appropriate toolkit folders.**
+
+**FORBIDDEN:** `docs_md/` folder (❌ NEVER create this)
+- All documentation goes to `docs/` (not `docs_md`)
+- If you see code trying to create `docs_md/`: REPORT & FIX IMMEDIATELY
+- Phase YAMLs go ONLY to `_workspaces/roadmap/phases/` (not anywhere else)
+
+**DO NOT create files in:**
+- ❌ Root directory
+- ❌ `.github/` directory  
+- ❌ `_workspaces/` directory (except reports/, issues/, phases/, tools/)
+- ❌ `docs_md/` folder (FORBIDDEN)
+- ❌ Any other non-standard location
+
+**File Placement Rules:**
+| File Type | Location | Example |
+|-----------|----------|---------|
+| Markdown docs | `docs/` | `docs/AC-FIX-001-02.md` |
+| Python utilities | `scripts/` | `scripts/analysis_tool.py` |
+| MCP toolkit | `src/mcp/tools/` | `src/mcp/tools/analysis.py` |
+| Python analysis | `cortex-brain/tierX/` | `cortex-brain/tier2/analysis.py` |
+| Investigation YAML | `_workspaces/roadmap/issues/` | `REVIEW-INVESTIGATION-REPORT-*.yaml` |
+| Consolidated findings | `_workspaces/roadmap/issues/` | `REVIEW-FINDINGS-CONSOLIDATED-*.yaml` |
+| Phase reports | `_workspaces/roadmap/reports/` | `phase-remediation-*.yaml` |
+| Phase YAML specs | `_workspaces/roadmap/phases/` | `phase-XX.yaml` (AUTHORITATIVE) |
+
+**Markdown Creation Rule:** Create MD files ONLY when:
+- ✅ Needed for CORTEX execution (test plans, investigation summaries)
+- ✅ Needed for planning (phase roadmaps, remediation guides)
+- ✅ Required by governance (audit trails, CORE compliance docs)
+- ✅ ALWAYS in `docs/` folder (NOT in _workspaces/roadmap/)
+- ❌ NOT for routine reporting (use YAML instead)
+- ❌ NOT for exploratory analysis (inline in terminal only)
+- ❌ NEVER in `docs_md/` (FORBIDDEN) or `_workspaces/roadmap/` root
+
+**Python Script Handling:**
+- ✅ Create in `scripts/`, `src/mcp/tools/`, or `cortex-brain/tierX/` as appropriate
+- ❌ NEVER in `_workspaces/roadmap/tools/` (use `src/mcp/tools/` instead)
+- ✅ Use in toolkit analysis and execution
+- ❌ NEVER leave temporary .py scripts in root
+- ❌ NEVER create exploratory scripts and abandon them
+- Cleanup: Delete or archive to appropriate home location after session
+
+**Minimalist Approach:**
+- Default to YAML output (structured, queryable)
+- Use MD only for human-readable execution guides
+- Use .py only for reusable toolkit components
+- Do NOT create separate "report" files unless explicitly requested
+- Avoid: temporary scripts, exploratory MD files, analysis dumps
 
 ---
 
