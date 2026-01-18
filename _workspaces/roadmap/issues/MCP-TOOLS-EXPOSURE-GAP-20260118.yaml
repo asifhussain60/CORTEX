@@ -1,0 +1,66 @@
+issue_id: "MCP-EXPOSURE-GAP-001"
+severity: "HIGH"
+evidence_grade: "A"
+discovered_date: "2026-01-18"
+discovery_method: "Systematic MCP tool exposure audit"
+
+title: "Incomplete MCP Tool Exposure - Domain Orchestrators Not Exposed"
+
+description: |
+  Not all CORTEX tools are exposed via MCP protocol.
+  
+  STATUS: 16 tools exposed, but missing:
+  - Domain orchestrator tools (planning, design, implementation, etc.)
+  - Specialized workflow tools
+  - Tool discovery/registration methods
+  
+  This creates API incompleteness for LLM-based clients.
+
+exposed_mcp_tools: 16
+  - check_phase_lock
+  - validate_ac_id
+  - canonicalize_intent
+  - enforce_operation
+  - get_phase_status
+  - register_orchestrator
+  - get_registered_domains
+  - get_orchestrator
+  - coordinate_operation
+  - get_coordination_history
+  - get_registry_status
+  - get_knowledge_summary
+  - query_knowledge
+  - get_relevant_knowledge
+  - get_business_knowledge_summary
+  - query_business_knowledge
+  - get_relevant_business_knowledge
+
+missing_exposures:
+  - name: "get_relevant_business_knowledge_for_operation"
+    location: "src/orchestrators/core/master_orchestrator.py:1024"
+    status: "METHOD EXISTS - MISSING @mcp_tool DECORATOR"
+    priority: "P1"
+    
+  - name: "Domain orchestrator operations"
+    location: "src/orchestrators/domain/*"
+    status: "NOT EXPOSED - Need systematic exposure"
+    priority: "P1"
+    
+  - name: "Tool discovery endpoint"
+    location: "src/mcp/server.py"
+    status: "MISSING - No endpoint to list all available tools"
+    priority: "P2"
+
+root_cause: |
+  Incremental development added MCP tools piecemeal without comprehensive exposure strategy.
+  No systematic review of all CORTEX capabilities to ensure complete MCP exposure.
+
+remedy_ac_ids:
+  - AC-MCP-EXPOSURE-001: "Add @mcp_tool decorator to get_relevant_business_knowledge"
+  - AC-MCP-EXPOSURE-002: "Expose domain orchestrator operations as MCP tools"
+  - AC-MCP-EXPOSURE-003: "Add /list-tools MCP endpoint for tool discovery"
+
+affected_phases:
+  - PHASE-22: "MCP Protocol Compliance (planned)"
+
+recommendation: "Integrate into PHASE-22 or create AC-FIX entries for immediate remediation"
