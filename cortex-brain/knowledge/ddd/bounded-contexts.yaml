@@ -1,0 +1,930 @@
+# Bounded Contexts Knowledge Base
+# CORTEX Knowledge Library - Phase 10.2 Week 27
+# Version: 1.0
+# Author: Asif Hussain
+# Created: 2025-12-22
+# Purpose: Strategic Domain-Driven Design - Bounded Contexts, Context Mapping, Integration Patterns
+
+metadata:
+  domain: ddd
+  category: bounded_contexts
+  version: "1.0"
+  last_updated: "2025-12-22"
+  author: "Asif Hussain"
+  tags:
+    - domain_driven_design
+    - bounded_contexts
+    - strategic_design
+    - context_mapping
+    - microservices
+    - architecture
+  use_cases:
+    - architecture_design
+    - system_decomposition
+    - service_boundaries
+    - team_organization
+    - integration_planning
+  related_documents:
+    - aggregates-entities.yaml
+    - domain-events.yaml
+    - ../engineering/design-patterns.yaml
+    - ../api/rest-api-design.yaml
+
+# =============================================================================
+# BOUNDED CONTEXT OVERVIEW
+# =============================================================================
+
+bounded_context_overview:
+  description: "Explicit boundary within which a domain model is defined and applicable"
+  
+  definition:
+    quote: "A Bounded Context delimits the applicability of a particular model so that team members have a clear and shared understanding of what has to be consistent and what can develop independently - Eric Evans"
+    
+  purpose:
+    - "Define clear boundaries for domain models"
+    - "Prevent model pollution and ambiguity"
+    - "Enable autonomous teams"
+    - "Support independent deployment"
+    - "Manage complexity through decomposition"
+    
+  key_concepts:
+    - concept: "Ubiquitous Language"
+      description: "Common language shared by domain experts and developers within context"
+      example: "In Billing context, 'Order' means invoice; in Fulfillment context, 'Order' means shipment request"
+      
+    - concept: "Context Boundary"
+      description: "Explicit boundary (often a microservice, module, or subsystem)"
+      markers:
+        - "Separate database/schema"
+        - "Different team ownership"
+        - "Independent deployment"
+        - "Distinct ubiquitous language"
+        
+    - concept: "Model Integrity"
+      description: "Within boundary, model must be internally consistent"
+      enforcement:
+        - "Aggregates enforce invariants"
+        - "Entities have single responsibility"
+        - "Value objects are immutable"
+  
+  benefits:
+    - "Clear model boundaries prevent ambiguity"
+    - "Teams can work independently"
+    - "Different models can coexist (same term, different meaning)"
+    - "Enables selective technology choices"
+    - "Supports incremental refactoring"
+    
+  costs:
+    - "Increased integration complexity"
+    - "Data duplication across contexts"
+    - "Need for translation between models"
+    - "More operational overhead"
+
+# =============================================================================
+# IDENTIFYING BOUNDED CONTEXTS
+# =============================================================================
+
+identifying_contexts:
+  description: "Strategies for discovering and defining bounded context boundaries"
+  
+  heuristics:
+    - heuristic: "Linguistic Boundaries"
+      description: "Different meanings of same term indicate separate contexts"
+      example: |
+        "Customer" means different things:
+        - Sales context: Potential buyer (leads, opportunities)
+        - Support context: Service recipient (tickets, SLAs)
+        - Billing context: Payment source (invoices, credits)
+      action: "Create separate Customer models in each context"
+      
+    - heuristic: "Team Boundaries"
+      description: "Different teams managing different parts of system"
+      rationale: "Conway's Law - system structure mirrors org structure"
+      example: "Separate contexts for teams: Marketing, Sales, Fulfillment, Support"
+      
+    - heuristic: "Change Rate"
+      description: "Parts that change together should be in same context"
+      example: "Order processing and inventory management change together → same context"
+      
+    - heuristic: "Business Capabilities"
+      description: "Distinct business functions often map to contexts"
+      examples:
+        - "E-commerce: Catalog, Shopping Cart, Checkout, Fulfillment, Customer Service"
+        - "Banking: Account Management, Payments, Loans, Investments"
+        
+    - heuristic: "Data Ownership"
+      description: "Single source of truth for data"
+      example: "User Profile context owns user data; other contexts reference it"
+      
+    - heuristic: "Coupling Analysis"
+      description: "Low coupling between parts suggests separate contexts"
+      indicators:
+        - "Few shared entities"
+        - "Different business rules"
+        - "Independent workflows"
+  
+  event_storming:
+    description: "Collaborative workshop to discover bounded contexts"
+    
+    process:
+      - step: 1
+        name: "Domain Events"
+        action: "Identify all significant events in domain"
+        output: "Orange stickies: OrderPlaced, PaymentProcessed, ItemShipped"
+        
+      - step: 2
+        name: "Commands"
+        action: "Identify actions that trigger events"
+        output: "Blue stickies: PlaceOrder, ProcessPayment, ShipItem"
+        
+      - step: 3
+        name: "Aggregates"
+        action: "Group events/commands by responsible entity"
+        output: "Yellow stickies: Order, Payment, Shipment"
+        
+      - step: 4
+        name: "Bounded Contexts"
+        action: "Draw boundaries around related aggregates"
+        output: "Contexts: Sales, Billing, Fulfillment"
+        
+      - step: 5
+        name: "Context Mapping"
+        action: "Identify relationships between contexts"
+        output: "Sales → Billing (Customer-Supplier), Billing → Fulfillment (Published Language)"
+    
+    benefits:
+      - "Visual collaboration"
+      - "Domain expert involvement"
+      - "Discovers implicit knowledge"
+      - "Builds shared understanding"
+      
+    tools:
+      - "Physical: Sticky notes on wall"
+      - "Digital: Miro, Mural, FigJam"
+
+# =============================================================================
+# CONTEXT MAPPING PATTERNS
+# =============================================================================
+
+context_mapping_patterns:
+  description: "Patterns describing relationships between bounded contexts"
+  
+  patterns:
+    - name: "Partnership"
+      relationship: "Mutual dependence, coordinated development"
+      
+      characteristics:
+        - "Two contexts succeed or fail together"
+        - "Coordinated planning and releases"
+        - "Strong collaboration between teams"
+        
+      when_to_use:
+        - "Contexts must evolve together"
+        - "Failure in one affects other"
+        - "Tight integration required"
+        
+      example: |
+        Order Management ↔ Inventory Management
+        - Orders cannot be placed without inventory check
+        - Inventory reserved when order placed
+        - Teams coordinate releases
+        
+      implementation:
+        - "Shared API contracts"
+        - "Joint testing"
+        - "Synchronized deployments"
+        
+      risks:
+        - "Reduced autonomy"
+        - "Coupling between teams"
+        - "Coordinated deployment complexity"
+        
+    - name: "Shared Kernel"
+      relationship: "Shared subset of domain model"
+      
+      characteristics:
+        - "Common model shared by multiple contexts"
+        - "Changes require agreement from all teams"
+        - "Usually small, stable subset"
+        
+      when_to_use:
+        - "Common model is small and stable"
+        - "Cost of duplication > cost of coordination"
+        - "Strong domain overlap"
+        
+      example: |
+        Core domain model shared by:
+        - Sales context (uses shared Customer)
+        - Support context (uses shared Customer)
+        
+      implementation:
+        shared_library: |
+          // Shared kernel library
+          public class Customer {
+              public Guid Id { get; }
+              public string Email { get; }
+              public CustomerType Type { get; }
+          }
+          
+        usage: |
+          // Sales context
+          using SharedKernel;
+          
+          public class SalesOrder {
+              public Customer Customer { get; }  // From shared kernel
+              // Sales-specific properties
+          }
+          
+      risks:
+        - "Increased coupling"
+        - "Change coordination overhead"
+        - "Potential for bloat"
+        
+      best_practices:
+        - "Keep kernel minimal"
+        - "Version shared kernel"
+        - "Automate tests for shared kernel"
+        - "Clear ownership and change process"
+        
+    - name: "Customer-Supplier"
+      relationship: "Upstream-downstream relationship"
+      
+      characteristics:
+        - "Upstream (supplier) provides service"
+        - "Downstream (customer) depends on upstream"
+        - "Upstream has some obligation to downstream"
+        
+      when_to_use:
+        - "Clear provider-consumer relationship"
+        - "Upstream team responsive to downstream needs"
+        
+      example: |
+        User Management (upstream) → Order Management (downstream)
+        - Order Management needs user data
+        - User Management exposes API
+        - Downstream influences upstream roadmap
+        
+      implementation:
+        api_contract: |
+          // Upstream API (User Management)
+          [ApiController]
+          [Route("api/users")]
+          public class UserController {
+              [HttpGet("{id}")]
+              public async Task<UserDto> GetUser(Guid id) {
+                  // Return user data
+              }
+          }
+          
+        downstream_usage: |
+          // Downstream (Order Management)
+          public class OrderService {
+              private readonly IUserApiClient _userApi;
+              
+              public async Task<Order> CreateOrder(Guid userId, OrderDetails details) {
+                  var user = await _userApi.GetUser(userId);  // Call upstream
+                  // Create order with user context
+              }
+          }
+          
+      collaboration:
+        - "Regular meetings (quarterly planning)"
+        - "Downstream feedback on API needs"
+        - "Upstream communicates breaking changes"
+        - "Shared roadmap visibility"
+        
+      risks:
+        - "Downstream blocked by upstream"
+        - "Upstream changes break downstream"
+        
+      mitigation:
+        - "API versioning"
+        - "Consumer-driven contracts"
+        - "Deprecation process"
+        
+    - name: "Conformist"
+      relationship: "Downstream conforms to upstream model"
+      
+      characteristics:
+        - "Downstream adopts upstream model without translation"
+        - "Upstream has no obligation to downstream"
+        - "Simple integration, but model pollution risk"
+        
+      when_to_use:
+        - "Upstream team unresponsive or external"
+        - "Cost of translation > benefit"
+        - "Upstream model acceptable"
+        
+      example: |
+        Internal app → Salesforce (external CRM)
+        - Salesforce model not negotiable
+        - Internal app uses Salesforce entities directly
+        
+      implementation:
+        python: |
+          # Conformist - using Salesforce model directly
+          from simple_salesforce import Salesforce
+          
+          sf = Salesforce(username='user', password='pass', security_token='token')
+          
+          # Use Salesforce model as-is
+          account = sf.Account.get('001xx000003DGbLQAW')
+          print(account['Name'])  # Salesforce field names
+          
+      risks:
+        - "Domain model pollution"
+        - "Upstream changes force downstream changes"
+        - "Loss of domain expressiveness"
+        
+      when_acceptable:
+        - "External system (Stripe, Salesforce)"
+        - "Standard protocol (HTTP, OAuth)"
+        - "Upstream model stable"
+        
+    - name: "Anticorruption Layer (ACL)"
+      relationship: "Translation layer protects downstream model"
+      
+      characteristics:
+        - "Insulates downstream from upstream changes"
+        - "Translates between models"
+        - "Preserves downstream model integrity"
+        
+      when_to_use:
+        - "Upstream model poor fit for downstream"
+        - "Protect from external system changes"
+        - "Legacy system integration"
+        
+      example: |
+        Modern app → Legacy ERP system
+        - Legacy uses cryptic codes (CUSTTYPE: "A", "B", "C")
+        - Modern app uses enums (CustomerType.Individual, Business, Enterprise)
+        - ACL translates between models
+        
+      implementation:
+        csharp: |
+          // Anticorruption Layer
+          public class LegacyErpAdapter : ICustomerRepository {
+              private readonly LegacyErpClient _legacyClient;
+              
+              public Customer GetCustomer(Guid id) {
+                  // Call legacy system
+                  var legacyCustomer = _legacyClient.GetCustomer(id);
+                  
+                  // Translate to domain model
+                  return new Customer(
+                      id: legacyCustomer.CUSTID,
+                      name: legacyCustomer.CUSTNAME,
+                      type: TranslateCustomerType(legacyCustomer.CUSTTYPE)
+                  );
+              }
+              
+              private CustomerType TranslateCustomerType(string legacyType) {
+                  return legacyType switch {
+                      "A" => CustomerType.Individual,
+                      "B" => CustomerType.Business,
+                      "C" => CustomerType.Enterprise,
+                      _ => throw new InvalidOperationException($"Unknown type: {legacyType}")
+                  };
+              }
+          }
+          
+      benefits:
+        - "Domain model stays clean"
+        - "Isolates complexity to ACL"
+        - "Easier to replace upstream later"
+        
+      costs:
+        - "Additional translation layer"
+        - "Maintenance overhead"
+        - "Performance impact"
+        
+    - name: "Open Host Service"
+      relationship: "Upstream provides protocol/API for all downstream consumers"
+      
+      characteristics:
+        - "Well-defined, public API"
+        - "Designed for multiple consumers"
+        - "Versioned, documented"
+        
+      when_to_use:
+        - "Multiple downstream consumers"
+        - "Need for stable, well-documented API"
+        
+      example: |
+        Payment Gateway → Multiple apps (Web, Mobile, POS)
+        - RESTful API with OpenAPI spec
+        - Versioned (v1, v2)
+        - Public documentation
+        
+      implementation:
+        openapi: |
+          openapi: 3.0.0
+          info:
+            title: Payment API
+            version: 1.0.0
+          paths:
+            /payments:
+              post:
+                summary: Process payment
+                requestBody:
+                  content:
+                    application/json:
+                      schema:
+                        $ref: '#/components/schemas/PaymentRequest'
+                responses:
+                  '200':
+                    content:
+                      application/json:
+                        schema:
+                          $ref: '#/components/schemas/PaymentResponse'
+          components:
+            schemas:
+              PaymentRequest:
+                type: object
+                properties:
+                  amount:
+                    type: number
+                  currency:
+                    type: string
+                  
+      best_practices:
+        - "Semantic versioning"
+        - "Backward compatibility"
+        - "Comprehensive documentation"
+        - "Consumer feedback loop"
+        - "Deprecation policy"
+        
+    - name: "Published Language"
+      relationship: "Shared, well-defined language for integration"
+      
+      characteristics:
+        - "Standard format (XML, JSON, Protocol Buffers)"
+        - "Schema-defined"
+        - "Multiple consumers and producers"
+        
+      when_to_use:
+        - "Need for interoperability"
+        - "Industry standards exist"
+        - "Multiple integrations"
+        
+      example: |
+        Healthcare systems using HL7 FHIR
+        Order systems using EDI
+        Financial systems using FIX protocol
+        
+      implementation:
+        protobuf: |
+          // Published Language - Protocol Buffers
+          syntax = "proto3";
+          
+          message Order {
+            string order_id = 1;
+            string customer_id = 2;
+            repeated OrderItem items = 3;
+            double total_amount = 4;
+          }
+          
+          message OrderItem {
+            string product_id = 1;
+            int32 quantity = 2;
+            double unit_price = 3;
+          }
+          
+      benefits:
+        - "Reduces integration complexity"
+        - "Leverages industry standards"
+        - "Tooling support"
+        
+    - name: "Separate Ways"
+      relationship: "No integration - contexts independent"
+      
+      characteristics:
+        - "No shared functionality"
+        - "Duplicate data/logic acceptable"
+        - "Maximum autonomy"
+        
+      when_to_use:
+        - "Integration cost > benefit"
+        - "Contexts truly independent"
+        - "Duplication acceptable"
+        
+      example: |
+        Marketing analytics and Core transaction system
+        - Marketing reads from data warehouse (batch)
+        - No real-time integration needed
+        - Duplicate customer data acceptable
+        
+      benefits:
+        - "Complete independence"
+        - "No integration complexity"
+        - "Different tech stacks possible"
+        
+      risks:
+        - "Data inconsistency"
+        - "Missed optimization opportunities"
+
+# =============================================================================
+# CONTEXT INTEGRATION PATTERNS
+# =============================================================================
+
+integration_patterns:
+  description: "Technical patterns for integrating bounded contexts"
+  
+  synchronous_patterns:
+    - name: "REST API"
+      description: "HTTP-based request-response"
+      
+      when_to_use:
+        - "Simple request-response needed"
+        - "Client needs immediate response"
+        - "CRUD operations"
+        
+      implementation:
+        csharp: |
+          // Upstream service
+          [ApiController]
+          [Route("api/inventory")]
+          public class InventoryController {
+              [HttpPost("reserve")]
+              public async Task<ReservationResult> ReserveItems(ReservationRequest request) {
+                  // Reserve inventory
+                  return new ReservationResult { ReservationId = Guid.NewGuid() };
+              }
+          }
+          
+          // Downstream service
+          public class OrderService {
+              private readonly HttpClient _inventoryClient;
+              
+              public async Task<Order> CreateOrder(OrderRequest request) {
+                  // Call inventory service synchronously
+                  var reservation = await _inventoryClient.PostAsJsonAsync(
+                      "/api/inventory/reserve",
+                      new ReservationRequest { Items = request.Items }
+                  );
+                  
+                  // Create order with reservation
+              }
+          }
+          
+      pros:
+        - "Simple, well-understood"
+        - "Immediate response"
+        - "Easy to debug"
+        
+      cons:
+        - "Tight coupling"
+        - "Availability dependency"
+        - "Cascading failures"
+        
+    - name: "gRPC"
+      description: "High-performance RPC using Protocol Buffers"
+      
+      when_to_use:
+        - "High throughput needed"
+        - "Strong typing desired"
+        - "Microservices communication"
+        
+      benefits:
+        - "10x faster than REST"
+        - "Strong contracts (protobuf)"
+        - "Bi-directional streaming"
+        
+  asynchronous_patterns:
+    - name: "Message Queue"
+      description: "Async communication via message broker"
+      
+      when_to_use:
+        - "Decoupling needed"
+        - "Can tolerate eventual consistency"
+        - "High volume events"
+        
+      implementation:
+        rabbitmq: |
+          # Publisher (Order context)
+          import pika
+          
+          connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+          channel = connection.channel()
+          
+          channel.queue_declare(queue='order_events')
+          
+          # Publish order placed event
+          channel.basic_publish(
+              exchange='',
+              routing_key='order_events',
+              body=json.dumps({
+                  'event_type': 'OrderPlaced',
+                  'order_id': '123',
+                  'customer_id': '456'
+              })
+          )
+          
+        consumer: |
+          # Consumer (Fulfillment context)
+          def callback(ch, method, properties, body):
+              event = json.loads(body)
+              if event['event_type'] == 'OrderPlaced':
+                  # Create shipment
+                  create_shipment(event['order_id'])
+          
+          channel.basic_consume(queue='order_events', on_message_callback=callback, auto_ack=True)
+          channel.start_consuming()
+          
+      pros:
+        - "Decoupled contexts"
+        - "Resilient to failures"
+        - "Load leveling"
+        
+      cons:
+        - "Eventual consistency"
+        - "More complex debugging"
+        - "Message broker dependency"
+        
+    - name: "Event Bus / Pub-Sub"
+      description: "Publish events to multiple subscribers"
+      
+      when_to_use:
+        - "One event, multiple consumers"
+        - "Loose coupling needed"
+        - "Event-driven architecture"
+        
+      technologies:
+        - "Apache Kafka"
+        - "AWS SNS/SQS"
+        - "Azure Service Bus"
+        - "Google Pub/Sub"
+        
+      implementation:
+        kafka: |
+          from kafka import KafkaProducer, KafkaConsumer
+          
+          # Publisher
+          producer = KafkaProducer(bootstrap_servers=['localhost:9092'])
+          producer.send('order-events', {
+              'event': 'OrderPlaced',
+              'order_id': '123'
+          })
+          
+          # Subscriber 1 (Fulfillment)
+          consumer = KafkaConsumer('order-events', group_id='fulfillment')
+          for message in consumer:
+              process_order_for_shipment(message.value)
+          
+          # Subscriber 2 (Analytics)
+          consumer = KafkaConsumer('order-events', group_id='analytics')
+          for message in consumer:
+              update_metrics(message.value)
+          
+      benefits:
+        - "Multiple independent consumers"
+        - "Replay capability (Kafka)"
+        - "High throughput"
+
+# =============================================================================
+# ANTI-PATTERNS
+# =============================================================================
+
+anti_patterns:
+  - name: "Big Ball of Mud"
+    description: "Single context trying to model entire domain"
+    
+    symptoms:
+      - "Massive, tangled codebase"
+      - "Ambiguous terminology"
+      - "Everything depends on everything"
+      - "Slow development velocity"
+      
+    problems:
+      - "No clear boundaries"
+      - "Can't reason about system"
+      - "Testing difficult"
+      - "Deployment risky"
+      
+    solution:
+      approach: "Identify bounded contexts using event storming"
+      steps:
+        - "Find linguistic boundaries (same term, different meanings)"
+        - "Identify autonomous business capabilities"
+        - "Extract contexts incrementally"
+        - "Start with new features in separate contexts"
+        
+  - name: "Anemic Bounded Contexts"
+    description: "Contexts with no business logic, just data"
+    
+    symptoms:
+      - "Contexts are just CRUD APIs"
+      - "Business logic in 'orchestrator' services"
+      - "No domain model"
+      
+    problems:
+      - "Loses benefits of DDD"
+      - "Logic scattered across services"
+      - "Difficult to maintain invariants"
+      
+    solution:
+      approach: "Move business logic into contexts"
+      example: |
+        // Before (anemic)
+        class Order {
+            public Guid Id { get; set; }
+            public List<OrderItem> Items { get; set; }
+            public decimal Total { get; set; }
+        }
+        
+        // Orchestrator service has logic
+        public class OrderOrchestrator {
+            public void PlaceOrder(Order order) {
+                // Calculate total (should be in Order)
+                order.Total = order.Items.Sum(i => i.Price * i.Quantity);
+                
+                // Validate (should be in Order)
+                if (order.Total < 10) throw new Exception("Minimum order $10");
+                
+                _orderRepository.Save(order);
+            }
+        }
+        
+        // After (rich domain model)
+        class Order {
+            private readonly List<OrderItem> _items = new();
+            
+            public void AddItem(Product product, int quantity) {
+                _items.Add(new OrderItem(product, quantity));
+            }
+            
+            public decimal Total => _items.Sum(i => i.Subtotal);
+            
+            public void Place() {
+                if (Total < 10) throw new DomainException("Minimum order $10");
+                // Emit OrderPlaced event
+            }
+        }
+        
+  - name: "Distributed Monolith"
+    description: "Microservices that must be deployed together"
+    
+    symptoms:
+      - "Can't deploy service independently"
+      - "Breaking changes cascade"
+      - "Tight coupling via shared database"
+      
+    causes:
+      - "Incorrect context boundaries"
+      - "Shared database across contexts"
+      - "Synchronous dependencies everywhere"
+      
+    solution:
+      - "Redraw context boundaries"
+      - "Separate databases per context"
+      - "Use async communication"
+      - "Implement ACL to isolate changes"
+      
+  - name: "Context Soup"
+    description: "Too many tiny contexts"
+    
+    symptoms:
+      - "100s of microservices"
+      - "Complex integration mesh"
+      - "High operational overhead"
+      - "Distributed transactions everywhere"
+      
+    problems:
+      - "Over-fragmentation"
+      - "Can't reason about system"
+      - "Performance issues (network hops)"
+      
+    solution:
+      approach: "Merge related contexts"
+      guideline: "Start with larger contexts, split later if needed"
+
+# =============================================================================
+# BEST PRACTICES
+# =============================================================================
+
+best_practices:
+  - practice: "Start with Monolith"
+    rationale: "Discover natural boundaries before splitting"
+    approach:
+      - "Build modular monolith with clear internal boundaries"
+      - "Use event storming to identify contexts"
+      - "Extract to microservices when needed"
+    quote: "Don't start with microservices - Martin Fowler"
+    
+  - practice: "Align with Business Capabilities"
+    rationale: "Stable boundaries match business structure"
+    example: "E-commerce contexts: Catalog, Cart, Checkout, Fulfillment"
+    
+  - practice: "One Database Per Context"
+    rationale: "Ensures autonomy and loose coupling"
+    implementation:
+      - "Separate physical databases"
+      - "OR separate schemas"
+      - "Never share tables across contexts"
+      
+  - practice: "Explicit Context Mapping"
+    rationale: "Makes relationships visible and manageable"
+    tool: "Context map diagram showing all relationships"
+    
+  - practice: "Minimize Synchronous Dependencies"
+    rationale: "Reduces coupling and improves resilience"
+    guideline: "Async by default, sync only when necessary"
+    
+  - practice: "Version APIs"
+    rationale: "Enables independent evolution"
+    approach:
+      - "Semantic versioning (v1, v2)"
+      - "Deprecation policy (6-12 months)"
+      - "Consumer-driven contracts"
+      
+  - practice: "Bounded Context != Microservice"
+    clarification: "Context is logical boundary, microservice is deployment unit"
+    options:
+      - "One context = one microservice (common)"
+      - "Multiple contexts in one service (modular monolith)"
+      - "One context split across multiple services (rare, complex)"
+
+# =============================================================================
+# CONTEXT MAPPING EXAMPLE
+# =============================================================================
+
+example_e_commerce:
+  description: "Complete context map for e-commerce system"
+  
+  contexts:
+    - name: "Catalog"
+      responsibility: "Product information, categories, search"
+      model:
+        - "Product (id, name, description, price)"
+        - "Category (id, name, products)"
+      events_published:
+        - "ProductAdded"
+        - "ProductUpdated"
+        - "PriceChanged"
+        
+    - name: "Shopping Cart"
+      responsibility: "Manage customer cart, apply discounts"
+      model:
+        - "Cart (id, customer_id, items)"
+        - "CartItem (product_id, quantity)"
+      integrations:
+        - target: "Catalog"
+          pattern: "Customer-Supplier"
+          method: "REST API to fetch product details"
+          
+    - name: "Checkout"
+      responsibility: "Order placement, payment processing"
+      model:
+        - "Order (id, customer_id, items, total)"
+        - "Payment (id, order_id, amount, status)"
+      integrations:
+        - target: "Shopping Cart"
+          pattern: "Customer-Supplier"
+          method: "Get cart contents"
+        - target: "Payment Gateway (external)"
+          pattern: "Anticorruption Layer"
+          method: "ACL translates to Stripe API"
+      events_published:
+        - "OrderPlaced"
+        - "PaymentProcessed"
+        
+    - name: "Fulfillment"
+      responsibility: "Warehouse, shipping, tracking"
+      model:
+        - "Shipment (id, order_id, address, status)"
+        - "TrackingInfo (id, shipment_id, updates)"
+      integrations:
+        - target: "Checkout"
+          pattern: "Published Language"
+          method: "Subscribe to OrderPlaced events"
+          
+    - name: "Customer Management"
+      responsibility: "User accounts, profiles, preferences"
+      model:
+        - "Customer (id, email, name, address)"
+      pattern: "Open Host Service"
+      api: "RESTful API for all contexts"
+      
+  context_map_diagram: |
+    +----------------+    REST API     +------------------+
+    |   Catalog      |<--------------- | Shopping Cart    |
+    +----------------+                 +------------------+
+           |                                    |
+           | Published                          | REST API
+           | Language                           |
+           | (Events)                           v
+           |                           +------------------+
+           |                           |    Checkout      |
+           |                           +------------------+
+           |                                    |
+           v                                    | Events (OrderPlaced)
+    +----------------+                          |
+    |  Fulfillment   |<-------------------------+
+    +----------------+
+           |
+           | REST API (Open Host Service)
+           |
+           v
+    +------------------+
+    | Customer Mgmt    |
+    +------------------+

@@ -2,28 +2,586 @@
   "metadata": {
     "version": "1.0",
     "created_at": "2026-01-15T20:12:04.454803",
-    "updated_at": "2026-01-15T20:12:04.454909",
-    "entry_count": 0,
-    "ac_id": "KN-001-02"
+    "updated_at": "2026-01-18T04:08:29.523029",
+    "entry_count": 35,
+    "ac_id": "KN-001-02",
+    "migration_note": "Migrated from cortex-brain/knowledge/ (CORTEX-4.0)"
   },
-  "entries": [],
+  "entries": [
+    {
+      "id": "KB-ARC-001",
+      "domain": "ARCHITECTURE",
+      "title": "resilience-patterns",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/ARCHITECTURE/resilience-patterns.yaml",
+      "source_file": "cortex-brain/knowledge/microservices/resilience-patterns.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:28.894999"
+    },
+    {
+      "id": "KB-DAT-002",
+      "domain": "DATA-MANAGEMENT",
+      "title": "oracle-best-practices",
+      "description": {
+        "critical_practices": [
+          "Always use bind variables (prevents SQL injection, enables caching)",
+          "Use connection pooling (dramatically improves performance)",
+          "Close resources properly (prevents resource leaks)",
+          "Never hardcode credentials (security fundamental)",
+          "Use explicit transactions (ensures data consistency)",
+          "Grant least privileges (limits security exposure)"
+        ],
+        "performance_priorities": [
+          "Use appropriate indexes",
+          "Set optimal arraysize (1000 for large result sets)",
+          "Use executemany() for bulk operations",
+          "Select only required columns",
+          "Keep transactions short",
+          "Gather statistics regularly"
+        ],
+        "security_priorities": [
+          "Use bind variables (prevent SQL injection)",
+          "Secure credential storage",
+          "Enable network encryption",
+          "Implement least privilege access",
+          "Enable auditing for sensitive operations",
+          "Validate and sanitize all user input"
+        ],
+        "common_pitfalls": [
+          "String concatenation in SQL (SQL injection risk)",
+          "Not closing connections (resource leaks)",
+          "Fetching rows one at a time (performance issue)",
+          "Using SELECT * (inefficient data transfer)",
+          "Long-running transactions (lock contention)",
+          "Over-privileged database users (security risk)"
+        ]
+      },
+      "file_path": "cortex-brain/tier3/knowledge/DATA-MANAGEMENT/oracle-best-practices.yaml",
+      "source_file": "cortex-brain/knowledge/database/oracle-best-practices.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:28.922878"
+    },
+    {
+      "id": "KB-DEP-003",
+      "domain": "DEPLOYMENT",
+      "title": "infrastructure-as-code",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/DEPLOYMENT/infrastructure-as-code.yaml",
+      "source_file": "cortex-brain/knowledge/devops/infrastructure-as-code.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:28.952589"
+    },
+    {
+      "id": "KB-DEP-004",
+      "domain": "DEPLOYMENT",
+      "title": "monitoring-observability",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/DEPLOYMENT/monitoring-observability.yaml",
+      "source_file": "cortex-brain/knowledge/devops/monitoring-observability.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:28.955898"
+    },
+    {
+      "id": "KB-DEP-005",
+      "domain": "DEPLOYMENT",
+      "title": "cicd-pipelines",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/DEPLOYMENT/cicd-pipelines.yaml",
+      "source_file": "cortex-brain/knowledge/devops/cicd-pipelines.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:28.992157"
+    },
+    {
+      "id": "KB-KNO-006",
+      "domain": "KNOWLEDGE-CURATION",
+      "title": "domain-rag-integration",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/KNOWLEDGE-CURATION/domain-rag-integration.yaml",
+      "source_file": "cortex-brain/knowledge/domains/domain-rag-integration.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:28.994673"
+    },
+    {
+      "id": "KB-KNO-007",
+      "domain": "KNOWLEDGE-CURATION",
+      "title": "retrieval-pipeline",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/KNOWLEDGE-CURATION/retrieval-pipeline.yaml",
+      "source_file": "cortex-brain/knowledge/domains/retrieval-pipeline.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:28.996968"
+    },
+    {
+      "id": "KB-KNO-008",
+      "domain": "KNOWLEDGE-CURATION",
+      "title": "vector-database-guide",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/KNOWLEDGE-CURATION/vector-database-guide.yaml",
+      "source_file": "cortex-brain/knowledge/domains/vector-database-guide.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.011817"
+    },
+    {
+      "id": "KB-KNO-009",
+      "domain": "KNOWLEDGE-CURATION",
+      "title": "embeddings-strategy",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/KNOWLEDGE-CURATION/embeddings-strategy.yaml",
+      "source_file": "cortex-brain/knowledge/domains/embeddings-strategy.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.014166"
+    },
+    {
+      "id": "KB-ARC-010",
+      "domain": "ARCHITECTURE",
+      "title": "react-best-practices",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/ARCHITECTURE/react-best-practices.yaml",
+      "source_file": "cortex-brain/knowledge/frontend/react-best-practices.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.024922"
+    },
+    {
+      "id": "KB-SEC-011",
+      "domain": "SECURITY",
+      "title": "owasp-top-10",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/SECURITY/owasp-top-10.yaml",
+      "source_file": "cortex-brain/knowledge/security/owasp-top-10.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.035803"
+    },
+    {
+      "id": "KB-SEC-012",
+      "domain": "SECURITY",
+      "title": "secure-coding-practices",
+      "description": {
+        "categories": [
+          {
+            "category": "Input Validation",
+            "rules": 4,
+            "criticality": "CRITICAL"
+          },
+          {
+            "category": "Output Encoding",
+            "rules": 4,
+            "criticality": "CRITICAL"
+          },
+          {
+            "category": "Authentication",
+            "rules": 4,
+            "criticality": "CRITICAL"
+          },
+          {
+            "category": "Authorization",
+            "rules": 2,
+            "criticality": "CRITICAL"
+          },
+          {
+            "category": "Cryptography",
+            "rules": 3,
+            "criticality": "CRITICAL"
+          },
+          {
+            "category": "Error Handling",
+            "rules": 2,
+            "criticality": "HIGH"
+          },
+          {
+            "category": "Session Management",
+            "rules": 1,
+            "criticality": "CRITICAL"
+          }
+        ],
+        "total_rules": 20,
+        "implementation_priority": [
+          {
+            "priority": 1,
+            "rules": [
+              "input_001",
+              "output_001",
+              "auth_001",
+              "authz_001",
+              "crypto_001"
+            ],
+            "description": "Critical security controls - implement first"
+          },
+          {
+            "priority": 2,
+            "rules": [
+              "input_003",
+              "output_003",
+              "auth_002",
+              "crypto_002",
+              "session_001"
+            ],
+            "description": "Essential protections - implement next"
+          },
+          {
+            "priority": 3,
+            "rules": [
+              "input_002",
+              "input_004",
+              "auth_003",
+              "auth_004",
+              "error_001"
+            ],
+            "description": "Important enhancements - implement after basics"
+          }
+        ]
+      },
+      "file_path": "cortex-brain/tier3/knowledge/SECURITY/secure-coding-practices.yaml",
+      "source_file": "cortex-brain/knowledge/security/secure-coding-practices.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.055216"
+    },
+    {
+      "id": "KB-SEC-013",
+      "domain": "SECURITY",
+      "title": "api-security-checklist",
+      "description": {
+        "rest_api_checks": 7,
+        "graphql_checks": 5,
+        "general_checks": 3,
+        "criticality_breakdown": {
+          "critical": 8,
+          "high": 5,
+          "medium": 2
+        },
+        "implementation_phases": {
+          "phase_1_foundation": [
+            "HTTPS enforcement",
+            "Authentication (JWT/OAuth)",
+            "Input validation",
+            "Rate limiting"
+          ],
+          "phase_2_hardening": [
+            "Authorization checks",
+            "CORS configuration",
+            "Security headers",
+            "Error handling"
+          ],
+          "phase_3_advanced": [
+            "API versioning",
+            "Monitoring & alerting",
+            "GraphQL security (if applicable)",
+            "Automated security testing"
+          ]
+        }
+      },
+      "file_path": "cortex-brain/tier3/knowledge/SECURITY/api-security-checklist.yaml",
+      "source_file": "cortex-brain/knowledge/security/api-security-checklist.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.072599"
+    },
+    {
+      "id": "KB-ARC-014",
+      "domain": "ARCHITECTURE",
+      "title": "aggregates-entities",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/ARCHITECTURE/aggregates-entities.yaml",
+      "source_file": "cortex-brain/knowledge/ddd/aggregates-entities.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.091923"
+    },
+    {
+      "id": "KB-ARC-015",
+      "domain": "ARCHITECTURE",
+      "title": "domain-events",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/ARCHITECTURE/domain-events.yaml",
+      "source_file": "cortex-brain/knowledge/ddd/domain-events.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.111367"
+    },
+    {
+      "id": "KB-ARC-016",
+      "domain": "ARCHITECTURE",
+      "title": "bounded-contexts",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/ARCHITECTURE/bounded-contexts.yaml",
+      "source_file": "cortex-brain/knowledge/ddd/bounded-contexts.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.134539"
+    },
+    {
+      "id": "KB-TES-017",
+      "domain": "TESTING-VALIDATION",
+      "title": "selenium-to-playwright-migration",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/TESTING-VALIDATION/selenium-to-playwright-migration.yaml",
+      "source_file": "cortex-brain/knowledge/testing/selenium-to-playwright-migration.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.143234"
+    },
+    {
+      "id": "KB-TES-018",
+      "domain": "TESTING-VALIDATION",
+      "title": "testing-pyramid",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/TESTING-VALIDATION/testing-pyramid.yaml",
+      "source_file": "cortex-brain/knowledge/testing/testing-pyramid.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.160852"
+    },
+    {
+      "id": "KB-TES-019",
+      "domain": "TESTING-VALIDATION",
+      "title": "tdd-best-practices",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/TESTING-VALIDATION/tdd-best-practices.yaml",
+      "source_file": "cortex-brain/knowledge/testing/tdd-best-practices.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.177494"
+    },
+    {
+      "id": "KB-TES-020",
+      "domain": "TESTING-VALIDATION",
+      "title": "test-doubles",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/TESTING-VALIDATION/test-doubles.yaml",
+      "source_file": "cortex-brain/knowledge/testing/test-doubles.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.197313"
+    },
+    {
+      "id": "KB-DOC-021",
+      "domain": "DOCUMENTATION",
+      "title": "glassmorphism-design-standards",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/DOCUMENTATION/glassmorphism-design-standards.yaml",
+      "source_file": "cortex-brain/knowledge/ui-ux/glassmorphism-design-standards.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.214292"
+    },
+    {
+      "id": "KB-DOC-022",
+      "domain": "DOCUMENTATION",
+      "title": "ui-ux-best-practices",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/DOCUMENTATION/ui-ux-best-practices.yaml",
+      "source_file": "cortex-brain/knowledge/ui-ux/ui-ux-best-practices.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.242291"
+    },
+    {
+      "id": "KB-DEP-023",
+      "domain": "DEPLOYMENT",
+      "title": "aws-best-practices",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/DEPLOYMENT/aws-best-practices.yaml",
+      "source_file": "cortex-brain/knowledge/cloud/aws-best-practices.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.252903"
+    },
+    {
+      "id": "KB-PER-024",
+      "domain": "PERFORMANCE",
+      "title": "profiling-analysis",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/PERFORMANCE/profiling-analysis.yaml",
+      "source_file": "cortex-brain/knowledge/performance/profiling-analysis.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.279447"
+    },
+    {
+      "id": "KB-PER-025",
+      "domain": "PERFORMANCE",
+      "title": "optimization-techniques",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/PERFORMANCE/optimization-techniques.yaml",
+      "source_file": "cortex-brain/knowledge/performance/optimization-techniques.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.309725"
+    },
+    {
+      "id": "KB-PER-026",
+      "domain": "PERFORMANCE",
+      "title": "caching-strategies",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/PERFORMANCE/caching-strategies.yaml",
+      "source_file": "cortex-brain/knowledge/performance/caching-strategies.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.334799"
+    },
+    {
+      "id": "KB-ARC-027",
+      "domain": "ARCHITECTURE",
+      "title": "clean-code",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/ARCHITECTURE/clean-code.yaml",
+      "source_file": "cortex-brain/knowledge/engineering/clean-code.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.362940"
+    },
+    {
+      "id": "KB-ARC-028",
+      "domain": "ARCHITECTURE",
+      "title": "refactoring",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/ARCHITECTURE/refactoring.yaml",
+      "source_file": "cortex-brain/knowledge/engineering/refactoring.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.388480"
+    },
+    {
+      "id": "KB-ARC-029",
+      "domain": "ARCHITECTURE",
+      "title": "anti-patterns",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/ARCHITECTURE/anti-patterns.yaml",
+      "source_file": "cortex-brain/knowledge/engineering/anti-patterns.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.415307"
+    },
+    {
+      "id": "KB-ARC-030",
+      "domain": "ARCHITECTURE",
+      "title": "solid-principles",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/ARCHITECTURE/solid-principles.yaml",
+      "source_file": "cortex-brain/knowledge/engineering/solid-principles.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.444107"
+    },
+    {
+      "id": "KB-ARC-031",
+      "domain": "ARCHITECTURE",
+      "title": "design-patterns",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/ARCHITECTURE/design-patterns.yaml",
+      "source_file": "cortex-brain/knowledge/engineering/design-patterns.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.451803"
+    },
+    {
+      "id": "KB-ARC-032",
+      "domain": "ARCHITECTURE",
+      "title": "code-review",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/ARCHITECTURE/code-review.yaml",
+      "source_file": "cortex-brain/knowledge/engineering/code-review.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.472071"
+    },
+    {
+      "id": "KB-ARC-033",
+      "domain": "ARCHITECTURE",
+      "title": "api-versioning",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/ARCHITECTURE/api-versioning.yaml",
+      "source_file": "cortex-brain/knowledge/engineering/api-design/api-versioning.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.491585"
+    },
+    {
+      "id": "KB-ARC-034",
+      "domain": "ARCHITECTURE",
+      "title": "graphql-best-practices",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/ARCHITECTURE/graphql-best-practices.yaml",
+      "source_file": "cortex-brain/knowledge/engineering/api-design/graphql-best-practices.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.501291"
+    },
+    {
+      "id": "KB-ARC-035",
+      "domain": "ARCHITECTURE",
+      "title": "rest-api-design",
+      "description": "",
+      "file_path": "cortex-brain/tier3/knowledge/ARCHITECTURE/rest-api-design.yaml",
+      "source_file": "cortex-brain/knowledge/engineering/api-design/rest-api-design.yaml",
+      "tags": [],
+      "version": "1.0",
+      "migrated_at": "2026-01-18T04:08:29.522939"
+    }
+  ],
   "ac_id_mapping": {},
   "by_domain": {
-    "GOVERNANCE": [],
-    "INTENT-ROUTING": [],
-    "HALLUCINATION-PREVENTION": [],
-    "EXECUTION-ORCHESTRATION": [],
-    "DATA-MANAGEMENT": [],
-    "OBSERVABILITY": [],
-    "SECURITY": [],
-    "API-DESIGN": [],
-    "ML-MODELS": [],
-    "KNOWLEDGE-CURATION": [],
-    "TESTING-VALIDATION": [],
-    "DEPLOYMENT": [],
-    "DOCUMENTATION": [],
-    "PERFORMANCE": [],
-    "ARCHITECTURE": [],
-    "ERROR-HANDLING": []
+    "ARCHITECTURE": [
+      "KB-ARC-001",
+      "KB-ARC-010",
+      "KB-ARC-014",
+      "KB-ARC-015",
+      "KB-ARC-016",
+      "KB-ARC-027",
+      "KB-ARC-028",
+      "KB-ARC-029",
+      "KB-ARC-030",
+      "KB-ARC-031",
+      "KB-ARC-032",
+      "KB-ARC-033",
+      "KB-ARC-034",
+      "KB-ARC-035"
+    ],
+    "DATA-MANAGEMENT": [
+      "KB-DAT-002"
+    ],
+    "DEPLOYMENT": [
+      "KB-DEP-003",
+      "KB-DEP-004",
+      "KB-DEP-005",
+      "KB-DEP-023"
+    ],
+    "KNOWLEDGE-CURATION": [
+      "KB-KNO-006",
+      "KB-KNO-007",
+      "KB-KNO-008",
+      "KB-KNO-009"
+    ],
+    "SECURITY": [
+      "KB-SEC-011",
+      "KB-SEC-012",
+      "KB-SEC-013"
+    ],
+    "TESTING-VALIDATION": [
+      "KB-TES-017",
+      "KB-TES-018",
+      "KB-TES-019",
+      "KB-TES-020"
+    ],
+    "DOCUMENTATION": [
+      "KB-DOC-021",
+      "KB-DOC-022"
+    ],
+    "PERFORMANCE": [
+      "KB-PER-024",
+      "KB-PER-025",
+      "KB-PER-026"
+    ]
   }
 }
