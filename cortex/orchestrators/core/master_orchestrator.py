@@ -74,6 +74,14 @@ class MasterOrchestrator(IOrchestrator):
         self.domain_orchestrators: Dict[str, OrchestratorMetadata] = {}
         self.operation_history: List[Dict[str, Any]] = []
         
+        # AC-REM-011-01: Initialize stage orchestrators for E2E workflow
+        # Stage 1: Interaction Orchestrator (Comprehension)
+        self.interaction_orchestrator: Optional[IOrchestrator] = None
+        # Stage 2: Intent Router
+        self.intent_router: Optional[IOrchestrator] = None
+        # Stage 3 Registry: Orchestrator registry for delegation
+        self.orchestrator_registry: Dict[str, IOrchestrator] = {}
+        
         # AC-FIX-001-01: Initialize DatabaseTransactionManager for atomic operations
         db_path = Path(__file__).parent.parent.parent.parent / "cortex_brain" / "state" / "governance.db"
         self.transaction_manager = DatabaseTransactionManager(str(db_path))
@@ -189,6 +197,45 @@ class MasterOrchestrator(IOrchestrator):
             )
             # Graceful degradation: continue without header injection
             self.header_injector = None
+        
+        # AC-REM-011-01: Initialize stage orchestrators for E2E workflow
+        # Try to initialize Interaction Orchestrator for Stage 1
+        try:
+            from cortex.orchestrators.core.master_orchestrator_stage_1 import MasterOrchestrationStage1
+            self.interaction_orchestrator = MasterOrchestrationStage1()
+            self.logger.log_operation_complete(
+                ac_id="AC-REM-011-01",
+                operation="STAGE_1_INIT",
+                success=True,
+                details={"stage": "Interaction Orchestrator initialized"}
+            )
+        except Exception as e:
+            # Log but don't fail - graceful degradation
+            self.logger.log_operation_complete(
+                ac_id="AC-REM-011-01",
+                operation="STAGE_1_INIT",
+                success=False,
+                details={"error": str(e)}
+            )
+        
+        # Try to initialize Intent Router for Stage 2
+        try:
+            from cortex.orchestrators.core.intent_router import IntentRouter
+            self.intent_router = IntentRouter()
+            self.logger.log_operation_complete(
+                ac_id="AC-REM-011-01",
+                operation="STAGE_2_INIT",
+                success=True,
+                details={"stage": "Intent Router initialized"}
+            )
+        except Exception as e:
+            # Log but don't fail - graceful degradation
+            self.logger.log_operation_complete(
+                ac_id="AC-REM-011-01",
+                operation="STAGE_2_INIT",
+                success=False,
+                details={"error": str(e)}
+            )
         
     @classmethod
     def instance(cls) -> 'MasterOrchestrator':

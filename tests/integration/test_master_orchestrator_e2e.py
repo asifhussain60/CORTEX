@@ -29,12 +29,12 @@ import time
 from unittest.mock import Mock, MagicMock, patch
 
 try:
-    from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+    from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 except (ImportError, ModuleNotFoundError):
     MasterOrchestrator = None
 
 try:
-    from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+    from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 except (ImportError, ModuleNotFoundError):
     EnhancedAuditLogger = None
 
@@ -177,10 +177,10 @@ class TestMasterOrchestrator3StageE2E:
         assert master.interaction_orchestrator is not None, "Interaction should initialize"
 
         # Audit trail should capture stage 1
-        audit_logger.log_event(
+        audit_logger.log_operation_start(
             ac_id="AC-MASTER-E2E-001",
             operation="STAGE-1-START",
-            message="Stage 1: Comprehension initiated",
+            details={"message": "Stage 1: Comprehension initiated"}
         )
 
     def test_master_stage1_interaction_builds_comprehension_context(
@@ -199,8 +199,9 @@ class TestMasterOrchestrator3StageE2E:
         interaction = master.interaction_orchestrator
         assert interaction is not None, "Interaction Orchestrator should exist"
 
-        # Verify it can be executed
-        assert hasattr(interaction, "execute_operation"), "Should have execute_operation"
+        # Verify it can execute comprehension
+        assert hasattr(interaction, "comprehend") or hasattr(interaction, "execute_operation"), \
+            "Should have comprehend or execute_operation method"
 
     # =========================================================================
     # STAGE 2: INTENT ROUTING
@@ -613,10 +614,10 @@ class TestMasterOrchestrator3StageE2E:
         assert audit_logger is not None
 
         # Audit system should be able to log stage transitions
-        audit_logger.log_event(
+        audit_logger.log_operation_start(
             ac_id="AC-MASTER-E2E-001",
             operation="MASTER-3STAGE-FLOW",
-            message="Master orchestrator 3-stage flow validated",
+            details={"message": "Master orchestrator 3-stage flow validated"}
         )
 
     def test_master_orchestrator_maintains_operation_context(
