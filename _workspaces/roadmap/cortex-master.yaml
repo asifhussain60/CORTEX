@@ -4220,6 +4220,146 @@ phase_tracker:
       hybrid_protocol_streaming:
         verdict: SELECTED
         reason: Best balance of power and pragmatism, matches existing patterns
+  PHASE-30-DOCUMENTATION-REMEDIATION:
+    title: Documentation Remediation & Content Organization
+    description: "PHASE-30: Strategic documentation remediation phase that executes ONLY\
+      \ after all production phases complete.\n\nGOAL: Transform scattered documentation\
+      \ (137 files in docs/ root) into organized, verified,\nGitHub Pages-ready structure\
+      \ with automated freshness validation.\n\nDELIVERABLES:\n1. Folder hierarchy (phases/,\
+      \ domains/, architecture/, guides/)\n2. Content reorganization & kebab-case\
+      \ file naming (<25 chars)\n3. Automated verification orchestrator (HousekeepingOrchestrator)\n\
+      4. Cross-reference validation & link repair\n5. Freshness checks (docs vs source\
+      \ specs)\n6. GitHub Pages integration & sitemap generation\n\nGATING RATIONALE:\n\
+      - Documentation work is FINAL post-production task\n- Should not begin until\
+      \ all feature work (PHASE-01 through PHASE-24) complete\n- Prevents outdated\
+      \ docs reflecting incomplete features\n- Ensures docs capture final API surface\n\
+      - Verification happens LAST when system is stable\n\nHOUSEKEEPING ORCHESTRATOR\
+      \ (NEW PATTERN):\n- Child orchestrator extending OrchestratorBase\n- 4-stage\
+      \ verification pipeline:\n  Stage 1: Source mapping (link doc to AC-ID or spec)\n\
+      \  Stage 2: Freshness check (content hash vs spec hash)\n  Stage 3: Implementation\
+      \ verification (AST scan for code changes)\n  Stage 4: Integrity audit (cross-refs,\
+      \ orphans)\n- Output: Verification report (VERIFIED | STALE | ORPHANED | NEEDS-UPDATE)\n\
+      - Audit trail: All checks logged with timestamps\n"
+    ac_ids: 6
+    completed_ac_ids: 0
+    status: NOT_STARTED
+    locked: false
+    enhancement_phase: true
+    implement_when_ready: true
+    implementation_prerequisite: "cortex-builder.prompt.md MUST implement this phase\
+      \ ONLY when:\n- ALL OTHER phases in phase_tracker have: locked: true\n- This\
+      \ phase is the ONLY phase with: locked: false AND implement_when_ready: true\n\
+      - ALL mandatory phases (PHASE-01 through PHASE-24) are COMPLETED and LOCKED\n\
+      - ALL gated phases (PHASE-15, PHASE-DEPLOYMENT) are LOCKED\n- System audit trail\
+      \ fully verified and unbroken\n- Production system stable for 24+ hours\n\nGating\
+      \ Logic for cortex-builder:\n  PHASE_READY = (ALL other phases have locked:\
+      \ true) AND\n                (PHASE-15 is LOCKED) AND\n                (PHASE-DEPLOYMENT\
+      \ is LOCKED) AND\n                (NO other phases have implement_when_ready:\
+      \ true) AND\n                (PHASE-30 is ONLY enhancement phase ready)\nIF PHASE_READY:\
+      \ implement PHASE-30 documentation remediation\nELSE: skip to next mandatory\
+      \ locked: true phase\n\nThis ensures documentation work executes ONLY after\
+      \ all feature work complete.\n"
+    requires: PHASE-DEPLOYMENT
+    required_for: DOCUMENTATION_COMPLETION
+    blocking: false
+    priority: P1
+    estimated_hours: 24
+    estimated_days: 3
+    progress_percentage: 0.0
+    acceptance_criteria:
+    - ac_id: AC-DOC-030-01
+      title: HousekeepingOrchestrator Child Pattern Implementation
+      description: "Create reusable HousekeepingOrchestrator class extending OrchestratorBase.\n\
+        Implements 4-stage verification pipeline for documentation verification.\n\
+        Provides abstraction for all doc auditing operations.\n"
+      estimated_hours: 4
+      test_count: 12
+      status: NOT_STARTED
+    - ac_id: AC-DOC-030-02
+      title: Folder Structure Design & Implementation
+      description: "Design and implement folder hierarchy:\n- docs/phases/ (PHASE-*.md\
+        \ files)\n- docs/domains/ (domain-specific content)\n- docs/architecture/\
+        \ (system design)\n- docs/guides/ (how-to, quick-starts)\n- docs/api/ (API\
+        \ reference)\nImplement kebab-case naming and <25 char limit.\n"
+      estimated_hours: 3
+      test_count: 8
+      status: NOT_STARTED
+    - ac_id: AC-DOC-030-03
+      title: Content Audit & Categorization
+      description: "Automated inventory of 137 root docs files.\nCategorize by prefix\
+        \ (PHASE, cortex, CHAT01, session, report, etc.).\nIdentify duplicates, obsolete\
+        \ content, and orphaned files.\n"
+      estimated_hours: 3
+      test_count: 6
+      status: NOT_STARTED
+    - ac_id: AC-DOC-030-04
+      title: File Migration & Renaming (Deterministic, Auditable)
+      description: "Implement safe file migration script:\n- Deterministic ordering\
+        \ (alphabetical by source)\n- Atomic moves (all-or-nothing semantics)\n- Complete\
+        \ audit trail (migration log)\n- Rollback capability (restore script)\n"
+      estimated_hours: 4
+      test_count: 10
+      status: NOT_STARTED
+    - ac_id: AC-DOC-030-05
+      title: Cross-Reference Validation & Link Repair
+      description: "Scan all migrated files for internal links.\nVerify all doc-to-doc\
+        \ references resolve correctly.\nUpdate links to reflect new folder structure.\n\
+        Generate report of broken/stale references.\n"
+      estimated_hours: 4
+      test_count: 8
+      status: NOT_STARTED
+    - ac_id: AC-DOC-030-06
+      title: GitHub Pages Integration & Sitemap Generation
+      description: "Create _config.yml for GitHub Pages.\nImplement automatic sitemap\
+        \ generation from folder structure.\nGenerate index.md for each folder.\n\
+        Create root README with navigation structure.\nValidate GitHub Pages build\
+        \ pipeline.\n"
+      estimated_hours: 6
+      test_count: 10
+      status: NOT_STARTED
+    files_to_create:
+    - src/housekeeping/orchestrator.py
+    - src/housekeeping/verification_pipeline.py
+    - src/housekeeping/doc_audit.py
+    - scripts/doc-migrate.py
+    - scripts/doc-validate.py
+    - docs/_config.yml
+    - docs/index.md
+    - tests/integration/test_housekeeping_orchestrator.py
+    files_to_modify:
+    - docs/README.md (root navigation guide)
+    governance:
+      core_rules:
+      - "CORE-008: TDD (tests first, RED \u2192 GREEN)"
+      - 'CORE-011: Type hints mandatory'
+      - 'CORE-012: Docstrings mandatory (Google style)'
+      - 'CORE-027: Audit trail (AC_START/EXECUTE/COMPLETE)'
+      - "CORE-028: Kebab-case, \u226425 chars filenames"
+    audit_verification:
+      verified: false
+      entry_count: 0
+      hash_chain_valid: null
+      verified_at: null
+      remediation_required: false
+    git_checkpoint: null
+    notes: "PHASE-30-DOCUMENTATION-REMEDIATION: Gated Phase\n\nRATIONALE:\n- Documentation\
+      \ remediation is FINAL task in CORTEX implementation\n- Should execute ONLY\
+      \ after all production features complete and stable\n- Prevents docs from reflecting\
+      \ incomplete/in-progress features\n- Ensures verification captures final system\
+      \ state\n\nGATING PATTERN (same as PHASE-15-DASHBOARD-UNIVERSAL & PHASE-DEPLOYMENT):\n\
+      - implement_when_ready: true (marks phase as gated/conditional)\n- implementation_prerequisite:\
+      \ documents gate conditions\n- Gate enforced by cortex-builder.prompt.md at\
+      \ phase execution time\n- Phase skipped if gate conditions not met\n- Only executes\
+      \ when ALL other phases locked AND this is ONLY pending enhancement\n\nDELIVERABLES:\n\
+      1. HousekeepingOrchestrator (reusable child pattern)\n2. 4-stage verification\
+      \ pipeline (mapping, freshness, implementation, integrity)\n3. Organized folder\
+      \ structure (6 top-level dirs)\n4. Kebab-case file names (<25 chars)\n5. Cross-reference\
+      \ validation & repair\n6. GitHub Pages ready (sitemap, navigation, _config.yml)\n\
+      7. Complete audit trail (docs verification report)\n\nOUTCOME:\n- 137 scattered\
+      \ files \u2192 organized hierarchy\n- No more root clutter\n- GitHub Pages\
+      \ deployment ready\n- Automated freshness checks prevent staleness\n- Full audit\
+      \ trail of all changes\n"
+
 architecture_decisions:
   AR-001:
     id: AR-001
