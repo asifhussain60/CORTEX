@@ -17,9 +17,12 @@ from typing import Generator
 
 import pytest
 
-# Add cortex to Python path
-sys.path.insert(0, str(Path(__file__).parent.parent / "cortex"))
-sys.path.insert(0, str(Path(__file__).parent.parent))
+# Add all possible paths to Python path to support both structures
+project_root = Path(__file__).parent.parent
+sys.path.insert(0, str(project_root / "cortex"))  # New structure
+sys.path.insert(0, str(project_root / "src"))     # Old structure (if exists)
+sys.path.insert(0, str(project_root / "cortex_brain"))  # Tier structure (if exists)
+sys.path.insert(0, str(project_root))  # Project root
 
 # Disable audit logger for migration - too many import issues
 # Will re-enable after all imports are updated

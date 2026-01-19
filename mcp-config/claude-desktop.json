@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "cortex": {
+      "command": "python",
+      "args": ["-m", "src.mcp"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "CORTEX_DB_PATH": "${workspaceFolder}/cortex_brain/state/governance.db"
+      }
+    }
+  }
+}
