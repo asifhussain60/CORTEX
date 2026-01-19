@@ -8,7 +8,7 @@ metadata:
   dor_score: 100
   start_date: null
   end_date: null
-  total_ac_ids: 101
+  total_ac_ids: 120
   total_ac_ids_locked: 10
   total_ac_ids_complete: 58
   locked_acs_in_phases: 46
@@ -148,140 +148,124 @@ metadata:
         '
   senior_leadership_metrics:
     reporting_frequency: Weekly
-    dashboard_url: "_workspaces/roadmap/reports/LEADERSHIP-DASHBOARD.md"
-    last_updated: "2026-01-19T00:00:00Z"
-    
+    dashboard_url: _workspaces/roadmap/reports/LEADERSHIP-DASHBOARD.md
+    last_updated: '2026-01-19T00:00:00Z'
     critical_metrics:
       program_health:
-        overall_completion: "57.4% (58 of 101 ACs complete)"
-        locked_phases: "6 phases (PHASE-01 through PHASE-04, PHASE-21 through PHASE-22)"
-        test_coverage: "100% pass rate for locked phases (331 tests passing)"
-        production_readiness: "NOT YET - Pending completion of PHASE-23 through PHASE-REMEDIATION-08"
-        
+        overall_completion: 57.4% (58 of 101 ACs complete)
+        locked_phases: 6 phases (PHASE-01 through PHASE-04, PHASE-21 through PHASE-22)
+        test_coverage: 100% pass rate for locked phases (331 tests passing)
+        production_readiness: NOT YET - Pending completion of PHASE-23 through PHASE-REMEDIATION-08
       delivery_schedule:
         committed_phases: 25
-        phases_on_track: 6  # Locked phases
-        phases_at_risk: 2  # In progress (PHASE-23, PHASE-24)
+        phases_on_track: 6
+        phases_at_risk: 2
         phases_not_started: 17
-        on_time_percentage: "100% of completed phases"
-        estimated_completion: "Q2 2026"
-        
+        on_time_percentage: 100% of completed phases
+        estimated_completion: Q2 2026
       technical_quality:
         total_tests_created: 331
         total_tests_passing: 331
-        test_pass_rate: "100%"
+        test_pass_rate: 100%
         failed_tests: 0
-        code_coverage: "95%+ (CORE modules)"
+        code_coverage: 95%+ (CORE modules)
         critical_defects: 0
         high_priority_issues: 0
-        
       ai_safety_posture:
-        hallucination_detection: "IN DESIGN (Issue #8 - PHASE-REMEDIATION-05)"
-        prompt_injection_prevention: "PLANNED (CORE-032)"
-        reasoning_trace_capture: "PLANNED (CORE-034)"
-        output_determinism_verification: "PLANNED (CORE-035)"
-        tool_accuracy_validation: "PLANNED (CORE-033)"
-        confidence_scoring: "PLANNED (CORE-031)"
-        
+        hallucination_detection: 'IN DESIGN (Issue #8 - PHASE-REMEDIATION-05)'
+        prompt_injection_prevention: PLANNED (CORE-032)
+        reasoning_trace_capture: PLANNED (CORE-034)
+        output_determinism_verification: PLANNED (CORE-035)
+        tool_accuracy_validation: PLANNED (CORE-033)
+        confidence_scoring: PLANNED (CORE-031)
       business_continuity:
-        cost_tracking: "PLANNED (BDOM-001)"
-        sla_compliance: "PLANNED (BDOM-002)"
-        budget_status: "On track (estimated $125K remaining from $500K allocated)"
-        stakeholder_alignment: "HIGH (weekly syncs active)"
+        cost_tracking: PLANNED (BDOM-001)
+        sla_compliance: PLANNED (BDOM-002)
+        budget_status: On track (estimated $125K remaining from $500K allocated)
+        stakeholder_alignment: HIGH (weekly syncs active)
         scope_creep_incidents: 0
-        
       governance_maturity:
         tier0_rules_implemented: 29
-        tier0_rules_planned: 8  # AI Safety (5) + Audit (2) + Resilience (1)
+        tier0_rules_planned: 8
         tier1_rules_implemented: 0
-        tier1_rules_planned: 6  # Business (4) + Data (2)
-        audit_trail_integrity: "VERIFIED - Unbroken hash chain (5040 entries)"
-        governance_db_status: "OPERATIONAL (governance.db - 257 production ACs)"
-        
+        tier1_rules_planned: 6
+        audit_trail_integrity: VERIFIED - Unbroken hash chain (5040 entries)
+        governance_db_status: OPERATIONAL (governance.db - 257 production ACs)
       stakeholder_communication:
-        executive_updates: "Weekly"
-        issue_tracking: "GitHub Issues (Public: 1, Active: #8)"
-        documentation_status: "CURRENT (updated 2026-01-19)"
-        transparency_score: "9/10 (comprehensive audit trails, public roadmap)"
-        
+        executive_updates: Weekly
+        issue_tracking: 'GitHub Issues (Public: 1, Active: #8)'
+        documentation_status: CURRENT (updated 2026-01-19)
+        transparency_score: 9/10 (comprehensive audit trails, public roadmap)
       risk_dashboard:
         critical_blockers: 3
         blocker_details:
-          - "PHASE-REMEDIATION-05 not started (AI Safety gap)"
-          - "Database performance SLAs not monitored (CORE-027b)"
-          - "PII sanitization not implemented (DATA-001)"
+        - PHASE-REMEDIATION-05 not started (AI Safety gap)
+        - Database performance SLAs not monitored (CORE-027b)
+        - PII sanitization not implemented (DATA-001)
         mitigation_in_progress: 3
         risks_closed_this_week: 0
-        
     reporting_dashboards:
-      - name: "Program Health Dashboard"
-        location: "_workspaces/roadmap/reports/LEADERSHIP-DASHBOARD.md"
-        refresh_frequency: "Weekly (Mondays 9am)"
-        sections:
-          - "Executive Summary (1 page)"
-          - "Delivery Schedule Tracking (Gantt chart)"
-          - "Quality Metrics (test pass rate, defects)"
-          - "Budget & Cost Tracking (actual vs planned)"
-          - "Risk Dashboard (critical issues, mitigation)"
-          - "Governance Maturity (rule coverage, compliance)"
-          
-      - name: "Phase Progress Report"
-        location: "_workspaces/roadmap/reports/PHASE-PROGRESS.md"
-        refresh_frequency: "On phase completion"
-        sections:
-          - "Phase Completion Summary"
-          - "AC Delivery (count, pass rates)"
-          - "Timeline Variance"
-          - "Known Issues & Resolutions"
-          
-      - name: "Technical Deep Dive"
-        location: "_workspaces/roadmap/reports/TECHNICAL-METRICS.md"
-        refresh_frequency: "Weekly (Fridays 3pm)"
-        sections:
-          - "Test Suite Status (breakdown by AC)"
-          - "Code Quality Metrics (type hints, docstrings)"
-          - "Architecture Compliance (YAML-first, Result pattern)"
-          - "Dependency Audit (security vulnerabilities)"
-          
-      - name: "AI Safety Compliance Report"
-        location: "_workspaces/roadmap/reports/AI-SAFETY-COMPLIANCE.md"
-        refresh_frequency: "Weekly (starting PHASE-REMEDIATION-05)"
-        sections:
-          - "Hallucination Detection Status"
-          - "Prompt Injection Incidents"
-          - "Confidence Score Distribution"
-          - "Reasoning Trace Completeness"
-          - "Determinism Verification Results"
-          
-      - name: "Governance Compliance Report"
-        location: "_workspaces/roadmap/reports/GOVERNANCE-COMPLIANCE.md"
-        refresh_frequency: "Weekly"
-        sections:
-          - "CORE Rules Implementation Status (29 + 8 new)"
-          - "TIER-1 Rules Implementation Status (0 + 6 new)"
-          - "Audit Trail Verification Results"
-          - "Rule Violations Detected"
-          - "Enforcement Actions Taken"
-          
-      - name: "Budget & Cost Report"
-        location: "_workspaces/roadmap/reports/BUDGET-TRACKING.md"
-        refresh_frequency: "Weekly (Thursdays)"
-        sections:
-          - "Phase Budget vs Actual"
-          - "LLM Token Usage by Phase"
-          - "Compute Hours Consumed"
-          - "Projected Overruns/Underruns"
-          - "Cost Optimization Recommendations"
-          
-      - name: "Stakeholder Communication Log"
-        location: "_workspaces/roadmap/reports/COMMUNICATION-LOG.md"
-        refresh_frequency: "After each communication event"
-        sections:
-          - "Executive Updates Sent"
-          - "Approval Requests & Responses"
-          - "Issue Escalations"
-          - "Stakeholder Feedback Received"
-  
+    - name: Program Health Dashboard
+      location: _workspaces/roadmap/reports/LEADERSHIP-DASHBOARD.md
+      refresh_frequency: Weekly (Mondays 9am)
+      sections:
+      - Executive Summary (1 page)
+      - Delivery Schedule Tracking (Gantt chart)
+      - Quality Metrics (test pass rate, defects)
+      - Budget & Cost Tracking (actual vs planned)
+      - Risk Dashboard (critical issues, mitigation)
+      - Governance Maturity (rule coverage, compliance)
+    - name: Phase Progress Report
+      location: _workspaces/roadmap/reports/PHASE-PROGRESS.md
+      refresh_frequency: On phase completion
+      sections:
+      - Phase Completion Summary
+      - AC Delivery (count, pass rates)
+      - Timeline Variance
+      - Known Issues & Resolutions
+    - name: Technical Deep Dive
+      location: _workspaces/roadmap/reports/TECHNICAL-METRICS.md
+      refresh_frequency: Weekly (Fridays 3pm)
+      sections:
+      - Test Suite Status (breakdown by AC)
+      - Code Quality Metrics (type hints, docstrings)
+      - Architecture Compliance (YAML-first, Result pattern)
+      - Dependency Audit (security vulnerabilities)
+    - name: AI Safety Compliance Report
+      location: _workspaces/roadmap/reports/AI-SAFETY-COMPLIANCE.md
+      refresh_frequency: Weekly (starting PHASE-REMEDIATION-05)
+      sections:
+      - Hallucination Detection Status
+      - Prompt Injection Incidents
+      - Confidence Score Distribution
+      - Reasoning Trace Completeness
+      - Determinism Verification Results
+    - name: Governance Compliance Report
+      location: _workspaces/roadmap/reports/GOVERNANCE-COMPLIANCE.md
+      refresh_frequency: Weekly
+      sections:
+      - CORE Rules Implementation Status (29 + 8 new)
+      - TIER-1 Rules Implementation Status (0 + 6 new)
+      - Audit Trail Verification Results
+      - Rule Violations Detected
+      - Enforcement Actions Taken
+    - name: Budget & Cost Report
+      location: _workspaces/roadmap/reports/BUDGET-TRACKING.md
+      refresh_frequency: Weekly (Thursdays)
+      sections:
+      - Phase Budget vs Actual
+      - LLM Token Usage by Phase
+      - Compute Hours Consumed
+      - Projected Overruns/Underruns
+      - Cost Optimization Recommendations
+    - name: Stakeholder Communication Log
+      location: _workspaces/roadmap/reports/COMMUNICATION-LOG.md
+      refresh_frequency: After each communication event
+      sections:
+      - Executive Updates Sent
+      - Approval Requests & Responses
+      - Issue Escalations
+      - Stakeholder Feedback Received
   governance:
     tier0_rules: cortex_brain/tier0/governance/core-rules.yaml
     phase_enforcement: cortex_brain/tier0/governance/phase-enforcement-map.yaml
@@ -4612,11 +4596,11 @@ phase_tracker:
         reason: Best balance of power and pragmatism, matches existing patterns
   PHASE-30-DOCUMENTATION-REMEDIATION:
     title: Documentation Remediation & Content Organization
-    description: "PHASE-30: Strategic documentation remediation phase that executes ONLY\
-      \ after all production phases complete.\n\nGOAL: Transform scattered documentation\
+    description: "PHASE-30: Strategic documentation remediation phase that executes\
+      \ ONLY after all production phases complete.\n\nGOAL: Transform scattered documentation\
       \ (137 files in docs/ root) into organized, verified,\nGitHub Pages-ready structure\
-      \ with automated freshness validation.\n\nDELIVERABLES:\n1. Folder hierarchy (phases/,\
-      \ domains/, architecture/, guides/)\n2. Content reorganization & kebab-case\
+      \ with automated freshness validation.\n\nDELIVERABLES:\n1. Folder hierarchy\
+      \ (phases/, domains/, architecture/, guides/)\n2. Content reorganization & kebab-case\
       \ file naming (<25 chars)\n3. Automated verification orchestrator (HousekeepingOrchestrator)\n\
       4. Cross-reference validation & link repair\n5. Freshness checks (docs vs source\
       \ specs)\n6. GitHub Pages integration & sitemap generation\n\nGATING RATIONALE:\n\
@@ -4641,14 +4625,14 @@ phase_tracker:
       \ phase is the ONLY phase with: locked: false AND implement_when_ready: true\n\
       - ALL mandatory phases (PHASE-01 through PHASE-24) are COMPLETED and LOCKED\n\
       - ALL gated phases (PHASE-15, PHASE-DEPLOYMENT) are LOCKED\n- System audit trail\
-      \ fully verified and unbroken\n- Production system stable for 24+ hours\n\nGating\
-      \ Logic for cortex-builder:\n  PHASE_READY = (ALL other phases have locked:\
+      \ fully verified and unbroken\n- Production system stable for 24+ hours\n\n\
+      Gating Logic for cortex-builder:\n  PHASE_READY = (ALL other phases have locked:\
       \ true) AND\n                (PHASE-15 is LOCKED) AND\n                (PHASE-DEPLOYMENT\
       \ is LOCKED) AND\n                (NO other phases have implement_when_ready:\
-      \ true) AND\n                (PHASE-30 is ONLY enhancement phase ready)\nIF PHASE_READY:\
-      \ implement PHASE-30 documentation remediation\nELSE: skip to next mandatory\
-      \ locked: true phase\n\nThis ensures documentation work executes ONLY after\
-      \ all feature work complete.\n"
+      \ true) AND\n                (PHASE-30 is ONLY enhancement phase ready)\nIF\
+      \ PHASE_READY: implement PHASE-30 documentation remediation\nELSE: skip to next\
+      \ mandatory locked: true phase\n\nThis ensures documentation work executes ONLY\
+      \ after all feature work complete.\n"
     requires: PHASE-DEPLOYMENT
     required_for: DOCUMENTATION_COMPLETION
     blocking: false
@@ -4659,51 +4643,91 @@ phase_tracker:
     acceptance_criteria:
     - ac_id: AC-DOC-030-01
       title: HousekeepingOrchestrator Child Pattern Implementation
-      description: "Create reusable HousekeepingOrchestrator class extending OrchestratorBase.\n\
-        Implements 4-stage verification pipeline for documentation verification.\n\
-        Provides abstraction for all doc auditing operations.\n"
+      description: 'Create reusable HousekeepingOrchestrator class extending OrchestratorBase.
+
+        Implements 4-stage verification pipeline for documentation verification.
+
+        Provides abstraction for all doc auditing operations.
+
+        '
       estimated_hours: 4
       test_count: 12
       status: NOT_STARTED
     - ac_id: AC-DOC-030-02
       title: Folder Structure Design & Implementation
-      description: "Design and implement folder hierarchy:\n- docs/phases/ (PHASE-*.md\
-        \ files)\n- docs/domains/ (domain-specific content)\n- docs/architecture/\
-        \ (system design)\n- docs/guides/ (how-to, quick-starts)\n- docs/api/ (API\
-        \ reference)\nImplement kebab-case naming and <25 char limit.\n"
+      description: 'Design and implement folder hierarchy:
+
+        - docs/phases/ (PHASE-*.md files)
+
+        - docs/domains/ (domain-specific content)
+
+        - docs/architecture/ (system design)
+
+        - docs/guides/ (how-to, quick-starts)
+
+        - docs/api/ (API reference)
+
+        Implement kebab-case naming and <25 char limit.
+
+        '
       estimated_hours: 3
       test_count: 8
       status: NOT_STARTED
     - ac_id: AC-DOC-030-03
       title: Content Audit & Categorization
-      description: "Automated inventory of 137 root docs files.\nCategorize by prefix\
-        \ (PHASE, cortex, CHAT01, session, report, etc.).\nIdentify duplicates, obsolete\
-        \ content, and orphaned files.\n"
+      description: 'Automated inventory of 137 root docs files.
+
+        Categorize by prefix (PHASE, cortex, CHAT01, session, report, etc.).
+
+        Identify duplicates, obsolete content, and orphaned files.
+
+        '
       estimated_hours: 3
       test_count: 6
       status: NOT_STARTED
     - ac_id: AC-DOC-030-04
       title: File Migration & Renaming (Deterministic, Auditable)
-      description: "Implement safe file migration script:\n- Deterministic ordering\
-        \ (alphabetical by source)\n- Atomic moves (all-or-nothing semantics)\n- Complete\
-        \ audit trail (migration log)\n- Rollback capability (restore script)\n"
+      description: 'Implement safe file migration script:
+
+        - Deterministic ordering (alphabetical by source)
+
+        - Atomic moves (all-or-nothing semantics)
+
+        - Complete audit trail (migration log)
+
+        - Rollback capability (restore script)
+
+        '
       estimated_hours: 4
       test_count: 10
       status: NOT_STARTED
     - ac_id: AC-DOC-030-05
       title: Cross-Reference Validation & Link Repair
-      description: "Scan all migrated files for internal links.\nVerify all doc-to-doc\
-        \ references resolve correctly.\nUpdate links to reflect new folder structure.\n\
-        Generate report of broken/stale references.\n"
+      description: 'Scan all migrated files for internal links.
+
+        Verify all doc-to-doc references resolve correctly.
+
+        Update links to reflect new folder structure.
+
+        Generate report of broken/stale references.
+
+        '
       estimated_hours: 4
       test_count: 8
       status: NOT_STARTED
     - ac_id: AC-DOC-030-06
       title: GitHub Pages Integration & Sitemap Generation
-      description: "Create _config.yml for GitHub Pages.\nImplement automatic sitemap\
-        \ generation from folder structure.\nGenerate index.md for each folder.\n\
-        Create root README with navigation structure.\nValidate GitHub Pages build\
-        \ pipeline.\n"
+      description: 'Create _config.yml for GitHub Pages.
+
+        Implement automatic sitemap generation from folder structure.
+
+        Generate index.md for each folder.
+
+        Create root README with navigation structure.
+
+        Validate GitHub Pages build pipeline.
+
+        '
       estimated_hours: 6
       test_count: 10
       status: NOT_STARTED
@@ -4746,10 +4770,9 @@ phase_tracker:
       \ structure (6 top-level dirs)\n4. Kebab-case file names (<25 chars)\n5. Cross-reference\
       \ validation & repair\n6. GitHub Pages ready (sitemap, navigation, _config.yml)\n\
       7. Complete audit trail (docs verification report)\n\nOUTCOME:\n- 137 scattered\
-      \ files \u2192 organized hierarchy\n- No more root clutter\n- GitHub Pages\
-      \ deployment ready\n- Automated freshness checks prevent staleness\n- Full audit\
-      \ trail of all changes\n"
-
+      \ files \u2192 organized hierarchy\n- No more root clutter\n- GitHub Pages deployment\
+      \ ready\n- Automated freshness checks prevent staleness\n- Full audit trail\
+      \ of all changes\n"
 architecture_decisions:
   AR-001:
     id: AR-001
@@ -7131,6 +7154,176 @@ phases:
         - "Tests comprehensive \u2705"
         - "Coverage complete \u2705"
         - "All pass \u2705 (21/21)"
+  phase_onboarding_orchestrator:
+    id: PHASE-ONBOARDING-ORCHESTRATOR
+    title: User Onboarding Orchestrator & Tool Discovery System
+    description: Comprehensive onboarding system with guided journeys, tool discovery,
+      contextual help, and adoption metrics. Balances efficiency (40-hour timeline
+      via pattern reuse) with production quality (140+ tests, full governance compliance).
+      YAML-first design enables post-deployment customization without code changes.
+    status: NOT_STARTED
+    locked: false
+    requires:
+    - PHASE-22
+    priority: P0
+    estimated_hours: 40
+    estimated_tests: 140
+    file: phases/phase-onboarding-orchestrator.yaml
+    focus:
+    - Onboarding Orchestrator Engine
+    - Tool Discovery & Registry
+    - Contextual Help System
+    - Journey Definitions (YAML-first)
+    - Adoption Metrics & Analytics
+    efficiency_notes: Efficiency-optimized via pattern reuse from master/planning
+      orchestrators, YAML-first journey definitions (6 base journeys + role-based
+      filtering), parallel AC work, fast iteration cycle (40 hours vs typical 60+).
+      Production quality maintained through 140+ test suite, full governance compliance
+      (CORE-008 TDD, CORE-011 types, CORE-012 docstrings, CORE-018 YAML-first, CORE-024
+      audit, CORE-025 Result, CORE-027 audit trail).
+    ac_ids:
+      AC-ONBOARD-001-01:
+        title: Onboarding Orchestrator & Flow Engine
+        description: Implement OnboardingOrchestrator core orchestrator using async/await
+          pattern; Journey state machine (NEW -> IN_PROGRESS -> COMPLETED); Result[T]
+          error handling; Audit logging of all onboarding events
+        status: NOT_STARTED
+        estimated_hours: 12
+        estimated_tests: 40
+        success_criteria:
+        - Orchestrator initialized and state managed
+        - Flow engine executes journeys sequentially
+        - Error handling with Result[T] pattern
+        - All onboarding events audit-logged
+        - 40 tests validate orchestrator behavior
+      AC-ONBOARD-002-01:
+        title: Tool Discovery & Registry Service
+        description: Implement ToolDiscoveryService for tool catalog, capability matching
+          (tool tags vs user role), and progressive exposure (show simple tools first,
+          complex later)
+        status: NOT_STARTED
+        estimated_hours: 8
+        estimated_tests: 35
+        success_criteria:
+        - Tool registry populated from schema
+        - Capability matching filters tools by user role
+        - Progressive exposure surfaces tools by complexity
+        - Discovery API exposes filtered catalog
+        - 35 tests validate discovery logic
+      AC-ONBOARD-003-01:
+        title: Contextual Help & Error Remediation
+        description: Implement ContextualHelpProvider with context-aware guidance
+          (tool tips, common mistakes, step-by-step instructions) and error remediation
+          suggestions (tool validates, helps user correct inputs)
+        status: NOT_STARTED
+        estimated_hours: 10
+        estimated_tests: 35
+        success_criteria:
+        - Context detection identifies user state
+        - Help content triggers appropriately
+        - Error suggestions guide user corrections
+        - Help system integrates with orchestrator events
+        - 35 tests validate help system
+      AC-ONBOARD-004-01:
+        title: Journey Definitions & Customization (YAML-first)
+        description: Define 6 base journeys as YAML (Standard, Beginner, Advanced,
+          Analyst-Role, Developer-Role, PM-Role) with role-based filtering. Journey
+          structure (sequence of activities, tools introduced, checkpoints). Enable
+          post-deployment customization via YAML updates.
+        status: NOT_STARTED
+        estimated_hours: 6
+        estimated_tests: 30
+        success_criteria:
+        - 6 journey YAML definitions complete
+        - Role-based filtering implemented
+        - Journey execution validates sequences
+        - Checkpoints track user progress
+        - YAML customization tested for hot-reload
+        - 30 tests validate journey logic
+      AC-ONBOARD-005-01:
+        title: Adoption Metrics & Analytics Collection
+        description: Collect adoption metrics (journeys started/completed, tools discovered,
+          help requests, time-to-productivity). Store in governance.db for analytics.
+          Generate adoption dashboards for leadership visibility.
+        status: NOT_STARTED
+        estimated_hours: 4
+        estimated_tests: 20
+        success_criteria:
+        - Metrics collected for all onboarding events
+        - Adoption analytics queryable from governance.db
+        - Dashboard generation for leadership
+        - Adoption trends tracked over time
+        - 20 tests validate metrics collection
+    design_principles:
+      efficiency_first:
+      - Reuse orchestrator pattern from master/planning orchestrators
+      - YAML-first journey definitions (6 base + role-based filtering)
+      - Parallel AC work (discovery and help system can be built independently)
+      - Fast iteration cycle (40-hour target vs typical 60+ for full phase)
+      production_ready:
+      - 140+ test suite with full coverage
+      - Full CORE governance compliance
+      - Audit logging of all events (CORE-024)
+      - Result[T] error handling (CORE-025)
+      - Comprehensive audit trail (CORE-027)
+      - Type hints on all functions (CORE-011)
+      - Docstrings on all classes/methods (CORE-012)
+      - TDD approach (CORE-008)
+    user_journeys:
+      standard:
+        name: Standard Onboarding
+        target_users: General users
+        duration_hours: 2
+        activities:
+        - Tool catalog overview
+        - Run first simple tool
+        - Explore 3 common tools
+        - Complete feedback survey
+      beginner:
+        name: Beginner-Friendly Journey
+        target_users: New to AI tools
+        duration_hours: 3
+        activities:
+        - Concepts & terminology
+        - Run supervised simple tool
+        - Guided hands-on exercises
+        - Q&A session
+      advanced:
+        name: Advanced User Journey
+        target_users: Experienced users
+        duration_hours: 1
+        activities:
+        - Tool architecture overview
+        - Advanced features tour
+        - Integration patterns
+        - Performance optimization
+      analyst_role:
+        name: Data Analyst Role Journey
+        target_users: Analysts
+        duration_hours: 2
+        activities:
+        - Analytics tool discovery
+        - Data manipulation tools
+        - Visualization tools
+        - Export & sharing tools
+      developer_role:
+        name: Developer Role Journey
+        target_users: Developers
+        duration_hours: 2
+        activities:
+        - API tools overview
+        - Code generation tools
+        - Integration patterns
+        - Custom tool development
+      pm_role:
+        name: Product Manager Role Journey
+        target_users: Product Managers
+        duration_hours: 1.5
+        activities:
+        - Feature planning tools
+        - Requirements tools
+        - Stakeholder communication tools
+        - Metrics & reporting tools
   phase_23_complexity_aware_confirmation:
     id: PHASE-23
     title: Complexity-Aware Confirmation Gate
@@ -7521,24 +7714,95 @@ phases:
         - Adoption smooth
   PHASE-25-GOVERNANCE-ENHANCEMENTS:
     id: PHASE-25
-    title: "Holistic Governance Enhancement: AI Safety, Audit, Resilience, Business, & Data Rules"
-    description: "Comprehensive governance framework addressing critical blind spots:\n\n\
-      TIER 0 ADDITIONS (AI SAFETY & AUDIT):\n- CORE-031: Hallucination Detection & Confidence\
-      \ Scoring\n- CORE-032: Prompt Injection Prevention & Input Sanitization\n- CORE-033:\
-      \ Tool Description Accuracy Validation\n- CORE-034: Reasoning Trace Requirements\n\
-      - CORE-035: Output Determinism Verification\n- CORE-027b: Audit Performance SLA\n\
-      - CORE-027c: Audit Immutability & Tamper Detection\n- CORE-036: Runtime Resilience\
-      \ Configuration\n\nTIER 1 ADDITIONS (BUSINESS & DATA GOVERNANCE):\n- BDOM-001:\
-      \ Cost Tracking & Budget Enforcement\n- BDOM-002: SLA Compliance Tracking\n\
+    title: 'Holistic Governance Enhancement: AI Safety, Audit, Resilience, Business,
+      & Data Rules'
+    description: "Comprehensive governance framework addressing critical blind spots:\n\
+      \nTIER 0 ADDITIONS (AI SAFETY & AUDIT):\n- CORE-031: Hallucination Detection\
+      \ & Confidence Scoring\n- CORE-032: Prompt Injection Prevention & Input Sanitization\n\
+      - CORE-033: Tool Description Accuracy Validation\n- CORE-034: Reasoning Trace\
+      \ Requirements\n- CORE-035: Output Determinism Verification\n- CORE-027b: Audit\
+      \ Performance SLA\n- CORE-027c: Audit Immutability & Tamper Detection\n- CORE-036:\
+      \ Runtime Resilience Configuration\n\nTIER 1 ADDITIONS (BUSINESS & DATA GOVERNANCE):\n\
+      - BDOM-001: Cost Tracking & Budget Enforcement\n- BDOM-002: SLA Compliance Tracking\n\
       - BDOM-003: Stakeholder Notification Governance\n- BDOM-004: Scope Creep Prevention\n\
       - DATA-001: PII Detection & Sanitization\n- DATA-002: Data Retention Policy\n\
-      \nTOTAL IMPACT:\n- 8 new CORE rules (29 → 37 total)\n- 6 new TIER-1 rules\n\
+      \nTOTAL IMPACT:\n- 8 new CORE rules (29 \u2192 37 total)\n- 6 new TIER-1 rules\n\
       - 450+ new tests\n- Production-ready governance by end of sprint\n- Eliminates\
       \ blind spots: AI safety, business governance, data protection, runtime resilience\n\
       \nISSUE REFERENCE: GitHub #8 - governance rules enhancements\n"
-    ac_ids: 14
+    ac_ids:
+      AC-GOV-SAFETY-001:
+        title: CORE-031 Hallucination Detection
+        status: NOT_STARTED
+        estimated_hours: 12
+        estimated_tests: 40
+      AC-GOV-SAFETY-002:
+        title: CORE-032 Prompt Injection Prevention
+        status: NOT_STARTED
+        estimated_hours: 10
+        estimated_tests: 35
+      AC-GOV-SAFETY-003:
+        title: CORE-033 Tool Description Accuracy
+        status: NOT_STARTED
+        estimated_hours: 8
+        estimated_tests: 30
+      AC-GOV-SAFETY-004:
+        title: CORE-034 Reasoning Trace Requirements
+        status: NOT_STARTED
+        estimated_hours: 10
+        estimated_tests: 30
+      AC-GOV-SAFETY-005:
+        title: CORE-035 Output Determinism
+        status: NOT_STARTED
+        estimated_hours: 9
+        estimated_tests: 25
+      AC-GOV-AUDIT-001:
+        title: CORE-027b Audit Performance SLA
+        status: NOT_STARTED
+        estimated_hours: 8
+        estimated_tests: 25
+      AC-GOV-AUDIT-002:
+        title: CORE-027c Audit Immutability
+        status: NOT_STARTED
+        estimated_hours: 6
+        estimated_tests: 20
+      AC-GOV-RESILIENCE-001:
+        title: CORE-036 Runtime Resilience
+        status: NOT_STARTED
+        estimated_hours: 12
+        estimated_tests: 40
+      AC-GOV-BUSINESS-001:
+        title: BDOM-001 Cost Tracking
+        status: NOT_STARTED
+        estimated_hours: 10
+        estimated_tests: 35
+      AC-GOV-BUSINESS-002:
+        title: BDOM-002 SLA Compliance
+        status: NOT_STARTED
+        estimated_hours: 8
+        estimated_tests: 30
+      AC-GOV-BUSINESS-003:
+        title: BDOM-003 Stakeholder Notification
+        status: NOT_STARTED
+        estimated_hours: 6
+        estimated_tests: 20
+      AC-GOV-BUSINESS-004:
+        title: BDOM-004 Scope Creep Prevention
+        status: NOT_STARTED
+        estimated_hours: 6
+        estimated_tests: 20
+      AC-GOV-DATA-001:
+        title: DATA-001 PII Detection
+        status: NOT_STARTED
+        estimated_hours: 10
+        estimated_tests: 40
+      AC-GOV-DATA-002:
+        title: DATA-002 Data Retention Policy
+        status: NOT_STARTED
+        estimated_hours: 8
+        estimated_tests: 30
     completed_ac_ids: 0
-    status: DESIGNED
+    status: NOT_STARTED
     locked: false
     enhancement_phase: false
     implement_when_ready: false
@@ -7554,8 +7818,8 @@ phases:
     acceptance_criteria:
     - ac_id: AC-GOV-SAFETY-001
       category: AI SAFETY - Tier 0
-      description: "CORE-031 Hallucination Detection: Confidence scoring (≥0.75 minimum),\
-        \ reasoning traces, output validation"
+      description: "CORE-031 Hallucination Detection: Confidence scoring (\u22650.75\
+        \ minimum), reasoning traces, output validation"
       estimated_hours: 12
       estimated_tests: 40
       status: NOT_STARTED
@@ -7572,8 +7836,8 @@ phases:
       - CORE-027 (Audit trail)
     - ac_id: AC-GOV-SAFETY-002
       category: AI SAFETY - Tier 0
-      description: "CORE-032 Prompt Injection Prevention: Input sanitization, jailbreak\
-        \ pattern detection, SQL injection prevention"
+      description: 'CORE-032 Prompt Injection Prevention: Input sanitization, jailbreak
+        pattern detection, SQL injection prevention'
       estimated_hours: 12
       estimated_tests: 45
       status: NOT_STARTED
@@ -7590,8 +7854,8 @@ phases:
       - CORE-027 (Audit trail)
     - ac_id: AC-GOV-SAFETY-003
       category: AI SAFETY - Tier 0
-      description: "CORE-033 Tool Description Accuracy: Auto-generate from code, detect\
-        \ drift, prevent hallucination"
+      description: 'CORE-033 Tool Description Accuracy: Auto-generate from code, detect
+        drift, prevent hallucination'
       estimated_hours: 8
       estimated_tests: 35
       status: NOT_STARTED
@@ -7606,8 +7870,8 @@ phases:
       - CORE-027 (Audit trail)
     - ac_id: AC-GOV-SAFETY-004
       category: AI SAFETY - Tier 0
-      description: "CORE-034 Reasoning Trace: Log decision chains, sources cited, alternatives\
-        \ considered"
+      description: 'CORE-034 Reasoning Trace: Log decision chains, sources cited,
+        alternatives considered'
       estimated_hours: 10
       estimated_tests: 30
       status: NOT_STARTED
@@ -7621,8 +7885,8 @@ phases:
       - CORE-027 (Audit trail)
     - ac_id: AC-GOV-SAFETY-005
       category: AI SAFETY - Tier 0
-      description: "CORE-035 Output Determinism: Verify same input → same output (≥95%\
-        \ match), detect hallucination patterns"
+      description: "CORE-035 Output Determinism: Verify same input \u2192 same output\
+        \ (\u226595% match), detect hallucination patterns"
       estimated_hours: 8
       estimated_tests: 25
       status: NOT_STARTED
@@ -7636,8 +7900,8 @@ phases:
       - CORE-027 (Audit trail)
     - ac_id: AC-GOV-AUDIT-001
       category: AUDIT ENHANCEMENT - Tier 0
-      description: "CORE-027b Audit Performance SLA: Query <100ms by ID, <500ms full\
-        \ scan, <1s search"
+      description: 'CORE-027b Audit Performance SLA: Query <100ms by ID, <500ms full
+        scan, <1s search'
       estimated_hours: 10
       estimated_tests: 25
       status: NOT_STARTED
@@ -7651,8 +7915,8 @@ phases:
       - CORE-027 (Audit trail)
     - ac_id: AC-GOV-AUDIT-002
       category: AUDIT ENHANCEMENT - Tier 0
-      description: "CORE-027c Audit Immutability: Append-only enforcement, hash chain\
-        \ tamper detection"
+      description: 'CORE-027c Audit Immutability: Append-only enforcement, hash chain
+        tamper detection'
       estimated_hours: 8
       estimated_tests: 20
       status: NOT_STARTED
@@ -7666,8 +7930,8 @@ phases:
       - CORE-025 (Hash chain)
     - ac_id: AC-GOV-RESILIENCE-001
       category: RUNTIME RESILIENCE - Tier 0
-      description: "CORE-036 Runtime Resilience: Timeouts per operation type, retry\
-        \ policies, circuit breakers"
+      description: 'CORE-036 Runtime Resilience: Timeouts per operation type, retry
+        policies, circuit breakers'
       estimated_hours: 12
       estimated_tests: 40
       status: NOT_STARTED
@@ -7682,8 +7946,8 @@ phases:
       - CORE-027 (Audit trail)
     - ac_id: AC-GOV-BUSINESS-001
       category: BUSINESS GOVERNANCE - Tier 1
-      description: "BDOM-001 Cost Tracking: Track LLM tokens, DB query time, orchestrator\
-        \ hours; enforce budgets"
+      description: 'BDOM-001 Cost Tracking: Track LLM tokens, DB query time, orchestrator
+        hours; enforce budgets'
       estimated_hours: 10
       estimated_tests: 30
       status: NOT_STARTED
@@ -7697,8 +7961,8 @@ phases:
       - CORE-027 (Audit trail)
     - ac_id: AC-GOV-BUSINESS-002
       category: BUSINESS GOVERNANCE - Tier 1
-      description: "BDOM-002 SLA Compliance: Track delivery dates, velocity, quality;\
-        \ variance >10% triggers escalation"
+      description: 'BDOM-002 SLA Compliance: Track delivery dates, velocity, quality;
+        variance >10% triggers escalation'
       estimated_hours: 8
       estimated_tests: 25
       status: NOT_STARTED
@@ -7712,8 +7976,8 @@ phases:
       - CORE-027 (Audit trail)
     - ac_id: AC-GOV-BUSINESS-003
       category: BUSINESS GOVERNANCE - Tier 1
-      description: "BDOM-003 Stakeholder Notifications: Notify on phase lock, budget\
-        \ overrun, blocking issues"
+      description: 'BDOM-003 Stakeholder Notifications: Notify on phase lock, budget
+        overrun, blocking issues'
       estimated_hours: 10
       estimated_tests: 30
       status: NOT_STARTED
@@ -7727,8 +7991,8 @@ phases:
       - CORE-027 (Audit trail)
     - ac_id: AC-GOV-BUSINESS-004
       category: BUSINESS GOVERNANCE - Tier 1
-      description: "BDOM-004 Scope Creep Prevention: Detect AC changes during phase,\
-        \ flag for approval"
+      description: 'BDOM-004 Scope Creep Prevention: Detect AC changes during phase,
+        flag for approval'
       estimated_hours: 6
       estimated_tests: 20
       status: NOT_STARTED
@@ -7742,8 +8006,8 @@ phases:
       - CORE-027 (Audit trail)
     - ac_id: AC-GOV-DATA-001
       category: DATA GOVERNANCE - Tier 1
-      description: "DATA-001 PII Detection & Sanitization: Detect emails, phones, SSNs,\
-        \ API keys; redact from logs"
+      description: 'DATA-001 PII Detection & Sanitization: Detect emails, phones,
+        SSNs, API keys; redact from logs'
       estimated_hours: 10
       estimated_tests: 35
       status: NOT_STARTED
@@ -7757,8 +8021,8 @@ phases:
       - CORE-027 (Audit trail)
     - ac_id: AC-GOV-DATA-002
       category: DATA GOVERNANCE - Tier 1
-      description: "DATA-002 Data Retention: Auto-cleanup temporary files (7d), archive\
-        \ logs (30d), retain audit (1y)"
+      description: 'DATA-002 Data Retention: Auto-cleanup temporary files (7d), archive
+        logs (30d), retain audit (1y)'
       estimated_hours: 8
       estimated_tests: 25
       status: NOT_STARTED
@@ -7772,8 +8036,8 @@ phases:
       - CORE-027 (Audit trail)
     - ac_id: AC-GOV-INTEGRATION-001
       category: INTEGRATION & ENFORCEMENT
-      description: "Load Tier 0/1 governance rules in correct order; Enforce pre-commit\
-        \ hooks; Runtime validation"
+      description: Load Tier 0/1 governance rules in correct order; Enforce pre-commit
+        hooks; Runtime validation
       estimated_hours: 12
       estimated_tests: 40
       status: NOT_STARTED
@@ -7787,8 +8051,8 @@ phases:
       - CORE-027 (Audit trail)
     - ac_id: AC-GOV-TESTING-001
       category: COMPREHENSIVE TEST SUITE
-      description: "Create 450+ tests covering all 14 new rules: unit (300+), integration\
-        \ (100+), E2E (50+)"
+      description: 'Create 450+ tests covering all 14 new rules: unit (300+), integration
+        (100+), E2E (50+)'
       estimated_hours: 20
       estimated_tests: 450
       status: NOT_STARTED
@@ -7836,12 +8100,12 @@ phases:
     - docs/governance-data-protection.md
     governance:
       core_rules:
-      - "CORE-008: TDD (tests first, RED → GREEN)"
-      - "CORE-011: Type hints mandatory"
-      - "CORE-012: Docstrings mandatory (Google style)"
-      - "CORE-017: Strict Governance Enforcement"
-      - "CORE-027: Audit trail per-operation"
-      - "CORE-028: Kebab-case, <25 chars filenames"
+      - "CORE-008: TDD (tests first, RED \u2192 GREEN)"
+      - 'CORE-011: Type hints mandatory'
+      - 'CORE-012: Docstrings mandatory (Google style)'
+      - 'CORE-017: Strict Governance Enforcement'
+      - 'CORE-027: Audit trail per-operation'
+      - 'CORE-028: Kebab-case, <25 chars filenames'
     audit_verification:
       verified: false
       entry_count: 0
@@ -7851,25 +8115,26 @@ phases:
     git_checkpoint: null
     notes: "PHASE-25: GOVERNANCE ENHANCEMENTS (GitHub Issue #8)\n\nRATIONALE:\nCORTEX\
       \ current state (29 CORE rules) is STRONG in determinism (TDD + Result pattern)\
-      \ and auditability (hash chain), but has CRITICAL BLIND SPOTS:\n\n❌ AI SAFETY:\
-      \ No detection of hallucinations, prompt injection, or reasoning errors\n❌ RUNTIME\
-      \ RESILIENCE: No timeout/retry policies (ad-hoc implementation)\n❌ BUSINESS\
-      \ GOVERNANCE: No cost tracking, SLA monitoring, stakeholder visibility\n❌ DATA\
-      \ GOVERNANCE: No PII protection, retention policies, or privacy compliance\n\
-      \nFIX:\nImplement 14 new ACs across 5 new CORE rules + 6 new TIER-1 rules\nTotal\
-      \ effort: 132 hours (4 weeks)\nTotal tests: 450+ (covers all edge cases)\n\n\
-      PHASE STRUCTURE:\n1. AC-GOV-SAFETY-001 through 005 (AI Safety - 50 tests, 50h)\n\
-      2. AC-GOV-AUDIT-001 and 002 (Audit Enhancement - 45 tests, 18h)\n3. AC-GOV-RESILIENCE-001\
-      \ (Runtime Resilience - 40 tests, 12h)\n4. AC-GOV-BUSINESS-001 through 004\
-      \ (Business Gov - 100 tests, 34h)\n5. AC-GOV-DATA-001 and 002 (Data Gov - 60\
-      \ tests, 18h)\n6. AC-GOV-INTEGRATION-001 (Enforcement - 40 tests, 12h)\n7. AC-GOV-TESTING-001\
-      \ (Comprehensive Tests - 450 total, 20h - includes orchestration)\n\nPRODUCTION\
-      \ READINESS:\n- Once complete, CORTEX is genuinely production-ready\n- Covers\
-      \ AI safety, reliability, business continuity, compliance\n- Zero blind spots\
-      \ remain\n- Ready for enterprise deployment\n\nBLOCKING FOR:\n- PRODUCTION_LAUNCH\
-      \ (must complete before production deployment)\n- All downstream deployment phases\n\
-      \nPREREQUISITE:\n- PHASE-24-RESPONSE-COMPOSITION (completed)\n\nDEPENDENCY CHAIN:\n\
-      PHASE-01 → ... → PHASE-24 → PHASE-25 → PHASE-DEPLOYMENT → PRODUCTION_LAUNCH\n"
+      \ and auditability (hash chain), but has CRITICAL BLIND SPOTS:\n\n\u274C AI\
+      \ SAFETY: No detection of hallucinations, prompt injection, or reasoning errors\n\
+      \u274C RUNTIME RESILIENCE: No timeout/retry policies (ad-hoc implementation)\n\
+      \u274C BUSINESS GOVERNANCE: No cost tracking, SLA monitoring, stakeholder visibility\n\
+      \u274C DATA GOVERNANCE: No PII protection, retention policies, or privacy compliance\n\
+      \nFIX:\nImplement 14 new ACs across 5 new CORE rules + 6 new TIER-1 rules\n\
+      Total effort: 132 hours (4 weeks)\nTotal tests: 450+ (covers all edge cases)\n\
+      \nPHASE STRUCTURE:\n1. AC-GOV-SAFETY-001 through 005 (AI Safety - 50 tests,\
+      \ 50h)\n2. AC-GOV-AUDIT-001 and 002 (Audit Enhancement - 45 tests, 18h)\n3.\
+      \ AC-GOV-RESILIENCE-001 (Runtime Resilience - 40 tests, 12h)\n4. AC-GOV-BUSINESS-001\
+      \ through 004 (Business Gov - 100 tests, 34h)\n5. AC-GOV-DATA-001 and 002 (Data\
+      \ Gov - 60 tests, 18h)\n6. AC-GOV-INTEGRATION-001 (Enforcement - 40 tests, 12h)\n\
+      7. AC-GOV-TESTING-001 (Comprehensive Tests - 450 total, 20h - includes orchestration)\n\
+      \nPRODUCTION READINESS:\n- Once complete, CORTEX is genuinely production-ready\n\
+      - Covers AI safety, reliability, business continuity, compliance\n- Zero blind\
+      \ spots remain\n- Ready for enterprise deployment\n\nBLOCKING FOR:\n- PRODUCTION_LAUNCH\
+      \ (must complete before production deployment)\n- All downstream deployment\
+      \ phases\n\nPREREQUISITE:\n- PHASE-24-RESPONSE-COMPOSITION (completed)\n\nDEPENDENCY\
+      \ CHAIN:\nPHASE-01 \u2192 ... \u2192 PHASE-24 \u2192 PHASE-25 \u2192 PHASE-DEPLOYMENT\
+      \ \u2192 PRODUCTION_LAUNCH\n"
   phase_remediation_07_mcp_exposure:
     id: PHASE-REMEDIATION-07
     title: MCP Tool Exposure Gap Fix
@@ -7925,11 +8190,99 @@ phases:
         - Discovery complete
         - Metadata accurate
   PHASE-GOVERNANCE-ENHANCEMENTS:
-    title: "Governance Enhancements: AI Safety, Resilience & Business Domain (Issue #8)"
-    description: "PHASE-GOVERNANCE-ENHANCEMENTS (2026-01-19):\n\nHolistic governance enhancement plan implementing 18 new rules across AI safety,\nauditability enhancements, runtime resilience, business domain governance, and\ndata governance.\n\nCURRENT STATE:\n- 29 CORE rules (strong code safety, determinism, auditability)\n- Blind spots: AI safety, runtime resilience, business governance, data governance\n\nPROPOSED STATE:\n- 37 CORE rules (add AI safety, audit performance, resilience)\n- 6 TIER-1 rules (business domain + data governance)\n- Complete coverage across all operational dimensions\n\nIMPLEMENTATION STRATEGY: 5 Implementation Phases (A-E)\n\nPHASE A: AI Safety Rules (CORE-031 through CORE-035) — URGENT\n  - Hallucination Detection & Confidence Scoring (CORE-031)\n  - Prompt Injection Prevention & Input Sanitization (CORE-032)\n  - Tool Accuracy Validation (CORE-033)\n  - Reasoning Trace Requirements (CORE-034)\n  - Output Determinism Verification (CORE-035)\n  Effort: 40 hours | Tests: 150+ | Blocker for PHASE-23 & PHASE-DEPLOYMENT\n\nPHASE B: Audit Enhancements (CORE-027b, CORE-027c) — HIGH PRIORITY\n  - Audit Performance SLA (CORE-027b)\n  - Audit Immutability & Tamper Detection (CORE-027c)\n  Effort: 16 hours | Tests: 60+ | Blocker for PHASE-DEPLOYMENT\n\nPHASE C: Runtime Resilience (CORE-036) — HIGH PRIORITY\n  - Runtime Resilience Configuration (CORE-036)\n  - Timeout policies, retry policies, circuit breakers\n  Effort: 24 hours | Tests: 80+ | Blocker for PHASE-DEPLOYMENT\n\nPHASE D: Business Domain Governance (BDOM-001 through BDOM-004) — MEDIUM PRIORITY\n  - Cost Tracking & Budget Governance (BDOM-001)\n  - SLA Compliance Tracking (BDOM-002)\n  - Stakeholder Notification Governance (BDOM-003)\n  - Scope Creep Prevention (BDOM-004)\n  Effort: 32 hours | Tests: 100+ | Blocker for Project Management Visibility\n\nPHASE E: Data Governance (DATA-001, DATA-002) — MEDIUM PRIORITY\n  - PII Detection & Sanitization (DATA-001)\n  - Data Retention Policy (DATA-002)\n  Effort: 20 hours | Tests: 60+ | Blocker for Compliance\n\nTOTAL EFFORT: 132 hours (40+16+24+32+20)\nTOTAL TESTS: 450+ (150+60+80+100+60)\nTIMELINE: 4 weeks (distributed across team)\nBLOCKERS: None (all dependencies identified)\n\nPRODUCTION IMPACT:\n- Eliminates AI safety blind spots (hallucination, prompt injection, reasoning validation)\n- Enables compliance (PII handling, data retention, cost tracking)\n- Improves resilience (timeouts, retries, circuit breakers)\n- Provides stakeholder visibility (SLA tracking, cost reporting, scope governance)\n\nNEXT STEP: Execute Phase A (AI Safety) this week to unblock PHASE-23 & PHASE-DEPLOYMENT\n"
-    ac_ids: 18
+    title: 'Governance Enhancements: AI Safety, Resilience & Business Domain (Issue
+      #8)'
+    description: "PHASE-GOVERNANCE-ENHANCEMENTS (2026-01-19):\n\nHolistic governance\
+      \ enhancement plan implementing 18 new rules across AI safety,\nauditability\
+      \ enhancements, runtime resilience, business domain governance, and\ndata governance.\n\
+      \nCURRENT STATE:\n- 29 CORE rules (strong code safety, determinism, auditability)\n\
+      - Blind spots: AI safety, runtime resilience, business governance, data governance\n\
+      \nPROPOSED STATE:\n- 37 CORE rules (add AI safety, audit performance, resilience)\n\
+      - 6 TIER-1 rules (business domain + data governance)\n- Complete coverage across\
+      \ all operational dimensions\n\nIMPLEMENTATION STRATEGY: 5 Implementation Phases\
+      \ (A-E)\n\nPHASE A: AI Safety Rules (CORE-031 through CORE-035) \u2014 URGENT\n\
+      \  - Hallucination Detection & Confidence Scoring (CORE-031)\n  - Prompt Injection\
+      \ Prevention & Input Sanitization (CORE-032)\n  - Tool Accuracy Validation (CORE-033)\n\
+      \  - Reasoning Trace Requirements (CORE-034)\n  - Output Determinism Verification\
+      \ (CORE-035)\n  Effort: 40 hours | Tests: 150+ | Blocker for PHASE-23 & PHASE-DEPLOYMENT\n\
+      \nPHASE B: Audit Enhancements (CORE-027b, CORE-027c) \u2014 HIGH PRIORITY\n\
+      \  - Audit Performance SLA (CORE-027b)\n  - Audit Immutability & Tamper Detection\
+      \ (CORE-027c)\n  Effort: 16 hours | Tests: 60+ | Blocker for PHASE-DEPLOYMENT\n\
+      \nPHASE C: Runtime Resilience (CORE-036) \u2014 HIGH PRIORITY\n  - Runtime Resilience\
+      \ Configuration (CORE-036)\n  - Timeout policies, retry policies, circuit breakers\n\
+      \  Effort: 24 hours | Tests: 80+ | Blocker for PHASE-DEPLOYMENT\n\nPHASE D:\
+      \ Business Domain Governance (BDOM-001 through BDOM-004) \u2014 MEDIUM PRIORITY\n\
+      \  - Cost Tracking & Budget Governance (BDOM-001)\n  - SLA Compliance Tracking\
+      \ (BDOM-002)\n  - Stakeholder Notification Governance (BDOM-003)\n  - Scope\
+      \ Creep Prevention (BDOM-004)\n  Effort: 32 hours | Tests: 100+ | Blocker for\
+      \ Project Management Visibility\n\nPHASE E: Data Governance (DATA-001, DATA-002)\
+      \ \u2014 MEDIUM PRIORITY\n  - PII Detection & Sanitization (DATA-001)\n  - Data\
+      \ Retention Policy (DATA-002)\n  Effort: 20 hours | Tests: 60+ | Blocker for\
+      \ Compliance\n\nTOTAL EFFORT: 132 hours (40+16+24+32+20)\nTOTAL TESTS: 450+\
+      \ (150+60+80+100+60)\nTIMELINE: 4 weeks (distributed across team)\nBLOCKERS:\
+      \ None (all dependencies identified)\n\nPRODUCTION IMPACT:\n- Eliminates AI\
+      \ safety blind spots (hallucination, prompt injection, reasoning validation)\n\
+      - Enables compliance (PII handling, data retention, cost tracking)\n- Improves\
+      \ resilience (timeouts, retries, circuit breakers)\n- Provides stakeholder visibility\
+      \ (SLA tracking, cost reporting, scope governance)\n\nNEXT STEP: Execute Phase\
+      \ A (AI Safety) this week to unblock PHASE-23 & PHASE-DEPLOYMENT\n"
+    ac_ids:
+      AC-GOVENHANCE-001:
+        title: CORE-031 Hallucination Detection
+        status: NOT_STARTED
+      AC-GOVENHANCE-002:
+        title: CORE-032 Prompt Injection
+        status: NOT_STARTED
+      AC-GOVENHANCE-003:
+        title: CORE-033 Tool Accuracy
+        status: NOT_STARTED
+      AC-GOVENHANCE-004:
+        title: CORE-034 Reasoning Trace
+        status: NOT_STARTED
+      AC-GOVENHANCE-005:
+        title: CORE-035 Determinism
+        status: NOT_STARTED
+      AC-GOVENHANCE-006:
+        title: CORE-027b Audit SLA
+        status: NOT_STARTED
+      AC-GOVENHANCE-007:
+        title: CORE-027c Audit Immutability
+        status: NOT_STARTED
+      AC-GOVENHANCE-008:
+        title: CORE-036 Runtime Resilience
+        status: NOT_STARTED
+      AC-GOVENHANCE-009:
+        title: BDOM-001 Cost Tracking
+        status: NOT_STARTED
+      AC-GOVENHANCE-010:
+        title: BDOM-002 SLA Compliance
+        status: NOT_STARTED
+      AC-GOVENHANCE-011:
+        title: BDOM-003 Stakeholder Notification
+        status: NOT_STARTED
+      AC-GOVENHANCE-012:
+        title: BDOM-004 Scope Creep
+        status: NOT_STARTED
+      AC-GOVENHANCE-013:
+        title: DATA-001 PII Detection
+        status: NOT_STARTED
+      AC-GOVENHANCE-014:
+        title: DATA-002 Data Retention
+        status: NOT_STARTED
+      AC-GOVENHANCE-015:
+        title: AI Safety Phase Testing
+        status: NOT_STARTED
+      AC-GOVENHANCE-016:
+        title: Audit Phase Testing
+        status: NOT_STARTED
+      AC-GOVENHANCE-017:
+        title: Business Phase Testing
+        status: NOT_STARTED
+      AC-GOVENHANCE-018:
+        title: Data Phase Testing
+        status: NOT_STARTED
     completed_ac_ids: 0
-    status: PLANNING
+    status: NOT_STARTED
     locked: false
     priority: P0
     blocking: true
@@ -7946,12 +8299,13 @@ phases:
     - PHASE-15-DASHBOARD-UNIVERSAL
     origin:
       date: '2026-01-19'
-      source: GitHub Issue #8 - governance rules enhancements
-      url: "https://github.com/asifhussain60/CORTEX/issues/8"
-      decision: Create integrated governance enhancement phase with 5 implementation phases
+      source: GitHub Issue
+      url: https://github.com/asifhussain60/CORTEX/issues/8
+      decision: Create integrated governance enhancement phase with 5 implementation
+        phases
     implementation_phases:
       phase_a_ai_safety:
-        title: "AI Safety Rules (CORE-031 through CORE-035)"
+        title: AI Safety Rules (CORE-031 through CORE-035)
         priority: URGENT
         effort_hours: 40
         estimated_days: 5
@@ -7982,7 +8336,7 @@ phases:
         - PHASE-23
         - PHASE-DEPLOYMENT
       phase_b_audit_enhancements:
-        title: "Audit Enhancements (CORE-027b, CORE-027c)"
+        title: Audit Enhancements (CORE-027b, CORE-027c)
         priority: HIGH
         effort_hours: 16
         estimated_days: 2
@@ -8002,7 +8356,7 @@ phases:
         blocking_phases:
         - PHASE-DEPLOYMENT
       phase_c_runtime_resilience:
-        title: "Runtime Resilience (CORE-036)"
+        title: Runtime Resilience (CORE-036)
         priority: HIGH
         effort_hours: 24
         estimated_days: 3
@@ -8022,7 +8376,7 @@ phases:
         blocking_phases:
         - PHASE-DEPLOYMENT
       phase_d_business_governance:
-        title: "Business Domain Governance (BDOM-001 through BDOM-004)"
+        title: Business Domain Governance (BDOM-001 through BDOM-004)
         priority: MEDIUM
         effort_hours: 32
         estimated_days: 4
@@ -8046,7 +8400,7 @@ phases:
         - src/core/scope_mgmt/scope_validator.py
         - tests/unit/test_business_*.py
       phase_e_data_governance:
-        title: "Data Governance (DATA-001, DATA-002)"
+        title: Data Governance (DATA-001, DATA-002)
         priority: MEDIUM
         effort_hours: 20
         estimated_days: 3
@@ -8065,8 +8419,9 @@ phases:
         - tests/unit/test_privacy_*.py
     acceptance_criteria:
     - ac_id: AC-GOVERN-001-01
-      title: "CORE-031: Hallucination Detection & Confidence Scoring"
-      description: All LLM outputs include explicit confidence scores; outputs with confidence <0.75 flagged for review
+      title: 'CORE-031: Hallucination Detection & Confidence Scoring'
+      description: All LLM outputs include explicit confidence scores; outputs with
+        confidence <0.75 flagged for review
       estimated_hours: 8
       test_count: 30
       status: NOT_STARTED
@@ -8074,7 +8429,7 @@ phases:
       - src/core/ai_safety/confidence_scorer.py
       - tests/unit/test_confidence_scorer.py
     - ac_id: AC-GOVERN-001-02
-      title: "CORE-032: Prompt Injection Prevention & Input Sanitization"
+      title: 'CORE-032: Prompt Injection Prevention & Input Sanitization'
       description: User inputs validated against injection patterns before LLM context
       estimated_hours: 8
       test_count: 30
@@ -8083,8 +8438,9 @@ phases:
       - src/core/ai_safety/prompt_sanitizer.py
       - tests/unit/test_prompt_sanitizer.py
     - ac_id: AC-GOVERN-001-03
-      title: "CORE-033: Tool Accuracy Validation"
-      description: Tool descriptions auto-generated from code; drift detected and logged
+      title: 'CORE-033: Tool Accuracy Validation'
+      description: Tool descriptions auto-generated from code; drift detected and
+        logged
       estimated_hours: 8
       test_count: 30
       status: NOT_STARTED
@@ -8092,8 +8448,9 @@ phases:
       - src/core/ai_safety/tool_validator.py
       - tests/unit/test_tool_validator.py
     - ac_id: AC-GOVERN-001-04
-      title: "CORE-034: Reasoning Trace Requirements"
-      description: All orchestrator decisions include reasoning traces with sources and confidence
+      title: 'CORE-034: Reasoning Trace Requirements'
+      description: All orchestrator decisions include reasoning traces with sources
+        and confidence
       estimated_hours: 8
       test_count: 30
       status: NOT_STARTED
@@ -8101,7 +8458,7 @@ phases:
       - src/core/ai_safety/reasoning_tracer.py
       - tests/unit/test_reasoning_tracer.py
     - ac_id: AC-GOVERN-001-05
-      title: "CORE-035: Output Determinism Verification"
+      title: 'CORE-035: Output Determinism Verification'
       description: Same input produces same output; hallucination patterns detected
       estimated_hours: 8
       test_count: 30
@@ -8110,8 +8467,9 @@ phases:
       - src/core/ai_safety/determinism_checker.py
       - tests/unit/test_determinism_checker.py
     - ac_id: AC-GOVERN-002-01
-      title: "CORE-027b: Audit Performance SLA"
-      description: Audit trail meets performance SLAs (100ms query, 10ms write, 5s durability)
+      title: 'CORE-027b: Audit Performance SLA'
+      description: Audit trail meets performance SLAs (100ms query, 10ms write, 5s
+        durability)
       estimated_hours: 8
       test_count: 30
       status: NOT_STARTED
@@ -8119,8 +8477,9 @@ phases:
       - src/core/audit/performance_sla_monitor.py
       - tests/integration/test_audit_performance_sla.py
     - ac_id: AC-GOVERN-002-02
-      title: "CORE-027c: Audit Immutability & Tamper Detection"
-      description: Audit trail append-only; hash chain integrity verified on every read
+      title: 'CORE-027c: Audit Immutability & Tamper Detection'
+      description: Audit trail append-only; hash chain integrity verified on every
+        read
       estimated_hours: 8
       test_count: 30
       status: NOT_STARTED
@@ -8128,8 +8487,9 @@ phases:
       - src/core/audit/tamper_detection.py
       - tests/integration/test_audit_tamper_detection.py
     - ac_id: AC-GOVERN-003-01
-      title: "CORE-036: Runtime Resilience Configuration"
-      description: All async operations have timeout/retry policies; circuit breaker patterns enforced
+      title: 'CORE-036: Runtime Resilience Configuration'
+      description: All async operations have timeout/retry policies; circuit breaker
+        patterns enforced
       estimated_hours: 24
       test_count: 80
       status: NOT_STARTED
@@ -8142,8 +8502,9 @@ phases:
       - tests/unit/test_resilience_retry.py
       - tests/unit/test_resilience_circuit_breaker.py
     - ac_id: AC-GOVERN-004-01
-      title: "BDOM-001: Cost Tracking & Budget Governance"
-      description: Expensive operations tracked with cost estimates; phase budgets enforced
+      title: 'BDOM-001: Cost Tracking & Budget Governance'
+      description: Expensive operations tracked with cost estimates; phase budgets
+        enforced
       estimated_hours: 8
       test_count: 25
       status: NOT_STARTED
@@ -8151,7 +8512,7 @@ phases:
       - src/core/cost_tracking/cost_manager.py
       - tests/unit/test_cost_tracking.py
     - ac_id: AC-GOVERN-004-02
-      title: "BDOM-002: SLA Compliance Tracking"
+      title: 'BDOM-002: SLA Compliance Tracking'
       description: Phase delivery SLAs tracked; variance >10% triggers escalation
       estimated_hours: 8
       test_count: 25
@@ -8160,7 +8521,7 @@ phases:
       - src/core/project_tracking/sla_monitor.py
       - tests/unit/test_sla_tracking.py
     - ac_id: AC-GOVERN-004-03
-      title: "BDOM-003: Stakeholder Notification Governance"
+      title: 'BDOM-003: Stakeholder Notification Governance'
       description: Critical milestones trigger stakeholder notifications and approvals
       estimated_hours: 8
       test_count: 25
@@ -8169,7 +8530,7 @@ phases:
       - src/core/stakeholder_mgmt/notifier.py
       - tests/unit/test_stakeholder_notifications.py
     - ac_id: AC-GOVERN-004-04
-      title: "BDOM-004: Scope Creep Prevention"
+      title: 'BDOM-004: Scope Creep Prevention'
       description: AC changes detected and flagged; scope governance enforced
       estimated_hours: 8
       test_count: 25
@@ -8178,7 +8539,7 @@ phases:
       - src/core/scope_mgmt/scope_validator.py
       - tests/unit/test_scope_validation.py
     - ac_id: AC-GOVERN-005-01
-      title: "DATA-001: PII Detection & Sanitization"
+      title: 'DATA-001: PII Detection & Sanitization'
       description: Personally identifiable information detected in logs and sanitized
       estimated_hours: 10
       test_count: 30
@@ -8187,8 +8548,9 @@ phases:
       - src/core/privacy/pii_detector.py
       - tests/unit/test_pii_detection.py
     - ac_id: AC-GOVERN-005-02
-      title: "DATA-002: Data Retention Policy"
-      description: Temporary data deleted per retention policies; audit trail retained for 1 year
+      title: 'DATA-002: Data Retention Policy'
+      description: Temporary data deleted per retention policies; audit trail retained
+        for 1 year
       estimated_hours: 10
       test_count: 30
       status: NOT_STARTED
@@ -8202,7 +8564,25 @@ phases:
       verified_at: null
       remediation_required: false
     git_checkpoint: null
-    notes: "PHASE-GOVERNANCE-ENHANCEMENTS: Planning Phase (2026-01-19)\n\nSOURCE: GitHub Issue #8 (governance rules enhancements)\nPRIORITY: P0 (Blocking PHASE-23, PHASE-DEPLOYMENT, Production Launch)\n\nTOTAL AC-IDs: 18\nTOTAL TESTS: 450+\nTOTAL EFFORT: 132 hours\n\nEXECUTION TIMELINE:\n- Week 1-2: Phase A (AI Safety) + Phase B (Audit) - 56 hours\n- Week 2-3: Phase C (Resilience) - 24 hours\n- Week 3-4: Phase D (Business Domain) - 32 hours\n- Week 4+: Phase E (Data Governance) - 20 hours\n\nKEY BLOCKERS ADDRESSED:\n✓ AI safety gaps (hallucination, prompt injection, reasoning validation)\n✓ Audit performance and immutability guarantees\n✓ Runtime resilience (timeouts, retries, circuit breakers)\n✓ Business domain visibility (cost tracking, SLA compliance)\n✓ Compliance requirements (PII handling, data retention)\n\nCOMPLIANCE TARGETS:\n- HIPAA: PII detection, data retention, audit trails\n- SOX: Governance enforcement, audit trail immutability\n- PCI-DSS: Input validation, output determinism\n\nPRE-IMPLEMENTATION CHECKLIST:\n☐ Approve Phase A (AI Safety) scope\n☐ Allocate engineering team capacity (132 hours)\n☐ Plan knowledge transfer for new rules\n☐ Prepare governance.db schema migrations\n☐ Schedule orchestrator updates (leverage new rules)\n\nRECOMMENDATION: Proceed with full Option A implementation (all 5 phases)\nRATIONALE: Complete production readiness requires all governance dimensions\n"
+    notes: "PHASE-GOVERNANCE-ENHANCEMENTS: Planning Phase (2026-01-19)\n\nSOURCE:\
+      \ GitHub Issue #8 (governance rules enhancements)\nPRIORITY: P0 (Blocking PHASE-23,\
+      \ PHASE-DEPLOYMENT, Production Launch)\n\nTOTAL AC-IDs: 18\nTOTAL TESTS: 450+\n\
+      TOTAL EFFORT: 132 hours\n\nEXECUTION TIMELINE:\n- Week 1-2: Phase A (AI Safety)\
+      \ + Phase B (Audit) - 56 hours\n- Week 2-3: Phase C (Resilience) - 24 hours\n\
+      - Week 3-4: Phase D (Business Domain) - 32 hours\n- Week 4+: Phase E (Data Governance)\
+      \ - 20 hours\n\nKEY BLOCKERS ADDRESSED:\n\u2713 AI safety gaps (hallucination,\
+      \ prompt injection, reasoning validation)\n\u2713 Audit performance and immutability\
+      \ guarantees\n\u2713 Runtime resilience (timeouts, retries, circuit breakers)\n\
+      \u2713 Business domain visibility (cost tracking, SLA compliance)\n\u2713 Compliance\
+      \ requirements (PII handling, data retention)\n\nCOMPLIANCE TARGETS:\n- HIPAA:\
+      \ PII detection, data retention, audit trails\n- SOX: Governance enforcement,\
+      \ audit trail immutability\n- PCI-DSS: Input validation, output determinism\n\
+      \nPRE-IMPLEMENTATION CHECKLIST:\n\u2610 Approve Phase A (AI Safety) scope\n\u2610\
+      \ Allocate engineering team capacity (132 hours)\n\u2610 Plan knowledge transfer\
+      \ for new rules\n\u2610 Prepare governance.db schema migrations\n\u2610 Schedule\
+      \ orchestrator updates (leverage new rules)\n\nRECOMMENDATION: Proceed with\
+      \ full Option A implementation (all 5 phases)\nRATIONALE: Complete production\
+      \ readiness requires all governance dimensions\n"
     phase_yaml: _workspaces/roadmap/phases/phase-governance-enhancements.yaml
 success_metrics:
   completion:
