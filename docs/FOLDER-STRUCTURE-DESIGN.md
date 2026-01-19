@@ -40,7 +40,7 @@ CORTEX/
 │   ├── tier0/                 # Tier 0 foundations
 │   ├── tier2/                 # Tier 2 specializations
 │   └── tier3/                 # Tier 3 knowledge base
-├── cortex-brain/              # (Deprecated - phase consolidation)
+├── cortex_brain/              # (Deprecated - phase consolidation)
 │   ├── tier0/
 │   ├── tier1/
 │   ├── tier2/
@@ -52,7 +52,7 @@ CORTEX/
 ```
 
 ### Pain Points Identified
-1. ❌ **Duplicate directories**: `cortex_brain/` vs `cortex-brain/` (confusion)
+1. ❌ **Duplicate directories**: `cortex_brain/` vs `cortex_brain/` (confusion)
 2. ❌ **Unclear hierarchy**: Deep nesting without clear pattern
 3. ❌ **Mixed concerns**: Core, infrastructure, API scattered
 4. ❌ **Test organization**: tests/ not aligned with source structure
@@ -289,7 +289,7 @@ CORTEX/
 | `cortex/api/` | `src/cortex/api/` | Consolidate under src |
 | `cortex/tools/` | `src/cortex/tools/` | Consolidate under src |
 | `cortex_brain/` | `src/cortex_brain/` | Consolidate under src |
-| `cortex-brain/` | DELETE (deprecated) | Consolidate duplicates |
+| `cortex_brain/` | DELETE (deprecated) | Consolidate duplicates |
 | `tests/` | `tests/` (reorganized) | Mirror new src structure |
 
 ### What Stays the Same

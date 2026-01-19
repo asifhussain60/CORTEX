@@ -24,7 +24,7 @@ Successfully implemented the Tier 1 Acceptance Criteria (AC) to orchestrator dom
 
 ### 1. YAML Mapping File: `ac-domain-mappings.yaml`
 
-**Location:** `/cortex-brain/tier1/acceptance-criteria/ac-domain-mappings.yaml`
+**Location:** `/cortex_brain/tier1/acceptance-criteria/ac-domain-mappings.yaml`
 
 **Structure:**
 ```yaml
@@ -323,7 +323,7 @@ tests/unit/test_ac_domain_mapper.py::TestACDomainMappingIntegration::test_specif
 ## Files Changed
 
 **Created:**
-1. `/cortex-brain/tier1/acceptance-criteria/ac-domain-mappings.yaml` (900 lines)
+1. `/cortex_brain/tier1/acceptance-criteria/ac-domain-mappings.yaml` (900 lines)
 2. `/src/core/ac_domain_mapper.py` (620 lines)
 3. `/tests/unit/test_ac_domain_mapper.py` (650 lines)
 

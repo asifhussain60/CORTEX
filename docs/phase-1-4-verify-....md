@@ -658,7 +658,7 @@ AC-IDs:
 
 2. **Audit database state:**
    ```bash
-   sqlite3 cortex-brain/state/governance.db ".tables"
+   sqlite3 cortex_brain/state/governance.db ".tables"
    SELECT COUNT(*) FROM ac_index;
    SELECT COUNT(*) FROM audit_log;
    ```

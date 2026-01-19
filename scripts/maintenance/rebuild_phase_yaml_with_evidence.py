@@ -64,7 +64,7 @@ PHASE_PATTERNS = {
                     "Schema includes previous_hash, entry_hash, metadata columns"
                 ],
                 "how_to_test": [
-                    "1. Connect to database: `import sqlite3; conn = sqlite3.connect('cortex-brain/state/governance.db')`",
+                    "1. Connect to database: `import sqlite3; conn = sqlite3.connect('cortex_brain/state/governance.db')`",
                     "2. Verify WAL mode: `PRAGMA query_only; PRAGMA journal_mode;` should show 'wal'",
                     "3. Check schema: `SELECT sql FROM sqlite_master WHERE type='table' AND name='audit_log'`",
                     "4. Verify indexes: `SELECT name FROM sqlite_master WHERE type='index' AND tbl_name='audit_log'`",

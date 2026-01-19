@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Migrate Knowledge Files from cortex-brain/knowledge/ to cortex-brain/tier3/knowledge/
+Migrate Knowledge Files from cortex_brain/knowledge/ to cortex_brain/tier3/knowledge/
 
 Maps old category structure to new 16-domain taxonomy and updates the knowledge index.
 
@@ -41,7 +41,7 @@ CATEGORY_TO_DOMAIN = {
 def get_domain_for_file(file_path: Path) -> str:
     """Determine the target domain for a knowledge file."""
     # Get relative path from knowledge root
-    rel_path = str(file_path.relative_to(Path("cortex-brain/knowledge")))
+    rel_path = str(file_path.relative_to(Path("cortex_brain/knowledge")))
     
     # Check for specific subdirectory mappings first
     for category, domain in CATEGORY_TO_DOMAIN.items():
@@ -77,8 +77,8 @@ def extract_metadata_from_yaml(file_path: Path) -> Dict[str, Any]:
 
 def migrate_files() -> List[Dict[str, Any]]:
     """Migrate all knowledge files to tier3 structure."""
-    source_dir = Path("cortex-brain/knowledge")
-    target_base = Path("cortex-brain/tier3/knowledge")
+    source_dir = Path("cortex_brain/knowledge")
+    target_base = Path("cortex_brain/tier3/knowledge")
     
     if not source_dir.exists():
         print(f"Source directory {source_dir} does not exist!")
@@ -127,7 +127,7 @@ def migrate_files() -> List[Dict[str, Any]]:
 
 def update_knowledge_index(entries: List[Dict[str, Any]]) -> None:
     """Update the .knowledge-index.json with migrated entries."""
-    index_path = Path("cortex-brain/tier3/knowledge/.knowledge-index.json")
+    index_path = Path("cortex_brain/tier3/knowledge/.knowledge-index.json")
     
     # Load existing index
     if index_path.exists():
@@ -147,7 +147,7 @@ def update_knowledge_index(entries: List[Dict[str, Any]]) -> None:
     # Update metadata
     index["metadata"]["updated_at"] = datetime.now().isoformat()
     index["metadata"]["entry_count"] = len(entries)
-    index["metadata"]["migration_note"] = "Migrated from cortex-brain/knowledge/ (CORTEX-4.0)"
+    index["metadata"]["migration_note"] = "Migrated from cortex_brain/knowledge/ (CORTEX-4.0)"
     
     # Add entries
     index["entries"] = entries
@@ -207,8 +207,8 @@ def main():
     
     print("\n✓ Migration complete!")
     print("\nNext steps:")
-    print("  1. Review migrated files in cortex-brain/tier3/knowledge/")
-    print("  2. git add cortex-brain/tier3/knowledge/")
+    print("  1. Review migrated files in cortex_brain/tier3/knowledge/")
+    print("  2. git add cortex_brain/tier3/knowledge/")
     print("  3. git commit -m 'feat: Migrate 35 knowledge YAMLs to tier3 structure'")
 
 

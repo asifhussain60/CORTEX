@@ -8,7 +8,7 @@ import hashlib
 import time
 
 def main():
-    db_path = Path("cortex-brain/state/governance.db")
+    db_path = Path("cortex_brain/state/governance.db")
     
     # Wait for database to be available
     max_retries = 15

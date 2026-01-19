@@ -26,7 +26,7 @@ The CORTEX framework implements a comprehensive **3-Tier Governance Model** with
 ### All Governance Files Present and Active
 
 ```
-✅ cortex-brain/tier0/governance/
+✅ cortex_brain/tier0/governance/
    ├─ core-rules.yaml                    (28 TIER 0 rules) ✅
    ├─ interaction-rules.yaml             (9 TIER 1 rules) ✅
    ├─ tdd-rules.yaml                     (8 TIER 1 rules) ✅

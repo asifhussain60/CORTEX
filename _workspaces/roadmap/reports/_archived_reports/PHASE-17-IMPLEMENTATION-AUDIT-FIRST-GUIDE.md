@@ -32,7 +32,7 @@ pip install pytest pytest-cov pytest-xdist sqlite3 PyYAML
 python init_db.py --audit-schema-only
 
 # 3. Verify schema
-sqlite3 cortex-brain/state/governance.db ".schema audit_entries"
+sqlite3 cortex_brain/state/governance.db ".schema audit_entries"
 ```
 
 ### First Test with Audit Logging
@@ -41,7 +41,7 @@ sqlite3 cortex-brain/state/governance.db ".schema audit_entries"
 # 1. Run single AC with audit trace
 pytest tests/unit/governance/test_phase_17_ac_db_001_01.py -v \
   --audit-trace \
-  --audit-log cortex-brain/state/governance.db
+  --audit-log cortex_brain/state/governance.db
 
 # Expected output:
 # test_query_existing_domain PASSED
@@ -56,14 +56,14 @@ pytest tests/unit/governance/test_phase_17_ac_db_001_01.py -v \
 # Sequential execution (preserves audit chain ordering)
 pytest tests/unit/governance/test_phase_17_*.py \
   --audit-trace \
-  --audit-log cortex-brain/state/governance.db \
+  --audit-log cortex_brain/state/governance.db \
   --collect-only | grep "test_" | wc -l
 # Expected: 338+ tests
 
 # Parallel execution (by AC, with audit coordination)
 pytest tests/unit/governance/test_phase_17_*.py \
   --audit-trace \
-  --audit-log cortex-brain/state/governance.db \
+  --audit-log cortex_brain/state/governance.db \
   -n auto \  # Use all CPU cores
   --dist loadgroup  # Group by AC to maintain audit ordering
 ```
@@ -265,7 +265,7 @@ from pathlib import Path
 @pytest.fixture
 def audit_logger():
     """Audit logger instance for each test."""
-    db_path = Path(__file__).parent.parent / "cortex-brain" / "state" / "governance.db"
+    db_path = Path(__file__).parent.parent / "cortex_brain" / "state" / "governance.db"
     return AuditLogger(str(db_path))
 
 class AuditedTestCase:
@@ -573,7 +573,7 @@ class TestDuplicateDetection:
 set -e
 
 PHASE="PHASE-17"
-DB_PATH="cortex-brain/state/governance.db"
+DB_PATH="cortex_brain/state/governance.db"
 WEEK=$1
 
 echo "📍 PHASE-17 Weekly Checkpoint: Week $WEEK"
@@ -604,7 +604,7 @@ echo "✓ Step 2: Verifying hash chain integrity"
 python << 'EOF'
 from src.governance.audit_logger import AuditLogger
 
-logger = AuditLogger('cortex-brain/state/governance.db')
+logger = AuditLogger('cortex_brain/state/governance.db')
 if not logger.verify_hash_chain(ac_id=None):
     exit(1)
 EOF
@@ -657,7 +657,7 @@ import json
 def generate_checkpoint_report(week: int):
     """Generate comprehensive checkpoint report."""
     
-    db = sqlite3.connect('cortex-brain/state/governance.db')
+    db = sqlite3.connect('cortex_brain/state/governance.db')
     cursor = db.cursor()
     
     # Aggregate stats
@@ -713,7 +713,7 @@ python -c "
 import sqlite3
 from src.governance.audit_logger import AuditLogger
 
-db = sqlite3.connect('cortex-brain/state/governance.db')
+db = sqlite3.connect('cortex_brain/state/governance.db')
 cursor = db.cursor()
 
 # Find entry before break
@@ -754,7 +754,7 @@ pytest tests/unit/governance/test_phase_17_ac_db_001_01.py -v --tb=short
 # Verify database connection
 python -c "
 import sqlite3
-db = sqlite3.connect('cortex-brain/state/governance.db')
+db = sqlite3.connect('cortex_brain/state/governance.db')
 cursor = db.cursor()
 cursor.execute('SELECT COUNT(*) FROM audit_entries')
 print(f'Total audit entries: {cursor.fetchone()[0]}')
@@ -774,16 +774,16 @@ pytest tests/unit/governance/test_phase_17_ac_db_001_01.py \
 **Solution**:
 ```bash
 # 1. Check database size
-du -h cortex-brain/state/governance.db
+du -h cortex_brain/state/governance.db
 
 # 2. Optimize indexes
-sqlite3 cortex-brain/state/governance.db "ANALYZE"
-sqlite3 cortex-brain/state/governance.db "VACUUM"
+sqlite3 cortex_brain/state/governance.db "ANALYZE"
+sqlite3 cortex_brain/state/governance.db "VACUUM"
 
 # 3. Check for slow queries
 python -c "
 import sqlite3
-db = sqlite3.connect('cortex-brain/state/governance.db')
+db = sqlite3.connect('cortex_brain/state/governance.db')
 cursor = db.cursor()
 
 # Recent entries (should be <5ms with TTL cache)
@@ -801,7 +801,7 @@ print(f'AC-ID lookup: {elapsed:.1f}ms')
 "
 
 # 4. Check index usage
-sqlite3 cortex-brain/state/governance.db "PRAGMA index_list(audit_entries);"
+sqlite3 cortex_brain/state/governance.db "PRAGMA index_list(audit_entries);"
 ```
 
 ---
@@ -893,7 +893,7 @@ class FastCheckpointVerification:
     
     def verify_week(self, week: int) -> bool:
         """Verify week checkpoint (fast)."""
-        db = sqlite3.connect('cortex-brain/state/governance.db')
+        db = sqlite3.connect('cortex_brain/state/governance.db')
         cursor = db.cursor()
         
         cursor.execute('''
@@ -933,11 +933,11 @@ CHECKPOINT=$1  # e.g., "week_2"
 echo "⚠️ Rolling back PHASE-17 to checkpoint: $CHECKPOINT"
 
 # 1. Get checkpoint info
-CHECKPOINT_HASH=$(sqlite3 cortex-brain/state/governance.db \
+CHECKPOINT_HASH=$(sqlite3 cortex_brain/state/governance.db \
   "SELECT checkpoint_hash FROM phase_checkpoints WHERE phase_id='PHASE-17' AND checkpoint='$CHECKPOINT'")
 
 # 2. Delete all entries after checkpoint
-sqlite3 cortex-brain/state/governance.db <<EOF
+sqlite3 cortex_brain/state/governance.db <<EOF
 DELETE FROM audit_entries 
 WHERE phase_id='PHASE-17' AND timestamp > (
     SELECT verified_at FROM phase_checkpoints 
@@ -948,7 +948,7 @@ EOF
 # 3. Verify integrity
 python -c "
 from src.governance.audit_logger import AuditLogger
-logger = AuditLogger('cortex-brain/state/governance.db')
+logger = AuditLogger('cortex_brain/state/governance.db')
 if logger.verify_hash_chain(ac_id=None):
     print('✅ Rollback successful')
 else:
@@ -969,7 +969,7 @@ echo "✅ PHASE-17 rolled back to $CHECKPOINT"
 
 def rollback_ac(ac_id: str, to_timestamp: str = None):
     """Roll back specific AC to checkpoint."""
-    db = sqlite3.connect('cortex-brain/state/governance.db')
+    db = sqlite3.connect('cortex_brain/state/governance.db')
     cursor = db.cursor()
     
     # Find last AC_START before timestamp

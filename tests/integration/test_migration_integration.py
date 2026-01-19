@@ -229,7 +229,7 @@ class TestValidatorIntegration:
         # Should verify old folders removed
         assert "cortex/" in content
         assert "cortex_brain/" in content
-        assert "cortex-brain/" in content
+        assert "cortex_brain/" in content
     
     def test_validator_checks_duplicates(self):
         """Test that validator checks for duplicates."""

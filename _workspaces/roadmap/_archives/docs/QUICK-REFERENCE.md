@@ -131,8 +131,8 @@ MEGA-05: ████████████ 43 ACs (17%)
 | **High-level roadmap** | `cortex-consolidated.yaml` |
 | **Detailed AC info** | `cortex-master.yaml` (phase_tracker) |
 | **Individual phase YAML** | `phases/phase-XX.yaml` |
-| **Governance rules** | `cortex-brain/tier0/governance/` |
-| **Audit trail** | `cortex-brain/state/governance.db` |
+| **Governance rules** | `cortex_brain/tier0/governance/` |
+| **Audit trail** | `cortex_brain/state/governance.db` |
 | **Consolidation guide** | `ROADMAP-CONSOLIDATION-GUIDE.md` |
 | **Quick reference** | This file (`QUICK-REFERENCE.md`) |
 

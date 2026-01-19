@@ -1,7 +1,7 @@
 """
 Tests for Custom Response Templates System
 
-AC-AR-009-01: Response templates loaded from cortex-brain/tier2/
+AC-AR-009-01: Response templates loaded from cortex_brain/tier2/
 AC-AR-009-02: Templates support variable substitution
 AC-AR-009-03: Template inheritance working
 """
@@ -163,7 +163,7 @@ class TestTemplateLoading:
             assert loaded_count == 1
     
     def test_load_templates_from_tier2(self):
-        """Test loading templates from default cortex-brain location"""
+        """Test loading templates from default cortex_brain location"""
         engine = TemplateEngine()
         
         result = engine.load_templates()

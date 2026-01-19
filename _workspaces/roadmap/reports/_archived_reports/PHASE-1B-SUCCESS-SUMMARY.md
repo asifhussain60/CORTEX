@@ -69,8 +69,8 @@ Current (post-markers)   181 entries, 9 ACs           +36 NEW entries
 git commit -m "checkpoint: before OPTION-1B remediation"
 
 # Restored from backup
-rm cortex-brain/state/governance.db
-cp cortex-brain/state/governance.db.backup cortex-brain/state/governance.db
+rm cortex_brain/state/governance.db
+cp cortex_brain/state/governance.db.backup cortex_brain/state/governance.db
 
 # Result: 145 entries restored (131 recovered)
 ```
@@ -208,8 +208,8 @@ Total: 6 → 17 AC_COMPLETE entries (+11 new)
 - ✅ `docs/REMEDIATION-EXECUTIVE-SUMMARY.md`
 
 **Database**:
-- ✅ `cortex-brain/state/governance.db` (145 entries restored, 181 current)
-- ✅ `cortex-brain/state/governance.db.backup` (preserved)
+- ✅ `cortex_brain/state/governance.db` (145 entries restored, 181 current)
+- ✅ `cortex_brain/state/governance.db.backup` (preserved)
 
 **Git Status**: All changes committed and pushed to `origin/CORTEX6`
 

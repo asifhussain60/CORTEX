@@ -2,7 +2,7 @@
 """
 AC-AR-010-02: Automated Folder Structure Migration Script
 
-Migrates CORTEX from dual structure (cortex-brain/ + src/) to unified structure (cortex/).
+Migrates CORTEX from dual structure (cortex_brain/ + src/) to unified structure (cortex/).
 Implements 4-phase migration strategy with checksum verification and rollback capability.
 
 Usage:
@@ -70,17 +70,17 @@ class MigrationValidator:
     def validate_current_structure(self) -> bool:
         """Verify current folder structure exists."""
         logger.info("Validating current structure...")
-        cortex_brain = self.project_root / "cortex-brain"
+        cortex_brain = self.project_root / "cortex_brain"
         src = self.project_root / "src"
         
         if not cortex_brain.exists():
-            logger.error(f"cortex-brain/ not found at {cortex_brain}")
+            logger.error(f"cortex_brain/ not found at {cortex_brain}")
             return False
         if not src.exists():
             logger.error(f"src/ not found at {src}")
             return False
         
-        logger.info(f"✓ cortex-brain/ found ({self._count_files(cortex_brain)} files)")
+        logger.info(f"✓ cortex_brain/ found ({self._count_files(cortex_brain)} files)")
         logger.info(f"✓ src/ found ({self._count_files(src)} files)")
         return True
 
@@ -246,19 +246,19 @@ class MigrationMappingBuilder:
         """Build complete migration mappings."""
         mappings = []
 
-        # cortex-brain/tier0/* → cortex/core/ + cortex/brain/tier0/
+        # cortex_brain/tier0/* → cortex/core/ + cortex/brain/tier0/
         mappings.extend(self._map_tier0())
 
-        # cortex-brain/tier1/* → cortex/brain/tier1/
+        # cortex_brain/tier1/* → cortex/brain/tier1/
         mappings.extend(self._map_tier1())
 
-        # cortex-brain/tier2/* → cortex/brain/tier2/
+        # cortex_brain/tier2/* → cortex/brain/tier2/
         mappings.extend(self._map_tier2())
 
-        # cortex-brain/tier3/* → cortex/brain/tier3/
+        # cortex_brain/tier3/* → cortex/brain/tier3/
         mappings.extend(self._map_tier3())
 
-        # cortex-brain/[other]/* → cortex/brain/ (special handling)
+        # cortex_brain/[other]/* → cortex/brain/ (special handling)
         mappings.extend(self._map_cortex_brain_other())
 
         # src/api/* → cortex/api/
@@ -287,7 +287,7 @@ class MigrationMappingBuilder:
     def _map_tier0(self) -> List[MigrationMapping]:
         """Map tier0 files (governance, audit, schemas, state, config, registry)."""
         mappings = []
-        tier0_src = self.project_root / "cortex-brain" / "tier0"
+        tier0_src = self.project_root / "cortex_brain" / "tier0"
 
         if tier0_src.exists():
             for item in tier0_src.iterdir():
@@ -315,7 +315,7 @@ class MigrationMappingBuilder:
     def _map_tier1(self) -> List[MigrationMapping]:
         """Map tier1 files → cortex/brain/tier1/"""
         mappings = []
-        tier1_src = self.project_root / "cortex-brain" / "tier1"
+        tier1_src = self.project_root / "cortex_brain" / "tier1"
 
         if tier1_src.exists():
             for item in tier1_src.iterdir():
@@ -332,7 +332,7 @@ class MigrationMappingBuilder:
     def _map_tier2(self) -> List[MigrationMapping]:
         """Map tier2 files → cortex/brain/tier2/"""
         mappings = []
-        tier2_src = self.project_root / "cortex-brain" / "tier2"
+        tier2_src = self.project_root / "cortex_brain" / "tier2"
 
         if tier2_src.exists():
             for item in tier2_src.iterdir():
@@ -349,7 +349,7 @@ class MigrationMappingBuilder:
     def _map_tier3(self) -> List[MigrationMapping]:
         """Map tier3 files → cortex/brain/tier3/"""
         mappings = []
-        tier3_src = self.project_root / "cortex-brain" / "tier3"
+        tier3_src = self.project_root / "cortex_brain" / "tier3"
 
         if tier3_src.exists():
             for item in tier3_src.iterdir():
@@ -364,9 +364,9 @@ class MigrationMappingBuilder:
         return mappings
 
     def _map_cortex_brain_other(self) -> List[MigrationMapping]:
-        """Map other cortex-brain items."""
+        """Map other cortex_brain items."""
         mappings = []
-        cortex_brain = self.project_root / "cortex-brain"
+        cortex_brain = self.project_root / "cortex_brain"
 
         if cortex_brain.exists():
             for item in cortex_brain.iterdir():

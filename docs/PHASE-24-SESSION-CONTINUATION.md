@@ -211,7 +211,7 @@ TemplateEngine
 **Implementation Files to Create:**
 - `src/orchestrators/response/response_templates.py` (400+ lines)
 - `tests/unit/orchestrators/test_response_templates.py` (20+ tests)
-- `cortex-brain/tier1/response-templates/` (template definitions)
+- `cortex_brain/tier1/response-templates/` (template definitions)
 
 **Success Criteria:**
 - ✓ Template patterns defined and documented

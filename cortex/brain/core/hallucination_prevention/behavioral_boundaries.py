@@ -69,7 +69,7 @@ class BehavioralBoundaryRules:
         Args:
             db_path: Path to governance database. If None, uses default.
         """
-        self.db_path = db_path or "cortex-brain/state/governance.db"
+        self.db_path = db_path or "cortex_brain/state/governance.db"
         self._violation_cache: List[Dict[str, Any]] = []
         self._last_violation_id: Optional[str] = None
         self._correlation_id: str = str(uuid.uuid4())

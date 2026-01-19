@@ -267,7 +267,7 @@ Overall Progress:
 **References:**
 - MCP Specification: https://spec.modelcontextprotocol.io/
 - cortex-builder.prompt.md: Single Source of Truth architecture
-- Governance Rules: `cortex-brain/tier0/governance/core-rules.yaml`
+- Governance Rules: `cortex_brain/tier0/governance/core-rules.yaml`
 
 ---
 

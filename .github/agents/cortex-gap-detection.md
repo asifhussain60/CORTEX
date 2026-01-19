@@ -359,7 +359,7 @@ fi
 
 # 3. Check governance gaps
 echo "3. Governance Check..."
-VIOLATIONS=$(sqlite3 cortex-brain/state/governance.db \
+VIOLATIONS=$(sqlite3 cortex_brain/state/governance.db \
   "SELECT COUNT(*) FROM audit_log WHERE ac_id IS NOT NULL AND operation NOT IN ('AC_START', 'AC_EXECUTE', 'AC_COMPLETE')")
 if [ $VIOLATIONS -gt 0 ]; then
   echo "  ⚠️  GAP: $VIOLATIONS governance violations detected"

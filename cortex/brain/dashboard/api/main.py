@@ -56,7 +56,7 @@ manager = ConnectionManager()
 def get_governance_db() -> str:
     """Get path to governance.db"""
     base_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-    return os.path.join(base_path, "cortex-brain", "state", "governance.db")
+    return os.path.join(base_path, "cortex_brain", "state", "governance.db")
 
 def get_cortex_master_yaml() -> str:
     """Get path to cortex-master.yaml"""

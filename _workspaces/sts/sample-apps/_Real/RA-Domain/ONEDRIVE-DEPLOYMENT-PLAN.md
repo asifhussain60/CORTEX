@@ -209,4 +209,4 @@ Asif Hussain
 ---
 
 **Note:** This deployment plan is stored at:
-`C:\PROJECTS\CORTEX\cortex-brain\admin\RA-Domain\ONEDRIVE-DEPLOYMENT-PLAN.md`
+`C:\PROJECTS\CORTEX\cortex_brain\admin\RA-Domain\ONEDRIVE-DEPLOYMENT-PLAN.md`

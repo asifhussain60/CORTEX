@@ -32,7 +32,7 @@ Comprehensive review of `.github/.workspace/phase-copilot-chats` against `#file:
 **Claims vs Reality:**
 | Claim | Verified | Evidence |
 |-------|----------|----------|
-| 3-Tier Governance Model | ✅ | `cortex-brain/tier0/governance/core-rules.yaml` exists |
+| 3-Tier Governance Model | ✅ | `cortex_brain/tier0/governance/core-rules.yaml` exists |
 | SQLite governance.db with WAL | ✅ | Database present with WAL mode |
 | Audit-First Pattern | ✅ | Hash chain audit entries verified |
 | State Machine Management | ✅ | `src/core/state_machine.py` tested |
@@ -189,7 +189,7 @@ Comprehensive review of `.github/.workspace/phase-copilot-chats` against `#file:
 
 ### Evidence from Audit Logs
 
-**Rollback History (`cortex-brain/audit-logs/rollback-history.json`):**
+**Rollback History (`cortex_brain/audit-logs/rollback-history.json`):**
 - 1334 lines of rollback events
 - All validations show `"is_safe": true`
 - No validation errors recorded

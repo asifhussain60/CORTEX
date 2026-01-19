@@ -603,7 +603,7 @@ def _stage_3_knowledge_integration(
     """
     STAGE 3: Merge governance + company context.
     
-    1. Load Tier 0 rules from cortex-brain/tier0/
+    1. Load Tier 0 rules from cortex_brain/tier0/
     2. Load domain-specific rules
     3. Validate against governance
     4. Add relevant company context
@@ -669,7 +669,7 @@ def _stage_3_knowledge_integration(
 ```
 
 **Acceptance Tests:**
-- [ ] Governance rules loaded from cortex-brain/tier0/
+- [ ] Governance rules loaded from cortex_brain/tier0/
 - [ ] Violations detected and added as challenges
 - [ ] Company context merged into comprehension
 - [ ] Knowledge graph generated

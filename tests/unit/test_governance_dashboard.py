@@ -168,11 +168,11 @@ class TestGovernanceDashboardBuilder:
         """Create temporary workspace."""
         with tempfile.TemporaryDirectory() as tmpdir:
             workspace = Path(tmpdir)
-            (workspace / "cortex-brain" / "state").mkdir(parents=True)
-            (workspace / "cortex-brain" / "tier0" / "governance").mkdir(parents=True)
+            (workspace / "cortex_brain" / "state").mkdir(parents=True)
+            (workspace / "cortex_brain" / "tier0" / "governance").mkdir(parents=True)
 
             # Create minimal rules file
-            rules_file = workspace / "cortex-brain" / "tier0" / "governance" / "core-rules.yaml"
+            rules_file = workspace / "cortex_brain" / "tier0" / "governance" / "core-rules.yaml"
             rules_file.write_text(yaml.dump({
                 "rules": [
                     {"id": "CORE-008", "title": "TDD", "domain": "test_execution", "severity": "blocked"},
@@ -187,7 +187,7 @@ class TestGovernanceDashboardBuilder:
         builder = GovernanceDashboardBuilder(temp_workspace)
 
         assert builder.workspace_root == temp_workspace
-        assert builder.governance_db == temp_workspace / "cortex-brain" / "state" / "governance.db"
+        assert builder.governance_db == temp_workspace / "cortex_brain" / "state" / "governance.db"
 
     def test_load_governance_rules(self, temp_workspace: Path) -> None:
         """Test loading governance rules."""
@@ -200,7 +200,7 @@ class TestGovernanceDashboardBuilder:
 
     def test_load_governance_rules_no_file(self, temp_workspace: Path) -> None:
         """Test loading rules when file doesn't exist."""
-        (temp_workspace / "cortex-brain" / "tier0" / "governance" / "core-rules.yaml").unlink()
+        (temp_workspace / "cortex_brain" / "tier0" / "governance" / "core-rules.yaml").unlink()
 
         builder = GovernanceDashboardBuilder(temp_workspace)
         rules = builder._load_governance_rules()
@@ -217,7 +217,7 @@ class TestGovernanceDashboardBuilder:
     def test_build_heatmap_with_violations(self, temp_workspace: Path) -> None:
         """Test building heatmap with violation data."""
         # Create database with violations
-        db_path = temp_workspace / "cortex-brain" / "state" / "governance.db"
+        db_path = temp_workspace / "cortex_brain" / "state" / "governance.db"
         conn = sqlite3.connect(str(db_path))
         cursor = conn.cursor()
         cursor.execute("""
@@ -243,7 +243,7 @@ class TestGovernanceDashboardBuilder:
 
     def test_build_phase_summaries_compliant(self, temp_workspace: Path) -> None:
         """Test building phase summaries for compliant phase."""
-        db_path = temp_workspace / "cortex-brain" / "state" / "governance.db"
+        db_path = temp_workspace / "cortex_brain" / "state" / "governance.db"
         conn = sqlite3.connect(str(db_path))
         cursor = conn.cursor()
         cursor.execute("""
@@ -268,7 +268,7 @@ class TestGovernanceDashboardBuilder:
 
     def test_build_phase_summaries_with_violations(self, temp_workspace: Path) -> None:
         """Test building phase summaries with violations."""
-        db_path = temp_workspace / "cortex-brain" / "state" / "governance.db"
+        db_path = temp_workspace / "cortex_brain" / "state" / "governance.db"
         conn = sqlite3.connect(str(db_path))
         cursor = conn.cursor()
         cursor.execute("""
@@ -294,7 +294,7 @@ class TestGovernanceDashboardBuilder:
     def test_build_domain_summaries(self, temp_workspace: Path) -> None:
         """Test building domain summaries."""
         # Create database for domain summaries
-        db_path = temp_workspace / "cortex-brain" / "state" / "governance.db"
+        db_path = temp_workspace / "cortex_brain" / "state" / "governance.db"
         conn = sqlite3.connect(str(db_path))
         cursor = conn.cursor()
         cursor.execute("""
@@ -328,7 +328,7 @@ class TestGovernanceDashboardBuilder:
 
     def test_build_violation_trends_with_data(self, temp_workspace: Path) -> None:
         """Test building violation trends with data."""
-        db_path = temp_workspace / "cortex-brain" / "state" / "governance.db"
+        db_path = temp_workspace / "cortex_brain" / "state" / "governance.db"
         conn = sqlite3.connect(str(db_path))
         cursor = conn.cursor()
         cursor.execute("""
@@ -437,11 +437,11 @@ class TestAcceptanceCriteriaGV00401:
         """Create temporary workspace with violations."""
         with tempfile.TemporaryDirectory() as tmpdir:
             workspace = Path(tmpdir)
-            (workspace / "cortex-brain" / "state").mkdir(parents=True)
-            (workspace / "cortex-brain" / "tier0" / "governance").mkdir(parents=True)
+            (workspace / "cortex_brain" / "state").mkdir(parents=True)
+            (workspace / "cortex_brain" / "tier0" / "governance").mkdir(parents=True)
 
             # Create rules file
-            rules_file = workspace / "cortex-brain" / "tier0" / "governance" / "core-rules.yaml"
+            rules_file = workspace / "cortex_brain" / "tier0" / "governance" / "core-rules.yaml"
             rules_file.write_text(yaml.dump({
                 "rules": [
                     {"id": "CORE-008", "title": "TDD", "domain": "test_execution", "severity": "blocked"},
@@ -451,7 +451,7 @@ class TestAcceptanceCriteriaGV00401:
             }))
 
             # Create database with violations
-            db_path = workspace / "cortex-brain" / "state" / "governance.db"
+            db_path = workspace / "cortex_brain" / "state" / "governance.db"
             conn = sqlite3.connect(str(db_path))
             cursor = conn.cursor()
             cursor.execute("""

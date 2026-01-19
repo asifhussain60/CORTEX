@@ -169,7 +169,7 @@
     {
       "timestamp": "2026-01-15T05:24:42.384853",
       "operation": "move",
-      "source": "cortex-brain/audit-logs/session-status.txt",
+      "source": "cortex_brain/audit-logs/session-status.txt",
       "destination": "docs/session-status.txt",
       "success": true,
       "error": null
@@ -177,7 +177,7 @@
     {
       "timestamp": "2026-01-15T05:24:42.384904",
       "operation": "move",
-      "source": "cortex-brain/vacuum/analysis-report.json",
+      "source": "cortex_brain/vacuum/analysis-report.json",
       "destination": "docs/analysis-report.json",
       "success": true,
       "error": null
@@ -185,7 +185,7 @@
     {
       "timestamp": "2026-01-15T05:24:42.384961",
       "operation": "move",
-      "source": "cortex-brain/vacuum/execution-report.json",
+      "source": "cortex_brain/vacuum/execution-report.json",
       "destination": "docs/reviews/execution-report.json",
       "success": true,
       "error": null

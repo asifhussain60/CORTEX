@@ -14,7 +14,7 @@ import hashlib
 
 def log_ac_lifecycle(ac_id: str, operation: str) -> None:
     """Log AC lifecycle event."""
-    db_path = Path(__file__).parent.parent.parent / "cortex-brain" / "state" / "governance.db"
+    db_path = Path(__file__).parent.parent.parent / "cortex_brain" / "state" / "governance.db"
     
     if not db_path.exists():
         raise FileNotFoundError(f"Database not found: {db_path}")

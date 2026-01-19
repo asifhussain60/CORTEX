@@ -618,7 +618,7 @@ implementation_plan:
   
   phase_4_governance: |
     WEEK 2-3: Governance & Audit Integration
-    - Create cortex-brain/tier1/governance/conf-gate-rules.yaml
+    - Create cortex_brain/tier1/governance/conf-gate-rules.yaml
     - Implement rule enforcement in GoveranceEngine
     - Extend audit_trail entry structure
     - Verify hash chain integrity maintained
@@ -647,7 +647,7 @@ files_to_create:
   - "src/core/orchestrator/approval_gate.py"
   - "src/core/orchestrator/confirmation_context.py"
   - "src/orchestrators/core/stage_2_5_gate.py"
-  - "cortex-brain/tier1/governance/conf-gate-rules.yaml"
+  - "cortex_brain/tier1/governance/conf-gate-rules.yaml"
   - "tests/unit/core/orchestrator/test_complexity_assessment.py"
   - "tests/unit/core/orchestrator/test_approval_gate.py"
   - "tests/integration/orchestrator/test_confirmation_gate_integration.py"
@@ -656,8 +656,8 @@ files_to_create:
 files_to_modify:
   - "src/core/orchestrator/conversation_protocol.py"
   - "src/core/orchestrator/continuation_decision.py"
-  - "cortex-brain/tier0/governance/governance-engine.py"
-  - "cortex-brain/tier0/audit/audit-logger.py"
+  - "cortex_brain/tier0/governance/governance-engine.py"
+  - "cortex_brain/tier0/audit/audit-logger.py"
 
 # =============================================================================
 # GOVERNANCE

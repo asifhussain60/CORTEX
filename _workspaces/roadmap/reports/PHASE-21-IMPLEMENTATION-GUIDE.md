@@ -560,8 +560,8 @@ class KnowledgeProvider(Protocol):
 Refer to:
 - `cortex-builder.prompt.md` - Phase execution workflow
 - `docs/cortex-review-enhanced.prompt.md` - Architecture patterns
-- `cortex-brain/tier0/governance/core-rules.yaml` - Governance rules
-- `cortex-brain/tier1/acceptance-criteria/` - AC templates
+- `cortex_brain/tier0/governance/core-rules.yaml` - Governance rules
+- `cortex_brain/tier1/acceptance-criteria/` - AC templates
 - Existing test files for reference implementations
 
 ---

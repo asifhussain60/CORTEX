@@ -13,7 +13,7 @@ from typing import Dict, List, Any
 
 DB_PATH = os.path.join(
     os.path.dirname(__file__),
-    "../../cortex-brain/state/governance.db"
+    "../../cortex_brain/state/governance.db"
 )
 
 

@@ -81,7 +81,7 @@ Overall Pass Rate: 96.1% (scripted) + 100% (manual)
 
 ### Audit Trail Verification
 ```
-Database: cortex-brain/state/governance.db
+Database: cortex_brain/state/governance.db
 ├─ Total Entries: 127
 ├─ Hash Uniqueness: 100% (127/127)
 ├─ AC-ID Coverage: 99.2% (126/127)

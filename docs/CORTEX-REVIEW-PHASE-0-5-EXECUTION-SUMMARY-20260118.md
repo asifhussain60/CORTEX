@@ -39,7 +39,7 @@ The CORTEX Review System Phase 0 (Pre-Review Validation) and Phase 0.5 (Surgical
 **Status:** ✅ RESOLVED via AC-FIX-001-04
 
 **File:** `tests/integration/test_audit_trail_integrity.py:39`  
-**Fix:** Changed path from `cortex-brain/state/` to `cortex/core/state/`
+**Fix:** Changed path from `cortex_brain/state/` to `cortex/core/state/`
 
 ---
 

@@ -158,8 +158,8 @@ Choose ONE:
 ✅ **Integration Config**: `pytest.ini` + `tests/conftest.py`  
 ✅ **Execution Report**: `docs/PHASE-A-REMEDIATION-EXECUTION-REPORT.md`  
 ✅ **Decision Analysis**: `docs/REMEDIATION-COMPLETION-DECISION.md`  
-✅ **Database Backup**: `cortex-brain/state/governance.db.backup`  
-✅ **Fresh Database**: `cortex-brain/state/governance.db` (14 entries from run)  
+✅ **Database Backup**: `cortex_brain/state/governance.db.backup`  
+✅ **Fresh Database**: `cortex_brain/state/governance.db` (14 entries from run)  
 
 All committed to git (commit 88bc7c37c)
 

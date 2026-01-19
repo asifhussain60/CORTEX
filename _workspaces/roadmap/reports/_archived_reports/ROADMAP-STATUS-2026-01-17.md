@@ -112,14 +112,14 @@ PHASE-20-TEMPLATE-CONTENT (6 ACs)
 
 ### Prerequisites Met for PHASE-07 ✅
 - [ ] ✅ PHASE-06-ECOSYSTEM locked and completed (v1 baseline)
-- [ ] ✅ Governance rules accessible: `cortex-brain/tier0/governance/core-rules.yaml`
-- [ ] ✅ Audit system operational: `cortex-brain/state/governance.db` (WAL mode)
+- [ ] ✅ Governance rules accessible: `cortex_brain/tier0/governance/core-rules.yaml`
+- [ ] ✅ Audit system operational: `cortex_brain/state/governance.db` (WAL mode)
 - [ ] ✅ Test infrastructure ready: pytest with 100% pass rate baseline
 - [ ] ✅ Documentation templates available in `.github/docs/`
 
 ### Pre-Implementation Actions Required
 1. [ ] Read full AC specifications: `.github/roadmap/phases/phase-07-intent-router.yaml`
-2. [ ] Load governance tier0 rules: `cortex-brain/tier0/governance/core-rules.yaml`
+2. [ ] Load governance tier0 rules: `cortex_brain/tier0/governance/core-rules.yaml`
 3. [ ] Create git checkpoint before first AC implementation
 4. [ ] Display Phase Initiation Summary (MANDATORY)
 5. [ ] Begin with AC-PHX-007-01 implementation
@@ -203,7 +203,7 @@ PHASE-20-TEMPLATE-CONTENT (6 ACs)
 
 - **Master Roadmap:** `.github/roadmap/cortex-master.yaml`
 - **Phase Specs:** `.github/roadmap/phases/phase-07-intent-router.yaml`
-- **Governance Rules:** `cortex-brain/tier0/governance/core-rules.yaml`
+- **Governance Rules:** `cortex_brain/tier0/governance/core-rules.yaml`
 - **Builder Prompt:** `.github/prompts/cortex-builder.prompt.md`
 - **v1 Reference:** `.github/roadmap/_archives/cortex-master-v1.yaml`
 

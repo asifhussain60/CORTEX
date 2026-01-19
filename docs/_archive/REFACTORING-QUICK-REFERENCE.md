@@ -65,7 +65,7 @@
 ```
 🔴 CANONICAL: _workspaces/roadmap/cortex-master.yaml
 🟠 Authoritative: _workspaces/roadmap/phases/phase-NN.yaml
-🟡 Implementation: src/, cortex-brain/tierX/, scripts/
+🟡 Implementation: src/, cortex_brain/tierX/, scripts/
 🟢 Human-readable: docs/ (MD only)
 🔵 Tracking: _workspaces/roadmap/reports/ (YAML only)
 ```
@@ -81,7 +81,7 @@ Every agent/prompt includes:
 [ ] Creating docs_md/? → STOP - FORBIDDEN
 [ ] Multiple cortex-*.yaml? → STOP - SSOT violation
 [ ] Phase YAML? → MUST be _workspaces/roadmap/phases/
-[ ] Python scripts? → Move to src/ or cortex-brain/ (not root)
+[ ] Python scripts? → Move to src/ or cortex_brain/ (not root)
 [ ] Reading YAML? → Use ONLY cortex-master.yaml (not v1/v2)
 ```
 

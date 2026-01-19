@@ -77,7 +77,7 @@ class PlanningOrchestrator(IOrchestrator):
         # AC-ENH-001-01: Initialize header system (ResponseHeaderInjector composition)
         try:
             config_manager = HeaderConfigurationManager.get_instance()
-            config_manager.load_configuration('cortex-brain/tier0/response-headers.yaml')
+            config_manager.load_configuration('cortex_brain/tier0/response-headers.yaml')
             self._header_config = config_manager
             
             # Create ResponseHeaderInjector instance

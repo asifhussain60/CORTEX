@@ -41,7 +41,7 @@ CORTEX gets business domain awareness through graceful progressive enhancement.
 
 ### PHASE-12 (1 hour)
 ```
-cortex-brain/tier3/domain-registry.yaml
+cortex_brain/tier3/domain-registry.yaml
 └─ Signals business domain availability
 ```
 

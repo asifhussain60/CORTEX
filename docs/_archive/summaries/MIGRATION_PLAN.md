@@ -9,10 +9,10 @@
 
 ## Executive Summary
 
-This plan details the phased migration from CORTEX's current dual-structure organization (cortex-brain/ + src/) to the unified, tier-based hierarchy defined in FOLDER_STRUCTURE_DESIGN.md.
+This plan details the phased migration from CORTEX's current dual-structure organization (cortex_brain/ + src/) to the unified, tier-based hierarchy defined in FOLDER_STRUCTURE_DESIGN.md.
 
 **Migration Scope**: 
-- Consolidate 30+ modules from cortex-brain/ and src/
+- Consolidate 30+ modules from cortex_brain/ and src/
 - Reorganize into 8 top-level modules under unified cortex/ root
 - Update 200+ import paths
 - Validate on macOS, Linux, Windows (simulated)
@@ -57,7 +57,7 @@ This plan details the phased migration from CORTEX's current dual-structure orga
 **Files to Migrate** (High-Level Count):
 
 ```
-cortex-brain/
+cortex_brain/
 ├── tier0/          ← 12 files (governance, audit, schemas)
 ├── tier1/          ← 18 files (orchestrators, routing)
 ├── tier2/          ← 25 files (domains, coherence, security, resilience)
@@ -108,7 +108,7 @@ cortex.core (tier0 foundation)
 git add -A
 git commit -m "MIGRATION-PREP: Baseline before folder structure consolidation
 
-Current structure: cortex-brain/ + src/ (dual)
+Current structure: cortex_brain/ + src/ (dual)
 Target structure: cortex/ (unified)
 
 Baseline tests: ✅ All passing
@@ -139,7 +139,7 @@ Step 8: Move knowledge files → cortex/knowledge/
 Step 9: Move infrastructure → cortex/infrastructure/
 Step 10: Move tools → cortex/tools/
 Step 11: Update documentation
-Step 12: Remove old directories (cortex-brain/, src/)
+Step 12: Remove old directories (cortex_brain/, src/)
 Step 13: Update imports
 ```
 
@@ -153,7 +153,7 @@ Step 13: Update imports
 
 **Script Inputs**:
 - Current directory structure (discovered automatically)
-- Mapping file (cortex-brain → cortex/brain, src/api → cortex/api, etc.)
+- Mapping file (cortex_brain → cortex/brain, src/api → cortex/api, etc.)
 - Dry-run flag (--dry-run)
 - Verbose flag (--verbose)
 
@@ -166,7 +166,7 @@ Step 13: Update imports
 ```python
 def migrate_structure(dry_run=False, verbose=False):
     """
-    Migrate from dual (cortex-brain/ + src/) to unified cortex/ structure.
+    Migrate from dual (cortex_brain/ + src/) to unified cortex/ structure.
     """
     # 1. Validate preconditions
     validate_git_clean()
@@ -201,8 +201,8 @@ def migrate_structure(dry_run=False, verbose=False):
 ```python
 # Before move: hash all files
 before_hashes = {
-    "cortex-brain/tier2/domains/foo.py": "abc123...",
-    "cortex-brain/tier2/domains/bar.py": "def456...",
+    "cortex_brain/tier2/domains/foo.py": "abc123...",
+    "cortex_brain/tier2/domains/bar.py": "def456...",
     ...
 }
 
@@ -226,7 +226,7 @@ else:
 After automated migration, verify:
 
 - [ ] **cortex/ root created** and contains 8 top-level folders
-- [ ] **All old directories empty** (cortex-brain/, src/ removed or empty)
+- [ ] **All old directories empty** (cortex_brain/, src/ removed or empty)
 - [ ] **No orphaned files** (all files accounted for)
 - [ ] **__init__.py exists** in all packages
 - [ ] **Critical modules present**:
@@ -568,7 +568,7 @@ pytest tests/test_imports_old_paths.py
 ### Structural Success
 - [ ] cortex/ root created with 8 top-level modules
 - [ ] All ~170 files migrated successfully
-- [ ] Old directories (cortex-brain/, src/) removed
+- [ ] Old directories (cortex_brain/, src/) removed
 - [ ] All checksums verified
 
 ### Import Success

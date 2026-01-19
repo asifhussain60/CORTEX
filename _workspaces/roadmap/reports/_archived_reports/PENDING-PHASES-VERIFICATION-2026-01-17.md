@@ -52,7 +52,7 @@ The cortex-master.yaml marks these as "NOT_STARTED", but they have **significant
 **Actual Status:** ✅ **PARTIALLY IMPLEMENTED**
 
 **Evidence:**
-- ✅ `cortex-brain/tier0/governance/` directory structure exists
+- ✅ `cortex_brain/tier0/governance/` directory structure exists
 - ✅ `core-rules.yaml` implemented
 - ✅ `phase-enforcement-map.yaml` implemented
 - ✅ `ac-validation-checklist.yaml` implemented

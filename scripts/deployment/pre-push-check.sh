@@ -68,7 +68,7 @@ ABSOLUTE_PATHS_FOUND=$(grep -rn --include="*.py" --include="*.yaml" --include="*
     grep -v 'analysis-report.json' | \
     grep -v 'migration-plan.json' | \
     grep -v 'execution-report.json' | \
-    grep -v 'cortex-brain/vacuum/' | \
+    grep -v 'cortex_brain/vacuum/' | \
     grep -v 'WRONG:' | \
     grep -v 'NEVER use' | \
     grep -v 'No C:\\' | \

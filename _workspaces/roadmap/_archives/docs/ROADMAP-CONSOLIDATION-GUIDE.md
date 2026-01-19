@@ -205,9 +205,9 @@ The CORTEX project has been consolidated from **23 individual phases** into **5 
 → See full dependency graph in `cortex-master.yaml`
 
 ### For Governance Compliance
-→ All governance rules locked at `cortex-brain/tier0/governance/`
+→ All governance rules locked at `cortex_brain/tier0/governance/`
 → 25 skull rules enforced across all mega-phases
-→ Audit trail: `cortex-brain/state/governance.db`
+→ Audit trail: `cortex_brain/state/governance.db`
 
 ---
 
@@ -252,7 +252,7 @@ MEGA-PHASE-05  ██████████ 100% (2026-01-17)
 **New:** Track 5 mega-phases + reference original 23 for details
 
 **Old:** Governance across all phases
-**New:** Governance integrated into `cortex-brain/` (tier0-3)
+**New:** Governance integrated into `cortex_brain/` (tier0-3)
 
 ---
 
@@ -274,8 +274,8 @@ MEGA-PHASE-05  ██████████ 100% (2026-01-17)
 - **Consolidated Roadmap:** `.github/roadmap/cortex-consolidated.yaml`
 - **Original Roadmap:** `.github/roadmap/cortex-master.yaml`
 - **Individual Phases:** `.github/roadmap/phases/phase-*.yaml`
-- **Governance Rules:** `cortex-brain/tier0/governance/`
-- **Audit Trail:** `cortex-brain/state/governance.db`
+- **Governance Rules:** `cortex_brain/tier0/governance/`
+- **Audit Trail:** `cortex_brain/state/governance.db`
 
 ---
 

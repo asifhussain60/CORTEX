@@ -25,23 +25,23 @@ CORTEX Vacuum is a three-tier repository standardization system that transforms 
 Run the analyzer to see what WILL change, WITHOUT making any changes:
 
 ```bash
-python scripts/run-cortex-vacuum.py analyze --output-dir cortex-brain/vacuum/
+python scripts/run-cortex-vacuum.py analyze --output-dir cortex_brain/vacuum/
 ```
 
 **Output files:**
-- `cortex-brain/vacuum/analysis-report.json` - Detailed findings
-- `cortex-brain/vacuum/migration-plan.json` - What will be changed
-- `cortex-brain/vacuum/reference-map.json` - Cross-file references
+- `cortex_brain/vacuum/analysis-report.json` - Detailed findings
+- `cortex_brain/vacuum/migration-plan.json` - What will be changed
+- `cortex_brain/vacuum/reference-map.json` - Cross-file references
 
 ### Step 2: Review (2 minutes)
 Look at the analysis results:
 
 ```bash
 # View summary
-cat cortex-brain/vacuum/analysis-report.json | head -50
+cat cortex_brain/vacuum/analysis-report.json | head -50
 
 # Or open in your editor
-code cortex-brain/vacuum/analysis-report.json
+code cortex_brain/vacuum/analysis-report.json
 ```
 
 Check:
@@ -54,7 +54,7 @@ See exactly what will happen WITHOUT making changes:
 
 ```bash
 python scripts/run-cortex-vacuum.py execute \
-  --plan cortex-brain/vacuum/migration-plan.json \
+  --plan cortex_brain/vacuum/migration-plan.json \
   --dry-run
 ```
 
@@ -65,7 +65,7 @@ When ready, execute the actual changes:
 
 ```bash
 python scripts/run-cortex-vacuum.py execute \
-  --plan cortex-brain/vacuum/migration-plan.json \
+  --plan cortex_brain/vacuum/migration-plan.json \
   --auto-approve
 ```
 
@@ -169,7 +169,7 @@ Files PROTECTED (never deleted):
 Phase 1 never modifies anything - run as many times as needed.
 
 ### 📸 Snapshots
-Before execution, complete repository state is backed up to `cortex-brain/snapshots/`
+Before execution, complete repository state is backed up to `cortex_brain/snapshots/`
 
 ### ⏮️ Rollback
 If something goes wrong:
@@ -201,19 +201,19 @@ Every change is logged with:
 # Step 1: Analyze
 python scripts/run-cortex-vacuum.py analyze
 
-# Step 2: Review the reports in cortex-brain/vacuum/
-# Edit cortex-brain/vacuum/config.yaml if you want to customize rules
+# Step 2: Review the reports in cortex_brain/vacuum/
+# Edit cortex_brain/vacuum/config.yaml if you want to customize rules
 
 # Step 3: Dry run
-python scripts/run-cortex-vacuum.py execute --plan cortex-brain/vacuum/migration-plan.json --dry-run
+python scripts/run-cortex-vacuum.py execute --plan cortex_brain/vacuum/migration-plan.json --dry-run
 
 # Step 4: Execute when ready
-python scripts/run-cortex-vacuum.py execute --plan cortex-brain/vacuum/migration-plan.json --auto-approve
+python scripts/run-cortex-vacuum.py execute --plan cortex_brain/vacuum/migration-plan.json --auto-approve
 ```
 
 ### Scenario 2: "I want to customize which files get moved"
 
-1. Edit `cortex-brain/vacuum/config.yaml`
+1. Edit `cortex_brain/vacuum/config.yaml`
 2. Modify the `file_classifications` section
 3. Re-run analysis: `python scripts/run-cortex-vacuum.py analyze`
 4. Review new plan
@@ -235,7 +235,7 @@ This shows:
 
 ```bash
 # Check what happened
-cat cortex-brain/vacuum/execution-report.json
+cat cortex_brain/vacuum/execution-report.json
 
 # Revert using git
 git checkout HEAD
@@ -274,7 +274,7 @@ registry.register_tool(register_vacuum_tools)
 
 ## Configuration
 
-Configuration file: `cortex-brain/vacuum/config.yaml`
+Configuration file: `cortex_brain/vacuum/config.yaml`
 
 Key settings:
 - **File classifications**: Where files should go
@@ -300,11 +300,11 @@ Key settings:
 ### Problem: "I want to undo everything"
 ```bash
 git checkout HEAD  # Restore from git
-rm -rf cortex-brain/snapshots/  # Clean up snapshots
+rm -rf cortex_brain/snapshots/  # Clean up snapshots
 ```
 
 ### Problem: "The naming suggestions don't match my style"
-- Edit `cortex-brain/vacuum/config.yaml`
+- Edit `cortex_brain/vacuum/config.yaml`
 - Modify the `abbreviations` section
 - Re-run analysis
 
@@ -351,7 +351,7 @@ python scripts/run-cortex-vacuum.py analyze --help
 
 For detailed information:
 - See `cortex-vacuum.prompt.md` for full specification
-- Check `cortex-brain/vacuum/README.md` for technical details
+- Check `cortex_brain/vacuum/README.md` for technical details
 - Review tool source code:
   - `src/mcp/tools/cortex_vacuum_analyzer.py`
   - `src/mcp/tools/cortex_vacuum_executor.py`
@@ -361,7 +361,7 @@ For detailed information:
 **Next Step**: Run the analysis!
 
 ```bash
-python scripts/run-cortex-vacuum.py analyze --output-dir cortex-brain/vacuum/
+python scripts/run-cortex-vacuum.py analyze --output-dir cortex_brain/vacuum/
 ```
 
 Good luck! 🚀

@@ -287,7 +287,7 @@ AXIS │
 │  │ (src/infrastructure/database.py)                                     │  │
 │  │                                                                      │  │
 │  │ ├─ governance.db (audit trail, phase tracking)                       │  │
-│  │ ├─ cortex-brain/state/ (persistent state)                            │  │
+│  │ ├─ cortex_brain/state/ (persistent state)                            │  │
 │  │ └─ Shared by all orchestrators for consistency                       │  │
 │  └──────────────────────────────────────────────────────────────────────┘  │
 │                                                                             │

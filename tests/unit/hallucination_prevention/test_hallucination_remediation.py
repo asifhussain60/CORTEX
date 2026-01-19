@@ -317,9 +317,9 @@ class TestPathResolution:
         """Configuration paths should be relative to project structure."""
         # Verify standard paths are relative
         expected_relative_paths = [
-            "cortex-brain/state/governance.db",
-            "cortex-brain/tier0/",
-            "cortex-brain/tier2/",
+            "cortex_brain/state/governance.db",
+            "cortex_brain/tier0/",
+            "cortex_brain/tier2/",
         ]
         
         for rel_path in expected_relative_paths:

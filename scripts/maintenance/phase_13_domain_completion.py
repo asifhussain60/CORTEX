@@ -37,7 +37,7 @@ class DomainACExecutor:
 
     def __init__(self):
         """Initialize executor with database connection."""
-        self.db_path = Path(__file__).parent.parent / "cortex-brain" / "state" / "governance.db"
+        self.db_path = Path(__file__).parent.parent / "cortex_brain" / "state" / "governance.db"
         self.conn = None
         self.ac_results: Dict[str, Dict] = {}
         self.last_hash = None
@@ -130,7 +130,7 @@ class DomainACExecutor:
         
         try:
             # Test 1: File exists
-            registry_file = Path(__file__).parent.parent / "cortex-brain" / "tier3" / "domain-registry.yaml"
+            registry_file = Path(__file__).parent.parent / "cortex_brain" / "tier3" / "domain-registry.yaml"
             if registry_file.exists():
                 tests_passed += 1
                 result = "✓ Domain registry file exists"
@@ -215,7 +215,7 @@ class DomainACExecutor:
         
         try:
             # Test 1: README exists
-            readme_file = Path(__file__).parent.parent / "cortex-brain" / "tier3" / "README-DOMAIN-INTEGRATION.md"
+            readme_file = Path(__file__).parent.parent / "cortex_brain" / "tier3" / "README-DOMAIN-INTEGRATION.md"
             if readme_file.exists():
                 tests_passed += 1
                 content = readme_file.read_text()
@@ -328,8 +328,8 @@ class DomainACExecutor:
         try:
             # Test 1-3: Check that domain files are new (not modified)
             domain_files = [
-                Path(__file__).parent.parent / "cortex-brain" / "tier3" / "domain-registry.yaml",
-                Path(__file__).parent.parent / "cortex-brain" / "tier3" / "README-DOMAIN-INTEGRATION.md",
+                Path(__file__).parent.parent / "cortex_brain" / "tier3" / "domain-registry.yaml",
+                Path(__file__).parent.parent / "cortex_brain" / "tier3" / "README-DOMAIN-INTEGRATION.md",
                 Path(__file__).parent.parent / "src" / "observability" / "dashboard_extensibility.py"
             ]
             
@@ -341,7 +341,7 @@ class DomainACExecutor:
             tests_passed += 1
             
             # Test 5: Backward compatibility (domain integration is optional)
-            readme_file = Path(__file__).parent.parent / "cortex-brain" / "tier3" / "README-DOMAIN-INTEGRATION.md"
+            readme_file = Path(__file__).parent.parent / "cortex_brain" / "tier3" / "README-DOMAIN-INTEGRATION.md"
             if readme_file.exists():
                 content = readme_file.read_text()
                 if "optional" in content.lower() or "zero breaking" in content.lower():

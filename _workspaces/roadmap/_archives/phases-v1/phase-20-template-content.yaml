@@ -1,7 +1,7 @@
 # =============================================================================
 # PHASE-20: Template Content Population & Tier-2 Knowledge Base
 # =============================================================================
-# Purpose: Populate cortex-brain/tier2/ with domain-specific response templates
+# Purpose: Populate cortex_brain/tier2/ with domain-specific response templates
 # Status: NEW (Proposed 2026-01-17)
 # Scope: Content creation for 5 domain templates + system templates
 # Estimated Duration: 2 weeks (40-50 hours)
@@ -81,7 +81,7 @@ acceptance_criteria:
       6. successful-with-details (success + detail info)
       
       Requirements:
-      - Location: cortex-brain/tier2/base/
+      - Location: cortex_brain/tier2/base/
       - Each template YAML with proper structure
       - Variable definitions documented
       - Example usage in template comments
@@ -99,12 +99,12 @@ acceptance_criteria:
       - "Response generator produces valid JSON from each"
       - "Performance: render each <100ms"
     files_to_create:
-      - "cortex-brain/tier2/base/successful-execution.yaml"
-      - "cortex-brain/tier2/base/successful-with-data.yaml"
-      - "cortex-brain/tier2/base/successful-with-metadata.yaml"
-      - "cortex-brain/tier2/base/successful-async.yaml"
-      - "cortex-brain/tier2/base/successful-paginated.yaml"
-      - "cortex-brain/tier2/base/successful-with-details.yaml"
+      - "cortex_brain/tier2/base/successful-execution.yaml"
+      - "cortex_brain/tier2/base/successful-with-data.yaml"
+      - "cortex_brain/tier2/base/successful-with-metadata.yaml"
+      - "cortex_brain/tier2/base/successful-async.yaml"
+      - "cortex_brain/tier2/base/successful-paginated.yaml"
+      - "cortex_brain/tier2/base/successful-with-details.yaml"
     git_checkpoint: "CONTENT-001-01: Base Success Templates"
   
   - ac_id: "CONTENT-001-02"
@@ -122,7 +122,7 @@ acceptance_criteria:
       7. partial-success (partial completion)
       
       Requirements:
-      - Location: cortex-brain/tier2/base/
+      - Location: cortex_brain/tier2/base/
       - Error codes standardized
       - Field descriptions clear
       - Validation error patterns documented
@@ -139,13 +139,13 @@ acceptance_criteria:
       - "No placeholder content"
       - "All templates render successfully"
     files_to_create:
-      - "cortex-brain/tier2/base/error-generic.yaml"
-      - "cortex-brain/tier2/base/error-validation-failed.yaml"
-      - "cortex-brain/tier2/base/error-not-found.yaml"
-      - "cortex-brain/tier2/base/error-unauthorized.yaml"
-      - "cortex-brain/tier2/base/error-rate-limited.yaml"
-      - "cortex-brain/tier2/base/validation-failed.yaml"
-      - "cortex-brain/tier2/base/partial-success.yaml"
+      - "cortex_brain/tier2/base/error-generic.yaml"
+      - "cortex_brain/tier2/base/error-validation-failed.yaml"
+      - "cortex_brain/tier2/base/error-not-found.yaml"
+      - "cortex_brain/tier2/base/error-unauthorized.yaml"
+      - "cortex_brain/tier2/base/error-rate-limited.yaml"
+      - "cortex_brain/tier2/base/validation-failed.yaml"
+      - "cortex_brain/tier2/base/partial-success.yaml"
     git_checkpoint: "CONTENT-001-02: Base Error Templates"
   
   # Domain-Specific Templates: Planning
@@ -166,7 +166,7 @@ acceptance_criteria:
       9. planning-options (planning options available)
       
       Requirements:
-      - Location: cortex-brain/tier2/planning/
+      - Location: cortex_brain/tier2/planning/
       - Domain-specific fields (plan_id, constraints, dependencies, etc)
       - Example plans included
       - Performance requirements met
@@ -182,15 +182,15 @@ acceptance_criteria:
       - "All templates schema-compliant"
       - "All templates render without errors"
     files_to_create:
-      - "cortex-brain/tier2/planning/planning-created.yaml"
-      - "cortex-brain/tier2/planning/planning-retrieved.yaml"
-      - "cortex-brain/tier2/planning/planning-updated.yaml"
-      - "cortex-brain/tier2/planning/planning-validation-failed.yaml"
-      - "cortex-brain/tier2/planning/planning-already-exists.yaml"
-      - "cortex-brain/tier2/planning/planning-constraints-violated.yaml"
-      - "cortex-brain/tier2/planning/planning-dependencies-unmet.yaml"
-      - "cortex-brain/tier2/planning/planning-async-created.yaml"
-      - "cortex-brain/tier2/planning/planning-options.yaml"
+      - "cortex_brain/tier2/planning/planning-created.yaml"
+      - "cortex_brain/tier2/planning/planning-retrieved.yaml"
+      - "cortex_brain/tier2/planning/planning-updated.yaml"
+      - "cortex_brain/tier2/planning/planning-validation-failed.yaml"
+      - "cortex_brain/tier2/planning/planning-already-exists.yaml"
+      - "cortex_brain/tier2/planning/planning-constraints-violated.yaml"
+      - "cortex_brain/tier2/planning/planning-dependencies-unmet.yaml"
+      - "cortex_brain/tier2/planning/planning-async-created.yaml"
+      - "cortex_brain/tier2/planning/planning-options.yaml"
     git_checkpoint: "CONTENT-002-01: Planning Templates"
   
   # Domain-Specific Templates: Analysis
@@ -220,7 +220,7 @@ acceptance_criteria:
       8. integration-status (sync status)
       
       Requirements:
-      - Location: cortex-brain/tier2/analysis/ and cortex-brain/tier2/integration/
+      - Location: cortex_brain/tier2/analysis/ and cortex_brain/tier2/integration/
       - Domain-specific metrics/insights/connections
       - Example data realistic
     priority: "HIGH"
@@ -235,22 +235,22 @@ acceptance_criteria:
       - "All templates schema-compliant"
       - "All render successfully"
     files_to_create:
-      - "cortex-brain/tier2/analysis/analysis-completed.yaml"
-      - "cortex-brain/tier2/analysis/analysis-insights-found.yaml"
-      - "cortex-brain/tier2/analysis/analysis-data-retrieved.yaml"
-      - "cortex-brain/tier2/analysis/analysis-pattern-detected.yaml"
-      - "cortex-brain/tier2/analysis/analysis-validation-failed.yaml"
-      - "cortex-brain/tier2/analysis/analysis-insufficient-data.yaml"
-      - "cortex-brain/tier2/analysis/analysis-options.yaml"
-      - "cortex-brain/tier2/analysis/analysis-async-created.yaml"
-      - "cortex-brain/tier2/integration/integration-initiated.yaml"
-      - "cortex-brain/tier2/integration/integration-connected.yaml"
-      - "cortex-brain/tier2/integration/integration-data-synced.yaml"
-      - "cortex-brain/tier2/integration/integration-failed.yaml"
-      - "cortex-brain/tier2/integration/integration-auth-required.yaml"
-      - "cortex-brain/tier2/integration/integration-timeout.yaml"
-      - "cortex-brain/tier2/integration/integration-partial-sync.yaml"
-      - "cortex-brain/tier2/integration/integration-status.yaml"
+      - "cortex_brain/tier2/analysis/analysis-completed.yaml"
+      - "cortex_brain/tier2/analysis/analysis-insights-found.yaml"
+      - "cortex_brain/tier2/analysis/analysis-data-retrieved.yaml"
+      - "cortex_brain/tier2/analysis/analysis-pattern-detected.yaml"
+      - "cortex_brain/tier2/analysis/analysis-validation-failed.yaml"
+      - "cortex_brain/tier2/analysis/analysis-insufficient-data.yaml"
+      - "cortex_brain/tier2/analysis/analysis-options.yaml"
+      - "cortex_brain/tier2/analysis/analysis-async-created.yaml"
+      - "cortex_brain/tier2/integration/integration-initiated.yaml"
+      - "cortex_brain/tier2/integration/integration-connected.yaml"
+      - "cortex_brain/tier2/integration/integration-data-synced.yaml"
+      - "cortex_brain/tier2/integration/integration-failed.yaml"
+      - "cortex_brain/tier2/integration/integration-auth-required.yaml"
+      - "cortex_brain/tier2/integration/integration-timeout.yaml"
+      - "cortex_brain/tier2/integration/integration-partial-sync.yaml"
+      - "cortex_brain/tier2/integration/integration-status.yaml"
     git_checkpoint: "CONTENT-002-02: Analysis & Integration Templates"
   
   # Domain-Specific Templates: Validation & Execution
@@ -280,7 +280,7 @@ acceptance_criteria:
       8. execution-cancelled (user cancelled)
       
       Requirements:
-      - Location: cortex-brain/tier2/validation/ and cortex-brain/tier2/execution/
+      - Location: cortex_brain/tier2/validation/ and cortex_brain/tier2/execution/
       - Metrics/results clearly documented
       - Audit trails included
     priority: "HIGH"
@@ -295,22 +295,22 @@ acceptance_criteria:
       - "All templates schema-compliant"
       - "All render successfully"
     files_to_create:
-      - "cortex-brain/tier2/validation/validation-passed.yaml"
-      - "cortex-brain/tier2/validation/validation-failed.yaml"
-      - "cortex-brain/tier2/validation/validation-warnings.yaml"
-      - "cortex-brain/tier2/validation/validation-strict-mode.yaml"
-      - "cortex-brain/tier2/validation/validation-custom-rules.yaml"
-      - "cortex-brain/tier2/validation/validation-correctable.yaml"
-      - "cortex-brain/tier2/validation/validation-schema-mismatch.yaml"
-      - "cortex-brain/tier2/validation/validation-rules-applied.yaml"
-      - "cortex-brain/tier2/execution/execution-started.yaml"
-      - "cortex-brain/tier2/execution/execution-completed.yaml"
-      - "cortex-brain/tier2/execution/execution-failed.yaml"
-      - "cortex-brain/tier2/execution/execution-timeout.yaml"
-      - "cortex-brain/tier2/execution/execution-status-update.yaml"
-      - "cortex-brain/tier2/execution/execution-with-metrics.yaml"
-      - "cortex-brain/tier2/execution/execution-partial-failure.yaml"
-      - "cortex-brain/tier2/execution/execution-cancelled.yaml"
+      - "cortex_brain/tier2/validation/validation-passed.yaml"
+      - "cortex_brain/tier2/validation/validation-failed.yaml"
+      - "cortex_brain/tier2/validation/validation-warnings.yaml"
+      - "cortex_brain/tier2/validation/validation-strict-mode.yaml"
+      - "cortex_brain/tier2/validation/validation-custom-rules.yaml"
+      - "cortex_brain/tier2/validation/validation-correctable.yaml"
+      - "cortex_brain/tier2/validation/validation-schema-mismatch.yaml"
+      - "cortex_brain/tier2/validation/validation-rules-applied.yaml"
+      - "cortex_brain/tier2/execution/execution-started.yaml"
+      - "cortex_brain/tier2/execution/execution-completed.yaml"
+      - "cortex_brain/tier2/execution/execution-failed.yaml"
+      - "cortex_brain/tier2/execution/execution-timeout.yaml"
+      - "cortex_brain/tier2/execution/execution-status-update.yaml"
+      - "cortex_brain/tier2/execution/execution-with-metrics.yaml"
+      - "cortex_brain/tier2/execution/execution-partial-failure.yaml"
+      - "cortex_brain/tier2/execution/execution-cancelled.yaml"
     git_checkpoint: "CONTENT-002-03: Validation & Execution Templates"
   
   # System/Cross-Cutting Templates
@@ -332,7 +332,7 @@ acceptance_criteria:
       10. system-version-info (API version/build info)
       
       Requirements:
-      - Location: cortex-brain/tier2/system/
+      - Location: cortex_brain/tier2/system/
       - Error codes standardized
       - Retry information included
       - Health metrics documented
@@ -348,16 +348,16 @@ acceptance_criteria:
       - "All templates schema-compliant"
       - "All render successfully"
     files_to_create:
-      - "cortex-brain/tier2/system/system-error.yaml"
-      - "cortex-brain/tier2/system/system-maintenance.yaml"
-      - "cortex-brain/tier2/system/system-degraded.yaml"
-      - "cortex-brain/tier2/system/system-dependency-failure.yaml"
-      - "cortex-brain/tier2/system/system-throttled.yaml"
-      - "cortex-brain/tier2/system/system-retry-available.yaml"
-      - "cortex-brain/tier2/system/system-fallback-used.yaml"
-      - "cortex-brain/tier2/system/system-timeout.yaml"
-      - "cortex-brain/tier2/system/system-health-status.yaml"
-      - "cortex-brain/tier2/system/system-version-info.yaml"
+      - "cortex_brain/tier2/system/system-error.yaml"
+      - "cortex_brain/tier2/system/system-maintenance.yaml"
+      - "cortex_brain/tier2/system/system-degraded.yaml"
+      - "cortex_brain/tier2/system/system-dependency-failure.yaml"
+      - "cortex_brain/tier2/system/system-throttled.yaml"
+      - "cortex_brain/tier2/system/system-retry-available.yaml"
+      - "cortex_brain/tier2/system/system-fallback-used.yaml"
+      - "cortex_brain/tier2/system/system-timeout.yaml"
+      - "cortex_brain/tier2/system/system-health-status.yaml"
+      - "cortex_brain/tier2/system/system-version-info.yaml"
     git_checkpoint: "CONTENT-003-01: System Templates"
   
   # Template Documentation & Validation
@@ -376,7 +376,7 @@ acceptance_criteria:
       7. API reference (all available templates)
       
       Requirements:
-      - Location: .github/docs/ and cortex-brain/templates/
+      - Location: .github/docs/ and cortex_brain/templates/
       - Examples realistic and useful
       - Guidelines clear and actionable
       - Searchable format (markdown with TOC)
@@ -448,27 +448,27 @@ metadata:
 
 files_to_create:
   # Base Templates
-  - "cortex-brain/tier2/base/successful-execution.yaml"
-  - "cortex-brain/tier2/base/successful-with-data.yaml"
-  - "cortex-brain/tier2/base/successful-with-metadata.yaml"
-  - "cortex-brain/tier2/base/successful-async.yaml"
-  - "cortex-brain/tier2/base/successful-paginated.yaml"
-  - "cortex-brain/tier2/base/successful-with-details.yaml"
-  - "cortex-brain/tier2/base/error-generic.yaml"
-  - "cortex-brain/tier2/base/error-validation-failed.yaml"
-  - "cortex-brain/tier2/base/error-not-found.yaml"
-  - "cortex-brain/tier2/base/error-unauthorized.yaml"
-  - "cortex-brain/tier2/base/error-rate-limited.yaml"
-  - "cortex-brain/tier2/base/validation-failed.yaml"
-  - "cortex-brain/tier2/base/partial-success.yaml"
+  - "cortex_brain/tier2/base/successful-execution.yaml"
+  - "cortex_brain/tier2/base/successful-with-data.yaml"
+  - "cortex_brain/tier2/base/successful-with-metadata.yaml"
+  - "cortex_brain/tier2/base/successful-async.yaml"
+  - "cortex_brain/tier2/base/successful-paginated.yaml"
+  - "cortex_brain/tier2/base/successful-with-details.yaml"
+  - "cortex_brain/tier2/base/error-generic.yaml"
+  - "cortex_brain/tier2/base/error-validation-failed.yaml"
+  - "cortex_brain/tier2/base/error-not-found.yaml"
+  - "cortex_brain/tier2/base/error-unauthorized.yaml"
+  - "cortex_brain/tier2/base/error-rate-limited.yaml"
+  - "cortex_brain/tier2/base/validation-failed.yaml"
+  - "cortex_brain/tier2/base/partial-success.yaml"
   
   # Domain Templates
-  - "cortex-brain/tier2/planning/*.yaml (9 templates)"
-  - "cortex-brain/tier2/analysis/*.yaml (8 templates)"
-  - "cortex-brain/tier2/integration/*.yaml (8 templates)"
-  - "cortex-brain/tier2/validation/*.yaml (8 templates)"
-  - "cortex-brain/tier2/execution/*.yaml (8 templates)"
-  - "cortex-brain/tier2/system/*.yaml (10 templates)"
+  - "cortex_brain/tier2/planning/*.yaml (9 templates)"
+  - "cortex_brain/tier2/analysis/*.yaml (8 templates)"
+  - "cortex_brain/tier2/integration/*.yaml (8 templates)"
+  - "cortex_brain/tier2/validation/*.yaml (8 templates)"
+  - "cortex_brain/tier2/execution/*.yaml (8 templates)"
+  - "cortex_brain/tier2/system/*.yaml (10 templates)"
   
   # Documentation
   - ".github/docs/tier2-template-structure.md"

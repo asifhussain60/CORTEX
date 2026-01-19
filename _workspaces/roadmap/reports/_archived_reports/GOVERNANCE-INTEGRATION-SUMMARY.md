@@ -18,7 +18,7 @@ Roadmap (1,400 lines)
 ### After (Governance-as-Service)
 ```
 Core Rules                          Phase Enforcement              AC Validation
-cortex-brain/tier0/governance/
+cortex_brain/tier0/governance/
 ├── core-rules.yaml               ├── phase-enforcement-map.yaml   ├── ac-validation-checklist.yaml
 │   (28 rules, immutable)         │   (Which rules per phase)      │   (Validation per AC-ID)
 │   (TIER-0 SKULL rules)          │   (150+ lines)                 │   (425 lines)
@@ -39,7 +39,7 @@ Agents & Prompts                   Roadmap (Clean)                 Audit Trail
 ## Files Created (905 Lines)
 
 ### 1. phase-enforcement-map.yaml (480 lines)
-**Location:** `cortex-brain/tier0/governance/phase-enforcement-map.yaml`
+**Location:** `cortex_brain/tier0/governance/phase-enforcement-map.yaml`
 
 **Purpose:** Maps which rules apply to which phases
 
@@ -68,7 +68,7 @@ Agents & Prompts                   Roadmap (Clean)                 Audit Trail
 - SQL queries for compliance reporting
 
 ### 2. ac-validation-checklist.yaml (425 lines)
-**Location:** `cortex-brain/tier0/governance/ac-validation-checklist.yaml`
+**Location:** `cortex_brain/tier0/governance/ac-validation-checklist.yaml`
 
 **Purpose:** Per-AC-ID governance validation
 
@@ -364,8 +364,8 @@ After this integration:
 **Branch:** CORTEX6 (synchronized with origin/CORTEX6)
 
 **Files Created:**
-- cortex-brain/tier0/governance/phase-enforcement-map.yaml (480 lines)
-- cortex-brain/tier0/governance/ac-validation-checklist.yaml (425 lines)
+- cortex_brain/tier0/governance/phase-enforcement-map.yaml (480 lines)
+- cortex_brain/tier0/governance/ac-validation-checklist.yaml (425 lines)
 - .github/agents/cortex-builder.md (130 lines, replaced old version)
 - .github/agents/cortex-planner.md (160 lines, replaced old version)
 

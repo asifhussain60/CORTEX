@@ -418,10 +418,10 @@ python3 -m pytest tests/integration/test_audit_trail_integrity.py -v
 python3 -m pytest tests/integration/test_audit_trail_integrity.py::TestAuditTrailIntegrity::test_hash_chain_integrity -v
 
 # Check database statistics
-sqlite3 cortex-brain/state/governance.db "SELECT operation, COUNT(*) FROM audit_log GROUP BY operation"
+sqlite3 cortex_brain/state/governance.db "SELECT operation, COUNT(*) FROM audit_log GROUP BY operation"
 
 # Verify recent hash chain
-sqlite3 cortex-brain/state/governance.db "SELECT id, ac_id, SUBSTR(entry_hash,1,16), SUBSTR(previous_hash,1,16) FROM audit_log WHERE id >= 7346 ORDER BY id LIMIT 20"
+sqlite3 cortex_brain/state/governance.db "SELECT id, ac_id, SUBSTR(entry_hash,1,16), SUBSTR(previous_hash,1,16) FROM audit_log WHERE id >= 7346 ORDER BY id LIMIT 20"
 ```
 
 ---

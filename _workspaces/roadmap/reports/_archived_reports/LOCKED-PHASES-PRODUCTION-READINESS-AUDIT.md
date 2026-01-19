@@ -183,16 +183,16 @@ All orchestrator ecosystem and knowledge system phases verified.
 - **AC Count**: 8/8 complete
 - **Deliverables Verification**: 
   ```
-  ✅ cortex-brain/tier2/base/success-response.yaml
-  ✅ cortex-brain/tier2/base/error-response.yaml
-  ✅ cortex-brain/tier2/base/warning-response.yaml
-  ✅ cortex-brain/tier2/domains/governance/evaluation-result.yaml
-  ✅ cortex-brain/tier2/domains/governance/rule-violation.yaml
-  ✅ cortex-brain/tier2/domains/planning/recommendations.yaml
-  ✅ cortex-brain/tier2/domains/planning/impact-assessment.yaml
-  ✅ cortex-brain/tier2/domains/tdd/test-result.yaml
-  ✅ cortex-brain/tier2/domains/tdd/coverage-report.yaml
-  ✅ cortex-brain/tier2/response-templates-index.yaml
+  ✅ cortex_brain/tier2/base/success-response.yaml
+  ✅ cortex_brain/tier2/base/error-response.yaml
+  ✅ cortex_brain/tier2/base/warning-response.yaml
+  ✅ cortex_brain/tier2/domains/governance/evaluation-result.yaml
+  ✅ cortex_brain/tier2/domains/governance/rule-violation.yaml
+  ✅ cortex_brain/tier2/domains/planning/recommendations.yaml
+  ✅ cortex_brain/tier2/domains/planning/impact-assessment.yaml
+  ✅ cortex_brain/tier2/domains/tdd/test-result.yaml
+  ✅ cortex_brain/tier2/domains/tdd/coverage-report.yaml
+  ✅ cortex_brain/tier2/response-templates-index.yaml
   ✅ scripts/validate_phase_deliverables.py (13,677 bytes)
   ```
 - **Production Ready**: ✅ YES

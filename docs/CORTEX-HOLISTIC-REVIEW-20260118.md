@@ -230,7 +230,7 @@ src/core/ → cortex/core/
 **Test Pass Rate**: 95% (78/82)
 
 **Achievements**:
-- ✅ Unified cortex/ structure from dual cortex-brain/ + src/
+- ✅ Unified cortex/ structure from dual cortex_brain/ + src/
 - ✅ 116+ files updated with new import paths
 - ✅ Single code home established
 - ✅ Import path resolution fixed

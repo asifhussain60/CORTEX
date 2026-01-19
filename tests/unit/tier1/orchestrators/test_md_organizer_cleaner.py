@@ -27,9 +27,9 @@ from pathlib import Path
 from typing import Dict, Any
 from datetime import datetime
 
-# Add cortex-brain to path
+# Add cortex_brain to path
 project_root = Path(__file__).parent.parent.parent.parent.parent
-cortex_brain_path = project_root / "cortex-brain"
+cortex_brain_path = project_root / "cortex_brain"
 sys.path.insert(0, str(cortex_brain_path))
 
 # Import from cleaner interface

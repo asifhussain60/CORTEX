@@ -278,7 +278,7 @@ agent_4_assumptions:
       evidence: |
         - Database path: configurable via connection
         - Audit log location: specified in initialization
-        - Permissions: requires write access to cortex-brain/state/
+        - Permissions: requires write access to cortex_brain/state/
     
     environment_variables:
       status: "✅ OPTIONAL"

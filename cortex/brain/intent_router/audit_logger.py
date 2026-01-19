@@ -30,7 +30,7 @@ def log_ac_lifecycle(ac_id: str, operation: str, success: bool = True) -> None:
         operation: Operation type (AC_START, AC_EXECUTE, AC_COMPLETE)
         success: Whether operation succeeded
     """
-    db_path = Path(__file__).parent.parent.parent / "cortex-brain" / "state" / "governance.db"
+    db_path = Path(__file__).parent.parent.parent / "cortex_brain" / "state" / "governance.db"
     
     if not db_path.exists():
         raise FileNotFoundError(f"Governance database not found: {db_path}")

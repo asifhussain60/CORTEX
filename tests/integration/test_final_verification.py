@@ -146,8 +146,8 @@ class TestFinalVerification:
     def test_governance_artifacts_exist(self):
         """All governance artifacts should exist."""
         artifacts = [
-            get_project_root() / "cortex-brain" / "tier0" / "governance" / "core-rules.yaml",
-            get_project_root() / "cortex-brain" / "state" / "governance.db",
+            get_project_root() / "cortex_brain" / "tier0" / "governance" / "core-rules.yaml",
+            get_project_root() / "cortex_brain" / "state" / "governance.db",
         ]
         
         for artifact in artifacts:
@@ -156,8 +156,8 @@ class TestFinalVerification:
     
     def test_phase_structure_complete(self):
         """All required phase directories should exist."""
-        tier0 = get_project_root() / "cortex-brain" / "tier0"
-        tier1 = get_project_root() / "cortex-brain" / "tier1"
+        tier0 = get_project_root() / "cortex_brain" / "tier0"
+        tier1 = get_project_root() / "cortex_brain" / "tier1"
         
         assert tier0.exists(), "Tier 0 should exist"
         assert tier1.exists(), "Tier 1 should exist"

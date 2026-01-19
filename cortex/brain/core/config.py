@@ -77,7 +77,7 @@ def load_config(name: str, config_dir: Optional[Path] = None) -> Result[Dict[str
     
     Searches for config in:
     1. Provided config_dir
-    2. cortex-brain/config/
+    2. cortex_brain/config/
     
     Supports both .yaml and .json extensions.
     
@@ -89,7 +89,7 @@ def load_config(name: str, config_dir: Optional[Path] = None) -> Result[Dict[str
         Result containing config dict or error
     """
     if config_dir is None:
-        config_dir = resolve_path("cortex-brain", "config")
+        config_dir = resolve_path("cortex_brain", "config")
     
     # Try with provided name first
     path = config_dir / name

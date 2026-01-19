@@ -619,7 +619,7 @@ References:
   📚 MCP Spec: https://spec.modelcontextprotocol.io/
   📄 Kickoff Guide: _workspaces/roadmap/reports/PHASE-22-IMPLEMENTATION-KICKOFF.md
   📋 Master File: _workspaces/roadmap/cortex-master.yaml (SSOT)
-  🔒 Governance: cortex-brain/tier0/governance/core-rules.yaml
+  🔒 Governance: cortex_brain/tier0/governance/core-rules.yaml
 
 
 ╔══════════════════════════════════════════════════════════════════════════════╗

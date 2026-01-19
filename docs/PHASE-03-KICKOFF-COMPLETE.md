@@ -78,7 +78,7 @@ Comprehensive guide includes:
 | **Expected Tests** | 72 (unit + integration) |
 | **Requires** | PHASE-02-CODEBASE-COHERENCE ✅ COMPLETED |
 | **Blocks** | PHASE-04-PRODUCTION-HARDENING |
-| **Implementation Module** | `cortex-brain/tier2/resilience/` |
+| **Implementation Module** | `cortex_brain/tier2/resilience/` |
 
 ---
 
@@ -96,7 +96,7 @@ Comprehensive guide includes:
 
 ### AC-NFR-002-03: Circuit Breaker Pattern Implementation
 - Tests: 14 unit + 6 integration
-- Module: `cortex-brain/tier2/resilience/` (380 LOC)
+- Module: `cortex_brain/tier2/resilience/` (380 LOC)
 - Classes: CircuitBreaker, CircuitBreakerConfig, CircuitBreakerMetrics, CircuitBreakerOpen, CircuitBreakerState
 
 ### AC-NFR-004-01: OpenTelemetry Metrics Integration
@@ -212,7 +212,7 @@ All 6 AC-IDs have specific success criteria documented in `cortex-master.yaml`:
 📄 **Master Plan**: `_workspaces/roadmap/cortex-master.yaml`  
 📋 **Implementation Guide**: `docs/PHASE-03-IMPLEMENTATION-KICKOFF.md`  
 🔬 **Validator**: `scripts/validation/validate_phase_sync.py`  
-📦 **Implementation Location**: `cortex-brain/tier2/resilience/`  
+📦 **Implementation Location**: `cortex_brain/tier2/resilience/`  
 🧪 **Test Location**: `tests/tier2/`  
 
 ---

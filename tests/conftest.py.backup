@@ -169,7 +169,7 @@ def test_db_path(tmp_path: Path) -> Generator[Path, None, None]:
     ```
     """
     # Create test database path
-    db_path = tmp_path / "cortex-brain" / "state" / "governance.db"
+    db_path = tmp_path / "cortex_brain" / "state" / "governance.db"
     db_path.parent.mkdir(parents=True, exist_ok=True)
     
     # Initialize schema

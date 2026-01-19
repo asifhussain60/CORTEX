@@ -101,7 +101,7 @@ class TestPhaseReadinessChecker:
         with tempfile.TemporaryDirectory() as tmpdir:
             workspace = Path(tmpdir)
             (workspace / "src" / "tools").mkdir(parents=True)
-            (workspace / "cortex-brain" / "state").mkdir(parents=True)
+            (workspace / "cortex_brain" / "state").mkdir(parents=True)
             (workspace / "docs" / "phases").mkdir(parents=True)
             (workspace / "tests").mkdir(parents=True)
 
@@ -117,7 +117,7 @@ class TestPhaseReadinessChecker:
 
         assert checker.workspace_root == temp_workspace
         assert checker.cli_script == temp_workspace / "src" / "tools" / "governance-cli.py"
-        assert checker.governance_db == temp_workspace / "cortex-brain" / "state" / "governance.db"
+        assert checker.governance_db == temp_workspace / "cortex_brain" / "state" / "governance.db"
 
     def test_checker_default_workspace(self) -> None:
         """Test PhaseReadinessChecker with default workspace."""
@@ -248,7 +248,7 @@ class TestPhaseReadinessChecker:
     def test_check_audit_trail_invalid_phase_id(self, temp_workspace: Path) -> None:
         """Test audit trail check with invalid phase ID."""
         # Create empty database
-        db_path = temp_workspace / "cortex-brain" / "state" / "governance.db"
+        db_path = temp_workspace / "cortex_brain" / "state" / "governance.db"
         conn = sqlite3.connect(str(db_path))
         conn.execute("CREATE TABLE audit_log (ac_id TEXT)")
         conn.close()
@@ -263,7 +263,7 @@ class TestPhaseReadinessChecker:
     def test_check_audit_trail_no_entries(self, temp_workspace: Path) -> None:
         """Test audit trail check with no entries."""
         # Create database with audit_log table
-        db_path = temp_workspace / "cortex-brain" / "state" / "governance.db"
+        db_path = temp_workspace / "cortex_brain" / "state" / "governance.db"
         conn = sqlite3.connect(str(db_path))
         conn.execute("CREATE TABLE audit_log (ac_id TEXT)")
         conn.close()
@@ -279,7 +279,7 @@ class TestPhaseReadinessChecker:
         """Test audit trail check with incomplete entries."""
         # Create database with audit entries (only 2 entries, need 3)
         # AC-GV-001-09 means AC for GV domain, AC number 001, phase 09
-        db_path = temp_workspace / "cortex-brain" / "state" / "governance.db"
+        db_path = temp_workspace / "cortex_brain" / "state" / "governance.db"
         conn = sqlite3.connect(str(db_path))
         conn.execute("CREATE TABLE audit_log (ac_id TEXT)")
         conn.execute("INSERT INTO audit_log VALUES ('AC-GV-001-09')")
@@ -299,7 +299,7 @@ class TestPhaseReadinessChecker:
         """Test audit trail check with complete entries."""
         # Create database with complete audit entries (3+ per AC)
         # AC-GV-001-09 means AC for GV domain, AC number 001, phase 09
-        db_path = temp_workspace / "cortex-brain" / "state" / "governance.db"
+        db_path = temp_workspace / "cortex_brain" / "state" / "governance.db"
         conn = sqlite3.connect(str(db_path))
         conn.execute("CREATE TABLE audit_log (ac_id TEXT)")
         # Add 3 entries for AC-GV-001-09

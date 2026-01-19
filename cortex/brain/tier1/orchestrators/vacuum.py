@@ -135,7 +135,7 @@ class VacuumOrchestrator:
             config: Configuration dictionary with keys:
                 - repo_root: Repository root path
                 - dry_run: If True, don't modify files (default: False)
-                - config_file: Path to vacuum config (default: cortex-brain/vacuum/config.yaml)
+                - config_file: Path to vacuum config (default: cortex_brain/vacuum/config.yaml)
                 - verbose: If True, enable verbose logging (default: False)
 
         Raises:
@@ -150,7 +150,7 @@ class VacuumOrchestrator:
         # Configuration
         self.repo_root = Path(config.get("repo_root", "."))
         self.dry_run = config.get("dry_run", False)
-        self.config_file = config.get("config_file", "cortex-brain/vacuum/config.yaml")
+        self.config_file = config.get("config_file", "cortex_brain/vacuum/config.yaml")
         self.verbose = config.get("verbose", False)
 
         # Load configuration if file exists

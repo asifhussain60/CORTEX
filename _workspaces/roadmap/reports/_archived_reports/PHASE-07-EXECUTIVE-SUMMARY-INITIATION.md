@@ -104,7 +104,7 @@ HAVING COUNT(*) >= 3
   - Verification: ✅ Confirmed in v1 baseline
 
 • **Assumption 2:** Governance rules are operational and accessible
-  - Source: `cortex-brain/tier0/governance/core-rules.yaml`
+  - Source: `cortex_brain/tier0/governance/core-rules.yaml`
   - Verification: ✅ 25 SKULL rules loaded and enforced
 
 • **Assumption 3:** Test infrastructure is ready (pytest + test fixtures)
@@ -116,7 +116,7 @@ HAVING COUNT(*) >= 3
   - Verification: ✅ 14 AC-IDs defined with full specifications
 
 • **Assumption 5:** Database and audit trail initialized
-  - Source: `cortex-brain/state/governance.db`
+  - Source: `cortex_brain/state/governance.db`
   - Verification: ✅ 258+ ACs already in audit log from v1
 
 ---
@@ -263,8 +263,8 @@ HAVING COUNT(*) >= 3
    - Review: All 14 AC-IDs and their detailed requirements
 
 3. **Load Governance Rules**
-   - Read: `cortex-brain/tier0/governance/core-rules.yaml`
-   - Read: `cortex-brain/tier0/governance/phase-enforcement-map.yaml`
+   - Read: `cortex_brain/tier0/governance/core-rules.yaml`
+   - Read: `cortex_brain/tier0/governance/phase-enforcement-map.yaml`
    - Activate: STRICT governance mode (CORE-017)
 
 4. **Begin AC-PHX-007-01 Implementation**
@@ -305,7 +305,7 @@ HAVING COUNT(*) >= 3
 ## ▸ SUPPORTING ARTIFACTS
 
 • **Phase Specifications:** `.github/roadmap/phases/phase-07-intent-router.yaml`
-• **Governance Rules:** `cortex-brain/tier0/governance/core-rules.yaml`
+• **Governance Rules:** `cortex_brain/tier0/governance/core-rules.yaml`
 • **Test Baseline:** 100% pass rate from v1 (153/153 orchestrator tests)
 • **Audit Baseline:** 258+ ACs with verified audit trails from v1
 • **Builder Prompt:** `.github/prompts/cortex-builder.prompt.md`

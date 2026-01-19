@@ -168,7 +168,7 @@ I have completed a comprehensive analysis of all pending phases in the CORTEX v2
 ### Immediate (Next Session)
 1. [ ] Create git checkpoint: `git commit -m "checkpoint: before PHASE-07"`
 2. [ ] Review PHASE-07 specifications: `.github/roadmap/phases/phase-07-intent-router.yaml`
-3. [ ] Review governance rules: `cortex-brain/tier0/governance/core-rules.yaml`
+3. [ ] Review governance rules: `cortex_brain/tier0/governance/core-rules.yaml`
 4. [ ] Begin AC-PHX-007-01 implementation (Intent Classification Framework)
 
 ### Daily Workflow
@@ -269,7 +269,7 @@ I have completed a comprehensive analysis of all pending phases in the CORTEX v2
 ### Reference Files
 - **Master Roadmap:** `.github/roadmap/cortex-master.yaml`
 - **Phase Specs:** `.github/roadmap/phases/phase-07-intent-router.yaml`
-- **Governance Rules:** `cortex-brain/tier0/governance/core-rules.yaml`
+- **Governance Rules:** `cortex_brain/tier0/governance/core-rules.yaml`
 - **Builder Prompt:** `.github/prompts/cortex-builder.prompt.md`
 - **v1 Reference:** `.github/roadmap/_archives/cortex-master-v1.yaml`
 
@@ -280,7 +280,7 @@ I have completed a comprehensive analysis of all pending phases in the CORTEX v2
 - **Complete Analysis:** `.github/roadmap/reports/PENDING-PHASES-ANALYSIS-COMPLETE.md`
 
 ### Audit & Verification
-- **Audit Database:** `cortex-brain/state/governance.db` (SQLite)
+- **Audit Database:** `cortex_brain/state/governance.db` (SQLite)
 - **Test Suite:** `tests/integration/test_audit_trail_integrity.py`
 - **Validation Query:** `SELECT COUNT(*) FROM audit_log WHERE ac_id LIKE 'AC-PHX-007-%'`
 

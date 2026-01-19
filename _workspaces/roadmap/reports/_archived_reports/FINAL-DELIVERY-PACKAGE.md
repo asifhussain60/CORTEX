@@ -423,7 +423,7 @@ b97868087 (HEAD -> CORTEX6, origin/CORTEX6)
 - `pytest.ini` - Test configuration
 - `requirements.txt` - Dependencies
 - `.github/workflows/compliance-check.yml` - CI/CD config
-- `cortex-brain/state/governance.db` - SQLite database
+- `cortex_brain/state/governance.db` - SQLite database
 
 ---
 

@@ -70,7 +70,7 @@ python scripts/validation/validate_phase_deliverables.py
 - Status: LOCKED
 
 ### ✅ PHASE-02: Codebase Coherence (CURRENT)
-- **Unified cortex/ structure** from dual cortex-brain/ + src/
+- **Unified cortex/ structure** from dual cortex_brain/ + src/
 - **104 items migrated** to single code home
 - **116+ files updated** with new import paths
 - **95% test coverage** (78/82 tests passing)

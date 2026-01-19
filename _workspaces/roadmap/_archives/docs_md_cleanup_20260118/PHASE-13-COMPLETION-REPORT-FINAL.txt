@@ -53,7 +53,7 @@ DOMAIN AC COMPLETION SUMMARY:
 │ Estimated: 0.5 hours | Actual: 0.5 hours                                     │
 │ Tests: 6 passed                                                              │
 │ Artifacts:                                                                   │
-│  • cortex-brain/tier3/domain-registry.yaml (403 lines)                       │
+│  • cortex_brain/tier3/domain-registry.yaml (403 lines)                       │
 │    - Metadata with version, tier, purpose                                    │
 │    - 16 CORTEX domains registered (Tier 0-3)                                 │
 │    - Business domains section extensible                                     │
@@ -80,7 +80,7 @@ DOMAIN AC COMPLETION SUMMARY:
 │ Estimated: 0.5 hours | Actual: 0.5 hours                                     │
 │ Tests: 5 passed                                                              │
 │ Artifacts:                                                                   │
-│  • cortex-brain/tier3/README-DOMAIN-INTEGRATION.md (479 lines)              │
+│  • cortex_brain/tier3/README-DOMAIN-INTEGRATION.md (479 lines)              │
 │    - Quick reference and overview section                                    │
 │    - All 16 CORTEX domains documented with descriptions                      │
 │    - Tier-based organization with table format                               │
@@ -149,8 +149,8 @@ DOMAIN AC COMPLETION SUMMARY:
 │  ✓ Domain integration is completely optional                                 │
 │                                                                              │
 │ New Artifacts (Addition Only):                                              │
-│  • cortex-brain/tier3/domain-registry.yaml                                   │
-│  • cortex-brain/tier3/README-DOMAIN-INTEGRATION.md                          │
+│  • cortex_brain/tier3/domain-registry.yaml                                   │
+│  • cortex_brain/tier3/README-DOMAIN-INTEGRATION.md                          │
 │  • src/observability/dashboard_extensibility.py                             │
 │                                                                              │
 │ Modified Artifacts: NONE ✓                                                   │
@@ -265,7 +265,7 @@ AUDIT TRAIL VERIFICATION
 ═════════════════════════════════════════════════════════════════════════════════
 
 AUDIT LOG SUMMARY:
-Database: cortex-brain/state/governance.db
+Database: cortex_brain/state/governance.db
 Query: SELECT ac_id, operation, COUNT(*) FROM audit_log WHERE ac_id LIKE 'BD-%'
 
 Results:
@@ -385,8 +385,8 @@ MODIFIED FILES:
      • Added domain completion metadata
 
 EXISTING FILES VERIFIED (NO MODIFICATIONS):
-  • cortex-brain/tier3/domain-registry.yaml
-  • cortex-brain/tier3/README-DOMAIN-INTEGRATION.md
+  • cortex_brain/tier3/domain-registry.yaml
+  • cortex_brain/tier3/README-DOMAIN-INTEGRATION.md
   • src/observability/dashboard_extensibility.py
   • All other project files (backward compatible ✓)
 

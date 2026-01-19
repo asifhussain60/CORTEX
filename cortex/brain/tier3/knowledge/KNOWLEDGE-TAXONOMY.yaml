@@ -219,7 +219,7 @@ knowledge_entry_schema:
 # DOMAIN STRUCTURE LAYOUT
 # =============================================================================
 directory_structure: |
-  cortex-brain/tier3/knowledge/
+  cortex_brain/tier3/knowledge/
   ├── KNOWLEDGE-TAXONOMY.yaml (this file)
   ├── knowledge-schema.json (JSON version of schema)
   ├── GOVERNANCE/

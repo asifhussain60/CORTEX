@@ -24,13 +24,13 @@ Successfully verified the robustness of the audit trail hash chain implementatio
 ### Phase 1: Backup & Delete
 ```bash
 # 1. Backup existing database (5,040 historical entries)
-cp cortex-brain/state/governance.db cortex-brain/state/governance.db.backup-20260117-072106
+cp cortex_brain/state/governance.db cortex_brain/state/governance.db.backup-20260117-072106
 
 # 2. Delete ALL audit logs
-sqlite3 cortex-brain/state/governance.db "DELETE FROM audit_log; VACUUM;"
+sqlite3 cortex_brain/state/governance.db "DELETE FROM audit_log; VACUUM;"
 
 # 3. Confirm clean slate
-sqlite3 cortex-brain/state/governance.db "SELECT COUNT(*) FROM audit_log"
+sqlite3 cortex_brain/state/governance.db "SELECT COUNT(*) FROM audit_log"
 # Result: 0
 ```
 
@@ -170,11 +170,11 @@ Hash Chain Segments: 2 (clean)
 ### ✅ Backup Deleted
 Removed historical database backups as fresh data is superior:
 ```bash
-rm -f cortex-brain/state/governance.db.backup-*
+rm -f cortex_brain/state/governance.db.backup-*
 ```
 
 ### Current State
-- **Active Database**: `cortex-brain/state/governance.db` (64 KB)
+- **Active Database**: `cortex_brain/state/governance.db` (64 KB)
 - **Entries**: 2,031 fresh entries with perfect hash chain
 - **No Backups**: Clean state for production
 

@@ -401,12 +401,12 @@ python3 scripts/validation/validate_phase_sync.py --fix
 - `cortex-builder.prompt.md` - Phase execution guidelines
 - `PHASE-21-IMPLEMENTATION-GUIDE.md` - Detailed specifications
 - `PHASE-21-EXPANSION-SUMMARY.md` - Changes and metrics
-- `cortex-brain/tier0/governance/core-rules.yaml` - Governance rules
+- `cortex_brain/tier0/governance/core-rules.yaml` - Governance rules
 
 💻 **Existing Code**:
 - `src/orchestrators/core/master_orchestrator.py` - Reference for integration
 - `src/orchestrators/orchestrator_traits.py` - Protocol pattern example
-- `cortex-brain/state/knowledge_repository.py` - Repository interface
+- `cortex_brain/state/knowledge_repository.py` - Repository interface
 - `src/core/business_knowledge/business_knowledge_repository.py` - Business knowledge
 
 🧪 **Test Templates**:

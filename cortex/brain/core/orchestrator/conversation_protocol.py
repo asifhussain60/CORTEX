@@ -113,7 +113,7 @@ class ConversationProtocol:
         # AC-FIX-001-01: Initialize DatabaseTransactionManager for atomic turn execution
         # AC-FIX-008-01: Use provided db_path for tests, default for production
         if db_path is None:
-            db_path = str(Path(__file__).parent.parent.parent / "cortex-brain" / "state" / "governance.db")
+            db_path = str(Path(__file__).parent.parent.parent / "cortex_brain" / "state" / "governance.db")
         self.transaction_manager = DatabaseTransactionManager(db_path)
         
         # AC-REM-001-01: Initialize AST Intelligence Engine for comprehension phase
@@ -913,7 +913,7 @@ class ConversationProtocol:
             if not target_files:
                 # Fallback: Look for common source directories
                 project_root = Path.cwd()
-                for source_dir in ["src", "cortex-brain", "tests"]:
+                for source_dir in ["src", "cortex_brain", "tests"]:
                     potential_dir = project_root / source_dir
                     if potential_dir.exists() and potential_dir.is_dir():
                         # For now, limit to first few Python files to avoid overhead

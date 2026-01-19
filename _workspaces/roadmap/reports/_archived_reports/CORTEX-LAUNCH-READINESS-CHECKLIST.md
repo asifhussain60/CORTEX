@@ -95,14 +95,14 @@
 - [ ] Status: NOT STARTED
 - [ ] Owner: Domain Architecture Lead
 - [ ] Timeline: Jan 29, 0.5 hours
-- [ ] Deliverable: cortex-brain/tier3/domain-registry.yaml
+- [ ] Deliverable: cortex_brain/tier3/domain-registry.yaml
 - [ ] Tests: 7 planned
 
 **BD-001-02: Domain Availability Documentation**
 - [ ] Status: NOT STARTED
 - [ ] Owner: Documentation Lead
 - [ ] Timeline: Jan 31, 0.5 hours
-- [ ] Deliverable: cortex-brain/tier3/README-DOMAIN-INTEGRATION.md
+- [ ] Deliverable: cortex_brain/tier3/README-DOMAIN-INTEGRATION.md
 - [ ] Tests: 6 planned
 
 **BD-002-01: Configurable Domain Endpoint**

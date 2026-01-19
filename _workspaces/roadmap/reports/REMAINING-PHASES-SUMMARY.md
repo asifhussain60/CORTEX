@@ -170,7 +170,7 @@
 - `src/core/orchestrator/complexity_assessment.py`
 - `src/core/orchestrator/approval_gate.py`
 - `src/core/orchestrator/confirmation_context.py`
-- `cortex-brain/tier1/governance/conf-gate-rules.yaml`
+- `cortex_brain/tier1/governance/conf-gate-rules.yaml`
 
 ---
 

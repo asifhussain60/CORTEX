@@ -160,14 +160,14 @@ class TestFolderStructureAnalysis:
         Analyze the current CORTEX structure to identify issues.
         
         Current state:
-        - root/cortex-brain/ (main tier-based structure)
+        - root/cortex_brain/ (main tier-based structure)
         - root/src/ (secondary code structure)
         - Multiple levels of nesting in different areas
         - Inconsistent organization patterns
         """
         # This test documents what we found during analysis
         current_issues = {
-            "dual_structure": "Both cortex-brain/ and src/ contain code",
+            "dual_structure": "Both cortex_brain/ and src/ contain code",
             "inconsistent_nesting": "Some modules 3-4 levels deep, others shallow",
             "mixed_concerns": "Tiers, domains, and functionality mixed at different levels",
             "documentation_root": "40+ documentation files in root directory",
@@ -182,7 +182,7 @@ class TestFolderStructureAnalysis:
         Define principles for the new nested structure.
         
         Key principles:
-        1. Single code home (consolidate cortex-brain and src)
+        1. Single code home (consolidate cortex_brain and src)
         2. Clear separation of concerns (by layer first, then domain)
         3. Documentation with code (where relevant)
         4. Consistent nesting depth (max 4 levels)
@@ -276,7 +276,7 @@ class TestDesignDocumentCompleteness:
         required_rationales = {
             "why_nested": "Explain benefits of nesting",
             "why_layer_first": "Explain tier-based organization",
-            "why_consolidate": "Explain consolidating cortex-brain and src",
+            "why_consolidate": "Explain consolidating cortex_brain and src",
             "why_max_depth": "Explain why 4-level max",
             "cross_platform": "Explain path resolution strategy",
         }

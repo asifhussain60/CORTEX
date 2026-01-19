@@ -360,7 +360,7 @@ PHASE-20
 ### Week 1 (Starting 2026-01-17)
 1. **Create git checkpoint** (before PHASE-07 starts)
 2. **Load PHASE-07 specifications** from `.github/roadmap/phases/phase-07-intent-router.yaml`
-3. **Review governance rules** from `cortex-brain/tier0/governance/core-rules.yaml`
+3. **Review governance rules** from `cortex_brain/tier0/governance/core-rules.yaml`
 4. **Begin AC-PHX-007-01 implementation** (Intent classification framework)
 5. **Follow TDD pattern** (RED → GREEN → REFACTOR)
 6. **Create audit entries** for each AC (AC_START, AC_EXECUTE, AC_COMPLETE)
@@ -382,7 +382,7 @@ git commit -m "AC-XXX-XXX: [description] - tests passing"
 git commit -m "checkpoint: after AC-XXX-XXX (N/14 complete)"
 
 # After phase completion
-sqlite3 cortex-brain/state/governance.db "SELECT COUNT(*) FROM audit_log WHERE ac_id LIKE 'AC-PHX-007-%'"
+sqlite3 cortex_brain/state/governance.db "SELECT COUNT(*) FROM audit_log WHERE ac_id LIKE 'AC-PHX-007-%'"
 git commit -m "phase-07: COMPLETED - audit verified, [count] entries"
 ```
 
@@ -395,9 +395,9 @@ git commit -m "phase-07: COMPLETED - audit verified, [count] entries"
 - `.github/roadmap/phases/phase-08.yaml` through `phase-20.yaml`
 
 ### Governance & Rules
-- `cortex-brain/tier0/governance/core-rules.yaml` (25 SKULL rules)
-- `cortex-brain/tier0/governance/phase-enforcement-map.yaml`
-- `cortex-brain/tier0/governance/ac-validation-checklist.yaml`
+- `cortex_brain/tier0/governance/core-rules.yaml` (25 SKULL rules)
+- `cortex_brain/tier0/governance/phase-enforcement-map.yaml`
+- `cortex_brain/tier0/governance/ac-validation-checklist.yaml`
 
 ### Builder Documentation
 - `.github/prompts/cortex-builder.prompt.md` (implementation guide)
@@ -409,7 +409,7 @@ git commit -m "phase-07: COMPLETED - audit verified, [count] entries"
 - `.github/roadmap/_archives/phases-v1/` (original phase definitions)
 
 ### Audit & Validation
-- `cortex-brain/state/governance.db` (SQLite audit trail)
+- `cortex_brain/state/governance.db` (SQLite audit trail)
 - `tests/integration/test_audit_trail_integrity.py` (validation tests)
 
 ### Status & Reports

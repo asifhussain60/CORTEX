@@ -122,7 +122,7 @@ Wed, Feb 5:  PHASE-13 LOCKDOWN
 
 **BD-001-01: Domain Registry Schema Creation** (0.5h)
 - Owner: Domain Architecture Lead
-- Deliverable: `cortex-brain/tier3/domain-registry.yaml`
+- Deliverable: `cortex_brain/tier3/domain-registry.yaml`
 - Content: CORTEX domains + business domains schema
 - Acceptance Tests:
   - [ ] File exists at correct path
@@ -135,7 +135,7 @@ Wed, Feb 5:  PHASE-13 LOCKDOWN
 
 **BD-001-02: Domain Availability Documentation** (0.5h)
 - Owner: Documentation Lead
-- Deliverable: `cortex-brain/tier3/README-DOMAIN-INTEGRATION.md`
+- Deliverable: `cortex_brain/tier3/README-DOMAIN-INTEGRATION.md`
 - Content: Integration guide + examples
 - Acceptance Tests:
   - [ ] All 16 CORTEX domains documented
@@ -183,7 +183,7 @@ Wed, Feb 5:  PHASE-13 LOCKDOWN
 
 ### New Files (5 total)
 
-#### 1. `cortex-brain/tier3/domain-registry.yaml`
+#### 1. `cortex_brain/tier3/domain-registry.yaml`
 **Size:** ~200 lines  
 **Priority:** Critical  
 **Owner:** Domain Architecture Lead  
@@ -205,7 +205,7 @@ business_domains_ready:
   - COMPLIANCE: "General compliance standards"
 ```
 
-#### 2. `cortex-brain/tier3/README-DOMAIN-INTEGRATION.md`
+#### 2. `cortex_brain/tier3/README-DOMAIN-INTEGRATION.md`
 **Size:** ~300 lines  
 **Priority:** Critical  
 **Owner:** Documentation Lead  

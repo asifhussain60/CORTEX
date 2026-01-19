@@ -285,12 +285,12 @@ cd /Users/asifhussain/PROJECTS/CORTEX
 
 # Optional: Dry-run to preview
 python3 scripts/run-cortex-vacuum.py execute \
-  --plan cortex-brain/vacuum/migration-plan.json \
+  --plan cortex_brain/vacuum/migration-plan.json \
   --dry-run
 
 # Execute with intelligent names
 python3 scripts/run-cortex-vacuum.py execute \
-  --plan cortex-brain/vacuum/migration-plan.json \
+  --plan cortex_brain/vacuum/migration-plan.json \
   --auto-approve
 ```
 
@@ -313,9 +313,9 @@ All 19 files will be renamed with meaningful, intelligent names that:
 1. `cortex-vacuum.prompt.md` - Updated specification
 2. `src/mcp/tools/cortex_vacuum_analyzer.py` - Enhanced algorithm
 3. `NAMING-FIX-SUMMARY.md` - Documentation
-4. `cortex-brain/vacuum/migration-plan.json` - New analysis
-5. `cortex-brain/vacuum/analysis-report.json` - New analysis
-6. `cortex-brain/vacuum/reference-map.json` - New analysis
+4. `cortex_brain/vacuum/migration-plan.json` - New analysis
+5. `cortex_brain/vacuum/analysis-report.json` - New analysis
+6. `cortex_brain/vacuum/reference-map.json` - New analysis
 
 ---
 

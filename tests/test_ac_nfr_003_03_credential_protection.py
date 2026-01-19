@@ -9,7 +9,7 @@ import sys
 from pathlib import Path
 from datetime import datetime, timedelta
 
-sys.path.insert(0, str(Path(__file__).parent.parent / "cortex-brain"))
+sys.path.insert(0, str(Path(__file__).parent.parent / "cortex_brain"))
 
 from tier2.credential_protection import (
     EncryptionAlgorithm,

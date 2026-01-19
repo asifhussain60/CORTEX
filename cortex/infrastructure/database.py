@@ -33,7 +33,7 @@ from cortex.brain.core.result import Result, Ok, Err
 @dataclass
 class DatabaseConfig:
     """Configuration for database manager."""
-    db_path: Path = field(default_factory=lambda: resolve_path("cortex-brain", "state", "governance.db"))
+    db_path: Path = field(default_factory=lambda: resolve_path("cortex_brain", "state", "governance.db"))
     wal_mode: bool = True
     timeout: float = 30.0
 

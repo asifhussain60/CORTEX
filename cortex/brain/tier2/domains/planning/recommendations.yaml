@@ -3,7 +3,7 @@
 # =============================================================================
 # Purpose: Template for implementation planning recommendations
 # Domain: Planning
-# Inherits: Header from cortex-brain/tier0/response-headers.yaml
+# Inherits: Header from cortex_brain/tier0/response-headers.yaml
 # =============================================================================
 
 metadata:

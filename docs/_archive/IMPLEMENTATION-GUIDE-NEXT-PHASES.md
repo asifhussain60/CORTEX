@@ -357,7 +357,7 @@ tests/unit/test_ac_xxx_xx_02.py
 | Phase Specs | `phase_tracker: → PHASE-XX:` section |
 | Scripts | `scripts/` |
 | Tests | `tests/` |
-| Source | `src/`, `cortex-brain/` |
+| Source | `src/`, `cortex_brain/` |
 | Validators | `scripts/validate_phase_sync.py` |
 | Pre-commit Hook | `.git/hooks/pre-commit` |
 | Documentation | `docs/` |

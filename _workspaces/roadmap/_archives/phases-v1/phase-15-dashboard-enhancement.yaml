@@ -62,7 +62,7 @@ phase:
   # DATA SOURCES (All exist TODAY - no new infrastructure needed)
   data_sources:
     - source: "governance.db"
-      location: "cortex-brain/state/governance.db"
+      location: "cortex_brain/state/governance.db"
       provides: "Audit logs, hash chain, operation history, metrics"
       exists: true
       
@@ -72,12 +72,12 @@ phase:
       exists: true
       
     - source: "rollback-history.json"
-      location: "cortex-brain/audit-logs/rollback-history.json"
+      location: "cortex_brain/audit-logs/rollback-history.json"
       provides: "Rollback events timeline"
       exists: true
       
     - source: "Orchestrator Registry"
-      location: "cortex-brain/registry/"
+      location: "cortex_brain/registry/"
       provides: "Registered orchestrators, dependencies, status"
       exists: true
       
@@ -87,7 +87,7 @@ phase:
       exists: true
       
     - source: "Governance Rules"
-      location: "cortex-brain/tier0/governance/"
+      location: "cortex_brain/tier0/governance/"
       provides: "CORE rules, phase enforcement, validation rules"
       exists: true
   
@@ -108,12 +108,12 @@ phase:
     enabled: true
     sync_strategy: "git-pull-init-db"
     read_only_sources:
-      - "cortex-brain/state/governance.db"
+      - "cortex_brain/state/governance.db"
       - ".github/roadmap/cortex-master.yaml"
-      - "cortex-brain/audit-logs/rollback-history.json"
-      - "cortex-brain/registry/"
+      - "cortex_brain/audit-logs/rollback-history.json"
+      - "cortex_brain/registry/"
       - ".github/roadmap/phases/"
-      - "cortex-brain/tier0/governance/"
+      - "cortex_brain/tier0/governance/"
     write_targets:
       - "src/dashboard/"
       - "tests/unit/dashboard/"
@@ -823,7 +823,7 @@ deployment:
   static_files: "Copy src/dashboard/frontend/ to web server"
   backend_server: "Run FastAPI from src/dashboard/api/main.py"
   environment_variables:
-    - "DATABASE_PATH: ../../../cortex-brain/state/governance.db"
+    - "DATABASE_PATH: ../../../cortex_brain/state/governance.db"
     - "CORTEX_MASTER_PATH: ../../../.github/roadmap/cortex-master.yaml"
     - "API_PORT: 8000"
     - "CORS_ORIGINS: ['http://localhost:3000', 'http://localhost:8080']"
@@ -834,7 +834,7 @@ deployment:
     WORKDIR /app
     COPY src/dashboard/api requirements.txt ./
     RUN pip install -r requirements.txt
-    COPY cortex-brain ../cortex-brain
+    COPY cortex_brain ../cortex_brain
     COPY .github/roadmap ../.github/roadmap
     EXPOSE 8000
     CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

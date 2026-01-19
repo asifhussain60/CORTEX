@@ -46,7 +46,7 @@
 **Stuck?**
 1. Check: [QUICK-START-PHASE-03.md](./QUICK-START-PHASE-03.md) → Troubleshooting
 2. Validate: `python3 scripts/validate_phase_sync.py`
-3. Review: Governance rules in `cortex-brain/tier0/governance/`
+3. Review: Governance rules in `cortex_brain/tier0/governance/`
 
 ### 👔 For Tech Leads
 
@@ -56,7 +56,7 @@
 
 **Quality Standards?**
 1. Review: [cortex-builder.prompt.md](./.github/prompts/cortex-builder.prompt.md) → "GOVERNANCE COMPLIANCE"
-2. Reference: `cortex-brain/tier0/governance/core-rules.yaml`
+2. Reference: `cortex_brain/tier0/governance/core-rules.yaml`
 
 **Phase Management?**
 1. Check: [CONSOLIDATED-IMPLEMENTATION-ROADMAP.md](./CONSOLIDATED-IMPLEMENTATION-ROADMAP.md)
@@ -188,9 +188,9 @@ scripts/validate_phase_sync.py                # SSOT validator
 
 ### Governance
 ```
-cortex-brain/tier0/governance/core-rules.yaml        # Governance rules
-cortex-brain/tier0/governance/ac-validation-checklist.yaml
-cortex-brain/tier0/governance/phase-enforcement-map.yaml
+cortex_brain/tier0/governance/core-rules.yaml        # Governance rules
+cortex_brain/tier0/governance/ac-validation-checklist.yaml
+cortex_brain/tier0/governance/phase-enforcement-map.yaml
 ```
 
 ### Documentation (This Plan)
@@ -329,7 +329,7 @@ git log --grep="COMPLETED" --oneline | head -10
 
 ### For Technical Questions
 - Review: [.github/prompts/cortex-builder.prompt.md](./.github/prompts/cortex-builder.prompt.md) → Troubleshooting
-- Check: Governance rules in `cortex-brain/tier0/governance/`
+- Check: Governance rules in `cortex_brain/tier0/governance/`
 - Validate: Run `python3 scripts/validate_phase_sync.py --verbose`
 
 ### For Project Questions
@@ -344,7 +344,7 @@ git log --grep="COMPLETED" --oneline | head -10
 ### Primary Resources
 - **SSOT Pattern**: [cortex-builder.prompt.md](./.github/prompts/cortex-builder.prompt.md)
 - **TDD Workflow**: [cortex-builder.prompt.md](./.github/prompts/cortex-builder.prompt.md) → "PHASE OPERATION WORKFLOW"
-- **Governance Rules**: `cortex-brain/tier0/governance/core-rules.yaml`
+- **Governance Rules**: `cortex_brain/tier0/governance/core-rules.yaml`
 
 ### Secondary Resources
 - **Phase Details**: [IMPLEMENTATION-PLAN-PHASES-03-05-AND-BEYOND.md](./IMPLEMENTATION-PLAN-PHASES-03-05-AND-BEYOND.md)

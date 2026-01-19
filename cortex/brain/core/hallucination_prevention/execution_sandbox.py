@@ -175,7 +175,7 @@ class ExecutionSandbox:
     AC-FIX-BRITTLENESS-003: Added thread-safe history access with RLock.
     """
 
-    def __init__(self, db_path: str = "cortex-brain/state/governance.db"):
+    def __init__(self, db_path: str = "cortex_brain/state/governance.db"):
         """Initialize execution sandbox.
         
         Args:

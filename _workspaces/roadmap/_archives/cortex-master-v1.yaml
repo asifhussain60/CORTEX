@@ -146,10 +146,10 @@ metadata:
   
   # GOVERNANCE INTEGRATION
   governance:
-    tier0_rules: "cortex-brain/tier0/governance/core-rules.yaml"
-    phase_enforcement: "cortex-brain/tier0/governance/phase-enforcement-map.yaml"
-    ac_validation: "cortex-brain/tier0/governance/ac-validation-checklist.yaml"
-    audit_location: "cortex-brain/state/governance.db"
+    tier0_rules: "cortex_brain/tier0/governance/core-rules.yaml"
+    phase_enforcement: "cortex_brain/tier0/governance/phase-enforcement-map.yaml"
+    ac_validation: "cortex_brain/tier0/governance/ac-validation-checklist.yaml"
+    audit_location: "cortex_brain/state/governance.db"
     enforcement_mode: "STRICT"
     agents_using_governance:
       - "cortex-builder" # See .github/agents/cortex-builder.md
@@ -1173,7 +1173,7 @@ phase_tracker:
         estimated_minutes: 60
         
       - ac_id: "AC-DOC-001-02"
-        description: "CORTEX.prompt.md references cortex-brain/tier0/response-headers.yaml"
+        description: "CORTEX.prompt.md references cortex_brain/tier0/response-headers.yaml"
         test: "grep 'response-headers.yaml' .github/prompts/CORTEX.prompt.md"
         files_to_modify:
           - ".github/prompts/CORTEX.prompt.md"
@@ -1202,34 +1202,34 @@ phase_tracker:
       # TIER 2 CONTENT CREATION (P1)
       - ac_id: "AC-DOC-003-01"
         description: "Tier 2 base response templates created (success, error, warning)"
-        test: "ls cortex-brain/tier2/base/*.yaml | wc -l returns >= 3"
+        test: "ls cortex_brain/tier2/base/*.yaml | wc -l returns >= 3"
         files_to_create:
-          - "cortex-brain/tier2/base/success-response.yaml"
-          - "cortex-brain/tier2/base/error-response.yaml"
-          - "cortex-brain/tier2/base/warning-response.yaml"
+          - "cortex_brain/tier2/base/success-response.yaml"
+          - "cortex_brain/tier2/base/error-response.yaml"
+          - "cortex_brain/tier2/base/warning-response.yaml"
         status: "NOT_STARTED"
         priority: "P1"
         estimated_minutes: 45
         
       - ac_id: "AC-DOC-003-02"
         description: "Tier 2 domain templates created (governance, planning, tdd)"
-        test: "find cortex-brain/tier2/domains -name '*.yaml' | wc -l returns >= 6"
+        test: "find cortex_brain/tier2/domains -name '*.yaml' | wc -l returns >= 6"
         files_to_create:
-          - "cortex-brain/tier2/domains/governance/evaluation-result.yaml"
-          - "cortex-brain/tier2/domains/governance/rule-violation.yaml"
-          - "cortex-brain/tier2/domains/planning/recommendations.yaml"
-          - "cortex-brain/tier2/domains/planning/impact-assessment.yaml"
-          - "cortex-brain/tier2/domains/tdd/test-result.yaml"
-          - "cortex-brain/tier2/domains/tdd/coverage-report.yaml"
+          - "cortex_brain/tier2/domains/governance/evaluation-result.yaml"
+          - "cortex_brain/tier2/domains/governance/rule-violation.yaml"
+          - "cortex_brain/tier2/domains/planning/recommendations.yaml"
+          - "cortex_brain/tier2/domains/planning/impact-assessment.yaml"
+          - "cortex_brain/tier2/domains/tdd/test-result.yaml"
+          - "cortex_brain/tier2/domains/tdd/coverage-report.yaml"
         status: "NOT_STARTED"
         priority: "P1"
         estimated_minutes: 60
         
       - ac_id: "AC-DOC-003-03"
         description: "Tier 2 response templates index created"
-        test: "test -f cortex-brain/tier2/response-templates-index.yaml"
+        test: "test -f cortex_brain/tier2/response-templates-index.yaml"
         files_to_create:
-          - "cortex-brain/tier2/response-templates-index.yaml"
+          - "cortex_brain/tier2/response-templates-index.yaml"
         status: "NOT_STARTED"
         priority: "P1"
         estimated_minutes: 30
@@ -1259,16 +1259,16 @@ phase_tracker:
       4. VERIFY: Run validation script before phase lock
       
       Files to Create:
-      - cortex-brain/tier2/base/success-response.yaml
-      - cortex-brain/tier2/base/error-response.yaml
-      - cortex-brain/tier2/base/warning-response.yaml
-      - cortex-brain/tier2/domains/governance/evaluation-result.yaml
-      - cortex-brain/tier2/domains/governance/rule-violation.yaml
-      - cortex-brain/tier2/domains/planning/recommendations.yaml
-      - cortex-brain/tier2/domains/planning/impact-assessment.yaml
-      - cortex-brain/tier2/domains/tdd/test-result.yaml
-      - cortex-brain/tier2/domains/tdd/coverage-report.yaml
-      - cortex-brain/tier2/response-templates-index.yaml
+      - cortex_brain/tier2/base/success-response.yaml
+      - cortex_brain/tier2/base/error-response.yaml
+      - cortex_brain/tier2/base/warning-response.yaml
+      - cortex_brain/tier2/domains/governance/evaluation-result.yaml
+      - cortex_brain/tier2/domains/governance/rule-violation.yaml
+      - cortex_brain/tier2/domains/planning/recommendations.yaml
+      - cortex_brain/tier2/domains/planning/impact-assessment.yaml
+      - cortex_brain/tier2/domains/tdd/test-result.yaml
+      - cortex_brain/tier2/domains/tdd/coverage-report.yaml
+      - cortex_brain/tier2/response-templates-index.yaml
       - scripts/validate_phase_deliverables.py
       
       Files to Modify:
@@ -1418,11 +1418,11 @@ phase_tracker:
       - governance.db: Audit logs, hash chain, phase status
       - cortex-master.yaml: Phase tracker, AC counts, progress
       - rollback-history.json: Rollback timeline events
-      - cortex-brain/registry/: Orchestrator registration data
+      - cortex_brain/registry/: Orchestrator registration data
       - Phase YAMLs: Individual phase details
       
       MULTI-MACHINE STRATEGY:
-      - Reads from cortex-brain/ and cortex-master.yaml (SSOT)
+      - Reads from cortex_brain/ and cortex-master.yaml (SSOT)
       - No write conflicts with backend phases
       - Sync via git pull + init_db.py --sync-only
       - Can be developed fully independently
@@ -2170,7 +2170,7 @@ phase_tracker:
       status: "COMPLETED"
       timestamp: "2026-01-17T03:30:00Z"
       git_checkpoint: "e245c78a8"
-      documentation_file: "cortex-brain/tier3/README.md"
+      documentation_file: "cortex_brain/tier3/README.md"
       finding_addressed: "FINDING-007 (MEDIUM)"
       documentation_updates:
         - "Added source code cross-references for adapters"
@@ -3636,7 +3636,7 @@ architecture_decisions:
       - Tier 2: Engineering standards (team conventions, lowest priority)
     acceptance_criteria:
       - ac_id: "AC-AR-001-01"
-        description: "Tier 0 rules loaded from cortex-brain/tier0/governance/core-rules.yaml"
+        description: "Tier 0 rules loaded from cortex_brain/tier0/governance/core-rules.yaml"
         test: "test_tier0_rules_loaded"
       - ac_id: "AC-AR-001-02"
         description: "Tier precedence enforced (0 > 1 > 2)"
@@ -3857,7 +3857,7 @@ architecture_decisions:
       - Template inheritance for customization
     acceptance_criteria:
       - ac_id: "AC-AR-009-01"
-        description: "Response templates loaded from cortex-brain/tier2/"
+        description: "Response templates loaded from cortex_brain/tier2/"
         test: "test_template_loading"
       - ac_id: "AC-AR-009-02"
         description: "Templates support variable substitution"
@@ -4443,7 +4443,7 @@ governance_rules:
     count: 25
     tier: 0
     immutable: true
-    location: "cortex-brain/tier0/governance/core-rules.yaml"
+    location: "cortex_brain/tier0/governance/core-rules.yaml"
     categories:
       auditability:
         rules: ["SKULL-001", "SKULL-002", "SKULL-003", "SKULL-004", "SKULL-005"]

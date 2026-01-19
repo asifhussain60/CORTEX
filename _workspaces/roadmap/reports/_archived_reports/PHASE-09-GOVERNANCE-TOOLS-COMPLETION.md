@@ -153,7 +153,7 @@ repos:
     "configuration": {
       "cortex-governance.enableRealTimeValidation": true,
       "cortex-governance.validateOnSave": true,
-      "cortex-governance.databasePath": "cortex-brain/state/governance.db"
+      "cortex-governance.databasePath": "cortex_brain/state/governance.db"
     }
   }
 }
@@ -399,7 +399,7 @@ tests/unit/
 5. **CI/CD**: Integration ready (outputs compatible with reporting)
 
 ### With Existing CORTEX Systems
-- **Database**: Uses existing `cortex-brain/state/governance.db`
+- **Database**: Uses existing `cortex_brain/state/governance.db`
 - **AC Index**: Queries against `ac_index` table
 - **Audit Log**: Reads from `audit_log` for evidence
 - **Phase Locks**: Compatible with `phase_locks` table

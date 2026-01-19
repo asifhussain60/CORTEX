@@ -76,7 +76,7 @@ Comprehensive cleanup and reorganization of the CORTEX project architecture to m
 ### 4. **Backup File Deletion**
 
 **Deleted:**
-- `cortex-brain/state/governance.db.backup` (backup database file)
+- `cortex_brain/state/governance.db.backup` (backup database file)
 
 **Rationale:** Fresh database initialized per recent verification; backup no longer needed
 
@@ -112,7 +112,7 @@ Comprehensive cleanup and reorganization of the CORTEX project architecture to m
 │           ├── *-SUMMARY.md
 │           ├── archive/
 │           └── ...
-├── cortex-brain/                       ← Brain structure (tier0-3)
+├── cortex_brain/                       ← Brain structure (tier0-3)
 │   ├── tier0/                          ← Core infrastructure
 │   ├── tier1/                          ← Governance & ACs
 │   ├── tier2/                          ← Response templates
@@ -141,7 +141,7 @@ Comprehensive cleanup and reorganization of the CORTEX project architecture to m
 ### ✅ **Separation of Concerns**
 - Reports/documentation → `.github/roadmap/reports/`
 - Codebase → `src/`, `tests/`, `scripts/`
-- Configuration → `cortex-brain/` (brain structure)
+- Configuration → `cortex_brain/` (brain structure)
 - Supporting data → `docs/` (JSON, text, supporting files)
 
 ### ✅ **Clean Root Directory**
@@ -156,10 +156,10 @@ Comprehensive cleanup and reorganization of the CORTEX project architecture to m
 - Organized by report type via naming convention
 
 ### ✅ **Governance Structure Intact**
-- `cortex-brain/tier0/` - Core governance rules
-- `cortex-brain/tier1/` - Acceptance criteria
-- `cortex-brain/tier2/` - Response templates
-- `cortex-brain/tier3/` - Knowledge base
+- `cortex_brain/tier0/` - Core governance rules
+- `cortex_brain/tier1/` - Acceptance criteria
+- `cortex_brain/tier2/` - Response templates
+- `cortex_brain/tier3/` - Knowledge base
 
 ---
 

@@ -73,12 +73,12 @@ phase:
 # BD-001-01: Domain Registry Schema Creation
 - ac_id: "BD-001-01"
   title: "Domain Registry Schema Creation"
-  description: "Create domain-registry.yaml in cortex-brain/tier3/"
+  description: "Create domain-registry.yaml in cortex_brain/tier3/"
   domain: "BUSINESS_DOMAIN"
   priority: "CRITICAL"
   estimated_hours: 0.5
   acceptance_tests:
-    - "Domain registry file exists at cortex-brain/tier3/domain-registry.yaml"
+    - "Domain registry file exists at cortex_brain/tier3/domain-registry.yaml"
     - "File contains metadata with version, tier, purpose"
     - "Tier designation is '3' (knowledge/reference)"
     - "cortex_domains section lists all 16 CORTEX domains"
@@ -99,7 +99,7 @@ phase:
     - "Integration examples show how to add FINANCIAL, HEALTHCARE, COMPLIANCE"
     - "Fallback guarantee documented (works with endpoint = null)"
     - "Query patterns provided for each tier"
-    - "README file created at cortex-brain/tier3/README-DOMAIN-INTEGRATION.md"
+    - "README file created at cortex_brain/tier3/README-DOMAIN-INTEGRATION.md"
 
 # BD-002-01: Configurable Domain Brain Endpoint
 - ac_id: "BD-002-01"
@@ -151,8 +151,8 @@ metadata:
       Jan 15, 2026. Adds 2 hours (9 ACs). Zero schedule impact. Eliminates
       6-month compliance gap. Aligns with strategic recommendation (Option A).
     files_to_create:
-      - "cortex-brain/tier3/domain-registry.yaml"
-      - "cortex-brain/tier3/README-DOMAIN-INTEGRATION.md"
+      - "cortex_brain/tier3/domain-registry.yaml"
+      - "cortex_brain/tier3/README-DOMAIN-INTEGRATION.md"
       - "src/observability/dashboard_extensibility.py"
       - "tests/observability/test_dashboard_extensibility.py"
       - "tests/integration/test_domain_registry.py"

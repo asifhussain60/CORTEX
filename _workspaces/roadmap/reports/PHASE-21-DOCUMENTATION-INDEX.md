@@ -218,8 +218,8 @@ PHASE-21 is complete when:
 ## 🔗 Related Documentation
 
 - `cortex-builder.prompt.md` - Phase execution guidelines
-- `cortex-brain/tier0/governance/core-rules.yaml` - Governance rules
-- `cortex-brain/tier1/acceptance-criteria/` - AC templates
+- `cortex_brain/tier0/governance/core-rules.yaml` - Governance rules
+- `cortex_brain/tier1/acceptance-criteria/` - AC templates
 - `tests/` - Existing test patterns
 - `src/orchestrators/` - Existing orchestrator implementations
 

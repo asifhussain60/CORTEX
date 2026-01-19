@@ -41,7 +41,7 @@ class TestExtensibilityFeatures:
         governance = GovernanceRegistry.instance()
         
         # Get all tier files and verify they can be tracked
-        tier_base = resolve_path("cortex-brain")
+        tier_base = resolve_path("cortex_brain")
         tier_count = 0
         yaml_file_count = 0
         
@@ -89,7 +89,7 @@ class TestExtensibilityFeatures:
 
     def test_tier0_governance_rules_loadable(self):
         """Bonus: Verify Tier 0 governance rules are loadable"""
-        tier0_governance = resolve_path("cortex-brain", "tier0", "governance")
+        tier0_governance = resolve_path("cortex_brain", "tier0", "governance")
         
         # Verify tier0 governance directory exists
         assert tier0_governance.exists(), "Tier 0 governance directory should exist"
@@ -111,7 +111,7 @@ class TestExtensibilityFeatures:
 
     def test_multiple_tiers_accessible(self):
         """Bonus: Verify all tiers are accessible and have content"""
-        base = resolve_path("cortex-brain")
+        base = resolve_path("cortex_brain")
         
         for tier_level in range(3):  # tier0, tier1, tier2 (tier3 is optional)
             tier_dir = base / f"tier{tier_level}"

@@ -197,7 +197,7 @@ Successfully implemented the complete hallucination prevention enforcement layer
 - Timeline and sequencing analysis
 
 ### Tier 0 Rules Integration
-- Loads SKULL governance rules from cortex-brain/tier0/
+- Loads SKULL governance rules from cortex_brain/tier0/
 - SHA256 hash verification for immutability
 - Always blocks modifications
 

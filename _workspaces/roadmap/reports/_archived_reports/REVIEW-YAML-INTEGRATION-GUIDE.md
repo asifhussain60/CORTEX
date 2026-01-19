@@ -434,13 +434,13 @@ yamllint .github/roadmap/cortex-master.yaml
 yamllint .github/roadmap/phases/phase-*.yaml
 
 # 2. Verify queries are correct SQL
-sqlite3 cortex-brain/state/governance.db < <(
+sqlite3 cortex_brain/state/governance.db < <(
   echo "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE ac_id NOT LIKE 'AC-CHAIN-%';"
 )
 
 # 3. Test fresh data process
-cp cortex-brain/state/governance.db cortex-brain/state/governance.db.backup
-sqlite3 cortex-brain/state/governance.db "DELETE FROM audit_log; VACUUM;"
+cp cortex_brain/state/governance.db cortex_brain/state/governance.db.backup
+sqlite3 cortex_brain/state/governance.db "DELETE FROM audit_log; VACUUM;"
 pytest tests/ -m "ac" --ignore=tests/integration/test_audit_trail_integrity.py --tb=no -q
 pytest tests/integration/test_audit_trail_integrity.py -v
 

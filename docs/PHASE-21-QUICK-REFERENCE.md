@@ -390,7 +390,7 @@ Commit 12: "phase: PHASE-21 COMPLETE & LOCKED"
 
 ## Configuration (New)
 
-### `cortex-brain/tier0/change-detection-config.yaml` (New)
+### `cortex_brain/tier0/change-detection-config.yaml` (New)
 
 ```yaml
 change_detection:

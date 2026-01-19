@@ -75,7 +75,7 @@ class MasterOrchestrator(IOrchestrator):
         self.operation_history: List[Dict[str, Any]] = []
         
         # AC-FIX-001-01: Initialize DatabaseTransactionManager for atomic operations
-        db_path = Path(__file__).parent.parent.parent.parent / "cortex-brain" / "state" / "governance.db"
+        db_path = Path(__file__).parent.parent.parent.parent / "cortex_brain" / "state" / "governance.db"
         self.transaction_manager = DatabaseTransactionManager(str(db_path))
         
         # AC-REM-002-04: Initialize GovernanceRegistry for per-turn validation
@@ -170,7 +170,7 @@ class MasterOrchestrator(IOrchestrator):
         # AC-ENH-002-01: Initialize ResponseHeaderInjector for header wrapping
         try:
             config_manager = HeaderConfigurationManager.get_instance()
-            config_manager.load_configuration('cortex-brain/tier0/response-headers.yaml')
+            config_manager.load_configuration('cortex_brain/tier0/response-headers.yaml')
             
             # Create ResponseHeaderInjector instance
             # Uses composition pattern - injector wraps a template engine

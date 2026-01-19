@@ -302,7 +302,7 @@ acceptance_criteria:
          - RESPONSE STRUCTURE (result first, justification second)
       3. Test with 10 varied prompts
       4. Measure word count, check for forbidden phrases
-      5. Document updated prompt in cortex-brain/tier0/
+      5. Document updated prompt in cortex_brain/tier0/
     
     status: "NOT_STARTED"
     completed_at: null

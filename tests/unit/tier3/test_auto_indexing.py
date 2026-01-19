@@ -30,7 +30,7 @@ from dataclasses import dataclass, asdict
 
 def get_knowledge_dir() -> Path:
     """Get knowledge directory using portable path resolution (CORE-028)."""
-    return Path(__file__).parent.parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+    return Path(__file__).parent.parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
 
 
 @dataclass

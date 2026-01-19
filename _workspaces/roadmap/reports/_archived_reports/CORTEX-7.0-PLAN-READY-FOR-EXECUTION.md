@@ -280,9 +280,9 @@ Phase Specifications:
   📄 .github/roadmap/phases/phase-remediation-01.yaml
 
 Governance Rules:
-  📄 cortex-brain/tier0/governance/core-rules.yaml (29 rules)
-  📄 cortex-brain/tier0/governance/phase-enforcement-map.yaml
-  📄 cortex-brain/tier0/governance/ac-validation-checklist.yaml
+  📄 cortex_brain/tier0/governance/core-rules.yaml (29 rules)
+  📄 cortex_brain/tier0/governance/phase-enforcement-map.yaml
+  📄 cortex_brain/tier0/governance/ac-validation-checklist.yaml
 
 Issue Details:
   📄 .github/roadmap/issues/issue-report-01.yaml (ISSUE-001)

@@ -43,14 +43,14 @@
 **AC-ID:** AC-FIX-001-04
 
 **Finding:**
-- Test fixture looked for DB at `cortex-brain/state/governance.db`
+- Test fixture looked for DB at `cortex_brain/state/governance.db`
 - Actual DB location is `cortex/core/state/governance.db`
 - File: `tests/integration/test_audit_trail_integrity.py:39`
 
 **Fix Applied:**
 ```python
 # Changed from:
-db_path = Path(__file__).parent.parent.parent / "cortex-brain" / "state" / "governance.db"
+db_path = Path(__file__).parent.parent.parent / "cortex_brain" / "state" / "governance.db"
 
 # To:
 db_path = Path(__file__).parent.parent.parent / "cortex" / "core" / "state" / "governance.db"

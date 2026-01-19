@@ -80,12 +80,12 @@ Command-line interface supporting:
 
 ### ✅ Infrastructure Setup
 **Directories**: 
-- `cortex-brain/vacuum/` - Analysis output location
-- `cortex-brain/snapshots/` - Rollback snapshots
+- `cortex_brain/vacuum/` - Analysis output location
+- `cortex_brain/snapshots/` - Rollback snapshots
 
 **Files**:
-- `cortex-brain/vacuum/config.yaml` - Classification and naming rules
-- `cortex-brain/vacuum/README.md` - Technical documentation
+- `cortex_brain/vacuum/config.yaml` - Classification and naming rules
+- `cortex_brain/vacuum/README.md` - Technical documentation
 
 ---
 
@@ -110,21 +110,21 @@ The analyzer was tested and successfully:
 
 ### Phase 1: Analysis (Non-Destructive)
 ```bash
-python scripts/run-cortex-vacuum.py analyze --output-dir cortex-brain/vacuum/
+python scripts/run-cortex-vacuum.py analyze --output-dir cortex_brain/vacuum/
 ```
 ✅ Generates plans without modifying anything
 
 ### Phase 2: Review
 ```bash
-cat cortex-brain/vacuum/analysis-report.json  # Review findings
-cat cortex-brain/vacuum/migration-plan.json   # Review changes
+cat cortex_brain/vacuum/analysis-report.json  # Review findings
+cat cortex_brain/vacuum/migration-plan.json   # Review changes
 ```
 ✅ Examine proposed changes, edit config if needed
 
 ### Phase 3: Dry Run
 ```bash
 python scripts/run-cortex-vacuum.py execute \
-  --plan cortex-brain/vacuum/migration-plan.json \
+  --plan cortex_brain/vacuum/migration-plan.json \
   --dry-run
 ```
 ✅ See exactly what will happen before committing
@@ -132,7 +132,7 @@ python scripts/run-cortex-vacuum.py execute \
 ### Phase 4: Execute
 ```bash
 python scripts/run-cortex-vacuum.py execute \
-  --plan cortex-brain/vacuum/migration-plan.json \
+  --plan cortex_brain/vacuum/migration-plan.json \
   --auto-approve
 ```
 ✅ Apply changes with automatic reference updates
@@ -164,7 +164,7 @@ python scripts/run-cortex-vacuum.py verify
 CORTEX/
 ├── cortex-vacuum.prompt.md                    ← Specification
 ├── CORTEX-VACUUM-QUICKSTART.md               ← Quick start guide
-├── cortex-brain/
+├── cortex_brain/
 │   ├── vacuum/
 │   │   ├── README.md                         ← Technical docs
 │   │   ├── config.yaml                       ← Classification rules
@@ -245,7 +245,7 @@ CORTEX/
 
 ## 📝 Configuration
 
-Edit `cortex-brain/vacuum/config.yaml` to customize:
+Edit `cortex_brain/vacuum/config.yaml` to customize:
 - File classification rules
 - Naming convention enforcement
 - Files to delete
@@ -300,8 +300,8 @@ registry.register_tool(register_vacuum_tools)
 |----------|---------|
 | `cortex-vacuum.prompt.md` | Complete specification and rules |
 | `CORTEX-VACUUM-QUICKSTART.md` | 5-minute getting started guide |
-| `cortex-brain/vacuum/README.md` | Technical implementation guide |
-| `cortex-brain/vacuum/config.yaml` | Configuration rules and settings |
+| `cortex_brain/vacuum/README.md` | Technical implementation guide |
+| `cortex_brain/vacuum/config.yaml` | Configuration rules and settings |
 | Tool source code | `src/mcp/tools/*.py` |
 
 ---

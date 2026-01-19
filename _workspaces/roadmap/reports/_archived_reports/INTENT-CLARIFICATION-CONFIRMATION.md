@@ -50,7 +50,7 @@ STAGE 2: INTENT ROUTING (Based on approved YAML)
 
 # STAGE 3 - KNOWLEDGE INTEGRATION
 STAGE 3: KNOWLEDGE INTEGRATION (Parallel with Stage 2)
-├─ Load company domain specifications from cortex-brain/
+├─ Load company domain specifications from cortex_brain/
 ├─ Load CORTEX rules from tier0/governance/
 └─ COMPANY OVERRIDES CORTEX (intelligent merge)
 ```
@@ -599,8 +599,8 @@ Route selected: TDDOrchestrator
 
 STAGE 3: KNOWLEDGE INTEGRATION
 Loading:
-├─ cortex-brain/tier0/governance/ (TIER 0 rules)
-├─ cortex-brain/tier1/company-standards/ (company context)
+├─ cortex_brain/tier0/governance/ (TIER 0 rules)
+├─ cortex_brain/tier1/company-standards/ (company context)
 └─ Merging into comprehension context
 
 STAGE 4: EXECUTION

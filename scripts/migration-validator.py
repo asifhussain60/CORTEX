@@ -49,7 +49,7 @@ class MigrationValidator:
             ("src/cortex_brain/ exists", self._check_src_cortex_brain_exists),
             ("cortex/ removed", self._check_old_cortex_removed),
             ("cortex_brain/ removed", self._check_old_cortex_brain_removed),
-            ("cortex-brain/ removed", self._check_old_cortex_brain_deprecated_removed),
+            ("cortex_brain/ removed", self._check_old_cortex_brain_deprecated_removed),
             ("No duplicate files", self._check_no_duplicates),
             ("Directory structure intact", self._check_directory_structure),
         ]
@@ -115,11 +115,11 @@ class MigrationValidator:
         return removed
     
     def _check_old_cortex_brain_deprecated_removed(self) -> bool:
-        """Check that deprecated cortex-brain/ is removed."""
-        old_deprecated = self.repo_root / "cortex-brain"
+        """Check that deprecated cortex_brain/ is removed."""
+        old_deprecated = self.repo_root / "cortex_brain"
         removed = not old_deprecated.exists()
         if not removed:
-            self.issues.append(f"Deprecated cortex-brain/ folder still exists at {old_deprecated}")
+            self.issues.append(f"Deprecated cortex_brain/ folder still exists at {old_deprecated}")
         return removed
     
     def _check_no_duplicates(self) -> bool:

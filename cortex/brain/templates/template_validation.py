@@ -49,7 +49,7 @@ class TemplateContentValidator:
             template_base_path: Base path for templates
         """
         if template_base_path is None:
-            self.template_base_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier2"
+            self.template_base_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier2"
         else:
             self.template_base_path = Path(template_base_path)
         

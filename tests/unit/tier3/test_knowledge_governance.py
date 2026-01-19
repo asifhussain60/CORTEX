@@ -51,13 +51,13 @@ class TestGovernanceRuleDefinition:
     
     def test_governance_rules_file_exists(self, governance_manager):
         """Verify governance rules file exists."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
         rules_file = tier3_path / "governance-rules.yaml"
         assert rules_file.exists(), "Governance rules file not found"
     
     def test_governance_rules_contain_required_sections(self, governance_manager):
         """Verify governance rules file contains required sections."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
         rules_file = tier3_path / "governance-rules.yaml"
         
         import yaml
@@ -71,7 +71,7 @@ class TestGovernanceRuleDefinition:
     
     def test_governance_rules_define_16_domains(self, governance_manager):
         """Verify rules defined for all 16 domains."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
         rules_file = tier3_path / "governance-rules.yaml"
         
         import yaml
@@ -98,7 +98,7 @@ class TestGovernanceRuleDefinition:
     
     def test_governance_rule_structure_valid(self, governance_manager):
         """Verify each rule has valid structure."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
         rules_file = tier3_path / "governance-rules.yaml"
         
         import yaml
@@ -118,7 +118,7 @@ class TestGovernanceRuleDefinition:
     
     def test_governance_rules_have_descriptions(self, governance_manager):
         """Verify all rules have meaningful descriptions."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
         rules_file = tier3_path / "governance-rules.yaml"
         
         import yaml
@@ -289,7 +289,7 @@ class TestGovernanceIntegration:
     
     def test_governance_manager_integrates_with_governance_db(self, governance_manager):
         """Verify integration with governance.db."""
-        governance_db = Path(__file__).parent.parent.parent / "cortex-brain" / "state" / "governance.db"
+        governance_db = Path(__file__).parent.parent.parent / "cortex_brain" / "state" / "governance.db"
         assert governance_db.exists(), "governance.db not found"
     
     def test_governance_manager_can_record_to_db(self, governance_manager):
@@ -310,7 +310,7 @@ class TestGovernanceIntegration:
     
     def test_governance_rules_reference_ac_id(self, governance_manager):
         """Verify governance rules reference KN-003-01."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
         rules_file = tier3_path / "governance-rules.yaml"
         
         import yaml
@@ -394,7 +394,7 @@ class TestGovernanceRuleTypes:
     
     def test_governance_has_required_field_rules(self, governance_manager):
         """Verify governance includes required field rules."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
         rules_file = tier3_path / "governance-rules.yaml"
         
         import yaml
@@ -406,7 +406,7 @@ class TestGovernanceRuleTypes:
     
     def test_governance_has_validation_rules(self, governance_manager):
         """Verify governance includes validation rules."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
         rules_file = tier3_path / "governance-rules.yaml"
         
         import yaml
@@ -418,7 +418,7 @@ class TestGovernanceRuleTypes:
     
     def test_governance_has_constraint_rules(self, governance_manager):
         """Verify governance includes constraint rules."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
         rules_file = tier3_path / "governance-rules.yaml"
         
         import yaml
@@ -434,7 +434,7 @@ class TestGovernanceRuleSeverity:
     
     def test_rules_have_critical_severity(self, governance_manager):
         """Verify some rules are marked as critical."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
         rules_file = tier3_path / "governance-rules.yaml"
         
         import yaml

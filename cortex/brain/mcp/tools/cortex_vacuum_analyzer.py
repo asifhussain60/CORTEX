@@ -419,7 +419,7 @@ class CortexVacuumAnalyzer:
         if ext in {'.json', '.yaml', '.yml'} and str(Path(file_path).parent) == '.':
             # Check content
             if 'rollback' in filename.lower():
-                return 'cortex-brain/audit-logs', 'Rollback history'
+                return 'cortex_brain/audit-logs', 'Rollback history'
             return 'config', 'Configuration file'
 
         # Default: keep in current location

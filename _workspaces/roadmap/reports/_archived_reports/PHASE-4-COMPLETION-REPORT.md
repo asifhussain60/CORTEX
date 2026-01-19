@@ -238,7 +238,7 @@ All Phase 4 execution used these proven safeguards:
 
 ```python
 # 1. Clear lock files before operations
-rm -f cortex-brain/state/governance.db-*
+rm -f cortex_brain/state/governance.db-*
 
 # 2. Use timeout connections
 conn = sqlite3.connect('...governance.db', timeout=10.0)
@@ -282,7 +282,7 @@ Framework continues using test-generated AC format (e.g., `AR-001-01`) without A
 
 ```
 Core Changes:
-✓ cortex-brain/state/governance.db (3,141 entries)
+✓ cortex_brain/state/governance.db (3,141 entries)
 ✓ tests/unit/test_brittleness_fixes.py (13 markers)
 
 Documentation:
@@ -301,7 +301,7 @@ Run these commands to verify Phase 4 completion:
 
 ```bash
 # 1. Verify database state
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT COUNT(*) FROM audit_log; SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation = 'AC_COMPLETE';"
 
 # 2. Check git log

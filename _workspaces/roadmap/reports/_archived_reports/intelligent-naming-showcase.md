@@ -297,7 +297,7 @@ Max used: 25 chars (limit)
 ### ✅ Ready for Execution
 ```bash
 python3 scripts/run-cortex-vacuum.py execute \
-  --plan cortex-brain/vacuum/migration-plan.json \
+  --plan cortex_brain/vacuum/migration-plan.json \
   --auto-approve
 ```
 

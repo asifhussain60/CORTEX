@@ -207,8 +207,8 @@ class TestFileStructureIntegrity:
         assert len(py_files) >= 250, f"Expected 250+ Python files, found {len(py_files)}"
 
     def test_no_py_files_in_old_locations(self):
-        """No .py files should remain in old cortex-brain/ or src/."""
-        cortex_brain = Path(__file__).parent.parent / "cortex-brain"
+        """No .py files should remain in old cortex_brain/ or src/."""
+        cortex_brain = Path(__file__).parent.parent / "cortex_brain"
         src = Path(__file__).parent.parent / "src"
 
         old_py_files = []

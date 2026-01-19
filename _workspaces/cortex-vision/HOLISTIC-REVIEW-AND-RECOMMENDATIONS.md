@@ -203,7 +203,7 @@ AC-KN-QUALITY-001: Knowledge Quality Scoring Framework
     - src/knowledge/quality_assurance.py
     - src/knowledge/confidence_scorer.py
     - tests/knowledge/test_quality_framework.py
-    - cortex-brain/tier3/quality-standards.yaml
+    - cortex_brain/tier3/quality-standards.yaml
 ```
 
 ---
@@ -304,7 +304,7 @@ AC-ODX-DEBUG-002: Chaos Testing Scenarios
 **Deliverables:**
 - Quality Scoring Framework (src/knowledge/quality_assurance.py)
 - Confidence Scorer (src/knowledge/confidence_scorer.py)
-- Quality Standards (cortex-brain/tier3/quality-standards.yaml)
+- Quality Standards (cortex_brain/tier3/quality-standards.yaml)
 - Human Verification Workflow (src/knowledge/verification_workflow.py)
 - Documentation (docs/knowledge-quality-standards.md)
 

@@ -49,10 +49,10 @@ Enhanced `cortex-review.prompt.md` based on comprehensive analysis of chat01.md 
 **What Changed**:
 ```bash
 # OLD: Just export existing audit data
-sqlite3 cortex-brain/state/governance.db ".dump audit_log" > snapshot.sql
+sqlite3 cortex_brain/state/governance.db ".dump audit_log" > snapshot.sql
 
 # NEW: Delete and regenerate ALL audit data first
-sqlite3 cortex-brain/state/governance.db "DELETE FROM audit_log; VACUUM;"
+sqlite3 cortex_brain/state/governance.db "DELETE FROM audit_log; VACUUM;"
 python -m pytest tests/ -m "ac" --ignore=tests/integration/test_audit_trail_integrity.py
 python -m pytest tests/integration/test_audit_trail_integrity.py::test_hash_chain_integrity -v
 ```
@@ -98,7 +98,7 @@ with open('.github/prompts/some-guide.md') as f:
     orchestrator.execute(instructions)
 
 # ✅ RIGHT - Orchestrator reading YAML schema
-with open('cortex-brain/tier2/execution-plan.yaml') as f:
+with open('cortex_brain/tier2/execution-plan.yaml') as f:
     plan = yaml.safe_load(f)
     orchestrator.execute(plan)
 ```
@@ -210,7 +210,7 @@ Turn 2: User → Master → Planning (with context C1 + D1) → Master (returns 
 ```bash
 # Check locked phases have audit proof
 for phase in $(grep -l "locked: true" .github/roadmap/phases/*.yaml); do
-  count=$(sqlite3 cortex-brain/state/governance.db "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE...")
+  count=$(sqlite3 cortex_brain/state/governance.db "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE...")
   echo "$phase: $count ACs with audit trail"
 done
 

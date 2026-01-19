@@ -30,7 +30,7 @@ Based on the analysis of `chat01.md` issues and comprehensive review of the CORT
 **What the AC specifies:**
 ```yaml
 AC-AR-009-01:
-  description: Response templates loaded from cortex-brain/tier2/
+  description: Response templates loaded from cortex_brain/tier2/
 AC-AR-009-02:
   description: Templates support variable substitution
 AC-AR-009-03:
@@ -41,7 +41,7 @@ AC-AR-009-03:
 - ✅ `src/core/template_engine.py` - Implemented (345 lines)
 - ✅ `src/core/response_template_engine.py` - Implemented (600+ lines)
 - ✅ Tests passing in `tests/unit/test_response_templates.py` (901 lines)
-- ❌ **MISSING: No actual templates in `cortex-brain/tier2/response-templates/`**
+- ❌ **MISSING: No actual templates in `cortex_brain/tier2/response-templates/`**
 
 **Gap Analysis:**
 | Requirement | Implementation | Content | Status |
@@ -54,7 +54,7 @@ AC-AR-009-03:
 
 **Missing Deliverables (should have been in AC scope):**
 ```
-cortex-brain/tier2/
+cortex_brain/tier2/
 ├── base/
 │   ├── success-response.yaml
 │   ├── error-response.yaml
@@ -96,14 +96,14 @@ The AC tested the *mechanism* (inheritance works) but not the *deliverables* (te
 ```yaml
 title: "Tier 2: Response Templates with Inheritance"
 files_to_create:
-  - "cortex-brain/tier2/base/*.yaml"
-  - "cortex-brain/tier2/domains/tdd/*.yaml"
-  - "cortex-brain/tier2/domains/planning/*.yaml"
+  - "cortex_brain/tier2/base/*.yaml"
+  - "cortex_brain/tier2/domains/tdd/*.yaml"
+  - "cortex_brain/tier2/domains/planning/*.yaml"
 ```
 
 **Current State:**
 ```
-cortex-brain/tier2/response-templates/
+cortex_brain/tier2/response-templates/
 └── .gitkeep  ← ONLY THIS EXISTS
 ```
 
@@ -119,7 +119,7 @@ cortex-brain/tier2/response-templates/
 1. Section: "Response Header Integration"
 2. Section: "Tier 2 Template Usage"
 3. Section: "Copyright Notice Requirements"
-4. Reference to: `cortex-brain/tier0/response-headers.yaml`
+4. Reference to: `cortex_brain/tier0/response-headers.yaml`
 
 **Why it's missing from roadmap:**
 - No AC-ID covers "Update CORTEX.prompt.md with new features"
@@ -201,15 +201,15 @@ notes: |
 **What roadmap specifies:**
 ```yaml
 files_to_create:
-  - "cortex-brain/tier2/base/success-response.yaml"
-  - "cortex-brain/tier2/base/error-response.yaml"
-  - "cortex-brain/tier2/domains/tdd/test-result.yaml"
-  - "cortex-brain/tier2/domains/planning/plan-analysis.yaml"
+  - "cortex_brain/tier2/base/success-response.yaml"
+  - "cortex_brain/tier2/base/error-response.yaml"
+  - "cortex_brain/tier2/domains/tdd/test-result.yaml"
+  - "cortex_brain/tier2/domains/planning/plan-analysis.yaml"
 ```
 
 **What exists:**
 ```
-cortex-brain/tier2/
+cortex_brain/tier2/
 ├── README.md           # 1 line: "# Tier 2 - Engineering Standards"
 └── response-templates/
     └── .gitkeep        # ONLY PLACEHOLDER
@@ -271,7 +271,7 @@ PHASE-06-ECOSYSTEM:
 
 **Current State:**
 ```
-cortex-brain/tier3/
+cortex_brain/tier3/
 ├── .gitkeep            # Exists but...
 └── [knowledge files]   # Do any exist?
 ```
@@ -290,7 +290,7 @@ The `BrainPopulator` component was specified to populate brain tiers. If the com
 
 ### GAP-9: Response Header Config Not in Prompts
 
-**File:** `cortex-brain/tier0/response-headers.yaml` (195 lines, fully configured)
+**File:** `cortex_brain/tier0/response-headers.yaml` (195 lines, fully configured)
 
 **Referenced in prompts:** ❌ ZERO mentions
 
@@ -356,8 +356,8 @@ Missing validation:
 ```yaml
 test: "test_templates_exist"  # Tests deliverables
 validation:
-  - file_exists: "cortex-brain/tier2/base/success-response.yaml"
-  - file_exists: "cortex-brain/tier2/domains/governance/*.yaml"
+  - file_exists: "cortex_brain/tier2/base/success-response.yaml"
+  - file_exists: "cortex_brain/tier2/domains/governance/*.yaml"
 ```
 
 ### Issue 3: `files_to_create` Not Enforced
@@ -365,7 +365,7 @@ validation:
 The roadmap YAML contains `files_to_create` lists that are informational, not enforced:
 ```yaml
 files_to_create:
-  - "cortex-brain/tier2/base/*.yaml"  # NEVER CREATED
+  - "cortex_brain/tier2/base/*.yaml"  # NEVER CREATED
 ```
 
 Should be:
@@ -373,7 +373,7 @@ Should be:
 files_to_create:
   enforce: true  # Phase cannot lock if files missing
   paths:
-    - "cortex-brain/tier2/base/*.yaml"
+    - "cortex_brain/tier2/base/*.yaml"
 ```
 
 ---
@@ -408,7 +408,7 @@ files_to_create:
 ### Must Create (Tier 2 Templates)
 
 ```
-cortex-brain/tier2/
+cortex_brain/tier2/
 ├── base/
 │   ├── success-response.yaml
 │   ├── error-response.yaml

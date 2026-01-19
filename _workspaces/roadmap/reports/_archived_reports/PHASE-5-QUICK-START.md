@@ -16,7 +16,7 @@ cd /Users/asifhussain/PROJECTS/CORTEX
 git log --oneline -1  # Should show: "Phase 4 Complete..."
 
 # Check database state
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT COUNT(*) FROM audit_log; SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation='AC_COMPLETE';"
 
 # Should output:
@@ -101,7 +101,7 @@ Expected: +150-200 new entries, 54 new ACs
 
 **Step 5: Final Verification**
 ```bash
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation='AC_COMPLETE';"
 # Should show: 137
 ```
@@ -124,7 +124,7 @@ print("=" * 100)
 
 # Clear locks
 import glob, os
-for lf in glob.glob('/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db-*'):
+for lf in glob.glob('/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db-*'):
     try:
         os.remove(lf)
     except:
@@ -135,7 +135,7 @@ project_root = "/Users/asifhussain/PROJECTS/CORTEX"
 
 # Get baseline
 conn = sqlite3.connect(
-    '/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db',
+    '/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db',
     timeout=10.0
 )
 cursor = conn.cursor()
@@ -162,7 +162,7 @@ time.sleep(2)
 
 # Check final results
 conn = sqlite3.connect(
-    '/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db',
+    '/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db',
     timeout=10.0
 )
 cursor = conn.cursor()
@@ -230,10 +230,10 @@ git push origin CORTEX6
 
 ```bash
 # Create backup
-cp cortex-brain/state/governance.db cortex-brain/state/governance.db.phase4-backup
+cp cortex_brain/state/governance.db cortex_brain/state/governance.db.phase4-backup
 
 # Clear any lock files
-rm -f cortex-brain/state/governance.db-*
+rm -f cortex_brain/state/governance.db-*
 ```
 
 ### Expected Database Growth
@@ -272,9 +272,9 @@ Final Growth: +150-300 entries
 
 ```bash
 # Clear locks and retry
-rm -f cortex-brain/state/governance.db-*
-rm -f cortex-brain/state/governance.db-wal
-rm -f cortex-brain/state/governance.db-shm
+rm -f cortex_brain/state/governance.db-*
+rm -f cortex_brain/state/governance.db-wal
+rm -f cortex_brain/state/governance.db-shm
 
 # Run tests with verbose output
 pytest tests/unit/test_phase5_targeted_markers.py -v
@@ -284,20 +284,20 @@ pytest tests/unit/test_phase5_targeted_markers.py -v
 
 ```bash
 # Check locks
-ls -la cortex-brain/state/governance.db*
+ls -la cortex_brain/state/governance.db*
 
 # Kill stuck processes (if any)
-lsof cortex-brain/state/governance.db
+lsof cortex_brain/state/governance.db
 
 # Clear and retry
-rm -f cortex-brain/state/governance.db-*
+rm -f cortex_brain/state/governance.db-*
 ```
 
 ### If Coverage Doesn't Reach 100%
 
 1. Verify all 54 ACs have `@pytest.mark.ac()` decorators
 2. Run tests individually: `pytest tests/unit/test_phase5_targeted_markers.py::TestAR_001_Markers -v`
-3. Check database for entries: `sqlite3 cortex-brain/state/governance.db "SELECT DISTINCT ac_id FROM audit_log WHERE operation='AC_COMPLETE' ORDER BY ac_id;"`
+3. Check database for entries: `sqlite3 cortex_brain/state/governance.db "SELECT DISTINCT ac_id FROM audit_log WHERE operation='AC_COMPLETE' ORDER BY ac_id;"`
 4. Compare against expected list of 137 ACs
 
 ---
@@ -309,7 +309,7 @@ rm -f cortex-brain/state/governance.db-*
 - `/Users/asifhussain/PROJECTS/CORTEX/docs/PHASE-4-CONTINUATION-PROMPT.md`
 
 **Database:**
-- `/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db`
+- `/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db`
 
 **Git Branch:**
 - `origin/CORTEX6` (current branch)

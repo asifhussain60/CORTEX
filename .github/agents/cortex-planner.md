@@ -144,9 +144,9 @@ Analyzes progress and plans next steps for CORTEX with **governance compliance t
 
 1. Read `phase_tracker` in `_workspaces/roadmap/cortex-master.yaml` (ONLY source)- `/progress` - Show completion status + governance compliance report (terminal only)- `/analyze-modify <change>` - Analyze impact on governance compliance
 
-2. Load governance rules from `cortex-brain/tier0/governance/phase-enforcement-map.yaml`
+2. Load governance rules from `cortex_brain/tier0/governance/phase-enforcement-map.yaml`
 
-3. Query audit logs from `cortex-brain/state/governance.db` for compliance status- `/next` - Recommend next AC-ID with governance checks- `/dependencies <ac-id>` - Show dependency graph + rule impacts
+3. Query audit logs from `cortex_brain/state/governance.db` for compliance status- `/next` - Recommend next AC-ID with governance checks- `/dependencies <ac-id>` - Show dependency graph + rule impacts
 
 4. Identify current phase (first unlocked with predecessor locked)
 

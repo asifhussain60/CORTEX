@@ -72,17 +72,17 @@ class TestResolvePath:
         """Should resolve single path component."""
         from src.core.path_resolver import resolve_path
         
-        result = resolve_path("cortex-brain")
+        result = resolve_path("cortex_brain")
         
-        assert result == mock_project_root / "cortex-brain"
+        assert result == mock_project_root / "cortex_brain"
     
     def test_resolves_multiple_parts(self, mock_project_root):
         """Should resolve multiple path components."""
         from src.core.path_resolver import resolve_path
         
-        result = resolve_path("cortex-brain", "tier0", "governance")
+        result = resolve_path("cortex_brain", "tier0", "governance")
         
-        assert result == mock_project_root / "cortex-brain" / "tier0" / "governance"
+        assert result == mock_project_root / "cortex_brain" / "tier0" / "governance"
 
 
 class TestTierPath:
@@ -95,7 +95,7 @@ class TestTierPath:
         
         result = tier_path(tier)
         
-        assert result == mock_project_root / "cortex-brain" / f"tier{tier}"
+        assert result == mock_project_root / "cortex_brain" / f"tier{tier}"
     
     @pytest.mark.parametrize("invalid_tier", [-1, 4, 5, 100])
     def test_invalid_tiers_raise_error(self, mock_project_root, invalid_tier):

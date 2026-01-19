@@ -13,9 +13,9 @@ Phase Information:
   ☐ Verify PHASE-16 locked: true ✓
 
 Governance Compliance:
-  ☐ Load cortex-brain/tier0/governance/core-rules.yaml (29 immutable rules)
-  ☐ Load cortex-brain/tier0/governance/phase-enforcement-map.yaml
-  ☐ Load cortex-brain/tier0/governance/ac-validation-checklist.yaml
+  ☐ Load cortex_brain/tier0/governance/core-rules.yaml (29 immutable rules)
+  ☐ Load cortex_brain/tier0/governance/phase-enforcement-map.yaml
+  ☐ Load cortex_brain/tier0/governance/ac-validation-checklist.yaml
   ☐ Verify enforcement_mode: STRICT ✓
 
 Git Repository:

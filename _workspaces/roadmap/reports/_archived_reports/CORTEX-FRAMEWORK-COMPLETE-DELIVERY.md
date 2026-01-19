@@ -132,7 +132,7 @@ Phase 5: 2,766 → 2,877 entries   (1.0x)
 ✅ `docs/PHASE-5-QUICK-START.md` — Phase 5 guide  
 
 ### Database
-✅ `cortex-brain/state/governance.db` — 2,877 audit entries, verified integrity  
+✅ `cortex_brain/state/governance.db` — 2,877 audit entries, verified integrity  
 ✅ Backups created at multiple checkpoints  
 
 ### Git
@@ -267,7 +267,7 @@ To verify complete delivery in any session:
 git log --oneline -5              # Should show Phase 5 complete
 
 # 2. Verify database
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT COUNT(*) FROM audit_log; \
    SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation='AC_COMPLETE';"
 # Should show: 2877, 120
@@ -397,23 +397,23 @@ git clone https://github.com/asifhussain60/CORTEX.git
 cd CORTEX
 git checkout CORTEX6
 # Verify: 120 ACs with completion entries
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation='AC_COMPLETE';"
 ```
 
 ### Database Query Examples
 ```bash
 # All ACs
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT DISTINCT ac_id FROM audit_log WHERE operation='AC_COMPLETE' ORDER BY ac_id;"
 
 # Coverage by domain
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT SUBSTR(ac_id,1,2) as domain, COUNT(DISTINCT ac_id) FROM audit_log \
    WHERE operation='AC_COMPLETE' GROUP BY domain ORDER BY domain;"
 
 # Top ACs by entry count
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT ac_id, COUNT(*) as entries FROM audit_log WHERE operation='AC_COMPLETE' \
    GROUP BY ac_id ORDER BY entries DESC LIMIT 10;"
 ```

@@ -20,8 +20,8 @@ from src.core.brain_populator import (
 
 @pytest.fixture
 def cortex_brain_path():
-    """Get path to cortex-brain folder"""
-    return str(Path(__file__).parent.parent.parent / "cortex-brain")
+    """Get path to cortex_brain folder"""
+    return str(Path(__file__).parent.parent.parent / "cortex_brain")
 
 
 @pytest.fixture

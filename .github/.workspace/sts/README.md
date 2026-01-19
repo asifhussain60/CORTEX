@@ -156,7 +156,7 @@ ls -la docs/showcase/ 2>/dev/null || echo "Showcase pages coming in Phase 2"
 
 From CORTEX-4.0 branch (reference):
 ```
-cortex-brain/
+cortex_brain/
 ├── documents/archive/
 │   ├── sts-phase1-complete-20251229.md
 │   ├── sts-phase2-complete-20251229.md

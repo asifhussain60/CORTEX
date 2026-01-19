@@ -177,7 +177,7 @@ Changed from truncating 20-char limit to **25-character maximum** with intellige
 ### Ready for Execution
 ```bash
 python3 scripts/run-cortex-vacuum.py execute \
-  --plan cortex-brain/vacuum/migration-plan.json \
+  --plan cortex_brain/vacuum/migration-plan.json \
   --auto-approve
 ```
 
@@ -327,7 +327,7 @@ Output: Meaningful filename ≤25 chars with preserved semantics
 ### Execute With:
 ```bash
 python3 scripts/run-cortex-vacuum.py execute \
-  --plan cortex-brain/vacuum/migration-plan.json \
+  --plan cortex_brain/vacuum/migration-plan.json \
   --auto-approve
 ```
 

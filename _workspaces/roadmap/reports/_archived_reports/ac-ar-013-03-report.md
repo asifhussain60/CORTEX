@@ -28,7 +28,7 @@ Full Test Suite:        189/189 PASSED ✅
 ## Deliverables
 
 ### 1. Response Templates YAML
-**File:** `cortex-brain/tier2/response-templates/response-templates.yaml` (1,100+ lines)
+**File:** `cortex_brain/tier2/response-templates/response-templates.yaml` (1,100+ lines)
 
 **Structure:**
 ```yaml
@@ -302,7 +302,7 @@ template = template_engine.render(
 class BrainPopulator:
     def populate_tier2_response_templates(self):
         engine = ResponseTemplatePopulator.populate_from_file(
-            "/cortex-brain/tier2/response-templates/response-templates.yaml"
+            "/cortex_brain/tier2/response-templates/response-templates.yaml"
         )
         return engine
 ```
@@ -532,7 +532,7 @@ Trend: Acceleration due to:
 Commit: 5f432ce70
 Message: AC-AR-013-03: Tier 2 Response Templates with Inheritance (34 tests, 189 total)
 Files: 3 created, 2,622 lines added
-  - cortex-brain/tier2/response-templates/response-templates.yaml (1,100 lines)
+  - cortex_brain/tier2/response-templates/response-templates.yaml (1,100 lines)
   - src/core/response_template_engine.py (620 lines)
   - tests/unit/test_response_templates.py (650 lines)
 

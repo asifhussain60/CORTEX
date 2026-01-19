@@ -816,7 +816,7 @@ class TestRealYAMLLoading:
     def test_load_actual_yaml_file(self):
         """Test loading the actual response-templates.yaml file."""
         from src.core.path_resolver import resolve_path
-        yaml_path = resolve_path("cortex-brain", "tier2", "response-templates", "response-templates.yaml")
+        yaml_path = resolve_path("cortex_brain", "tier2", "response-templates", "response-templates.yaml")
         
         if not yaml_path.exists():
             pytest.skip("response-templates.yaml not found in expected location")
@@ -838,7 +838,7 @@ class TestRealYAMLLoading:
     def test_load_and_render_tdd_templates(self):
         """Test loading and rendering TDD templates."""
         from src.core.path_resolver import resolve_path
-        yaml_path = resolve_path("cortex-brain", "tier2", "response-templates", "response-templates.yaml")
+        yaml_path = resolve_path("cortex_brain", "tier2", "response-templates", "response-templates.yaml")
         
         if not yaml_path.exists():
             pytest.skip("response-templates.yaml not found")
@@ -870,7 +870,7 @@ class TestRealYAMLLoading:
     def test_load_and_render_planning_templates(self):
         """Test loading and rendering Planning templates."""
         from src.core.path_resolver import resolve_path
-        yaml_path = resolve_path("cortex-brain", "tier2", "response-templates", "response-templates.yaml")
+        yaml_path = resolve_path("cortex_brain", "tier2", "response-templates", "response-templates.yaml")
         
         if not yaml_path.exists():
             pytest.skip("response-templates.yaml not found")

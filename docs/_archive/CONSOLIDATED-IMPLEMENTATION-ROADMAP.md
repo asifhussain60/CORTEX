@@ -506,7 +506,7 @@ grep "status: COMPLETED" _workspaces/roadmap/cortex-master.yaml | wc -l
 | Phase Specs | Single source of truth | `cortex-master.yaml` → `phases:` section |
 | Builder Prompt | Implementation workflow | `.github/prompts/cortex-builder.prompt.md` |
 | Validator | Sync prevention | `scripts/validate_phase_sync.py` |
-| Governance | Quality rules | `cortex-brain/tier0/governance/core-rules.yaml` |
+| Governance | Quality rules | `cortex_brain/tier0/governance/core-rules.yaml` |
 | Detailed Plan | Full breakdown | `IMPLEMENTATION-PLAN-PHASES-03-05-AND-BEYOND.md` |
 | Quick Start | Day-by-day guide | `QUICK-START-PHASE-03.md` |
 

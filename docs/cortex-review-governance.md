@@ -92,7 +92,7 @@ ORDER BY ac_id, id;
 grep -rn "/Users/\|/home/\|C:\\\\Users" --include="*.py" src/ tests/
 
 # Find hardcoded paths in YAML
-grep -rn "/Users/\|/home/\|C:\\\\Users" --include="*.yaml" cortex-brain/ .github/
+grep -rn "/Users/\|/home/\|C:\\\\Users" --include="*.yaml" cortex_brain/ .github/
 
 # Verify path_resolver usage
 grep -rn "get_project_root\|Path(__file__)" --include="*.py" src/ | head -20
@@ -161,10 +161,10 @@ git log --oneline -50 | grep -E "checkpoint:|phase-[0-9]+-\w+"
 
 ```bash
 # Find files violating kebab-case (contains underscore in non-Python)
-find cortex-brain/ .github/ -type f -name "*_*" ! -name "*.py" ! -name "__*" | head -20
+find cortex_brain/ .github/ -type f -name "*_*" ! -name "*.py" ! -name "__*" | head -20
 
 # Find files exceeding 25 chars (excluding path)
-find src/ cortex-brain/ -type f -name "*.py" | while read f; do
+find src/ cortex_brain/ -type f -name "*.py" | while read f; do
   base=$(basename "$f")
   if [ ${#base} -gt 25 ]; then
     echo "$f (${#base} chars)"
@@ -193,7 +193,7 @@ with open('_workspaces/roadmap/cortex-master.yaml') as f:
 phase_tracker = master.get('phase_tracker', {})
 
 # Connect to audit DB
-db = sqlite3.connect('cortex-brain/state/governance.db')
+db = sqlite3.connect('cortex_brain/state/governance.db')
 cursor = db.cursor()
 
 for phase_id, phase_data in phase_tracker.items():
@@ -513,8 +513,8 @@ fi
 
 echo ""
 echo "CORE-027 (Audit Trail):"
-if [ -f "cortex-brain/state/governance.db" ]; then
-  incomplete=$(sqlite3 cortex-brain/state/governance.db "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE ac_id IS NOT NULL GROUP BY ac_id HAVING COUNT(*) < 3;" 2>/dev/null | wc -l)
+if [ -f "cortex_brain/state/governance.db" ]; then
+  incomplete=$(sqlite3 cortex_brain/state/governance.db "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE ac_id IS NOT NULL GROUP BY ac_id HAVING COUNT(*) < 3;" 2>/dev/null | wc -l)
   echo "  ACs with incomplete trail: $incomplete"
 else
   echo "  ⚠️ Database not found"

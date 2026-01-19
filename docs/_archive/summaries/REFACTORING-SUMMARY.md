@@ -79,7 +79,7 @@ All prompts now have:
 [ ] Creating docs_md/? → STOP - FORBIDDEN
 [ ] Multiple cortex-*.yaml? → STOP - Keep ONLY cortex-master.yaml
 [ ] Phase YAML? → MUST be _workspaces/roadmap/phases/phase-NN.yaml
-[ ] Python scripts? → Move to src/, cortex-brain/, or scripts/ (not root)
+[ ] Python scripts? → Move to src/, cortex_brain/, or scripts/ (not root)
 [ ] Reading YAML? → Use ONLY _workspaces/roadmap/cortex-master.yaml
 ```
 

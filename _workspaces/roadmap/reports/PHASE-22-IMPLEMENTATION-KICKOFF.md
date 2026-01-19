@@ -405,9 +405,9 @@ tests/
 
 - **MCP Specification:** https://spec.modelcontextprotocol.io/
 - **CORTEX Master File:** `_workspaces/roadmap/cortex-master.yaml` (SSOT for all phases)
-- **Governance Rules:** `cortex-brain/tier0/governance/core-rules.yaml`
+- **Governance Rules:** `cortex_brain/tier0/governance/core-rules.yaml`
 - **Test Infrastructure:** `tests/` directory
-- **Audit Trail:** `cortex-brain/state/governance.db`
+- **Audit Trail:** `cortex_brain/state/governance.db`
 
 ---
 

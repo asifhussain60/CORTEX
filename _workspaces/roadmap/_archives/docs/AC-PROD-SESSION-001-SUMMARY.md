@@ -210,7 +210,7 @@ Hash chain integrity: VERIFIED ✓
 
 ### Modified
 - ✅ `tests/integration/test_master_interaction_orchestration.py` (1 line)
-- ✅ `cortex-brain/state/governance.db` (audit entries)
+- ✅ `cortex_brain/state/governance.db` (audit entries)
 
 ### Git Commits
 1. `941128c91` - AC-PROD-001-01: Fix Path import + Create 5-week plan

@@ -41,19 +41,19 @@ Unlike generic coding assistants, you:
 ### Your Governance Foundation
 
 **TIER 0 RULES (Immutable - Always Active):**
-- **Loading Sequence:** See `cortex-brain/tier0/governance-loading-sequence.yaml` (SSOT for rule precedence)
-- Load from `cortex-brain/tier0/governance/core-rules.yaml` (29 SKULL rules)
+- **Loading Sequence:** See `cortex_brain/tier0/governance-loading-sequence.yaml` (SSOT for rule precedence)
+- Load from `cortex_brain/tier0/governance/core-rules.yaml` (29 SKULL rules)
 - Apply to ALL operations across ALL domains
 - No exceptions, no overrides, strictly enforced
 
 **DOMAIN RULES (Specific to your operation):**
-- Load from `cortex-brain/tier0/governance/interaction-rules.yaml` (for context building)
-- Load from `cortex-brain/tier0/governance/planning-rules.yaml` (for planning operations)
-- Load from `cortex-brain/tier0/governance/tdd-rules.yaml` (for code operations)
-- Load from `cortex-brain/tier0/governance/ado-rules.yaml` (for Azure DevOps operations)
+- Load from `cortex_brain/tier0/governance/interaction-rules.yaml` (for context building)
+- Load from `cortex_brain/tier0/governance/planning-rules.yaml` (for planning operations)
+- Load from `cortex_brain/tier0/governance/tdd-rules.yaml` (for code operations)
+- Load from `cortex_brain/tier0/governance/ado-rules.yaml` (for Azure DevOps operations)
 
 **LENS PROTOCOL OPERATIONALIZATION:**
-- See `cortex-brain/tier0/lens-protocol-implementation.yaml` (tool mappings + execution procedures)
+- See `cortex_brain/tier0/lens-protocol-implementation.yaml` (tool mappings + execution procedures)
 - Maps LENS steps (Language, Examination, Navigation, Synthesis) to concrete tools
 - Specifies confidence thresholds and error handling
 
@@ -95,7 +95,7 @@ USER REQUEST (Natural Language)
 |-------|------------|---------------|
 | **1. Comprehension** | Build complete understanding of intent + context | LENS protocol (AST, Git, Comments, Relationships) |
 | **2. Routing** | Decide WHERE to execute (planning, code, query, etc.) | Intent canonicalization + decision trees |
-| **3. Integration** | Merge governance + company context | Load cortex-brain/ + tier0/governance/ |
+| **3. Integration** | Merge governance + company context | Load cortex_brain/ + tier0/governance/ |
 | **4. Approval** | Present for user confirmation BEFORE execution | Comprehension YAML for review |
 
 ---
@@ -650,7 +650,7 @@ STAGE 3: APPROVE BEFORE EXECUTION
 
 1. **Load Tier 0 Rules** (IMMUTABLE)
    ```yaml
-   # From cortex-brain/tier0/governance/core-rules.yaml
+   # From cortex_brain/tier0/governance/core-rules.yaml
    CORE-008: Tests before implementation (RED → GREEN pattern)
    CORE-011: Type hints on all functions
    CORE-012: Docstrings on all public APIs (Google style)
@@ -748,7 +748,7 @@ def authenticate(request, callback):
 
 ### Configuration Source
 
-Response headers are configured in **`cortex-brain/tier0/response-headers.yaml`** (Tier 0 = immutable):
+Response headers are configured in **`cortex_brain/tier0/response-headers.yaml`** (Tier 0 = immutable):
 
 ```yaml
 # Key configuration values:
@@ -826,7 +826,7 @@ The response header system is implemented via:
 | `ResponseHeaderInjector` | `src/core/response_header_injector.py` | Injects headers into responses |
 | `HeaderConfigurationManager` | `src/core/response_header_config.py` | Loads config from YAML |
 | `ResponseTemplateEngine` | `src/core/response_template_engine.py` | Renders templates with variables |
-| Configuration | `cortex-brain/tier0/response-headers.yaml` | Single Source of Truth |
+| Configuration | `cortex_brain/tier0/response-headers.yaml` | Single Source of Truth |
 
 ### Orchestrator Integration
 
@@ -1010,8 +1010,8 @@ STAGE 4: KNOWLEDGE INTEGRATION & EXECUTION PLAN
 ═══════════════════════════════════════════════════════════════
 
 Now loading governance context...
-✓ Loaded cortex-brain/tier0/governance/core-rules.yaml
-✓ Loaded cortex-brain/tier0/governance/tdd-rules.yaml
+✓ Loaded cortex_brain/tier0/governance/core-rules.yaml
+✓ Loaded cortex_brain/tier0/governance/tdd-rules.yaml
 
 Merging company context...
 ✓ Email service: Use existing EmailService (async queue available)

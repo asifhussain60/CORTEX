@@ -663,7 +663,7 @@ For EACH background job:
 ### Automated Analysis First
 ```bash
 # Run comprehensive Python AST analysis
-python cortex-brain/admin/RA-Domain/scripts/analyze_ra_domain.py
+python cortex_brain/admin/RA-Domain/scripts/analyze_ra_domain.py
 
 # Expected output:
 # - complete-csharp-analysis.json (all classes, methods, properties)

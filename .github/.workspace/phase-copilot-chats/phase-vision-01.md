@@ -201,7 +201,7 @@ Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 -c "
 import sqlite3
 from pathlib import Path
 
-db_path = Path('cortex-brain/state/governance.db')
+db_path = Path('cortex_brain/state/governance.db')
 if db_path.exists():
     conn = sqlite3.connect(str(db_path))
     cursor = conn.cursor()
@@ -220,7 +220,7 @@ import sqlite3
 from pathlib import Path
 from datetime import datetime
 
-db_path = Path('cortex-brain/state/governance.db')
+db_path = Path('cortex_brain/state/governance.db')
 
 conn = sqlite3.connect(str(db_path))
 cursor = conn.cursor()
@@ -265,7 +265,7 @@ Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 -c "
 import sqlite3
 from pathlib import Path
 
-db_path = Path('cortex-brain/state/governance.db')
+db_path = Path('cortex_brain/state/governance.db')
 conn = sqlite3.connect(str(db_path))
 cursor = conn.cursor()
 cursor.execute('PRAGMA table_info(audit_log)')
@@ -284,7 +284,7 @@ from pathlib import Path
 from datetime import datetime
 import hashlib
 
-db_path = Path('cortex-brain/state/governance.db')
+db_path = Path('cortex_brain/state/governance.db')
 
 conn = sqlite3.connect(str(db_path))
 cursor = conn.cursor()
@@ -381,7 +381,7 @@ from pathlib import Path
 from datetime import datetime
 import hashlib
 
-db_path = Path('cortex-brain/state/governance.db')
+db_path = Path('cortex_brain/state/governance.db')
 
 conn = sqlite3.connect(str(db_path))
 cursor = conn.cursor()
@@ -460,7 +460,7 @@ from pathlib import Path
 from datetime import datetime
 import hashlib
 
-db_path = Path('cortex-brain/state/governance.db')
+db_path = Path('cortex_brain/state/governance.db')
 
 conn = sqlite3.connect(str(db_path))
 cursor = conn.cursor()
@@ -541,7 +541,7 @@ Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'EOF'
 import sqlite3
 from pathlib import Path
 
-db_path = Path('cortex-brain/state/governance.db')
+db_path = Path('cortex_brain/state/governance.db')
 conn = sqlite3.connect(str(db_path))
 cursor = conn.cursor()
 
@@ -2051,9 +2051,9 @@ PRIORITY: CRITICAL
   • Rollback: Git checkpoint created before AC-AR-013-01
 
 ▸ ASSUMPTIONS
-  • cortex-brain/tier0/governance/ YAML files exist — Source: workspace structure
-  • cortex-brain/tier1/governance/ schema defined — Source: PHASE-01 output
-  • cortex-brain/tier2/response-templates/ exist — Source: cortex-brain structure
+  • cortex_brain/tier0/governance/ YAML files exist — Source: workspace structure
+  • cortex_brain/tier1/governance/ schema defined — Source: PHASE-01 output
+  • cortex_brain/tier2/response-templates/ exist — Source: cortex_brain structure
   • OrchestratorBase and registry working — Source: AR-012 completion (90/90 tests)
   • Domain classification scheme defined — Source: phase-vision-core.yaml domains
 
@@ -2071,7 +2071,7 @@ PRIORITY: CRITICAL
 ▸ DEPENDENCIES
   • Required: AR-012 COMPLETE (provides OrchestratorBase, context injection)
   • Required: AR-001 COMPLETE (provides 3-tier governance model)
-  • Required: cortex-brain structure exists (foundation tier folders)
+  • Required: cortex_brain structure exists (foundation tier folders)
 
 ▸ IMPACT
   • New files: ~20 YAML files for domain rules, 3-4 Python modules for population
@@ -2092,37 +2092,37 @@ Now let me proceed with **AC-AR-013-01: Tier 0 Domain Rules Loading**. First, I'
 
 Ran terminal command: git add -A && git commit -m "checkpoint: before AR-013 (Brain Tier Population)"
 
-Good - working tree is already clean. Let me check the cortex-brain structure to understand the tier organization: 
+Good - working tree is already clean. Let me check the cortex_brain structure to understand the tier organization: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain)
 
 Let me check what's in tier0: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier0)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier0)
 
 Let me check the governance folder: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier0/governance)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier0/governance)
 
 Let me check what's in the existing core-rules.yaml: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier0/governance/core-rules.yaml#1-1), lines 1 to 50
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier0/governance/core-rules.yaml#1-1), lines 1 to 50
 
 Good! The core rules already exist. Now I need to create domain-specific rules for each of the 4 domains. Let me create the domain rules structure. First, let me create the TDD domain rules: 
 
-Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier0/governance/tdd-rules.yaml)
+Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier0/governance/tdd-rules.yaml)
 
 Great! Now let me create rules for the other 3 domains. Let me create Planning rules: 
 
-Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier0/governance/planning-rules.yaml)
+Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier0/governance/planning-rules.yaml)
 
 Now let me create ADO (Azure DevOps) domain rules: 
 
-Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier0/governance/ado-rules.yaml)
+Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier0/governance/ado-rules.yaml)
 
 Now let me create the Interaction domain rules: 
 
-Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier0/governance/interaction-rules.yaml)
+Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier0/governance/interaction-rules.yaml)
 
 Perfect! Now I need to create a BrainPopulator module that loads these domain rules from YAML into the governance system. Let me create that: 
 
@@ -2168,7 +2168,7 @@ Perfect! **30/30 tests passing** for AC-AR-013-01! Now let's commit this milesto
 
 Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && git add -A && git commit -m "AC-AR-013-01: Tier 0 Domain Rules Loading
 
-- Created 4 domain-specific YAML files in cortex-brain/tier0/governance/:
+- Created 4 domain-specific YAML files in cortex_brain/tier0/governance/:
   * tdd-rules.yaml (TDD orchestrator domain - 8 rules)
   * planning-rules.yaml (Planning orchestrator domain - 8 rules)
   * ado-rules.yaml (ADO orchestrator domain - 8 rules)
@@ -2395,11 +2395,11 @@ Now let me look at the AC details and understand what ACs exist that need to be 
 
 Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/roadmap/cortex-master.yaml#150-150), lines 150 to 180
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier1)
 
 Let me check what's in tier1/acceptance-criteria: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1/acceptance-criteria)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier1/acceptance-criteria)
 
 Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/roadmap/cortex-master.yaml#1-1), lines 1 to 50
 
@@ -2413,7 +2413,7 @@ Completed with input: {
 
 Perfect! Now I need to map these ACs to the 4 domains. Let me create a strategic mapping based on the architecture decisions and feature relationships: 
 
-Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1/acceptance-criteria/ac-domain-mappings.yaml)
+Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier1/acceptance-criteria/ac-domain-mappings.yaml)
 
 Perfect! Now I'll create the Python module to load and query these AC-to-domain mappings: 
 
@@ -2431,7 +2431,7 @@ I see the issue! The TDD domain actually has fewer ACs than expected because som
 
 Ran `pylanceRunCodeSnippet` 
 Completed with input: {
-  "codeSnippet": "\nimport yaml\nfrom pathlib import Path\n\n# Load the mappings file\nwith open('cortex-brain/tier1/acceptance-criteria/ac-domain-mappings.yaml', 'r') as f:\n    content = yaml.safe_load(f)\n\n# Count ACs per domain\nfor domain_id, domain_data in content['domains'].items():\n    ac_count = 0\n    if 'acceptance_criteria' in domain_data:\n        ac_count = len(domain_data['acceptance_criteria'])\n    print(f\"{domain_id}: {ac_count} ACs\")\n\n# Also check the summary\nsummary = content['summary']['domains_breakdown']\nprint(\"\\nSummary breakdown:\")\nfor domain_id, info in summary.items():\n    print(f\"{domain_id}: {info['count']} ACs\")\n\n# Total\ntotal = sum(len(domain_data.get('acceptance_criteria', [])) for domain_data in content['domains'].values())\nprint(f\"\\nTotal: {total} ACs\")\n",
+  "codeSnippet": "\nimport yaml\nfrom pathlib import Path\n\n# Load the mappings file\nwith open('cortex_brain/tier1/acceptance-criteria/ac-domain-mappings.yaml', 'r') as f:\n    content = yaml.safe_load(f)\n\n# Count ACs per domain\nfor domain_id, domain_data in content['domains'].items():\n    ac_count = 0\n    if 'acceptance_criteria' in domain_data:\n        ac_count = len(domain_data['acceptance_criteria'])\n    print(f\"{domain_id}: {ac_count} ACs\")\n\n# Also check the summary\nsummary = content['summary']['domains_breakdown']\nprint(\"\\nSummary breakdown:\")\nfor domain_id, info in summary.items():\n    print(f\"{domain_id}: {info['count']} ACs\")\n\n# Total\ntotal = sum(len(domain_data.get('acceptance_criteria', [])) for domain_data in content['domains'].values())\nprint(f\"\\nTotal: {total} ACs\")\n",
   "workspaceRoot": "/Users/asifhussain/PROJECTS/CORTEX"
 }
 
@@ -2439,7 +2439,7 @@ I see! The actual counts don't match the summary. Let me check which ACs might b
 
 Ran `pylanceRunCodeSnippet` 
 Completed with input: {
-  "codeSnippet": "\nimport yaml\nfrom pathlib import Path\n\n# Load the mappings file\nwith open('cortex-brain/tier1/acceptance-criteria/ac-domain-mappings.yaml', 'r') as f:\n    content = yaml.safe_load(f)\n\n# Check ac_to_domain_index counts\nindex = content['ac_to_domain_index']\nprint(f\"AC-to-domain index has {len(index)} entries\")\n\n# Count by domain\ndomain_counts = {}\nfor ac_id, domain in index.items():\n    domain_counts[domain] = domain_counts.get(domain, 0) + 1\n\nprint(\"\\nDomain counts from index:\")\nfor domain, count in sorted(domain_counts.items()):\n    print(f\"  {domain}: {count}\")\n\n# Check for duplicates in domain arrays\nprint(\"\\nChecking for duplicates in domain arrays:\")\nfor domain_id, domain_data in content['domains'].items():\n    ac_list = [ac['ac_id'] for ac in domain_data.get('acceptance_criteria', [])]\n    unique_ac = set(ac_list)\n    if len(ac_list) != len(unique_ac):\n        print(f\"  {domain_id}: {len(ac_list) - len(unique_ac)} duplicates found\")\n        dups = [ac for ac in ac_list if ac_list.count(ac) > 1]\n        print(f\"    Duplicates: {set(dups)}\")\n    else:\n        print(f\"  {domain_id}: No duplicates\")\n",
+  "codeSnippet": "\nimport yaml\nfrom pathlib import Path\n\n# Load the mappings file\nwith open('cortex_brain/tier1/acceptance-criteria/ac-domain-mappings.yaml', 'r') as f:\n    content = yaml.safe_load(f)\n\n# Check ac_to_domain_index counts\nindex = content['ac_to_domain_index']\nprint(f\"AC-to-domain index has {len(index)} entries\")\n\n# Count by domain\ndomain_counts = {}\nfor ac_id, domain in index.items():\n    domain_counts[domain] = domain_counts.get(domain, 0) + 1\n\nprint(\"\\nDomain counts from index:\")\nfor domain, count in sorted(domain_counts.items()):\n    print(f\"  {domain}: {count}\")\n\n# Check for duplicates in domain arrays\nprint(\"\\nChecking for duplicates in domain arrays:\")\nfor domain_id, domain_data in content['domains'].items():\n    ac_list = [ac['ac_id'] for ac in domain_data.get('acceptance_criteria', [])]\n    unique_ac = set(ac_list)\n    if len(ac_list) != len(unique_ac):\n        print(f\"  {domain_id}: {len(ac_list) - len(unique_ac)} duplicates found\")\n        dups = [ac for ac in ac_list if ac_list.count(ac) > 1]\n        print(f\"    Duplicates: {set(dups)}\")\n    else:\n        print(f\"  {domain_id}: No duplicates\")\n",
   "workspaceRoot": "/Users/asifhussain/PROJECTS/CORTEX"
 }
 
@@ -2491,13 +2491,13 @@ There's still a mismatch - planning has 29 ACs but we expected 26. Let me verify
 
 Ran `pylanceRunCodeSnippet` 
 Completed with input: {
-  "codeSnippet": "\nimport yaml\n\n# Load the mappings file\nwith open('cortex-brain/tier1/acceptance-criteria/ac-domain-mappings.yaml', 'r') as f:\n    content = yaml.safe_load(f)\n\n# Count from index\nindex = content['ac_to_domain_index']\ndomain_counts = {}\nfor ac_id, domain in index.items():\n    domain_counts[domain] = domain_counts.get(domain, 0) + 1\n\nprint(\"From index:\")\nfor domain in sorted(domain_counts.keys()):\n    print(f\"  {domain}: {domain_counts[domain]}\")\n\n# Count from domains array\nprint(\"\\nFrom domains array:\")\nfor domain_id, domain_data in sorted(content['domains'].items()):\n    ac_count = len(domain_data.get('acceptance_criteria', []))\n    print(f\"  {domain_id}: {ac_count}\")\n\n# Verify consistency\nprint(\"\\nVerifying consistency...\")\nfor ac_id, domain in index.items():\n    found = False\n    for d_id, d_data in content['domains'].items():\n        if d_id == domain:\n            for ac in d_data.get('acceptance_criteria', []):\n                if ac['ac_id'] == ac_id:\n                    found = True\n                    break\n    if not found:\n        print(f\"  MISMATCH: {ac_id} in index as {domain} but not in domain array!\")\n\nprint(\"\\nChecking for ACs in domain array but not in index...\")\nfor domain_id, domain_data in content['domains'].items():\n    for ac in domain_data.get('acceptance_criteria', []):\n        ac_id = ac['ac_id']\n        if ac_id not in index:\n            print(f\"  MISMATCH: {ac_id} in {domain_id} domain but not in index!\")\n        elif index[ac_id] != domain_id:\n            print(f\"  MISMATCH: {ac_id} in {domain_id} but index says {index[ac_id]}!\")\n",
+  "codeSnippet": "\nimport yaml\n\n# Load the mappings file\nwith open('cortex_brain/tier1/acceptance-criteria/ac-domain-mappings.yaml', 'r') as f:\n    content = yaml.safe_load(f)\n\n# Count from index\nindex = content['ac_to_domain_index']\ndomain_counts = {}\nfor ac_id, domain in index.items():\n    domain_counts[domain] = domain_counts.get(domain, 0) + 1\n\nprint(\"From index:\")\nfor domain in sorted(domain_counts.keys()):\n    print(f\"  {domain}: {domain_counts[domain]}\")\n\n# Count from domains array\nprint(\"\\nFrom domains array:\")\nfor domain_id, domain_data in sorted(content['domains'].items()):\n    ac_count = len(domain_data.get('acceptance_criteria', []))\n    print(f\"  {domain_id}: {ac_count}\")\n\n# Verify consistency\nprint(\"\\nVerifying consistency...\")\nfor ac_id, domain in index.items():\n    found = False\n    for d_id, d_data in content['domains'].items():\n        if d_id == domain:\n            for ac in d_data.get('acceptance_criteria', []):\n                if ac['ac_id'] == ac_id:\n                    found = True\n                    break\n    if not found:\n        print(f\"  MISMATCH: {ac_id} in index as {domain} but not in domain array!\")\n\nprint(\"\\nChecking for ACs in domain array but not in index...\")\nfor domain_id, domain_data in content['domains'].items():\n    for ac in domain_data.get('acceptance_criteria', []):\n        ac_id = ac['ac_id']\n        if ac_id not in index:\n            print(f\"  MISMATCH: {ac_id} in {domain_id} domain but not in index!\")\n        elif index[ac_id] != domain_id:\n            print(f\"  MISMATCH: {ac_id} in {domain_id} but index says {index[ac_id]}!\")\n",
   "workspaceRoot": "/Users/asifhussain/PROJECTS/CORTEX"
 }
 
 I see! The planning domain array has AC-AR-012-01/02/03 but the index says they're TDD. I need to remove those 3 ACs from the planning domain array since they're already in the TDD test suite. Let me fix this: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1/acceptance-criteria/ac-domain-mappings.yaml#260-260), lines 260 to 290
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier1/acceptance-criteria/ac-domain-mappings.yaml#260-260), lines 260 to 290
 
 Let me find and remove the AR-012 entries from the planning domain: 
 
@@ -2511,7 +2511,7 @@ Now let's verify the counts are correct:
 
 Ran `pylanceRunCodeSnippet` 
 Completed with input: {
-  "codeSnippet": "\nimport yaml\n\n# Load the mappings file\nwith open('cortex-brain/tier1/acceptance-criteria/ac-domain-mappings.yaml', 'r') as f:\n    content = yaml.safe_load(f)\n\n# Count from index\nindex = content['ac_to_domain_index']\ndomain_counts = {}\nfor ac_id, domain in index.items():\n    domain_counts[domain] = domain_counts.get(domain, 0) + 1\n\nprint(\"From index (SHOULD BE TRUTH):\")\nfor domain in sorted(domain_counts.keys()):\n    print(f\"  {domain}: {domain_counts[domain]}\")\n\n# Count from domains array\nprint(\"\\nFrom domains array (should match index):\")\nfor domain_id, domain_data in sorted(content['domains'].items()):\n    ac_count = len(domain_data.get('acceptance_criteria', []))\n    print(f\"  {domain_id}: {ac_count}\")\n\n# Check for mismatches\nprint(\"\\nMismatches:\")\nhas_mismatch = False\nfor domain_id, domain_data in content['domains'].items():\n    for ac in domain_data.get('acceptance_criteria', []):\n        ac_id = ac['ac_id']\n        if ac_id not in index:\n            print(f\"  {ac_id} in {domain_id} but not in index!\")\n            has_mismatch = True\n        elif index[ac_id] != domain_id:\n            print(f\"  {ac_id} in {domain_id} but index says {index[ac_id]}!\")\n            has_mismatch = True\n\nif not has_mismatch:\n    print(\"  None - all ACs match!\")\n",
+  "codeSnippet": "\nimport yaml\n\n# Load the mappings file\nwith open('cortex_brain/tier1/acceptance-criteria/ac-domain-mappings.yaml', 'r') as f:\n    content = yaml.safe_load(f)\n\n# Count from index\nindex = content['ac_to_domain_index']\ndomain_counts = {}\nfor ac_id, domain in index.items():\n    domain_counts[domain] = domain_counts.get(domain, 0) + 1\n\nprint(\"From index (SHOULD BE TRUTH):\")\nfor domain in sorted(domain_counts.keys()):\n    print(f\"  {domain}: {domain_counts[domain]}\")\n\n# Count from domains array\nprint(\"\\nFrom domains array (should match index):\")\nfor domain_id, domain_data in sorted(content['domains'].items()):\n    ac_count = len(domain_data.get('acceptance_criteria', []))\n    print(f\"  {domain_id}: {ac_count}\")\n\n# Check for mismatches\nprint(\"\\nMismatches:\")\nhas_mismatch = False\nfor domain_id, domain_data in content['domains'].items():\n    for ac in domain_data.get('acceptance_criteria', []):\n        ac_id = ac['ac_id']\n        if ac_id not in index:\n            print(f\"  {ac_id} in {domain_id} but not in index!\")\n            has_mismatch = True\n        elif index[ac_id] != domain_id:\n            print(f\"  {ac_id} in {domain_id} but index says {index[ac_id]}!\")\n            has_mismatch = True\n\nif not has_mismatch:\n    print(\"  None - all ACs match!\")\n",
   "workspaceRoot": "/Users/asifhussain/PROJECTS/CORTEX"
 }
 
@@ -2735,15 +2735,15 @@ Let me start by understanding what response templates need to be created:
 
 Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/roadmap/phases/phase-vision-core.yaml#80-80), lines 80 to 150
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2)
 
 Good! Let me check the response-templates directory: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2/response-templates)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2/response-templates)
 
 Perfect! Now I'll create the Tier 2 response templates with inheritance. This will include base templates and domain-specific overrides: 
 
-Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2/response-templates/response-templates.yaml)
+Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2/response-templates/response-templates.yaml)
 
 Summarized conversation historyNow I'll create the Python template loader and engine with inheritance support: 
 
@@ -2872,9 +2872,9 @@ Ran terminal command: cat > /Users/asifhussain/PROJECTS/CORTEX/CURRENT-STATUS.md
 ## 📁 Key Files Created
 
 ### Configuration
-- `cortex-brain/tier0/governance/*.yaml` - 4 domain governance files
-- `cortex-brain/tier1/acceptance-criteria/ac-domain-mappings.yaml` - 87 AC mappings
-- `cortex-brain/tier2/response-templates/response-templates.yaml` - 20 templates
+- `cortex_brain/tier0/governance/*.yaml` - 4 domain governance files
+- `cortex_brain/tier1/acceptance-criteria/ac-domain-mappings.yaml` - 87 AC mappings
+- `cortex_brain/tier2/response-templates/response-templates.yaml` - 20 templates
 
 ### Python Modules
 - `src/core/brain_populator.py` - Tier 0 loader + registry
@@ -3405,11 +3405,11 @@ Using "Replace String in File"
 ```
 Now let me check if there's an AC index to update: Let me check what files exist in that directory: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier1)
 
 Let me check the AC tracking file: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1/tracking)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier1/tracking)
 
 Let me now run the full test suite one more time to get final numbers: 
 
@@ -4291,15 +4291,15 @@ Searched for files matching `**/phase_tracker*`, no matches
 
 Let me check what's in the tracking directory: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1/tracking)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier1/tracking)
 
 The progress tracker doesn't exist yet. Let me create it: 
 
-Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1/tracking/progress-tracker.json)
+Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier1/tracking/progress-tracker.json)
 
 Perfect! Now let me commit this: 
 
-Ran terminal command: git add cortex-brain/tier1/tracking/progress-tracker.json && git commit -m "Progress: 10/24 ACs complete (41.7%), 1116 unit tests passing"
+Ran terminal command: git add cortex_brain/tier1/tracking/progress-tracker.json && git commit -m "Progress: 10/24 ACs complete (41.7%), 1116 unit tests passing"
 
 Ah, we need to calculate percentages. Let me fix that: 
 
@@ -4319,7 +4319,7 @@ Using "Replace String in File"
 ```
 Now let's try committing again: 
 
-Ran terminal command: git add cortex-brain/tier1/tracking/progress-tracker.json && git commit -m "Progress: 10/24 ACs complete (41.7%), 1116 unit tests passing"
+Ran terminal command: git add cortex_brain/tier1/tracking/progress-tracker.json && git commit -m "Progress: 10/24 ACs complete (41.7%), 1116 unit tests passing"
 
 Excellent! Now we've reached 40% (10/24 ACs)! 🎉 Let me create a quick status summary and show you where we are: 
 
@@ -4484,7 +4484,7 @@ Using "Replace String in File"
 ```
 Now commit the progress update: 
 
-Ran terminal command: git add cortex-brain/tier1/tracking/progress-tracker.json && git commit -m "Progress: 11/24 ACs complete (45.8%), 1151 unit tests passing"
+Ran terminal command: git add cortex_brain/tier1/tracking/progress-tracker.json && git commit -m "Progress: 11/24 ACs complete (45.8%), 1151 unit tests passing"
 
 Fantastic! We're now at **45.8%** (11/24 ACs). Let me show you the current progress: 
 
@@ -4804,7 +4804,7 @@ Completion Status:
 
 Perfect! Now let's update the progress tracker: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1/tracking/progress-tracker.json#1-1), lines 1 to 30
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier1/tracking/progress-tracker.json#1-1), lines 1 to 30
 
 Using "Replace String in File"
 
@@ -4814,7 +4814,7 @@ Using "Replace String in File"
 ```
 Now add AR-015-03 to the completed list: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1/tracking/progress-tracker.json#75-75), lines 75 to 107
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier1/tracking/progress-tracker.json#75-75), lines 75 to 107
 
 Using "Replace String in File"
 
@@ -4824,7 +4824,7 @@ Using "Replace String in File"
 ```
 Now commit the progress update: 
 
-Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && git add cortex-brain/tier1/tracking/progress-tracker.json && git commit -m "Progress: 12/24 ACs complete (50% of PHASE-VISION-CORE)
+Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && git add cortex_brain/tier1/tracking/progress-tracker.json && git commit -m "Progress: 12/24 ACs complete (50% of PHASE-VISION-CORE)
 
 Session milestone achieved: 50% completion
 - AR-015 Vision Evolution Protocol: ALL 3 ACs COMPLETE
@@ -5679,11 +5679,11 @@ Ran terminal command: /Users/asifhussain/PROJECTS/CORTEX/.venv/bin/python -m pyt
 
 Let me check the actual tier structure: 
 
-Ran terminal command: find /Users/asifhussain/PROJECTS/CORTEX/cortex-brain -type d -name "tier*" | head -10
+Ran terminal command: find /Users/asifhussain/PROJECTS/CORTEX/cortex_brain -type d -name "tier*" | head -10
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier1)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1/governance)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier1/governance)
 
 I see - not all tiers have YAML files. Let me update the tests to match reality: 
 

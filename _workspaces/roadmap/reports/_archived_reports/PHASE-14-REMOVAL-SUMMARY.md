@@ -52,7 +52,7 @@ PHASE-14-PRODUCTION-MIGRATION has been removed from the CORTEX roadmap and all r
 
 ### Governance Files
 
-7. **`cortex-brain/tier0/governance/phase-enforcement-map.yaml`**
+7. **`cortex_brain/tier0/governance/phase-enforcement-map.yaml`**
    - ✅ Updated header comment: "PHASE-08 through PHASE-14" → "PHASE-08 through PHASE-13"
    - ✅ Removed entire `PHASE-14-PRODUCTION-MIGRATION` enforcement rules
    - ✅ Added `PHASE-15-NEURAL-OBSERVATORY` enforcement rules

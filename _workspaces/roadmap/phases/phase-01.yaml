@@ -30,7 +30,7 @@ days:
           - "src/core/decorators/"
           - "src/orchestrators/core/"
           - "src/orchestrators/domain/"
-          - "cortex-brain/state/"
+          - "cortex_brain/state/"
         files_to_create:
           - "src/core/decorators/__init__.py"
           - "src/orchestrators/core/__init__.py"
@@ -137,7 +137,7 @@ days:
         files_to_modify: []
         acceptance_criteria:
           - ac_id: "AC-AR-001-01"
-            description: "Tier 0 rules loaded from cortex-brain/tier0/governance/core-rules.yaml"
+            description: "Tier 0 rules loaded from cortex_brain/tier0/governance/core-rules.yaml"
             status: "NOT_STARTED"
             test_file: "tests/unit/test_governance_registry.py"
             test_name: "test_tier0_rules_loaded"

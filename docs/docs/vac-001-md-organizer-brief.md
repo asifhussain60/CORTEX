@@ -127,7 +127,7 @@ VacuumOrchestrator (coordinator)
 ### What WILL NOT change:
 - `README.md` (protected)
 - `pytest.ini`, `requirements.txt` (protected)
-- `cortex-brain/state/governance.db*` (protected)
+- `cortex_brain/state/governance.db*` (protected)
 - Prompts in `.github/prompts/` (preserved per chat01.md)
 
 ---

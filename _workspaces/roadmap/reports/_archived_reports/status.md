@@ -27,9 +27,9 @@
 ## 📁 Key Files Created
 
 ### Configuration
-- `cortex-brain/tier0/governance/*.yaml` - 4 domain governance files
-- `cortex-brain/tier1/acceptance-criteria/ac-domain-mappings.yaml` - 87 AC mappings
-- `cortex-brain/tier2/response-templates/response-templates.yaml` - 20 templates
+- `cortex_brain/tier0/governance/*.yaml` - 4 domain governance files
+- `cortex_brain/tier1/acceptance-criteria/ac-domain-mappings.yaml` - 87 AC mappings
+- `cortex_brain/tier2/response-templates/response-templates.yaml` - 20 templates
 
 ### Python Modules
 - `src/core/brain_populator.py` - Tier 0 loader + registry

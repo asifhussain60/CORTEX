@@ -25,14 +25,14 @@ def find_repo_root() -> Path:
     """Find CORTEX repository root."""
     current = Path.cwd()
     while current != current.parent:
-        if (current / 'cortex-brain').exists() and (current / 'src').exists():
+        if (current / 'cortex_brain').exists() and (current / 'src').exists():
             return current
         current = current.parent
     
     # Try starting from this script's location
     current = Path(__file__).parent.parent
     while current != current.parent:
-        if (current / 'cortex-brain').exists() and (current / 'src').exists():
+        if (current / 'cortex_brain').exists() and (current / 'src').exists():
             return current
         current = current.parent
     
@@ -50,7 +50,7 @@ from src.mcp.tools.cortex_vacuum_executor import CortexVacuumExecutor
 def cmd_analyze(args) -> int:
     """Execute analysis command."""
     repo_root = Path(args.repo_root) if args.repo_root else find_repo_root()
-    output_dir = args.output_dir or (repo_root / 'cortex-brain' / 'vacuum')
+    output_dir = args.output_dir or (repo_root / 'cortex_brain' / 'vacuum')
     
     print(f"🔍 CORTEX Vacuum Analysis")
     print(f"   Repository: {repo_root}")
@@ -228,14 +228,14 @@ def main():
         epilog="""
 Examples:
   # Analyze repository without making changes
-  python run-cortex-vacuum.py analyze --output-dir cortex-brain/vacuum/
+  python run-cortex-vacuum.py analyze --output-dir cortex_brain/vacuum/
   
   # Review the analysis report, then execute
-  cat cortex-brain/vacuum/analysis-report.json
-  python run-cortex-vacuum.py execute --plan cortex-brain/vacuum/migration-plan.json --dry-run
+  cat cortex_brain/vacuum/analysis-report.json
+  python run-cortex-vacuum.py execute --plan cortex_brain/vacuum/migration-plan.json --dry-run
   
   # Execute after review (no more confirmation prompts with --auto-approve)
-  python run-cortex-vacuum.py execute --plan cortex-brain/vacuum/migration-plan.json --auto-approve
+  python run-cortex-vacuum.py execute --plan cortex_brain/vacuum/migration-plan.json --auto-approve
   
   # Verify compliance
   python run-cortex-vacuum.py verify --fail-on-violations

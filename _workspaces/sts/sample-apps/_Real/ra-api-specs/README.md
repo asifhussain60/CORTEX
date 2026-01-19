@@ -82,9 +82,9 @@ python C:\PROJECTS\CORTEX\src\operations\modules\generators\legacy_spec_generato
 ## 📚 Documentation
 
 **CORTEX Lens Documentation:**
-- Quick Reference: `C:\PROJECTS\CORTEX\cortex-brain\documents\CORTEX-LENS-QUICK-REF.md`
-- OpenAPI Guide: `C:\PROJECTS\CORTEX\cortex-brain\documents\implementation-guides\openapi-generation-guide.md`
-- Usage Guide: `C:\PROJECTS\CORTEX\cortex-brain\documents\implementation-guides\cortex-lens-usage-guide.md`
+- Quick Reference: `C:\PROJECTS\CORTEX\cortex_brain\documents\CORTEX-LENS-QUICK-REF.md`
+- OpenAPI Guide: `C:\PROJECTS\CORTEX\cortex_brain\documents\implementation-guides\openapi-generation-guide.md`
+- Usage Guide: `C:\PROJECTS\CORTEX\cortex_brain\documents\implementation-guides\cortex-lens-usage-guide.md`
 
 **Validators:**
 - AST Completeness: `C:\PROJECTS\CORTEX\src\operations\modules\validators\ast_completeness_checker.py`

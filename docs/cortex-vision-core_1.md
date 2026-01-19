@@ -68,7 +68,7 @@ Result: Zero broken dependencies; all downstream requirements preserved
 ### 4. **Governance Rules Stay in Brain, Not Code**
 ```
 Guarantee: No hardcoded SKULL rules in orchestrator implementations
-          All rules loaded from cortex-brain/tier0/domains/
+          All rules loaded from cortex_brain/tier0/domains/
 Mechanism: AR-013 brain tier activation + decorator validation
 Benefit: Rules can change without code modification
 ```

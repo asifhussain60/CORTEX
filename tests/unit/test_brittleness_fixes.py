@@ -137,7 +137,7 @@ class TestBrittleness003ProgressTracker:
     
     def test_progress_tracker_operational(self):
         """Progress tracker file should exist and be accessible."""
-        progress_file = get_project_root() / "cortex-brain" / "tier1" / "tracking" / "progress-tracker.json"
+        progress_file = get_project_root() / "cortex_brain" / "tier1" / "tracking" / "progress-tracker.json"
         
         # File should exist (may be created during tests)
         assert progress_file.parent.exists(), "Tracking directory should exist"
@@ -305,7 +305,7 @@ class TestBrittleness012GovernanceEnforcement:
     
     def test_all_rules_enforced(self):
         """All SKULL governance rules should be enforced."""
-        governance_file = get_project_root() / "cortex-brain" / "tier0" / "governance" / "core-rules.yaml"
+        governance_file = get_project_root() / "cortex_brain" / "tier0" / "governance" / "core-rules.yaml"
         
         assert governance_file.exists(), "Governance rules file should exist"
         

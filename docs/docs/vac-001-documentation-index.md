@@ -239,9 +239,9 @@ START → analyze() → execute() → SUCCESS → END
 - SOLID principles verified
 
 **Files:**
-- `cortex-brain/tier1/orchestrators/cleaners/interface.py`
-- `cortex-brain/tier1/orchestrators/cleaners/registry.py`
-- `cortex-brain/tier1/orchestrators/vacuum.py` (modified)
+- `cortex_brain/tier1/orchestrators/cleaners/interface.py`
+- `cortex_brain/tier1/orchestrators/cleaners/registry.py`
+- `cortex_brain/tier1/orchestrators/vacuum.py` (modified)
 
 ---
 
@@ -264,7 +264,7 @@ START → analyze() → execute() → SUCCESS → END
 - Zero files modified during analysis
 
 **Files:**
-- `cortex-brain/tier1/orchestrators/cleaners/md_organizer/analyzer.py`
+- `cortex_brain/tier1/orchestrators/cleaners/md_organizer/analyzer.py`
 
 ---
 
@@ -287,8 +287,8 @@ START → analyze() → execute() → SUCCESS → END
 - Rollback restores pre-execution state
 
 **Files:**
-- `cortex-brain/tier1/orchestrators/cleaners/md_organizer/executor.py`
-- `cortex-brain/tier1/orchestrators/cleaners/md_organizer/snapshot.py`
+- `cortex_brain/tier1/orchestrators/cleaners/md_organizer/executor.py`
+- `cortex_brain/tier1/orchestrators/cleaners/md_organizer/snapshot.py`
 
 ---
 
@@ -309,7 +309,7 @@ START → analyze() → execute() → SUCCESS → END
 - All operations logged to audit trail
 
 **Files:**
-- `cortex-brain/tier1/orchestrators/cleaners/md_organizer/cleaner.py`
+- `cortex_brain/tier1/orchestrators/cleaners/md_organizer/cleaner.py`
 
 ---
 

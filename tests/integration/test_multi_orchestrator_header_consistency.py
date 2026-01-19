@@ -46,7 +46,7 @@ class TestMasterOrchestratorHeaderConsistency:
         """Setup: Initialize MasterOrchestrator for consistency tests."""
         # Get config manager (singleton)
         self.config_manager = HeaderConfigurationManager.get_instance()
-        self.config_manager.load_configuration('cortex-brain/tier0/response-headers.yaml')
+        self.config_manager.load_configuration('cortex_brain/tier0/response-headers.yaml')
 
         # Initialize MasterOrchestrator
         self.master_orchestrator = MasterOrchestrator()
@@ -196,7 +196,7 @@ class TestMasterOrchestratorDelegationHeaderConsistency:
     def setup(self):
         """Setup: Initialize MasterOrchestrator for delegation tests."""
         self.config_manager = HeaderConfigurationManager.get_instance()
-        self.config_manager.load_configuration('cortex-brain/tier0/response-headers.yaml')
+        self.config_manager.load_configuration('cortex_brain/tier0/response-headers.yaml')
 
         self.master_orchestrator = MasterOrchestrator()
         self.master_orchestrator.current_operation = "parent_operation"
@@ -267,7 +267,7 @@ class TestMasterOrchestratorHeaderErrorConditions:
     def setup(self):
         """Setup: Initialize MasterOrchestrator."""
         self.config_manager = HeaderConfigurationManager.get_instance()
-        self.config_manager.load_configuration('cortex-brain/tier0/response-headers.yaml')
+        self.config_manager.load_configuration('cortex_brain/tier0/response-headers.yaml')
 
         self.master_orchestrator = MasterOrchestrator()
 
@@ -314,7 +314,7 @@ class TestMasterOrchestratorHeaderInjectorPattern:
     def setup(self):
         """Setup: Initialize MasterOrchestrator."""
         self.config_manager = HeaderConfigurationManager.get_instance()
-        self.config_manager.load_configuration('cortex-brain/tier0/response-headers.yaml')
+        self.config_manager.load_configuration('cortex_brain/tier0/response-headers.yaml')
 
         self.master_orchestrator = MasterOrchestrator()
 
@@ -401,7 +401,7 @@ class TestMasterOrchestratorOrchestrationPattern:
     def setup(self):
         """Setup: Initialize MasterOrchestrator."""
         self.config_manager = HeaderConfigurationManager.get_instance()
-        self.config_manager.load_configuration('cortex-brain/tier0/response-headers.yaml')
+        self.config_manager.load_configuration('cortex_brain/tier0/response-headers.yaml')
 
         self.master_orchestrator = MasterOrchestrator()
 

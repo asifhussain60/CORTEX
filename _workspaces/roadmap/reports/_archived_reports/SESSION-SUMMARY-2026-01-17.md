@@ -176,7 +176,7 @@ All prerequisites met. No blockers identified. Governance ready.
 ### Immediate (Start PHASE-07)
 1. Create git checkpoint: `git commit -m "checkpoint: before PHASE-07"`
 2. Load phase specs: `.github/roadmap/phases/phase-07-intent-router.yaml`
-3. Load governance rules: `cortex-brain/tier0/governance/core-rules.yaml`
+3. Load governance rules: `cortex_brain/tier0/governance/core-rules.yaml`
 4. Begin AC-PHX-007-01 (Intent Classification Framework)
 5. Follow TDD pattern: RED → GREEN → REFACTOR
 
@@ -309,9 +309,9 @@ All prerequisites met. No blockers identified. Governance ready.
 - **Quick Reference:** `.github/roadmap/reports/PENDING-PHASES-INDEX.md`
 
 ### For Governance Rules
-- **Core Rules:** `cortex-brain/tier0/governance/core-rules.yaml`
-- **Phase Enforcement:** `cortex-brain/tier0/governance/phase-enforcement-map.yaml`
-- **AC Validation:** `cortex-brain/tier0/governance/ac-validation-checklist.yaml`
+- **Core Rules:** `cortex_brain/tier0/governance/core-rules.yaml`
+- **Phase Enforcement:** `cortex_brain/tier0/governance/phase-enforcement-map.yaml`
+- **AC Validation:** `cortex_brain/tier0/governance/ac-validation-checklist.yaml`
 
 ### For Builder Context
 - **Builder Prompt:** `.github/prompts/cortex-builder.prompt.md`
@@ -390,7 +390,7 @@ For the next developer picking up this work:
 1. **Read this document first** (you're reading it!)
 2. **Read PHASE-07-EXECUTIVE-SUMMARY-INITIATION.md** (before starting)
 3. **Load phase specs:** `.github/roadmap/phases/phase-07-intent-router.yaml`
-4. **Load governance:** `cortex-brain/tier0/governance/core-rules.yaml`
+4. **Load governance:** `cortex_brain/tier0/governance/core-rules.yaml`
 5. **Create checkpoint:** `git commit -m "checkpoint: before PHASE-07"`
 6. **Begin implementation:** AC-PHX-007-01 (Intent Classification Framework)
 7. **Follow TDD:** Write tests first, implement code, refactor

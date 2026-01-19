@@ -228,7 +228,7 @@ reports/phase-08-progress-2026-01-25.md
 ## 📚 References
 
 - **Previous Plan:** `_archives/cortex-master-v1.yaml`
-- **Governance Rules:** `cortex-brain/tier0/governance/`
+- **Governance Rules:** `cortex_brain/tier0/governance/`
 - **Implementation Guide:** `.github/prompts/cortex-builder.prompt.md`
 - **Progress Tracker:** `cortex-master.yaml` (this file)
 

@@ -387,7 +387,7 @@ cat src/hallucination_prevention/__init__.py
 python -c "from cortex_brain.state.ssot_manager import SSOTManager; print(SSOTManager().verify_integrity())"
 
 # View audit logs
-sqlite3 cortex-brain/state/governance.db "SELECT * FROM audit_log ORDER BY timestamp DESC LIMIT 10;"
+sqlite3 cortex_brain/state/governance.db "SELECT * FROM audit_log ORDER BY timestamp DESC LIMIT 10;"
 ```
 
 ---

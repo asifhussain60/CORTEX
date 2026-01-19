@@ -25,7 +25,7 @@ git log --oneline -3
 git status
 
 # Check database
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT COUNT(*) as entries, (SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation='AC_COMPLETE') as acs FROM audit_log;"
 ```
 
@@ -44,7 +44,7 @@ from pathlib import Path
 
 # Clear locks
 import glob, os
-for lf in glob.glob('/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db-*'):
+for lf in glob.glob('/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db-*'):
     try: os.remove(lf)
     except: pass
 
@@ -78,14 +78,14 @@ EOF
 | `docs/PHASE-4-CONTINUATION-PROMPT.md` | Full context & templates (START HERE) |
 | `docs/PHASE-4-EXECUTION-PLAN.md` | Overall Phase 4 strategy |
 | `docs/PHASE-3-GAP-ANALYSIS-REPORT.md` | Gap analysis (69 missing ACs) |
-| `cortex-brain/state/governance.db` | Audit database |
+| `cortex_brain/state/governance.db` | Audit database |
 
 ## Database Lock Safeguard
 
 **ALWAYS do this before test execution:**
 ```bash
-rm -f cortex-brain/state/governance.db-wal
-rm -f cortex-brain/state/governance.db-shm
+rm -f cortex_brain/state/governance.db-wal
+rm -f cortex_brain/state/governance.db-shm
 ```
 
 ## Coverage Tracking
@@ -118,7 +118,7 @@ git push origin CORTEX6
 
 ```bash
 # All 137 ACs should have evidence
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT ac_id, COUNT(*) FROM audit_log WHERE operation='AC_COMPLETE' GROUP BY ac_id ORDER BY ac_id" | wc -l
 # Should show: 137
 ```

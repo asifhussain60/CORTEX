@@ -167,12 +167,12 @@ Mon (10): Production monitoring
 ### Business Domain Track (4 ACs - Pending ⏳)
 
 **BD-001-01: Domain Registry Schema** (0.5h)
-- File: `cortex-brain/tier3/domain-registry.yaml`
+- File: `cortex_brain/tier3/domain-registry.yaml`
 - Purpose: Register CORTEX + business domains
 - Tests: 7 planned
 
 **BD-001-02: Domain Documentation** (0.5h)
-- File: `cortex-brain/tier3/README-DOMAIN-INTEGRATION.md`
+- File: `cortex_brain/tier3/README-DOMAIN-INTEGRATION.md`
 - Purpose: Integration guide + examples
 - Tests: 6 planned
 

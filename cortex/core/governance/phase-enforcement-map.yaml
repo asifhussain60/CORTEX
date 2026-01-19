@@ -115,9 +115,9 @@ PHASE-01:
   
   ac_id_rules:
     "AC-AR-001-01":
-      description: "Tier 0 rules loaded from cortex-brain/tier0/governance/core-rules.yaml"
+      description: "Tier 0 rules loaded from cortex_brain/tier0/governance/core-rules.yaml"
       enforcement_checks:
-        - Check: "File cortex-brain/tier0/governance/core-rules.yaml exists"
+        - Check: "File cortex_brain/tier0/governance/core-rules.yaml exists"
         - Check: "YAML schema valid (governance_tier: 0)"
         - Check: "25 rules present"
         - Governance: "CORE-018 (YAML-First)"
@@ -446,19 +446,19 @@ PHASE-07-INTENT-ROUTER:
       name: "Context Preservation"
       enforcement: "blocked"
       applies_to: "IR-001, IR-004 (context intelligence)"
-      source: "cortex-brain/tier0/governance/interaction-rules.yaml"
+      source: "cortex_brain/tier0/governance/interaction-rules.yaml"
     
     - rule_id: INT-RULE-003
       name: "Decision Capture & Rationale"
       enforcement: "blocked"
       applies_to: "IR-002, IR-005 (intent reflection & routing)"
-      source: "cortex-brain/tier0/governance/interaction-rules.yaml"
+      source: "cortex_brain/tier0/governance/interaction-rules.yaml"
     
     - rule_id: INT-RULE-009
       name: "Mandatory Intelligent Challenge"
       enforcement: "blocked"
       applies_to: "ALL user requests processed by InteractionOrchestrator"
-      source: "cortex-brain/tier0/governance/interaction-rules.yaml"
+      source: "cortex_brain/tier0/governance/interaction-rules.yaml"
       description: |
         Every request MUST be challenged before execution.
         Challenges based on MERGED knowledge (CORTEX + Company).
@@ -605,7 +605,7 @@ enforcement_actions:
 
 audit_logging:
   enabled: true
-  location: "cortex-brain/state/governance.db"
+  location: "cortex_brain/state/governance.db"
   required_fields:
     - timestamp
     - phase_id

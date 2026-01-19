@@ -134,13 +134,13 @@ Status: REQUIRED (blocks PHASE-14)
 
 ### New Files (To Be Created)
 ```
-cortex-brain/tier3/domain-registry.yaml
+cortex_brain/tier3/domain-registry.yaml
 ├─ Purpose: Register CORTEX and business domains
 ├─ Content: 16 CORTEX domains + 3 initial business domains (extensible)
 ├─ Size: ~200 lines
 └─ Owner: Domain Architecture Lead
 
-cortex-brain/tier3/README-DOMAIN-INTEGRATION.md
+cortex_brain/tier3/README-DOMAIN-INTEGRATION.md
 ├─ Purpose: Document domain integration pattern
 ├─ Content: Query patterns, fallback behavior, compliance guarantees
 ├─ Size: ~300 lines

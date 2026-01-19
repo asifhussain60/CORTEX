@@ -55,13 +55,13 @@ acceptance_criteria:
 - ac_id: AC-PHASE-16-01
   domain: BUSINESS_DOMAIN
   title: Domain Registry Schema Creation
-  description: 'Create domain-registry.yaml in cortex-brain/tier3/ with proper schema
+  description: 'Create domain-registry.yaml in cortex_brain/tier3/ with proper schema
 
     documenting CORTEX domains and business domain availability.
 
     '
   requirements:
-  - 'File path: cortex-brain/tier3/domain-registry.yaml'
+  - 'File path: cortex_brain/tier3/domain-registry.yaml'
   - 'Schema includes: metadata, tier, purpose, cortex_domains, business_domains_ready'
   - All 16 CORTEX domains listed with descriptions
   - business_domains_ready section present (extensible)
@@ -175,7 +175,7 @@ acceptance_criteria:
 
     '
   requirements:
-  - No existing files modified in cortex-brain/ (except new registry)
+  - No existing files modified in cortex_brain/ (except new registry)
   - No changes to orchestrators, governance, or core modules
   - All existing tests pass unchanged
   - 'Backward compatibility: old code works with new system'
@@ -410,7 +410,7 @@ day_sequence:
     - 'AC-PHASE-16-03: Configure DOMAIN_BRAIN_ENDPOINT (0.25 hrs)'
     - 'AC-PHASE-16-04: Verify zero breaking changes (0.25 hrs)'
     deliverables:
-    - cortex-brain/tier3/domain-registry.yaml
+    - cortex_brain/tier3/domain-registry.yaml
     - Environment configuration support
     - git diff verification
   day_2:

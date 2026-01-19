@@ -219,7 +219,7 @@ All documentation is available in: `/Users/asifhussain/PROJECTS/CORTEX/docs/`
 
 ### Database Access
 ```bash
-sqlite3 /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db
+sqlite3 /Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db
 ```
 
 ### Test Execution

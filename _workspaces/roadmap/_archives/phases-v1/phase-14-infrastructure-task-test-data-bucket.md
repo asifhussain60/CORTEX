@@ -41,7 +41,7 @@ This task implements proper organization.
 **How to Test:**
 ```bash
 # Connect to database
-sqlite3 cortex-brain/state/governance.db
+sqlite3 cortex_brain/state/governance.db
 
 # Verify schema
 .schema test_data_bucket

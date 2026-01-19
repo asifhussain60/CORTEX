@@ -328,7 +328,7 @@ high_issue_1:
     AC_COMPLETE entries with hash-chain verification.
   
   current_state: |
-    cortex-brain/audit-logs/rollback-history.json shows:
+    cortex_brain/audit-logs/rollback-history.json shows:
     - Rollback events exist but are incomplete
     - All have completion_timestamp: null (not executed)
     - All have orchestrators_updated: [] (empty)
@@ -642,7 +642,7 @@ compliance_detailed:
       evidence: "Plans in YAML, not markdown"
     
     - rule_id: "CORE-020"
-      title: "No Markdown in cortex-brain"
+      title: "No Markdown in cortex_brain"
       status: "PASS"
       evidence: "Only YAML/JSON in governance folders"
     

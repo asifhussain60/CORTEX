@@ -321,12 +321,12 @@ python3 -m pytest tests/integration/test_audit_trail_integrity.py::TestAuditTrai
 
 ### Check Database Statistics
 ```bash
-sqlite3 cortex-brain/state/governance.db "SELECT operation, COUNT(*) FROM audit_log GROUP BY operation"
+sqlite3 cortex_brain/state/governance.db "SELECT operation, COUNT(*) FROM audit_log GROUP BY operation"
 ```
 
 ### Verify Recent Hash Chain
 ```bash
-sqlite3 cortex-brain/state/governance.db "
+sqlite3 cortex_brain/state/governance.db "
 SELECT id, ac_id, SUBSTR(entry_hash,1,16), SUBSTR(previous_hash,1,16) 
 FROM audit_log 
 WHERE id >= 7346 

@@ -28,7 +28,7 @@ gate_0a_freshness:
   status: "PASS"
   test_command: "SELECT MAX(timestamp) FROM audit_log WHERE id >= 7346"
   result: "Governance database exists and contains recent entries"
-  db_location: "./cortex-brain/state/governance.db"
+  db_location: "./cortex_brain/state/governance.db"
   age_check: "Data freshness verified (recent entries present)"
   acceptance_criteria:
     - "✅ Latest entry < 24 hours old"

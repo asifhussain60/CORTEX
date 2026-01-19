@@ -311,29 +311,29 @@ class TestBrainTierPusher:
 
     def test_push_to_tier0_governance(self) -> None:
         """Test pushing governance comprehensions to tier0."""
-        # tier0: cortex-brain/tier0/governance/
-        tier0_path = "cortex-brain/tier0/governance"
+        # tier0: cortex_brain/tier0/governance/
+        tier0_path = "cortex_brain/tier0/governance"
         
         assert "governance" in tier0_path
 
     def test_push_to_tier1_ac_mapping(self) -> None:
         """Test pushing AC mappings to tier1."""
-        # tier1: cortex-brain/tier1/acceptance-criteria/
-        tier1_path = "cortex-brain/tier1/acceptance-criteria"
+        # tier1: cortex_brain/tier1/acceptance-criteria/
+        tier1_path = "cortex_brain/tier1/acceptance-criteria"
         
         assert "acceptance-criteria" in tier1_path
 
     def test_push_to_tier2_standards(self) -> None:
         """Test pushing standards to tier2."""
-        # tier2: cortex-brain/tier2/standards/
-        tier2_path = "cortex-brain/tier2/standards"
+        # tier2: cortex_brain/tier2/standards/
+        tier2_path = "cortex_brain/tier2/standards"
         
         assert "standards" in tier2_path
 
     def test_push_to_tier3_knowledge(self) -> None:
         """Test pushing knowledge to tier3."""
-        # tier3: cortex-brain/tier3/knowledge/
-        tier3_path = "cortex-brain/tier3/knowledge"
+        # tier3: cortex_brain/tier3/knowledge/
+        tier3_path = "cortex_brain/tier3/knowledge"
         
         assert "knowledge" in tier3_path
 
@@ -394,10 +394,10 @@ class TestTempCleanup:
     def test_keep_approved_files(self) -> None:
         """Test that approved final files are kept."""
         # Only final approved YAML pushed to brain tier should remain
-        approved_file = Path("cortex-brain/tier3/knowledge/comprehension-2026-01-15T20-00-00Z.yaml")
+        approved_file = Path("cortex_brain/tier3/knowledge/comprehension-2026-01-15T20-00-00Z.yaml")
         
         # This file path structure follows the convention
-        assert "cortex-brain/tier3" in str(approved_file)
+        assert "cortex_brain/tier3" in str(approved_file)
 
     def test_cleanup_on_rejection(self) -> None:
         """Test cleanup behavior on rejection."""

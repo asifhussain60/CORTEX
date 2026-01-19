@@ -15,7 +15,7 @@
 cd /Users/asifhussain/PROJECTS/CORTEX
 
 # Check if governance.db has any audit entries
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT COUNT(*) as audit_entry_count FROM audit_log;"
 
 # Expected: Thousands of entries (if working)
@@ -592,11 +592,11 @@ class GovernanceRegistry:
 
 ```bash
 # Should show thousands of audit entries
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT COUNT(*) FROM audit_log;"
 
 # Should show entries for each AC
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT ac_id, COUNT(*) FROM audit_log GROUP BY ac_id LIMIT 10;"
 ```
 

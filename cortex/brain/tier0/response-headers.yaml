@@ -2,7 +2,7 @@
 # CORTEX RESPONSE HEADERS CONFIGURATION
 # =============================================================================
 # Single Source of Truth for all response headers across all domains
-# Location: cortex-brain/tier0/response-headers.yaml
+# Location: cortex_brain/tier0/response-headers.yaml
 # Status: Version 1.0 - Production Ready
 # Last Updated: 2026-01-15
 # =============================================================================

@@ -13,8 +13,8 @@ from datetime import datetime
 from typing import Dict, Any, Optional, List
 from copy import deepcopy
 
-# Add cortex-brain to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'cortex-brain'))
+# Add cortex_brain to path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'cortex_brain'))
 
 try:
     from tier2.hallucination_prevention.execution_sandbox import (
@@ -25,7 +25,7 @@ try:
     )
 except ModuleNotFoundError:
     import os
-    cortex_brain_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../cortex-brain'))
+    cortex_brain_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../cortex_brain'))
     sys.path.insert(0, cortex_brain_path)
     from tier2.hallucination_prevention.execution_sandbox import (
         StateSnapshot,

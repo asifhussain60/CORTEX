@@ -259,7 +259,7 @@ After tests run, verify integrity:
 
 ```bash
 # Query database
-sqlite3 cortex-brain/state/governance.db
+sqlite3 cortex_brain/state/governance.db
 
 # Check total AC_COMPLETE entries
 SELECT COUNT(*) FROM audit_log WHERE operation = 'AC_COMPLETE';
@@ -362,7 +362,7 @@ pytest tests/ -v
 
 ```bash
 # Connect to database
-sqlite3 cortex-brain/state/governance.db
+sqlite3 cortex_brain/state/governance.db
 
 # Count audit entries by operation
 SELECT operation, COUNT(*) as count FROM audit_log 
@@ -451,7 +451,7 @@ cd /Users/asifhussain/PROJECTS/CORTEX
 pytest tests/ -v 2>&1 | tee audit_log_run.txt
 
 # Then verify
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT COUNT(*) as total, 
           COUNT(CASE WHEN operation='AC_COMPLETE' THEN 1 END) as ac_complete 
    FROM audit_log;"

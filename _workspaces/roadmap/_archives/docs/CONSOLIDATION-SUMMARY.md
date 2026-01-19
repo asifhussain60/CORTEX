@@ -205,8 +205,8 @@ Reference: QUICK-REFERENCE.md
 | Quick lookup table | `QUICK-REFERENCE.md` |
 | Understanding consolidation | `ROADMAP-CONSOLIDATION-GUIDE.md` |
 | Before/after comparison | `BEFORE-AFTER-CONSOLIDATION.md` |
-| Governance rules | `cortex-brain/tier0/governance/` |
-| Audit trail | `cortex-brain/state/governance.db` |
+| Governance rules | `cortex_brain/tier0/governance/` |
+| Audit trail | `cortex_brain/state/governance.db` |
 
 ---
 

@@ -233,7 +233,7 @@ The tests are failing NOT because continuation is missing, but because:
 
 ```python
 # In test environment:
-db_path = Path("cortex-brain/state/governance.db")
+db_path = Path("cortex_brain/state/governance.db")
 # When tests run, working directory != project root
 # database file not found → tests fail
 ```

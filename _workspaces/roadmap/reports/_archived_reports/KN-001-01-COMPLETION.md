@@ -87,7 +87,7 @@ Successfully established the foundational knowledge repository structure for COR
 ### 4. Directory Structure
 
 ```
-cortex-brain/tier3/knowledge/
+cortex_brain/tier3/knowledge/
 ├── KNOWLEDGE-TAXONOMY.yaml        # Domain definitions & schema
 ├── GOVERNANCE/
 │   └── README.md                  # Domain overview
@@ -204,23 +204,23 @@ cortex-brain/tier3/knowledge/
 ## FILES CREATED/MODIFIED
 
 ### New Files Created (19)
-- `cortex-brain/tier3/knowledge/KNOWLEDGE-TAXONOMY.yaml` (main taxonomy definition)
-- `cortex-brain/tier3/knowledge/GOVERNANCE/README.md`
-- `cortex-brain/tier3/knowledge/INTENT-ROUTING/README.md`
-- `cortex-brain/tier3/knowledge/HALLUCINATION-PREVENTION/README.md`
-- `cortex-brain/tier3/knowledge/EXECUTION-ORCHESTRATION/README.md`
-- `cortex-brain/tier3/knowledge/DATA-MANAGEMENT/README.md`
-- `cortex-brain/tier3/knowledge/OBSERVABILITY/README.md`
-- `cortex-brain/tier3/knowledge/SECURITY/README.md`
-- `cortex-brain/tier3/knowledge/API-DESIGN/README.md`
-- `cortex-brain/tier3/knowledge/ML-MODELS/README.md`
-- `cortex-brain/tier3/knowledge/KNOWLEDGE-CURATION/README.md`
-- `cortex-brain/tier3/knowledge/TESTING-VALIDATION/README.md`
-- `cortex-brain/tier3/knowledge/DEPLOYMENT/README.md`
-- `cortex-brain/tier3/knowledge/DOCUMENTATION/README.md`
-- `cortex-brain/tier3/knowledge/PERFORMANCE/README.md`
-- `cortex-brain/tier3/knowledge/ARCHITECTURE/README.md`
-- `cortex-brain/tier3/knowledge/ERROR-HANDLING/README.md`
+- `cortex_brain/tier3/knowledge/KNOWLEDGE-TAXONOMY.yaml` (main taxonomy definition)
+- `cortex_brain/tier3/knowledge/GOVERNANCE/README.md`
+- `cortex_brain/tier3/knowledge/INTENT-ROUTING/README.md`
+- `cortex_brain/tier3/knowledge/HALLUCINATION-PREVENTION/README.md`
+- `cortex_brain/tier3/knowledge/EXECUTION-ORCHESTRATION/README.md`
+- `cortex_brain/tier3/knowledge/DATA-MANAGEMENT/README.md`
+- `cortex_brain/tier3/knowledge/OBSERVABILITY/README.md`
+- `cortex_brain/tier3/knowledge/SECURITY/README.md`
+- `cortex_brain/tier3/knowledge/API-DESIGN/README.md`
+- `cortex_brain/tier3/knowledge/ML-MODELS/README.md`
+- `cortex_brain/tier3/knowledge/KNOWLEDGE-CURATION/README.md`
+- `cortex_brain/tier3/knowledge/TESTING-VALIDATION/README.md`
+- `cortex_brain/tier3/knowledge/DEPLOYMENT/README.md`
+- `cortex_brain/tier3/knowledge/DOCUMENTATION/README.md`
+- `cortex_brain/tier3/knowledge/PERFORMANCE/README.md`
+- `cortex_brain/tier3/knowledge/ARCHITECTURE/README.md`
+- `cortex_brain/tier3/knowledge/ERROR-HANDLING/README.md`
 - `tests/unit/tier3/__init__.py`
 - `tests/unit/tier3/test_knowledge_repository.py` (36 tests)
 

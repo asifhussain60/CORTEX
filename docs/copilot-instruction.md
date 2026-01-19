@@ -9,11 +9,11 @@ You are working on CORTEX 7.0, a governance-first audit system with a 3-tier arc
 ```
 CORTEX 7.0 Architecture
 ├── Tier 0: Immutable SKULL Rules (25 rules)
-│   └── cortex-brain/tier0/governance/core-rules.yaml
+│   └── cortex_brain/tier0/governance/core-rules.yaml
 ├── Tier 1: Project Governance (YAML + SQLite)
-│   └── cortex-brain/tier1/
+│   └── cortex_brain/tier1/
 └── Tier 2: Engineering Standards
-    └── cortex-brain/tier2/
+    └── cortex_brain/tier2/
 ```
 
 ## Key Principles
@@ -38,13 +38,13 @@ Every completed AC-ID requires:
 
 ### 4. Governance Loading Sequence (NEW)
 All governance rules load in a specific order with defined precedence:
-- See `cortex-brain/tier0/governance-loading-sequence.yaml` (SSOT for loading order)
+- See `cortex_brain/tier0/governance-loading-sequence.yaml` (SSOT for loading order)
 - Defines TIER_0_CORE → TIER_0_DOMAIN → TIER_0_VALIDATION → TIER_1_ENFORCEMENT
 - Includes conflict resolution algorithm and dependency tracking
 
 ### 5. LENS Protocol Operationalization (NEW)
 The LENS protocol (Language, Examination, Navigation, Synthesis) now has concrete tool mappings:
-- See `cortex-brain/tier0/lens-protocol-implementation.yaml` (tool registry)
+- See `cortex_brain/tier0/lens-protocol-implementation.yaml` (tool registry)
 - Maps each LENS step to executable tools and procedures
 - Specifies confidence thresholds and error handling
 
@@ -148,7 +148,7 @@ Every response is validated before return:
 ### Governance Reference
 
 - **Rule:** CORE-030 (Mandatory CORTEX Response Headers)
-- **Source:** `cortex-brain/tier0/governance/core-rules.yaml` (lines 630-720)
+- **Source:** `cortex_brain/tier0/governance/core-rules.yaml` (lines 630-720)
 - **Validator:** `src.core.response_header_injector.ResponseHeaderValidator`
 - **Loading:** Enforced at governance startup + pre-response validation
 
@@ -190,7 +190,7 @@ The code follows governance rules CORE-011 and CORE-012...
 
 ### Configuration Source
 
-Headers are configured in: `cortex-brain/tier0/response-headers.yaml`
+Headers are configured in: `cortex_brain/tier0/response-headers.yaml`
 
 ```yaml
 # Key values (DO NOT modify without governance approval):
@@ -337,8 +337,8 @@ Check `.github/roadmap/cortex-master.yaml` for:
 
 1. **Master Plan**: `.github/roadmap/cortex-master.yaml` (SSOT - Single Source of Truth)
 2. **Phase Specifications**: `.github/roadmap/phases/phase-NN.yaml` (current & next phases)
-3. **Governance Rules**: `cortex-brain/tier0/governance/core-rules.yaml` (Tier 0 immutable)
-4. **Phase Enforcement**: `cortex-brain/tier0/governance/phase-enforcement-map.yaml`
+3. **Governance Rules**: `cortex_brain/tier0/governance/core-rules.yaml` (Tier 0 immutable)
+4. **Phase Enforcement**: `cortex_brain/tier0/governance/phase-enforcement-map.yaml`
 5. **Builder Prompt**: `.github/prompts/cortex-builder.prompt.md`
 6. **Git Commit Protocol**: `.github/prompts/cortex-git-commit.prompt.md`
 7. **Builder Agent**: `.github/agents/cortex-builder.md`

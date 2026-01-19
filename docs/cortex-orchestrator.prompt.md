@@ -45,9 +45,9 @@ Files to load ENTIRELY (not sections):
 │   └── governance_rules (all 25 SKULL rules)
 │
 ├── _workspaces/roadmap/phases/phase-XX.yaml (current + next phases)
-├── cortex-brain/tier0/governance/core-rules.yaml (Tier 0 rules)
-├── cortex-brain/tier0/governance/phase-enforcement-map.yaml
-└── cortex-brain/tier0/response-headers.yaml (header config)
+├── cortex_brain/tier0/governance/core-rules.yaml (Tier 0 rules)
+├── cortex_brain/tier0/governance/phase-enforcement-map.yaml
+└── cortex_brain/tier0/response-headers.yaml (header config)
 ```
 
 ### Step 2: Gap Analysis (Identify Missing Pieces)

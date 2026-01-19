@@ -760,7 +760,7 @@ Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 -c "
 import sqlite3
 from pathlib import Path
 
-db_path = Path('cortex-brain/state/governance.db')
+db_path = Path('cortex_brain/state/governance.db')
 if db_path.exists():
     conn = sqlite3.connect(str(db_path))
     cursor = conn.cursor()
@@ -779,7 +779,7 @@ import sqlite3
 from pathlib import Path
 from datetime import datetime
 
-db_path = Path('cortex-brain/state/governance.db')
+db_path = Path('cortex_brain/state/governance.db')
 
 conn = sqlite3.connect(str(db_path))
 cursor = conn.cursor()
@@ -824,7 +824,7 @@ Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 -c "
 import sqlite3
 from pathlib import Path
 
-db_path = Path('cortex-brain/state/governance.db')
+db_path = Path('cortex_brain/state/governance.db')
 conn = sqlite3.connect(str(db_path))
 cursor = conn.cursor()
 cursor.execute('PRAGMA table_info(audit_log)')
@@ -843,7 +843,7 @@ from pathlib import Path
 from datetime import datetime
 import hashlib
 
-db_path = Path('cortex-brain/state/governance.db')
+db_path = Path('cortex_brain/state/governance.db')
 
 conn = sqlite3.connect(str(db_path))
 cursor = conn.cursor()
@@ -940,7 +940,7 @@ from pathlib import Path
 from datetime import datetime
 import hashlib
 
-db_path = Path('cortex-brain/state/governance.db')
+db_path = Path('cortex_brain/state/governance.db')
 
 conn = sqlite3.connect(str(db_path))
 cursor = conn.cursor()
@@ -1019,7 +1019,7 @@ from pathlib import Path
 from datetime import datetime
 import hashlib
 
-db_path = Path('cortex-brain/state/governance.db')
+db_path = Path('cortex_brain/state/governance.db')
 
 conn = sqlite3.connect(str(db_path))
 cursor = conn.cursor()
@@ -1100,7 +1100,7 @@ Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'EOF'
 import sqlite3
 from pathlib import Path
 
-db_path = Path('cortex-brain/state/governance.db')
+db_path = Path('cortex_brain/state/governance.db')
 conn = sqlite3.connect(str(db_path))
 cursor = conn.cursor()
 

@@ -29,10 +29,10 @@
 #### Governance Foundation
 - ✅ References all Tier 0 rules correctly:
   ```
-  - cortex-brain/tier0/governance/core-rules.yaml
-  - cortex-brain/tier0/governance/interaction-rules.yaml
-  - cortex-brain/tier0/governance/planning-rules.yaml
-  - cortex-brain/tier0/governance/tdd-rules.yaml
+  - cortex_brain/tier0/governance/core-rules.yaml
+  - cortex_brain/tier0/governance/interaction-rules.yaml
+  - cortex_brain/tier0/governance/planning-rules.yaml
+  - cortex_brain/tier0/governance/tdd-rules.yaml
   ```
 
 #### LENS Protocol
@@ -53,7 +53,7 @@
 **Critical Gap: No Response Header/Template Integration**
 
 The prompt does NOT reference or instruct the user to:
-1. Load `cortex-brain/tier0/response-headers.yaml`
+1. Load `cortex_brain/tier0/response-headers.yaml`
 2. Use `ResponseHeaderInjector` for wrapping responses
 3. Inject copyright headers into responses
 4. Load from Tier 2 response templates
@@ -66,8 +66,8 @@ The prompt does NOT reference or instruct the user to:
 ## Response Header Integration
 
 When generating responses, you MUST:
-1. Load: cortex-brain/tier0/response-headers.yaml
-2. Load: cortex-brain/tier2/response-templates/
+1. Load: cortex_brain/tier0/response-headers.yaml
+2. Load: cortex_brain/tier2/response-templates/
 3. Wrap all responses with CORTEX headers
 4. Include copyright notice: "Copyright © 2025-2026 Asif Hussain"
 5. Use ResponseHeaderInjector pattern for all user-facing output
@@ -108,7 +108,7 @@ When generating responses, you MUST:
 **Critical Gaps:**
 
 1. **No Response Header Instructions**
-   - Doesn't mention `cortex-brain/tier0/response-headers.yaml`
+   - Doesn't mention `cortex_brain/tier0/response-headers.yaml`
    - No instructions to include copyright headers
    - No ResponseHeaderInjector reference
 
@@ -132,8 +132,8 @@ All responses MUST include:
 2. **Copyright**: "Copyright © 2025-2026 Asif Hussain. All rights reserved."
 3. **Format**: Markdown with proper separators
 
-Load from: `cortex-brain/tier0/response-headers.yaml`
-Templates from: `cortex-brain/tier2/response-templates/`
+Load from: `cortex_brain/tier0/response-headers.yaml`
+Templates from: `cortex_brain/tier2/response-templates/`
 ```
 
 ---
@@ -142,7 +142,7 @@ Templates from: `cortex-brain/tier2/response-templates/`
 
 ### ✅ Infrastructure is COMPLETE
 
-**Location:** `cortex-brain/tier0/response-headers.yaml` (195 lines)
+**Location:** `cortex_brain/tier0/response-headers.yaml` (195 lines)
 
 #### What's Configured
 - ✅ Author & attribution properly set
@@ -187,10 +187,10 @@ variables:
 
 ### ❌ Status: EMPTY - NOT IMPLEMENTED
 
-**Location:** `cortex-brain/tier2/response-templates/`
+**Location:** `cortex_brain/tier2/response-templates/`
 
 ```
-cortex-brain/tier2/
+cortex_brain/tier2/
 └── response-templates/
     └── .gitkeep  ← ONLY PLACEHOLDER
 ```
@@ -283,7 +283,7 @@ Based on the roadmap phase-06-ecosystem.yaml:
 User Request
     ↓
 MasterOrchestrator
-    ├─ Load: cortex-brain/tier0/response-headers.yaml ✅
+    ├─ Load: cortex_brain/tier0/response-headers.yaml ✅
     ├─ Create: ResponseHeaderInjector ✅
     ├─ Generate: Response content ✅
     └─ Inject headers via: get_response_with_headers() ✅
@@ -360,7 +360,7 @@ All responses generated must comply with CORTEX response header standards:
 
 1. **Load Configuration**
    ```bash
-   cortex-brain/tier0/response-headers.yaml
+   cortex_brain/tier0/response-headers.yaml
    ```
    
 2. **Header Format**
@@ -377,8 +377,8 @@ All responses generated must comply with CORTEX response header standards:
 
 3. **Implementation Pattern**
    - Use `ResponseHeaderInjector` for response wrapping
-   - Load from `cortex-brain/tier0/response-headers.yaml`
-   - Load domain templates from `cortex-brain/tier2/response-templates/`
+   - Load from `cortex_brain/tier0/response-headers.yaml`
+   - Load domain templates from `cortex_brain/tier2/response-templates/`
    - Substitute variables: {operation}, {author}, {phase}, {orchestrator}
 
 4. **Example Response**
@@ -401,7 +401,7 @@ All responses generated must comply with CORTEX response header standards:
 
 5. **Template Resolution**
    - When generating domain-specific content:
-     1. Check `cortex-brain/tier2/response-templates/{domain}/`
+     1. Check `cortex_brain/tier2/response-templates/{domain}/`
      2. Load template matching operation type
      3. Render with context variables
      4. Inject headers around rendered output
@@ -430,8 +430,8 @@ All responses MUST include the CORTEX header and copyright notice:
    ```
 
 3. **Configuration Source**
-   - Headers: `cortex-brain/tier0/response-headers.yaml`
-   - Templates: `cortex-brain/tier2/response-templates/`
+   - Headers: `cortex_brain/tier0/response-headers.yaml`
+   - Templates: `cortex_brain/tier2/response-templates/`
 
 4. **Implementation**
    When generating responses in code:
@@ -447,7 +447,7 @@ All responses MUST include the CORTEX header and copyright notice:
    ```
 
 5. **Domain Templates**
-   Use templates from `cortex-brain/tier2/response-templates/{domain}/`
+   Use templates from `cortex_brain/tier2/response-templates/{domain}/`
    - governance/
    - planning/
    - analysis/
@@ -456,7 +456,7 @@ All responses MUST include the CORTEX header and copyright notice:
 
 ### Priority 3: Create Tier 2 Response Templates (MEDIUM)
 
-**Populate:** `cortex-brain/tier2/response-templates/`
+**Populate:** `cortex_brain/tier2/response-templates/`
 
 Suggested structure:
 ```

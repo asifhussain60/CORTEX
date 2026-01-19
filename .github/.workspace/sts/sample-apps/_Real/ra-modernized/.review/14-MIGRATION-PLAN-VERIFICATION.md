@@ -6,7 +6,7 @@
 
 ## 🎯 Migration Plan Compliance Check
 
-Verification of implementation against **RA Migration Plan v2.1** documented in `cortex-brain/documents/planning/ra-migration-plan-v2-changes.md`
+Verification of implementation against **RA Migration Plan v2.1** documented in `cortex_brain/documents/planning/ra-migration-plan-v2-changes.md`
 
 ---
 

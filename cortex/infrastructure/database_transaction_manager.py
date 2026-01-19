@@ -497,7 +497,7 @@ class StateAtomicityManager:
 
 if __name__ == "__main__":
     # Simple test
-    db_path = Path(__file__).parent.parent.parent / "cortex-brain" / "state" / "test.db"
+    db_path = Path(__file__).parent.parent.parent / "cortex_brain" / "state" / "test.db"
     manager = DatabaseTransactionManager(str(db_path))
     
     try:

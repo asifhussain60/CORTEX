@@ -132,8 +132,8 @@ class KnowledgeRepository:
     """
     
     # Default paths (relative to project root)
-    DEFAULT_INDEX_PATH = "cortex-brain/tier3/knowledge/.knowledge-index.json"
-    DEFAULT_KNOWLEDGE_DIR = "cortex-brain/tier3/knowledge"
+    DEFAULT_INDEX_PATH = "cortex_brain/tier3/knowledge/.knowledge-index.json"
+    DEFAULT_KNOWLEDGE_DIR = "cortex_brain/tier3/knowledge"
     
     def __init__(
         self,
@@ -181,7 +181,7 @@ class KnowledgeRepository:
         # Auto-detect: walk up from this file's location
         current = Path(__file__).resolve()
         for parent in [current] + list(current.parents):
-            if (parent / "cortex-brain").exists() or (parent / "src").exists():
+            if (parent / "cortex_brain").exists() or (parent / "src").exists():
                 return parent
         
         # Fallback to current working directory

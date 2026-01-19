@@ -203,7 +203,7 @@
    
    1. **Master Plan**: `.github/roadmap/cortex-master.yaml`
    2. **Current Phase**: `docs/phases/phase-XX.yaml`  # <- WRONG location
-   3. **Governance Rules**: `cortex-brain/tier0/governance/core-rules.yaml`
+   3. **Governance Rules**: `cortex_brain/tier0/governance/core-rules.yaml`
    4. **Builder Prompt**: `.github/prompts/cortex-builder.prompt.md`
    5. **Vision Files**: `cortex-vision/*.yaml`
    ```
@@ -296,7 +296,7 @@ PHASE-14: locked=false, status=NOT_STARTED ⏳
 
 1. **Master Plan**: `.github/roadmap/cortex-master.yaml`
 2. **Current Phase**: `docs/phases/phase-XX.yaml`
-3. **Governance Rules**: `cortex-brain/tier0/governance/core-rules.yaml`
+3. **Governance Rules**: `cortex_brain/tier0/governance/core-rules.yaml`
 4. **Builder Prompt**: `.github/prompts/cortex-builder.prompt.md`
 5. **Vision Files**: `cortex-vision/*.yaml`
 ```
@@ -307,8 +307,8 @@ PHASE-14: locked=false, status=NOT_STARTED ⏳
 
 1. **Master Plan**: `.github/roadmap/cortex-master.yaml` (SSOT)
 2. **Phase Specifications**: `.github/roadmap/phases/phase-NN.yaml` (current phase)
-3. **Governance Rules**: `cortex-brain/tier0/governance/core-rules.yaml` (Tier 0 immutable)
-4. **Phase Enforcement**: `cortex-brain/tier0/governance/phase-enforcement-map.yaml`
+3. **Governance Rules**: `cortex_brain/tier0/governance/core-rules.yaml` (Tier 0 immutable)
+4. **Phase Enforcement**: `cortex_brain/tier0/governance/phase-enforcement-map.yaml`
 5. **Builder Prompt**: `.github/prompts/cortex-builder.prompt.md`
 6. **Git Commit Protocol**: `.github/prompts/cortex-git-commit.prompt.md`
 7. **Agents**: `.github/agents/cortex-builder.md` + `.github/agents/cortex-planner.md`
@@ -399,12 +399,12 @@ path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/config.yaml")
 ```yaml
 # ✅ CORRECT - Relative paths only
 paths:
-  database: "cortex-brain/state/governance.db"
-  rules: "cortex-brain/tier0/governance/core-rules.yaml"
+  database: "cortex_brain/state/governance.db"
+  rules: "cortex_brain/tier0/governance/core-rules.yaml"
 
 # ❌ WRONG - Absolute paths
 paths:
-  database: "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db"
+  database: "/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db"
 ```
 
 ### Validation

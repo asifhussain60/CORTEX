@@ -101,7 +101,7 @@ This created duplication, consistency risks, and inability to validate knowledge
 
 | Component | Implementation | Location | Evidence |
 |-----------|-----------------|----------|----------|
-| Domain Brain | Centralized Tier 3 knowledge repository | `cortex-brain/tier3/` | ✅ Foundation |
+| Domain Brain | Centralized Tier 3 knowledge repository | `cortex_brain/tier3/` | ✅ Foundation |
 | BKIO | BusinessKnowledgeIngestionOrchestrator | `src/domain_brain/bkio_orchestrator.py` (420 lines) | ✅ 70 tests |
 | AST Adapter | Source: Abstract Syntax Tree analysis | `src/domain_brain/ast_adapter.py` (150 lines) | ✅ 12 tests |
 | Git Adapter | Source: Git commit history | `src/domain_brain/git_adapter.py` (150 lines) | ✅ 13 tests |
@@ -216,8 +216,8 @@ CORTEX 6.0 regressed from CORTEX 5.5:
 | ConversationProtocol | Pre/post-turn validation gates | `src/core/orchestrator/conversation_protocol.py` (320 lines) | ✅ COMPLETE |
 | MasterOrchestrator | Governance check before delegation | `src/orchestrators/master/master_orchestrator.py` (280 lines) | ✅ COMPLETE |
 | TierAccessValidator | Active enforcement in execution | `src/core/tier_validator.py` (250 lines) | ✅ COMPLETE |
-| Database Schema | Tier enforcement schema + triggers | `cortex-brain/state/governance.db` schema | ⏳ DEFERRED |
-| Tier Access Log | Per-turn logging to database | `cortex-brain/state/audit_log` table | ✅ COMPLETE |
+| Database Schema | Tier enforcement schema + triggers | `cortex_brain/state/governance.db` schema | ⏳ DEFERRED |
+| Tier Access Log | Per-turn logging to database | `cortex_brain/state/audit_log` table | ✅ COMPLETE |
 
 #### Verification Evidence
 

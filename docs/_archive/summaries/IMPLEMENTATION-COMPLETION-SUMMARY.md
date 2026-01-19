@@ -141,7 +141,7 @@ PHASE-REMEDIATION-07 (3 ACs) ⬜ [Can run parallel]
 - Smoke tests: <30s execution for rapid feedback
 
 **File Organization Standards**:
-- Source code: `src/`, `cortex-brain/tierX/`
+- Source code: `src/`, `cortex_brain/tierX/`
 - Tests: `tests/unit/`, `tests/integration/`
 - Documentation: `docs/` or `_workspaces/roadmap/reports/`
 - Utilities: `src/mcp/utilities/`

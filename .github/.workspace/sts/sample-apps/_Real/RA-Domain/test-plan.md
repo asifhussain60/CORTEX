@@ -271,7 +271,7 @@ Get-ChildItem -Recurse -Filter *.cs | Measure-Object
 
 ```bash
 # Future ideal command
-cortex scan-domain --path "C:\PROJECTS\Product.PaymentAccounts" --output "cortex-brain/admin/RA-Domain"
+cortex scan-domain --path "C:\PROJECTS\Product.PaymentAccounts" --output "cortex_brain/admin/RA-Domain"
 ```
 
 ---

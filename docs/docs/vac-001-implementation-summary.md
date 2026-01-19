@@ -170,7 +170,7 @@ Each AC-ID generates audit entries:
 - **AC_EXECUTE:** Before execute() begins  
 - **AC_COMPLETE:** After all operations complete
 
-Logged to: `cortex-brain/state/governance.db`
+Logged to: `cortex_brain/state/governance.db`
 
 ---
 
@@ -204,7 +204,7 @@ These files are NEVER modified or deleted:
 - `pytest.ini` (test configuration)
 - `requirements.txt` (dependencies)
 - `.gitignore` (git configuration)
-- `cortex-brain/state/governance.db*` (audit database)
+- `cortex_brain/state/governance.db*` (audit database)
 
 ### Reference Integrity
 
@@ -262,23 +262,23 @@ docs_md/phases/phase-vac-001-md-organizer.yaml
 ### What Developers Will Do Next
 
 **Step 1: VAC-001-01 - Cleaner Plugin Architecture (4 hours)**
-- Create `cortex-brain/tier1/orchestrators/cleaners/interface.py`
-- Create `cortex-brain/tier1/orchestrators/cleaners/registry.py`
+- Create `cortex_brain/tier1/orchestrators/cleaners/interface.py`
+- Create `cortex_brain/tier1/orchestrators/cleaners/registry.py`
 - Create tests in `tests/unit/tier1/orchestrators/test_cleaner_interface.py`
-- Modify `cortex-brain/tier1/orchestrators/vacuum.py` to add plugin support
+- Modify `cortex_brain/tier1/orchestrators/vacuum.py` to add plugin support
 
 **Step 2: VAC-001-02 - MD Analyzer (6 hours)**
-- Create `cortex-brain/tier1/orchestrators/cleaners/md_organizer/analyzer.py`
+- Create `cortex_brain/tier1/orchestrators/cleaners/md_organizer/analyzer.py`
 - Implement file scanning, classification, reference tracking
 - Create tests in `tests/unit/tier1/orchestrators/test_md_organizer_analyzer.py`
 
 **Step 3: VAC-001-03 - MD Executor (8 hours)**
-- Create `cortex-brain/tier1/orchestrators/cleaners/md_organizer/executor.py`
+- Create `cortex_brain/tier1/orchestrators/cleaners/md_organizer/executor.py`
 - Implement file operations, renaming, reference updating, snapshot/rollback
 - Create tests in `tests/unit/tier1/orchestrators/test_md_organizer_executor.py`
 
 **Step 4: VAC-001-04 - Integration (4 hours)**
-- Create `cortex-brain/tier1/orchestrators/cleaners/md_organizer/cleaner.py`
+- Create `cortex_brain/tier1/orchestrators/cleaners/md_organizer/cleaner.py`
 - Wire into VacuumOrchestrator as first plugin
 - Create integration tests
 

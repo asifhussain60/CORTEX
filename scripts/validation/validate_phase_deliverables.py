@@ -225,7 +225,7 @@ class PhaseDeliverableValidator:
     
     def _validate_tier2_templates(self) -> None:
         """Validate Tier 2 response templates exist and are not empty."""
-        tier2_base = self.project_root / "cortex-brain" / "tier2"
+        tier2_base = self.project_root / "cortex_brain" / "tier2"
         
         # Check base templates
         base_dir = tier2_base / "base"
@@ -255,7 +255,7 @@ class PhaseDeliverableValidator:
             self.results.append(ValidationResult(
                 check_name="Tier 2 Domain Templates Directory",
                 passed=False,
-                message="❌ cortex-brain/tier2/domains/ directory not found",
+                message="❌ cortex_brain/tier2/domains/ directory not found",
                 severity="ERROR"
             ))
         

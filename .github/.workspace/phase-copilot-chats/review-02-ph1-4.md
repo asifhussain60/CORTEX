@@ -41,7 +41,7 @@ Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && .venv/bin/python 
 import sqlite3
 from pathlib import Path
 
-db_path = Path("cortex-brain/state/governance.db")
+db_path = Path("cortex_brain/state/governance.db")
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
@@ -403,7 +403,7 @@ Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && .venv/bin/python 
 import sqlite3
 from collections import defaultdict
 
-db_path = "cortex-brain/state/governance.db"
+db_path = "cortex_brain/state/governance.db"
 try:
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -475,7 +475,7 @@ Let me check the correct schema:
 Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && .venv/bin/python << 'EOF'
 import sqlite3
 
-db_path = "cortex-brain/state/governance.db"
+db_path = "cortex_brain/state/governance.db"
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
@@ -496,7 +496,7 @@ Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && .venv/bin/python 
 import sqlite3
 from collections import defaultdict
 
-db_path = "cortex-brain/state/governance.db"
+db_path = "cortex_brain/state/governance.db"
 try:
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
@@ -577,7 +577,7 @@ Let me fix the query:
 Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && .venv/bin/python << 'EOF'
 import sqlite3
 
-db_path = "cortex-brain/state/governance.db"
+db_path = "cortex_brain/state/governance.db"
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 

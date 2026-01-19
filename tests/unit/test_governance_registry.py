@@ -2,7 +2,7 @@
 3-Tier Governance Model Tests - TDD for AR-001
 
 Tests for:
-- AC-AR-001-01: Tier 0 rules loaded from cortex-brain/tier0/governance/core-rules.yaml
+- AC-AR-001-01: Tier 0 rules loaded from cortex_brain/tier0/governance/core-rules.yaml
 - AC-AR-001-02: Tier precedence enforced (0 > 1 > 2)
 - AC-AR-001-03: Tier 0 rules immutable (modification attempts rejected)
 

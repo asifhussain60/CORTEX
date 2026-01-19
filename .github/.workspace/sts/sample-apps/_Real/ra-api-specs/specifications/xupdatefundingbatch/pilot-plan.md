@@ -248,7 +248,7 @@ Validate the **3-phase specification-first migration workflow** with a simple, l
 
 ## 📁 Artifact Storage
 
-**Location:** `cortex-brain/documents/pilot-projects/xupdatefundingbatch/`
+**Location:** `cortex_brain/documents/pilot-projects/xupdatefundingbatch/`
 
 **Structure:**
 ```

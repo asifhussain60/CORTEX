@@ -138,7 +138,7 @@ for func in analysis.function_list:
 
 ## 🚀 Analysis Script Template
 
-**Location:** `cortex-brain/admin/RA-Domain/scripts/analyze_csharp.py`
+**Location:** `cortex_brain/admin/RA-Domain/scripts/analyze_csharp.py`
 
 ```python
 #!/usr/bin/env python3
@@ -219,7 +219,7 @@ def analyze_csproj(filepath):
 
 def main():
     repo_path = Path('C:/PROJECTS/Product.PaymentAccounts')
-    output_path = Path('C:/PROJECTS/CORTEX/cortex-brain/admin/RA-Domain/ast-outputs')
+    output_path = Path('C:/PROJECTS/CORTEX/cortex_brain/admin/RA-Domain/ast-outputs')
     
     # Analyze all C# files
     results = defaultdict(list)
@@ -284,7 +284,7 @@ if __name__ == '__main__':
 
 3. **Run Analysis:**
    ```bash
-   python cortex-brain/admin/RA-Domain/scripts/analyze_csharp.py
+   python cortex_brain/admin/RA-Domain/scripts/analyze_csharp.py
    ```
 
 4. **Review Outputs:**

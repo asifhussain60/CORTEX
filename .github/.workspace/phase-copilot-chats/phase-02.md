@@ -34,7 +34,7 @@ Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'EOF'
 import sqlite3
 from datetime import datetime
 
-db_path = "cortex-brain/state/governance.db"
+db_path = "cortex_brain/state/governance.db"
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
@@ -101,7 +101,7 @@ Let me check the audit table schema:
 Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'EOF'
 import sqlite3
 
-db_path = "cortex-brain/state/governance.db"
+db_path = "cortex_brain/state/governance.db"
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
@@ -121,7 +121,7 @@ Good! Now let me query the audit logs properly:
 Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && python3 << 'EOF'
 import sqlite3
 
-db_path = "cortex-brain/state/governance.db"
+db_path = "cortex_brain/state/governance.db"
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
@@ -719,7 +719,7 @@ Perfect! Let me verify the Phase lock was properly recorded in the database:
 Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && .venv/bin/python << 'EOF'
 import sqlite3
 
-db_path = "cortex-brain/state/governance.db"
+db_path = "cortex_brain/state/governance.db"
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
@@ -799,7 +799,7 @@ Excellent! Now verify it:
 Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && .venv/bin/python << 'EOF'
 import sqlite3
 
-db_path = "cortex-brain/state/governance.db"
+db_path = "cortex_brain/state/governance.db"
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
@@ -1069,7 +1069,7 @@ Ran terminal command: cat > /Users/asifhussain/PROJECTS/CORTEX/STATUS.md << 'EOF
 - `STATUS.md` - This file
 
 ### Database
-- `cortex-brain/state/governance.db` - Single source of truth
+- `cortex_brain/state/governance.db` - Single source of truth
   - `ac_index` table: All 36+ AC-IDs
   - `audit_log` table: Immutable audit trail with hash chain
   - `phase_locks` table: Phase lock status
@@ -1188,7 +1188,7 @@ cf8e8997e checkpoint: before PHASE-01 initialization
 # Check Phase-01 lock
 .venv/bin/python << 'PYEOF'
 import sqlite3
-conn = sqlite3.connect('cortex-brain/state/governance.db')
+conn = sqlite3.connect('cortex_brain/state/governance.db')
 cursor = conn.cursor()
 cursor.execute("SELECT * FROM phase_locks WHERE phase_id='PHASE-01'")
 print(cursor.fetchone())
@@ -1321,7 +1321,7 @@ Architecture Decisions (9):
      - Governance context in responses
    
    • AR-009: Custom Response Templates (3 AC-IDs)
-     - Template loading from cortex-brain/tier2/
+     - Template loading from cortex_brain/tier2/
      - Variable substitution
      - Template inheritance
 
@@ -1512,7 +1512,7 @@ Database State:
 EOF
 .venv/bin/python << 'PYEOF' && cat << 'EOF'
 import sqlite3
-db_path = "cortex-brain/state/governance.db"
+db_path = "cortex_brain/state/governance.db"
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
@@ -1571,7 +1571,7 @@ Let me create a final summary report directly:
 Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && .venv/bin/python << 'EOF'
 import sqlite3
 
-db_path = "cortex-brain/state/governance.db"
+db_path = "cortex_brain/state/governance.db"
 conn = sqlite3.connect(db_path)
 cursor = conn.cursor()
 
@@ -1659,7 +1659,7 @@ Ran terminal command: git status
 
 Let me stage the database changes and commit: 
 
-Ran terminal command: git add cortex-brain/state/governance.db cortex-brain/state/governance.db-shm && git commit -m "Update governance.db: Phase-01 lock recorded" && git push origin CORTEX6
+Ran terminal command: git add cortex_brain/state/governance.db cortex_brain/state/governance.db-shm && git commit -m "Update governance.db: Phase-01 lock recorded" && git push origin CORTEX6
 
 Perfect! Now let me create the Phase-02 startup guide: 
 
@@ -1735,7 +1735,7 @@ Critical Path:
 ═════════════════════════════════════════
 
 3. AR-009: Custom Response Templates (3 AC-IDs)
-   ├─ AC-AR-009-01: Response templates loaded from cortex-brain/tier2/
+   ├─ AC-AR-009-01: Response templates loaded from cortex_brain/tier2/
    ├─ AC-AR-009-02: Templates support variable substitution
    └─ AC-AR-009-03: Template inheritance working
    
@@ -3572,11 +3572,11 @@ Perfect! Now I understand the PHASE-02 structure. We have:
 
 So the next AC-IDs to implement are AR-009-01, 02, 03. Let me create the implementation for AR-009. First, let me read the templates directory to understand the structure: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2)
 
 Good! Now let me check what's in the response-templates directory: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2/response-templates)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2/response-templates)
 
 Perfect - the templates directory exists but is empty. Now let me implement AR-009 (Custom Response Templates). I'll create the TemplateEngine and TemplateRegistry: 
 
@@ -3650,7 +3650,7 @@ AR-009: CUSTOM RESPONSE TEMPLATES ✅ COMPLETE
   ✓ 21 comprehensive tests (all passing)
   ✓ Full variable substitution support
   ✓ Multi-level template inheritance
-  ✓ Template loading from cortex-brain/tier2/
+  ✓ Template loading from cortex_brain/tier2/
 
 ▸ AC-ID BREAKDOWN
   ✓ AC-AR-009-01: Templates loaded from tier2/response-templates (5 tests)
@@ -3760,7 +3760,7 @@ Ran terminal command: git add -A && git commit -m "checkpoint: PHASE-02 at 44% c
 
 Good - no uncommitted changes. Now let's check the AC requirements for the Input Validation Framework: Let me list the acceptance criteria directory: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1/acceptance-criteria)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier1/acceptance-criteria)
 
 Let me check the AC-INDEX in the tier root or find AC requirements: 
 
@@ -3940,7 +3940,7 @@ SECTION: Day 4 Task 2 — Input Validation Framework (AC-VALIDATE-001 through 00
 ▸ ASSUMPTIONS
 
   • GovernanceRegistry populated with tier 0-2 rules — Source: PHASE-01 (locked)
-  • AC-INDEX accessible for AC-ID validation — Source: cortex-brain/tier1/
+  • AC-INDEX accessible for AC-ID validation — Source: cortex_brain/tier1/
   • AuditLogger integrated — Source: infrastructure/audit_logger.py
   • Evidence bundles follow established structure — Source: AR-009 (complete)
 
@@ -4995,7 +4995,7 @@ Ran terminal command: git status
 
 The changes to `governance.db` and `governance.db-shm` are database state files that shouldn't be committed. Let me verify what's in the staging area and check if there are any code changes: 
 
-Ran terminal command: git diff --name-only cortex-brain/state/governance.db 2>/dev/null | head -5 && echo "Database files are modified but not tracked in commits (expected)" && git log --oneline -1
+Ran terminal command: git diff --name-only cortex_brain/state/governance.db 2>/dev/null | head -5 && echo "Database files are modified but not tracked in commits (expected)" && git log --oneline -1
 
 Perfect! The repository is already fully committed and pushed. The only changes are database state files (`governance.db` and `governance.db-shm`) which are runtime state and shouldn't be committed.
 

@@ -326,11 +326,11 @@ This assessment welcomes feedback. Key discussion topics:
 **In Project Root**:
 - `.github/roadmap/cortex-master.yaml` - CORTEX master roadmap
 - `docs/phases/phase-*.yaml` - Individual phase specifications
-- `cortex-brain/tier3/knowledge/DOCUMENTATION/` - Documentation standards
+- `cortex_brain/tier3/knowledge/DOCUMENTATION/` - Documentation standards
 
 **Sample Applications**:
 - `.github/.workspace/sts/sample-apps/BadMonolith/` - This application
-- `cortex-brain/documents/planning/STS-REGEN/` - STS planning documents
+- `cortex_brain/documents/planning/STS-REGEN/` - STS planning documents
 
 ---
 

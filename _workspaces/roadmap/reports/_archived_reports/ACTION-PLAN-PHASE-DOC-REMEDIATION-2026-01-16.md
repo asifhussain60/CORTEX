@@ -74,7 +74,7 @@ Every orchestrator response follows this structure:
 ### Implementation Reference
 The ResponseHeaderInjector is implemented in:
 - **Class:** `src/core/response_header_injector.py::ResponseHeaderInjector`
-- **Configuration:** `cortex-brain/tier0/response-headers.yaml`
+- **Configuration:** `cortex_brain/tier0/response-headers.yaml`
 - **Usage Pattern:** See `src/orchestrators/domain/planning_orchestrator.py` (AC-ENH-001-01)
 
 ### Key Features
@@ -86,7 +86,7 @@ The ResponseHeaderInjector is implemented in:
 
 ### Configuration File
 ```yaml
-# cortex-brain/tier0/response-headers.yaml
+# cortex_brain/tier0/response-headers.yaml
 response_headers:
   enabled: true
   format: "CORTEX"
@@ -132,7 +132,7 @@ class MyOrchestrator(OrchestratorBase):
 See: `tests/unit/test_response_headers.py` (full test suite with 58+ tests)
 
 ### Next Steps
-1. Review `cortex-brain/tier0/response-headers.yaml` for configuration
+1. Review `cortex_brain/tier0/response-headers.yaml` for configuration
 2. Check `src/orchestrators/domain/planning_orchestrator.py` for reference implementation
 3. When implementing new orchestrators, follow the pattern from AC-ENH-001-01
 ```
@@ -165,10 +165,10 @@ Find section that mentions "Configuration Files" or add new subsection:
 ```markdown
 ### Related Configuration Files
 
-- **Governance Rules:** See `cortex-brain/tier0/governance/core-rules.yaml`
-- **Response Headers:** See `cortex-brain/tier0/response-headers.yaml`
+- **Governance Rules:** See `cortex_brain/tier0/governance/core-rules.yaml`
+- **Response Headers:** See `cortex_brain/tier0/response-headers.yaml`
 - **Phase Tracking:** See `.github/roadmap/cortex-master.yaml` (phase_tracker section)
-- **Domain Registry:** See `cortex-brain/tier3/domain-registry.yaml`
+- **Domain Registry:** See `cortex_brain/tier3/domain-registry.yaml`
 ```
 
 **Validation:**
@@ -220,7 +220,7 @@ CORTEX RESPONSE FORMAT:
 
 ### Response Content Guidelines
 - JSON responses must be valid and parseable
-- YAML must follow cortex-brain/tier2/ schema
+- YAML must follow cortex_brain/tier2/ schema
 - Plain text must be structured (lists, tables, etc.)
 - All responses must be audit-logged
 
@@ -357,7 +357,7 @@ grep -c "Copyright.*2025-2026" .github/copilot-instruction.md
 
 **Files to Create:**
 
-#### 1. `cortex-brain/tier2/base/success-response.yaml`
+#### 1. `cortex_brain/tier2/base/success-response.yaml`
 ```yaml
 # Success Response Template
 # Standard response for successful operations
@@ -413,7 +413,7 @@ validation:
   - timestamp must be ISO-8601 format
 ```
 
-#### 2. `cortex-brain/tier2/base/error-response.yaml`
+#### 2. `cortex_brain/tier2/base/error-response.yaml`
 ```yaml
 # Error Response Template
 # Standard response for failed operations
@@ -477,7 +477,7 @@ variables:
     required: true
 ```
 
-#### 3. `cortex-brain/tier2/base/warning-response.yaml`
+#### 3. `cortex_brain/tier2/base/warning-response.yaml`
 ```yaml
 # Warning Response Template
 # Response indicating partial success or non-blocking issues
@@ -546,10 +546,10 @@ variables:
 
 **Validation:**
 ```bash
-ls -la cortex-brain/tier2/base/
+ls -la cortex_brain/tier2/base/
 # Should show 3 .yaml files (not just .gitkeep)
 
-grep -l "name:" cortex-brain/tier2/base/*.yaml
+grep -l "name:" cortex_brain/tier2/base/*.yaml
 # Should return all 3 files
 ```
 
@@ -560,21 +560,21 @@ grep -l "name:" cortex-brain/tier2/base/*.yaml
 **Files to Create:**
 
 #### Governance Domain
-1. `cortex-brain/tier2/domains/governance/evaluation-result.yaml`
-2. `cortex-brain/tier2/domains/governance/rule-violation.yaml`
+1. `cortex_brain/tier2/domains/governance/evaluation-result.yaml`
+2. `cortex_brain/tier2/domains/governance/rule-violation.yaml`
 
 #### Planning Domain
-3. `cortex-brain/tier2/domains/planning/recommendations.yaml`
-4. `cortex-brain/tier2/domains/planning/impact-assessment.yaml`
+3. `cortex_brain/tier2/domains/planning/recommendations.yaml`
+4. `cortex_brain/tier2/domains/planning/impact-assessment.yaml`
 
 #### TDD Domain
-5. `cortex-brain/tier2/domains/tdd/test-result.yaml`
-6. `cortex-brain/tier2/domains/tdd/coverage-report.yaml`
+5. `cortex_brain/tier2/domains/tdd/test-result.yaml`
+6. `cortex_brain/tier2/domains/tdd/coverage-report.yaml`
 
 **Example Content for Each:**
 
 ```yaml
-# cortex-brain/tier2/domains/governance/evaluation-result.yaml
+# cortex_brain/tier2/domains/governance/evaluation-result.yaml
 name: "governance_evaluation_result"
 description: "Result of governance rule evaluation"
 inherits: "base/success-response"
@@ -595,10 +595,10 @@ extends:
 
 **Validation:**
 ```bash
-find cortex-brain/tier2/domains -name "*.yaml" | wc -l
+find cortex_brain/tier2/domains -name "*.yaml" | wc -l
 # Should return: 6
 
-grep -l "name:" cortex-brain/tier2/domains/*/*.yaml
+grep -l "name:" cortex_brain/tier2/domains/*/*.yaml
 # Should list all 6 files
 ```
 
@@ -606,7 +606,7 @@ grep -l "name:" cortex-brain/tier2/domains/*/*.yaml
 
 ### AC-DOC-003-03: Create Response Templates Index
 
-**File:** `cortex-brain/tier2/response-templates-index.yaml`
+**File:** `cortex_brain/tier2/response-templates-index.yaml`
 
 ```yaml
 # Response Templates Index
@@ -619,51 +619,51 @@ last_updated: "2026-01-16T12:00:00Z"
 
 base_templates:
   - name: "success_response"
-    path: "cortex-brain/tier2/base/success-response.yaml"
+    path: "cortex_brain/tier2/base/success-response.yaml"
     purpose: "Standard successful operation response"
     status_code: 200
     
   - name: "error_response"
-    path: "cortex-brain/tier2/base/error-response.yaml"
+    path: "cortex_brain/tier2/base/error-response.yaml"
     purpose: "Standard error operation response"
     status_code: "400-599"
     
   - name: "warning_response"
-    path: "cortex-brain/tier2/base/warning-response.yaml"
+    path: "cortex_brain/tier2/base/warning-response.yaml"
     purpose: "Partial success or warning response"
     status_code: 206
 
 domain_templates:
   governance:
     - name: "evaluation_result"
-      path: "cortex-brain/tier2/domains/governance/evaluation-result.yaml"
+      path: "cortex_brain/tier2/domains/governance/evaluation-result.yaml"
       purpose: "Result of governance rule evaluation"
       inherits: "success_response"
       
     - name: "rule_violation"
-      path: "cortex-brain/tier2/domains/governance/rule-violation.yaml"
+      path: "cortex_brain/tier2/domains/governance/rule-violation.yaml"
       purpose: "Report of governance rule violation"
       inherits: "error_response"
   
   planning:
     - name: "recommendations"
-      path: "cortex-brain/tier2/domains/planning/recommendations.yaml"
+      path: "cortex_brain/tier2/domains/planning/recommendations.yaml"
       purpose: "Planning recommendations for next steps"
       inherits: "success_response"
       
     - name: "impact_assessment"
-      path: "cortex-brain/tier2/domains/planning/impact-assessment.yaml"
+      path: "cortex_brain/tier2/domains/planning/impact-assessment.yaml"
       purpose: "Impact analysis of proposed changes"
       inherits: "success_response"
   
   tdd:
     - name: "test_result"
-      path: "cortex-brain/tier2/domains/tdd/test-result.yaml"
+      path: "cortex_brain/tier2/domains/tdd/test-result.yaml"
       purpose: "Result of test execution"
       inherits: "success_response"
       
     - name: "coverage_report"
-      path: "cortex-brain/tier2/domains/tdd/coverage-report.yaml"
+      path: "cortex_brain/tier2/domains/tdd/coverage-report.yaml"
       purpose: "Test coverage metrics and analysis"
       inherits: "success_response"
 
@@ -682,7 +682,7 @@ validation:
 
 **Validation:**
 ```bash
-test -f cortex-brain/tier2/response-templates-index.yaml && echo "✓ Index created"
+test -f cortex_brain/tier2/response-templates-index.yaml && echo "✓ Index created"
 ```
 
 ---
@@ -726,8 +726,8 @@ def validate_templates_not_empty() -> Tuple[bool, List[str]]:
     """Check tier2 templates not empty (.gitkeep only)."""
     errors = []
     tier2_dirs = [
-        'cortex-brain/tier2/base',
-        'cortex-brain/tier2/domains',
+        'cortex_brain/tier2/base',
+        'cortex_brain/tier2/domains',
     ]
     
     for dir_path in tier2_dirs:
@@ -879,31 +879,31 @@ PHASE-DOC-REMEDIATION EXECUTION CHECKLIST
     [ ] Save and commit: git commit -m "AC-DOC-002-02: Copyright header template"
 
 [ ] AC-DOC-003-01: Create base templates (45 min)
-    [ ] Create cortex-brain/tier2/base/success-response.yaml
-    [ ] Create cortex-brain/tier2/base/error-response.yaml
-    [ ] Create cortex-brain/tier2/base/warning-response.yaml
+    [ ] Create cortex_brain/tier2/base/success-response.yaml
+    [ ] Create cortex_brain/tier2/base/error-response.yaml
+    [ ] Create cortex_brain/tier2/base/warning-response.yaml
     [ ] Remove .gitkeep if it exists
-    [ ] Validate: ls cortex-brain/tier2/base/ should show 3 .yaml files
+    [ ] Validate: ls cortex_brain/tier2/base/ should show 3 .yaml files
     [ ] Save and commit: git commit -m "AC-DOC-003-01: Create base response templates"
 
 [ ] AC-DOC-003-02: Create domain templates (45 min)
-    [ ] Create cortex-brain/tier2/domains/governance/evaluation-result.yaml
-    [ ] Create cortex-brain/tier2/domains/governance/rule-violation.yaml
-    [ ] Create cortex-brain/tier2/domains/planning/recommendations.yaml
-    [ ] Create cortex-brain/tier2/domains/planning/impact-assessment.yaml
-    [ ] Create cortex-brain/tier2/domains/tdd/test-result.yaml
-    [ ] Create cortex-brain/tier2/domains/tdd/coverage-report.yaml
+    [ ] Create cortex_brain/tier2/domains/governance/evaluation-result.yaml
+    [ ] Create cortex_brain/tier2/domains/governance/rule-violation.yaml
+    [ ] Create cortex_brain/tier2/domains/planning/recommendations.yaml
+    [ ] Create cortex_brain/tier2/domains/planning/impact-assessment.yaml
+    [ ] Create cortex_brain/tier2/domains/tdd/test-result.yaml
+    [ ] Create cortex_brain/tier2/domains/tdd/coverage-report.yaml
     [ ] Remove .gitkeep files if they exist
-    [ ] Validate: find cortex-brain/tier2/domains -name "*.yaml" | wc -l should return 6
+    [ ] Validate: find cortex_brain/tier2/domains -name "*.yaml" | wc -l should return 6
     [ ] Save and commit: git commit -m "AC-DOC-003-02: Create domain response templates"
 
 [ ] AC-DOC-003-03: Create templates index (15 min)
-    [ ] Create cortex-brain/tier2/response-templates-index.yaml
+    [ ] Create cortex_brain/tier2/response-templates-index.yaml
     [ ] Include all 9 templates (3 base + 6 domain)
     [ ] Include version and last updated
     [ ] Include usage instructions
     [ ] Include validation rules
-    [ ] Validate: test -f cortex-brain/tier2/response-templates-index.yaml
+    [ ] Validate: test -f cortex_brain/tier2/response-templates-index.yaml
     [ ] Save and commit: git commit -m "AC-DOC-003-03: Create response templates index"
 
 [ ] AC-DOC-004-01: Create validation script (30 min)

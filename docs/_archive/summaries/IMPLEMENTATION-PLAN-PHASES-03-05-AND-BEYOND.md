@@ -362,7 +362,7 @@ For each AC-ID:
 
 ### File Organization
 
-- **Source code**: `src/`, `cortex-brain/tierX/`
+- **Source code**: `src/`, `cortex_brain/tierX/`
 - **Tests**: `tests/unit/`, `tests/integration/`
 - **Utilities**: `src/mcp/utilities/`
 - **Analysis tools**: `src/mcp/tools/analysis/`
@@ -439,7 +439,7 @@ A: Yes! PHASE-PARALLEL can run with PHASE-02/03/04, but must finish before PHASE
 
 - **Single Source of Truth**: `cortex-builder.prompt.md` (sections on SSOT)
 - **Validator**: `scripts/validate_phase_sync.py` (auto-fixes, prevention)
-- **Governance**: `cortex-brain/tier0/governance/core-rules.yaml`
+- **Governance**: `cortex_brain/tier0/governance/core-rules.yaml`
 - **Phase YAML Archive**: `_workspaces/roadmap/_archives/phase-yamls-v1/` (read-only reference)
 
 ---

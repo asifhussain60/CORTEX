@@ -61,7 +61,7 @@ phase_03:
 - **Tests Expected**: 14 unit, 6 integration
 - **Tests Actual**: 16 unit, 6 integration + 4 parametrized + 3 performance (23 total, 100% pass rate)
 - **Completion**: 2026-01-18T12:15:00Z
-- **Module**: `cortex-brain/tier2/resilience/__init__.py` (380 LOC)
+- **Module**: `cortex_brain/tier2/resilience/__init__.py` (380 LOC)
 - **Classes**: CircuitBreaker, CircuitBreakerConfig, CircuitBreakerMetrics, CircuitBreakerOpen, CircuitBreakerState
 
 ### 4. AC-NFR-004-01: OpenTelemetry Metrics Integration
@@ -157,7 +157,7 @@ git commit -m "phase-03: status IN_PROGRESS - all 6 ACs ready for implementation
 ### Module Structure
 All PHASE-03 implementation goes into:
 ```
-cortex-brain/
+cortex_brain/
   tier2/
     resilience/
       __init__.py  (380+ lines of core components)
@@ -251,7 +251,7 @@ python3 scripts/validation/validate_phase_sync.py --verbose
 
 - **Master Plan**: `_workspaces/roadmap/cortex-master.yaml`
 - **Validator**: `scripts/validation/validate_phase_sync.py`
-- **Implementation**: `cortex-brain/tier2/resilience/`
+- **Implementation**: `cortex_brain/tier2/resilience/`
 - **Tests**: `tests/tier2/`
 - **Governance**: `docs/CORE-*.md`, `src/orchestrators/governance/`
 

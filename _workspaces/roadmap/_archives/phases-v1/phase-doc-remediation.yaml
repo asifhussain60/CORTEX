@@ -169,7 +169,7 @@ acceptance_criteria:
       
       ### Overview
       All responses generated must comply with CORTEX response header standards
-      defined in Tier 0: `cortex-brain/tier0/response-headers.yaml`
+      defined in Tier 0: `cortex_brain/tier0/response-headers.yaml`
       
       ### Header Format
       [Document the header structure]
@@ -194,8 +194,8 @@ acceptance_criteria:
     files_to_modify:
       - path: ".github/prompts/CORTEX.prompt.md"
         changes:
-          - "Add reference to cortex-brain/tier0/response-headers.yaml"
-          - "Add reference to cortex-brain/tier2/response-templates/"
+          - "Add reference to cortex_brain/tier0/response-headers.yaml"
+          - "Add reference to cortex_brain/tier2/response-templates/"
     
     acceptance_tests:
       - test: "grep 'response-headers.yaml' .github/prompts/CORTEX.prompt.md"
@@ -276,24 +276,24 @@ acceptance_criteria:
     estimated_minutes: 45
     
     files_to_create:
-      - path: "cortex-brain/tier2/base/success-response.yaml"
+      - path: "cortex_brain/tier2/base/success-response.yaml"
         content_type: "template"
         description: "Base template for successful operation responses"
-      - path: "cortex-brain/tier2/base/error-response.yaml"
+      - path: "cortex_brain/tier2/base/error-response.yaml"
         content_type: "template"
         description: "Base template for error responses"
-      - path: "cortex-brain/tier2/base/warning-response.yaml"
+      - path: "cortex_brain/tier2/base/warning-response.yaml"
         content_type: "template"
         description: "Base template for warning responses"
     
     acceptance_tests:
-      - test: "ls cortex-brain/tier2/base/*.yaml | wc -l"
+      - test: "ls cortex_brain/tier2/base/*.yaml | wc -l"
         expected: ">= 3"
         description: "At least 3 base templates exist"
-      - test: "test -f cortex-brain/tier2/base/success-response.yaml"
+      - test: "test -f cortex_brain/tier2/base/success-response.yaml"
         expected: "true"
         description: "Success template exists"
-      - test: "test -f cortex-brain/tier2/base/error-response.yaml"
+      - test: "test -f cortex_brain/tier2/base/error-response.yaml"
         expected: "true"
         description: "Error template exists"
   
@@ -309,36 +309,36 @@ acceptance_criteria:
     estimated_minutes: 60
     
     files_to_create:
-      - path: "cortex-brain/tier2/domains/governance/evaluation-result.yaml"
+      - path: "cortex_brain/tier2/domains/governance/evaluation-result.yaml"
         content_type: "template"
         description: "Template for governance evaluation results"
-      - path: "cortex-brain/tier2/domains/governance/rule-violation.yaml"
+      - path: "cortex_brain/tier2/domains/governance/rule-violation.yaml"
         content_type: "template"
         description: "Template for governance rule violation reports"
-      - path: "cortex-brain/tier2/domains/planning/recommendations.yaml"
+      - path: "cortex_brain/tier2/domains/planning/recommendations.yaml"
         content_type: "template"
         description: "Template for planning recommendations"
-      - path: "cortex-brain/tier2/domains/planning/impact-assessment.yaml"
+      - path: "cortex_brain/tier2/domains/planning/impact-assessment.yaml"
         content_type: "template"
         description: "Template for change impact assessments"
-      - path: "cortex-brain/tier2/domains/tdd/test-result.yaml"
+      - path: "cortex_brain/tier2/domains/tdd/test-result.yaml"
         content_type: "template"
         description: "Template for test execution results"
-      - path: "cortex-brain/tier2/domains/tdd/coverage-report.yaml"
+      - path: "cortex_brain/tier2/domains/tdd/coverage-report.yaml"
         content_type: "template"
         description: "Template for code coverage reports"
     
     acceptance_tests:
-      - test: "find cortex-brain/tier2/domains -name '*.yaml' | wc -l"
+      - test: "find cortex_brain/tier2/domains -name '*.yaml' | wc -l"
         expected: ">= 6"
         description: "At least 6 domain templates exist"
-      - test: "test -d cortex-brain/tier2/domains/governance"
+      - test: "test -d cortex_brain/tier2/domains/governance"
         expected: "true"
         description: "Governance domain directory exists"
-      - test: "test -d cortex-brain/tier2/domains/planning"
+      - test: "test -d cortex_brain/tier2/domains/planning"
         expected: "true"
         description: "Planning domain directory exists"
-      - test: "test -d cortex-brain/tier2/domains/tdd"
+      - test: "test -d cortex_brain/tier2/domains/tdd"
         expected: "true"
         description: "TDD domain directory exists"
   
@@ -354,15 +354,15 @@ acceptance_criteria:
     estimated_minutes: 30
     
     files_to_create:
-      - path: "cortex-brain/tier2/response-templates-index.yaml"
+      - path: "cortex_brain/tier2/response-templates-index.yaml"
         content_type: "index"
         description: "Master index of all tier 2 templates"
     
     acceptance_tests:
-      - test: "test -f cortex-brain/tier2/response-templates-index.yaml"
+      - test: "test -f cortex_brain/tier2/response-templates-index.yaml"
         expected: "true"
         description: "Index file exists"
-      - test: "grep 'templates:' cortex-brain/tier2/response-templates-index.yaml"
+      - test: "grep 'templates:' cortex_brain/tier2/response-templates-index.yaml"
         expected: "match found"
         description: "Index contains templates section"
   
@@ -447,9 +447,9 @@ completion_checklist:
       required: true
     - check: "copilot-instruction.md contains Response Format Standards section"
       required: true
-    - check: "cortex-brain/tier2/base/ contains 3+ template files"
+    - check: "cortex_brain/tier2/base/ contains 3+ template files"
       required: true
-    - check: "cortex-brain/tier2/domains/ contains 6+ template files"
+    - check: "cortex_brain/tier2/domains/ contains 6+ template files"
       required: true
     - check: "response-templates-index.yaml exists and is valid"
       required: true

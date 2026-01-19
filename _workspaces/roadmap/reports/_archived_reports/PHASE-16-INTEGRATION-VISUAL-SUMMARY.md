@@ -118,8 +118,8 @@ PHASE-01 ← PHASE-02 ← ... ← PHASE-13 ← PHASE-14
 ### PHASE-16 Standalone (Current - Option B)
 ```
 Files Created: 5
-├─ cortex-brain/tier3/domain-registry.yaml
-├─ cortex-brain/tier3/README-DOMAIN-INTEGRATION.md
+├─ cortex_brain/tier3/domain-registry.yaml
+├─ cortex_brain/tier3/README-DOMAIN-INTEGRATION.md
 ├─ src/domain/domain_brain_client.py
 ├─ tests/domain/test_domain_registry.py
 └─ tests/domain/test_domain_integration.py
@@ -135,8 +135,8 @@ Status: Optional enhancement ❌
 ### PHASE-16 Integrated (Recommended - Option A)
 ```
 Files Created: Same 5 files
-├─ cortex-brain/tier3/domain-registry.yaml
-├─ cortex-brain/tier3/README-DOMAIN-INTEGRATION.md
+├─ cortex_brain/tier3/domain-registry.yaml
+├─ cortex_brain/tier3/README-DOMAIN-INTEGRATION.md
 ├─ src/observability/dashboard_extensibility.py
 ├─ tests/observability/test_dashboard_extensibility.py
 └─ tests/integration/test_domain_registry.py

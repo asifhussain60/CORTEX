@@ -696,23 +696,23 @@ Read [](file:///Users/asifhussain/PROJECTS/CORTEX/tests/unit/tier2/hallucination
 
 Read [](file:///Users/asifhussain/PROJECTS/CORTEX/tests/unit/tier2/hallucination_prevention/test_hp_001_01_canonicalization.py#1-1), lines 1 to 30
 
-I see - the tests try to import from cortex-brain directory which may not exist or has different structure. Let me check: 
+I see - the tests try to import from cortex_brain directory which may not exist or has different structure. Let me check: 
 
 Read [](file:///Users/asifhussain/PROJECTS/CORTEX)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2/hallucination_prevention)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2/hallucination_prevention)
 
 Good - the modules exist. Let me check the __init__.py files to understand the module structure: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2/hallucination_prevention/__init__.py)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2/hallucination_prevention/__init__.py)
 
 Found it! The `tier2` directory doesn't have an __init__.py file, so Python can't import from it as a package. Let me create the missing __init__.py files: 
 
-Searched for files matching `**/cortex-brain/**/__init__.py`, 6 matches
+Searched for files matching `**/cortex_brain/**/__init__.py`, 6 matches
 
 Missing __init__.py files at:
 - __init__.py
@@ -720,25 +720,25 @@ Missing __init__.py files at:
 
 Let me create them: 
 
-Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/__init__.py)
+Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/__init__.py)
 
-Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2/__init__.py)
+Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2/__init__.py)
 
 Now let me check if tier0 and tier1 also need __init__.py: 
 
-Ran terminal command: ls -la /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier0/ | head -10
+Ran terminal command: ls -la /Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier0/ | head -10
 
-Ran terminal command: ls -la /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1/ | head -10
+Ran terminal command: ls -la /Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier1/ | head -10
 
-Ran terminal command: ls -la /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/ | head -10
+Ran terminal command: ls -la /Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/ | head -10
 
 Let me also check if there are Python files in tier0 and tier1 that need importing: 
 
-Ran terminal command: find /Users/asifhussain/PROJECTS/CORTEX/cortex-brain -name "*.py" | head -30
+Ran terminal command: find /Users/asifhussain/PROJECTS/CORTEX/cortex_brain -name "*.py" | head -30
 
 Now let me create tier1 __init__.py since it has Python orchestrators: 
 
-Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier1/__init__.py)
+Created [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier1/__init__.py)
 
 Now let me run the tests to see if the import errors are resolved: 
 
@@ -762,7 +762,7 @@ Ran terminal command: find /Users/asifhussain/PROJECTS/CORTEX/tests -name "conft
 
 Read [](file:///Users/asifhussain/PROJECTS/CORTEX/tests/conftest.py#1-1), lines 1 to 50
 
-I see - the conftest.py adds src to the path, but the hallucination_prevention tests are trying to import from hallucination_prevention. I need to also add cortex-brain to the path. Let me update the conftest.py: 
+I see - the conftest.py adds src to the path, but the hallucination_prevention tests are trying to import from hallucination_prevention. I need to also add cortex_brain to the path. Let me update the conftest.py: 
 
 Using "Replace String in File"
 
@@ -796,7 +796,7 @@ Ran terminal command: .venv/bin/python -m pytest tests/ --timeout=30 -q 2>&1 | t
 
 The test got suspended. Let me try a different approach - debug the import issue by checking what happens when collecting: 
 
-Ran terminal command: .venv/bin/python -c "import sys; sys.path.insert(0, 'cortex-brain'); from tier2.hallucination_prevention import CanonicalIntentEngine; print('Success!')"
+Ran terminal command: .venv/bin/python -c "import sys; sys.path.insert(0, 'cortex_brain'); from tier2.hallucination_prevention import CanonicalIntentEngine; print('Success!')"
 
 The import works. The problem must be a module namespace collision during test collection. Let me look at the actual test file imports more closely: 
 
@@ -862,13 +862,13 @@ Ran terminal command: .venv/bin/python -m pytest tests/unit/tier2/ -q --timeout=
 
 I fixed all import issues by creating the following missing __init__.py files:
 
-1. **__init__.py** - Makes cortex-brain a proper Python package
+1. **__init__.py** - Makes cortex_brain a proper Python package
 2. **__init__.py** - Makes tier1 a proper Python package  
 3. **__init__.py** - Makes tier2 a proper Python package
 4. **__init__.py** - Makes tests/unit/tier2 a proper Python package
 
 Additionally, I updated:
-- **conftest.py** - Added cortex-brain to `sys.path` so all tests can import from it
+- **conftest.py** - Added cortex_brain to `sys.path` so all tests can import from it
 - **__init__.py** - Updated to avoid package shadowing issues
 
 All import issues are now resolved:
@@ -959,10 +959,10 @@ STATUS: COMPLETED ✅
   • Tests passing: 89 (100% pass rate)
 
 ▸ IMPORT FIXES APPLIED (This Session)
-  • Created cortex-brain/__init__.py (package initialization)
-  • Created cortex-brain/tier1/__init__.py (tier1 package)
-  • Created cortex-brain/tier2/__init__.py (tier2 package)
-  • Updated tests/conftest.py (added cortex-brain to sys.path)
+  • Created cortex_brain/__init__.py (package initialization)
+  • Created cortex_brain/tier1/__init__.py (tier1 package)
+  • Created cortex_brain/tier2/__init__.py (tier2 package)
+  • Updated tests/conftest.py (added cortex_brain to sys.path)
   • Created tests/unit/tier2/__init__.py (test package)
   • Fixed Python 3.9 compatibility (Union[Path, str] syntax)
 
@@ -985,19 +985,19 @@ STATUS: COMPLETED ✅
 
 Now let me begin PHASE-20 implementation. First, let me understand what tier2 templates currently exist: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2/response-templates)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2/response-templates)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2/response-templates/README.md)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2/response-templates/README.md)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2/base)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2/base)
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2/domains)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2/domains)
 
-Ran terminal command: find /Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2/domains -name "*.yaml" | head -20
+Ran terminal command: find /Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2/domains -name "*.yaml" | head -20
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2/domains/planning/recommendations.yaml#1-1), lines 1 to 50
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2/domains/planning/recommendations.yaml#1-1), lines 1 to 50
 
 I can see the templates have structure but need content population. Let me create a comprehensive PHASE-20 implementation with proper tests first (TDD approach per CORE-008).
 
@@ -1259,9 +1259,9 @@ Searched for files matching `**/planning*recommendations*.yaml`, no matches
 
 Searched for files matching `**/recommendations*.yaml`, 2 matches
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2/domains/planning/recommendations.yaml#1-1), lines 1 to 50
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2/domains/planning/recommendations.yaml#1-1), lines 1 to 50
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier2/domains/planning/recommendations.yaml#50-50), lines 50 to 100
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier2/domains/planning/recommendations.yaml#50-50), lines 50 to 100
 
 So the file-based template has more mandatory variables! Options:
 1. Update the test to include all mandatory variables
@@ -2430,7 +2430,7 @@ Regression: 520 tests in related areas passing"
 
 Now let's update the cortex-master.yaml to add PHASE-REMEDIATION-06: 
 
-Searched text for `PHASE-REMEDIATION-05` (`**/cortex-brain/cortex-master.yaml`), no results
+Searched text for `PHASE-REMEDIATION-05` (`**/cortex_brain/cortex-master.yaml`), no results
 
 Searched text for `phase_tracker`, 20 results
 
@@ -2627,23 +2627,23 @@ Ran terminal command: git ls-tree --name-only -r CORTEX-4.0 | grep -i "docs/know
 
 Now let me check what exists on the current CORTEX6 branch: 
 
-Ran terminal command: ls -la cortex-brain/knowledge/ 2>/dev/null || echo "Directory does not exist"
+Ran terminal command: ls -la cortex_brain/knowledge/ 2>/dev/null || echo "Directory does not exist"
 
-Ran terminal command: ls -la cortex-brain/knowledge-library/ 2>/dev/null || echo "Directory does not exist"
+Ran terminal command: ls -la cortex_brain/knowledge-library/ 2>/dev/null || echo "Directory does not exist"
 
-Ran terminal command: find cortex-brain -name "*.yaml" -type f 2>/dev/null | grep -i "knowledge\|best-practice" | head -20
+Ran terminal command: find cortex_brain -name "*.yaml" -type f 2>/dev/null | grep -i "knowledge\|best-practice" | head -20
 
-Ran terminal command: ls -la cortex-brain/tier3/knowledge/ 2>/dev/null
+Ran terminal command: ls -la cortex_brain/tier3/knowledge/ 2>/dev/null
 
-Ran terminal command: find cortex-brain/tier3/knowledge -name "*.yaml" -type f | wc -l
+Ran terminal command: find cortex_brain/tier3/knowledge -name "*.yaml" -type f | wc -l
 
-Ran terminal command: find cortex-brain/tier3/knowledge -type f -name "*.yaml" -o -name "*.md" | head -30
+Ran terminal command: find cortex_brain/tier3/knowledge -type f -name "*.yaml" -o -name "*.md" | head -30
 
 Now let me count how many YAML files were on CORTEX-4.0: 
 
-Ran terminal command: git ls-tree --name-only -r CORTEX-4.0 | grep "cortex-brain/knowledge/.*\.yaml$" | wc -l
+Ran terminal command: git ls-tree --name-only -r CORTEX-4.0 | grep "cortex_brain/knowledge/.*\.yaml$" | wc -l
 
-Ran terminal command: git ls-tree --name-only -r CORTEX-4.0 | grep "cortex-brain/knowledge/.*\.yaml$"
+Ran terminal command: git ls-tree --name-only -r CORTEX-4.0 | grep "cortex_brain/knowledge/.*\.yaml$"
 
 ---
 
@@ -2657,8 +2657,8 @@ The CORTEX-4.0 branch has **35 best practices YAML files** that have **NOT been 
 
 | Location | CORTEX-4.0 | CORTEX6 (Current) |
 |----------|-----------|-------------------|
-| `cortex-brain/knowledge/` | **35 YAML files** | ❌ Directory doesn't exist |
-| `cortex-brain/knowledge-library/` | 6 YAML files | ❌ Directory doesn't exist |
+| `cortex_brain/knowledge/` | **35 YAML files** | ❌ Directory doesn't exist |
+| `cortex_brain/knowledge-library/` | 6 YAML files | ❌ Directory doesn't exist |
 | knowledge | N/A | 1 YAML (taxonomy only) + 16 empty READMEs |
 
 ### Missing Knowledge Files (35 total)
@@ -2692,7 +2692,7 @@ The knowledge directory has:
 **Option 1: Import from CORTEX-4.0** (Quick)
 ```bash
 # Copy the knowledge directory from CORTEX-4.0
-git checkout CORTEX-4.0 -- cortex-brain/knowledge/
+git checkout CORTEX-4.0 -- cortex_brain/knowledge/
 ```
 
 **Option 2: Migrate to Tier-3 structure** (Recommended)
@@ -2722,11 +2722,11 @@ Searched for files matching `**/knowledge_indexer.py`, no matches
 
 Searched text for `class KnowledgeIndexer`, no results
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge/.knowledge-index.json)
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge/.knowledge-index.json)
 
 Now let me check the KNOWLEDGE-TAXONOMY.yaml to understand the structure: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge/KNOWLEDGE-TAXONOMY.yaml#1-1), lines 1 to 100
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge/KNOWLEDGE-TAXONOMY.yaml#1-1), lines 1 to 100
 
 Now I understand. The knowledge goes into **BOTH**:
 1. **File system** (tier3/knowledge/ directories with YAML files)
@@ -2734,15 +2734,15 @@ Now I understand. The knowledge goes into **BOTH**:
 
 Let me import the files and update the index: 
 
-Ran terminal command: git checkout CORTEX-4.0 -- cortex-brain/knowledge/
+Ran terminal command: git checkout CORTEX-4.0 -- cortex_brain/knowledge/
 
-Ran terminal command: ls -la cortex-brain/knowledge/
+Ran terminal command: ls -la cortex_brain/knowledge/
 
-Ran terminal command: find cortex-brain/knowledge -name "*.yaml" -type f | wc -l
+Ran terminal command: find cortex_brain/knowledge -name "*.yaml" -type f | wc -l
 
 Now let me migrate these to the tier3 knowledge structure. First, let me create a mapping: 
 
-Ran terminal command: find cortex-brain/knowledge -name "*.yaml" -type f
+Ran terminal command: find cortex_brain/knowledge -name "*.yaml" -type f
 
 Now let me create a migration script to copy these to tier3 with proper mapping: 
 
@@ -2752,21 +2752,21 @@ Ran terminal command: source .venv/bin/activate && python scripts/migrate_knowle
 
 Migration successful. Now let me verify and commit: 
 
-Ran terminal command: ls -la cortex-brain/tier3/knowledge/ARCHITECTURE/ | head -20
+Ran terminal command: ls -la cortex_brain/tier3/knowledge/ARCHITECTURE/ | head -20
 
-Ran terminal command: cat cortex-brain/tier3/knowledge/.knowledge-index.json | head -60
+Ran terminal command: cat cortex_brain/tier3/knowledge/.knowledge-index.json | head -60
 
 Now let's commit the changes: 
 
 Ran terminal command: git status --short | head -50
 
-Ran terminal command: git add cortex-brain/knowledge/ cortex-brain/tier3/knowledge/ scripts/migrate_knowledge_to_tier3.py
+Ran terminal command: git add cortex_brain/knowledge/ cortex_brain/tier3/knowledge/ scripts/migrate_knowledge_to_tier3.py
 
 Ran terminal command: cd /Users/asifhussain/PROJECTS/CORTEX && git commit -m "feat: Import 35 best practices knowledge YAMLs from CORTEX-4.0
 
 Knowledge Migration:
-- Imported 35 YAML files from cortex-brain/knowledge/ (CORTEX-4.0 branch)
-- Migrated to cortex-brain/tier3/knowledge/ (16-domain taxonomy)
+- Imported 35 YAML files from cortex_brain/knowledge/ (CORTEX-4.0 branch)
+- Migrated to cortex_brain/tier3/knowledge/ (16-domain taxonomy)
 - Updated .knowledge-index.json with all 35 entries
 
 Domain Distribution:
@@ -2780,10 +2780,10 @@ Domain Distribution:
 - DATA-MANAGEMENT: 1 file (Oracle)
 
 Files Added:
-- cortex-brain/knowledge/ (original 35 YAMLs)
-- cortex-brain/tier3/knowledge/*/ (migrated 35 YAMLs)
+- cortex_brain/knowledge/ (original 35 YAMLs)
+- cortex_brain/tier3/knowledge/*/ (migrated 35 YAMLs)
 - scripts/migrate_knowledge_to_tier3.py (migration tool)
-- Updated cortex-brain/tier3/knowledge/.knowledge-index.json"
+- Updated cortex_brain/tier3/knowledge/.knowledge-index.json"
 
 ---
 
@@ -2802,7 +2802,7 @@ Files Added:
 ### Where Knowledge Lives Now
 
 ```
-cortex-brain/
+cortex_brain/
 ├── knowledge/                    # Original files (preserved)
 │   ├── cloud/aws-best-practices.yaml
 │   ├── database/oracle-best-practices.yaml
@@ -2831,7 +2831,7 @@ cortex-brain/
 ```python
 # Load the index
 import json
-with open("cortex-brain/tier3/knowledge/.knowledge-index.json") as f:
+with open("cortex_brain/tier3/knowledge/.knowledge-index.json") as f:
     index = json.load(f)
 
 # Find by domain
@@ -2846,10 +2846,10 @@ entry = next(e for e in index["entries"] if e["id"] == "KB-SEC-012")
 **Via File System:**
 ```bash
 # List all architecture knowledge
-ls cortex-brain/tier3/knowledge/ARCHITECTURE/
+ls cortex_brain/tier3/knowledge/ARCHITECTURE/
 
 # View specific file
-cat cortex-brain/tier3/knowledge/SECURITY/owasp-top-10.yaml
+cat cortex_brain/tier3/knowledge/SECURITY/owasp-top-10.yaml
 ```
 
 Made changes.
@@ -2874,11 +2874,11 @@ Read [](file:///Users/asifhussain/PROJECTS/CORTEX/src/orchestrators/core/master_
 
 Summarized conversation historyNow let me check the existing knowledge index structure: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge/.knowledge-index.json#1-1), lines 1 to 100
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge/.knowledge-index.json#1-1), lines 1 to 100
 
 Summarized conversation history
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier3/knowledge/.knowledge-index.json#100-100), lines 100 to 200
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier3/knowledge/.knowledge-index.json#100-100), lines 100 to 200
 
 Good. Now let me check if there's an existing knowledge loader or repository: 
 

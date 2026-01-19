@@ -240,8 +240,8 @@ Total: 1026 tests, 1024 passing (99.8%)
 # Reads phase_tracker from cortex-master.yaml
 guard = MutationGuard(
     phase_tracker_path=".github/roadmap/cortex-master.yaml",
-    tier0_rules_path="cortex-brain/tier0/governance/",
-    db_path="cortex-brain/state/governance.db"
+    tier0_rules_path="cortex_brain/tier0/governance/",
+    db_path="cortex_brain/state/governance.db"
 )
 ```
 
@@ -260,7 +260,7 @@ guard = MutationGuard(
 ### 3. Tier 0 Rules Integration
 ```python
 # Verifies integrity of SKULL governance rules
-# Expected: cortex-brain/tier0/governance/*.yaml files
+# Expected: cortex_brain/tier0/governance/*.yaml files
 # - Each rule has metadata.immutable = true
 # - SHA256 hash computed for integrity checking
 # - Any modification detected via hash mismatch

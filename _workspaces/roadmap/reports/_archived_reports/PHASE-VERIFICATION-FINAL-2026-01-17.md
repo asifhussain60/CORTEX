@@ -65,9 +65,9 @@ The 13 "pending" phases marked in `cortex-master.yaml` are **NOT actually pendin
 **Actual Status:** FULLY_IMPLEMENTED
 
 **Evidence:**
-- ✅ `cortex-brain/tier0/governance/core-rules.yaml` (25 SKULL rules)
-- ✅ `cortex-brain/tier0/governance/phase-enforcement-map.yaml`
-- ✅ `cortex-brain/tier0/governance/ac-validation-checklist.yaml`
+- ✅ `cortex_brain/tier0/governance/core-rules.yaml` (25 SKULL rules)
+- ✅ `cortex_brain/tier0/governance/phase-enforcement-map.yaml`
+- ✅ `cortex_brain/tier0/governance/ac-validation-checklist.yaml`
 - ✅ Governance infrastructure operational
 - ✅ Audit logging active (248+ ACs tracked)
 

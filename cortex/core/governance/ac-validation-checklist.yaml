@@ -142,7 +142,7 @@ phase_specific:
     AR-001-01:
       title: "Tier 0 rules loaded"
       pre_checks:
-        - "File exists: cortex-brain/tier0/governance/core-rules.yaml"
+        - "File exists: cortex_brain/tier0/governance/core-rules.yaml"
         - "YAML valid: governance_tier: 0"
         - "Rule count: 28 rules"
       validation:

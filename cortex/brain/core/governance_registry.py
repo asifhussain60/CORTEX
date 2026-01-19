@@ -147,7 +147,7 @@ class GovernanceRegistry:
         if self._initialized:
             return Ok(None)
         
-        # Load Tier 0 SKULL rules from cortex-brain/tier0/governance/core-rules.yaml
+        # Load Tier 0 SKULL rules from cortex_brain/tier0/governance/core-rules.yaml
         result = self._load_tier0_rules()
         if result.is_err():
             return result
@@ -165,7 +165,7 @@ class GovernanceRegistry:
         Returns:
             Result containing None if successful, error otherwise
         """
-        rules_path = resolve_path("cortex-brain", "tier0", "governance", "core-rules.yaml")
+        rules_path = resolve_path("cortex_brain", "tier0", "governance", "core-rules.yaml")
         
         # Load YAML
         config_result = load_yaml(rules_path)
