@@ -1,0 +1,459 @@
+metadata:
+  phase_id: PHASE-25-GOVERNANCE-COMPOSITION
+  title: Governance Composite Rules Enhancement - Intent-Driven Rule Profiling
+  version: 1.0
+  created_at: '2026-01-19T00:00:00Z'
+  status: NOT_STARTED
+  locked: false
+
+description: |
+  Transform governance rule application from independent filtering to composite
+  rule profiling with multi-rule orchestration, dependency resolution, and
+  severity-gated execution. This phase implements holistic rule composition
+  patterns ensuring deterministic, auditable governance enforcement.
+
+objectives:
+  - "Eliminate implicit rule dependencies (CORE-008 requires CORE-011 + CORE-012)"
+  - "Prevent late-stage failures from missing transitive dependencies"
+  - "Implement deterministic rule selection based on operation context"
+  - "Achieve 50-60% efficiency gain in governance overhead"
+  - "Maintain 100% auditability and compliance"
+  - "Support context-aware rule application (intent + confidence + phase)"
+
+deliverables:
+  - Profile definition system with registry and YAML parser
+  - Severity-based execution gates (BLOCKED/WARNING/INFO)
+  - Intent-profile selection matrix with caching
+  - Rule dependency resolution with DAG validation
+  - Composite rule evaluation engine
+  - 8 core governance profiles (TDD, Query, Planning, etc.)
+  - Master Orchestrator Stage 2 integration
+  - Comprehensive test suite (180+ tests) with benchmarks
+
+dependencies:
+  blocking_phases:
+    - PHASE-13-OBSERVABILITY-MATURITY
+  related_phases:
+    - PHASE-09-GOVERNANCE-TOOLS
+    - PHASE-07-INTENT-ROUTER
+  integration_points:
+    - cortex.orchestrators.core.master_orchestrator_stage_2
+    - cortex.brain.core.governance_registry
+    - cortex.brain.core.rule_evaluator
+
+governance_requirements:
+  - "CORE-008: TDD - tests created before implementation"
+  - "CORE-011: All functions must have type hints"
+  - "CORE-012: All public APIs must have Google-style docstrings"
+  - "CORE-027: All operations logged with AC_START → AC_EXECUTE → AC_COMPLETE"
+  - "CORE-028: All new files/modules use kebab-case, ≤25 chars"
+
+acceptance_criteria_summary:
+  total_acs: 8
+  total_tests: 180+
+  total_estimated_hours: 72
+  total_estimated_days: 9
+
+acceptance_criteria:
+  AC-GC-001-01:
+    id: AC-GC-001-01
+    title: Governance Composition Profile System
+    category: Core Infrastructure
+    description: |
+      Implement profile definition system with registry, parser, and lifecycle
+      management. Profiles encapsulate rule collections, dependencies, and
+      constraints for context-aware governance selection.
+    
+    acceptance_tests:
+      - "Profile schema validates rule_ids, dependencies, constraints, severity"
+      - "ProfileRegistry loads all profiles from governance-composition-profiles.yaml"
+      - "ProfileRegistry supports get_profile(name), list_profiles(), validate_profile()"
+      - "Circular dependencies detected and rejected at load time"
+      - "Profile immutability enforced after load-time"
+      - "Cache behavior: profiles cached per orchestrator lifecycle"
+    
+    implementation_details: |
+      1. Define profile schema in governance-composition-profiles.yaml
+      2. Implement Profile dataclass with fields: name, rules[], dependencies[], constraints[]
+      3. Implement ProfileRegistry singleton for profile management
+      4. Parser: YAML → Profile dataclass conversion
+      5. Circular dependency detector using graph algorithms
+      6. Profile caching strategy with lifecycle management
+      
+      Files to create:
+      - cortex/brain/core/governance/profile.py (Profile dataclass)
+      - cortex/brain/core/governance/profile_registry.py (ProfileRegistry)
+      - cortex_brain/tier0/governance-composition-profiles.yaml (Profile definitions)
+    
+    estimated_hours: 8
+    test_count: 25
+    status: NOT_STARTED
+    acceptance_criteria_type: FUNCTIONAL
+
+  AC-GC-002-01:
+    id: AC-GC-002-01
+    title: Severity-Based Rule Execution Gates
+    category: Governance Engine
+    description: |
+      Implement severity-based gating system for ordered rule evaluation.
+      BLOCKED rules fail-fast (execution halts on violation). WARNING rules
+      logged but never blocking. INFO rules audit-only with zero overhead.
+    
+    acceptance_tests:
+      - "SeverityGate processes rules in order: BLOCKED → WARNING → INFO"
+      - "BLOCKED gate: fails immediately on first BLOCKED rule violation"
+      - "WARNING gate: logs violations but continues execution"
+      - "INFO gate: captures info for audit trail only"
+      - "Audit trail captures each gate's decisions with timestamps"
+      - "Deterministic ordering: same rules always evaluated in same sequence"
+    
+    implementation_details: |
+      1. Define SeverityGate executor with three sequential gates
+      2. BLOCKED gate: all-or-nothing validation with immediate termination
+      3. WARNING gate: collects warnings without blocking
+      4. INFO gate: appends to audit trail
+      5. Return GateResult with (passed: bool, violations: List[RuleViolation])
+      6. Audit logging integrated per gate execution
+      
+      Files to create:
+      - cortex/brain/core/governance/severity_gates.py (SeverityGate)
+      - cortex/brain/core/governance/gate_result.py (GateResult dataclass)
+    
+    estimated_hours: 9
+    test_count: 30
+    status: NOT_STARTED
+    acceptance_criteria_type: FUNCTIONAL
+
+  AC-GC-003-01:
+    id: AC-GC-003-01
+    title: Intent-Profile Selection Matrix
+    category: Routing Integration
+    description: |
+      Build (intent_type, confidence_band, phase) → profile lookup matrix.
+      Enable O(1) profile retrieval based on operation context. Integrate with
+      Stage 2 routing for automatic profile selection per operation.
+    
+    acceptance_tests:
+      - "Matrix correctly maps (IMPLEMENT, HIGH_CONF, PHASE-08) → TDD_STRICT"
+      - "Matrix correctly maps (QUERY, ANY_CONF, ANY_PHASE) → QUERY_FAST"
+      - "Matrix correctly maps (PLANNING, MED_CONF, PHASE-13) → PLANNING_STANDARD"
+      - "Profile lookup is O(1) via dictionary/hash table"
+      - "Profile caching: same context → same profile without recomputation"
+      - "Fallback profiles handle edge cases (UNKNOWN intent → MINIMAL_RULES)"
+      - "Stage 2 IntentRouter calls ProfileSelector.select_profile(intent, confidence, phase)"
+    
+    implementation_details: |
+      1. Define ProfileSelectionMatrix structure
+      2. Build lookup table: (IntentType, ConfidenceBand, PhaseContext) → Profile
+      3. Implement ProfileSelector with select_profile() method
+      4. Add caching layer with lifecycle-aware invalidation
+      5. Integrate into Stage 2 routing decision
+      6. Fallback logic for unmapped combinations
+      
+      Files to create:
+      - cortex/brain/core/governance/profile_selector.py (ProfileSelector)
+      - cortex/brain/core/governance/profile_selection_matrix.py (Matrix)
+      - Update cortex/orchestrators/core/master_orchestrator_stage_2.py
+    
+    estimated_hours: 8
+    test_count: 28
+    status: NOT_STARTED
+    acceptance_criteria_type: FUNCTIONAL
+
+  AC-GC-004-01:
+    id: AC-GC-004-01
+    title: Rule Dependency Resolution
+    category: Validation Engine
+    description: |
+      Implement DAG-based dependency resolution for rules. Detect circular
+      dependencies at compile-time. Generate topological sort for execution
+      ordering. Capture full dependency chain in audit trail.
+    
+    acceptance_tests:
+      - "DAG builder correctly constructs graph from rule dependencies"
+      - "Circular dependency detector identifies and rejects cycles"
+      - "Topological sort produces valid execution ordering"
+      - "Transitive dependencies included (CORE-008 → [CORE-011, CORE-012])"
+      - "Orphaned rules detected (rule_id not found in rule registry)"
+      - "Audit trail logs dependency chain for each evaluated ruleset"
+      - "Performance: DAG operations <5ms per profile"
+    
+    implementation_details: |
+      1. Define DependencyGraph structure with adjacency representation
+      2. DAG builder: rules → graph construction
+      3. Cycle detector: DFS-based cycle detection algorithm
+      4. Topological sorter: Kahn's algorithm for ordering
+      5. Orphan detector: validate all rule_ids exist in registry
+      6. Audit logging captures full dependency chain
+      
+      Files to create:
+      - cortex/brain/core/governance/dependency_graph.py (DependencyGraph)
+      - cortex/brain/core/governance/dependency_resolver.py (DependencyResolver)
+    
+    estimated_hours: 7
+    test_count: 22
+    status: NOT_STARTED
+    acceptance_criteria_type: FUNCTIONAL
+
+  AC-GC-005-01:
+    id: AC-GC-005-01
+    title: Composite Rule Evaluation Engine
+    category: Governance Engine
+    description: |
+      Implement unified rule evaluator accepting profile ruleset + operation
+      context. Applies rules in severity order respecting constraints. Returns
+      detailed violation report per rule. Audit trail captures all decisions.
+    
+    acceptance_tests:
+      - "CompositeRuleEvaluator accepts (profile: Profile, context: Dict)"
+      - "Evaluation applies rules in severity order (BLOCKED → WARNING → INFO)"
+      - "Violation report includes: rule_id, severity, message, remediation"
+      - "Audit trail logs: profile_name, rules_evaluated, violations, timestamp"
+      - "Performance: evaluation <5ms per operation"
+      - "Determinism: identical (profile, context) → identical violations"
+      - "Constraint satisfaction checked before execution"
+    
+    implementation_details: |
+      1. Implement CompositeRuleEvaluator class
+      2. Method: evaluate(profile, context) → EvaluationResult
+      3. EvaluationResult dataclass: passed(bool), violations(List[RuleViolation])
+      4. Severity ordering: apply BLOCKED, then WARNING, then INFO
+      5. Constraint validation: ensure all constraints satisfied
+      6. Audit logging: profile selection + rule evaluations + violations
+      
+      Files to create:
+      - cortex/brain/core/governance/composite_evaluator.py (CompositeRuleEvaluator)
+      - cortex/brain/core/governance/evaluation_result.py (EvaluationResult)
+    
+    estimated_hours: 10
+    test_count: 35
+    status: NOT_STARTED
+    acceptance_criteria_type: FUNCTIONAL
+
+  AC-GC-006-01:
+    id: AC-GC-006-01
+    title: Governance Profile Library & Catalog
+    category: Profile Definitions
+    description: |
+      Define 8 core governance profiles covering common operation patterns.
+      Document profile semantics and constraint rationale. Provide extension
+      pattern for custom profiles. Auto-generate profile documentation.
+    
+    acceptance_tests:
+      - "Profile TDD_STRICT: [CORE-008, CORE-011, CORE-012, CORE-013, CORE-014]"
+      - "Profile QUERY_FAST: [CORE-001, CORE-017] (minimal rules)"
+      - "Profile PLANNING_STANDARD: [CORE-006, CORE-009, CORE-018]"
+      - "Profile PHASE_ENFORCEMENT: domain/phase-specific rules"
+      - "All 8 profiles defined in governance-composition-profiles.yaml"
+      - "Profile documentation generated from YAML (name, rules, constraints)"
+      - "Extension pattern documented for custom profile creation"
+    
+    implementation_details: |
+      1. Define 8 core profiles:
+         - TDD_STRICT, TDD_STANDARD, TDD_LITE
+         - QUERY_FAST, QUERY_STANDARD
+         - PLANNING_STANDARD, PLANNING_STRICT
+         - PHASE_ENFORCEMENT_MANDATORY
+      2. Profile YAML schema with semantics documentation
+      3. Auto-document profiles from YAML → markdown generation
+      4. Extension pattern guide for custom profiles
+      5. Profile rationale document explaining constraint choices
+      
+      Files to create:
+      - cortex_brain/tier0/governance-composition-profiles.yaml (Profile library)
+      - docs/governance-profiles.md (Documentation auto-generated)
+    
+    estimated_hours: 6
+    test_count: 18
+    status: NOT_STARTED
+    acceptance_criteria_type: DOCUMENTATION
+
+  AC-GC-007-01:
+    id: AC-GC-007-01
+    title: Integration with Master Orchestrator Stage 2
+    category: Orchestrator Integration
+    description: |
+      Integrate profile selection into Stage 2 routing. Modify IntentRouter to
+      return selected profile along with routing decision. RuleEvaluator uses
+      profile instead of rule enumeration. Audit trail captures profile name.
+    
+    acceptance_tests:
+      - "Stage 2 routing decision includes profile_name field"
+      - "IntentRouter.route() calls ProfileSelector.select_profile()"
+      - "Profile passed to RuleEvaluator instead of rule enumeration"
+      - "Audit trail logs profile selection decision"
+      - "End-to-end test: user intent → profile selection → rule evaluation"
+      - "Backward compatibility: existing code unchanged"
+      - "Performance: routing overhead <2ms (vs original routing)"
+    
+    implementation_details: |
+      1. Modify RoutingDecision to include profile_name
+      2. Update IntentRouter.route() to call ProfileSelector
+      3. Pass profile to RuleEvaluator.evaluate(profile, context)
+      4. Audit logging: log profile selection reason
+      5. End-to-end integration test: intent → profile → evaluation
+      6. Performance benchmarking vs original approach
+      
+      Files to modify:
+      - cortex/orchestrators/core/intent_router.py (RoutingDecision)
+      - cortex/orchestrators/core/master_orchestrator_stage_2.py (Stage 2 integration)
+      - cortex/brain/core/rule_evaluator.py (RuleEvaluator integration)
+    
+    estimated_hours: 10
+    test_count: 25
+    status: NOT_STARTED
+    acceptance_criteria_type: INTEGRATION
+
+  AC-GC-008-01:
+    id: AC-GC-008-01
+    title: Governance Enhancement Testing & Validation
+    category: Quality Assurance
+    description: |
+      Comprehensive testing of all governance composition features. Benchmark
+      efficiency gains. Verify determinism. Validate audit trail completeness.
+      Stress test with edge cases and high-load scenarios.
+    
+    acceptance_tests:
+      - "180+ unit + integration tests covering all ACs"
+      - "Efficiency benchmark: 50-60% reduction in rule checks vs baseline"
+      - "Determinism verification: same input → same ruleset + sequence (100 runs)"
+      - "Audit trail completeness: every governance decision logged"
+      - "Edge cases: UNKNOWN intent, missing profiles, circular deps, orphaned rules"
+      - "Stress test: 10k operations with profile caching"
+      - "Performance: profile selection <1ms, evaluation <5ms"
+      - "Coverage: >95% code coverage for all governance modules"
+    
+    implementation_details: |
+      1. Unit tests: ProfileRegistry, SeverityGate, ProfileSelector, etc.
+      2. Integration tests: end-to-end Stage 2 → RuleEvaluator → audit trail
+      3. Benchmark suite: compare efficiency vs current approach
+      4. Determinism verification: run same operations 100x, verify identical
+      5. Audit trail validation: check all operations logged with correct info
+      6. Edge case tests: UNKNOWN, missing profiles, malformed YAML
+      7. Stress tests: high concurrency, large profiles, many rules
+      
+      Files to create:
+      - tests/unit/governance/test_profile_system.py
+      - tests/unit/governance/test_severity_gates.py
+      - tests/unit/governance/test_profile_selector.py
+      - tests/unit/governance/test_dependency_resolver.py
+      - tests/unit/governance/test_composite_evaluator.py
+      - tests/integration/test_governance_composition_integration.py
+      - tests/performance/test_governance_benchmarks.py
+    
+    estimated_hours: 14
+    test_count: 40+
+    status: NOT_STARTED
+    acceptance_criteria_type: QUALITY_ASSURANCE
+
+files_to_create:
+  modules:
+    - cortex/brain/core/governance/profile.py
+    - cortex/brain/core/governance/profile_registry.py
+    - cortex/brain/core/governance/severity_gates.py
+    - cortex/brain/core/governance/gate_result.py
+    - cortex/brain/core/governance/profile_selector.py
+    - cortex/brain/core/governance/profile_selection_matrix.py
+    - cortex/brain/core/governance/dependency_graph.py
+    - cortex/brain/core/governance/dependency_resolver.py
+    - cortex/brain/core/governance/composite_evaluator.py
+    - cortex/brain/core/governance/evaluation_result.py
+  
+  configuration:
+    - cortex_brain/tier0/governance-composition-profiles.yaml
+  
+  documentation:
+    - docs/governance-profiles.md
+    - docs/governance-composition-architecture.md
+  
+  tests:
+    - tests/unit/governance/test_profile_system.py
+    - tests/unit/governance/test_severity_gates.py
+    - tests/unit/governance/test_profile_selector.py
+    - tests/unit/governance/test_dependency_resolver.py
+    - tests/unit/governance/test_composite_evaluator.py
+    - tests/integration/test_governance_composition_integration.py
+    - tests/performance/test_governance_benchmarks.py
+
+files_to_modify:
+  - cortex/orchestrators/core/intent_router.py
+  - cortex/orchestrators/core/master_orchestrator_stage_2.py
+  - cortex/brain/core/rule_evaluator.py
+
+architecture:
+  layers:
+    - layer: Layer 1 - Profile Definition
+      components:
+        - Profile dataclass
+        - ProfileRegistry singleton
+        - YAML parser
+        - Circular dependency detector
+    
+    - layer: Layer 2 - Severity Gates
+      components:
+        - SeverityGate executor
+        - BLOCKED gate (fail-fast)
+        - WARNING gate (informational)
+        - INFO gate (audit-only)
+    
+    - layer: Layer 3 - Profile Selection
+      components:
+        - ProfileSelectionMatrix
+        - ProfileSelector with caching
+        - Intent-context mapping
+        - Fallback profiles
+    
+    - layer: Layer 4 - Constraint Validation
+      components:
+        - DependencyGraph builder
+        - Topological sorter
+        - Constraint satisfaction checker
+        - CompositeRuleEvaluator
+
+success_criteria:
+  efficiency:
+    - "50-60% reduction in rule evaluation overhead"
+    - "<1ms profile lookup (cached)"
+    - "<5ms composite rule evaluation"
+  
+  correctness:
+    - "100% determinism: identical input → identical output"
+    - "Zero orphaned rules or missing dependencies"
+    - "All circular dependencies detected at load-time"
+  
+  auditability:
+    - "100% of governance decisions logged"
+    - "Profile selection captured in audit trail"
+    - "Full dependency chain visible in logs"
+  
+  reliability:
+    - ">95% code coverage for all governance modules"
+    - "180+ passing tests (unit + integration)"
+    - "Zero regressions to existing phases"
+
+notes: |
+  Governance Composite Rules Enhancement - Intent-Driven Rule Profiling
+  
+  This phase transforms governance from independent rule filtering to composite
+  profiling with deterministic selection and severity gating. It addresses:
+  
+  - Implicit rule dependencies (CORE-008 requires CORE-011 + CORE-012)
+  - Late-stage failures from missing transitive dependencies
+  - Non-deterministic rule selection causing unpredictable behavior
+  - Redundant validation overhead (40% of rule checks unnecessary)
+  
+  All 8 ACs must be completed sequentially. Integration with Stage 2 routing
+  (AC-GC-007-01) is blocking and must be completed before moving to next phase.
+  
+  Key design decisions:
+  1. Pre-validated profiles (not runtime DAG resolution) for determinism
+  2. Severity gates for ordered evaluation (not unordered set)
+  3. Profile caching for efficiency
+  4. Explicit dependencies in profiles (not implicit)
+  5. Intent-context matrix for O(1) profile selection
+  
+  Expected outcomes:
+  - 50-60% efficiency gain in governance overhead
+  - 100% deterministic rule selection and ordering
+  - Complete auditability of all governance decisions
+  - Zero impact on currently locked phases
