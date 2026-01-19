@@ -45,6 +45,10 @@ htmlcov/
 .tox/
 .nox/
 
+# Security: Prevent test fixtures with secret patterns from being committed
+# This file is used only for local testing of secret detection patterns
+tests/unit/gates/test-pre-commit-secrets.py
+
 # OS
 .DS_Store
 Thumbs.db
