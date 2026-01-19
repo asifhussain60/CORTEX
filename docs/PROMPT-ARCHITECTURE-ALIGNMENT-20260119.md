@@ -3,10 +3,6 @@
 
 ---
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
-
----
-
 ## Executive Summary
 
 Current prompt architecture (`CORTEX.prompt.md`) is comprehensive but needs:

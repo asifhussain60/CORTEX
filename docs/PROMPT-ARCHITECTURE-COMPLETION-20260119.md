@@ -3,10 +3,6 @@
 
 ---
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
-
----
-
 ## ✅ Completion Summary
 
 Successfully redesigned CORTEX prompt architecture for Master Orchestrator + Copilot integration.
