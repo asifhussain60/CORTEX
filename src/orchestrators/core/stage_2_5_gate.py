@@ -28,6 +28,7 @@ class ConfirmationContext:
     lens_confidence: float  # Confidence from Stage 2 LENS analysis
     user_intent: Optional[str] = None
     affected_files: List[str] = field(default_factory=list)
+    challenges: List[Dict[str, Any]] = field(default_factory=list)  # Integrated challenges
     timestamp: datetime = field(default_factory=datetime.now)
 
 @dataclass
@@ -58,6 +59,7 @@ class Stage25Gate:
         user_intent: Optional[str] = None,
         affected_files: Optional[List[str]] = None,
         alternatives: Optional[List[Dict[str, Any]]] = None,
+        challenges: Optional[List[Dict[str, Any]]] = None,
     ) -> ContinuationDecision:
         """
         Evaluate operation at Stage 2.5.
@@ -72,6 +74,7 @@ class Stage25Gate:
             user_intent: User's stated intent/goal
             affected_files: List of files affected by operation
             alternatives: List of alternative approaches
+            challenges: List of challenge dictionaries for risk identification
         
         Returns:
             ContinuationDecision for turn execution
@@ -101,7 +104,6 @@ class Stage25Gate:
                 is_confirmation_gate=False,
             )
         
-        else:
             # MODERATE/COMPLEX/CRITICAL: Need confirmation
             context = self._build_confirmation_context(
                 operation_id,
@@ -110,6 +112,7 @@ class Stage25Gate:
                 approval,
                 user_intent,
                 affected_files,
+                challenges,
             )
             
             return ContinuationDecision(
@@ -128,6 +131,7 @@ class Stage25Gate:
         approval: ApprovalDecision,
         user_intent: Optional[str],
         affected_files: Optional[List[str]],
+        challenges: Optional[List[Dict[str, Any]]] = None,
     ) -> ConfirmationContext:
         """Build confirmation context from assessment and approval."""
         # Extract reasons from assessment factors
@@ -146,6 +150,7 @@ class Stage25Gate:
             lens_confidence=lens_confidence,
             user_intent=user_intent,
             affected_files=affected_files or [],
+            challenges=challenges or [],
         )
     
     def record_confirmation(
@@ -185,6 +190,7 @@ class ConversationProtocolIntegration:
         operation_id: str,
         routing_decision: Dict[str, Any],
         stage_2_context: Dict[str, Any],
+        challenges: Optional[List[Dict[str, Any]]] = None,
     ) -> ContinuationDecision:
         """
         Execute turn with Stage 2.5 confirmation gate.
@@ -201,6 +207,7 @@ class ConversationProtocolIntegration:
             operation_id: Operation identifier
             routing_decision: Decision from Stage 2 routing
             stage_2_context: Context from Stage 2 (includes LENS confidence)
+            challenges: List of challenge dictionaries for decision rationale
         
         Returns:
             ContinuationDecision indicating execution path
@@ -216,7 +223,7 @@ class ConversationProtocolIntegration:
         # Extract alternatives if available
         alternatives = routing_decision.get('alternatives', None)
         
-        # Evaluate at Stage 2.5
+        # Evaluate at Stage 2.5 with challenges
         decision = self.stage_2_5.evaluate(
             operation_id=operation_id,
             lens_confidence=lens_confidence,
@@ -224,6 +231,7 @@ class ConversationProtocolIntegration:
             user_intent=user_intent,
             affected_files=affected_files,
             alternatives=alternatives,
+            challenges=challenges,
         )
         
         return decision
