@@ -103,7 +103,7 @@ class Stage25Gate:
                 reason=f"Auto-approved ({approval.complexity_level})",
                 is_confirmation_gate=False,
             )
-        
+        else:
             # MODERATE/COMPLEX/CRITICAL: Need confirmation
             context = self._build_confirmation_context(
                 operation_id,
