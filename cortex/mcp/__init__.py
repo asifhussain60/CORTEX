@@ -24,6 +24,15 @@ from cortex.mcp.server import (
     MCPResponse,
     MCPError,
 )
+from cortex.mcp.decorators import mcp_tool, MCP_TOOLS_REGISTRY
+from cortex.mcp.endpoints import (
+    list_tools_endpoint,
+    get_tool_metadata,
+    filter_tools_by_domain,
+    get_tool_count,
+    is_tool_registered,
+    call_tool,
+)
 
 __all__ = [
     "MCPServer",
@@ -34,4 +43,12 @@ __all__ = [
     "MCPRequest",
     "MCPResponse",
     "MCPError",
+    "mcp_tool",
+    "MCP_TOOLS_REGISTRY",
+    "list_tools_endpoint",
+    "get_tool_metadata",
+    "filter_tools_by_domain",
+    "get_tool_count",
+    "is_tool_registered",
+    "call_tool",
 ]
