@@ -1901,142 +1901,146 @@ phase_tracker:
       \ 183 tests passing (100% pass rate), governance compliance verified. Phase\
       \ locked, audit trail complete, ready for PHASE-REMEDIATION-11."
 
-  PHASE-DEPLOYMENT:
-    title: CORTEX Universal Deployment & Multi-Repo Distribution
-    description: "PHASE-DEPLOYMENT REDESIGNED (2026-01-18):\nSingle-command installation,\
-      \ multi-repo deployment, upgrade capability, and \nproduction distribution of\
-      \ CORTEX as universal development tool accessible \nacross all company repos.\n\
-      \nNEW ARCHITECTURE:\n- CORTEX clones into any company repo as CORTEX/ folder\n\
-      - CORTEX operates entirely from CORTEX/ but reads/modifies parent repo\n- MCP\
-      \ tools exposed universally via CORTEX.prompt.md from ANY repo context\n- Single\
-      \ install command: git clone + cortex init\n- Single upgrade command: cortex\
-      \ upgrade (pulls from main branch)\n- No setup required - production-ready immediately\
-      \ post-clone\n\nSECTION A - Installation & Bootstrap (3 ACs):\n- AC-DEPLOY-001-01:\
-      \ `cortex init` command - single-step setup\n- AC-DEPLOY-001-02: Auto-detection\
-      \ of company repo structure\n- AC-DEPLOY-001-03: MCP tool registration in user's\
-      \ MCP client\n\nSECTION B - Multi-Repo Architecture (3 ACs):\n- AC-DEPLOY-002-01:\
-      \ CORTEX operates from isolated folder, reads/modifies parent repo\n- AC-DEPLOY-002-02:\
-      \ Context switching between repos\n- AC-DEPLOY-002-03: Shared state management\
-      \ (audit trail, cache)\n\nSECTION C - Upgrade & Distribution (2 ACs):\n- AC-DEPLOY-003-01:\
-      \ `cortex upgrade` - pull latest from main branch\n- AC-DEPLOY-003-02: Backward-compatible\
-      \ versioning & migration\n\nSECTION D - Production Readiness (2 ACs):\n- AC-DEPLOY-004-01:\
-      \ Security hardening (no secrets in CORTEX folder)\n- AC-DEPLOY-004-02: Performance\
-      \ optimization & resource limits\n\nDEPLOYMENT MODEL:\nParent Repo Structure\
-      \ (UNCHANGED except CORTEX/ folder):\n  company-repo/\n  \u251C\u2500\u2500\
-      \ .git/\n  \u251C\u2500\u2500 src/\n  \u251C\u2500\u2500 tests/\n  \u251C\u2500\
-      \u2500 [user's existing files]\n  \u2514\u2500\u2500 CORTEX/  (NEW - separate\
-      \ .git, independent version history)\n      \u251C\u2500\u2500 cortex (CLI entry\
-      \ point)\n      \u251C\u2500\u2500 dashboard/\n      \u251C\u2500\u2500 cortex_brain/\
-      \ (governance engine)\n      \u251C\u2500\u2500 .env.example\n      \u2514\u2500\
-      \u2500 [CORTEX files]\n\nUSAGE PATTERN:\n  $ cd company-repo\n  $ git clone\
-      \ https://github.com/cortex-ai/cortex.git CORTEX\n  $ cd CORTEX\n  $ ./cortex\
-      \ init\n  $ cortex dashboard                # Opens dashboard showing parent\
-      \ repo metrics\n  $ cortex upgrade                  # Pulls latest features\
-      \ from main branch\n"
+  PHASE-UNIFIED-DEPLOY:
+    title: CORTEX Unified Deployment - Centralized Service Architecture
+    description: "PHASE-UNIFIED-DEPLOY (2026-01-19 - CORRECT ARCHITECTURE):\nCORTEX\
+      \ as top-level independent repo (cortex-ai/cortex) consumed via lightweight\
+      \ reference in child repos (.github/prompts/CORTEX.prompt). Single version,\
+      \ unified telemetry, automatic intelligence distribution, deterministic governance.\n\
+      \nARCHITECTURE MODEL:\ncortex-ai/cortex (TOP-LEVEL SOURCE OF TRUTH)\n  ├─ orchestrators/\
+      \ (Master, LENS, ResponseComposer, all patterns)\n  ├─ mcp-tools/ (all MCP implementations)\n\
+      \ ├─ cortex_brain/tier0/tier1/tier2 (governance + knowledge)\n  ├─ .github/prompts/CORTEX.prompt\
+      \ (THE distribution artifact)\n  ├─ api/telemetry (feedback collection endpoint)\n\
+      \  └─ manifest.json (intelligence versioning)\n\ncompany-repo-N (ANY REPO)\n\
+      \  └─ .github/prompts/CORTEX.prompt ← ONE FILE (reference to cortex-ai/cortex)\n\
+      \nSECTION A - Infrastructure & Telemetry (3 ACs):\n- AC-UNIFIED-DEPLOY-001-01:\
+      \ Centralized CORTEX repo setup (consolidate system)\n- AC-UNIFIED-DEPLOY-001-02:\
+      \ Telemetry endpoint implementation (server-side aggregation)\n- AC-UNIFIED-DEPLOY-001-03:\
+      \ Aggregation engine + GitHub issue auto-generation\n\nSECTION B - Prompt-Based\
+      \ Distribution (3 ACs):\n- AC-UNIFIED-DEPLOY-002-01: CORTEX.prompt template\
+      \ + versioning\n- AC-UNIFIED-DEPLOY-002-02: Reference template for child repos\
+      \ (one-file adoption)\n- AC-UNIFIED-DEPLOY-002-03: Multi-repo context switching\
+      \ (unified governance.db)\n\nSECTION C - Intelligence Update Protocol (2 ACs):\n\
+      - AC-UNIFIED-DEPLOY-003-01: Manifest system + version management\n- AC-UNIFIED-DEPLOY-003-02:\
+      \ Copilot chat intelligence display (inline, no markdown)\n\nSECTION D - Feedback\
+      \ Loop (2 ACs):\n- AC-UNIFIED-DEPLOY-004-01: Operational data collection +\
+      \ transmission\n- AC-UNIFIED-DEPLOY-004-02: Feedback analysis + team action\
+      \ loop\n"
     ac_ids: 10
     completed_ac_ids: 0
     status: NOT_STARTED
     locked: false
     enhancement_phase: true
     implement_when_ready: true
-    implementation_prerequisite: "cortex-builder.prompt.md MUST implement this deployment\
-      \ phase ONLY when:\n- ALL OTHER phases in phase_tracker have: locked: true\n\
-      - This phase is the ONLY phase with: locked: false AND implement_when_ready:\
-      \ true\n- PHASE-15-DASHBOARD-UNIVERSAL is completed and locked\n- ALL 22 active\
-      \ phases are COMPLETED and LOCKED\n- System audit trail fully verified\n\nGating\
-      \ Logic:\n  PHASE_READY = (ALL other phases have locked: true) AND\n       \
-      \         (PHASE-15 is COMPLETED) AND\n                (NO other phases have\
-      \ implement_when_ready: true) AND\n                (PHASE-DEPLOYMENT is ONLY\
-      \ deployment phase ready)\nIF PHASE_READY: implement PHASE-DEPLOYMENT\nELSE:\
-      \ skip to next mandatory locked: true phase\n"
+    implementation_prerequisite: "cortex-builder.prompt.md MUST implement this phase\
+      \ ONLY when:\n- ALL OTHER phases in phase_tracker have: locked: true\n- This\
+      \ phase is the ONLY phase with: locked: false AND implement_when_ready: true\n\
+      - PHASE-15-DASHBOARD-UNIVERSAL is completed and locked\n- ALL 22 active phases\
+      \ are COMPLETED and LOCKED\n- System audit trail fully verified\n\nGating Logic:\n\
+      \  PHASE_READY = (ALL other phases locked: true) AND (PHASE-15 COMPLETED) AND\n\
+      \                (NO other implement_when_ready phases) AND\n              \
+      \  (PHASE-UNIFIED-DEPLOY is ONLY deployment phase ready)\nIF PHASE_READY: implement\
+      \ PHASE-UNIFIED-DEPLOY\nELSE: skip to next mandatory locked: true phase\n"
     requires: PHASE-22-MCP-PROTOCOL-COMPLIANCE
     required_for: PRODUCTION_LAUNCH
     blocking: false
     priority: P0
-    estimated_hours: 60
-    estimated_days: 7
+    estimated_hours: 80
+    estimated_days: 10
     progress_percentage: 0.0
     acceptance_criteria:
-    - ac_id: AC-DEPLOY-001-01
-      title: Deployment Configuration Management
-      description: Environment-specific configs (dev, staging, prod) with secrets
-        management
+    - ac_id: AC-UNIFIED-DEPLOY-001-01
+      title: Centralized CORTEX Repository Setup
+      description: Consolidate CORTEX into cortex-ai/cortex as definitive source
+        (orchestrators, MCP tools, governance, distribution artifact)
       estimated_hours: 8
-      test_count: 12
+      test_count: 20
       status: NOT_STARTED
-    - ac_id: AC-DEPLOY-001-02
-      title: Blue-Green Deployment Infrastructure
-      description: Dual environment setup for zero-downtime deployments
+    - ac_id: AC-UNIFIED-DEPLOY-001-02
+      title: Telemetry Endpoint Implementation
+      description: Server-side REST endpoint for batch telemetry ingestion (events,
+        validation, scrubbing)
       estimated_hours: 12
-      test_count: 15
+      test_count: 25
       status: NOT_STARTED
-    - ac_id: AC-DEPLOY-002-01
-      title: Deployment Orchestration & Automation
-      description: CI/CD pipeline for automated production deployment
+    - ac_id: AC-UNIFIED-DEPLOY-001-03
+      title: Aggregation Engine & GitHub Issue Auto-Generation
+      description: Deduplicate telemetry, compute impact scores, auto-create GitHub
+        issues for patterns
+      estimated_hours: 14
+      test_count: 30
+      status: NOT_STARTED
+    - ac_id: AC-UNIFIED-DEPLOY-002-01
+      title: CORTEX.prompt Template & Versioning
+      description: Define lightweight prompt template consumed by all company repos
+        (versioned, cached, <5KB)
       estimated_hours: 10
       test_count: 18
       status: NOT_STARTED
-    - ac_id: AC-DEPLOY-002-02
-      title: Rollback Procedures & Contingency Plans
-      description: Emergency rollback with point-in-time recovery options
+    - ac_id: AC-UNIFIED-DEPLOY-002-02
+      title: Reference Template for Child Repos
+      description: One-file adoption script/guide for any company repo (copy file,
+        add to Copilot, done)
       estimated_hours: 8
-      test_count: 14
+      test_count: 22
       status: NOT_STARTED
-    - ac_id: AC-DEPLOY-003-01
-      title: Production Monitoring & Alerting Setup
-      description: Real-time metrics, logging, and alert configuration
+    - ac_id: AC-UNIFIED-DEPLOY-002-03
+      title: Multi-Repo Context Switching
+      description: Copilot detects repo context, maintains isolated state per repo,
+        shared governance.db reference
       estimated_hours: 12
+      test_count: 20
+      status: NOT_STARTED
+    - ac_id: AC-UNIFIED-DEPLOY-003-01
+      title: Manifest System & Version Management
+      description: Track CORTEX intelligence versions (orchestrators, workflows, tools),
+        enable deterministic upgrades
+      estimated_hours: 12
+      test_count: 28
+      status: NOT_STARTED
+    - ac_id: AC-UNIFIED-DEPLOY-003-02
+      title: Copilot Chat Intelligence Display
+      description: Show new intelligence inline in chat (formatted summary, no markdown
+        files, version hash)
+      estimated_hours: 8
       test_count: 16
       status: NOT_STARTED
-    - ac_id: AC-DEPLOY-003-02
-      title: Health Check & Readiness Validation
-      description: Automated health checks and production readiness gates
-      estimated_hours: 6
-      test_count: 10
+    - ac_id: AC-UNIFIED-DEPLOY-004-01
+      title: Operational Data Collection & Transmission
+      description: Capture deterministic telemetry (execution, errors, performance,
+        feedback), batch and encrypt transmission
+      estimated_hours: 16
+      test_count: 32
       status: NOT_STARTED
-    - ac_id: AC-DEPLOY-004-01
-      title: Release Notes & User Documentation
-      description: Complete release documentation and user guides
-      estimated_hours: 8
-      test_count: 8
-      status: NOT_STARTED
-    - ac_id: AC-DEPLOY-004-02
-      title: User Training & Communication Plan
-      description: Stakeholder communication and training materials
-      estimated_hours: 4
-      test_count: 6
-      status: NOT_STARTED
-    - ac_id: AC-DEPLOY-005-01
-      title: Compliance Verification & Audit Trail
-      description: Final governance compliance check before production
-      estimated_hours: 6
-      test_count: 10
-      status: NOT_STARTED
-    - ac_id: AC-DEPLOY-005-02
-      title: Post-Deployment Validation & Sign-Off
-      description: Final production acceptance testing and stakeholder sign-off
-      estimated_hours: 6
-      test_count: 8
+    - ac_id: AC-UNIFIED-DEPLOY-004-02
+      title: Feedback Analysis & Team Action Loop
+      description: Aggregate insights, map to GitHub issues, prioritize backlog by
+        real impact (not gut feel)
+      estimated_hours: 14
+      test_count: 26
       status: NOT_STARTED
     files_to_create:
-    - src/deployment/config_manager.py
-    - src/deployment/environment_provisioner.py
-    - src/deployment/health_checker.py
-    - src/deployment/monitoring_setup.py
-    - scripts/deploy-to-production.sh
-    - scripts/rollback-deployment.sh
-    - scripts/health-check.sh
-    - .github/deployment/production-checklist.md
-    - .github/deployment/runbook.md
-    - docs/deployment-guide.md
-    - tests/deployment/test_deployment_procedures.py
+    - cortex-ai/cortex/.github/prompts/CORTEX.prompt
+    - cortex-ai/cortex/api/telemetry/ingest.py
+    - cortex-ai/cortex/api/telemetry/aggregator.py
+    - cortex-ai/cortex/lib/manifest-diff.py
+    - cortex-ai/cortex/lib/telemetry-event-schema.json
+    - cortex-ai/cortex/tests/telemetry/test_ingest.py
+    - cortex-ai/cortex/tests/telemetry/test_aggregation.py
+    - cortex-ai/cortex/tests/telemetry/test_data-scrubbing.py
+    - cortex-ai/cortex/tests/deployment/test_manifest-system.py
+    - cortex-ai/cortex/tests/deployment/test_context-switching.py
+    - docs/UNIFIED-DEPLOYMENT.md
+    - docs/ADOPTION-GUIDE.md
+    - docs/TELEMETRY-PRIVACY.md
     governance:
       core_rules:
       - "CORE-008: TDD (tests first, RED \u2192 GREEN)"
       - 'CORE-011: Type hints mandatory'
       - 'CORE-012: Docstrings mandatory (Google style)'
-      - 'CORE-027: Audit trail per deployment step'
-      - "CORE-028: Kebab-case, \u226425 chars filenames"
+      - 'CORE-013: No bare except clauses'
+      - 'CORE-027: Audit trail per AC (AC_START → AC_EXECUTE → AC_COMPLETE)'
+      - "CORE-028: Kebab-case filenames, \u226425 chars"
     audit_verification:
       verified: false
       entry_count: 0
@@ -2044,10 +2048,9 @@ phase_tracker:
       verified_at: null
       remediation_required: false
     git_checkpoint: null
-    notes: 'PHASE-21: NOT STARTED
-
-
-      KEY DELIVERABLES:'
+    notes: 'PHASE-UNIFIED-DEPLOY: Architecture redesigned to centralized model.
+      See _workspaces/roadmap/UNIFIED-DEPLOYMENT-PLAN.md for complete specification.
+      Implementation Plan Authority: cortex-builder.prompt.md v2.1 SSOT'
   PHASE-REMEDIATION-11:
     title: End-to-End Integration & Governance Enforcement Verification
     description: |
