@@ -4615,8 +4615,8 @@ phases:
     priority: P1
     estimated_hours: 23
     estimated_tests: 30
-    actual_tests: 80
-    actual_hours: 8
+    actual_tests: 71
+    actual_hours: 10
     started_at: '2026-01-18T23:45:00Z'
     completed_at: '2026-01-18T22:45:00Z'
     progress_percentage: 100.0
