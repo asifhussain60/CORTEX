@@ -103,7 +103,7 @@ class GovernanceEngine:
         self._initialize_default_rules()
     
     def _initialize_default_rules(self) -> None:
-        """Initialize 5 default governance rules."""
+        """Initialize 5 default governance rules + 5 CONF-GATE rules."""
         rules = [
             GovernanceRule(
                 rule_id="GOV-001",
@@ -146,6 +146,52 @@ class GovernanceEngine:
                 rule_type=GovernanceRuleType.COMPLIANCE_CHECK,
                 description="Monthly compliance reports required",
                 enforcement_level="informational",
+                is_active=True,
+                created_at=datetime.now(),
+                created_by="system"
+            ),
+            # CONF-GATE rules (Phase 23)
+            GovernanceRule(
+                rule_id="CONF-GATE-001",
+                rule_type=GovernanceRuleType.APPROVAL_ROUTING,
+                description="Trivial operations (complexity ≤ 0.15) must be auto-approved without override",
+                enforcement_level="strict",
+                is_active=True,
+                created_at=datetime.now(),
+                created_by="system"
+            ),
+            GovernanceRule(
+                rule_id="CONF-GATE-002",
+                rule_type=GovernanceRuleType.CONFIDENCE_THRESHOLD,
+                description="Confidence-based approval matrix thresholds enforced",
+                enforcement_level="strict",
+                is_active=True,
+                created_at=datetime.now(),
+                created_by="system"
+            ),
+            GovernanceRule(
+                rule_id="CONF-GATE-003",
+                rule_type=GovernanceRuleType.APPROVAL_ROUTING,
+                description="COMPLEX/CRITICAL operations must include top 3 alternative recommendations",
+                enforcement_level="strict",
+                is_active=True,
+                created_at=datetime.now(),
+                created_by="system"
+            ),
+            GovernanceRule(
+                rule_id="CONF-GATE-004",
+                rule_type=GovernanceRuleType.APPROVAL_ROUTING,
+                description="User goal enhancement: propose better approach if alternative confidence higher",
+                enforcement_level="informational",
+                is_active=True,
+                created_at=datetime.now(),
+                created_by="system"
+            ),
+            GovernanceRule(
+                rule_id="CONF-GATE-005",
+                rule_type=GovernanceRuleType.AUDIT_LOGGING,
+                description="Audit trail enrichment: log complexity factors, level, signals, approval decision",
+                enforcement_level="strict",
                 is_active=True,
                 created_at=datetime.now(),
                 created_by="system"
@@ -412,3 +458,61 @@ class GovernanceEngine:
         """Clear audit trail and violations."""
         self.audit_trail = []
         self.rule_violations = []
+    
+    def register_rule(self, rule: GovernanceRule) -> None:
+        """Register a new governance rule."""
+        self.rules[rule.rule_id] = rule
+    
+    def is_rule_active(self, rule_id: str) -> bool:
+        """Check if rule is active."""
+        return rule_id in self.rules and self.rules[rule_id].is_active
+    
+    def get_rule(self, rule_id: str) -> GovernanceRule:
+        """Get a specific governance rule."""
+        return self.rules.get(rule_id)
+    
+    def log_gate_decision(
+        self,
+        conversation_id: str,
+        actor_id: str,
+        operation_id: str,
+        approval_decision: bool,
+        complexity_score: float = None,
+        complexity_level: str = None,
+        rules_enforced: List[str] = None
+    ) -> AuditEntry:
+        """
+        Log a gate decision with complexity factors.
+        Implements CONF-GATE-005: Audit trail enrichment.
+        
+        Args:
+            conversation_id: Conversation ID
+            actor_id: Actor performing decision
+            operation_id: Operation ID
+            approval_decision: True if approved
+            complexity_score: Complexity score (0.0-1.0)
+            complexity_level: Complexity level (TRIVIAL/SIMPLE/MODERATE/COMPLEX/CRITICAL)
+            rules_enforced: List of rules enforced
+        
+        Returns:
+            AuditEntry with enriched metadata
+        """
+        metadata = {
+            'approval_decision': approval_decision,
+            'operation_id': operation_id,
+        }
+        
+        # CONF-GATE-005: Enrich audit trail with complexity factors
+        if complexity_score is not None:
+            metadata['complexity_score'] = complexity_score
+        if complexity_level is not None:
+            metadata['complexity_level'] = complexity_level
+        
+        return self.log_audit_entry(
+            event_type=AuditEventType.GATE_DECISION,
+            conversation_id=conversation_id,
+            actor_id=actor_id,
+            action=f"Gate decision: {'approved' if approval_decision else 'confirmation_required'}",
+            affected_rules=rules_enforced or [],
+            metadata=metadata
+        )
