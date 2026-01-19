@@ -1,9 +1,9 @@
 current_version: 1.0.0
 metadata:
   description: CORTEX Prompt Version Manifest
-  updated_at: '2026-01-19T11:40:07.766876'
+  updated_at: '2026-01-19T11:43:49.449080'
 versions:
 - is_deprecated: false
-  release_date: '2026-01-19T11:40:07.766877'
+  release_date: '2026-01-19T11:43:49.449081'
   sha_hash: v1.0.0-initial
   version: 1.0.0
