@@ -1,0 +1,187 @@
+# PHASE-30: Documentation Ignore List
+# 
+# Files in docs/ that should be EXCLUDED from reorganization because:
+# - They're executable scripts/prompts/agents (belong in .github/)
+# - They're specifications (belong in _workspaces/roadmap/)
+# - They're temporary/transient artifacts
+#
+# This list enables fully automated, idempotent reorganization.
+# Files matching these patterns are DELETED from docs/ (not moved).
+
+metadata:
+  title: Documentation Ignore List for PHASE-30
+  purpose: Deterministic exclusion rules for automated doc reorganization
+  version: "1.0"
+  created: "2026-01-19"
+  scope: docs/ folder only
+  automation: "Fully automated - no manual review required"
+
+# RULE SET 1: Executable Prompts & Instructions (DELETE)
+# These are system instructions, not user documentation
+executable_prompts:
+  description: "Files that are prompts/instructions for AI agents - belong in .github/prompts/"
+  patterns:
+    - "*.prompt.md"              # cortex-builder.prompt.md, CORTEX.prompt.md, etc.
+    - "copilot-instruction.md"   # GitHub Copilot configuration
+    - "*-instruction*.md"         # Any instruction file
+  action: "DELETE_FROM_DOCS"
+  reason: "Executable prompts belong in .github/prompts/, not in docs/"
+  safety_check: "These files have authoritative copies in .github/prompts/"
+
+# RULE SET 2: Agent Definitions (DELETE)
+# These are orchestrator/agent definitions, not user documentation
+agent_definitions:
+  description: "Files that define orchestrator agents - belong in .github/agents/"
+  patterns:
+    - "cortex-agents-*.md"       # Agent orchestration
+    - "cortex-builder.md"        # Builder pattern (if in docs, delete - keep in .github/agents)
+    - "cortex-planner.md"        # Planner agent
+    - "cortex-gap-detection.md"  # Gap detection agent
+    - "cortex-review-*.md"       # Review orchestrators
+  action: "DELETE_FROM_DOCS"
+  reason: "Agent definitions belong in .github/agents/, not in docs/"
+  safety_check: "Authoritative versions in .github/agents/"
+
+# RULE SET 3: Master Specifications (DELETE & MOVE)
+# These are PHASE specifications and master plans - belong in _workspaces/roadmap/
+specifications:
+  description: "YAML/spec files that define phases and roadmap - belong in _workspaces/roadmap/"
+  patterns:
+    - "cortex-master.yaml"       # Master roadmap
+    - "phase-*.yaml"             # Phase specifications
+    - "AC-*.yaml"                # Acceptance criteria specs
+    - "*-roadmap.yaml"           # Roadmap files
+  action: "DELETE_FROM_DOCS"
+  reason: "Specifications belong in _workspaces/roadmap/, not in docs/"
+  safety_check: "Authoritative versions in _workspaces/roadmap/phases/"
+
+# RULE SET 4: Session/Temporary Artifacts (DELETE)
+# These are transient outputs from analysis sessions - not permanent documentation
+temporary_artifacts:
+  description: "Temporary outputs from analysis sessions - not permanent docs"
+  patterns:
+    - "CHAT01-*.md"              # Session chat artifacts
+    - "*-SESSION-*.md"           # Session output files
+    - "*-INDEX-*.md"             # Session index files (if temporary)
+    - "*-ARCHIVE-*.md"           # Archive indicators
+    - ".*-REPORT.md"             # Old report files without version
+  action: "DELETE_FROM_DOCS"
+  reason: "Session artifacts are transient - not permanent documentation"
+  safety_check: "These are scratch/output files from analysis, not source docs"
+
+# RULE SET 5: Executable Scripts (DELETE)
+# Python/shell scripts - belong in scripts/ or .github/, not in docs/
+executable_scripts:
+  description: "Executable scripts and automation - belong in scripts/ or .github/"
+  patterns:
+    - "*.py"                     # Python scripts
+    - "*.sh"                     # Shell scripts
+    - "*.ps1"                    # PowerShell scripts
+  action: "DELETE_FROM_DOCS"
+  reason: "Executable scripts belong in scripts/, not in docs/"
+  safety_check: "No scripts should ever be in docs/"
+
+# RULE SET 6: Metadata/Index Files (DELETE)
+# These are automatically generated or transient index files
+metadata_and_indexes:
+  description: "Auto-generated metadata or transient index files"
+  patterns:
+    - "*-INDEX.md"               # Auto-generated indexes
+    - "*-MANIFEST.md"            # Delivery manifests (transient)
+    - "*-SUMMARY.md"             # Temporary summaries
+    - "README.md"                # Root README (will be regenerated)
+  action: "DELETE_FROM_DOCS"
+  reason: "These are auto-generated or transient metadata"
+  safety_check: "Will be regenerated during PHASE-30 finalization"
+
+# RULE SET 7: Hidden/System Files (IGNORE - DON'T PROCESS)
+# These are system files that should never be touched
+system_files:
+  description: "System files and directories - never reorganize"
+  patterns:
+    - ".*"                       # Hidden files/dirs (.*config, .gitignore, etc.)
+    - "_*"                       # Directories starting with _ (except specific ones)
+    - "node_modules"
+    - ".git"
+  action: "IGNORE - DO_NOT_PROCESS"
+  reason: "System files - leave untouched"
+
+# VALID DOCUMENTATION PATTERNS (PROCESS THESE)
+# Everything NOT matching the ignore rules above is assumed to be valid documentation
+
+valid_documentation_characteristics:
+  description: "Files that WILL be reorganized (not ignored)"
+  examples:
+    - "cortex-builder-issue-remediation-pattern.md"  # How-to guide
+    - "cortex-vision-core.md"                        # System design documentation
+    - "CORTEX-HOLISTIC-REVIEW-*.md"                  # Analysis/reviews
+    - "FINDINGS-*.md"                                # Research findings
+    - "CORTEX-TECHNICAL-VERIFICATION.md"            # Technical content
+    - "AC-FIX-*.md"                                  # Fix documentation
+  process: "MOVE_TO_APPROPRIATE_FOLDER"
+  categorization: "By content type (guides/, concepts/, architecture/, etc.)"
+
+# IMPLEMENTATION NOTES
+implementation:
+  automation_level: "FULLY AUTOMATED"
+  manual_review_required: false
+  idempotency: "Repeatable - same output every run"
+  
+  algorithm:
+    step_1: "Read all *.md files from docs/ recursively"
+    step_2: "For each file, check against ALL ignore patterns"
+    step_3: "If matches ignore pattern → DELETE (with audit log)"
+    step_4: "If not ignored → CATEGORIZE using deterministic rules"
+    step_5: "MOVE to appropriate folder"
+    step_6: "Generate audit report with all actions"
+    step_7: "Delete _temp/ folder"
+  
+  safety_mechanisms:
+    audit_logging: "All deletes/moves logged with timestamp"
+    dry_run_mode: "First execution shows what WILL happen without making changes"
+    idempotency_check: "Script detects already-reorganized files and skips"
+    rollback_capability: "Audit log enables rollback if needed"
+
+# EDGE CASES & DECISIONS
+edge_cases:
+  
+  - case: "File matches multiple patterns"
+    resolution: "First match wins (rules evaluated top-to-bottom)"
+    
+  - case: "File is 'PHASE-XX-COMPLETION-REPORT.md' (looks like spec but is a report)"
+    resolution: "REPORT suffix → treat as documentation, not spec. Move to docs/reports/"
+    
+  - case: "File is 'phase-01.yaml' in docs/ (spec file)"
+    resolution: "Matches specifications pattern → DELETE (belong in _workspaces/roadmap/)"
+    
+  - case: "File is 'cortex-builder-issue-remediation-pattern.md' (looks like agent but is guide)"
+    resolution: "PATTERN suffix indicates guide content → PROCESS as valid doc"
+    
+  - case: "File disappears between runs (someone deletes it externally)"
+    resolution: "Audit log shows it was deleted. Script skips (idempotent)"
+    
+  - case: "New file added after PHASE-30 runs once"
+    resolution: "Next PHASE-30 run processes new file if not ignored"
+
+# USAGE
+usage:
+  by_cortex_builder: |
+    1. PHASE-30 starts
+    2. Load this ignore-list.yaml
+    3. Call doc-audit-automated.py --ignore-list doc-ignore-list.yaml
+    4. Script generates deterministic migration plan
+    5. Script executes migration (no user input required)
+    6. Audit log saved to _workspaces/roadmap/reports/
+    
+  by_humans: |
+    1. To add new exclusion: Add pattern to appropriate section
+    2. To mark file as "keep": Remove from ignore patterns OR add to valid_documentation
+    3. To debug: Check audit log in _workspaces/roadmap/reports/doc-migration-*.json
+    4. To rollback: Use rollback script with audit log timestamp
+
+# LAST UPDATED
+last_updated:
+  date: "2026-01-19"
+  by: "CORTEX Builder Protocol"
+  version: "1.0"
+  next_review: "After PHASE-30 completion"
