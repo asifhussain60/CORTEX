@@ -44,7 +44,9 @@ class OperationState:
 
     def get_phase_output(self, phase: int) -> Optional[Any]:
         """Get output from specific phase."""
-        return self.phase_outputs.get(phase)
+        output = self.phase_outputs.get(phase)
+        # Return deep copy to prevent external mutations
+        return deepcopy(output) if output is not None else None
 
     def set_phase_output(self, phase: int, output: Any) -> None:
         """Set output for a phase."""
@@ -97,6 +99,8 @@ class StateManager:
                 metadata=metadata or {}
             )
             self._operations[operation_id] = state
+            # Create initial snapshot for phase 1
+            self._create_snapshot(operation_id, 1)
             self.logger.info(f"Created operation state: {operation_id}")
             return state
 
