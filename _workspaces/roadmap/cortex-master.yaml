@@ -2,19 +2,19 @@ metadata:
   title: CORTEX Implementation Roadmap
   description: AI-Powered Development Orchestration System - Foundation through Full
     Remediation - COMPLETE + DevX Enhancement + Response Composition + MCP Protocol
-    + Challenge Integration
+    + Challenge Integration + Environment Setup
   project: CORTEX
-  status: "🎉 PHASE-REMEDIATION-08 COMPLETE ✅ - Missing __init__.py files created (42/42 tests passing)"
+  status: "PHASE-ENV-SETUP READY FOR IMPLEMENTATION - Environment Setup & Toolkit Initialization (5 ACs, 53 tests)"
   dor_score: 100
   start_date: null
   end_date: '2026-01-19'
-  total_ac_ids: 102
+  total_ac_ids: 107
   total_ac_ids_locked: 102
   total_ac_ids_complete: 102
   locked_acs_in_phases: 102
-  completion_percentage: 100.0
-  pending_implementation: 0
-  pending_phases: 0
+  completion_percentage: 95.3
+  pending_implementation: 5
+  pending_phases: 1
   ac_breakdown:
     locked_phases: 125
     phase_03_04_05: 35
@@ -41,13 +41,14 @@ metadata:
     mcp_protocol_compliance: 8
     complexity_aware_confirmation: 4
     response_composition: 4
-    total: 334
+    env_setup: 5
+    total: 339
   final_status:
     date_completed: '2026-01-19T12:00:00Z'
-    all_phases_locked: true
-    all_acs_complete: true
-    production_ready: true
-    test_suite_status: "100% PASS RATE \u2705 (all phases)"
+    all_phases_locked: false
+    all_acs_complete: false
+    production_ready: false
+    test_suite_status: "102/107 ACs locked (95.3%) - PHASE-ENV-SETUP pending"
     governance_compliant: true
     audit_trail_verified: true
     hash_chain_integrity: UNBROKEN
@@ -4560,6 +4561,54 @@ phases:
         - "Tests comprehensive \u2705"
         - "Coverage complete \u2705"
         - "All pass \u2705 (21/21)"
+  PHASE-ENV-SETUP:
+    id: PHASE-ENV-SETUP
+    title: Environment Setup & Toolkit Initialization
+    description: Formalize Python environment setup and toolkit initialization. Validates
+      Python 3.9+, installs 23 dependencies, configures dev tools, bootstraps MCP
+      server, and installs pre-commit hooks for quality gates.
+    status: NOT_STARTED
+    locked: false
+    ac_ids: 5
+    completed_ac_ids: 0
+    estimated_hours: 3
+    estimated_tests: 53
+    priority: P0
+    blocking: true
+    category: Infrastructure & Deployment
+    requires: null
+    required_for: PHASE-ONBOARDING-ORCHESTRATOR
+    file: phases/phase-env-setup.yaml
+    acceptance_criteria:
+      AC-ENV-SETUP-001-01:
+        title: Python 3.9+ Version Validation
+        status: NOT_STARTED
+        tests: 8
+      AC-ENV-SETUP-002-01:
+        title: Dependency Installation & Verification
+        status: NOT_STARTED
+        tests: 15
+      AC-ENV-SETUP-003-01:
+        title: Development Tools Configuration
+        status: NOT_STARTED
+        tests: 12
+      AC-ENV-SETUP-004-01:
+        title: MCP Server Bootstrap & Health Check
+        status: NOT_STARTED
+        tests: 10
+      AC-ENV-SETUP-005-01:
+        title: Verification Script & Pre-Commit Hook Integration
+        status: NOT_STARTED
+        tests: 8
+    files_to_create:
+      - cortex/scripts/verify_environment.py
+      - .github/hooks/pre-commit
+      - tests/unit/infrastructure/test_environment_setup.py
+    progress_percentage: 0.0
+    notes: 'Addresses deployment process gap: requirements.txt toolkit setup timing
+      was undefined. This phase provides single source of truth for environment initialization
+      with comprehensive verification and pre-commit quality gates. Replaces scattered
+      documentation with formal AC-IDs, tests, and governance compliance.'
   phase_onboarding_orchestrator:
     id: PHASE-ONBOARDING-ORCHESTRATOR
     title: User Onboarding Orchestrator & Tool Discovery System
