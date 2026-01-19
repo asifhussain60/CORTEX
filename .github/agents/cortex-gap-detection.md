@@ -1,52 +1,37 @@
-# CORTEX Gap Detection & Enforcement Agent
+# CORTEX Gap Detection Agent
 
-**Purpose:** Systematically identify and track "Design-Build Gaps" where functionality is designed in YAML but NOT properly implemented, exposed, or integrated.
-
-**Status**: ACTIVE  
-**SSOT Source**: `_workspaces/roadmap/cortex-master.yaml` (ONLY master plan)
+**Purpose:** Identify and track "Design-Build Gaps" where functionality designed but NOT properly exposed, integrated, or implemented.
 
 ---
 
-## 🚫 FILE PLACEMENT POLICY (CRITICAL - PREVENT SSOT CONFLICTS)
+## Quick Commands
 
-### Forbidden File Patterns (Same as cortex-builder.md)
-| What | Why | Action |
-|------|-----|--------|
-| `.md` files anywhere except `docs/` | Creates SSOT confusion | FIX IMMEDIATELY |
-| `docs_md/` folder | Violates org structure | DELETE IMMEDIATELY |
-| Multiple cortex-*.yaml files | Creates conflicting truth | DELETE IMMEDIATELY |
-| `.md` reports in `_workspaces/roadmap/` | Mixes YAML authority | DELETE IMMEDIATELY |
-
-### Correct Output Locations
-- **Findings/Investigation**: `_workspaces/roadmap/issues/Findings-*.yaml` (YAML only)
-- **Terminal Output**: Human-readable analysis (default, no file creation)
-- **Documentation**: `docs/FILENAME.md` (only if absolutely needed for execution)
+- `/gaps` → Show all design-build gaps
+- `/gap <gap-id>` → Details for specific gap
+- `/gap-status <component>` → Exposure/integration status
+- `/gap-remediation` → Recommended fixes (new ACs)
+- `/gap-audit` → Audit trail of discovered gaps
 
 ---
 
-## 🎯 PREVENTION CHECKLIST - Before Each Output
+## Gap Categories
 
-```
-BEFORE outputting findings:
-[ ] Creating .md report? → STOP - Use YAML instead or terminal output
-[ ] Creating files outside designated locations? → STOP - FIX LOCATIONS
-[ ] Creating docs_md/ folder? → STOP - FORBIDDEN (DELETE if exists)
-[ ] Multiple YAML master plans? → STOP - SSOT violation
-[ ] References to .github/roadmap/? → WRONG - Use _workspaces/roadmap/
-[ ] Reading from wrong cortex-*.yaml? → VERIFY cortex-master.yaml is source
-```
-
-**Red Flag 🚩 = STOP & FIX IMMEDIATELY**
-- Outputting findings to .md file (not in docs/)
-- docs_md/ folder being created
-- Multiple cortex-*.yaml files in use
-- References to wrong roadmap locations
+| Category | Example | Status | Remediation |
+|---|---|---|---|
+| **Not Exposed** | MCP server tools not exposed | CRITICAL | Wrap with @mcp_tool |
+| **Partially Integrated** | Governance rules loaded but not enforced | HIGH | Add enforcement layer |
+| **Missing Config** | Claude Desktop config missing | HIGH | Create claude_desktop_config.json |
+| **Incomplete Tests** | 85% coverage only | MEDIUM | Add edge case tests |
+| **Orphaned Code** | Tools created but not registered | MEDIUM | Register in orchestrator |
 
 ---
 
----
+## Output Defaults
 
-## CRITICAL GAP PATTERN ANALYSIS
+- YAML findings to `_workspaces/roadmap/issues/Findings-*.yaml`
+- Terminal output (human-readable analysis)
+- NO `.md` report files
+- NO verbosity
 
 ### Pattern Definition: Design-Build Gap
 

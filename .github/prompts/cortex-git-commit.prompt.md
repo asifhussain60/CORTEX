@@ -591,3 +591,17 @@ A successful commit/merge meets ALL of these:
 
 *Last Updated: January 15, 2026*
 *Integrates with: PHASE-09 (Governance Tools), PHASE-13 (Production Rollout)*
+
+## �� Related Prompts
+
+**Implementation & Review:**
+- `cortex-builder.prompt.md` - AC-ID implementation with TDD & governance
+- `cortex-review.prompt.md` - Complete code review & issue detection
+- `builder/cortex-builder-continuation.prompt.md` - Resume sessions (in builder/ subfolder)
+
+**Planning & Governance:**
+- `planning/cortex-planner.prompt.md` - Phase readiness assessment
+- `planning/cortex-governance.prompt.md` - Compliance verification
+
+**System Architecture:**
+- `CORTEX.prompt.md` - Master Orchestrator & Intent Router

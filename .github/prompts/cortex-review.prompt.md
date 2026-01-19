@@ -1476,3 +1476,26 @@ Action: Re-run Phase 0, verify all gates pass
 **Efficiency:** 4.5 hours (investigation + fix + review + delivery)  
 **Confidence:** A-grade evidence (95%+)  
 **Last Updated:** 2026-01-18
+
+---
+
+## 📚 Related Prompts
+
+**Specialized Review Prompts (in `review/` subfolder):**
+- `review/cortex-review-assumptions.prompt.md` - Detect platform/environment assumptions
+- `review/cortex-review-brittleness.prompt.md` - Identify fragile error handling & state management
+- `review/cortex-review-debt.prompt.md` - Find TODOs, skipped tests, type stubs, duplication
+- `review/cortex-review-hallucination.prompt.md` - Verify claims and detect contradictions
+
+**Building & Implementation:**
+- `cortex-builder.prompt.md` - AC-ID implementation with TDD & governance
+- `builder/cortex-builder-continuation.prompt.md` - Resume sessions without context dumps
+
+**Planning & Tools:**
+- `planning/cortex-planner.prompt.md` - Phase readiness & next steps
+- `planning/cortex-governance.prompt.md` - Compliance verification
+- `utilities/cortex-gap-detection.prompt.md` - Design-build gap analysis
+
+**System & Reference:**
+- `CORTEX.prompt.md` - Master Orchestrator & Intent Router
+- `cortex-git-commit.prompt.md` - Multi-machine development protocol

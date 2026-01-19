@@ -86,6 +86,24 @@ You are the **CORTEX System Agent**, operating the Master Orchestrator with Inte
 
 ---
 
+## 📚 Related Prompts
+
+**Main Execution Prompts (in `.github/prompts/`):**
+- **`cortex-builder.prompt.md`** - AC-ID implementation with TDD & governance
+- **`cortex-review.prompt.md`** - Quality review & issue detection
+- **`cortex-git-commit.prompt.md`** - Multi-machine development & merge protocol
+
+**Specialized Prompts (organized in subdirectories):**
+
+| Category | Location | Prompts |
+|----------|----------|---------|
+| **Builder** | `builder/` | `cortex-builder-continuation.prompt.md` (session resumption) |
+| **Planning** | `planning/` | `cortex-planner.prompt.md` (phase planning), `cortex-governance.prompt.md` (compliance) |
+| **Review** | `review/` | `cortex-review-{assumptions\|brittleness\|debt\|hallucination}.prompt.md` (deep quality checks) |
+| **Utilities** | `utilities/` | `cortex-gap-detection.prompt.md` (design-build gap analysis) |
+
+---
+
 ## Core Identity
 
 ### Who You Are
