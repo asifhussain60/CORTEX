@@ -1849,6 +1849,217 @@ phase_tracker:
       verified_at: null
       remediation_required: false
     git_checkpoint: null
+  PHASE-25-GOVERNANCE-COMPOSITION:
+    title: Governance Composite Rules Enhancement - Intent-Driven Rule Profiling
+    description: |
+      Transform governance rule application from independent filtering to composite
+      rule profiling with multi-rule orchestration, dependency resolution, and
+      severity-gated execution. This phase implements holistic rule composition
+      patterns ensuring deterministic, auditable governance enforcement.
+
+      PROBLEM ADDRESSED:
+      - Current governance applies rules independently (set union model)
+      - Rules have implicit dependencies (CORE-008 requires CORE-011 + CORE-012)
+      - No composition semantics (conflicting rules can apply simultaneously)
+      - Late-stage failures due to missing transitive dependencies
+
+      SOLUTION ARCHITECTURE:
+      Four-layer governance enhancement enabling context-aware rule selection:
+
+      Layer 1: Profile Definition (GC-001)
+      - Pre-defined rule compositions per operation pattern
+      - 8 core profiles (TDD_IMPLEMENT, QUICK_QUERY, PLANNING_PHASE, etc.)
+      - Dependency resolution at profile definition time (not runtime)
+      - Profiles stored in cortex_brain/tier0/governance-composition-profiles.yaml
+
+      Layer 2: Severity-Based Gating (GC-002)
+      - BLOCKED rules: Fail-fast enforcement (execution halts on violation)
+      - WARNING rules: Informational logging (never blocking)
+      - INFO rules: Audit trail only (zero enforcement overhead)
+      - Deterministic execution sequence by severity order
+
+      Layer 3: Profile Selection (GC-003)
+      - Intent Router selects profile based on (intent_type, confidence, phase)
+      - Lookup matrix: O(1) profile retrieval per operation
+      - Profiles cached per orchestrator lifecycle (no runtime resolution)
+      - Profile selection decision logged for auditability
+
+      Layer 4: Constraint Validation (GC-004)
+      - Rule groups with collective constraints and mutual exclusivity
+      - Constraint satisfaction checked pre-execution (fail-fast)
+      - Dependency graph validation ensures no orphaned rules
+      - Execution sequence determined by constraint ordering
+
+      AC BREAKDOWN (8 ACs):
+
+      AC-GC-001: Governance Composition Profile System
+      - Define profile schema with rule sets, dependencies, constraints
+      - Implement ProfileRegistry for profile storage and retrieval
+      - Create parser for governance-composition-profiles.yaml
+      - Tests: 25+ (schema validation, profile loading, cache behavior)
+
+      AC-GC-002: Severity-Based Rule Execution Gates
+      - Implement SeverityGate executor for ordered rule evaluation
+      - BLOCKED gate: all-or-nothing validation (fail-fast on violation)
+      - WARNING gate: log violations but continue execution
+      - INFO gate: audit-only, zero enforcement impact
+      - Tests: 30+ (gate logic, ordering, audit logging)
+
+      AC-GC-003: Intent-Profile Selection Matrix
+      - Build (intent_type, confidence_band, phase) → profile lookup matrix
+      - Integrate with Stage 2 routing for profile selection
+      - Cache profiles per orchestrator context
+      - Fallback profiles for edge cases (UNKNOWN intent → minimal rules)
+      - Tests: 28+ (matrix correctness, cache behavior, fallback handling)
+
+      AC-GC-004: Rule Dependency Resolution
+      - DAG builder for rule dependencies extracted from profiles
+      - Circular dependency detector (compile-time validation)
+      - Topological sort for execution ordering
+      - Audit logging shows full dependency chain
+      - Tests: 22+ (DAG construction, cycle detection, ordering)
+
+      AC-GC-005: Composite Rule Evaluation Engine
+      - Unified evaluator accepting profile ruleset + context
+      - Applies rules in severity order with constraints respected
+      - Returns detailed violation report per rule with category
+      - Audit trail captures profile name + rules evaluated + violations
+      - Tests: 35+ (evaluation correctness, audit logging, performance)
+
+      AC-GC-006: Governance Profile Library & Catalog
+      - Define 8 core profiles (TDD, Query, Planning, Phase Enforcement, etc.)
+      - Document profile semantics and constraint rationale
+      - Provide extension pattern for custom profiles
+      - Profile documentation auto-generated from YAML
+      - Tests: 18+ (profile definitions, documentation generation)
+
+      AC-GC-007: Integration with Master Orchestrator Stage 2
+      - Modify IntentRouter output to include profile selection
+      - Stage 2 routing accepts profile from router
+      - RuleEvaluator uses profile instead of rule enumeration
+      - Audit trail logs profile selection decision
+      - Tests: 25+ (routing integration, end-to-end flows)
+
+      AC-GC-008: Governance Enhancement Testing & Validation
+      - Comprehensive test suite (180+ unit + integration tests)
+      - Efficiency benchmarks: measure latency reduction vs current approach
+      - Determinism verification: identical input → identical ruleset + sequence
+      - Audit trail completeness: all governance decisions logged
+      - Tests: 40+ (benchmarking, determinism, audit completeness)
+
+      EFFICIENCY GAINS:
+      - 50-60% reduction in runtime rule checks (profiles pre-validated)
+      - <1ms profile lookup (vs 10-15ms DAG traversal alternatives)
+      - Fail-fast BLOCKED violations prevent cascading failures
+      - Caching eliminates repeated profile resolution
+
+      AUDITABILITY ENHANCEMENTS:
+      - Profile name logged per operation (not individual rules)
+      - Dependency chain captured in audit trail
+      - Severity gate decisions logged for each rule
+      - Hash chain integrity maintained across governance decisions
+
+      DETERMINISM GUARANTEES:
+      - Same (intent, confidence, phase) → identical ruleset + execution order
+      - No non-deterministic rule selection or ordering
+      - Profiles immutable after load-time (no drift)
+      - All randomness eliminated (deterministic mapping)
+
+      ALIGNMENT WITH EXISTING ARCHITECTURE:
+      - Respects tier precedence (CORE > Domain > Phase)
+      - Compatible with GovernanceRegistry (profiles are Meta-layer)
+      - Integrates with Stage 2 routing (no breaking changes)
+      - Extends existing audit trail (per AC-027)
+      - Zero impact on currently locked phases
+
+    ac_ids: 8
+    completed_ac_ids: 0
+    status: NOT_STARTED
+    locked: false
+    enhancement_phase: true
+    blocking: false
+    priority: P1
+    implement_when_ready: false
+    requires: PHASE-13-OBSERVABILITY-MATURITY
+    required_for: PRODUCTION_OPTIMIZATION
+    estimated_hours: 72
+    estimated_days: 9
+    progress_percentage: 0.0
+    parallel_capable: false
+    git_checkpoint: null
+    acceptance_criteria:
+      - ac_id: AC-GC-001-01
+        title: Governance Composition Profile System
+        description: Profile schema, ProfileRegistry, YAML parser, profile loading
+        estimated_hours: 8
+        test_count: 25
+        status: NOT_STARTED
+      - ac_id: AC-GC-002-01
+        title: Severity-Based Rule Execution Gates
+        description: BLOCKED/WARNING/INFO gates, ordered evaluation, fail-fast logic
+        estimated_hours: 9
+        test_count: 30
+        status: NOT_STARTED
+      - ac_id: AC-GC-003-01
+        title: Intent-Profile Selection Matrix
+        description: Lookup matrix, Stage 2 integration, caching, fallback profiles
+        estimated_hours: 8
+        test_count: 28
+        status: NOT_STARTED
+      - ac_id: AC-GC-004-01
+        title: Rule Dependency Resolution
+        description: DAG builder, cycle detection, topological sort, audit logging
+        estimated_hours: 7
+        test_count: 22
+        status: NOT_STARTED
+      - ac_id: AC-GC-005-01
+        title: Composite Rule Evaluation Engine
+        description: Unified evaluator, severity ordering, constraint respecting, violations
+        estimated_hours: 10
+        test_count: 35
+        status: NOT_STARTED
+      - ac_id: AC-GC-006-01
+        title: Governance Profile Library & Catalog
+        description: 8 core profiles, semantics documentation, extension patterns
+        estimated_hours: 6
+        test_count: 18
+        status: NOT_STARTED
+      - ac_id: AC-GC-007-01
+        title: Integration with Master Orchestrator Stage 2
+        description: IntentRouter profile selection, Stage 2 routing, audit trail
+        estimated_hours: 10
+        test_count: 25
+        status: NOT_STARTED
+      - ac_id: AC-GC-008-01
+        title: Governance Enhancement Testing & Validation
+        description: Comprehensive testing, efficiency benchmarks, determinism verification
+        estimated_hours: 14
+        test_count: 40
+        status: NOT_STARTED
+    audit_verification:
+      verified: false
+      entry_count: 0
+      hash_chain_valid: null
+      verified_at: null
+      remediation_required: false
+    governance_rules_enforced:
+      - "CORE-008: TDD (tests first, RED → GREEN)"
+      - 'CORE-011: Type hints mandatory'
+      - 'CORE-012: Docstrings mandatory (Google style)'
+      - 'CORE-027: Audit trail per decision'
+      - 'CORE-028: Kebab-case, ≤25 chars filenames'
+    phase_yaml: _workspaces/roadmap/phases/phase-25-governance-composition.yaml
+    notes: |
+      Governance Composite Rules Enhancement - Intent-Driven Rule Profiling
+      
+      This phase transforms governance from independent rule filtering to
+      composite profiling with deterministic selection and severity gating.
+      Addresses implicit rule dependencies, late-stage failures, and provides
+      50-60% efficiency gains while maintaining full auditability.
+      
+      All 8 ACs must be completed sequentially. No parallel execution.
+      Integration with Stage 2 routing is blocking (AC-GC-007-01).
+
   PHASE-DEPLOYMENT:
     title: CORTEX Universal Deployment & Multi-Repo Distribution
     description: "PHASE-DEPLOYMENT REDESIGNED (2026-01-18):\nSingle-command installation,\
@@ -2106,45 +2317,17 @@ phase_tracker:
       
       This remediation phase creates 650+ tests to validate complete system integration
       and production readiness. No gaps should remain after completion.
+  phase_tracker_END: null
 
-phase_tracker_END:
-    KEY DELIVERABLES:
+architecture_decisions_section:
+  note: Phase tracker complete. Section marker preserved for reference.
+  phase_yaml: _workspaces/roadmap/phases/phase-21-intelligent-knowledge-protocol.yaml
 
-      - KnowledgeProvider Protocol (typing.Protocol)
-
-      - IntelligentKnowledgeRouter (query-aware routing)
-
-      - ChangeDetectionService (drift detection + alerting)
-
-      - BulkIngestionPipeline (scalable data transformation)
-
-      - RefinementEngine (CORTEX optimization)
-
-      - UnifiedKnowledgeService (single entry point)
-
-
-      DESIGN DECISIONS:
-
-      - Protocol over ABC (structural subtyping, zero runtime overhead)
-
-      - Registry pattern (extensibility without code changes)
-
-      - YAML/JSON only (machine-readable, never Markdown)
-
-      - Incremental adoption (existing integrations unchanged initially)
-
-
-      BLOCKERS: None
-
-      DEPENDENCIES: PHASE-17 (DomainBrain), PHASE-REMEDIATION-06 (KnowledgeRepository)
-
-      '
-    phase_yaml: _workspaces/roadmap/phases/phase-21-intelligent-knowledge-protocol.yaml
-    roi_analysis:
-      total_effort_hours: 39
-      efficiency_gain: 40-60% reduction in redundant knowledge queries
-      accuracy_gain: Change detection prevents knowledge drift
-      extensibility: Registry pattern enables unlimited backend/filter additions
+roi_analysis:
+  total_effort_hours: 39
+  efficiency_gain: 40-60% reduction in redundant knowledge queries
+  accuracy_gain: Change detection prevents knowledge drift
+  extensibility: Registry pattern enables unlimited backend/filter additions
       risk_level: LOW - Protocol pattern proven in orchestrator_traits.py
     alternatives_evaluated:
       graphql_federation:
