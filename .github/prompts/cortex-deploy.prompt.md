@@ -1,6 +1,6 @@
 # CORTEX Deployment Strategy: Clean Repository with Day-Zero Data
 
-**Objective**: Push clean, consolidated code to the main branch with day-zero data while preserving application state in the CORTEX6 branch.
+**Objective**: Push clean, consolidated code to the main branch with day-zero data while preserving application state in the CORTEX branch.
 
 ---
 
@@ -73,7 +73,7 @@ git commit -m "refactor: consolidate repository structure - move docs to /docs, 
 ```
 
 **Verification**:
-- All changes staged and committed to `CORTEX6` branch
+- All changes staged and committed to `CORTEX` branch
 - Commit message clearly describes the refactoring
 
 ---
@@ -82,30 +82,30 @@ git commit -m "refactor: consolidate repository structure - move docs to /docs, 
 
 **Action**:
 ```bash
-git push origin CORTEX6
+git push origin CORTEX
 ```
 
 **Verification**:
-- Remote `CORTEX6` branch updated with all refactored code
+- Remote `CORTEX` branch updated with all refactored code
 - No conflicts with remote state
 
 ---
 
-### Step 2.3: Rebase Main onto CORTEX6
+### Step 2.3: Rebase Main onto CORTEX
 
 **Action**:
 ```bash
 git branch -D main          # Delete local main if it exists
 git checkout main           # Create/checkout main (pulls from remote)
-git rebase CORTEX6
+git rebase CORTEX
 git push origin main --force
-git checkout CORTEX6        # Switch back to CORTEX6
+git checkout CORTEX        # Switch back to CORTEX
 ```
 
 **Verification**:
-- Local `main` branch now contains all CORTEX6 changes
+- Local `main` branch now contains all CORTEX changes
 - Remote `main` branch updated
-- `CORTEX6` branch is the active working branch
+- `CORTEX` branch is the active working branch
 
 ---
 
@@ -235,10 +235,10 @@ python -m cortex_toolkit.tools.day_zero_reset --action=full
 - [ ] `cortex_brain/` and `_workspaces/` remain intact
 
 ### Git State
-- [ ] Local commits on `CORTEX6`
-- [ ] Remote `CORTEX6` updated
-- [ ] Remote `main` rebased from `CORTEX6`
-- [ ] `CORTEX6` branch is active
+- [ ] Local commits on `CORTEX`
+- [ ] Remote `CORTEX` updated
+- [ ] Remote `main` rebased from `CORTEX`
+- [ ] `CORTEX` branch is active
 
 ### Day-Zero Data
 - [ ] `governance.db` reset with seed data
@@ -267,9 +267,9 @@ If issues arise during deployment:
    git push origin main --force
    ```
 
-2. **Return to CORTEX6**:
+2. **Return to CORTEX**:
    ```bash
-   git checkout CORTEX6
+   git checkout CORTEX
    ```
 
 3. **Identify Issues**: Review Phase that failed and address root cause
@@ -305,7 +305,7 @@ If issues arise during deployment:
 
 ## Notes
 
-- **Preservation**: The `CORTEX6` branch serves as the preserved working branch with full history
+- **Preservation**: The `CORTEX` branch serves as the preserved working branch with full history
 - **Main**: Becomes the clean deployment artifact
 - **Database**: Maintained as authoritative state registry
 - **MCP**: Remains the external integration interface
