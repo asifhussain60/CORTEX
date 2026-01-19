@@ -1,0 +1,486 @@
+# PHASE-DEPLOYMENT-ENHANCED: Multi-Repo Production Deployment Architecture
+# Reference: Issue #7 - Deployment gaps
+# Created: 2026-01-19
+# Status: Architecture + Implementation Ready
+
+id: PHASE-DEPLOYMENT-ENHANCED
+title: Enhanced Multi-Repo Production Deployment Architecture
+description: >
+  Comprehensive redesign of CORTEX deployment system to support:
+  - Automated multi-repo setup without manual errors
+  - Per-repo isolation and governance enforcement
+  - Production-grade service discovery and health checks
+  - IDE support (VS Code via MCP, Visual Studio 2019+ via LSP adapter)
+  - Resilient offline mode with local audit trail syncing
+  - Unified knowledge graph across repos
+
+status: NOT_STARTED
+locked: false
+priority: P0
+estimated_hours: 160
+estimated_tests: 187
+
+focus:
+  - Three-Tier Deployment Architecture
+  - Session Context & Repo Isolation
+  - Service Discovery & Configuration Management
+  - Prompt Version Management
+  - IDE Integration (MCP + LSP)
+  - Integration Testing (9 edge cases)
+  - Production Documentation
+
+requirements:
+  - Python 3.9+
+  - SQLite WAL mode support
+  - VS Code LSP support
+  - VS Studio 2019+ LSP support
+  - Git 2.20+
+  - pytest 7.0+
+
+dependencies:
+  - PHASE-22: MCP Protocol Compliance (COMPLETED)
+  - PHASE-23: Complexity-Aware Confirmation Gate (COMPLETED)
+  - All prior phases must be locked
+
+ac_ids:
+  # TIER 1: SESSION & ISOLATION (Days 1-3)
+  AC-DEPLOY-ENHANCED-001-01:
+    title: Session Context Injection for MCP Server
+    description: >
+      Extend MCPServer with per-connection session management.
+      Each connected repo gets unique session_id with repo_id context.
+      All orchestrator calls receive __cortex_session__ with isolation metadata.
+      Audit entries automatically tagged with repo_id + session_id.
+    acceptance_criteria:
+      - Session created with unique session_id on repo connect
+      - repo_id extracted and passed to all orchestrators
+      - Audit entries include repo_id (non-null)
+      - Unit tests: 100% coverage of MCPSession + SessionManager
+      - No regression in existing MCP tests
+    testing:
+      unit_tests_expected: 12
+      integration_tests_expected: 3
+      edge_cases:
+        - Multiple concurrent sessions
+        - Session timeout handling
+        - Session cleanup on disconnect
+    success_criteria:
+      - Tests passing: tests/unit/test_mcp_session.py
+      - Coverage: ≥95% for session code
+      - Audit trail shows repo_id in all entries
+    files_to_create:
+      - src/mcp/models/session.py (NEW)
+      - tests/unit/test_mcp_session.py (NEW)
+      - migrations/001_add_session_support.sql (NEW)
+    files_to_modify:
+      - src/mcp/server.py
+      - cortex/api/mcp/server.py
+    audit_entry: AC-DEPLOY-ENHANCED-001-01
+
+  AC-DEPLOY-ENHANCED-001-02:
+    title: Repository Isolation Rules Enforcement
+    description: >
+      Implement hard isolation boundaries in orchestrators.
+      All file operations scoped to repo_path (matching session.repo_id).
+      Cross-repo file access rejected with RepositoryIsolationError.
+      Audit log shows isolation violations as AC_EXECUTE_FAILED.
+    acceptance_criteria:
+      - File operations checked against session.repo_path
+      - Cross-repo access blocked immediately
+      - Clear error message on violation
+      - Audit includes isolation_reason on failure
+      - Unit tests: 100% coverage of isolation logic
+    testing:
+      unit_tests_expected: 15
+      integration_tests_expected: 4
+      edge_cases:
+        - Symlink traversal attempts
+        - Relative path attacks
+        - Permission elevation attempts
+    success_criteria:
+      - Tests passing: tests/unit/test_repo_isolation.py
+      - Coverage: ≥95% for isolation code
+      - Security review approved
+    files_to_create:
+      - cortex/core/security/isolation.py (NEW)
+      - tests/unit/test_repo_isolation.py (NEW)
+    files_to_modify:
+      - cortex/orchestrators/*.py (all orchestrators respect isolation)
+    audit_entry: AC-DEPLOY-ENHANCED-001-02
+
+  AC-DEPLOY-ENHANCED-001-03:
+    title: Repository Registry System
+    description: >
+      Create centralized registry of connected repositories.
+      Enables repo lookup by repo_id, type, path validation.
+      Registry stored in cortex-brain/tier0/repo-registry.yaml.
+      Database table tracks registration, status, metadata.
+    acceptance_criteria:
+      - Repos registered in cortex-brain/tier0/repo-registry.yaml
+      - Registry queried for isolation boundary checks
+      - Invalid repo_ids rejected with clear error
+      - Unit tests: 100% coverage of registry logic
+    testing:
+      unit_tests_expected: 10
+      integration_tests_expected: 2
+      edge_cases:
+        - Duplicate repo_ids rejected
+        - Invalid repo_type detection
+        - Stale registry entries cleanup
+    success_criteria:
+      - Tests passing: tests/unit/test_repo_registry.py
+      - Coverage: ≥95% for registry code
+      - Registry schema validates against schema.json
+    files_to_create:
+      - cortex/core/registry/repo_registry.py (NEW)
+      - cortex-brain/tier0/repo-registry.yaml (NEW)
+      - tests/unit/test_repo_registry.py (NEW)
+    audit_entry: AC-DEPLOY-ENHANCED-001-03
+
+  # TIER 2: DISCOVERY & VERSIONING (Days 4-7)
+  AC-DEPLOY-ENHANCED-002-01:
+    title: MCP Service Discovery with Health Checks
+    description: >
+      Implement /health endpoint for MCP hub readiness probes.
+      Add /config/prompt-version endpoint for version negotiation.
+      Service discovery sequence: CORTEX_MCP_ENDPOINT env var → cortex-config.yaml → 127.0.0.1:8000 default.
+      Health check includes: db connection, governance rules loaded, orchestrators registered.
+    acceptance_criteria:
+      - GET /health returns 200 with valid schema
+      - GET /health detects DB connection failure
+      - GET /config/prompt-version returns current version
+      - Discovery tries env var first, then config, then default
+      - Invalid endpoints detected with clear error
+      - Health check latency <100ms (cached)
+    testing:
+      unit_tests_expected: 14
+      integration_tests_expected: 4
+      edge_cases:
+        - DB connection timeout
+        - Invalid endpoint format
+        - Network unreachable
+    success_criteria:
+      - Tests passing: tests/unit/test_mcp_health.py
+      - Endpoint latency <100ms
+      - Coverage: ≥95%
+    files_to_create:
+      - cortex/core/discovery/mcp_discovery.py (NEW)
+      - tests/unit/test_mcp_discovery.py (NEW)
+    files_to_modify:
+      - src/mcp/server.py
+    audit_entry: AC-DEPLOY-ENHANCED-002-01
+
+  AC-DEPLOY-ENHANCED-002-02:
+    title: Prompt Version Management System
+    description: >
+      Create versioned prompt releases in cortex-brain/releases/vX.Y.Z/.
+      Implement PromptVersionManager for version negotiation and compatibility checks.
+      Maintain prompt-versions.yaml manifest tracking all releases, compatibility matrix.
+      Support backward compatibility checks (what versions work with each other).
+    acceptance_criteria:
+      - cortex-brain/releases/v1.0.0/ contains CORTEX.prompt.md
+      - Version negotiation works (repo requests v1.0, hub has v1.0 → compatible)
+      - Incompatible version rejected with clear error message
+      - Version history auditable in prompt-versions.yaml
+      - Unit tests: 100% coverage of version manager
+    testing:
+      unit_tests_expected: 16
+      integration_tests_expected: 3
+      edge_cases:
+        - Future version requested by old repo
+        - Deprecated version requested
+        - Major version incompatibility
+    success_criteria:
+      - Tests passing: tests/unit/test_prompt_version_manager.py
+      - Coverage: ≥95%
+      - v1.0.0 release created with SHA hash
+    files_to_create:
+      - src/versioning/prompt_version_manager.py (NEW)
+      - cortex-brain/releases/v1.0.0/CORTEX.prompt.md (NEW)
+      - cortex-brain/releases/v1.0.0/CORTEX.prompt.schema.yaml (NEW)
+      - cortex-brain/tier0/prompt-versions.yaml (NEW)
+      - tests/unit/test_prompt_version_manager.py (NEW)
+    files_to_modify:
+      - src/mcp/server.py (version negotiation on connect)
+    audit_entry: AC-DEPLOY-ENHANCED-002-02
+
+  AC-DEPLOY-ENHANCED-002-03:
+    title: Hub Setup Automation Script
+    description: >
+      Create scripts/setup-cortex-hub.py for one-time hub initialization.
+      Actions: verify Python, start MCP server, initialize governance.db, create releases,
+      generate version manifest, create registry template, output endpoint + status.
+      Idempotent (safe to run multiple times).
+    acceptance_criteria:
+      - Script runs without errors
+      - governance.db initialized (all tables present)
+      - Prompts in cortex-brain/releases/v1.0.0/
+      - Registry template created
+      - Health endpoint returns ready
+      - Running twice produces same result
+      - Clear success output
+    testing:
+      unit_tests_expected: 10
+      integration_tests_expected: 2
+    success_criteria:
+      - Script runs successfully: bash scripts/setup-cortex-hub.py
+      - DB initialized: ls -la cortex_brain/state/governance.db
+      - Version released: ls -la cortex-brain/releases/v1.0.0/
+      - Health check passes: curl http://127.0.0.1:8000/health
+    files_to_create:
+      - scripts/setup-cortex-hub.py (NEW)
+      - scripts/templates/repo-registry.yaml.jinja2 (NEW)
+    audit_entry: AC-DEPLOY-ENHANCED-002-03
+
+  # TIER 3: REPO SETUP & ISOLATION (Days 8-12)
+  AC-DEPLOY-ENHANCED-003-01:
+    title: Repo Registration Script & Template
+    description: >
+      Create scripts/register-repo.sh for per-repo registration (run once in each repo).
+      Actions: create .github/prompts/, generate cortex-config.yaml, copy/symlink prompts,
+      validate MCP connectivity, create .github/tier0/ stub, git commit initial setup.
+      Idempotent and cross-platform (Linux/Mac symlinks, Windows copy).
+    acceptance_criteria:
+      - Script runs without errors in new repo
+      - cortex-config.yaml created with correct repo_id, repo_name, repo_type
+      - Prompts copied/symlinked correctly
+      - MCP connectivity validated
+      - Git commit created with AC-REPO-REG-001 audit entry
+      - Idempotent (running twice is safe)
+      - Works on macOS, Linux, Windows
+    testing:
+      unit_tests_expected: 12
+      integration_tests_expected: 4
+      edge_cases:
+        - Invalid repo_id format rejected
+        - Already registered repo handled
+        - MCP hub unavailable handled gracefully
+    success_criteria:
+      - Script runs: bash scripts/register-repo.sh --repo-id api-service --repo-name "API" --repo-type backend
+      - cortex-config.yaml present: ls -la .github/cortex-config.yaml
+      - Connectivity check passes
+      - Git commit present
+    files_to_create:
+      - scripts/register-repo.sh (NEW)
+      - _workspaces/roadmap/templates/cortex-config.yaml.jinja2 (NEW)
+      - docs/DEPLOYMENT-REPO-REGISTRATION.md (NEW)
+    audit_entry: AC-DEPLOY-ENHANCED-003-01
+
+  AC-DEPLOY-ENHANCED-003-02:
+    title: Multi-Repo Integration Testing Suite
+    description: >
+      Comprehensive integration tests for all 9 edge cases in multi-repo deployment.
+      Tests cover: 5-repo connection, isolation enforcement, offline mode, version mismatch,
+      governance conflicts, concurrent operations, health checks, sync on reconnect.
+      All tests must pass before deployment phase can be locked.
+    acceptance_criteria:
+      - All 9 test cases passing
+      - No regressions in existing test suite
+      - Coverage ≥95% for new code
+      - Tests complete in <30 seconds
+      - Clear test output (no warnings)
+    testing:
+      unit_tests_expected: 8
+      integration_tests_expected: 9
+      edge_cases:
+        - SingleRepoConnects
+        - FiveReposConnectIsolated
+        - IsolationViolationBlocked
+        - PromptVersionMismatch
+        - OfflineFallback
+        - OfflineSyncOnReconnect
+        - RepoOverrideConflict
+        - ConcurrentReposAtomicity
+        - HealthCheckWorks
+    success_criteria:
+      - All tests passing: pytest tests/integration/test_multi_repo_deployment.py -v
+      - Coverage ≥95%: pytest --cov=cortex
+      - No test warnings
+    files_to_create:
+      - tests/integration/test_multi_repo_deployment.py (NEW)
+      - tests/fixtures/mock_repos.py (NEW)
+      - tests/fixtures/mock_mcp_server.py (NEW)
+    audit_entry: AC-DEPLOY-ENHANCED-003-02
+
+  # TIER 4: IDE INTEGRATION (Days 13-18)
+  AC-DEPLOY-ENHANCED-004-01:
+    title: VS Code MCP Extension - vscode-cortex
+    description: >
+      Create VS Code extension that consumes MCP server.
+      Features: load CORTEX.prompt.md from .github/prompts/, connect to MCP via cortex-config.yaml,
+      display governance violations inline, show quick-fixes, audit trail viewer, health indicator.
+      Extension discovers MCP endpoint from cortex-config.yaml + validates connectivity on load.
+    acceptance_criteria:
+      - Extension loads in VS Code without errors
+      - Connects to MCP hub via cortex-config.yaml discovery
+      - Displays violations inline as squiggly lines
+      - Hover shows violation details + remediation
+      - Quick-fix suggestions work (test 1 case)
+      - Audit panel shows recent changes
+      - Health indicator shows connection status
+      - Works with all 5 test repos
+    testing:
+      unit_tests_expected: 14
+      integration_tests_expected: 3
+      manual_tests:
+        - Extension loads in VS Code
+        - Violations displayed
+        - Quick-fix applied
+        - Audit trail shown
+    success_criteria:
+      - Extension installs: code --install-extension vscode-cortex-*.vsix
+      - Test violation appears: create governance violation, see red squiggly
+      - Quick-fix works: apply suggestion via Ctrl+.
+      - Audit panel shows changes
+    files_to_create:
+      - extensions/vscode-cortex/package.json (NEW)
+      - extensions/vscode-cortex/src/extension.ts (NEW)
+      - extensions/vscode-cortex/src/mcp_client.ts (NEW)
+      - extensions/vscode-cortex/src/diagnostics.ts (NEW)
+    audit_entry: AC-DEPLOY-ENHANCED-004-01
+
+  AC-DEPLOY-ENHANCED-004-02:
+    title: Visual Studio 2019+ LSP Adapter
+    description: >
+      Create cortex-lsp-adapter as .NET Core app bridging VS ↔ MCP.
+      LSP server listens on TCP/IPC for VS requests.
+      LSP client calls MCP hub for governance checks.
+      Validates local Python environment compatibility.
+      Converts MCP results to LSP Diagnostics for VS display.
+    acceptance_criteria:
+      - LSP adapter starts without errors
+      - Connects to MCP hub
+      - Validates Python environment
+      - Receives LSP requests from VS
+      - Returns violations as LSP Diagnostics
+      - VS displays violations correctly
+      - Works with VS 2019 community edition
+    testing:
+      unit_tests_expected: 16
+      integration_tests_expected: 3
+      manual_tests:
+        - Adapter starts
+        - VS connects
+        - Violation shown in VS
+        - Diagnostic cleared on fix
+    success_criteria:
+      - Adapter starts: dotnet run
+      - VS connects via LSP
+      - Governance violation shown as error/warning
+      - Test violation fixes, diagnostic clears
+    files_to_create:
+      - extensions/cortex-lsp-adapter/cortex-lsp-adapter.csproj (NEW)
+      - extensions/cortex-lsp-adapter/Program.cs (NEW)
+      - extensions/cortex-lsp-adapter/MCPClient.cs (NEW)
+      - extensions/cortex-lsp-adapter/LSPServer.cs (NEW)
+      - extensions/cortex-lsp-adapter/PythonEnvironmentValidator.cs (NEW)
+      - docs/VS-STUDIO-LSP-SETUP.md (NEW)
+    audit_entry: AC-DEPLOY-ENHANCED-004-02
+
+  # TIER 5: PRODUCTION READINESS (Days 19-20)
+  AC-DEPLOY-ENHANCED-005-01:
+    title: Comprehensive Deployment Documentation
+    description: >
+      Create production-ready deployment guides covering all scenarios.
+      Includes: setup guide (step-by-step), architecture decision records (ADR),
+      troubleshooting runbook (5+ scenarios), API reference (MCP endpoints),
+      FAQ (common questions), multi-repo example (3 repos end-to-end).
+    acceptance_criteria:
+      - Setup guide includes 3-repo example (verified working end-to-end)
+      - Architecture documents explain all decisions + rationale
+      - Troubleshooting covers 5+ common issues + solutions
+      - API reference complete (all MCP endpoints documented)
+      - No broken links or typos
+      - Reviewed by tech lead + approved
+    testing:
+      manual_tests:
+        - Follow setup guide from scratch
+        - Register 3 test repos
+        - Verify all 3 connect + isolated
+        - Verify audit trail includes all 3 repos
+    success_criteria:
+      - Setup guide works end-to-end: 3 repos connected + isolated
+      - Architecture docs clear and thorough
+      - Troubleshooting resolves 5+ common issues
+      - Tech lead approval documented
+    files_to_create:
+      - docs/DEPLOYMENT-SETUP-GUIDE.md (NEW)
+      - docs/DEPLOYMENT-ARCHITECTURE-ADRS.md (NEW)
+      - docs/DEPLOYMENT-TROUBLESHOOTING.md (NEW)
+      - docs/DEPLOYMENT-API-REFERENCE.md (NEW)
+      - docs/DEPLOYMENT-FAQ.md (NEW)
+    audit_entry: AC-DEPLOY-ENHANCED-005-01
+
+  AC-DEPLOY-ENHANCED-005-02:
+    title: Production Readiness Validation & Sign-Off
+    description: >
+      Final validation that deployment phase meets all production requirements.
+      Verify: all 10 success criteria met, all 4 critical blockers resolved,
+      all 9 edge cases tested, no regressions in existing tests,
+      governance compliance verified, audit trail integrity confirmed.
+      Get sign-off from: author, tech lead, devops, security.
+    acceptance_criteria:
+      - All 10 success criteria verified met
+      - All 4 critical blockers resolved
+      - All 9 edge cases tested + passing
+      - All existing tests still passing
+      - Governance compliance verified
+      - Audit trail integrity confirmed
+      - Security review passed (isolation verified)
+      - Sign-offs collected
+    testing:
+      manual_tests:
+        - All criteria checklist
+        - Security isolation test
+        - Production readiness review
+    success_criteria:
+      - All criteria: ✅ checked
+      - Sign-offs: ✅ collected
+      - Production ready: ✅ APPROVED
+    files_to_modify:
+      - _workspaces/roadmap/DEPLOYMENT-PHASE-REDESIGN-20260119.md (update status)
+      - _workspaces/roadmap/DEPLOYMENT-PHASE-IMPLEMENTATION-PLAN-20260119.md (update status)
+    audit_entry: AC-DEPLOY-ENHANCED-005-02
+
+# SUMMARY
+summary:
+  overview: >
+    Complete redesign of CORTEX deployment architecture to support production-grade
+    multi-repo orchestration with unified governance, IDE support, and resilient operations.
+    Implemented as 3-Tier system: Central Hub (MCP + governance), Configuration Service
+    (discovery + registry), Repo Local (templates + config files).
+
+  key_outcomes:
+    - ✅ Deterministic deployment across 5+ repos without manual errors
+    - ✅ Full governance compliance (CORE-026, CORE-027, CORE-005)
+    - ✅ IDE-agnostic (VS Code via MCP, VS 2019+ via LSP adapter)
+    - ✅ Unified audit trail (all repo changes logged centrally)
+    - ✅ Unified knowledge graph (cross-repo pattern learning)
+    - ✅ Production resilience (offline mode, service discovery, health checks)
+
+  timeline:
+    week_1: Session context, health checks, service discovery (Days 1-5)
+    week_2: Versioning, hub setup, repo setup scripts (Days 6-10)
+    week_3: Integration testing, repo isolation enforcement (Days 11-15)
+    week_4: IDE integrations, documentation, production validation (Days 16-20)
+
+  effort:
+    total_hours: 160
+    total_engineer_days: 20
+    parallel_tasks: 8
+    critical_path: Session Context → Repo Isolation → Integration Tests (10 days)
+
+  risks:
+    - MCP server single point of failure (mitigation: failover server + health checks)
+    - Audit race conditions (mitigation: SQLite WAL + transactions)
+    - VS Studio LSP compatibility (mitigation: early testing + fallback CLI)
+    - Performance degradation at scale (mitigation: caching + DB indexing)
+
+  success_criteria:
+    - All 10 ACs completed + locked
+    - 100% test pass rate (187 tests)
+    - 95%+ code coverage
+    - All 9 edge cases tested
+    - All 4 critical blockers resolved
+    - Production sign-offs collected
+    - Zero regressions in existing code
