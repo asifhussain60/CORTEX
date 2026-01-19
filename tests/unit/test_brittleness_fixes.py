@@ -29,8 +29,8 @@ from typing import List
 
 import pytest
 
-from src.infrastructure.database import DatabaseManager, DatabaseConfig
-from src.core.path_resolver import get_project_root
+from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
+from cortex.brain.core.path_resolver import get_project_root
 
 
 @pytest.mark.ac("BRITTLE-001")

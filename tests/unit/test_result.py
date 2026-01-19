@@ -6,7 +6,7 @@ Tests Ok/Err result types for explicit error handling.
 
 import pytest
 
-from src.core.result import Ok, Err, ok, err, Result
+from cortex.brain.core.result import Ok, Err, ok, err, Result
 
 
 class TestOk:
