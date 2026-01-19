@@ -1,53 +1,38 @@
 # CORTEX Builder Agent
 
-Implements CORTEX from the **single, authoritative source of truth:**
-- **`_workspaces/roadmap/cortex-master.yaml`** ← ONLY master plan file
-- Read `phase_tracker` section for current phase status
-- Reference `_workspaces/roadmap/phases/phase-NN.yaml` for phase details
-
-Enforce **tier0 governance rules** from `cortex_brain/tier0/governance/core-rules.yaml` (28 IMMUTABLE rules).
+**Purpose:** Implement AC-IDs from `_workspaces/roadmap/cortex-master.yaml` with strict tier0 governance.
 
 ---
 
-## ⚠️ FILE PLACEMENT POLICY (CRITICAL - PREVENT SSOT CONFLICTS)
+## SSOT & File Placement
 
-### 🚫 FORBIDDEN LOCATIONS
-| What | Why | Action |
-|------|-----|--------|
-| `.md` files anywhere except `docs/` | Creates SSOT confusion | FIX IMMEDIATELY |
-| `docs_md/` folder | Violates org structure | DELETE IMMEDIATELY |
-| `.md` files in `_workspaces/roadmap/` | Mixes YAML authority | DELETE IMMEDIATELY |
-| `.md` files in root directory | Creates confusion | DELETE IMMEDIATELY |
-| Phase specs outside `_workspaces/roadmap/phases/` | Breaks SSOT | DELETE IMMEDIATELY |
-| Multiple cortex-*.yaml files (except archives) | Creates conflicting truth | DELETE IMMEDIATELY |
+| File Type | Location | Authority |
+|---|---|---|
+| **Master Plan** | `_workspaces/roadmap/cortex-master.yaml` | CANONICAL |
+| **Phase Specs** | `_workspaces/roadmap/phases/phase-NN.yaml` | Per-phase |
+| **Code** | `src/`, `cortex_brain/` | Implementation |
+| **Tests** | `tests/` | Verification |
+| **Docs** | `docs/` ONLY | Human-readable |
+| **Reports** | `_workspaces/roadmap/reports/` | YAML tracking |
 
-### ✅ CORRECT LOCATIONS
-| File Type | Location | Authority | Example |
-|-----------|----------|-----------|---------|
-| **MASTER PLAN** | `_workspaces/roadmap/cortex-master.yaml` | **CANONICAL** | Contains `phase_tracker` |
-| Phase Specs (YAML) | `_workspaces/roadmap/phases/phase-NN.yaml` | Authoritative per phase | Details for PHASE-05 |
-| Implementation Code | `src/`, `cortex_brain/tierX/` | Execution | Source modules |
-| Test Code | `tests/` | Verification | Test suites |
-| Utilities | `scripts/` | Tools | Permanent scripts |
-| Documentation (MD) | `docs/` ONLY | Human-readable | Guides, plans |
-| Status Reports (YAML) | `_workspaces/roadmap/reports/` | Tracking | phase-status-*.yaml |
-| Findings (YAML) | `_workspaces/roadmap/issues/` | Analysis | Findings-*.yaml |
-
-### 🔍 VALIDATION RULES - CHECK BEFORE COMMITTING
-Before outputting ANY file, verify:
-
-1. **MD files**: Path MUST be `docs/FILENAME.md` (NEVER root, NEVER `_workspaces/`, NEVER `docs_md/`)
-2. **YAML reports**: Path MUST be `_workspaces/roadmap/reports/FILENAME.yaml`
-3. **Phase YAML**: Path MUST be `_workspaces/roadmap/phases/phase-NN.yaml`
-4. **No `docs_md/` folder**: This folder is FORBIDDEN (check: does it exist? DELETE)
-5. **No conflicting SSOT**: Only ONE `cortex-master.yaml` in active use
-6. **Reference check**: All references must point to `_workspaces/roadmap/cortex-master.yaml`
-
-**If ANY file violates these rules: STOP, FIX, VERIFY BEFORE PROCEEDING**
+**� Forbidden:** `.md` files outside `docs/`, `docs_md/` folder, `.py` in root
 
 ---
 
-## 🛡️ GOVERNANCE INTEGRATION (MANDATORY)
+## Implementation Protocol
+
+1. Load `phase_tracker` → verify phase not locked
+2. Load `phases/phase-XX.yaml` → get AC specs
+3. Load `core-rules.yaml` → 28 immutable rules
+4. Git checkpoint: `git commit -m "checkpoint: before AC-XXX-XX-XX"`
+5. Implement AC-ID with tests (TDD first - CORE-008)
+6. Audit trail: AC_START → AC_EXECUTE → AC_COMPLETE
+7. Commit on completion
+8. Next AC-ID when ready
+
+---
+
+## Governance Integration
 
 **Before implementing ANY AC-ID, load governance rules:**
 

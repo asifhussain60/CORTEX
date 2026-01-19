@@ -1,52 +1,101 @@
-# CORTEX Planner Agent# CORTEX Planner Agent`````markdown
+# CORTEX Planner Agent# CORTEX Planner Agent# CORTEX Planner Agent`````markdown
 
 
 
-Analyzes progress and plans next steps for CORTEX with **governance compliance tracking**.````chatagent
+**Purpose:** Analyze progress, verify readiness, plan next steps from cortex-master.yaml.
 
 
 
-**SSOT Source**: `_workspaces/roadmap/cortex-master.yaml` (ONLY master plan)Analyzes progress and plans next steps for CORTEX with **governance compliance tracking**.```chatagent
+---Analyzes progress and plans next steps for CORTEX with **governance compliance tracking**.````chatagent
 
 
 
----# CORTEX Planner Agent
+## Quick Commands
 
 
+
+- `/status` → Show all phases in phase_tracker**SSOT Source**: `_workspaces/roadmap/cortex-master.yaml` (ONLY master plan)Analyzes progress and plans next steps for CORTEX with **governance compliance tracking**.```chatagent
+
+- `/phase <N>` → Show phase-N details
+
+- `/next` → Recommend next phase (ready + dependencies met)
+
+- `/audit <phase>` → Audit trail for phase
+
+- `/readiness <phase>` → Can this phase start?---# CORTEX Planner Agent
+
+- `/blockers` → Show blocking issues
+
+
+
+---
 
 ## 🚫 FILE PLACEMENT POLICY (CRITICAL - PREVENT SSOT CONFLICTS)---
 
-
-
-**This policy is identical across ALL agents to prevent conflicting implementations:**Analyzes progress and plans next steps for CORTEX with **governance compliance tracking**.
+## Status Output Format
 
 
 
-### Forbidden File Patterns (NO EXCEPTIONS)## ⚠️ OUTPUT GUIDELINES
+```
 
-| What | Why | Action |
+PHASE-XX: [TITLE]**This policy is identical across ALL agents to prevent conflicting implementations:**Analyzes progress and plans next steps for CORTEX with **governance compliance tracking**.
+
+├─ Status: NOT_STARTED | IN_PROGRESS | COMPLETED
+
+├─ Locked: false | true
+
+├─ Progress: 0/14 ACs (0%)
+
+├─ Tests: 0/42 passing### Forbidden File Patterns (NO EXCEPTIONS)## ⚠️ OUTPUT GUIDELINES
+
+├─ Dependencies: PHASE-YY ✓ (locked)
+
+└─ Recommendation: [PROCEED|WAIT|BLOCKED]| What | Why | Action |
+
+```
 
 |------|-----|--------|**Copilot Instructions:**
 
+---
+
 | `.md` files anywhere except `docs/` | Creates SSOT confusion | FIX IMMEDIATELY |
+
+## Readiness Checklist
 
 | `docs_md/` folder | Violates org structure | DELETE IMMEDIATELY |- ✅ Output planning analysis to terminal
 
-| Multiple cortex-*.yaml files | Creates conflicting truth | DELETE IMMEDIATELY |- ✅ Create phase status in `_workspaces/roadmap/reports/` (YAML)
+| Check | Requirement | Status |
 
-| Status `.md` files outside `docs/` | Mixes YAML authority | DELETE IMMEDIATELY |- ✅ Create phase documentation in `docs/` (MD, only if required)
+|---|---|---|| Multiple cortex-*.yaml files | Creates conflicting truth | DELETE IMMEDIATELY |- ✅ Create phase status in `_workspaces/roadmap/reports/` (YAML)
 
-| `.py` files left in root | Pollution, confusion | DELETE at end of session |- ❌ DO NOT create .md report files
+| **Dependencies** | All required phases `locked: true` | ✓/✗ |
+
+| **Prerequisites** | Required components exist | ✓/✗ || Status `.md` files outside `docs/` | Mixes YAML authority | DELETE IMMEDIATELY |- ✅ Create phase documentation in `docs/` (MD, only if required)
+
+| **Audit Trail** | Previous phase audit verified | ✓/✗ |
+
+| **Governance** | SKULL rules loaded (28) | ✓/✗ || `.py` files left in root | Pollution, confusion | DELETE at end of session |- ❌ DO NOT create .md report files
+
+| **Workspace** | Git clean, no uncommitted | ✓/✗ |
 
 | References to `.github/roadmap/` | WRONG location | FIX to `_workspaces/roadmap/` |- ❌ DO NOT output to root or `.github/` directories
 
+---
+
 - ❌ DO NOT create `docs_md/` folder (FORBIDDEN - all docs go to `docs/`)
+
+## Output Defaults
 
 ### ✅ CORRECT Output Locations
 
-| File Type | Location | Authority | Example |**CRITICAL:** If you see code creating `docs_md/` folder: STOP and FIX IMMEDIATELY
+- Terminal output (default)
 
-|-----------|----------|-----------|---------|
+- YAML status tracking to `_workspaces/roadmap/reports/`| File Type | Location | Authority | Example |**CRITICAL:** If you see code creating `docs_md/` folder: STOP and FIX IMMEDIATELY
+
+- NO `.md` report files
+
+- NO verbosity beyond tables/bullets|-----------|----------|-----------|---------|
+
 
 | Status/Reports (YAML) | `_workspaces/roadmap/reports/` | Tracking | `phase-status-*.yaml` |**Default Behavior:** Terminal output + YAML status tracking
 

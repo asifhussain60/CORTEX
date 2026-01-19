@@ -4,13 +4,12 @@ metadata:
     Remediation - COMPLETE + DevX Enhancement + Response Composition + MCP Protocol
     + Challenge Integration
   project: CORTEX
-  status: "PHASE-22-COMPLETE \u2705 PHASE-23-COMPLETE \u2705 PHASE-REMEDIATION-08-COMPLETE\
-    \ \u2705 PHASE-REMEDIATION-09-NOT-STARTED \u23F3 - 58 ACs locked, 10 pending (Issue\
-    \ #9)"
+  status: 'PHASE-22-COMPLETE ✅ PHASE-23-COMPLETE ✅ PHASE-REMEDIATION-08-COMPLETE ✅
+    PHASE-REMEDIATION-09-NOT-STARTED ⏳ - 58 ACs locked, 10 pending (Issue #9)'
   dor_score: 100
   start_date: null
   end_date: null
-  total_ac_ids: 102
+  total_ac_ids: 120
   total_ac_ids_locked: 10
   total_ac_ids_complete: 58
   locked_acs_in_phases: 46
@@ -49,7 +48,7 @@ metadata:
     all_phases_locked: false
     all_acs_complete: false
     production_ready: false
-    test_suite_status: "100% PASS RATE \u2705 (for completed phases)"
+    test_suite_status: 100% PASS RATE ✅ (for completed phases)
     governance_compliant: true
     audit_trail_verified: true
     hash_chain_integrity: UNBROKEN
@@ -341,10 +340,10 @@ metadata:
       not_in_root: true
       not_in_docs: true
       examples:
-      - "Phase completion reports \u2192 _workspaces/roadmap/reports/PHASE-XX-COMPLETION-REPORT.md"
-      - "AC analysis documents \u2192 _workspaces/roadmap/reports/AC-XXX-YY-analysis.md"
-      - "Implementation summaries \u2192 _workspaces/roadmap/reports/PHASE-XX-*-SUMMARY.md"
-      - "Gap analysis \u2192 _workspaces/roadmap/reports/PHASE-XX-GAP-ANALYSIS.md"
+      - Phase completion reports → _workspaces/roadmap/reports/PHASE-XX-COMPLETION-REPORT.md
+      - AC analysis documents → _workspaces/roadmap/reports/AC-XXX-YY-analysis.md
+      - Implementation summaries → _workspaces/roadmap/reports/PHASE-XX-*-SUMMARY.md
+      - Gap analysis → _workspaces/roadmap/reports/PHASE-XX-GAP-ANALYSIS.md
       validation:
       - No .md files created in project root
       - No .md files created in _workspaces/roadmap/ root
@@ -366,10 +365,10 @@ metadata:
       - _workspaces/roadmap/ root
       - .github/ root
       examples:
-      - "consolidate.py \u2192 src/mcp/tools/consolidate.py"
-      - "validate_consolidation.py \u2192 src/mcp/tools/validation/validate_consolidation.py"
-      - "Utility scripts \u2192 src/mcp/utilities/"
-      - "Analysis tools \u2192 src/mcp/tools/analysis/"
+      - consolidate.py → src/mcp/tools/consolidate.py
+      - validate_consolidation.py → src/mcp/tools/validation/validate_consolidation.py
+      - Utility scripts → src/mcp/utilities/
+      - Analysis tools → src/mcp/tools/analysis/
       enforcement: Python scripts in forbidden locations MUST be moved before phase
         lock
       cleanup_rule: 'End of session: rm -f *.py (verify none remain in root)'
@@ -380,7 +379,7 @@ metadata:
     enforcement: 'Pre-commit check: find . -path ./docs -prune -o -name ''*.md'' -type
       f -print (should be empty)'
   audit_remediation:
-    status: "COMPLETE \u2705"
+    status: COMPLETE ✅
     initiative_id: AUDIT-REMEDIATION-2026-01-15
     purpose: 'Fix CORE-027 compliance: Ensure all phases 1-13 have complete audit
       trail evidence (AC_START, AC_EXECUTE, AC_COMPLETE) properly logged during test
@@ -402,7 +401,7 @@ metadata:
       - PHASE-07-INTENT-ROUTER (14 ACs, locked: false)
       - PHASE-08-CORE-ORCHESTRATORS (6 ACs, locked: false)
       - PHASE-09-GOVERNANCE-TOOLS (8 ACs, locked: false)
-      - PHASE-10-ADAPTIVE-EXECUTION (5 ACs, locked: "true) \u2713 Already locked"
+      - PHASE-10-ADAPTIVE-EXECUTION (5 ACs, locked: true) ✓ Already locked
       - PHASE-11-HALLUCINATION-PREVENTION (6 ACs, locked: false)
       - PHASE-12-KNOWLEDGE-ECOSYSTEM (7 ACs, locked: false)
       - PHASE-13-OBSERVABILITY-MATURITY (5 ACs, locked: false)
@@ -465,1586 +464,720 @@ metadata:
     total_estimated_hours: 752.5
     total_buffer_hours: 150
     total_with_buffer: 902.5
-  version: v2.1-lean
-  updated_at: '2026-01-19T09:38:05.880557'
-  archive_aware: true
-  note: Lean version with active phases only. Completed phases archived in _archives/v2.1/
 phase_tracker:
-  PHASE-05-PRODUCTION-HARDENING:
-    title: Production Hardening & Security
-    description: Security Hardening, Secret Redaction, Hash Verification, Cross-File
-      Coherence Validation
-    ac_ids: 12
-    completed_ac_ids: 12
+  PHASE-01:
+    title: Governance Foundation & Core Architecture
+    description: 3-Tier Governance Model, SQLite-based AC Index, Audit-First Pattern,
+      State Machine Management, Reference Orchestrator Validation
+    ac_ids: 36
+    completed_ac_ids: 36
     status: COMPLETED
     locked: true
-    completed_at: '2026-01-18T18:35:25.632388Z'
+    completed_at: '2026-01-14T00:00:00Z'
     cleanup_required: false
-    requires: PHASE-04-SAFETY-RELIABILITY
+    day_sequence:
+      day_0: Scaffolding (folders, __init__.py)
+      day_1: AR-002 (SQLite), AR-005 (Mode Control)
+      day_2: AR-001 (Governance), AR-004 (Logging), FR-001 (Audit+Hash)
+      day_3: AR-003 (Decorators), FR-003 (State Machine)
+      day_4: FR-004 (Evidence), FR-005 (Progress)
+      day_5: FR-006 (Continuation), AR-008 (Legacy)
+      day_6: AR-011 (Reference Orchestrator Validation)
     audit_verification:
       verified: true
-      entry_count: 45
+      entry_count: 940
       hash_chain_valid: true
-      verified_at: '2026-01-18T18:35:25.632388Z'
+      verified_at: '2026-01-16T03:30:00Z'
+      remediation_required: false
+      notes: Audit logs verified as authentic (not fake). 2,825 total entries across
+        all phases with proper hash chain.
+    git_checkpoint: phase-01-lock
+  PHASE-02-CODEBASE-COHERENCE:
+    title: Codebase Coherence & Import Foundation
+    description: Nested Folder Structure Organization, Import Path Resolution, Cross-Platform
+      Compatibility, Code Organization Standardization
+    ac_ids: 3
+    completed_ac_ids: 3
+    status: COMPLETED
+    locked: true
+    started_at: '2026-01-18T00:00:00Z'
+    completed_at: '2026-01-18T14:00:00Z'
+    cleanup_required: false
+    requires: PHASE-01
+    must_complete_before: PHASE-03-CORE-ARCHITECTURE
+    blocking: true
+    estimated_hours: 35
+    priority: P0
+    notes: '✅ PHASE-02 COMPLETE & LOCKED. All 3 ACs complete: AC-AR-010-01 (29 tests),
+      AC-AR-010-02 (58 tests), AC-AR-010-03 (56 tests). CORTEX now has coherent folder
+      structure, migration scripts, and validated imports. Ready to unblock PHASE-03
+      and all downstream phases.'
+    audit_verification:
+      verified: false
+      entry_count: 0
+      hash_chain_valid: false
+      verified_at: null
       remediation_required: false
     git_checkpoint: null
-    notes: 'All 12 ACs complete with unified specifications in phases: section. Security
-      hardening, secret redaction, and coherence validation framework operational.'
-  PHASE-06-BRITTLENESS:
-    ac_ids: 17
-    completed_ac_ids: 17
+    acceptance_criteria:
+    - ac_id: AC-AR-010-01
+      title: Nested Folder Structure Planning & Design
+      description: Design comprehensive nested folder structure for CORTEX codebase.
+        Document organization rationale and benefits. Create detailed migration plan
+        with risk assessment.
+      estimated_hours: 8
+      test_count: 29
+      status: COMPLETE
+      completed_at: '2026-01-18T12:00:00Z'
+      success_criteria:
+      - Structure designed and documented ✅
+      - Organization rationale provided ✅
+      - Migration plan comprehensive with risk assessment ✅
+      - Governance approval obtained ✅
+      - All 29 tests passing (15 unit + 14 integration) ✅
+      files_created:
+      - docs/FOLDER-STRUCTURE-DESIGN.md (9KB, comprehensive design)
+      - tests/unit/test_folder_structure_design.py (15 unit tests)
+      - tests/integration/test_folder_structure_design_integration.py (14 integration
+        tests)
+      - docs/PHASE-02-KICKOFF.md (implementation guide)
+      files_modified:
+      - _workspaces/roadmap/cortex-master.yaml (PHASE-02 AC-IDs consolidated)
+    - ac_id: AC-AR-010-02
+      title: Automated Folder Migration Script
+      description: Create automated Python script to safely migrate codebase to new
+        folder structure. Verify all file integrity. Generate comprehensive migration
+        report.
+      estimated_hours: 12
+      test_count: 58
+      status: COMPLETE
+      completed_at: '2026-01-18T13:30:00Z'
+      success_criteria:
+      - Migration script created and tested ✅
+      - File integrity verified post-migration ✅
+      - Migration report generated with statistics ✅
+      - Rollback capability implemented ✅
+      - All 58 tests passing (32 unit + 26 integration) ✅
+      files_created:
+      - scripts/migrate-folder-structure.py (350+ lines, full implementation)
+      - scripts/migration-validator.py (240+ lines, validation logic)
+      - tests/unit/test_migration_script.py (32 unit tests)
+      - tests/integration/test_migration_integration.py (26 integration tests)
+      files_modified: []
+    - ac_id: AC-AR-010-03
+      title: Import Path Update & Validation
+      description: Update all Python import paths after folder migration. Validate
+        no broken imports across codebase. Run full test suite to confirm 100% pass
+        rate.
+      estimated_hours: 15
+      test_count: 56
+      status: COMPLETE
+      completed_at: '2026-01-18T14:00:00Z'
+      success_criteria:
+      - All import paths updated to new structure ✅
+      - No broken imports detected (validation passes) ✅
+      - Full test suite passes 100% (all tests green) ✅
+      - Import coherence verified with automated checks ✅
+      - All 56 tests passing (30 unit + 26 integration) ✅
+      files_created:
+      - scripts/update-imports.py (380+ lines, AST-based analyzer)
+      - scripts/validate-imports.py (240+ lines, validation logic)
+      - tests/unit/test_import_update_scripts.py (30 unit tests)
+      - tests/integration/test_import_update_integration.py (26 integration tests)
+      files_modified:
+      - cortex-master.yaml (PHASE-02 completion)
+  PHASE-03-CORE-ARCHITECTURE:
+    title: Orchestration Core & MCP Integration
+    description: Orchestrator Architecture Framework, Model Context Protocol Integration,
+      Governance Evaluation Engine, Response Templates System
+    ac_ids: 27
+    completed_ac_ids: 27
     status: COMPLETED
     locked: true
-    started_at: '2026-01-18T16:41:00.687455Z'
-    completed_at: '2026-01-18T16:41:00.687455Z'
-    requires: PHASE-05-PRODUCTION-HARDENING
-    git_checkpoint: d6511b1ac
-  PHASE-07-ECOSYSTEM:
-    title: Orchestrator Plugin Ecosystem & Brain Activation
-    description: Extensible Orchestrator Framework, Brain Tier Population, Hallucination
-      Prevention Enforcement, Vision Governance Protocol
-    ac_ids: 24
-    completed_ac_ids: 24
-    status: COMPLETED
-    locked: true
-    started_at: '2026-01-15T00:00:00Z'
-    requires: PHASE-06-BRITTLENESS
+    completed_at: '2026-01-14T00:00:00Z'
     cleanup_required: false
-    estimated_hours: 152
-    estimated_days: 27
-    progress_percentage: 100.0
+    requires: PHASE-02-CODEBASE-COHERENCE
     audit_verification:
       verified: true
-      entry_count: 1200
+      entry_count: 810
       hash_chain_valid: true
-      verified_at: '2026-01-16T04:00:00Z'
+      verified_at: '2026-01-16T03:35:00Z'
       remediation_required: false
-    git_checkpoint: 730ed0e4e
-    notes: 'AR-012: 3 ACs, 90 tests. AR-013: 3 ACs, 99 tests. AR-014: 3 ACs, 79 tests.
-      AR-015: 3 ACs, 113 tests (40+35+38). Total: 24/24 ACs (100%), 1189 unit tests
-      passing. Vision evolution protocol complete: mutation tracking, orchestrator
-      dependency registry, rollback capability.'
-  PHASE-07-INTENT-ROUTER:
-    title: Holistic Intent Router Intelligence
-    description: "Master & Interaction Orchestrator Collaboration, Three-Stage Architecture\
-      \ (Comprehension \u2192 Routing \u2192 Knowledge), CORTEX LENS Knowledge Graph,\
-      \ Comprehension Loop"
-    ac_ids: 14
-    completed_ac_ids: 14
-    status: COMPLETED
-    locked: true
-    started_at: '2026-01-15T10:00:00Z'
-    completed_at: '2026-01-15T21:30:00Z'
-    requires: PHASE-ENHANCEMENT-03
-    estimated_hours: 64
-    estimated_days: 8
-    actual_hours: 8
-    progress_percentage: 100.0
-    blocking: true
-    audit_verification:
-      verified: true
-      entry_count: 420
-      hash_chain_valid: true
-      verified_at: '2026-01-16T04:20:00Z'
-      remediation_required: false
-    git_checkpoint: 1c47503c6
-    notes: "PHASE-07 COMPLETE: 14/14 ACs - 100%  #  \u2705\nAll IR-001 through IR-004\
-      \ acceptance criteria fully implemented and tested.\n\nIR-004 (2 ACs): Intent\
-      \ Router Integration - COMPLETE  #  \u2705\n- IR-004-01: CORTEX LENS Knowledge\
-      \ Graph Builder - COMPLETED (36 tests) \u2713\n- IR-004-02: Comprehension Loop\
-      \ with YAML Condensation - COMPLETED (36 tests) \u2713\n\nDELIVERABLES SUMMARY:\n\
-      \n[IR-004-01] Knowledge Graph Builder:\n- GraphNode: Entity representation (functions,\
-      \ classes, APIs, models, patterns, config, schemas)\n- GraphEdge: 15 relationship\
-      \ types (calls, imports, depends_on, persists, queries, triggers, etc.)\n- KnowledgeGraph:\
-      \ 50+ query operations (find, traverse, reachability, impact analysis, path\
-      \ finding)\n- KnowledgeGraphBuilder: Multi-source intelligence orchestrator\n\
-      - Incremental updates, JSON serialization, statistics generation\n- 36 integration\
-      \ tests (Node/Edge creation, Graph construction, Builder, Queries, Updates,\
-      \ Persistence)\n\n[IR-004-02] Comprehension Loop:\n- ComprehensionSession: Session-scoped\
-      \ loop tracking (revisions, approval states)\n- ComprehensionCondenser: Graph\u2192\
-      YAML transformation with confidence scoring\n- UserApprovalGate: Approve/Reject/Clarify\
-      \ workflow with audit trails\n- BrainTierPusher: Automatic tier routing (tier0=governance,\
-      \ tier1=acceptance-criteria, tier2=standards, tier3=knowledge)\n- TempFileManager:\
-      \ Temporary file lifecycle with cleanup orchestration\n- ComprehensionLoopEngine:\
-      \ Main orchestrator coordinating all components\n- ApprovalStatus enum: PENDING,\
-      \ APPROVED, REJECTED, CLARIFICATION_REQUESTED\n- BrainTier enum: TIER0, TIER1,\
-      \ TIER2, TIER3\n- 36 integration tests (Session basics, User workflow, Refinement\
-      \ loop, Gates, Routing, Cleanup, Rejection, History, Integration)\n\nTOTAL TESTS:\
-      \ 400/400 PASSING  #  \u2705\n- IR-001: 88 tests (31+20+20+17)\n- IR-002: 94\
-      \ tests (21+17+21+35)\n- IR-003: 126 tests (41+38+34+13)\n- IR-004: 72 tests\
-      \ (36+36)\n- Total: 380 tests from previous sessions + 72 from IR-004 = 452\
-      \ total historical tests\n- Phase accuracy: 400 entry_count reflects audit-verified\
-      \ subset\n\nGOVERNANCE COMPLIANCE:\n- CORE-008: TDD methodology applied (tests\
-      \ first, 100% pass rate) \u2713\n- CORE-011: Type hints on all functions \u2713\
-      \n- CORE-012: Google-style docstrings on all classes/methods \u2713\n- CORE-013:\
-      \ Specific exception handling, no bare except \u2713\n- CORE-026: Git checkpoints\
-      \ at 438c6eeb5 (before IR-004-01), 7cfa461cf (before IR-004-02), fa9fa144e (IR-004-01\
-      \ complete), 1c47503c6 (IR-004-02 complete) \u2713\n- CORE-028: Kebab-case module\
-      \ names, <25 char limit \u2713\n- INT-RULE-009: Auto-Challenge governance integrated\
-      \ \u2713\n\nPHASE LOCK: VERIFIED AND LOCKED \u2713\n- All 14 ACs completed\n\
-      - 400+ tests passing\n- Git history clean and auditable\n- Ready to unblock\
-      \ PHASE-08-CORE-ORCHESTRATORS\n\nOrigin: CORTEX5.5 LLM Intent Routing Intelligence\n"
-    phase_yaml: _workspaces/roadmap/phases/phase-07-intent-router.yaml
-  PHASE-08-CORE-ORCHESTRATORS:
-    title: Domain Orchestrator Ecosystem
-    description: Transform Discovered Orchestrators into Systematic Framework, Scalable
-      Architecture, Plugin Registration & Lifecycle
+    git_checkpoint: cdbd823fb
+  PHASE-04-SAFETY-RELIABILITY:
+    title: Safety, Reliability & Observability
+    description: Production Reliability, Graceful Degradation, Circuit Breaker Patterns,
+      OpenTelemetry Metrics Integration
     ac_ids: 6
     completed_ac_ids: 6
     status: COMPLETED
     locked: true
-    requires: PHASE-07-INTENT-ROUTER
-    estimated_hours: 24
-    estimated_days: 3
-    progress_percentage: 100.0
-    blocking: true
-    audit_verification:
-      verified: true
-      entry_count: 180
-      hash_chain_valid: true
-      verified_at: '2026-01-16T04:25:00Z'
-      remediation_required: false
-    git_checkpoint: 5c61ed971
-    started_at: '2026-01-15T23:00:00Z'
-    completed_at: '2026-01-16T00:45:00Z'
-    notes: "PHASE-08 COMPLETE: 6/6 ACs - 100%  #  \u2705\nAll AR-016, AR-017, and\
-      \ CR-001 acceptance criteria fully implemented.\n161 tests passing with zero\
-      \ regressions.\n"
-    phase_yaml: _workspaces/roadmap/phases/phase-08.yaml
-  PHASE-09-GOVERNANCE-TOOLS:
-    title: Developer Governance Tooling
-    description: CLI Tools for Developers, Pre-commit Hooks, IDE Integration, Dashboard
-      Analytics, Governance Enforcement Automation
-    ac_ids: 8
-    completed_ac_ids: 8
-    status: COMPLETED
-    locked: true
-    requires: PHASE-08-CORE-ORCHESTRATORS
-    started_at: '2026-01-16T00:00:00Z'
-    completed_at: '2026-01-16T02:00:00Z'
+    started_at: '2026-01-18T18:45:00Z'
+    completed_at: '2026-01-18T20:15:00Z'
+    cleanup_required: false
+    requires: PHASE-03-CORE-ARCHITECTURE
     estimated_hours: 28
-    estimated_days: 3.5
-    progress_percentage: 100.0
-    blocking: true
+    actual_hours: 1.5
     audit_verification:
       verified: true
-      entry_count: 240
+      entry_count: 18
       hash_chain_valid: true
-      verified_at: '2026-01-16T04:30:00Z'
+      verified_at: '2026-01-18T20:15:00Z'
       remediation_required: false
-    git_checkpoint: 5df57b24f
-    notes: "PHASE-09 COMPLETE: 8/8 ACs - 100%  #  \u2705\nAll GV-001 through GV-004\
-      \ acceptance criteria fully implemented.\nCLI tools, pre-commit hooks, IDE integration,\
-      \ and dashboard complete.\n\nGV-002 (Agent Prompts): 2/2 COMPLETED (from previous\
-      \ session)\n- GV-002-01: cortex-builder.prompt.md updated with governance tools\n\
-      - GV-002-02: cortex-planner.md updated with governance commands\n\nGV-003 (Pre-commit/IDE):\
-      \ 2/2 COMPLETED \u2713\n- GV-003-01: Pre-Commit Hook Validation - COMPLETED\n\
-      \  * AC-ID format validation in commit messages\n  * Governance rule violation\
-      \ prevention\n  * .pre-commit-config.yaml configuration\n  * 25 unit tests passing\
-      \ (format validation, hook execution, config)\n  * 3 acceptance criteria met\n\
-      \  * Supports: multiple AC-IDs, optional AC-IDs, domain validation\n  * Commit:\
-      \ cc7f174c1\n\n- GV-003-02: VS Code IDE Integration - COMPLETED\n  * vscode-diagnostics-provider.py\
-      \ for real-time diagnostics\n  * VS Code extension (TypeScript) with:\n    -\
-      \ Real-time governance violation diagnostics\n    - Quick-fix suggestions for\
-      \ violations\n    - Command palette integration\n    - Configuration settings\n\
-      \    - Status bar indicator\n    - Keybindings (Cmd+Shift+G)\n  * 19 integration\
-      \ tests passing (diagnostics, extension structure, config)\n  * 3 acceptance\
-      \ criteria met\n  * Commit: d29a401a2\n\nGV-004 (Dashboard/Readiness): 2/2 COMPLETED\
-      \ \u2713\n- GV-004-01: Governance Rule Dashboard - COMPLETED \u2713\n  * Compliance\
-      \ heatmap visualization (rules \xD7 phases)\n  * Violation trend analysis over\
-      \ time\n  * Domain-level compliance summaries\n  * Phase-level readiness dashboards\n\
-      \  * Actionable recommendations generation\n  * 25 unit tests passing (data\
-      \ structures, builder methods, AC criteria)\n  * 3 acceptance criteria met\n\
-      \  * JSON output format for dashboard integration\n  * Commit: 5df57b24f\n\n\
-      - GV-004-02: Phase Readiness Checker - COMPLETED \u2713\n  * 4-stage readiness\
-      \ validation (governance, audit, tests, docs)\n  * PhaseReadinessChecker class\
-      \ with orchestration logic\n  * Real-time phase readiness assessment\n  * Blockers\
-      \ identification and recommendations generation\n  * 32 unit tests passing (data\
-      \ structures, all stages, AC criteria)\n  * 3 acceptance criteria met\n  * Integrates\
-      \ with phase lock mechanism\n  * Exit codes: 0 (ready), 1 (not ready)\n  * Commit:\
-      \ 51276d370\n\nTotal tests: 133/133 PASSING (9+11+25+19+32+25 = 121 core tests)\n\
-      Phase Progress: 100% (8/8 ACs completed)  #  \u2705\nPHASE-09 COMPLETE: Ready\
-      \ to proceed to PHASE-10\n"
-    phase_yaml: _workspaces/roadmap/phases/phase-09.yaml
-  PHASE-10-ADAPTIVE-EXECUTION:
-    title: Adaptive Execution Framework
-    description: Context-Aware Orchestrator Routing, Dynamic Mode Selection, Performance
-      Optimization, Execution Analytics
-    ac_ids: 5
-    completed_ac_ids: 5
-    status: COMPLETED
-    locked: true
-    requires: PHASE-09-GOVERNANCE-TOOLS
-    estimated_hours: 20
-    estimated_days: 2.5
-    progress_percentage: 100.0
-    completed_at: '2026-01-15T17:19:25.734055Z'
-    actual_hours: 4.2
-    actual_days: 0.17
-    blocking: false
-    audit_verification:
-      verified: true
-      entry_count: 15
-      hash_chain_valid: true
-      verified_at: '2026-01-15T17:19:25.734055Z'
-    git_checkpoint: b39214599
-    notes: EX-001 (Context Analyzer & Routing), EX-002 (Execution Modes & Optimization),
-      EX-003 (Performance Profiling) - ALL COMPLETE. 106 tests passing (41+21+18+14+12).
-      Governance compliance verified. Ready for PHASE-11.
-    phase_yaml: _workspaces/roadmap/phases/phase-10.yaml
-  PHASE-11-HALLUCINATION-PREVENTION:
-    title: Hallucination Prevention System
-    description: Behavioral Boundaries for AI Agents, Intent Canonicalization, Input
-      Validation, Cross-Reference Coherence
-    ac_ids: 6
-    completed_ac_ids: 6
-    status: COMPLETED
-    locked: true
-    requires: PHASE-09-GOVERNANCE-TOOLS
-    estimated_hours: 28
-    estimated_days: 3.5
-    progress_percentage: 100.0
-    blocking: false
-    started_at: '2026-01-16T12:30:00Z'
-    completed_at: '2026-01-16T14:45:00Z'
-    audit_verification:
-      verified: true
-      entry_count: 160
-      hash_chain_valid: true
-      verified_at: '2026-01-16T14:45:00Z'
-      remediation_required: false
-    git_checkpoint: 8905be21d
-    notes: "PHASE-11 COMPLETE: 6/6 ACs - 100%  #  \u2705\nALL HP-001 through HP-003\
-      \ acceptance criteria fully implemented.\nTotal: 160/160 tests passing (36+28+26+23+23+24).\n"
-    phase_yaml: _workspaces/roadmap/phases/phase-11.yaml
-  PHASE-12-KNOWLEDGE-ECOSYSTEM:
-    title: Knowledge Ecosystem Expansion
-    description: Tier 3 Knowledge Library Expansion, Auto-Indexing System, Semantic
-      Search Integration, Quality Curation
-    ac_ids: 7
-    completed_ac_ids: 7
-    status: COMPLETED
-    locked: true
-    started_at: '2026-01-16T16:00:00Z'
-    completed_at: '2026-01-16T20:40:00Z'
-    requires: PHASE-11-HALLUCINATION-PREVENTION
-    estimated_hours: 36
-    estimated_days: 4.5
-    progress_percentage: 100.0
-    blocking: false
-    audit_verification:
-      verified: true
-      entry_count: 243
-      hash_chain_valid: true
-      verified_at: '2026-01-16T21:00:00Z'
-      remediation_required: false
-    git_checkpoint: d608261ee
-    notes: "ALL 7 ACs COMPLETED \u2713 KN-001-01 (36/36), KN-001-02 (33/33), KN-002-01\
-      \ (38/38), KN-002-02 (38/38), KN-003-01 (38/38), KN-003-02 (24/24), KN-004-01\
-      \ (36/36). Total: 243 tests passing (100%). Full Tier 3 knowledge ecosystem\
-      \ operational with quality curation, semantic search, governance, expert validation,\
-      \ and cross-domain synthesis."
-    phase_yaml: _workspaces/roadmap/phases/phase-12.yaml
-  PHASE-13-OBSERVABILITY-MATURITY:
-    title: Observability Maturity & Business Domain Integration
-    description: Production-Grade Observability, Telemetry System, Audit Trail Visualization,
-      Business Domain Framework Integration
-    ac_ids: 9
-    completed_ac_ids: 9
-    status: COMPLETED
-    locked: true
-    requires: PHASE-10-ADAPTIVE-EXECUTION
-    estimated_hours: 22
-    estimated_days: 2.5
-    progress_percentage: 100.0
-    blocking: true
-    phase_16_integration:
-      status: APPROVED
-      decision_date: '2026-01-15'
-      rationale: Business domain is production requirement, not optional. 2h of work
-        added to PHASE-13. Zero schedule impact. Eliminates 6-month compliance gap.
-      decision_document: PHASE-16-INTEGRATION-DECISION.md
-      planned_completion: '2026-02-05'
-      actual_completion: '2026-01-16T08:32:36Z'
-    audit_verification:
-      verified: true
-      entry_count: 42
-      hash_chain_valid: true
-      verified_at: '2026-01-16T08:32:36Z'
-      domain_audit_hash: 604907440b938223
-      remediation_notes: OB-001-01 through OB-003-01 audit entries verified. BD-001-01
-        through BD-003-01 audit entries created and verified. All 9 ACs complete and
-        locked.
-    git_checkpoint: b1b9bad67
-    domain_completion_script: scripts/phase_13_domain_completion.py
-    domain_test_suite: tests/unit/governance/test_phase_13_domain_acs.py
-    actual_hours: 6.5
-    actual_days: 0.27
-    notes: "OB-001-01 \u2713 (21/21), OB-001-02 \u2713 (19/19), OB-002-01 \u2713 (22/22),\
-      \ OB-002-02 \u2713 (20/20), OB-003-01 \u2713 (26/26) = 108/108 tests. Domain\
-      \ ACs: BD-001-01 \u2713 (6 tests), BD-001-02 \u2713 (5 tests), BD-002-01 \u2713\
-      \ (6 tests), BD-003-01 \u2713 (7 tests) = 33 tests passing. Total: 141/141 tests.\
-      \ 12 domain audit entries created with hash chain integrity maintained."
-    completed_at: '2026-01-16T08:32:36Z'
-    phase_yaml: _workspaces/roadmap/phases/phase-13.yaml
-  PHASE-15-DASHBOARD-UNIVERSAL:
-    title: Universal CORTEX Dashboard - Multi-Repo Visualization
-    description: "Production-grade dashboard for visualizing CORTEX operations across\
-      \ ANY repo \nutilizing the system, with single-click setup and universal tool\
-      \ access.\n\nREDESIGNED FOR MULTI-REPO ARCHITECTURE:\n- Universal dashboard\
-      \ operates from CORTEX/ folder\n- Accessible from any company repo where CORTEX\
-      \ is cloned\n- Zero setup required - works immediately post-init\n- Repo-agnostic\
-      \ metrics (files, tests, commits, CORTEX ops)\n- Real-time MCP tool status and\
-      \ usage statistics\n\nARCHITECTURE CHANGES (v2.0):\n- Single HTML file + embedded\
-      \ JavaScript (no build step)\n- Operates on ANY repo, not just CORTEX internal\
-      \ metrics\n- Dashboard reads parent repo structure auto-magically\n- Multi-repo\
-      \ context switching support\n- Responsive design: mobile/tablet/desktop all\
-      \ supported\n- Dark/light theme toggle with persistence\n\nSECTION A - Foundation\
-      \ (4 ACs):\n- AC-DASH-001-01: Universal dashboard shell (HTML + embedded JS)\n\
-      - AC-DASH-001-02: Repo detection & configuration auto-discovery\n- AC-DASH-001-03:\
-      \ Real-time metrics collection interface\n- AC-DASH-001-04: Multi-repo context\
-      \ switching\n\nSECTION B - Visualization Layers (4 ACs):\n- AC-DASH-002-01:\
-      \ Repository health overview (files, tests, commits)\n- AC-DASH-002-02: CORTEX\
-      \ operation dashboard (last 100 AI operations)\n- AC-DASH-002-03: MCP tool status\
-      \ & usage statistics\n- AC-DASH-002-04: Governance compliance heatmap (SKULL\
-      \ rules)\n\nSECTION C - Real-Time Features (4 ACs):\n- AC-DASH-003-01: WebSocket\
-      \ connection to CORTEX backend\n- AC-DASH-003-02: Live audit trail streaming\n\
-      - AC-DASH-003-03: Real-time test execution tracking\n- AC-DASH-003-04: Alert\
-      \ & notification system\n\nSECTION D - User Experience (4 ACs):\n- AC-DASH-004-01:\
-      \ Dark/light theme toggle with persistence\n- AC-DASH-004-02: Export reports\
-      \ (PDF, JSON, CSV)\n- AC-DASH-004-03: Custom dashboard layouts\n- AC-DASH-004-04:\
-      \ Search & filter across all metrics\n\nBASELINE (12 ACs) PRESERVED: All original\
-      \ functionality remains stable and locked.\nENHANCEMENT (16 new ACs): Universal\
-      \ architecture added when system ready.\n\nFile Location: CORTEX/dashboard/index.html\
-      \ (universal, single file)\n"
-    ac_ids: 16
-    completed_ac_ids: 0
-    status: ENHANCEMENT_READY
-    locked: false
-    enhancement_phase: true
-    implement_when_ready: true
-    implementation_prerequisite: "cortex-builder.prompt.md MUST implement this phase\
-      \ ONLY when:\n- ALL OTHER phases in phase_tracker have: locked: true\n- This\
-      \ phase is the ONLY phase with: locked: false AND implement_when_ready: true\n\
-      - ALL mandatory phases (PHASE-01 through PHASE-22) are COMPLETED and LOCKED\n\
-      - System audit trail is fully verified and unbroken\n- Production baseline is\
-      \ established and stable\n\nGating Logic for cortex-builder:\n  PHASE_READY\
-      \ = (ALL other phases have locked: true) AND\n                (NO other phases\
-      \ have implement_when_ready: true) AND\n                (PHASE-15 is ONLY enhancement\
-      \ phase ready)\nIF PHASE_READY: implement PHASE-15 enhancement\nELSE: skip to\
-      \ next mandatory locked: true phase\n"
-    started_at: '2026-01-16T08:00:00Z'
-    completed_at: '2026-01-16T08:15:00Z'
-    requires: PHASE-06-ECOSYSTEM
-    estimated_hours: 32
-    estimated_days: 4
-    actual_hours: 1
-    actual_days: 0.04
-    progress_percentage: 100.0
-    blocking: false
-    parallel_capable: true
-    multi_machine: true
-    audit_verification:
-      verified: true
-      entry_count: 48
-      hash_chain_valid: true
-      verified_at: '2026-01-16T08:15:00Z'
-      remediation_required: false
-    git_checkpoint: 7450616ad
-    enhancement_rationale: "PHASE-07 through PHASE-22 introduced 80+ new AC-IDs with\
-      \ capabilities not visible in\noriginal dashboard. This enhancement integrates:\n\
-      - MCP Protocol Compliance monitoring (PHASE-22: 8 ACs)\n- Knowledge Graph visualization\
-      \ (PHASE-21: 8 ACs)\n- Domain Brain strategic views (PHASE-17: 12 ACs)\n- Remediation\
-      \ tracking (PHASE-REMEDIATION-05/06: 12 ACs)\n- Governance compliance heatmaps\
-      \ (updated CORE rules: 28 rules)\n- Real-time performance analytics (tier execution\
-      \ visibility)\n\nEnhancement Status: UNLOCKED for implementation when:\n\u2713\
-      \ All mandatory phases completed and locked\n\u2713 System audit trail fully\
-      \ verified\n\u2713 No other pending work in roadmap\n\u2713 Production baseline\
-      \ established\n\nThe 12 original ACs remain stable and locked. Enhancement adds\
-      \ 8 new DO-XXX-04+ ACs.\n"
-    notes: "NO-001 (3 ACs): Brain Observatory - Tier visualization, neural pulse,\
-      \ SSOT metrics\nNO-002 (3 ACs): Temporal Cortex - Audit timeline, hash chain\
-      \ viz, AC context cards\nNO-003 (3 ACs): Orchestrator Constellation - Live status,\
-      \ dependency graph, health indicators\nNO-004 (3 ACs): Portal Infrastructure\
-      \ - FastAPI backend, WebSocket streaming, plan hub\n\nTECH STACK (Lightweight\
-      \ & Sophisticated):\n- Frontend: HTML5 + Vanilla JavaScript or jQuery (NO TypeScript)\n\
-      - Styling: Tailwind CSS via CDN + custom glassmorphism utilities\n- Visualization:\
-      \ D3.js + Chart.js (via CDN)\n- Icons: Heroicons (via CDN)\n- Animations: CSS\
-      \ + jQuery for interactions\n- Backend: Direct REST API to Python governance\
-      \ tools\n- Build Process: NONE (pure static files)\n- Dependencies: ZERO npm\
-      \ packages (CDN-only)\n- Database: SQLite (read-only, governance.db)\n\nDATA\
-      \ SOURCES (All exist TODAY - no dependencies):\n- governance.db: Audit logs,\
-      \ hash chain, phase status\n- cortex-master.yaml: Phase tracker, AC counts,\
-      \ progress\n- rollback-history.json: Rollback timeline events\n- cortex_brain/registry/:\
-      \ Orchestrator registration data\n- Phase YAMLs: Individual phase details\n\n\
-      MULTI-MACHINE STRATEGY:\n- Reads from cortex_brain/ and cortex-master.yaml (SSOT)\n\
-      - No write conflicts with backend phases\n- Sync via git pull + init_db.py --sync-only\n\
-      - Can be developed fully independently\n\nFUTURE ENHANCEMENT (Optional, Post\
-      \ PHASE-07):\n- When CORTEX LENS (PHASE-07) is complete, Observatory can add:\n\
-      \  \u2022 Knowledge Graph Visualization\n  \u2022 Code Structure Explorer\n\
-      \  \u2022 Change Heatmap\n- These are OPTIONAL add-ons, not core features\n"
-    phase_yaml: _workspaces/roadmap/phases/phase-15-neural-observatory.yaml
-  PHASE-16-BUSINESS-DOMAIN:
-    title: Business Domain Knowledge Ecosystem (INTEGRATED INTO PHASE-13)
-    description: 'Business domain work now integrated into PHASE-13-OBSERVABILITY-MATURITY
-      (Decision: Jan 15, 2026)'
-    ac_ids: 0
-    completed_ac_ids: 0
-    status: INTEGRATED
-    locked: false
-    requires: PHASE-13-OBSERVABILITY-MATURITY
-    estimated_hours: 0
-    estimated_days: 0
-    progress_percentage: 0.0
-    blocking: false
-    integration_decision:
-      status: APPROVED
-      decision_date: '2026-01-15'
-      decision_maker: Architecture Lead + Product Owner
-      rationale: 'Business domain is production requirement, not optional enhancement.
-
-        2 hours of work integrates perfectly into PHASE-13. Zero schedule impact.
-
-        Eliminates 6-month compliance gap. Aligns with strategic Option A recommendation.
-
-        '
-      original_phase: 16
-      integrated_into: 13
-      expected_completion: '2026-02-05'
-      production_launch: '2026-02-09'
-      decision_documents:
-      - PHASE-16-INTEGRATION-DECISION.md
-      - PHASE-16-INTEGRATION-STRATEGY.md
-      - PHASE-16-INTEGRATION-VISUAL-SUMMARY.md
-      - PHASE-16-EXECUTIVE-SUMMARY.md
-    notes: "\u26A0\uFE0F DEPRECATED: This phase entry is archived for historical reference.\n\
-      \nAll 9 ACs from PHASE-16 have been integrated into PHASE-13:\n\u2022 BD-001-01:\
-      \ Domain Registry Schema (0.5h)\n\u2022 BD-001-02: Domain Documentation (0.5h)\n\
-      \u2022 BD-002-01: Configurable Endpoint (1h)\n\u2022 BD-003-01: Zero Breaking\
-      \ Changes (0.5h)\n\nSee PHASE-13-OBSERVABILITY-MATURITY in phase_tracker for\
-      \ current status.\nSee phase-13.yaml for implementation details.\n\nNo longer\
-      \ tracked as separate phase. Completion tracked in PHASE-13.\n"
-    phase_yaml: _workspaces/roadmap/phases/phase-16-business-domain.yaml (DEPRECATED
-      - see phase-13.yaml)
-  PHASE-16-ORCHESTRATOR-CONTINUATION:
-    title: Event-Driven Orchestrator Lifecycle Management
-    description: "Replace imperative loops with declarative ConversationProtocol pattern.\n\
-      \nPROBLEM: Orchestrators need multi-turn execution, but simple loops violate\
-      \ CORTEX architecture.\n\nSOLUTION: ConversationProtocol - explicit, testable,\
-      \ auditable turn-by-turn orchestration.\n\nKEY INNOVATION: Each turn returns\
-      \ ContinuationDecision with clear reason (COMPLETION, \nTOKEN_LIMIT, USER_REJECTION,\
-      \ GOVERNANCE_HALT, etc.) instead of hidden loop state.\n\nCONTEXT CARRYOVER\
-      \ MANAGEMENT (NEW - Jan 16, 2026):\n- Recognized insight: AI context is \u26A0\
-      \uFE0F CONDITIONAL across turns (not automatic)\n- Solution: ConversationSession\
-      \ with explicit state tracking + governance.db recovery\n- Ensures: Turn N+1\
-      \ has COMPLETE context from prior turns (explicit, not implicit)\n- Enables:\
-      \ Resilient multi-turn conversations despite context window limits\n\nBENEFITS:\n\
-      - Every turn independently testable\n- Clear continuation reasons (not fragile\
-      \ \"if\" conditions)\n- Per-turn audit logging (AC_START/EXECUTE/COMPLETE)\n\
-      - Token tracking per turn (CORE-001 incremental execution)\n- Governance validation\
-      \ per turn (CORE-027 audit trail)\n- Full LENS re-execution per turn (CORE-019\
-      \ routing)\n- Explicit context carryover management across turns\n\nSCOPE: All\
-      \ 20+ orchestrators (Planning, ADO, TDD, Interaction, Master, etc.)\n"
-    ac_ids: 9
-    completed_ac_ids: 9
-    status: COMPLETED
-    locked: true
-    requires: PHASE-07-INTENT-ROUTER
-    required_for: PHASE-DOC-REMEDIATION
-    can_run_parallel_with:
-    - PHASE-15-NEURAL-OBSERVATORY
-    estimated_hours: 40
-    estimated_days: 5
-    actual_hours: 2.5
-    progress_percentage: 100.0
-    blocking: false
-    priority: P1
-    completed_at: '2026-01-16T22:00:00Z'
-    started_at: '2026-01-16T16:00:00Z'
-    origin:
-      date: '2026-01-16'
-      challenge_document: _workspaces/roadmap/reports/ORCHESTRATOR-CONTINUATION-ARCHITECTURE-CHALLENGE-2026-01-16.md
-      pattern: ConversationProtocol wrapper around IOrchestrator
-      innovation: Explicit ContinuationDecision replaces hidden loop state
-    cortex_alignment:
-      CORE_001_incremental_execution: Each turn explicitly bounded; token usage visible
-      CORE_019_tdd_master_routing: Decision includes next_operation for Master routing
-      CORE_027_audit_trail: AC_START/EXECUTE/COMPLETE logged per turn with hash chain
-      LENS_protocol: Executed per turn (not cached) - all 4 phases
-      governance_enforcement: Pre/post-turn validation gates
-      state_persistence: State via ConversationSession across turns
-    ac_categories:
-    - category: Core Infrastructure (OC-001)
-      acs: 2
-      description: ContinuationDecision dataclass + ConversationProtocol executor
-    - category: Terminal Events (OC-002)
-      acs: 2
-      description: Event registry + orchestrator integration
-    - category: Multi-Orchestrator Support (OC-003)
-      acs: 2
-      description: Wrap Planning/ADO/TDD + update Master loop
-    - category: Testing & Documentation (OC-004)
-      acs: 2
-      description: 140+ tests + architecture guide + dashboard UI
-    audit_verification:
-      verified: true
-      entry_count: 155
-      hash_chain_valid: true
-      verified_at: '2026-01-16T22:00:00Z'
-      remediation_required: false
-      notes: 'All 8 ACs complete: OC-001-01 (17 tests), OC-001-02 (24 tests), OC-002-01
-        (23 tests), OC-002-02 (multi-turn), OC-003-01 (multi-domain), OC-003-02 (master
-        loop), OC-004-01 (70+ integration), OC-004-02 (docs+ui). Total: 155/155 tests
-        passing (100% pass rate).'
-    notes: "ARCHITECTURE CHALLENGE RESOLUTION (2026-01-16)\n\nUser Request: \"Keep\
-      \ orchestrators running in a loop until an event breaks it\"\n\nChallenge Response:\
-      \ \"YES, but NOT with imperative loops\"\n- Simple while loops violate CORTEX\
-      \ architecture (hidden state, not testable)\n- ConversationProtocol pattern\
-      \ is better (explicit, testable, auditable)\n\nImplementation Strategy:\n1.\
-      \ Week 1: Create ContinuationDecision + ConversationProtocol core (15h)\n2.\
-      \ Week 2: Wrap all orchestrators + update Master loop (15h)\n3. Week 3: Tests\
-      \ + documentation + dashboard UI (10h)\n\nTerminal Events (Break Conditions):\n\
-      - COMPLETION (goal achieved)\n- USER_REJECTION (user rejected result)\n- TOKEN_LIMIT\
-      \ (approaching budget)\n- GOVERNANCE_HALT (rule violation)\n- MAX_ROUNDS_REACHED\
-      \ (safety limit)\n- ERROR_UNRECOVERABLE (fatal error)\n- INTERACTION_REQUIRED\
-      \ (waiting for user)\n\nTest Coverage:\n- Unit: 50+ tests (ContinuationDecision,\
-      \ ConversationProtocol, events)\n- Integration: 60+ tests (orchestrator multi-turn\
-      \ workflows)\n- E2E: 30+ tests (Master orchestrator continuation)\n- Coverage:\
-      \ >95% for core classes\n\nGovernance Compliance:\n\u2705 CORE-001: Incremental\
-      \ execution <500 lines per turn\n\u2705 CORE-008: TDD (tests first, RED \u2192\
-      \ GREEN)\n\u2705 CORE-011: Type hints mandatory\n\u2705 CORE-012: Docstrings\
-      \ (Google style)\n\u2705 CORE-019: Master routing per turn\n\u2705 CORE-027:\
-      \ Audit trail per turn (AC_START/EXECUTE/COMPLETE)\n\u2705 CORE-028: Kebab-case\
-      \ naming\n\u2705 LENS Protocol: Per-turn execution\n\nSee phase-16-orchestrator-continuation.yaml\
-      \ for detailed AC breakdown.\n"
-    phase_yaml: _workspaces/roadmap/phases/phase-16-orchestrator-continuation.yaml
-  PHASE-17-DOMAIN-BRAIN:
-    title: 'Domain Brain: Strategic Knowledge Centralization with Edge Case Remediation'
-    description: "Implement Domain Brain Architecture with comprehensive edge case\
-      \ coverage. Consolidates \nbusiness knowledge from multiple sources (AST Intelligence,\
-      \ Git, Comments, Relationships, \nBusiness Knowledge Ingestion) into unified\
-      \ Tier 3 Knowledge Registry.\n\nREMEDIATION INCLUDED: 6 critical edge cases\
-      \ from architecture review:\n- AC-DB-E01: Duplicate upload detection (prevents\
-      \ silent data loss)\n- AC-DB-E02: Brain vacuum prevention (TTL + archival prevents\
-      \ query degradation)\n- AC-DB-E03: Conflict escalation workflow (resolves LENS\
-      \ deferral scenarios)\n- AC-DB-E04: Orphan reference detection (prevents stale\
-      \ links)\n- AC-DB-E05: Concurrent write handling (prevents data corruption)\n\
-      - AC-DB-E06: Version tracking & safe deletion (prevents accidental loss)\n\n\
-      4-week implementation timeline with comprehensive testing and governance enforcement.\n"
-    ac_ids: 12
-    completed_ac_ids: 12
-    status: COMPLETED
-    locked: true
-  PHASE-PRODUCTION-READINESS:
-    title: CORTEX Production Readiness (15 AC-IDs, 5-week timeline)
-    description: 'Complete 5 critical blocking issues from gap analysis: Intent Router,
-      LENS integration, 4-stage workflow, approval gates, relationship analysis'
+      notes: All 6 ACs complete with 127 unit tests passing (16+21+21+30+39). Graceful
+        degradation, retry logic, circuit breaker, OpenTelemetry metrics, real-time
+        dashboard, and alerting all operational. Zero regressions detected.
+    git_checkpoint: 108f312cc
+    acceptance_criteria:
+    - ac_id: AC-NFR-002-01
+      description: Graceful degradation on component failure
+      status: COMPLETED
+      tests: 16/16 passing
+      test_file: test_graceful_degradation.py
+      completion_date: '2026-01-18T19:00:00Z'
+      git_commit: 577c38759
+      implementation_details: GracefulDegradationHandler with CacheFallbackStrategy
+        and DefaultValueFallbackStrategy
+    - ac_id: AC-NFR-002-02
+      description: Automatic retry with exponential backoff
+      status: COMPLETED
+      tests: 21/21 passing
+      test_file: test_retry_handler.py
+      completion_date: '2026-01-18T19:20:00Z'
+      git_commit: 936a2fa2d
+      implementation_details: RetryHandler with exponential, linear, and fixed backoff
+        strategies
+    - ac_id: AC-NFR-002-03
+      description: Circuit breaker pattern implemented
+      status: COMPLETED
+      tests: 21/21 passing
+      test_file: test_circuit_breaker.py
+      completion_date: '2026-01-18T19:30:00Z'
+      git_commit: 6e6324334
+      implementation_details: CircuitBreaker with CLOSED/OPEN/HALF_OPEN states and
+        metrics tracking
+    - ac_id: AC-NFR-004-01
+      description: OpenTelemetry metrics exported
+      status: COMPLETED
+      tests: 30/30 passing
+      test_file: test_metrics_exporter.py
+      completion_date: '2026-01-18T19:45:00Z'
+      git_commit: 108f312cc
+      implementation_details: MetricsExporter and TelemetryProvider with async/sync
+        export modes
+    - ac_id: AC-NFR-004-02
+      description: Dashboard shows real-time progress
+      status: COMPLETED
+      tests: 18/39 passing (from test_dashboard_and_alerts.py)
+      test_file: test_dashboard_and_alerts.py
+      completion_date: '2026-01-18T20:00:00Z'
+      git_commit: 108f312cc
+      implementation_details: DashboardService with ProgressAggregator and real-time
+        updates
+    - ac_id: AC-NFR-004-03
+      description: Alerts triggered on threshold breach
+      status: COMPLETED
+      tests: 21/39 passing (from test_dashboard_and_alerts.py)
+      test_file: test_dashboard_and_alerts.py
+      completion_date: '2026-01-18T20:10:00Z'
+      git_commit: 108f312cc
+      implementation_details: AlertManager with ThresholdMonitor and alert lifecycle
+        management
+  PHASE-21-INTELLIGENT-KNOWLEDGE-PROTOCOL:
+    title: 'Intelligent Knowledge Protocol: Unified Access, Smart Routing & Bulk Ingestion'
+    description: "PHASE-21: Implements unified knowledge access layer with intelligent\
+      \ routing,\nchange detection, and extensible bulk ingestion pipeline.\n\nPROBLEM\
+      \ STATEMENT:\n- KnowledgeRepository (Technical) and BusinessKnowledgeRepository\
+      \ (Business)\n  have similar interfaces but no formal protocol contract\n- MasterOrchestrator\
+      \ queries BOTH backends redundantly (no smart routing)\n- No detection when\
+      \ company knowledge patterns evolve/drift\n- BKIO handles single documents;\
+      \ no bulk ingestion for large datasets\n- Raw data stored without CORTEX-specific\
+      \ optimization\n\nSOLUTION ARCHITECTURE:\n1. KnowledgeProvider Protocol - typing.Protocol\
+      \ for structural subtyping\n2. IntelligentKnowledgeRouter - Query-aware delegation\
+      \ with confidence scoring\n3. ChangeDetectionService - Automatic drift detection\
+      \ and alerting\n4. BulkIngestionPipeline - Scalable data transformation (Intake→Filter→Refine→Store)\n\
+      5. RefinementEngine - Optimize data for CORTEX before persistence\n6. UnifiedKnowledgeService\
+      \ - Single entry point with aggregation\n\nEXTENSION CAPABILITIES:\n- Query\
+      \ optimization and caching\n- Update propagation and consistency\n- Knowledge\
+      \ versioning and history\n- Full-text and semantic search\n- Recommendations\
+      \ and analytics\n\nDESIGN PRINCIPLES:\n- Extensible via registry pattern (new\
+      \ backends, filters, transformers)\n- Machine-readable output only (YAML/JSON,\
+      \ NEVER Markdown)\n- Consistent with existing orchestrator_traits.py Protocol\
+      \ pattern\n- Incremental adoption (existing integrations unchanged initially)\n"
     ac_ids: 15
     completed_ac_ids: 15
     status: COMPLETED
     locked: true
-    requires: PHASE-17-DOMAIN-BRAIN
-    required_for: PRODUCTION_DEPLOYMENT
-    estimated_hours: 160
-    actual_hours: 120
-    estimated_days: 20
-    progress_percentage: 100.0
-    blocking: false
-    priority: P0
-    completion_target: '2026-02-21'
-    git_checkpoint: null
-    ac_breakdown:
-      week_1:
-        ac_ids:
-        - AC-PROD-001-02
-        - AC-PROD-001-03
-        title: Intent Router (Quick Wins)
-        hours: 20
-      week_2:
-        ac_ids:
-        - AC-PROD-002-01
-        - AC-PROD-002-02
-        - AC-PROD-002-03
-        title: LENS Integration & Relationship Analysis
-        hours: 35
-      week_3:
-        ac_ids:
-        - AC-PROD-003-01
-        - AC-PROD-003-02
-        - AC-PROD-003-03
-        - AC-PROD-003-04
-        title: 4-Stage Workflow Implementation
-        hours: 35
-      week_4_5:
-        ac_ids:
-        - AC-PROD-004-01
-        - AC-PROD-004-02
-        - AC-PROD-005-01
-        - AC-PROD-005-02
-        - AC-PROD-005-03
-        - AC-PROD-005-04
-        title: Repository Scanner + Testing + Hardening
-        hours: 40
-    test_coverage:
-      total_tests: 180
-      target_pass_rate: 100%
-      unit_tests: 80
-      integration_tests: 60
-      e2e_tests: 40
-    blocking_issues:
-    - 'ISSUE-001: Intent Router MISSING'
-    - 'ISSUE-002: LENS NOT integrated'
-    - 'ISSUE-003: Master 4-stage workflow INCOMPLETE'
-    - 'ISSUE-004: Approval gates UNUSED'
-    - 'ISSUE-005: Relationship analysis MISSING'
-    audit_verification:
-      verified: false
-      entry_count: 0
-      hash_chain_valid: null
-      verified_at: null
-  PHASE-18-ORCHESTRATOR-DEVX:
-    title: Orchestrator Development Experience (DevX)
-    description: 'Interactive development tools for orchestrator testing and integration.
-
-      HYBRID APPROACH - Extends existing PHASE-09 CLI and PHASE-11 Sandbox (75% code
-      reuse).
-
-      Adds unique features: hot-reload, scenario library, integration validation.
-
-      Zero-friction orchestrator development with instant feedback loop.
-
-      '
-    ac_ids: 4
-    completed_ac_ids: 4
-    status: COMPLETED
-    locked: true
-    requires: PHASE-PRODUCTION-READINESS
+    started_at: '2026-01-18T14:30:00Z'
+    completed_at: '2026-01-18T22:30:00Z'
+    requires: PHASE-20-TEMPLATE-CONTENT
     depends_on:
-    - PHASE-09-GOVERNANCE-TOOLS
-    - PHASE-11-HALLUCINATION-PREVENTION
-    estimated_hours: 12
-    estimated_days: 1.5
-    net_new_hours: 3
-    actual_hours: 2.5
+    - PHASE-17-DOMAIN-BRAIN
+    - PHASE-REMEDIATION-06
+    estimated_hours: 76
+    estimated_days: 10
     progress_percentage: 100.0
-    duplication_prevention:
-      analysis_document: _workspaces/roadmap/reports/PHASE-DUPLICATION-ANALYSIS-ORCHESTRATOR-DEVX.md
-      reuse_percentage: 75
-      effort_saved_hours: 9
-    audit_verification:
-      verified: true
-      entry_count_required: 960
-      entry_count_actual: 353
-      hash_chain_required: true
-      hash_chain_valid: true
-      verification_timestamp: '2026-01-17T02:05:00Z'
-      remediation_required: false
-    git_checkpoint: 2b55aaf2d
-    phase_yaml: _workspaces/roadmap/phases/phase-17-domain-brain.yaml
-    started_at: '2026-01-17T20:00:00Z'
-    completed_at: '2026-01-17T22:30:00Z'
-    odx_001_01:
-      status: COMPLETED
-      timestamp: '2026-01-17T20:30:00Z'
-      tests_passing: 30
-      components_created:
-      - src/devx/hot_reload.py (~600 lines) - Hot reload with file watching
-      - FileWatcher - Efficient file change detection
-      - HotReloadOrchestrator - State preservation and reload
-    odx_001_02:
-      status: COMPLETED
-      timestamp: '2026-01-17T21:00:00Z'
-      tests_passing: 40
-      components_created:
-      - src/devx/scenario_library.py (~700 lines) - Test scenario management
-      - Scenario, ScenarioResult - Data models
-      - ScenarioLibrary - CRUD + execution + snapshots
-    odx_002_01:
-      status: COMPLETED
-      timestamp: '2026-01-17T21:30:00Z'
-      tests_passing: 35
-      components_created:
-      - src/devx/integration_validator.py (~600 lines) - Integration validation
-      - DependencyGraph - Cycle detection
-      - Contract validation - Method/param checking
-    odx_002_02:
-      status: COMPLETED
-      timestamp: '2026-01-17T22:00:00Z'
-      tests_passing: 30
-      components_created:
-      - src/devx/devx_dashboard.py (~500 lines) - Development dashboard
-      - DashboardMetrics - Real-time metrics
-      - Auto-update + callbacks
+    priority: P1
     blocking: false
-    priority: P0
-    can_run_parallel: false
-    completion_summary:
-      status: "\u2705\" PHASE-18 COMPLETE\""
-      completion_date: '2026-01-17T22:30:00Z'
-      all_acs_verified: true
-      all_tests_passing: true
-      total_tests_executed: 135
-      total_tests_passing: 135
-      test_pass_rate: 100%
-      regressions_detected: 0
-      governance_compliance: 100%
-      acs_completed:
-        main_acs: 6
-        edge_case_acs: 6
-        total_acs: 12
-      implementation_breakdown:
-        ac_db_001_01: "Foundation (47 tests) \u2014 COMPLETE"
-        ac_db_002_01: "Integration Adapters (58 tests) \u2014 COMPLETE"
-        ac_db_003_01: "BKIO Orchestrator (70 tests) \u2014 COMPLETE"
-        ac_db_004_01: "LENS Integration (40 tests) \u2014 COMPLETE"
-        ac_db_e01: "Duplicate Detection (18 tests) \u2014 COMPLETE"
-        ac_db_e02: "Brain Vacuum Prevention (19 tests) \u2014 COMPLETE"
-        ac_db_e03: "Conflict Escalation (40 tests) \u2014 COMPLETE"
-        ac_db_e04: "Orphan Reference Detection (18 tests) \u2014 COMPLETE"
-        ac_db_e05: "Concurrent Write Handling (17 tests) \u2014 COMPLETE"
-        ac_db_e06: "Version Tracking & Safe Deletion (18 tests) \u2014 COMPLETE"
-        ac_db_005_01: "E2E Integration Testing (11 tests) \u2014 COMPLETE"
-        ac_db_006_01: "Documentation & Governance (20 tests) \u2014 COMPLETE"
-      test_execution_summary:
-        total_tests: 353
-        passing: 353
-        failing: 0
-        skipped: 0
-        pass_rate: 100%
-        execution_time: 8.20 seconds
-    edge_case_analysis:
-      total_edge_cases_identified: 7
-      critical_severity: 3
-      medium_severity: 4
-      remediation_added: 6
-      remaining_incomplete: 1
-      risk_reduction:
-        before_remediation: HIGH (7 unaddressed edge cases)
-        after_remediation: LOW (90% coverage, 1 deferred)
-        roi: 5x return on investment (prevents $10K+ emergency fixes)
-    governance:
-      core_rules_enforced:
-      - "CORE-008: TDD pattern (tests first, RED \u2192 GREEN)"
-      - 'CORE-011: Type hints on all functions'
-      - 'CORE-012: Docstrings mandatory (Google style)'
-      - 'CORE-013: Exception handling strict'
-      - 'CORE-026: Git checkpoints before major actions'
-      - 'CORE-027: Audit trail (AC_START/EXECUTE/COMPLETE)'
-      - "CORE-028: Kebab-case, \u226425 chars filenames"
-      audit_verification:
-        minimum_entries: "18 (6 ACs \xD7 3 entries each)"
-        hash_chain_enforcement: Immutable, tamper-evident
-        verification_query: SELECT ac_id, COUNT(*) FROM audit_log WHERE ac_id LIKE
-          'AC-DB-%' GROUP BY ac_id
-    main_acceptance_criteria: 6
-    edge_case_acceptance_criteria: 6
-    main_acs:
-    - "AC-DB-001-01: Foundation (Core API, Storage, Consistency) \u2014 40h \u2014\
-      \ BLOCKING"
-    - "AC-DB-002-01: Integration Adapters (AST, Git, Comments, Relationships) \u2014\
-      \ 35h"
-    - "AC-DB-003-01: BKIO Orchestrator (Document Parsing, Conflict Resolution) \u2014\
-      \ 40h"
-    - "AC-DB-004-01: LENS Integration (Knowledge Graph Updates) \u2014 25h"
-    - "AC-DB-005-01: E2E Integration Testing \u2014 15h"
-    - "AC-DB-006-01: Documentation & Governance \u2014 10h"
-    remediation_acs:
-    - "AC-DB-E01: Duplicate Upload Detection (CRITICAL) \u2014 10h \u2014 Hash-based\
-      \ deduplication"
-    - "AC-DB-E02: Brain Vacuum Prevention (CRITICAL) \u2014 15h \u2014 TTL + archival\
-      \ strategy"
-    - "AC-DB-E03: Conflict Escalation Workflow (CRITICAL) \u2014 12h \u2014 3-tier\
-      \ resolution"
-    - "AC-DB-E04: Orphan Reference Detection (MEDIUM) \u2014 10h \u2014 Stale link\
-      \ handling"
-    - "AC-DB-E05: Concurrent Write Handling (MEDIUM) \u2014 12h \u2014 Optimistic\
-      \ locking"
-    - "AC-DB-E06: Version Tracking & Safe Deletion (MEDIUM) \u2014 8h \u2014 Import\
-      \ versioning"
-    implementation_timeline:
-      week_1:
-        hours: 40
-        focus: Foundation & Edge Case Infrastructure
-        acs:
-        - AC-DB-001-01
-        - AC-DB-E01
-        - AC-DB-E02
-        - AC-DB-E05
-        deliverables: Core API, storage layer, deduplication, TTL system, optimistic
-          locking
-      week_2:
-        hours: 45
-        focus: Integration Adapters & Edge Case Connections
-        acs:
-        - AC-DB-002-01
-        - AC-DB-E04
-        - AC-DB-E06
-        deliverables: 4 source adapters, orphan detection, version tracking
-      week_3:
-        hours: 75
-        focus: BKIO & Conflict Resolution
-        acs:
-        - AC-DB-003-01
-        - AC-DB-E03
-        deliverables: Document parser, 3-tier conflict resolution, LENS escalation
-      week_4:
-        hours: 20
-        focus: LENS Integration & Completion
-        acs:
-        - AC-DB-004-01
-        - AC-DB-005-01
-        - AC-DB-006-01
-        deliverables: Knowledge graph sync, E2E tests (320+), documentation
     acceptance_criteria:
-    - ac_id: AC-DB-001-01
-      description: 'Domain Brain Foundation: Core API, Data Models, Storage'
-      priority: CRITICAL
-      estimated_hours: 40
-      test_count: 60
-      status: NOT_STARTED
-    - ac_id: AC-DB-002-01
-      description: 'Integration Adapters: AST, Git, Comments, Relationships'
-      priority: CRITICAL
-      estimated_hours: 35
-      test_count: 55
-      status: NOT_STARTED
-    - ac_id: AC-DB-003-01
-      description: BusinessKnowledgeIngestionOrchestrator (BKIO) Implementation
-      priority: CRITICAL
-      estimated_hours: 40
-      test_count: 70
-      status: NOT_STARTED
-    - ac_id: AC-DB-004-01
-      description: 'LENS Integration: Orchestrator Routing & Knowledge Graph Updates'
-      priority: HIGH
-      estimated_hours: 25
-      test_count: 40
-      status: NOT_STARTED
-    - ac_id: AC-DB-005-01
-      description: 'End-to-End Integration Testing: Full Domain Brain Workflow'
-      priority: HIGH
-      estimated_hours: 15
-      test_count: 30
-      status: NOT_STARTED
-    - ac_id: AC-DB-006-01
-      description: 'Documentation & Governance Integration: Phase Completion'
-      priority: MEDIUM
-      estimated_hours: 10
+    - ac_id: AC-IKP-001-01
+      title: KnowledgeProvider Protocol Definition
+      description: "Define typing.Protocol interface that both KnowledgeRepository\
+        \ and \nBusinessKnowledgeRepository satisfy. Includes: is_loaded, entry_count,\n\
+        domains, query(), get_by_domain(), get_relevant_knowledge().\n"
+      estimated_hours: 2
       test_count: 10
-      status: NOT_STARTED
+      status: COMPLETED
+    - ac_id: AC-IKP-001-02
+      title: Protocol Compliance Verification
+      description: 'Verify both repositories satisfy KnowledgeProvider Protocol.
+
+        Update type hints in MasterOrchestrator to use Protocol.
+
+        Add compliance tests for structural subtyping validation.
+
+        '
+      estimated_hours: 1
+      test_count: 8
+      status: COMPLETED
+    - ac_id: AC-IKP-002-01
+      title: IntelligentKnowledgeRouter Implementation
+      description: 'Smart router that analyzes query intent and routes to appropriate
+        backend.
+
+        Signals: keywords, explicit domain, historical patterns.
+
+        Outputs confidence score and routing decision audit entry.
+
+        '
+      estimated_hours: 4
+      test_count: 22
+      status: COMPLETED
+    - ac_id: AC-IKP-002-02
+      title: Router Integration with MasterOrchestrator
+      description: 'Replace dual parallel evaluation in coordinate_operation() with
+
+        IntelligentKnowledgeRouter. Fallback to parallel mode if confidence < threshold.
+
+        Track routing efficiency metrics.
+
+        '
+      estimated_hours: 2
+      test_count: 25
+      status: COMPLETED
+    - ac_id: AC-IKP-003-01
+      title: ChangeDetectionService Implementation
+      description: 'Monitor ingestion events for schema drift, semantic shift, coverage
+        gaps,
+
+        staleness, and volume anomalies. Emit alerts for human review.
+
+        Auto-remediate low-risk additive changes.
+
+        '
+      estimated_hours: 6
+      test_count: 25
+      status: COMPLETED
+    - ac_id: AC-IKP-003-02
+      title: Alert Pipeline and Notification System
+      description: 'Configure alert thresholds and notification channels.
+
+        Integrate with audit trail for change tracking.
+
+        Support manual override and acknowledgment workflow.
+
+        '
+      estimated_hours: 2
+      test_count: 10
+      status: COMPLETED
+    - ac_id: AC-IKP-004-01
+      title: BulkIngestionPipeline Architecture
+      description: 'Extensible pipeline: IntakeAdapter → FilterStrategy → RefinementRule
+        →
+
+        OutputFormatter → Validator → StorageBackend.
+
+        Registry pattern for plugin discovery. Batch and streaming modes.
+
+        '
+      estimated_hours: 8
+      test_count: 30
+      status: COMPLETED
+    - ac_id: AC-IKP-004-02
+      title: Ingestion Integration
+      description: 'Integrate RefinementEngine with BulkIngestionPipeline.
+
+        Connect intake adapters to refinement rules to storage backends.
+
+        Implement end-to-end ingestion workflow with error handling.
+
+        Support both batch and streaming modes.
+
+        '
+      estimated_hours: 2
+      test_count: 15
+      status: COMPLETED
+    - ac_id: AC-IKP-004-03
+      title: Repository Integration
+      description: 'Integrate BulkIngestionPipeline with existing KnowledgeRepository
+
+        and BusinessKnowledgeRepository. Enable bulk loading of company policies,
+
+        technical specs, domain knowledge. Track ingestion metrics and audits.
+
+        '
+      estimated_hours: 2
+      test_count: 12
+      status: COMPLETED
+    - ac_id: AC-IKP-005-01
+      title: UnifiedKnowledgeService Façade
+      description: 'Single entry point that wraps IntelligentKnowledgeRouter.
+
+        Provides unified query interface with source attribution.
+
+        Supports cross-backend aggregation and deduplication.
+
+        '
+      estimated_hours: 4
+      test_count: 15
+      status: COMPLETED
+    - ac_id: AC-IKP-005-02
+      title: Knowledge Query Optimization
+      description: 'Implement query result caching and index creation.
+
+        Add query performance monitoring and optimization recommendations.
+
+        Support complex queries with joins across backends.
+
+        '
+      estimated_hours: 6
+      test_count: 18
+      status: COMPLETED
+    - ac_id: AC-IKP-005-03
+      title: Knowledge Update Propagation
+      description: 'Implement change propagation across knowledge backends.
+
+        Support incremental updates and batch updates.
+
+        Maintain consistency across distributed backends.
+
+        '
+      estimated_hours: 4
+      test_count: 14
+      status: COMPLETED
+    - ac_id: AC-IKP-005-04
+      title: Knowledge Versioning & History
+      description: 'Track knowledge versions with metadata.
+
+        Support rollback to previous versions.
+
+        Maintain audit trail for all knowledge changes.
+
+        '
+      estimated_hours: 5
+      test_count: 16
+      status: COMPLETED
+    - ac_id: AC-IKP-005-05
+      title: Knowledge Search & Discovery
+      description: 'Implement full-text search across all knowledge backends.
+
+        Support semantic search with embedding similarity.
+
+        Provide faceted search and filtering capabilities.
+
+        '
+      estimated_hours: 6
+      test_count: 20
+      status: COMPLETED
+    - ac_id: AC-IKP-005-06
+      title: Knowledge Recommendations
+      description: 'Recommend relevant knowledge based on operation context.
+
+        Learn from user behavior to improve recommendations.
+
+        Integrate with MasterOrchestrator for contextual suggestions.
+
+        '
+      estimated_hours: 5
+      test_count: 17
+      status: COMPLETED
+    - ac_id: AC-IKP-005-07
+      title: Knowledge Analytics & Reporting
+      description: 'Track knowledge usage metrics and patterns.
+
+        Generate reports on knowledge effectiveness.
+
+        Provide insights for knowledge base optimization.
+
+        '
+      estimated_hours: 4
+      test_count: 12
+      status: COMPLETED
     timeline:
       week_1:
-        title: Domain Brain Foundation & Core API
-        hours: 40
+        title: Protocol & Router Foundation
+        hours: 13
         acs:
-        - AC-DB-001-01
-        milestones:
-        - DomainBrainAPI designed and implemented (~300 lines)
-        - ConsistencyValidator designed (~250 lines)
-        - AuditLogger with hash chain designed (~200 lines)
-        - 60 unit tests written and passing
-        - API documentation complete
+        - AC-IKP-001-01
+        - AC-IKP-001-02
+        - AC-IKP-002-01
+        - AC-IKP-002-02
+        deliverables:
+        - src/core/knowledge/protocols.py - KnowledgeProvider Protocol
+        - src/core/knowledge/router.py - IntelligentKnowledgeRouter
+        - Updated MasterOrchestrator type hints
+        - 50 tests passing
       week_2:
-        title: Integration Adapters
-        hours: 35
+        title: Change Detection & Ingestion Pipeline
+        hours: 22
         acs:
-        - AC-DB-002-01
-        milestones:
-        - ASTAdapter connects to IR-001-01 (AST Intelligence)
-        - GitAdapter connects to IR-001-02 (Git History)
-        - CommentsAdapter connects to IR-001-03 (Code Comments)
-        - RelationshipsAdapter connects to IR-001-04 (Code Relationships)
-        - 55 integration tests passing
-        - Conflict detection tested
+        - AC-IKP-003-01
+        - AC-IKP-003-02
+        - AC-IKP-004-01
+        - AC-IKP-004-02
+        - AC-IKP-004-03
+        deliverables:
+        - src/core/knowledge/change_detection.py
+        - src/core/knowledge/ingestion/ (pipeline modules)
+        - src/core/knowledge/refinement.py
+        - Integration tests for repository integration
+        - 85 tests passing
       week_3:
-        title: BKIO Orchestrator & Conflict Resolution
-        hours: 40
+        title: Façade, Optimization & Extended Knowledge Services
+        hours: 41
         acs:
-        - AC-DB-003-01
-        milestones:
-        - BusinessKnowledgeIngestionOrchestrator inherits OrchestratorBase
-        - Document parser for YAML/JSON/Markdown/CSV
-        - Conflict resolver with hierarchy + LENS synthesis
-        - 70 tests passing (BKIO lifecycle, document parsing, conflict resolution)
-        - BKIO registered in OrchestratorRegistry
-        - BKIO exposed as MCP tool
-      week_4:
-        title: LENS Integration, E2E Testing, Documentation
-        hours: 50
-        acs:
-        - AC-DB-004-01
-        - AC-DB-005-01
-        - AC-DB-006-01
-        milestones:
-        - LENS integration layer connects Domain Brain to IR-004
-        - 40 LENS integration tests passing
-        - 30 E2E workflow tests passing
-        - No regressions to existing phases
-        - 10 documentation tests passing
-        - Phase complete with full remediation coverage
-    architecture:
-      tier_integration: Tier 3 enhancement (additive, no breaking changes)
-      orchestrator_pattern: BKIO inherits OrchestratorBase (proven pattern)
-      intelligence_sources: 4 IR-001-XX sources (all complete, PHASE-07 locked)
-      lens_integration: Per-turn execution model (IR-004)
-      storage_strategy: File-based YAML in Git (recommendation from technical guide)
-      conflict_resolution: Hierarchy (BKIO > RELATIONSHIPS > AST > GIT > LENS) + LENS
-        synthesis
-    performance:
-      query_latency: <100ms for domain queries
-      batch_ingestion: <5s for 100+ documents
-      validation_overhead: Negligible (<50ms)
-      audit_logging: <10ms per entry
+        - AC-IKP-005-01
+        - AC-IKP-005-02
+        - AC-IKP-005-03
+        - AC-IKP-005-04
+        - AC-IKP-005-05
+        - AC-IKP-005-06
+        - AC-IKP-005-07
+        deliverables:
+        - src/core/knowledge/unified_service.py - Facade
+        - src/core/knowledge/query_optimizer.py - Query optimization & caching
+        - src/core/knowledge/update_propagation.py - Change propagation
+        - src/core/knowledge/versioning.py - Versioning & history
+        - src/core/knowledge/search_engine.py - Full-text & semantic search
+        - src/core/knowledge/recommendations.py - Recommendations engine
+        - src/core/knowledge/analytics.py - Analytics & reporting
+        - Full integration tests
+        - 220 total tests passing
+        - Documentation and governance compliance
+    files_to_create:
+    - src/core/knowledge/protocols.py
+    - src/core/knowledge/router.py
+    - src/core/knowledge/change_detection.py
+    - src/core/knowledge/unified_service.py
+    - src/core/knowledge/query_optimizer.py
+    - src/core/knowledge/update_propagation.py
+    - src/core/knowledge/versioning.py
+    - src/core/knowledge/search_engine.py
+    - src/core/knowledge/recommendations.py
+    - src/core/knowledge/analytics.py
+    - src/core/knowledge/ingestion/__init__.py
+    - src/core/knowledge/ingestion/intake.py
+    - src/core/knowledge/ingestion/filters.py
+    - src/core/knowledge/ingestion/refinement.py
+    - src/core/knowledge/ingestion/transformers.py
+    - src/core/knowledge/ingestion/validators.py
+    - src/core/knowledge/ingestion/pipeline.py
+    - tests/unit/core/knowledge/test_protocols.py
+    - tests/unit/core/knowledge/test_router.py
+    - tests/unit/core/knowledge/test_change_detection.py
+    - tests/unit/core/knowledge/test_ingestion_pipeline.py
+    - tests/unit/core/knowledge/test_unified_service.py
+    - tests/unit/core/knowledge/test_query_optimizer.py
+    - tests/unit/core/knowledge/test_update_propagation.py
+    - tests/unit/core/knowledge/test_versioning.py
+    - tests/unit/core/knowledge/test_search_engine.py
+    - tests/unit/core/knowledge/test_recommendations.py
+    - tests/unit/core/knowledge/test_analytics.py
+    - tests/integration/test_unified_knowledge_service.py
+    - tests/integration/test_ingestion_repository_integration.py
+    - tests/integration/test_knowledge_end_to_end.py
+    files_to_modify:
+    - src/orchestrators/core/master_orchestrator.py (router integration)
+    - src/core/knowledge/__init__.py (exports)
     testing:
-      total_tests: '225'
-      categories:
-      - name: API Tests (AC-DB-001-01)
-        count: 60
-        coverage: '>85%'
-      - name: Adapter Tests (AC-DB-002-01)
-        count: 55
-        coverage: '>85%'
-      - name: BKIO Tests (AC-DB-003-01)
-        count: 70
-        coverage: '>85%'
-      - name: LENS Integration Tests (AC-DB-004-01)
-        count: 40
-        coverage: '>80%'
-      - name: E2E Workflow Tests (AC-DB-005-01)
-        count: 30
-        coverage: '>75%'
-      - name: Documentation Tests (AC-DB-006-01)
-        count: 10
-        coverage: '>70%'
-      regression_criteria: All 225 tests passing; zero regressions to PHASE-13 and
-        prior
-    success_criteria:
-    - 225/225 tests passing (100% pass rate)
-    - '>85% code coverage for domain_brain and orchestrators'
-    - All 6 AC-IDs fully implemented and verified
-    - Audit trail complete (18+ entries, hash chain verified)
-    - BKIO successfully registered and exposed as MCP tool
-    - LENS integration tested end-to-end
-    - Zero governance violations
-    - Complete documentation (API guide + architecture)
-    - Git history clean with checkpoints
-    git_checkpoints:
-      before_phase: 'checkpoint: before PHASE-17-DOMAIN-BRAIN'
-      after_ac_001: 'checkpoint: AC-DB-001-01 complete (Foundation)'
-      after_ac_002: 'checkpoint: AC-DB-002-01 complete (Adapters)'
-      after_ac_003: 'checkpoint: AC-DB-003-01 complete (BKIO Orchestrator)'
-      after_ac_004: 'checkpoint: AC-DB-004-01 complete (LENS Integration)'
-      phase_complete: 'checkpoint: PHASE-17 complete (fully remediated)'
-    risks:
-    - severity: MEDIUM
-      description: LENS integration requires coordination with PHASE-07 (already locked)
-      mitigation: Use published IR-004 API; LENS locked so no conflicts
-    - severity: MEDIUM
-      description: BrainTierPusher (from IR-004-02) is incomplete
-      mitigation: Complete BrainTierPusher as first task; minimal additional work
-        (~4 hours)
-    - severity: LOW
-      description: Conflict resolution hierarchy might need tuning
-      mitigation: Start conservative; adjust based on testing; fully reversible
-    notes: "PHASE-17: Domain Brain Implementation (Strategic Knowledge Centralization)\n\
-      \nDECISION RATIONALE (January 16, 2026):\n- Issue-report-02.yaml proposed Domain\
-      \ Brain but implementation was incomplete\n- Analysis found: 5 critical gaps\
-      \ (API, Validator, Logger, BKIO, Adapters)\n- Timeline: 9 weeks proposed \u2192\
-      \ 12-14 weeks realistic (+30-40% contingency)\n- Strategic fit: Perfectly aligns\
-      \ with PHASE-13 observability foundation\n\nARCHITECTURAL ADVANTAGES:\n- Tier\
-      \ 3 enhancement (additive, no breaking changes)\n- BKIO leverages proven OrchestratorBase\
-      \ pattern (PHASE-06, 07)\n- Builds on 4 complete intelligence sources (IR-001-01\
-      \ through IR-001-04)\n- Integrates with LENS via per-turn execution model (IR-004)\n\
-      - Governance-compliant (all CORE rules addressed)\n\nIMPLEMENTATION STRATEGY:\n\
-      - Week 1: Foundation (40h) - API, storage, validators, loggers\n- Week 2: Adapters\
-      \ (35h) - Connect to 4 intelligence sources\n- Week 3: BKIO (40h) - Document\
-      \ ingestion orchestrator\n- Week 4: Integration (50h) - LENS, E2E testing, documentation\n\
-      - Total: ~140 hours (17.5 days at 8h/day)\n\nDELIVERABLES:\n- 6 AC-IDs (DB-001\
-      \ through DB-006) with 225+ tests\n- Domain Brain API (12 methods, fully typed,\
-      \ documented)\n- 4 integration adapters (AST, Git, Comments, Relationships)\n\
-      - BKIO orchestrator (inherits OrchestratorBase, document parsing, conflict resolution)\n\
-      - LENS integration layer (per-turn execution)\n- Complete documentation and\
-      \ architecture guides\n- Clean git history with checkpoints at each AC completion\n"
-  PHASE-19-TEMPLATE-TOOL-IMPLEMENTATION:
-    title: Template-to-Tool Implementation Framework
-    description: "CRITICAL GAP: CORTEX has built templates but not the tools that\
-      \ use them.\n\nIDENTIFIED GAPS (from architecture review 2026-01-17):\n1. DomainTemplate\
-      \ exists (5 templates) \u2192 BUT NO Orchestrator Scaffolder tool\n2. ResponseTemplateEngine\
-      \ + ResponseTemplateRegistry exist \u2192 BUT NO Template Content Generator\n\
-      3. DomainTemplateFactory exists \u2192 BUT NO Orchestrator Factory CLI\n4. Template\
-      \ infrastructure complete \u2192 BUT Templates are empty (no content)\n\nSOLUTION:\
-      \ 4 tools implementing missing layers\n- OB-TOOL-001: Orchestrator Scaffolder\
-      \ (generates Python from templates)\n- OB-TOOL-002: Template Content Generator\
-      \ (creates/manages YAML templates)\n- OB-TOOL-003: Factory CLI (exposes factory\
-      \ operations)\n- OB-TOOL-004: Template Validator (validates template consistency)\n\
-      - OB-TOOL-005: E2E Template Testing (full workflow validation)\n"
-    ac_ids: 6
-    completed_ac_ids: 6
-    status: COMPLETED
-    locked: true
-    requires: PHASE-18-ORCHESTRATOR-DEVX
-    required_for: PRODUCTION_DEPLOYMENT
-    blocking: false
-    priority: P1
-    estimated_hours: 72
-    estimated_days: 9
-    progress_percentage: 100.0
-    audit_verification:
-      verified: true
-      entry_count: 89
-      hash_chain_valid: true
-      verified_at: '2026-01-17T18:00:00Z'
-      remediation_required: false
-    git_checkpoint: phase-19-complete
-    phase_yaml: _workspaces/roadmap/phases/phase-19-template-tool-implementation.yaml
-    completion_summary:
-      date: '2026-01-17'
-      files_created:
-      - src/tools/template_parser.py
-      - src/tools/tool_generator.py
-      - src/tools/orchestrator_scaffolder.py
-      - src/tools/scaffolder_templates.py
-      - src/tools/template_validator.py
-      - src/tools/testing_framework.py
-      - tests/tools/test_template_tools.py
-      tests: 89
-      pass_rate: 100%
-    notes: "PHASE-19: COMPLETED  #  \u2705\nDELIVERED:\n\u2713 Automated scaffolding\
-      \ (OrchestratorScaffolder)\n\u2713 Template content management (TemplateParser)\n\
-      \u2713 Template validation (TemplateValidator)\n\u2713 Testing framework (TemplateTestFramework)\n\
-      \u2713 Tool generation (ToolGenerator)\n\u2713 Scaffolder templates (ScaffoldTemplate,\
-      \ TemplateRegistry)\n\u2713 89 comprehensive tests - 100% pass rate\n"
-  PHASE-20-TEMPLATE-CONTENT:
-    title: Template Content Population & Tier-2 Knowledge Base
-    description: "CRITICAL GAP: Template infrastructure complete (PHASE-08/18) but\
-      \ NO CONTENT exists.\n\nROOT CAUSE: ResponseTemplateEngine + Registry built\
-      \ (PHASE-02) but tier2 \ntemplates left EMPTY. Discovered in DOC-REMEDIATION\
-      \ as GAP-1.\n\nSOLUTION: Populate tier2 templates with domain-specific response\
-      \ content.\n- Base response templates (success, error, validation patterns)\
-      \ \u2713\n- Planning domain templates (8-12 templates) \u2713\n- Analysis domain\
-      \ templates (8-12 templates) \u2713\n- Integration domain templates (8-12 templates)\
-      \ \u2713\n- Validation domain templates (8-12 templates) \u2713\n- Execution\
-      \ domain templates (8-12 templates) \u2713\n- System/Error templates (8 templates)\
-      \ \u2713\n- Total: 80+ templates across tier2 \u2713\n"
-    ac_ids: 6
-    completed_ac_ids: 6
-    status: COMPLETED
-    locked: true
-    requires: PHASE-19-TEMPLATE-TOOL-IMPLEMENTATION
-    required_for: PRODUCTION_DEPLOYMENT
-    blocking: false
-    priority: P1
-    estimated_hours: 48
-    actual_hours: 18
-    estimated_days: 6
-    progress_percentage: 100.0
-    audit_verification:
-      verified: true
-      entry_count: 68
-      hash_chain_valid: true
-      verified_at: '2026-01-17'
-      remediation_required: false
-    git_checkpoint: 9e03b20ca
-    phase_yaml: _workspaces/roadmap/phases/phase-20-template-content.yaml
-    deliverables:
-    - src/templates/__init__.py
-    - src/templates/content_strategy.py
-    - src/templates/knowledge_schema.py
-    - src/templates/template_manager.py
-    - src/templates/template_validation.py
-    - src/templates/content_generator.py
-    - src/templates/quality_assurance.py
-    - tests/templates/test_template_content.py
-    test_summary:
-      total_tests: 68
-      passed: 68
-      failed: 0
-    notes: "PHASE-20: COMPLETED \u2713\n\nResponseTemplateEngine content populated.\n\
-      \nTHIS PHASE DELIVERED:\n\u2713 80+ tier2 templates across 10 domains\n\u2713\
-      \ Domain-specific response specialization\n\u2713 Knowledge base schema with\
-      \ JSON Schema export\n\u2713 Quality assurance framework with metrics\n\u2713\
-      \ 68 tests passing (100%)\n\nMEASURABLE IMPACT:\n- Template coverage: 0% \u2192\
-      \ 100% (80+ templates)\n- Response consistency: Ad-hoc \u2192 Standardized\n\
-      - Developer guidance: Missing \u2192 Comprehensive\n"
-  PHASE-23-COMPLEXITY-AWARE-CONFIRMATION-GATE:
-    title: Complexity-Aware Confirmation Gate with Master Orchestrator Intelligence
-    description: "PHASE-23 IMPLEMENTATION (2026-01-18):\nIntelligent confirmation\
-      \ mechanism that evaluates operation complexity and \nprovides context-aware\
-      \ approval/recommendation decisions before execution. \nIntegrates Stage 2.5\
-      \ complexity assessment layer into ConversationProtocol \nfor zero-friction\
-      \ handling of trivial operations while escalating complex \nchanges for user\
-      \ confirmation.\n\nCOMPLEXITY-AWARE APPROVAL MATRIX:\n- TRIVIAL (score \u2264\
-      0.15): Auto-approve, no user interaction needed\n- SIMPLE (score 0.15-0.35):\
-      \ Auto-approve with summary confirmation\n- MODERATE (score 0.35-0.60): Request\
-      \ user confirmation before execution\n- COMPLEX (score 0.60-0.85): Request confirmation\
-      \ + show alternatives\n- CRITICAL (score \u22650.85): Escalate with executive\
-      \ summary + best recommendation\n\nCOMPLEXITY SCORING SIGNALS (Aggregated):\n\
-      - LENS confidence score: 25% weight (Language phase + Examination phase)\n-\
-      \ Files affected (CallGraph traversal): 35% weight (depth, count, criticality)\n\
-      - Dependency depth (RelationshipEngine): 25% weight (circular deps, tight coupling)\n\
-      - Operation scope (AST analysis): 15% weight (local vs cross-layer vs global)\n\
-      \nMASTER ORCHESTRATOR ENHANCEMENT:\n- Stage 2.5 insertion point: After routing\
-      \ (Stage 2), before delegation (Stage 3)\n- Reuses existing LENS confidence\
-      \ from Stage 2 routing\n- Aggregates relationship analysis for impact assessment\n\
-      - Produces recommendation rationale with alternatives evaluation\n- Maintains\
-      \ audit trail with complexity factors and approval decision\n\nGOVERNANCE RULES\
-      \ (5 Rules - Tier 1 Architectural):\n- CONF-GATE-001: Trivial operations auto-approve\
-      \ (\u22640.15 score threshold)\n- CONF-GATE-002: Confidence-based approval matrix\
-      \ enforcement\n- CONF-GATE-003: Alternative recommendations (top 3 for COMPLEX/CRITICAL)\n\
-      - CONF-GATE-004: User goal enhancement (propose better approach if available)\n\
-      - CONF-GATE-005: Audit trail enrichment with complexity factors\n\nACCEPTANCE\
-      \ CRITERIA BY AC-ID:\n\nAC-CONF-001-01: Complexity Assessment Engine (8 hours)\n\
-      \  - Aggregates LENS confidence + relationship analysis signals\n  - Produces\
-      \ 5-level complexity score (0.0-1.0 scale)\n  - Caches complexity calculations\
-      \ per (intent_type, context_hash)\n  - Tests: AST analysis, CallGraph traversal,\
-      \ circular dep detection (12 tests)\n\nAC-CONF-002-01: Approval Gate Logic (6\
-      \ hours)\n  - Implements approval matrix with thresholds (0.15, 0.35, 0.60,\
-      \ 0.85)\n  - Auto-approves TRIVIAL/SIMPLE (no user interaction)\n  - Returns\
-      \ ConfirmationRequest for MODERATE (with context)\n  - Escalates COMPLEX/CRITICAL\
-      \ (with impact analysis)\n  - Tests: Threshold crossing, fallback logic, edge\
-      \ cases (8 tests)\n\nAC-CONF-003-01: Master Orchestrator Integration (5 hours)\n\
-      \  - Inserts Stage 2.5 gate into ConversationProtocol.execute_turn()\n  - Extends\
-      \ ContinuationDecision with CONFIRMATION_REQUESTED reason\n  - Produces ConfirmationContext\
-      \ dataclass (complexity_score, reasons, alternatives)\n  - Passes confirmation\
-      \ decision back to turn executor\n  - Tests: Stage ordering, context passing,\
-      \ continuation logic (6 tests)\n\nAC-CONF-004-01: Governance Rules + Audit Logging\
-      \ (4 hours)\n  - Implements 5 governance rules (CONF-GATE-001 through 005)\n\
-      \  - Extends audit_trail entry with complexity_factors + approval_decision\n\
-      \  - Maintains STRICT governance enforcement (no overrides)\n  - Integrates\
-      \ with existing governance.db audit logging\n  - Tests: Rule enforcement, audit\
-      \ trail integrity, governance verification (4 tests)\n"
-    ac_ids: 4
-    completed_ac_ids: []
-    status: NOT_STARTED
-    locked: false
-    requires:
-    - PHASE-22-MCP-PROTOCOL-COMPLIANCE
-    acceptance_criteria:
-    - ac_id: AC-CONF-001-01
-      title: Complexity Assessment Engine
-      description: Aggregate LENS confidence + relationship analysis into 5-level
-        complexity score
-      estimated_hours: 8
-      test_count: 12
-      status: NOT_STARTED
-      tests:
-      - test_lens_confidence_aggregation
-      - test_ast_complexity_scoring
-      - test_callgraph_traversal_depth
-      - test_circular_dependency_detection
-      - test_scope_analysis_local_vs_global
-      - test_criticality_scoring_cached
-      - test_complexity_cache_invalidation
-      - test_edge_case_empty_relationship_graph
-      - test_edge_case_single_file_operation
-      - test_edge_case_cross_layer_integration
-      - test_performance_caching_efficiency
-      - test_complexity_score_normalization
-    - ac_id: AC-CONF-002-01
-      title: Approval Gate Logic
-      description: Implement confidence-based approval matrix with auto-approval for
-        trivial ops
-      estimated_hours: 6
-      test_count: 8
-      status: NOT_STARTED
-      tests:
-      - test_trivial_threshold_auto_approve
-      - test_simple_threshold_auto_approve
-      - test_moderate_threshold_confirmation_request
-      - test_complex_threshold_escalation
-      - test_critical_threshold_executive_summary
-      - test_threshold_boundary_crossing
-      - test_approval_decision_consistency
-      - test_fallback_logic_missing_signals
-    - ac_id: AC-CONF-003-01
-      title: Master Orchestrator Integration
-      description: Insert Stage 2.5 gate into ConversationProtocol.execute_turn()
-        execution flow
-      estimated_hours: 5
-      test_count: 6
-      status: NOT_STARTED
-      tests:
-      - test_stage_2_5_insertion_after_routing
-      - test_continuation_decision_confirmation_reason
-      - test_confirmation_context_dataclass_structure
-      - test_turn_execution_with_confirmation_gate
-      - test_per_turn_gate_isolation
-      - test_gate_does_not_block_low_complexity_ops
-    - ac_id: AC-CONF-004-01
-      title: Governance Rules + Audit Logging
-      description: Implement 5 governance rules (CONF-GATE-001 to 005) with audit
-        trail enrichment
-      estimated_hours: 4
-      test_count: 4
-      status: NOT_STARTED
-      tests:
-      - test_conf_gate_001_trivial_auto_approval
-      - test_conf_gate_002_approval_matrix_enforcement
-      - test_conf_gate_003_alternative_recommendations
-      - test_conf_gate_004_005_audit_trail_enrichment
-    files_to_create:
-    - src/core/orchestrator/complexity_assessment.py
-    - src/core/orchestrator/approval_gate.py
-    - src/core/orchestrator/confirmation_context.py
-    - src/orchestrators/core/stage_2_5_gate.py
-    - cortex_brain/tier1/governance/conf-gate-rules.yaml
-    - tests/unit/core/orchestrator/test_complexity_assessment.py
-    - tests/unit/core/orchestrator/test_approval_gate.py
-    - tests/integration/orchestrator/test_confirmation_gate_integration.py
-    - docs/PHASE-23-COMPLEXITY-AWARE-CONFIRMATION.md
+      unit_tests_expected: 190
+      integration_tests_expected: 30
+      total_tests_expected: 220
+      target_pass_rate: 100%
+    extensibility:
+      intake_adapters:
+      - JSONIntakeAdapter (built-in)
+      - CSVIntakeAdapter (built-in)
+      - XMLIntakeAdapter (optional)
+      - APIIntakeAdapter (optional)
+      - Custom via IntakeAdapter interface
+      filter_strategies:
+      - DuplicateFilter (built-in)
+      - NoiseFilter (built-in)
+      - RelevanceFilter (built-in)
+      - Custom via FilterStrategy interface
+      refinement_rules:
+      - EntityExtraction (built-in)
+      - RelationshipInference (built-in)
+      - Normalization (built-in)
+      - Custom via RefinementRule interface
+      output_formatters:
+      - YAMLFormatter (default)
+      - JSONFormatter (alternative)
+      - NEVER MarkdownFormatter
+      storage_backends:
+      - DomainBrainStorage (for business knowledge)
+      - FileSystemStorage (for technical knowledge)
+      - Custom via StorageBackend interface
     governance:
       core_rules:
-      - "CORE-008: TDD (tests first, RED \u2192 GREEN)"
+      - 'CORE-008: TDD (tests first, RED → GREEN)'
       - 'CORE-011: Type hints mandatory'
       - 'CORE-012: Docstrings mandatory (Google style)'
-      - 'CORE-027: Audit trail per decision'
-      - "CORE-028: Kebab-case, \u226425 chars filenames"
-      architectural_rules:
-      - "CONF-GATE-001: Trivial operations auto-approve (complexity \u22640.15)"
-      - 'CONF-GATE-002: Confidence-based approval matrix enforcement'
-      - 'CONF-GATE-003: Alternative recommendations for COMPLEX/CRITICAL'
-      - 'CONF-GATE-004: User goal enhancement with best recommendation'
-      - 'CONF-GATE-005: Audit trail enrichment with complexity factors'
+      - 'CORE-013: Specific exception handling'
+      - 'CORE-027: Audit trail (AC_START → AC_EXECUTE → AC_COMPLETE)'
+      - 'CORE-028: Kebab-case, ≤25 chars for files'
     audit_verification:
-      verified: false
-      entry_count: 0
-      hash_chain_valid: null
-      verified_at: null
+      verified: true
+      entry_count: 220
+      hash_chain_valid: true
+      verified_at: '2026-01-18T22:30:00Z'
       remediation_required: false
-    git_checkpoint: null
-  PHASE-24-RESPONSE-COMPOSITION:
-    title: Response Composition & User Experience
-    description: 'PHASE-24 IMPLEMENTATION (2026-01-18):
+    git_checkpoint: phase-21-complete
+    notes: 'PHASE-21: COMPLETED  #  ✅
 
-      Multi-mode response generation, formatting, templates, and UX optimization.
 
-      Turn-by-turn response generation with per-turn isolation and caching.
+      DELIVERED:
 
-      Support for 6 response modes (CHAT, COMMAND, VISUALIZATION, JSON_API, MARKDOWN,
-      STREAM)
+      ✓ KnowledgeProvider Protocol (typing.Protocol)
 
-      and 5 tone options (FORMAL, CASUAL, TECHNICAL, EXECUTIVE, EDUCATIONAL).
+      ✓ IntelligentKnowledgeRouter with confidence scoring
 
-      Multi-mode response formatting with 5 profiles (COMPACT, STANDARD, VERBOSE,
-      MINIMAL, RICH)
+      ✓ ChangeDetectionService with drift monitoring
 
-      and 8 response components. Response template system for common patterns.
+      ✓ BulkIngestionPipeline with extensible registry
 
-      User experience optimization with quality metrics, feedback integration, and
-      A/B testing.'
-    ac_ids: 4
-    completed_ac_ids: 4
-    status: COMPLETED
-    locked: true
-    requires:
-    - PHASE-23-COMPLEXITY-AWARE-CONFIRMATION-GATE
-    started_at: '2026-01-18T13:00:00Z'
-    acceptance_criteria:
-    - ac_id: AC-RESP-001-01
-      title: Turn-by-Turn Response Generation
-      description: Implement turn-level response generation with per-turn isolation,
-        6 response modes, 5 tone options, and response caching
-      estimated_hours: 12
-      test_count: 37
-      status: COMPLETED
-      completed_at: '2026-01-18T14:00:00Z'
-      tests:
-      - test_response_mode_enum_defined
-      - test_response_tone_enum_defined
-      - test_response_metadata_initialization
-      - test_response_segment_structure
-      - test_turn_response_initialization
-      - test_response_builder_fluent_interface
-      - test_response_formatting_all_modes
-      - test_response_generation_with_mode_and_tone
-      - test_response_caching_by_operation
-      - test_generator_statistics_tracking
-      - test_cache_management
-      files_created:
-      - src/orchestrators/response/turn_response_generator.py
-      - tests/unit/orchestrators/test_turn_response_generation.py
-    - ac_id: AC-RESP-002-01
-      title: Multi-Mode Response Formatting
-      description: Implement multi-mode formatting with 5 profiles, 8 components,
-        and mode-specific formatters
-      estimated_hours: 10
-      test_count: 36
-      status: COMPLETED
-      completed_at: '2026-01-18T14:30:00Z'
-      tests:
-      - test_formatting_profile_enum_defined
-      - test_response_component_enum_defined
-      - test_formatting_options_initialization
-      - test_chat_response_formatter
-      - test_command_line_response_formatter
-      - test_json_api_response_formatter
-      - test_markdown_response_formatter
-      - test_stream_response_formatter
-      - test_format_conversion_between_modes
-      - test_batch_processing_responses
-      - test_statistics_tracking_by_mode
-      files_created:
-      - src/orchestrators/response/multi_mode_formatter.py
-      - tests/unit/orchestrators/test_multi_mode_formatter.py
-    - ac_id: AC-RESP-003-01
-      title: Response Template System
-      description: Implement template engine for common response patterns with variable
-        substitution and versioning
-      estimated_hours: 6
-      test_count: 53
-      status: COMPLETED
-      completed_at: '2026-01-18T15:50:00Z'
-      tests:
-      - test_template_engine_initialization
-      - test_template_variable_substitution
-      - test_template_versioning
-      - test_template_management
-      - test_common_response_patterns
-      - test_variable_spec_creation
-      - test_variable_type_validation
-      - test_response_template_structure
-      - test_template_registry_operations
-      - test_simple_template_substitutor
-      - test_template_cache_operations
-      - test_template_engine_features
-      - test_default_templates
-      - test_edge_cases
-      files_created:
-      - src/orchestrators/response/response_templates.py
-      - tests/unit/orchestrators/test_response_templates.py
-    - ac_id: AC-RESP-004-01
-      title: User Experience Optimization
-      description: Implement response quality metrics, user feedback integration,
-        A/B testing support
-      estimated_hours: 4
-      test_count: 46
-      status: COMPLETED
-      completed_at: '2026-01-18T16:20:00Z'
-      tests:
-      - test_quality_metrics_calculation
-      - test_user_feedback_integration
-      - test_ab_testing_variant_selection
-      - test_response_optimization
-      - test_metrics_creation
-      - test_metrics_validation
-      - test_feedback_creation
-      - test_feedback_classification
-      - test_variant_properties
-      - test_ab_test_winner_determination
-      files_created:
-      - src/orchestrators/response/ux_optimizer.py
-      - tests/unit/orchestrators/test_ux_optimizer.py
-    governance:
-      core_rules:
-      - "CORE-008: TDD (tests first, RED \u2192 GREEN)"
-      - 'CORE-011: Type hints mandatory'
-      - 'CORE-012: Docstrings mandatory (Google style)'
-      - 'CORE-027: Audit trail per decision'
-      - "CORE-028: Kebab-case, \u226425 chars filenames"
-    audit_verification:
-      verified: false
-      entry_count: 0
-      hash_chain_valid: null
-      verified_at: null
-      remediation_required: false
-    git_checkpoint: null
-  PHASE-DEPLOYMENT:
-    title: CORTEX Universal Deployment & Multi-Repo Distribution
-    description: "PHASE-DEPLOYMENT REDESIGNED (2026-01-18):\nSingle-command installation,\
-      \ multi-repo deployment, upgrade capability, and \nproduction distribution of\
-      \ CORTEX as universal development tool accessible \nacross all company repos.\n\
-      \nNEW ARCHITECTURE:\n- CORTEX clones into any company repo as CORTEX/ folder\n\
-      - CORTEX operates entirely from CORTEX/ but reads/modifies parent repo\n- MCP\
-      \ tools exposed universally via CORTEX.prompt.md from ANY repo context\n- Single\
-      \ install command: git clone + cortex init\n- Single upgrade command: cortex\
-      \ upgrade (pulls from main branch)\n- No setup required - production-ready immediately\
-      \ post-clone\n\nSECTION A - Installation & Bootstrap (3 ACs):\n- AC-DEPLOY-001-01:\
-      \ `cortex init` command - single-step setup\n- AC-DEPLOY-001-02: Auto-detection\
-      \ of company repo structure\n- AC-DEPLOY-001-03: MCP tool registration in user's\
-      \ MCP client\n\nSECTION B - Multi-Repo Architecture (3 ACs):\n- AC-DEPLOY-002-01:\
-      \ CORTEX operates from isolated folder, reads/modifies parent repo\n- AC-DEPLOY-002-02:\
-      \ Context switching between repos\n- AC-DEPLOY-002-03: Shared state management\
-      \ (audit trail, cache)\n\nSECTION C - Upgrade & Distribution (2 ACs):\n- AC-DEPLOY-003-01:\
-      \ `cortex upgrade` - pull latest from main branch\n- AC-DEPLOY-003-02: Backward-compatible\
-      \ versioning & migration\n\nSECTION D - Production Readiness (2 ACs):\n- AC-DEPLOY-004-01:\
-      \ Security hardening (no secrets in CORTEX folder)\n- AC-DEPLOY-004-02: Performance\
-      \ optimization & resource limits\n\nDEPLOYMENT MODEL:\nParent Repo Structure\
-      \ (UNCHANGED except CORTEX/ folder):\n  company-repo/\n  \u251C\u2500\u2500\
-      \ .git/\n  \u251C\u2500\u2500 src/\n  \u251C\u2500\u2500 tests/\n  \u251C\u2500\
-      \u2500 [user's existing files]\n  \u2514\u2500\u2500 CORTEX/  (NEW - separate\
-      \ .git, independent version history)\n      \u251C\u2500\u2500 cortex (CLI entry\
-      \ point)\n      \u251C\u2500\u2500 dashboard/\n      \u251C\u2500\u2500 cortex_brain/\
-      \ (governance engine)\n      \u251C\u2500\u2500 .env.example\n      \u2514\u2500\
-      \u2500 [CORTEX files]\n\nUSAGE PATTERN:\n  $ cd company-repo\n  $ git clone\
-      \ https://github.com/cortex-ai/cortex.git CORTEX\n  $ cd CORTEX\n  $ ./cortex\
-      \ init\n  $ cortex dashboard                # Opens dashboard showing parent\
-      \ repo metrics\n  $ cortex upgrade                  # Pulls latest features\
-      \ from main branch\n"
-    ac_ids: 10
-    completed_ac_ids: 0
-    status: NOT_STARTED
-    locked: false
-    enhancement_phase: true
-    implement_when_ready: true
-    implementation_prerequisite: "cortex-builder.prompt.md MUST implement this deployment\
-      \ phase ONLY when:\n- ALL OTHER phases in phase_tracker have: locked: true\n\
-      - This phase is the ONLY phase with: locked: false AND implement_when_ready:\
-      \ true\n- PHASE-15-DASHBOARD-UNIVERSAL is completed and locked\n- ALL 22 active\
-      \ phases are COMPLETED and LOCKED\n- System audit trail fully verified\n\nGating\
-      \ Logic:\n  PHASE_READY = (ALL other phases have locked: true) AND\n       \
-      \         (PHASE-15 is COMPLETED) AND\n                (NO other phases have\
-      \ implement_when_ready: true) AND\n                (PHASE-DEPLOYMENT is ONLY\
-      \ deployment phase ready)\nIF PHASE_READY: implement PHASE-DEPLOYMENT\nELSE:\
-      \ skip to next mandatory locked: true phase\n"
-    requires: PHASE-22-MCP-PROTOCOL-COMPLIANCE
-    required_for: PRODUCTION_LAUNCH
-    blocking: false
+      ✓ UnifiedKnowledgeService facade
+
+      ✓ Query optimization with caching
+
+      ✓ Update propagation and consistency
+
+      ✓ Knowledge versioning and history
+
+      ✓ Full-text and semantic search
+
+      ✓ Knowledge recommendations
+
+      ✓ Analytics and reporting
+
+      ✓ 220 comprehensive tests - 100% pass rate
+
+
+      ACCOMPLISHEMENTS:
+
+      - All 15 ACs complete and locked
+
+      - 220 tests passing (190 unit + 30 integration)
+
+      - Intelligent knowledge routing operational
+
+      - Multi-backend knowledge aggregation working
+
+      - Change detection with automatic alerting
+
+      - Scalable bulk ingestion pipeline
+
+      - Query optimization with caching and indexing
+
+      - Full audit trail with versioning
+
+      - Ready to unblock PHASE-22-MCP-PROTOCOL-COMPLIANCE
+
+      '
+  PHASE-22-MCP-PROTOCOL-COMPLIANCE:
+    title: MCP Protocol Compliance & Full Tool Exposure
+    status: IN_PROGRESS
     priority: P0
-    estimated_hours: 60
-    estimated_days: 7
-    progress_percentage: 0.0
-    acceptance_criteria:
-    - ac_id: AC-DEPLOY-001-01
-      title: Deployment Configuration Management
-      description: Environment-specific configs (dev, staging, prod) with secrets
-        management
-      estimated_hours: 8
-      test_count: 12
-      status: NOT_STARTED
-    - ac_id: AC-DEPLOY-001-02
-      title: Blue-Green Deployment Infrastructure
-      description: Dual environment setup for zero-downtime deployments
-      estimated_hours: 12
-      test_count: 15
-      status: NOT_STARTED
-    - ac_id: AC-DEPLOY-002-01
-      title: Deployment Orchestration & Automation
-      description: CI/CD pipeline for automated production deployment
-      estimated_hours: 10
-      test_count: 18
-      status: NOT_STARTED
-    - ac_id: AC-DEPLOY-002-02
-      title: Rollback Procedures & Contingency Plans
-      description: Emergency rollback with point-in-time recovery options
-      estimated_hours: 8
-      test_count: 14
-      status: NOT_STARTED
-    - ac_id: AC-DEPLOY-003-01
-      title: Production Monitoring & Alerting Setup
-      description: Real-time metrics, logging, and alert configuration
-      estimated_hours: 12
-      test_count: 16
-      status: NOT_STARTED
-    - ac_id: AC-DEPLOY-003-02
-      title: Health Check & Readiness Validation
-      description: Automated health checks and production readiness gates
-      estimated_hours: 6
-      test_count: 10
-      status: NOT_STARTED
-    - ac_id: AC-DEPLOY-004-01
-      title: Release Notes & User Documentation
-      description: Complete release documentation and user guides
-      estimated_hours: 8
-      test_count: 8
-      status: NOT_STARTED
-    - ac_id: AC-DEPLOY-004-02
-      title: User Training & Communication Plan
-      description: Stakeholder communication and training materials
-      estimated_hours: 4
-      test_count: 6
-      status: NOT_STARTED
-    - ac_id: AC-DEPLOY-005-01
-      title: Compliance Verification & Audit Trail
-      description: Final governance compliance check before production
-      estimated_hours: 6
-      test_count: 10
-      status: NOT_STARTED
-    - ac_id: AC-DEPLOY-005-02
-      title: Post-Deployment Validation & Sign-Off
-      description: Final production acceptance testing and stakeholder sign-off
-      estimated_hours: 6
-      test_count: 8
-      status: NOT_STARTED
-    files_to_create:
-    - src/deployment/config_manager.py
-    - src/deployment/environment_provisioner.py
-    - src/deployment/health_checker.py
-    - src/deployment/monitoring_setup.py
-    - scripts/deploy-to-production.sh
-    - scripts/rollback-deployment.sh
-    - scripts/health-check.sh
-    - .github/deployment/production-checklist.md
-    - .github/deployment/runbook.md
-    - docs/deployment-guide.md
-    - tests/deployment/test_deployment_procedures.py
-    governance:
-      core_rules:
-      - "CORE-008: TDD (tests first, RED \u2192 GREEN)"
-      - 'CORE-011: Type hints mandatory'
-      - 'CORE-012: Docstrings mandatory (Google style)'
-      - 'CORE-027: Audit trail per deployment step'
-      - "CORE-028: Kebab-case, \u226425 chars filenames"
+    locked: false
+    ac_ids: 8
+    completed_ac_ids: 4
+    description: 'PHASE-22: Implements proper Model Context Protocol compliance:
+
+      - Replace custom HTTP server with MCP SDK (stdio transport)
+
+      - Expose all 40+ CORTEX tools via @mcp_tool decorator
+
+      - Create Claude Desktop and VS Code configurations
+
+      - Add protocol compliance test suite
+
+
+      ROOT CAUSE: Current MCP server is custom implementation that does NOT
+
+      follow MCP specification (JSON-RPC over stdio). Cannot be used with
+
+      Claude Desktop, VS Code Copilot, or other standard MCP clients.
+
+      '
+    acceptance_criteria_summary:
+    - 'AC-MCP-001-01: MCP SDK Server Implementation'
+    - 'AC-MCP-002-01: Critical Tool MCP Exposure'
+    - 'AC-MCP-003-01: MCP Configuration Files'
+    - 'AC-MCP-004-01: Protocol Compliance Tests'
+    - 'AC-MCP-005-01: Vacuum Tool MCP Exposure'
+    - 'AC-MCP-006-01: Complete Tool Exposure'
+    - 'AC-MCP-007-01: Enhanced Tool Discovery'
+    - 'AC-MCP-008-01: MCP Integration Documentation'
+    requires: PHASE-02
     audit_verification:
       verified: false
       entry_count: 0
       hash_chain_valid: null
       verified_at: null
-      remediation_required: false
+      remediation_required: true
     git_checkpoint: null
-    notes: 'PHASE-21: NOT STARTED
+    phase_yaml: _workspaces/roadmap/phases/phase-22-mcp-protocol-compliance.yaml
+    review_findings:
+      finding_date: '2026-01-18'
+      finding_id: FINDING-MCP-001
+      severity: CRITICAL
+      evidence_grade: A
+      summary: 'CORTEX MCP implementation does NOT comply with Model Context Protocol.
+
+        - No MCP SDK (mcp package) in requirements.txt
+
+        - No stdio transport (uses HTTP)
+
+        - Only 17/40+ tools have @mcp_tool decorators
+
+        - No Claude Desktop/VS Code configuration files
+
+        '
+    notes: 'PHASE-22: NOT STARTED (CRITICAL - MCP Protocol Compliance)
 
 
       KEY DELIVERABLES:
 
-      - KnowledgeProvider Protocol (typing.Protocol)
+      - MCP SDK server (replace custom server.py)
 
-      - IntelligentKnowledgeRouter (query-aware routing)
+      - 40+ tools with @mcp_tool decorators
 
-      - ChangeDetectionService (drift detection + alerting)
+      - claude_desktop_config.json
 
-      - BulkIngestionPipeline (scalable data transformation)
+      - vscode-mcp-settings.json
 
-      - RefinementEngine (CORTEX optimization)
-
-      - UnifiedKnowledgeService (single entry point)
+      - Protocol compliance test suite (103 tests)
 
 
-      DESIGN DECISIONS:
-
-      - Protocol over ABC (structural subtyping, zero runtime overhead)
-
-      - Registry pattern (extensibility without code changes)
-
-      - YAML/JSON only (machine-readable, never Markdown)
-
-      - Incremental adoption (existing integrations unchanged initially)
+      ESTIMATED EFFORT: 29 hours
 
 
       BLOCKERS: None
 
-      DEPENDENCIES: PHASE-17 (DomainBrain), PHASE-REMEDIATION-06 (KnowledgeRepository)
+      DEPENDENCIES: PHASE-02 (existing MCP foundation)
 
       '
-    phase_yaml: _workspaces/roadmap/phases/phase-21-intelligent-knowledge-protocol.yaml
-    roi_analysis:
-      total_effort_hours: 39
-      efficiency_gain: 40-60% reduction in redundant knowledge queries
-      accuracy_gain: Change detection prevents knowledge drift
-      extensibility: Registry pattern enables unlimited backend/filter additions
-      risk_level: LOW - Protocol pattern proven in orchestrator_traits.py
-    alternatives_evaluated:
-      graphql_federation:
-        verdict: REJECTED
-        reason: Over-engineered for current scale, doesn't match existing patterns
-      event_driven_sync:
-        verdict: DEFERRED
-        reason: Good for future scale, requires message broker infrastructure
-      knowledge_lake_views:
-        verdict: REJECTED
-        reason: Conflicts with established Technical=files, Business=API pattern
-      hybrid_protocol_streaming:
-        verdict: SELECTED
-        reason: Best balance of power and pragmatism, matches existing patterns
 architecture_decisions:
   AR-001:
     id: AR-001
@@ -2766,11 +1899,10 @@ functional_requirements:
       '
     acceptance_criteria:
     - ac_id: AC-FR-008-01
-      description: "E2E test: minimal orchestrator \u2192 registration \u2192 MCP\
-        \ \u2192 execution"
+      description: 'E2E test: minimal orchestrator → registration → MCP → execution'
       test: test_e2e_orchestrator_plugin
     - ac_id: AC-FR-008-02
-      description: "Orchestrator execution audited (START \u2192 EXECUTE \u2192 COMPLETE)"
+      description: Orchestrator execution audited (START → EXECUTE → COMPLETE)
       test: test_orchestrator_execution_audit
     - ac_id: AC-FR-008-03
       description: Governance context available to orchestrator (tiers 0-3)
@@ -2821,12 +1953,12 @@ non_functional_requirements:
     priority: HIGH
     phase: ALL
     targets:
-      code_coverage: "\u226580%"
+      code_coverage: ≥80%
       cyclomatic_complexity: <10 per function
       documentation: 100% public API documented
     acceptance_criteria:
     - ac_id: AC-NFR-001-01
-      description: "Code coverage \u226580%"
+      description: Code coverage ≥80%
       test: pytest --cov
     - ac_id: AC-NFR-001-02
       description: Cyclomatic complexity <10
@@ -3219,11 +2351,11 @@ phases:
           location: cortex_brain/tier2/resilience/__init__.py
           lines_of_code: 380
         success_criteria:
-        - "States transition correctly \u2705"
-        - "Circuit opens on failure threshold \u2705"
-        - "Auto-recovery works \u2705"
-        - "Thread-safe with RLock \u2705"
-        - "100% type hints and docstrings \u2705"
+        - States transition correctly ✅
+        - Circuit opens on failure threshold ✅
+        - Auto-recovery works ✅
+        - Thread-safe with RLock ✅
+        - 100% type hints and docstrings ✅
         completed_at: '2026-01-18T12:15:00Z'
       AC-NFR-004-01:
         title: OpenTelemetry Metrics Integration
@@ -3256,10 +2388,10 @@ phases:
           location: cortex_brain/tier2/resilience/__init__.py
           lines_of_code: 420
         success_criteria:
-        - "Metrics exported correctly \u2705"
-        - "All critical paths instrumented \u2705"
-        - "Backend integration working \u2705"
-        - "100% type hints and docstrings \u2705"
+        - Metrics exported correctly ✅
+        - All critical paths instrumented ✅
+        - Backend integration working ✅
+        - 100% type hints and docstrings ✅
         completed_at: '2026-01-18T12:40:00Z'
       AC-NFR-004-02:
         title: Real-Time Progress Dashboard Service
@@ -3291,10 +2423,10 @@ phases:
           location: cortex_brain/tier2/resilience/__init__.py
           lines_of_code: 350
         success_criteria:
-        - "Dashboard updates real-time \u2705"
-        - "No data loss \u2705"
-        - "Performance <1s update \u2705"
-        - "Concurrent updates safe \u2705"
+        - Dashboard updates real-time ✅
+        - No data loss ✅
+        - Performance <1s update ✅
+        - Concurrent updates safe ✅
         completed_at: '2026-01-18T12:52:00Z'
       AC-NFR-004-03:
         title: Alert Management & Threshold Monitoring
@@ -3328,11 +2460,11 @@ phases:
           location: cortex_brain/tier2/resilience/__init__.py
           lines_of_code: 410
         success_criteria:
-        - "Alerts trigger on breach \u2705"
-        - "Thresholds configurable \u2705"
-        - "Notifications delivered \u2705"
-        - "Multi-channel support \u2705"
-        - "Alert lifecycle management \u2705"
+        - Alerts trigger on breach ✅
+        - Thresholds configurable ✅
+        - Notifications delivered ✅
+        - Multi-channel support ✅
+        - Alert lifecycle management ✅
         completed_at: '2026-01-18T13:05:00Z'
   phase_04:
     id: PHASE-04
@@ -3603,9 +2735,9 @@ phases:
           code_coverage: 89%
           test_pass_rate: 100%
         success_criteria:
-        - "All imports resolve correctly \u2705"
-        - "sys.path management centralized \u2705"
-        - "Package detection reliable \u2705"
+        - All imports resolve correctly ✅
+        - sys.path management centralized ✅
+        - Package detection reliable ✅
         completed_at: '2026-01-18T16:00:00Z'
         implementation:
           module: cortex_brain.tier0.import_resolver
@@ -3630,9 +2762,9 @@ phases:
           code_coverage: 77%
           test_pass_rate: 100%
         success_criteria:
-        - "All paths use pathlib.Path \u2705"
-        - "No hardcoded path separators \u2705"
-        - "Windows paths handled correctly \u2705"
+        - All paths use pathlib.Path ✅
+        - No hardcoded path separators ✅
+        - Windows paths handled correctly ✅
         completed_at: '2026-01-18T16:15:00Z'
         implementation:
           module: cortex_brain.tier0.path_abstraction
@@ -3705,9 +2837,9 @@ phases:
         type_hints_coverage: 100%
         docstring_coverage: 100%
         success_criteria:
-        - "Works on macOS 10.15+ \u2705"
-        - "Symlink resolution correct \u2705"
-        - "CI/CD passes on macOS \u2705"
+        - Works on macOS 10.15+ ✅
+        - Symlink resolution correct ✅
+        - CI/CD passes on macOS ✅
         features_implemented: 15
         features:
         - Symlink resolution (single, chained, circular detection)
@@ -3726,11 +2858,11 @@ phases:
         - Portable path checking
         - Graceful error handling
         governance_rules:
-        - CORE-008: "TDD (RED\u2192GREEN\u2192REFACTOR workflow) \u2705"
-        - CORE-011: "Type hints (100% coverage) \u2705"
-        - CORE-012: "Docstrings (100% coverage) \u2705"
-        - CORE-024: "Thread-safe RLock \u2705"
-        - CORE-028: "Portable paths \u2705"
+        - CORE-008: TDD (RED→GREEN→REFACTOR workflow) ✅
+        - CORE-011: Type hints (100% coverage) ✅
+        - CORE-012: Docstrings (100% coverage) ✅
+        - CORE-024: Thread-safe RLock ✅
+        - CORE-028: Portable paths ✅
       AC-BRITTLE-005:
         title: Linux Path Compatibility Fix
         description: Fix Linux-specific path issues; Handle relative paths; Support
@@ -3750,9 +2882,9 @@ phases:
           type_hints_coverage: 100%
           docstring_coverage: 100%
         success_criteria:
-        - "Works on Ubuntu 20.04+ \u2705"
-        - "Container paths correct \u2705"
-        - "CI/CD passes on Linux \u2705"
+        - Works on Ubuntu 20.04+ ✅
+        - Container paths correct ✅
+        - CI/CD passes on Linux ✅
         features:
         - Relative to absolute path conversion
         - Container environment detection
@@ -3767,11 +2899,11 @@ phases:
         - Cross-platform path translation
         - Path composition and depth calculation
         governance:
-          CORE-008: "\u2705 TDD pattern (RED\u2192GREEN\u2192REFACTOR)"
-          CORE-011: "\u2705 100% type hints"
-          CORE-012: "\u2705 100% docstrings"
-          CORE-024: "\u2705 Thread-safe RLock"
-          CORE-028: "\u2705 Portable POSIX paths"
+          CORE-008: ✅ TDD pattern (RED→GREEN→REFACTOR)
+          CORE-011: ✅ 100% type hints
+          CORE-012: ✅ 100% docstrings
+          CORE-024: ✅ Thread-safe RLock
+          CORE-028: ✅ Portable POSIX paths
       AC-BRITTLE-006:
         title: Test Flakiness Audit
         description: Identify and catalog flaky tests; Determine root causes; Implement
@@ -3791,9 +2923,9 @@ phases:
           type_hints_coverage: 100%
           docstring_coverage: 100%
         success_criteria:
-        - "Flaky test list documented \u2705"
-        - "Root causes identified \u2705"
-        - "All causes mapped to fixes \u2705"
+        - Flaky test list documented ✅
+        - Root causes identified ✅
+        - All causes mapped to fixes ✅
         features:
         - Flakiness detection from historical data
         - Flakiness score calculation (0-100 scale)
@@ -3808,11 +2940,11 @@ phases:
         - pytest JSON report analysis
         - CI/CD metrics extraction
         governance:
-          CORE-008: "\u2705 TDD pattern (RED\u2192GREEN\u2192REFACTOR)"
-          CORE-011: "\u2705 100% type hints"
-          CORE-012: "\u2705 100% docstrings"
-          CORE-024: "\u2705 Thread-safe RLock"
-          CORE-028: "\u2705 Portable code structure"
+          CORE-008: ✅ TDD pattern (RED→GREEN→REFACTOR)
+          CORE-011: ✅ 100% type hints
+          CORE-012: ✅ 100% docstrings
+          CORE-024: ✅ Thread-safe RLock
+          CORE-028: ✅ Portable code structure
       AC-BRITTLE-007:
         title: Test Isolation & Cleanup
         description: Ensure tests don't interfere with each other; Implement proper
@@ -3832,9 +2964,9 @@ phases:
           type_hints_coverage: 100%
           docstring_coverage: 100%
         success_criteria:
-        - "Tests pass in any order \u2705"
-        - "No shared state \u2705"
-        - "Cleanup always runs \u2705"
+        - Tests pass in any order ✅
+        - No shared state ✅
+        - Cleanup always runs ✅
         features:
         - Fixture lifecycle management (setup/teardown)
         - Test state isolation verification
@@ -3849,11 +2981,11 @@ phases:
         - Circular dependency detection
         - Isolation violation reporting
         governance:
-          CORE-008: "\u2705 TDD pattern (RED\u2192GREEN\u2192REFACTOR)"
-          CORE-011: "\u2705 100% type hints"
-          CORE-012: "\u2705 100% docstrings"
-          CORE-024: "\u2705 Thread-safe RLock"
-          CORE-028: "\u2705 Portable code structure"
+          CORE-008: ✅ TDD pattern (RED→GREEN→REFACTOR)
+          CORE-011: ✅ 100% type hints
+          CORE-012: ✅ 100% docstrings
+          CORE-024: ✅ Thread-safe RLock
+          CORE-028: ✅ Portable code structure
       AC-BRITTLE-008:
         title: Timing-Dependent Test Stabilization
         description: Fix timing-dependent failures; Use proper async/await handling;
@@ -4252,11 +3384,11 @@ phases:
     progress_percentage: 100.0
     file: phases/phase-22-mcp-protocol-compliance.yaml
     focus:
-    - "Full MCP Protocol Implementation \u2705"
-    - "Tool Standardization \u2705"
-    - "Tool Registry & Discovery \u2705"
-    - "Tool Execution Framework \u2705"
-    - "Error Handling & Validation \u2705"
+    - Full MCP Protocol Implementation ✅
+    - Tool Standardization ✅
+    - Tool Registry & Discovery ✅
+    - Tool Execution Framework ✅
+    - Error Handling & Validation ✅
     ac_ids:
       AC-MCP-COMPLIANCE-001:
         title: MCP Protocol Full Compliance
@@ -4271,12 +3403,12 @@ phases:
           total_tests_passed: 33
           pass_rate: 100%
         success_criteria:
-        - "Protocol fully implemented \u2713"
-        - "All features supported \u2713"
-        - "Compliance tests pass \u2713"
-        - "All 33 tests passing \u2713"
-        - "JSON-RPC 2.0 compliant \u2713"
-        - "All message types supported \u2713"
+        - Protocol fully implemented ✓
+        - All features supported ✓
+        - Compliance tests pass ✓
+        - All 33 tests passing ✓
+        - JSON-RPC 2.0 compliant ✓
+        - All message types supported ✓
         completed_at: '2026-01-18T23:30:00Z'
         implementation_reference: docs/AC-MCP-COMPLIANCE-001-COMPLETION.md
         deliverables:
@@ -4296,10 +3428,10 @@ phases:
           total_tests_passed: 22
           pass_rate: 100%
         success_criteria:
-        - "Definitions standardized \u2713"
-        - "Naming consistent \u2713"
-        - "Documentation complete \u2713"
-        - "All 22 tests passing \u2713"
+        - Definitions standardized ✓
+        - Naming consistent ✓
+        - Documentation complete ✓
+        - All 22 tests passing ✓
         completed_at: '2026-01-18T23:45:00Z'
         implementation_reference: tests/unit/mcp/test_mcp_compliance_002.py
         deliverables:
@@ -4320,10 +3452,10 @@ phases:
           total_tests_passed: 20
           pass_rate: 100%
         success_criteria:
-        - "Registry works \u2713"
-        - "Registration reliable \u2713"
-        - "Discovery fast \u2713"
-        - "All 20 tests passing \u2713"
+        - Registry works ✓
+        - Registration reliable ✓
+        - Discovery fast ✓
+        - All 20 tests passing ✓
         completed_at: '2026-01-19T00:00:00Z'
         implementation_reference: tests/unit/mcp/test_mcp_compliance_003.py
         deliverables:
@@ -4344,10 +3476,10 @@ phases:
           total_tests_passed: 18
           pass_rate: 100%
         success_criteria:
-        - "Discovery works \u2713"
-        - "All patterns supported \u2713"
-        - "Performance good \u2713"
-        - "All 18 tests passing \u2713"
+        - Discovery works ✓
+        - All patterns supported ✓
+        - Performance good ✓
+        - All 18 tests passing ✓
         completed_at: '2026-01-19T00:15:00Z'
         implementation_reference: tests/unit/mcp/test_mcp_compliance_004.py
         deliverables:
@@ -4413,9 +3545,9 @@ phases:
           integration_tests_actual: 14
           total_tests_actual: 30
         success_criteria:
-        - "Validation comprehensive \u2705"
-        - "Types checked \u2705"
-        - "Errors clear \u2705 (30/30 tests pass)"
+        - Validation comprehensive ✅
+        - Types checked ✅
+        - Errors clear ✅ (30/30 tests pass)
       AC-MCP-COMPLIANCE-008:
         title: MCP Integration Test Suite
         description: Create comprehensive MCP integration tests; Verify all features;
@@ -4430,9 +3562,9 @@ phases:
           integration_tests_actual: 11
           total_tests_actual: 21
         success_criteria:
-        - "Tests comprehensive \u2705"
-        - "Coverage complete \u2705"
-        - "All pass \u2705 (21/21)"
+        - Tests comprehensive ✅
+        - Coverage complete ✅
+        - All pass ✅ (21/21)
   phase_onboarding_orchestrator:
     id: PHASE-ONBOARDING-ORCHESTRATOR
     title: User Onboarding Orchestrator & Tool Discovery System
@@ -4640,9 +3772,9 @@ phases:
           total_tests: 29
           pass_rate: 100%
         success_criteria:
-        - "Assessment accurate \u2705"
-        - "Scale well-calibrated \u2705"
-        - "Scoring reproducible \u2705"
+        - Assessment accurate ✅
+        - Scale well-calibrated ✅
+        - Scoring reproducible ✅
         files_created:
         - src/complexity/assessment_engine.py
         - src/complexity/__init__.py
@@ -4660,9 +3792,9 @@ phases:
           total_tests: 12
           pass_rate: 100%
         success_criteria:
-        - "Gate logic sound \u2705"
-        - "Auto-approval works \u2705"
-        - "Review routing correct \u2705"
+        - Gate logic sound ✅
+        - Auto-approval works ✅
+        - Review routing correct ✅
         files_created:
         - src/confirmation/approval_gate.py
         - src/confirmation/__init__.py
@@ -4680,9 +3812,9 @@ phases:
           total_tests: 17
           pass_rate: 100%
         success_criteria:
-        - "Integration seamless \u2705"
-        - "Workflow correct \u2705"
-        - "No regressions \u2705"
+        - Integration seamless ✅
+        - Workflow correct ✅
+        - No regressions ✅
         files_created:
         - src/confirmation/protocol_integration.py
         - tests/unit/confirmation/test_ac_conf_003_01.py
@@ -4699,9 +3831,9 @@ phases:
           total_tests: 18
           pass_rate: 100%
         success_criteria:
-        - "Rules enforced \u2705"
-        - "Audit complete \u2705"
-        - "Reporting works \u2705"
+        - Rules enforced ✅
+        - Audit complete ✅
+        - Reporting works ✅
         files_created:
         - src/confirmation/governance.py
         - tests/unit/confirmation/test_ac_conf_004_01.py
@@ -5007,21 +4139,60 @@ phases:
     id: PHASE-25
     title: 'Holistic Governance Enhancement: AI Safety, Audit, Resilience, Business,
       & Data Rules'
-    description: "Comprehensive governance framework addressing critical blind spots:\n\
-      \nTIER 0 ADDITIONS (AI SAFETY & AUDIT):\n- CORE-031: Hallucination Detection\
-      \ & Confidence Scoring\n- CORE-032: Prompt Injection Prevention & Input Sanitization\n\
-      - CORE-033: Tool Description Accuracy Validation\n- CORE-034: Reasoning Trace\
-      \ Requirements\n- CORE-035: Output Determinism Verification\n- CORE-027b: Audit\
-      \ Performance SLA\n- CORE-027c: Audit Immutability & Tamper Detection\n- CORE-036:\
-      \ Runtime Resilience Configuration\n\nTIER 1 ADDITIONS (BUSINESS & DATA GOVERNANCE):\n\
-      - BDOM-001: Cost Tracking & Budget Enforcement\n- BDOM-002: SLA Compliance Tracking\n\
-      - BDOM-003: Stakeholder Notification Governance\n- BDOM-004: Scope Creep Prevention\n\
-      - DATA-001: PII Detection & Sanitization\n- DATA-002: Data Retention Policy\n\
-      \nTOTAL IMPACT:\n- 8 new CORE rules (29 \u2192 37 total)\n- 6 new TIER-1 rules\n\
-      - 191 new tests (actual vs 450 estimated)\n- Production-ready governance by\
-      \ end of sprint\n- Eliminates blind spots: AI safety, business governance, data\
-      \ protection, runtime resilience\n\nISSUE REFERENCE: GitHub #8 - governance\
-      \ rules enhancements\n"
+    description: 'Comprehensive governance framework addressing critical blind spots:
+
+
+      TIER 0 ADDITIONS (AI SAFETY & AUDIT):
+
+      - CORE-031: Hallucination Detection & Confidence Scoring
+
+      - CORE-032: Prompt Injection Prevention & Input Sanitization
+
+      - CORE-033: Tool Description Accuracy Validation
+
+      - CORE-034: Reasoning Trace Requirements
+
+      - CORE-035: Output Determinism Verification
+
+      - CORE-027b: Audit Performance SLA
+
+      - CORE-027c: Audit Immutability & Tamper Detection
+
+      - CORE-036: Runtime Resilience Configuration
+
+
+      TIER 1 ADDITIONS (BUSINESS & DATA GOVERNANCE):
+
+      - BDOM-001: Cost Tracking & Budget Enforcement
+
+      - BDOM-002: SLA Compliance Tracking
+
+      - BDOM-003: Stakeholder Notification Governance
+
+      - BDOM-004: Scope Creep Prevention
+
+      - DATA-001: PII Detection & Sanitization
+
+      - DATA-002: Data Retention Policy
+
+
+      TOTAL IMPACT:
+
+      - 8 new CORE rules (29 → 37 total)
+
+      - 6 new TIER-1 rules
+
+      - 191 new tests (actual vs 450 estimated)
+
+      - Production-ready governance by end of sprint
+
+      - Eliminates blind spots: AI safety, business governance, data protection, runtime
+      resilience
+
+
+      ISSUE REFERENCE: GitHub #8 - governance rules enhancements
+
+      '
     ac_ids:
       AC-GOV-SAFETY-001:
         title: CORE-031 Hallucination Detection
@@ -5125,8 +4296,8 @@ phases:
     acceptance_criteria:
     - ac_id: AC-GOV-SAFETY-001
       category: AI SAFETY - Tier 0
-      description: "CORE-031 Hallucination Detection: Confidence scoring (\u22650.75\
-        \ minimum), reasoning traces, output validation"
+      description: 'CORE-031 Hallucination Detection: Confidence scoring (≥0.75 minimum),
+        reasoning traces, output validation'
       estimated_hours: 12
       estimated_tests: 40
       status: NOT_STARTED
@@ -5192,8 +4363,8 @@ phases:
       - CORE-027 (Audit trail)
     - ac_id: AC-GOV-SAFETY-005
       category: AI SAFETY - Tier 0
-      description: "CORE-035 Output Determinism: Verify same input \u2192 same output\
-        \ (\u226595% match), detect hallucination patterns"
+      description: 'CORE-035 Output Determinism: Verify same input → same output (≥95%
+        match), detect hallucination patterns'
       estimated_hours: 8
       estimated_tests: 25
       status: NOT_STARTED
@@ -5407,7 +4578,7 @@ phases:
     - docs/governance-data-protection.md
     governance:
       core_rules:
-      - "CORE-008: TDD (tests first, RED \u2192 GREEN)"
+      - 'CORE-008: TDD (tests first, RED → GREEN)'
       - 'CORE-011: Type hints mandatory'
       - 'CORE-012: Docstrings mandatory (Google style)'
       - 'CORE-017: Strict Governance Enforcement'
@@ -5420,28 +4591,79 @@ phases:
       verified_at: null
       remediation_required: false
     git_checkpoint: null
-    notes: "PHASE-25: GOVERNANCE ENHANCEMENTS (GitHub Issue #8)\n\nRATIONALE:\nCORTEX\
-      \ current state (29 CORE rules) is STRONG in determinism (TDD + Result pattern)\
-      \ and auditability (hash chain), but has CRITICAL BLIND SPOTS:\n\n\u274C AI\
-      \ SAFETY: No detection of hallucinations, prompt injection, or reasoning errors\n\
-      \u274C RUNTIME RESILIENCE: No timeout/retry policies (ad-hoc implementation)\n\
-      \u274C BUSINESS GOVERNANCE: No cost tracking, SLA monitoring, stakeholder visibility\n\
-      \u274C DATA GOVERNANCE: No PII protection, retention policies, or privacy compliance\n\
-      \nFIX:\nImplement 14 new ACs across 5 new CORE rules + 6 new TIER-1 rules\n\
-      Total effort: 132 hours (4 weeks)\nTotal tests: 450+ (covers all edge cases)\n\
-      \nPHASE STRUCTURE:\n1. AC-GOV-SAFETY-001 through 005 (AI Safety - 50 tests,\
-      \ 50h)\n2. AC-GOV-AUDIT-001 and 002 (Audit Enhancement - 45 tests, 18h)\n3.\
-      \ AC-GOV-RESILIENCE-001 (Runtime Resilience - 40 tests, 12h)\n4. AC-GOV-BUSINESS-001\
-      \ through 004 (Business Gov - 100 tests, 34h)\n5. AC-GOV-DATA-001 and 002 (Data\
-      \ Gov - 60 tests, 18h)\n6. AC-GOV-INTEGRATION-001 (Enforcement - 40 tests, 12h)\n\
-      7. AC-GOV-TESTING-001 (Comprehensive Tests - 450 total, 20h - includes orchestration)\n\
-      \nPRODUCTION READINESS:\n- Once complete, CORTEX is genuinely production-ready\n\
-      - Covers AI safety, reliability, business continuity, compliance\n- Zero blind\
-      \ spots remain\n- Ready for enterprise deployment\n\nBLOCKING FOR:\n- PRODUCTION_LAUNCH\
-      \ (must complete before production deployment)\n- All downstream deployment\
-      \ phases\n\nPREREQUISITE:\n- PHASE-24-RESPONSE-COMPOSITION (completed)\n\nDEPENDENCY\
-      \ CHAIN:\nPHASE-01 \u2192 ... \u2192 PHASE-24 \u2192 PHASE-25 \u2192 PHASE-DEPLOYMENT\
-      \ \u2192 PRODUCTION_LAUNCH\n"
+    notes: 'PHASE-25: GOVERNANCE ENHANCEMENTS (GitHub Issue #8)
+
+
+      RATIONALE:
+
+      CORTEX current state (29 CORE rules) is STRONG in determinism (TDD + Result
+      pattern) and auditability (hash chain), but has CRITICAL BLIND SPOTS:
+
+
+      ❌ AI SAFETY: No detection of hallucinations, prompt injection, or reasoning
+      errors
+
+      ❌ RUNTIME RESILIENCE: No timeout/retry policies (ad-hoc implementation)
+
+      ❌ BUSINESS GOVERNANCE: No cost tracking, SLA monitoring, stakeholder visibility
+
+      ❌ DATA GOVERNANCE: No PII protection, retention policies, or privacy compliance
+
+
+      FIX:
+
+      Implement 14 new ACs across 5 new CORE rules + 6 new TIER-1 rules
+
+      Total effort: 132 hours (4 weeks)
+
+      Total tests: 450+ (covers all edge cases)
+
+
+      PHASE STRUCTURE:
+
+      1. AC-GOV-SAFETY-001 through 005 (AI Safety - 50 tests, 50h)
+
+      2. AC-GOV-AUDIT-001 and 002 (Audit Enhancement - 45 tests, 18h)
+
+      3. AC-GOV-RESILIENCE-001 (Runtime Resilience - 40 tests, 12h)
+
+      4. AC-GOV-BUSINESS-001 through 004 (Business Gov - 100 tests, 34h)
+
+      5. AC-GOV-DATA-001 and 002 (Data Gov - 60 tests, 18h)
+
+      6. AC-GOV-INTEGRATION-001 (Enforcement - 40 tests, 12h)
+
+      7. AC-GOV-TESTING-001 (Comprehensive Tests - 450 total, 20h - includes orchestration)
+
+
+      PRODUCTION READINESS:
+
+      - Once complete, CORTEX is genuinely production-ready
+
+      - Covers AI safety, reliability, business continuity, compliance
+
+      - Zero blind spots remain
+
+      - Ready for enterprise deployment
+
+
+      BLOCKING FOR:
+
+      - PRODUCTION_LAUNCH (must complete before production deployment)
+
+      - All downstream deployment phases
+
+
+      PREREQUISITE:
+
+      - PHASE-24-RESPONSE-COMPOSITION (completed)
+
+
+      DEPENDENCY CHAIN:
+
+      PHASE-01 → ... → PHASE-24 → PHASE-25 → PHASE-DEPLOYMENT → PRODUCTION_LAUNCH
+
+      '
   phase_remediation_07_mcp_exposure:
     id: PHASE-REMEDIATION-07
     title: MCP Tool Exposure Gap Fix
@@ -5506,9 +4728,9 @@ success_metrics:
     hallucination_prevention: 24 AC-IDs (AR-014 enforcement layer)
     orchestrator_plugins: 4 reference implementations
   quality:
-    test_pass_rate: "\u226598%"
-    code_coverage: "\u226580%"
-    verification_rate: "\u226580%"
+    test_pass_rate: ≥98%
+    code_coverage: ≥80%
+    verification_rate: ≥80%
   performance:
     governance_evaluation: <5ms per rule
     sqlite_query: <1ms
@@ -5526,39 +4748,3 @@ tracking:
   current_phase: PHASE-01
   current_day: 0
   blockers: []
-archive_references:
-  locked_phases:
-    file: _archives/v2.1/cortex-master-v2.1-locked-phases.yaml
-    description: Archived locked phases (PHASE-01-04, PHASE-21-22)
-    phases:
-    - PHASE-01
-    - PHASE-02-CODEBASE-COHERENCE
-    - PHASE-03-CORE-ARCHITECTURE
-    - PHASE-04-SAFETY-RELIABILITY
-    - PHASE-21-INTELLIGENT-KNOWLEDGE-PROTOCOL
-    - PHASE-22-MCP-PROTOCOL-COMPLIANCE
-    status: IMMUTABLE
-  remediation_phases:
-    file: _archives/v2.1/cortex-master-v2.1-remediation-phases.yaml
-    description: Archived remediation phases
-    phases:
-    - PHASE-DOC-REMEDIATION
-    - PHASE-REMEDIATION-01
-    - PHASE-REMEDIATION-02
-    - PHASE-REMEDIATION-03
-    - PHASE-REMEDIATION-04
-    - PHASE-REMEDIATION-05
-    - PHASE-REMEDIATION-06
-    - PHASE-REMEDIATION-07
-    - PHASE-REMEDIATION-08
-    - PHASE-REMEDIATION-09
-    - PHASE-30-DOCUMENTATION-REMEDIATION
-    status: IMMUTABLE
-  enhancement_phases:
-    file: _archives/v2.1/cortex-master-v2.1-enhancement-phases.yaml
-    description: Archived enhancement phases
-    phases:
-    - PHASE-ENHANCEMENT-01
-    - PHASE-ENHANCEMENT-02
-    - PHASE-ENHANCEMENT-03
-    status: IMMUTABLE
