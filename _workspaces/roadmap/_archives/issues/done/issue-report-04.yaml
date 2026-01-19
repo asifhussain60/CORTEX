@@ -71,7 +71,7 @@ problem:
        - Tier boundary validation available but "dead code"
   
   current_state: |
-    ✅ TIER-0 rules loaded from cortex-brain/tier0/governance/core-rules.yaml (29 rules)
+    ✅ TIER-0 rules loaded from cortex_brain/tier0/governance/core-rules.yaml (29 rules)
     ✅ Tier precedence enforced (0 > 1 > 2) via TierResolver
     ✅ Rule registration prevents TIER-0 override (add_tier1/2_rule checks)
     ✅ In-memory tier enforcement framework complete
@@ -195,7 +195,7 @@ root_causes:
   - cause_id: "ROOT-003"
     title: "Database-Level Tier Enforcement Missing"
     description: |
-      Database: cortex-brain/state/governance.db (SQLite)
+      Database: cortex_brain/state/governance.db (SQLite)
       
       Current Schema:
       - audit_log table: Logs operations (AC_START, AC_EXECUTE, AC_COMPLETE)
@@ -231,7 +231,7 @@ root_causes:
       Impact: Tier violations not enforced at database layer
     
     evidence:
-      - File: cortex-brain/state/governance.db (no tier_access_log table)
+      - File: cortex_brain/state/governance.db (no tier_access_log table)
       - Pattern: Audit-only database, no enforcement
       - Missing: Schema definition for tier enforcement
   
@@ -282,7 +282,7 @@ critical_finding: |
   Enforcement Status by Lifecycle Stage:
   
   ✅ STAGE 1: Configuration Load (Turn 0)
-     - TIER-0 rules loaded from cortex-brain/tier0/governance/core-rules.yaml
+     - TIER-0 rules loaded from cortex_brain/tier0/governance/core-rules.yaml
      - GovernanceRegistry._load_tier0_rules() executes
      - 29 SKULL rules loaded into memory
      - Immutability flag set: rule.is_immutable = True for tier 0
@@ -344,7 +344,7 @@ affected_components:
     status: "INCOMPLETE"
   
   - component: "governance.db"
-    file: "cortex-brain/state/governance.db"
+    file: "cortex_brain/state/governance.db"
     tables:
       - "tier_access_log [MISSING]"
     constraints:
@@ -380,7 +380,7 @@ compliance_violations:
   
   - rule_id: "CORE-017"
     rule_name: "Strict Governance Enforcement"
-    spec: "cortex-brain/tier0/governance/core-rules.yaml"
+    spec: "cortex_brain/tier0/governance/core-rules.yaml"
     status: "VIOLATED"
     violation_detail: |
       ❌ Governance validation is STUB (returns Ok(True) without checking)
@@ -392,7 +392,7 @@ compliance_violations:
   
   - rule_id: "CORE-019"
     rule_name: "TDD-Master Routing (LENS on every turn)"
-    spec: "cortex-brain/tier0/governance/core-rules.yaml"
+    spec: "cortex_brain/tier0/governance/core-rules.yaml"
     status: "VIOLATED"
     violation_detail: |
       ❌ Master doesn't validate CORE-019 compliance per-turn
@@ -403,7 +403,7 @@ compliance_violations:
   
   - rule_id: "CORE-027"
     rule_name: "Audit Trail Per Turn (AC_START/EXECUTE/COMPLETE)"
-    spec: "cortex-brain/tier0/governance/core-rules.yaml"
+    spec: "cortex_brain/tier0/governance/core-rules.yaml"
     status: "PARTIALLY_VIOLATED"
     violation_detail: |
       ✅ Audit entries logged (AC_START/EXECUTE/COMPLETE)
@@ -909,7 +909,7 @@ references:
     relevance: "Governance framework architecture"
   
   - title: "core-rules.yaml"
-    path: "cortex-brain/tier0/governance/"
+    path: "cortex_brain/tier0/governance/"
     relevance: "TIER-0 SKULL rules definition"
   
   - title: "conversation_protocol.py"

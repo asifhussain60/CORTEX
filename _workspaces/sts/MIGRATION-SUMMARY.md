@@ -199,7 +199,7 @@ These files exist in the CORTEX-4.0 branch and can be reference/migrated later:
 
 ### Original Planning Documents
 ```
-cortex-brain/documents/planning/STS-REGEN/
+cortex_brain/documents/planning/STS-REGEN/
 ├── 00-master-plan.md          (Original master plan - 663 lines)
 ├── README.md                  (Original STS README)
 ├── tracking/progress-tracker.json
@@ -208,7 +208,7 @@ cortex-brain/documents/planning/STS-REGEN/
 
 ### Phase Completion Reports
 ```
-cortex-brain/documents/archive/
+cortex_brain/documents/archive/
 ├── sts-phase1-complete-20251229.md         (Emoji → FontAwesome)
 ├── sts-phase2-complete-20251229.md         (Icon updates)
 ├── sts-phase3-complete-20251229.md         (CSS refinement)
@@ -217,7 +217,7 @@ cortex-brain/documents/archive/
 
 ### Architecture Diagrams
 ```
-cortex-brain/documents/diagrams/sts-capabilities/
+cortex_brain/documents/diagrams/sts-capabilities/
 ├── sts-3.1-deployment.mmd
 ├── sts-3.2-multi-workspace.mmd
 ├── sts-3.3-upgrade.mmd

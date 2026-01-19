@@ -65,7 +65,7 @@ PHASE-15 → PHASE-16 → PHASE-17 → PHASE-18 → PHASE-19 → PHASE-20
 ### Pre-Implementation Checklist
 - [ ] Git checkpoint created: `git commit -m "checkpoint: before PHASE-07"`
 - [ ] Phase specs loaded: `.github/roadmap/phases/phase-07-intent-router.yaml`
-- [ ] Governance rules reviewed: `cortex-brain/tier0/governance/core-rules.yaml`
+- [ ] Governance rules reviewed: `cortex_brain/tier0/governance/core-rules.yaml`
 - [ ] Display Phase Initiation Summary (MANDATORY)
 
 ---
@@ -325,13 +325,13 @@ git commit -m "checkpoint: before PHASE-07"
 cat .github/roadmap/phases/phase-07-intent-router.yaml
 
 # 3. Load governance rules
-cat cortex-brain/tier0/governance/core-rules.yaml
+cat cortex_brain/tier0/governance/core-rules.yaml
 
 # 4. Begin implementation (AC-PHX-007-01)
 # (TDD mode: RED → GREEN → REFACTOR)
 
 # 5. Verify audit trail
-sqlite3 cortex-brain/state/governance.db "SELECT COUNT(*) FROM audit_log WHERE ac_id LIKE 'AC-PHX-007-%'"
+sqlite3 cortex_brain/state/governance.db "SELECT COUNT(*) FROM audit_log WHERE ac_id LIKE 'AC-PHX-007-%'"
 ```
 
 ### For Later Phases
@@ -347,7 +347,7 @@ sqlite3 cortex-brain/state/governance.db "SELECT COUNT(*) FROM audit_log WHERE a
 
 - **Master Roadmap:** `.github/roadmap/cortex-master.yaml`
 - **Phase Specs:** `.github/roadmap/phases/phase-*.yaml`
-- **Governance:** `cortex-brain/tier0/governance/core-rules.yaml`
+- **Governance:** `cortex_brain/tier0/governance/core-rules.yaml`
 - **Builder Prompt:** `.github/prompts/cortex-builder.prompt.md`
 - **v1 Reference:** `.github/roadmap/_archives/cortex-master-v1.yaml`
 - **Status Reports:** `.github/roadmap/reports/`

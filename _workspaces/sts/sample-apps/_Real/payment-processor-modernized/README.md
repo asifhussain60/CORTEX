@@ -10,7 +10,7 @@
 
 Modernization of PaymentProcessor (Payment Accounts) Transaction Invoices services from legacy WCF to ASP.NET Core 8 REST API with GDPR/ISO27001 compliance.
 
-**Migration Plan:** [PaymentProcessor Migration Plan v2.1](../../../../CORTEX/cortex-brain/documents/planning/ra-migration-plan-v2-changes.md)
+**Migration Plan:** [PaymentProcessor Migration Plan v2.1](../../../../CORTEX/cortex_brain/documents/planning/ra-migration-plan-v2-changes.md)
 
 ---
 
@@ -228,7 +228,7 @@ TOTAL: 38 tests passed (100% pass rate)
 # Run validation report generator (manual trigger)
 dotnet run --project src/PaymentProcessor.TransactionInvoices.API -- validate-schema
 
-# Output: cortex-brain/documents/reports/schema-validation-report.md
+# Output: cortex_brain/documents/reports/schema-validation-report.md
 ```
 
 **Report Includes:**
@@ -597,7 +597,7 @@ cd deploy/azure
 
 ## 📚 References
 
-- [PaymentProcessor Migration Plan v2.1](../../../../CORTEX/cortex-brain/documents/planning/ra-migration-plan-v2-changes.md)
+- [PaymentProcessor Migration Plan v2.1](../../../../CORTEX/cortex_brain/documents/planning/ra-migration-plan-v2-changes.md)
 - [Phase 9 Production Deployment Guide](docs/phase-9-production-deployment-guide.md)
 - [Kusto Query Reference](deploy/azure/kusto-queries.md)
 - [Phase 7a Automated Testing](docs/phase-7a-automated-testing-completion-report.md)

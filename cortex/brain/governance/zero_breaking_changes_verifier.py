@@ -46,9 +46,9 @@ class ZeroBreakingChangesVerifier:
         Verify that no existing CORTEX files were modified.
         
         Business domain files added:
-        - cortex-brain/tier3/domain-registry.yaml (NEW)
+        - cortex_brain/tier3/domain-registry.yaml (NEW)
         - src/observability/dashboard_extensibility.py (NEW)
-        - cortex-brain/tier3/README-DOMAIN-INTEGRATION.md (NEW)
+        - cortex_brain/tier3/README-DOMAIN-INTEGRATION.md (NEW)
         
         Expected modified (tracking only):
         - _workspaces/roadmap/phases/phase-13.yaml (METADATA ONLY)
@@ -58,9 +58,9 @@ class ZeroBreakingChangesVerifier:
         try:
             # Files that SHOULD be new/untouched
             business_domain_files = [
-                "cortex-brain/tier3/domain-registry.yaml",
+                "cortex_brain/tier3/domain-registry.yaml",
                 "src/observability/dashboard_extensibility.py",
-                "cortex-brain/tier3/README-DOMAIN-INTEGRATION.md"
+                "cortex_brain/tier3/README-DOMAIN-INTEGRATION.md"
             ]
             
             # Check each file exists and is new

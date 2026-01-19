@@ -196,7 +196,7 @@ pytest tests/ -v
 
 2. **Verify audit entries generated**
    ```bash
-   sqlite3 cortex-brain/state/governance.db
+   sqlite3 cortex_brain/state/governance.db
    SELECT COUNT(*) FROM audit_log WHERE operation IN ('AC_START', 'AC_EXECUTE', 'AC_COMPLETE');
    ```
    Expected: Should see hundreds of new entries
@@ -264,7 +264,7 @@ PHASE-13-OBSERVABILITY-MATURITY:
 
 2. **Check database path**:
    ```bash
-   ls -la cortex-brain/state/governance.db
+   ls -la cortex_brain/state/governance.db
    ```
    Should exist and be writable
 
@@ -293,13 +293,13 @@ PHASE-13-OBSERVABILITY-MATURITY:
 
 1. **Check WAL mode**:
    ```bash
-   sqlite3 cortex-brain/state/governance.db "PRAGMA journal_mode;"
+   sqlite3 cortex_brain/state/governance.db "PRAGMA journal_mode;"
    ```
    Should return `wal`
 
 2. **Check permissions**:
    ```bash
-   ls -la cortex-brain/state/
+   ls -la cortex_brain/state/
    ```
    Directory should be writable
 
@@ -328,7 +328,7 @@ PHASE-13-OBSERVABILITY-MATURITY:
 
 - **CORE-027**: Audit Logging requirement
 - **CORE-026**: Phase Lock Immutability
-- **Database Schema**: `cortex-brain/state/governance.db`
+- **Database Schema**: `cortex_brain/state/governance.db`
 - **Plugin Code**: `src/testing/test_audit_logger.py`
 - **Configuration**: `pytest.ini`
 
@@ -362,7 +362,7 @@ EOF
 pytest test_framework_demo.py -v
 
 # Check database
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT operation, ac_id FROM audit_log WHERE ac_id LIKE 'AC-TEST%' OR ac_id LIKE 'AC-DEMO%' ORDER BY id DESC LIMIT 10;"
 ```
 

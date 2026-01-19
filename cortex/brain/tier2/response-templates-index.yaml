@@ -2,7 +2,7 @@
 # CORTEX TIER 2 - RESPONSE TEMPLATES INDEX
 # =============================================================================
 # Purpose: Central index of all response templates
-# Location: cortex-brain/tier2/response-templates-index.yaml
+# Location: cortex_brain/tier2/response-templates-index.yaml
 # Updated: 2026-01-16
 # =============================================================================
 
@@ -21,7 +21,7 @@ metadata:
 hierarchy:
   tier0:
     description: "Immutable headers and footers - inherited by all templates"
-    source: "cortex-brain/tier0/response-headers.yaml"
+    source: "cortex_brain/tier0/response-headers.yaml"
     components:
       - header: "CORTEX brain icon header with operation/author/phase"
       - copyright: "Copyright notice (mandatory on all responses)"
@@ -29,12 +29,12 @@ hierarchy:
   
   tier2_base:
     description: "Base templates for common response types"
-    path: "cortex-brain/tier2/base/"
+    path: "cortex_brain/tier2/base/"
     inherits: "tier0"
   
   tier2_domains:
     description: "Domain-specific templates"
-    path: "cortex-brain/tier2/domains/"
+    path: "cortex_brain/tier2/domains/"
     inherits: "tier2_base"
 
 # =============================================================================
@@ -43,7 +43,7 @@ hierarchy:
 
 base_templates:
   - id: "success-response"
-    path: "cortex-brain/tier2/base/success-response.yaml"
+    path: "cortex_brain/tier2/base/success-response.yaml"
     description: "Standard template for successful operation responses"
     use_when:
       - "Operation completed successfully"
@@ -56,7 +56,7 @@ base_templates:
       - "Next steps (optional)"
   
   - id: "error-response"
-    path: "cortex-brain/tier2/base/error-response.yaml"
+    path: "cortex_brain/tier2/base/error-response.yaml"
     description: "Standard template for error/failure responses"
     use_when:
       - "Operation failed"
@@ -70,7 +70,7 @@ base_templates:
       - "Resolution and fallback options"
   
   - id: "warning-response"
-    path: "cortex-brain/tier2/base/warning-response.yaml"
+    path: "cortex_brain/tier2/base/warning-response.yaml"
     description: "Standard template for warning/caution responses"
     use_when:
       - "Operation can proceed but with caveats"
@@ -90,10 +90,10 @@ base_templates:
 domain_templates:
   governance:
     description: "Templates for governance domain operations"
-    path: "cortex-brain/tier2/domains/governance/"
+    path: "cortex_brain/tier2/domains/governance/"
     templates:
       - id: "evaluation-result"
-        path: "cortex-brain/tier2/domains/governance/evaluation-result.yaml"
+        path: "cortex_brain/tier2/domains/governance/evaluation-result.yaml"
         description: "Governance compliance evaluation summary"
         use_when:
           - "Evaluating code against governance rules"
@@ -105,7 +105,7 @@ domain_templates:
           - "violations_table"
       
       - id: "rule-violation"
-        path: "cortex-brain/tier2/domains/governance/rule-violation.yaml"
+        path: "cortex_brain/tier2/domains/governance/rule-violation.yaml"
         description: "Detailed governance rule violation report"
         use_when:
           - "Specific rule violation detected"
@@ -117,10 +117,10 @@ domain_templates:
   
   planning:
     description: "Templates for planning domain operations"
-    path: "cortex-brain/tier2/domains/planning/"
+    path: "cortex_brain/tier2/domains/planning/"
     templates:
       - id: "recommendations"
-        path: "cortex-brain/tier2/domains/planning/recommendations.yaml"
+        path: "cortex_brain/tier2/domains/planning/recommendations.yaml"
         description: "Implementation planning recommendations"
         use_when:
           - "Planning a new phase"
@@ -132,7 +132,7 @@ domain_templates:
           - "ac_table, dependencies, risks"
       
       - id: "impact-assessment"
-        path: "cortex-brain/tier2/domains/planning/impact-assessment.yaml"
+        path: "cortex_brain/tier2/domains/planning/impact-assessment.yaml"
         description: "Change impact assessment"
         use_when:
           - "Assessing risk of changes"
@@ -145,10 +145,10 @@ domain_templates:
   
   tdd:
     description: "Templates for TDD domain operations"
-    path: "cortex-brain/tier2/domains/tdd/"
+    path: "cortex_brain/tier2/domains/tdd/"
     templates:
       - id: "test-result"
-        path: "cortex-brain/tier2/domains/tdd/test-result.yaml"
+        path: "cortex_brain/tier2/domains/tdd/test-result.yaml"
         description: "Test execution result report"
         use_when:
           - "Running tests"
@@ -160,7 +160,7 @@ domain_templates:
           - "duration, coverage_table"
       
       - id: "coverage-report"
-        path: "cortex-brain/tier2/domains/tdd/coverage-report.yaml"
+        path: "cortex_brain/tier2/domains/tdd/coverage-report.yaml"
         description: "Code coverage analysis report"
         use_when:
           - "Analyzing test coverage"

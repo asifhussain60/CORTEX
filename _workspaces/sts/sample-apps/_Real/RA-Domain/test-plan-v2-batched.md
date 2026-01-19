@@ -823,16 +823,16 @@ Select-String -Pattern "Calculate|Validate|Eligible|Rule" -Path **\*.cs
 cd C:\PROJECTS\Product.Example
 
 # Find potential null reference issues
-Select-String -Path **\*.cs -Pattern "\.\w+\(" | Select-String -NotMatch "if.*null|\?\.|\!\." | Out-File "..\..\CORTEX\cortex-brain\admin\RA-Domain\findings\potential-null-refs.txt"
+Select-String -Path **\*.cs -Pattern "\.\w+\(" | Select-String -NotMatch "if.*null|\?\.|\!\." | Out-File "..\..\CORTEX\cortex_brain\admin\RA-Domain\findings\potential-null-refs.txt"
 
 # Find async void methods (P0 issue)
-Select-String -Path **\*.cs -Pattern "async void" | Out-File "..\..\CORTEX\cortex-brain\admin\RA-Domain\findings\async-void-usage.txt"
+Select-String -Path **\*.cs -Pattern "async void" | Out-File "..\..\CORTEX\cortex_brain\admin\RA-Domain\findings\async-void-usage.txt"
 
 # Find .Result/.Wait() blocking (P1 issue)
-Select-String -Path **\*.cs -Pattern "\.Result|\.Wait\(\)" | Out-File "..\..\CORTEX\cortex-brain\admin\RA-Domain\findings\async-blocking.txt"
+Select-String -Path **\*.cs -Pattern "\.Result|\.Wait\(\)" | Out-File "..\..\CORTEX\cortex_brain\admin\RA-Domain\findings\async-blocking.txt"
 
 # Find database queries in loops (P1 N+1 issue)
-Select-String -Path **\*.cs -Pattern "foreach|for\s*\(" -Context 0,10 | Where-Object { $_.Context.PostContext -match "dbContext\.|Repository\.|\.Where\(|\.First" } | Out-File "..\..\CORTEX\cortex-brain\admin\RA-Domain\findings\potential-n-plus-1.txt"
+Select-String -Path **\*.cs -Pattern "foreach|for\s*\(" -Context 0,10 | Where-Object { $_.Context.PostContext -match "dbContext\.|Repository\.|\.Where\(|\.First" } | Out-File "..\..\CORTEX\cortex_brain\admin\RA-Domain\findings\potential-n-plus-1.txt"
 
 # Review findings and categorize by priority
 ```
@@ -948,7 +948,7 @@ Select-String -Path **\*.cs -Pattern "foreach|for\s*\(" -Context 0,10 | Where-Ob
 **Execution Command:**
 ```powershell
 # Review all previous batch outputs
-cd C:\PROJECTS\CORTEX\cortex-brain\admin\RA-Domain
+cd C:\PROJECTS\CORTEX\cortex_brain\admin\RA-Domain
 
 # Compile enhancement findings
 Get-ChildItem -Recurse -Filter *enhancement*.md | Get-Content | Out-File "findings\cortex-enhancement-compilation.txt"
@@ -1072,7 +1072,7 @@ Execute batches in order, 1-2 per day:
 **Purpose:** Make RA domain analysis accessible through CORTEX admin dashboard under new repo: `payment-accounts`
 
 ### Tasks - Repository Setup
-- [ ] Create `cortex-brain/dashboards/data/repos/payment-accounts/` folder
+- [ ] Create `cortex_brain/dashboards/data/repos/payment-accounts/` folder
 - [ ] Create `metadata.json` (repo path, collection date, CORTEX version)
 - [ ] Register repo in `repository-registry.json`
 - [ ] Add to dashboard UI navigation
@@ -1143,7 +1143,7 @@ Execute batches in order, 1-2 per day:
   - Test intelligence matrix: regulations → test scenarios
   - Annual compliance calendar: limit updates, grace periods, reporting deadlines
 
-### Expected Outputs (All in `cortex-brain/dashboards/data/repos/payment-accounts/`)
+### Expected Outputs (All in `cortex_brain/dashboards/data/repos/payment-accounts/`)
 - `metadata.json` - Repo registration
 - `overview.json` - Dashboard overview (health score, metrics, critical issues)
 - `business-domain.json` - Healthcare domain model (plan types, workflows, glossary)

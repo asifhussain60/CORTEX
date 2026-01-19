@@ -226,10 +226,10 @@ cortex-governance query CORE-017
 cortex-governance validate src/ --strict
 
 # Check audit trail
-sqlite3 cortex-brain/state/governance.db "SELECT COUNT(*) FROM audit_log"
+sqlite3 cortex_brain/state/governance.db "SELECT COUNT(*) FROM audit_log"
 
 # Verify phase lock immutability
-sqlite3 cortex-brain/state/phase_tracker.db \
+sqlite3 cortex_brain/state/phase_tracker.db \
   "SELECT phase_id, locked FROM phase_tracker WHERE locked=true"
 
 # Run governance tests

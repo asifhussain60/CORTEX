@@ -294,7 +294,7 @@ solution_architecture:
   
   central_component:
     name: "Domain Brain"
-    location: "cortex-brain/tier3/domain-brain/"
+    location: "cortex_brain/tier3/domain-brain/"
     purpose: |
       Single repository for ALL domain knowledge (business + CORTEX).
       All 5 knowledge sources write here. All components read here.
@@ -412,7 +412,7 @@ solution_architecture:
 tier3_domain_brain_schema:
   
   master_domain_registry:
-    file: "cortex-brain/tier3/domain-brain/domains/domain-registry.yaml"
+    file: "cortex_brain/tier3/domain-brain/domains/domain-registry.yaml"
     purpose: "Master index of all domains (business + CORTEX)"
     
     structure: |
@@ -484,7 +484,7 @@ tier3_domain_brain_schema:
                 • Revenue at risk if customers cannot login
   
   audit_trail_format:
-    file: "cortex-brain/tier3/domain-brain/audit-trail/domain-updates.log"
+    file: "cortex_brain/tier3/domain-brain/audit-trail/domain-updates.log"
     purpose: "Immutable audit trail (SHA-256 hash chain)"
     
     format: |
@@ -501,7 +501,7 @@ tier3_domain_brain_schema:
       • Rollback: revert to any previous state via git checkpoint
   
   consistency_validation:
-    file: "cortex-brain/tier3/domain-brain/api/consistency_validator.py"
+    file: "cortex_brain/tier3/domain-brain/api/consistency_validator.py"
     purpose: "Enforce schema + detect conflicts before any write"
     
     checks: |
@@ -1372,7 +1372,7 @@ next_steps:
     owner: "Implementation Team"
     deadline: "Jan 20, 2026"
     startup_tasks:
-      - "Create cortex-brain/tier3/domain-brain/ directory"
+      - "Create cortex_brain/tier3/domain-brain/ directory"
       - "Write RED tests for DomainBrainAPI"
       - "Design domain-schema.json"
       - "Implement consistency validator"
@@ -1536,8 +1536,8 @@ document:
     - "governance"
   
   related_documents:
-    - "cortex-brain/tier3/domain-registry.yaml"
-    - "cortex-brain/tier0/governance/core-rules.yaml"
+    - "cortex_brain/tier3/domain-registry.yaml"
+    - "cortex_brain/tier0/governance/core-rules.yaml"
     - "docs/phases/phase-13.yaml"
     - ".github/roadmap/cortex-master.yaml"
   

@@ -369,7 +369,7 @@ phases:  # CANONICAL SOURCE OF TRUTH
 ✅ Regression prevention  
 
 ### Governance as Code
-✅ Rules defined in cortex-brain/tier0  
+✅ Rules defined in cortex_brain/tier0  
 ✅ Enforced by validator  
 ✅ Checked by pre-commit hook  
 ✅ Maintained in audit trail  

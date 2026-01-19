@@ -210,7 +210,7 @@ TOTAL: 122 tracked (120 unique AC concepts)
 
 ### Structure Verification
 ```
-Database: cortex-brain/state/governance.db
+Database: cortex_brain/state/governance.db
 Status: ✅ Verified & Intact
 Total Entries: 2,877
 Unique ACs: 120
@@ -419,7 +419,7 @@ The CORTEX governance framework is now complete and ready for:
 cd /Users/asifhussain/PROJECTS/CORTEX
 
 # Check database final state
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT COUNT(*) FROM audit_log; SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation='AC_COMPLETE';"
 # Should show: 2877, 120
 

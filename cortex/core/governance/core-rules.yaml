@@ -99,7 +99,7 @@ rules:
     description: |
       NEVER use hardcoded absolute paths. Use src.core.path_resolver.
       WRONG: /Users/asifhussain/PROJECTS/CORTEX
-      RIGHT: get_project_root() / "cortex-brain"
+      RIGHT: get_project_root() / "cortex_brain"
     validation:
       - No /Users/... paths
       - No C:\Users\... paths
@@ -306,16 +306,16 @@ rules:
       - "Never write code directly"
 
   # --------------------------------------------------------------------------
-  # CORE-020: No Markdown in cortex-brain
+  # CORE-020: No Markdown in cortex_brain
   # --------------------------------------------------------------------------
   - rule_id: CORE-020
     category: response_formatting
     severity: blocked
     name: No Markdown in Brain
     description: |
-      cortex-brain/ MUST be YAML/JSON only. No .md files.
+      cortex_brain/ MUST be YAML/JSON only. No .md files.
     validation:
-      - cortex-brain/**/*.md blocked
+      - cortex_brain/**/*.md blocked
       - Use YAML for all configs
       - Exception: None in brain
 
@@ -620,7 +620,7 @@ rules:
       No exceptions. No variations. This is immutable.
     
     header_configuration:
-      source: "cortex-brain/tier0/response-headers.yaml"
+      source: "cortex_brain/tier0/response-headers.yaml"
       precedence: "Load at agent startup, not overridable"
       validation: "All responses validated before return"
     
@@ -715,4 +715,4 @@ enforcement:
     highest: "CORE-030 (Response headers)"
     high: "CORE-005 (Path portability), CORE-011 (Type hints), CORE-012 (Docstrings)"
     medium: "CORE-028 (File naming), CORE-016 (Code formatting)"
-    loading_sequence: "See cortex-brain/tier0/governance-loading-sequence.yaml"
+    loading_sequence: "See cortex_brain/tier0/governance-loading-sequence.yaml"

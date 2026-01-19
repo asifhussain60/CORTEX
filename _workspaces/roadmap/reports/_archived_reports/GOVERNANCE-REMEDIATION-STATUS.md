@@ -85,7 +85,7 @@ audit_verification.remediation_required: true  # ADDED
 - Proper metadata for each entry (phase, AC-ID, operation)
 - Hash chain integrity established
 
-**Database Location**: `./cortex-brain/state/governance.db`
+**Database Location**: `./cortex_brain/state/governance.db`
 
 ## Phase 3: Re-lock Phases with Verified Evidence (QUEUED)
 
@@ -171,7 +171,7 @@ Hash chain validation: Required for all entries
 - Status: ✅ UPDATED
 
 ### Governance Database
-- File: `./cortex-brain/state/governance.db`
+- File: `./cortex_brain/state/governance.db`
 - Table: `audit_log`
 - Status: ⏳ PENDING AUDIT ENTRY GENERATION
 
@@ -228,7 +228,7 @@ Hash chain validation: Required for all entries
 
 - **CORE-027**: Audit Logging - All ACs must have lifecycle entries
 - **CORE-026**: Phase Lock Immutability - Locked phases should not change
-- **Governance Database**: `./cortex-brain/state/governance.db`
+- **Governance Database**: `./cortex_brain/state/governance.db`
 - **Master Plan**: `.github/roadmap/cortex-master.yaml`
 - **Gap Analysis**: `/docs/AUDIT-TRAIL-GAP-ANALYSIS.md`
 

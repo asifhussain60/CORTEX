@@ -12,8 +12,8 @@ You are the **CORTEX Reviewer**, a specialized agent for conducting systematic, 
 - **SSOT (Single Source of Truth):** `_workspaces/roadmap/cortex-master.yaml` (v2.0 - Continuation)
 - **Active Phases:** `_workspaces/roadmap/phases/phase-XX.yaml` (13 phases: phase-07 through phase-20)
 - **v1 Baseline Reference:** `_workspaces/roadmap/_archives/cortex-master-v1.yaml` (258+ ACs archived)
-- **Governance Rules:** `cortex-brain/tier0/governance/` (all v1 rules continue)
-- **Audit Database:** `cortex-brain/state/governance.db` (audit trail continues from v1)
+- **Governance Rules:** `cortex_brain/tier0/governance/` (all v1 rules continue)
+- **Audit Database:** `cortex_brain/state/governance.db` (audit trail continues from v1)
 
 ✅ **What This Means for Reviews:**
 - When checking phase status → Query `_workspaces/roadmap/cortex-master.yaml` phase_tracker (not old v1 file)
@@ -178,10 +178,10 @@ You are the **CORTEX Reviewer**, a specialized agent for conducting systematic, 
 
 ```bash
 # STEP 1: Backup existing audit logs (preserve evidence)
-cp cortex-brain/state/governance.db cortex-brain/state/governance.db.backup-$(date +%Y%m%d-%H%M%S)
+cp cortex_brain/state/governance.db cortex_brain/state/governance.db.backup-$(date +%Y%m%d-%H%M%S)
 
 # STEP 2: Delete ALL audit logs (remove historical artifacts)
-sqlite3 cortex-brain/state/governance.db "DELETE FROM audit_log; VACUUM;"
+sqlite3 cortex_brain/state/governance.db "DELETE FROM audit_log; VACUUM;"
 
 # STEP 3: Regenerate audit logs with fresh test execution
 python -m pytest tests/ -m "ac" --ignore=tests/integration/test_audit_trail_integrity.py --tb=no -q
@@ -190,7 +190,7 @@ python -m pytest tests/ -m "ac" --ignore=tests/integration/test_audit_trail_inte
 python -m pytest tests/integration/test_audit_trail_integrity.py::TestAuditTrailIntegrity::test_hash_chain_integrity -v
 
 # STEP 5: Document baseline metrics
-sqlite3 cortex-brain/state/governance.db << 'EOF'
+sqlite3 cortex_brain/state/governance.db << 'EOF'
 .mode json
 SELECT 
   COUNT(*) as total_entries,
@@ -206,7 +206,7 @@ EOF
 # STEP 6: Verify data freshness
 python -c "
 import sqlite3, datetime, sys
-db = sqlite3.connect('cortex-brain/state/governance.db')
+db = sqlite3.connect('cortex_brain/state/governance.db')
 c = db.cursor()
 c.execute('SELECT MAX(timestamp) FROM audit_log')
 last = c.fetchone()[0]
@@ -350,8 +350,8 @@ review_assumptions:
     why_it_matters: "Compliance review must enforce same SKULL rules (25 total)"
     how_to_verify: |
       # VERIFY: Governance rules files exist and unchanged
-      ls -la cortex-brain/tier0/governance/core-rules.yaml
-      grep -c "^  CORE-" cortex-brain/tier0/governance/core-rules.yaml  # Should be 25+
+      ls -la cortex_brain/tier0/governance/core-rules.yaml
+      grep -c "^  CORE-" cortex_brain/tier0/governance/core-rules.yaml  # Should be 25+
       
       # VERIFY: cortex-master.yaml v2.0 references governance rules
       grep -i "governance\|skull\|core-" _workspaces/roadmap/cortex-master.yaml | head -5
@@ -364,14 +364,14 @@ review_assumptions:
     why_it_matters: "Hash chain integrity depends on continuous audit trail"
     how_to_verify: |
       # VERIFY: Database file exists
-      ls -lah cortex-brain/state/governance.db
-      sqlite3 cortex-brain/state/governance.db ".tables"
+      ls -lah cortex_brain/state/governance.db
+      sqlite3 cortex_brain/state/governance.db ".tables"
       
       # VERIFY: Audit entries exist (should have 2000+)
-      sqlite3 cortex-brain/state/governance.db "SELECT COUNT(*) FROM audit_log"
+      sqlite3 cortex_brain/state/governance.db "SELECT COUNT(*) FROM audit_log"
       
       # VERIFY: Entries span from v1 to current (timestamp range)
-      sqlite3 cortex-brain/state/governance.db \
+      sqlite3 cortex_brain/state/governance.db \
         "SELECT MIN(timestamp), MAX(timestamp) FROM audit_log"
     actual_result: "[FILL AFTER RUNNING]"
     valid_yes_no: "[YES/NO]"
@@ -823,12 +823,12 @@ finding:
   traceability:
     related_acs: ["AC-XXX-XX"]  # From cortex-master.yaml v2.0 or _archives/v1
     related_phases: ["PHASE-XX"]  # From _workspaces/roadmap/phases/phase-XX.yaml
-    related_rules: ["CORE-XXX"]  # From cortex-brain/tier0/governance/core-rules.yaml
+    related_rules: ["CORE-XXX"]  # From cortex_brain/tier0/governance/core-rules.yaml
     reference_files:
       - "file: _workspaces/roadmap/cortex-master.yaml (phase_tracker status)"
       - "file: _workspaces/roadmap/phases/phase-XX.yaml (AC specifications)"
       - "file: _workspaces/roadmap/_archives/cortex-master-v1.yaml (v1 baseline reference)"
-      - "file: cortex-brain/tier0/governance/core-rules.yaml (governance rules)"
+      - "file: cortex_brain/tier0/governance/core-rules.yaml (governance rules)"
   
   # TIMING DOCUMENTATION (NEW - for verification queries)
   verification_timing:

@@ -16,8 +16,8 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, Any, Optional
 
-# Add cortex-brain to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'cortex-brain'))
+# Add cortex_brain to path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'cortex_brain'))
 
 try:
     from tier2.hallucination_prevention.boundary_rules import (
@@ -30,7 +30,7 @@ try:
 except ModuleNotFoundError:
     # Alternative import path for development
     import os
-    cortex_brain_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../cortex-brain'))
+    cortex_brain_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../cortex_brain'))
     sys.path.insert(0, cortex_brain_path)
     from tier2.hallucination_prevention.boundary_rules import (
         BoundaryRule,
@@ -314,7 +314,7 @@ class TestGovernanceBypassPrevention:
         """Test that authorized API operations are allowed."""
         violation = enforcer.check_governance_bypass(
             operation_type='API_CALL',
-            target='cortex-brain/update_phase',
+            target='cortex_brain/update_phase',
             actor='user@example.com',
             bypass_method=None,
         )

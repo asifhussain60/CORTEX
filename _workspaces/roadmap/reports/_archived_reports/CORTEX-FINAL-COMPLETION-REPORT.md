@@ -333,7 +333,7 @@ CORTEX 7.0 implementation has been **FULLY COMPLETED** as of January 17, 2026, 0
 
 - **Architecture Guide:** `.github/roadmap/docs/architecture.md`
 - **API Documentation:** `.github/roadmap/docs/api-reference.md`
-- **Governance Rules:** `cortex-brain/tier0/governance/core-rules.yaml`
+- **Governance Rules:** `cortex_brain/tier0/governance/core-rules.yaml`
 - **Deployment Procedures:** `.github/roadmap/deployment/`
 - **Issue Remediation:** `.github/roadmap/reports/ISSUE-REMEDIATION-VERIFICATION.md`
 - **Audit Trail Report:** `.github/roadmap/reports/AUDIT-TRAIL-REMEDIATION-17-ACS.md`

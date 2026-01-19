@@ -41,7 +41,7 @@
 **Before AC-FIX-008-01**:
 ```python
 # Tests hardcoded production database path
-db_path = Path(__file__).parent.parent.parent / "cortex-brain" / "state" / "governance.db"
+db_path = Path(__file__).parent.parent.parent / "cortex_brain" / "state" / "governance.db"
 self.transaction_manager = DatabaseTransactionManager(str(db_path))
 
 # Result: 81 tests failed with "unable to open database file"
@@ -52,7 +52,7 @@ self.transaction_manager = DatabaseTransactionManager(str(db_path))
 # ConversationProtocol accepts optional db_path
 def __init__(self, orchestrator, db_path=None):
     if db_path is None:
-        db_path = str(Path(...) / "cortex-brain" / "state" / "governance.db")
+        db_path = str(Path(...) / "cortex_brain" / "state" / "governance.db")
     self.transaction_manager = DatabaseTransactionManager(db_path)
 
 # pytest autouse fixture patches all instances
@@ -116,7 +116,7 @@ $ pytest tests/unit/core/orchestrator/ --tb=line -q
 
 ### 2. Audit Trail
 ```sql
-sqlite3 cortex-brain/state/governance.db "SELECT * FROM audit_log WHERE ac_id = 'AC-FIX-008-01'"
+sqlite3 cortex_brain/state/governance.db "SELECT * FROM audit_log WHERE ac_id = 'AC-FIX-008-01'"
 -- (audit entries generated during test runs with isolated databases)
 ```
 

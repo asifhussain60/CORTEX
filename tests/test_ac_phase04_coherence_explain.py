@@ -19,7 +19,7 @@ import pytest
 import sys
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).parent.parent / "cortex-brain"))
+sys.path.insert(0, str(Path(__file__).parent.parent / "cortex_brain"))
 
 from tier2.coherence import (
     CoherenceType,

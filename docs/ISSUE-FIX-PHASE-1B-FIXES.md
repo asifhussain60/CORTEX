@@ -15,7 +15,7 @@ Details
 
 **Problem:**
 TestAuditRemediationProgress fixture was looking for database at wrong path:
-- Old path: cortex-brain/state/governance.db (doesn't exist)
+- Old path: cortex_brain/state/governance.db (doesn't exist)
 - Correct path: cortex/core/state/governance.db
 
 **Solution:**

@@ -132,7 +132,7 @@ architecture:
     tier_0:
       name: "Governance"
       purpose: "Immutable rules that protect system integrity"
-      location: "cortex-brain/tier0/"
+      location: "cortex_brain/tier0/"
       components:
         - core-rules.yaml
         - schemas/
@@ -140,7 +140,7 @@ architecture:
     tier_1:
       name: "Acceptance Criteria"
       purpose: "Testable requirements and tracking"
-      location: "cortex-brain/tier1/"
+      location: "cortex_brain/tier1/"
       components:
         - acceptance-criteria/
         - governance/
@@ -149,14 +149,14 @@ architecture:
     tier_2:
       name: "Response Templates"
       purpose: "Standardized output formats"
-      location: "cortex-brain/tier2/"
+      location: "cortex_brain/tier2/"
       components:
         - response-templates/
       
     tier_3:
       name: "Knowledge Library"
       purpose: "Domain expertise and patterns"
-      location: "cortex-brain/tier3/"
+      location: "cortex_brain/tier3/"
 
   orchestrators:
     description: "Autonomous execution units for specific domains"
@@ -222,7 +222,7 @@ current_state:
     roadmap: ".github/roadmap/"
     prompts: ".github/prompts/"
     agents: ".github/agents/"
-    brain: "cortex-brain/"
+    brain: "cortex_brain/"
     source: "src/"
     tests: "tests/"
     

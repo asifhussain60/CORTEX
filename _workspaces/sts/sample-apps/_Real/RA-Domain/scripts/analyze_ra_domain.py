@@ -237,7 +237,7 @@ def find_business_terms(code_text):
 
 def main():
     repo_path = Path('C:/PROJECTS/Product.Example')
-    output_path = Path('C:/PROJECTS/CORTEX/cortex-brain/admin/RA-Domain/ast-outputs')
+    output_path = Path('C:/PROJECTS/CORTEX/cortex_brain/admin/RA-Domain/ast-outputs')
     output_path.mkdir(parents=True, exist_ok=True)
     
     results = {

@@ -147,8 +147,8 @@ class CleanerRegistry:
 
         Configuration Resolution Order:
         1. Provided config parameter (highest priority)
-        2. Per-cleaner config: cortex-brain/tier1/orchestrators/cleaners/<domain>/config.yaml
-        3. Global config: cortex-brain/vacuum/config.yaml
+        2. Per-cleaner config: cortex_brain/tier1/orchestrators/cleaners/<domain>/config.yaml
+        3. Global config: cortex_brain/vacuum/config.yaml
         4. Empty dict (fallback)
 
         Args:
@@ -215,8 +215,8 @@ class CleanerRegistry:
         """Load configuration for cleaner.
 
         Resolution order:
-        1. Per-cleaner config: cortex-brain/tier1/orchestrators/cleaners/<domain>/config.yaml
-        2. Global config: cortex-brain/vacuum/config.yaml
+        1. Per-cleaner config: cortex_brain/tier1/orchestrators/cleaners/<domain>/config.yaml
+        2. Global config: cortex_brain/vacuum/config.yaml
         3. Empty dict (fallback)
 
         Args:

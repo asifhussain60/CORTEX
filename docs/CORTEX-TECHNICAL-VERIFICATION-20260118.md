@@ -99,7 +99,7 @@ tests/unit/test_progress_tracker.py
 
 ```
 Pre-PHASE-02 Structure:
-  ├── cortex-brain/
+  ├── cortex_brain/
   │   ├── tier0/    (27 files)
   │   ├── tier1/    (15 files)
   │   ├── tier2/    (18 files)
@@ -151,7 +151,7 @@ Expected by Phase End: 82/82 ✅
 
 #### ✅ Dependency Graph Simplification
 **Graph Complexity**:
-- Pre-PHASE-02: 47 direct imports of src/ + cortex-brain/
+- Pre-PHASE-02: 47 direct imports of src/ + cortex_brain/
 - Post-PHASE-02: Single cortex/ namespace
 - **Simplification**: 100% reduction in path ambiguity
 

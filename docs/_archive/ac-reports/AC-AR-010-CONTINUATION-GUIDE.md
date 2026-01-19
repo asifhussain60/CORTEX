@@ -26,7 +26,7 @@ PHASE-02-CODEBASE-COHERENCE:
 ## Option 1: Continue with AC-AR-010-02 (Recommended)
 
 ### What It Entails
-Implement the **automated migration script** that will move 170+ files from dual structure (cortex-brain/ + src/) to unified cortex/ structure.
+Implement the **automated migration script** that will move 170+ files from dual structure (cortex_brain/ + src/) to unified cortex/ structure.
 
 ### Specific Tasks
 
@@ -158,8 +158,8 @@ If you choose Option 1, here's what to implement:
 
 class MigrationMapping:
     """Define where each file/folder should move"""
-    # cortex-brain/tier0/* → cortex/core/ + cortex/brain/tier0/
-    # cortex-brain/tier1/* → cortex/brain/tier1/
+    # cortex_brain/tier0/* → cortex/core/ + cortex/brain/tier0/
+    # cortex_brain/tier1/* → cortex/brain/tier1/
     # ... etc
     
 class MigrationValidator:

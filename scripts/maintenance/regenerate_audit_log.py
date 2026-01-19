@@ -14,7 +14,7 @@ import hashlib
 
 def regenerate_audit_log():
     """Create fresh audit log with test data."""
-    db_path = Path(__file__).parent / "cortex-brain" / "state" / "governance.db"
+    db_path = Path(__file__).parent / "cortex_brain" / "state" / "governance.db"
     
     # Delete old database
     if db_path.exists():

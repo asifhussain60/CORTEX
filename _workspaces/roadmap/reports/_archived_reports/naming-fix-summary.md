@@ -173,7 +173,7 @@ Analysis of 19 renamed files:
 Run the following to apply the intelligent renaming:
 ```bash
 python3 scripts/run-cortex-vacuum.py execute \
-  --plan cortex-brain/vacuum/migration-plan.json \
+  --plan cortex_brain/vacuum/migration-plan.json \
   --auto-approve
 ```
 

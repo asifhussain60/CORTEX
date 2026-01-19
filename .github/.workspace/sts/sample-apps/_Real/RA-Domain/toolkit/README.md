@@ -130,7 +130,7 @@ toolkit/
 
 All analysis results saved to:
 ```
-cortex-brain/dashboards/data/repos/Product.Example/
+cortex_brain/dashboards/data/repos/Product.Example/
 ├── dashboard.json                      # Master dashboard data
 ├── ast-outputs/                        # AST scan results
 ├── test-coverage/                      # Coverage reports

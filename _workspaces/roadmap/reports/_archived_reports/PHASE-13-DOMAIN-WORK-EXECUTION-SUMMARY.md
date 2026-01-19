@@ -14,7 +14,7 @@
 **4 Domain Acceptance Criteria - ALL COMPLETE ✅**
 
 #### 1. BD-001-01: Domain Registry Schema (0.5h)
-**File:** `cortex-brain/tier3/domain-registry.yaml`  
+**File:** `cortex_brain/tier3/domain-registry.yaml`  
 **Status:** ✅ COMPLETE
 
 - Central registry for CORTEX core domains (3 domains)
@@ -38,7 +38,7 @@ Business Domain (Optional):
 ```
 
 #### 2. BD-001-02: Domain Documentation (0.5h)
-**File:** `cortex-brain/tier3/README-DOMAIN-INTEGRATION.md`  
+**File:** `cortex_brain/tier3/README-DOMAIN-INTEGRATION.md`  
 **Status:** ✅ COMPLETE
 
 Comprehensive integration guide (1,200+ lines) including:
@@ -313,9 +313,9 @@ Status:                   ✅ QUALITY VERIFIED
 **Status:** ✅ Pushed to origin/CORTEX6
 
 **Files:**
-1. ✅ cortex-brain/tier3/domain-registry.yaml (NEW)
+1. ✅ cortex_brain/tier3/domain-registry.yaml (NEW)
 2. ✅ src/observability/dashboard_extensibility.py (NEW)
-3. ✅ cortex-brain/tier3/README-DOMAIN-INTEGRATION.md (NEW)
+3. ✅ cortex_brain/tier3/README-DOMAIN-INTEGRATION.md (NEW)
 4. ✅ src/governance/zero_breaking_changes_verifier.py (NEW)
 5. ✅ docs/BD-003-01-VERIFICATION-REPORT.json (NEW)
 

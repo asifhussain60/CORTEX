@@ -15,7 +15,7 @@ metadata:
   - image-centering
   - navigation-consistency
   sync:
-    source_markdown: cortex-brain/documents/templates/glassmorphism-design-standards-v2.md
+    source_markdown: cortex_brain/documents/templates/glassmorphism-design-standards-v2.md
     sync_enabled: true
     sync_direction: bidirectional
     last_sync: '2025-12-29T10:38:56.365100Z'
@@ -26,7 +26,7 @@ metadata:
     format: markdown
     auto_generate: false
   supersedes:
-  - file: cortex-brain/documents/templates/documentation-styling-standards.md
+  - file: cortex_brain/documents/templates/documentation-styling-standards.md
     version: 1.1.0
     reason: Layout patterns, breadcrumb styling, navigation standards
 ui_ux_section:
@@ -420,13 +420,13 @@ integration:
     auto_fix: true
   brain_protection:
     skull_rule: UI_STANDARDS_ENFORCEMENT
-    file: cortex-brain/brain-protection-rules.yaml
+    file: cortex_brain/brain-protection-rules.yaml
     enforcement_phase: Pre-commit validation
 references:
   wcag_guidelines: https://www.w3.org/WAI/WCAG21/quickref/
   apple_hig_touch: https://developer.apple.com/design/human-interface-guidelines/ios/visual-design/adaptivity-and-layout/
   glassmorphism_spec: https://uxdesign.cc/glassmorphism-in-user-interfaces-1f39bb1308c9
   internal_docs:
-  - cortex-brain/documents/templates/glassmorphism-design-standards-v2.md
+  - cortex_brain/documents/templates/glassmorphism-design-standards-v2.md
   - docs/assets/css/main.css
   - docs/assets/css/sts.css

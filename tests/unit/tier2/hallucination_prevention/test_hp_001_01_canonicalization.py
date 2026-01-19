@@ -11,8 +11,8 @@ from pathlib import Path
 import sys
 from datetime import datetime
 
-# Add cortex-brain to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent.parent / "cortex-brain"))
+# Add cortex_brain to path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent.parent / "cortex_brain"))
 
 from tier2.hallucination_prevention.canonicalization_engine import (
     CanonicalIntentEngine,

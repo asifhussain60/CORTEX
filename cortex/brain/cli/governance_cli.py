@@ -22,7 +22,7 @@ from datetime import datetime
 class GovernanceQueryEngine:
     """Query engine for governance rules with sub-100ms performance."""
     
-    def __init__(self, db_path: str = "cortex-brain/state/governance.db"):
+    def __init__(self, db_path: str = "cortex_brain/state/governance.db"):
         """Initialize query engine with database connection."""
         self.db_path = db_path
         self.conn = None
@@ -159,7 +159,7 @@ class GovernanceQueryEngine:
 class GovernanceValidator:
     """Validates code/paths against governance rules."""
     
-    def __init__(self, db_path: str = "cortex-brain/state/governance.db"):
+    def __init__(self, db_path: str = "cortex_brain/state/governance.db"):
         """Initialize validator with database connection."""
         self.db_path = db_path
         self.engine = GovernanceQueryEngine(db_path)

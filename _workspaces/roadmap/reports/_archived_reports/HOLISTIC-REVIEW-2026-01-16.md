@@ -168,7 +168,7 @@ E     BD-003-01: missing AC_COMPLETE, AC_EXECUTE, AC_START
 - ✅ Hash chain support defined in code
 
 #### 3.2 Database Schema
-- ✅ **governance.db** exists (cortex-brain/state/)
+- ✅ **governance.db** exists (cortex_brain/state/)
 - ✅ **Backup exists** (governance.db.backup.2026-01-15)
 - ✅ SQLite schema has audit tables
 

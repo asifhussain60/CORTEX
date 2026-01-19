@@ -98,13 +98,13 @@ class TestFileMigration:
     """Test that files are migrated correctly."""
 
     def test_files_migrated_from_cortex_brain(self):
-        """Files should be migrated out of cortex-brain/."""
-        # After migration, cortex-brain/ should be empty or removed
-        cortex_brain = Path(__file__).parent.parent / "cortex-brain"
+        """Files should be migrated out of cortex_brain/."""
+        # After migration, cortex_brain/ should be empty or removed
+        cortex_brain = Path(__file__).parent.parent / "cortex_brain"
         if cortex_brain.exists():
             py_files = list(cortex_brain.rglob("*.py"))
             # Allow some stragglers, but most should be migrated
-            assert len(py_files) < 10, f"Too many .py files left in cortex-brain/: {len(py_files)}"
+            assert len(py_files) < 10, f"Too many .py files left in cortex_brain/: {len(py_files)}"
 
     def test_files_migrated_from_src(self):
         """Files should be migrated out of src/."""
@@ -236,12 +236,12 @@ class TestMigrationCompleteness:
             assert len(py_files) >= 250, f"Only {len(py_files)} Python files found, expected 250+"
 
     def test_no_cortex_brain_py_files(self):
-        """No .py files should remain in old cortex-brain/ location."""
-        cortex_brain = Path(__file__).parent.parent / "cortex-brain"
+        """No .py files should remain in old cortex_brain/ location."""
+        cortex_brain = Path(__file__).parent.parent / "cortex_brain"
         if cortex_brain.exists():
             # Exclude __pycache__ and .pyc files
             py_files = [f for f in cortex_brain.rglob("*.py") if '__pycache__' not in str(f)]
-            assert len(py_files) == 0, f"Found {len(py_files)} .py files still in cortex-brain/"
+            assert len(py_files) == 0, f"Found {len(py_files)} .py files still in cortex_brain/"
 
     def test_no_src_py_files(self):
         """No .py files should remain in old src/ location."""

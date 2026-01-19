@@ -565,11 +565,11 @@ mega_phase_tracker:
 # =============================================================================
 
 governance_integration:
-  tier0_rules: "cortex-brain/tier0/governance/core-rules.yaml"
-  tier1_acceptance_criteria: "cortex-brain/tier1/acceptance-criteria/"
-  tier2_response_templates: "cortex-brain/tier2/response-templates/"
-  tier3_knowledge: "cortex-brain/tier3/knowledge/"
-  audit_location: "cortex-brain/state/governance.db"
+  tier0_rules: "cortex_brain/tier0/governance/core-rules.yaml"
+  tier1_acceptance_criteria: "cortex_brain/tier1/acceptance-criteria/"
+  tier2_response_templates: "cortex_brain/tier2/response-templates/"
+  tier3_knowledge: "cortex_brain/tier3/knowledge/"
+  audit_location: "cortex_brain/state/governance.db"
   enforcement_mode: "STRICT"
 
 prompt_maintenance:
@@ -660,5 +660,5 @@ summary:
     1. All 5 mega-phases are LOCKED and VERIFIED ✓
     2. Reference original phase-XX.yaml files for detailed AC breakdown
     3. Use cortex-master.yaml phase_tracker section for individual AC details
-    4. Monitor cortex-brain/state/governance.db for ongoing governance compliance
+    4. Monitor cortex_brain/state/governance.db for ongoing governance compliance
     5. Execute deployment via launch-dashboard.py

@@ -5,7 +5,7 @@ GitHub Copilot: I'll follow the CORTEX Builder protocol to begin PHASE-08-CORE-O
 
 Read [](file:///Users/asifhussain/PROJECTS/CORTEX/.github/roadmap/cortex-master.yaml#1-1), lines 1 to 100
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier0/governance/core-rules.yaml#1-1), lines 1 to 50
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier0/governance/core-rules.yaml#1-1), lines 1 to 50
 
 Searched for files matching `**/phase-08*`, 2 matches
 

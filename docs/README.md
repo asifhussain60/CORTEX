@@ -28,7 +28,7 @@ python -m src.tools.toolkit version
 
 ```
 CORTEX/
-├── cortex-brain/          # 3-Tier Governance
+├── cortex_brain/          # 3-Tier Governance
 │   ├── tier0/             # SKULL rules (immutable)
 │   ├── tier1/             # Business rules (mutable)
 │   ├── tier2/             # Engineering standards

@@ -45,7 +45,7 @@ phase:
   # DATA SOURCES (All exist TODAY - no new infrastructure needed)
   data_sources:
     - source: "governance.db"
-      location: "cortex-brain/state/governance.db"
+      location: "cortex_brain/state/governance.db"
       provides: "Audit logs, hash chain, operation history"
       exists: true
       
@@ -55,12 +55,12 @@ phase:
       exists: true
       
     - source: "rollback-history.json"
-      location: "cortex-brain/audit-logs/rollback-history.json"
+      location: "cortex_brain/audit-logs/rollback-history.json"
       provides: "Rollback events timeline"
       exists: true
       
     - source: "Orchestrator Registry"
-      location: "cortex-brain/registry/"
+      location: "cortex_brain/registry/"
       provides: "Registered orchestrators, dependencies"
       exists: true
       
@@ -86,10 +86,10 @@ phase:
     enabled: true
     sync_strategy: "git-pull-init-db"
     read_only_sources:
-      - "cortex-brain/state/governance.db"
+      - "cortex_brain/state/governance.db"
       - ".github/roadmap/cortex-master.yaml"
-      - "cortex-brain/audit-logs/rollback-history.json"
-      - "cortex-brain/registry/"
+      - "cortex_brain/audit-logs/rollback-history.json"
+      - "cortex_brain/registry/"
       - "docs/phases/"
     write_targets:
       - "src/dashboard/"  # New directory for dashboard code
@@ -545,7 +545,7 @@ multi_machine_guide:
         command: "python scripts/init_db.py --sync-only"
       - step: 5
         action: "Verify brain structure exists"
-        command: "ls cortex-brain/state/governance.db"
+        command: "ls cortex_brain/state/governance.db"
       - step: 6
         action: "Start dashboard development"
         command: "cd src/dashboard/frontend && python -m http.server 8080"

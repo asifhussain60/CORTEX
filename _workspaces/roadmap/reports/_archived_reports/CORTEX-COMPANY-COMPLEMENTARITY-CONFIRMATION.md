@@ -87,7 +87,7 @@ STAGE 3: KNOWLEDGE INTEGRATION
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 1. Load CORTEX rules from tier0/governance/
-2. Load Company domain YAMLs from cortex-brain/
+2. Load Company domain YAMLs from cortex_brain/
 3. MERGE: Company OVERRIDES CORTEX
 4. Pass merged context to execution orchestrator
 

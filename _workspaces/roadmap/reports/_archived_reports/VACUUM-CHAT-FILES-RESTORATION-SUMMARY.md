@@ -268,7 +268,7 @@ The phase-copilot-chats files have been **successfully reorganized** as per gove
 **For Future Use**:
 - To understand what files were moved: Check commit 934f758c9 and b4b6f28e7
 - To understand routing rules: Read `cortex-vacuum.prompt.md` (File Classification Rules, lines 50-80)
-- To see the migration plan: Check `cortex-brain/vacuum/migration-plan.json` or git snapshot
+- To see the migration plan: Check `cortex_brain/vacuum/migration-plan.json` or git snapshot
 
 ---
 

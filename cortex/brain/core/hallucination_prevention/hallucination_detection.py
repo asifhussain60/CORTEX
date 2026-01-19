@@ -139,7 +139,7 @@ class HallucinationDetector:
     - Comprehensive incident logging and querying
     """
 
-    def __init__(self, db_path: str = "cortex-brain/state/governance.db"):
+    def __init__(self, db_path: str = "cortex_brain/state/governance.db"):
         """Initialize hallucination detector.
         
         Args:

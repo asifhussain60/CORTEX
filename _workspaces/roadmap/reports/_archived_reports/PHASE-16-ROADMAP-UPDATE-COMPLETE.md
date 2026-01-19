@@ -167,12 +167,12 @@ The following 5 new files will be created as part of domain integration:
 
 ### Tier 3 Files
 ```
-cortex-brain/tier3/domain-registry.yaml
+cortex_brain/tier3/domain-registry.yaml
   └─ Schema documenting CORTEX + business domains
   └─ Extensible pattern for company configuration
   └─ Size: ~200 lines
 
-cortex-brain/tier3/README-DOMAIN-INTEGRATION.md
+cortex_brain/tier3/README-DOMAIN-INTEGRATION.md
   └─ Integration guide and query patterns
   └─ Fallback behavior documentation
   └─ Compliance guarantees

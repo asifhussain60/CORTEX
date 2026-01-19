@@ -132,7 +132,7 @@ Production ready: ✅
 | Type | Location |
 |------|----------|
 | Master Plan | `cortex-master.yaml` |
-| Source | `src/`, `cortex-brain/tierX/` |
+| Source | `src/`, `cortex_brain/tierX/` |
 | Tests | `tests/` |
 | Docs | `docs/` |
 

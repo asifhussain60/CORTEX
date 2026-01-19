@@ -102,7 +102,7 @@
 - [x] AC-FIX-001-04: Test database path
   - File: `tests/integration/test_audit_trail_integrity.py`
   - Line: 39
-  - Old: `cortex-brain/state/governance.db`
+  - Old: `cortex_brain/state/governance.db`
   - New: `cortex/core/state/governance.db`
   - Status: ✅ IMPLEMENTED
 

@@ -218,8 +218,8 @@ All existing production rollout activities
 ### Summary of Changes
 ```
 NEW FILES (5):
-├─ cortex-brain/tier3/domain-registry.yaml (200 lines)
-├─ cortex-brain/tier3/README-DOMAIN-INTEGRATION.md (300 lines)
+├─ cortex_brain/tier3/domain-registry.yaml (200 lines)
+├─ cortex_brain/tier3/README-DOMAIN-INTEGRATION.md (300 lines)
 ├─ src/observability/dashboard_extensibility.py (150 lines)
 ├─ tests/observability/test_dashboard_extensibility.py (100 lines)
 └─ tests/integration/test_domain_registry.py (200 lines)

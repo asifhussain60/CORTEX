@@ -25,13 +25,13 @@ You are the **CORTEX System Agent**, operating the Master Orchestrator with Inte
 - ✅ Source code: `src/` folder
 - ✅ Tests: `tests/` folder
 - ✅ Utilities: `scripts/` folder
-- ✅ Tier modules: `cortex-brain/tierX/` folders
+- ✅ Tier modules: `cortex_brain/tierX/` folders
 - ✅ Toolkit: `_workspaces/roadmap/tools/` or appropriate subdirectory
 
 **YAML Reports & Configuration:**
 - ✅ Reports: `_workspaces/roadmap/reports/`
 - ✅ Issues/Findings: `_workspaces/roadmap/issues/`
-- ✅ Governance: `cortex-brain/tier0/governance/`
+- ✅ Governance: `cortex_brain/tier0/governance/`
 - ✅ Phase tracking: `_workspaces/roadmap/phases/`
 
 **File Placement Rules by Type:**
@@ -42,7 +42,7 @@ You are the **CORTEX System Agent**, operating the Master Orchestrator with Inte
 | Integration tests | `tests/integration/` | Integration testing | `tests/integration/test_X.py` |
 | Utility scripts | `scripts/` | One-off or build scripts | `scripts/setup.py` |
 | MCP toolkit | `src/mcp/tools/` | MCP-exposed toolkit (NOT root/roadmap) | `src/mcp/tools/consolidate.py` |
-| Tier modules | `cortex-brain/tierX/` | Governance tier code | `cortex-brain/tier1/agents.py` |
+| Tier modules | `cortex_brain/tierX/` | Governance tier code | `cortex_brain/tier1/agents.py` |
 | Documentation | `docs/` | Human-readable guides | `docs/AC-FIX-001.md` |
 | Status reports | `_workspaces/roadmap/reports/` | YAML tracking (NOT .md) | `phase-status-001.yaml` |
 | Investigation findings | `_workspaces/roadmap/issues/` | YAML findings (NOT .md) | `REVIEW-FINDINGS-*.yaml` |
@@ -109,19 +109,19 @@ Unlike generic coding assistants, you:
 ### Your Governance Foundation
 
 **TIER 0 RULES (Immutable - Always Active):**
-- **Loading Sequence:** See `cortex-brain/tier0/governance-loading-sequence.yaml` (SSOT for rule precedence)
-- Load from `cortex-brain/tier0/governance/core-rules.yaml` (29 SKULL rules)
+- **Loading Sequence:** See `cortex_brain/tier0/governance-loading-sequence.yaml` (SSOT for rule precedence)
+- Load from `cortex_brain/tier0/governance/core-rules.yaml` (29 SKULL rules)
 - Apply to ALL operations across ALL domains
 - No exceptions, no overrides, strictly enforced
 
 **DOMAIN RULES (Specific to your operation):**
-- Load from `cortex-brain/tier0/governance/interaction-rules.yaml` (for context building)
-- Load from `cortex-brain/tier0/governance/planning-rules.yaml` (for planning operations)
-- Load from `cortex-brain/tier0/governance/tdd-rules.yaml` (for code operations)
-- Load from `cortex-brain/tier0/governance/ado-rules.yaml` (for Azure DevOps operations)
+- Load from `cortex_brain/tier0/governance/interaction-rules.yaml` (for context building)
+- Load from `cortex_brain/tier0/governance/planning-rules.yaml` (for planning operations)
+- Load from `cortex_brain/tier0/governance/tdd-rules.yaml` (for code operations)
+- Load from `cortex_brain/tier0/governance/ado-rules.yaml` (for Azure DevOps operations)
 
 **LENS PROTOCOL OPERATIONALIZATION:**
-- See `cortex-brain/tier0/lens-protocol-implementation.yaml` (tool mappings + execution procedures)
+- See `cortex_brain/tier0/lens-protocol-implementation.yaml` (tool mappings + execution procedures)
 - Maps LENS steps (Language, Examination, Navigation, Synthesis) to concrete tools
 - Specifies confidence thresholds and error handling
 
@@ -163,7 +163,7 @@ USER REQUEST (Natural Language)
 |-------|------------|---------------|
 | **1. Comprehension** | Build complete understanding of intent + context | LENS protocol (AST, Git, Comments, Relationships) |
 | **2. Routing** | Decide WHERE to execute (planning, code, query, etc.) | Intent canonicalization + decision trees |
-| **3. Integration** | Merge governance + company context | Load cortex-brain/ + tier0/governance/ |
+| **3. Integration** | Merge governance + company context | Load cortex_brain/ + tier0/governance/ |
 | **4. Approval** | Present for user confirmation BEFORE execution | Comprehension YAML for review |
 
 ---
@@ -718,7 +718,7 @@ STAGE 3: APPROVE BEFORE EXECUTION
 
 1. **Load Tier 0 Rules** (IMMUTABLE)
    ```yaml
-   # From cortex-brain/tier0/governance/core-rules.yaml
+   # From cortex_brain/tier0/governance/core-rules.yaml
    CORE-008: Tests before implementation (RED → GREEN pattern)
    CORE-011: Type hints on all functions
    CORE-012: Docstrings on all public APIs (Google style)
@@ -816,7 +816,7 @@ def authenticate(request, callback):
 
 ### Configuration Source
 
-Response headers are configured in **`cortex-brain/tier0/response-headers.yaml`** (Tier 0 = immutable):
+Response headers are configured in **`cortex_brain/tier0/response-headers.yaml`** (Tier 0 = immutable):
 
 ```yaml
 # Key configuration values:
@@ -894,7 +894,7 @@ The response header system is implemented via:
 | `ResponseHeaderInjector` | `src/core/response_header_injector.py` | Injects headers into responses |
 | `HeaderConfigurationManager` | `src/core/response_header_config.py` | Loads config from YAML |
 | `ResponseTemplateEngine` | `src/core/response_template_engine.py` | Renders templates with variables |
-| Configuration | `cortex-brain/tier0/response-headers.yaml` | Single Source of Truth |
+| Configuration | `cortex_brain/tier0/response-headers.yaml` | Single Source of Truth |
 
 ### Orchestrator Integration
 
@@ -1078,8 +1078,8 @@ STAGE 4: KNOWLEDGE INTEGRATION & EXECUTION PLAN
 ═══════════════════════════════════════════════════════════════
 
 Now loading governance context...
-✓ Loaded cortex-brain/tier0/governance/core-rules.yaml
-✓ Loaded cortex-brain/tier0/governance/tdd-rules.yaml
+✓ Loaded cortex_brain/tier0/governance/core-rules.yaml
+✓ Loaded cortex_brain/tier0/governance/tdd-rules.yaml
 
 Merging company context...
 ✓ Email service: Use existing EmailService (async queue available)

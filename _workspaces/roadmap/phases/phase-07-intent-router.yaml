@@ -29,7 +29,7 @@ phase:
     - Ambiguous → Back to Interaction for clarification (DEFAULT)
     
     STAGE 3 - KNOWLEDGE INTEGRATION:
-    - Load company domain specifications from cortex-brain/
+    - Load company domain specifications from cortex_brain/
     - Load CORTEX rules from tier0/governance/
     - COMPANY OVERRIDES CORTEX (intelligent merge)
     - Pass merged context to execution orchestrator (TDD, etc.)
@@ -97,7 +97,7 @@ phase:
 #   │                          ▼                                      │
 #   │  ┌──────────────────────────────────────────────────────────┐  │
 #   │  │  STAGE 3: KNOWLEDGE INTEGRATION (Parallel)               │  │
-#   │  │  • Load company domain YAMLs from cortex-brain/          │  │
+#   │  │  • Load company domain YAMLs from cortex_brain/          │  │
 #   │  │  • Load CORTEX rules from tier0/governance/              │  │
 #   │  │  • COMPANY OVERRIDES CORTEX (intelligent merge)          │  │
 #   │  │  • TDD receives merged context                           │  │
@@ -1128,7 +1128,7 @@ acceptance_criteria:
       │  ╔═══════════════════════════════════════════════════════════╗ │
       │  ║ STAGE 3: KNOWLEDGE INTEGRATION (Parallel with Stage 2)    ║ │
       │  ║                                                           ║ │
-      │  ║   1. Load company domain YAMLs from cortex-brain/         ║ │
+      │  ║   1. Load company domain YAMLs from cortex_brain/         ║ │
       │  ║   2. Load CORTEX rules from tier0/governance/             ║ │
       │  ║   3. MERGE: Company OVERRIDES CORTEX                      ║ │
       │  ║   4. Pass merged context to target orchestrator           ║ │
@@ -1240,19 +1240,19 @@ acceptance_criteria:
   # IR-006: Company Domain Override System
   # ---------------------------------------------------------------------------
   - ac_id: "IR-006-01"
-    title: "Domain Rule Loading from cortex-brain/"
+    title: "Domain Rule Loading from cortex_brain/"
     description: |
-      Load company-specific domain rules from cortex-brain/ tiers.
+      Load company-specific domain rules from cortex_brain/ tiers.
       These rules represent company standards, conventions, and 
       business logic that may differ from CORTEX defaults.
     
     status: "NOT_STARTED"
     
     acceptance_tests:
-      - "Load domain YAMLs from cortex-brain/tier0/ (governance)"
-      - "Load domain YAMLs from cortex-brain/tier1/ (AC mappings)"
-      - "Load domain YAMLs from cortex-brain/tier2/ (standards)"
-      - "Load domain YAMLs from cortex-brain/tier3/ (advisory)"
+      - "Load domain YAMLs from cortex_brain/tier0/ (governance)"
+      - "Load domain YAMLs from cortex_brain/tier1/ (AC mappings)"
+      - "Load domain YAMLs from cortex_brain/tier2/ (standards)"
+      - "Load domain YAMLs from cortex_brain/tier3/ (advisory)"
       - "Parse and validate YAML structure"
       - "Cache loaded rules for performance"
       - "Detect and handle YAML syntax errors gracefully"
@@ -1260,7 +1260,7 @@ acceptance_criteria:
     implementation_details: |
       Domain Rule Structure:
       ```yaml
-      # cortex-brain/tier0/governance/company-rules.yaml
+      # cortex_brain/tier0/governance/company-rules.yaml
       domain_rules:
         rule_set_id: "COMPANY-RULES"
         version: "1.0"
@@ -1285,7 +1285,7 @@ acceptance_criteria:
       
       Loading Hierarchy:
       ```
-      cortex-brain/
+      cortex_brain/
       ├── tier0/governance/     # HIGHEST priority (immutable)
       │   ├── cortex-core-rules.yaml
       │   └── company-rules.yaml     # Company governance
@@ -1452,7 +1452,7 @@ acceptance_criteria:
       │  ★ MERGE HAPPENS FIRST (Before ANY comprehension)      │
       │                                                         │
       │  1. Load CORTEX rules from tier0/governance/            │
-      │  2. Load Company rules from cortex-brain/               │
+      │  2. Load Company rules from cortex_brain/               │
       │  3. Execute additive_merge_with_selective_override()    │
       │  4. MERGED_RULES available for entire request lifecycle │
       └─────────────────────────────────────────────────────────┘

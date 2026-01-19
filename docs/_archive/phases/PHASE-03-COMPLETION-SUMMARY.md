@@ -138,7 +138,7 @@ PHASE-03 (Resilience & Observability Framework) has been successfully completed 
 
 ## Resilience Module Summary
 
-**Location**: `cortex-brain/tier2/resilience/__init__.py`
+**Location**: `cortex_brain/tier2/resilience/__init__.py`
 **Total Lines**: 1,950+ (production code + documentation)
 **Components**: 23 classes + 8 dataclasses + 4 protocols + 6 enums
 

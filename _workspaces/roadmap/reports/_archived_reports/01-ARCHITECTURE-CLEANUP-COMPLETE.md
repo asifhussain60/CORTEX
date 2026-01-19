@@ -73,7 +73,7 @@ Master Status Files:
 ### Backup Files Deleted
 
 ```
-cortex-brain/state/governance.db.backup
+cortex_brain/state/governance.db.backup
 ```
 **Rationale:** Fresh database initialized per verification; backup no longer needed
 
@@ -182,7 +182,7 @@ After:
 │           ├── archive/              (historical)
 │           └── ... (129+ total)
 │
-├── cortex-brain/
+├── cortex_brain/
 │   ├── tier0/                  (core governance)
 │   ├── tier1/                  (acceptance criteria)
 │   ├── tier2/                  (response templates)
@@ -235,7 +235,7 @@ After:
 | **No duplicate reports** | ✅ | Reports/ folder removed from root |
 | **All files relocated** | ✅ | 129 files in .github/roadmap/reports/ |
 | **Docs folder clean** | ✅ | Only supporting JSON/text files remain |
-| **cortex-brain intact** | ✅ | All tier0-3 structures preserved |
+| **cortex_brain intact** | ✅ | All tier0-3 structures preserved |
 | **Governance preserved** | ✅ | All SKULL rules and governance files safe |
 | **No data loss** | ✅ | All files moved/preserved (none deleted) |
 | **Documentation current** | ✅ | INDEX.md updated with navigation |
@@ -248,7 +248,7 @@ After:
 ### 🎯 **Separation of Concerns**
 - Reports/documentation → `.github/roadmap/reports/`
 - Codebase → `src/`, `tests/`, `scripts/`
-- Configuration → `cortex-brain/` (brain structure)
+- Configuration → `cortex_brain/` (brain structure)
 - Supporting data → `docs/` (JSON, text, subdirectories)
 
 ### 📊 **Improved Navigation**

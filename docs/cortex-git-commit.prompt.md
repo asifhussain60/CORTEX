@@ -140,7 +140,7 @@ git checkout --ours <file>
 git mergetool <file>
 
 # For SQLite conflicts - always regenerate
-git checkout --theirs cortex-brain/state/governance.db
+git checkout --theirs cortex_brain/state/governance.db
 python scripts/init_db.py --sync
 ```
 
@@ -212,7 +212,7 @@ from src.core.path_resolver import get_project_root, resolve_path
 root = get_project_root()
 
 # Resolve paths relative to project
-config_path = resolve_path("cortex-brain", "tier0", "governance", "core-rules.yaml")
+config_path = resolve_path("cortex_brain", "tier0", "governance", "core-rules.yaml")
 
 # Use Path for file operations
 from pathlib import Path
@@ -222,7 +222,7 @@ relative_path = Path(__file__).parent / "data" / "config.yaml"
 **NEVER USE:**
 ```python
 # ❌ WRONG - Hardcoded absolute paths
-config_path = "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/config.yaml"
+config_path = "/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/config.yaml"
 
 # ❌ WRONG - Hardcoded home directory
 data_dir = "/home/developer/cortex/data/"
@@ -237,12 +237,12 @@ settings = "C:\\Users\\dev\\cortex\\settings.json"
 ```yaml
 # ✅ CORRECT - Relative references
 paths:
-  governance_db: "cortex-brain/state/governance.db"
-  rules: "cortex-brain/tier0/governance/core-rules.yaml"
+  governance_db: "cortex_brain/state/governance.db"
+  rules: "cortex_brain/tier0/governance/core-rules.yaml"
   
 # ❌ WRONG - Absolute paths
 paths:
-  governance_db: "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db"
+  governance_db: "/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db"
 ```
 
 ### Documentation
@@ -251,7 +251,7 @@ paths:
 ```markdown
 <!-- ✅ CORRECT - Relative links -->
 See [roadmap](/_workspaces/roadmap/cortex-master.yaml)
-Database at `cortex-brain/state/governance.db`
+Database at `cortex_brain/state/governance.db`
 
 <!-- ❌ WRONG - Absolute paths -->
 See `_workspaces/roadmap/cortex-master.yaml`
@@ -336,8 +336,8 @@ chmod +x .git/hooks/post-merge
 **Resolution:**
 ```bash
 # Accept remote version (or either - it will be regenerated)
-git checkout --theirs cortex-brain/state/governance.db
-git add cortex-brain/state/governance.db
+git checkout --theirs cortex_brain/state/governance.db
+git add cortex_brain/state/governance.db
 
 # Regenerate from YAML
 python scripts/init_db.py --sync
@@ -527,7 +527,7 @@ echo "✅ All checks passed - safe to push"
 - **Multi-Machine Strategy:** `_workspaces/roadmap/MULTI_MACHINE_STRATEGY.md`
 - **Master Roadmap:** `_workspaces/roadmap/cortex-master.yaml`
 - **Database Init:** `scripts/init_db.py --help`
-- **Governance Rules:** `cortex-brain/tier0/governance/core-rules.yaml`
+- **Governance Rules:** `cortex_brain/tier0/governance/core-rules.yaml`
 - **Builder Prompt:** `.github/prompts/cortex-builder.prompt.md`
 
 ---

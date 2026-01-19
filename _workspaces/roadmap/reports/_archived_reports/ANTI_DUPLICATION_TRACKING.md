@@ -116,7 +116,7 @@ PHASE-ENHANCEMENT-01:
 ```python
 # In __init__()
 config_manager = HeaderConfigurationManager.get_instance()
-config_manager.load_configuration('cortex-brain/tier0/response-headers.yaml')
+config_manager.load_configuration('cortex_brain/tier0/response-headers.yaml')
 self._header_config = config_manager
 
 # Usage method

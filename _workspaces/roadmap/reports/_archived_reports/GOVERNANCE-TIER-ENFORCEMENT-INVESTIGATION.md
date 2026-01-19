@@ -20,7 +20,7 @@ This investigation examined whether CORTEX governance tiers (TIER-0 immutable, T
 **Status**: WORKS - GovernanceRegistry correctly implemented
 
 **Tier Structure**:
-- **TIER-0 (SKULL Rules)**: 29 immutable core rules loaded from `cortex-brain/tier0/governance/core-rules.yaml`
+- **TIER-0 (SKULL Rules)**: 29 immutable core rules loaded from `cortex_brain/tier0/governance/core-rules.yaml`
   - Examples: CORE-001 (incremental execution), CORE-019 (TDD-master routing), CORE-027 (audit trail per turn)
   - Loaded by: `GovernanceRegistry._load_tier0_rules()`
   - Precedence: HIGHEST (0 > 1 > 2)
@@ -117,7 +117,7 @@ def _validate_governance_before_turn(self) -> Result[bool]:
 **Status**: NOT IMPLEMENTED
 
 **Database State**:
-- `governance.db` (SQLite) exists in `cortex-brain/state/`
+- `governance.db` (SQLite) exists in `cortex_brain/state/`
 - Contains `audit_log` table for audit trail
 - Has hash chain integrity mechanism (WAL mode)
 - Has AC-ID tracking capability

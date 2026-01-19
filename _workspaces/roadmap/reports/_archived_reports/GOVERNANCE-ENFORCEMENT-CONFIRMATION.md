@@ -18,7 +18,7 @@ The framework implements a complete **3-Tier Governance Model** with strict enfo
 
 ### TIER 0 Rules (Highest Precedence)
 
-All 28 immutable SKULL rules from `cortex-brain/tier0/governance/core-rules.yaml`:
+All 28 immutable SKULL rules from `cortex_brain/tier0/governance/core-rules.yaml`:
 
 | # | Rule ID | Name | Category | Severity | Status |
 |---|---------|------|----------|----------|--------|
@@ -41,7 +41,7 @@ All 28 immutable SKULL rules from `cortex-brain/tier0/governance/core-rules.yaml
 | 17 | CORE-017 | **Strict Governance Enforcement** | Security | **BLOCKED** | ✅ Enforced |
 | 18 | CORE-018 | YAML-First Design | Architecture | **BLOCKED** | ✅ Enforced |
 | 19 | CORE-019 | Route Through TDD-Master | Development Workflow | **BLOCKED** | ✅ Enforced |
-| 20 | CORE-020 | No Markdown in cortex-brain | Response Formatting | **BLOCKED** | ✅ Enforced |
+| 20 | CORE-020 | No Markdown in cortex_brain | Response Formatting | **BLOCKED** | ✅ Enforced |
 | 21 | CORE-021 | Use Orchestrator Scaffolder | Architecture | **BLOCKED** | ✅ Enforced |
 | 22 | CORE-022 | **Kebab-Case File Naming** | Architecture | **BLOCKED** | ✅ Enforced |
 | 23 | CORE-023 | Pre-Commit File Validation | Quality Gates | **BLOCKED** | ✅ Enforced |
@@ -654,7 +654,7 @@ If Any Check Fails:
 ### Global Enforcement Settings
 
 ```yaml
-# cortex-brain/tier0/governance/core-rules.yaml
+# cortex_brain/tier0/governance/core-rules.yaml
 enforcement:
   mode: strict                    # Not "warning" or "permissive"
   override_allowed: false         # No exceptions allowed

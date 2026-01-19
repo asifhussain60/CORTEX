@@ -232,7 +232,7 @@ acceptance_criteria:
       - Schema mismatch in DatabaseTransactionManager
       
       ROOT CAUSE IDENTIFIED:
-      1. ❌ Tests used production database (cortex-brain/state/governance.db)
+      1. ❌ Tests used production database (cortex_brain/state/governance.db)
       2. ❌ No test database isolation (state leakage between tests)
       3. ❌ DatabaseTransactionManager schema didn't match production
       4. ❌ ConversationProtocol didn't accept db_path parameter
@@ -309,7 +309,7 @@ acceptance_criteria:
       ============================== 24 passed in 0.70s ==============================
       
       ✅ Schema aligned:
-      $ sqlite3 cortex-brain/state/governance.db ".schema audit_log"
+      $ sqlite3 cortex_brain/state/governance.db ".schema audit_log"
       (matches DatabaseTransactionManager._create_audit_table)
       
       ✅ No more database connection errors:

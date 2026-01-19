@@ -198,7 +198,7 @@ class TestACIndexOperations:
         result = db.insert_ac(
             ac_id="AC-AR-001-01",
             phase="PHASE-01",
-            title="Tier 0 rules loaded from cortex-brain/tier0/governance/core-rules.yaml"
+            title="Tier 0 rules loaded from cortex_brain/tier0/governance/core-rules.yaml"
         )
         
         assert result.is_ok()

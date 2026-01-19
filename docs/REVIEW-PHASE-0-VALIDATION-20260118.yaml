@@ -40,7 +40,7 @@ phase_0_validation:
     status: "FAIL ❌ (but data valid)"
     description: "Hash chain is valid but TEST has wrong path"
     findings:
-      - expected_test_path: "cortex-brain/state/governance.db"
+      - expected_test_path: "cortex_brain/state/governance.db"
       - actual_database_location: "cortex/core/state/governance.db"
       - test_file: "tests/integration/test_audit_trail_integrity.py"
       - test_fixture_location: "Line 39"
@@ -78,7 +78,7 @@ investigation:
     issue: "test_hash_chain_integrity fixture points to wrong database path"
     location: "tests/integration/test_audit_trail_integrity.py:39"
     current_code: |
-      db_path = Path(__file__).parent.parent.parent / "cortex-brain" / "state" / "governance.db"
+      db_path = Path(__file__).parent.parent.parent / "cortex_brain" / "state" / "governance.db"
     actual_database_location: "cortex/core/state/governance.db"
     severity: "BLOCKING - Test cannot execute"
 
@@ -123,7 +123,7 @@ investigation:
     issue_description: "Test fixture uses wrong database path"
     fix_required: "AC-FIX-001-04"
     fix_title: "Fix test fixture path in test_audit_trail_integrity.py"
-    fix_description: "Update db_path to use cortex/core/state/governance.db instead of cortex-brain/state/governance.db"
+    fix_description: "Update db_path to use cortex/core/state/governance.db instead of cortex_brain/state/governance.db"
     fix_effort: "15 minutes"
     verification_needed: "test_hash_chain_integrity must PASS after fix"
     can_regenerate: "NO - Must fix path first, then regenerate"
@@ -132,7 +132,7 @@ investigation:
     evidence_items:
       - "SQL Query shows 795 valid entries with intact hash chain"
       - "Database exists at cortex/core/state/governance.db (verified)"
-      - "Test fixture expects cortex-brain/state/governance.db (does not exist)"
+      - "Test fixture expects cortex_brain/state/governance.db (does not exist)"
       - "Hash chain validation in code is sound (no calculation bugs)"
       - "Test failure is PATH_BUG not DATA_BUG"
     
@@ -175,7 +175,7 @@ ac_fix_001_04:
     The test fixture db_connection() in test_audit_trail_integrity.py uses an
     incorrect path for the governance database. The actual database is located at
     'cortex/core/state/governance.db' but the test expects it at
-    'cortex-brain/state/governance.db'.
+    'cortex_brain/state/governance.db'.
     
     This fix corrects the path so the test can access the database and validate
     hash chain integrity.
@@ -186,7 +186,7 @@ ac_fix_001_04:
   changes:
     - line: 39
       old_code: |
-        db_path = Path(__file__).parent.parent.parent / "cortex-brain" / "state" / "governance.db"
+        db_path = Path(__file__).parent.parent.parent / "cortex_brain" / "state" / "governance.db"
       new_code: |
         db_path = Path(__file__).parent.parent.parent / "cortex" / "core" / "state" / "governance.db"
   
@@ -221,7 +221,7 @@ ac_fixes_recommended:
 next_action: |
   Execute AC-FIX-001-04:
   1. Edit tests/integration/test_audit_trail_integrity.py line 39
-  2. Change path from "cortex-brain/state" to "cortex/core/state"
+  2. Change path from "cortex_brain/state" to "cortex/core/state"
   3. Run pytest to verify PASS
   4. Commit with message: "AC-FIX-001-04: Fix test fixture path in test_audit_trail_integrity.py"
   5. Resume PHASE 1: Agent Analysis

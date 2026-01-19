@@ -175,8 +175,8 @@ CORTEX with:
 
 ### To Create (5 files)
 ```
-cortex-brain/tier3/domain-registry.yaml
-cortex-brain/tier3/README-DOMAIN-INTEGRATION.md
+cortex_brain/tier3/domain-registry.yaml
+cortex_brain/tier3/README-DOMAIN-INTEGRATION.md
 src/observability/dashboard_extensibility.py
 tests/observability/test_dashboard_extensibility.py
 tests/integration/test_domain_registry.py

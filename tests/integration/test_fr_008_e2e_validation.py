@@ -138,9 +138,9 @@ class TestGovernanceContextAvailability:
         # Tier 3 is the knowledge library
         from pathlib import Path
         
-        tier3_path = Path("cortex-brain/tier3/")
+        tier3_path = Path("cortex_brain/tier3/")
         # Should have tier 3 structure
-        assert Path("cortex-brain").exists()
+        assert Path("cortex_brain").exists()
 
 
 class TestE2EOrchestratorIntegration:

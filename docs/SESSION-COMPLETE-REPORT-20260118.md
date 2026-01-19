@@ -18,7 +18,7 @@ Executed all 4 mandatory gates:
 ### AC-FIX-001-04: Test Path Fix ✅
 **Status:** Executed  
 **File:** `tests/integration/test_audit_trail_integrity.py:39`  
-**Change:** Database path corrected from `cortex-brain/state/` to `cortex/core/state/`
+**Change:** Database path corrected from `cortex_brain/state/` to `cortex/core/state/`
 
 ### Phase 0.5: Surgical Investigation ✅
 Systematic root cause analysis performed:

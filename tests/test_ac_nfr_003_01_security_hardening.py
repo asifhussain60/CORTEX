@@ -17,8 +17,8 @@ import pytest
 import sys
 from pathlib import Path
 
-# Add cortex-brain to path for tier2 imports
-sys.path.insert(0, str(Path(__file__).parent.parent / "cortex-brain"))
+# Add cortex_brain to path for tier2 imports
+sys.path.insert(0, str(Path(__file__).parent.parent / "cortex_brain"))
 
 from tier2.security import (
     SecurityViolation,

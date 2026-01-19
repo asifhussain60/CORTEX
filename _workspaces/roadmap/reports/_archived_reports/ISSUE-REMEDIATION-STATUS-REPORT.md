@@ -45,7 +45,7 @@ Four issue reports were generated during PHASE-17 discovery. Analysis of these r
 #### Implementation Evidence:
 - `src/core/intelligence/ast_intelligence.py` - ASTIntelligenceEngine (219 lines)
 - `src/core/orchestrator/interaction_orchestrator.py` - LENS protocol implementation
-- `cortex-brain/tier0/governance/core-rules.yaml` - 25 CORE rules defined
+- `cortex_brain/tier0/governance/core-rules.yaml` - 25 CORE rules defined
 - `src/core/governance_registry.py` - Governance enforcement (400+ lines)
 
 #### Remaining Gaps:
@@ -70,11 +70,11 @@ Four issue reports were generated during PHASE-17 discovery. Analysis of these r
 
 | Component | Implementation | Location | Tests |
 |-----------|-----------------|----------|-------|
-| Domain Brain (Tier 3) | Unified knowledge repository | `cortex-brain/tier3/` | ✅ 47 tests |
+| Domain Brain (Tier 3) | Unified knowledge repository | `cortex_brain/tier3/` | ✅ 47 tests |
 | BKIO | BusinessKnowledgeIngestionOrchestrator | `src/domain_brain/bkio_orchestrator.py` | ✅ 25 tests |
 | LENS Integration | Context Builder with Domain Brain | `src/domain_brain/lens_context_builder.py` | ✅ 28 tests |
 | Cache Layer | Read-through cache for optimization | `src/domain_brain/cache_layer.py` | ✅ 31 tests |
-| Audit Trail | Full versioning and rollback | `cortex-brain/state/governance.db` | ✅ Integrated |
+| Audit Trail | Full versioning and rollback | `cortex_brain/state/governance.db` | ✅ Integrated |
 
 #### Verification:
 - **All 12 PHASE-17 ACs passing:** 353/353 tests (100%)

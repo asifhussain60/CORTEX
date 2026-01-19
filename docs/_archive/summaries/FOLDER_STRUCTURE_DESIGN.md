@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-This document defines CORTEX's optimal nested folder structure, addressing current organizational chaos and establishing a foundation for scalable, maintainable code organization. The proposed structure consolidates dual code homes (cortex-brain/ and src/) into a unified, hierarchical organization that aligns with CORTEX's 3-tier architecture and domain-driven design principles.
+This document defines CORTEX's optimal nested folder structure, addressing current organizational chaos and establishing a foundation for scalable, maintainable code organization. The proposed structure consolidates dual code homes (cortex_brain/ and src/) into a unified, hierarchical organization that aligns with CORTEX's 3-tier architecture and domain-driven design principles.
 
 **Key Outcome**: Clean, navigable structure that reduces onboarding time by 50%, eliminates import path confusion, and supports growth to 100+ modules without degradation.
 
@@ -20,7 +20,7 @@ This document defines CORTEX's optimal nested folder structure, addressing curre
 
 **1. Dual Code Homes (CRITICAL)**
 ```
-cortex-brain/          (Primary tier-based code)
+cortex_brain/          (Primary tier-based code)
 └── tier0/, tier1/, tier2/, tier3/
 
 src/                   (Secondary domain/functional code)
@@ -30,15 +30,15 @@ src/                   (Secondary domain/functional code)
 
 **2. Inconsistent Nesting Depth**
 ```
-cortex-brain/tier2/domains/           (3 levels)
-cortex-brain/tier2/security/          (3 levels)
+cortex_brain/tier2/domains/           (3 levels)
+cortex_brain/tier2/security/          (3 levels)
 src/orchestrators/domain/planning/    (4 levels)
 src/api/                              (2 levels)
 ```
 **Issue**: No consistent mental model. Max depth unclear.
 
 **3. Mixed Organizational Principles**
-- **cortex-brain/**: Tier-first organization (tier0 → tier1 → tier2 → tier3)
+- **cortex_brain/**: Tier-first organization (tier0 → tier1 → tier2 → tier3)
 - **src/**: Domain-first organization (api, cli, orchestrators, etc.)
 - **root/**: 40+ documentation files mixed with code
 
@@ -56,7 +56,7 @@ src/api/                              (2 levels)
 **5. Test Organization Scattered**
 ```
 /tests/                    (Some tests)
-/cortex-brain/tier0/...   (Some tests co-located)
+/cortex_brain/tier0/...   (Some tests co-located)
 /src/...                  (Some tests co-located)
 ```
 **Issue**: Unclear where to put new tests. Inconsistent discovery.
@@ -265,7 +265,7 @@ cortex/
 
 ## Organization Rationale
 
-### Why Consolidate cortex-brain/ and src/?
+### Why Consolidate cortex_brain/ and src/?
 
 **Consolidated Model**:
 ```

@@ -77,7 +77,7 @@ cortex-sample-apps/
 
 ### 3. **STS Metadata & Tracking**
 ```
-cortex-brain/
+cortex_brain/
 ├── documents/archive/
 │   ├── sts-phase1-complete-20251229.md        # Glassmorphism migration
 │   ├── sts-phase2-complete-20251229.md        # Icon updates
@@ -348,7 +348,7 @@ Link showcase to knowledge base
 2. Document flaws in STS-MANIFEST.json
 3. Create category pages showing before/after
 4. Link to relevant learning materials
-5. Update tracking in `cortex-brain/documents/planning/`
+5. Update tracking in `cortex_brain/documents/planning/`
 
 ---
 
@@ -383,7 +383,7 @@ Developers using STS can:
 
 For questions about STS:
 1. Check `docs/` directory for detailed information
-2. Review `cortex-brain/documents/planning/STS-REGEN/` for implementation details
+2. Review `cortex_brain/documents/planning/STS-REGEN/` for implementation details
 3. Browse sample apps in `cortex-sample-apps/`
 4. Consult learning materials linked from category pages
 

@@ -42,7 +42,7 @@ Comprehensive holistic review conducted on CORTEX workspace. All critical YAML f
 
 **Verification:**
 ```
-✅ cortex-brain/tier3/domain-registry.yaml
+✅ cortex_brain/tier3/domain-registry.yaml
 ✅ .github/roadmap/phases/phase-13.yaml  
 ✅ .github/roadmap/cortex-master.yaml
 ```
@@ -55,8 +55,8 @@ Comprehensive holistic review conducted on CORTEX workspace. All critical YAML f
 
 | File | Size | Status | Last Update |
 |------|------|--------|-------------|
-| `cortex-brain/tier3/domain-registry.yaml` | 12.5 KB | ✅ Valid | Jan 16 |
-| `cortex-brain/tier3/README-DOMAIN-INTEGRATION.md` | 15.8 KB | ✅ Valid | Jan 16 |
+| `cortex_brain/tier3/domain-registry.yaml` | 12.5 KB | ✅ Valid | Jan 16 |
+| `cortex_brain/tier3/README-DOMAIN-INTEGRATION.md` | 15.8 KB | ✅ Valid | Jan 16 |
 | `src/observability/dashboard_extensibility.py` | 9.2 KB | ✅ Valid | Jan 16 |
 | `.github/roadmap/phases/phase-13.yaml` | 8.8 KB | ✅ Valid | Jan 16 |
 | `.github/roadmap/cortex-master.yaml` | ~2.5 MB | ✅ Valid | Jan 16 |
@@ -112,7 +112,7 @@ Comprehensive holistic review conducted on CORTEX workspace. All critical YAML f
 
 ### BD-001-01: Domain Registry Schema ✅
 
-**File:** `cortex-brain/tier3/domain-registry.yaml` (12.5 KB, 418 lines)
+**File:** `cortex_brain/tier3/domain-registry.yaml` (12.5 KB, 418 lines)
 
 **Acceptance Criteria Met:**
 - ✅ 16 CORTEX domains registered (T0=2, T1=8, T2=1, T3=5)
@@ -142,7 +142,7 @@ Tier 3 (Knowledge):
 
 ### BD-001-02: Domain Availability Documentation ✅
 
-**File:** `cortex-brain/tier3/README-DOMAIN-INTEGRATION.md` (15.8 KB, 478 lines)
+**File:** `cortex_brain/tier3/README-DOMAIN-INTEGRATION.md` (15.8 KB, 478 lines)
 
 **Acceptance Criteria Met:**
 - ✅ All 16 domains documented with descriptions

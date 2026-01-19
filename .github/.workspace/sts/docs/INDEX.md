@@ -90,9 +90,9 @@ Will include:
 
 #### Source Documents (Reference)
 These are available in CORTEX-4.0 branch for reference:
-- `cortex-brain/documents/planning/STS-REGEN/00-master-plan.md` (Original master plan)
-- `cortex-brain/documents/planning/STS-REGEN/README.md` (Original STS README)
-- `cortex-brain/documents/archive/sts-phase*.md` (Phase completion reports)
+- `cortex_brain/documents/planning/STS-REGEN/00-master-plan.md` (Original master plan)
+- `cortex_brain/documents/planning/STS-REGEN/README.md` (Original STS README)
+- `cortex_brain/documents/archive/sts-phase*.md` (Phase completion reports)
 
 ---
 
@@ -295,7 +295,7 @@ STS-CONCEPT-AND-PURPOSE.md (What & Why)
                ↓
           sample-apps/ (Real examples)
           docs/showcase/ (Generated pages)
-          cortex-brain/ (Source materials)
+          cortex_brain/ (Source materials)
 ```
 
 ---
@@ -390,7 +390,7 @@ All documents have been:
 
 4. **Monitor Progress**
    - Use STS-QUICK-REFERENCE.md checklist
-   - Update tracking in cortex-brain/
+   - Update tracking in cortex_brain/
    - Communicate status to stakeholders
 
 ---

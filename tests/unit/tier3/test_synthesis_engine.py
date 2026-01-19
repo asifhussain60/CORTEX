@@ -46,13 +46,13 @@ class TestSynthesisEngineStructure:
     
     def test_synthesis_config_file_exists(self, synthesis_engine):
         """Verify synthesis config file exists."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
         config_file = tier3_path / "synthesis-config.yaml"
         assert config_file.exists(), "Synthesis config file not found"
     
     def test_synthesis_config_contains_metadata(self, synthesis_engine):
         """Verify config contains metadata."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
         config_file = tier3_path / "synthesis-config.yaml"
         
         import yaml
@@ -64,7 +64,7 @@ class TestSynthesisEngineStructure:
     
     def test_synthesis_config_has_domain_relationships(self, synthesis_engine):
         """Verify config defines domain relationships."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
         config_file = tier3_path / "synthesis-config.yaml"
         
         import yaml
@@ -190,7 +190,7 @@ class TestSourceAttribution:
     
     def test_attribution_includes_domain_source(self, synthesis_engine):
         """Verify attribution tracks domain source."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
         config_file = tier3_path / "synthesis-config.yaml"
         
         import yaml
@@ -211,7 +211,7 @@ class TestDomainRelationships:
     
     def test_domain_relationships_include_all_domains(self, synthesis_engine):
         """Verify all 16 domains have relationship definitions."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex-brain" / "tier3" / "knowledge"
+        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
         config_file = tier3_path / "synthesis-config.yaml"
         
         import yaml

@@ -44,12 +44,12 @@ Each agent produces:
 **Total Codebase Size:**
 - Python files: ~85 files
 - Lines of code: ~15,000+ LOC
-- Key directories: cortex/, cortex_brain/, cortex-brain/tier0-2/
+- Key directories: cortex/, cortex_brain/, cortex_brain/tier0-2/
 - Test suite: ~45 test files
 - Documentation: 100+ markdown files
 
 **Analysis Boundaries:**
-- **Include:** All production code in cortex/, cortex_brain/, cortex-brain/
+- **Include:** All production code in cortex/, cortex_brain/, cortex_brain/
 - **Include:** Test infrastructure and integration tests
 - **Include:** Configuration and orchestration code
 - **Exclude:** External dependencies (analyze only usage)

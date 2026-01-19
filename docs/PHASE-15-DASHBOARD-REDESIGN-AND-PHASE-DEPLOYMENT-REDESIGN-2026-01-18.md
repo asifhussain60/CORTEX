@@ -193,7 +193,7 @@ company-repo/
     │   ├── CORTEX.prompt.md              # Master orchestrator
     │   ├── cortex-builder.prompt.md      # Implementation guide
     │   └── [other prompts]
-    ├── cortex-brain/                     # Governance engine
+    ├── cortex_brain/                     # Governance engine
     │   ├── tier0/governance/
     │   ├── state/governance.db           # Audit trail
     │   └── [core files]
@@ -207,7 +207,7 @@ company-repo/
 - CORTEX has its own `.git` folder (separate from parent)
 - Parent repo unchanged except for `CORTEX/` folder
 - All CORTEX operations read from parent repo's `src/`, `tests/`, etc.
-- Audit trail stays in `CORTEX/cortex-brain/state/governance.db`
+- Audit trail stays in `CORTEX/cortex_brain/state/governance.db`
 - MCP tools can operate on parent repo files
 
 ### Installation Flow
@@ -436,7 +436,7 @@ PHASE-DEPLOYMENT:
 **Multi-Repo Specific:**
 - No hardcoded paths (use `Path(__file__).parent`)
 - All file operations relative to working repo
-- Audit trail stored in CORTEX/cortex-brain/state/governance.db
+- Audit trail stored in CORTEX/cortex_brain/state/governance.db
 - MCP tools must operate on parent repo context
 
 ---

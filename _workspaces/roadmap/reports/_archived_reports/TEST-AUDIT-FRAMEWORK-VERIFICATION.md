@@ -40,7 +40,7 @@ The pytest test audit logging framework is **fully operational** and generating 
    - Hash Chain: SHA-256 chain integrity verified
 
 4. **Database Operations**
-   - Database: `./cortex-brain/state/governance.db`
+   - Database: `./cortex_brain/state/governance.db`
    - Total Entries After Tests: 145 (130 pre-test + 15 from tests)
    - Batch Writing: Entries written at session end (performance optimized)
    - Hash Continuity: Preserved from last pre-test entry

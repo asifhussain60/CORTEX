@@ -105,12 +105,12 @@ WS   /ws/audit                     → Real-time audit stream
 
 ### Data Sources (Read-Only)
 ```
-✓ cortex-brain/state/governance.db
+✓ cortex_brain/state/governance.db
 ✓ .github/roadmap/cortex-master.yaml
-✓ cortex-brain/audit-logs/rollback-history.json
-✓ cortex-brain/registry/
+✓ cortex_brain/audit-logs/rollback-history.json
+✓ cortex_brain/registry/
 ✓ .github/roadmap/phases/*.yaml
-✓ cortex-brain/tier0/governance/
+✓ cortex_brain/tier0/governance/
 ```
 
 ---
@@ -233,7 +233,7 @@ box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 2. git checkout CORTEX6
 3. python -m venv venv && source venv/bin/activate && pip install -r requirements.txt
 4. python scripts/init_db.py --sync-only
-5. ls cortex-brain/state/governance.db          # Verify brain structure
+5. ls cortex_brain/state/governance.db          # Verify brain structure
 6. cd src/dashboard/frontend && python -m http.server 8080
 7. Open http://localhost:8080 in browser
 ```
@@ -256,7 +256,7 @@ git push origin CORTEX6
 
 ### Required (Already Completed)
 - ✅ PHASE-06-ECOSYSTEM (brain structure exists)
-- ✅ governance.db (exists at cortex-brain/state/)
+- ✅ governance.db (exists at cortex_brain/state/)
 - ✅ cortex-master.yaml (phase tracker exists)
 
 ### Optional (Future Enhancements)

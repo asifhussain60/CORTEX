@@ -186,7 +186,7 @@ def test_governance_registry_initialization():
 **17 Failed Tests** (all unrelated to audit framework):
 
 1. **Tier2 Templates** (2 failures)
-   - Missing files: `.cortex-brain/tier2/templates/`
+   - Missing files: `.cortex_brain/tier2/templates/`
    - Not a governance/audit issue
 
 2. **VS Code Extension** (13 failures)

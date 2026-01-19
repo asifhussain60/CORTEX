@@ -24,8 +24,8 @@
 
 **☐ Review the deliverables**
 - Read: `PHASE-13-DOMAIN-WORK-EXECUTION-SUMMARY.md`
-- Review: `cortex-brain/tier3/domain-registry.yaml`
-- Check: `cortex-brain/tier3/README-DOMAIN-INTEGRATION.md`
+- Review: `cortex_brain/tier3/domain-registry.yaml`
+- Check: `cortex_brain/tier3/README-DOMAIN-INTEGRATION.md`
 
 **☐ Schedule Sprint Planning**
 - Date: January 22, 2026
@@ -59,7 +59,7 @@
 
 ### Domain Registry
 ```
-cortex-brain/tier3/domain-registry.yaml
+cortex_brain/tier3/domain-registry.yaml
 ├─ 3 core CORTEX domains (immutable)
 ├─ 1 optional business domain
 ├─ Integration points defined
@@ -78,7 +78,7 @@ src/observability/dashboard_extensibility.py
 
 ### Documentation
 ```
-cortex-brain/tier3/README-DOMAIN-INTEGRATION.md
+cortex_brain/tier3/README-DOMAIN-INTEGRATION.md
 ├─ Quick reference
 ├─ Installation steps
 ├─ 5 usage examples
@@ -152,11 +152,11 @@ docs/BD-003-01-VERIFICATION-REPORT.json
 
 ### Documentation
 - Implementation Guide: `PHASE-13-IMPLEMENTATION-KICKOFF.md`
-- Domain Guide: `cortex-brain/tier3/README-DOMAIN-INTEGRATION.md`
+- Domain Guide: `cortex_brain/tier3/README-DOMAIN-INTEGRATION.md`
 - Execution Summary: `PHASE-13-DOMAIN-WORK-EXECUTION-SUMMARY.md`
 
 ### Source Code
-- Registry: `cortex-brain/tier3/domain-registry.yaml`
+- Registry: `cortex_brain/tier3/domain-registry.yaml`
 - Module: `src/observability/dashboard_extensibility.py`
 - Verifier: `src/governance/zero_breaking_changes_verifier.py`
 

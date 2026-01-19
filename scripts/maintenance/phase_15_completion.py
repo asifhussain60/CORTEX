@@ -305,7 +305,7 @@ Data Sources (Read-Only):
 - governance.db (SQLite) - Audit logs, metrics, hash chain
 - cortex-master.yaml - Phase tracker, AC status
 - rollback-history.json - Rollback timeline
-- cortex-brain/registry/ - Orchestrator data
+- cortex_brain/registry/ - Orchestrator data
 - Phase YAMLs - Individual phase details
 
 QUALITY METRICS

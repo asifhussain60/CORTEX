@@ -7,21 +7,21 @@ Implements CORTEX following `_workspaces/roadmap/cortex-master.yaml` with **gove
 **Before implementing ANY AC-ID, load governance rules:**
 
 1. **Tier 0 Governance Rules:**
-   - Load: `cortex-brain/tier0/governance/core-rules.yaml` (28 rules)
+   - Load: `cortex_brain/tier0/governance/core-rules.yaml` (28 rules)
    - Purpose: IMMUTABLE operational boundaries
    - Enforcement: STRICT (no overrides)
 
 2. **Phase Enforcement Map:**
-   - Load: `cortex-brain/tier0/governance/phase-enforcement-map.yaml`
+   - Load: `cortex_brain/tier0/governance/phase-enforcement-map.yaml`
    - Purpose: Which rules apply to this phase
    - Example: PHASE-01 requires CORE-008 (TDD), CORE-011 (types), CORE-026 (checkpoints)
 
 3. **AC-ID Validation Checklist:**
-   - Load: `cortex-brain/tier0/governance/ac-validation-checklist.yaml`
+   - Load: `cortex_brain/tier0/governance/ac-validation-checklist.yaml`
    - Purpose: Pre-start, during, and post-completion validation
 
 **Audit Trail Required:**
-- Location: `cortex-brain/state/governance.db`
+- Location: `cortex_brain/state/governance.db`
 - Events: AC_START, AC_EXECUTE, AC_COMPLETE (minimum 3 per AC-ID)
 - Queries: Compliance reports, violation tracking, phase readiness checks
 
@@ -224,7 +224,7 @@ surgical_investigation_decision_tree:
 | Master Plan | `_workspaces/roadmap/cortex-master.yaml` |
 | Phase Specs | `docs/phases/phase-XX.yaml` |
 | Vision Files | `cortex-vision/*.yaml` |
-| Governance Rules | `cortex-brain/tier0/governance/core-rules.yaml` |
+| Governance Rules | `cortex_brain/tier0/governance/core-rules.yaml` |
 | Builder Prompt | `.github/prompts/cortex-builder.prompt.md` |
 
 ## Governance Enforcement Rules (Quick Reference)

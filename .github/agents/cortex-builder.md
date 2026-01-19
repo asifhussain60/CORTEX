@@ -5,7 +5,7 @@ Implements CORTEX from the **single, authoritative source of truth:**
 - Read `phase_tracker` section for current phase status
 - Reference `_workspaces/roadmap/phases/phase-NN.yaml` for phase details
 
-Enforce **tier0 governance rules** from `cortex-brain/tier0/governance/core-rules.yaml` (28 IMMUTABLE rules).
+Enforce **tier0 governance rules** from `cortex_brain/tier0/governance/core-rules.yaml` (28 IMMUTABLE rules).
 
 ---
 
@@ -26,7 +26,7 @@ Enforce **tier0 governance rules** from `cortex-brain/tier0/governance/core-rule
 |-----------|----------|-----------|---------|
 | **MASTER PLAN** | `_workspaces/roadmap/cortex-master.yaml` | **CANONICAL** | Contains `phase_tracker` |
 | Phase Specs (YAML) | `_workspaces/roadmap/phases/phase-NN.yaml` | Authoritative per phase | Details for PHASE-05 |
-| Implementation Code | `src/`, `cortex-brain/tierX/` | Execution | Source modules |
+| Implementation Code | `src/`, `cortex_brain/tierX/` | Execution | Source modules |
 | Test Code | `tests/` | Verification | Test suites |
 | Utilities | `scripts/` | Tools | Permanent scripts |
 | Documentation (MD) | `docs/` ONLY | Human-readable | Guides, plans |
@@ -52,22 +52,22 @@ Before outputting ANY file, verify:
 **Before implementing ANY AC-ID, load governance rules:**
 
 1. **Tier 0 Governance Rules:**
-   - Load: `cortex-brain/tier0/governance/core-rules.yaml` (28 IMMUTABLE rules)
+   - Load: `cortex_brain/tier0/governance/core-rules.yaml` (28 IMMUTABLE rules)
    - Enforcement: STRICT (no overrides, no exceptions)
    - Violation = Failed implementation
 
 2. **Phase Enforcement Map:**
-   - Load: `cortex-brain/tier0/governance/phase-enforcement-map.yaml`
+   - Load: `cortex_brain/tier0/governance/phase-enforcement-map.yaml`
    - Purpose: Which rules apply to this phase
    - Example: PHASE-01 requires CORE-008 (TDD), CORE-011 (types), CORE-026 (checkpoints)
 
 3. **AC-ID Validation Checklist:**
-   - Load: `cortex-brain/tier0/governance/ac-validation-checklist.yaml`
+   - Load: `cortex_brain/tier0/governance/ac-validation-checklist.yaml`
    - Purpose: Pre-start, during, and post-completion validation
    - MUST PASS all checks before marking complete
 
 4. **Audit Trail Recording:**
-   - Location: `cortex-brain/state/governance.db`
+   - Location: `cortex_brain/state/governance.db`
    - REQUIRED: AC_START, AC_EXECUTE, AC_COMPLETE entries
    - Hash chain integrity: Every entry includes previous_hash for tamper detection
 
@@ -201,7 +201,7 @@ All blocking rules violations → REFUSE continuation
 | Master Plan | `_workspaces/roadmap/cortex-master.yaml` |
 | Phase Specs | `_workspaces/roadmap/phases/phase-XX.yaml` |
 | Vision Files | `_workspaces/cortex-vision/*.yaml` |
-| Governance Rules | `cortex-brain/tier0/governance/core-rules.yaml` |
+| Governance Rules | `cortex_brain/tier0/governance/core-rules.yaml` |
 | Builder Prompt | `.github/prompts/cortex-builder.prompt.md` |
 
 ## Governance Enforcement Rules (Quick Reference)

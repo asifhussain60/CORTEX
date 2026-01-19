@@ -7,7 +7,7 @@
 
 ## Executive Summary
 
-PHASE-02-CODEBASE-COHERENCE has been **successfully completed autonomously**. The phase implemented a comprehensive migration from CORTEX's dual-structure architecture (cortex-brain/ + src/) to a unified, tier-based hierarchy (cortex/).
+PHASE-02-CODEBASE-COHERENCE has been **successfully completed autonomously**. The phase implemented a comprehensive migration from CORTEX's dual-structure architecture (cortex_brain/ + src/) to a unified, tier-based hierarchy (cortex/).
 
 ### Completion Stats
 
@@ -54,7 +54,7 @@ PHASE-02-CODEBASE-COHERENCE has been **successfully completed autonomously**. Th
 
 ### Execution Results
 - **104 top-level items migrated** ✅
-  - cortex-brain/tier0-3 → cortex/brain/tier0-3
+  - cortex_brain/tier0-3 → cortex/brain/tier0-3
   - src/api → cortex/api
   - src/orchestrators → cortex/orchestrators
   - src/infrastructure → cortex/infrastructure
@@ -115,7 +115,7 @@ cortex/
 ### Structural Improvements
 | Metric | Before | After | Improvement |
 |--------|--------|-------|-------------|
-| Code Homes | 2 (cortex-brain/ + src/) | 1 (cortex/) | 100% consolidation |
+| Code Homes | 2 (cortex_brain/ + src/) | 1 (cortex/) | 100% consolidation |
 | Mental Models | Multiple | Single | -100% confusion |
 | Navigation Depth | Inconsistent 2-5 levels | Consistent 4 max | 50% reduction |
 | Import Paths | Ambiguous | Clear | 100% clarity |
@@ -214,7 +214,7 @@ cortex/
 1. Manually verify all imports resolve correctly
 2. Run full integration test suite (currently skipped some)
 3. Update documentation references to old paths
-4. Archive old cortex-brain/ and src/ directories
+4. Archive old cortex_brain/ and src/ directories
 5. Update CI/CD pipelines for new structure
 
 ### Optional Improvements

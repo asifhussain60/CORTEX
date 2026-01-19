@@ -226,7 +226,7 @@ class ComplianceGate:
     def check_compliance(self):
         """Verify compliance before deployment"""
         # Connect to database
-        conn = sqlite3.connect('cortex-brain/state/governance.db')
+        conn = sqlite3.connect('cortex_brain/state/governance.db')
         cursor = conn.cursor()
         
         # Get current coverage
@@ -321,7 +321,7 @@ class ContinuousComplianceMonitor:
     
     def check_compliance_status(self):
         """Check current compliance status"""
-        conn = sqlite3.connect('cortex-brain/state/governance.db')
+        conn = sqlite3.connect('cortex_brain/state/governance.db')
         cursor = conn.cursor()
         
         cursor.execute('SELECT COUNT(*) FROM audit_log')
@@ -436,7 +436,7 @@ class GovernanceAnalytics:
     
     def analyze_coverage_patterns(self):
         """Analyze AC coverage patterns"""
-        conn = sqlite3.connect('cortex-brain/state/governance.db')
+        conn = sqlite3.connect('cortex_brain/state/governance.db')
         cursor = conn.cursor()
         
         # Analyze by domain

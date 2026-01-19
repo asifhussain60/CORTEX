@@ -23,7 +23,7 @@
 ### Problem
 ```
 Error: "unable to open database file"
-Files affected: Tests trying to access cortex-brain/state/governance.db
+Files affected: Tests trying to access cortex_brain/state/governance.db
 Cause: Working directory != project root (CORE-028 violation)
 ```
 
@@ -32,10 +32,10 @@ Cause: Working directory != project root (CORE-028 violation)
 **File 1**: `tests/unit/core/orchestrator/test_conversation_protocol.py`
 ```python
 # CURRENT (WRONG):
-db_path = Path("cortex-brain/state/governance.db")  # ← Relative to pwd, not reliable
+db_path = Path("cortex_brain/state/governance.db")  # ← Relative to pwd, not reliable
 
 # MUST BE (CORRECT):
-db_path = Path(__file__).parent.parent.parent.parent / "cortex-brain" / "state" / "governance.db"
+db_path = Path(__file__).parent.parent.parent.parent / "cortex_brain" / "state" / "governance.db"
 ```
 
 **File 2**: `src/infrastructure/database_transaction_manager.py`
@@ -77,7 +77,7 @@ cd /Users/asifhussain/PROJECTS/CORTEX && /Users/asifhussain/PROJECTS/CORTEX/.ven
 import sqlite3
 from pathlib import Path
 
-db = sqlite3.connect('cortex-brain/state/governance.db')
+db = sqlite3.connect('cortex_brain/state/governance.db')
 cursor = db.cursor()
 
 cursor.execute('''
@@ -129,7 +129,7 @@ For each incomplete AC:
 5. **Verify audit trail captures AC_COMPLETE**
    ```bash
    # After test passes, check audit log:
-   sqlite3 cortex-brain/state/governance.db << EOF
+   sqlite3 cortex_brain/state/governance.db << EOF
    SELECT operation, COUNT(*) FROM audit_log 
    WHERE ac_id='AC-XXXX-XX' 
    GROUP BY operation;
@@ -207,7 +207,7 @@ echo "1️⃣  Checking governance.db..."
 import sqlite3
 from pathlib import Path
 
-db = sqlite3.connect('cortex-brain/state/governance.db')
+db = sqlite3.connect('cortex_brain/state/governance.db')
 cursor = db.cursor()
 
 # Check audit trail

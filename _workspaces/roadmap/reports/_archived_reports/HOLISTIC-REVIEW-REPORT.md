@@ -123,7 +123,7 @@ DomainClassifier discovered 20+ orchestrators:
 #### ✅ **VERIFIED: 3-Tier Governance Model**
 
 **Tier 0 (SKULL Rules):** 28 immutable core rules
-- Location: `cortex-brain/tier0/governance/core-rules.yaml`
+- Location: `cortex_brain/tier0/governance/core-rules.yaml`
 - Status: ✅ ACTIVE
 - Enforcement: STRICT mode
 - Examples:
@@ -133,13 +133,13 @@ DomainClassifier discovered 20+ orchestrators:
   - CORE-004: Minimal Continuation
 
 **Tier 1 (Brain Rules):** Domain-specific rules
-- Location: `cortex-brain/tier1/governance/`
+- Location: `cortex_brain/tier1/governance/`
 - Status: ✅ ACTIVE
 - Count: 8 rule categories (ADO, Planning, TDD, Interaction)
 - Enforcement: Enforced via `governance_enforcer.py`
 
 **Tier 2 (Operational Rules):** Instance-specific rules
-- Location: `cortex-brain/tier2/`
+- Location: `cortex_brain/tier2/`
 - Status: ✅ ACTIVE
 - Features: Response templates, orchestrator configurations
 
@@ -154,7 +154,7 @@ Input → RuleEvaluator → Violation Detection → Audit Logging → Enforcemen
 
 #### ✅ **VERIFIED: Comprehensive Audit Logging**
 
-**Audit Database:** `cortex-brain/state/governance.db`
+**Audit Database:** `cortex_brain/state/governance.db`
 - **Total Entries:** 127 audit log entries
 - **Hash Chain:** ✅ VALID (FR-001-02)
 - **Entry Types Logged:**
@@ -258,7 +258,7 @@ X-CORTEX-Audit-Hash: sha256:...
 **What Exists:**
 - ✅ `src/core/governance_enforcer.py` (runtime enforcement)
 - ✅ `src/core/governance_registry.py` (rule management)
-- ✅ `cortex-brain/tier0/governance/core-rules.yaml` (rules)
+- ✅ `cortex_brain/tier0/governance/core-rules.yaml` (rules)
 - ✅ Pre-commit hook script exists: `scripts/pre-push-check.sh`
 - ✅ CLI structure: `src/tools/` directory exists
 
@@ -561,7 +561,7 @@ PHASE-07 (✅ COMPLETE) → PHASE-08 (❌ BLOCKED) → PHASE-09/10 → PHASE-11/
 - [ ] Phase Readiness Checker (2 hours)
 
 **Priority 4: Fix Tier 2 Template Issues**
-- [ ] Create actual template files in `cortex-brain/tier2/` (1 hour)
+- [ ] Create actual template files in `cortex_brain/tier2/` (1 hour)
 - [ ] Add YAML validation (1 hour)
 - [ ] Update tests (1 hour)
 
@@ -734,8 +734,8 @@ OrchestratorRegistry
 - **Roadmap Master:** `.github/roadmap/cortex-master.yaml`
 - **Strategic Analysis:** `.github/roadmap/remaining-work-strategic-analysis.md`
 - **Vision Document:** `.github/.workspace/cortex-vision/cortex-vision.yaml`
-- **Governance Rules:** `cortex-brain/tier0/governance/core-rules.yaml`
-- **Audit Database:** `cortex-brain/state/governance.db` (127 entries)
+- **Governance Rules:** `cortex_brain/tier0/governance/core-rules.yaml`
+- **Audit Database:** `cortex_brain/state/governance.db` (127 entries)
 - **Phase Definitions:** `docs/phases/phase-{01-15}.yaml`
 - **Test Reports:** `tests/unit/` (1828/1831 passing) + `tests/integration/` (247/262 passing)
 

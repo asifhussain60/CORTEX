@@ -38,9 +38,9 @@ You are the CORTEX Builder, implementing the CORTEX 7.0 plan from `_workspaces/r
 **ALWAYS load governance rules FIRST, then check phase_tracker:**
 
 1. **Load Tier 0 Rules:**
-   - `cortex-brain/tier0/governance/core-rules.yaml` (28 immutable rules)
-   - `cortex-brain/tier0/governance/phase-enforcement-map.yaml` (phase-specific)
-   - `cortex-brain/tier0/governance/ac-validation-checklist.yaml` (AC validation)
+   - `cortex_brain/tier0/governance/core-rules.yaml` (28 immutable rules)
+   - `cortex_brain/tier0/governance/phase-enforcement-map.yaml` (phase-specific)
+   - `cortex_brain/tier0/governance/ac-validation-checklist.yaml` (AC validation)
 
 2. **Enforce Strict Governance** (CORE-017):
    - NO overrides allowed
@@ -148,8 +148,8 @@ For each AC-ID in the phase:
 | AC-ID specifications | phase-XX.yaml | `_workspaces/roadmap/phases/phase-XX.yaml` |
 | v1 patterns/reference | cortex-master-v1.yaml | `_workspaces/roadmap/_archives/cortex-master-v1.yaml` |
 | Phase completion reports | phase-XX-report.md | `_workspaces/roadmap/reports/phase-XX-*.md` |
-| Governance rules | core-rules.yaml | `cortex-brain/tier0/governance/core-rules.yaml` |
-| Audit trail | governance.db | `cortex-brain/state/governance.db` |
+| Governance rules | core-rules.yaml | `cortex_brain/tier0/governance/core-rules.yaml` |
+| Audit trail | governance.db | `cortex_brain/state/governance.db` |
 
 ---
 
@@ -393,13 +393,13 @@ path = Path("/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/config.yaml")
 ```yaml
 # ✅ CORRECT - Relative paths only
 paths:
-  database: "cortex-brain/state/governance.db"
-  rules: "cortex-brain/tier0/governance/core-rules.yaml"
-  logs: "cortex-brain/state/audit.log"
+  database: "cortex_brain/state/governance.db"
+  rules: "cortex_brain/tier0/governance/core-rules.yaml"
+  logs: "cortex_brain/state/audit.log"
 
 # ❌ WRONG - Absolute paths lock to one machine
 paths:
-  database: "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db"
+  database: "/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db"
 ```
 
 ### Validation
@@ -659,7 +659,7 @@ _workspaces/roadmap/
     ├── issues/                     Issue tracking materials
     └── recommendations/            Automation & config files
 
-cortex-brain/                       # Governance & State
+cortex_brain/                       # Governance & State
 ├── tier0/governance/
 │   ├── core-rules.yaml             25 immutable SKULL rules
 │   ├── phase-enforcement-map.yaml  Phase-specific rules
@@ -696,7 +696,7 @@ cortex-brain/                       # Governance & State
 → Write: reports/phase-XX-completion-report-YYYY-MM-DD.md
 
 ❓ "How do I verify audit trail?"
-→ Query: SELECT * FROM cortex-brain/state/governance.db
+→ Query: SELECT * FROM cortex_brain/state/governance.db
 
 ❓ "What's the difference between v1 and v2?"
 → Read: TRANSITION-SUMMARY.md (this session's work)
@@ -819,7 +819,7 @@ STATUS: INITIATING
 
 ▸ ASSUMPTIONS
   • SQLite available in Python environment — Source: requirements.txt
-  • cortex-brain/tier0/ structure exists — Source: workspace structure
+  • cortex_brain/tier0/ structure exists — Source: workspace structure
   • No prior governance.db state to migrate — Source: fresh implementation
 
 ▸ RISKS
@@ -935,7 +935,7 @@ STATUS: COMPLETED ✓
 - [ ] ✅ Read: success_criteria section (how to verify completion)
 
 ### Phase 5: Prepare to Execute
-- [ ] ✅ Load: Governance rules from `cortex-brain/tier0/governance/`
+- [ ] ✅ Load: Governance rules from `cortex_brain/tier0/governance/`
 - [ ] ✅ Create: Git checkpoint before starting: `git commit -m "checkpoint: before PHASE-XX"`
 - [ ] ✅ Display: Executive Summary - Phase Initiation (MANDATORY)
 - [ ] ✅ Ready: To begin first AC-ID implementation
@@ -1020,7 +1020,7 @@ cat _workspaces/roadmap/TRANSITION-SUMMARY.md
 grep "AC-PHX-007" _workspaces/roadmap/cortex-master.yaml
 
 # 2. Check audit trail
-sqlite3 cortex-brain/state/governance.db "SELECT ac_id, COUNT(*) FROM audit_log WHERE ac_id LIKE 'AC-PHX-007%' GROUP BY ac_id"
+sqlite3 cortex_brain/state/governance.db "SELECT ac_id, COUNT(*) FROM audit_log WHERE ac_id LIKE 'AC-PHX-007%' GROUP BY ac_id"
 
 # 3. Update master plan
 # (Edit cortex-master.yaml: status=COMPLETED, locked=true)

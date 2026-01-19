@@ -322,7 +322,7 @@ Governance Tests:    All passed ✅
 src/infrastructure/enhanced_audit_logger.py (316 lines)
 src/orchestrators/core/master_orchestrator.py (600 lines)
 src/core/orchestrator/conversation_protocol.py (multiple components)
-cortex-brain/state/governance.db (4,599 entries)
+cortex_brain/state/governance.db (4,599 entries)
 ```
 
 ---

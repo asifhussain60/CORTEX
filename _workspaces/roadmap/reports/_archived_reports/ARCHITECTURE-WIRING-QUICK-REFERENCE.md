@@ -75,7 +75,7 @@ Instruction Documents:
      └─ Missing: Template usage guide
 
 Tier 2 Templates:
-  └─ Directory: cortex-brain/tier2/response-templates/
+  └─ Directory: cortex_brain/tier2/response-templates/
      ├─ governance/ ← EMPTY
      ├─ planning/ ← EMPTY
      ├─ analysis/ ← EMPTY
@@ -123,7 +123,7 @@ Meanwhile, Infrastructure Exists:
 ─────────────────────────────────
 
 ┌────────────────────────────────────┐
-│  cortex-brain/tier0/               │
+│  cortex_brain/tier0/               │
 │  ├─ response-headers.yaml          │ ✅ Perfect config
 │  └─ [Tier 0 governance rules]       │ ✅ All there
 └────────────────────────────────────┘
@@ -155,7 +155,7 @@ Fixed State (Connected System):
 │ + copilot-instruction.md (UPDATED)               │
 │                                                  │
 │ "When generating responses, you MUST:            │
-│  1. Load: cortex-brain/tier0/response-headers"  │
+│  1. Load: cortex_brain/tier0/response-headers"  │
 │  2. Use: ResponseHeaderInjector pattern"         │
 │  3. Include: Copyright © 2025-2026"             │
 │  4. Format: ## 🧠 CORTEX {operation}"           │
@@ -226,7 +226,7 @@ Let me know if you need clarification.
 ## Response Header Integration
 
 All responses must include CORTEX headers loaded from:
-- cortex-brain/tier0/response-headers.yaml
+- cortex_brain/tier0/response-headers.yaml
 
 Format:
   ## 🧠 CORTEX {operation}
@@ -248,12 +248,12 @@ All responses MUST include:
 2. Copyright: Copyright © 2025-2026 Asif Hussain
 3. Footer: License and reference
 
-Load from: cortex-brain/tier0/response-headers.yaml
+Load from: cortex_brain/tier0/response-headers.yaml
 ```
 
 ### 3. Response Templates ❌
 
-**Directory:** `cortex-brain/tier2/response-templates/`
+**Directory:** `cortex_brain/tier2/response-templates/`
 
 **Create:**
 ```
@@ -318,4 +318,4 @@ analysis/
 - `.github/copilot-instruction.md` (Lines: Add after "Quality Targets")
 
 **To add templates:** Create files in
-- `cortex-brain/tier2/response-templates/{domain}/{template}.template`
+- `cortex_brain/tier2/response-templates/{domain}/{template}.template`

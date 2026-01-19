@@ -27,7 +27,7 @@ class TestBrainTierConsistencyValidation:
     
     def test_tier1_ac_mappings_exist(self):
         """AC-FR-009-01: Verify Tier 1 AC mappings are loaded."""
-        mappings_path = Path("cortex-brain/tier1/acceptance-criteria")
+        mappings_path = Path("cortex_brain/tier1/acceptance-criteria")
         
         assert mappings_path.exists(), "Tier 1 AC mappings should exist"
         mapping_files = list(mappings_path.glob("*.yaml"))
@@ -35,7 +35,7 @@ class TestBrainTierConsistencyValidation:
     
     def test_no_orphaned_ac_ids(self):
         """AC-FR-009-01: Verify no orphaned AC-IDs exist."""
-        mappings_path = Path("cortex-brain/tier1/acceptance-criteria")
+        mappings_path = Path("cortex_brain/tier1/acceptance-criteria")
         
         # Verify the mapping index exists
         ac_index = mappings_path / "ac-domain-mappings.yaml"
@@ -44,9 +44,9 @@ class TestBrainTierConsistencyValidation:
     def test_tier_structure_valid(self):
         """AC-FR-009-02: Verify tier structure is valid."""
         # Check that tier directories exist
-        tier0_path = Path("cortex-brain/tier0")
-        tier1_path = Path("cortex-brain/tier1")
-        tier2_path = Path("cortex-brain/tier2")
+        tier0_path = Path("cortex_brain/tier0")
+        tier1_path = Path("cortex_brain/tier1")
+        tier2_path = Path("cortex_brain/tier2")
         
         assert tier0_path.exists(), "Tier 0 should exist"
         assert tier1_path.exists(), "Tier 1 should exist"
@@ -54,7 +54,7 @@ class TestBrainTierConsistencyValidation:
     
     def test_tier0_rules_valid_yaml(self):
         """AC-FR-009-02: Verify Tier 0 rules are valid YAML."""
-        tier0_path = Path("cortex-brain/tier0/governance")
+        tier0_path = Path("cortex_brain/tier0/governance")
         
         if not tier0_path.exists():
             pytest.skip("Tier 0 governance files not found")
@@ -80,7 +80,7 @@ class TestBrainTierConsistencyValidation:
     
     def test_tier1_mappings_valid_yaml(self):
         """AC-FR-009-02: Verify Tier 1 mappings are valid YAML."""
-        mappings_path = Path("cortex-brain/tier1/acceptance-criteria")
+        mappings_path = Path("cortex_brain/tier1/acceptance-criteria")
         
         if not mappings_path.exists():
             pytest.skip("Tier 1 AC mappings not found")
@@ -103,7 +103,7 @@ class TestBrainTierConsistencyValidation:
     
     def test_tier2_templates_valid_yaml(self):
         """AC-FR-009-02: Verify Tier 2 templates are valid YAML."""
-        templates_path = Path("cortex-brain/tier2/response-templates")
+        templates_path = Path("cortex_brain/tier2/response-templates")
         
         if not templates_path.exists():
             pytest.skip("Tier 2 templates not found")
@@ -126,7 +126,7 @@ class TestBrainTierConsistencyValidation:
     
     def test_rules_have_required_fields(self):
         """AC-FR-009-03: Verify rules have required fields."""
-        tier0_path = Path("cortex-brain/tier0/governance")
+        tier0_path = Path("cortex_brain/tier0/governance")
         
         if not tier0_path.exists():
             pytest.skip("Tier 0 governance files not found")
@@ -153,7 +153,7 @@ class TestTierReferenceVerification:
     
     def test_tier1_references_tier0(self):
         """Tier 1 mappings should reference Tier 0 rules."""
-        mappings_path = Path("cortex-brain/tier1/acceptance-criteria")
+        mappings_path = Path("cortex_brain/tier1/acceptance-criteria")
         
         if not mappings_path.exists():
             pytest.skip("Tier 1 AC mappings not found")
@@ -165,7 +165,7 @@ class TestTierReferenceVerification:
     
     def test_tier2_templates_reference_types(self):
         """Tier 2 templates should reference valid types."""
-        templates_path = Path("cortex-brain/tier2/response-templates")
+        templates_path = Path("cortex_brain/tier2/response-templates")
         
         if not templates_path.exists():
             pytest.skip("Tier 2 templates not found")
@@ -182,7 +182,7 @@ class TestRuleConflictDetection:
     
     def test_tier0_rules_not_conflicting(self):
         """Tier 0 rules should not contradict each other."""
-        tier0_path = Path("cortex-brain/tier0/governance")
+        tier0_path = Path("cortex_brain/tier0/governance")
         
         if not tier0_path.exists():
             pytest.skip("Tier 0 governance files not found")
@@ -205,7 +205,7 @@ class TestRuleConflictDetection:
     
     def test_rules_have_consistent_format(self):
         """Tier 0 rules should have consistent format."""
-        tier0_path = Path("cortex-brain/tier0/governance")
+        tier0_path = Path("cortex_brain/tier0/governance")
         
         if not tier0_path.exists():
             pytest.skip("Tier 0 governance files not found")

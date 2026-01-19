@@ -346,7 +346,7 @@
 4. **PrivacyRegulation PHI Security** - Administrative/physical/technical safeguards for healthcare data
 5. **PaymentSecurity Payment Card Security** - CHD protection requirements (if card transactions supported)
 
-**Next Step:** Create learning library entry in `cortex-brain/learning/healthcare-payment/` (Batch 2.5 Task 7)
+**Next Step:** Create learning library entry in `cortex_brain/learning/healthcare-payment/` (Batch 2.5 Task 7)
 
 ---
 

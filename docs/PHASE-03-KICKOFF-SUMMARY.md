@@ -61,7 +61,7 @@ Four comprehensive guides created:
 | **AC-IDs** | 6 |
 | **Expected Tests** | 113 total |
 | **Pass Rate Target** | 100% |
-| **Implementation Module** | `cortex-brain/tier2/resilience/` |
+| **Implementation Module** | `cortex_brain/tier2/resilience/` |
 
 ---
 
@@ -94,7 +94,7 @@ All specifications are consolidated in `cortex-master.yaml` under `phases: → p
 
 - **Tests**: 23 (14 unit + 6 integration + 4 parametrized + 3 performance)
 - **Classes**: CircuitBreaker, CircuitBreakerConfig, CircuitBreakerMetrics, CircuitBreakerState
-- **Module**: `cortex-brain/tier2/resilience/` (380 LOC)
+- **Module**: `cortex_brain/tier2/resilience/` (380 LOC)
 - **States**: CLOSED → OPEN → HALF_OPEN → CLOSED
 
 ### 4. AC-NFR-004-01: OpenTelemetry Metrics Integration

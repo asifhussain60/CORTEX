@@ -359,7 +359,7 @@ class AuditLogManager:
     """Manages audit log lifecycle (retention, archival, performance)."""
     
     RETENTION_DAYS = 90  # Configurable
-    ARCHIVE_PATH = "cortex-brain/audit-archives/"
+    ARCHIVE_PATH = "cortex_brain/audit-archives/"
     
     def cleanup_old_entries(self) -> CleanupStats:
         """
@@ -1084,7 +1084,7 @@ TOTAL: 180 hours, 22.5 days, 320+ tests
 - [ ] Governance enforcement verified (CORE-008, etc.)
 - [ ] Brain vacuum telemetry dashboard defined
 - [ ] Manual review SLA (24h) confirmed
-- [ ] Archive location approved (cortex-brain/audit-archives/)
+- [ ] Archive location approved (cortex_brain/audit-archives/)
 
 ### During Implementation
 

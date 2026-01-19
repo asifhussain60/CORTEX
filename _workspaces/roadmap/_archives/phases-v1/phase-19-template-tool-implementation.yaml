@@ -147,7 +147,7 @@ acceptance_criteria:
   - ac_id: "OB-TOOL-002-01"
     title: "Template Content Generator - YAML Creation"
     description: |
-      Tool creates and manages template YAML files in cortex-brain/tier2/.
+      Tool creates and manages template YAML files in cortex_brain/tier2/.
       
       Usage:
         cortex-template create \
@@ -157,7 +157,7 @@ acceptance_criteria:
           --variables operation,status,message
       
       Creates:
-      - cortex-brain/tier2/base/success-response.yaml
+      - cortex_brain/tier2/base/success-response.yaml
       - With proper structure and comments
       - Ready to be populated with content
     priority: "CRITICAL"
@@ -192,7 +192,7 @@ acceptance_criteria:
       - "Interactive prompts for all template fields"
       - "Example suggestions from existing templates"
       - "Content validation (length, format)"
-      - "Version history tracked (cortex-brain/.git)"
+      - "Version history tracked (cortex_brain/.git)"
       - "Prevents committing templates with TODO placeholders"
     git_checkpoint: "OB-TOOL-002-02: Content Population"
   
@@ -334,7 +334,7 @@ acceptance_criteria:
       End-to-end tests verifying complete template workflow:
       
       1. Create orchestrator via scaffolder (uses template)
-      2. Apply template content (from cortex-brain/tier2/)
+      2. Apply template content (from cortex_brain/tier2/)
       3. Generate response via template engine
       4. Validate response matches expected structure
       5. Execute orchestrator with template-generated response

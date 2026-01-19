@@ -268,7 +268,7 @@ findings:
     
     title: "Response templates interpolate user input without sanitization"
     description: |
-      Response templates in cortex-brain/tier2/response-templates/ use string
+      Response templates in cortex_brain/tier2/response-templates/ use string
       interpolation for dynamic content (AC-IDs, operation names, etc.) but
       don't validate template structure before injection.
       
@@ -286,7 +286,7 @@ findings:
     evidence:
       source: "code_analysis"
       files_affected:
-        - path: "cortex-brain/tier2/response-templates/"
+        - path: "cortex_brain/tier2/response-templates/"
           issue: "Glob pattern shows 8+ template files with interpolation"
         - path: "src/core/response_header_injector.py"
           lines: "40-80"
@@ -456,7 +456,7 @@ findings:
         - path: "src/domain_brain/adapters.py"
           lines: "330-345"
           issue: "New _query_todos() method not documented"
-        - path: "cortex-brain/tier3/domain-brain/README.md"
+        - path: "cortex_brain/tier3/domain-brain/README.md"
           issue: "Query syntax documentation incomplete"
     
     impact:

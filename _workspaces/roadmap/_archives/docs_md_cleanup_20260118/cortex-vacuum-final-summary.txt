@@ -46,20 +46,20 @@ Version: 1.0
       → 4 commands: analyze, execute, verify, rollback
 
 ✅ CONFIGURATION & INFRASTRUCTURE (2 ITEMS):
-   1. cortex-brain/vacuum/config.yaml (~200 lines)
+   1. cortex_brain/vacuum/config.yaml (~200 lines)
       → File classification rules
       → Naming convention enforcement
       → Safety settings
       
-   2. cortex-brain/vacuum/README.md
+   2. cortex_brain/vacuum/README.md
       → Technical documentation
 
 ✅ INFRASTRUCTURE DIRECTORIES (2 CREATED):
-   1. cortex-brain/vacuum/
+   1. cortex_brain/vacuum/
       → Analysis output location
       → Configuration storage
       
-   2. cortex-brain/snapshots/
+   2. cortex_brain/snapshots/
       → Rollback snapshots directory
 
 ✅ GENERATED ANALYSIS (First Test Run):
@@ -102,27 +102,27 @@ FUNCTIONALITY TESTS:
 ================================================================================
 
 1. ANALYZE (Non-destructive, read-only):
-   $ python3 scripts/run-cortex-vacuum.py analyze --output-dir cortex-brain/vacuum/
+   $ python3 scripts/run-cortex-vacuum.py analyze --output-dir cortex_brain/vacuum/
    
    Output: JSON reports showing what WILL change
-   → cortex-brain/vacuum/analysis-report.json
-   → cortex-brain/vacuum/migration-plan.json
-   → cortex-brain/vacuum/reference-map.json
+   → cortex_brain/vacuum/analysis-report.json
+   → cortex_brain/vacuum/migration-plan.json
+   → cortex_brain/vacuum/reference-map.json
 
 2. REVIEW:
    Review the generated reports and verify proposed changes are correct.
-   Edit cortex-brain/vacuum/config.yaml if needed to customize rules.
+   Edit cortex_brain/vacuum/config.yaml if needed to customize rules.
 
 3. DRY RUN (Preview without making changes):
    $ python3 scripts/run-cortex-vacuum.py execute \
-     --plan cortex-brain/vacuum/migration-plan.json \
+     --plan cortex_brain/vacuum/migration-plan.json \
      --dry-run
    
    Output: Shows exactly what WILL happen
 
 4. EXECUTE (Apply changes):
    $ python3 scripts/run-cortex-vacuum.py execute \
-     --plan cortex-brain/vacuum/migration-plan.json \
+     --plan cortex_brain/vacuum/migration-plan.json \
      --auto-approve
    
    Changes applied with snapshots and reference updates
@@ -218,15 +218,15 @@ Register with MCP:
 
 IMMEDIATELY:
   ✅ Run analysis: python3 scripts/run-cortex-vacuum.py analyze
-  ✅ Review findings: cat cortex-brain/vacuum/analysis-report.json
-  ✅ See migration plan: cat cortex-brain/vacuum/migration-plan.json
+  ✅ Review findings: cat cortex_brain/vacuum/analysis-report.json
+  ✅ See migration plan: cat cortex_brain/vacuum/migration-plan.json
   ✅ Preview changes: python3 scripts/run-cortex-vacuum.py execute --plan ... --dry-run
 
 WHEN READY:
   ✅ Execute changes: python3 scripts/run-cortex-vacuum.py execute --plan ...
   ✅ Verify compliance: python3 scripts/run-cortex-vacuum.py verify
   ✅ Integrate with MCP: register_vacuum_tools() in your MCP server
-  ✅ Customize rules: Edit cortex-brain/vacuum/config.yaml
+  ✅ Customize rules: Edit cortex_brain/vacuum/config.yaml
 
 ================================================================================
                           FILE LOCATIONS
@@ -248,17 +248,17 @@ CLI:
   /scripts/run-cortex-vacuum.py (280+ lines)
 
 Configuration:
-  /cortex-brain/vacuum/config.yaml (200+ lines)
-  /cortex-brain/vacuum/README.md
+  /cortex_brain/vacuum/config.yaml (200+ lines)
+  /cortex_brain/vacuum/README.md
 
 Infrastructure:
-  /cortex-brain/vacuum/ (Analysis output)
-  /cortex-brain/snapshots/ (Rollback snapshots)
+  /cortex_brain/vacuum/ (Analysis output)
+  /cortex_brain/snapshots/ (Rollback snapshots)
 
 Generated Reports:
-  /cortex-brain/vacuum/analysis-report.json (663 KB)
-  /cortex-brain/vacuum/migration-plan.json (40 KB)
-  /cortex-brain/vacuum/reference-map.json (535 KB)
+  /cortex_brain/vacuum/analysis-report.json (663 KB)
+  /cortex_brain/vacuum/migration-plan.json (40 KB)
+  /cortex_brain/vacuum/reference-map.json (535 KB)
 
 ================================================================================
                            NEXT STEPS
@@ -267,16 +267,16 @@ Generated Reports:
 1. READ: Start with CORTEX-VACUUM-QUICKSTART.md for overview
 
 2. REVIEW: Look at the analysis results
-   cat cortex-brain/vacuum/analysis-report.json | head -100
+   cat cortex_brain/vacuum/analysis-report.json | head -100
 
 3. CUSTOMIZE: Edit rules if needed
-   vi cortex-brain/vacuum/config.yaml
+   vi cortex_brain/vacuum/config.yaml
 
 4. DRY RUN: See what will happen
-   python3 scripts/run-cortex-vacuum.py execute --plan cortex-brain/vacuum/migration-plan.json --dry-run
+   python3 scripts/run-cortex-vacuum.py execute --plan cortex_brain/vacuum/migration-plan.json --dry-run
 
 5. EXECUTE: Apply changes when satisfied
-   python3 scripts/run-cortex-vacuum.py execute --plan cortex-brain/vacuum/migration-plan.json --auto-approve
+   python3 scripts/run-cortex-vacuum.py execute --plan cortex_brain/vacuum/migration-plan.json --auto-approve
 
 6. VERIFY: Confirm everything is correct
    python3 scripts/run-cortex-vacuum.py verify
@@ -330,7 +330,7 @@ Questions? Check these resources in order:
 
 For errors: Check execution-report.json for detailed logs
 
-For customization: Edit cortex-brain/vacuum/config.yaml
+For customization: Edit cortex_brain/vacuum/config.yaml
 
 ================================================================================
 

@@ -89,12 +89,12 @@ acceptance_criteria:
       - "Google-style docstrings on all classes/methods (CORE-012)"
     
     files_to_create:
-      - "cortex-brain/tier1/orchestrators/cleaners/interface.py"
-      - "cortex-brain/tier1/orchestrators/cleaners/registry.py"
-      - "cortex-brain/tier1/orchestrators/cleaners/__init__.py"
+      - "cortex_brain/tier1/orchestrators/cleaners/interface.py"
+      - "cortex_brain/tier1/orchestrators/cleaners/registry.py"
+      - "cortex_brain/tier1/orchestrators/cleaners/__init__.py"
     
     files_to_modify:
-      - "cortex-brain/tier1/orchestrators/vacuum.py"
+      - "cortex_brain/tier1/orchestrators/vacuum.py"
     
     test_file: "tests/unit/tier1/orchestrators/test_cleaner_interface.py"
     git_checkpoint: "VAC-001-01-cleaner-interface"
@@ -128,12 +128,12 @@ acceptance_criteria:
       - "Cross-references detected and tracked"
       - "Migration plan generated with: file, source, destination, reason"
       - "Analysis report includes consolidation opportunities"
-      - "Report saved to cortex-brain/vacuum/analysis-report.json"
+      - "Report saved to cortex_brain/vacuum/analysis-report.json"
       - "Zero files modified during analysis (read-only operation)"
     
     files_to_create:
-      - "cortex-brain/tier1/orchestrators/cleaners/md_organizer/analyzer.py"
-      - "cortex-brain/tier1/orchestrators/cleaners/md_organizer/__init__.py"
+      - "cortex_brain/tier1/orchestrators/cleaners/md_organizer/analyzer.py"
+      - "cortex_brain/tier1/orchestrators/cleaners/md_organizer/__init__.py"
     
     test_file: "tests/unit/tier1/orchestrators/test_md_organizer_analyzer.py"
     git_checkpoint: "VAC-001-02-md-analyzer"
@@ -177,11 +177,11 @@ acceptance_criteria:
       - "All operations logged with timestamp and user"
     
     files_to_create:
-      - "cortex-brain/tier1/orchestrators/cleaners/md_organizer/executor.py"
-      - "cortex-brain/tier1/orchestrators/cleaners/md_organizer/snapshot.py"
+      - "cortex_brain/tier1/orchestrators/cleaners/md_organizer/executor.py"
+      - "cortex_brain/tier1/orchestrators/cleaners/md_organizer/snapshot.py"
     
     files_to_modify:
-      - "cortex-brain/tier1/orchestrators/cleaners/md_organizer/__init__.py"
+      - "cortex_brain/tier1/orchestrators/cleaners/md_organizer/__init__.py"
     
     test_file: "tests/unit/tier1/orchestrators/test_md_organizer_executor.py"
     git_checkpoint: "VAC-001-03-md-executor"
@@ -199,7 +199,7 @@ acceptance_criteria:
       
       Workflow:
       - Register MDOrganizerCleaner in VacuumOrchestrator.cleaners
-      - Load config from cortex-brain/vacuum/config.yaml
+      - Load config from cortex_brain/vacuum/config.yaml
       - Invoke analyze() → generate migration plan
       - Support dry-run mode (no changes)
       - Invoke execute() → apply reorganization
@@ -221,11 +221,11 @@ acceptance_criteria:
       - "All operations logged to governance.db audit trail"
     
     files_to_create:
-      - "cortex-brain/tier1/orchestrators/cleaners/md_organizer/cleaner.py"
+      - "cortex_brain/tier1/orchestrators/cleaners/md_organizer/cleaner.py"
     
     files_to_modify:
-      - "cortex-brain/tier1/orchestrators/vacuum.py"
-      - "cortex-brain/tier1/orchestrators/cleaners/__init__.py"
+      - "cortex_brain/tier1/orchestrators/vacuum.py"
+      - "cortex_brain/tier1/orchestrators/cleaners/__init__.py"
     
     test_file: "tests/unit/tier1/orchestrators/test_md_organizer_integration.py"
     git_checkpoint: "VAC-001-04-md-integration"
@@ -311,15 +311,15 @@ design_principles:
 plugin_architecture:
   registration: |
     VacuumOrchestrator.register_cleaner(cleaner: CleanerInterface)
-    Cleaners registered at startup from cortex-brain/tier1/orchestrators/cleaners/
+    Cleaners registered at startup from cortex_brain/tier1/orchestrators/cleaners/
   
   discovery: |
     Automatic discovery of cleaner modules via Python package structure.
-    Each cleaner in: cortex-brain/tier1/orchestrators/cleaners/<domain>/
+    Each cleaner in: cortex_brain/tier1/orchestrators/cleaners/<domain>/
   
   configuration: |
-    Global config: cortex-brain/vacuum/config.yaml
-    Per-cleaner overrides: cortex-brain/tier1/orchestrators/cleaners/<domain>/config.yaml
+    Global config: cortex_brain/vacuum/config.yaml
+    Per-cleaner overrides: cortex_brain/tier1/orchestrators/cleaners/<domain>/config.yaml
   
   lifecycle: |
     1. Load → register all cleaners
@@ -349,13 +349,13 @@ dependencies:
   
   - component: "CleanerInterface"
     reason: "VAC-001-01 defines this, others depend on it"
-    location: "cortex-brain/tier1/orchestrators/cleaners/"
+    location: "cortex_brain/tier1/orchestrators/cleaners/"
     blocking_for: ["VAC-001-02", "VAC-001-03", "VAC-001-04"]
 
-  - config: "cortex-brain/vacuum/config.yaml"
+  - config: "cortex_brain/vacuum/config.yaml"
     reason: "Classification rules for file organization"
     exists: true
-    location: "/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/vacuum/config.yaml"
+    location: "/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/vacuum/config.yaml"
 
 # =============================================================================
 # RISKS & MITIGATIONS

@@ -222,7 +222,7 @@ WHERE previous_hash != expected_previous# Find hardcoded absolute paths in Pytho
 
 -- 3. Audit entries per phase# Find hardcoded paths in YAML
 
-SELECT grep -rn "/Users/\|/home/\|C:\\\\Users" --include="*.yaml" cortex-brain/ .github/
+SELECT grep -rn "/Users/\|/home/\|C:\\\\Users" --include="*.yaml" cortex_brain/ .github/
 
   CASE 
 
@@ -316,7 +316,7 @@ ORDER BY ac_id, id;mypy src/ --ignore-missing-imports --show-error-codes 2>&1 | 
 
 grep -rn "except:" --include="*.py" src/ | grep -v "except \w\|except Exception"
 
-1. Load `cortex-brain/tier0/governance/core-rules.yaml` (28 rules)
+1. Load `cortex_brain/tier0/governance/core-rules.yaml` (28 rules)
 
 2. For each active phase, verify:# Find generic Exception catches
 
@@ -360,13 +360,13 @@ grep -rn "except:" --include="*.py" src/ | grep -v "except \w\|except Exception"
 
 # Find files violating kebab-case (contains underscore in non-Python)
 
-| Level | Definition | Action |find cortex-brain/ .github/ -type f -name "*_*" ! -name "*.py" ! -name "__*" | head -20
+| Level | Definition | Action |find cortex_brain/ .github/ -type f -name "*_*" ! -name "*.py" ! -name "__*" | head -20
 
 |-------|-----------|--------|
 
 | BLOCKED | CORE rule violation | Immediate escalation |# Find files exceeding 25 chars (excluding path)
 
-| CRITICAL | Governance failure | Fix before next phase |find src/ cortex-brain/ -type f -name "*.py" | while read f; do
+| CRITICAL | Governance failure | Fix before next phase |find src/ cortex_brain/ -type f -name "*.py" | while read f; do
 
 | HIGH | Compliance gap | Fix in this phase |  base=$(basename "$f")
 
@@ -399,7 +399,7 @@ with open('_workspaces/roadmap/cortex-master.yaml') as f:
 phase_tracker = master.get('phase_tracker', {})
 
 # Connect to audit DB
-db = sqlite3.connect('cortex-brain/state/governance.db')
+db = sqlite3.connect('cortex_brain/state/governance.db')
 cursor = db.cursor()
 
 for phase_id, phase_data in phase_tracker.items():
@@ -585,8 +585,8 @@ fi
 
 echo ""
 echo "CORE-027 (Audit Trail):"
-if [ -f "cortex-brain/state/governance.db" ]; then
-  incomplete=$(sqlite3 cortex-brain/state/governance.db "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE ac_id IS NOT NULL GROUP BY ac_id HAVING COUNT(*) < 3;" 2>/dev/null | wc -l)
+if [ -f "cortex_brain/state/governance.db" ]; then
+  incomplete=$(sqlite3 cortex_brain/state/governance.db "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE ac_id IS NOT NULL GROUP BY ac_id HAVING COUNT(*) < 3;" 2>/dev/null | wc -l)
   echo "  ACs with incomplete trail: $incomplete"
 else
   echo "  ⚠️ Database not found"

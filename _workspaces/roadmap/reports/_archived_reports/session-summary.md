@@ -245,7 +245,7 @@ HolisticDependencyValidator (holistic check)
 Rule integrity protection:
 
 ```
-cortex-brain/tier0/governance/ (SKULL rules)
+cortex_brain/tier0/governance/ (SKULL rules)
         ↓
 RuleImmutabilityValidator (SHA256 verification)
         ↓

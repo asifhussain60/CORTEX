@@ -128,7 +128,7 @@ Verify that the audit log maintains tamper-evident design with valid hash chain 
 
 ### Setup
 ```python
-- Database: cortex-brain/state/governance.db (SQLite3)
+- Database: cortex_brain/state/governance.db (SQLite3)
 - Direct Query: Raw SQL for accuracy
 - Schema: Validated audit_log table
 ```

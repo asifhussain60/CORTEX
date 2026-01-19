@@ -62,12 +62,12 @@ class FolderStructureValidator:
         return len(self.issues) == 0
     
     def check_no_duplicates(self) -> bool:
-        """Check for duplicate folders (cortex_brain vs cortex-brain)."""
+        """Check for duplicate folders (cortex_brain vs cortex_brain)."""
         cortex_brain = self.root_path / 'src/cortex_brain'
-        cortex_brain_old = self.root_path / 'cortex-brain'
+        cortex_brain_old = self.root_path / 'cortex_brain'
         
         if cortex_brain_old.exists() and cortex_brain.exists():
-            self.issues.append("DUPLICATE: cortex-brain/ and src/cortex_brain/ both exist")
+            self.issues.append("DUPLICATE: cortex_brain/ and src/cortex_brain/ both exist")
             return False
         
         return True

@@ -249,7 +249,7 @@ Expected:
 | CommentAnalyzer | `src/core/intelligence/comment_analyzer.py` | Extract comments/docstrings |
 | RelationshipTraversalEngine | `src/core/intelligence/relationship_traversal.py` | Map dependencies |
 | MasterOrchestrator | `src/orchestrators/core/master_orchestrator.py` | Route operations |
-| Governance Rules | `cortex-brain/tier0/governance/*.yaml` | Enforce rules |
+| Governance Rules | `cortex_brain/tier0/governance/*.yaml` | Enforce rules |
 
 ### With LLM Providers
 
@@ -357,9 +357,9 @@ Bad: "When can you do it?"
 **Solution:** Ensure governance files are present
 ```
 Required files:
-✓ cortex-brain/tier0/governance/core-rules.yaml
-✓ cortex-brain/tier0/governance/interaction-rules.yaml
-✓ cortex-brain/tier0/governance/tdd-rules.yaml
+✓ cortex_brain/tier0/governance/core-rules.yaml
+✓ cortex_brain/tier0/governance/interaction-rules.yaml
+✓ cortex_brain/tier0/governance/tdd-rules.yaml
 ```
 
 ---

@@ -43,7 +43,7 @@ Every review AUTOMATICALLY produces actionable gaps that are:
 | Markdown docs | `docs/` | `docs/AC-FIX-001-02.md` |
 | Python utilities | `scripts/` | `scripts/analysis_tool.py` |
 | MCP toolkit | `src/mcp/tools/` | `src/mcp/tools/analysis.py` |
-| Python analysis | `cortex-brain/tierX/` | `cortex-brain/tier2/analysis.py` |
+| Python analysis | `cortex_brain/tierX/` | `cortex_brain/tier2/analysis.py` |
 | Investigation YAML | `_workspaces/roadmap/issues/` | `REVIEW-INVESTIGATION-REPORT-*.yaml` |
 | Consolidated findings | `_workspaces/roadmap/issues/` | `REVIEW-FINDINGS-CONSOLIDATED-*.yaml` |
 | Phase reports | `_workspaces/roadmap/reports/` | `phase-remediation-*.yaml` |
@@ -59,7 +59,7 @@ Every review AUTOMATICALLY produces actionable gaps that are:
 - ❌ NEVER in `docs_md/` (FORBIDDEN) or `_workspaces/roadmap/` root
 
 **Python Script Handling:**
-- ✅ Create in `scripts/`, `src/mcp/tools/`, or `cortex-brain/tierX/` as appropriate
+- ✅ Create in `scripts/`, `src/mcp/tools/`, or `cortex_brain/tierX/` as appropriate
 - ❌ NEVER in `_workspaces/roadmap/tools/` (use `src/mcp/tools/` instead)
 - ✅ Use in toolkit analysis and execution
 - ❌ NEVER leave temporary .py scripts in root
@@ -1271,7 +1271,7 @@ EOF
 for phase in cortex-master.yaml:
   for ac in phase.ac_ids:
     for rule in ac.governance_rules:
-      if rule not in cortex-brain/tier0/governance/core-rules.yaml:
+      if rule not in cortex_brain/tier0/governance/core-rules.yaml:
         echo "ERROR: Unknown rule $rule in $ac"
 
 # 5. Evidence grading check

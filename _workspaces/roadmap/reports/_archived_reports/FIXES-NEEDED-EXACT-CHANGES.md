@@ -31,7 +31,7 @@ This ensures consistent branding, copyright attribution, and professional appear
 
 CORTEX headers are configured in a single source of truth:
 ```yaml
-# cortex-brain/tier0/response-headers.yaml
+# cortex_brain/tier0/response-headers.yaml
 header:
   template: "## 🧠 CORTEX {operation}"
   
@@ -91,7 +91,7 @@ When generating responses, follow this pattern:
 
 1. **Load configuration**
    ```
-   Source: cortex-brain/tier0/response-headers.yaml
+   Source: cortex_brain/tier0/response-headers.yaml
    Loader: HeaderConfigurationManager
    ```
 
@@ -121,7 +121,7 @@ from src.core.response_header_config import HeaderConfigurationManager
 
 # Load configuration
 config_manager = HeaderConfigurationManager.get_instance()
-config_manager.load_configuration('cortex-brain/tier0/response-headers.yaml')
+config_manager.load_configuration('cortex_brain/tier0/response-headers.yaml')
 
 # Create injector (wrap your response generator)
 injector = ResponseHeaderInjector(
@@ -179,7 +179,7 @@ Based on the holistic context gathered, here are the planning recommendations:
 
 Domain-specific response templates are available in:
 ```
-cortex-brain/tier2/response-templates/
+cortex_brain/tier2/response-templates/
 ├── governance/        # Governance evaluation responses
 ├── planning/          # Planning recommendations
 ├── analysis/          # Analysis reports
@@ -224,7 +224,7 @@ When rendering domain responses, load templates from these directories.
 ### CORTEX Response Headers (Mandatory)
 
 All responses generated must include CORTEX headers and copyright notice
-as defined in `cortex-brain/tier0/response-headers.yaml`.
+as defined in `cortex_brain/tier0/response-headers.yaml`.
 
 ### Header Format
 
@@ -317,7 +317,7 @@ class MyOrchestrator:
     def __init__(self):
         # Load header configuration
         self.config_manager = HeaderConfigurationManager.get_instance()
-        self.config_manager.load_configuration('cortex-brain/tier0/response-headers.yaml')
+        self.config_manager.load_configuration('cortex_brain/tier0/response-headers.yaml')
         
         # Create header injector
         self.header_injector = ResponseHeaderInjector(
@@ -361,7 +361,7 @@ class MyOrchestrator:
 ### Configuration Source
 
 All header configuration comes from:
-- **Location:** `cortex-brain/tier0/response-headers.yaml`
+- **Location:** `cortex_brain/tier0/response-headers.yaml`
 - **Immutability:** Tier 0 (changes require governance approval)
 - **Authority:** Single source of truth for all domains
 - **Version:** 1.0 (as of 2026-01-15)
@@ -369,10 +369,10 @@ All header configuration comes from:
 ### Template Usage
 
 Domain-specific response templates are in:
-- `cortex-brain/tier2/response-templates/governance/`
-- `cortex-brain/tier2/response-templates/planning/`
-- `cortex-brain/tier2/response-templates/analysis/`
-- `cortex-brain/tier2/response-templates/custom/`
+- `cortex_brain/tier2/response-templates/governance/`
+- `cortex_brain/tier2/response-templates/planning/`
+- `cortex_brain/tier2/response-templates/analysis/`
+- `cortex_brain/tier2/response-templates/custom/`
 
 Use ResponseTemplateEngine to load and render domain templates.
 
@@ -395,7 +395,7 @@ When generating a response, verify:
 
 ## FIX #3: Create Tier 2 Response Templates
 
-**Directory:** `cortex-brain/tier2/response-templates/`
+**Directory:** `cortex_brain/tier2/response-templates/`
 
 **What:** Create template files for domain-specific responses  
 **Files to create:** 5+ templates (20+ for full implementation)
@@ -566,13 +566,13 @@ Each template file should follow this format:
 
 1. **Create the directory structure**
    ```bash
-   mkdir -p cortex-brain/tier2/response-templates/{governance,planning,analysis,custom,shared}
+   mkdir -p cortex_brain/tier2/response-templates/{governance,planning,analysis,custom,shared}
    ```
 
 2. **Create each template file**
    ```bash
-   touch cortex-brain/tier2/response-templates/governance/evaluation-result.template
-   touch cortex-brain/tier2/response-templates/planning/recommendations.template
+   touch cortex_brain/tier2/response-templates/governance/evaluation-result.template
+   touch cortex_brain/tier2/response-templates/planning/recommendations.template
    # ... etc
    ```
 
@@ -585,7 +585,7 @@ Each template file should follow this format:
    ```python
    from src.core.response_template_engine import ResponseTemplateEngine
    
-   engine = ResponseTemplateEngine('cortex-brain/tier2/')
+   engine = ResponseTemplateEngine('cortex_brain/tier2/')
    rendered = engine.render_by_id(
        'governance/evaluation-result',
        {'ac_id': 'AC-OB-001-01', ...}

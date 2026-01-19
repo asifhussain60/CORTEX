@@ -130,7 +130,7 @@ AC Coverage:
 # Check database status
 cd /Users/asifhussain/PROJECTS/CORTEX
 
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT COUNT(*) FROM audit_log; \
    SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation = 'AC_COMPLETE';"
 
@@ -169,7 +169,7 @@ import glob
 import os
 
 # 1. Clear lock files
-lock_files = glob.glob('/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db-*')
+lock_files = glob.glob('/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db-*')
 for lf in lock_files:
     try:
         os.remove(lf)
@@ -179,7 +179,7 @@ for lf in lock_files:
 
 # 2. Query current state
 conn = sqlite3.connect(
-    '/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db',
+    '/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db',
     timeout=10.0
 )
 cursor = conn.cursor()
@@ -203,7 +203,7 @@ EOF
 **Before each test execution:**
 ```bash
 # Clear lock files
-rm -f cortex-brain/state/governance.db-*
+rm -f cortex_brain/state/governance.db-*
 
 # Run tests with timeout
 timeout 60 /Users/asifhussain/PROJECTS/CORTEX/.venv/bin/python -m pytest tests/unit/test_*.py -q --tb=no
@@ -229,8 +229,8 @@ timeout 60 /Users/asifhussain/PROJECTS/CORTEX/.venv/bin/python -m pytest tests/u
 ### 1. Database Lock Prevention
 ```bash
 # Before EVERY batch of tests:
-rm -f cortex-brain/state/governance.db-wal
-rm -f cortex-brain/state/governance.db-shm
+rm -f cortex_brain/state/governance.db-wal
+rm -f cortex_brain/state/governance.db-shm
 ```
 
 ### 2. Connection Timeout
@@ -304,7 +304,7 @@ print("=" * 100)
 
 # Clear database locks
 import glob, os
-for lf in glob.glob('/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db-*'):
+for lf in glob.glob('/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db-*'):
     try:
         os.remove(lf)
     except:
@@ -312,7 +312,7 @@ for lf in glob.glob('/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/gover
 
 # Query current baseline
 conn = sqlite3.connect(
-    '/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db',
+    '/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db',
     timeout=10.0
 )
 cursor = conn.cursor()
@@ -351,7 +351,7 @@ for test_file in test_files_step2:
 # Verify new entries
 time.sleep(2)
 conn = sqlite3.connect(
-    '/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db',
+    '/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db',
     timeout=10.0
 )
 cursor = conn.cursor()
@@ -438,7 +438,7 @@ LIMIT 10;
 - `/Users/asifhussain/PROJECTS/CORTEX/tests/unit/test_brittleness_fixes.py` — 13 BRITTLE markers added
 
 **Data source:**
-- `/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db` — SQLite database with audit trail
+- `/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db` — SQLite database with audit trail
 
 ---
 

@@ -3,12 +3,12 @@ import sys, pytest
 from pathlib import Path
 from datetime import datetime
 from typing import Dict, Any
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'cortex-brain'))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'cortex_brain'))
 try:
     from tier2.hallucination_prevention.confidence_scoring import ConfidenceScore, ConfidenceScorer
 except ModuleNotFoundError:
     import os
-    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../cortex-brain')))
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../../cortex_brain')))
     from tier2.hallucination_prevention.confidence_scoring import ConfidenceScore, ConfidenceScorer
 
 @pytest.fixture

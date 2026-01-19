@@ -13,7 +13,7 @@ from pathlib import Path
 class GovernanceHeatmapGenerator:
     """Generates compliance heatmap data from governance database."""
     
-    def __init__(self, db_path: str = "cortex-brain/state/governance.db"):
+    def __init__(self, db_path: str = "cortex_brain/state/governance.db"):
         """Initialize heatmap generator."""
         self.db_path = db_path
         self.conn = None
@@ -247,7 +247,7 @@ class GovernanceHeatmapGenerator:
 class PhaseReadinessChecker:
     """4-stage readiness check: governance, audit, tests, docs."""
     
-    def __init__(self, db_path: str = "cortex-brain/state/governance.db"):
+    def __init__(self, db_path: str = "cortex_brain/state/governance.db"):
         """Initialize readiness checker."""
         self.db_path = db_path
         self.conn = None

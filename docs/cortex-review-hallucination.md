@@ -15,7 +15,7 @@ grep -rn "\.format(\|f\".*{.*}\|%s" --include="*.py" src/ | grep -i "prompt\|tem
 grep -rn "prompt.*+\|+ .*prompt" --include="*.py" src/
 
 # Find YAML templates with dynamic content
-grep -rn "{{.*}}\|{%.*%}" --include="*.yaml" cortex-brain/tier2/
+grep -rn "{{.*}}\|{%.*%}" --include="*.yaml" cortex_brain/tier2/
 ```
 
 **What to Flag:**
@@ -69,13 +69,13 @@ grep -rn "read()\|readlines()\|Path.*read_text" --include="*.py" src/
 **Detection Approach:**
 ```bash
 # Find response templates
-ls -la cortex-brain/tier2/response-templates/
+ls -la cortex_brain/tier2/response-templates/
 
 # Find template loading without validation
 grep -rn "yaml.safe_load\|json.load" --include="*.py" src/ | grep -i "template"
 
 # Find templates with AI-generated sections
-grep -rn "{{ai_content}}\|{generated}\|<!-- AI -->" --include="*.yaml" --include="*.md" cortex-brain/
+grep -rn "{{ai_content}}\|{generated}\|<!-- AI -->" --include="*.yaml" --include="*.md" cortex_brain/
 ```
 
 **What to Flag:**

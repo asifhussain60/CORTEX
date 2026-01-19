@@ -54,10 +54,10 @@ Autonomous implementation of two major phases in single session, following `cort
 
 ### Implementation Highlights
 
-- **Security Module**: `cortex-brain/tier2/security/__init__.py` (359 lines)
-- **Secrets Module**: `cortex-brain/tier2/secrets/__init__.py` (412 lines)
-- **Credential Protection**: `cortex-brain/tier2/credential_protection/__init__.py` (298 lines)
-- **Coherence Module**: `cortex-brain/tier2/coherence/__init__.py` (487 lines)
+- **Security Module**: `cortex_brain/tier2/security/__init__.py` (359 lines)
+- **Secrets Module**: `cortex_brain/tier2/secrets/__init__.py` (412 lines)
+- **Credential Protection**: `cortex_brain/tier2/credential_protection/__init__.py` (298 lines)
+- **Coherence Module**: `cortex_brain/tier2/coherence/__init__.py` (487 lines)
 
 ### Problem Resolution
 

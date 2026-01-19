@@ -225,7 +225,7 @@ cd /Users/asifhussain/PROJECTS/CORTEX
 pytest tests/ -v
 
 # 2. Verify entries in database
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT COUNT(*) FROM audit_log WHERE operation='AC_COMPLETE';"
 # Expected: 195+ entries
 ```

@@ -229,7 +229,7 @@ Mon, Feb 9:    Production launch with business compliance support
 
 | Criterion | Status |
 |-----------|--------|
-| Domain registry in cortex-brain/tier3/ | ✅ New file |
+| Domain registry in cortex_brain/tier3/ | ✅ New file |
 | Dashboard extensibility module | ✅ New file |
 | Configuration system for domain endpoint | ✅ Implemented |
 | Zero breaking changes | ✅ Verified |
@@ -242,8 +242,8 @@ Mon, Feb 9:    Production launch with business compliance support
 
 ### New Files (PHASE-13 Integration)
 ```
-cortex-brain/tier3/domain-registry.yaml
-cortex-brain/tier3/README-DOMAIN-INTEGRATION.md
+cortex_brain/tier3/domain-registry.yaml
+cortex_brain/tier3/README-DOMAIN-INTEGRATION.md
 src/observability/dashboard_extensibility.py
 tests/observability/test_dashboard_extensibility.py
 tests/integration/test_domain_registry.py
@@ -323,7 +323,7 @@ Score: 45/100
 ### Tier 3 (Knowledge Ecosystem)
 - 16 existing CORTEX domains
 - **NEW:** 20+ business domains (company-provided registry)
-- Registry at: `cortex-brain/tier3/domain-registry.yaml`
+- Registry at: `cortex_brain/tier3/domain-registry.yaml`
 
 ---
 

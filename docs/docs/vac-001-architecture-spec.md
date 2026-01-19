@@ -88,7 +88,7 @@
 
 ### 1. CleanerInterface (Abstract Base)
 
-**Location:** `cortex-brain/tier1/orchestrators/cleaners/interface.py`
+**Location:** `cortex_brain/tier1/orchestrators/cleaners/interface.py`
 
 **Purpose:** Define contract that all cleaners must implement
 
@@ -274,7 +274,7 @@ class CleanerInterface(ABC):
 
 ### 2. CleanerRegistry
 
-**Location:** `cortex-brain/tier1/orchestrators/cleaners/registry.py`
+**Location:** `cortex_brain/tier1/orchestrators/cleaners/registry.py`
 
 **Purpose:** Manage plugin registration and discovery
 
@@ -366,8 +366,8 @@ class CleanerRegistry:
         """Load configuration for cleaner
         
         Tries in order:
-        1. Per-cleaner config: cortex-brain/tier1/orchestrators/cleaners/<domain>/config.yaml
-        2. Global config: cortex-brain/vacuum/config.yaml
+        1. Per-cleaner config: cortex_brain/tier1/orchestrators/cleaners/<domain>/config.yaml
+        2. Global config: cortex_brain/vacuum/config.yaml
         
         Args:
             domain: Domain identifier
@@ -396,7 +396,7 @@ class CleanerRegistry:
 
 ### 3. VacuumOrchestrator Enhancement
 
-**Location:** `cortex-brain/tier1/orchestrators/vacuum.py`
+**Location:** `cortex_brain/tier1/orchestrators/vacuum.py`
 
 **Enhancement:** Add cleaner plugin support
 
@@ -566,7 +566,7 @@ RollbackResult:
 
 ```
 VacuumOrchestrator.__init__()
-  └─► Auto-discover cleaners in cortex-brain/tier1/orchestrators/cleaners/
+  └─► Auto-discover cleaners in cortex_brain/tier1/orchestrators/cleaners/
       ├─ For each subdirectory (md_organizer, python_cache, etc.):
       │  ├─ Import cleaner module
       │  ├─ Verify implements CleanerInterface
@@ -623,7 +623,7 @@ rollback_all()
 
 ### Creating a New Cleaner
 
-**Template: cortex-brain/tier1/orchestrators/cleaners/my_domain/cleaner.py**
+**Template: cortex_brain/tier1/orchestrators/cleaners/my_domain/cleaner.py**
 
 ```python
 from ..interface import CleanerInterface, Analysis, Report, RollbackResult
@@ -730,7 +730,7 @@ class MyDomainCleaner(CleanerInterface):
 
 ### Registering in VacuumOrchestrator
 
-**File: cortex-brain/tier1/orchestrators/cleaners/__init__.py**
+**File: cortex_brain/tier1/orchestrators/cleaners/__init__.py**
 
 ```python
 from .interface import CleanerInterface, Analysis, Report, RollbackResult
@@ -887,7 +887,7 @@ tests/
 
 ### Global Configuration
 
-**File: cortex-brain/vacuum/config.yaml**
+**File: cortex_brain/vacuum/config.yaml**
 
 ```yaml
 cleaners:
@@ -906,7 +906,7 @@ cleaners:
 
 ### Per-Cleaner Configuration
 
-**File: cortex-brain/tier1/orchestrators/cleaners/md_organizer/config.yaml**
+**File: cortex_brain/tier1/orchestrators/cleaners/md_organizer/config.yaml**
 
 ```yaml
 md_organizer:

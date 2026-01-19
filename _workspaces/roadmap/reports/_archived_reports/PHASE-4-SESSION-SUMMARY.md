@@ -85,7 +85,7 @@ ENFORCE_ALLOWED: 29 (0.9%)
 ## DATABASE STATE
 
 ### Final Database Profile
-- **Location:** `/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db`
+- **Location:** `/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db`
 - **Total Entries:** 3,141
 - **Unique ACs:** 83
 - **Status:** ✅ Verified & Intact
@@ -177,7 +177,7 @@ To verify Phase 4 completion in a new session:
 ```bash
 # Check database state
 cd /Users/asifhussain/PROJECTS/CORTEX
-sqlite3 cortex-brain/state/governance.db \
+sqlite3 cortex_brain/state/governance.db \
   "SELECT COUNT(*) FROM audit_log; SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation='AC_COMPLETE';"
 
 # Should show:
@@ -221,7 +221,7 @@ grep "@pytest.mark.ac.*BRITTLE" tests/unit/test_brittleness_fixes.py | wc -l
 ## RESOURCE LOCATIONS
 
 **Critical Files:**
-- Database: `/Users/asifhussain/PROJECTS/CORTEX/cortex-brain/state/governance.db`
+- Database: `/Users/asifhussain/PROJECTS/CORTEX/cortex_brain/state/governance.db`
 - Python env: `/Users/asifhussain/PROJECTS/CORTEX/.venv/bin/python`
 - Project root: `/Users/asifhussain/PROJECTS/CORTEX`
 
@@ -268,7 +268,7 @@ grep "@pytest.mark.ac.*BRITTLE" tests/unit/test_brittleness_fixes.py | wc -l
    ```bash
    cd /Users/asifhussain/PROJECTS/CORTEX
    git log --oneline -1
-   sqlite3 cortex-brain/state/governance.db "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation='AC_COMPLETE';"
+   sqlite3 cortex_brain/state/governance.db "SELECT COUNT(DISTINCT ac_id) FROM audit_log WHERE operation='AC_COMPLETE';"
    ```
 
 2. **Create Phase 5 Marker File:**

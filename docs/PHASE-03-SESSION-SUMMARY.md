@@ -421,7 +421,7 @@ Zero regressions. Ready for production deployment and next phase commencement.
 - Complete Report: `_workspaces/roadmap/reports/PHASE-03-COMPLETION-REPORT.md`
 - Phase Initiation: `_workspaces/roadmap/PHASE-03-INITIATION-SUMMARY.md`
 - Master Roadmap: `_workspaces/roadmap/cortex-master.yaml`
-- Audit Log: `cortex-brain/state/governance.db` (18 entries verified)
+- Audit Log: `cortex_brain/state/governance.db` (18 entries verified)
 
 ---
 

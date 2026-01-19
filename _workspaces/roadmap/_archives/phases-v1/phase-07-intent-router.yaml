@@ -9,7 +9,7 @@ phase:
     \nSTAGE 2 - INTENT ROUTING:\n- Planning/ADO intent → PlanningOrchestrator/ADOOrchestrator\n\
     - Code/implement/fix intent → TDDOrchestrator\n- Query/status → Direct response\n\
     - Ambiguous → Back to Interaction for clarification (DEFAULT)\n\nSTAGE 3 - KNOWLEDGE\
-    \ INTEGRATION:\n- Load company domain specifications from cortex-brain/\n- Load\
+    \ INTEGRATION:\n- Load company domain specifications from cortex_brain/\n- Load\
     \ CORTEX rules from tier0/governance/\n- COMPANY OVERRIDES CORTEX (intelligent\
     \ merge)\n- Pass merged context to execution orchestrator (TDD, etc.)\n\nVision:\
     \ Transform ad-hoc user requests into well-understood, validated intents\nwith\
@@ -1031,7 +1031,7 @@ acceptance_criteria:
 
     │  ║                                                           ║ │
 
-    │  ║   1. Load company domain YAMLs from cortex-brain/         ║ │
+    │  ║   1. Load company domain YAMLs from cortex_brain/         ║ │
 
     │  ║   2. Load CORTEX rules from tier0/governance/             ║ │
 
@@ -1131,20 +1131,20 @@ acceptance_criteria:
     '
   git_checkpoint: IR-005-02-tdd-routing
 - ac_id: IR-006-01
-  title: Domain Rule Loading from cortex-brain/
-  description: "Load company-specific domain rules from cortex-brain/ tiers.\nThese\
+  title: Domain Rule Loading from cortex_brain/
+  description: "Load company-specific domain rules from cortex_brain/ tiers.\nThese\
     \ rules represent company standards, conventions, and \nbusiness logic that may\
     \ differ from CORTEX defaults.\n"
   status: NOT_STARTED
   acceptance_tests:
-  - Load domain YAMLs from cortex-brain/tier0/ (governance)
-  - Load domain YAMLs from cortex-brain/tier1/ (AC mappings)
-  - Load domain YAMLs from cortex-brain/tier2/ (standards)
-  - Load domain YAMLs from cortex-brain/tier3/ (advisory)
+  - Load domain YAMLs from cortex_brain/tier0/ (governance)
+  - Load domain YAMLs from cortex_brain/tier1/ (AC mappings)
+  - Load domain YAMLs from cortex_brain/tier2/ (standards)
+  - Load domain YAMLs from cortex_brain/tier3/ (advisory)
   - Parse and validate YAML structure
   - Cache loaded rules for performance
   - Detect and handle YAML syntax errors gracefully
-  implementation_details: "Domain Rule Structure:\n```yaml\n# cortex-brain/tier0/governance/company-rules.yaml\n\
+  implementation_details: "Domain Rule Structure:\n```yaml\n# cortex_brain/tier0/governance/company-rules.yaml\n\
     domain_rules:\n  rule_set_id: \"COMPANY-RULES\"\n  version: \"1.0\"\n  priority:\
     \ 100  # Higher = more important (company > cortex)\n  \n  rules:\n    - rule_id:\
     \ \"COMPANY-001\"\n      description: \"All APIs must use company auth middleware\"\
@@ -1154,7 +1154,7 @@ acceptance_criteria:
     , \"database\"]\n      enforcement: \"STRICT\"\n      \n    - rule_id: \"COMPANY-003\"\
     \n      description: \"Prefer async handlers for I/O operations\"\n      applies_to:\
     \ [\"handler\", \"function\"]\n      enforcement: \"ADVISORY\"\n```\n\nLoading\
-    \ Hierarchy:\n```\ncortex-brain/\n├── tier0/governance/     # HIGHEST priority\
+    \ Hierarchy:\n```\ncortex_brain/\n├── tier0/governance/     # HIGHEST priority\
     \ (immutable)\n│   ├── cortex-core-rules.yaml\n│   └── company-rules.yaml    \
     \ # Company governance\n├── tier1/acceptance-criteria/ # Project-specific\n├──\
     \ tier2/                     # Standards\n└── tier3/                     # LOWEST\
@@ -1248,7 +1248,7 @@ acceptance_criteria:
     \ 80% (CORTEX still applies!)\n```\n\nMerge Timing (CRITICAL):\n```\n┌─────────────────────────────────────────────────────────┐\n\
     │  ★ MERGE HAPPENS FIRST (Before ANY comprehension)      │\n│                \
     \                                         │\n│  1. Load CORTEX rules from tier0/governance/\
-    \            │\n│  2. Load Company rules from cortex-brain/               │\n\
+    \            │\n│  2. Load Company rules from cortex_brain/               │\n\
     │  3. Execute additive_merge_with_selective_override()    │\n│  4. MERGED_RULES\
     \ available for entire request lifecycle │\n└─────────────────────────────────────────────────────────┘\n\
     \                        │\n                        ▼\n┌─────────────────────────────────────────────────────────┐\n\

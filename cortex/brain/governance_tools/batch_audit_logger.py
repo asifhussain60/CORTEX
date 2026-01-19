@@ -5,7 +5,7 @@ from datetime import datetime
 from pathlib import Path
 
 # CORE-028: Use relative path resolution from project root
-db_path = Path(__file__).parent.parent.parent / "cortex-brain" / "state" / "governance.db"
+db_path = Path(__file__).parent.parent.parent / "cortex_brain" / "state" / "governance.db"
 acs = [f"AC-GV-009-{i:02d}" for i in range(1, 9)]
 
 def compute_hash(data: str) -> str:

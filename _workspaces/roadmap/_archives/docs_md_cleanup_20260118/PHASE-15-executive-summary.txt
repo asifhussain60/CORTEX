@@ -99,7 +99,7 @@ STATUS: COMPLETED & LOCKED ✓ (but with architectural qualification)
   Five (5) data sources required by Phase 15 specification:
 
   Source 1: governance.db (SQLite audit database)
-  • Location: cortex-brain/state/governance.db
+  • Location: cortex_brain/state/governance.db
   • Size: 112 KB
   • Status: ✓ EXISTS & ACCESSIBLE
   • Contains: Audit logs, hash chain, phase history
@@ -113,14 +113,14 @@ STATUS: COMPLETED & LOCKED ✓ (but with architectural qualification)
   • Used by: SSOT metrics dashboard, brain tier visualization
 
   Source 3: rollback-history.json (Rollback timeline)
-  • Location: cortex-brain/audit-logs/rollback-history.json
+  • Location: cortex_brain/audit-logs/rollback-history.json
   • Size: 40 KB
   • Status: ✓ EXISTS & ACCESSIBLE
   • Contains: Rollback events with timestamps
   • Used by: Temporal cortex timeline view
 
   Source 4: Orchestrator Registry (JSON registration files)
-  • Location: cortex-brain/registry/
+  • Location: cortex_brain/registry/
   • Count: 4 orchestrator files
   • Status: ✓ EXISTS & ACCESSIBLE
   • Contains: Orchestrator names, status, dependencies
@@ -167,7 +167,7 @@ STATUS: COMPLETED & LOCKED ✓ (but with architectural qualification)
     Status: 200 OK
     Response: {"orchestrators": [orchestrator objects]}
     Currently: MOCK DATA (hardcoded list)
-    Should Be: LIVE DATA (scan cortex-brain/registry/ folder)
+    Should Be: LIVE DATA (scan cortex_brain/registry/ folder)
 
   ✓ WS /ws/audit-stream
     Status: CONNECTED
@@ -311,7 +311,7 @@ STATUS: COMPLETED & LOCKED ✓ (but with architectural qualification)
        entries = [{"ac_id": "AC-AR-001-01", ...} for i in range(limit)]
      
      Fix Required:
-       • Connect to cortex-brain/state/governance.db
+       • Connect to cortex_brain/state/governance.db
        • Query audit_log table
        • Apply filters (orchestrator, phase, severity)
        • Effort: 1 hour
@@ -323,7 +323,7 @@ STATUS: COMPLETED & LOCKED ✓ (but with architectural qualification)
        orchestrators = [{"name": "PlanningOrchestrator", ...}, ...]
      
      Fix Required:
-       • Scan cortex-brain/registry/ folder
+       • Scan cortex_brain/registry/ folder
        • Load JSON registration files
        • Aggregate orchestrator data
        • Effort: 30 minutes

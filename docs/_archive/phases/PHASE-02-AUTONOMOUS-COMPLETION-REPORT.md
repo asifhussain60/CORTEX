@@ -10,7 +10,7 @@
 
 **PHASE-02-CODEBASE-COHERENCE has been successfully completed and locked with all 3 acceptance criteria implemented and validated.**
 
-This phase addressed the critical structural problem: a dual-code-home architecture (cortex-brain/ + src/) that caused:
+This phase addressed the critical structural problem: a dual-code-home architecture (cortex_brain/ + src/) that caused:
 - 200+ hours/year of developer navigation confusion
 - 50+ hours/year of import path bugs
 - 100-240 hours/year of onboarding overhead
@@ -78,7 +78,7 @@ This phase addressed the critical structural problem: a dual-code-home architect
 
 **Execution Results**:
 - **104 top-level items migrated** ✅
-  - cortex-brain/tier{0-3} → cortex/brain/tier{0-3}
+  - cortex_brain/tier{0-3} → cortex/brain/tier{0-3}
   - src/api → cortex/api
   - src/orchestrators → cortex/orchestrators
   - src/infrastructure → cortex/infrastructure

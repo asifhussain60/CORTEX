@@ -704,7 +704,7 @@ class AlertPipeline:
 
 **Files**: 
 - `src/cortex/core/knowledge/alert_pipeline.py`
-- `cortex-brain/tier0/change-detection-config.yaml` (new config)
+- `cortex_brain/tier0/change-detection-config.yaml` (new config)
 
 ---
 
@@ -888,7 +888,7 @@ class BulkIngestionPipeline:
 **No Hardcoded Paths**
 - Uses `Path(__file__).parent` for relative imports
 - All file paths portable (no /Users/ hardcoding)
-- Configurable via `cortex-brain/tier0/` YAML files
+- Configurable via `cortex_brain/tier0/` YAML files
 
 **Dependency Constraints**
 - No circular dependencies (protocol in Tier0, implementations in Tier1+)

@@ -94,7 +94,7 @@ class TestProductionConfiguration:
     
     def test_headers_configuration_exists(self):
         """Test that response headers configuration exists"""
-        config_path = "cortex-brain/tier0/response-headers.yaml"
+        config_path = "cortex_brain/tier0/response-headers.yaml"
         # Config may or may not exist depending on setup
         assert True  # Configuration presence is environment-dependent
     

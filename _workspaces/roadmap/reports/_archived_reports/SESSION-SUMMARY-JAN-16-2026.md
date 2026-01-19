@@ -17,7 +17,7 @@
 
 **Verification Completed:**
 ```
-✅ cortex-brain/tier3/domain-registry.yaml (valid)
+✅ cortex_brain/tier3/domain-registry.yaml (valid)
 ✅ .github/roadmap/phases/phase-13.yaml (valid)
 ✅ .github/roadmap/cortex-master.yaml (valid)
 ```
@@ -104,8 +104,8 @@ acdbf355 - BD-001-02: Domain Availability Documentation
 
 ## Deliverables Checklist
 
-- ✅ cortex-brain/tier3/domain-registry.yaml (12 KB)
-- ✅ cortex-brain/tier3/README-DOMAIN-INTEGRATION.md (16 KB)
+- ✅ cortex_brain/tier3/domain-registry.yaml (12 KB)
+- ✅ cortex_brain/tier3/README-DOMAIN-INTEGRATION.md (16 KB)
 - ✅ src/observability/dashboard_extensibility.py (9 KB)
 - ✅ .github/roadmap/phases/phase-13.yaml (updated)
 - ✅ .github/roadmap/cortex-master.yaml (fixed)

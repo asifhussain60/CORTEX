@@ -291,7 +291,7 @@ acceptance_criteria:
       - "TIER-0 constraint_violation message informative"
       - "Indexes created: idx_tier_access_turn, idx_tier_access_orchestrator"
       - "Migration script: scripts/migrate_governance_db_tier_enforcement.py"
-      - "Schema verified against cortex-brain/state/governance.db"
+      - "Schema verified against cortex_brain/state/governance.db"
     
     implementation_notes: |
       File: src/core/database/tier_enforcement_schema.sql
@@ -696,7 +696,7 @@ audit_trail:
   start_event: "PHASE-REMEDIATION-02-START"
   complete_event: "PHASE-REMEDIATION-02-COMPLETE"
   per_ac_tracking: true
-  governance_db_location: "cortex-brain/state/governance.db"
+  governance_db_location: "cortex_brain/state/governance.db"
 
 # =============================================================================
 # FILES AFFECTED

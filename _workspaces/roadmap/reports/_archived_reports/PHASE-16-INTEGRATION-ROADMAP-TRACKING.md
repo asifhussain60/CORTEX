@@ -172,11 +172,11 @@ REFERENCE: See PHASE-13 for implementation details
 
 **New Files to Create:**
 ```
-cortex-brain/tier3/domain-registry.yaml
+cortex_brain/tier3/domain-registry.yaml
   └─ Domain availability schema
   └─ ~200 lines
   
-cortex-brain/tier3/README-DOMAIN-INTEGRATION.md
+cortex_brain/tier3/README-DOMAIN-INTEGRATION.md
   └─ Integration guide
   └─ ~300 lines
 

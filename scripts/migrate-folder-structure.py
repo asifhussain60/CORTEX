@@ -5,7 +5,7 @@ AC-AR-010-02: Automated Folder Migration Script
 Migrates CORTEX codebase from flat structure to nested tier-based structure:
 - Moves cortex/* -> src/cortex/*
 - Moves cortex_brain/* -> src/cortex_brain/*
-- Removes deprecated cortex-brain/ folder
+- Removes deprecated cortex_brain/ folder
 - Validates file integrity
 - Implements rollback capability
 - Generates migration report
@@ -99,10 +99,10 @@ class FolderMigrator:
                 )
                 logger.info(f"   ✓ Planned cortex_brain/ migration ({len(self.files_to_migrate)} files)")
             
-            # Plan cortex-brain/ removal
-            cortex_brain_deprecated = self.repo_root / "cortex-brain"
+            # Plan cortex_brain/ removal
+            cortex_brain_deprecated = self.repo_root / "cortex_brain"
             if cortex_brain_deprecated.exists():
-                logger.info("   ✓ Marked cortex-brain/ for removal")
+                logger.info("   ✓ Marked cortex_brain/ for removal")
             
             self.migration_stats['total_files'] = len(self.files_to_migrate)
             logger.info(f"✅ Migration plan complete: {self.migration_stats['total_files']} files to migrate")
@@ -144,7 +144,7 @@ class FolderMigrator:
             self.backup_dir.mkdir(parents=True, exist_ok=True)
             
             # Backup original folders
-            for folder_name in ['cortex', 'cortex_brain', 'cortex-brain']:
+            for folder_name in ['cortex', 'cortex_brain', 'cortex_brain']:
                 folder_path = self.repo_root / folder_name
                 if folder_path.exists():
                     backup_path = self.backup_dir / folder_name
@@ -232,7 +232,7 @@ class FolderMigrator:
             
             # Remove old folders
             logger.info("🗑️  Removing old folders...")
-            for folder_name in ['cortex', 'cortex_brain', 'cortex-brain']:
+            for folder_name in ['cortex', 'cortex_brain', 'cortex_brain']:
                 folder_path = self.repo_root / folder_name
                 if folder_path.exists():
                     shutil.rmtree(folder_path)
@@ -275,7 +275,7 @@ class FolderMigrator:
                 logger.info("   ✓ Removed src/cortex_brain/")
             
             # Restore from backup
-            for folder_name in ['cortex', 'cortex_brain', 'cortex-brain']:
+            for folder_name in ['cortex', 'cortex_brain', 'cortex_brain']:
                 backup_path = self.backup_dir / folder_name
                 if backup_path.exists():
                     restore_path = self.repo_root / folder_name
@@ -317,7 +317,7 @@ class FolderMigrator:
 |--------|-------------|--------|
 | `cortex/` | `src/cortex/` | ✓ Migrated |
 | `cortex_brain/` | `src/cortex_brain/` | ✓ Migrated |
-| `cortex-brain/` | Removed | ✓ Removed |
+| `cortex_brain/` | Removed | ✓ Removed |
 
 ### File Statistics
 

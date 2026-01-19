@@ -499,7 +499,7 @@ class DegradedResponse(Generic[T]):
    ```bash
    git add _workspaces/roadmap/cortex-master.yaml
    git add tests/tier2/test_graceful_degradation.py
-   git add cortex-brain/tier2/resilience.py  # or __init__.py
+   git add cortex_brain/tier2/resilience.py  # or __init__.py
    git commit -m "phase-03: AC-NFR-002-01 COMPLETED - Graceful Degradation Framework"
    ```
 
@@ -521,13 +521,13 @@ class DegradedResponse(Generic[T]):
 touch tests/tier2/test_graceful_degradation.py
 
 # Write tests first (TDD)
-# Then implement classes in cortex-brain/tier2/resilience/__init__.py
+# Then implement classes in cortex_brain/tier2/resilience/__init__.py
 
 # Run tests
 pytest tests/tier2/test_graceful_degradation.py -v
 
 # Check type hints
-mypy cortex-brain/tier2/resilience.py
+mypy cortex_brain/tier2/resilience.py
 
 # When done, update master and commit
 git add _workspaces/roadmap/cortex-master.yaml

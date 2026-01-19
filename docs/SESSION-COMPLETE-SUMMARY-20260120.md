@@ -16,7 +16,7 @@
 #### Issue #6: New AC Audit Coverage
 - **Problem:** Database path incorrect in audit trail test fixture
 - **Solution:** Updated `TestAuditRemediationProgress.db_connection` to use correct path
-- **Location:** `cortex/core/state/governance.db` (not `cortex-brain/state/`)
+- **Location:** `cortex/core/state/governance.db` (not `cortex_brain/state/`)
 - **Impact:** All 8 audit trail tests now passing
 - **Time:** 10 minutes
 

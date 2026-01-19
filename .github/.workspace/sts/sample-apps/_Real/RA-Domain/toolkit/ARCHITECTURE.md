@@ -48,7 +48,7 @@
                               ↓
 ┌─────────────────────────────────────────────────────────────────┐
 │                    DATA STORAGE LAYER                           │
-│  - cortex-brain/dashboards/data/repos/{repo_name}/              │
+│  - cortex_brain/dashboards/data/repos/{repo_name}/              │
 │    ├── ast-outputs/        # AST scan results (JSON)            │
 │    ├── test-coverage/      # Coverage reports                   │
 │    ├── regulatory/         # Compliance findings                │
@@ -303,7 +303,7 @@ class RADomainOrchestrator:
 **Pattern:** Aligned with CORTEX dashboard data structure
 
 ```
-cortex-brain/dashboards/data/repos/Product.Example/
+cortex_brain/dashboards/data/repos/Product.Example/
 ├── dashboard.json                      # Master dashboard data (template-ready)
 ├── registry-metadata.json              # Repository metadata
 │
@@ -357,7 +357,7 @@ def discover_and_register_ra_domain():
     Discover RA domain analysis results and register with dashboard
     """
     ra_domain_path = Path('C:/PROJECTS/Product.Example')
-    output_path = Path('cortex-brain/dashboards/data/repos/Product.Example')
+    output_path = Path('cortex_brain/dashboards/data/repos/Product.Example')
     
     # Check if analysis exists
     if (output_path / 'dashboard.json').exists():
@@ -479,7 +479,7 @@ from src.operations.ra_domain.orchestrator import RADomainOrchestrator
 # Create orchestrator
 orchestrator = RADomainOrchestrator(
     repo_path='C:/PROJECTS/Product.Example',
-    output_dir='cortex-brain/dashboards/data/repos/Product.Example'
+    output_dir='cortex_brain/dashboards/data/repos/Product.Example'
 )
 
 # Execute specific phase
@@ -507,7 +507,7 @@ class ProgressTracker:
     """
     Track batch execution progress in real-time
     
-    Persists to: cortex-brain/dashboards/data/repos/{repo}/reports/progress-tracker.json
+    Persists to: cortex_brain/dashboards/data/repos/{repo}/reports/progress-tracker.json
     """
     
     def update_batch_status(self, batch_num: int, status: str, duration_min: float):
@@ -537,7 +537,7 @@ class ProgressTracker:
 ### Toolkit Configuration
 
 ```yaml
-# cortex-brain/admin/RA-Domain/toolkit/config/analysis-config.yaml
+# cortex_brain/admin/RA-Domain/toolkit/config/analysis-config.yaml
 
 repository:
   path: "C:/PROJECTS/Product.Example"
@@ -545,7 +545,7 @@ repository:
   type: "external_csharp"
 
 output:
-  base_dir: "cortex-brain/dashboards/data/repos/Product.Example"
+  base_dir: "cortex_brain/dashboards/data/repos/Product.Example"
   formats:
     - json
     - markdown
@@ -1325,11 +1325,11 @@ class OneDriveSitePublisher(RABaseCollector):
 # 1. Generate site structure
 python scripts/onedrive_site_publisher.py --generate
 
-# 2. Output: cortex-brain/dashboards/data/repos/Product.Example/onedrive-site/
+# 2. Output: cortex_brain/dashboards/data/repos/Product.Example/onedrive-site/
 
 # 3. Copy to OneDrive (manual or auto-sync)
 # Option A: Manual
-Copy-Item -Recurse "cortex-brain/.../onedrive-site/*" "C:/Users/YourName/OneDrive/RA-Domain-Analysis/"
+Copy-Item -Recurse "cortex_brain/.../onedrive-site/*" "C:/Users/YourName/OneDrive/RA-Domain-Analysis/"
 
 # Option B: Auto-sync (configure OneDrive path in config)
 # Publisher auto-copies to OneDrive sync folder
@@ -1370,7 +1370,7 @@ python scripts/06_master_orchestrator.py --execute-all
 
 **Current State:**
 - **Standalone OneDrive Site:** Static HTML/CSS/JS deployed to `C:\Users\ahussain\OneDrive - WAGEWORKS, INC\ASIF\RA-Domain-Analysis`
-- **CORTEX Admin Dashboard:** React-based dashboard at `cortex-brain/dashboards/ui/` with glassmorphism design system
+- **CORTEX Admin Dashboard:** React-based dashboard at `cortex_brain/dashboards/ui/` with glassmorphism design system
 
 **Future State:** Single unified dashboard with:
 - Multi-repository support (CORTEX + RA + future repos)
@@ -1385,10 +1385,10 @@ python scripts/06_master_orchestrator.py --execute-all
 **Goal:** Standardize data format between RA scans and CORTEX dashboard collectors
 
 **Tasks:**
-1. Extend `cortex-brain/dashboards/data/repos/` structure to include RA
+1. Extend `cortex_brain/dashboards/data/repos/` structure to include RA
 2. Create `product-payment-accounts.json` matching admin dashboard schema
 3. Map business_value_scanner.py output to dashboard data model
-4. Add RA repository to registry (`cortex-brain/dashboards/data/repository-registry.json`)
+4. Add RA repository to registry (`cortex_brain/dashboards/data/repository-registry.json`)
 
 **Example Mapping:**
 ```json
@@ -1412,7 +1412,7 @@ python scripts/06_master_orchestrator.py --execute-all
 **Goal:** Convert OneDrive HTML pages to React components matching admin dashboard architecture
 
 **Tasks:**
-1. Create `cortex-brain/dashboards/ui/src/pages/RA/` directory
+1. Create `cortex_brain/dashboards/ui/src/pages/RA/` directory
 2. Convert static HTML to React components:
    - `index.html` → `RADomainOverview.jsx`
    - `managers/weekly-scorecard.html` → `ManagerScorecard.jsx`
@@ -1464,14 +1464,14 @@ dashboards/ui/src/pages/
 
 **Tasks:**
 1. Schedule `business_value_scanner.py` to run weekly via Windows Task Scheduler
-2. Auto-update `cortex-brain/dashboards/data/repos/Product.Example/latest.json`
+2. Auto-update `cortex_brain/dashboards/data/repos/Product.Example/latest.json`
 3. Add "Last Updated" timestamp to dashboard
 4. Implement manual refresh button (re-runs scanner on-demand)
 
 **Automation Script:**
 ```powershell
 # Weekly RA scan (runs every Monday 6 AM)
-schtasks /create /tn "RA Domain Scan" /tr "python cortex-brain/admin/RA-Domain/toolkit/scripts/business_value_scanner.py" /sc weekly /d MON /st 06:00
+schtasks /create /tn "RA Domain Scan" /tr "python cortex_brain/admin/RA-Domain/toolkit/scripts/business_value_scanner.py" /sc weekly /d MON /st 06:00
 ```
 
 #### Phase 5: Mobile Optimization (Q4 2025)

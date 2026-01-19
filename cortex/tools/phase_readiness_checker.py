@@ -104,7 +104,7 @@ class PhaseReadinessChecker:
             self.workspace_root / "src" / "tools" / "governance-cli.py"
         )
         self.governance_db = (
-            self.workspace_root / "cortex-brain" / "state" / "governance.db"
+            self.workspace_root / "cortex_brain" / "state" / "governance.db"
         )
 
     def check_phase_readiness(self, phase_id: str) -> PhaseReadinessReport:

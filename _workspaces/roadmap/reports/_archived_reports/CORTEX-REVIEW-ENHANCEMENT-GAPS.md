@@ -69,7 +69,7 @@ mandatory_pre_review_gate:
     # MUST pass before review begins
     python -c "
     import sqlite3, datetime
-    db = sqlite3.connect('cortex-brain/state/governance.db')
+    db = sqlite3.connect('cortex_brain/state/governance.db')
     c = db.cursor()
     
     # Check freshness
@@ -156,7 +156,7 @@ timing_aware_verification:
     import sqlite3, time
     time.sleep(1)  # Ensure persistence window
     
-    db = sqlite3.connect('cortex-brain/state/governance.db')
+    db = sqlite3.connect('cortex_brain/state/governance.db')
     c = db.cursor()
     
     # Fresh connection ensures we see committed data
@@ -684,11 +684,11 @@ def stage_2_routing(self):
 
 ```python
 # ANTI-PATTERN (environment-specific)
-db_path = "cortex-brain/state/governance.db"
+db_path = "cortex_brain/state/governance.db"
 # Fails if run from different directory
 
 # CORRECT (CORE-028 compliant)
-db_path = Path(__file__).parent / "cortex-brain/state/governance.db"
+db_path = Path(__file__).parent / "cortex_brain/state/governance.db"
 ```
 
 **Occurrences**: 12+ files have environment assumptions

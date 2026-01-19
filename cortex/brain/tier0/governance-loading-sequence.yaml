@@ -31,7 +31,7 @@ loading_sequence:
   phase_0_bootstrap:
     description: "Initial bootstrap - core governance loaded first"
     rules:
-      - path: "cortex-brain/tier0/governance/core-rules.yaml"
+      - path: "cortex_brain/tier0/governance/core-rules.yaml"
         id: "core-rules"
         rules_count: 29
         severity: "BLOCKED"
@@ -43,7 +43,7 @@ loading_sequence:
   phase_1_domain_rules:
     description: "Domain-specific orchestrator rules"
     rules:
-      - path: "cortex-brain/tier0/governance/tdd-rules.yaml"
+      - path: "cortex_brain/tier0/governance/tdd-rules.yaml"
         id: "tdd-rules"
         domain: "tdd"
         severity: "BLOCKED"
@@ -51,7 +51,7 @@ loading_sequence:
         dependencies: ["core-rules"]
         description: "TDD orchestrator domain rules (8 rules)"
   
-      - path: "cortex-brain/tier0/governance/interaction-rules.yaml"
+      - path: "cortex_brain/tier0/governance/interaction-rules.yaml"
         id: "interaction-rules"
         domain: "interaction"
         severity: "BLOCKED"
@@ -59,7 +59,7 @@ loading_sequence:
         dependencies: ["core-rules"]
         description: "Intent comprehension & LENS protocol rules"
   
-      - path: "cortex-brain/tier0/governance/planning-rules.yaml"
+      - path: "cortex_brain/tier0/governance/planning-rules.yaml"
         id: "planning-rules"
         domain: "planning"
         severity: "BLOCKED"
@@ -67,7 +67,7 @@ loading_sequence:
         dependencies: ["core-rules"]
         description: "Planning orchestrator domain rules"
   
-      - path: "cortex-brain/tier0/governance/ado-rules.yaml"
+      - path: "cortex_brain/tier0/governance/ado-rules.yaml"
         id: "ado-rules"
         domain: "ado"
         severity: "WARNING"
@@ -78,7 +78,7 @@ loading_sequence:
   phase_2_validation:
     description: "Validation & compliance rules"
     rules:
-      - path: "cortex-brain/tier0/governance/ac-validation-checklist.yaml"
+      - path: "cortex_brain/tier0/governance/ac-validation-checklist.yaml"
         id: "ac-validation"
         category: "validation"
         severity: "BLOCKED"
@@ -89,7 +89,7 @@ loading_sequence:
   phase_3_enforcement:
     description: "Enforcement policy & phase mapping"
     rules:
-      - path: "cortex-brain/tier0/governance/phase-enforcement-map.yaml"
+      - path: "cortex_brain/tier0/governance/phase-enforcement-map.yaml"
         id: "phase-enforcement"
         category: "orchestration"
         severity: "BLOCKED"
@@ -163,7 +163,7 @@ validation:
     - name: "YAML schema validation"
       check: "All files conform to governance schema"
       failure_action: "BLOCK - invalid YAML structure"
-      schema_file: "cortex-brain/tier0/governance/governance-schema.yaml"
+      schema_file: "cortex_brain/tier0/governance/governance-schema.yaml"
   
     - name: "Dependency resolution"
       check: "All rule dependencies can be satisfied"

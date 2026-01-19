@@ -62,7 +62,7 @@ STATUS: INITIATING
 
 ▸ ASSUMPTIONS
   • SQLite available in Python environment — Source: requirements.txt
-  • cortex-brain/tier0/ structure exists — Source: workspace structure verification
+  • cortex_brain/tier0/ structure exists — Source: workspace structure verification
   • No prior governance.db state to migrate — Source: fresh implementation
   • YAML parser available (PyYAML) — Source: dependencies
   • Python 3.10+ available — Source: standard runtime
@@ -80,7 +80,7 @@ STATUS: INITIATING
 
 ▸ DEPENDENCIES
   • Required phases: None (PHASE-01 has no prerequisites)
-  • Required components: cortex-brain/tier0/governance/core-rules.yaml must exist
+  • Required components: cortex_brain/tier0/governance/core-rules.yaml must exist
 
 ▸ IMPACT
   • New files: ~18 Python modules, 1 SQLite database
@@ -247,11 +247,11 @@ Ran terminal command: git add -A && git commit -m "checkpoint: before AC-AR-001"
 
 Good. Now let me check the core-rules.yaml to understand the SKULL rules I need to load: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier0/governance/core-rules.yaml#1-1), lines 1 to 100
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier0/governance/core-rules.yaml#1-1), lines 1 to 100
 
 Let me see more of the rules: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier0/governance/core-rules.yaml#100-100), lines 100 to 200
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier0/governance/core-rules.yaml#100-100), lines 100 to 200
 
 Good, I understand the SKULL rules. Now let me create the Governance Registry and related components. Let me start by creating the governance_registry.py: 
 
@@ -271,11 +271,11 @@ Ran terminal command: /Users/asifhussain/PROJECTS/CORTEX/.venv/bin/python -m pyt
 
 There's a YAML parsing error in the core-rules.yaml file at line 303. Let me check that line: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier0/governance/core-rules.yaml#295-295), lines 295 to 310
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier0/governance/core-rules.yaml#295-295), lines 295 to 310
 
 I see the issue - the validation array syntax is not properly formatted in the YAML. However, I don't want to modify the core-rules.yaml file as it's part of the master data. Instead, I should make my loader more robust to handle this. Let me check what the actual structure looks like more carefully: 
 
-Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex-brain/tier0/governance/core-rules.yaml#300-300), lines 300 to 330
+Read [](file:///Users/asifhussain/PROJECTS/CORTEX/cortex_brain/tier0/governance/core-rules.yaml#300-300), lines 300 to 330
 
 I see the issue - line 303 has a Unicode arrow character `→` which is causing the YAML parser to have issues. This is actually in the YAML file and that's a legitimate issue. The test should handle this gracefully. Let me update the test to be more resilient and also fix the YAML parsing by making it handle this case: 
 

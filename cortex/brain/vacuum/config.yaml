@@ -81,9 +81,9 @@ protected_files:
   - "requirements.txt"
   - "README.md"
   - ".gitignore"
-  - "cortex-brain/state/governance.db"
-  - "cortex-brain/state/governance.db-shm"
-  - "cortex-brain/state/governance.db-wal"
+  - "cortex_brain/state/governance.db"
+  - "cortex_brain/state/governance.db-shm"
+  - "cortex_brain/state/governance.db-wal"
 
 # Naming Conventions
 
@@ -148,16 +148,16 @@ target_structure:
   - "reports/archive/"
   - "config/"
   - "scripts/"
-  - "cortex-brain/"
-  - "cortex-brain/tier0/"
-  - "cortex-brain/tier1/"
-  - "cortex-brain/tier2/"
-  - "cortex-brain/tier3/"
-  - "cortex-brain/audit-logs/"
-  - "cortex-brain/audit-logs/vacuum-logs/"
-  - "cortex-brain/state/"
-  - "cortex-brain/vacuum/"
-  - "cortex-brain/snapshots/"
+  - "cortex_brain/"
+  - "cortex_brain/tier0/"
+  - "cortex_brain/tier1/"
+  - "cortex_brain/tier2/"
+  - "cortex_brain/tier3/"
+  - "cortex_brain/audit-logs/"
+  - "cortex_brain/audit-logs/vacuum-logs/"
+  - "cortex_brain/state/"
+  - "cortex_brain/vacuum/"
+  - "cortex_brain/snapshots/"
   - "src/"
   - "src/core/"
   - "src/infrastructure/"
@@ -194,8 +194,8 @@ logging:
   format: "%(timestamp)s [%(level)s] %(message)s"
   
   # Log files
-  audit_log: "cortex-brain/audit-logs/vacuum-logs/vacuum.log"
-  error_log: "cortex-brain/audit-logs/vacuum-logs/vacuum-errors.log"
+  audit_log: "cortex_brain/audit-logs/vacuum-logs/vacuum.log"
+  error_log: "cortex_brain/audit-logs/vacuum-logs/vacuum-errors.log"
   
   # Verbosity
   verbose: false

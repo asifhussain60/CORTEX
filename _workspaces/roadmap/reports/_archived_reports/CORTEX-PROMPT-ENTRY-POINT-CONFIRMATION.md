@@ -131,7 +131,7 @@ LLM Agent
 
 ```yaml
 # TIER 0 Rules (Immutable)
-cortex-brain/tier0/governance/core-rules.yaml
+cortex_brain/tier0/governance/core-rules.yaml
   ├─ CORE-008: RED → GREEN testing pattern
   ├─ CORE-011: Type hints mandatory
   ├─ CORE-012: Docstrings mandatory
@@ -139,7 +139,7 @@ cortex-brain/tier0/governance/core-rules.yaml
   └─ ... (28 total rules)
 
 # Domain Rules (Context-Specific)
-cortex-brain/tier0/governance/
+cortex_brain/tier0/governance/
   ├─ interaction-rules.yaml (context building)
   ├─ planning-rules.yaml (planning operations)
   └─ tdd-rules.yaml (code operations)

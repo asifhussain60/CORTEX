@@ -76,11 +76,11 @@
 ### 🔧 Infrastructure Files
 
 - ✅ `verify_phases.py` → `scripts/verify-phases.py`
-- ✅ `rollback_history.json` → `cortex-brain/audit-logs/rollback-history.json`
+- ✅ `rollback_history.json` → `cortex_brain/audit-logs/rollback-history.json`
 
 ### 🗑️ Files Deleted
 
-- ✅ `cortex-brain/tier2/response-templates/response-templates.yaml` (backup file)
+- ✅ `cortex_brain/tier2/response-templates/response-templates.yaml` (backup file)
 
 ---
 
@@ -119,7 +119,7 @@ CORTEX/
 │   ├── verify-phases.py
 │   └── ... (other scripts)
 │
-├── cortex-brain/
+├── cortex_brain/
 │   ├── audit-logs/
 │   │   └── rollback-history.json
 │   ├── vacuum/
@@ -169,7 +169,7 @@ The system automatically identified and updated:
 
 ### Snapshots Created
 - **Timestamp**: 2026-01-15T05:03:37.609566
-- **Location**: `cortex-brain/snapshots/backup-2026-01-15T05-03-37.json`
+- **Location**: `cortex_brain/snapshots/backup-2026-01-15T05-03-37.json`
 - **Can Rollback To**: Previous state via git or snapshot
 
 ### Operations Logged
@@ -231,7 +231,7 @@ Every operation was logged with:
 
 ## Artifacts Generated
 
-All analysis artifacts saved to `cortex-brain/vacuum/`:
+All analysis artifacts saved to `cortex_brain/vacuum/`:
 
 1. **analysis-report.json** (1.2 MB)
    - Complete inventory and findings
@@ -277,7 +277,7 @@ git checkout HEAD -- .
 ### Option 2: Snapshot
 ```bash
 python scripts/run-cortex-vacuum.py rollback \
-  --snapshot cortex-brain/snapshots/backup-2026-01-15T05-03-37.json
+  --snapshot cortex_brain/snapshots/backup-2026-01-15T05-03-37.json
 ```
 
 ---

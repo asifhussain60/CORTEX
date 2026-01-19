@@ -238,7 +238,7 @@ TEST EXECUTION
 | CORE-017 | Strict governance | ✅ YES | PHASE-09 tools: verified | NONE |
 | CORE-018 | YAML-first design | ✅ YES | Phase plans: YAML only | NONE |
 | CORE-019 | TDD-Master routing | ⚠️ PARTIAL | IR-004-02 tests ✓, but turn-by-turn approval GAP | CRIT-002 (minor) |
-| CORE-020 | No markdown in tier0 | ✅ YES | cortex-brain/: YAML only | NONE |
+| CORE-020 | No markdown in tier0 | ✅ YES | cortex_brain/: YAML only | NONE |
 | CORE-021 | Scaffolder pattern | ✅ YES (future) | Documented for PHASE-14+ | NONE |
 | CORE-022 | Kebab-case naming | ❌ FAIL | 1 file: housekeeping_orchestrator.py | MED-001 |
 | CORE-023 | Pre-commit validation | ⚠️ PARTIAL | Not shown in execution logs | MED-002 |

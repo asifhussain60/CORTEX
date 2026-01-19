@@ -395,17 +395,17 @@ acceptance_criteria:
       title: "Tier 0: Domain-Specific SKULL Rules"
       description: |
         Load domain-specific governance rules into Tier 0:
-        - Add rule files: cortex-brain/tier0/domains/*.yaml
+        - Add rule files: cortex_brain/tier0/domains/*.yaml
         - Domains: tdd, planning, ado, interaction, infrastructure
         - Rules: 5+ rules per domain covering security, performance, compliance
         - Verify: Zero hardcoded rules in orchestrators
       test_file: "tests/unit/test_brain_tier0_domains.py"
       test_name: "test_tier0_domain_rules_loaded"
       components_created:
-        - "cortex-brain/tier0/domains/tdd-rules.yaml"
-        - "cortex-brain/tier0/domains/planning-rules.yaml"
-        - "cortex-brain/tier0/domains/ado-rules.yaml"
-        - "cortex-brain/tier0/domains/interaction-rules.yaml"
+        - "cortex_brain/tier0/domains/tdd-rules.yaml"
+        - "cortex_brain/tier0/domains/planning-rules.yaml"
+        - "cortex_brain/tier0/domains/ado-rules.yaml"
+        - "cortex_brain/tier0/domains/interaction-rules.yaml"
       
     - ac_id: "AC-AR-013-02"
       title: "Tier 1: AC-to-Domain Mappings"
@@ -418,22 +418,22 @@ acceptance_criteria:
       test_file: "tests/unit/test_brain_tier1_mappings.py"
       test_name: "test_tier1_ac_domain_mappings"
       components_created:
-        - "cortex-brain/tier1/domain-mappings.yaml"
+        - "cortex_brain/tier1/domain-mappings.yaml"
       
     - ac_id: "AC-AR-013-03"
       title: "Tier 2: Response Templates with Inheritance"
       description: |
         Implement template inheritance for response templates:
-        - Base templates: cortex-brain/tier2/base/
-        - Domain templates: cortex-brain/tier2/domains/
+        - Base templates: cortex_brain/tier2/base/
+        - Domain templates: cortex_brain/tier2/domains/
         - Inheritance: domain templates extend base templates
         - Verification: All templates validate against schema
       test_file: "tests/unit/test_brain_tier2_templates.py"
       test_name: "test_tier2_template_inheritance"
       components_created:
-        - "cortex-brain/tier2/base/*.yaml"
-        - "cortex-brain/tier2/domains/tdd/*.yaml"
-        - "cortex-brain/tier2/domains/planning/*.yaml"
+        - "cortex_brain/tier2/base/*.yaml"
+        - "cortex_brain/tier2/domains/tdd/*.yaml"
+        - "cortex_brain/tier2/domains/planning/*.yaml"
 
   AR-014:
     - ac_id: "AC-AR-014-01"
@@ -635,7 +635,7 @@ acceptance_criteria:
       title: "Dynamic Tier Content Loading"
       description: |
         Verify new tier files auto-loaded:
-        - Create: New YAML file in cortex-brain/tier0/domains/
+        - Create: New YAML file in cortex_brain/tier0/domains/
         - Verify: Loaded without restart
         - Measure: Load latency <100ms
         - Pass: If content available in <100ms
@@ -730,10 +730,10 @@ days:
         requirement_id: "AC-AR-013-01"
         components: []
         files_to_create:
-          - "cortex-brain/tier0/domains/tdd-rules.yaml"
-          - "cortex-brain/tier0/domains/planning-rules.yaml"
-          - "cortex-brain/tier0/domains/ado-rules.yaml"
-          - "cortex-brain/tier0/domains/interaction-rules.yaml"
+          - "cortex_brain/tier0/domains/tdd-rules.yaml"
+          - "cortex_brain/tier0/domains/planning-rules.yaml"
+          - "cortex_brain/tier0/domains/ado-rules.yaml"
+          - "cortex_brain/tier0/domains/interaction-rules.yaml"
         acceptance_criteria:
           - ac_id: "AC-AR-013-01"
             description: "Domain rules loaded for 4+ domains"
@@ -743,7 +743,7 @@ days:
         requirement_id: "AC-AR-013-02"
         components: []
         files_to_create:
-          - "cortex-brain/tier1/domain-mappings.yaml"
+          - "cortex_brain/tier1/domain-mappings.yaml"
         acceptance_criteria:
           - ac_id: "AC-AR-013-02"
             description: "All AC-IDs mapped to domains"
@@ -753,10 +753,10 @@ days:
         requirement_id: "AC-AR-013-03"
         components: []
         files_to_create:
-          - "cortex-brain/tier2/base/success-response.yaml"
-          - "cortex-brain/tier2/base/error-response.yaml"
-          - "cortex-brain/tier2/domains/tdd/test-result.yaml"
-          - "cortex-brain/tier2/domains/planning/plan-analysis.yaml"
+          - "cortex_brain/tier2/base/success-response.yaml"
+          - "cortex_brain/tier2/base/error-response.yaml"
+          - "cortex_brain/tier2/domains/tdd/test-result.yaml"
+          - "cortex_brain/tier2/domains/planning/plan-analysis.yaml"
         acceptance_criteria:
           - ac_id: "AC-AR-013-03"
             description: "Templates with inheritance working"

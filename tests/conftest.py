@@ -2,7 +2,7 @@
 Pytest Configuration - Minimal for Migrated Structure
 
 Shared fixtures and configuration for all tests.
-Handles both old (src/, cortex-brain/) and new (cortex/) structures gracefully.
+Handles both old (src/, cortex_brain/) and new (cortex/) structures gracefully.
 
 Author: Asif Hussain
 Copyright © 2025-2026 Asif Hussain. All rights reserved.

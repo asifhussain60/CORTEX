@@ -289,7 +289,7 @@ def check_unclosed_files():
 
 def check_audit_failures():
     """Query audit log for failure patterns."""
-    db_path = Path("cortex-brain/state/governance.db")
+    db_path = Path("cortex_brain/state/governance.db")
     if not db_path.exists():
         return {"check": "audit_failures", "error": "Database not found"}
     

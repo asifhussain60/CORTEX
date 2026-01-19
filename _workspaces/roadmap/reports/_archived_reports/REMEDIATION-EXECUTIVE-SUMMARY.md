@@ -124,7 +124,7 @@ Expected outcome: 100% CORE-027 compliance in 2-3 hours
 
 - ✅ `tests/unit/test_folder_structure.py` - Added AC-ID markers
 - ✅ `tests/unit/test_brittleness_fixes.py` - Added AC-ID markers
-- ✅ `cortex-brain/state/governance.db` - Restored from backup (145 entries)
+- ✅ `cortex_brain/state/governance.db` - Restored from backup (145 entries)
 - ✅ Documented results in `docs/OPTION-1B-PHASE-1-COMPLETE.md`
 
 ## Git Commits

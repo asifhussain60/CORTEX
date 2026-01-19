@@ -130,7 +130,7 @@ BLOCKER ANALYSIS:
 │  │  │        └─────────────────────┘                         │  │    │
 │  │  └──────────────────────────────────────────────────────┘  │    │
 │  │                                                             │    │
-│  │  STORAGE: File-based YAML in Git (cortex-brain/tier3/)    │    │
+│  │  STORAGE: File-based YAML in Git (cortex_brain/tier3/)    │    │
 │  │  GOVERNANCE: All 28 CORE rules enforced                    │    │
 │  │  TESTING: 225 tests covering all components (>85% coverage)│    │
 │  │                                                             │    │

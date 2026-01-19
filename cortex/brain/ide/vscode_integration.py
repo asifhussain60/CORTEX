@@ -239,7 +239,7 @@ class VSCodeExtensionConfig:
                         },
                         "cortex-governance.databasePath": {
                             "type": "string",
-                            "default": "cortex-brain/state/governance.db",
+                            "default": "cortex_brain/state/governance.db",
                             "description": "Path to governance database"
                         }
                     }

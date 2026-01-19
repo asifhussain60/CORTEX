@@ -89,7 +89,7 @@ Before submitting this review, verify:
 - `tests/RA.FundingInvoices.IntegrationTests/` - Integration test coverage
 
 ### Migration Plan Reference
-**Document:** `C:\PROJECTS\CORTEX\cortex-brain\documents\planning\ra-migration-plan-v2-changes.md`
+**Document:** `C:\PROJECTS\CORTEX\cortex_brain\documents\planning\ra-migration-plan-v2-changes.md`
 
 ---
 

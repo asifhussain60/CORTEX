@@ -40,7 +40,7 @@ SHOULD BE (Live):
 │ Brain Tier Metrics                                          │
 ├─────────────────────────────────────────────────────────────┤
 │ • Reads from: .github/roadmap/cortex-master.yaml           │
-│ • Reads from: cortex-brain/state/governance.db             │
+│ • Reads from: cortex_brain/state/governance.db             │
 │ • Auto-updates when phase_tracker changes                  │
 │ • Real audit entry counts from database                    │
 └─────────────────────────────────────────────────────────────┘
@@ -70,7 +70,7 @@ SHOULD BE (Live):
 - `governance.db` - Exists but not queried
 - `cortex-master.yaml` - Exists but not parsed
 - `rollback-history.json` - Exists but not loaded
-- `cortex-brain/registry/` - Exists but not consulted
+- `cortex_brain/registry/` - Exists but not consulted
 
 ### FRONTEND (HTML5 + Vanilla JS) - ⚠️ RENDERS BUT NO DATA
 
@@ -143,7 +143,7 @@ Total: 19/19 PASSING (100%)
 "progress": 65.5
 
 # SHOULD BE (Live - Read from governance.db)
-# Query cortex-brain/state/governance.db for actual phase_tracker values
+# Query cortex_brain/state/governance.db for actual phase_tracker values
 ```
 
 **Fix Required**: 
@@ -186,7 +186,7 @@ entries = [
 ]
 
 # SHOULD BE (Live)
-# Read from cortex-brain/registry/ folder
+# Read from cortex_brain/registry/ folder
 # Parse orchestrator registration files
 ```
 
@@ -244,7 +244,7 @@ async def get_ssot_metrics():
 # Add database connection manager
 class GovernanceDB:
     def __init__(self):
-        self.db_path = "cortex-brain/state/governance.db"
+        self.db_path = "cortex_brain/state/governance.db"
     
     def get_audit_entries(self, limit=50, offset=0):
         conn = sqlite3.connect(self.db_path)
@@ -274,7 +274,7 @@ def load_orchestrators():
     import os
     import json
     
-    registry_path = "cortex-brain/registry"
+    registry_path = "cortex_brain/registry"
     orchestrators = []
     
     for file in os.listdir(registry_path):
@@ -298,7 +298,7 @@ async def get_orchestrators():
 ```python
 def verify_audit_chain():
     """Verify hash chain integrity from governance.db"""
-    conn = sqlite3.connect("cortex-brain/state/governance.db")
+    conn = sqlite3.connect("cortex_brain/state/governance.db")
     cursor = conn.cursor()
     
     cursor.execute("""
@@ -376,10 +376,10 @@ This is a **deliberate architectural choice** documented in the implementation:
 ## VERIFICATION: Data Sources Exist and Are Accessible
 
 ```bash
-✓ cortex-brain/state/governance.db        [112 KB] - SQLite audit database
+✓ cortex_brain/state/governance.db        [112 KB] - SQLite audit database
 ✓ .github/roadmap/cortex-master.yaml      [79 KB] - Phase tracker YAML
-✓ cortex-brain/audit-logs/rollback-history.json  [40 KB] - Rollback timeline
-✓ cortex-brain/registry/                  [4 items] - Orchestrator registrations
+✓ cortex_brain/audit-logs/rollback-history.json  [40 KB] - Rollback timeline
+✓ cortex_brain/registry/                  [4 items] - Orchestrator registrations
 ✓ docs/phases/*.yaml                      [13 files] - Phase specifications
 ```
 
@@ -430,7 +430,7 @@ This is a **deliberate architectural choice** documented in the implementation:
    - Effort: 1 hour
    - Dependencies: JSON (built-in)
    - Tasks:
-     - Scan `cortex-brain/registry/` for orchestrator files
+     - Scan `cortex_brain/registry/` for orchestrator files
      - Parse and aggregate orchestrator data
      - Implement status checking
 

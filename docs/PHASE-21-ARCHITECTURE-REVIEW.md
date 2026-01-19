@@ -34,7 +34,7 @@ CORTEX Knowledge Access Pattern (AS-IS):
 
 MasterOrchestrator.__init__()
 ├─ Line 81-98: Initialize KnowledgeRepository (technical)
-│  ├─ Data source: cortex-brain/tier3/knowledge/*.yaml (35+ entries)
+│  ├─ Data source: cortex_brain/tier3/knowledge/*.yaml (35+ entries)
 │  ├─ Index: .knowledge-index.json
 │  ├─ Interface: query(domains, tags, keywords)
 │  │           get_by_domain(domain)

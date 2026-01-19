@@ -335,7 +335,7 @@ WEEK 4: FR-008 + FR-009 (E2E Validation)
 - `.github/roadmap/phases/phase-vision-core.yaml` → Next phase specification
 
 **Audit & Verification:**
-- `cortex-brain/state/governance.db` → Audit logs and AC index
+- `cortex_brain/state/governance.db` → Audit logs and AC index
 - Git commit history → All phase transitions documented
 - Test results → 810+ tests passing
 

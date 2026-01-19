@@ -27,17 +27,17 @@ CORTEX is a **sophisticated, well-architected governance system** with outstandi
 **Evidence:**
 - ✅ Code exists: `ResponseHeaderInjector`, `ConversationProtocol`, `TerminalEvents`
 - ❌ Prompts don't document it: `CORTEX.prompt.md` mentions "Response Headers" 0 times
-- ❌ Content missing: `cortex-brain/tier2/base/` contains `.gitkeep`, no actual templates
+- ❌ Content missing: `cortex_brain/tier2/base/` contains `.gitkeep`, no actual templates
 - ❌ Phase YAML mismatch: `cortex-master.yaml` says "files_to_create" will be created, but never validated
 
 **What's Wrong:**
 ```yaml
 # cortex-master.yaml says this exists:
-cortex-brain/tier2/base/success-response.yaml
-cortex-brain/tier2/domains/governance/evaluation-result.yaml
+cortex_brain/tier2/base/success-response.yaml
+cortex_brain/tier2/domains/governance/evaluation-result.yaml
 
 # But filesystem shows:
-$ ls cortex-brain/tier2/base/
+$ ls cortex_brain/tier2/base/
 .gitkeep  # ← EMPTY
 ```
 
@@ -401,7 +401,7 @@ Every orchestrator response includes:
 - Copyright footer
 
 ### Configuration
-See: cortex-brain/tier0/response-headers.yaml
+See: cortex_brain/tier0/response-headers.yaml
 
 ### Implementation Pattern
 See: PHASE-ENHANCEMENT-01 (PlanningOrchestrator reference)

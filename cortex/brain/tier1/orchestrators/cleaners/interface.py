@@ -305,7 +305,7 @@ class CleanerInterface(ABC):
         """Domain this cleaner operates on.
 
         Used for:
-        - Configuration resolution (cortex-brain/tier1/orchestrators/cleaners/<domain>/config.yaml)
+        - Configuration resolution (cortex_brain/tier1/orchestrators/cleaners/<domain>/config.yaml)
         - Logging and identification
         - Dependency management
 

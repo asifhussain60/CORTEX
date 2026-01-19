@@ -94,7 +94,7 @@ The phase demonstrated the value of simplicity:
 - **Outcome:** All tests passing with minimal code
 
 ### 2. Pragmatic Error Handling
-- Encountered malformed YAML in cortex-brain/tier0/governance/core-rules.yaml (line 303)
+- Encountered malformed YAML in cortex_brain/tier0/governance/core-rules.yaml (line 303)
 - **Initial Approach:** Strict validation, fail on any error
 - **Final Approach:** Graceful degradation, count valid files, skip malformed ones
 - **Benefit:** Tests pass against actual system state rather than perfect configuration
@@ -112,7 +112,7 @@ All core CORTEX components validated and working:
 1. **Audit-First Logging:** All operations logged with START/COMPLETE markers
 2. **Result Pattern:** Consistent Result[T] return types (no dual-return errors)
 3. **Singleton Management:** Clean instance() methods for all registries
-4. **YAML Configuration:** Verified loading from cortex-brain tier directories
+4. **YAML Configuration:** Verified loading from cortex_brain tier directories
 5. **Git Checkpoints:** Committed at each completion milestone
 
 ## Completion Verification

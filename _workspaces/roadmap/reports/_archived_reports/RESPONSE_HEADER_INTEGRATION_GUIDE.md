@@ -13,7 +13,7 @@ This guide documents the hybrid integration approach for the ResponseHeaderInjec
 
 ### Key Principles
 
-1. **Single Source of Truth:** All headers defined in `cortex-brain/tier0/response-headers.yaml`
+1. **Single Source of Truth:** All headers defined in `cortex_brain/tier0/response-headers.yaml`
 2. **Non-Invasive:** Uses composition pattern—ResponseTemplateEngine unchanged
 3. **Hybrid Rollout:** Reference implementation first, then pattern-based adoption
 4. **Zero Duplication:** Document the pattern once, reuse everywhere
@@ -23,7 +23,7 @@ This guide documents the hybrid integration approach for the ResponseHeaderInjec
 ## Component Overview
 
 ### 1. Header Configuration (Tier 0)
-**File:** `cortex-brain/tier0/response-headers.yaml`
+**File:** `cortex_brain/tier0/response-headers.yaml`
 
 ```yaml
 metadata:
@@ -60,7 +60,7 @@ from src.core.response_header_config import HeaderConfigurationManager
 
 # Initialize at application startup
 config_manager = HeaderConfigurationManager.get_instance()
-config_manager.load_configuration('cortex-brain/tier0/response-headers.yaml')
+config_manager.load_configuration('cortex_brain/tier0/response-headers.yaml')
 
 # Use anywhere
 author = config_manager.get_author_name()  # "Asif Hussain"
@@ -108,7 +108,7 @@ class MyOrchestrator:
     def __init__(self):
         # Initialize config manager
         config_manager = HeaderConfigurationManager.get_instance()
-        config_manager.load_configuration('cortex-brain/tier0/response-headers.yaml')
+        config_manager.load_configuration('cortex_brain/tier0/response-headers.yaml')
         
         # Wrap engine with injector
         engine = ResponseTemplateEngine(registry)
@@ -259,7 +259,7 @@ pytest tests/integration/test_orchestrator_headers.py -v
 
 ### Adding/Modifying Headers
 
-Edit `cortex-brain/tier0/response-headers.yaml`:
+Edit `cortex_brain/tier0/response-headers.yaml`:
 
 ```yaml
 # Change header template
@@ -372,7 +372,7 @@ A: Negligible. Composition adds <1ms per render.
 
 ## Related Documents
 
-- **Configuration:** `cortex-brain/tier0/response-headers.yaml`
+- **Configuration:** `cortex_brain/tier0/response-headers.yaml`
 - **Config Manager:** `src/core/response_header_config.py`
 - **Injector:** `src/core/response_header_injector.py`
 - **Tests:** `tests/unit/test_response_headers.py`

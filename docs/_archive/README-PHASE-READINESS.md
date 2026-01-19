@@ -175,7 +175,7 @@ bash start-phase-03.sh  # from QUICK-START
    └─ Tests should fail initially
 
 3. CODE (GREEN)
-   └─ Implement code in src/ or cortex-brain/
+   └─ Implement code in src/ or cortex_brain/
    └─ Add type hints (CORE-011)
    └─ Add docstrings (CORE-012)
    └─ Run tests again
@@ -225,7 +225,7 @@ bash start-phase-03.sh  # from QUICK-START
 ### Code Examples
 - **QUICK-START-PHASE-03.md** - Includes code templates
 - **IMPLEMENTATION-GUIDE-NEXT-PHASES.md** - Per-phase details
-- **cortex-brain/** - Real implementation patterns
+- **cortex_brain/** - Real implementation patterns
 
 ### Validation & Testing
 - **scripts/validate_phase_sync.py** - Validate before commit
