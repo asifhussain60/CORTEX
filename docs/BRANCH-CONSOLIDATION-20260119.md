@@ -3,10 +3,6 @@
 
 ---
 
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
-
----
-
 ## Consolidation Summary
 
 ### Action Taken

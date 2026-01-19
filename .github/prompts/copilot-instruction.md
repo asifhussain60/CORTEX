@@ -11,8 +11,7 @@
 
 **Golden Rules:**
 1. ✅ Every response needs a header: `## 🧠 CORTEX {operation}`
-2. ✅ Include copyright: `**Copyright © 2025-2026 Asif Hussain. All rights reserved.**`
-3. ✅ Keep responses <500 words
+2. ✅ Keep responses <500 words
 4. ✅ Always cite governance rules when applicable
 5. ✅ No temp files in root; code goes to `src/`, tests to `tests/`
 
@@ -77,9 +76,6 @@
 **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
 
 ---
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
-
-[Your response here]
 ```
 
 **Variable Guide:**
@@ -93,8 +89,6 @@
 **Author:** Asif Hussain | **Phase:** PHASE-AUTH | **Orchestrator:** BuilderOrchestrator ✅
 
 ---
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
-
 Here's the implementation plan...
 ```
 

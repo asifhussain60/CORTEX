@@ -93,7 +93,6 @@ Every response MUST include this header (line 1):
 **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
 
 ---
-**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 ```
 
 **Variable Substitution:**
