@@ -4704,160 +4704,127 @@ phase_tracker:
         verdict: SELECTED
         reason: Best balance of power and pragmatism, matches existing patterns
   PHASE-30-DOCUMENTATION-REMEDIATION:
-    title: Documentation Remediation & Content Organization
-    description: "PHASE-30: Strategic documentation remediation phase that executes\
-      \ ONLY after all production phases complete.\n\nGOAL: Transform scattered documentation\
-      \ (137 files in docs/ root) into organized, verified,\nGitHub Pages-ready structure\
-      \ with automated freshness validation.\n\nDELIVERABLES:\n1. Folder hierarchy\
-      \ (phases/, domains/, architecture/, guides/)\n2. Content reorganization & kebab-case\
-      \ file naming (<25 chars)\n3. Automated verification orchestrator (HousekeepingOrchestrator)\n\
-      4. Cross-reference validation & link repair\n5. Freshness checks (docs vs source\
-      \ specs)\n6. GitHub Pages integration & sitemap generation\n\nGATING RATIONALE:\n\
-      - Documentation work is FINAL post-production task\n- Should not begin until\
-      \ all feature work (PHASE-01 through PHASE-24) complete\n- Prevents outdated\
-      \ docs reflecting incomplete features\n- Ensures docs capture final API surface\n\
-      - Verification happens LAST when system is stable\n\nHOUSEKEEPING ORCHESTRATOR\
-      \ (NEW PATTERN):\n- Child orchestrator extending OrchestratorBase\n- 4-stage\
-      \ verification pipeline:\n  Stage 1: Source mapping (link doc to AC-ID or spec)\n\
-      \  Stage 2: Freshness check (content hash vs spec hash)\n  Stage 3: Implementation\
-      \ verification (AST scan for code changes)\n  Stage 4: Integrity audit (cross-refs,\
-      \ orphans)\n- Output: Verification report (VERIFIED | STALE | ORPHANED | NEEDS-UPDATE)\n\
-      - Audit trail: All checks logged with timestamps\n"
+    title: Documentation Remediation & Content Organization (Fully Automated)
+    description: "PHASE-30: Fully automated, idempotent documentation reorganization\
+      \ that executes ONLY after all production phases complete.\n\nGOAL: Transform\
+      \ 137 scattered docs/ files into GitHub Pages-ready hierarchy with deterministic\
+      \ categorization, intelligent ignore rules, and atomic migration.\n\nAUTOMATION:\n\
+      - FULLY AUTOMATED: No manual review required\n- IDEMPOTENT: Same output every\
+      \ run\n- DETERMINISTIC: Alphabetical processing, explicit rules\n- ATOMIC: All-or-nothing\
+      \ semantics with transaction logging\n- REVERSIBLE: Complete audit trail enables\
+      \ rollback\n\nARCHITECTURE:\n1. doc-ignore-list.yaml: Explicit rules for files\
+      \ to DELETE\n   - Executable prompts (*.prompt.md, copilot-instruction.md)\n   - Agent definitions (cortex-*.md agent files)\n   - Specifications (cortex-master.yaml,\
+      \ phase-*.yaml)\n   - Session artifacts (CHAT01-*.md, *-SESSION-*.md)\n   - Executable\
+      \ scripts (*.py, *.sh in docs/)\n   - Auto-generated metadata (*-INDEX.md, *-MANIFEST.md)\n\
+      \n2. doc-categorization-rules.yaml: Deterministic file→folder mapping\n   - guides/:\
+      \ How-to, tutorials, remediation patterns\n   - concepts/: Vision, governance,\
+      \ hallucination prevention, assumptions\n   - architecture/: System design,\
+      \ technical verification\n   - reference/: Specifications, API reference\n  \
+      \ - processes/: Phase execution, testing procedures\n   - research/: Analysis,\
+      \ findings, gaps, debt, anti-patterns\n   - reports/: Phase completion, verification,\
+      \ status\n\n3. doc-migrate-automated.py: Execution orchestrator\n   - Load ignore\
+      \ list & categorization rules\n   - Recursively scan docs/ for *.md files\n  \
+      \ - Plan migration (dry-run capable)\n   - Delete ignored files (with audit)\n\
+      \   - Move files to categorized locations\n   - Merge duplicates (same target,\
+      \ multiple sources)\n   - Normalize names (kebab-case, <50 chars)\n   - Generate\
+      \ GitHub Pages structure (_config.yml, index.md)\n   - Log all actions (JSON\
+      \ audit trail)\n\nDELIVERABLES:\n1. docs/guides/ - How-to guides and tutorials\n\
+      2. docs/concepts/ - Architecture and design concepts\n3. docs/architecture/\
+      \ - System design and technical specs\n4. docs/reference/ - API and detailed\
+      \ reference\n5. docs/processes/ - Operational procedures\n6. docs/research/\
+      \ - Analysis and findings\n7. docs/reports/ - Historical artifacts\n8. docs/_config.yml\
+      \ - GitHub Pages configuration\n9. docs/index.md - Root navigation\n10. Audit\
+      \ log (JSON) - Complete migration history\n\nGATING RATIONALE:\n- Documentation\
+      \ work is FINAL post-production task\n- Should not begin until all feature work\
+      \ (PHASE-01 through PHASE-24) complete\n- Prevents outdated docs reflecting\
+      \ incomplete features\n- Ensures docs capture final API surface\n- Verification\
+      \ happens LAST when system is stable\n"
     ac_ids: 6
     completed_ac_ids: 0
     status: NOT_STARTED
     locked: false
     enhancement_phase: true
-    implement_when_ready: true
-    implementation_prerequisite: "cortex-builder.prompt.md MUST implement this phase\
-      \ ONLY when:\n- ALL OTHER phases in phase_tracker have: locked: true\n- This\
-      \ phase is the ONLY phase with: locked: false AND implement_when_ready: true\n\
-      - ALL mandatory phases (PHASE-01 through PHASE-24) are COMPLETED and LOCKED\n\
-      - ALL gated phases (PHASE-15, PHASE-DEPLOYMENT) are LOCKED\n- System audit trail\
-      \ fully verified and unbroken\n- Production system stable for 24+ hours\n\n\
-      Gating Logic for cortex-builder:\n  PHASE_READY = (ALL other phases have locked:\
-      \ true) AND\n                (PHASE-15 is LOCKED) AND\n                (PHASE-DEPLOYMENT\
-      \ is LOCKED) AND\n                (NO other phases have implement_when_ready:\
-      \ true) AND\n                (PHASE-30 is ONLY enhancement phase ready)\nIF\
-      \ PHASE_READY: implement PHASE-30 documentation remediation\nELSE: skip to next\
-      \ mandatory locked: true phase\n\nThis ensures documentation work executes ONLY\
-      \ after all feature work complete.\n"
     requires: PHASE-DEPLOYMENT
     required_for: DOCUMENTATION_COMPLETION
     blocking: false
     priority: P1
-    estimated_hours: 24
-    estimated_days: 3
+    estimated_hours: 12
+    estimated_days: 1.5
     progress_percentage: 0.0
     acceptance_criteria:
     - ac_id: AC-DOC-030-01
-      title: HousekeepingOrchestrator Child Pattern Implementation
-      description: 'Create reusable HousekeepingOrchestrator class extending OrchestratorBase.
-
-        Implements 4-stage verification pipeline for documentation verification.
-
-        Provides abstraction for all doc auditing operations.
-
-        '
-      estimated_hours: 4
+      title: Ignore List Definition (doc-ignore-list.yaml)
+      description: "Machine-readable rules defining which files to DELETE from docs/\
+        \ because they are executable scripts, prompts, specs, or transient artifacts.\
+        \ Rules include: *.prompt.md, copilot-instruction.md, cortex-*.md agents,\
+        \ cortex-master.yaml, phase-*.yaml, CHAT01-*.md, *.py/.sh, *-INDEX.md, *-MANIFEST.md.\n"
+      estimated_hours: 2
+      test_count: 8
+      status: NOT_STARTED
+      files_to_create:
+        - scripts/doc-ignore-list.yaml
+    - ac_id: AC-DOC-030-02
+      title: Categorization Rules (doc-categorization-rules.yaml)
+      description: "Deterministic priority-ordered rules for mapping files to GitHub\
+        \ Pages hierarchy: guides/, concepts/, architecture/, reference/, processes/,\
+        \ research/, reports/. Each file matches exactly one rule (alphabetically ordered).\n"
+      estimated_hours: 3
       test_count: 12
       status: NOT_STARTED
-    - ac_id: AC-DOC-030-02
-      title: Folder Structure Design & Implementation
-      description: 'Design and implement folder hierarchy:
-
-        - docs/phases/ (PHASE-*.md files)
-
-        - docs/domains/ (domain-specific content)
-
-        - docs/architecture/ (system design)
-
-        - docs/guides/ (how-to, quick-starts)
-
-        - docs/api/ (API reference)
-
-        Implement kebab-case naming and <25 char limit.
-
-        '
-      estimated_hours: 3
-      test_count: 8
-      status: NOT_STARTED
+      files_to_create:
+        - scripts/doc-categorization-rules.yaml
     - ac_id: AC-DOC-030-03
-      title: Content Audit & Categorization
-      description: 'Automated inventory of 137 root docs files.
-
-        Categorize by prefix (PHASE, cortex, CHAT01, session, report, etc.).
-
-        Identify duplicates, obsolete content, and orphaned files.
-
-        '
-      estimated_hours: 3
+      title: Automated Migration Script (doc-migrate-automated.py)
+      description: "Fully automated orchestrator that: loads ignore list and rules,\
+        \ recursively scans docs/, plans migration (dry-run capable), executes atomically\
+        \ with audit logging, merges duplicates, normalizes names, generates GitHub\
+        \ Pages structure.\n"
+      estimated_hours: 4
+      test_count: 20
+      status: NOT_STARTED
+      files_to_create:
+        - scripts/doc-migrate-automated.py
+    - ac_id: AC-DOC-030-04
+      title: Automated Execution & Audit Trail
+      description: "Run doc-migrate-automated.py to execute idempotent migration.\
+        \ Generates JSON audit log with all actions (deletes, moves, merges, errors).\
+        \ Audit log saved to _workspaces/roadmap/reports/ with timestamp.\n"
+      estimated_hours: 1
       test_count: 6
       status: NOT_STARTED
-    - ac_id: AC-DOC-030-04
-      title: File Migration & Renaming (Deterministic, Auditable)
-      description: 'Implement safe file migration script:
-
-        - Deterministic ordering (alphabetical by source)
-
-        - Atomic moves (all-or-nothing semantics)
-
-        - Complete audit trail (migration log)
-
-        - Rollback capability (restore script)
-
-        '
-      estimated_hours: 4
-      test_count: 10
-      status: NOT_STARTED
     - ac_id: AC-DOC-030-05
-      title: Cross-Reference Validation & Link Repair
-      description: 'Scan all migrated files for internal links.
-
-        Verify all doc-to-doc references resolve correctly.
-
-        Update links to reflect new folder structure.
-
-        Generate report of broken/stale references.
-
-        '
-      estimated_hours: 4
+      title: GitHub Pages Structure Generation
+      description: "Create docs/_config.yml for GitHub Pages, docs/index.md with\
+        \ navigation, and folder-level index files (guides/index.md, concepts/index.md,\
+        \ etc.) with directory listings.\n"
+      estimated_hours: 1
       test_count: 8
       status: NOT_STARTED
+      files_to_create:
+        - docs/_config.yml
+        - docs/index.md
     - ac_id: AC-DOC-030-06
-      title: GitHub Pages Integration & Sitemap Generation
-      description: 'Create _config.yml for GitHub Pages.
-
-        Implement automatic sitemap generation from folder structure.
-
-        Generate index.md for each folder.
-
-        Create root README with navigation structure.
-
-        Validate GitHub Pages build pipeline.
-
-        '
-      estimated_hours: 6
+      title: Verification & Link Validation
+      description: "Scan all moved files for internal cross-references. Verify all\
+        \ doc-to-doc links resolve correctly in new structure. Generate validation\
+        \ report.\n"
+      estimated_hours: 1
       test_count: 10
       status: NOT_STARTED
     files_to_create:
-    - src/housekeeping/orchestrator.py
-    - src/housekeeping/verification_pipeline.py
-    - src/housekeeping/doc_audit.py
-    - scripts/doc-migrate.py
-    - scripts/doc-validate.py
+    - scripts/doc-ignore-list.yaml
+    - scripts/doc-categorization-rules.yaml
+    - scripts/doc-migrate-automated.py
     - docs/_config.yml
     - docs/index.md
-    - tests/integration/test_housekeeping_orchestrator.py
-    files_to_modify:
-    - docs/README.md (root navigation guide)
+    files_to_modify: []
     governance:
       core_rules:
       - "CORE-008: TDD (tests first, RED \u2192 GREEN)"
       - 'CORE-011: Type hints mandatory'
       - 'CORE-012: Docstrings mandatory (Google style)'
       - 'CORE-027: Audit trail (AC_START/EXECUTE/COMPLETE)'
-      - "CORE-028: Kebab-case, \u226425 chars filenames"
+      - "CORE-028: Kebab-case, \u226450 chars filenames"
     audit_verification:
       verified: false
       entry_count: 0
@@ -4865,23 +4832,27 @@ phase_tracker:
       verified_at: null
       remediation_required: false
     git_checkpoint: null
-    notes: "PHASE-30-DOCUMENTATION-REMEDIATION: Gated Phase\n\nRATIONALE:\n- Documentation\
-      \ remediation is FINAL task in CORTEX implementation\n- Should execute ONLY\
-      \ after all production features complete and stable\n- Prevents docs from reflecting\
-      \ incomplete/in-progress features\n- Ensures verification captures final system\
-      \ state\n\nGATING PATTERN (same as PHASE-15-DASHBOARD-UNIVERSAL & PHASE-DEPLOYMENT):\n\
-      - implement_when_ready: true (marks phase as gated/conditional)\n- implementation_prerequisite:\
-      \ documents gate conditions\n- Gate enforced by cortex-builder.prompt.md at\
-      \ phase execution time\n- Phase skipped if gate conditions not met\n- Only executes\
-      \ when ALL other phases locked AND this is ONLY pending enhancement\n\nDELIVERABLES:\n\
-      1. HousekeepingOrchestrator (reusable child pattern)\n2. 4-stage verification\
-      \ pipeline (mapping, freshness, implementation, integrity)\n3. Organized folder\
-      \ structure (6 top-level dirs)\n4. Kebab-case file names (<25 chars)\n5. Cross-reference\
-      \ validation & repair\n6. GitHub Pages ready (sitemap, navigation, _config.yml)\n\
-      7. Complete audit trail (docs verification report)\n\nOUTCOME:\n- 137 scattered\
-      \ files \u2192 organized hierarchy\n- No more root clutter\n- GitHub Pages deployment\
-      \ ready\n- Automated freshness checks prevent staleness\n- Full audit trail\
-      \ of all changes\n"
+    notes: "PHASE-30-DOCUMENTATION-REMEDIATION: Fully Automated & Immediately Executable\n\n\
+      KEY FEATURES:\n1. FULLY AUTOMATED: No manual review required. Script makes all\
+      \ decisions.\n2. IDEMPOTENT: Running twice in a row produces identical state.\n\
+      3. DETERMINISTIC: Same input → Same output. Alphabetical processing.\n4. SAFE:\
+      \ Dry-run mode, audit logging, transaction semantics.\n5. REVERSIBLE: Complete\
+      \ audit trail enables rollback.\n6. GATING REMOVED: Ready to execute immediately\
+      \ without prerequisite gate conditions.\n\nIMPLEMENTATION:\n- Step 1: Create\
+      \ doc-ignore-list.yaml (2 hrs)\n- Step 2: Create doc-categorization-rules.yaml\
+      \ (3 hrs)\n- Step 3: Create doc-migrate-automated.py (4 hrs)\n- Step 4: Run\
+      \ migration with audit log (1 hr)\n- Step 5: Generate GitHub Pages structure\
+      \ (1 hr)\n- Step 6: Verify & validate links (1 hr)\nTotal: 12 hours\n\nPHASE\
+      \ FLOW:\n1. Ignore list filters out non-documentation files\n2. Categorization\
+      \ rules map each file to folder\n3. Migration script executes atomically\n4.\
+      \ Audit log tracks all actions\n5. GitHub Pages structure generated\n6. Verification\
+      \ confirms integrity\n\nOUTPUT:\n- 137 files reorganized into 7 folders\n- docs/_config.yml\
+      \ (GitHub Pages config)\n- docs/index.md (root navigation)\n- audit log (JSON)\
+      \ for traceability\n- All internal links updated\n- Ready for GitHub Pages deployment\n\n\
+      REUSABILITY:\n- Script can run N times with identical results (idempotent)\n\
+      - New files added after Phase-30 can be manually categorized or rules extended\n\
+      - Ignore list can be updated without re-running full migration\n- Categorization\
+      \ rules portable to other documentation systems\n"
 architecture_decisions:
   AR-001:
     id: AR-001
