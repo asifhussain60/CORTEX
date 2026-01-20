@@ -105,8 +105,9 @@ class IntentClassifier:
                 "redesign"
             },
             IntentCategory.TEST: {
-                "test", "verify", "validate", "check", "ensure", "confirm",
-                "assert", "coverage", "unit test", "integration test", "testing"
+                "test", "tests", "testing", "verify", "validate", "check", 
+                "ensure", "confirm", "assert", "coverage", "unit test", 
+                "integration test"
             },
             IntentCategory.DOCUMENT: {
                 "document", "doc", "explain", "describe", "comment", "annotate",
@@ -126,7 +127,7 @@ class IntentClassifier:
                 "install", "configure", "enable", "disable", "launch"
             },
             IntentCategory.NAVIGATION: {
-                "go", "navigate", "open", "display", "view",
+                "navigate", "open", "display", "view",
                 "switch", "move", "jump", "find", "locate"
             }
         }
@@ -239,10 +240,10 @@ class IntentClassifier:
         keywords_list = [w for w in words if len(w) > 2][:5]
         
         # Build secondary intents
-        # Must be at least 60% of primary score to be considered secondary
+        # Must be at least 50% of primary score to be considered secondary
         if intent_scores:
             primary_score = intent_scores[primary]
-            threshold = max(primary_score * 0.6, 0.05)
+            threshold = max(primary_score * 0.5, 0.05)
             secondary = [(intent, score) for intent, score in intent_scores.items()
                         if intent != primary and score >= threshold][:3]
         else:
