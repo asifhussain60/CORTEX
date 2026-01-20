@@ -1,36 +1,7 @@
-"""Module: behavioral_boundaries.py."""
+"""REDIRECT: behavioral_boundaries → cortex_brain.tier2.hallucination_prevention.boundary_rules
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass
-from enum import Enum
+Author: CORTEX Framework
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
 
-
-class BehavioralBoundaryRules:
-    """Stub for BehavioralBoundaryRules."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-class BoundaryViolation:
-    """Stub for BoundaryViolation."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-class ViolationType:
-    """Stub for ViolationType."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-__all__ = [
-    "BehavioralBoundaryRules",
-    "BoundaryViolation",
-    "ViolationType",
-]
+from cortex_brain.tier2.hallucination_prevention.boundary_rules import *  # noqa: F401, F403

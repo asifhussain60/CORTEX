@@ -1,32 +1,7 @@
-"""Governance module stub."""
+"""REDIRECT: audit_immutability → cortex_brain.tier2.governance.audit_immutability
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from enum import Enum
+Author: CORTEX Framework
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
 
-
-@dataclass
-class AuditEntry:
-    """Data class for AuditEntry."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class ImmutabilityViolation:
-    """Data class for ImmutabilityViolation."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-class AuditImmutabilityValidator:
-    """AuditImmutabilityValidator implementation."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-__all__ = [
-    "AuditImmutabilityValidator",
-    "AuditEntry",
-    "ImmutabilityViolation",
-]
+from cortex_brain.tier2.governance.audit_immutability import *  # noqa: F401, F403

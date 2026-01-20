@@ -1,31 +1,7 @@
-"""Governance module stub."""
+"""REDIRECT: stakeholder_notification → cortex_brain.tier2.governance.stakeholder_notification
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from enum import Enum
+Author: CORTEX Framework
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
 
-
-class StakeholderGroup(str, Enum):
-    """Enum for StakeholderGroup."""
-    UNKNOWN = "unknown"
-
-
-@dataclass
-class Notification:
-    """Data class for Notification."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-class StakeholderNotifier:
-    """StakeholderNotifier implementation."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-__all__ = [
-    "StakeholderNotifier",
-    "Notification",
-    "StakeholderGroup",
-]
+from cortex_brain.tier2.governance.stakeholder_notification import *  # noqa: F401, F403

@@ -1,32 +1,7 @@
-"""Governance module stub."""
+"""REDIRECT: runtime_resilience → cortex_brain.tier2.governance.runtime_resilience
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from enum import Enum
+Author: CORTEX Framework
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
 
-
-@dataclass
-class ResilienceCheck:
-    """Data class for ResilienceCheck."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class ResilienceViolation:
-    """Data class for ResilienceViolation."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-class RuntimeResilienceValidator:
-    """RuntimeResilienceValidator implementation."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-__all__ = [
-    "RuntimeResilienceValidator",
-    "ResilienceCheck",
-    "ResilienceViolation",
-]
+from cortex_brain.tier2.governance.runtime_resilience import *  # noqa: F401, F403

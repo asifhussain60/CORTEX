@@ -1,45 +1,7 @@
-"""Governance module stub."""
+"""REDIRECT: hallucination_detector → cortex_brain.tier2.governance.hallucination_detector
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from enum import Enum
+Author: CORTEX Framework
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
 
-
-class ConfidenceLevel(str, Enum):
-    """Enum for ConfidenceLevel."""
-    UNKNOWN = "unknown"
-
-
-@dataclass
-class ConfidenceScore:
-    """Data class for ConfidenceScore."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class HallucinationDetectionResult:
-    """Data class for HallucinationDetectionResult."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class HallucinationRisk:
-    """Data class for HallucinationRisk."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-class HallucinationDetector:
-    """HallucinationDetector implementation."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-__all__ = [
-    "HallucinationDetector",
-    "ConfidenceScore",
-    "ConfidenceLevel",
-    "HallucinationDetectionResult",
-    "HallucinationRisk",
-]
+from cortex_brain.tier2.governance.hallucination_detector import *  # noqa: F401, F403

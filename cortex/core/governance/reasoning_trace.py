@@ -1,32 +1,7 @@
-"""Governance module stub."""
+"""REDIRECT: reasoning_trace → cortex_brain.tier2.governance.reasoning_trace
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from enum import Enum
+Author: CORTEX Framework
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
 
-
-@dataclass
-class ReasoningStep:
-    """Data class for ReasoningStep."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class TraceEntry:
-    """Data class for TraceEntry."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-class ReasoningTracer:
-    """ReasoningTracer implementation."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-__all__ = [
-    "ReasoningTracer",
-    "ReasoningStep",
-    "TraceEntry",
-]
+from cortex_brain.tier2.governance.reasoning_trace import *  # noqa: F401, F403

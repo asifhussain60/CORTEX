@@ -1,31 +1,7 @@
-"""Governance module stub."""
+"""REDIRECT: pii_detection → cortex_brain.tier2.governance.pii_detection
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from enum import Enum
+Author: CORTEX Framework
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
 
-
-class SensitivityLevel(str, Enum):
-    """Enum for SensitivityLevel."""
-    UNKNOWN = "unknown"
-
-
-@dataclass
-class PIIFinding:
-    """Data class for PIIFinding."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-class PIIDetector:
-    """PIIDetector implementation."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-__all__ = [
-    "PIIDetector",
-    "PIIFinding",
-    "SensitivityLevel",
-]
+from cortex_brain.tier2.governance.pii_detection import *  # noqa: F401, F403

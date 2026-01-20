@@ -1,32 +1,7 @@
-"""Governance module stub."""
+"""REDIRECT: data_retention → cortex_brain.tier2.governance.data_retention
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from enum import Enum
+Author: CORTEX Framework
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
 
-
-@dataclass
-class RetentionPolicy:
-    """Data class for RetentionPolicy."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class RetentionViolation:
-    """Data class for RetentionViolation."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-class DataRetentionManager:
-    """DataRetentionManager implementation."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-__all__ = [
-    "DataRetentionManager",
-    "RetentionPolicy",
-    "RetentionViolation",
-]
+from cortex_brain.tier2.governance.data_retention import *  # noqa: F401, F403
