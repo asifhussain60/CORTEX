@@ -25,19 +25,52 @@ class DocumentationManager:
         self.entries: Dict[str, DocumentationEntry] = {}
     
     def add_entry(self, key: str, entry: DocumentationEntry) -> None:
-        """Add documentation entry."""
+        """Add documentation entry.
+        
+        Args:
+            key: Unique key for the entry
+            entry: DocumentationEntry to add
+        """
         self.entries[key] = entry
     
     def get_entry(self, key: str) -> Optional[DocumentationEntry]:
-        """Get documentation entry."""
+        """Get documentation entry.
+        
+        Args:
+            key: Key of the entry to retrieve
+            
+        Returns:
+            DocumentationEntry if found, None otherwise
+        """
         return self.entries.get(key)
     
     def search(self, query: str) -> List[DocumentationEntry]:
-        """Search documentation."""
+        """Search documentation.
+        
+        Args:
+            query: Search query string
+            
+        Returns:
+            List of matching DocumentationEntry objects
+        """
         return [
             entry for entry in self.entries.values()
             if query.lower() in entry.content.lower() or query.lower() in entry.title.lower()
         ]
 
 
-__all__ = ["DocumentationEntry", "DocumentationManager"]
+def get_documentation() -> Dict[str, Any]:
+    """Get framework documentation.
+    
+    Returns:
+        Dictionary containing framework documentation
+    """
+    manager = DocumentationManager()
+    return {
+        "manager": manager,
+        "version": "1.0",
+        "entries": list(manager.entries.values())
+    }
+
+
+__all__ = ["DocumentationEntry", "DocumentationManager", "get_documentation"]
