@@ -20,6 +20,15 @@ class ResponseFormat(Enum):
     MINIMAL = "minimal"
 
 
+class ResponseMode(Enum):
+    """Response modes."""
+
+    CHAT = "chat"
+    COMPLETION = "completion"
+    ASSISTANT = "assistant"
+    EXPERT = "expert"
+
+
 @dataclass
 class ResponseContent:
     """Response content container.
@@ -102,4 +111,4 @@ class TurnResponseGenerator:
 # Alias for backward compatibility
 ResponseGenerator = TurnResponseGenerator
 
-__all__ = ["TurnResponseGenerator", "ResponseGenerator", "ResponseContent", "ResponseFormat"]
+__all__ = ["TurnResponseGenerator", "ResponseGenerator", "ResponseContent", "ResponseFormat", "ResponseMode"]
