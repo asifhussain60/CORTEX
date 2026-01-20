@@ -46,18 +46,25 @@ def mcp_tool(
     def decorator(func: Callable[..., Any]) -> Callable[..., Any]:
         """Register function and return it unchanged."""
         # Store tool metadata
-        MCP_TOOLS_REGISTRY[name] = {
+        metadata = {
             "name": name,
             "description": description,
             "func": func,
             "parameters": parameters or {},
         }
+        MCP_TOOLS_REGISTRY[name] = metadata
+        
+        # Attach metadata to function for discovery
+        func._mcp_tool_metadata = metadata
         
         # Return original function unchanged (preserve metadata)
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             """Call original function."""
             return func(*args, **kwargs)
+        
+        # Also attach metadata to wrapper
+        wrapper._mcp_tool_metadata = metadata
         
         return wrapper
     

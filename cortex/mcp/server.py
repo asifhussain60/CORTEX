@@ -220,6 +220,14 @@ class MCPServer:
         # Register built-in tools
         self._register_tool(SampleTool())
         
+        # Auto-discover and register MCP tools by category
+        try:
+            from cortex.mcp.tool_discovery import auto_discover_and_register_tools
+            auto_discover_and_register_tools()
+            self.logger.info("MCP tools auto-discovered and registered")
+        except (ImportError, Exception) as e:
+            self.logger.warning(f"Could not auto-discover MCP tools: {e}")
+        
         if EnhancedAuditLogger is not None:
             self._audit_logger: Optional[Any] = EnhancedAuditLogger.instance()
         else:

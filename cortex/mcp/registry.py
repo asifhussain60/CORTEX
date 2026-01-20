@@ -1,15 +1,20 @@
 """MCP Tool Registry - Centralized registry for MCP tools.
 
 Manages registration, retrieval, and lifecycle of MCP tools across the
-CORTEX framework. Provides a single source of truth for available tools.
+CORTEX framework. Provides a single source of truth for available tools
+with category-based organization and discovery mechanisms.
 
 Author: CORTEX Framework
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Callable
 from threading import Lock
 from dataclasses import dataclass, field
+from datetime import datetime
+import importlib
+import inspect
+from pathlib import Path
 
 
 @dataclass
