@@ -24,7 +24,7 @@ CORE Governance:
 import pytest
 from typing import Dict, Any, List, Optional
 
-from src.core.result import Result, Ok, Err
+from cortex.core.result import Result, Ok, Err
 
 
 class TestStage4Initialization:
@@ -32,7 +32,7 @@ class TestStage4Initialization:
     
     def test_stage_4_initializes(self) -> None:
         """Test MasterOrchestrationStage4 creates successfully."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4
         )
         
@@ -43,7 +43,7 @@ class TestStage4Initialization:
     
     def test_stage_4_has_required_attributes(self) -> None:
         """Test Stage 4 has required attributes."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4
         )
         
@@ -55,7 +55,7 @@ class TestStage4Initialization:
     
     def test_stage_4_starts_with_empty_history(self) -> None:
         """Test Stage 4 starts with empty approval history."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4
         )
         
@@ -70,10 +70,10 @@ class TestStage4ApprovalContext:
     
     def test_approval_context_from_stage3_output(self) -> None:
         """Test Stage 4 context creation from Stage 3 output."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             Stage4ApprovalContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
         
         stage3_output = Stage3Output(
             operation="implement_oauth2",
@@ -97,10 +97,10 @@ class TestStage4ApprovalContext:
     
     def test_approval_context_with_constraints(self) -> None:
         """Test context with domain constraints."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             Stage4ApprovalContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
         
         stage3_output = Stage3Output(
             operation="fix_security",
@@ -128,7 +128,7 @@ class TestStage4Output:
     
     def test_output_creation(self) -> None:
         """Test Stage4Output creates successfully."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             Stage4Output
         )
         
@@ -150,7 +150,7 @@ class TestStage4Output:
     
     def test_output_has_execution_ready_format(self) -> None:
         """Test output format is ready for execution."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             Stage4Output
         )
         
@@ -175,11 +175,11 @@ class TestApprovalGates:
     
     def test_domain_validation_gate(self) -> None:
         """Test domain validation gate."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
         
         stage4 = MasterOrchestrationStage4()
         
@@ -204,11 +204,11 @@ class TestApprovalGates:
     
     def test_urgency_gate(self) -> None:
         """Test urgency gate evaluation."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
         
         stage4 = MasterOrchestrationStage4()
         
@@ -236,11 +236,11 @@ class TestApprovalGates:
     
     def test_risk_assessment_gate(self) -> None:
         """Test risk assessment gate."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
         
         stage4 = MasterOrchestrationStage4()
         
@@ -272,11 +272,11 @@ class TestApprovalDecisions:
     
     def test_approve_low_risk_operation(self) -> None:
         """Test approving low-risk operation."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
         
         stage4 = MasterOrchestrationStage4()
         
@@ -306,11 +306,11 @@ class TestApprovalDecisions:
     
     def test_reject_high_risk_low_confidence(self) -> None:
         """Test rejecting high-risk, low-confidence operation."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
         
         stage4 = MasterOrchestrationStage4()
         
@@ -338,11 +338,11 @@ class TestApprovalDecisions:
     
     def test_auto_approve_critical_urgency(self) -> None:
         """Test auto-approval for critical urgency."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
         
         stage4 = MasterOrchestrationStage4()
         
@@ -374,11 +374,11 @@ class TestImplementationPlanning:
     
     def test_implementation_plan_generated(self) -> None:
         """Test implementation plan is generated."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
         
         stage4 = MasterOrchestrationStage4()
         
@@ -406,11 +406,11 @@ class TestImplementationPlanning:
     
     def test_implementation_plan_has_steps(self) -> None:
         """Test implementation plan has executable steps."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
         
         stage4 = MasterOrchestrationStage4()
         
@@ -443,11 +443,11 @@ class TestApprovalHistory:
     
     def test_history_tracks_approvals(self) -> None:
         """Test history tracks all approval decisions."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
         
         stage4 = MasterOrchestrationStage4()
         
@@ -475,11 +475,11 @@ class TestApprovalHistory:
     
     def test_history_preserves_order(self) -> None:
         """Test history preserves chronological order."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
         
         stage4 = MasterOrchestrationStage4()
         
@@ -512,7 +512,7 @@ class TestErrorHandling:
     
     def test_approve_invalid_context(self) -> None:
         """Test invalid context returns error."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4
         )
         
@@ -523,7 +523,7 @@ class TestErrorHandling:
     
     def test_approve_missing_stage3_output(self) -> None:
         """Test missing Stage 3 output handled."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
@@ -544,11 +544,11 @@ class TestErrorHandling:
     
     def test_invalid_urgency_handled(self) -> None:
         """Test invalid urgency handled gracefully."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
         
         stage4 = MasterOrchestrationStage4()
         
@@ -578,7 +578,7 @@ class TestGovernanceCompliance:
     
     def test_core_011_type_hints_present(self) -> None:
         """Test CORE-011: Type hints present on all methods."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4
         )
         
@@ -589,7 +589,7 @@ class TestGovernanceCompliance:
     
     def test_core_012_docstrings_present(self) -> None:
         """Test CORE-012: Google-style docstrings present."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4
         )
         
@@ -598,7 +598,7 @@ class TestGovernanceCompliance:
     
     def test_core_027_audit_trail_support(self) -> None:
         """Test CORE-027: Audit trail support."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4
         )
         
@@ -613,11 +613,11 @@ class TestAuditTrailing:
     
     def test_approval_logged(self) -> None:
         """Test approval operations are logged."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
         
         stage4 = MasterOrchestrationStage4()
         
@@ -643,7 +643,7 @@ class TestAuditTrailing:
     
     def test_error_operations_logged(self) -> None:
         """Test error operations are logged."""
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4
         )
         

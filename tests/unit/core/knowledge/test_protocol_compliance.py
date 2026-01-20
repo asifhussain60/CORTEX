@@ -17,7 +17,7 @@ class TestProtocolCompliance:
 
     def test_knowledge_repository_satisfies_protocol(self):
         """Test that KnowledgeRepository satisfies KnowledgeProvider protocol."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
         from cortex_brain.state.knowledge_repository import KnowledgeRepository
         
         repo = KnowledgeRepository()
@@ -32,8 +32,8 @@ class TestProtocolCompliance:
 
     def test_business_knowledge_repository_satisfies_protocol(self):
         """Test that BusinessKnowledgeRepository satisfies KnowledgeProvider protocol."""
-        from src.core.knowledge.protocols import KnowledgeProvider
-        from src.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
+        from cortex.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
         
         repo = BusinessKnowledgeRepository()
         
@@ -48,7 +48,7 @@ class TestProtocolCompliance:
     def test_is_loaded_property_compliance(self):
         """Test is_loaded property returns bool on both repositories."""
         from cortex_brain.state.knowledge_repository import KnowledgeRepository
-        from src.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
+        from cortex.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
         
         kr = KnowledgeRepository()
         bkr = BusinessKnowledgeRepository()
@@ -59,7 +59,7 @@ class TestProtocolCompliance:
     def test_entry_count_property_compliance(self):
         """Test entry_count property returns int on both repositories."""
         from cortex_brain.state.knowledge_repository import KnowledgeRepository
-        from src.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
+        from cortex.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
         
         kr = KnowledgeRepository()
         bkr = BusinessKnowledgeRepository()
@@ -72,7 +72,7 @@ class TestProtocolCompliance:
     def test_domains_property_compliance(self):
         """Test domains property returns List[str] on both repositories."""
         from cortex_brain.state.knowledge_repository import KnowledgeRepository
-        from src.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
+        from cortex.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
         
         kr = KnowledgeRepository()
         bkr = BusinessKnowledgeRepository()
@@ -85,7 +85,7 @@ class TestProtocolCompliance:
     def test_query_method_compliance(self):
         """Test query method signature and return type on both repositories."""
         from cortex_brain.state.knowledge_repository import KnowledgeRepository
-        from src.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
+        from cortex.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
         
         kr = KnowledgeRepository()
         bkr = BusinessKnowledgeRepository()
@@ -104,7 +104,7 @@ class TestProtocolCompliance:
     def test_get_by_domain_method_compliance(self):
         """Test get_by_domain method signature and return type."""
         from cortex_brain.state.knowledge_repository import KnowledgeRepository
-        from src.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
+        from cortex.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
         
         kr = KnowledgeRepository()
         bkr = BusinessKnowledgeRepository()
@@ -125,7 +125,7 @@ class TestProtocolCompliance:
     def test_get_relevant_knowledge_method_compliance(self):
         """Test get_relevant_knowledge method signature and return type."""
         from cortex_brain.state.knowledge_repository import KnowledgeRepository
-        from src.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
+        from cortex.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
         
         kr = KnowledgeRepository()
         bkr = BusinessKnowledgeRepository()
@@ -144,9 +144,9 @@ class TestProtocolCompliance:
 
     def test_protocol_compliance_with_isinstance(self):
         """Test runtime protocol checking with isinstance when available."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
         from cortex_brain.state.knowledge_repository import KnowledgeRepository
-        from src.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
+        from cortex.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
         
         kr = KnowledgeRepository()
         bkr = BusinessKnowledgeRepository()
@@ -162,8 +162,8 @@ class TestProtocolCompliance:
 
     def test_type_hints_in_master_orchestrator(self):
         """Test that MasterOrchestrator uses KnowledgeProvider protocol hints."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.core.knowledge.protocols import KnowledgeProvider
         import inspect
         
         # Get MasterOrchestrator source or annotations
@@ -180,9 +180,9 @@ class TestProtocolComplianceIntegration:
 
     def test_repositories_interchangeable_with_protocol(self):
         """Test that both repositories can be used interchangeably as KnowledgeProvider."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
         from cortex_brain.state.knowledge_repository import KnowledgeRepository
-        from src.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
+        from cortex.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
         
         def use_knowledge_provider(provider: KnowledgeProvider) -> Dict[str, Any]:
             """Generic function that works with any KnowledgeProvider."""
@@ -209,7 +209,7 @@ class TestProtocolComplianceIntegration:
 
     def test_protocol_duck_typing_works(self):
         """Test that duck typing works without explicit inheritance."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
         
         class CustomProvider:
             """Custom provider not explicitly inheriting from protocol."""
@@ -253,9 +253,9 @@ class TestProtocolComplianceIntegration:
 
     def test_multiple_backends_accessible_through_protocol(self):
         """Test accessing multiple backends through protocol interface."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
         from cortex_brain.state.knowledge_repository import KnowledgeRepository
-        from src.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
+        from cortex.core.business_knowledge.business_knowledge_repository import BusinessKnowledgeRepository
         
         backends: List[KnowledgeProvider] = [
             KnowledgeRepository(),

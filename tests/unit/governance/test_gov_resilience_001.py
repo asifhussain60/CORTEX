@@ -1,6 +1,6 @@
 """Test for CORE-036: Runtime Resilience Configuration"""
 import pytest
-from src.core.governance.runtime_resilience import (
+from cortex.core.governance.runtime_resilience import (
     RuntimeResilienceManager,
     ResilienceLevel,
 )

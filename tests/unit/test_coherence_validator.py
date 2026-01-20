@@ -16,7 +16,7 @@ Test scenarios:
 """
 
 import pytest
-from src.core.coherence_validator import CoherenceValidator, CoherenceIssue
+from cortex.core.coherence_validator import CoherenceValidator, CoherenceIssue
 
 
 @pytest.mark.ac("NFR-003-01")

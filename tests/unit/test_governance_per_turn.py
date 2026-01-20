@@ -11,8 +11,8 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest
-from src.core.governance_registry import GovernanceRegistry, GovernanceRule, GovernanceViolationError
-from src.core.result import Ok, Err
+from cortex.core.governance_registry import GovernanceRegistry, GovernanceRule, GovernanceViolationError
+from cortex.core.result import Ok, Err
 
 
 class TestGovernanceRegistryShouldProceed:
@@ -100,14 +100,14 @@ class TestConversationProtocolGovernanceValidation:
     
     def test_conversation_protocol_governance_method_exists(self):
         """Verify ConversationProtocol has _validate_governance_before_turn() method."""
-        from src.core.orchestrator.conversation_protocol import ConversationProtocol
+        from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
         
         # Protocol should have governance validation method
         assert hasattr(ConversationProtocol, '_validate_governance_before_turn')
     
     def test_conversation_protocol_governance_validation_turn_1(self):
         """Test _validate_governance_before_turn() passes on Turn 1."""
-        from src.core.orchestrator.conversation_protocol import ConversationProtocol
+        from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
         
         protocol = ConversationProtocol("test-orch")
         protocol.current_turn = 1
@@ -118,7 +118,7 @@ class TestConversationProtocolGovernanceValidation:
     
     def test_conversation_protocol_governance_validation_turn_2plus(self):
         """Test _validate_governance_before_turn() passes on Turn 2+."""
-        from src.core.orchestrator.conversation_protocol import ConversationProtocol
+        from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
         
         protocol = ConversationProtocol("test-orch")
         
@@ -130,7 +130,7 @@ class TestConversationProtocolGovernanceValidation:
     
     def test_conversation_protocol_governance_validation_integration(self):
         """Test multi-turn conversation with governance validation (integration test)."""
-        from src.core.orchestrator.conversation_protocol import ConversationProtocol
+        from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
         
         protocol = ConversationProtocol("planning-orch")
         
@@ -149,7 +149,7 @@ class TestPerTurnGovernanceIntegration:
     
     def test_governance_validated_on_each_turn(self):
         """Test governance is validated on every turn (not just first/last)."""
-        from src.core.orchestrator.conversation_protocol import ConversationProtocol
+        from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
         
         protocol = ConversationProtocol("test-orch")
         validation_count = 0

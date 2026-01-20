@@ -8,8 +8,8 @@ from dataclasses import dataclass
 from typing import Optional
 from enum import Enum
 
-from src.core.intent.intent_canonicalizer import IntentType
-from src.core.intent.intent_router import (
+from cortex.core.intent.intent_canonicalizer import IntentType
+from cortex.core.intent.intent_router import (
     IntentRouter,
     RoutingDecision,
     OrchestrationTarget,
@@ -361,7 +361,7 @@ class TestIntentRouterDelegation:
 
 def _create_intent(intent_type, confidence):
     """Helper to create canonical intent for testing."""
-    from src.core.intent.intent_canonicalizer import CanonicalizedIntent, IntentScope
+    from cortex.core.intent.intent_canonicalizer import CanonicalizedIntent, IntentScope
 
     return CanonicalizedIntent(
         original_text=f"Test {intent_type.name} request",

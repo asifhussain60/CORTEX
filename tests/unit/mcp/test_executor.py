@@ -4,8 +4,8 @@ import time
 from unittest.mock import Mock
 from datetime import datetime
 
-from src.mcp.protocol import ToolParameter, ToolDefinition, MCPTool, ErrorCode
-from src.mcp.executor import ToolExecutor, ExecutionState
+from cortex.mcp.protocol import ToolParameter, ToolDefinition, MCPTool, ErrorCode
+from cortex.mcp.executor import ToolExecutor, ExecutionState
 
 @pytest.fixture
 def executor():

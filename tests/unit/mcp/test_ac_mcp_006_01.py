@@ -14,7 +14,7 @@ Compliance: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 
 import pytest
 from typing import Dict, Any, List, Optional
-from src.mcp.decorator import mcp_tool, get_registered_tools, clear_tools
+from cortex.mcp.decorator import mcp_tool, get_registered_tools, clear_tools
 
 
 class TestIntentRouterExposure:

@@ -18,14 +18,14 @@ from enum import Enum
 
 
 # Import modules to be tested (will be created)
-from src.core.observability.alerting import (
+from cortex.core.observability.alerting import (
     AlertManager,
     AlertRule,
     AlertSeverity,
     AlertCondition,
     AlertNotification,
 )
-from src.core.observability.health_monitor import (
+from cortex.core.observability.health_monitor import (
     HealthMonitor,
     HealthStatus,
     HealthStatusLevel,

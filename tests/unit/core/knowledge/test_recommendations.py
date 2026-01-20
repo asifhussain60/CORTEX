@@ -1,6 +1,6 @@
 """Tests for recommendations engine."""
 import pytest
-from src.core.knowledge.recommendations import RecommendationEngine, Recommendation
+from cortex.core.knowledge.recommendations import RecommendationEngine, Recommendation
 
 @pytest.fixture
 def recommendation_engine():

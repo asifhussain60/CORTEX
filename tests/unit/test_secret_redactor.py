@@ -15,7 +15,7 @@ Test scenarios:
 """
 
 import pytest
-from src.infrastructure.secret_redactor import RedactionRule, SecretRedactor
+from cortex.infrastructure.secret_redactor import RedactionRule, SecretRedactor
 
 
 class TestSecretRedactor:

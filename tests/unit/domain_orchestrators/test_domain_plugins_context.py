@@ -17,12 +17,12 @@ class TestDomainPluginFramework:
     
     def test_plugin_registry_exists(self) -> None:
         """Domain plugin registry exists."""
-        from src.domain_orchestrators.business.plugins import DomainPluginRegistry
+        from cortex.domain_orchestrators.business.plugins import DomainPluginRegistry
         assert DomainPluginRegistry is not None
     
     def test_register_plugin(self) -> None:
         """Can register a domain plugin."""
-        from src.domain_orchestrators.business.plugins import (
+        from cortex.domain_orchestrators.business.plugins import (
             DomainPluginRegistry,
             DomainPlugin,
         )
@@ -48,7 +48,7 @@ class TestDomainPluginFramework:
     
     def test_list_plugins_by_domain(self) -> None:
         """Can list plugins by domain."""
-        from src.domain_orchestrators.business.plugins import DomainPluginRegistry
+        from cortex.domain_orchestrators.business.plugins import DomainPluginRegistry
         
         registry = DomainPluginRegistry()
         plugins = registry.list_plugins_by_domain("financial")
@@ -56,7 +56,7 @@ class TestDomainPluginFramework:
     
     def test_plugin_hooks(self) -> None:
         """Plugins can define pre/post hooks."""
-        from src.domain_orchestrators.business.plugins import DomainPlugin
+        from cortex.domain_orchestrators.business.plugins import DomainPlugin
         
         assert hasattr(DomainPlugin, 'pre_execute')
         assert hasattr(DomainPlugin, 'post_execute')
@@ -67,12 +67,12 @@ class TestDomainContextManagement:
     
     def test_domain_context_manager_exists(self) -> None:
         """Domain context manager exists."""
-        from src.domain_orchestrators.business.context import DomainContextManager
+        from cortex.domain_orchestrators.business.context import DomainContextManager
         assert DomainContextManager is not None
     
     def test_create_context(self) -> None:
         """Can create a domain context."""
-        from src.domain_orchestrators.business.context import DomainContextManager
+        from cortex.domain_orchestrators.business.context import DomainContextManager
         
         manager = DomainContextManager()
         context = manager.create_context(
@@ -87,7 +87,7 @@ class TestDomainContextManagement:
     
     def test_context_isolation(self) -> None:
         """Domain contexts are isolated from each other."""
-        from src.domain_orchestrators.business.context import DomainContextManager
+        from cortex.domain_orchestrators.business.context import DomainContextManager
         
         manager = DomainContextManager()
         ctx1 = manager.create_context(domain="financial", operation="transfer")
@@ -98,7 +98,7 @@ class TestDomainContextManagement:
     
     def test_context_scoped_data(self) -> None:
         """Context can store scoped data."""
-        from src.domain_orchestrators.business.context import DomainContextManager
+        from cortex.domain_orchestrators.business.context import DomainContextManager
         
         manager = DomainContextManager()
         context = manager.create_context(domain="ecommerce", operation="checkout")
@@ -110,7 +110,7 @@ class TestDomainContextManagement:
     
     def test_context_cleanup(self) -> None:
         """Context data is cleaned up properly."""
-        from src.domain_orchestrators.business.context import DomainContextManager
+        from cortex.domain_orchestrators.business.context import DomainContextManager
         
         manager = DomainContextManager()
         context = manager.create_context(domain="financial", operation="transfer")
@@ -128,12 +128,12 @@ class TestDomainValidationFramework:
     
     def test_domain_validator_exists(self) -> None:
         """Domain validator exists."""
-        from src.domain_orchestrators.business.validation import DomainValidator
+        from cortex.domain_orchestrators.business.validation import DomainValidator
         assert DomainValidator is not None
     
     def test_validate_domain_context(self) -> None:
         """Can validate domain context."""
-        from src.domain_orchestrators.business.validation import DomainValidator
+        from cortex.domain_orchestrators.business.validation import DomainValidator
         
         validator = DomainValidator()
         result = validator.validate_context(
@@ -145,7 +145,7 @@ class TestDomainValidationFramework:
     
     def test_validate_domain_operation(self) -> None:
         """Can validate domain operations."""
-        from src.domain_orchestrators.business.validation import DomainValidator
+        from cortex.domain_orchestrators.business.validation import DomainValidator
         
         validator = DomainValidator()
         result = validator.validate_operation(
@@ -157,7 +157,7 @@ class TestDomainValidationFramework:
     
     def test_validation_rules_per_domain(self) -> None:
         """Each domain has specific validation rules."""
-        from src.domain_orchestrators.business.validation import DomainValidator
+        from cortex.domain_orchestrators.business.validation import DomainValidator
         
         validator = DomainValidator()
         financial_rules = validator.get_rules("financial")
@@ -168,7 +168,7 @@ class TestDomainValidationFramework:
     
     def test_custom_validation_rule(self) -> None:
         """Can register custom validation rules."""
-        from src.domain_orchestrators.business.validation import (
+        from cortex.domain_orchestrators.business.validation import (
             DomainValidator,
             ValidationRule,
         )
@@ -193,7 +193,7 @@ class TestDomainIntegrationValidation:
     
     def test_cross_domain_operation_validation(self) -> None:
         """Can validate cross-domain operations."""
-        from src.domain_orchestrators.business.validation import DomainValidator
+        from cortex.domain_orchestrators.business.validation import DomainValidator
         
         validator = DomainValidator()
         result = validator.validate_cross_domain_operation(
@@ -207,7 +207,7 @@ class TestDomainIntegrationValidation:
     
     def test_domain_compatibility_check(self) -> None:
         """Can check domain compatibility."""
-        from src.domain_orchestrators.business.validation import DomainValidator
+        from cortex.domain_orchestrators.business.validation import DomainValidator
         
         validator = DomainValidator()
         

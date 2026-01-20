@@ -1,7 +1,7 @@
 """Tests for Turn-by-Turn Response Generation (AC-RESP-001-01)."""
 import pytest
 from datetime import datetime
-from src.orchestrators.response.turn_response_generator import (
+from cortex.orchestrators.response.turn_response_generator import (
     ResponseMode,
     ResponseTone,
     ResponseMetadata,

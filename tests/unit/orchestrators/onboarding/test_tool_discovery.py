@@ -9,7 +9,7 @@ Validates the ToolDiscoveryService implementation with:
 """
 
 import pytest
-from src.orchestrators.onboarding.tool_discovery import (
+from cortex.orchestrators.onboarding.tool_discovery import (
     ToolDiscoveryService,
     ToolSchema,
     ToolInfo,

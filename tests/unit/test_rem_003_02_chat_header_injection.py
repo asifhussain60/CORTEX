@@ -23,7 +23,7 @@ class TestChatResponseFormatter:
         """Create ChatResponseFormatter instance for tests."""
         # Import will fail initially (RED state) - that's expected
         try:
-            from src.api.chat_response_formatter import ChatResponseFormatter
+            from cortex.api.chat_response_formatter import ChatResponseFormatter
             return ChatResponseFormatter()
         except ImportError:
             pytest.skip("ChatResponseFormatter not yet implemented")
@@ -31,7 +31,7 @@ class TestChatResponseFormatter:
     def test_formatter_class_exists(self):
         """Verify ChatResponseFormatter class exists."""
         try:
-            from src.api.chat_response_formatter import ChatResponseFormatter
+            from cortex.api.chat_response_formatter import ChatResponseFormatter
             assert ChatResponseFormatter is not None
         except ImportError as e:
             pytest.fail(f"ChatResponseFormatter class not found: {e}")
@@ -209,7 +209,7 @@ class TestChatResponseFormatterIntegration:
     def formatter(self):
         """Create formatter instance."""
         try:
-            from src.api.chat_response_formatter import ChatResponseFormatter
+            from cortex.api.chat_response_formatter import ChatResponseFormatter
             return ChatResponseFormatter()
         except ImportError:
             pytest.skip("ChatResponseFormatter not yet implemented")

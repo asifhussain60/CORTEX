@@ -16,7 +16,7 @@ from pathlib import Path
 import tempfile
 import json
 
-from src.core.orchestrator_dependency_registry import (
+from cortex.core.orchestrator_dependency_registry import (
     OrchestratorDependencyRegistry,
     TierLevel,
     DependencyType,

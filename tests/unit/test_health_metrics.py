@@ -12,7 +12,7 @@ Tests for AC-METRICS-001 through AC-METRICS-005:
 import pytest
 import time
 from datetime import datetime, timedelta
-from src.core.health_metrics import (
+from cortex.core.health_metrics import (
     HealthMetrics,
     MetricEntry,
     MetricSummary,

@@ -6,7 +6,7 @@ locked phase dependency verification.
 """
 
 import pytest
-from src.core.dependency_validator import (
+from cortex.core.dependency_validator import (
     DependencyValidationResult,
     DependencyPath,
     DependencyValidationStatus,

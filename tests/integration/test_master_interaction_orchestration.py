@@ -24,15 +24,15 @@ from typing import Dict, Any, List
 from datetime import datetime
 from pathlib import Path
 
-from src.orchestrators.core.master_orchestrator import MasterOrchestrator
-from src.core.intent.intent_reflection_protocol import (
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+from cortex.core.intent.intent_reflection_protocol import (
     IntentReflectionEngine,
     ReflectionRequest,
     ReflectionStatus,
 )
-from src.core.interfaces import IOrchestrator, OperationMode
-from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-from src.infrastructure.database import DatabaseManager
+from cortex.core.interfaces import IOrchestrator, OperationMode
+from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.infrastructure.database import DatabaseManager
 
 
 class TestMasterInteractionOrchestratorIntegration:

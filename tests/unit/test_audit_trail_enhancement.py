@@ -18,7 +18,7 @@ import json
 
 
 # Import modules to be tested (will be created)
-from src.core.observability.audit_trail import (
+from cortex.core.observability.audit_trail import (
     AuditTrail,
     AuditEntry,
     RetentionPolicy,

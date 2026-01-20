@@ -8,7 +8,7 @@ Validates that:
 """
 
 import pytest
-from src.infrastructure.import_path_updater import (
+from cortex.infrastructure.import_path_updater import (
     ImportPathUpdater,
     ImportMapping
 )
@@ -24,25 +24,25 @@ class TestImportPathUpdate:
     def test_add_import_mapping(self):
         """Test adding an import mapping."""
         self.updater.add_import_mapping(
-            "from src.core import Orchestrator",
-            "from src.core.orchestrator import Orchestrator",
+            "from cortex.core import Orchestrator",
+            "from cortex.core.orchestrator import Orchestrator",
             "src/main.py"
         )
         
         assert len(self.updater.import_mappings) == 1
         assert self.updater.import_mappings[0].old_import == \
-               "from src.core import Orchestrator"
+               "from cortex.core import Orchestrator"
     
     def test_multiple_import_mappings(self):
         """Test adding multiple import mappings."""
         self.updater.add_import_mapping(
-            "from src.core import X",
-            "from src.core.module import X",
+            "from cortex.core import X",
+            "from cortex.core.module import X",
             "file1.py"
         )
         self.updater.add_import_mapping(
-            "from src.api import Y",
-            "from src.api.module import Y",
+            "from cortex.api import Y",
+            "from cortex.api.module import Y",
             "file2.py"
         )
         
@@ -51,8 +51,8 @@ class TestImportPathUpdate:
     def test_scan_file_imports(self):
         """Test scanning file imports."""
         imports = [
-            "from src.core import Orchestrator",
-            "from src.api import APIHandler",
+            "from cortex.core import Orchestrator",
+            "from cortex.api import APIHandler",
             "import sys"
         ]
         
@@ -63,54 +63,54 @@ class TestImportPathUpdate:
     
     def test_update_imports_single_mapping(self):
         """Test updating imports with a single mapping."""
-        imports = ["from src.core import Orchestrator"]
+        imports = ["from cortex.core import Orchestrator"]
         self.updater.scan_file_imports("src/main.py", imports)
         self.updater.add_import_mapping(
-            "from src.core import Orchestrator",
-            "from src.core.orchestrator import Orchestrator",
+            "from cortex.core import Orchestrator",
+            "from cortex.core.orchestrator import Orchestrator",
             "src/main.py"
         )
         
         updated = self.updater.update_imports()
         
         assert updated["src/main.py"][0] == \
-               "from src.core.orchestrator import Orchestrator"
+               "from cortex.core.orchestrator import Orchestrator"
     
     def test_update_imports_multiple_mappings(self):
         """Test updating imports with multiple mappings."""
         imports = [
-            "from src.core import Orchestrator",
-            "from src.api import APIHandler"
+            "from cortex.core import Orchestrator",
+            "from cortex.api import APIHandler"
         ]
         self.updater.scan_file_imports("src/main.py", imports)
         self.updater.add_import_mapping(
-            "from src.core import Orchestrator",
-            "from src.core.orchestrator import Orchestrator",
+            "from cortex.core import Orchestrator",
+            "from cortex.core.orchestrator import Orchestrator",
             "src/main.py"
         )
         self.updater.add_import_mapping(
-            "from src.api import APIHandler",
-            "from src.api.handler import APIHandler",
+            "from cortex.api import APIHandler",
+            "from cortex.api.handler import APIHandler",
             "src/main.py"
         )
         
         updated = self.updater.update_imports()
         
         assert updated["src/main.py"][0] == \
-               "from src.core.orchestrator import Orchestrator"
+               "from cortex.core.orchestrator import Orchestrator"
         assert updated["src/main.py"][1] == \
-               "from src.api.handler import APIHandler"
+               "from cortex.api.handler import APIHandler"
     
     def test_update_imports_unmapped_imports_preserved(self):
         """Test that unmapped imports are preserved."""
         imports = [
-            "from src.core import Orchestrator",
+            "from cortex.core import Orchestrator",
             "import sys"
         ]
         self.updater.scan_file_imports("src/main.py", imports)
         self.updater.add_import_mapping(
-            "from src.core import Orchestrator",
-            "from src.core.orchestrator import Orchestrator",
+            "from cortex.core import Orchestrator",
+            "from cortex.core.orchestrator import Orchestrator",
             "src/main.py"
         )
         
@@ -133,13 +133,13 @@ class TestImportPathUpdate:
     def test_check_no_broken_imports(self):
         """Test checking for broken imports."""
         imports = [
-            "from src.core import Orchestrator",
+            "from cortex.core import Orchestrator",
             "import sys"
         ]
         self.updater.scan_file_imports("src/main.py", imports)
         self.updater.add_import_mapping(
-            "from src.core import Orchestrator",
-            "from src.core.orchestrator import Orchestrator",
+            "from cortex.core import Orchestrator",
+            "from cortex.core.orchestrator import Orchestrator",
             "src/main.py"
         )
         
@@ -148,18 +148,18 @@ class TestImportPathUpdate:
     def test_is_migration_valid_complete(self):
         """Test complete valid migration check."""
         imports = [
-            "from src.core import Orchestrator",
-            "from src.api import APIHandler"
+            "from cortex.core import Orchestrator",
+            "from cortex.api import APIHandler"
         ]
         self.updater.scan_file_imports("src/main.py", imports)
         self.updater.add_import_mapping(
-            "from src.core import Orchestrator",
-            "from src.core.orchestrator import Orchestrator",
+            "from cortex.core import Orchestrator",
+            "from cortex.core.orchestrator import Orchestrator",
             "src/main.py"
         )
         self.updater.add_import_mapping(
-            "from src.api import APIHandler",
-            "from src.api.handler import APIHandler",
+            "from cortex.api import APIHandler",
+            "from cortex.api.handler import APIHandler",
             "src/main.py"
         )
         
@@ -179,11 +179,11 @@ class TestImportPathUpdate:
     
     def test_run_full_validation(self):
         """Test running full validation suite."""
-        imports = ["from src.core import Orchestrator"]
+        imports = ["from cortex.core import Orchestrator"]
         self.updater.scan_file_imports("src/main.py", imports)
         self.updater.add_import_mapping(
-            "from src.core import Orchestrator",
-            "from src.core.orchestrator import Orchestrator",
+            "from cortex.core import Orchestrator",
+            "from cortex.core.orchestrator import Orchestrator",
             "src/main.py"
         )
         
@@ -199,18 +199,18 @@ class TestImportPathUpdate:
     def test_full_validation_success(self):
         """Test successful full validation."""
         imports = [
-            "from src.core import Orchestrator",
-            "from src.api import APIHandler"
+            "from cortex.core import Orchestrator",
+            "from cortex.api import APIHandler"
         ]
         self.updater.scan_file_imports("src/main.py", imports)
         self.updater.add_import_mapping(
-            "from src.core import Orchestrator",
-            "from src.core.orchestrator import Orchestrator",
+            "from cortex.core import Orchestrator",
+            "from cortex.core.orchestrator import Orchestrator",
             "src/main.py"
         )
         self.updater.add_import_mapping(
-            "from src.api import APIHandler",
-            "from src.api.handler import APIHandler",
+            "from cortex.api import APIHandler",
+            "from cortex.api.handler import APIHandler",
             "src/main.py"
         )
         
@@ -225,12 +225,12 @@ class TestImportPathUpdate:
         # Setup multiple files
         files_and_imports = {
             "src/main.py": [
-                "from src.core import Orchestrator",
-                "from src.api import APIHandler"
+                "from cortex.core import Orchestrator",
+                "from cortex.api import APIHandler"
             ],
             "src/worker.py": [
-                "from src.brain import Brain",
-                "from src.tools import Tools"
+                "from cortex.brain import Brain",
+                "from cortex.tools import Tools"
             ]
         }
         
@@ -240,23 +240,23 @@ class TestImportPathUpdate:
         
         # Add mappings
         self.updater.add_import_mapping(
-            "from src.core import Orchestrator",
-            "from src.core.orchestrator import Orchestrator",
+            "from cortex.core import Orchestrator",
+            "from cortex.core.orchestrator import Orchestrator",
             "src/main.py"
         )
         self.updater.add_import_mapping(
-            "from src.api import APIHandler",
-            "from src.api.handler import APIHandler",
+            "from cortex.api import APIHandler",
+            "from cortex.api.handler import APIHandler",
             "src/main.py"
         )
         self.updater.add_import_mapping(
-            "from src.brain import Brain",
-            "from src.core.brain import Brain",
+            "from cortex.brain import Brain",
+            "from cortex.core.brain import Brain",
             "src/worker.py"
         )
         self.updater.add_import_mapping(
-            "from src.tools import Tools",
-            "from src.tools.impl import Tools",
+            "from cortex.tools import Tools",
+            "from cortex.tools.impl import Tools",
             "src/worker.py"
         )
         

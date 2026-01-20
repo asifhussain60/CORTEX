@@ -13,12 +13,12 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 
 import pytest
 
-from src.core.governance_enforcer import (
+from cortex.core.governance_enforcer import (
     GovernanceEnforcer,
     EnforcementResult,
     IntentType,
 )
-from src.infrastructure.database import DatabaseManager, DatabaseConfig
+from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
 
 
 @pytest.fixture

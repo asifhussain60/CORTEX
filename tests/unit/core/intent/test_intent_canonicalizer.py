@@ -167,7 +167,7 @@ class TestIntentTypeExtraction:
         self, implement_requests: List[Dict[str, Any]]
     ) -> None:
         """Test detection of IMPLEMENT intent."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         
@@ -179,7 +179,7 @@ class TestIntentTypeExtraction:
         self, fix_requests: List[Dict[str, Any]]
     ) -> None:
         """Test detection of FIX intent."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         
@@ -191,7 +191,7 @@ class TestIntentTypeExtraction:
         self, refactor_requests: List[Dict[str, Any]]
     ) -> None:
         """Test detection of REFACTOR intent."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         
@@ -203,7 +203,7 @@ class TestIntentTypeExtraction:
         self, query_requests: List[Dict[str, Any]]
     ) -> None:
         """Test detection of QUERY intent."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         
@@ -215,7 +215,7 @@ class TestIntentTypeExtraction:
         self, implement_requests: List[Dict[str, Any]]
     ) -> None:
         """Test keyword extraction from requests."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         request = implement_requests[0]  # "implement user authentication for the API"
@@ -239,7 +239,7 @@ class TestScopeExtraction:
         self, scoped_requests: List[Dict[str, Any]]
     ) -> None:
         """Test extraction of file scope."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         request = scoped_requests[0]  # "fix the calculate_total function in orders.py"
@@ -253,7 +253,7 @@ class TestScopeExtraction:
         self, scoped_requests: List[Dict[str, Any]]
     ) -> None:
         """Test extraction of function scope."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         request = scoped_requests[0]
@@ -267,7 +267,7 @@ class TestScopeExtraction:
         self, scoped_requests: List[Dict[str, Any]]
     ) -> None:
         """Test extraction of AC-ID scope."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         request = scoped_requests[1]  # "implement AC-ID FR-008-01"
@@ -281,7 +281,7 @@ class TestScopeExtraction:
         self, scoped_requests: List[Dict[str, Any]]
     ) -> None:
         """Test extraction of class scope."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         request = scoped_requests[2]  # "refactor the UserModel class"
@@ -304,7 +304,7 @@ class TestConfidenceScoring:
         self, implement_requests: List[Dict[str, Any]]
     ) -> None:
         """Test high confidence for clear intents."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         request = implement_requests[0]
@@ -317,7 +317,7 @@ class TestConfidenceScoring:
         self, ambiguous_requests: List[Dict[str, Any]]
     ) -> None:
         """Test low confidence for ambiguous requests."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         
@@ -327,7 +327,7 @@ class TestConfidenceScoring:
 
     def test_confidence_ranges(self) -> None:
         """Test that confidence is always in valid range."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         
@@ -356,7 +356,7 @@ class TestClarificationGeneration:
         self, ambiguous_requests: List[Dict[str, Any]]
     ) -> None:
         """Test clarification generation for ambiguous requests."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         request = ambiguous_requests[0]  # "work on the login"
@@ -371,7 +371,7 @@ class TestClarificationGeneration:
         self, implement_requests: List[Dict[str, Any]]
     ) -> None:
         """Test no clarification needed for clear intents."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         request = implement_requests[0]
@@ -382,7 +382,7 @@ class TestClarificationGeneration:
 
     def test_clarification_suggests_options(self) -> None:
         """Test that clarification prompt suggests valid options."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         result = canonicalizer.canonicalize("work on the code")
@@ -403,7 +403,7 @@ class TestIntentTypes:
 
     def test_all_intent_types_defined(self) -> None:
         """Test that all standard intent types are defined."""
-        from src.core.intent.intent_canonicalizer import IntentType
+        from cortex.core.intent.intent_canonicalizer import IntentType
         
         required_types = [
             "IMPLEMENT",
@@ -420,7 +420,7 @@ class TestIntentTypes:
 
     def test_detect_analyze_intent(self) -> None:
         """Test detection of ANALYZE intent."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         
@@ -436,7 +436,7 @@ class TestIntentTypes:
 
     def test_detect_validate_intent(self) -> None:
         """Test detection of VALIDATE intent."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         
@@ -463,7 +463,7 @@ class TestIntentCanonicalizerIntegration:
         self, implement_requests: List[Dict[str, Any]]
     ) -> None:
         """Test complete canonicalization pipeline."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         request = implement_requests[0]
@@ -480,7 +480,7 @@ class TestIntentCanonicalizerIntegration:
         self, implement_requests: List[Dict[str, Any]]
     ) -> None:
         """Test serialization of canonicalized intent."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         request = implement_requests[0]
@@ -498,7 +498,7 @@ class TestIntentCanonicalizerIntegration:
         self, implement_requests: List[Dict[str, Any]]
     ) -> None:
         """Test canonicalization with additional context."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
         
         canonicalizer = IntentCanonicalizer()
         

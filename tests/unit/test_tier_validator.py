@@ -8,8 +8,8 @@ import pytest
 from datetime import datetime
 from typing import Any
 
-from src.core.orchestrator_base import OrchestratorBase, OrchestrationContext
-from src.core.tier_validator import (
+from cortex.core.orchestrator_base import OrchestratorBase, OrchestrationContext
+from cortex.core.tier_validator import (
     TierAccessValidator,
     TierAccessEnforcer,
     TierViolation,

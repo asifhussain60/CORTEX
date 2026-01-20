@@ -39,22 +39,22 @@ class TestBusinessKnowledgeRepositoryModule:
     
     def test_business_knowledge_repository_class_exists(self):
         """Verify BusinessKnowledgeRepository class can be imported."""
-        from src.domain_brain.business_knowledge_repository import BusinessKnowledgeRepository
+        from cortex.domain_brain.business_knowledge_repository import BusinessKnowledgeRepository
         assert BusinessKnowledgeRepository is not None
     
     def test_business_knowledge_entry_dataclass_exists(self):
         """Verify BusinessKnowledgeEntry dataclass can be imported."""
-        from src.domain_brain.business_knowledge_repository import BusinessKnowledgeEntry
+        from cortex.domain_brain.business_knowledge_repository import BusinessKnowledgeEntry
         assert BusinessKnowledgeEntry is not None
     
     def test_business_knowledge_query_result_dataclass_exists(self):
         """Verify BusinessKnowledgeQueryResult dataclass can be imported."""
-        from src.domain_brain.business_knowledge_repository import BusinessKnowledgeQueryResult
+        from cortex.domain_brain.business_knowledge_repository import BusinessKnowledgeQueryResult
         assert BusinessKnowledgeQueryResult is not None
     
     def test_get_business_knowledge_repository_singleton_exists(self):
         """Verify singleton accessor function exists."""
-        from src.domain_brain.business_knowledge_repository import get_business_knowledge_repository
+        from cortex.domain_brain.business_knowledge_repository import get_business_knowledge_repository
         assert callable(get_business_knowledge_repository)
 
 
@@ -73,7 +73,7 @@ class TestBusinessKnowledgeRepositoryInitialization:
     @pytest.fixture
     def business_repo(self, mock_api):
         """Create BusinessKnowledgeRepository instance with mock API."""
-        from src.domain_brain.business_knowledge_repository import BusinessKnowledgeRepository
+        from cortex.domain_brain.business_knowledge_repository import BusinessKnowledgeRepository
         return BusinessKnowledgeRepository(domain_brain_api=mock_api)
     
     def test_repository_initializes_successfully(self, business_repo):
@@ -98,7 +98,7 @@ class TestBusinessKnowledgeRepositoryQueries:
     @pytest.fixture
     def mock_domain(self):
         """Create mock domain with entities."""
-        from src.domain_brain.models import Domain, Entity, EntityType
+        from cortex.domain_brain.models import Domain, Entity, EntityType
         
         domain = Domain(
             domain_id="test-domain",
@@ -141,7 +141,7 @@ class TestBusinessKnowledgeRepositoryQueries:
     @pytest.fixture
     def business_repo_with_data(self, mock_api_with_data):
         """Create BusinessKnowledgeRepository with test data."""
-        from src.domain_brain.business_knowledge_repository import BusinessKnowledgeRepository
+        from cortex.domain_brain.business_knowledge_repository import BusinessKnowledgeRepository
         return BusinessKnowledgeRepository(domain_brain_api=mock_api_with_data)
     
     def test_get_by_domain_returns_entries(self, business_repo_with_data):
@@ -177,7 +177,7 @@ class TestBusinessKnowledgeRepositoryHelpers:
     @pytest.fixture
     def mock_api(self):
         """Create mock DomainBrainAPI."""
-        from src.domain_brain.models import Domain, Entity, EntityType
+        from cortex.domain_brain.models import Domain, Entity, EntityType
         
         domain = Domain(
             domain_id="payments",
@@ -207,7 +207,7 @@ class TestBusinessKnowledgeRepositoryHelpers:
     @pytest.fixture
     def business_repo(self, mock_api):
         """Create BusinessKnowledgeRepository."""
-        from src.domain_brain.business_knowledge_repository import BusinessKnowledgeRepository
+        from cortex.domain_brain.business_knowledge_repository import BusinessKnowledgeRepository
         return BusinessKnowledgeRepository(domain_brain_api=mock_api)
     
     def test_get_services(self, business_repo):
@@ -265,7 +265,7 @@ class TestMasterOrchestratorBusinessKnowledgeIntegration:
         self, mock_logger, mock_db, mock_transaction_manager
     ):
         """Verify MasterOrchestrator has _business_knowledge_repository attribute."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         MasterOrchestrator._instance = None
         orchestrator = MasterOrchestrator()
@@ -276,7 +276,7 @@ class TestMasterOrchestratorBusinessKnowledgeIntegration:
         self, mock_logger, mock_db, mock_transaction_manager
     ):
         """Verify has_business_knowledge_repository property exists."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         MasterOrchestrator._instance = None
         orchestrator = MasterOrchestrator()
@@ -288,7 +288,7 @@ class TestMasterOrchestratorBusinessKnowledgeIntegration:
         self, mock_logger, mock_db, mock_transaction_manager
     ):
         """Verify get_business_knowledge_summary method exists."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         MasterOrchestrator._instance = None
         orchestrator = MasterOrchestrator()
@@ -300,7 +300,7 @@ class TestMasterOrchestratorBusinessKnowledgeIntegration:
         self, mock_logger, mock_db, mock_transaction_manager
     ):
         """Verify query_business_knowledge method exists."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         MasterOrchestrator._instance = None
         orchestrator = MasterOrchestrator()
@@ -312,7 +312,7 @@ class TestMasterOrchestratorBusinessKnowledgeIntegration:
         self, mock_logger, mock_db, mock_transaction_manager
     ):
         """Verify _evaluate_business_knowledge_for_request method exists."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         MasterOrchestrator._instance = None
         orchestrator = MasterOrchestrator()
@@ -354,7 +354,7 @@ class TestMasterOrchestratorBusinessKnowledgeEvaluation:
         """Create mock governance registry."""
         with patch('src.orchestrators.core.master_orchestrator.GovernanceRegistry') as mock:
             registry = Mock()
-            from src.core.result import Ok
+            from cortex.core.result import Ok
             registry.initialize.return_value = Ok("initialized")
             registry.should_proceed.return_value = Ok(True)
             mock.instance.return_value = registry
@@ -364,7 +364,7 @@ class TestMasterOrchestratorBusinessKnowledgeEvaluation:
         self, mock_logger, mock_db, mock_transaction_manager
     ):
         """Verify _evaluate_business_knowledge_for_request returns dict with expected keys."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         MasterOrchestrator._instance = None
         orchestrator = MasterOrchestrator()
@@ -420,7 +420,7 @@ class TestCoordinateOperationUnifiedKnowledge:
         """Create mock governance registry."""
         with patch('src.orchestrators.core.master_orchestrator.GovernanceRegistry') as mock:
             registry = Mock()
-            from src.core.result import Ok
+            from cortex.core.result import Ok
             registry.initialize.return_value = Ok("initialized")
             registry.should_proceed.return_value = Ok(True)
             mock.instance.return_value = registry
@@ -430,7 +430,7 @@ class TestCoordinateOperationUnifiedKnowledge:
         self, mock_logger, mock_db, mock_transaction_manager, mock_governance
     ):
         """Verify coordinate_operation result includes both knowledge contexts."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         MasterOrchestrator._instance = None
         orchestrator = MasterOrchestrator()
@@ -479,7 +479,7 @@ class TestBusinessKnowledgeGracefulDegradation:
     
     def test_orchestrator_works_without_business_knowledge_repository(self):
         """Verify orchestrator functions when business repository fails."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         with patch('src.orchestrators.core.master_orchestrator.EnhancedAuditLogger') as mock_logger:
             with patch('src.orchestrators.core.master_orchestrator.DatabaseManager'):
@@ -501,7 +501,7 @@ class TestBusinessKnowledgeGracefulDegradation:
     
     def test_evaluate_business_knowledge_returns_empty_when_unavailable(self):
         """Verify _evaluate_business_knowledge_for_request returns empty gracefully."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         with patch('src.orchestrators.core.master_orchestrator.EnhancedAuditLogger') as mock_logger:
             with patch('src.orchestrators.core.master_orchestrator.DatabaseManager'):
@@ -534,22 +534,22 @@ class TestBKIOOrchestratorWiring:
     
     def test_bkio_orchestrator_can_be_imported(self):
         """Verify BKIO orchestrator can be imported."""
-        from src.domain_brain.bkio_orchestrator import BusinessKnowledgeIngestionOrchestrator
+        from cortex.domain_brain.bkio_orchestrator import BusinessKnowledgeIngestionOrchestrator
         assert BusinessKnowledgeIngestionOrchestrator is not None
     
     def test_bkio_inherits_orchestrator_base(self):
         """Verify BKIO inherits from OrchestratorBase."""
-        from src.domain_brain.bkio_orchestrator import BusinessKnowledgeIngestionOrchestrator
-        from src.core.orchestrator_base import OrchestratorBase
+        from cortex.domain_brain.bkio_orchestrator import BusinessKnowledgeIngestionOrchestrator
+        from cortex.core.orchestrator_base import OrchestratorBase
         
         assert issubclass(BusinessKnowledgeIngestionOrchestrator, OrchestratorBase)
     
     def test_bkio_can_be_registered_with_master_orchestrator(self):
         """Verify BKIO can be registered in MasterOrchestrator's domain_orchestrators."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
-        from src.domain_brain.bkio_orchestrator import BusinessKnowledgeIngestionOrchestrator
-        from src.core.orchestrator_base import OrchestrationContext
-        from src.domain_brain.api import DomainBrainAPI
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.domain_brain.bkio_orchestrator import BusinessKnowledgeIngestionOrchestrator
+        from cortex.core.orchestrator_base import OrchestrationContext
+        from cortex.domain_brain.api import DomainBrainAPI
         
         with patch('src.orchestrators.core.master_orchestrator.EnhancedAuditLogger') as mock_logger:
             with patch('src.orchestrators.core.master_orchestrator.DatabaseManager'):

@@ -11,12 +11,12 @@ import pytest
 from typing import Any
 
 try:
-    from src.core.safety.hallucination_detector import HallucinationDetector
+    from cortex.core.safety.hallucination_detector import HallucinationDetector
 except (ImportError, ModuleNotFoundError):
     HallucinationDetector = None
 
 try:
-    from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+    from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 except (ImportError, ModuleNotFoundError):
     MasterOrchestrator = None
 

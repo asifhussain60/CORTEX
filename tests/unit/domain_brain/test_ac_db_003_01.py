@@ -9,13 +9,13 @@ Total: 70 tests
 """
 
 import pytest
-from src.domain_brain.bkio_orchestrator import (
+from cortex.domain_brain.bkio_orchestrator import (
     BusinessKnowledgeIngestionOrchestrator,
     DocumentFormat,
 )
-from src.core.orchestrator_base import OrchestrationContext
-from src.domain_brain.api import DomainBrainAPI
-from src.domain_brain.models import Domain, Entity, EntityType
+from cortex.core.orchestrator_base import OrchestrationContext
+from cortex.domain_brain.api import DomainBrainAPI
+from cortex.domain_brain.models import Domain, Entity, EntityType
 
 
 class TestBKIOOrchestrator:

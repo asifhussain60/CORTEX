@@ -8,8 +8,8 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 import pytest
 from pathlib import Path
 
-from src.infrastructure.database import DatabaseManager, DatabaseConfig
-from src.tools.ac_populator import ACPopulator
+from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
+from cortex.tools.ac_populator import ACPopulator
 
 
 @pytest.fixture

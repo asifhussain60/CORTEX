@@ -12,12 +12,12 @@ import pytest
 from typing import Any
 
 try:
-    from src.core.analysis.lens_protocol import LENSEngine
+    from cortex.core.analysis.lens_protocol import LENSEngine
 except (ImportError, ModuleNotFoundError):
     LENSEngine = None
 
 try:
-    from src.orchestrators.core.interaction_orchestrator import InteractionOrchestrator
+    from cortex.orchestrators.core.interaction_orchestrator import InteractionOrchestrator
 except (ImportError, ModuleNotFoundError):
     InteractionOrchestrator = None
 

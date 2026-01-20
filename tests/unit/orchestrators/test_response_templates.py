@@ -19,7 +19,7 @@ import pytest
 from datetime import datetime
 from typing import Dict, Any
 
-from src.orchestrators.response.response_templates import (
+from cortex.orchestrators.response.response_templates import (
     VariableType,
     VariableSpec,
     ResponseType,

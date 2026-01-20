@@ -8,7 +8,7 @@ Validates the migration script that:
 """
 
 import pytest
-from src.infrastructure.folder_migration_script import (
+from cortex.infrastructure.folder_migration_script import (
     FolderMigrationScript,
     FileIntegrityRecord
 )

@@ -16,7 +16,7 @@ import time
 import asyncio
 from enum import Enum
 
-from src.mcp.protocol import ToolDefinition, ToolParameter, MCPError, ErrorCode
+from cortex.mcp.protocol import ToolDefinition, ToolParameter, MCPError, ErrorCode
 
 
 class ExecutionStatus(Enum):

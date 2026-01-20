@@ -16,9 +16,9 @@ import time
 import yaml
 import pytest
 from pathlib import Path
-from src.core.path_resolver import resolve_path
-from src.orchestrators.core.master_orchestrator import MasterOrchestrator
-from src.core.governance_registry import GovernanceRegistry
+from cortex.core.path_resolver import resolve_path
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+from cortex.core.governance_registry import GovernanceRegistry
 
 
 @pytest.mark.ac("NFR-006-01")

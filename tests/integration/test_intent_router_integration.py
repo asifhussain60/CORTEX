@@ -11,15 +11,15 @@ import pytest
 from typing import Any
 
 try:
-    from src.core.intent.intent_router import IntentRouter
-    from src.core.intent.intent_canonicalizer import CanonicalizedIntent, IntentType
+    from cortex.core.intent.intent_router import IntentRouter
+    from cortex.core.intent.intent_canonicalizer import CanonicalizedIntent, IntentType
 except (ImportError, ModuleNotFoundError):
     IntentRouter = None
     CanonicalizedIntent = None
     IntentType = None
 
 try:
-    from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+    from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 except (ImportError, ModuleNotFoundError):
     MasterOrchestrator = None
 

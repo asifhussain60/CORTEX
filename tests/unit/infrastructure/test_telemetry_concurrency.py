@@ -17,7 +17,7 @@ from typing import List
 
 import pytest
 
-from src.infrastructure.metrics_exporter import (
+from cortex.infrastructure.metrics_exporter import (
     MetricsExporter,
     TelemetryProvider,
     MemoryMetricsExporter,

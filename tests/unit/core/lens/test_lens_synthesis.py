@@ -26,7 +26,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime
 
-from src.core.result import Result, Ok, Err
+from cortex.core.result import Result, Ok, Err
 
 
 class SynthesisPhase(Enum):

@@ -10,13 +10,13 @@ Total: 40 tests
 """
 
 import pytest
-from src.domain_brain.lens_integration import (
+from cortex.domain_brain.lens_integration import (
     LENSIntegrationLayer,
     LENSQuery,
     LENSSynthesis,
 )
-from src.domain_brain.api import DomainBrainAPI
-from src.domain_brain.models import Domain, Entity, Conflict, EntityType
+from cortex.domain_brain.api import DomainBrainAPI
+from cortex.domain_brain.models import Domain, Entity, Conflict, EntityType
 import uuid
 
 

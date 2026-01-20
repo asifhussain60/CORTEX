@@ -7,10 +7,10 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest
-from src.intent_router.test_framework import TestFramework
-from src.intent_router.documentation import get_documentation
-from src.intent_router.observability import ObservabilityInstrument
-from src.intent_router.edge_case_handler import EdgeCaseHandler
+from cortex.intent_router.test_framework import TestFramework
+from cortex.intent_router.documentation import get_documentation
+from cortex.intent_router.observability import ObservabilityInstrument
+from cortex.intent_router.edge_case_handler import EdgeCaseHandler
 
 
 class TestTestingFramework:

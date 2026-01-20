@@ -1,7 +1,7 @@
 """Tests for MCP Protocol Implementation (AC-MCP-COMPLIANCE-001)."""
 import pytest
 from datetime import datetime
-from src.mcp.protocol import (
+from cortex.mcp.protocol import (
     ToolParameter, ToolDefinition, MCPError, MCPResponse, 
     ErrorCode, ToolValidator
 )

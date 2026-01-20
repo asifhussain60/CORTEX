@@ -20,8 +20,8 @@ CORE Governance:
 import pytest
 from typing import Dict, Any, List, Optional
 
-from src.core.result import Result, Ok, Err
-from src.orchestrators.core.relationship_analyzer import (
+from cortex.core.result import Result, Ok, Err
+from cortex.orchestrators.core.relationship_analyzer import (
     RelationshipAnalyzer,
     EntityType,
     RelationshipType,

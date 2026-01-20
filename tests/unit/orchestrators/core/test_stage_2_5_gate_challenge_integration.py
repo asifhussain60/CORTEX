@@ -13,13 +13,13 @@ import pytest
 from typing import List, Dict, Any
 from dataclasses import dataclass
 
-from src.orchestrators.core.stage_2_5_gate import (
+from cortex.orchestrators.core.stage_2_5_gate import (
     Stage25Gate,
     ConfirmationContext,
     ContinuationDecision,
 )
-from src.core.orchestrator.complexity_assessment import ComplexitySignals
-from src.core.orchestrator.approval_gate import AlternativeRecommendation
+from cortex.core.orchestrator.complexity_assessment import ComplexitySignals
+from cortex.core.orchestrator.approval_gate import AlternativeRecommendation
 
 
 class MockComplexityAssessment:

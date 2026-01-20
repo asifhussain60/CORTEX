@@ -31,7 +31,7 @@ class TestContentPopulationStrategy:
     @pytest.fixture
     def content_strategy(self):
         """Create ContentPopulationStrategy instance."""
-        from src.templates.content_strategy import ContentPopulationStrategy
+        from cortex.templates.content_strategy import ContentPopulationStrategy
         return ContentPopulationStrategy()
     
     def test_strategy_creation(self, content_strategy):
@@ -125,7 +125,7 @@ class TestKnowledgeBaseSchema:
     @pytest.fixture
     def knowledge_schema(self):
         """Create KnowledgeBaseSchema instance."""
-        from src.templates.knowledge_schema import KnowledgeBaseSchema
+        from cortex.templates.knowledge_schema import KnowledgeBaseSchema
         return KnowledgeBaseSchema()
     
     def test_schema_creation(self, knowledge_schema):
@@ -219,7 +219,7 @@ class TestTier2DomainTemplates:
     @pytest.fixture
     def template_manager(self):
         """Create TemplateManager instance."""
-        from src.templates.template_manager import TemplateManager
+        from cortex.templates.template_manager import TemplateManager
         return TemplateManager()
     
     def test_manager_creation(self, template_manager):
@@ -318,7 +318,7 @@ class TestTemplateValidation:
     @pytest.fixture
     def template_validator(self):
         """Create TemplateValidator instance."""
-        from src.templates.template_validation import TemplateContentValidator
+        from cortex.templates.template_validation import TemplateContentValidator
         return TemplateContentValidator()
     
     def test_validator_creation(self, template_validator):
@@ -398,7 +398,7 @@ class TestContentGeneration:
     @pytest.fixture
     def content_generator(self):
         """Create ContentGenerator instance."""
-        from src.templates.content_generator import ContentGenerator
+        from cortex.templates.content_generator import ContentGenerator
         return ContentGenerator()
     
     def test_generator_creation(self, content_generator):
@@ -503,7 +503,7 @@ class TestQualityAssurance:
     @pytest.fixture
     def qa_framework(self):
         """Create QualityAssuranceFramework instance."""
-        from src.templates.quality_assurance import QualityAssuranceFramework
+        from cortex.templates.quality_assurance import QualityAssuranceFramework
         return QualityAssuranceFramework()
     
     def test_qa_creation(self, qa_framework):
@@ -584,9 +584,9 @@ class TestTemplateContentIntegration:
     @pytest.fixture
     def full_system(self):
         """Create full template content system."""
-        from src.templates.content_strategy import ContentPopulationStrategy
-        from src.templates.template_manager import TemplateManager
-        from src.templates.quality_assurance import QualityAssuranceFramework
+        from cortex.templates.content_strategy import ContentPopulationStrategy
+        from cortex.templates.template_manager import TemplateManager
+        from cortex.templates.quality_assurance import QualityAssuranceFramework
         
         return {
             'strategy': ContentPopulationStrategy(),

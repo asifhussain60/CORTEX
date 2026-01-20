@@ -17,7 +17,7 @@ from unittest.mock import Mock, patch
 
 
 # Import modules to be tested (will be created)
-from src.core.observability.performance_profiler import (
+from cortex.core.observability.performance_profiler import (
     PerformanceProfiler,
     BottleneckDetector,
     Bottleneck,

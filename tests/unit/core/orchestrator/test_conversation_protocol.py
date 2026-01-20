@@ -17,15 +17,15 @@ from unittest.mock import Mock, MagicMock, patch
 from dataclasses import dataclass
 from typing import Dict, Any
 
-from src.core.orchestrator.conversation_protocol import (
+from cortex.core.orchestrator.conversation_protocol import (
     ConversationProtocol,
     RoundContext,
 )
-from src.core.orchestrator.continuation_decision import (
+from cortex.core.orchestrator.continuation_decision import (
     ContinuationDecision,
     ContinuationReason,
 )
-from src.core.result import Result, Ok, Err
+from cortex.core.result import Result, Ok, Err
 
 
 @dataclass

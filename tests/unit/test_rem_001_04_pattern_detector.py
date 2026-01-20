@@ -18,12 +18,12 @@ import pytest
 from pathlib import Path
 from typing import List
 
-from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-from src.core.intelligence.pattern_detector import (
+from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+from cortex.core.intelligence.pattern_detector import (
     PatternDetector,
     DetectedPattern,
 )
-from src.core.orchestrator.conversation_protocol import ConversationProtocol
+from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
 
 
 class TestPatternDetectorIntegration:

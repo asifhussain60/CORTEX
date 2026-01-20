@@ -1,6 +1,6 @@
 """Test for DATA-001: PII Detection"""
 import pytest
-from src.core.governance.pii_detection import (
+from cortex.core.governance.pii_detection import (
     PIIDetector,
     PIIType,
 )

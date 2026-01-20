@@ -15,7 +15,7 @@ class TestGetProjectRoot:
     
     def test_uses_env_variable_when_set(self, temp_dir, monkeypatch):
         """Should use CORTEX_ROOT env var when set."""
-        from src.core import path_resolver
+        from cortex.core import path_resolver
         
         monkeypatch.setenv("CORTEX_ROOT", str(temp_dir))
         path_resolver.reset_project_root()
@@ -26,7 +26,7 @@ class TestGetProjectRoot:
     
     def test_finds_git_root(self, temp_dir, monkeypatch):
         """Should find .git directory and use its parent."""
-        from src.core import path_resolver
+        from cortex.core import path_resolver
         
         # Clear env var
         monkeypatch.delenv("CORTEX_ROOT", raising=False)
@@ -48,7 +48,7 @@ class TestGetProjectRoot:
     
     def test_caches_result(self, temp_dir, monkeypatch):
         """Should cache the project root."""
-        from src.core import path_resolver
+        from cortex.core import path_resolver
         
         monkeypatch.setenv("CORTEX_ROOT", str(temp_dir))
         path_resolver.reset_project_root()
@@ -70,7 +70,7 @@ class TestResolvePath:
     
     def test_resolves_single_part(self, mock_project_root):
         """Should resolve single path component."""
-        from src.core.path_resolver import resolve_path
+        from cortex.core.path_resolver import resolve_path
         
         result = resolve_path("cortex_brain")
         
@@ -78,7 +78,7 @@ class TestResolvePath:
     
     def test_resolves_multiple_parts(self, mock_project_root):
         """Should resolve multiple path components."""
-        from src.core.path_resolver import resolve_path
+        from cortex.core.path_resolver import resolve_path
         
         result = resolve_path("cortex_brain", "tier0", "governance")
         
@@ -91,7 +91,7 @@ class TestTierPath:
     @pytest.mark.parametrize("tier", [0, 1, 2, 3])
     def test_valid_tiers(self, mock_project_root, tier):
         """Should return correct path for valid tiers."""
-        from src.core.path_resolver import tier_path
+        from cortex.core.path_resolver import tier_path
         
         result = tier_path(tier)
         
@@ -100,7 +100,7 @@ class TestTierPath:
     @pytest.mark.parametrize("invalid_tier", [-1, 4, 5, 100])
     def test_invalid_tiers_raise_error(self, mock_project_root, invalid_tier):
         """Should raise ValueError for invalid tiers."""
-        from src.core.path_resolver import tier_path
+        from cortex.core.path_resolver import tier_path
         
         with pytest.raises(ValueError, match="Invalid tier"):
             tier_path(invalid_tier)

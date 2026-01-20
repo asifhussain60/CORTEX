@@ -18,9 +18,9 @@ from unittest.mock import Mock, patch, MagicMock
 from dataclasses import dataclass
 
 # Import the components we'll be testing
-from src.core.orchestrator.conversation_protocol import ConversationProtocol
-from src.core.result import Result, Ok, Err
-from src.security.prompt_injection_prevention import (
+from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
+from cortex.core.result import Result, Ok, Err
+from cortex.security.prompt_injection_prevention import (
     YAMLSanitizer,
     OperationNameValidator,
     ACIDValidator,

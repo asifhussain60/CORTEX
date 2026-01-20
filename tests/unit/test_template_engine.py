@@ -12,7 +12,7 @@ import os
 import tempfile
 from pathlib import Path
 
-from src.core.template_engine import TemplateEngine, TemplateRegistry, TemplateInfo
+from cortex.core.template_engine import TemplateEngine, TemplateRegistry, TemplateInfo
 
 
 class TestTemplateRegistry:

@@ -12,7 +12,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest
-from src.orchestrators.domains.domain_templates import (
+from cortex.orchestrators.domains.domain_templates import (
     DomainTemplateFactory,
     PlanningTemplate,
     AnalysisTemplate,

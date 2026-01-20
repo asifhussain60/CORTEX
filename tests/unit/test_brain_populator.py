@@ -9,7 +9,7 @@ import os
 from pathlib import Path
 from typing import Dict, Any
 
-from src.core.brain_populator import (
+from cortex.core.brain_populator import (
     BrainPopulator,
     TierContentLoader,
     DomainRuleRegistry,

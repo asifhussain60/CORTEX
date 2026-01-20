@@ -13,10 +13,10 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 
 import time
 import pytest
-from src.orchestrators.core.master_orchestrator import MasterOrchestrator
-from src.orchestrators.core.orchestrator_registry import OrchestratorRegistry
-from src.core.governance_registry import GovernanceRegistry
-from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+from cortex.orchestrators.core.orchestrator_registry import OrchestratorRegistry
+from cortex.core.governance_registry import GovernanceRegistry
+from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 
 @pytest.mark.ac("NFR-005-01")

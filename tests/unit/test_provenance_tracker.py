@@ -18,7 +18,7 @@ Test scenarios:
 """
 
 import pytest
-from src.core.provenance_tracker import (
+from cortex.core.provenance_tracker import (
     ProvenanceTracker,
     ProvenanceType,
     EvidenceType,

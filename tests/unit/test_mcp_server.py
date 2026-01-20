@@ -10,14 +10,14 @@ import pytest
 from unittest.mock import Mock, MagicMock, patch
 from datetime import datetime
 
-from src.mcp.server import MCPServer, MCPConnection, MCPToolInfo
-from src.orchestrators.core.orchestrator_registry import OrchestratorRegistry
-from src.core.decorators.orchestrator_decorator import (
+from cortex.mcp.server import MCPServer, MCPConnection, MCPToolInfo
+from cortex.orchestrators.core.orchestrator_registry import OrchestratorRegistry
+from cortex.core.decorators.orchestrator_decorator import (
     orchestrator,
     clear_orchestrator_registry,
 )
-from src.core.interfaces import IOrchestrator, OperationMode
-from src.core.result import Ok, Err, Result
+from cortex.core.interfaces import IOrchestrator, OperationMode
+from cortex.core.result import Ok, Err, Result
 from typing import Any, Dict
 
 

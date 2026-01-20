@@ -19,7 +19,7 @@ import uuid
 import json
 import hashlib
 
-from src.core.hallucination_prevention.hallucination_detection import (
+from cortex.core.hallucination_prevention.hallucination_detection import (
     HallucinationDetector,
     CorruptionDetectionResult,
     CorruptionType,

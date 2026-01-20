@@ -19,8 +19,8 @@ import json
 from typing import Dict, Any, List
 from unittest.mock import Mock, AsyncMock, patch, MagicMock
 
-from src.mcp.decorator import mcp_tool, get_registered_tools, clear_tools, get_tool
-from src.mcp.server_sdk import CORTEXMCPServer, MCPRequest, MCPResponse
+from cortex.mcp.decorator import mcp_tool, get_registered_tools, clear_tools, get_tool
+from cortex.mcp.server_sdk import CORTEXMCPServer, MCPRequest, MCPResponse
 
 
 class TestMCPServerInitialization:

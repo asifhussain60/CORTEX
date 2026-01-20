@@ -162,7 +162,7 @@ class TestBreakingChangeDetection:
         self, code_with_dependencies: str
     ) -> None:
         """Test detection of function signature change risks."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         
@@ -185,7 +185,7 @@ class TestBreakingChangeDetection:
         self, code_with_dependencies: str
     ) -> None:
         """Test detection of public API changes."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         
@@ -207,7 +207,7 @@ class TestBreakingChangeDetection:
         self, code_with_dependencies: str
     ) -> None:
         """Test identification of affected callers."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         
@@ -238,7 +238,7 @@ class TestTestGapIdentification:
         self, code_with_no_tests: str
     ) -> None:
         """Test detection of functions without tests."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         
@@ -254,7 +254,7 @@ class TestTestGapIdentification:
         self, code_with_no_tests: str
     ) -> None:
         """Test that public functions are flagged higher priority."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         context = {"existing_tests": []}
@@ -287,7 +287,7 @@ class TestGovernanceRiskDetection:
         self, code_with_governance_issues: str
     ) -> None:
         """Test detection of missing docstrings."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         
@@ -303,7 +303,7 @@ class TestGovernanceRiskDetection:
         self, code_with_governance_issues: str
     ) -> None:
         """Test detection of dangerous code patterns."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         
@@ -320,7 +320,7 @@ class TestGovernanceRiskDetection:
         self, code_with_governance_issues: str
     ) -> None:
         """Test detection of missing error handling."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         
@@ -346,7 +346,7 @@ class TestHistoricalIssueMatching:
         self, sample_intent: Dict[str, Any], historical_issues: List[Dict[str, Any]]
     ) -> None:
         """Test matching historical issues to current change area."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         
@@ -362,7 +362,7 @@ class TestHistoricalIssueMatching:
         self, historical_issues: List[Dict[str, Any]]
     ) -> None:
         """Test that more recent issues are prioritized."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         
@@ -390,7 +390,7 @@ class TestPerformanceRiskAnalysis:
         self, code_with_performance_risks: str
     ) -> None:
         """Test detection of O(n²) complexity patterns."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         
@@ -407,7 +407,7 @@ class TestPerformanceRiskAnalysis:
         self, code_with_performance_risks: str
     ) -> None:
         """Test detection of N+1 query patterns."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         
@@ -433,7 +433,7 @@ class TestChallengePrioritization:
         self, code_with_governance_issues: str
     ) -> None:
         """Test that challenges have severity levels."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         
@@ -446,7 +446,7 @@ class TestChallengePrioritization:
         self, code_with_governance_issues: str
     ) -> None:
         """Test that challenges are sorted by severity."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         
@@ -475,7 +475,7 @@ class TestChallengeGeneratorIntegration:
         self, code_with_dependencies: str
     ) -> None:
         """Test complete challenge generation pipeline."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         
@@ -492,7 +492,7 @@ class TestChallengeGeneratorIntegration:
         self, code_with_governance_issues: str
     ) -> None:
         """Test serialization of challenges."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         
@@ -510,7 +510,7 @@ class TestChallengeGeneratorIntegration:
         self, code_with_governance_issues: str
     ) -> None:
         """Test that challenges include mitigation suggestions."""
-        from src.core.intent.challenge_generator import ChallengeGenerator
+        from cortex.core.intent.challenge_generator import ChallengeGenerator
         
         generator = ChallengeGenerator()
         

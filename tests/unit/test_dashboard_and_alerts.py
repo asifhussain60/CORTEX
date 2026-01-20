@@ -7,14 +7,14 @@ AC-NFR-004-03: Alerts triggered on threshold breach
 
 import pytest
 from datetime import datetime, timedelta
-from src.infrastructure.dashboard_service import (
+from cortex.infrastructure.dashboard_service import (
     DashboardService,
     ProgressAggregator,
     ProgressSnapshot,
     ProgressMetrics,
     DashboardStatus,
 )
-from src.infrastructure.alert_manager import (
+from cortex.infrastructure.alert_manager import (
     AlertManager,
     ThresholdMonitor,
     ThresholdRule,

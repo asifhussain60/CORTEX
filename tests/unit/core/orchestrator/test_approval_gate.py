@@ -1,12 +1,12 @@
 """Tests for Approval Gate Logic."""
 import pytest
-from src.core.orchestrator.complexity_assessment import (
+from cortex.core.orchestrator.complexity_assessment import (
     ComplexitySignals,
     ComplexityAssessment,
     ComplexityLevel,
     ComplexityAssessmentEngine,
 )
-from src.core.orchestrator.approval_gate import (
+from cortex.core.orchestrator.approval_gate import (
     ApprovalGateLogic,
     ApprovalDecision,
     ConfirmationRequest,

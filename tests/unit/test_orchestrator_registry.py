@@ -11,16 +11,16 @@ AC-AR-006-03: Orchestrator registry queryable by domain
 import pytest
 from typing import Any, Dict
 
-from src.orchestrators.core.orchestrator_registry import (
+from cortex.orchestrators.core.orchestrator_registry import (
     OrchestratorRegistry,
     RegistryQuery,
 )
-from src.core.decorators.orchestrator_decorator import (
+from cortex.core.decorators.orchestrator_decorator import (
     orchestrator,
     clear_orchestrator_registry,
 )
-from src.core.interfaces import IOrchestrator, OperationMode
-from src.core.result import Result, Ok
+from cortex.core.interfaces import IOrchestrator, OperationMode
+from cortex.core.result import Result, Ok
 
 
 class MockOrchestrator(IOrchestrator):
@@ -467,13 +467,13 @@ class TestOrchestratorDecoratorRegistration:
     def setup_method(self):
         """Clear and setup registry before each test"""
         # Import here to avoid import conflicts
-        from src.core.decorators.orchestrator import get_registry
+        from cortex.core.decorators.orchestrator import get_registry
         registry = get_registry()
         registry.clear()
     
     def test_decorator_imports(self):
         """Test that decorator and registry can be imported"""
-        from src.core.decorators.orchestrator import (
+        from cortex.core.decorators.orchestrator import (
             orchestrator,
             OrchestratorRegistry,
             get_registry,
@@ -485,7 +485,7 @@ class TestOrchestratorDecoratorRegistration:
     
     def test_tier_based_registry_singleton(self):
         """Test that tier-based registry is a singleton"""
-        from src.core.decorators.orchestrator import get_registry
+        from cortex.core.decorators.orchestrator import get_registry
         
         reg1 = get_registry()
         reg2 = get_registry()
@@ -494,8 +494,8 @@ class TestOrchestratorDecoratorRegistration:
     
     def test_create_simple_decorated_orchestrator(self):
         """Test creating a simple decorated orchestrator"""
-        from src.core.decorators.orchestrator import orchestrator
-        from src.core.orchestrator_base import OrchestratorBase
+        from cortex.core.decorators.orchestrator import orchestrator
+        from cortex.core.orchestrator_base import OrchestratorBase
         
         @orchestrator(
             orchestrator_id="test-orch-001",
@@ -510,8 +510,8 @@ class TestOrchestratorDecoratorRegistration:
     
     def test_decorated_orchestrator_with_tier_dependencies(self):
         """Test decorated orchestrator with tier dependencies"""
-        from src.core.decorators.orchestrator import orchestrator, get_registry
-        from src.core.orchestrator_base import OrchestratorBase
+        from cortex.core.decorators.orchestrator import orchestrator, get_registry
+        from cortex.core.orchestrator_base import OrchestratorBase
         
         reg = get_registry()
         reg.clear()
@@ -531,8 +531,8 @@ class TestOrchestratorDecoratorRegistration:
     
     def test_decorated_orchestrator_with_required_rules(self):
         """Test decorated orchestrator with required rules"""
-        from src.core.decorators.orchestrator import orchestrator, get_registry
-        from src.core.orchestrator_base import OrchestratorBase
+        from cortex.core.decorators.orchestrator import orchestrator, get_registry
+        from cortex.core.orchestrator_base import OrchestratorBase
         
         reg = get_registry()
         reg.clear()
@@ -552,8 +552,8 @@ class TestOrchestratorDecoratorRegistration:
     
     def test_registry_query_by_tier_new_decorator(self):
         """Test querying registry by tier (new decorator)"""
-        from src.core.decorators.orchestrator import orchestrator, get_registry
-        from src.core.orchestrator_base import OrchestratorBase
+        from cortex.core.decorators.orchestrator import orchestrator, get_registry
+        from cortex.core.orchestrator_base import OrchestratorBase
         
         reg = get_registry()
         reg.clear()
@@ -590,12 +590,12 @@ class TestOrchestratorDecoratorRegistration:
     
     def test_instantiate_decorated_orchestrator(self):
         """Test instantiating a decorated orchestrator"""
-        from src.core.decorators.orchestrator import (
+        from cortex.core.decorators.orchestrator import (
             orchestrator,
             instantiate_orchestrator,
             get_registry,
         )
-        from src.core.orchestrator_base import OrchestratorBase
+        from cortex.core.orchestrator_base import OrchestratorBase
         
         reg = get_registry()
         reg.clear()
@@ -625,12 +625,12 @@ class TestOrchestratorDecoratorRegistration:
     
     def test_instantiated_orchestrator_execution(self):
         """Test executing an instantiated decorated orchestrator"""
-        from src.core.decorators.orchestrator import (
+        from cortex.core.decorators.orchestrator import (
             orchestrator,
             instantiate_orchestrator,
             get_registry,
         )
-        from src.core.orchestrator_base import OrchestratorBase
+        from cortex.core.orchestrator_base import OrchestratorBase
         
         reg = get_registry()
         reg.clear()
@@ -658,12 +658,12 @@ class TestOrchestratorDecoratorRegistration:
     
     def test_tier_access_control_enforcement(self):
         """Test that tier access control is enforced"""
-        from src.core.decorators.orchestrator import (
+        from cortex.core.decorators.orchestrator import (
             orchestrator,
             instantiate_orchestrator,
             get_registry,
         )
-        from src.core.orchestrator_base import OrchestratorBase
+        from cortex.core.orchestrator_base import OrchestratorBase
         
         reg = get_registry()
         reg.clear()
@@ -693,8 +693,8 @@ class TestOrchestratorDecoratorRegistration:
     
     def test_mcp_tools_metadata(self):
         """Test MCP tools metadata storage"""
-        from src.core.decorators.orchestrator import orchestrator, get_registry
-        from src.core.orchestrator_base import OrchestratorBase
+        from cortex.core.decorators.orchestrator import orchestrator, get_registry
+        from cortex.core.orchestrator_base import OrchestratorBase
         
         reg = get_registry()
         reg.clear()
@@ -714,7 +714,7 @@ class TestOrchestratorDecoratorRegistration:
     
     def test_decorator_rejects_non_base_class(self):
         """Test that decorator rejects non-OrchestratorBase classes"""
-        from src.core.decorators.orchestrator import orchestrator
+        from cortex.core.decorators.orchestrator import orchestrator
         
         with pytest.raises(TypeError):
             @orchestrator(orchestrator_id="invalid-001")
@@ -723,8 +723,8 @@ class TestOrchestratorDecoratorRegistration:
     
     def test_duplicate_orchestrator_id_raises_error(self):
         """Test that registering duplicate IDs raises error"""
-        from src.core.decorators.orchestrator import orchestrator, get_registry
-        from src.core.orchestrator_base import OrchestratorBase
+        from cortex.core.decorators.orchestrator import orchestrator, get_registry
+        from cortex.core.orchestrator_base import OrchestratorBase
         
         reg = get_registry()
         reg.clear()
@@ -742,8 +742,8 @@ class TestOrchestratorDecoratorRegistration:
     
     def test_registry_list_all(self):
         """Test listing all orchestrators"""
-        from src.core.decorators.orchestrator import orchestrator, get_registry
-        from src.core.orchestrator_base import OrchestratorBase
+        from cortex.core.decorators.orchestrator import orchestrator, get_registry
+        from cortex.core.orchestrator_base import OrchestratorBase
         
         reg = get_registry()
         reg.clear()
@@ -767,8 +767,8 @@ class TestOrchestratorDecoratorRegistration:
     
     def test_registry_count(self):
         """Test registry count method"""
-        from src.core.decorators.orchestrator import orchestrator, get_registry
-        from src.core.orchestrator_base import OrchestratorBase
+        from cortex.core.decorators.orchestrator import orchestrator, get_registry
+        from cortex.core.orchestrator_base import OrchestratorBase
         
         reg = get_registry()
         reg.clear()
@@ -791,12 +791,12 @@ class TestOrchestratorDecoratorRegistration:
     
     def test_get_orchestrator_class_by_id(self):
         """Test getting orchestrator class by ID"""
-        from src.core.decorators.orchestrator import (
+        from cortex.core.decorators.orchestrator import (
             orchestrator,
             get_orchestrator_class,
             get_registry,
         )
-        from src.core.orchestrator_base import OrchestratorBase
+        from cortex.core.orchestrator_base import OrchestratorBase
         
         reg = get_registry()
         reg.clear()
@@ -812,7 +812,7 @@ class TestOrchestratorDecoratorRegistration:
     
     def test_get_nonexistent_orchestrator_class(self):
         """Test getting nonexistent orchestrator class returns None"""
-        from src.core.decorators.orchestrator import get_orchestrator_class
+        from cortex.core.decorators.orchestrator import get_orchestrator_class
         
         cls = get_orchestrator_class("nonexistent-id")
         

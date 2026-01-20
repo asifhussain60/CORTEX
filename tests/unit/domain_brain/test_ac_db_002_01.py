@@ -10,13 +10,13 @@ Total: 55 tests
 """
 
 import pytest
-from src.domain_brain.adapters import (
+from cortex.domain_brain.adapters import (
     ASTAdapter,
     GitAdapter,
     CommentsAdapter,
     RelationshipsAdapter,
 )
-from src.domain_brain.models import EntityType
+from cortex.domain_brain.models import EntityType
 
 
 class TestASTAdapter:

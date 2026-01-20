@@ -12,8 +12,8 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest
-from src.orchestrators.domains.domain_classifier import DomainClassifier
-from src.orchestrators.domains.orchestrator_traits import (
+from cortex.orchestrators.domains.domain_classifier import DomainClassifier
+from cortex.orchestrators.domains.orchestrator_traits import (
     ComposableOrchestrator,
     AnalyticalOrchestrator,
     ExecutiveOrchestrator,
@@ -214,7 +214,7 @@ class TestTraitInheritanceHierarchy:
     
     def test_no_circular_dependencies(self):
         """Test that trait hierarchy has no circular dependencies"""
-        from src.orchestrators.domains.orchestrator_traits import (
+        from cortex.orchestrators.domains.orchestrator_traits import (
             get_trait_hierarchy,
             detect_cycles,
         )
@@ -226,7 +226,7 @@ class TestTraitInheritanceHierarchy:
     
     def test_trait_hierarchy_is_dag(self):
         """Test that trait hierarchy is a directed acyclic graph"""
-        from src.orchestrators.domains.orchestrator_traits import (
+        from cortex.orchestrators.domains.orchestrator_traits import (
             get_trait_hierarchy,
             is_dag,
         )
@@ -236,7 +236,7 @@ class TestTraitInheritanceHierarchy:
     
     def test_trait_hierarchy_reachability(self):
         """Test reachability in trait hierarchy"""
-        from src.orchestrators.domains.orchestrator_traits import (
+        from cortex.orchestrators.domains.orchestrator_traits import (
             get_trait_hierarchy,
             get_reachable_traits,
         )

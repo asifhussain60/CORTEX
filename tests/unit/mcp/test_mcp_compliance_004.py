@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from enum import Enum
 import time
 
-from src.mcp.protocol import ToolDefinition, ToolParameter
+from cortex.mcp.protocol import ToolDefinition, ToolParameter
 
 
 class DiscoveryPattern(Enum):

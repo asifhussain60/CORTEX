@@ -1,7 +1,7 @@
 """Test for DATA-002: Data Retention Policy"""
 import pytest
 from datetime import datetime, timedelta
-from src.core.governance.data_retention import (
+from cortex.core.governance.data_retention import (
     RetentionManager,
     DataRetentionPolicy,
     RetentionPeriod,

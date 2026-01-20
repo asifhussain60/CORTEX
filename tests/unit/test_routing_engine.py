@@ -14,7 +14,7 @@ Copyright: © 2025-2026 Asif Hussain. All rights reserved.
 import pytest
 from typing import List, Dict, Any, Set
 
-from src.orchestrators.adaptive.execution_context_analyzer import (
+from cortex.orchestrators.adaptive.execution_context_analyzer import (
     ExecutionContext,
     ExecutionContextAnalyzer,
 )
@@ -25,7 +25,7 @@ class TestOrchestratorRoutingEngineBasics:
     
     def test_routing_engine_initialization(self) -> None:
         """Test initialization of routing engine."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -34,7 +34,7 @@ class TestOrchestratorRoutingEngineBasics:
     
     def test_routing_engine_has_analyzer(self) -> None:
         """Test that routing engine has access to context analyzer."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -44,7 +44,7 @@ class TestOrchestratorRoutingEngineBasics:
     
     def test_routing_engine_has_decision_log(self) -> None:
         """Test that routing engine maintains decision log."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -58,7 +58,7 @@ class TestOrchestratorSelection:
     
     def test_select_orchestrator_for_planning_task(self) -> None:
         """Test selection of appropriate orchestrator for planning task."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -75,7 +75,7 @@ class TestOrchestratorSelection:
     
     def test_select_orchestrator_for_complex_task(self) -> None:
         """Test selection for complex orchestration tasks."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -93,7 +93,7 @@ class TestOrchestratorSelection:
     
     def test_select_orchestrator_returns_capable_orchestrator(self) -> None:
         """Test that selected orchestrator can handle required capabilities."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -115,7 +115,7 @@ class TestOrchestratorSelection:
     
     def test_select_orchestrator_considers_complexity(self) -> None:
         """Test that selection considers task complexity."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -146,7 +146,7 @@ class TestMultipleOrchestratorComposition:
     
     def test_select_orchestrators_for_composition(self) -> None:
         """Test selection of multiple orchestrators for composition."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -169,7 +169,7 @@ class TestMultipleOrchestratorComposition:
     
     def test_composition_orchestrators_can_handle_task(self) -> None:
         """Test that composed orchestrators are selected from available pool."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -191,7 +191,7 @@ class TestMultipleOrchestratorComposition:
     
     def test_composition_includes_multiple_orchestrators(self) -> None:
         """Test that composition selects multiple orchestrators when beneficial."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -214,7 +214,7 @@ class TestRoutingDecisionLogging:
     
     def test_routing_decision_logged(self) -> None:
         """Test that routing decisions are logged."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -233,7 +233,7 @@ class TestRoutingDecisionLogging:
     
     def test_decision_log_contains_routing_info(self) -> None:
         """Test that decision log contains routing information."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -255,7 +255,7 @@ class TestRoutingDecisionLogging:
     
     def test_get_routing_history(self) -> None:
         """Test retrieval of routing history."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -276,7 +276,7 @@ class TestRoutingDecisionLogging:
     
     def test_get_routing_history_for_task_type(self) -> None:
         """Test retrieval of routing history for specific task type."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -312,7 +312,7 @@ class TestRoutingOptimization:
     
     def test_routing_considers_resources(self) -> None:
         """Test that routing considers resource requirements."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -339,7 +339,7 @@ class TestRoutingOptimization:
     
     def test_routing_considers_priority(self) -> None:
         """Test that routing considers task priority."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -372,7 +372,7 @@ class TestRoutingEdgeCases:
     
     def test_routing_with_no_matching_orchestrators(self) -> None:
         """Test routing when no orchestrator matches all capabilities."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -395,7 +395,7 @@ class TestRoutingEdgeCases:
     
     def test_routing_with_empty_context(self) -> None:
         """Test routing with minimal context."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -420,7 +420,7 @@ class TestRoutingPerformance:
     def test_routing_decision_completes_quickly(self) -> None:
         """Test that routing decision completes in reasonable time."""
         import time
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -443,7 +443,7 @@ class TestCompositionOrchestration:
     
     def test_composition_order_optimized(self) -> None:
         """Test that composed orchestrators are ordered optimally."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         
@@ -462,7 +462,7 @@ class TestCompositionOrchestration:
     
     def test_composition_includes_delegation_info(self) -> None:
         """Test that composition includes delegation information."""
-        from src.orchestrators.adaptive.routing_engine import (
+        from cortex.orchestrators.adaptive.routing_engine import (
             OrchestratorRoutingEngine,
         )
         

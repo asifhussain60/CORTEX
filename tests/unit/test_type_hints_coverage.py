@@ -19,7 +19,7 @@ class TestTypeCoverageComprehensive:
 
     def test_response_header_injector_functions_have_return_types(self):
         """Verify all ResponseHeaderInjector methods have return type hints."""
-        from src.core.response_header_injector import ResponseHeaderInjector
+        from cortex.core.response_header_injector import ResponseHeaderInjector
         
         # Get all methods
         methods = inspect.getmembers(ResponseHeaderInjector, predicate=inspect.isfunction)
@@ -38,7 +38,7 @@ class TestTypeCoverageComprehensive:
 
     def test_sanitization_functions_have_return_types(self):
         """Verify sanitization helper functions have return type hints."""
-        import src.core.response_header_injector as rhij
+        import cortex.core.response_header_injector as rhij
         
         functions_to_check = [
             'escape_yaml_string',
@@ -56,7 +56,7 @@ class TestTypeCoverageComprehensive:
 
     def test_response_header_config_functions_have_return_types(self):
         """Verify HeaderConfigurationManager methods have return type hints."""
-        from src.core.response_header_config import HeaderConfigurationManager
+        from cortex.core.response_header_config import HeaderConfigurationManager
         
         # Get all methods
         methods = inspect.getmembers(HeaderConfigurationManager, predicate=inspect.isfunction)
@@ -72,7 +72,7 @@ class TestTypeCoverageComprehensive:
 
     def test_response_template_engine_functions_have_return_types(self):
         """Verify ResponseTemplateEngine methods have return type hints."""
-        from src.core.response_template_engine import ResponseTemplateEngine
+        from cortex.core.response_template_engine import ResponseTemplateEngine
         
         # Get all public methods
         methods = inspect.getmembers(ResponseTemplateEngine, predicate=inspect.isfunction)
@@ -86,7 +86,7 @@ class TestTypeCoverageComprehensive:
 
     def test_all_function_parameters_have_type_hints(self):
         """Verify all function parameters have type annotations."""
-        from src.core.response_header_injector import (
+        from cortex.core.response_header_injector import (
             escape_yaml_string,
             validate_ac_id,
             validate_operation_name,
@@ -113,7 +113,7 @@ class TestTypeCoverageComprehensive:
 
     def test_escape_yaml_string_return_type_is_str(self):
         """Verify escape_yaml_string returns str type."""
-        from src.core.response_header_injector import escape_yaml_string
+        from cortex.core.response_header_injector import escape_yaml_string
         
         result = escape_yaml_string("test: value")
         assert isinstance(result, str), "escape_yaml_string should return str"
@@ -125,7 +125,7 @@ class TestTypeCoverageComprehensive:
 
     def test_validate_ac_id_return_type_is_bool(self):
         """Verify validate_ac_id returns bool type."""
-        from src.core.response_header_injector import validate_ac_id
+        from cortex.core.response_header_injector import validate_ac_id
         
         result = validate_ac_id("AC-FIX-001-01")
         assert isinstance(result, bool), "validate_ac_id should return bool"
@@ -137,7 +137,7 @@ class TestTypeCoverageComprehensive:
 
     def test_validate_operation_name_return_type_is_bool(self):
         """Verify validate_operation_name returns bool type."""
-        from src.core.response_header_injector import validate_operation_name
+        from cortex.core.response_header_injector import validate_operation_name
         
         result = validate_operation_name("create")
         assert isinstance(result, bool), "validate_operation_name should return bool"
@@ -149,7 +149,7 @@ class TestTypeCoverageComprehensive:
 
     def test_validate_domain_name_return_type_is_bool(self):
         """Verify validate_domain_name returns bool type."""
-        from src.core.response_header_injector import validate_domain_name
+        from cortex.core.response_header_injector import validate_domain_name
         
         result = validate_domain_name("governance")
         assert isinstance(result, bool), "validate_domain_name should return bool"
@@ -161,7 +161,7 @@ class TestTypeCoverageComprehensive:
 
     def test_sanitize_context_value_return_type_is_str(self):
         """Verify sanitize_context_value returns str type."""
-        from src.core.response_header_injector import sanitize_context_value
+        from cortex.core.response_header_injector import sanitize_context_value
         
         result = sanitize_context_value("ac_id", "AC-FIX-001-01")
         assert isinstance(result, str), "sanitize_context_value should return str"
@@ -177,7 +177,7 @@ class TestResponseHeaderInjectorTypes:
 
     def test_render_method_returns_str(self):
         """Test ResponseHeaderInjector.render() return type."""
-        from src.core.response_header_injector import ResponseHeaderInjector
+        from cortex.core.response_header_injector import ResponseHeaderInjector
         from unittest.mock import Mock
         
         mock_engine = Mock()
@@ -198,7 +198,7 @@ class TestResponseHeaderInjectorTypes:
 
     def test_render_by_id_method_returns_str(self):
         """Test ResponseHeaderInjector.render_by_id() return type."""
-        from src.core.response_header_injector import ResponseHeaderInjector
+        from cortex.core.response_header_injector import ResponseHeaderInjector
         
         render_by_id = getattr(ResponseHeaderInjector, 'render_by_id')
         if hasattr(render_by_id, '__annotations__'):
@@ -208,7 +208,7 @@ class TestResponseHeaderInjectorTypes:
 
     def test_clear_cache_returns_none(self):
         """Test ResponseHeaderInjector.clear_cache() return type."""
-        from src.core.response_header_injector import ResponseHeaderInjector
+        from cortex.core.response_header_injector import ResponseHeaderInjector
         
         clear_cache = getattr(ResponseHeaderInjector, 'clear_cache')
         if hasattr(clear_cache, '__annotations__'):
@@ -219,7 +219,7 @@ class TestResponseHeaderInjectorTypes:
 
     def test_get_statistics_method_returns_dict(self):
         """Test ResponseHeaderInjector.get_statistics() return type."""
-        from src.core.response_header_injector import ResponseHeaderInjector
+        from cortex.core.response_header_injector import ResponseHeaderInjector
         
         get_stats = getattr(ResponseHeaderInjector, 'get_statistics')
         if hasattr(get_stats, '__annotations__'):
@@ -232,7 +232,7 @@ class TestHeaderConfigurationManagerTypes:
 
     def test_is_header_enabled_returns_bool(self):
         """Test HeaderConfigurationManager.is_header_enabled() return type."""
-        from src.core.response_header_config import HeaderConfigurationManager
+        from cortex.core.response_header_config import HeaderConfigurationManager
         
         method = getattr(HeaderConfigurationManager, 'is_header_enabled')
         if hasattr(method, '__annotations__'):
@@ -242,7 +242,7 @@ class TestHeaderConfigurationManagerTypes:
 
     def test_is_copyright_enabled_returns_bool(self):
         """Test HeaderConfigurationManager.is_copyright_enabled() return type."""
-        from src.core.response_header_config import HeaderConfigurationManager
+        from cortex.core.response_header_config import HeaderConfigurationManager
         
         method = getattr(HeaderConfigurationManager, 'is_copyright_enabled')
         if hasattr(method, '__annotations__'):
@@ -252,7 +252,7 @@ class TestHeaderConfigurationManagerTypes:
 
     def test_is_footer_enabled_returns_bool(self):
         """Test HeaderConfigurationManager.is_footer_enabled() return type."""
-        from src.core.response_header_config import HeaderConfigurationManager
+        from cortex.core.response_header_config import HeaderConfigurationManager
         
         method = getattr(HeaderConfigurationManager, 'is_footer_enabled')
         if hasattr(method, '__annotations__'):
@@ -262,7 +262,7 @@ class TestHeaderConfigurationManagerTypes:
 
     def test_get_header_template_returns_str(self):
         """Test HeaderConfigurationManager.get_header_template() return type."""
-        from src.core.response_header_config import HeaderConfigurationManager
+        from cortex.core.response_header_config import HeaderConfigurationManager
         
         method = getattr(HeaderConfigurationManager, 'get_header_template')
         if hasattr(method, '__annotations__'):
@@ -275,7 +275,7 @@ class TestResponseTemplateEngineTypes:
 
     def test_render_method_has_return_type(self):
         """Test ResponseTemplateEngine.render() has return type annotation."""
-        from src.core.response_template_engine import ResponseTemplateEngine
+        from cortex.core.response_template_engine import ResponseTemplateEngine
         
         method = getattr(ResponseTemplateEngine, 'render')
         if hasattr(method, '__annotations__'):
@@ -284,7 +284,7 @@ class TestResponseTemplateEngineTypes:
 
     def test_render_by_id_method_has_return_type(self):
         """Test ResponseTemplateEngine.render_by_id() has return type annotation."""
-        from src.core.response_template_engine import ResponseTemplateEngine
+        from cortex.core.response_template_engine import ResponseTemplateEngine
         
         method = getattr(ResponseTemplateEngine, 'render_by_id')
         if hasattr(method, '__annotations__'):
@@ -324,7 +324,7 @@ class TestMyPyCompliance:
 
     def test_sanitization_functions_properly_annotated(self):
         """Test that sanitization functions have proper type annotations."""
-        import src.core.response_header_injector as rhij
+        import cortex.core.response_header_injector as rhij
         
         # Check escape_yaml_string
         func = rhij.escape_yaml_string
@@ -372,7 +372,7 @@ class TestReturnTypeCorrectness:
 
     def test_escape_yaml_string_returns_declared_type(self):
         """Verify escape_yaml_string returns str (declared type)."""
-        from src.core.response_header_injector import escape_yaml_string
+        from cortex.core.response_header_injector import escape_yaml_string
         
         test_cases = [
             ("simple", "simple"),
@@ -387,7 +387,7 @@ class TestReturnTypeCorrectness:
 
     def test_validate_functions_return_bool(self):
         """Verify validation functions return bool type."""
-        from src.core.response_header_injector import (
+        from cortex.core.response_header_injector import (
             validate_ac_id,
             validate_operation_name,
             validate_domain_name,
@@ -408,7 +408,7 @@ class TestReturnTypeCorrectness:
 
     def test_sanitize_context_value_returns_str(self):
         """Verify sanitize_context_value returns str type."""
-        from src.core.response_header_injector import sanitize_context_value
+        from cortex.core.response_header_injector import sanitize_context_value
         
         result = sanitize_context_value("ac_id", "AC-FIX-001-01")
         assert isinstance(result, str), "sanitize_context_value should return str"

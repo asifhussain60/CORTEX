@@ -16,7 +16,7 @@ import sqlite3
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from src.observability.health_monitor import (
+from cortex.observability.health_monitor import (
     HealthMonitor,
     HealthCheck,
     HealthCheckResult,
@@ -25,14 +25,14 @@ from src.observability.health_monitor import (
     MemoryHealthCheck,
 )
 
-from src.observability.performance_profiler import (
+from cortex.observability.performance_profiler import (
     PerformanceProfiler,
     PerformanceMetric,
     PerformanceLevel,
     Bottleneck,
 )
 
-from src.observability.audit_trail import (
+from cortex.observability.audit_trail import (
     AuditTrail,
     AuditEvent,
     AuditEventType,

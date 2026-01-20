@@ -13,8 +13,8 @@ import pytest
 from unittest.mock import MagicMock, patch
 from typing import Dict, Any
 
-from src.orchestrators.core.master_orchestrator import MasterOrchestrator
-from src.orchestrators.domain.planning_orchestrator import PlanningOrchestrator
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+from cortex.orchestrators.domain.planning_orchestrator import PlanningOrchestrator
 
 
 class TestListToolsEndpoint:

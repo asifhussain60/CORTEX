@@ -9,14 +9,14 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest
-from src.intent_router.confidence_scorer import ConfidenceScorer
-from src.intent_router.context_manager import ContextManager, ConversationContext
-from src.intent_router.routing_engine import RoutingEngine
-from src.intent_router.fallback_strategy import FallbackStrategy
-from src.intent_router.intent_learner import IntentLearner
-from src.intent_router.performance_metrics import PerformanceMetrics
-from src.intent_router.orchestration_integrator import OrchestrationIntegrator
-from src.intent_router.classifier import IntentCategory
+from cortex.intent_router.confidence_scorer import ConfidenceScorer
+from cortex.intent_router.context_manager import ContextManager, ConversationContext
+from cortex.intent_router.routing_engine import RoutingEngine
+from cortex.intent_router.fallback_strategy import FallbackStrategy
+from cortex.intent_router.intent_learner import IntentLearner
+from cortex.intent_router.performance_metrics import PerformanceMetrics
+from cortex.intent_router.orchestration_integrator import OrchestrationIntegrator
+from cortex.intent_router.classifier import IntentCategory
 
 
 class TestConfidenceScorer:

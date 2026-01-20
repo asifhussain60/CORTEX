@@ -17,9 +17,9 @@ from typing import Optional
 from unittest.mock import Mock, patch, MagicMock
 
 # Placeholder imports - will be implemented
-# from src.core.orchestrator.conversation_protocol import ConversationProtocol
-# from src.core.governance_pregate import GovernancePregate, PreGateDecision
-# from src.core.governance_registry import GovernanceRegistry
+# from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
+# from cortex.core.governance_pregate import GovernancePregate, PreGateDecision
+# from cortex.core.governance_registry import GovernanceRegistry
 
 
 class MockOrchestrator:

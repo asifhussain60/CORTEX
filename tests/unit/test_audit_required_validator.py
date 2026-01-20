@@ -12,7 +12,7 @@ from pathlib import Path
 from datetime import datetime, timedelta
 import json
 
-from src.core.audit_required_validator import (
+from cortex.core.audit_required_validator import (
     AuditOperationType,
     AuditValidationResult,
     AuditEntry,

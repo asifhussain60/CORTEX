@@ -18,9 +18,9 @@ additions.
 
 import pytest
 from datetime import datetime, timezone
-from src.orchestrators.domain.planning_orchestrator import PlanningOrchestrator
-from src.orchestrators.core.master_orchestrator import MasterOrchestrator
-from src.core.response_header_config import HeaderConfigurationManager
+from cortex.orchestrators.domain.planning_orchestrator import PlanningOrchestrator
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+from cortex.core.response_header_config import HeaderConfigurationManager
 
 
 @pytest.fixture
@@ -232,7 +232,7 @@ class TestOrchestratorHeaderIntegration:
         assert planning_orch.get_version() == "1.0.0"
         
         # Get mode
-        from src.core.interfaces import OperationMode
+        from cortex.core.interfaces import OperationMode
         assert planning_orch.get_mode() == OperationMode.PLANNING
     
     def test_master_orchestrator_core_functionality_unchanged(self, master_orch):
@@ -246,7 +246,7 @@ class TestOrchestratorHeaderIntegration:
         assert master_orch.get_version() == "2.0"
         
         # Get mode
-        from src.core.interfaces import OperationMode
+        from cortex.core.interfaces import OperationMode
         assert master_orch.get_mode() == OperationMode.PLANNING
     
     def test_planning_orchestrator_mcp_tools_unchanged(self, planning_orch):

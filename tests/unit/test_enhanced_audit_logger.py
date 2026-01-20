@@ -14,8 +14,8 @@ from pathlib import Path
 
 import pytest
 
-from src.infrastructure.database import DatabaseManager, DatabaseConfig
-from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
+from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 
 @pytest.mark.ac("FR-001-01")

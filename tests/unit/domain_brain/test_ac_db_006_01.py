@@ -7,8 +7,8 @@ and architecture documentation.
 import pytest
 from datetime import datetime
 
-from src.domain_brain.api import DomainBrainAPI
-from src.domain_brain.models import Domain, Entity, EntityType, AuditOperationType
+from cortex.domain_brain.api import DomainBrainAPI
+from cortex.domain_brain.models import Domain, Entity, EntityType, AuditOperationType
 
 
 class TestAPIDocumentation:
@@ -182,10 +182,10 @@ class TestArchitectureDocumentation:
     def test_component_separation(self) -> None:
         """Test that components are properly separated."""
         # Import different components to verify modularity
-        from src.domain_brain.models import Domain
-        from src.domain_brain.api import DomainBrainAPI
-        from src.domain_brain.validator import ConsistencyValidator
-        from src.domain_brain.audit_logger import AuditLogger
+        from cortex.domain_brain.models import Domain
+        from cortex.domain_brain.api import DomainBrainAPI
+        from cortex.domain_brain.validator import ConsistencyValidator
+        from cortex.domain_brain.audit_logger import AuditLogger
 
         # All components should be independent modules
         assert Domain is not None
@@ -195,7 +195,7 @@ class TestArchitectureDocumentation:
 
     def test_adapter_pattern_implementation(self) -> None:
         """Test that adapter pattern is properly implemented."""
-        from src.domain_brain.adapters import (
+        from cortex.domain_brain.adapters import (
             ASTAdapter,
             GitAdapter,
             CommentsAdapter,
@@ -209,8 +209,8 @@ class TestArchitectureDocumentation:
 
     def test_orchestrator_pattern_implementation(self) -> None:
         """Test that orchestrator pattern is properly implemented."""
-        from src.domain_brain.bkio_orchestrator import BusinessKnowledgeIngestionOrchestrator
-        from src.domain_brain.lens_integration import LENSIntegrationLayer
+        from cortex.domain_brain.bkio_orchestrator import BusinessKnowledgeIngestionOrchestrator
+        from cortex.domain_brain.lens_integration import LENSIntegrationLayer
 
         # Orchestrators should exist
         assert BusinessKnowledgeIngestionOrchestrator is not None
@@ -218,12 +218,12 @@ class TestArchitectureDocumentation:
 
     def test_edge_case_implementations(self) -> None:
         """Test that all edge case implementations exist."""
-        from src.domain_brain.deduplication import DuplicateDetector
-        from src.domain_brain.audit_log_manager import AuditLogManager
-        from src.domain_brain.conflict_resolver import ConflictResolver
-        from src.domain_brain.orphan_detector import ReferenceValidator
-        from src.domain_brain.optimistic_lock import OptimisticLockManager
-        from src.domain_brain.version_manager import VersionedDomainManager
+        from cortex.domain_brain.deduplication import DuplicateDetector
+        from cortex.domain_brain.audit_log_manager import AuditLogManager
+        from cortex.domain_brain.conflict_resolver import ConflictResolver
+        from cortex.domain_brain.orphan_detector import ReferenceValidator
+        from cortex.domain_brain.optimistic_lock import OptimisticLockManager
+        from cortex.domain_brain.version_manager import VersionedDomainManager
 
         # All edge case implementations should exist
         edge_cases = [
@@ -251,7 +251,7 @@ class TestComplianceMatrix:
     def test_core_011_type_hints_compliance(self) -> None:
         """Test CORE-011: Type Hints compliance."""
         import inspect
-        from src.domain_brain.api import DomainBrainAPI
+        from cortex.domain_brain.api import DomainBrainAPI
 
         api = DomainBrainAPI()
         sig = inspect.signature(api.upsert_domain)
@@ -261,7 +261,7 @@ class TestComplianceMatrix:
 
     def test_core_012_docstring_compliance(self) -> None:
         """Test CORE-012: Comprehensive Docstrings compliance."""
-        from src.domain_brain.models import Domain
+        from cortex.domain_brain.models import Domain
 
         # Domain should have docstring
         doc = Domain.__doc__
@@ -269,7 +269,7 @@ class TestComplianceMatrix:
 
     def test_core_027_audit_logging_compliance(self) -> None:
         """Test CORE-027: Audit Logging & Accountability compliance."""
-        from src.domain_brain.api import DomainBrainAPI
+        from cortex.domain_brain.api import DomainBrainAPI
 
         api = DomainBrainAPI()
         domain = Domain(
@@ -286,7 +286,7 @@ class TestComplianceMatrix:
 
     def test_core_028_naming_conventions_compliance(self) -> None:
         """Test CORE-028: Naming Conventions compliance."""
-        from src.domain_brain.models import (
+        from cortex.domain_brain.models import (
             Domain,
             Entity,
             Conflict,
@@ -306,7 +306,7 @@ class TestQuickStartScenarios:
 
     def test_scenario_1_create_domain(self) -> None:
         """Quick-start Scenario 1: Create and query a domain."""
-        from src.domain_brain.api import DomainBrainAPI
+        from cortex.domain_brain.api import DomainBrainAPI
 
         api = DomainBrainAPI()
 
@@ -337,8 +337,8 @@ class TestQuickStartScenarios:
 
     def test_scenario_2_handle_conflicts(self) -> None:
         """Quick-start Scenario 2: Detect and resolve conflicts."""
-        from src.domain_brain.api import DomainBrainAPI
-        from src.domain_brain.models import Conflict
+        from cortex.domain_brain.api import DomainBrainAPI
+        from cortex.domain_brain.models import Conflict
 
         api = DomainBrainAPI()
 
@@ -377,7 +377,7 @@ class TestQuickStartScenarios:
 
     def test_scenario_3_audit_operations(self) -> None:
         """Quick-start Scenario 3: Audit domain operations."""
-        from src.domain_brain.api import DomainBrainAPI
+        from cortex.domain_brain.api import DomainBrainAPI
 
         api = DomainBrainAPI()
 

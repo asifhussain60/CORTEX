@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from typing import Dict, Any, Optional
 from enum import Enum
 
-from src.mcp.protocol import MCPError, ErrorCode
+from cortex.mcp.protocol import MCPError, ErrorCode
 
 
 class RecoveryStrategy(Enum):

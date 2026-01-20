@@ -16,12 +16,12 @@ from typing import Dict, List, Optional, Any
 
 import pytest
 
-from src.core.orchestrator.continuation_decision import (
+from cortex.core.orchestrator.continuation_decision import (
     ContinuationDecision,
     ContinuationReason,
 )
-from src.core.orchestrator.conversation_protocol import ConversationProtocol
-from src.core.orchestrator.terminal_events import (
+from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
+from cortex.core.orchestrator.terminal_events import (
     EventRegistry,
     PhaseCompletedEvent,
     MaxTurnsReachedEvent,

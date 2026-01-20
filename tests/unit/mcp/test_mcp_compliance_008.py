@@ -14,7 +14,7 @@ from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
 from typing import Dict, Any, List
 
-from src.mcp.protocol import (
+from cortex.mcp.protocol import (
     ToolDefinition, ToolParameter, MCPTool, ErrorCode,
     MCPRequest, MCPResponse, MCPError, ToolValidator, MCPProtocolHandler, MessageType
 )
@@ -288,7 +288,7 @@ class TestToolRegistry:
     
     def test_register_multiple_tools(self):
         """Test registering multiple tools."""
-        from src.mcp.registry import ToolRegistry
+        from cortex.mcp.registry import ToolRegistry
         
         registry = ToolRegistry()
         
@@ -309,7 +309,7 @@ class TestToolRegistry:
     
     def test_retrieve_tool_definition(self):
         """Test retrieving tool definitions from registry."""
-        from src.mcp.registry import ToolRegistry
+        from cortex.mcp.registry import ToolRegistry
         
         registry = ToolRegistry()
         
@@ -337,8 +337,8 @@ class TestToolDiscovery:
     
     def test_discover_tools_by_tag(self):
         """Test discovering tools by tag."""
-        from src.mcp.discovery import ToolDiscovery
-        from src.mcp.registry import ToolRegistry
+        from cortex.mcp.discovery import ToolDiscovery
+        from cortex.mcp.registry import ToolRegistry
         
         registry = ToolRegistry()
         discovery = ToolDiscovery(registry)
@@ -361,8 +361,8 @@ class TestToolDiscovery:
     
     def test_search_tools_by_name(self):
         """Test searching tools by name."""
-        from src.mcp.discovery import ToolDiscovery
-        from src.mcp.registry import ToolRegistry
+        from cortex.mcp.discovery import ToolDiscovery
+        from cortex.mcp.registry import ToolRegistry
         
         registry = ToolRegistry()
         discovery = ToolDiscovery(registry)
@@ -387,7 +387,7 @@ class TestToolExecution:
     
     def test_execute_with_context(self):
         """Test executing tool with execution context."""
-        from src.mcp.executor import ToolExecutor
+        from cortex.mcp.executor import ToolExecutor
         
         executor = ToolExecutor()
         
@@ -407,7 +407,7 @@ class TestToolExecution:
     
     def test_concurrent_tool_execution(self):
         """Test executing multiple tools concurrently."""
-        from src.mcp.executor import ToolExecutor
+        from cortex.mcp.executor import ToolExecutor
         
         executor = ToolExecutor()
         
@@ -438,8 +438,8 @@ class TestIntegrationWorkflows:
     
     def test_end_to_end_tool_workflow(self):
         """Test complete end-to-end tool workflow."""
-        from src.mcp.registry import ToolRegistry
-        from src.mcp.discovery import ToolDiscovery
+        from cortex.mcp.registry import ToolRegistry
+        from cortex.mcp.discovery import ToolDiscovery
         
         # 1. Create registry and discovery
         registry = ToolRegistry()

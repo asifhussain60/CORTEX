@@ -17,10 +17,10 @@ import pytest
 from unittest.mock import Mock, MagicMock, patch
 from datetime import datetime
 
-from src.core.orchestrator.conversation_protocol import ConversationProtocol
-from src.core.tier_validator import TierAccessValidator, TierViolation, TierViolationType
-from src.core.orchestrator_base import OrchestratorBase, OrchestrationContext
-from src.core.result import Ok, Err
+from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
+from cortex.core.tier_validator import TierAccessValidator, TierViolation, TierViolationType
+from cortex.core.orchestrator_base import OrchestratorBase, OrchestrationContext
+from cortex.core.result import Ok, Err
 
 
 class TestTierValidatorIntegration:

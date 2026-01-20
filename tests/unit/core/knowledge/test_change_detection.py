@@ -22,13 +22,13 @@ class TestChangeDetectionService:
 
     def test_change_detection_service_exists(self):
         """Test that ChangeDetectionService class exists."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         assert ChangeDetectionService is not None
 
     def test_change_detection_service_initialization(self):
         """Test that service initializes with backends."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         backend.entry_count = 100
@@ -41,7 +41,7 @@ class TestChangeDetectionService:
 
     def test_schema_drift_detection(self):
         """Test detection of schema drift in knowledge entries."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         backend.entry_count = 100
@@ -53,7 +53,7 @@ class TestChangeDetectionService:
 
     def test_semantic_shift_detection(self):
         """Test detection of semantic shifts in knowledge entries."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(backends={'test': backend})
@@ -63,7 +63,7 @@ class TestChangeDetectionService:
 
     def test_coverage_gap_detection(self):
         """Test detection of coverage gaps in domains."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(backends={'test': backend})
@@ -73,7 +73,7 @@ class TestChangeDetectionService:
 
     def test_staleness_detection(self):
         """Test detection of stale knowledge entries."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(backends={'test': backend})
@@ -83,7 +83,7 @@ class TestChangeDetectionService:
 
     def test_volume_anomaly_detection(self):
         """Test detection of volume anomalies."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(backends={'test': backend})
@@ -93,7 +93,7 @@ class TestChangeDetectionService:
 
     def test_alert_emission_on_drift(self):
         """Test that alerts are emitted when drift is detected."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(backends={'test': backend})
@@ -103,7 +103,7 @@ class TestChangeDetectionService:
 
     def test_change_detection_stores_baseline(self):
         """Test that service stores baseline for comparison."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         backend.entry_count = 50
@@ -116,7 +116,7 @@ class TestChangeDetectionService:
 
     def test_change_detection_compares_current_state(self):
         """Test that service compares current state with baseline."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(backends={'test': backend})
@@ -126,7 +126,7 @@ class TestChangeDetectionService:
 
     def test_auto_remediation_low_risk_changes(self):
         """Test automatic remediation of low-risk additive changes."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(backends={'test': backend})
@@ -136,7 +136,7 @@ class TestChangeDetectionService:
 
     def test_change_detection_alert_metadata(self):
         """Test that alerts contain comprehensive metadata."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(backends={'test': backend})
@@ -156,7 +156,7 @@ class TestChangeDetectionService:
 
     def test_change_detection_handles_multiple_backends(self):
         """Test that service handles multiple knowledge backends."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend1 = Mock()
         backend2 = Mock()
@@ -169,7 +169,7 @@ class TestChangeDetectionService:
 
     def test_change_detection_threshold_configuration(self):
         """Test that detection thresholds are configurable."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(
@@ -184,7 +184,7 @@ class TestChangeDetectionService:
 
     def test_change_detection_alert_acknowledgment(self):
         """Test manual override and acknowledgment of alerts."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(backends={'test': backend})
@@ -194,7 +194,7 @@ class TestChangeDetectionService:
 
     def test_change_detection_metrics_tracking(self):
         """Test that service tracks detection metrics."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(backends={'test': backend})
@@ -208,7 +208,7 @@ class TestChangeDetectionIntegration:
 
     def test_change_detection_with_knowledge_repository(self):
         """Test change detection with real knowledge repository interface."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         backend.entry_count = 100
@@ -224,7 +224,7 @@ class TestChangeDetectionIntegration:
 
     def test_change_detection_continuous_monitoring(self):
         """Test continuous monitoring of knowledge backends."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         backend.entry_count = 100
@@ -237,7 +237,7 @@ class TestChangeDetectionIntegration:
 
     def test_change_detection_alert_routing(self):
         """Test alert routing to audit trail and notification systems."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(backends={'test': backend})
@@ -247,7 +247,7 @@ class TestChangeDetectionIntegration:
 
     def test_change_detection_anomaly_scoring(self):
         """Test that anomalies are scored for severity."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(backends={'test': backend})
@@ -257,7 +257,7 @@ class TestChangeDetectionIntegration:
 
     def test_change_detection_historical_tracking(self):
         """Test tracking of historical changes."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(backends={'test': backend})
@@ -267,7 +267,7 @@ class TestChangeDetectionIntegration:
 
     def test_change_detection_pattern_analysis(self):
         """Test pattern analysis of detected changes."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(backends={'test': backend})
@@ -277,7 +277,7 @@ class TestChangeDetectionIntegration:
 
     def test_change_detection_performance_under_load(self):
         """Test that change detection performs well with large backends."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         backend.entry_count = 1000000  # 1M entries
@@ -290,7 +290,7 @@ class TestChangeDetectionIntegration:
 
     def test_change_detection_graceful_degradation(self):
         """Test graceful degradation when backends are unavailable."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         # Empty backends dict
         service = ChangeDetectionService(backends={})
@@ -300,7 +300,7 @@ class TestChangeDetectionIntegration:
 
     def test_change_detection_error_handling(self):
         """Test error handling during detection."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         backend.entry_count = 100
@@ -314,7 +314,7 @@ class TestChangeDetectionIntegration:
 
     def test_change_detection_audit_logging(self):
         """Test that all changes are logged to audit trail."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(backends={'test': backend})
@@ -324,7 +324,7 @@ class TestChangeDetectionIntegration:
 
     def test_change_detection_compliance_reporting(self):
         """Test compliance reporting for detected changes."""
-        from src.core.knowledge.change_detection import ChangeDetectionService
+        from cortex.core.knowledge.change_detection import ChangeDetectionService
         
         backend = Mock()
         service = ChangeDetectionService(backends={'test': backend})

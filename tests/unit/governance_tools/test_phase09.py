@@ -1,6 +1,6 @@
 """Tests for PHASE-09: Governance Tools - 8 ACs"""
 import pytest
-from src.governance_tools.governance_cli import GovernanceValidator, GovernanceCLI
+from cortex.governance_tools.governance_cli import GovernanceValidator, GovernanceCLI
 
 class TestGovernanceValidator:
     def test_type_hints_valid(self): v = GovernanceValidator(); assert v.validate_type_hints("def func() -> int: pass") is True

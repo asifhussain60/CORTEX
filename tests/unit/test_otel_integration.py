@@ -16,8 +16,8 @@ from datetime import datetime
 from unittest.mock import Mock, MagicMock, patch
 
 # Import the module to be tested (will be created)
-from src.core.observability.otel_exporter import OtelExporter, TraceConfig
-from src.core.observability.span_manager import SpanManager, SpanContext
+from cortex.core.observability.otel_exporter import OtelExporter, TraceConfig
+from cortex.core.observability.span_manager import SpanManager, SpanContext
 
 
 class TestOtelExporterInitialization:

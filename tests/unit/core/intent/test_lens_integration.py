@@ -13,13 +13,13 @@ import pytest
 from datetime import datetime
 import json
 
-from src.core.intent.lens_context_builder import LENSContextBuilder
-from src.core.intent.intent_reflection_protocol import (
+from cortex.core.intent.lens_context_builder import LENSContextBuilder
+from cortex.core.intent.intent_reflection_protocol import (
     IntentReflectionEngine,
     ReflectionRequest,
     ReflectionStatus,
 )
-from src.core.intent.lens_response_formatter import (
+from cortex.core.intent.lens_response_formatter import (
     LENSResponseFormatter,
     ResponseFormat,
 )

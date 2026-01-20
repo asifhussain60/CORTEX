@@ -11,12 +11,12 @@ import pytest
 from typing import Any
 
 try:
-    from src.core.governance.tier_system import TierValidator
+    from cortex.core.governance.tier_system import TierValidator
 except (ImportError, ModuleNotFoundError):
     TierValidator = None
 
 try:
-    from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+    from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 except (ImportError, ModuleNotFoundError):
     MasterOrchestrator = None
 

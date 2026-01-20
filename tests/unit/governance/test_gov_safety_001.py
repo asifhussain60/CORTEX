@@ -10,7 +10,7 @@ Validates:
 """
 
 import pytest
-from src.core.governance.hallucination_detector import (
+from cortex.core.governance.hallucination_detector import (
     HallucinationDetector,
     ConfidenceScore,
     ConfidenceLevel,

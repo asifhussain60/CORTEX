@@ -12,13 +12,13 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 
 import pytest
 
-from src.infrastructure.progress_tracker import (
+from cortex.infrastructure.progress_tracker import (
     ProgressTrackerManager,
     BlockerSeverity,
     BlockerCategory,
     AlertPriority,
 )
-from src.infrastructure.database import DatabaseManager, DatabaseConfig
+from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
 
 
 class TestPhaseProgressInitialization:

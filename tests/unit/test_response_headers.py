@@ -16,14 +16,14 @@ import tempfile
 from pathlib import Path
 from unittest.mock import Mock, MagicMock, patch
 
-from src.core.response_header_config import (
+from cortex.core.response_header_config import (
     HeaderConfigurationManager,
     HeaderConfigLoader,
     AuthorInfo,
     CopyrightInfo,
 )
-from src.core.response_header_injector import ResponseHeaderInjector
-from src.core.response_template_engine import (
+from cortex.core.response_header_injector import ResponseHeaderInjector
+from cortex.core.response_template_engine import (
     ResponseTemplateEngine,
     ResponseTemplateRegistry,
     TemplateDefinition,

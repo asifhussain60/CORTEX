@@ -28,8 +28,8 @@ class TestImportUpdatesExecuted:
         cortex = Path(__file__).parent.parent / "cortex"
         old_patterns = [
             'cortex_brain',
-            'from src.',
-            'import src.'
+            'from cortex.',
+            'import cortex.'
         ]
 
         found_old = []

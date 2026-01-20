@@ -11,11 +11,11 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest
-from src.orchestrators.registry.orchestrator_registry import (
+from cortex.orchestrators.registry.orchestrator_registry import (
     OrchestratorRegistry,
     OrchestratorMetadata,
 )
-from src.orchestrators.registry.discovery_engine import (
+from cortex.orchestrators.registry.discovery_engine import (
     DiscoveryEngine,
     DiscoveryQuery,
     DiscoveryResult,

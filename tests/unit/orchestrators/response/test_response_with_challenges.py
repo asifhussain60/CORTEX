@@ -14,7 +14,7 @@ import pytest
 from dataclasses import dataclass
 from typing import Dict, Any, List
 
-from src.orchestrators.response.turn_response_with_challenges import (
+from cortex.orchestrators.response.turn_response_with_challenges import (
     TurnResponseWithChallenges,
     TurnResponseSegment,
 )

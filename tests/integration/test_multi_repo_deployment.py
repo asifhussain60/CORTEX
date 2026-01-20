@@ -170,7 +170,7 @@ class TestPromptVersionMismatch:
 
     def test_version_mismatch_detected(self):
         """Version mismatch between repo and hub is detected."""
-        from src.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
         manager.register_version("1.0.0", "hash100", False)
@@ -187,7 +187,7 @@ class TestPromptVersionMismatch:
 
     def test_deprecated_version_rejected(self):
         """Deprecated version is rejected with clear error."""
-        from src.versioning.prompt_version_manager import PromptVersionManager
+        from cortex.versioning.prompt_version_manager import PromptVersionManager
 
         manager = PromptVersionManager()
         manager.register_version("0.9.0", "hash090", True)  # deprecated

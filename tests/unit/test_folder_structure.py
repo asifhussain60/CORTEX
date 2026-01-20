@@ -17,7 +17,7 @@ from typing import List, Set
 
 import pytest
 
-from src.core.path_resolver import get_project_root
+from cortex.core.path_resolver import get_project_root
 
 
 @pytest.mark.ac("AC-AR-010-01")
@@ -87,7 +87,7 @@ class TestAC_AR_010_02_ImportsUpdated:
             with open(py_file, "r") as f:
                 content = f.read()
             
-            # Check that imports use absolute paths (from src.*)
+            # Check that imports use absolute paths (from cortex.*)
             lines = content.split("\n")
             for line in lines:
                 if line.startswith("from ") or line.startswith("import "):
@@ -104,9 +104,9 @@ class TestAC_AR_010_02_ImportsUpdated:
         # Import the orchestrator modules to verify imports are correct
         try:
             # These imports should succeed if imports are updated correctly
-            from src.orchestrators.core import master_orchestrator
-            from src.orchestrators.core import orchestrator_registry
-            from src.orchestrators.domain import planning_orchestrator
+            from cortex.orchestrators.core import master_orchestrator
+            from cortex.orchestrators.core import orchestrator_registry
+            from cortex.orchestrators.domain import planning_orchestrator
         except ImportError as e:
             pytest.fail(f"Import failed: {e}")
 

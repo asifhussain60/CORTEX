@@ -3,9 +3,9 @@ Test suite for CONF-GATE governance rules verification.
 AC-REM-010-02: Verify governance rules implementation.
 """
 import pytest
-from src.confirmation.governance import GovernanceEngine, GovernanceRule, GovernanceRuleType, AuditEventType
-from src.orchestrators.core.stage_2_5_gate import Stage25Gate, ConfirmationContext
-from src.core.orchestrator.complexity_assessment import ComplexitySignals
+from cortex.confirmation.governance import GovernanceEngine, GovernanceRule, GovernanceRuleType, AuditEventType
+from cortex.orchestrators.core.stage_2_5_gate import Stage25Gate, ConfirmationContext
+from cortex.core.orchestrator.complexity_assessment import ComplexitySignals
 from datetime import datetime
 
 

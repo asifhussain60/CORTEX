@@ -6,7 +6,7 @@ Tests YAML and JSON config loading functionality.
 
 import pytest
 
-from src.core.config import load_yaml, load_json, load_config, save_yaml, save_json
+from cortex.core.config import load_yaml, load_json, load_config, save_yaml, save_json
 
 
 class TestLoadYaml:

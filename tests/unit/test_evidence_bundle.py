@@ -15,14 +15,14 @@ import time
 
 import pytest
 
-from src.infrastructure.evidence_bundle import (
+from cortex.infrastructure.evidence_bundle import (
     EvidenceBundleGenerator,
     EvidenceBundle,
     Artifact,
     ArtifactType,
     EvidenceLevel,
 )
-from src.infrastructure.database import DatabaseManager, DatabaseConfig
+from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
 
 
 @pytest.mark.ac("FR-004-01")

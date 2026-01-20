@@ -20,15 +20,15 @@ from typing import Dict, Any, Optional, List
 from unittest.mock import Mock, MagicMock, patch
 from datetime import datetime
 
-from src.orchestrators.core.intent_router import (
+from cortex.orchestrators.core.intent_router import (
     IntentRouter,
     IntentType,
     RoutingContext,
     RoutingDecision
 )
-from src.core.result import Ok, Err, Result
-from src.core.interfaces import IOrchestrator, OperationMode
-from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.core.result import Ok, Err, Result
+from cortex.core.interfaces import IOrchestrator, OperationMode
+from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 
 class TestIntentRouterInitialization:

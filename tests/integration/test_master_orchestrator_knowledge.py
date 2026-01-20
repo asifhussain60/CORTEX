@@ -38,22 +38,22 @@ class TestKnowledgeRepositoryModule:
     
     def test_knowledge_repository_class_exists(self):
         """Verify KnowledgeRepository class can be imported."""
-        from src.core.knowledge.knowledge_repository import KnowledgeRepository
+        from cortex.core.knowledge.knowledge_repository import KnowledgeRepository
         assert KnowledgeRepository is not None
     
     def test_knowledge_entry_dataclass_exists(self):
         """Verify KnowledgeEntry dataclass can be imported."""
-        from src.core.knowledge.knowledge_repository import KnowledgeEntry
+        from cortex.core.knowledge.knowledge_repository import KnowledgeEntry
         assert KnowledgeEntry is not None
     
     def test_knowledge_query_result_dataclass_exists(self):
         """Verify KnowledgeQueryResult dataclass can be imported."""
-        from src.core.knowledge.knowledge_repository import KnowledgeQueryResult
+        from cortex.core.knowledge.knowledge_repository import KnowledgeQueryResult
         assert KnowledgeQueryResult is not None
     
     def test_get_knowledge_repository_singleton_exists(self):
         """Verify singleton accessor function exists."""
-        from src.core.knowledge.knowledge_repository import get_knowledge_repository
+        from cortex.core.knowledge.knowledge_repository import get_knowledge_repository
         assert callable(get_knowledge_repository)
 
 
@@ -63,7 +63,7 @@ class TestKnowledgeRepositoryInitialization:
     @pytest.fixture
     def knowledge_repo(self):
         """Create KnowledgeRepository instance."""
-        from src.core.knowledge.knowledge_repository import KnowledgeRepository
+        from cortex.core.knowledge.knowledge_repository import KnowledgeRepository
         return KnowledgeRepository(project_root=str(project_root))
     
     def test_repository_initializes_successfully(self, knowledge_repo):
@@ -95,7 +95,7 @@ class TestKnowledgeRepositoryQueries:
     @pytest.fixture
     def knowledge_repo(self):
         """Create KnowledgeRepository instance."""
-        from src.core.knowledge.knowledge_repository import KnowledgeRepository
+        from cortex.core.knowledge.knowledge_repository import KnowledgeRepository
         return KnowledgeRepository(project_root=str(project_root))
     
     def test_get_by_domain_returns_entries(self, knowledge_repo):
@@ -140,7 +140,7 @@ class TestKnowledgeRepositoryHelpers:
     @pytest.fixture
     def knowledge_repo(self):
         """Create KnowledgeRepository instance."""
-        from src.core.knowledge.knowledge_repository import KnowledgeRepository
+        from cortex.core.knowledge.knowledge_repository import KnowledgeRepository
         return KnowledgeRepository(project_root=str(project_root))
     
     def test_get_security_knowledge(self, knowledge_repo):
@@ -199,7 +199,7 @@ class TestMasterOrchestratorKnowledgeIntegration:
         self, mock_logger, mock_db, mock_transaction_manager
     ):
         """Verify MasterOrchestrator has _knowledge_repository attribute."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         # Clear singleton
         MasterOrchestrator._instance = None
@@ -211,7 +211,7 @@ class TestMasterOrchestratorKnowledgeIntegration:
         self, mock_logger, mock_db, mock_transaction_manager
     ):
         """Verify has_knowledge_repository property exists."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         MasterOrchestrator._instance = None
         orchestrator = MasterOrchestrator()
@@ -224,7 +224,7 @@ class TestMasterOrchestratorKnowledgeIntegration:
         self, mock_logger, mock_db, mock_transaction_manager
     ):
         """Verify get_knowledge_summary method exists."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         MasterOrchestrator._instance = None
         orchestrator = MasterOrchestrator()
@@ -236,7 +236,7 @@ class TestMasterOrchestratorKnowledgeIntegration:
         self, mock_logger, mock_db, mock_transaction_manager
     ):
         """Verify query_knowledge method exists."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         MasterOrchestrator._instance = None
         orchestrator = MasterOrchestrator()
@@ -248,7 +248,7 @@ class TestMasterOrchestratorKnowledgeIntegration:
         self, mock_logger, mock_db, mock_transaction_manager
     ):
         """Verify get_relevant_knowledge_for_operation method exists."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         MasterOrchestrator._instance = None
         orchestrator = MasterOrchestrator()
@@ -287,7 +287,7 @@ class TestMasterOrchestratorKnowledgeQueries:
     @pytest.fixture
     def orchestrator(self, mock_logger, mock_db, mock_transaction_manager):
         """Create MasterOrchestrator instance."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         MasterOrchestrator._instance = None
         return MasterOrchestrator()
     
@@ -345,7 +345,7 @@ class TestMasterOrchestratorKnowledgeEvaluation:
         """Create mock governance registry."""
         with patch('src.orchestrators.core.master_orchestrator.GovernanceRegistry') as mock:
             registry = Mock()
-            from src.core.result import Ok
+            from cortex.core.result import Ok
             registry.initialize.return_value = Ok("initialized")
             registry.should_proceed.return_value = Ok(True)
             mock.instance.return_value = registry
@@ -355,7 +355,7 @@ class TestMasterOrchestratorKnowledgeEvaluation:
         self, mock_logger, mock_db, mock_transaction_manager
     ):
         """Verify _evaluate_knowledge_for_request method exists."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         MasterOrchestrator._instance = None
         orchestrator = MasterOrchestrator()
@@ -367,7 +367,7 @@ class TestMasterOrchestratorKnowledgeEvaluation:
         self, mock_logger, mock_db, mock_transaction_manager
     ):
         """Verify _evaluate_knowledge_for_request returns dict with expected keys."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         MasterOrchestrator._instance = None
         orchestrator = MasterOrchestrator()
@@ -391,7 +391,7 @@ class TestMasterOrchestratorKnowledgeGracefulDegradation:
     
     def test_orchestrator_works_without_knowledge_repository(self):
         """Verify orchestrator functions when repository fails to load."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         with patch('src.orchestrators.core.master_orchestrator.EnhancedAuditLogger') as mock_logger:
             with patch('src.orchestrators.core.master_orchestrator.DatabaseManager'):
@@ -413,7 +413,7 @@ class TestMasterOrchestratorKnowledgeGracefulDegradation:
     
     def test_get_relevant_knowledge_returns_empty_when_unavailable(self):
         """Verify get_relevant_knowledge returns empty list gracefully."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         with patch('src.orchestrators.core.master_orchestrator.EnhancedAuditLogger') as mock_logger:
             with patch('src.orchestrators.core.master_orchestrator.DatabaseManager'):
@@ -473,7 +473,7 @@ class TestCoordinateOperationKnowledgeIntegration:
         """Create mock governance registry."""
         with patch('src.orchestrators.core.master_orchestrator.GovernanceRegistry') as mock:
             registry = Mock()
-            from src.core.result import Ok
+            from cortex.core.result import Ok
             registry.initialize.return_value = Ok("initialized")
             registry.should_proceed.return_value = Ok(True)
             mock.instance.return_value = registry
@@ -483,7 +483,7 @@ class TestCoordinateOperationKnowledgeIntegration:
         self, mock_logger, mock_db, mock_transaction_manager, mock_governance
     ):
         """Verify coordinate_operation result includes knowledge_context."""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         MasterOrchestrator._instance = None
         orchestrator = MasterOrchestrator()

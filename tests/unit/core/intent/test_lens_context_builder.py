@@ -24,7 +24,7 @@ import uuid
 import json
 
 # Import modules to test
-from src.core.intent.lens_context_builder import (
+from cortex.core.intent.lens_context_builder import (
     LENSContextBuilder,
     ContextNode,
     ContextEdge,
@@ -489,7 +489,7 @@ class TestContextSerialization:
 
     def test_context_from_dict(self, sample_ast_findings):
         """Test creating context from dictionary."""
-        from src.core.intent.lens_context_builder import LENSContext
+        from cortex.core.intent.lens_context_builder import LENSContext
 
         builder = LENSContextBuilder()
         builder.add_ast_findings(sample_ast_findings)
@@ -502,7 +502,7 @@ class TestContextSerialization:
 
     def test_context_round_trip(self, sample_ast_findings, sample_git_findings):
         """Test serialization and deserialization round trip."""
-        from src.core.intent.lens_context_builder import LENSContext
+        from cortex.core.intent.lens_context_builder import LENSContext
 
         builder = LENSContextBuilder()
         builder.add_ast_findings(sample_ast_findings)

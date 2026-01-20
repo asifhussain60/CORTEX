@@ -1,9 +1,9 @@
 """Tests for Input Validation, Error Handling, and Compliance."""
 import pytest
-from src.mcp.protocol import ToolDefinition, ToolParameter, ErrorCode, MCPError, MCPResponse
-from src.mcp.input_validator import ToolInputValidator, ValidationError
-from src.mcp.error_handler import MCPErrorHandler, ErrorThrottler, ErrorRecoveryStrategy
-from src.mcp.compliance import MCPComplianceTester, ComplianceLevel
+from cortex.mcp.protocol import ToolDefinition, ToolParameter, ErrorCode, MCPError, MCPResponse
+from cortex.mcp.input_validator import ToolInputValidator, ValidationError
+from cortex.mcp.error_handler import MCPErrorHandler, ErrorThrottler, ErrorRecoveryStrategy
+from cortex.mcp.compliance import MCPComplianceTester, ComplianceLevel
 
 # ===== INPUT VALIDATION TESTS =====
 
@@ -196,7 +196,7 @@ def test_response_compliance_both_result_and_error():
 
 def test_get_compliance_level_full():
     """Test compliance level FULL."""
-    from src.mcp.compliance import ComplianceResult
+    from cortex.mcp.compliance import ComplianceResult
     results = [
         ComplianceResult("check1", True, "Pass", {}),
         ComplianceResult("check2", True, "Pass", {}),
@@ -206,7 +206,7 @@ def test_get_compliance_level_full():
 
 def test_get_compliance_level_partial():
     """Test compliance level PARTIAL."""
-    from src.mcp.compliance import ComplianceResult
+    from cortex.mcp.compliance import ComplianceResult
     results = [
         ComplianceResult("check1", True, "Pass", {}),
         ComplianceResult("check2", True, "Pass", {}),

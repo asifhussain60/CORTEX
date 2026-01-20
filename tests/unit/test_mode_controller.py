@@ -16,7 +16,7 @@ from unittest.mock import patch
 
 import pytest
 
-from src.core.mode_controller import ModeController, RuntimeMode
+from cortex.core.mode_controller import ModeController, RuntimeMode
 
 
 @pytest.mark.ac("AR-005-01")

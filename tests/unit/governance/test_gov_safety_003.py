@@ -9,7 +9,7 @@ Validates:
 """
 
 import pytest
-from src.core.governance.tool_description_validator import (
+from cortex.core.governance.tool_description_validator import (
     ToolDescriptionValidator,
     ToolDescription,
     ParameterSpec,

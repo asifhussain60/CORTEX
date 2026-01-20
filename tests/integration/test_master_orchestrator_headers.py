@@ -10,9 +10,9 @@ AC-ENH-002-01: MasterOrchestrator integrated with ResponseHeaderInjector
 import pytest
 from typing import Dict, Any
 
-from src.orchestrators.core.master_orchestrator import MasterOrchestrator
-from src.core.interfaces import IOrchestrator, OperationMode
-from src.core.result import Result, Ok, Err
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+from cortex.core.interfaces import IOrchestrator, OperationMode
+from cortex.core.result import Result, Ok, Err
 
 
 class MockDomainOrchestrator(IOrchestrator):
