@@ -11,8 +11,8 @@ from _pytest.python import Module
 # Add tier modules to path
 project_root = Path(__file__).parent
 tier_paths = [
-    str(project_root),  # For tier1, tier2 imports
-    str(project_root / "cortex_brain"),  # For cortex_brain imports
+    str(project_root),  # For cortex imports
+    str(project_root / "cortex_brain"),  # For tier0, tier1, tier2 imports
 ]
 
 for path in tier_paths:
@@ -39,7 +39,7 @@ def pytest_pycollect_makemodule(module_path, parent):
     """
     try:
         return Module.from_parent(parent, path=module_path)
-    except (ImportError, ModuleNotFoundError):
+    except (ImportError, ModuleNotFoundError) as e:
         # Skip modules with missing dependencies
         return None
 
@@ -65,3 +65,4 @@ def pytest_configure(config):
         "markers", 
         "requires_module(module): mark test as requiring a specific module"
     )
+
