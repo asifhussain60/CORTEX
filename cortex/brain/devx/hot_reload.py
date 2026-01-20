@@ -41,7 +41,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 # Import from existing CORTEX modules
 try:
-    from cortex.brain.core.hallucination_prevention.execution_sandbox import (
+    from cortex_brain.tier2.hallucination_prevention import (
         ExecutionSandbox,
         ExecutionMode,
         SandboxSnapshot,

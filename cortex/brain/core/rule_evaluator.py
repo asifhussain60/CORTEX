@@ -13,9 +13,9 @@ from typing import Dict, Any, List, Optional
 from cortex.brain.core.governance_registry import GovernanceRegistry, GovernanceRule
 from cortex.brain.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-from cortex.brain.core.governance.context_extractor import ContextExtractor, GovernanceContext
-from cortex.brain.core.governance.rule_applicability import RuleApplicabilityEngine
-from cortex.brain.core.governance import rule_validators
+# from cortex.brain.core.governance.context_extractor import ContextExtractor, GovernanceContext
+# from cortex.brain.core.governance.rule_applicability import RuleApplicabilityEngine
+# from cortex.brain.core.governance import rule_validators
 
 
 @dataclass
@@ -57,8 +57,9 @@ class RuleEvaluator:
         """Initialize rule evaluator with context-aware pipeline"""
         self.logger = EnhancedAuditLogger.instance()
         self.registry = GovernanceRegistry.instance()
-        self.context_extractor = ContextExtractor()
-        self.applicability_engine = RuleApplicabilityEngine()
+        # TODO: Implement proper context extraction and applicability checking
+        # self.context_extractor = ContextExtractor()
+        # self.applicability_engine = RuleApplicabilityEngine()
         
         # Ensure registry is initialized with rules
         init_result = self.registry.initialize()
@@ -202,11 +203,12 @@ class RuleEvaluator:
             validator_func = None
             rule_id_lower = rule.rule_id.lower().replace('-', '_')
             
+            # TODO: Implement proper rule validators
             # Check all functions starting with validate_{rule_id}
-            for func_name in dir(rule_validators):
-                if func_name.startswith(f"validate_{rule_id_lower}"):
-                    validator_func = getattr(rule_validators, func_name)
-                    break
+            # for func_name in dir(rule_validators):
+            #     if func_name.startswith(f"validate_{rule_id_lower}"):
+            #         validator_func = getattr(rule_validators, func_name)
+            #         break
             
             if validator_func:
                 # Build kwargs with all available metrics

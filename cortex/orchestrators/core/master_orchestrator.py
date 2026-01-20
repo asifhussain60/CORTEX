@@ -24,7 +24,7 @@ from cortex.core.result import Result, Ok, Err
 from cortex.brain.core.response_header_injector import ResponseHeaderInjector
 from cortex.brain.core.response_header_config import HeaderConfigurationManager
 from cortex.brain.core.governance_registry import GovernanceRegistry, GovernanceViolationError
-from cortex.brain.core.hallucination_prevention.behavioral_boundaries import BehavioralBoundaryRules
+from cortex_brain.tier2.hallucination_prevention import BehavioralBoundaryRules
 from cortex.brain.core.knowledge.knowledge_repository import KnowledgeRepository, KnowledgeEntry
 from cortex.brain.core.state_manager import StateManager, OperationState, get_state_manager
 from cortex.brain.domain_brain.business_knowledge_repository import (
