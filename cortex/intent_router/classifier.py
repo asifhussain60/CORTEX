@@ -47,6 +47,7 @@ class ClassificationResult:
     detected_signals: List[IntentSignal] = field(default_factory=list)
     keywords: List[str] = field(default_factory=list)
     reasoning: str = ""
+    metadata: Dict[str, Any] = field(default_factory=dict)
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
 
 
@@ -81,31 +82,35 @@ class IntentClassifier:
         return {
             IntentCategory.CREATE: {
                 "create", "build", "add", "implement", "make", "generate",
-                "develop", "establish", "construct", "new", "setup", "initialize"
+                "develop", "establish", "construct", "new", "setup", "initialize",
+                "provision", "deploy", "instantiate", "form"
             },
             IntentCategory.FIX: {
                 "fix", "repair", "resolve", "correct", "debug", "patch",
-                "address", "solve", "remedy", "bug", "issue", "error"
+                "address", "solve", "remedy", "bug", "issue", "error",
+                "broken", "failing"
             },
             IntentCategory.ANALYZE: {
                 "analyze", "examine", "investigate", "review", "inspect",
-                "study", "evaluate", "assess", "check", "audit"
+                "study", "evaluate", "assess", "check", "audit", "explore"
             },
             IntentCategory.OPTIMIZE: {
                 "optimize", "improve", "enhance", "speed", "performance",
-                "faster", "efficient", "reduce", "minimize", "streamline"
+                "faster", "efficient", "reduce", "minimize", "streamline",
+                "accelerate", "boost"
             },
             IntentCategory.REFACTOR: {
                 "refactor", "restructure", "reorganize", "clean", "simplify",
-                "modularize", "rewrite", "improve structure", "consolidate"
+                "modularize", "rewrite", "improve structure", "consolidate",
+                "redesign"
             },
             IntentCategory.TEST: {
                 "test", "verify", "validate", "check", "ensure", "confirm",
-                "assert", "coverage", "unit test", "integration test"
+                "assert", "coverage", "unit test", "integration test", "testing"
             },
             IntentCategory.DOCUMENT: {
                 "document", "doc", "explain", "describe", "comment", "annotate",
-                "readme", "guide", "manual", "documentation"
+                "readme", "guide", "manual", "documentation", "docs"
             },
             IntentCategory.MODIFY: {
                 "modify", "change", "update", "alter", "adjust", "edit",
@@ -113,15 +118,16 @@ class IntentClassifier:
             },
             IntentCategory.QUERY: {
                 "what", "how", "why", "when", "where", "which", "who",
-                "show", "tell", "explain", "is", "are", "can", "does"
+                "show", "tell", "explain", "is", "are", "can", "does", "?",
+                "help", "info", "information"
             },
             IntentCategory.COMMAND: {
                 "run", "execute", "start", "stop", "restart", "deploy",
-                "install", "configure", "enable", "disable"
+                "install", "configure", "enable", "disable", "launch"
             },
             IntentCategory.NAVIGATION: {
-                "go", "navigate", "open", "show", "display", "view",
-                "switch", "move", "jump", "find"
+                "go", "navigate", "open", "display", "view",
+                "switch", "move", "jump", "find", "locate"
             }
         }
     
@@ -181,10 +187,25 @@ class IntentClassifier:
         
         # Score all intents
         intent_scores: Dict[IntentCategory, float] = {}
+        words = normalized.split()
+        total_words = max(len(words), 1)
+        
         for intent, keywords in self.keyword_mappings.items():
-            score = sum(1.0 for keyword in keywords if keyword in normalized)
-            if score > 0:
-                intent_scores[intent] = score / len(keywords)  # Normalize
+            matches = 0.0
+            # Use whole-word matching to avoid substring issues (e.g., "go" in "governance")
+            for keyword in keywords:
+                # Check for whole word boundaries
+                pattern = r'\b' + re.escape(keyword) + r'\b'
+                if re.search(pattern, normalized):
+                    matches += 1.0
+            
+            if matches > 0:
+                # Base score: keyword density
+                density = matches / len(keywords)
+                # Word ratio: matches relative to input length
+                word_ratio = matches / total_words
+                # Combined score with higher weight on density
+                intent_scores[intent] = (density * 0.7) + (word_ratio * 0.3)
         
         # Detect signals
         detected_signals = []
@@ -194,19 +215,38 @@ class IntentClassifier:
         
         # Determine primary intent
         if not intent_scores:
+            # No clear intent = query with LOW confidence for ambiguous text
             primary = IntentCategory.QUERY
-            confidence = 0.5
+            confidence = 0.3  # Lower default for truly ambiguous text
         else:
             sorted_intents = sorted(intent_scores.items(), key=lambda x: x[1], reverse=True)
             primary = sorted_intents[0][0]
-            confidence = min(sorted_intents[0][1] * 1.5, 1.0)  # Boost confidence
+            
+            # Confidence calculation
+            base_score = sorted_intents[0][1]
+            
+            # Boost for clear intents (multiple keyword matches)
+            if base_score > 0.15:
+                confidence = min(base_score * 2.0, 0.95)
+            else:
+                confidence = base_score * 1.5
+            
+            # Signal boost
+            signal_boost = len(detected_signals) * 0.05
+            confidence = min(confidence + signal_boost, 0.99)
         
-        # Extract keywords (up to 5)
-        words = [w for w in normalized.split() if len(w) > 3][:5]
+        # Extract keywords (up to 5, filter short words)
+        keywords_list = [w for w in words if len(w) > 2][:5]
         
         # Build secondary intents
-        secondary = [(intent, score) for intent, score in intent_scores.items()
-                    if intent != primary and score > 0.1][:3]
+        # Must be at least 60% of primary score to be considered secondary
+        if intent_scores:
+            primary_score = intent_scores[primary]
+            threshold = max(primary_score * 0.6, 0.05)
+            secondary = [(intent, score) for intent, score in intent_scores.items()
+                        if intent != primary and score >= threshold][:3]
+        else:
+            secondary = []
         
         # Create result
         result = ClassificationResult(
