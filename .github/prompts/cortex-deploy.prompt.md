@@ -160,7 +160,7 @@ cortex_brain/
 
 ### Step 4.1: Create Day-Zero Reset Tool
 
-**Location**: `cortex_toolkit/tools/`
+**Location**: `cortex/tools/`
 
 **Action**: Implement a new tool: `DayZeroResetTool`
 
@@ -203,10 +203,10 @@ class DayZeroResetTool:
 **Usage**:
 ```bash
 # Via MCP
-mcp call cortex_toolkit.DayZeroResetTool.reset_to_day_zero
+mcp call cortex.tools.DayZeroResetTool.reset_to_day_zero
 
 # Or via CLI
-python -m cortex_toolkit.tools.day_zero_reset --action=full
+python -m cortex.tools.day_zero_reset --action=full
 ```
 
 ---
@@ -214,7 +214,7 @@ python -m cortex_toolkit.tools.day_zero_reset --action=full
 ### Step 4.2: Integrate into CORTEX Toolkit
 
 **Action**:
-- Add `day_zero_reset.py` module to `cortex_toolkit/tools/`
+- Add `day_zero_reset.py` module to `cortex/tools/`
 - Register in MCP server configuration
 - Add integration tests
 - Document in MCP API documentation
@@ -231,7 +231,7 @@ python -m cortex_toolkit.tools.day_zero_reset --action=full
 
 ### Repository Structure
 - [ ] All relevant `*.md` files in `/docs/`
-- [ ] All `*.py` files in `cortex_toolkit/` with preserved structure
+- [ ] All `*.py` files in `cortex/` with preserved structure
 - [ ] No orphaned markdown or Python files in root or subdirectories
 - [ ] `cortex_brain/` and `_workspaces/` remain intact
 
@@ -249,7 +249,7 @@ python -m cortex_toolkit.tools.day_zero_reset --action=full
 - [ ] No temporary or debug artifacts present
 
 ### Toolkit Enhancement
-- [ ] `DayZeroResetTool` implemented in `cortex_toolkit/tools/`
+- [ ] `DayZeroResetTool` implemented in `cortex/tools/`
 - [ ] Tool registered in MCP server
 - [ ] Tool tested and verified
 - [ ] Tool exposed via MCP protocol

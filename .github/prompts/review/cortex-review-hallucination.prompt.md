@@ -37,10 +37,10 @@ pytest tests/ -q --tb=no | tail -1
 grep -r "@mcp_tool" src/ | wc -l
 
 # Verify claim 3: File exists at path
-ls -la _workspaces/roadmap/cortex-master.yaml
+ls -la _workspaces/roadmap/cortex-impl-map.yaml
 
 # Verify claim 4: Phase locked
-grep "locked: true" _workspaces/roadmap/cortex-master.yaml | grep PHASE-XX
+grep "locked: true" _workspaces/roadmap/phases/impl-*.yaml | grep impl-
 
 # Detect version confusion
 grep -r "cortex-master-v1\|cortex-master-v2\|_archives" docs/ --include="*.md" | head -10
@@ -58,7 +58,7 @@ SEVERITY: HIGH
 VERIFICATION:
 ├─ Phase locked: false ✓
 ├─ Dependency PHASE-06 locked: true ✓
-├─ Prerequisite (cortex-master.yaml exists): true ✓
+├─ Prerequisite (cortex-impl-map.yaml exists): true ✓
 └─ OVERALL: ✗ FALSE - Missing phase YAML file
 
 EVIDENCE: 
@@ -92,11 +92,11 @@ contradictions:
     claim_b: "No dependencies between AR and FR"
     location: phase-01.yaml vs phase-01-notes.md
     severity: HIGH
-    resolution: "Verify cortex-master.yaml: requires field"
+    resolution: "Verify cortex-impl-map.yaml: requires field"
 
   - claim_a: "Phase 15 is ENHANCEMENT_READY"
     claim_b: "Phase 15 is NOT_STARTED"
-    location: cortex-master.yaml status vs phase-15.yaml
+    location: cortex-impl-map.yaml status vs impl-*.yaml
     severity: CRITICAL
     resolution: "Update phase_tracker to consistent state"
 ```

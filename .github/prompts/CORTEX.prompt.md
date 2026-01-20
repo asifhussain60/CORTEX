@@ -149,7 +149,7 @@ Every response MUST include this header (line 1):
 | Document | Purpose |
 |----------|---------|
 | `cortex/core/governance/core-rules.yaml` | 29 SKULL rules |
-| `_workspaces/roadmap/cortex-master.yaml` | Master roadmap (SSOT) |
+| `_workspaces/roadmap/cortex-impl-map.yaml` | Implementation map (truth-based) |
 | `.github/prompts/copilot-instruction.md` | Standalone instruction set |
 | `.github/prompts/cortex-builder.prompt.md` | AC implementation guide |
 

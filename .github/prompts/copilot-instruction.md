@@ -207,7 +207,7 @@ USER REQUEST                   → USE
 
 **If you get stuck:**
 1. Load `cortex/core/governance/core-rules.yaml` – Single source of truth
-2. Check `_workspaces/roadmap/cortex-master.yaml` – Phase definitions
+2. Check `_workspaces/roadmap/cortex-impl-map.yaml` – Implementation status
 3. Look at `.github/prompts/cortex-builder.prompt.md` – Implementation guide
 4. Cite the rule you're following in your response
 
