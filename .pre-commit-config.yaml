@@ -19,6 +19,25 @@ repos:
         pass_filenames: false
         always_run: true
         description: "Validate AC-ID format and governance rule compliance"
+      
+      # Phase 0 Automation - Stub Detection
+      - id: detect-stubs
+        name: Detect stub implementations (NO empty functions)
+        entry: scripts/validation/detect_stubs.sh
+        language: script
+        files: ^cortex/.*\.py$
+        pass_filenames: false
+        stages: [commit]
+        description: "Block commits with stub implementations (def ...: pass)"
+        
+      - id: detect-empty-classes
+        name: Detect empty classes (NO class stubs)
+        entry: scripts/validation/detect_empty_classes.sh
+        language: script
+        files: ^cortex/.*\.py$
+        pass_filenames: false
+        stages: [commit]
+        description: "Block commits with empty class definitions"
 
   # Standard pre-commit hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
