@@ -599,33 +599,68 @@ governance:
   rules_file_expected: "cortex_brain/tier0/governance/core-rules.yaml"
 
 production_readiness_summary:
-  status: "NOT_READY"
+  status: "NOT_READY_NOW / READY_AFTER_REMEDIATIONS"
   blocking_phases: 3
   estimated_completion: "16-22 days (3-4 weeks)"
+  
+  remediation_completeness:
+    analysis_date: "2026-01-20"
+    authority: "REMEDIATION-COMPLETENESS-ANALYSIS-20260120.md"
+    
+    will_be_fixed:
+      production_blockers: 3  # All P0 phases
+      test_import_errors: 170  # impl-tdd-prod-ready fixes all
+      brittleness_issues: "5/5 addressed in impl-recovery-003"
+      orphaned_modules: 125  # impl-tdd-prod-ready + consolidation-001
+      src_imports: "30+ consolidated to cortex/"
+    
+    will_NOT_be_fixed:
+      stub_phases: 21  # Design-only, not production blockers
+      mcp_tool_stubs: 14  # Subset of arch-022-mcp-compliance
+      dashboard: "Not in scope"
+      knowledge_protocol: "Not in scope"
+      tier1_tier2_governance: "Not populated"
+    
+    verdict: |
+      ✅ PRODUCTION_READY_WITH_KNOWN_STUBS after Phase 1-4 (3-4 weeks)
+      ✅ Zero production blockers after remediations
+      ⚠️ 21 architectural stub phases remain (design, not code)
+      ⚠️ 14 MCP tools remain as stubs (documented as future work)
+      ❌ Zero stubs requires Phase 26+ future work roadmap (8-12 weeks additional)
   
   critical_path:
     - phase: "impl-infra-001-resilience"
       duration: "5-7 days"
       blocks: "All production deployment"
       severity: "P0-CRITICAL"
+      status: "✅ IMPLEMENTED (2026-01-20)"
+      tests: "126 passing"
     
     - phase: "impl-state-002-concurrency"
       duration: "6-8 days"
       blocks: "Multi-user deployment"
       severity: "P0-CRITICAL"
+      status: "✅ IMPLEMENTED (2026-01-20)"
+      tests: "82 passing"
       depends_on: ["impl-infra-001-resilience"]
     
     - phase: "impl-recovery-003-fault-tolerance"
       duration: "5-7 days"
       blocks: "Production reliability"
       severity: "P0-CRITICAL"
+      status: "⏳ NOT_STARTED"
+      tests_expected: "~120"
       depends_on: ["impl-infra-001-resilience", "impl-state-002-concurrency"]
+      fixes: ["Incomplete error paths", "Cascading failures", "Orphan cleanup", "Automatic repair"]
     
     - phase: "impl-ops-004-observability"
       duration: "4-6 days"
       blocks: "Operational visibility"
       severity: "P1-HIGH (can deploy without, but risky)"
+      status: "⏳ NOT_STARTED"
+      tests_expected: "~100"
       depends_on: ["all P0 phases"]
+      fixes: ["Structured logging", "Prometheus metrics", "Distributed tracing", "Health checks"]
   
   risk_assessment:
     without_infra_resilience:
@@ -718,3 +753,130 @@ maintenance:
     - "Test suite expansion"
     - "MCP tool implementation"
     - "Governance rule changes"
+
+remediation_completion_matrix:
+  version: "3.2-with-remediation-plan"
+  analysis_date: "2026-01-20"
+  analysis_authority: "_workspaces/roadmap/reports/REMEDIATION-COMPLETENESS-ANALYSIS-20260120.md"
+  
+  planned_remediations:
+    - id: "consolidation-001-src-cleanup"
+      priority: "P1-CRITICAL"
+      effort: "8-16 hours"
+      fixes:
+        - "30+ src.* imports → cortex.* imports"
+        - "125 orphaned modules consolidated"
+        - "Repository structure cleaned"
+      impact: "Unblocks downstream phases"
+      
+    - id: "impl-recovery-003-fault-tolerance"
+      priority: "P0-CRITICAL"
+      effort: "5-7 days"
+      fixes:
+        - "Incomplete error paths → Compensation transactions"
+        - "Cascading failures → Fault isolation"
+        - "Orphaned resources → Automatic cleanup"
+        - "Inconsistent state → Transaction guarantees"
+        - "Insufficient error context → Rich diagnostics"
+      impact: "Eliminates brittleness; production-grade reliability"
+      
+    - id: "impl-ops-004-observability"
+      priority: "P1-HIGH"
+      effort: "4-6 days"
+      fixes:
+        - "Unstructured logging → JSON structured logging"
+        - "Missing metrics → Prometheus full integration"
+        - "No tracing → Distributed tracing"
+        - "Basic health checks → Advanced degradation awareness"
+      impact: "Production operations capability"
+      
+    - id: "impl-tdd-prod-ready"
+      priority: "P2-MEDIUM"
+      effort: "2-3 weeks"
+      fixes:
+        - "125 missing modules → Full implementations"
+        - "170 test errors → 0 errors"
+        - "TDD gaps → Complete coverage"
+      impact: "Production test readiness; zero import errors"
+  
+  after_all_4_remediations:
+    timeline: "3-4 weeks total"
+    implemented_phases: 10  # 6 current + 4 remediation
+    stub_phases_remaining: 21  # UNCHANGED - not in scope
+    mcp_tools_functional: 5  # UNCHANGED - 14 stubs remain
+    mcp_tools_stub: 14  # UNCHANGED - not in scope
+    production_blockers: 0  # Fixed: 3 → 0
+    test_collection_errors: 0  # Fixed: 170 → 0
+    brittleness_level: "MEDIUM"  # Improved: HIGH → MEDIUM
+    production_readiness: "✅ READY_WITH_KNOWN_STUBS"
+    verdict: |
+      PRODUCTION READY - All critical blockers removed
+      - Infrastructure resilience ✅
+      - Concurrency safety ✅
+      - Error recovery ✅
+      - Observability ✅
+      - TDD completeness ✅
+      
+      KNOWN_LIMITATIONS (not production blockers):
+      - 21 architectural stub phases (design-only, not code)
+      - 14 MCP tool stubs (mock data, documented as future work)
+      - Dashboard not implemented (future work)
+      - Knowledge protocol not started (future work)
+      - Tier 1-2 governance rules empty (future work)
+  
+  stubs_remaining_after_remediations:
+    architectural_stubs: 21
+      examples:
+        - "arch-007-intent: Intent Router (design exists)"
+        - "arch-015-dashboard: Dashboard UI (not implemented)"
+        - "arch-012-knowledge: Knowledge Ecosystem (concept)"
+        - "arch-022-mcp-compliance: 9 MCP tool stubs (mock data)"
+      reason: "Not production blockers; deferred to Phase 26+ roadmap"
+      impact: "Low - documented as future enhancements"
+    
+    mcp_tool_stubs: 14
+      functional: 5  # Governance tools
+      stub: 9  # Mock data only
+      reason: "No phase allocates effort to MCP implementation"
+      impact: "Medium - MCP integration not production-grade"
+      recommendation: "Implement as follow-up phase or document as Phase 26+ future work"
+  
+  path_to_zero_stubs:
+    estimated_additional_effort: "8-12 weeks"
+    additional_phases_required: "Phase 26+ Future Work Roadmap"
+    blockers: "None - these don't block production"
+    priority: "P3-DEFERRED"
+    scope:
+      - "MCP tool implementations (9 tools)"
+      - "Dashboard implementation (moderate UI work)"
+      - "Architectural phase implementations (20+ design phases)"
+      - "Tier 1-2 governance rule populations"
+    recommendation: |
+      1. Execute Phase 1-4 remediations (3-4 weeks) → Production ready
+      2. Create separate Phase 26+ roadmap for stubs and future enhancements
+      3. Prioritize by business value (dashboard, MCP tools, knowledge protocol)
+      4. Update cortex-master.yaml per cortex-builder.prompt.md§Phase0
+
+summary:
+  conclusion: |
+    The 4 planned remediation phases will eliminate all production blockers and
+    brittleness issues, achieving production-ready status with known stubs.
+    
+    Stubs (21 architectural phases + 14 MCP tools) are documented as design-only
+    or future work, not requirements for core production operations.
+    
+    ✅ RECOMMENDED: Execute Phase 1-4 now (3-4 weeks)
+    ✅ DEFERRED: Stub implementations and MCP tools (Phase 26+, 8-12 weeks)
+  
+  completion_criteria_production_ready:
+    - "Zero production blockers" → After Phase 1-4 ✅
+    - "Zero brittleness" → After Phase 3 ✅
+    - "Zero TDD errors" → After Phase 4 ✅
+    - "Observable operations" → After Phase 3 ✅
+    - "All stubs eliminated" → Requires Phase 26+ ❌
+  
+  completion_criteria_zero_stubs:
+    not_met_after_phase_1_4: "21 stubs remain (design-only)"
+    requires_separate_work: "Phase 26+ Future Work Roadmap"
+    timeline: "8-12 weeks additional"
+    recommendation: "Document as separate roadmap; not required for production"
