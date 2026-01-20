@@ -23,6 +23,15 @@ class Result:
     state: JourneyState = JourneyState.NOT_STARTED
 
 
+@dataclass
+class JourneyProgress:
+    """Onboarding journey progress."""
+    current_step: int
+    total_steps: int
+    state: JourneyState
+    completion_percentage: float = 0.0
+
+
 
 class OnboardingOrchestrator:
     """Orchestrate onboarding journey."""

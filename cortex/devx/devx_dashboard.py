@@ -14,6 +14,14 @@ class DashboardMetrics:
 
 
 @dataclass
+class LogEntry:
+    """Dashboard log entry."""
+    timestamp: str
+    level: str
+    message: str
+
+
+@dataclass
 class DashboardSection:
     """Dashboard section."""
     name: str

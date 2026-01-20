@@ -13,6 +13,14 @@ class DeploymentSlot(Enum):
     GREEN = "green"
 
 
+class DeploymentStatus(Enum):
+    """Deployment status."""
+    PENDING = "pending"
+    IN_PROGRESS = "in_progress"
+    COMPLETED = "completed"
+    FAILED = "failed"
+
+
 @dataclass
 class Deployment:
     """Deployment configuration."""

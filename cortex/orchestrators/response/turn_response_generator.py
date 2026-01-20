@@ -15,11 +15,26 @@ class ResponseMode(Enum):
     TECHNICAL = "technical"
 
 
+class ResponseTone(Enum):
+    """Response tone."""
+    FORMAL = "formal"
+    CASUAL = "casual"
+    TECHNICAL = "technical"
+
+
 @dataclass
 class ResponseMetadata:
     """Response metadata."""
     response_id: str
     metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class ResponseContent:
+    """Response content."""
+    text: str
+    format: str = "plain"
+    metadata: dict = field(default_factory=dict)
 
 
 @dataclass

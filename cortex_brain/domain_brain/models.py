@@ -244,6 +244,14 @@ def get_domain_registry() -> DomainRegistry:
 Domain = DomainModel
 
 
+@dataclass
+class ConflictResolution:
+    """Conflict resolution result."""
+    conflict_id: str
+    resolution_strategy: str
+    resolved: bool = False
+
+
 __all__ = [
     "DomainModel",
     "Domain",
@@ -251,6 +259,7 @@ __all__ = [
     "EntityType",
     "AuditOperationType",
     "Conflict",
+    "ConflictResolution",
     "DomainCapability",
     "DomainState",
     "DomainContext",

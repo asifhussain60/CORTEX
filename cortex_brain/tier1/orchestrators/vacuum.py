@@ -4,6 +4,8 @@ Author: CORTEX Framework
 """
 
 from enum import Enum
+from dataclasses import dataclass, field
+
 
 class OrchestratorState(str, Enum):
     """Orchestrator states."""
@@ -12,7 +14,20 @@ class OrchestratorState(str, Enum):
     PAUSED = "paused"
 
 
-from dataclasses import dataclass
+@dataclass
+class VacuumStats:
+    """Vacuum operation statistics."""
+    cleaned_items: int = 0
+    errors: int = 0
+    duration_ms: float = 0.0
+
+
+@dataclass
+class OrchestrationReport:
+    """Orchestration execution report."""
+    status: str
+    stats: VacuumStats = None
+    messages: list = field(default_factory=list)
 
 
 @dataclass
@@ -26,4 +41,4 @@ class VacuumOrchestrator:
         return True
 
 
-__all__ = ["OrchestratorState", "VacuumOrchestrator"]
+__all__ = ["OrchestratorState", "VacuumStats", "OrchestrationReport", "VacuumOrchestrator"]

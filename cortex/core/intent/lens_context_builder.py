@@ -26,6 +26,14 @@ class ContextNode:
     children: list = field(default_factory=list)
 
 
+@dataclass
+class ContextEdge:
+    """Edge connecting context nodes."""
+    from_node: str
+    to_node: str
+    relationship: str = "relates_to"
+
+
 
 
 class LENSContextBuilder:
