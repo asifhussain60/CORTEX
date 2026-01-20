@@ -176,6 +176,28 @@ class GovernanceViolationEvent:
 
 
 @dataclass
+class UserApprovalRejectedEvent:
+    """Event when user rejects an approval request.
+
+    Attributes:
+        event_id: Unique event identifier.
+        approval_id: Related approval request identifier.
+        rejection_reason: Reason for rejection.
+        timestamp: When rejection occurred.
+    """
+
+    event_id: str
+    approval_id: str
+    rejection_reason: str = ""
+    timestamp: datetime = None
+
+    def __post_init__(self) -> None:
+        """Initialize defaults."""
+        if self.timestamp is None:
+            self.timestamp = datetime.now()
+
+
+@dataclass
 class PhaseCompletedEvent:
     """Event when a phase completes.
 
@@ -302,6 +324,7 @@ __all__ = [
     "ErrorOccurredEvent",
     "TokenLimitEvent",
     "GovernanceViolationEvent",
+    "UserApprovalRejectedEvent",
     "EventType",
     "PhaseType",
     "EventHandler",

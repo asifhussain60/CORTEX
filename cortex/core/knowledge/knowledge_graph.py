@@ -281,6 +281,78 @@ class KnowledgeGraph:
 GraphNode = Node
 GraphEdge = Edge
 
-__all__ = ["KnowledgeGraph", "Node", "Edge", "NodeType", "RelationType", "EdgeType", "GraphNode", "GraphEdge"]
+
+class KnowledgeGraphBuilder:
+    """Builder for constructing knowledge graphs fluently.
+
+    Provides a fluent interface for building and modifying knowledge graphs.
+    """
+
+    def __init__(self) -> None:
+        """Initialize the knowledge graph builder."""
+        self.graph = KnowledgeGraph()
+
+    def add_node(
+        self, node_id: str, label: str, node_type: str = "generic", **properties
+    ) -> "KnowledgeGraphBuilder":
+        """Add a node to the graph.
+
+        Args:
+            node_id: Node identifier.
+            label: Human-readable label.
+            node_type: Node type category.
+            **properties: Additional node properties.
+
+        Returns:
+            Self for chaining.
+        """
+        self.graph.add_node(node_id, label, node_type, properties)
+        return self
+
+    def add_edge(
+        self, source_id: str, target_id: str, relation: RelationType, **properties
+    ) -> "KnowledgeGraphBuilder":
+        """Add an edge (relationship) to the graph.
+
+        Args:
+            source_id: Source node ID.
+            target_id: Target node ID.
+            relation: Relationship type.
+            **properties: Additional edge properties.
+
+        Returns:
+            Self for chaining.
+        """
+        self.graph.add_edge(source_id, target_id, relation, properties)
+        return self
+
+    def build(self) -> KnowledgeGraph:
+        """Build and return the knowledge graph.
+
+        Returns:
+            Constructed KnowledgeGraph.
+        """
+        return self.graph
+
+    def get_graph(self) -> KnowledgeGraph:
+        """Get the current graph instance.
+
+        Returns:
+            Current KnowledgeGraph.
+        """
+        return self.graph
+
+
+__all__ = [
+    "KnowledgeGraph",
+    "KnowledgeGraphBuilder",
+    "Node",
+    "Edge",
+    "NodeType",
+    "RelationType",
+    "EdgeType",
+    "GraphNode",
+    "GraphEdge",
+]
 
 
