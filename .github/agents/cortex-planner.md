@@ -2,7 +2,7 @@
 
 
 
-**Purpose:** Analyze progress, verify readiness, plan next steps from cortex-master.yaml.
+**Purpose:** Analyze progress, verify readiness, plan next steps from cortex-impl-map.yaml.
 
 
 
@@ -14,7 +14,9 @@
 
 
 
-- `/status` → Show all phases in phase_tracker**SSOT Source**: `_workspaces/roadmap/cortex-master.yaml` (ONLY master plan)Analyzes progress and plans next steps for CORTEX with **governance compliance tracking**.```chatagent
+- `/status` → Show all phases in phase_tracker
+
+**SSOT Source**: `_workspaces/roadmap/cortex-impl-map.yaml` (ONLY implementation map)Analyzes progress and plans next steps for CORTEX with **governance compliance tracking**.```chatagent
 
 - `/phase <N>` → Show phase-N details
 
@@ -105,7 +107,9 @@ PHASE-XX: [TITLE]**This policy is identical across ALL agents to prevent conflic
 
 | Phase Specs (YAML) | `_workspaces/roadmap/phases/` | Authoritative | `phase-NN.yaml` |
 
-| Master Plan (YAML) | `_workspaces/roadmap/cortex-master.yaml` | **CANONICAL** | Never modify structure |1. Read `phase_tracker` in `cortex-master.yaml`
+| Master Plan (YAML) | `_workspaces/roadmap/cortex-impl-map.yaml` | **CANONICAL** | Never modify structure |
+
+1. Read `phase_tracker` in `cortex-impl-map.yaml`
 
 2. Load governance rules from `tier0/governance/phase-enforcement-map.yaml`
 
@@ -127,11 +131,11 @@ PHASE-XX: [TITLE]**This policy is identical across ALL agents to prevent conflic
 
 [ ] Creating docs_md/ folder? → STOP - FORBIDDEN
 
-[ ] Multiple YAML master plans? → STOP - SSOT violation (keep only cortex-master.yaml)
+[ ] Multiple YAML master plans? → STOP - SSOT violation (keep only cortex-impl-map.yaml)
 
 [ ] References to .github/roadmap/? → WRONG - Use _workspaces/roadmap/
 
-[ ] Reading from wrong YAML file? → VERIFY using cortex-master.yaml (NOT v1, v2, etc.)---### Planning with Governance
+[ ] Reading from wrong YAML file? → VERIFY using cortex-impl-map.yaml (NOT v1, v2, etc.)---### Planning with Governance
 
 [ ] Python scripts left in root? → DELETE before committing
 
@@ -143,15 +147,17 @@ PHASE-XX: [TITLE]**This policy is identical across ALL agents to prevent conflic
 
 - `.md` report files being created outside `docs/`
 
-- `docs_md/` folder appearing- `/next` - Recommend next AC-ID with governance checks
-
+- `docs_md/` folder appearing
+- `/next` - Recommend next AC-ID with governance checks
 - Multiple `cortex-*.yaml` files in use simultaneously
+- Wrong roadmap location references
 
-- Wrong roadmap location references1. Read `phase_tracker` in `cortex-master.yaml`- `/audit-status` - Show audit trail status and compliance per phase
-
+1. Read `phase_tracker` in `cortex-impl-map.yaml`
+- `/audit-status` - Show audit trail status and compliance per phase
 - Stray `.py` files in root directory
 
-2. Load governance rules from `tier0/governance/phase-enforcement-map.yaml`- `/governance-report <phase>` - Full governance compliance analysis
+2. Load governance rules from `tier0/governance/phase-enforcement-map.yaml`
+- `/governance-report <phase>` - Full governance compliance analysis
 
 ---
 
@@ -191,7 +197,7 @@ PHASE-XX: [TITLE]**This policy is identical across ALL agents to prevent conflic
 
 
 
-1. Read `phase_tracker` in `_workspaces/roadmap/cortex-master.yaml` (ONLY source)- `/progress` - Show completion status + governance compliance report (terminal only)- `/analyze-modify <change>` - Analyze impact on governance compliance
+1. Read `phase_tracker` in `cortex-impl-map.yaml`- `/progress` - Show completion status + governance compliance report (terminal only)- `/analyze-modify <change>` - Analyze impact on governance compliance
 
 2. Load governance rules from `cortex_brain/tier0/governance/phase-enforcement-map.yaml`
 

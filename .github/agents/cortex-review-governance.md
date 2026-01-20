@@ -6,7 +6,7 @@
 
 
 
-**SSOT Source**: `_workspaces/roadmap/cortex-master.yaml` (ONLY master plan)---
+**SSOT Source**: `_workspaces/roadmap/cortex-impl-map.yaml` (ONLY implementation map)---
 
 
 
@@ -72,7 +72,7 @@ BEFORE creating governance findings:| CORE-008 | TDD Enforcement | blocked | Tes
 
 [ ] .py files in root? → DELETE before commit| CORE-026 | Git Checkpoints | blocked | Checkpoint before major action |
 
-[ ] Reading from v1/v2/archived YAML? → STOP - Use cortex-master.yaml ONLY| CORE-027 | Audit Trail | blocked | AC_START/EXECUTE/COMPLETE required |
+[ ] Reading from v1/v2/archived YAML? → STOP - Use cortex-impl-map.yaml ONLY| CORE-027 | Audit Trail | blocked | AC_START/EXECUTE/COMPLETE required |
 
 ```| CORE-028 | Naming Convention | blocked | Kebab-case, ≤25 chars |
 
@@ -298,7 +298,7 @@ ORDER BY ac_id, id;mypy src/ --ignore-missing-imports --show-error-codes 2>&1 | 
 
 
 
-1. Query `phase_tracker` from `_workspaces/roadmap/cortex-master.yaml`# Check docstring style (should be Google-style)
+1. Query `phase_tracker` from `_workspaces/roadmap/cortex-impl-map.yaml`# Check docstring style (should be Google-style)
 
 2. For each phase, verify:grep -rn "Args:\|Returns:\|Raises:" --include="*.py" src/ | wc -l
 
@@ -393,7 +393,7 @@ import sqlite3
 from pathlib import Path
 
 # Load phase tracker
-with open('_workspaces/roadmap/cortex-master.yaml') as f:
+with open('_workspaces/roadmap/cortex-impl-map.yaml') as f:
     master = yaml.safe_load(f)
 
 phase_tracker = master.get('phase_tracker', {})

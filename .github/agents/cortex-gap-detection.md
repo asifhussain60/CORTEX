@@ -119,7 +119,7 @@ design_phase_check:
   expected: "AC-IDs present with clear deliverables"
   
   question_2: "Are AC-IDs marked COMPLETED?"
-  action: "Query _workspaces/roadmap/cortex-master.yaml phase_tracker"
+  action: "Query _workspaces/roadmap/cortex-impl-map.yaml phase_tracker"
   expected: "status: COMPLETED, completed_ac_ids: N/N"
   
   question_3: "Do tests pass 100%?"
@@ -262,7 +262,7 @@ WHERE mcp_exposed = false;
 2. **Create Remediation AC-ID**
    - Format: `AC-GAP-XXX-01` (e.g., `AC-GAP-001-01` for MCP SDK gap)
    - Link to original PHASE AC-ID
-   - Add to cortex-master.yaml
+   - Add to cortex-impl-map.yaml
 
 3. **Track Remediation**
    - Add to next appropriate phase
