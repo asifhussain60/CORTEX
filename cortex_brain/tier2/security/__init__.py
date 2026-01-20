@@ -97,8 +97,69 @@ class SecurityValidator:
         self.violations.clear()
 
 
+class OutputEncoder:
+    """Encodes output safely for security."""
+
+    @staticmethod
+    def encode_html(text: str) -> str:
+        """HTML-encode text.
+
+        Args:
+            text: Text to encode.
+
+        Returns:
+            HTML-encoded text.
+        """
+        replacements = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#x27;",
+        }
+        result = text
+        for old, new in replacements.items():
+            result = result.replace(old, new)
+        return result
+
+    @staticmethod
+    def encode_json(text: str) -> str:
+        """JSON-encode text.
+
+        Args:
+            text: Text to encode.
+
+        Returns:
+            JSON-encoded text.
+        """
+        import json
+        return json.dumps(text)
+
+    @staticmethod
+    def sanitize(text: str) -> str:
+        """Sanitize text by removing dangerous characters.
+
+        Args:
+            text: Text to sanitize.
+
+        Returns:
+            Sanitized text.
+        """
+        dangerous_chars = ["<", ">", "\\x00", "\r", "\n"]
+        result = text
+        for char in dangerous_chars:
+            result = result.replace(char, "")
+        return result
+
+
+# Alias for backward compatibility
+InputValidator = SecurityValidator
+
 __all__ = [
     "SecurityViolation",
     "SecurityValidator",
+    "OutputEncoder",
+    "InputValidator",
     "ViolationType",
 ]
+
