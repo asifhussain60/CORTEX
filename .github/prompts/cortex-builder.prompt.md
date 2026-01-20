@@ -194,7 +194,48 @@ Production ready: ✅
 - Audit logging: via governance.db (CORE-024 principle)
 - Portable paths: pathlib only (CORE-028 principle)
 
-**Note:** core-rules.yaml missing from cortex_brain/tier0/governance/
+**Note:** core-rules.yaml exists at cortex_brain/tier0/governance/core-rules.yaml ✅
+
+---
+
+## PRODUCTION READINESS REMEDIATION PHASES (2026-01-20)
+
+**Current Status**: 36% ready (172 test collection errors, 4 architecture conflicts)
+**Target**: 100% ready (5 weeks, 4 critical phases + TDD implementation)
+
+### Critical Path to 100%
+
+```
+Phase A: Tier Consolidation (1 day)
+├─ Problem: Governance split across cortex/brain/core/ + cortex_brain/
+├─ Fix: Delete duplicate governance, consolidate to single source
+├─ Unblocks: Phases B, C, impl-arch-011, impl-arch-022, impl-arch-025
+└─ Outcome: 36% → 60% ready
+
+Phase B: MCP Registry Centralization (2 days)
+├─ Problem: 14 MCP tools scattered, no discovery mechanism
+├─ Fix: Create registry.py, reorganize by category, auto-discovery
+├─ Unblocks: impl-arch-022-mcp-compliance
+└─ Outcome: 60% → 95% ready
+
+Phase C: Fix Circular Imports (2 days)
+├─ Problem: 21 integration tests blocked by RecursionError in cortex.core
+├─ Fix: Refactor imports, break circular dependencies
+├─ Outcome: 95% → 98% ready (172 errors → 0)
+
+Phase D: Create Missing Modules (3-4 days)
+├─ Problem: 71 missing modules, 58 missing classes (TDD stubs)
+├─ Fix: Create stub implementations, resolve all imports
+├─ Outcome: 98% → 99% ready (all tests collectable)
+
+Phase E: TDD Implementation (15-20 days)
+├─ Scope: Implement 125 modules with full functionality
+├─ Tests: 5500+ tests, 90%+ pass rate
+├─ Outcome: 99% → 100% ready
+└─ Authority: _workspaces/roadmap/phases/impl-tdd-prod-ready.yaml
+```
+
+**Reference**: _workspaces/roadmap/REMEDIATION-PLAN-20260120.yaml (complete plan with steps)
 
 ---
 
