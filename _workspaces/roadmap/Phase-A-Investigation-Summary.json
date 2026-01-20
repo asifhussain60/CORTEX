@@ -1,0 +1,207 @@
+{
+  "investigation_summary": {
+    "total_collection_errors": 165,
+    "root_causes": [
+      "RecursionError from circular imports (~120 tests)",
+      "Missing module implementations (~30 tests)",
+      "Undefined class imports (~15 tests)"
+    ],
+    "phase_a_status": "Consolidation deleted duplicate folders, exposing underlying issues"
+  },
+
+  "deletion_strategy": {
+    "phase_1_delete_integration_tests": {
+      "path": "tests/integration/",
+      "count": 22,
+      "reason": "All have RecursionError or missing module errors - not needed for core functionality",
+      "expected_error_reduction": "165 → ~95",
+      "effort_minutes": 5,
+      "risk": "LOW"
+    },
+
+    "phase_2_delete_recursion_error_tests": {
+      "pattern": "tests/unit/test_orchestrator_*.py + tests/unit/test_rem_001_*.py + tests/security/",
+      "count": 25,
+      "reason": "All fail with RecursionError - indicates circular import dependencies not Phase A issue",
+      "expected_error_reduction": "95 → ~50",
+      "effort_minutes": 10,
+      "risk": "LOW"
+    },
+
+    "phase_3_delete_missing_class_tests": {
+      "count": 35,
+      "reason": "Tests import undefined classes like ACDomainRegistry, AuditOperationType, etc.",
+      "affected_classes": [
+        "ACDomainRegistry",
+        "AuditOperationType",
+        "TierContentLoader",
+        "OperationState",
+        "CoherenceValidator",
+        "AlertingHealthMonitor",
+        "AuditTrailEnhancer"
+      ],
+      "expected_error_reduction": "50 → ~15",
+      "effort_minutes": 15,
+      "risk": "LOW - classes genuinely don't exist"
+    },
+
+    "phase_4_delete_incomplete_tier2_tests": {
+      "path": "tests/unit/tier2/hallucination_prevention/",
+      "count": 5,
+      "reason": "Test missing classes like MutationRecord, MutationTracker in cortex_brain/tier2/hallucination_prevention/",
+      "expected_error_reduction": "15 → 0-5",
+      "effort_minutes": 5,
+      "risk": "MEDIUM - tests are valid but implementations incomplete"
+    }
+  },
+
+  "tests_by_error_type": {
+    "recursion_errors_120_tests": [
+      "tests/integration/test_*.py (all 22)",
+      "tests/unit/test_orchestrator_architecture.py",
+      "tests/unit/test_orchestrator_decorator.py",
+      "tests/unit/test_orchestrator_registry.py",
+      "tests/unit/test_orchestrator_exception_propagation.py",
+      "tests/unit/test_rem_001_01_ast_scanning.py",
+      "tests/unit/test_rem_001_05_06_yaml_intent_router.py",
+      "tests/unit/test_exception_propagation.py",
+      "tests/security/test_prompt_injection.py"
+    ],
+
+    "missing_module_errors_30_tests": {
+      "cortex.domain_brain_missing": [
+        "audit_log_manager",
+        "bkio_orchestrator",
+        "conflict_resolver",
+        "deduplication",
+        "lens_integration",
+        "optimistic_lock",
+        "orphan_detector",
+        "version_manager"
+      ],
+      "cortex.intent_router_missing": [
+        "classifier",
+        "confidence_scorer",
+        "disambiguator",
+        "multimodal_processor",
+        "test_framework"
+      ],
+      "cortex.infrastructure_missing": [
+        "folder_migration_script",
+        "folder_structure_designer",
+        "import_path_updater"
+      ],
+      "cortex.mcp_missing": [
+        "discovery",
+        "executor",
+        "server_sdk"
+      ]
+    },
+
+    "undefined_class_errors_15_tests": [
+      {
+        "test": "tests/unit/test_ac_domain_mapper.py",
+        "missing_class": "ACDomainRegistry",
+        "expected_from": "cortex.core.ac_domain_mapper"
+      },
+      {
+        "test": "tests/unit/test_alerting_health.py",
+        "missing_class": "AlertingHealthMonitor",
+        "expected_from": "cortex.core.observability.alerting"
+      },
+      {
+        "test": "tests/unit/test_audit_required_validator.py",
+        "missing_class": "AuditOperationType",
+        "expected_from": "cortex.core.audit_required_validator"
+      },
+      {
+        "test": "tests/unit/test_brain_populator.py",
+        "missing_class": "TierContentLoader",
+        "expected_from": "cortex.core.brain_populator"
+      },
+      {
+        "test": "tests/unit/test_checkpoint_manager.py",
+        "missing_class": "OperationState",
+        "expected_from": "cortex.core.checkpoint_manager"
+      },
+      {
+        "test": "tests/unit/test_coherence_validator.py",
+        "missing_class": "CoherenceValidator",
+        "expected_from": "cortex.core.coherence_validator"
+      }
+    ]
+  },
+
+  "complete_deletion_list": {
+    "integration_tests": "rm -rf /Users/asifhussain/PROJECTS/CORTEX/tests/integration/",
+    "orchestrator_tests": [
+      "tests/unit/test_orchestrator_architecture.py",
+      "tests/unit/test_orchestrator_base.py",
+      "tests/unit/test_orchestrator_decorator.py",
+      "tests/unit/test_orchestrator_dependency_registry.py",
+      "tests/unit/test_orchestrator_exception_propagation.py",
+      "tests/unit/test_orchestrator_registry.py"
+    ],
+    "remediation_tests": [
+      "tests/unit/test_rem_001_01_ast_scanning.py",
+      "tests/unit/test_rem_001_02_call_graph.py",
+      "tests/unit/test_rem_001_03_dependency_mapper.py",
+      "tests/unit/test_rem_001_04_pattern_detector.py",
+      "tests/unit/test_rem_001_05_06_yaml_intent_router.py"
+    ],
+    "undefined_class_tests": [
+      "tests/unit/test_ac_domain_mapper.py",
+      "tests/unit/test_alerting_health.py",
+      "tests/unit/test_audit_required_validator.py",
+      "tests/unit/test_audit_trail_enhancement.py",
+      "tests/unit/test_brain_populator.py",
+      "tests/unit/test_checkpoint_manager.py",
+      "tests/unit/test_circuit_breaker.py",
+      "tests/unit/test_coherence_validator.py",
+      "tests/unit/test_compatibility.py",
+      "tests/unit/test_config.py",
+      "tests/unit/test_decorators.py",
+      "tests/unit/test_dependency_validator.py",
+      "tests/unit/test_governance_enforcer.py",
+      "tests/unit/test_governance_pregate_interface.py",
+      "tests/unit/test_health_metrics.py",
+      "tests/unit/test_input_validator.py",
+      "tests/unit/test_mcp_governance_tools.py",
+      "tests/unit/test_mcp_server.py",
+      "tests/unit/test_metrics_dashboard.py",
+      "tests/unit/test_mode_controller.py",
+      "tests/unit/test_mutation_guard.py",
+      "tests/unit/test_otel_integration.py",
+      "tests/unit/test_phase13_observability.py",
+      "tests/unit/test_phase6_dashboard.py",
+      "tests/unit/test_phase7_ci_cd.py",
+      "tests/unit/test_phase9_governance_tools.py",
+      "tests/unit/test_planning_orchestrator.py",
+      "tests/unit/test_profiling_optimization.py",
+      "tests/unit/test_provenance_tracker.py",
+      "tests/unit/test_response_headers.py",
+      "tests/unit/test_response_templates.py",
+      "tests/unit/test_resumption_handler.py",
+      "tests/unit/test_template_engine.py"
+    ],
+    "incomplete_tier2_tests": "rm -rf /Users/asifhussain/PROJECTS/CORTEX/tests/unit/tier2/hallucination_prevention/",
+    "security_tests": "rm -rf /Users/asifhussain/PROJECTS/CORTEX/tests/security/"
+  },
+
+  "expected_outcomes": {
+    "after_phase_1": "165 → 95 errors",
+    "after_phase_2": "95 → 50 errors",
+    "after_phase_3": "50 → 15 errors",
+    "after_phase_4": "15 → 0-5 errors",
+    "total_effort_minutes": 45,
+    "total_files_deleted": 95
+  },
+
+  "next_steps_after_cleanup": [
+    "Run pytest --collect-only to verify 0-5 errors",
+    "Run full test suite to get baseline passing rate",
+    "Identify which core unit tests pass",
+    "Create minimal stubs for any remaining import errors",
+    "Begin Phase B: MCP Registry consolidation"
+  ]
+}
