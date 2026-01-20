@@ -34,6 +34,17 @@ class RelationType(Enum):
     IMPLEMENTS = "implements"
 
 
+class EdgeType(Enum):
+    """Types of edges in knowledge graph (alias for RelationType)."""
+
+    DEPENDS_ON = "depends_on"
+    PART_OF = "part_of"
+    IS_A = "is_a"
+    RELATED_TO = "related_to"
+    CAUSES = "causes"
+    IMPLEMENTS = "implements"
+
+
 @dataclass
 class Node:
     """Knowledge graph node.
@@ -270,6 +281,6 @@ class KnowledgeGraph:
 GraphNode = Node
 GraphEdge = Edge
 
-__all__ = ["KnowledgeGraph", "Node", "Edge", "NodeType", "RelationType", "GraphNode", "GraphEdge"]
+__all__ = ["KnowledgeGraph", "Node", "Edge", "NodeType", "RelationType", "EdgeType", "GraphNode", "GraphEdge"]
 
 

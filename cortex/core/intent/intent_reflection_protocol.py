@@ -22,6 +22,16 @@ class ReflectionType(Enum):
     AMBIGUITY_RESOLUTION = "ambiguity_resolution"
 
 
+class ReflectionStatus(Enum):
+    """Status of a reflection operation."""
+
+    PENDING = "pending"
+    IN_PROGRESS = "in_progress"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    CANCELLED = "cancelled"
+
+
 @dataclass
 class ReflectionRequest:
     """Request for intent reflection.
@@ -221,6 +231,7 @@ __all__ = [
     "ReflectionRequest",
     "ReflectionQuestion",
     "ReflectionType",
+    "ReflectionStatus",
 ]
 
 

@@ -96,8 +96,52 @@ class EventHandler:
         self.events.clear()
 
 
+class EventRegistry:
+    """Registry for event handlers and subscriptions."""
+
+    def __init__(self) -> None:
+        """Initialize event registry."""
+        self.handlers: Dict[EventType, list] = {}
+
+    def register(self, event_type: EventType, callback: callable) -> None:
+        """Register an event handler.
+
+        Args:
+            event_type: Type of event to handle.
+            callback: Callback function.
+        """
+        if event_type not in self.handlers:
+            self.handlers[event_type] = []
+        self.handlers[event_type].append(callback)
+
+    def unregister(self, event_type: EventType, callback: callable) -> None:
+        """Unregister an event handler.
+
+        Args:
+            event_type: Type of event.
+            callback: Callback to remove.
+        """
+        if event_type in self.handlers:
+            try:
+                self.handlers[event_type].remove(callback)
+            except ValueError:
+                pass
+
+    def get_handlers(self, event_type: EventType) -> list:
+        """Get handlers for an event type.
+
+        Args:
+            event_type: Type of event.
+
+        Returns:
+            List of registered handlers.
+        """
+        return self.handlers.get(event_type, []).copy()
+
+
 __all__ = [
     "TerminalEvent",
     "EventType",
     "EventHandler",
+    "EventRegistry",
 ]
