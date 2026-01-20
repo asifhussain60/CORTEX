@@ -1,0 +1,313 @@
+# CORTEX Implementation Phase: Knowledge Protocol
+# Phase ID: impl-arch-021-knowledge-proto
+# Priority: P1
+# Date: 2026-01-20
+
+metadata:
+  phase_id: "impl-arch-021-knowledge-proto"
+  title: "Knowledge Protocol - Semantic Interchange Format"
+  description: "Protocol for exchanging knowledge and context between systems"
+  priority: "P1"
+  estimated_effort: "4-6 days"
+  status: "NOT_STARTED"
+  locked: false
+
+objective:
+  summary: "Define standard protocol for knowledge exchange enabling interoperability"
+  business_value: "Enables tool integration, knowledge federation, AI model interoperability"
+
+acceptance_criteria:
+  - id: "KNOW-PROTO-001-01"
+    description: "Protocol specification with entity and relationship types"
+    verification:
+      - "KnowledgeMessage base type with semantic versioning"
+      - "Entity messages: FunctionEntity, ClassEntity, ModuleEntity, DomainEntity"
+      - "Relationship messages: Calls, Imports, Inherits, UsesLibrary, Documents"
+      - "Query messages: SemanticQuery, GraphQuery, TimeSeriesQuery"
+      - "Response messages with confidence scoring and provenance"
+      - "Metadata tracking (version, timestamp, author, source_repo)"
+      - "Schema validation on message construction"
+      - "Backward compatibility with older message versions"
+    tests:
+      - "test_protocol_entity_types()"
+      - "test_protocol_relationship_types()"
+      - "test_protocol_versioning_backward_compat()"
+      - "test_protocol_confidence_scoring()"
+      - "test_protocol_provenance_tracking()"
+    message_format_spec:
+      base_message:
+        - field: "message_id" (UUID, globally unique)
+        - field: "version" (semantic, e.g., "1.2.3")
+        - field: "timestamp" (ISO 8601)
+        - field: "source_repo" (origin identifier)
+        - field: "ttl" (time to live, for caching)
+        - field: "signature" (cryptographic, for federation trust)
+
+  - id: "KNOW-PROTO-001-02"
+    description: "Multi-format serialization with negotiation"
+    verification:
+      - "Serialize to JSON-LD for RDF triple store compatibility"
+      - "Serialize to Protocol Buffers for efficiency (>60% smaller)"
+      - "Serialize to MessagePack for streaming efficiency"
+      - "Serialize to CBOR for constrained environments"
+      - "Schema validation before/after serialization"
+      - "Lossless round-trip serialization (bit-exact)"
+      - "Format auto-detection from message header"
+      - "Streaming serialization for large graphs"
+    tests:
+      - "test_serialization_json_ld_rdf_compat()"
+      - "test_serialization_protobuf_efficiency()"
+      - "test_serialization_roundtrip_lossless()"
+      - "test_serialization_format_negotiation()"
+      - "test_serialization_streaming_large_graphs()"
+    serialization_strategy:
+      primary: "Protocol Buffers (prod default)"
+      alternative: "JSON-LD (debugging, RDF federation)"
+      streaming: "MessagePack (efficient streaming)"
+      size_reduction: ">60% compared to JSON"
+
+  - id: "KNOW-PROTO-001-03"
+    description: "Query language with SPARQL-like syntax"
+    verification:
+      - "KnowledgeQuery with SPARQL-like syntax (W3C compatible subset)"
+      - "Pattern matching on entities and relationships"
+      - "Aggregation queries (count, group_by, sum)"
+      - "Filtering and path queries (multi-hop)"
+      - "Time-based queries (temporal changes)"
+      - "Ranking and relevance scoring (semantic similarity)"
+      - "Query optimization (index utilization, cost estimation)"
+      - "Partial result streaming for large results"
+      - "Query result caching with invalidation"
+    tests:
+      - "test_query_pattern_matching_single_hop()"
+      - "test_query_pattern_matching_multi_hop()"
+      - "test_query_aggregation_with_groupby()"
+      - "test_query_temporal_changes()"
+      - "test_query_ranking_relevance()"
+      - "test_query_optimization_indexes()"
+      - "test_query_result_streaming()"
+    query_language:
+      syntax: "SPARQL 1.1 subset + extensions"
+      example: "SELECT ?func WHERE { ?func a FunctionEntity . ?func calls ?helper }"
+      extensions: "time_range(), relevance_score(), provenance()"
+
+  - id: "KNOW-PROTO-001-04"
+    description: "Ontology with versioning and extension"
+    verification:
+      - "OWL 2 DL ontology for code entities (rdfs:Class hierarchy)"
+      - "SHACL shapes for validation (property constraints)"
+      - "Custom ontology extension points (plugin system)"
+      - "Ontology versioning (semantic, backward-compat tracking)"
+      - "Namespace management (avoid conflicts across repos)"
+      - "Ontology inheritance (domain ontologies extend base)"
+      - "Ontology validation on load (syntax, consistency)"
+    tests:
+      - "test_ontology_base_entity_types()"
+      - "test_ontology_shacl_validation()"
+      - "test_ontology_extension_loading()"
+      - "test_ontology_namespace_isolation()"
+      - "test_ontology_version_compatibility()"
+    ontology_structure:
+      base_entities: "Entity, Function, Class, Module, Domain"
+      relationships: "Calls, Imports, Inherits, Documents, Implements"
+      properties: "name, signature, documentation, complexity_score, last_modified"
+
+  - id: "KNOW-PROTO-001-05"
+    description: "API endpoints with multiple query patterns"
+    verification:
+      - "REST API for SPARQL queries (GET /query?q=...)"
+      - "POST endpoint for complex queries (request body)"
+      - "WebSocket streaming endpoint for subscriptions"
+      - "GraphQL endpoint for client-driven queries"
+      - "gRPC endpoint for high-performance federation"
+      - "Rate limiting per-client (token bucket)"
+      - "Pagination with cursor support"
+      - "Authentication via OAuth2/JWT"
+      - "Authorization checks (repo-level permissions)"
+    tests:
+      - "test_api_rest_simple_queries()"
+      - "test_api_rest_complex_queries()"
+      - "test_api_websocket_subscriptions()"
+      - "test_api_graphql_introspection()"
+      - "test_api_grpc_performance()"
+      - "test_api_rate_limiting()"
+      - "test_api_authentication()"
+      - "test_api_authorization_checks()"
+    api_endpoints:
+      - "GET /query - simple SPARQL queries"
+      - "POST /query - complex queries with request body"
+      - "WS /stream - streaming subscriptions"
+      - "POST /graphql - GraphQL queries"
+      - "gRPC service for federation"
+
+  - id: "KNOW-PROTO-001-06"
+    description: "Consensus protocol for federated knowledge truth"
+    verification:
+      - "Voting mechanism for conflicting claims (majority vote + confidence)"
+      - "Confidence scoring from multiple sources (weighted by reputation)"
+      - "Conflict resolution strategies (voting, merge, escalation)"
+      - "Byzantine fault tolerance (PBFT, tolerates <1/3 bad actors)"
+      - "Knowledge federation across repos (gossip protocol)"
+      - "Reputation system (track source reliability)"
+      - "Consensus finality (when agreement achieved)"
+      - "Dispute resolution (evidence chain for conflicts)"
+    tests:
+      - "test_consensus_voting_simple()"
+      - "test_consensus_weighted_voting()"
+      - "test_consensus_byzantine_tolerance()"
+      - "test_consensus_reputation_tracking()"
+      - "test_consensus_finality_guarantee()"
+      - "test_consensus_dispute_resolution()"
+    consensus_strategy:
+      algorithm: "Weighted Byzantine Fault Tolerant voting"
+      fault_tolerance: "<1/3 bad actors"
+      voting_rounds: "minimum 3 independent sources"
+      finality: "achieved when >2/3 consensus + reputation threshold"
+      federation: "gossip protocol with exponential backoff"
+
+implementation:
+  core_components:
+    - component: "MessageCodec"
+      description: "Handle serialization/deserialization"
+      location: "cortex/mcp/message_codec.py"
+      loc: 200
+      formats: ["protobuf", "json-ld", "msgpack", "cbor"]
+
+    - component: "QueryEngine"
+      description: "Execute SPARQL-like queries"
+      location: "cortex/mcp/query_engine.py"
+      loc: 250
+      optimizations: ["index_use", "cost_estimation", "streaming"]
+
+    - component: "OntologyManager"
+      description: "Manage ontologies and validation"
+      location: "cortex/mcp/ontology_manager.py"
+      loc: 200
+      features: ["versioning", "extension", "validation"]
+
+    - component: "APIServer"
+      description: "REST/gRPC/GraphQL endpoints"
+      location: "cortex/mcp/api_server.py"
+      loc: 300
+      endpoints: ["rest", "graphql", "grpc", "websocket"]
+
+    - component: "ConsensusManager"
+      description: "Handle distributed consensus"
+      location: "cortex/mcp/consensus_manager.py"
+      loc: 250
+      protocol: "Byzantine Fault Tolerant voting"
+
+    - component: "ReputationTracker"
+      description: "Track source reliability"
+      location: "cortex/mcp/reputation_tracker.py"
+      loc: 150
+      metrics: ["accuracy", "timeliness", "completeness"]
+
+  files_to_create:
+    - path: "cortex/mcp/knowledge_protocol.py"
+      loc: 300
+      classes:
+        - name: "KnowledgeMessage"
+          methods:
+            - "to_json_ld()"
+            - "to_protobuf()"
+            - "from_any_format(data, format_hint=None)"
+            - "validate_schema()"
+
+    - path: "cortex/mcp/query_language.py"
+      loc: 250
+      classes:
+        - name: "KnowledgeQuery"
+          methods:
+            - "parse(query_string)"
+            - "validate_syntax()"
+            - "optimize_plan()"
+            - "execute(knowledge_base)"
+
+    - path: "cortex/mcp/ontology.py"
+      loc: 250
+      classes:
+        - name: "KnowledgeOntology"
+          methods:
+            - "load_owl(owl_file)"
+            - "validate_entity(entity)"
+            - "extend_with_plugin(extension)"
+            - "get_property_constraints(entity_type)"
+
+    - path: "cortex/mcp/api_server.py"
+      loc: 350
+      classes:
+        - name: "KnowledgeAPIServer"
+          methods:
+            - "handle_rest_query(request)"
+            - "handle_graphql(query)"
+            - "handle_stream_subscribe(websocket)"
+            - "handle_grpc_query(request)"
+
+    - path: "cortex/mcp/consensus.py"
+      loc: 300
+      classes:
+        - name: "ConsensusProtocol"
+          methods:
+            - "propose_claim(claim, evidence)"
+            - "vote_on_claim(claim_id, vote)"
+            - "finalize_consensus(claim_id)"
+            - "resolve_dispute(conflict)"
+
+    - path: "cortex/mcp/reputation.py"
+      loc: 150
+      classes:
+        - name: "ReputationTracker"
+          methods:
+            - "update_reputation(source, metric, value)"
+            - "get_source_reputation(source)"
+            - "get_weighted_consensus()"
+
+    - path: "tests/unit/mcp/test_knowledge_protocol.py"
+      loc: 350
+      test_count: 24
+
+    - path: "tests/integration/mcp/test_protocol_integration.py"
+      loc: 200
+      test_count: 14
+
+    - path: "tests/performance/mcp/test_protocol_performance.py"
+      loc: 150
+      test_count: 6
+
+governance:
+  compliance:
+    - "CORE-008: TDD (>90% coverage)"
+    - "CORE-011: Type hints 100%"
+    - "CORE-012: Google docstrings"
+    - "CORE-027: Audit logging on consensus decisions"
+
+testing_strategy:
+  unit_tests: 24
+  integration_tests: 14
+  performance_tests: 6
+
+performance_targets:
+  query_latency: "<500ms p95 for typical queries"
+  throughput: ">1000 queries/sec"
+  serialization_overhead: "<10% of data size"
+  consensus_convergence: "<5s for typical claims"
+
+federation_strategy:
+  protocol: "Gossip-based with Byzantine Fault Tolerance"
+  message_propagation: "O(log n) hops"
+  convergence_time: "<30s for full network"
+  cross_repo_queries: "automatic federated execution"
+
+dependencies:
+  requires:
+    - "impl-arch-012-knowledge (knowledge graph infrastructure)"
+  optional:
+    - "impl-arch-022-mcp-compliance (for tool integration)"
+
+success_metrics:
+  - "Query latency <500ms p95"
+  - "Serialization roundtrip 100% faithful"
+  - "Consensus accuracy >99%"
+  - "Federation latency <2s across 5+ repos"
+  - "Message size reduction >60% vs JSON"

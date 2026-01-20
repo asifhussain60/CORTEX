@@ -1,0 +1,428 @@
+# CORTEX Stub Phases - Quick Reference Guide
+# Developer Quick Cards
+# Date: 2026-01-20
+
+quick_reference:
+
+  phase_001_hardening:
+    id: "impl-arch-005-hardening"
+    effort: "5-7 days"
+    key_files:
+      - "cortex/infrastructure/security/secrets_filter.py"
+      - "cortex/infrastructure/security/input_validator.py"
+      - "cortex/infrastructure/security/rate_limiter.py"
+      - "cortex/infrastructure/security/crypto_provider.py"
+      - "cortex/infrastructure/security/cors_handler.py"
+      - "cortex/infrastructure/security/security_auditor.py"
+    quick_start: |
+      1. Create SecretsFilter to redact PII in logs
+      2. Build InputValidator for SQL injection/XSS prevention
+      3. Implement TokenBucketRateLimiter for DDoS protection
+      4. Add CryptoProvider (AES-256-GCM, PBKDF2)
+      5. CORS/CSRF protection in CORSHandler
+      6. SecurityAuditor scans for vulnerabilities
+    test_first: "tests/unit/infrastructure/security/"
+    ac_count: 6
+    tests: 64
+
+  phase_002_orchestrators:
+    id: "impl-arch-008-orchestrators"
+    effort: "7-9 days"
+    key_files:
+      - "cortex/orchestrators/master.py"
+      - "cortex/orchestrators/planning.py"
+      - "cortex/orchestrators/analysis.py"
+      - "cortex/orchestrators/execution.py"
+      - "cortex/orchestrators/lifecycle.py"
+      - "cortex/orchestrators/protocol.py"
+    quick_start: |
+      1. MasterOrchestrator: routes + aggregates
+      2. PlanningOrchestrator: decomposes into tasks
+      3. AnalysisOrchestrator: multi-strategy analysis
+      4. ExecutionOrchestrator: safe sandbox execution
+      5. OrchestratorLifecycle: hooks for init/request/complete/error
+      6. OrchestratorMessage protocol for inter-orchestrator comms
+    test_first: "tests/unit/orchestrators/"
+    ac_count: 6
+    tests: 66
+
+  phase_003_governance:
+    id: "impl-arch-009-governance"
+    effort: "6-8 days"
+    key_files:
+      - "cortex/brain/governance/rule_engine.py"
+      - "cortex/brain/governance/audit_logger.py"
+      - "cortex/brain/governance/compliance_dashboard.py"
+      - "cortex/brain/governance/exception_manager.py"
+      - "cortex/brain/governance/report_generator.py"
+      - "cortex/brain/governance/ci_cd_integration.py"
+    quick_start: |
+      1. RuleEvaluator: evaluates all 29 SKULL rules
+      2. AuditLogger: immutable audit trail (AC_START/EXECUTE/COMPLETE)
+      3. ComplianceDashboard: per-rule status + trends
+      4. ExceptionManager: exemption approval workflow
+      5. ReportGenerator: HTML/PDF/JSON exports
+      6. GithubActionValidator: CI/CD hook integration
+    test_first: "tests/unit/governance/"
+    ac_count: 6
+    tests: 44
+    critical: "Sets up foundation for impl-arch-025"
+
+  phase_004_governance_comp:
+    id: "impl-arch-025-governance-comp"
+    effort: "4-6 days"
+    key_files:
+      - "cortex/brain/governance/tier_loader.py"
+      - "cortex/brain/governance/composition_engine.py"
+      - "cortex/brain/governance/dynamic_applier.py"
+      - "cortex/brain/governance/override_manager.py"
+      - "cortex/brain/governance/governance_report.py"
+      - "cortex/brain/governance/optimizer.py"
+      - "cortex_brain/tier0/governance/core-rules.yaml"
+    quick_start: |
+      1. CRITICAL: Create core-rules.yaml with all 29 SKULL rules
+      2. TierLoader: load tier0, tier1, tier2 rules
+      3. CompositionEngine: resolve conflicts (tier0 > tier1 > tier2)
+      4. DynamicRuleApplier: context-aware rule selection
+      5. OverrideManager: exemption workflow + audit
+      6. Governance report with tier visualization
+    test_first: "tests/unit/governance/"
+    ac_count: 6
+    tests: 28
+    critical_deliverable: "cortex_brain/tier0/governance/core-rules.yaml"
+
+  phase_005_hallucination:
+    id: "impl-arch-011-hallucination"
+    effort: "7-9 days"
+    key_files:
+      - "cortex/brain/safety/fact_checker.py"
+      - "cortex/brain/safety/consistency_validator.py"
+      - "cortex/brain/safety/reference_checker.py"
+      - "cortex/brain/safety/complexity_validator.py"
+      - "cortex/brain/safety/pattern_matcher.py"
+      - "cortex/brain/safety/hallucination_audit.py"
+    quick_start: |
+      1. FactChecker: verify claims against codebase
+      2. ConsistencyValidator: detect contradictions
+      3. ReferenceChecker: validate all citations
+      4. ComplexityValidator: flag unrealistic solutions
+      5. PatternMatcher: detect known hallucination patterns
+      6. HallucinationAudit: track false claims + trends
+    test_first: "tests/unit/safety/"
+    ac_count: 6
+    tests: 37
+    success_metric: ">95% hallucination detection"
+
+  phase_006_intent:
+    id: "impl-arch-007-intent"
+    effort: "6-8 days"
+    key_files:
+      - "cortex/intent_router/classifier.py"
+      - "cortex/intent_router/router.py"
+      - "cortex/intent_router/cache.py"
+      - "cortex/intent_router/multi_domain.py"
+      - "cortex/intent_router/context.py"
+      - "cortex/intent_router/explainer.py"
+    quick_start: |
+      1. IntentClassifier: detect user goal + confidence
+      2. IntentRouter: dispatch to specialized orchestrator
+      3. IntentCache: cache results (TTL-based)
+      4. MultiDomainRouter: cross-domain requests
+      5. IntentContext: user, session, environment metadata
+      6. IntentExplainer: explain routing decisions
+    test_first: "tests/unit/intent_router/"
+    ac_count: 6
+    tests: 57
+    success_metric: ">95% classification accuracy, <100ms latency"
+
+  phase_007_adaptive:
+    id: "impl-arch-010-adaptive"
+    effort: "5-7 days"
+    key_files:
+      - "cortex/orchestrators/adaptive/metrics_collector.py"
+      - "cortex/orchestrators/adaptive/strategy_selector.py"
+      - "cortex/orchestrators/adaptive/retry_advisor.py"
+      - "cortex/orchestrators/adaptive/timeout_adaptor.py"
+      - "cortex/orchestrators/adaptive/resource_allocator.py"
+      - "cortex/orchestrators/adaptive/feedback_loop.py"
+    quick_start: |
+      1. MetricsCollector: latency, errors, resources
+      2. StrategySelector: choose best execution path
+      3. RetryAdvisor: exp backoff + circuit breaker
+      4. TimeoutAdaptor: p95 + margin calculation
+      5. ResourceAllocator: dynamic thread pool scaling
+      6. FeedbackLoop: continuously improve strategies
+    test_first: "tests/unit/orchestrators/adaptive/"
+    ac_count: 6
+    tests: 26
+
+  phase_008_knowledge:
+    id: "impl-arch-012-knowledge"
+    effort: "6-8 days"
+    key_files:
+      - "cortex/brain/knowledge/graph_builder.py"
+      - "cortex/brain/knowledge/semantic_search.py"
+      - "cortex/brain/knowledge/doc_generator.py"
+      - "cortex/brain/knowledge/kb_maintenance.py"
+      - "cortex/brain/knowledge/query_suggester.py"
+      - "cortex/brain/knowledge/exporter.py"
+    quick_start: |
+      1. KnowledgeGraphBuilder: build semantic graph
+      2. SemanticSearcher: embedding-based search
+      3. DocGenerator: auto-generate from docstrings
+      4. KnowledgeBaseMaintainer: incremental updates
+      5. QuerySuggester: contextual help prompts
+      6. KnowledgeExporter: JSON-LD/RDF/GraphML
+    test_first: "tests/unit/knowledge/"
+    ac_count: 6
+    tests: 28
+
+  phase_009_continuation:
+    id: "impl-arch-016-continuation"
+    effort: "5-7 days"
+    key_files:
+      - "cortex/orchestrators/continuation/checkpoint.py"
+      - "cortex/orchestrators/continuation/serialization.py"
+      - "cortex/orchestrators/continuation/resumption.py"
+      - "cortex/orchestrators/continuation/session_coordinator.py"
+      - "cortex/orchestrators/continuation/history.py"
+      - "cortex/orchestrators/continuation/gc.py"
+    quick_start: |
+      1. CheckpointManager: save execution state
+      2. StateSerializer: serialize + deserialize
+      3. ResumptionManager: restore and continue
+      4. SessionCoordinator: multi-session tracking
+      5. HistoryTracker: record + replay
+      6. ContinuationGC: cleanup stale checkpoints
+    test_first: "tests/unit/orchestrators/continuation/"
+    ac_count: 6
+    tests: 30
+
+  phase_010_domain_brain:
+    id: "impl-arch-017-domain-brain"
+    effort: "5-7 days"
+    key_files:
+      - "cortex/domain_brain/registry.py"
+      - "cortex/domain_brain/reasoner.py"
+      - "cortex/domain_brain/knowledge.py"
+      - "cortex/domain_brain/specializer.py"
+      - "cortex/domain_brain/conflict_resolver.py"
+      - "cortex/domain_brain/migration.py"
+    quick_start: |
+      1. DomainRegistry: register specialized reasoners
+      2. DomainReasoner: domain-specific analysis
+      3. DomainKnowledge: store domain data
+      4. DomainSpecializer: optimize per domain
+      5. ConflictResolver: cross-domain issues
+      6. DomainMigrator: evolve domains
+    test_first: "tests/unit/domain_brain/"
+    ac_count: 6
+    tests: 28
+
+  phase_011_devx:
+    id: "impl-arch-018-devx"
+    effort: "6-8 days"
+    key_files:
+      - "cortex/devx/cli.py"
+      - "cortex/devx/ide_extension.py"
+      - "cortex/devx/debugger.py"
+      - "cortex/devx/profiler.py"
+      - "cortex/devx/test_generator.py"
+      - "cortex/devx/doc_writer.py"
+    quick_start: |
+      1. CorTexCLI: plan, analyze, execute, explain commands
+      2. IDEExtension: VS Code integration
+      3. DebugSession: breakpoints + variable inspection
+      4. Profiler: CPU/memory/I/O analysis
+      5. TestGenerator: test scaffolds + edge cases
+      6. DocWriter: docstring suggestions + README
+    test_first: "tests/unit/devx/"
+    ac_count: 6
+    tests: 30
+
+  phase_012_templates:
+    id: "impl-arch-019-template-tools"
+    effort: "4-6 days"
+    key_files:
+      - "cortex/tools/templates/engine.py"
+      - "cortex/tools/templates/registry.py"
+      - "cortex/tools/templates/generator.py"
+      - "cortex/tools/templates/validator.py"
+      - "cortex/tools/templates/customizer.py"
+    quick_start: |
+      1. TemplateEngine: Jinja2 rendering
+      2. TemplateRegistry: categorized templates
+      3. ScaffoldGenerator: multi-file generation
+      4. TemplateValidator: syntax + variable checks
+      5. TemplateCustomizer: override parameters
+    test_first: "tests/unit/tools/templates/"
+    ac_count: 6
+    tests: 25
+
+  phase_013_template_content:
+    id: "impl-arch-020-template-content"
+    effort: "3-5 days"
+    key_files:
+      - "cortex/tools/templates/library/module_templates/"
+      - "cortex/tools/templates/library/test_templates/"
+      - "cortex/tools/templates/library/api_templates/"
+      - "cortex/tools/templates/library/config_templates/"
+      - "cortex/tools/templates/library/doc_templates/"
+      - "cortex/tools/templates/library/deploy_templates/"
+    quick_start: |
+      1. Create 5 module templates (function, class, orchestrator, etc)
+      2. Create 5 test templates (unit, integration, perf, etc)
+      3. Create 3 API templates (REST, GraphQL, MCP)
+      4. Create 3 config templates (YAML, .env, secrets)
+      5. Create 3 doc templates (module, API ref, ADR)
+      6. Create 3 deploy templates (Docker, K8s, GitHub Actions)
+    test_first: "tests/unit/tools/templates/test_content.py"
+    ac_count: 6
+    tests: 18
+    deliverable: "15+ production-ready templates"
+
+  phase_014_knowledge_proto:
+    id: "impl-arch-021-knowledge-proto"
+    effort: "4-6 days"
+    key_files:
+      - "cortex/mcp/knowledge_protocol.py"
+      - "cortex/mcp/query_language.py"
+      - "cortex/mcp/ontology.py"
+      - "cortex/mcp/api_server.py"
+      - "cortex/mcp/consensus.py"
+    quick_start: |
+      1. KnowledgeMessage: JSON-LD/Protobuf serialization
+      2. KnowledgeQuery: SPARQL-like syntax + execution
+      3. KnowledgeOntology: OWL + SHACL validation
+      4. KnowledgeAPIServer: REST/WebSocket/GraphQL
+      5. ConsensusProtocol: voting + Byzantine tolerance
+    test_first: "tests/unit/mcp/"
+    ac_count: 6
+    tests: 28
+    prerequisite: "impl-arch-012-knowledge"
+
+  phase_015_mcp_tools:
+    id: "impl-arch-022-mcp-compliance"
+    effort: "8-10 days"
+    key_files:
+      - "cortex/mcp/tools_impl/query_tool.py"
+      - "cortex/mcp/tools_impl/validate_tool.py"
+      - "cortex/mcp/tools_impl/analyze_tool.py"
+      - "cortex/mcp/tools_impl/generate_tool.py"
+      - "cortex/mcp/tools_impl/execute_tool.py"
+      - "cortex/mcp/tools_impl/reporting_tools.py"
+      - "cortex/mcp/tools_impl/diagnostic_tools.py"
+      - "cortex/mcp/tools_impl/utility_tools.py"
+    quick_start: |
+      Convert 14 stub tools to production implementations:
+      1. query: real capability queries
+      2. validate: governance + type + security checks
+      3. analyze: AST + complexity + dependencies
+      4. generate: template rendering + multi-file
+      5. execute: safe sandbox + resource limits
+      6. monitor: real-time metrics
+      7. report: human-readable reports
+      8. optimize: performance suggestions
+      9. diagnose: issue detection + fixes
+      10. alert, transform, status, echo, sample: supporting functions
+    test_first: "tests/unit/mcp/test_mcp_tools.py"
+    ac_count: 8
+    tests: 55
+    critical: "Claude/Copilot compatibility"
+
+  phase_016_complexity:
+    id: "impl-arch-023-complexity"
+    effort: "4-6 days"
+    key_files:
+      - "cortex/core/complexity/analyzer.py"
+      - "cortex/core/complexity/classifier.py"
+      - "cortex/core/complexity/gate.py"
+      - "cortex/core/complexity/handler_selector.py"
+      - "cortex/core/complexity/quota_manager.py"
+      - "cortex/core/complexity/feedback_loop.py"
+    quick_start: |
+      1. ComplexityAnalyzer: score 0-100 + algorithm class
+      2. WorkloadClassifier: simple/moderate/complex/extreme tiers
+      3. ComplexityGate: enforce limits + queue prioritization
+      4. HandlerSelector: route by tier
+      5. QuotaManager: per-user/domain quotas + burst
+      6. FeedbackLoop: auto-tune thresholds
+    test_first: "tests/unit/core/complexity/"
+    ac_count: 6
+    tests: 28
+
+  phase_017_response:
+    id: "impl-arch-024-response"
+    effort: "5-7 days"
+    key_files:
+      - "cortex/api/response/collector.py"
+      - "cortex/api/response/synthesizer.py"
+      - "cortex/api/response/formatter.py"
+      - "cortex/api/response/example_selector.py"
+      - "cortex/api/response/summarizer.py"
+      - "cortex/api/response/confidence.py"
+    quick_start: |
+      1. ResponseCollector: gather partial results
+      2. ResultSynthesizer: logical ordering + coherence
+      3. ResponseFormatter: markdown/HTML/JSON/text
+      4. ExampleSelector: relevant examples (difficulty-matched)
+      5. SummaryGenerator: TF-IDF extraction + context
+      6. ConfidenceScorer: aggregate + communicate uncertainty
+    test_first: "tests/unit/api/response/"
+    ac_count: 6
+    tests: 30
+    success_metric: "Response assembly <2s, coherence >90%"
+
+  all_phases_summary:
+    total_phases: 21
+    total_effort: "120-150 person-days"
+    critical_path: "35-42 days" (with parallelization)
+    total_tests: 664
+    total_ac_ids: 121
+    recommended_team: "3-4 engineers"
+    
+    phase_groups:
+      foundation: "impl-arch-005, impl-arch-008, impl-arch-009"
+      intelligence: "impl-arch-007, impl-arch-010, impl-arch-023, impl-arch-011"
+      knowledge: "impl-arch-012, impl-arch-021, impl-arch-022"
+      state: "impl-arch-016, impl-arch-017"
+      response: "impl-arch-024, impl-arch-025"
+      devx: "impl-arch-018, impl-arch-019, impl-arch-020"
+    
+    execution_order:
+      1: "impl-arch-005-hardening"
+      2: "impl-arch-008-orchestrators"
+      3: ["impl-arch-009-governance", "impl-arch-011-hallucination"]
+      4: ["impl-arch-007-intent", "impl-arch-010-adaptive", "impl-arch-023-complexity"]
+      5: ["impl-arch-012-knowledge", "impl-arch-016-continuation", "impl-arch-017-domain-brain"]
+      6: ["impl-arch-021-knowledge-proto", "impl-arch-024-response", "impl-arch-025-governance-comp"]
+      7: "impl-arch-022-mcp-compliance"
+      8: ["impl-arch-018-devx", "impl-arch-019-template-tools"]
+      9: "impl-arch-020-template-content"
+
+testing_checklist:
+  
+  pre_implementation:
+    - [ ] Review CORTEX Builder prompt.md §Implementation Checklist
+    - [ ] Create git checkpoint before starting
+    - [ ] Read existing phase specs for patterns
+    - [ ] Understand governance compliance (CORE-008 through CORE-027)
+  
+  during_implementation:
+    - [ ] Write tests FIRST (CORE-008 TDD)
+    - [ ] 100% type hints on all public APIs (CORE-011)
+    - [ ] Google docstrings on all classes/methods (CORE-012)
+    - [ ] No bare except clauses (CORE-013)
+    - [ ] AC_START logged on phase begin
+    - [ ] AC_EXECUTE logged on implementation start
+    - [ ] Tests passing before committing
+  
+  post_implementation:
+    - [ ] All unit tests passing (>95%)
+    - [ ] All integration tests passing
+    - [ ] AC_COMPLETE logged on phase end
+    - [ ] Audit trail verified
+    - [ ] Git checkpoint committed
+    - [ ] Documentation complete
+    - [ ] Performance benchmarks verified
+    - [ ] Security audit clean

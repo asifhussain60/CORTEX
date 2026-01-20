@@ -1,0 +1,353 @@
+# CORTEX Implementation Phase: Production Hardening
+# Phase ID: impl-arch-005-hardening
+# Priority: P0 (Production Critical)
+# Date: 2026-01-20
+
+metadata:
+  phase_id: "impl-arch-005-hardening"
+  title: "Production Hardening & Security Hardening"
+  description: "Comprehensive security hardening, validation gating, production resilience, and cross-repo security"
+  priority: "P0"
+  estimated_effort: "5-7 days"
+  status: "NOT_STARTED"
+  locked: false
+  owasp_coverage: "Top 10 + API 2024"
+  defense_in_depth: true
+
+objective:
+  summary: "Implement production-grade security controls, input validation gates, and resilience mechanisms"
+  business_value: "Enable safe production deployment with automated security validation and attack surface reduction"
+
+gap_analysis:
+  current_state:
+    - "Recovery mechanisms implemented (saga, orphan cleanup)"
+    - "Infrastructure resilience foundation exists"
+    - "Observability infrastructure operational"
+    - "No centralized input validation framework"
+    - "No security secret protection"
+    - "No rate limiting or DDoS protection"
+    - "No automated vulnerability scanning"
+  
+  critical_findings:
+    - "Secrets may be logged in tracebacks"
+    - "No input sanitization on API endpoints"
+    - "No rate limiting on MCP tools"
+    - "No SQL injection prevention on dynamic queries"
+    - "No CSRF tokens on interactive responses"
+
+acceptance_criteria:
+  - id: "HARD-PROD-001-01"
+    description: "Secret masking engine prevents credential exposure"
+    verification:
+      - "SecretsFilter redacts PII, API keys, passwords in logs"
+      - "Pattern matching for common secret formats"
+      - "Audit trail logs what was masked and why"
+      - "Zero false negatives on known secret types"
+    tests:
+      - "test_secrets_filter_api_keys()"
+      - "test_secrets_filter_passwords()"
+      - "test_secrets_filter_pii()"
+      - "test_secrets_filter_custom_patterns()"
+      - "test_secrets_filter_performance()"
+
+  - id: "HARD-PROD-001-02"
+    description: "Input validation framework gates all API entry points"
+    verification:
+      - "InputValidator enforces type, length, and format constraints"
+      - "SQL injection prevention via parameterized queries"
+      - "XSS prevention via output encoding"
+      - "Schema validation on JSON payloads"
+      - "Request size limits (default 10MB)"
+    tests:
+      - "test_input_validator_sql_injection()"
+      - "test_input_validator_xss_prevention()"
+      - "test_input_validator_type_validation()"
+      - "test_input_validator_size_limits()"
+      - "test_input_validator_schema_validation()"
+
+  - id: "HARD-PROD-001-03"
+    description: "Rate limiting and throttling prevent abuse"
+    verification:
+      - "TokenBucketRateLimiter enforces per-client rate limits"
+      - "Configurable limits per endpoint"
+      - "Sliding window algorithm for accuracy"
+      - "Graceful degradation under load"
+      - "Audit logging of rate limit violations"
+    tests:
+      - "test_rate_limiter_enforces_limits()"
+      - "test_rate_limiter_per_client()"
+      - "test_rate_limiter_sliding_window()"
+      - "test_rate_limiter_audit_trail()"
+
+  - id: "HARD-PROD-001-04"
+    description: "Cryptographic operations use industry standards"
+    verification:
+      - "CryptoProvider uses AES-256-GCM for encryption"
+      - "PBKDF2 with 100k iterations for password hashing"
+      - "Secure random number generation (os.urandom)"
+      - "No use of deprecated algorithms (MD5, SHA1)"
+      - "Key rotation capability"
+    tests:
+      - "test_crypto_aes_256_gcm()"
+      - "test_crypto_pbkdf2_hashing()"
+      - "test_crypto_random_generation()"
+      - "test_crypto_key_rotation()"
+
+  - id: "HARD-PROD-001-05"
+    description: "CORS and CSRF protection guards against cross-origin attacks"
+    verification:
+      - "CORS headers strictly configured (whitelist, not allow-all)"
+      - "CSRF tokens on state-changing operations"
+      - "Referer header validation"
+      - "SameSite cookie attribute set"
+      - "No credentials in URLs"
+    tests:
+      - "test_cors_headers_validation()"
+      - "test_csrf_token_validation()"
+      - "test_cors_credential_handling()"
+
+  - id: "HARD-PROD-001-06"
+    description: "Automated security audit on deployment"
+    verification:
+      - "SecurityAuditor scans codebase for vulnerabilities"
+      - "Bandit integration for common Python security issues"
+      - "Dependency vulnerability scanning (pip-audit)"
+      - "Configuration hardness check (no debug=True in prod)"
+      - "Report generation with remediation steps"
+    tests:
+      - "test_security_auditor_detects_hardcoded_secrets()"
+      - "test_security_auditor_detects_debug_mode()"
+      - "test_security_auditor_dependency_check()"
+
+  - id: "HARD-PROD-001-07"
+    description: "Defense-in-depth with layered security"
+    verification:
+      - "Layer 1: Input validation (SecretsFilter + InputValidator)"
+      - "Layer 2: Rate limiting (TokenBucketRateLimiter + circuit breaker)"
+      - "Layer 3: Cryptography (CryptoProvider + TLS 1.3+)"
+      - "Layer 4: CORS/CSRF (CORSHandler + token validation)"
+      - "Layer 5: Audit logging (SecurityAuditor + tamper-proof logs)"
+      - "Fail-secure defaults (deny by default, explicit allow)"
+      - "Defense overlap verification (no single point of failure)"
+    tests:
+      - "test_defense_layer_1_input_validation()"
+      - "test_defense_layer_2_rate_limiting()"
+      - "test_defense_layer_3_cryptography()"
+      - "test_defense_layer_4_cors_csrf()"
+      - "test_defense_layer_5_audit_logging()"
+      - "test_defense_fail_secure()"
+    defense_layers:
+      layer_1: "Input Validation (whitelist approach)"
+      layer_2: "Rate Limiting & Circuit Breaker"
+      layer_3: "Cryptography & TLS"
+      layer_4: "CORS/CSRF & Session Management"
+      layer_5: "Audit Logging & Anomaly Detection"
+
+  - id: "HARD-PROD-001-08"
+    description: "Cross-repo security enforcement"
+    verification:
+      - "Security policies shared across repos (tier0 rules)"
+      - "Secrets scanning before commit (pre-commit hook)"
+      - "Vulnerability disclosure handling (CVE coordination)"
+      - "Security incident response (SLA <1h for critical)"
+      - "Permission model per repo (least privilege)"
+      - "Audit trail federation (security logs aggregated)"
+      - "Supply chain security (dependency provenance)"
+    tests:
+      - "test_cross_repo_policy_enforcement()"
+      - "test_secrets_scanning_precommit()"
+      - "test_vulnerability_coordination()"
+      - "test_permission_least_privilege()"
+      - "test_audit_log_federation()"
+    cross_repo_strategy:
+      policy_sync: "mirror tier0 security rules to all repos"
+      secrets_scan: "pre-commit hook + GitHub Actions check"
+      vuln_response: "automate patching for low-risk updates"
+      permissions: "RBAC model with role inheritance"
+
+implementation:
+  files_to_create:
+    - path: "cortex/infrastructure/security/secrets_filter.py"
+      loc: 250
+      classes:
+        - name: "SecretsFilter"
+          methods:
+            - "redact_log_record(record)"
+            - "mask_sensitive_data(text)"
+            - "compile_patterns()"
+            - "add_custom_pattern(pattern, name)"
+      patterns:
+        - "API keys (AWS, GitHub, etc.)"
+        - "PII (SSN, credit card, email)"
+        - "Passwords and hashes"
+        - "JWT/session tokens"
+    
+    - path: "cortex/infrastructure/security/input_validator.py"
+      loc: 300
+      classes:
+        - name: "InputValidator"
+          methods:
+            - "validate(data, schema)"
+            - "sanitize_sql(query)"
+            - "encode_output(text)"
+            - "validate_json_schema(data, schema)"
+      owasp_coverage:
+        - "A01: Injection"
+        - "A03: Injection (SQL, NoSQL, OS commands)"
+        - "A07: Cross-Site Scripting (XSS)"
+    
+    - path: "cortex/infrastructure/security/rate_limiter.py"
+      loc: 200
+      classes:
+        - name: "TokenBucketRateLimiter"
+          methods:
+            - "allow_request(client_id, quota=None)"
+            - "get_reset_time(client_id)"
+            - "configure_limits(client_id, requests_per_sec, burst_size)"
+            - "circuit_breaker_enabled(client_id)"
+      algorithm: "Token Bucket with exponential backoff"
+      burst_handling: "leaky bucket secondary buffer"
+    
+    - path: "cortex/infrastructure/security/crypto_provider.py"
+      loc: 180
+      classes:
+        - name: "CryptoProvider"
+          methods:
+            - "encrypt(plaintext, key, algorithm='AES-256-GCM')"
+            - "decrypt(ciphertext, key)"
+            - "hash_password(password, iterations=100000)"
+            - "verify_password(password, hash)"
+            - "generate_secure_random(length)"
+      algorithms:
+        - "AES-256-GCM for encryption (default)"
+        - "PBKDF2 with 100k iterations for passwords"
+        - "os.urandom for random generation"
+    
+    - path: "cortex/infrastructure/security/cors_handler.py"
+      loc: 150
+      classes:
+        - name: "CORSHandler"
+          methods:
+            - "validate_request(request)"
+            - "add_security_headers(response)"
+            - "validate_origin(origin, whitelist)"
+            - "handle_preflight(request)"
+      headers:
+        - "Strict-Transport-Security (HSTS)"
+        - "X-Content-Type-Options: nosniff"
+        - "X-Frame-Options: DENY"
+        - "Content-Security-Policy (CSP)"
+        - "SameSite=Strict on cookies"
+    
+    - path: "cortex/infrastructure/security/security_auditor.py"
+      loc: 350
+      classes:
+        - name: "SecurityAuditor"
+          methods:
+            - "scan_codebase()"
+            - "check_configuration()"
+            - "check_dependencies()"
+            - "generate_report(format='html')"
+            - "integrate_bandit()"
+            - "integrate_pip_audit()"
+      integration:
+        - "Bandit for Python security"
+        - "pip-audit for dependency vulns"
+        - "Custom checks for CORTEX patterns"
+    
+    - path: "cortex/infrastructure/security/defense_orchestrator.py"
+      loc: 200
+      classes:
+        - name: "DefenseOrchestrator"
+          methods:
+            - "validate_all_layers(request)"
+            - "apply_fail_secure_defaults()"
+            - "coordinate_layer_response(layer_violations)"
+      responsibilities:
+        - "Coordinate all 5 defense layers"
+        - "No single point of failure"
+        - "Fail-secure (deny by default)"
+    
+    - path: "tests/unit/infrastructure/security/test_secrets_filter.py"
+      loc: 180
+      test_count: 14
+    
+    - path: "tests/unit/infrastructure/security/test_input_validator.py"
+      loc: 250
+      test_count: 18
+    
+    - path: "tests/unit/infrastructure/security/test_rate_limiter.py"
+      loc: 180
+      test_count: 12
+    
+    - path: "tests/unit/infrastructure/security/test_crypto_provider.py"
+      loc: 150
+      test_count: 10
+    
+    - path: "tests/unit/infrastructure/security/test_cors_handler.py"
+      loc: 130
+      test_count: 9
+    
+    - path: "tests/unit/infrastructure/security/test_security_auditor.py"
+      loc: 150
+      test_count: 8
+    
+    - path: "tests/unit/infrastructure/security/test_defense_orchestrator.py"
+      loc: 150
+      test_count: 8
+    
+    - path: "tests/integration/security/test_hardening_end_to_end.py"
+      loc: 300
+      test_count: 16
+      test_scenarios:
+        - "attack_simulation_sql_injection()"
+        - "attack_simulation_xss()"
+        - "attack_simulation_ddos()"
+        - "attack_simulation_csrf()"
+
+governance:
+  compliance:
+    - "CORE-008: TDD - tests first, >95% coverage"
+    - "CORE-011: Type hints 100%"
+    - "CORE-012: Google docstrings mandatory"
+    - "CORE-013: No bare except clauses"
+    - "CORE-027: AC_START → AC_EXECUTE → AC_COMPLETE audit logging"
+
+security_standards:
+  - "OWASP Top 10 2024 + API (full coverage)"
+  - "NIST Cybersecurity Framework"
+  - "CWE Top 25"
+
+testing_strategy:
+  unit_tests:
+    count: 99
+    coverage_target: "100%"
+    per_component: "10-18 tests each"
+  
+  integration_tests:
+    count: 16
+    tests:
+      - "attack_simulation_*.py"
+      - "defense_coordination_tests"
+  
+  security_tests:
+    penetration: "OWASP Top 10 validation"
+    fuzz_testing: "input fuzzing for validators"
+
+dependencies:
+  requires:
+    - "impl-infra-001-resilience"
+    - "impl-ops-004-observability"
+  blocks:
+    - "impl-arch-008-orchestrators"
+    - "impl-arch-022-mcp-compliance"
+
+success_metrics:
+  - "All 99 unit tests passing (100% coverage)"
+  - "All 16 integration tests passing"
+  - "OWASP Top 10 full coverage verified"
+  - "Zero high-severity security issues"
+  - "Penetration test success rate <5%"
+  - "Response time <100ms for security checks"
+
+  - "Zero known vulnerabilities in final audit"

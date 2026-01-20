@@ -1,0 +1,220 @@
+# CORTEX Implementation Phase: Core Orchestrators Framework
+# Phase ID: impl-arch-008-orchestrators
+# Priority: P0 (Architecture Foundation)
+# Date: 2026-01-20
+
+metadata:
+  phase_id: "impl-arch-008-orchestrators"
+  title: "Core Orchestrators - Concrete Implementations"
+  description: "Production-ready implementations of Master, Planning, Analysis, and Execution orchestrators"
+  priority: "P0"
+  estimated_effort: "7-9 days"
+  status: "NOT_STARTED"
+  locked: false
+
+objective:
+  summary: "Complete concrete orchestrator implementations with full test coverage and production guarantees"
+  business_value: "Enables multi-domain orchestration, request routing, result aggregation, and fault recovery"
+
+gap_analysis:
+  current_state:
+    - "Orchestrator base interfaces exist"
+    - "Auto-registration decorator implemented"
+    - "Tier access control implemented"
+    - "4 concrete orchestrators partially implemented"
+    - "Missing lifecycle management hooks"
+    - "Missing result aggregation logic"
+    - "Missing error propagation strategies"
+
+acceptance_criteria:
+  - id: "ORCH-IMPL-001-01"
+    description: "MasterOrchestrator routes and coordinates requests"
+    verification:
+      - "MasterOrchestrator.execute(request) → OrchestratorResult"
+      - "Request type analysis and routing"
+      - "Concurrent execution of sub-orchestrators"
+      - "Result aggregation and conflict resolution"
+      - "Error propagation with recovery hints"
+    tests:
+      - "test_master_orchestrator_route_plan()"
+      - "test_master_orchestrator_concurrent_execution()"
+      - "test_master_orchestrator_result_aggregation()"
+      - "test_master_orchestrator_error_handling()"
+
+  - id: "ORCH-IMPL-001-02"
+    description: "PlanningOrchestrator generates structured execution plans"
+    verification:
+      - "PlanningOrchestrator.plan(intent) → ExecutionPlan"
+      - "Plan decomposition into tasks"
+      - "Dependency graph analysis"
+      - "Resource allocation"
+      - "Timeline estimation"
+      - "Risk assessment"
+    tests:
+      - "test_planning_orchestrator_decomposition()"
+      - "test_planning_orchestrator_dependencies()"
+      - "test_planning_orchestrator_risk_assessment()"
+
+  - id: "ORCH-IMPL-001-03"
+    description: "AnalysisOrchestrator performs deep code analysis"
+    verification:
+      - "AnalysisOrchestrator.analyze(target) → AnalysisResult"
+      - "Multi-strategy analysis (AST, patterns, dependencies)"
+      - "Result synthesis and insights extraction"
+      - "Anomaly detection and flagging"
+      - "Performance profiling"
+    tests:
+      - "test_analysis_orchestrator_multi_strategy()"
+      - "test_analysis_orchestrator_insights()"
+      - "test_analysis_orchestrator_anomalies()"
+
+  - id: "ORCH-IMPL-001-04"
+    description: "ExecutionOrchestrator safely runs actions"
+    verification:
+      - "ExecutionOrchestrator.execute(plan) → ExecutionResult"
+      - "Sandbox isolation for untrusted code"
+      - "Resource limits (CPU, memory, time)"
+      - "Rollback on failure"
+      - "Audit logging of all operations"
+      - "Progress tracking and cancellation"
+    tests:
+      - "test_execution_orchestrator_sandbox()"
+      - "test_execution_orchestrator_resource_limits()"
+      - "test_execution_orchestrator_rollback()"
+      - "test_execution_orchestrator_cancellation()"
+
+  - id: "ORCH-IMPL-001-05"
+    description: "Orchestrator lifecycle management"
+    verification:
+      - "on_initialize() hook for startup"
+      - "on_request() hook for preprocessing"
+      - "on_complete() hook for cleanup"
+      - "on_error() hook for error handling"
+      - "State transitions tracked in audit log"
+    tests:
+      - "test_orchestrator_lifecycle_initialize()"
+      - "test_orchestrator_lifecycle_request()"
+      - "test_orchestrator_lifecycle_complete()"
+      - "test_orchestrator_lifecycle_error()"
+
+  - id: "ORCH-IMPL-001-06"
+    description: "Cross-orchestrator communication protocol"
+    verification:
+      - "OrchestratorMessage interface for inter-orchestrator communication"
+      - "Request/response pattern with timeouts"
+      - "Message versioning for backward compatibility"
+      - "Async communication support"
+      - "Message auditing"
+    tests:
+      - "test_orchestrator_message_protocol()"
+      - "test_orchestrator_async_communication()"
+      - "test_orchestrator_timeout_handling()"
+
+implementation:
+  files_to_create:
+    - path: "cortex/orchestrators/master.py"
+      loc: 350
+      classes:
+        - name: "MasterOrchestrator"
+          methods:
+            - "execute(request)"
+            - "route_to_orchestrator(request_type)"
+            - "aggregate_results(results)"
+            - "propagate_errors(errors)"
+    
+    - path: "cortex/orchestrators/planning.py"
+      loc: 400
+      classes:
+        - name: "PlanningOrchestrator"
+          methods:
+            - "plan(intent)"
+            - "decompose_into_tasks(intent)"
+            - "analyze_dependencies(tasks)"
+            - "assess_risk(plan)"
+    
+    - path: "cortex/orchestrators/analysis.py"
+      loc: 400
+      classes:
+        - name: "AnalysisOrchestrator"
+          methods:
+            - "analyze(target)"
+            - "run_multi_strategy_analysis(target)"
+            - "synthesize_results(results)"
+            - "detect_anomalies(results)"
+    
+    - path: "cortex/orchestrators/execution.py"
+      loc: 400
+      classes:
+        - name: "ExecutionOrchestrator"
+          methods:
+            - "execute(plan)"
+            - "create_sandbox()"
+            - "enforce_resource_limits()"
+            - "rollback_on_failure()"
+    
+    - path: "cortex/orchestrators/lifecycle.py"
+      loc: 150
+      classes:
+        - name: "OrchestratorLifecycle"
+          methods:
+            - "on_initialize()"
+            - "on_request(request)"
+            - "on_complete(result)"
+            - "on_error(error)"
+    
+    - path: "cortex/orchestrators/protocol.py"
+      loc: 200
+      classes:
+        - name: "OrchestratorMessage"
+          methods:
+            - "serialize()"
+            - "deserialize(data)"
+            - "validate_version()"
+    
+    - path: "tests/unit/orchestrators/test_master_orchestrator.py"
+      loc: 250
+      test_count: 12
+    
+    - path: "tests/unit/orchestrators/test_planning_orchestrator.py"
+      loc: 250
+      test_count: 12
+    
+    - path: "tests/unit/orchestrators/test_analysis_orchestrator.py"
+      loc: 250
+      test_count: 12
+    
+    - path: "tests/unit/orchestrators/test_execution_orchestrator.py"
+      loc: 300
+      test_count: 15
+    
+    - path: "tests/integration/orchestrators/test_orchestrator_integration.py"
+      loc: 300
+      test_count: 15
+
+governance:
+  compliance:
+    - "CORE-008: TDD"
+    - "CORE-011: Type hints"
+    - "CORE-012: Google docstrings"
+    - "CORE-027: Audit logging"
+
+testing_strategy:
+  unit_tests:
+    count: 51
+    coverage_target: "100%"
+  
+  integration_tests:
+    count: 15
+
+dependencies:
+  requires:
+    - "impl-arch-005-hardening"
+  blocks:
+    - "impl-arch-010-adaptive"
+    - "impl-arch-016-continuation"
+
+success_metrics:
+  - "All 51 unit tests passing"
+  - "All 15 integration tests passing"
+  - "Mean response time <500ms for typical request"
+  - "Error recovery success rate >99%"

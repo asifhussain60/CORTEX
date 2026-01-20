@@ -1,0 +1,451 @@
+# CORTEX Implementation Phase: Governance Composition
+# Phase ID: impl-arch-025-governance-comp
+# Priority: P1
+# Date: 2026-01-20
+
+metadata:
+  phase_id: "impl-arch-025-governance-comp"
+  title: "Governance Composite - Multi-Layer Rule Engine"
+  description: "Composite governance pattern combining tier0, tier1, tier2 rules dynamically"
+  priority: "P1"
+  estimated_effort: "4-6 days"
+  status: "NOT_STARTED"
+  locked: false
+
+objective:
+  summary: "Implement dynamic governance composition enabling layered rule enforcement"
+  business_value: "Flexible governance, domain-specific rules, adaptable enforcement levels"
+
+gap_analysis:
+  current_state:
+    - "Tier0, tier1, tier2 directories exist but mostly empty"
+    - "Only 2 tier0 YAML files (not governance rules)"
+    - "No composite pattern for tier interaction"
+    - "No dynamic rule loading"
+    - "No tier-specific exemption handling"
+
+acceptance_criteria:
+  - id: "GOV-COMP-001-01"
+    description: "Tier loader loads rules from all tiers"
+    verification:
+      - "TierLoader.load_all_tiers() → CompositeRuleSet"
+      - "Tier0: global, immutable governance core (28/29 rules)"
+      - "Tier1: domain-specific customizations"
+      - "Tier2: environment/deployment-specific rules"
+      - "Conflict resolution (tier0 > tier1 > tier2)"
+    tests:
+      - "test_tier_loader_all_tiers()"
+      - "test_tier_loader_conflict_resolution()"
+      - "test_tier_loader_immutability_tier0()"
+
+  - id: "GOV-COMP-001-02"
+    description: "Rule composition engine merges rules"
+    verification:
+      - "CompositionEngine.compose(tier0, tier1, tier2) → merged"
+      - "Rule inheritance from higher tiers"
+      - "Override capability (with audit trail)"
+      - "Rule priority calculation"
+      - "Cycle detection (prevent circular overrides)"
+    tests:
+      - "test_composition_inheritance()"
+      - "test_composition_override_audit()"
+      - "test_composition_cycle_detection()"
+
+  - id: "GOV-COMP-001-03"
+    description: "Dynamic rule application adapts to context"
+    verification:
+      - "DynamicRuleApplier.apply_rules(context) → violations"
+      - "Runtime context analysis (file, operation, environment)"
+      - "Active rule set calculation per context"
+      - "Rule priority ordering"
+      - "Exception handling per tier"
+    tests:
+      - "test_dynamic_applier_context_analysis()"
+      - "test_dynamic_applier_exception_handling()"
+
+  - id: "GOV-COMP-001-04"
+    description: "Rule override management with audit trail"
+    verification:
+      - "OverrideManager.request_override(rule_id, reason)"
+      - "Override approval workflow"
+      - "Time-limited overrides (auto-expire)"
+      - "Override reasoning audit trail"
+      - "Statistics on override usage"
+    tests:
+      - "test_override_manager_approval()"
+      - "test_override_manager_expiry()"
+      - "test_override_manager_audit_trail()"
+
+  - id: "GOV-COMP-001-05"
+    description: "Governance report shows all active rules"
+    verification:
+      - "GovernanceReport.generate() → report"
+      - "Per-tier rule listing"
+      - "Inheritance chain visualization"
+      - "Override history"
+      - "Compliance percentage per rule"
+    tests:
+      - "test_report_tier_listing()"
+      - "test_report_compliance_percentage()"
+
+  - id: "GOV-COMP-001-06"
+    description: "Rule performance optimization"
+    verification:
+      - "RuleOptimizer.optimize(rule_set) → optimized"
+      - "Caching of expensive rule evaluations"
+      - "Short-circuit evaluation"
+      - "Parallel rule evaluation where safe"
+      - "Performance profiling per rule"
+    tests:
+      - "test_optimizer_caching()"
+      - "test_optimizer_short_circuit()"
+      - "test_optimizer_parallelization()"
+
+implementation:
+  files_to_create:
+    - path: "cortex/brain/governance/tier_loader.py"
+      loc: 200
+      classes:
+        - name: "TierLoader"
+          methods:
+            - "load_all_tiers()"
+            - "load_tier(tier_name)"
+            - "resolve_conflicts(rules)"
+
+    - path: "cortex/brain/governance/composition_engine.py"
+      loc: 250
+      classes:
+        - name: "CompositionEngine"
+          methods:
+            - "compose(tier0, tier1, tier2)"
+            - "inherit_rules(parent_tier)"
+            - "detect_cycles(overrides)"
+
+    - path: "cortex/brain/governance/dynamic_applier.py"
+      loc: 200
+      classes:
+        - name: "DynamicRuleApplier"
+          methods:
+            - "apply_rules(context)"
+            - "select_active_rules(context)"
+
+    - path: "cortex/brain/governance/override_manager.py"
+      loc: 200
+      classes:
+        - name: "OverrideManager"
+          methods:
+            - "request_override(rule_id, reason)"
+            - "approve_override(request_id)"
+            - "expire_overrides()"
+
+    - path: "cortex/brain/governance/governance_report.py"
+      loc: 150
+      classes:
+        - name: "GovernanceReport"
+          methods:
+            - "generate()"
+            - "list_active_rules()"
+            - "show_inheritance_chain()"
+
+    - path: "cortex/brain/governance/optimizer.py"
+      loc: 150
+      classes:
+        - name: "RuleOptimizer"
+          methods:
+            - "optimize(rule_set)"
+            - "cache_evaluation(rule, result)"
+
+    - path: "cortex_brain/tier0/governance/core-rules.yaml"
+      loc: 500
+      note: "CRITICAL DELIVERABLE: All 29 SKULL governance rules (immutable, enforced on all)"
+      critical: true
+      core_rules_spec:
+        - rule: "CORE-001"
+          name: "Modular Code (<500 LOC/file)"
+          level: "error"
+          description: "All Python files must be <500 LOC to ensure maintainability"
+          applies_to: ["*.py"]
+          exemptions: ["migrations", "generated_code"]
+          
+        - rule: "CORE-002"
+          name: "Pure Functions Preferred"
+          level: "warning"
+          description: "Avoid side effects; prefer functional style"
+          applies_to: ["core/**/*.py", "brain/**/*.py"]
+          
+        - rule: "CORE-003"
+          name: "Immutable Data by Default"
+          level: "warning"
+          description: "Use dataclasses with frozen=True, named tuples"
+          applies_to: ["*.py"]
+          
+        - rule: "CORE-004"
+          name: "Explicit Error Handling"
+          level: "error"
+          description: "Errors must be logged with context before propagation"
+          applies_to: ["*.py"]
+          
+        - rule: "CORE-005"
+          name: "Clear Data Flow"
+          level: "warning"
+          description: "Avoid deeply nested data transformations"
+          applies_to: ["*.py"]
+          max_nesting: 3
+          
+        - rule: "CORE-006"
+          name: "Single Responsibility"
+          level: "warning"
+          description: "Classes should have one reason to change"
+          applies_to: ["*.py"]
+          max_methods_per_class: 8
+          
+        - rule: "CORE-007"
+          name: "Explicit Dependencies"
+          level: "error"
+          description: "All dependencies must be passed as parameters"
+          applies_to: ["*.py"]
+          
+        - rule: "CORE-008"
+          name: "Test-Driven Development"
+          level: "error"
+          description: "Tests must exist for all public APIs; >95% coverage required"
+          applies_to: ["*.py"]
+          coverage_target: 0.95
+          
+        - rule: "CORE-009"
+          name: "No Hardcoded Values"
+          level: "error"
+          description: "Magic numbers/strings must be constants"
+          applies_to: ["*.py"]
+          
+        - rule: "CORE-010"
+          name: "Explicit Null Handling"
+          level: "error"
+          description: "Optional types must be handled explicitly (no None surprises)"
+          applies_to: ["*.py"]
+          
+        - rule: "CORE-011"
+          name: "Type Hints Mandatory"
+          level: "error"
+          description: "All public methods must have complete type hints (100%)"
+          applies_to: ["*.py"]
+          coverage_target: 1.0
+          
+        - rule: "CORE-012"
+          name: "Google Docstrings Required"
+          level: "error"
+          description: "All public classes/functions must have Google-style docstrings"
+          applies_to: ["*.py"]
+          
+        - rule: "CORE-013"
+          name: "No Bare Except Clauses"
+          level: "error"
+          description: "Must catch specific exception types"
+          applies_to: ["*.py"]
+          
+        - rule: "CORE-014"
+          name: "Performance Profiling"
+          level: "warning"
+          description: "Hot paths must have performance benchmarks"
+          applies_to: ["orchestrators/**/*.py", "api/**/*.py"]
+          
+        - rule: "CORE-015"
+          name: "Backward Compatibility"
+          level: "warning"
+          description: "API changes must maintain backward compatibility or require deprecation cycle"
+          applies_to: ["api/**/*.py", "mcp/**/*.py"]
+          deprecation_cycle: 2
+          
+        - rule: "CORE-016"
+          name: "Security by Default"
+          level: "error"
+          description: "No security bypasses; all defaults must be secure"
+          applies_to: ["infrastructure/security/**/*.py", "api/**/*.py"]
+          
+        - rule: "CORE-017"
+          name: "Strict Type Checking"
+          level: "error"
+          description: "Mypy with strict mode enabled"
+          applies_to: ["*.py"]
+          
+        - rule: "CORE-018"
+          name: "Deterministic Behavior"
+          level: "warning"
+          description: "Non-determinism must be explicitly documented"
+          applies_to: ["*.py"]
+          
+        - rule: "CORE-019"
+          name: "Resource Cleanup"
+          level: "error"
+          description: "All resources must be cleaned up (context managers, finally blocks)"
+          applies_to: ["*.py"]
+          
+        - rule: "CORE-020"
+          name: "Idempotent Operations"
+          level: "warning"
+          description: "Operations should be safely re-runnable"
+          applies_to: ["orchestrators/**/*.py", "api/**/*.py"]
+          
+        - rule: "CORE-021"
+          name: "Configuration Externalization"
+          level: "warning"
+          description: "Config must be external, not hardcoded"
+          applies_to: ["*.py"]
+          
+        - rule: "CORE-022"
+          name: "Logging Standards"
+          level: "warning"
+          description: "Consistent logging with structured format"
+          applies_to: ["*.py"]
+          log_format: "json"
+          
+        - rule: "CORE-023"
+          name: "Observability"
+          level: "warning"
+          description: "Metrics, traces, logs mandatory in orchestrators"
+          applies_to: ["orchestrators/**/*.py"]
+          
+        - rule: "CORE-024"
+          name: "Versioning Policy"
+          level: "warning"
+          description: "Semantic versioning mandatory for public APIs"
+          applies_to: ["api/**/*.py", "mcp/**/*.py"]
+          
+        - rule: "CORE-025"
+          name: "Documentation Currency"
+          level: "warning"
+          description: "Docs must be updated on API changes"
+          applies_to: ["*.py"]
+          
+        - rule: "CORE-026"
+          name: "Code Review Quality"
+          level: "warning"
+          description: "All changes require review; CODEOWNERS defined"
+          applies_to: ["*.py"]
+          
+        - rule: "CORE-027"
+          name: "Audit Trail Logging"
+          level: "error"
+          description: "All user actions must log AC_START/AC_EXECUTE/AC_COMPLETE"
+          applies_to: ["orchestrators/**/*.py", "api/**/*.py"]
+          
+        - rule: "CORE-028"
+          name: "Naming Conventions"
+          level: "warning"
+          description: "Kebab-case for files/vars, PascalCase for classes, max 25 chars"
+          applies_to: ["*.py"]
+          max_name_length: 25
+          
+        - rule: "CORE-029"
+          name: "Reproducible Builds"
+          level: "warning"
+          description: "Deterministic outputs; versions pinned"
+          applies_to: ["*.py"]
+    
+    - path: "cortex_brain/tier1/governance/domain_extensions.yaml"
+      loc: 150
+      note: "Domain-specific rule customizations (e.g., security domain stricter)"
+      examples:
+        - domain: "security"
+          overrides:
+            - rule: "CORE-016"
+              level: "error"
+              message: "Security domain enforces hardened defaults"
+        - domain: "performance"
+          overrides:
+            - rule: "CORE-014"
+              level: "error"
+              message: "All hot paths required to have benchmarks"
+    
+    - path: "cortex_brain/tier2/governance/deployment_rules.yaml"
+      loc: 100
+      note: "Environment-specific rules (e.g., production stricter than dev)"
+      examples:
+        - environment: "production"
+          overrides:
+            - rule: "CORE-008"
+              coverage_target: 0.98
+              message: "Production requires 98% test coverage"
+        - environment: "development"
+          relaxations:
+            - rule: "CORE-025"
+              level: "info"
+              message: "Docs optional during development"
+
+    - path: "tests/unit/governance/test_governance_composition.py"
+      loc: 350
+      test_count: 22
+      test_coverage:
+        - "test_load_core_rules_all_29()"
+        - "test_tier0_immutability()"
+        - "test_tier1_domain_extensions()"
+        - "test_tier2_environment_rules()"
+        - "test_composition_conflict_resolution()"
+        - "test_composition_caching()"
+
+    - path: "tests/integration/governance/test_composition_integration.py"
+      loc: 200
+      test_count: 12
+      test_coverage:
+        - "test_end_to_end_rule_evaluation()"
+        - "test_multi_tier_enforcement()"
+        - "test_dynamic_context_rules()"
+
+governance:
+  compliance:
+    - "CORE-008: TDD (all governance code >95% coverage)"
+    - "CORE-011: Type hints 100%"
+    - "CORE-012: Google docstrings mandatory"
+    - "CORE-017: Strict type checking"
+    - "CORE-027: AC lifecycle logging on all rule evaluations"
+
+  tier_structure:
+    tier0:
+      name: "Immutable Global Governance"
+      description: "All 29 SKULL rules - applies to all code everywhere"
+      enforced: true
+      override_capable: false
+      rules: 29
+      
+    tier1:
+      name: "Domain-Specific Customizations"
+      description: "Per-domain rule adjustments (security, performance, UX, etc.)"
+      enforced: true
+      override_capable: true
+      can_override_tier0: false
+      can_customize_tier0: true
+      
+    tier2:
+      name: "Environment-Specific Rules"
+      description: "Per-deployment adjustments (dev/staging/prod)"
+      enforced: true
+      override_capable: true
+      can_override_tier0: false
+      can_customize_tier0: true
+      can_override_tier1: true
+
+testing_strategy:
+  unit_tests: 22
+  integration_tests: 12
+  coverage_target: 0.95
+  tier_testing:
+    tier0_tests: "test_core_rules_*.py (18 tests)"
+    tier1_tests: "test_domain_extensions_*.py (2 tests)"
+    tier2_tests: "test_environment_rules_*.py (2 tests)"
+
+dependencies:
+  requires:
+    - "impl-arch-009-governance (RuleEvaluator infrastructure)"
+
+critical_deliverables:
+  - "cortex_brain/tier0/governance/core-rules.yaml with all 29 SKULL rules (immutable)"
+  - "cortex_brain/tier1/governance/domain_extensions.yaml with examples"
+  - "cortex_brain/tier2/governance/deployment_rules.yaml with examples"
+  - "Tier0 immutability enforced via filesystem permissions + code validation"
+
+success_metrics:
+  - "All 29 rules loaded without conflicts"
+  - "Tier composition time <100ms"
+  - "Zero rule conflicts left unresolved"
+  - "Tier0 immutability: attempts to modify logged and rejected"
+  - "Rule evaluation coverage: 100% of 29 rules"

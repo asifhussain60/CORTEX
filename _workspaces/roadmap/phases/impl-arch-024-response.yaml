@@ -1,0 +1,174 @@
+# CORTEX Implementation Phase: Response Composition Engine
+# Phase ID: impl-arch-024-response
+# Priority: P1
+# Date: 2026-01-20
+
+metadata:
+  phase_id: "impl-arch-024-response"
+  title: "Response Composition - Multi-Source Result Assembly"
+  description: "Assemble final responses from multiple orchestrator outputs"
+  priority: "P1"
+  estimated_effort: "5-7 days"
+  status: "NOT_STARTED"
+  locked: false
+
+objective:
+  summary: "Intelligently combine results from multiple orchestrators into coherent responses"
+  business_value: "Enables rich, contextual responses; balances detail with conciseness"
+
+acceptance_criteria:
+  - id: "RESP-COMPOSE-001-01"
+    description: "Response collector gathers partial results"
+    verification:
+      - "ResponseCollector.collect(execution_results) → aggregated"
+      - "Handles partial failures gracefully"
+      - "Timeout handling (wait up to T, use incomplete results)"
+      - "Deduplication of redundant results"
+      - "Conflict detection between results"
+    tests:
+      - "test_collector_partial_failures()"
+      - "test_collector_timeout_handling()"
+      - "test_collector_deduplication()"
+
+  - id: "RESP-COMPOSE-001-02"
+    description: "Result synthesizer creates coherent narrative"
+    verification:
+      - "ResultSynthesizer.synthesize(results, context) → response"
+      - "Logical ordering (overview, details, examples)"
+      - "Coherence checking (no contradictions)"
+      - "Context-aware emphasis (what matters to user)"
+      - "Cross-reference linking"
+    tests:
+      - "test_synthesizer_logical_ordering()"
+      - "test_synthesizer_coherence_checking()"
+      - "test_synthesizer_cross_references()"
+
+  - id: "RESP-COMPOSE-001-03"
+    description: "Formatter renders for target medium"
+    verification:
+      - "ResponseFormatter.format(response, medium) → text"
+      - "Mediums: markdown, HTML, JSON, plain text"
+      - "Code highlighting and syntax preservation"
+      - "Table/list formatting"
+      - "Proper escaping for target format"
+    tests:
+      - "test_formatter_markdown()"
+      - "test_formatter_html()"
+      - "test_formatter_json()"
+
+  - id: "RESP-COMPOSE-001-04"
+    description: "Example selector includes relevant examples"
+    verification:
+      - "ExampleSelector.select(topic, count) → examples"
+      - "Example relevance ranking"
+      - "Difficulty level matching user expertise"
+      - "Completeness (runnable examples)"
+      - "Diversity (multiple approaches)"
+    tests:
+      - "test_example_selector_relevance()"
+      - "test_example_selector_difficulty()"
+      - "test_example_selector_diversity()"
+
+  - id: "RESP-COMPOSE-001-05"
+    description: "Summary generator creates concise overviews"
+    verification:
+      - "SummaryGenerator.generate_summary(response, max_length)"
+      - "TF-IDF extraction of key points"
+      - "Abstraction and generalization"
+      - "Context preservation despite length limit"
+      - "Pointer to full details"
+    tests:
+      - "test_summary_key_extraction()"
+      - "test_summary_context_preservation()"
+      - "test_summary_length_enforcement()"
+
+  - id: "RESP-COMPOSE-001-06"
+    description: "Confidence scoring indicates result reliability"
+    verification:
+      - "ConfidenceScorer.score(response) → confidence (0-1)"
+      - "Aggregation of component confidences"
+      - "Penalty for disagreements between results"
+      - "Uncertainty communication to user"
+      - "Conditional statements on low confidence"
+    tests:
+      - "test_confidence_aggregation()"
+      - "test_confidence_disagreement_penalty()"
+      - "test_confidence_communication()"
+
+implementation:
+  files_to_create:
+    - path: "cortex/api/response/collector.py"
+      loc: 200
+      classes:
+        - name: "ResponseCollector"
+          methods:
+            - "collect(execution_results)"
+            - "handle_partial_failure(results)"
+            - "detect_conflicts(results)"
+
+    - path: "cortex/api/response/synthesizer.py"
+      loc: 250
+      classes:
+        - name: "ResultSynthesizer"
+          methods:
+            - "synthesize(results, context)"
+            - "order_logically(results)"
+            - "check_coherence(results)"
+
+    - path: "cortex/api/response/formatter.py"
+      loc: 200
+      classes:
+        - name: "ResponseFormatter"
+          methods:
+            - "format(response, medium)"
+            - "highlight_code(code, language)"
+
+    - path: "cortex/api/response/example_selector.py"
+      loc: 150
+      classes:
+        - name: "ExampleSelector"
+          methods:
+            - "select(topic, count)"
+            - "rank_by_relevance(examples)"
+
+    - path: "cortex/api/response/summarizer.py"
+      loc: 150
+      classes:
+        - name: "SummaryGenerator"
+          methods:
+            - "generate_summary(response, max_length)"
+            - "extract_key_points(response)"
+
+    - path: "cortex/api/response/confidence.py"
+      loc: 150
+      classes:
+        - name: "ConfidenceScorer"
+          methods:
+            - "score(response)"
+            - "aggregate_confidences(components)"
+
+    - path: "tests/unit/api/response/test_response_composition.py"
+      loc: 300
+      test_count: 20
+
+    - path: "tests/integration/api/test_response_integration.py"
+      loc: 150
+      test_count: 10
+
+governance:
+  compliance:
+    - "CORE-008: TDD"
+    - "CORE-011: Type hints"
+
+testing_strategy:
+  unit_tests: 20
+  integration_tests: 10
+
+dependencies:
+  requires:
+    - "impl-arch-008-orchestrators"
+
+success_metrics:
+  - "Response assembly <2s"
+  - "Coherence score >90%"
+  - "User satisfaction on response quality >4.5/5"
