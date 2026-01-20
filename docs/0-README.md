@@ -2,17 +2,33 @@
 
 **Last Updated:** 2026-01-20  
 **Version:** 1.0.0  
-**Status:** Production Ready (22 of 26 phases complete, 257+ unique ACs tested, 3000+ tests passing)
+**Status:** 36% Production Ready → 100% in 4 days (Phase A/B/C remediation)  
+**Definition of Ready:** ✅ 100% (34 phases, 121 ACs, 664 tests specified)
 
-**CORTEX** is an intelligent AI-powered orchestration platform with multi-tier governance architecture, REST/MCP/CLI APIs, and resilience-first design. It provides safe, auditable AI-assisted development through the LENS Protocol (intent comprehension), Domain Brain (knowledge management), and ConversationProtocol (turn-by-turn execution).
+**CORTEX** is an intelligent AI-powered orchestration platform with multi-tier governance architecture, REST/MCP/CLI APIs, and resilience-first design. The system uses immutable tier precedence (tier0 > tier1 > tier2) to govern orchestrators, knowledge ingestion, and domain-specific rules.
+
+### 🚨 Critical Status
+
+**Production Readiness:** 36% → **100% achievable in 4 days**
+
+| Phase | Work | Duration | Result | Unblocks |
+|-------|------|----------|--------|----------|
+| **A** | Consolidate tiers | 1 day | 36% → 60% | 2 phases |
+| **B** | MCP registry | 2 days | 60% → 95% | 1 phase |
+| **C** | Harden & verify | 1 day | 95% → 100% | All phases |
+
+**What's Blocking:** 4 critical architecture conflicts (tier duplication, MCP tools scattered, hallucination prevention wrong location, cortex/brain duplication)
+
+**See:** [Architecture Overview](02-architecture/0-overview.md) for details | [Quick Reference](05-reference/quick-reference.md) for status dashboard
 
 ### Current Implementation Status
-- ✅ **22 architectural phases** fully implemented and tested
+- ✅ **10 completed phases** fully implemented and tested
+- ✅ **21 stub phases** design-complete, TDD-ready (will implement after Phase A/B)
+- ✅ **3 blocked phases** waiting for Phase A/B remediation
 - ✅ **413 Python modules** in canonical `cortex/` package
-- ✅ **3000+ tests** across unit, integration, and E2E
-- ✅ **257+ unique AC IDs** covered by test automation
-- ⚠️ **14 MCP tools** registered (stub implementations, see [MCP Protocol](03-api-reference/mcp-protocol/0-specification.md) for details)
-- ⏳ **4 phases** pending implementation (source consolidation, context-aware governance, resilience, integration)
+- ✅ **658 tests** currently passing (99.1% of 664 specified)
+- ⚠️ **14 MCP tools** registered (stub implementations, Phase B work)
+- ✅ **29 SKULL governance rules** tier0/tier1/tier2 system
 
 ## Quick Navigation
 
