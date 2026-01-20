@@ -606,19 +606,19 @@ class StateRepair:
     ) -> None:
         """Save repair checkpoint for resume.
         
-        Checkpoint only includes items never attempted, not failed items.
+        Checkpoint includes both failed items (to retry) and never-attempted items.
         
         Args:
             inconsistencies: All inconsistencies in repair
             completed_results: Results completed so far
         """
-        # Use the attempted list from progress tracking
-        attempted_ids = set(self._repair_progress.get("attempted", []))
+        # Get successfully completed IDs
+        completed_ids = {r.inconsistency_id for r in completed_results}
         
-        # Only include items that were never attempted
+        # Include all items NOT successfully completed (both failed and not-attempted)
         remaining_inconsistencies = [
             inc for inc in inconsistencies 
-            if inc.inconsistency_id not in attempted_ids
+            if inc.inconsistency_id not in completed_ids
         ]
         
         checkpoint = {
