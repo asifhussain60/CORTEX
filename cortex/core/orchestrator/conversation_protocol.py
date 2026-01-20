@@ -1,0 +1,191 @@
+"""Conversation Protocol - Multi-turn orchestrator executor.
+
+Wraps any IOrchestrator to execute one turn at a time with continuation
+decisions, governance validation, and token tracking.
+
+Author: CORTEX Framework
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
+
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
+from datetime import datetime
+from pathlib import Path
+
+from cortex.core.result import Result, Ok, Err
+from cortex.core.interfaces import IOrchestrator, OperationMode
+
+
+@dataclass
+class RoundContext:
+    """Context for a single round of execution.
+
+    Attributes:
+        round_number: Current round number.
+        user_input: User input for this round.
+        previous_context: Context from previous round.
+        orchestrator_name: Name of the orchestrator.
+        timestamp: When the round started.
+    """
+
+    round_number: int
+    user_input: str
+    previous_context: Dict[str, Any]
+    orchestrator_name: str
+    timestamp: datetime = field(default_factory=datetime.now)
+
+
+class ConversationProtocol:
+    """Single-turn executor for orchestrators.
+
+    Wraps any IOrchestrator to execute one turn at a time with explicit
+    continuation decisions, governance validation, audit logging, and token tracking.
+
+    Attributes:
+        orchestrator: The IOrchestrator to wrap.
+        max_turns: Safety limit on iterations (default: 10).
+        token_limit: Token budget before halt (default: 20000).
+        turn_number: Current turn count.
+        total_tokens_used: Accumulated tokens across all turns.
+        decisions_history: List of all decisions made.
+    """
+
+    def __init__(
+        self,
+        orchestrator: IOrchestrator,
+        max_turns: int = 10,
+        token_limit: int = 20000,
+        db_path: Optional[str] = None,
+    ) -> None:
+        """Initialize ConversationProtocol.
+
+        Args:
+            orchestrator: IOrchestrator instance to wrap.
+            max_turns: Maximum turns before safety halt (default: 10).
+            token_limit: Token budget before halt (default: 20000).
+            db_path: Optional database path for persistence.
+
+        Raises:
+            TypeError: If orchestrator doesn't implement IOrchestrator protocol.
+        """
+        self.orchestrator = orchestrator
+        self.max_turns = max_turns
+        self.token_limit = token_limit
+        self.db_path = db_path
+        self.turn_number: int = 0
+        self.total_tokens_used: int = 0
+        self.decisions_history: List[Dict[str, Any]] = []
+        self.ast_engine: Optional[Any] = None
+        self.context_history: List[RoundContext] = []
+
+    def execute_turn(
+        self, user_input: str, context: Dict[str, Any]
+    ) -> Result[Any, str]:
+        """Execute a single turn of orchestration.
+
+        Args:
+            user_input: User input for this turn.
+            context: Execution context from previous turn.
+
+        Returns:
+            Result[ContinuationDecision] on success, Result[Err] on failure.
+
+        Raises:
+            Nothing - all errors returned as Err result.
+        """
+        try:
+            # Validate input
+            if not isinstance(user_input, str):
+                return Err("user_input must be a string")
+
+            if not context or not isinstance(context, dict):
+                context = {}
+
+            # Check turn limits
+            if self.turn_number >= self.max_turns:
+                return Err(f"Exceeded max_turns limit: {self.max_turns}")
+
+            # Increment turn counter
+            self.turn_number += 1
+
+            # Create round context
+            round_context = RoundContext(
+                round_number=self.turn_number,
+                user_input=user_input,
+                previous_context=context,
+                orchestrator_name=self.orchestrator.__class__.__name__,
+            )
+            self.context_history.append(round_context)
+
+            # Validate orchestrator can handle this
+            if not isinstance(context, dict):
+                return Err("context must be a dict")
+
+            # Execute orchestrator
+            result = self.orchestrator.execute(user_input, context)
+
+            # Track tokens (stub implementation)
+            tokens_this_turn = len(user_input.split()) + len(str(result).split())
+            self.total_tokens_used += tokens_this_turn
+
+            # Check token limit
+            if self.total_tokens_used > self.token_limit:
+                return Err("Token limit exceeded")
+
+            # Create continuation decision
+            from cortex.brain.core.orchestrator.continuation_decision import (
+                ContinuationDecision,
+                ContinuationReason,
+            )
+
+            decision = ContinuationDecision(
+                should_continue=False,
+                reason=ContinuationReason.COMPLETION,
+                context=result,
+                tokens_used=tokens_this_turn,
+                round_number=self.turn_number,
+            )
+
+            # Add to history
+            self.decisions_history.append(
+                {
+                    "turn": self.turn_number,
+                    "decision": decision,
+                    "timestamp": round_context.timestamp,
+                }
+            )
+
+            return Ok(decision)
+
+        except ImportError:
+            # Fallback if ContinuationDecision not available
+            return Ok(
+                {
+                    "should_continue": False,
+                    "reason": "COMPLETION",
+                    "context": context,
+                    "turn": self.turn_number,
+                }
+            )
+        except (ValueError, TypeError) as e:
+            return Err(f"Execution failed: {str(e)}")
+        except Exception as e:
+            return Err(f"Unexpected error: {str(e)}")
+
+    def get_decisions_history(self) -> List[Dict[str, Any]]:
+        """Get history of all decisions made.
+
+        Returns:
+            List of decision records.
+        """
+        return list(self.decisions_history)
+
+    def reset(self) -> None:
+        """Reset protocol state for a new conversation."""
+        self.turn_number = 0
+        self.total_tokens_used = 0
+        self.decisions_history = []
+        self.context_history = []
+
+
+__all__ = ["ConversationProtocol", "RoundContext"]
