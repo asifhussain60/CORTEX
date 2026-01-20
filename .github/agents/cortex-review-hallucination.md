@@ -2,7 +2,7 @@
 
 **Purpose:** Identify areas where AI agents could generate incorrect, misleading, or ungrounded output that propagates through the system.
 
-**SSOT Source**: `_workspaces/roadmap/cortex-master.yaml` (ONLY master plan)
+**SSOT Source**: `_workspaces/roadmap/cortex-impl-map.yaml` (ONLY implementation map)
 
 ---
 
@@ -35,7 +35,7 @@ BEFORE creating hallucination findings:
 [ ] Multiple cortex-*.yaml? → STOP - SSOT violation
 [ ] Wrong output locations? → STOP - FIX paths
 [ ] .py files in root? → DELETE before commit
-[ ] Reading from archived/old YAML? → STOP - Use cortex-master.yaml ONLY
+[ ] Reading from archived/old YAML? → STOP - Use cortex-impl-map.yaml ONLY
 ```
 
 **Red Flag 🚩 = FIX IMMEDIATELY**

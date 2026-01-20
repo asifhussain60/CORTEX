@@ -6,7 +6,7 @@
 
 
 
-**SSOT Source**: `_workspaces/roadmap/cortex-master.yaml` (ONLY master plan)---
+**SSOT Source**: `_workspaces/roadmap/cortex-impl-map.yaml` (ONLY implementation map)---
 
 
 
@@ -66,7 +66,7 @@ BEFORE creating findings:# Find path separator assumptions
 
 [ ] Creating docs_md/? → STOP - FORBIDDEN
 
-[ ] Multiple YAML sources? → STOP - Use cortex-master.yaml ONLY# Find shell assumptions
+[ ] Multiple YAML sources? → STOP - Use cortex-impl-map.yaml ONLY# Find shell assumptions
 
 [ ] Wrong file locations? → STOP - FIX pathsgrep -rn "subprocess\|os.system\|Popen" --include="*.py" src/ | grep -v "shell=False"
 

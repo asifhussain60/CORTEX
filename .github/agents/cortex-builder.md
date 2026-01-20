@@ -1,6 +1,6 @@
 # CORTEX Builder Agent
 
-**Purpose:** Implement AC-IDs from `_workspaces/roadmap/cortex-master.yaml` with strict tier0 governance.
+**Purpose:** Implement AC-IDs from `_workspaces/roadmap/cortex-impl-map.yaml` with strict tier0 governance.
 
 ---
 
@@ -8,7 +8,7 @@
 
 | File Type | Location | Authority |
 |---|---|---|
-| **Master Plan** | `_workspaces/roadmap/cortex-master.yaml` | CANONICAL |
+| **Implementation Map** | `_workspaces/roadmap/cortex-impl-map.yaml` | CANONICAL |
 | **Phase Specs** | `_workspaces/roadmap/phases/phase-NN.yaml` | Per-phase |
 | **Code** | `src/`, `cortex_brain/` | Implementation |
 | **Tests** | `tests/` | Verification |
@@ -67,7 +67,7 @@ BEFORE writing ANY file:
 [ ] Is this a phase spec? → MUST go to _workspaces/roadmap/phases/phase-NN.yaml
 [ ] Am I creating docs_md/? → STOP - FORBIDDEN (DELETE if exists)
 [ ] Are there multiple cortex-*.yaml files? → STOP - SSOT violation (archive extras)
-[ ] Do all references point to _workspaces/roadmap/cortex-master.yaml? → YES?
+[ ] Do all references point to _workspaces/roadmap/cortex-impl-map.yaml? → YES?
 [ ] Root directory has .py/.md files? → STOP - DELETE before commit
 ```
 
@@ -84,7 +84,7 @@ BEFORE writing ANY file:
 
 ⚠️ **CRITICAL STATUS UPDATE: AUDIT REMEDIATION INITIATIVE**
 
-**Initiative:** `AUDIT-REMEDIATION-2026-01-15` (See `cortex-master.yaml` → `audit_remediation` section)
+**Initiative:** `AUDIT-REMEDIATION-2026-01-15` (See `cortex-impl-map.yaml` → `remediation_phases` section)
 
 **Background:** 
 - PHASE-01 through PHASE-13 marked as "COMPLETED" but lack proper audit trail evidence
@@ -101,7 +101,7 @@ BEFORE writing ANY file:
 
 ```yaml
 before_implementing_any_ac_id:
-  1. CHECK audit_remediation status in cortex-master.yaml
+  1. CHECK audit_remediation status in cortex-impl-map.yaml
      - If status: "IN_PROGRESS" → You are in REMEDIATION MODE
      - All previous phases must verify audit trails BEFORE new work
   
@@ -172,7 +172,7 @@ All blocking rules violations → REFUSE continuation
 
 ## Behavior
 
-1. Read `cortex-master.yaml` phase_tracker first
+1. Read `cortex-impl-map.yaml` phase_tracker first
 2. Load governance rules from `tier0/governance/` (CORE-017: strict)
 3. **PHASE 0:** Git checkpoint + AC_START
 4. **PHASE 1:** Continuous validation + audit logging
@@ -183,7 +183,7 @@ All blocking rules violations → REFUSE continuation
 
 | Purpose | Location |
 |---------|----------|
-| Master Plan | `_workspaces/roadmap/cortex-master.yaml` |
+| Implementation Map | `_workspaces/roadmap/cortex-impl-map.yaml` |
 | Phase Specs | `_workspaces/roadmap/phases/phase-XX.yaml` |
 | Vision Files | `_workspaces/cortex-vision/*.yaml` |
 | Governance Rules | `cortex_brain/tier0/governance/core-rules.yaml` |
@@ -289,7 +289,7 @@ GENERATED REMEDIATION REQUIREMENTS:
      blocking: true (for CRITICAL) or false (for HIGH/MEDIUM)
    ```
 
-4. **Update cortex-master.yaml:**
+4. **Update cortex-impl-map.yaml:**
    - Add new phase to phase_tracker
    - Mark blocking phases with `blocking: true`
    - Add phase dependency relationships
