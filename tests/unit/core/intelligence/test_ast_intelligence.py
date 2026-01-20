@@ -203,7 +203,7 @@ class TestASTParsing:
         self, temp_python_file: Path
     ) -> None:
         """Test parsing a valid Python file returns AST."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         engine = ASTIntelligenceEngine()
         result = engine.parse_file(temp_python_file)
@@ -217,7 +217,7 @@ class TestASTParsing:
         self, temp_python_file: Path
     ) -> None:
         """Test that module docstring is extracted."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         engine = ASTIntelligenceEngine()
         result = engine.parse_file(temp_python_file)
@@ -228,7 +228,7 @@ class TestASTParsing:
         self, temp_python_file: Path
     ) -> None:
         """Test that imports are correctly extracted."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         engine = ASTIntelligenceEngine()
         result = engine.parse_file(temp_python_file)
@@ -245,7 +245,7 @@ class TestASTParsing:
         self, temp_python_file: Path
     ) -> None:
         """Test that function definitions are extracted."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         engine = ASTIntelligenceEngine()
         result = engine.parse_file(temp_python_file)
@@ -258,7 +258,7 @@ class TestASTParsing:
         self, temp_python_file: Path
     ) -> None:
         """Test that function signatures include parameters and return types."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         engine = ASTIntelligenceEngine()
         result = engine.parse_file(temp_python_file)
@@ -278,7 +278,7 @@ class TestASTParsing:
         self, temp_python_file: Path
     ) -> None:
         """Test that function docstrings are extracted."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         engine = ASTIntelligenceEngine()
         result = engine.parse_file(temp_python_file)
@@ -294,7 +294,7 @@ class TestASTParsing:
         self, temp_python_file: Path
     ) -> None:
         """Test that class definitions are extracted."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         engine = ASTIntelligenceEngine()
         result = engine.parse_file(temp_python_file)
@@ -307,7 +307,7 @@ class TestASTParsing:
         self, temp_python_file: Path
     ) -> None:
         """Test that class inheritance is identified."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         engine = ASTIntelligenceEngine()
         result = engine.parse_file(temp_python_file)
@@ -322,7 +322,7 @@ class TestASTParsing:
         self, temp_python_file: Path
     ) -> None:
         """Test that class methods are extracted."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         engine = ASTIntelligenceEngine()
         result = engine.parse_file(temp_python_file)
@@ -337,7 +337,7 @@ class TestASTParsing:
         self, temp_python_file: Path
     ) -> None:
         """Test that module-level constants are extracted."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         engine = ASTIntelligenceEngine()
         result = engine.parse_file(temp_python_file)
@@ -348,7 +348,7 @@ class TestASTParsing:
         self, sample_python_code: str
     ) -> None:
         """Test parsing Python code from string."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         engine = ASTIntelligenceEngine()
         result = engine.parse_string(sample_python_code)
@@ -370,8 +370,8 @@ class TestCallGraphConstruction:
         self, temp_python_file: Path
     ) -> None:
         """Test that function calls within functions are identified."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from src.core.intelligence.call_graph import CallGraphBuilder
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.call_graph import CallGraphBuilder
         
         engine = ASTIntelligenceEngine()
         parse_result = engine.parse_file(temp_python_file)
@@ -387,8 +387,8 @@ class TestCallGraphConstruction:
         self, temp_python_file: Path
     ) -> None:
         """Test that method calls are identified."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from src.core.intelligence.call_graph import CallGraphBuilder
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.call_graph import CallGraphBuilder
         
         engine = ASTIntelligenceEngine()
         parse_result = engine.parse_file(temp_python_file)
@@ -404,8 +404,8 @@ class TestCallGraphConstruction:
         self, temp_python_file: Path
     ) -> None:
         """Test that super() calls are identified."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from src.core.intelligence.call_graph import CallGraphBuilder
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.call_graph import CallGraphBuilder
         
         engine = ASTIntelligenceEngine()
         parse_result = engine.parse_file(temp_python_file)
@@ -422,8 +422,8 @@ class TestCallGraphConstruction:
         self, temp_python_file: Path
     ) -> None:
         """Test that a complete call graph is built."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from src.core.intelligence.call_graph import CallGraphBuilder
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.call_graph import CallGraphBuilder
         
         engine = ASTIntelligenceEngine()
         parse_result = engine.parse_file(temp_python_file)
@@ -441,8 +441,8 @@ class TestCallGraphConstruction:
         self, temp_python_file: Path
     ) -> None:
         """Test that call graph edges point in correct direction (caller → callee)."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from src.core.intelligence.call_graph import CallGraphBuilder
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.call_graph import CallGraphBuilder
         
         engine = ASTIntelligenceEngine()
         parse_result = engine.parse_file(temp_python_file)
@@ -467,8 +467,8 @@ class TestPatternDetection:
         self, singleton_pattern_code: str
     ) -> None:
         """Test detection of singleton pattern."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from src.core.intelligence.pattern_detector import PatternDetector
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.pattern_detector import PatternDetector
         
         engine = ASTIntelligenceEngine()
         parse_result = engine.parse_string(singleton_pattern_code)
@@ -486,8 +486,8 @@ class TestPatternDetection:
         self, factory_pattern_code: str
     ) -> None:
         """Test detection of factory pattern."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from src.core.intelligence.pattern_detector import PatternDetector
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.pattern_detector import PatternDetector
         
         engine = ASTIntelligenceEngine()
         parse_result = engine.parse_string(factory_pattern_code)
@@ -505,8 +505,8 @@ class TestPatternDetection:
         self, decorator_pattern_code: str
     ) -> None:
         """Test detection of decorator usage."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from src.core.intelligence.pattern_detector import PatternDetector
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.pattern_detector import PatternDetector
         
         engine = ASTIntelligenceEngine()
         parse_result = engine.parse_string(decorator_pattern_code)
@@ -531,8 +531,8 @@ class TestPatternDetection:
         self, decorator_pattern_code: str
     ) -> None:
         """Test detection of decorator chains."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from src.core.intelligence.pattern_detector import PatternDetector
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.pattern_detector import PatternDetector
         
         engine = ASTIntelligenceEngine()
         parse_result = engine.parse_string(decorator_pattern_code)
@@ -563,8 +563,8 @@ class TestDependencyMapping:
         self, temp_python_file: Path
     ) -> None:
         """Test mapping of standard library imports."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from src.core.intelligence.dependency_mapper import DependencyMapper
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.dependency_mapper import DependencyMapper
         
         engine = ASTIntelligenceEngine()
         parse_result = engine.parse_file(temp_python_file)
@@ -581,8 +581,8 @@ class TestDependencyMapping:
         self, temp_python_file: Path
     ) -> None:
         """Test classification of import types (standard, third-party, local)."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from src.core.intelligence.dependency_mapper import DependencyMapper
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.dependency_mapper import DependencyMapper
         
         engine = ASTIntelligenceEngine()
         parse_result = engine.parse_file(temp_python_file)
@@ -598,8 +598,8 @@ class TestDependencyMapping:
         self, tmp_path: Path
     ) -> None:
         """Test building import graph from multiple files."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from src.core.intelligence.dependency_mapper import DependencyMapper
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.dependency_mapper import DependencyMapper
         
         # Create module_a.py
         module_a = tmp_path / "module_a.py"
@@ -645,7 +645,7 @@ class TestGracefulDegradation:
         self, syntax_error_code: str
     ) -> None:
         """Test that syntax errors are handled gracefully."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         engine = ASTIntelligenceEngine()
         result = engine.parse_string(syntax_error_code)
@@ -658,7 +658,7 @@ class TestGracefulDegradation:
         self, syntax_error_code: str
     ) -> None:
         """Test that syntax errors include line/column information."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         engine = ASTIntelligenceEngine()
         result = engine.parse_string(syntax_error_code)
@@ -668,7 +668,7 @@ class TestGracefulDegradation:
 
     def test_handles_nonexistent_file(self) -> None:
         """Test handling of nonexistent file."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         engine = ASTIntelligenceEngine()
         result = engine.parse_file(Path("/nonexistent/path/file.py"))
@@ -680,7 +680,7 @@ class TestGracefulDegradation:
         self, tmp_path: Path
     ) -> None:
         """Test handling of empty Python file."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         empty_file = tmp_path / "empty.py"
         empty_file.write_text("")
@@ -696,7 +696,7 @@ class TestGracefulDegradation:
         self, tmp_path: Path
     ) -> None:
         """Test handling of non-Python (binary) file."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         binary_file = tmp_path / "binary.py"
         binary_file.write_bytes(b'\x00\x01\x02\x03')
@@ -720,9 +720,9 @@ class TestASTIntelligenceIntegration:
         self, temp_python_file: Path
     ) -> None:
         """Test complete analysis pipeline from file to insights."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
-        from src.core.intelligence.call_graph import CallGraphBuilder
-        from src.core.intelligence.dependency_mapper import DependencyMapper
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.call_graph import CallGraphBuilder
+        from cortex.core.intelligence.dependency_mapper import DependencyMapper
         
         engine = ASTIntelligenceEngine()
         result = engine.parse_file(temp_python_file)
@@ -747,7 +747,7 @@ class TestASTIntelligenceIntegration:
         self, temp_python_file: Path
     ) -> None:
         """Test that analysis results can be serialized to dict."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         engine = ASTIntelligenceEngine()
         result = engine.parse_file(temp_python_file)
@@ -764,7 +764,7 @@ class TestASTIntelligenceIntegration:
         self, temp_python_file: Path
     ) -> None:
         """Test that repeated analysis uses cache."""
-        from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+        from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
         
         engine = ASTIntelligenceEngine(enable_cache=True)
         

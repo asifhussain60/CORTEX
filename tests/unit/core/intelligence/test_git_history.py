@@ -138,7 +138,7 @@ class TestGitLogParsing:
         self, temp_git_repo: Path
     ) -> None:
         """Test parsing commit history from a git repository."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
         
         analyzer = GitHistoryAnalyzer(repo_path=temp_git_repo)
         commits = analyzer.get_commit_history()
@@ -150,7 +150,7 @@ class TestGitLogParsing:
         self, temp_git_repo: Path
     ) -> None:
         """Test extracting commit metadata (author, date, hash)."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
         
         analyzer = GitHistoryAnalyzer(repo_path=temp_git_repo)
         commits = analyzer.get_commit_history()
@@ -164,7 +164,7 @@ class TestGitLogParsing:
         self, temp_git_repo: Path
     ) -> None:
         """Test parsing commit messages."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
         
         analyzer = GitHistoryAnalyzer(repo_path=temp_git_repo)
         commits = analyzer.get_commit_history()
@@ -175,7 +175,7 @@ class TestGitLogParsing:
         self, temp_git_repo: Path
     ) -> None:
         """Test getting history for a specific file."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
         
         # Create and commit a second version
         test_file = temp_git_repo / "test.py"
@@ -204,7 +204,7 @@ class TestGitLogParsing:
         self, temp_git_repo: Path
     ) -> None:
         """Test getting diff for a specific commit."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
         
         analyzer = GitHistoryAnalyzer(repo_path=temp_git_repo)
         commits = analyzer.get_commit_history()
@@ -218,7 +218,7 @@ class TestGitLogParsing:
         self, tmp_path: Path
     ) -> None:
         """Test handling of repository with no commits."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
         
         empty_repo = tmp_path / "empty_repo"
         empty_repo.mkdir()
@@ -248,8 +248,8 @@ class TestChangeFrequency:
         self, temp_git_repo: Path
     ) -> None:
         """Test identification of frequently changed files."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
-        from src.core.intelligence.change_frequency import ChangeFrequencyMapper
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.change_frequency import ChangeFrequencyMapper
         
         # Create multiple commits to build history
         test_file = temp_git_repo / "hot_file.py"
@@ -281,8 +281,8 @@ class TestChangeFrequency:
         self, temp_git_repo: Path
     ) -> None:
         """Test calculation of change count for files."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
-        from src.core.intelligence.change_frequency import ChangeFrequencyMapper
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.change_frequency import ChangeFrequencyMapper
         
         analyzer = GitHistoryAnalyzer(repo_path=temp_git_repo)
         mapper = ChangeFrequencyMapper(analyzer)
@@ -295,8 +295,8 @@ class TestChangeFrequency:
         self, temp_git_repo: Path
     ) -> None:
         """Test hot spot identification within time window."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
-        from src.core.intelligence.change_frequency import ChangeFrequencyMapper
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.change_frequency import ChangeFrequencyMapper
         
         analyzer = GitHistoryAnalyzer(repo_path=temp_git_repo)
         mapper = ChangeFrequencyMapper(analyzer)
@@ -319,8 +319,8 @@ class TestAuthorMapping:
         self, temp_git_repo: Path
     ) -> None:
         """Test mapping authors to files they've modified."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
-        from src.core.intelligence.author_context import AuthorContextBuilder
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.author_context import AuthorContextBuilder
         
         analyzer = GitHistoryAnalyzer(repo_path=temp_git_repo)
         builder = AuthorContextBuilder(analyzer)
@@ -333,8 +333,8 @@ class TestAuthorMapping:
         self, temp_git_repo: Path
     ) -> None:
         """Test identification of experts for specific files."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
-        from src.core.intelligence.author_context import AuthorContextBuilder
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.author_context import AuthorContextBuilder
         
         analyzer = GitHistoryAnalyzer(repo_path=temp_git_repo)
         builder = AuthorContextBuilder(analyzer)
@@ -348,8 +348,8 @@ class TestAuthorMapping:
         self, temp_git_repo: Path
     ) -> None:
         """Test calculation of author contribution percentage."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
-        from src.core.intelligence.author_context import AuthorContextBuilder
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.author_context import AuthorContextBuilder
         
         analyzer = GitHistoryAnalyzer(repo_path=temp_git_repo)
         builder = AuthorContextBuilder(analyzer)
@@ -372,7 +372,7 @@ class TestRefactoringDetection:
         self, temp_git_repo: Path
     ) -> None:
         """Test detection of file rename operations."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
         
         # Create a file and rename it
         old_file = temp_git_repo / "old_name.py"
@@ -417,7 +417,7 @@ class TestRefactoringDetection:
         self, temp_git_repo: Path
     ) -> None:
         """Test detection of file move operations."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
         
         # Create directory and file
         src_dir = temp_git_repo / "src"
@@ -471,7 +471,7 @@ class TestTemporalContext:
         self, temp_git_repo: Path
     ) -> None:
         """Test building a timeline of changes for a file."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
         
         # Create multiple commits
         test_file = temp_git_repo / "timeline.py"
@@ -502,7 +502,7 @@ class TestTemporalContext:
         self, temp_git_repo: Path
     ) -> None:
         """Test getting recent changes within time window."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
         
         analyzer = GitHistoryAnalyzer(repo_path=temp_git_repo)
         recent = analyzer.get_recent_changes(days=7)
@@ -528,7 +528,7 @@ class TestGitHistoryErrorHandling:
         self, tmp_path: Path
     ) -> None:
         """Test handling of non-git directory."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
         
         non_git_dir = tmp_path / "not_a_repo"
         non_git_dir.mkdir()
@@ -542,7 +542,7 @@ class TestGitHistoryErrorHandling:
         self, temp_git_repo: Path
     ) -> None:
         """Test handling of history request for non-existent file."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
         
         analyzer = GitHistoryAnalyzer(repo_path=temp_git_repo)
         history = analyzer.get_file_history(Path("nonexistent.py"))
@@ -562,9 +562,9 @@ class TestGitHistoryIntegration:
         self, temp_git_repo: Path
     ) -> None:
         """Test complete git history analysis pipeline."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
-        from src.core.intelligence.change_frequency import ChangeFrequencyMapper
-        from src.core.intelligence.author_context import AuthorContextBuilder
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.change_frequency import ChangeFrequencyMapper
+        from cortex.core.intelligence.author_context import AuthorContextBuilder
         
         # Build up some history
         for i in range(3):
@@ -603,7 +603,7 @@ class TestGitHistoryIntegration:
         self, temp_git_repo: Path
     ) -> None:
         """Test serialization of git analysis results."""
-        from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+        from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
         
         analyzer = GitHistoryAnalyzer(repo_path=temp_git_repo)
         commits = analyzer.get_commit_history()
