@@ -306,8 +306,34 @@ phases_implementation_status:
         implementation_requires: "BrainPopulator repoint to cortex_brain/ + delete cortex/brain/core/governance/"
   
   not_started:
-    count: 3
+    count: 4
     phases:
+      - id: "phase-remediation-001"
+        title: "Production Readiness Remediation (Phase A-E Complete Roadmap)"
+        ac_ids: 5
+        status: "NOT_STARTED"
+        priority: "P0-CRITICAL"
+        estimated_effort: "5 weeks"
+        blocking: true
+        note: "Comprehensive plan for 100% production readiness: 172 test errors → 0, 4 architecture conflicts → 0"
+        file: "_workspaces/roadmap/phases/phase-remediation-001-production-readiness.yaml"
+        components:
+          - id: "Phase A - Tier Consolidation"
+            effort: "1 day"
+            blocks: ["impl-arch-011", "impl-arch-022", "impl-arch-025"]
+          - id: "Phase B - MCP Registry Centralization"
+            effort: "2 days"
+            blocks: ["impl-arch-022-mcp-compliance"]
+          - id: "Phase C - Fix Circular Imports"
+            effort: "2 days"
+            blocks: ["Phase D", "Phase E"]
+          - id: "Phase D - Create Missing Modules"
+            effort: "3-4 days"
+            blocks: ["Phase E"]
+          - id: "Phase E - TDD Implementation"
+            effort: "15-20 days"
+            blocks: ["production deployment"]
+      
       - id: "impl-tdd-prod-ready"
         title: "TDD Production Readiness (125 missing modules)"
         ac_ids: 6
@@ -315,8 +341,9 @@ phases_implementation_status:
         priority: "P2-MEDIUM"
         estimated_effort: "2-3 weeks"
         blocking: false
-        note: "125 modules have tests but no implementations; 170 test errors"
+        note: "Phase E of phase-remediation-001: implement 125 modules; 170 test errors resolved"
         file: "_workspaces/roadmap/phases/impl-tdd-prod-ready.yaml"
+        dependency: "phase-remediation-001 Phase D (stubs created first)"
       
       - id: "impl-features-registry-001"
         title: "FeatureRegistry Implementation - Live Manifest System"
@@ -347,17 +374,20 @@ phases_implementation_status:
         business_value: "Eliminates ephemeral _workspaces/roadmap confusion, enables proper plan isolation, scales to multiple domains"
 
 phase_tracker:
-  authority: "CORTEX_IMPL_MAP_v3.3-FINAL"
-  last_updated: "2026-01-20T20:00:00Z"
-  validation_status: "VERIFIED_COMPLETE"
+  authority: "CORTEX_IMPL_MAP_v3.4-WITH-REMEDIATION"
+  last_updated: "2026-01-20T21:00:00Z"
+  validation_status: "VERIFIED_WITH_REMEDIATION_PLAN"
   validation_notes: |
-    Complete implementation verification against filesystem + test inventory:
+    Complete implementation verification with holistic remediation roadmap:
     - 10 implemented phases documented (verified with file analysis)
     - impl-recovery-003 verified IMPLEMENTED (418+481+417+441 LOC, 127 tests)
     - impl-ops-004-observability verified IMPLEMENTED (2028 LOC, 137 tests)
+    - 1 comprehensive remediation phase (phase-remediation-001 with sub-phases A-E)
+    - 1 TDD implementation phase (impl-tdd-prod-ready as Phase E of remediation)
     - 21 stub/placeholder phases (design-only, not production blockers)
-    - 3 not-started phases (impl-tdd-prod-ready + 2 future phases)
-    - Total: 34 known phases, 0 production blockers remaining
+    - 2 future phases (impl-features-registry-001, cortex-registry-001-migration)
+    - Total: 35 known phases, 5 critical blockers identified + remediation plan
+    - New: 172 test collection errors + 4 architecture conflicts identified with fixes
   
   source_of_truth_chain:
     - document: "cortex-master.yaml"
