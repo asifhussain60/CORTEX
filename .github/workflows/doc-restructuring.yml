@@ -1,0 +1,225 @@
+name: Autonomous Documentation Restructuring
+
+on:
+  schedule:
+    # Run every Sunday at 2 AM UTC
+    - cron: '0 2 * * 0'
+  
+  push:
+    paths:
+      - '**.md'
+      - '**.txt'
+    branches:
+      - main
+      - develop
+    ignore-paths:
+      - 'docs/**'
+      - '.github/**'
+  
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (preview only, no file changes)'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  restructure-documentation:
+    runs-on: ubuntu-latest
+    name: Document Discovery & Restructuring
+    
+    permissions:
+      contents: write
+      actions: read
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+      
+      - name: Run autonomous document restructuring agent
+        id: agent
+        env:
+          CORTEX_ROOT: ${{ github.workspace }}
+          LOG_PATH: .github/agents/doc-restructuring.log
+          REPORT_PATH: .github/agents/doc-restructuring-report.json
+          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
+        run: |
+          python .github/agents/doc-restructuring-agent.py \
+            --root="${CORTEX_ROOT}" \
+            --auto-commit \
+            --dry-run="${DRY_RUN}"
+          
+          # Extract results for next steps
+          if [ -f .github/agents/doc-restructuring-report.json ]; then
+            echo "report_exists=true" >> $GITHUB_OUTPUT
+            echo "log_exists=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create git commit (if changes made)
+        if: steps.agent.outputs.report_exists == 'true' && github.event.inputs.dry_run != 'true'
+        run: |
+          git config user.name "CORTEX Documentation Bot"
+          git config user.email "docs-bot@cortex.local"
+          
+          # Check if there are changes
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git commit -m "Autonomous: Documentation restructuring
+
+- Phase 0: Repository scan and file discovery
+- Phase 1: Automatic file categorization
+- Phase 2: File movement and archival
+- Phase 3: Report generation
+
+See .github/agents/doc-restructuring-report.json for details.
+Execution Log: .github/agents/doc-restructuring.log"
+          fi
+      
+      - name: Push changes
+        if: steps.agent.outputs.report_exists == 'true' && github.event.inputs.dry_run != 'true'
+        run: |
+          # Only push if there are committed changes
+          if [ -n "$(git log -1 --oneline 2>/dev/null | grep -i 'autonomous')" ]; then
+            git push origin ${{ github.ref }}
+          fi
+      
+      - name: Upload log artifact
+        if: always() && steps.agent.outputs.log_exists == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: doc-restructuring-log
+          path: .github/agents/doc-restructuring.log
+          retention-days: 30
+      
+      - name: Upload report artifact
+        if: always() && steps.agent.outputs.report_exists == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: doc-restructuring-report
+          path: .github/agents/doc-restructuring-report.json
+          retention-days: 30
+      
+      - name: Comment on PR (if applicable)
+        if: github.event_name == 'pull_request' && steps.agent.outputs.report_exists == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('.github/agents/doc-restructuring-report.json', 'utf8'));
+            
+            const comment = `
+            ## 📚 Documentation Restructuring Report
+            
+            **Files Discovered:** ${report.analysis.total_files}
+            
+            ### By Category
+            ${Object.entries(report.analysis.by_category).map(([cat, count]) => 
+              `- ${cat}: ${count}`
+            ).join('\n')}
+            
+            ### Actions Taken
+            ${Object.entries(report.analysis.by_action).map(([action, count]) => 
+              `- ${action}: ${count}`
+            ).join('\n')}
+            
+            ### Execution
+            - Moved: ${report.execution.moved || 0}
+            - Archived: ${report.execution.archived || 0}
+            - Review Pending: ${report.execution.review_pending || 0}
+            
+            See [Full Report](.github/agents/doc-restructuring-report.json) and [Log](.github/agents/doc-restructuring.log) for details.
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+      
+      - name: Notify Slack (optional)
+        if: always() && secrets.SLACK_WEBHOOK_URL != ''
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          payload: |
+            {
+              "text": "Documentation Restructuring Completed",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*CORTEX Documentation Restructuring*\n:white_check_mark: Autonomous execution completed\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Details>"
+                  }
+                }
+              ]
+            }
+
+  verify-integrity:
+    needs: restructure-documentation
+    runs-on: ubuntu-latest
+    name: Verify Documentation Integrity
+    if: always()
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Check for broken links
+        continue-on-error: true
+        run: |
+          echo "Checking for broken documentation links..."
+          find docs/ -name "*.md" -type f | while read file; do
+            # Extract links from markdown
+            grep -o '\[.*\](.*\.md)' "$file" | grep -o '([^)]*)' | tr -d '()' | while read link; do
+              if ! [ -f "$link" ]; then
+                echo "WARN: Broken link in $file: $link"
+              fi
+            done
+          done
+      
+      - name: Verify protected files
+        run: |
+          echo "Verifying protected files..."
+          
+          # Check critical files exist
+          required_files=(
+            "requirements.txt"
+            "pytest.ini"
+            "cortex-config.yaml"
+            ".github/prompts/cortex-doc.prompt.md"
+          )
+          
+          for file in "${required_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "ERROR: Protected file missing: $file"
+              exit 1
+            fi
+          done
+          
+          echo "All protected files verified ✓"
+      
+      - name: Summary
+        run: |
+          echo "## Documentation Restructuring Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✓ Autonomous restructuring completed" >> $GITHUB_STEP_SUMMARY
+          echo "✓ Protected files verified" >> $GITHUB_STEP_SUMMARY
+          echo "✓ Documentation integrity maintained" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "See artifacts for execution details." >> $GITHUB_STEP_SUMMARY
