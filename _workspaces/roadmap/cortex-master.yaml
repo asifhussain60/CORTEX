@@ -1,20 +1,24 @@
 metadata:
   title: CORTEX Implementation Roadmap
-  description: AI-Powered Development Orchestration System - Foundation through Full
-    Remediation - COMPLETE + DevX Enhancement + Response Composition + MCP Protocol
-    + Challenge Integration + Environment Setup
+  description: AI-Powered Development Orchestration System - PHASE-ENV-SETUP COMPLETE.
+    CRITICAL BLOCKER IDENTIFIED & REMEDIATION PHASE CREATED. Root cause analysis
+    shows tests import from src.* but implementations in cortex/. Created PHASE-CONSOLIDATION-SRC-CORTEX
+    (5 ACs, 9.5h) to consolidate to single source folder.
   project: CORTEX
-  status: "PHASE-ENV-SETUP COMPLETE ✅ - Environment Setup & Toolkit Initialization (5 ACs, 54 tests passing)"
-  dor_score: 100
+  status: "PHASE-CONSOLIDATION-SRC-CORTEX - Blocks all production phases. Consolidate src/ vs cortex/ to single canonical location."
+  dor_score: CONDITIONAL (blocked by consolidation)
   start_date: null
-  end_date: '2026-01-19'
-  total_ac_ids: 107
+  end_date: null
+  updated_date: '2026-01-20T12:00:00Z'
+  total_ac_ids: 112
   total_ac_ids_locked: 107
   total_ac_ids_complete: 107
   locked_acs_in_phases: 107
-  completion_percentage: 100.0
-  pending_implementation: 0
-  pending_phases: 0
+  pending_acs_in_phases: 5
+  completion_percentage: 95.5
+  pending_implementation: 5
+  pending_phases: 1
+  blocking_phase: PHASE-CONSOLIDATION-SRC-CORTEX
   ac_breakdown:
     locked_phases: 126
     phase_03_04_05: 35
@@ -4649,7 +4653,7 @@ phases:
       src.infrastructure.database). NOT a platform issue (Mac vs Windows) - conftest.py 
       already uses platform-independent pathlib. This is a structural gap where tests 
       expect implementations that are either missing or in different locations.
-    status: NOT_STARTED
+    status: SUPERSEDED_BY_CONSOLIDATION
     locked: false
     ac_ids: 5
     completed_ac_ids: 0
@@ -4658,44 +4662,105 @@ phases:
     priority: P0 (CRITICAL BLOCKER)
     category: Quality & Testing
     requires: PHASE-ENV-SETUP
-    required_for: PHASE-ONBOARDING-ORCHESTRATOR
+    required_for: PHASE-CONSOLIDATION-SRC-CORTEX
     file: phases/phase-remediation-cross-platform.yaml
+    blocking: false
+    notes: >
+      SUPERSEDED: Root cause analysis identified the real issue: TWO source folders (src/ and cortex/).
+      Tests import from src.* but implementations are in cortex.*. This phase conceptually complete,
+      but real solution is PHASE-CONSOLIDATION-SRC-CORTEX which consolidates to single folder.
+      See: _workspaces/roadmap/reports/CONSOLIDATION-ANALYSIS-SRC-VS-CORTEX.md
+  PHASE-CONSOLIDATION-SRC-CORTEX:
+    id: PHASE-CONSOLIDATION-SRC-CORTEX
+    title: Source Folder Consolidation - Single Canonical Location
+    description: >
+      CRITICAL BLOCKER RESOLUTION. Consolidate dual source folders (src/ with 79 files, cortex/ with 388 files)
+      into single canonical location: cortex/. Tests currently import from src.* but all implementations
+      are in cortex.*. This consolidation establishes cortex/ as canonical, updates all 409 test imports
+      (src.* → cortex.*), and removes ambiguity.
+    
+      Root cause identified in PHASE-REMEDIATION-CROSS-PLATFORM analysis: NOT missing implementations,
+      but TWO LOCATIONS for same code. Cortex is complete (388 files, 269 in brain/), src is incomplete
+      leftover (79 files, no root __init__.py).
+    status: NOT_STARTED
+    locked: false
+    ac_ids: 5
+    completed_ac_ids: 0
+    estimated_hours: 9.5
+    estimated_tests: 409
+    priority: P0 (CRITICAL BLOCKER)
+    category: Infrastructure & Quality
+    requires: PHASE-ENV-SETUP
+    required_for: PHASE-ONBOARDING-ORCHESTRATOR
+    file: phases/phase-consolidation-src-cortex.yaml
     blocking: true
     acceptance_criteria:
-      AC-REM-CROSS-PLATFORM-001-01:
-        title: Inventory Missing Modules & Map to Existing Code
+      AC-CONS-001-01:
+        title: Audit & Validate src/ vs cortex/ Content
         status: NOT_STARTED
         tests: 0
-        description: "Scan test imports and create comprehensive mapping of 170+ missing modules"
-      AC-REM-CROSS-PLATFORM-002-01:
-        title: Refactor Test Imports to Match Actual Structure
+        description: "Catalog all files in both folders, identify duplication and unique content"
+      AC-CONS-002-01:
+        title: Archive & Migrate Unique src/ Content
         status: NOT_STARTED
         tests: 0
-        description: "Update test files to import from correct locations"
-      AC-REM-CROSS-PLATFORM-003-01:
-        title: Create Stub Implementations for Missing Modules
+        description: "Move unique src/ files to cortex/, remove duplicates, empty src/"
+      AC-CONS-003-01:
+        title: Refactor All Test Imports (src.* → cortex.*)
+        status: NOT_STARTED
+        tests: 409
+        description: "Update all 409 test files to import from cortex.* instead of src.*"
+      AC-CONS-003-02:
+        title: Update conftest.py Path Resolution
         status: NOT_STARTED
         tests: 0
-        description: "Create minimal stubs for modules mapped as missing"
-      AC-REM-CROSS-PLATFORM-004-01:
-        title: Validate Test Collection & Run Full Suite
+        description: "Remove src/ from sys.path, verify cortex/ as canonical"
+      AC-CONS-004-01:
+        title: Validate Test Collection & Verify Execution
+        status: NOT_STARTED
+        tests: 409
+        description: "Run pytest --collect-only and full suite, verify 0 import errors"
+      AC-CONS-005-01:
+        title: Documentation & Status Updates
         status: NOT_STARTED
         tests: 0
-        description: "Verify pytest can collect and run all tests without import errors"
-      AC-REM-CROSS-PLATFORM-005-01:
-        title: Update cortex-master.yaml Status & Create Test Gate
-        status: NOT_STARTED
-        tests: 0
-        description: "Update YAML with accurate test status and create pre-commit gates"
+        description: "Update cortex-master.yaml, docs/, and prompts with new structure"
+    analysis_reference: _workspaces/roadmap/reports/CONSOLIDATION-ANALYSIS-SRC-VS-CORTEX.md
     diagnosis:
-      problem: "170+ test collection errors - ModuleNotFoundError on critical modules"
-      root_cause: "Structural gap: Tests written (TDD) but implementations missing or misplaced"
-      not_platform_related: "conftest.py already uses pathlib.Path correctly for cross-platform support"
-      impact: "Test suite cannot run, cannot verify production readiness, blocks CI/CD"
+      problem: "170+ test collection errors - ModuleNotFoundError"
+      root_cause: "Dual source folders: src/ (79 files, no __init__.py) vs cortex/ (388 files, complete)"
+      architecture_issue: "Tests import src.* but implementations in cortex.*"
+      not_missing_code: "All code exists in cortex/, just needs import path consolidation"
+      not_platform_related: "conftest.py already cross-platform correct"
+    impact: |
+      - Tests cannot run (170 collection errors)
+      - Cannot verify CORTEX "fully active and wired in"
+      - Blocks all CI/CD verification
+      - Developer confusion: which folder is canonical?
+      - Technical debt: dual maintenance burden
+    success_metrics:
+      before:
+        - 170+ ModuleNotFoundError on pytest collection
+        - 409 tests undiscoverable
+        - Dual folder maintenance
+      after:
+        - 0 import errors on collection
+        - 409+ tests discoverable and executable
+        - Single canonical source: cortex/
+        - Clear import paths
+        - All downstream phases unblocked
+    blocking_until_complete: |
+      PHASE-ONBOARDING-ORCHESTRATOR and all downstream phases are blocked.
+      Cannot proceed to production work until test suite is executable.
     notes: >
-      PHASE NOT YET STARTED. This remediation phase addresses critical test failures.
-      Conftest.py is already correct - no platform-specific path changes needed. 
-      This is about code structure and import alignment. Blocking PHASE-ONBOARDING-ORCHESTRATOR.
+      CRITICAL BLOCKER FOR ALL PRODUCTION PHASES.
+      
+      Analysis shows: cortex/ is complete (388 files, with 269-file brain/ integration).
+      src/ is legacy/incomplete (79 files, missing root __init__.py, has duplicates of core/orchestrators/etc).
+      Solution: Consolidate to cortex/ (not create missing stubs).
+      
+      This unblocks test execution and all downstream production phases.
+      See full analysis: _workspaces/roadmap/reports/CONSOLIDATION-ANALYSIS-SRC-VS-CORTEX.md
   phase_onboarding_orchestrator:
     id: PHASE-ONBOARDING-ORCHESTRATOR
     title: User Onboarding Orchestrator & Tool Discovery System
@@ -4703,10 +4768,17 @@ phases:
       contextual help, and adoption metrics. Balances efficiency (40-hour timeline
       via pattern reuse) with production quality (140+ tests, full governance compliance).
       YAML-first design enables post-deployment customization without code changes.
-    status: COMPLETED
-    locked: true
-    completed_at: '2026-01-19T05:45:00Z'
+    status: BLOCKED_AWAITING_CONSOLIDATION
+    locked: false
+    completion_target: TBD
+    blocking_reason: PHASE-CONSOLIDATION-SRC-CORTEX must complete first - no working test suite
+    notes: >
+      STATUS UPDATED (2026-01-20): Changed from COMPLETED to BLOCKED.
+      This phase was previously marked complete but test suite cannot run due to import failures.
+      Actual status: BLOCKED by PHASE-CONSOLIDATION-SRC-CORTEX (must resolve src/ vs cortex/ issue first).
+      Once consolidation complete and tests executable, this phase can proceed.
     requires:
+    - PHASE-CONSOLIDATION-SRC-CORTEX
     - PHASE-22
     priority: P0
     estimated_hours: 40
