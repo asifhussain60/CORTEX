@@ -68,12 +68,19 @@ def decide_continuation(context: ContinuationContext) -> ContinuationDecision:
     if context.turn_number > 20:  # Max 20 turns
         return ContinuationDecision.COMPLETE
 
+
+
     # Normal continuation
     return ContinuationDecision.CONTINUE
 
 
+# Aliases for backward compatibility
+ContinuationReason = ContinuationDecision
+
 __all__ = [
     "ContinuationDecision",
     "ContinuationContext",
+    "ContinuationReason",
     "decide_continuation",
 ]
+

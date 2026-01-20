@@ -189,9 +189,14 @@ class IntentReflectionProtocol:
         self.reflection_history.clear()
 
 
+# Alias for backward compatibility
+IntentReflectionEngine = IntentReflectionProtocol
+
 __all__ = [
     "IntentReflectionProtocol",
+    "IntentReflectionEngine",
     "IntentReflection",
     "ReflectionQuestion",
     "ReflectionType",
 ]
+
