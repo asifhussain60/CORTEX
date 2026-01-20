@@ -15,6 +15,19 @@ __author__ = 'Asif Hussain'
 __license__ = 'Proprietary'
 __description__ = 'TIER 1 - Core Logic and Intelligence'
 
+# Import orchestrators components for backward compatibility
+from .orchestrators import (
+    Cleaner,
+    DataCleaner,
+    FormatCleaner,
+    CleaningRule,
+    CleanerType,
+    VacuumOrchestrator,
+    VacuumStats,
+    VacuumStrategy,
+    cleaners,
+)
+
 # Key TIER 1 components
 __all__ = [
     '__version__',
@@ -25,6 +38,16 @@ __all__ = [
     'brains',
     'intelligence',
     'adapters',
+    # Backward compatibility exports
+    'Cleaner',
+    'DataCleaner',
+    'FormatCleaner',
+    'CleaningRule',
+    'CleanerType',
+    'VacuumOrchestrator',
+    'VacuumStats',
+    'VacuumStrategy',
+    'cleaners',
 ]
 
 # Lazy imports for TIER 1 components
