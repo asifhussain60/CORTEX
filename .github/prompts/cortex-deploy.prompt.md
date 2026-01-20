@@ -32,32 +32,33 @@ CORTEX/
 
 ---
 
-### Step 1.2: Consolidate Python Implementation
+### Step 1.2: Python Implementation Structure
 **Location**: Across CORTEX codebase
 
 **Action**:
-- Identify all `*.py` files in the current repository structure
-- Map Python modules to their logical packages (MCP, API, Brain, Orchestrators, Tools, etc.)
-- Move all Python implementation into the **CORTEX Toolkit** exposed via MCP
-- Preserve package structure where applicable (e.g., `cortex/api/` → `toolkit/api/`)
-- Ensure MCP server correctly exposes all tools and utilities
+- Verify all `*.py` files are organized in the canonical cortex/ package
+- Ensure logical module organization (MCP, API, Brain, Orchestrators, Tools, etc.)
+- Verify MCP server correctly exposes all tools and utilities
+- Maintain separation: cortex/ (implementation) vs cortex_brain/ (governance/state)
 
 **Expected Outcome**:
 ```
 CORTEX/
-├── cortex_toolkit/          # Central implementation hub exposed via MCP
+├── cortex/                  # Canonical implementation package (388 files)
 │   ├── api/                 # API utilities
-│   ├── brain/               # Governance logic
+│   ├── brain/               # Brain integration (269 files)
 │   ├── core/                # Core utilities
 │   ├── infrastructure/      # Infrastructure utilities
-│   ├── mcp/                 # MCP server and handlers
-│   ├── orchestrators/       # Orchestration logic
+│   ├── mcp/                 # MCP server and handlers (23+ tools)
+│   ├── orchestrators/       # Orchestration logic (41 files)
 │   ├── tools/               # Reusable tools
 │   └── __init__.py
-├── cortex_brain/            # State and data (preserved)
-├── tests/                   # Test files aligned with implementation
+├── cortex_brain/            # Governance, state, tier0/1/2 rules
+├── tests/                   # Test files aligned with cortex/ structure
 └── mcp-config/              # MCP configuration
 ```
+
+**Note**: cortex/ is the canonical implementation package. All MCP tools are exposed via cortex/mcp/. See Architecture Decision Record: docs/ARCH-DECISION-RECORD-CORTEX-CANONICAL-PACKAGE.md
 
 ---
 
