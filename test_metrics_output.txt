@@ -1,0 +1,87 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.2, pluggy-1.6.0 -- C:\Users\asifh\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: D:\PROJECTS\CORTEX
+configfile: pytest.ini
+plugins: anyio-4.12.0, asyncio-1.3.0, cov-7.0.0, timeout-2.4.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+timeout: 30.0s
+timeout method: thread
+timeout func_only: False
+collecting ... collected 29 items
+
+tests/unit/infrastructure/test_prometheus_metrics.py::TestMetricsCollectorInitialization::test_metrics_collector_creation PASSED [  3%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestMetricsCollectorInitialization::test_metrics_registry_isolated PASSED [  6%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestMetricsCollectorInitialization::test_metrics_config_defaults PASSED [ 10%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestRequestMetrics::test_request_metrics_creation PASSED [ 13%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestRequestMetrics::test_http_requests_total_counter FAILED [ 17%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestRequestMetrics::test_http_request_duration_histogram PASSED [ 20%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestRequestMetrics::test_http_requests_in_flight_gauge PASSED [ 24%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestRequestMetrics::test_label_cardinality_enforcement FAILED [ 27%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestDatabaseMetrics::test_database_metrics_creation PASSED [ 31%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestDatabaseMetrics::test_db_connections_active_gauge PASSED [ 34%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestDatabaseMetrics::test_db_connections_idle_gauge PASSED [ 37%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestDatabaseMetrics::test_db_query_duration_histogram PASSED [ 41%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestDatabaseMetrics::test_db_queries_total_counter FAILED [ 44%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestBusinessMetrics::test_business_metrics_creation PASSED [ 48%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestBusinessMetrics::test_phases_total_counter FAILED [ 51%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestBusinessMetrics::test_ac_completed_total_counter FAILED [ 55%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestBusinessMetrics::test_governance_checks_total_counter FAILED [ 58%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestCustomMetrics::test_custom_metrics_creation PASSED [ 62%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestCustomMetrics::test_orchestrator_executions_total FAILED [ 65%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestCustomMetrics::test_circuit_breaker_state_gauge PASSED [ 68%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestMetricsEndpoint::test_metrics_endpoint_returns_text FAILED [ 72%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestMetricsEndpoint::test_metrics_format_is_valid FAILED [ 75%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestMetricsEndpoint::test_scrape_performance FAILED [ 79%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestMetricsPerformance::test_metric_recording_overhead PASSED [ 82%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestMetricsPerformance::test_histogram_recording_performance PASSED [ 86%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestMetricsEdgeCases::test_missing_labels_default_to_unknown PASSED [ 89%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestMetricsEdgeCases::test_histogram_bucket_configuration PASSED [ 93%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestMetricsEdgeCases::test_counter_reset_handling PASSED [ 96%]
+tests/unit/infrastructure/test_prometheus_metrics.py::TestMetricsEdgeCases::test_concurrent_metric_recording PASSED [100%]
+
+================================== FAILURES ===================================
+E   AssertionError: http_requests_total metric not found
+    assert False
+D:\PROJECTS\CORTEX\tests\unit\infrastructure\test_prometheus_metrics.py:95: AssertionError: http_requests_total metric not found
+E   TypeError: MetricsConfig.__init__() missing 1 required positional argument: 'environment'
+D:\PROJECTS\CORTEX\tests\unit\infrastructure\test_prometheus_metrics.py:148: TypeError: MetricsConfig.__init__() missing 1 required positional argument: 'environment'
+E   AssertionError: db_queries_total metric not found
+    assert False
+D:\PROJECTS\CORTEX\tests\unit\infrastructure\test_prometheus_metrics.py:245: AssertionError: db_queries_total metric not found
+E   AssertionError: phases_total metric not found
+    assert False
+D:\PROJECTS\CORTEX\tests\unit\infrastructure\test_prometheus_metrics.py:272: AssertionError: phases_total metric not found
+E   AssertionError: ac_completed_total metric not found
+    assert False
+D:\PROJECTS\CORTEX\tests\unit\infrastructure\test_prometheus_metrics.py:289: AssertionError: ac_completed_total metric not found
+E   AssertionError: governance_checks_total metric not found
+    assert False
+D:\PROJECTS\CORTEX\tests\unit\infrastructure\test_prometheus_metrics.py:306: AssertionError: governance_checks_total metric not found
+E   AssertionError: orchestrator_executions_total metric not found
+    assert False
+D:\PROJECTS\CORTEX\tests\unit\infrastructure\test_prometheus_metrics.py:342: AssertionError: orchestrator_executions_total metric not found
+E   ValueError: Duplicated timeseries in CollectorRegistry: {'http_requests', 'http_requests_created', 'http_requests_total'}
+C:\Users\asifh\AppData\Local\Programs\Python\Python313\Lib\site-packages\prometheus_client\registry.py:40: ValueError: Duplicated timeseries in CollectorRegistry: {'http_requests', 'http_requests_created', 'http_requests_total'}
+E   ValueError: Duplicated timeseries in CollectorRegistry: {'http_requests', 'http_requests_created', 'http_requests_total'}
+C:\Users\asifh\AppData\Local\Programs\Python\Python313\Lib\site-packages\prometheus_client\registry.py:40: ValueError: Duplicated timeseries in CollectorRegistry: {'http_requests', 'http_requests_created', 'http_requests_total'}
+E   ValueError: Duplicated timeseries in CollectorRegistry: {'http_requests', 'http_requests_created', 'http_requests_total'}
+C:\Users\asifh\AppData\Local\Programs\Python\Python313\Lib\site-packages\prometheus_client\registry.py:40: ValueError: Duplicated timeseries in CollectorRegistry: {'http_requests', 'http_requests_created', 'http_requests_total'}
+=========================== short test summary info ===========================
+FAILED tests/unit/infrastructure/test_prometheus_metrics.py::TestRequestMetrics::test_http_requests_total_counter - AssertionError: http_requests_total metric not found
+assert False
+FAILED tests/unit/infrastructure/test_prometheus_metrics.py::TestRequestMetrics::test_label_cardinality_enforcement - TypeError: MetricsConfig.__init__() missing 1 required positional argument: 'environment'
+FAILED tests/unit/infrastructure/test_prometheus_metrics.py::TestDatabaseMetrics::test_db_queries_total_counter - AssertionError: db_queries_total metric not found
+assert False
+FAILED tests/unit/infrastructure/test_prometheus_metrics.py::TestBusinessMetrics::test_phases_total_counter - AssertionError: phases_total metric not found
+assert False
+FAILED tests/unit/infrastructure/test_prometheus_metrics.py::TestBusinessMetrics::test_ac_completed_total_counter - AssertionError: ac_completed_total metric not found
+assert False
+FAILED tests/unit/infrastructure/test_prometheus_metrics.py::TestBusinessMetrics::test_governance_checks_total_counter - AssertionError: governance_checks_total metric not found
+assert False
+FAILED tests/unit/infrastructure/test_prometheus_metrics.py::TestCustomMetrics::test_orchestrator_executions_total - AssertionError: orchestrator_executions_total metric not found
+assert False
+FAILED tests/unit/infrastructure/test_prometheus_metrics.py::TestMetricsEndpoint::test_metrics_endpoint_returns_text - ValueError: Duplicated timeseries in CollectorRegistry: {'http_requests', 'http_requests_created', 'http_requests_total'}
+FAILED tests/unit/infrastructure/test_prometheus_metrics.py::TestMetricsEndpoint::test_metrics_format_is_valid - ValueError: Duplicated timeseries in CollectorRegistry: {'http_requests', 'http_requests_created', 'http_requests_total'}
+FAILED tests/unit/infrastructure/test_prometheus_metrics.py::TestMetricsEndpoint::test_scrape_performance - ValueError: Duplicated timeseries in CollectorRegistry: {'http_requests', 'http_requests_created', 'http_requests_total'}
+======================== 10 failed, 19 passed in 0.50s ========================

@@ -1,0 +1,51 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.2, pluggy-1.6.0 -- C:\Users\asifh\AppData\Local\Programs\Python\Python313\python.exe
+cachedir: .pytest_cache
+rootdir: D:\PROJECTS\CORTEX
+configfile: pytest.ini
+plugins: anyio-4.12.0, asyncio-1.3.0, cov-7.0.0, timeout-2.4.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+timeout: 30.0s
+timeout method: thread
+timeout func_only: False
+collecting ... collected 4 items
+
+tests/unit/infrastructure/test_structured_logging.py::TestStructuredLoggerBasics::test_structured_logger_creation PASSED
+{"timestamp": "2026-01-20T13:21:54.696005Z", "level": "INFO", "component": "test-component", "correlation_id": "5e0a0b46-d7bd-48a2-863a-af4dee7a566c", "message": "Test message"}
+{"timestamp": "2026-01-20T13:21:54.696005Z", "level": "INFO", "component": "test-component", "correlation_id": "5e0a0b46-d7bd-48a2-863a-af4dee7a566c", "message": "Test message"}
+tests/unit/infrastructure/test_structured_logging.py::TestStructuredLoggerBasics::test_json_format_validation PASSED
+{"timestamp": "2026-01-20T13:21:54.698927Z", "level": "DEBUG", "component": "test-component", "correlation_id": "5ddc18e1-9bf3-480a-b545-56c55cc32809", "message": "Debug message"}
+{"timestamp": "2026-01-20T13:21:54.698927Z", "level": "DEBUG", "component": "test-component", "correlation_id": "5ddc18e1-9bf3-480a-b545-56c55cc32809", "message": "Debug message"}
+{"timestamp": "2026-01-20T13:21:54.698927Z", "level": "DEBUG", "component": "test-component", "correlation_id": "5ddc18e1-9bf3-480a-b545-56c55cc32809", "message": "Debug message"}
+{"timestamp": "2026-01-20T13:21:54.699157Z", "level": "INFO", "component": "test-component", "correlation_id": "5ddc18e1-9bf3-480a-b545-56c55cc32809", "message": "Info message"}
+{"timestamp": "2026-01-20T13:21:54.699157Z", "level": "INFO", "component": "test-component", "correlation_id": "5ddc18e1-9bf3-480a-b545-56c55cc32809", "message": "Info message"}
+{"timestamp": "2026-01-20T13:21:54.699157Z", "level": "INFO", "component": "test-component", "correlation_id": "5ddc18e1-9bf3-480a-b545-56c55cc32809", "message": "Info message"}
+{"timestamp": "2026-01-20T13:21:54.699302Z", "level": "WARN", "component": "test-component", "correlation_id": "5ddc18e1-9bf3-480a-b545-56c55cc32809", "message": "Warning message"}
+{"timestamp": "2026-01-20T13:21:54.699302Z", "level": "WARN", "component": "test-component", "correlation_id": "5ddc18e1-9bf3-480a-b545-56c55cc32809", "message": "Warning message"}
+{"timestamp": "2026-01-20T13:21:54.699302Z", "level": "WARN", "component": "test-component", "correlation_id": "5ddc18e1-9bf3-480a-b545-56c55cc32809", "message": "Warning message"}
+{"timestamp": "2026-01-20T13:21:54.699436Z", "level": "ERROR", "component": "test-component", "correlation_id": "5ddc18e1-9bf3-480a-b545-56c55cc32809", "message": "Error message"}
+{"timestamp": "2026-01-20T13:21:54.699436Z", "level": "ERROR", "component": "test-component", "correlation_id": "5ddc18e1-9bf3-480a-b545-56c55cc32809", "message": "Error message"}
+{"timestamp": "2026-01-20T13:21:54.699436Z", "level": "ERROR", "component": "test-component", "correlation_id": "5ddc18e1-9bf3-480a-b545-56c55cc32809", "message": "Error message"}
+{"timestamp": "2026-01-20T13:21:54.699561Z", "level": "CRITICAL", "component": "test-component", "correlation_id": "5ddc18e1-9bf3-480a-b545-56c55cc32809", "message": "Critical message"}
+{"timestamp": "2026-01-20T13:21:54.699561Z", "level": "CRITICAL", "component": "test-component", "correlation_id": "5ddc18e1-9bf3-480a-b545-56c55cc32809", "message": "Critical message"}
+{"timestamp": "2026-01-20T13:21:54.699561Z", "level": "CRITICAL", "component": "test-component", "correlation_id": "5ddc18e1-9bf3-480a-b545-56c55cc32809", "message": "Critical message"}
+tests/unit/infrastructure/test_structured_logging.py::TestStructuredLoggerBasics::test_log_levels PASSED
+{"timestamp": "2026-01-20T13:21:54.702355Z", "level": "INFO", "component": "test-component", "correlation_id": "563737c5-77bf-445d-b608-6fb2b88d6d55", "message": "Test with context", "context": {"user_id": "user123", "request_id": "req456"}}
+{"timestamp": "2026-01-20T13:21:54.702355Z", "level": "INFO", "component": "test-component", "correlation_id": "563737c5-77bf-445d-b608-6fb2b88d6d55", "message": "Test with context", "context": {"user_id": "user123", "request_id": "req456"}}
+{"timestamp": "2026-01-20T13:21:54.702355Z", "level": "INFO", "component": "test-component", "correlation_id": "563737c5-77bf-445d-b608-6fb2b88d6d55", "message": "Test with context", "context": {"user_id": "user123", "request_id": "req456"}}
+{"timestamp": "2026-01-20T13:21:54.702355Z", "level": "INFO", "component": "test-component", "correlation_id": "563737c5-77bf-445d-b608-6fb2b88d6d55", "message": "Test with context", "context": {"user_id": "user123", "request_id": "req456"}}
+tests/unit/infrastructure/test_structured_logging.py::TestStructuredLoggerBasics::test_context_fields_included PASSED
+
+============================== warnings summary ===============================
+tests/unit/infrastructure/test_structured_logging.py::TestStructuredLoggerBasics::test_json_format_validation
+tests/unit/infrastructure/test_structured_logging.py::TestStructuredLoggerBasics::test_log_levels
+tests/unit/infrastructure/test_structured_logging.py::TestStructuredLoggerBasics::test_log_levels
+tests/unit/infrastructure/test_structured_logging.py::TestStructuredLoggerBasics::test_log_levels
+tests/unit/infrastructure/test_structured_logging.py::TestStructuredLoggerBasics::test_log_levels
+tests/unit/infrastructure/test_structured_logging.py::TestStructuredLoggerBasics::test_log_levels
+tests/unit/infrastructure/test_structured_logging.py::TestStructuredLoggerBasics::test_context_fields_included
+  D:\PROJECTS\CORTEX\cortex\infrastructure\structured_logger.py:306: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "timestamp": datetime.now(datetime.UTC).isoformat() if hasattr(datetime, "UTC") else datetime.utcnow().isoformat() + "Z",
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+======================== 4 passed, 7 warnings in 0.14s ========================
