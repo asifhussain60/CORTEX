@@ -37,6 +37,28 @@ class GateCheckResult:
     severity: str = "medium"
 
 
+@dataclass
+class ConfirmationContext:
+    """Context for confirmation decisions.
+
+    Attributes:
+        context_id: Unique context identifier.
+        request_context: Request context data.
+        verification_details: Verification details.
+        confirmed: Whether confirmed.
+    """
+
+    context_id: str
+    request_context: Dict[str, Any]
+    verification_details: Dict[str, Any] = None
+    confirmed: bool = False
+
+    def __post_init__(self) -> None:
+        """Initialize defaults."""
+        if self.verification_details is None:
+            self.verification_details = {}
+
+
 class Stage25Gate:
     """Gate for stage 2.5 processing."""
 
@@ -108,4 +130,4 @@ class Stage25Gate:
 # Alias for backward compatibility
 Stage2_5Gate = Stage25Gate
 
-__all__ = ["Stage25Gate", "Stage2_5Gate", "GateDecision", "GateCheckResult"]
+__all__ = ["Stage25Gate", "Stage2_5Gate", "GateDecision", "GateCheckResult", "ConfirmationContext"]

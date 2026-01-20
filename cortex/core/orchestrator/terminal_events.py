@@ -60,6 +60,29 @@ class TerminalEvent:
 
 
 @dataclass
+class UserCancelledEvent:
+    """Event when user cancels operation.
+
+    Attributes:
+        event_id: Unique event identifier.
+        operation_id: Operation being cancelled.
+        reason: Cancellation reason.
+        timestamp: When cancellation occurred.
+    """
+
+    event_id: str
+    operation_id: str
+    reason: str = ""
+    timestamp: datetime = None
+
+    def __post_init__(self) -> None:
+        """Initialize defaults."""
+        if self.timestamp is None:
+            self.timestamp = datetime.now()
+
+
+
+@dataclass
 class PhaseCompletedEvent:
     """Event when a phase completes.
 
@@ -181,6 +204,7 @@ class EventRegistry:
 __all__ = [
     "TerminalEvent",
     "PhaseCompletedEvent",
+    "UserCancelledEvent",
     "EventType",
     "PhaseType",
     "EventHandler",

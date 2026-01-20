@@ -39,6 +39,23 @@ class Challenge:
 
 
 @dataclass
+class TurnResponseSegment:
+    """Segment of a turn response.
+
+    Attributes:
+        segment_id: Unique segment identifier.
+        content: Segment content.
+        segment_type: Type of segment.
+        position: Position in response.
+    """
+
+    segment_id: str
+    content: str
+    segment_type: str = "text"
+    position: int = 0
+
+
+@dataclass
 class ResponseWithChallenges:
     """Response content with embedded challenges.
 
@@ -142,6 +159,7 @@ __all__ = [
     "TurnResponseWithChallenges",
     "ChallengeResponseGenerator",
     "ResponseWithChallenges",
+    "TurnResponseSegment",
     "Challenge",
     "ChallengeType",
 ]

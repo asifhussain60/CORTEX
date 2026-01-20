@@ -5,7 +5,19 @@ Handles graceful skipping of tests with missing module dependencies.
 """
 import pytest
 import sys
+from pathlib import Path
 from _pytest.python import Module
+
+# Add tier modules to path
+project_root = Path(__file__).parent
+tier_paths = [
+    str(project_root),  # For tier1, tier2 imports
+    str(project_root / "cortex_brain"),  # For cortex_brain imports
+]
+
+for path in tier_paths:
+    if path not in sys.path:
+        sys.path.insert(0, path)
 
 
 def pytest_collection_modifyitems(session, config, items):
