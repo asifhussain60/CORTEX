@@ -156,4 +156,35 @@ class SandboxExecution:
     result: Any = None
     error: Optional[str] = None
 
-__all__ = ["ExecutionSandbox", "SandboxResult", "SandboxExecution"]
+
+from enum import Enum
+
+class ExecutionMode(Enum):
+    """Execution modes for sandbox."""
+    SAFE = "safe"
+    ISOLATED = "isolated"
+    RESTRICTED = "restricted"
+    UNRESTRICTED = "unrestricted"
+
+
+class ExecutionState(Enum):
+    """States of execution."""
+    PENDING = "pending"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    TIMEOUT = "timeout"
+
+
+from dataclasses import dataclass, field
+
+@dataclass
+class SandboxSnapshot:
+    """Snapshot of sandbox state."""
+    timestamp: str
+    state: ExecutionState
+    operations: list = field(default_factory=list)
+    results: Dict[str, Any] = field(default_factory=dict)
+
+
+__all__ = ["ExecutionSandbox", "SandboxResult", "SandboxExecution", "ExecutionMode", "ExecutionState", "SandboxSnapshot"]

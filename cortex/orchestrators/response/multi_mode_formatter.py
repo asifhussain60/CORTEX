@@ -74,4 +74,37 @@ class VisualizationResponseFormatter:
         """Format response with visualizations."""
         return response
 
-__all__ = ["ResponseComponent", "FormattingProfile", "FormattingOptions", "FormattedResponseSection", "ChatResponseFormatter", "CommandLineResponseFormatter", "VisualizationResponseFormatter", "MultiModeFormatter"]
+
+class JSONAPIResponseFormatter:
+    """Format responses as JSON API."""
+    
+    def format(self, response: str) -> str:
+        """Format response as JSON API."""
+        return response
+
+
+class MarkdownResponseFormatter:
+    """Format responses as Markdown."""
+    
+    def format(self, response: str) -> str:
+        """Format response as Markdown."""
+        return response
+
+
+class StreamResponseFormatter:
+    """Format responses as stream."""
+    
+    def format(self, response: str) -> str:
+        """Format response as stream."""
+        return response
+
+
+class ResponseFormattingEngine:
+    """Engine for response formatting."""
+    
+    def format(self, response: str, formatter: str = "chat") -> str:
+        """Format response using specified formatter."""
+        return response
+
+
+__all__ = ["ResponseComponent", "FormattingProfile", "FormattingOptions", "FormattedResponseSection", "ChatResponseFormatter", "CommandLineResponseFormatter", "VisualizationResponseFormatter", "JSONAPIResponseFormatter", "MarkdownResponseFormatter", "StreamResponseFormatter", "ResponseFormattingEngine", "MultiModeFormatter"]
