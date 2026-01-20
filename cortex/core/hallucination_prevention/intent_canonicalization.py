@@ -1,51 +1,47 @@
-"""Intent Canonicalization for Hallucination Prevention.
+"""Module: intent_canonicalization.py."""
 
-Normalizes intents to prevent interpretation-based hallucinations.
+from typing import Dict, List, Optional, Any
+from dataclasses import dataclass, field
+from enum import Enum
 
-Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
-"""
 
-from typing import Dict, Optional, Any
-from dataclasses import dataclass
+class ActionType(str, Enum):
+    """Action types."""
+    UNKNOWN = "unknown"
 
 
 @dataclass
 class CanonicalIntent:
-    """Canonical form of an intent."""
-    original: str
-    canonical: str
-    normalization_steps: list
+    """Data class for CanonicalIntent."""
+    data: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class ExtendedCanonicalIntent:
+    """Data class for ExtendedCanonicalIntent."""
+    data: Dict[str, Any] = field(default_factory=dict)
 
 
 class IntentCanonicalizer:
-    """Canonicalizes intents to prevent hallucinations.
-    
-    Normalizes intents to a canonical form to prevent
-    misinterpretations that could lead to hallucinations.
-    """
-    
+    """Implementation of IntentCanonicalizer."""
+
     def __init__(self):
-        """Initialize intent canonicalizer."""
+        """Initialize."""
         pass
-    
-    def canonicalize(self, intent: str) -> CanonicalIntent:
-        """Canonicalize an intent.
-        
-        Args:
-            intent: Intent to canonicalize
-            
-        Returns:
-            CanonicalIntent with original and canonical forms
-        """
-        return CanonicalIntent(
-            original=intent,
-            canonical=intent,
-            normalization_steps=[],
-        )
+
+
+class ExtendedIntentCanonicalizer:
+    """Implementation of ExtendedIntentCanonicalizer."""
+
+    def __init__(self):
+        """Initialize."""
+        pass
 
 
 __all__ = [
     "IntentCanonicalizer",
+    "ExtendedIntentCanonicalizer",
     "CanonicalIntent",
+    "ExtendedCanonicalIntent",
+    "ActionType",
 ]
