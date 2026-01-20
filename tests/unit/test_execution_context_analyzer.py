@@ -14,7 +14,7 @@ Copyright: © 2025-2026 Asif Hussain. All rights reserved.
 import pytest
 from typing import Dict, Any, Set
 
-from src.orchestrators.adaptive.execution_context_analyzer import (
+from cortex.orchestrators.adaptive.execution_context_analyzer import (
     ExecutionContext,
     ExecutionContextAnalyzer,
 )

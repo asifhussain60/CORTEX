@@ -11,12 +11,12 @@ import pytest
 from typing import Any, Dict
 
 try:
-    from src.mcp.server import MCPServer
+    from cortex.mcp.server import MCPServer
 except (ImportError, ModuleNotFoundError):
     MCPServer = None
 
 try:
-    from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+    from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 except (ImportError, ModuleNotFoundError):
     MasterOrchestrator = None
 

@@ -11,8 +11,8 @@ Comprehensive test suite for:
 
 import pytest
 from pathlib import Path
-from src.core.path_resolver import resolve_path
-from src.core.ac_domain_mapper import (
+from cortex.core.path_resolver import resolve_path
+from cortex.core.ac_domain_mapper import (
     ACDomainRegistry,
     ACMetadata,
     DomainMetadata,

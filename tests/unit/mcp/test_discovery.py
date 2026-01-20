@@ -2,9 +2,9 @@
 import pytest
 from unittest.mock import Mock
 
-from src.mcp.protocol import ToolDefinition, MCPTool
-from src.mcp.registry import ToolRegistry
-from src.mcp.discovery import ToolDiscovery, DiscoveryFilter, DiscoveryPattern
+from cortex.mcp.protocol import ToolDefinition, MCPTool
+from cortex.mcp.registry import ToolRegistry
+from cortex.mcp.discovery import ToolDiscovery, DiscoveryFilter, DiscoveryPattern
 
 @pytest.fixture
 def registry():

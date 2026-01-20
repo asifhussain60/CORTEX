@@ -16,7 +16,7 @@ Test scenarios:
 import pytest
 from datetime import datetime, timezone
 from pathlib import Path
-from src.infrastructure.hash_verifier import HashVerifier, HashChainEntry
+from cortex.infrastructure.hash_verifier import HashVerifier, HashChainEntry
 
 
 class TestHashVerifier:

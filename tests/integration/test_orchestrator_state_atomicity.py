@@ -27,7 +27,7 @@ from unittest.mock import Mock, patch, MagicMock
 import pytest
 
 # Import transaction manager for testing
-from src.infrastructure.database_transaction_manager import (
+from cortex.infrastructure.database_transaction_manager import (
     DatabaseTransactionManager,
     TransactionContext,
     StateAtomicityManager
@@ -35,17 +35,17 @@ from src.infrastructure.database_transaction_manager import (
 
 # These will be tested for integration
 try:
-    from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+    from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 except ImportError:
     MasterOrchestrator = None
 
 try:
-    from src.core.orchestrator.conversation_protocol import ConversationProtocol
+    from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
 except ImportError:
     ConversationProtocol = None
 
 try:
-    from src.core.governance_registry import GovernanceRegistry
+    from cortex.core.governance_registry import GovernanceRegistry
 except ImportError:
     GovernanceRegistry = None
 

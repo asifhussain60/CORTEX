@@ -23,13 +23,13 @@ class TestAlertPipeline:
 
     def test_alert_pipeline_exists(self):
         """Test that AlertPipeline class exists."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         assert AlertPipeline is not None
 
     def test_alert_pipeline_initialization(self):
         """Test that pipeline initializes with backends."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         backend = Mock()
         backend.name = 'audit_trail'
@@ -41,7 +41,7 @@ class TestAlertPipeline:
 
     def test_alert_threshold_configuration(self):
         """Test alert threshold configuration."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         backend = Mock()
         backend.name = 'audit_trail'
@@ -57,7 +57,7 @@ class TestAlertPipeline:
 
     def test_notification_channel_registration(self):
         """Test registering notification channels."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         backend = Mock()
         pipeline = AlertPipeline(backends={'audit_trail': backend})
@@ -67,7 +67,7 @@ class TestAlertPipeline:
 
     def test_notification_channel_deregistration(self):
         """Test deregistering notification channels."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         backend = Mock()
         pipeline = AlertPipeline(backends={'audit_trail': backend})
@@ -77,7 +77,7 @@ class TestAlertPipeline:
 
     def test_alert_routing_to_channels(self):
         """Test routing alerts to configured channels."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         backend = Mock()
         pipeline = AlertPipeline(backends={'audit_trail': backend})
@@ -87,7 +87,7 @@ class TestAlertPipeline:
 
     def test_multiple_notification_backends(self):
         """Test support for multiple notification backends."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         audit_backend = Mock()
         audit_backend.name = 'audit_trail'
@@ -103,7 +103,7 @@ class TestAlertPipeline:
 
     def test_alert_filtering_by_severity(self):
         """Test filtering alerts by severity level."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         backend = Mock()
         pipeline = AlertPipeline(backends={'audit_trail': backend})
@@ -113,7 +113,7 @@ class TestAlertPipeline:
 
     def test_alert_acknowledgment_workflow(self):
         """Test alert acknowledgment workflow."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         backend = Mock()
         pipeline = AlertPipeline(backends={'audit_trail': backend})
@@ -123,7 +123,7 @@ class TestAlertPipeline:
 
     def test_alert_override_support(self):
         """Test manual override of alert decisions."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         backend = Mock()
         pipeline = AlertPipeline(backends={'audit_trail': backend})
@@ -137,8 +137,8 @@ class TestAlertPipelineIntegration:
 
     def test_alert_pipeline_with_change_detection_service(self):
         """Test AlertPipeline integration with ChangeDetectionService."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
-        from src.core.knowledge.change_detection import ChangeDetectionService, Alert, AnomalyType, SeverityLevel
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.change_detection import ChangeDetectionService, Alert, AnomalyType, SeverityLevel
         
         # Setup backends
         backend = Mock()
@@ -158,7 +158,7 @@ class TestAlertPipelineIntegration:
 
     def test_alert_notification_channel_workflow(self):
         """Test complete notification channel workflow."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         backend = Mock()
         pipeline = AlertPipeline(backends={'audit_trail': backend})
@@ -174,7 +174,7 @@ class TestAlertPipelineIntegration:
 
     def test_alert_threshold_enforcement(self):
         """Test that thresholds are enforced during routing."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         backend = Mock()
         thresholds = {'CRITICAL': 0.9, 'HIGH': 0.7, 'MEDIUM': 0.5}
@@ -189,7 +189,7 @@ class TestAlertPipelineIntegration:
 
     def test_alert_retry_mechanism(self):
         """Test alert delivery retry mechanism."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         backend = Mock()
         pipeline = AlertPipeline(backends={'audit_trail': backend})
@@ -199,7 +199,7 @@ class TestAlertPipelineIntegration:
 
     def test_alert_deduplication(self):
         """Test alert deduplication to prevent duplicate notifications."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         backend = Mock()
         pipeline = AlertPipeline(backends={'audit_trail': backend})
@@ -209,7 +209,7 @@ class TestAlertPipelineIntegration:
 
     def test_alert_metrics_tracking(self):
         """Test tracking of alert metrics."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         backend = Mock()
         pipeline = AlertPipeline(backends={'audit_trail': backend})
@@ -219,7 +219,7 @@ class TestAlertPipelineIntegration:
 
     def test_alert_pipeline_graceful_degradation(self):
         """Test graceful degradation when channels unavailable."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         # Empty backends dict
         pipeline = AlertPipeline(backends={})
@@ -229,7 +229,7 @@ class TestAlertPipelineIntegration:
 
     def test_alert_pipeline_error_handling(self):
         """Test error handling during alert routing."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         backend = Mock()
         pipeline = AlertPipeline(backends={'audit_trail': backend})
@@ -239,7 +239,7 @@ class TestAlertPipelineIntegration:
 
     def test_alert_audit_trail_logging(self):
         """Test audit trail logging of all alert events."""
-        from src.core.knowledge.alert_pipeline import AlertPipeline
+        from cortex.core.knowledge.alert_pipeline import AlertPipeline
         
         backend = Mock()
         backend.log = Mock()

@@ -37,7 +37,7 @@ class TestExecutionStrategySelector(unittest.TestCase):
     
     def test_strategy_selector_initialization(self) -> None:
         """Test StrategySelector can be initialized with default strategies."""
-        from src.orchestrators.adaptive.strategy_selector import StrategySelector
+        from cortex.orchestrators.adaptive.strategy_selector import StrategySelector
         
         selector = StrategySelector()
         self.assertIsNotNone(selector)
@@ -45,7 +45,7 @@ class TestExecutionStrategySelector(unittest.TestCase):
     
     def test_select_strategy_for_simple_task(self) -> None:
         """Test selecting FAST strategy for simple tasks."""
-        from src.orchestrators.adaptive.strategy_selector import StrategySelector
+        from cortex.orchestrators.adaptive.strategy_selector import StrategySelector
         
         selector = StrategySelector()
         task = {"complexity": "low", "timeout": 5}
@@ -56,7 +56,7 @@ class TestExecutionStrategySelector(unittest.TestCase):
     
     def test_select_strategy_for_complex_task(self) -> None:
         """Test selecting THOROUGH strategy for complex tasks."""
-        from src.orchestrators.adaptive.strategy_selector import StrategySelector
+        from cortex.orchestrators.adaptive.strategy_selector import StrategySelector
         
         selector = StrategySelector()
         task = {"complexity": "high", "requires_validation": True}
@@ -67,7 +67,7 @@ class TestExecutionStrategySelector(unittest.TestCase):
     
     def test_strategy_selector_considers_resource_availability(self) -> None:
         """Test strategy selection considers available resources."""
-        from src.orchestrators.adaptive.strategy_selector import StrategySelector
+        from cortex.orchestrators.adaptive.strategy_selector import StrategySelector
         
         selector = StrategySelector()
         task = {
@@ -82,7 +82,7 @@ class TestExecutionStrategySelector(unittest.TestCase):
     
     def test_strategy_selector_respects_deadlines(self) -> None:
         """Test strategy respects time constraints."""
-        from src.orchestrators.adaptive.strategy_selector import StrategySelector
+        from cortex.orchestrators.adaptive.strategy_selector import StrategySelector
         
         selector = StrategySelector()
         task = {
@@ -98,7 +98,7 @@ class TestExecutionStrategySelector(unittest.TestCase):
     
     def test_strategy_selector_learns_from_history(self) -> None:
         """Test strategy selection improves with execution history."""
-        from src.orchestrators.adaptive.strategy_selector import StrategySelector
+        from cortex.orchestrators.adaptive.strategy_selector import StrategySelector
         
         selector = StrategySelector()
         
@@ -133,7 +133,7 @@ class TestExecutionContextAnalyzer(unittest.TestCase):
     
     def test_context_analyzer_initialization(self) -> None:
         """Test ContextAnalyzer initialization."""
-        from src.orchestrators.adaptive.execution_context_analyzer import (
+        from cortex.orchestrators.adaptive.execution_context_analyzer import (
             ExecutionContextAnalyzer
         )
         
@@ -143,7 +143,7 @@ class TestExecutionContextAnalyzer(unittest.TestCase):
     
     def test_analyze_system_state(self) -> None:
         """Test analyzing current system state."""
-        from src.orchestrators.adaptive.execution_context_analyzer import (
+        from cortex.orchestrators.adaptive.execution_context_analyzer import (
             ExecutionContextAnalyzer
         )
         
@@ -158,7 +158,7 @@ class TestExecutionContextAnalyzer(unittest.TestCase):
     
     def test_analyze_task_characteristics(self) -> None:
         """Test analyzing task characteristics."""
-        from src.orchestrators.adaptive.execution_context_analyzer import (
+        from cortex.orchestrators.adaptive.execution_context_analyzer import (
             ExecutionContextAnalyzer
         )
         
@@ -179,7 +179,7 @@ class TestExecutionContextAnalyzer(unittest.TestCase):
     
     def test_context_includes_resource_availability(self) -> None:
         """Test context analysis includes resource availability."""
-        from src.orchestrators.adaptive.execution_context_analyzer import (
+        from cortex.orchestrators.adaptive.execution_context_analyzer import (
             ExecutionContextAnalyzer
         )
         
@@ -194,7 +194,7 @@ class TestExecutionContextAnalyzer(unittest.TestCase):
     
     def test_context_tracks_execution_history(self) -> None:
         """Test context tracking includes historical data."""
-        from src.orchestrators.adaptive.execution_context_analyzer import (
+        from cortex.orchestrators.adaptive.execution_context_analyzer import (
             ExecutionContextAnalyzer
         )
         
@@ -209,7 +209,7 @@ class TestExecutionContextAnalyzer(unittest.TestCase):
     
     def test_context_identifies_bottlenecks(self) -> None:
         """Test context analysis identifies system bottlenecks."""
-        from src.orchestrators.adaptive.execution_context_analyzer import (
+        from cortex.orchestrators.adaptive.execution_context_analyzer import (
             ExecutionContextAnalyzer
         )
         
@@ -239,7 +239,7 @@ class TestAdaptiveRouting(unittest.TestCase):
     
     def test_adaptive_router_initialization(self) -> None:
         """Test AdaptiveRouter initialization."""
-        from src.orchestrators.adaptive.router import AdaptiveRouter
+        from cortex.orchestrators.adaptive.router import AdaptiveRouter
         
         router = AdaptiveRouter()
         self.assertIsNotNone(router)
@@ -247,7 +247,7 @@ class TestAdaptiveRouting(unittest.TestCase):
     
     def test_route_task_to_appropriate_orchestrator(self) -> None:
         """Test routing task to appropriate orchestrator."""
-        from src.orchestrators.adaptive.router import AdaptiveRouter
+        from cortex.orchestrators.adaptive.router import AdaptiveRouter
         
         router = AdaptiveRouter()
         task = {"domain": "planning", "type": "strategy"}
@@ -260,7 +260,7 @@ class TestAdaptiveRouting(unittest.TestCase):
     
     def test_router_considers_execution_context(self) -> None:
         """Test router considers execution context in routing."""
-        from src.orchestrators.adaptive.router import AdaptiveRouter
+        from cortex.orchestrators.adaptive.router import AdaptiveRouter
         
         router = AdaptiveRouter()
         task = {"domain": "analysis"}
@@ -272,7 +272,7 @@ class TestAdaptiveRouting(unittest.TestCase):
     
     def test_router_provides_fallback_routes(self) -> None:
         """Test router provides fallback routes."""
-        from src.orchestrators.adaptive.router import AdaptiveRouter
+        from cortex.orchestrators.adaptive.router import AdaptiveRouter
         
         router = AdaptiveRouter()
         task = {"domain": "validation"}
@@ -285,7 +285,7 @@ class TestAdaptiveRouting(unittest.TestCase):
     
     def test_router_balances_load(self) -> None:
         """Test router implements load balancing."""
-        from src.orchestrators.adaptive.router import AdaptiveRouter
+        from cortex.orchestrators.adaptive.router import AdaptiveRouter
         
         router = AdaptiveRouter()
         
@@ -300,7 +300,7 @@ class TestAdaptiveRouting(unittest.TestCase):
     
     def test_router_respects_qos_requirements(self) -> None:
         """Test router respects QoS requirements."""
-        from src.orchestrators.adaptive.router import AdaptiveRouter
+        from cortex.orchestrators.adaptive.router import AdaptiveRouter
         
         router = AdaptiveRouter()
         task = {
@@ -329,7 +329,7 @@ class TestPerformanceFeedbackLoop(unittest.TestCase):
     
     def test_feedback_loop_initialization(self) -> None:
         """Test FeedbackLoop initialization."""
-        from src.orchestrators.adaptive.feedback_loop import FeedbackLoop
+        from cortex.orchestrators.adaptive.feedback_loop import FeedbackLoop
         
         loop = FeedbackLoop()
         self.assertIsNotNone(loop)
@@ -337,7 +337,7 @@ class TestPerformanceFeedbackLoop(unittest.TestCase):
     
     def test_collect_execution_metrics(self) -> None:
         """Test collecting execution metrics."""
-        from src.orchestrators.adaptive.feedback_loop import FeedbackLoop
+        from cortex.orchestrators.adaptive.feedback_loop import FeedbackLoop
         
         loop = FeedbackLoop()
         metrics = {
@@ -354,7 +354,7 @@ class TestPerformanceFeedbackLoop(unittest.TestCase):
     
     def test_analyze_performance_trends(self) -> None:
         """Test analyzing performance trends."""
-        from src.orchestrators.adaptive.feedback_loop import FeedbackLoop
+        from cortex.orchestrators.adaptive.feedback_loop import FeedbackLoop
         
         loop = FeedbackLoop()
         
@@ -372,7 +372,7 @@ class TestPerformanceFeedbackLoop(unittest.TestCase):
     
     def test_generate_optimization_recommendations(self) -> None:
         """Test generating optimization recommendations."""
-        from src.orchestrators.adaptive.feedback_loop import FeedbackLoop
+        from cortex.orchestrators.adaptive.feedback_loop import FeedbackLoop
         
         loop = FeedbackLoop()
         
@@ -391,7 +391,7 @@ class TestPerformanceFeedbackLoop(unittest.TestCase):
     
     def test_feedback_identifies_performance_bottlenecks(self) -> None:
         """Test feedback loop identifies performance bottlenecks."""
-        from src.orchestrators.adaptive.feedback_loop import FeedbackLoop
+        from cortex.orchestrators.adaptive.feedback_loop import FeedbackLoop
         
         loop = FeedbackLoop()
         
@@ -409,7 +409,7 @@ class TestPerformanceFeedbackLoop(unittest.TestCase):
     
     def test_feedback_tracks_strategy_effectiveness(self) -> None:
         """Test tracking strategy effectiveness over time."""
-        from src.orchestrators.adaptive.feedback_loop import FeedbackLoop
+        from cortex.orchestrators.adaptive.feedback_loop import FeedbackLoop
         
         loop = FeedbackLoop()
         
@@ -451,7 +451,7 @@ class TestAdaptiveExecutionTestingFramework(unittest.TestCase):
     
     def test_test_framework_initialization(self) -> None:
         """Test AdaptiveExecutionTestFramework initialization."""
-        from src.orchestrators.adaptive.testing_framework import (
+        from cortex.orchestrators.adaptive.testing_framework import (
             AdaptiveExecutionTestFramework
         )
         
@@ -461,7 +461,7 @@ class TestAdaptiveExecutionTestingFramework(unittest.TestCase):
     
     def test_generate_test_scenarios(self) -> None:
         """Test generating test scenarios."""
-        from src.orchestrators.adaptive.testing_framework import (
+        from cortex.orchestrators.adaptive.testing_framework import (
             AdaptiveExecutionTestFramework
         )
         
@@ -473,7 +473,7 @@ class TestAdaptiveExecutionTestingFramework(unittest.TestCase):
     
     def test_compare_strategies(self) -> None:
         """Test comparing execution strategies."""
-        from src.orchestrators.adaptive.testing_framework import (
+        from cortex.orchestrators.adaptive.testing_framework import (
             AdaptiveExecutionTestFramework
         )
         
@@ -488,7 +488,7 @@ class TestAdaptiveExecutionTestingFramework(unittest.TestCase):
     
     def test_benchmark_performance(self) -> None:
         """Test benchmarking strategy performance."""
-        from src.orchestrators.adaptive.testing_framework import (
+        from cortex.orchestrators.adaptive.testing_framework import (
             AdaptiveExecutionTestFramework
         )
         
@@ -501,7 +501,7 @@ class TestAdaptiveExecutionTestingFramework(unittest.TestCase):
     
     def test_detect_regression(self) -> None:
         """Test detecting performance regression."""
-        from src.orchestrators.adaptive.testing_framework import (
+        from cortex.orchestrators.adaptive.testing_framework import (
             AdaptiveExecutionTestFramework
         )
         
@@ -520,7 +520,7 @@ class TestAdaptiveExecutionTestingFramework(unittest.TestCase):
     
     def test_test_framework_generates_report(self) -> None:
         """Test framework generates comprehensive test report."""
-        from src.orchestrators.adaptive.testing_framework import (
+        from cortex.orchestrators.adaptive.testing_framework import (
             AdaptiveExecutionTestFramework
         )
         
@@ -545,11 +545,11 @@ class TestAdaptiveExecutionIntegration(unittest.TestCase):
     
     def test_end_to_end_adaptive_execution(self) -> None:
         """Test complete adaptive execution workflow."""
-        from src.orchestrators.adaptive.strategy_selector import StrategySelector
-        from src.orchestrators.adaptive.execution_context_analyzer import (
+        from cortex.orchestrators.adaptive.strategy_selector import StrategySelector
+        from cortex.orchestrators.adaptive.execution_context_analyzer import (
             ExecutionContextAnalyzer
         )
-        from src.orchestrators.adaptive.router import AdaptiveRouter
+        from cortex.orchestrators.adaptive.router import AdaptiveRouter
         
         # Create components
         selector = StrategySelector()
@@ -573,8 +573,8 @@ class TestAdaptiveExecutionIntegration(unittest.TestCase):
     
     def test_adaptive_execution_with_feedback(self) -> None:
         """Test adaptive execution with feedback loop."""
-        from src.orchestrators.adaptive.feedback_loop import FeedbackLoop
-        from src.orchestrators.adaptive.strategy_selector import StrategySelector
+        from cortex.orchestrators.adaptive.feedback_loop import FeedbackLoop
+        from cortex.orchestrators.adaptive.strategy_selector import StrategySelector
         
         feedback = FeedbackLoop()
         selector = StrategySelector()

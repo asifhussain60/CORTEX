@@ -19,7 +19,7 @@ Total Tests: 20+
 
 import pytest
 from datetime import datetime, timedelta
-from src.orchestrators.response.ux_optimizer import (
+from cortex.orchestrators.response.ux_optimizer import (
     ResponseQualityMetrics,
     UserFeedback,
     ABTestVariant,

@@ -12,14 +12,14 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 
 import pytest
 
-from src.core.state_machine import (
+from cortex.core.state_machine import (
     StateMachine,
     ACState,
     PhaseState,
     TransitionType,
     StateTransition,
 )
-from src.infrastructure.database import DatabaseManager, DatabaseConfig
+from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
 
 
 @pytest.mark.ac("FR-003-01")

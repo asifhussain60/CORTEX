@@ -22,7 +22,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import Optional, Generator
 
-from src.infrastructure.database_transaction_manager import DatabaseTransactionManager
+from cortex.infrastructure.database_transaction_manager import DatabaseTransactionManager
 
 
 class TestHashChainCalculation:

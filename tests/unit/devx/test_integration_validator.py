@@ -9,7 +9,7 @@ import pytest
 from datetime import datetime
 from typing import Optional
 
-from src.devx.integration_validator import (
+from cortex.devx.integration_validator import (
     IntegrationValidator,
     IntegrationPoint,
     ValidationResult,

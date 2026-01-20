@@ -10,9 +10,9 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest
-from src.orchestrators.core.master_orchestrator import MasterOrchestrator
-from src.core.governance_registry import GovernanceRegistry, GovernanceViolationError
-from src.core.result import Ok, Err
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+from cortex.core.governance_registry import GovernanceRegistry, GovernanceViolationError
+from cortex.core.result import Ok, Err
 
 
 class TestMasterOrchestratorGovernanceValidation:

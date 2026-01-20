@@ -15,7 +15,7 @@ import tempfile
 import yaml
 from pathlib import Path
 
-from src.core.mutation_guard import (
+from cortex.core.mutation_guard import (
     MutationType,
     MutationResult,
     MutationAttempt,

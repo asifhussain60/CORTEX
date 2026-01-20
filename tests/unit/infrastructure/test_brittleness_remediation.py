@@ -32,7 +32,7 @@ class TestDatabaseConnectionLifecycle:
     
     def test_connection_context_manager_closes(self):
         """Connection should close when context manager exits."""
-        from src.infrastructure.database import DatabaseManager, DatabaseConfig
+        from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
         
         with tempfile.TemporaryDirectory() as tmpdir:
             config = DatabaseConfig(db_path=Path(tmpdir) / "test.db")
@@ -52,7 +52,7 @@ class TestDatabaseConnectionLifecycle:
     
     def test_connection_exception_cleanup(self):
         """Connection should close even when exception occurs."""
-        from src.infrastructure.database import DatabaseManager, DatabaseConfig
+        from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
         
         with tempfile.TemporaryDirectory() as tmpdir:
             config = DatabaseConfig(db_path=Path(tmpdir) / "test.db")
@@ -75,7 +75,7 @@ class TestDatabaseConnectionLifecycle:
     
     def test_multiple_connections_sequential(self):
         """Sequential connections should not leak resources."""
-        from src.infrastructure.database import DatabaseManager, DatabaseConfig
+        from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
         
         with tempfile.TemporaryDirectory() as tmpdir:
             config = DatabaseConfig(db_path=Path(tmpdir) / "test.db")
@@ -92,7 +92,7 @@ class TestDatabaseConnectionLifecycle:
     
     def test_concurrent_connections_no_leak(self):
         """Concurrent connections should not leak resources."""
-        from src.infrastructure.database import DatabaseManager, DatabaseConfig
+        from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
         
         with tempfile.TemporaryDirectory() as tmpdir:
             config = DatabaseConfig(db_path=Path(tmpdir) / "test.db")
@@ -117,7 +117,7 @@ class TestDatabaseConnectionLifecycle:
         """AuditLogger should properly clean up connections."""
         # Skip if audit_logger has import issues (pre-existing)
         try:
-            from src.infrastructure.audit_logger import AuditLogger
+            from cortex.infrastructure.audit_logger import AuditLogger
         except ImportError:
             pytest.skip("AuditLogger has pre-existing import issues")
         
@@ -146,7 +146,7 @@ class TestTelemetryThreadSafety:
     
     def test_running_flag_atomic(self):
         """Running flag should use threading.Event for atomic operations."""
-        from src.infrastructure.metrics_exporter import TelemetryProvider
+        from cortex.infrastructure.metrics_exporter import TelemetryProvider
         
         provider = TelemetryProvider(use_async=True)
         
@@ -164,7 +164,7 @@ class TestTelemetryThreadSafety:
     
     def test_concurrent_startup_race_condition(self):
         """Multiple startups should not cause race condition."""
-        from src.infrastructure.metrics_exporter import TelemetryProvider
+        from cortex.infrastructure.metrics_exporter import TelemetryProvider
         
         results = []
         
@@ -185,7 +185,7 @@ class TestTelemetryThreadSafety:
     
     def test_graceful_shutdown_with_timeout(self):
         """Shutdown should have timeout to prevent indefinite hangs."""
-        from src.infrastructure.metrics_exporter import TelemetryProvider
+        from cortex.infrastructure.metrics_exporter import TelemetryProvider
         
         provider = TelemetryProvider(use_async=True)
         
@@ -198,7 +198,7 @@ class TestTelemetryThreadSafety:
     
     def test_metrics_exported_before_shutdown(self):
         """All buffered metrics should be exported before shutdown."""
-        from src.infrastructure.metrics_exporter import (
+        from cortex.infrastructure.metrics_exporter import (
             TelemetryProvider, MemoryMetricsExporter, MetricType
         )
         
@@ -230,7 +230,7 @@ class TestTelemetryThreadSafety:
     
     def test_high_throughput_shutdown(self):
         """Shutdown should work correctly under high metric throughput."""
-        from src.infrastructure.metrics_exporter import (
+        from cortex.infrastructure.metrics_exporter import (
             TelemetryProvider, MemoryMetricsExporter, MetricType
         )
         
@@ -266,7 +266,7 @@ class TestSandboxHistoryLocking:
     
     def test_history_has_lock(self):
         """Sandbox should have a lock for history access."""
-        from src.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
+        from cortex.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
         
         with tempfile.TemporaryDirectory() as tmpdir:
             sandbox = ExecutionSandbox(db_path=str(Path(tmpdir) / "test.db"))
@@ -279,7 +279,7 @@ class TestSandboxHistoryLocking:
     
     def test_concurrent_history_read(self):
         """Concurrent reads of history should be thread-safe."""
-        from src.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
+        from cortex.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
         
         with tempfile.TemporaryDirectory() as tmpdir:
             sandbox = ExecutionSandbox(db_path=str(Path(tmpdir) / "test.db"))
@@ -306,7 +306,7 @@ class TestSandboxHistoryLocking:
     
     def test_history_clear_thread_safe(self):
         """Clearing history should be thread-safe."""
-        from src.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
+        from cortex.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
         
         with tempfile.TemporaryDirectory() as tmpdir:
             sandbox = ExecutionSandbox(db_path=str(Path(tmpdir) / "test.db"))
@@ -328,7 +328,7 @@ class TestTimeoutConfiguration:
     
     def test_thread_join_has_timeout(self):
         """All thread.join() calls should have timeout parameter."""
-        from src.infrastructure.metrics_exporter import TelemetryProvider
+        from cortex.infrastructure.metrics_exporter import TelemetryProvider
         
         provider = TelemetryProvider(use_async=True)
         
@@ -343,7 +343,7 @@ class TestTimeoutConfiguration:
     
     def test_timeout_config_exists(self):
         """Timeout configuration should exist."""
-        from src.infrastructure.config import get_timeout_config
+        from cortex.infrastructure.config import get_timeout_config
         
         config = get_timeout_config()
         
@@ -358,7 +358,7 @@ class TestTimeoutConfiguration:
     
     def test_database_timeout_applied(self):
         """Database operations should have timeout."""
-        from src.infrastructure.database import DatabaseManager, DatabaseConfig
+        from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
         
         with tempfile.TemporaryDirectory() as tmpdir:
             config = DatabaseConfig(
@@ -408,7 +408,7 @@ class TestTestFrameworkNaming:
     
     def test_framework_not_collected_as_test(self):
         """TestFramework class should not be collected as a test."""
-        from src.intent_router.test_framework import TestFramework
+        from cortex.intent_router.test_framework import TestFramework
         
         # Should have __test__ = False or be renamed
         if hasattr(TestFramework, '__test__'):
@@ -430,25 +430,25 @@ class TestBrittlenessRemediation:
     def test_all_fixes_applied(self):
         """Verify all critical fixes are in place."""
         # Database connection lifecycle
-        from src.infrastructure.database import DatabaseManager
+        from cortex.infrastructure.database import DatabaseManager
         assert hasattr(DatabaseManager, 'get_connection')
         
         # Telemetry thread safety
-        from src.infrastructure.metrics_exporter import TelemetryProvider
+        from cortex.infrastructure.metrics_exporter import TelemetryProvider
         provider = TelemetryProvider(use_async=True)
         assert isinstance(provider._running, threading.Event)
         provider.shutdown()
         
         # Sandbox history locking
-        from src.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
+        from cortex.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
         with tempfile.TemporaryDirectory() as tmpdir:
             sandbox = ExecutionSandbox(db_path=str(Path(tmpdir) / "test.db"))
             assert hasattr(sandbox, '_history_lock')
     
     def test_no_resource_leaks_end_to_end(self):
         """End-to-end test for resource leak prevention."""
-        from src.infrastructure.database import DatabaseManager, DatabaseConfig
-        from src.infrastructure.metrics_exporter import TelemetryProvider, MemoryMetricsExporter
+        from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
+        from cortex.infrastructure.metrics_exporter import TelemetryProvider, MemoryMetricsExporter
         
         with tempfile.TemporaryDirectory() as tmpdir:
             # Database

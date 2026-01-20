@@ -18,7 +18,7 @@ import pytest
 import yaml
 from pathlib import Path
 
-from src.core.brain_populator import BrainPopulator
+from cortex.core.brain_populator import BrainPopulator
 
 
 @pytest.mark.ac("FR-009-01")

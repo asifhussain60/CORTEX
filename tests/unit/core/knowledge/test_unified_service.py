@@ -23,13 +23,13 @@ class TestUnifiedKnowledgeService:
 
     def test_unified_knowledge_service_exists(self):
         """Test that UnifiedKnowledgeService class exists."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         assert UnifiedKnowledgeService is not None
 
     def test_service_initialization_with_router(self):
         """Test service initialization with router."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}
@@ -41,7 +41,7 @@ class TestUnifiedKnowledgeService:
 
     def test_unified_query_interface(self):
         """Test unified query interface."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}
@@ -53,7 +53,7 @@ class TestUnifiedKnowledgeService:
 
     def test_cross_backend_aggregation(self):
         """Test aggregation across multiple backends."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'backend1': Mock(), 'backend2': Mock(), 'backend3': Mock()}
@@ -65,7 +65,7 @@ class TestUnifiedKnowledgeService:
 
     def test_result_deduplication(self):
         """Test deduplication of results from multiple backends."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}
@@ -77,7 +77,7 @@ class TestUnifiedKnowledgeService:
 
     def test_source_attribution_in_results(self):
         """Test source attribution tracking in results."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}
@@ -89,7 +89,7 @@ class TestUnifiedKnowledgeService:
 
     def test_domain_aware_queries(self):
         """Test domain-aware query routing."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}
@@ -101,7 +101,7 @@ class TestUnifiedKnowledgeService:
 
     def test_confidence_scoring_in_results(self):
         """Test confidence scoring from router."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}
@@ -113,7 +113,7 @@ class TestUnifiedKnowledgeService:
 
     def test_result_filtering_and_ranking(self):
         """Test filtering and ranking of aggregated results."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}
@@ -125,7 +125,7 @@ class TestUnifiedKnowledgeService:
 
     def test_batch_query_support(self):
         """Test batch query support."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}
@@ -137,7 +137,7 @@ class TestUnifiedKnowledgeService:
 
     def test_async_query_support(self):
         """Test asynchronous query support."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}
@@ -149,7 +149,7 @@ class TestUnifiedKnowledgeService:
 
     def test_query_metrics_and_tracking(self):
         """Test query metrics collection."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}
@@ -161,7 +161,7 @@ class TestUnifiedKnowledgeService:
 
     def test_error_handling_in_aggregation(self):
         """Test error handling when aggregating from multiple backends."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}
@@ -177,7 +177,7 @@ class TestUnifiedKnowledgeIntegration:
 
     def test_unified_service_wraps_router(self):
         """Test that service properly wraps router."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         router.route = Mock(return_value={'results': []})
@@ -189,7 +189,7 @@ class TestUnifiedKnowledgeIntegration:
 
     def test_multi_backend_aggregation_workflow(self):
         """Test complete aggregation workflow across backends."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backend1 = Mock()
@@ -206,7 +206,7 @@ class TestUnifiedKnowledgeIntegration:
 
     def test_deduplication_of_identical_results(self):
         """Test deduplication when backends return identical results."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}
@@ -224,7 +224,7 @@ class TestUnifiedKnowledgeIntegration:
 
     def test_source_attribution_and_lineage(self):
         """Test source attribution and result lineage tracking."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'backend1': Mock(), 'backend2': Mock()}
@@ -236,7 +236,7 @@ class TestUnifiedKnowledgeIntegration:
 
     def test_confidence_scoring_integration(self):
         """Test integration of confidence scoring from router."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}
@@ -248,7 +248,7 @@ class TestUnifiedKnowledgeIntegration:
 
     def test_unified_query_across_domains(self):
         """Test unified queries spanning multiple domains."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}
@@ -260,7 +260,7 @@ class TestUnifiedKnowledgeIntegration:
 
     def test_result_ranking_by_confidence(self):
         """Test ranking results by confidence scores."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}
@@ -272,7 +272,7 @@ class TestUnifiedKnowledgeIntegration:
 
     def test_graceful_handling_of_backend_failures(self):
         """Test graceful degradation when backends fail."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'backend1': Mock(), 'backend2': Mock()}
@@ -284,7 +284,7 @@ class TestUnifiedKnowledgeIntegration:
 
     def test_caching_of_aggregated_results(self):
         """Test optional caching of aggregated results."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}
@@ -300,7 +300,7 @@ class TestUnifiedKnowledgeIntegration:
 
     def test_query_performance_metrics(self):
         """Test collection of query performance metrics."""
-        from src.core.knowledge.unified_service import UnifiedKnowledgeService
+        from cortex.core.knowledge.unified_service import UnifiedKnowledgeService
         
         router = Mock()
         backends = {'test': Mock()}

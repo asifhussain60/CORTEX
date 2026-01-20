@@ -1,7 +1,7 @@
 """Integration tests for Stage 2.5 Confirmation Gate."""
 import pytest
-from src.core.orchestrator.complexity_assessment import ComplexitySignals
-from src.orchestrators.core.stage_2_5_gate import (
+from cortex.core.orchestrator.complexity_assessment import ComplexitySignals
+from cortex.orchestrators.core.stage_2_5_gate import (
     Stage25Gate,
     ConfirmationContext,
     ContinuationDecision,

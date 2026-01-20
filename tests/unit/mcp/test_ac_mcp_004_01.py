@@ -8,7 +8,7 @@ Compliance: CORE-008 (TDD), CORE-011 (Type hints), CORE-012 (Docstrings)
 
 import pytest
 import json
-from src.mcp.server_sdk import MCPRequest, MCPResponse
+from cortex.mcp.server_sdk import MCPRequest, MCPResponse
 
 
 class TestJSONRPC2RequestFormat:

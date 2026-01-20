@@ -22,13 +22,13 @@ class TestIngestionIntegration:
 
     def test_ingestion_integration_exists(self):
         """Test that IngestionIntegration class exists."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         assert IngestionIntegration is not None
 
     def test_ingestion_integration_initialization(self):
         """Test initialization with pipeline and engine."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()
@@ -44,7 +44,7 @@ class TestIngestionIntegration:
 
     def test_refinement_engine_integration(self):
         """Test integration with RefinementEngine."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()
@@ -61,7 +61,7 @@ class TestIngestionIntegration:
 
     def test_adapter_to_storage_backend_connection(self):
         """Test adapter to storage backend connection."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()
@@ -78,7 +78,7 @@ class TestIngestionIntegration:
 
     def test_end_to_end_ingestion_workflow(self):
         """Test complete end-to-end ingestion workflow."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()
@@ -95,7 +95,7 @@ class TestIngestionIntegration:
 
     def test_ingestion_with_refinement_rules(self):
         """Test ingestion with refinement rules applied."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()
@@ -112,7 +112,7 @@ class TestIngestionIntegration:
 
     def test_batch_and_streaming_modes(self):
         """Test support for both batch and streaming modes."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()
@@ -130,7 +130,7 @@ class TestIngestionIntegration:
 
     def test_error_handling_in_workflow(self):
         """Test error handling throughout workflow."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()
@@ -147,7 +147,7 @@ class TestIngestionIntegration:
 
     def test_workflow_state_tracking(self):
         """Test tracking workflow state."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()
@@ -168,7 +168,7 @@ class TestIngestionIntegrationEnd2End:
 
     def test_full_ingestion_workflow_from_source_to_storage(self):
         """Test full workflow from source to storage."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()
@@ -185,7 +185,7 @@ class TestIngestionIntegrationEnd2End:
 
     def test_intake_adapter_connects_to_refinement_engine(self):
         """Test intake adapter connects to refinement engine."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()
@@ -202,7 +202,7 @@ class TestIngestionIntegrationEnd2End:
 
     def test_refinement_engine_connects_to_storage_backend(self):
         """Test refinement engine connects to storage backend."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()
@@ -219,7 +219,7 @@ class TestIngestionIntegrationEnd2End:
 
     def test_batch_ingestion_end_to_end(self):
         """Test batch ingestion end-to-end."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()
@@ -236,7 +236,7 @@ class TestIngestionIntegrationEnd2End:
 
     def test_streaming_ingestion_end_to_end(self):
         """Test streaming ingestion end-to-end."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()
@@ -253,7 +253,7 @@ class TestIngestionIntegrationEnd2End:
 
     def test_ingestion_metrics_and_tracking(self):
         """Test metrics and tracking of ingestion."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()
@@ -270,7 +270,7 @@ class TestIngestionIntegrationEnd2End:
 
     def test_partial_failure_recovery(self):
         """Test recovery from partial failures."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()
@@ -287,7 +287,7 @@ class TestIngestionIntegrationEnd2End:
 
     def test_validation_before_storage(self):
         """Test validation before storing ingested data."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()
@@ -304,7 +304,7 @@ class TestIngestionIntegrationEnd2End:
 
     def test_audit_trail_for_ingestion(self):
         """Test audit trail logging of ingestion."""
-        from src.core.knowledge.ingestion_integration import IngestionIntegration
+        from cortex.core.knowledge.ingestion_integration import IngestionIntegration
         
         pipeline = Mock()
         engine = Mock()

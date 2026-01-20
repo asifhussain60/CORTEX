@@ -18,12 +18,12 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest
-from src.core.hallucination_prevention.intent_canonicalization import (
+from cortex.core.hallucination_prevention.intent_canonicalization import (
     ExtendedIntentCanonicalizer,
     ExtendedCanonicalIntent,
     ActionType,
 )
-from src.core.intent.intent_canonicalizer import IntentCanonicalizer
+from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer
 
 
 # =============================================================================
@@ -404,7 +404,7 @@ class TestExtendedCanonicalIntent:
         self, canonicalizer: ExtendedIntentCanonicalizer
     ) -> None:
         """Should reject invalid confidence scores."""
-        from src.core.intent.intent_canonicalizer import IntentCanonicalizer, IntentType
+        from cortex.core.intent.intent_canonicalizer import IntentCanonicalizer, IntentType
         
         base_intent = IntentCanonicalizer().canonicalize("test")
         

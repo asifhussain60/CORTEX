@@ -9,9 +9,9 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 
 import pytest
 
-from src.infrastructure.database import DatabaseManager, DatabaseConfig
-from src.core.governance_enforcer import GovernanceEnforcer
-from src.mcp.tools.governance_tools import (
+from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
+from cortex.core.governance_enforcer import GovernanceEnforcer
+from cortex.mcp.tools.governance_tools import (
     check_phase_lock,
     validate_ac_id,
     canonicalize_intent,
@@ -45,7 +45,7 @@ def mock_enforcer(initialized_db, monkeypatch):
     enforcer = GovernanceEnforcer(initialized_db)
     
     # Patch the global enforcer in the tools module
-    from src.mcp.tools import governance_tools
+    from cortex.mcp.tools import governance_tools
     monkeypatch.setattr(governance_tools, "_enforcer", enforcer)
     monkeypatch.setattr(governance_tools, "_db", initialized_db)
     

@@ -6,7 +6,7 @@ AC-NFR-004-01: OpenTelemetry metrics exported
 
 import pytest
 import time
-from src.infrastructure.metrics_exporter import (
+from cortex.infrastructure.metrics_exporter import (
     MetricsExporter,
     ConsoleMetricsExporter,
     MemoryMetricsExporter,
@@ -16,7 +16,7 @@ from src.infrastructure.metrics_exporter import (
     MetricAttribute,
     MetricBatch,
 )
-from src.infrastructure.telemetry_provider import (
+from cortex.infrastructure.telemetry_provider import (
     TelemetryConfiguration,
     create_telemetry_provider,
     get_default_telemetry_provider,

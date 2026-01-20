@@ -19,11 +19,11 @@ from pathlib import Path
 from typing import Dict, Any, List
 from unittest.mock import Mock, patch, MagicMock
 
-from src.core.intelligence.ast_intelligence import (
+from cortex.core.intelligence.ast_intelligence import (
     ASTIntelligenceEngine,
     ParseResult,
 )
-from src.core.orchestrator.conversation_protocol import ConversationProtocol
+from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
 
 
 class TestASTScanningIntegration:

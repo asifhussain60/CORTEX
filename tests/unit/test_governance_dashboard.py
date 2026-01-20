@@ -18,7 +18,7 @@ import yaml
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from src.tools.governance_dashboard import (
+from cortex.tools.governance_dashboard import (
     ComplianceLevel,
     GovernanceDashboardBuilder,
     GovernanceRuleDashboard,

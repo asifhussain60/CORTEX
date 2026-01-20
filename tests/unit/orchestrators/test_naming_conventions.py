@@ -11,7 +11,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest
-from src.orchestrators.linting.naming_conventions import (
+from cortex.orchestrators.linting.naming_conventions import (
     NamingConvention,
     NamingLinter,
     LintResult,

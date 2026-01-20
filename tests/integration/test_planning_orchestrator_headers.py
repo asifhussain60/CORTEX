@@ -6,8 +6,8 @@ AC-ENH-001-02: Response header appearance verification
 """
 
 import pytest
-from src.orchestrators.domain.planning_orchestrator import PlanningOrchestrator
-from src.core.response_header_config import HeaderConfigurationManager
+from cortex.orchestrators.domain.planning_orchestrator import PlanningOrchestrator
+from cortex.core.response_header_config import HeaderConfigurationManager
 
 
 @pytest.fixture

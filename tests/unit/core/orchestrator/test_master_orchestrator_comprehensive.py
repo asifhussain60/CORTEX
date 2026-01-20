@@ -26,9 +26,9 @@ from typing import Any, Dict, List, Optional
 from unittest.mock import Mock, MagicMock, patch
 import pytest
 
-from src.orchestrators.core.master_orchestrator import MasterOrchestrator, OrchestratorMetadata
-from src.core.interfaces import IOrchestrator, OperationMode
-from src.core.result import Ok, Err
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator, OrchestratorMetadata
+from cortex.core.interfaces import IOrchestrator, OperationMode
+from cortex.core.result import Ok, Err
 
 
 pytestmark = pytest.mark.timeout(30)

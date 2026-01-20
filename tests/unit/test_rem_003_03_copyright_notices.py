@@ -10,7 +10,7 @@ Priority: HIGH
 """
 
 import pytest
-from src.api.chat_response_formatter import ChatResponseFormatter
+from cortex.api.chat_response_formatter import ChatResponseFormatter
 
 
 class TestCopyrightNotice:

@@ -13,11 +13,11 @@ from unittest.mock import Mock, MagicMock, patch
 from datetime import datetime
 from typing import Any, Dict
 
-from src.orchestrators.core.master_orchestrator import MasterOrchestrator, OrchestratorMetadata
-from src.core.interfaces import IOrchestrator, OperationMode
-from src.core.result import Result, Ok, Err
-from src.infrastructure.database import DatabaseManager
-from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator, OrchestratorMetadata
+from cortex.core.interfaces import IOrchestrator, OperationMode
+from cortex.core.result import Result, Ok, Err
+from cortex.infrastructure.database import DatabaseManager
+from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 
 class MockOrchestrator(IOrchestrator):
@@ -41,7 +41,7 @@ class MockOrchestrator(IOrchestrator):
     
     def get_mode(self) -> 'OperationMode':
         """Get current operation mode."""
-        from src.core.interfaces import OperationMode
+        from cortex.core.interfaces import OperationMode
         return OperationMode.PLANNING
     
     def get_mcp_tools(self) -> 'Result[Dict]':

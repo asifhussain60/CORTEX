@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from typing import Dict, Any, List, Optional, Union
 from enum import Enum
 
-from src.mcp.protocol import ToolParameter, ToolDefinition, MCPError
+from cortex.mcp.protocol import ToolParameter, ToolDefinition, MCPError
 
 
 class ParameterType(Enum):

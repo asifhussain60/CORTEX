@@ -16,10 +16,10 @@ CORE Governance:
 import pytest
 from typing import Dict, Any, Optional
 
-from src.core.result import Result, Ok, Err
-from src.orchestrators.core.lens_synthesis import LENSSynthesis, LENSContext
-from src.orchestrators.core.relationship_analyzer import RelationshipAnalyzer
-from src.orchestrators.core.intent_router import IntentRouter, RoutingContext
+from cortex.core.result import Result, Ok, Err
+from cortex.orchestrators.core.lens_synthesis import LENSSynthesis, LENSContext
+from cortex.orchestrators.core.relationship_analyzer import RelationshipAnalyzer
+from cortex.orchestrators.core.intent_router import IntentRouter, RoutingContext
 
 
 class TestLENSRouterInitialization:

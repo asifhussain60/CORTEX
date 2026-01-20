@@ -14,14 +14,14 @@ from unittest.mock import Mock, patch, MagicMock
 src_path = str(Path(__file__).parent.parent.parent / "src")
 sys.path.insert(0, src_path)
 
-from src.cli.governance_cli import (
+from cortex.cli.governance_cli import (
     GovernanceQueryEngine, GovernanceValidator, GovernanceCLI
 )
-from src.cli.pre_commit_hook import PreCommitValidator
-from src.ide.vscode_integration import (
+from cortex.cli.pre_commit_hook import PreCommitValidator
+from cortex.ide.vscode_integration import (
     GovernanceDiagnosticsProvider, VSCodeExtensionConfig
 )
-from src.dashboard.governance_heatmap import (
+from cortex.dashboard.governance_heatmap import (
     GovernanceHeatmapGenerator, PhaseReadinessChecker
 )
 

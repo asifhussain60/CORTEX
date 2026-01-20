@@ -15,7 +15,7 @@ from pathlib import Path
 import tempfile
 import yaml
 
-from src.core.response_template_engine import (
+from cortex.core.response_template_engine import (
     TemplateVariable,
     TemplateDefinition,
     DomainTemplateMetadata,
@@ -815,7 +815,7 @@ class TestRealYAMLLoading:
     
     def test_load_actual_yaml_file(self):
         """Test loading the actual response-templates.yaml file."""
-        from src.core.path_resolver import resolve_path
+        from cortex.core.path_resolver import resolve_path
         yaml_path = resolve_path("cortex_brain", "tier2", "response-templates", "response-templates.yaml")
         
         if not yaml_path.exists():
@@ -837,7 +837,7 @@ class TestRealYAMLLoading:
     
     def test_load_and_render_tdd_templates(self):
         """Test loading and rendering TDD templates."""
-        from src.core.path_resolver import resolve_path
+        from cortex.core.path_resolver import resolve_path
         yaml_path = resolve_path("cortex_brain", "tier2", "response-templates", "response-templates.yaml")
         
         if not yaml_path.exists():
@@ -869,7 +869,7 @@ class TestRealYAMLLoading:
     
     def test_load_and_render_planning_templates(self):
         """Test loading and rendering Planning templates."""
-        from src.core.path_resolver import resolve_path
+        from cortex.core.path_resolver import resolve_path
         yaml_path = resolve_path("cortex_brain", "tier2", "response-templates", "response-templates.yaml")
         
         if not yaml_path.exists():

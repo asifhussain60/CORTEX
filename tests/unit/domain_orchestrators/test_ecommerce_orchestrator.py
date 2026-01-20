@@ -17,24 +17,24 @@ class TestEcommerceOrchestratorBase:
     
     def test_ecommerce_orchestrator_exists(self) -> None:
         """AC-PHX-008-03: E-commerce orchestrator class exists."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         assert EcommerceOrchestrator is not None
     
     def test_ecommerce_orchestrator_inherits_base(self) -> None:
         """E-commerce orchestrator inherits from BusinessDomainOrchestrator."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
-        from src.domain_orchestrators.business.base import BusinessDomainOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.base import BusinessDomainOrchestrator
         assert issubclass(EcommerceOrchestrator, BusinessDomainOrchestrator)
     
     def test_ecommerce_orchestrator_domain_property(self) -> None:
         """E-commerce orchestrator has correct domain property."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         assert orchestrator.domain == "ecommerce"
     
     def test_ecommerce_orchestrator_compliance_requirements(self) -> None:
         """E-commerce orchestrator specifies PCI-DSS for payments."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         assert hasattr(orchestrator, 'compliance_requirements')
         assert "PCI-DSS" in orchestrator.compliance_requirements
@@ -45,7 +45,7 @@ class TestEcommerceOrderProcessing:
     
     def test_validate_order_context(self) -> None:
         """E-commerce orchestrator validates order context."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         
         valid_context = {
@@ -59,7 +59,7 @@ class TestEcommerceOrderProcessing:
     
     def test_reject_invalid_order(self) -> None:
         """E-commerce orchestrator rejects invalid orders."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         
         invalid_context = {
@@ -70,7 +70,7 @@ class TestEcommerceOrderProcessing:
     
     def test_inventory_check_on_order(self) -> None:
         """Inventory is checked during order processing."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         
         context = {
@@ -91,7 +91,7 @@ class TestEcommercePaymentProcessing:
     
     def test_payment_validation(self) -> None:
         """Payment information is validated."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         
         payment_context = {
@@ -105,7 +105,7 @@ class TestEcommercePaymentProcessing:
     
     def test_pci_dss_compliance_on_payment(self) -> None:
         """PCI-DSS compliance is enforced for payments."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         
         context = {
@@ -123,7 +123,7 @@ class TestEcommercePaymentProcessing:
     
     def test_multiple_payment_methods(self) -> None:
         """Multiple payment methods are supported."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         
         methods = orchestrator.supported_payment_methods
@@ -137,7 +137,7 @@ class TestEcommerceShippingIntegration:
     
     def test_shipping_calculation(self) -> None:
         """Shipping costs can be calculated."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         
         shipping_context = {
@@ -152,7 +152,7 @@ class TestEcommerceShippingIntegration:
     
     def test_shipping_carrier_integration(self) -> None:
         """Multiple shipping carriers are supported."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         
         carriers = orchestrator.available_shipping_carriers
@@ -164,7 +164,7 @@ class TestEcommerceInventoryManagement:
     
     def test_inventory_check(self) -> None:
         """Can check inventory levels."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         
         inventory_check = orchestrator.check_inventory("SKU001")
@@ -174,7 +174,7 @@ class TestEcommerceInventoryManagement:
     
     def test_inventory_reservation(self) -> None:
         """Inventory can be reserved for orders."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         
         reservation = orchestrator.reserve_inventory(
@@ -191,7 +191,7 @@ class TestEcommerceReportingCapabilities:
     
     def test_generate_sales_report(self) -> None:
         """Can generate sales reports."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         
         report = orchestrator.generate_report(
@@ -205,7 +205,7 @@ class TestEcommerceReportingCapabilities:
     
     def test_generate_inventory_report(self) -> None:
         """Can generate inventory reports."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         
         report = orchestrator.generate_report(
@@ -223,13 +223,13 @@ class TestEcommerceOrchestratorMetadata:
     
     def test_orchestrator_id_format(self) -> None:
         """Orchestrator ID follows naming convention."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         assert orchestrator.orchestrator_id.startswith("ecommerce-")
     
     def test_supported_operations(self) -> None:
         """Orchestrator lists supported operations."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         
         operations = orchestrator.supported_operations
@@ -240,7 +240,7 @@ class TestEcommerceOrchestratorMetadata:
     
     def test_tier_access_level(self) -> None:
         """E-commerce orchestrator has appropriate tier access."""
-        from src.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
+        from cortex.domain_orchestrators.business.ecommerce import EcommerceOrchestrator
         orchestrator = EcommerceOrchestrator()
         
         # E-commerce with payment data requires tier 2+

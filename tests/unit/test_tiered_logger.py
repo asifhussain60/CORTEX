@@ -16,8 +16,8 @@ from pathlib import Path
 
 import pytest
 
-from src.infrastructure.database import DatabaseManager, DatabaseConfig
-from src.infrastructure.tiered_logger import TieredLogger, LogLevel, LogEntry
+from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
+from cortex.infrastructure.tiered_logger import TieredLogger, LogLevel, LogEntry
 
 
 @pytest.mark.ac("AR-004-01")

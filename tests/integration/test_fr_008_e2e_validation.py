@@ -17,10 +17,10 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 import pytest
 from pathlib import Path
 
-from src.orchestrators.core.master_orchestrator import MasterOrchestrator
-from src.core.governance_registry import GovernanceRegistry
-from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-from src.infrastructure.database import DatabaseManager
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+from cortex.core.governance_registry import GovernanceRegistry
+from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.infrastructure.database import DatabaseManager
 
 
 @pytest.mark.ac("FR-008-01")
@@ -44,7 +44,7 @@ class TestE2EOrchestratorPluginIntegration:
     
     def test_orchestrator_registry_exists(self):
         """Verify orchestrator registry exists."""
-        from src.orchestrators.core.orchestrator_registry import OrchestratorRegistry
+        from cortex.orchestrators.core.orchestrator_registry import OrchestratorRegistry
         
         registry = OrchestratorRegistry.instance()
         assert registry is not None
@@ -128,7 +128,7 @@ class TestGovernanceContextAvailability:
     def test_governance_tier_2_accessible(self):
         """Verify Tier 2 (templates) is accessible."""
         # Brain tier 2 contains response templates
-        from src.core.response_template_engine import ResponseTemplateEngine
+        from cortex.core.response_template_engine import ResponseTemplateEngine
         
         engine = ResponseTemplateEngine()
         assert engine is not None

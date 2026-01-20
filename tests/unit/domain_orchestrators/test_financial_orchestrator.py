@@ -17,24 +17,24 @@ class TestFinancialOrchestratorBase:
     
     def test_financial_orchestrator_exists(self) -> None:
         """AC-PHX-008-01: Financial orchestrator class exists."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
         assert FinancialOrchestrator is not None
     
     def test_financial_orchestrator_inherits_base(self) -> None:
         """Financial orchestrator inherits from BusinessDomainOrchestrator."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
-        from src.domain_orchestrators.business.base import BusinessDomainOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.base import BusinessDomainOrchestrator
         assert issubclass(FinancialOrchestrator, BusinessDomainOrchestrator)
     
     def test_financial_orchestrator_domain_property(self) -> None:
         """Financial orchestrator has correct domain property."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
         orchestrator = FinancialOrchestrator()
         assert orchestrator.domain == "financial"
     
     def test_financial_orchestrator_compliance_requirements(self) -> None:
         """Financial orchestrator specifies compliance requirements."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
         orchestrator = FinancialOrchestrator()
         assert hasattr(orchestrator, 'compliance_requirements')
         assert isinstance(orchestrator.compliance_requirements, list)
@@ -47,7 +47,7 @@ class TestFinancialTransactionHandling:
     
     def test_validate_transaction_context(self) -> None:
         """Financial orchestrator validates transaction context."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
         orchestrator = FinancialOrchestrator()
         
         valid_context = {
@@ -61,7 +61,7 @@ class TestFinancialTransactionHandling:
     
     def test_reject_invalid_transaction(self) -> None:
         """Financial orchestrator rejects invalid transactions."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
         orchestrator = FinancialOrchestrator()
         
         invalid_context = {
@@ -72,7 +72,7 @@ class TestFinancialTransactionHandling:
     
     def test_execute_transaction_audit_trail(self) -> None:
         """Financial transactions create audit trail entries."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
         orchestrator = FinancialOrchestrator()
         
         context = {
@@ -94,13 +94,13 @@ class TestFinancialRiskAssessment:
     
     def test_risk_assessment_available(self) -> None:
         """Financial orchestrator provides risk assessment."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
         orchestrator = FinancialOrchestrator()
         assert hasattr(orchestrator, 'assess_risk')
     
     def test_high_value_transaction_flagged(self) -> None:
         """High-value transactions are flagged for review."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
         orchestrator = FinancialOrchestrator()
         
         context = {
@@ -114,7 +114,7 @@ class TestFinancialRiskAssessment:
     
     def test_low_value_transaction_normal(self) -> None:
         """Low-value transactions have normal risk."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
         orchestrator = FinancialOrchestrator()
         
         context = {
@@ -132,7 +132,7 @@ class TestFinancialComplianceIntegration:
     
     def test_compliance_check_on_execute(self) -> None:
         """Compliance is checked before execution."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
         orchestrator = FinancialOrchestrator()
         
         context = {
@@ -148,7 +148,7 @@ class TestFinancialComplianceIntegration:
     
     def test_compliance_failure_blocks_execution(self) -> None:
         """Failed compliance check blocks execution."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
         orchestrator = FinancialOrchestrator()
         
         # Suspicious transaction pattern
@@ -170,7 +170,7 @@ class TestFinancialReportingCapabilities:
     
     def test_generate_transaction_report(self) -> None:
         """Can generate transaction reports."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
         orchestrator = FinancialOrchestrator()
         
         report = orchestrator.generate_report(
@@ -184,7 +184,7 @@ class TestFinancialReportingCapabilities:
     
     def test_generate_compliance_report(self) -> None:
         """Can generate compliance reports."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
         orchestrator = FinancialOrchestrator()
         
         report = orchestrator.generate_report(
@@ -202,13 +202,13 @@ class TestFinancialOrchestratorMetadata:
     
     def test_orchestrator_id_format(self) -> None:
         """Orchestrator ID follows naming convention."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
         orchestrator = FinancialOrchestrator()
         assert orchestrator.orchestrator_id.startswith("financial-")
     
     def test_supported_operations(self) -> None:
         """Orchestrator lists supported operations."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
         orchestrator = FinancialOrchestrator()
         
         operations = orchestrator.supported_operations
@@ -218,7 +218,7 @@ class TestFinancialOrchestratorMetadata:
     
     def test_tier_access_level(self) -> None:
         """Financial orchestrator has appropriate tier access."""
-        from src.domain_orchestrators.business.financial import FinancialOrchestrator
+        from cortex.domain_orchestrators.business.financial import FinancialOrchestrator
         orchestrator = FinancialOrchestrator()
         
         # Financial operations require tier 2+ for sensitive data

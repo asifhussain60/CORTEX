@@ -20,13 +20,13 @@ from enum import Enum
 
 import pytest
 
-from src.core.orchestrator.continuation_decision import (
+from cortex.core.orchestrator.continuation_decision import (
     ContinuationDecision,
     ContinuationReason,
 )
-from src.core.orchestrator.conversation_protocol import ConversationProtocol
-from src.core.orchestrator.terminal_events import EventRegistry, TerminalEvent
-from src.core.result import Ok, Err, Result
+from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
+from cortex.core.orchestrator.terminal_events import EventRegistry, TerminalEvent
+from cortex.core.result import Ok, Err, Result
 
 
 # Apply timeout to all tests in this module to prevent hangs

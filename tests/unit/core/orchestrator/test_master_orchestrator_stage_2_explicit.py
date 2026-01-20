@@ -12,12 +12,12 @@ import pytest
 from typing import Dict, Any
 from datetime import datetime
 
-from src.orchestrators.core.master_orchestrator_stage_2 import (
+from cortex.orchestrators.core.master_orchestrator_stage_2 import (
     MasterOrchestrationStage2,
     Stage2RoutingContext
 )
-from src.orchestrators.core.intent_router import IntentType
-from src.core.result import Ok, Err
+from cortex.orchestrators.core.intent_router import IntentType
+from cortex.core.result import Ok, Err
 
 
 class TestStage2Implementation:
@@ -231,7 +231,7 @@ class TestStage2IntegrationWithMasterOrchestrator:
     
     def test_stage_2_as_master_orchestrator_component(self):
         """Test that Stage 2 can be integrated into Master Orchestrator"""
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         master = MasterOrchestrator.instance()
         stage2 = MasterOrchestrationStage2()

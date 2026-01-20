@@ -11,7 +11,7 @@ AC-AR-006-02: Orchestrators auto-registered via @orchestrator decorator
 import pytest
 from typing import Any, Dict
 
-from src.core.decorators.orchestrator_decorator import (
+from cortex.core.decorators.orchestrator_decorator import (
     orchestrator,
     get_registered_orchestrators,
     get_orchestrator_by_domain,
@@ -19,8 +19,8 @@ from src.core.decorators.orchestrator_decorator import (
     is_orchestrator,
     clear_orchestrator_registry,
 )
-from src.core.interfaces import IOrchestrator, OperationMode
-from src.core.result import Result, Ok, Err
+from cortex.core.interfaces import IOrchestrator, OperationMode
+from cortex.core.result import Result, Ok, Err
 
 
 class TestOrchestratorDecoratorBasics:

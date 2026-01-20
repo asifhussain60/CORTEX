@@ -19,14 +19,14 @@ import pytest
 from typing import List, Dict, Any
 from dataclasses import dataclass
 
-from src.core.governance_pregate import (
+from cortex.core.governance_pregate import (
     GovernancePregate, 
     PreGateDecision, 
     DefaultGovernancePregate,
     get_governance_pregate,
     set_governance_pregate
 )
-from src.core.governance_registry import GovernanceRegistry
+from cortex.core.governance_registry import GovernanceRegistry
 
 
 class TestGovernancePregateInterface:

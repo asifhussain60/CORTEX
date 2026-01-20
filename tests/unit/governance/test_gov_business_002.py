@@ -1,6 +1,6 @@
 """Test for BDOM-002: SLA Compliance Tracking"""
 import pytest
-from src.core.governance.sla_tracking import SLATracker, SLAComplianceStatus
+from cortex.core.governance.sla_tracking import SLATracker, SLAComplianceStatus
 
 class TestSLATracking:
     def test_create_tracker(self):

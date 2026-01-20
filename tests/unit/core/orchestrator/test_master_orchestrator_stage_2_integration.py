@@ -23,10 +23,10 @@ from typing import Dict, Any, Optional
 from unittest.mock import Mock, MagicMock, patch
 from datetime import datetime
 
-from src.orchestrators.core.master_orchestrator import MasterOrchestrator
-from src.orchestrators.core.intent_router import IntentRouter, IntentType, RoutingDecision
-from src.core.result import Ok, Err, Result
-from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+from cortex.orchestrators.core.intent_router import IntentRouter, IntentType, RoutingDecision
+from cortex.core.result import Ok, Err, Result
+from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 
 class TestMasterOrchHestratorStage2Integration:

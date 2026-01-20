@@ -11,7 +11,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest
-from src.orchestrators.documentation.capability_docs import (
+from cortex.orchestrators.documentation.capability_docs import (
     CapabilityDocumentation,
     CapabilityDocGenerator,
     CapabilityIndex,

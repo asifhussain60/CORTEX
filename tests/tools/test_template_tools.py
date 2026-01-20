@@ -28,7 +28,7 @@ class TestTemplateParser:
     @pytest.fixture
     def parser(self):
         """Create parser instance."""
-        from src.tools.template_parser import TemplateParser
+        from cortex.tools.template_parser import TemplateParser
         return TemplateParser()
     
     @pytest.fixture
@@ -197,7 +197,7 @@ version: 1.0.0
     
     def test_parse_invalid_yaml(self, parser):
         """Test handling invalid YAML."""
-        from src.tools.template_parser import ParseError
+        from cortex.tools.template_parser import ParseError
         
         with pytest.raises(ParseError):
             parser.parse_string("invalid: yaml: content: [")
@@ -218,13 +218,13 @@ class TestToolGenerator:
     @pytest.fixture
     def generator(self):
         """Create generator instance."""
-        from src.tools.tool_generator import ToolGenerator
+        from cortex.tools.tool_generator import ToolGenerator
         return ToolGenerator()
     
     @pytest.fixture
     def sample_template(self):
         """Create sample parsed template."""
-        from src.tools.template_parser import TemplateParser
+        from cortex.tools.template_parser import TemplateParser
         
         yaml_str = """
 name: DataProcessor
@@ -264,7 +264,7 @@ hooks:
     
     def test_generate_cli_command(self, generator, sample_template):
         """Test CLI command generation."""
-        from src.tools.tool_generator import GenerationConfig, ToolType
+        from cortex.tools.tool_generator import GenerationConfig, ToolType
         
         config = GenerationConfig(tool_type=ToolType.CLI_COMMAND)
         result = generator.generate(sample_template, config)
@@ -278,7 +278,7 @@ hooks:
     
     def test_generate_api_client(self, generator, sample_template):
         """Test API client generation."""
-        from src.tools.tool_generator import GenerationConfig, ToolType
+        from cortex.tools.tool_generator import GenerationConfig, ToolType
         
         config = GenerationConfig(tool_type=ToolType.API_CLIENT)
         result = generator.generate(sample_template, config)
@@ -292,7 +292,7 @@ hooks:
     
     def test_generate_test_harness(self, generator, sample_template):
         """Test test harness generation."""
-        from src.tools.tool_generator import GenerationConfig, ToolType
+        from cortex.tools.tool_generator import GenerationConfig, ToolType
         
         config = GenerationConfig(tool_type=ToolType.TEST_HARNESS)
         result = generator.generate(sample_template, config)
@@ -306,7 +306,7 @@ hooks:
     
     def test_generate_documentation(self, generator, sample_template):
         """Test documentation generation."""
-        from src.tools.tool_generator import GenerationConfig, ToolType
+        from cortex.tools.tool_generator import GenerationConfig, ToolType
         
         config = GenerationConfig(tool_type=ToolType.DOCUMENTATION)
         result = generator.generate(sample_template, config)
@@ -320,7 +320,7 @@ hooks:
     
     def test_generate_config_validator(self, generator, sample_template):
         """Test config validator generation."""
-        from src.tools.tool_generator import GenerationConfig, ToolType
+        from cortex.tools.tool_generator import GenerationConfig, ToolType
         
         config = GenerationConfig(tool_type=ToolType.CONFIG_VALIDATOR)
         result = generator.generate(sample_template, config)
@@ -333,7 +333,7 @@ hooks:
     
     def test_generate_mock_service(self, generator, sample_template):
         """Test mock service generation."""
-        from src.tools.tool_generator import GenerationConfig, ToolType
+        from cortex.tools.tool_generator import GenerationConfig, ToolType
         
         config = GenerationConfig(tool_type=ToolType.MOCK_SERVICE)
         result = generator.generate(sample_template, config)
@@ -346,7 +346,7 @@ hooks:
     
     def test_generate_integration_adapter(self, generator, sample_template):
         """Test integration adapter generation."""
-        from src.tools.tool_generator import GenerationConfig, ToolType
+        from cortex.tools.tool_generator import GenerationConfig, ToolType
         
         config = GenerationConfig(tool_type=ToolType.INTEGRATION_ADAPTER)
         result = generator.generate(sample_template, config)
@@ -359,7 +359,7 @@ hooks:
     
     def test_generate_all(self, generator, sample_template):
         """Test generating all tool types."""
-        from src.tools.tool_generator import ToolType
+        from cortex.tools.tool_generator import ToolType
         
         result = generator.generate_all(sample_template, Path("output"))
         
@@ -368,7 +368,7 @@ hooks:
     
     def test_generated_tool_has_dependencies(self, generator, sample_template):
         """Test generated tools include dependencies."""
-        from src.tools.tool_generator import GenerationConfig, ToolType
+        from cortex.tools.tool_generator import GenerationConfig, ToolType
         
         config = GenerationConfig(tool_type=ToolType.CLI_COMMAND)
         result = generator.generate(sample_template, config)
@@ -378,7 +378,7 @@ hooks:
     
     def test_generated_tool_has_path(self, generator, sample_template):
         """Test generated tools have output path."""
-        from src.tools.tool_generator import GenerationConfig, ToolType
+        from cortex.tools.tool_generator import GenerationConfig, ToolType
         
         config = GenerationConfig(tool_type=ToolType.API_CLIENT)
         result = generator.generate(sample_template, config)
@@ -398,7 +398,7 @@ class TestOrchestratorScaffolder:
     @pytest.fixture
     def scaffolder(self):
         """Create scaffolder instance."""
-        from src.tools.orchestrator_scaffolder import OrchestratorScaffolder
+        from cortex.tools.orchestrator_scaffolder import OrchestratorScaffolder
         return OrchestratorScaffolder()
     
     @pytest.fixture
@@ -467,7 +467,7 @@ integrations:
     
     def test_scaffold_generates_orchestrator(self, scaffolder, sample_template_yaml):
         """Test scaffolding generates orchestrator file."""
-        from src.tools.orchestrator_scaffolder import ScaffoldConfig, ScaffoldType
+        from cortex.tools.orchestrator_scaffolder import ScaffoldConfig, ScaffoldType
         
         config = ScaffoldConfig(scaffold_type=ScaffoldType.ORCHESTRATOR)
         template = scaffolder.parser.parse_string(sample_template_yaml)
@@ -485,7 +485,7 @@ integrations:
     
     def test_scaffold_generates_tests(self, scaffolder, sample_template_yaml):
         """Test scaffolding generates test file."""
-        from src.tools.orchestrator_scaffolder import ScaffoldConfig, ScaffoldType
+        from cortex.tools.orchestrator_scaffolder import ScaffoldConfig, ScaffoldType
         
         config = ScaffoldConfig(
             scaffold_type=ScaffoldType.FULL,
@@ -505,7 +505,7 @@ integrations:
     
     def test_scaffold_generates_config(self, scaffolder, sample_template_yaml):
         """Test scaffolding generates config file."""
-        from src.tools.orchestrator_scaffolder import ScaffoldConfig, ScaffoldType
+        from cortex.tools.orchestrator_scaffolder import ScaffoldConfig, ScaffoldType
         
         config = ScaffoldConfig(
             scaffold_type=ScaffoldType.FULL,
@@ -525,7 +525,7 @@ integrations:
     
     def test_scaffold_generates_integrations(self, scaffolder, sample_template_yaml):
         """Test scaffolding generates integration adapter."""
-        from src.tools.orchestrator_scaffolder import ScaffoldConfig, ScaffoldType
+        from cortex.tools.orchestrator_scaffolder import ScaffoldConfig, ScaffoldType
         
         config = ScaffoldConfig(
             scaffold_type=ScaffoldType.FULL,
@@ -542,7 +542,7 @@ integrations:
     
     def test_scaffold_includes_stages(self, scaffolder, sample_template_yaml):
         """Test scaffolded code includes stage methods."""
-        from src.tools.orchestrator_scaffolder import ScaffoldConfig, ScaffoldType
+        from cortex.tools.orchestrator_scaffolder import ScaffoldConfig, ScaffoldType
         
         config = ScaffoldConfig(scaffold_type=ScaffoldType.ORCHESTRATOR)
         template = scaffolder.parser.parse_string(sample_template_yaml)
@@ -556,7 +556,7 @@ integrations:
     
     def test_scaffold_includes_parameters(self, scaffolder, sample_template_yaml):
         """Test scaffolded code includes parameter class."""
-        from src.tools.orchestrator_scaffolder import ScaffoldConfig, ScaffoldType
+        from cortex.tools.orchestrator_scaffolder import ScaffoldConfig, ScaffoldType
         
         config = ScaffoldConfig(scaffold_type=ScaffoldType.ORCHESTRATOR)
         template = scaffolder.parser.parse_string(sample_template_yaml)
@@ -586,7 +586,7 @@ integrations:
     
     def test_scaffold_async_support(self, scaffolder, sample_template_yaml):
         """Test scaffolding with async support."""
-        from src.tools.orchestrator_scaffolder import ScaffoldConfig, ScaffoldType
+        from cortex.tools.orchestrator_scaffolder import ScaffoldConfig, ScaffoldType
         
         config = ScaffoldConfig(
             scaffold_type=ScaffoldType.ORCHESTRATOR,
@@ -610,14 +610,14 @@ class TestScaffolderTemplates:
     
     def test_base_template_creation(self):
         """Test BaseTemplate can be created."""
-        from src.tools.scaffolder_templates import BaseTemplate
+        from cortex.tools.scaffolder_templates import BaseTemplate
         
         template = BaseTemplate()
         assert template is not None
     
     def test_base_template_render(self):
         """Test BaseTemplate rendering."""
-        from src.tools.scaffolder_templates import BaseTemplate
+        from cortex.tools.scaffolder_templates import BaseTemplate
         
         template = BaseTemplate()
         context = {
@@ -633,14 +633,14 @@ class TestScaffolderTemplates:
     
     def test_orchestrator_template_creation(self):
         """Test OrchestratorTemplate can be created."""
-        from src.tools.scaffolder_templates import OrchestratorTemplate
+        from cortex.tools.scaffolder_templates import OrchestratorTemplate
         
         template = OrchestratorTemplate()
         assert template is not None
     
     def test_orchestrator_template_render(self):
         """Test OrchestratorTemplate rendering."""
-        from src.tools.scaffolder_templates import OrchestratorTemplate
+        from cortex.tools.scaffolder_templates import OrchestratorTemplate
         
         template = OrchestratorTemplate()
         context = {
@@ -661,14 +661,14 @@ class TestScaffolderTemplates:
     
     def test_test_template_creation(self):
         """Test TestTemplate can be created."""
-        from src.tools.scaffolder_templates import TestTemplate
+        from cortex.tools.scaffolder_templates import TestTemplate
         
         template = TestTemplate()
         assert template is not None
     
     def test_test_template_render(self):
         """Test TestTemplate rendering."""
-        from src.tools.scaffolder_templates import TestTemplate
+        from cortex.tools.scaffolder_templates import TestTemplate
         
         template = TestTemplate()
         context = {
@@ -686,14 +686,14 @@ class TestScaffolderTemplates:
     
     def test_config_template_creation(self):
         """Test ConfigTemplate can be created."""
-        from src.tools.scaffolder_templates import ConfigTemplate
+        from cortex.tools.scaffolder_templates import ConfigTemplate
         
         template = ConfigTemplate()
         assert template is not None
     
     def test_config_template_render(self):
         """Test ConfigTemplate rendering."""
-        from src.tools.scaffolder_templates import ConfigTemplate
+        from cortex.tools.scaffolder_templates import ConfigTemplate
         
         template = ConfigTemplate()
         context = {
@@ -709,14 +709,14 @@ class TestScaffolderTemplates:
     
     def test_integration_template_creation(self):
         """Test IntegrationTemplate can be created."""
-        from src.tools.scaffolder_templates import IntegrationTemplate
+        from cortex.tools.scaffolder_templates import IntegrationTemplate
         
         template = IntegrationTemplate()
         assert template is not None
     
     def test_integration_template_render(self):
         """Test IntegrationTemplate rendering."""
-        from src.tools.scaffolder_templates import IntegrationTemplate
+        from cortex.tools.scaffolder_templates import IntegrationTemplate
         
         template = IntegrationTemplate()
         context = {
@@ -732,14 +732,14 @@ class TestScaffolderTemplates:
     
     def test_template_registry_get(self):
         """Test TemplateRegistry.get()."""
-        from src.tools.scaffolder_templates import TemplateRegistry, TemplateType
+        from cortex.tools.scaffolder_templates import TemplateRegistry, TemplateType
         
         template = TemplateRegistry.get(TemplateType.ORCHESTRATOR)
         assert template is not None
     
     def test_template_registry_available_types(self):
         """Test TemplateRegistry.available_types()."""
-        from src.tools.scaffolder_templates import TemplateRegistry, TemplateType
+        from cortex.tools.scaffolder_templates import TemplateRegistry, TemplateType
         
         types = TemplateRegistry.available_types()
         
@@ -749,7 +749,7 @@ class TestScaffolderTemplates:
     
     def test_template_variable_resolve(self):
         """Test TemplateVariable resolution."""
-        from src.tools.scaffolder_templates import TemplateVariable
+        from cortex.tools.scaffolder_templates import TemplateVariable
         
         var = TemplateVariable(
             name='test_var',
@@ -764,7 +764,7 @@ class TestScaffolderTemplates:
     
     def test_template_variable_default(self):
         """Test TemplateVariable default value."""
-        from src.tools.scaffolder_templates import TemplateVariable
+        from cortex.tools.scaffolder_templates import TemplateVariable
         
         var = TemplateVariable(
             name='optional_var',
@@ -780,7 +780,7 @@ class TestScaffolderTemplates:
     
     def test_template_block_render(self):
         """Test TemplateBlock rendering."""
-        from src.tools.scaffolder_templates import TemplateBlock
+        from cortex.tools.scaffolder_templates import TemplateBlock
         
         block = TemplateBlock(
             name='test_block',
@@ -793,7 +793,7 @@ class TestScaffolderTemplates:
     
     def test_template_block_conditional(self):
         """Test TemplateBlock conditional rendering."""
-        from src.tools.scaffolder_templates import TemplateBlock
+        from cortex.tools.scaffolder_templates import TemplateBlock
         
         block = TemplateBlock(
             name='conditional_block',
@@ -818,7 +818,7 @@ class TestTemplateValidator:
     @pytest.fixture
     def validator(self):
         """Create validator instance."""
-        from src.tools.template_validator import TemplateValidator
+        from cortex.tools.template_validator import TemplateValidator
         return TemplateValidator()
     
     @pytest.fixture
@@ -883,7 +883,7 @@ class TestTemplateValidator:
     
     def test_validate_missing_required_field(self, validator):
         """Test validation catches missing required fields."""
-        from src.tools.template_validator import ValidationLevel
+        from cortex.tools.template_validator import ValidationLevel
         
         template = {
             'domain': 'testing',
@@ -899,7 +899,7 @@ class TestTemplateValidator:
     
     def test_validate_invalid_version(self, validator):
         """Test validation catches invalid version format."""
-        from src.tools.template_validator import ValidationLevel
+        from cortex.tools.template_validator import ValidationLevel
         
         template = {
             'name': 'Test',
@@ -934,7 +934,7 @@ class TestTemplateValidator:
     
     def test_validate_unknown_parameter_type(self, validator):
         """Test validation catches unknown parameter types."""
-        from src.tools.template_validator import ValidationLevel
+        from cortex.tools.template_validator import ValidationLevel
         
         template = {
             'name': 'Test',
@@ -980,7 +980,7 @@ class TestTemplateValidator:
     
     def test_add_rule(self, validator):
         """Test adding custom rule."""
-        from src.tools.template_validator import ValidationRule
+        from cortex.tools.template_validator import ValidationRule
         
         class CustomRule(ValidationRule):
             code = "CUSTOM-001"
@@ -1031,7 +1031,7 @@ class TestTestingFramework:
     @pytest.fixture
     def framework(self):
         """Create framework instance."""
-        from src.tools.testing_framework import TemplateTestFramework
+        from cortex.tools.testing_framework import TemplateTestFramework
         return TemplateTestFramework("Test Framework")
     
     @pytest.fixture
@@ -1053,7 +1053,7 @@ class TestTestingFramework:
     
     def test_add_test(self, framework):
         """Test adding test case."""
-        from src.tools.testing_framework import TemplateTestCase, Assertion
+        from cortex.tools.testing_framework import TemplateTestCase, Assertion
         
         test = TemplateTestCase(
             name='test_example',
@@ -1069,7 +1069,7 @@ class TestTestingFramework:
     
     def test_run_passing_test(self, framework):
         """Test running a passing test."""
-        from src.tools.testing_framework import TemplateTestCase, Assertion, TestStatus
+        from cortex.tools.testing_framework import TemplateTestCase, Assertion, TestStatus
         
         test = TemplateTestCase(
             name='test_pass',
@@ -1087,7 +1087,7 @@ class TestTestingFramework:
     
     def test_run_failing_test(self, framework):
         """Test running a failing test."""
-        from src.tools.testing_framework import TemplateTestCase, Assertion, TestStatus
+        from cortex.tools.testing_framework import TemplateTestCase, Assertion, TestStatus
         
         test = TemplateTestCase(
             name='test_fail',
@@ -1105,7 +1105,7 @@ class TestTestingFramework:
     
     def test_run_skipped_test(self, framework):
         """Test running a skipped test."""
-        from src.tools.testing_framework import TemplateTestCase, TestStatus
+        from cortex.tools.testing_framework import TemplateTestCase, TestStatus
         
         test = TemplateTestCase(
             name='test_skip',
@@ -1121,7 +1121,7 @@ class TestTestingFramework:
     
     def test_run_error_test(self, framework):
         """Test handling test errors."""
-        from src.tools.testing_framework import TemplateTestCase, Assertion, TestStatus
+        from cortex.tools.testing_framework import TemplateTestCase, Assertion, TestStatus
         
         def raise_error():
             raise RuntimeError("Test error")
@@ -1141,7 +1141,7 @@ class TestTestingFramework:
     
     def test_suite_summary(self, framework):
         """Test suite summary generation."""
-        from src.tools.testing_framework import TemplateTestCase, Assertion
+        from cortex.tools.testing_framework import TemplateTestCase, Assertion
         
         framework.add_test(TemplateTestCase(
             name='test1',
@@ -1160,7 +1160,7 @@ class TestTestingFramework:
     
     def test_report_generation(self, framework):
         """Test report generation."""
-        from src.tools.testing_framework import TemplateTestCase, Assertion
+        from cortex.tools.testing_framework import TemplateTestCase, Assertion
         
         framework.add_test(TemplateTestCase(
             name='test_pass',
@@ -1179,7 +1179,7 @@ class TestTestingFramework:
     
     def test_assertion_builder(self, sample_template):
         """Test AssertionBuilder."""
-        from src.tools.testing_framework import AssertionBuilder
+        from cortex.tools.testing_framework import AssertionBuilder
         
         builder = AssertionBuilder(sample_template)
         builder.has_field('name').equals('SampleTemplate')
@@ -1191,7 +1191,7 @@ class TestTestingFramework:
     
     def test_assertion_builder_check_all(self, sample_template):
         """Test AssertionBuilder.check_all()."""
-        from src.tools.testing_framework import AssertionBuilder
+        from cortex.tools.testing_framework import AssertionBuilder
         
         builder = AssertionBuilder(sample_template)
         builder.has_field('name').equals('SampleTemplate')
@@ -1203,7 +1203,7 @@ class TestTestingFramework:
     
     def test_assertion_builder_failed_check(self, sample_template):
         """Test AssertionBuilder with failing checks."""
-        from src.tools.testing_framework import AssertionBuilder
+        from cortex.tools.testing_framework import AssertionBuilder
         
         builder = AssertionBuilder(sample_template)
         builder.has_field('name').equals('WrongName')
@@ -1215,7 +1215,7 @@ class TestTestingFramework:
     
     def test_filter_tests_by_tags(self, framework):
         """Test filtering tests by tags."""
-        from src.tools.testing_framework import TemplateTestCase, Assertion
+        from cortex.tools.testing_framework import TemplateTestCase, Assertion
         
         framework.add_test(TemplateTestCase(
             name='test_tagged',
@@ -1234,7 +1234,7 @@ class TestTestingFramework:
     
     def test_filter_tests_by_names(self, framework):
         """Test filtering tests by names."""
-        from src.tools.testing_framework import TemplateTestCase, Assertion
+        from cortex.tools.testing_framework import TemplateTestCase, Assertion
         
         framework.add_test(TemplateTestCase(
             name='test_one',
@@ -1252,7 +1252,7 @@ class TestTestingFramework:
     
     def test_before_each_hook(self, framework):
         """Test before_each hook."""
-        from src.tools.testing_framework import TemplateTestCase, Assertion
+        from cortex.tools.testing_framework import TemplateTestCase, Assertion
         
         call_count = [0]
         
@@ -1275,7 +1275,7 @@ class TestTestingFramework:
     
     def test_create_template_test(self, sample_template):
         """Test create_template_test factory function."""
-        from src.tools.testing_framework import create_template_test
+        from cortex.tools.testing_framework import create_template_test
         
         test = create_template_test(
             sample_template,
@@ -1287,7 +1287,7 @@ class TestTestingFramework:
     
     def test_to_pytest_generation(self, framework):
         """Test pytest code generation."""
-        from src.tools.testing_framework import TemplateTestCase, Assertion
+        from cortex.tools.testing_framework import TemplateTestCase, Assertion
         
         framework.add_test(TemplateTestCase(
             name='test_example',
@@ -1376,9 +1376,9 @@ integrations:
     
     def test_full_workflow_parse_validate_scaffold(self, full_template_yaml):
         """Test complete workflow: parse -> validate -> scaffold."""
-        from src.tools.template_parser import TemplateParser
-        from src.tools.template_validator import TemplateValidator
-        from src.tools.orchestrator_scaffolder import OrchestratorScaffolder
+        from cortex.tools.template_parser import TemplateParser
+        from cortex.tools.template_validator import TemplateValidator
+        from cortex.tools.orchestrator_scaffolder import OrchestratorScaffolder
         
         # Parse
         parser = TemplateParser()
@@ -1402,8 +1402,8 @@ integrations:
     
     def test_full_workflow_with_tool_generation(self, full_template_yaml):
         """Test workflow with tool generation."""
-        from src.tools.template_parser import TemplateParser
-        from src.tools.tool_generator import ToolGenerator, GenerationConfig, ToolType
+        from cortex.tools.template_parser import TemplateParser
+        from cortex.tools.tool_generator import ToolGenerator, GenerationConfig, ToolType
         
         # Parse
         parser = TemplateParser()
@@ -1436,8 +1436,8 @@ integrations:
     
     def test_full_workflow_with_testing_framework(self, full_template_yaml):
         """Test workflow with testing framework."""
-        from src.tools.template_parser import TemplateParser
-        from src.tools.testing_framework import (
+        from cortex.tools.template_parser import TemplateParser
+        from cortex.tools.testing_framework import (
             TemplateTestFramework,
             TemplateTestCase,
             AssertionBuilder,
@@ -1470,8 +1470,8 @@ integrations:
     
     def test_compliance_report_generation(self, full_template_yaml):
         """Test generating compliance report."""
-        from src.tools.template_parser import TemplateParser
-        from src.tools.template_validator import TemplateValidator
+        from cortex.tools.template_parser import TemplateParser
+        from cortex.tools.template_validator import TemplateValidator
         
         parser = TemplateParser()
         template = parser.parse_string(full_template_yaml)
@@ -1490,18 +1490,18 @@ integrations:
 
 def test_all_tools_importable():
     """Test that all tools are importable."""
-    from src.tools.template_parser import TemplateParser, ParsedTemplate, ParseError
-    from src.tools.tool_generator import ToolGenerator, GeneratedTool, ToolType
-    from src.tools.orchestrator_scaffolder import OrchestratorScaffolder, ScaffoldResult
-    from src.tools.scaffolder_templates import (
+    from cortex.tools.template_parser import TemplateParser, ParsedTemplate, ParseError
+    from cortex.tools.tool_generator import ToolGenerator, GeneratedTool, ToolType
+    from cortex.tools.orchestrator_scaffolder import OrchestratorScaffolder, ScaffoldResult
+    from cortex.tools.scaffolder_templates import (
         BaseTemplate,
         OrchestratorTemplate,
         TestTemplate,
         ConfigTemplate,
         IntegrationTemplate,
     )
-    from src.tools.template_validator import TemplateValidator, ValidationResult
-    from src.tools.testing_framework import TemplateTestFramework, TemplateTestCase
+    from cortex.tools.template_validator import TemplateValidator, ValidationResult
+    from cortex.tools.testing_framework import TemplateTestFramework, TemplateTestCase
     
     # All imports successful
     assert TemplateParser is not None

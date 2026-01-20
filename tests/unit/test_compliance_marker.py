@@ -14,7 +14,7 @@ Test scenarios:
 """
 
 import pytest
-from src.infrastructure.compliance_marker import (
+from cortex.infrastructure.compliance_marker import (
     ComplianceFramework,
     ComplianceCategory,
     ComplianceMarker,

@@ -10,7 +10,7 @@ Total: 60 tests
 
 import pytest
 from datetime import datetime
-from src.domain_brain import (
+from cortex.domain_brain import (
     DomainBrainAPI,
     Domain,
     Entity,
@@ -18,7 +18,7 @@ from src.domain_brain import (
     ConsistencyValidator,
     AuditLogger,
 )
-from src.domain_brain.models import EntityType, ConflictResolution, AuditOperationType
+from cortex.domain_brain.models import EntityType, ConflictResolution, AuditOperationType
 
 
 class TestDomainBrainAPI:

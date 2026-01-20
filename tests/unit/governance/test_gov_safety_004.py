@@ -10,7 +10,7 @@ Validates:
 
 import pytest
 from datetime import datetime
-from src.core.governance.reasoning_trace import (
+from cortex.core.governance.reasoning_trace import (
     ReasoningTrace,
     ReasoningTraceStep,
     ReasoningTraceValidator,

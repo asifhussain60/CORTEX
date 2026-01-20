@@ -29,14 +29,14 @@ from datetime import datetime
 from typing import Dict, List, Any
 import uuid
 
-from src.core.knowledge.knowledge_graph import (
+from cortex.core.knowledge.knowledge_graph import (
     KnowledgeGraph,
     GraphNode,
     GraphEdge,
     NodeType,
     EdgeType,
 )
-from src.core.intent.comprehension_yaml import (
+from cortex.core.intent.comprehension_yaml import (
     ComprehensionYAML,
     IntentSection,
     ChallengeSection,

@@ -26,10 +26,10 @@ from unittest.mock import Mock, MagicMock, patch
 # Add src to path for imports
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "../../src"))
 
-from src.orchestrators.domain.planning_orchestrator import PlanningOrchestrator
-from src.orchestrators.core.master_orchestrator import MasterOrchestrator
-from src.core.response_header_injector import ResponseHeaderInjector
-from src.core.response_header_config import HeaderConfigurationManager
+from cortex.orchestrators.domain.planning_orchestrator import PlanningOrchestrator
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+from cortex.core.response_header_injector import ResponseHeaderInjector
+from cortex.core.response_header_config import HeaderConfigurationManager
 
 
 class TestMasterOrchestratorHeaderConsistency:

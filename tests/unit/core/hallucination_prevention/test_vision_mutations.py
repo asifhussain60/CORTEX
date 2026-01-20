@@ -20,7 +20,7 @@ from enum import Enum
 import uuid
 import json
 
-from src.core.hallucination_prevention.vision_mutations import (
+from cortex.core.hallucination_prevention.vision_mutations import (
     VisionMutationTracker,
     VisionMutation,
     MutationType,

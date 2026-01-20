@@ -11,7 +11,7 @@ Tests for AC-VALIDATE-001 through AC-VALIDATE-005:
 
 import pytest
 from datetime import datetime
-from src.core.input_validator import (
+from cortex.core.input_validator import (
     InputValidator,
     ValidationResult,
     CanonicalIntent,

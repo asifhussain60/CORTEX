@@ -18,8 +18,8 @@ import json
 
 
 # Import modules to be tested (will be created)
-from src.core.observability.metrics_dashboard import MetricsDashboard, DashboardConfig
-from src.core.observability.metrics_aggregator import MetricsAggregator, MetricPoint
+from cortex.core.observability.metrics_dashboard import MetricsDashboard, DashboardConfig
+from cortex.core.observability.metrics_aggregator import MetricsAggregator, MetricPoint
 
 
 class TestDashboardInitialization:

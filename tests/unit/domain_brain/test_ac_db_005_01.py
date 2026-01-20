@@ -7,19 +7,19 @@ from document ingestion through LENS resolution.
 import pytest
 from typing import List
 
-from src.domain_brain.models import (
+from cortex.domain_brain.models import (
     Domain,
     Entity,
     EntityType,
     Conflict,
     AuditOperationType,
 )
-from src.domain_brain.api import DomainBrainAPI
-from src.domain_brain.deduplication import DuplicateDetector
-from src.domain_brain.audit_log_manager import AuditLogManager
-from src.domain_brain.conflict_resolver import ConflictResolver
-from src.domain_brain.lens_integration import LENSIntegrationLayer
-from src.domain_brain.orphan_detector import ReferenceValidator
+from cortex.domain_brain.api import DomainBrainAPI
+from cortex.domain_brain.deduplication import DuplicateDetector
+from cortex.domain_brain.audit_log_manager import AuditLogManager
+from cortex.domain_brain.conflict_resolver import ConflictResolver
+from cortex.domain_brain.lens_integration import LENSIntegrationLayer
+from cortex.domain_brain.orphan_detector import ReferenceValidator
 
 
 class TestEndToEndWorkflow:

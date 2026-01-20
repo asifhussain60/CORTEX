@@ -11,8 +11,8 @@ Rule: Security best practice - never trust user input
 import pytest
 from typing import Dict, Any
 from unittest.mock import Mock, patch, MagicMock
-from src.core.response_header_injector import ResponseHeaderInjector
-from src.core.response_header_config import HeaderConfigurationManager
+from cortex.core.response_header_injector import ResponseHeaderInjector
+from cortex.core.response_header_config import HeaderConfigurationManager
 
 
 class TestTemplateInjectionVectors:
@@ -473,7 +473,7 @@ class TestSecurityCompliance:
         # without escaping on user input
         
         import inspect
-        from src.core.response_header_injector import ResponseHeaderInjector
+        from cortex.core.response_header_injector import ResponseHeaderInjector
         
         # Check that _substitute_variables uses safe methods
         source = inspect.getsource(ResponseHeaderInjector._substitute_variables)

@@ -6,7 +6,7 @@ AC-NFR-002-03: Circuit breaker pattern implemented
 
 import pytest
 import time
-from src.infrastructure.circuit_breaker import (
+from cortex.infrastructure.circuit_breaker import (
     CircuitBreaker,
     CircuitBreakerConfig,
     CircuitState,

@@ -30,15 +30,15 @@ class TestStage1ToStage4EndToEnd:
     
     def test_implement_operation_complete_workflow(self) -> None:
         """Test complete workflow for IMPLEMENT operation."""
-        from src.orchestrators.core.master_orchestrator_stage_1 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import (
             MasterOrchestrationStage1,
             Stage1ComprehensionContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
@@ -87,15 +87,15 @@ class TestStage1ToStage4EndToEnd:
     
     def test_fix_operation_complete_workflow(self) -> None:
         """Test complete workflow for FIX operation."""
-        from src.orchestrators.core.master_orchestrator_stage_1 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import (
             MasterOrchestrationStage1,
             Stage1ComprehensionContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
@@ -143,15 +143,15 @@ class TestStage1ToStage4EndToEnd:
     
     def test_refactor_operation_complete_workflow(self) -> None:
         """Test complete workflow for REFACTOR operation."""
-        from src.orchestrators.core.master_orchestrator_stage_1 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import (
             MasterOrchestrationStage1,
             Stage1ComprehensionContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
@@ -200,11 +200,11 @@ class TestDataFlowAcrossStages:
     
     def test_stage1_output_feeds_stage3_input(self) -> None:
         """Test Stage 1 output format compatible with Stage 3 input."""
-        from src.orchestrators.core.master_orchestrator_stage_1 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import (
             MasterOrchestrationStage1,
             Stage1ComprehensionContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             Stage3KnowledgeContext
         )
         
@@ -236,12 +236,12 @@ class TestDataFlowAcrossStages:
     
     def test_stage3_output_feeds_stage4_input(self) -> None:
         """Test Stage 3 output format compatible with Stage 4 input."""
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             Stage4ApprovalContext
         )
         
@@ -285,7 +285,7 @@ class TestMultiTurnConversations:
     
     def test_multi_turn_same_stage(self) -> None:
         """Test multiple turns within same stage."""
-        from src.orchestrators.core.master_orchestrator_stage_1 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import (
             MasterOrchestrationStage1,
             Stage1ComprehensionContext
         )
@@ -322,15 +322,15 @@ class TestMultiTurnConversations:
     
     def test_multi_turn_across_stages(self) -> None:
         """Test multiple turns across different stages."""
-        from src.orchestrators.core.master_orchestrator_stage_1 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import (
             MasterOrchestrationStage1,
             Stage1ComprehensionContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
@@ -380,7 +380,7 @@ class TestErrorRecoveryAcrossStages:
     
     def test_error_at_stage1_blocks_downstream(self) -> None:
         """Test Stage 1 error prevents downstream processing."""
-        from src.orchestrators.core.master_orchestrator_stage_1 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import (
             MasterOrchestrationStage1
         )
         
@@ -392,8 +392,8 @@ class TestErrorRecoveryAcrossStages:
     
     def test_graceful_handling_at_stage3_if_low_confidence(self) -> None:
         """Test Stage 3 gracefully handles low-confidence input."""
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
@@ -422,8 +422,8 @@ class TestErrorRecoveryAcrossStages:
     
     def test_stage4_rejection_provides_reason(self) -> None:
         """Test Stage 4 rejection provides clear reason."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import Stage3Output
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
@@ -460,15 +460,15 @@ class TestCriticalUrgencyFastTrack:
     
     def test_critical_urgency_auto_approved_if_reasonable_confidence(self) -> None:
         """Test critical urgency operations auto-approved if confidence sufficient."""
-        from src.orchestrators.core.master_orchestrator_stage_1 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import (
             MasterOrchestrationStage1,
             Stage1ComprehensionContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
@@ -522,15 +522,15 @@ class TestGovernanceComplianceEndToEnd:
     
     def test_audit_trail_continuous_across_stages(self) -> None:
         """Test audit trail is maintained across all stages."""
-        from src.orchestrators.core.master_orchestrator_stage_1 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import (
             MasterOrchestrationStage1,
             Stage1ComprehensionContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
@@ -547,13 +547,13 @@ class TestGovernanceComplianceEndToEnd:
     
     def test_type_hints_present_across_stages(self) -> None:
         """Test type hints present in all stages."""
-        from src.orchestrators.core.master_orchestrator_stage_1 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import (
             MasterOrchestrationStage1
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3
         )
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4
         )
         
@@ -564,13 +564,13 @@ class TestGovernanceComplianceEndToEnd:
     
     def test_docstrings_present_across_stages(self) -> None:
         """Test docstrings present in all stages."""
-        from src.orchestrators.core.master_orchestrator_stage_1 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import (
             MasterOrchestrationStage1
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3
         )
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4
         )
         
@@ -585,15 +585,15 @@ class TestImplementationPlanExecution:
     
     def test_approved_operation_has_executable_plan(self) -> None:
         """Test approved operations have executable implementation plans."""
-        from src.orchestrators.core.master_orchestrator_stage_1 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import (
             MasterOrchestrationStage1,
             Stage1ComprehensionContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )
@@ -650,15 +650,15 @@ class TestWorkflowMetrics:
     
     def test_history_tracking_across_stages(self) -> None:
         """Test history is tracked across all stages."""
-        from src.orchestrators.core.master_orchestrator_stage_1 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import (
             MasterOrchestrationStage1,
             Stage1ComprehensionContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_4 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_4 import (
             MasterOrchestrationStage4,
             Stage4ApprovalContext
         )

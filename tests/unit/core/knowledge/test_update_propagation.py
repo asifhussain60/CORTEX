@@ -1,6 +1,6 @@
 """Tests for update propagation."""
 import pytest
-from src.core.knowledge.update_propagation import UpdatePropagator, UpdateEvent, UpdateType
+from cortex.core.knowledge.update_propagation import UpdatePropagator, UpdateEvent, UpdateType
 
 @pytest.fixture
 def propagator():

@@ -13,7 +13,7 @@ from typing import List
 from dataclasses import dataclass
 from enum import Enum
 
-from src.core.orchestrator.challenge_integration import (
+from cortex.core.orchestrator.challenge_integration import (
     ChallengeIntegrationOrchestrator,
     Challenge,
     ChallengeSeverity,

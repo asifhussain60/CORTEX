@@ -11,7 +11,7 @@ import pytest
 from typing import Any, Dict, List
 
 try:
-    from src.orchestrators.core.interaction_orchestrator import InteractionOrchestrator
+    from cortex.orchestrators.core.interaction_orchestrator import InteractionOrchestrator
 except (ImportError, ModuleNotFoundError):
     InteractionOrchestrator = None
 

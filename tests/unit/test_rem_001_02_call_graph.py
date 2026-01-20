@@ -18,12 +18,12 @@ import pytest
 from pathlib import Path
 from typing import List
 
-from src.core.intelligence.ast_intelligence import (
+from cortex.core.intelligence.ast_intelligence import (
     ASTIntelligenceEngine,
     ParseResult,
 )
-from src.core.intelligence.call_graph import CallGraphBuilder, CallGraph
-from src.core.orchestrator.conversation_protocol import ConversationProtocol
+from cortex.core.intelligence.call_graph import CallGraphBuilder, CallGraph
+from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
 
 
 class TestCallGraphBuilderIntegration:

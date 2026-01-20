@@ -28,7 +28,7 @@ from datetime import datetime
 from typing import Dict, List, Any
 import uuid
 
-from src.core.knowledge.knowledge_graph import (
+from cortex.core.knowledge.knowledge_graph import (
     KnowledgeGraph,
     GraphNode,
     GraphEdge,
@@ -36,10 +36,10 @@ from src.core.knowledge.knowledge_graph import (
     EdgeType,
     KnowledgeGraphBuilder,
 )
-from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine, FunctionInfo
-from src.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
-from src.core.intelligence.comment_analyzer import CommentAnalyzer
-from src.core.intelligence.relationship_traversal import RelationshipEngine
+from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine, FunctionInfo
+from cortex.core.intelligence.git_history_analyzer import GitHistoryAnalyzer
+from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
+from cortex.core.intelligence.relationship_traversal import RelationshipEngine
 
 
 class TestGraphNodeCreation:

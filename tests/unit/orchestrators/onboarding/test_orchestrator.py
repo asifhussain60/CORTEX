@@ -9,7 +9,7 @@ Validates the OnboardingOrchestrator implementation with:
 """
 
 import pytest
-from src.orchestrators.onboarding.orchestrator import (
+from cortex.orchestrators.onboarding.orchestrator import (
     OnboardingOrchestrator,
     JourneyState,
     Result,

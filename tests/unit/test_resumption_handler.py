@@ -10,8 +10,8 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest
-from src.core.checkpoint_manager import CheckpointManager, CheckpointStatus
-from src.core.resumption_handler import (
+from cortex.core.checkpoint_manager import CheckpointManager, CheckpointStatus
+from cortex.core.resumption_handler import (
     ResumptionHandler,
     RecoveryStrategy,
     ResumptionStatus,
@@ -210,7 +210,7 @@ class TestOperationHandlers:
         handler = ResumptionHandler.instance()
         
         def dummy_handler(context: RecoveryContext):
-            from src.core.result import Ok
+            from cortex.core.result import Ok
             return Ok({"recovered": True})
         
         reg_result = handler.register_operation_handler("phase_transition", dummy_handler)
@@ -225,7 +225,7 @@ class TestOperationHandlers:
         handler = ResumptionHandler.instance()
         
         def dummy_handler(context: RecoveryContext):
-            from src.core.result import Ok
+            from cortex.core.result import Ok
             return Ok({"result": "ok"})
         
         handler.register_operation_handler("test_op", dummy_handler)
@@ -262,7 +262,7 @@ class TestRecoveryExecution:
         handler = ResumptionHandler.instance()
         
         def recovery_handler(context: RecoveryContext):
-            from src.core.result import Ok
+            from cortex.core.result import Ok
             return Ok({"recovered_value": context.recovered_state["value"]})
         
         handler.register_operation_handler("test_recovery", recovery_handler)
@@ -304,7 +304,7 @@ class TestRecoveryExecution:
         handler = ResumptionHandler.instance()
         
         def failing_handler(context: RecoveryContext):
-            from src.core.result import Err
+            from cortex.core.result import Err
             return Err("Recovery failed")
         
         handler.register_operation_handler("failing_op", failing_handler)
@@ -524,7 +524,7 @@ class TestResumptionIntegration:
         handler = ResumptionHandler.instance()
         
         def workflow_handler(context: RecoveryContext):
-            from src.core.result import Ok
+            from cortex.core.result import Ok
             return Ok({"completed": True})
         
         handler.register_operation_handler("workflow", workflow_handler)

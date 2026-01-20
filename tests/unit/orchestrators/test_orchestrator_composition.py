@@ -11,12 +11,12 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest
-from src.orchestrators.composition.composition_engine import (
+from cortex.orchestrators.composition.composition_engine import (
     CompositionPattern,
     ComposedOrchestrator,
     DelegationResult,
 )
-from src.orchestrators.composition.delegation_handler import (
+from cortex.orchestrators.composition.delegation_handler import (
     DelegationHandler,
     DelegationContext,
 )

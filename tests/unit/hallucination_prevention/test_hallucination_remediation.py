@@ -36,7 +36,7 @@ class TestBoundaryEnforcementIntegration:
         
         AC-FIX-HALLUCINATION-001: Integration point for boundary enforcement.
         """
-        from src.orchestrators.core.master_orchestrator import MasterOrchestrator
+        from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
         
         orchestrator = MasterOrchestrator()
         
@@ -52,7 +52,7 @@ class TestBoundaryEnforcementIntegration:
         
         Tests existing BehavioralBoundaryRules.check_phase_lock() method.
         """
-        from src.core.hallucination_prevention.behavioral_boundaries import (
+        from cortex.core.hallucination_prevention.behavioral_boundaries import (
             BehavioralBoundaryRules, BoundaryViolation, ViolationType
         )
         
@@ -73,7 +73,7 @@ class TestBoundaryEnforcementIntegration:
     
     def test_boundary_allows_query_on_locked_phase(self):
         """QUERY operations should be allowed on locked phases."""
-        from src.core.hallucination_prevention.behavioral_boundaries import (
+        from cortex.core.hallucination_prevention.behavioral_boundaries import (
             BehavioralBoundaryRules
         )
         
@@ -94,7 +94,7 @@ class TestBoundaryEnforcementIntegration:
         
         Tests existing BehavioralBoundaryRules.check_ac_deletion() method.
         """
-        from src.core.hallucination_prevention.behavioral_boundaries import (
+        from cortex.core.hallucination_prevention.behavioral_boundaries import (
             BehavioralBoundaryRules, BoundaryViolation, ViolationType
         )
         
@@ -114,7 +114,7 @@ class TestBoundaryEnforcementIntegration:
     
     def test_ac_deletion_with_valid_approval(self):
         """AC deletion with valid approval should be allowed."""
-        from src.core.hallucination_prevention.behavioral_boundaries import (
+        from cortex.core.hallucination_prevention.behavioral_boundaries import (
             BehavioralBoundaryRules
         )
         from datetime import datetime, timedelta
@@ -147,7 +147,7 @@ class TestSandboxIsolation:
     
     def test_sandbox_documents_isolation_scope(self):
         """Sandbox should have clear documentation of isolation scope."""
-        from src.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
+        from cortex.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
         
         # Check docstring or class-level documentation
         assert ExecutionSandbox.__doc__ is not None, \
@@ -160,7 +160,7 @@ class TestSandboxIsolation:
     
     def test_sandbox_execute_method_with_modes(self):
         """Sandbox should support different execution modes."""
-        from src.core.hallucination_prevention.execution_sandbox import (
+        from cortex.core.hallucination_prevention.execution_sandbox import (
             ExecutionSandbox, ExecutionMode
         )
         
@@ -179,7 +179,7 @@ class TestSandboxIsolation:
     
     def test_sandbox_tracks_side_effects(self):
         """Sandbox should track side effects during execution."""
-        from src.core.hallucination_prevention.execution_sandbox import (
+        from cortex.core.hallucination_prevention.execution_sandbox import (
             ExecutionSandbox, ExecutionMode
         )
         
@@ -192,7 +192,7 @@ class TestSandboxIsolation:
     
     def test_sandbox_captures_mutations_in_result(self):
         """Sandbox execute should capture mutations in result."""
-        from src.core.hallucination_prevention.execution_sandbox import (
+        from cortex.core.hallucination_prevention.execution_sandbox import (
             ExecutionSandbox, ExecutionMode, SandboxExecution
         )
         
@@ -217,7 +217,7 @@ class TestSandboxIsolation:
     
     def test_sandbox_provides_execution_history(self):
         """Sandbox should provide execution history."""
-        from src.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
+        from cortex.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
         
         with tempfile.TemporaryDirectory() as tmpdir:
             sandbox = ExecutionSandbox(db_path=str(Path(tmpdir) / "test.db"))
@@ -275,7 +275,7 @@ class TestPathResolution:
     
     def test_database_manager_uses_path_objects(self):
         """DatabaseManager should accept Path objects for paths."""
-        from src.infrastructure.database import DatabaseManager, DatabaseConfig
+        from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
         
         # Should work with Path objects
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -289,7 +289,7 @@ class TestPathResolution:
     
     def test_behavioral_boundaries_uses_relative_db_path(self):
         """BehavioralBoundaryRules should use relative DB path, not absolute."""
-        from src.core.hallucination_prevention.behavioral_boundaries import (
+        from cortex.core.hallucination_prevention.behavioral_boundaries import (
             BehavioralBoundaryRules
         )
         import inspect
@@ -304,7 +304,7 @@ class TestPathResolution:
     
     def test_execution_sandbox_uses_relative_db_path(self):
         """ExecutionSandbox should use relative DB path, not absolute."""
-        from src.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
+        from cortex.core.hallucination_prevention.execution_sandbox import ExecutionSandbox
         import inspect
         
         source = inspect.getsource(ExecutionSandbox.__init__)
@@ -337,7 +337,7 @@ class TestACStatusTracking:
     
     def test_boundary_rules_has_violation_logging(self):
         """BehavioralBoundaryRules should log violations to database."""
-        from src.core.hallucination_prevention.behavioral_boundaries import (
+        from cortex.core.hallucination_prevention.behavioral_boundaries import (
             BehavioralBoundaryRules
         )
         import inspect
@@ -350,7 +350,7 @@ class TestACStatusTracking:
     
     def test_boundary_violation_has_audit_fields(self):
         """BoundaryViolation should have fields for audit trail."""
-        from src.core.hallucination_prevention.behavioral_boundaries import (
+        from cortex.core.hallucination_prevention.behavioral_boundaries import (
             BoundaryViolation, ViolationType
         )
         
@@ -373,7 +373,7 @@ class TestACStatusTracking:
     
     def test_violation_types_cover_all_scenarios(self):
         """ViolationType enum should cover all boundary scenarios."""
-        from src.core.hallucination_prevention.behavioral_boundaries import ViolationType
+        from cortex.core.hallucination_prevention.behavioral_boundaries import ViolationType
         
         expected_types = [
             'LOCKED_PHASE_MODIFICATION',
@@ -395,7 +395,7 @@ class TestHallucinationPreventionIntegration:
     
     def test_boundary_rules_check_phase_lock_flow(self):
         """Test complete flow of phase lock checking."""
-        from src.core.hallucination_prevention.behavioral_boundaries import (
+        from cortex.core.hallucination_prevention.behavioral_boundaries import (
             BehavioralBoundaryRules, BoundaryViolation, ViolationType
         )
         
@@ -423,7 +423,7 @@ class TestHallucinationPreventionIntegration:
     
     def test_sandbox_execution_flow(self):
         """Test complete sandbox execution flow."""
-        from src.core.hallucination_prevention.execution_sandbox import (
+        from cortex.core.hallucination_prevention.execution_sandbox import (
             ExecutionSandbox, ExecutionMode, ExecutionState
         )
         
@@ -449,7 +449,7 @@ class TestHallucinationPreventionIntegration:
     
     def test_hallucination_prevention_module_imports(self):
         """All hallucination prevention exports should be importable."""
-        from src.core.hallucination_prevention import (
+        from cortex.core.hallucination_prevention import (
             # Behavioral Boundaries
             BehavioralBoundaryRules,
             BoundaryViolation,

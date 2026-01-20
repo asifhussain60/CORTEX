@@ -11,12 +11,12 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest
-from src.core.compatibility_layer import (
+from cortex.core.compatibility_layer import (
     CompatibilityLayer,
     CompatibilityMode,
     SchemaVersion,
 )
-from src.core.schema_adapter import (
+from cortex.core.schema_adapter import (
     SchemaAdapter,
     AuditLogSchema,
     LegacyAuditLogSchema,

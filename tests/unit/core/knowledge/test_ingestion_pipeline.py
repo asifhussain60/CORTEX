@@ -22,13 +22,13 @@ class TestBulkIngestionPipeline:
 
     def test_bulk_ingestion_pipeline_exists(self):
         """Test that BulkIngestionPipeline class exists."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         assert BulkIngestionPipeline is not None
 
     def test_pipeline_initialization(self):
         """Test pipeline initialization."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         backend.name = 'storage'
@@ -40,7 +40,7 @@ class TestBulkIngestionPipeline:
 
     def test_intake_adapter_registration(self):
         """Test registering intake adapters."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -50,7 +50,7 @@ class TestBulkIngestionPipeline:
 
     def test_filter_strategy_registration(self):
         """Test registering filter strategies."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -60,7 +60,7 @@ class TestBulkIngestionPipeline:
 
     def test_refinement_rule_registration(self):
         """Test registering refinement rules."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -70,7 +70,7 @@ class TestBulkIngestionPipeline:
 
     def test_output_formatter_registration(self):
         """Test registering output formatters."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -80,7 +80,7 @@ class TestBulkIngestionPipeline:
 
     def test_validator_registration(self):
         """Test registering validators."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -90,7 +90,7 @@ class TestBulkIngestionPipeline:
 
     def test_registry_pattern_for_plugin_discovery(self):
         """Test registry pattern enables plugin discovery."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -102,7 +102,7 @@ class TestBulkIngestionPipeline:
 
     def test_custom_adapter_creation(self):
         """Test creating custom intake adapters."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -112,7 +112,7 @@ class TestBulkIngestionPipeline:
 
     def test_custom_filter_creation(self):
         """Test creating custom filter strategies."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -122,7 +122,7 @@ class TestBulkIngestionPipeline:
 
     def test_pipeline_execution_batch_mode(self):
         """Test pipeline execution in batch mode."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -132,7 +132,7 @@ class TestBulkIngestionPipeline:
 
     def test_pipeline_execution_streaming_mode(self):
         """Test pipeline execution in streaming mode."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -142,7 +142,7 @@ class TestBulkIngestionPipeline:
 
     def test_pipeline_data_validation(self):
         """Test data validation before ingestion."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -152,7 +152,7 @@ class TestBulkIngestionPipeline:
 
     def test_pipeline_error_handling(self):
         """Test error handling during ingestion."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -162,7 +162,7 @@ class TestBulkIngestionPipeline:
 
     def test_pipeline_retry_logic(self):
         """Test retry logic for failed items."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -172,7 +172,7 @@ class TestBulkIngestionPipeline:
 
     def test_pipeline_metrics_tracking(self):
         """Test metrics tracking during ingestion."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -186,7 +186,7 @@ class TestBulkIngestionIntegration:
 
     def test_full_pipeline_execution_flow(self):
         """Test complete pipeline flow: adapt -> filter -> refine -> format -> validate -> store."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -196,7 +196,7 @@ class TestBulkIngestionIntegration:
 
     def test_adapter_to_storage_backend_connection(self):
         """Test connection from intake adapter to storage backend."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         storage_backend = Mock()
         storage_backend.name = 'storage'
@@ -208,7 +208,7 @@ class TestBulkIngestionIntegration:
 
     def test_multi_step_transformation_pipeline(self):
         """Test multi-step data transformation."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -225,7 +225,7 @@ class TestBulkIngestionIntegration:
 
     def test_batch_ingestion_with_large_dataset(self):
         """Test batch ingestion with large dataset."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(
@@ -238,7 +238,7 @@ class TestBulkIngestionIntegration:
 
     def test_streaming_ingestion_mode(self):
         """Test streaming ingestion mode."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(
@@ -251,7 +251,7 @@ class TestBulkIngestionIntegration:
 
     def test_plugin_discovery_through_registry(self):
         """Test discovering plugins through registry."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -266,7 +266,7 @@ class TestBulkIngestionIntegration:
 
     def test_filter_chain_execution(self):
         """Test executing a chain of filters."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -276,7 +276,7 @@ class TestBulkIngestionIntegration:
 
     def test_refinement_rule_application(self):
         """Test applying refinement rules to data."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -286,7 +286,7 @@ class TestBulkIngestionIntegration:
 
     def test_output_formatting_stage(self):
         """Test output formatting before storage."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -296,7 +296,7 @@ class TestBulkIngestionIntegration:
 
     def test_validation_gate_before_storage(self):
         """Test validation gate prevents invalid data storage."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -306,7 +306,7 @@ class TestBulkIngestionIntegration:
 
     def test_metrics_collection_throughout_pipeline(self):
         """Test metrics collected at each stage."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -317,7 +317,7 @@ class TestBulkIngestionIntegration:
 
     def test_error_recovery_and_partial_success(self):
         """Test handling partial success with error recovery."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -327,7 +327,7 @@ class TestBulkIngestionIntegration:
 
     def test_custom_plugin_creation_and_registration(self):
         """Test creating and registering custom plugins."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -338,7 +338,7 @@ class TestBulkIngestionIntegration:
 
     def test_pipeline_state_tracking(self):
         """Test tracking pipeline state during execution."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})
@@ -348,7 +348,7 @@ class TestBulkIngestionIntegration:
 
     def test_graceful_degradation_with_missing_stages(self):
         """Test graceful degradation when optional stages are missing."""
-        from src.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
+        from cortex.core.knowledge.ingestion_pipeline import BulkIngestionPipeline
         
         backend = Mock()
         pipeline = BulkIngestionPipeline(backends={'storage': backend})

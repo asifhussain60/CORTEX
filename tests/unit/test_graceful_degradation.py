@@ -5,7 +5,7 @@ AC-NFR-002-01: Graceful degradation on component failure
 """
 
 import pytest
-from src.infrastructure.graceful_degradation import (
+from cortex.infrastructure.graceful_degradation import (
     GracefulDegradationHandler,
     DegradationLevel,
     FallbackStrategy,

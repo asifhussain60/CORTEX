@@ -336,7 +336,7 @@ class TestOrchestratorRoutingBehavior:
     def test_orchestrator_error_handling_no_backends(self):
         """Test orchestrator error handling when no backends available."""
         from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-        from src.core.knowledge.router import IntelligentKnowledgeRouter
+        from cortex.core.knowledge.router import IntelligentKnowledgeRouter
         
         with pytest.raises(ValueError):
             IntelligentKnowledgeRouter(backends={})

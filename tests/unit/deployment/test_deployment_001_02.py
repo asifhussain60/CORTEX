@@ -4,7 +4,7 @@ Tests for AC-DEPLOY-001-02: Blue-Green Deployment Setup
 Tests blue-green deployment for zero-downtime updates, traffic switching, and rollback.
 """
 import pytest
-from src.deployment.blue_green import (
+from cortex.deployment.blue_green import (
     BlueGreenDeploymentManager, 
     Deployment, 
     DeploymentSlot, 

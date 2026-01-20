@@ -9,7 +9,7 @@ Validates the design of a comprehensive nested folder structure that:
 """
 
 import pytest
-from src.infrastructure.folder_structure_designer import (
+from cortex.infrastructure.folder_structure_designer import (
     FolderStructureDesigner
 )
 

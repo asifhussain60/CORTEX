@@ -14,7 +14,7 @@ from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass, field
 import time
 
-from src.mcp.protocol import ToolDefinition, ToolParameter
+from cortex.mcp.protocol import ToolDefinition, ToolParameter
 
 
 @dataclass

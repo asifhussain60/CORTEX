@@ -13,7 +13,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
 
-from src.devx.hot_reload import (
+from cortex.devx.hot_reload import (
     HotReloadOrchestrator,
     FileWatcher,
     ReloadEvent,

@@ -21,7 +21,7 @@ import tempfile
 from pathlib import Path
 from datetime import datetime
 
-from src.infrastructure.database_transaction_manager import DatabaseTransactionManager
+from cortex.infrastructure.database_transaction_manager import DatabaseTransactionManager
 
 
 class HashChainIntegrityError(Exception):

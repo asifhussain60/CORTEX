@@ -11,8 +11,8 @@ Rule: CORE-013 (specific exception handling)
 import pytest
 from typing import Optional
 from unittest.mock import Mock, patch, MagicMock
-from src.core.orchestrator.conversation_protocol import ConversationProtocol
-from src.core.result import Result, Ok, Err
+from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
+from cortex.core.result import Result, Ok, Err
 
 
 class TestExceptionPropagationInterface:

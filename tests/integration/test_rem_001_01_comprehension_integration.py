@@ -18,8 +18,8 @@ from pathlib import Path
 from typing import Dict, Any
 from unittest.mock import Mock, MagicMock, patch
 
-from src.core.orchestrator.conversation_protocol import ConversationProtocol
-from src.core.intelligence.ast_intelligence import ASTIntelligenceEngine
+from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
+from cortex.core.intelligence.ast_intelligence import ASTIntelligenceEngine
 
 
 class TestComprehensionPhaseIntegration:
@@ -48,7 +48,7 @@ class TestComprehensionPhaseIntegration:
         mock_orchestrator = Mock()
         protocol = ConversationProtocol(mock_orchestrator)
         
-        from src.core.orchestrator.conversation_protocol import RoundContext
+        from cortex.core.orchestrator.conversation_protocol import RoundContext
         round_context = RoundContext(
             round_number=1,
             user_input="test input",
@@ -83,7 +83,7 @@ class ComprehensionTestClass:
 """)
         
         try:
-            from src.core.orchestrator.conversation_protocol import RoundContext
+            from cortex.core.orchestrator.conversation_protocol import RoundContext
             round_context = RoundContext(
                 round_number=1,
                 user_input="test",
@@ -119,7 +119,7 @@ class ComprehensionTestClass:
         protocol = ConversationProtocol(mock_orchestrator)
         
         # Pass invalid path to comprehension
-        from src.core.orchestrator.conversation_protocol import RoundContext
+        from cortex.core.orchestrator.conversation_protocol import RoundContext
         round_context = RoundContext(
             round_number=1,
             user_input="test",
@@ -161,7 +161,7 @@ from pathlib import Path
             test_files.append(test_file)
         
         try:
-            from src.core.orchestrator.conversation_protocol import RoundContext
+            from cortex.core.orchestrator.conversation_protocol import RoundContext
             round_context = RoundContext(
                 round_number=1,
                 user_input="test",
@@ -199,7 +199,7 @@ from pathlib import Path
         mock_orchestrator = Mock()
         protocol = ConversationProtocol(mock_orchestrator)
         
-        from src.core.orchestrator.conversation_protocol import RoundContext
+        from cortex.core.orchestrator.conversation_protocol import RoundContext
         round_context = RoundContext(
             round_number=1,
             user_input="test",
@@ -223,7 +223,7 @@ from pathlib import Path
         test_file.write_text("def turn_func(): pass")
         
         try:
-            from src.core.orchestrator.conversation_protocol import RoundContext
+            from cortex.core.orchestrator.conversation_protocol import RoundContext
             
             # Simulate 4 sequential turns all calling comprehension
             comprehension_results = []
@@ -260,7 +260,7 @@ from pathlib import Path
         mock_orchestrator = Mock()
         protocol = ConversationProtocol(mock_orchestrator)
         
-        from src.core.orchestrator.conversation_protocol import RoundContext
+        from cortex.core.orchestrator.conversation_protocol import RoundContext
         round_context = RoundContext(
             round_number=1,
             user_input="test",

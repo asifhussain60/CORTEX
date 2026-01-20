@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Dict, Any
 from unittest.mock import Mock
 
-from src.core.orchestrator.conversation_protocol import ConversationProtocol
+from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
 
 
 class TestComprehensionYAMLGeneration:
@@ -326,7 +326,7 @@ class TestComprehensionIntentRouterContinuousExecution:
     
     def test_sequential_turn_comprehension_execution(self) -> None:
         """Test comprehension runs on multiple sequential turns."""
-        from src.core.orchestrator.conversation_protocol import RoundContext
+        from cortex.core.orchestrator.conversation_protocol import RoundContext
         
         mock_orchestrator = Mock()
         protocol = ConversationProtocol(mock_orchestrator)
@@ -355,7 +355,7 @@ class TestComprehensionIntentRouterContinuousExecution:
     
     def test_comprehension_state_preserved_across_turns(self) -> None:
         """Test comprehension results accumulated across turns."""
-        from src.core.orchestrator.conversation_protocol import RoundContext
+        from cortex.core.orchestrator.conversation_protocol import RoundContext
         
         protocol = ConversationProtocol(Mock())
         

@@ -21,7 +21,7 @@ import pytest
 # Add src to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))
 
-from src.tools.phase_readiness_checker import (
+from cortex.tools.phase_readiness_checker import (
     PhaseReadinessChecker,
     PhaseReadinessReport,
     ReadinessCheckResult,

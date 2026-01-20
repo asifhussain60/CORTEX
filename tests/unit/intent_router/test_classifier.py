@@ -25,7 +25,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 import pytest
 from typing import List
 
-from src.intent_router.classifier import (
+from cortex.intent_router.classifier import (
     IntentClassifier,
     IntentCategory,
     IntentSignal,

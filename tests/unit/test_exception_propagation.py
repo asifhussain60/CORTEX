@@ -18,9 +18,9 @@ import pytest
 from unittest.mock import Mock, patch, MagicMock
 from dataclasses import dataclass
 
-from src.core.result import Ok, Err, Result
-from src.core.orchestrator.conversation_protocol import ConversationProtocol
-from src.core.orchestrator.continuation_decision import (
+from cortex.core.result import Ok, Err, Result
+from cortex.core.orchestrator.conversation_protocol import ConversationProtocol
+from cortex.core.orchestrator.continuation_decision import (
     ContinuationDecision,
     ContinuationReason,
 )

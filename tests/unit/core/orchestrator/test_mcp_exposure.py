@@ -12,10 +12,10 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 import pytest
 from typing import Dict, Any, List
 
-from src.core.interfaces.i_orchestrator import IOrchestrator
-from src.core.result import Result, Ok, Err
-from src.orchestrators.core.master_orchestrator import MasterOrchestrator
-from src.orchestrators.domain.planning_orchestrator import PlanningOrchestrator
+from cortex.core.interfaces.i_orchestrator import IOrchestrator
+from cortex.core.result import Result, Ok, Err
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+from cortex.orchestrators.domain.planning_orchestrator import PlanningOrchestrator
 
 
 class TestMCPToolRegistration:

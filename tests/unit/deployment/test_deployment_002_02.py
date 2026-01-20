@@ -1,6 +1,6 @@
 """Tests for AC-DEPLOY-002-02: Emergency Rollback with Point-in-Time Recovery"""
 import pytest
-from src.deployment.recovery import RecoveryManager, Snapshot, SnapshotStatus
+from cortex.deployment.recovery import RecoveryManager, Snapshot, SnapshotStatus
 from datetime import datetime
 
 

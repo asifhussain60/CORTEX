@@ -1,6 +1,6 @@
 """Tests for search service."""
 import pytest
-from src.core.knowledge.search import SearchService, SearchResult
+from cortex.core.knowledge.search import SearchService, SearchResult
 
 @pytest.fixture
 def search_service():

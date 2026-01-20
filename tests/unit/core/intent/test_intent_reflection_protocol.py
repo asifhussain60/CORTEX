@@ -23,7 +23,7 @@ from dataclasses import dataclass
 from typing import Dict, List, Any, Optional
 from pathlib import Path
 
-from src.core.intent.intent_reflection_protocol import (
+from cortex.core.intent.intent_reflection_protocol import (
     IntentReflectionEngine,
     ReflectionRequest,
     ReflectionResponse,

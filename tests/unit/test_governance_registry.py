@@ -12,8 +12,8 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 
 import pytest
 
-from src.core.governance_registry import GovernanceRegistry, GovernanceRule
-from src.core.tier_resolver import TierResolver
+from cortex.core.governance_registry import GovernanceRegistry, GovernanceRule
+from cortex.core.tier_resolver import TierResolver
 
 
 @pytest.mark.ac("AR-001-01")

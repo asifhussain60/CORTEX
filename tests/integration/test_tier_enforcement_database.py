@@ -17,8 +17,8 @@ import sqlite3
 import tempfile
 from pathlib import Path
 
-from src.core.database.tier_enforcement_queries import TierEnforcementDatabase
-from src.core.result import Ok, Err
+from cortex.core.database.tier_enforcement_queries import TierEnforcementDatabase
+from cortex.core.result import Ok, Err
 
 
 class TestTierEnforcementSchema:

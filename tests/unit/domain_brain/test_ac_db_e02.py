@@ -11,8 +11,8 @@ import pytest
 import time
 from datetime import datetime, timedelta
 
-from src.domain_brain.models import AuditOperationType
-from src.domain_brain.audit_log_manager import AuditLogManager, ArchivalStats
+from cortex.domain_brain.models import AuditOperationType
+from cortex.domain_brain.audit_log_manager import AuditLogManager, ArchivalStats
 
 
 class TestTTLEnforcement:

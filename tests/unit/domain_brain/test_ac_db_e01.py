@@ -11,13 +11,13 @@ import pytest
 from datetime import datetime, timedelta
 import time
 
-from src.domain_brain.models import (
+from cortex.domain_brain.models import (
     Domain,
     Entity,
     EntityType,
     Conflict,
 )
-from src.domain_brain.deduplication import DuplicateDetector, DuplicateEntry
+from cortex.domain_brain.deduplication import DuplicateDetector, DuplicateEntry
 
 
 class TestHashComputation:

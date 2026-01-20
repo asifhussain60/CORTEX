@@ -16,44 +16,44 @@ class TestKnowledgeProviderProtocol:
 
     def test_protocol_definition_exists(self):
         """Test that KnowledgeProvider protocol is defined."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
         assert KnowledgeProvider is not None
         # Check that it's a protocol (runtime_checkable decorator applied)
         assert hasattr(KnowledgeProvider, '_is_protocol')
 
     def test_protocol_has_is_loaded_property(self):
         """Test that protocol defines is_loaded property."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
         assert hasattr(KnowledgeProvider, 'is_loaded')
 
     def test_protocol_has_entry_count_property(self):
         """Test that protocol defines entry_count property."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
         assert hasattr(KnowledgeProvider, 'entry_count')
 
     def test_protocol_has_domains_property(self):
         """Test that protocol defines domains property."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
         assert hasattr(KnowledgeProvider, 'domains')
 
     def test_protocol_has_query_method(self):
         """Test that protocol defines query method."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
         assert hasattr(KnowledgeProvider, 'query')
 
     def test_protocol_has_get_by_domain_method(self):
         """Test that protocol defines get_by_domain method."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
         assert hasattr(KnowledgeProvider, 'get_by_domain')
 
     def test_protocol_has_get_relevant_knowledge_method(self):
         """Test that protocol defines get_relevant_knowledge method."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
         assert hasattr(KnowledgeProvider, 'get_relevant_knowledge')
 
     def test_protocol_structural_subtyping(self):
         """Test structural subtyping with protocol."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
 
         # Create a mock object that satisfies the protocol
         mock_provider = Mock(spec=['is_loaded', 'entry_count', 'domains', 
@@ -67,7 +67,7 @@ class TestKnowledgeProviderProtocol:
 
     def test_is_loaded_returns_bool(self):
         """Test that is_loaded property returns boolean."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
 
         class ConcreteProvider:
             @property
@@ -96,7 +96,7 @@ class TestKnowledgeProviderProtocol:
 
     def test_entry_count_returns_int(self):
         """Test that entry_count property returns integer."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
 
         class ConcreteProvider:
             @property
@@ -126,7 +126,7 @@ class TestKnowledgeProviderProtocol:
 
     def test_domains_returns_list(self):
         """Test that domains property returns list of strings."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
 
         class ConcreteProvider:
             @property
@@ -156,7 +156,7 @@ class TestKnowledgeProviderProtocol:
 
     def test_query_method_signature(self):
         """Test query method accepts string and returns list of dicts."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
 
         class ConcreteProvider:
             @property
@@ -187,7 +187,7 @@ class TestKnowledgeProviderProtocol:
 
     def test_get_by_domain_method_signature(self):
         """Test get_by_domain method accepts domain string and returns list."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
 
         class ConcreteProvider:
             @property
@@ -218,7 +218,7 @@ class TestKnowledgeProviderProtocol:
 
     def test_get_relevant_knowledge_method_signature(self):
         """Test get_relevant_knowledge method with intent and context."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
 
         class ConcreteProvider:
             @property
@@ -251,7 +251,7 @@ class TestKnowledgeProviderProtocol:
 
     def test_empty_query_returns_empty_list(self):
         """Test that empty query returns empty list."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
 
         class ConcreteProvider:
             @property
@@ -281,7 +281,7 @@ class TestKnowledgeProviderProtocol:
 
     def test_protocol_allows_multiple_implementations(self):
         """Test that protocol allows multiple different implementations."""
-        from src.core.knowledge.protocols import KnowledgeProvider
+        from cortex.core.knowledge.protocols import KnowledgeProvider
 
         class Provider1:
             @property

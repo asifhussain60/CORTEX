@@ -13,7 +13,7 @@ import pytest
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 
-from src.orchestrators.response.turn_response_generator import (
+from cortex.orchestrators.response.turn_response_generator import (
     TurnResponseGenerator,
     ResponseMode,
     ResponseTone,

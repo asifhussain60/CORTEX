@@ -14,12 +14,12 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 import pytest
 from pathlib import Path
 
-from src.infrastructure.database import DatabaseManager, DatabaseConfig
-from src.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-from src.core.path_resolver import get_project_root
-from src.core.state_machine import StateMachine
-from src.core.governance_registry import GovernanceRegistry
-from src.mcp.registry import OrchestratorRegistry
+from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
+from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.core.path_resolver import get_project_root
+from cortex.core.state_machine import StateMachine
+from cortex.core.governance_registry import GovernanceRegistry
+from cortex.mcp.registry import OrchestratorRegistry
 
 
 class TestPhaseIntegration:
@@ -128,7 +128,7 @@ class TestFinalVerification:
     def test_distributed_lock_available(self):
         """Distributed lock infrastructure should be available."""
         try:
-            from src.core.distributed_lock import DistributedLock
+            from cortex.core.distributed_lock import DistributedLock
             lock = DistributedLock.instance()
             assert lock is not None
         except ImportError:
@@ -137,7 +137,7 @@ class TestFinalVerification:
     def test_ac_linker_available(self):
         """Test-AC linker infrastructure should be available."""
         try:
-            from src.infrastructure.test_ac_linker import TestACLinker
+            from cortex.infrastructure.test_ac_linker import TestACLinker
             linker = TestACLinker()
             assert linker is not None
         except ImportError:

@@ -8,8 +8,8 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import pytest
-from src.intent_router.disambiguator import IntentDisambiguator
-from src.intent_router.classifier import (
+from cortex.intent_router.disambiguator import IntentDisambiguator
+from cortex.intent_router.classifier import (
     IntentClassifier,
     IntentCategory,
     ClassificationResult,

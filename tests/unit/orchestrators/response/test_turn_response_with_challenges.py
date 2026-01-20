@@ -13,7 +13,7 @@ Tests cover:
 import pytest
 from typing import List, Dict, Any
 
-from src.orchestrators.response.turn_response_with_challenges import (
+from cortex.orchestrators.response.turn_response_with_challenges import (
     TurnResponseWithChallenges,
     TurnResponseSegment,
 )

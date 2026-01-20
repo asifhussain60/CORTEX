@@ -12,19 +12,19 @@ import pytest
 from pathlib import Path
 from typing import Optional
 
-from src.orchestrators.core.master_orchestrator_stage_1 import (
+from cortex.orchestrators.core.master_orchestrator_stage_1 import (
     MasterOrchestrationStage1,
     Stage1ComprehensionContext,
 )
-from src.orchestrators.core.repository_scanner import (
+from cortex.orchestrators.core.repository_scanner import (
     RepositoryScanner,
     ScanContext,
 )
-from src.orchestrators.core.master_orchestrator_stage_3 import (
+from cortex.orchestrators.core.master_orchestrator_stage_3 import (
     MasterOrchestrationStage3,
     Stage3KnowledgeContext,
 )
-from src.orchestrators.core.master_orchestrator_stage_4 import (
+from cortex.orchestrators.core.master_orchestrator_stage_4 import (
     MasterOrchestrationStage4,
     Stage4ApprovalContext,
 )

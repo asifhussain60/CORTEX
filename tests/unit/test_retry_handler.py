@@ -6,7 +6,7 @@ AC-NFR-002-02: Automatic retry with exponential backoff
 
 import pytest
 import time
-from src.infrastructure.retry_handler import (
+from cortex.infrastructure.retry_handler import (
     RetryHandler,
     RetryConfig,
     RetryPolicy,

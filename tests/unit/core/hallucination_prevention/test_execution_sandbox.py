@@ -19,7 +19,7 @@ import uuid
 import copy
 import json
 
-from src.core.hallucination_prevention.execution_sandbox import (
+from cortex.core.hallucination_prevention.execution_sandbox import (
     ExecutionSandbox,
     SandboxExecution,
     ExecutionMode,
@@ -467,7 +467,7 @@ class TestSandboxIntegration:
         
         Verify that boundary rules are enforced within sandbox.
         """
-        from src.core.hallucination_prevention.behavioral_boundaries import (
+        from cortex.core.hallucination_prevention.behavioral_boundaries import (
             BehavioralBoundaryRules,
             BoundaryViolation,
         )
@@ -497,7 +497,7 @@ class TestSandboxIntegration:
         
         Verify that canonicalized intents execute correctly in sandbox.
         """
-        from src.core.hallucination_prevention.intent_canonicalization import (
+        from cortex.core.hallucination_prevention.intent_canonicalization import (
             ExtendedIntentCanonicalizer,
         )
         

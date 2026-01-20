@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from typing import List, Callable
 from datetime import datetime
 
-from src.core.orchestrator.terminal_events import (
+from cortex.core.orchestrator.terminal_events import (
     TerminalEvent,
     PhaseCompletedEvent,
     UserCancelledEvent,
@@ -26,7 +26,7 @@ from src.core.orchestrator.terminal_events import (
     EventListener,
     EventRegistry,
 )
-from src.core.orchestrator.continuation_decision import ContinuationReason
+from cortex.core.orchestrator.continuation_decision import ContinuationReason
 
 
 class TestEventDefinitions:

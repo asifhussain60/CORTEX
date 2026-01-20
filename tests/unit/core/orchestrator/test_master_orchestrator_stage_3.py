@@ -24,8 +24,8 @@ CORE Governance:
 import pytest
 from typing import Dict, Any, List, Optional
 
-from src.core.result import Result, Ok, Err
-from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+from cortex.core.result import Result, Ok, Err
+from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
 
 
 class TestStage3Initialization:
@@ -33,7 +33,7 @@ class TestStage3Initialization:
     
     def test_stage_3_initializes(self) -> None:
         """Test MasterOrchestrationStage3 creates successfully."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3
         )
         
@@ -44,7 +44,7 @@ class TestStage3Initialization:
     
     def test_stage_3_has_required_attributes(self) -> None:
         """Test Stage 3 has required attributes."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3
         )
         
@@ -57,7 +57,7 @@ class TestStage3Initialization:
     
     def test_stage_3_starts_with_empty_history(self) -> None:
         """Test Stage 3 starts with empty knowledge history."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3
         )
         
@@ -72,10 +72,10 @@ class TestStage3KnowledgeContext:
     
     def test_knowledge_context_from_stage1_output(self) -> None:
         """Test Stage 3 context creation from Stage 1 output."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
         
         stage1_output = Stage1Output(
             operation="implement_oauth2",
@@ -98,10 +98,10 @@ class TestStage3KnowledgeContext:
     
     def test_knowledge_context_with_relationships(self) -> None:
         """Test context with existing relationship data."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
         
         stage1_output = Stage1Output(
             operation="fix_auth",
@@ -130,7 +130,7 @@ class TestStage3Output:
     
     def test_output_creation(self) -> None:
         """Test Stage3Output creates successfully."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             Stage3Output
         )
         
@@ -154,7 +154,7 @@ class TestStage3Output:
     
     def test_output_has_stage_4_ready_format(self) -> None:
         """Test output format is ready for Stage 4 approval."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             Stage3Output
         )
         
@@ -179,11 +179,11 @@ class TestLENSPhase1Integration:
     
     def test_stage3_receives_stage1_comprehension(self) -> None:
         """Test Stage 3 receives and processes Stage 1 comprehension."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
         
         stage3 = MasterOrchestrationStage3()
         
@@ -207,11 +207,11 @@ class TestLENSPhase1Integration:
     
     def test_language_analysis_phase_incorporated(self) -> None:
         """Test LENS Language analysis is incorporated."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
         
         stage3 = MasterOrchestrationStage3()
         
@@ -243,11 +243,11 @@ class TestLENSPhase2Integration:
     
     def test_code_examination_phase_executed(self) -> None:
         """Test LENS Phase 2 code examination is executed."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
         
         stage3 = MasterOrchestrationStage3()
         
@@ -278,11 +278,11 @@ class TestLENSPhase3Integration:
     
     def test_domain_navigation_graph_built(self) -> None:
         """Test domain navigation graph is built."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
         
         stage3 = MasterOrchestrationStage3()
         
@@ -315,7 +315,7 @@ class TestRelationshipGraphIntegration:
     
     def test_relationship_analyzer_instantiated(self) -> None:
         """Test RelationshipAnalyzer is instantiated."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3
         )
         
@@ -326,11 +326,11 @@ class TestRelationshipGraphIntegration:
     
     def test_entities_extracted_from_relationships(self) -> None:
         """Test entities are extracted and indexed."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
         
         stage3 = MasterOrchestrationStage3()
         
@@ -358,11 +358,11 @@ class TestLENSSynthesisIntegration:
     
     def test_lens_synthesis_produces_recommendations(self) -> None:
         """Test LENS Synthesis produces recommendations."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
         
         stage3 = MasterOrchestrationStage3()
         
@@ -393,11 +393,11 @@ class TestKnowledgeGraphConstruction:
     
     def test_knowledge_graph_populated(self) -> None:
         """Test knowledge graph is populated with entities."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
         
         stage3 = MasterOrchestrationStage3()
         
@@ -431,11 +431,11 @@ class TestKnowledgeHistory:
     
     def test_history_tracks_knowledge_operations(self) -> None:
         """Test history tracks all knowledge operations."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
         
         stage3 = MasterOrchestrationStage3()
         
@@ -480,11 +480,11 @@ class TestKnowledgeHistory:
     
     def test_history_preserves_order(self) -> None:
         """Test history preserves chronological order."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
         
         stage3 = MasterOrchestrationStage3()
         
@@ -516,11 +516,11 @@ class TestStage3ToStage4Handoff:
     
     def test_stage3_output_ready_for_stage4_approval(self) -> None:
         """Test Stage 3 output is compatible with Stage 4 approval."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
         
         stage3 = MasterOrchestrationStage3()
         
@@ -550,11 +550,11 @@ class TestStage3ToStage4Handoff:
     
     def test_stage3_provides_knowledge_for_approval_decision(self) -> None:
         """Test Stage 3 provides sufficient knowledge for approval."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
         
         stage3 = MasterOrchestrationStage3()
         
@@ -588,7 +588,7 @@ class TestErrorHandling:
     
     def test_process_knowledge_invalid_context(self) -> None:
         """Test invalid context returns error."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3
         )
         
@@ -599,7 +599,7 @@ class TestErrorHandling:
     
     def test_process_knowledge_missing_stage1_output(self) -> None:
         """Test missing Stage 1 output handled."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
@@ -620,11 +620,11 @@ class TestErrorHandling:
     
     def test_invalid_domain_handled(self) -> None:
         """Test invalid domain handled gracefully."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
         
         stage3 = MasterOrchestrationStage3()
         
@@ -653,7 +653,7 @@ class TestGovernanceCompliance:
     
     def test_core_011_type_hints_present(self) -> None:
         """Test CORE-011: Type hints present on all methods."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3
         )
         
@@ -664,7 +664,7 @@ class TestGovernanceCompliance:
     
     def test_core_012_docstrings_present(self) -> None:
         """Test CORE-012: Google-style docstrings present."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3
         )
         
@@ -673,7 +673,7 @@ class TestGovernanceCompliance:
     
     def test_core_027_audit_trail_support(self) -> None:
         """Test CORE-027: Audit trail support."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3
         )
         
@@ -688,11 +688,11 @@ class TestAuditTrailing:
     
     def test_knowledge_processing_logged(self) -> None:
         """Test knowledge processing operations are logged."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3,
             Stage3KnowledgeContext
         )
-        from src.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
+        from cortex.orchestrators.core.master_orchestrator_stage_1 import Stage1Output
         
         stage3 = MasterOrchestrationStage3()
         
@@ -717,7 +717,7 @@ class TestAuditTrailing:
     
     def test_error_operations_logged(self) -> None:
         """Test error operations are logged."""
-        from src.orchestrators.core.master_orchestrator_stage_3 import (
+        from cortex.orchestrators.core.master_orchestrator_stage_3 import (
             MasterOrchestrationStage3
         )
         

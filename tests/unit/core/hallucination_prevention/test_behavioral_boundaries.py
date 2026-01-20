@@ -18,7 +18,7 @@ import sqlite3
 from pathlib import Path
 import uuid
 
-from src.core.hallucination_prevention.behavioral_boundaries import (
+from cortex.core.hallucination_prevention.behavioral_boundaries import (
     BehavioralBoundaryRules,
     BoundaryViolation,
     ViolationType,

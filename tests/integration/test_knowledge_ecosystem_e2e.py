@@ -11,12 +11,12 @@ import pytest
 from typing import Any
 
 try:
-    from src.core.knowledge.knowledge_ecosystem import KnowledgeEcosystem
+    from cortex.core.knowledge.knowledge_ecosystem import KnowledgeEcosystem
 except (ImportError, ModuleNotFoundError):
     KnowledgeEcosystem = None
 
 try:
-    from src.orchestrators.core.interaction_orchestrator import InteractionOrchestrator
+    from cortex.orchestrators.core.interaction_orchestrator import InteractionOrchestrator
 except (ImportError, ModuleNotFoundError):
     InteractionOrchestrator = None
 

@@ -14,7 +14,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 
 import pytest
 
-from src.intent_router.multimodal_processor import (
+from cortex.intent_router.multimodal_processor import (
     MultiModalIntentProcessor,
     ModalityInput,
     InputModality,

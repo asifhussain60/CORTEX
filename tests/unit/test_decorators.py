@@ -15,14 +15,14 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from src.core.decorators.governance_decorator import (
+from cortex.core.decorators.governance_decorator import (
     governance_enforced,
     audit_logged,
     governance_with_audit,
 )
-from src.core.governance_enforcer import GovernanceEnforcer
-from src.infrastructure.database import DatabaseManager, DatabaseConfig
-from src.core.result import Ok, Err
+from cortex.core.governance_enforcer import GovernanceEnforcer
+from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
+from cortex.core.result import Ok, Err
 
 
 @pytest.mark.ac("AR-003-01")

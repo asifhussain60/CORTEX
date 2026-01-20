@@ -23,8 +23,8 @@ CORE Governance:
 import pytest
 from typing import Dict, Any, Optional
 
-from src.core.result import Result, Ok, Err
-from src.orchestrators.core.master_orchestrator_stage_1 import (
+from cortex.core.result import Result, Ok, Err
+from cortex.orchestrators.core.master_orchestrator_stage_1 import (
     MasterOrchestrationStage1,
     Stage1ComprehensionContext,
     Stage1Output,

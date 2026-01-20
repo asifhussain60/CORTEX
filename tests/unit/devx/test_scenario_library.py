@@ -12,7 +12,7 @@ from pathlib import Path
 from datetime import datetime
 from unittest.mock import Mock, patch
 
-from src.devx.scenario_library import (
+from cortex.devx.scenario_library import (
     ScenarioLibrary,
     Scenario,
     ScenarioInput,

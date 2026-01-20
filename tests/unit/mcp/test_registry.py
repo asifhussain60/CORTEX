@@ -3,8 +3,8 @@ import pytest
 from datetime import datetime
 from unittest.mock import Mock
 
-from src.mcp.protocol import ToolParameter, ToolDefinition, MCPTool
-from src.mcp.registry import ToolRegistry, ToolEntry
+from cortex.mcp.protocol import ToolParameter, ToolDefinition, MCPTool
+from cortex.mcp.registry import ToolRegistry, ToolEntry
 
 @pytest.fixture
 def registry():

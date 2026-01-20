@@ -1,6 +1,6 @@
 """Tests for Multi-Mode Response Formatting (AC-RESP-002-01)."""
 import pytest
-from src.orchestrators.response.multi_mode_formatter import (
+from cortex.orchestrators.response.multi_mode_formatter import (
     FormattingProfile,
     ResponseComponent,
     FormattingOptions,

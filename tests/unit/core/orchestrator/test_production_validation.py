@@ -26,8 +26,8 @@ from pathlib import Path
 from typing import Dict, Any, List
 import pytest
 
-from src.orchestrators.core.master_orchestrator import MasterOrchestrator
-from src.core.result import Ok, Err
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+from cortex.core.result import Ok, Err
 
 
 pytestmark = pytest.mark.timeout(30)

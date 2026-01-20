@@ -18,7 +18,7 @@ import asyncio
 from pathlib import Path
 
 # Import MCP protocol components
-from src.mcp.protocol import (
+from cortex.mcp.protocol import (
     ToolDefinition,
     ToolParameter,
     ErrorCode,
