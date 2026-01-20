@@ -1,21 +1,28 @@
-"""Module: Deduplicates data
-
-Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
-"""
+"""Domain brain module."""
 
 from typing import Dict, List, Optional, Any
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from enum import Enum
+
+
+@dataclass
+class DeduplicationResult:
+    """Data class."""
+    data: Dict[str, Any] = field(default_factory=dict)
 
 
 class Deduplicator:
-    """Deduplicator - Deduplicates data."""
+    """Class Deduplicator."""
+    def __init__(self): pass
 
-    def __init__(self):
-        """Initialize deduplicator."""
-        pass
+
+class DuplicateSet:
+    """Class DuplicateSet."""
+    def __init__(self): pass
 
 
 __all__ = [
     "Deduplicator",
+    "DuplicateSet",
+    "DeduplicationResult",
 ]

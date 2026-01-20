@@ -305,45 +305,73 @@ phases_implementation_status:
         unblocked_by: "Phase A (1 day: consolidate tiers to single source of truth in cortex_brain/)"
         implementation_requires: "BrainPopulator repoint to cortex_brain/ + delete cortex/brain/core/governance/"
   
-  not_started:
-    count: 4
+  in_progress:
+    count: 2
     phases:
       - id: "phase-remediation-001"
         title: "Production Readiness Remediation (Phase A-E Complete Roadmap)"
         ac_ids: 5
-        status: "NOT_STARTED"
+        status: "IN_PROGRESS"
         priority: "P0-CRITICAL"
         estimated_effort: "5 weeks"
         blocking: true
-        note: "Comprehensive plan for 100% production readiness: 172 test errors → 0, 4 architecture conflicts → 0"
+        note: "Comprehensive plan for 100% production readiness: 76 collection errors → 0, production ready"
         file: "_workspaces/roadmap/phases/phase-remediation-001-production-readiness.yaml"
         components:
           - id: "Phase A - Tier Consolidation"
             effort: "1 day"
+            status: "COMPLETED"
             blocks: ["impl-arch-011", "impl-arch-022", "impl-arch-025"]
           - id: "Phase B - MCP Registry Centralization"
             effort: "2 days"
+            status: "COMPLETED"
             blocks: ["impl-arch-022-mcp-compliance"]
           - id: "Phase C - Fix Circular Imports"
             effort: "2 days"
+            status: "COMPLETED"
             blocks: ["Phase D", "Phase E"]
-          - id: "Phase D - Create Missing Modules"
+          - id: "Phase D - Create Missing Modules (Stub Files)"
             effort: "3-4 days"
+            status: "COMPLETED"
             blocks: ["Phase E"]
-          - id: "Phase E - TDD Implementation"
+            note: "Stub files created - empty classes/functions. Ready for TDD implementation in Phase E."
+          - id: "Phase E - TDD Implementation (CURRENT)"
             effort: "15-20 days"
+            status: "NOT_STARTED"
             blocks: ["production deployment"]
-      
-      - id: "impl-tdd-prod-ready"
-        title: "TDD Production Readiness (125 missing modules)"
+            file: "_workspaces/roadmap/phases/PHASE-E-TDD-IMPLEMENTATION.yaml"
+            guide: "_workspaces/roadmap/PHASE-E-IMPLEMENTATION-GUIDE.md"
+            governance_rule: "CORE-008: Tests BEFORE code - RED → GREEN → REFACTOR"
+            constraint: "NO EMPTY STUBS. Each module must implement enough to pass tests."
+
+  not_started:
+    count: 3
+    phases:
+      - id: "PHASE-E-TDD-IMPLEMENTATION"
+        title: "TDD Production Implementation - 125 Modules"
         ac_ids: 6
         status: "NOT_STARTED"
-        priority: "P2-MEDIUM"
-        estimated_effort: "2-3 weeks"
-        blocking: false
-        note: "Phase E of phase-remediation-001: implement 125 modules; 170 test errors resolved"
-        file: "_workspaces/roadmap/phases/impl-tdd-prod-ready.yaml"
-        dependency: "phase-remediation-001 Phase D (stubs created first)"
+        priority: "P0-CRITICAL"
+        estimated_effort: "15-20 days"
+        blocking: true
+        note: "Transform test stubs into working code through test-driven development. 76 errors → 0, ≥98% tests passing"
+        file: "_workspaces/roadmap/phases/PHASE-E-TDD-IMPLEMENTATION.yaml"
+        implementation_guide: "_workspaces/roadmap/PHASE-E-IMPLEMENTATION-GUIDE.md"
+        current_state:
+          collection_errors: 76
+          tests_collected: 7547
+          modules_with_stubs: 125
+          stub_status: "Empty classes/functions - ready for implementation"
+        target_state:
+          collection_errors: 0
+          tests_collected: 7547
+          tests_passing: "≥7400 (≥98%)"
+          production_ready: true
+        governance:
+          core_008_enforcement: "Tests BEFORE code - see test FAIL before implementing"
+          stub_prevention: "No passing implementation without test verification"
+          type_hints: "100% mandatory"
+          documentation: "100% Google docstrings mandatory"
       
       - id: "impl-features-registry-001"
         title: "FeatureRegistry Implementation - Live Manifest System"

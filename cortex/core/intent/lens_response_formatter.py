@@ -27,6 +27,13 @@ class LENSResponseFormatter:
         pass
 
 
+
+@dataclass
+class ResponseFormat:
+    """Data class for ResponseFormat."""
+    data: dict = field(default_factory=dict)
+
+
 __all__ = [
     "SeverityColor",
     "LENSResponseFormatter",

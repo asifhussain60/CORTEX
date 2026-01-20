@@ -21,7 +21,20 @@ class UpdatePropagator:
         pass
 
 
+
+@dataclass
+class UpdateEvent:
+    """Data class for UpdateEvent."""
+    data: dict = field(default_factory=dict)
+
+
+
+class UpdateType:
+    """Class UpdateType."""
+    def __init__(self): pass
+
 __all__ = [
     "PropagationStrategy",
     "UpdatePropagator",
+    "UpdateType",
 ]
