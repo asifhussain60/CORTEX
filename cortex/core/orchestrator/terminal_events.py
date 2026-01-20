@@ -151,6 +151,29 @@ class TokenLimitEvent:
             self.timestamp = datetime.now()
 
 
+@dataclass
+class GovernanceViolationEvent:
+    """Event when governance violation occurs.
+
+    Attributes:
+        event_id: Unique event identifier.
+        violation_type: Type of governance violation.
+        details: Violation details.
+        timestamp: When violation occurred.
+        severity: Violation severity level.
+    """
+
+    event_id: str
+    violation_type: str
+    details: str = ""
+    timestamp: datetime = None
+    severity: str = "medium"
+
+    def __post_init__(self) -> None:
+        """Initialize defaults."""
+        if self.timestamp is None:
+            self.timestamp = datetime.now()
+
 
 @dataclass
 class PhaseCompletedEvent:
@@ -278,6 +301,7 @@ __all__ = [
     "MaxTurnsReachedEvent",
     "ErrorOccurredEvent",
     "TokenLimitEvent",
+    "GovernanceViolationEvent",
     "EventType",
     "PhaseType",
     "EventHandler",
