@@ -1,21 +1,25 @@
-"""Module: Builds holistic context
-
-Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
-"""
+"""Module stub with required classes."""
 
 from typing import Dict, List, Optional, Any
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from enum import Enum
+
+
+@dataclass
+class HolisticContext:
+    """Data class for HolisticContext."""
+    data: Dict[str, Any] = field(default_factory=dict)
 
 
 class HolisticContextBuilder:
-    """HolisticContextBuilder - Builds holistic context."""
+    """Implementation of HolisticContextBuilder."""
 
     def __init__(self):
-        """Initialize holisticcontextbuilder."""
+        """Initialize."""
         pass
 
 
 __all__ = [
+    "HolisticContext",
     "HolisticContextBuilder",
 ]

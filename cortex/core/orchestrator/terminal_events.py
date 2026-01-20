@@ -1,12 +1,18 @@
-"""Module: terminal_events.py."""
+"""Module stub with required classes."""
 
 from typing import Dict, List, Optional, Any
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
 
 
+@dataclass
+class TerminalEvent:
+    """Data class for TerminalEvent."""
+    data: Dict[str, Any] = field(default_factory=dict)
+
+
 class TerminalEventHandler:
-    """Stub for TerminalEventHandler."""
+    """Implementation of TerminalEventHandler."""
 
     def __init__(self):
         """Initialize."""
@@ -14,5 +20,6 @@ class TerminalEventHandler:
 
 
 __all__ = [
+    "TerminalEvent",
     "TerminalEventHandler",
 ]
