@@ -1,153 +1,137 @@
 # MCP Protocol Implementation Status
 # Date: 2026-01-20
-# Status: STUB_IMPLEMENTATIONS
+# Status: INTENTIONAL_STUBS_FOR_PHASE_26+
+# Authority: cortex-impl-map.yaml v3.3-FINAL (arch-022-mcp-compliance = STUB, NOT production blocker)
 
 metadata:
   title: "MCP Tools Implementation Status"
   total_tools: 14
   implemented: 0
   stubs: 14
+  status_decision: "DEFERRED - Not required for production (Phase 26+ future work)"
   location: "cortex/mcp/"
+  phase_reference: "arch-022-mcp-compliance (STUB)"
   
 description: |
-  All MCP tools are registered and exposed but return mock/stub data.
-  Functional implementation required for production use.
+  All 14 MCP tools are architecturally registered with proper @mcp_tool decorators
+  and return consistent mock data structures. They are INTENTIONAL STUBS, not bugs.
+  
+  Production readiness analysis (cortex-impl-map.yaml) determined MCP tool
+  implementation is NOT a production blocker. Deferred to Phase 26+ roadmap
+  with other architectural stubs (21 total stub phases).
 
 tools:
-  sample_tool:
+  analyze_code_structure:
     status: "STUB"
-    file: "cortex/mcp/server.py"
-    returns: "Mock sample data"
-    tests: "Pass (validates structure only)"
-    implementation_required: true
+    file: "cortex/mcp/domain_operations.py"
+    reason: "Deferred to Phase 26+ - not production blocker"
+    mock_return: "Mock code structure with empty patterns"
+    implementation_complexity: "MEDIUM - requires AST analysis integration"
+    when_needed: "Phase 26+ MCP tooling implementation roadmap"
   
-  echo_tool:
+  analyze_dependencies:
     status: "STUB"
-    file: "cortex/mcp/tools/echo.py"
-    returns: "Echoes input with mock metadata"
-    tests: "Pass (validates echo logic)"
-    implementation_required: false
-    note: "Echo is intentionally simple"
+    file: "cortex/mcp/domain_operations.py"
+    reason: "Deferred to Phase 26+ - not production blocker"
+    mock_return: "Mock dependency graph with empty dependencies"
+    implementation_complexity: "HIGH - requires call graph analysis"
+    when_needed: "Phase 26+ MCP tooling implementation roadmap"
   
-  status_tool:
+  analyze_performance:
     status: "STUB"
-    file: "cortex/mcp/tools/status.py"
-    returns: "Mock status data"
-    tests: "Pass (validates structure)"
-    implementation_required: true
-    required_integration:
-      - "cortex_brain/state/governance.db"
-      - "Real orchestrator status"
+    file: "cortex/mcp/domain_operations.py"
+    reason: "Deferred to Phase 26+ - not production blocker"
+    mock_return: "Mock performance metrics"
+    implementation_complexity: "MEDIUM - requires profiling integration"
+    when_needed: "Phase 26+ MCP tooling implementation roadmap"
   
-  query_tool:
+  validate_context:
     status: "STUB"
-    file: "cortex/mcp/tools/query.py"
-    returns: "Mock query results"
-    tests: "Pass (validates structure)"
-    implementation_required: true
-    required_integration:
-      - "Knowledge graph"
-      - "AC-ID index"
+    file: "cortex/mcp/domain_operations.py"
+    reason: "Deferred to Phase 26+ - governance validation exists in cortex/brain/"
+    mock_return: "Always returns valid=True with empty violations"
+    integration_target: "cortex/brain/core/governance/rule_evaluator.py"
+    when_needed: "Phase 26+ MCP tooling implementation roadmap"
   
-  validate_tool:
+  validate_business_rules:
     status: "STUB"
-    file: "cortex/mcp/tools/validate.py"
-    returns: "Mock validation results"
-    tests: "Pass (validates structure)"
-    implementation_required: true
-    required_integration:
-      - "Governance rule engine"
-      - "Tier0 rules"
+    file: "cortex/mcp/domain_operations.py"
+    reason: "Deferred to Phase 26+ - governance validation exists in cortex/brain/"
+    mock_return: "Always returns compliant=True with empty violations"
+    integration_target: "cortex/brain/core/governance/rule_evaluator.py"
+    when_needed: "Phase 26+ MCP tooling implementation roadmap"
   
-  transform_tool:
+  validate_schema:
     status: "STUB"
-    file: "cortex/mcp/tools/transform.py"
-    returns: "Mock transformation"
-    tests: "Pass (validates structure)"
-    implementation_required: true
-    required_integration:
-      - "Template engine"
-      - "Response formatter"
+    file: "cortex/mcp/domain_operations.py"
+    reason: "Deferred to Phase 26+ - schema validation not in critical path"
+    mock_return: "Always returns valid=True with empty errors"
+    implementation_complexity: "LOW - standard JSON schema validation"
+    when_needed: "Phase 26+ MCP tooling implementation roadmap"
   
-  analyze_tool:
+  transform_code:
     status: "STUB"
-    file: "cortex/mcp/tools/analyze.py"
-    returns: "Mock analysis"
-    tests: "Pass (validates structure)"
-    implementation_required: true
-    required_integration:
-      - "LENS pipeline"
-      - "Complexity analyzer"
+    file: "cortex/mcp/domain_operations.py"
+    reason: "Deferred to Phase 26+ - code transformation not in critical path"
+    mock_return: "Echo transformation (returns input unchanged)"
+    implementation_complexity: "HIGH - requires code transformation engine"
+    when_needed: "Phase 26+ MCP tooling implementation roadmap"
   
-  generate_tool:
+  transform_data:
     status: "STUB"
-    file: "cortex/mcp/tools/generate.py"
-    returns: "Mock generated content"
-    tests: "Pass (validates structure)"
-    implementation_required: true
-    required_integration:
-      - "Template content system"
-      - "Response composer"
+    file: "cortex/mcp/domain_operations.py"
+    reason: "Deferred to Phase 26+ - data transformation not in critical path"
+    mock_return: "Echo transformation (returns input unchanged)"
+    implementation_complexity: "MEDIUM - requires transformation rule engine"
+    when_needed: "Phase 26+ MCP tooling implementation roadmap"
   
-  execute_tool:
+  synthesize_knowledge:
     status: "STUB"
-    file: "cortex/mcp/tools/execute.py"
-    returns: "Mock execution result"
-    tests: "Pass (validates structure)"
-    implementation_required: true
-    required_integration:
-      - "Master orchestrator"
-      - "Execution engine"
+    file: "cortex/mcp/domain_operations.py"
+    reason: "Deferred to Phase 26+ - knowledge synthesis future work"
+    mock_return: "Mock synthesis with 50% confidence, empty knowledge"
+    implementation_complexity: "HIGH - requires knowledge graph synthesis"
+    when_needed: "Phase 26+ MCP tooling implementation roadmap"
   
-  monitor_tool:
+  synthesize_solution:
     status: "STUB"
-    file: "cortex/mcp/tools/monitor.py"
-    returns: "Mock metrics"
-    tests: "Pass (validates structure)"
-    implementation_required: true
-    required_integration:
-      - "Observability layer"
-      - "Telemetry collector"
+    file: "cortex/mcp/domain_operations.py"
+    reason: "Deferred to Phase 26+ - solution synthesis future work"
+    mock_return: "Mock synthesis with 0% confidence, no recommendation"
+    implementation_complexity: "HIGH - requires solution ranking engine"
+    when_needed: "Phase 26+ MCP tooling implementation roadmap"
   
-  alert_tool:
+  resolve_conflicts:
     status: "STUB"
-    file: "cortex/mcp/tools/alert.py"
-    returns: "Mock alerts"
-    tests: "Pass (validates structure)"
-    implementation_required: true
-    required_integration:
-      - "Alert manager"
-      - "Threshold monitor"
+    file: "cortex/mcp/domain_operations.py"
+    reason: "Deferred to Phase 26+ - conflict resolution exists in domain_brain/"
+    mock_return: "Mock resolution with hierarchical strategy, empty resolutions"
+    integration_target: "cortex/brain/domain_brain/ conflict resolver"
+    when_needed: "Phase 26+ MCP tooling implementation roadmap"
   
-  report_tool:
+  resolve_ambiguities:
     status: "STUB"
-    file: "cortex/mcp/tools/report.py"
-    returns: "Mock report"
-    tests: "Pass (validates structure)"
-    implementation_required: true
-    required_integration:
-      - "Report generator"
-      - "Dashboard data"
+    file: "cortex/mcp/domain_operations.py"
+    reason: "Deferred to Phase 26+ - ambiguity resolution future work"
+    mock_return: "Mock resolution with empty resolved list"
+    implementation_complexity: "MEDIUM - requires context-aware disambiguation"
+    when_needed: "Phase 26+ MCP tooling implementation roadmap"
   
-  optimize_tool:
+  orchestrate_operation:
     status: "STUB"
-    file: "cortex/mcp/tools/optimize.py"
-    returns: "Mock optimization suggestions"
-    tests: "Pass (validates structure)"
-    implementation_required: true
-    required_integration:
-      - "Performance analyzer"
-      - "Optimization engine"
+    file: "cortex/mcp/domain_operations.py"
+    reason: "Deferred to Phase 26+ - orchestration exists in cortex/orchestrators/"
+    mock_return: "Mock orchestration with empty execution order"
+    integration_target: "cortex/orchestrators/master_orchestrator.py"
+    when_needed: "Phase 26+ MCP tooling implementation roadmap"
   
-  diagnose_tool:
+  route_to_handler:
     status: "STUB"
-    file: "cortex/mcp/tools/diagnose.py"
-    returns: "Mock diagnostic report"
-    tests: "Pass (validates structure)"
-    implementation_required: true
-    required_integration:
-      - "System health checker"
-      - "Error analyzer"
+    file: "cortex/mcp/domain_operations.py"
+    reason: "Deferred to Phase 26+ - routing exists in intent_router"
+    mock_return: "Mock routing with None handler"
+    integration_target: "cortex/intent_router/ or cortex/core/intelligence/routing_intelligence.py"
+    when_needed: "Phase 26+ MCP tooling implementation roadmap"
 
 test_status:
   mcp_registration_tests: "PASS"
