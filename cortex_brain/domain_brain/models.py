@@ -177,8 +177,17 @@ def get_domain_registry() -> DomainRegistry:
     return _global_domain_registry
 
 
+# Alias for backward compatibility
+Domain = DomainModel
+
+
+# Alias for backward compatibility
+Domain = DomainModel
+
+
 __all__ = [
     "DomainModel",
+    "Domain",
     "DomainCapability",
     "DomainState",
     "DomainContext",

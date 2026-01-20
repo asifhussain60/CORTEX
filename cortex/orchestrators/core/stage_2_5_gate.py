@@ -9,6 +9,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 from dataclasses import dataclass
 from typing import Any, Dict, Optional, List
 from enum import Enum
+from cortex.core.orchestrator.continuation_decision import ContinuationDecision
 
 
 class GateDecision(Enum):
@@ -130,4 +131,11 @@ class Stage25Gate:
 # Alias for backward compatibility
 Stage2_5Gate = Stage25Gate
 
-__all__ = ["Stage25Gate", "Stage2_5Gate", "GateDecision", "GateCheckResult", "ConfirmationContext"]
+__all__ = [
+    "Stage25Gate",
+    "Stage2_5Gate",
+    "GateDecision",
+    "GateCheckResult",
+    "ConfirmationContext",
+    "ContinuationDecision",
+]
