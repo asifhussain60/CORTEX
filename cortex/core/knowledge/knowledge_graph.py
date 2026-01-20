@@ -255,4 +255,7 @@ class KnowledgeGraph:
         return len(self.nodes)
 
 
-__all__ = ["KnowledgeGraph", "Node", "Edge", "RelationType"]
+# Alias for backward compatibility
+GraphNode = Node
+
+__all__ = ["KnowledgeGraph", "Node", "Edge", "RelationType", "GraphNode"]
