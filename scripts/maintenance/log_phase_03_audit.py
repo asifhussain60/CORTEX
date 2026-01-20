@@ -14,7 +14,7 @@ from pathlib import Path
 # Add project root to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.infrastructure.database import DatabaseManager
+from cortex.infrastructure.database import DatabaseManager
 
 
 def log_ac_audit_trail(ac_id: str, description: str):
