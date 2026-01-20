@@ -18,7 +18,7 @@ def pytest_collection_modifyitems(session, config, items):
     pass  # Items are already collected if we get here
 
 
-def pytest_pycollect_makemodule(module_path, path, parent):
+def pytest_pycollect_makemodule(module_path, parent):
     """
     Handle module collection with graceful error handling.
     
