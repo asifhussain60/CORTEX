@@ -6,6 +6,18 @@ Author: CORTEX Framework
 from dataclasses import dataclass
 from typing import List
 
+
+@dataclass
+class DiscoveryFilter:
+    """Filter for tool discovery."""
+    filter_type: str
+    criteria: dict = None
+    
+    def __post_init__(self):
+        if self.criteria is None:
+            self.criteria = {}
+
+
 @dataclass
 class ToolDiscovery:
     """Tool discovery service."""
@@ -14,6 +26,15 @@ class ToolDiscovery:
         """Discover available tools."""
         return []
 
+
+from enum import Enum
+
+class DiscoveryPattern(Enum):
+    """Discovery patterns."""
+    FILE_SYSTEM = "file_system"
+    REGISTRY = "registry"
+    ANNOTATION = "annotation"
+    PLUGIN = "plugin"
 
 
 class ToolDiscoveryEngine:
@@ -26,4 +47,4 @@ class ToolDiscoveryEngine:
         """Scan for tools."""
         return self.discovery.discover()
 
-__all__ = ["ToolDiscovery", "ToolDiscoveryEngine"]
+__all__ = ["DiscoveryFilter", "ToolDiscovery", "DiscoveryPattern", "ToolDiscoveryEngine"]

@@ -29,6 +29,13 @@ class Deployment:
     status: str = "pending"
 
 
+@dataclass
+class DeploymentConfig:
+    """Deployment configuration details."""
+    config_id: str
+    target_environment: DeploymentSlot
+    rollback_enabled: bool = True
+
 
 class BlueGreenDeploymentManager:
     """Manage blue-green deployments."""
@@ -41,4 +48,4 @@ class BlueGreenDeploymentManager:
         """Switch traffic between environments."""
         return True
 
-__all__ = ["Deployment", "BlueGreenDeploymentManager"]
+__all__ = ["DeploymentSlot", "DeploymentStatus", "Deployment", "DeploymentConfig", "BlueGreenDeploymentManager"]

@@ -34,6 +34,11 @@ class ContextEdge:
     relationship: str = "relates_to"
 
 
+@dataclass
+class KnowledgeGraph:
+    """Knowledge graph for LENS context."""
+    nodes: list = field(default_factory=list)
+    edges: list = field(default_factory=list)
 
 
 class LENSContextBuilder:
@@ -46,4 +51,4 @@ class LENSContextBuilder:
         """Build context."""
         return self.context
 
-__all__ = ["LENSContext", "LENSContextBuilder"]
+__all__ = ["LENSContext", "ContextNode", "ContextEdge", "KnowledgeGraph", "LENSContextBuilder"]

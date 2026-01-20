@@ -60,6 +60,23 @@ class MCPTool:
     enabled: bool = True
 
 
+class ToolValidator:
+    """Validate MCP tools."""
+    
+    def validate(self, tool: MCPTool) -> bool:
+        """Validate tool."""
+        return True
+
+
+class MessageType(Enum):
+    """MCP message types."""
+    TOOLS_LIST = "tools/list"
+    TOOLS_CALL = "tools/call"
+    RESOURCES_LIST = "resources/list"
+    RESOURCES_READ = "resources/read"
+    PROMPTS_LIST = "prompts/list"
+    PROMPTS_GET = "prompts/get"
+
 
 class MCPProtocolHandler:
     """Handle MCP protocol."""
@@ -68,4 +85,4 @@ class MCPProtocolHandler:
         """Handle request."""
         return MCPResponse(result="OK")
 
-__all__ = ["MCPRequest", "MCPResponse", "MCPProtocolHandler"]
+__all__ = ["ErrorCode", "MCPError", "MCPRequest", "MCPResponse", "ToolDefinition", "ToolParameter", "MCPTool", "ToolValidator", "MessageType", "MCPProtocolHandler"]

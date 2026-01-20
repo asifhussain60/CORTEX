@@ -21,7 +21,6 @@ class MCPResponse:
     data: dict = field(default_factory=dict)
 
 
-
 class MCPServer:
     """MCP server SDK."""
     
@@ -29,4 +28,11 @@ class MCPServer:
         """Handle MCP request."""
         return {"status": "ok"}
 
-__all__ = ["MCPRequest", "MCPServer"]
+
+class CORTEXMCPServer(MCPServer):
+    """CORTEX MCP server."""
+    
+    def __init__(self):
+        super().__init__()
+
+__all__ = ["MCPRequest", "MCPResponse", "MCPServer", "CORTEXMCPServer"]

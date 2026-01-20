@@ -7,6 +7,15 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass
+from enum import Enum
+
+
+class ConfidenceLevel(Enum):
+    """Confidence levels."""
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    VERY_HIGH = "very_high"
 
 
 @dataclass
@@ -28,4 +37,20 @@ class HallucinationDetector:
         return False
 
 
-__all__ = ["ConfidenceScore", "HallucinationDetector"]
+@dataclass
+class HallucinationDetectionResult:
+    """Result of hallucination detection."""
+    detected: bool
+    confidence: float
+    explanation: str = ""
+
+
+class HallucinationRisk(Enum):
+    """Hallucination risk levels."""
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    CRITICAL = "critical"
+
+
+__all__ = ["ConfidenceLevel", "ConfidenceScore", "HallucinationDetector", "HallucinationDetectionResult", "HallucinationRisk"]

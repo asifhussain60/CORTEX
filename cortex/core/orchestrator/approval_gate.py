@@ -19,6 +19,14 @@ class AlternativeRecommendation:
 
 
 @dataclass
+class ApprovalDecision:
+    """Approval decision."""
+    approved: bool
+    reason: str
+    approver: str = ""
+
+
+@dataclass
 class ApprovalGateLogic:
     """Approval gate logic."""
     gate_id: str
@@ -33,4 +41,16 @@ class ApprovalGateLogic:
         return True
 
 
-__all__ = ["AlternativeRecommendation", "ApprovalGateLogic"]
+@dataclass
+class ConfirmationRequest:
+    """Confirmation request for approval."""
+    request_id: str
+    message: str
+    options: List[str] = None
+    
+    def __post_init__(self):
+        if self.options is None:
+            self.options = ["approve", "reject"]
+
+
+__all__ = ["AlternativeRecommendation", "ApprovalDecision", "ApprovalGateLogic", "ConfirmationRequest"]
