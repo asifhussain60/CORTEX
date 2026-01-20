@@ -99,6 +99,9 @@ class ProfileRegistry:
     
     def _has_circular_dependency(self, name: str, deps: Dict[str, List[str]]) -> bool:
         """Detect circular dependencies using DFS."""
+        if not deps:
+            return False
+            
         visited: set = set()
         rec_stack: set = set()
         
@@ -117,7 +120,13 @@ class ProfileRegistry:
             rec_stack.remove(node)
             return False
         
-        return dfs(name)
+        # Check all nodes in dependency graph
+        for node in deps:
+            if node not in visited:
+                if dfs(node):
+                    return True
+        
+        return False
     
     def clear_cache(self) -> None:
         """Clear profile cache."""
