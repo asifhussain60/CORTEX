@@ -301,23 +301,61 @@ for tool in tools:
 
 ## Available Tools
 
-### Core Tools
+### ⚠️ IMPORTANT: Tool Implementation Status
 
-| Tool | Description | Parameters |
-|------|-------------|------------|
-| `cortex_execute_orchestrator` | Execute an orchestrator | `orchestrator_name`, `context` |
-| `cortex_query_knowledge` | Query Domain Brain | `domain`, `keywords`, `max_results` |
-| `cortex_validate_governance` | Validate against rules | `entity_type`, `entity_data` |
-| `cortex_audit_trail` | Query audit trail | `ac_id`, `date_range` |
+**As of 2026-01-20:** All MCP tools are registered and discoverable but return **mock/stub data only**. 
 
-### Orchestrator Tools
+| Status | Count | Tools |
+|--------|-------|-------|
+| **STUB (Mock Data)** | 14 | All tools below |
+| **Functional** | 0 | None yet |
+| **In Progress** | 0 | None |
 
-| Tool | Description | Domain |
-|------|-------------|--------|
-| `cortex_onboarding` | User onboarding workflow | Planning |
-| `cortex_complexity_assessment` | Assess operation complexity | Analysis |
-| `cortex_gap_detection` | Detect implementation gaps | Analysis |
-| `cortex_bkio` | Business knowledge ingestion | Integration |
+**Implications:**
+- ✅ Tool schema and discovery works correctly
+- ❌ Tool execution returns mock responses, not real data
+- ❌ Production integration requires tool implementation
+- ⏳ Implementation planned for Phase 26+
+
+### Core Tools (STUBS)
+
+| Tool | Description | Status | Mock Returns | Implementation Required |
+|------|-------------|--------|-----|-------------------------|
+| `sample_tool` | Sample data tool | STUB | Mock sample data | Yes |
+| `echo_tool` | Echo input with metadata | STUB | Input echo | No (intentionally simple) |
+| `status_tool` | System status | STUB | Mock status data | Yes - Requires governance.db integration |
+| `query_tool` | Knowledge queries | STUB | Mock results | Yes - Requires knowledge graph |
+| `validate_tool` | Validation tool | STUB | Mock validation | Yes - Requires governance rules |
+| `transform_tool` | Data transformation | STUB | Mock transformation | Yes - Requires template engine |
+| `analyze_tool` | Analysis operations | STUB | Mock analysis | Yes - Requires LENS pipeline |
+| `generate_tool` | Content generation | STUB | Mock content | Yes - Requires template system |
+| `execute_tool` | Orchestrator execution | STUB | Mock execution | Yes - Requires master orchestrator |
+| `monitor_tool` | Monitoring operations | STUB | Mock metrics | Yes - Requires monitoring system |
+| `alert_tool` | Alert management | STUB | Mock alerts | Yes - Requires alerting system |
+| `report_tool` | Report generation | STUB | Mock reports | Yes - Requires reporting engine |
+| `optimize_tool` | Optimization operations | STUB | Mock optimization | Yes - Requires optimizer |
+| `diagnose_tool` | Diagnostic operations | STUB | Mock diagnostics | Yes - Requires diagnostic engine |
+
+### Governance Tools (Partially Implemented)
+
+| Tool | Description | Status | Returns | Implementation Note |
+|------|-------------|--------|---------|---------------------|
+| `check_phase_lock` | Check phase lock status | FUNCTIONAL | Real governance.db queries | ✅ Implemented |
+| `validate_ac_id` | Validate AC-ID existence | FUNCTIONAL | Real AC validation | ✅ Implemented |
+| `canonicalize_intent` | Normalize intent | FUNCTIONAL | Real intent normalization | ✅ Implemented |
+| `enforce_operation` | Enforce governance rules | PARTIAL | Mock enforcement | ⚠️ Partial - missing core-rules.yaml |
+| `get_phase_status` | Get phase status | FUNCTIONAL | Real phase data | ✅ Implemented |
+
+### Orchestrator-Exposed Tools (From @mcp_tool decorator)
+
+| Tool | Orchestrator | Domain | Status | Returns |
+|------|-------------|--------|--------|---------|
+| `plan_status` | PlanningOrchestrator | Planning | FUNCTIONAL | Real phase planning data |
+| `next_ac` | PlanningOrchestrator | Planning | FUNCTIONAL | Real AC suggestions |
+| `enforce_phase_lock` | PlanningOrchestrator | Planning | FUNCTIONAL | Real lock enforcement |
+| `register_orchestrator` | MasterOrchestrator | Core | FUNCTIONAL | Real orchestrator registration |
+| `get_registered_domains` | MasterOrchestrator | Core | FUNCTIONAL | Real domain list |
+| `coordinate_operation` | MasterOrchestrator | Core | FUNCTIONAL | Real coordination |
 
 ## Error Handling
 
