@@ -6,7 +6,7 @@
 
 
 
-**SSOT Source**: `_workspaces/roadmap/cortex-master.yaml` (ONLY master plan)---
+**SSOT Source**: `_workspaces/roadmap/cortex-impl-map.yaml` (ONLY implementation map)---
 
 
 

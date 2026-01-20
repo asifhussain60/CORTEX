@@ -284,7 +284,7 @@ Before production execution:
 ## 🔗 Integration Points
 
 ### With cortex-builder.md
-- **Input:** Live capabilities from cortex-master.yaml
+- **Input:** Live capabilities from cortex-impl-map.yaml
 - **Output:** Documentation of built features
 - **Coordination:** Wait for AC-ID completion
 
