@@ -254,7 +254,7 @@ phases_implementation_status:
         reason: "Core governance done; composite patterns pending"
   
   not_started:
-    count: 3
+    count: 5
     phases:
       - id: "impl-recovery-003-fault-tolerance"
         title: "Error Recovery and Fault Tolerance"
@@ -287,9 +287,33 @@ phases_implementation_status:
         blocking: false
         note: "125 modules have tests but no implementations; 170 test errors"
         file: "_workspaces/roadmap/phases/impl-tdd-prod-ready.yaml"
+      
+      - id: "impl-features-registry-001-live-manifest"
+        title: "FeatureRegistry - Live Manifest System"
+        ac_ids: 6
+        status: "DEFERRED"
+        priority: "P1-MEDIUM"
+        estimated_effort: "6-9 hours"
+        blocking: false
+        dependencies: ["impl-ops-004-observability"]
+        note: "Live feature manifest with SQL schema, event bus, and query API"
+        reason_deferred: "Future enhancement after core observability complete"
+        file: "_workspaces/roadmap/issues/registry.yaml"
+      
+      - id: "cortex-registry-001-infrastructure-migration"
+        title: "cortex-registry Migration - Folder Structure"
+        ac_ids: 6
+        status: "DEFERRED"
+        priority: "P0-INFRASTRUCTURE"
+        estimated_effort: "18-21 hours"
+        blocking: false
+        dependencies: ["impl-ops-004-observability"]
+        note: "Migrate _workspaces/roadmap → cortex-registry/ folder structure"
+        reason_deferred: "Infrastructure enhancement after core operations ready"
+        file: "_workspaces/roadmap/issues/cortex-plans.yaml"
 
 phase_tracker:
-  authority: "CORTEX_IMPL_MAP_v3.1"
+  authority: "CORTEX_IMPL_MAP_v3.1-with-deferred"
   last_updated: "2026-01-20T16:00:00Z"
   validation_status: "CORRECTED"
   validation_notes: |
@@ -297,8 +321,9 @@ phase_tracker:
     - Removed 22 false "IMPLEMENTED" claims
     - Correctly documented 6 actually-completed phases
     - Documented 21 stub/placeholder phases
-    - Documented 4 not-started critical phases
-    - Total: 31 known phases, 263 import errors, tier system incomplete
+    - Documented 5 not-started phases (3 critical + 2 deferred)
+    - Added 2 deferred phases from _workspaces/roadmap/issues/
+    - Total: 33 known phases, 263 import errors, tier system incomplete
   
   source_of_truth_chain:
     - document: "cortex-master.yaml"
@@ -740,17 +765,34 @@ next_actions:
       note: "Can deploy without, but significantly increases operational risk"
   
   priority_3_technical_debt:
-    - action: "Archive current cortex-master.yaml"
-      destination: "_archives/20260120-consolidation/cortex-master-legacy.yaml"
-    
     - action: "Implement 125 missing TDD modules"
       file: "_workspaces/roadmap/phases/impl-tdd-prod-ready.yaml"
       estimated_effort: "2-3 weeks"
+    
+    - action: "Archive current cortex-master.yaml"
+      destination: "_archives/20260120-consolidation/cortex-master-legacy.yaml"
     
     - action: "Create core-rules.yaml"
       location: "cortex_brain/tier0/governance/core-rules.yaml"
       content: "28 CORE-* rules from documentation"
       status: "COMPLETED (2026-01-20)"
+  
+  priority_4_deferred_enhancements:
+    - action: "Begin impl-features-registry-001-live-manifest"
+      file: "_workspaces/roadmap/issues/registry.yaml"
+      estimated_effort: "6-9 hours"
+      priority: "P1-MEDIUM"
+      note: "Live feature manifest with SQL schema, event bus, query API"
+      deferred_reason: "Future enhancement after impl-ops-004-observability"
+      dependencies: ["impl-ops-004-observability"]
+    
+    - action: "Begin cortex-registry-001-infrastructure-migration"
+      file: "_workspaces/roadmap/issues/cortex-plans.yaml"
+      estimated_effort: "18-21 hours"
+      priority: "P0-INFRASTRUCTURE"
+      note: "Migrate _workspaces/roadmap → cortex-registry/ folder structure"
+      deferred_reason: "Infrastructure enhancement after core operations ready"
+      dependencies: ["impl-ops-004-observability"]
   
   priority_2:
     - action: "Document MCP stub status"
@@ -760,7 +802,7 @@ next_actions:
       file: "_workspaces/roadmap/reports/test-ac-coverage.yaml"
     
     - action: "Update phase status"
-      note: "Mark phases as IMPLEMENTED, STUB, or NOT_STARTED based on filesystem evidence"
+      note: "Mark phases as IMPLEMENTED, STUB, DEFERRED, or NOT_STARTED based on filesystem evidence"
 
 maintenance:
   validation_command: "pytest tests/ -v --co -q | grep 'test_' | wc -l"
