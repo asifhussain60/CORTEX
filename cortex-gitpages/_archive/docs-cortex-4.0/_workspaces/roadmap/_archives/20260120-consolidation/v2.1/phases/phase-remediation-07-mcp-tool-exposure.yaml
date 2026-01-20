@@ -1,0 +1,389 @@
+# =============================================================================
+# PHASE-REMEDIATION-07: MCP TOOL EXPOSURE GAP REMEDIATION
+# =============================================================================
+# Remediation of MCP Tool Exposure Gaps Identified in Issue MCP-EXPOSURE-GAP-001
+# Status: NOT_STARTED (Ready for Implementation)
+# AC-IDs: 3 (AC-MCP-EXPOSURE-001 through AC-MCP-EXPOSURE-003)
+# Estimated Hours: 8
+# Priority: P1 (HIGH - Blocks Programmatic Tool Discovery)
+# =============================================================================
+
+metadata:
+  phase_id: "PHASE-REMEDIATION-07-MCP-TOOL-EXPOSURE"
+  title: "MCP Tool Exposure Gap Remediation"
+  version: "1.0.0"
+  created: "2026-01-18"
+  author: "cortex-builder"
+  status: "NOT_STARTED"
+  priority: "P1"
+  blocking: false
+  issue_reference: "MCP-TOOLS-EXPOSURE-GAP-20260118"
+
+# =============================================================================
+# PROBLEM STATEMENT
+# =============================================================================
+
+problem_statement:
+  summary: |
+    Not all CORTEX tools are exposed via MCP protocol. Systematic audit identified
+    16 tools currently exposed but critical gaps in domain orchestrator operations
+    and tool discovery mechanisms.
+  
+  evidence_grade: "A"
+  discovered_date: "2026-01-18"
+  discovery_method: "Systematic MCP tool exposure audit"
+  
+  gaps_identified:
+    - gap_id: "EXPOSURE-GAP-001"
+      title: "Missing @mcp_tool Decorator"
+      description: "get_relevant_business_knowledge_for_operation() method exists but not exposed"
+      location: "src/orchestrators/core/master_orchestrator.py:1024"
+      severity: "HIGH"
+      impact: "Clients cannot discover or call this critical business knowledge method"
+      status: "METHOD EXISTS - MISSING @mcp_tool DECORATOR"
+      priority: "P1"
+    
+    - gap_id: "EXPOSURE-GAP-002"
+      title: "Domain Orchestrator Operations Not Exposed"
+      description: "Systematic gap across domain orchestrators"
+      location: "src/orchestrators/domain/*"
+      severity: "HIGH"
+      impact: "Domain-specific operations unreachable via MCP"
+      status: "NOT EXPOSED - Need systematic exposure"
+      priority: "P1"
+      affected_domains:
+        - "planning_orchestrator"
+        - "design_orchestrator"
+        - "implementation_orchestrator"
+        - "testing_orchestrator"
+        - "documentation_orchestrator"
+    
+    - gap_id: "EXPOSURE-GAP-003"
+      title: "Tool Discovery Endpoint Missing"
+      description: "No MCP endpoint to list all available tools"
+      location: "src/mcp/server.py"
+      severity: "MEDIUM"
+      impact: "Clients must hardcode known tools; no dynamic discovery"
+      status: "MISSING - No endpoint to list all available tools"
+      priority: "P2"
+
+# =============================================================================
+# ROOT CAUSE ANALYSIS
+# =============================================================================
+
+root_cause: |
+  Incremental development added MCP tools piecemeal (16 tools over multiple phases)
+  without comprehensive exposure strategy. Each phase added decorators to specific
+  modules but never conducted systematic review of ALL CORTEX capabilities to ensure
+  complete MCP exposure.
+  
+  Pattern: Each developer added @mcp_tool to their own functions but never checked
+  other modules for methods that should also be exposed.
+
+# =============================================================================
+# ACCEPTANCE CRITERIA (3 AC-IDs)
+# =============================================================================
+
+acceptance_criteria:
+  ac_001:
+    ac_id: "AC-MCP-EXPOSURE-001"
+    title: "Add @mcp_tool decorator to get_relevant_business_knowledge_for_operation"
+    description: |
+      Expose get_relevant_business_knowledge_for_operation() method in MasterOrchestrator
+      as MCP tool for programmatic access.
+    
+    success_criteria:
+      - "Method decorated with @mcp_tool"
+      - "Tool name: get_relevant_business_knowledge_for_operation"
+      - "Tool metadata includes description, parameters, return type"
+      - "Tool listed in /tools endpoint"
+      - "Tool callable via MCP protocol"
+      - "4+ unit tests verifying MCP exposure"
+      - "Zero regression in existing MCP tools (16 → 17)"
+      - "Audit trail created (AC_START, AC_EXECUTE, AC_COMPLETE)"
+    
+    files_to_modify:
+      - "src/orchestrators/core/master_orchestrator.py (add @mcp_tool decorator + metadata)"
+      - "tests/unit/core/orchestrator/test_mcp_exposure.py (add verification tests)"
+    
+    testing_requirements:
+      unit_tests_expected: 4
+      integration_tests_expected: 0
+      test_categories:
+        - "MCP tool registration verification"
+        - "Tool metadata completeness"
+        - "Tool callable via MCP protocol"
+        - "Tool parameters validated"
+    
+    estimation:
+      hours: 1
+      days: 0.25
+  
+  ac_002:
+    ac_id: "AC-MCP-EXPOSURE-002"
+    title: "Expose domain orchestrator operations as MCP tools"
+    description: |
+      Systematically add @mcp_tool decorators to key public methods in all domain
+      orchestrators (planning, design, implementation, testing, documentation).
+      This enables LLM clients to discover and invoke domain-specific operations.
+    
+    success_criteria:
+      - "Planning orchestrator: 3+ key methods exposed"
+      - "Design orchestrator: 3+ key methods exposed"
+      - "Implementation orchestrator: 3+ key methods exposed"
+      - "Testing orchestrator: 2+ key methods exposed"
+      - "Documentation orchestrator: 2+ key methods exposed"
+      - "All exposed methods have metadata (description, parameters, return type)"
+      - "15+ new MCP tools added (16 → 31)"
+      - "Tool categories properly organized"
+      - "10+ unit tests verifying domain orchestrator exposure"
+      - "Backward compatibility verified (zero regressions)"
+      - "Audit trail created for all ACs"
+    
+    domain_operations:
+      planning_orchestrator:
+        - "create_plan()"
+        - "validate_plan()"
+        - "decompose_into_tasks()"
+      
+      design_orchestrator:
+        - "design_architecture()"
+        - "validate_design()"
+        - "create_design_patterns()"
+      
+      implementation_orchestrator:
+        - "implement_feature()"
+        - "validate_implementation()"
+        - "optimize_code()"
+      
+      testing_orchestrator:
+        - "create_test_plan()"
+        - "execute_tests()"
+        - "analyze_coverage()"
+      
+      documentation_orchestrator:
+        - "generate_docs()"
+        - "validate_documentation()"
+        - "update_examples()"
+    
+    files_to_modify:
+      - "src/orchestrators/domain/planning_orchestrator.py (add @mcp_tool decorators)"
+      - "src/orchestrators/domain/design_orchestrator.py (add @mcp_tool decorators)"
+      - "src/orchestrators/domain/implementation_orchestrator.py (add @mcp_tool decorators)"
+      - "src/orchestrators/domain/testing_orchestrator.py (add @mcp_tool decorators)"
+      - "src/orchestrators/domain/documentation_orchestrator.py (add @mcp_tool decorators)"
+      - "tests/unit/core/orchestrator/test_domain_mcp_exposure.py (NEW - 10+ tests)"
+    
+    testing_requirements:
+      unit_tests_expected: 10
+      integration_tests_expected: 0
+      test_categories:
+        - "Domain orchestrator tool registration"
+        - "Tool metadata validation"
+        - "Tool invocation via MCP"
+        - "Cross-domain tool interaction"
+        - "Tool catalog consistency"
+    
+    estimation:
+      hours: 4
+      days: 1
+  
+  ac_003:
+    ac_id: "AC-MCP-EXPOSURE-003"
+    title: "Add /list-tools MCP endpoint for tool discovery"
+    description: |
+      Implement comprehensive tool discovery endpoint that lists all available MCP tools
+      with their metadata. Enables clients to dynamically discover capabilities without
+      hardcoding tool names.
+    
+    success_criteria:
+      - "New MCP endpoint: /list-tools"
+      - "Returns list of all exposed MCP tools (31+ tools)"
+      - "Each tool includes: name, description, parameters, return_type"
+      - "Tool categories/namespaces organized (governance, orchestration, domain)"
+      - "Endpoint accessible via standard MCP protocol"
+      - "5+ unit tests verifying tool list accuracy"
+      - "Integration test: client can discover and call tools dynamically"
+      - "Tool count accurate (must reflect all @mcp_tool decorated methods)"
+      - "Tool metadata consistent with function signatures"
+    
+    implementation_details:
+      endpoint_name: "/list-tools"
+      request_format: "MCP-standard tools/list protocol"
+      response_format: |
+        {
+          "tools": [
+            {
+              "name": "tool_name",
+              "description": "Tool description",
+              "inputSchema": {
+                "type": "object",
+                "properties": {...},
+                "required": [...]
+              }
+            },
+            ...
+          ]
+        }
+      
+      tool_categories:
+        - governance: "Governance and compliance tools"
+        - orchestration: "Master orchestrator tools"
+        - domain: "Domain-specific orchestrator tools"
+        - knowledge: "Knowledge management tools"
+    
+    files_to_modify:
+      - "src/mcp/server.py (add /list-tools endpoint)"
+      - "src/mcp/tool_registry.py (enhance registry with listing capability)"
+      - "tests/unit/mcp/test_tool_discovery.py (NEW - 5+ tests)"
+      - "tests/integration/test_mcp_tool_discovery_e2e.py (NEW - dynamic discovery)"
+    
+    testing_requirements:
+      unit_tests_expected: 5
+      integration_tests_expected: 1
+      test_categories:
+        - "Tool list retrieval"
+        - "Tool metadata completeness"
+        - "Tool count accuracy"
+        - "Tool category organization"
+        - "Tool discoverability from client perspective"
+        - "E2E tool discovery and invocation"
+    
+    estimation:
+      hours: 3
+      days: 1
+
+# =============================================================================
+# PHASE EXECUTION PLAN
+# =============================================================================
+
+execution_plan:
+  day_sequence:
+    day_1:
+      title: "AC-MCP-EXPOSURE-001: Master Orchestrator Tool Exposure"
+      duration: "2-4 hours"
+      tasks:
+        - "Add @mcp_tool decorator to get_relevant_business_knowledge_for_operation()"
+        - "Add metadata (description, parameters, return type)"
+        - "Create unit tests (4 tests)"
+        - "Verify tool registered and callable"
+        - "Audit logging (AC_START, AC_EXECUTE, AC_COMPLETE)"
+    
+    day_2:
+      title: "AC-MCP-EXPOSURE-002: Domain Orchestrator Tool Exposure"
+      duration: "4-6 hours"
+      tasks:
+        - "Identify key public methods in each domain orchestrator"
+        - "Add @mcp_tool decorators to 15+ methods"
+        - "Add metadata to all decorated methods"
+        - "Create unit tests (10 tests)"
+        - "Create test_domain_mcp_exposure.py test file"
+        - "Verify all tools registered and discoverable"
+        - "Backward compatibility check"
+        - "Audit logging"
+    
+    day_3:
+      title: "AC-MCP-EXPOSURE-003: Tool Discovery Endpoint"
+      duration: "3-4 hours"
+      tasks:
+        - "Implement /list-tools endpoint in src/mcp/server.py"
+        - "Enhance tool registry with listing capability"
+        - "Create response formatting (MCP-standard)"
+        - "Create unit tests (5 tests)"
+        - "Create integration test for E2E discovery"
+        - "Test tool discovery from client perspective"
+        - "Audit logging"
+
+# =============================================================================
+# GOVERNANCE COMPLIANCE
+# =============================================================================
+
+governance_compliance:
+  rules_applied:
+    - rule_id: "CORE-008"
+      rule_name: "Test-Driven Development"
+      compliance: "Tests created BEFORE implementation (RED → GREEN)"
+      evidence: "Test files created with acceptance criteria"
+    
+    - rule_id: "CORE-011"
+      rule_name: "Type Hints Mandatory"
+      compliance: "All new functions include type hints"
+      verification: "Pylance verification on completion"
+    
+    - rule_id: "CORE-012"
+      rule_name: "Google-Style Docstrings"
+      compliance: "All exposed methods must have Google-style docstrings"
+      verification: "Docstring audit on completion"
+    
+    - rule_id: "CORE-027"
+      rule_name: "Audit Trail Enforcement"
+      compliance: "AC_START, AC_EXECUTE, AC_COMPLETE entries required"
+      verification: "Audit log verification on completion"
+    
+    - rule_id: "CORE-028"
+      rule_name: "Naming Convention (Kebab-Case)"
+      compliance: "All tool names must follow AC naming: AC-MCP-EXPOSURE-XXX"
+      verification: "Phase naming compliance"
+
+# =============================================================================
+# SUCCESS CRITERIA
+# =============================================================================
+
+success_criteria:
+  completion_targets:
+    - "3/3 AC-IDs implemented (100%)"
+    - "1/1 methods from master_orchestrator exposed"
+    - "15+ methods from domain orchestrators exposed"
+    - "Tool count: 16 → 32+ tools"
+    - "Tool discovery endpoint functional"
+  
+  testing_targets:
+    - "19+ unit tests created"
+    - "1+ integration test (E2E discovery)"
+    - "100% test pass rate"
+    - "Zero regressions in existing MCP tools"
+  
+  quality_targets:
+    - "All methods have Google-style docstrings"
+    - "All functions have type hints"
+    - "All methods have metadata (description, parameters)"
+    - "Tool registry complete and accurate"
+  
+  governance_targets:
+    - "3/3 AC audit trails complete"
+    - "CORE-008 compliance: TDD enforced"
+    - "CORE-011 compliance: Type hints present"
+    - "CORE-012 compliance: Docstrings present"
+    - "CORE-027 compliance: Audit entries created"
+    - "CORE-028 compliance: Naming convention followed"
+
+# =============================================================================
+# PHASE COMPLETION CRITERIA
+# =============================================================================
+
+phase_completion_criteria:
+  all_acs_complete: "3/3 AC-IDs implemented with 100% success"
+  all_tests_passing: "20+ tests passing with 100% pass rate"
+  governance_compliant: "All governance rules enforced"
+  audit_trail_verified: "Audit log entries verified for all ACs"
+  production_ready: "Code ready for immediate deployment"
+  zero_regressions: "No degradation of existing MCP functionality"
+
+# =============================================================================
+# REMEDIATION ARTIFACTS
+# =============================================================================
+
+evidence_location: "_workspaces/roadmap/issues/MCP-TOOLS-EXPOSURE-GAP-20260118.yaml"
+
+completion_reports:
+  - "PHASE-REMEDIATION-07-COMPLETION-REPORT.md"
+  - "MCP-TOOL-EXPOSURE-SUMMARY.md"
+
+audit_verification:
+  verified: false  # Will be set to true on completion
+  entry_count: 0   # Will be updated on completion
+  hash_chain_valid: false  # Will be verified on completion
+  verified_at: null
+  remediation_required: false
+
+git_checkpoint: null  # Will be set on completion

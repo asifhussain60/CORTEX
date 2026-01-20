@@ -1,0 +1,568 @@
+# CORTEX Analysis Orchestrator - Estimation Engine Phase
+# Phase ID: impl-analysis-001-estimation-engine
+# Date: 2026-01-20
+# Authority: Strategic analysis + senior-level SWAG generation
+# Part 1 of 3: Foundation (EstimationEngine)
+
+metadata:
+  phase_id: "impl-analysis-001-estimation-engine"
+  title: "AnalysisOrchestrator - Estimation Engine Foundation"
+  description: |
+    Build estimation engine consuming CORTEX LENS intelligence (git history, AST analysis,
+    code comments, dependency relationships) to produce senior-level SWAGs.
+    Outputs: effort hours, complexity scores, test coverage gaps, governance violations.
+    Used by downstream components (TeamOptimizer, SprintPlanner, RiskAssessor).
+  
+  category: "ORCHESTRATION"
+  priority: "P1"
+  blocking: "Team planning, resource allocation, ROI analysis"
+  status: "NOT_STARTED"
+  locked: false
+  
+  estimated_effort:
+    hours: 32
+    days: "4 days (parallel with other work)"
+    confidence: "HIGH"
+    rationale: "Reuses existing LENS pipeline + proven estimation patterns"
+
+objective:
+  summary: |
+    Create EstimationEngine that consumes CORTEX Domain Brain intelligence
+    (AST metrics, git patterns, code quality signals) to estimate effort at
+    senior engineer level: hours, complexity, gaps, risks.
+  
+  business_value: |
+    • Removes manual effort estimation (currently guesswork)
+    • Enables data-driven sprint planning
+    • Identifies hidden complexity early (test gaps, governance violations)
+    • Supports ROI analysis with credible numbers
+    • Enables team sizing optimization
+
+gap_analysis:
+  current_state:
+    - "LENS pipeline exists (git, AST, code comments, relationships)"
+    - "DomainBrain ingests and normalizes LENS data"
+    - "PlanningOrchestrator tracks AC status"
+    - "cortex-impl-map.yaml has manual effort estimates (not data-driven)"
+    - "No effort estimation logic"
+    - "No complexity scoring algorithm"
+    - "No test coverage gap detection"
+    - "No governance violation impact assessment"
+  
+  problems:
+    - "Effort estimates are aspirational, not calibrated"
+    - "No data-driven basis for sprints/teams"
+    - "Hidden complexity (unmaintained code, test gaps) emerges late"
+    - "Governance violations not factored into effort"
+    - "Cannot answer: 'how many engineers can parallelize this?'"
+  
+  solutions:
+    - "Build EstimationEngine leveraging LENS outputs"
+    - "Implement senior-level heuristics (LOC, complexity, test patterns)"
+    - "Score governance violations → effort impact"
+    - "Detect parallelizable work → team sizing recommendations"
+
+acceptance_criteria:
+  
+  - id: "ANAL-EST-001-01"
+    title: "LENS Context Integration"
+    description: |
+      EstimationEngine consumes LENS pipeline outputs:
+      - Git history (commit patterns, file change frequency, blame)
+      - AST analysis (cyclomatic complexity, method size, nesting depth)
+      - Code comments (documentation coverage, TODO/FIXME markers)
+      - Dependency relationships (coupling, circular dependencies)
+      - Test coverage metrics (coverage %, test-to-code ratio)
+      
+      Extract into normalized EstimationContext dataclass.
+    
+    verification:
+      - "EstimationContext captures all 5 LENS signals"
+      - "Can construct from real phase/AC (e.g., consolidation-001-src-cleanup)"
+      - "Metrics normalize to 0-100 scale"
+      - "Handles missing data gracefully (uses defaults)"
+    
+    tests:
+      - "test_extract_context_from_phase()"
+      - "test_extract_context_from_ac()"
+      - "test_normalize_metrics_to_scale()"
+      - "test_handle_missing_data()"
+    
+    deliverables:
+      files:
+        - "cortex/core/analysis/models.py"  # EstimationContext, MetricNormalization
+      tests:
+        - "tests/unit/analysis/test_lens_integration.py"
+
+  - id: "ANAL-EST-001-02"
+    title: "Senior-Level Effort Estimation Algorithm"
+    description: |
+      Implement estimation heuristics calibrated to senior engineer level:
+      
+      Base formula:
+        effort_hours = (LOC_estimate + complexity_factor + test_gap_factor + 
+                       governance_factor + integration_factor) * calibration_factor
+      
+      Components:
+      - LOC_estimate: Lines of code affected (AST + git)
+      - complexity_factor: Cyclomatic complexity × nesting depth (AST)
+      - test_gap_factor: Coverage gap × test_to_code ratio (test metrics)
+      - governance_factor: Violations × severity (governance rules)
+      - integration_factor: Coupling score (dependency graph)
+      - calibration_factor: Team experience adjustment (1.2-0.7 range)
+      
+      Examples:
+      - Simple feature (50 LOC, low complexity): 8-12 hours
+      - Medium feature (300 LOC, medium complexity, 20% test gap): 32-48 hours
+      - Complex phase (2000 LOC, high complexity, governance violations): 120-160 hours
+    
+    verification:
+      - "Estimates match historical data ±20% (validation set)"
+      - "Complexity adjustments reflect actual difficulty"
+      - "Test gaps materially increase estimates"
+      - "Governance violations cause 10-30% increase"
+      - "Output includes confidence interval (min-max)"
+    
+    tests:
+      - "test_estimate_simple_feature()"
+      - "test_estimate_medium_feature()"
+      - "test_estimate_complex_phase()"
+      - "test_complexity_factor_applied()"
+      - "test_test_gap_factor_applied()"
+      - "test_governance_factor_applied()"
+      - "test_confidence_interval_reasonable()"
+      - "test_historical_validation()"
+    
+    deliverables:
+      files:
+        - "cortex/core/analysis/estimation_engine.py"  # EstimationEngine class
+      tests:
+        - "tests/unit/analysis/test_estimation_engine.py"
+        - "tests/unit/analysis/test_estimation_validation.py"
+
+  - id: "ANAL-EST-001-03"
+    title: "Complexity Scoring - Code Metrics"
+    description: |
+      Score code complexity from AST analysis (reuse DomainBrain AST processor).
+      
+      Metrics:
+      - Cyclomatic complexity (number of decision points)
+      - Method size (LOC per method)
+      - Nesting depth (max indentation level)
+      - Parameter count (function arity)
+      - Coupling score (external dependencies)
+      - Maintenance index (composite readability score)
+      
+      Aggregate to 0-100 complexity_score:
+      - 0-25: Simple (clear logic, low maintenance burden)
+      - 26-50: Moderate (some complexity, manageable)
+      - 51-75: Complex (hidden states, hard to reason about)
+      - 76-100: Very complex (cognitive overload risk, refactoring needed)
+      
+      Output: ComplexityReport with breakdown + recommendations.
+    
+    verification:
+      - "All 6 metrics extracted from AST"
+      - "Complexity score in 0-100 range"
+      - "Reports provide actionable recommendations"
+      - "Matches manual code review estimates"
+    
+    tests:
+      - "test_extract_cyclomatic_complexity()"
+      - "test_extract_method_size()"
+      - "test_extract_nesting_depth()"
+      - "test_extract_parameter_count()"
+      - "test_compute_complexity_score()"
+      - "test_complexity_categories_correct()"
+    
+    deliverables:
+      files:
+        - "cortex/core/analysis/complexity_analyzer.py"  # ComplexityAnalyzer class
+      tests:
+        - "tests/unit/analysis/test_complexity_analyzer.py"
+
+  - id: "ANAL-EST-001-04"
+    title: "Test Coverage Gap Detection"
+    description: |
+      Identify missing test coverage and estimate effort to close gaps.
+      
+      Inputs:
+      - Current test coverage % (from pytest --cov)
+      - Test-to-code ratio (test LOC / production LOC)
+      - Uncovered branches (from coverage reports)
+      - AC-to-test mapping (which tests verify which ACs)
+      
+      Analysis:
+      - Missing coverage by module
+      - High-risk untested paths (based on complexity + git frequency)
+      - Missing integration tests (detected from coverage gaps + git history)
+      - Flaky test indicators (from test history)
+      
+      Output: TestGapReport with effort estimate for closure (hours).
+    
+    verification:
+      - "Identifies real coverage gaps from pytest output"
+      - "Estimate effort for gap closure"
+      - "Flags high-risk untested code"
+      - "Estimates match peer review"
+    
+    tests:
+      - "test_parse_coverage_report()"
+      - "test_identify_uncovered_branches()"
+      - "test_estimate_gap_closure_effort()"
+      - "test_flag_high_risk_code()"
+      - "test_detect_flaky_tests()"
+    
+    deliverables:
+      files:
+        - "cortex/core/analysis/test_gap_analyzer.py"  # TestGapAnalyzer class
+      tests:
+        - "tests/unit/analysis/test_test_gap_analyzer.py"
+
+  - id: "ANAL-EST-001-05"
+    title: "Governance Violation Impact Assessment"
+    description: |
+      Score governance violations found during analysis and estimate remediation effort.
+      
+      For each governance rule violation:
+      - Rule severity (CORE-008 TDD vs CORE-022 kebab-case)
+      - Instance count (how many violations)
+      - Remediation type (fix code, add tests, refactor)
+      - Estimated effort (hours to fix)
+      
+      Aggregate to governance_impact_score:
+      - 0-10: No violations (clean)
+      - 11-30: Minor violations (cosmetic, 2-4 hours)
+      - 31-70: Moderate violations (process, 8-16 hours)
+      - 71-100: Severe violations (structural, 20+ hours)
+      
+      Output: GovernanceReport with violations + remediation plan + effort.
+    
+    verification:
+      - "Identifies real CORE-* violations from code"
+      - "Effort estimates reasonable for fixes"
+      - "Severity scoring matches rule definitions"
+      - "Provides actionable remediation steps"
+    
+    tests:
+      - "test_identify_core_008_violations()"
+      - "test_identify_core_011_violations()"
+      - "test_identify_core_012_violations()"
+      - "test_compute_governance_impact_score()"
+      - "test_estimate_remediation_effort()"
+      - "test_severity_scoring_correct()"
+    
+    deliverables:
+      files:
+        - "cortex/core/analysis/governance_analyzer.py"  # GovernanceAnalyzer class
+      tests:
+        - "tests/unit/analysis/test_governance_analyzer.py"
+
+  - id: "ANAL-EST-001-06"
+    title: "EstimationReport Generation"
+    description: |
+      Compose all analysis components into comprehensive EstimationReport.
+      
+      Report structure:
+      - Summary (effort range, complexity, confidence)
+      - Effort breakdown (base + complexity + test gaps + governance + integration)
+      - Complexity report (code metrics, risk areas)
+      - Test gap report (missing coverage, remediation plan)
+      - Governance report (violations, remediation steps)
+      - Recommendations (refactor opportunities, test priorities)
+      - Confidence factors (what could change the estimate)
+      
+      Example report for consolidation-001-src-cleanup:
+        Effort: 12-16 hours (confidence: HIGH)
+        Complexity: Low (simple import migration)
+        Test gaps: None (existing tests adequate)
+        Governance: CORE-008 TDD compliant if tests added first
+        Recommendation: Add 2-3 migration validation tests
+    
+    verification:
+      - "Report includes all 7 sections"
+      - "Numbers are internally consistent"
+      - "Report is actionable (not just metrics)"
+      - "Confidence explanation is clear"
+    
+    tests:
+      - "test_generate_estimation_report()"
+      - "test_report_sections_complete()"
+      - "test_report_numbers_consistent()"
+      - "test_confidence_explained()"
+    
+    deliverables:
+      files:
+        - "cortex/core/analysis/report_generator.py"  # ReportGenerator class
+      tests:
+        - "tests/unit/analysis/test_report_generator.py"
+
+  - id: "ANAL-EST-001-07"
+    title: "MCP Tool Exposure - estimate_effort"
+    description: |
+      Expose EstimationEngine as MCP tool for external clients and MasterOrchestrator.
+      
+      Tool: estimate_effort
+      Parameters:
+      - phase_id: str (phase to estimate)
+      - AC_id: Optional[str] (specific AC, or all if omitted)
+      - calibration_factor: Optional[float] (team experience: 1.2-0.7)
+      
+      Returns:
+      - effort_hours: (min, expected, max)
+      - complexity_score: 0-100
+      - test_gap_hours: estimate to close gaps
+      - governance_violations: count + summary
+      - confidence: HIGH|MEDIUM|LOW (with reasons)
+      - recommendations: List[str]
+      
+      Example:
+        estimate_effort(phase_id="consolidation-001-src-cleanup")
+        → {
+          "effort_hours": {"min": 12, "expected": 14, "max": 16},
+          "complexity_score": 15,
+          "test_gap_hours": 2,
+          "governance_violations": 0,
+          "confidence": "HIGH",
+          "recommendations": ["Add migration test", "Validate import order"]
+        }
+    
+    verification:
+      - "MCP tool schema valid"
+      - "Tool registered in MCP server"
+      - "Tool responds with correct structure"
+      - "Results match EstimationEngine directly"
+    
+    tests:
+      - "test_mcp_tool_registered()"
+      - "test_mcp_estimate_returns_correct_structure()"
+      - "test_mcp_calibration_factor_applied()"
+      - "test_mcp_performance_acceptable()"
+    
+    dependencies:
+      - "ANAL-EST-001-01 through ANAL-EST-001-06"
+    
+    deliverables:
+      files:
+        - "cortex/mcp/tools/estimate_effort.py"  # MCP tool implementation
+      tests:
+        - "tests/unit/mcp/test_estimate_effort_tool.py"
+
+  - id: "ANAL-EST-001-08"
+    title: "Integration with DomainBrain & PlanningOrchestrator"
+    description: |
+      Integrate EstimationEngine into CORTEX ecosystem.
+      
+      Changes:
+      - EstimationEngine leverages DomainBrain AST processor (no duplication)
+      - PlanningOrchestrator.get_plan_data_for_observatory() includes effort estimates
+      - FeatureRegistry stores effort estimates alongside features
+      - MasterOrchestrator queries estimates for routing decisions
+      
+      Files modified:
+      - cortex/orchestrators/domain/planning_orchestrator.py: add estimate exposure
+      - cortex/core/feature_registry/registry.py: add effort_estimate field
+      - cortex/brain/domain_brain/__init__.py: expose AST processor for reuse
+    
+    verification:
+      - "EstimationEngine can be constructed from DomainBrain outputs"
+      - "No code duplication between LENS and EstimationEngine"
+      - "PlanningOrchestrator includes estimates in plan data"
+      - "FeatureRegistry stores estimates persistently"
+      - "MasterOrchestrator queries successfully"
+    
+    tests:
+      - "test_estimation_engine_uses_domain_brain()"
+      - "test_planning_orchestrator_includes_estimates()"
+      - "test_feature_registry_stores_estimates()"
+      - "test_master_orchestrator_queries_estimates()"
+    
+    dependencies:
+      - "ANAL-EST-001-01 through ANAL-EST-001-07"
+      - "impl-features-registry-001 (FeatureRegistry)"
+    
+    files_to_modify:
+      - "cortex/orchestrators/domain/planning_orchestrator.py"
+        location: "get_plan_data_for_observatory()"
+        change: "Include effort estimates in plan data"
+        impact: "~10 lines"
+      
+      - "cortex/core/feature_registry/registry.py"
+        location: "Feature dataclass"
+        change: "Add effort_hours, complexity_score fields"
+        impact: "~5 lines"
+      
+      - "cortex/brain/domain_brain/__init__.py"
+        location: "Public API exports"
+        change: "Export AST processor for EstimationEngine reuse"
+        impact: "~3 lines"
+    
+    deliverables:
+      files:
+        - "cortex/orchestrators/domain/planning_orchestrator.py"  # Modified
+        - "cortex/core/feature_registry/registry.py"  # Modified
+        - "cortex/brain/domain_brain/__init__.py"  # Modified
+      tests:
+        - "tests/integration/analysis/test_estimation_integration.py"
+
+implementation:
+  
+  files_to_create:
+    - path: "cortex/core/analysis/__init__.py"
+      loc: 30
+      purpose: "Package initialization, public API"
+    
+    - path: "cortex/core/analysis/models.py"
+      loc: 120
+      purpose: "EstimationContext, ComplexityReport, TestGapReport, GovernanceReport"
+    
+    - path: "cortex/core/analysis/lens_integrator.py"
+      loc: 100
+      purpose: "Extract LENS outputs, normalize to EstimationContext"
+    
+    - path: "cortex/core/analysis/complexity_analyzer.py"
+      loc: 150
+      purpose: "Code complexity scoring (AST metrics)"
+    
+    - path: "cortex/core/analysis/test_gap_analyzer.py"
+      loc: 120
+      purpose: "Test coverage gap detection and remediation estimates"
+    
+    - path: "cortex/core/analysis/governance_analyzer.py"
+      loc: 140
+      purpose: "Governance violation impact assessment"
+    
+    - path: "cortex/core/analysis/estimation_engine.py"
+      loc: 200
+      purpose: "Main EstimationEngine with senior-level heuristics"
+    
+    - path: "cortex/core/analysis/report_generator.py"
+      loc: 100
+      purpose: "Compose analysis components into EstimationReport"
+    
+    - path: "cortex/mcp/tools/estimate_effort.py"
+      loc: 80
+      purpose: "MCP tool wrapper for EstimationEngine"
+    
+    - path: "tests/unit/analysis/__init__.py"
+      loc: 5
+    
+    - path: "tests/unit/analysis/test_lens_integration.py"
+      loc: 150
+      tests: 8
+    
+    - path: "tests/unit/analysis/test_complexity_analyzer.py"
+      loc: 200
+      tests: 12
+    
+    - path: "tests/unit/analysis/test_test_gap_analyzer.py"
+      loc: 180
+      tests: 10
+    
+    - path: "tests/unit/analysis/test_governance_analyzer.py"
+      loc: 180
+      tests: 10
+    
+    - path: "tests/unit/analysis/test_estimation_engine.py"
+      loc: 250
+      tests: 15
+    
+    - path: "tests/unit/analysis/test_estimation_validation.py"
+      loc: 150
+      tests: 10
+    
+    - path: "tests/unit/analysis/test_report_generator.py"
+      loc: 120
+      tests: 8
+    
+    - path: "tests/unit/mcp/test_estimate_effort_tool.py"
+      loc: 100
+      tests: 8
+    
+    - path: "tests/integration/analysis/__init__.py"
+      loc: 5
+    
+    - path: "tests/integration/analysis/test_estimation_integration.py"
+      loc: 150
+      tests: 8
+    
+    - path: "tests/unit/analysis/fixtures/"
+      loc: "multiple"
+      purpose: "Test data: real phase LENS outputs, expected estimates"
+    
+    - path: "docs/02-architecture/adrs/ADR-ANALYSIS-ORCHESTRATOR.md"
+      loc: 250
+      purpose: "Architecture decision record"
+    
+    - path: "docs/03-api-reference/analysis-api.md"
+      loc: 300
+      purpose: "Complete API specification"
+
+governance:
+  tier0_rules_applied:
+    - "CORE-001: Changes <500 lines per increment"
+    - "CORE-005: No hardcoded paths (use DomainBrain processors)"
+    - "CORE-008: Tests BEFORE code (TDD)"
+    - "CORE-011: Type hints on all functions"
+    - "CORE-012: Google-style docstrings"
+    - "CORE-025: Audit trail for estimation decisions"
+    - "CORE-029: Response headers on reports"
+
+dependencies:
+  blocks:
+    - "impl-analysis-002-team-optimizer (needs EstimationEngine)"
+    - "impl-analysis-003-sprint-planner (needs EstimationEngine)"
+  
+  requires:
+    - "cortex/brain/domain_brain/ (AST processor)"
+    - "pytest --cov (test coverage data)"
+    - "cortex/core/governance/core-rules.yaml (rule definitions)"
+  
+  related:
+    - "impl-features-registry-001 (FeatureRegistry stores estimates)"
+    - "cortex/orchestrators/domain/planning_orchestrator.py (exposes estimates)"
+
+rationale:
+  
+  problem: |
+    CORTEX lacks data-driven effort estimation. Current cortex-impl-map.yaml 
+    has manual guesses (12h, 4-6 days). No senior-level SWAG methodology.
+    Cannot answer: complexity, test gaps, governance impact, team sizing.
+  
+  solution: |
+    Build EstimationEngine consuming CORTEX LENS intelligence (git, AST, 
+    comments, relationships) to produce calibrated effort estimates with 
+    confidence intervals and component breakdowns.
+  
+  benefits: |
+    - Effort estimates grounded in code metrics, not guesses
+    - Identifies hidden complexity (test gaps, governance violations) early
+    - Enables data-driven sprint planning and team sizing
+    - Feeds into ROI analysis (reliable effort → reliable ROI)
+    - Supports MasterOrchestrator routing decisions
+
+success_criteria:
+  - "All 8 ACs completed"
+  - "Code coverage >90%"
+  - "All 100+ tests passing"
+  - "Estimates calibrated to within ±20% of actual (validation set)"
+  - "Test gap detection matches manual review ±1 item"
+  - "Governance violations scored consistently"
+  - "MCP tool performs <500ms on realistic inputs"
+  - "Integration with PlanningOrchestrator working"
+
+timeline:
+  phase_duration: "32 hours (4 days)"
+  day_1: "AC-ANAL-EST-001-01 (LENS integration) + AC-ANAL-EST-001-02 (estimation algorithm)"
+  day_2: "AC-ANAL-EST-001-03 (complexity) + AC-ANAL-EST-001-04 (test gaps)"
+  day_3: "AC-ANAL-EST-001-05 (governance) + AC-ANAL-EST-001-06 (report)"
+  day_3_afternoon: "AC-ANAL-EST-001-07 (MCP tool) + AC-ANAL-EST-001-08 (integration)"
+
+notes:
+  - "Reuses DomainBrain AST processor (no duplication)"
+  - "Estimation heuristics calibrated to real CORTEX projects"
+  - "Low risk: proven algorithms (complexity scoring, effort estimation)"
+  - "High impact: feeds into all downstream planning"
+  - "Part 1 of 3: EstimationEngine foundation"
+  - "Part 2 will add TeamOptimizer (parallelization analysis)"
+  - "Part 3 will add SprintPlanner + RiskAssessor"

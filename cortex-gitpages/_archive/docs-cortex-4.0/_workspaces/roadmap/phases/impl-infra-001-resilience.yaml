@@ -1,0 +1,390 @@
+# PHASE: Infrastructure Resilience Foundation
+# ID: impl-infra-001-resilience
+# Priority: P0-CRITICAL (Blocks Production)
+# Date: 2026-01-20
+
+metadata:
+  phase_id: "impl-infra-001-resilience"
+  title: "Infrastructure Resilience Foundation"
+  priority: "P0-CRITICAL"
+  status: "NOT_STARTED"
+  estimated_effort: "5-7 days"
+  blocks_production: true
+  dependencies: []
+
+executive_summary: |
+  Critical infrastructure resilience gaps prevent production deployment. Current implementation
+  has single-threaded database connections, no connection pooling, missing circuit breakers,
+  no retry logic, and inadequate error recovery. These issues cause cascading failures under
+  load, connection exhaustion, and data corruption risks.
+  
+  This phase establishes production-grade infrastructure with proper connection lifecycle
+  management, bulkhead isolation, graceful degradation, and failure recovery.
+
+problem_analysis:
+  root_causes:
+    database_connections:
+      issue: "Thread-local connections without pooling"
+      location: "cortex/infrastructure/database.py"
+      risk: "Connection exhaustion under concurrent load"
+      failure_mode: "Database locked errors, file handle exhaustion"
+      current_implementation: "Single connection per thread, no limits"
+      test_evidence: "tests/unit/infrastructure/test_connection_lifecycle.py (169 errors)"
+    
+    no_bulkhead_isolation:
+      issue: "Shared resources across components"
+      risk: "Slow operation in one component blocks all others"
+      failure_mode: "Cascading timeouts, system-wide degradation"
+      current_implementation: "Global timeout, no per-component limits"
+    
+    missing_circuit_breakers:
+      issue: "No failure detection or isolation"
+      risk: "Failed dependencies cause continuous retries"
+      failure_mode: "Resource exhaustion, cascading failures"
+      test_evidence: "tests/unit/test_circuit_breaker.py expects implementation"
+    
+    inadequate_retry_logic:
+      issue: "Simple retry without backoff or jitter"
+      risk: "Thundering herd on recovery"
+      failure_mode: "System overwhelm during incident recovery"
+      location: "cortex/infrastructure/retry_handler.py (partial)"
+
+  production_impact:
+    correctness:
+      - "Connection leaks lead to 'database is locked' errors"
+      - "No transaction isolation causes data races"
+      - "Missing rollback on errors corrupts state"
+    
+    reliability:
+      - "Single slow query blocks entire system"
+      - "Failed external calls cause endless retries"
+      - "No graceful degradation under partial failure"
+    
+    scalability:
+      - "Connection exhaustion at ~20 concurrent users"
+      - "No horizontal scaling due to state coupling"
+      - "Memory leaks from unclosed resources"
+    
+    operability:
+      - "No circuit breaker visibility for operators"
+      - "Cannot identify which component is slow"
+      - "No automatic recovery from transient failures"
+
+acceptance_criteria:
+  AC-INFRA-001-01:
+    title: "Connection Pool with Lifecycle Management"
+    description: |
+      Implement proper connection pooling with configurable min/max connections,
+      timeout handling, health checks, and automatic cleanup of stale connections.
+    
+    requirements:
+      - "Per-environment connection pools (dev/test/prod isolation)"
+      - "Configurable pool size (min: 2, max: 20, configurable)"
+      - "Connection health checks before reuse"
+      - "Automatic cleanup of connections idle >5 minutes"
+      - "Metrics: active, idle, total, wait time"
+      - "Context manager support for guaranteed cleanup"
+    
+    edge_cases:
+      - "Pool exhaustion: block with timeout, fail fast after 30s"
+      - "Connection dies mid-transaction: rollback, return to pool"
+      - "Database file locked: retry with exponential backoff"
+      - "Pool initialization failure: degrade to read-only mode"
+    
+    validation:
+      - "Load test: 100 concurrent operations complete successfully"
+      - "No connection leaks after 1000 operations"
+      - "Pool metrics exposed via /health endpoint"
+      - "Recovery from database restart within 5s"
+    
+    files:
+      implementation: "cortex/infrastructure/connection_pool.py"
+      tests: "tests/unit/infrastructure/test_connection_pool_resilience.py"
+      integration: "tests/integration/test_connection_pool_under_load.py"
+
+  AC-INFRA-001-02:
+    title: "Component Bulkhead Isolation"
+    description: |
+      Isolate resource pools per component to prevent cascading failures.
+      Each component (governance, audit, knowledge) gets dedicated connection pool.
+    
+    requirements:
+      - "Separate pools: governance (5 conn), audit (3 conn), knowledge (10 conn)"
+      - "Per-component timeouts: governance (1s), audit (5s), knowledge (10s)"
+      - "Independent circuit breakers per component"
+      - "Component health reporting: healthy/degraded/failed"
+    
+    edge_cases:
+      - "One component pool exhausted: others continue normally"
+      - "Component-level circuit open: return cached/default values"
+      - "Transient failure: automatic retry with backoff"
+      - "Persistent failure: degrade to read-only or fail-safe mode"
+    
+    validation:
+      - "Slow audit write doesn't block governance check"
+      - "Knowledge query timeout doesn't affect audit logging"
+      - "Component failure isolated to that component only"
+    
+    files:
+      implementation: "cortex/infrastructure/bulkhead_manager.py"
+      tests: "tests/unit/infrastructure/test_bulkhead_isolation.py"
+
+  AC-INFRA-001-03:
+    title: "Circuit Breaker with Adaptive Thresholds"
+    description: |
+      Implement circuit breaker pattern with half-open state testing,
+      failure rate tracking, and automatic recovery detection.
+    
+    requirements:
+      - "States: CLOSED (normal), OPEN (failing), HALF_OPEN (testing)"
+      - "Failure threshold: 50% error rate over 10 requests"
+      - "Open duration: 30s initial, exponential backoff up to 5 minutes"
+      - "Half-open test: 3 successful requests to close circuit"
+      - "Per-operation circuit breakers (not global)"
+    
+    edge_cases:
+      - "Intermittent failures: don't trip on single error"
+      - "Slow operations: count timeout as failure"
+      - "Circuit stuck open: force close after 10 minutes"
+      - "Rapid open/close oscillation: increase backoff exponentially"
+    
+    validation:
+      - "Circuit opens after 5/10 failures"
+      - "Circuit stays open for configured duration"
+      - "Half-open state tests recovery"
+      - "Circuit closes after 3 successful tests"
+      - "Metrics track open/close events and duration"
+    
+    files:
+      implementation: "cortex/infrastructure/circuit_breaker.py"
+      tests: "tests/unit/infrastructure/test_circuit_breaker_adaptive.py"
+
+  AC-INFRA-001-04:
+    title: "Retry Logic with Exponential Backoff and Jitter"
+    description: |
+      Implement intelligent retry with exponential backoff, jitter to prevent
+      thundering herd, max attempts, and idempotency detection.
+    
+    requirements:
+      - "Exponential backoff: 100ms, 200ms, 400ms, 800ms, 1600ms"
+      - "Jitter: ±25% randomization to prevent synchronized retries"
+      - "Max attempts: 5 (configurable per operation)"
+      - "Retry only on transient errors (not validation/auth failures)"
+      - "Idempotency token tracking to prevent duplicate operations"
+    
+    edge_cases:
+      - "Non-idempotent operation: fail fast, no retry"
+      - "Permanent failure (404, 403): don't retry"
+      - "Transient failure (503, timeout): retry with backoff"
+      - "Retry budget exhausted: circuit breaker opens"
+    
+    validation:
+      - "Retries transient failures successfully"
+      - "Doesn't retry permanent failures"
+      - "Backoff timing measured correctly (±10%)"
+      - "No duplicate operations on retry"
+    
+    files:
+      implementation: "cortex/infrastructure/retry_strategy.py"
+      tests: "tests/unit/infrastructure/test_retry_exponential.py"
+
+  AC-INFRA-001-05:
+    title: "Graceful Degradation Framework"
+    description: |
+      Implement fallback strategies for partial failures, allowing system
+      to continue operating with reduced functionality.
+    
+    requirements:
+      - "Degradation levels: FULL (100%), PARTIAL (read-only), MINIMAL (cached)"
+      - "Automatic fallback: fresh data → cached → default values"
+      - "Degradation state exposed via /health endpoint"
+      - "Operator override: force degradation level"
+      - "Recovery detection: automatic upgrade when healthy"
+    
+    edge_cases:
+      - "Cache miss during degradation: return safe default"
+      - "Stale cache (>5 minutes): warn but serve"
+      - "All fallbacks exhausted: return explicit error"
+      - "Partial recovery: gradually restore capabilities"
+    
+    validation:
+      - "System serves cached data when DB unavailable"
+      - "Read-only mode when writes fail"
+      - "Automatic recovery when dependency healthy"
+      - "Health endpoint reflects current degradation"
+    
+    files:
+      implementation: "cortex/infrastructure/degradation_manager.py"
+      tests: "tests/unit/infrastructure/test_graceful_degradation_levels.py"
+
+  AC-INFRA-001-06:
+    title: "Resource Cleanup and Leak Detection"
+    description: |
+      Implement comprehensive resource tracking, automatic cleanup,
+      and leak detection for connections, file handles, and memory.
+    
+    requirements:
+      - "Resource registry: track all connections, files, locks"
+      - "Automatic cleanup on context exit (even on exception)"
+      - "Leak detection: warn if resource held >1 minute"
+      - "Forced cleanup on shutdown: close all resources within 5s"
+      - "Resource usage metrics: count by type, age distribution"
+    
+    edge_cases:
+      - "Exception during cleanup: log but continue"
+      - "Resource already closed: ignore silently"
+      - "Cleanup timeout: force kill after 10s"
+      - "Circular references: break cycles, log warning"
+    
+    validation:
+      - "No leaked connections after 1000 operations"
+      - "All resources cleaned up on shutdown"
+      - "Leak warnings triggered for held resources"
+      - "Memory usage stable over time"
+    
+    files:
+      implementation: "cortex/infrastructure/resource_tracker.py"
+      tests: "tests/unit/infrastructure/test_resource_leak_detection.py"
+
+implementation_strategy:
+  phase_1_foundation:
+    duration: "2 days"
+    focus: "Connection pooling and lifecycle management"
+    deliverables:
+      - "AC-INFRA-001-01: Connection pool implementation"
+      - "AC-INFRA-001-06: Resource tracking foundation"
+    validation: "Load test with 100 concurrent connections"
+  
+  phase_2_isolation:
+    duration: "2 days"
+    focus: "Bulkhead pattern and circuit breakers"
+    deliverables:
+      - "AC-INFRA-001-02: Component isolation"
+      - "AC-INFRA-001-03: Circuit breaker pattern"
+    validation: "Failure injection tests for each component"
+  
+  phase_3_resilience:
+    duration: "2 days"
+    focus: "Retry logic and graceful degradation"
+    deliverables:
+      - "AC-INFRA-001-04: Retry strategy"
+      - "AC-INFRA-001-05: Degradation framework"
+    validation: "End-to-end resilience test suite"
+  
+  phase_4_validation:
+    duration: "1 day"
+    focus: "Integration testing and documentation"
+    deliverables:
+      - "Integration tests passing"
+      - "Load tests passing (100 concurrent users)"
+      - "Runbook for operators"
+
+testing_strategy:
+  unit_tests:
+    - "Connection pool: acquire, release, health checks, cleanup"
+    - "Circuit breaker: state transitions, threshold detection, recovery"
+    - "Retry logic: backoff timing, jitter, max attempts"
+    - "Degradation: fallback chain, level transitions"
+    - "Resource tracking: leak detection, forced cleanup"
+  
+  integration_tests:
+    - "End-to-end with real database under load"
+    - "Failure injection: kill DB mid-transaction"
+    - "Recovery: database restart, network partition"
+    - "Concurrent access: 100 threads, no leaks"
+  
+  chaos_tests:
+    - "Kill database randomly during operations"
+    - "Introduce network latency (100-500ms)"
+    - "Exhaust connection pool, verify recovery"
+    - "Simulate partial failures across components"
+
+rollout_strategy:
+  phase_1_dev:
+    environment: "development"
+    validation: "All unit tests passing, manual verification"
+    rollback: "Revert to current implementation"
+  
+  phase_2_test:
+    environment: "test"
+    validation: "Integration tests, load tests, chaos tests"
+    soak_time: "24 hours continuous operation"
+    rollback: "Automatic rollback if error rate >1%"
+  
+  phase_3_staging:
+    environment: "staging"
+    validation: "Full production workload simulation"
+    soak_time: "72 hours"
+    rollback: "Manual rollback decision"
+  
+  phase_4_production:
+    environment: "production"
+    strategy: "Canary deployment (10% → 50% → 100%)"
+    monitoring: "Error rate, latency, resource usage"
+    rollback: "Automatic if P95 latency >2x baseline"
+
+success_criteria:
+  functional:
+    - "All AC requirements implemented and tested"
+    - "Zero connection leaks over 10,000 operations"
+    - "Circuit breakers trip and recover correctly"
+    - "System degrades gracefully under failure"
+  
+  performance:
+    - "P95 latency <100ms for database operations"
+    - "Support 100 concurrent users without degradation"
+    - "Connection pool acquisition <10ms P99"
+    - "Recovery from failure within 30 seconds"
+  
+  reliability:
+    - "99.9% uptime under normal conditions"
+    - "Graceful degradation during partial failures"
+    - "No data corruption under any failure scenario"
+    - "Automatic recovery from transient failures"
+
+risk_mitigation:
+  risk_1_backward_compatibility:
+    risk: "Breaking changes to existing database code"
+    mitigation: "Phased rollout with feature flags"
+    fallback: "Keep old implementation available"
+  
+  risk_2_performance_regression:
+    risk: "Connection pooling adds latency"
+    mitigation: "Benchmark before/after, tune pool size"
+    fallback: "Revert if P95 latency increases >20%"
+  
+  risk_3_new_failure_modes:
+    risk: "Pool exhaustion, circuit breaker stuck open"
+    mitigation: "Comprehensive testing, operator runbook"
+    fallback: "Emergency circuit breaker override"
+
+monitoring_requirements:
+  metrics:
+    - "connection_pool_active (gauge)"
+    - "connection_pool_idle (gauge)"
+    - "connection_pool_wait_time_ms (histogram)"
+    - "circuit_breaker_state (gauge: 0=closed, 1=open, 2=half-open)"
+    - "circuit_breaker_trips_total (counter)"
+    - "retry_attempts_total (counter)"
+    - "degradation_level (gauge: 0=full, 1=partial, 2=minimal)"
+    - "resource_leaks_detected (counter)"
+  
+  alerts:
+    - "Connection pool >90% utilization for >5 minutes"
+    - "Circuit breaker open for >5 minutes"
+    - "Retry budget exhausted (>100 retries/minute)"
+    - "System degraded for >15 minutes"
+    - "Resource leak detected"
+
+documentation:
+  operator_runbook:
+    - "Connection pool tuning guide"
+    - "Circuit breaker manual override"
+    - "Degradation level interpretation"
+    - "Common failure scenarios and responses"
+  
+  developer_guide:
+    - "How to use connection pool correctly"
+    - "When to use circuit breakers"
+    - "Retry strategy best practices"
+    - "Resource cleanup patterns"

@@ -1,0 +1,232 @@
+---
+analysis_id: ARCH-GAP-001
+date: 2026-01-20
+title: "CORTEX Architectural Gap Analysis: Design vs Implementation"
+severity: HIGH
+category: ARCHITECTURAL_MISALIGNMENT
+status: ANALYSIS_COMPLETE
+
+executive_summary: |
+  CORTEX has significant gap between architectural design intent (cortex-deploy.prompt.md)
+  and current implementation. MCP tools should be in cortex_toolkit/ but are in cortex/mcp/.
+  cortex_toolkit/ is essentially empty (only __init__.py). This creates confusion and
+  violates the documented deployment strategy.
+
+findings:
+  finding_001:
+    id: GAP-CORTEX-TOOLKIT-EMPTY
+    severity: HIGH
+    title: "cortex_toolkit folder is effectively empty"
+    description: |
+      cortex_toolkit/ exists but only contains cortex_toolkit/core/__init__.py.
+      No MCP tools, no utilities, no implementation code exists in cortex_toolkit/.
+    
+    evidence:
+      - "cortex_toolkit/core/__init__.py exists (empty marker)"
+      - "No other Python files in cortex_toolkit/"
+      - "Total implementation: 0 lines of functional code"
+    
+    expected_behavior: |
+      Per cortex-deploy.prompt.md (lines 36-63):
+      - cortex_toolkit/ should be "Central implementation hub exposed via MCP"
+      - Should contain: api/, brain/, core/, infrastructure/, mcp/, orchestrators/, tools/
+      - All Python implementation should be "moved into CORTEX Toolkit exposed via MCP"
+    
+    actual_behavior: |
+      Implementation exists in cortex/ instead:
+      - cortex/api/ (exists)
+      - cortex/brain/ (269 files)
+      - cortex/core/ (exists)
+      - cortex/infrastructure/ (exists)
+      - cortex/mcp/ (exists with server, decorators, endpoints)
+      - cortex/orchestrators/ (41 files)
+      - cortex/tools/ (exists)
+    
+    impact: |
+      - Violates documented deployment strategy
+      - Creates confusion about canonical location
+      - Tests import from cortex.* not cortex_toolkit.*
+      - MCP exposure documentation references cortex.mcp not cortex_toolkit.mcp
+
+  finding_002:
+    id: GAP-SRC-CORTEX-CONFUSION
+    severity: RESOLVED_IN_CHAT01
+    title: "src/ vs cortex/ module confusion (FIXED)"
+    description: |
+      Tests were importing from src.* but implementations were in cortex.*
+      This was identified and fixed in chat01.md by:
+      1. Deleting src/ folder entirely
+      2. Updating 260 test files to import from cortex.* instead of src.*
+      3. Updating 12 test files to import from cortex_brain.tier* instead of tier*
+    
+    status: RESOLVED
+    resolution_date: 2026-01-20
+    resolution: "src/ folder removed, all imports updated to cortex.*"
+
+  finding_003:
+    id: GAP-MCP-LOCATION-MISMATCH
+    severity: MEDIUM
+    title: "MCP implementation in cortex/mcp/ not cortex_toolkit/mcp/"
+    description: |
+      MCP server and tools are implemented in cortex/mcp/ with:
+      - cortex/mcp/server.py (MCP server)
+      - cortex/mcp/decorators.py (@mcp_tool decorator)
+      - cortex/mcp/endpoints.py (list_tools_endpoint, etc.)
+      - cortex/mcp/domain_operations.py (MCP-exposed operations)
+      - cortex/mcp/protocol.py (JSON-RPC protocol)
+      
+      But deployment design expects cortex_toolkit/mcp/ to be the MCP hub.
+    
+    evidence:
+      actual_location: cortex/mcp/
+      expected_location: cortex_toolkit/mcp/
+      test_imports: "from cortex.mcp.decorators import mcp_tool"
+      documentation_references: "cortex/mcp/ (not cortex_toolkit/)"
+    
+    question: |
+      Should cortex/ be renamed to cortex_toolkit/ to align with design?
+      OR should cortex_toolkit/ be populated with MCP-only exports?
+      OR should cortex-deploy.prompt.md be updated to reflect cortex/ as canonical?
+
+  finding_004:
+    id: GAP-FOLDER-STRUCTURE-RATIONALE
+    severity: MEDIUM
+    title: "Unclear rationale for cortex/ vs cortex_toolkit/ separation"
+    description: |
+      Current structure has:
+      - cortex/ (388 Python files, full implementation)
+      - cortex_toolkit/ (empty, only __init__.py)
+      - cortex_brain/ (tier0/1/2 brain logic, 100+ files)
+      
+      Unclear why three separate packages exist when deployment guide
+      suggests cortex_toolkit/ should be the main implementation hub.
+    
+    possible_explanations:
+      - "cortex_toolkit/ was created as placeholder for future MCP-only exports"
+      - "cortex/ evolved as main implementation before cortex_toolkit/ design"
+      - "cortex_toolkit/ represents 'external API' while cortex/ is 'internal'"
+      - "Design documentation not updated after implementation decisions"
+
+root_cause_analysis:
+  primary_cause: DESIGN_IMPLEMENTATION_DRIFT
+  description: |
+    Deployment design document (cortex-deploy.prompt.md) was written after
+    implementation had already established cortex/ as the main package.
+    cortex_toolkit/ was likely created to align with design but never populated.
+  
+  contributing_factors:
+    - "No enforcement of cortex_toolkit/ as canonical location"
+    - "Tests written against cortex.* imports (established pattern)"
+    - "MCP tools implemented in cortex/mcp/ before deployment design finalized"
+    - "No validation that implementation matches deployment strategy"
+
+impact_assessment:
+  user_impact: LOW
+  description: "System functions correctly; this is an organizational issue"
+  
+  developer_impact: MEDIUM
+  description: |
+    - Confusion about where to add new MCP tools
+    - Inconsistency between documentation and code
+    - Potential for duplicate implementations
+  
+  deployment_impact: MEDIUM
+  description: |
+    - Deployment guide references cortex_toolkit/ but it doesn't exist
+    - Unclear how to package for MCP distribution
+    - May need to update deployment automation
+
+recommendations:
+  option_1:
+    title: "Rename cortex/ to cortex_toolkit/"
+    effort: MEDIUM (8-12 hours)
+    pros:
+      - Aligns with deployment design documentation
+      - Single source of truth for main implementation
+      - Clear that all code is "toolkit exposed via MCP"
+    cons:
+      - Requires updating 388 files' imports
+      - Requires updating 400+ test imports
+      - Breaks existing import patterns throughout codebase
+    steps:
+      - "Rename cortex/ → cortex_toolkit/"
+      - "Update all imports: cortex.* → cortex_toolkit.*"
+      - "Update conftest.py sys.path"
+      - "Update MCP configuration"
+      - "Validate all tests pass"
+  
+  option_2:
+    title: "Populate cortex_toolkit/ with MCP facade"
+    effort: LOW (2-4 hours)
+    pros:
+      - Maintains existing cortex/ imports
+      - cortex_toolkit/ becomes MCP-specific export layer
+      - No breaking changes to existing code
+    cons:
+      - Maintains dual structure (cortex/ and cortex_toolkit/)
+      - Adds complexity (two entry points)
+      - Doesn't fully align with deployment design
+    steps:
+      - "Create cortex_toolkit/mcp/ as re-export facade"
+      - "Import cortex.mcp.* and re-export"
+      - "Update deployment guide to clarify roles"
+      - "Document: cortex/ = impl, cortex_toolkit/ = MCP API"
+  
+  option_3:
+    title: "Update deployment design to match reality (RECOMMENDED)"
+    effort: VERY_LOW (1-2 hours)
+    pros:
+      - No code changes required
+      - Documents current working implementation
+      - Eliminates confusion by aligning docs with reality
+      - Fastest path to consistency
+    cons:
+      - cortex_toolkit/ remains empty (should be deleted)
+      - Deployment design becomes "as-built" not "as-designed"
+    steps:
+      - "Delete empty cortex_toolkit/ folder"
+      - "Update cortex-deploy.prompt.md: cortex_toolkit/ → cortex/"
+      - "Update all documentation references"
+      - "Create ARCH-DECISION-RECORD.md explaining cortex/ as canonical"
+      - "Add governance rule: cortex/ is main package, not cortex_toolkit/"
+
+  recommended_option: option_3
+  rationale: |
+    cortex/ is the established, working implementation with 388 files and
+    400+ tests. MCP exposure is already complete and functional in cortex/mcp/.
+    Renaming or adding facade layer adds risk and effort for no functional gain.
+    
+    Better to update documentation to match the proven implementation rather
+    than risk breaking a working system to match outdated design docs.
+
+action_plan:
+  phase: PHASE-ARCH-ALIGNMENT-001
+  title: "Align Deployment Design with Implementation Reality"
+  estimated_effort: 2 hours
+  priority: P1
+  
+  acceptance_criteria:
+    - AC-ARCH-001-01: "Delete empty cortex_toolkit/ folder"
+    - AC-ARCH-001-02: "Update cortex-deploy.prompt.md to reference cortex/ not cortex_toolkit/"
+    - AC-ARCH-001-03: "Create ARCH-DECISION-RECORD.md documenting cortex/ as canonical"
+    - AC-ARCH-001-04: "Update cortex-master.yaml governance rules to forbid cortex_toolkit/"
+    - AC-ARCH-001-05: "Validate no references to cortex_toolkit remain in codebase"
+
+validation:
+  validation_criteria:
+    - "grep -r 'cortex_toolkit' returns only historical references in this document"
+    - "All documentation references cortex/ as main implementation package"
+    - "cortex_toolkit/ folder does not exist in filesystem"
+    - "Governance rules updated in cortex-master.yaml"
+    - "ARCH-DECISION-RECORD.md exists and documents the decision"
+
+related_issues:
+  - chat01.md (src/ vs cortex/ confusion - RESOLVED)
+  - CONSOLIDATION-REPORT-20260119.md (folder structure cleanup)
+  - cortex-deploy.prompt.md (needs update to match reality)
+
+next_steps:
+  - Create PHASE-ARCH-ALIGNMENT-001.yaml
+  - Add phase to cortex-master.yaml
+  - Execute ACs to bring docs in line with implementation
+  - Close this gap analysis as RESOLVED

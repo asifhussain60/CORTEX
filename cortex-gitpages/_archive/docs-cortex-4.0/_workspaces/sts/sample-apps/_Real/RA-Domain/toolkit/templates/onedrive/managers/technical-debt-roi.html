@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Debt ROI Analysis | RA Domain Analysis</title>
+    <link rel="stylesheet" href="../assets/onedrive-glass.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="page-header">
+        <div class="header-logo">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="cortex-logo">
+            <div>
+                <h1 class="header-title">Technical Debt ROI Analysis</h1>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                    Current debt register | Financial impact | Effort estimates
+                </p>
+            </div>
+        </div>
+        <div>
+            <p class="last-updated">Last Updated: December 11, 2025</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">
+                <a href="../index.html" style="color: var(--accent-primary);">← Back to Dashboard</a>
+            </p>
+        </div>
+    </header>
+
+    <!-- Summary KPIs -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            💰 Technical Debt Return on Investment (ROI) - Key Performance Indicators (KPIs)
+        </h2>
+        <div class="kpi-grid">
+        <div class="kpi critical">
+            <h3>Total Annual Impact</h3>
+            <div class="value" title="Source: technical-debt-register.json (sum of items 1-5)">$645k</div>
+            <div class="target">Risk exposure</div>
+            <div class="trend down">↓ 5 open items</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Current debt register
+            </p>
+        </div>
+
+        <div class="kpi warning">
+            <h3>Total Effort Required</h3>
+            <div class="value" title="Source: technical-debt-register.json (sum of estimated_hours)">161</div>
+            <div class="target">Hours estimated</div>
+            <div class="trend down">↓ 4 weeks FTE</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Across 5 items
+            </p>
+        </div>
+
+        <div class="kpi success">
+            <h3>Average ROI</h3>
+            <div class="value" title="Calculation: $645,000 ÷ 161 hours = $4,006/hour">$4,006</div>
+            <div class="target">Per hour invested</div>
+            <div class="trend up">↑ High value</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Financial return
+            </p>
+        </div>
+
+        <div class="kpi info">
+            <h3>Critical Severity</h3>
+            <div class="value" title="Source: technical-debt-register.json (count of severity=CRITICAL)">2</div>
+            <div class="target">Of 5 total items</div>
+            <div class="trend down">↓ $550k impact</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Highest priority
+            </p>
+        </div>
+        </div>
+    </section>
+
+    <!-- Debt Register Table -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            📊 Technical Debt Register
+        </h2>
+        <table class="scorecard-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Issue</th>
+                    <th>Type</th>
+                    <th>Severity</th>
+                    <th>Hours</th>
+                    <th>Annual Impact</th>
+                    <th>ROI/Hour</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="critical">
+                    <td><strong>TD-002</strong></td>
+                    <td title="Source: technical-debt-register.json:14-26">Zero test coverage for rollover logic</td>
+                    <td>Test Gap</td>
+                    <td><span class="badge badge-critical">CRITICAL</span></td>
+                    <td>40</td>
+                    <td title="Source: technical-debt-register.json:20 (estimated_savings_per_year)">$500,000</td>
+                    <td><strong>$12,500</strong></td>
+                </tr>
+                <tr class="critical">
+                    <td><strong>TD-001</strong></td>
+                    <td title="Source: technical-debt-register.json:3-13">ExampleDomainService too large (717 LOC)</td>
+                    <td>Code Complexity</td>
+                    <td><span class="badge badge-critical">CRITICAL</span></td>
+                    <td>40</td>
+                    <td title="Source: technical-debt-register.json:9 (estimated_savings_per_year)">$50,000</td>
+                    <td><strong>$1,250</strong></td>
+                </tr>
+                <tr class="warning">
+                    <td><strong>TD-003</strong></td>
+                    <td title="Source: technical-debt-register.json:27-37">ClaimsProcessingService needs CQRS refactoring</td>
+                    <td>Code Complexity</td>
+                    <td><span class="badge badge-warning">HIGH</span></td>
+                    <td>35</td>
+                    <td title="Source: technical-debt-register.json:31 (estimated_savings_per_year)">$40,000</td>
+                    <td>$1,143</td>
+                </tr>
+                <tr class="warning">
+                    <td><strong>TD-005</strong></td>
+                    <td title="Source: technical-debt-register.json:49-59">BalanceCalculationService split needed</td>
+                    <td>Code Complexity</td>
+                    <td><span class="badge badge-warning">HIGH</span></td>
+                    <td>30</td>
+                    <td title="Source: technical-debt-register.json:53 (estimated_savings_per_year)">$35,000</td>
+                    <td>$1,167</td>
+                </tr>
+                <tr class="warning">
+                    <td><strong>TD-004</strong></td>
+                    <td title="Source: technical-debt-register.json:38-48">Missing README and architecture docs</td>
+                    <td>Documentation</td>
+                    <td><span class="badge badge-warning">HIGH</span></td>
+                    <td>16</td>
+                    <td title="Source: technical-debt-register.json:42 (estimated_savings_per_year)">$20,000</td>
+                    <td>$1,250</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Financial Impact Breakdown -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            💰 Financial Impact Breakdown
+        </h2>
+        <div style="display: grid; gap: 1rem;">
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--danger);">
+                    CRITICAL: Test Coverage Gap ($500k)
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;" title="Source: technical-debt-register.json:14-26">
+                    <strong>TD-002:</strong> Zero test coverage for rollover logic | 40 hours
+                </p>
+                <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
+                    <li>Annual risk exposure: $500,000</li>
+                    <li>Estimated effort: 40 hours</li>
+                    <li>ROI per hour: $12,500</li>
+                    <li>Current status: Open (created 2025-12-11)</li>
+                </ul>
+                <p style="margin-top: 0.75rem; font-size: 0.875rem; color: var(--accent-primary);">
+                    💡 <strong>Context:</strong> Highest financial impact item in debt register
+                </p>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--danger);">
+                    CRITICAL: Code Complexity ($50k)
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;" title="Source: technical-debt-register.json:3-13">
+                    <strong>TD-001:</strong> ExampleDomainService too large (717 LOC) | 40 hours
+                </p>
+                <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
+                    <li>Annual maintenance cost: $50,000</li>
+                    <li>Estimated effort: 40 hours</li>
+                    <li>ROI per hour: $1,250</li>
+                    <li>Current status: Open (created 2025-12-11)</li>
+                </ul>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--warning);">
+                    HIGH: Combined Impact ($95k)
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;" title="Source: technical-debt-register.json (items TD-003, TD-004, TD-005)">
+                    <strong>3 items:</strong> Requests CQRS, Missing docs, Balance split | 81 hours
+                </p>
+                <ul style="font-size: 0.875rem; color: var(--text-primary); padding-left: 1.25rem;">
+                    <li>TD-003: ClaimsProcessingService CQRS ($40k, 35 hrs)</li>
+                    <li>TD-005: BalanceCalculationService split ($35k, 30 hrs)</li>
+                    <li>TD-004: Missing README/architecture docs ($20k, 16 hrs)</li>
+                    <li>Combined annual impact: $95,000</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Effort Distribution -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            ⏱️ Effort Distribution
+        </h2>
+        <table class="scorecard-table">
+            <thead>
+                <tr>
+                    <th>Debt Type</th>
+                    <th>Item Count</th>
+                    <th>Total Hours</th>
+                    <th>Total Impact</th>
+                    <th>Avg ROI/Hour</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="warning">
+                    <td><strong>Code Complexity</strong></td>
+                    <td title="Source: technical-debt-register.json (count of type=Code Complexity)">3</td>
+                    <td title="Sum: TD-001(40) + TD-003(35) + TD-005(30)">105</td>
+                    <td title="Sum: $50k + $40k + $35k">$125,000</td>
+                    <td>$1,190</td>
+                </tr>
+                <tr class="critical">
+                    <td><strong>Test Gap</strong></td>
+                    <td title="Source: technical-debt-register.json (count of type=Test Gap)">1</td>
+                    <td title="TD-002 estimated_hours">40</td>
+                    <td title="TD-002 estimated_savings_per_year">$500,000</td>
+                    <td><strong>$12,500</strong></td>
+                </tr>
+                <tr class="info">
+                    <td><strong>Documentation</strong></td>
+                    <td title="Source: technical-debt-register.json (count of type=Documentation)">1</td>
+                    <td title="TD-004 estimated_hours">16</td>
+                    <td title="TD-004 estimated_savings_per_year">$20,000</td>
+                    <td>$1,250</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Severity Distribution -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            🎯 Severity Distribution
+        </h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--danger);">
+                    CRITICAL
+                </h3>
+                <p style="font-size: 2rem; font-weight: 700; color: var(--danger); margin: 0.5rem 0;" title="Source: technical-debt-register.json (count of severity=CRITICAL)">
+                    2 items
+                </p>
+                <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                    <strong>Impact:</strong> $550,000/year<br>
+                    <strong>Effort:</strong> 80 hours<br>
+                    <strong>Items:</strong> TD-001, TD-002
+                </p>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--warning);">
+                    HIGH
+                </h3>
+                <p style="font-size: 2rem; font-weight: 700; color: var(--warning); margin: 0.5rem 0;" title="Source: technical-debt-register.json (count of severity=HIGH)">
+                    3 items
+                </p>
+                <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                    <strong>Impact:</strong> $95,000/year<br>
+                    <strong>Effort:</strong> 81 hours<br>
+                    <strong>Items:</strong> TD-003, TD-004, TD-005
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="text-align: center; margin-top: 3rem; padding: 2rem; border-top: 1px solid var(--glass-border);">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" style="height: 24px;">
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin: 0;">
+                Powered by <strong style="color: var(--accent-primary);">CORTEX</strong> AI Framework
+            </p>
+        </div>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin: 0;">
+            <a href="../index.html" style="color: var(--accent-primary);">Dashboard</a> | 
+            <a href="test-coverage-gaps.html" style="color: var(--accent-primary);">Test Coverage Gaps</a> |
+            <a href="team-metrics.html" style="color: var(--accent-primary);">Team Metrics</a>
+        </p>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem;">
+            Data Source: technical-debt-register.json (AST analysis: 2025-12-11)
+        </p>
+    </footer>
+</body>
+</html>

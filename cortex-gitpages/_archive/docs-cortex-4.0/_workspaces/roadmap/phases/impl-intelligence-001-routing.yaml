@@ -1,0 +1,261 @@
+# CORTEX Implementation Phase: Routing Intelligence
+# Phase ID: impl-intelligence-001-routing
+# Priority: P1 (High-value quick win)
+# Source: INTELLIGENCE-IMPLEMENTATION-ROADMAP.md (Module 1)
+# Date: 2026-01-20
+
+metadata:
+  phase_id: "impl-intelligence-001-routing"
+  title: "Routing Decision Intelligence"
+  description: "Track routing decisions vs outcomes; detect misrouting patterns"
+  priority: "P1"
+  estimated_effort: "2-3 hours"
+  source_spec: "docs/INTELLIGENCE-IMPLEMENTATION-ROADMAP.md (Module 1)"
+  status: "COMPLETED"
+  locked: true
+  completed_date: "2026-01-20"
+  git_commit: "82301bac9"
+
+objective:
+  summary: "Build routing outcome tracking system to identify systematic misrouting before cascade failures"
+  business_value: "Enable proactive detection of routing problems that currently go unnoticed until failures"
+  
+gap_analysis:
+  current_state:
+    - "IntentRouter generates routing decisions with confidence scores"
+    - "Decisions logged to audit trail (AC_EXECUTE)"
+    - "No tracking of whether routing was correct or led to success"
+    - "No visibility into misrouting patterns"
+  
+  missing_capability:
+    - "Routing outcome recording (decided_handler vs actual_handler)"
+    - "Routing accuracy metrics (success rate per handler)"
+    - "Misrouting pattern detection (systematic failures)"
+    - "Baseline for routing quality measurement"
+
+acceptance_criteria:
+  - id: "INT-RT-001-01"
+    description: "RoutingAnalyzer records routing outcomes"
+    verification:
+      - "record_routing_outcome() stores decision_id, decided_handler, actual_handler, success, reason, duration_ms"
+      - "Data persisted to governance.db routing_outcomes table"
+      - "Timestamp recorded for time-window queries"
+    tests:
+      - "test_record_routing_outcome()"
+      - "test_database_persistence()"
+      - "test_concurrent_updates()"
+  
+  - id: "INT-RT-001-02"
+    description: "RoutingAnalyzer calculates routing accuracy"
+    verification:
+      - "get_routing_accuracy() returns total_decisions, successful_routes, accuracy_rate"
+      - "Supports filtering by handler_name (optional)"
+      - "Supports time window filtering (days parameter)"
+      - "Returns per-handler breakdown"
+    tests:
+      - "test_get_routing_accuracy_all_handlers()"
+      - "test_get_routing_accuracy_specific_handler()"
+      - "test_get_routing_accuracy_time_window()"
+      - "test_accuracy_calculation_edge_cases()"
+  
+  - id: "INT-RT-001-03"
+    description: "RoutingAnalyzer detects misrouting patterns"
+    verification:
+      - "detect_misrouting_patterns() identifies repeated (decided != actual) scenarios"
+      - "Returns decided_handler, actual_handler, occurrences, reason, first_seen"
+      - "Filters by time window (days parameter)"
+      - "Groups similar misrouting events"
+    tests:
+      - "test_detect_misrouting_patterns_single()"
+      - "test_detect_misrouting_patterns_multiple()"
+      - "test_detect_misrouting_patterns_empty()"
+      - "test_pattern_detection_threshold()"
+      - "test_time_window_filtering()"
+
+implementation:
+  files_to_create:
+    - path: "cortex/core/intelligence/routing_intelligence.py"
+      loc: 160
+      classes:
+        - name: "RoutingAnalyzer"
+          methods:
+            - "record_routing_outcome(routing_decision_id, target_handler_decided, target_handler_actual, success, reason, duration_ms)"
+            - "get_routing_accuracy(handler_name=None, days=7)"
+            - "detect_misrouting_patterns(days=7)"
+      
+    - path: "tests/unit/intelligence/test_routing_intelligence.py"
+      loc: 200
+      test_count: 12
+  
+  files_to_modify:
+    - path: "cortex/orchestrators/core/master_orchestrator_stage_3.py"
+      changes: "+5 lines after handler execution"
+      reason: "Call routing_analyzer.record_routing_outcome()"
+      location: "After handler result obtained, before return"
+  
+  database_changes:
+    table: "routing_outcomes"
+    columns:
+      - "id UUID PRIMARY KEY"
+      - "decision_id VARCHAR(255) FOREIGN KEY to audit trail"
+      - "decided_handler VARCHAR(255)"
+      - "actual_handler VARCHAR(255)"
+      - "success BOOLEAN"
+      - "reason TEXT"
+      - "duration_ms INTEGER"
+      - "timestamp DATETIME"
+    indexes:
+      - "idx_routing_timestamp ON timestamp"
+      - "idx_routing_handler ON decided_handler"
+
+api_specification:
+  class: "RoutingAnalyzer"
+  
+  methods:
+    - name: "record_routing_outcome"
+      params:
+        - "routing_decision_id: str"
+        - "target_handler_decided: str"
+        - "target_handler_actual: str"
+        - "success: bool"
+        - "reason: str"
+        - "duration_ms: float"
+      returns: "None"
+      docstring: "Record outcome of a routing decision"
+    
+    - name: "get_routing_accuracy"
+      params:
+        - "handler_name: Optional[str] = None"
+        - "days: int = 7"
+      returns: "Dict[str, Any]"
+      example_output:
+        total_decisions: 150
+        successful_routes: 145
+        accuracy_rate: 0.9667
+        by_handler:
+          handler_a:
+            total: 50
+            success: 48
+            rate: 0.96
+    
+    - name: "detect_misrouting_patterns"
+      params:
+        - "days: int = 7"
+      returns: "List[Dict[str, Any]]"
+      example_output:
+        - decided_handler: "handler_a"
+          actual_handler: "handler_b"
+          occurrences: 5
+          reason: "Fallback due to unavailability"
+          first_seen: "2026-01-19T10:30:00Z"
+
+governance:
+  compliance:
+    - "CORE-008: TDD - tests written before implementation"
+    - "CORE-011: Type hints on all public methods"
+    - "CORE-012: Google docstrings on all classes and methods"
+    - "CORE-013: No bare except clauses"
+    - "CORE-027: AC_START → AC_EXECUTE → AC_COMPLETE audit trail"
+  
+  audit_trail:
+    - event: "AC_START"
+      phase: "impl-intelligence-001-routing"
+      ac_id: "INT-RT-001-01"
+    - event: "AC_EXECUTE"
+      phase: "impl-intelligence-001-routing"
+      ac_id: "INT-RT-001-01"
+    - event: "AC_COMPLETE"
+      phase: "impl-intelligence-001-routing"
+      ac_id: "INT-RT-001-01"
+
+testing_strategy:
+  unit_tests:
+    count: 12
+    framework: "pytest"
+    coverage_target: "100%"
+    tests:
+      - "test_record_routing_outcome() - Basic recording"
+      - "test_get_routing_accuracy_all_handlers() - Overall metrics"
+      - "test_get_routing_accuracy_specific_handler() - Filtered metrics"
+      - "test_get_routing_accuracy_time_window() - Time filtering"
+      - "test_detect_misrouting_patterns_single() - Single pattern"
+      - "test_detect_misrouting_patterns_multiple() - Multiple patterns"
+      - "test_detect_misrouting_patterns_empty() - No patterns"
+      - "test_accuracy_calculation_edge_cases() - Division by zero, empty data"
+      - "test_database_persistence() - Data integrity"
+      - "test_concurrent_updates() - Thread safety"
+      - "test_pattern_detection_threshold() - Threshold filtering"
+      - "test_time_window_filtering() - Date range validation"
+  
+  integration_tests:
+    - "test_routing_analyzer_master_orchestrator_integration()"
+    - "test_routing_outcome_audit_trail_link()"
+
+dependencies:
+  requires: []
+  blocks: []
+  related:
+    - "impl-intelligence-002-duration.yaml"
+    - "impl-intelligence-003-errors.yaml"
+
+risks_and_mitigations:
+  - risk: "Performance overhead from database writes"
+    mitigation: "Use async write batching; measure <5ms overhead"
+    severity: "LOW"
+  
+  - risk: "Large data volume over time"
+    mitigation: "Implement data retention policy (30 days); add cleanup job"
+    severity: "LOW"
+  
+  - risk: "Schema migration for new table"
+    mitigation: "Use Alembic migration script; test rollback"
+    severity: "LOW"
+
+success_metrics:
+  - metric: "All 12 unit tests passing"
+    target: "100%"
+  
+  - metric: "Integration overhead"
+    target: "<5ms per routing outcome"
+  
+  - metric: "Database query performance"
+    target: "get_routing_accuracy() <100ms for 7-day window"
+  
+  - metric: "Pattern detection accuracy"
+    target: "Detects 100% of systematic patterns (occurrences >= 3)"
+
+rollback_plan:
+  - step: "Remove routing_analyzer.record_routing_outcome() call from master_orchestrator_stage_3.py"
+  - step: "Drop routing_outcomes table"
+  - step: "Remove routing_intelligence.py module"
+  - step: "Revert git commit"
+
+validation:
+  pre_implementation:
+    - "Review INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 1"
+    - "Verify governance.db schema supports new table"
+    - "Confirm master_orchestrator_stage_3.py integration point"
+  
+  post_implementation:
+    - "pytest tests/unit/intelligence/test_routing_intelligence.py -v"
+    - "Verify routing_outcomes table created in governance.db"
+    - "Run integration test with master orchestrator"
+    - "Check audit trail for AC_COMPLETE event"
+
+timeline:
+  estimated_hours: 2.5
+  breakdown:
+    - task: "Create routing_intelligence.py"
+      hours: 1.0
+    - task: "Write 12 unit tests"
+      hours: 1.0
+    - task: "Integrate into master_orchestrator_stage_3.py"
+      hours: 0.25
+    - task: "Create database migration"
+      hours: 0.25
+
+notes:
+  - "First of 7 intelligence enhancements identified in holistic review"
+  - "Zero architectural changes - purely additive"
+  - "Enables proactive routing quality monitoring"
+  - "Foundation for future auto-correction of misrouting"

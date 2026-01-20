@@ -1,0 +1,762 @@
+# Selenium to Playwright Migration Best Practices
+# Part of CORTEX 4.0 Knowledge Library (Phase 10)
+# Author: Asif Hussain
+# Copyright © 2025 Asif Hussain. All rights reserved.
+
+version: "1.0.0"
+category: testing
+subcategory: test_migration
+tags:
+  - selenium
+  - playwright
+  - test-automation
+  - migration
+  - e2e-testing
+  - browser-automation
+
+metadata:
+  created: "2025-12-25"
+  last_updated: "2025-12-25"
+  status: active
+  complexity: intermediate
+  effort_level: medium
+  prerequisites:
+    - "Understanding of Selenium WebDriver"
+    - "Basic Playwright knowledge"
+    - "Async/await programming"
+    - "Test automation patterns"
+
+# ============================================================================
+# OVERVIEW
+# ============================================================================
+
+overview:
+  purpose: |
+    Comprehensive guide for migrating Selenium WebDriver tests to Playwright,
+    covering architecture differences, API mappings, best practices, and common
+    pitfalls. Enables teams to modernize their test automation with minimal risk.
+  
+  why_migrate:
+    - "Native async/await support (no explicit waits)"
+    - "Auto-wait for elements (built-in smart waiting)"
+    - "Better performance (faster test execution)"
+    - "Network interception (mock APIs easily)"
+    - "Multiple browser contexts (parallel isolation)"
+    - "Built-in test fixtures (setup/teardown)"
+    - "Better debugging (trace viewer, screenshots)"
+    - "Modern API design (cleaner, more intuitive)"
+  
+  migration_complexity:
+    simple_cases: "Direct API mapping (80% of tests)"
+    moderate_cases: "Refactor wait strategies (15% of tests)"
+    complex_cases: "Architecture changes (5% of tests)"
+  
+  estimated_effort:
+    small_suite: "1-2 weeks (< 100 tests)"
+    medium_suite: "3-4 weeks (100-500 tests)"
+    large_suite: "2-3 months (500+ tests)"
+
+# ============================================================================
+# ARCHITECTURE COMPARISON
+# ============================================================================
+
+architecture_differences:
+  selenium:
+    driver_model: "WebDriver protocol (stateful sessions)"
+    async_support: "Synchronous by default (blocking calls)"
+    wait_strategy: "Explicit waits required (WebDriverWait)"
+    browser_lifecycle: "Manual browser/driver management"
+    element_handling: "No auto-wait (race conditions common)"
+    network_control: "Limited (requires proxies/extensions)"
+  
+  playwright:
+    driver_model: "CDP/WebSocket (stateless commands)"
+    async_support: "Native async/await (non-blocking)"
+    wait_strategy: "Auto-wait built-in (actionability checks)"
+    browser_lifecycle: "Managed contexts (isolated sessions)"
+    element_handling: "Smart waiting (auto-retry on stale)"
+    network_control: "Native interception (route/fulfill)"
+  
+  key_insights:
+    - "Playwright: async-first design (all actions return promises)"
+    - "Selenium: imperative style (step-by-step commands)"
+    - "Playwright: context isolation (test independence)"
+    - "Selenium: shared driver state (test pollution risk)"
+
+# ============================================================================
+# API MAPPING REFERENCE
+# ============================================================================
+
+api_mappings:
+  
+  # Browser & Driver Setup
+  browser_initialization:
+    selenium: |
+      from selenium import webdriver
+      driver = webdriver.Chrome()
+      driver.get("https://example.com")
+    
+    playwright: |
+      from playwright.sync_api import sync_playwright
+      with sync_playwright() as p:
+          browser = p.chromium.launch()
+          page = browser.new_page()
+          page.goto("https://example.com")
+    
+    notes:
+      - "Playwright: context manager handles cleanup automatically"
+      - "Use async API for better performance in large suites"
+      - "Browser contexts provide isolated sessions (faster than new browsers)"
+  
+  # Element Location
+  find_element:
+    selenium: |
+      element = driver.find_element(By.ID, "submit-btn")
+      elements = driver.find_elements(By.CSS_SELECTOR, ".item")
+    
+    playwright: |
+      element = page.locator("#submit-btn")
+      elements = page.locator(".item")
+    
+    notes:
+      - "Playwright locators are lazy (evaluated on action)"
+      - "Use page.locator() instead of query_selector() (auto-wait)"
+      - "Locators are auto-retrying (handle stale elements)"
+  
+  # Clicks & Interactions
+  click_action:
+    selenium: |
+      element = driver.find_element(By.ID, "btn")
+      WebDriverWait(driver, 10).until(
+          EC.element_to_be_clickable((By.ID, "btn"))
+      )
+      element.click()
+    
+    playwright: |
+      page.locator("#btn").click()
+    
+    notes:
+      - "Playwright auto-waits for actionability (visible, enabled, stable)"
+      - "No explicit waits needed for 90% of cases"
+      - "Use timeout option for custom wait times: click(timeout=5000)"
+  
+  # Text Input
+  text_input:
+    selenium: |
+      element = driver.find_element(By.NAME, "username")
+      element.clear()
+      element.send_keys("admin")
+    
+    playwright: |
+      page.locator('[name="username"]').fill("admin")
+    
+    notes:
+      - "fill() auto-clears before typing (no need for clear())"
+      - "Use type() for character-by-character input (slower)"
+      - "Use press_sequentially() for realistic typing simulation"
+  
+  # Wait Strategies
+  explicit_waits:
+    selenium: |
+      from selenium.webdriver.support.ui import WebDriverWait
+      from selenium.webdriver.support import expected_conditions as EC
+      
+      wait = WebDriverWait(driver, 10)
+      element = wait.until(
+          EC.visibility_of_element_located((By.ID, "result"))
+      )
+    
+    playwright: |
+      page.locator("#result").wait_for(state="visible", timeout=10000)
+      # OR just use the element (auto-wait on action)
+      page.locator("#result").text_content()
+    
+    notes:
+      - "Most Selenium explicit waits unnecessary in Playwright"
+      - "Use wait_for() for explicit state checks (visible/hidden/attached)"
+      - "Default timeout: 30s (configurable globally)"
+  
+  # Dropdowns & Select
+  select_dropdown:
+    selenium: |
+      from selenium.webdriver.support.ui import Select
+      select = Select(driver.find_element(By.ID, "country"))
+      select.select_by_visible_text("United States")
+    
+    playwright: |
+      page.locator("#country").select_option(label="United States")
+    
+    notes:
+      - "No separate Select class needed in Playwright"
+      - "select_option() accepts label, value, or index"
+      - "Auto-waits for dropdown to be ready"
+  
+  # Frames & iframes
+  frame_handling:
+    selenium: |
+      driver.switch_to.frame("iframe-name")
+      element = driver.find_element(By.ID, "inner")
+      driver.switch_to.default_content()
+    
+    playwright: |
+      frame = page.frame_locator('[name="iframe-name"]')
+      frame.locator("#inner").click()
+    
+    notes:
+      - "No need to switch contexts in Playwright"
+      - "Use frame_locator() for iframe access"
+      - "Automatic frame detection and handling"
+  
+  # Alerts & Dialogs
+  alert_handling:
+    selenium: |
+      alert = driver.switch_to.alert
+      alert.accept()
+    
+    playwright: |
+      page.on("dialog", lambda dialog: dialog.accept())
+      # Trigger action that causes alert
+      page.locator("#delete-btn").click()
+    
+    notes:
+      - "Playwright uses event-driven dialog handling"
+      - "Register handler BEFORE triggering action"
+      - "Auto-dismisses dialogs if no handler registered"
+  
+  # Screenshots
+  screenshots:
+    selenium: |
+      driver.save_screenshot("screenshot.png")
+      element = driver.find_element(By.ID, "logo")
+      element.screenshot("logo.png")
+    
+    playwright: |
+      page.screenshot(path="screenshot.png")
+      page.locator("#logo").screenshot(path="logo.png")
+    
+    notes:
+      - "Playwright supports full page screenshots (full_page=True)"
+      - "Can capture specific elements with locator.screenshot()"
+      - "Built-in screenshot comparison for visual regression"
+  
+  # Navigation
+  navigation:
+    selenium: |
+      driver.get("https://example.com")
+      driver.back()
+      driver.forward()
+      driver.refresh()
+    
+    playwright: |
+      page.goto("https://example.com")
+      page.go_back()
+      page.go_forward()
+      page.reload()
+    
+    notes:
+      - "goto() waits for 'load' event by default"
+      - "Use wait_until option for different wait strategies"
+      - "Supports 'domcontentloaded', 'networkidle', 'commit'"
+
+# ============================================================================
+# MIGRATION STRATEGY
+# ============================================================================
+
+migration_strategy:
+  
+  phase_1_preparation:
+    duration: "1-2 days"
+    activities:
+      - "Audit existing Selenium test suite (count tests, complexity)"
+      - "Identify test dependencies (shared fixtures, utilities)"
+      - "Set up Playwright environment (install, configure)"
+      - "Create proof-of-concept (migrate 3-5 representative tests)"
+      - "Document migration patterns (custom utilities, helpers)"
+    
+    deliverables:
+      - "Migration assessment report"
+      - "POC test suite (validates approach)"
+      - "Migration guide (team-specific patterns)"
+  
+  phase_2_incremental_migration:
+    duration: "Ongoing (2-12 weeks depending on suite size)"
+    approach: "Parallel run strategy"
+    activities:
+      - "Migrate tests in batches (10-20 tests per sprint)"
+      - "Run both Selenium and Playwright suites (ensure parity)"
+      - "Validate results match (same pass/fail status)"
+      - "Retire Selenium tests after Playwright validation"
+      - "Refactor test utilities (remove Selenium helpers)"
+    
+    batch_prioritization:
+      critical_path_tests: "Migrate first (smoke, sanity)"
+      stable_tests: "Migrate next (low maintenance)"
+      flaky_tests: "Migrate last (may require redesign)"
+    
+    risk_mitigation:
+      - "Keep Selenium tests running until Playwright stable"
+      - "Version control both implementations"
+      - "Monitor test execution time (should improve)"
+      - "Track flakiness metrics (should decrease)"
+  
+  phase_3_optimization:
+    duration: "1-2 weeks post-migration"
+    activities:
+      - "Remove unnecessary explicit waits (use auto-wait)"
+      - "Implement parallel execution (contexts, workers)"
+      - "Add network interception (mock slow APIs)"
+      - "Leverage Playwright-specific features (tracing, video)"
+      - "Refactor test fixtures (use Playwright's fixture system)"
+    
+    performance_targets:
+      execution_time: "30-50% faster than Selenium"
+      flakiness_rate: "<2% (down from typical 5-10%)"
+      maintenance_effort: "20-30% reduction"
+
+# ============================================================================
+# BEST PRACTICES
+# ============================================================================
+
+best_practices:
+  
+  locator_strategies:
+    prefer_user_facing:
+      description: "Use visible text, labels, roles (accessibility-first)"
+      examples:
+        - 'page.get_by_role("button", name="Submit")'
+        - 'page.get_by_label("Email address")'
+        - 'page.get_by_text("Welcome back")'
+      rationale: "Resilient to implementation changes, mirrors user behavior"
+    
+    avoid_brittle_selectors:
+      description: "Don't rely on auto-generated IDs or deep CSS paths"
+      bad_examples:
+        - 'page.locator("#root > div > div:nth-child(3) > button")'
+        - 'page.locator("[data-testid=\'btn-1234567890\']")'
+      good_examples:
+        - 'page.get_by_role("button", name="Sign in")'
+        - 'page.locator("[aria-label=\'Close dialog\']")'
+      rationale: "User-facing selectors survive refactoring"
+  
+  async_patterns:
+    use_async_api:
+      description: "Prefer async API for better performance in large suites"
+      example: |
+        import asyncio
+        from playwright.async_api import async_playwright
+        
+        async def test_login():
+            async with async_playwright() as p:
+                browser = await p.chromium.launch()
+                page = await browser.new_page()
+                await page.goto("https://example.com")
+                await page.locator("#login").click()
+      benefits:
+        - "Non-blocking I/O (faster execution)"
+        - "Better resource utilization"
+        - "Scales to hundreds of parallel tests"
+    
+    avoid_mixed_sync_async:
+      description: "Don't mix sync and async Playwright APIs"
+      rationale: "Leads to deadlocks and confusing errors"
+  
+  test_isolation:
+    use_contexts:
+      description: "Create new browser context per test (not new browser)"
+      example: |
+        browser = playwright.chromium.launch()
+        context1 = browser.new_context()  # Test 1
+        context2 = browser.new_context()  # Test 2
+        # Isolated cookies, storage, cache
+      benefits:
+        - "3-5x faster than launching new browsers"
+        - "True test isolation (no state pollution)"
+        - "Parallel execution friendly"
+    
+    clean_state:
+      description: "Reset state between tests automatically"
+      approaches:
+        - "Use pytest fixtures with scope='function'"
+        - "Let context auto-cleanup handle teardown"
+        - "Don't manually clear cookies (context handles it)"
+  
+  wait_strategies:
+    trust_auto_wait:
+      description: "Remove 90% of explicit waits from Selenium code"
+      what_playwright_waits_for:
+        - "Element is attached to DOM"
+        - "Element is visible"
+        - "Element is stable (not animating)"
+        - "Element is enabled (not disabled)"
+        - "Element receives pointer events (not covered)"
+      when_to_add_explicit_waits:
+        - "Waiting for element to disappear (wait_for(state='hidden'))"
+        - "Waiting for network requests (wait_for_load_state('networkidle'))"
+        - "Custom business logic conditions (wait_for_function())"
+    
+    avoid_sleep:
+      bad: "time.sleep(5)  # Wait for page to load"
+      good: 'page.wait_for_load_state("networkidle")'
+      rationale: "Sleep is brittle and wastes time; use deterministic waits"
+  
+  network_interception:
+    mock_apis:
+      description: "Speed up tests by mocking slow/unreliable APIs"
+      example: |
+        page.route("**/api/users", lambda route: route.fulfill(
+            json=[{"id": 1, "name": "Test User"}]
+        ))
+        page.goto("/dashboard")  # API calls mocked
+      benefits:
+        - "10x faster test execution"
+        - "Eliminates external dependencies"
+        - "Enables offline testing"
+    
+    intercept_requests:
+      description: "Monitor and modify network traffic"
+      use_cases:
+        - "Verify API calls made with correct parameters"
+        - "Simulate API errors (500, 404)"
+        - "Test retry logic"
+        - "Validate analytics events"
+
+# ============================================================================
+# COMMON PITFALLS
+# ============================================================================
+
+common_pitfalls:
+  
+  pitfall_1_explicit_waits:
+    issue: "Overusing explicit waits (Selenium mindset)"
+    selenium_antipattern: |
+      # Unnecessary in Playwright
+      page.locator("#btn").wait_for(state="visible")
+      page.locator("#btn").click()
+    
+    playwright_correct: |
+      # Auto-waits for visibility and clickability
+      page.locator("#btn").click()
+    
+    fix: "Trust Playwright's auto-wait; only use explicit waits for hidden/detached states"
+  
+  pitfall_2_stale_elements:
+    issue: "Trying to avoid StaleElementReferenceException (doesn't exist in Playwright)"
+    selenium_antipattern: |
+      # Re-querying to avoid stale element
+      for _ in range(3):
+          try:
+              element = driver.find_element(By.ID, "btn")
+              element.click()
+              break
+          except StaleElementReferenceException:
+              continue
+    
+    playwright_correct: |
+      # Locators are lazy and auto-retry
+      page.locator("#btn").click()
+    
+    fix: "Use locators (not elements); they auto-retry on staleness"
+  
+  pitfall_3_implicit_waits:
+    issue: "Using Selenium's implicit waits (incompatible with Playwright)"
+    selenium_antipattern: |
+      driver.implicitly_wait(10)  # Global timeout
+    
+    playwright_correct: |
+      # Set default timeout globally
+      page.set_default_timeout(10000)
+      # Or per-action
+      page.locator("#btn").click(timeout=5000)
+    
+    fix: "Use set_default_timeout() or per-action timeouts"
+  
+  pitfall_4_iframe_switching:
+    issue: "Trying to switch_to.frame() (doesn't exist in Playwright)"
+    selenium_antipattern: |
+      driver.switch_to.frame("iframe")
+      element = driver.find_element(By.ID, "inner")
+      driver.switch_to.default_content()
+    
+    playwright_correct: |
+      page.frame_locator('[name="iframe"]').locator("#inner").click()
+    
+    fix: "Use frame_locator() for seamless iframe access"
+  
+  pitfall_5_actions_chains:
+    issue: "Using Selenium's ActionChains for complex interactions"
+    selenium_antipattern: |
+      from selenium.webdriver.common.action_chains import ActionChains
+      actions = ActionChains(driver)
+      actions.move_to_element(element).click().perform()
+    
+    playwright_correct: |
+      page.locator("#element").hover()
+      page.locator("#element").click()
+    
+    fix: "Use direct Playwright methods (hover, drag_to, etc.)"
+  
+  pitfall_6_sync_in_async:
+    issue: "Mixing sync and async APIs causes deadlocks"
+    antipattern: |
+      async def test():
+          page = browser.new_page()  # Sync call in async function
+    
+    correct: |
+      async def test():
+          page = await browser.new_page()  # Await async call
+    
+    fix: "Use async API consistently; await all Playwright calls"
+
+# ============================================================================
+# TEST FRAMEWORK INTEGRATION
+# ============================================================================
+
+framework_integration:
+  
+  pytest_example:
+    setup: |
+      # conftest.py
+      import pytest
+      from playwright.sync_api import sync_playwright
+      
+      @pytest.fixture(scope="function")
+      def page():
+          with sync_playwright() as p:
+              browser = p.chromium.launch()
+              context = browser.new_context()
+              page = context.new_page()
+              yield page
+              context.close()
+              browser.close()
+    
+    test_usage: |
+      # test_example.py
+      def test_login(page):
+          page.goto("https://example.com/login")
+          page.locator('[name="username"]').fill("admin")
+          page.locator('[name="password"]').fill("password")
+          page.locator('button[type="submit"]').click()
+          assert page.locator("text=Welcome").is_visible()
+    
+    parallel_execution: |
+      # pytest.ini
+      [pytest]
+      addopts = -n auto --headed --browser chromium
+      
+      # Run with:
+      pytest -n 4  # 4 parallel workers
+  
+  unittest_example:
+    setup: |
+      import unittest
+      from playwright.sync_api import sync_playwright
+      
+      class TestLogin(unittest.TestCase):
+          @classmethod
+          def setUpClass(cls):
+              cls.playwright = sync_playwright().start()
+              cls.browser = cls.playwright.chromium.launch()
+          
+          def setUp(self):
+              self.context = self.browser.new_context()
+              self.page = self.context.new_page()
+          
+          def tearDown(self):
+              self.context.close()
+          
+          @classmethod
+          def tearDownClass(cls):
+              cls.browser.close()
+              cls.playwright.stop()
+    
+    test_usage: |
+      def test_valid_login(self):
+          self.page.goto("https://example.com/login")
+          self.page.locator('[name="username"]').fill("admin")
+          self.page.locator('button[type="submit"]').click()
+          self.assertTrue(self.page.locator("text=Welcome").is_visible())
+
+# ============================================================================
+# DEBUGGING & TROUBLESHOOTING
+# ============================================================================
+
+debugging:
+  
+  trace_viewer:
+    description: "Playwright's built-in debugging tool (better than screenshots)"
+    usage: |
+      context = browser.new_context()
+      context.tracing.start(screenshots=True, snapshots=True)
+      
+      # Run tests
+      page.goto("https://example.com")
+      page.locator("#btn").click()
+      
+      context.tracing.stop(path="trace.zip")
+      # View with: playwright show-trace trace.zip
+    
+    benefits:
+      - "Time-travel debugging (step through test execution)"
+      - "DOM snapshots at each action"
+      - "Network logs (requests/responses)"
+      - "Console logs"
+      - "Screenshots on failure"
+  
+  headed_mode:
+    description: "Run tests with visible browser for debugging"
+    usage: |
+      browser = playwright.chromium.launch(headed=True, slow_mo=1000)
+      # slow_mo adds 1s delay between actions
+    
+    when_to_use:
+      - "Debugging flaky tests"
+      - "Understanding page behavior"
+      - "Developing new tests"
+  
+  inspector:
+    description: "Interactive debugging tool (like browser DevTools)"
+    usage: |
+      # Set environment variable
+      PWDEBUG=1 pytest test_example.py
+      
+      # Or programmatically
+      page.pause()  # Pauses execution, opens inspector
+    
+    features:
+      - "Step through test line-by-line"
+      - "Inspect locators (live preview)"
+      - "Edit and replay actions"
+      - "Record new test steps"
+
+# ============================================================================
+# PERFORMANCE OPTIMIZATION
+# ============================================================================
+
+performance_optimization:
+  
+  parallel_contexts:
+    description: "Run tests in parallel using browser contexts (not browsers)"
+    approach: |
+      # Launch one browser, create multiple contexts
+      browser = playwright.chromium.launch()
+      
+      async def run_test(test_name):
+          context = await browser.new_context()
+          page = await context.new_page()
+          # Run test
+          await context.close()
+      
+      # Run tests in parallel
+      await asyncio.gather(*[run_test(f"test_{i}") for i in range(10)])
+    
+    speedup: "5-10x faster than sequential execution"
+  
+  network_mocking:
+    description: "Mock slow APIs to eliminate network latency"
+    approach: |
+      page.route("**/api/**", lambda route: route.fulfill(
+          json={"data": "mocked"}
+      ))
+    
+    speedup: "10-20x faster for API-heavy tests"
+  
+  reuse_authentication:
+    description: "Save authentication state and reuse across tests"
+    approach: |
+      # Login once, save state
+      context = browser.new_context()
+      page = context.new_page()
+      page.goto("/login")
+      page.locator('[name="username"]').fill("admin")
+      page.locator('button').click()
+      context.storage_state(path="auth.json")
+      
+      # Reuse in other tests
+      context = browser.new_context(storage_state="auth.json")
+      page = context.new_page()
+      page.goto("/dashboard")  # Already logged in
+    
+    speedup: "Skip login in every test (saves 5-10s per test)"
+
+# ============================================================================
+# MIGRATION CHECKLIST
+# ============================================================================
+
+migration_checklist:
+  
+  pre_migration:
+    - "[ ] Audit Selenium test suite (count, complexity, dependencies)"
+    - "[ ] Install Playwright (pip install playwright && playwright install)"
+    - "[ ] Create migration plan (batch strategy, timeline)"
+    - "[ ] Set up parallel run environment (both suites can run)"
+    - "[ ] Document custom utilities needing migration"
+  
+  during_migration:
+    - "[ ] Migrate tests in batches (10-20 per sprint)"
+    - "[ ] Use API mapping reference (above)"
+    - "[ ] Remove explicit waits (trust auto-wait)"
+    - "[ ] Use locators instead of elements"
+    - "[ ] Leverage browser contexts (not new browsers)"
+    - "[ ] Add tracing for flaky tests"
+    - "[ ] Run both suites (validate parity)"
+  
+  post_migration:
+    - "[ ] Remove Selenium dependencies (requirements.txt)"
+    - "[ ] Delete Selenium test files"
+    - "[ ] Optimize Playwright tests (parallel, mocking)"
+    - "[ ] Set up CI/CD integration"
+    - "[ ] Train team on Playwright best practices"
+    - "[ ] Document Playwright-specific patterns"
+  
+  validation:
+    - "[ ] Test pass rate matches Selenium (±2%)"
+    - "[ ] Execution time improved (30-50% faster)"
+    - "[ ] Flakiness reduced (<2%)"
+    - "[ ] All critical paths covered"
+    - "[ ] No remaining Selenium imports"
+
+# ============================================================================
+# ADDITIONAL RESOURCES
+# ============================================================================
+
+resources:
+  official_docs:
+    - url: "https://playwright.dev/python/docs/selenium-grid"
+      title: "Playwright Migration Guide"
+    - url: "https://playwright.dev/python/docs/api/class-page"
+      title: "Playwright Python API Reference"
+  
+  community:
+    - url: "https://github.com/microsoft/playwright-python"
+      title: "Playwright Python GitHub"
+    - url: "https://discord.gg/playwright"
+      title: "Playwright Discord Community"
+  
+  tutorials:
+    - "Playwright official tutorial (playwright.dev)"
+    - "Test automation YouTube channels (Automation Step by Step, Test Automation University)"
+    - "Playwright blog (official releases, best practices)"
+
+# ============================================================================
+# SUMMARY
+# ============================================================================
+
+summary:
+  key_takeaways:
+    - "Playwright: 30-50% faster execution, <2% flakiness (vs 5-10% Selenium)"
+    - "Auto-wait eliminates 90% of explicit waits"
+    - "Locators are lazy and auto-retry (no stale elements)"
+    - "Browser contexts enable true test isolation"
+    - "Network interception makes tests 10x faster"
+    - "Migration is incremental (parallel run strategy)"
+  
+  when_to_migrate:
+    - "Selenium tests are flaky (>5% failure rate)"
+    - "Test execution is slow (>30 minutes for full suite)"
+    - "Need modern features (network mocking, tracing)"
+    - "Team wants better debugging tools"
+  
+  when_not_to_migrate:
+    - "Selenium tests are stable and fast"
+    - "Team lacks bandwidth (migration effort > maintenance savings)"
+    - "Legacy browser support required (IE11, old Safari)"

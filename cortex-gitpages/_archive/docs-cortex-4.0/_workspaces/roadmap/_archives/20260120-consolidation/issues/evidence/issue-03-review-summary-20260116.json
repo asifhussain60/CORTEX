@@ -1,0 +1,39 @@
+{
+  "review_id": "REVIEW-2026-01-16",
+  "timestamp": "2026-01-16T12:00:00Z",
+  "scope": "FULL_ARCHITECTURE",
+  "score": {
+    "overall": 78,
+    "brittleness": 72,
+    "hallucination": 85,
+    "governance": 88,
+    "assumptions": 70,
+    "debt": 75
+  },
+  "findings": {
+    "total": 19,
+    "critical": 2,
+    "high": 5,
+    "medium": 8,
+    "low": 4
+  },
+  "blocking_issues": 1,
+  "quick_wins": 6,
+  "estimated_fix_hours": 36,
+  "audit_health": {
+    "total_entries": 2921,
+    "unique_acs": 246,
+    "completion_rate": 93.1,
+    "hash_chain_valid": true
+  },
+  "governance_compliance": {
+    "CORE-005": "FAIL",
+    "CORE-008": "PASS",
+    "CORE-013": "FAIL",
+    "CORE-026": "PASS",
+    "CORE-027": "PASS"
+  },
+  "historical_debt_resolved": "71%",
+  "next_review_recommended": "2026-01-23",
+  "generated_by": "cortex-review-system"
+}

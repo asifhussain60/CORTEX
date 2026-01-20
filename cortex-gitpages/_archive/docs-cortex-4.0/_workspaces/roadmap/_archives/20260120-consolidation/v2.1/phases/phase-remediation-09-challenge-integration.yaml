@@ -1,0 +1,304 @@
+metadata:
+  title: PHASE-REMEDIATION-09 - Challenge Integration Gap in Master Orchestrator
+  description: |
+    Remediation of critical Challenge Integration Gap identified in Issue #9.
+    
+    PROBLEM: ChallengeGenerator exists but is NOT automatically integrated into every turn.
+    Users don't receive proactive challenge identification, violating INT-RULE-009 
+    (Mandatory Intelligent Challenge) and CORTEX.prompt.md requirements.
+    
+    SOLUTION: 3-layer integration system:
+    1. ChallengeIntegrationOrchestrator - Wraps challenge generation with confidence filtering
+    2. HolisticContextBuilder - Merges intent + analysis + challenges + recommendations
+    3. TurnResponseWithChallenges - Automatic challenge injection into every turn
+    
+    IMPACT: Enables INT-RULE-009 enforcement, holistic context generation, 
+    and proactive risk identification per user turn.
+  phase_id: PHASE-REMEDIATION-09
+  status: NOT_STARTED
+  locked: false
+  date_created: '2026-01-19T00:00:00Z'
+  issue_reference: 'https://github.com/asifhussain60/CORTEX/issues/9'
+  severity: HIGH
+  blocks_production: true
+
+acceptance_criteria:
+  - ac_id: AC-CIG-001-01
+    title: Challenge Integration Orchestrator
+    description: |
+      Create ChallengeIntegrationOrchestrator that wraps ChallengeGenerator and:
+      - Generates challenges from code context, intent, and changes
+      - Filters challenges by confidence threshold (0.30 per INT-RULE-009)
+      - Sorts by severity (CRITICAL → HIGH → MEDIUM → LOW)
+      - Handles empty challenge lists gracefully
+    acceptance_tests:
+      - Challenge generation called on every turn
+      - Confidence filtering: challenges < 0.3 excluded
+      - Confidence filtering: challenges >= 0.3 included
+      - Severity sorting order correct (CRITICAL first)
+      - Empty challenges returns empty list
+      - Mixed severity challenges sorted correctly
+    estimated_tests: 20
+    estimated_hours: 4
+    files_to_create:
+      - src/core/orchestrator/challenge_integration.py
+
+  - ac_id: AC-CIG-001-02
+    title: Holistic Context Builder
+    description: |
+      Create HolisticContextBuilder that merges all context dimensions:
+      - Intent (canonicalized user request)
+      - Code Analysis (AST, imports, structure)
+      - Challenges (with severity, description, mitigation)
+      - Recommendations (prioritized actions)
+      - Git Context (history, relationships)
+      
+      Output: YAML structure matching CORTEX.prompt.md holistic context format
+    acceptance_tests:
+      - All dimensions merged into single context
+      - Challenges included in reflection section
+      - Recommendations included in reflection section
+      - YAML serialization correct
+      - Empty challenges handled
+      - Structure matches CORTEX.prompt.md format
+    estimated_tests: 18
+    estimated_hours: 4
+    files_to_create:
+      - src/core/orchestrator/holistic_context_builder.py
+
+  - ac_id: AC-CIG-001-03
+    title: Turn Response With Challenges Integration
+    description: |
+      Create TurnResponseWithChallenges that wraps TurnResponseGenerator:
+      - Calls ChallengeIntegrationOrchestrator on every turn
+      - Calls HolisticContextBuilder to merge dimensions
+      - Adds challenges_segment to response after header
+      - Adds recommendations_segment to response
+      - Adds holistic_context_segment to response
+      - No segments added if no challenges/recommendations exist
+    acceptance_tests:
+      - Challenges segment added after header
+      - Recommendations segment added
+      - Holistic context segment added
+      - No segments if no challenges
+      - Segment order preserved
+      - Response structure still valid
+    estimated_tests: 15
+    estimated_hours: 4
+    files_to_create:
+      - src/orchestrators/response/turn_response_with_challenges.py
+
+  - ac_id: AC-CIG-002-01
+    title: Stage 2.5 Gate Challenge Integration
+    description: |
+      Modify Stage 2.5 Gate to integrate challenge information:
+      - Call ChallengeIntegrationOrchestrator during evaluate()
+      - Attach challenges to ConfirmationContext
+      - Include challenges in decision rationale
+      - Pass challenges to approval gate
+    acceptance_tests:
+      - Challenges generated during gate evaluation
+      - Challenges attached to context
+      - Challenges appear in decision
+      - Gate still makes correct decisions
+      - Zero regressions to existing gate tests
+    estimated_tests: 12
+    estimated_hours: 3
+    files_to_modify:
+      - src/orchestrators/core/stage_2_5_gate.py
+
+  - ac_id: AC-CIG-002-02
+    title: Turn Response Generator Challenge Hook
+    description: |
+      Modify TurnResponseGenerator to use new challenge-aware path:
+      - Call TurnResponseWithChallenges.generate_response_with_challenges()
+      - Maintain backward compatibility with existing interface
+      - Challenge injection is automatic (user doesn't need to request)
+    acceptance_tests:
+      - Response generation works with challenges
+      - Response generation works without challenges
+      - Response format unchanged
+      - All existing tests still pass
+      - Zero regressions
+    estimated_tests: 16
+    estimated_hours: 3
+    files_to_modify:
+      - src/orchestrators/response/turn_response_generator.py
+
+  - ac_id: AC-CIG-003-01
+    title: Unit Tests - Challenge Integration
+    description: |
+      Comprehensive unit test suite for ChallengeIntegrationOrchestrator:
+      - Test confidence threshold filtering
+      - Test severity-based sorting
+      - Test edge cases (empty, all low-confidence, mixed)
+      - Test integration with ChallengeGenerator
+    estimated_tests: 25
+    estimated_hours: 3
+    files_to_create:
+      - tests/unit/core/orchestrator/test_challenge_integration.py
+
+  - ac_id: AC-CIG-003-02
+    title: Unit Tests - Holistic Context Builder
+    description: |
+      Comprehensive unit test suite for HolisticContextBuilder:
+      - Test all dimensions merged correctly
+      - Test YAML serialization
+      - Test structure matches spec
+      - Test edge cases
+    estimated_tests: 20
+    estimated_hours: 2
+    files_to_create:
+      - tests/unit/core/orchestrator/test_holistic_context_builder.py
+
+  - ac_id: AC-CIG-003-03
+    title: Unit Tests - Turn Response With Challenges
+    description: |
+      Comprehensive unit test suite for TurnResponseWithChallenges:
+      - Test segment insertion
+      - Test segment ordering
+      - Test empty challenge handling
+      - Test integration with base generator
+    estimated_tests: 22
+    estimated_hours: 2
+    files_to_create:
+      - tests/unit/orchestrators/response/test_response_with_challenges.py
+
+  - ac_id: AC-CIG-004-01
+    title: Integration Tests - Stage 2.5 With Challenges
+    description: |
+      Integration tests for Stage 2.5 Gate with challenge integration:
+      - Test gate evaluation includes challenges
+      - Test decision quality with challenges
+      - Test approval logic unchanged
+      - Test edge cases
+    estimated_tests: 18
+    estimated_hours: 2
+    files_to_create:
+      - tests/integration/test_stage_2_5_gate_with_challenges.py
+
+  - ac_id: AC-CIG-004-02
+    title: Integration Tests - End-to-End Challenge Flow
+    description: |
+      End-to-end integration tests validating complete challenge flow:
+      - Challenge generation on every turn
+      - Challenges appear in responses
+      - Holistic context generated and valid
+      - INT-RULE-009 enforced (challenges always generated when applicable)
+      - Real-world scenarios with actual code
+    estimated_tests: 35
+    estimated_hours: 4
+    files_to_create:
+      - tests/integration/test_challenge_end_to_end.py
+
+governance_enforcement:
+  - rule_id: INT-RULE-009
+    rule_name: Mandatory Intelligent Challenge
+    enforcement: STRICT
+    verification: All ACs include tests that validate challenge generation on every turn
+    
+  - rule_id: CORE-008
+    rule_name: Test-Driven Development
+    enforcement: REQUIRED
+    verification: Tests written before implementation, all tests passing
+
+  - rule_id: CORE-011
+    rule_name: Type Hints
+    enforcement: 100%
+    verification: All new functions have complete type hints
+
+  - rule_id: CORE-012
+    rule_name: Docstrings
+    enforcement: Google Style
+    verification: All public APIs have comprehensive docstrings
+
+  - rule_id: CORE-029
+    rule_name: Response Headers
+    enforcement: REQUIRED
+    verification: Challenge headers include in response header system
+
+execution_plan:
+  phase_1_layer_creation:
+    title: Create Challenge Integration Layer (16 hours)
+    acs:
+      - AC-CIG-001-01
+      - AC-CIG-001-02
+      - AC-CIG-001-03
+    estimated_hours: 16
+    sequence: Sequential - foundation layer
+
+  phase_2_gate_integration:
+    title: Integrate into Stage 2.5 Gate (8 hours)
+    acs:
+      - AC-CIG-002-01
+      - AC-CIG-002-02
+    estimated_hours: 8
+    depends_on: phase_1_layer_creation
+    sequence: Sequential - orchestrator integration
+
+  phase_3_unit_tests:
+    title: Unit Test Suite (7 hours)
+    acs:
+      - AC-CIG-003-01
+      - AC-CIG-003-02
+      - AC-CIG-003-03
+    estimated_hours: 7
+    depends_on: phase_1_layer_creation
+    sequence: Parallel - can start after phase_1
+
+  phase_4_integration_tests:
+    title: Integration Tests (6 hours)
+    acs:
+      - AC-CIG-004-01
+      - AC-CIG-004-02
+    estimated_hours: 6
+    depends_on: phase_2_gate_integration
+    sequence: Sequential - validates full integration
+
+deployment:
+  backward_compatibility: FULL - All changes are additive
+  risk_level: LOW-MEDIUM
+  rollback_plan: |
+    1. Revert 2 modified files to previous version
+    2. Remove 3 new core files
+    3. Run tests (should pass - additive change)
+  
+estimated_hours_total: 44
+estimated_days: 5
+estimated_developers: 2
+
+success_metrics:
+  challenge_generation_every_turn: 100%
+  confidence_filtering_accuracy: 100%
+  holistic_context_generation: 100%
+  test_coverage: ">=95%"
+  governance_compliance: 100%
+  int_rule_009_enforcement: STRICT
+  performance_degradation: "<10% latency increase"
+  test_pass_rate: "100%"
+  no_regressions: true
+
+dependencies:
+  requires: PHASE-REMEDIATION-08
+  blocks: PHASE-DEPLOYMENT
+  related_issues:
+    - issue_1: Missing Recommendation Integration (can be done alongside)
+    - issue_2: INT-RULE-009 Not Enforced (RESOLVED by this phase)
+    - issue_3: Holistic Context Not Generated (RESOLVED by this phase)
+    - issue_4: Challenge Confidence Filtering Missing (RESOLVED by this phase)
+    - issue_5: Response Header Integration Incomplete (addressed in this phase)
+
+validation:
+  pre_commit:
+    - All tests pass (unit + integration)
+    - Type hint coverage >= 95%
+    - Docstring coverage >= 95%
+    - Governance rules enforced
+    - Hash chain integrity maintained
+
+  phase_completion:
+    - All 10 ACs marked COMPLETED
+    - All acceptance tests passing
+    - Validator confirms phase_tracker sync
+    - Git checkpoint created
+    - Completion report generated

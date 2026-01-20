@@ -1,0 +1,647 @@
+# =============================================================================
+# CORTEX IMPLEMENTATION AUDIT - ACTUAL vs ROADMAP
+# =============================================================================
+# Generated: 2026-01-20
+# Purpose: Comprehensive audit of what's ACTUALLY implemented vs roadmap claims
+# Methodology: Filesystem inspection, code grep, test pattern analysis
+# =============================================================================
+
+metadata:
+  audit_date: "2026-01-20"
+  auditor: "GitHub Copilot"
+  scope: "Full CORTEX codebase (cortex/, cortex_brain/, tests/, _workspaces/roadmap/phases/)"
+  confidence: "HIGH (based on direct filesystem/code inspection)"
+
+# =============================================================================
+# SECTION 1: MCP TOOLS EXPOSED
+# =============================================================================
+
+mcp_tools_exposed:
+  summary: "14 MCP tools exposed via @mcp_tool decorator"
+  location: "cortex/mcp/domain_operations.py"
+  decorator_source: "cortex/mcp/decorators.py"
+  
+  tools_list:
+    - name: "analyze_code_structure"
+      description: "Analyze code structure and extract patterns"
+      parameters: ["code", "language"]
+      status: "IMPLEMENTED (stub)"
+    
+    - name: "analyze_dependencies"
+      description: "Analyze code dependencies and relationships"
+      parameters: ["module"]
+      status: "IMPLEMENTED (stub)"
+    
+    - name: "analyze_performance"
+      description: "Analyze code performance characteristics"
+      parameters: ["code"]
+      status: "IMPLEMENTED (stub)"
+    
+    - name: "validate_context"
+      description: "Validate execution context for operation"
+      parameters: ["context", "rules"]
+      status: "IMPLEMENTED (stub)"
+    
+    - name: "validate_business_rules"
+      description: "Validate business rule compliance"
+      parameters: ["operation", "rules"]
+      status: "IMPLEMENTED (stub)"
+    
+    - name: "validate_schema"
+      description: "Validate data against schema"
+      parameters: ["data", "schema"]
+      status: "IMPLEMENTED (stub)"
+    
+    - name: "transform_code"
+      description: "Transform code using specified transformation"
+      parameters: ["code", "transformation"]
+      status: "IMPLEMENTED (stub)"
+    
+    - name: "transform_data"
+      description: "Transform data using transformation rules"
+      parameters: ["data", "rules"]
+      status: "IMPLEMENTED (stub)"
+    
+    - name: "synthesize_knowledge"
+      description: "Synthesize knowledge from multiple sources"
+      parameters: ["sources"]
+      status: "IMPLEMENTED (stub)"
+    
+    - name: "synthesize_solution"
+      description: "Synthesize solution from multiple approaches"
+      parameters: ["approaches"]
+      status: "IMPLEMENTED (stub)"
+    
+    - name: "resolve_conflicts"
+      description: "Resolve conflicts in knowledge or code"
+      parameters: ["conflicts"]
+      status: "IMPLEMENTED (stub)"
+    
+    - name: "resolve_ambiguities"
+      description: "Resolve ambiguities in operation context"
+      parameters: ["ambiguities", "context"]
+      status: "IMPLEMENTED (stub)"
+    
+    - name: "orchestrate_operation"
+      description: "Orchestrate multi-step operation execution"
+      parameters: ["steps", "context"]
+      status: "IMPLEMENTED (stub)"
+    
+    - name: "route_to_handler"
+      description: "Route operation to appropriate handler"
+      parameters: ["operation_type", "context"]
+      status: "IMPLEMENTED (stub)"
+  
+  implementation_notes: |
+    - All 14 tools are STUB implementations returning mock data
+    - Tools decorated with @mcp_tool(name="...", description="...", parameters={...})
+    - No actual business logic implemented
+    - Tools follow MCP protocol structure but lack real orchestrator integration
+
+# =============================================================================
+# SECTION 2: TESTS BY AC-ID (UNIQUE ACCEPTANCE CRITERIA COVERAGE)
+# =============================================================================
+
+tests_by_ac_id:
+  summary: "257 unique AC-IDs referenced across 409 test files"
+  methodology: "Regex pattern matching AC-[A-Z]+-\\d+-\\d+ across tests/"
+  
+  total_unique_ac_ids: 257
+  total_test_files: 409
+  total_test_references: 1189
+  
+  top_tested_ac_ids:
+    - ac_id: "AC-AR-001-01"
+      references: 55
+      description: "Tier 0 governance rules (most tested)"
+    
+    - ac_id: "AC-NFR-003-01"
+      references: 44
+      description: "Security hardening / credential protection"
+    
+    - ac_id: "AC-FIX-001-01"
+      references: 38
+      description: "Hash chain integrity fixes"
+    
+    - ac_id: "AC-AR-006-01"
+      references: 33
+      description: "MasterOrchestrator coordination"
+    
+    - ac_id: "AC-ENH-001-02"
+      references: 25
+      description: "Enhancement request handling"
+    
+    - ac_id: "AC-FIX-001-02"
+      references: 21
+      description: "Hash chain calculation"
+    
+    - ac_id: "AC-NFR-001-01"
+      references: 19
+      description: "Code coverage ≥80%"
+    
+    - ac_id: "AC-IR-004-01"
+      references: 19
+      description: "Intent routing logic"
+    
+    - ac_id: "AC-AR-010-02"
+      references: 18
+      description: "Folder migration automation"
+  
+  ac_id_categories:
+    AC-AR: "Architecture (AR) - 53 unique AC-IDs"
+    AC-NFR: "Non-Functional Requirements - 24 unique AC-IDs"
+    AC-FIX: "Fixes/Remediation - 12 unique AC-IDs"
+    AC-FR: "Functional Requirements - 24 unique AC-IDs"
+    AC-GV: "Governance - 8 unique AC-IDs"
+    AC-HP: "High Priority - 6 unique AC-IDs"
+    AC-IR: "Intent Router - 4 unique AC-IDs"
+    AC-ENH: "Enhancements - 4 unique AC-IDs"
+    AC-DEPLOY: "Deployment - 11 unique AC-IDs"
+    AC-CONF: "Confirmation Gate - 4 unique AC-IDs"
+    AC-DB: "Domain Brain - 6 unique AC-IDs"
+    AC-REM: "Remediation - 20 unique AC-IDs"
+    AC-PROD: "Production - 15 unique AC-IDs"
+    AC-PHX: "Phase X - 20 unique AC-IDs"
+    AC-GC: "Governance Composition - 8 unique AC-IDs"
+    AC-IKP: "Knowledge Protocol - 10 unique AC-IDs"
+    AC-MCP: "MCP Integration - 8 unique AC-IDs"
+    AC-TC: "Test Coverage - 6 unique AC-IDs"
+    AC-TT: "Template Tool - 6 unique AC-IDs"
+    AC-RESP: "Response Handling - 4 unique AC-IDs"
+    AC-EX: "Execution - 5 unique AC-IDs"
+  
+  test_coverage_quality: |
+    - HIGH coverage for core governance (AC-AR-001, AC-FR-001)
+    - HIGH coverage for infrastructure (AC-NFR-002, AC-NFR-003)
+    - MEDIUM coverage for orchestrators (AC-AR-006, AC-AR-011)
+    - LOW coverage for MCP tools (AC-MCP-XXX)
+    - LOW coverage for deployment (AC-DEPLOY-XXX)
+
+# =============================================================================
+# SECTION 3: CORE MODULES (ACTUAL FILE COUNTS)
+# =============================================================================
+
+core_modules:
+  summary: "16 major modules in cortex/ with 413 Python files total"
+  
+  module_inventory:
+    - name: "brain/"
+      file_count: 269
+      description: "Domain orchestrators, knowledge management, business logic"
+      status: "LARGEST module by far"
+    
+    - name: "orchestrators/"
+      file_count: 43
+      description: "Core orchestration framework, registry, routing"
+      status: "ACTIVE - core architecture"
+    
+    - name: "core/"
+      file_count: 35
+      description: "Base classes, protocols, path resolution, state management"
+      status: "ACTIVE - foundational"
+    
+    - name: "infrastructure/"
+      file_count: 22
+      description: "Audit logging, circuit breaker, telemetry, retry handler"
+      status: "ACTIVE - cross-cutting concerns"
+    
+    - name: "tools/"
+      file_count: 16
+      description: "CLI tools, scaffolders, generators, governance dashboard"
+      status: "ACTIVE - developer tooling"
+    
+    - name: "mcp/"
+      file_count: 9
+      description: "MCP protocol, server, endpoints, domain_operations"
+      status: "ACTIVE - MCP integration"
+    
+    - name: "api/"
+      file_count: 8
+      description: "API endpoints, telemetry ingestion, compliance metrics"
+      status: "ACTIVE - external interface"
+    
+    - name: "tests/"
+      file_count: 5
+      description: "Tests within cortex/tests/ (separate from root tests/)"
+      status: "ACTIVE - unit tests"
+    
+    - name: "scripts/"
+      file_count: 2
+      description: "Utility scripts"
+      status: "MINIMAL"
+    
+    - name: "deployment/"
+      file_count: 1
+      description: "Deployment scripts"
+      status: "MINIMAL"
+    
+    - name: "devx/"
+      file_count: 1
+      description: "Developer experience tools"
+      status: "MINIMAL"
+    
+    - name: "domain_brain/"
+      file_count: 1
+      description: "Domain brain integration"
+      status: "MINIMAL"
+    
+    - name: "domain_orchestrators/"
+      file_count: 1
+      description: "Domain orchestrator integration"
+      status: "MINIMAL"
+    
+    - name: "intent_router/"
+      file_count: 1
+      description: "Intent routing logic"
+      status: "MINIMAL"
+    
+    - name: ".github/"
+      file_count: 0
+      description: "GitHub workflows"
+      status: "EMPTY"
+    
+    - name: "__pycache__/"
+      file_count: 0
+      description: "Python cache"
+      status: "IGNORED"
+  
+  total_python_files: 413
+  
+  observations: |
+    - brain/ dominates with 65% of all Python files (269/413)
+    - Most modules are ACTIVE with meaningful implementations
+    - Several single-file modules (deployment, devx, intent_router) suggest incomplete migration
+    - No evidence of abandoned code - all modules have purpose
+
+# =============================================================================
+# SECTION 4: ORCHESTRATOR INVENTORY
+# =============================================================================
+
+orchestrators:
+  summary: "9 concrete orchestrator classes identified"
+  location: "cortex/orchestrators/"
+  
+  orchestrator_classes:
+    - name: "MasterOrchestrator"
+      file: "cortex/orchestrators/core/master_orchestrator.py"
+      base_class: "IOrchestrator"
+      status: "IMPLEMENTED"
+      description: "Top-level coordinator for domain orchestrators"
+    
+    - name: "PlanningOrchestrator"
+      file: "cortex/orchestrators/domain/planning_orchestrator.py"
+      base_class: "IOrchestrator"
+      status: "IMPLEMENTED"
+      description: "Planning domain operations"
+    
+    - name: "WorkflowOrchestrator"
+      file: "cortex/orchestrators/core/workflow_orchestrator.py"
+      base_class: "None"
+      status: "IMPLEMENTED"
+      description: "Workflow coordination"
+    
+    - name: "ComposedOrchestrator"
+      file: "cortex/orchestrators/composition/composition_engine.py"
+      base_class: "None"
+      status: "IMPLEMENTED"
+      description: "Composite orchestrator pattern"
+    
+    - name: "IntentRouter"
+      file: "cortex/orchestrators/core/intent_router.py"
+      base_class: "IOrchestrator"
+      status: "IMPLEMENTED"
+      description: "Intent routing and classification (Stage 2)"
+    
+    - name: "ComposableOrchestrator"
+      file: "cortex/orchestrators/domains/orchestrator_traits.py"
+      base_class: "Protocol"
+      status: "INTERFACE"
+      description: "Protocol for composable orchestrators"
+    
+    - name: "AnalyticalOrchestrator"
+      file: "cortex/orchestrators/domains/orchestrator_traits.py"
+      base_class: "Protocol"
+      status: "INTERFACE"
+      description: "Protocol for analytical orchestrators"
+    
+    - name: "ExecutiveOrchestrator"
+      file: "cortex/orchestrators/domains/orchestrator_traits.py"
+      base_class: "Protocol"
+      status: "INTERFACE"
+      description: "Protocol for executive orchestrators"
+    
+    - name: "ValidatingOrchestrator"
+      file: "cortex/orchestrators/domains/orchestrator_traits.py"
+      base_class: "Protocol"
+      status: "INTERFACE"
+      description: "Protocol for validating orchestrators"
+    
+    - name: "IntegrativeOrchestrator"
+      file: "cortex/orchestrators/domains/orchestrator_traits.py"
+      base_class: "Protocol"
+      status: "INTERFACE"
+      description: "Protocol for integrative orchestrators"
+  
+  registry_support:
+    - "OrchestratorRegistry (cortex/orchestrators/registry/orchestrator_registry.py)"
+    - "OrchestratorMetadata for metadata management"
+    - "DiscoveryEngine for dynamic orchestrator discovery"
+  
+  observations: |
+    - 5 Protocol interfaces (trait definitions)
+    - 4 concrete orchestrator implementations
+    - Registry architecture in place but limited concrete orchestrators
+    - MasterOrchestrator + IntentRouter form core routing infrastructure
+    - Significant gap between planned orchestrators (roadmap) and implemented ones
+
+# =============================================================================
+# SECTION 5: GOVERNANCE FILES (TIER0/1/2)
+# =============================================================================
+
+governance_files:
+  summary: "Minimal governance files - mostly __init__.py stubs"
+  
+  tier0:
+    location: "cortex_brain/tier0/"
+    file_count: 8
+    files:
+      - "import_resolver.py (ACTIVE)"
+      - "linux_path_compat.py (ACTIVE)"
+      - "macos_path_compat.py (ACTIVE)"
+      - "windows_path_compat.py (ACTIVE)"
+      - "path_abstraction.py (ACTIVE)"
+      - "test_flakiness_audit.py (TEST)"
+      - "test_isolation_cleanup.py (TEST)"
+      - "__init__.py (STUB)"
+    governance_files: 0
+    yaml_files:
+      - "repo-registry.yaml"
+      - "prompt-versions.yaml"
+    status: "INFRASTRUCTURE only - no governance rules"
+    notes: |
+      - Tier0 contains cross-platform path compatibility
+      - Test isolation/flakiness utilities
+      - NO core-rules.yaml or governance rule definitions
+      - Roadmap claims Tier0 governance but not implemented
+  
+  tier1:
+    location: "cortex_brain/tier1/"
+    file_count: 3
+    directories:
+      - "governance/ (1 file)"
+      - "orchestrators/ (__init__.py only)"
+    files:
+      - "governance/confirmation_gate_rules.py (ACTIVE)"
+      - "orchestrators/__init__.py (STUB)"
+      - "__init__.py (STUB)"
+    status: "MINIMAL - only confirmation gate rules"
+    notes: |
+      - Single governance file: confirmation_gate_rules.py
+      - Orchestrators directory exists but empty
+      - Tier1 mostly stub infrastructure
+  
+  tier2:
+    location: "cortex_brain/tier2/"
+    file_count: 6
+    directories:
+      - "coherence/ (__init__.py only)"
+      - "credential_protection/ (__init__.py only)"
+      - "hallucination_prevention/ (__init__.py only)"
+      - "security/ (__init__.py only)"
+    files:
+      - "resilience.py (ACTIVE)"
+      - "coherence/__init__.py (STUB)"
+      - "credential_protection/__init__.py (STUB)"
+      - "hallucination_prevention/__init__.py (STUB)"
+      - "security/__init__.py (STUB)"
+      - "__init__.py (STUB)"
+    status: "MOSTLY STUBS - directory structure only"
+    notes: |
+      - Only resilience.py has implementation
+      - All security/coherence/hallucination modules are stubs
+      - Directory structure matches roadmap but no content
+  
+  overall_governance_status: |
+    ❌ CRITICAL GAP: Roadmap claims extensive Tier0/1/2 governance
+    ✅ REALITY: Only 3 active governance files:
+       - tier0: 0 governance files (infrastructure only)
+       - tier1: 1 file (confirmation_gate_rules.py)
+       - tier2: 1 file (resilience.py)
+    
+    Roadmap claims:
+    - "Tier 0 rules loaded from cortex_brain/tier0/governance/core-rules.yaml"
+    - "Tier precedence enforced (0 > 1 > 2)"
+    - "Tier 0 rules immutable"
+    
+    Reality:
+    - No core-rules.yaml exists
+    - No tier precedence system
+    - No immutable rule enforcement
+
+# =============================================================================
+# SECTION 6: PHASE IMPLEMENTATION REALITY CHECK
+# =============================================================================
+
+phase_implementation:
+  summary: "29 phase YAML files in _workspaces/roadmap/phases/"
+  total_phases: 29
+  
+  sample_phase_analysis:
+    - phase_id: "PHASE-14"
+      title: "Production Rollout & Adoption"
+      status_claimed: "NOT_STARTED"
+      ac_ids: 4
+      completed_ac_ids: 0
+      files_to_create: "Not specified"
+      reality_check: "CONSISTENT - marked NOT_STARTED, no files claimed"
+    
+    - phase_id: "PHASE-17"
+      title: "Domain Brain: Strategic Knowledge Centralization"
+      status_claimed: "COMPLETED"
+      ac_ids: 12
+      completed_ac_ids: 12
+      completed_at: "2026-01-17T02:05:00Z"
+      files_to_create: "Not listed in visible section"
+      reality_check: "CLAIMED COMPLETE - needs verification"
+      notes: |
+        - Duplicate upload detection
+        - Brain vacuum prevention
+        - Conflict escalation workflow
+        - Orphan reference detection
+    
+    - phase_id: "PHASE-23"
+      title: "Complexity-Aware Confirmation Gate"
+      status_claimed: "NOT_STARTED"
+      ac_ids: 4
+      estimated_hours: 23
+      files_to_create: "Listed (Stage 2.5 insertion)"
+      reality_check: "CONSISTENT - marked NOT_STARTED"
+      notes: |
+        - AC-CONF-001-01 through AC-CONF-004-01
+        - Stage 2.5 intelligence layer
+        - Complexity assessment gate
+    
+    - phase_id: "PHASE-25"
+      title: "Governance Composition"
+      status_claimed: "COMPLETE ✅"
+      ac_ids: 8
+      completed_at: "2026-01-19T18:45:00Z"
+      total_tests: "180+"
+      files_to_create: "Listed extensively"
+      reality_check: "CLAIMED COMPLETE - needs verification"
+      deliverables_claimed:
+        - "Profile definition system with registry and YAML parser"
+        - "Severity-based execution gates (BLOCKED/WARNING/INFO)"
+        - "Intent-profile selection matrix with caching"
+        - "Rule dependency resolution with DAG validation"
+        - "Composite rule evaluation engine"
+        - "8 core governance profiles"
+  
+  phase_status_summary:
+    completed: "Unknown (requires full scan)"
+    in_progress: "Unknown"
+    not_started: "At least 2 (PHASE-14, PHASE-23)"
+    
+  verification_required: |
+    - PHASE-17 claims 100% complete - verify domain brain files exist
+    - PHASE-25 claims 180+ tests - verify test files exist
+    - Check all "COMPLETE" phases for actual deliverables
+
+# =============================================================================
+# SECTION 7: KEY FINDINGS & GAPS
+# =============================================================================
+
+key_findings:
+  what_exists:
+    - "✅ 14 MCP tools (STUB implementations)"
+    - "✅ 257 unique AC-IDs with 1189 test references"
+    - "✅ 409 test files across codebase"
+    - "✅ 413 Python files in cortex/"
+    - "✅ 9 orchestrator classes (5 protocols + 4 concrete)"
+    - "✅ Robust infrastructure (audit logging, circuit breaker, telemetry)"
+    - "✅ 29 phase YAML files documenting roadmap"
+    - "✅ Strong test coverage for governance (AC-AR-001, AC-NFR-003)"
+  
+  what_is_missing:
+    - "❌ MCP tools are STUBS - no real business logic"
+    - "❌ Tier0/1/2 governance MOSTLY EMPTY - roadmap claims not delivered"
+    - "❌ Limited concrete orchestrators (only 4 vs dozens in brain/)"
+    - "❌ No core-rules.yaml in tier0/governance/"
+    - "❌ Many tier2 security modules are empty __init__.py files"
+    - "❌ Significant gap between phase deliverables claimed vs actual files"
+  
+  critical_gaps:
+    - gap_id: "GAP-001"
+      title: "MCP Tools Are Non-Functional Stubs"
+      severity: "HIGH"
+      impact: "MCP server can start but tools return mock data"
+      recommendation: "Implement actual orchestrator integration in domain_operations.py"
+    
+    - gap_id: "GAP-002"
+      title: "Governance Tier System Not Implemented"
+      severity: "HIGH"
+      impact: "Tests reference AC-AR-001-01 (Tier0 rules) but no rules exist"
+      recommendation: "Create cortex_brain/tier0/governance/core-rules.yaml"
+    
+    - gap_id: "GAP-003"
+      title: "Orchestrator Implementation Gap"
+      severity: "MEDIUM"
+      impact: "Only 4 concrete orchestrators vs extensive domain logic in brain/"
+      recommendation: "Migrate brain/ domain logic into proper orchestrators"
+    
+    - gap_id: "GAP-004"
+      title: "Phase Deliverable Verification Needed"
+      severity: "MEDIUM"
+      impact: "Several phases marked COMPLETE but files not verified"
+      recommendation: "Audit PHASE-17, PHASE-25 deliverables"
+    
+    - gap_id: "GAP-005"
+      title: "Tier2 Security Modules Empty"
+      severity: "MEDIUM"
+      impact: "coherence/, credential_protection/, hallucination_prevention/ are stubs"
+      recommendation: "Implement tier2 modules or remove stub directories"
+
+# =============================================================================
+# SECTION 8: RECOMMENDATIONS
+# =============================================================================
+
+recommendations:
+  immediate_actions:
+    - "1. Verify COMPLETE phases (17, 25) have actual deliverables"
+    - "2. Create cortex_brain/tier0/governance/core-rules.yaml"
+    - "3. Implement MCP tool business logic in domain_operations.py"
+    - "4. Document orchestrator implementation roadmap"
+    - "5. Clean up empty tier2 stub directories"
+  
+  short_term:
+    - "Audit all 29 phases for deliverable vs reality gaps"
+    - "Consolidate brain/ domain logic into orchestrators/"
+    - "Implement tier1/tier2 governance modules"
+    - "Add integration tests for MCP tool execution"
+  
+  long_term:
+    - "Establish continuous integration to detect roadmap drift"
+    - "Create automated phase completion verification"
+    - "Build governance rule validation framework"
+    - "Document actual vs planned architecture differences"
+
+# =============================================================================
+# SECTION 9: METRICS SUMMARY
+# =============================================================================
+
+metrics_summary:
+  codebase_size:
+    total_python_files_cortex: 413
+    total_test_files: 409
+    total_phase_yamls: 29
+    mcp_tools: 14
+    orchestrators: 9
+    governance_files: 3
+  
+  test_coverage:
+    unique_ac_ids: 257
+    total_test_references: 1189
+    avg_tests_per_ac_id: 4.6
+    top_ac_coverage: "AC-AR-001-01 (55 refs)"
+  
+  implementation_gaps:
+    mcp_tools_functional: "0/14 (0%)"
+    governance_tiers_implemented: "1/3 (33%)"
+    orchestrators_concrete: "4/? (unknown target)"
+    tier2_modules_implemented: "1/4 (25%)"
+  
+  quality_indicators:
+    test_file_count: "HIGH (409 files)"
+    ac_id_coverage: "EXCELLENT (257 unique)"
+    infrastructure_maturity: "HIGH (audit logging, circuit breaker, telemetry)"
+    governance_maturity: "LOW (mostly stubs)"
+    orchestrator_maturity: "MEDIUM (core present, domain incomplete)"
+
+# =============================================================================
+# AUDIT CONCLUSION
+# =============================================================================
+
+conclusion: |
+  CORTEX has a STRONG foundational architecture with excellent test coverage
+  and infrastructure. However, there are SIGNIFICANT GAPS between roadmap
+  claims and actual implementation:
+  
+  STRENGTHS:
+  - Robust testing framework (409 test files, 257 AC-IDs)
+  - Strong infrastructure (audit logging, circuit breaker, telemetry)
+  - Core orchestrator architecture in place
+  - Comprehensive roadmap documentation (29 phases)
+  
+  WEAKNESSES:
+  - MCP tools are non-functional stubs
+  - Governance tier system incomplete (missing tier0 rules)
+  - Orchestrator implementations lag behind domain logic (brain/)
+  - Phase deliverable verification needed
+  - Tier2 security modules mostly empty
+  
+  RECOMMENDATION: Prioritize GAP-001 (MCP tools) and GAP-002 (governance tiers)
+  as these are foundational to the CORTEX architecture claims.
+
+# =============================================================================
+# END OF AUDIT
+# =============================================================================

@@ -1,0 +1,92 @@
+# Domain RAG Integration
+# CORTEX Knowledge Base - Domain Integration
+# Version: 1.0.0
+# Created: December 22, 2025
+# Author: Asif Hussain
+
+metadata:
+  version: "1.0.0"
+  created: "2025-12-22"
+  category: "domain-integration"
+  subcategory: "rag-integration"
+
+# CORTEX Domain Integration
+cortex_integration:
+  brain_tiers:
+    tier0:
+      role: "Governance and rules"
+      rag_use: "Retrieve SKULL rules for validation"
+      
+    tier1:
+      role: "Working memory"
+      rag_use: "Recent conversation context retrieval"
+      
+    tier2:
+      role: "Knowledge graph"
+      rag_use: "Pattern and best practice retrieval"
+      
+    tier3:
+      role: "Development context"
+      rag_use: "Code metrics and hotspot retrieval"
+
+# Domain-Specific RAG Patterns
+domain_patterns:
+  code_generation:
+    knowledge_sources:
+      - "Engineering best practices (Tier 2)"
+      - "Company coding standards"
+      - "Similar code patterns"
+    prompt_template: |
+      Based on these patterns:
+      {retrieved_patterns}
+      
+      Generate code for: {user_request}
+      Following: {standards}
+  
+  code_review:
+    knowledge_sources:
+      - "Code review checklists"
+      - "SOLID principles"
+      - "Security patterns (OWASP)"
+    retrieval_strategy: "Hybrid (keyword + semantic)"
+    
+  architecture_advice:
+    knowledge_sources:
+      - "Design patterns"
+      - "Architecture patterns"
+      - "Anti-patterns"
+    context_assembly: "Hierarchical (patterns → examples)"
+
+# Multi-Tenant RAG
+multi_tenant:
+  isolation:
+    approach: "Namespace-based separation"
+    metadata_filter: "tenant_id"
+    
+  shared_knowledge:
+    - "General best practices"
+    - "Language-specific patterns"
+    
+  tenant_specific:
+    - "Company coding standards"
+    - "Internal APIs and libraries"
+    - "Project-specific context"
+
+# Evaluation Framework
+evaluation:
+  quality_metrics:
+    - "Retrieval precision/recall"
+    - "Response accuracy"
+    - "Citation correctness"
+    - "Latency"
+  
+  continuous_improvement:
+    - "Collect user feedback"
+    - "A/B test retrieval strategies"
+    - "Monitor retrieval relevance scores"
+    - "Update knowledge base regularly"
+
+related_knowledge:
+  - "vector-database-guide.yaml"
+  - "retrieval-pipeline.yaml"
+  - "../tier2/pattern-learning.yaml"

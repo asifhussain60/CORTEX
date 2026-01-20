@@ -1,0 +1,14 @@
+sequenceDiagram
+    participant Client
+    participant XUpdateFundingBatch
+    participant Database
+
+    Client->>+XUpdateFundingBatch: Execute
+    XUpdateFundingBatch->>XUpdateFundingBatch: Validate Inputs
+    XUpdateFundingBatch->>XUpdateFundingBatch: fundingBatch_equals_null
+    XUpdateFundingBatch->>XUpdateFundingBatch: stringIsNullOrEmptyFundingCash
+    XUpdateFundingBatch->>+Database: SELECT FundingBatch
+    Database-->>-XUpdateFundingBatch: Result
+    XUpdateFundingBatch->>+Database: SELECT CashInOut
+    Database-->>-XUpdateFundingBatch: Result
+    XUpdateFundingBatch-->>-Client: Success

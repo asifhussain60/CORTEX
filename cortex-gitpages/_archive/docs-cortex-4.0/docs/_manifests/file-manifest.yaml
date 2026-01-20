@@ -1,0 +1,499 @@
+---
+# CORTEX Documentation File Manifest
+# Purpose: Track all documentation files, metadata, and status
+# Authority: Updated by cortex-documentation agent
+# Version: 1.0.0
+# Updated: 2026-01-20
+
+# Manifest Configuration
+config:
+  purpose: "Track documentation file metadata, status, and properties"
+  update_frequency: "After each file operation"
+  validation_enabled: true
+  archive_tracking: true
+
+# File Manifest Entries
+# Structure: Organized by section matching docs/ folder hierarchy
+files:
+  
+  # Root level
+  root_readme:
+    path: "docs/0-README.md"
+    status: "target"  # target | existing | planned | archived
+    created_date: null
+    last_modified: null
+    created_by: null
+    modified_by: null
+    content_hash: null
+    line_count: null
+    heading_count: null
+    heading_structure: []
+    link_count: null
+    external_links: null
+    internal_links: []
+    source_files: []
+    audience_tags: []
+    has_frontmatter: false
+    has_toc: false
+    has_audience_callouts: false
+    properties:
+      purpose: "Main entry point, navigation hub"
+      content_type: "Navigation & Overview"
+      update_frequency: "When structure changes"
+      maintenance_owner: "Documentation team"
+
+  # 01-getting-started section
+  gs_overview:
+    path: "docs/01-getting-started/0-overview.md"
+    status: "planned"
+    created_date: null
+    last_modified: null
+    content_hash: null
+    source_files: []
+    audience_tags: ["all"]
+    properties:
+      purpose: "Getting started overview"
+
+  gs_installation:
+    path: "docs/01-getting-started/1-installation.md"
+    status: "planned"
+    created_date: null
+    last_modified: null
+    content_hash: null
+    source_files: []
+    audience_tags: ["Developer", "Operator"]
+    properties:
+      purpose: "Installation and setup guide"
+
+  gs_quickstart:
+    path: "docs/01-getting-started/2-quickstart.md"
+    status: "planned"
+    created_date: null
+    last_modified: null
+    content_hash: null
+    source_files: []
+    audience_tags: ["Developer"]
+    properties:
+      purpose: "15-minute getting started tutorial"
+
+  gs_troubleshooting:
+    path: "docs/01-getting-started/3-troubleshooting.md"
+    status: "planned"
+    created_date: null
+    last_modified: null
+    content_hash: null
+    source_files: []
+    audience_tags: ["Developer", "Operator"]
+    properties:
+      purpose: "Common setup issues and solutions"
+
+  # 02-architecture section
+  arch_overview:
+    path: "docs/02-architecture/0-overview.md"
+    status: "planned"
+    created_date: null
+    last_modified: null
+    content_hash: null
+    source_files:
+      - "ARCHITECTURE-MAP.md"
+      - "cortex-master-prompt-v3.md"
+      - "CORTEX-TECHNICAL-VERIFICATION-20260118.md"
+    audience_tags: ["Architect", "Developer"]
+    properties:
+      purpose: "System architecture overview"
+
+  arch_design_principles:
+    path: "docs/02-architecture/1-design-principles.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Architect"]
+
+  arch_multi_tier:
+    path: "docs/02-architecture/2-multi-tier-architecture.md"
+    status: "planned"
+    content_hash: null
+    source_files:
+      - "PHASE-21-*.md"
+      - "PHASE-24-*.md"
+    audience_tags: ["Architect", "Developer"]
+
+  arch_orchestration:
+    path: "docs/02-architecture/3-orchestration-engine.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Developer", "Architect"]
+
+  arch_registry:
+    path: "docs/02-architecture/4-orchestrator-registry.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Developer"]
+
+  arch_resilience:
+    path: "docs/02-architecture/5-resilience-patterns.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Developer", "Architect"]
+
+  arch_security:
+    path: "docs/02-architecture/6-security-governance.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Architect", "Operator"]
+
+  arch_domain_brain:
+    path: "docs/02-architecture/7-domain-brain.md"
+    status: "planned"
+    content_hash: null
+    source_files:
+      - "cortex-brain/domain_brain/bkio_orchestrator.py"
+    audience_tags: ["Developer", "Architect"]
+
+  arch_state_management:
+    path: "docs/02-architecture/8-state-management.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Architect", "Developer"]
+
+  # 03-api-reference section
+  api_overview:
+    path: "docs/03-api-reference/0-overview.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Developer"]
+
+  api_rest_guide:
+    path: "docs/03-api-reference/rest-api/0-guide.md"
+    status: "planned"
+    content_hash: null
+    source_files:
+      - "DEPLOYMENT-API-REFERENCE.md"
+      - "DEPLOYMENT-TROUBLESHOOTING.md"
+    audience_tags: ["Developer"]
+
+  api_rest_orchestrators:
+    path: "docs/03-api-reference/rest-api/orchestrators.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Developer"]
+
+  api_mcp_spec:
+    path: "docs/03-api-reference/mcp-protocol/0-specification.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Developer"]
+
+  api_cli_guide:
+    path: "docs/03-api-reference/cli/0-guide.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Developer", "Operator"]
+
+  # 04-guides section
+  guides_index:
+    path: "docs/04-guides/0-index.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["all"]
+
+  guides_integration_overview:
+    path: "docs/04-guides/integration/0-overview.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Developer", "Architect"]
+
+  guides_custom_orchestrators:
+    path: "docs/04-guides/integration/1-developing-custom-orchestrators.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Developer"]
+
+  guides_api_integration:
+    path: "docs/04-guides/integration/2-integrating-with-apis.md"
+    status: "planned"
+    content_hash: null
+    source_files:
+      - "DEPLOYMENT-API-REFERENCE.md"
+      - "DEPLOYMENT-TROUBLESHOOTING.md"
+    audience_tags: ["Developer"]
+
+  guides_domain_knowledge:
+    path: "docs/04-guides/integration/3-domain-knowledge-integration.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Developer", "Architect"]
+
+  guides_monitoring:
+    path: "docs/04-guides/integration/4-monitoring-observability.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Developer", "Operator"]
+
+  guides_compliance:
+    path: "docs/04-guides/integration/5-compliance-audit.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Operator", "Architect"]
+
+  guides_deployment_overview:
+    path: "docs/04-guides/deployment/0-overview.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Operator", "Developer"]
+
+  guides_local_dev:
+    path: "docs/04-guides/deployment/1-local-development.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Developer"]
+
+  guides_staging:
+    path: "docs/04-guides/deployment/2-staging-deployment.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Operator"]
+
+  guides_production:
+    path: "docs/04-guides/deployment/3-production-deployment.md"
+    status: "planned"
+    content_hash: null
+    source_files:
+      - "DEPLOYMENT-SETUP-GUIDE.md"
+      - "DEPLOYMENT-TO-MAIN-20260119.md"
+    audience_tags: ["Operator", "Developer"]
+
+  guides_azure:
+    path: "docs/04-guides/deployment/4-azure-deployment.md"
+    status: "planned"
+    content_hash: null
+    source_files:
+      - "DEPLOYMENT-PHASE-REDESIGN-20260119.md"
+    audience_tags: ["Operator"]
+
+  guides_config_management:
+    path: "docs/04-guides/deployment/5-configuration-management.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Operator", "Developer"]
+
+  guides_feature_flags:
+    path: "docs/04-guides/deployment/6-feature-flags.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Operator", "Developer"]
+
+  guides_blue_green:
+    path: "docs/04-guides/deployment/7-blue-green-deployment.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Operator"]
+
+  guides_ops_overview:
+    path: "docs/04-guides/operations/0-overview.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Operator", "Developer"]
+
+  guides_monitoring:
+    path: "docs/04-guides/operations/1-monitoring.md"
+    status: "planned"
+    content_hash: null
+    source_files:
+      - "INTEGRATION-TEST-EXECUTIVE-SUMMARY-20260119.md"
+    audience_tags: ["Operator", "Developer"]
+
+  guides_alerting:
+    path: "docs/04-guides/operations/2-alerting.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Operator"]
+
+  guides_logging:
+    path: "docs/04-guides/operations/3-logging.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Operator"]
+
+  guides_troubleshooting:
+    path: "docs/04-guides/operations/4-troubleshooting.md"
+    status: "planned"
+    content_hash: null
+    source_files:
+      - "DEPLOYMENT-TROUBLESHOOTING.md"
+      - "DEPLOYMENT-FAQ.md"
+    audience_tags: ["Operator", "Developer"]
+
+  guides_perf_tuning:
+    path: "docs/04-guides/operations/5-performance-tuning.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Operator", "Developer"]
+
+  guides_disaster_recovery:
+    path: "docs/04-guides/operations/6-disaster-recovery.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Operator"]
+
+  guides_audit_compliance:
+    path: "docs/04-guides/operations/7-audit-compliance.md"
+    status: "planned"
+    content_hash: null
+    source_files: []
+    audience_tags: ["Operator", "Architect"]
+
+  # 05-reference section
+  ref_glossary:
+    path: "docs/05-reference/glossary.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["all"]
+
+  ref_faq:
+    path: "docs/05-reference/faq.md"
+    status: "planned"
+    content_hash: null
+    source_files:
+      - "DEPLOYMENT-FAQ.md"
+    audience_tags: ["all"]
+
+  ref_known_issues:
+    path: "docs/05-reference/known-issues.md"
+    status: "planned"
+    content_hash: null
+    source_files:
+      - "AC-FIX-*.md"
+      - "ISSUE-FIX-*.md"
+      - "GITHUB-ISSUES-*.md"
+    audience_tags: ["Developer", "Operator"]
+
+  ref_changelog:
+    path: "docs/05-reference/changelog.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Developer"]
+
+  ref_compliance:
+    path: "docs/05-reference/compliance-mappings.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Architect", "Operator"]
+
+  ref_performance:
+    path: "docs/05-reference/performance-baselines.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Operator", "Developer"]
+
+  # 06-tutorials section
+  tut_index:
+    path: "docs/06-tutorials/0-index.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Developer", "Operator"]
+
+  # 07-contributing section
+  contrib_coc:
+    path: "docs/07-contributing/0-code-of-conduct.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["all"]
+
+  contrib_guidelines:
+    path: "docs/07-contributing/1-contributing-guidelines.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Developer"]
+
+  contrib_dev_setup:
+    path: "docs/07-contributing/2-development-setup.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Developer"]
+
+  contrib_testing:
+    path: "docs/07-contributing/3-testing-strategy.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Developer"]
+
+  contrib_doc_style:
+    path: "docs/07-contributing/4-documentation-style.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Developer", "Documentation team"]
+
+  contrib_pr_process:
+    path: "docs/07-contributing/5-pull-request-process.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Developer"]
+
+  contrib_release:
+    path: "docs/07-contributing/6-release-process.md"
+    status: "planned"
+    content_hash: null
+    audience_tags: ["Developer", "Maintainer"]
+
+# Archive Index
+archive_index:
+  sessions:
+    location: "docs/_archive/sessions/"
+    description: "Development session logs"
+    file_count: 0
+    status: "pending_migration"
+
+  phases:
+    location: "docs/_archive/phases/"
+    description: "Phase completion reports"
+    file_count: 0
+    status: "pending_migration"
+
+  analysis:
+    location: "docs/_archive/analysis/"
+    description: "Analysis and investigation documents"
+    file_count: 0
+    status: "pending_migration"
+
+  implementation_plans:
+    location: "docs/_archive/implementation-plans/"
+    description: "Superseded implementation plans"
+    file_count: 0
+    status: "pending_migration"
+
+  reviews:
+    location: "docs/_archive/reviews/"
+    description: "Review and verification artifacts"
+    file_count: 0
+    status: "pending_migration"
+
+# Summary Statistics
+summary:
+  total_target_files: 0  # Count of files in 'files' section
+  total_existing_files: 0
+  total_migrated_files: 0
+  total_archived_files: 0
+  total_planned_files: 0
+  completion_percentage: 0
+  last_updated: null
+  last_operation: null
+
