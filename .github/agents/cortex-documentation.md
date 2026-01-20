@@ -804,6 +804,6 @@ Before every run:
 - **Master Plan**: `.github/prompts/cortex-doc.prompt.md` (structure authority)
 - **File Policy**: This document (SSOT for file placement)
 - **Registry**: `_manifests/content-registry.yaml` (duplicate prevention)
-- **Live Features**: `cortex-master.yaml` (capability source)
+- **Live Features**: `cortex-impl-map.yaml` (capability source)
 - **Archived History**: `docs/_archive/INDEX.md` (historical reference)
 

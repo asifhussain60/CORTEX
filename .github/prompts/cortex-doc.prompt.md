@@ -346,7 +346,7 @@ During chat, identify consolidation opportunities:
 | `DEPLOYMENT-*.md` (multiple) | `operations/deployment-guide.md` | Single source for deployment |
 | `PHASE-21-*.md`, `PHASE-24-*.md` | `architecture/implementation-history.md` | Phase milestone history |
 | `AC-FIX-*.md`, `ISSUE-FIX-*.md` | `reference/known-issues.md` | Known issues & resolutions |
-| `ARCHITECTURE-MAP.md`, `CORTEX-master-prompt-v3.md` | `architecture/system-architecture.md` | Unified architecture view |
+| `ARCHITECTURE-MAP.md`, `cortex-impl-map-overview.md` | `architecture/system-architecture.md` | Unified architecture view |
 | `*EXECUTIVE-SUMMARY*.md` | Remove (extract into intro pages) | Executive content → page headers |
 | `DEPLOYMENT-API-REFERENCE.md`, `DEPLOYMENT-*.md` | `api/deployment-api.md` | API consolidation |
 
@@ -538,7 +538,7 @@ During chat, analyze and map these consolidation opportunities:
 | Source Files | Consolidated Document | Rationale |
 |---|---|---|
 | `README.md`, `00-README-START-HERE-*.md`, `INDEX.md` | `0-README.md` + navigation structure | Single entry point |
-| `ARCHITECTURE-MAP.md`, `cortex-master-prompt-v3.md`, `CORTEX-TECHNICAL-VERIFICATION-*.md` | `02-architecture/0-overview.md` | Unified architecture view |
+| `ARCHITECTURE-MAP.md`, `cortex-impl-map-overview.md`, `CORTEX-TECHNICAL-VERIFICATION-*.md` | `02-architecture/0-overview.md` | Unified architecture view |
 | `DEPLOYMENT-*.md` (multiple) + `DEPLOYMENT-SETUP-GUIDE.md` | `04-guides/deployment/*` (split by environment) | Environment-specific deployment |
 | `DEPLOYMENT-API-REFERENCE.md` + `DEPLOYMENT-TROUBLESHOOTING.md` | `04-guides/integration/2-integrating-with-apis.md` | API integration patterns |
 | `PHASE-21-*.md`, `PHASE-24-*.md` (20+ files) | `02-architecture/7-state-management.md` + `04-guides/advanced/*` | Extract technical content |
