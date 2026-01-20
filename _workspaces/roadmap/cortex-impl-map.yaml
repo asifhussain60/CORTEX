@@ -235,8 +235,30 @@ phases_implementation_status:
         status: "IMPLEMENTED"
   
   missing_implementation:
-    count: 3
+    count: 4
     phases:
+      - id: "consolidation-001-src-cleanup"
+        title: "Source Code Consolidation (src/ → cortex/)"
+        ac_ids: 3
+        status: "NOT_STARTED"
+        priority: "P1"
+        estimated_effort: "8-16 hours"
+        blocking: false
+        note: "Migrate 30+ src.* imports to cortex.*, validate tests pass, delete src/ folder"
+        acceptance_criteria:
+          - "AC-SRC-001-01: Audit all src.* imports across codebase (scripts, tests, cortex)"
+          - "AC-SRC-001-02: Create migration plan mapping src.* modules to cortex.* equivalents"
+          - "AC-SRC-001-03: Update all imports (scripts/, tests/, cortex/) from src.* to cortex.*"
+          - "AC-SRC-001-04: Run full test suite - 0 failures from import errors"
+          - "AC-SRC-001-05: Delete src/ folder after validation"
+        rationale: |
+          cortex/ is canonical package (ARCH-DECISION-RECORD). src/ is legacy duplicate
+          with ~135 Python files containing 30+ active imports. Consolidation unifies
+          implementation to single package, reducing maintenance burden and confusion.
+        dependencies: []
+        file: "_workspaces/roadmap/phases/consolidation-001-src-cleanup.yaml"
+        created: "2026-01-20"
+      
       - id: "arch-021-knowledge-proto"
         title: "Knowledge Protocol"
         ac_ids: 8
@@ -566,6 +588,13 @@ production_readiness_summary:
       - "Long mean time to resolution (MTTR)"
 
 next_actions:
+  priority_0_immediate:
+    - action: "Begin consolidation-001-src-cleanup"
+      file: "_workspaces/roadmap/phases/consolidation-001-src-cleanup.yaml"
+      estimated_effort: "8-16 hours"
+      blocking: "Repository cleanliness, test consistency"
+      note: "Eliminate src/ duplicate package, consolidate all imports to cortex/"
+  
   priority_1_production_readiness:
     - action: "Begin impl-infra-001-resilience"
       file: "_workspaces/roadmap/phases/impl-infra-001-resilience.yaml"
