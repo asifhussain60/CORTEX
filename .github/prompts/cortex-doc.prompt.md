@@ -707,12 +707,12 @@ After each phase, present results in chat for confirmation:
 
 ### 6.1 Feature Discovery from Roadmap
 
-Scan `_workspaces/roadmap/cortex-master.yaml` to identify implemented features:
+Scan `_workspaces/roadmap/cortex-impl-map.yaml` to identify implemented features:
 
 **Discovery Checklist:**
 ```yaml
 discovery_sources:
-  - _workspaces/roadmap/cortex-master.yaml (phase_tracker section)
+  - _workspaces/roadmap/cortex-impl-map.yaml (phases_implementation_status section)
   - _workspaces/roadmap/phases/*.yaml (individual phase specs)
   - src/**/*.py (implementation patterns)
   - cortex/**/*.py (core modules)
@@ -792,7 +792,7 @@ done
 
 **Step 2: Feature-to-Doc Mapping**
 
-For each implemented feature (from cortex-master.yaml):
+For each implemented feature (from cortex-impl-map.yaml):
 1. Identify which doc(s) should cover it
 2. Check if coverage exists
 3. If missing → flag for creation
@@ -885,7 +885,7 @@ Every documentation claim MUST be validated against:
 
 | Source | Validation Method |
 |--------|-------------------|
-| `cortex-master.yaml` | Feature exists in `phase_tracker` with `status: COMPLETED` |
+| `cortex-impl-map.yaml` | Feature exists in `phases_implementation_status` with status indicating completion |
 | Source code | Implementation file exists and matches documented behavior |
 | Tests | Test coverage exists for documented features |
 | Governance rules | Rule exists in `cortex_brain/tier0/governance/` |

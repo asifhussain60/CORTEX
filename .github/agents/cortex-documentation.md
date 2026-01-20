@@ -54,8 +54,8 @@
 
 | Source | Authority | Usage | Governance |
 |--------|-----------|-------|---|
-| `.github/prompts/cortex-doc.prompt.md` | CANONICAL | Restructuring strategy, folder hierarchy | Immutable master plan |
-| `cortex-master.yaml` | CANONICAL | Phase tracking, AC-IDs, live capabilities | Synchronized with implementation |
+| `.github/prompts/cortex-doc.prompt.md` | CANONICAL | Restructuring strategy, folder hierarchy | Immutable reference |
+| `cortex-impl-map.yaml` | CANONICAL | Phase tracking, AC-IDs, live capabilities | Synchronized with implementation |
 | `docs/` folder structure | CANONICAL | Actual documentation tree | Single source for user-facing docs |
 | `docs/0-README.md` | CANONICAL | Main entry point, navigation | Updated when structure changes |
 | Archived docs in `docs/_archive/` | Historical | Reference & history | Write-once, read-often |
@@ -121,7 +121,7 @@ file_manifest:
   "docs/02-architecture/0-overview.md":
     created: "2026-01-20"
     last_modified: "2026-01-20"
-    source_files: ["ARCHITECTURE-MAP.md", "cortex-master-prompt-v3.md"]
+    source_files: ["ARCHITECTURE-MAP.md", "cortex-impl-map-overview.md"]
     content_hash: "a1b2c3d4e5f6..."
     status: "current"
 ```
@@ -578,7 +578,7 @@ Load governance rules:
    - Correct locations: ONLY in `docs/` or `_archive/`
 
 2. **Content Authority:**
-   - Load: `cortex-master.yaml` (live capabilities source)
+   - Load: `cortex-impl-map.yaml` (live capabilities source)
    - Load: `.github/prompts/cortex-doc.prompt.md` (structure authority)
    - Verify documentation reflects actual live features
 
@@ -777,8 +777,8 @@ Before every run:
 
 | Agent | Interaction | Governance |
 |---|---|---|
-| **cortex-doc** | Extracts live capabilities from implemented features | Read-only from `cortex-master.yaml` |
-| **cortex-builder** | Implements features, cortex-doc documents them | cortex-builder updates master plan |
+| **cortex-doc** | Extracts live capabilities from implemented features | Read-only from `cortex-impl-map.yaml` |
+| **cortex-builder** | Implements features, cortex-doc documents them | cortex-builder updates implementation map |
 | **Coordination** | cortex-doc waits for AC-ID completion before documenting | cortex-builder signals AC-ID completion |
 
 ### Interaction with cortex-gap-detection.md
