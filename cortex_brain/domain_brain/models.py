@@ -43,6 +43,27 @@ class Entity:
 
 
 @dataclass
+class Conflict:
+    """Conflict between entities or operations.
+
+    Attributes:
+        conflict_id: Unique conflict identifier.
+        entity_a: First entity involved.
+        entity_b: Second entity involved.
+        conflict_type: Type of conflict.
+        severity: Conflict severity.
+        resolution: Proposed resolution.
+    """
+
+    conflict_id: str
+    entity_a: str
+    entity_b: str
+    conflict_type: str = ""
+    severity: str = "medium"
+    resolution: str = ""
+
+
+@dataclass
 class DomainModel:
     """Base domain data model.
 
@@ -216,6 +237,7 @@ __all__ = [
     "Domain",
     "Entity",
     "EntityType",
+    "Conflict",
     "DomainCapability",
     "DomainState",
     "DomainContext",

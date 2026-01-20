@@ -129,6 +129,28 @@ class ErrorOccurredEvent:
             self.context = {}
 
 
+@dataclass
+class TokenLimitEvent:
+    """Event when token limit reached.
+
+    Attributes:
+        event_id: Unique event identifier.
+        max_tokens: Maximum tokens allowed.
+        used_tokens: Tokens used so far.
+        timestamp: When event occurred.
+    """
+
+    event_id: str
+    max_tokens: int
+    used_tokens: int
+    timestamp: datetime = None
+
+    def __post_init__(self) -> None:
+        """Initialize defaults."""
+        if self.timestamp is None:
+            self.timestamp = datetime.now()
+
+
 
 @dataclass
 class PhaseCompletedEvent:
@@ -255,6 +277,7 @@ __all__ = [
     "UserCancelledEvent",
     "MaxTurnsReachedEvent",
     "ErrorOccurredEvent",
+    "TokenLimitEvent",
     "EventType",
     "PhaseType",
     "EventHandler",

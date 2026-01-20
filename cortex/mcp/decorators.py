@@ -62,3 +62,15 @@ def mcp_tool(
         return wrapper
     
     return decorator
+
+
+def get_registered_tools() -> Dict[str, Dict[str, Any]]:
+    """Get all registered MCP tools.
+
+    Returns:
+        Dictionary of registered tools.
+    """
+    return MCP_TOOLS_REGISTRY.copy()
+
+
+__all__ = ["mcp_tool", "get_registered_tools", "MCP_TOOLS_REGISTRY"]
