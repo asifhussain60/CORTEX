@@ -1,0 +1,309 @@
+═══════════════════════════════════════════════════════════════════════════════
+                         TDD REMEDIATION STRATEGY
+                      CORTEX Implementation Gap Analysis
+                              2026-01-20
+═══════════════════════════════════════════════════════════════════════════════
+
+EXECUTIVE SUMMARY
+───────────────────────────────────────────────────────────────────────────────
+
+PROBLEM
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ • 263 test collection errors (vs baseline 0)                               │
+│ • 125 modules missing implementations                                       │
+│ • 200+ test files affected by import failures                              │
+│ • Root cause: src/ → cortex/ consolidation orphaned test imports           │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+FAILED APPROACH
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Attempted: Stub generation + import aliasing                                │
+│                                                                              │
+│ Why Failed:                                                                  │
+│ ✗ Incomplete signatures → "cannot import name" errors (145 new errors)    │
+│ ✗ Circular dependencies → cascading failures (30 new errors)              │
+│ ✗ Empty implementations → false test runs (88 new errors)                  │
+│                                                                              │
+│ Result: ERROR COUNT INCREASED from 169 → 263 (+94 errors) ⚠️              │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+RECOMMENDED APPROACH
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Phased Real Implementation (NOT stubs)                                       │
+│                                                                              │
+│ Phase 1: P0 Critical (5 modules)   → Unblocks 70% of tests                 │
+│ Phase 2: P1 Knowledge (5 modules)  → Unblocks 90% of tests                 │
+│ Phase 3: P2 Intent/MCP (10 modules) → Unblocks 95% of tests                │
+│ Phase 4: P3 Batch (105 modules)    → Unblocks 100% of tests                │
+│ Phase 5: Validation (2-3 days)     → Production hardening                   │
+│                                                                              │
+│ Timeline: 2-3 weeks                                                         │
+│ Outcome: ≥98% test pass rate, 0 import errors, production ready            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+KEY PRINCIPLE: Real implementations with 100% type hints and docstrings,
+              not placeholder stubs that create false dependencies.
+
+
+ERROR BREAKDOWN
+───────────────────────────────────────────────────────────────────────────────
+
+Total Errors: 263
+
+By Type:
+  • Cannot import name (circular deps):     145 errors
+  • ModuleNotFoundError (still missing):     78 errors
+  • Stub conflicts (empty implementations):  30 errors
+  • Configuration issues:                    10 errors
+
+By Category:
+  • Core modules:          87  (decorators, orchestrator, knowledge, governance)
+  • Orchestrators:          9  (composition, registry, adaptive)
+  • Domain:                14  (domain_orchestrators)
+  • Infrastructure:         5  (database, circuit breaker, etc.)
+  • MCP:                    1  (protocol definitions)
+  • Other:                  9  (devx, tools, templates, etc.)
+
+
+PHASED IMPLEMENTATION PLAN
+───────────────────────────────────────────────────────────────────────────────
+
+PHASE 1: P0 CRITICAL FOUNDATION (Days 1-3)
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Modules: 5                                                                   │
+│ Unblocks: 70% of test suite                                                │
+│ Goal: Implement high-impact modules with real functionality                 │
+│                                                                              │
+│ Module Implementations:                                                     │
+│                                                                              │
+│ 1. orchestrator_decorator.py (50+ test refs)                               │
+│    ├─ @orchestrator decorator for marking entry points                    │
+│    ├─ MethodRegistry for method tracking                                  │
+│    ├─ Type hints: 100% coverage                                           │
+│    └─ Result: ~20 tests pass                                              │
+│                                                                              │
+│ 2. conversation_protocol.py (35+ test refs)                                │
+│    ├─ ConversationProtocol for multi-turn exchanges                       │
+│    ├─ Turn, Message, Context classes                                      │
+│    ├─ Type hints: 100% coverage                                           │
+│    └─ Result: ~25 tests pass                                              │
+│                                                                              │
+│ 3. interfaces/__init__.py (protocol tests)                                 │
+│    ├─ IOrchestrator protocol/ABC                                          │
+│    ├─ OperationMode enum, ExecutionContext data class                    │
+│    ├─ Generic Result[T] wrapper                                           │
+│    ├─ Type hints: 100% coverage                                           │
+│    └─ Result: ~15 tests pass                                              │
+│                                                                              │
+│ 4. infrastructure/database.py (15+ test refs)                              │
+│    ├─ DatabaseManager with connection pooling                             │
+│    ├─ Transaction support with rollback                                   │
+│    ├─ Query builder pattern                                               │
+│    ├─ Type hints: 100% coverage                                           │
+│    └─ Result: ~12 tests pass                                              │
+│                                                                              │
+│ 5. infrastructure/enhanced_audit_logger.py (audit tests)                   │
+│    ├─ EnhancedAuditLogger with DB persistence                             │
+│    ├─ AuditEntry, AuditFilter, AuditExporter classes                     │
+│    ├─ Export to JSON/CSV/XML                                              │
+│    ├─ Type hints: 100% coverage                                           │
+│    └─ Result: ~10 tests pass                                              │
+│                                                                              │
+│ Governance Compliance (All modules):                                        │
+│   ✓ CORE-008: Tests reviewed before implementation                         │
+│   ✓ CORE-011: All functions 100% typed                                     │
+│   ✓ CORE-012: Google docstrings on all public APIs                         │
+│   ✓ CORE-013: Specific exception handling only                             │
+│                                                                              │
+│ Success Metric: ≥50% of test suite passes                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+PHASE 2: P1 KNOWLEDGE & GOVERNANCE (Days 4-7)
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Modules: 5                                                                   │
+│ Unblocks: 90% of test suite                                                │
+│ Dependencies: REQUIRES Phase 1 complete                                     │
+│                                                                              │
+│ Implementations:                                                             │
+│   1. core/knowledge/knowledge_graph.py (30+ tests)                         │
+│   2. core/knowledge/unified_service.py (20+ tests)                         │
+│   3. core/governance_pregate.py (25+ tests)                                │
+│   4. core/governance_registry.py (20+ tests)                               │
+│   5. orchestrators/core/master_orchestrator.py (40+ tests)                 │
+│                                                                              │
+│ Success Metric: ≥70% of test suite passes                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+PHASE 3: P2 INTENT ROUTING & MCP (Days 8-10)
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Modules: 10                                                                  │
+│ Unblocks: 95% of test suite                                                │
+│ Dependencies: REQUIRES Phase 1 & 2 complete                                 │
+│                                                                              │
+│ Implementations:                                                             │
+│   1. core/intent/intent_router.py                                          │
+│   2. core/intent/lens_context_builder.py                                   │
+│   3. core/intent/comprehension_analyzer.py                                 │
+│   4. mcp/server.py                                                         │
+│   5. mcp/protocol.py                                                       │
+│   6. orchestrators/response/response_builder.py                            │
+│   7. orchestrators/response/turn_response.py                               │
+│   8. orchestrators/response/ux_optimizer.py                                │
+│   9. orchestrators/adaptive/routing_engine.py                              │
+│  10. orchestrators/adaptive/execution_analyzer.py                          │
+│                                                                              │
+│ Success Metric: ≥85% of test suite passes                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+PHASE 4: P3 BATCH REMAINING (Days 11-15)
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Modules: 105                                                                │
+│ Unblocks: 100% of test suite (0 import errors)                            │
+│ Dependencies: REQUIRES Phase 1, 2, & 3 complete                            │
+│                                                                              │
+│ Categories (105 modules total):                                             │
+│   • domain_orchestrators/*    (14 modules)                                 │
+│   • devx/*                    (8 modules)                                  │
+│   • observability/*           (12 modules)                                 │
+│   • hallucination_prevention/* (15 modules)                                │
+│   • tools/*                   (20 modules)                                 │
+│   • tier1/*                   (10 modules)                                 │
+│   • tier2/*                   (20 modules)                                 │
+│   • other                     (6 modules)                                  │
+│                                                                              │
+│ Success Metric: 0 import errors, ≥90% test pass rate                       │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+PHASE 5: VALIDATION & HARDENING (Days 16-18)
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ Activities:                                                                  │
+│   1. Full test suite run (all 6599 tests)                                   │
+│   2. Fix any failing tests                                                  │
+│   3. Integration test validation                                            │
+│   4. Performance smoke tests                                                │
+│   5. Governance compliance verification                                     │
+│                                                                              │
+│ Success Metrics:                                                             │
+│   ✓ Test collection: 6599 tests, 0 errors                                   │
+│   ✓ Test pass rate: ≥98%                                                    │
+│   ✓ All modules: CORE-008 ✓, CORE-011 ✓, CORE-012 ✓, CORE-013 ✓         │
+│   ✓ Production ready                                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+GOVERNANCE ENFORCEMENT
+───────────────────────────────────────────────────────────────────────────────
+
+Every implementation MUST comply with:
+
+CORE-008: TDD (Tests Before Code)
+  ✓ Review test expectations before implementation
+  ✓ Understand what tests expect the code to do
+  ✓ Implement to match test expectations exactly
+
+CORE-011: Type Hints (100% Coverage)
+  ✓ Every function parameter typed
+  ✓ Every return type specified
+  ✓ No use of generic Any type
+  ✓ Example:
+      def process_data(input: List[str], mode: OperationMode) -> Result[Dict]:
+          """Process data according to operation mode."""
+
+CORE-012: Google Docstrings
+  ✓ All public APIs documented
+  ✓ Format with Args, Returns, Raises sections
+  ✓ Example:
+      """Process conversation turn.
+      
+      Args:
+          turn: The conversation turn to process.
+          context: Current conversation context.
+      
+      Returns:
+          Result containing processed turn or error.
+      
+      Raises:
+          ValueError: If turn data is invalid.
+      """
+
+CORE-013: Specific Exception Handling
+  ✓ NO bare except:
+  ✓ NO except Exception:
+  ✓ ONLY: except (SpecificError1, SpecificError2):
+
+CORE-026: Git Checkpoints
+  ✓ Before phase: git commit -m "checkpoint: before phase-X"
+  ✓ After phase:  git commit -m "complete: phase-X"
+
+
+RISK MITIGATION STRATEGIES
+───────────────────────────────────────────────────────────────────────────────
+
+Risk 1: Circular Dependencies
+├─ Probability: MEDIUM
+├─ Impact: HIGH (entire module fails)
+└─ Mitigation: Use Protocol/ABC to break cycles
+
+Risk 2: Implementation Mismatches
+├─ Probability: MEDIUM
+├─ Impact: MEDIUM (tests fail)
+└─ Mitigation: Analyze test expectations first
+
+Risk 3: Governance Violations
+├─ Probability: LOW (strict enforcement)
+├─ Impact: HIGH (must fix before next phase)
+└─ Mitigation: Automated code review
+
+Risk 4: Scope Creep
+├─ Probability: LOW (phased approach)
+├─ Impact: MEDIUM (timeline extends)
+└─ Mitigation: Strict P0→P1→P2→P3→P5 sequence
+
+
+DECISION MATRIX
+───────────────────────────────────────────────────────────────────────────────
+
+OPTION A: Stub Approach (Already Failed)
+├─ Pros: Fast to start
+├─ Cons: Creates more errors, doesn't solve problem
+├─ Result: 263 errors, cannot ship
+└─ Decision: ✗ REJECTED
+
+OPTION B: Phased Real Implementation (RECOMMENDED)
+├─ Pros: Production-ready, solves problem completely, reduces errors
+├─ Cons: Takes 2-3 weeks, requires strict discipline
+├─ Result: 0 errors, ≥98% pass rate, production ready
+└─ Decision: ✓ RECOMMENDED
+
+
+FINAL RECOMMENDATION
+───────────────────────────────────────────────────────────────────────────────
+
+PROCEED WITH PHASED REAL IMPLEMENTATION
+
+This approach:
+  ✓ Delivers production-ready code
+  ✓ Eliminates all 263 import errors
+  ✓ Achieves ≥98% test pass rate
+  ✓ Enforces strict governance compliance
+  ✓ Creates reusable architectural patterns
+  ✓ Builds sustainable codebase
+
+Timeline: 2-3 weeks
+Effort: 20-25 person-days
+Team: 2-3 developers
+
+Next Steps:
+  1. Approve this remediation strategy
+  2. Create git checkpoint: "before-tdd-remediation"
+  3. Begin Phase 1: P0 Critical Foundation
+  4. Implement orchestrator_decorator (highest priority)
+
+
+REFERENCES
+───────────────────────────────────────────────────────────────────────────────
+
+Implementation Plan: _workspaces/roadmap/phases/impl-tdd-prod-ready-remediation.yaml
+Architecture Map: _workspaces/roadmap/cortex-impl-map.yaml
+Governance Rules: cortex_brain/tier0/governance/core-rules.yaml
+Test Results: Run `pytest tests/ --co -q` to verify collection status

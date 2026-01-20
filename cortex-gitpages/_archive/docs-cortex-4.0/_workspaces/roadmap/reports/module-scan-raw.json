@@ -1,0 +1,2173 @@
+{
+  "metadata": {
+    "total_missing_modules": 215,
+    "total_test_references": 1075,
+    "unique_test_files": 203
+  },
+  "missing_modules": [
+    [
+      "cortex_brain.state.knowledge_repository",
+      {
+        "count": 10,
+        "tests": [
+          "test_protocol_compliance.py"
+        ]
+      }
+    ],
+    [
+      "cortex_brain.tier3.knowledge.ai_curator",
+      {
+        "count": 1,
+        "tests": [
+          "test_ai_curation.py"
+        ]
+      }
+    ],
+    [
+      "cortex_brain.tier3.knowledge.expert_registry",
+      {
+        "count": 1,
+        "tests": [
+          "test_expert_registry.py"
+        ]
+      }
+    ],
+    [
+      "cortex_brain.tier3.knowledge.knowledge_governance",
+      {
+        "count": 1,
+        "tests": [
+          "test_knowledge_governance.py"
+        ]
+      }
+    ],
+    [
+      "cortex_brain.tier3.knowledge.knowledge_indexer",
+      {
+        "count": 2,
+        "tests": [
+          "test_auto_indexing.py"
+        ]
+      }
+    ],
+    [
+      "cortex_brain.tier3.knowledge.retrieval_optimizer",
+      {
+        "count": 1,
+        "tests": [
+          "test_retrieval_optimizer.py"
+        ]
+      }
+    ],
+    [
+      "cortex_brain.tier3.knowledge.synthesis_engine",
+      {
+        "count": 1,
+        "tests": [
+          "test_synthesis_engine.py"
+        ]
+      }
+    ],
+    [
+      "src.api.chat_response_formatter",
+      {
+        "count": 4,
+        "tests": [
+          "test_rem_003_02_chat_header_injection.py",
+          "test_rem_003_03_copyright_notices.py"
+        ]
+      }
+    ],
+    [
+      "src.cli.governance_cli",
+      {
+        "count": 1,
+        "tests": [
+          "test_phase9_governance_tools.py"
+        ]
+      }
+    ],
+    [
+      "src.cli.pre_commit_hook",
+      {
+        "count": 1,
+        "tests": [
+          "test_phase9_governance_tools.py"
+        ]
+      }
+    ],
+    [
+      "src.core.ac_domain_mapper",
+      {
+        "count": 1,
+        "tests": [
+          "test_ac_domain_mapper.py"
+        ]
+      }
+    ],
+    [
+      "src.core.analysis.lens_protocol",
+      {
+        "count": 1,
+        "tests": [
+          "test_ast_lens_integration.py"
+        ]
+      }
+    ],
+    [
+      "src.core.audit_required_validator",
+      {
+        "count": 1,
+        "tests": [
+          "test_audit_required_validator.py"
+        ]
+      }
+    ],
+    [
+      "src.core.brain_populator",
+      {
+        "count": 2,
+        "tests": [
+          "test_fr_009_consistency.py",
+          "test_brain_populator.py"
+        ]
+      }
+    ],
+    [
+      "src.core.business_knowledge.business_knowledge_repository",
+      {
+        "count": 10,
+        "tests": [
+          "test_protocol_compliance.py"
+        ]
+      }
+    ],
+    [
+      "src.core.checkpoint_manager",
+      {
+        "count": 2,
+        "tests": [
+          "test_checkpoint_manager.py",
+          "test_resumption_handler.py"
+        ]
+      }
+    ],
+    [
+      "src.core.coherence_validator",
+      {
+        "count": 1,
+        "tests": [
+          "test_coherence_validator.py"
+        ]
+      }
+    ],
+    [
+      "src.core.compatibility_layer",
+      {
+        "count": 1,
+        "tests": [
+          "test_compatibility.py"
+        ]
+      }
+    ],
+    [
+      "src.core.config",
+      {
+        "count": 1,
+        "tests": [
+          "test_config.py"
+        ]
+      }
+    ],
+    [
+      "src.core.database.tier_enforcement_queries",
+      {
+        "count": 1,
+        "tests": [
+          "test_tier_enforcement_database.py"
+        ]
+      }
+    ],
+    [
+      "src.core.decorators.governance_decorator",
+      {
+        "count": 1,
+        "tests": [
+          "test_decorators.py"
+        ]
+      }
+    ],
+    [
+      "src.core.decorators.orchestrator",
+      {
+        "count": 17,
+        "tests": [
+          "test_orchestrator_registry.py"
+        ]
+      }
+    ],
+    [
+      "src.core.decorators.orchestrator_decorator",
+      {
+        "count": 3,
+        "tests": [
+          "test_mcp_server.py",
+          "test_orchestrator_decorator.py",
+          "test_orchestrator_registry.py"
+        ]
+      }
+    ],
+    [
+      "src.core.dependency_validator",
+      {
+        "count": 1,
+        "tests": [
+          "test_dependency_validator.py"
+        ]
+      }
+    ],
+    [
+      "src.core.distributed_lock",
+      {
+        "count": 1,
+        "tests": [
+          "test_final_verification.py"
+        ]
+      }
+    ],
+    [
+      "src.core.governance.tier_system",
+      {
+        "count": 1,
+        "tests": [
+          "test_tier_system_orchestration.py"
+        ]
+      }
+    ],
+    [
+      "src.core.governance_enforcer",
+      {
+        "count": 3,
+        "tests": [
+          "test_decorators.py",
+          "test_governance_enforcer.py",
+          "test_mcp_governance_tools.py"
+        ]
+      }
+    ],
+    [
+      "src.core.governance_pregate",
+      {
+        "count": 1,
+        "tests": [
+          "test_governance_pregate_interface.py"
+        ]
+      }
+    ],
+    [
+      "src.core.governance_registry",
+      {
+        "count": 10,
+        "tests": [
+          "test_final_verification.py",
+          "test_fr_008_e2e_validation.py",
+          "test_master_governance_per_turn.py",
+          "test_nfr_005_performance.py",
+          "test_nfr_006_extensibility.py",
+          "test_orchestrator_state_atomicity.py",
+          "test_governance_per_turn.py",
+          "test_governance_pregate_interface.py",
+          "test_governance_registry.py",
+          "test_rule_evaluator.py"
+        ]
+      }
+    ],
+    [
+      "src.core.hallucination_prevention",
+      {
+        "count": 1,
+        "tests": [
+          "test_hallucination_remediation.py"
+        ]
+      }
+    ],
+    [
+      "src.core.hallucination_prevention.behavioral_boundaries",
+      {
+        "count": 11,
+        "tests": [
+          "test_behavioral_boundaries.py",
+          "test_execution_sandbox.py",
+          "test_hallucination_remediation.py"
+        ]
+      }
+    ],
+    [
+      "src.core.hallucination_prevention.confidence_scoring",
+      {
+        "count": 1,
+        "tests": [
+          "test_confidence_scoring.py"
+        ]
+      }
+    ],
+    [
+      "src.core.hallucination_prevention.execution_sandbox",
+      {
+        "count": 12,
+        "tests": [
+          "test_execution_sandbox.py",
+          "test_hallucination_remediation.py",
+          "test_brittleness_remediation.py"
+        ]
+      }
+    ],
+    [
+      "src.core.hallucination_prevention.hallucination_detection",
+      {
+        "count": 1,
+        "tests": [
+          "test_hallucination_detection.py"
+        ]
+      }
+    ],
+    [
+      "src.core.hallucination_prevention.intent_canonicalization",
+      {
+        "count": 2,
+        "tests": [
+          "test_execution_sandbox.py",
+          "test_intent_canonicalization.py"
+        ]
+      }
+    ],
+    [
+      "src.core.hallucination_prevention.vision_mutations",
+      {
+        "count": 1,
+        "tests": [
+          "test_vision_mutations.py"
+        ]
+      }
+    ],
+    [
+      "src.core.health_metrics",
+      {
+        "count": 1,
+        "tests": [
+          "test_health_metrics.py"
+        ]
+      }
+    ],
+    [
+      "src.core.input_validator",
+      {
+        "count": 1,
+        "tests": [
+          "test_input_validator.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intelligence.ast_intelligence",
+      {
+        "count": 38,
+        "tests": [
+          "test_cortex_lens_knowledge_graph.py",
+          "test_rem_001_01_comprehension_integration.py",
+          "test_ast_intelligence.py",
+          "test_ast_audit_tracing.py",
+          "test_rem_001_01_ast_scanning.py",
+          "test_rem_001_02_call_graph.py",
+          "test_rem_001_03_dependency_mapper.py",
+          "test_rem_001_04_pattern_detector.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intelligence.author_context",
+      {
+        "count": 4,
+        "tests": [
+          "test_git_history.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intelligence.call_graph",
+      {
+        "count": 8,
+        "tests": [
+          "test_ast_intelligence.py",
+          "test_ast_audit_tracing.py",
+          "test_rem_001_02_call_graph.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intelligence.change_frequency",
+      {
+        "count": 4,
+        "tests": [
+          "test_git_history.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intelligence.comment_analyzer",
+      {
+        "count": 21,
+        "tests": [
+          "test_cortex_lens_knowledge_graph.py",
+          "test_comment_analyzer.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intelligence.dependency_mapper",
+      {
+        "count": 6,
+        "tests": [
+          "test_ast_intelligence.py",
+          "test_ast_audit_tracing.py",
+          "test_rem_001_03_dependency_mapper.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intelligence.git_history_analyzer",
+      {
+        "count": 21,
+        "tests": [
+          "test_cortex_lens_knowledge_graph.py",
+          "test_git_history.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intelligence.pattern_detector",
+      {
+        "count": 6,
+        "tests": [
+          "test_ast_intelligence.py",
+          "test_ast_audit_tracing.py",
+          "test_rem_001_04_pattern_detector.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intelligence.relationship_traversal",
+      {
+        "count": 18,
+        "tests": [
+          "test_cortex_lens_knowledge_graph.py",
+          "test_relationship_traversal.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intent.challenge_generator",
+      {
+        "count": 17,
+        "tests": [
+          "test_challenge_generator.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intent.comprehension_yaml",
+      {
+        "count": 2,
+        "tests": [
+          "test_comprehension_loop.py",
+          "test_comprehension_yaml.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intent.intent_canonicalizer",
+      {
+        "count": 26,
+        "tests": [
+          "test_intent_router_integration.py",
+          "test_intent_canonicalization.py",
+          "test_intent_canonicalizer.py",
+          "test_intent_router.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intent.intent_reflection_protocol",
+      {
+        "count": 3,
+        "tests": [
+          "test_master_interaction_orchestration.py",
+          "test_intent_reflection_protocol.py",
+          "test_lens_integration.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intent.intent_router",
+      {
+        "count": 2,
+        "tests": [
+          "test_intent_router_integration.py",
+          "test_intent_router.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intent.lens_context_builder",
+      {
+        "count": 5,
+        "tests": [
+          "test_lens_context_builder.py",
+          "test_lens_integration.py",
+          "test_lens_response_formatter.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intent.lens_response_formatter",
+      {
+        "count": 2,
+        "tests": [
+          "test_lens_integration.py",
+          "test_lens_response_formatter.py"
+        ]
+      }
+    ],
+    [
+      "src.core.intent.recommendation_engine",
+      {
+        "count": 16,
+        "tests": [
+          "test_recommendation_engine.py"
+        ]
+      }
+    ],
+    [
+      "src.core.interfaces",
+      {
+        "count": 11,
+        "tests": [
+          "test_master_interaction_orchestration.py",
+          "test_master_orchestrator_headers.py",
+          "test_orchestrator_header_parity.py",
+          "test_intent_router.py",
+          "test_master_orchestrator_comprehensive.py",
+          "test_mcp_server.py",
+          "test_orchestrator_architecture.py",
+          "test_orchestrator_decorator.py",
+          "test_orchestrator_registry.py"
+        ]
+      }
+    ],
+    [
+      "src.core.interfaces.i_orchestrator",
+      {
+        "count": 2,
+        "tests": [
+          "test_mcp_exposure.py",
+          "test_planning_orchestrator.py"
+        ]
+      }
+    ],
+    [
+      "src.core.knowledge.knowledge_ecosystem",
+      {
+        "count": 1,
+        "tests": [
+          "test_knowledge_ecosystem_e2e.py"
+        ]
+      }
+    ],
+    [
+      "src.core.knowledge.knowledge_graph",
+      {
+        "count": 2,
+        "tests": [
+          "test_comprehension_loop.py",
+          "test_cortex_lens_knowledge_graph.py"
+        ]
+      }
+    ],
+    [
+      "src.core.knowledge.knowledge_repository",
+      {
+        "count": 7,
+        "tests": [
+          "test_master_orchestrator_knowledge.py"
+        ]
+      }
+    ],
+    [
+      "src.core.mode_controller",
+      {
+        "count": 1,
+        "tests": [
+          "test_mode_controller.py"
+        ]
+      }
+    ],
+    [
+      "src.core.mutation_guard",
+      {
+        "count": 1,
+        "tests": [
+          "test_mutation_guard.py"
+        ]
+      }
+    ],
+    [
+      "src.core.observability.alerting",
+      {
+        "count": 1,
+        "tests": [
+          "test_alerting_health.py"
+        ]
+      }
+    ],
+    [
+      "src.core.observability.audit_trail",
+      {
+        "count": 1,
+        "tests": [
+          "test_audit_trail_enhancement.py"
+        ]
+      }
+    ],
+    [
+      "src.core.observability.health_monitor",
+      {
+        "count": 1,
+        "tests": [
+          "test_alerting_health.py"
+        ]
+      }
+    ],
+    [
+      "src.core.observability.metrics_aggregator",
+      {
+        "count": 1,
+        "tests": [
+          "test_metrics_dashboard.py"
+        ]
+      }
+    ],
+    [
+      "src.core.observability.metrics_collector",
+      {
+        "count": 1,
+        "tests": [
+          "test_observability_live_metrics.py"
+        ]
+      }
+    ],
+    [
+      "src.core.observability.metrics_dashboard",
+      {
+        "count": 1,
+        "tests": [
+          "test_metrics_dashboard.py"
+        ]
+      }
+    ],
+    [
+      "src.core.observability.otel_exporter",
+      {
+        "count": 1,
+        "tests": [
+          "test_otel_integration.py"
+        ]
+      }
+    ],
+    [
+      "src.core.observability.performance_profiler",
+      {
+        "count": 1,
+        "tests": [
+          "test_profiling_optimization.py"
+        ]
+      }
+    ],
+    [
+      "src.core.observability.span_manager",
+      {
+        "count": 1,
+        "tests": [
+          "test_otel_integration.py"
+        ]
+      }
+    ],
+    [
+      "src.core.orchestrator.continuation_decision",
+      {
+        "count": 8,
+        "tests": [
+          "test_continuation_decision.py",
+          "test_conversation_protocol.py",
+          "test_event_integration.py",
+          "test_master_orchestrator.py",
+          "test_oc_004_01_integration.py",
+          "test_terminal_events.py",
+          "test_wrapped_orchestrators.py",
+          "test_exception_propagation.py"
+        ]
+      }
+    ],
+    [
+      "src.core.orchestrator.conversation_protocol",
+      {
+        "count": 30,
+        "tests": [
+          "test_orchestrator_state_atomicity.py",
+          "test_rem_001_01_comprehension_integration.py",
+          "test_tier_validator_integration.py",
+          "test_prompt_injection.py",
+          "test_conversation_protocol.py",
+          "test_event_integration.py",
+          "test_master_orchestrator.py",
+          "test_oc_004_01_integration.py",
+          "test_wrapped_orchestrators.py",
+          "test_exception_propagation.py",
+          "test_governance_per_turn.py",
+          "test_orchestrator_exception_propagation.py",
+          "test_rem_001_01_ast_scanning.py",
+          "test_rem_001_02_call_graph.py",
+          "test_rem_001_03_dependency_mapper.py",
+          "test_rem_001_04_pattern_detector.py",
+          "test_rem_001_05_06_yaml_intent_router.py"
+        ]
+      }
+    ],
+    [
+      "src.core.orchestrator.terminal_events",
+      {
+        "count": 5,
+        "tests": [
+          "test_event_integration.py",
+          "test_master_orchestrator.py",
+          "test_oc_004_01_integration.py",
+          "test_terminal_events.py",
+          "test_wrapped_orchestrators.py"
+        ]
+      }
+    ],
+    [
+      "src.core.orchestrator_base",
+      {
+        "count": 18,
+        "tests": [
+          "test_business_knowledge_integration.py",
+          "test_tier_validator_integration.py",
+          "test_ac_db_003_01.py",
+          "test_orchestrator_base.py",
+          "test_orchestrator_registry.py",
+          "test_tier_validator.py"
+        ]
+      }
+    ],
+    [
+      "src.core.orchestrator_dependency_registry",
+      {
+        "count": 1,
+        "tests": [
+          "test_orchestrator_dependency_registry.py"
+        ]
+      }
+    ],
+    [
+      "src.core.path_resolver",
+      {
+        "count": 11,
+        "tests": [
+          "test_final_verification.py",
+          "test_nfr_006_extensibility.py",
+          "test_ac_domain_mapper.py",
+          "test_folder_structure.py",
+          "test_path_resolver.py",
+          "test_response_templates.py"
+        ]
+      }
+    ],
+    [
+      "src.core.provenance_tracker",
+      {
+        "count": 1,
+        "tests": [
+          "test_provenance_tracker.py"
+        ]
+      }
+    ],
+    [
+      "src.core.response_header_config",
+      {
+        "count": 10,
+        "tests": [
+          "test_multi_orchestrator_header_consistency.py",
+          "test_orchestrator_header_parity.py",
+          "test_planning_orchestrator_headers.py",
+          "test_template_injection.py",
+          "test_response_headers.py",
+          "test_type_hints_coverage.py"
+        ]
+      }
+    ],
+    [
+      "src.core.response_header_injector",
+      {
+        "count": 22,
+        "tests": [
+          "test_multi_orchestrator_header_consistency.py",
+          "test_template_injection.py",
+          "test_response_header_escaping.py",
+          "test_response_headers.py",
+          "test_type_hints_coverage.py"
+        ]
+      }
+    ],
+    [
+      "src.core.response_template_engine",
+      {
+        "count": 6,
+        "tests": [
+          "test_fr_008_e2e_validation.py",
+          "test_response_headers.py",
+          "test_response_templates.py",
+          "test_type_hints_coverage.py"
+        ]
+      }
+    ],
+    [
+      "src.core.resumption_handler",
+      {
+        "count": 1,
+        "tests": [
+          "test_resumption_handler.py"
+        ]
+      }
+    ],
+    [
+      "src.core.rule_evaluator",
+      {
+        "count": 1,
+        "tests": [
+          "test_rule_evaluator.py"
+        ]
+      }
+    ],
+    [
+      "src.core.safety.hallucination_detector",
+      {
+        "count": 1,
+        "tests": [
+          "test_hallucination_prevention_e2e.py"
+        ]
+      }
+    ],
+    [
+      "src.core.schema_adapter",
+      {
+        "count": 1,
+        "tests": [
+          "test_compatibility.py"
+        ]
+      }
+    ],
+    [
+      "src.core.state_machine",
+      {
+        "count": 2,
+        "tests": [
+          "test_final_verification.py",
+          "test_state_machine.py"
+        ]
+      }
+    ],
+    [
+      "src.core.template_engine",
+      {
+        "count": 1,
+        "tests": [
+          "test_template_engine.py"
+        ]
+      }
+    ],
+    [
+      "src.core.tier_resolver",
+      {
+        "count": 1,
+        "tests": [
+          "test_governance_registry.py"
+        ]
+      }
+    ],
+    [
+      "src.core.tier_validator",
+      {
+        "count": 2,
+        "tests": [
+          "test_tier_validator_integration.py",
+          "test_tier_validator.py"
+        ]
+      }
+    ],
+    [
+      "src.dashboard.governance_heatmap",
+      {
+        "count": 1,
+        "tests": [
+          "test_phase9_governance_tools.py"
+        ]
+      }
+    ],
+    [
+      "src.devx.devx_dashboard",
+      {
+        "count": 1,
+        "tests": [
+          "test_devx_dashboard.py"
+        ]
+      }
+    ],
+    [
+      "src.devx.hot_reload",
+      {
+        "count": 1,
+        "tests": [
+          "test_hot_reload.py"
+        ]
+      }
+    ],
+    [
+      "src.devx.integration_validator",
+      {
+        "count": 1,
+        "tests": [
+          "test_integration_validator.py"
+        ]
+      }
+    ],
+    [
+      "src.devx.scenario_library",
+      {
+        "count": 1,
+        "tests": [
+          "test_scenario_library.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_brain",
+      {
+        "count": 1,
+        "tests": [
+          "test_ac_db_001_01.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_brain.adapters",
+      {
+        "count": 2,
+        "tests": [
+          "test_ac_db_002_01.py",
+          "test_ac_db_006_01.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_brain.api",
+      {
+        "count": 11,
+        "tests": [
+          "test_business_knowledge_integration.py",
+          "test_ac_db_003_01.py",
+          "test_ac_db_004_01.py",
+          "test_ac_db_005_01.py",
+          "test_ac_db_006_01.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_brain.audit_log_manager",
+      {
+        "count": 3,
+        "tests": [
+          "test_ac_db_005_01.py",
+          "test_ac_db_006_01.py",
+          "test_ac_db_e02.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_brain.audit_logger",
+      {
+        "count": 1,
+        "tests": [
+          "test_ac_db_006_01.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_brain.bkio_orchestrator",
+      {
+        "count": 5,
+        "tests": [
+          "test_business_knowledge_integration.py",
+          "test_ac_db_003_01.py",
+          "test_ac_db_006_01.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_brain.business_knowledge_repository",
+      {
+        "count": 7,
+        "tests": [
+          "test_business_knowledge_integration.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_brain.conflict_resolver",
+      {
+        "count": 3,
+        "tests": [
+          "test_ac_db_005_01.py",
+          "test_ac_db_006_01.py",
+          "test_ac_db_e03.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_brain.deduplication",
+      {
+        "count": 3,
+        "tests": [
+          "test_ac_db_005_01.py",
+          "test_ac_db_006_01.py",
+          "test_ac_db_e01.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_brain.lens_integration",
+      {
+        "count": 3,
+        "tests": [
+          "test_ac_db_004_01.py",
+          "test_ac_db_005_01.py",
+          "test_ac_db_006_01.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_brain.models",
+      {
+        "count": 15,
+        "tests": [
+          "test_business_knowledge_integration.py",
+          "test_ac_db_001_01.py",
+          "test_ac_db_002_01.py",
+          "test_ac_db_003_01.py",
+          "test_ac_db_004_01.py",
+          "test_ac_db_005_01.py",
+          "test_ac_db_006_01.py",
+          "test_ac_db_e01.py",
+          "test_ac_db_e02.py",
+          "test_ac_db_e03.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_brain.optimistic_lock",
+      {
+        "count": 2,
+        "tests": [
+          "test_ac_db_006_01.py",
+          "test_ac_db_e05.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_brain.orphan_detector",
+      {
+        "count": 3,
+        "tests": [
+          "test_ac_db_005_01.py",
+          "test_ac_db_006_01.py",
+          "test_ac_db_e04.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_brain.validator",
+      {
+        "count": 1,
+        "tests": [
+          "test_ac_db_006_01.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_brain.version_manager",
+      {
+        "count": 2,
+        "tests": [
+          "test_ac_db_006_01.py",
+          "test_ac_db_e06.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_orchestrators.business.base",
+      {
+        "count": 3,
+        "tests": [
+          "test_ecommerce_orchestrator.py",
+          "test_financial_orchestrator.py",
+          "test_healthcare_orchestrator.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_orchestrators.business.context",
+      {
+        "count": 5,
+        "tests": [
+          "test_domain_plugins_context.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_orchestrators.business.ecommerce",
+      {
+        "count": 19,
+        "tests": [
+          "test_ecommerce_orchestrator.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_orchestrators.business.financial",
+      {
+        "count": 17,
+        "tests": [
+          "test_financial_orchestrator.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_orchestrators.business.healthcare",
+      {
+        "count": 18,
+        "tests": [
+          "test_healthcare_orchestrator.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_orchestrators.business.plugins",
+      {
+        "count": 4,
+        "tests": [
+          "test_domain_plugins_context.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_orchestrators.business.validation",
+      {
+        "count": 7,
+        "tests": [
+          "test_domain_plugins_context.py"
+        ]
+      }
+    ],
+    [
+      "src.domain_orchestrators.domain_orchestrator",
+      {
+        "count": 1,
+        "tests": [
+          "test_phase08.py"
+        ]
+      }
+    ],
+    [
+      "src.governance_tools.governance_cli",
+      {
+        "count": 1,
+        "tests": [
+          "test_phase09.py"
+        ]
+      }
+    ],
+    [
+      "src.ide.vscode_integration",
+      {
+        "count": 1,
+        "tests": [
+          "test_phase9_governance_tools.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.alert_manager",
+      {
+        "count": 1,
+        "tests": [
+          "test_dashboard_and_alerts.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.audit_logger",
+      {
+        "count": 1,
+        "tests": [
+          "test_brittleness_remediation.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.circuit_breaker",
+      {
+        "count": 1,
+        "tests": [
+          "test_circuit_breaker.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.compliance_marker",
+      {
+        "count": 1,
+        "tests": [
+          "test_compliance_marker.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.config",
+      {
+        "count": 1,
+        "tests": [
+          "test_brittleness_remediation.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.dashboard_service",
+      {
+        "count": 1,
+        "tests": [
+          "test_dashboard_and_alerts.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.database",
+      {
+        "count": 24,
+        "tests": [
+          "test_final_verification.py",
+          "test_fr_008_e2e_validation.py",
+          "test_master_interaction_orchestration.py",
+          "test_ast_audit_tracing.py",
+          "test_hallucination_remediation.py",
+          "test_brittleness_remediation.py",
+          "test_connection_lifecycle.py",
+          "test_ac_populator.py",
+          "test_database.py",
+          "test_decorators.py",
+          "test_enhanced_audit_logger.py",
+          "test_evidence_bundle.py",
+          "test_governance_enforcer.py",
+          "test_mcp_governance_tools.py",
+          "test_orchestrator_architecture.py",
+          "test_progress_tracker.py",
+          "test_state_machine.py",
+          "test_tiered_logger.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.database_transaction_manager",
+      {
+        "count": 3,
+        "tests": [
+          "test_orchestrator_state_atomicity.py",
+          "test_database_transaction_manager.py",
+          "test_hash_chain_validation.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.enhanced_audit_logger",
+      {
+        "count": 8,
+        "tests": [
+          "test_final_verification.py",
+          "test_fr_008_e2e_validation.py",
+          "test_master_interaction_orchestration.py",
+          "test_nfr_005_performance.py",
+          "test_intent_router.py",
+          "test_master_orchestrator_stage_2_integration.py",
+          "test_enhanced_audit_logger.py",
+          "test_orchestrator_architecture.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.evidence_bundle",
+      {
+        "count": 1,
+        "tests": [
+          "test_evidence_bundle.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.graceful_degradation",
+      {
+        "count": 1,
+        "tests": [
+          "test_graceful_degradation.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.hash_verifier",
+      {
+        "count": 1,
+        "tests": [
+          "test_hash_verifier.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.metrics_exporter",
+      {
+        "count": 10,
+        "tests": [
+          "test_brittleness_remediation.py",
+          "test_telemetry_concurrency.py",
+          "test_metrics_exporter.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.progress_tracker",
+      {
+        "count": 1,
+        "tests": [
+          "test_progress_tracker.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.retry_handler",
+      {
+        "count": 1,
+        "tests": [
+          "test_retry_handler.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.secret_redactor",
+      {
+        "count": 1,
+        "tests": [
+          "test_secret_redactor.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.telemetry_provider",
+      {
+        "count": 1,
+        "tests": [
+          "test_metrics_exporter.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.test_ac_linker",
+      {
+        "count": 1,
+        "tests": [
+          "test_final_verification.py"
+        ]
+      }
+    ],
+    [
+      "src.infrastructure.tiered_logger",
+      {
+        "count": 1,
+        "tests": [
+          "test_tiered_logger.py"
+        ]
+      }
+    ],
+    [
+      "src.intent_router.classifier",
+      {
+        "count": 3,
+        "tests": [
+          "test_classifier.py",
+          "test_disambiguator.py",
+          "test_routing_components.py"
+        ]
+      }
+    ],
+    [
+      "src.intent_router.confidence_scorer",
+      {
+        "count": 1,
+        "tests": [
+          "test_routing_components.py"
+        ]
+      }
+    ],
+    [
+      "src.intent_router.context_manager",
+      {
+        "count": 1,
+        "tests": [
+          "test_routing_components.py"
+        ]
+      }
+    ],
+    [
+      "src.intent_router.disambiguator",
+      {
+        "count": 1,
+        "tests": [
+          "test_disambiguator.py"
+        ]
+      }
+    ],
+    [
+      "src.intent_router.documentation",
+      {
+        "count": 1,
+        "tests": [
+          "test_framework_docs_observability.py"
+        ]
+      }
+    ],
+    [
+      "src.intent_router.edge_case_handler",
+      {
+        "count": 1,
+        "tests": [
+          "test_framework_docs_observability.py"
+        ]
+      }
+    ],
+    [
+      "src.intent_router.fallback_strategy",
+      {
+        "count": 1,
+        "tests": [
+          "test_routing_components.py"
+        ]
+      }
+    ],
+    [
+      "src.intent_router.intent_learner",
+      {
+        "count": 1,
+        "tests": [
+          "test_routing_components.py"
+        ]
+      }
+    ],
+    [
+      "src.intent_router.multimodal_processor",
+      {
+        "count": 1,
+        "tests": [
+          "test_multimodal_processor.py"
+        ]
+      }
+    ],
+    [
+      "src.intent_router.observability",
+      {
+        "count": 1,
+        "tests": [
+          "test_framework_docs_observability.py"
+        ]
+      }
+    ],
+    [
+      "src.intent_router.orchestration_integrator",
+      {
+        "count": 1,
+        "tests": [
+          "test_routing_components.py"
+        ]
+      }
+    ],
+    [
+      "src.intent_router.performance_metrics",
+      {
+        "count": 1,
+        "tests": [
+          "test_routing_components.py"
+        ]
+      }
+    ],
+    [
+      "src.intent_router.routing_engine",
+      {
+        "count": 1,
+        "tests": [
+          "test_routing_components.py"
+        ]
+      }
+    ],
+    [
+      "src.intent_router.test_framework",
+      {
+        "count": 2,
+        "tests": [
+          "test_brittleness_remediation.py",
+          "test_framework_docs_observability.py"
+        ]
+      }
+    ],
+    [
+      "src.mcp.server",
+      {
+        "count": 2,
+        "tests": [
+          "test_mcp_orchestrator_bridge.py",
+          "test_mcp_server.py"
+        ]
+      }
+    ],
+    [
+      "src.mcp.tools",
+      {
+        "count": 1,
+        "tests": [
+          "test_mcp_governance_tools.py"
+        ]
+      }
+    ],
+    [
+      "src.mcp.tools.governance_tools",
+      {
+        "count": 1,
+        "tests": [
+          "test_mcp_governance_tools.py"
+        ]
+      }
+    ],
+    [
+      "src.observability.audit_trail",
+      {
+        "count": 1,
+        "tests": [
+          "test_phase13_observability.py"
+        ]
+      }
+    ],
+    [
+      "src.observability.health_monitor",
+      {
+        "count": 1,
+        "tests": [
+          "test_phase13_observability.py"
+        ]
+      }
+    ],
+    [
+      "src.observability.performance_profiler",
+      {
+        "count": 1,
+        "tests": [
+          "test_phase13_observability.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.adaptive.execution_context_analyzer",
+      {
+        "count": 9,
+        "tests": [
+          "test_adaptive_execution.py",
+          "test_execution_context_analyzer.py",
+          "test_routing_engine.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.adaptive.feedback_loop",
+      {
+        "count": 7,
+        "tests": [
+          "test_adaptive_execution.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.adaptive.router",
+      {
+        "count": 7,
+        "tests": [
+          "test_adaptive_execution.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.adaptive.routing_engine",
+      {
+        "count": 21,
+        "tests": [
+          "test_routing_engine.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.adaptive.strategy_selector",
+      {
+        "count": 8,
+        "tests": [
+          "test_adaptive_execution.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.adaptive.testing_framework",
+      {
+        "count": 6,
+        "tests": [
+          "test_adaptive_execution.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.composition.composition_engine",
+      {
+        "count": 1,
+        "tests": [
+          "test_orchestrator_composition.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.composition.delegation_handler",
+      {
+        "count": 1,
+        "tests": [
+          "test_orchestrator_composition.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.core.intent_router",
+      {
+        "count": 4,
+        "tests": [
+          "test_intent_router.py",
+          "test_lens_router_integration.py",
+          "test_master_orchestrator_stage_2_explicit.py",
+          "test_master_orchestrator_stage_2_integration.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.core.interaction_orchestrator",
+      {
+        "count": 3,
+        "tests": [
+          "test_ast_lens_integration.py",
+          "test_interaction_multi_turn.py",
+          "test_knowledge_ecosystem_e2e.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.core.lens_synthesis",
+      {
+        "count": 1,
+        "tests": [
+          "test_lens_router_integration.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.core.master_orchestrator",
+      {
+        "count": 44,
+        "tests": [
+          "test_business_knowledge_integration.py",
+          "test_fr_008_e2e_validation.py",
+          "test_hallucination_prevention_e2e.py",
+          "test_intent_router_integration.py",
+          "test_master_governance_per_turn.py",
+          "test_master_interaction_orchestration.py",
+          "test_master_orchestrator_headers.py",
+          "test_master_orchestrator_knowledge.py",
+          "test_mcp_orchestrator_bridge.py",
+          "test_multi_orchestrator_header_consistency.py",
+          "test_nfr_005_performance.py",
+          "test_nfr_006_extensibility.py",
+          "test_observability_live_metrics.py",
+          "test_orchestrator_header_parity.py",
+          "test_orchestrator_state_atomicity.py",
+          "test_tier_system_orchestration.py",
+          "test_protocol_compliance.py",
+          "test_master_orchestrator_comprehensive.py",
+          "test_master_orchestrator_stage_2_explicit.py",
+          "test_master_orchestrator_stage_2_integration.py",
+          "test_mcp_exposure.py",
+          "test_mcp_list_tools.py",
+          "test_production_validation.py",
+          "test_hallucination_remediation.py",
+          "test_orchestrator_architecture.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.core.master_orchestrator_stage_1",
+      {
+        "count": 35,
+        "tests": [
+          "test_4stage_integration.py",
+          "test_5stage_workflow_integration.py",
+          "test_e2e_integration.py",
+          "test_hardening_edge_cases.py",
+          "test_master_orchestrator_stage_1.py",
+          "test_master_orchestrator_stage_3.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.core.master_orchestrator_stage_2",
+      {
+        "count": 1,
+        "tests": [
+          "test_master_orchestrator_stage_2_explicit.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.core.master_orchestrator_stage_3",
+      {
+        "count": 58,
+        "tests": [
+          "test_4stage_integration.py",
+          "test_5stage_workflow_integration.py",
+          "test_e2e_integration.py",
+          "test_hardening_edge_cases.py",
+          "test_master_orchestrator_stage_3.py",
+          "test_master_orchestrator_stage_4.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.core.master_orchestrator_stage_4",
+      {
+        "count": 40,
+        "tests": [
+          "test_4stage_integration.py",
+          "test_5stage_workflow_integration.py",
+          "test_e2e_integration.py",
+          "test_hardening_edge_cases.py",
+          "test_master_orchestrator_stage_4.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.core.orchestrator_registry",
+      {
+        "count": 4,
+        "tests": [
+          "test_fr_008_e2e_validation.py",
+          "test_nfr_005_performance.py",
+          "test_mcp_server.py",
+          "test_orchestrator_registry.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.core.relationship_analyzer",
+      {
+        "count": 2,
+        "tests": [
+          "test_lens_router_integration.py",
+          "test_relationship_analyzer.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.core.repository_scanner",
+      {
+        "count": 4,
+        "tests": [
+          "test_5stage_workflow_integration.py",
+          "test_e2e_integration.py",
+          "test_hardening_edge_cases.py",
+          "test_repository_scanner.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.documentation.capability_docs",
+      {
+        "count": 1,
+        "tests": [
+          "test_capability_documentation.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.domain",
+      {
+        "count": 1,
+        "tests": [
+          "test_folder_structure.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.domain.planning_orchestrator",
+      {
+        "count": 6,
+        "tests": [
+          "test_multi_orchestrator_header_consistency.py",
+          "test_orchestrator_header_parity.py",
+          "test_planning_orchestrator_headers.py",
+          "test_mcp_exposure.py",
+          "test_mcp_list_tools.py",
+          "test_planning_orchestrator.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.domains.domain_classifier",
+      {
+        "count": 1,
+        "tests": [
+          "test_domain_classification.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.domains.domain_templates",
+      {
+        "count": 1,
+        "tests": [
+          "test_domain_templates.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.domains.orchestrator_traits",
+      {
+        "count": 4,
+        "tests": [
+          "test_domain_classification.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.linting.naming_conventions",
+      {
+        "count": 1,
+        "tests": [
+          "test_naming_conventions.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.registry.discovery_engine",
+      {
+        "count": 1,
+        "tests": [
+          "test_orchestrator_registry.py"
+        ]
+      }
+    ],
+    [
+      "src.orchestrators.registry.orchestrator_registry",
+      {
+        "count": 1,
+        "tests": [
+          "test_orchestrator_registry.py"
+        ]
+      }
+    ],
+    [
+      "src.security.prompt_injection_prevention",
+      {
+        "count": 1,
+        "tests": [
+          "test_prompt_injection.py"
+        ]
+      }
+    ],
+    [
+      "src.templates.content_generator",
+      {
+        "count": 1,
+        "tests": [
+          "test_template_content.py"
+        ]
+      }
+    ],
+    [
+      "src.templates.content_strategy",
+      {
+        "count": 2,
+        "tests": [
+          "test_template_content.py"
+        ]
+      }
+    ],
+    [
+      "src.templates.knowledge_schema",
+      {
+        "count": 1,
+        "tests": [
+          "test_template_content.py"
+        ]
+      }
+    ],
+    [
+      "src.templates.quality_assurance",
+      {
+        "count": 2,
+        "tests": [
+          "test_template_content.py"
+        ]
+      }
+    ],
+    [
+      "src.templates.template_manager",
+      {
+        "count": 2,
+        "tests": [
+          "test_template_content.py"
+        ]
+      }
+    ],
+    [
+      "src.templates.template_validation",
+      {
+        "count": 1,
+        "tests": [
+          "test_template_content.py"
+        ]
+      }
+    ],
+    [
+      "src.testing.test_audit_logger",
+      {
+        "count": 1,
+        "tests": [
+          "test_ast_audit_tracing.py"
+        ]
+      }
+    ],
+    [
+      "src.tools.ac_populator",
+      {
+        "count": 1,
+        "tests": [
+          "test_ac_populator.py"
+        ]
+      }
+    ],
+    [
+      "src.tools.governance_dashboard",
+      {
+        "count": 1,
+        "tests": [
+          "test_governance_dashboard.py"
+        ]
+      }
+    ],
+    [
+      "src.tools.orchestrator_scaffolder",
+      {
+        "count": 10,
+        "tests": [
+          "test_template_tools.py"
+        ]
+      }
+    ],
+    [
+      "src.tools.phase_readiness_checker",
+      {
+        "count": 1,
+        "tests": [
+          "test_phase_readiness_checker.py"
+        ]
+      }
+    ],
+    [
+      "src.tools.scaffolder_templates",
+      {
+        "count": 17,
+        "tests": [
+          "test_template_tools.py"
+        ]
+      }
+    ],
+    [
+      "src.tools.template_parser",
+      {
+        "count": 8,
+        "tests": [
+          "test_template_tools.py"
+        ]
+      }
+    ],
+    [
+      "src.tools.template_validator",
+      {
+        "count": 8,
+        "tests": [
+          "test_template_tools.py"
+        ]
+      }
+    ],
+    [
+      "src.tools.testing_framework",
+      {
+        "count": 18,
+        "tests": [
+          "test_template_tools.py"
+        ]
+      }
+    ],
+    [
+      "src.tools.tool_generator",
+      {
+        "count": 13,
+        "tests": [
+          "test_template_tools.py"
+        ]
+      }
+    ],
+    [
+      "tier1.orchestrators.cleaners",
+      {
+        "count": 3,
+        "tests": [
+          "test_cleaner_interface.py",
+          "test_md_organizer_cleaner.py",
+          "test_vacuum_orchestrator.py"
+        ]
+      }
+    ],
+    [
+      "tier1.orchestrators.cleaners.md_organizer",
+      {
+        "count": 1,
+        "tests": [
+          "test_md_organizer_cleaner.py"
+        ]
+      }
+    ],
+    [
+      "tier1.orchestrators.vacuum",
+      {
+        "count": 1,
+        "tests": [
+          "test_vacuum_orchestrator.py"
+        ]
+      }
+    ],
+    [
+      "tier2.coherence",
+      {
+        "count": 1,
+        "tests": [
+          "test_ac_phase04_coherence_explain.py"
+        ]
+      }
+    ],
+    [
+      "tier2.credential_protection",
+      {
+        "count": 1,
+        "tests": [
+          "test_ac_nfr_003_03_credential_protection.py"
+        ]
+      }
+    ],
+    [
+      "tier2.hallucination_prevention.boundary_rules",
+      {
+        "count": 2,
+        "tests": [
+          "test_hp_001_02_boundaries.py"
+        ]
+      }
+    ],
+    [
+      "tier2.hallucination_prevention.canonicalization_engine",
+      {
+        "count": 1,
+        "tests": [
+          "test_hp_001_01_canonicalization.py"
+        ]
+      }
+    ],
+    [
+      "tier2.hallucination_prevention.confidence_scoring",
+      {
+        "count": 2,
+        "tests": [
+          "test_hp_003_02_confidence.py"
+        ]
+      }
+    ],
+    [
+      "tier2.hallucination_prevention.detection_recovery",
+      {
+        "count": 2,
+        "tests": [
+          "test_hp_002_02_detection.py"
+        ]
+      }
+    ],
+    [
+      "tier2.hallucination_prevention.execution_sandbox",
+      {
+        "count": 2,
+        "tests": [
+          "test_hp_002_01_sandbox.py"
+        ]
+      }
+    ],
+    [
+      "tier2.hallucination_prevention.mutation_tracking",
+      {
+        "count": 2,
+        "tests": [
+          "test_hp_003_01_mutations.py"
+        ]
+      }
+    ],
+    [
+      "tier2.security",
+      {
+        "count": 1,
+        "tests": [
+          "test_ac_nfr_003_01_security_hardening.py"
+        ]
+      }
+    ]
+  ]
+}

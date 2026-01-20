@@ -1,0 +1,104 @@
+# CORTEX 7.0 Requirements
+# ========================
+# Production-grade Python dependencies for CORTEX Master Orchestrator System
+# Python 3.9+ required (3.10+ recommended)
+# Enforcement: All packages pinned to tested versions
+
+# ============================================================================
+# CORE DEPENDENCIES (Python 3.9+ compatible)
+# ============================================================================
+
+# Configuration management and data validation
+pyyaml==6.0.1              # YAML parsing for config files (Python 3.9+)
+pydantic==2.5.2            # Data validation with type hints (Python 3.9+)
+
+# ============================================================================
+# MCP PROTOCOL & IPC
+# ============================================================================
+# Note: CORTEX uses custom JSON-RPC 2.0 implementation (cortex/mcp/protocol.py)
+# Reason: Official mcp SDK requires Python 3.10+; we support 3.9+
+
+# WebSocket and async communication
+websockets==12.0           # WebSocket protocol (MCP server communication)
+aiofiles==23.2.0           # Async file I/O for streaming responses
+httptools==0.7.0           # C-accelerated HTTP parsing (performance)
+wsproto==1.1.0             # WebSocket subprotocol layer
+
+# ============================================================================
+# API & WEB FRAMEWORK (FastAPI + Uvicorn)
+# ============================================================================
+
+# Web framework and server
+fastapi==0.104.1           # Modern async web framework (ASGI)
+uvicorn[standard]==0.24.0  # ASGI server with all standard features
+
+# HTTP clients
+httpx==0.25.2              # Async HTTP client (API calls, testing)
+requests==2.31.0           # Synchronous HTTP client (backward compat)
+
+# ============================================================================
+# DATA SCIENCE & ANALYSIS (Optional but recommended)
+# ============================================================================
+# Used for: orchestrator analytics, performance metrics, usage patterns
+
+pandas==2.0.3              # Data analysis and manipulation
+numpy==1.24.4              # Numerical computing foundation
+scikit-learn==1.3.2        # Machine learning for recommendations/analytics
+
+# ============================================================================
+# TESTING & QUALITY ASSURANCE (Development)
+# ============================================================================
+
+# Testing frameworks (TDD enforcement per CORE-008)
+pytest==7.4.3              # Test framework
+pytest-cov==4.1.0          # Code coverage measurement (AC-NFR-007 compliance)
+pytest-asyncio==0.23.2     # Async test support for cortex.mcp.*
+
+# Code quality and linting
+black==23.12.1             # Code formatter (enforced)
+isort==5.13.2              # Import sorter (PEP 8 compliance)
+mypy==1.8.0                # Static type checker (CORE-011 enforcement)
+pylint==3.0.3              # Advanced code linter
+flake8==7.0.0              # PEP 8 style guide enforcement
+
+# ============================================================================
+# DEVELOPMENT & INFRASTRUCTURE UTILITIES
+# ============================================================================
+
+# Environment and configuration
+python-dotenv==1.0.0       # .env file loading for local development
+
+# CLI framework
+click==8.1.7               # Command-line interface builder
+argparse-dataclass==1.0.0  # Dataclass-based CLI argument parsing
+
+# System utilities
+psutil==5.9.6              # System and process information
+dependency-injector==4.40.0  # Dependency injection framework (CORTEX core pattern)
+
+# ============================================================================
+# OPTIONAL: AI/ML INTEGRATIONS
+# ============================================================================
+# Uncomment to enable specific vendor integrations:
+
+# anthropic==0.7.11         # Anthropic Claude API client
+# openai==1.3.9             # OpenAI API client
+
+# ============================================================================
+# DEVELOPMENT NOTES
+# ============================================================================
+# 
+# Version Pinning Strategy:
+# - Production dependencies: Fixed versions (pyyaml==6.0.1)
+# - Rationale: Prevent breaking changes in minor/patch versions
+# - Updates: Only after testing in CORTEX test suite
+#
+# Python 3.9+ Requirement:
+# - Reason: asyncio improvements, type hinting coverage
+# - MCP: Custom JSON-RPC 2.0 implementation (cortex/mcp/)
+# - FastAPI: Requires 3.9+ for full async/await support
+#
+# Production Deployment:
+# - Install with: pip install -r requirements.txt
+# - Verify: python -m cortex.mcp.server --health-check
+# - Environment: Python 3.10+ recommended for performance

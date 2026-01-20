@@ -1,0 +1,312 @@
+# ==============================================================================
+# GOVERNANCE LOADING SEQUENCE & PRECEDENCE MAP
+# ==============================================================================
+# Purpose: Defines authoritative loading order, precedence rules, and conflict
+#          resolution for CORTEX governance across all tiers and domains.
+#
+# Status: ACTIVE (Tier 0 = Immutable)
+# Author: Asif Hussain
+# Copyright: © 2025-2026 Asif Hussain. All rights reserved.
+# ==============================================================================
+
+schema_version: '1.0'
+governance_tier: 0
+category: GOVERNANCE_ORCHESTRATION
+precedence: HIGHEST
+
+metadata:
+  purpose: "Single source of truth for governance rule loading"
+  created_at: "2026-01-16T00:00:00Z"
+  author: "Asif Hussain"
+  copyright: "© 2025-2026 Asif Hussain. All rights reserved."
+
+# ==============================================================================
+# LOADING SEQUENCE (IMMUTABLE)
+# ==============================================================================
+# Rules in this sequence MUST be loaded in this exact order.
+# Later rules can override earlier ones (see precedence_rules below).
+# ==============================================================================
+
+loading_sequence:
+  phase_0_bootstrap:
+    description: "Initial bootstrap - core governance loaded first"
+    rules:
+      - path: "cortex_brain/tier0/governance/core-rules.yaml"
+        id: "core-rules"
+        rules_count: 29
+        severity: "BLOCKED"
+        load_order: 1
+        description: "29 immutable SKULL rules - foundation for all governance"
+        dependencies: []
+        critical: true
+  
+  phase_1_domain_rules:
+    description: "Domain-specific orchestrator rules"
+    rules:
+      - path: "cortex_brain/tier0/governance/tdd-rules.yaml"
+        id: "tdd-rules"
+        domain: "tdd"
+        severity: "BLOCKED"
+        load_order: 2
+        dependencies: ["core-rules"]
+        description: "TDD orchestrator domain rules (8 rules)"
+  
+      - path: "cortex_brain/tier0/governance/interaction-rules.yaml"
+        id: "interaction-rules"
+        domain: "interaction"
+        severity: "BLOCKED"
+        load_order: 3
+        dependencies: ["core-rules"]
+        description: "Intent comprehension & LENS protocol rules"
+  
+      - path: "cortex_brain/tier0/governance/planning-rules.yaml"
+        id: "planning-rules"
+        domain: "planning"
+        severity: "BLOCKED"
+        load_order: 4
+        dependencies: ["core-rules"]
+        description: "Planning orchestrator domain rules"
+  
+      - path: "cortex_brain/tier0/governance/ado-rules.yaml"
+        id: "ado-rules"
+        domain: "ado"
+        severity: "WARNING"
+        load_order: 5
+        dependencies: ["core-rules"]
+        description: "Azure DevOps integration rules"
+  
+  phase_2_validation:
+    description: "Validation & compliance rules"
+    rules:
+      - path: "cortex_brain/tier0/governance/ac-validation-checklist.yaml"
+        id: "ac-validation"
+        category: "validation"
+        severity: "BLOCKED"
+        load_order: 6
+        dependencies: ["core-rules", "planning-rules"]
+        description: "AC-ID validation checklist"
+  
+  phase_3_enforcement:
+    description: "Enforcement policy & phase mapping"
+    rules:
+      - path: "cortex_brain/tier0/governance/phase-enforcement-map.yaml"
+        id: "phase-enforcement"
+        category: "orchestration"
+        severity: "BLOCKED"
+        load_order: 7
+        dependencies: ["core-rules", "ac-validation"]
+        description: "Phase-specific governance enforcement"
+
+# ==============================================================================
+# PRECEDENCE RULES (CONFLICT RESOLUTION)
+# ==============================================================================
+# When rules from different tiers conflict, use this precedence order.
+# ==============================================================================
+
+precedence_rules:
+  hierarchy:
+    - level: 1
+      tier: "TIER_0_CORE"
+      file: "core-rules.yaml"
+      description: "Core SKULL rules (immutable, always highest precedence)"
+      override_protection: "STRICT"
+      example_rule: "CORE-005 (Path Portability)"
+  
+    - level: 2
+      tier: "TIER_0_DOMAIN"
+      file: "tdd-rules.yaml, interaction-rules.yaml, planning-rules.yaml, ado-rules.yaml"
+      description: "Domain-specific rules (high precedence, extend core)"
+      override_protection: "HIGH"
+      example_rule: "TDD-RULE-001 (Test Lifecycle)"
+  
+    - level: 3
+      tier: "TIER_0_VALIDATION"
+      file: "ac-validation-checklist.yaml"
+      description: "Validation rules (enforce quality gates)"
+      override_protection: "HIGH"
+      example_rule: "AC-VALIDATION-003 (Coverage check)"
+  
+    - level: 4
+      tier: "TIER_1_ENFORCEMENT"
+      file: "phase-enforcement-map.yaml"
+      description: "Phase-specific enforcement (context-dependent)"
+      override_protection: "MEDIUM"
+      example_rule: "PHASE-13 enforcement rules"
+
+  conflict_resolution_algorithm: |
+    When rule_A from tier_X conflicts with rule_B from tier_Y:
+    
+    1. If one is CORE (tier 0), CORE wins (always)
+    2. If both are TIER_0, check dependencies:
+       - If rule_A depends_on rule_B, rule_B wins
+       - If mutual or no dependency, alphabetical (tdd < interaction < planning < ado)
+    3. If one is TIER_0 and other TIER_1, TIER_0 wins
+    4. If both TIER_1, phase-specific wins (PHASE context)
+    
+    Example:
+      CORE-011 (type hints) vs TDD-RULE-005 (type hints) 
+      → CORE-011 wins (CORE > DOMAIN)
+      → Use CORE-011 as baseline, TDD-RULE-005 for TDD-specific extensions
+
+# ==============================================================================
+# LOADING VALIDATION
+# ==============================================================================
+# Validation steps that MUST pass before governance is active.
+# ==============================================================================
+
+validation:
+  pre_load_checks:
+    - name: "File existence"
+      check: "All files in loading_sequence exist and are readable"
+      failure_action: "BLOCK - fail immediately"
+  
+    - name: "YAML schema validation"
+      check: "All files conform to governance schema"
+      failure_action: "BLOCK - invalid YAML structure"
+      schema_file: "cortex_brain/tier0/governance/governance-schema.yaml"
+  
+    - name: "Dependency resolution"
+      check: "All rule dependencies can be satisfied"
+      failure_action: "BLOCK - circular dependency detected"
+      algorithm: "topological sort"
+  
+    - name: "Conflict detection"
+      check: "Conflicting rules detected and logged (not fatal)"
+      failure_action: "WARN - conflicts resolved per precedence_rules"
+  
+    - name: "Rule uniqueness"
+      check: "No duplicate rule_id across all files"
+      failure_action: "BLOCK - duplicate rule_id"
+
+  post_load_checks:
+    - name: "Total rule count"
+      check: "Sum of all rules matches metadata rule counts"
+      expected_total: 54  # 29 (core) + 8 (tdd) + 10 (interaction) + 4 (planning) + etc.
+  
+    - name: "Severity distribution"
+      check: "BLOCKED severity rules dominate (>75%)"
+      expected_blocked_percent: 78
+  
+    - name: "Domain coverage"
+      check: "All documented domains have rule coverage"
+      domains: ["tdd", "interaction", "planning", "ado"]
+
+# ==============================================================================
+# EXECUTION CONTEXT RULES
+# ==============================================================================
+# How governance applies in different execution contexts.
+# ==============================================================================
+
+execution_contexts:
+  agent_execution:
+    description: "Governance applied when agents execute code"
+    rules_applied: ["core-rules", "tdd-rules", "interaction-rules", "phase-enforcement"]
+    loading_method: "Eager load at agent startup"
+    reload_frequency: "On every orchestrator instantiation"
+    example: "When TDD Orchestrator runs tests"
+  
+  human_development:
+    description: "Governance applied to human developer code"
+    rules_applied: ["core-rules", "phase-enforcement"]
+    loading_method: "Git pre-commit hooks"
+    reload_frequency: "Per commit"
+    example: "When pushing code to GitHub"
+  
+  phase_transitions:
+    description: "Governance applied when phase changes"
+    rules_applied: ["core-rules", "phase-enforcement", "ac-validation"]
+    loading_method: "Eager load before phase transition"
+    reload_frequency: "At phase boundary"
+    example: "When PHASE-12 transitions to PHASE-13"
+
+# ==============================================================================
+# RULE DISCOVERY & INTROSPECTION
+# ==============================================================================
+# API for runtime rule queries (used by agents and validators).
+# ==============================================================================
+
+discovery_api:
+  functions:
+    - name: "get_rule(rule_id)"
+      description: "Fetch a single rule by ID"
+      returns: "Rule definition or null if not found"
+      example: "get_rule('CORE-011') → Returns type hints rule"
+    
+    - name: "get_rules_by_category(category)"
+      description: "Fetch all rules in a category"
+      returns: "List[Rule]"
+      example: "get_rules_by_category('quality_gates') → Returns CORE-011, CORE-012, etc."
+    
+    - name: "get_rules_by_domain(domain)"
+      description: "Fetch all rules for a domain"
+      returns: "List[Rule]"
+      example: "get_rules_by_domain('tdd') → Returns TDD-RULE-001, etc."
+    
+    - name: "get_rules_by_severity(severity)"
+      description: "Fetch all rules with specific severity"
+      returns: "List[Rule]"
+      example: "get_rules_by_severity('BLOCKED') → Returns all critical rules"
+    
+    - name: "validate_against_rules(code, rule_ids?)"
+      description: "Validate code against governance rules"
+      returns: "ValidationResult(violations: List[Violation], passed: bool)"
+      example: "validate_against_rules(code, ['CORE-011', 'CORE-012'])"
+  
+  implementation:
+    module: "src.core.governance_registry"
+    class: "GovernanceRegistry"
+    initialization: "Registry loaded at agent startup, cached"
+
+# ==============================================================================
+# AUDIT LOGGING OF GOVERNANCE LOADING
+# ==============================================================================
+# Every governance load event must be logged for audit trail.
+# ==============================================================================
+
+audit_logging:
+  events_logged:
+    - "governance_load_start"
+    - "governance_file_loaded"
+    - "governance_validation_passed"
+    - "governance_validation_failed"
+    - "governance_conflict_detected"
+    - "governance_load_complete"
+  
+  log_structure:
+    timestamp: "ISO 8601"
+    event_type: "string"
+    rule_id: "string (if applicable)"
+    status: "SUCCESS | FAILURE | WARNING"
+    details: "JSON object with context"
+    duration_ms: "number"
+  
+  example_log_entry: |
+    {
+      "timestamp": "2026-01-16T14:32:00Z",
+      "event_type": "governance_file_loaded",
+      "file": "core-rules.yaml",
+      "rule_count": 29,
+      "status": "SUCCESS",
+      "duration_ms": 45
+    }
+
+# ==============================================================================
+# ENFORCEMENT CONFIGURATION
+# ==============================================================================
+
+enforcement:
+  mode: "strict"
+  override_allowed: false
+  validation_level: "pre_and_post_load"
+  audit_logging: true
+  
+  violation_handling:
+    blocked_severity:
+      action: "Prevent execution"
+      escalation: "Orchestrator halt"
+      audit_log: "CRITICAL"
+    
+    warning_severity:
+      action: "Log and warn"
+      escalation: "Log entry only"
+      audit_log: "WARNING"

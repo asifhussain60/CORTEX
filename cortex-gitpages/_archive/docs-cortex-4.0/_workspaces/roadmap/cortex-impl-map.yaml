@@ -1,0 +1,720 @@
+# CORTEX Implementation Master Map
+# Version: 3.1-corrected
+# Date: 2026-01-20
+# Authority: Filesystem scan + test inventory + code analysis + hallucination remediation
+# Status: CORRECTED (22 false "IMPLEMENTED" claims removed, 6 verified implementations documented)
+
+metadata:
+  title: "CORTEX Implementation Map"
+  description: "Truth-based roadmap reflecting actual implementation, tests, and MCP exposure (CORRECTED v3.1)"
+  project: "CORTEX"
+  version: "3.1-corrected"
+  updated: "2026-01-20T16:00:00Z"
+  governance_mode: "STRICT"
+  hallucination_remediation: "22 false 'IMPLEMENTED' claims removed per Phase 0 AC-3"
+  
+implementation_stats:
+  codebase:
+    total_python_files: 413
+    cortex_package: 413  # cortex/ is canonical
+    cortex_brain_files: 41  # State + governance only
+    test_files: 409
+    mcp_tools_exposed: 14  # All stubs currently
+  
+  test_coverage:
+    unique_ac_ids_tested: 257
+    total_test_files: 409
+    test_frameworks:
+      - pytest
+      - unittest
+    test_categories:
+      unit: ~300
+      integration: ~80
+      e2e: ~29
+  
+  mcp_tools:
+    status: "STUB_IMPLEMENTATIONS"
+    exposed_count: 14
+    location: "cortex/mcp/"
+    tools:
+      - sample_tool
+      - echo_tool
+      - status_tool
+      - query_tool
+      - validate_tool
+      - transform_tool
+      - analyze_tool
+      - generate_tool
+      - execute_tool
+      - monitor_tool
+      - alert_tool
+      - report_tool
+      - optimize_tool
+      - diagnose_tool
+    note: "All tools return mock data - require implementation"
+  
+  orchestrators:
+    status: "PARTIAL_IMPLEMENTATION"
+    count: 9
+    protocols: 5  # IOrchestrator, IExecutor, IPlanner, IAnalyzer, IValidator
+    concrete: 4  # MasterOrchestrator, PlanningOrchestrator, AnalysisOrchestrator, ExecutionOrchestrator
+    location: "cortex/orchestrators/"
+  
+  governance:
+    tier0_files: 2  # prompt-versions.yaml, repo-registry.yaml
+    tier1_files: 0  # Empty directory
+    tier2_files: 0  # Empty directory
+    core_rules_missing: true
+    governance_db_exists: true
+    location: "cortex_brain/"
+    note: "Tier system incomplete - missing core-rules.yaml"
+
+architecture:
+  canonical_package: "cortex/"
+  state_management: "cortex_brain/"
+  test_location: "tests/"
+  mcp_server: "cortex/mcp/server.py"
+  governance_db: "cortex_brain/state/governance.db"
+  
+  forbidden_patterns:
+    - "cortex_toolkit/"  # Deleted per PHASE-ARCH-ALIGNMENT-001
+    - "src/"  # Consolidated to cortex/
+    - "Multiple implementation folders"
+  
+  structure:
+    cortex/:
+      api/: "API layer"
+      brain/: "269 files - brain integration logic"
+      core/: "Core utilities"
+      infrastructure/: "Infrastructure components"
+      mcp/: "MCP server + 14 stub tools"
+      orchestrators/: "9 orchestrator classes"
+      tools/: "Reusable tooling"
+    cortex_brain/:
+      tier0/: "2 YAML files (not governance rules)"
+      tier1/: "Empty"
+      tier2/: "Empty"
+      state/: "governance.db + runtime state"
+    tests/:
+      unit/: "~300 test files"
+      integration/: "~80 test files"
+      e2e/: "~29 test files"
+
+phases_implementation_status:
+  implemented:
+    count: 3
+    phases:
+      - id: "impl-governance-001-context-aware"
+        title: "Context-Aware Governance"
+        ac_ids: 4
+        tests: 75
+        status: "IMPLEMENTED"
+        completion_date: "2026-01-20"
+        note: "28/29 core rules now functional"
+      
+      - id: "impl-intelligence-001-routing"
+        title: "Routing Decision Intelligence"
+        ac_ids: 1
+        tests: 12
+        status: "IMPLEMENTED"
+        completion_date: "2026-01-20"
+      
+      - id: "impl-intelligence-002-duration"
+        title: "Operation Duration Intelligence"
+        ac_ids: 1
+        tests: 15
+        status: "IMPLEMENTED"
+        completion_date: "2026-01-20"
+      
+      - id: "impl-intelligence-003-errors"
+        title: "Error Pattern Recognition"
+        ac_ids: 1
+        tests: 15
+        status: "IMPLEMENTED"
+        completion_date: "2026-01-20"
+      
+      - id: "impl-infra-001-resilience"
+        title: "Infrastructure Resilience Foundation"
+        ac_ids: 6
+        tests: 126
+        status: "IMPLEMENTED"
+        completion_date: "2026-01-20"
+        note: "P0-CRITICAL: Connection pooling, circuit breakers, retry logic"
+      
+      - id: "impl-state-002-concurrency"
+        title: "State Management and Concurrency Safety"
+        ac_ids: 6
+        tests: 82
+        status: "IMPLEMENTED"
+        completion_date: "2026-01-20"
+        note: "P0-CRITICAL: Transactional state, optimistic locking, lock-free registry"
+  
+  stub_implementations:
+    count: 21
+    note: "These phases are planned or partially documented but lack complete implementations"
+    phases:
+      - id: "arch-005-hardening"
+        title: "Production Hardening"
+        status: "STUB"
+        reason: "Placeholder phase - actual hardening covered in impl-infra-001, impl-state-002, impl-recovery-003"
+      
+      - id: "arch-007-ecosystem"
+        title: "Orchestrator Ecosystem"
+        status: "STUB"
+        reason: "Broad placeholder - actual implementations in impl-governance-001, impl-intelligence-001/002/003"
+      
+      - id: "arch-007-intent"
+        title: "Intent Router"
+        status: "STUB"
+        reason: "Design documented but no implementation"
+      
+      - id: "arch-008-orchestrators"
+        title: "Core Orchestrators"
+        status: "STUB"
+        reason: "Interfaces exist; concrete implementations incomplete"
+      
+      - id: "arch-009-governance"
+        title: "Governance Tools"
+        status: "STUB"
+        reason: "Core governance implemented in impl-governance-001; tools not finalized"
+      
+      - id: "arch-010-adaptive"
+        title: "Adaptive Execution"
+        status: "STUB"
+        reason: "Design documented but no implementation"
+      
+      - id: "arch-011-hallucination"
+        title: "Hallucination Prevention"
+        status: "STUB"
+        reason: "Conceptual phase - implementation in tier2 safety rules (not yet populated)"
+      
+      - id: "arch-012-knowledge"
+        title: "Knowledge Ecosystem"
+        status: "STUB"
+        reason: "Concept phase - no implementations found"
+      
+      - id: "arch-013-observability"
+        title: "Observability"
+        status: "STUB"
+        reason: "Deferred to impl-ops-004-observability"
+      
+      - id: "arch-015-dashboard"
+        title: "Dashboard"
+        status: "STUB"
+        reason: "No dashboard implementation found"
+      
+      - id: "arch-016-continuation"
+        title: "Orchestrator Continuation"
+        status: "STUB"
+        reason: "Design not yet implemented"
+      
+      - id: "arch-017-domain-brain"
+        title: "Domain Brain"
+        status: "STUB"
+        reason: "Framework exists; domain implementations incomplete"
+      
+      - id: "arch-018-devx"
+        title: "Developer Experience"
+        status: "STUB"
+        reason: "Partial documentation; tools not finalized"
+      
+      - id: "arch-019-template-tool"
+        title: "Template Tools"
+        status: "STUB"
+        reason: "Stub tools exist; real implementations missing"
+      
+      - id: "arch-020-template-content"
+        title: "Template Content"
+        status: "STUB"
+        reason: "Template structures exist; content not populated"
+      
+      - id: "arch-021-knowledge-proto"
+        title: "Knowledge Protocol"
+        status: "STUB"
+        reason: "Referenced but not specified"
+      
+      - id: "arch-022-mcp-compliance"
+        title: "MCP Protocol"
+        status: "STUB"
+        reason: "14 MCP tools are stubs returning mock data"
+      
+      - id: "arch-023-complexity"
+        title: "Complexity Gate"
+        status: "STUB"
+        reason: "Framework exists; business rules incomplete"
+      
+      - id: "arch-024-response"
+        title: "Response Composition"
+        status: "STUB"
+        reason: "Structure defined; full composition logic pending"
+      
+      - id: "arch-025-governance-comp"
+        title: "Governance Composite"
+        status: "STUB"
+        reason: "Core governance done; composite patterns pending"
+  
+  not_started:
+    count: 4
+    phases:
+      - id: "consolidation-001-src-cleanup"
+        title: "Source Code Consolidation (src/ → cortex/)"
+        ac_ids: 5
+        status: "NOT_STARTED"
+        priority: "P1-CRITICAL"
+        estimated_effort: "8-16 hours"
+        blocking: true
+        note: "30+ src.* imports remain; blocks all downstream work"
+        file: "_workspaces/roadmap/phases/consolidation-001-src-cleanup.yaml"
+      
+      - id: "impl-recovery-003-fault-tolerance"
+        title: "Error Recovery and Fault Tolerance"
+        ac_ids: 6
+        status: "NOT_STARTED"
+        priority: "P0-CRITICAL"
+        estimated_effort: "5-7 days"
+        blocking: true
+        dependencies: ["impl-infra-001-resilience", "impl-state-002-concurrency"]
+        note: "Incomplete error paths leave system in inconsistent state"
+        file: "_workspaces/roadmap/phases/impl-recovery-003-fault-tolerance.yaml"
+      
+      - id: "impl-ops-004-observability"
+        title: "Production Observability and Operations"
+        ac_ids: 6
+        status: "NOT_STARTED"
+        priority: "P1-HIGH"
+        estimated_effort: "4-6 days"
+        blocking: false
+        dependencies: ["impl-infra-001-resilience", "impl-state-002-concurrency"]
+        note: "Structured logging, Prometheus metrics, distributed tracing"
+        file: "_workspaces/roadmap/phases/impl-ops-004-observability.yaml"
+      
+      - id: "impl-tdd-prod-ready"
+        title: "TDD Production Readiness (125 missing modules)"
+        ac_ids: 6
+        status: "NOT_STARTED"
+        priority: "P2-MEDIUM"
+        estimated_effort: "2-3 weeks"
+        blocking: false
+        note: "125 modules have tests but no implementations; 170 test errors"
+        file: "_workspaces/roadmap/phases/impl-tdd-prod-ready.yaml"
+
+phase_tracker:
+  authority: "CORTEX_IMPL_MAP_v3.1"
+  last_updated: "2026-01-20T16:00:00Z"
+  validation_status: "CORRECTED"
+  validation_notes: |
+    This document corrects hallucinations from v3.0-consolidated:
+    - Removed 22 false "IMPLEMENTED" claims
+    - Correctly documented 6 actually-completed phases
+    - Documented 21 stub/placeholder phases
+    - Documented 4 not-started critical phases
+    - Total: 31 known phases, 263 import errors, tier system incomplete
+  
+  source_of_truth_chain:
+    - document: "cortex-master.yaml"
+      authority_level: "PRIMARY"
+      status: "PENDING_CREATION"
+      note: "Phase 0 AC-1 - to be created for v3.2+"
+    - document: "cortex-impl-map.yaml"
+      authority_level: "SECONDARY"
+      status: "CORRECTED"
+      version: "v3.1"
+    - document: "phase file system"
+      authority_level: "SOURCE_OF_RECORD"
+      status: "ACTIVE"
+      location: "_workspaces/roadmap/phases/*.yaml"
+
+governance_compliance:
+  cortex_builder_prompt_md:
+    requirement: "Phases must be tracked with phase_tracker for authority validation"
+    status: "✅ IMPLEMENTED"
+    version: "Per cortex-builder.prompt.md §3"
+  
+  core_rules_yaml:
+    requirement: "core-rules.yaml must exist in cortex_brain/tier0/governance/"
+    status: "✅ CREATED"
+    location: "cortex_brain/tier0/governance/core-rules.yaml"
+    date_created: "2026-01-20"
+  
+  authority_chain:
+    requirement: "Single source of truth per cortex-builder.prompt.md § 'ONE PATH FORWARD'"
+    status: "⏳ PENDING"
+    next_step: "Phase 0 AC-1: Create cortex-master.yaml (v3.2+)"
+    blocking: "All phase implementations require cortex-master.yaml authority"
+
+gaps_identified:
+  critical:
+    - gap: "125 modules have tests but no implementations"
+      location: "Multiple src.* imports in test files"
+      impact: "170 test errors on import failures, production not ready"
+      source: "_workspaces/roadmap/reports/tdd-gap-analysis.yaml"
+      resolution: "impl-tdd-prod-ready.yaml"
+      priority: "P0-NEXT"
+      estimated_effort: "8-12 days implementation + 3-4 days validation"
+      categories:
+        core: 87
+        orchestrators: 9
+        domain: 14
+        infrastructure: 5
+        mcp: 1
+        other: 9
+    
+    - gap: "MCP tools are stubs"
+      location: "cortex/mcp/*.py"
+      impact: "No functional MCP exposure"
+      resolution: "Implement tool logic or document as future work"
+      priority: "P1"
+    
+    - gap: "Empty tier1/tier2 directories"
+      location: "cortex_brain/tier1/, cortex_brain/tier2/"
+      impact: "Governance architecture incomplete"
+      resolution: "Populate or remove directory structure"
+      priority: "P2"
+  
+  resolved:
+    - gap: "Governance rules not enforced - context-aware dispatch missing"
+      resolution_date: "2026-01-20"
+      implementation: "Context-aware governance pipeline (GOV-CTX-001)"
+      result: "28/29 rules now functional - 75 tests passing"
+    
+    - gap: "Missing core-rules.yaml"
+      resolution_date: "2026-01-20"
+      implementation: "Copied to cortex_brain/tier0/governance/core-rules.yaml"
+      result: "30 rules loading successfully from YAML"
+    
+    - gap: "No routing decision outcome tracking"
+      resolution_date: "2026-01-20"
+      implementation: "RoutingAnalyzer with SQLite persistence (INT-001)"
+      result: "12 tests passing - accuracy and misrouting detection"
+    
+    - gap: "No operation duration baselines"
+      resolution_date: "2026-01-20"
+      implementation: "DurationAnalyzer with percentile calculations (INT-002)"
+      result: "15 tests passing - p50/p95/p99 baselines and slow operation detection"
+    
+    - gap: "Error logs not analyzed for patterns"
+      resolution_date: "2026-01-20"
+      implementation: "ErrorAnalyzer with context sanitization (INT-003)"
+      result: "15 tests passing - pattern detection and brittle handler identification"
+  
+  moderate:
+    - gap: "Test-to-AC mapping unclear"
+      impact: "Hard to verify AC completion"
+      resolution: "Document test file AC-ID coverage"
+      priority: "P2"
+    
+    - gap: "Orchestrator protocol vs concrete mismatch"
+      impact: "5 protocols, 4 implementations - incomplete"
+      resolution: "Document missing orchestrators or remove unused protocols"
+    
+    - gap: "Dashboard files missing"
+      impact: "PHASE-15 claimed complete but no dashboard/index.html"
+      resolution: "Implement or mark as future work"
+
+recommendations:
+  immediate:
+    - "Implement 125 missing modules (P0-NEXT) - see impl-tdd-prod-ready.yaml"
+    - "Start with Priority 1 critical modules (conversation_protocol, orchestrator_decorator)"
+    - "Use three-phase approach: stub generation → implementation → validation"
+  
+  completed:
+    - "✅ Context-aware governance (P0) - 28/29 rules functional (2026-01-20)"
+    - "✅ Intelligence modules (P1) - routing, duration, error tracking (2026-01-20)"
+    - "✅ Core-rules.yaml created in cortex_brain/tier0/governance/"
+  
+  short_term:
+    - "Implement missing MCP tool logic"
+    - "Complete tier1/tier2 governance content"
+    - "Add AC-ID markers to all test files"
+    - "Create test-to-phase mapping report"
+  
+  long_term:
+    - "Implement production readiness checks"
+    - "Build unified deployment pipeline"
+    - "Complete Knowledge Protocol implementation"
+    - "Implement dashboard (PHASE-15)"
+
+remediation_phases:
+  governance:
+    - phase_id: "impl-governance-001-context-aware"
+      title: "Situational Governance Rule Engine"
+      priority: "P0"
+      effort: "4-6 days"
+      source: "docs/GOVERNANCE-INTELLIGENCE-BRIEF.md"
+      status: "IMPLEMENTED"
+      completion_date: "2026-01-20"
+      file: "_workspaces/roadmap/phases/impl-governance-001-context-aware.yaml"
+      implementation:
+        - "cortex/brain/core/governance/context_extractor.py (15 tests)"
+        - "cortex/brain/core/governance/rule_applicability.py (17 tests)"
+        - "cortex/brain/core/governance/rule_validators.py (18 tests)"
+        - "cortex/brain/core/rule_evaluator.py (integration - 25 tests)"
+      tests_total: "75 passing"
+      resolution: "28/29 rules now functional (was only SKULL-001)"
+  
+  intelligence:
+    - phase_id: "impl-intelligence-001-routing"
+      title: "Routing Decision Intelligence"
+      priority: "P1"
+      effort: "2-3 hours"
+      source: "docs/INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 1"
+      status: "IMPLEMENTED"
+      completion_date: "2026-01-20"
+      file: "_workspaces/roadmap/phases/impl-intelligence-001-routing.yaml"
+      implementation: "cortex/core/intelligence/routing_intelligence.py"
+      tests: "tests/unit/core/intelligence/test_routing_intelligence.py (12 passing)"
+    
+    - phase_id: "impl-intelligence-002-duration"
+      title: "Operation Duration Intelligence"
+      priority: "P1"
+      effort: "2-3 hours"
+      source: "docs/INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 2"
+      status: "IMPLEMENTED"
+      completion_date: "2026-01-20"
+      file: "_workspaces/roadmap/phases/impl-intelligence-002-duration.yaml"
+      implementation: "cortex/core/intelligence/duration_intelligence.py"
+      tests: "tests/unit/core/intelligence/test_duration_intelligence.py (15 passing)"
+    
+    - phase_id: "impl-intelligence-003-errors"
+      title: "Error Pattern Recognition"
+      priority: "P1"
+      effort: "2-3 hours"
+      source: "docs/INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 3"
+      status: "IMPLEMENTED"
+      completion_date: "2026-01-20"
+      file: "_workspaces/roadmap/phases/impl-intelligence-003-errors.yaml"
+      implementation: "cortex/core/intelligence/error_intelligence.py"
+      tests: "tests/unit/core/intelligence/test_error_intelligence.py (15 passing)"
+  
+  tdd_production:
+    - phase_id: "impl-tdd-prod-ready"
+      title: "TDD Production Readiness (125 missing modules)"
+      priority: "P2"
+      effort: "2-3 weeks"
+      source: "_workspaces/roadmap/reports/tdd-gap-analysis.yaml"
+      status: "NOT_STARTED"
+      file: "_workspaces/roadmap/phases/impl-tdd-prod-ready.yaml"
+      issue: "125 modules have tests but no implementations"
+      impact: "Test suite 170 errors; production not ready"
+  
+  production_infrastructure:
+    - phase_id: "impl-infra-001-resilience"
+      title: "Infrastructure Resilience Foundation"
+      priority: "P0-CRITICAL"
+      effort: "5-7 days"
+      status: "IMPLEMENTED"
+      completion_date: "2026-01-20"
+      file: "_workspaces/roadmap/phases/impl-infra-001-resilience.yaml"
+      blocks_production: true
+      acceptance_criteria: 6
+      tests_total: "126 passing"
+      focus: "Connection pooling, circuit breakers, retry logic, graceful degradation"
+      implementation:
+        - "cortex/infrastructure/connection_pool.py (23 tests)"
+        - "cortex/infrastructure/bulkhead_manager.py (15 tests)"
+        - "cortex/infrastructure/circuit_breaker.py (24 tests)"
+        - "cortex/infrastructure/retry_strategy.py (25 tests)"
+        - "cortex/infrastructure/degradation_manager.py (18 tests)"
+        - "cortex/infrastructure/resource_tracker.py (21 tests)"
+      git_commits:
+        - "0f90af78a: checkpoint before impl-infra-001-resilience"
+        - "2a45d3b21: impl-infra-001 ACs 01-04 complete"
+        - "27fdd720b: impl-infra-001 Complete - All 6 ACs"
+    
+    - phase_id: "impl-state-002-concurrency"
+      title: "State Management and Concurrency Safety"
+      priority: "P0-CRITICAL"
+      effort: "6-8 days"
+      status: "IMPLEMENTED"
+      completion_date: "2026-01-20"
+      file: "_workspaces/roadmap/phases/impl-state-002-concurrency.yaml"
+      blocks_production: true
+      dependencies: ["impl-infra-001-resilience"]
+      acceptance_criteria: 6
+      tests_total: "82 passing"
+      focus: "Transactional state, optimistic locking, concurrent hash chain, lock-free registry"
+      implementation:
+        - "cortex/infrastructure/transaction_manager.py (16 tests)"
+        - "cortex/core/state/optimistic_lock.py (21 tests)"
+        - "cortex/infrastructure/audit_hash_chain.py (13 tests)"
+        - "cortex/orchestrators/registry/lock_free_registry.py (15 tests)"
+        - "cortex/core/state/phase_state_machine.py (17 tests)"
+      git_commits:
+        - "checkpoint before impl-state-002-concurrency"
+        - "a698337c2: AC-STATE-002-01, AC-STATE-002-02 complete"
+        - "21e08eb9e: AC-STATE-002-03 complete"
+        - "3543cd7fa: AC-STATE-002-04, AC-STATE-002-05, AC-STATE-002-06 - PHASE COMPLETE"
+    
+    - phase_id: "impl-recovery-003-fault-tolerance"
+      title: "Error Recovery and Fault Tolerance"
+      priority: "P0-CRITICAL"
+      effort: "5-7 days"
+      status: "NOT_STARTED"
+      file: "_workspaces/roadmap/phases/impl-recovery-003-fault-tolerance.yaml"
+      blocks_production: true
+      dependencies: ["impl-infra-001-resilience", "impl-state-002-concurrency"]
+      acceptance_criteria: 6
+      focus: "Saga compensation, orphan cleanup, automatic repair, fault isolation"
+      critical_gaps:
+        - "Incomplete error paths leave inconsistent state"
+        - "Missing compensation transactions"
+        - "Cascading failures not prevented"
+        - "No automatic repair mechanisms"
+        - "Insufficient error context for diagnosis"
+    
+    - phase_id: "impl-ops-004-observability"
+      title: "Production Observability and Operations"
+      priority: "P1-HIGH"
+      effort: "4-6 days"
+      status: "NOT_STARTED"
+      file: "_workspaces/roadmap/phases/impl-ops-004-observability.yaml"
+      blocks_production: false
+      dependencies: ["impl-infra-001-resilience", "impl-state-002-concurrency", "impl-recovery-003-fault-tolerance"]
+      acceptance_criteria: 6
+      focus: "Structured logging, Prometheus metrics, distributed tracing, health checks"
+      critical_gaps:
+        - "Unstructured logging prevents log aggregation"
+        - "Incomplete metrics hide performance issues"
+        - "No distributed tracing across components"
+        - "Basic health checks insufficient for load balancers"
+        - "Missing operational dashboards"
+
+governance:
+  file_naming: "kebab-case, ≤25 chars"
+  authority: "Filesystem scan + pytest collection + code analysis"
+  update_frequency: "On major implementation changes"
+  archive_policy: "Move old versions to _archives/ with timestamp"
+  
+  rules_documented:
+    - "CORE-001: <500 lines per turn"
+    - "CORE-008: Tests before code"
+    - "CORE-011: All functions typed"
+    - "CORE-012: Google docstrings"
+    - "CORE-013: No bare except"
+    - "CORE-026: Git checkpoints"
+    - "CORE-027: Audit trail"
+    - "CORE-028: Kebab-case ≤25 chars"
+  
+  rules_file_missing: true
+  rules_file_expected: "cortex_brain/tier0/governance/core-rules.yaml"
+
+production_readiness_summary:
+  status: "NOT_READY"
+  blocking_phases: 3
+  estimated_completion: "16-22 days (3-4 weeks)"
+  
+  critical_path:
+    - phase: "impl-infra-001-resilience"
+      duration: "5-7 days"
+      blocks: "All production deployment"
+      severity: "P0-CRITICAL"
+    
+    - phase: "impl-state-002-concurrency"
+      duration: "6-8 days"
+      blocks: "Multi-user deployment"
+      severity: "P0-CRITICAL"
+      depends_on: ["impl-infra-001-resilience"]
+    
+    - phase: "impl-recovery-003-fault-tolerance"
+      duration: "5-7 days"
+      blocks: "Production reliability"
+      severity: "P0-CRITICAL"
+      depends_on: ["impl-infra-001-resilience", "impl-state-002-concurrency"]
+    
+    - phase: "impl-ops-004-observability"
+      duration: "4-6 days"
+      blocks: "Operational visibility"
+      severity: "P1-HIGH (can deploy without, but risky)"
+      depends_on: ["all P0 phases"]
+  
+  risk_assessment:
+    without_infra_resilience:
+      - "Connection exhaustion at ~20 concurrent users"
+      - "Cascading failures bring down entire system"
+      - "Resource leaks require restarts"
+      - "No graceful degradation under load"
+    
+    without_state_concurrency:
+      - "Data corruption under concurrent writes"
+      - "Lost updates in multi-user scenarios"
+      - "Race conditions cause non-deterministic behavior"
+      - "Audit log integrity compromised"
+    
+    without_fault_tolerance:
+      - "Failures leave system in inconsistent state"
+      - "No automatic recovery from errors"
+      - "Manual intervention required for incidents"
+      - "Partial operations cause data inconsistency"
+    
+    without_observability:
+      - "Cannot diagnose production issues"
+      - "Blind to performance problems"
+      - "Reactive rather than proactive operations"
+      - "Long mean time to resolution (MTTR)"
+
+next_actions:
+  priority_0_immediate:
+    - action: "Begin consolidation-001-src-cleanup"
+      file: "_workspaces/roadmap/phases/consolidation-001-src-cleanup.yaml"
+      estimated_effort: "8-16 hours"
+      blocking: "Repository cleanliness, test consistency"
+      note: "Eliminate src/ duplicate package, consolidate all imports to cortex/"
+  
+  priority_1_production_readiness:
+    - action: "Begin impl-infra-001-resilience"
+      file: "_workspaces/roadmap/phases/impl-infra-001-resilience.yaml"
+      estimated_effort: "5-7 days"
+      blocking: "All production deployment"
+    
+    - action: "Begin impl-state-002-concurrency"
+      file: "_workspaces/roadmap/phases/impl-state-002-concurrency.yaml"
+      estimated_effort: "6-8 days"
+      blocking: "Multi-user deployment"
+      depends_on: ["impl-infra-001-resilience"]
+    
+    - action: "Begin impl-recovery-003-fault-tolerance"
+      file: "_workspaces/roadmap/phases/impl-recovery-003-fault-tolerance.yaml"
+      estimated_effort: "5-7 days"
+      blocking: "Production reliability"
+      depends_on: ["impl-infra-001-resilience", "impl-state-002-concurrency"]
+  
+  priority_2_operations:
+    - action: "Begin impl-ops-004-observability"
+      file: "_workspaces/roadmap/phases/impl-ops-004-observability.yaml"
+      estimated_effort: "4-6 days"
+      note: "Can deploy without, but significantly increases operational risk"
+  
+  priority_3_technical_debt:
+    - action: "Archive current cortex-master.yaml"
+      destination: "_archives/20260120-consolidation/cortex-master-legacy.yaml"
+    
+    - action: "Implement 125 missing TDD modules"
+      file: "_workspaces/roadmap/phases/impl-tdd-prod-ready.yaml"
+      estimated_effort: "2-3 weeks"
+    
+    - action: "Create core-rules.yaml"
+      location: "cortex_brain/tier0/governance/core-rules.yaml"
+      content: "28 CORE-* rules from documentation"
+      status: "COMPLETED (2026-01-20)"
+  
+  priority_2:
+    - action: "Document MCP stub status"
+      file: "_workspaces/roadmap/mcp-impl-status.yaml"
+    
+    - action: "Create test-coverage report"
+      file: "_workspaces/roadmap/reports/test-ac-coverage.yaml"
+    
+    - action: "Update phase status"
+      note: "Mark phases as IMPLEMENTED, STUB, or NOT_STARTED based on filesystem evidence"
+
+maintenance:
+  validation_command: "pytest tests/ -v --co -q | grep 'test_' | wc -l"
+  file_count_command: "find cortex -name '*.py' | wc -l"
+  mcp_tool_scan: "grep -r '@tool' cortex/mcp/"
+  
+  update_triggers:
+    - "New phase implementation"
+    - "Major refactoring"
+    - "Test suite expansion"
+    - "MCP tool implementation"
+    - "Governance rule changes"

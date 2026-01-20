@@ -1,0 +1,235 @@
+# =============================================================================
+# CORTEX TIER 2 - WARNING RESPONSE TEMPLATE
+# =============================================================================
+# Purpose: Standard template for warning/caution responses
+# Tier: 2 (Engineering Standards - can be customized per team)
+# Inherits: Header from cortex_brain/tier0/response-headers.yaml
+# =============================================================================
+
+metadata:
+  template_id: "warning-response"
+  version: "1.0"
+  created_at: "2026-01-16T00:00:00Z"
+  author: "Asif Hussain"
+  description: "Base template for warning and caution responses"
+  tier: 2
+  category: "base"
+
+# =============================================================================
+# TEMPLATE STRUCTURE
+# =============================================================================
+
+template:
+  # Header is automatically injected from tier0/response-headers.yaml
+  # DO NOT duplicate header configuration here
+  
+  structure:
+    - section: "header"
+      source: "tier0/response-headers.yaml"
+      required: true
+    
+    - section: "warning_summary"
+      required: true
+      format: |
+        ### ⚠️ {warning_title}
+        
+        {warning_message}
+        
+        **Impact:** {impact}
+    
+    - section: "details"
+      required: false
+      format: |
+        ### Details
+        
+        {details}
+    
+    - section: "recommendations"
+      required: true
+      format: |
+        ### Recommendations
+        
+        {recommendations}
+    
+    - section: "proceed_options"
+      required: false
+      format: |
+        ### Options
+        
+        - **Proceed anyway:** {proceed_action}
+        - **Fix first:** {fix_action}
+        - **Defer:** {defer_action}
+    
+    - section: "footer"
+      source: "tier0/response-headers.yaml"
+      required: false
+
+# =============================================================================
+# VARIABLE DEFINITIONS
+# =============================================================================
+
+variables:
+  mandatory:
+    - name: "warning_title"
+      type: "string"
+      description: "Brief warning title"
+      example: "Potential Performance Impact"
+    
+    - name: "warning_message"
+      type: "string"
+      description: "Human-readable warning message"
+      example: "This operation may take longer than expected due to large dataset"
+    
+    - name: "impact"
+      type: "string"
+      description: "What could happen if ignored"
+      example: "Response time may exceed 30 seconds"
+    
+    - name: "recommendations"
+      type: "list"
+      description: "Suggested actions to mitigate"
+      example:
+        - "Consider pagination"
+        - "Add caching layer"
+  
+  optional:
+    - name: "details"
+      type: "string"
+      description: "Additional context about the warning"
+      default: ""
+    
+    - name: "proceed_action"
+      type: "string"
+      description: "What happens if user proceeds"
+      default: "Continue with current approach"
+    
+    - name: "fix_action"
+      type: "string"
+      description: "How to fix before proceeding"
+      default: "Apply recommended changes first"
+    
+    - name: "defer_action"
+      type: "string"
+      description: "How to defer to later"
+      default: "Create ticket for future sprint"
+
+# =============================================================================
+# WARNING CATEGORIES
+# =============================================================================
+
+warning_categories:
+  performance:
+    emoji: "⏱️"
+    description: "Operation may be slow or resource-intensive"
+    typical_recommendations:
+      - "Consider async processing"
+      - "Add pagination"
+      - "Implement caching"
+  
+  deprecation:
+    emoji: "📅"
+    description: "Feature or API will be removed in future"
+    typical_recommendations:
+      - "Migrate to new API"
+      - "Update dependencies"
+      - "Review release notes"
+  
+  security:
+    emoji: "🔐"
+    description: "Potential security concern (not blocking)"
+    typical_recommendations:
+      - "Review security implications"
+      - "Add input validation"
+      - "Consider rate limiting"
+  
+  compatibility:
+    emoji: "🔄"
+    description: "May cause compatibility issues"
+    typical_recommendations:
+      - "Test in staging first"
+      - "Check downstream dependencies"
+      - "Prepare rollback plan"
+  
+  governance:
+    emoji: "📋"
+    description: "Non-blocking governance concern"
+    typical_recommendations:
+      - "Review with team lead"
+      - "Document exception"
+      - "Plan remediation"
+
+# =============================================================================
+# EXAMPLE OUTPUT
+# =============================================================================
+
+example:
+  input:
+    operation: "Implementation Plan"
+    phase: "PHASE-DOC-REMEDIATION"
+    orchestrator: "PlanningOrchestrator"
+    warning_title: "Large File Modification"
+    warning_message: "CORTEX.prompt.md is 1,254 lines. Adding 150 lines may impact readability."
+    impact: "File may become harder to navigate and maintain"
+    details: |
+      Current file stats:
+      - Lines: 1,254
+      - Sections: 8
+      - Adding: ~150 lines (12% increase)
+    recommendations:
+      - "Consider splitting into multiple prompt files"
+      - "Add more detailed Table of Contents"
+      - "Use collapsible sections where supported"
+    proceed_action: "Add section as planned"
+    fix_action: "Refactor prompt structure first"
+    defer_action: "Add to tech debt backlog"
+  
+  output: |
+    ## 🧠 CORTEX Implementation Plan
+    **Author:** Asif Hussain | **Phase:** PHASE-DOC-REMEDIATION | **Orchestrator:** PlanningOrchestrator ✅
+    
+    ---
+    **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+    
+    ### ⚠️ Large File Modification
+    
+    CORTEX.prompt.md is 1,254 lines. Adding 150 lines may impact readability.
+    
+    **Impact:** File may become harder to navigate and maintain
+    
+    ### Details
+    
+    Current file stats:
+    - Lines: 1,254
+    - Sections: 8
+    - Adding: ~150 lines (12% increase)
+    
+    ### Recommendations
+    
+    - Consider splitting into multiple prompt files
+    - Add more detailed Table of Contents
+    - Use collapsible sections where supported
+    
+    ### Options
+    
+    - **Proceed anyway:** Add section as planned
+    - **Fix first:** Refactor prompt structure first
+    - **Defer:** Add to tech debt backlog
+
+# =============================================================================
+# USAGE NOTES
+# =============================================================================
+
+usage:
+  when_to_use:
+    - "Operation can proceed but with caveats"
+    - "Non-blocking governance concerns"
+    - "Performance implications detected"
+    - "Deprecation notices"
+    - "Compatibility warnings"
+  
+  best_practices:
+    - "Always explain the impact"
+    - "Provide actionable recommendations"
+    - "Give user clear options (proceed/fix/defer)"
+    - "Don't overuse warnings - save for genuine concerns"
+    - "Be specific about what triggered the warning"

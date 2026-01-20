@@ -1,0 +1,133 @@
+# =============================================================================
+# CORTEX TIER 2 - PLANNING IMPACT ASSESSMENT TEMPLATE
+# =============================================================================
+# Purpose: Template for change impact assessment responses
+# Domain: Planning
+# Inherits: Header from cortex_brain/tier0/response-headers.yaml
+# =============================================================================
+
+metadata:
+  template_id: "planning-impact-assessment"
+  version: "1.0"
+  created_at: "2026-01-16T00:00:00Z"
+  author: "Asif Hussain"
+  description: "Template for change impact assessment"
+  tier: 2
+  category: "domain"
+  domain: "planning"
+
+# =============================================================================
+# TEMPLATE STRUCTURE
+# =============================================================================
+
+template:
+  structure:
+    - section: "header"
+      source: "tier0/response-headers.yaml"
+      required: true
+    
+    - section: "summary"
+      required: true
+      format: |
+        ### Impact Assessment: {change_title}
+        
+        **Overall Risk:** {overall_risk}
+        **Files Affected:** {files_affected}
+        **Tests Impacted:** {tests_impacted}
+    
+    - section: "file_impact"
+      required: true
+      format: |
+        ### Files to Modify
+        
+        {file_table}
+    
+    - section: "dependency_impact"
+      required: false
+      format: |
+        ### Dependency Impact
+        
+        {dependency_analysis}
+    
+    - section: "rollback_plan"
+      required: true
+      format: |
+        ### Rollback Plan
+        
+        {rollback_steps}
+
+# =============================================================================
+# VARIABLE DEFINITIONS
+# =============================================================================
+
+variables:
+  mandatory:
+    - name: "change_title"
+      type: "string"
+      description: "Title of the change being assessed"
+    
+    - name: "overall_risk"
+      type: "enum"
+      values: ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+      description: "Overall risk level"
+    
+    - name: "files_affected"
+      type: "integer"
+      description: "Number of files affected"
+    
+    - name: "tests_impacted"
+      type: "integer"
+      description: "Number of tests impacted"
+    
+    - name: "file_table"
+      type: "string"
+      description: "Markdown table of files"
+    
+    - name: "rollback_steps"
+      type: "list"
+      description: "Steps to rollback changes"
+  
+  optional:
+    - name: "dependency_analysis"
+      type: "string"
+      description: "Analysis of dependency impacts"
+
+# =============================================================================
+# EXAMPLE OUTPUT
+# =============================================================================
+
+example:
+  output: |
+    ## 🧠 CORTEX Impact Assessment
+    **Author:** Asif Hussain | **Phase:** PHASE-DOC-REMEDIATION | **Orchestrator:** PlanningOrchestrator ✅
+    
+    ---
+    **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+    
+    ### Impact Assessment: Response Header Documentation
+    
+    **Overall Risk:** LOW
+    **Files Affected:** 12
+    **Tests Impacted:** 0
+    
+    ### Files to Modify
+    
+    | File | Change Type | Lines | Risk |
+    |------|-------------|-------|------|
+    | .github/prompts/CORTEX.prompt.md | ADD | +150 | LOW |
+    | .github/copilot-instruction.md | ADD | +80 | LOW |
+    | cortex_brain/tier2/base/*.yaml | CREATE | 3 files | LOW |
+    | cortex_brain/tier2/domains/*/*.yaml | CREATE | 6 files | LOW |
+    
+    ### Dependency Impact
+    
+    - No runtime dependencies affected
+    - Documentation only - no code changes
+    - Template engine already supports new templates
+    
+    ### Rollback Plan
+    
+    1. `git checkout HEAD~1 -- .github/prompts/CORTEX.prompt.md`
+    2. `git checkout HEAD~1 -- .github/copilot-instruction.md`
+    3. `rm -rf cortex_brain/tier2/base cortex_brain/tier2/domains`
+    4. `git commit -m "rollback: PHASE-DOC-REMEDIATION"`

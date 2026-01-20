@@ -1,0 +1,12 @@
+sequenceDiagram
+    participant Client
+    participant XGenerateFundingInvoice
+    participant Database
+
+    Client->>+XGenerateFundingInvoice: Execute
+    XGenerateFundingInvoice->>XGenerateFundingInvoice: Validate Inputs
+    XGenerateFundingInvoice->>XGenerateFundingInvoice: InvoiceAmount_less_equal_0
+    XGenerateFundingInvoice->>XGenerateFundingInvoice: InvoiceDate_less_DateTime
+    XGenerateFundingInvoice->>+Database: SELECT Subaccount
+    Database-->>-XGenerateFundingInvoice: Result
+    XGenerateFundingInvoice-->>-Client: Success
