@@ -156,7 +156,12 @@ class ASTIntelligence:
         return min(100, complexity * 5)
 
 
+# Alias for backward compatibility
+ASTIntelligenceEngine = ASTIntelligence
+
 __all__ = [
     "ASTIntelligence",
+    "ASTIntelligenceEngine",
     "ASTNode",
 ]
+

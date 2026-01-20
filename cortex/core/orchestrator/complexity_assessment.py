@@ -178,13 +178,20 @@ class ComplexityAssessment:
         data_structures = details.get("data_structures", 0) * 5
         return min(100, state_size + data_structures)
 
+
+
     def clear_cache(self) -> None:
         """Clear the assessment cache."""
         self.cache.clear()
 
 
+# Alias for ComplexityMetrics
+ComplexitySignals = ComplexityMetrics
+
 __all__ = [
     "ComplexityAssessment",
     "ComplexityMetrics",
+    "ComplexitySignals",
     "ComplexityLevel",
 ]
+

@@ -140,7 +140,12 @@ class LensContextBuilder:
         return context
 
 
+# Alias for backward compatibility
+LENSContextBuilder = LensContextBuilder
+
 __all__ = [
     "LensContext",
     "LensContextBuilder",
+    "LENSContextBuilder",
 ]
+
