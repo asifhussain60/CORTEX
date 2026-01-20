@@ -14,6 +14,17 @@ class ScenarioResult:
 
 
 @dataclass
+class ScenarioInput:
+    """Scenario input data."""
+    input_type: str
+    data: dict = None
+    
+    def __post_init__(self):
+        if self.data is None:
+            self.data = {}
+
+
+@dataclass
 class Scenario:
     """Test scenario."""
     name: str

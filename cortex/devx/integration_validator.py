@@ -14,6 +14,17 @@ class ValidationIssue:
 
 
 @dataclass
+class ValidationResult:
+    """Validation result."""
+    passed: bool
+    issues: list = None
+    
+    def __post_init__(self):
+        if self.issues is None:
+            self.issues = []
+
+
+@dataclass
 class IntegrationPoint:
     """Integration point definition."""
     name: str

@@ -22,6 +22,16 @@ class CommentsAdapter:
         return []
 
 
+@dataclass
+class RelationshipsAdapter:
+    """Adapter for relationships between entities."""
+    source: str
+    
+    def get_relationships(self) -> list:
+        """Get relationships."""
+        return []
+
+
 
 class ASTAdapter:
     """Abstract syntax tree adapter."""

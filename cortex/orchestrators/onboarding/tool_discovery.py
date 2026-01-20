@@ -23,6 +23,15 @@ class ToolSchema:
     description: str = ""
 
 
+@dataclass
+class ToolInfo:
+    """Tool information."""
+    tool_id: str
+    name: str
+    description: str
+    schema: ToolSchema = None
+
+
 
 class ToolDiscoveryOrchestrator:
     """Orchestrate tool discovery."""

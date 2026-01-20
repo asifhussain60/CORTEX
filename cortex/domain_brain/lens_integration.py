@@ -22,6 +22,14 @@ class LENSQuery:
             self.context = {}
 
 
+@dataclass
+class LENSSynthesis:
+    """LENS synthesis result."""
+    query: str
+    result: str
+    confidence: float = 0.0
+
+
 
 from typing import Dict, Any
 

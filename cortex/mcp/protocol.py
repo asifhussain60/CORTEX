@@ -5,6 +5,14 @@ Author: CORTEX Framework
 
 from dataclasses import dataclass, field
 from typing import Dict, Any, Optional
+from enum import Enum
+
+
+class ErrorCode(Enum):
+    """MCP error codes."""
+    INVALID_REQUEST = "invalid_request"
+    METHOD_NOT_FOUND = "method_not_found"
+    INTERNAL_ERROR = "internal_error"
 
 
 class MCPError(Exception):
@@ -42,6 +50,14 @@ class ToolParameter:
     name: str
     type: str
     required: bool = False
+
+
+@dataclass
+class MCPTool:
+    """MCP tool."""
+    name: str
+    definition: ToolDefinition
+    enabled: bool = True
 
 
 

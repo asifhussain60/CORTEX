@@ -22,6 +22,16 @@ class CreateHandler:
         return True
 
 
+@dataclass
+class ModifyHandler:
+    """Domain modify handler."""
+    domain: str
+    
+    def handle(self) -> bool:
+        """Handle domain modification."""
+        return True
+
+
 
 class DomainOrchestrator:
     """Orchestrate domain operations."""

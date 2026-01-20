@@ -17,6 +17,18 @@ class OptimisticLockManager:
     lock_timeout_ms: int = 5000
 
 
+@dataclass
+class VersionedDomain:
+    """Versioned domain entity."""
+    domain_id: str
+    version: int
+    data: dict = None
+    
+    def __post_init__(self):
+        if self.data is None:
+            self.data = {}
+
+
 
 @dataclass
 class LockToken:

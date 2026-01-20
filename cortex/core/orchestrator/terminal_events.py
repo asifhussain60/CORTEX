@@ -27,10 +27,19 @@ class PhaseCompletedEvent:
 
 
 @dataclass
+class MaxTurnsReachedEvent:
+    """Event fired when maximum turns reached."""
+    event_id: str
+    max_turns: int
+    current_turn: int
+    timestamp: str = ""
+
+
+@dataclass
 class TerminalEvent:
     """Base terminal event."""
     event_id: str
     event_type: str
     timestamp: str = ""
 
-__all__ = ["UserCancelledEvent", "PhaseCompletedEvent", "TerminalEvent"]
+__all__ = ["UserCancelledEvent", "PhaseCompletedEvent", "MaxTurnsReachedEvent", "TerminalEvent"]

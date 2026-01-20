@@ -23,10 +23,18 @@ class OrphanEntry:
 
 
 @dataclass
+class OrphanStats:
+    """Orphan detection statistics."""
+    total_checked: int = 0
+    orphans_found: int = 0
+    orphans_cleaned: int = 0
+
+
+@dataclass
 class OrphanRecord:
     """Orphaned record."""
     record_id: str
     missing_reference: str
     detected_at: str = ""
 
-__all__ = ["ReferenceValidator", "OrphanEntry", "OrphanRecord"]
+__all__ = ["ReferenceValidator", "OrphanEntry", "OrphanStats", "OrphanRecord"]

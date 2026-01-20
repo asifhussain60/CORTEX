@@ -21,6 +21,14 @@ class FileWatcher:
 
 
 @dataclass
+class FileChange:
+    """File change event."""
+    file_path: str
+    change_type: str  # "created", "modified", "deleted"
+    timestamp: float
+
+
+@dataclass
 class ReloadEvent:
     """Hot reload event."""
     file_path: str

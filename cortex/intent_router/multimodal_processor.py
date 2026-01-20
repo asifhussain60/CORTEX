@@ -12,6 +12,13 @@ class MultiModalIntentProcessor:
 
 
 @dataclass
+class InputModality:
+    """Input modality type."""
+    modality_type: str  # "text", "image", "audio", "video"
+    supported: bool = True
+
+
+@dataclass
 class ModalityInput:
     """Multimodal input."""
     modality: str

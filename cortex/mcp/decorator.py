@@ -21,4 +21,9 @@ def mcp_tool(name: str = None, description: str = None):
     return decorator
 
 
-__all__ = ["get_tool", "mcp_tool"]
+def get_registered_tools() -> list:
+    """Get list of all registered MCP tools."""
+    return []
+
+
+__all__ = ["get_tool", "mcp_tool", "get_registered_tools"]
