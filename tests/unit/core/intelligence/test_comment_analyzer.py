@@ -239,7 +239,7 @@ class TestDocstringExtraction:
         self, google_style_docstring_code: str
     ) -> None:
         """Test extraction of Google-style docstrings."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(google_style_docstring_code)
@@ -253,7 +253,7 @@ class TestDocstringExtraction:
         self, google_style_docstring_code: str
     ) -> None:
         """Test parsing of Args section in Google-style docstring."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(google_style_docstring_code)
@@ -266,7 +266,7 @@ class TestDocstringExtraction:
         self, google_style_docstring_code: str
     ) -> None:
         """Test parsing of Returns section in Google-style docstring."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(google_style_docstring_code)
@@ -279,7 +279,7 @@ class TestDocstringExtraction:
         self, google_style_docstring_code: str
     ) -> None:
         """Test parsing of Raises section in Google-style docstring."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(google_style_docstring_code)
@@ -294,7 +294,7 @@ class TestDocstringExtraction:
         self, numpy_style_docstring_code: str
     ) -> None:
         """Test extraction of NumPy-style docstrings."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(numpy_style_docstring_code)
@@ -307,7 +307,7 @@ class TestDocstringExtraction:
         self, sphinx_style_docstring_code: str
     ) -> None:
         """Test extraction of Sphinx-style docstrings."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(sphinx_style_docstring_code)
@@ -329,7 +329,7 @@ class TestInlineCommentAnalysis:
         self, inline_comments_code: str
     ) -> None:
         """Test extraction of inline comments."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(inline_comments_code)
@@ -340,7 +340,7 @@ class TestInlineCommentAnalysis:
         self, inline_comments_code: str
     ) -> None:
         """Test classification of comment types."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(inline_comments_code)
@@ -356,7 +356,7 @@ class TestInlineCommentAnalysis:
         self, inline_comments_code: str
     ) -> None:
         """Test linking comments to related code."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(inline_comments_code)
@@ -378,7 +378,7 @@ class TestTechDebtTracking:
         self, tech_debt_comments_code: str
     ) -> None:
         """Test detection of TODO comments."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(tech_debt_comments_code)
@@ -390,7 +390,7 @@ class TestTechDebtTracking:
         self, tech_debt_comments_code: str
     ) -> None:
         """Test detection of FIXME comments."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(tech_debt_comments_code)
@@ -402,7 +402,7 @@ class TestTechDebtTracking:
         self, tech_debt_comments_code: str
     ) -> None:
         """Test detection of HACK comments."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(tech_debt_comments_code)
@@ -414,7 +414,7 @@ class TestTechDebtTracking:
         self, tech_debt_comments_code: str
     ) -> None:
         """Test extraction of TODO assignee."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(tech_debt_comments_code)
@@ -431,7 +431,7 @@ class TestTechDebtTracking:
         self, tech_debt_comments_code: str
     ) -> None:
         """Test detection of WARNING comments."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(tech_debt_comments_code)
@@ -452,7 +452,7 @@ class TestSemanticIndexing:
         self, google_style_docstring_code: str
     ) -> None:
         """Test building searchable comment index."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(google_style_docstring_code)
@@ -468,7 +468,7 @@ class TestSemanticIndexing:
         self, google_style_docstring_code: str
     ) -> None:
         """Test searching comments by keyword."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(google_style_docstring_code)
@@ -491,7 +491,7 @@ class TestCommentQuality:
         self, temp_python_files: Dict[str, Path]
     ) -> None:
         """Test detection of potentially outdated comments."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         # Create file with comment-code mismatch
         test_code = textwrap.dedent('''
@@ -522,7 +522,7 @@ class TestCommentAnalyzerIntegration:
         self, google_style_docstring_code: str
     ) -> None:
         """Test complete comment analysis pipeline."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(google_style_docstring_code)
@@ -538,7 +538,7 @@ class TestCommentAnalyzerIntegration:
         self, temp_python_files: Dict[str, Path]
     ) -> None:
         """Test analyzing a Python file."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_file(temp_python_files['mixed'])
@@ -550,7 +550,7 @@ class TestCommentAnalyzerIntegration:
         self, google_style_docstring_code: str
     ) -> None:
         """Test serialization of analysis results."""
-        from src.core.intelligence.comment_analyzer import CommentAnalyzer
+        from cortex.core.intelligence.comment_analyzer import CommentAnalyzer
         
         analyzer = CommentAnalyzer()
         result = analyzer.analyze_string(google_style_docstring_code)
