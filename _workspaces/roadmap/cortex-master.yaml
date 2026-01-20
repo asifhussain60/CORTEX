@@ -357,28 +357,51 @@ metadata:
       - All phase reports indexed in _workspaces/roadmap/reports/INDEX.md
       enforcement: Phase cannot be locked if reports found outside designated directory
     mcp_toolkit:
-      status: ACTIVE
-      rule: All Python scripts & utilities MUST be organized in MCP-exposed toolkit
-        folders, NOT in root
-      locations:
-        toolkit_root: src/mcp/tools/
-        toolkit_utilities: src/mcp/utilities/
-        analysis_tools: src/mcp/tools/analysis/
-        core_tools: src/mcp/tools/core/
-        validation_tools: src/mcp/tools/validation/
-      forbidden_locations:
-      - Root directory (./*.py)
-      - _workspaces/ root
-      - _workspaces/roadmap/ root
-      - .github/ root
-      examples:
-      - "consolidate.py \u2192 src/mcp/tools/consolidate.py"
-      - "validate_consolidation.py \u2192 src/mcp/tools/validation/validate_consolidation.py"
-      - "Utility scripts \u2192 src/mcp/utilities/"
-      - "Analysis tools \u2192 src/mcp/tools/analysis/"
-      enforcement: Python scripts in forbidden locations MUST be moved before phase
-        lock
-      cleanup_rule: 'End of session: rm -f *.py (verify none remain in root)'
+      status: DEPRECATED
+      deprecated_date: '2026-01-20'
+      replacement: canonical_package
+      historical_note: |
+        Original rule referenced src/mcp/tools/ structure that was never implemented.
+        Replaced by canonical_package rule enforcing cortex/ as implementation hub.
+    canonical_package:
+      status: ENFORCED
+      rule: cortex/ is the ONLY canonical implementation package for CORTEX
+      forbidden:
+        - cortex_toolkit/ (deleted 2026-01-20 per PHASE-ARCH-ALIGNMENT-001)
+        - Multiple parallel implementation folders
+        - src/ (removed in chat01.md consolidation)
+      required:
+        - All Python implementation in cortex/ package
+        - cortex_brain/ for tier0/1/2 governance and state only
+        - Clear separation: cortex/ (code) vs cortex_brain/ (rules/state)
+      rationale: |
+        ADR: docs/ARCH-DECISION-RECORD-CORTEX-CANONICAL-PACKAGE.md
+        cortex/ contains 388 files, 400+ tests, 23+ MCP tools (all working).
+        cortex_toolkit/ was empty placeholder contradicting deployment docs.
+        Better to align docs with proven implementation than refactor working code.
+      structure:
+        cortex/:
+          - api/ (API layer)
+          - brain/ (269 files, brain integration)
+          - core/ (core utilities)
+          - infrastructure/ (infrastructure)
+          - mcp/ (MCP server, 23+ tools)
+          - orchestrators/ (41 files)
+          - tools/ (reusable tools)
+        cortex_brain/:
+          - tier0/ (28 core rules, immutable)
+          - tier1/ (orchestrator governance)
+          - tier2/ (domain governance)
+          - state/ (runtime state, databases)
+      enforcement: |
+        - No cortex_toolkit/ folder allowed (deleted, forbidden)
+        - All new implementation goes to cortex/
+        - Tests import from cortex.* only
+        - MCP tools in cortex/mcp/ only
+      validation:
+        - Test-Path cortex_toolkit/ should return False
+        - All imports use cortex.* pattern
+        - grep -r "cortex_toolkit" returns only historical references
   documentation_guidelines:
     status: ACTIVE
     rule: ALL .md files created during implementation MUST go to docs/ folder ONLY
@@ -4761,11 +4784,12 @@ phases:
       exists in cortex/ (388 files). cortex_toolkit/ is essentially empty (only
       cortex_toolkit/core/__init__.py exists). DECISION: Update documentation to match
       proven implementation reality rather than refactoring working system.
-    status: NOT_STARTED
-    locked: false
+    status: COMPLETED
+    locked: true
     ac_ids: 5
-    completed_ac_ids: 0
+    completed_ac_ids: 5
     estimated_hours: 2
+    actual_hours: 0.5
     estimated_tests: 1
     priority: P1
     category: DOCUMENTATION_ALIGNMENT
@@ -4773,30 +4797,31 @@ phases:
     required_for: PHASE-DEPLOYMENT-ENHANCED
     file: phases/phase-arch-alignment-001.yaml
     blocking: false
+    completed_at: '2026-01-20T15:00:00Z'
     acceptance_criteria:
       AC-ARCH-001-01:
         title: Delete empty cortex_toolkit/ folder
-        status: NOT_STARTED
+        status: COMPLETED
         tests: 0
         description: "Remove cortex_toolkit/ directory (contains only __init__.py)"
       AC-ARCH-001-02:
         title: Update cortex-deploy.prompt.md to reference cortex/
-        status: NOT_STARTED
+        status: COMPLETED
         tests: 0
         description: "Replace all cortex_toolkit/ references with cortex/ in deployment docs"
       AC-ARCH-001-03:
         title: Create Architecture Decision Record
-        status: NOT_STARTED
+        status: COMPLETED
         tests: 0
         description: "Document cortex/ as canonical package decision in ADR"
       AC-ARCH-001-04:
         title: Update cortex-master.yaml governance rules
-        status: NOT_STARTED
+        status: COMPLETED
         tests: 0
         description: "Add governance rule forbidding cortex_toolkit/ resurrection"
       AC-ARCH-001-05:
         title: Validate no cortex_toolkit references remain
-        status: NOT_STARTED
+        status: COMPLETED
         tests: 1
         description: "Verify cleanup complete, all tests pass"
     diagnosis:
@@ -4810,6 +4835,12 @@ phases:
       - Risk of duplicate implementation attempts
     solution: "Delete ghost folder, update docs to match working implementation"
     analysis_reference: _workspaces/roadmap/reports/ARCHITECTURAL-GAP-ANALYSIS-20260120.yaml
+    deliverables:
+      - cortex_toolkit/ deleted
+      - cortex-deploy.prompt.md updated
+      - docs/ARCH-DECISION-RECORD-CORTEX-CANONICAL-PACKAGE.md created
+      - cortex-master.yaml governance rules updated
+      - Validation passed (cortex/ has 415 files, MCP tools verified)
         - All downstream phases unblocked
     blocking_until_complete: |
       PHASE-ONBOARDING-ORCHESTRATOR and all downstream phases are blocked.
