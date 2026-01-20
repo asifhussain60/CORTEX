@@ -571,8 +571,13 @@ class TestPathConversions:
     def test_is_absolute_on_absolute_paths(self) -> None:
         """Test is_absolute returns True for absolute paths."""
         from cortex_brain.tier0.path_abstraction import PathAbstraction
+        import sys
         
-        abs_path = PathAbstraction("/home/user")
+        # Use platform-appropriate absolute path
+        if sys.platform == "win32":
+            abs_path = PathAbstraction("C:/home/user")
+        else:
+            abs_path = PathAbstraction("/home/user")
         assert abs_path.is_absolute() is True
 
     def test_is_absolute_on_relative_paths(self) -> None:
