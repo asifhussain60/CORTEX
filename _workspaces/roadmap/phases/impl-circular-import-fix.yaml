@@ -1,0 +1,231 @@
+# Phase G: Circular Import Resolution
+# Required for 100% Production Readiness Confidence
+# Date: 2026-01-20
+# Priority: P0-CRITICAL (blocks 15 integration tests)
+
+metadata:
+  phase_id: "impl-circular-import-fix"
+  title: "Circular Import Resolution - Fix RecursionError in orchestrators"
+  description: "Break circular dependency in cortex.orchestrators.core hierarchy"
+  priority: "P0-CRITICAL"
+  estimated_effort: "1-2 days"
+  status: "NOT_STARTED"
+  blocks_production: true
+  prerequisite_for: ["PHASE-E-TDD-IMPLEMENTATION"]
+  depends_on: ["impl-export-completion"]
+
+executive_summary: |
+  15 test files fail with RecursionError during collection due to circular imports
+  in the cortex.orchestrators.core module hierarchy. This phase identifies and
+  breaks the circular dependency to enable full test collection.
+
+problem_statement:
+  recursion_errors: 15
+  affected_area: "cortex/orchestrators/core/"
+  root_cause: "Circular import between master_orchestrator and its dependencies"
+  
+  affected_tests:
+    - "tests/unit/core/orchestrator/test_conversation_protocol.py"
+    - "tests/unit/core/orchestrator/test_event_integration.py"
+    - "tests/unit/core/orchestrator/test_intent_router.py"
+    - "tests/unit/core/orchestrator/test_master_orchestrator.py"
+    - "tests/unit/core/orchestrator/test_master_orchestrator_comprehensive.py"
+    - "tests/unit/core/orchestrator/test_master_orchestrator_stage_2_integration.py"
+    - "tests/unit/core/orchestrator/test_mcp_exposure.py"
+    - "tests/unit/core/orchestrator/test_mcp_list_tools.py"
+    - "tests/unit/core/orchestrator/test_oc_004_01_integration.py"
+    - "tests/unit/core/orchestrator/test_production_validation.py"
+    - "tests/unit/core/orchestrator/test_wrapped_orchestrators.py"
+    - "tests/unit/infrastructure/test_circuit_breaker_adaptive.py"
+    - "tests/unit/infrastructure/test_prometheus_metrics.py"
+    
+  error_pattern: |
+    RecursionError: maximum recursion depth exceeded
+    
+    Traceback typically shows:
+    File "cortex/orchestrators/core/master_orchestrator.py", line X, in <module>
+        from cortex.orchestrators.core.planning_orchestrator import ...
+    File "cortex/orchestrators/core/planning_orchestrator.py", line Y, in <module>
+        from cortex.orchestrators.core.master_orchestrator import ...
+
+diagnosis_steps:
+  step_1:
+    description: "Identify the circular import chain"
+    command: |
+      python3 -c "
+      import sys
+      sys.setrecursionlimit(50)
+      try:
+          from cortex.orchestrators.core import master_orchestrator
+      except RecursionError as e:
+          import traceback
+          traceback.print_exc()
+      "
+    expected: "Stack trace showing the import cycle"
+    
+  step_2:
+    description: "Map all imports in orchestrator modules"
+    command: |
+      grep -r "^from cortex" cortex/orchestrators/core/*.py | sort
+      grep -r "^import cortex" cortex/orchestrators/core/*.py | sort
+    expected: "Import graph showing cycles"
+    
+  step_3:
+    description: "Identify which module starts the cycle"
+    analysis: |
+      Common patterns:
+      - __init__.py imports all modules (wildcard import)
+      - master_orchestrator imports planning_orchestrator
+      - planning_orchestrator imports master_orchestrator
+      - Type annotations cause runtime imports
+
+resolution_strategies:
+  strategy_1:
+    name: "TYPE_CHECKING guard"
+    description: "Move type-only imports under TYPE_CHECKING block"
+    pattern: |
+      from typing import TYPE_CHECKING
+      
+      if TYPE_CHECKING:
+          from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+      
+      # Use string annotation for forward reference
+      def process(orchestrator: "MasterOrchestrator") -> None:
+          pass
+    when_to_use: "When import is only for type hints"
+    
+  strategy_2:
+    name: "Lazy import"
+    description: "Import inside function rather than at module level"
+    pattern: |
+      def get_master_orchestrator():
+          from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+          return MasterOrchestrator()
+    when_to_use: "When import is rarely used at runtime"
+    
+  strategy_3:
+    name: "Interface extraction"
+    description: "Extract common interface to separate module"
+    pattern: |
+      # cortex/orchestrators/core/interfaces.py
+      from abc import ABC, abstractmethod
+      
+      class IOrchestratorBase(ABC):
+          @abstractmethod
+          def execute(self, context): pass
+      
+      # Both master_orchestrator.py and planning_orchestrator.py import from interfaces.py
+    when_to_use: "When modules need to reference each other's types"
+    
+  strategy_4:
+    name: "Clean __init__.py"
+    description: "Remove wildcard imports from __init__.py"
+    pattern: |
+      # Instead of:
+      # from .master_orchestrator import *
+      # from .planning_orchestrator import *
+      
+      # Use explicit lazy loading:
+      def __getattr__(name):
+          if name == "MasterOrchestrator":
+              from .master_orchestrator import MasterOrchestrator
+              return MasterOrchestrator
+          raise AttributeError(f"module has no attribute {name}")
+    when_to_use: "When __init__.py causes eager import of circular deps"
+
+acceptance_criteria:
+  - id: "AC-CIRCULAR-001"
+    description: "RecursionError eliminated from test collection"
+    verification: "pytest --collect-only 2>&1 | grep RecursionError | wc -l == 0"
+    
+  - id: "AC-CIRCULAR-002"
+    description: "All 15 blocked tests now collectible"
+    verification: "pytest --collect-only tests/unit/core/orchestrator/ shows all tests"
+    
+  - id: "AC-CIRCULAR-003"
+    description: "Full test suite collects with 0 errors"
+    verification: "pytest --collect-only reports 0 errors"
+    
+  - id: "AC-CIRCULAR-004"
+    description: "No new runtime errors introduced"
+    verification: "pytest tests/unit -x runs without new ImportError"
+    
+  - id: "AC-CIRCULAR-005"
+    description: "Git checkpoint created"
+    verification: "git log shows 'checkpoint: Phase G circular import fix'"
+
+implementation_steps:
+  step_1:
+    description: "Create diagnostic script to map import cycle"
+    effort: "1 hour"
+    deliverable: "scripts/diagnose_circular_imports.py"
+    
+  step_2:
+    description: "Identify exact cycle in orchestrator modules"
+    effort: "1 hour"
+    expected_output: "Import graph with cycle highlighted"
+    
+  step_3:
+    description: "Apply TYPE_CHECKING guard to type-only imports"
+    effort: "2 hours"
+    files_likely_affected:
+      - "cortex/orchestrators/core/master_orchestrator.py"
+      - "cortex/orchestrators/core/planning_orchestrator.py"
+      - "cortex/orchestrators/core/execution_orchestrator.py"
+      - "cortex/orchestrators/core/analysis_orchestrator.py"
+      - "cortex/orchestrators/core/__init__.py"
+    
+  step_4:
+    description: "If TYPE_CHECKING insufficient, apply lazy import strategy"
+    effort: "2 hours"
+    
+  step_5:
+    description: "Clean __init__.py if causing eager loading"
+    effort: "1 hour"
+    
+  step_6:
+    description: "Run pytest --collect-only to verify"
+    effort: "30 min"
+    command: "python3 -m pytest --collect-only -q 2>&1 | tail -10"
+    expected: "X tests collected, 0 errors"
+    
+  step_7:
+    description: "Run full unit test suite to verify no regressions"
+    effort: "30 min"
+    command: "python3 -m pytest tests/unit -x --tb=short"
+    
+  step_8:
+    description: "Git checkpoint"
+    effort: "5 min"
+    command: "git add -A && git commit -m 'checkpoint: Phase G circular import fix - 0 collection errors'"
+
+success_criteria:
+  before:
+    collection_errors: "~15 (RecursionError)"
+    blocked_tests: 15
+    tests_collectible: "~5700"
+  
+  after:
+    collection_errors: 0
+    blocked_tests: 0
+    tests_collectible: "~5800+"
+
+dependencies:
+  requires: ["impl-export-completion"]
+  enables: ["PHASE-E-TDD-IMPLEMENTATION"]
+
+governance_compliance:
+  - "CORE-011: Type hints preserved (using forward references)"
+  - "CORE-012: Docstrings updated if interface changes"
+  - "CORE-026: Git checkpoint before and after"
+  - "CORE-027: AC audit trail documented"
+
+risk_mitigation:
+  risk: "Breaking existing imports"
+  mitigation: "Run full test suite after each change"
+  
+  risk: "TYPE_CHECKING not sufficient"
+  mitigation: "Have lazy import as fallback strategy"
+  
+  risk: "Performance impact from lazy imports"
+  mitigation: "Only apply to circular deps, not all imports"

@@ -1,0 +1,283 @@
+# Phase I: CI/CD Validation
+# Required for 100% Production Readiness Confidence
+# Date: 2026-01-20
+# Priority: P1-HIGH (ensures reliable deployments)
+
+metadata:
+  phase_id: "impl-cicd-validation"
+  title: "CI/CD Pipeline Validation and Hardening"
+  description: "Validate GitHub Actions, pre-commit hooks, rollback automation, and deployment health checks"
+  priority: "P1-HIGH"
+  estimated_effort: "2-3 days"
+  status: "NOT_STARTED"
+  blocks_production: false  # Can deploy manually, but risky
+  recommended_before_production: true
+
+executive_summary: |
+  Without validated CI/CD:
+  - Deployments may fail silently
+  - Regressions slip to production
+  - Rollbacks are manual and slow
+  - No canary protection
+  
+  This phase ensures the pipeline catches issues before production.
+
+current_state:
+  github_actions: "May exist but not verified running"
+  pre_commit_hooks: "Not verified"
+  rollback_automation: "Not tested"
+  health_checks: "Implemented but not integrated with deployment"
+  canary_deployment: "Not configured"
+  
+  risk_without_validation: |
+    - Bad commits reach production
+    - Manual deployment errors
+    - Slow recovery from failures
+    - No staged rollout protection
+
+acceptance_criteria:
+  - id: "AC-CICD-001"
+    description: "GitHub Actions runs all tests on PR"
+    verification: ".github/workflows/test.yml runs pytest on every PR"
+    checks:
+      - "Unit tests pass"
+      - "Integration tests pass"
+      - "Type checking passes (mypy)"
+      - "Linting passes (ruff/flake8)"
+      - "Security scan passes (bandit)"
+    
+  - id: "AC-CICD-002"
+    description: "Pre-commit hooks verified and documented"
+    verification: "pre-commit run --all-files passes"
+    hooks:
+      - "trailing-whitespace"
+      - "end-of-file-fixer"
+      - "check-yaml"
+      - "check-json"
+      - "ruff (linting)"
+      - "mypy (type checking)"
+      - "pytest (test subset)"
+      - "detect-secrets"
+    
+  - id: "AC-CICD-003"
+    description: "Rollback automation tested"
+    verification: "Blue/green switch completes in <30s with zero downtime"
+    scenarios:
+      - "Deploy new version"
+      - "Detect failure in health checks"
+      - "Automatic rollback to previous version"
+      - "Verify service restored"
+    
+  - id: "AC-CICD-004"
+    description: "Deployment health checks integrated"
+    verification: "/health endpoint returns 200 with full status"
+    checks:
+      - "Application running"
+      - "Database connected"
+      - "Cache accessible"
+      - "All dependencies healthy"
+    
+  - id: "AC-CICD-005"
+    description: "Canary deployment configured"
+    verification: "5% traffic to canary, auto-rollback on error spike"
+    metrics_monitored:
+      - "Error rate"
+      - "Latency p99"
+      - "CPU/Memory usage"
+
+implementation_plan:
+  day_1:
+    title: "GitHub Actions Validation"
+    tasks:
+      - "Audit existing .github/workflows/"
+      - "Create/update test.yml for PR validation"
+      - "Add type checking (mypy) to pipeline"
+      - "Add security scanning (bandit)"
+      - "Verify workflow runs on test PR"
+    deliverables:
+      - ".github/workflows/test.yml (updated)"
+      - "Successful test PR with all checks"
+    
+  day_2:
+    title: "Pre-commit Hooks & Rollback"
+    tasks:
+      - "Create/update .pre-commit-config.yaml"
+      - "Add all required hooks"
+      - "Test hooks with pre-commit run --all-files"
+      - "Document rollback procedure"
+      - "Test blue/green deployment switch"
+    deliverables:
+      - ".pre-commit-config.yaml (updated)"
+      - "docs/04-guides/deployment/rollback-procedure.md"
+      - "Rollback test results"
+    
+  day_3:
+    title: "Health Checks & Canary"
+    tasks:
+      - "Verify /health endpoint implementation"
+      - "Add dependency health checks"
+      - "Configure canary deployment (if infrastructure supports)"
+      - "Document deployment pipeline"
+      - "Run full deployment validation"
+    deliverables:
+      - "Health check verification report"
+      - "Canary configuration (or documentation for manual canary)"
+      - "docs/04-guides/deployment/pipeline.md"
+
+github_actions_configuration:
+  test_workflow:
+    file: ".github/workflows/test.yml"
+    trigger: "on: [push, pull_request]"
+    jobs:
+      lint:
+        runs_on: "ubuntu-latest"
+        steps:
+          - "Checkout"
+          - "Setup Python 3.11"
+          - "Install ruff"
+          - "Run ruff check cortex/ tests/"
+        
+      type_check:
+        runs_on: "ubuntu-latest"
+        steps:
+          - "Checkout"
+          - "Setup Python 3.11"
+          - "Install mypy"
+          - "Run mypy cortex/"
+        
+      security:
+        runs_on: "ubuntu-latest"
+        steps:
+          - "Checkout"
+          - "Setup Python 3.11"
+          - "Install bandit"
+          - "Run bandit -r cortex/"
+        
+      test:
+        runs_on: "ubuntu-latest"
+        needs: [lint, type_check]
+        steps:
+          - "Checkout"
+          - "Setup Python 3.11"
+          - "Install dependencies"
+          - "Run pytest tests/ --cov=cortex"
+          - "Upload coverage to codecov"
+
+pre_commit_configuration:
+  file: ".pre-commit-config.yaml"
+  repos:
+    - repo: "https://github.com/pre-commit/pre-commit-hooks"
+      hooks:
+        - "trailing-whitespace"
+        - "end-of-file-fixer"
+        - "check-yaml"
+        - "check-json"
+        - "check-added-large-files"
+    
+    - repo: "https://github.com/astral-sh/ruff-pre-commit"
+      hooks:
+        - "ruff"
+        - "ruff-format"
+    
+    - repo: "https://github.com/pre-commit/mirrors-mypy"
+      hooks:
+        - "mypy"
+        additional_dependencies: ["types-all"]
+    
+    - repo: "https://github.com/Yelp/detect-secrets"
+      hooks:
+        - "detect-secrets"
+
+rollback_procedure:
+  trigger_conditions:
+    - "Health check fails for >30s"
+    - "Error rate exceeds 5%"
+    - "p99 latency exceeds 5s"
+    - "Manual trigger by operator"
+  
+  automation:
+    tool: "Blue/green deployment switch"
+    steps:
+      1: "Detect failure condition"
+      2: "Log rollback initiation"
+      3: "Switch load balancer to previous (blue) version"
+      4: "Verify health of blue version"
+      5: "Alert operations team"
+      6: "Log rollback completion"
+    target_time: "<30 seconds"
+    
+  manual_fallback:
+    command: |
+      # If automation fails
+      kubectl rollout undo deployment/cortex
+      # or for docker-compose
+      docker-compose up -d --scale cortex-new=0 --scale cortex-old=2
+
+health_check_specification:
+  endpoint: "/health"
+  response_format:
+    status: "healthy|degraded|unhealthy"
+    checks:
+      application:
+        status: "ok|error"
+        version: "1.0.0"
+      database:
+        status: "ok|error"
+        latency_ms: 5
+      cache:
+        status: "ok|error"
+        latency_ms: 1
+      dependencies:
+        governance_db: "ok|error"
+        audit_log: "ok|error"
+    timestamp: "2026-01-20T12:00:00Z"
+  
+  status_codes:
+    healthy: 200
+    degraded: 200  # Some non-critical checks failing
+    unhealthy: 503
+
+canary_configuration:
+  traffic_split:
+    canary: "5%"
+    stable: "95%"
+  
+  promotion_criteria:
+    observation_period: "10 minutes"
+    metrics:
+      error_rate_threshold: "1%"  # Must be below
+      latency_p99_threshold: "2000ms"  # Must be below
+  
+  rollback_criteria:
+    error_rate_spike: ">5%"
+    latency_spike: ">5000ms p99"
+    
+  tooling_options:
+    - "Kubernetes Ingress with traffic splitting"
+    - "Istio service mesh"
+    - "AWS ALB weighted target groups"
+    - "Manual percentage-based deployment"
+
+success_metrics:
+  before:
+    ci_running: "Unknown"
+    pre_commit_hooks: "Not verified"
+    rollback_time: "Manual (minutes)"
+    health_checks: "Basic"
+    canary: "None"
+  
+  after:
+    ci_running: "All PRs validated"
+    pre_commit_hooks: "8 hooks active"
+    rollback_time: "<30 seconds"
+    health_checks: "Comprehensive"
+    canary: "Configured (5%)"
+
+dependencies:
+  requires: ["impl-e2e-validation"]  # E2E tests should pass first
+  enables: ["Confident production deployments"]
+
+governance_compliance:
+  - "CORE-008: Tests run automatically before merge"
+  - "CORE-026: Git checkpoint after CI/CD configured"
+  - "CORE-027: Deployment audit trail"

@@ -1,0 +1,247 @@
+# Phase F: Export Completion
+# Required for 100% Production Readiness Confidence
+# Date: 2026-01-20
+# Priority: P0-CRITICAL (blocks all test collection)
+
+metadata:
+  phase_id: "impl-export-completion"
+  title: "Export Completion - Add 44 Missing Class/Function Exports"
+  description: "Add all missing exports to stub modules to eliminate ImportError in test collection"
+  priority: "P0-CRITICAL"
+  estimated_effort: "4-6 hours (1 day)"
+  status: "NOT_STARTED"
+  blocks_production: true
+  prerequisite_for: ["impl-circular-import-fix", "PHASE-E-TDD-IMPLEMENTATION"]
+
+executive_summary: |
+  pytest --collect-only reveals 76 errors, of which ~44 are ImportError due to missing exports.
+  Stub files exist but don't export all classes/functions expected by tests.
+  This phase adds all missing exports (as stubs) to enable full test collection.
+
+problem_statement:
+  current_errors: 76
+  import_errors: 44
+  recursion_errors: 15
+  other_errors: 17
+  
+  impact: |
+    - 44 test files cannot import their test fixtures
+    - Tests fail at collection, never execute
+    - Cannot measure actual test pass rate
+    - Phase E TDD Implementation blocked
+
+missing_exports:
+  cortex_core_orchestrator:
+    file: "cortex/core/orchestrator/complexity_assessment.py"
+    missing: ["ComplexityLevel"]
+    
+  cortex_core_orchestrator_challenge:
+    file: "cortex/core/orchestrator/challenge_integration.py"
+    missing: ["Challenge"]
+    
+  cortex_core_orchestrator_terminal:
+    file: "cortex/core/orchestrator/terminal_events.py"
+    missing: ["UserCancelledEvent"]
+    
+  cortex_deployment_blue_green:
+    file: "cortex/deployment/blue_green.py"
+    missing: ["Deployment"]
+    
+  cortex_deployment_recovery:
+    file: "cortex/deployment/recovery.py"
+    missing: ["Snapshot"]
+    
+  cortex_devx_dashboard:
+    file: "cortex/devx/devx_dashboard.py"
+    missing: ["DashboardMetrics"]
+    
+  cortex_devx_hot_reload:
+    file: "cortex/devx/hot_reload.py"
+    missing: ["FileWatcher"]
+    
+  cortex_devx_integration_validator:
+    file: "cortex/devx/integration_validator.py"
+    missing: ["ValidationIssue"]
+    
+  cortex_devx_scenario_library:
+    file: "cortex/devx/scenario_library.py"
+    missing: ["ScenarioResult"]
+    
+  cortex_domain_orchestrators:
+    file: "cortex/domain_orchestrators/domain_orchestrator.py"
+    missing: ["DomainRegistry"]
+    
+  cortex_intent_router_classifier:
+    file: "cortex/intent_router/classifier.py"
+    missing: ["IntentCategory"]
+    
+  cortex_intent_router_multimodal:
+    file: "cortex/intent_router/multimodal_processor.py"
+    missing: ["MultiModalIntentProcessor"]
+    
+  cortex_intent_router_context:
+    file: "cortex/intent_router/context_manager.py"
+    missing: ["ConversationContext"]
+    note: "File may not exist - create if needed"
+    
+  cortex_infrastructure_migration:
+    file: "cortex/infrastructure/folder_migration_script.py"
+    missing: ["FileIntegrityRecord"]
+    
+  cortex_infrastructure_import:
+    file: "cortex/infrastructure/import_path_updater.py"
+    missing: ["ImportMapping"]
+    
+  cortex_mcp_decorator:
+    file: "cortex/mcp/decorator.py"
+    missing: ["get_tool"]
+    
+  cortex_mcp_discovery:
+    file: "cortex/mcp/discovery.py"
+    missing: ["ToolDiscovery"]
+    
+  cortex_mcp_executor:
+    file: "cortex/mcp/executor.py"
+    missing: ["ToolExecutor"]
+    
+  cortex_mcp_protocol:
+    file: "cortex/mcp/protocol.py"
+    missing: ["MCPRequest", "MCPResponse"]
+    
+  cortex_mcp_registry:
+    file: "cortex/mcp/registry.py"
+    missing: ["ToolEntry"]
+    
+  cortex_mcp_server_sdk:
+    file: "cortex/mcp/server_sdk.py"
+    missing: ["MCPRequest"]
+    
+  cortex_governance_audit:
+    file: "cortex/core/governance/audit_immutability.py"
+    missing: ["AuditImmutability"]
+    
+  cortex_governance_notification:
+    file: "cortex/core/governance/stakeholder_notification.py"
+    missing: ["NotificationManager"]
+    
+  cortex_governance_scope:
+    file: "cortex/core/governance/scope_creep.py"
+    missing: ["ScopeManager"]
+    
+  cortex_governance_pii:
+    file: "cortex/core/governance/pii_detection.py"
+    missing: ["PIIType"]
+    
+  cortex_governance_retention:
+    file: "cortex/core/governance/data_retention.py"
+    missing: ["RetentionManager"]
+    
+  cortex_knowledge_versioning:
+    file: "cortex/core/knowledge/versioning.py"
+    missing: ["KnowledgeVersion"]
+    
+  cortex_intent_lens:
+    file: "cortex/core/intent/lens_context_builder.py"
+    missing: ["LENSContext"]
+    
+  cortex_orchestrators_response:
+    - file: "cortex/orchestrators/response/ux_optimizer.py"
+      missing: ["ResponseQualityMetrics"]
+    - file: "cortex/orchestrators/response/turn_response_generator.py"
+      missing: ["TurnResponse", "ResponseMetadata"]
+    - file: "cortex/orchestrators/response/response_templates.py"
+      missing: ["VariableType"]
+    - file: "cortex/orchestrators/response/multi_mode_formatter.py"
+      missing: ["FormattingProfile"]
+    
+  cortex_orchestrators_onboarding:
+    - file: "cortex/orchestrators/onboarding/tool_discovery.py"
+      missing: ["ToolDiscoveryService"]
+    - file: "cortex/orchestrators/onboarding/orchestrator.py"
+      missing: ["JourneyState"]
+    
+  tier1_orchestrators:
+    - file: "tier1/orchestrators/vacuum.py"
+      missing: ["OrchestratorState"]
+      note: "Module path needs verification"
+    - file: "tier1/orchestrators/cleaners.py"
+      missing: ["CleanerRegistrationError"]
+
+acceptance_criteria:
+  - id: "AC-EXPORT-001"
+    description: "All 44 missing exports added to respective modules"
+    verification: "grep -r 'class ComplexityLevel' cortex/ returns match"
+    
+  - id: "AC-EXPORT-002"
+    description: "pytest --collect-only shows 0 ImportError"
+    verification: "pytest --collect-only 2>&1 | grep ImportError | wc -l == 0"
+    
+  - id: "AC-EXPORT-003"
+    description: "Collection errors reduced from 76 to ~15 (RecursionError only)"
+    verification: "pytest --collect-only reports ~15 errors (recursion only)"
+    
+  - id: "AC-EXPORT-004"
+    description: "All exports have type hints and docstrings"
+    verification: "All new classes have @dataclass or class definition with docstring"
+    
+  - id: "AC-EXPORT-005"
+    description: "Git checkpoint created after completion"
+    verification: "git log shows 'checkpoint: Phase F export completion'"
+
+implementation_steps:
+  step_1:
+    description: "Audit all missing exports from pytest output"
+    effort: "30 min"
+    command: |
+      python3 -m pytest --collect-only 2>&1 | \
+        grep "ImportError: cannot import name" | \
+        sed "s/.*cannot import name '\([^']*\)' from '\([^']*\)'.*/\2: \1/" | \
+        sort -u > missing_exports.txt
+    
+  step_2:
+    description: "For each missing export, add stub class/function"
+    effort: "3 hours"
+    pattern: |
+      # Example for ComplexityLevel
+      class ComplexityLevel(Enum):
+          """Complexity level enumeration."""
+          LOW = "low"
+          MEDIUM = "medium"
+          HIGH = "high"
+          CRITICAL = "critical"
+    
+  step_3:
+    description: "Update __all__ in each modified module"
+    effort: "30 min"
+    
+  step_4:
+    description: "Run pytest --collect-only to verify"
+    effort: "15 min"
+    command: "python3 -m pytest --collect-only -q 2>&1 | tail -20"
+    expected: "~15 errors (RecursionError only)"
+    
+  step_5:
+    description: "Git checkpoint"
+    effort: "5 min"
+    command: "git add -A && git commit -m 'checkpoint: Phase F export completion - 44 missing exports added'"
+
+success_criteria:
+  before:
+    collection_errors: 76
+    import_errors: 44
+    tests_collectible: 5653
+  
+  after:
+    collection_errors: "~15 (RecursionError only)"
+    import_errors: 0
+    tests_collectible: "~5700+"
+
+dependencies:
+  requires: []
+  enables: ["impl-circular-import-fix", "PHASE-E-TDD-IMPLEMENTATION"]
+
+governance_compliance:
+  - "CORE-011: 100% type hints on all exports"
+  - "CORE-012: Google docstrings on all classes"
+  - "CORE-026: Git checkpoint before and after"
+  - "CORE-027: AC audit trail documented"
