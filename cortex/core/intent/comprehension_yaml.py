@@ -32,6 +32,18 @@ class IntentSection(Enum):
     STAKEHOLDERS = "stakeholders"
 
 
+class ChallengeSection(Enum):
+    """Sections for challenge comprehension."""
+
+    TECHNICAL = "technical"
+    ORGANIZATIONAL = "organizational"
+    FINANCIAL = "financial"
+    TIMELINE = "timeline"
+    RESOURCE = "resource"
+    RISK = "risk"
+    DEPENDENCY = "dependency"
+
+
 @dataclass
 class ComprehensionResult:
     """Comprehension assessment result.
@@ -138,4 +150,5 @@ __all__ = [
     "ComprehensionResult",
     "ComprehensionLevel",
     "IntentSection",
+    "ChallengeSection",
 ]

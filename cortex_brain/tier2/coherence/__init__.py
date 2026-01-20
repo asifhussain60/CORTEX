@@ -23,6 +23,16 @@ class CoherenceType(Enum):
     LOGICAL = "logical"
 
 
+class CoherenceIssue(Enum):
+    """Issues affecting coherence."""
+
+    SEMANTIC_MISMATCH = "semantic_mismatch"
+    SYNTACTIC_ERROR = "syntactic_error"
+    LOGICAL_CONTRADICTION = "logical_contradiction"
+    INCONSISTENT_REFERENCE = "inconsistent_reference"
+    BROKEN_NARRATIVE = "broken_narrative"
+
+
 @dataclass
 class CoherenceScore:
     """Coherence score for response analysis.
@@ -190,6 +200,7 @@ class CoherenceAnalyzer:
 
 __all__ = [
     "CoherenceType",
+    "CoherenceIssue",
     "CoherenceScore",
     "CoherenceAnalyzer",
 ]
