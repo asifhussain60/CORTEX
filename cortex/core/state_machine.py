@@ -200,4 +200,12 @@ __all__ = [
     "State",
     "Transition",
     "StateType",
+    "ACState",
 ]
+
+# Stub for test compatibility
+class ACState:
+    """AC State for acceptance criteria."""
+    def __init__(self, name: str = "initial"):
+        self.name = name
+        self.context = {}

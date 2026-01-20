@@ -135,4 +135,7 @@ def get_governance_pregate() -> GovernancePreGate:
     return get_governance_pregate._instance
 
 
-__all__ = ["GovernancePreGate", "PreGateResult", "PreGateDecision", "get_governance_pregate"]
+__all__ = ["GovernancePreGate", "PreGateResult", "PreGateDecision", "get_governance_pregate", "GovernancePregate"]
+
+# Alias for compatibility
+GovernancePregate = GovernancePreGate

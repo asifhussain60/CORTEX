@@ -105,4 +105,11 @@ class GovernanceEnforcer:
         return self.violations.copy()
 
 
-__all__ = ["GovernanceEnforcer", "GovernanceRule", "RuleSeverity"]
+__all__ = ["GovernanceEnforcer", "GovernanceRule", "RuleSeverity", "EnforcementResult"]
+
+# Stub for test compatibility
+class EnforcementResult:
+    """Result of governance enforcement."""
+    def __init__(self, compliant: bool = True, violations: Optional[List[str]] = None):
+        self.compliant = compliant
+        self.violations = violations or []

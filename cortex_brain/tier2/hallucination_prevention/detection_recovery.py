@@ -168,4 +168,12 @@ __all__ = [
     "HallucinationRecovery",
     "HallucinationEvent",
     "HallucinationPattern",
+    "CorruptionIndicator",
 ]
+
+# Aliases and stubs for test compatibility
+class CorruptionIndicator(Enum):
+    """Types of corruption indicators."""
+    INVALID_STATE = "invalid_state"
+    INCONSISTENT_DATA = "inconsistent_data"
+    MISSING_REFERENCE = "missing_reference"

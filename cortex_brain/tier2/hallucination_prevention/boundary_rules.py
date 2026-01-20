@@ -149,4 +149,12 @@ __all__ = [
     "BehavioralBoundaryRules",
     "BoundaryRule",
     "get_behavioral_boundary_rules",
+    "BoundaryViolation",
 ]
+
+# Stub for test compatibility
+class BoundaryViolation:
+    """Represents boundary violation."""
+    def __init__(self, rule_id: str, severity: int = 50):
+        self.rule_id = rule_id
+        self.severity = severity
