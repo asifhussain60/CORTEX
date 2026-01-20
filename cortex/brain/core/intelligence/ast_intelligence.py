@@ -241,7 +241,7 @@ class ASTIntelligenceEngine:
         self.enable_cache = enable_cache
         self._cache: Dict[str, ParseResult] = {}
     
-    def parse_file(self, file_path: Path | str) -> ParseResult:
+    def parse_file(self, file_path: Union[Path, str]) -> ParseResult:
         """Parse a Python file and extract code intelligence.
         
         Args:
