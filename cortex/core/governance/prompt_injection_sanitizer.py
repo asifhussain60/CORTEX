@@ -1,32 +1,7 @@
-"""Governance module stub."""
+"""REDIRECT: prompt_injection_sanitizer → cortex_brain.tier2.governance.prompt_injection_sanitizer
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from enum import Enum
+Author: CORTEX Framework
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
 
-
-@dataclass
-class InjectionPattern:
-    """Data class for InjectionPattern."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class SanitizationResult:
-    """Data class for SanitizationResult."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-class PromptInjectionSanitizer:
-    """PromptInjectionSanitizer implementation."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-__all__ = [
-    "PromptInjectionSanitizer",
-    "InjectionPattern",
-    "SanitizationResult",
-]
+from cortex_brain.tier2.governance.prompt_injection_sanitizer import *  # noqa: F401, F403

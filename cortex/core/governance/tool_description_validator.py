@@ -1,34 +1,7 @@
-"""Governance module stub."""
+"""REDIRECT: tool_description_validator → cortex_brain.tier2.governance.tool_description_validator
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from enum import Enum
+Author: CORTEX Framework
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
 
-
-@dataclass
-class DescriptionValidation:
-    """Data class for DescriptionValidation."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-class ToolDescriptionValidator:
-    """ToolDescriptionValidator implementation."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-class ValidationError:
-    """ValidationError implementation."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-__all__ = [
-    "ToolDescriptionValidator",
-    "DescriptionValidation",
-    "ValidationError",
-]
+from cortex_brain.tier2.governance.tool_description_validator import *  # noqa: F401, F403
