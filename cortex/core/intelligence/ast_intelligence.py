@@ -10,6 +10,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 import ast
 from typing import Any, Dict, List, Optional, Set
 from dataclasses import dataclass
+from cortex.core.parsing import ParseResult
 
 
 @dataclass
@@ -163,5 +164,6 @@ __all__ = [
     "ASTIntelligence",
     "ASTIntelligenceEngine",
     "ASTNode",
+    "ParseResult",
 ]
 

@@ -22,6 +22,17 @@ class EventType(Enum):
     STATUS = "status"
     COMMAND = "command"
     RESPONSE = "response"
+    PHASE_COMPLETED = "phase_completed"
+
+
+class PhaseType(Enum):
+    """Types of phases."""
+
+    DISCOVERY = "discovery"
+    ANALYSIS = "analysis"
+    EXECUTION = "execution"
+    VERIFICATION = "verification"
+    COMPLETION = "completion"
 
 
 @dataclass
@@ -37,6 +48,34 @@ class TerminalEvent:
 
     event_type: EventType
     message: str
+    timestamp: datetime = None
+    metadata: Dict[str, Any] = None
+
+    def __post_init__(self) -> None:
+        """Initialize defaults."""
+        if self.timestamp is None:
+            self.timestamp = datetime.now()
+        if self.metadata is None:
+            self.metadata = {}
+
+
+@dataclass
+class PhaseCompletedEvent:
+    """Event when a phase completes.
+
+    Attributes:
+        phase_id: Phase identifier.
+        phase_type: Type of phase.
+        duration_ms: Phase duration.
+        status: Completion status (success/failure).
+        timestamp: When phase completed.
+        metadata: Additional metadata.
+    """
+
+    phase_id: str
+    phase_type: PhaseType
+    duration_ms: int
+    status: str = "success"
     timestamp: datetime = None
     metadata: Dict[str, Any] = None
 
@@ -141,7 +180,9 @@ class EventRegistry:
 
 __all__ = [
     "TerminalEvent",
+    "PhaseCompletedEvent",
     "EventType",
+    "PhaseType",
     "EventHandler",
     "EventRegistry",
 ]
