@@ -9,7 +9,7 @@ Comprehensive test suite validating:
 
 import pytest
 
-from src.domain_brain.version_manager import (
+from cortex.domain_brain.version_manager import (
     VersionedDomainManager,
     DeletionStatus,
 )

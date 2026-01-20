@@ -10,7 +10,7 @@ Comprehensive test suite validating:
 import pytest
 import time
 
-from src.domain_brain.orphan_detector import (
+from cortex.domain_brain.orphan_detector import (
     ReferenceValidator,
     OrphanEntry,
     OrphanStats,
