@@ -1,0 +1,68 @@
+# SQLite runtime artifacts (NOT the database itself)
+# These are transient files that cause merge conflicts
+cortex_brain/state/*.db-shm
+cortex_brain/state/*.db-wal
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# .NET Build Artifacts
+bin/
+obj/
+*.csproj.user
+*.csproj.VisualStudio.user
+*.vs/
+.vs/
+
+# Security: Prevent test fixtures with secret patterns from being committed
+# This file is used only for local testing of secret detection patterns
+tests/unit/gates/test-pre-commit-secrets.py
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs (keep structure, ignore content)
+*.log
+.knowledge-index.json
+*.db.backup*
+tests/test_ac_nfr_003_02_secrets.py

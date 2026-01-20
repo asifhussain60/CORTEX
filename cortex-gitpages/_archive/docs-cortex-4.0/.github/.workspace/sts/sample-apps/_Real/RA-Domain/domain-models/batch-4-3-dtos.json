@@ -1,0 +1,164 @@
+{
+  "batch_info": {
+    "name": "Batch 3.1 - First 10 Entities",
+    "total_files": 9,
+    "total_classes": 9,
+    "total_properties": 0,
+    "total_navigation_properties": 0
+  },
+  "entities": [
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\MemberFlexSpanDto.cs",
+      "filename": "MemberFlexSpanDto.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "MemberFlexSpanDto",
+          "line": 5,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\MemberFlexStageChangeDto.cs",
+      "filename": "MemberFlexStageChangeDto.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "MemberFlexStageChangeDto",
+          "line": 5,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\MemberRecentActivitiesDto.cs",
+      "filename": "MemberRecentActivitiesDto.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "MemberRecentActivitiesDto",
+          "line": 22,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\MemberReimbursementAccountDetailsDto.cs",
+      "filename": "MemberReimbursementAccountDetailsDto.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "MemberReimbursementAccountDetailsDto",
+          "line": 21,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\MemberReimbursementAccountsSummaryDto.cs",
+      "filename": "MemberReimbursementAccountsSummaryDto.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "MemberReimbursementAccountsSummaryDto",
+          "line": 22,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\MemberSuspendedCard.cs",
+      "filename": "MemberSuspendedCard.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "MemberSuspendedCard",
+          "line": 19,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\MemberUnsubstantiatedTransaction.cs",
+      "filename": "MemberUnsubstantiatedTransaction.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "MemberUnsubstantiatedTransaction",
+          "line": 21,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\OverrideMemberFlexStageRequest.cs",
+      "filename": "OverrideMemberFlexStageRequest.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "OverrideMemberFlexStageRequest",
+          "line": 21,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    },
+    {
+      "file": "C:\\PROJECTS\\Product.PaymentAccounts\\SDKs\\App.PaymentAccounts.Contracts\\DTOs\\PercentPlanLedgerJobResponse.cs",
+      "filename": "PercentPlanLedgerJobResponse.cs",
+      "namespace": "App.PaymentAccounts.Contracts.DTOs",
+      "classes": [
+        {
+          "name": "PercentPlanLedgerJobResponse",
+          "line": 5,
+          "modifiers": [],
+          "inherits": [],
+          "properties": [],
+          "navigation_properties": [],
+          "attributes": [],
+          "xml_doc": null
+        }
+      ]
+    }
+  ]
+}

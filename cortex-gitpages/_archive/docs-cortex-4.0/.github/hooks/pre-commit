@@ -1,0 +1,16 @@
+#!/bin/bash
+# Pre-commit hook: Verify environment before allowing commits
+# Install with: cp .github/hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+
+set -e
+
+echo "🔍 Running environment verification..."
+
+# Run verification script
+if python3 cortex/scripts/verify_environment.py --quiet; then
+    exit 0
+else
+    echo "❌ Environment verification failed!"
+    echo "Fix issues and try again, or use --no-verify to bypass"
+    exit 1
+fi

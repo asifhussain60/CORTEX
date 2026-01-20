@@ -1,0 +1,184 @@
+# =============================================================================
+# CORTEX TIER 2 - GOVERNANCE RULE VIOLATION TEMPLATE
+# =============================================================================
+# Purpose: Template for detailed governance violation reports
+# Domain: Governance
+# Inherits: Header from cortex_brain/tier0/response-headers.yaml
+# =============================================================================
+
+metadata:
+  template_id: "governance-rule-violation"
+  version: "1.0"
+  created_at: "2026-01-16T00:00:00Z"
+  author: "Asif Hussain"
+  description: "Template for detailed governance rule violation reports"
+  tier: 2
+  category: "domain"
+  domain: "governance"
+
+# =============================================================================
+# TEMPLATE STRUCTURE
+# =============================================================================
+
+template:
+  structure:
+    - section: "header"
+      source: "tier0/response-headers.yaml"
+      required: true
+    
+    - section: "violation_header"
+      required: true
+      format: |
+        ### ❌ Governance Violation: {rule_id}
+        
+        **Rule:** {rule_name}
+        **Severity:** {severity}
+        **Category:** {category}
+    
+    - section: "location"
+      required: true
+      format: |
+        ### Location
+        
+        - **File:** `{file_path}`
+        - **Line:** {line_number}
+        - **Function:** {function_name}
+    
+    - section: "violation_code"
+      required: true
+      format: |
+        ### Violation
+        
+        ```{language}
+        {violation_code}
+        ```
+    
+    - section: "fix"
+      required: true
+      format: |
+        ### Fix
+        
+        ```{language}
+        {fix_code}
+        ```
+    
+    - section: "rule_reference"
+      required: false
+      format: |
+        ### Rule Reference
+        
+        **Source:** `{rule_source}`
+        
+        {rule_description}
+
+# =============================================================================
+# VARIABLE DEFINITIONS
+# =============================================================================
+
+variables:
+  mandatory:
+    - name: "rule_id"
+      type: "string"
+      description: "Rule identifier"
+      example: "CORE-013"
+    
+    - name: "rule_name"
+      type: "string"
+      description: "Human-readable rule name"
+      example: "Explicit Error Handling"
+    
+    - name: "severity"
+      type: "enum"
+      values: ["BLOCKED", "WARNING"]
+      description: "Violation severity"
+    
+    - name: "file_path"
+      type: "string"
+      description: "Path to file with violation"
+    
+    - name: "line_number"
+      type: "integer"
+      description: "Line number of violation"
+    
+    - name: "violation_code"
+      type: "string"
+      description: "Code showing the violation"
+    
+    - name: "fix_code"
+      type: "string"
+      description: "Corrected code"
+  
+  optional:
+    - name: "category"
+      type: "string"
+      default: "quality_gates"
+    
+    - name: "function_name"
+      type: "string"
+      default: "N/A"
+    
+    - name: "language"
+      type: "string"
+      default: "python"
+    
+    - name: "rule_source"
+      type: "string"
+      default: "cortex_brain/tier0/governance/core-rules.yaml"
+    
+    - name: "rule_description"
+      type: "string"
+      default: ""
+
+# =============================================================================
+# EXAMPLE OUTPUT
+# =============================================================================
+
+example:
+  output: |
+    ## 🧠 CORTEX Governance Evaluation
+    **Author:** Asif Hussain | **Phase:** PHASE-09 | **Orchestrator:** GovernanceOrchestrator ✅
+    
+    ---
+    **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
+    
+    ### ❌ Governance Violation: CORE-013
+    
+    **Rule:** Explicit Error Handling
+    **Severity:** BLOCKED
+    **Category:** quality_gates
+    
+    ### Location
+    
+    - **File:** `src/utils/helper.py`
+    - **Line:** 45
+    - **Function:** `process_data`
+    
+    ### Violation
+    
+    ```python
+    def process_data(data):
+        try:
+            result = transform(data)
+            return result
+        except:  # ← VIOLATION: bare except
+            return None
+    ```
+    
+    ### Fix
+    
+    ```python
+    def process_data(data):
+        try:
+            result = transform(data)
+            return result
+        except TransformError as e:  # ← COMPLIANT: specific exception
+            logger.error(f"Transform failed: {e}")
+            raise
+    ```
+    
+    ### Rule Reference
+    
+    **Source:** `cortex_brain/tier0/governance/core-rules.yaml`
+    
+    NO bare except. NO catching generic Exception. Use specific exception types
+    and preserve error context.

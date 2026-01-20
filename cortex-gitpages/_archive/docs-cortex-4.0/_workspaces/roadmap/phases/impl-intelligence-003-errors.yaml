@@ -1,0 +1,284 @@
+# CORTEX Implementation Phase: Error Pattern Intelligence
+# Phase ID: impl-intelligence-003-errors
+# Priority: P1 (High-value quick win)
+# Source: INTELLIGENCE-IMPLEMENTATION-ROADMAP.md (Module 3)
+# Date: 2026-01-20
+
+metadata:
+  phase_id: "impl-intelligence-003-errors"
+  title: "Error Pattern Recognition"
+  description: "Aggregate errors; detect recurring patterns; identify brittle handlers"
+  priority: "P1"
+  estimated_effort: "2-3 hours"
+  source_spec: "docs/INTELLIGENCE-IMPLEMENTATION-ROADMAP.md (Module 3)"
+  status: "COMPLETED"
+  locked: true
+  completed_date: "2026-01-20"
+  git_commit: "82301bac9"
+
+objective:
+  summary: "Detect recurring error patterns to identify systemic issues and brittle handlers"
+  business_value: "Transform error logs into actionable intelligence; guide debugging priorities"
+
+gap_analysis:
+  current_state:
+    - "Errors logged with full context"
+    - "Exception types stored in audit trail"
+    - "No aggregation or pattern detection"
+    - "No visibility into which handlers/operations are brittle"
+  
+  missing_capability:
+    - "Error pattern aggregation (error_type + handler + operation)"
+    - "Recurring error detection (count >= threshold)"
+    - "Handler brittleness metrics"
+    - "New error detection (errors not seen before)"
+
+acceptance_criteria:
+  - id: "INT-ERR-003-01"
+    description: "ErrorAnalyzer records error occurrences"
+    verification:
+      - "record_error() stores error_type, handler, operation_type, context"
+      - "Data persisted to governance.db error_occurrences table"
+      - "Context includes stack trace, input params (sanitized)"
+    tests:
+      - "test_record_error()"
+      - "test_error_context_sanitization()"
+      - "test_database_persistence()"
+  
+  - id: "INT-ERR-003-02"
+    description: "ErrorAnalyzer detects error patterns"
+    verification:
+      - "get_error_patterns() identifies recurring (error_type, handler, operation) tuples"
+      - "Returns error_type, handler, operation_type, count, first_seen, last_seen"
+      - "Configurable min_occurrence threshold (default 3)"
+      - "Filters by time window (days parameter)"
+    tests:
+      - "test_get_error_patterns_single()"
+      - "test_get_error_patterns_multiple()"
+      - "test_get_error_patterns_threshold()"
+      - "test_error_patterns_time_window()"
+      - "test_error_patterns_empty()"
+  
+  - id: "INT-ERR-003-03"
+    description: "ErrorAnalyzer calculates error frequency by handler"
+    verification:
+      - "get_error_frequency_by_handler() returns error counts grouped by handler"
+      - "Includes total_errors, unique_error_types, failure_rate"
+      - "Enables handler brittleness ranking"
+      - "Filters by time window"
+    tests:
+      - "test_get_error_frequency_by_handler()"
+      - "test_handler_brittleness_ranking()"
+      - "test_error_frequency_time_window()"
+  
+  - id: "INT-ERR-003-04"
+    description: "ErrorAnalyzer detects new errors"
+    verification:
+      - "detect_new_errors() identifies errors not seen in historical baseline"
+      - "Compares recent errors (last N days) to historical baseline (30 days)"
+      - "Returns error_type, first_occurrence, handler, operation_type"
+      - "Flags potentially critical regressions"
+    tests:
+      - "test_detect_new_errors_single()"
+      - "test_detect_new_errors_multiple()"
+      - "test_detect_new_errors_empty()"
+      - "test_new_error_baseline_calculation()"
+
+implementation:
+  files_to_create:
+    - path: "cortex/core/intelligence/error_intelligence.py"
+      loc: 160
+      classes:
+        - name: "ErrorAnalyzer"
+          methods:
+            - "record_error(error_type, handler, operation_type, context)"
+            - "get_error_patterns(days=7, min_occurrence=3)"
+            - "get_error_frequency_by_handler(days=7)"
+            - "detect_new_errors(recent_days=7, baseline_days=30)"
+    
+    - path: "tests/unit/intelligence/test_error_intelligence.py"
+      loc: 220
+      test_count: 10
+  
+  files_to_modify:
+    - path: "cortex/infrastructure/enhanced_audit_logger.py"
+      changes: "+5-8 lines when logging errors"
+      reason: "Call error_analyzer.record_error() with handler + operation_type context"
+      location: "In error logging methods (log_error, log_exception)"
+  
+  database_changes:
+    table: "error_occurrences"
+    columns:
+      - "id UUID PRIMARY KEY"
+      - "error_type VARCHAR(255) NOT NULL"
+      - "handler VARCHAR(255)"
+      - "operation_type VARCHAR(50)"
+      - "context TEXT"  # JSON serialized
+      - "timestamp DATETIME NOT NULL"
+    indexes:
+      - "idx_error_timestamp ON timestamp"
+      - "idx_error_type ON error_type"
+      - "idx_error_handler ON handler"
+      - "idx_error_pattern ON (error_type, handler, operation_type)"
+
+api_specification:
+  class: "ErrorAnalyzer"
+  
+  methods:
+    - name: "record_error"
+      params:
+        - "error_type: str"  # Exception class name
+        - "handler: str"
+        - "operation_type: str"
+        - "context: Dict[str, Any]"  # Stack trace, input params (sanitized)
+      returns: "None"
+      docstring: "Record error occurrence with context"
+    
+    - name: "get_error_patterns"
+      params:
+        - "days: int = 7"
+        - "min_occurrence: int = 3"
+      returns: "List[Dict[str, Any]]"
+      example_output:
+        - error_type: "ValidationError"
+          handler: "handler_a"
+          operation_type: "implement"
+          count: 5
+          first_seen: "2026-01-18T10:30:00Z"
+          last_seen: "2026-01-20T15:45:00Z"
+    
+    - name: "get_error_frequency_by_handler"
+      params:
+        - "days: int = 7"
+      returns: "Dict[str, Dict[str, Any]]"
+      example_output:
+        handler_a:
+          total_errors: 15
+          unique_error_types: 3
+          failure_rate: 0.15
+        handler_b:
+          total_errors: 2
+          unique_error_types: 1
+          failure_rate: 0.02
+    
+    - name: "detect_new_errors"
+      params:
+        - "recent_days: int = 7"
+        - "baseline_days: int = 30"
+      returns: "List[Dict[str, Any]]"
+      example_output:
+        - error_type: "DatabaseConnectionError"
+          first_occurrence: "2026-01-20T10:30:00Z"
+          handler: "handler_c"
+          operation_type: "fix"
+          is_new: true
+
+governance:
+  compliance:
+    - "CORE-008: TDD - tests written before implementation"
+    - "CORE-011: Type hints on all public methods"
+    - "CORE-012: Google docstrings on all classes and methods"
+    - "CORE-013: No bare except clauses"
+    - "CORE-027: AC_START → AC_EXECUTE → AC_COMPLETE audit trail"
+  
+  audit_trail:
+    - event: "AC_START"
+      phase: "impl-intelligence-003-errors"
+      ac_id: "INT-ERR-003-01"
+    - event: "AC_EXECUTE"
+      phase: "impl-intelligence-003-errors"
+      ac_id: "INT-ERR-003-01"
+    - event: "AC_COMPLETE"
+      phase: "impl-intelligence-003-errors"
+      ac_id: "INT-ERR-003-01"
+
+testing_strategy:
+  unit_tests:
+    count: 10
+    framework: "pytest"
+    coverage_target: "100%"
+    tests:
+      - "test_record_error() - Basic error recording"
+      - "test_error_context_sanitization() - PII removal, size limits"
+      - "test_database_persistence() - Data integrity"
+      - "test_get_error_patterns_single() - Single recurring pattern"
+      - "test_get_error_patterns_multiple() - Multiple patterns"
+      - "test_get_error_patterns_threshold() - Min occurrence filtering"
+      - "test_error_patterns_time_window() - Date range filtering"
+      - "test_error_patterns_empty() - No patterns found"
+      - "test_get_error_frequency_by_handler() - Handler brittleness"
+      - "test_handler_brittleness_ranking() - Sort by failure rate"
+  
+  integration_tests:
+    - "test_error_analyzer_audit_logger_integration()"
+    - "test_error_pattern_detection_real_data()"
+
+dependencies:
+  requires:
+    - "impl-intelligence-001-routing.yaml"
+    - "impl-intelligence-002-duration.yaml"
+  blocks: []
+  related:
+    - "impl-intelligence-004-handler-load.yaml"
+
+risks_and_mitigations:
+  - risk: "Context field contains sensitive data (PII, credentials)"
+    mitigation: "Implement context sanitization; redact known patterns"
+    severity: "HIGH"
+  
+  - risk: "Large context payloads (>10KB stack traces)"
+    mitigation: "Truncate context to 5KB; hash full context for dedup"
+    severity: "MEDIUM"
+  
+  - risk: "Pattern detection false positives (transient errors)"
+    mitigation: "Use min_occurrence threshold; exclude known transient types"
+    severity: "LOW"
+
+success_metrics:
+  - metric: "All 10 unit tests passing"
+    target: "100%"
+  
+  - metric: "Context sanitization accuracy"
+    target: "100% of PII patterns redacted"
+  
+  - metric: "Pattern detection accuracy"
+    target: "Detects 100% of patterns with count >= 3"
+  
+  - metric: "Integration overhead"
+    target: "<2ms per error"
+
+rollback_plan:
+  - step: "Remove error_analyzer.record_error() call from enhanced_audit_logger.py"
+  - step: "Drop error_occurrences table"
+  - step: "Remove error_intelligence.py module"
+  - step: "Revert git commit"
+
+validation:
+  pre_implementation:
+    - "Review INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 3"
+    - "Identify enhanced_audit_logger integration points"
+    - "Design context sanitization rules (PII patterns)"
+  
+  post_implementation:
+    - "pytest tests/unit/intelligence/test_error_intelligence.py -v"
+    - "Verify error_occurrences table created in governance.db"
+    - "Test context sanitization with sample PII data"
+    - "Run integration test with audit logger"
+
+timeline:
+  estimated_hours: 2.5
+  breakdown:
+    - task: "Create error_intelligence.py"
+      hours: 1.0
+    - task: "Write 10 unit tests"
+      hours: 1.0
+    - task: "Integrate into enhanced_audit_logger.py"
+      hours: 0.25
+    - task: "Create database migration"
+      hours: 0.25
+
+notes:
+  - "Third of 7 intelligence enhancements"
+  - "Transforms passive error logs into active debugging intelligence"
+  - "Enables proactive identification of brittle handlers"
+  - "Context sanitization is critical for compliance (GDPR, PII)"

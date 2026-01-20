@@ -1,0 +1,54 @@
+{
+  "dashboard": {
+    "title": "CORTEX Governance Monitoring",
+    "description": "Governance rule evaluation metrics and decision tracking",
+    "tags": ["cortex", "governance"],
+    "panels": [
+      {
+        "title": "Rules Evaluated per Second",
+        "targets": [
+          {
+            "expr": "rate(governance_checks_total[1m])"
+          }
+        ],
+        "type": "graph"
+      },
+      {
+        "title": "Rule Pass/Fail Rates",
+        "targets": [
+          {
+            "expr": "rate(governance_checks_total{decision=\"allow\"}[5m]) / rate(governance_checks_total[5m]) * 100"
+          }
+        ],
+        "type": "graph"
+      },
+      {
+        "title": "Governance Check Latency (ms)",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(governance_check_duration_seconds_bucket[5m])) * 1000"
+          }
+        ],
+        "type": "graph"
+      },
+      {
+        "title": "Quota Enforcement Actions",
+        "targets": [
+          {
+            "expr": "increase(governance_quota_enforced_total[1h])"
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "title": "Denied Requests by Rule",
+        "targets": [
+          {
+            "expr": "increase(governance_checks_total{decision=\"deny\"}[1h]) by (rule)"
+          }
+        ],
+        "type": "table"
+      }
+    ]
+  }
+}

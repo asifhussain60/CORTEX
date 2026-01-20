@@ -1,0 +1,255 @@
+# ==============================================================================
+# TIER 0 GOVERNANCE - PLANNING ORCHESTRATOR DOMAIN RULES
+# ==============================================================================
+# Purpose: Planning orchestrator governance rules
+# Domain: planning
+# Status: ACTIVE
+#
+# These rules apply to Planning orchestrators and their domain-specific operations.
+# They enforce constraints on project planning, roadmap management, and phase management.
+# ==============================================================================
+
+schema_version: '1.0'
+governance_tier: 0
+domain: planning
+category: DOMAIN_ORCHESTRATOR
+precedence: HIGH
+
+metadata:
+  rule_count: 8
+  domain_id: "planning"
+  domain_name: "Planning & Roadmap Management"
+  author: "Asif Hussain"
+  copyright: "© 2025-2026 Asif Hussain. All rights reserved."
+  created_at: "2026-01-15T00:00:00Z"
+
+categories:
+  - phase_management
+  - roadmap_integrity
+  - dependency_resolution
+  - milestone_tracking
+  - risk_management
+  - estimation_accuracy
+
+# ==============================================================================
+# RULE DEFINITIONS
+# ==============================================================================
+rules:
+  # --------------------------------------------------------------------------
+  # PLAN-RULE-001: Phase Lock Immutability
+  # --------------------------------------------------------------------------
+  - rule_id: PLAN-RULE-001
+    category: phase_management
+    severity: blocked
+    name: Phase Lock Immutability Enforcement
+    description: |
+      Once a phase is locked (locked: true in phase_tracker), it CANNOT be:
+      - Reimplemented (status must remain COMPLETED)
+      - Modified (AC-IDs cannot be changed)
+      - Reopened (locked: false forbidden)
+      - Rolled back (commits must not be reverted)
+      
+      Audit trail must track all lock state changes.
+    validation:
+      - Phase locked status immutable
+      - No AC-ID modifications after lock
+      - Lock timestamp recorded in audit log
+      - Rollback attempts logged as violations
+
+  # --------------------------------------------------------------------------
+  # PLAN-RULE-002: Dependency Validation
+  # --------------------------------------------------------------------------
+  - rule_id: PLAN-RULE-002
+    category: dependency_resolution
+    severity: blocked
+    name: Strict Dependency Validation
+    description: |
+      No phase may start until all `requires` phases are COMPLETED and locked.
+      AC-ID dependencies MUST form a DAG (no cycles allowed).
+      Missing dependencies MUST be detected before phase execution.
+    validation:
+      - All predecessor phases checked before phase start
+      - All predecessor AC-IDs completed before AC-ID execution
+      - Dependency cycles detected and reported
+      - Transitive dependencies validated
+
+  # --------------------------------------------------------------------------
+  # PLAN-RULE-003: Estimation Accuracy
+  # --------------------------------------------------------------------------
+  - rule_id: PLAN-RULE-003
+    category: estimation_accuracy
+    severity: high
+    name: Estimation Tracking & Accuracy
+    description: |
+      All estimates MUST be tracked against actuals.
+      Estimation accuracy ratio = actual_hours / estimated_hours
+      If ratio >1.3 (30% over estimate), post-mortem required.
+      Estimation patterns used for future planning adjustments.
+    validation:
+      - Estimated hours recorded at phase start
+      - Actual hours tracked per AC-ID
+      - Ratio calculated at phase end
+      - Post-mortem triggered if >1.3 ratio
+
+  # --------------------------------------------------------------------------
+  # PLAN-RULE-004: AC-ID Traceability
+  # --------------------------------------------------------------------------
+  - rule_id: PLAN-RULE-004
+    category: roadmap_integrity
+    severity: blocked
+    name: AC-ID Traceability Chain
+    description: |
+      Every AC-ID MUST have:
+      - Clear acceptance criteria (measurable, testable)
+      - Explicit priority (CRITICAL, HIGH, MEDIUM, LOW)
+      - Test reference (which test validates it)
+      - Governance rules it enforces
+      - Git commit hash when completed
+      
+      Traceability MUST be unbroken from requirement → test → commit.
+    validation:
+      - AC-ID description ≥20 words
+      - Priority level assigned
+      - Test name explicitly referenced
+      - Governance rules listed
+      - Completion commit linked
+
+  # --------------------------------------------------------------------------
+  # PLAN-RULE-005: Risk Management
+  # --------------------------------------------------------------------------
+  - rule_id: PLAN-RULE-005
+    category: risk_management
+    severity: high
+    name: Risk Tracking & Mitigation
+    description: |
+      All identified risks MUST have:
+      - Severity level (HIGH, MEDIUM, LOW)
+      - Mitigation strategy documented
+      - Owner assigned
+      - Status tracked (OPEN, MITIGATED, REALIZED, CLOSED)
+      
+      Realized risks MUST have root cause analysis logged.
+    validation:
+      - Risk documented before phase execution
+      - Mitigation strategy present
+      - Owner name recorded
+      - Status updated in real-time
+      - RCA logged if risk realized
+
+  # --------------------------------------------------------------------------
+  # PLAN-RULE-006: Milestone Tracking
+  # --------------------------------------------------------------------------
+  - rule_id: PLAN-RULE-006
+    category: milestone_tracking
+    severity: high
+    name: Milestone Completion Verification
+    description: |
+      Each phase milestone MUST be verified complete before marking phase done.
+      Milestones include:
+      - All AC-IDs completed (not skipped)
+      - All tests passing (100% pass rate required)
+      - Audit trail complete (≥3 entries per AC-ID)
+      - Git checkpoint created
+      - Documentation updated
+    validation:
+      - Milestone checklist validated before lock
+      - Zero completed AC-IDs allowed (all or nothing)
+      - Test pass rate must be 100%
+      - Audit entry count ≥ AC-ID count × 3
+
+  # --------------------------------------------------------------------------
+  # PLAN-RULE-007: Change Management
+  # --------------------------------------------------------------------------
+  - rule_id: PLAN-RULE-007
+    category: roadmap_integrity
+    severity: high
+    name: Change Request Protocol
+    description: |
+      Any phase/AC-ID modification requires:
+      - Impact assessment (which files affected)
+      - Dependency analysis (what breaks)
+      - Test coverage validation (coverage maintained)
+      - Stakeholder approval (change logged)
+      - Rollback plan documented
+      
+      Changes NOT applied to locked phases.
+    validation:
+      - Impact assessed before change
+      - Dependencies validated
+      - Coverage maintained
+      - Change logged with approver
+      - Rollback documented
+
+  # --------------------------------------------------------------------------
+  # PLAN-RULE-008: Roadmap Coherence
+  # --------------------------------------------------------------------------
+  - rule_id: PLAN-RULE-008
+    category: roadmap_integrity
+    severity: high
+    name: Roadmap Coherence & Consistency
+    description: |
+      Total AC-ID counts MUST be consistent across:
+      - phase_tracker (sum of all phases)
+      - individual phase YAML files
+      - AC index documentation
+      - Git tags/checkpoints
+      
+      Inconsistencies MUST be detected and corrected.
+    validation:
+      - Total AC-IDs matches across sources
+      - No duplicate AC-IDs across phases
+      - AC-ID sequence follows naming convention
+      - Git tags match phase_tracker status
+
+# ==============================================================================
+# DOMAIN ORCHESTRATOR REQUIREMENTS
+# ==============================================================================
+planning_orchestrator_requirements:
+  id: PlanningOrchestrator
+  tier_access: [0, 1, 2, 3]
+  required_rules:
+    - PLAN-RULE-001
+    - PLAN-RULE-002
+    - PLAN-RULE-004
+    - PLAN-RULE-006
+  mcp_tools:
+    - verify_phase_status
+    - check_dependencies
+    - validate_roadmap
+    - generate_status_report
+    - track_estimation_accuracy
+  capabilities:
+    - phase_execution_planning
+    - dependency_resolution
+    - risk_assessment
+    - milestone_tracking
+    - estimation_tracking
+  performance_sla:
+    dependency_check_timeout: 5000  # milliseconds
+    roadmap_validation_timeout: 10000
+    report_generation_timeout: 15000
+
+# ==============================================================================
+# DOMAIN-TO-AC MAPPINGS
+# ==============================================================================
+# AC-IDs that relate to Planning domain rules
+domain_ac_mappings:
+  - ac_id: PHASE-VISION-CORE
+    description: "Planning phase complete with all 24 AC-IDs"
+    rules: [PLAN-RULE-001, PLAN-RULE-004, PLAN-RULE-006]
+  - ac_id: AC-AR-014-01
+    description: "Hallucination prevention: phase lock enforcement"
+    rules: [PLAN-RULE-001]
+  - ac_id: AC-AR-015-01
+    description: "Vision governance: roadmap coherence tracking"
+    rules: [PLAN-RULE-008]
+
+# ==============================================================================
+# METADATA & VERSIONING
+# ==============================================================================
+versioning:
+  version: "1.0"
+  created_at: "2026-01-15T00:00:00Z"
+  last_updated_at: "2026-01-15T00:00:00Z"
+  status: "ACTIVE"
+  enforcement_mode: "STRICT"  # STRICT | WARNING | LOGGING
