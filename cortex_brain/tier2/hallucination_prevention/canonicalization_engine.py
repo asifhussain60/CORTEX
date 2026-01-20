@@ -6,7 +6,7 @@ Author: CORTEX Framework
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Dict, Optional, List, Callable
 from enum import Enum
 
@@ -128,6 +128,28 @@ class ExtendedIntentCanonicalizer(CanonicalizeEngine):
         """Canonicalize with context."""
         return self.canonicalize(data)
 
+
+from enum import Enum
+
+class ActionType(Enum):
+    """Types of actions."""
+    CREATE = "create"
+    MODIFY = "modify"
+    DELETE = "delete"
+    QUERY = "query"
+    EXECUTE = "execute"
+    ROLLBACK = "rollback"
+
+
+@dataclass
+class ExtendedCanonicalIntent:
+    """Extended canonical intent with additional fields."""
+    intent: str
+    action_type: ActionType
+    confidence: float = 1.0
+    context: Dict[str, Any] = field(default_factory=dict)
+
+
 __all__ = [
     "CanonicalizeEngine",
     "CanonicalData",
@@ -136,6 +158,9 @@ __all__ = [
     "CanonicalIntentEngine",
     "IntentCanonicalForm",
     "ACIDExtraction",
+    "ExtendedIntentCanonicalizer",
+    "ExtendedCanonicalIntent",
+    "ActionType",
 ]
 
 # Alias for backward compatibility

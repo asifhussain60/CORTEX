@@ -96,4 +96,10 @@ class TemplateEngine:
             return template.render(variables)
         return ""
 
-__all__ = ["VariableType", "VariableSpec", "ResponseType", "ResponseTemplate", "TemplateRegistry", "SimpleTemplateSubstitutor", "TemplateCache", "TemplateEngine"]
+
+def get_template_engine() -> TemplateEngine:
+    """Get the template engine singleton."""
+    return TemplateEngine()
+
+
+__all__ = ["VariableType", "VariableSpec", "ResponseType", "ResponseTemplate", "TemplateRegistry", "SimpleTemplateSubstitutor", "TemplateCache", "TemplateEngine", "get_template_engine"]

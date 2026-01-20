@@ -139,4 +139,33 @@ class VisionMutationTracker(MutationTracker):
         self.track_mutation(mutation)
         return mutation
 
-__all__ = ["MutationTracker", "Mutation", "VisionMutationTracker"]
+
+from enum import Enum
+from dataclasses import dataclass, field
+
+class VisionMutation(Enum):
+    """Vision mutation types."""
+    ADDED = "added"
+    REMOVED = "removed"
+    MODIFIED = "modified"
+    REPLACED = "replaced"
+
+
+class MutationType(Enum):
+    """Types of mutations."""
+    CREATE = "create"
+    UPDATE = "update"
+    DELETE = "delete"
+    RESTORE = "restore"
+
+
+@dataclass
+class MutationSnapshot:
+    """Snapshot of a mutation state."""
+    timestamp: str
+    mutation_type: MutationType
+    data: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+
+__all__ = ["MutationTracker", "Mutation", "VisionMutationTracker", "VisionMutation", "MutationType", "MutationSnapshot"]

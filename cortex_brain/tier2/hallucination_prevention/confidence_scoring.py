@@ -153,4 +153,29 @@ class ConfidenceAssessment:
     factors: Dict[str, float] = field(default_factory=dict)
     is_reliable: bool = True
 
-__all__ = ["ConfidenceScorer", "ConfidenceScore", "ConfidenceAssessment"]
+
+from enum import Enum
+
+class ScoringFactor(Enum):
+    """Factors that influence confidence scoring."""
+    CONSISTENCY = "consistency"
+    SOURCE_RELIABILITY = "source_reliability"
+    CONTEXT_ALIGNMENT = "context_alignment"
+    HISTORICAL_ACCURACY = "historical_accuracy"
+
+
+class ScoringModel(Enum):
+    """Scoring models for confidence assessment."""
+    RULE_BASED = "rule_based"
+    ML_BASED = "ml_based"
+    HYBRID = "hybrid"
+
+
+class ReviewTrigger(Enum):
+    """Triggers for review based on confidence."""
+    LOW_CONFIDENCE = "low_confidence"
+    HIGH_RISK = "high_risk"
+    ANOMALY_DETECTED = "anomaly_detected"
+
+
+__all__ = ["ConfidenceScorer", "ConfidenceScore", "ConfidenceAssessment", "ScoringFactor", "ScoringModel", "ReviewTrigger"]

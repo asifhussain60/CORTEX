@@ -98,4 +98,15 @@ class ResponseUXOptimizer:
         """Optimize response UX."""
         return self.optimizer.optimize(response)
 
-__all__ = ["FeedbackSentiment", "ResponseQualityMetrics", "UserFeedback", "ABTestVariant", "QualityMetricType", "DefaultQualityScoringStrategy", "FeedbackRegistry", "ResponseUXOptimizer", "UXOptimizer"]
+
+def get_ux_optimizer() -> ResponseUXOptimizer:
+    """Get the UX optimizer singleton."""
+    return ResponseUXOptimizer()
+
+
+def reset_ux_optimizer() -> None:
+    """Reset the UX optimizer singleton."""
+    pass
+
+
+__all__ = ["FeedbackSentiment", "ResponseQualityMetrics", "UserFeedback", "ABTestVariant", "QualityMetricType", "DefaultQualityScoringStrategy", "FeedbackRegistry", "ResponseUXOptimizer", "UXOptimizer", "get_ux_optimizer", "reset_ux_optimizer"]

@@ -173,13 +173,15 @@ class CorruptionDetectionResult:
     confidence: float = 0.0
     details: Dict[str, Any] = field(default_factory=dict)
 
-__all__ = [
-    "HallucinationDetector",
-    "HallucinationRecovery",
-    "HallucinationEvent",
-    "HallucinationPattern",
-    "CorruptionIndicator",
-]
+
+@dataclass
+class CorruptionDetectionResult:
+    """Result of corruption detection analysis."""
+    detected: bool
+    corruption_level: float = 0.0
+    indicators: list = field(default_factory=list)
+    recovery_actions: list = field(default_factory=list)
+
 
 # Aliases and stubs for test compatibility
 class CorruptionIndicator(Enum):
@@ -187,3 +189,43 @@ class CorruptionIndicator(Enum):
     INVALID_STATE = "invalid_state"
     INCONSISTENT_DATA = "inconsistent_data"
     MISSING_REFERENCE = "missing_reference"
+
+
+class CorruptionType(Enum):
+    """Types of corruption."""
+    DATA_CORRUPTION = "data_corruption"
+    STATE_CORRUPTION = "state_corruption"
+    LOGIC_CORRUPTION = "logic_corruption"
+    REFERENCE_CORRUPTION = "reference_corruption"
+
+
+class RecoveryStrategy(Enum):
+    """Recovery strategies for hallucination."""
+    ROLLBACK = "rollback"
+    RETRY = "retry"
+    FALLBACK = "fallback"
+    MANUAL_INTERVENTION = "manual_intervention"
+
+
+@dataclass
+class IncidentReport:
+    """Report of a hallucination incident."""
+    incident_id: str
+    timestamp: str
+    corruption_type: str
+    severity: str
+    description: str
+    recovery_strategy: RecoveryStrategy
+
+
+__all__ = [
+    "HallucinationDetector",
+    "HallucinationRecovery",
+    "HallucinationEvent",
+    "HallucinationPattern",
+    "CorruptionIndicator",
+    "CorruptionDetectionResult",
+    "CorruptionType",
+    "RecoveryStrategy",
+    "IncidentReport",
+]
