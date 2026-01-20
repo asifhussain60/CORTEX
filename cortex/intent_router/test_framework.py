@@ -89,6 +89,14 @@ class TestFramework:
         self.test_suites[name] = tests
         logger.info(f"Registered test suite: {name} with {len(tests)} tests")
     
+    def get_test_count(self) -> int:
+        """Get total number of tests across all suites.
+        
+        Returns:
+            Total count of tests
+        """
+        return sum(len(tests) for tests in self.test_suites.values())
+    
     def run_suite(self, name: str) -> List[TestResult]:
         """Run a specific test suite.
         
