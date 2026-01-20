@@ -18,6 +18,22 @@ class ViolationType(str, Enum):
     CONTENT = "content"
     BEHAVIOR = "behavior"
     SECURITY = "security"
+    LOCKED_PHASE_MODIFICATION = "locked_phase_modification"
+
+
+class BoundaryViolation(Exception):
+    """Exception raised for boundary violations.
+    
+    Attributes:
+        violation_type: Type of violation
+        message: Violation message
+        severity: Severity level (INFO, WARNING, CRITICAL)
+    """
+    def __init__(self, violation_type: ViolationType, message: str, severity: str = "WARNING"):
+        self.violation_type = violation_type
+        self.message = message
+        self.severity = severity
+        super().__init__(message)
 
 
 @dataclass
@@ -137,6 +153,31 @@ class BehavioralBoundaryRules:
     def clear_violations(self) -> None:
         """Clear violation history."""
         self.violations.clear()
+    
+    def check_phase_lock(self, context: Dict[str, Any]) -> bool:
+        """Check if phase modification is allowed.
+        
+        Args:
+            context: Context dict with phase_id, phase_locked, action, etc.
+            
+        Returns:
+            True if allowed
+            
+        Raises:
+            BoundaryViolation: If locked phase modification attempted
+        """
+        phase_locked = context.get("phase_locked", False)
+        action = context.get("action", "READ")
+        
+        if phase_locked and action in ("MODIFY", "DELETE"):
+            phase_id = context.get("phase_id", "UNKNOWN")
+            raise BoundaryViolation(
+                ViolationType.LOCKED_PHASE_MODIFICATION,
+                f"Cannot {action} locked phase {phase_id}",
+                severity="CRITICAL"
+            )
+        
+        return True
 
 
 # Global instance
@@ -158,14 +199,7 @@ def get_behavioral_boundary_rules() -> BehavioralBoundaryRules:
 __all__ = [
     "BehavioralBoundaryRules",
     "BoundaryRule",
-    "get_behavioral_boundary_rules",
     "BoundaryViolation",
     "ViolationType",
+    "get_behavioral_boundary_rules",
 ]
-
-# Stub for test compatibility
-class BoundaryViolation:
-    """Represents boundary violation."""
-    def __init__(self, rule_id: str, severity: int = 50):
-        self.rule_id = rule_id
-        self.severity = severity
