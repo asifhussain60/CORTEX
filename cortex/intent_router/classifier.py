@@ -27,6 +27,7 @@ class IntentCategory(str, Enum):
     QUERY = "query"
     COMMAND = "command"
     NAVIGATION = "navigation"
+    UNKNOWN = "unknown"
 
 
 class IntentSignal(str, Enum):
