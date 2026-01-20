@@ -1,14 +1,14 @@
 # CORTEX Builder - Implementation Prompt
 
-**Role:** Implement AC-IDs from `_workspaces/roadmap/cortex-master.yaml` (v2.1 SSOT) with strict tier0 governance.
+**Role:** Implement phases from `_workspaces/roadmap/cortex-impl-map.yaml` (v3.0 truth-based) with strict tier0 governance.
 
 ## Quick Reference
 
-**Before implementing any AC-ID:**
-1. Check `phase_tracker` in cortex-master.yaml → verify phase not locked
-2. Load `_workspaces/roadmap/phases/phase-XX.yaml` → AC specifications
-3. Load `cortex_brain/tier0/governance/core-rules.yaml` → 28 immutable rules
-4. Create git checkpoint: `git commit -m "checkpoint: before AC-XXX-XXX-XX"`
+**Before implementing any phase:**
+1. Check `cortex-impl-map.yaml` → verify implementation status
+2. Load `_workspaces/roadmap/phases/impl-*.yaml` → Phase specifications
+3. Reference `cortex/core/governance/` → Governance rules (Note: core-rules.yaml missing)
+4. Create git checkpoint: `git commit -m "checkpoint: before impl-XXX"`
 
 ---
 
@@ -55,8 +55,9 @@
 | Phase Status | `locked` | Action |
 |---|---|---|
 | COMPLETED | `true` | 🚫 REFUSE - already done |
-| IN_PROGRESS | `false` | ⏳ CONTINUE - pick up where left off |
-| NOT_STARTED | `false` | ✅ PROCEED - ready to implement |
+| PARTIAL | `false` | ⏳ CONTINUE - extend implementation |
+| STUB | `false` | ✅ IMPLEMENT - functional code required |
+| MISSING | `false` | 🔨 CREATE - from scratch |
 
 ---
 
@@ -64,9 +65,10 @@
 
 | File Type | Location | Authority |
 |---|---|---|
-| Master Plan | `_workspaces/roadmap/cortex-master.yaml` | CANONICAL |
-| Phase Specs | `_workspaces/roadmap/phases/phase-NN.yaml` | Per-phase authority |
-| Code | `src/`, `cortex_brain/tierX/` | Implementation |
+| Master Plan | `_workspaces/roadmap/cortex-impl-map.yaml` | CANONICAL |
+| Phase Specs | `_workspaces/roadmap/phases/impl-*.yaml` | Per-phase authority |
+| MCP Status | `_workspaces/roadmap/mcp-impl-status.yaml` | MCP tracking |
+| Code | `cortex/`, `cortex_brain/` | Implementation |
 | Tests | `tests/` | Verification |
 | Documentation | `docs/` ONLY | Human-readable |
 | Reports | `_workspaces/roadmap/reports/` | YAML tracking |
@@ -74,8 +76,9 @@
 **🚫 FORBIDDEN:**
 - `.md` files anywhere except `docs/`
 - `docs_md/` folder
-- `.py` files in root (cleanup at end)
-- Multiple active `cortex-*.yaml` files
+- `.py` files in root
+- `src/` folder (consolidated to cortex/)
+- `cortex_toolkit/` folder (deleted)
 
 ---
 
@@ -110,10 +113,10 @@
 
 ## Status Commands
 
-- `/status <phase>` → Current phase status from phase_tracker
-- `/next` → Next unstarted AC-ID
-- `/audit <ac-id>` → Audit trail for AC-ID
-- `/governance-check <phase>` → Compliance verification
+- `/status <phase>` → Current phase status from cortex-impl-map.yaml
+- `/next` → Next stub/partial implementation
+- `/mcp-status` → MCP tool implementation status
+- `/governance-check` → Compliance verification (Note: core-rules.yaml missing)
 
 ## EXECUTIVE SUMMARY FORMAT
 
@@ -154,8 +157,8 @@ Proceed to PHASE-YY? (yes/no)
               🎉 CORTEX IMPLEMENTATION COMPLETE 🎉
 ═══════════════════════════════════════════════════════════════
 
-All phases in cortex-master.yaml are now locked: true.
-Total ACs delivered: [N]
+All phases in cortex-impl-map.yaml are now locked: true.
+Total phases delivered: [N]
 Production ready: ✅
 
 ═══════════════════════════════════════════════════════════════
@@ -185,11 +188,13 @@ Production ready: ✅
 
 ## GOVERNANCE (Enforced Silently)
 
-- CORE-008: TDD (tests first)
-- CORE-011: Type hints (100%)
-- CORE-012: Docstrings (Google style)
-- CORE-024: Audit logging
-- CORE-028: Portable paths (pathlib)
+- TDD: Tests first (CORE-008 principle)
+- Type hints: 100% coverage (CORE-011 principle)
+- Docstrings: Google style (CORE-012 principle)
+- Audit logging: via governance.db (CORE-024 principle)
+- Portable paths: pathlib only (CORE-028 principle)
+
+**Note:** core-rules.yaml missing from cortex_brain/tier0/governance/
 
 ---
 
@@ -197,10 +202,13 @@ Production ready: ✅
 
 | Type | Location |
 |------|----------|
-| Master Plan | `cortex-master.yaml` |
-| Source | `src/`, `cortex_brain/tierX/` |
+| Master Plan | `_workspaces/roadmap/cortex-impl-map.yaml` |
+| Phase Specs | `_workspaces/roadmap/phases/impl-*.yaml` |
+| MCP Status | `_workspaces/roadmap/mcp-impl-status.yaml` |
+| Source | `cortex/`, `cortex_brain/` |
 | Tests | `tests/` |
 | Docs | `docs/` |
+| Reports | `_workspaces/roadmap/reports/*.yaml` |
 
 ---
 

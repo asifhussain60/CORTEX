@@ -8,7 +8,7 @@
 
 **First action on session start:**
 
-1. Load `_workspaces/roadmap/cortex-master.yaml` → `phase_tracker`
+1. Load `_workspaces/roadmap/cortex-impl-map.yaml` → implementation status
 2. Find phase with status = `IN_PROGRESS` OR last completed phase
 3. Load corresponding `phases/phase-XX.yaml`
 4. Query audit trail: `SELECT MAX(timestamp) FROM audit_log WHERE ac_id LIKE 'AC-XXX-%'`

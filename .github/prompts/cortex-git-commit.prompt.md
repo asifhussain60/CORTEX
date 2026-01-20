@@ -22,11 +22,11 @@ You are the CORTEX Git Commit Assistant, ensuring clean repository state across 
 ### ✅ CORRECT File Locations (Single Source of Truth)
 | File Type | Location | Authority | Example |
 |-----------|----------|-----------|---------|
-| **Master Plan (YAML)** | `_workspaces/roadmap/cortex-master.yaml` | **CANONICAL** | Never modify structure |
+| **Master Plan (YAML)** | `_workspaces/roadmap/cortex-impl-map.yaml` | **CANONICAL** | Never modify structure |
 | Phase Specs (YAML) | `_workspaces/roadmap/phases/phase-NN.yaml` | Authoritative | Details for PHASE-05 |
 | Markdown docs | `docs/` | Human-readable | Guides, plans |
 | Python utilities | `scripts/` | Tools | Permanent utilities |
-| MCP toolkit | `src/mcp/tools/` | Exposed via MCP | MCP tools |
+| MCP toolkit | `cortex/mcp/tools/` | Exposed via MCP | MCP tools |
 | Source modules | `src/` | Implementation | Permanent source |
 | Tests | `tests/` | Verification | Test suite |
 | Tier modules | `cortex_brain/tierX/` | Governance | Tier code |
@@ -151,7 +151,7 @@ git log HEAD..origin/$(git branch --show-current) --oneline
 
 **CONFLICT RESOLUTION HIERARCHY:**
 
-1. **YAML files (cortex-master.yaml, phase files)**
+1. **YAML files (cortex-impl-map.yaml, phase files)**
    - Preserve ALL acceptance criteria from both versions
    - Later timestamps win for `completed_at`, `locked` status
    - Merge `notes` fields (concatenate with separator)
@@ -294,11 +294,11 @@ paths:
 **In markdown/docs, use:**
 ```markdown
 <!-- ✅ CORRECT - Relative links -->
-See [roadmap](/_workspaces/roadmap/cortex-master.yaml)
+See [roadmap](/_workspaces/roadmap/cortex-impl-map.yaml)
 Database at `cortex_brain/state/governance.db`
 
 <!-- ❌ WRONG - Absolute paths -->
-See `/Users/asifhussain/PROJECTS/CORTEX/_workspaces/roadmap/cortex-master.yaml`
+See `/Users/asifhussain/PROJECTS/CORTEX/_workspaces/roadmap/cortex-impl-map.yaml`
 ```
 
 ---
@@ -426,7 +426,7 @@ git add <files>
 
 ### Edge Case 4: Stale Phase Locks After Pull
 
-**Symptom:** Database shows different phase locks than `cortex-master.yaml`
+**Symptom:** Database shows different phase locks than `cortex-impl-map.yaml`
 
 **Resolution:**
 ```bash
@@ -463,7 +463,7 @@ python -c "from src.core.path_resolver import get_project_root; print(get_projec
 **Resolution:**
 1. Keep the version with more comprehensive tests
 2. Merge any unique test cases from the other version
-3. Update `cortex-master.yaml` with accurate completion timestamp
+3. Update `cortex-impl-map.yaml` with accurate completion timestamp
 4. Run full test suite to verify
 
 ---
@@ -569,7 +569,7 @@ echo "✅ All checks passed - safe to push"
 ## 📚 RELATED DOCUMENTATION
 
 - **Multi-Machine Strategy:** `docs/CORTEX-MASTER-PLAN-INTEGRATION-REMEDIATION-05.md` (or equivalent in docs/)
-- **Master Roadmap:** `_workspaces/roadmap/cortex-master.yaml`
+- **Master Roadmap:** `_workspaces/roadmap/cortex-impl-map.yaml`
 - **Database Init:** `scripts/init_db.py --help`
 - **Governance Rules:** `cortex_brain/tier0/governance/core-rules.yaml`
 - **Builder Prompt:** `.github/prompts/cortex-builder.prompt.md`
@@ -585,7 +585,7 @@ A successful commit/merge meets ALL of these:
 3. ☐ **Database synced** with YAML sources
 4. ☐ **All tests passing** after merge
 5. ☐ **Commit message** follows convention with AC-ID reference
-6. ☐ **Phase locks** match `cortex-master.yaml`
+6. ☐ **Phase locks** match `cortex-impl-map.yaml`
 
 ---
 
