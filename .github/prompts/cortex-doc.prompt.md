@@ -164,41 +164,79 @@ As files are discovered, classify immediately into these categories:
 
 ---
 
-## Phase 0 Execution Steps
+## Phase 0 Execution (AUTONOMOUS)
 
-### Step 1: Root Directory Scan
-Execute in terminal and review results in chat:
-```bash
-find /Users/asifhussain/PROJECTS/CORTEX -maxdepth 1 -type f \( -name "*.md" -o -name "*.txt" \) | sort
+This phase is now executed autonomously by the doc-restructuring agent without user input.
+
+### Autonomous Execution
+
+The agent performs all discovery automatically:
+
+```python
+# Phase 0 Implementation
+orchestrator = AutonomousOrchestrator(root_path)
+
+# Phase 0: Scan
+discovered = scanner.scan()  # Root + recursive scan, blacklist filtering
+# Outputs: 1) File list with paths and categories
+#          2) scan-results.json
+
+# Phase 1: Analyze  
+analyzer.analyze()  # Auto-categorization based on rules
+# Outputs: analysis-results.json with categories, actions, target dirs
+
+# Phase 2: Execute (NO USER INPUT NEEDED)
+orchestrator._execute_restructuring(discovered)  # Move/archive files
+# Outputs: Moved files to correct locations
+
+# Phase 3: Report
+orchestrator._generate_report()  # Comprehensive report
+# Outputs: doc-restructuring-report.json + git commit
 ```
 
-### Step 2: Recursive Folder Scan  
-Execute in terminal and review results in chat:
+**No chat interaction required** - all decisions are data-driven based on rules defined in ProtectionFilter, DocumentationScanner, and FileCategory enum.
+
+### Execution Triggers
+
+The agent runs autonomously via:
+
+1. **Scheduled**: Weekly Sunday 2 AM UTC (configurable)
+2. **Event-based**: Detects new .md files outside docs/ folder
+3. **Manual**: `python .github/agents/doc-restructuring-agent.py --run-now`
+4. **CI/CD**: Integrated into GitHub Actions workflow
+
+### Monitoring
+
+Review execution automatically:
+
 ```bash
-find /Users/asifhussain/PROJECTS/CORTEX -type f \( -name "*.md" -o -name "*.txt" \) \
-  -not -path "*/\.git/*" \
-  -not -path "*/__pycache__/*" \
-  -not -path "*.egg-info/*" \
-  | sort
+# View log
+tail -f .github/agents/doc-restructuring.log
+
+# View report
+cat .github/agents/doc-restructuring-report.json | jq
+
+# Check git commits
+git log --oneline | head -5
 ```
-
-### Step 3: Apply Blacklist Filter
-Analyze results in chat to identify files matching protected patterns (see 0.3 above)
-
-### Step 4: Classify Files in Chat
-Discuss findings in conversation:
-- Count files by type and location
-- Identify candidates for consolidation vs. archive vs. protection
-- Summarize categorization results
-
-### Step 5: Interactive Review & Decision
-Get confirmation in chat before proceeding with any file movements
 
 ---
 
-## Intent Reflection & Implementation Plan
+## Intent Reflection & Autonomous Implementation Plan
 
-### Current State Analysis
+### Execution Model: Autonomous (No User Interaction at Each Step)
+
+**CHANGED FROM**: Interactive workflow requiring user confirmation at Phases 2-5  
+**CHANGED TO**: Fully autonomous execution with predefined categorization rules
+
+The documentation restructuring now runs as a **background agent** without waiting for user input:
+
+1. **Autonomous Discovery** → Agent scans entire repository automatically
+2. **Autonomous Categorization** → Files categorized by rules (location, name patterns)
+3. **Autonomous Execution** → Files moved/archived per categorization (NO APPROVAL GATE)
+4. **Autonomous Reporting** → Results logged and committed to git
+
+### Current State Analysis (Same as Before)
 
 | Dimension | Current Status | Issues |
 |-----------|---|---|
@@ -209,7 +247,7 @@ Get confirmation in chat before proceeding with any file movements
 | **Content Quality** | Mix of working notes, duplicate findings, completed reports | Obsolete content mixed with current documentation |
 | **Audience** | Unclear (developers? operators? architects?) | No documentation strategy |
 
-### Live Application Capabilities
+### Live Application Capabilities (Same as Before)
 
 | Component | Capability | Documentation Need |
 |-----------|---|---|
@@ -221,151 +259,70 @@ Get confirmation in chat before proceeding with any file movements
 | **Domain Brain** | Business knowledge ingestion, document parsing, conflict resolution | BKIO patterns, knowledge management, integration |
 | **Deployment** | Multi-environment support, feature flags, metrics collection | Deployment guides, environment setup, monitoring |
 
-### Restructuring Strategy
+### Restructuring Strategy: Autonomous + Rules-Based
 
-**Goal**: Create a hierarchical, audience-segmented documentation suite with clear ownership and maintenance patterns.
+**Goal**: Create a hierarchical, audience-segmented documentation suite that updates automatically when new files are detected.
 
----
-
-## Phase 1: Internal Memory Map Creation (In-Chat Analysis)
-
-**Input:** File categorization from Phase 0 (discussed in chat)  
-**Purpose:** Map current scattered state to target documentation structure  
-**Output:** File consolidation plan (discussed & confirmed in chat, not written to file)
-
-### 1.1 File Categorization Framework
-
-During chat discussion, classify all discovered files into these categories:
-
-| Category | Purpose | Keep/Archive | Typical Count |
-|----------|---------|---|---|
-| **Session Logs** | Development session summaries, chat transcripts | Archive | ~45 |
-| **Phase Reports** | Completion reports, kickoff docs, status summaries | Consolidate → Architecture/Phases | ~35 |
-| **Analysis Docs** | Gap analyses, findings, investigation reports | Archive or consolidate | ~25 |
-| **Review Artifacts** | Holistic reviews, gate analyses, verification checklists | Archive | ~20 |
-| **Implementation Plans** | AC specifications, implementation guides, design docs | Consolidate → Architecture | ~15 |
-| **Quick Guides** | Quick-start, troubleshooting, quick references | Restructure → Guides | ~10 |
-| **Architecture Docs** | REST API design, architecture maps, ADRS | Preserve → Core | ~5 |
-| **Deployment Guides** | Setup, troubleshooting, Azure deployment | Preserve → Operations | ~5 |
-| **Index/Navigation** | README, index files, documentation indexes | Consolidate → Single navigation | ~5 |
-| **Misc Reference** | License, organization summaries, prompt files | Preserve as-is or deprecate | ~15 |
-
-**Chat Discussion Points:**
-- Review each category and confirm consolidation strategy
-- Identify candidate files for each category
-- Discuss which archived content should be preserved for historical reference
-- Confirm target documents for consolidation of duplicate content
-
-### 1.2 Content Extraction & Mapping
-
-During chat analysis:
-- Identify multiple source files that should be consolidated
-- Extract key technical content from each
-- Note redundant sections across files
-- Map relationships (e.g., which phase builds on prior phases)
-- Identify authoritative sources vs. duplicates
-- Classify content by audience level: Architect/Developer/Operator
-
-**Chat Output:** Consolidation plan as structured discussion (not written to file)
-
-### 1.3 Dependency Graph
-
-During chat discussion, reference this dependency model to understand documentation relationships:
-
-**Documentation Dependencies:**
-- Getting Started (Foundation)
-  - Installation & Setup
-  - Quick Start Tutorial
-- Architecture (Foundation)
-  - Design Principles & Patterns
-  - Multi-Tier Architecture Overview
-  - Governance Framework
-  - Component Reference
-- Features & Capabilities (Depends on Architecture)
-  - Orchestration Engine
-  - Orchestrator Registry & Discovery
-  - Resilience & Failure Handling
-  - Domain Brain Integration
-  - Security & Compliance
-- API Reference (Depends on Architecture)
-  - REST API Guide
-  - MCP Protocol Specification
-  - CLI Command Reference
-  - Configuration Schema
-- Integration Guides (Depends on API Reference)
-  - Custom Orchestrator Development
-  - API Integration Patterns
-  - Domain Knowledge Integration
-  - Monitoring & Observability
-- Operations (Depends on Deployment)
-  - Deployment & Setup (by environment)
-  - Configuration Management
-  - Troubleshooting & FAQs
-  - Audit & Compliance Procedures
-  - Monitoring & Alerting
-- Reference (No dependencies)
-  - Glossary
-  - Change Log
-  - Migration Guides
-
-**Chat Discussion:** Confirm this dependency order before starting content consolidation.
+**Key Difference From Before**:
+- Old: User reviews findings, confirms decisions, approves file movements
+- New: Agent categorizes files automatically per predefined rules, executes immediately, no approval gate
 
 ---
 
-## Phase 2: Obsolescence & Redundancy Analysis (In-Chat Discussion)
+## Phase 1-2: Autonomous Analysis & Categorization
 
-**Input:** File categorization from Phase 1 (discussed in chat)  
-**Purpose:** Identify files to archive and consolidate duplicates  
-**Output:** Archive & consolidation decisions (discussed in chat, not written to file)
+**AUTOMATED** - No user interaction required. Agent performs all analysis automatically.
 
-### 2.1 Files to Archive (Candidates for docs/_archive/)
+### 1.1 File Categorization (Automatic)
 
-During chat, identify files matching these patterns:
+The agent automatically classifies files into these categories based on location and naming patterns:
 
-| File Pattern | Reason | Recommendation |
-|---|---|---|
-| `SESSION-*.md` | Development session logs | Archive |
-| `CHAT*.md` | Chat session transcripts | Archive |
-| `*-20260118.md`, `*-20260119.md`, etc. | Dated completion/status reports | Archive |
-| `PHASE-0*-*.md` | Early phase working documents | Archive |
-| `*ANALYSIS*.md` | Investigation/analysis working docs | Archive |
-| `*FINDINGS-*.md` | Analysis findings (if superseded) | Archive |
-| `*REVIEW-*.yaml` | Review data files (non-narrative) | Archive |
-| `CONSOLIDATION-*.md` | Consolidation working docs | Archive |
-| `INDEX-*.md` | Outdated index files | Archive (consolidate into new nav) |
-| `COMPLETION-REPORT.md` | Generic completion docs | Archive |
+| Category | Auto-Detection Logic | Action |
+|----------|-----|--------|
+| **ROOT_DOCS** | `*.md` in root dir OR named `README.md`, `CHANGELOG.md`, `CONTRIBUTING.md` | Review/Move to docs/02-architecture |
+| **SUBDIRECTORY_DOCS** | Named `README.md` in any subdirectory (except `.git`, `__pycache__`, etc.) | Move to docs/05-reference |
+| **PHASE_DOCS** | Located in `_workspaces/*/` OR `phases/*/` | Archive to docs/_archive/workspaces |
+| **ANALYSIS_REPORTS** | Contains keywords: analysis, report, findings, summary in path or name | Archive to docs/_archive/reports |
+| **CONFIG_EXAMPLES** | `.yaml`, `.yml`, `.json` files with "example" in name | Move to docs/04-guides |
+| **PROTECTED** | Matches blacklist patterns (`.github/workflows/**`, `src/**/*.py`, `requirements.txt`, etc.) | Skip - never moved |
 
-**Chat Task:** Count discovered files matching each pattern and discuss which to archive vs. preserve for historical reference.
+**No user decisions needed** - categorization is 100% rules-based.
 
-### 2.2 Files to Consolidate (Merge Duplicate Content)
+### 1.2 Action Assignment (Automatic)
 
-During chat, identify consolidation opportunities:
+Based on category, agent automatically assigns action:
 
-| Files to Merge | Consolidated Into | Rationale |
-|---|---|---|
-| `DEPLOYMENT-*.md` (multiple) | `operations/deployment-guide.md` | Single source for deployment |
-| `PHASE-21-*.md`, `PHASE-24-*.md` | `architecture/implementation-history.md` | Phase milestone history |
-| `AC-FIX-*.md`, `ISSUE-FIX-*.md` | `reference/known-issues.md` | Known issues & resolutions |
-| `ARCHITECTURE-MAP.md`, `cortex-impl-map-overview.md` | `architecture/system-architecture.md` | Unified architecture view |
-| `*EXECUTIVE-SUMMARY*.md` | Remove (extract into intro pages) | Executive content → page headers |
-| `DEPLOYMENT-API-REFERENCE.md`, `DEPLOYMENT-*.md` | `api/deployment-api.md` | API consolidation |
+| Category | Auto-Assigned Action | Target Directory |
+|----------|-----|--------|
+| ROOT_DOCS | move | docs/02-architecture |
+| SUBDIRECTORY_DOCS | move | docs/05-reference |
+| PHASE_DOCS | archive | docs/_archive/workspaces |
+| ANALYSIS_REPORTS | archive | docs/_archive/reports |
+| CONFIG_EXAMPLES | move | docs/04-guides |
+| PROTECTED | protect | (none - preserved) |
 
-**Chat Task:** Review source files to identify key content that should be merged into these consolidated documents.
+**No approval gate** - actions execute immediately after categorization.
 
-### 2.3 Files to Deprecate (Minimal Value)
+### 1.3 Execution (Automatic)
 
-Identify files with minimal documentation value:
+The agent executes all actions autonomously:
 
-| File | Reason | Alternative |
-|---|---|---|
-| `ORGANIZATION-SUMMARY.txt` | Administrative metadata | Remove (use git history) |
-| `TEST-SUMMARY.md` | Test status (volatile) | Link to CI/CD system |
-| `TEST-EXECUTION-REPORT-*.txt` | Test artifacts (volatile) | Link to test runner outputs |
-| `README-PROMPTS-AGENTS.md` | Agent development (move to code) | Docstrings in source code |
-| `PROMPTS-AGENTS-INDEX.md` | Prompt catalog (move to registry) | In-code or `.github/prompts/` |
-| `cortex-builder.md`, `cortex-planner.md` | Agent-specific (code docs) | Move to source tree |
+```python
+# Pseudo-code showing autonomous flow
+for file in discovered_files:
+    category = auto_categorize(file)  # Automatic - no user input
+    action = get_action(category)      # Automatic - predefined
+    target = get_target_dir(category)  # Automatic - predetermined
+    
+    if action == 'move':
+        move_file(file, target)        # Execute immediately
+    elif action == 'archive':
+        archive_file(file, target)     # Execute immediately
+    elif action == 'protect':
+        skip_file(file)                # Leave in place
+```
 
-**Chat Task:** Confirm which of these files should be removed vs. integrated into other documentation.
+**All execution is fully automated** - no user confirmation needed between steps.
 
 ---
 
@@ -956,16 +913,18 @@ grep -r "RULE-ID" cortex_brain/tier0/governance/ --include="*.yaml"
 ## Prompt Refactoring Summary
 
 **Changes Made (January 20, 2026):**
-- Removed all instructions to generate discovery_report.yaml
-- Converted Phase 0-5 from file-creation oriented to chat-discussion oriented
-- Changed "Generate Report" steps to "Discuss in Chat"
-- Removed instructions to create YAML/JSON output files
-- Added "Chat Verification" and "Chat Output" columns to all process tables
-- Emphasized real-time conversation as the collaborative medium
-- All decisions now happen through interactive GitHub Copilot Chat
-- Full traceability through conversation history instead of separate reporting files
-- Added Phase 6: Documentation Enhancement Discovery (POST-ORGANIZATION)
-- Added Phase 7: Documentation Content Enhancement (EXECUTION)
-- Added source-of-truth validation requirements
-- Added reality-based documentation principle
+- Converted from interactive chat-based workflow to autonomous agent-based workflow
+- Created `doc-restructuring-agent.py` - Pure Python autonomous agent with zero chat dependencies
+- Created `doc-restructuring-scheduler.yaml` - Execution scheduler with weekly + event-based triggers
+- Created `README-AUTONOMOUS.md` - Complete guide to autonomous operation
+- Phase 0 now describes autonomous scanning (no confirmation needed)
+- Phase 1-2 now describes automatic categorization (rules-driven, no decisions)
+- Phases 3-5 now describe autonomous execution (immediate, no approval gates)
+- Removed all interactive chat discussion requirements
+- Agent performs all file operations automatically with git backup
+- Full audit logging and comprehensive JSON reports
+- Protected file blacklist enforcement
+- Zero user interruption during execution
+
+See [Autonomous Agent Documentation](.github/agents/README-AUTONOMOUS.md) for setup and operation.
 
