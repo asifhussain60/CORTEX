@@ -10,6 +10,36 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 from datetime import datetime
+from enum import Enum
+
+
+class EntityType(Enum):
+    """Entity types."""
+
+    DOMAIN = "domain"
+    SERVICE = "service"
+    RESOURCE = "resource"
+    OPERATION = "operation"
+    DATA = "data"
+
+
+@dataclass
+class Entity:
+    """Domain entity.
+
+    Attributes:
+        entity_id: Entity identifier.
+        entity_type: Type of entity.
+        name: Entity name.
+        domain_id: Domain identifier.
+        metadata: Additional metadata.
+    """
+
+    entity_id: str
+    entity_type: EntityType
+    name: str
+    domain_id: str
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -181,13 +211,11 @@ def get_domain_registry() -> DomainRegistry:
 Domain = DomainModel
 
 
-# Alias for backward compatibility
-Domain = DomainModel
-
-
 __all__ = [
     "DomainModel",
     "Domain",
+    "Entity",
+    "EntityType",
     "DomainCapability",
     "DomainState",
     "DomainContext",

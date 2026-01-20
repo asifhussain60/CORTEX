@@ -103,6 +103,32 @@ class MaxTurnsReachedEvent:
             self.timestamp = datetime.now()
 
 
+@dataclass
+class ErrorOccurredEvent:
+    """Event when error occurs.
+
+    Attributes:
+        event_id: Unique event identifier.
+        error_type: Type of error.
+        message: Error message.
+        timestamp: When error occurred.
+        context: Error context.
+    """
+
+    event_id: str
+    error_type: str
+    message: str
+    timestamp: datetime = None
+    context: Dict[str, Any] = None
+
+    def __post_init__(self) -> None:
+        """Initialize defaults."""
+        if self.timestamp is None:
+            self.timestamp = datetime.now()
+        if self.context is None:
+            self.context = {}
+
+
 
 @dataclass
 class PhaseCompletedEvent:
@@ -228,6 +254,7 @@ __all__ = [
     "PhaseCompletedEvent",
     "UserCancelledEvent",
     "MaxTurnsReachedEvent",
+    "ErrorOccurredEvent",
     "EventType",
     "PhaseType",
     "EventHandler",
