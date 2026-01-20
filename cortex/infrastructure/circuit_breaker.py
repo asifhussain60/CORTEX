@@ -12,7 +12,7 @@ import time
 from typing import Any, Callable, Optional, TypeVar
 from enum import Enum
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +52,7 @@ class CircuitBreakerMetrics:
     failed_calls: int = 0
     rejected_calls: int = 0
     current_state: CircuitState = CircuitState.CLOSED
-    state_change_timestamp: datetime = field(default_factory=datetime.utcnow)
+    state_change_timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
     last_failure_time: Optional[datetime] = None
     last_failure_reason: Optional[str] = None
     consecutive_successes: int = 0
@@ -67,7 +67,7 @@ class CircuitBreakerResult:
     error: Optional[str] = None
     circuit_state: CircuitState = CircuitState.CLOSED
     call_rejected: bool = False
-    timestamp: datetime = field(default_factory=datetime.utcnow)
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class CircuitBreaker:
@@ -153,7 +153,7 @@ class CircuitBreaker:
         self.metrics.failed_calls += 1
         self.metrics.consecutive_failures += 1
         self.metrics.consecutive_successes = 0
-        self.metrics.last_failure_time = datetime.utcnow()
+        self.metrics.last_failure_time = datetime.now(timezone.utc)
         self.metrics.last_failure_reason = reason
         
         # Transition to open if threshold exceeded
@@ -170,24 +170,24 @@ class CircuitBreaker:
             return False
         
         timeout = timedelta(seconds=self.config.timeout_seconds)
-        return datetime.utcnow() - self.metrics.state_change_timestamp > timeout
+        return datetime.now(timezone.utc) - self.metrics.state_change_timestamp > timeout
     
     def _transition_to_closed(self):
         """Transition circuit to closed state."""
         self.metrics.current_state = CircuitState.CLOSED
-        self.metrics.state_change_timestamp = datetime.utcnow()
+        self.metrics.state_change_timestamp = datetime.now(timezone.utc)
         self.metrics.consecutive_successes = 0
         self.metrics.consecutive_failures = 0
     
     def _transition_to_open(self):
         """Transition circuit to open state."""
         self.metrics.current_state = CircuitState.OPEN
-        self.metrics.state_change_timestamp = datetime.utcnow()
+        self.metrics.state_change_timestamp = datetime.now(timezone.utc)
     
     def _transition_to_half_open(self):
         """Transition circuit to half-open state."""
         self.metrics.current_state = CircuitState.HALF_OPEN
-        self.metrics.state_change_timestamp = datetime.utcnow()
+        self.metrics.state_change_timestamp = datetime.now(timezone.utc)
         self.metrics.consecutive_successes = 0
         self.metrics.consecutive_failures = 0
         logger.info(f"Circuit breaker '{self.name}' transitioning to HALF_OPEN")
@@ -208,5 +208,5 @@ class CircuitBreaker:
     def force_state(self, state: CircuitState):
         """Force circuit to a specific state (for testing)."""
         self.metrics.current_state = state
-        self.metrics.state_change_timestamp = datetime.utcnow()
+        self.metrics.state_change_timestamp = datetime.now(timezone.utc)
         logger.warning(f"Circuit breaker '{self.name}' forced to {state.value}")
