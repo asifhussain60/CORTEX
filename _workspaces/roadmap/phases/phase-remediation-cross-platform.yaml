@@ -1,0 +1,164 @@
+metadata:
+  phase_id: PHASE-REMEDIATION-CROSS-PLATFORM
+  title: Cross-Platform Compatibility & Test-Implementation Gap Remediation
+  description: >
+    Resolve critical test failures due to missing implementation modules. 
+    Root cause: Tests reference src modules that don't exist (e.g., src.core.config, 
+    src.infrastructure.database). This is NOT a platform issue (Mac vs Windows) - it's 
+    a structural gap where 170+ test files expect implementations that are either missing 
+    or in different locations. Governance rules verify, refactor imports, and ensure 
+    conftest.py correctly handles cross-platform paths using pathlib (already done).
+  date_created: '2026-01-20T00:00:00Z'
+  status: NOT_STARTED
+  locked: false
+  priority: P0 (CRITICAL BLOCKER)
+  category: Quality & Testing
+  
+diagnosis:
+  problem_statement: |
+    When running `pytest tests -v --tb=short -q`, 170+ tests fail during collection 
+    with ModuleNotFoundError for critical modules:
+    - src.core.brain_populator
+    - src.core.config
+    - src.core.checkpoint_manager
+    - src.infrastructure.database
+    - src.infrastructure.database_transaction_manager
+    - src.core.decorators
+    - src.orchestrators.core.master_orchestrator
+    - ... and 163 more
+    
+  root_cause_analysis: |
+    1. NOT a platform issue (Mac vs Windows) - conftest.py correctly uses pathlib.Path
+    2. STRUCTURAL GAP: Tests were written (TDD) but implementations are missing
+    3. ACTUAL MODULES IN src/:
+       - src/core/governance/* (11 files)
+       - src/core/knowledge/* (13 files)
+       - src/core/orchestrator/* (4 files)
+       - src/mcp/* (9 files)
+       - ... but tests expect different module structure
+    4. LIKELY CAUSES:
+       a) Refactoring: Code moved to cortex/ or cortex_brain/ but test imports not updated
+       b) Partial implementation: Tests written but code implementation incomplete
+       c) Path resolution: Tests use absolute imports but modules use relative structure
+    
+  impact: |
+    - Test suite cannot run (170 collection errors)
+    - Cannot verify CORTEX is "fully active and wired in"
+    - Cannot validate production readiness claim
+    - Blocks all CI/CD verification
+    
+remediation_phases:
+  AC-REM-CROSS-PLATFORM-001:
+    id: AC-REM-CROSS-PLATFORM-001-01
+    title: Inventory Missing Modules & Map to Existing Code
+    description: |
+      Scan test imports and create mapping to actual module locations.
+      Determine if implementations exist elsewhere or need creation.
+    acceptance_criteria:
+      - Comprehensive list of 170+ missing modules documented
+      - Each mapped to either: (a) cortex/ location, (b) cortex_brain/tierX/ location, 
+        (c) doesn't exist - needs implementation
+      - Mapping stored in _workspaces/roadmap/reports/MODULE-IMPORT-MAPPING.yaml
+    deliverables:
+      - _workspaces/roadmap/reports/MODULE-IMPORT-MAPPING.yaml (inventory)
+      - Decision matrix for each module (relocate vs create)
+    estimated_hours: 2
+    
+  AC-REM-CROSS-PLATFORM-002:
+    id: AC-REM-CROSS-PLATFORM-002-01
+    title: Refactor Test Imports to Match Actual Structure
+    description: |
+      Update test files to import from correct locations.
+      Two approaches:
+      a) If implementation exists in cortex/: update import paths
+      b) If implementation in cortex_brain/tierX/: update import paths
+      Use automated refactoring where possible.
+    acceptance_criteria:
+      - All test imports updated to reflect actual module locations
+      - No ModuleNotFoundError on test collection
+      - Tests can at least be discovered by pytest
+      - conftest.py sys.path additions validated
+    deliverables:
+      - Updated test files with corrected imports (up to 170 files)
+      - Refactoring report showing changes by module
+    estimated_hours: 4
+    
+  AC-REM-CROSS-PLATFORM-003:
+    id: AC-REM-CROSS-PLATFORM-003-01
+    title: Create Stub Implementations for Missing Modules
+    description: |
+      For modules mapped as "doesn't exist", create minimal stubs
+      that satisfy test imports without full implementation.
+      Prevents pytest collection errors while real implementation is added.
+    acceptance_criteria:
+      - Stub modules created for all "missing" implementations
+      - Each stub has proper __init__.py and minimal class/function definitions
+      - Tests can import without errors
+      - Stubs follow governance rules (type hints, docstrings)
+    deliverables:
+      - Stub module files in src/ or cortex_brain/ as appropriate
+      - Stubs for ~50-80 missing modules based on inventory
+    estimated_hours: 3
+    
+  AC-REM-CROSS-PLATFORM-004:
+    id: AC-REM-CROSS-PLATFORM-004-01
+    title: Validate Test Collection & Run Full Suite
+    description: |
+      Verify pytest can collect and run all tests.
+      Establish baseline pass rates (some tests may fail due to incomplete implementation,
+      but pytest should run, not error on collection).
+    acceptance_criteria:
+      - pytest --collect-only completes without errors
+      - At least 80% of test modules importable
+      - Full test run completes (failures OK at this stage)
+      - Test summary report generated
+    deliverables:
+      - Test collection report (no import errors)
+      - Full test run report with pass/fail/skip counts
+      - Performance metrics (total test count, collection time)
+    estimated_hours: 2
+    
+  AC-REM-CROSS-PLATFORM-005:
+    id: AC-REM-CROSS-PLATFORM-005-01
+    title: Update cortex-master.yaml Status & Create Test Gate
+    description: |
+      Update master YAML with accurate test status (don't claim 100% pass 
+      if tests are failing). Create pre-commit hook to prevent committing 
+      code that breaks test collection.
+    acceptance_criteria:
+      - cortex-master.yaml.metadata.status reflects actual test state
+      - .pre-commit-config.yaml updated with test collection gate
+      - Documentation updated: PHASE-REMEDIATION-CROSS-PLATFORM results
+      - Audit trail logged with fixes applied
+    deliverables:
+      - Updated cortex-master.yaml
+      - Updated .pre-commit-config.yaml
+      - PHASE-REMEDIATION-CROSS-PLATFORM-REPORT.md
+      - Audit entries for all changes
+    estimated_hours: 1
+    
+governance_compliance:
+  CORE-008: "TDD approach: Tests first (already written), now fix implementation"
+  CORE-011: "Type hints required on all stub implementations"
+  CORE-012: "Google-style docstrings on all stub classes/functions"
+  CORE-013: "No bare except clauses"
+  CORE-026: "Git checkpoint before each AC implementation"
+  CORE-027: "Audit trail for all remediation actions"
+  CORE-028: "Kebab-case naming convention"
+
+cross_platform_notes: |
+  Conftest.py already implements cross-platform path handling correctly:
+  - Uses pathlib.Path (platform-independent)
+  - Adds multiple sys.path entries (cortex/, src/, cortex_brain/, project root)
+  - No Windows/Mac specific path separators needed
+  
+  This remediation is about CODE STRUCTURE, not platform paths.
+  No changes to conftest.py needed - it's already correct.
+
+estimated_completion:
+  hours: 12
+  days: 2
+  team_size: 1
+  milestone_date: '2026-01-21'
+
+next_phase: PHASE-ONBOARDING-ORCHESTRATOR

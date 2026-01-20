@@ -4639,7 +4639,63 @@ phases:
     notes: 'PHASE-ENV-SETUP COMPLETE: All 5 ACs implemented with 54 tests passing.
       Comprehensive environment verification with Python validation, dependency checking,
       dev tool configuration, MCP server bootstrap, and pre-commit hooks. 100% governance
-      compliant. Ready for PHASE-ONBOARDING-ORCHESTRATOR.'
+      compliant. Ready for PHASE-REMEDIATION-CROSS-PLATFORM.'
+  PHASE-REMEDIATION-CROSS-PLATFORM:
+    id: PHASE-REMEDIATION-CROSS-PLATFORM
+    title: Cross-Platform Compatibility & Test-Implementation Gap Remediation
+    description: >
+      Resolve 170+ test collection failures due to missing/misplaced implementation modules.
+      Root cause: Tests reference src modules that don't exist (e.g., src.core.config, 
+      src.infrastructure.database). NOT a platform issue (Mac vs Windows) - conftest.py 
+      already uses platform-independent pathlib. This is a structural gap where tests 
+      expect implementations that are either missing or in different locations.
+    status: NOT_STARTED
+    locked: false
+    ac_ids: 5
+    completed_ac_ids: 0
+    estimated_hours: 12
+    estimated_tests: 15
+    priority: P0 (CRITICAL BLOCKER)
+    category: Quality & Testing
+    requires: PHASE-ENV-SETUP
+    required_for: PHASE-ONBOARDING-ORCHESTRATOR
+    file: phases/phase-remediation-cross-platform.yaml
+    blocking: true
+    acceptance_criteria:
+      AC-REM-CROSS-PLATFORM-001-01:
+        title: Inventory Missing Modules & Map to Existing Code
+        status: NOT_STARTED
+        tests: 0
+        description: "Scan test imports and create comprehensive mapping of 170+ missing modules"
+      AC-REM-CROSS-PLATFORM-002-01:
+        title: Refactor Test Imports to Match Actual Structure
+        status: NOT_STARTED
+        tests: 0
+        description: "Update test files to import from correct locations"
+      AC-REM-CROSS-PLATFORM-003-01:
+        title: Create Stub Implementations for Missing Modules
+        status: NOT_STARTED
+        tests: 0
+        description: "Create minimal stubs for modules mapped as missing"
+      AC-REM-CROSS-PLATFORM-004-01:
+        title: Validate Test Collection & Run Full Suite
+        status: NOT_STARTED
+        tests: 0
+        description: "Verify pytest can collect and run all tests without import errors"
+      AC-REM-CROSS-PLATFORM-005-01:
+        title: Update cortex-master.yaml Status & Create Test Gate
+        status: NOT_STARTED
+        tests: 0
+        description: "Update YAML with accurate test status and create pre-commit gates"
+    diagnosis:
+      problem: "170+ test collection errors - ModuleNotFoundError on critical modules"
+      root_cause: "Structural gap: Tests written (TDD) but implementations missing or misplaced"
+      not_platform_related: "conftest.py already uses pathlib.Path correctly for cross-platform support"
+      impact: "Test suite cannot run, cannot verify production readiness, blocks CI/CD"
+    notes: >
+      PHASE NOT YET STARTED. This remediation phase addresses critical test failures.
+      Conftest.py is already correct - no platform-specific path changes needed. 
+      This is about code structure and import alignment. Blocking PHASE-ONBOARDING-ORCHESTRATOR.
   phase_onboarding_orchestrator:
     id: PHASE-ONBOARDING-ORCHESTRATOR
     title: User Onboarding Orchestrator & Tool Discovery System
