@@ -66,8 +66,27 @@ class CircularDependencyDetector:
 
 @dataclass
 class ComplexitySignals:
-    """Complexity assessment signals."""
-    signals: Dict[str, float] = field(default_factory=dict)
-    overall_level: ComplexityLevel = ComplexityLevel.LOW
+    """Complexity assessment signals.
+    
+    Attributes:
+        lens_confidence: Confidence score from lens analysis
+        files_affected_count: Number of files affected
+        call_graph_depth: Depth of call graph
+        circular_dependencies: Count of circular dependencies
+        dependency_depth: Maximum dependency depth
+        tight_coupling_score: Coupling score
+        operation_scope: Scope of operation (local/module/system)
+        ast_complexity: AST complexity score
+        criticality_level: Criticality level (low/medium/high/critical)
+    """
+    lens_confidence: float
+    files_affected_count: int
+    call_graph_depth: int
+    circular_dependencies: int
+    dependency_depth: int
+    tight_coupling_score: float
+    operation_scope: str
+    ast_complexity: int
+    criticality_level: str
 
 __all__ = ["ComplexityLevel", "ComplexityAssessment", "ComplexityAssessmentEngine", "ASTComplexityAnalyzer", "CallGraphAnalyzer", "CircularDependencyDetector", "ComplexitySignals"]
