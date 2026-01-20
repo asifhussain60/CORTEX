@@ -30,9 +30,9 @@ from pathlib import Path
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.infrastructure.database import DatabaseManager
-from src.tools.ac_populator import ACPopulator
-from src.core.path_resolver import resolve_path
+from cortex.infrastructure.database import DatabaseManager
+from cortex.tools.ac_populator import ACPopulator
+from cortex.brain.core.path_resolver import resolve_path
 
 
 def load_phase_tracker():

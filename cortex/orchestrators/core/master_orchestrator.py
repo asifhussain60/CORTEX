@@ -37,7 +37,7 @@ from cortex.brain.mcp.decorator import mcp_tool
 
 # AC-IKP-002-02: Import IntelligentKnowledgeRouter for knowledge backend coordination
 try:
-    from src.core.knowledge.router import IntelligentKnowledgeRouter
+    from cortex.brain.core.knowledge.router import IntelligentKnowledgeRouter
 except ImportError:
     # Fallback if module not accessible
     IntelligentKnowledgeRouter = None

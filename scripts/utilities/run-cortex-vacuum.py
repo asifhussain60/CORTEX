@@ -43,8 +43,8 @@ def find_repo_root() -> Path:
 _repo_root = find_repo_root()
 sys.path.insert(0, str(_repo_root))
 
-from src.mcp.tools.cortex_vacuum_analyzer import CortexVacuumAnalyzer
-from src.mcp.tools.cortex_vacuum_executor import CortexVacuumExecutor
+from cortex.brain.mcp.tools.cortex_vacuum_analyzer import CortexVacuumAnalyzer
+from cortex.brain.mcp.tools.cortex_vacuum_executor import CortexVacuumExecutor
 
 
 def cmd_analyze(args) -> int:
