@@ -257,6 +257,14 @@ phases_implementation_status:
 
 gaps_identified:
   critical:
+    - gap: "Governance rules not enforced - context-aware dispatch missing"
+      location: "cortex/brain/core/rule_evaluator.py lines 158-193"
+      impact: "28 out of 29 rules non-functional (only SKULL-001 checked)"
+      source: "GOVERNANCE-INTELLIGENCE-BRIEF.md (git commit dacb8091)"
+      resolution: "impl-governance-001-context-aware.yaml"
+      priority: "P0"
+      estimated_effort: "4-6 days"
+    
     - gap: "Missing core-rules.yaml"
       location: "cortex_brain/tier0/governance/"
       impact: "Tier0 governance claims invalid"
@@ -273,6 +281,30 @@ gaps_identified:
       resolution: "Populate or remove directory structure"
   
   moderate:
+    - gap: "No routing decision outcome tracking"
+      location: "cortex/orchestrators/core/master_orchestrator.py"
+      impact: "Cannot identify systematic misrouting patterns"
+      source: "INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 1 (git commit dacb8091)"
+      resolution: "impl-intelligence-001-routing.yaml"
+      priority: "P1"
+      estimated_effort: "2-3 hours"
+    
+    - gap: "No operation duration baselines"
+      location: "cortex/brain/core/observability/metrics_aggregator.py"
+      impact: "Cannot detect performance degradation early"
+      source: "INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 2 (git commit dacb8091)"
+      resolution: "impl-intelligence-002-duration.yaml"
+      priority: "P1"
+      estimated_effort: "2-3 hours"
+    
+    - gap: "Error logs not analyzed for patterns"
+      location: "cortex/infrastructure/enhanced_audit_logger.py"
+      impact: "Recurring failures go unnoticed; cannot identify brittle handlers"
+      source: "INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 3 (git commit dacb8091)"
+      resolution: "impl-intelligence-003-errors.yaml"
+      priority: "P1"
+      estimated_effort: "2-3 hours"
+    
     - gap: "Test-to-AC mapping unclear"
       impact: "Hard to verify AC completion"
       resolution: "Document test file AC-ID coverage"
@@ -287,6 +319,8 @@ gaps_identified:
 
 recommendations:
   immediate:
+    - "Implement context-aware governance (P0) - 28/29 rules non-functional"
+    - "Implement intelligence modules (P1) - 3 quick-wins in 6-9 hours total"
     - "Archive bloated cortex-master.yaml (6010 lines)"
     - "Create lean implementation map (<500 lines)"
     - "Document actual test coverage per AC-ID"
@@ -304,6 +338,60 @@ recommendations:
     - "Build unified deployment pipeline"
     - "Complete Knowledge Protocol implementation"
     - "Implement dashboard (PHASE-15)"
+
+remediation_phases:
+  governance:
+    - phase_id: "impl-governance-001-context-aware"
+      title: "Situational Governance Rule Engine"
+      priority: "P0"
+      effort: "4-6 days"
+      source: "docs/GOVERNANCE-INTELLIGENCE-BRIEF.md"
+      status: "NOT_STARTED"
+      file: "_workspaces/roadmap/phases/impl-governance-001-context-aware.yaml"
+      issue: "28 out of 29 rules return None - only SKULL-001 evaluated"
+      impact: "Governance declared but not enforced"
+  
+  intelligence:
+    - phase_id: "impl-intelligence-001-routing"
+      title: "Routing Decision Intelligence"
+      priority: "P1"
+      effort: "2-3 hours"
+      source: "docs/INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 1"
+      status: "NOT_STARTED"
+      file: "_workspaces/roadmap/phases/impl-intelligence-001-routing.yaml"
+      issue: "Routing decisions logged but outcomes never tracked"
+      impact: "Cannot detect systematic misrouting"
+    
+    - phase_id: "impl-intelligence-002-duration"
+      title: "Operation Duration Intelligence"
+      priority: "P1"
+      effort: "2-3 hours"
+      source: "docs/INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 2"
+      status: "NOT_STARTED"
+      file: "_workspaces/roadmap/phases/impl-intelligence-002-duration.yaml"
+      issue: "No duration baselines per operation type"
+      impact: "Cannot detect performance degradation early"
+    
+    - phase_id: "impl-intelligence-003-errors"
+      title: "Error Pattern Recognition"
+      priority: "P1"
+      effort: "2-3 hours"
+      source: "docs/INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 3"
+      status: "NOT_STARTED"
+      file: "_workspaces/roadmap/phases/impl-intelligence-003-errors.yaml"
+      issue: "Errors logged but not analyzed for patterns"
+      impact: "Recurring failures undetected; brittle handlers unidentified"
+  
+  tdd_production:
+    - phase_id: "impl-tdd-prod-ready"
+      title: "TDD Production Readiness (125 missing modules)"
+      priority: "P2"
+      effort: "2-3 weeks"
+      source: "_workspaces/roadmap/reports/tdd-gap-analysis.yaml"
+      status: "NOT_STARTED"
+      file: "_workspaces/roadmap/phases/impl-tdd-prod-ready.yaml"
+      issue: "125 modules have tests but no implementations"
+      impact: "Test suite 170 errors; production not ready"
 
 governance:
   file_naming: "kebab-case, ≤25 chars"
