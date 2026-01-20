@@ -105,7 +105,7 @@ class CleanupStrategy:
             ResourceType.OPERATION: cls(
                 resource_type=ResourceType.OPERATION,
                 action="mark_failed",
-                description="Mark stuck operation as failed",
+                description="Mark as failed",
                 verify_liveness=True
             ),
             ResourceType.STATE: cls(
