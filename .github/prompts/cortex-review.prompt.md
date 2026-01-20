@@ -12,7 +12,7 @@ Every review AUTOMATICALLY produces actionable gaps that are:
 - ✅ Extracted from findings (Phase 3A)
 - ✅ Analyzed holistically (Phase 3B)
 - ✅ Generated as structured YAML (Phase 3C)
-- ✅ Integrated into cortex-impl-map.yaml (cortex-builder.prompt.md automatic)
+- ✅ Integrated into cortex-master.yaml (cortex-builder.prompt.md automatic)
 - ✅ No manual gap management needed
 
 **Result:** From findings to master plan remediation in single workflow.
@@ -680,7 +680,7 @@ Score = (PASS rules × 10) / Total rules
 
 ### ⚠️ CRITICAL: DEFAULT BEHAVIOR - ALWAYS INTEGRATE GAPS
 
-**MANDATE:** Every review MUST produce gap identifications that are automatically integrated into `cortex-impl-map.yaml` via cortex-builder.prompt.md. This is NOT optional.
+**MANDATE:** Every review MUST produce gap identifications that are automatically integrated into `cortex-master.yaml` via cortex-builder.prompt.md. This is NOT optional.
 
 **Default Workflow:**
 ```
@@ -904,7 +904,7 @@ cortex_master_yaml_updates:
 /cortex-builder integrate-gaps \
   --findings-file REVIEW-FINDINGS-CONSOLIDATED-YYYYMMDD.yaml \
   --gaps-file REVIEW-GAPS-EXTRACTED-YYYYMMDD.yaml \
-  --master-plan cortex-impl-map.yaml
+  --master-plan cortex-master.yaml
 ```
 
 **cortex-builder.prompt.md will:**
@@ -922,7 +922,7 @@ cortex_master_yaml_updates:
 ```yaml
 decision: "READY FOR PRODUCTION DEPLOYMENT"
 findings_summary: "No CRITICAL or blocking issues identified"
-next_phase: "NEXT (from cortex-impl-map.yaml)"
+next_phase: "NEXT (from cortex-master.yaml)"
 production_readiness: "9/10 (all governance compliant)"
 documentation_complete: true
 assumptions_documented: true
@@ -1063,7 +1063,7 @@ PRODUCTION READINESS: 95% (governance compliant)
 # Time: ~5 min
 
 # Phase 3C: Generate structured YAML for cortex-builder
-/review remediation --gaps REVIEW-GAPS-EXTRACTED-20260118.yaml --master cortex-impl-map.yaml
+/review remediation --gaps REVIEW-GAPS-EXTRACTED-20260118.yaml --master cortex-master.yaml
 # Validates gaps are ready for integration
 # Generates cortex_master_yaml_updates section
 # Time: ~5 min
@@ -1080,7 +1080,7 @@ PRODUCTION READINESS: 95% (governance compliant)
 
 TOTAL TIME (Phase 3): 20 min (gap extraction + analysis + yaml generation)
 INTEGRATION TIME: Automatic (cortex-builder triggered)
-RESULT: cortex-impl-map.yaml updated, phase ready for implementation
+RESULT: cortex-master.yaml updated, phase ready for implementation
 ```
 
 ---
@@ -1093,7 +1093,7 @@ RESULT: cortex-impl-map.yaml updated, phase ready for implementation
 1. REVIEW-FINDINGS-CONSOLIDATED (Phase 2 output)
 2. REVIEW-GAPS-EXTRACTED (Phase 3A output) ← NEW
 3. cortex_master_yaml_updates section (Phase 3B/3C output) ← NEW
-4. Integration into cortex-impl-map.yaml (cortex-builder.prompt.md) ← AUTOMATIC
+4. Integration into cortex-master.yaml (cortex-builder.prompt.md) ← AUTOMATIC
 
 **Outcome:** Zero manual gap management. Systematic, traceable, actionable.
 
@@ -1241,12 +1241,12 @@ holistic_analysis:
 # Run these checks in cortex-builder BEFORE committing gap integration
 
 # 1. Syntax validation
-yamllint cortex-impl-map.yaml
+yamllint cortex-master.yaml
 
 # 2. Gap-to-AC mapping validation
 python3 << 'EOF'
 import yaml
-with open('cortex-impl-map.yaml') as f:
+with open('cortex-master.yaml') as f:
   master = yaml.safe_load(f)
 
 for phase in master['phase_tracker'].values():
@@ -1268,7 +1268,7 @@ python3 << 'EOF'
 EOF
 
 # 4. Governance rule verification
-for phase in cortex-impl-map.yaml:
+for phase in cortex-master.yaml:
   for ac in phase.ac_ids:
     for rule in ac.governance_rules:
       if rule not in cortex_brain/tier0/governance/core-rules.yaml:
