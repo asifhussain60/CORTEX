@@ -207,4 +207,10 @@ class IExecutor(ABC):
         pass
 
 
-__all__ = ["IOrchestrator", "IExecutor", "OperationMode", "ExecutionContext"]
+# Import OrchestratorBase for export
+try:
+    from cortex.core.orchestrator.orchestrator_base import OrchestratorBase
+except ImportError:
+    OrchestratorBase = None
+
+__all__ = ["IOrchestrator", "IExecutor", "OperationMode", "ExecutionContext", "OrchestratorBase"]

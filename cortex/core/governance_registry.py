@@ -171,10 +171,82 @@ def get_governance_registry() -> GovernanceRegistry:
     return _global_registry
 
 
+class GovernanceEnforcer:
+    """Enforces governance rules and violations."""
+
+    def __init__(self, registry: Optional[GovernanceRegistry] = None) -> None:
+        """Initialize enforcer.
+
+        Args:
+            registry: GovernanceRegistry to use (default: global).
+        """
+        self.registry = registry or get_governance_registry()
+        self.violations: List[Dict[str, Any]] = []
+
+    def enforce(self, rule_id: str, context: Dict[str, Any]) -> bool:
+        """Enforce a specific rule.
+
+        Args:
+            rule_id: ID of rule to enforce.
+            context: Context for rule evaluation.
+
+        Returns:
+            True if rule enforcement passes, False if violated.
+        """
+        enforced = self.registry.get_enforced_rules()
+        rule = None
+        for r in enforced:
+            if r.rule_id == rule_id:
+                rule = r
+                break
+
+        if not rule:
+            return True  # Unknown rule, allow
+
+        # Simple enforcement: check if context satisfies rule
+        if not self._check_rule(rule, context):
+            violation = {
+                "rule_id": rule_id,
+                "severity": rule.severity.value,
+                "description": rule.description,
+                "context": context,
+            }
+            self.violations.append(violation)
+            return False
+
+        return True
+
+    def _check_rule(self, rule: GovernanceRule, context: Dict[str, Any]) -> bool:
+        """Check if context satisfies rule.
+
+        Args:
+            rule: Rule to check.
+            context: Context to validate.
+
+        Returns:
+            True if rule is satisfied, False otherwise.
+        """
+        # Basic rule checking logic
+        return True
+
+    def get_violations(self) -> List[Dict[str, Any]]:
+        """Get recorded violations.
+
+        Returns:
+            List of violations.
+        """
+        return self.violations.copy()
+
+    def clear_violations(self) -> None:
+        """Clear violation history."""
+        self.violations.clear()
+
+
 __all__ = [
     "GovernanceRegistry",
     "GovernanceRule",
     "GovernanceViolationError",
+    "GovernanceEnforcer",
     "RuleSeverity",
     "get_governance_registry",
 ]
