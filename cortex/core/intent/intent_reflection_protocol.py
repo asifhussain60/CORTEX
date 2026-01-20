@@ -23,6 +23,28 @@ class ReflectionType(Enum):
 
 
 @dataclass
+class ReflectionRequest:
+    """Request for intent reflection.
+
+    Attributes:
+        intent: Intent to reflect on.
+        reflection_types: Types of reflection requested.
+        context: Additional context for reflection.
+    """
+
+    intent: str
+    reflection_types: List[ReflectionType] = None
+    context: Dict[str, Any] = None
+
+    def __post_init__(self) -> None:
+        """Initialize defaults."""
+        if self.reflection_types is None:
+            self.reflection_types = [ReflectionType.CLARIFICATION]
+        if self.context is None:
+            self.context = {}
+
+
+@dataclass
 class ReflectionQuestion:
     """A clarification question during reflection.
 
@@ -196,7 +218,9 @@ __all__ = [
     "IntentReflectionProtocol",
     "IntentReflectionEngine",
     "IntentReflection",
+    "ReflectionRequest",
     "ReflectionQuestion",
     "ReflectionType",
 ]
+
 
