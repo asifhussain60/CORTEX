@@ -1,15 +1,17 @@
 # CORTEX Implementation Master Map
-# Version: 3.0-consolidated
+# Version: 3.1-corrected
 # Date: 2026-01-20
-# Authority: Actual filesystem scan + test inventory + code analysis
+# Authority: Filesystem scan + test inventory + code analysis + hallucination remediation
+# Status: CORRECTED (22 false "IMPLEMENTED" claims removed, 6 verified implementations documented)
 
 metadata:
   title: "CORTEX Implementation Map"
-  description: "Truth-based roadmap reflecting actual implementation, tests, and MCP exposure"
+  description: "Truth-based roadmap reflecting actual implementation, tests, and MCP exposure (CORRECTED v3.1)"
   project: "CORTEX"
-  version: "3.0-consolidated"
-  updated: "2026-01-20T12:00:00Z"
+  version: "3.1-corrected"
+  updated: "2026-01-20T16:00:00Z"
   governance_mode: "STRICT"
+  hallucination_remediation: "22 false 'IMPLEMENTED' claims removed per Phase 0 AC-3"
   
 implementation_stats:
   codebase:
@@ -100,182 +102,245 @@ architecture:
 
 phases_implementation_status:
   implemented:
-    count: 22
+    count: 3
+    phases:
+      - id: "impl-governance-001-context-aware"
+        title: "Context-Aware Governance"
+        ac_ids: 4
+        tests: 75
+        status: "IMPLEMENTED"
+        completion_date: "2026-01-20"
+        note: "28/29 core rules now functional"
+      
+      - id: "impl-intelligence-001-routing"
+        title: "Routing Decision Intelligence"
+        ac_ids: 1
+        tests: 12
+        status: "IMPLEMENTED"
+        completion_date: "2026-01-20"
+      
+      - id: "impl-intelligence-002-duration"
+        title: "Operation Duration Intelligence"
+        ac_ids: 1
+        tests: 15
+        status: "IMPLEMENTED"
+        completion_date: "2026-01-20"
+      
+      - id: "impl-intelligence-003-errors"
+        title: "Error Pattern Recognition"
+        ac_ids: 1
+        tests: 15
+        status: "IMPLEMENTED"
+        completion_date: "2026-01-20"
+      
+      - id: "impl-infra-001-resilience"
+        title: "Infrastructure Resilience Foundation"
+        ac_ids: 6
+        tests: 126
+        status: "IMPLEMENTED"
+        completion_date: "2026-01-20"
+        note: "P0-CRITICAL: Connection pooling, circuit breakers, retry logic"
+      
+      - id: "impl-state-002-concurrency"
+        title: "State Management and Concurrency Safety"
+        ac_ids: 6
+        tests: 82
+        status: "IMPLEMENTED"
+        completion_date: "2026-01-20"
+        note: "P0-CRITICAL: Transactional state, optimistic locking, lock-free registry"
+  
+  stub_implementations:
+    count: 21
+    note: "These phases are planned or partially documented but lack complete implementations"
     phases:
       - id: "arch-005-hardening"
         title: "Production Hardening"
-        ac_ids: 12
-        tests: 45
-        status: "IMPLEMENTED"
-      
-      - id: "arch-006-brittleness"
-        title: "Brittleness Fixes"
-        ac_ids: 17
-        tests: ~100
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Placeholder phase - actual hardening covered in impl-infra-001, impl-state-002, impl-recovery-003"
       
       - id: "arch-007-ecosystem"
         title: "Orchestrator Ecosystem"
-        ac_ids: 24
-        tests: 1189
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Broad placeholder - actual implementations in impl-governance-001, impl-intelligence-001/002/003"
       
       - id: "arch-007-intent"
         title: "Intent Router"
-        ac_ids: 14
-        tests: 400
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Design documented but no implementation"
       
       - id: "arch-008-orchestrators"
         title: "Core Orchestrators"
-        ac_ids: 6
-        tests: 161
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Interfaces exist; concrete implementations incomplete"
       
       - id: "arch-009-governance"
         title: "Governance Tools"
-        ac_ids: 8
-        tests: 133
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Core governance implemented in impl-governance-001; tools not finalized"
       
       - id: "arch-010-adaptive"
         title: "Adaptive Execution"
-        ac_ids: 5
-        tests: 106
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Design documented but no implementation"
       
       - id: "arch-011-hallucination"
         title: "Hallucination Prevention"
-        ac_ids: 6
-        tests: 160
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Conceptual phase - implementation in tier2 safety rules (not yet populated)"
       
       - id: "arch-012-knowledge"
         title: "Knowledge Ecosystem"
-        ac_ids: 7
-        tests: 243
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Concept phase - no implementations found"
       
       - id: "arch-013-observability"
         title: "Observability"
-        ac_ids: 9
-        tests: 141
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Deferred to impl-ops-004-observability"
       
       - id: "arch-015-dashboard"
         title: "Dashboard"
-        ac_ids: 16
-        tests: 48
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "No dashboard implementation found"
       
       - id: "arch-016-continuation"
         title: "Orchestrator Continuation"
-        ac_ids: 9
-        tests: 155
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Design not yet implemented"
       
       - id: "arch-017-domain-brain"
         title: "Domain Brain"
-        ac_ids: 12
-        tests: 353
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Framework exists; domain implementations incomplete"
       
       - id: "arch-018-devx"
         title: "Developer Experience"
-        ac_ids: 4
-        tests: 135
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Partial documentation; tools not finalized"
       
       - id: "arch-019-template-tool"
         title: "Template Tools"
-        ac_ids: 6
-        tests: 89
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Stub tools exist; real implementations missing"
       
       - id: "arch-020-template-content"
         title: "Template Content"
-        ac_ids: 6
-        tests: 68
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Template structures exist; content not populated"
+      
+      - id: "arch-021-knowledge-proto"
+        title: "Knowledge Protocol"
+        status: "STUB"
+        reason: "Referenced but not specified"
       
       - id: "arch-022-mcp-compliance"
         title: "MCP Protocol"
-        ac_ids: 8
-        tests: ~50
-        status: "STUB_ONLY"
+        status: "STUB"
+        reason: "14 MCP tools are stubs returning mock data"
       
       - id: "arch-023-complexity"
         title: "Complexity Gate"
-        ac_ids: 4
-        tests: ~30
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Framework exists; business rules incomplete"
       
       - id: "arch-024-response"
         title: "Response Composition"
-        ac_ids: 4
-        tests: 172
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Structure defined; full composition logic pending"
       
       - id: "arch-025-governance-comp"
         title: "Governance Composite"
-        ac_ids: 8
-        tests: 183
-        status: "IMPLEMENTED"
-      
-      - id: "remed-008-init-files"
-        title: "Package Init Files"
-        ac_ids: 6
-        tests: 42
-        status: "IMPLEMENTED"
-      
-      - id: "remed-011-integration"
-        title: "E2E Integration"
-        ac_ids: 8
-        tests: 650
-        status: "IMPLEMENTED"
+        status: "STUB"
+        reason: "Core governance done; composite patterns pending"
   
-  missing_implementation:
+  not_started:
     count: 4
     phases:
       - id: "consolidation-001-src-cleanup"
         title: "Source Code Consolidation (src/ → cortex/)"
-        ac_ids: 3
+        ac_ids: 5
         status: "NOT_STARTED"
-        priority: "P1"
+        priority: "P1-CRITICAL"
         estimated_effort: "8-16 hours"
-        blocking: false
-        note: "Migrate 30+ src.* imports to cortex.*, validate tests pass, delete src/ folder"
-        acceptance_criteria:
-          - "AC-SRC-001-01: Audit all src.* imports across codebase (scripts, tests, cortex)"
-          - "AC-SRC-001-02: Create migration plan mapping src.* modules to cortex.* equivalents"
-          - "AC-SRC-001-03: Update all imports (scripts/, tests/, cortex/) from src.* to cortex.*"
-          - "AC-SRC-001-04: Run full test suite - 0 failures from import errors"
-          - "AC-SRC-001-05: Delete src/ folder after validation"
-        rationale: |
-          cortex/ is canonical package (ARCH-DECISION-RECORD). src/ is legacy duplicate
-          with ~135 Python files containing 30+ active imports. Consolidation unifies
-          implementation to single package, reducing maintenance burden and confusion.
-        dependencies: []
+        blocking: true
+        note: "30+ src.* imports remain; blocks all downstream work"
         file: "_workspaces/roadmap/phases/consolidation-001-src-cleanup.yaml"
-        created: "2026-01-20"
       
-      - id: "arch-021-knowledge-proto"
-        title: "Knowledge Protocol"
-        ac_ids: 8
+      - id: "impl-recovery-003-fault-tolerance"
+        title: "Error Recovery and Fault Tolerance"
+        ac_ids: 6
         status: "NOT_STARTED"
-        note: "Referenced in roadmap but no tests found"
+        priority: "P0-CRITICAL"
+        estimated_effort: "5-7 days"
+        blocking: true
+        dependencies: ["impl-infra-001-resilience", "impl-state-002-concurrency"]
+        note: "Incomplete error paths leave system in inconsistent state"
+        file: "_workspaces/roadmap/phases/impl-recovery-003-fault-tolerance.yaml"
       
-      - id: "prod-readiness"
-        title: "Production Readiness"
-        ac_ids: 15
+      - id: "impl-ops-004-observability"
+        title: "Production Observability and Operations"
+        ac_ids: 6
         status: "NOT_STARTED"
-        note: "Claimed complete but no evidence"
+        priority: "P1-HIGH"
+        estimated_effort: "4-6 days"
+        blocking: false
+        dependencies: ["impl-infra-001-resilience", "impl-state-002-concurrency"]
+        note: "Structured logging, Prometheus metrics, distributed tracing"
+        file: "_workspaces/roadmap/phases/impl-ops-004-observability.yaml"
       
-      - id: "unified-deploy"
-        title: "Unified Deployment"
-        ac_ids: 10
-        status: "STUB_ONLY"
-        note: "Deployment strategy not implemented"
+      - id: "impl-tdd-prod-ready"
+        title: "TDD Production Readiness (125 missing modules)"
+        ac_ids: 6
+        status: "NOT_STARTED"
+        priority: "P2-MEDIUM"
+        estimated_effort: "2-3 weeks"
+        blocking: false
+        note: "125 modules have tests but no implementations; 170 test errors"
+        file: "_workspaces/roadmap/phases/impl-tdd-prod-ready.yaml"
+
+phase_tracker:
+  authority: "CORTEX_IMPL_MAP_v3.1"
+  last_updated: "2026-01-20T16:00:00Z"
+  validation_status: "CORRECTED"
+  validation_notes: |
+    This document corrects hallucinations from v3.0-consolidated:
+    - Removed 22 false "IMPLEMENTED" claims
+    - Correctly documented 6 actually-completed phases
+    - Documented 21 stub/placeholder phases
+    - Documented 4 not-started critical phases
+    - Total: 31 known phases, 263 import errors, tier system incomplete
+  
+  source_of_truth_chain:
+    - document: "cortex-master.yaml"
+      authority_level: "PRIMARY"
+      status: "PENDING_CREATION"
+      note: "Phase 0 AC-1 - to be created for v3.2+"
+    - document: "cortex-impl-map.yaml"
+      authority_level: "SECONDARY"
+      status: "CORRECTED"
+      version: "v3.1"
+    - document: "phase file system"
+      authority_level: "SOURCE_OF_RECORD"
+      status: "ACTIVE"
+      location: "_workspaces/roadmap/phases/*.yaml"
+
+governance_compliance:
+  cortex_builder_prompt_md:
+    requirement: "Phases must be tracked with phase_tracker for authority validation"
+    status: "✅ IMPLEMENTED"
+    version: "Per cortex-builder.prompt.md §3"
+  
+  core_rules_yaml:
+    requirement: "core-rules.yaml must exist in cortex_brain/tier0/governance/"
+    status: "✅ CREATED"
+    location: "cortex_brain/tier0/governance/core-rules.yaml"
+    date_created: "2026-01-20"
+  
+  authority_chain:
+    requirement: "Single source of truth per cortex-builder.prompt.md § 'ONE PATH FORWARD'"
+    status: "⏳ PENDING"
+    next_step: "Phase 0 AC-1: Create cortex-master.yaml (v3.2+)"
+    blocking: "All phase implementations require cortex-master.yaml authority"
 
 gaps_identified:
   critical:
