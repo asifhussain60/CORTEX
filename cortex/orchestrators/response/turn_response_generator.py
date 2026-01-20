@@ -5,12 +5,22 @@ Author: CORTEX Framework
 
 from dataclasses import dataclass, field
 from typing import Dict, Any
+from enum import Enum
+
+
+class ResponseMode(Enum):
+    """Response generation mode."""
+    BRIEF = "brief"
+    DETAILED = "detailed"
+    TECHNICAL = "technical"
+
 
 @dataclass
 class ResponseMetadata:
     """Response metadata."""
     response_id: str
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 @dataclass
 class TurnResponse:
@@ -19,4 +29,24 @@ class TurnResponse:
     content: str
     metadata: ResponseMetadata = None
 
-__all__ = ["ResponseMetadata", "TurnResponse"]
+
+@dataclass
+class ResponseGenerator:
+    """Response generator."""
+    mode: ResponseMode = ResponseMode.BRIEF
+    
+    def generate(self, input: str) -> str:
+        """Generate response."""
+        return f"Generated: {input}"
+
+
+
+class TurnResponseGenerator:
+    """Generate turn responses."""
+    
+    def generate(self, turn_id: str, content: str) -> TurnResponse:
+        """Generate response."""
+        metadata = ResponseMetadata(response_id=f"{turn_id}_resp")
+        return TurnResponse(turn_id=turn_id, content=content, metadata=metadata)
+
+__all__ = ["ResponseMetadata", "TurnResponse", "TurnResponseGenerator"]

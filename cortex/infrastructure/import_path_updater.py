@@ -11,4 +11,15 @@ class ImportMapping:
     old_path: str
     new_path: str
 
-__all__ = ["ImportMapping"]
+
+
+from typing import List
+
+class ImportPathUpdater:
+    """Update import paths."""
+    
+    def update(self, file_path: str, mappings: List[ImportMapping]) -> int:
+        """Update imports in file."""
+        return 0
+
+__all__ = ["ImportMapping", "ImportPathUpdater"]

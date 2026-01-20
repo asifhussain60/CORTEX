@@ -11,4 +11,14 @@ class BusinessKnowledgeIngestionOrchestrator:
     source: str
     status: str = "idle"
 
-__all__ = ["BusinessKnowledgeIngestionOrchestrator"]
+
+
+from enum import Enum
+
+class DocumentFormat(str, Enum):
+    """Document formats."""
+    PDF = "pdf"
+    DOCX = "docx"
+    MARKDOWN = "markdown"
+
+__all__ = ["BusinessKnowledgeIngestionOrchestrator", "DocumentFormat"]

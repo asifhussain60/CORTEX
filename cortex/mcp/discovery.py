@@ -14,4 +14,16 @@ class ToolDiscovery:
         """Discover available tools."""
         return []
 
-__all__ = ["ToolDiscovery"]
+
+
+class ToolDiscoveryEngine:
+    """Enhanced tool discovery."""
+    
+    def __init__(self):
+        self.discovery = ToolDiscovery()
+    
+    def scan(self) -> List[str]:
+        """Scan for tools."""
+        return self.discovery.discover()
+
+__all__ = ["ToolDiscovery", "ToolDiscoveryEngine"]

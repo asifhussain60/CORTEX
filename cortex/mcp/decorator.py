@@ -10,4 +10,15 @@ def get_tool(tool_id: str):
         return func
     return decorator
 
-__all__ = ["get_tool"]
+
+def mcp_tool(name: str = None, description: str = None):
+    """MCP tool decorator."""
+    def decorator(func):
+        func._mcp_tool = True
+        func._mcp_name = name or func.__name__
+        func._mcp_description = description or func.__doc__
+        return func
+    return decorator
+
+
+__all__ = ["get_tool", "mcp_tool"]

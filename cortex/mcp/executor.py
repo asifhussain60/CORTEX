@@ -14,4 +14,16 @@ class ToolExecutor:
         """Execute tool."""
         return None
 
-__all__ = ["ToolExecutor"]
+
+
+class ToolExecutionEngine:
+    """Enhanced tool execution."""
+    
+    def __init__(self):
+        self.executor = ToolExecutor()
+    
+    def run(self, tool_id: str, params: Dict[str, Any]) -> Any:
+        """Run tool."""
+        return self.executor.execute(tool_id, params)
+
+__all__ = ["ToolExecutor", "ToolExecutionEngine"]

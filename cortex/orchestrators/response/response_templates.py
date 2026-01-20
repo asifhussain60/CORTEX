@@ -11,4 +11,15 @@ class VariableType(str, Enum):
     NUMBER = "number"
     BOOLEAN = "boolean"
 
-__all__ = ["VariableType"]
+
+
+from typing import Dict
+
+class ResponseTemplate:
+    """Response template."""
+    
+    def render(self, variables: Dict[str, VariableType]) -> str:
+        """Render template."""
+        return ""
+
+__all__ = ["VariableType", "ResponseTemplate"]

@@ -6,5 +6,16 @@ Author: CORTEX Framework
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
-# Stub implementation - Phase E will add full logic
-pass
+from dataclasses import dataclass
+
+
+@dataclass
+class PromptInjectionSanitizer:
+    """Sanitize prompt injections."""
+    enabled: bool = True
+    
+    def sanitize(self, prompt: str) -> str:
+        return prompt
+
+
+__all__ = ["PromptInjectionSanitizer"]

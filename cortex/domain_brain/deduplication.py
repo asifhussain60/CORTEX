@@ -14,4 +14,13 @@ class DuplicateDetector:
         """Detect if items are duplicates."""
         return False
 
-__all__ = ["DuplicateDetector"]
+
+
+@dataclass
+class DuplicateEntry:
+    """Duplicate entry record."""
+    entry_id: str
+    duplicate_of: str
+    confidence: float = 0.9
+
+__all__ = ["DuplicateDetector", "DuplicateEntry"]

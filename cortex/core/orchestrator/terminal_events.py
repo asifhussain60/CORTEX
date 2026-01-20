@@ -17,4 +17,20 @@ class UserCancelledEvent:
     timestamp: str = ""
 
 
-__all__ = ["UserCancelledEvent"]
+@dataclass
+class PhaseCompletedEvent:
+    """Event fired when a phase completes."""
+    event_id: str
+    phase: str
+    success: bool
+    timestamp: str = ""
+
+
+@dataclass
+class TerminalEvent:
+    """Base terminal event."""
+    event_id: str
+    event_type: str
+    timestamp: str = ""
+
+__all__ = ["UserCancelledEvent", "PhaseCompletedEvent", "TerminalEvent"]
