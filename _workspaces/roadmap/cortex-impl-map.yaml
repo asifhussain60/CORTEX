@@ -569,7 +569,7 @@ remediation_phases:
       title: "Error Recovery and Fault Tolerance"
       priority: "P0-CRITICAL"
       effort: "5-7 days"
-      status: "NOT_STARTED"
+      status: "PARTIAL"
       file: "_workspaces/roadmap/phases/impl-recovery-003-fault-tolerance.yaml"
       blocks_production: true
       dependencies: ["impl-infra-001-resilience", "impl-state-002-concurrency"]
