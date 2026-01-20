@@ -37,6 +37,32 @@ class ASTNode:
             self.metadata = {}
 
 
+@dataclass
+class FunctionInfo:
+    """Information about a function.
+
+    Attributes:
+        name: Function name.
+        parameters: List of parameter names.
+        return_type: Return type annotation if present.
+        docstring: Function docstring.
+        line_number: Line where function is defined.
+        complexity: Cyclomatic complexity metric.
+    """
+
+    name: str
+    parameters: List[str] = None
+    return_type: Optional[str] = None
+    docstring: Optional[str] = None
+    line_number: int = 0
+    complexity: float = 1.0
+
+    def __post_init__(self) -> None:
+        """Initialize defaults."""
+        if self.parameters is None:
+            self.parameters = []
+
+
 class ASTIntelligence:
     """Abstract Syntax Tree analyzer for code intelligence."""
 
@@ -164,6 +190,7 @@ __all__ = [
     "ASTIntelligence",
     "ASTIntelligenceEngine",
     "ASTNode",
+    "FunctionInfo",
     "ParseResult",
 ]
 

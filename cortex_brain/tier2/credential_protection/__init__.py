@@ -34,6 +34,16 @@ class CredentialType(Enum):
     CONNECTION_STRING = "connection_string"
 
 
+class CredentialStatus(Enum):
+    """Status of credentials."""
+
+    ACTIVE = "active"
+    EXPIRED = "expired"
+    REVOKED = "revoked"
+    PENDING = "pending"
+    INVALID = "invalid"
+
+
 @dataclass
 class EncryptedCredential:
     """Encrypted credential entry.
@@ -215,6 +225,7 @@ class KeyManager:
 __all__ = [
     "EncryptionAlgorithm",
     "CredentialType",
+    "CredentialStatus",
     "EncryptedCredential",
     "CredentialManager",
     "KeyManager",

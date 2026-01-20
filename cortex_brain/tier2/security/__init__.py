@@ -84,6 +84,73 @@ class SecurityPolicy:
         return len(self.rules) > 0 or len(self.permissions) > 0
 
 
+class SecurityContext:
+    """Security context for request processing.
+
+    Maintains security context, credentials, and permissions.
+    """
+
+    def __init__(self, user_id: str, session_id: str = "") -> None:
+        """Initialize security context.
+
+        Args:
+            user_id: User identifier.
+            session_id: Session identifier.
+        """
+        self.user_id = user_id
+        self.session_id = session_id
+        self.permissions: set = set()
+        self.credentials: Dict[str, Any] = {}
+        self.is_authenticated = False
+
+    def set_authenticated(self, authenticated: bool = True) -> None:
+        """Set authentication status.
+
+        Args:
+            authenticated: Authentication status.
+        """
+        self.is_authenticated = authenticated
+
+    def grant_permission(self, permission: str) -> None:
+        """Grant a permission.
+
+        Args:
+            permission: Permission to grant.
+        """
+        self.permissions.add(permission)
+
+    def has_permission(self, permission: str) -> bool:
+        """Check if permission is granted.
+
+        Args:
+            permission: Permission to check.
+
+        Returns:
+            True if granted, False otherwise.
+        """
+        return permission in self.permissions
+
+    def set_credential(self, key: str, value: Any) -> None:
+        """Set a credential.
+
+        Args:
+            key: Credential key.
+            value: Credential value.
+        """
+        self.credentials[key] = value
+
+    def get_credential(self, key: str) -> Optional[Any]:
+        """Get a credential.
+
+        Args:
+            key: Credential key.
+
+        Returns:
+            Credential value if found, None otherwise.
+        """
+        return self.credentials.get(key)
+
+
 @dataclass
 class SecurityViolation:
     """Security violation event.
@@ -219,6 +286,7 @@ __all__ = [
     "SecurityViolation",
     "SecurityValidator",
     "SecurityPolicy",
+    "SecurityContext",
     "OutputEncoder",
     "InputValidator",
     "ViolationType",
