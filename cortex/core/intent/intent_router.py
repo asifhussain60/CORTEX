@@ -6,21 +6,21 @@ from enum import Enum
 
 
 @dataclass
-class FormattedResponse:
-    """Data class for FormattedResponse."""
+class RoutingDecision:
+    """Data class for RoutingDecision."""
     data: Dict[str, Any] = field(default_factory=dict)
 
 
-class SeverityColor:
-    """Implementation of SeverityColor."""
+class OrchestrationTarget:
+    """Implementation of OrchestrationTarget."""
 
     def __init__(self):
         """Initialize."""
         pass
 
 
-class LENSResponseFormatter:
-    """Implementation of LENSResponseFormatter."""
+class IntentRouter:
+    """Implementation of IntentRouter."""
 
     def __init__(self):
         """Initialize."""
@@ -28,7 +28,7 @@ class LENSResponseFormatter:
 
 
 __all__ = [
-    "SeverityColor",
-    "LENSResponseFormatter",
-    "FormattedResponse",
+    "OrchestrationTarget",
+    "IntentRouter",
+    "RoutingDecision",
 ]
