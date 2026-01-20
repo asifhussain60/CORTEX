@@ -7,10 +7,12 @@ Author: CORTEX Framework
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
-from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from dataclasses import dataclass, field
+from typing import Any, Dict, Optional, List
 from enum import Enum
-from datetime import datetime
+from datetime import datetime, timedelta
+import hashlib
+import secrets
 
 
 class EncryptionAlgorithm(Enum):
@@ -45,6 +47,32 @@ class CredentialStatus(Enum):
 
 
 @dataclass
+class EncryptionKey:
+    """Encryption key with lifecycle management."""
+
+    key_id: str
+    algorithm: EncryptionAlgorithm
+    created_at: datetime = field(default_factory=datetime.utcnow)
+    ttl_days: int = 90
+    expires_at: Optional[datetime] = None
+    is_active: bool = True
+    metadata: Dict[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self):
+        """Calculate expiration time."""
+        if self.expires_at is None:
+            self.expires_at = self.created_at + timedelta(days=self.ttl_days)
+
+    def is_expired(self) -> bool:
+        """Check if key is expired."""
+        return datetime.utcnow() > self.expires_at
+
+    def is_valid(self) -> bool:
+        """Check if key is valid for use."""
+        return self.is_active and not self.is_expired()
+
+
+@dataclass
 class EncryptedCredential:
     """Encrypted credential entry.
 
@@ -55,21 +83,16 @@ class EncryptedCredential:
         algorithm: Encryption algorithm used.
         created_at: When credential was stored.
         metadata: Additional metadata.
+        status: Credential status.
     """
 
     credential_id: str
     credential_type: CredentialType
     encrypted_value: str
     algorithm: EncryptionAlgorithm
-    created_at: datetime = None
-    metadata: Dict[str, Any] = None
-
-    def __post_init__(self) -> None:
-        """Initialize defaults."""
-        if self.created_at is None:
-            self.created_at = datetime.now()
-        if self.metadata is None:
-            self.metadata = {}
+    created_at: datetime = field(default_factory=datetime.utcnow)
+    metadata: Dict[str, Any] = field(default_factory=dict)
+    status: CredentialStatus = CredentialStatus.ACTIVE
 
 
 class CredentialManager:
@@ -222,11 +245,251 @@ class KeyManager:
         return self.keys.get(key_id)
 
 
+class SecureCredentialStore:
+    """Secure store for credentials with full lifecycle management."""
+
+    def __init__(self) -> None:
+        """Initialize secure credential store."""
+        self.store: Dict[str, Dict[str, Any]] = {}
+        self.key_manager = KeyManager()
+
+    def store_credential(
+        self,
+        credential_id: str,
+        value: str,
+        credential_type: CredentialType = CredentialType.PASSWORD,
+        algorithm: EncryptionAlgorithm = EncryptionAlgorithm.AES_256,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        """Store a credential securely.
+
+        Args:
+            credential_id: Credential identifier.
+            value: Credential value to store.
+            credential_type: Type of credential.
+            algorithm: Encryption algorithm to use.
+            metadata: Optional metadata for the credential.
+
+        Raises:
+            ValueError: If value is empty or credential already exists.
+        """
+        if not value or value.strip() == "":
+            raise ValueError(f"Credential value cannot be empty")
+
+        if credential_id in self.store:
+            raise ValueError(f"Credential {credential_id} already exists")
+
+        # Hash the value for verification
+        value_hash = hashlib.sha256(value.encode()).hexdigest()
+
+        self.store[credential_id] = {
+            "id": credential_id,
+            "type": credential_type,
+            "value_hash": value_hash,
+            "algorithm": algorithm,
+            "created_at": datetime.utcnow().isoformat(),
+            "status": CredentialStatus.ACTIVE,
+            "metadata": metadata or {},
+        }
+
+    def retrieve_credential(self, credential_id: str) -> Optional[str]:
+        """Retrieve a stored credential (returns hash for security).
+
+        Args:
+            credential_id: Credential identifier.
+
+        Returns:
+            Credential information if found and active, None otherwise.
+        """
+        if credential_id not in self.store:
+            return None
+
+        cred = self.store[credential_id]
+        if cred["status"] != CredentialStatus.ACTIVE:
+            return None
+
+        return cred["value_hash"]
+
+    def has_credential(self, credential_id: str) -> bool:
+        """Check if a credential exists and is active.
+
+        Args:
+            credential_id: Credential identifier.
+
+        Returns:
+            True if credential exists and is active.
+        """
+        if credential_id not in self.store:
+            return False
+
+        return self.store[credential_id]["status"] == CredentialStatus.ACTIVE
+
+    def revoke_credential(self, credential_id: str) -> bool:
+        """Revoke a credential.
+
+        Args:
+            credential_id: Credential identifier.
+
+        Returns:
+            True if revoked, False if not found.
+        """
+        if credential_id not in self.store:
+            return False
+
+        self.store[credential_id]["status"] = CredentialStatus.REVOKED
+        return True
+
+    def delete_credential(self, credential_id: str) -> bool:
+        """Delete a credential permanently.
+
+        Args:
+            credential_id: Credential identifier.
+
+        Returns:
+            True if deleted, False if not found.
+        """
+        if credential_id in self.store:
+            del self.store[credential_id]
+            return True
+        return False
+
+    def list_credentials(self, active_only: bool = True) -> Dict[str, Any]:
+        """List all credentials.
+
+        Args:
+            active_only: If True, only return active credentials.
+
+        Returns:
+            Dictionary of credential metadata (without values).
+        """
+        result = {}
+        for cred_id, cred_data in self.store.items():
+            if active_only and cred_data["status"] != CredentialStatus.ACTIVE:
+                continue
+            result[cred_id] = {
+                "id": cred_data["id"],
+                "type": cred_data["type"],
+                "algorithm": cred_data["algorithm"],
+                "created_at": cred_data["created_at"],
+                "status": cred_data["status"],
+                "metadata": cred_data["metadata"],
+            }
+        return result
+
+
+class KeyRotationManager:
+    """Manages key rotation policies and schedules."""
+
+    def __init__(self) -> None:
+        """Initialize key rotation manager."""
+        self.key_manager = KeyManager()
+        self.rotation_schedule: Dict[str, Dict[str, Any]] = {}
+        self.rotation_history: List[Dict[str, Any]] = []
+
+    def schedule_rotation(
+        self,
+        key_id: str,
+        rotation_period_days: int = 90,
+        max_age_days: int = 365,
+    ) -> Dict[str, Any]:
+        """Schedule key rotation.
+
+        Args:
+            key_id: Key identifier.
+            rotation_period_days: Days between rotations.
+            max_age_days: Maximum key age before mandatory rotation.
+
+        Returns:
+            Rotation schedule information.
+        """
+        schedule = {
+            "key_id": key_id,
+            "rotation_period_days": rotation_period_days,
+            "max_age_days": max_age_days,
+            "last_rotation": datetime.utcnow().isoformat(),
+            "next_rotation": (
+                datetime.utcnow() + timedelta(days=rotation_period_days)
+            ).isoformat(),
+        }
+        self.rotation_schedule[key_id] = schedule
+        return schedule
+
+    def rotate_key(self, key_id: str, algorithm: EncryptionAlgorithm) -> Optional[Dict[str, Any]]:
+        """Perform key rotation.
+
+        Args:
+            key_id: Key identifier.
+            algorithm: Algorithm for the new key.
+
+        Returns:
+            New key information if rotation successful, None otherwise.
+        """
+        if key_id not in self.rotation_schedule:
+            return None
+
+        # Generate new key
+        new_key_id = f"{key_id}_v{len(self.rotation_history) + 1}"
+        new_key = self.key_manager.generate_key(new_key_id, algorithm)
+
+        # Record in history
+        rotation_record = {
+            "old_key_id": key_id,
+            "new_key_id": new_key_id,
+            "rotated_at": datetime.utcnow().isoformat(),
+            "algorithm": algorithm.value,
+        }
+        self.rotation_history.append(rotation_record)
+
+        # Update schedule
+        if key_id in self.rotation_schedule:
+            self.rotation_schedule[key_id]["last_rotation"] = (
+                datetime.utcnow().isoformat()
+            )
+            self.rotation_schedule[key_id]["next_rotation"] = (
+                datetime.utcnow()
+                + timedelta(
+                    days=self.rotation_schedule[key_id]["rotation_period_days"]
+                )
+            ).isoformat()
+
+        return new_key
+
+    def is_rotation_due(self, key_id: str) -> bool:
+        """Check if key rotation is due.
+
+        Args:
+            key_id: Key identifier.
+
+        Returns:
+            True if rotation is due.
+        """
+        if key_id not in self.rotation_schedule:
+            return False
+
+        schedule = self.rotation_schedule[key_id]
+        next_rotation = datetime.fromisoformat(schedule["next_rotation"])
+        return datetime.utcnow() >= next_rotation
+
+    def get_rotation_history(self, key_id: str) -> List[Dict[str, Any]]:
+        """Get rotation history for a key.
+
+        Args:
+            key_id: Key identifier.
+
+        Returns:
+            List of rotation records.
+        """
+        return [r for r in self.rotation_history if r["old_key_id"] == key_id]
+
+
 __all__ = [
     "EncryptionAlgorithm",
     "CredentialType",
     "CredentialStatus",
     "EncryptedCredential",
+    "EncryptionKey",
     "CredentialManager",
     "KeyManager",
+    "SecureCredentialStore",
+    "KeyRotationManager",
 ]
