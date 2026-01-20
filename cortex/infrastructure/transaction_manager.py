@@ -109,9 +109,13 @@ class TransactionContext:
     
     def __enter__(self) -> "TransactionContext":
         """Begin transaction."""
-        # Set isolation level
-        self._connection.isolation_level = None  # Manual mode
-        self._connection.execute("BEGIN")
+        # Begin transaction with appropriate type
+        if self._isolation == IsolationLevel.SERIALIZABLE:
+            self._connection.execute("BEGIN IMMEDIATE")
+        elif self._read_only:
+            self._connection.execute("BEGIN DEFERRED")
+        else:
+            self._connection.execute("BEGIN IMMEDIATE")
         return self
     
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
@@ -153,8 +157,7 @@ class TransactionContext:
         """Explicitly rollback transaction."""
         self._rollback()
     
-    @contextmanager
-    def savepoint(self) -> SavepointContext:
+    def savepoint(self):
         """
         Create nested transaction via savepoint.
         
@@ -163,7 +166,7 @@ class TransactionContext:
         """
         self._savepoint_counter += 1
         name = f"sp_{self._savepoint_counter}"
-        yield SavepointContext(self._connection, name)
+        return SavepointContext(self._connection, name)
     
     def _commit(self) -> None:
         """Commit transaction."""
@@ -250,6 +253,15 @@ class TransactionManager:
         conn = self._acquire_connection()
         return TransactionContext(conn, isolation, timeout, read_only, self)
     
+    def transaction(
+        self,
+        isolation: Optional[IsolationLevel] = None,
+        read_only: bool = False,
+        timeout: Optional[float] = None,
+    ) -> TransactionContext:
+        """Alias for begin() for compatibility."""
+        return self.begin(isolation, read_only, timeout)
+    
     def get_metrics(self) -> Dict[str, int]:
         """
         Get transaction metrics.
@@ -275,9 +287,12 @@ class TransactionManager:
             self._db_path,
             check_same_thread=False,  # Allow multi-threaded access
             timeout=30.0,
+            isolation_level=None,  # Manual transaction control
         )
         # Enable WAL mode for better concurrency
         conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("PRAGMA synchronous=NORMAL")
+        conn.execute("PRAGMA busy_timeout=5000")
         return conn
     
     def _acquire_connection(self) -> sqlite3.Connection:
