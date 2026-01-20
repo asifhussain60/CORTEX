@@ -45,6 +45,14 @@ htmlcov/
 .tox/
 .nox/
 
+# .NET Build Artifacts
+bin/
+obj/
+*.csproj.user
+*.csproj.VisualStudio.user
+*.vs/
+.vs/
+
 # Security: Prevent test fixtures with secret patterns from being committed
 # This file is used only for local testing of secret detection patterns
 tests/unit/gates/test-pre-commit-secrets.py
