@@ -254,18 +254,8 @@ phases_implementation_status:
         reason: "Core governance done; composite patterns pending"
   
   not_started:
-    count: 4
+    count: 3
     phases:
-      - id: "consolidation-001-src-cleanup"
-        title: "Source Code Consolidation (src/ → cortex/)"
-        ac_ids: 5
-        status: "NOT_STARTED"
-        priority: "P1-CRITICAL"
-        estimated_effort: "8-16 hours"
-        blocking: true
-        note: "30+ src.* imports remain; blocks all downstream work"
-        file: "_workspaces/roadmap/phases/consolidation-001-src-cleanup.yaml"
-      
       - id: "impl-recovery-003-fault-tolerance"
         title: "Error Recovery and Fault Tolerance"
         ac_ids: 6
@@ -421,6 +411,7 @@ recommendations:
     - "✅ Context-aware governance (P0) - 28/29 rules functional (2026-01-20)"
     - "✅ Intelligence modules (P1) - routing, duration, error tracking (2026-01-20)"
     - "✅ Core-rules.yaml created in cortex_brain/tier0/governance/"
+    - "✅ Source consolidation (consolidation-001-src-cleanup) - 1,353 imports migrated (2026-01-20)"
   
   short_term:
     - "Implement missing MCP tool logic"
@@ -435,6 +426,35 @@ recommendations:
     - "Implement dashboard (PHASE-15)"
 
 remediation_phases:
+  consolidation:
+    - phase_id: "consolidation-001-src-cleanup"
+      title: "Source Code Consolidation (src/ → cortex/)"
+      priority: "P1-CRITICAL"
+      effort: "1 day (8 hours)"
+      status: "IMPLEMENTED"
+      completion_date: "2026-01-20"
+      file: "_workspaces/roadmap/phases/consolidation-001-src-cleanup.yaml"
+      acceptance_criteria: 5
+      implementation:
+        - "AC-SRC-001-01: Audit all src.* imports (1,353 found)"
+        - "AC-SRC-001-02: Create migration mapping (6 unique modules)"
+        - "AC-SRC-001-03: Update all imports (1,353 consolidated)"
+        - "AC-SRC-001-04: Validation (460 tests compile, 0 errors)"
+        - "AC-SRC-001-05: Delete src/ folder (79 files removed)"
+      results:
+        - "100% import consolidation"
+        - "0 remaining src.* imports"
+        - "Canonical cortex/ structure"
+        - "16,935 lines of legacy code removed"
+      unblocks: ["impl-recovery-003", "impl-ops-004", "impl-tdd-prod-ready"]
+      git_commits:
+        - "ab730c27c - AC-001-01 audit"
+        - "cb08ccdda - AC-001-02 mapping"
+        - "3726832c1 - AC-001-03 phase A"
+        - "4007c4bf9 - AC-001-03 phase B"
+        - "6241f828a - AC-001-03 final fixes"
+        - "e2307572c - AC-001-05 cleanup"
+
   governance:
     - phase_id: "impl-governance-001-context-aware"
       title: "Situational Governance Rule Engine"
