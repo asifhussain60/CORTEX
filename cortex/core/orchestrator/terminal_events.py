@@ -19,7 +19,13 @@ class TerminalEventHandler:
         pass
 
 
+
+class PhaseCompletedEvent:
+    """Class PhaseCompletedEvent."""
+    def __init__(self): pass
+
 __all__ = [
     "TerminalEvent",
     "TerminalEventHandler",
+    "PhaseCompletedEvent",
 ]

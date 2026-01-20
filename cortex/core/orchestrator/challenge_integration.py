@@ -19,6 +19,13 @@ class ChallengeIntegrator:
         pass
 
 
+
+@dataclass
+class ChallengeIntegrationOrchestrator:
+    """Data class for ChallengeIntegrationOrchestrator."""
+    data: dict = field(default_factory=dict)
+
+
 __all__ = [
     "ChallengeResponse",
     "ChallengeIntegrator",

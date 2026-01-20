@@ -24,6 +24,13 @@ class CanonicalIntent:
         pass
 
 
+
+@dataclass
+class IntentType:
+    """Data class for IntentType."""
+    data: dict = field(default_factory=dict)
+
+
 __all__ = [
     "IntentCanonicalizer",
     "CanonicalIntent",

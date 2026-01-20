@@ -33,6 +33,13 @@ class IntentReflectionProtocol:
         pass
 
 
+
+@dataclass
+class IntentReflectionEngine:
+    """Data class for IntentReflectionEngine."""
+    data: dict = field(default_factory=dict)
+
+
 __all__ = [
     "ReflectionRequest",
     "ReflectionStatus",

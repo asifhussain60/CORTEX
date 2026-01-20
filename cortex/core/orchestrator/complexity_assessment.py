@@ -19,7 +19,20 @@ class ComplexityAssessor:
         pass
 
 
+
+@dataclass
+class ComplexitySignals:
+    """Data class for ComplexitySignals."""
+    data: dict = field(default_factory=dict)
+
+
+
+class ComplexityAssessment:
+    """Class ComplexityAssessment."""
+    def __init__(self): pass
+
 __all__ = [
     "ComplexityMetrics",
     "ComplexityAssessor",
+    "ComplexityAssessment",
 ]

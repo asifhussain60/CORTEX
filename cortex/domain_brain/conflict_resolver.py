@@ -1,21 +1,29 @@
-"""Module: Resolves conflicts
-
-Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
-"""
+"""Domain brain module."""
 
 from typing import Dict, List, Optional, Any
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from enum import Enum
+
+
+@dataclass
+class Conflict:
+    """Data class."""
+    data: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class Resolution:
+    """Data class."""
+    data: Dict[str, Any] = field(default_factory=dict)
 
 
 class ConflictResolver:
-    """ConflictResolver - Resolves conflicts."""
-
-    def __init__(self):
-        """Initialize conflictresolver."""
-        pass
+    """Class ConflictResolver."""
+    def __init__(self): pass
 
 
 __all__ = [
     "ConflictResolver",
+    "Conflict",
+    "Resolution",
 ]

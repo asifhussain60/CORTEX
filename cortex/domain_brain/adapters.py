@@ -1,21 +1,35 @@
-"""Module: Adapts to domain specifics
-
-Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
-"""
+"""Domain brain module."""
 
 from typing import Dict, List, Optional, Any
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from enum import Enum
+
+
+@dataclass
+class AdapterConfig:
+    """Data class."""
+    data: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class AdapterResult:
+    """Data class."""
+    data: Dict[str, Any] = field(default_factory=dict)
 
 
 class DomainAdapter:
-    """DomainAdapter - Adapts to domain specifics."""
+    """Class DomainAdapter."""
+    def __init__(self): pass
 
-    def __init__(self):
-        """Initialize domainadapter."""
-        pass
 
+
+class ASTAdapter:
+    """Class ASTAdapter."""
+    def __init__(self): pass
 
 __all__ = [
     "DomainAdapter",
+    "AdapterConfig",
+    "AdapterResult",
+    "ASTAdapter",
 ]

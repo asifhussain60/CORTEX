@@ -21,6 +21,13 @@ class KnowledgeVersionManager:
         pass
 
 
+
+@dataclass
+class VersioningService:
+    """Data class for VersioningService."""
+    data: dict = field(default_factory=dict)
+
+
 __all__ = [
     "VersionMetadata",
     "KnowledgeVersionManager",

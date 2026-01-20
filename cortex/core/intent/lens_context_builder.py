@@ -29,6 +29,13 @@ class LENSContextBuilder:
         pass
 
 
+
+@dataclass
+class KnowledgeGraph:
+    """Data class for KnowledgeGraph."""
+    data: dict = field(default_factory=dict)
+
+
 __all__ = [
     "ContextEdge",
     "ContextNode",
