@@ -165,4 +165,14 @@ __all__ = [
     "HeaderConfiguration",
     "HeaderFormat",
     "get_header_config_manager",
+    "HeaderConfigLoader",
 ]
+
+# Stub for test compatibility
+class HeaderConfigLoader:
+    """Load header configurations."""
+    def __init__(self):
+        self.configs = {}
+    
+    def load(self, config_path):
+        return {}

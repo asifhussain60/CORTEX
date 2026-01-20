@@ -43,6 +43,21 @@ class RollbackResult:
     pass
 
 
+class CleanerRegistry:
+    """Registry for cleaner instances."""
+    
+    def __init__(self):
+        self.cleaners = {}
+    
+    def register(self, name: str, cleaner):
+        """Register a cleaner."""
+        self.cleaners[name] = cleaner
+    
+    def get(self, name: str):
+        """Get a cleaner by name."""
+        return self.cleaners.get(name)
+
+
 __all__ = [
     "Cleaner",
     "DataCleaner",
@@ -53,4 +68,5 @@ __all__ = [
     "Analysis",
     "Report",
     "RollbackResult",
+    "CleanerRegistry",
 ]
