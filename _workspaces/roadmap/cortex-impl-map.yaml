@@ -409,6 +409,74 @@ remediation_phases:
       file: "_workspaces/roadmap/phases/impl-tdd-prod-ready.yaml"
       issue: "125 modules have tests but no implementations"
       impact: "Test suite 170 errors; production not ready"
+  
+  production_infrastructure:
+    - phase_id: "impl-infra-001-resilience"
+      title: "Infrastructure Resilience Foundation"
+      priority: "P0-CRITICAL"
+      effort: "5-7 days"
+      status: "NOT_STARTED"
+      file: "_workspaces/roadmap/phases/impl-infra-001-resilience.yaml"
+      blocks_production: true
+      acceptance_criteria: 6
+      focus: "Connection pooling, circuit breakers, retry logic, graceful degradation"
+      critical_gaps:
+        - "Connection exhaustion under concurrent load"
+        - "No bulkhead isolation between components"
+        - "Missing circuit breaker pattern"
+        - "Inadequate retry logic with backoff"
+        - "Resource leaks from unclosed connections"
+    
+    - phase_id: "impl-state-002-concurrency"
+      title: "State Management and Concurrency Safety"
+      priority: "P0-CRITICAL"
+      effort: "6-8 days"
+      status: "NOT_STARTED"
+      file: "_workspaces/roadmap/phases/impl-state-002-concurrency.yaml"
+      blocks_production: true
+      dependencies: ["impl-infra-001-resilience"]
+      acceptance_criteria: 6
+      focus: "Transactional state, optimistic locking, concurrent hash chain, lock-free registry"
+      critical_gaps:
+        - "Thread-local state without proper locking"
+        - "Shared mutable state creates race conditions"
+        - "Missing transaction isolation"
+        - "No optimistic locking for concurrent updates"
+        - "Hash chain corruption under concurrent writes"
+    
+    - phase_id: "impl-recovery-003-fault-tolerance"
+      title: "Error Recovery and Fault Tolerance"
+      priority: "P0-CRITICAL"
+      effort: "5-7 days"
+      status: "NOT_STARTED"
+      file: "_workspaces/roadmap/phases/impl-recovery-003-fault-tolerance.yaml"
+      blocks_production: true
+      dependencies: ["impl-infra-001-resilience", "impl-state-002-concurrency"]
+      acceptance_criteria: 6
+      focus: "Saga compensation, orphan cleanup, automatic repair, fault isolation"
+      critical_gaps:
+        - "Incomplete error paths leave inconsistent state"
+        - "Missing compensation transactions"
+        - "Cascading failures not prevented"
+        - "No automatic repair mechanisms"
+        - "Insufficient error context for diagnosis"
+    
+    - phase_id: "impl-ops-004-observability"
+      title: "Production Observability and Operations"
+      priority: "P1-HIGH"
+      effort: "4-6 days"
+      status: "NOT_STARTED"
+      file: "_workspaces/roadmap/phases/impl-ops-004-observability.yaml"
+      blocks_production: false
+      dependencies: ["impl-infra-001-resilience", "impl-state-002-concurrency", "impl-recovery-003-fault-tolerance"]
+      acceptance_criteria: 6
+      focus: "Structured logging, Prometheus metrics, distributed tracing, health checks"
+      critical_gaps:
+        - "Unstructured logging prevents log aggregation"
+        - "Incomplete metrics hide performance issues"
+        - "No distributed tracing across components"
+        - "Basic health checks insufficient for load balancers"
+        - "Missing operational dashboards"
 
 governance:
   file_naming: "kebab-case, ≤25 chars"
@@ -429,18 +497,97 @@ governance:
   rules_file_missing: true
   rules_file_expected: "cortex_brain/tier0/governance/core-rules.yaml"
 
+production_readiness_summary:
+  status: "NOT_READY"
+  blocking_phases: 3
+  estimated_completion: "16-22 days (3-4 weeks)"
+  
+  critical_path:
+    - phase: "impl-infra-001-resilience"
+      duration: "5-7 days"
+      blocks: "All production deployment"
+      severity: "P0-CRITICAL"
+    
+    - phase: "impl-state-002-concurrency"
+      duration: "6-8 days"
+      blocks: "Multi-user deployment"
+      severity: "P0-CRITICAL"
+      depends_on: ["impl-infra-001-resilience"]
+    
+    - phase: "impl-recovery-003-fault-tolerance"
+      duration: "5-7 days"
+      blocks: "Production reliability"
+      severity: "P0-CRITICAL"
+      depends_on: ["impl-infra-001-resilience", "impl-state-002-concurrency"]
+    
+    - phase: "impl-ops-004-observability"
+      duration: "4-6 days"
+      blocks: "Operational visibility"
+      severity: "P1-HIGH (can deploy without, but risky)"
+      depends_on: ["all P0 phases"]
+  
+  risk_assessment:
+    without_infra_resilience:
+      - "Connection exhaustion at ~20 concurrent users"
+      - "Cascading failures bring down entire system"
+      - "Resource leaks require restarts"
+      - "No graceful degradation under load"
+    
+    without_state_concurrency:
+      - "Data corruption under concurrent writes"
+      - "Lost updates in multi-user scenarios"
+      - "Race conditions cause non-deterministic behavior"
+      - "Audit log integrity compromised"
+    
+    without_fault_tolerance:
+      - "Failures leave system in inconsistent state"
+      - "No automatic recovery from errors"
+      - "Manual intervention required for incidents"
+      - "Partial operations cause data inconsistency"
+    
+    without_observability:
+      - "Cannot diagnose production issues"
+      - "Blind to performance problems"
+      - "Reactive rather than proactive operations"
+      - "Long mean time to resolution (MTTR)"
+
 next_actions:
-  priority_1:
+  priority_1_production_readiness:
+    - action: "Begin impl-infra-001-resilience"
+      file: "_workspaces/roadmap/phases/impl-infra-001-resilience.yaml"
+      estimated_effort: "5-7 days"
+      blocking: "All production deployment"
+    
+    - action: "Begin impl-state-002-concurrency"
+      file: "_workspaces/roadmap/phases/impl-state-002-concurrency.yaml"
+      estimated_effort: "6-8 days"
+      blocking: "Multi-user deployment"
+      depends_on: ["impl-infra-001-resilience"]
+    
+    - action: "Begin impl-recovery-003-fault-tolerance"
+      file: "_workspaces/roadmap/phases/impl-recovery-003-fault-tolerance.yaml"
+      estimated_effort: "5-7 days"
+      blocking: "Production reliability"
+      depends_on: ["impl-infra-001-resilience", "impl-state-002-concurrency"]
+  
+  priority_2_operations:
+    - action: "Begin impl-ops-004-observability"
+      file: "_workspaces/roadmap/phases/impl-ops-004-observability.yaml"
+      estimated_effort: "4-6 days"
+      note: "Can deploy without, but significantly increases operational risk"
+  
+  priority_3_technical_debt:
     - action: "Archive current cortex-master.yaml"
       destination: "_archives/20260120-consolidation/cortex-master-legacy.yaml"
     
-    - action: "Create phase-impl-*.yaml files"
-      pattern: "One file per implemented phase, ~100 lines each"
-      location: "_workspaces/roadmap/phases/"
+    - action: "Implement 125 missing TDD modules"
+      file: "_workspaces/roadmap/phases/impl-tdd-prod-ready.yaml"
+      estimated_effort: "2-3 weeks"
     
     - action: "Create core-rules.yaml"
       location: "cortex_brain/tier0/governance/core-rules.yaml"
       content: "28 CORE-* rules from documentation"
+      status: "COMPLETED (2026-01-20)"
   
   priority_2:
     - action: "Document MCP stub status"
