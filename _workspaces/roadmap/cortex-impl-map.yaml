@@ -257,57 +257,64 @@ phases_implementation_status:
 
 gaps_identified:
   critical:
-    - gap: "Governance rules not enforced - context-aware dispatch missing"
-      location: "cortex/brain/core/rule_evaluator.py lines 158-193"
-      impact: "28 out of 29 rules non-functional (only SKULL-001 checked)"
-      source: "GOVERNANCE-INTELLIGENCE-BRIEF.md (git commit dacb8091)"
-      resolution: "impl-governance-001-context-aware.yaml"
-      priority: "P0"
-      estimated_effort: "4-6 days"
-    
-    - gap: "Missing core-rules.yaml"
-      location: "cortex_brain/tier0/governance/"
-      impact: "Tier0 governance claims invalid"
-      resolution: "Create from documented CORE-* rules"
+    - gap: "125 modules have tests but no implementations"
+      location: "Multiple src.* imports in test files"
+      impact: "170 test errors on import failures, production not ready"
+      source: "_workspaces/roadmap/reports/tdd-gap-analysis.yaml"
+      resolution: "impl-tdd-prod-ready.yaml"
+      priority: "P0-NEXT"
+      estimated_effort: "8-12 days implementation + 3-4 days validation"
+      categories:
+        core: 87
+        orchestrators: 9
+        domain: 14
+        infrastructure: 5
+        mcp: 1
+        other: 9
     
     - gap: "MCP tools are stubs"
       location: "cortex/mcp/*.py"
       impact: "No functional MCP exposure"
       resolution: "Implement tool logic or document as future work"
+      priority: "P1"
     
     - gap: "Empty tier1/tier2 directories"
       location: "cortex_brain/tier1/, cortex_brain/tier2/"
       impact: "Governance architecture incomplete"
       resolution: "Populate or remove directory structure"
+      priority: "P2"
   
-  moderate:
+  resolved:
+    - gap: "Governance rules not enforced - context-aware dispatch missing"
+      resolution_date: "2026-01-20"
+      implementation: "Context-aware governance pipeline (GOV-CTX-001)"
+      result: "28/29 rules now functional - 75 tests passing"
+    
+    - gap: "Missing core-rules.yaml"
+      resolution_date: "2026-01-20"
+      implementation: "Copied to cortex_brain/tier0/governance/core-rules.yaml"
+      result: "30 rules loading successfully from YAML"
+    
     - gap: "No routing decision outcome tracking"
-      location: "cortex/orchestrators/core/master_orchestrator.py"
-      impact: "Cannot identify systematic misrouting patterns"
-      source: "INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 1 (git commit dacb8091)"
-      resolution: "impl-intelligence-001-routing.yaml"
-      priority: "P1"
-      estimated_effort: "2-3 hours"
+      resolution_date: "2026-01-20"
+      implementation: "RoutingAnalyzer with SQLite persistence (INT-001)"
+      result: "12 tests passing - accuracy and misrouting detection"
     
     - gap: "No operation duration baselines"
-      location: "cortex/brain/core/observability/metrics_aggregator.py"
-      impact: "Cannot detect performance degradation early"
-      source: "INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 2 (git commit dacb8091)"
-      resolution: "impl-intelligence-002-duration.yaml"
-      priority: "P1"
-      estimated_effort: "2-3 hours"
+      resolution_date: "2026-01-20"
+      implementation: "DurationAnalyzer with percentile calculations (INT-002)"
+      result: "15 tests passing - p50/p95/p99 baselines and slow operation detection"
     
     - gap: "Error logs not analyzed for patterns"
-      location: "cortex/infrastructure/enhanced_audit_logger.py"
-      impact: "Recurring failures go unnoticed; cannot identify brittle handlers"
-      source: "INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 3 (git commit dacb8091)"
-      resolution: "impl-intelligence-003-errors.yaml"
-      priority: "P1"
-      estimated_effort: "2-3 hours"
-    
+      resolution_date: "2026-01-20"
+      implementation: "ErrorAnalyzer with context sanitization (INT-003)"
+      result: "15 tests passing - pattern detection and brittle handler identification"
+  
+  moderate:
     - gap: "Test-to-AC mapping unclear"
       impact: "Hard to verify AC completion"
       resolution: "Document test file AC-ID coverage"
+      priority: "P2"
     
     - gap: "Orchestrator protocol vs concrete mismatch"
       impact: "5 protocols, 4 implementations - incomplete"
@@ -319,13 +326,14 @@ gaps_identified:
 
 recommendations:
   immediate:
-    - "Implement context-aware governance (P0) - 28/29 rules non-functional"
-    - "Implement intelligence modules (P1) - 3 quick-wins in 6-9 hours total"
-    - "Archive bloated cortex-master.yaml (6010 lines)"
-    - "Create lean implementation map (<500 lines)"
-    - "Document actual test coverage per AC-ID"
-    - "Create core-rules.yaml from CORE-* documentation"
-    - "Mark MCP tools as 'STUB' explicitly"
+    - "Implement 125 missing modules (P0-NEXT) - see impl-tdd-prod-ready.yaml"
+    - "Start with Priority 1 critical modules (conversation_protocol, orchestrator_decorator)"
+    - "Use three-phase approach: stub generation → implementation → validation"
+  
+  completed:
+    - "✅ Context-aware governance (P0) - 28/29 rules functional (2026-01-20)"
+    - "✅ Intelligence modules (P1) - routing, duration, error tracking (2026-01-20)"
+    - "✅ Core-rules.yaml created in cortex_brain/tier0/governance/"
   
   short_term:
     - "Implement missing MCP tool logic"
@@ -346,10 +354,16 @@ remediation_phases:
       priority: "P0"
       effort: "4-6 days"
       source: "docs/GOVERNANCE-INTELLIGENCE-BRIEF.md"
-      status: "NOT_STARTED"
+      status: "IMPLEMENTED"
+      completion_date: "2026-01-20"
       file: "_workspaces/roadmap/phases/impl-governance-001-context-aware.yaml"
-      issue: "28 out of 29 rules return None - only SKULL-001 evaluated"
-      impact: "Governance declared but not enforced"
+      implementation:
+        - "cortex/brain/core/governance/context_extractor.py (15 tests)"
+        - "cortex/brain/core/governance/rule_applicability.py (17 tests)"
+        - "cortex/brain/core/governance/rule_validators.py (18 tests)"
+        - "cortex/brain/core/rule_evaluator.py (integration - 25 tests)"
+      tests_total: "75 passing"
+      resolution: "28/29 rules now functional (was only SKULL-001)"
   
   intelligence:
     - phase_id: "impl-intelligence-001-routing"
@@ -357,30 +371,33 @@ remediation_phases:
       priority: "P1"
       effort: "2-3 hours"
       source: "docs/INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 1"
-      status: "NOT_STARTED"
+      status: "IMPLEMENTED"
+      completion_date: "2026-01-20"
       file: "_workspaces/roadmap/phases/impl-intelligence-001-routing.yaml"
-      issue: "Routing decisions logged but outcomes never tracked"
-      impact: "Cannot detect systematic misrouting"
+      implementation: "cortex/core/intelligence/routing_intelligence.py"
+      tests: "tests/unit/core/intelligence/test_routing_intelligence.py (12 passing)"
     
     - phase_id: "impl-intelligence-002-duration"
       title: "Operation Duration Intelligence"
       priority: "P1"
       effort: "2-3 hours"
       source: "docs/INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 2"
-      status: "NOT_STARTED"
+      status: "IMPLEMENTED"
+      completion_date: "2026-01-20"
       file: "_workspaces/roadmap/phases/impl-intelligence-002-duration.yaml"
-      issue: "No duration baselines per operation type"
-      impact: "Cannot detect performance degradation early"
+      implementation: "cortex/core/intelligence/duration_intelligence.py"
+      tests: "tests/unit/core/intelligence/test_duration_intelligence.py (15 passing)"
     
     - phase_id: "impl-intelligence-003-errors"
       title: "Error Pattern Recognition"
       priority: "P1"
       effort: "2-3 hours"
       source: "docs/INTELLIGENCE-IMPLEMENTATION-ROADMAP.md Module 3"
-      status: "NOT_STARTED"
+      status: "IMPLEMENTED"
+      completion_date: "2026-01-20"
       file: "_workspaces/roadmap/phases/impl-intelligence-003-errors.yaml"
-      issue: "Errors logged but not analyzed for patterns"
-      impact: "Recurring failures undetected; brittle handlers unidentified"
+      implementation: "cortex/core/intelligence/error_intelligence.py"
+      tests: "tests/unit/core/intelligence/test_error_intelligence.py (15 passing)"
   
   tdd_production:
     - phase_id: "impl-tdd-prod-ready"
