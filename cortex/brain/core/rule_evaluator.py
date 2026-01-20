@@ -4,6 +4,7 @@ Governance Rule Evaluation Engine
 AC-FR-002-01: Rules evaluated in tier priority order
 AC-FR-002-02: Violations returned with rule ID and message
 AC-FR-002-03: Evaluation performance <5ms per rule
+AC-GOV-CTX-001-04: Context-aware rule evaluation with validators
 """
 
 import time
@@ -12,6 +13,9 @@ from typing import Dict, Any, List, Optional
 from cortex.brain.core.governance_registry import GovernanceRegistry, GovernanceRule
 from cortex.brain.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
+from cortex.brain.core.governance.context_extractor import ContextExtractor, GovernanceContext
+from cortex.brain.core.governance.rule_applicability import RuleApplicabilityEngine
+from cortex.brain.core.governance import rule_validators
 
 
 @dataclass
@@ -46,12 +50,28 @@ class RuleEvaluator:
     
     AC-FR-002-01: Rules evaluated in tier priority order (0 > 1 > 2)
     AC-FR-002-03: Evaluation performance optimized <5ms per rule
+    AC-GOV-CTX-001-04: Context-aware evaluation with validators
     """
     
     def __init__(self):
-        """Initialize rule evaluator"""
+        """Initialize rule evaluator with context-aware pipeline"""
         self.logger = EnhancedAuditLogger.instance()
         self.registry = GovernanceRegistry.instance()
+        self.context_extractor = ContextExtractor()
+        self.applicability_engine = RuleApplicabilityEngine()
+        
+        # Ensure registry is initialized with rules
+        init_result = self.registry.initialize()
+        if init_result.is_err():
+            # Log but don't crash - allow evaluator to work with empty rules
+            error_msg = str(init_result.err()) if hasattr(init_result, 'err') else "Unknown error"
+            if self.logger:
+                self.logger.log_operation_complete(
+                    ac_id="AC-GOV-CTX-001-04",
+                    operation="INIT_REGISTRY",
+                    success=False,
+                    details={"error": error_msg}
+                )
     
     def evaluate_rules(
         self,
@@ -157,31 +177,84 @@ class RuleEvaluator:
     
     def _evaluate_single_rule(self, rule: GovernanceRule, context: Dict[str, Any]) -> Optional[RuleViolation]:
         """
-        Evaluate a single rule against context.
+        Evaluate a single rule against context using context-aware pipeline.
+        
+        AC-GOV-CTX-001-04: Context extraction → Applicability → Validation
         
         Returns violation if rule fails, None if passes
         """
         try:
-            # Rule matching logic based on rule_id and context
-            # This is a simplified version - real implementation would have complex matching
+            # Extract governance context from operation context
+            file_path = context.get("file_path", context.get("target", ""))
             
-            # Example: Check if operation type matches rule
-            if "operation_type" in context:
-                op_type = context["operation_type"]
+            gov_context = self.context_extractor.extract_context(
+                file_path=file_path,
+                operation_context=context
+            )
+            
+            # Check if rule should apply based on context
+            if not self.applicability_engine.should_apply_rule(rule.rule_id, gov_context):
+                return None  # Rule exempt for this context
+            
+            # Get validator function for this rule
+            # Try exact match first (e.g., validate_core_001_incremental)
+            # Then try generic match (e.g., validate_core_001)
+            validator_func = None
+            rule_id_lower = rule.rule_id.lower().replace('-', '_')
+            
+            # Check all functions starting with validate_{rule_id}
+            for func_name in dir(rule_validators):
+                if func_name.startswith(f"validate_{rule_id_lower}"):
+                    validator_func = getattr(rule_validators, func_name)
+                    break
+            
+            if validator_func:
+                # Build kwargs with all available metrics
+                validator_kwargs = {
+                    "context": gov_context,
+                    "lines_changed": context.get("lines_changed", 0),
+                    "test_file_exists": context.get("test_file_exists", False),
+                    "functions_analyzed": context.get("functions_analyzed", 0),
+                    "functions_with_hints": context.get("functions_with_hints", 0),
+                    "public_apis": context.get("public_apis", 0),
+                    "documented_apis": context.get("documented_apis", 0),
+                    "bare_except_count": context.get("bare_except_count", 0),
+                    "filename": context.get("filename", ""),
+                    "line_count": context.get("line_count", 0),
+                    "has_hardcoded_paths": context.get("has_hardcoded_paths", False),
+                    "import_groups_correct": context.get("import_groups_correct", True)
+                }
                 
-                # SKULL-001: No modifications to Tier 0 rules
-                if rule.rule_id == "SKULL-001" and op_type == "MODIFY_TIER0":
+                # Call validator - it will accept only the params it needs
+                import inspect
+                sig = inspect.signature(validator_func)
+                filtered_kwargs = {k: v for k, v in validator_kwargs.items() if k in sig.parameters}
+                
+                validator_violation = validator_func(**filtered_kwargs)
+                
+                # Convert validator violation to RuleViolation format
+                if validator_violation:
+                    return RuleViolation(
+                        rule_id=rule.rule_id,
+                        rule_name=rule.name,
+                        rule_tier=rule.tier,
+                        severity=validator_violation.severity,
+                        message=validator_violation.message,
+                        context=validator_violation.context
+                    )
+            else:
+                # Fallback: SKULL-001 hardcoded check for compatibility
+                if rule.rule_id == "SKULL-001" and context.get("operation_type") == "MODIFY_TIER0":
                     return RuleViolation(
                         rule_id=rule.rule_id,
                         rule_name=rule.name,
                         rule_tier=rule.tier,
                         severity=rule.severity,
-                        message=f"Operation '{op_type}' violates {rule.rule_id}: {rule.description}",
+                        message=f"Operation '{context.get('operation_type')}' violates {rule.rule_id}: {rule.description}",
                         context=context
                     )
             
-            # Check if rule should apply based on context
-            # Return None if rule passes
+            # Rule passed
             return None
         
         except Exception as e:

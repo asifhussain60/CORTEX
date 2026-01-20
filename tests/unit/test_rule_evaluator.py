@@ -8,8 +8,8 @@ AC-FR-002-03: Evaluation performance <5ms per rule
 
 import pytest
 import time
-from src.core.rule_evaluator import RuleEvaluator, ViolationReporter, RuleViolation, EvaluationResult
-from src.core.governance_registry import GovernanceRegistry, GovernanceRule
+from cortex.brain.core.rule_evaluator import RuleEvaluator, RuleViolation, EvaluationResult, ViolationReporter
+from cortex.brain.core.governance_registry import GovernanceRegistry, GovernanceRule
 
 
 class TestRuleEvaluator:
