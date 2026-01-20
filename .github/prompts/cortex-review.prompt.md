@@ -12,10 +12,10 @@ Every review AUTOMATICALLY produces actionable gaps that are:
 - ✅ Extracted from findings (Phase 3A)
 - ✅ Analyzed holistically (Phase 3B)
 - ✅ Generated as structured YAML (Phase 3C)
-- ✅ Integrated into cortex-master.yaml (cortex-builder.prompt.md automatic)
+- ✅ Integrated into cortex-impl-map.yaml (cortex-builder.prompt.md automatic)
 - ✅ No manual gap management needed
 
-**Result:** From findings to master plan remediation in single workflow.
+**Result:** From findings to implementation map remediation in single workflow.
 
 ---
 
@@ -680,7 +680,7 @@ Score = (PASS rules × 10) / Total rules
 
 ### ⚠️ CRITICAL: DEFAULT BEHAVIOR - ALWAYS INTEGRATE GAPS
 
-**MANDATE:** Every review MUST produce gap identifications that are automatically integrated into `cortex-master.yaml` via cortex-builder.prompt.md. This is NOT optional.
+**MANDATE:** Every review MUST produce gap identifications that are automatically integrated into `cortex-impl-map.yaml` via cortex-builder.prompt.md. This is NOT optional.
 
 **Default Workflow:**
 ```
@@ -904,7 +904,7 @@ cortex_master_yaml_updates:
 /cortex-builder integrate-gaps \
   --findings-file REVIEW-FINDINGS-CONSOLIDATED-YYYYMMDD.yaml \
   --gaps-file REVIEW-GAPS-EXTRACTED-YYYYMMDD.yaml \
-  --master-plan cortex-master.yaml
+  --impl-map cortex-impl-map.yaml
 ```
 
 **cortex-builder.prompt.md will:**
@@ -914,7 +914,7 @@ cortex_master_yaml_updates:
 4. Add new AC-FIX entries with full specifications
 5. Update ac_breakdown with new critical blockers
 6. Add investigation references (dates, reports)
-7. Set phase status to IN_PROGRESS and locked: false
+7. Set phase status to IN_PROGRESS and mark as requiring remediation
 8. Commit with: `git commit -m "integrate-review-gaps: ISSUE-XXX remediation ACs added"`
 
 ### If No Critical Findings
@@ -922,7 +922,7 @@ cortex_master_yaml_updates:
 ```yaml
 decision: "READY FOR PRODUCTION DEPLOYMENT"
 findings_summary: "No CRITICAL or blocking issues identified"
-next_phase: "NEXT (from cortex-master.yaml)"
+next_phase: "NEXT (from cortex-impl-map.yaml)"
 production_readiness: "9/10 (all governance compliant)"
 documentation_complete: true
 assumptions_documented: true
@@ -1063,9 +1063,9 @@ PRODUCTION READINESS: 95% (governance compliant)
 # Time: ~5 min
 
 # Phase 3C: Generate structured YAML for cortex-builder
-/review remediation --gaps REVIEW-GAPS-EXTRACTED-20260118.yaml --master cortex-master.yaml
+/review remediation --gaps REVIEW-GAPS-EXTRACTED-20260118.yaml --impl-map cortex-impl-map.yaml
 # Validates gaps are ready for integration
-# Generates cortex_master_yaml_updates section
+# Generates cortex_impl_map_updates section
 # Time: ~5 min
 
 # AUTOMATIC (cortex-builder integration)
@@ -1080,7 +1080,7 @@ PRODUCTION READINESS: 95% (governance compliant)
 
 TOTAL TIME (Phase 3): 20 min (gap extraction + analysis + yaml generation)
 INTEGRATION TIME: Automatic (cortex-builder triggered)
-RESULT: cortex-master.yaml updated, phase ready for implementation
+RESULT: cortex-impl-map.yaml updated, phase ready for implementation
 ```
 
 ---
@@ -1092,8 +1092,8 @@ RESULT: cortex-master.yaml updated, phase ready for implementation
 **MANDATE:** Every review AUTOMATICALLY produces:
 1. REVIEW-FINDINGS-CONSOLIDATED (Phase 2 output)
 2. REVIEW-GAPS-EXTRACTED (Phase 3A output) ← NEW
-3. cortex_master_yaml_updates section (Phase 3B/3C output) ← NEW
-4. Integration into cortex-master.yaml (cortex-builder.prompt.md) ← AUTOMATIC
+3. cortex_impl_map_updates section (Phase 3B/3C output) ← NEW
+4. Integration into cortex-impl-map.yaml (cortex-builder.prompt.md) ← AUTOMATIC
 
 **Outcome:** Zero manual gap management. Systematic, traceable, actionable.
 
@@ -1241,16 +1241,16 @@ holistic_analysis:
 # Run these checks in cortex-builder BEFORE committing gap integration
 
 # 1. Syntax validation
-yamllint cortex-master.yaml
+yamllint cortex-impl-map.yaml
 
 # 2. Gap-to-AC mapping validation
 python3 << 'EOF'
 import yaml
-with open('cortex-master.yaml') as f:
-  master = yaml.safe_load(f)
+with open('cortex-impl-map.yaml') as f:
+  impl_map = yaml.safe_load(f)
 
-for phase in master['phase_tracker'].values():
-  if 'gaps_addressed' in phase:
+for phase in impl_map['phases_implementation_status'].values():
+  if isinstance(phase, dict) and 'gaps_addressed' in phase:
     for gap in phase['gaps_addressed']:
       # Verify remedy AC exists in phase
       remedy_id = gap['remedy_ac_id']
@@ -1268,11 +1268,12 @@ python3 << 'EOF'
 EOF
 
 # 4. Governance rule verification
-for phase in cortex-master.yaml:
-  for ac in phase.ac_ids:
-    for rule in ac.governance_rules:
-      if rule not in cortex_brain/tier0/governance/core-rules.yaml:
-        echo "ERROR: Unknown rule $rule in $ac"
+for phase in impl_map['phases_implementation_status'].values():
+  if isinstance(phase, dict) and 'ac_ids' in phase:
+    for ac in phase['ac_ids']:
+      for rule in ac.get('governance_rules', []):
+        if rule not in ["CORE-001", "CORE-008", "CORE-011", "CORE-012", "CORE-013", "CORE-017", "CORE-026", "CORE-027", "CORE-028"]:
+          print(f"WARNING: Unknown rule {rule} in {ac}")
 
 # 5. Evidence grading check
 for gap in gaps_addressed:

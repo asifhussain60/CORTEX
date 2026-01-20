@@ -1,11 +1,11 @@
 # CORTEX Builder - Implementation Prompt
 
-**Role:** Implement phases from `_workspaces/roadmap/cortex-master.yaml` (v3.0 truth-based) with strict tier0 governance.
+**Role:** Implement phases from `_workspaces/roadmap/cortex-impl-map.yaml` (v3.1-corrected truth-based) with strict tier0 governance.
 
 ## Quick Reference
 
 **Before implementing any phase:**
-1. Check `cortex-master.yaml` → verify implementation status
+1. Check `cortex-impl-map.yaml` → verify implementation status
 2. Load `_workspaces/roadmap/phases/impl-*.yaml` → Phase specifications
 3. Reference `cortex/core/governance/` → Governance rules (Note: core-rules.yaml missing)
 4. Create git checkpoint: `git commit -m "checkpoint: before impl-XXX"`
@@ -65,7 +65,7 @@
 
 | File Type | Location | Authority |
 |---|---|---|
-| Master Plan | `_workspaces/roadmap/cortex-master.yaml` | CANONICAL |
+| Implementation Map | `_workspaces/roadmap/cortex-impl-map.yaml` | CANONICAL |
 | Phase Specs | `_workspaces/roadmap/phases/impl-*.yaml` | Per-phase authority |
 | MCP Status | `_workspaces/roadmap/mcp-impl-status.yaml` | MCP tracking |
 | Code | `cortex/`, `cortex_brain/` | Implementation |
@@ -113,7 +113,7 @@
 
 ## Status Commands
 
-- `/status <phase>` → Current phase status from cortex-master.yaml
+- `/status <phase>` → Current phase status from cortex-impl-map.yaml
 - `/next` → Next stub/partial implementation
 - `/mcp-status` → MCP tool implementation status
 - `/governance-check` → Compliance verification (Note: core-rules.yaml missing)
@@ -157,7 +157,7 @@ Proceed to PHASE-YY? (yes/no)
               🎉 CORTEX IMPLEMENTATION COMPLETE 🎉
 ═══════════════════════════════════════════════════════════════
 
-All phases in cortex-master.yaml are now locked: true.
+All phases in cortex-impl-map.yaml are now locked: true.
 Total phases delivered: [N]
 Production ready: ✅
 
@@ -202,7 +202,7 @@ Production ready: ✅
 
 | Type | Location |
 |------|----------|
-| Master Plan | `_workspaces/roadmap/cortex-master.yaml` |
+| Implementation Map | `_workspaces/roadmap/cortex-impl-map.yaml` |
 | Phase Specs | `_workspaces/roadmap/phases/impl-*.yaml` |
 | MCP Status | `_workspaces/roadmap/mcp-impl-status.yaml` |
 | Source | `cortex/`, `cortex_brain/` |
@@ -214,7 +214,7 @@ Production ready: ✅
 
 ## CRITICAL RULES
 
-1. **ONE PATH FORWARD**: Until all phases `locked: true`, the only option is "Proceed to next phase? (yes/no)"
+1. **ONE PATH FORWARD**: Until all phases are marked completed in cortex-impl-map.yaml, the only option is "Proceed to next phase? (yes/no)"
 2. **NO ALTERNATIVES**: Do not present other options, suggestions, or detours
 3. **AUTONOMOUS**: Execute all ACs in a phase without pausing
 4. **MINIMAL OUTPUT**: Silent during execution, summary on completion
