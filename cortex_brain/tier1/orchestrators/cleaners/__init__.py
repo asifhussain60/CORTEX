@@ -16,6 +16,17 @@ from ..cleaners_base import (
     CleanerType,
 )
 
+# Exceptions
+class CleanerRegistrationError(Exception):
+    """Error during cleaner registration."""
+    pass
+
+
+class CleanerNotFoundError(Exception):
+    """Error when cleaner not found."""
+    pass
+
+
 # Stub classes for test compatibility
 class CleanerInterface:
     """Cleaner interface for backward compatibility."""
@@ -64,6 +75,8 @@ __all__ = [
     "FormatCleaner",
     "CleaningRule",
     "CleanerType",
+    "CleanerRegistrationError",
+    "CleanerNotFoundError",
     "CleanerInterface",
     "Analysis",
     "Report",

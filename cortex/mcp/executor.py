@@ -5,6 +5,16 @@ Author: CORTEX Framework
 
 from dataclasses import dataclass
 from typing import Any, Dict
+from enum import Enum
+
+
+class ExecutionState(Enum):
+    """Tool execution states."""
+    PENDING = "pending"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
+
 
 @dataclass
 class ToolExecutor:

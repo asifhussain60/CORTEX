@@ -5,6 +5,15 @@ Author: CORTEX Framework
 
 from dataclasses import dataclass
 from typing import List
+from enum import Enum
+
+
+class ChangeType(Enum):
+    """File change types."""
+    CREATED = "created"
+    MODIFIED = "modified"
+    DELETED = "deleted"
+
 
 @dataclass
 class FileWatcher:
@@ -36,15 +45,38 @@ class ReloadEvent:
     event_type: str = "modified"
 
 
+class ReloadState(Enum):
+    """Hot reload state."""
+    IDLE = "idle"
+    WATCHING = "watching"
+    RELOADING = "reloading"
+    COMPLETED = "completed"
+    ERROR = "error"
+
 
 class HotReloadOrchestrator:
     """Orchestrate hot reload operations."""
     
     def __init__(self):
         self.watcher = FileWatcher()
+        self.state = ReloadState.IDLE
     
     def start(self) -> None:
         """Start hot reload."""
+        self.state = ReloadState.WATCHING
         self.watcher.watch()
 
-__all__ = ["FileWatcher", "HotReloadOrchestrator"]
+
+@dataclass
+class WatchConfig:
+    """File watcher configuration."""
+    watch_paths: List[str] = None
+    ignore_patterns: List[str] = None
+    
+    def __post_init__(self):
+        if self.watch_paths is None:
+            self.watch_paths = []
+        if self.ignore_patterns is None:
+            self.ignore_patterns = []
+
+__all__ = ["ChangeType", "FileWatcher", "ReloadState", "WatchConfig", "HotReloadOrchestrator"]

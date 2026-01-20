@@ -7,6 +7,15 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass
+from enum import Enum
+
+
+class RetentionPeriod(Enum):
+    """Data retention periods."""
+    SHORT = 30  # 30 days
+    MEDIUM = 90  # 90 days
+    LONG = 365  # 1 year
+    PERMANENT = -1  # Forever
 
 
 @dataclass
@@ -26,4 +35,4 @@ class RetentionManager:
         return True
 
 
-__all__ = ["DataRetentionPolicy", "RetentionManager"]
+__all__ = ["RetentionPeriod", "DataRetentionPolicy", "RetentionManager"]

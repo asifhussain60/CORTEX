@@ -3,7 +3,17 @@
 Author: CORTEX Framework
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from enum import Enum
+
+
+class ScenarioCategory(Enum):
+    """Scenario categories."""
+    SMOKE = "smoke"
+    REGRESSION = "regression"
+    INTEGRATION = "integration"
+    E2E = "e2e"
+
 
 @dataclass
 class ScenarioResult:
@@ -35,6 +45,14 @@ class Scenario:
             self.steps = []
 
 
+class ScenarioStatus(Enum):
+    """Scenario execution status."""
+    PENDING = "pending"
+    RUNNING = "running"
+    PASSED = "passed"
+    FAILED = "failed"
+    SKIPPED = "skipped"
+
 
 from typing import List
 
@@ -49,4 +67,21 @@ class ScenarioLibrary:
         """Run a scenario."""
         return ScenarioResult(scenario_id=scenario_id, passed=True)
 
-__all__ = ["ScenarioResult", "ScenarioLibrary"]
+
+@dataclass
+class ExpectedOutput:
+    """Expected output for scenario validation."""
+    output_type: str
+    expected_value: any = None
+    tolerance: float = 0.0
+
+
+@dataclass
+class ScenarioSnapshot:
+    """Snapshot of scenario execution state."""
+    snapshot_id: str
+    scenario_id: str
+    state: dict = field(default_factory=dict)
+    timestamp: float = 0.0
+
+__all__ = ["ScenarioCategory", "ScenarioResult", "ScenarioStatus", "ExpectedOutput", "ScenarioSnapshot", "ScenarioLibrary"]

@@ -36,10 +36,64 @@ class MaxTurnsReachedEvent:
 
 
 @dataclass
+class ErrorOccurredEvent:
+    """Event fired when error occurs."""
+    event_id: str
+    error_message: str
+    error_type: str = "unknown"
+    timestamp: str = ""
+
+
+@dataclass
+class TokenLimitEvent:
+    """Event fired when token limit is reached."""
+    event_id: str
+    current_tokens: int
+    max_tokens: int
+    timestamp: str = ""
+
+
+@dataclass
 class TerminalEvent:
     """Base terminal event."""
     event_id: str
     event_type: str
     timestamp: str = ""
 
-__all__ = ["UserCancelledEvent", "PhaseCompletedEvent", "MaxTurnsReachedEvent", "TerminalEvent"]
+
+@dataclass
+class GovernanceViolationEvent:
+    """Event fired when governance violation occurs."""
+    event_id: str
+    violation_type: str
+    severity: str = "medium"
+    timestamp: str = ""
+
+
+@dataclass
+class UserApprovalRejectedEvent:
+    """Event fired when user rejects approval."""
+    event_id: str
+    reason: str = ""
+    timestamp: str = ""
+
+
+class EventListener:
+    """Event listener interface."""
+    
+    def on_event(self, event: TerminalEvent) -> None:
+        """Handle terminal event."""
+        pass
+
+
+class EventRegistry:
+    """Registry for event listeners."""
+    
+    def __init__(self):
+        self.listeners = []
+    
+    def register(self, listener: EventListener) -> None:
+        """Register event listener."""
+        self.listeners.append(listener)
+
+__all__ = ["UserCancelledEvent", "PhaseCompletedEvent", "MaxTurnsReachedEvent", "ErrorOccurredEvent", "TokenLimitEvent", "TerminalEvent", "GovernanceViolationEvent", "UserApprovalRejectedEvent", "EventListener", "EventRegistry"]

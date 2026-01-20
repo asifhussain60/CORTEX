@@ -7,6 +7,16 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass
+from enum import Enum
+
+
+class InjectionThreatLevel(Enum):
+    """Injection threat levels."""
+    NONE = "none"
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    CRITICAL = "critical"
 
 
 @dataclass
@@ -26,4 +36,20 @@ class PromptInjectionSanitizer:
         return prompt
 
 
-__all__ = ["SanitizationResult", "PromptInjectionSanitizer"]
+class SanitizationMethod(Enum):
+    """Sanitization method types."""
+    FILTER = "filter"
+    ESCAPE = "escape"
+    VALIDATE = "validate"
+    REMOVE = "remove"
+
+
+@dataclass
+class InjectionPattern:
+    """Injection attack pattern."""
+    pattern_id: str
+    pattern_type: str
+    severity: str = "medium"
+
+
+__all__ = ["InjectionThreatLevel", "SanitizationResult", "PromptInjectionSanitizer", "SanitizationMethod", "InjectionPattern"]

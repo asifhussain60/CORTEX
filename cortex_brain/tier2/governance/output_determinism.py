@@ -20,6 +20,14 @@ class ExecutionRecord:
 
 
 @dataclass
+class DeterminismAnalysis:
+    """Determinism analysis result."""
+    is_deterministic: bool
+    consistency_score: float
+    deviation_count: int = 0
+
+
+@dataclass
 class OutputDeterminismVerifier:
     """Verify output determinism."""
     enabled: bool = True
@@ -28,4 +36,13 @@ class OutputDeterminismVerifier:
         return True
 
 
-__all__ = ["ExecutionRecord", "OutputDeterminismVerifier"]
+from enum import Enum
+
+class DeterminismStatus(Enum):
+    """Determinism status."""
+    DETERMINISTIC = "deterministic"
+    NON_DETERMINISTIC = "non_deterministic"
+    UNKNOWN = "unknown"
+
+
+__all__ = ["ExecutionRecord", "DeterminismAnalysis", "OutputDeterminismVerifier", "DeterminismStatus"]

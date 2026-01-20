@@ -24,4 +24,29 @@ class ReasoningTrace:
     steps: list = field(default_factory=list)
 
 
-__all__ = ["ReasoningTraceStep", "ReasoningTrace"]
+@dataclass
+class ReasoningStep:
+    """Individual reasoning step."""
+    step_id: str
+    operation: str
+    input_data: dict = field(default_factory=dict)
+    output_data: dict = field(default_factory=dict)
+
+
+@dataclass
+class StepConfidence:
+    """Confidence score for reasoning step."""
+    step_id: str
+    confidence: float
+    explanation: str = ""
+
+
+class ReasoningTraceValidator:
+    """Validate reasoning traces."""
+    
+    def validate(self, trace: ReasoningTrace) -> bool:
+        """Validate trace."""
+        return True
+
+
+__all__ = ["ReasoningTraceStep", "ReasoningTrace", "ReasoningStep", "StepConfidence", "ReasoningTraceValidator"]

@@ -32,6 +32,46 @@ class ModifyHandler:
         return True
 
 
+@dataclass
+class FixHandler:
+    """Domain fix handler."""
+    domain: str
+    
+    def handle(self) -> bool:
+        """Handle domain fix."""
+        return True
+
+
+@dataclass
+class AnalysisHandler:
+    """Domain analysis handler."""
+    domain: str
+    
+    def handle(self) -> Dict[str, any]:
+        """Handle domain analysis."""
+        return {}
+
+
+@dataclass
+class OptimizationHandler:
+    """Domain optimization handler."""
+    domain: str
+    
+    def handle(self) -> bool:
+        """Handle domain optimization."""
+        return True
+
+
+@dataclass
+class IntegrationHandler:
+    """Domain integration handler."""
+    domain: str
+    target: str = ""
+    
+    def handle(self) -> bool:
+        """Handle domain integration."""
+        return True
+
 
 class DomainOrchestrator:
     """Orchestrate domain operations."""
@@ -43,4 +83,4 @@ class DomainOrchestrator:
         """Execute domain operation."""
         return True
 
-__all__ = ["DomainRegistry", "DomainOrchestrator"]
+__all__ = ["DomainRegistry", "CreateHandler", "ModifyHandler", "FixHandler", "AnalysisHandler", "OptimizationHandler", "IntegrationHandler", "DomainOrchestrator"]

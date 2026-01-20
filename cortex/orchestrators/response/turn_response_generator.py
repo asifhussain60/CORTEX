@@ -71,6 +71,30 @@ class ResponseGenerator:
         return f"Generated: {input}"
 
 
+class ResponseBuilder:
+    """Builder for constructing responses."""
+    
+    def __init__(self):
+        self.segments = []
+    
+    def add_segment(self, segment: ResponseSegment) -> "ResponseBuilder":
+        """Add segment to response."""
+        self.segments.append(segment)
+        return self
+    
+    def build(self) -> TurnResponse:
+        """Build final response."""
+        content = "\n".join(s.content for s in self.segments)
+        return TurnResponse(turn_id="built", content=content)
+
+
+class ResponseFormatter:
+    """Format responses for different modes."""
+    
+    def format(self, response: TurnResponse, mode: ResponseMode) -> str:
+        """Format response."""
+        return response.content
+
 
 class TurnResponseGenerator:
     """Generate turn responses."""
@@ -80,4 +104,4 @@ class TurnResponseGenerator:
         metadata = ResponseMetadata(response_id=f"{turn_id}_resp")
         return TurnResponse(turn_id=turn_id, content=content, metadata=metadata)
 
-__all__ = ["ResponseMetadata", "TurnResponse", "TurnResponseGenerator"]
+__all__ = ["ResponseMetadata", "TurnResponse", "ResponseBuilder", "ResponseFormatter", "TurnResponseGenerator"]

@@ -3,7 +3,17 @@
 Author: CORTEX Framework
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from enum import Enum
+
+
+class ValidationSeverity(Enum):
+    """Validation severity levels."""
+    INFO = "info"
+    WARNING = "warning"
+    ERROR = "error"
+    CRITICAL = "critical"
+
 
 @dataclass
 class ValidationIssue:
@@ -32,6 +42,13 @@ class IntegrationPoint:
     enabled: bool = True
 
 
+class IntegrationStatus(Enum):
+    """Integration status."""
+    CONNECTED = "connected"
+    DISCONNECTED = "disconnected"
+    ERROR = "error"
+    VALIDATING = "validating"
+
 
 class IntegrationValidator:
     """Validate integrations."""
@@ -44,4 +61,11 @@ class IntegrationValidator:
         """Report validation issue."""
         pass
 
-__all__ = ["ValidationIssue", "IntegrationValidator"]
+
+@dataclass
+class DependencyGraph:
+    """Dependency graph for integration analysis."""
+    nodes: list = field(default_factory=list)
+    edges: list = field(default_factory=list)
+
+__all__ = ["ValidationSeverity", "ValidationIssue", "IntegrationStatus", "DependencyGraph", "IntegrationValidator"]

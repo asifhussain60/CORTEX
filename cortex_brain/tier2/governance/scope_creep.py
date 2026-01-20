@@ -7,6 +7,14 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass
+from enum import Enum
+
+
+class ScopeStatus(Enum):
+    """Scope status."""
+    WITHIN_SCOPE = "within_scope"
+    AT_LIMIT = "at_limit"
+    EXCEEDED = "exceeded"
 
 
 @dataclass
@@ -26,4 +34,4 @@ class ScopeManager:
         return current_scope <= self.max_scope
 
 
-__all__ = ["ScopeItem", "ScopeManager"]
+__all__ = ["ScopeStatus", "ScopeItem", "ScopeManager"]
