@@ -48,24 +48,65 @@ Final:     100% █████████████████████�
 
 ---
 
-## What's Working (36%)
+## What's Working (36% → 100% in 4 Days)
 
-✅ Infrastructure resilience (connections, circuit breakers, retry, graceful degradation)  
-✅ State management & concurrency (transactional, optimistic locking, lock-free registry)  
-✅ Fault tolerance & recovery (saga compensation, orphan cleanup, automatic repair)  
-✅ Production observability (JSON logging, Prometheus, distributed tracing, health checks)  
-✅ 10 completed phases with 658 passing tests
+### ✅ Currently Implemented (10 Phases, 551 Tests)
+
+| Phase | Focus | Tests | Status |
+|-------|-------|-------|--------|
+| **impl-governance-001** | Context-aware rule dispatch (28/29 rules) | 75 | ✅ |
+| **impl-intelligence-001** | Routing decision tracking | 12 | ✅ |
+| **impl-intelligence-002** | Duration baselines (p50/p95/p99) | 15 | ✅ |
+| **impl-intelligence-003** | Error pattern recognition | 15 | ✅ |
+| **impl-infra-001** | Resilience (pools, circuit breakers, retries) | 126 | ✅ |
+| **impl-state-002** | State mgmt & concurrency (transactional, locking) | 82 | ✅ |
+| **impl-recovery-003** | Fault tolerance (saga, orphan cleanup, crash recovery) | 127 | ✅ |
+| **impl-ops-004** | Observability (logging, metrics, tracing, health) | 137 | ✅ |
+| **consolidation-001** | Source consolidation (src/ → cortex/) | 460 | ✅ |
+
+**Production readiness contribution:** 36% of system ready for deployment
 
 ---
 
-## What's Blocking (4 Critical Issues)
+### 🟡 Blocking Issues (4 Critical, Fixed in Phase A/B)
 
-| Issue | Impact | Fix Timeline | Details |
-|-------|--------|--------------|---------|
-| **Tier duplication** | Breaks governance (cortex/brain + cortex_brain) | Phase A (1 day) | [See architecture overview](../02-architecture/0-overview.md) |
-| **MCP tools scattered** | No tool discovery/registry (14 tools, no categorization) | Phase B (2 days) | [See API reference](../03-api-reference/0-overview.md) |
-| **Hallucination prevention wrong location** | Not integrated into tier system (Python files vs YAML) | Phase A (1 day) | [See governance](../02-architecture/2-multi-tier-architecture.md) |
-| **cortex/brain duplicates cortex_brain** | Architectural confusion (35+ duplicate files) | Phase A (1 day) | [See remediation guide](../04-guides/advanced/0-remediation-phases.md) |
+| Issue | Impact | Phase | Timeline | Unblocks |
+|-------|--------|-------|----------|----------|
+| **Tier duplication** | Governance split across 2 locations (breaks precedence) | A | 1 day | arch-011, arch-025 |
+| **MCP tools not centralized** | No registry, no discovery, no governance | B | 2 days | arch-022 |
+| **Hallucination prevention wrong location** | Python files not integrated into tier system | A | 1 day | arch-011 |
+| **cortex/brain duplicates cortex_brain** | Multiple sources of truth (35+ duplicate files) | A | 1 day | All governance |
+
+**Timeline:** Execute Phase A → Phase B → Phase C (4 days total) to achieve 100% readiness
+
+---
+
+### 🔶 Ready for Implementation (21 Stub Phases)
+
+All design-complete with acceptance criteria + pre-written tests. Ready for TDD after Phase A/B:
+
+- **Governance (3):** Hardening, governance tools, complexity gate
+- **Intelligence (6):** Preferences, optimization, behavior, anomaly detection, complexity prediction
+- **Infrastructure (4):** Advanced networking, monitoring, security, caching  
+- **Knowledge (3):** Semantic search, knowledge graph, conflict resolution
+- **Orchestration (5):** Intent routing, continuation protocol, adaptive execution, domain orchestrators
+
+---
+
+## Production Readiness Timeline
+
+```
+Current:    36% ████████░░░░░░░░░░░░░░░░░░░░░░░░
+Phase A:    60% ██████████████░░░░░░░░░░░░░░░░░░  (1 day: Tier consolidation)
+Phase B:    95% ███████████████████████░░░░░░░░░  (2 days: MCP registry)
+Final:     100% ████████████████████████████████  (1 day: Verification)
+```
+
+| Phase | Work | Duration | Before | After | Unblocks |
+|-------|------|----------|--------|-------|----------|
+| **A** | Delete tier duplicates, consolidate governance | 1 day | 36% | 60% | 2 phases |
+| **B** | Create MCP registry, reorganize tools, implement logic | 2 days | 60% | 95% | 1 phase |
+| **C** | Verify all tests, update docs | 1 day | 95% | **100%** | **Ready for production** |
 
 ---
 

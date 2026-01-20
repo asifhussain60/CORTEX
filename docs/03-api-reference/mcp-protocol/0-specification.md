@@ -99,16 +99,151 @@ CORTEX implements the Model Context Protocol (MCP) v2024-11-05 specification for
 
 ### Implementation Files
 
-| File | Purpose |
-|------|---------|
-| `src/mcp/server_sdk.py` | Main MCP server implementation |
-| `src/mcp/decorator.py` | `@mcp_tool` decorator for tool registration |
-| `src/mcp/registry.py` | Tool registry and discovery |
-| `src/mcp/input_validator.py` | Parameter validation |
-| `src/mcp/error_handler.py` | Error response formatting |
-| `src/mcp/executor.py` | Async tool execution |
-| `src/mcp/compliance.py` | Protocol compliance verification |
-| `cortex/mcp/server.py` | Alternative server implementation |
+| File | Purpose | Status |
+|------|---------|--------|
+| `cortex/mcp/server.py` | Main MCP server (JSON-RPC processor, stdio handler) | ✅ Working |
+| `cortex/mcp/registry.py` | **NEW:** Tool registry with metadata + discovery | Phase B |
+| `cortex/mcp/tools/governance/` | 5 governance tools (query, validate, execute, analyze, report) | Stub → Phase 2 |
+| `cortex/mcp/tools/orchestration/` | 4 orchestration tools (status, monitor, optimize, diagnose) | Stub → Phase 2 |
+| `cortex/mcp/tools/knowledge/` | 3 knowledge tools (search, analyze, generate) | Stub → Phase 2 |
+| `cortex/mcp/tools/utility/` | 2 utility tools (echo, sample, transform) | Stub → Phase 2 |
+
+**Note:** As of 2026-01-20, all 14 tools are registered stub implementations (return mock data). Phase B (2 days) creates the registry. Phase 2 (3-4 days) implements real tool logic.
+
+---
+
+## MCP Tools Directory (14 Total)
+
+### Governance Tools (5)
+
+| Tool | ID | Description | Auth | Parameters |
+|------|----|----|------|-----------|
+| **Query Governance State** | `query-governance` | Query current governance rules and assignments | ✅ Required | `context`, `rule_id` (optional) |
+| **Validate Compliance** | `validate-compliance` | Check if action complies with governance rules | ✅ Required | `action`, `context` |
+| **Execute Governance Action** | `execute-governance` | Execute a governance-controlled operation | ✅ Required | `action`, `parameters` |
+| **Analyze Governance** | `analyze-governance` | Analyze effectiveness of governance rules | ✅ Required | `time_range`, `scope` |
+| **Generate Governance Report** | `report-governance` | Generate compliance and governance reports | ✅ Required | `report_type`, `date_range` |
+
+### Orchestration Tools (4)
+
+| Tool | ID | Description | Auth | Parameters |
+|------|----|----|------|-----------|
+| **Orchestrator Status** | `status-orchestrator` | Check status of running orchestrators | ❌ Optional | `orchestrator_id`, `include_logs` |
+| **Monitor Orchestration** | `monitor-orchestration` | Real-time orchestration metrics and health | ❌ Optional | `time_window`, `metric_types` |
+| **Optimize Orchestration** | `optimize-orchestration` | Get optimization suggestions for orchestration | ❌ Optional | `analysis_type`, `performance_goal` |
+| **Diagnose Issues** | `diagnose-issues` | Diagnose orchestration problems and failures | ❌ Optional | `orchestrator_id`, `log_level` |
+
+### Knowledge Tools (3)
+
+| Tool | ID | Description | Auth | Parameters |
+|------|----|----|------|-----------|
+| **Search Knowledge** | `search-knowledge` | Search the knowledge graph and domain content | ❌ Optional | `query`, `filters`, `limit` |
+| **Analyze Knowledge** | `analyze-knowledge` | Extract insights and analyze knowledge base | ❌ Optional | `domain`, `analysis_type` |
+| **Generate Knowledge** | `generate-knowledge` | Generate knowledge recommendations | ❌ Optional | `context`, `intent` |
+
+### Utility Tools (2)
+
+| Tool | ID | Description | Auth | Parameters |
+|------|----|----|------|-----------|
+| **Echo Test** | `echo-test` | Simple echo tool for connectivity testing | ❌ No | `message` |
+| **Transform Data** | `transform-data` | Transform data between formats | ❌ No | `input`, `format`, `target_format` |
+
+---
+
+## Tool Discovery
+
+### List Tools
+
+**Request:**
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "tools/list",
+  "params": {
+    "category": "governance"  // Optional: governance|orchestration|knowledge|utility
+  },
+  "id": 2
+}
+```
+
+**Response (All Tools):**
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "tools": {
+      "governance": [
+        "query-governance",
+        "validate-compliance", 
+        "execute-governance",
+        "analyze-governance",
+        "report-governance"
+      ],
+      "orchestration": [
+        "status-orchestrator",
+        "monitor-orchestration",
+        "optimize-orchestration",
+        "diagnose-issues"
+      ],
+      "knowledge": [
+        "search-knowledge",
+        "analyze-knowledge",
+        "generate-knowledge"
+      ],
+      "utility": [
+        "echo-test",
+        "transform-data"
+      ]
+    },
+    "total": 14
+  },
+  "id": 2
+}
+```
+
+### Get Tool Metadata
+
+**Request:**
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "tools/metadata",
+  "params": {
+    "tool_id": "query-governance"
+  },
+  "id": 3
+}
+```
+
+**Response:**
+```json
+{
+  "jsonrpc": "2.0",
+  "result": {
+    "id": "query-governance",
+    "name": "Query Governance State",
+    "category": "governance",
+    "description": "Query the current governance state and rule assignments",
+    "parameters": {
+      "context": {
+        "type": "string",
+        "description": "Governance context (e.g., 'conversation', 'domain', 'operation')",
+        "required": true
+      },
+      "rule_id": {
+        "type": "string",
+        "description": "Optional specific rule ID to query",
+        "required": false
+      }
+    },
+    "auth_required": true,
+    "version": "1.0.0"
+  },
+  "id": 3
+}
+```
+
+---
 
 ## Supported Methods
 
