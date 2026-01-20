@@ -214,6 +214,67 @@ class EdgeCaseHandler:
             "success_rate": handled / total if total > 0 else 0,
             "by_type": by_type
         }
+    
+    @staticmethod
+    def handle_empty_input(value: Any) -> bool:
+        """Check if input is empty (static method for testing).
+        
+        Args:
+            value: Value to check
+            
+        Returns:
+            True if value is empty
+        """
+        if value is None:
+            return True
+        if isinstance(value, str):
+            # Check for empty string or whitespace-only
+            return value.strip() == ""
+        if isinstance(value, (list, dict, tuple, set)) and len(value) == 0:
+            return True
+        return False
+    
+    @staticmethod
+    def handle_special_characters(text: str) -> bool:
+        """Check if text contains special characters.
+        
+        Args:
+            text: Text to check
+            
+        Returns:
+            True if special characters found
+        """
+        import re
+        pattern = r'[<>&\'"@#$%]'
+        return bool(re.search(pattern, text))
+    
+    @staticmethod
+    def handle_very_long_input(text: str, max_length: int = 10000) -> str:
+        """Truncate very long input.
+        
+        Args:
+            text: Text to truncate
+            max_length: Maximum length (default 10000)
+            
+        Returns:
+            Truncated text
+        """
+        if len(text) <= max_length:
+            return text
+        return text[:max_length]
+    
+    @staticmethod
+    def handle_unicode_text(text: str) -> str:
+        """Normalize unicode text.
+        
+        Args:
+            text: Text to normalize
+            
+        Returns:
+            Normalized text
+        """
+        import unicodedata
+        return unicodedata.normalize('NFKC', text)
 
 
 __all__ = ["EdgeCaseHandler", "EdgeCaseType", "EdgeCaseResult"]

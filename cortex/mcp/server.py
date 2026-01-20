@@ -31,18 +31,26 @@ except (ImportError, ModuleNotFoundError):
 @dataclass
 class ToolParameter:
     """
-    MCP Tool Parameter Definition.
+    MCP Tool Parameter Definition (compliant with MCP v2024-11-05).
     
     Attributes:
         name: Parameter name
         type: Parameter type (string, number, boolean, array, object)
         required: Whether parameter is required
         description: Parameter description
+        default: Default value if parameter is optional
+        enum: List of allowed values (for validation)
+        min_value: Minimum value for numeric types
+        max_value: Maximum value for numeric types
     """
     name: str
     type: str
     required: bool = True
     description: str = ""
+    default: Optional[Any] = None
+    enum: Optional[List[Any]] = None
+    min_value: Optional[float] = None
+    max_value: Optional[float] = None
 
 
 @dataclass

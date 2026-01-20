@@ -64,6 +64,37 @@ class ObservabilityInstrument:
         self.metrics: List[Metric] = []
         self.spans: List[Span] = []
         self.active_spans: Dict[str, Span] = {}
+        self.events: List[Dict[str, Any]] = []  # For record_event compatibility
+    
+    def record_event(
+        self,
+        event_type: str,
+        component: str,
+        details: Dict[str, Any]
+    ) -> None:
+        """Record an observability event (simplified API for testing).
+        
+        Args:
+            event_type: Type of event
+            component: Component name
+            details: Event details
+        """
+        event = {
+            "timestamp": datetime.now().isoformat(),
+            "type": event_type,
+            "component": component,
+            "details": details,
+        }
+        self.events.append(event)
+        logger.debug(f"Recorded event: {event_type} from {component}")
+    
+    def get_events(self) -> List[Dict[str, Any]]:
+        """Get recorded events.
+        
+        Returns:
+            List of event dictionaries
+        """
+        return self.events.copy()
     
     def record_metric(
         self,
