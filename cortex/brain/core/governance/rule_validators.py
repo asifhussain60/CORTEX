@@ -393,6 +393,56 @@ def validate_core_018_yaml_first(context: GovernanceContext) -> Optional[RuleVio
 # Remaining validators for CORE-019 through CORE-029
 # Return None (pass) - can be implemented as needed
 
+def validate_core_019_result_types(context: GovernanceContext) -> Optional[RuleViolation]:
+    """Validate Result monad usage for error handling"""
+    return None  # Requires AST analysis - future enhancement
+
+
+def validate_core_020_async_patterns(context: GovernanceContext) -> Optional[RuleViolation]:
+    """Validate async/await patterns"""
+    return None  # Requires AST analysis - future enhancement
+
+
+def validate_core_021_logging_standards(context: GovernanceContext) -> Optional[RuleViolation]:
+    """Validate logging standards"""
+    return None  # Requires code analysis - future enhancement
+
+
+def validate_core_023_version_control(context: GovernanceContext) -> Optional[RuleViolation]:
+    """Validate version control practices"""
+    return None  # Runtime enforcement - not static
+
+
+def validate_core_024_backward_compatibility(context: GovernanceContext) -> Optional[RuleViolation]:
+    """Validate backward compatibility"""
+    return None  # Requires API diff analysis - future enhancement
+
+
+def validate_core_025_security_practices(context: GovernanceContext) -> Optional[RuleViolation]:
+    """Validate security practices"""
+    return None  # Requires security scanner integration - future enhancement
+
+
+def validate_core_026_git_checkpoints(context: GovernanceContext) -> Optional[RuleViolation]:
+    """Validate git checkpoint commits"""
+    return None  # Runtime enforcement - not static
+
+
+def validate_core_027_audit_trail(context: GovernanceContext) -> Optional[RuleViolation]:
+    """Validate audit trail completeness"""
+    return None  # Runtime enforcement - not static
+
+
+def validate_core_029_dependency_management(context: GovernanceContext) -> Optional[RuleViolation]:
+    """Validate dependency management"""
+    return None  # Requires requirements.txt analysis - future enhancement
+
+
+def validate_core_030_response_headers(context: GovernanceContext) -> Optional[RuleViolation]:
+    """Validate API response headers"""
+    return None  # API-specific validation - future enhancement
+
+
 def validate_other_core_rules(
     rule_id: str,
     context: GovernanceContext
