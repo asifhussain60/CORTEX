@@ -7,6 +7,14 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass
+from enum import Enum
+
+
+class SLAComplianceStatus(Enum):
+    """SLA compliance status."""
+    COMPLIANT = "compliant"
+    AT_RISK = "at_risk"
+    NON_COMPLIANT = "non_compliant"
 
 
 @dataclass
@@ -18,4 +26,4 @@ class SLATracker:
         return duration_ms <= self.sla_threshold_ms
 
 
-__all__ = ["SLATracker"]
+__all__ = ["SLAComplianceStatus", "SLATracker"]

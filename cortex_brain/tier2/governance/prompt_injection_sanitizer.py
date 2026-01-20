@@ -10,6 +10,14 @@ from dataclasses import dataclass
 
 
 @dataclass
+class SanitizationResult:
+    """Sanitization result."""
+    sanitized_text: str
+    threats_found: int = 0
+    threats_removed: int = 0
+
+
+@dataclass
 class PromptInjectionSanitizer:
     """Sanitize prompt injections."""
     enabled: bool = True
@@ -18,4 +26,4 @@ class PromptInjectionSanitizer:
         return prompt
 
 
-__all__ = ["PromptInjectionSanitizer"]
+__all__ = ["SanitizationResult", "PromptInjectionSanitizer"]

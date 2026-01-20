@@ -18,4 +18,19 @@ class AlternativeRecommendation:
     rationale: str
 
 
-__all__ = ["AlternativeRecommendation"]
+@dataclass
+class ApprovalGateLogic:
+    """Approval gate logic."""
+    gate_id: str
+    conditions: list = None
+    
+    def __post_init__(self):
+        if self.conditions is None:
+            self.conditions = []
+    
+    def evaluate(self) -> bool:
+        """Evaluate approval gate."""
+        return True
+
+
+__all__ = ["AlternativeRecommendation", "ApprovalGateLogic"]

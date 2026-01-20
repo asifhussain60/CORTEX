@@ -10,6 +10,14 @@ from dataclasses import dataclass
 
 
 @dataclass
+class ScopeItem:
+    """Scope item."""
+    item_id: str
+    description: str
+    cost: float = 0.0
+
+
+@dataclass
 class ScopeManager:
     """Manage scope creep."""
     max_scope: int = 100
@@ -18,4 +26,4 @@ class ScopeManager:
         return current_scope <= self.max_scope
 
 
-__all__ = ["ScopeManager"]
+__all__ = ["ScopeItem", "ScopeManager"]

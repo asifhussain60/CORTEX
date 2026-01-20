@@ -10,6 +10,19 @@ from dataclasses import dataclass
 
 
 @dataclass
+class ToolDescription:
+    """Tool description."""
+    tool_id: str
+    name: str
+    description: str
+    parameters: list = None
+    
+    def __post_init__(self):
+        if self.parameters is None:
+            self.parameters = []
+
+
+@dataclass
 class ToolDescriptionValidator:
     """Validate tool descriptions."""
     strict_mode: bool = True
@@ -18,4 +31,4 @@ class ToolDescriptionValidator:
         return True
 
 
-__all__ = ["ToolDescriptionValidator"]
+__all__ = ["ToolDescription", "ToolDescriptionValidator"]

@@ -7,6 +7,17 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass
+from enum import Enum
+
+
+class PIIType(Enum):
+    """PII data types."""
+    EMAIL = "email"
+    PHONE = "phone"
+    SSN = "ssn"
+    CREDIT_CARD = "credit_card"
+    NAME = "name"
+    ADDRESS = "address"
 
 
 @dataclass
@@ -18,4 +29,4 @@ class PIIDetector:
         return []
 
 
-__all__ = ["PIIDetector"]
+__all__ = ["PIIType", "PIIDetector"]

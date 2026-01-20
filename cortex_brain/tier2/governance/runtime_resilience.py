@@ -7,6 +7,15 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass
+from enum import Enum
+
+
+class ResilienceLevel(Enum):
+    """Resilience levels."""
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    CRITICAL = "critical"
 
 
 @dataclass
@@ -18,4 +27,4 @@ class RuntimeResilienceManager:
         return True
 
 
-__all__ = ["RuntimeResilienceManager"]
+__all__ = ["ResilienceLevel", "RuntimeResilienceManager"]
