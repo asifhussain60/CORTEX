@@ -21,6 +21,16 @@ class FormatterType(Enum):
     HTML = "html"
 
 
+class ResponseFormat(Enum):
+    """Response format types (alias for FormatterType)."""
+
+    JSON = "json"
+    YAML = "yaml"
+    MARKDOWN = "markdown"
+    PLAIN_TEXT = "plain_text"
+    HTML = "html"
+
+
 @dataclass
 class FormattedResponse:
     """Formatted response output.
@@ -134,4 +144,5 @@ __all__ = [
     "LENSResponseFormatter",
     "FormattedResponse",
     "FormatterType",
+    "ResponseFormat",
 ]

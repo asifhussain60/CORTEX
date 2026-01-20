@@ -81,6 +81,28 @@ class UserCancelledEvent:
             self.timestamp = datetime.now()
 
 
+@dataclass
+class MaxTurnsReachedEvent:
+    """Event when max turns reached.
+
+    Attributes:
+        event_id: Unique event identifier.
+        max_turns: Maximum turns allowed.
+        current_turn: Current turn number.
+        timestamp: When event occurred.
+    """
+
+    event_id: str
+    max_turns: int
+    current_turn: int
+    timestamp: datetime = None
+
+    def __post_init__(self) -> None:
+        """Initialize defaults."""
+        if self.timestamp is None:
+            self.timestamp = datetime.now()
+
+
 
 @dataclass
 class PhaseCompletedEvent:
@@ -205,6 +227,7 @@ __all__ = [
     "TerminalEvent",
     "PhaseCompletedEvent",
     "UserCancelledEvent",
+    "MaxTurnsReachedEvent",
     "EventType",
     "PhaseType",
     "EventHandler",

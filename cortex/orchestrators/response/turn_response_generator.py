@@ -29,6 +29,16 @@ class ResponseMode(Enum):
     EXPERT = "expert"
 
 
+class ResponseTone(Enum):
+    """Response tones."""
+
+    FORMAL = "formal"
+    CASUAL = "casual"
+    TECHNICAL = "technical"
+    FRIENDLY = "friendly"
+    PROFESSIONAL = "professional"
+
+
 @dataclass
 class ResponseContent:
     """Response content container.
@@ -111,4 +121,4 @@ class TurnResponseGenerator:
 # Alias for backward compatibility
 ResponseGenerator = TurnResponseGenerator
 
-__all__ = ["TurnResponseGenerator", "ResponseGenerator", "ResponseContent", "ResponseFormat", "ResponseMode"]
+__all__ = ["TurnResponseGenerator", "ResponseGenerator", "ResponseContent", "ResponseFormat", "ResponseMode", "ResponseTone"]
