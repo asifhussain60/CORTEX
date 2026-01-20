@@ -11,7 +11,7 @@ AC-INFRA-001-03: Adaptive circuit breaker with failure rate threshold
 import logging
 import threading
 import time
-from typing import Any, Callable, Optional, TypeVar, Dict
+from typing import Any, Callable, Optional, TypeVar, Dict, Union
 from enum import Enum
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
@@ -41,7 +41,7 @@ class CircuitBreakerConfig:
     Supports both legacy (count-based) and new (rate-based) thresholds.
     """
     # Legacy parameters (AC-NFR-002-03)
-    failure_threshold: int | float = 5          # Failures before opening (int) or failure rate (float 0-1)
+    failure_threshold: Union[int, float] = 5    # Failures before opening (int) or failure rate (float 0-1)
     success_threshold: int = 2                  # Successes in half-open before closing (legacy)
     timeout_seconds: float = 60.0               # Time before trying again
     monitored_exceptions: tuple = (Exception,)
@@ -141,7 +141,7 @@ class CircuitBreaker:
         self._success_count = 0
         self._failure_count = 0
         self._rejected_count = 0
-        self._opened_at: float | None = None
+        self._opened_at: Optional[float] = None
         self._current_open_duration = self.config.open_duration_seconds
         self._half_open_attempts = 0
         self._consecutive_successes = 0
@@ -157,7 +157,7 @@ class CircuitBreaker:
         fn: Callable[..., T],
         *args,
         **kwargs
-    ) -> T | CircuitBreakerResult:
+    ) -> Union[T, 'CircuitBreakerResult']:
         """
         Execute function through circuit breaker.
         
@@ -398,7 +398,7 @@ class CircuitBreaker:
         """Get current circuit state."""
         return self._state if hasattr(self, '_state') else self.metrics.current_state
     
-    def get_metrics(self) -> Dict[str, Any] | CircuitBreakerMetrics:
+    def get_metrics(self) -> Union[Dict[str, Any], 'CircuitBreakerMetrics']:
         """
         Get circuit breaker metrics.
         
