@@ -202,7 +202,35 @@ class Err(Generic[E], metaclass=_ResultMeta):
         return cls
 
 
-# Type alias for Result - Union of Ok or Err
-Result = Union[Ok[T], Err[E]]
 
-__all__ = ["Result", "Ok", "Err"]
+# Create a ResultType that supports subscripting
+class _ResultType(metaclass=_ResultMeta):
+    """Type that allows Result[T] syntax for type hints."""
+    
+    def __getitem__(self, item: Any) -> type:
+        """Allow Result[T] subscripting.
+        
+        Args:
+            item: Type parameter.
+        
+        Returns:
+            Self for chaining (type hints only).
+        """
+        return self
+    
+    def __instancecheck__(self, instance: Any) -> bool:
+        """Check if instance is Ok or Err."""
+        return isinstance(instance, (Ok, Err))
+    
+    def __subclasscheck__(self, subclass: Any) -> bool:
+        """Check if subclass is Ok or Err."""
+        return subclass in (Ok, Err)
+
+
+# Export Result as a subscriptable type
+Result = _ResultType()
+
+# For isinstance checks, make a union available
+ResultUnion = Union[Ok[T], Err[E]]
+
+__all__ = ["Result", "ResultUnion", "Ok", "Err"]
