@@ -7,7 +7,7 @@ Author: CORTEX Framework
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
-from typing import Generic, TypeVar, Union, Callable, Optional, Any
+from typing import Generic, TypeVar, Union, Callable, Optional, Any, TYPE_CHECKING
 
 T = TypeVar("T")
 E = TypeVar("E")
@@ -204,33 +204,46 @@ class Err(Generic[E], metaclass=_ResultMeta):
 
 
 # Create a ResultType that supports subscripting
-class _ResultType(metaclass=_ResultMeta):
-    """Type that allows Result[T] syntax for type hints."""
+class _ResultType(type):
+    """Metaclass that allows Result[T] syntax for type hints."""
     
-    def __getitem__(self, item: Any) -> type:
+    def __getitem__(cls, item: Any) -> type:
         """Allow Result[T] subscripting.
         
         Args:
             item: Type parameter.
         
         Returns:
-            Self for chaining (type hints only).
+            Union type for type checking.
         """
-        return self
+        if isinstance(item, tuple):
+            # Result[T, E] syntax
+            return Union[Ok[item[0]], Err[item[1] if len(item) > 1 else Any]]
+        else:
+            # Result[T] syntax - error type defaults to Any
+            return Union[Ok[item], Err[Any]]
     
-    def __instancecheck__(self, instance: Any) -> bool:
+    def __instancecheck__(cls, instance: Any) -> bool:
         """Check if instance is Ok or Err."""
         return isinstance(instance, (Ok, Err))
+
+
+class Result(metaclass=_ResultType):
+    """Result type for type hints.
     
-    def __subclasscheck__(self, subclass: Any) -> bool:
-        """Check if subclass is Ok or Err."""
-        return subclass in (Ok, Err)
+    Use Result[T] or Result[T, E] in type annotations.
+    At runtime, use Ok(value) or Err(error).
+    
+    Example:
+        def divide(a: int, b: int) -> Result[float, str]:
+            if b == 0:
+                return Err("Division by zero")
+            return Ok(a / b)
+    """
+    pass
 
 
-# Export Result as a subscriptable type
-Result = _ResultType()
-
-# For isinstance checks, make a union available
+# For isinstance checks and backwards compatibility
 ResultUnion = Union[Ok[T], Err[E]]
 
 __all__ = ["Result", "ResultUnion", "Ok", "Err"]
