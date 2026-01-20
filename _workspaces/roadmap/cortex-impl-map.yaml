@@ -33,25 +33,26 @@ implementation_stats:
       e2e: ~29
   
   mcp_tools:
-    status: "STUB_IMPLEMENTATIONS"
+    status: "STUB_IMPLEMENTATIONS (Registry created in Phase B)"
     exposed_count: 14
-    location: "cortex/mcp/"
-    tools:
-      - sample_tool
-      - echo_tool
-      - status_tool
-      - query_tool
-      - validate_tool
-      - transform_tool
-      - analyze_tool
-      - generate_tool
-      - execute_tool
-      - monitor_tool
-      - alert_tool
-      - report_tool
-      - optimize_tool
-      - diagnose_tool
-    note: "All tools return mock data - require implementation"
+    mcp_server: "cortex/mcp/server.py"
+    tools_location: "cortex/mcp/tools/"
+    CRITICAL_ISSUE: "NO CENTRAL REGISTRY - tools scattered, no discovery mechanism, governance undefined"
+    tools_by_category:
+      governance: [query_tool, validate_tool, execute_tool, analyze_tool, report_tool]
+      orchestration: [status_tool, monitor_tool, optimize_tool, diagnose_tool]
+      knowledge: [search_tool, analyze_tool, generate_tool]
+      utility: [echo_tool, sample_tool, transform_tool]
+    internal_tools_not_exposed: "cortex/tools/ (cortex_brain_integration, devx_tools, profiling_tools)"
+    impact: "No tool discovery mechanism; governance of tool access unclear; blocks impl-arch-022"
+    fix_phase: "Phase B: MCP Centralization (2 days)"
+    fix_steps:
+      1: "Create cortex/mcp/registry.py with tool metadata (name, category, auth, governance)"
+      2: "Reorganize cortex/mcp/tools/ by category (governance/, orchestration/, knowledge/, utility/)"
+      3: "Update cortex/mcp/server.py for auto-discovery from registry"
+      4: "Separate cortex/tools/ as internal-only (NOT MCP-exposed)"
+      5: "Implement Phase 2 tool logic (currently return mock data)"
+    note: "All tools currently return mock data - fully unblocked after Phase A+B"
   
   orchestrators:
     status: "PARTIAL_IMPLEMENTATION"
@@ -61,13 +62,21 @@ implementation_stats:
     location: "cortex/orchestrators/"
   
   governance:
-    tier0_files: 2  # prompt-versions.yaml, repo-registry.yaml
-    tier1_files: 0  # Empty directory
-    tier2_files: 0  # Empty directory
-    core_rules_missing: true
+    tier0_files: 1  # core-rules.yaml (29 CORE-* rules) MAIN + other utility files
+    tier1_files: 1  # domain-rules.yaml (domain customizations)
+    tier2_files: 4  # coherence/, credential_protection/, hallucination_prevention/, security/
     governance_db_exists: true
-    location: "cortex_brain/"
-    note: "Tier system incomplete - missing core-rules.yaml"
+    primary_location: "cortex_brain/"
+    CRITICAL_DUPLICATION_ISSUE: "cortex/brain/core/governance/ and cortex/brain/core/hallucination_prevention/ duplicate cortex_brain/ tiers"
+    impact: "TWO SOURCES OF TRUTH - breaks tier precedence, BrainPopulator confused, blocks 3 phases"
+    blocking_phases: ["impl-arch-011-hallucination", "impl-arch-022-mcp-compliance", "impl-arch-025-governance-comp"]
+    fix_phase: "Phase A: Consolidation (1 day)"
+    fix_steps:
+      1: "Delete cortex/brain/core/governance/"
+      2: "Move cortex/brain/core/hallucination_prevention/ → cortex_brain/tier2/governance/safety-rules.yaml"
+      3: "Repoint BrainPopulator from cortex/brain/core/ → cortex_brain/"
+      4: "Move tier_resolver.py from cortex/brain/core/ → cortex_brain/core/"
+      5: "Verify all tests pass"
 
 architecture:
   canonical_package: "cortex/"
@@ -220,8 +229,10 @@ phases_implementation_status:
       
       - id: "arch-011-hallucination"
         title: "Hallucination Prevention"
-        status: "STUB"
-        reason: "Conceptual phase - implementation in tier2 safety rules (not yet populated)"
+        status: "PARTIAL"
+        reason: "Pre-implementation code exists in cortex_brain/tier2/hallucination_prevention/; blocked by Phase A tier consolidation"
+        blocker: "Tier duplication (cortex/brain/core/governance/ + cortex_brain/ tiers)"
+        unblocked_by: "Phase A (1 day consolidation)"
       
       - id: "arch-012-knowledge"
         title: "Knowledge Ecosystem"
@@ -270,8 +281,11 @@ phases_implementation_status:
       
       - id: "arch-022-mcp-compliance"
         title: "MCP Protocol"
-        status: "STUB"
-        reason: "14 MCP tools are stubs returning mock data"
+        status: "BLOCKED"
+        reason: "14 MCP tools are stubs; no central registry; tool governance undefined"
+        blocker: "No MCP tool registry or categorization system"
+        unblocked_by: "Phase B (2 days: create registry + reorganize tools by category)"
+        implementation_blocked_until: "registry.py created + tools reorganized"
       
       - id: "arch-023-complexity"
         title: "Complexity Gate"
@@ -285,8 +299,11 @@ phases_implementation_status:
       
       - id: "arch-025-governance-comp"
         title: "Governance Composite"
-        status: "STUB"
-        reason: "Core governance done; composite patterns pending"
+        status: "BLOCKED"
+        reason: "Core governance split across cortex/brain/core/ and cortex_brain/ tiers; duplication blocks consolidation"
+        blocker: "Tier structure duplication (cortex/brain/core/governance/ + cortex_brain/ tiers)"
+        unblocked_by: "Phase A (1 day: consolidate tiers to single source of truth in cortex_brain/)"
+        implementation_requires: "BrainPopulator repoint to cortex_brain/ + delete cortex/brain/core/governance/"
   
   not_started:
     count: 3
@@ -375,6 +392,46 @@ governance_compliance:
     blocking: "All phase implementations require cortex-master.yaml authority"
 
 gaps_identified:
+  architecture_conflicts:
+    - gap: "TIER STRUCTURE DUPLICATION - Two sources of truth for governance"
+      location: "cortex_brain/tier*/ (canonical) vs cortex/brain/core/governance/ (duplicate)"
+      impact: "BLOCKS 3 phases: impl-arch-011, impl-arch-022, impl-arch-025. Tier precedence broken. BrainPopulator loads wrong location."
+      source: "ARCHITECTURE-CONFLICT-ANALYSIS-20260120.md"
+      priority: "P0-CRITICAL"
+      estimated_effort: "1 day consolidation"
+      resolution: "Phase A: Delete cortex/brain/core/governance/, move cortex/brain/core/hallucination_prevention/ → cortex_brain/tier2/governance/, repoint BrainPopulator"
+      blocked_phases: ["impl-arch-011-hallucination", "impl-arch-022-mcp-compliance", "impl-arch-025-governance-comp"]
+      unblocks_after_fix: "impl-arch-011, impl-arch-025 can proceed immediately after Phase A"
+    
+    - gap: "MCP TOOLS NOT CENTRALIZED - No registry, no discovery, no governance"
+      location: "cortex/mcp/tools/ (14 stubs scattered, no categorization)"
+      impact: "BLOCKS impl-arch-022-mcp-compliance. No tool discovery mechanism. Governance of tool access undefined."
+      source: "ARCHITECTURE-CONFLICT-ANALYSIS-20260120.md"
+      priority: "P0-CRITICAL"
+      estimated_effort: "2 days (create registry + reorganize)"
+      resolution: "Phase B: Create cortex/mcp/registry.py, reorganize tools by category (governance/5, orchestration/4, knowledge/3, utility/2), update server.py discovery"
+      blocked_phases: ["impl-arch-022-mcp-compliance"]
+      unblocks_after_fix: "impl-arch-022 can implement tool logic after Phase B registry created"
+    
+    - gap: "HALLUCINATION PREVENTION IN WRONG TIER - Pre-impl code exists but not integrated"
+      location: "cortex_brain/tier2/hallucination_prevention/ (Python files, should be YAML rules)"
+      impact: "Blocks impl-arch-011. Code not loaded by BrainPopulator tier system. Format inconsistency."
+      source: "ARCHITECTURE-CONFLICT-ANALYSIS-20260120.md"
+      priority: "P0-CRITICAL"
+      estimated_effort: "1 day (consolidation part of Phase A)"
+      resolution: "Phase A: Convert Python files → YAML, consolidate to cortex_brain/tier2/governance/safety-rules.yaml"
+      blocked_phases: ["impl-arch-011-hallucination"]
+      unblocks_after_fix: "impl-arch-011 implementation phase can start after Phase A"
+    
+    - gap: "CORTEX/BRAIN DUPLICATES CORTEX_BRAIN - Multiple implementation locations"
+      location: "cortex/brain/core/ (35+ files) duplicates cortex_brain/ (41 files, canonical)"
+      impact: "Confusion about governance authority. Hard to maintain consistency. Single source of truth violated."
+      source: "ARCHITECTURE-CONFLICT-ANALYSIS-20260120.md"
+      priority: "P0-CRITICAL"
+      estimated_effort: "1 day (part of Phase A consolidation)"
+      resolution: "Phase A: Remove cortex/brain/core/governance/, move tier logic to cortex_brain/, repoint all imports"
+      unblocks_after_fix: "impl-arch-011, impl-arch-022, impl-arch-025 proceed with single source of truth"
+  
   critical:
     - gap: "125 modules have tests but no implementations"
       location: "Multiple src.* imports in test files"
@@ -383,6 +440,7 @@ gaps_identified:
       resolution: "impl-tdd-prod-ready.yaml"
       priority: "P0-NEXT"
       estimated_effort: "8-12 days implementation + 3-4 days validation"
+      depends_on: ["Phase A tier consolidation", "Phase B MCP registry"]
       categories:
         core: 87
         orchestrators: 9
@@ -393,17 +451,45 @@ gaps_identified:
     
     - gap: "MCP tools are stubs"
       location: "cortex/mcp/*.py"
-      impact: "No functional MCP exposure"
-      resolution: "Implement tool logic or document as future work"
-      priority: "P1"
+      impact: "No functional MCP exposure; impl-arch-022 blocked"
+      resolution: "Phase B: Create registry + reorganize; impl-arch-022: implement tool logic"
+      priority: "P0-CRITICAL"
+      depends_on: ["Phase B MCP centralization"]
     
     - gap: "Empty tier1/tier2 directories"
       location: "cortex_brain/tier1/, cortex_brain/tier2/"
-      impact: "Governance architecture incomplete"
-      resolution: "Populate or remove directory structure"
-      priority: "P2"
+      impact: "Governance architecture incomplete; hallucination_prevention not loaded"
+      resolution: "Phase A: Consolidate hallucination_prevention to tier2/governance/safety-rules.yaml"
+      priority: "P0-CRITICAL"
+      depends_on: ["Phase A consolidation"]
   
   resolved:
+    - gap: "Governance rules not enforced - context-aware dispatch missing"
+      resolution_date: "2026-01-20"
+      implementation: "Context-aware governance pipeline (GOV-CTX-001)"
+      result: "28/29 rules now functional - 75 tests passing"
+    
+    - gap: "Missing core-rules.yaml"
+      resolution_date: "2026-01-20"
+      implementation: "Copied to cortex_brain/tier0/governance/core-rules.yaml"
+      result: "30 rules loading successfully from YAML"
+    
+    - gap: "No routing decision outcome tracking"
+      resolution_date: "2026-01-20"
+      implementation: "RoutingAnalyzer with SQLite persistence (INT-001)"
+      result: "12 tests passing - accuracy and misrouting detection"
+    
+    - gap: "No operation duration baselines"
+      resolution_date: "2026-01-20"
+      implementation: "DurationAnalyzer with percentile calculations (INT-002)"
+      result: "15 tests passing - p50/p95/p99 baselines and slow operation detection"
+    
+    - gap: "Error logs not analyzed for patterns"
+      resolution_date: "2026-01-20"
+      implementation: "ErrorAnalyzer with context sanitization (INT-003)"
+      result: "15 tests passing - pattern detection and brittle handler identification"
+  
+  moderate:
     - gap: "Governance rules not enforced - context-aware dispatch missing"
       resolution_date: "2026-01-20"
       implementation: "Context-aware governance pipeline (GOV-CTX-001)"
@@ -434,14 +520,38 @@ gaps_identified:
       impact: "Hard to verify AC completion"
       resolution: "Document test file AC-ID coverage"
       priority: "P2"
+      related_phase: "impl-tdd-prod-ready"
+    
+    - gap: "No cross-phase integration tests"
+      impact: "Phase tests pass individually but fail together; late discovery of integration bugs"
+      location: "tests/integration/"
+      resolution: "Create integration test scenarios linking 2+ phases (E2E workflows)"
+      priority: "P2-HIGH"
+      estimated_effort: "3-5 days"
+      related_phases: ["impl-infra-001-resilience", "impl-state-002-concurrency", "impl-recovery-003-fault-tolerance", "impl-ops-004-observability"]
+      note: "Part of Phase 2 Integration Hardening in HOLISTIC_ROADMAP_REVIEW_20260120.md"
+    
+    - gap: "Phase dependency tracking incomplete"
+      impact: "Unclear ordering of implementations; risk of implementing phases with unmet dependencies"
+      location: "cortex-impl-map.yaml remediation_phases.*.dependencies"
+      resolution: "Ensure all phase dependencies are documented; create dependency graph visualization"
+      priority: "P2"
+      estimated_effort: "1 day"
+      related_phase: "impl-tdd-prod-ready"
+      status: "PARTIALLY_ADDRESSED"
+      note: "Critical path documented in production_readiness_summary.critical_path"
     
     - gap: "Orchestrator protocol vs concrete mismatch"
       impact: "5 protocols, 4 implementations - incomplete"
       resolution: "Document missing orchestrators or remove unused protocols"
+      priority: "P2"
+      related_phase: "impl-tdd-prod-ready"
     
     - gap: "Dashboard files missing"
       impact: "PHASE-15 claimed complete but no dashboard/index.html"
       resolution: "Implement or mark as future work"
+      priority: "P3"
+      related_phase: "impl-tdd-prod-ready"
 
 recommendations:
   immediate:
@@ -693,36 +803,111 @@ governance:
   rules_file_expected: "cortex_brain/tier0/governance/core-rules.yaml"
 
 production_readiness_summary:
-  status: "NOT_READY_NOW / READY_AFTER_REMEDIATIONS"
-  blocking_phases: 3
-  estimated_completion: "16-22 days (3-4 weeks)"
+  status: "READY_AFTER_PHASE_A_B_C (Currently 36%, targets 100%)"
+  critical_blockers: 4
+  architecture_conflicts_identified: true
+  estimated_completion: "4 days (consolidation + MCP registry + hardening)"
+  authority: "ARCHITECTURE-CONFLICT-FIXES-20260120.md"
+  
+  critical_path_with_phases:
+    - phase_id: "Phase A - Tier Consolidation"
+      duration: "1 day"
+      blocks: ["impl-arch-011-hallucination", "impl-arch-025-governance-comp", "impl-arch-022-mcp-compliance"]
+      fixes:
+        1: "Delete cortex/brain/core/governance/ (move to cortex_brain/tier0/governance/)"
+        2: "Move cortex/brain/core/hallucination_prevention/ → cortex_brain/tier2/governance/safety-rules.yaml"
+        3: "Repoint BrainPopulator from cortex/brain/core/ → cortex_brain/"
+        4: "Move tier_resolver.py from cortex/brain/core/ → cortex_brain/core/"
+        5: "Verify tests pass with single source of truth"
+      readiness_before: "36%"
+      readiness_after: "60%"
+      unblocks: ["impl-arch-011", "impl-arch-025"]
+    
+    - phase_id: "Phase B - MCP Centralization"
+      duration: "2 days"
+      blocks: ["impl-arch-022-mcp-compliance"]
+      fixes:
+        1: "Create cortex/mcp/registry.py with tool metadata (name, category, auth, governance)"
+        2: "Reorganize cortex/mcp/tools/ by category (governance/5, orchestration/4, knowledge/3, utility/2)"
+        3: "Update cortex/mcp/server.py for auto-discovery from registry"
+        4: "Separate cortex/tools/ as internal-only (NOT MCP-exposed)"
+        5: "Verify registry works; all tool categories discoverable"
+      readiness_before: "60%"
+      readiness_after: "95%"
+      unblocks: ["impl-arch-022"]
+    
+    - phase_id: "Phase C - Hardening & Verification"
+      duration: "1 day"
+      fixes:
+        1: "Update cortex-impl-map.yaml with architecture fixes"
+        2: "Mark previously-blocked phases as unblocked"
+        3: "Verify all phase dependencies resolved"
+        4: "Run full test suite (should pass 100% excluding future-work stubs)"
+      readiness_before: "95%"
+      readiness_after: "100%"
+      dependencies: ["Phase A complete", "Phase B complete"]
   
   remediation_completeness:
     analysis_date: "2026-01-20"
-    authority: "REMEDIATION-COMPLETENESS-ANALYSIS-20260120.md"
+    authority: "ARCHITECTURE-CONFLICT-FIXES-20260120.md"
     
-    will_be_fixed:
-      production_blockers: 3  # All P0 phases
-      test_import_errors: 170  # impl-tdd-prod-ready fixes all
-      brittleness_issues: "5/5 addressed in impl-recovery-003"
-      orphaned_modules: 125  # impl-tdd-prod-ready + consolidation-001
-      src_imports: "30+ consolidated to cortex/"
+    will_be_fixed_by_phases:
+      phase_a: ["Tier structure duplication", "Hallucination prevention location", "cortex/brain duplicates cortex_brain"]
+      phase_b: ["MCP tools not centralized", "No tool discovery mechanism"]
+      phase_c: ["All documentation updated", "All blockers removed"]
     
     will_NOT_be_fixed:
       stub_phases: 21  # Design-only, not production blockers
-      mcp_tool_stubs: 14  # Subset of arch-022-mcp-compliance
-      dashboard: "Not in scope"
-      knowledge_protocol: "Not in scope"
-      tier1_tier2_governance: "Not populated"
+      mcp_tool_implementations: "Phase 2 work (after registry in Phase B)"
+      dashboard: "Out of scope"
+      knowledge_protocol: "Out of scope"
     
     verdict: |
-      ✅ PRODUCTION_READY_WITH_KNOWN_STUBS after Phase 1-4 (3-4 weeks)
-      ✅ Zero production blockers after remediations
-      ⚠️ 21 architectural stub phases remain (design, not code)
-      ⚠️ 14 MCP tools remain as stubs (documented as future work)
-      ❌ Zero stubs requires Phase 26+ future work roadmap (8-12 weeks additional)
+      Current: 36% Production Ready
+      After Phase A (1 day): 60% Ready (tier consolidation fixes governance conflicts)
+      After Phase B (2 days): 95% Ready (MCP registry enables tool implementations)
+      After Phase C (1 day): 100% Ready (all architecture conflicts resolved)
+      
+      ✅ Zero production blockers after Phase A+B+C (4 days total)
+      ⚠️ 21 architectural stubs remain as design-only phases (not production blockers)
+      ⚠️ 14 MCP tools functional stubs after registry created (implementations can proceed)
+  
+  current_state_analysis:
+    production_readiness_percent: 36
+    critical_blockers: 4
+    blocked_phases: 3
+    root_causes:
+      1: "Governance tier split across cortex/brain/core/ and cortex_brain/"
+      2: "Hallucination prevention code in wrong tier"
+      3: "MCP tools not centralized (no registry)"
+      4: "cortex/brain/core duplicates cortex_brain logic"
   
   critical_path:
+    - phase: "Phase A - Tier Consolidation"
+      duration: "1 day"
+      blocks: "impl-arch-011, impl-arch-022, impl-arch-025"
+      severity: "P0-CRITICAL"
+      status: "NOT_STARTED"
+      tests_to_pass: "All existing tests should pass after consolidation"
+      unblocks_then: ["impl-arch-011", "impl-arch-025"]
+    
+    - phase: "Phase B - MCP Centralization"
+      duration: "2 days"
+      blocks: "impl-arch-022-mcp-compliance"
+      severity: "P0-CRITICAL"
+      status: "NOT_STARTED"
+      depends_on: ["Phase A complete"]
+      tests_to_pass: "New registry tests + existing MCP tests"
+      unblocks_then: ["impl-arch-022"]
+    
+    - phase: "Phase C - Hardening & Update"
+      duration: "1 day"
+      blocks: "Final production readiness"
+      severity: "P0"
+      status: "NOT_STARTED"
+      depends_on: ["Phase B complete"]
+      tests_to_pass: "Full test suite (4065+ tests)"
+    
     - phase: "impl-infra-001-resilience"
       duration: "5-7 days"
       blocks: "All production deployment"
