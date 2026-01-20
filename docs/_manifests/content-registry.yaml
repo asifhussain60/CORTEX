@@ -1,0 +1,379 @@
+---
+# CORTEX Documentation Content Registry
+# Purpose: Prevent duplicates, track changes, enable idempotent operations
+# Authority: Single source of truth for content hashing and consolidation
+# Updated: 2026-01-20
+# Version: 1.0.0
+
+# Global Configuration
+config:
+  purpose: "Duplicate detection, content tracking, change detection"
+  update_frequency: "After each migration operation"
+  validation_enabled: true
+  archive_tracking: true
+
+# Content Topics & File Locations (by hash)
+content_topics:
+  # Architecture Documentation
+  system_architecture_overview:
+    primary_file: "docs/02-architecture/0-overview.md"
+    status: "planned"
+    hash: null
+    source_files: []
+    created: null
+    last_updated: null
+    audience: ["Architect", "Developer"]
+    notes: "Consolidates ARCHITECTURE-MAP.md + cortex-master-prompt-v3.md"
+
+  orchestration_engine:
+    primary_file: "docs/02-architecture/3-orchestration-engine.md"
+    status: "planned"
+    hash: null
+    source_files: []
+    created: null
+    last_updated: null
+    audience: ["Developer", "Architect"]
+    notes: "New doc, sourced from PHASE-21+ phase reports"
+
+  multi_tier_architecture:
+    primary_file: "docs/02-architecture/2-multi-tier-architecture.md"
+    status: "planned"
+    hash: null
+    source_files: []
+    created: null
+    last_updated: null
+    audience: ["Architect"]
+    notes: "Tier 0-3 governance & execution layers"
+
+  resilience_patterns:
+    primary_file: "docs/02-architecture/5-resilience-patterns.md"
+    status: "planned"
+    hash: null
+    source_files: []
+    created: null
+    last_updated: null
+    audience: ["Developer", "Architect"]
+    notes: "Circuit breakers, partial functionality mode, graceful degradation"
+
+  security_governance:
+    primary_file: "docs/02-architecture/6-security-governance.md"
+    status: "planned"
+    hash: null
+    source_files: []
+    created: null
+    last_updated: null
+    audience: ["Architect", "Operator"]
+    notes: "GDPR/HIPAA/SOC2 compliance, audit trails, encryption"
+
+  # API Documentation
+  rest_api_guide:
+    primary_file: "docs/03-api-reference/rest-api/0-guide.md"
+    status: "planned"
+    hash: null
+    source_files: ["DEPLOYMENT-API-REFERENCE.md"]
+    created: null
+    last_updated: null
+    audience: ["Developer"]
+    notes: "Consolidates multiple deployment API docs"
+
+  mcp_protocol_spec:
+    primary_file: "docs/03-api-reference/mcp-protocol/0-specification.md"
+    status: "planned"
+    hash: null
+    source_files: []
+    created: null
+    last_updated: null
+    audience: ["Developer"]
+    notes: "MCP protocol specification & tools"
+
+  cli_reference:
+    primary_file: "docs/03-api-reference/cli/0-guide.md"
+    status: "planned"
+    hash: null
+    source_files: []
+    created: null
+    last_updated: null
+    audience: ["Developer", "Operator"]
+    notes: "CLI command reference"
+
+  # Integration Guides
+  custom_orchestrator_development:
+    primary_file: "docs/04-guides/integration/1-developing-custom-orchestrators.md"
+    status: "planned"
+    hash: null
+    source_files: []
+    created: null
+    last_updated: null
+    audience: ["Developer"]
+    notes: "How to build custom orchestrators"
+
+  api_integration_patterns:
+    primary_file: "docs/04-guides/integration/2-integrating-with-apis.md"
+    status: "planned"
+    hash: null
+    source_files: ["DEPLOYMENT-API-REFERENCE.md", "DEPLOYMENT-TROUBLESHOOTING.md"]
+    created: null
+    last_updated: null
+    audience: ["Developer"]
+    notes: "API integration patterns and examples"
+
+  domain_knowledge_integration:
+    primary_file: "docs/04-guides/integration/3-domain-knowledge-integration.md"
+    status: "planned"
+    hash: null
+    source_files: []
+    created: null
+    last_updated: null
+    audience: ["Developer", "Architect"]
+    notes: "Domain Brain integration patterns"
+
+  # Deployment Guides
+  local_development:
+    primary_file: "docs/04-guides/deployment/1-local-development.md"
+    status: "planned"
+    hash: null
+    source_files: []
+    created: null
+    last_updated: null
+    audience: ["Developer"]
+    notes: "Local development setup"
+
+  production_deployment:
+    primary_file: "docs/04-guides/deployment/3-production-deployment.md"
+    status: "planned"
+    hash: null
+    source_files: ["DEPLOYMENT-SETUP-GUIDE.md", "DEPLOYMENT-TO-MAIN-20260119.md"]
+    created: null
+    last_updated: null
+    audience: ["Operator", "Developer"]
+    notes: "Production environment setup and deployment"
+
+  azure_deployment:
+    primary_file: "docs/04-guides/deployment/4-azure-deployment.md"
+    status: "planned"
+    hash: null
+    source_files: ["DEPLOYMENT-PHASE-REDESIGN-20260119.md"]
+    created: null
+    last_updated: null
+    audience: ["Operator"]
+    notes: "Azure-specific deployment configuration"
+
+  # Operations Guides
+  monitoring_setup:
+    primary_file: "docs/04-guides/operations/1-monitoring.md"
+    status: "planned"
+    hash: null
+    source_files: ["INTEGRATION-TEST-EXECUTIVE-SUMMARY-20260119.md"]
+    created: null
+    last_updated: null
+    audience: ["Operator", "Developer"]
+    notes: "Application Insights and monitoring setup"
+
+  troubleshooting:
+    primary_file: "docs/04-guides/operations/4-troubleshooting.md"
+    status: "planned"
+    hash: null
+    source_files: ["DEPLOYMENT-TROUBLESHOOTING.md", "DEPLOYMENT-FAQ.md"]
+    created: null
+    last_updated: null
+    audience: ["Operator", "Developer"]
+    notes: "Common issues and resolutions"
+
+  audit_compliance_procedures:
+    primary_file: "docs/04-guides/operations/7-audit-compliance.md"
+    status: "planned"
+    hash: null
+    source_files: []
+    created: null
+    last_updated: null
+    audience: ["Operator", "Architect"]
+    notes: "Audit procedures and compliance verification"
+
+  # Reference Documentation
+  glossary:
+    primary_file: "docs/05-reference/glossary.md"
+    status: "planned"
+    hash: null
+    source_files: []
+    created: null
+    last_updated: null
+    audience: ["all"]
+    notes: "Term definitions and concepts"
+
+  faq:
+    primary_file: "docs/05-reference/faq.md"
+    status: "planned"
+    hash: null
+    source_files: ["DEPLOYMENT-FAQ.md"]
+    created: null
+    last_updated: null
+    audience: ["all"]
+    notes: "Frequently asked questions"
+
+  known_issues:
+    primary_file: "docs/05-reference/known-issues.md"
+    status: "planned"
+    hash: null
+    source_files: ["AC-FIX-*.md", "ISSUE-FIX-*.md", "GITHUB-ISSUES-*.md"]
+    created: null
+    last_updated: null
+    audience: ["Developer", "Operator"]
+    notes: "Known issues and workarounds"
+
+  changelog:
+    primary_file: "docs/05-reference/changelog.md"
+    status: "planned"
+    hash: null
+    source_files: []
+    created: null
+    last_updated: null
+    audience: ["Developer"]
+    notes: "Version history and changelog"
+
+  compliance_mappings:
+    primary_file: "docs/05-reference/compliance-mappings.md"
+    status: "planned"
+    hash: null
+    source_files: []
+    created: null
+    last_updated: null
+    audience: ["Architect", "Operator"]
+    notes: "GDPR/HIPAA/SOC2 compliance mappings"
+
+# Files Pending Archive
+files_to_archive:
+  session_logs:
+    pattern: "SESSION-*.md"
+    count: 15
+    location: "docs/_archive/sessions/"
+    reason: "Working session documentation, preserved for history"
+    status: "pending"
+
+  phase_completion_reports:
+    pattern: "PHASE-*.md"
+    count: 50
+    location: "docs/_archive/phases/"
+    reason: "Phase completion reports, preserved for milestone reference"
+    status: "pending"
+
+  analysis_documents:
+    pattern: "*-ANALYSIS*.md, *-FINDINGS-*.md"
+    count: 25
+    location: "docs/_archive/analysis/"
+    reason: "Investigation and analysis working documents"
+    status: "pending"
+
+  dated_reports:
+    pattern: "*-20260[0-9][0-9][0-9]-[0-9][0-9].md"
+    count: 40
+    location: "docs/_archive/"
+    reason: "Date-stamped working and completion reports"
+    status: "pending"
+
+  review_artifacts:
+    pattern: "REVIEW-*, *REVIEW-*.md, *HOLISTIC*.md"
+    count: 20
+    location: "docs/_archive/reviews/"
+    reason: "Review and verification artifacts"
+    status: "pending"
+
+  implementation_plans:
+    pattern: "*-IMPLEMENTATION-*.md"
+    count: 10
+    location: "docs/_archive/implementation-plans/"
+    reason: "Superseded implementation plans"
+    status: "pending"
+
+# Files Successfully Archived (Historical Record)
+archived_files:
+  # Example entries (populated as migration progresses)
+  example_archive:
+    original_filename: "SESSION-EXAMPLE.md"
+    archived_to: "docs/_archive/sessions/SESSION-EXAMPLE.md"
+    archived_date: null
+    reason: "Development session log"
+    content_consolidated_to: null
+    search_keywords: ["example", "session"]
+
+# Duplicate Detection History
+duplicates_detected:
+  # Example entries (populated as validation runs)
+  rest_api_duplication:
+    files:
+      - "DEPLOYMENT-API-REFERENCE.md"
+      - "DEPLOYMENT-TROUBLESHOOTING.md"
+    similarity: "45%"
+    overlap_topics: ["REST endpoints", "API integration", "error handling"]
+    status: "identified"
+    resolution: "Consolidate into docs/03-api-reference/rest-api/0-guide.md"
+    resolved_date: null
+
+# File Manifest (Detailed Tracking)
+file_manifest:
+  # Gets populated as files are migrated/created
+  # Example structure:
+  example_manifest_entry:
+    path: "docs/02-architecture/0-overview.md"
+    status: "planned"  # planned | migrated | created | archived
+    created_date: null
+    last_modified: null
+    content_hash: null
+    source_files:
+      - "ARCHITECTURE-MAP.md"
+      - "cortex-master-prompt-v3.md"
+    line_count: null
+    heading_count: null
+    link_count: null
+    audience_tags: []
+    has_frontmatter: false
+    has_toc: false
+    has_audience_callouts: false
+
+# Consolidation History (Merged Files Tracking)
+consolidation_history:
+  # Record of successful file consolidations
+  example_consolidation:
+    operation: "consolidate"
+    date: null
+    source_files: []
+    target_file: null
+    files_archived: []
+    lines_added: null
+    lines_removed: null
+    sections_merged: null
+    conflicts_resolved: 0
+    verification_passed: false
+
+# Validation Reports (Link Checking, etc.)
+validation_reports:
+  last_link_validation:
+    date: null
+    total_links_checked: null
+    broken_links: []
+    orphaned_files: []
+    status: "pending"
+
+  last_duplicate_check:
+    date: null
+    duplicates_found: 0
+    status: "pending"
+
+  last_naming_compliance:
+    date: null
+    files_with_dates: []
+    files_with_phases: []
+    status: "pending"
+
+# Operation Log (Audit Trail)
+operation_log:
+  # Timestamp entries for each migration operation
+  summary:
+    total_operations: 0
+    successful_operations: 0
+    failed_operations: 0
+    skipped_operations: 0
+    last_operation: null
+    last_operation_time: null
+
+  # Individual operation records (appended as operations run)
+  operations: []
