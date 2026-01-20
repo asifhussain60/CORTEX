@@ -73,4 +73,10 @@ def get_registered_tools() -> Dict[str, Dict[str, Any]]:
     return MCP_TOOLS_REGISTRY.copy()
 
 
-__all__ = ["mcp_tool", "get_registered_tools", "MCP_TOOLS_REGISTRY"]
+def clear_tools() -> None:
+    """Clear all registered MCP tools."""
+    global MCP_TOOLS_REGISTRY
+    MCP_TOOLS_REGISTRY.clear()
+
+
+__all__ = ["mcp_tool", "get_registered_tools", "clear_tools", "MCP_TOOLS_REGISTRY"]

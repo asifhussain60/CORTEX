@@ -23,6 +23,18 @@ class EntityType(Enum):
     DATA = "data"
 
 
+class AuditOperationType(Enum):
+    """Types of audit operations."""
+
+    CREATE = "create"
+    READ = "read"
+    UPDATE = "update"
+    DELETE = "delete"
+    APPROVE = "approve"
+    REJECT = "reject"
+    ESCALATE = "escalate"
+
+
 @dataclass
 class Entity:
     """Domain entity.
@@ -237,6 +249,7 @@ __all__ = [
     "Domain",
     "Entity",
     "EntityType",
+    "AuditOperationType",
     "Conflict",
     "DomainCapability",
     "DomainState",
