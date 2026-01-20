@@ -270,27 +270,55 @@ class StateRepair:
         
         results: List[RepairResult] = []
         
-        for inconsistency in sorted_inconsistencies:
-            # Check for conflicts with active operations
-            if self._has_active_conflict(inconsistency):
-                results.append(RepairResult(
-                    success=False,
-                    inconsistency_id=inconsistency.inconsistency_id,
-                    dry_run=mode == RepairMode.DRY_RUN,
-                    message="Deferred: conflicts with active operation"
-                ))
-                continue
-            
-            # Execute repair
-            result = self._repair_single(inconsistency, mode)
-            results.append(result)
-            
-            # Update metrics
-            self._metrics["repairs_attempted"] += 1
-            if result.success:
-                self._metrics["repairs_succeeded"] += 1
-            else:
-                self._metrics["repairs_failed"] += 1
+        # Initialize progress tracking
+        self._repair_progress = {
+            "total": len(sorted_inconsistencies),
+            "completed": 0,
+            "failed": 0,
+            "deferred": 0,
+            "attempted": [],  # Track items that were attempted (success or failure)
+            "remaining": [inc.inconsistency_id for inc in sorted_inconsistencies]
+        }
+        
+        try:
+            for i, inconsistency in enumerate(sorted_inconsistencies):
+                # Check for conflicts with active operations
+                if self._has_active_conflict(inconsistency):
+                    results.append(RepairResult(
+                        success=False,
+                        inconsistency_id=inconsistency.inconsistency_id,
+                        dry_run=mode == RepairMode.DRY_RUN,
+                        message="Deferred: conflicts with active operation"
+                    ))
+                    self._repair_progress["deferred"] += 1
+                    self._repair_progress["remaining"].remove(inconsistency.inconsistency_id)
+                    continue
+                
+                # Mark as attempted
+                self._repair_progress["attempted"].append(inconsistency.inconsistency_id)
+                
+                # Execute repair
+                result = self._repair_single(inconsistency, mode)
+                results.append(result)
+                
+                # Update progress - only remove from remaining if successful
+                if result.success:
+                    self._repair_progress["completed"] += 1
+                    self._repair_progress["remaining"].remove(inconsistency.inconsistency_id)
+                else:
+                    self._repair_progress["failed"] += 1
+                
+                # Update metrics
+                self._metrics["repairs_attempted"] += 1
+                if result.success:
+                    self._metrics["repairs_succeeded"] += 1
+                else:
+                    self._metrics["repairs_failed"] += 1
+        except Exception as e:
+            # Save checkpoint on failure
+            logger.error(f"Repair failed: {e}")
+            self._save_checkpoint(sorted_inconsistencies, results)
+            raise
         
         return results
     
@@ -366,7 +394,15 @@ class StateRepair:
         
         checkpoint = json.loads(checkpoint_file.read_text())
         remaining = [
-            InconsistencyRecord(**inc)
+            InconsistencyRecord(
+                inconsistency_id=inc["inconsistency_id"],
+                inconsistency_type=InconsistencyType(inc["inconsistency_type"]),
+                severity=inc["severity"],
+                detected_at=datetime.fromisoformat(inc["detected_at"]),
+                description=inc["description"],
+                affected_resources=inc["affected_resources"],
+                metadata=inc.get("metadata", {})
+            )
             for inc in checkpoint.get("remaining", [])
         ]
         
@@ -481,7 +517,7 @@ class StateRepair:
                 message=f"Irreparable: {e}"
             )
         
-        except Exception as e:
+        except RepairError as e:
             logger.error(f"Repair failed for {inconsistency.inconsistency_id}: {e}")
             
             # Rollback on error
@@ -562,3 +598,47 @@ class StateRepair:
             if resource in self._active_operations:
                 return True
         return False
+
+    def _save_checkpoint(
+        self,
+        inconsistencies: List[InconsistencyRecord],
+        completed_results: List[RepairResult]
+    ) -> None:
+        """Save repair checkpoint for resume.
+        
+        Checkpoint only includes items never attempted, not failed items.
+        
+        Args:
+            inconsistencies: All inconsistencies in repair
+            completed_results: Results completed so far
+        """
+        # Use the attempted list from progress tracking
+        attempted_ids = set(self._repair_progress.get("attempted", []))
+        
+        # Only include items that were never attempted
+        remaining_inconsistencies = [
+            inc for inc in inconsistencies 
+            if inc.inconsistency_id not in attempted_ids
+        ]
+        
+        checkpoint = {
+            "timestamp": datetime.utcnow().isoformat(),
+            "completed_count": len(completed_results),
+            "remaining": [
+                {
+                    "inconsistency_id": inc.inconsistency_id,
+                    "inconsistency_type": inc.inconsistency_type.value,
+                    "severity": inc.severity,
+                    "detected_at": inc.detected_at.isoformat(),
+                    "description": inc.description,
+                    "affected_resources": inc.affected_resources,
+                    "metadata": inc.metadata
+                }
+                for inc in remaining_inconsistencies
+            ],
+            "progress": self._repair_progress
+        }
+        
+        checkpoint_file = self.storage_path / "repair_checkpoint.json"
+        checkpoint_file.write_text(json.dumps(checkpoint, indent=2))
+
