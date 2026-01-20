@@ -12,6 +12,17 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 from enum import Enum
 
 
+class NodeType(Enum):
+    """Types of nodes in knowledge graph."""
+
+    ENTITY = "entity"
+    CONCEPT = "concept"
+    OPERATION = "operation"
+    RULE = "rule"
+    FACT = "fact"
+    GENERIC = "generic"
+
+
 class RelationType(Enum):
     """Types of relationships in knowledge graph."""
 
@@ -259,5 +270,6 @@ class KnowledgeGraph:
 GraphNode = Node
 GraphEdge = Edge
 
-__all__ = ["KnowledgeGraph", "Node", "Edge", "RelationType", "GraphNode", "GraphEdge"]
+__all__ = ["KnowledgeGraph", "Node", "Edge", "NodeType", "RelationType", "GraphNode", "GraphEdge"]
+
 

@@ -185,11 +185,13 @@ class ComplexityAssessment:
         self.cache.clear()
 
 
-# Alias for ComplexityMetrics
+# Aliases for backward compatibility
 ComplexitySignals = ComplexityMetrics
+ComplexityAssessmentEngine = ComplexityAssessment
 
 __all__ = [
     "ComplexityAssessment",
+    "ComplexityAssessmentEngine",
     "ComplexityMetrics",
     "ComplexitySignals",
     "ComplexityLevel",
