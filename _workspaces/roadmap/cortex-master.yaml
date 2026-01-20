@@ -1,24 +1,27 @@
 metadata:
   title: CORTEX Implementation Roadmap
-  description: AI-Powered Development Orchestration System - PHASE-ENV-SETUP COMPLETE.
-    CRITICAL BLOCKER IDENTIFIED & REMEDIATION PHASE CREATED. Root cause analysis
-    shows tests import from src.* but implementations in cortex/. Created PHASE-CONSOLIDATION-SRC-CORTEX
-    (5 ACs, 9.5h) to consolidate to single source folder.
+  description: AI-Powered Development Orchestration System - Multiple structural issues
+    identified and remediation phases created. 1) src/ vs cortex/ resolved in chat01
+    (src/ deleted, imports updated). 2) cortex_toolkit/ ghost folder identified -
+    empty placeholder contradicting deployment docs (PHASE-ARCH-ALIGNMENT-001 created).
+    3) All functionality exists in cortex/ (388 files, canonical).
   project: CORTEX
-  status: "PHASE-CONSOLIDATION-SRC-CORTEX - Blocks all production phases. Consolidate src/ vs cortex/ to single canonical location."
-  dor_score: CONDITIONAL (blocked by consolidation)
+  status: "PHASE-ARCH-ALIGNMENT-001 - Align docs with implementation reality. Remove empty cortex_toolkit/, update deployment docs."
+  dor_score: CONDITIONAL (blocked by architectural alignment)
   start_date: null
   end_date: null
-  updated_date: '2026-01-20T12:00:00Z'
-  total_ac_ids: 112
+  updated_date: '2026-01-20T14:00:00Z'
+  total_ac_ids: 117
   total_ac_ids_locked: 107
   total_ac_ids_complete: 107
   locked_acs_in_phases: 107
-  pending_acs_in_phases: 5
-  completion_percentage: 95.5
-  pending_implementation: 5
-  pending_phases: 1
-  blocking_phase: PHASE-CONSOLIDATION-SRC-CORTEX
+  pending_acs_in_phases: 10
+  completion_percentage: 91.5
+  pending_implementation: 10
+  pending_phases: 2
+  blocking_phases:
+    - PHASE-CONSOLIDATION-SRC-CORTEX (resolved in chat01, needs formalization)
+    - PHASE-ARCH-ALIGNMENT-001 (cortex_toolkit cleanup)
   ac_breakdown:
     locked_phases: 126
     phase_03_04_05: 35
@@ -4748,6 +4751,65 @@ phases:
         - 409+ tests discoverable and executable
         - Single canonical source: cortex/
         - Clear import paths
+  
+  PHASE-ARCH-ALIGNMENT-001:
+    id: PHASE-ARCH-ALIGNMENT-001
+    title: Architectural Alignment - Remove cortex_toolkit Ghost Folder
+    description: >
+      Remove architectural design/implementation gap where cortex-deploy.prompt.md
+      references cortex_toolkit/ as main implementation hub, but actual implementation
+      exists in cortex/ (388 files). cortex_toolkit/ is essentially empty (only
+      cortex_toolkit/core/__init__.py exists). DECISION: Update documentation to match
+      proven implementation reality rather than refactoring working system.
+    status: NOT_STARTED
+    locked: false
+    ac_ids: 5
+    completed_ac_ids: 0
+    estimated_hours: 2
+    estimated_tests: 1
+    priority: P1
+    category: DOCUMENTATION_ALIGNMENT
+    requires: PHASE-CONSOLIDATION-SRC-CORTEX
+    required_for: PHASE-DEPLOYMENT-ENHANCED
+    file: phases/phase-arch-alignment-001.yaml
+    blocking: false
+    acceptance_criteria:
+      AC-ARCH-001-01:
+        title: Delete empty cortex_toolkit/ folder
+        status: NOT_STARTED
+        tests: 0
+        description: "Remove cortex_toolkit/ directory (contains only __init__.py)"
+      AC-ARCH-001-02:
+        title: Update cortex-deploy.prompt.md to reference cortex/
+        status: NOT_STARTED
+        tests: 0
+        description: "Replace all cortex_toolkit/ references with cortex/ in deployment docs"
+      AC-ARCH-001-03:
+        title: Create Architecture Decision Record
+        status: NOT_STARTED
+        tests: 0
+        description: "Document cortex/ as canonical package decision in ADR"
+      AC-ARCH-001-04:
+        title: Update cortex-master.yaml governance rules
+        status: NOT_STARTED
+        tests: 0
+        description: "Add governance rule forbidding cortex_toolkit/ resurrection"
+      AC-ARCH-001-05:
+        title: Validate no cortex_toolkit references remain
+        status: NOT_STARTED
+        tests: 1
+        description: "Verify cleanup complete, all tests pass"
+    diagnosis:
+      problem: "cortex_toolkit/ exists but is empty, contradicts deployment docs"
+      root_cause: "Deployment design written after implementation established cortex/"
+      architecture_issue: "cortex_toolkit/ was placeholder never populated"
+      gap: "Design expects cortex_toolkit/, reality uses cortex/"
+    impact: |
+      - Confusion about where to add new MCP tools
+      - Deployment guide references non-existent structure
+      - Risk of duplicate implementation attempts
+    solution: "Delete ghost folder, update docs to match working implementation"
+    analysis_reference: _workspaces/roadmap/reports/ARCHITECTURAL-GAP-ANALYSIS-20260120.yaml
         - All downstream phases unblocked
     blocking_until_complete: |
       PHASE-ONBOARDING-ORCHESTRATOR and all downstream phases are blocked.
