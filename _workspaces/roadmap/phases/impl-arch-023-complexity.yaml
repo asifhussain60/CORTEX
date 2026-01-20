@@ -1,0 +1,174 @@
+# CORTEX Implementation Phase: Complexity Gate
+# Phase ID: impl-arch-023-complexity
+# Priority: P1
+# Date: 2026-01-20
+
+metadata:
+  phase_id: "impl-arch-023-complexity"
+  title: "Complexity Gate - Workload Classification & Dispatch"
+  description: "Intelligent gate that classifies complexity and routes to appropriate handler"
+  priority: "P1"
+  estimated_effort: "4-6 days"
+  status: "NOT_STARTED"
+  locked: false
+
+objective:
+  summary: "Implement complexity-aware request routing preventing resource exhaustion"
+  business_value: "Protects system from overload, ensures SLA compliance, optimizes resource allocation"
+
+acceptance_criteria:
+  - id: "COMPLEX-GATE-001-01"
+    description: "Complexity analyzer estimates request complexity"
+    verification:
+      - "ComplexityAnalyzer.estimate_complexity(request) → score (0-100)"
+      - "Input size analysis"
+      - "Algorithm complexity class (O(1), O(n), O(n²), etc.)"
+      - "Required resources (CPU, memory, I/O)"
+      - "Estimated execution time"
+    tests:
+      - "test_complexity_input_size()"
+      - "test_complexity_algorithm_class()"
+      - "test_complexity_resource_estimation()"
+
+  - id: "COMPLEX-GATE-001-02"
+    description: "Workload classifier assigns complexity tier"
+    verification:
+      - "WorkloadClassifier.classify(complexity_score) → tier"
+      - "Tiers: simple (0-20), moderate (20-50), complex (50-80), extreme (80-100)"
+      - "Per-tier SLA targets"
+      - "Per-tier resource quotas"
+      - "Dynamic tier adjustment based on queue depth"
+    tests:
+      - "test_workload_classifier_simple()"
+      - "test_workload_classifier_complex()"
+      - "test_workload_classifier_dynamic_adjustment()"
+
+  - id: "COMPLEX-GATE-001-03"
+    description: "Gate enforces complexity limits"
+    verification:
+      - "ComplexityGate.can_accept(request) → bool"
+      - "Check against per-tier limits"
+      - "Check against global capacity"
+      - "Graceful rejection with suggested alternatives"
+      - "Queue prioritization by complexity"
+    tests:
+      - "test_gate_accepts_simple()"
+      - "test_gate_rejects_extreme_overload()"
+      - "test_gate_queue_prioritization()"
+
+  - id: "COMPLEX-GATE-001-04"
+    description: "Handler selection routes by complexity"
+    verification:
+      - "HandlerSelector.select_handler(tier) → handler"
+      - "Simple: lightweight handler"
+      - "Moderate: standard handler"
+      - "Complex: specialized handler"
+      - "Extreme: async background handler"
+    tests:
+      - "test_handler_selection_simple()"
+      - "test_handler_selection_complex()"
+      - "test_handler_selection_async()"
+
+  - id: "COMPLEX-GATE-001-05"
+    description: "Resource quota enforcement prevents exhaustion"
+    verification:
+      - "QuotaManager tracks per-user, per-domain quotas"
+      - "Quota refill (per minute, per hour, per day)"
+      - "Burst allowance for temporary peaks"
+      - "Quota enforcement on request dispatch"
+      - "Fair-share queuing when over quota"
+    tests:
+      - "test_quota_tracking()"
+      - "test_quota_refill()"
+      - "test_quota_burst_allowance()"
+
+  - id: "COMPLEX-GATE-001-06"
+    description: "Feedback loop tunes complexity thresholds"
+    verification:
+      - "FeedbackLoop collects tier performance metrics"
+      - "Automatic threshold adjustment based on SLA violations"
+      - "A/B testing for threshold changes"
+      - "Convergence to optimal thresholds"
+      - "Trend analysis and reporting"
+    tests:
+      - "test_feedback_loop_collection()"
+      - "test_feedback_loop_threshold_adjustment()"
+      - "test_feedback_loop_convergence()"
+
+implementation:
+  files_to_create:
+    - path: "cortex/core/complexity/analyzer.py"
+      loc: 200
+      classes:
+        - name: "ComplexityAnalyzer"
+          methods:
+            - "estimate_complexity(request)"
+            - "analyze_input_size(request)"
+            - "infer_algorithm_class(request)"
+
+    - path: "cortex/core/complexity/classifier.py"
+      loc: 150
+      classes:
+        - name: "WorkloadClassifier"
+          methods:
+            - "classify(complexity_score)"
+            - "get_sla_target(tier)"
+
+    - path: "cortex/core/complexity/gate.py"
+      loc: 150
+      classes:
+        - name: "ComplexityGate"
+          methods:
+            - "can_accept(request)"
+            - "queue_request(request)"
+
+    - path: "cortex/core/complexity/handler_selector.py"
+      loc: 120
+      classes:
+        - name: "HandlerSelector"
+          methods:
+            - "select_handler(tier)"
+
+    - path: "cortex/core/complexity/quota_manager.py"
+      loc: 200
+      classes:
+        - name: "QuotaManager"
+          methods:
+            - "get_quota(user_id)"
+            - "check_quota(user_id, cost)"
+            - "refill_quota(user_id)"
+
+    - path: "cortex/core/complexity/feedback_loop.py"
+      loc: 180
+      classes:
+        - name: "FeedbackLoop"
+          methods:
+            - "collect_metrics(tier, result)"
+            - "adjust_thresholds()"
+
+    - path: "tests/unit/core/complexity/test_complexity_gate.py"
+      loc: 250
+      test_count: 18
+
+    - path: "tests/integration/core/test_complexity_integration.py"
+      loc: 150
+      test_count: 10
+
+governance:
+  compliance:
+    - "CORE-008: TDD"
+    - "CORE-011: Type hints"
+
+testing_strategy:
+  unit_tests: 18
+  integration_tests: 10
+  load_tests: "Verify limits under synthetic load"
+
+dependencies:
+  requires:
+    - "impl-arch-008-orchestrators"
+
+success_metrics:
+  - "Complexity estimation accuracy >90%"
+  - "SLA adherence >99.5%"
+  - "Fair-share queue prevents starvation"

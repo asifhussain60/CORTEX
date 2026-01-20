@@ -1,0 +1,285 @@
+# CORTEX Implementation Phase: Orchestrator Continuation
+# Phase ID: impl-arch-016-continuation
+# Priority: P1
+# Date: 2026-01-20
+
+metadata:
+  phase_id: "impl-arch-016-continuation"
+  title: "Orchestrator Continuation - Multi-Session Stateful Execution"
+  description: "Enable orchestrators to maintain state across sessions and resume execution"
+  priority: "P1"
+  estimated_effort: "5-7 days"
+  status: "NOT_STARTED"
+  locked: false
+
+objective:
+  summary: "Support long-running operations with checkpointing, resumption, and multi-session coordination"
+  business_value: "Enables complex multi-step workflows, resilience to interruptions, better UX"
+
+acceptance_criteria:
+  - id: "CONT-EXEC-001-01"
+    description: "Checkpoint system saves execution state with compression"
+    verification:
+      - "CheckpointManager.create_checkpoint(state) → checkpoint_id"
+      - "Incremental checkpointing (delta-compression, only changes)"
+      - "Atomic checkpoint writes (all-or-nothing guarantees)"
+      - "Checkpoint versioning with rollback capability"
+      - "Compression via zstd (>70% reduction typical)"
+      - "Checkpoint metadata (size, timestamp, dependencies)"
+      - "Concurrent checkpoint creation without blocking"
+      - "Checkpoint integrity verification (checksum validation)"
+    tests:
+      - "test_checkpoint_creation_basic()"
+      - "test_checkpoint_incremental_delta()"
+      - "test_checkpoint_atomic_writes()"
+      - "test_checkpoint_rollback_chain()"
+      - "test_checkpoint_compression_ratio()"
+      - "test_checkpoint_concurrent_creation()"
+      - "test_checkpoint_integrity_verification()"
+    checkpoint_strategy:
+      storage: "Redis + local filesystem for durability"
+      compression: "zstd with level 10"
+      incremental: "delta-compression from previous checkpoint"
+      ttl: "configurable (default 7 days)"
+      size_limit: "1GB per checkpoint (auto-segment larger)"
+
+  - id: "CONT-EXEC-001-02"
+    description: "State serialization with format negotiation"
+    verification:
+      - "StateSerializer.serialize(state, format) → bytes"
+      - "Handles complex object graphs (cyclic refs allowed)"
+      - "Preserves execution environment (variables, call stack, context)"
+      - "Deterministic serialization (same object → same bytes)"
+      - "Compression via format negotiation (pickle, msgpack, protobuf)"
+      - "Schema validation pre/post serialization"
+      - "Zero-copy optimizations for large objects"
+      - "Format version tracking for compatibility"
+    tests:
+      - "test_serialization_complex_graph()"
+      - "test_serialization_environment_preservation()"
+      - "test_serialization_determinism()"
+      - "test_serialization_format_negotiation()"
+      - "test_serialization_schema_validation()"
+      - "test_serialization_backward_compatibility()"
+    serialization_approach:
+      primary: "Protocol Buffers (efficiency + schema validation)"
+      fallback: "msgpack (human-debuggable)"
+      legacy: "pickle (backward compat only)"
+      format_selection: "content-based (negotiate at checkpoint time)"
+
+  - id: "CONT-EXEC-001-03"
+    description: "Resumption logic with exact state restoration"
+    verification:
+      - "ResumptionManager.resume(checkpoint_id) → ExecutionContext"
+      - "State restoration to exact point (byte-for-byte)"
+      - "Execution continuation from saved point (no re-execution)"
+      - "Context re-initialization (imports, dependencies)"
+      - "Resource re-acquisition (file handles, connections)"
+      - "Environment variable restoration"
+      - "Concurrent resumption from same checkpoint"
+      - "Resume-from-resume chains (nested continuations)"
+      - "Timeout handling on resume (re-acquire or abort)"
+    tests:
+      - "test_resumption_state_restore_exact()"
+      - "test_resumption_continuation_seamless()"
+      - "test_resumption_context_reinit()"
+      - "test_resumption_resource_reacquisition()"
+      - "test_resumption_nested_chains()"
+      - "test_resumption_concurrent_restores()"
+      - "test_resumption_timeout_handling()"
+    resumption_strategy:
+      verify_consistency: "re-run from checkpoint -100 steps (validate match)"
+      resource_reacquisition: "exponential backoff with circuit breaker"
+      timeout: "30s per resource reacquisition"
+
+  - id: "CONT-EXEC-001-04"
+    description: "Multi-session coordination with conflict resolution"
+    verification:
+      - "SessionCoordinator.track_multi_session_work(session_id)"
+      - "Cross-session dependency tracking and wait-for graphs"
+      - "Session merge on completion (combine results)"
+      - "Conflict resolution for concurrent modifications (LWW or voting)"
+      - "Session isolation (sandboxed execution)"
+      - "Session timeout and cleanup on deadlock"
+      - "Distributed locks for cross-session atomicity"
+      - "Session merge validation (no duplicate work)"
+    tests:
+      - "test_multi_session_dependency_tracking()"
+      - "test_multi_session_merge_basic()"
+      - "test_multi_session_conflict_lww()"
+      - "test_multi_session_conflict_voting()"
+      - "test_multi_session_isolation()"
+      - "test_multi_session_deadlock_detection()"
+      - "test_multi_session_merge_validation()"
+    conflict_strategy:
+      strategy: "Last-Write-Wins (LWW) with audit trail"
+      alternative: "Domain-specific voting protocol"
+      deadlock_timeout: "5 min"
+      deadlock_action: "abort session + alert"
+
+  - id: "CONT-EXEC-001-05"
+    description: "History tracking for audit and deterministic replay"
+    verification:
+      - "HistoryTracker records all execution steps (events)"
+      - "Event-based history format (deterministic)"
+      - "Timeline visualization (Gantt charts, DAG)"
+      - "Deterministic replay from history (bit-exact)"
+      - "History compression for long runs (>80% size reduction)"
+      - "Incremental history updates (stream-based)"
+      - "History search and filtering (by time, component, type)"
+      - "History export formats (JSON, protobuf, SQL)"
+    tests:
+      - "test_history_recording_completeness()"
+      - "test_history_replay_deterministic()"
+      - "test_history_timeline_visualization()"
+      - "test_history_compression()"
+      - "test_history_search_and_filter()"
+      - "test_history_export_formats()"
+    history_strategy:
+      format: "Event sourcing (immutable log of events)"
+      storage: "Time-series DB (InfluxDB, TimescaleDB)"
+      retention: "90 days hot, archive older"
+      replay_validation: "re-run subset of events (10%) for validation"
+
+  - id: "CONT-EXEC-001-06"
+    description: "Garbage collection with dependency-aware cleanup"
+    verification:
+      - "ContinuationGC.identify_abandoned_checkpoints()"
+      - "Abandoned checkpoint detection (no resumption in X days)"
+      - "Dependency checking before deletion (ensure no orphans)"
+      - "Configurable retention policies (per-checkpoint-type)"
+      - "Safe deletion workflow (soft-delete, verify, hard-delete)"
+      - "Storage reclamation reporting (space freed, time saved)"
+      - "Incremental GC (not all-at-once)"
+      - "Partial reclamation on storage pressure"
+    tests:
+      - "test_gc_abandoned_detection()"
+      - "test_gc_dependency_checking()"
+      - "test_gc_retention_policies()"
+      - "test_gc_safe_deletion_workflow()"
+      - "test_gc_storage_reclamation()"
+      - "test_gc_partial_reclamation()"
+    gc_strategy:
+      trigger: "nightly + on-demand"
+      abandoned_threshold: "7 days without resumption"
+      verification: "2-phase deletion (mark, verify, delete)"
+      emergency_mode: "aggressive deletion on >90% capacity"
+
+implementation:
+  storage_layer:
+    - backend: "Redis Streams (event log)"
+      purpose: "Checkpoint metadata, history events"
+      retention: "30 days (default, configurable)"
+    
+    - backend: "PostgreSQL (relational integrity)"
+      purpose: "Dependency tracking, session metadata"
+      
+    - backend: "S3 / MinIO (object storage)"
+      purpose: "Large checkpoint binaries, history exports"
+      lifecycle: "7d hot → 90d warm → archive"
+
+  files_to_create:
+    - path: "cortex/orchestrators/continuation/checkpoint.py"
+      loc: 300
+      classes:
+        - name: "CheckpointManager"
+          methods:
+            - "create_checkpoint(state, incremental=True)"
+            - "create_incremental_checkpoint(delta)"
+            - "get_checkpoint(checkpoint_id, format='auto')"
+            - "delete_checkpoint(checkpoint_id)"
+            - "verify_integrity(checkpoint_id)"
+
+    - path: "cortex/orchestrators/continuation/serialization.py"
+      loc: 250
+      classes:
+        - name: "StateSerializer"
+          methods:
+            - "serialize(state, format='protobuf')"
+            - "deserialize(data, format_hint=None)"
+            - "compress(data, algorithm='zstd')"
+            - "decompress(data, algorithm='auto')"
+            - "validate_schema(state, schema)"
+
+    - path: "cortex/orchestrators/continuation/resumption.py"
+      loc: 250
+      classes:
+        - name: "ResumptionManager"
+          methods:
+            - "resume(checkpoint_id, validate=True)"
+            - "restore_state(data, format_hint=None)"
+            - "reinitialize_context(resources)"
+            - "verify_consistency(checkpoint_id, sample_rate=0.1)"
+
+    - path: "cortex/orchestrators/continuation/session_coordinator.py"
+      loc: 250
+      classes:
+        - name: "SessionCoordinator"
+          methods:
+            - "track_multi_session_work(session_id)"
+            - "merge_sessions(sessions, strategy='lww')"
+            - "resolve_conflicts(conflicts, voting_rounds=3)"
+            - "detect_deadlock(timeout=5*60)"
+
+    - path: "cortex/orchestrators/continuation/history.py"
+      loc: 200
+      classes:
+        - name: "HistoryTracker"
+          methods:
+            - "record_event(event_type, event_data)"
+            - "replay_history(start_event=0, end_event=None)"
+            - "get_timeline() → Gantt"
+            - "compress_history(window_size=1000)"
+
+    - path: "cortex/orchestrators/continuation/gc.py"
+      loc: 180
+      classes:
+        - name: "ContinuationGC"
+          methods:
+            - "identify_abandoned_checkpoints(threshold_days=7)"
+            - "check_dependencies(checkpoint_id)"
+            - "soft_delete(checkpoint_id)"
+            - "hard_delete(checkpoint_id)"
+            - "get_reclamation_report()"
+
+    - path: "tests/unit/orchestrators/continuation/test_continuation.py"
+      loc: 350
+      test_count: 28
+
+    - path: "tests/integration/orchestrators/test_continuation_integration.py"
+      loc: 200
+      test_count: 14
+
+performance_targets:
+  checkpoint_creation: "<1s for typical state"
+  incremental_checkpoint: "<100ms"
+  resume_latency: "<500ms"
+  serialization_throughput: ">100MB/s"
+  history_replay: "<5s for 1000-step history"
+  gc_time: "<10 min for complete cycle"
+
+governance:
+  compliance:
+    - "CORE-008: TDD (>90% coverage)"
+    - "CORE-011: Type hints 100%"
+    - "CORE-027: Audit logging on all checkpoint operations"
+
+testing_strategy:
+  unit_tests: 28
+  integration_tests: 14
+  chaos_tests: "5-10 (simulated failures, corrupted state)"
+  load_tests: "long-running workflows with periodic checkpoints"
+
+dependencies:
+  requires:
+    - "impl-arch-008-orchestrators"
+  optional:
+    - "impl-arch-023-complexity (for complexity-aware checkpoint intervals)"
+
+success_metrics:
+  - "Checkpoint creation <1s (p95)"
+  - "Resume latency <500ms (p95)"
+  - "State serialization 100% faithful (bit-exact replay)"
+  - "GC reclaims >70% of abandoned space"
+  - "Zero data loss in failure scenarios"
+  - "Conflict resolution success rate >99%"
