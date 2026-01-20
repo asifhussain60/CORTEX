@@ -1,54 +1,45 @@
-"""Vision Mutations for Hallucination Prevention.
-
-Tracks vision changes to detect when hallucinations distort perception.
-
-Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
-"""
+"""Module: vision_mutations.py."""
 
 from typing import Dict, List, Optional, Any
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from enum import Enum
+
+
+class MutationType(str, Enum):
+    """Mutation types."""
+    UNKNOWN = "unknown"
+
+
+@dataclass
+class VisionMutation:
+    """Data class for VisionMutation."""
+    data: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class MutationSnapshot:
+    """Data class for MutationSnapshot."""
+    data: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
 class VisionChange:
-    """Change in agent vision/perception."""
-    before: Dict[str, Any]
-    after: Dict[str, Any]
-    change_type: str
-    timestamp: str
+    """Data class for VisionChange."""
+    data: Dict[str, Any] = field(default_factory=dict)
 
 
 class VisionMutationTracker:
-    """Tracks mutations in agent vision.
-    
-    Detects when hallucinations cause unexpected changes
-    in agent perception.
-    """
-    
+    """Implementation of VisionMutationTracker."""
+
     def __init__(self):
-        """Initialize vision mutation tracker."""
-        self.mutations: List[VisionChange] = []
-    
-    def track_mutation(self, before: Dict[str, Any], after: Dict[str, Any]) -> VisionChange:
-        """Track a vision mutation.
-        
-        Args:
-            before: Vision before change
-            after: Vision after change
-            
-        Returns:
-            VisionChange record
-        """
-        return VisionChange(
-            before=before,
-            after=after,
-            change_type="normal",
-            timestamp="",
-        )
+        """Initialize."""
+        pass
 
 
 __all__ = [
     "VisionMutationTracker",
+    "VisionMutation",
+    "MutationType",
+    "MutationSnapshot",
     "VisionChange",
 ]
