@@ -1,211 +1,201 @@
-"""State Machine - Finite state machine for workflow orchestration.
 
-Provides state machine implementation for managing operation states,
-transitions, and lifecycle management.
-
-Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
-"""
-
-from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Callable
+from dataclasses import dataclass, field
+from typing import Any, Dict, Optional, List
 from enum import Enum
+from datetime import datetime
 
 
-class StateType(Enum):
-    """Types of states."""
-
-    INITIAL = "initial"
-    INTERMEDIATE = "intermediate"
-    TERMINAL = "terminal"
-    ERROR = "error"
-
-
-@dataclass
-class State:
-    """State in state machine.
-
-    Attributes:
-        name: State name.
-        state_type: Type of state.
-        on_enter: Callback when entering state.
-        on_exit: Callback when exiting state.
-    """
-
-    name: str
-    state_type: StateType = StateType.INTERMEDIATE
-    on_enter: Optional[Callable] = None
-    on_exit: Optional[Callable] = None
-
-    def enter(self, context: Dict[str, Any] = None) -> None:
-        """Enter this state.
-
-        Args:
-            context: State context.
-        """
-        if self.on_enter and context is not None:
-            try:
-                self.on_enter(context)
-            except Exception:
-                pass
-
-    def exit(self, context: Dict[str, Any] = None) -> None:
-        """Exit this state.
-
-        Args:
-            context: State context.
-        """
-        if self.on_exit and context is not None:
-            try:
-                self.on_exit(context)
-            except Exception:
-                pass
+class TransitionType(Enum):
+    """Types of state transitions."""
+    VALIDATE = "validate"
+    LOCK = "lock"
+    COMMIT = "commit"
+    ROLLBACK = "rollback"
+    RESUME = "resume"
 
 
 @dataclass
-class Transition:
-    """Transition between states.
+class StateSnapshot:
+    """Snapshot of a state at a point in time."""
+    entity_id: str
+    current_state: str
+    previous_state: Optional[str] = None
+    is_locked: bool = False
+    created_at: datetime = field(default_factory=datetime.utcnow)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
-    Attributes:
-        from_state: Source state name.
-        to_state: Target state name.
-        condition: Condition for transition.
-        action: Action to perform during transition.
-    """
 
+@dataclass
+class StateTransition:
+    """Represents a state transition."""
     from_state: str
     to_state: str
-    condition: Optional[Callable] = None
-    action: Optional[Callable] = None
+    transition_type: TransitionType
+    timestamp: datetime = field(default_factory=datetime.utcnow)
+    reason: str = ""
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
-    def can_transition(self, context: Dict[str, Any] = None) -> bool:
-        """Check if transition is allowed.
 
-        Args:
-            context: State context.
+class ACState:
+    """AC State management."""
+    DRAFT = "DRAFT"
+    ACTIVE = "ACTIVE"
+    LOCKED = "LOCKED"
+    COMMITTED = "COMMITTED"
+    REVERTED = "REVERTED"
 
-        Returns:
-            True if transition is allowed, False otherwise.
-        """
-        if self.condition is None:
-            return True
-        if context is None:
-            return False
-        
-        try:
-            return self.condition(context)
-        except Exception:
-            return False
+
+class PhaseState:
+    """Phase State management."""
+    PLANNING = "PLANNING"
+    EXECUTION = "EXECUTION"
+    VALIDATION = "VALIDATION"
+    COMPLETE = "COMPLETE"
+
+
+class Result:
+    """Result type for operations."""
+    def __init__(self, value=None, error=None):
+        self.value = value
+        self.error = error
+    
+    def is_ok(self) -> bool:
+        return self.error is None
+    
+    def is_err(self) -> bool:
+        return self.error is not None
+    
+    def unwrap(self):
+        if self.is_ok():
+            return self.value
+        raise Exception(self.error)
 
 
 class StateMachine:
-    """Finite state machine."""
-
-    def __init__(self, initial_state: str) -> None:
-        """Initialize state machine.
-
-        Args:
-            initial_state: Name of initial state.
-        """
-        self.current_state = initial_state
-        self.states: Dict[str, State] = {}
-        self.transitions: List[Transition] = []
-        self.context: Dict[str, Any] = {}
-        self.history: List[str] = [initial_state]
-
-    def add_state(self, state: State) -> None:
-        """Add a state to the machine.
-
-        Args:
-            state: State to add.
-        """
-        self.states[state.name] = state
-
-    def add_transition(self, transition: Transition) -> None:
-        """Add a transition to the machine.
-
-        Args:
-            transition: Transition to add.
-        """
+    """State machine for managing AC and Phase states."""
+    
+    def __init__(self):
+        self.ac_states: Dict[str, StateSnapshot] = {}
+        self.phase_states: Dict[str, StateSnapshot] = {}
+        self.transitions: List[StateTransition] = []
+    
+    def initialize_ac(self, ac_id: str) -> Result:
+        """Initialize AC in DRAFT state."""
+        snapshot = StateSnapshot(entity_id=ac_id, current_state=ACState.DRAFT)
+        self.ac_states[ac_id] = snapshot
+        return Result(value=snapshot)
+    
+    def initialize_phase(self, phase_id: str) -> Result:
+        """Initialize Phase in PLANNING state."""
+        snapshot = StateSnapshot(entity_id=phase_id, current_state=PhaseState.PLANNING)
+        self.phase_states[phase_id] = snapshot
+        return Result(value=snapshot)
+    
+    def get_ac_state(self, ac_id: str) -> Result:
+        """Get AC state."""
+        if ac_id not in self.ac_states:
+            return Result(error=f"AC {ac_id} not found")
+        return Result(value=self.ac_states[ac_id])
+    
+    def get_phase_state(self, phase_id: str) -> Result:
+        """Get Phase state."""
+        if phase_id not in self.phase_states:
+            return Result(error=f"Phase {phase_id} not found")
+        return Result(value=self.phase_states[phase_id])
+    
+    def transition_ac(self, ac_id: str, to_state: str, transition_type: TransitionType) -> Result:
+        """Transition AC to new state."""
+        if ac_id not in self.ac_states:
+            return Result(error=f"AC {ac_id} not found")
+        
+        snapshot = self.ac_states[ac_id]
+        from_state = snapshot.current_state
+        
+        # Record transition
+        transition = StateTransition(
+            from_state=from_state,
+            to_state=to_state,
+            transition_type=transition_type
+        )
         self.transitions.append(transition)
-
-    def transition(self, target_state: str) -> bool:
-        """Attempt to transition to a state.
-
-        Args:
-            target_state: Target state name.
-
-        Returns:
-            True if transition successful, False otherwise.
-        """
-        # Find valid transition
-        valid_transition = None
-        for t in self.transitions:
-            if t.from_state == self.current_state and t.to_state == target_state:
-                if t.can_transition(self.context):
-                    valid_transition = t
-                    break
-
-        if not valid_transition:
-            return False
-
-        # Exit current state
-        current = self.states.get(self.current_state)
-        if current:
-            current.exit(self.context)
-
-        # Perform action
-        if valid_transition.action:
-            try:
-                valid_transition.action(self.context)
-            except Exception:
-                pass
-
-        # Enter new state
-        new_state = self.states.get(target_state)
-        if new_state:
-            new_state.enter(self.context)
-
-        # Update current state and history
-        self.current_state = target_state
-        self.history.append(target_state)
-
-        return True
-
-    def get_possible_transitions(self) -> List[str]:
-        """Get possible next states.
-
-        Returns:
-            List of possible state names.
-        """
-        possible = []
-        for t in self.transitions:
-            if t.from_state == self.current_state and t.can_transition(self.context):
-                possible.append(t.to_state)
-        return possible
-
-    def reset(self, initial_state: str) -> None:
-        """Reset state machine.
-
-        Args:
-            initial_state: New initial state.
-        """
-        self.current_state = initial_state
-        self.history = [initial_state]
-        self.context.clear()
+        
+        # Update state
+        snapshot.previous_state = from_state
+        snapshot.current_state = to_state
+        
+        return Result(value=snapshot)
+    
+    def transition_phase(self, phase_id: str, to_state: str, transition_type: TransitionType) -> Result:
+        """Transition Phase to new state."""
+        if phase_id not in self.phase_states:
+            return Result(error=f"Phase {phase_id} not found")
+        
+        snapshot = self.phase_states[phase_id]
+        from_state = snapshot.current_state
+        
+        transition = StateTransition(
+            from_state=from_state,
+            to_state=to_state,
+            transition_type=transition_type
+        )
+        self.transitions.append(transition)
+        
+        snapshot.previous_state = from_state
+        snapshot.current_state = to_state
+        
+        return Result(value=snapshot)
+    
+    def lock_ac(self, ac_id: str) -> Result:
+        """Lock AC state."""
+        if ac_id not in self.ac_states:
+            return Result(error=f"AC {ac_id} not found")
+        self.ac_states[ac_id].is_locked = True
+        return Result(value=self.ac_states[ac_id])
+    
+    def unlock_ac(self, ac_id: str) -> Result:
+        """Unlock AC state."""
+        if ac_id not in self.ac_states:
+            return Result(error=f"AC {ac_id} not found")
+        self.ac_states[ac_id].is_locked = False
+        return Result(value=self.ac_states[ac_id])
+    
+    def get_transition_history(self, ac_id: str = None) -> Result:
+        """Get transition history for AC."""
+        if ac_id:
+            history = [t for t in self.transitions if ac_id in [t.from_state, t.to_state]]
+        else:
+            history = [t for t in self.transitions]
+        return Result(value=history)
+    
+    def validate_transition(self, from_state: str, to_state: str) -> Result:
+        """Validate if transition is allowed."""
+        valid_transitions = {
+            ACState.DRAFT: [ACState.ACTIVE],
+            ACState.ACTIVE: [ACState.LOCKED, ACState.REVERTED],
+            ACState.LOCKED: [ACState.COMMITTED, ACState.REVERTED],
+            ACState.COMMITTED: [],
+            ACState.REVERTED: [ACState.DRAFT],
+            PhaseState.PLANNING: [PhaseState.EXECUTION],
+            PhaseState.EXECUTION: [PhaseState.VALIDATION],
+            PhaseState.VALIDATION: [PhaseState.COMPLETE],
+            PhaseState.COMPLETE: [],
+        }
+        
+        if from_state not in valid_transitions:
+            return Result(error=f"Unknown state: {from_state}")
+        
+        if to_state in valid_transitions[from_state]:
+            return Result(value=True)
+        
+        return Result(error=f"Invalid transition: {from_state} -> {to_state}")
 
 
 __all__ = [
     "StateMachine",
-    "State",
-    "Transition",
-    "StateType",
     "ACState",
+    "PhaseState",
+    "StateSnapshot",
+    "StateTransition",
+    "TransitionType",
+    "Result",
 ]
-
-# Stub for test compatibility
-class ACState:
-    """AC State for acceptance criteria."""
-    def __init__(self, name: str = "initial"):
-        self.name = name
-        self.context = {}
