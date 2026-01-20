@@ -390,6 +390,9 @@ class SagaCoordinator:
                 except CompensationError as ce:
                     if attempt == self.max_compensation_retries - 1:
                         logger.error(f"Compensation failed after {attempt + 1} attempts: {ce}")
+                        # Mark saga as STUCK - non-compensatable failure
+                        state.status = SagaStatus.STUCK
+                        self._save_state(saga_id, state)
                         raise
                     
                     backoff = self.compensation_backoff_seconds * (2 ** attempt)
