@@ -14,6 +14,13 @@ class OrchestratorState(str, Enum):
     PAUSED = "paused"
 
 
+class VacuumStrategy(str, Enum):
+    """Vacuum strategies."""
+    CONSERVATIVE = "conservative"
+    AGGRESSIVE = "aggressive"
+    CUSTOM = "custom"
+
+
 @dataclass
 class VacuumStats:
     """Vacuum operation statistics."""
@@ -41,4 +48,4 @@ class VacuumOrchestrator:
         return True
 
 
-__all__ = ["OrchestratorState", "VacuumStats", "OrchestrationReport", "VacuumOrchestrator"]
+__all__ = ["OrchestratorState", "VacuumStrategy", "VacuumStats", "OrchestrationReport", "VacuumOrchestrator"]

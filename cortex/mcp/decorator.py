@@ -26,4 +26,9 @@ def get_registered_tools() -> list:
     return []
 
 
-__all__ = ["get_tool", "mcp_tool", "get_registered_tools"]
+def clear_tools() -> None:
+    """Clear all registered MCP tools."""
+    pass
+
+
+__all__ = ["get_tool", "mcp_tool", "get_registered_tools", "clear_tools"]

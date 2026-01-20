@@ -10,6 +10,14 @@ from dataclasses import dataclass
 
 
 @dataclass
+class DataRetentionPolicy:
+    """Data retention policy."""
+    policy_id: str
+    retention_days: int
+    auto_delete: bool = True
+
+
+@dataclass
 class RetentionManager:
     """Manage data retention policies."""
     retention_days: int = 90
@@ -18,4 +26,4 @@ class RetentionManager:
         return True
 
 
-__all__ = ["RetentionManager"]
+__all__ = ["DataRetentionPolicy", "RetentionManager"]

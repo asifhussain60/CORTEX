@@ -6,7 +6,17 @@ Author: CORTEX Framework
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+
+@dataclass
+class ExecutionRecord:
+    """Execution record for determinism tracking."""
+    execution_id: str
+    input_hash: str
+    output_hash: str
+    timestamp: str = ""
+    metadata: dict = field(default_factory=dict)
 
 
 @dataclass
@@ -18,4 +28,4 @@ class OutputDeterminismVerifier:
         return True
 
 
-__all__ = ["OutputDeterminismVerifier"]
+__all__ = ["ExecutionRecord", "OutputDeterminismVerifier"]

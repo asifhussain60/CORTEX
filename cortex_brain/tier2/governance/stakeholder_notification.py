@@ -7,6 +7,15 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass
+from enum import Enum
+
+
+class NotificationLevel(Enum):
+    """Notification priority levels."""
+    INFO = "info"
+    WARNING = "warning"
+    ERROR = "error"
+    CRITICAL = "critical"
 
 
 @dataclass
@@ -18,4 +27,4 @@ class NotificationManager:
         return True
 
 
-__all__ = ["NotificationManager"]
+__all__ = ["NotificationLevel", "NotificationManager"]

@@ -10,6 +10,16 @@ from dataclasses import dataclass
 
 
 @dataclass
+class ConfidenceScore:
+    """Confidence score for hallucination detection."""
+    score: float
+    threshold: float = 0.8
+    
+    def is_confident(self) -> bool:
+        return self.score >= self.threshold
+
+
+@dataclass
 class HallucinationDetector:
     """Detect hallucinations in outputs."""
     threshold: float = 0.8
@@ -18,4 +28,4 @@ class HallucinationDetector:
         return False
 
 
-__all__ = ["HallucinationDetector"]
+__all__ = ["ConfidenceScore", "HallucinationDetector"]

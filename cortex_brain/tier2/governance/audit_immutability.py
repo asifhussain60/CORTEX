@@ -7,6 +7,14 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass
+from enum import Enum
+
+
+class TamperStatus(Enum):
+    """Tamper detection status."""
+    CLEAN = "clean"
+    TAMPERED = "tampered"
+    SUSPICIOUS = "suspicious"
 
 
 @dataclass
@@ -19,4 +27,4 @@ class AuditImmutability:
         return True
 
 
-__all__ = ["AuditImmutability"]
+__all__ = ["TamperStatus", "AuditImmutability"]

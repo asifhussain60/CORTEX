@@ -10,10 +10,18 @@ from dataclasses import dataclass, field
 
 
 @dataclass
+class ReasoningTraceStep:
+    """Reasoning trace step."""
+    step_id: str
+    description: str
+    timestamp: str = ""
+
+
+@dataclass
 class ReasoningTrace:
     """Reasoning trace."""
     trace_id: str
     steps: list = field(default_factory=list)
 
 
-__all__ = ["ReasoningTrace"]
+__all__ = ["ReasoningTraceStep", "ReasoningTrace"]

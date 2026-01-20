@@ -7,6 +7,14 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass
+from enum import Enum
+
+
+class SLAStatus(Enum):
+    """SLA compliance status."""
+    COMPLIANT = "compliant"
+    WARNING = "warning"
+    BREACH = "breach"
 
 
 @dataclass
@@ -19,4 +27,4 @@ class AuditPerformanceSLA:
         return duration_ms <= self.max_response_time_ms
 
 
-__all__ = ["AuditPerformanceSLA"]
+__all__ = ["SLAStatus", "AuditPerformanceSLA"]

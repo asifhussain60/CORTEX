@@ -22,6 +22,14 @@ class ResponseTone(Enum):
     TECHNICAL = "technical"
 
 
+class ResponseFormat(Enum):
+    """Response format."""
+    TEXT = "text"
+    MARKDOWN = "markdown"
+    HTML = "html"
+    JSON = "json"
+
+
 @dataclass
 class ResponseMetadata:
     """Response metadata."""
@@ -35,6 +43,14 @@ class ResponseContent:
     text: str
     format: str = "plain"
     metadata: dict = field(default_factory=dict)
+
+
+@dataclass
+class ResponseSegment:
+    """Response segment."""
+    segment_id: str
+    content: str
+    segment_type: str = "text"
 
 
 @dataclass
