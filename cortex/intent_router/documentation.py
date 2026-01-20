@@ -59,18 +59,67 @@ class DocumentationManager:
         ]
 
 
-def get_documentation() -> Dict[str, Any]:
+def get_documentation() -> str:
     """Get framework documentation.
     
     Returns:
-        Dictionary containing framework documentation
+        String containing framework documentation
     """
-    manager = DocumentationManager()
-    return {
-        "manager": manager,
-        "version": "1.0",
-        "entries": list(manager.entries.values())
-    }
+    doc = """# Intent Router Framework Documentation
+
+## Overview
+
+The Intent Router Framework provides intelligent intent classification and routing
+for user requests. It supports multiple input modalities and provides comprehensive
+classification, disambiguation, and orchestration capabilities.
+
+## Usage
+
+```python
+from cortex.intent_router.classifier import IntentClassifier
+
+# Create classifier
+classifier = IntentClassifier()
+
+# Classify user intent
+result = classifier.classify("Create a new authentication module")
+print(f"Intent: {result.primary_intent}")
+print(f"Confidence: {result.confidence_score}")
+```
+
+## Modules
+
+- **classifier**: Multi-label intent classification with confidence scoring
+- **disambiguator**: Disambiguation logic for ambiguous classifications
+- **multimodal_processor**: Multi-modal input processing (text, JSON, commands, code, schemas)
+- **routing_engine**: Intent routing to appropriate handlers
+- **confidence_scorer**: Confidence score computation
+- **context_manager**: Conversation context preservation
+- **fallback_strategy**: Fallback chains for low-confidence classifications
+- **intent_learner**: Learning from feedback to improve accuracy
+- **performance_metrics**: Performance tracking and metrics
+- **orchestration_integrator**: Integration with orchestrators
+
+## Architecture
+
+The framework follows a pipeline architecture:
+1. Input processing (multimodal)
+2. Intent classification
+3. Disambiguation (if needed)
+4. Routing to handlers
+5. Orchestrator integration
+
+## Features
+
+- Multi-label classification
+- Confidence scoring
+- Context awareness
+- Multiple input modalities
+- Fallback strategies
+- Performance metrics
+- Learning from feedback
+"""
+    return doc
 
 
 __all__ = ["DocumentationEntry", "DocumentationManager", "get_documentation"]
