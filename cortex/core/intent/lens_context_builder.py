@@ -18,4 +18,24 @@ class LENSContext:
     confidence: float = 1.0
 
 
-__all__ = ["LENSContext"]
+@dataclass
+class ContextNode:
+    """Node in LENS context tree."""
+    name: str
+    value: Any
+    children: list = field(default_factory=list)
+
+
+
+
+class LENSContextBuilder:
+    """Build LENS context."""
+    
+    def __init__(self):
+        self.context = LENSContext(intent="", context={})
+    
+    def build(self) -> LENSContext:
+        """Build context."""
+        return self.context
+
+__all__ = ["LENSContext", "LENSContextBuilder"]

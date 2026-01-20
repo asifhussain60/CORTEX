@@ -19,4 +19,24 @@ class FileWatcher:
         """Start watching."""
         pass
 
-__all__ = ["FileWatcher"]
+
+@dataclass
+class ReloadEvent:
+    """Hot reload event."""
+    file_path: str
+    timestamp: float
+    event_type: str = "modified"
+
+
+
+class HotReloadOrchestrator:
+    """Orchestrate hot reload operations."""
+    
+    def __init__(self):
+        self.watcher = FileWatcher()
+    
+    def start(self) -> None:
+        """Start hot reload."""
+        self.watcher.watch()
+
+__all__ = ["FileWatcher", "HotReloadOrchestrator"]

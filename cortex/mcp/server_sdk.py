@@ -13,4 +13,20 @@ class MCPRequest:
     params: Dict[str, Any] = field(default_factory=dict)
     id: Optional[str] = None
 
-__all__ = ["MCPRequest"]
+
+@dataclass
+class MCPResponse:
+    """MCP SDK response."""
+    status: str
+    data: dict = field(default_factory=dict)
+
+
+
+class MCPServer:
+    """MCP server SDK."""
+    
+    def handle(self, request: MCPRequest) -> dict:
+        """Handle MCP request."""
+        return {"status": "ok"}
+
+__all__ = ["MCPRequest", "MCPServer"]

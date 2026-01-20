@@ -17,4 +17,17 @@ class KnowledgeVersion:
     author: str = "system"
 
 
-__all__ = ["KnowledgeVersion"]
+
+
+class VersioningService:
+    """Knowledge versioning service."""
+    
+    def get_version(self, knowledge_id: str) -> KnowledgeVersion:
+        """Get knowledge version."""
+        return KnowledgeVersion(version="1.0.0", timestamp="", author="system")
+    
+    def create_version(self, knowledge_id: str) -> KnowledgeVersion:
+        """Create new version."""
+        return KnowledgeVersion(version="1.0.1", timestamp="", author="system")
+
+__all__ = ["KnowledgeVersion", "VersioningService"]

@@ -11,4 +11,23 @@ class GitAdapter:
     repo_path: str
     branch: str = "main"
 
-__all__ = ["GitAdapter"]
+
+@dataclass
+class CommentsAdapter:
+    """Adapter for comments."""
+    source: str
+    
+    def get_comments(self) -> list:
+        """Get comments."""
+        return []
+
+
+
+class ASTAdapter:
+    """Abstract syntax tree adapter."""
+    
+    def parse(self, code: str) -> dict:
+        """Parse code to AST."""
+        return {}
+
+__all__ = ["GitAdapter", "ASTAdapter"]

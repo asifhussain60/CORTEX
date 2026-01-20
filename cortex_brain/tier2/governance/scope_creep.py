@@ -6,5 +6,16 @@ Author: CORTEX Framework
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
-# Stub implementation - Phase E will add full logic
-pass
+from dataclasses import dataclass
+
+
+@dataclass
+class ScopeManager:
+    """Manage scope creep."""
+    max_scope: int = 100
+    
+    def check_scope(self, current_scope: int) -> bool:
+        return current_scope <= self.max_scope
+
+
+__all__ = ["ScopeManager"]

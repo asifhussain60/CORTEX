@@ -12,4 +12,28 @@ class DashboardMetrics:
     requests_per_minute: float = 0.0
     error_rate: float = 0.0
 
-__all__ = ["DashboardMetrics"]
+
+@dataclass
+class DashboardSection:
+    """Dashboard section."""
+    name: str
+    widgets: list = None
+    
+    def __post_init__(self):
+        if self.widgets is None:
+            self.widgets = []
+
+
+
+class DevXDashboard:
+    """Developer experience dashboard."""
+    
+    def get_metrics(self) -> DashboardMetrics:
+        """Get current metrics."""
+        return DashboardMetrics()
+    
+    def update(self) -> None:
+        """Update dashboard."""
+        pass
+
+__all__ = ["DashboardMetrics", "DevXDashboard"]

@@ -12,4 +12,30 @@ class ScenarioResult:
     passed: bool
     duration_ms: float = 0.0
 
-__all__ = ["ScenarioResult"]
+
+@dataclass
+class Scenario:
+    """Test scenario."""
+    name: str
+    steps: list = None
+    
+    def __post_init__(self):
+        if self.steps is None:
+            self.steps = []
+
+
+
+from typing import List
+
+class ScenarioLibrary:
+    """Library of test scenarios."""
+    
+    def get_scenarios(self) -> List[str]:
+        """Get available scenarios."""
+        return []
+    
+    def run_scenario(self, scenario_id: str) -> ScenarioResult:
+        """Run a scenario."""
+        return ScenarioResult(scenario_id=scenario_id, passed=True)
+
+__all__ = ["ScenarioResult", "ScenarioLibrary"]

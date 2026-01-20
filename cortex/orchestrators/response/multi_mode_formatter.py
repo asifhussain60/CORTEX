@@ -11,4 +11,13 @@ class FormattingProfile:
     profile_id: str
     format_type: str = "markdown"
 
-__all__ = ["FormattingProfile"]
+
+
+class MultiModeFormatter:
+    """Format responses in multiple modes."""
+    
+    def format(self, content: str, profile: FormattingProfile) -> str:
+        """Format content."""
+        return content
+
+__all__ = ["FormattingProfile", "MultiModeFormatter"]

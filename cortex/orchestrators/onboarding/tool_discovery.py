@@ -3,7 +3,7 @@
 Author: CORTEX Framework
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import List
 
 @dataclass
@@ -14,4 +14,24 @@ class ToolDiscoveryService:
         """Discover available tools."""
         return []
 
-__all__ = ["ToolDiscoveryService"]
+
+@dataclass
+class ToolSchema:
+    """Tool schema."""
+    name: str
+    parameters: list = field(default_factory=list)
+    description: str = ""
+
+
+
+class ToolDiscoveryOrchestrator:
+    """Orchestrate tool discovery."""
+    
+    def __init__(self):
+        self.service = ToolDiscoveryService()
+    
+    def orchestrate(self) -> List[str]:
+        """Orchestrate discovery."""
+        return self.service.discover_tools()
+
+__all__ = ["ToolDiscoveryService", "ToolDiscoveryOrchestrator"]

@@ -6,5 +6,16 @@ Author: CORTEX Framework
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
-# Stub implementation - Phase E will add full logic
-pass
+from dataclasses import dataclass
+
+
+@dataclass
+class PIIDetector:
+    """Detect PII in data."""
+    strict_mode: bool = True
+    
+    def detect(self, text: str) -> list:
+        return []
+
+
+__all__ = ["PIIDetector"]

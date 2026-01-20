@@ -20,4 +20,17 @@ class ToolEntry:
         if self.metadata is None:
             self.metadata = {}
 
-__all__ = ["ToolEntry"]
+
+
+class ToolRegistry:
+    """Tool registry."""
+    
+    def register(self, entry: ToolEntry) -> bool:
+        """Register tool."""
+        return True
+    
+    def get(self, tool_id: str) -> ToolEntry:
+        """Get tool entry."""
+        return ToolEntry(tool_id=tool_id, name=tool_id)
+
+__all__ = ["ToolEntry", "ToolRegistry"]

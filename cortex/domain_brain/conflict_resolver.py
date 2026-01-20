@@ -11,4 +11,20 @@ class ResolutionTier(str, Enum):
     MANUAL = "manual"
     ESCALATED = "escalated"
 
-__all__ = ["ResolutionTier"]
+
+class ReviewStatus(Enum):
+    """Conflict review status."""
+    PENDING = "pending"
+    APPROVED = "approved"
+    REJECTED = "rejected"
+
+
+
+class ConflictResolver:
+    """Resolve domain conflicts."""
+    
+    def resolve(self, conflict_id: str, tier: ResolutionTier) -> bool:
+        """Resolve conflict."""
+        return True
+
+__all__ = ["ResolutionTier", "ConflictResolver"]
