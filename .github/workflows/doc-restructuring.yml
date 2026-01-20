@@ -12,7 +12,7 @@ on:
     branches:
       - main
       - develop
-    ignore-paths:
+    paths-ignore:
       - 'docs/**'
       - '.github/**'
   
@@ -56,29 +56,33 @@ jobs:
           CORTEX_ROOT: ${{ github.workspace }}
           LOG_PATH: .github/agents/doc-restructuring.log
           REPORT_PATH: .github/agents/doc-restructuring-report.json
-          DRY_RUN: ${{ github.event.inputs.dry_run || 'false' }}
         run: |
-          python .github/agents/doc-restructuring-agent.py \
-            --root="${CORTEX_ROOT}" \
-            --auto-commit \
-            --dry-run="${DRY_RUN}"
+          cd ${{ github.workspace }}
+          python .github/agents/doc-restructuring-agent.py
           
-          # Extract results for next steps
+          # Check if reports were generated
           if [ -f .github/agents/doc-restructuring-report.json ]; then
             echo "report_exists=true" >> $GITHUB_OUTPUT
             echo "log_exists=true" >> $GITHUB_OUTPUT
           fi
       
+      - name: Check for changes
+        id: changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          fi
+      
       - name: Create git commit (if changes made)
-        if: steps.agent.outputs.report_exists == 'true' && github.event.inputs.dry_run != 'true'
+        if: steps.changes.outputs.has_changes == 'true'
         run: |
           git config user.name "CORTEX Documentation Bot"
           git config user.email "docs-bot@cortex.local"
           
-          # Check if there are changes
-          if [ -n "$(git status --porcelain)" ]; then
-            git add -A
-            git commit -m "Autonomous: Documentation restructuring
+          git add -A
+          git commit -m "Autonomous: Documentation restructuring
 
 - Phase 0: Repository scan and file discovery
 - Phase 1: Automatic file categorization
@@ -87,15 +91,11 @@ jobs:
 
 See .github/agents/doc-restructuring-report.json for details.
 Execution Log: .github/agents/doc-restructuring.log"
-          fi
       
       - name: Push changes
-        if: steps.agent.outputs.report_exists == 'true' && github.event.inputs.dry_run != 'true'
+        if: steps.changes.outputs.has_changes == 'true'
         run: |
-          # Only push if there are committed changes
-          if [ -n "$(git log -1 --oneline 2>/dev/null | grep -i 'autonomous')" ]; then
-            git push origin ${{ github.ref }}
-          fi
+          git push origin ${{ github.ref }}
       
       - name: Upload log artifact
         if: always() && steps.agent.outputs.log_exists == 'true'
@@ -119,6 +119,8 @@ Execution Log: .github/agents/doc-restructuring.log"
         with:
           script: |
             const fs = require('fs');
+            if (!fs.existsSync('.github/agents/doc-restructuring-report.json')) return;
+            
             const report = JSON.parse(fs.readFileSync('.github/agents/doc-restructuring-report.json', 'utf8'));
             
             const comment = `
@@ -127,19 +129,19 @@ Execution Log: .github/agents/doc-restructuring.log"
             **Files Discovered:** ${report.analysis.total_files}
             
             ### By Category
-            ${Object.entries(report.analysis.by_category).map(([cat, count]) => 
+            ${Object.entries(report.analysis.by_category || {}).map(([cat, count]) => 
               `- ${cat}: ${count}`
-            ).join('\n')}
+            ).join('\n') || 'None'}
             
             ### Actions Taken
-            ${Object.entries(report.analysis.by_action).map(([action, count]) => 
+            ${Object.entries(report.analysis.by_action || {}).map(([action, count]) => 
               `- ${action}: ${count}`
-            ).join('\n')}
+            ).join('\n') || 'None'}
             
             ### Execution
-            - Moved: ${report.execution.moved || 0}
-            - Archived: ${report.execution.archived || 0}
-            - Review Pending: ${report.execution.review_pending || 0}
+            - Moved: ${report.execution?.moved || 0}
+            - Archived: ${report.execution?.archived || 0}
+            - Review Pending: ${report.execution?.review_pending || 0}
             
             See [Full Report](.github/agents/doc-restructuring-report.json) and [Log](.github/agents/doc-restructuring.log) for details.
             `;
@@ -152,7 +154,7 @@ Execution Log: .github/agents/doc-restructuring.log"
             });
       
       - name: Notify Slack (optional)
-        if: always() && secrets.SLACK_WEBHOOK_URL != ''
+        if: always() && steps.agent.outputs.report_exists == 'true' && secrets.SLACK_WEBHOOK_URL != ''
         uses: slackapi/slack-github-action@v1.24.0
         with:
           webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
