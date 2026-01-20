@@ -1,28 +1,14 @@
-"""Domain brain module."""
+"""Business Knowledge Ingestion Orchestrator
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from enum import Enum
+Author: CORTEX Framework
+"""
 
+from dataclasses import dataclass
 
 @dataclass
-class BKIOResult:
-    """Data class."""
-    data: Dict[str, Any] = field(default_factory=dict)
+class BusinessKnowledgeIngestionOrchestrator:
+    """BKIO orchestrator."""
+    source: str
+    status: str = "idle"
 
-
-class BKIOOrchestrator:
-    """Class BKIOOrchestrator."""
-    def __init__(self): pass
-
-
-class BKIOOperation:
-    """Class BKIOOperation."""
-    def __init__(self): pass
-
-
-__all__ = [
-    "BKIOOrchestrator",
-    "BKIOOperation",
-    "BKIOResult",
-]
+__all__ = ["BusinessKnowledgeIngestionOrchestrator"]

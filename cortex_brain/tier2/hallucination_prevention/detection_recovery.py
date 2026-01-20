@@ -163,6 +163,16 @@ class HallucinationRecovery:
         return len(self.recovery_actions.get(pattern, []))
 
 
+
+
+@dataclass
+class CorruptionDetectionResult:
+    """Result of corruption detection."""
+    is_corrupted: bool
+    corruption_type: Optional[str] = None
+    confidence: float = 0.0
+    details: Dict[str, Any] = field(default_factory=dict)
+
 __all__ = [
     "HallucinationDetector",
     "HallucinationRecovery",

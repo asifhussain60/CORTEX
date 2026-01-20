@@ -1,18 +1,15 @@
-"""Module stub."""
-from typing import Dict, Any; from dataclasses import dataclass, field
+"""Integration Validator
+
+Author: CORTEX Framework
+"""
+
+from dataclasses import dataclass
 
 @dataclass
-class Base:
-    data: Dict[str, Any] = field(default_factory=dict)
+class ValidationIssue:
+    """Validation issue."""
+    issue_id: str
+    severity: str
+    message: str
 
-class IntegrationValidator(Base): pass
-
-class ValidationResult(Base): pass
-
-
-class IntegrationPoint:
-    """Class IntegrationPoint."""
-    def __init__(self): pass
-
-__all__ = ['IntegrationValidator', 'ValidationResult'    "IntegrationPoint",
-]
+__all__ = ["ValidationIssue"]

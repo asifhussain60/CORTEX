@@ -1,21 +1,14 @@
-"""Module: Onboarding orchestration
+"""Onboarding Orchestrator
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass
+from enum import Enum
 
+class JourneyState(str, Enum):
+    """Onboarding journey states."""
+    NOT_STARTED = "not_started"
+    IN_PROGRESS = "in_progress"
+    COMPLETED = "completed"
 
-class OnboardingOrchestrator:
-    """OnboardingOrchestrator - Onboarding orchestration."""
-
-    def __init__(self):
-        """Initialize onboardingorchestrator."""
-        pass
-
-
-__all__ = [
-    "OnboardingOrchestrator",
-]
+__all__ = ["JourneyState"]

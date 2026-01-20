@@ -1,12 +1,13 @@
-"""Module stub."""
-from typing import Dict, Any; from dataclasses import dataclass, field
+"""Multimodal Processor
+
+Author: CORTEX Framework
+"""
+
+from dataclasses import dataclass
 
 @dataclass
-class Base:
-    data: Dict[str, Any] = field(default_factory=dict)
+class MultiModalIntentProcessor:
+    """Process multimodal intents."""
+    enabled: bool = True
 
-class MultimodalProcessor(Base): pass
-
-class ProcessedInput(Base): pass
-
-__all__ = ['MultimodalProcessor', 'ProcessedInput']
+__all__ = ["MultiModalIntentProcessor"]

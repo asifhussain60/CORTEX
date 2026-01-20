@@ -1,21 +1,14 @@
-"""Module: Formats responses in multiple modes
+"""Multi-Mode Formatter
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
-from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 
+@dataclass
+class FormattingProfile:
+    """Formatting profile."""
+    profile_id: str
+    format_type: str = "markdown"
 
-class MultiModeFormatter:
-    """MultiModeFormatter - Formats responses in multiple modes."""
-
-    def __init__(self):
-        """Initialize multimodeformatter."""
-        pass
-
-
-__all__ = [
-    "MultiModeFormatter",
-]
+__all__ = ["FormattingProfile"]

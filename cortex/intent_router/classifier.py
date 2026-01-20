@@ -1,12 +1,14 @@
-"""Module stub."""
-from typing import Dict, Any; from dataclasses import dataclass, field
+"""Intent Classifier
 
-@dataclass
-class Base:
-    data: Dict[str, Any] = field(default_factory=dict)
+Author: CORTEX Framework
+"""
 
-class IntentClassifier(Base): pass
+from enum import Enum
 
-class Classification(Base): pass
+class IntentCategory(str, Enum):
+    """Intent categories."""
+    QUERY = "query"
+    COMMAND = "command"
+    NAVIGATION = "navigation"
 
-__all__ = ['IntentClassifier', 'Classification']
+__all__ = ["IntentCategory"]

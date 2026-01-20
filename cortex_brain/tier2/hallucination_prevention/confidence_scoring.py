@@ -86,9 +86,9 @@ class ConfidenceScorer:
 
         # Calculate weighted score
         overall = (
-            input_conf * self.weights["input"]
-            + proc_conf * self.weights["processing"]
-            + out_conf * self.weights["output"]
+            input_conf * self.weights["input", "ConfidenceAssessment"]
+            + proc_conf * self.weights["processing", "ConfidenceAssessment"]
+            + out_conf * self.weights["output", "ConfidenceAssessment"]
         )
 
         score = ConfidenceScore(
@@ -144,4 +144,13 @@ class ConfidenceScorer:
         self.scores.clear()
 
 
-__all__ = ["ConfidenceScorer", "ConfidenceScore"]
+
+
+@dataclass  
+class ConfidenceAssessment:
+    """Assessment of confidence in a result."""
+    confidence_score: float
+    factors: Dict[str, float] = field(default_factory=dict)
+    is_reliable: bool = True
+
+__all__ = ["ConfidenceScorer", "ConfidenceScore", "ConfidenceAssessment"]

@@ -1,34 +1,20 @@
-"""Module stub with required classes."""
+"""Knowledge Versioning
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from enum import Enum
+STUB IMPLEMENTATION - To be completed in Phase E.
 
+Author: CORTEX Framework
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
 
-class VersionMetadata:
-    """Implementation of VersionMetadata."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-class KnowledgeVersionManager:
-    """Implementation of KnowledgeVersionManager."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
+from dataclasses import dataclass
 
 
 @dataclass
-class VersioningService:
-    """Data class for VersioningService."""
-    data: dict = field(default_factory=dict)
+class KnowledgeVersion:
+    """Knowledge version info."""
+    version: str
+    timestamp: str
+    author: str = "system"
 
 
-__all__ = [
-    "VersionMetadata",
-    "KnowledgeVersionManager",
-]
+__all__ = ["KnowledgeVersion"]

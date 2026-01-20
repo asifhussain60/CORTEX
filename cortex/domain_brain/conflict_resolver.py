@@ -1,29 +1,14 @@
-"""Domain brain module."""
+"""Conflict Resolver
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
+Author: CORTEX Framework
+"""
+
 from enum import Enum
 
+class ResolutionTier(str, Enum):
+    """Resolution tiers."""
+    AUTOMATIC = "automatic"
+    MANUAL = "manual"
+    ESCALATED = "escalated"
 
-@dataclass
-class Conflict:
-    """Data class."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-@dataclass
-class Resolution:
-    """Data class."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
-
-class ConflictResolver:
-    """Class ConflictResolver."""
-    def __init__(self): pass
-
-
-__all__ = [
-    "ConflictResolver",
-    "Conflict",
-    "Resolution",
-]
+__all__ = ["ResolutionTier"]

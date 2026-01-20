@@ -1,35 +1,14 @@
-"""Domain brain module."""
+"""Domain Brain Adapters
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from enum import Enum
+Author: CORTEX Framework
+"""
 
-
-@dataclass
-class AdapterConfig:
-    """Data class."""
-    data: Dict[str, Any] = field(default_factory=dict)
-
+from dataclasses import dataclass
 
 @dataclass
-class AdapterResult:
-    """Data class."""
-    data: Dict[str, Any] = field(default_factory=dict)
+class GitAdapter:
+    """Git repository adapter."""
+    repo_path: str
+    branch: str = "main"
 
-
-class DomainAdapter:
-    """Class DomainAdapter."""
-    def __init__(self): pass
-
-
-
-class ASTAdapter:
-    """Class ASTAdapter."""
-    def __init__(self): pass
-
-__all__ = [
-    "DomainAdapter",
-    "AdapterConfig",
-    "AdapterResult",
-    "ASTAdapter",
-]
+__all__ = ["GitAdapter"]
