@@ -1,0 +1,130 @@
+# © 2025-2026 Asif Hussain. All rights reserved.
+# CORTEX Intelligence Module - Context gathering and analysis
+"""
+CORTEX Intelligence Module.
+
+This module provides context intelligence capabilities including:
+- AST-based code analysis
+- Git history intelligence
+- Code comment analysis
+- Relationship traversal
+
+Part of PHASE-07: Holistic Intent Router Intelligence.
+"""
+
+from cortex.brain.core.intelligence.ast_intelligence import (
+    ASTIntelligenceEngine,
+    ParseResult,
+    FunctionInfo,
+    ClassInfo,
+    ConstantInfo,
+    Parameter,
+)
+from cortex.brain.core.intelligence.call_graph import (
+    CallGraphBuilder,
+    CallGraph,
+    CallEdge,
+)
+from cortex.brain.core.intelligence.pattern_detector import (
+    PatternDetector,
+    DetectedPattern,
+)
+from cortex.brain.core.intelligence.dependency_mapper import (
+    DependencyMapper,
+    DependencyMap,
+    ImportInfo,
+)
+from cortex.brain.core.intelligence.git_history_analyzer import (
+    GitHistoryAnalyzer,
+    CommitInfo,
+    RenameInfo,
+)
+from cortex.brain.core.intelligence.change_frequency import (
+    ChangeFrequencyMapper,
+    HotSpot,
+)
+from cortex.brain.core.intelligence.author_context import (
+    AuthorContextBuilder,
+    Author,
+    AuthorContribution,
+)
+from cortex.brain.core.intelligence.comment_analyzer import (
+    CommentAnalyzer,
+    CommentAnalysisResult,
+    ParsedDocstring,
+    InlineComment,
+    TechDebtItem,
+    QualityIssue,
+    CommentIndex,
+    ArgInfo,
+    RaisesInfo,
+)
+from cortex.brain.core.intelligence.relationship_traversal import (
+    RelationshipEngine,
+    RelationshipAnalysisResult,
+    APIEndpoint,
+    DatabaseModel,
+    EnvReference,
+    ConfigReference,
+    FileDependency,
+    DependencyGraph,
+    ModelGraph,
+    ImpactAnalysis,
+    ForeignKeyRef,
+    ModelRelationship,
+)
+
+__all__ = [
+    # AST Intelligence
+    "ASTIntelligenceEngine",
+    "ParseResult",
+    "FunctionInfo",
+    "ClassInfo",
+    "ConstantInfo",
+    "Parameter",
+    # Call Graph
+    "CallGraphBuilder",
+    "CallGraph",
+    "CallEdge",
+    # Pattern Detection
+    "PatternDetector",
+    "DetectedPattern",
+    # Dependency Mapping
+    "DependencyMapper",
+    "DependencyMap",
+    "ImportInfo",
+    # Git History
+    "GitHistoryAnalyzer",
+    "CommitInfo",
+    "RenameInfo",
+    # Change Frequency
+    "ChangeFrequencyMapper",
+    "HotSpot",
+    # Author Context
+    "AuthorContextBuilder",
+    "Author",
+    "AuthorContribution",
+    # Comment Analysis
+    "CommentAnalyzer",
+    "CommentAnalysisResult",
+    "ParsedDocstring",
+    "InlineComment",
+    "TechDebtItem",
+    "QualityIssue",
+    "CommentIndex",
+    "ArgInfo",
+    "RaisesInfo",
+    # Relationship Traversal
+    "RelationshipEngine",
+    "RelationshipAnalysisResult",
+    "APIEndpoint",
+    "DatabaseModel",
+    "EnvReference",
+    "ConfigReference",
+    "FileDependency",
+    "DependencyGraph",
+    "ModelGraph",
+    "ImpactAnalysis",
+    "ForeignKeyRef",
+    "ModelRelationship",
+]

@@ -1,0 +1,864 @@
+# API Security Checklist (Machine-Readable)
+# Source: OWASP API Security Top 10 + Industry Best Practices
+# Version: 1.0
+# Created: December 22, 2025
+# Schema: APISecurityChecklistSchema
+# Purpose: Comprehensive API security guidelines for REST, GraphQL, and gRPC
+
+metadata:
+  title: "API Security Checklist"
+  organization: "OWASP Foundation + Industry Standards"
+  sources:
+    - "https://owasp.org/www-project-api-security/"
+    - "https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html"
+    - "https://graphql.org/learn/best-practices/"
+  version: "1.0"
+  created: "2025-12-22"
+  updated: "2025-12-22"
+  schema: "APISecurityChecklistSchema"
+  tags:
+    - security
+    - api-security
+    - rest-api
+    - graphql
+    - grpc
+    - owasp
+  
+  generated_docs:
+    - path: "docs/guidelines/security/api-security-checklist.md"
+      format: "markdown"
+      generator: "DocumentationOrchestrator"
+      template: "security_guideline"
+
+# REST API SECURITY
+rest_api_security:
+  authentication:
+    - id: "rest_auth_001"
+      name: "Use HTTPS Everywhere"
+      description: "All API endpoints must use TLS 1.2+"
+      severity: "CRITICAL"
+      implementation:
+        python: |
+          from flask import Flask, request, redirect
+          from flask_talisman import Talisman
+          
+          app = Flask(__name__)
+          
+          # Force HTTPS
+          Talisman(app, force_https=True, strict_transport_security=True)
+          
+          # Or manual redirect
+          @app.before_request
+          def force_https():
+              if not request.is_secure and not app.debug:
+                  url = request.url.replace('http://', 'https://', 1)
+                  return redirect(url, code=301)
+        
+        nginx: |
+          # Nginx configuration
+          server {
+              listen 80;
+              server_name api.example.com;
+              return 301 https://$server_name$request_uri;
+          }
+          
+          server {
+              listen 443 ssl http2;
+              server_name api.example.com;
+              
+              ssl_certificate /path/to/cert.pem;
+              ssl_certificate_key /path/to/key.pem;
+              ssl_protocols TLSv1.2 TLSv1.3;
+              ssl_ciphers HIGH:!aNULL:!MD5;
+              
+              # HSTS
+              add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+          }
+    
+    - id: "rest_auth_002"
+      name: "Implement Bearer Token Authentication"
+      description: "Use JWT or OAuth 2.0 tokens in Authorization header"
+      severity: "CRITICAL"
+      implementation:
+        python: |
+          import jwt
+          from functools import wraps
+          from flask import request, jsonify, g
+          
+          SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
+          
+          def require_auth(f):
+              @wraps(f)
+              def decorated(*args, **kwargs):
+                  auth_header = request.headers.get('Authorization')
+                  
+                  if not auth_header:
+                      return jsonify({'error': 'Authorization header missing'}), 401
+                  
+                  try:
+                      scheme, token = auth_header.split()
+                      
+                      if scheme.lower() != 'bearer':
+                          return jsonify({'error': 'Invalid authentication scheme'}), 401
+                      
+                      # Verify JWT
+                      payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+                      g.user_id = payload['user_id']
+                      
+                  except ValueError:
+                      return jsonify({'error': 'Invalid authorization header format'}), 401
+                  except jwt.ExpiredSignatureError:
+                      return jsonify({'error': 'Token expired'}), 401
+                  except jwt.InvalidTokenError:
+                      return jsonify({'error': 'Invalid token'}), 401
+                  
+                  return f(*args, **kwargs)
+              return decorated
+          
+          # Usage
+          @app.route('/api/v1/users/me')
+          @require_auth
+          def get_current_user():
+              user = User.query.get(g.user_id)
+              return jsonify(user.to_dict())
+        
+        javascript: |
+          // Axios interceptor for token
+          const api = axios.create({
+            baseURL: 'https://api.example.com'
+          });
+          
+          api.interceptors.request.use(config => {
+            const token = localStorage.getItem('access_token');
+            if (token) {
+              config.headers.Authorization = `Bearer ${token}`;
+            }
+            return config;
+          });
+  
+  authorization:
+    - id: "rest_authz_001"
+      name: "Validate Resource Ownership"
+      description: "Always verify user owns requested resource"
+      severity: "CRITICAL"
+      implementation:
+        python: |
+          @app.route('/api/v1/documents/<int:doc_id>', methods=['GET'])
+          @require_auth
+          def get_document(doc_id):
+              document = Document.query.get_or_404(doc_id)
+              
+              # Verify ownership
+              if document.owner_id != g.user_id and g.user.role != 'admin':
+                  return jsonify({'error': 'Access denied'}), 403
+              
+              return jsonify(document.to_dict())
+          
+          @app.route('/api/v1/documents/<int:doc_id>', methods=['DELETE'])
+          @require_auth
+          def delete_document(doc_id):
+              document = Document.query.get_or_404(doc_id)
+              
+              # Only owner or admin can delete
+              if document.owner_id != g.user_id and g.user.role != 'admin':
+                  return jsonify({'error': 'Access denied'}), 403
+              
+              db.session.delete(document)
+              db.session.commit()
+              
+              return '', 204
+  
+  rate_limiting:
+    - id: "rest_rate_001"
+      name: "Implement Rate Limiting"
+      description: "Prevent abuse with token bucket algorithm"
+      severity: "HIGH"
+      implementation:
+        python: |
+          from flask_limiter import Limiter
+          from flask_limiter.util import get_remote_address
+          
+          limiter = Limiter(
+              app,
+              key_func=get_remote_address,
+              default_limits=["200 per day", "50 per hour"],
+              storage_uri="redis://localhost:6379"
+          )
+          
+          # Per-endpoint limits
+          @app.route('/api/v1/login', methods=['POST'])
+          @limiter.limit("5 per minute")
+          def login():
+              # Login logic
+              pass
+          
+          @app.route('/api/v1/search')
+          @limiter.limit("100 per hour")
+          def search():
+              # Search logic
+              pass
+          
+          # User-specific limits (after authentication)
+          @app.route('/api/v1/upload', methods=['POST'])
+          @limiter.limit("10 per day", key_func=lambda: g.user_id)
+          def upload():
+              # Upload logic
+              pass
+        
+        nodejs: |
+          const rateLimit = require('express-rate-limit');
+          const RedisStore = require('rate-limit-redis');
+          
+          // Global rate limiter
+          const limiter = rateLimit({
+            store: new RedisStore({
+              client: redisClient
+            }),
+            windowMs: 15 * 60 * 1000, // 15 minutes
+            max: 100, // Limit each IP to 100 requests per window
+            message: 'Too many requests, please try again later'
+          });
+          
+          app.use('/api/', limiter);
+          
+          // Strict limiter for sensitive endpoints
+          const authLimiter = rateLimit({
+            windowMs: 15 * 60 * 1000,
+            max: 5,
+            message: 'Too many login attempts'
+          });
+          
+          app.post('/api/login', authLimiter, loginHandler);
+  
+  input_validation:
+    - id: "rest_input_001"
+      name: "Validate Request Body Schema"
+      description: "Use schema validation libraries"
+      severity: "CRITICAL"
+      implementation:
+        python: |
+          from pydantic import BaseModel, validator, constr
+          from flask import request, jsonify
+          
+          class CreateUserRequest(BaseModel):
+              username: constr(min_length=3, max_length=20, regex=r'^[a-zA-Z0-9_]+$')
+              email: str
+              password: constr(min_length=8)
+              
+              @validator('email')
+              def validate_email(cls, v):
+                  if not re.match(r'^[\w\.-]+@[\w\.-]+\.\w+$', v):
+                      raise ValueError('Invalid email format')
+                  return v
+              
+              @validator('password')
+              def validate_password(cls, v):
+                  if not any(c.isupper() for c in v):
+                      raise ValueError('Password must contain uppercase')
+                  if not any(c.isdigit() for c in v):
+                      raise ValueError('Password must contain digit')
+                  return v
+          
+          @app.route('/api/v1/users', methods=['POST'])
+          def create_user():
+              try:
+                  # Validate request body
+                  user_data = CreateUserRequest(**request.json)
+                  
+                  # Create user
+                  user = User(
+                      username=user_data.username,
+                      email=user_data.email
+                  )
+                  user.set_password(user_data.password)
+                  
+                  db.session.add(user)
+                  db.session.commit()
+                  
+                  return jsonify(user.to_dict()), 201
+                  
+              except ValueError as e:
+                  return jsonify({'error': str(e)}), 400
+  
+  cors:
+    - id: "rest_cors_001"
+      name: "Configure CORS Properly"
+      description: "Restrict allowed origins, methods, and headers"
+      severity: "HIGH"
+      implementation:
+        python: |
+          from flask_cors import CORS
+          
+          # Restrictive CORS configuration
+          CORS(app, resources={
+              r"/api/*": {
+                  "origins": ["https://app.example.com", "https://www.example.com"],
+                  "methods": ["GET", "POST", "PUT", "DELETE"],
+                  "allow_headers": ["Content-Type", "Authorization"],
+                  "expose_headers": ["X-Total-Count"],
+                  "max_age": 3600,
+                  "supports_credentials": True
+              }
+          })
+          
+          # Or manual CORS
+          @app.after_request
+          def add_cors_headers(response):
+              origin = request.headers.get('Origin')
+              
+              # Whitelist origins
+              allowed_origins = ['https://app.example.com']
+              
+              if origin in allowed_origins:
+                  response.headers['Access-Control-Allow-Origin'] = origin
+                  response.headers['Access-Control-Allow-Credentials'] = 'true'
+                  response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE'
+                  response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+              
+              return response
+  
+  versioning:
+    - id: "rest_version_001"
+      name: "Version Your API"
+      description: "Use URL versioning (e.g., /api/v1/)"
+      severity: "MEDIUM"
+      implementation:
+        python: |
+          from flask import Blueprint
+          
+          # API v1
+          api_v1 = Blueprint('api_v1', __name__, url_prefix='/api/v1')
+          
+          @api_v1.route('/users')
+          def get_users_v1():
+              return jsonify([u.to_dict() for u in User.query.all()])
+          
+          # API v2 (with changes)
+          api_v2 = Blueprint('api_v2', __name__, url_prefix='/api/v2')
+          
+          @api_v2.route('/users')
+          def get_users_v2():
+              # New response format
+              return jsonify({
+                  'data': [u.to_dict_v2() for u in User.query.all()],
+                  'meta': {'total': User.query.count()}
+              })
+          
+          app.register_blueprint(api_v1)
+          app.register_blueprint(api_v2)
+  
+  error_handling:
+    - id: "rest_error_001"
+      name: "Consistent Error Response Format"
+      description: "Use RFC 7807 Problem Details"
+      severity: "MEDIUM"
+      implementation:
+        python: |
+          from flask import jsonify
+          
+          def error_response(status: int, title: str, detail: str = None, **kwargs):
+              """Return RFC 7807 compliant error response"""
+              response = {
+                  'type': f'https://api.example.com/errors/{status}',
+                  'title': title,
+                  'status': status
+              }
+              
+              if detail:
+                  response['detail'] = detail
+              
+              response.update(kwargs)
+              
+              return jsonify(response), status
+          
+          # Usage
+          @app.route('/api/v1/users/<int:user_id>')
+          def get_user(user_id):
+              user = User.query.get(user_id)
+              
+              if not user:
+                  return error_response(
+                      404,
+                      'User Not Found',
+                      f'User with ID {user_id} does not exist',
+                      user_id=user_id
+                  )
+              
+              return jsonify(user.to_dict())
+        
+        example_response: |
+          {
+            "type": "https://api.example.com/errors/404",
+            "title": "User Not Found",
+            "status": 404,
+            "detail": "User with ID 123 does not exist",
+            "user_id": 123
+          }
+
+# GRAPHQL SECURITY
+graphql_security:
+  query_complexity:
+    - id: "graphql_complexity_001"
+      name: "Implement Query Complexity Analysis"
+      description: "Prevent expensive queries"
+      severity: "CRITICAL"
+      implementation:
+        python: |
+          from graphene import ObjectType, String, Int, List, Field
+          from graphql import GraphQLError
+          
+          # Define complexity rules
+          def complexity_rule(node, field_name, field_args, child_complexity):
+              if field_name == 'users':
+                  # Base complexity + list multiplier
+                  limit = field_args.get('limit', 10)
+                  return limit * (1 + child_complexity)
+              return 1 + child_complexity
+          
+          # Validation
+          MAX_COMPLEXITY = 1000
+          
+          def validate_complexity(query, max_complexity=MAX_COMPLEXITY):
+              complexity = calculate_complexity(query)
+              
+              if complexity > max_complexity:
+                  raise GraphQLError(
+                      f'Query too complex: {complexity} > {max_complexity}'
+                  )
+          
+          # Usage with GraphQL server
+          schema = graphene.Schema(
+              query=Query,
+              mutation=Mutation
+          )
+          
+          result = schema.execute(
+              query,
+              middleware=[complexity_validation_middleware]
+          )
+        
+        javascript: |
+          // Apollo Server with complexity plugin
+          const { ApolloServer } = require('apollo-server');
+          const depthLimit = require('graphql-depth-limit');
+          const { createComplexityLimitRule } = require('graphql-validation-complexity');
+          
+          const server = new ApolloServer({
+            typeDefs,
+            resolvers,
+            validationRules: [
+              depthLimit(5),  // Max nesting depth
+              createComplexityLimitRule(1000)  // Max complexity
+            ]
+          });
+  
+  query_depth:
+    - id: "graphql_depth_001"
+      name: "Limit Query Depth"
+      description: "Prevent deeply nested queries"
+      severity: "HIGH"
+      implementation:
+        python: |
+          from graphql import GraphQLError
+          
+          MAX_DEPTH = 5
+          
+          def depth_limit_validator(max_depth=MAX_DEPTH):
+              def validate(node, key, parent, path, ancestors):
+                  depth = len([a for a in ancestors if isinstance(a, Field)])
+                  
+                  if depth > max_depth:
+                      raise GraphQLError(
+                          f'Query exceeds max depth of {max_depth}'
+                      )
+              
+              return validate
+  
+  batching:
+    - id: "graphql_batch_001"
+      name: "Limit Batch Queries"
+      description: "Restrict number of queries in batch"
+      severity: "HIGH"
+      implementation:
+        python: |
+          MAX_BATCH_SIZE = 10
+          
+          @app.route('/graphql', methods=['POST'])
+          def graphql_handler():
+              data = request.json
+              
+              # Check if batched query
+              if isinstance(data, list):
+                  if len(data) > MAX_BATCH_SIZE:
+                      return jsonify({
+                          'error': f'Batch size exceeds limit of {MAX_BATCH_SIZE}'
+                      }), 400
+              
+              # Execute query
+              result = schema.execute(data)
+              return jsonify(result.data)
+  
+  introspection:
+    - id: "graphql_introspection_001"
+      name: "Disable Introspection in Production"
+      description: "Hide schema details from attackers"
+      severity: "MEDIUM"
+      implementation:
+        python: |
+          from graphql import GraphQLSchema
+          
+          # Disable introspection
+          schema = GraphQLSchema(
+              query=QueryType,
+              mutation=MutationType,
+              enable_introspection=app.debug  # Only in development
+          )
+        
+        javascript: |
+          // Apollo Server
+          const server = new ApolloServer({
+            typeDefs,
+            resolvers,
+            introspection: process.env.NODE_ENV !== 'production'
+          });
+  
+  authorization:
+    - id: "graphql_authz_001"
+      name: "Field-Level Authorization"
+      description: "Check permissions for each field"
+      severity: "CRITICAL"
+      implementation:
+        python: |
+          import graphene
+          from functools import wraps
+          
+          def require_auth(f):
+              @wraps(f)
+              def wrapper(self, info, **kwargs):
+                  if not info.context.user:
+                      raise GraphQLError('Authentication required')
+                  return f(self, info, **kwargs)
+              return wrapper
+          
+          def require_role(role):
+              def decorator(f):
+                  @wraps(f)
+                  def wrapper(self, info, **kwargs):
+                      if not info.context.user:
+                          raise GraphQLError('Authentication required')
+                      
+                      if info.context.user.role != role:
+                          raise GraphQLError('Insufficient permissions')
+                      
+                      return f(self, info, **kwargs)
+                  return wrapper
+              return decorator
+          
+          class Query(graphene.ObjectType):
+              user = graphene.Field(UserType, id=graphene.Int())
+              users = graphene.List(UserType)
+              
+              @require_auth
+              def resolve_user(self, info, id):
+                  user = User.query.get(id)
+                  
+                  # Field-level authorization
+                  if user.id != info.context.user.id and \
+                     info.context.user.role != 'admin':
+                      raise GraphQLError('Access denied')
+                  
+                  return user
+              
+              @require_role('admin')
+              def resolve_users(self, info):
+                  return User.query.all()
+
+# GENERAL API SECURITY
+general_security:
+  headers:
+    - id: "headers_001"
+      name: "Security Headers"
+      description: "Add security headers to all responses"
+      severity: "HIGH"
+      headers:
+        - name: "X-Content-Type-Options"
+          value: "nosniff"
+          description: "Prevent MIME type sniffing"
+        
+        - name: "X-Frame-Options"
+          value: "DENY"
+          description: "Prevent clickjacking"
+        
+        - name: "Content-Security-Policy"
+          value: "default-src 'self'"
+          description: "Restrict resource loading"
+        
+        - name: "X-XSS-Protection"
+          value: "1; mode=block"
+          description: "Enable XSS filter"
+        
+        - name: "Strict-Transport-Security"
+          value: "max-age=31536000; includeSubDomains"
+          description: "Force HTTPS"
+      
+      implementation:
+        python: |
+          @app.after_request
+          def add_security_headers(response):
+              response.headers['X-Content-Type-Options'] = 'nosniff'
+              response.headers['X-Frame-Options'] = 'DENY'
+              response.headers['X-XSS-Protection'] = '1; mode=block'
+              response.headers['Strict-Transport-Security'] = \
+                  'max-age=31536000; includeSubDomains'
+              response.headers['Content-Security-Policy'] = "default-src 'self'"
+              
+              # Remove server identification
+              response.headers.pop('Server', None)
+              
+              return response
+  
+  logging:
+    - id: "logging_001"
+      name: "Log Security Events"
+      description: "Track authentication, authorization, and suspicious activity"
+      severity: "HIGH"
+      implementation:
+        python: |
+          import logging
+          from functools import wraps
+          
+          security_logger = logging.getLogger('api.security')
+          
+          def log_api_call(f):
+              @wraps(f)
+              def wrapper(*args, **kwargs):
+                  # Log request
+                  security_logger.info(
+                      'API_CALL',
+                      extra={
+                          'method': request.method,
+                          'path': request.path,
+                          'user_id': getattr(g, 'user_id', None),
+                          'ip': request.remote_addr,
+                          'user_agent': request.headers.get('User-Agent')
+                      }
+                  )
+                  
+                  # Execute
+                  response = f(*args, **kwargs)
+                  
+                  # Log response
+                  security_logger.info(
+                      'API_RESPONSE',
+                      extra={
+                          'path': request.path,
+                          'status': response.status_code
+                      }
+                  )
+                  
+                  return response
+              return wrapper
+          
+          # Log failed authentication
+          @app.route('/api/v1/login', methods=['POST'])
+          def login():
+              username = request.json.get('username')
+              password = request.json.get('password')
+              
+              user = User.authenticate(username, password)
+              
+              if not user:
+                  security_logger.warning(
+                      'LOGIN_FAILED',
+                      extra={
+                          'username': username,
+                          'ip': request.remote_addr
+                      }
+                  )
+                  return jsonify({'error': 'Invalid credentials'}), 401
+              
+              security_logger.info(
+                  'LOGIN_SUCCESS',
+                  extra={'user_id': user.id, 'ip': request.remote_addr}
+              )
+              
+              return jsonify({'token': generate_jwt(user)})
+  
+  api_keys:
+    - id: "apikey_001"
+      name: "Secure API Key Management"
+      description: "Rotate keys, use scopes, monitor usage"
+      severity: "HIGH"
+      implementation:
+        python: |
+          import secrets
+          import hashlib
+          from datetime import datetime, timedelta
+          
+          class APIKey:
+              def __init__(self, name: str, scopes: list):
+                  self.id = secrets.token_urlsafe(16)
+                  self.key = self.generate_key()
+                  self.key_hash = self.hash_key(self.key)
+                  self.name = name
+                  self.scopes = scopes
+                  self.created_at = datetime.utcnow()
+                  self.expires_at = datetime.utcnow() + timedelta(days=90)
+                  self.last_used = None
+                  self.usage_count = 0
+              
+              @staticmethod
+              def generate_key():
+                  return secrets.token_urlsafe(32)
+              
+              @staticmethod
+              def hash_key(key: str) -> str:
+                  return hashlib.sha256(key.encode()).hexdigest()
+              
+              def is_valid(self) -> bool:
+                  return datetime.utcnow() < self.expires_at
+              
+              def has_scope(self, scope: str) -> bool:
+                  return scope in self.scopes
+              
+              def record_usage(self):
+                  self.last_used = datetime.utcnow()
+                  self.usage_count += 1
+          
+          # Middleware
+          def require_api_key(required_scope=None):
+              def decorator(f):
+                  @wraps(f)
+                  def wrapper(*args, **kwargs):
+                      key = request.headers.get('X-API-Key')
+                      
+                      if not key:
+                          return jsonify({'error': 'API key required'}), 401
+                      
+                      # Hash and lookup
+                      key_hash = APIKey.hash_key(key)
+                      api_key = APIKey.query.filter_by(key_hash=key_hash).first()
+                      
+                      if not api_key or not api_key.is_valid():
+                          return jsonify({'error': 'Invalid or expired API key'}), 401
+                      
+                      # Check scope
+                      if required_scope and not api_key.has_scope(required_scope):
+                          return jsonify({'error': 'Insufficient permissions'}), 403
+                      
+                      # Record usage
+                      api_key.record_usage()
+                      db.session.commit()
+                      
+                      g.api_key = api_key
+                      return f(*args, **kwargs)
+                  return wrapper
+              return decorator
+
+# MONITORING & ALERTING
+monitoring:
+  metrics:
+    - metric: "api_requests_total"
+      type: "counter"
+      labels: ["method", "endpoint", "status_code"]
+      description: "Total API requests"
+    
+    - metric: "api_request_duration_seconds"
+      type: "histogram"
+      labels: ["method", "endpoint"]
+      description: "API request duration"
+    
+    - metric: "api_authentication_failures_total"
+      type: "counter"
+      labels: ["reason"]
+      description: "Failed authentication attempts"
+    
+    - metric: "api_rate_limit_hits_total"
+      type: "counter"
+      labels: ["endpoint", "user_id"]
+      description: "Rate limit violations"
+  
+  alerts:
+    - name: "HighAuthFailureRate"
+      condition: "rate(api_authentication_failures_total[5m]) > 10"
+      severity: "WARNING"
+      description: "Possible brute force attack"
+    
+    - name: "APIErrorRate"
+      condition: "rate(api_requests_total{status_code=~'5..'}[5m]) > 0.05"
+      severity: "CRITICAL"
+      description: "High API error rate"
+    
+    - name: "UnusualTrafficSpike"
+      condition: "rate(api_requests_total[5m]) > 1000"
+      severity: "WARNING"
+      description: "Traffic spike detected"
+
+# TESTING
+security_testing:
+  automated:
+    - tool: "OWASP ZAP"
+      type: "DAST"
+      command: "zap-cli quick-scan --self-contained https://api.example.com"
+    
+    - tool: "Postman Security Tests"
+      type: "Functional"
+      tests:
+        - "Verify HTTPS redirect"
+        - "Test rate limiting"
+        - "Validate authentication"
+        - "Check CORS configuration"
+    
+    - tool: "Bandit"
+      type: "SAST"
+      command: "bandit -r src/"
+  
+  manual:
+    - test: "Authentication Bypass"
+      steps:
+        - "Attempt to access protected endpoints without token"
+        - "Use expired token"
+        - "Modify token payload"
+    
+    - test: "Authorization Bypass"
+      steps:
+        - "Access other users' resources"
+        - "Modify resource IDs in requests"
+        - "Test role escalation"
+    
+    - test: "Input Validation"
+      steps:
+        - "Send malformed JSON"
+        - "Send oversized payloads"
+        - "Test SQL injection payloads"
+        - "Test XSS payloads"
+
+# SUMMARY
+summary:
+  rest_api_checks: 7
+  graphql_checks: 5
+  general_checks: 3
+  
+  criticality_breakdown:
+    critical: 8
+    high: 5
+    medium: 2
+  
+  implementation_phases:
+    phase_1_foundation:
+      - "HTTPS enforcement"
+      - "Authentication (JWT/OAuth)"
+      - "Input validation"
+      - "Rate limiting"
+    
+    phase_2_hardening:
+      - "Authorization checks"
+      - "CORS configuration"
+      - "Security headers"
+      - "Error handling"
+    
+    phase_3_advanced:
+      - "API versioning"
+      - "Monitoring & alerting"
+      - "GraphQL security (if applicable)"
+      - "Automated security testing"

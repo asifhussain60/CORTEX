@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Developer Insights | RA Domain Analysis</title>
+    <link rel="stylesheet" href="../assets/onedrive-glass.css">
+    <style>
+        .comment-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .comment-card.critical {
+            border-left: 4px solid var(--danger);
+            background: rgba(239, 68, 68, 0.05);
+        }
+        .comment-card.high {
+            border-left: 4px solid var(--warning);
+            background: rgba(245, 158, 11, 0.05);
+        }
+        .comment-meta {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .keyword-badge {
+            display: inline-block;
+            background: var(--accent-primary);
+            color: white;
+            padding: 0.125rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .keyword-badge.regulatory {
+            background: var(--danger);
+        }
+        .keyword-badge.business {
+            background: var(--success);
+        }
+        .keyword-badge.tech-debt {
+            background: var(--warning);
+        }
+        .chart-bar {
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding-left: 0.5rem;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            transition: transform 0.2s;
+        }
+        .chart-bar:hover {
+            transform: scaleX(1.02);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-box {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-primary);
+        }
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="page-header">
+        <div class="header-logo">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="cortex-logo">
+            <div>
+                <h1 class="header-title">Developer Insights</h1>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                    1,494 comments analyzed | 7 regulatory refs | 124 business rules
+                </p>
+            </div>
+        </div>
+        <div>
+            <p class="last-updated">Last Updated: December 11, 2025</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">
+                <a href="../index.html" style="color: var(--accent-primary);">← Back to Dashboard</a>
+            </p>
+        </div>
+    </header>
+
+    <!-- Comment Extraction Summary KPIs -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            📊 Comment Extraction Summary - Key Performance Indicators (KPIs)
+        </h2>
+        <div class="kpi-grid">
+            <div class="kpi success">
+                <h3>Total Comments Extracted</h3>
+                <div class="value">1,494</div>
+                <div class="target">256 files scanned</div>
+                <div class="trend up">↑ 5.8 per file</div>
+                <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                    82% quality rate
+                </p>
+            </div>
+
+            <div class="kpi critical">
+                <h3>Regulatory References</h3>
+                <div class="value">7</div>
+                <div class="target">RegulatoryAgency compliance</div>
+                <div class="trend">Critical insights</div>
+                <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                    5 critical comments
+                </p>
+            </div>
+
+            <div class="kpi warning">
+                <h3>Business Rule Comments</h3>
+                <div class="value">124</div>
+                <div class="target">8.3% of total</div>
+                <div class="trend up">↑ High value</div>
+                <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                    120 high relevance
+                </p>
+            </div>
+
+            <div class="kpi info">
+                <h3>Technical Debt Markers</h3>
+                <div class="value">11</div>
+                <div class="target">9 TODO + 2 BUG</div>
+                <div class="trend down">↓ Low debt</div>
+                <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                    0.7% of comments
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comment Distribution Stats -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            📈 Comment Distribution by Type
+        </h2>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-value">154</div>
+                <div class="stat-label">XML Summary Tags</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">1,559</div>
+                <div class="stat-label">Single-Line Comments</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">39</div>
+                <div class="stat-label">XML Param Descriptions</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">30</div>
+                <div class="stat-label">Region Markers</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">24</div>
+                <div class="stat-label">XML Returns Descriptions</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">1</div>
+                <div class="stat-label">Multi-Line Comments</div>
+            </div>
+        </div>
+
+        <h3 style="font-size: 1.25rem; font-weight: 600; margin-top: 2rem; margin-bottom: 1rem; color: var(--text-primary);">
+            Comment Relevance Distribution
+        </h3>
+        <div style="max-width: 600px;">
+            <div class="chart-bar" style="width: 81%;">Low: 1,213 comments (81%)</div>
+            <div class="chart-bar" style="width: 10%; background: var(--warning);">Medium: 156 comments (10%)</div>
+            <div class="chart-bar" style="width: 8%; background: var(--success);">High: 120 comments (8%)</div>
+            <div class="chart-bar" style="width: 0.3%; background: var(--danger);">Critical: 5 comments (0.3%)</div>
+        </div>
+    </section>
+
+    <!-- Critical Regulatory Comments -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            🚨 Critical Regulatory Comments
+        </h2>
+        
+        <div class="comment-card critical">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">Cross-Organization Security Requirement</h3>
+            <p style="font-style: italic; color: var(--text-primary); line-height: 1.6;">
+                "Tests to validate that GetCurrentYearReimbursementAccountForCarryoverAsync correctly filters by organization
+                to prevent cross-organization rollover transfers that would cause card balance inflation. CRITICAL SECURITY REQUIREMENT:
+                This method MUST only return accounts from the SAME organization as the source account. Cross-organization transfers would incorrectly inflate card balances."
+            </p>
+            <div class="comment-meta">
+                <span><span class="keyword-badge regulatory">RegulatoryAgency</span></span>
+                <span><span class="keyword-badge business">rollover</span> <span class="keyword-badge business">payment</span></span>
+                <span>📁 ReimbursementAccountRepository_CrossEmployerValidationTests.cs</span>
+                <span>Line: 80</span>
+            </div>
+        </div>
+
+        <div class="comment-card high">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">Balance Change Audit Trail</h3>
+            <p style="font-style: italic; color: var(--text-primary); line-height: 1.6;">
+                "Represents an audit record for balance changes in PaymentAccounts."
+            </p>
+            <div class="comment-meta">
+                <span><span class="keyword-badge business">payment</span></span>
+                <span>📁 BalanceChangeAudit.cs</span>
+                <span>Context: class BalanceChangeAudit</span>
+            </div>
+        </div>
+
+        <div class="comment-card high">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">Manual Rollover vs. Rollover Feature</h3>
+            <p style="font-style: italic; color: var(--text-primary); line-height: 1.6;">
+                "Should return FALSE because Manual Rollover bypasses the rollover feature"
+            </p>
+            <div class="comment-meta">
+                <span><span class="keyword-badge business">rollover</span></span>
+                <span>Context: Test method</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Business Rule Comments -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            💼 Key Business Rule Comments
+        </h2>
+
+        <div style="margin-bottom: 1rem;">
+            <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Top Business Keywords</h3>
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                <span class="keyword-badge business">payment (89 refs)</span>
+                <span class="keyword-badge business">rollover (24 refs)</span>
+                <span class="keyword-badge business">request (11 refs)</span>
+                <span class="keyword-badge business">grace period</span>
+                <span class="keyword-badge business">expiration</span>
+                <span class="keyword-badge business">registration</span>
+                <span class="keyword-badge business">benefit</span>
+                <span class="keyword-badge business">eligibility</span>
+            </div>
+        </div>
+
+        <div class="comment-card">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">Organization Data Isolation</h3>
+            <p style="font-style: italic; color: var(--text-primary); line-height: 1.6;">
+                "&& x.PaymentPlan.EmployerId == previousEmployerId"
+            </p>
+            <div class="comment-meta">
+                <span><span class="keyword-badge business">payment</span></span>
+                <span>Ensures multi-tenant data isolation</span>
+            </div>
+        </div>
+
+        <div class="comment-card">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">Cross-Organization Rollover Prevention</h3>
+            <p style="font-style: italic; color: var(--text-primary); line-height: 1.6;">
+                "The repository filtering should prevent finding TechCo's account when looking for Acme's rollover"
+            </p>
+            <div class="comment-meta">
+                <span><span class="keyword-badge business">rollover</span></span>
+                <span>Multi-tenant security test case</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Debt Analysis -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            🔧 Technical Debt Markers
+        </h2>
+
+        <div style="margin-bottom: 2rem;">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">Distribution</h3>
+            <div style="max-width: 400px;">
+                <div class="chart-bar" style="width: 82%; background: var(--warning);">TODO: 9 markers (82%)</div>
+                <div class="chart-bar" style="width: 18%; background: var(--danger);">BUG: 2 markers (18%)</div>
+            </div>
+        </div>
+
+        <div style="background: rgba(34, 197, 94, 0.1); border-left: 4px solid var(--success); padding: 1rem; border-radius: 8px;">
+            <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">✅ Platform Health Indicator</h3>
+            <p style="line-height: 1.6;">
+                <strong>11 total technical debt markers across 256 files = 0.043 markers per file</strong><br>
+                This is exceptionally low for an enterprise C# codebase, indicating:<br>
+                • Active technical debt management<br>
+                • Issues likely tracked externally (Azure DevOps, Jira)<br>
+                • Mature development practices<br>
+                • Low code churn / stable architecture
+            </p>
+        </div>
+    </section>
+
+    <!-- Comment Coverage Analysis -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            📊 Comment Coverage Analysis
+        </h2>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-value">256</div>
+                <div class="stat-label">Files Processed</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">5.8</div>
+                <div class="stat-label">Avg Comments/File</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">82%</div>
+                <div class="stat-label">Quality Rate</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">321</div>
+                <div class="stat-label">Boilerplate Skipped</div>
+            </div>
+        </div>
+
+        <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; margin-top: 2rem;">Coverage Insights</h3>
+        <ul style="line-height: 1.8; color: var(--text-primary);">
+            <li><strong>Selective Documentation:</strong> Developers focus on critical/high-value areas (8.3% critical+high) rather than documenting everything equally</li>
+            <li><strong>XML Documentation:</strong> 217 XML tags (summary, param, returns) provide API-level documentation for public interfaces</li>
+            <li><strong>Low Inline Comments:</strong> 91% low/medium relevance suggests code is self-documenting OR developers rely on external documentation</li>
+            <li><strong>Regulatory Awareness:</strong> Only 7 regulatory comments found—opportunity to enhance compliance documentation in code</li>
+        </ul>
+    </section>
+
+    <!-- Key Insights Summary -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            💡 Key Insights from Comment Analysis
+        </h2>
+
+        <div style="background: rgba(79, 70, 229, 0.1); border-left: 4px solid var(--accent-primary); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.75rem;">🔒 Security-First Mindset</h3>
+            <p style="line-height: 1.6;">
+                Critical security requirements are documented in ALL-CAPS warnings (e.g., "CRITICAL SECURITY REQUIREMENT: This method MUST only return accounts from the SAME organization"), 
+                demonstrating that developers prioritize security in both code and documentation.
+            </p>
+        </div>
+
+        <div style="background: rgba(34, 197, 94, 0.1); border-left: 4px solid var(--success); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.75rem;">📋 Disciplined Development Culture</h3>
+            <p style="line-height: 1.6;">
+                Low technical debt markers (11 total), high-quality comment filtering (82% pass rate), and explicit business rule documentation 
+                reveal a mature development team that values code quality and maintainability.
+            </p>
+        </div>
+
+        <div style="background: rgba(245, 158, 11, 0.1); border-left: 4px solid var(--warning); padding: 1.5rem; border-radius: 8px; margin-bottom: 1rem;">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.75rem;">📚 Documentation Opportunity</h3>
+            <p style="line-height: 1.6;">
+                Only 7 regulatory references found in 1,494 comments suggests an opportunity to enhance compliance documentation. 
+                Given the platform manages RegulatoryAgency/PrivacyRegulation/PaymentSecurity requirements, increasing regulatory citations in code comments would improve 
+                audit trail and knowledge transfer.
+            </p>
+        </div>
+
+        <div style="background: rgba(239, 68, 68, 0.1); border-left: 4px solid var(--danger); padding: 1.5rem; border-radius: 8px;">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.75rem;">⚠️ Multi-Tenant Architecture Critical</h3>
+            <p style="line-height: 1.6;">
+                Multiple comments emphasize organization separation and cross-organization validation, highlighting that multi-tenant data isolation 
+                is a **critical business requirement**. Any breach in organization isolation could expose sensitive financial data or cause 
+                incorrect fund transfers between unrelated companies.
+            </p>
+        </div>
+    </section>
+
+    <!-- Data Sources -->
+    <section class="glass-card-flat">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            📁 Data Sources
+        </h2>
+        <ul style="line-height: 1.8; color: var(--text-primary);">
+            <li><code>comment-extraction.json</code> - 1,494 developer comments with full metadata</li>
+            <li><code>comment-statistics.json</code> - Comment quality and distribution metrics</li>
+            <li><strong>Extraction Date:</strong> December 11, 2025</li>
+            <li><strong>Source Repository:</strong> Product.PaymentAccounts (256 C# files)</li>
+            <li><strong>Extractor Version:</strong> comment_extractor.py v1.0</li>
+            <li><strong>Quality Threshold:</strong> Minimum 10 characters, boilerplate filtered</li>
+        </ul>
+    </section>
+
+    <footer style="text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.875rem;">
+        <p>Generated by CORTEX AST-to-Narrative Orchestrator | Comment Extraction Module</p>
+        <p style="margin-top: 0.5rem;">© 2025 Asif Hussain. All rights reserved.</p>
+    </footer>
+</body>
+</html>

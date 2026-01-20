@@ -1,0 +1,153 @@
+[
+  {
+    "priority": "P0",
+    "component": "CarryoverDollarsDomainService",
+    "files_untested": [
+      "CarryoverDollarsDomainService.cs"
+    ],
+    "test_scenarios_needed": 15,
+    "business_impact": "RegulatoryAgency compliance failure - $500k penalty risk",
+    "regulatory_risk": "CRITICAL",
+    "roi_estimate": 500000,
+    "effort_hours": 40,
+    "sprint_target": "Sprint 1",
+    "test_types": [
+      "Unit",
+      "Integration",
+      "Regulatory"
+    ],
+    "key_scenarios": [
+      "FlexAccount rollover limit validation ($640 max)",
+      "HealthSavings unlimited rollover",
+      "Grace period mutual exclusion",
+      "Plan year transition logic",
+      "Balance calculation accuracy"
+    ]
+  },
+  {
+    "priority": "P0",
+    "component": "BalanceCalculationService",
+    "files_untested": [
+      "BalanceCalculationService.cs",
+      "BalanceRepository.cs"
+    ],
+    "test_scenarios_needed": 12,
+    "business_impact": "Incorrect balances \u2192 customer claims denied",
+    "regulatory_risk": "HIGH",
+    "roi_estimate": 200000,
+    "effort_hours": 30,
+    "sprint_target": "Sprint 1-2",
+    "test_types": [
+      "Unit",
+      "Integration"
+    ],
+    "key_scenarios": [
+      "Contribution + organization match calculation",
+      "Requests deduction logic",
+      "Carry-forward balance accuracy",
+      "Multi-plan aggregation",
+      "Real-time vs. batch sync"
+    ]
+  },
+  {
+    "priority": "P1",
+    "component": "ClaimsProcessingService",
+    "files_untested": [
+      "ClaimsProcessingService.cs",
+      "ClaimValidationService.cs"
+    ],
+    "test_scenarios_needed": 20,
+    "business_impact": "Requests processing errors \u2192 customer support burden",
+    "regulatory_risk": "MEDIUM",
+    "roi_estimate": 100000,
+    "effort_hours": 50,
+    "sprint_target": "Sprint 3",
+    "test_types": [
+      "Unit",
+      "Integration",
+      "E2E"
+    ],
+    "key_scenarios": [
+      "Qualified expense validation",
+      "Insufficient balance handling",
+      "Duplicate request detection",
+      "Manual review triggers",
+      "Auto-adjudication rules"
+    ]
+  },
+  {
+    "priority": "P1",
+    "component": "CardTransactionService",
+    "files_untested": [
+      "CardTransactionService.cs",
+      "MerchantValidator.cs"
+    ],
+    "test_scenarios_needed": 18,
+    "business_impact": "Fraudulent transactions, merchant code errors",
+    "regulatory_risk": "MEDIUM",
+    "roi_estimate": 80000,
+    "effort_hours": 45,
+    "sprint_target": "Sprint 3-4",
+    "test_types": [
+      "Unit",
+      "Integration"
+    ],
+    "key_scenarios": [
+      "Merchant category code validation",
+      "Real-time authorization",
+      "Transaction reversal",
+      "Fraud detection rules",
+      "PaymentSecurity compliance checks"
+    ]
+  },
+  {
+    "priority": "P2",
+    "component": "PlanManagementService",
+    "files_untested": [
+      "PlanManagementService.cs",
+      "PlanRepository.cs",
+      "PlanValidator.cs"
+    ],
+    "test_scenarios_needed": 15,
+    "business_impact": "Plan setup errors \u2192 delayed onboarding",
+    "regulatory_risk": "LOW",
+    "roi_estimate": 50000,
+    "effort_hours": 35,
+    "sprint_target": "Sprint 5",
+    "test_types": [
+      "Unit",
+      "Integration"
+    ],
+    "key_scenarios": [
+      "FlexAccount vs HealthSavings plan type validation",
+      "Organization contribution rules",
+      "Registration period enforcement",
+      "Plan year configuration",
+      "Benefit limits setup"
+    ]
+  },
+  {
+    "priority": "P2",
+    "component": "ReportingService",
+    "files_untested": [
+      "ReportingService.cs",
+      "ReportGenerator.cs"
+    ],
+    "test_scenarios_needed": 10,
+    "business_impact": "Report inaccuracies \u2192 operational delays",
+    "regulatory_risk": "LOW",
+    "roi_estimate": 20000,
+    "effort_hours": 25,
+    "sprint_target": "Sprint 6",
+    "test_types": [
+      "Unit"
+    ],
+    "key_scenarios": [
+      "Contribution summary reports",
+      "Requests utilization reports",
+      "Compliance audit reports",
+      "Year-end tax forms (1099-SA)",
+      "Custom report builder"
+    ]
+  }
+]

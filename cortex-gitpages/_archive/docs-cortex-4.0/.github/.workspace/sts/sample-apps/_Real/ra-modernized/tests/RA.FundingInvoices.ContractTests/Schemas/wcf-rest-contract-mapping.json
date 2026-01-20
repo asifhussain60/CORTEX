@@ -1,0 +1,362 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": "1.0",
+  "description": "WCF to REST contract mapping for RA Funding Invoices migration",
+  "mappings": [
+    {
+      "wcfTransaction": "XAddFundingInvoice",
+      "restEndpoint": {
+        "method": "POST",
+        "path": "/api/v1/funding-invoices",
+        "controller": "FundingInvoiceController",
+        "action": "CreateInvoice"
+      },
+      "requestMapping": {
+        "wcfSchema": {
+          "EmployerId": "string",
+          "SubaccountId": "string",
+          "ReimbursementPlanId": "string",
+          "EmployerFundingDefault": "decimal",
+          "EmployeeFundingDefault": "decimal",
+          "EffectiveDate": "DateTime",
+          "InvoiceDescription": "string",
+          "IsLSA": "boolean",
+          "UpdateTemplate": "boolean",
+          "CreatedBy": "string"
+        },
+        "restSchema": {
+          "employerId": "string",
+          "subaccountId": "string",
+          "reimbursementPlanId": "string",
+          "employerFundingDefault": "number",
+          "employeeFundingDefault": "number",
+          "effectiveDate": "string (ISO 8601)",
+          "invoiceDescription": "string",
+          "isLSA": "boolean",
+          "updateTemplate": "boolean",
+          "createdBy": "string"
+        },
+        "fieldMappings": [
+          {"wcf": "EmployerId", "rest": "employerId", "type": "string", "required": true},
+          {"wcf": "SubaccountId", "rest": "subaccountId", "type": "string", "required": true},
+          {"wcf": "ReimbursementPlanId", "rest": "reimbursementPlanId", "type": "string", "required": true},
+          {"wcf": "EmployerFundingDefault", "rest": "employerFundingDefault", "type": "decimal", "required": true},
+          {"wcf": "EmployeeFundingDefault", "rest": "employeeFundingDefault", "type": "decimal", "required": true},
+          {"wcf": "EffectiveDate", "rest": "effectiveDate", "type": "DateTime", "required": true},
+          {"wcf": "InvoiceDescription", "rest": "invoiceDescription", "type": "string", "required": true},
+          {"wcf": "IsLSA", "rest": "isLSA", "type": "boolean", "required": true},
+          {"wcf": "UpdateTemplate", "rest": "updateTemplate", "type": "boolean", "required": true},
+          {"wcf": "CreatedBy", "rest": "createdBy", "type": "string", "required": true}
+        ]
+      },
+      "responseMapping": {
+        "wcfSchema": {
+          "InvoiceId": "string",
+          "EmployerId": "string",
+          "SubaccountId": "string",
+          "TotalAmount": "decimal",
+          "Status": "string",
+          "CreatedDate": "DateTime"
+        },
+        "restSchema": {
+          "invoiceId": "string",
+          "employerId": "string",
+          "subaccountId": "string",
+          "totalAmount": "number",
+          "status": "string",
+          "createdDate": "string (ISO 8601)"
+        }
+      },
+      "businessLogic": [
+        "EmployerFundingDefault + EmployeeFundingDefault = TotalAmount",
+        "InvoiceNumber auto-generated",
+        "CashInOut record created",
+        "Status = 'Pending'"
+      ],
+      "errorCases": [
+        {"condition": "EmployerId empty", "wcfError": "Validation error", "restStatus": 400},
+        {"condition": "Both amounts zero", "wcfError": "Validation error", "restStatus": 400},
+        {"condition": "Subaccount not found", "wcfError": "Entity not found", "restStatus": 404}
+      ]
+    },
+    {
+      "wcfTransaction": "XGenerateFundingInvoice",
+      "restEndpoint": {
+        "method": "POST",
+        "path": "/api/v1/funding-invoices/generate",
+        "controller": "FundingInvoiceController",
+        "action": "GenerateInvoice"
+      },
+      "requestMapping": {
+        "wcfSchema": {
+          "SubaccountId": "string",
+          "InvoiceAmount": "decimal",
+          "InvoiceDate": "DateTime",
+          "CreatedBy": "string"
+        },
+        "restSchema": {
+          "subaccountId": "string",
+          "invoiceAmount": "number",
+          "invoiceDate": "string (ISO 8601)",
+          "createdBy": "string"
+        },
+        "fieldMappings": [
+          {"wcf": "SubaccountId", "rest": "subaccountId", "type": "string", "required": true},
+          {"wcf": "InvoiceAmount", "rest": "invoiceAmount", "type": "decimal", "required": true},
+          {"wcf": "InvoiceDate", "rest": "invoiceDate", "type": "DateTime", "required": true},
+          {"wcf": "CreatedBy", "rest": "createdBy", "type": "string", "required": true}
+        ]
+      },
+      "responseMapping": {
+        "wcfSchema": {
+          "Result": "string",
+          "CashInOutId": "string (nullable)",
+          "Invoice": "FundingInvoice (nullable)",
+          "PaymentId": "string (nullable)"
+        },
+        "restSchema": {
+          "result": "string",
+          "cashInOutId": "string | null",
+          "invoice": "FundingInvoiceResponse | null",
+          "paymentId": "string | null"
+        }
+      },
+      "businessLogic": [
+        "Compare InvoiceAmount with Subaccount.Balance",
+        "If Balance >= InvoiceAmount, Result = 'invoice not needed'",
+        "If Balance < InvoiceAmount, Result = 'invoice created'",
+        "Peg amount = InvoiceAmount - Balance",
+        "Auto-debit payment created if enabled"
+      ],
+      "errorCases": [
+        {"condition": "SubaccountId empty", "wcfError": "Validation error", "restStatus": 400},
+        {"condition": "InvoiceAmount <= 0", "wcfError": "Validation error", "restStatus": 400},
+        {"condition": "Subaccount not found", "wcfError": "Entity not found", "restStatus": 404}
+      ]
+    },
+    {
+      "wcfTransaction": "Updater_CreateRAFundingInvoices",
+      "restEndpoint": {
+        "method": "POST",
+        "path": "/api/v1/funding-invoices/batch",
+        "controller": "FundingInvoiceController",
+        "action": "CreateBatchInvoices"
+      },
+      "requestMapping": {
+        "wcfSchema": {
+          "EmployerIds": "string[]",
+          "CreatedBy": "string"
+        },
+        "restSchema": {
+          "employerIds": "string[]",
+          "createdBy": "string"
+        },
+        "fieldMappings": [
+          {"wcf": "EmployerIds", "rest": "employerIds", "type": "string[]", "required": true},
+          {"wcf": "CreatedBy", "rest": "createdBy", "type": "string", "required": true}
+        ]
+      },
+      "responseMapping": {
+        "wcfSchema": {
+          "TotalProcessed": "int",
+          "SuccessCount": "int",
+          "FailureCount": "int",
+          "SkippedCount": "int",
+          "Results": "BatchFundingResult[]"
+        },
+        "restSchema": {
+          "totalProcessed": "number",
+          "successCount": "number",
+          "failureCount": "number",
+          "skippedCount": "number",
+          "results": "BatchFundingResult[]"
+        }
+      },
+      "businessLogic": [
+        "Process all subaccounts for specified employers",
+        "Skip if invoice already exists for current period",
+        "Create invoice with employer/employee funding defaults",
+        "Duplicate detection by SubaccountId + EffectiveDate"
+      ],
+      "errorCases": [
+        {"condition": "EmployerIds empty", "wcfError": "Validation error", "restStatus": 400}
+      ]
+    },
+    {
+      "wcfTransaction": "XCloseFundingBatch",
+      "restEndpoint": {
+        "method": "POST",
+        "path": "/api/v1/funding-batches/close",
+        "controller": "FundingBatchController",
+        "action": "CloseBatch"
+      },
+      "requestMapping": {
+        "wcfSchema": {
+          "BatchId": "string",
+          "Description": "string",
+          "ExcludedInvoiceIds": "string[]",
+          "ClosedBy": "string"
+        },
+        "restSchema": {
+          "batchId": "string",
+          "description": "string",
+          "excludedInvoiceIds": "string[]",
+          "closedBy": "string"
+        },
+        "fieldMappings": [
+          {"wcf": "BatchId", "rest": "batchId", "type": "string", "required": true},
+          {"wcf": "Description", "rest": "description", "type": "string", "required": true},
+          {"wcf": "ExcludedInvoiceIds", "rest": "excludedInvoiceIds", "type": "string[]", "required": false},
+          {"wcf": "ClosedBy", "rest": "closedBy", "type": "string", "required": true}
+        ]
+      },
+      "responseMapping": {
+        "wcfSchema": {
+          "Result": "string",
+          "CashInOutId": "string",
+          "PaymentId": "string (nullable)",
+          "Batch": "FundingBatch"
+        },
+        "restSchema": {
+          "result": "string",
+          "cashInOutId": "string",
+          "paymentId": "string | null",
+          "batch": "FundingBatchResponse"
+        }
+      },
+      "businessLogic": [
+        "Validate batch status = 'Open'",
+        "Exclude specified invoices from total",
+        "Calculate batch total (sum of non-excluded invoices)",
+        "Validate total > 0",
+        "State transition: Open -> Pending -> Closed",
+        "Create replenishment CashInOut (negative amount)",
+        "Create auto-debit payment if enabled (2 business days)",
+        "Reopen batch if payment fails"
+      ],
+      "errorCases": [
+        {"condition": "BatchId empty", "wcfError": "Validation error", "restStatus": 400},
+        {"condition": "Batch not found", "wcfError": "Entity not found", "restStatus": 404},
+        {"condition": "Batch total = 0", "wcfError": "Business logic error", "restStatus": 409},
+        {"condition": "Batch already closed", "wcfError": "Business logic error", "restStatus": 409}
+      ]
+    },
+    {
+      "wcfTransaction": "XUpdateFundingBatch",
+      "restEndpoint": {
+        "method": "PUT",
+        "path": "/api/v1/funding-batches/{id}",
+        "controller": "FundingBatchController",
+        "action": "UpdateBatch"
+      },
+      "requestMapping": {
+        "wcfSchema": {
+          "BatchId": "string",
+          "Description": "string",
+          "EmployerId": "string",
+          "UpdatedBy": "string"
+        },
+        "restSchema": {
+          "batchId": "string",
+          "description": "string",
+          "employerId": "string",
+          "updatedBy": "string"
+        },
+        "fieldMappings": [
+          {"wcf": "BatchId", "rest": "batchId", "type": "string", "required": true},
+          {"wcf": "Description", "rest": "description", "type": "string", "required": true},
+          {"wcf": "EmployerId", "rest": "employerId", "type": "string", "required": false},
+          {"wcf": "UpdatedBy", "rest": "updatedBy", "type": "string", "required": true}
+        ]
+      },
+      "responseMapping": {
+        "wcfSchema": {
+          "BatchId": "string",
+          "Description": "string",
+          "EmployerId": "string",
+          "Status": "string"
+        },
+        "restSchema": {
+          "batchId": "string",
+          "description": "string",
+          "employerId": "string",
+          "status": "string"
+        }
+      },
+      "businessLogic": [
+        "Update metadata only (description, employer)",
+        "No status changes",
+        "Validation: Description max 500 chars"
+      ],
+      "errorCases": [
+        {"condition": "BatchId empty", "wcfError": "Validation error", "restStatus": 400},
+        {"condition": "Description > 500 chars", "wcfError": "Validation error", "restStatus": 400},
+        {"condition": "Batch not found", "wcfError": "Entity not found", "restStatus": 404}
+      ]
+    }
+  ],
+  "additionalRestEndpoints": [
+    {
+      "endpoint": "GET /api/v1/funding-invoices/{id}",
+      "purpose": "Retrieve single invoice by ID",
+      "wcfEquivalent": "None - new functionality"
+    },
+    {
+      "endpoint": "GET /api/v1/funding-invoices/batch/{batchId}",
+      "purpose": "Retrieve all invoices in a batch",
+      "wcfEquivalent": "None - new functionality"
+    },
+    {
+      "endpoint": "GET /api/v1/funding-invoices/subaccount/{subaccountId}",
+      "purpose": "Retrieve all invoices for a subaccount",
+      "wcfEquivalent": "None - new functionality"
+    },
+    {
+      "endpoint": "GET /api/v1/funding-batches/{id}",
+      "purpose": "Retrieve single batch by ID",
+      "wcfEquivalent": "None - new functionality"
+    },
+    {
+      "endpoint": "GET /api/v1/funding-batches/subaccount/{subaccountId}",
+      "purpose": "Retrieve all batches for a subaccount",
+      "wcfEquivalent": "None - new functionality"
+    },
+    {
+      "endpoint": "GET /api/v1/funding-batches/subaccount/{subaccountId}/open",
+      "purpose": "Retrieve open batch for a subaccount",
+      "wcfEquivalent": "None - new functionality"
+    },
+    {
+      "endpoint": "POST /api/v1/funding-batches",
+      "purpose": "Create new batch",
+      "wcfEquivalent": "None - new functionality"
+    },
+    {
+      "endpoint": "POST /api/v1/funding-batches/reopen",
+      "purpose": "Reopen closed batch",
+      "wcfEquivalent": "None - new functionality"
+    }
+  ],
+  "verificationRequirements": {
+    "schemaValidation": {
+      "fieldNameCasing": "WCF: PascalCase, REST: camelCase",
+      "dateFormat": "WCF: DateTime, REST: ISO 8601 string",
+      "decimalHandling": "WCF: decimal, REST: number (JSON)",
+      "nullability": "Must match between WCF and REST"
+    },
+    "businessLogicParity": {
+      "calculations": "100% match required",
+      "stateTransitions": "Exact sequence match",
+      "errorHandling": "Same error conditions, mapped status codes"
+    },
+    "performanceCriteria": {
+      "p95ResponseTime": "< 500ms",
+      "wcfComparison": "No more than 20% slower than WCF baseline"
+    },
+    "testCoverage": {
+      "minimumScenarios": 100,
+      "coverageTarget": "100% of WCF operations",
+      "errorScenarios": "All validation and business logic errors"
+    }
+  }
+}

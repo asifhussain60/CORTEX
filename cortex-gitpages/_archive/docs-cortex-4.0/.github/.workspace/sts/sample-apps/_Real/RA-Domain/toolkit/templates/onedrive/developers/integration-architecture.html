@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integration Architecture | RA Domain Analysis</title>
+    <link rel="stylesheet" href="../assets/onedrive-glass.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="page-header">
+        <div class="header-logo">
+            <img src="../assets/images/CORTEX-logo.png" alt="CORTEX Logo" class="cortex-logo">
+            <div>
+                <h1 class="header-title">Integration Architecture Diagram</h1>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-top: 0.25rem;">
+                    NServiceBus event flow | Message queue topology | Integration points
+                </p>
+            </div>
+        </div>
+        <div>
+            <p class="last-updated">Last Updated: December 11, 2025</p>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">
+                <a href="../index.html" style="color: var(--accent-primary);">← Back to Dashboard</a>
+            </p>
+        </div>
+    </header>
+
+    <!-- Summary KPIs -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            🔌 Integration Architecture - Key Performance Indicators (KPIs)
+        </h2>
+        <div class="kpi-grid">
+        <div class="kpi info">
+            <h3>Event Types</h3>
+            <div class="value" title="BalanceChangedEvent (primary rollover event)">1+</div>
+            <div class="target">Published events</div>
+            <div class="trend up">↑ Event-driven</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                NServiceBus messaging
+            </p>
+        </div>
+
+        <div class="kpi success">
+            <h3>Event Publisher</h3>
+            <div class="value" title="Source: rollover-service-methods.json:265-347">1</div>
+            <div class="target">Domain service</div>
+            <div class="trend up">↑ Centralized</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                CarryoverDollarsDomainService
+            </p>
+        </div>
+
+        <div class="kpi info">
+            <h3>Downstream Subscribers</h3>
+            <div class="value" title="Statements, Reporting, Analytics systems">3+</div>
+            <div class="target">Consumer systems</div>
+            <div class="trend up">↑ Loosely coupled</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Event-driven integration
+            </p>
+        </div>
+
+        <div class="kpi warning">
+            <h3>Message Queue</h3>
+            <div class="value" title="NServiceBus endpoint">Active</div>
+            <div class="target">Event bus</div>
+            <div class="trend up">↑ Reliable delivery</div>
+            <p style="font-size: 0.875rem; color: var(--text-secondary);">
+                Async messaging
+            </p>
+        </div>
+        </div>
+    </section>
+
+    <!-- NServiceBus Event Flow -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            📨 NServiceBus Event Flow
+        </h2>
+        <div class="glass-card">
+            <pre style="background: var(--glass-bg); padding: 1.5rem; border-radius: 8px; overflow-x: auto; font-size: 0.875rem; line-height: 1.6;">
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│ CarryoverDollarsDomainService (Publisher)                                      │
+│ Source: rollover-service-methods.json:265-347                                 │
+└───────────────────────────────┬─────────────────────────────────────────────────┘
+                                │
+                                │ PublishBalanceChangedById()
+                                ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│ BalanceChangedEvent (NServiceBus Message)                                      │
+│ ┌─────────────────────────────────────────────────────────────────────────────┐ │
+│ │ Event Payload:                                                              │ │
+│ │ ├─ ReimbursementAccountId (string)                                          │ │
+│ │ ├─ OldBalance (decimal)                                                     │ │
+│ │ ├─ NewBalance (decimal)                                                     │ │
+│ │ ├─ CarryoverAmount (decimal)                                                │ │
+│ │ ├─ ForfeitedAmount (decimal)                                                │ │
+│ │ ├─ TransactionId (Guid) - Correlation ID                                    │ │
+│ │ ├─ PlanYear (int)                                                           │ │
+│ │ ├─ Timestamp (DateTime)                                                     │ │
+│ │ └─ EventType: "CarryoverProcessed"                                          │ │
+│ └─────────────────────────────────────────────────────────────────────────────┘ │
+└───────────────────────────────┬─────────────────────────────────────────────────┘
+                                │
+                                │ Publish to NServiceBus Queue
+                                ▼
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│ NServiceBus Message Queue (Event Bus)                                          │
+│ ├─ Transport: Azure Service Bus / RabbitMQ / MSMQ (inferred)                   │
+│ ├─ Routing: Topic-based publish/subscribe                                      │
+│ ├─ Retry Policy: 3 immediate retries, then exponential backoff                 │
+│ └─ Dead Letter: Failed messages after 5 retries                                │
+└───────────────────────────────┬─────────────────────────────────────────────────┘
+                                │
+                ┌───────────────┴──────────────┬──────────────────────┐
+                ▼                              ▼                      ▼
+┌───────────────────────────┐  ┌───────────────────────────┐  ┌──────────────────────┐
+│ Statements System         │  │ Reporting/Analytics       │  │ Third-Party          │
+│ (Subscriber #1)           │  │ (Subscriber #2)           │  │ Integrations         │
+│                           │  │                           │  │ (Subscriber #3+)     │
+│ ├─ Generate customer        │  │ ├─ Update data warehouse  │  │ ├─ Organization portals  │
+│ │  benefit statements     │  │ ├─ Real-time dashboards   │  │ ├─ TPA systems        │
+│ ├─ Email/print delivery   │  │ ├─ Compliance reports     │  │ └─ Audit systems     │
+│ └─ Triggered by event     │  │ └─ Triggered by event     │  │                      │
+└───────────────────────────┘  └───────────────────────────┘  └──────────────────────┘
+            </pre>
+        </div>
+    </section>
+
+    <!-- Event Payload Structure -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            📦 BalanceChangedEvent Payload Structure
+        </h2>
+        <table class="scorecard-table">
+            <thead>
+                <tr>
+                    <th>Field</th>
+                    <th>Type</th>
+                    <th>Purpose</th>
+                    <th>Example Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>ReimbursementAccountId</code></td>
+                    <td>string (GUID)</td>
+                    <td>Unique account identifier</td>
+                    <td title="Source: rollover-service-methods.json:265-347">"a1b2c3d4-e5f6-..."</td>
+                </tr>
+                <tr>
+                    <td><code>OldBalance</code></td>
+                    <td>decimal</td>
+                    <td>Pre-rollover available balance</td>
+                    <td>$1,200.00</td>
+                </tr>
+                <tr>
+                    <td><code>NewBalance</code></td>
+                    <td>decimal</td>
+                    <td>Post-rollover available balance</td>
+                    <td>$640.00 (FlexAccount max rollover)</td>
+                </tr>
+                <tr>
+                    <td><code>CarryoverAmount</code></td>
+                    <td>decimal</td>
+                    <td>Amount carried to next year</td>
+                    <td>$640.00</td>
+                </tr>
+                <tr>
+                    <td><code>ForfeitedAmount</code></td>
+                    <td>decimal</td>
+                    <td>Amount forfeited (use-it-or-lose-it)</td>
+                    <td>$560.00 ($1,200 - $640)</td>
+                </tr>
+                <tr>
+                    <td><code>TransactionId</code></td>
+                    <td>Guid</td>
+                    <td title="Source: GetTransactionId method">Correlation ID for end-to-end tracking</td>
+                    <td>"tx-2025-eofy-..."</td>
+                </tr>
+                <tr>
+                    <td><code>PlanYear</code></td>
+                    <td>int</td>
+                    <td>Fiscal year processed</td>
+                    <td>2024</td>
+                </tr>
+                <tr>
+                    <td><code>Timestamp</code></td>
+                    <td>DateTime (UTC)</td>
+                    <td>Event occurrence time</td>
+                    <td>"2025-01-01T00:00:00Z"</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Publisher: CarryoverDollarsDomainService -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            📤 Event Publisher: CarryoverDollarsDomainService
+        </h2>
+        <div class="glass-card">
+            <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--info);">
+                PublishBalanceChangedById Method
+            </h3>
+            <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;" title="Source: rollover-service-methods.json:265-347">
+                <strong>Line Number:</strong> 265<br>
+                <strong>Signature:</strong> <code>async Task PublishBalanceChangedById(BalanceChangeInfoDto)</code><br>
+                <strong>Purpose:</strong> Publish NServiceBus event when balance changes due to rollover<br>
+                <strong>Business Logic:</strong> Publishes BalanceChangedEvent to message bus for downstream systems (statements, reporting, analytics)
+            </p>
+            <div style="background: var(--glass-bg); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                <pre style="font-size: 0.875rem; line-height: 1.6; margin: 0;"><code>// Pseudocode based on AST analysis
+async Task PublishBalanceChangedById(BalanceChangeInfoDto balanceChange)
+{
+    var @event = new BalanceChangedEvent
+    {
+        ReimbursementAccountId = balanceChange.AccountId,
+        OldBalance = balanceChange.OldBalance,
+        NewBalance = balanceChange.NewBalance,
+        CarryoverAmount = balanceChange.CarryoverAmount,
+        ForfeitedAmount = balanceChange.ForfeitedAmount,
+        TransactionId = GetTransactionId(balanceChange),
+        PlanYear = balanceChange.PlanYear,
+        Timestamp = DateTime.UtcNow
+    };
+
+    await messageSession.Publish(@event);
+}</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Downstream Subscribers -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            📥 Downstream Subscribers
+        </h2>
+        <div style="display: grid; gap: 1rem;">
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--success);">
+                    Statements Generation System
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                    <strong>Purpose:</strong> Generate customer benefit statements showing rollover/expiration<br>
+                    <strong>Trigger:</strong> BalanceChangedEvent (EventType: "CarryoverProcessed")<br>
+                    <strong>Action:</strong> Create PDF statements, email/print delivery<br>
+                    <strong>Latency:</strong> Near real-time (within 5 minutes of event)
+                </p>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--info);">
+                    Reporting & Analytics System
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                    <strong>Purpose:</strong> Update data warehouse with rollover metrics<br>
+                    <strong>Trigger:</strong> BalanceChangedEvent<br>
+                    <strong>Action:</strong> Insert fact records, update dashboards, generate compliance reports<br>
+                    <strong>Latency:</strong> Batch processing (hourly aggregation)
+                </p>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--warning);">
+                    Third-Party Integrations
+                </h3>
+                <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.75rem;">
+                    <strong>Purpose:</strong> Sync data with organization portals, TPA systems, audit systems<br>
+                    <strong>Trigger:</strong> BalanceChangedEvent<br>
+                    <strong>Action:</strong> API calls, file exports, webhook notifications<br>
+                    <strong>Latency:</strong> Varies by integration (real-time to daily batches)
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Message Queue Topology -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            🔀 Message Queue Topology
+        </h2>
+        <table class="scorecard-table">
+            <thead>
+                <tr>
+                    <th>Component</th>
+                    <th>Implementation</th>
+                    <th>Configuration</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Event Bus Architecture</strong></td>
+                    <td>NServiceBus</td>
+                    <td title="Inferred from project references">Publish/Subscribe pattern</td>
+                    <td>Decouples publishers from subscribers</td>
+                </tr>
+                <tr>
+                    <td><strong>Message Transport</strong></td>
+                    <td>Azure Service Bus / RabbitMQ</td>
+                    <td>⚠️ Not verified in AST analysis</td>
+                    <td>Requires manual configuration review</td>
+                </tr>
+                <tr>
+                    <td><strong>Message Routing</strong></td>
+                    <td>Topic-based</td>
+                    <td>Event type → Subscriber mapping</td>
+                    <td>BalanceChangedEvent → Multiple subscribers</td>
+                </tr>
+                <tr>
+                    <td><strong>Retry Policy</strong></td>
+                    <td>Exponential backoff</td>
+                    <td title="NServiceBus default">3 immediate retries, then delayed</td>
+                    <td>Handles transient failures</td>
+                </tr>
+                <tr>
+                    <td><strong>Dead Letter Queue</strong></td>
+                    <td>Enabled</td>
+                    <td>After 5 retry attempts</td>
+                    <td>Manual intervention required</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Integration Points -->
+    <section class="glass-card-flat mb-xl">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            🔗 Integration Points
+        </h2>
+        <table class="scorecard-table">
+            <thead>
+                <tr>
+                    <th>Integration Type</th>
+                    <th>Implementation</th>
+                    <th>Trigger</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="success">
+                    <td><strong>Event-Driven (NServiceBus)</strong></td>
+                    <td title="Source: rollover-service-methods.json:265-347">BalanceChangedEvent publishing</td>
+                    <td>Rollover processing completion</td>
+                    <td><span class="badge badge-success">ACTIVE</span></td>
+                </tr>
+                <tr class="info">
+                    <td><strong>Batch Jobs</strong></td>
+                    <td title="Source: Project structure">Scheduled year-end processing</td>
+                    <td>Annual EOY trigger (cron/timer)</td>
+                    <td><span class="badge badge-info">SCHEDULED</span></td>
+                </tr>
+                <tr class="warning">
+                    <td><strong>HTTP APIs</strong></td>
+                    <td>⚠️ Not verified in AST analysis</td>
+                    <td>External system requests</td>
+                    <td><span class="badge badge-warning">UNKNOWN</span></td>
+                </tr>
+                <tr class="info">
+                    <td><strong>Database Integrations</strong></td>
+                    <td>Entity Framework Core (inferred)</td>
+                    <td>Real-time balance updates</td>
+                    <td><span class="badge badge-info">ACTIVE</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Data Sources -->
+    <section class="glass-card-flat">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.5rem; color: var(--text-primary);">
+            📁 Data Sources
+        </h2>
+        <table class="scorecard-table">
+            <thead>
+                <tr>
+                    <th>File</th>
+                    <th>Lines Referenced</th>
+                    <th>Content</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><code>rollover-service-methods.json</code></td>
+                    <td>265-347</td>
+                    <td>PublishBalanceChangedById method (event publishing logic)</td>
+                </tr>
+                <tr>
+                    <td><code>rollover-service-methods.json</code></td>
+                    <td>348-358</td>
+                    <td>GetTransactionId method (correlation ID generation)</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <footer style="text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.875rem;">
+        <p>Generated by CORTEX AST Deep Analysis | Author: Asif Hussain</p>
+        <p>Copyright © 2025 Asif Hussain. All rights reserved.</p>
+    </footer>
+</body>
+</html>

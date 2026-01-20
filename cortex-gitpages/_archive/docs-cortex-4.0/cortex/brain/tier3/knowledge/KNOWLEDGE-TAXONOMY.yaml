@@ -1,0 +1,298 @@
+# KNOWLEDGE TAXONOMY & DOMAIN STRUCTURE
+# =============================================================================
+# Defines 15+ knowledge domains with metadata schema
+# Part of PHASE-12: Knowledge Ecosystem Expansion (KN-001-01)
+# =============================================================================
+
+knowledge_domains:
+  - domain_id: "GOVERNANCE"
+    name: "Governance & Compliance"
+    description: "Governance rules, compliance frameworks, audit requirements"
+    owner: "Governance Team"
+    priority: 1
+    subdomain: "Tier 0, 1, 2, 3"
+    tags: ["governance", "compliance", "audit"]
+    
+  - domain_id: "INTENT-ROUTING"
+    name: "Intent Recognition & Routing"
+    description: "Intent canonicalization, action classification, routing patterns"
+    owner: "CORTEX Architecture"
+    priority: 1
+    subdomain: "AI Agent Core"
+    tags: ["intent", "routing", "canonicalization"]
+    
+  - domain_id: "HALLUCINATION-PREVENTION"
+    name: "Hallucination Prevention"
+    description: "Boundary rules, detection mechanisms, recovery strategies"
+    owner: "Reliability Team"
+    priority: 1
+    subdomain: "Safety Systems"
+    tags: ["hallucination", "prevention", "safety"]
+    
+  - domain_id: "EXECUTION-ORCHESTRATION"
+    name: "Execution & Orchestration"
+    description: "Execution modes, orchestration patterns, performance optimization"
+    owner: "Execution Team"
+    priority: 2
+    subdomain: "Runtime"
+    tags: ["execution", "orchestration", "performance"]
+    
+  - domain_id: "DATA-MANAGEMENT"
+    name: "Data Management & Storage"
+    description: "Database schemas, data persistence, caching strategies"
+    owner: "Data Team"
+    priority: 2
+    subdomain: "Infrastructure"
+    tags: ["data", "storage", "persistence"]
+    
+  - domain_id: "OBSERVABILITY"
+    name: "Observability & Telemetry"
+    description: "Monitoring, logging, metrics, tracing, alerting"
+    owner: "Observability Team"
+    priority: 2
+    subdomain: "Operations"
+    tags: ["observability", "monitoring", "telemetry"]
+    
+  - domain_id: "SECURITY"
+    name: "Security & Authentication"
+    description: "Authentication, authorization, encryption, threat models"
+    owner: "Security Team"
+    priority: 1
+    subdomain: "Security"
+    tags: ["security", "auth", "encryption"]
+    
+  - domain_id: "API-DESIGN"
+    name: "API Design & Integration"
+    description: "REST/gRPC APIs, integration patterns, versioning"
+    owner: "API Team"
+    priority: 2
+    subdomain: "Integration"
+    tags: ["api", "integration", "design"]
+    
+  - domain_id: "ML-MODELS"
+    name: "Machine Learning & Models"
+    description: "Model architectures, training, inference, optimization"
+    owner: "ML Team"
+    priority: 2
+    subdomain: "AI/ML"
+    tags: ["ml", "models", "ai"]
+    
+  - domain_id: "KNOWLEDGE-CURATION"
+    name: "Knowledge Curation"
+    description: "Knowledge validation, quality metrics, expert workflows"
+    owner: "Knowledge Team"
+    priority: 1
+    subdomain: "Knowledge"
+    tags: ["knowledge", "curation", "quality"]
+    
+  - domain_id: "TESTING-VALIDATION"
+    name: "Testing & Validation"
+    description: "Test strategies, validation frameworks, quality assurance"
+    owner: "QA Team"
+    priority: 2
+    subdomain: "Quality"
+    tags: ["testing", "validation", "qa"]
+    
+  - domain_id: "DEPLOYMENT"
+    name: "Deployment & Operations"
+    description: "Deployment strategies, operations, scaling, rollout"
+    owner: "DevOps Team"
+    priority: 2
+    subdomain: "Operations"
+    tags: ["deployment", "operations", "scaling"]
+    
+  - domain_id: "DOCUMENTATION"
+    name: "Documentation & Knowledge Transfer"
+    description: "Architecture docs, API docs, user guides, training"
+    owner: "Technical Writing"
+    priority: 1
+    subdomain: "Documentation"
+    tags: ["documentation", "knowledge-transfer", "guides"]
+    
+  - domain_id: "PERFORMANCE"
+    name: "Performance & Optimization"
+    description: "Performance tuning, optimization strategies, benchmarking"
+    owner: "Performance Team"
+    priority: 2
+    subdomain: "Performance"
+    tags: ["performance", "optimization", "benchmarking"]
+    
+  - domain_id: "ARCHITECTURE"
+    name: "System Architecture"
+    description: "Architecture patterns, design decisions, system design"
+    owner: "Architecture Team"
+    priority: 1
+    subdomain: "Architecture"
+    tags: ["architecture", "design", "patterns"]
+    
+  - domain_id: "ERROR-HANDLING"
+    name: "Error Handling & Recovery"
+    description: "Error handling patterns, recovery strategies, resilience"
+    owner: "Reliability Team"
+    priority: 1
+    subdomain: "Reliability"
+    tags: ["error-handling", "recovery", "resilience"]
+
+# KNOWLEDGE ENTRY SCHEMA
+# =============================================================================
+knowledge_entry_schema:
+  required_fields:
+    entry_id:
+      type: string
+      format: "KE-{DOMAIN}-{NNN}-{NN}"
+      description: "Unique entry identifier"
+    
+    title:
+      type: string
+      max_length: 100
+      description: "Entry title"
+    
+    domain:
+      type: string
+      enum: ["GOVERNANCE", "INTENT-ROUTING", "HALLUCINATION-PREVENTION", "EXECUTION-ORCHESTRATION",
+             "DATA-MANAGEMENT", "OBSERVABILITY", "SECURITY", "API-DESIGN", "ML-MODELS",
+             "KNOWLEDGE-CURATION", "TESTING-VALIDATION", "DEPLOYMENT", "DOCUMENTATION",
+             "PERFORMANCE", "ARCHITECTURE", "ERROR-HANDLING"]
+      description: "Primary domain"
+    
+    content:
+      type: string
+      min_length: 50
+      description: "Entry content/body"
+    
+    ac_ids:
+      type: array
+      items: string
+      pattern: "AC-[A-Z]+-[0-9]{3}-[0-9]{2}"
+      description: "Related AC-IDs"
+    
+    created_at:
+      type: datetime
+      description: "Creation timestamp"
+    
+    created_by:
+      type: string
+      description: "Creator identifier"
+    
+  optional_fields:
+    description:
+      type: string
+      max_length: 200
+      description: "Short summary"
+    
+    related_entries:
+      type: array
+      items: string
+      description: "Cross-domain references"
+    
+    tags:
+      type: array
+      items: string
+      description: "Search tags"
+    
+    quality_score:
+      type: float
+      min: 0.0
+      max: 1.0
+      description: "AI-assessed quality (0.0-1.0)"
+    
+    expert_review:
+      type: object
+      properties:
+        reviewer: string
+        status: "enum[pending, approved, needs_revision]"
+        feedback: string
+      description: "Expert review details"
+    
+    last_updated:
+      type: datetime
+      description: "Last modification timestamp"
+    
+    update_history:
+      type: array
+      items:
+        - timestamp: datetime
+        - changed_by: string
+        - changes: string
+      description: "Modification history"
+
+# DOMAIN STRUCTURE LAYOUT
+# =============================================================================
+directory_structure: |
+  cortex_brain/tier3/knowledge/
+  ├── KNOWLEDGE-TAXONOMY.yaml (this file)
+  ├── knowledge-schema.json (JSON version of schema)
+  ├── GOVERNANCE/
+  │   ├── README.md (domain overview)
+  │   ├── KE-GOVERNANCE-001-01.md (entries)
+  │   └── ...
+  ├── INTENT-ROUTING/
+  │   ├── README.md
+  │   └── ...
+  ├── HALLUCINATION-PREVENTION/
+  │   ├── README.md
+  │   └── ...
+  ├── EXECUTION-ORCHESTRATION/
+  │   ├── README.md
+  │   └── ...
+  ├── DATA-MANAGEMENT/
+  │   ├── README.md
+  │   └── ...
+  ├── OBSERVABILITY/
+  │   ├── README.md
+  │   └── ...
+  ├── SECURITY/
+  │   ├── README.md
+  │   └── ...
+  ├── API-DESIGN/
+  │   ├── README.md
+  │   └── ...
+  ├── ML-MODELS/
+  │   ├── README.md
+  │   └── ...
+  ├── KNOWLEDGE-CURATION/
+  │   ├── README.md
+  │   └── ...
+  ├── TESTING-VALIDATION/
+  │   ├── README.md
+  │   └── ...
+  ├── DEPLOYMENT/
+  │   ├── README.md
+  │   └── ...
+  ├── DOCUMENTATION/
+  │   ├── README.md
+  │   └── ...
+  ├── PERFORMANCE/
+  │   ├── README.md
+  │   └── ...
+  ├── ARCHITECTURE/
+  │   ├── README.md
+  │   └── ...
+  └── ERROR-HANDLING/
+      ├── README.md
+      └── ...
+
+# METADATA REQUIREMENTS
+# =============================================================================
+metadata_requirements:
+  validation_rules:
+    - "All entries must have required_fields populated"
+    - "AC-ID format must match AC-{DOMAIN}-{NNN}-{NN}"
+    - "Entry ID must be unique within domain"
+    - "Quality score auto-generated if not provided"
+    - "timestamps use ISO-8601 UTC format"
+  
+  governance_rules:
+    - "Entries log to governance.db knowledge_entries table"
+    - "Each modification creates audit entry"
+    - "Expert review required for quality_score >= 0.8"
+    - "Cross-domain references validated on commit"
+    - "Duplicate detection runs on every indexing"
+
+# VERSION CONTROL
+# =============================================================================
+version: "1.0"
+created_at: "2026-01-16T15:00:00Z"
+updated_at: "2026-01-16T15:00:00Z"
+status: "ACTIVE"
+ac_id: "KN-001-01"

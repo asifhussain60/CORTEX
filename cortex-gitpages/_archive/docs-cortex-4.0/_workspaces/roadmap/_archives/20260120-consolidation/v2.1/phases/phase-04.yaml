@@ -1,0 +1,261 @@
+# =============================================================================
+# PHASE 04: PRODUCTION HARDENING
+# =============================================================================
+# Focus: Security (NFR-003), Performance Tuning, Compliance
+#        Cross-File Coherence (Hallucination Prevention)
+# =============================================================================
+
+metadata:
+  phase_id: "PHASE-04"
+  title: "Production Hardening"
+  description: "Security, Secret Redaction, Hash Verification, Cross-File Coherence"
+  status: "NOT_STARTED"
+  start_date: null
+  end_date: null
+  predecessor: "PHASE-03"
+  successor: "PHASE-05"
+
+# =============================================================================
+# DAY-BY-DAY BREAKDOWN
+# =============================================================================
+
+days:
+  day_1:
+    title: "Security Foundation"
+    focus:
+      - "NFR-003: Security - Secret Redaction"
+    
+    tasks:
+      - task_id: "TASK-04-01-01"
+        title: "Implement Secret Redaction"
+        requirement_id: "NFR-003"
+        status: "NOT_STARTED"
+        components:
+          - "SecretRedactor"
+          - "SensitiveDataDetector"
+        files_to_create:
+          - "src/infrastructure/secret_redactor.py"
+          - "src/infrastructure/sensitive_data_detector.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-NFR-003-01"
+            description: "Secrets redacted from all logs"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_secret_redactor.py"
+            test_name: "test_secret_redaction"
+
+  day_2:
+    title: "Integrity & Compliance"
+    focus:
+      - "NFR-003: Security - Hash Verification & Compliance"
+    
+    tasks:
+      - task_id: "TASK-04-02-01"
+        title: "Implement Hash Chain Verification"
+        requirement_id: "NFR-003"
+        status: "NOT_STARTED"
+        components:
+          - "HashVerifier"
+        files_to_create:
+          - "src/infrastructure/hash_verifier.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-NFR-003-02"
+            description: "Hash chain integrity verified on read"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_hash_verifier.py"
+            test_name: "test_hash_verification"
+
+      - task_id: "TASK-04-02-02"
+        title: "Implement Compliance Markers"
+        requirement_id: "NFR-003"
+        status: "NOT_STARTED"
+        components:
+          - "ComplianceMarker"
+        files_to_create:
+          - "src/infrastructure/compliance_marker.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-NFR-003-03"
+            description: "Compliance markers in audit logs"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_compliance_marker.py"
+            test_name: "test_compliance_markers"
+
+  day_3:
+    title: "Cross-File Coherence"
+    focus:
+      - "AC-COHERENCE-001 through AC-COHERENCE-004"
+    
+    tasks:
+      - task_id: "TASK-04-03-01"
+        title: "Implement Coherence Validator"
+        requirement_id: "HALLUCINATION-PREVENTION"
+        status: "NOT_STARTED"
+        components:
+          - "CoherenceValidator"
+        files_to_create:
+          - "src/core/coherence_validator.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-COHERENCE-001"
+            description: "File-to-file requirement coherence (no conflicting requirements)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_coherence_validator.py"
+            test_name: "test_file_to_file_coherence"
+          - ac_id: "AC-COHERENCE-002"
+            description: "AC-ID naming consistency (same AC-ID consistent across files)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_coherence_validator.py"
+            test_name: "test_ac_id_naming_consistency"
+          - ac_id: "AC-COHERENCE-003"
+            description: "Reference validity (all internal references resolve)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_coherence_validator.py"
+            test_name: "test_reference_validity"
+          - ac_id: "AC-COHERENCE-004"
+            description: "Contradiction detection (conflicting AC-IDs flagged)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_coherence_validator.py"
+            test_name: "test_contradiction_detection"
+
+  day_4:
+    title: "Provenance Tracking"
+    focus:
+      - "AC-EXPLAIN-001 through AC-EXPLAIN-005"
+    
+    tasks:
+      - task_id: "TASK-04-04-01"
+        title: "Implement Provenance Tracker"
+        requirement_id: "HALLUCINATION-PREVENTION"
+        status: "NOT_STARTED"
+        components:
+          - "ProvenanceTracker"
+        files_to_create:
+          - "src/core/provenance_tracker.py"
+        files_to_modify: []
+        acceptance_criteria:
+          - ac_id: "AC-EXPLAIN-001"
+            description: "Requirement source tracking (where did this requirement come from?)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_provenance_tracker.py"
+            test_name: "test_requirement_source_tracking"
+          - ac_id: "AC-EXPLAIN-002"
+            description: "Decision justification capture (why was this decision made?)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_provenance_tracker.py"
+            test_name: "test_decision_justification"
+          - ac_id: "AC-EXPLAIN-003"
+            description: "Architecture decision rationale (why this architecture?)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_provenance_tracker.py"
+            test_name: "test_architecture_rationale"
+          - ac_id: "AC-EXPLAIN-004"
+            description: "Test coverage justification (why this test coverage?)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_provenance_tracker.py"
+            test_name: "test_coverage_justification"
+          - ac_id: "AC-EXPLAIN-005"
+            description: "Evidence bundle provenance (what evidence supports this AC-ID?)"
+            status: "NOT_STARTED"
+            test_file: "tests/unit/test_provenance_tracker.py"
+            test_name: "test_evidence_provenance"
+
+  day_5:
+    title: "Performance & Integration"
+    focus:
+      - "Performance Tuning"
+      - "Phase 4 Integration Testing"
+    
+    tasks:
+      - task_id: "TASK-04-05-01"
+        title: "Performance Optimization"
+        requirement_id: "PERFORMANCE"
+        status: "NOT_STARTED"
+        components:
+          - "PerformanceOptimizer"
+        files_to_create:
+          - "src/infrastructure/performance_optimizer.py"
+        files_to_modify: []
+        acceptance_criteria: []
+
+      - task_id: "TASK-04-05-02"
+        title: "Load Testing"
+        requirement_id: "TESTING"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create:
+          - "tests/performance/test_load.py"
+        files_to_modify: []
+        acceptance_criteria: []
+
+      - task_id: "TASK-04-05-03"
+        title: "Phase 4 Integration Testing"
+        requirement_id: "TESTING"
+        status: "NOT_STARTED"
+        components: []
+        files_to_create:
+          - "tests/integration/test_phase_04_integration.py"
+        files_to_modify: []
+        acceptance_criteria: []
+
+# =============================================================================
+# RISKS & MITIGATIONS
+# =============================================================================
+
+risks:
+  - risk_id: "RISK-04-001"
+    description: "Secret detection regex may have false positives/negatives"
+    severity: "HIGH"
+    probability: "MEDIUM"
+    mitigation: "Build comprehensive test suite with known secret patterns; use established library (detect-secrets)"
+  - risk_id: "RISK-04-002"
+    description: "Hash verification on large audit logs may impact read performance"
+    severity: "MEDIUM"
+    probability: "LOW"
+    mitigation: "Implement incremental verification; cache verification results"
+  - risk_id: "RISK-04-003"
+    description: "Cross-file coherence validation may be computationally expensive"
+    severity: "MEDIUM"
+    probability: "MEDIUM"
+    mitigation: "Implement caching; validate only changed files incrementally"
+
+# =============================================================================
+# SUMMARY
+# =============================================================================
+
+summary:
+  total_tasks: 8
+  total_ac_ids: 12
+  components_to_create: 7
+  files_to_create: 10
+  files_to_modify: 0
+  estimated_hours: 32
+  buffer_hours: 6
+  
+  requirements_covered:
+    non_functional_requirements: ["NFR-003"]
+    hallucination_prevention: ["AC-COHERENCE-001", "AC-COHERENCE-002", "AC-COHERENCE-003", "AC-COHERENCE-004", "AC-EXPLAIN-001", "AC-EXPLAIN-002", "AC-EXPLAIN-003", "AC-EXPLAIN-004", "AC-EXPLAIN-005"]
+  
+  note: "Phase 4 has 3 NFR-003 AC-IDs + 9 hallucination prevention AC-IDs = 12 total"
+
+  exit_criteria:
+    - "All 12 AC-IDs pass verification"
+    - "Secret redaction working 100%"
+    - "Hash chain integrity verified"
+    - "Compliance markers in all audit logs"
+    - "Cross-file coherence validation working"
+    - "Provenance tracking complete"
+    - "Performance targets met"
+
+# =============================================================================
+# TRACKING
+# =============================================================================
+
+tracking:
+  started_at: null
+  completed_at: null
+  current_day: 0
+  current_task: null
+  blockers: []
+  notes: []

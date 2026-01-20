@@ -1,0 +1,1037 @@
+# Secure Coding Practices (Machine-Readable)
+# Source: OWASP Secure Coding Practices Quick Reference Guide
+# Version: 1.0
+# Created: December 22, 2025
+# Schema: SecureCodingPracticesSchema
+# Purpose: Comprehensive secure coding guidelines for CORTEX code generation and review
+
+metadata:
+  title: "Secure Coding Practices"
+  organization: "OWASP Foundation"
+  source: "https://owasp.org/www-project-secure-coding-practices-quick-reference-guide/"
+  version: "1.0"
+  created: "2025-12-22"
+  updated: "2025-12-22"
+  schema: "SecureCodingPracticesSchema"
+  tags:
+    - security
+    - secure-coding
+    - owasp
+    - best-practices
+    - defensive-programming
+  
+  generated_docs:
+    - path: "docs/guidelines/security/secure-coding-practices.md"
+      format: "markdown"
+      generator: "DocumentationOrchestrator"
+      template: "security_guideline"
+
+# INPUT VALIDATION
+input_validation:
+  principle: "Never trust user input - validate, sanitize, and encode"
+  importance: "CRITICAL - First line of defense against injection attacks"
+  
+  rules:
+    - id: "input_001"
+      name: "Whitelist Input Validation"
+      description: "Define allowed characters, length, format, and type"
+      severity: "CRITICAL"
+      implementation:
+        python: |
+          import re
+          from pydantic import BaseModel, validator, constr
+          
+          # Pydantic validation (recommended)
+          class UserRegistration(BaseModel):
+              username: constr(min_length=3, max_length=20, regex=r'^[a-zA-Z0-9_]+$')
+              email: constr(regex=r'^[\w\.-]+@[\w\.-]+\.\w+$')
+              age: int
+              
+              @validator('age')
+              def validate_age(cls, v):
+                  if not 13 <= v <= 120:
+                      raise ValueError('Age must be between 13 and 120')
+                  return v
+          
+          # Manual validation
+          def validate_username(username: str) -> bool:
+              # Whitelist approach
+              allowed_pattern = r'^[a-zA-Z0-9_]{3,20}$'
+              return bool(re.match(allowed_pattern, username))
+          
+          def validate_email(email: str) -> bool:
+              pattern = r'^[\w\.-]+@[\w\.-]+\.\w{2,}$'
+              return bool(re.match(pattern, email))
+        
+        csharp: |
+          using System.ComponentModel.DataAnnotations;
+          using System.Text.RegularExpressions;
+          
+          public class UserRegistration
+          {
+              [Required]
+              [StringLength(20, MinimumLength = 3)]
+              [RegularExpression(@"^[a-zA-Z0-9_]+$")]
+              public string Username { get; set; }
+              
+              [Required]
+              [EmailAddress]
+              public string Email { get; set; }
+              
+              [Range(13, 120)]
+              public int Age { get; set; }
+          }
+          
+          // Fluent validation (recommended)
+          public class UserValidator : AbstractValidator<UserRegistration>
+          {
+              public UserValidator()
+              {
+                  RuleFor(x => x.Username)
+                      .NotEmpty()
+                      .Length(3, 20)
+                      .Matches(@"^[a-zA-Z0-9_]+$");
+                  
+                  RuleFor(x => x.Email)
+                      .NotEmpty()
+                      .EmailAddress();
+                  
+                  RuleFor(x => x.Age)
+                      .InclusiveBetween(13, 120);
+              }
+          }
+        
+        javascript: |
+          // Express-validator
+          const { body, validationResult } = require('express-validator');
+          
+          app.post('/register',
+            body('username')
+              .isLength({ min: 3, max: 20 })
+              .matches(/^[a-zA-Z0-9_]+$/)
+              .withMessage('Invalid username format'),
+            body('email')
+              .isEmail()
+              .normalizeEmail(),
+            body('age')
+              .isInt({ min: 13, max: 120 }),
+            (req, res) => {
+              const errors = validationResult(req);
+              if (!errors.isEmpty()) {
+                return res.status(400).json({ errors: errors.array() });
+              }
+              // Process valid data
+            }
+          );
+    
+    - id: "input_002"
+      name: "Type Validation"
+      description: "Ensure data matches expected type"
+      severity: "HIGH"
+      implementation:
+        python: |
+          from typing import Union
+          import json
+          
+          def process_user_id(user_id: Union[int, str]) -> int:
+              # Type coercion with validation
+              try:
+                  uid = int(user_id)
+                  if uid <= 0:
+                      raise ValueError("User ID must be positive")
+                  return uid
+              except (ValueError, TypeError):
+                  raise ValueError("Invalid user ID format")
+          
+          def parse_json_safely(data: str) -> dict:
+              try:
+                  parsed = json.loads(data)
+                  if not isinstance(parsed, dict):
+                      raise ValueError("Expected JSON object")
+                  return parsed
+              except json.JSONDecodeError:
+                  raise ValueError("Invalid JSON")
+    
+    - id: "input_003"
+      name: "Sanitize File Uploads"
+      description: "Validate file type, size, and content"
+      severity: "CRITICAL"
+      implementation:
+        python: |
+          import os
+          import mimetypes
+          from werkzeug.utils import secure_filename
+          
+          ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf'}
+          MAX_FILE_SIZE = 5 * 1024 * 1024  # 5 MB
+          
+          def allowed_file(filename: str) -> bool:
+              return '.' in filename and \
+                     filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+          
+          def validate_file_upload(file):
+              # Check filename
+              if not file or not file.filename:
+                  raise ValueError("No file provided")
+              
+              # Secure the filename (remove path traversal)
+              filename = secure_filename(file.filename)
+              
+              # Validate extension
+              if not allowed_file(filename):
+                  raise ValueError("File type not allowed")
+              
+              # Check file size
+              file.seek(0, os.SEEK_END)
+              size = file.tell()
+              file.seek(0)  # Reset pointer
+              
+              if size > MAX_FILE_SIZE:
+                  raise ValueError("File too large")
+              
+              # Validate MIME type (don't trust client)
+              mime_type, _ = mimetypes.guess_type(filename)
+              if mime_type not in ['image/png', 'image/jpeg', 'application/pdf']:
+                  raise ValueError("Invalid file type")
+              
+              return filename
+    
+    - id: "input_004"
+      name: "Prevent Path Traversal"
+      description: "Validate file paths to prevent directory traversal"
+      severity: "CRITICAL"
+      implementation:
+        python: |
+          import os
+          from pathlib import Path
+          
+          UPLOAD_FOLDER = '/var/www/uploads'
+          
+          def safe_join(directory: str, filename: str) -> str:
+              """Safely join directory and filename, preventing traversal"""
+              # Normalize path
+              filepath = os.path.normpath(os.path.join(directory, filename))
+              
+              # Ensure path is within allowed directory
+              if not filepath.startswith(os.path.abspath(directory)):
+                  raise ValueError("Path traversal detected")
+              
+              return filepath
+          
+          # Better approach using pathlib
+          def safe_path(base_dir: Path, user_path: str) -> Path:
+              full_path = (base_dir / user_path).resolve()
+              
+              # Ensure resolved path is within base directory
+              if not str(full_path).startswith(str(base_dir.resolve())):
+                  raise ValueError("Path traversal detected")
+              
+              return full_path
+          
+          # Usage
+          base = Path(UPLOAD_FOLDER)
+          try:
+              safe_file = safe_path(base, user_input)
+              # Process file
+          except ValueError:
+              abort(400, "Invalid file path")
+
+# OUTPUT ENCODING
+output_encoding:
+  principle: "Encode output based on context to prevent injection"
+  importance: "CRITICAL - Prevents XSS and other injection attacks"
+  
+  rules:
+    - id: "output_001"
+      name: "HTML Encoding"
+      description: "Escape HTML special characters"
+      severity: "CRITICAL"
+      implementation:
+        python: |
+          from markupsafe import escape
+          from flask import Markup
+          
+          # Automatic with Jinja2
+          @app.route('/profile/<username>')
+          def profile(username):
+              # Jinja2 auto-escapes {{ username }}
+              return render_template('profile.html', username=username)
+          
+          # Manual escaping
+          safe_html = escape(user_input)
+          
+          # Allow HTML (dangerous - sanitize first!)
+          from bleach import clean
+          
+          ALLOWED_TAGS = ['p', 'br', 'strong', 'em', 'a']
+          ALLOWED_ATTRS = {'a': ['href', 'title']}
+          
+          def sanitize_html(dirty_html: str) -> str:
+              return clean(
+                  dirty_html,
+                  tags=ALLOWED_TAGS,
+                  attributes=ALLOWED_ATTRS,
+                  strip=True
+              )
+        
+        javascript: |
+          // React automatically escapes
+          function UserProfile({ username }) {
+            return <div>{username}</div>;  // Safe
+          }
+          
+          // Vanilla JS
+          element.textContent = userInput;  // Safe
+          element.innerText = userInput;    // Safe
+          element.innerHTML = userInput;    // DANGEROUS!
+          
+          // DOMPurify for rich content
+          import DOMPurify from 'dompurify';
+          
+          element.innerHTML = DOMPurify.sanitize(userInput, {
+            ALLOWED_TAGS: ['p', 'br', 'strong', 'em'],
+            ALLOWED_ATTR: []
+          });
+    
+    - id: "output_002"
+      name: "JavaScript Encoding"
+      description: "Escape JavaScript strings"
+      severity: "CRITICAL"
+      implementation:
+        python: |
+          import json
+          
+          # Safe way to pass data to JavaScript
+          @app.route('/page')
+          def page():
+              user_data = {'name': user.name, 'email': user.email}
+              # JSON encoding is safe
+              return render_template(
+                  'page.html',
+                  user_data_json=json.dumps(user_data)
+              )
+        
+        html: |
+          <!-- Template -->
+          <script>
+            // Parse JSON safely
+            const userData = JSON.parse('{{ user_data_json | safe }}');
+            
+            // NEVER do this:
+            const name = '{{ user.name }}';  // XSS vulnerability!
+          </script>
+    
+    - id: "output_003"
+      name: "URL Encoding"
+      description: "Encode URL parameters"
+      severity: "HIGH"
+      implementation:
+        python: |
+          from urllib.parse import quote, urlencode
+          
+          # Encode single parameter
+          safe_param = quote(user_input)
+          url = f"https://example.com/search?q={safe_param}"
+          
+          # Encode multiple parameters
+          params = {
+              'query': user_query,
+              'category': user_category
+          }
+          query_string = urlencode(params)
+          url = f"https://example.com/search?{query_string}"
+        
+        javascript: |
+          // Encode URL component
+          const safeParam = encodeURIComponent(userInput);
+          const url = `https://example.com/search?q=${safeParam}`;
+          
+          // Build URL with URLSearchParams
+          const params = new URLSearchParams({
+            query: userQuery,
+            category: userCategory
+          });
+          const url = `https://example.com/search?${params.toString()}`;
+    
+    - id: "output_004"
+      name: "SQL Parameterization"
+      description: "Never concatenate SQL - use parameters"
+      severity: "CRITICAL"
+      implementation:
+        python: |
+          # See A03: Injection in owasp-top-10.yaml
+          # ALWAYS use parameterized queries
+          cursor.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+
+# AUTHENTICATION
+authentication:
+  principle: "Verify identity securely with strong authentication"
+  importance: "CRITICAL - Foundation of application security"
+  
+  patterns:
+    - id: "auth_001"
+      name: "Password-Based Authentication"
+      description: "Traditional username/password with secure hashing"
+      implementation:
+        python: |
+          import bcrypt
+          from datetime import datetime, timedelta
+          
+          class User:
+              def set_password(self, password: str):
+                  # Hash with bcrypt
+                  self.password_hash = bcrypt.hashpw(
+                      password.encode(),
+                      bcrypt.gensalt(rounds=12)
+                  ).decode()
+              
+              def verify_password(self, password: str) -> bool:
+                  return bcrypt.checkpw(
+                      password.encode(),
+                      self.password_hash.encode()
+                  )
+              
+              @staticmethod
+              def authenticate(username: str, password: str):
+                  user = User.query.filter_by(username=username).first()
+                  
+                  if not user or not user.verify_password(password):
+                      # Log failed attempt
+                      log_security_event('LOGIN_FAILED', username)
+                      return None
+                  
+                  # Check account status
+                  if user.is_locked:
+                      return None
+                  
+                  # Update last login
+                  user.last_login = datetime.utcnow()
+                  db.session.commit()
+                  
+                  return user
+    
+    - id: "auth_002"
+      name: "JWT Authentication"
+      description: "Token-based authentication for APIs"
+      implementation:
+        python: |
+          import jwt
+          from datetime import datetime, timedelta
+          from functools import wraps
+          from flask import request, g
+          
+          SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
+          
+          def generate_jwt(user) -> str:
+              payload = {
+                  'user_id': user.id,
+                  'username': user.username,
+                  'exp': datetime.utcnow() + timedelta(hours=1),
+                  'iat': datetime.utcnow(),
+                  'jti': secrets.token_urlsafe(16)  # JWT ID for revocation
+              }
+              return jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+          
+          def verify_jwt(token: str) -> dict:
+              try:
+                  payload = jwt.decode(
+                      token,
+                      SECRET_KEY,
+                      algorithms=['HS256'],
+                      options={'verify_exp': True}
+                  )
+                  
+                  # Check if token is revoked (check against blacklist)
+                  if is_token_revoked(payload['jti']):
+                      raise jwt.InvalidTokenError("Token revoked")
+                  
+                  return payload
+              except jwt.ExpiredSignatureError:
+                  raise ValueError("Token expired")
+              except jwt.InvalidTokenError:
+                  raise ValueError("Invalid token")
+          
+          def require_jwt(f):
+              @wraps(f)
+              def decorated_function(*args, **kwargs):
+                  auth_header = request.headers.get('Authorization')
+                  
+                  if not auth_header or not auth_header.startswith('Bearer '):
+                      return jsonify({'error': 'Missing token'}), 401
+                  
+                  token = auth_header.split(' ')[1]
+                  
+                  try:
+                      payload = verify_jwt(token)
+                      g.user_id = payload['user_id']
+                      g.username = payload['username']
+                  except ValueError as e:
+                      return jsonify({'error': str(e)}), 401
+                  
+                  return f(*args, **kwargs)
+              return decorated_function
+          
+          # Usage
+          @app.route('/api/profile')
+          @require_jwt
+          def get_profile():
+              user = User.query.get(g.user_id)
+              return jsonify(user.to_dict())
+    
+    - id: "auth_003"
+      name: "OAuth 2.0 Integration"
+      description: "Delegate authentication to OAuth provider"
+      implementation:
+        python: |
+          from authlib.integrations.flask_client import OAuth
+          
+          oauth = OAuth(app)
+          
+          # Configure OAuth providers
+          oauth.register(
+              name='google',
+              client_id=os.environ.get('GOOGLE_CLIENT_ID'),
+              client_secret=os.environ.get('GOOGLE_CLIENT_SECRET'),
+              server_metadata_url='https://accounts.google.com/.well-known/openid-configuration',
+              client_kwargs={'scope': 'openid email profile'}
+          )
+          
+          @app.route('/login/google')
+          def login_google():
+              redirect_uri = url_for('authorize_google', _external=True)
+              return oauth.google.authorize_redirect(redirect_uri)
+          
+          @app.route('/authorize/google')
+          def authorize_google():
+              token = oauth.google.authorize_access_token()
+              user_info = oauth.google.parse_id_token(token)
+              
+              # Create or update user
+              user = User.query.filter_by(email=user_info['email']).first()
+              if not user:
+                  user = User(
+                      email=user_info['email'],
+                      username=user_info['name'],
+                      oauth_provider='google',
+                      oauth_id=user_info['sub']
+                  )
+                  db.session.add(user)
+                  db.session.commit()
+              
+              # Create session
+              session['user_id'] = user.id
+              return redirect('/dashboard')
+    
+    - id: "auth_004"
+      name: "API Key Authentication"
+      description: "Simple authentication for service-to-service"
+      implementation:
+        python: |
+          import secrets
+          from functools wraps
+          
+          class APIKey:
+              @staticmethod
+              def generate():
+                  return secrets.token_urlsafe(32)
+              
+              def __init__(self, key: str, name: str, scopes: list):
+                  self.key = self.hash_key(key)
+                  self.name = name
+                  self.scopes = scopes
+                  self.created_at = datetime.utcnow()
+                  self.last_used = None
+              
+              @staticmethod
+              def hash_key(key: str) -> str:
+                  # Hash API key (like password)
+                  return bcrypt.hashpw(key.encode(), bcrypt.gensalt()).decode()
+              
+              def verify(self, key: str) -> bool:
+                  return bcrypt.checkpw(key.encode(), self.key.encode())
+          
+          def require_api_key(required_scope=None):
+              def decorator(f):
+                  @wraps(f)
+                  def decorated_function(*args, **kwargs):
+                      key = request.headers.get('X-API-Key')
+                      
+                      if not key:
+                          return jsonify({'error': 'API key required'}), 401
+                      
+                      # Find API key
+                      api_key = APIKey.query.filter_by(
+                          key=APIKey.hash_key(key)
+                      ).first()
+                      
+                      if not api_key:
+                          return jsonify({'error': 'Invalid API key'}), 401
+                      
+                      # Check scope
+                      if required_scope and required_scope not in api_key.scopes:
+                          return jsonify({'error': 'Insufficient permissions'}), 403
+                      
+                      # Update last used
+                      api_key.last_used = datetime.utcnow()
+                      db.session.commit()
+                      
+                      g.api_key = api_key
+                      return f(*args, **kwargs)
+                  return decorated_function
+              return decorator
+          
+          # Usage
+          @app.route('/api/data')
+          @require_api_key('read:data')
+          def get_data():
+              return jsonify({'data': 'sensitive'})
+
+# AUTHORIZATION
+authorization:
+  principle: "Enforce access control after authentication"
+  importance: "CRITICAL - Prevent privilege escalation"
+  
+  patterns:
+    - id: "authz_001"
+      name: "Role-Based Access Control (RBAC)"
+      description: "Assign permissions to roles, roles to users"
+      implementation:
+        python: |
+          from enum import Enum
+          from functools import wraps
+          
+          class Role(Enum):
+              ADMIN = 'admin'
+              MODERATOR = 'moderator'
+              USER = 'user'
+          
+          class Permission(Enum):
+              READ_USERS = 'read:users'
+              WRITE_USERS = 'write:users'
+              DELETE_USERS = 'delete:users'
+              READ_POSTS = 'read:posts'
+              WRITE_POSTS = 'write:posts'
+          
+          # Role-permission mapping
+          ROLE_PERMISSIONS = {
+              Role.ADMIN: [
+                  Permission.READ_USERS,
+                  Permission.WRITE_USERS,
+                  Permission.DELETE_USERS,
+                  Permission.READ_POSTS,
+                  Permission.WRITE_POSTS
+              ],
+              Role.MODERATOR: [
+                  Permission.READ_USERS,
+                  Permission.READ_POSTS,
+                  Permission.WRITE_POSTS
+              ],
+              Role.USER: [
+                  Permission.READ_POSTS,
+                  Permission.WRITE_POSTS  # Own posts only
+              ]
+          }
+          
+          def require_permission(permission: Permission):
+              def decorator(f):
+                  @wraps(f)
+                  def decorated_function(*args, **kwargs):
+                      if not g.user:
+                          abort(401)
+                      
+                      user_permissions = ROLE_PERMISSIONS.get(g.user.role, [])
+                      
+                      if permission not in user_permissions:
+                          abort(403)
+                      
+                      return f(*args, **kwargs)
+                  return decorated_function
+              return decorator
+          
+          # Usage
+          @app.route('/admin/users')
+          @require_permission(Permission.READ_USERS)
+          def list_users():
+              return jsonify([u.to_dict() for u in User.query.all()])
+    
+    - id: "authz_002"
+      name: "Attribute-Based Access Control (ABAC)"
+      description: "Policy-based authorization using attributes"
+      implementation:
+        python: |
+          from dataclasses import dataclass
+          from typing import Any
+          
+          @dataclass
+          class AccessRequest:
+              user: Any
+              resource: Any
+              action: str
+              context: dict
+          
+          class AccessPolicy:
+              @staticmethod
+              def can_read_document(request: AccessRequest) -> bool:
+                  doc = request.resource
+                  user = request.user
+                  
+                  # Owner can always read
+                  if doc.owner_id == user.id:
+                      return True
+                  
+                  # Admin can read all
+                  if user.role == 'admin':
+                      return True
+                  
+                  # Public documents readable by all
+                  if doc.is_public:
+                      return True
+                  
+                  # Shared with user
+                  if user.id in doc.shared_with:
+                      return True
+                  
+                  return False
+              
+              @staticmethod
+              def can_write_document(request: AccessRequest) -> bool:
+                  doc = request.resource
+                  user = request.user
+                  
+                  # Owner can write
+                  if doc.owner_id == user.id:
+                      return True
+                  
+                  # Admin can write
+                  if user.role == 'admin':
+                      return True
+                  
+                  # Write permission explicitly granted
+                  if user.id in doc.editors:
+                      return True
+                  
+                  return False
+          
+          def require_access(action: str):
+              def decorator(f):
+                  @wraps(f)
+                  def decorated_function(*args, **kwargs):
+                      # Get resource (e.g., from URL parameter)
+                      doc_id = kwargs.get('doc_id')
+                      doc = Document.query.get_or_404(doc_id)
+                      
+                      request = AccessRequest(
+                          user=g.user,
+                          resource=doc,
+                          action=action,
+                          context={'ip': request.remote_addr}
+                      )
+                      
+                      # Check policy
+                      if action == 'read':
+                          allowed = AccessPolicy.can_read_document(request)
+                      elif action == 'write':
+                          allowed = AccessPolicy.can_write_document(request)
+                      else:
+                          allowed = False
+                      
+                      if not allowed:
+                          abort(403)
+                      
+                      return f(*args, **kwargs)
+                  return decorated_function
+              return decorator
+          
+          # Usage
+          @app.route('/documents/<int:doc_id>')
+          @require_access('read')
+          def view_document(doc_id):
+              doc = Document.query.get(doc_id)
+              return render_template('document.html', doc=doc)
+
+# CRYPTOGRAPHY
+cryptography:
+  principle: "Use proven algorithms and libraries"
+  importance: "CRITICAL - Protect sensitive data"
+  
+  guidelines:
+    - id: "crypto_001"
+      name: "Use Strong Algorithms"
+      algorithms:
+        symmetric:
+          recommended: ["AES-256-GCM", "ChaCha20-Poly1305"]
+          avoid: ["DES", "3DES", "RC4", "Blowfish"]
+        asymmetric:
+          recommended: ["RSA-2048+", "ECDSA-P256+", "Ed25519"]
+          avoid: ["RSA-1024", "DSA"]
+        hashing:
+          recommended: ["SHA-256", "SHA-3", "BLAKE2"]
+          avoid: ["MD5", "SHA-1"]
+        password_hashing:
+          recommended: ["bcrypt", "scrypt", "Argon2"]
+          avoid: ["MD5", "SHA-256", "PBKDF2 with low iterations"]
+      implementation:
+        python: |
+          from cryptography.fernet import Fernet
+          from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+          from cryptography.hazmat.primitives import hashes
+          from cryptography.hazmat.backends import default_backend
+          import os
+          
+          # Symmetric encryption with AES-256-GCM
+          def encrypt_aes_gcm(plaintext: bytes, key: bytes) -> tuple:
+              # Generate random IV
+              iv = os.urandom(12)  # 96 bits for GCM
+              
+              # Create cipher
+              cipher = Cipher(
+                  algorithms.AES(key),
+                  modes.GCM(iv),
+                  backend=default_backend()
+              )
+              
+              encryptor = cipher.encryptor()
+              ciphertext = encryptor.update(plaintext) + encryptor.finalize()
+              
+              # Return IV + ciphertext + tag
+              return iv, ciphertext, encryptor.tag
+          
+          def decrypt_aes_gcm(iv: bytes, ciphertext: bytes, tag: bytes, key: bytes) -> bytes:
+              cipher = Cipher(
+                  algorithms.AES(key),
+                  modes.GCM(iv, tag),
+                  backend=default_backend()
+              )
+              
+              decryptor = cipher.decryptor()
+              return decryptor.update(ciphertext) + decryptor.finalize()
+    
+    - id: "crypto_002"
+      name: "Secure Random Number Generation"
+      description: "Use cryptographically secure RNG"
+      implementation:
+        python: |
+          import secrets
+          import os
+          
+          # Generate secure tokens
+          token = secrets.token_urlsafe(32)  # 256 bits
+          hex_token = secrets.token_hex(32)  # 256 bits
+          
+          # Generate random bytes
+          random_bytes = secrets.token_bytes(32)
+          
+          # Or use os.urandom
+          random_bytes = os.urandom(32)
+          
+          # Secure random choice
+          secure_random = secrets.SystemRandom()
+          value = secure_random.randint(1000, 9999)
+    
+    - id: "crypto_003"
+      name: "Key Management"
+      description: "Store keys securely, rotate regularly"
+      implementation:
+        python: |
+          # Use environment variables (development)
+          SECRET_KEY = os.environ.get('SECRET_KEY')
+          
+          # Use secret management service (production)
+          import boto3
+          
+          def get_secret(secret_name: str) -> str:
+              client = boto3.client('secretsmanager', region_name='us-east-1')
+              response = client.get_secret_value(SecretId=secret_name)
+              return response['SecretString']
+          
+          # Key rotation
+          class KeyManager:
+              def __init__(self):
+                  self.current_key = get_secret('encryption_key_v1')
+                  self.previous_keys = [
+                      get_secret('encryption_key_v0')
+                  ]
+              
+              def encrypt(self, data: bytes) -> bytes:
+                  # Always encrypt with current key
+                  return encrypt_aes_gcm(data, self.current_key)
+              
+              def decrypt(self, data: bytes) -> bytes:
+                  # Try current key first
+                  try:
+                      return decrypt_aes_gcm(data, self.current_key)
+                  except:
+                      # Try previous keys
+                      for key in self.previous_keys:
+                          try:
+                              return decrypt_aes_gcm(data, key)
+                          except:
+                              continue
+                      raise ValueError("Decryption failed")
+
+# ERROR HANDLING
+error_handling:
+  principle: "Fail securely without leaking information"
+  importance: "HIGH - Prevent information disclosure"
+  
+  rules:
+    - id: "error_001"
+      name: "Generic Error Messages"
+      description: "Don't expose stack traces or system details"
+      implementation:
+        python: |
+          from flask import jsonify
+          import logging
+          
+          logger = logging.getLogger(__name__)
+          
+          @app.errorhandler(Exception)
+          def handle_error(error):
+              # Log detailed error internally
+              logger.error(
+                  f"Error: {str(error)}",
+                  exc_info=True,
+                  extra={
+                      'user_id': g.get('user_id'),
+                      'path': request.path,
+                      'method': request.method
+                  }
+              )
+              
+              # Return generic message to user
+              if isinstance(error, ValueError):
+                  return jsonify({'error': 'Invalid input'}), 400
+              elif isinstance(error, PermissionError):
+                  return jsonify({'error': 'Access denied'}), 403
+              else:
+                  # Never expose stack traces
+                  return jsonify({'error': 'An error occurred'}), 500
+    
+    - id: "error_002"
+      name: "Secure Logging"
+      description: "Log security events without sensitive data"
+      implementation:
+        python: |
+          import logging
+          from logging.handlers import RotatingFileHandler
+          
+          # Security event logger
+          security_logger = logging.getLogger('security')
+          security_logger.setLevel(logging.INFO)
+          
+          handler = RotatingFileHandler(
+              'security.log',
+              maxBytes=10485760,  # 10MB
+              backupCount=10
+          )
+          
+          formatter = logging.Formatter(
+              '%(asctime)s - %(levelname)s - %(message)s'
+          )
+          handler.setFormatter(formatter)
+          security_logger.addHandler(handler)
+          
+          # Log security events
+          def log_security_event(event_type: str, user=None, details=None):
+              security_logger.info(
+                  f"[{event_type}] User: {user.id if user else 'anonymous'}, "
+                  f"IP: {request.remote_addr}, Details: {details}"
+              )
+          
+          # NEVER log sensitive data
+          # BAD: logger.info(f"Password attempt: {password}")
+          # GOOD: logger.info(f"Failed login for user {username}")
+
+# SESSION MANAGEMENT
+session_management:
+  principle: "Secure session tokens with proper configuration"
+  importance: "CRITICAL - Prevent session hijacking"
+  
+  rules:
+    - id: "session_001"
+      name: "Secure Session Configuration"
+      implementation:
+        python: |
+          from flask import Flask, session
+          from datetime import timedelta
+          import secrets
+          
+          app = Flask(__name__)
+          
+          # Secure session configuration
+          app.config.update(
+              SECRET_KEY=secrets.token_urlsafe(32),
+              SESSION_COOKIE_SECURE=True,       # HTTPS only
+              SESSION_COOKIE_HTTPONLY=True,     # No JavaScript access
+              SESSION_COOKIE_SAMESITE='Strict',  # CSRF protection
+              PERMANENT_SESSION_LIFETIME=timedelta(hours=1),
+              SESSION_REFRESH_EACH_REQUEST=True
+          )
+          
+          @app.route('/login', methods=['POST'])
+          def login():
+              user = authenticate(request.form.get('username'), 
+                                 request.form.get('password'))
+              
+              if user:
+                  # Regenerate session ID (prevent fixation)
+                  session.clear()
+                  session.permanent = True
+                  session['user_id'] = user.id
+                  session['created_at'] = datetime.utcnow().isoformat()
+                  session['ip'] = request.remote_addr
+                  
+                  return redirect('/dashboard')
+              
+              return "Invalid credentials", 401
+          
+          @app.route('/logout')
+          def logout():
+              session.clear()
+              return redirect('/login')
+
+# SUMMARY
+summary:
+  categories:
+    - category: "Input Validation"
+      rules: 4
+      criticality: "CRITICAL"
+    
+    - category: "Output Encoding"
+      rules: 4
+      criticality: "CRITICAL"
+    
+    - category: "Authentication"
+      rules: 4
+      criticality: "CRITICAL"
+    
+    - category: "Authorization"
+      rules: 2
+      criticality: "CRITICAL"
+    
+    - category: "Cryptography"
+      rules: 3
+      criticality: "CRITICAL"
+    
+    - category: "Error Handling"
+      rules: 2
+      criticality: "HIGH"
+    
+    - category: "Session Management"
+      rules: 1
+      criticality: "CRITICAL"
+  
+  total_rules: 20
+  
+  implementation_priority:
+    - priority: 1
+      rules: ["input_001", "output_001", "auth_001", "authz_001", "crypto_001"]
+      description: "Critical security controls - implement first"
+    
+    - priority: 2
+      rules: ["input_003", "output_003", "auth_002", "crypto_002", "session_001"]
+      description: "Essential protections - implement next"
+    
+    - priority: 3
+      rules: ["input_002", "input_004", "auth_003", "auth_004", "error_001"]
+      description: "Important enhancements - implement after basics"
