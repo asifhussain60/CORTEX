@@ -8,6 +8,21 @@
 
 CORTEX is an AI-powered development orchestration platform that provides intelligent coordination of business processes through a multi-tier governance architecture. The system combines advanced intent comprehension (LENS Protocol), domain knowledge management (Domain Brain), and resilience-first patterns to enable safe, auditable AI-assisted development.
 
+### Implementation Status (2026-01-20)
+
+| Dimension | Status | Details |
+|-----------|--------|---------|
+| **Core Architecture** | ✅ Complete | 22 phases implemented, locked in governance.db |
+| **Test Coverage** | ✅ Comprehensive | 3000+ tests, 257+ unique AC IDs, 100% pass rate |
+| **Python Codebase** | ✅ Consolidated | 413 modules in canonical `cortex/` package |
+| **REST API** | ✅ Functional | All endpoints implemented and tested |
+| **MCP Server** | ⚠️ Partial | Tool discovery & schema ✅, tool implementations ⏳ (14 stubs) |
+| **Governance Rules** | ⚠️ Partial | Tier 0 ✅, Tier 1-2 🔲, core-rules.yaml pending |
+| **LENS Protocol** | ✅ Complete | 4-phase intent comprehension fully implemented |
+| **Domain Brain** | ✅ Complete | AST, Git, Comments, Relationships adapters functional |
+
+**Note:** See [MCP Protocol Status](../../03-api-reference/mcp-protocol/0-specification.md) and [Known Issues](../../05-reference/known-issues.md) for details on partial implementations.
+
 ## System Architecture Diagram
 
 ```
@@ -256,6 +271,7 @@ AC_START → AC_EXECUTE → AC_COMPLETE
 - [Orchestration Engine](3-orchestration-engine.md) - Orchestrator lifecycle
 - [Domain Brain](4-domain-brain.md) - Knowledge management
 - [Resilience Patterns](5-resilience-patterns.md) - Failure handling
+- [Implementation Phases](6-implementation-phases.md) - Complete phase reference with test coverage
 - [MCP Protocol](../03-api-reference/mcp-protocol/0-specification.md) - MCP integration
 - [Governance Rules](../05-reference/compliance-mappings.md) - Rule reference
 
