@@ -94,7 +94,7 @@ All new files follow **CORE-028**:
 - Meaningful names
 
 Examples:
-- `cortex-impl-map.yaml` (19 chars) ✓
+- `cortex-master.yaml` (18 chars) ✓
 - `impl-arch-007-ecosystem.yaml` (26 chars - phase prefix adds clarity)
 - `impl-arch-007-intent.yaml` (23 chars) ✓
 - `impl-remed-011-integration.yaml` (28 chars - acceptable for remediation phase)
@@ -123,7 +123,7 @@ Examples:
 
 ```
 _workspaces/roadmap/
-├── cortex-impl-map.yaml         # New master (400 lines)
+├── cortex-master.yaml         # New master (400 lines)
 ├── mcp-impl-status.yaml          # MCP tool inventory
 ├── phases/
 │   ├── impl-arch-007-ecosystem.yaml
@@ -138,7 +138,7 @@ _workspaces/roadmap/
 ## Next Actions
 
 1. ✅ Archive legacy cortex-master.yaml
-2. ✅ Create cortex-impl-map.yaml
+2. ✅ Create cortex-master.yaml (renamed from cortex-impl-map.yaml)
 3. ✅ Create 3 phase implementation YAMLs
 4. ✅ Create mcp-impl-status.yaml
 5. ⏳ Create remaining phase YAMLs (19 more)
