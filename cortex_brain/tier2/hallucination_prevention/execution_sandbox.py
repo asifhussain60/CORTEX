@@ -118,16 +118,16 @@ class ExecutionSandbox:
         # Compare states
         for key in after_state:
             if key not in before_state:
-                side_effects[f"added_{key}"] = after_state[key]
+                side_effects[f"added_{key}", "SandboxExecution"] = after_state[key]
             elif before_state[key] != after_state[key]:
-                side_effects[f"modified_{key}"] = {
+                side_effects[f"modified_{key}", "SandboxExecution"] = {
                     "from": before_state[key],
                     "to": after_state[key],
                 }
 
         for key in before_state:
             if key not in after_state:
-                side_effects[f"removed_{key}"] = before_state[key]
+                side_effects[f"removed_{key}", "SandboxExecution"] = before_state[key]
 
         self.side_effects_log.append(side_effects)
         return side_effects
@@ -146,4 +146,14 @@ class ExecutionSandbox:
         self.side_effects_log.clear()
 
 
-__all__ = ["ExecutionSandbox", "SandboxResult"]
+
+
+@dataclass
+class SandboxExecution:
+    """Represents a sandboxed execution."""
+    execution_id: str
+    status: str = "pending"
+    result: Any = None
+    error: Optional[str] = None
+
+__all__ = ["ExecutionSandbox", "SandboxResult", "SandboxExecution"]

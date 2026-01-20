@@ -1,18 +1,22 @@
-"""Module stub."""
-from typing import Dict, Any; from dataclasses import dataclass, field
+"""Hot Reload
+
+Author: CORTEX Framework
+"""
+
+from dataclasses import dataclass
+from typing import List
 
 @dataclass
-class Base:
-    data: Dict[str, Any] = field(default_factory=dict)
+class FileWatcher:
+    """File system watcher."""
+    paths: List[str] = None
+    
+    def __post_init__(self):
+        if self.paths is None:
+            self.paths = []
+    
+    def watch(self) -> None:
+        """Start watching."""
+        pass
 
-class HotReloadManager(Base): pass
-
-class ReloadEvent(Base): pass
-
-
-class HotReloadOrchestrator:
-    """Class HotReloadOrchestrator."""
-    def __init__(self): pass
-
-__all__ = ['HotReloadManager', 'ReloadEvent'    "HotReloadOrchestrator",
-]
+__all__ = ["FileWatcher"]

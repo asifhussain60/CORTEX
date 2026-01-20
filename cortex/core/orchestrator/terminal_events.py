@@ -1,31 +1,20 @@
-"""Module stub with required classes."""
+"""Terminal Events
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from enum import Enum
+STUB IMPLEMENTATION - To be completed in Phase E.
+
+Author: CORTEX Framework
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
+
+from dataclasses import dataclass
 
 
 @dataclass
-class TerminalEvent:
-    """Data class for TerminalEvent."""
-    data: Dict[str, Any] = field(default_factory=dict)
+class UserCancelledEvent:
+    """Event for user cancellation."""
+    event_id: str
+    reason: str = "user_cancelled"
+    timestamp: str = ""
 
 
-class TerminalEventHandler:
-    """Implementation of TerminalEventHandler."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-
-class PhaseCompletedEvent:
-    """Class PhaseCompletedEvent."""
-    def __init__(self): pass
-
-__all__ = [
-    "TerminalEvent",
-    "TerminalEventHandler",
-    "PhaseCompletedEvent",
-]
+__all__ = ["UserCancelledEvent"]

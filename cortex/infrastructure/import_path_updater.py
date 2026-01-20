@@ -1,12 +1,14 @@
-"""Module stub."""
-from typing import Dict, Any; from dataclasses import dataclass, field
+"""Import Path Updater
+
+Author: CORTEX Framework
+"""
+
+from dataclasses import dataclass
 
 @dataclass
-class Base:
-    data: Dict[str, Any] = field(default_factory=dict)
+class ImportMapping:
+    """Import path mapping."""
+    old_path: str
+    new_path: str
 
-class ImportPathUpdater(Base): pass
-
-class PathUpdate(Base): pass
-
-__all__ = ['ImportPathUpdater', 'PathUpdate']
+__all__ = ["ImportMapping"]

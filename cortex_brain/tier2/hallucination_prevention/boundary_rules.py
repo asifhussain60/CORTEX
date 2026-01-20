@@ -8,6 +8,16 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional
+from enum import Enum
+
+
+class ViolationType(str, Enum):
+    """Types of boundary violations."""
+    SCOPE = "scope"
+    FORMAT = "format"
+    CONTENT = "content"
+    BEHAVIOR = "behavior"
+    SECURITY = "security"
 
 
 @dataclass
@@ -150,6 +160,7 @@ __all__ = [
     "BoundaryRule",
     "get_behavioral_boundary_rules",
     "BoundaryViolation",
+    "ViolationType",
 ]
 
 # Stub for test compatibility

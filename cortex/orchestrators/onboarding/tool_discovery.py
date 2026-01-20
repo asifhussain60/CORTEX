@@ -1,21 +1,17 @@
-"""Module: Tool discovery in onboarding
+"""Tool Discovery Service
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
-from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
+from typing import List
 
+@dataclass
+class ToolDiscoveryService:
+    """Discover and recommend tools."""
+    
+    def discover_tools(self) -> List[str]:
+        """Discover available tools."""
+        return []
 
-class ToolDiscoveryOrchestrator:
-    """ToolDiscoveryOrchestrator - Tool discovery in onboarding."""
-
-    def __init__(self):
-        """Initialize tooldiscoveryorchestrator."""
-        pass
-
-
-__all__ = [
-    "ToolDiscoveryOrchestrator",
-]
+__all__ = ["ToolDiscoveryService"]

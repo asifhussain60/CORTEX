@@ -119,6 +119,15 @@ class CanonicalizeEngine:
         return len(self.rules)
 
 
+
+
+class ExtendedIntentCanonicalizer(CanonicalizeEngine):
+    """Extended intent canonicalizer with additional features."""
+    
+    def canonicalize_with_context(self, data: Any, context: Dict[str, Any]) -> CanonicalData:
+        """Canonicalize with context."""
+        return self.canonicalize(data)
+
 __all__ = [
     "CanonicalizeEngine",
     "CanonicalData",

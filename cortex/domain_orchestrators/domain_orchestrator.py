@@ -1,8 +1,14 @@
-"""Module: DomainOrchestrator."""
+"""Domain Orchestrator
 
-class DomainOrchestrator:
-    """Stub implementation."""
-    pass
+Author: CORTEX Framework
+"""
 
+from dataclasses import dataclass, field
+from typing import Dict
 
-__all__ = ["DomainOrchestrator"]
+@dataclass
+class DomainRegistry:
+    """Domain registry."""
+    domains: Dict[str, str] = field(default_factory=dict)
+
+__all__ = ["DomainRegistry"]

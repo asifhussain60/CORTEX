@@ -1,5 +1,13 @@
-"""MCP Decorator - Re-exports from decorators module."""
+"""MCP Decorator
 
-from cortex.mcp.decorators import mcp_tool, get_registered_tools, clear_tools  # noqa
+Author: CORTEX Framework
+"""
 
-__all__ = ["mcp_tool", "get_registered_tools", "clear_tools"]
+def get_tool(tool_id: str):
+    """Get MCP tool decorator."""
+    def decorator(func):
+        func._mcp_tool_id = tool_id
+        return func
+    return decorator
+
+__all__ = ["get_tool"]

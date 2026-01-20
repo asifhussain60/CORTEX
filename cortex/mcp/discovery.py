@@ -1,8 +1,17 @@
-"""Module: Discovery."""
+"""MCP Discovery
 
-class Discovery:
-    """Stub implementation."""
-    pass
+Author: CORTEX Framework
+"""
 
+from dataclasses import dataclass
+from typing import List
 
-__all__ = ["Discovery"]
+@dataclass
+class ToolDiscovery:
+    """Tool discovery service."""
+    
+    def discover(self) -> List[str]:
+        """Discover available tools."""
+        return []
+
+__all__ = ["ToolDiscovery"]

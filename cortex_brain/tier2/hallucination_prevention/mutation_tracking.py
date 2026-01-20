@@ -123,4 +123,20 @@ class MutationTracker:
         self.state_snapshots.clear()
 
 
-__all__ = ["MutationTracker", "Mutation"]
+
+
+class VisionMutationTracker(MutationTracker):
+    """Track mutations in vision/goals."""
+    
+    def track_vision_change(self, old_vision: str, new_vision: str) -> Mutation:
+        """Track vision mutation."""
+        mutation = Mutation(
+            mutation_id=f"vision_{len(self.mutations)}",
+            mutation_type="vision_change",
+            old_value=old_vision,
+            new_value=new_vision
+        )
+        self.track_mutation(mutation)
+        return mutation
+
+__all__ = ["MutationTracker", "Mutation", "VisionMutationTracker"]

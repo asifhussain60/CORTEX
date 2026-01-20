@@ -1,43 +1,21 @@
-"""Module stub with required classes."""
+"""LENS Context Builder
 
-from typing import Dict, List, Optional, Any
+STUB IMPLEMENTATION - To be completed in Phase E.
+
+Author: CORTEX Framework
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
+
 from dataclasses import dataclass, field
-from enum import Enum
-
-
-class ContextEdge:
-    """Implementation of ContextEdge."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-class ContextNode:
-    """Implementation of ContextNode."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-class LENSContextBuilder:
-    """Implementation of LENSContextBuilder."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
+from typing import Dict, Any
 
 
 @dataclass
-class KnowledgeGraph:
-    """Data class for KnowledgeGraph."""
-    data: dict = field(default_factory=dict)
+class LENSContext:
+    """LENS context for intent routing."""
+    intent: str
+    context: Dict[str, Any] = field(default_factory=dict)
+    confidence: float = 1.0
 
 
-__all__ = [
-    "ContextEdge",
-    "ContextNode",
-    "LENSContextBuilder",
-]
+__all__ = ["LENSContext"]

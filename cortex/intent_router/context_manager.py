@@ -1,8 +1,15 @@
-"""Module: ContextManager."""
+"""Context Manager
 
-class ContextManager:
-    """Stub implementation."""
-    pass
+Author: CORTEX Framework
+"""
 
+from dataclasses import dataclass, field
+from typing import Dict, Any
 
-__all__ = ["ContextManager"]
+@dataclass
+class ConversationContext:
+    """Conversation context."""
+    context_id: str
+    data: Dict[str, Any] = field(default_factory=dict)
+
+__all__ = ["ConversationContext"]

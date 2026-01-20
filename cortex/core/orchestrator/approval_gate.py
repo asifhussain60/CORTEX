@@ -1,25 +1,21 @@
-"""Module stub with required classes."""
+"""Approval Gate
 
-from typing import Dict, List, Optional, Any
-from dataclasses import dataclass, field
-from enum import Enum
+STUB IMPLEMENTATION - To be completed in Phase E.
+
+Author: CORTEX Framework
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
+
+from dataclasses import dataclass
+from typing import List
 
 
 @dataclass
-class ApprovalRequest:
-    """Data class for ApprovalRequest."""
-    data: Dict[str, Any] = field(default_factory=dict)
+class AlternativeRecommendation:
+    """Alternative recommendation for approval."""
+    alternative_id: str
+    description: str
+    rationale: str
 
 
-class ApprovalGate:
-    """Implementation of ApprovalGate."""
-
-    def __init__(self):
-        """Initialize."""
-        pass
-
-
-__all__ = [
-    "ApprovalRequest",
-    "ApprovalGate",
-]
+__all__ = ["AlternativeRecommendation"]
