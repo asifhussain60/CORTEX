@@ -165,4 +165,111 @@ def get_mcp_tool_registry() -> MCPToolRegistry:
     return _mcp_tool_registry
 
 
-__all__ = ["ToolRegistryEntry", "MCPToolRegistry", "get_mcp_tool_registry"]
+class OrchestratorRegistry:
+    """Registry for orchestrator tools and metadata.
+
+    Manages orchestrator discovery, registration, and lifecycle management.
+    """
+
+    def __init__(self) -> None:
+        """Initialize orchestrator registry."""
+        self.orchestrators: Dict[str, Dict[str, Any]] = {}
+        self._lock = Lock()
+
+    def register_orchestrator(
+        self, orchestrator_id: str, name: str, config: Dict[str, Any] = None
+    ) -> Dict[str, Any]:
+        """Register an orchestrator.
+
+        Args:
+            orchestrator_id: Unique orchestrator identifier.
+            name: Human-readable orchestrator name.
+            config: Orchestrator configuration.
+
+        Returns:
+            Registered orchestrator info.
+
+        Raises:
+            ValueError: If orchestrator_id already registered.
+        """
+        with self._lock:
+            if orchestrator_id in self.orchestrators:
+                raise ValueError(f"Orchestrator {orchestrator_id} already registered")
+
+            entry = {
+                "orchestrator_id": orchestrator_id,
+                "name": name,
+                "config": config or {},
+                "registered_at": str(__import__("datetime").datetime.now()),
+            }
+            self.orchestrators[orchestrator_id] = entry
+            return entry
+
+    def get_orchestrator(self, orchestrator_id: str) -> Optional[Dict[str, Any]]:
+        """Retrieve an orchestrator.
+
+        Args:
+            orchestrator_id: Orchestrator identifier.
+
+        Returns:
+            Orchestrator info if found, None otherwise.
+        """
+        with self._lock:
+            return self.orchestrators.get(orchestrator_id)
+
+    def list_orchestrators(self) -> List[Dict[str, Any]]:
+        """List all registered orchestrators.
+
+        Returns:
+            List of orchestrator entries.
+        """
+        with self._lock:
+            return list(self.orchestrators.values())
+
+    def unregister_orchestrator(self, orchestrator_id: str) -> bool:
+        """Unregister an orchestrator.
+
+        Args:
+            orchestrator_id: Orchestrator identifier.
+
+        Returns:
+            True if unregistered, False if not found.
+        """
+        with self._lock:
+            if orchestrator_id in self.orchestrators:
+                del self.orchestrators[orchestrator_id]
+                return True
+            return False
+
+
+# Global orchestrator registry instance
+_orchestrator_registry: Optional[OrchestratorRegistry] = None
+_orch_registry_lock = Lock()
+
+
+def get_orchestrator_registry() -> OrchestratorRegistry:
+    """Get the global orchestrator registry instance.
+
+    Returns:
+        OrchestratorRegistry: The global registry instance.
+    """
+    global _orchestrator_registry
+    if _orchestrator_registry is None:
+        with _orch_registry_lock:
+            if _orchestrator_registry is None:
+                _orchestrator_registry = OrchestratorRegistry()
+    return _orchestrator_registry
+
+
+# Alias for backward compatibility
+ToolRegistry = MCPToolRegistry
+
+
+__all__ = [
+    "ToolRegistryEntry",
+    "MCPToolRegistry",
+    "ToolRegistry",
+    "OrchestratorRegistry",
+    "get_mcp_tool_registry",
+    "get_orchestrator_registry",
+]

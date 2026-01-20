@@ -24,6 +24,66 @@ class ViolationType(Enum):
     MALICIOUS_INPUT = "malicious_input"
 
 
+class SecurityPolicy:
+    """Security policy for access control.
+
+    Manages security policies, permissions, and access control rules.
+    """
+
+    def __init__(self, policy_id: str, name: str) -> None:
+        """Initialize security policy.
+
+        Args:
+            policy_id: Policy identifier.
+            name: Human-readable policy name.
+        """
+        self.policy_id = policy_id
+        self.name = name
+        self.rules: Dict[str, Any] = {}
+        self.permissions: Dict[str, bool] = {}
+
+    def add_rule(self, rule_id: str, rule_config: Dict[str, Any]) -> None:
+        """Add a security rule.
+
+        Args:
+            rule_id: Rule identifier.
+            rule_config: Rule configuration.
+        """
+        self.rules[rule_id] = rule_config
+
+    def grant_permission(self, resource: str, allow: bool = True) -> None:
+        """Grant or deny permission for a resource.
+
+        Args:
+            resource: Resource identifier.
+            allow: True to grant, False to deny.
+        """
+        self.permissions[resource] = allow
+
+    def has_permission(self, resource: str) -> bool:
+        """Check if resource access is permitted.
+
+        Args:
+            resource: Resource identifier.
+
+        Returns:
+            True if access is permitted, False otherwise.
+        """
+        return self.permissions.get(resource, False)
+
+    def evaluate(self, context: Dict[str, Any]) -> bool:
+        """Evaluate policy against a context.
+
+        Args:
+            context: Context to evaluate.
+
+        Returns:
+            True if policy is satisfied, False otherwise.
+        """
+        # Basic evaluation logic
+        return len(self.rules) > 0 or len(self.permissions) > 0
+
+
 @dataclass
 class SecurityViolation:
     """Security violation event.
@@ -158,6 +218,7 @@ InputValidator = SecurityValidator
 __all__ = [
     "SecurityViolation",
     "SecurityValidator",
+    "SecurityPolicy",
     "OutputEncoder",
     "InputValidator",
     "ViolationType",

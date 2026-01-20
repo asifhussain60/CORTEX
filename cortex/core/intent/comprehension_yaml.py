@@ -20,6 +20,18 @@ class ComprehensionLevel(Enum):
     EXPERT = "expert"
 
 
+class IntentSection(Enum):
+    """Sections within intent comprehension."""
+
+    OBJECTIVE = "objective"
+    CONTEXT = "context"
+    CONSTRAINTS = "constraints"
+    ASSUMPTIONS = "assumptions"
+    SUCCESS_CRITERIA = "success_criteria"
+    RESOURCES = "resources"
+    STAKEHOLDERS = "stakeholders"
+
+
 @dataclass
 class ComprehensionResult:
     """Comprehension assessment result.
@@ -125,4 +137,5 @@ __all__ = [
     "ComprehensionSchema",
     "ComprehensionResult",
     "ComprehensionLevel",
+    "IntentSection",
 ]

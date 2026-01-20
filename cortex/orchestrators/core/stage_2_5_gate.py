@@ -131,9 +131,74 @@ class Stage25Gate:
 # Alias for backward compatibility
 Stage2_5Gate = Stage25Gate
 
+
+class ConversationProtocolIntegration:
+    """Integration layer for conversation protocol with stage 2.5 gate.
+
+    Bridges conversation protocol and stage 2.5 gate processing.
+    """
+
+    def __init__(self) -> None:
+        """Initialize conversation protocol integration."""
+        self.gate = Stage25Gate()
+        self.conversation_state: Dict[str, Any] = {}
+        self.protocol_version = "1.0"
+
+    def initialize_from_protocol(self, protocol_data: Dict[str, Any]) -> bool:
+        """Initialize from conversation protocol data.
+
+        Args:
+            protocol_data: Protocol data dictionary.
+
+        Returns:
+            True if initialization successful, False otherwise.
+        """
+        try:
+            self.conversation_state = protocol_data.copy()
+            decision = self.gate.validate(protocol_data)
+            return decision == GateDecision.ALLOW
+        except Exception:
+            return False
+
+    def get_integration_context(self) -> Dict[str, Any]:
+        """Get current integration context.
+
+        Returns:
+            Context dictionary.
+        """
+        return {
+            "protocol_version": self.protocol_version,
+            "gate_decision": self.gate.decision.value,
+            "conversation_state": self.conversation_state.copy(),
+            "checks": [
+                {
+                    "name": c.check_name,
+                    "passed": c.passed,
+                    "details": c.details,
+                }
+                for c in self.gate.checks
+            ],
+        }
+
+    def apply_protocol_transformation(self, data: Dict[str, Any]) -> Dict[str, Any]:
+        """Apply conversation protocol transformations.
+
+        Args:
+            data: Data to transform.
+
+        Returns:
+            Transformed data.
+        """
+        transformed = data.copy()
+        transformed["_protocol_version"] = self.protocol_version
+        transformed["_gate_validated"] = self.gate.is_passed()
+        return transformed
+
+
 __all__ = [
     "Stage25Gate",
     "Stage2_5Gate",
+    "ConversationProtocolIntegration",
     "GateDecision",
     "GateCheckResult",
     "ConfirmationContext",
