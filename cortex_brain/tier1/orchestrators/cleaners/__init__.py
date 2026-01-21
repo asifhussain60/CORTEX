@@ -1,85 +1,46 @@
-"""Cleaners Package - Re-exports from cleaners_base module.
+"""Cleaners Package
 
-Maintains backward compatibility for imports like:
-- from tier1.orchestrators.cleaners import Cleaner
-- from tier1.orchestrators.cleaners.md_organizer import MDOrganizerCleaner
+This package should NOT be imported directly.
+Instead, import from tier1.orchestrators.cleaners (the cleaners.py module)
+
+When Python sees "from tier1.orchestrators.cleaners import X",
+it will import from the cleaners/ package directory first.
+This __init__.py must re-export the classes from the parent cleaners.py module.
 
 Author: CORTEX Framework
-Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
-from ..cleaners_base import (
-    Cleaner,
-    DataCleaner,
-    FormatCleaner,
-    CleaningRule,
-    CleanerType,
-)
+# Import and re-export from parent cleaners module
+# We use the parent module path by importing from the package above
+import sys
+from pathlib import Path
 
-# Exceptions
-class CleanerRegistrationError(Exception):
-    """Error during cleaner registration."""
-    pass
+# Get the parent directory (tier1/orchestrators)
+parent_dir = Path(__file__).parent.parent
 
+# Try to import from the parent cleaners.py module directly
+# by using importlib to avoid circular imports
+import importlib.util
+cleaners_module_path = parent_dir / "cleaners.py"
+spec = importlib.util.spec_from_file_location("_cleaners_module", cleaners_module_path)
+_cleaners_module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(_cleaners_module)
 
-class CleanerNotFoundError(Exception):
-    """Error when cleaner not found."""
-    pass
-
-
-# Stub classes for test compatibility
-class CleanerInterface:
-    """Cleaner interface for backward compatibility."""
-
-    def clean(self, data):
-        """Clean data."""
-        raise NotImplementedError
-
-
-class Analysis:
-    """Analysis result."""
-
-    pass
-
-
-class Report:
-    """Report result."""
-
-    pass
-
-
-class RollbackResult:
-    """Rollback result."""
-
-    pass
-
-
-class CleanerRegistry:
-    """Registry for cleaner instances."""
-    
-    def __init__(self):
-        self.cleaners = {}
-    
-    def register(self, name: str, cleaner):
-        """Register a cleaner."""
-        self.cleaners[name] = cleaner
-    
-    def get(self, name: str):
-        """Get a cleaner by name."""
-        return self.cleaners.get(name)
-
+# Re-export all classes
+CleanerInterface = _cleaners_module.CleanerInterface
+CleanerRegistry = _cleaners_module.CleanerRegistry
+Analysis = _cleaners_module.Analysis
+Report = _cleaners_module.Report
+RollbackResult = _cleaners_module.RollbackResult
+CleanerRegistrationError = _cleaners_module.CleanerRegistrationError
+CleanerNotFoundError = _cleaners_module.CleanerNotFoundError
 
 __all__ = [
-    "Cleaner",
-    "DataCleaner",
-    "FormatCleaner",
-    "CleaningRule",
-    "CleanerType",
-    "CleanerRegistrationError",
-    "CleanerNotFoundError",
     "CleanerInterface",
+    "CleanerRegistry",
     "Analysis",
     "Report",
     "RollbackResult",
-    "CleanerRegistry",
+    "CleanerRegistrationError",
+    "CleanerNotFoundError",
 ]
