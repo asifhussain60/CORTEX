@@ -1,0 +1,7 @@
+feature_registry:
+  audit_enabled: true
+  audit_retention_days: 2555
+  cache_ttl_seconds: 60
+  enabled: true
+  event_bus: internal
+  persistence: sql

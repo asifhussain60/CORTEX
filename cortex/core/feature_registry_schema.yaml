@@ -1,0 +1,10 @@
+feature_schema:
+  audit_trail: array
+  category: string
+  constraints: object
+  description: string
+  enabled: boolean
+  id: string (required)
+  name: string (required)
+  rollout_percentage: integer (0-100)
+  version: string
