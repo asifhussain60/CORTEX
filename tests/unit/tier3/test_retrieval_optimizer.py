@@ -35,16 +35,20 @@ class TestRetrieverStructure:
     
     def test_retrieval_config_exists(self, retrieval_optimizer):
         """Verify retrieval config file exists."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
-        config_file = tier3_path / "retrieval-config.yaml"
-        assert config_file.exists(), "Retrieval config file not found"
+        from pathlib import Path
+        import os
+        # Go from tests/unit/tier3 up to project root, then to cortex_brain
+        project_root = Path(__file__).parent.parent.parent.parent
+        config_file = project_root / "cortex_brain" / "tier3" / "knowledge" / "retrieval-config.yaml"
+        assert config_file.exists(), f"Retrieval config file not found at {config_file}"
     
     def test_config_contains_metadata(self, retrieval_optimizer):
         """Verify config contains metadata."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
-        config_file = tier3_path / "retrieval-config.yaml"
-        
+        from pathlib import Path
         import yaml
+        project_root = Path(__file__).parent.parent.parent.parent
+        config_file = project_root / "cortex_brain" / "tier3" / "knowledge" / "retrieval-config.yaml"
+        
         with open(config_file, 'r') as f:
             config = yaml.safe_load(f)
         
@@ -53,10 +57,11 @@ class TestRetrieverStructure:
     
     def test_config_has_ranking_rules(self, retrieval_optimizer):
         """Verify config defines ranking rules."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
-        config_file = tier3_path / "retrieval-config.yaml"
-        
+        from pathlib import Path
         import yaml
+        project_root = Path(__file__).parent.parent.parent.parent
+        config_file = project_root / "cortex_brain" / "tier3" / "knowledge" / "retrieval-config.yaml"
+        
         with open(config_file, 'r') as f:
             config = yaml.safe_load(f)
         
@@ -123,14 +128,14 @@ class TestResultRanking:
     def test_rank_results_orders_by_relevance(self, retrieval_optimizer):
         """Verify ranking orders by relevance."""
         entries = [
-            {"entry_id": "KE-LOW", "quality": 0.5},
-            {"entry_id": "KE-HIGH", "quality": 0.95},
-            {"entry_id": "KE-MED", "quality": 0.7}
+            {"entry_id": "KE-LOW", "domain": "TEST", "content": "Low", "quality": 0.5, "relevance_score": 0.5},
+            {"entry_id": "KE-HIGH", "domain": "TEST", "content": "High", "quality": 0.95, "relevance_score": 0.95},
+            {"entry_id": "KE-MED", "domain": "TEST", "content": "Med", "quality": 0.7, "relevance_score": 0.7}
         ]
         ranked = retrieval_optimizer.rank_results(entries)
-        if ranked and "quality" in ranked[0]:
-            # First should have highest quality
-            assert ranked[0].get("quality", 0) >= ranked[-1].get("quality", 0)
+        if ranked:
+            # First should have highest relevance score
+            assert ranked[0].relevance_score >= ranked[-1].relevance_score
     
     def test_ranking_considers_quality_score(self, retrieval_optimizer):
         """Verify ranking considers quality scores."""
@@ -144,10 +149,11 @@ class TestResultRanking:
     def test_ranking_considers_domain_relevance(self, retrieval_optimizer):
         """Verify ranking considers domain relevance."""
         entries = [
-            {"entry_id": "KE-1", "domain": "GOVERNANCE", "quality": 0.8},
-            {"entry_id": "KE-2", "domain": "SECURITY", "quality": 0.8}
+            {"entry_id": "KE-1", "domain": "GOVERNANCE", "content": "Gov", "quality": 0.8, "relevance_score": 0.8},
+            {"entry_id": "KE-2", "domain": "SECURITY", "content": "Sec", "quality": 0.8, "relevance_score": 0.8}
         ]
-        ranked = retrieval_optimizer.rank_results(entries, preferred_domain="GOVERNANCE")
+        domain_weights = {"GOVERNANCE": 1.5}
+        ranked = retrieval_optimizer.rank_results(entries, domain_weights=domain_weights)
         assert len(ranked) == 2
     
     def test_ranking_handles_empty_list(self, retrieval_optimizer):
@@ -188,10 +194,11 @@ class TestCachingMechanism:
     
     def test_cache_respects_ttl(self, retrieval_optimizer):
         """Verify cache respects TTL."""
-        tier3_path = Path(__file__).parent.parent.parent / "cortex_brain" / "tier3" / "knowledge"
-        config_file = tier3_path / "retrieval-config.yaml"
-        
+        from pathlib import Path
         import yaml
+        project_root = Path(__file__).parent.parent.parent.parent
+        config_file = project_root / "cortex_brain" / "tier3" / "knowledge" / "retrieval-config.yaml"
+        
         with open(config_file, 'r') as f:
             config = yaml.safe_load(f)
         

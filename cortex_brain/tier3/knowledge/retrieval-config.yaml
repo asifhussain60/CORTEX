@@ -1,0 +1,86 @@
+---
+# Knowledge Retrieval Optimization Configuration
+# AC: KN-002-02
+
+metadata:
+  ac_id: "KN-002-02"
+  phase: "PHASE-12-Knowledge-Ecosystem-Expansion"
+  title: "Knowledge Retrieval Optimization"
+  description: "Semantic search, intelligent ranking, and performance optimization"
+  version: "1.0"
+  status: "ACTIVE"
+
+semantic_search:
+  enabled: true
+  engine: "vector-similarity"
+  embedding_model: "cortex-embeddings-v1"
+  similarity_threshold: 0.5
+  top_k_results: 10
+
+ranking_factors:
+  - name: "relevance_score"
+    weight: 0.7
+    description: "Semantic relevance to query"
+  - name: "quality_score"
+    weight: 0.2
+    description: "Content quality and completeness"
+  - name: "recency_score"
+    weight: 0.1
+    description: "Content freshness and recency"
+
+ranking_rules:
+  - rule_id: "RANK-001"
+    name: "Relevance First"
+    description: "Sort by semantic relevance"
+    priority: 1
+    
+  - rule_id: "RANK-002"
+    name: "Domain Weighting"
+    description: "Apply domain-specific weights"
+    priority: 2
+    domain_weights:
+      GOVERNANCE: 1.2
+      ORCHESTRATION: 1.1
+      KNOWLEDGE: 1.0
+      INFRASTRUCTURE: 0.9
+  
+  - rule_id: "RANK-003"
+    name: "Quality Filtering"
+    description: "Filter low-quality results"
+    priority: 3
+    min_quality_score: 0.6
+
+caching:
+  enabled: true
+  backend: "in-memory"
+  ttl_seconds: 3600
+  max_entries: 10000
+  eviction_policy: "lru"
+
+performance:
+  max_search_time_ms: 500
+  max_ranking_time_ms: 100
+  async_enabled: true
+  batch_size: 100
+
+query_optimization:
+  normalize_whitespace: true
+  remove_stop_words: true
+  expand_synonyms: true
+  languages:
+    - "en"
+    - "es"
+    - "fr"
+
+integrations:
+  indexer: "cortex_brain.tier3.knowledge.knowledge_indexer.KnowledgeIndexer"
+  curator: "cortex_brain.tier3.knowledge.ai_curator.AICurator"
+  synthesizer: "cortex_brain.tier3.knowledge.synthesis_engine.SynthesisEngine"
+
+monitoring:
+  enabled: true
+  metrics:
+    - total_searches
+    - cache_hit_rate
+    - avg_search_time_ms
+    - ranking_stats
