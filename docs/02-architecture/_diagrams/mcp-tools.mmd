@@ -1,0 +1,16 @@
+graph LR
+    A["MCP Client"] -->|JSON-RPC| B["CORTEX MCP Server"]
+    B --> C["Tool Registry"]
+    C --> D["Execute Orchestrator"]
+    C --> E["Query Knowledge"]
+    C --> F["Check Governance"]
+    
+    D --> G["Response"]
+    E --> G
+    F --> G
+    
+    G -->|JSON-RPC Result| A
+    
+    style A fill:#E3F2FD
+    style B fill:#0D47A1
+    style G fill:#4CAF50
