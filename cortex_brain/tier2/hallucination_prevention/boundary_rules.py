@@ -33,12 +33,14 @@ class BoundaryViolation(Exception):
         message: Violation message
         severity: Severity level (INFO, WARNING, CRITICAL)
         violation_id: Unique violation identifier
+        context: Context dict that triggered violation
     """
-    def __init__(self, violation_type: ViolationType, message: str, severity: str = "WARNING"):
+    def __init__(self, violation_type: ViolationType, message: str, severity: str = "WARNING", context: Optional[Dict[str, Any]] = None):
         self.violation_type = violation_type
         self.message = message
         self.severity = severity
         self.violation_id = str(uuid.uuid4())
+        self.context = context or {}
         super().__init__(message)
 
 
@@ -178,9 +180,10 @@ class BehavioralBoundaryRules:
         
         from datetime import datetime
         
-        action = context.get("action")
-        if action != "DELETE":
-            return True  # Only DELETE needs approval
+        action = context.get("action", "")
+        # Check if this is a deletion action (exact "DELETE" or contains "DELETE")
+        if not (action == "DELETE" or "DELETE" in action):
+            return True  # Not a deletion action
         
         ac_id = context.get("ac_id", "UNKNOWN")
         approval = context.get("approval")
@@ -191,7 +194,8 @@ class BehavioralBoundaryRules:
             raise BoundaryViolation(
                 ViolationType.AC_DELETION_WITHOUT_APPROVAL,
                 f"AC {ac_id} deletion requires governance approval",
-                severity="CRITICAL"
+                severity="CRITICAL",
+                context=context
             )
         
         # Check expiration if present
@@ -201,7 +205,8 @@ class BehavioralBoundaryRules:
                 raise BoundaryViolation(
                     ViolationType.AC_DELETION_WITHOUT_APPROVAL,
                     f"AC {ac_id} deletion approval has expired",
-                    severity="CRITICAL"
+                    severity="CRITICAL",
+                    context=context
                 )
         
         # Check reason field
@@ -209,7 +214,8 @@ class BehavioralBoundaryRules:
             raise BoundaryViolation(
                 ViolationType.AC_DELETION_WITHOUT_APPROVAL,
                 f"AC {ac_id} deletion requires audit reason",
-                severity="CRITICAL"
+                severity="CRITICAL",
+                context=context
             )
         
         # For completed ACs, check approval authority level
@@ -219,7 +225,8 @@ class BehavioralBoundaryRules:
                 raise BoundaryViolation(
                     ViolationType.AC_DELETION_WITHOUT_APPROVAL,
                     f"Completed AC {ac_id} deletion requires high-level approval",
-                    severity="CRITICAL"
+                    severity="CRITICAL",
+                    context=context
                 )
         
         return True
@@ -253,7 +260,8 @@ class BehavioralBoundaryRules:
                 violation = BoundaryViolation(
                     ViolationType.GOVERNANCE_BYPASS_ATTEMPT,
                     f"Unauthorized tier {tier} attempt to {action}",
-                    severity="CRITICAL"
+                    severity="CRITICAL",
+                    context=context
                 )
                 self.violations.append({
                     "violation_id": violation.violation_id,
@@ -280,7 +288,8 @@ class BehavioralBoundaryRules:
                     violation = BoundaryViolation(
                         ViolationType.GOVERNANCE_BYPASS_ATTEMPT,
                         f"SQL injection pattern detected: {pattern}",
-                        severity="CRITICAL"
+                        severity="CRITICAL",
+                        context=context
                     )
                     self.violations.append({
                         "violation_id": violation.violation_id,
@@ -297,7 +306,8 @@ class BehavioralBoundaryRules:
                 violation = BoundaryViolation(
                     ViolationType.GOVERNANCE_BYPASS_ATTEMPT,
                     f"API call with explicit bypass flag: {context.get('endpoint')}",
-                    severity="CRITICAL"
+                    severity="CRITICAL",
+                    context=context
                 )
                 self.violations.append({
                     "violation_id": violation.violation_id,
@@ -325,7 +335,8 @@ class BehavioralBoundaryRules:
                     violation = BoundaryViolation(
                         ViolationType.GOVERNANCE_BYPASS_ATTEMPT,
                         f"Direct modification of {target} bypasses governance",
-                        severity="CRITICAL"
+                        severity="CRITICAL",
+                        context=context
                     )
                     self.violations.append({
                         "violation_id": violation.violation_id,
@@ -341,7 +352,8 @@ class BehavioralBoundaryRules:
             violation = BoundaryViolation(
                 ViolationType.GOVERNANCE_BYPASS_ATTEMPT,
                 f"Unauthorized user bypass attempt",
-                severity="CRITICAL"
+                severity="CRITICAL",
+                context=context
             )
             self.violations.append({
                 "violation_id": violation.violation_id,
@@ -394,7 +406,7 @@ class BehavioralBoundaryRules:
             BoundaryViolation: If locked phase modification attempted
         """
         if not context:
-            return True
+            raise ValueError("Context cannot be None for phase lock check")
         
         phase_locked = context.get("phase_locked", False)
         action = context.get("action", "READ")
@@ -404,7 +416,8 @@ class BehavioralBoundaryRules:
             violation = BoundaryViolation(
                 ViolationType.LOCKED_PHASE_MODIFICATION,
                 f"Cannot {action} locked phase {phase_id}",
-                severity="CRITICAL"
+                severity="CRITICAL",
+                context=context
             )
             self.violations.append({
                 "violation_id": violation.violation_id,
@@ -412,12 +425,62 @@ class BehavioralBoundaryRules:
                 "message": violation.message,
                 "severity": violation.severity,
                 "timestamp": datetime.now().isoformat(),
+                "context": context,  # Store full context
                 "phase_id": phase_id,
                 "action": action,
                 "user_id": context.get("user_id"),
                 "correlation_id": context.get("correlation_id"),
             })
             raise violation
+        
+        return True
+    
+    def check_combined_boundaries(self, context: Dict[str, Any]) -> bool:
+        """Check multiple boundary rules together.
+        
+        Applies all applicable boundary checks and reports the most critical violation.
+        
+        Args:
+            context: Context dict with all boundary check parameters
+            
+        Returns:
+            True if all checks pass
+            
+        Raises:
+            BoundaryViolation: For most critical violation detected
+        """
+        if not context:
+            return True
+        
+        violations_found: List[BoundaryViolation] = []
+        
+        # Try AC deletion check
+        try:
+            self.check_ac_deletion(context)
+        except BoundaryViolation as e:
+            violations_found.append(e)
+        
+        # Try governance compliance check
+        try:
+            self.check_governance_compliance(context)
+        except BoundaryViolation as e:
+            violations_found.append(e)
+        
+        # Try phase lock check
+        try:
+            self.check_phase_lock(context)
+        except BoundaryViolation as e:
+            violations_found.append(e)
+        
+        # If violations found, raise the most critical one
+        if violations_found:
+            # Sort by severity level
+            severity_order = {"CRITICAL": 3, "WARNING": 2, "INFO": 1}
+            most_critical = max(
+                violations_found,
+                key=lambda v: severity_order.get(v.severity, 0)
+            )
+            raise most_critical
         
         return True
 
