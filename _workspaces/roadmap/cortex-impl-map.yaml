@@ -526,7 +526,7 @@ phases_implementation_status:
       - id: "impl-features-registry-001"
         title: "FeatureRegistry Implementation - Live Manifest System"
         ac_ids: 6
-        status: "NOT_STARTED"
+        status: "COMPLETED"
         priority: "P1"
         estimated_effort: "6-9 hours"
         blocking: false
@@ -536,6 +536,8 @@ phases_implementation_status:
         file: "_workspaces/roadmap/issues/registry.yaml"
         scheduled_after: "impl-ops-004-observability"
         business_value: "Live capability inventory, O(1) feature discovery, audit trail compliance"
+        completion_date: "2026-01-21"
+        tests_passing: 9
       
       - id: "cortex-registry-001-migration"
         title: "Establish cortex-registry/ Folder Structure"

@@ -1,0 +1,7 @@
+cache_strategy: Refresh on event bus publication
+fallback: Static manifest if DB unavailable
+performance_targets:
+  check_enabled: "< 500\xB5s (with rollout calculation)"
+  get_features_all: < 1ms (cached)
+  get_single_feature: "< 100\xB5s (O(1) hash)"
+  list_enabled: < 10ms (cached, refreshed on change)
