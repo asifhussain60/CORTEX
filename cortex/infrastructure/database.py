@@ -102,9 +102,14 @@ class DatabaseManager:
         if hasattr(self._local, 'connection') and self._local.connection is not None:
             try:
                 self._local.connection.close()
-            except Exception:
-                pass
-            self._local.connection = None
+            except sqlite3.Error as e:
+                import logging
+                logging.warning(f"Error closing database connection: {e}")
+            except Exception as e:
+                import logging
+                logging.error(f"Unexpected error closing connection: {e}")
+            finally:
+                self._local.connection = None
     
     def _create_connection(self) -> sqlite3.Connection:
         """Create a new database connection."""
@@ -263,12 +268,14 @@ class DatabaseManager:
             if hasattr(self._local, 'connection') and self._local.connection:
                 try:
                     self._local.connection.close()
-                except sqlite3.Error:
-                    pass  # Already closed or error closing
+                except sqlite3.Error as e:
+                    import logging
+                    logging.warning(f"Error closing connection during cleanup: {e}")
                 finally:
                     self._local.connection = None
-        except Exception:
-            pass  # Ensure close never raises
+        except Exception as e:
+            import logging
+            logging.error(f"Unexpected error in close: {e}")  # Ensure close never raises
     
     def __enter__(self) -> "DatabaseManager":
         """

@@ -295,10 +295,13 @@ class ConnectionPool:
     
     def _close_connection(self, wrapper: _ConnectionWrapper) -> None:
         """Close a connection and remove from pool."""
+        import logging
         try:
             wrapper.connection.close()
-        except Exception:
-            pass
+        except sqlite3.Error as e:
+            logging.warning(f"Error closing connection: {e}")
+        except Exception as e:
+            logging.error(f"Unexpected error closing connection: {e}")
         
         conn_id = id(wrapper.connection)
         if conn_id in self._all_connections:
@@ -380,8 +383,10 @@ class ConnectionPool:
             for wrapper in list(self._all_connections.values()):
                 try:
                     wrapper.connection.close()
-                except Exception:
-                    pass
+                except sqlite3.Error as e:
+                    logging.warning(f"Error closing connection during cleanup: {e}")
+                except Exception as e:
+                    logging.error(f"Unexpected error closing connection during cleanup: {e}")
             
             self._all_connections.clear()
             
