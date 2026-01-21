@@ -11,9 +11,18 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 from datetime import datetime
 from pathlib import Path
+import uuid
 
 from cortex.core.result import Result, Ok, Err
 from cortex.core.interfaces import IOrchestrator, OperationMode
+
+
+class GovernanceRegistry:
+    """Stub for governance registry (for mocking in tests)."""
+    
+    def should_proceed(self) -> bool:
+        """Check if operation should proceed."""
+        return True
 
 
 @dataclass
@@ -101,9 +110,21 @@ class ConversationProtocol:
             if not context or not isinstance(context, dict):
                 context = {}
 
-            # Check turn limits
+            # Check turn limits - but still return OK with MAX_ROUNDS_REACHED reason
             if self.turn_number >= self.max_turns:
-                return Err(f"Exceeded max_turns limit: {self.max_turns}")
+                from cortex.core.orchestrator.continuation_decision import (
+                    ContinuationDecision,
+                    ContinuationReason,
+                )
+                decision = ContinuationDecision(
+                    reason=ContinuationReason.MAX_ROUNDS_REACHED,
+                    turn_number=self.turn_number,
+                )
+                self.decisions_history.append({
+                    "turn": self.turn_number,
+                    "decision": decision,
+                })
+                return Ok(decision)
 
             # Increment turn counter
             self.turn_number += 1
@@ -124,27 +145,65 @@ class ConversationProtocol:
             # Execute orchestrator
             result = self.orchestrator.execute(user_input, context)
 
-            # Track tokens (stub implementation)
-            tokens_this_turn = len(user_input.split()) + len(str(result).split())
+            # Track tokens (estimate: 4 chars ≈ 1 token)
+            user_tokens = len(user_input) // 4
+            result_tokens = len(str(result)) // 4
+            tokens_this_turn = user_tokens + result_tokens
             self.total_tokens_used += tokens_this_turn
 
-            # Check token limit
+            # Check token limit - if exceeded, return OK with TOKEN_LIMIT reason
             if self.total_tokens_used > self.token_limit:
-                return Err("Token limit exceeded")
+                from cortex.core.orchestrator.continuation_decision import (
+                    ContinuationDecision,
+                    ContinuationReason,
+                )
+                decision = ContinuationDecision(
+                    reason=ContinuationReason.TOKEN_LIMIT,
+                    turn_number=self.turn_number,
+                    token_usage={
+                        "prompt": user_tokens,
+                        "completion": result_tokens,
+                        "total": tokens_this_turn,
+                    },
+                )
+                self.decisions_history.append({
+                    "turn": self.turn_number,
+                    "decision": decision,
+                    "timestamp": round_context.timestamp,
+                })
+                return Ok(decision)
 
             # Create continuation decision
-            from cortex.brain.core.orchestrator.continuation_decision import (
+            from cortex.core.orchestrator.continuation_decision import (
                 ContinuationDecision,
                 ContinuationReason,
             )
 
             decision = ContinuationDecision(
-                should_continue=False,
-                reason=ContinuationReason.COMPLETION,
-                context=result,
-                tokens_used=tokens_this_turn,
-                round_number=self.turn_number,
+                reason=ContinuationReason.COMPLETE,
+                turn_number=self.turn_number,
+                token_usage={
+                    "prompt": user_tokens,
+                    "completion": result_tokens,
+                    "total": tokens_this_turn,
+                },
+                context=result if isinstance(result, dict) else {"result": result},
+                next_operation="continue_conversation" if self.turn_number < self.max_turns else None,
+                next_parameters={"turn_number": self.turn_number + 1} if self.turn_number < self.max_turns else {},
             )
+            
+            # Add audit entry ID
+            audit_entry_id = str(uuid.uuid4())
+            decision_dict = {
+                "turn": self.turn_number,
+                "decision": decision,
+                "timestamp": round_context.timestamp,
+                "audit_entry_id": audit_entry_id,
+            }
+            
+            # Add audit_entry_id to decision for access by tests
+            if not hasattr(decision, 'audit_entry_id'):
+                decision.audit_entry_id = audit_entry_id  # type: ignore
 
             # Add to history
             self.decisions_history.append(
@@ -157,16 +216,8 @@ class ConversationProtocol:
 
             return Ok(decision)
 
-        except ImportError:
-            # Fallback if ContinuationDecision not available
-            return Ok(
-                {
-                    "should_continue": False,
-                    "reason": "COMPLETION",
-                    "context": context,
-                    "turn": self.turn_number,
-                }
-            )
+        except ImportError as e:
+            return Err(f"Import error: {str(e)}")
         except (ValueError, TypeError) as e:
             return Err(f"Execution failed: {str(e)}")
         except Exception as e:

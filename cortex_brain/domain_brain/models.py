@@ -50,13 +50,17 @@ class Entity:
         entity_type: Type of entity.
         name: Entity name.
         domain_id: Domain identifier.
+        description: Entity description.
+        source: Source of entity (AST, BKIO, etc).
         metadata: Additional metadata.
     """
 
     entity_id: str
     entity_type: EntityType
     name: str
-    domain_id: str
+    description: str = ""
+    domain_id: str = ""
+    source: str = ""
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -66,19 +70,29 @@ class Conflict:
 
     Attributes:
         conflict_id: Unique conflict identifier.
-        entity_a: First entity involved.
-        entity_b: Second entity involved.
+        domain_id: Domain ID for this conflict.
+        attribute: Attribute involved in conflict.
+        source_values: Dictionary of conflicting source values.
+        entity_a: First entity involved (optional).
+        entity_b: Second entity involved (optional).
         conflict_type: Type of conflict.
         severity: Conflict severity.
         resolution: Proposed resolution.
+        resolution_method: Method used to resolve conflict.
+        resolved_at: When conflict was resolved.
     """
 
     conflict_id: str
-    entity_a: str
-    entity_b: str
+    domain_id: str
+    attribute: str
+    source_values: Dict[str, Any] = field(default_factory=dict)
+    entity_a: str = ""
+    entity_b: str = ""
     conflict_type: str = ""
     severity: str = "medium"
     resolution: str = ""
+    resolution_method: str = ""
+    resolved_at: Optional[datetime] = None
 
 
 @dataclass
@@ -90,6 +104,8 @@ class DomainModel:
         name: Model name.
         description: Model description.
         created_at: When model was created.
+        entities: Dictionary of entities in the domain.
+        conflicts: List of conflicts in the domain.
         metadata: Additional metadata.
     """
 
@@ -97,6 +113,8 @@ class DomainModel:
     name: str
     description: str
     created_at: datetime = field(default_factory=datetime.now)
+    entities: Dict[str, Any] = field(default_factory=dict)
+    conflicts: List[Conflict] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -256,6 +274,48 @@ class ConflictResolution:
     conflict_id: str
     resolution_strategy: str
     resolved: bool = False
+
+
+@dataclass
+class ValidationResult:
+    """Domain validation result.
+    
+    Attributes:
+        is_valid: Whether domain is valid.
+        errors: List of validation errors.
+        conflicts_detected: List of detected conflicts.
+    """
+    is_valid: bool = True
+    errors: List[str] = field(default_factory=list)
+    conflicts_detected: List[Any] = field(default_factory=list)
+
+
+@dataclass
+class AuditEntry:
+    """Audit log entry.
+    
+    Attributes:
+        entry_id: Unique entry identifier.
+        operation: Type of operation performed.
+        domain_id: Associated domain ID.
+        entity_id: Associated entity ID (optional).
+        timestamp: When operation occurred.
+        hash: Hash of this entry.
+        previous_hash: Hash of previous entry (for chain integrity).
+        description: Human-readable description.
+        previous_value: Previous value before update.
+        new_value: New value after update.
+    """
+    entry_id: str
+    operation: AuditOperationType
+    timestamp: datetime = field(default_factory=datetime.now)
+    domain_id: Optional[str] = None
+    entity_id: Optional[str] = None
+    hash: str = ""
+    previous_hash: str = ""
+    description: str = ""
+    previous_value: Optional[Dict[str, Any]] = None
+    new_value: Optional[Dict[str, Any]] = None
 
 
 __all__ = [

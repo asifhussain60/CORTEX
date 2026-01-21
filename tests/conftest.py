@@ -24,11 +24,16 @@ sys.path.insert(0, str(project_root / "src"))     # Old structure (if exists)
 sys.path.insert(0, str(project_root / "cortex_brain"))  # Tier structure (if exists)
 sys.path.insert(0, str(project_root))  # Project root
 
-# Disable audit logger for migration - too many import issues
-# Will re-enable after all imports are updated
+# Register CORTEX test audit plugin for performance monitoring
 def pytest_configure(config):
     """Configure pytest."""
-    pass  # Minimal configuration
+    try:
+        from cortex.testing.pytest_plugin_audit import cortex_test_audit_plugin
+        config.pluginmanager.register(cortex_test_audit_plugin, name="cortex_test_audit")
+    except Exception as e:
+        # Plugin not available or import failed, continue without it
+        import sys
+        print(f"Note: Test audit plugin not loaded ({type(e).__name__})", file=sys.stderr)
 
 
 @pytest.fixture
@@ -116,3 +121,19 @@ def reset_db_env():
     for var in ['DB_POOL_SIZE', 'DB_MAX_OVERFLOW', 'DB_POOL_TIMEOUT']:
         if var in os.environ:
             del os.environ[var]
+
+
+@pytest.fixture
+def test_db_path(temp_dir):
+    """Provide a temporary SQLite database path for testing.
+    
+    Creates a temporary SQLite database file that can be used
+    by tests that require database connectivity.
+    """
+    db_path = temp_dir / "test.db"
+    
+    # Create empty database
+    conn = sqlite3.connect(str(db_path))
+    conn.close()
+    
+    return db_path
