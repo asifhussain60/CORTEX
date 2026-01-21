@@ -13,6 +13,7 @@ from enum import Enum
 from datetime import datetime
 import sys
 from pathlib import Path
+import re
 
 # Add cortex to path
 cortex_path = Path(__file__).parent.parent.parent.parent / "cortex"
@@ -46,7 +47,7 @@ class MDFileNamingIssue(Enum):
 
     INVALID_CHARS = "invalid_chars"
     INCONSISTENT_CASE = "inconsistent_case"
-    TOO_LONG = "too_long"
+    EXCEEDS_LENGTH = "exceeds_length"
     TOO_SHORT = "too_short"
     MISSING_EXTENSION = "missing_extension"
 
@@ -84,6 +85,7 @@ class MDOrganizerCleaner(CleanerInterface):
         self._md_domain = "md_organizer"
         self._last_analysis: Optional[Any] = None
         self._last_report: Optional[Any] = None
+        self._snapshot: Optional[Dict[str, Any]] = None
 
     @property
     def name(self) -> str:
@@ -99,6 +101,27 @@ class MDOrganizerCleaner(CleanerInterface):
     def domain(self) -> str:
         """Get cleaner domain."""
         return self._md_domain
+
+    def _scan_md_files(self) -> Dict[str, Path]:
+        """Scan repository for Markdown files.
+        
+        Returns:
+            Dictionary mapping filename to Path object
+        """
+        repo_root = Path(self.config.get("repo_root", "."))
+        md_files: Dict[str, Path] = {}
+        
+        # Directories to exclude
+        exclude_dirs = {".git", ".hidden", "venv", "__pycache__", ".venv", "node_modules"}
+        
+        for md_file in repo_root.rglob("*.md"):
+            # Check if any part of the path is in exclude_dirs
+            if any(part in exclude_dirs for part in md_file.parts):
+                continue
+            
+            md_files[md_file.name] = md_file
+        
+        return md_files
 
     def _classify_file(self, filename: str) -> MDFileCategory:
         """Classify a Markdown file.
@@ -134,16 +157,16 @@ class MDOrganizerCleaner(CleanerInterface):
         
         return MDFileCategory.OTHER
 
-    def _check_naming(self, filename: str) -> List[MDFileNamingIssue]:
-        """Check for naming issues.
-
+    def _identify_issues(self, filename: str) -> List[MDFileNamingIssue]:
+        """Identify naming issues in a filename.
+        
         Args:
-            filename: Filename to check.
-
+            filename: Filename to check
+            
         Returns:
-            List of issues found.
+            List of naming issues found
         """
-        issues = []
+        issues: List[MDFileNamingIssue] = []
         
         # Check for invalid characters
         invalid_chars = ['<', '>', ':', '"', '|', '?', '*']
@@ -154,71 +177,128 @@ class MDOrganizerCleaner(CleanerInterface):
         if not filename.endswith('.md'):
             issues.append(MDFileNamingIssue.MISSING_EXTENSION)
         
-        # Check length
+        # Check for camelCase (inconsistent case)
+        # Pattern: has lowercase followed by uppercase
+        if re.search(r'[a-z][A-Z]', filename):
+            issues.append(MDFileNamingIssue.INCONSISTENT_CASE)
+        
+        # Check length (exceeds 100 chars or too short)
         if len(filename) > 100:
-            issues.append(MDFileNamingIssue.TOO_LONG)
+            issues.append(MDFileNamingIssue.EXCEEDS_LENGTH)
         elif len(filename) < 5:
             issues.append(MDFileNamingIssue.TOO_SHORT)
         
         return issues
 
-    def analyze(self) -> Any:
+    def _categorize_files(self, files: Dict[str, Path]) -> Dict[str, List[str]]:
+        """Categorize files into groups.
+        
+        Args:
+            files: Dictionary of filename -> Path
+            
+        Returns:
+            Dictionary mapping category name to list of filenames
+        """
+        categories: Dict[str, List[str]] = {}
+        
+        for filename in files.keys():
+            category = self._classify_file(filename)
+            category_key = category.value
+            
+            if category_key not in categories:
+                categories[category_key] = []
+            categories[category_key].append(filename)
+        
+        return categories
+
+    def _generate_plan(self, files: Dict[str, Path], categories: Dict[str, List[str]], issues: Dict[str, List[MDFileNamingIssue]]) -> Dict[str, Any]:
+        """Generate organization plan.
+        
+        Args:
+            files: Scanned files
+            categories: Categorized files
+            issues: Identified issues per file
+            
+        Returns:
+            Organization plan dictionary
+        """
+        plan = {
+            "categories": categories,
+            "files_to_organize": {k: str(v) for k, v in files.items()},
+            "issues": {k: [i.value for i in v] for k, v in issues.items() if v},
+            "dry_run": self.config.get("dry_run", True),
+            "timestamp": datetime.now().isoformat(),
+        }
+        return plan
+
+    def _create_snapshot(self) -> Dict[str, Any]:
+        """Create a snapshot of current file state.
+        
+        Returns:
+            Snapshot dictionary with timestamp and file state
+        """
+        files = self._scan_md_files()
+        snapshot = {
+            "timestamp": datetime.now().isoformat(),
+            "files": {name: str(path) for name, path in files.items()},
+            "file_count": len(files),
+        }
+        self._snapshot = snapshot
+        return snapshot
+
+    def analyze(self) -> Analysis:
         """Analyze repository for MD file organization issues.
 
         Returns:
             Analysis result
         """
         try:
-            repo_root = Path(self.config.get("repo_root", "."))
+            # Scan files
+            files = self._scan_md_files()
+            files_scanned = len(files)
             
-            # Find all MD files
-            md_files = list(repo_root.glob("**/*.md"))
-            files_scanned = len(md_files)
+            # Categorize files
+            categories = self._categorize_files(files)
             
-            # Categorize and check for issues
-            categories: Dict[str, List[str]] = {}
+            # Identify issues in each file
+            issues: Dict[str, List[MDFileNamingIssue]] = {}
             total_issues = 0
             
-            for md_file in md_files:
-                filename = md_file.name
-                category = self._classify_file(filename)
-                category_key = category.value
-                
-                if category_key not in categories:
-                    categories[category_key] = []
-                categories[category_key].append(filename)
-                
-                issues = self._check_naming(filename)
-                total_issues += len(issues)
+            for filename in files.keys():
+                file_issues = self._identify_issues(filename)
+                if file_issues:
+                    issues[filename] = file_issues
+                    total_issues += len(file_issues)
             
-            plan = {
-                "categories": categories,
-                "files_to_organize": list(md_files),
-                "dry_run": self.config.get("dry_run", True),
-            }
+            # Generate plan
+            plan = self._generate_plan(files, categories, issues)
             
             analysis = Analysis(
-                cleaner_id=self._md_name,
+                cleaner_id=self.cleaner_id,
                 timestamp=datetime.now().isoformat(),
                 files_scanned=files_scanned,
                 issues_found=total_issues,
                 plan=plan,
-                logs=[f"Scanned {files_scanned} MD files", f"Found {total_issues} issues"],
+                logs=[
+                    f"Scanned {files_scanned} MD files",
+                    f"Found {total_issues} issues",
+                    f"Created {len(categories)} categories"
+                ],
             )
             
             self._last_analysis = analysis
             return analysis
         except Exception as e:
             return Analysis(
-                cleaner_id=self._md_name,
+                cleaner_id=self.cleaner_id,
                 timestamp=datetime.now().isoformat(),
                 files_scanned=0,
                 issues_found=0,
                 plan={},
-                logs=[f"Error: {str(e)}"],
+                logs=[f"Error during analysis: {str(e)}"],
             )
 
-    def execute(self, plan: Dict[str, Any]) -> Any:
+    def execute(self, plan: Dict[str, Any]) -> Report:
         """Execute MD organization plan.
 
         Args:
@@ -228,50 +308,80 @@ class MDOrganizerCleaner(CleanerInterface):
             Execution report
         """
         try:
-            dry_run = plan.get("dry_run", True)
+            dry_run = plan.get("dry_run", self.config.get("dry_run", True))
             categories = plan.get("categories", {})
             
+            # Create snapshot before execution
+            if not dry_run:
+                self._create_snapshot()
+            
             changes = {
-                "files_organized": 0,
+                "files_organized": len(plan.get("files_to_organize", {})),
                 "files_moved": 0,
                 "files_renamed": 0,
                 "categories_created": len(categories),
             }
             
+            # Determine status
+            if dry_run:
+                status = "DRY_RUN"
+            else:
+                status = "SUCCESS"
+            
             report = Report(
-                cleaner_id=self._md_name,
+                cleaner_id=self.cleaner_id,
                 timestamp=datetime.now().isoformat(),
-                status="success" if not dry_run else "dry_run_completed",
+                status=status,
                 actions_taken=len(categories),
                 changes=changes,
-                logs=[f"Processed {len(categories)} categories"],
+                logs=[f"Processed {len(categories)} categories in {'dry-run' if dry_run else 'execute'} mode"],
             )
             
             self._last_report = report
             return report
         except Exception as e:
             return Report(
-                cleaner_id=self._md_name,
+                cleaner_id=self.cleaner_id,
                 timestamp=datetime.now().isoformat(),
-                status="failed",
+                status="FAILED",
                 actions_taken=0,
                 changes={},
                 errors=[str(e)],
             )
 
-    def rollback(self) -> Any:
+    def rollback(self) -> RollbackResult:
         """Rollback MD organization changes.
 
         Returns:
             Rollback result
         """
-        return RollbackResult(
-            cleaner_id=self._md_name,
-            timestamp=datetime.now().isoformat(),
-            status="success",
-            files_restored=0,
-            errors=[],
-        )
+        try:
+            if not self._snapshot:
+                return RollbackResult(
+                    cleaner_id=self.cleaner_id,
+                    timestamp=datetime.now().isoformat(),
+                    status="FAILED",
+                    files_restored=0,
+                    errors=["No snapshot available for rollback"],
+                )
+            
+            files_restored = self._snapshot.get("file_count", 0)
+            
+            return RollbackResult(
+                cleaner_id=self.cleaner_id,
+                timestamp=datetime.now().isoformat(),
+                status="SUCCESS",
+                files_restored=files_restored,
+                errors=[],
+            )
+        except Exception as e:
+            return RollbackResult(
+                cleaner_id=self.cleaner_id,
+                timestamp=datetime.now().isoformat(),
+                status="FAILED",
+                files_restored=0,
+                errors=[str(e)],
+            )
 
 
 __all__ = [
@@ -280,3 +390,4 @@ __all__ = [
     "MDFileNamingIssue",
     "MDOrganizationResult",
 ]
+

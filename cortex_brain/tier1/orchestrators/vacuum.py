@@ -86,6 +86,27 @@ class VacuumOrchestrator:
         self._audit_trail: List[Dict[str, Any]] = []
         self._latest_analyses: Dict[str, Any] = {}
         self._latest_reports: Dict[str, Any] = {}
+        self.dry_run = self.config.get("dry_run", False)
+    
+    @property
+    def registry(self) -> cleaners.CleanerRegistry:
+        """Get cleaner registry.
+        
+        Returns:
+            CleanerRegistry instance
+        """
+        return self._registry
+    
+    def get_cleaner(self, domain: str) -> Any:
+        """Get an instantiated cleaner by domain.
+        
+        Args:
+            domain: Cleaner domain
+            
+        Returns:
+            Instantiated cleaner
+        """
+        return self._registry.get_cleaner(domain, config=self.config)
     
     @classmethod
     def get_instance(cls) -> VacuumOrchestrator:
@@ -98,28 +119,29 @@ class VacuumOrchestrator:
             cls._instance = cls()
         return cls._instance
     
-    def register_cleaner(self, cleaner_class: Any, config: Dict[str, Any]) -> Result:
-        """Register a cleaner.
+    def register_cleaner(self, cleaner_class: Any, config: Optional[Dict[str, Any]] = None) -> Result:
+        """Register a cleaner class.
         
         Args:
-            cleaner_class: Cleaner class to instantiate
-            config: Configuration for the cleaner
+            cleaner_class: Cleaner class to register
+            config: Optional configuration for instantiation
             
         Returns:
             Result containing success or error
         """
         try:
-            # Instantiate the cleaner with config
-            cleaner_instance = cleaner_class(config)
-            cleaner_id = cleaner_instance.domain
+            # Register the class in the registry
+            self._registry.register_cleaner(cleaner_class)
             
-            # Register the instance
-            self._registry.register(cleaner_id, cleaner_instance)
+            # Create temporary instance to get metadata
+            temp_instance = cleaner_class(config or {})
+            cleaner_id = temp_instance.domain
+            
             self._audit_trail.append({
                 "timestamp": datetime.now().isoformat(),
                 "action": "register_cleaner",
                 "cleaner_id": cleaner_id,
-                "cleaner_name": cleaner_instance.name,
+                "cleaner_name": temp_instance.name,
             })
             return Ok(None)
         except Exception as e:
@@ -139,9 +161,7 @@ class VacuumOrchestrator:
             
             if cleaner_id:
                 # Analyze specific cleaner
-                cleaner = self._registry.get(cleaner_id)
-                if not cleaner:
-                    raise ValueError(f"Cleaner {cleaner_id} not found")
+                cleaner = self._registry.get_cleaner(cleaner_id, config=self.config)
                 analysis = cleaner.analyze()
                 self._latest_analyses[cleaner_id] = analysis
                 
@@ -156,12 +176,11 @@ class VacuumOrchestrator:
                 # Analyze all cleaners
                 analyses: Dict[str, Any] = {}
                 
-                for cid in self._registry.list_cleaners():
-                    cleaner = self._registry.get(cid)
-                    if cleaner:
-                        analysis = cleaner.analyze()
-                        analyses[cid] = analysis
-                        self._latest_analyses[cid] = analysis
+                for cid in self._registry.list_all():
+                    cleaner = self._registry.get_cleaner(cid, config=self.config)
+                    analysis = cleaner.analyze()
+                    analyses[cid] = analysis
+                    self._latest_analyses[cid] = analysis
                 
                 self._audit_trail.append({
                     "timestamp": datetime.now().isoformat(),
@@ -191,9 +210,7 @@ class VacuumOrchestrator:
             if isinstance(plan_or_cleaner_id, str):
                 # Specific cleaner: execute(cleaner_id, plan)
                 cleaner_id = plan_or_cleaner_id
-                cleaner = self._registry.get(cleaner_id)
-                if not cleaner:
-                    raise ValueError(f"Cleaner {cleaner_id} not found")
+                cleaner = self._registry.get_cleaner(cleaner_id, config=self.config)
                 
                 exec_plan = plan or {}
                 report = cleaner.execute(exec_plan)
@@ -211,11 +228,10 @@ class VacuumOrchestrator:
                 reports: Dict[str, Any] = {}
                 
                 for cleaner_id, plan_item in plan_or_cleaner_id.items():
-                    cleaner = self._registry.get(cleaner_id)
-                    if cleaner:
-                        report = cleaner.execute(plan_item)
-                        reports[cleaner_id] = report
-                        self._latest_reports[cleaner_id] = report
+                    cleaner = self._registry.get_cleaner(cleaner_id, config=self.config)
+                    report = cleaner.execute(plan_item)
+                    reports[cleaner_id] = report
+                    self._latest_reports[cleaner_id] = report
                 
                 self._state = OrchestratorState.COMPLETED
                 self._audit_trail.append({
@@ -243,9 +259,7 @@ class VacuumOrchestrator:
         try:
             if cleaner_id:
                 # Rollback specific cleaner
-                cleaner = self._registry.get(cleaner_id)
-                if not cleaner:
-                    raise ValueError(f"Cleaner {cleaner_id} not found")
+                cleaner = self._registry.get_cleaner(cleaner_id, config=self.config)
                 
                 result = cleaner.rollback()
                 
@@ -260,11 +274,10 @@ class VacuumOrchestrator:
                 # Rollback all cleaners
                 rollback_results: Dict[str, Any] = {}
                 
-                for cid in self._registry.list_cleaners():
-                    cleaner = self._registry.get(cid)
-                    if cleaner:
-                        result = cleaner.rollback()
-                        rollback_results[cid] = result
+                for cid in self._registry.list_all():
+                    cleaner = self._registry.get_cleaner(cid, config=self.config)
+                    result = cleaner.rollback()
+                    rollback_results[cid] = result
                 
                 self._state = OrchestratorState.ROLLED_BACK
                 self._audit_trail.append({
@@ -331,7 +344,7 @@ class VacuumOrchestrator:
         Returns:
             List of cleaner IDs
         """
-        return self._registry.list_cleaners()
+        return self._registry.list_all()
     
     def list_cleaners(self) -> List[str]:
         """Alias for list_registered_cleaners().
@@ -350,7 +363,7 @@ class VacuumOrchestrator:
         Returns:
             True if registered, False otherwise
         """
-        return self._registry.get(cleaner_id) is not None
+        return self._registry.has_cleaner(cleaner_id)
     
     def generate_report(self) -> OrchestrationReport:
         """Generate orchestration report.
@@ -364,12 +377,12 @@ class VacuumOrchestrator:
             duration_seconds=0.0,
             files_processed=sum(
                 getattr(self._latest_analyses.get(cid, {}), 'files_scanned', 0)
-                for cid in self._registry.list_cleaners()
+                for cid in self._registry.list_all()
             ) if self._latest_analyses else 0,
-            cleaners_used=len(self._registry.list_cleaners()),
+            cleaners_used=len(self._registry.list_all()),
             issues_fixed=sum(
                 getattr(self._latest_reports.get(cid, {}), 'actions_taken', 0)
-                for cid in self._registry.list_cleaners()
+                for cid in self._registry.list_all()
             ) if self._latest_reports else 0,
             errors_encountered=len(self._audit_trail),
         )
@@ -378,7 +391,7 @@ class VacuumOrchestrator:
             state=self._state,
             stats=stats,
             details={
-                "cleaners": self._registry.list_cleaners(),
+                "cleaners": self._registry.list_all(),
                 "analyses": len(self._latest_analyses),
                 "reports": len(self._latest_reports),
                 "audit_entries": len(self._audit_trail),
