@@ -21,6 +21,16 @@ class DocumentFormat(str, Enum):
     CSV = "csv"
 
 
+@dataclass
+class OrchestrationResult:
+    """Result from orchestrator execution."""
+    success: bool
+    documents_processed: int = 0
+    documents_failed: int = 0
+    conflicts_detected: int = 0
+    errors: List[str] = field(default_factory=list)
+
+
 class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
     """Orchestrator for ingesting business knowledge documents."""
 
@@ -63,7 +73,7 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         self.documents_failed = 0
         self.conflicts_detected = 0
 
-    def execute(self, context: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
+    def execute(self, context: Optional[Dict[str, Any]] = None) -> Optional[OrchestrationResult]:
         """Execute orchestrator.
         
         Args:
@@ -84,13 +94,14 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
                 self.documents_failed += 1
                 self._log(f"Document processing failed: {str(e)}")
         
-        return {
-            "documents_processed": self.documents_processed,
-            "documents_failed": self.documents_failed,
-            "conflicts_detected": self.conflicts_detected,
-        }
+        return OrchestrationResult(
+            success=self.documents_failed == 0,
+            documents_processed=self.documents_processed,
+            documents_failed=self.documents_failed,
+            conflicts_detected=self.conflicts_detected,
+        )
     
-    def run(self) -> Optional[Dict[str, Any]]:
+    def run(self) -> Optional[OrchestrationResult]:
         """Run the orchestrator (alias for execute).
         
         Returns:
@@ -116,6 +127,9 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         description = doc.get("description", "")
         fmt = doc.get("format", "yaml")
         content = doc.get("content", {})
+        
+        # Update context with domain name
+        self.context.domain_name = domain_id
         
         # Validate format
         try:
@@ -183,12 +197,49 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
             entity_data: Entity data to merge.
         """
         entity_id = entity_data.get("id")
+        if not entity_id:
+            # Skip entities without ID
+            return
+        
         entity_type_str = entity_data.get("type", "resource").lower()
         name = entity_data.get("name", "")
         description = entity_data.get("description", "")
         
         entity_type = self._get_entity_type(entity_type_str)
         
+        # Check for existing entity (conflict detection)
+        if entity_id in domain.entities:
+            existing = domain.entities[entity_id]
+            
+            # Detect description conflict
+            if existing.description and description and existing.description != description:
+                # Create conflict record
+                from cortex_brain.domain_brain.models import Conflict
+                conflict = Conflict(
+                    conflict_id=f"conflict-{entity_id}-desc",
+                    domain_id=domain.domain_id,
+                    attribute="description",
+                    source_values={
+                        existing.source: existing.description,
+                        "BKIO": description
+                    },
+                    entity_a=entity_id,
+                    entity_b=entity_id,
+                    conflict_type="description_mismatch",
+                    severity="medium"
+                )
+                domain.conflicts.append(conflict)
+                self.conflicts_detected += 1
+                
+                # BKIO has priority - overwrite description
+                existing.description = description
+            elif description:
+                existing.description = description
+            
+            # Preserve original source but update description
+            return
+        
+        # Create new entity
         entity = Entity(
             entity_id=entity_id,
             entity_type=entity_type,
