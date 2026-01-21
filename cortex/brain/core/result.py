@@ -20,10 +20,28 @@ Author: Asif Hussain
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
+from abc import ABCMeta
 from dataclasses import dataclass
 from typing import TypeVar, Generic, Optional, Union
 
 T = TypeVar('T')
+
+
+class ResultMeta(type):
+    """Metaclass for Result to support isinstance checks and subscripting."""
+    
+    def __instancecheck__(cls, instance):
+        """Allow isinstance checks for Ok and Err instances."""
+        return isinstance(instance, (Ok, Err))
+    
+    def __getitem__(cls, item):
+        """Support Result[T] syntax for type hints."""
+        return Union[Ok[item], Err]
+
+
+class Result(metaclass=ResultMeta):
+    """Base result type for isinstance and type hint support."""
+    pass
 
 
 @dataclass
@@ -60,10 +78,6 @@ class Err:
     
     def unwrap_or(self, default):
         return default
-
-
-# Type alias for Result
-Result = Union[Ok[T], Err]
 
 
 def ok(value: T) -> Ok[T]:
