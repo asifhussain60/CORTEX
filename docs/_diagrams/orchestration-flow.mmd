@@ -1,0 +1,21 @@
+---
+title: Orchestration Flow
+---
+sequenceDiagram
+    participant Client
+    participant API
+    participant Router as Intent Router
+    participant Orchestrator as Master Orchestrator
+    participant Brain as Domain Brain
+    participant Gov as Governance
+    
+    Client->>API: Request
+    API->>Router: Route Intent
+    Router->>Router: Classify Intent
+    Router->>Orchestrator: Execute
+    Orchestrator->>Gov: Validate Rules
+    Gov-->>Orchestrator: Approved
+    Orchestrator->>Brain: Query Knowledge
+    Brain-->>Orchestrator: Knowledge Response
+    Orchestrator-->>API: Result
+    API-->>Client: Response

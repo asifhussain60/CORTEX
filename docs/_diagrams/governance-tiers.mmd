@@ -1,0 +1,12 @@
+---
+title: Governance Tier Hierarchy
+---
+flowchart TD
+    T0["Tier 0: Core Rules<br/>cortex_brain/tier0/<br/>29 CORE-* rules (immutable)"]
+    T1["Tier 1: Domain Rules<br/>cortex_brain/tier1/<br/>Domain customizations"]
+    T2["Tier 2: Context Rules<br/>cortex_brain/tier2/<br/>Safety, security, hallucination prevention"]
+    T3["Tier 3: Runtime Rules<br/>Domain Brain knowledge<br/>Business rules"]
+    
+    T0 --> T1 --> T2 --> T3
+    
+    note1["Precedence: T0 > T1 > T2 > T3<br/>Higher tiers cannot override lower tiers"]

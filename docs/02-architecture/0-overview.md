@@ -1,8 +1,10 @@
 # CORTEX Architecture Overview
 
-**Current Production Readiness:** 36% (100% achievable in 4 days with Phase A/B/C remediation)  
-**Definition of Ready:** ✅ 100% (34 phases, 121 ACs, 664 tests specified)  
-**Last Updated:** 2026-01-20
+> Auto-generated from cortex-impl-map.yaml on 2026-01-21
+
+**Current Production Readiness:** 62% (100% achievable with Phases F-J)  
+**Definition of Ready:** ✅ 100% (41 phases, 257 unique AC IDs tested)  
+**Last Updated:** 2026-01-21
 
 ---
 
@@ -42,203 +44,123 @@ Business knowledge ingestion and conflict resolution:
 
 ---
 
-## Implementation Status: 34 Phases
+## Implementation Status: 41 Phases
 
 ### Overview
 
 | Category | Count | Status |
 |----------|-------|--------|
 | **Implemented** | 10 | ✅ Working (governance, intelligence, infrastructure, state, recovery, observability, consolidation) |
-| **Stub Phases** | 21 | 🟡 Design-complete, TDD-ready, ready for implementation |
-| **Not Started** | 3 | 🔴 Blocked by architecture conflicts (will unblock after Phase A/B) |
-| **Total** | **34** | ✅ 100% Definition of Ready |
+| **In Progress** | 2 | 🔄 Phase A-D complete, Phase E TDD ongoing (32% complete) |
+| **Stub Phases** | 21 | 🟡 Design-complete, ready for implementation |
+| **Not Started** | 8 | 🔴 Phases F-J for 100% production confidence |
+| **Total** | **41** | ✅ Tracked with full dependencies |
 
-### Phase Distribution by Tier
+### Codebase Statistics
 
-| Tier | Completed | Pending | Total |
-|------|-----------|---------|-------|
-| **Tier 0 - Governance Foundation** | 1 | 3 | 4 |
-| **Tier 1 - Intelligence Layer** | 3 | 6 | 9 |
-| **Tier 2 - Infrastructure** | 1 | 4 | 5 |
-| **Tier 3 - State Management** | 1 | 5 | 6 |
-| **Tier 4 - Recovery & Resilience** | 1 | 3 | 4 |
-| **Tier 5 - Observability** | 1 | 0 | 1 |
-| **Tier 6 - Integration & Consolidation** | 1 | 0 | 1 |
-| **Cross-cutting** | 1 | 0 | 1 |
-| **TOTAL** | **10** | **21** | **34** |
+| Metric | Value |
+|--------|-------|
+| **Total Python Files** | 413 |
+| **Cortex Package Files** | 413 (canonical) |
+| **Cortex Brain Files** | 41 (state + governance) |
+| **Test Files** | 409 |
+| **MCP Tools Exposed** | 14 (stub implementations) |
+| **Unique AC IDs Tested** | 257 |
 
-### Test Coverage
+### Canonical Package Structure
 
-| Category | Tests |
-|----------|-------|
-| **Tests Pre-written** | 664 |
-| **Tests Currently Passing** | 658 |
-| **Test Coverage Rate** | 99.1% |
-| **Acceptance Criteria Specified** | 121 |
+```
+cortex/               # Canonical package (413 files)
+├── api/              # API layer
+├── brain/            # Brain integration logic (269 files)
+├── core/             # Core utilities
+├── infrastructure/   # Infrastructure components
+├── mcp/              # MCP server + 14 stub tools
+├── orchestrators/    # 9 orchestrator classes (5 protocols, 4 concrete)
+└── tools/            # Reusable tooling
+
+cortex_brain/         # State management (41 files)
+├── tier0/            # Global governance (core-rules.yaml)
+├── tier1/            # Domain rules (empty)
+├── tier2/            # Context rules (empty)
+├── state/            # governance.db + runtime state
+└── ...               # Domain brain, releases, governance
+
+tests/                # Test location
+├── unit/             # ~300 test files
+├── integration/      # ~80 test files
+└── e2e/              # ~29 test files
+```
 
 ---
 
-## Critical Architecture Issues (4 Blocking Production Readiness)
+## Critical Path to 100% Production Readiness
 
-### Issue #1: Tier Structure Duplication (BLOCKS 3 PHASES) 🔴
+### Confidence Assessment
 
-**Current Problem:**
-- Canonical governance: `cortex_brain/tier0/`, `tier1/`, `tier2/` ✅
-- **DUPLICATE:** `cortex/brain/core/governance/` (same logic in different location)
-- **DUPLICATE:** `cortex/brain/core/hallucination_prevention/` (safety rules scattered)
-- **BLOCKER:** `BrainPopulator` points to `cortex/brain/core/` instead of `cortex_brain/`
+| State | Confidence | Milestone |
+|-------|------------|-----------|
+| **Current** | 62% | 76 collection errors, 44 missing exports, 15 RecursionErrors |
+| **After Phase F** | 68% | Export Completion - 44 missing exports resolved |
+| **After Phase G** | 75% | Circular Import Fix - 0 collection errors |
+| **After Phase E** | 90% | TDD Implementation - ≥98% tests passing |
+| **After Phases H-J** | 100% | E2E, CI/CD, Governance complete |
 
-**Impact:** Two sources of truth for governance rules break tier precedence and prevent 3 phases from implementing:
-- `impl-arch-011-hallucination` (hallucination prevention rules)
-- `impl-arch-022-mcp-compliance` (MCP governance)
-- `impl-arch-025-governance-comp` (comprehensive governance)
+### Phase F: Export Completion (1 day)
 
-**Fix (Phase A - Tier Consolidation, 1 day):**
-1. Delete `cortex/brain/core/governance/` entirely
-2. Move `cortex/brain/core/hallucination_prevention/` → `cortex_brain/tier2/governance/safety-rules.yaml` (convert to YAML)
-3. Repoint `BrainPopulator` from `cortex/brain/core/` → `cortex_brain/`
-4. Move `tier_resolver.py` → `cortex_brain/core/`
-5. Verify tests pass with single source of truth
+- Add 44 missing class/function exports to stub modules
+- Eliminate ImportError in test collection
+- **Prerequisite for:** Phase G, Phase E
 
-**Result:** Single source of truth, tier precedence working, 3 blocked phases unblock
+### Phase G: Circular Import Fix (1-2 days)
 
----
+- Break circular dependency in `cortex.orchestrators.core` hierarchy
+- Fix 15 RecursionErrors
+- **Depends on:** Phase F
 
-### Issue #2: MCP Tools Not Centralized (BLOCKS IMPL-ARCH-022) 🔴
+### Phase E: TDD Implementation (15-20 days)
 
-**Current Problem:**
-- 14 stub tools in `cortex/mcp/tools/` with NO central registry
-- NO tool discovery mechanism (cannot enumerate available tools)
-- NO categorization system (tools mixed together)
-- NO governance for tool access (which tools require authentication?)
-- All tools return mock data, not real implementations
+- Transform 125 stub modules into working code
+- Target: ≥98% tests passing (≥5500 of 5653)
+- **Completed Work:**
+  - Intent Router Module: 128/128 tests (100%)
+  - IntentClassifier: 53/53 tests (100%)
+  - MultiModalIntentProcessor: 25/25 tests (100%)
+  - Governance: 161/368 tests (44%)
 
-**Tool Distribution:**
-- Governance tools: 5 (query, validate, execute, analyze, report)
-- Orchestration tools: 4 (status, monitor, optimize, diagnose)
-- Knowledge tools: 3 (search, analyze, generate)
-- Utility tools: 2 (echo, sample, transform)
+### Phases H-J: Validation & Governance (7-9 days)
 
-**Impact:** Clients cannot discover or interact with MCP tools, blocks `impl-arch-022-mcp-compliance` implementation
-
-**Fix (Phase B - MCP Centralization, 2 days):**
-1. Create `cortex/mcp/registry.py` with metadata:
-   - Tool name, category, authentication requirements
-   - Central registry of all MCP-exposed tools
-   - Tool discovery mechanism for clients
-2. Reorganize `cortex/mcp/tools/` by category:
-   - `governance/` (5 tools)
-   - `orchestration/` (4 tools)
-   - `knowledge/` (3 tools)
-   - `utility/` (2 tools)
-3. Update `cortex/mcp/server.py` to auto-discover from registry
-4. Separate `cortex/tools/` (internal-only tools, NOT MCP-exposed)
-5. Implement tool logic (currently mock data returns)
-
-**Result:** Central tool registry, tool discovery working, categorization clear, impl-arch-022 unblocks
+- **Phase H:** E2E Validation Framework - smoke, load, chaos tests ✅ COMPLETED
+- **Phase I:** CI/CD Pipeline Validation ✅ COMPLETED  
+- **Phase J:** Governance Tier Content Population ✅ COMPLETED
 
 ---
 
-### Issue #3: Hallucination Prevention in Wrong Location 🔴
+## MCP Tools
 
-**Current Problem:**
-- Code location: `cortex_brain/tier2/hallucination_prevention/` (Python files)
-- Correct location: `cortex_brain/tier2/governance/safety-rules.yaml` (YAML rules format)
-- Integration: Not loaded by BrainPopulator tier system
-- Format mismatch: Python code instead of YAML rules
+### Current Status: Stub Implementations
 
-**Impact:** Pre-implementation code exists but cannot be integrated into tier2 governance system, blocks `impl-arch-011` implementation
+| Category | Tools | Status |
+|----------|-------|--------|
+| **Governance** | query_tool, validate_tool, execute_tool, analyze_tool, report_tool | Stub |
+| **Orchestration** | status_tool, monitor_tool, optimize_tool, diagnose_tool | Stub |
+| **Knowledge** | search_tool, analyze_tool, generate_tool | Stub |
+| **Utility** | echo_tool, sample_tool, transform_tool | Stub |
 
-**Fix (Phase A consolidation):**
-1. Convert 6 Python files in `tier2/hallucination_prevention/` to YAML rule format
-2. Consolidate into `cortex_brain/tier2/governance/safety-rules.yaml`
-3. Remove Python directory after consolidation
-4. Integrate into tier2 governance loader
+**Location:** `cortex/mcp/server.py` + `cortex/mcp/tools/`  
+**Internal Tools (not MCP-exposed):** `cortex/tools/` (cortex_brain_integration, devx_tools, profiling_tools)
 
 ---
 
-### Issue #4: Cortex/Brain Duplicates Cortex_Brain 🔴
+## Orchestrators
 
-**Current Problem:**
-- `cortex/brain/core/` has 35+ files (governance, hallucination_prevention, tier_resolver, etc.)
-- `cortex_brain/` is canonical state + governance location (41 files)
-- Single source of truth principle violated
-- Architectural confusion: where does governance actually live?
+### Status: Partial Implementation
 
-**Impact:** Multiple implementation locations for same logic, difficult to maintain consistency
-
-**Fix (Phase A consolidation):**
-- All governance logic → `cortex_brain/tiers`
-- All state management → `cortex_brain/state`
-- Remove redundant code from `cortex/brain/core/governance`
-- Update imports and references throughout codebase
-
----
-
-## Production Readiness Timeline
-
-### Current State: 36%
-
-**What's Working:**
-- ✅ Infrastructure resilience (connections, circuit breakers, retry, graceful degradation)
-- ✅ State management & concurrency (transactional, optimistic locking, lock-free registry)
-- ✅ Fault tolerance & recovery (saga compensation, orphan cleanup, automatic repair)
-- ✅ Production observability (JSON logging, Prometheus, distributed tracing, health checks)
-
-**What's Blocking:** 4 critical architecture conflicts (tier duplication, MCP tools, hallucination prevention, cortex/brain duplication)
-
-### Phase A: Tier Consolidation (1 day, 8 hrs)
-
-```
-Delete cortex/brain/core/governance/
-Move hallucination_prevention → tier2/governance/safety-rules.yaml
-Repoint BrainPopulator → cortex_brain/
-Move tier_resolver.py → cortex_brain/core/
-Run full test suite
-Result: 36% → 60%, 2 phases unblocked
-```
-
-**Unblocks:** impl-arch-011, impl-arch-025
-
-### Phase B: MCP Registry (2 days, 16 hrs)
-
-```
-Create cortex/mcp/registry.py with tool metadata
-Reorganize tools by category (5+4+3+2=14 tools)
-Update server.py for auto-discovery
-Separate internal tools from MCP-exposed
-Implement tool logic (currently mock data)
-Result: 60% → 95%, 1 phase unblocked
-```
-
-**Unblocks:** impl-arch-022
-
-### Phase C: Hardening & Verification (1 day, 6 hrs)
-
-```
-Update cortex-impl-map.yaml with all fixes
-Mark blocked phases as UNBLOCKED
-Run full test suite (4065+ tests)
-Update documentation to reflect production state
-Result: 95% → 100% PRODUCTION READY
-```
-
-**All phases unblocked, all tests passing, production ready**
-
----
-
-## Remediation Success Criteria
-
-| Criteria | Target | Verification |
-|----------|--------|--------------|
-| Single source of truth for governance | ✅ | No cortex/brain/core/governance/ directory |
-| Tier precedence working | ✅ | All tests pass with tier precedence |
-| MCP tool discovery working | ✅ | registry.py exists, auto-discovery functional |
-| Tool categorization clear | ✅ | Tools organized by governance/orchestration/knowledge/utility |
-| BrainPopulator points to cortex_brain | ✅ | Import verification, tests confirm |
-| All tests passing | ✅ | 4065+ tests passing (currently 658/664) |
-| All 34 phases unblocked | ✅ | impl-arch-011/022/025 unblocked after Phase A/B |
-
+| Type | Count | Status |
+|------|-------|--------|
+| **Protocols** | 5 | IOrchestrator, IExecutor, IPlanner, IAnalyzer, IValidator |
+| **Concrete** | 4 | MasterOrchestrator, PlanningOrchestrator, AnalysisOrchestrator, ExecutionOrchestrator |
+| **Location** | - | `cortex/orchestrators/` |
 ---
 
 ## Related Documentation
@@ -248,8 +170,23 @@ Result: 95% → 100% PRODUCTION READY
 - **Multi-Tier Architecture:** [Tier System Details](./2-multi-tier-architecture.md)
 - **Orchestration Engine:** [Orchestrator Lifecycle & Patterns](./3-orchestration-engine.md)
 - **Governance Rules:** [29 SKULL Rules Reference](./governance-rules.md)
-- **Remediation Plan:** [Phase A/B/C Implementation Guide](../04-guides/advanced/0-remediation-phases.md)
-- **Production Readiness:** [DoR Assessment & Verification](./definition-of-ready.md)
+- **Implementation Phases:** [Phase Status & Dependencies](./6-implementation-phases.md)
+- **Definition of Ready:** [DoR Assessment & Verification](./definition-of-ready.md)
+- **Gap Analysis:** [Identified Gaps & Resolutions](../05-reference/gap-analysis.md)
+- **Remediation Status:** [Remediation Phases](../05-reference/remediation-status.md)
+
+---
+
+## Diagrams
+
+- [Architecture Overview](../_diagrams/architecture-overview.mmd)
+- [Governance Tiers](../_diagrams/governance-tiers.mmd)
+- [Phase Dependencies](../_diagrams/phase-dependencies.mmd)
+- [Orchestration Flow](../_diagrams/orchestration-flow.mmd)
+- [MCP Tools](../_diagrams/mcp-tools.mmd)
+- [Production Readiness](../_diagrams/production-readiness.mmd)
+- [State Management](../_diagrams/state-management.mmd)
+- [Resilience Patterns](../_diagrams/resilience-patterns.mmd)
 
 ---
 
@@ -257,12 +194,11 @@ Result: 95% → 100% PRODUCTION READY
 
 | Metric | Value | Status |
 |--------|-------|--------|
-| **Phases Documented** | 34/34 | ✅ 100% |
-| **Acceptance Criteria** | 121 | ✅ Specified |
-| **Tests Specified** | 664 | ✅ Pre-written |
-| **Tests Passing** | 658 | ✅ 99.1% pass rate |
-| **Production Readiness** | 36% → 100% | ✅ Path clear (4 days) |
-| **Critical Issues Identified** | 4 | ✅ All with fixes |
-| **Remediation Timeline** | 4 days | ✅ Phase A/B/C |
-| **Definition of Ready** | 100% | ✅ All criteria met |
+| **Phases Tracked** | 41 | ✅ Comprehensive |
+| **Phases Implemented** | 10 | ✅ Working |
+| **Phases In Progress** | 2 | 🔄 Active |
+| **Unique AC IDs Tested** | 257 | ✅ Coverage |
+| **Test Files** | 409 | ✅ Extensive |
+| **Production Readiness** | 62% → 100% | ✅ Path clear |
+| **Python Files** | 413 | ✅ Consolidated |
 

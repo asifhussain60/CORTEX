@@ -1,0 +1,32 @@
+---
+title: Phase Dependencies
+---
+flowchart LR
+    subgraph COMPLETED["✅ Completed"]
+        A["Phase A<br/>Tier Consolidation"]
+        B["Phase B<br/>MCP Registry"]
+        C["Phase C<br/>Circular Imports"]
+        D["Phase D<br/>Missing Modules"]
+    end
+    
+    subgraph IN_PROGRESS["🔄 In Progress"]
+        E["Phase E<br/>TDD Implementation<br/>32%"]
+    end
+    
+    subgraph PENDING["🔴 Pending"]
+        F["Phase F<br/>Export Completion"]
+        G["Phase G<br/>Circular Import Fix"]
+    end
+    
+    subgraph VALIDATION["✅ Validation Complete"]
+        H["Phase H<br/>E2E Validation"]
+        I["Phase I<br/>CI/CD Validation"]
+        J["Phase J<br/>Governance Content"]
+    end
+    
+    A --> B --> C --> D --> E
+    F --> G --> E
+    E --> H --> I --> J
+    
+    PROD["100% Production Ready"]
+    J --> PROD

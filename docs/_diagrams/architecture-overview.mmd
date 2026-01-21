@@ -1,0 +1,24 @@
+---
+title: CORTEX Architecture Overview
+---
+flowchart TB
+    subgraph CORTEX["CORTEX Architecture"]
+        API["API Layer<br/>REST/MCP/CLI"]
+        ORCH["Orchestrators<br/>9 classes (5 protocols, 4 concrete)"]
+        BRAIN["Domain Brain<br/>269 files"]
+        GOV["Governance<br/>3-tier (tier0/tier1/tier2)"]
+        STATE["State Management<br/>governance.db + runtime"]
+        MCP["MCP Server<br/>14 stub tools"]
+    end
+    
+    API --> ORCH
+    ORCH --> BRAIN
+    ORCH --> GOV
+    GOV --> STATE
+    MCP --> ORCH
+    
+    subgraph PACKAGES["Package Structure"]
+        CORTEX_PKG["cortex/<br/>413 files (canonical)"]
+        CORTEX_BRAIN["cortex_brain/<br/>41 files (state)"]
+        TESTS["tests/<br/>409 files"]
+    end

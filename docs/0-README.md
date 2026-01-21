@@ -1,59 +1,50 @@
 # CORTEX Documentation
 
-**Last Updated:** 2026-01-20  
-**Version:** 1.0.0  
-**Status:** 36% Production Ready → 100% in 4 days (Phase A/B/C remediation)  
-**Definition of Ready:** ✅ 100% (34 phases, 121 ACs, 664 tests specified)
+> Auto-generated from cortex-impl-map.yaml on 2026-01-21
+
+**Last Updated:** 2026-01-21  
+**Version:** 3.9  
+**Status:** 62% Production Ready → 100% with Phases F-J  
+**Confidence Score:** 62/100 → 100/100
 
 **CORTEX** is an intelligent AI-powered orchestration platform with multi-tier governance architecture, REST/MCP/CLI APIs, and resilience-first design. The system uses immutable tier precedence (tier0 > tier1 > tier2) to govern orchestrators, knowledge ingestion, and domain-specific rules.
 
 ### 🚨 Critical Status
 
-**Production Readiness:** 36% → **100% achievable in 4 days**
+**Production Readiness:** 62% → **100% achievable with Phases F-J**
 
-| Phase | Work | Duration | Result | Unblocks |
-|-------|------|----------|--------|----------|
-| **A** | Consolidate tiers | 1 day | 36% → 60% | 2 phases |
-| **B** | MCP registry | 2 days | 60% → 95% | 1 phase |
-| **C** | Harden & verify | 1 day | 95% → 100% | All phases |
+| Phase | Work | Duration | Result |
+|-------|------|----------|--------|
+| **F** | Export Completion | 1 day | 62% → 68% |
+| **G** | Circular Import Fix | 1-2 days | 68% → 75% |
+| **E** | TDD Implementation | 15-20 days | 75% → 90% |
+| **H-J** | Validation & Governance | 7-9 days | 90% → 100% ✅ COMPLETED |
 
-**What's Blocking:** 4 critical architecture conflicts (tier duplication, MCP tools scattered, hallucination prevention wrong location, cortex/brain duplication)
-
-**See:** [Architecture Overview](02-architecture/0-overview.md) for details | [Quick Reference](05-reference/quick-reference.md) for status dashboard
+**See:** [Architecture Overview](02-architecture/0-overview.md) | [Implementation Phases](02-architecture/6-implementation-phases.md) | [Definition of Ready](02-architecture/definition-of-ready.md)
 
 ### Current Implementation Status
 
-**Production Readiness: 36% → 100% in 4 days**
-
 | Component | Status | Tests |
 |-----------|--------|-------|
-| **Governance Framework** | ✅ IMPLEMENTED | 75 tests |
-| **Intelligence Modules** (routing, duration, errors) | ✅ IMPLEMENTED | 42 tests |
-| **Infrastructure Resilience** (pools, circuit breakers, retries) | ✅ IMPLEMENTED | 126 tests |
-| **State Management & Concurrency** (transactional, locking, registry) | ✅ IMPLEMENTED | 82 tests |
-| **Error Recovery & Fault Tolerance** (saga, orphan cleanup, crash recovery) | ✅ IMPLEMENTED | 127 tests |
-| **Production Observability** (logging, metrics, tracing, health, profiling) | ✅ IMPLEMENTED | 137 tests |
-| **Source Code Consolidation** (src/ → cortex/) | ✅ IMPLEMENTED | 460 tests |
-| **MCP Tools Registry** | 🟡 BLOCKED (Phase B) | 14 tools |
-| **Hallucination Prevention** | 🟡 BLOCKED (Phase A) | Pre-impl code |
-| **Governance Composition** | 🟡 BLOCKED (Phase A) | Waiting |
-
-**Legend:** ✅ Ready for production | 🟡 Blocked by architecture conflicts | 📦 551 tests
+| **Governance Framework** | ✅ IMPLEMENTED | 75 |
+| **Intelligence Modules** | ✅ IMPLEMENTED | 42 |
+| **Infrastructure Resilience** | ✅ IMPLEMENTED | 126 |
+| **State Management & Concurrency** | ✅ IMPLEMENTED | 82 |
+| **Error Recovery & Fault Tolerance** | ✅ IMPLEMENTED | 127 |
+| **Production Observability** | ✅ IMPLEMENTED | 137 |
+| **Source Code Consolidation** | ✅ IMPLEMENTED | 460 |
+| **E2E Validation (Phase H)** | ✅ COMPLETED | 11 |
+| **CI/CD Validation (Phase I)** | ✅ COMPLETED | 9 |
+| **Governance Content (Phase J)** | ✅ COMPLETED | 12 |
 
 **Key Metrics:**
-- ✅ **10 completed phases** fully implemented and tested (551 tests passing)
-- ✅ **21 stub phases** design-complete, TDD-ready (will implement after Phase A/B)
-- 🟡 **3 blocked phases** waiting for Phase A/B remediation
+- ✅ **10 implemented phases** (1,081+ tests passing)
+- ✅ **2 in-progress phases** (Phase E at 32%)
+- 🔄 **8 not-started phases** (Phases F, G pending)
 - ✅ **413 Python modules** in canonical `cortex/` package
-- ✅ **658 tests** currently passing (99.1% of 664 specified)
-- ⚠️ **14 MCP tools** registered (stub implementations, need Phase B registry)
-- ✅ **29 CORE governance rules** tier0/tier1/tier2 system
-
-**Blocking Issues (4 Critical):**
-1. **Tier Duplication** - Governance split between `cortex_brain/` and `cortex/brain/core/` (blocks 3 phases)
-2. **MCP Tools Not Centralized** - No registry, no discovery, governance undefined (blocks 1 phase)
-3. **Hallucination Prevention Wrong Tier** - Python files in tier2, not loading (blocks 1 phase)
-4. **cortex/brain Duplicates cortex_brain** - Multiple sources of truth (blocks all)
+- ✅ **409 test files** in tests/
+- ⚠️ **14 MCP tools** (stub implementations)
+- ✅ **257 unique AC IDs tested**
 
 ## Quick Navigation
 
@@ -246,17 +237,30 @@ These phases are fully designed with 121 acceptance criteria and 664 tests pre-w
 
 | Section | Status | Last Updated |
 |---------|--------|--------------|
-| Getting Started | ✅ Complete | 2026-01-20 |
-| Architecture | ✅ Complete | 2026-01-20 |
-| API Reference | ✅ Complete | 2026-01-20 |
-| Guides | 🔄 Expanding | 2026-01-20 |
-| Reference | ✅ Complete | 2026-01-20 |
-| Tutorials | 🔄 In Progress | 2026-01-20 |
-| Contributing | 🔄 In Progress | 2026-01-20 |
-| Archive | ✅ Organized | 2026-01-20 |
+| Getting Started | ✅ Complete | 2026-01-21 |
+| Architecture | ✅ Complete | 2026-01-21 |
+| API Reference | ✅ Complete | 2026-01-21 |
+| Guides | 🔄 Expanding | 2026-01-21 |
+| Reference | ✅ Complete | 2026-01-21 |
+| Tutorials | 🔄 In Progress | 2026-01-21 |
+| Contributing | 🔄 In Progress | 2026-01-21 |
+| Diagrams | ✅ Complete | 2026-01-21 |
 
 ---
 
-**Source of Truth:** `_workspaces/roadmap/cortex-master.yaml`  
+## Diagrams
+
+- [Architecture Overview](_diagrams/architecture-overview.mmd)
+- [Governance Tiers](_diagrams/governance-tiers.mmd)
+- [Phase Dependencies](_diagrams/phase-dependencies.mmd)
+- [Orchestration Flow](_diagrams/orchestration-flow.mmd)
+- [MCP Tools](_diagrams/mcp-tools.mmd)
+- [Production Readiness](_diagrams/production-readiness.mmd)
+- [State Management](_diagrams/state-management.mmd)
+- [Resilience Patterns](_diagrams/resilience-patterns.mmd)
+
+---
+
+**Source of Truth:** `_workspaces/roadmap/cortex-impl-map.yaml`  
 **Governance Database:** `cortex_brain/state/governance.db`  
-**Test Suite:** 3000+ tests, 100% pass rate
+**Test Suite:** 409 test files, 257 unique AC IDs tested
