@@ -290,6 +290,34 @@ class ValidationResult:
     conflicts_detected: List[Any] = field(default_factory=list)
 
 
+@dataclass
+class AuditEntry:
+    """Audit log entry.
+    
+    Attributes:
+        entry_id: Unique entry identifier.
+        operation: Type of operation performed.
+        domain_id: Associated domain ID.
+        entity_id: Associated entity ID (optional).
+        timestamp: When operation occurred.
+        hash: Hash of this entry.
+        previous_hash: Hash of previous entry (for chain integrity).
+        description: Human-readable description.
+        previous_value: Previous value before update.
+        new_value: New value after update.
+    """
+    entry_id: str
+    operation: AuditOperationType
+    timestamp: datetime = field(default_factory=datetime.now)
+    domain_id: Optional[str] = None
+    entity_id: Optional[str] = None
+    hash: str = ""
+    previous_hash: str = ""
+    description: str = ""
+    previous_value: Optional[Dict[str, Any]] = None
+    new_value: Optional[Dict[str, Any]] = None
+
+
 __all__ = [
     "DomainModel",
     "Domain",
