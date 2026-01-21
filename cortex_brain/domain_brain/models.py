@@ -50,13 +50,17 @@ class Entity:
         entity_type: Type of entity.
         name: Entity name.
         domain_id: Domain identifier.
+        description: Entity description.
+        source: Source of entity (AST, BKIO, etc).
         metadata: Additional metadata.
     """
 
     entity_id: str
     entity_type: EntityType
     name: str
-    domain_id: str
+    description: str = ""
+    domain_id: str = ""
+    source: str = ""
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -90,6 +94,7 @@ class DomainModel:
         name: Model name.
         description: Model description.
         created_at: When model was created.
+        entities: Dictionary of entities in the domain.
         metadata: Additional metadata.
     """
 
@@ -97,6 +102,7 @@ class DomainModel:
     name: str
     description: str
     created_at: datetime = field(default_factory=datetime.now)
+    entities: Dict[str, Any] = field(default_factory=dict)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
