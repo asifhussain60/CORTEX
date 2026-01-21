@@ -1597,24 +1597,29 @@ phase_execution_tracking:
                 priority: "2/5"
                 completion_percent: 25
                 note: "4-phase synthesis framework implemented, need synthesis logic"
-              - module_id: "domain_brain_models"
-                status: "207/353 tests passing (59%)"
+              - module_id: "orphan_detector"
+                status: "5/18 tests passing (28%)"
                 priority: "3/5"
-                completion_percent: 59
+                completion_percent: 28
+                note: "Reference validation, deprecation, sweep implemented"
+              - module_id: "domain_brain_models"
+                status: "213/353 tests passing (60%)"
+                priority: "4/5"
+                completion_percent: 60
                 note: "Core models complete, query/synthesis engines pending"
             modules_queued:
               - orchestrator_decorator
               - i_orchestrator
               - database_manager
               - enhanced_audit_logger
-            progress: "Domain_brain: 207/353 (59%), Governance: 348/368 (95%), Orchestrator: 412/613 (67%), Intent: 128/128 (100%)"
+            progress: "Domain_brain: 213/353 (60%), Governance: 348/368 (95%), Orchestrator: 412/613 (67%), Intent: 128/128 (100%)"
             priority: "CRITICAL"
             session_stats:
-              tests_passing_major_modules: 1095
+              tests_passing_major_modules: 1101
               total_major_tests: 1462
-              pass_rate: "75%"
-              modules_actively_implemented: 3
-              estimated_remaining_modules: 2
+              pass_rate: "75.3%"
+              modules_actively_implemented: 4
+              estimated_remaining_modules: 1
           phase_e3_high_priority:
             id: "PHASE-E3-P1-HIGH"
             status: "PENDING"
@@ -1638,12 +1643,12 @@ phase_execution_tracking:
         phase_e_metrics:
           tests_collected: 7598
           collection_errors: 0
-          major_modules_pass_rate: "75% (1095/1462 tests)"
+          major_modules_pass_rate: "75.3% (1101/1462 tests)"
           critical_path_modules:
             - conflict_resolver (✓ 100%)
             - lens_integration (⏳ 25%)
-            - domain_brain_models (⏳ 59%)
-            - orchestrator_decorator (pending)
+            - orphan_detector (⏳ 28%)
+            - domain_brain_models (⏳ 60%)
             - database_manager (pending)
           implementation_priority: "P1 Critical → P2 High → P3 Medium → P4 Low → Validation"
         execution_model: |
@@ -1662,13 +1667,14 @@ phase_execution_tracking:
           Loop termination: All modules complete or blocker encountered
         progress_notes: |
           Session 2026-01-21 Progress:
-          - conflict_resolver: Implemented 3-tier resolution (hierarchy, LENS synthesis, manual review with SLA)
+          - conflict_resolver: Implemented 3-tier resolution (hierarchy, LENS synthesis, manual review with SLA) ✓
           - lens_integration: Implemented 4-phase LENS synthesis (recognition, routing, evaluation, navigation)
-          - Major modules test summary: 1095/1462 passing (75%)
+          - orphan_detector: Implemented reference validation with registration, deprecation marking, sweep
+          - Major modules test summary: 1101/1462 passing (75.3%)
             * Intent Router: 128/128 (100%) ✓
             * Governance: 348/368 (95%)
             * Orchestrator: 412/613 (67%)
-            * Domain Brain: 207/353 (59%)
+            * Domain Brain: 213/353 (60%)
           - Next: Continue domain_brain implementation (query engines, synthesis, repositories)
         
   win_track_state:
