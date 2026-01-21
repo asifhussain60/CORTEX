@@ -56,6 +56,15 @@ class Report:
             True if status is SUCCESS and no errors, False otherwise
         """
         return self.status == "SUCCESS" and len(self.errors) == 0
+    
+    @property
+    def is_failed(self) -> bool:
+        """Check if execution failed.
+        
+        Returns:
+            True if status is FAILED or status is not SUCCESS, False otherwise
+        """
+        return self.status == "FAILED" or self.status != "SUCCESS"
 
 
 @dataclass
@@ -115,6 +124,15 @@ class CleanerInterface(ABC):
         """Get cleaner domain."""
         pass
     
+    @property
+    def cleaner_id(self) -> str:
+        """Get cleaner ID (alias for domain).
+        
+        Returns:
+            Cleaner ID
+        """
+        return self.domain
+    
     @abstractmethod
     def analyze(self) -> Analysis:
         """Analyze repository for cleaning opportunities.
@@ -151,49 +169,107 @@ class CleanerRegistry:
     
     def __init__(self) -> None:
         """Initialize registry."""
-        self._cleaners: Dict[str, CleanerInterface] = {}
+        self._cleaners: Dict[str, type] = {}
     
-    def register(self, cleaner_id: str, cleaner: CleanerInterface) -> None:
-        """Register a cleaner.
+    def register_cleaner(self, cleaner_class: type) -> None:
+        """Register a cleaner class.
         
         Args:
-            cleaner_id: Unique cleaner ID
-            cleaner: Cleaner instance
+            cleaner_class: Cleaner class to register
             
         Raises:
-            ValueError: If cleaner_id already registered
+            CleanerRegistrationError: If class is invalid or domain already registered
         """
-        if cleaner_id in self._cleaners:
-            raise ValueError(f"Cleaner {cleaner_id} already registered")
-        self._cleaners[cleaner_id] = cleaner
+        # Validate it's a class
+        if not isinstance(cleaner_class, type):
+            raise CleanerRegistrationError(
+                f"Expected a class, got {type(cleaner_class).__name__}"
+            )
+        
+        # Validate it implements CleanerInterface
+        if not issubclass(cleaner_class, CleanerInterface):
+            raise CleanerRegistrationError(
+                f"Class {cleaner_class.__name__} does not implement CleanerInterface"
+            )
+        
+        # Create temporary instance to get domain
+        try:
+            temp_instance = cleaner_class(config={})
+            domain = temp_instance.domain
+        except Exception as e:
+            raise CleanerRegistrationError(
+                f"Failed to instantiate {cleaner_class.__name__}: {str(e)}"
+            )
+        
+        # Check for duplicate domain
+        if domain in self._cleaners:
+            raise CleanerRegistrationError(
+                f"Cleaner with domain '{domain}' already registered"
+            )
+        
+        self._cleaners[domain] = cleaner_class
     
-    def get(self, cleaner_id: str) -> Optional[CleanerInterface]:
-        """Get registered cleaner.
+    def get_cleaner(
+        self, domain: str, config: Optional[Dict[str, Any]] = None
+    ) -> CleanerInterface:
+        """Get instantiated cleaner.
         
         Args:
-            cleaner_id: Cleaner ID
+            domain: Cleaner domain
+            config: Configuration dictionary
             
         Returns:
-            Cleaner instance or None
+            Instantiated cleaner
+            
+        Raises:
+            CleanerNotFoundError: If domain not registered
         """
-        return self._cleaners.get(cleaner_id)
+        if domain not in self._cleaners:
+            available = ", ".join(sorted(self._cleaners.keys()))
+            raise CleanerNotFoundError(
+                f"Cleaner domain '{domain}' not found. Available domains: {available}"
+            )
+        
+        cleaner_class = self._cleaners[domain]
+        config = config or {}
+        return cleaner_class(config=config)
     
-    def list_cleaners(self) -> List[str]:
-        """List all registered cleaner IDs.
+    def has_cleaner(self, domain: str) -> bool:
+        """Check if cleaner is registered.
+        
+        Args:
+            domain: Cleaner domain
+            
+        Returns:
+            True if registered, False otherwise
+        """
+        return domain in self._cleaners
+    
+    def list_all(self) -> List[str]:
+        """List all registered cleaner domains.
         
         Returns:
-            List of cleaner IDs
+            List of domains
         """
         return list(self._cleaners.keys())
     
-    def unregister(self, cleaner_id: str) -> None:
+    def unregister(self, domain: str) -> None:
         """Unregister a cleaner.
         
         Args:
-            cleaner_id: Cleaner ID to remove
+            domain: Cleaner domain to remove
         """
-        if cleaner_id in self._cleaners:
-            del self._cleaners[cleaner_id]
+        if domain in self._cleaners:
+            del self._cleaners[domain]
+    
+    def __repr__(self) -> str:
+        """Get string representation.
+        
+        Returns:
+            String representation showing registered domains
+        """
+        domains = ", ".join(sorted(self._cleaners.keys()))
+        return f"CleanerRegistry(domains=[{domains}])"
 
 
 class CleanerRegistrationError(Exception):
