@@ -1,0 +1,30 @@
+graph TD
+    A["User Request"] --> B["Orchestrator<br/>Execution"]
+    
+    B --> C{"Error<br/>Detected?"}
+    
+    C -->|Yes| D["Circuit Breaker<br/>Check"]
+    C -->|No| E["Normal Response"]
+    
+    D --> F{"Circuit<br/>Open?"}
+    
+    F -->|Yes| G["Return Cached<br/>Response"]
+    F -->|No| H["Retry Logic"]
+    
+    H --> I{"Retry<br/>Success?"}
+    
+    I -->|Yes| E
+    I -->|No| J["Fallback Handler"]
+    
+    J --> K["Graceful<br/>Degradation"]
+    
+    E --> L["Audit Log"]
+    G --> L
+    K --> L
+    
+    L --> M["Return Response"]
+    
+    style A fill:#E3F2FD
+    style M fill:#C8E6C9
+    style C fill:#FFF9C4
+    style D fill:#FFE0B2
