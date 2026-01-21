@@ -17,6 +17,15 @@ class Analysis:
     issues_found: int
     plan: Dict[str, Any]
     logs: List[str] = field(default_factory=list)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary.
+        
+        Returns:
+            Dictionary representation
+        """
+        from dataclasses import asdict
+        return asdict(self)
 
 
 @dataclass
@@ -29,6 +38,24 @@ class Report:
     changes: Dict[str, Any]
     errors: List[str] = field(default_factory=list)
     logs: List[str] = field(default_factory=list)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary.
+        
+        Returns:
+            Dictionary representation
+        """
+        from dataclasses import asdict
+        return asdict(self)
+    
+    @property
+    def is_success(self) -> bool:
+        """Check if execution was successful.
+        
+        Returns:
+            True if status is SUCCESS and no errors, False otherwise
+        """
+        return self.status == "SUCCESS" and len(self.errors) == 0
 
 
 @dataclass
@@ -39,6 +66,24 @@ class RollbackResult:
     status: str
     files_restored: int
     errors: List[str] = field(default_factory=list)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary.
+        
+        Returns:
+            Dictionary representation
+        """
+        from dataclasses import asdict
+        return asdict(self)
+    
+    @property
+    def is_success(self) -> bool:
+        """Check if rollback was successful.
+        
+        Returns:
+            True if status is SUCCESS and no errors, False otherwise
+        """
+        return self.status == "SUCCESS" and len(self.errors) == 0
 
 
 class CleanerInterface(ABC):
