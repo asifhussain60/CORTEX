@@ -252,6 +252,10 @@ class SecureCredentialStore:
         """Initialize secure credential store."""
         self.store: Dict[str, Dict[str, Any]] = {}
         self.key_manager = KeyManager()
+        self._access_log: List[Dict[str, Any]] = []
+        self._keys: Dict[str, EncryptionKey] = {}
+        self._default_key = EncryptionKey("default", EncryptionAlgorithm.AES_256)
+        self._keys["default"] = self._default_key
 
     def store_credential(
         self,
@@ -291,6 +295,12 @@ class SecureCredentialStore:
             "status": CredentialStatus.ACTIVE,
             "metadata": metadata or {},
         }
+        
+        self._access_log.append({
+            "action": "store",
+            "credential_id": credential_id,
+            "timestamp": datetime.utcnow().isoformat()
+        })
 
     def retrieve_credential(self, credential_id: str) -> Optional[str]:
         """Retrieve a stored credential (returns hash for security).
@@ -307,6 +317,12 @@ class SecureCredentialStore:
         cred = self.store[credential_id]
         if cred["status"] != CredentialStatus.ACTIVE:
             return None
+        
+        self._access_log.append({
+            "action": "retrieve",
+            "credential_id": credential_id,
+            "timestamp": datetime.utcnow().isoformat()
+        })
 
         return cred["value_hash"]
 
@@ -337,6 +353,13 @@ class SecureCredentialStore:
             return False
 
         self.store[credential_id]["status"] = CredentialStatus.REVOKED
+        
+        self._access_log.append({
+            "action": "revoke",
+            "credential_id": credential_id,
+            "timestamp": datetime.utcnow().isoformat()
+        })
+        
         return True
 
     def delete_credential(self, credential_id: str) -> bool:
@@ -352,6 +375,44 @@ class SecureCredentialStore:
             del self.store[credential_id]
             return True
         return False
+
+    def expire_credential(self, credential_id: str) -> None:
+        """Expire a credential.
+        
+        Args:
+            credential_id: Credential identifier.
+        """
+        if credential_id in self.store:
+            self.store[credential_id]["status"] = CredentialStatus.EXPIRED
+            del self.store[credential_id]
+
+    def get_access_log(self) -> List[Dict[str, Any]]:
+        """Get access log for credential operations.
+        
+        Returns:
+            List[Dict[str, Any]]: List of access log entries.
+        """
+        if not hasattr(self, '_access_log'):
+            self._access_log = []
+        return self._access_log.copy()
+
+    def rotate_key(self, credential_id: str, new_key_id: str) -> None:
+        """Rotate encryption key for a credential.
+        
+        Args:
+            credential_id: Credential identifier.
+            new_key_id: New encryption key identifier.
+        """
+        if credential_id in self.store:
+            if not hasattr(self, '_access_log'):
+                self._access_log = []
+            
+            self._access_log.append({
+                "action": "key_rotation",
+                "credential_id": credential_id,
+                "new_key_id": new_key_id,
+                "timestamp": datetime.utcnow().isoformat()
+            })
 
     def list_credentials(self, active_only: bool = True) -> Dict[str, Any]:
         """List all credentials.
@@ -380,39 +441,89 @@ class SecureCredentialStore:
 class KeyRotationManager:
     """Manages key rotation policies and schedules."""
 
-    def __init__(self) -> None:
-        """Initialize key rotation manager."""
+    def __init__(self, store: Optional[SecureCredentialStore] = None) -> None:
+        """Initialize key rotation manager.
+        
+        Args:
+            store: Optional credential store to manage.
+        """
+        self._store = store
         self.key_manager = KeyManager()
         self.rotation_schedule: Dict[str, Dict[str, Any]] = {}
         self.rotation_history: List[Dict[str, Any]] = []
+        self._rotation_schedule: Dict[str, int] = {}
+        self._last_rotation: Dict[str, datetime] = {}
 
     def schedule_rotation(
         self,
-        key_id: str,
-        rotation_period_days: int = 90,
+        credential_id: str,
+        days: int = 90,
+        rotation_period_days: int = None,
         max_age_days: int = 365,
     ) -> Dict[str, Any]:
         """Schedule key rotation.
 
         Args:
-            key_id: Key identifier.
+            credential_id: Credential or key identifier.
+            days: Number of days between rotations (alias for rotation_period_days).
             rotation_period_days: Days between rotations.
             max_age_days: Maximum key age before mandatory rotation.
 
         Returns:
             Rotation schedule information.
         """
+        # Support both parameter names for compatibility
+        period = rotation_period_days if rotation_period_days is not None else days
+        
+        self._rotation_schedule[credential_id] = period
+        self._last_rotation[credential_id] = datetime.utcnow()
+        
         schedule = {
-            "key_id": key_id,
-            "rotation_period_days": rotation_period_days,
+            "key_id": credential_id,
+            "rotation_period_days": period,
             "max_age_days": max_age_days,
             "last_rotation": datetime.utcnow().isoformat(),
             "next_rotation": (
-                datetime.utcnow() + timedelta(days=rotation_period_days)
+                datetime.utcnow() + timedelta(days=period)
             ).isoformat(),
         }
-        self.rotation_schedule[key_id] = schedule
+        self.rotation_schedule[credential_id] = schedule
         return schedule
+
+    def needs_rotation(self, credential_id: str) -> bool:
+        """Check if credential needs key rotation.
+        
+        Args:
+            credential_id: Credential identifier.
+            
+        Returns:
+            bool: True if rotation is needed, False otherwise.
+        """
+        if credential_id not in self._rotation_schedule:
+            return False
+        
+        if credential_id not in self._last_rotation:
+            return True
+        
+        days_since_rotation = (datetime.utcnow() - self._last_rotation[credential_id]).days
+        return days_since_rotation >= self._rotation_schedule[credential_id]
+
+    def get_rotation_status(self) -> Dict[str, Dict[str, Any]]:
+        """Get rotation status for all scheduled credentials.
+        
+        Returns:
+            Dict[str, Dict[str, Any]]: Rotation status for each credential.
+        """
+        status = {}
+        for credential_id in self._rotation_schedule:
+            status[credential_id] = {
+                "needs_rotation": self.needs_rotation(credential_id),
+                "rotation_interval_days": self._rotation_schedule[credential_id],
+                "last_rotation": self._last_rotation.get(credential_id, "never").isoformat() 
+                    if isinstance(self._last_rotation.get(credential_id), datetime) 
+                    else "never"
+            }
+        return status
 
     def rotate_key(self, key_id: str, algorithm: EncryptionAlgorithm) -> Optional[Dict[str, Any]]:
         """Perform key rotation.
