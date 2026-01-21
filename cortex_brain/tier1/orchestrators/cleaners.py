@@ -105,6 +105,7 @@ class CleanerInterface(ABC):
             config: Configuration dictionary
         """
         self.config = config
+        self.dry_run = config.get("dry_run", False)
     
     @property
     @abstractmethod
