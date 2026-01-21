@@ -374,6 +374,7 @@ phases_implementation_status:
         priority: "P0-CRITICAL"
         estimated_effort: "4-6 hours (1 day)"
         blocking: true
+        machine: "mac"
         note: "Add all 44 missing exports to stub modules to eliminate ImportError in test collection"
         file: "_workspaces/roadmap/phases/impl-export-completion.yaml"
         current_state:
@@ -391,6 +392,7 @@ phases_implementation_status:
         priority: "P0-CRITICAL"
         estimated_effort: "1-2 days"
         blocking: true
+        machine: "mac"
         note: "Break circular dependency in cortex.orchestrators.core hierarchy (15 RecursionErrors)"
         file: "_workspaces/roadmap/phases/impl-circular-import-fix.yaml"
         depends_on: ["impl-export-completion"]
@@ -408,6 +410,7 @@ phases_implementation_status:
         priority: "P1-HIGH"
         estimated_effort: "3-4 days"
         blocking: false
+        machine: "win"
         recommended_before_production: true
         note: "Create comprehensive E2E test suite: smoke tests, load tests, chaos engineering"
         file: "_workspaces/roadmap/phases/impl-e2e-validation.yaml"
@@ -420,6 +423,7 @@ phases_implementation_status:
         priority: "P1-HIGH"
         estimated_effort: "2-3 days"
         blocking: false
+        machine: "win"
         recommended_before_production: true
         note: "Validate GitHub Actions, pre-commit hooks, rollback automation, health checks"
         file: "_workspaces/roadmap/phases/impl-cicd-validation.yaml"
@@ -432,6 +436,7 @@ phases_implementation_status:
         priority: "P1-MEDIUM"
         estimated_effort: "2-3 days"
         blocking: false
+        machine: "win"
         recommended_before_production: true
         note: "Populate tier1 domain rules (15-20) and tier2 context rules (25-30)"
         file: "_workspaces/roadmap/phases/impl-governance-content.yaml"
@@ -450,6 +455,7 @@ phases_implementation_status:
         priority: "P0-CRITICAL"
         estimated_effort: "15-20 days"
         blocking: true
+        machine: "mac"
         note: "Transform test stubs into working code through test-driven development. 76 errors → 0, ≥98% tests passing"
         file: "_workspaces/roadmap/phases/PHASE-E-TDD-IMPLEMENTATION.yaml"
         implementation_guide: "_workspaces/roadmap/PHASE-E-IMPLEMENTATION-GUIDE.md"
@@ -477,6 +483,7 @@ phases_implementation_status:
         priority: "P1"
         estimated_effort: "6-9 hours"
         blocking: false
+        machine: "win"
         dependencies: ["impl-recovery-003-fault-tolerance", "impl-ops-004-observability"]
         note: "Real-time feature discovery replacing static manifest files; event bus-driven registry with SQL persistence"
         file: "_workspaces/roadmap/issues/registry.yaml"
@@ -490,6 +497,7 @@ phases_implementation_status:
         priority: "P0"
         estimated_effort: "18-21 hours"
         blocking: false
+        machine: "win"
         dependencies: ["impl-recovery-003-fault-tolerance", "impl-ops-004-observability"]
         note: "Migrate _workspaces/roadmap → cortex-registry/ with plan-type segregation; enables master/planning/ADO/interaction orchestrators"
         file: "_workspaces/roadmap/issues/cortex-plans.yaml"
