@@ -19,6 +19,8 @@ class ViolationType(str, Enum):
     BEHAVIOR = "behavior"
     SECURITY = "security"
     LOCKED_PHASE_MODIFICATION = "locked_phase_modification"
+    AC_DELETION_WITHOUT_APPROVAL = "ac_deletion_without_approval"
+    GOVERNANCE_BYPASS_ATTEMPT = "governance_bypass_attempt"
 
 
 class BoundaryViolation(Exception):
@@ -62,6 +64,7 @@ class BehavioralBoundaryRules:
         """Initialize boundary rules."""
         self.rules: Dict[str, BoundaryRule] = {}
         self.violations: list = []
+        self._violation_cache: Dict[str, Any] = {}
 
     def register_rule(self, rule: BoundaryRule) -> None:
         """Register a boundary rule.
@@ -153,6 +156,102 @@ class BehavioralBoundaryRules:
     def clear_violations(self) -> None:
         """Clear violation history."""
         self.violations.clear()
+    
+    def check_ac_deletion(self, context: Dict[str, Any]) -> bool:
+        """Check if AC deletion is allowed with proper approval.
+        
+        Args:
+            context: Context dict with ac_id, action, approval, ac_status, etc.
+            
+        Returns:
+            True if allowed
+            
+        Raises:
+            BoundaryViolation: If AC deletion attempted without proper approval
+        """
+        from datetime import datetime
+        
+        action = context.get("action")
+        if action != "DELETE":
+            return True  # Only DELETE needs approval
+        
+        ac_id = context.get("ac_id", "UNKNOWN")
+        approval = context.get("approval")
+        ac_status = context.get("ac_status", "PENDING")
+        
+        # Check if approval exists and is valid
+        if not approval or not approval.get("approved"):
+            raise BoundaryViolation(
+                ViolationType.AC_DELETION_WITHOUT_APPROVAL,
+                f"AC {ac_id} deletion requires governance approval",
+                severity="CRITICAL"
+            )
+        
+        # Check expiration if present
+        if "expires_at" in approval:
+            expires_at = datetime.fromisoformat(approval["expires_at"].replace("Z", "+00:00"))
+            if expires_at < datetime.now(expires_at.tzinfo):
+                raise BoundaryViolation(
+                    ViolationType.AC_DELETION_WITHOUT_APPROVAL,
+                    f"AC {ac_id} deletion approval has expired",
+                    severity="CRITICAL"
+                )
+        
+        # Check reason field
+        if "reason" not in approval:
+            raise BoundaryViolation(
+                ViolationType.AC_DELETION_WITHOUT_APPROVAL,
+                f"AC {ac_id} deletion requires audit reason",
+                severity="CRITICAL"
+            )
+        
+        # For completed ACs, check approval authority level
+        if ac_status == "COMPLETED":
+            approved_by = approval.get("approved_by", "")
+            if approved_by not in ("governance_admin", "system_admin", "owner"):
+                raise BoundaryViolation(
+                    ViolationType.AC_DELETION_WITHOUT_APPROVAL,
+                    f"Completed AC {ac_id} deletion requires high-level approval",
+                    severity="CRITICAL"
+                )
+        
+        return True
+    
+    def check_governance_compliance(self, context: Dict[str, Any]) -> bool:
+        """Check if governance compliance rules are being followed.
+        
+        Args:
+            context: Context dict with operation_type, target, etc.
+            
+        Returns:
+            True if allowed
+            
+        Raises:
+            BoundaryViolation: If governance bypass detected
+        """
+        operation_type = context.get("operation_type")
+        
+        # Detect direct database modifications that bypass governance
+        if operation_type in ("DIRECT_DB_WRITE", "RAW_SQL", "ORM_BYPASS"):
+            target = context.get("target", "")
+            
+            # Governance-critical tables cannot be directly modified
+            critical_tables = [
+                "governance.db",
+                "phase_locks",
+                "audit_trail",
+                "approval_records",
+            ]
+            
+            for critical_table in critical_tables:
+                if critical_table in target or critical_table in str(context.get("table", "")):
+                    raise BoundaryViolation(
+                        ViolationType.GOVERNANCE_BYPASS_ATTEMPT,
+                        f"Direct modification of {target} bypasses governance",
+                        severity="CRITICAL"
+                    )
+        
+        return True
     
     def check_phase_lock(self, context: Dict[str, Any]) -> bool:
         """Check if phase modification is allowed.
