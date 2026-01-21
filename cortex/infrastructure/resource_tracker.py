@@ -106,7 +106,7 @@ class ResourceTracker:
         self._lock = threading.RLock()
         self._leak_detection_enabled = leak_detection_enabled
         self._leak_check_interval = leak_check_interval_seconds
-        self._shutdown = False
+        self._shutdown = threading.Event()  # Use Event for interruptible wait
         
         # Metrics
         self._total_created = 0
@@ -303,7 +303,11 @@ class ResourceTracker:
     
     def shutdown(self) -> None:
         """Shutdown tracker and force cleanup of all resources."""
-        self._shutdown = True
+        self._shutdown.set()  # Signal thread to stop
+        
+        # Wait for leak detection thread to finish
+        if hasattr(self, '_leak_detection_thread') and self._leak_detection_thread.is_alive():
+            self._leak_detection_thread.join(timeout=1.0)
         
         with self._lock:
             # Release all active resources
@@ -317,8 +321,7 @@ class ResourceTracker:
     
     def _leak_detection_loop(self) -> None:
         """Background thread for leak detection."""
-        while not self._shutdown:
-            time.sleep(self._leak_check_interval)
+        while not self._shutdown.wait(timeout=self._leak_check_interval):
             self._check_for_leaks()
     
     def _check_for_leaks(self) -> None:

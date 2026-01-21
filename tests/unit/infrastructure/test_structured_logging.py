@@ -45,8 +45,11 @@ class TestStructuredLoggerBasics:
             component="test-component",
             level=LogLevel.DEBUG,
             sampling_rate=1.0,
+            async_writes=False,  # Disable async to avoid thread leaks in tests
         )
-        return StructuredLogger(config)
+        logger = StructuredLogger(config)
+        yield logger
+        logger.close()
 
     @pytest.fixture
     def log_capture(self) -> io.StringIO:
@@ -131,8 +134,11 @@ class TestCorrelationIdPropagation:
             component="test-component",
             level=LogLevel.DEBUG,
             sampling_rate=1.0,
+            async_writes=False,
         )
-        return StructuredLogger(config)
+        logger = StructuredLogger(config)
+        yield logger
+        logger.close()
 
     def test_correlation_id_generation(self, logger: "StructuredLogger") -> None:
         """Test correlation ID is generated if missing."""
@@ -187,8 +193,11 @@ class TestPIIRedaction:
             level=LogLevel.DEBUG,
             sampling_rate=1.0,
             pii_redaction_enabled=True,
+            async_writes=False,
         )
-        return StructuredLogger(config)
+        logger = StructuredLogger(config)
+        yield logger
+        logger.close()
 
     def test_pii_redaction_email(self, logger: "StructuredLogger") -> None:
         """Test email addresses are redacted."""
@@ -252,8 +261,11 @@ class TestLoggingPerformance:
             component="test-component",
             level=LogLevel.DEBUG,
             sampling_rate=1.0,
+            async_writes=False,
         )
-        return StructuredLogger(config)
+        logger = StructuredLogger(config)
+        yield logger
+        logger.close()
 
     def test_logging_overhead_less_than_1ms(self, logger: "StructuredLogger") -> None:
         """Test log writes don't exceed 1ms overhead."""
@@ -304,8 +316,11 @@ class TestEdgeCases:
             component="test-component",
             level=LogLevel.DEBUG,
             sampling_rate=1.0,
+            async_writes=False,
         )
-        return StructuredLogger(config)
+        logger = StructuredLogger(config)
+        yield logger
+        logger.close()
 
     def test_large_context_objects_truncated(self, logger: "StructuredLogger") -> None:
         """Test large context objects are truncated to 4KB limit."""
@@ -411,8 +426,11 @@ class TestLogContextManagement:
             component="test-component",
             level=LogLevel.DEBUG,
             sampling_rate=1.0,
+            async_writes=False,
         )
-        return StructuredLogger(config)
+        logger = StructuredLogger(config)
+        yield logger
+        logger.close()
 
     def test_context_creation(self) -> None:
         """Test LogContext creation."""
