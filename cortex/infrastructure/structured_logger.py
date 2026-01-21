@@ -437,6 +437,13 @@ class StructuredLogger:
         if self.executor:
             self.executor.shutdown(wait=True)
 
+    def close(self) -> None:
+        """Close logger and cleanup resources.
+        
+        This is an alias for shutdown() for context manager compatibility.
+        """
+        self.shutdown()
+
 
 class JSONFormatter(logging.Formatter):
     """Custom formatter for JSON log output."""
