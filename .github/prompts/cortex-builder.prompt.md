@@ -6,12 +6,35 @@
 
 **When user specifies `machine:mac` or `machine:win`:**
 
-### Execution Protocol (ZERO OUTPUT MODE)
+### Execution Protocol (ZERO OUTPUT MODE - AUTONOMOUS LOOP)
 1. **Load** `cortex-impl-map.yaml` → Read `execution_config` + filter by machine
-2. **Execute** all phases for machine sequentially (P0 → P1 → P2 → P3)
-3. **Output** one sentence per phase: `✓ {phase_id}: {summary} → Next: {next_phase}`
+2. **Loop** through all phases for machine sequentially:
+   - Get current phase from `machine_track_state.current_phase_index`
+   - Read phase YAML file from `_workspaces/roadmap/phases/`
+   - Check dependencies: all prerequisite phases must be COMPLETED
+   - **Execute** phase implementation
+   - Update `phase_execution_tracking.{machine}_track_state.phase_states[index].status` → COMPLETED
+   - Increment `current_phase_index`
+   - Output one sentence: `✓ {phase_id}: {summary} → Next: {next_phase}`
+   - **Continue to next phase without pausing** (NO USER INPUT REQUIRED)
+3. **Loop termination:** When all phases are COMPLETED or BLOCKED, output final status and stop
 4. **NO reports, NO *.md files, NO status documents**
-5. **Auto-advance** to next phase without pausing
+5. **Auto-advance** - NEVER ask "Proceed?" or wait for confirmation
+
+### Autonomous Loop Termination Conditions
+```yaml
+if all_phases_for_machine.status == "COMPLETED" or "SKIPPED":
+  output_final_summary()
+  stop_execution()
+elif any_phase.status == "BLOCKED":
+  output_blocker_detail()
+  stop_execution()
+elif critical_error_encountered:
+  output_error_detail()
+  stop_execution()
+else:
+  continue_to_next_phase()
+```
 
 ### Forbidden Actions (Machine Mode)
 - ❌ Creating ANY .md files (except in docs/ if required by AC)
@@ -19,13 +42,15 @@
 - ❌ Asking "Proceed to next phase?"
 - ❌ Verbose explanations between phases
 - ❌ Progress reports or execution logs
+- ❌ **PAUSING between phases for any reason**
 
 ### Required Actions (Machine Mode)
 - ✅ Implement code (cortex/, cortex_brain/, tests/)
 - ✅ Run tests silently (capture pass/fail only)
-- ✅ Update cortex-impl-map.yaml status field
+- ✅ Update `phase_execution_tracking.{machine}_track_state.phase_states[index].status`
 - ✅ Git commit (one per phase, descriptive message with machine marker)
 - ✅ One-sentence notification per phase completion
+- ✅ **Continue to next phase automatically without pausing**
 
 ### Git Commit Message Format (Machine-Specific)
 Each commit MUST include the machine marker in the message for easy merging:
@@ -42,6 +67,9 @@ This ensures commits can be easily identified and merged by machine track later.
 ### Notification Format (ONLY Output)
 ```
 ✓ impl-export-completion: Added 44 missing exports, 76→15 errors → Next: impl-circular-import-fix
+✓ impl-circular-import-fix: Fixed recursion in orchestrators, 15→0 errors → Next: PHASE-E-TDD-IMPLEMENTATION
+[continues without pause...]
+✓ PHASE-E-TDD-IMPLEMENTATION: 125 modules implemented, 7547 tests passing → Mac track complete
 ```
 
 ### Machine Tracks
@@ -58,12 +86,22 @@ This ensures commits can be easily identified and merged by machine track later.
 4. impl-governance-content (P1, 2-3 days)
 5. impl-features-registry-001 (P1, 6-9 hours)
 
-**Example Session:**
+**Example Session (CORRECT - Autonomous):**
 ```
 User: "continue with machine:mac"
-Assistant: ✓ impl-export-completion: Added 44 exports, tests 76→15 errors → Next: impl-circular-import-fix
-          ✓ impl-circular-import-fix: Fixed recursion in orchestrators, 15→0 errors → Next: PHASE-E-TDD-IMPLEMENTATION
-          [Continues silently until all mac phases complete]
+Assistant: ✓ impl-export-completion: Added 44 exports, 76→0 errors → Next: impl-circular-import-fix
+          ✓ impl-circular-import-fix: Fixed recursion, 15→0 errors → Next: PHASE-E-TDD-IMPLEMENTATION
+          ✓ PHASE-E-TDD-IMPLEMENTATION: 125 modules impl'd, 7547/7547 pass → Mac track COMPLETE
+[NO PAUSE - all phases executed autonomously]
+```
+
+**Example Session (WRONG - Do NOT Do This):**
+```
+User: "machine:mac"
+Assistant: ✓ phase-1 ... [STOPS - WAITS FOR NEXT USER MESSAGE]
+User: "proceed to phase-2"
+Assistant: ✓ phase-2 ... [STOPS - WAITS FOR NEXT USER MESSAGE]
+❌ THIS PATTERN IS FORBIDDEN - breaks autonomous execution
 ```
 
 ## Quick Reference
@@ -111,6 +149,73 @@ Assistant: ✓ impl-export-completion: Added 44 exports, tests 76→15 errors �
 - [ ] Audit AC_EXECUTE and AC_COMPLETE logged?
 - [ ] Git checkpoint committed?
 - [ ] Hash chain integrity verified?
+
+---
+
+## AUTONOMOUS EXECUTION LOOP (Machine Mode Implementation)
+
+**Algorithm for `machine:mac` or `machine:win`:**
+
+```
+1. Load cortex-impl-map.yaml
+2. Get machine_track_state[machine]
+3. current_index = machine_track_state.current_phase_index
+
+4. LOOP:
+   a. if current_index >= total_phases:
+      → Output "✓ {machine} track complete ({phases_completed}/{total_phases} phases)"
+      → BREAK LOOP
+      
+   b. Get phase_id = machine_track_state.phase_states[current_index].phase_id
+   
+   c. Check dependencies:
+      → For each dep in phase.dependencies:
+         if dep.status != "COMPLETED":
+            → Output "⚠ {phase_id} blocked by {dep} (status: {dep.status})"
+            → BREAK LOOP (blocker encountered)
+      
+   d. Load _workspaces/roadmap/phases/{phase_id}.yaml
+   
+   e. Set phase_state.status = "EXECUTING"
+      Set phase_state.start_time = now()
+      Update cortex-impl-map.yaml
+   
+   f. EXECUTE phase:
+      - Implement code
+      - Run tests
+      - Verify completion_verification.success_criteria all pass
+      
+   g. if completion_verification all pass:
+      → Set phase_state.status = "COMPLETED"
+      → Set phase_state.end_time = now()
+      → Output: "✓ {phase_id}: {success_summary} → Next: {next_phase}"
+      → Increment current_index
+      → Update cortex-impl-map.yaml
+      → Git commit -m "{phase_id}: completed"
+      → CONTINUE LOOP (no pause)
+      
+   h. else (completion_verification failed):
+      → Set phase_state.status = "BLOCKED"
+      → Output: "⚠ {phase_id}: {failure_summary} - blocker encountered"
+      → BREAK LOOP (stop on failure)
+
+5. END LOOP
+
+OUTPUT PATTERN:
+✓ phase-1: summary → Next: phase-2
+✓ phase-2: summary → Next: phase-3
+✓ phase-3: summary → {machine} track COMPLETE
+```
+
+**Key Rules:**
+- ✅ LOOP continuously until termination condition
+- ✅ NO user confirmation between phases
+- ✅ NO pausing for feedback
+- ✅ Output only phase completion lines
+- ✅ Update phase_execution_tracking in realtime
+- ❌ DO NOT ask "Proceed to next phase?"
+- ❌ DO NOT create .md status files
+- ❌ DO NOT verbose explanations
 
 ---
 
