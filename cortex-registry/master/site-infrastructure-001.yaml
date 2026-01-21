@@ -1,0 +1,405 @@
+# CORTEX Multi-Site Infrastructure Master Plan
+# Authority: Master Orchestrator
+# Version: 1.0
+# Date: 2026-01-21
+# Status: APPROVED
+
+metadata:
+  plan_id: "site-infrastructure-001"
+  title: "Multi-Site Hosting & Lifecycle Management"
+  type: "infrastructure"
+  authority: "cortex-registry/master/"
+  priority: "P0-CRITICAL"
+  reason: "Foundation for production-grade documentation & dashboard ecosystem"
+  estimated_effort: "5-7 days"
+  blocking: true
+  
+strategic_objectives:
+  - "Centralize multi-site discovery and lifecycle management"
+  - "Integrate site infrastructure with Master Orchestrator as first-class capability"
+  - "Enable on-demand site launches without interfering with dev workflow"
+  - "Establish production-ready foundation for scaling to 10+ sites"
+  - "Eliminate port conflicts, process orphans, and silent failures"
+  
+success_criteria:
+  - "Registry-driven site discovery (sites defined in cortex-registry, not hard-coded)"
+  - "Dynamic port allocation with conflict detection (no more port 8000 collisions)"
+  - "Process lifecycle tracking (manifest tracks PID, health, start time)"
+  - "Readiness gates before declaring success (health polling with 3x confirmation)"
+  - "Orchestrator integration (sites queryable as system capability)"
+  - "Graceful degradation (one site failure doesn't cascade)"
+  - "All 5 sites launchable: docs-main, docs-archive-v4, docs-archive-v5, docs-archive-v5.5, observability"
+
+---
+
+## Phase 1: Site Registry Declaration (Days 1-1)
+
+### 1.1 Create Site Registry
+**File:** `cortex-registry/master/sites-registry.yaml`
+**Authority:** Master Orchestrator—single source of truth for all sites
+
+**Content Specification:**
+- Site ID (kebab-case, unique)
+- Type (mkdocs, static-html, flask-app, observability-dashboard)
+- Source paths (docs_dir, config_file)
+- Build configuration (Python version, dependencies, build command)
+- Network (port pool, health endpoint, protocol)
+- Lifecycle (startup checks, restart policy, graceful shutdown timeout)
+- Resource constraints (memory limit, CPU affinity, file handle quota)
+- Dependencies (if site X must start before Y)
+- Status tracking (current status, last-updated, error log)
+
+**Sites to Register:**
+```
+docs-main: MkDocs, docs/ → site/, port 8000, priority P0
+docs-archive-v4: MkDocs, cortex-gitpages/_archive/docs-cortex-4.0/, port 8001, priority P1
+docs-archive-v5: MkDocs, cortex-gitpages/_archive/docs-cortex-5.0/, port 8002, priority P1
+docs-archive-v5.5: MkDocs, cortex-gitpages/_archive/docs-cortex-5.5/, port 8003, priority P1
+observability-dashboard: Future placeholder, port 9000, priority P2
+```
+
+### 1.2 Create Site Launcher Schema
+**File:** `cortex-registry/master/site-launcher-schema.yaml`
+**Purpose:** Define valid site configurations and launcher behavior
+
+**Schema Elements:**
+- Site object structure (id, type, config, lifecycle, health)
+- Port allocation strategy (static vs. dynamic discovery)
+- Process manifest format (PID, port, status, started_at, error)
+- Health check contract (endpoint, interval, retry logic)
+- Restart policy (none, always, on-failure with backoff)
+- Failure modes (cascade prevention, logging, alerting)
+
+---
+
+## Phase 2: Site Launcher Implementation (Days 2-3)
+
+### 2.1 Create Python Site Launcher Module
+**File:** `cortex/core/infrastructure/site_launcher.py`
+**Responsibility:** Lifecycle management for individual sites
+
+**Core Methods:**
+- `SiteLauncher.launch(site_id: str, timeout_seconds: int) → SiteStatus`
+- `SiteLauncher.health_check(site_id: str) → HealthStatus`
+- `SiteLauncher.stop(site_id: str) → bool`
+- `SiteLauncher.restart(site_id: str) → bool`
+- `SiteLauncher.get_status(site_id: str) → SiteStatus`
+
+**Key Features:**
+- Pre-flight validation (port available, dependencies present, build path exists)
+- Subprocess spawning with environment isolation
+- Stdout/stderr capture to `_workspaces/roadmap/logs/sites/{site_id}.log`
+- Health polling with exponential backoff (10 attempts, max 10s)
+- Process manifest reconciliation (cleanup orphans, track PIDs)
+- Resource limits (memory, file handles)
+
+### 2.2 Create Multi-Site Orchestrator
+**File:** `cortex/core/infrastructure/multi_site_orchestrator.py`
+**Responsibility:** Coordinates launches, manages state, routes intents
+
+**Core Methods:**
+- `MultiSiteOrchestrator.launch_all(filter_priority: str = None) → Dict[str, SiteStatus]`
+- `MultiSiteOrchestrator.launch_site(site_id: str) → SiteStatus`
+- `MultiSiteOrchestrator.stop_all() → Dict[str, bool]`
+- `MultiSiteOrchestrator.health_report() → SystemHealthStatus`
+- `MultiSiteOrchestrator.register_site(site_config: SiteConfig) → bool`
+
+**Key Features:**
+- Reads sites-registry.yaml at startup
+- Manages dependency order (don't launch dashboard until docs ready)
+- Handles concurrent launches (thread pool with configurable concurrency)
+- Maintains process manifest in `_workspaces/roadmap/running-sites.json`
+- Publishes metrics (build time, startup time, current health)
+- Cleanup on shutdown (graceful SIGTERM cascade)
+
+### 2.3 Create Health Check Service
+**File:** `cortex/core/infrastructure/site_health_checker.py`
+**Responsibility:** Continuous monitoring and status reporting
+
+**Core Methods:**
+- `SiteHealthChecker.check_readiness(site_id: str, max_attempts: int) → bool`
+- `SiteHealthChecker.continuous_monitor(interval_seconds: int) → None`
+- `SiteHealthChecker.publish_status(orchestrator_bus) → None`
+
+**Features:**
+- HTTP GET to site health endpoint (/{site_id}/health or just /)
+- Exponential backoff: 100ms, 200ms, 400ms... up to 10s
+- Requires 3 consecutive 200 OK before declaring ready
+- Logs failures (timeout, connection refused, non-200 status)
+- Feeds metrics to orchestrator event bus
+
+---
+
+## Phase 3: Process Manifest & Port Management (Days 2-3)
+
+### 3.1 Create Process Manifest Manager
+**File:** `cortex/core/infrastructure/process_manifest.py`
+**Responsibility:** Track running site processes, prevent orphans
+
+**Data Structure** (`_workspaces/roadmap/running-sites.json`):
+```json
+{
+  "docs-main": {
+    "pid": 12345,
+    "port": 8000,
+    "type": "mkdocs",
+    "status": "healthy",
+    "started_at": "2026-01-21T10:00:00Z",
+    "last_health_check": "2026-01-21T10:05:30Z",
+    "build_time_ms": 1250,
+    "error": null
+  },
+  "observability-dashboard": {
+    "status": "stopped",
+    "error": "port 9000 already in use"
+  }
+}
+```
+
+**Core Methods:**
+- `ProcessManifest.register(site_id, pid, port, type) → None`
+- `ProcessManifest.update_status(site_id, status, error) → None`
+- `ProcessManifest.get_manifest() → Dict`
+- `ProcessManifest.cleanup_orphans() → List[int]`
+- `ProcessManifest.persist() → None` (write to JSON file)
+
+**Cleanup Logic:**
+- On launcher startup: Scan manifest, verify all PIDs still running
+- If PID dead: Check if port occupied (if so, find new process owner)
+- If port free but manifest stale: Remove entry
+- If port occupied but not in manifest: Log warning (external process)
+
+### 3.2 Create Port Allocation Strategy
+**File:** `cortex/core/infrastructure/port_allocator.py`
+**Responsibility:** Dynamic port discovery, conflict detection
+
+**Core Methods:**
+- `PortAllocator.allocate(site_id: str, preferred_port: int, pool_size: int) → int`
+- `PortAllocator.is_available(port: int) → bool`
+- `PortAllocator.release(site_id: str) → None`
+
+**Algorithm:**
+1. Try preferred port first (netstat + socket probe)
+2. If occupied, scan pool (preferred ± 20 ports)
+3. Return first available
+4. If none available in pool: Raise PortAllocationError (not silent failure)
+5. Update manifest with actual port
+
+**Port Pools:**
+- Development: 8000-8099 (local MkDocs)
+- CI/CD: 9000-9099 (parallel builds)
+- Dashboard: 9100-9199 (observability)
+
+---
+
+## Phase 4: Orchestrator Integration (Days 4-5)
+
+### 4.1 Register Sites Capability with Master Orchestrator
+**File:** `cortex/core/orchestrator/sites_capability.py`
+**Purpose:** Expose site management as system capability
+
+**Capability Metadata:**
+```yaml
+capability:
+  id: "sites"
+  name: "Multi-Site Infrastructure"
+  version: "1.0"
+  mcp_tools:
+    - "cortex_launch_sites"
+    - "cortex_list_sites"
+    - "cortex_stop_sites"
+    - "cortex_site_status"
+  event_subscriptions:
+    - "system.startup" → auto-launch P0 sites
+    - "intent.documentation" → launch docs-main + archive
+    - "intent.observability" → launch observability-dashboard
+  capabilities:
+    - "async-launch" (non-blocking, returns immediately)
+    - "health-gating" (blocks upstream until sites healthy)
+    - "cascade-failure-isolation" (one site down ≠ system down)
+```
+
+### 4.2 Create MCP Tools for Site Management
+**File:** `cortex/core/mcp/site_management_tools.py`
+
+**Tool: cortex_launch_sites**
+- Params: site_ids: List[str], port_override: Dict[str, int], timeout_seconds: int, async: bool
+- Returns: {sites: [{id, url, status, health_percent, error}], total_time_ms}
+- Behavior: Async by default (doesn't block orchestrator), polls health before returning
+
+**Tool: cortex_list_sites**
+- Params: None
+- Returns: {sites: [...], manifest_file, last_updated}
+- Behavior: Returns all registered sites + current status
+
+**Tool: cortex_stop_sites**
+- Params: site_ids: List[str], force: bool, timeout_seconds: int
+- Returns: {stopped: [...], failed: [...], total_time_ms}
+- Behavior: SIGTERM first, SIGKILL after timeout if force=true
+
+**Tool: cortex_site_status**
+- Params: site_id: str
+- Returns: {id, status, pid, port, url, health, build_time, error, logs_tail: string}
+- Behavior: Real-time status + last 500 chars of log
+
+### 4.3 Integrate with Intent Router
+**File:** `cortex/core/intent/site_intents.py`
+**Purpose:** Route documentation-related intents to site launcher
+
+**Intent Mappings:**
+```yaml
+intent: "show_documentation"
+  → routes to: cortex_launch_sites(site_ids: ["docs-main"])
+  → behavior: Launch docs, return URL, open in browser
+
+intent: "show_all_documentation"
+  → routes to: cortex_launch_sites(site_ids: ["docs-main", "docs-archive-v4", "docs-archive-v5", "docs-archive-v5.5"])
+  → behavior: Launch all, aggregate status page
+
+intent: "view_system_health"
+  → routes to: cortex_site_status(site_id: "observability-dashboard")
+  → behavior: Launch dashboard, show metrics
+```
+
+---
+
+## Phase 5: Build Isolation & Log Management (Days 4-5)
+
+### 5.1 Per-Site Build Directory Isolation
+**File:** `cortex/core/infrastructure/build_manager.py`
+
+**Strategy:**
+- Each site builds to `build/{site_id}/` instead of shared `site/`
+- Example: `build/docs-main/site/`, `build/docs-archive-v5/site/`
+- MkDocs config override: `site_dir` → dynamic path per site
+- Symlink strategy (optional): `site/docs-main → ../build/docs-main/site/` for browser navigation
+
+**Benefits:**
+- Zero I/O contention on concurrent builds
+- Atomic swap: Build to green, swap on success (blue-green pattern)
+- No artifact collision
+
+### 5.2 Log Capture & Rotation
+**File:** `cortex/core/infrastructure/log_manager.py`
+
+**Log Storage:**
+- Location: `_workspaces/roadmap/logs/sites/`
+- Format: `{site_id}.log` (stdout + stderr interleaved)
+- Rotation: At 10MB, create `.log.1`, `.log.2`... (keep 5 generations)
+- Queryable: SiteHealthChecker can tail logs, return last N lines
+
+**Logging Metadata:**
+- Timestamp, level (INFO, ERROR, WARN, DEBUG)
+- Process ID, elapsed time
+- Event type (LAUNCH, HEALTH_CHECK, SHUTDOWN, ERROR)
+
+---
+
+## Phase 6: Testing & Validation (Day 6)
+
+### 6.1 Unit Tests (TDD First)
+**File:** `tests/unit/cortex/core/infrastructure/test_site_launcher.py`
+- Launch success (healthy site, logs captured)
+- Port conflict detection (all ports occupied)
+- Orphan cleanup (stale PID in manifest)
+- Health polling (exponential backoff, 3-check confirmation)
+- Timeout handling (process hangs, health unreachable)
+
+**File:** `tests/unit/cortex/core/infrastructure/test_multi_site_orchestrator.py`
+- Sequential launch (respects dependency order)
+- Concurrent launch (thread pool isolation)
+- Cascade failure (one site error doesn't break others)
+- Manifest reconciliation (cleanup + update)
+
+**File:** `tests/unit/cortex/core/infrastructure/test_port_allocator.py`
+- Available port detection (netstat + socket probe)
+- Port pool exhaustion (clear error, not silent)
+- Manifest tracking (allocated ports reconciled)
+
+### 6.2 Integration Tests
+**File:** `tests/integration/cortex/core/infrastructure/test_multisite_e2e.py`
+- Launch docs-main → verify health → check logs → stop gracefully
+- Launch 5 sites concurrently → all healthy → manifest consistent
+- Kill process externally → orchestrator detects → restart on policy
+- Build isolation → concurrent builds to separate `build/` dirs, no collision
+
+### 6.3 Manual Validation (Dev Environment)
+- Launch: `cortex_launch_sites(site_ids: ["docs-main", "observability-dashboard"])`
+- Verify: Browser http://127.0.0.1:8000 (docs), http://127.0.0.1:9000 (dashboard)
+- Verify: Process manifest shows both running
+- Stop: `cortex_stop_sites(site_ids: ["docs-main"])`
+- Verify: Port 8000 released, manifest updated
+
+---
+
+## Phase 7: Documentation & Governance Update (Day 7)
+
+### 7.1 Update Governance Rules
+**File:** `cortex_brain/tier0/governance/core-rules.yaml`
+- Add SITE-RULE-001: "All sites must be declared in cortex-registry/master/sites-registry.yaml"
+- Add SITE-RULE-002: "All sites must have health endpoint returning 200 on readiness"
+- Add SITE-RULE-003: "Site launcher must respect process manifest to prevent orphans"
+- Add SITE-RULE-004: "Per-site build directories required (no shared site/ dir)"
+
+### 7.2 Update Master Orchestrator
+**File:** `cortex/core/orchestrator/master_orchestrator.py`
+- Register sites capability on startup
+- Auto-launch P0 sites (docs-main) on system initialization
+- Subscribe to startup/shutdown events
+- Expose site status in system health report
+
+### 7.3 Create Migration Plan from Old Scripts
+**File:** `docs/migration/launch-mkdocs-to-site-infrastructure.md`
+- Deprecate: `scripts/launch-mkdocs.ps1` (mark as legacy)
+- New path: Use `cortex_launch_sites` MCP tool or Python launcher
+- Backward compat: Keep old script, emit warning on execution
+
+---
+
+## Deliverables Summary
+
+| Component | File | Type | Status |
+|-----------|------|------|--------|
+| **1. Registry** | `cortex-registry/master/sites-registry.yaml` | YAML | To Create |
+| **2. Schema** | `cortex-registry/master/site-launcher-schema.yaml` | YAML | To Create |
+| **3. Launcher** | `cortex/core/infrastructure/site_launcher.py` | Python | To Create |
+| **4. Multi-Site Orch** | `cortex/core/infrastructure/multi_site_orchestrator.py` | Python | To Create |
+| **5. Health Checker** | `cortex/core/infrastructure/site_health_checker.py` | Python | To Create |
+| **6. Process Manifest** | `cortex/core/infrastructure/process_manifest.py` | Python | To Create |
+| **7. Port Allocator** | `cortex/core/infrastructure/port_allocator.py` | Python | To Create |
+| **8. Sites Capability** | `cortex/core/orchestrator/sites_capability.py` | Python | To Create |
+| **9. MCP Tools** | `cortex/core/mcp/site_management_tools.py` | Python | To Create |
+| **10. Intent Router** | `cortex/core/intent/site_intents.py` | Python | To Create |
+| **11. Build Manager** | `cortex/core/infrastructure/build_manager.py` | Python | To Create |
+| **12. Log Manager** | `cortex/core/infrastructure/log_manager.py` | Python | To Create |
+| **13. Tests (12 files)** | `tests/unit/...` + `tests/integration/...` | Python | To Create |
+| **14. Governance Rules** | `cortex_brain/tier0/governance/core-rules.yaml` | YAML | To Update |
+| **15. Migration Guide** | `docs/migration/launch-mkdocs-to-site-infrastructure.md` | Markdown | To Create |
+
+---
+
+## Risk Mitigation
+
+| Risk | Probability | Impact | Mitigation |
+|------|-------------|--------|------------|
+| Port exhaustion during heavy CI | Medium | High | Port pool = 100 (8000-8099), rollback to static if needed |
+| Process leaks on crash | Medium | High | Process manifest reconciliation on every launcher startup |
+| Health check false negatives | Low | Medium | 3-check confirmation + configurable timeout per site |
+| Concurrent build I/O collision | Low | High | Per-site build dirs + atomic swap strategy |
+| Orchestrator awareness lag | Low | Medium | Event bus publishes site status in real-time |
+
+---
+
+## Rollout Strategy
+
+**Week 1:** Phases 1-2 (registry + launcher implementation)
+**Week 2:** Phases 3-4 (manifest + orchestrator integration)
+**Week 3:** Phases 5-7 (isolation, testing, governance update)
+
+**Go-Live:** After integration tests pass + manual validation in dev environment
+
+---
+
+**Approved By:** Master Orchestrator  
+**Date:** 2026-01-21  
+**Next Review:** After Phase 2 completion

@@ -1,0 +1,20 @@
+graph TD
+    A["Tier 0 - Executive<br/>Highest Authority"] -->|Override| B["Tier 1 - Domain<br/>Business Logic"]
+    B -->|Override| C["Tier 2 - Operational<br/>Tactical"]
+    
+    A --> D["Tier 0 Rules<br/>Strategic Policies"]
+    B --> E["Tier 1 Rules<br/>Domain Rules"]
+    C --> F["Tier 2 Rules<br/>Operational Rules"]
+    
+    D --> G{"Governance<br/>Decision"}
+    E --> G
+    F --> G
+    
+    G -->|Approved| H["Execute"]
+    G -->|Denied| I["Reject"]
+    
+    style A fill:#FF6B6B
+    style B fill:#FFA500
+    style C fill:#FFD700
+    style H fill:#51CF66
+    style I fill:#FF6B6B

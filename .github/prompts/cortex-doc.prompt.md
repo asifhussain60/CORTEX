@@ -6,6 +6,101 @@ Manually refresh `docs/` folder content and Mermaid diagrams to reflect the fina
 
 ---
 
+## Folder Structure
+
+All documentation assets are organized under the `docs/` directory. Build output is generated to `_build/site/` (git-ignored):
+
+```
+Repository Root
+├── assets/                      # Centralized assets (7 logo files)
+│   ├── images/
+│   ├── README.md
+│   └── INDEX.md
+│
+├── docs/                        # SOURCE DOCUMENTATION (COMMITTED)
+│   ├── 0-README.md              # Main documentation index
+│   ├── INDEX.md                 # Alternative index
+│   ├── LICENSE.md               # Licensing information
+│   ├── ARCHITECTURE-ASSETS.md   # Asset architecture reference
+│   ├── 01-getting-started/      # Quick start guides
+│   ├── 02-architecture/         # Architecture documentation
+│   │   ├── adrs/                # Architecture Decision Records
+│   │   ├── 0-overview.md
+│   │   ├── 6-implementation-phases.md
+│   │   ├── 7-intent-router.md
+│   │   ├── 9-knowledge-protocol.md
+│   │   └── 10-mcp-tool-governance.md
+│   ├── 03-api-reference/        # API reference documentation
+│   ├── 04-guides/               # Implementation guides
+│   │   ├── operations/          # Operations runbooks
+│   │   ├── 5-runbook.md
+│   │   ├── 6-disaster-recovery.md
+│   │   └── 7-scaling-guide.md
+│   ├── 05-reference/            # Reference materials
+│   │   ├── gap-analysis.md
+│   │   ├── remediation-status.md
+│   │   ├── governance-rules-reference.md
+│   │   └── test-ac-mapping.md
+│   ├── 06-tutorials/            # Tutorial guides
+│   ├── 07-contributing/         # Contributor guides
+│   │   ├── 2-development-setup.md
+│   │   ├── 3-testing-strategy.md
+│   │   ├── 4-code-style-guide.md
+│   │   └── 5-pull-request-process.md
+│   ├── _archive/                # Historical documentation (DO NOT EDIT)
+│   │   ├── BEFORE-AFTER-COMPARISON.md
+│   │   ├── phases/
+│   │   ├── reviews/
+│   │   ├── sessions/
+│   │   └── ... (other archived documents)
+│   ├── _diagrams/               # All Mermaid diagrams
+│   │   ├── architecture-overview.mmd
+│   │   ├── ci-cd-pipeline.mmd
+│   │   ├── error-recovery-flow.mmd
+│   │   ├── governance-tiers.mmd
+│   │   ├── intent-router-flow.mmd
+│   │   ├── knowledge-graph.mmd
+│   │   ├── mcp-tools.mmd
+│   │   ├── orchestration-flow.mmd
+│   │   ├── phase-dependencies.mmd
+│   │   ├── production-readiness.mmd
+│   │   ├── resilience-patterns.mmd
+│   │   ├── state-management.mmd
+│   │   └── test-pyramid.mmd
+│   ├── _manifests/              # System manifests (DO NOT EDIT)
+│   │   ├── content-registry.yaml
+│   │   ├── file-discovery-blacklist.yaml
+│   │   ├── file-manifest.yaml
+│   │   └── file-placement-policy.yaml
+│   ├── _hooks/                  # MkDocs build hooks
+│   │   └── copy_assets.py       # Post-build asset copying
+│   └── _unsorted/               # Work-in-progress documents
+│       └── ... (session reports and temporary docs)
+│
+└── _build/ (git-ignored)        # BUILD OUTPUT (NOT COMMITTED)
+    └── site/                    # Generated website
+        ├── index.html
+        ├── assets/              # Auto-copied from root assets/
+        │   └── images/
+        └── (other generated pages)
+```
+
+**Key Rules:**
+- ✅ All diagrams go in `docs/_diagrams/`
+- ✅ All reference docs go in appropriate `docs/XX-*` sections
+- ✅ Historical archives go in `docs/_archive/`
+- ✅ System metadata goes in `docs/_manifests/`
+- ✅ Build hooks go in `docs/_hooks/`
+- ✅ Work-in-progress goes in `docs/_unsorted/`
+- ✅ Centralized assets go in root `assets/` folder
+- ✅ Build output generates to `_build/site/` (git-ignored)
+- ❌ No .md files in repository root (except reference docs: SOLUTION-SUMMARY.md, BUILD-STRUCTURE-REFERENCE.md, IMPLEMENTATION-COMPLETION-REPORT.md, POST-IMPLEMENTATION-CHECKLIST.md)
+- ❌ No .md files outside docs/ (except reference docs above)
+- ❌ No orphaned `_docs_*` folders in root (all moved to docs/)
+- ❌ Never commit `_build/` directory (git-ignored)
+
+---
+
 ## Invocation
 
 Run this prompt manually when `cortex-impl-map.yaml` is updated and documentation needs refresh.
@@ -18,6 +113,65 @@ Run this prompt manually when `cortex-impl-map.yaml` is updated and documentatio
 2. **Todo-driven** - Create todo list first, then execute each item
 3. **Complete or fail** - Do not leave partial work; finish all todos
 4. **Clean result** - `docs/` folder must be organized when done
+
+---
+
+---
+
+## Build Output Configuration
+
+**MkDocs Configuration** (`mkdocs.yml`):
+```yaml
+docs_dir: docs
+site_dir: _build/site    # Hidden directory (git-ignored)
+
+hooks:
+  - docs/_hooks/copy_assets.py
+```
+
+**Git Exclusion** (`.gitignore`):
+```
+_build/              # Build artifacts (git-ignored)
+```
+
+This keeps the repository root clean by:
+- Hiding generated files in `_build/`
+- Automatically ignored by git
+- Post-build hook copies `assets/` to `_build/site/assets/`
+
+---
+
+## Option 1: Launch MkDocs Server (Detached External Terminal)
+
+Before documentation work, launch the MkDocs development server in an **external PowerShell window** so it runs independently without blocking VS Code workflow.
+
+### Quick Start
+```powershell
+./scripts/launch-mkdocs.ps1
+```
+
+### Result
+- ✅ New PowerShell window opens
+- ✅ MkDocs server runs at `http://127.0.0.1:8000`
+- ✅ Output generated to `_build/site/` (not visible in root)
+- ✅ VS Code terminal remains free for editing/testing
+- ✅ Live reload enabled (changes reflect immediately)
+- 🛑 Press Ctrl+C in external window to stop server
+
+### Manual Alternative
+```powershell
+# Terminal 1: External PowerShell window
+cd d:\PROJECTS\CORTEX
+mkdocs serve
+# Output: _build/site/
+```
+
+### Why Detached?
+- **No blocking** – Documentation updates don't freeze your editor
+- **Persistent** – Server keeps running through multiple edits
+- **Preview-ready** – Switch to browser tab to verify changes instantly
+- **Clean workflow** – Separate concern from code editing
+- **Clean root** – Build output hidden in `_build/`
 
 ---
 
@@ -40,19 +194,19 @@ Read `_workspaces/roadmap/cortex-impl-map.yaml` and create todos for:
 
 | Todo | Diagram File | Type | Illustrates |
 |------|--------------|------|-------------|
-| Architecture Diagram | `architecture-overview.mmd` | Flowchart | System components and relationships |
-| Tier Structure | `governance-tiers.mmd` | Flowchart | Tier 0-3 hierarchy |
-| Phase Dependencies | `phase-dependencies.mmd` | Flowchart | Phase execution order |
-| Orchestration Flow | `orchestration-flow.mmd` | Sequence | Request to orchestrator to execution |
-| MCP Tools | `mcp-tools.mmd` | Mind Map | Tool categories and capabilities |
-| Production Readiness | `production-readiness.mmd` | Flowchart | Critical path to 100% |
-| State Management | `state-management.mmd` | Flowchart | State persistence and recovery |
-| Resilience Patterns | `resilience-patterns.mmd` | Sequence | Circuit breaker, retry, fallback |
-| Intent Router Flow | `intent-router-flow.mmd` | Flowchart | LENS protocol + routing decisions |
-| Knowledge Graph | `knowledge-graph.mmd` | Flowchart | BKIO pipeline, entity relationships |
-| Error Recovery Flow | `error-recovery-flow.mmd` | Sequence | Recovery patterns, circuit states |
-| Test Pyramid | `test-pyramid.mmd` | Flowchart | Unit/integration/E2E distribution |
-| CI/CD Pipeline | `ci-cd-pipeline.mmd` | Flowchart | Deployment flow, validation gates |
+| Architecture Diagram | `docs/_diagrams/architecture-overview.mmd` | Flowchart | System components and relationships |
+| Tier Structure | `docs/_diagrams/governance-tiers.mmd` | Flowchart | Tier 0-3 hierarchy |
+| Phase Dependencies | `docs/_diagrams/phase-dependencies.mmd` | Flowchart | Phase execution order |
+| Orchestration Flow | `docs/_diagrams/orchestration-flow.mmd` | Sequence | Request to orchestrator to execution |
+| MCP Tools | `docs/_diagrams/mcp-tools.mmd` | Mind Map | Tool categories and capabilities |
+| Production Readiness | `docs/_diagrams/production-readiness.mmd` | Flowchart | Critical path to 100% |
+| State Management | `docs/_diagrams/state-management.mmd` | Flowchart | State persistence and recovery |
+| Resilience Patterns | `docs/_diagrams/resilience-patterns.mmd` | Sequence | Circuit breaker, retry, fallback |
+| Intent Router Flow | `docs/_diagrams/intent-router-flow.mmd` | Flowchart | LENS protocol + routing decisions |
+| Knowledge Graph | `docs/_diagrams/knowledge-graph.mmd` | Flowchart | BKIO pipeline, entity relationships |
+| Error Recovery Flow | `docs/_diagrams/error-recovery-flow.mmd` | Sequence | Recovery patterns, circuit states |
+| Test Pyramid | `docs/_diagrams/test-pyramid.mmd` | Flowchart | Unit/integration/E2E distribution |
+| CI/CD Pipeline | `docs/_diagrams/ci-cd-pipeline.mmd` | Flowchart | Deployment flow, validation gates |
 
 ### Architecture Documents (in `docs/02-architecture/`)
 
@@ -430,3 +584,8 @@ flowchart LR
 - `docs/0-README.md` (update, don't delete)
 - `docs/_archive/**` (historical records)
 - `docs/_manifests/**` (system metadata)
+- `docs/_diagrams/**` (rendered diagrams)
+- `docs/_hooks/` (build automation)
+- `docs/_unsorted/**` (work-in-progress documents)
+- `assets/` (centralized assets)
+- `_build/` (generated build output - do not edit, automatically regenerated)

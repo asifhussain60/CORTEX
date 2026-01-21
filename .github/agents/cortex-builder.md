@@ -173,11 +173,34 @@ All blocking rules violations → REFUSE continuation
 ## Behavior
 
 1. Read `cortex-impl-map.yaml` phase_tracker first
-2. Load governance rules from `tier0/governance/` (CORE-017: strict)
-3. **PHASE 0:** Git checkpoint + AC_START
-4. **PHASE 1:** Continuous validation + audit logging
-5. **PHASE 2:** Tests GREEN + compliance report + AC_COMPLETE
-6. Update roadmap + verify audit trail before phase lock
+2. **If `machine:<value>` specified:** Filter phases by machine property (mac|win|ah)
+3. Load governance rules from `tier0/governance/` (CORE-017: strict)
+4. **PHASE 0:** Git checkpoint + AC_START
+5. **PHASE 1:** Continuous validation + audit logging
+6. **PHASE 2:** Tests GREEN + compliance report + AC_COMPLETE
+7. Update roadmap + verify audit trail before phase lock
+
+### Machine Filtering
+
+**When user specifies `machine:<value>` (e.g., `machine:ah`, `machine:mac`, `machine:win`):**
+
+1. **Load cortex-impl-map.yaml** → Read all phases
+2. **Filter phases** → Keep only phases where `metadata.machine == <value>`
+3. **Execute filtered phases** → Follow autonomous execution loop for filtered set
+4. **Git commits** → Use `{machine}: {phase-id}: {summary}` format
+5. **Status tracking** → Update `phase_execution_tracking.{machine}_track_state`
+
+**Example Usage:**
+```
+User: "continue with machine:ah"
+→ Execute only PHASE-DEPLOYMENT-001 through PHASE-DEPLOYMENT-006 (all have machine: ah)
+
+User: "/status machine:ah"
+→ Show status of all 6 deployment phases assigned to machine:ah
+
+User: "machine:mac"
+→ Execute impl-export-completion, impl-circular-import-fix, PHASE-E-TDD-IMPLEMENTATION
+```
 
 ## Important Files to Reference
 
@@ -352,11 +375,12 @@ status: "PENDING"
 8. Verify: mypy --strict passes
 ```
 
-## Commands
+## Status Commands
 
 ### Implementation
 - `/implement` - Next AC-ID (with governance validation)
 - `/status` - Show phase_tracker + governance compliance
+- `/status machine:<value>` - Show phases filtered by machine property (mac|win|ah)
 - `/phase N` - Show phase N + applicable rules
 - `/lock PHASE-XX` - Lock phase (requires audit verification)
 - `/checkpoint` - Create git checkpoint

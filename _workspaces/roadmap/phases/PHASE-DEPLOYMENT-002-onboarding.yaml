@@ -1,0 +1,172 @@
+# Phase DEPLOYMENT-002: Onboarding Orchestrator
+# Zero-config developer setup with auto-installation
+# Date: 2026-01-21
+# Priority: P1-HIGH
+# Authority: chat01.md requirements analysis
+
+metadata:
+  phase_id: "PHASE-DEPLOYMENT-002-onboarding"
+  title: "Onboarding Orchestrator and Environment Setup"
+  description: "Auto-install requirements, configure VSCode, validate toolchain, bootstrap MCP"
+  priority: "P1-HIGH"
+  estimated_effort: "3 days"
+  status: "NOT_STARTED"
+  blocks_production: false
+  machine: "ah"
+
+executive_summary: |
+  Eliminate manual setup steps. New developers/deployments should:
+  1. Clone repo
+  2. Run `python cortex/orchestrators/setup_orchestrator.py`
+  3. CORTEX fully operational in <5 minutes
+  
+  Onboarding orchestrator handles:
+  - requirements.txt validation + auto-install
+  - VSCode workspace configuration
+  - Toolchain health checks (pytest, mypy, ruff, etc.)
+  - MCP server bootstrap + validation
+  - Multi-repo dependency conflict resolution
+
+current_state:
+  setup_process: "Manual (README.md instructions)"
+  requirements_install: "Manual pip install -r requirements.txt"
+  vscode_config: "Not automated"
+  toolchain_validation: "Not automated"
+  mcp_bootstrap: "Manual"
+  dependency_conflicts: "Not detected across D:\\PROJECTS\\*"
+
+acceptance_criteria:
+  - id: "AC-DEP-002-01"
+    description: "Requirements validator detects conflicts and auto-installs"
+    verification: "setup_orchestrator.py installs all packages without errors"
+    implementation:
+      - "Create cortex/orchestrators/setup_orchestrator.py"
+      - "Parse requirements.txt (detect version conflicts)"
+      - "Scan D:\\PROJECTS\\* for requirements.txt files (KASHKOLE, KSESSIONS, etc.)"
+      - "Resolve conflicts (suggest unified version or isolated venv)"
+      - "Run pip-audit for CVE scanning"
+      - "Auto-install with progress reporting"
+    tests:
+      - "test_parse_requirements_detects_conflicts"
+      - "test_scan_multi_repo_dependencies"
+      - "test_resolve_version_conflicts"
+      - "test_auto_install_all_packages"
+      - "test_pip_audit_security_scan"
+  
+  - id: "AC-DEP-002-02"
+    description: "VSCode workspace config generator creates .vscode/settings.json"
+    verification: ".vscode/settings.json exists with correct Python path and linters"
+    implementation:
+      - "Create cortex/orchestrators/vscode_configurator.py"
+      - "Detect Python interpreter path (venv or system)"
+      - "Generate .vscode/settings.json (python.pythonPath, linting configs)"
+      - "Generate .vscode/extensions.json (recommended extensions)"
+      - "Generate .vscode/tasks.json (pytest runner, MCP launcher)"
+    tests:
+      - "test_detect_python_interpreter"
+      - "test_generate_settings_json"
+      - "test_generate_extensions_json"
+      - "test_generate_tasks_json"
+  
+  - id: "AC-DEP-002-03"
+    description: "Toolchain health checks validate all required tools"
+    verification: "All toolchain checks pass: pytest, mypy, ruff, git"
+    implementation:
+      - "Create cortex/orchestrators/toolchain_validator.py"
+      - "Check pytest (run sample test)"
+      - "Check mypy (validate type checking works)"
+      - "Check ruff (validate linting works)"
+      - "Check git (validate repo state)"
+      - "Generate tool_health.yaml report"
+    tests:
+      - "test_validate_pytest"
+      - "test_validate_mypy"
+      - "test_validate_ruff"
+      - "test_validate_git"
+      - "test_generate_health_report"
+  
+  - id: "AC-DEP-002-04"
+    description: "MCP server bootstrap starts and validates connectivity"
+    verification: "MCP server running on port 3000, health check passes"
+    implementation:
+      - "Start cortex/mcp/server.py as subprocess"
+      - "Poll health endpoint (http://localhost:3000/health)"
+      - "Validate tool registry loaded (14+ tools)"
+      - "Register MCP server with Claude Desktop config"
+    tests:
+      - "test_mcp_server_starts"
+      - "test_mcp_health_endpoint"
+      - "test_mcp_tools_registered"
+      - "test_claude_desktop_config_updated"
+  
+  - id: "AC-DEP-002-05"
+    description: "Dependency conflict resolver handles multi-repo scenarios"
+    verification: "Conflict resolution report generated for D:\\PROJECTS\\*"
+    implementation:
+      - "Scan D:\\PROJECTS\\* for requirements.txt"
+      - "Build dependency graph (package → versions across repos)"
+      - "Detect conflicts (KASHKOLE needs pandas 2.0, CORTEX needs 1.5)"
+      - "Suggest resolution strategy (shared venv vs isolated)"
+      - "Generate conflict_resolution_report.yaml"
+    tests:
+      - "test_scan_multi_repo_requirements"
+      - "test_build_dependency_graph"
+      - "test_detect_version_conflicts"
+      - "test_suggest_resolution_strategy"
+      - "test_generate_conflict_report"
+
+deliverables:
+  code:
+    - "cortex/orchestrators/setup_orchestrator.py"
+    - "cortex/orchestrators/vscode_configurator.py"
+    - "cortex/orchestrators/toolchain_validator.py"
+    - "cortex/orchestrators/mcp_bootstrapper.py"
+    - "cortex/orchestrators/dependency_resolver.py"
+  
+  config:
+    - ".vscode/settings.json (auto-generated)"
+    - ".vscode/extensions.json (recommended extensions)"
+    - ".vscode/tasks.json (pytest, MCP launcher)"
+    - "tool_health.yaml (toolchain validation report)"
+    - "conflict_resolution_report.yaml (multi-repo dependencies)"
+  
+  tests:
+    - "tests/orchestrators/test_setup_orchestrator.py (12 tests)"
+    - "tests/orchestrators/test_vscode_configurator.py (5 tests)"
+    - "tests/orchestrators/test_toolchain_validator.py (6 tests)"
+    - "tests/orchestrators/test_mcp_bootstrapper.py (5 tests)"
+    - "tests/orchestrators/test_dependency_resolver.py (6 tests)"
+
+dependencies:
+  requires: 
+    - "PHASE-DEPLOYMENT-001-sanitizer (clean production state)"
+  blocks: 
+    - "PHASE-DEPLOYMENT-003-mcp-expansion"
+
+completion_verification:
+  success_criteria:
+    - "All 34 onboarding tests passing"
+    - "setup_orchestrator.py completes in <5 minutes"
+    - ".vscode/settings.json auto-generated correctly"
+    - "MCP server starts and passes health check"
+    - "Multi-repo conflict report generated"
+  validation_command: "python cortex/orchestrators/setup_orchestrator.py --dry-run"
+
+governance_compliance:
+  - "CORE-005: Portable paths (pathlib only)"
+  - "CORE-008: Tests before implementation"
+  - "CORE-011: All functions typed"
+  - "CORE-012: Google docstrings"
+  - "CORE-026: Git checkpoint before major setup changes"
+
+notes: |
+  This phase implements the "zero-config" requirement from chat01.md.
+  Developer experience flow:
+  1. git clone https://github.com/asifhussain60/CORTEX
+  2. python cortex/orchestrators/setup_orchestrator.py
+  3. CORTEX ready in <5 minutes
+  
+  Multi-repo awareness (D:\PROJECTS\*) ensures CORTEX can work across:
+  - KASHKOLE (financial domain)
+  - KSESSIONS (session management)
+  - Other production repos
