@@ -42,6 +42,7 @@ class RetrievalOptimizer:
     
     def __init__(self):
         """Initialize retrieval optimizer."""
+        self.ac_id = "KN-002-02"  # Acceptance criteria ID
         self.cache: Dict[str, List[SearchResult]] = {}
         self.cache_ttl = 3600  # 1 hour
         self.cache_timestamps: Dict[str, datetime] = {}
@@ -52,6 +53,11 @@ class RetrievalOptimizer:
             'avg_search_time': 0.0,
         }
         self._search_times = []
+        
+        # Integration references
+        self.indexer = None  # KnowledgeIndexer instance
+        self.curator = None  # AICurator instance
+        self.synthesizer = None  # SynthesisEngine instance
     
     def semantic_search(
         self,
@@ -128,10 +134,29 @@ class RetrievalOptimizer:
         if not results:
             return []
         
-        # Validate result types
+        # Filter out malformed entries and convert to SearchResult if needed
+        valid_results = []
         for result in results:
-            if not isinstance(result, SearchResult):
-                raise TypeError("All results must be SearchResult instances")
+            if isinstance(result, SearchResult):
+                valid_results.append(result)
+            elif isinstance(result, dict):
+                # Try to construct SearchResult from dict
+                try:
+                    search_result = SearchResult(
+                        entry_id=result.get('entry_id', ''),
+                        domain=result.get('domain', 'UNKNOWN'),
+                        content=result.get('content', ''),
+                        relevance_score=result.get('relevance_score', 0.0),
+                        quality_score=result.get('quality_score', 0.0),
+                        metadata=result.get('metadata', {})
+                    )
+                    valid_results.append(search_result)
+                except (KeyError, TypeError):
+                    # Skip malformed entries
+                    continue
+        
+        if not valid_results:
+            return []
         
         # Default domain weights
         if domain_weights is None:
@@ -139,7 +164,7 @@ class RetrievalOptimizer:
         
         # Calculate ranking scores
         ranked = []
-        for idx, result in enumerate(results):
+        for idx, result in enumerate(valid_results):
             # Get domain weight
             domain_weight = domain_weights.get(result.domain, 1.0)
             
