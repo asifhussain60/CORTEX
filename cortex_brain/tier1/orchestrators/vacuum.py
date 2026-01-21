@@ -98,117 +98,197 @@ class VacuumOrchestrator:
             cls._instance = cls()
         return cls._instance
     
-    def register_cleaner(self, cleaner_id: str, cleaner: "cleaners.CleanerInterface") -> Result:
+    def register_cleaner(self, cleaner_class: Any, config: Dict[str, Any]) -> Result:
         """Register a cleaner.
         
         Args:
-            cleaner_id: Unique cleaner ID
-            cleaner: Cleaner instance
+            cleaner_class: Cleaner class to instantiate
+            config: Configuration for the cleaner
             
         Returns:
             Result containing success or error
         """
         try:
-            self._registry.register(cleaner_id, cleaner)
+            # Instantiate the cleaner with config
+            cleaner_instance = cleaner_class(config)
+            cleaner_id = cleaner_instance.domain
+            
+            # Register the instance
+            self._registry.register(cleaner_id, cleaner_instance)
             self._audit_trail.append({
                 "timestamp": datetime.now().isoformat(),
                 "action": "register_cleaner",
                 "cleaner_id": cleaner_id,
-                "cleaner_name": cleaner.name,
+                "cleaner_name": cleaner_instance.name,
             })
             return Ok(None)
         except Exception as e:
             return Err(str(e))
     
-    def analyze(self) -> Result:
-        """Analyze with all registered cleaners.
+    def analyze(self, cleaner_id: Optional[str] = None) -> Any:
+        """Analyze with registered cleaners.
         
+        Args:
+            cleaner_id: Optional specific cleaner to analyze. If None, analyzes all.
+            
         Returns:
-            Result containing analysis results or error
+            Analysis result or dict of results
         """
         try:
             self._state = OrchestratorState.ANALYZING
-            analyses: Dict[str, Any] = {}
             
-            for cleaner_id in self._registry.list_cleaners():
+            if cleaner_id:
+                # Analyze specific cleaner
                 cleaner = self._registry.get(cleaner_id)
-                if cleaner:
-                    analysis = cleaner.analyze()
-                    analyses[cleaner_id] = analysis
-                    self._latest_analyses[cleaner_id] = analysis
-            
-            self._audit_trail.append({
-                "timestamp": datetime.now().isoformat(),
-                "action": "analyze",
-                "cleaners_analyzed": len(analyses),
-            })
-            
-            return Ok(analyses)
+                if not cleaner:
+                    raise ValueError(f"Cleaner {cleaner_id} not found")
+                analysis = cleaner.analyze()
+                self._latest_analyses[cleaner_id] = analysis
+                
+                self._audit_trail.append({
+                    "timestamp": datetime.now().isoformat(),
+                    "action": "analyze",
+                    "cleaner_id": cleaner_id,
+                })
+                
+                return analysis
+            else:
+                # Analyze all cleaners
+                analyses: Dict[str, Any] = {}
+                
+                for cid in self._registry.list_cleaners():
+                    cleaner = self._registry.get(cid)
+                    if cleaner:
+                        analysis = cleaner.analyze()
+                        analyses[cid] = analysis
+                        self._latest_analyses[cid] = analysis
+                
+                self._audit_trail.append({
+                    "timestamp": datetime.now().isoformat(),
+                    "action": "analyze",
+                    "cleaners_analyzed": len(analyses),
+                })
+                
+                return Ok(analyses)
         except Exception as e:
             self._state = OrchestratorState.FAILED
             return Err(str(e))
     
-    def execute(self, plans: Dict[str, Dict[str, Any]]) -> Result:
+    def execute(self, plan_or_cleaner_id: Any = None, plan: Optional[Dict[str, Any]] = None) -> Any:
         """Execute cleaning plans.
         
         Args:
-            plans: Mapping of cleaner_id to cleaning plan
+            plan_or_cleaner_id: Either a cleaner_id string or a plan dict
+            plan: Optional execution plan (if first arg is cleaner_id)
             
         Returns:
-            Result containing execution reports or error
+            Execution report or dict of reports
         """
         try:
             self._state = OrchestratorState.EXECUTING
-            reports: Dict[str, Any] = {}
             
-            for cleaner_id, plan in plans.items():
+            # Handle both call signatures for backwards compatibility
+            if isinstance(plan_or_cleaner_id, str):
+                # Specific cleaner: execute(cleaner_id, plan)
+                cleaner_id = plan_or_cleaner_id
                 cleaner = self._registry.get(cleaner_id)
-                if cleaner:
-                    report = cleaner.execute(plan)
-                    reports[cleaner_id] = report
-                    self._latest_reports[cleaner_id] = report
-            
-            self._state = OrchestratorState.COMPLETED
-            self._audit_trail.append({
-                "timestamp": datetime.now().isoformat(),
-                "action": "execute",
-                "cleaners_executed": len(reports),
-            })
-            
-            return Ok(reports)
+                if not cleaner:
+                    raise ValueError(f"Cleaner {cleaner_id} not found")
+                
+                exec_plan = plan or {}
+                report = cleaner.execute(exec_plan)
+                self._latest_reports[cleaner_id] = report
+                
+                self._audit_trail.append({
+                    "timestamp": datetime.now().isoformat(),
+                    "action": "execute",
+                    "cleaner_id": cleaner_id,
+                })
+                
+                return report
+            elif isinstance(plan_or_cleaner_id, dict):
+                # All cleaners: execute(plans_dict)
+                reports: Dict[str, Any] = {}
+                
+                for cleaner_id, plan_item in plan_or_cleaner_id.items():
+                    cleaner = self._registry.get(cleaner_id)
+                    if cleaner:
+                        report = cleaner.execute(plan_item)
+                        reports[cleaner_id] = report
+                        self._latest_reports[cleaner_id] = report
+                
+                self._state = OrchestratorState.COMPLETED
+                self._audit_trail.append({
+                    "timestamp": datetime.now().isoformat(),
+                    "action": "execute",
+                    "cleaners_executed": len(reports),
+                })
+                
+                return Ok(reports)
+            else:
+                raise TypeError("Invalid execute() call signature")
         except Exception as e:
             self._state = OrchestratorState.FAILED
             return Err(str(e))
     
-    def rollback(self) -> Result:
-        """Rollback all recent changes.
+    def rollback(self, cleaner_id: Optional[str] = None) -> Any:
+        """Rollback changes.
         
+        Args:
+            cleaner_id: Optional specific cleaner to rollback. If None, rolls back all.
+            
         Returns:
-            Result containing rollback results or error
+            Rollback result or dict of results
         """
         try:
-            rollback_results: Dict[str, Any] = {}
-            
-            for cleaner_id in self._registry.list_cleaners():
+            if cleaner_id:
+                # Rollback specific cleaner
                 cleaner = self._registry.get(cleaner_id)
-                if cleaner:
-                    result = cleaner.rollback()
-                    rollback_results[cleaner_id] = result
-            
-            self._state = OrchestratorState.ROLLED_BACK
-            self._audit_trail.append({
-                "timestamp": datetime.now().isoformat(),
-                "action": "rollback",
-                "cleaners_rolled_back": len(rollback_results),
-            })
-            
-            return Ok(rollback_results)
+                if not cleaner:
+                    raise ValueError(f"Cleaner {cleaner_id} not found")
+                
+                result = cleaner.rollback()
+                
+                self._audit_trail.append({
+                    "timestamp": datetime.now().isoformat(),
+                    "action": "rollback",
+                    "cleaner_id": cleaner_id,
+                })
+                
+                return result
+            else:
+                # Rollback all cleaners
+                rollback_results: Dict[str, Any] = {}
+                
+                for cid in self._registry.list_cleaners():
+                    cleaner = self._registry.get(cid)
+                    if cleaner:
+                        result = cleaner.rollback()
+                        rollback_results[cid] = result
+                
+                self._state = OrchestratorState.ROLLED_BACK
+                self._audit_trail.append({
+                    "timestamp": datetime.now().isoformat(),
+                    "action": "rollback",
+                    "cleaners_rolled_back": len(rollback_results),
+                })
+                
+                return Ok(rollback_results)
         except Exception as e:
             self._state = OrchestratorState.FAILED
             return Err(str(e))
     
     def get_state(self) -> OrchestratorState:
         """Get current orchestrator state.
+        
+        Returns:
+            Current state
+        """
+        return self._state
+    
+    @property
+    def state(self) -> OrchestratorState:
+        """State property for convenient access.
         
         Returns:
             Current state
@@ -252,6 +332,59 @@ class VacuumOrchestrator:
             List of cleaner IDs
         """
         return self._registry.list_cleaners()
+    
+    def list_cleaners(self) -> List[str]:
+        """Alias for list_registered_cleaners().
+        
+        Returns:
+            List of cleaner IDs
+        """
+        return self.list_registered_cleaners()
+    
+    def has_cleaner(self, cleaner_id: str) -> bool:
+        """Check if a cleaner is registered.
+        
+        Args:
+            cleaner_id: Cleaner ID to check
+            
+        Returns:
+            True if registered, False otherwise
+        """
+        return self._registry.get(cleaner_id) is not None
+    
+    def generate_report(self) -> OrchestrationReport:
+        """Generate orchestration report.
+        
+        Returns:
+            OrchestrationReport with current state and stats
+        """
+        stats = VacuumStats(
+            start_time=datetime.now().isoformat(),
+            end_time=datetime.now().isoformat(),
+            duration_seconds=0.0,
+            files_processed=sum(
+                getattr(self._latest_analyses.get(cid, {}), 'files_scanned', 0)
+                for cid in self._registry.list_cleaners()
+            ) if self._latest_analyses else 0,
+            cleaners_used=len(self._registry.list_cleaners()),
+            issues_fixed=sum(
+                getattr(self._latest_reports.get(cid, {}), 'actions_taken', 0)
+                for cid in self._registry.list_cleaners()
+            ) if self._latest_reports else 0,
+            errors_encountered=len(self._audit_trail),
+        )
+        
+        return OrchestrationReport(
+            state=self._state,
+            stats=stats,
+            details={
+                "cleaners": self._registry.list_cleaners(),
+                "analyses": len(self._latest_analyses),
+                "reports": len(self._latest_reports),
+                "audit_entries": len(self._audit_trail),
+            },
+            errors=[],
+        )
 
 
 __all__ = ["OrchestratorState", "VacuumStrategy", "VacuumStats", "OrchestrationReport", "VacuumOrchestrator"]
