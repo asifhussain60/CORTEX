@@ -33,6 +33,9 @@ class AuditOperationType(Enum):
     APPROVE = "approve"
     REJECT = "reject"
     ESCALATE = "escalate"
+    AC_START = "ac_start"
+    AC_EXECUTE = "ac_execute"
+    AC_COMPLETE = "ac_complete"
 
 
 @dataclass
