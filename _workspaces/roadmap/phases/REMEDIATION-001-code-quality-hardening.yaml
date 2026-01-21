@@ -1,0 +1,332 @@
+# Phase REMEDIATION-001: Code Quality Hardening
+# Addresses 137 identified code quality issues across CORTEX codebase
+# Authority: BRITTLENESS_ANALYSIS.yaml, TECHNICAL_DEBT_ANALYSIS.yaml, CORE_VIOLATIONS_DETAILED.md
+# Date: 2026-01-21
+# Priority: P0-CRITICAL
+# Machine: ah
+
+metadata:
+  phase_id: "REMEDIATION-001-code-quality-hardening"
+  title: "Code Quality Hardening - Critical Path Stabilization"
+  description: |
+    Production stabilization phase addressing 137 identified issues:
+    - 12 CRITICAL severity: bare except, resource leaks, unhandled exceptions
+    - 28 HIGH severity: missing cleanup, type safety, exception suppression
+    - 45 MEDIUM severity: validation patterns, configuration parsing, logging
+    - 52 LOW severity: documentation, naming, minor refactoring
+    
+    Focuses on stability, observability, and production readiness.
+  
+  priority: "P0-CRITICAL"
+  estimated_effort: "5-7 days"
+  status: "NOT_STARTED"
+  blocks_production: true
+  machine: "ah"
+  depends_on:
+    - "PHASE-DEPLOYMENT-006-profiles"  # After main track complete
+
+executive_summary: |
+  Code quality analysis identified 137 defects across CORTEX codebase.
+  This phase systematically remediates CRITICAL and HIGH severity issues:
+  
+  **CRITICAL (12):**
+  - Bare except: clauses masking errors (5 files)
+  - Database connection leaks (3 files)
+  - Broad exception suppression (4 files)
+  - Single point of failure without fallback (1 file)
+  - Unhandled parse errors in critical paths (2 files)
+  
+  **HIGH (28):**
+  - Missing resource cleanup (6 files)
+  - Type safety violations (8 files)
+  - Inconsistent error handling (7 files)
+  - Logging gaps (4 files)
+  - Configuration validation issues (3 files)
+  
+  **DELIVERY:**
+  - All CRITICAL issues resolved (12/12)
+  - All HIGH issues resolved (28/28)
+  - Enhanced exception handling library
+  - Automated violation detection (pre-commit)
+  - Production health check framework
+
+current_state:
+  critical_count: 12
+  high_count: 28
+  medium_count: 45
+  low_count: 52
+  total_issues: 137
+  
+  affected_files:
+    - "tests/test_ac_ar_010_03_imports.py (bare except: x3)"
+    - "tests/unit/test_conversation_protocol_transactions.py (bare except: x2)"
+    - "cortex/brain/mcp/tools/validate_consolidation.py (bare except: + parse errors)"
+    - "cortex/tools/toolkit/ac_fix_001_06_regenerate.py (conn leak)"
+    - "cortex/infrastructure/connection_pool.py (suppression + health check)"
+    - "cortex/infrastructure/database.py (suppression x3)"
+    - "cortex/infrastructure/audit_logger.py (suppression)"
+    - "+9 more files with HIGH severity issues"
+  
+  production_risk: "HIGH - Silent failures hide bugs, resource exhaustion possible"
+
+acceptance_criteria:
+  
+  - id: "AC-REM-001-01"
+    description: "All CRITICAL bare except: clauses replaced with specific handling"
+    verification: "Zero bare except: in codebase (validated by linter)"
+    priority: "P0"
+    implementation:
+      - "Fix tests/test_ac_ar_010_03_imports.py (lines 42, 66, 385)"
+      - "Fix tests/unit/test_conversation_protocol_transactions.py (lines 136, 195)"
+      - "Fix cortex/brain/mcp/tools/validate_consolidation.py (line 205)"
+      - "Add except-specific logging for each case"
+      - "Document error recovery strategy per file"
+    tests:
+      - "test_import_validation_specific_exceptions"
+      - "test_protocol_transaction_exception_handling"
+      - "test_validate_consolidation_error_recovery"
+      - "test_no_bare_except_clauses (codebase-wide)"
+    
+
+  - id: "AC-REM-001-02"
+    description: "Database connection leaks eliminated via context managers"
+    verification: "All DB connections use context managers or try/finally"
+    priority: "P0"
+    implementation:
+      - "Refactor cortex/tools/toolkit/ac_fix_001_06_regenerate.py (lines 43, 46, 66)"
+      - "Audit all sqlite3.connect() calls (6 instances)"
+      - "Convert to context managers (with sqlite3.connect())"
+      - "Add integration tests with connection pool monitoring"
+      - "Document connection lifecycle patterns"
+    tests:
+      - "test_toolkit_fix_connection_cleanup"
+      - "test_no_connection_leaks (codebase-wide)"
+      - "test_connection_pool_exhaustion_recovery"
+      - "test_context_manager_cleanup_on_exception"
+    
+  - id: "AC-REM-001-03"
+    description: "Exception suppression replaced with logged handling"
+    verification: "All except Exception: pass replaced with specific + logging"
+    priority: "P0"
+    implementation:
+      - "Fix cortex/infrastructure/connection_pool.py (lines 300, 383)"
+      - "Fix cortex/infrastructure/database.py (lines 89, 105, 270)"
+      - "Fix cortex/infrastructure/audit_logger.py (line 106)"
+      - "Pattern: except SpecificError: logger.error(...); continue/raise"
+      - "Create exception handling guidelines"
+    tests:
+      - "test_connection_pool_error_logging"
+      - "test_database_operation_error_visibility"
+      - "test_audit_logger_cleanup_failures_logged"
+      - "test_exception_suppression_audit_trail"
+    
+  - id: "AC-REM-001-04"
+    description: "Connection pool health check with fallback"
+    verification: "Health check failure triggers fallback connection attempt"
+    priority: "P0"
+    implementation:
+      - "Implement health check with exponential backoff (max 3 retries)"
+      - "On N failures, create fresh connection attempt"
+      - "Log degraded state to monitoring (structured logging)"
+      - "Implement circuit breaker pattern (fail-open behavior)"
+      - "Document fallback strategy and recovery criteria"
+    tests:
+      - "test_health_check_failure_fallback"
+      - "test_exponential_backoff_retry"
+      - "test_circuit_breaker_open_state"
+      - "test_degraded_state_monitoring"
+    
+  - id: "AC-REM-001-05"
+    description: "Parse error handling in critical paths"
+    verification: "YAML/JSON parsing has specific exception recovery"
+    priority: "P0"
+    implementation:
+      - "Fix cortex/brain/mcp/tools/validate_consolidation.py (lines 225, 240)"
+      - "Pattern: except yaml.YAMLError: logger.error(problem_mark); raise"
+      - "Pattern: except json.JSONDecodeError: logger.error(lineno); raise"
+      - "Create ValidationError exception (includes diagnostics)"
+      - "Add error context to all parse failures"
+    tests:
+      - "test_yaml_parse_error_recovery"
+      - "test_json_parse_error_diagnostics"
+      - "test_consolidation_file_validation_errors"
+      - "test_parse_error_audit_trail"
+    
+  - id: "AC-REM-001-06"
+    description: "Code duplication analysis and refactoring roadmap"
+    verification: "DUP-001 through DUP-005 documented with refactoring plans"
+    priority: "P1"
+    implementation:
+      - "Document DUP-001: Audit logger consolidation plan"
+      - "Document DUP-002: Validation pattern standardization"
+      - "Document DUP-003: Configuration parsing unification"
+      - "Document DUP-004: Error message templates"
+      - "Document DUP-005: Initialization patterns"
+      - "Create refactoring phase (REMEDIATION-002) for HIGH-effort items"
+    tests:
+      - "test_duplication_analysis_completeness"
+      - "test_refactoring_plan_coverage"
+    
+  - id: "AC-REM-001-07"
+    description: "Violation detection automation"
+    verification: "Pre-commit hook blocks bare except:, unsuppressed exceptions, leaks"
+    priority: "P0"
+    implementation:
+      - "Create cortex/testing/violation_detector.py"
+      - "Implement checks:"
+      - "  - Bare except: detector (via AST)"
+      - "  - Exception suppression detector (except.*:.*pass)"
+      - "  - Resource cleanup detector (sqlite3.connect without context)"
+      - "  - Type annotation coverage (100% for public APIs)"
+      - "Add .pre-commit-config hook: violation-detector"
+      - "Exit code 1 if violations found"
+    tests:
+      - "test_detector_finds_bare_except"
+      - "test_detector_finds_suppression"
+      - "test_detector_finds_unclosed_resources"
+      - "test_detector_ignores_false_positives"
+      - "test_precommit_hook_blocks_violations"
+    
+  - id: "AC-REM-001-08"
+    description: "Production health check framework"
+    verification: "Integrated health checks in connection pool, audit logger, database"
+    priority: "P0"
+    implementation:
+      - "Create cortex/infrastructure/health_check.py"
+      - "Implement:"
+      - "  - DatabaseHealthCheck (connection test + query latency)"
+      - "  - AuditLoggerHealthCheck (write/read cycle test)"
+      - "  - ConnectionPoolHealthCheck (pool utilization + availability)"
+      - "Integrate into startup validation"
+      - "Create /health endpoint for monitoring (if API exists)"
+      - "Log health status to test audit trail"
+    tests:
+      - "test_database_health_check"
+      - "test_audit_logger_health_check"
+      - "test_connection_pool_health_check"
+      - "test_health_check_failure_recovery"
+      - "test_health_endpoint_returns_status"
+    
+  - id: "AC-REM-001-09"
+    description: "Core governance violations remediation"
+    verification: "All CORE-008, CORE-011, CORE-012, CORE-013 violations resolved"
+    priority: "P0"
+    implementation:
+      - "Create cortex/testing/governance_validator.py"
+      - "Implement checkers:"
+      - "  - CORE-008: Test-first validation (test timestamp < implementation)"
+      - "  - CORE-011: Type annotation coverage (100% on functions)"
+      - "  - CORE-012: Google docstring validation"
+      - "  - CORE-013: No bare except: violations"
+      - "Integrate into CI/CD (pytest plugin)"
+      - "Generate governance compliance report"
+    tests:
+      - "test_governance_validator_all_rules"
+      - "test_compliance_report_generation"
+      - "test_ci_integration_blocks_violations"
+    
+  - id: "AC-REM-001-10"
+    description: "Environment assumption validation"
+    verification: "All 15 environment assumptions documented and validated"
+    priority: "P1"
+    implementation:
+      - "Document assumptions:"
+      - "  - Python 3.11+ (validate in startup)"
+      - "  - SQLite3 available (test connectivity)"
+      - "  - YAML/JSON parsers available (test import)"
+      - "  - Logging infrastructure initialized (check handler count)"
+      - "  - Filesystem permissions (create/read/delete test)"
+      - "Create cortex/infrastructure/environment_validator.py"
+      - "Add startup validation (fail fast if assumptions violated)"
+      - "Log validation results to test audit trail"
+    tests:
+      - "test_python_version_check"
+      - "test_sqlite3_connectivity"
+      - "test_yaml_parser_availability"
+      - "test_filesystem_permissions"
+      - "test_logging_infrastructure"
+      - "test_startup_validation_comprehensive"
+
+deliverables:
+  
+  code:
+    - "cortex/infrastructure/health_check.py (health monitoring)"
+    - "cortex/testing/violation_detector.py (pre-commit hook)"
+    - "cortex/testing/governance_validator.py (CI/CD integration)"
+    - "cortex/infrastructure/environment_validator.py (startup checks)"
+    - "cortex/common/exceptions.py (ValidationError, RecoveryableError types)"
+    - "Fixed files x12 (bare except: + parse errors + leaks)"
+    - "Fixed files x6 (exception suppression with logging)"
+  
+  config:
+    - ".pre-commit-config.yaml (violation-detector hook)"
+    - "cortex_brain/tier0/governance/exception-handling-standards.yaml"
+    - "docs/error-handling-patterns.md (in docs/ folder only)"
+  
+  tests:
+    - "tests/test_violation_detector.py"
+    - "tests/test_governance_validator.py"
+    - "tests/test_health_checks.py"
+    - "tests/test_environment_validator.py"
+    - "tests/test_exception_handling_patterns.py"
+    - "45+ test cases across acceptance criteria"
+
+completion_verification:
+  success_criteria:
+    - "All 12 CRITICAL issues resolved (test_critical_issue_fixes)"
+    - "All 28 HIGH issues resolved (test_high_issue_fixes)"
+    - "Zero bare except: clauses (test_no_bare_except_clauses)"
+    - "Zero exception suppression without logging (test_all_exceptions_logged)"
+    - "All CRITICAL tests passing (pytest tests/ -k critical)"
+    - "Governance compliance: CORE-008, 011, 012, 013 ✓"
+    - "Health check framework operational"
+    - "Pre-commit hook blocks violations"
+    - "Environment assumptions validated at startup"
+
+  testing:
+    total_test_cases: 45
+    test_categories:
+      - "Critical issue fixes: 12 tests"
+      - "High severity fixes: 12 tests"
+      - "Health checks: 8 tests"
+      - "Violation detection: 5 tests"
+      - "Governance compliance: 4 tests"
+      - "Integration tests: 4 tests"
+    
+    minimum_pass_rate: "98%"
+    coverage_target: "85% on modified files"
+
+  regression_validation:
+    - "All existing tests still pass (pytest tests/ -v)"
+    - "No new test failures introduced"
+    - "Performance unchanged (health checks < 50ms)"
+    - "No breaking API changes"
+
+timeline:
+  phase_1_critical_fixes: "Days 1-2"
+  phase_2_high_fixes: "Days 2-3"
+  phase_3_automation: "Days 4-5"
+  phase_4_integration: "Days 5-6"
+  phase_5_validation: "Day 7"
+
+notes: |
+  This phase focuses on STABILITY and OBSERVABILITY:
+  
+  1. **Stability**: Remove silent failures via specific exception handling
+  2. **Observability**: Log all errors for debugging and monitoring
+  3. **Resilience**: Add health checks and fallback mechanisms
+  4. **Compliance**: Enforce governance rules via automation
+  5. **Prevention**: Pre-commit hooks block future violations
+  
+  Medium/Low severity items (97 issues) documented in REMEDIATION-002
+  for post-production-launch improvement cycle.
+
+git_strategy:
+  commits:
+    - "ah: REMEDIATION-001-critical-fixes: bare except + leaks resolved"
+    - "ah: REMEDIATION-001-high-fixes: exception suppression + health checks"
+    - "ah: REMEDIATION-001-automation: violation detector + governance validator"
+    - "ah: REMEDIATION-001-complete: all tests passing, production ready"
+  
+  message_format: "ah: REMEDIATION-001-code-quality-hardening: {summary}"
+  tag: "v1.1.0-remediation-001"

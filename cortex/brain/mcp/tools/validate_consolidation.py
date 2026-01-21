@@ -202,7 +202,17 @@ class ConsolidationValidator:
                 for chunk in iter(lambda: f.read(8192), b''):
                     sha256_hash.update(chunk)
             return sha256_hash.hexdigest()
-        except:
+        except FileNotFoundError:
+            import logging
+            logging.error(f"File not found: {file_path}")
+            return "ERROR_FILE_NOT_FOUND"
+        except IOError as e:
+            import logging
+            logging.error(f"Cannot read file {file_path}: {e}")
+            return "ERROR_READING_FILE"
+        except Exception as e:
+            import logging
+            logging.error(f"Unexpected error reading {file_path}: {e}")
             return "ERROR_READING_FILE"
     
     def validate_consolidated(self) -> Tuple[bool, List[str]]:
