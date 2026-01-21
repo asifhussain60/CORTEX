@@ -1,0 +1,122 @@
+---
+# Tier 3 Knowledge Governance Rules
+# AC: KN-003-01 - Tier 3 Knowledge Governance
+
+metadata:
+  ac_id: "KN-003-01"
+  title: "Tier 3 Knowledge Governance"
+  version: "1.0"
+  updated: "2026-01-20"
+
+rules:
+  - rule_id: "KGR-001"
+    domain: "GOVERNANCE"
+    rule_type: "required_field"
+    description: "All governance entries must have entry_id, domain, title, and ac_ids"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "KGR-002"
+    domain: "INTENT-ROUTING"
+    rule_type: "validation"
+    description: "Intent routing entries must specify classification methods"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "KGR-003"
+    domain: "HALLUCINATION-PREVENTION"
+    rule_type: "constraint"
+    description: "Hallucination prevention entries must define detection strategies"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "KGR-004"
+    domain: "EXECUTION-ORCHESTRATION"
+    rule_type: "required_field"
+    description: "Orchestration entries must specify execution patterns"
+    severity: "warning"
+    enabled: true
+    
+  - rule_id: "KGR-005"
+    domain: "DATA-MANAGEMENT"
+    rule_type: "validation"
+    description: "Data management entries must define schema and validation rules"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "KGR-006"
+    domain: "OBSERVABILITY"
+    rule_type: "required_field"
+    description: "Observability entries must specify metrics and logging requirements"
+    severity: "warning"
+    enabled: true
+    
+  - rule_id: "KGR-007"
+    domain: "SECURITY"
+    rule_type: "constraint"
+    description: "Security entries must define threat models and mitigations"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "KGR-008"
+    domain: "API-DESIGN"
+    rule_type: "validation"
+    description: "API entries must specify endpoints and authentication methods"
+    severity: "warning"
+    enabled: true
+    
+  - rule_id: "KGR-009"
+    domain: "ML-MODELS"
+    rule_type: "required_field"
+    description: "ML model entries must define model architecture and training data"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "KGR-010"
+    domain: "KNOWLEDGE-CURATION"
+    rule_type: "validation"
+    description: "Curation entries must specify quality scoring criteria"
+    severity: "warning"
+    enabled: true
+    
+  - rule_id: "KGR-011"
+    domain: "TESTING-VALIDATION"
+    rule_type: "constraint"
+    description: "Testing entries must define test coverage and success criteria"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "KGR-012"
+    domain: "DEPLOYMENT"
+    rule_type: "required_field"
+    description: "Deployment entries must specify environments and rollback procedures"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "KGR-013"
+    domain: "DOCUMENTATION"
+    rule_type: "validation"
+    description: "Documentation entries must follow standard templates"
+    severity: "info"
+    enabled: true
+    
+  - rule_id: "KGR-014"
+    domain: "PERFORMANCE"
+    rule_type: "constraint"
+    description: "Performance entries must define SLAs and benchmarks"
+    severity: "warning"
+    enabled: true
+    
+  - rule_id: "KGR-015"
+    domain: "ARCHITECTURE"
+    rule_type: "required_field"
+    description: "Architecture entries must specify component relationships"
+    severity: "critical"
+    enabled: true
+    
+  - rule_id: "KGR-016"
+    domain: "ERROR-HANDLING"
+    rule_type: "validation"
+    description: "Error handling entries must define recovery strategies"
+    severity: "critical"
+    enabled: true

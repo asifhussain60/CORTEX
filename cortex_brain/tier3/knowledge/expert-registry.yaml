@@ -1,0 +1,70 @@
+---
+# Domain Expert Registry
+# AC: KN-003-02 - Domain Expert Registry
+
+metadata:
+  ac_id: "KN-003-02"
+  title: "Domain Expert Registry"
+  version: "1.0"
+  updated: "2026-01-20"
+
+experts:
+  - expert_id: "EXP-001"
+    name: "Dr. Sarah Chen"
+    email: "schen@cortex.ai"
+    domains:
+      - "GOVERNANCE"
+      - "INTENT-ROUTING"
+      - "ARCHITECTURE"
+    expertise_level: "expert"
+    active: true
+    
+  - expert_id: "EXP-002"
+    name: "James Rodriguez"
+    email: "jrodriguez@cortex.ai"
+    domains:
+      - "HALLUCINATION-PREVENTION"
+      - "SECURITY"
+      - "TESTING-VALIDATION"
+    expertise_level: "expert"
+    active: true
+    
+  - expert_id: "EXP-003"
+    name: "Dr. Maria Santos"
+    email: "msantos@cortex.ai"
+    domains:
+      - "EXECUTION-ORCHESTRATION"
+      - "PERFORMANCE"
+      - "OBSERVABILITY"
+    expertise_level: "expert"
+    active: true
+    
+  - expert_id: "EXP-004"
+    name: "Alex Kim"
+    email: "akim@cortex.ai"
+    domains:
+      - "DATA-MANAGEMENT"
+      - "API-DESIGN"
+      - "DOCUMENTATION"
+    expertise_level: "expert"
+    active: true
+    
+  - expert_id: "EXP-005"
+    name: "Dr. Priya Patel"
+    email: "ppatel@cortex.ai"
+    domains:
+      - "ML-MODELS"
+      - "KNOWLEDGE-CURATION"
+      - "ERROR-HANDLING"
+    expertise_level: "expert"
+    active: true
+    
+  - expert_id: "EXP-006"
+    name: "Michael Brown"
+    email: "mbrown@cortex.ai"
+    domains:
+      - "DEPLOYMENT"
+      - "OBSERVABILITY"
+      - "ARCHITECTURE"
+    expertise_level: "advanced"
+    active: true
