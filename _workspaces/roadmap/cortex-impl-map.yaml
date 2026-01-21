@@ -24,6 +24,20 @@ execution_config:
     notification_style: "concise"  # One sentence per phase completion
     auto_advance: true
     
+  execution_loop:
+    enabled: true
+    mode: "continuous"  # Execute ALL phases for machine without pausing
+    continue_until: "all_phases_complete_or_blocker"
+    max_iterations: 100  # Safety limit to prevent infinite loops
+    
+  loop_termination:
+    - condition: "all_phases_for_machine have status == 'COMPLETED' or 'SKIPPED'"
+      action: "output final summary, stop execution"
+    - condition: "phase_status == 'BLOCKED' or 'DEPENDENCY_FAILED'"
+      action: "output blocker detail, stop execution"
+    - condition: "critical_error encountered"
+      action: "output error detail, request user intervention"
+    
   notification_format: "✓ {phase_id}: {one_sentence_summary} → Next: {next_phase_id}"
   
   forbidden_outputs:
@@ -43,14 +57,46 @@ execution_config:
     mac:
       strategy: "sequential_tdd"
       focus: "Core implementation, test collection fixes, module implementations"
-      phases: ["impl-export-completion", "impl-circular-import-fix", "PHASE-E-TDD-IMPLEMENTATION"]
+      phases: 
+        - phase_id: "impl-export-completion"
+          sequence: 1
+          required: true
+          machine: "mac"
+        - phase_id: "impl-circular-import-fix"
+          sequence: 2
+          required: true
+          machine: "mac"
+        - phase_id: "PHASE-E-TDD-IMPLEMENTATION"
+          sequence: 3
+          required: true
+          machine: "mac"
       estimated_duration: "17-23 days"
       blocking: true
       
     win:
       strategy: "parallel_validation"
       focus: "Infrastructure, validation, governance content"
-      phases: ["cortex-registry-001-migration", "impl-e2e-validation", "impl-cicd-validation", "impl-governance-content", "impl-features-registry-001"]
+      phases:
+        - phase_id: "cortex-registry-001-migration"
+          sequence: 1
+          required: true
+          machine: "win"
+        - phase_id: "impl-e2e-validation"
+          sequence: 2
+          required: true
+          machine: "win"
+        - phase_id: "impl-cicd-validation"
+          sequence: 3
+          required: true
+          machine: "win"
+        - phase_id: "impl-governance-content"
+          sequence: 4
+          required: true
+          machine: "win"
+        - phase_id: "impl-features-registry-001"
+          sequence: 5
+          required: true
+          machine: "win"
       estimated_duration: "10-14 days"
       blocking: false
       depends_on_mac_completion: "PHASE-E-TDD-IMPLEMENTATION"
@@ -1384,6 +1430,101 @@ remediation_completion_matrix:
       2. Create separate Phase 26+ roadmap for stubs and future enhancements
       3. Prioritize by business value (dashboard, MCP tools, knowledge protocol)
       4. Update cortex-master.yaml per cortex-builder.prompt.md§Phase0
+
+phase_execution_tracking:
+  description: "Real-time phase execution state for autonomous machine-specific loops"
+  
+  mac_track_state:
+    machine: "mac"
+    current_phase_index: 0  # 0=impl-export-completion, 1=impl-circular-import-fix, 2=PHASE-E
+    total_phases: 3
+    phases_completed: 0
+    loop_active: false
+    last_execution: null
+    next_execution: null
+    
+    phase_states:
+      - phase_id: "impl-export-completion"
+        machine: "mac"
+        sequence: 1
+        status: "PENDING"  # PENDING | EXECUTING | COMPLETED | BLOCKED | SKIPPED
+        executed_by: null  # which chat/invocation
+        start_time: null
+        end_time: null
+        duration_seconds: null
+        passed: false
+        error_message: null
+        next_phase: "impl-circular-import-fix"
+        
+      - phase_id: "impl-circular-import-fix"
+        machine: "mac"
+        sequence: 2
+        status: "PENDING"
+        executed_by: null
+        start_time: null
+        end_time: null
+        duration_seconds: null
+        passed: false
+        error_message: null
+        dependencies: ["impl-export-completion"]
+        next_phase: "PHASE-E-TDD-IMPLEMENTATION"
+        
+      - phase_id: "PHASE-E-TDD-IMPLEMENTATION"
+        machine: "mac"
+        sequence: 3
+        status: "PENDING"
+        executed_by: null
+        start_time: null
+        end_time: null
+        duration_seconds: null
+        passed: false
+        error_message: null
+        dependencies: ["impl-circular-import-fix"]
+        next_phase: null
+        
+  win_track_state:
+    machine: "win"
+    current_phase_index: 0
+    total_phases: 5
+    phases_completed: 0
+    loop_active: false
+    blocked_by_dependency: "PHASE-E-TDD-IMPLEMENTATION"
+    
+    phase_states:
+      - phase_id: "cortex-registry-001-migration"
+        machine: "win"
+        sequence: 1
+        status: "BLOCKED_BY_DEPENDENCY"  # Depends on PHASE-E completion
+        dependencies: ["PHASE-E-TDD-IMPLEMENTATION"]
+        next_phase: "impl-e2e-validation"
+        
+      - phase_id: "impl-e2e-validation"
+        machine: "win"
+        sequence: 2
+        status: "BLOCKED_BY_DEPENDENCY"
+        dependencies: ["cortex-registry-001-migration"]
+        next_phase: "impl-cicd-validation"
+        
+      - phase_id: "impl-cicd-validation"
+        machine: "win"
+        sequence: 3
+        status: "BLOCKED_BY_DEPENDENCY"
+        dependencies: ["impl-e2e-validation"]
+        next_phase: "impl-governance-content"
+        
+      - phase_id: "impl-governance-content"
+        machine: "win"
+        sequence: 4
+        status: "BLOCKED_BY_DEPENDENCY"
+        dependencies: ["impl-cicd-validation"]
+        next_phase: "impl-features-registry-001"
+        
+      - phase_id: "impl-features-registry-001"
+        machine: "win"
+        sequence: 5
+        status: "BLOCKED_BY_DEPENDENCY"
+        dependencies: ["impl-governance-content"]
+        next_phase: null
 
 summary:
   conclusion: |
