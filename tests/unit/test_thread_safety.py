@@ -86,12 +86,17 @@ class TestSpawnWithTimeoutJoin:
     
     def test_spawn_timeout_returns_none(self):
         """Task that times out returns None."""
+        from unittest.mock import patch
+        
         def long_task():
-            time.sleep(10)
+            # Simulate long-running task without actual sleep
+            # Test the timeout mechanism without waiting
+            import time
+            time.sleep(0.001)  # Minimal sleep, test passes timeout_sec=0.0001
         
         thread = spawn_with_timeout_join(
             target=long_task,
-            timeout_sec=0.01,
+            timeout_sec=0.00001,  # Very small timeout to test timeout behavior
             daemon=True
         )
         assert thread is None
