@@ -1499,12 +1499,12 @@ phase_execution_tracking:
   
   mac_track_state:
     machine: "mac"
-    current_phase_index: 1  # 0=impl-export-completion (COMPLETED), 1=impl-circular-import-fix, 2=PHASE-E
+    current_phase_index: 2  # 0=impl-export-completion (COMPLETED), 1=impl-circular-import-fix (COMPLETED), 2=PHASE-E
     total_phases: 3
-    phases_completed: 1
+    phases_completed: 2
     loop_active: true
-    last_execution: "2026-01-21T14:35:00Z"
-    next_execution: "2026-01-21T14:35:00Z"
+    last_execution: "2026-01-21T14:36:00Z"
+    next_execution: "2026-01-21T14:36:00Z"
     
     phase_states:
       - phase_id: "impl-export-completion"
@@ -1523,15 +1523,16 @@ phase_execution_tracking:
       - phase_id: "impl-circular-import-fix"
         machine: "mac"
         sequence: 2
-        status: "PENDING"
-        executed_by: null
-        start_time: null
-        end_time: null
-        duration_seconds: null
-        passed: false
+        status: "COMPLETED"
+        executed_by: "machine:mac autonomous loop"
+        start_time: "2026-01-21T14:35:00Z"
+        end_time: "2026-01-21T14:36:00Z"
+        duration_seconds: 60
+        passed: true
         error_message: null
         dependencies: ["impl-export-completion"]
         next_phase: "PHASE-E-TDD-IMPLEMENTATION"
+        notes: "All 7598 tests collect with 0 RecursionErrors; circular import already resolved"
         
       - phase_id: "PHASE-E-TDD-IMPLEMENTATION"
         machine: "mac"
