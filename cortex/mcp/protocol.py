@@ -11,8 +11,13 @@ from enum import Enum
 class ErrorCode(Enum):
     """MCP error codes."""
     INVALID_REQUEST = "invalid_request"
+    INVALID_PARAMS = "invalid_params"
     METHOD_NOT_FOUND = "method_not_found"
     INTERNAL_ERROR = "internal_error"
+    EXECUTION_ERROR = "execution_error"
+    TIMEOUT = "timeout"
+    UNAUTHORIZED = "unauthorized"
+    NOT_FOUND = "not_found"
 
 
 class MCPError(Exception):
@@ -45,6 +50,49 @@ class ToolDefinition:
     parameters: list = field(default_factory=list)
     tags: list = field(default_factory=list)  # Tag list for categorization
     deprecated: bool = False  # Whether tool is deprecated
+    version: str = "1.0"  # Tool version
+    timeout_ms: Optional[int] = None  # Tool-specific timeout in milliseconds
+    
+    def validate_params(self, params: Dict[str, Any]) -> tuple[bool, Optional[str]]:
+        """Validate parameters against definition.
+        
+        Args:
+            params: Parameters to validate.
+            
+        Returns:
+            Tuple of (is_valid, error_message).
+        """
+        for param_def in self.parameters:
+            if isinstance(param_def, ToolParameter):
+                # Check required parameters
+                if param_def.required and param_def.name not in params:
+                    return False, f"Missing required parameter: {param_def.name}"
+                
+                # Check unknown parameters
+                if param_def.name in params:
+                    value = params[param_def.name]
+                    
+                    # Check type (basic type validation)
+                    if param_def.type == "number" and not isinstance(value, (int, float)):
+                        return False, f"Invalid type for {param_def.name}: expected number"
+                    if param_def.type == "string" and not isinstance(value, str):
+                        return False, f"Invalid type for {param_def.name}: expected string"
+                    
+                    # Check min/max
+                    if param_def.min_value is not None and isinstance(value, (int, float)):
+                        if value < param_def.min_value:
+                            return False, f"Value for {param_def.name} below minimum: {param_def.min_value}"
+                    if param_def.max_value is not None and isinstance(value, (int, float)):
+                        if value > param_def.max_value:
+                            return False, f"Value for {param_def.name} above maximum: {param_def.max_value}"
+        
+        # Check for unknown parameters
+        known_params = {p.name for p in self.parameters if isinstance(p, ToolParameter)}
+        for param_name in params:
+            if param_name not in known_params:
+                return False, f"Unknown parameter: {param_name}"
+        
+        return True, None
 
 
 @dataclass
@@ -85,6 +133,14 @@ class MCPTool:
             Execution result.
         """
         return {"status": "success"}
+    
+    def get_error_code(self) -> "ErrorCode":
+        """Get error code for failed execution.
+        
+        Returns:
+            ErrorCode: Default EXECUTION_ERROR.
+        """
+        return ErrorCode.EXECUTION_ERROR
 
 
 class ToolValidator:
