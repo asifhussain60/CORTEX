@@ -1,0 +1,175 @@
+# Phase DEPLOYMENT-005: Intelligent Version Migration
+# Seamless upgrade with intelligence preservation
+# Date: 2026-01-21
+# Priority: P1-HIGH
+# Authority: chat01.md requirements analysis (seamless upgrade)
+
+metadata:
+  phase_id: "PHASE-DEPLOYMENT-005-migration"
+  title: "Intelligent Version Migration and Upgrade System"
+  description: "Seamless CORTEX upgrades that preserve learned intelligence and augment with new capabilities"
+  priority: "P1-HIGH"
+  estimated_effort: "3 days"
+  status: "NOT_STARTED"
+  blocks_production: false
+  machine: "ah"
+
+executive_summary: |
+  CORTEX must upgrade seamlessly without losing learned intelligence:
+  - Detect new versions (GitHub releases, PyPI)
+  - Preserve governance.db, tier1 rules, learned patterns
+  - Augment existing intelligence (new tier0 rules ADD, not replace)
+  - Rollback capability if upgrade fails
+  - Zero-downtime upgrade protocol (blue-green deployment)
+
+current_state:
+  version_detection: "None"
+  intelligence_preservation: "None"
+  upgrade_automation: "Manual"
+  rollback_capability: "None"
+  zero_downtime: "None"
+
+acceptance_criteria:
+  - id: "AC-DEP-005-01"
+    description: "Version detection and compatibility matrix"
+    verification: "Upgrade orchestrator detects v1.3.0 available, shows compatibility"
+    implementation:
+      - "Create cortex/orchestrators/version_manager.py"
+      - "Read .cortex-version (current: v1.2.0)"
+      - "Check GitHub releases API (github.com/asifhussain60/CORTEX/releases)"
+      - "Check PyPI API (pypi.org/pypi/cortex/json)"
+      - "Build compatibility matrix (v1.2.0 → v1.3.0: compatible, minor upgrade)"
+      - "Display upgrade path (safe upgrade vs manual migration required)"
+    tests:
+      - "test_read_current_version"
+      - "test_check_github_releases"
+      - "test_check_pypi_releases"
+      - "test_build_compatibility_matrix"
+      - "test_display_upgrade_path"
+  
+  - id: "AC-DEP-005-02"
+    description: "Intelligence preservation engine snapshots current state"
+    verification: "Snapshot contains governance.db, tier1 rules, learned patterns"
+    implementation:
+      - "Create cortex/orchestrators/intelligence_preserver.py"
+      - "Snapshot governance.db → .cortex-snapshots/v1.2.0/governance.db"
+      - "Snapshot tier1/ → .cortex-snapshots/v1.2.0/tier1/"
+      - "Snapshot learned patterns (rule hit rates, routing decisions, duration baselines)"
+      - "Generate snapshot manifest (timestamp, version, files included)"
+      - "Validate snapshot integrity (hash chain verification)"
+    tests:
+      - "test_snapshot_governance_db"
+      - "test_snapshot_tier1_rules"
+      - "test_snapshot_learned_patterns"
+      - "test_generate_snapshot_manifest"
+      - "test_validate_snapshot_integrity"
+  
+  - id: "AC-DEP-005-03"
+    description: "Differential upgrade system applies only changes"
+    verification: "Upgrade from v1.2.0 to v1.3.0 applies delta, not full replacement"
+    implementation:
+      - "Download v1.3.0 package (GitHub release or PyPI)"
+      - "Extract release notes (CHANGELOG.md or GitHub release notes)"
+      - "Compute diff (new tier0 rules, modified modules, deprecated APIs)"
+      - "Apply delta (add new rules, update modules, keep tier1 intact)"
+      - "Run upgrade validation tests (all existing tests still pass)"
+    tests:
+      - "test_download_new_version"
+      - "test_extract_release_notes"
+      - "test_compute_upgrade_diff"
+      - "test_apply_delta_not_replace"
+      - "test_run_validation_tests"
+  
+  - id: "AC-DEP-005-04"
+    description: "Augmentation strategy adds new intelligence without replacing"
+    verification: "New tier0 rules ADD to existing, learned patterns preserved"
+    implementation:
+      - "New tier0 rules: Append to existing (CORE-001 to CORE-029 + CORE-030 added)"
+      - "Tier1 rules: Preserve (user customizations intact)"
+      - "Learned patterns: Merge (new baselines added, old baselines kept)"
+      - "Deprecated rules: Mark as deprecated (not deleted, for backwards compatibility)"
+    tests:
+      - "test_new_tier0_rules_append"
+      - "test_tier1_rules_preserved"
+      - "test_learned_patterns_merged"
+      - "test_deprecated_rules_marked"
+  
+  - id: "AC-DEP-005-05"
+    description: "Zero-downtime upgrade with blue-green deployment"
+    verification: "v1.2.0 and v1.3.0 run in parallel during upgrade"
+    implementation:
+      - "Blue-green deployment: Run v1.2.0 (blue) + v1.3.0 (green) in parallel"
+      - "Validation phase: Test v1.3.0 against production workload"
+      - "Cutover: Switch traffic from v1.2.0 → v1.3.0"
+      - "Rollback: If validation fails, revert to v1.2.0 (snapshot restore)"
+      - "Post-upgrade report: What changed, what preserved, any warnings"
+    tests:
+      - "test_blue_green_parallel_run"
+      - "test_validation_against_production"
+      - "test_cutover_to_new_version"
+      - "test_rollback_on_failure"
+      - "test_generate_upgrade_report"
+
+deliverables:
+  code:
+    - "cortex/orchestrators/version_manager.py"
+    - "cortex/orchestrators/intelligence_preserver.py"
+    - "cortex/orchestrators/upgrade_orchestrator.py"
+    - "cortex/orchestrators/rollback_orchestrator.py"
+    - "scripts/deployment/upgrade_cortex.py (CLI wrapper)"
+  
+  config:
+    - ".cortex-snapshots/ (intelligence preservation)"
+    - ".cortex-version (version tracking)"
+    - "CHANGELOG.md (release notes)"
+  
+  tests:
+    - "tests/orchestrators/test_version_manager.py (10 tests)"
+    - "tests/orchestrators/test_intelligence_preserver.py (8 tests)"
+    - "tests/orchestrators/test_upgrade_orchestrator.py (12 tests)"
+    - "tests/orchestrators/test_rollback_orchestrator.py (6 tests)"
+
+dependencies:
+  requires: 
+    - "PHASE-DEPLOYMENT-004-multi-repo-gov (governance profiles)"
+  blocks: 
+    - "PHASE-DEPLOYMENT-006-profiles"
+
+completion_verification:
+  success_criteria:
+    - "All 36 migration tests passing"
+    - "Upgrade from v1.0.0 to v1.1.0 preserves governance.db"
+    - "New tier0 rules added without replacing existing"
+    - "Learned patterns (rule hit rates, routing decisions) preserved"
+    - "Rollback successfully reverts to previous version"
+    - "Zero-downtime upgrade validated (blue-green deployment)"
+  validation_command: "pytest tests/orchestrators/test_*upgrade*.py -v"
+
+governance_compliance:
+  - "CORE-008: Tests before implementation"
+  - "CORE-011: All functions typed"
+  - "CORE-012: Google docstrings"
+  - "CORE-026: Git checkpoint before upgrade"
+  - "CORE-027: Audit trail for upgrade operations"
+
+notes: |
+  This phase implements the "seamless upgrade mechanism" requirement from chat01.md.
+  
+  Intelligence preservation strategy:
+  - Governance rule hit rates (CORE-008 enforced 1,247 times) → preserved
+  - Routing decision patterns (84% to BuilderOrchestrator) → preserved
+  - Operation duration baselines (p50/p95/p99) → merged with new baselines
+  - Error pattern history (brittle handler detection) → preserved
+  - Tier1 customizations (project-specific rules) → preserved
+  
+  Augmentation (not replacement):
+  - New tier0 rules: CORE-030, CORE-031, etc. → ADDED to existing
+  - New features: New MCP tools → ADDED to registry
+  - Bug fixes: Module updates → REPLACED only affected modules
+  - Breaking changes: Marked in CHANGELOG, migration guide provided
+  
+  Rollback safety:
+  - Snapshot before upgrade (governance.db, tier1/, learned patterns)
+  - Validation phase tests v1.3.0 before cutover
+  - If validation fails → restore snapshot, revert to v1.2.0
+  - Post-upgrade report shows what changed, what preserved

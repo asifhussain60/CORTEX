@@ -1,18 +1,18 @@
 # CORTEX Implementation Master Map
-# Version: 3.1-corrected
-# Date: 2026-01-20
-# Authority: Filesystem scan + test inventory + code analysis + hallucination remediation
-# Status: CORRECTED (22 false "IMPLEMENTED" claims removed, 6 verified implementations documented)
+# Version: 3.2-deployment-system
+# Date: 2026-01-21
+# Authority: Filesystem scan + test inventory + code analysis + chat01.md deployment requirements
+# Status: DEPLOYMENT SYSTEM ARCHITECTED (6 new phases, consolidates old deployment logic)
 
 metadata:
   title: "CORTEX Implementation Map"
-  description: "Truth-based roadmap reflecting actual implementation, tests, and MCP exposure (CORRECTED v3.1)"
+  description: "Truth-based roadmap reflecting actual implementation, tests, and MCP exposure (v3.2 with deployment system)"
   project: "CORTEX"
-  version: "3.9-machine-autonomous-tracks"
-  updated: "2026-01-21T08:00:00Z"
+  version: "3.2-deployment-system"
+  updated: "2026-01-21T14:00:00Z"
   governance_mode: "STRICT"
   hallucination_remediation: "22 false 'IMPLEMENTED' claims removed per Phase 0 AC-3"
-  latest_completion: "Tier3 Knowledge Ecosystem: 64/244 tests passing. GovernanceManager, ExpertRegistry, AICurator, KnowledgeIndexer, SynthesisEngine implemented."
+  latest_completion: "Win track complete (5 phases, 48 tests); Deployment system architected (6 phases, chat01.md requirements)"
   
 execution_config:
   autonomous_mode:
@@ -100,6 +100,38 @@ execution_config:
       estimated_duration: "10-14 days"
       blocking: false
       depends_on_mac_completion: "PHASE-E-TDD-IMPLEMENTATION"
+    
+    ah:
+      strategy: "deployment_system"
+      focus: "Production deployment, onboarding, multi-repo governance"
+      phases:
+        - phase_id: "PHASE-DEPLOYMENT-001-sanitizer"
+          sequence: 1
+          required: true
+          machine: "ah"
+        - phase_id: "PHASE-DEPLOYMENT-002-onboarding"
+          sequence: 2
+          required: true
+          machine: "ah"
+        - phase_id: "PHASE-DEPLOYMENT-003-mcp-expansion"
+          sequence: 3
+          required: true
+          machine: "ah"
+        - phase_id: "PHASE-DEPLOYMENT-004-multi-repo-gov"
+          sequence: 4
+          required: true
+          machine: "ah"
+        - phase_id: "PHASE-DEPLOYMENT-005-migration"
+          sequence: 5
+          required: true
+          machine: "ah"
+        - phase_id: "PHASE-DEPLOYMENT-006-profiles"
+          sequence: 6
+          required: true
+          machine: "ah"
+      estimated_duration: "17 days"
+      blocking: false
+      depends_on: []
   
 implementation_stats:
   codebase:
@@ -223,25 +255,28 @@ phases_implementation_status:
         machine: "win"
         ac_ids: 2
         tests: 11
-        status: "IMPLEMENTED"
+        status: "ABSORBED"
+        absorption_target: "PHASE-DEPLOYMENT-001-sanitizer (CI gating logic)"
         completion_date: "2026-01-21"
-        note: "Smoke, load, chaos test suites; conftest fixtures; CI/CD integration"
+        note: "Smoke/load/chaos tests preserved; deployment logic moved to DEPLOYMENT-001"
       
       - id: "impl-cicd-validation"
         title: "CICD Validation and Automation"
         machine: "win"
         ac_ids: 3
         tests: 9
-        status: "IMPLEMENTED"
+        status: "ABSORBED"
+        absorption_target: "PHASE-DEPLOYMENT-002-onboarding (CI/CD setup logic)"
         completion_date: "2026-01-21"
-        note: "GitHub Actions workflows, pre-commit hooks, rollback automation, deployment verification"
-      
       - id: "impl-governance-content"
         title: "Governance Rule Content Population"
         machine: "win"
         ac_ids: 4
         tests: 12
-        status: "IMPLEMENTED"
+        status: "ABSORBED"
+        absorption_target: "PHASE-DEPLOYMENT-004-multi-repo-gov (tier1 templates), PHASE-DEPLOYMENT-006-profiles (profile system)"
+        completion_date: "2026-01-21"
+        note: "Tier0/Tier1/Tier2 rules expanded; profile templates added for FinOps/Auth/ML/DevOps/Healthcare/Legal"
         completion_date: "2026-01-21"
         note: "Tier0/Tier1/Tier2 governance rules, 5 domains, 5 contexts, policy enforcement rules"
       
@@ -1804,18 +1839,206 @@ summary:
     ⏳ MAC TRACK: Planned (3 phases pending)
     ✅ WIN TRACK: COMPLETE (5/5 phases, 48/48 tests passing)
     ⏳ REMAINING: Non-critical design phases (21 stubs)
-    
-    PRODUCTION STATUS: ✅ READY FOR DEPLOYMENT
-  
   completion_criteria_production_ready:
     - "Zero production blockers" → ✅ ACHIEVED (2026-01-21 Win track complete)
     - "Zero brittleness" → ✅ ACHIEVED (impl-recovery-003, E2E validation)
-    - "Zero TDD errors" → ✅ IN PROGRESS (PHASE-E pending on Mac track)
+    - "Zero TDD errors" → ⏳ IN PROGRESS (PHASE-E pending on Mac track)
     - "Observable operations" → ✅ ACHIEVED (impl-ops-004)
-    - "All critical infrastructure" → ✅ ACHIEVED (Win track registry, CICD, governance)
+    - "All critical infrastructure" → ✅ ACHIEVED (Win track complete)
+    - "Production deployment system" → ⏳ ARCHITECTED (6 deployment phases planned, 17 days)
   
   completion_criteria_zero_stubs:
     not_met_after_phase_15: "21 stubs remain (design-only)"
     requires_separate_work: "Phase 16+ Future Work Roadmap (Mac track + design phases)"
     timeline: "12-16 weeks additional for full completion"
-    recommendation: "Win track complete; Mac track designs exist; stubs are architectural documentation"
+    recommendation: "Win track complete; Mac track designs exist; deployment system architected; stubs are architectural documentation"
+
+deployment_system_summary:
+  version: "1.0-architected"
+  date_architected: "2026-01-21"
+  authority: "chat01.md requirements analysis"
+  total_phases: 6
+  estimated_effort: "17 days"
+  machine: "win"
+  
+  requirements_implemented:
+    - "Clean production-ready main branch (PHASE-DEPLOYMENT-001)"
+    - "Day-zero data in databases/YAML files (PHASE-DEPLOYMENT-001)"
+    - "Zero-config onboarding orchestrator (PHASE-DEPLOYMENT-002)"
+    - "Auto-install requirements.txt (PHASE-DEPLOYMENT-002)"
+    - "VSCode settings automation (PHASE-DEPLOYMENT-002)"
+    - "MCP-first enforcement (PHASE-DEPLOYMENT-003)"
+    - "Multi-repo governance (PHASE-DEPLOYMENT-004)"
+    - "KASHKOLE/KSESSIONS support (PHASE-DEPLOYMENT-004)"
+    - "Seamless version upgrade (PHASE-DEPLOYMENT-005)"
+    - "Intelligence preservation (PHASE-DEPLOYMENT-005)"
+    - "Pre-built governance profiles (PHASE-DEPLOYMENT-006)"
+  
+  consolidation_strategy:
+    note: "Existing deployment-related phases absorbed into new deployment system"
+    impl_e2e_validation:
+      status: "ABSORBED into PHASE-DEPLOYMENT-001"
+      logic_moved: "CI integration, branch gating, health checks"
+      tests_preserved: "Smoke/load/chaos test suites remain in tests/e2e/"
+    impl_cicd_validation:
+      status: "ABSORBED into PHASE-DEPLOYMENT-002"
+      logic_moved: "GitHub Actions setup, pre-commit hooks, environment config"
+      tests_preserved: "CI/CD workflow tests remain in tests/cicd/"
+    impl_governance_content:
+      status: "EXPANDED into PHASE-DEPLOYMENT-004 + PHASE-DEPLOYMENT-006"
+      logic_moved: "Tier1 templates → DEPLOYMENT-004; Profile system → DEPLOYMENT-006"
+      tests_preserved: "Governance rule tests remain in tests/governance/"
+    phase_remediation_001:
+      status: "SUPERSEDED by new deployment phases"
+      note: "5-week remediation plan superseded by deployment system architecture"
+  
+  phase_dependencies:
+    PHASE-DEPLOYMENT-001:
+      requires: []
+      blocks: ["PHASE-DEPLOYMENT-002"]
+    PHASE-DEPLOYMENT-002:
+      requires: ["PHASE-DEPLOYMENT-001"]
+      blocks: ["PHASE-DEPLOYMENT-003"]
+    PHASE-DEPLOYMENT-003:
+      requires: ["PHASE-DEPLOYMENT-002"]
+      blocks: ["PHASE-DEPLOYMENT-004"]
+    PHASE-DEPLOYMENT-004:
+      requires: ["PHASE-DEPLOYMENT-003"]
+      blocks: ["PHASE-DEPLOYMENT-005"]
+    PHASE-DEPLOYMENT-005:
+      requires: ["PHASE-DEPLOYMENT-004"]
+      blocks: ["PHASE-DEPLOYMENT-006"]
+    PHASE-DEPLOYMENT-006:
+      requires: ["PHASE-DEPLOYMENT-005"]
+      blocks: []
+  
+  critical_path:
+    - "PHASE-DEPLOYMENT-001: Sanitizer (2 days)"
+    - "PHASE-DEPLOYMENT-002: Onboarding (3 days)"
+    - "PHASE-DEPLOYMENT-003: MCP expansion (4 days)"
+    - "PHASE-DEPLOYMENT-004: Multi-repo (3 days)"
+    - "PHASE-DEPLOYMENT-005: Migration (3 days)"
+    - "PHASE-DEPLOYMENT-006: Profiles (2 days)"
+    - "Total: 17 days sequential execution"
+  
+  multi_repo_support:
+    projects_supported:
+      - "CORTEX (governance engine)"
+      - "KASHKOLE (financial domain → FinOps profile)"
+      - "KSESSIONS (session management → Auth profile)"
+      - "[future projects with appropriate profiles]"
+    governance_propagation: "CORTEX/tier0 (immutable) → Projects/tier1 (domain-specific) → CORTEX validates all via MCP"
+    requires_separate_work: "Phase 16+ Future Work Roadmap (Mac track + design phases)"
+    timeline: "12-16 weeks additional for full completion"
+    recommendation: "Win track complete; Mac track designs exist; deployment system architected; stubs are architectural documentation"
+
+deployment_system_summary:
+  version: "1.0-architected"
+  date_architected: "2026-01-21"
+  authority: "chat01.md requirements analysis"
+  total_phases: 6
+  estimated_effort: "17 days"
+  machine: "win"
+  
+  requirements_implemented:
+    - "Clean production-ready main branch (PHASE-DEPLOYMENT-001)"
+    - "Day-zero data in databases/YAML files (PHASE-DEPLOYMENT-001)"
+    - "Zero-config onboarding orchestrator (PHASE-DEPLOYMENT-002)"
+    - "Auto-install requirements.txt (PHASE-DEPLOYMENT-002)"
+    - "VSCode settings automation (PHASE-DEPLOYMENT-002)"
+    - "MCP-first enforcement (PHASE-DEPLOYMENT-003)"
+    - "Multi-repo governance (PHASE-DEPLOYMENT-004)"
+    - "KASHKOLE/KSESSIONS support (PHASE-DEPLOYMENT-004)"
+    - "Seamless version upgrade (PHASE-DEPLOYMENT-005)"
+    - "Intelligence preservation (PHASE-DEPLOYMENT-005)"
+    - "Pre-built governance profiles (PHASE-DEPLOYMENT-006)"
+  
+  consolidation_strategy:
+    note: "Existing deployment-related phases absorbed into new deployment system"
+    impl_e2e_validation:
+      status: "ABSORBED into PHASE-DEPLOYMENT-001"
+      logic_moved: "CI integration, branch gating, health checks"
+      tests_preserved: "Smoke/load/chaos test suites remain in tests/e2e/"
+    impl_cicd_validation:
+      status: "ABSORBED into PHASE-DEPLOYMENT-002"
+      logic_moved: "GitHub Actions setup, pre-commit hooks, environment config"
+      tests_preserved: "CI/CD workflow tests remain in tests/cicd/"
+    impl_governance_content:
+      status: "EXPANDED into PHASE-DEPLOYMENT-004 + PHASE-DEPLOYMENT-006"
+      logic_moved: "Tier1 templates → DEPLOYMENT-004; Profile system → DEPLOYMENT-006"
+      tests_preserved: "Governance rule tests remain in tests/governance/"
+    phase_remediation_001:
+      status: "SUPERSEDED by new deployment phases"
+      note: "5-week remediation plan superseded by deployment system architecture"
+  
+  phase_dependencies:
+    PHASE-DEPLOYMENT-001:
+      requires: []
+      blocks: ["PHASE-DEPLOYMENT-002"]
+    PHASE-DEPLOYMENT-002:
+      requires: ["PHASE-DEPLOYMENT-001"]
+      blocks: ["PHASE-DEPLOYMENT-003"]
+    PHASE-DEPLOYMENT-003:
+      requires: ["PHASE-DEPLOYMENT-002"]
+      blocks: ["PHASE-DEPLOYMENT-004"]
+    PHASE-DEPLOYMENT-004:
+      requires: ["PHASE-DEPLOYMENT-003"]
+      blocks: ["PHASE-DEPLOYMENT-005"]
+    PHASE-DEPLOYMENT-005:
+      requires: ["PHASE-DEPLOYMENT-004"]
+      blocks: ["PHASE-DEPLOYMENT-006"]
+    PHASE-DEPLOYMENT-006:
+      requires: ["PHASE-DEPLOYMENT-005"]
+      blocks: []
+  
+  critical_path:
+    - "PHASE-DEPLOYMENT-001: Sanitizer (2 days)"
+    - "PHASE-DEPLOYMENT-002: Onboarding (3 days)"
+    - "PHASE-DEPLOYMENT-003: MCP expansion (4 days)"
+    - "PHASE-DEPLOYMENT-004: Multi-repo (3 days)"
+    - "PHASE-DEPLOYMENT-005: Migration (3 days)"
+    - "PHASE-DEPLOYMENT-006: Profiles (2 days)"
+    - "Total: 17 days sequential execution"
+  
+  multi_repo_support:
+    projects_supported:
+      - "CORTEX (governance engine)"
+      - "KASHKOLE (financial domain → FinOps profile)"
+      - "KSESSIONS (session management → Auth profile)"
+      - "[future projects with appropriate profiles]"
+    governance_propagation: "CORTEX/tier0 (immutable) → Projects/tier1 (domain-specific) → CORTEX validates all via MCP"
+
+machine_execution_tracking:
+  description: "Track execution state per machine for autonomous filtering and execution"
+  
+  ah_track_state:
+    machine: "ah"
+    strategy: "deployment_system"
+    total_phases: 6
+    current_phase_index: 0
+    status: "NOT_STARTED"
+    phase_states:
+      - phase_id: "PHASE-DEPLOYMENT-001-sanitizer"
+        status: "NOT_STARTED"
+        start_time: null
+        end_time: null
+      - phase_id: "PHASE-DEPLOYMENT-002-onboarding"
+        status: "NOT_STARTED"
+        start_time: null
+        end_time: null
+      - phase_id: "PHASE-DEPLOYMENT-003-mcp-expansion"
+        status: "NOT_STARTED"
+        start_time: null
+        end_time: null
+      - phase_id: "PHASE-DEPLOYMENT-004-multi-repo-gov"
+        status: "NOT_STARTED"
+        start_time: null
+        end_time: null
+      - phase_id: "PHASE-DEPLOYMENT-005-migration"
+        status: "NOT_STARTED"
+        start_time: null
+        end_time: null
+      - phase_id: "PHASE-DEPLOYMENT-006-profiles"
+        status: "NOT_STARTED"
+        start_time: null
+        end_time: null
