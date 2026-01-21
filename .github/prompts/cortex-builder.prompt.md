@@ -382,6 +382,33 @@ When user specifies `machine:mac` or `machine:win`:
 
 **Note:** core-rules.yaml exists at cortex_brain/tier0/governance/core-rules.yaml ✅
 
+## TEST MONITORING (Auto-Enabled)
+
+**Infrastructure:**
+- Plugin: `cortex/testing/pytest_plugin_audit.py` (auto-registered via conftest.py)
+- Audit Log: `cortex/test_audit_trail.log` (structured test performance data)
+- Detector: `scripts/detect_hanging_tests.py` (analyze slow/hanging tests)
+
+**Thresholds:**
+- Slow: >1.0s (warning logged)
+- Very Slow: >5.0s (error logged, investigate required)
+- Hanging: >3.0s (default detection threshold)
+
+**Usage:**
+```bash
+# Detect hanging tests after test run
+python scripts/detect_hanging_tests.py --threshold 5.0 --top 20
+
+# Tests automatically log to cortex/test_audit_trail.log
+pytest tests/ -v  # Audit plugin captures all test durations
+```
+
+**Benefits:**
+- Automatic slow test detection
+- Historical performance tracking
+- Identify bottlenecks in test suite
+- Debug hanging tests quickly
+
 ---
 
 ## MACHINE TRACK EXECUTION DETAILS

@@ -59,7 +59,7 @@ class CORTEXTestAuditPlugin:
         """Track session start."""
         self.session_start_time = time.time()
         num_tests = session.config.hook.pytest_collection_modifyitems.get_hookimpls()
-        self.logger.info(f"🚀 TEST SESSION START")
+        self.logger.info(f"[TEST SESSION START]")
     
     def pytest_runtest_setup(self, item):
         """Track test setup."""
@@ -79,25 +79,25 @@ class CORTEXTestAuditPlugin:
         
         # Map pytest outcome to status
         status_map = {
-            "passed": "✅ PASSED",
-            "failed": "❌ FAILED",
-            "skipped": "⏭️  SKIPPED",
-            "error": "⚠️  ERROR"
+            "passed": "PASSED",
+            "failed": "FAILED",
+            "skipped": "SKIPPED",
+            "error": "ERROR"
         }
         
-        status = status_map.get(report.outcome, "❓ UNKNOWN")
+        status = status_map.get(report.outcome, "UNKNOWN")
         execution.complete(status)
         
         # Flag slow tests (>1 second)
         if execution.duration > 1.0:
             self.logger.warning(
-                f"🐢 SLOW TEST: {test_id} took {execution.duration:.3f}s"
+                f"SLOW TEST: {test_id} took {execution.duration:.3f}s"
             )
         
         # Flag very slow tests (>5 seconds)
         if execution.duration > 5.0:
             self.logger.error(
-                f"🚨 VERY SLOW: {test_id} took {execution.duration:.3f}s - INVESTIGATE"
+                f"VERY SLOW: {test_id} took {execution.duration:.3f}s - INVESTIGATE"
             )
     
     def pytest_sessionfinish(self, session, exitstatus):
@@ -123,13 +123,13 @@ class CORTEXTestAuditPlugin:
         slowest_5 = sorted_tests[:5]
         
         self.logger.info(
-            f"✅ SESSION COMPLETE - "
+            f"[SESSION COMPLETE] - "
             f"Passed: {passed}, Failed: {failed}, Skipped: {skipped}, Errors: {errors} "
             f"| Total Duration: {total_duration:.2f}s"
         )
         
         if slowest_5:
-            self.logger.info("🐢 TOP 5 SLOWEST TESTS:")
+            self.logger.info("TOP 5 SLOWEST TESTS:")
             for execution in slowest_5:
                 if execution.duration > 0.1:
                     self.logger.info(

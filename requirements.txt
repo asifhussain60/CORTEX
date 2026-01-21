@@ -21,7 +21,7 @@ pydantic==2.5.2            # Data validation with type hints (Python 3.9+)
 # WebSocket and async communication
 websockets==12.0           # WebSocket protocol (MCP server communication)
 aiofiles==23.2.0           # Async file I/O for streaming responses
-httptools==0.7.0           # C-accelerated HTTP parsing (performance)
+httptools==0.7.1           # C-accelerated HTTP parsing (performance)
 wsproto==1.1.0             # WebSocket subprotocol layer
 
 # ============================================================================

@@ -62,12 +62,11 @@ class ProgressReporter:
                 rate = total / elapsed if elapsed > 0 else 0
                 sys.stdout.write(
                     f"[PYTEST PROGRESS] {total}/{self.test_count} - "
-                    f"{self.passed}✓ {self.failed}✗ {self.errors}⚠ "
+                    f"{self.passed}P {self.failed}F {self.errors}E "
                     f"({rate:.1f} tests/sec) - {self.current_test}\n"
                 )
                 sys.stdout.flush()
                 self.last_report_count = total
-                
     def pytest_terminal_summary(self, terminalreporter, exitstatus) -> None:
         """Hook called at end of test run."""
         elapsed = (datetime.now() - self.start_time).total_seconds()
