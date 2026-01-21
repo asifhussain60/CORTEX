@@ -1,0 +1,34 @@
+{
+  "timestamp": "2026-01-21T07:11:54.513273",
+  "test_path": "tests/unit/core/",
+  "analysis": {
+    "total_collected": 1517,
+    "total_run": 1509,
+    "passed": 565,
+    "failed": 766,
+    "errors": 178,
+    "skipped": 8,
+    "pass_rate": 37.44201457919152,
+    "collection_errors": 0,
+    "hanging_detected": false,
+    "health_score": 50
+  },
+  "metrics": {
+    "collection": {
+      "total": 1517,
+      "errors": 0
+    },
+    "execution": {
+      "total_run": 1509,
+      "passed": 565,
+      "failed": 766,
+      "errors": 178,
+      "skipped": 8
+    },
+    "quality": {
+      "pass_rate": 37.44201457919152,
+      "health_score": 50,
+      "hanging_detected": false
+    }
+  }
+}
