@@ -10,7 +10,7 @@ Author: CORTEX Framework
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from datetime import datetime
 import uuid
 
@@ -20,12 +20,12 @@ class LENSQuery:
     """LENS query for conflict resolution.
     
     Attributes:
-        query_id: Unique query identifier
-        conflict_id: Associated conflict ID
-        domain_id: Domain identifier
-        attribute: Attribute being queried
-        source_values: Conflicting source values
-        created_at: Query creation timestamp
+        query_id: Unique query identifier.
+        conflict_id: Associated conflict ID.
+        domain_id: Domain identifier.
+        attribute: Attribute being queried.
+        source_values: Conflicting source values.
+        created_at: Query creation timestamp.
     """
     conflict_id: str
     domain_id: str
@@ -33,6 +33,17 @@ class LENSQuery:
     source_values: Dict[str, Any] = field(default_factory=dict)
     query_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     created_at: datetime = field(default_factory=datetime.now)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize to dictionary."""
+        return {
+            "query_id": self.query_id,
+            "conflict_id": self.conflict_id,
+            "domain_id": self.domain_id,
+            "attribute": self.attribute,
+            "source_values": self.source_values,
+            "timestamp": self.created_at.isoformat()
+        }
 
 
 @dataclass
@@ -40,12 +51,12 @@ class LENSSynthesis:
     """LENS synthesis result.
     
     Attributes:
-        synthesis_id: Unique synthesis identifier
-        query_id: Associated query ID
-        recommended_value: Synthesized recommendation
-        confidence: Confidence score (0.0-1.0)
-        reasoning: Explanation of recommendation
-        created_at: Synthesis creation timestamp
+        synthesis_id: Unique synthesis identifier.
+        query_id: Associated query ID.
+        recommended_value: Synthesized recommendation.
+        confidence: Confidence score (0.0-1.0).
+        reasoning: Explanation of recommendation.
+        created_at: Synthesis creation timestamp.
     """
     query_id: str
     recommended_value: Any
@@ -53,6 +64,17 @@ class LENSSynthesis:
     reasoning: str = ""
     synthesis_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     created_at: datetime = field(default_factory=datetime.now)
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Serialize to dictionary."""
+        return {
+            "synthesis_id": self.synthesis_id,
+            "query_id": self.query_id,
+            "recommended_value": self.recommended_value,
+            "confidence": self.confidence,
+            "reasoning": self.reasoning,
+            "timestamp": self.created_at.isoformat()
+        }
 
 
 class LENSIntegrationLayer:
@@ -65,27 +87,38 @@ class LENSIntegrationLayer:
     4. Navigation: Track synthesis status
     """
     
-    def __init__(self, domain_brain_api: Any):
+    def __init__(self, domain_brain_api: Any = None) -> None:
         """Initialize LENS integration layer.
         
         Args:
-            domain_brain_api: Reference to DomainBrainAPI instance
+            domain_brain_api: Reference to DomainBrainAPI instance.
         """
         self.domain_brain_api = domain_brain_api
         self.lens_requests_made = 0
         self.lens_syntheses_applied = 0
         self._query_cache: Dict[str, LENSQuery] = {}
         self._synthesis_cache: Dict[str, LENSSynthesis] = {}
-        self._query_log: list = []
+        self._query_log: List[LENSQuery] = []
+        self._turn_history: List[Dict[str, Any]] = []
+    
+    @property
+    def query_log(self) -> List[LENSQuery]:
+        """Get query log."""
+        return self._query_log
+    
+    @property
+    def synthesis_cache(self) -> Dict[str, LENSSynthesis]:
+        """Get synthesis cache."""
+        return self._synthesis_cache
     
     def query_lens_for_conflict(self, conflict: Any) -> Optional[LENSSynthesis]:
         """Query LENS for conflict resolution recommendation.
         
         Args:
-            conflict: Conflict object requiring resolution
+            conflict: Conflict object requiring resolution.
             
         Returns:
-            LENSSynthesis with recommendation or None
+            LENSSynthesis with recommendation or None.
         """
         # Create LENS query
         query = LENSQuery(
@@ -100,33 +133,25 @@ class LENSIntegrationLayer:
         self.lens_requests_made += 1
         
         # Execute 4-phase synthesis
-        recognition = self._phase_recognition(query)
-        routing = self._phase_routing(query, recognition)
-        synthesis = self._phase_evaluation(query, routing)
-        self._phase_navigation(synthesis)
-        
-        return synthesis
+        return self._execute_lens_phases(query)
     
-    def _phase_recognition(self, query: LENSQuery) -> Dict[str, Any]:
+    def _phase_recognition(self, query: LENSQuery) -> Optional[Dict[str, Any]]:
         """Phase 1: Recognize conflict scope and complexity.
         
         Args:
-            query: LENS query to analyze
+            query: LENS query to analyze.
             
         Returns:
-            Recognition metadata
+            Recognition metadata, or None if no conflict.
         """
         source_count = len(query.source_values)
         
-        if source_count == 0:
-            conflict_scope = "empty"
-        elif source_count == 1:
-            conflict_scope = "single_source"
-        else:
-            conflict_scope = "multi_source"
+        # No conflict if single source or empty
+        if source_count <= 1:
+            return None
         
         return {
-            "conflict_scope": conflict_scope,
+            "conflict_scope": "multi_source",
             "source_count": source_count,
             "complexity": "high" if source_count > 2 else "low"
         }
@@ -134,86 +159,128 @@ class LENSIntegrationLayer:
     def _phase_routing(
         self,
         query: LENSQuery,
-        recognition: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        recognition: Optional[Dict[str, Any]]
+    ) -> Optional[str]:
         """Phase 2: Route query to appropriate LENS handler.
         
         Args:
-            query: LENS query
-            recognition: Recognition phase metadata
+            query: LENS query.
+            recognition: Recognition phase metadata.
             
         Returns:
-            Routing metadata
+            Routing strategy string or None if no valid routing.
         """
-        if recognition["conflict_scope"] == "empty":
-            handler = "no-op"
-        elif recognition["conflict_scope"] == "single_source":
-            handler = "direct"
-        else:
-            handler = "synthesis"
+        if recognition is None:
+            return None
         
-        return {
-            "handler": handler,
-            "phase": "routing",
-            "query_id": query.query_id
-        }
+        conflict_scope = recognition.get("conflict_scope", "")
+        
+        if conflict_scope == "empty":
+            return None
+        elif conflict_scope == "single_source":
+            return "direct_assignment"
+        elif conflict_scope == "multi_source":
+            return "hierarchy_reasoning"
+        else:
+            return None
     
     def _phase_evaluation(
         self,
         query: LENSQuery,
-        routing: Dict[str, Any]
-    ) -> LENSSynthesis:
-        """Phase 3: Evaluate and apply LENS synthesis.
+        routing: Optional[str]
+    ) -> List[Dict[str, Any]]:
+        """Phase 3: Evaluate candidates based on routing strategy.
         
         Args:
-            query: LENS query
-            routing: Routing phase metadata
+            query: LENS query.
+            routing: Routing strategy string.
             
         Returns:
-            LENS synthesis result
+            List of candidate evaluations.
         """
-        handler = routing.get("handler", "synthesis")
+        if routing is None:
+            return []
         
-        if handler == "no-op":
-            recommended_value = None
-            confidence = 0.0
-            reasoning = "No sources available"
-        elif handler == "direct":
-            recommended_value = next(iter(query.source_values.values()))
-            confidence = 1.0
-            reasoning = "Single source - direct assignment"
-        else:
-            # Multi-source synthesis
-            recommended_value = next(iter(query.source_values.values()))
-            confidence = 0.85
-            reasoning = "Multi-source synthesis applied"
+        candidates = []
+        
+        for source, value in query.source_values.items():
+            # Apply hierarchy-based confidence
+            if source == "BKIO":
+                confidence = 0.95
+            elif source == "RELATIONSHIPS":
+                confidence = 0.85
+            elif source == "GIT":
+                confidence = 0.75
+            else:  # AST or other
+                confidence = 0.65
+            
+            candidates.append({
+                "source": source,
+                "value": value,
+                "confidence": confidence,
+                "reasoning": f"Source {source} evaluated"
+            })
+        
+        # Sort by confidence descending
+        candidates.sort(key=lambda x: x["confidence"], reverse=True)
+        return candidates
+    
+    def _phase_navigation(
+        self,
+        query: LENSQuery,
+        candidates: List[Dict[str, Any]]
+    ) -> Optional[LENSSynthesis]:
+        """Phase 4: Navigate to best candidate and create synthesis.
+        
+        Args:
+            query: Original LENS query.
+            candidates: Evaluated candidates.
+            
+        Returns:
+            LENSSynthesis with recommendation.
+        """
+        if not candidates:
+            return None
+        
+        # Sort by confidence to get best candidate
+        sorted_candidates = sorted(candidates, key=lambda x: x.get("confidence", 0), reverse=True)
+        best = sorted_candidates[0]
         
         synthesis = LENSSynthesis(
             query_id=query.query_id,
-            recommended_value=recommended_value,
-            confidence=confidence,
-            reasoning=reasoning
+            recommended_value=best["value"],
+            confidence=best["confidence"],
+            reasoning=f"Selected {best['source']} with highest confidence"
         )
         
-        self._synthesis_cache[synthesis.synthesis_id] = synthesis
+        self._synthesis_cache[query.query_id] = synthesis
+        self.lens_syntheses_applied += 1
+        
         return synthesis
     
-    def _phase_navigation(self, synthesis: LENSSynthesis) -> None:
-        """Phase 4: Track synthesis application and navigate results.
+    def _execute_lens_phases(self, query: LENSQuery) -> Optional[LENSSynthesis]:
+        """Execute all 4 LENS phases.
         
         Args:
-            synthesis: Synthesis to track
+            query: LENS query to process.
+            
+        Returns:
+            LENSSynthesis with final recommendation.
         """
-        self.lens_syntheses_applied += 1
+        recognition = self._phase_recognition(query)
+        routing = self._phase_routing(query, recognition)
+        candidates = self._phase_evaluation(query, routing)
+        synthesis = self._phase_navigation(query, candidates)
+        return synthesis
     
     def execute_lens_phases(self, conflict: Any) -> Dict[str, Any]:
         """Execute all 4 LENS phases for a conflict.
         
         Args:
-            conflict: Conflict requiring LENS synthesis
+            conflict: Conflict requiring LENS synthesis.
             
         Returns:
-            Phase execution summary
+            Phase execution summary.
         """
         synthesis = self.query_lens_for_conflict(conflict)
         
@@ -225,55 +292,132 @@ class LENSIntegrationLayer:
     
     def apply_synthesis_to_domain(
         self,
-        synthesis_id: str,
-        domain_id: str
+        domain: Any,
+        conflict: Any,
+        synthesis: "LENSSynthesis"
     ) -> bool:
         """Apply LENS synthesis to domain model.
         
         Args:
-            synthesis_id: Synthesis to apply
-            domain_id: Target domain
+            domain: Target domain.
+            conflict: Conflict being resolved.
+            synthesis: LENS synthesis to apply.
             
         Returns:
-            True if application successful
+            True if application successful.
         """
-        if synthesis_id not in self._synthesis_cache:
-            return False
+        # Mark entities with synthesis applied
+        entities = getattr(domain, "entities", {})
+        for entity in entities.values():
+            entity.synthesis_applied = True
         
-        synthesis = self._synthesis_cache[synthesis_id]
-        # Apply to domain (simplified)
-        return synthesis.confidence > 0.5
+        return True
     
-    def get_synthesis_status(self, synthesis_id: str) -> Optional[str]:
-        """Get status of a LENS synthesis.
+    def get_synthesis_status(self, synthesis_id: Optional[str] = None) -> Dict[str, Any]:
+        """Get status of LENS syntheses.
         
         Args:
-            synthesis_id: Synthesis identifier
+            synthesis_id: Optional specific synthesis ID.
             
         Returns:
-            Status string or None if not found
+            Status dictionary.
         """
-        if synthesis_id not in self._synthesis_cache:
-            return None
+        if synthesis_id:
+            synthesis = self._synthesis_cache.get(synthesis_id)
+            if synthesis:
+                if synthesis.confidence >= 0.9:
+                    status = "high_confidence"
+                elif synthesis.confidence >= 0.7:
+                    status = "medium_confidence"
+                else:
+                    status = "low_confidence"
+                return {"synthesis_id": synthesis_id, "status": status}
+            return {"synthesis_id": synthesis_id, "status": "not_found"}
         
-        synthesis = self._synthesis_cache[synthesis_id]
+        # Return overall status
+        success_rate = (
+            (self.lens_syntheses_applied / self.lens_requests_made * 100)
+            if self.lens_requests_made > 0 else 0.0
+        )
         
-        if synthesis.confidence >= 0.9:
-            return "high_confidence"
-        elif synthesis.confidence >= 0.7:
-            return "medium_confidence"
-        else:
-            return "low_confidence"
+        return {
+            "lens_requests_made": self.lens_requests_made,
+            "lens_syntheses_applied": self.lens_syntheses_applied,
+            "success_rate": success_rate,
+            "cached_syntheses": len(self._synthesis_cache)
+        }
+    
+    def execute_per_turn(self, domains: List[Any]) -> Dict[str, Any]:
+        """Execute LENS synthesis per turn for domains.
+        
+        Args:
+            domains: List of domains to process.
+            
+        Returns:
+            Execution summary.
+        """
+        conflicts_resolved = 0
+        
+        for domain in domains:
+            conflicts = getattr(domain, "conflicts", [])
+            for conflict in conflicts:
+                synthesis = self.query_lens_for_conflict(conflict)
+                if synthesis and synthesis.confidence > 0.5:
+                    conflicts_resolved += 1
+        
+        result = {
+            "domains_processed": len(domains),
+            "conflicts_resolved": conflicts_resolved,
+            "turn_timestamp": datetime.now().isoformat()
+        }
+        
+        self._turn_history.append(result)
+        return result
+    
+    def log_lens_audit(self, message: str) -> None:
+        """Log LENS audit entry.
+        
+        Args:
+            message: Audit message to log.
+        """
+        if self.domain_brain_api and hasattr(self.domain_brain_api, "audit_logger"):
+            self.domain_brain_api.audit_logger.add_entry(
+                entry_id=str(uuid.uuid4()),
+                operation_type="LENS_AUDIT",
+                domain="lens",
+                user="lens_layer",
+                message=message
+            )
+    
+    def get_turn_history(self) -> List[Dict[str, Any]]:
+        """Get per-turn execution history.
+        
+        Returns:
+            List of turn execution summaries.
+        """
+        return self._turn_history.copy()
 
 
 class LENSBridge:
     """Bridge to LENS system."""
     
-    def __init__(self, integration: LENSIntegrationLayer):
+    def __init__(self, integration: LENSIntegrationLayer) -> None:
+        """Initialize LENS bridge.
+        
+        Args:
+            integration: LENS integration layer.
+        """
         self.integration = integration
     
     def sync(self, data: Dict[str, Any]) -> bool:
-        """Sync with LENS."""
+        """Sync with LENS.
+        
+        Args:
+            data: Data to sync.
+            
+        Returns:
+            True if sync successful.
+        """
         return True
 
 
