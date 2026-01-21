@@ -46,6 +46,11 @@ class FolderMigrationScript:
         self.file_mappings: Dict[str, str] = {}
         self.integrity_records: List[FileIntegrityRecord] = []
     
+    @property
+    def integrity_checks(self) -> List[FileIntegrityRecord]:
+        """Alias for integrity_records for backwards compatibility."""
+        return self.integrity_records
+    
     def add_file_mapping(self, source_path: str, target_path: str) -> None:
         """Add a file mapping from source to target.
         
@@ -107,15 +112,37 @@ class FolderMigrationScript:
         successful = sum(1 for r in self.integrity_records if r.status == "OK")
         failed = sum(1 for r in self.integrity_records if r.status == "MISMATCH")
         
-        success_rate = (successful / total * 100) if total > 0 else 0.0
+        success_rate = (successful / total) if total > 0 else 0.0
+        
+        # Get integrity issues
+        integrity_issues = [
+            {
+                'file_path': r.file_path,
+                'status': r.status,
+                'original_hash': r.original_hash,
+                'migrated_hash': r.migrated_hash,
+                'error': r.error_message
+            }
+            for r in self.integrity_records if r.status == "MISMATCH"
+        ]
+        
+        # Convert file mappings dict to list of dicts
+        file_mappings_list = [
+            {'source': src, 'target': tgt}
+            for src, tgt in self.file_mappings.items()
+        ]
         
         return {
             'total_files': total,
+            'total_files_migrated': len(self.file_mappings),
             'successful': successful,
             'failed': failed,
+            'integrity_ok_count': successful,
+            'integrity_mismatch_count': failed,
             'success_rate': success_rate,
-            'file_mappings': len(self.file_mappings),
-            'integrity_checks': len(self.integrity_records),
+            'file_mappings': file_mappings_list,
+            'integrity_checks_performed': len(self.integrity_records),
+            'integrity_issues': integrity_issues,
             'records': self.integrity_records
         }
     
