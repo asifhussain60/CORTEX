@@ -57,8 +57,8 @@
 /* Logo Styling */
 .md-header__button.md-logo img,
 .md-header__button.md-logo svg {
-  width: 32px !important;
-  height: 32px !important;
+  width: 100px !important;
+  height: 100px !important;
   object-fit: contain !important;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)) !important;
 }
