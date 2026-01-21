@@ -101,9 +101,21 @@ class ConversationProtocol:
             if not context or not isinstance(context, dict):
                 context = {}
 
-            # Check turn limits
+            # Check turn limits - but still return OK with MAX_ROUNDS_REACHED reason
             if self.turn_number >= self.max_turns:
-                return Err(f"Exceeded max_turns limit: {self.max_turns}")
+                from cortex.core.orchestrator.continuation_decision import (
+                    ContinuationDecision,
+                    ContinuationReason,
+                )
+                decision = ContinuationDecision(
+                    reason=ContinuationReason.MAX_ROUNDS_REACHED,
+                    turn_number=self.turn_number,
+                )
+                self.decisions_history.append({
+                    "turn": self.turn_number,
+                    "decision": decision,
+                })
+                return Ok(decision)
 
             # Increment turn counter
             self.turn_number += 1
@@ -130,9 +142,27 @@ class ConversationProtocol:
             tokens_this_turn = user_tokens + result_tokens
             self.total_tokens_used += tokens_this_turn
 
-            # Check token limit
+            # Check token limit - if exceeded, return OK with PAUSE reason
             if self.total_tokens_used > self.token_limit:
-                return Err("Token limit exceeded")
+                from cortex.core.orchestrator.continuation_decision import (
+                    ContinuationDecision,
+                    ContinuationReason,
+                )
+                decision = ContinuationDecision(
+                    reason=ContinuationReason.PAUSE,
+                    turn_number=self.turn_number,
+                    token_usage={
+                        "prompt": user_tokens,
+                        "completion": result_tokens,
+                        "total": tokens_this_turn,
+                    },
+                )
+                self.decisions_history.append({
+                    "turn": self.turn_number,
+                    "decision": decision,
+                    "timestamp": round_context.timestamp,
+                })
+                return Ok(decision)
 
             # Create continuation decision
             from cortex.core.orchestrator.continuation_decision import (
