@@ -238,8 +238,8 @@ def sanitize_pii(text: str) -> str:
     # Email addresses
     text = re.sub(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', '[EMAIL]', text)
     
-    # API keys (common patterns)
-    text = re.sub(r'\b(sk|pk|api|key)[-_]?[A-Za-z0-9]{16,}\b', '[API_KEY]', text, flags=re.IGNORECASE)
+    # API keys (common patterns) - match full key including prefix
+    text = re.sub(r'\b(sk|pk|api|key)[-_]?[A-Za-z0-9]{8,}\b', '[API_KEY]', text, flags=re.IGNORECASE)
     
     # Phone numbers
     text = re.sub(r'\b\d{3}[-.]?\d{3}[-.]?\d{4}\b', '[PHONE]', text)
