@@ -94,6 +94,7 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
                 self.documents_failed += 1
                 self._log(f"Document processing failed: {str(e)}")
         
+<<<<<<< Updated upstream
         return OrchestrationResult(
             success=self.documents_failed == 0,
             documents_processed=self.documents_processed,
@@ -102,6 +103,15 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         )
     
     def run(self) -> Optional[OrchestrationResult]:
+=======
+        return {
+            "documents_processed": self.documents_processed,
+            "documents_failed": self.documents_failed,
+            "conflicts_detected": self.conflicts_detected,
+        }
+    
+    def run(self) -> Optional[Dict[str, Any]]:
+>>>>>>> Stashed changes
         """Run the orchestrator (alias for execute).
         
         Returns:
@@ -128,9 +138,12 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         fmt = doc.get("format", "yaml")
         content = doc.get("content", {})
         
+<<<<<<< Updated upstream
         # Update context with domain name
         self.context.domain_name = domain_id
         
+=======
+>>>>>>> Stashed changes
         # Validate format
         try:
             doc_format = DocumentFormat(fmt) if fmt in [f.value for f in DocumentFormat] else None
