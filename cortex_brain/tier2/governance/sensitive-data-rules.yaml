@@ -1,0 +1,31 @@
+context: "sensitive-data"
+tier: "tier2"
+data_type: "sensitive"
+
+rules:
+  - id: "SENS-001"
+    name: "Data Classification"
+    description: "All data must be classified (public/internal/confidential/restricted)"
+    severity: "critical"
+    
+  - id: "SENS-002"
+    name: "Access Control"
+    description: "Restricted data requires MFA + audit approval"
+    severity: "critical"
+    
+  - id: "SENS-003"
+    name: "Encryption"
+    description: "Encryption key rotation every 90 days"
+    severity: "critical"
+    
+  - id: "SENS-004"
+    name: "Audit Trail"
+    description: "Immutable audit log for all access"
+    severity: "critical"
+    
+  - id: "SENS-005"
+    name: "Anonymization"
+    description: "PII removed before logs/backups"
+    severity: "critical"
+
+status: "DEFINED"

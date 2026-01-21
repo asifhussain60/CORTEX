@@ -1,0 +1,47 @@
+name: E2E Validation Tests
+
+on:
+  push:
+    branches: [CORTEX, stable]
+  pull_request:
+    branches: [CORTEX, stable]
+
+jobs:
+  smoke-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest
+      - name: Run smoke tests
+        run: pytest tests/e2e/smoke/ -v
+
+  integration-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest pytest-cov
+      - name: Run integration tests with coverage
+        run: pytest tests/integration/ --cov=cortex --cov-report=term
+
+  chaos-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest
+      - name: Run chaos tests
+        run: pytest tests/chaos/ -v
