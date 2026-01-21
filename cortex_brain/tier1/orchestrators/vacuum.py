@@ -55,6 +55,25 @@ class OrchestrationReport:
     stats: VacuumStats
     details: Dict[str, Any]
     errors: List[str] = field(default_factory=list)
+    timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
+    analyses_completed: int = 0
+    executions_completed: int = 0
+    
+    @property
+    def overall_status(self) -> str:
+        """Get overall status string.
+        
+        Returns:
+            Overall status based on state
+        """
+        if self.state == OrchestratorState.COMPLETED:
+            return "SUCCESS" if not self.errors else "PARTIAL"
+        elif self.state == OrchestratorState.FAILED:
+            return "FAILED"
+        elif self.state == OrchestratorState.ROLLED_BACK:
+            return "ROLLED_BACK"
+        else:
+            return self.state.value
 
 
 class VacuumOrchestrator:
@@ -86,6 +105,8 @@ class VacuumOrchestrator:
         self._audit_trail: List[Dict[str, Any]] = []
         self._latest_analyses: Dict[str, Any] = {}
         self._latest_reports: Dict[str, Any] = {}
+        self._completed_analyses: List[str] = []
+        self._completed_executions: List[str] = []
         self.dry_run = self.config.get("dry_run", False)
     
     @property
@@ -155,15 +176,19 @@ class VacuumOrchestrator:
             
         Returns:
             Analysis result or dict of results
-        """
-        try:
-            self._state = OrchestratorState.ANALYZING
             
+        Raises:
+            CleanerNotFoundError: If specified cleaner not registered
+        """
+        self._state = OrchestratorState.ANALYZING
+        
+        try:
             if cleaner_id:
-                # Analyze specific cleaner
+                # Analyze specific cleaner - let exception propagate if not found
                 cleaner = self._registry.get_cleaner(cleaner_id, config=self.config)
                 analysis = cleaner.analyze()
                 self._latest_analyses[cleaner_id] = analysis
+                self._completed_analyses.append(cleaner_id)
                 
                 self._audit_trail.append({
                     "timestamp": datetime.now().isoformat(),
@@ -181,6 +206,7 @@ class VacuumOrchestrator:
                     analysis = cleaner.analyze()
                     analyses[cid] = analysis
                     self._latest_analyses[cid] = analysis
+                    self._completed_analyses.append(cid)
                 
                 self._audit_trail.append({
                     "timestamp": datetime.now().isoformat(),
@@ -191,6 +217,9 @@ class VacuumOrchestrator:
                 return Ok(analyses)
         except Exception as e:
             self._state = OrchestratorState.FAILED
+            # Re-raise CleanerNotFoundError, but catch other exceptions
+            if e.__class__.__name__ == "CleanerNotFoundError":
+                raise
             return Err(str(e))
     
     def execute(self, plan_or_cleaner_id: Any = None, plan: Optional[Dict[str, Any]] = None) -> Any:
@@ -215,6 +244,7 @@ class VacuumOrchestrator:
                 exec_plan = plan or {}
                 report = cleaner.execute(exec_plan)
                 self._latest_reports[cleaner_id] = report
+                self._completed_executions.append(cleaner_id)
                 
                 self._audit_trail.append({
                     "timestamp": datetime.now().isoformat(),
@@ -232,6 +262,7 @@ class VacuumOrchestrator:
                     report = cleaner.execute(plan_item)
                     reports[cleaner_id] = report
                     self._latest_reports[cleaner_id] = report
+                    self._completed_executions.append(cleaner_id)
                 
                 self._state = OrchestratorState.COMPLETED
                 self._audit_trail.append({
@@ -301,11 +332,14 @@ class VacuumOrchestrator:
     
     @property
     def state(self) -> OrchestratorState:
-        """State property for convenient access.
+        """State property for convenient access with tracking info.
         
         Returns:
-            Current state
+            Current state with tracking attributes added
         """
+        # Add attributes directly to the enum instance
+        self._state.completed_analyses = self._completed_analyses
+        self._state.completed_executions = self._completed_executions
         return self._state
     
     def get_audit_trail(self) -> List[Dict[str, Any]]:
@@ -397,6 +431,8 @@ class VacuumOrchestrator:
                 "audit_entries": len(self._audit_trail),
             },
             errors=[],
+            analyses_completed=len(self._completed_analyses),
+            executions_completed=len(self._completed_executions),
         )
 
 

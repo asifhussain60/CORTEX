@@ -1,11 +1,5 @@
-"""MD Organizer Cleaner - Markdown file organization and cleaning.
+"""MD Organizer Cleaner - Markdown file organization and cleaning."""
 
-Provides specialized cleaning for Markdown documents.
-
-Author: CORTEX Framework
-"""
-
-from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 from enum import Enum
@@ -14,7 +8,6 @@ import sys
 from pathlib import Path
 import re
 
-# Add cortex to path
 cortex_path = Path(__file__).parent.parent.parent.parent / "cortex"
 sys.path.insert(0, str(cortex_path))
 
@@ -56,6 +49,8 @@ class MDOrganizerCleaner(CleanerInterface):
         self._md_domain = "md_organizer"
         self._snapshot: Optional[Dict[str, Any]] = None
         self._md_files: Dict[str, Path] = {}
+        self._categories: Dict[str, List[str]] = {}
+        self._issues: List[tuple] = []
 
     @property
     def name(self) -> str:
@@ -74,19 +69,16 @@ class MDOrganizerCleaner(CleanerInterface):
         repo_root = Path(self.config.get("repo_root", "."))
         md_files: Dict[str, Path] = {}
         exclude_dirs = {".git", ".hidden", "venv", "__pycache__", ".venv", "node_modules"}
-        
         for md_file in repo_root.rglob("*.md"):
             if any(part in exclude_dirs for part in md_file.parts):
                 continue
             md_files[md_file.name] = md_file
-        
         self._md_files = md_files
         return md_files
 
     def _classify_file(self, filename: str) -> MDFileCategory:
         """Classify a Markdown file."""
         name_lower = filename.lower()
-        
         if name_lower.startswith("phase-"):
             return MDFileCategory.PHASE
         elif name_lower.startswith("ac-fix-"):
@@ -122,6 +114,7 @@ class MDOrganizerCleaner(CleanerInterface):
             invalid_chars = ['<', '>', ':', '"', '|', '?', '*']
             if any(c in filename for c in invalid_chars):
                 issues.append((filename, MDFileNamingIssue.INVALID_CHARS))
+        self._issues = issues
         return issues
 
     def _identify_issues_for_file(self, filename: str) -> List[MDFileNamingIssue]:
@@ -138,8 +131,10 @@ class MDOrganizerCleaner(CleanerInterface):
             issues.append(MDFileNamingIssue.INVALID_CHARS)
         return issues
 
-    def _categorize_files(self, files: Dict[str, Path]) -> Dict[str, List[str]]:
+    def _categorize_files(self, files: Optional[Dict[str, Path]] = None) -> Dict[str, List[str]]:
         """Categorize files into groups."""
+        if files is None:
+            files = self._md_files
         categories: Dict[str, List[str]] = {}
         for filename in files.keys():
             category = self._classify_file(filename)
@@ -147,21 +142,31 @@ class MDOrganizerCleaner(CleanerInterface):
             if category_key not in categories:
                 categories[category_key] = []
             categories[category_key].append(filename)
+        self._categories = categories
         return categories
 
-    def _generate_plan(self, files: Dict[str, Path], categories: Dict[str, List[str]], issues: Dict[str, List[MDFileNamingIssue]]) -> Dict[str, Any]:
+    def _generate_plan(self, files: Optional[Dict[str, Path]] = None, categories: Optional[Dict] = None, issues: Optional[List] = None) -> Dict[str, Any]:
         """Generate organization plan."""
+        if files is None:
+            files = self._md_files
+        if categories is None:
+            categories = self._categories
+        if issues is None:
+            issues = self._issues
         return {
             "categories": categories,
             "files_to_organize": {k: str(v) for k, v in files.items()},
-            "issues": {k: [i.value for i in v] for k, v in issues.items() if v},
+            "issues": [{"file": file, "issue": issue.value} for file, issue in issues],
+            "issues_identified": len(issues),
+            "moves": [],
+            "renames": [],
             "dry_run": self.config.get("dry_run", True),
             "timestamp": datetime.now().isoformat(),
         }
 
     def _create_snapshot(self) -> Dict[str, Any]:
         """Create a snapshot of current file state."""
-        files = self._scan_md_files()
+        files = self._md_files or self._scan_md_files()
         snapshot = {
             "timestamp": datetime.now().isoformat(),
             "files": {name: str(path) for name, path in files.items()},
@@ -176,14 +181,9 @@ class MDOrganizerCleaner(CleanerInterface):
             files = self._scan_md_files()
             files_scanned = len(files)
             categories = self._categorize_files(files)
-            issues: Dict[str, List[MDFileNamingIssue]] = {}
-            total_issues = 0
-            for filename in files.keys():
-                file_issues = self._identify_issues_for_file(filename)
-                if file_issues:
-                    issues[filename] = file_issues
-                    total_issues += len(file_issues)
-            plan = self._generate_plan(files, categories, issues)
+            issues_list = self._identify_issues()
+            total_issues = len(issues_list)
+            plan = self._generate_plan(files, categories, issues_list)
             return Analysis(
                 cleaner_id=self.cleaner_id,
                 timestamp=datetime.now().isoformat(),
@@ -205,7 +205,8 @@ class MDOrganizerCleaner(CleanerInterface):
     def execute(self, plan: Dict[str, Any]) -> Report:
         """Execute MD organization plan."""
         try:
-            dry_run = plan.get("dry_run", self.config.get("dry_run", True))
+            # Check dry_run: first from plan, then from cleaner.dry_run, then from config
+            dry_run = plan.get("dry_run", self.dry_run if hasattr(self, "dry_run") else self.config.get("dry_run", True))
             categories = plan.get("categories", {})
             if not dry_run:
                 self._create_snapshot()

@@ -1,0 +1,7 @@
+endpoints:
+- checks:
+  - application_running
+  - database_connected
+  - cache_accessible
+  - all_dependencies_healthy
+  path: /health
