@@ -1,0 +1,26 @@
+name: Automatic Rollback
+
+on:
+  workflow_run:
+    workflows: ["Test Suite"]
+    types: [completed]
+
+jobs:
+  rollback:
+    if: github.event.workflow_run.conclusion == 'failure'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout stable branch
+        uses: actions/checkout@v3
+        with:
+          ref: stable
+      - name: Verify deployment health
+        run: |
+          echo "Checking health endpoints..."
+          curl -f http://localhost:8000/health || exit 1
+      - name: Rollback if unhealthy
+        if: failure()
+        run: |
+          echo "Rolling back to previous stable version..."
+          git revert --no-edit HEAD
+          git push origin stable
