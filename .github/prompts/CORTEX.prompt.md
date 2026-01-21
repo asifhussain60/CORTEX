@@ -237,6 +237,8 @@ notification_format: "✓ {phase_id}: {one_sentence_summary} → Next: {next_pha
 | MCP Tool Registry | `cortex.mcp.registry.ToolRegistry` | ✅ 14 tools |
 | Knowledge Query | `cortex.brain.core.knowledge.knowledge_repository.KnowledgeRepository` | ✅ Active |
 | Business Knowledge | `cortex.brain.domain_brain.business_knowledge_repository.BusinessKnowledgeRepository` | ✅ Active |
+| **Total Recall Agent** | `cortex.tools.total_recall_agent.TotalRecallAgent` | ✅ Active |
+| **Feedback Agent** | `cortex.tools.feedback_agent.FeedbackAgent` | ✅ Active |
 
 ---
 

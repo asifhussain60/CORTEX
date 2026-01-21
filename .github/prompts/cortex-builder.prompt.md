@@ -572,6 +572,16 @@ git commit -m "win: impl-e2e-validation: smoke/load/chaos tests, 35 tests passin
 - `cortex-git-commit.prompt.md` - Multi-machine development & merge protocol
 - `utilities/cortex-gap-detection.prompt.md` - Design-build gap analysis
 
+**Agent Support:**
+- `cortex-total-recall.prompt.md` - Feature discovery & recall
+- `utilities/cortex-total-recall-agent.prompt.md` - Total Recall Agent specification
+- `cortex-feedback.prompt.md` - Feedback collection & GitHub Issues
+- `utilities/cortex-feedback-agent.prompt.md` - Feedback Agent specification
+
+**Python Agents:**
+- `cortex.tools.total_recall_agent.TotalRecallAgent` - Feature recall implementation
+- `cortex.tools.feedback_agent.FeedbackAgent` - Feedback collection implementation
+
 **System Architecture:**
 - `CORTEX.prompt.md` - Master Orchestrator & Intent Router (main system prompt)
 

@@ -1,17 +1,109 @@
-# CORTEX Total Recall - Completed Functionality Reference
-**Version:** 1.0 | **Updated:** 2026-01-21 | **Authority:** cortex-impl-map.yaml v3.9
+# CORTEX Total Recall - Post-Clone Setup & Functionality Wiring
+**Version:** 2.0 | **Updated:** 2026-01-21 | **Authority:** cortex-impl-map.yaml v3.9
 
 ---
 
 ## Purpose
 
-Wire in ALL verified completed functionality from CORTEX for maximum operational efficiency. This prompt ensures you leverage existing implementations rather than recreating functionality.
+**First-run setup prompt for CORTEX after cloning from GitHub.** This prompt ensures:
+1. Python environment is created and configured from `requirements.txt`
+2. CORTEX.prompt.md and copilot-instruction.md are wired to MasterOrchestrator
+3. All completed functionality is available for immediate use
+4. Roadmap context is understood (what's done vs. in-progress)
 
 ---
 
-## Completed Feature Matrix (Production Ready)
+## 🚀 PHASE 1: Environment Setup
 
-### ✅ Intent Router (128/128 Tests - 100%)
+### Step 1.1: Create Python Virtual Environment
+
+```powershell
+# Windows (PowerShell)
+cd C:\PROJECTS\CORTEX
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+```bash
+# macOS/Linux
+cd /path/to/CORTEX
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+### Step 1.2: Install Dependencies from requirements.txt
+
+```powershell
+# Windows
+.\.venv\Scripts\pip.exe install -r requirements.txt
+```
+
+```bash
+# macOS/Linux
+pip install -r requirements.txt
+```
+
+### Step 1.3: Verify Installation
+
+```powershell
+# Check Python version (3.9+ required, 3.10+ recommended)
+python --version
+
+# Verify critical packages
+python -c "import cortex; print('CORTEX package: OK')"
+python -c "import pytest; print('pytest:', pytest.__version__)"
+python -c "import pydantic; print('pydantic:', pydantic.__version__)"
+```
+
+### Step 1.4: Initialize Governance Database
+
+```powershell
+# Verify governance database exists
+Test-Path "cortex_brain/state/governance.db"
+
+# If missing, initialize it
+python -c "from cortex.infrastructure.database import DatabaseManager; DatabaseManager().initialize()"
+```
+
+---
+
+## 🔌 PHASE 2: Wire Copilot Instructions to MasterOrchestrator
+
+### Configuration Files
+
+| File | Purpose | Status |
+|------|---------|--------|
+| `.github/prompts/CORTEX.prompt.md` | System prompt for MasterOrchestrator | ✅ Configured |
+| `.github/copilot-instruction.md` | Copilot workspace instructions | ✅ Configured |
+| `cortex-config.yaml` | Runtime configuration | ✅ Active |
+
+### Verify Integration Points
+
+```python
+# Test MasterOrchestrator availability
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+
+orchestrator = MasterOrchestrator()
+print(f"MasterOrchestrator: {orchestrator.name}")
+print(f"Orchestrator ready: {orchestrator.is_ready()}")
+```
+
+### Key Entry Points (Wired to Copilot)
+
+| Component | Import Path | Usage |
+|-----------|-------------|-------|
+| **MasterOrchestrator** | `cortex.orchestrators.core.master_orchestrator.MasterOrchestrator` | 4-stage pipeline execution |
+| **IntentClassifier** | `cortex.intent_router.classifier.IntentClassifier` | Parse user requests |
+| **GovernanceRegistry** | `cortex.brain.core.governance_registry.GovernanceRegistry` | Validate against TIER 0 rules |
+| **StateManager** | `cortex.brain.core.state_manager.StateManager` | Cross-phase state persistence |
+| **EnhancedAuditLogger** | `cortex.infrastructure.enhanced_audit_logger.EnhancedAuditLogger` | Hash-chain audit trail |
+| **TotalRecallAgent** | `cortex.tools.total_recall_agent.TotalRecallAgent` | Feature discovery |
+
+---
+
+## ✅ PHASE 3: Completed Functionality (Production Ready)
+
+### Intent Router — 128/128 Tests (100%)
 
 | Component | Entry Point | Capabilities |
 |-----------|-------------|--------------|
@@ -19,14 +111,14 @@ Wire in ALL verified completed functionality from CORTEX for maximum operational
 | **ConfidenceScorer** | `cortex.intent_router.confidence_scorer.ConfidenceScorer` | Threshold-based confidence evaluation |
 | **ContextManager** | `cortex.intent_router.context_manager.ContextManager` | Session context persistence |
 | **RoutingEngine** | `cortex.intent_router.routing_engine.RoutingEngine` | Orchestrator selection and routing |
-| **IntentDisambiguator** | `cortex.intent_router.disambiguator.IntentDisambiguator` | Ambiguity detection, recommendation generation |
-| **MultiModalIntentProcessor** | `cortex.intent_router.multimodal_processor.MultiModalIntentProcessor` | TEXT, JSON, COMMAND, CODE, SCHEMA modality support |
-| **FallbackStrategy** | `cortex.intent_router.fallback_strategy.FallbackStrategy` | Graceful degradation when classification fails |
-| **IntentLearner** | `cortex.intent_router.intent_learner.IntentLearner` | Pattern learning from user interactions |
-| **PerformanceMetrics** | `cortex.intent_router.performance_metrics.PerformanceMetrics` | Latency tracking, throughput measurement |
-| **OrchestrationIntegrator** | `cortex.intent_router.orchestration_integrator.OrchestrationIntegrator` | Bridge to MasterOrchestrator |
+| **IntentDisambiguator** | `cortex.intent_router.disambiguator.IntentDisambiguator` | Ambiguity detection, recommendations |
+| **MultiModalIntentProcessor** | `cortex.intent_router.multimodal_processor.MultiModalIntentProcessor` | TEXT, JSON, COMMAND, CODE, SCHEMA modality |
+| **FallbackStrategy** | `cortex.intent_router.fallback_strategy.FallbackStrategy` | Graceful degradation |
+| **IntentLearner** | `cortex.intent_router.intent_learner.IntentLearner` | Pattern learning |
+| **PerformanceMetrics** | `cortex.intent_router.performance_metrics.PerformanceMetrics` | Latency/throughput tracking |
+| **OrchestrationIntegrator** | `cortex.intent_router.orchestration_integrator.OrchestrationIntegrator` | MasterOrchestrator bridge |
 
-**Usage Pattern:**
+**Usage:**
 ```python
 from cortex.intent_router.classifier import IntentClassifier
 from cortex.intent_router.routing_engine import RoutingEngine
@@ -39,16 +131,15 @@ if result.confidence >= 0.7:
 
 ---
 
-### ✅ Governance Engine (348/368 Tests - 95%)
+### Governance Engine — 348/368 Tests (95%)
 
 | Component | Entry Point | Capabilities |
 |-----------|-------------|--------------|
 | **GovernanceRegistry** | `cortex.brain.core.governance_registry.GovernanceRegistry` | Rule loading, evaluation, enforcement |
-| **ContextExtractor** | `cortex.brain.core.governance.context_extractor.ContextExtractor` | Situational context for rule evaluation |
-| **RuleApplicability** | `cortex.brain.core.governance.rule_applicability.RuleApplicability` | Determine which rules apply to context |
-| **RuleValidators** | `cortex.brain.core.governance.rule_validators.RuleValidators` | Validate operations against rules |
-| **RuleEvaluator** | `cortex.brain.core.rule_evaluator.RuleEvaluator` | Integrated rule evaluation pipeline |
-| **BehavioralBoundaryRules** | `cortex_brain.tier2.hallucination_prevention.BehavioralBoundaryRules` | Hallucination prevention boundaries |
+| **ContextExtractor** | `cortex.brain.core.governance.context_extractor.ContextExtractor` | Situational context extraction |
+| **RuleApplicability** | `cortex.brain.core.governance.rule_applicability.RuleApplicability` | Rule filtering |
+| **RuleValidators** | `cortex.brain.core.governance.rule_validators.RuleValidators` | Operation validation |
+| **RuleEvaluator** | `cortex.brain.core.rule_evaluator.RuleEvaluator` | Integrated evaluation pipeline |
 
 **29 TIER 0 Rules Active:**
 ```yaml
@@ -63,102 +154,62 @@ Critical Rules:
   - CORE-029: Response headers
 ```
 
-**Usage Pattern:**
-```python
-from cortex.brain.core.governance_registry import GovernanceRegistry
-
-registry = GovernanceRegistry()
-violations = registry.evaluate_operation(operation_context)
-if violations:
-    raise GovernanceViolationError(violations)
-```
-
 ---
 
-### ✅ Infrastructure Resilience (126/126 Tests - 100%)
+### Infrastructure Resilience — 472/472 Tests (100%)
 
 | Component | Entry Point | Capabilities |
 |-----------|-------------|--------------|
-| **ConnectionPool** | `cortex.infrastructure.connection_pool.ConnectionPool` | Connection management, recycling, health checks |
-| **CircuitBreaker** | `cortex.infrastructure.circuit_breaker.CircuitBreaker` | Failure detection, automatic recovery |
-| **RetryStrategy** | `cortex.infrastructure.retry_strategy.RetryStrategy` | Exponential backoff, jitter, max attempts |
-| **BulkheadManager** | `cortex.infrastructure.bulkhead_manager.BulkheadManager` | Resource isolation, concurrent limits |
+| **ConnectionPool** | `cortex.infrastructure.connection_pool.ConnectionPool` | Connection management, health checks |
+| **CircuitBreaker** | `cortex.infrastructure.circuit_breaker.CircuitBreaker` | Failure detection, auto-recovery |
+| **RetryStrategy** | `cortex.infrastructure.retry_strategy.RetryStrategy` | Exponential backoff, jitter |
+| **BulkheadManager** | `cortex.infrastructure.bulkhead_manager.BulkheadManager` | Resource isolation |
 | **DegradationManager** | `cortex.infrastructure.degradation_manager.DegradationManager` | Graceful feature degradation |
-| **ResourceTracker** | `cortex.infrastructure.resource_tracker.ResourceTracker` | Memory, connection, thread tracking |
-
-**Usage Pattern:**
-```python
-from cortex.infrastructure.circuit_breaker import CircuitBreaker
-from cortex.infrastructure.retry_strategy import RetryStrategy
-
-@CircuitBreaker(failure_threshold=5, recovery_timeout=30)
-@RetryStrategy(max_attempts=3, backoff_base=2)
-def external_call():
-    # Protected operation
-    pass
-```
+| **ResourceTracker** | `cortex.infrastructure.resource_tracker.ResourceTracker` | Memory/connection/thread tracking |
+| **TransactionManager** | `cortex.infrastructure.transaction_manager.TransactionManager` | ACID transactions, rollback |
+| **StructuredLogger** | `cortex.infrastructure.structured_logger.StructuredLogger` | JSON logging, PII redaction |
+| **PrometheusMetrics** | `cortex.infrastructure.prometheus_metrics.PrometheusMetrics` | RED/USE metrics |
+| **DistributedTracing** | `cortex.infrastructure.tracing.DistributedTracing` | OpenTelemetry tracing |
+| **EnhancedAuditLogger** | `cortex.infrastructure.enhanced_audit_logger.EnhancedAuditLogger` | Hash-chain audit logging |
+| **CrashRecovery** | `cortex.infrastructure.crash_recovery.CrashRecovery` | State recovery after failures |
+| **FaultIsolator** | `cortex.infrastructure.fault_isolator.FaultIsolator` | Cascading failure prevention |
 
 ---
 
-### ✅ State & Concurrency (82/82 Tests - 100%)
+### State & Concurrency — 82/82 Tests (100%)
 
 | Component | Entry Point | Capabilities |
 |-----------|-------------|--------------|
-| **TransactionManager** | `cortex.infrastructure.transaction_manager.TransactionManager` | ACID transactions, rollback |
-| **OptimisticLock** | `cortex.core.state.optimistic_lock.OptimisticLock` | Version-based concurrency control |
-| **AuditHashChain** | `cortex.infrastructure.audit_hash_chain.AuditHashChain` | Tamper-evident audit log |
-| **LockFreeRegistry** | `cortex.orchestrators.registry.lock_free_registry.LockFreeRegistry` | Concurrent orchestrator registration |
-| **PhaseStateMachine** | `cortex.core.state.phase_state_machine.PhaseStateMachine` | Phase transition management |
-| **StateManager** | `cortex.brain.core.state_manager.StateManager` | Cross-phase state persistence |
-
-**Usage Pattern:**
-```python
-from cortex.infrastructure.transaction_manager import TransactionManager
-from cortex.core.state.optimistic_lock import OptimisticLock
-
-with TransactionManager() as tx:
-    with OptimisticLock(resource_id, version) as lock:
-        # Atomic, concurrent-safe operation
-        tx.commit()
-```
+| **OptimisticLock** | `cortex.core.state.optimistic_lock.OptimisticLock` | Version-based concurrency |
+| **PhaseStateMachine** | `cortex.core.state.phase_state_machine.PhaseStateMachine` | Phase transitions |
+| **StateManager** | `cortex.brain.core.state_manager.StateManager` | Cross-phase persistence |
+| **LockFreeRegistry** | `cortex.orchestrators.registry.lock_free_registry.LockFreeRegistry` | Concurrent registration |
+| **AuditHashChain** | `cortex.infrastructure.audit_hash_chain.AuditHashChain` | Tamper-evident logging |
 
 ---
 
-### ✅ Fault Tolerance (127/127 Tests - 100%)
+### Fault Tolerance — 127/127 Tests (100%)
 
 | Component | Entry Point | Capabilities |
 |-----------|-------------|--------------|
 | **SagaCoordinator** | `cortex.core.recovery.saga_coordinator.SagaCoordinator` | Distributed transaction compensation |
-| **OrphanCleaner** | `cortex.core.recovery.orphan_cleaner.OrphanCleaner` | Orphaned resource detection and cleanup |
-| **CrashRecovery** | `cortex.infrastructure.crash_recovery.CrashRecovery` | State recovery after failures |
-| **FaultIsolator** | `cortex.infrastructure.fault_isolator.FaultIsolator` | Prevent cascading failures |
-
-**Usage Pattern:**
-```python
-from cortex.core.recovery.saga_coordinator import SagaCoordinator
-
-saga = SagaCoordinator()
-saga.add_step("create_resource", create_fn, compensate_fn)
-saga.add_step("update_database", update_fn, rollback_fn)
-result = saga.execute()
-if result.failed:
-    # Automatic compensation already triggered
-    log.error(f"Saga failed: {result.error}")
-```
+| **OrphanCleaner** | `cortex.core.recovery.orphan_cleaner.OrphanCleaner` | Orphaned resource cleanup |
+| **CrashRecovery** | `cortex.infrastructure.crash_recovery.CrashRecovery` | Post-failure recovery |
+| **FaultIsolator** | `cortex.infrastructure.fault_isolator.FaultIsolator` | Fault containment |
 
 ---
 
-### ✅ Observability (137/137 Tests - 100%)
+### Observability — 137/137 Tests (100%)
 
 | Component | Entry Point | Capabilities |
 |-----------|-------------|--------------|
-| **StructuredLogger** | `cortex.infrastructure.structured_logger.StructuredLogger` | JSON logging, correlation IDs, PII redaction |
-| **PrometheusMetrics** | `cortex.infrastructure.prometheus_metrics.PrometheusMetrics` | RED/USE method metrics |
-| **DistributedTracing** | `cortex.infrastructure.tracing.DistributedTracing` | OpenTelemetry tracing, sampling |
-| **HealthEndpoints** | `cortex.api.health_endpoints.HealthEndpoints` | Liveness, readiness, component health |
-| **ProfilingTools** | `cortex.devx.profiling_tools.ProfilingTools` | CPU/memory profiling, slow query logs |
+| **StructuredLogger** | `cortex.infrastructure.structured_logger.StructuredLogger` | JSON logging, correlation IDs |
+| **PrometheusMetrics** | `cortex.infrastructure.prometheus_metrics.PrometheusMetrics` | RED/USE metrics |
+| **DistributedTracing** | `cortex.infrastructure.tracing.DistributedTracing` | OpenTelemetry, sampling |
+| **HealthEndpoints** | `cortex.api.health_endpoints.HealthEndpoints` | Liveness, readiness checks |
+| **ProfilingTools** | `cortex.devx.profiling_tools.ProfilingTools` | CPU/memory profiling |
 
-**Dashboards Available:**
+**Dashboards:**
 ```
 deployment/grafana/dashboards/
 ├── system-dashboard.json
@@ -168,57 +219,108 @@ deployment/grafana/dashboards/
 deployment/prometheus/alerts.yaml
 ```
 
-**Usage Pattern:**
-```python
-from cortex.infrastructure.structured_logger import StructuredLogger
-from cortex.infrastructure.prometheus_metrics import PrometheusMetrics
+---
 
-logger = StructuredLogger("module_name")
-metrics = PrometheusMetrics()
+### Intelligence Modules — 42/42 Tests (100%)
 
-with metrics.track_operation("my_operation"):
-    logger.info("Starting operation", context={"key": "value"})
-    # Operation code
+| Component | Entry Point | Capabilities |
+|-----------|-------------|--------------|
+| **RoutingAnalyzer** | `cortex.core.intelligence.routing_intelligence.RoutingAnalyzer` | Routing accuracy analysis |
+| **DurationAnalyzer** | `cortex.core.intelligence.duration_intelligence.DurationAnalyzer` | p50/p95/p99 baselines |
+| **ErrorAnalyzer** | `cortex.core.intelligence.error_intelligence.ErrorAnalyzer` | Brittle handler detection |
+
+---
+
+### Win Track Features — 48/48 Tests (100%)
+
+| Phase | Tests | Status |
+|-------|-------|--------|
+| Registry Infrastructure | 7 | ✅ Complete |
+| E2E Validation | 11 | ✅ Complete |
+| CICD Automation | 9 | ✅ Complete |
+| Governance Content | 12 | ✅ Complete |
+| Feature Discovery | 9 | ✅ Complete |
+
+---
+
+## ⏳ PHASE 4: Roadmap In-Progress
+
+### Current Phase: PHASE-E-TDD-IMPLEMENTATION
+
+**Authority:** `_workspaces/roadmap/cortex-impl-map.yaml`
+
+| Track | Status | Progress |
+|-------|--------|----------|
+| **Mac Track** | ⏳ IN_PROGRESS | Day 1 of 15-20 |
+| **Win Track** | ✅ COMPLETE | 5/5 phases (48 tests) |
+
+### Remaining Work
+
+| Component | Current | Target | Gap |
+|-----------|---------|--------|-----|
+| Domain Brain | 213/353 (60%) | 353/353 | 140 tests |
+| Orchestrators | 412/613 (67%) | 613/613 | 201 tests |
+| MCP Tools | 14 stubs | 14 functional | Logic implementation |
+
+### Phase Files
+
+```
+_workspaces/roadmap/
+├── cortex-impl-map.yaml         # SSOT: Implementation status
+├── PHASE-E-EXECUTION-STATUS.md  # Current phase status
+├── phases/
+│   ├── PHASE-E-TDD-IMPLEMENTATION.yaml
+│   ├── impl-governance-001-context-aware.yaml
+│   ├── impl-infra-001-resilience.yaml
+│   └── ... (15 phase specifications)
+└── reports/
+    ├── PHASE-E2-EXECUTIVE-SUMMARY.md
+    └── PHASE-E2-INVENTORY.md
 ```
 
 ---
 
-### ✅ Intelligence Modules (42 Tests - 100%)
+## 📋 PHASE 5: Validation Checklist
 
-| Component | Entry Point | Tests | Capabilities |
-|-----------|-------------|-------|--------------|
-| **RoutingIntelligence** | `cortex.core.intelligence.routing_intelligence.RoutingAnalyzer` | 12 | Routing decision tracking, accuracy analysis |
-| **DurationIntelligence** | `cortex.core.intelligence.duration_intelligence.DurationAnalyzer` | 15 | p50/p95/p99 baselines, slow operation detection |
-| **ErrorIntelligence** | `cortex.core.intelligence.error_intelligence.ErrorAnalyzer` | 15 | Pattern detection, brittle handler identification |
+### Environment Verification
 
-**Usage Pattern:**
+```powershell
+# 1. Test collection (expect 7540+ tests)
+pytest tests/ --co -q 2>&1 | Select-String "test"
+
+# 2. Run intent router tests (128/128 expected)
+pytest tests/unit/intent_router/ -v --tb=short
+
+# 3. Run governance tests (348/368 expected)
+pytest tests/unit/governance/ -v --tb=short
+
+# 4. Verify MCP server starts
+python -m cortex.mcp.server --health-check
+
+# 5. Validate governance
+python -m cortex.brain.core.governance_registry --validate
+```
+
+### Quick Health Check
+
 ```python
-from cortex.core.intelligence.routing_intelligence import RoutingAnalyzer
-from cortex.core.intelligence.duration_intelligence import DurationAnalyzer
+# Run this to verify all systems operational
+from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
+from cortex.intent_router.classifier import IntentClassifier
+from cortex.brain.core.governance_registry import GovernanceRegistry
+from cortex.brain.core.state_manager import StateManager
 
-routing = RoutingAnalyzer()
-routing.record_decision(intent, orchestrator, outcome)
-accuracy = routing.get_accuracy_report()
-
-duration = DurationAnalyzer()
-baselines = duration.get_percentiles("operation_name")
+print("Checking CORTEX components...")
+print(f"✓ MasterOrchestrator: {MasterOrchestrator().name}")
+print(f"✓ IntentClassifier: Ready")
+print(f"✓ GovernanceRegistry: {len(GovernanceRegistry().rules)} rules")
+print(f"✓ StateManager: Operational")
+print("\n🧠 CORTEX is ready for operation!")
 ```
 
 ---
 
-### ✅ Win Track Completed Features (48 Tests)
-
-| Phase | Component | Tests | Entry Point |
-|-------|-----------|-------|-------------|
-| **Registry Infrastructure** | Multi-domain registry | 7 | `cortex-registry/` |
-| **E2E Validation** | Smoke, load, chaos tests | 11 | `tests/e2e/` |
-| **CICD Automation** | GitHub Actions, rollback | 9 | `.github/workflows/` |
-| **Governance Content** | Tier1/Tier2 rules | 12 | `cortex_brain/tier1/`, `cortex_brain/tier2/` |
-| **Feature Discovery** | Live feature registry | 9 | `cortex.orchestrators.registry.feature_registry.FeatureRegistry` |
-
----
-
-## MCP Tools Available (14 Registered)
+## 🎯 MCP Tools Available (14 Registered)
 
 | Category | Tools | Status |
 |----------|-------|--------|
@@ -232,17 +334,19 @@ baselines = duration.get_percentiles("operation_name")
 from cortex.mcp.registry import get_mcp_tool_registry
 
 registry = get_mcp_tool_registry()
-tool = registry.get("query_tool")
+for tool in registry.list_tools():
+    print(f"- {tool.name}: {tool.category}")
 ```
 
 ---
 
-## Master Orchestrator Pipeline (Operational)
+## 🔧 MasterOrchestrator Pipeline
+
+### 4-Stage Execution
 
 ```python
 from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
 
-# Full 4-stage pipeline available:
 orchestrator = MasterOrchestrator()
 
 # Stage 1: Intent Comprehension (LENS Protocol)
@@ -252,117 +356,92 @@ orchestrator = MasterOrchestrator()
 
 result = orchestrator.execute_operation(
     operation_type="IMPLEMENT",
-    context=operation_context,
+    context={"ac_id": "AC-XXX-001", "description": "..."},
     governance_enabled=True
 )
 ```
 
+### Response Header (CORE-029)
+
+Every CORTEX response MUST begin with:
+
+```markdown
+## 🧠 CORTEX {operation}
+**Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
+
 ---
-
-## Database & Audit (Operational)
-
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| **Governance DB** | `cortex_brain/state/governance.db` | 257 production ACs tracked |
-| **EnhancedAuditLogger** | `cortex.infrastructure.enhanced_audit_logger.EnhancedAuditLogger` | Hash-chain verified logging |
-| **DatabaseManager** | `cortex.infrastructure.database.DatabaseManager` | SQLite operations |
-| **DatabaseTransactionManager** | `cortex.infrastructure.database_transaction_manager.DatabaseTransactionManager` | Atomic operations |
-
-**Usage Pattern:**
-```python
-from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
-
-logger = EnhancedAuditLogger.instance()
-logger.log_operation_start(ac_id="AC-XXX-001", operation="IMPLEMENT")
-# ... operation ...
-logger.log_operation_complete(ac_id="AC-XXX-001", operation="IMPLEMENT", success=True)
+**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 ```
 
 ---
 
-## Quick Command Reference
+## 📚 Key File References
 
-```bash
-# Verify all completed functionality
-pytest tests/unit/intent_router/ -v          # 128 tests
-pytest tests/unit/governance/ -v             # 348 tests  
-pytest tests/unit/infrastructure/ -v         # 472 tests
-pytest tests/unit/core/intelligence/ -v      # 42 tests
+| Document | Location | Purpose |
+|----------|----------|---------|
+| **System Prompt** | `.github/prompts/CORTEX.prompt.md` | MasterOrchestrator instructions |
+| **Copilot Instructions** | `.github/copilot-instruction.md` | Workspace development rules |
+| **Implementation Map** | `_workspaces/roadmap/cortex-impl-map.yaml` | SSOT: Phase status |
+| **TIER 0 Rules** | `cortex_brain/tier0/governance/core-rules.yaml` | 29 immutable rules |
+| **Governance DB** | `cortex_brain/state/governance.db` | 257 production ACs |
 
-# Run full test suite
-pytest tests/ --co -q | wc -l                # 7540+ tests
+---
 
-# Start MCP server
-python -m cortex.mcp.server
+## 🚨 Post-Clone Troubleshooting
 
-# Validate governance
-python -m cortex.brain.core.governance_registry --validate
+### Import Errors
 
-# Check infrastructure health
-python -m cortex.api.health_endpoints --check
+```powershell
+# If ImportError on cortex package
+$env:PYTHONPATH = "C:\PROJECTS\CORTEX"
+python -c "import cortex; print('OK')"
+```
+
+### Database Missing
+
+```powershell
+# Recreate governance database
+python -c "
+from cortex.infrastructure.database import DatabaseManager
+db = DatabaseManager()
+db.initialize()
+print('Database initialized')
+"
+```
+
+### Test Collection Fails
+
+```powershell
+# Check for syntax errors
+python -m py_compile cortex/__init__.py
+
+# Run with verbose collection
+pytest tests/ --co -v 2>&1 | Select-Object -First 50
 ```
 
 ---
 
-## Integration Patterns
+## ✅ Setup Complete Confirmation
 
-### Pattern 1: Full Orchestration with Governance
-```python
-from cortex.orchestrators.core.master_orchestrator import MasterOrchestrator
-from cortex.brain.core.governance_registry import GovernanceRegistry
+After running all steps, you should see:
 
-orchestrator = MasterOrchestrator()
-governance = GovernanceRegistry()
-
-# Pre-validate governance
-violations = governance.evaluate_operation(context)
-if not violations:
-    result = orchestrator.execute_operation(context)
 ```
+✓ Python virtual environment: .venv/
+✓ Dependencies installed: requirements.txt
+✓ Test collection: 7540+ tests
+✓ Intent Router: 128/128 (100%)
+✓ Governance Engine: 348/368 (95%)
+✓ Infrastructure: 472/472 (100%)
+✓ MasterOrchestrator: Ready
+✓ Copilot Instructions: Wired
+✓ CORTEX.prompt.md: Active
 
-### Pattern 2: Resilient External Calls
-```python
-from cortex.infrastructure.circuit_breaker import CircuitBreaker
-from cortex.infrastructure.retry_strategy import RetryStrategy
-from cortex.core.recovery.saga_coordinator import SagaCoordinator
-
-@CircuitBreaker(failure_threshold=5)
-@RetryStrategy(max_attempts=3)
-def resilient_operation():
-    saga = SagaCoordinator()
-    saga.add_step("step1", do_step1, undo_step1)
-    return saga.execute()
+🧠 CORTEX is fully operational and ready for development!
 ```
-
-### Pattern 3: Observable Operations
-```python
-from cortex.infrastructure.structured_logger import StructuredLogger
-from cortex.infrastructure.prometheus_metrics import PrometheusMetrics
-from cortex.infrastructure.tracing import DistributedTracing
-
-logger = StructuredLogger("my_module")
-metrics = PrometheusMetrics()
-tracer = DistributedTracing()
-
-with tracer.start_span("operation") as span:
-    with metrics.track_operation("my_op"):
-        logger.info("Executing", correlation_id=span.trace_id)
-```
-
----
-
-## What's NOT Complete (In Progress)
-
-| Component | Status | Tests | Blocker |
-|-----------|--------|-------|---------|
-| Domain Brain | 60% | 213/353 | Query engines, synthesis pending |
-| MCP Tool Logic | Stubs | - | Registered but return mock data |
-| Orchestrators | 67% | 412/613 | Domain orchestrators expanding |
-
-**Current Phase:** PHASE-E-TDD-IMPLEMENTATION (Day 1 of 15-20)
 
 ---
 
 **Last Updated:** 2026-01-21
 **Authority:** cortex-impl-map.yaml v3.9
-**Status:** ✅ Production-ready features documented
+**Agent Support:** `cortex.tools.total_recall_agent.TotalRecallAgent`
+**Status:** ✅ Post-clone setup and functionality wiring complete

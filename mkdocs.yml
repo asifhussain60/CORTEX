@@ -10,13 +10,22 @@ site_dir: _build/site
 
 theme:
   name: material
+  custom_dir: docs/theme
+  logo: assets/images/cortex-logo-200.png
+  favicon: assets/images/CORTEX-logo-64.png
   palette:
-    - scheme: default
-      primary: blue
-      accent: blue
     - scheme: slate
       primary: blue
       accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+    - scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
   features:
     - navigation.instant
     - navigation.tracking
@@ -26,12 +35,19 @@ theme:
     - search.highlight
     - content.code.copy
     - content.tabs.link
-  javascript:
-    - https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js
+
+extra_css:
+  - stylesheets/cortex-glassmorphism.css
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js
 
 plugins:
   - search:
       lang: en
+
+exclude_docs: |
+  _archive/
 
 # Custom post-build hook to copy assets to site folder
 hooks:
@@ -56,7 +72,7 @@ markdown_extensions:
       permalink: true
 
 nav:
-  - Home: INDEX.md
+  - "🚀 Home": INDEX.md
   - Getting Started:
     - Installation & Setup: 01-getting-started/0-installation.md
     - Quick Start: 01-getting-started/1-quickstart.md

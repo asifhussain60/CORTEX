@@ -6,6 +6,21 @@ Manually refresh `docs/` folder content and Mermaid diagrams to reflect the fina
 
 ---
 
+## Quick Start Landing Page
+
+**Primary Entry Point:** [`docs/quick-start-overview.md`](../../docs/quick-start-overview.md)
+
+This one-pager provides technical-to-business translations:
+- YAML configuration mappings (governance, tiers, domains)
+- Orchestrator registry and usage patterns
+- Governance tier composite evaluation
+- LENS protocol for AST scanning
+- Conversation protocol for multi-turn interactions
+
+**Launch command:** `docs\serve-docs.bat` (opens browser to Quick Overview)
+
+---
+
 ## Folder Structure
 
 All documentation assets are organized under the `docs/` directory. Build output is generated to `_build/site/` (git-ignored):

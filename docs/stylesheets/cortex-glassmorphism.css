@@ -55,22 +55,17 @@
 }
 
 /* Logo Styling */
-.md-header__logo {
-  display: flex !important;
-  align-items: center !important;
-  padding: 8px 16px !important;
-}
-
-.md-header__logo img {
-  width: 200px !important;
-  height: 200px !important;
+.md-header__button.md-logo img,
+.md-header__button.md-logo svg {
+  width: 32px !important;
+  height: 32px !important;
   object-fit: contain !important;
-  margin-right: 16px !important;
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1)) !important;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1)) !important;
 }
 
-[data-md-color-scheme="slate"] .md-header__logo img {
-  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3)) !important;
+[data-md-color-scheme="slate"] .md-header__button.md-logo img,
+[data-md-color-scheme="slate"] .md-header__button.md-logo svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3)) !important;
 }
 
 /* Navigation Sidebar */
