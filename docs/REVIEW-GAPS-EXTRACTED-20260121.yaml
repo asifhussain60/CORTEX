@@ -1,0 +1,442 @@
+---
+# CORTEX Review System - Phase 3: Gaps Extracted & Remediation Integration
+# Review Date: 2026-01-21
+# Purpose: Convert findings into actionable gaps and AC-FIX recommendations for cortex-impl-map.yaml
+
+metadata:
+  phase: 3
+  review_date: "2026-01-21T14:00:00Z"
+  consolidated_findings_source: "REVIEW-FINDINGS-CONSOLIDATED-20260121.yaml"
+  total_findings: 118
+  gaps_extracted: 11
+  critical_gaps: 3
+  high_gaps: 8
+
+gap_summary:
+  total_affected_acs: 15
+  total_new_acs_needed: 11
+  combined_effort_hours: 156
+  combined_effort_days: 26
+  blocking_status: "CRITICAL (3 gaps block production deployment)"
+  estimated_completion: "2026-02-04 (14 days from 2026-01-21)"
+
+gaps_addressed:
+  # ==================== CRITICAL GAPS ====================
+  
+  - gap_id: "GAP-EXEC-SAFETY-001"
+    severity: "CRITICAL"
+    evidence_grade: "A"
+    
+    description: |
+      Code Execution Vulnerability - 1,685 eval/exec/pickle calls in 228 files.
+      34% of codebase uses dangerous dynamic code execution without proper input validation.
+      Vulnerable modules: governance_rules, policy_engine, metrics, audit_validation.
+      Risk: Remote Code Execution (RCE) if untrusted input reaches these calls.
+    
+    root_cause: "IMPLEMENTATION_FLAW"
+    root_cause_detail: "eval/exec/pickle/compile/__import__ used where safer alternatives exist"
+    affected_ac_ids: ["AC-CORE-GOVERNANCE-001", "AC-CORE-POLICY-001", "AC-METRICS-001"]
+    affected_tests: ["test_governance_rules", "test_policy_evaluation", "test_metrics_calculation"]
+    affected_files_count: 228
+    
+    remedy:
+      ac_id: "AC-FIX-EVAL-EXEC-001"
+      title: "Remove Dangerous eval/exec Calls and Replace with Safe Alternatives"
+      description: |
+        1. Audit all 228 files for eval/exec/pickle usage
+        2. Replace with safer alternatives:
+           - eval() → ast.literal_eval() or json.loads()
+           - exec() → Function tables or strategy pattern
+           - pickle → JSON or msgpack
+           - compile() → Static code or AST manipulation
+        3. Implement input validation gates for all dynamic operations
+        4. Add security tests for injection attempts
+        5. Document approved patterns for code generation
+      
+      effort: "40-60 hours"
+      priority: "P0 - CRITICAL"
+      blocking_for: ["production_deployment", "security_audit"]
+      depends_on: []
+      related_skull_rules: ["CORE-028", "CORE-011", "CORE-012"]
+      issue_id: "ISSUE-006-RCE"
+    
+    holistic_context:
+      root_cause_cluster: "Security Hardening"
+      cluster_gaps: ["GAP-EXEC-SAFETY-001", "GAP-VALIDATION-SAFETY-002", "GAP-INJECTION-SAFETY-003"]
+      cluster_effort_total: "75 hours"
+      cluster_priority: "CRITICAL PATH"
+      cluster_blocking: "All three gaps must be resolved before production deployment"
+  
+  - gap_id: "GAP-ERROR-HANDLING-001"
+    severity: "CRITICAL"
+    evidence_grade: "A"
+    
+    description: |
+      Silent Exception Suppression - 23 bare except clauses hiding errors.
+      Makes debugging impossible and masks failures in production.
+      Example: cortex/core/state_manager.py line 156
+        except:
+            pass  # ← Error is silently suppressed
+    
+    root_cause: "IMPLEMENTATION_FLAW"
+    root_cause_detail: "Incomplete error handling with bare except clauses"
+    affected_ac_ids: ["AC-CORE-STATE-001"]
+    affected_files_count: 23
+    
+    remedy:
+      ac_id: "AC-FIX-ERROR-HANDLING-001"
+      title: "Replace 23 Bare Except Clauses with Proper Error Handling"
+      description: |
+        1. Find all 23 bare except: clauses
+        2. For each:
+           a. Identify exception type(s)
+           b. Add specific exception catching (except SpecificError:)
+           c. Add logging or error reporting
+           d. Add recovery action or re-raise
+        3. Add unit tests for error paths
+        4. Verify no exceptions are silently lost
+      
+      effort: "8-12 hours"
+      priority: "P0 - CRITICAL"
+      blocking_for: ["production_deployment"]
+      depends_on: []
+      related_skull_rules: ["CORE-011"]
+      issue_id: "ISSUE-007-ERROR-HANDLING"
+    
+    holistic_context:
+      root_cause_cluster: "Code Quality"
+      cluster_gaps: ["GAP-ERROR-HANDLING-001"]
+      cluster_effort_total: "8-12 hours"
+      cluster_priority: "CRITICAL"
+  
+  - gap_id: "GAP-LLM-VALIDATION-001"
+    severity: "CRITICAL"
+    evidence_grade: "A"
+    
+    description: |
+      Unvalidated LLM Confidence Scores - 40+ places check confidence without validating it exists/is numeric.
+      Leads to crashes or incorrect behavior when LLM returns invalid confidence.
+      Example: cortex/core/llm_router.py line 145
+        if response.confidence > 0.8:  # ← May throw AttributeError if confidence missing
+    
+    root_cause: "IMPLEMENTATION_FLAW"
+    root_cause_detail: "Missing type/value validation on LLM confidence scores"
+    affected_ac_ids: ["AC-CORE-LLM-001", "AC-INTENT-ROUTER-001"]
+    affected_files_count: 12
+    
+    remedy:
+      ac_id: "AC-FIX-LLM-VALIDATION-001"
+      title: "Add Confidence Score Validation to All 40+ LLM Calls"
+      description: |
+        1. Audit all 40+ locations checking LLM confidence
+        2. Add validation before each check:
+           - isinstance(confidence, (int, float))
+           - 0 <= confidence <= 1
+           - confidence is not None
+        3. Add default behavior when validation fails
+        4. Add logging for validation failures
+        5. Add tests for invalid confidence values
+      
+      effort: "6-8 hours"
+      priority: "P0 - CRITICAL"
+      blocking_for: ["production_deployment"]
+      depends_on: []
+      related_skull_rules: ["CORE-011"]
+      issue_id: "ISSUE-008-LLM-SAFETY"
+    
+    holistic_context:
+      root_cause_cluster: "AI Safety"
+      cluster_gaps: ["GAP-LLM-VALIDATION-001", "GAP-INJECTION-SAFETY-003"]
+      cluster_effort_total: "25 hours"
+      cluster_priority: "CRITICAL"
+  
+  # ==================== HIGH PRIORITY GAPS ====================
+  
+  - gap_id: "GAP-TYPING-COMPLIANCE-001"
+    severity: "HIGH"
+    evidence_grade: "A"
+    
+    description: |
+      Type Hints Incomplete (CORE-011 violation) - 150+ functions missing type hints.
+      Required: 100% coverage on all public APIs and functions.
+      Current: ~75% coverage.
+    
+    root_cause: "INCOMPLETE_IMPL"
+    root_cause_detail: "Type hints not added during initial implementation"
+    affected_ac_ids: ["AC-CORE-API-001", "AC-BRAIN-API-001"]
+    affected_files_count: 45
+    
+    remedy:
+      ac_id: "AC-FIX-TYPING-001"
+      title: "Add Type Hints to 150+ Functions (CORE-011 Compliance)"
+      description: |
+        1. Identify all 150+ functions without type hints
+        2. For each function:
+           a. Determine parameter types from usage and docstrings
+           b. Determine return type
+           c. Add type hints: def func(param: Type) -> ReturnType
+        3. Run mypy to verify correctness
+        4. Update any type stubs
+      
+      effort: "16-24 hours"
+      priority: "P1 - HIGH"
+      blocking_for: ["CORE-011_compliance"]
+      depends_on: []
+      related_skull_rules: ["CORE-011"]
+      issue_id: "ISSUE-009-TYPING"
+  
+  - gap_id: "GAP-DOCSTRING-COMPLIANCE-001"
+    severity: "HIGH"
+    evidence_grade: "A"
+    
+    description: |
+      Docstrings Incomplete (CORE-012 violation) - 120+ public APIs missing docstrings.
+      Required: 100% coverage on all public APIs.
+      Current: ~80% coverage.
+    
+    root_cause: "INCOMPLETE_IMPL"
+    root_cause_detail: "Docstrings not added during initial implementation"
+    affected_ac_ids: ["AC-CORE-API-001", "AC-BRAIN-API-001"]
+    affected_files_count: 40
+    
+    remedy:
+      ac_id: "AC-FIX-DOCSTRINGS-001"
+      title: "Add Docstrings to 120+ Public APIs (CORE-012 Compliance)"
+      description: |
+        1. Identify all 120+ public APIs without docstrings
+        2. For each API:
+           a. Add module/class/function docstring
+           b. Document parameters: Args
+           c. Document return value: Returns
+           d. Document exceptions: Raises
+           e. Add examples if complex
+        3. Verify with pydoc
+      
+      effort: "16-24 hours"
+      priority: "P1 - HIGH"
+      blocking_for: ["CORE-012_compliance"]
+      depends_on: []
+      related_skull_rules: ["CORE-012"]
+      issue_id: "ISSUE-010-DOCSTRINGS"
+  
+  - gap_id: "GAP-DB-CONNECTION-LEAK-001"
+    severity: "HIGH"
+    evidence_grade: "A"
+    
+    description: |
+      Database Connection Leaks - 4 instances where database connections not properly closed.
+      Can lead to resource exhaustion and connection pool depletion in production.
+    
+    root_cause: "IMPLEMENTATION_FLAW"
+    root_cause_detail: "Missing context managers for database connections"
+    affected_ac_ids: ["AC-DATABASE-001"]
+    affected_files_count: 4
+    
+    remedy:
+      ac_id: "AC-FIX-DB-CONNECTIONS-001"
+      title: "Fix 4 Database Connection Leaks with Proper Context Managers"
+      description: |
+        1. Audit all 4 locations with connection leaks
+        2. Replace with proper context managers:
+           with db.connection() as conn:
+               # Use connection
+        3. Ensure cleanup on exceptions
+        4. Add connection pool monitoring
+      
+      effort: "6-8 hours"
+      priority: "P1 - HIGH"
+      blocking_for: []
+      depends_on: []
+      related_skull_rules: ["CORE-011"]
+      issue_id: "ISSUE-011-DB-LEAKS"
+  
+  - gap_id: "GAP-INTEGRATION-TESTS-001"
+    severity: "HIGH"
+    evidence_grade: "B"
+    
+    description: |
+      Missing Integration Tests - 400+ unit tests but virtually no integration tests.
+      Integration coverage gap prevents discovery of component interaction issues.
+    
+    root_cause: "INCOMPLETE_IMPL"
+    root_cause_detail: "Test suite designed for unit testing only"
+    affected_ac_ids: ["AC-TEST-INFRASTRUCTURE-001"]
+    
+    remedy:
+      ac_id: "AC-FIX-INTEGRATION-TESTS-001"
+      title: "Add Integration Test Suite"
+      description: |
+        1. Design integration test scenarios
+        2. Implement 50+ integration tests covering:
+           a. API → Database → State Manager
+           b. LLM Router → Confidence validation
+           c. Audit logger → Data persistence
+           d. Error handling across layers
+        3. Integrate into CI/CD
+        4. Target 60%+ integration coverage
+      
+      effort: "24-40 hours"
+      priority: "P1 - HIGH"
+      blocking_for: ["production_readiness"]
+      depends_on: []
+      related_skull_rules: ["CORE-008"]
+      issue_id: "ISSUE-012-INTEGRATION-TESTS"
+  
+  - gap_id: "GAP-INJECTION-DEFENSE-003"
+    severity: "HIGH"
+    evidence_grade: "B"
+    
+    description: |
+      Prompt Injection Vectors - 8 potential prompt injection points in LLM interface.
+      Inadequate defense against prompt injection attacks.
+    
+    root_cause: "DESIGN_WEAKNESS"
+    root_cause_detail: "Insufficient input sanitization and prompt defense"
+    affected_ac_ids: ["AC-CORE-LLM-001"]
+    
+    remedy:
+      ac_id: "AC-FIX-INJECTION-DEFENSE-001"
+      title: "Add Prompt Injection Defense to 8 LLM Interface Points"
+      description: |
+        1. Identify all 8 injection vectors
+        2. Implement multi-layer defense:
+           a. Input sanitization (remove special tokens)
+           b. Prompt markers (clear separation of instructions vs data)
+           c. Output validation (detect prompt leakage attempts)
+           d. Confidence thresholds
+        3. Add security tests for injection attempts
+        4. Document approved patterns
+      
+      effort: "16-24 hours"
+      priority: "P1 - HIGH"
+      blocking_for: ["production_deployment"]
+      depends_on: []
+      related_skull_rules: ["CORE-028"]
+      issue_id: "ISSUE-013-INJECTION"
+  
+  - gap_id: "GAP-MCP-VALIDATION-001"
+    severity: "HIGH"
+    evidence_grade: "B"
+    
+    description: |
+      MCP Tool Validation Gaps - 30+ MCP tools lack input schema validation.
+      Tools can receive invalid inputs leading to crashes or unexpected behavior.
+    
+    root_cause: "INCOMPLETE_IMPL"
+    root_cause_detail: "Tools created without input validation schema"
+    affected_ac_ids: ["AC-MCP-TOOLS-001"]
+    
+    remedy:
+      ac_id: "AC-FIX-MCP-VALIDATION-001"
+      title: "Add Input Schema Validation to 30+ MCP Tools"
+      description: |
+        1. Audit all 30+ MCP tools
+        2. Add input_schema to each tool:
+           - Define required parameters
+           - Validate parameter types
+           - Check parameter constraints
+        3. Add validation before tool execution
+        4. Return validation errors to client
+        5. Add tests for invalid inputs
+      
+      effort: "16-24 hours"
+      priority: "P1 - HIGH"
+      blocking_for: []
+      depends_on: []
+      related_skull_rules: ["CORE-011"]
+      issue_id: "ISSUE-014-MCP"
+
+cortex_master_yaml_updates:
+  # These updates MUST be applied by cortex-builder.prompt.md
+  # Identifies which phase needs updating and what changes to make
+  
+  affected_phase: "PHASE-REMEDIATION-04"
+  phase_status_change:
+    from: "COMPLETED"
+    to: "IN_PROGRESS"
+    reason: "Review identified 11 critical and high-priority gaps requiring remediation"
+    locked_change:
+      from: true
+      to: false
+  
+  ac_ids_to_add: [
+    "AC-FIX-DB-PERSIST-001",  # Already implemented during Phase 0.5
+    "AC-FIX-EVAL-EXEC-001",
+    "AC-FIX-ERROR-HANDLING-001",
+    "AC-FIX-LLM-VALIDATION-001",
+    "AC-FIX-TYPING-001",
+    "AC-FIX-DOCSTRINGS-001",
+    "AC-FIX-DB-CONNECTIONS-001",
+    "AC-FIX-INTEGRATION-TESTS-001",
+    "AC-FIX-INJECTION-DEFENSE-001",
+    "AC-FIX-MCP-VALIDATION-001",
+  ]
+  
+  ac_breakdown_updates:
+    critical_blockers:
+      from: 0
+      to: 3
+      examples: ["AC-FIX-EVAL-EXEC-001", "AC-FIX-ERROR-HANDLING-001", "AC-FIX-LLM-VALIDATION-001"]
+    
+    high_priority:
+      from: 0
+      to: 8
+      examples: ["AC-FIX-TYPING-001", "AC-FIX-DOCSTRINGS-001", "AC-FIX-DB-CONNECTIONS-001"]
+  
+  metadata:
+    review_date: "2026-01-21"
+    review_type: "CORTEX Full System Review"
+    investigation_report: "_workspaces/roadmap/issues/REVIEW-INVESTIGATION-REPORT-20260121.yaml"
+    consolidated_findings: "docs/REVIEW-FINDINGS-CONSOLIDATED-20260121.yaml"
+    decision_gate: "BLOCKED - Critical findings require remediation before deployment"
+    production_readiness_score: "5.2/10"
+
+remediation_critical_path:
+  phase_1:
+    timeline: "2-4 weeks (starting 2026-01-21)"
+    completion_date: "2026-02-04"
+    acs: ["AC-FIX-EVAL-EXEC-001", "AC-FIX-ERROR-HANDLING-001", "AC-FIX-LLM-VALIDATION-001"]
+    total_effort: "54-80 hours"
+    deliverables:
+      - "RCE vulnerability patched (1,685 eval/exec calls resolved)"
+      - "Error handling implemented (23 bare excepts fixed)"
+      - "LLM confidence validation added (40+ calls protected)"
+      - "Phase 0 re-run: All gates PASS"
+  
+  phase_2:
+    timeline: "4-6 weeks (starting after Phase 1 verification)"
+    acs: ["AC-FIX-TYPING-001", "AC-FIX-DOCSTRINGS-001", "AC-FIX-INTEGRATION-TESTS-001"]
+    total_effort: "56-88 hours"
+    deliverables:
+      - "100% type hint coverage (CORE-011)"
+      - "100% docstring coverage (CORE-012)"
+      - "Integration test suite (60%+ coverage)"
+  
+  phase_3:
+    timeline: "parallel with Phase 2"
+    acs: ["AC-FIX-DB-CONNECTIONS-001", "AC-FIX-INJECTION-DEFENSE-001", "AC-FIX-MCP-VALIDATION-001"]
+    total_effort: "38-56 hours"
+    deliverables:
+      - "Database connection management fixed"
+      - "Prompt injection defense implemented"
+      - "MCP tool validation added"
+
+decision_gate_status:
+  gate_id: "PRODUCTION_DEPLOYMENT"
+  current_status: "BLOCKED"
+  blocking_criteria:
+    - "CRITICAL: GAP-EXEC-SAFETY-001 (RCE vulnerability)"
+    - "CRITICAL: GAP-ERROR-HANDLING-001 (Silent exceptions)"
+    - "CRITICAL: GAP-LLM-VALIDATION-001 (Unvalidated confidence)"
+  
+  approval_path:
+    step_1: "Complete AC-FIX remediation for all CRITICAL gaps"
+    step_2: "Re-run Phase 0 gates - all must PASS"
+    step_3: "Re-run Phase 1 analysis - verify fixes"
+    step_4: "Approval for deployment"
+  
+  estimated_approval_date: "2026-02-04"
+  contingency_buffer: "3-5 days"
+  expected_ready_date: "2026-02-07 to 2026-02-09"
+
+---

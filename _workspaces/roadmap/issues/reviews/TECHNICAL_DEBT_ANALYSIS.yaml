@@ -1,0 +1,1915 @@
+---
+# CORTEX Technical Debt Analysis Report
+# Generated: 2026-01-21
+# Scope: Full CORTEX codebase (388 Python files)
+# 
+# This report identifies structural debt, architectural issues, and
+# code quality problems across the CORTEX Master Orchestrator system.
+
+metadata:
+  analysis_date: 2026-01-21
+  codebase_size: 388 Python files
+  lines_of_code: ~150,000 LOC
+  total_debt_items: 47
+  critical_items: 8
+  high_items: 18
+  medium_items: 17
+  low_items: 4
+  
+# ============================================================================
+# SECTION 1: CODE DUPLICATION (9 items)
+# ============================================================================
+
+duplication:
+  
+  - id: DUP-001
+    title: "Multiple Audit Logger Implementations"
+    type: duplication
+    severity: HIGH
+    files_affected:
+      - cortex/infrastructure/audit_logger.py
+      - cortex/infrastructure/enhanced_audit_logger.py
+      - cortex/infrastructure/structured_logger.py
+      - cortex/infrastructure/tiered_logger.py
+      - cortex/brain/domain_brain/audit_logger.py
+      - cortex/brain/intent_router/audit_logger.py
+      - cortex/brain/intent_router/batch_audit_logger.py
+      - cortex/brain/governance_tools/batch_audit_logger.py
+      - cortex/brain/domain_orchestrators/batch_audit_logger.py
+    description: |
+      Multiple audit logger classes with overlapping functionality across modules.
+      Each implementation has its own hash-chain logic, TTL caching, and operation tracking.
+      This creates maintenance burden and inconsistent behavior.
+    impact: |
+      - Code duplication: ~3,000+ lines across 9 files
+      - Inconsistent audit behavior across modules
+      - Changes to logging logic must be applied to multiple places
+      - Testing overhead multiplied by number of implementations
+      - Risk of subtle behavioral differences causing audit inconsistencies
+    effort: HIGH (requires careful refactoring)
+    suggested_approach: |
+      1. Create abstract base class: `AbstractAuditLogger`
+      2. Extract common hash-chain logic to `HashChainMixin`
+      3. Extract TTL cache logic to `CachedAuditMixin`
+      4. Create factory function: `get_audit_logger(component_type, config)`
+      5. Update all 9 files to inherit from base class
+      6. Add integration tests for cross-module compatibility
+      
+      Impact:
+      - Reduce duplication by 80%
+      - Single source of truth for audit behavior
+      - Easier to audit and debug
+      
+  - id: DUP-002
+    title: "Validation Function Duplication"
+    type: duplication
+    severity: MEDIUM
+    files_affected:
+      - cortex/brain/core/coherence_validator.py (8 validate_* methods)
+      - cortex/brain/core/mutation_guard.py (7 validate_* methods)
+      - cortex/brain/core/production_readiness_manager.py (5 validate_* methods)
+      - cortex/brain/core/rollback_recovery_manager.py (5 verify_/check_* methods)
+    description: |
+      25+ validation/verification methods with similar patterns:
+      - Input parameter validation
+      - State checking
+      - Returning Tuple[bool, str] or Dict[str, Any]
+      - Repetitive logging patterns
+    impact: |
+      - 1,200+ lines of similar validation code
+      - Inconsistent return types (some return Tuple, some Dict, some Result)
+      - Duplicate error messages and logging
+      - Hard to maintain consistent validation logic
+    effort: MEDIUM
+    suggested_approach: |
+      1. Create `ValidationResult` dataclass with consistent return type
+      2. Create `@validator` decorator for common patterns
+      3. Extract validation logic to validators module
+      4. Use composition: validators = [rule1, rule2, rule3]
+      5. Consolidate 25+ methods into 5-7 parameterized functions
+      
+  - id: DUP-003
+    title: "Configuration Parsing Repeated Pattern"
+    type: duplication
+    severity: MEDIUM
+    files_affected:
+      - cortex/tools/orchestrator_scaffolder.py
+      - cortex/tools/tool_generator.py
+      - cortex/tools/scaffolder_templates.py
+      - cortex/brain/mcp/tools/validate_consolidation.py
+    description: |
+      Multiple files independently implement the same pattern:
+      - Load YAML config
+      - Validate with custom logic
+      - Return Dict[str, Any]
+      - Handle errors with try/except Exception
+    impact: |
+      - 500+ lines of redundant parsing code
+      - Inconsistent error handling
+      - Hard to update validation logic
+    effort: LOW
+    suggested_approach: |
+      1. Create `ConfigLoader` class with:
+         - load_yaml(path) -> Dict
+         - validate(config, schema) -> Result
+         - merge(configs) -> Dict
+      2. Move to cortex/config/loader.py
+      3. Update 4 files to use shared loader
+      
+  - id: DUP-004
+    title: "Query Method Duplication in LENSContextBuilder"
+    type: duplication
+    severity: MEDIUM
+    files_affected:
+      - cortex/brain/core/intent/lens_context_builder.py (lines 639-700)
+      - cortex-gitpages/_archive/docs-cortex-4.0/cortex/brain/core/intent/lens_context_builder.py (identical)
+    description: |
+      Query methods follow identical pattern:
+      - _query_function_by_name()
+      - _query_functions_in_file()
+      - _query_expertise_by_file()
+      All use same filtering logic: if not context, return []; filter list with lambda
+    impact: |
+      - 4 similar methods with 10 lines each
+      - Harder to add new query types
+      - Changes needed in multiple places
+    effort: LOW
+    suggested_approach: |
+      1. Create generic query method: `_query(context, field, predicate)`
+      2. Register queries as Dict[str, Callable]
+      3. Implement query_context as router to registered queries
+      4. Reduce 4 methods to 1 generic + 4 predicates
+      
+  - id: DUP-005
+    title: "Duplicate Detection Logic (3 implementations)"
+    type: duplication
+    severity: MEDIUM
+    files_affected:
+      - cortex/brain/domain_brain/deduplication.py
+      - tests/unit/domain_brain/test_ac_db_e01.py
+      - tests/unit/tier3/test_ai_curation.py
+    description: |
+      Hash-based duplication logic implemented 3+ times with slight variations.
+      Each has own hash computation, duplicate tracking, and audit logging.
+    impact: |
+      - Inconsistent duplicate detection
+      - Hard to maintain single source of truth
+      - Test logic differs from implementation logic
+    effort: MEDIUM
+    suggested_approach: |
+      1. Consolidate to single: `DuplicateDetector` class
+      2. Parameterize hash algorithm
+      3. Use in all locations uniformly
+      4. Create standard test fixtures
+      
+  - id: DUP-006
+    title: "Logger Initialization Pattern (30+ locations)"
+    type: duplication
+    severity: LOW
+    files_affected:
+      - cortex/brain/tier1/orchestrators/vacuum.py
+      - cortex/infrastructure/audit_logger.py
+      - cortex/brain/mcp/server.py
+      - cortex/orchestrators/core/master_orchestrator.py
+      - "~26 more files"
+    description: |
+      Logger initialization repeated 30+ times:
+      ```python
+      self.logger = logging.getLogger(self.__class__.__name__)
+      # OR
+      self.logger = EnhancedAuditLogger.instance()
+      # OR
+      self.logger = self._setup_logger()
+      ```
+    impact: |
+      - Inconsistent logger configuration
+      - Hard to change logging setup globally
+      - Some modules use standard logging, others use custom
+    effort: LOW
+    suggested_approach: |
+      1. Create `@setup_logger` decorator
+      2. Move logger initialization to module level
+      3. Use dependency injection for test mocking
+      
+  - id: DUP-007
+    title: "Governance Rule Validators - Similar Structure"
+    type: duplication
+    severity: MEDIUM
+    files_affected:
+      - cortex/brain/core/governance/rule_validators.py
+      - cortex-gitpages/_archive/docs-cortex-4.0/cortex/brain/core/governance/rule_validators.py
+    description: |
+      29 CORE rules, each with similar validator structure.
+      Pattern repeats for CORE-001 through CORE-029.
+    impact: |
+      - ~1,500 lines of similar rule validation code
+      - Hard to add new rules
+      - Changes to validation pattern require updates to 29 places
+    effort: HIGH
+    suggested_approach: |
+      1. Create `RuleValidator` base class
+      2. Define rules as data (not code): RULES_CONFIG.yaml
+      3. Use visitor pattern for validation
+      4. Reduce code by 70%
+      
+  - id: DUP-008
+    title: "Repository Scanner Functions in Archive and Production"
+    type: duplication
+    severity: MEDIUM
+    files_affected:
+      - cortex/orchestrators/core/repository_scanner.py
+      - cortex-gitpages/_archive/docs-cortex-4.0/cortex/orchestrators/core/repository_scanner.py
+    description: |
+      Identical RepositoryScanner class with same methods, same logic.
+      Archive version may have been copied but both are kept in sync manually.
+    impact: |
+      - Maintenance burden on archive version
+      - Risk of version skew
+      - 800+ lines duplicated
+    effort: LOW
+    suggested_approach: |
+      1. Keep only production version (cortex/orchestrators/core/)
+      2. Move archive version to read-only status
+      3. Update docs to reference production version only
+      
+  - id: DUP-009
+    title: "Exception Handling Pattern (40+ instances)"
+    type: duplication
+    severity: MEDIUM
+    files_affected: "~40 files across cortex/"
+    description: |
+      Broad exception handling repeated across codebase:
+      ```python
+      try:
+          # operation
+      except Exception:
+          pass  # or self.logger.debug()
+      ```
+      Found 40+ instances silently swallowing errors.
+    impact: |
+      - Silent failures hide bugs
+      - Production issues hard to debug
+      - Errors logged at DEBUG level (may be hidden in prod)
+      - No error recovery strategy
+    effort: MEDIUM
+    suggested_approach: |
+      1. Create `@safe_operation` decorator for legitimate pass cases
+      2. Replace 40+ catch-all exceptions with specific types
+      3. Add error classification: transient vs permanent
+      4. Log at WARNING/ERROR (not DEBUG) for real errors
+      5. Implement circuit breaker for failing operations
+      
+# ============================================================================
+# SECTION 2: DEPRECATED PATTERNS (8 items)
+# ============================================================================
+
+deprecated:
+  
+  - id: DEP-001
+    title: "Legacy WCF Endpoints Still Referenced"
+    type: deprecated
+    severity: HIGH
+    files_affected:
+      - _workspaces/sts/sample-apps/_Real/ra-modernized/.review/15-RECOMMENDATIONS.md (line 293)
+      - Various infrastructure files
+    description: |
+      WCF endpoints marked as deprecated but not removed.
+      System still contains references to legacy WCF patterns
+      in code and configuration.
+    impact: |
+      - Confusion about which endpoints to use
+      - Migration path unclear
+      - Dead code increases maintenance burden
+      - Possible security risks in unmaintained code paths
+    effort: MEDIUM
+    suggested_approach: |
+      1. Create deprecation timeline: deprecate → warn → remove
+      2. Add `@deprecated(removal_date="2026-Q2")` decorator to WCF code
+      3. Update all imports to point to new endpoints
+      4. Create migration guide for users
+      5. Schedule removal for Q2 2026
+      
+  - id: DEP-002
+    title: "Old Design Patterns for Code Analysis"
+    type: deprecated
+    severity: MEDIUM
+    files_affected:
+      - cortex/orchestrators/core/repository_scanner.py (800 lines)
+      - cortex/brain/core/intent/lens_context_builder.py (680 lines)
+    description: |
+      Manual AST traversal and graph building using old patterns:
+      - Manual ast.walk() iteration (no visitor pattern)
+      - Manual graph construction with lists/dicts (no proper graph library)
+      - Manual filtering with lambda functions
+      - No caching of computed results
+    impact: |
+      - Verbose, hard-to-maintain code
+      - Slow for large codebases
+      - No built-in optimization
+    effort: MEDIUM
+    suggested_approach: |
+      1. Replace ast.walk() with ast.NodeVisitor pattern
+      2. Consider networkx for graph operations
+      3. Add memoization for expensive computations
+      4. Create specialized graph traversal methods
+      
+  - id: DEP-003
+    title: "String-based Type Checking"
+    type: deprecated
+    severity: LOW
+    files_affected:
+      - cortex/brain/core/intent/lens_context_builder.py
+      - cortex/orchestrators/core/repository_scanner.py
+    description: |
+      Using string values for types instead of enums:
+      ```python
+      node_type: str  # Use ContextNodeType.value
+      edge_type: str  # Use ContextEdgeType.value
+      ```
+      Code defines enums but serializes to strings and compares strings.
+    impact: |
+      - Type safety lost
+      - Easy to introduce typos
+      - IDE autocomplete doesn't help
+    effort: LOW
+    suggested_approach: |
+      1. Change node_type: str to node_type: ContextNodeType
+      2. Update serialization to use .value
+      3. Update comparisons to use enum values
+      
+  - id: DEP-004
+    title: "Direct Logger Instantiation Instead of Injection"
+    type: deprecated
+    severity: MEDIUM
+    files_affected: "~30 files across cortex/"
+    description: |
+      Classes instantiate their own loggers instead of receiving via injection:
+      ```python
+      self.logger = EnhancedAuditLogger.instance()  # Hard to test
+      self.logger = logging.getLogger(__name__)      # Hard to configure globally
+      ```
+    impact: |
+      - Hard to mock in tests
+      - Hard to change logging setup globally
+      - Violates dependency injection principle
+    effort: MEDIUM
+    suggested_approach: |
+      1. Create `LoggerFactory` class
+      2. Pass logger via constructor: `def __init__(self, logger=None)`
+      3. Use factory as default: `logger=LoggerFactory.get_default()`
+      4. Update tests to inject mock logger
+      
+  - id: DEP-005
+    title: "Bare except: Clauses in Archive"
+    type: deprecated
+    severity: HIGH
+    files_affected:
+      - cortex-gitpages/_archive/docs-cortex-4.0/cortex/infrastructure/database.py (3 instances)
+      - cortex-gitpages/_archive/docs-cortex-4.0/cortex/infrastructure/crash_recovery.py (2 instances)
+      - cortex-gitpages/_archive/docs-cortex-4.0/cortex/mcp/server.py (1 instance)
+    description: |
+      Archive code contains bare `except:` clauses violating CORE-013.
+      While archive is read-only, this indicates compliance gaps in history.
+    impact: |
+      - CORE-013 violation in archive
+      - Silent failures hide errors
+      - Audit trail shows compliance failures
+    effort: LOW
+    suggested_approach: |
+      1. Document archive as legacy/read-only
+      2. Update compliance reports to exclude archive
+      3. Or: Apply CORE-013 fixes to archive for historical integrity
+      
+  - id: DEP-006
+    title: "TODO/FIXME Comments (9 instances) - Incomplete Implementation"
+    type: deprecated
+    severity: HIGH
+    files_affected:
+      - cortex/tools/scaffolder_templates.py (line 478) - "TODO: Implement test"
+      - cortex/tools/orchestrator_scaffolder.py (line 437, 473) - "TODO: Implement stage logic"
+      - cortex/brain/core/rule_evaluator.py (line 60, 206) - "TODO: Implement validators"
+      - _workspaces/sts/sample-apps/_Real/ra-modernized/src/ (4 instances)
+    description: |
+      Incomplete features with TODO markers scattered across codebase.
+      These mark incomplete work without clear ownership or deadlines.
+    impact: |
+      - Incomplete features may cause runtime errors
+      - Unclear status of features
+      - No clear owner or deadline for completion
+      - Risk to production stability
+    effort: HIGH
+    suggested_approach: |
+      1. Create ticket for each TODO
+      2. Add owner and deadline: `TODO(john, 2026-Q1-01): AC-FIX-001`
+      3. Link to AC IDs for governance
+      4. Enforce in pre-commit: TODO must have owner and date
+      5. Track completion in sprint planning
+      
+  - id: DEP-007
+    title: "Custom JSON-RPC Implementation (vs. Standard SDK)"
+    type: deprecated
+    severity: MEDIUM
+    files_affected:
+      - cortex/mcp/protocol.py (custom implementation)
+      - cortex/mcp/server.py (uses custom protocol)
+    description: |
+      CORTEX implements custom JSON-RPC 2.0 instead of using official MCP SDK.
+      Reason: Official SDK requires Python 3.10+, CORTEX supports 3.9+.
+      But this creates maintenance burden.
+    impact: |
+      - Custom protocol harder to maintain
+      - Out of sync with official MCP updates
+      - Test coverage may lag behind official SDK
+      - Compatibility issues if SDK adds new features
+    effort: HIGH
+    suggested_approach: |
+      1. Plan migration to Python 3.10+ only (evaluate feasibility)
+      2. If not possible, keep custom implementation but:
+         - Add compatibility layer to official SDK
+         - Document why custom implementation exists
+         - Create integration tests vs. official SDK
+      3. Consider gradual migration: new services use SDK, legacy uses custom
+      
+  - id: DEP-008
+    title: "Direct sys.path Manipulation (Path Resolution)"
+    type: deprecated
+    severity: MEDIUM
+    files_affected:
+      - cortex/brain/core/path_resolver.py
+      - cortex/core/path_resolver.py (if different)
+      - Multiple files importing from path_resolver
+    description: |
+      Manual sys.path manipulation for import resolution instead of proper packaging.
+      ```python
+      sys.path.insert(0, str(project_root))  # Fragile
+      ```
+    impact: |
+      - Fragile import system
+      - Hard to package for distribution
+      - Different behavior in different environments
+      - Hard to debug import issues
+    effort: MEDIUM
+    suggested_approach: |
+      1. Use proper Python packaging: setup.py or pyproject.toml
+      2. Replace sys.path manipulation with importlib
+      3. Use editable install for development
+      4. Update all files to use standard imports
+      
+# ============================================================================
+# SECTION 3: MISSING ABSTRACTIONS (10 items)
+# ============================================================================
+
+missing_abstractions:
+  
+  - id: ABS-001
+    title: "No Base Validation Class (25+ validators)"
+    type: missing-abstraction
+    severity: HIGH
+    files_affected:
+      - cortex/brain/core/coherence_validator.py
+      - cortex/brain/core/mutation_guard.py
+      - cortex/brain/core/production_readiness_manager.py
+      - cortex/brain/core/rollback_recovery_manager.py
+      - cortex/brain/core/rule_evaluator.py
+      - "And 10+ more files"
+    description: |
+      25+ validation methods spread across 10+ classes with no base abstraction.
+      Each implements its own:
+      - Input validation
+      - State checking
+      - Return type handling
+      - Error logging
+    impact: |
+      - Inconsistent validation behavior
+      - Hard to add new validators
+      - Hard to change validation logic globally
+      - 1,500+ lines of similar code
+    effort: MEDIUM
+    suggested_approach: |
+      1. Create abstract `Validator` base class:
+         ```python
+         class Validator(ABC):
+             @abstractmethod
+             def validate(self, context: Any) -> ValidationResult
+             
+             def log_validation(self, result: ValidationResult)
+         ```
+      2. Create `CompositeValidator` for combining multiple validators
+      3. Create `ValidatorRegistry` for managing validators
+      4. Refactor 25+ methods to inherit from Validator
+      5. Update callers to use ValidatorRegistry
+      
+  - id: ABS-002
+    title: "Configuration Objects Repeated (8+ config patterns)"
+    type: missing-abstraction
+    severity: MEDIUM
+    files_affected:
+      - cortex/tools/orchestrator_scaffolder.py (ScaffoldConfig)
+      - cortex/tools/tool_generator.py (GenerationConfig)
+      - cortex/brain/mcp/tools/validate_consolidation.py (custom dict)
+      - cortex/tools/scaffolder_templates.py (dict usage)
+      - cortex/config/features.yaml (YAML config)
+      - "And 3+ more files"
+    description: |
+      No unified configuration abstraction.
+      Config loaded/handled 8+ different ways:
+      - Pydantic models in some files
+      - dataclasses in others
+      - Plain dicts in others
+      - YAML parsed directly
+    impact: |
+      - Hard to validate configs consistently
+      - Hard to update global config schema
+      - Different config patterns confuse developers
+      - Duplication of validation logic
+    effort: MEDIUM
+    suggested_approach: |
+      1. Create `ConfigBase(BaseModel)` using Pydantic
+      2. Create specific configs: OrchestrationConfig, ToolConfig, etc.
+      3. Centralize loading: `ConfigLoader.load(path)`
+      4. Create config registry
+      5. Update 8+ locations to use unified config
+      
+  - id: ABS-003
+    title: "No Error/Result Pattern Base Class (Inconsistent usage)"
+    type: missing-abstraction
+    severity: MEDIUM
+    files_affected:
+      - cortex/brain/core/result.py (defines Result[T])
+      - cortex/orchestrators/core/intent_router.py (uses Result[bool])
+      - ~20 files using Result
+      - ~30 files returning Tuple instead of Result
+      - ~15 files returning None on error
+    description: |
+      Result[T] pattern exists but only used in 50% of codebase.
+      Other code returns:
+      - Tuple[bool, str]
+      - Tuple[bool, Dict, str]
+      - None (for errors)
+      - Plain exceptions
+      Inconsistent error handling patterns.
+    impact: |
+      - Hard to chain operations
+      - Uncertain error handling
+      - Partial adoption creates confusion
+      - Different modules handle errors differently
+    effort: HIGH
+    suggested_approach: |
+      1. Standardize on Result[T] everywhere
+      2. Create @result_handler decorator for auto-conversion
+      3. Create ErrorCode enum for standard errors
+      4. Update 50+ files to use Result[T] consistently
+      5. Create Result utilities: map, flat_map, recover
+      
+  - id: ABS-004
+    title: "No Query Interface (5+ query implementations)"
+    type: missing-abstraction
+    severity: MEDIUM
+    files_affected:
+      - cortex/brain/core/intent/lens_context_builder.py (query_context, 4 _query_* methods)
+      - cortex/orchestrators/core/repository_scanner.py (similar query pattern)
+      - cortex/knowledge/retriever.py (custom query logic)
+      - cortex/api/endpoints.py (API queries)
+    description: |
+      Query operations implemented differently in 5+ places:
+      - lens_context_builder has _query_function_by_name, _query_functions_in_file, etc.
+      - repository_scanner has analyze_file, extract_imports, identify_functions
+      - knowledge retriever has custom query logic
+      No unified interface for querying code/knowledge
+    impact: |
+      - Hard to add new query types
+      - Inconsistent query API
+      - Code duplication in filtering/searching
+      - Hard to optimize queries
+    effort: MEDIUM
+    suggested_approach: |
+      1. Create `Query[T]` interface:
+         ```python
+         class Query(ABC):
+             @abstractmethod
+             def execute(self, context: Any) -> List[T]
+         ```
+      2. Create specific queries: FunctionQuery, ClassQuery, etc.
+      3. Create QueryRegistry for registering/executing queries
+      4. Refactor 5 locations to use query interface
+      5. Add caching layer for expensive queries
+      
+  - id: ABS-005
+    title: "No Standardized Error/Exception Hierarchy"
+    type: missing-abstraction
+    severity: MEDIUM
+    files_affected: "All files raising exceptions (40+ files)"
+    description: |
+      Exceptions raised inconsistently:
+      - Generic Exception
+      - ValueError
+      - FileNotFoundError
+      - Custom exceptions scattered across files
+      No hierarchy, no error codes, inconsistent messages
+    impact: |
+      - Hard to catch specific errors
+      - Inconsistent error messages
+      - Hard to map errors to causes
+      - Poor error recovery
+    effort: MEDIUM
+    suggested_approach: |
+      1. Create CortexException hierarchy:
+         ```python
+         CortexException
+         ├── CortexConfigError
+         ├── CortexRuntimeError
+         ├── CortexIOError
+         └── CortexValidationError
+         ```
+      2. Add error code: CortexError(code="E001", message=)
+      3. Create error recovery strategies
+      4. Update 40+ locations to use proper exceptions
+      
+  - id: ABS-006
+    title: "No Common Logger Configuration"
+    type: missing-abstraction
+    severity: MEDIUM
+    files_affected: "~30 files with logger initialization"
+    description: |
+      Each module configures its own logger without central configuration.
+      Some use standard logging, some use EnhancedAuditLogger, some use TieredLogger.
+      No way to globally change log level or format.
+    impact: |
+      - Inconsistent logging behavior
+      - Hard to enable DEBUG logging globally
+      - Hard to change log format
+      - Test logging configuration scattered
+    effort: MEDIUM
+    suggested_approach: |
+      1. Create `LoggerConfig` with standard settings
+      2. Create `setup_logging(config)` global function
+      3. Use logging.config.dictConfig for standard Python logging
+      4. Replace 30 logger initializations with:
+         `logger = logging.getLogger(__name__)`
+      5. Control via central configuration
+      
+  - id: ABS-007
+    title: "No Caching Strategy/Abstraction"
+    type: missing-abstraction
+    severity: MEDIUM
+    files_affected:
+      - cortex/brain/domain_brain/audit_logger.py (manual TTL cache)
+      - cortex/brain/core/intent/lens_context_builder.py (@lru_cache decorator)
+      - cortex/api/endpoints.py (manual caching)
+      - cortex/knowledge/retriever.py (no caching)
+    description: |
+      Caching implemented ad-hoc in 4+ places:
+      - Manual OrderedDict with TTL
+      - @lru_cache decorators
+      - Manual dict caching
+      - No caching (should have it)
+      No unified caching strategy
+    impact: |
+      - Performance: repeated expensive queries without caching
+      - Inconsistent cache invalidation
+      - Memory leaks (unbounded caches)
+      - Hard to profile cache performance
+    effort: MEDIUM
+    suggested_approach: |
+      1. Create `Cache[K, V]` interface with strategies:
+         - LRU, LFU, TTL, Time-based
+      2. Create `@cached(strategy='lru', size=100)` decorator
+      3. Create `CacheManager` for monitoring/clearing caches
+      4. Standardize caching in 4+ locations
+      5. Add metrics: hit rate, eviction rate
+      
+  - id: ABS-008
+    title: "No Unified Graph Data Structure"
+    type: missing-abstraction
+    severity: MEDIUM
+    files_affected:
+      - cortex/orchestrators/core/repository_scanner.py (DependencyGraph)
+      - cortex/brain/core/intent/lens_context_builder.py (KnowledgeGraph)
+    description: |
+      Two independent graph implementations (DependencyGraph, KnowledgeGraph)
+      with similar functionality but different APIs:
+      - DependencyGraph has relationships
+      - KnowledgeGraph has nodes/edges
+      Both need traversal, filtering, etc.
+    impact: |
+      - Code duplication in graph operations
+      - Different behavior for same operations
+      - Hard to convert between graph types
+    effort: LOW
+    suggested_approach: |
+      1. Create `BaseGraph[N, E]` generic class
+      2. Create `Graph` with nodes and edges
+      3. Update DependencyGraph and KnowledgeGraph to inherit
+      4. Share traversal/filtering logic
+      
+  - id: ABS-009
+    title: "No Metadata Abstraction (scattered patterns)"
+    type: missing-abstraction
+    severity: LOW
+    files_affected:
+      - cortex/orchestrators/core/repository_scanner.py (metadata: Dict)
+      - cortex/brain/core/intent/lens_context_builder.py (metadata: Dict)
+      - cortex/knowledge/retriever.py (metadata: Dict)
+      - "And 5+ more files"
+    description: |
+      Metadata stored as Dict[str, Any] everywhere without schema.
+      No type safety, no validation, different structures in different files.
+    impact: |
+      - No schema enforcement
+      - Hard to discover available metadata
+      - Easy to create incompatible metadata
+    effort: LOW
+    suggested_approach: |
+      1. Create `Metadata` class inheriting from TypedDict
+      2. Define standard metadata fields
+      3. Use instead of Dict[str, Any]
+      4. Add validation when setting metadata
+      
+  - id: ABS-010
+    title: "No Observer/Event Pattern for Notifications"
+    type: missing-abstraction
+    severity: MEDIUM
+    files_affected:
+      - cortex/api/endpoints.py
+      - cortex/mcp/server.py
+      - cortex/infrastructure/alert_manager.py
+      - cortex/orchestrators/core/master_orchestrator.py
+    description: |
+      Status changes trigger manual notifications (alerts, logging) in multiple places.
+      No centralized event system or observer pattern.
+      When status changes, 3-4 different code paths must be updated.
+    impact: |
+      - Hard to add new status change handlers
+      - Easy to forget to notify in some paths
+      - No event history/audit trail for status changes
+      - Hard to implement features like webhooks
+    effort: MEDIUM
+    suggested_approach: |
+      1. Create `Event` base class
+      2. Create `EventBus` with pub/sub
+      3. Register handlers for status change events
+      4. Publish events instead of calling code directly
+      5. Keep event history in audit trail
+      
+# ============================================================================
+# SECTION 4: OVER-ENGINEERING (6 items)
+# ============================================================================
+
+over_engineering:
+  
+  - id: OE-001
+    title: "Over-Complex Graph Building (DependencyGraph/KnowledgeGraph)"
+    type: over-engineering
+    severity: MEDIUM
+    files_affected:
+      - cortex/orchestrators/core/repository_scanner.py
+      - cortex/brain/core/intent/lens_context_builder.py
+    description: |
+      Graph construction over-engineered with:
+      - Separate methods for adding nodes vs edges
+      - Validation on edge creation (source/target must exist)
+      - Multiple graph representations (DependencyGraph AND KnowledgeGraph)
+      - Complex traversal logic
+      Could use simpler approach for 80% use cases.
+    impact: |
+      - 400+ lines of graph code
+      - Steep learning curve
+      - Over-engineered for actual needs
+    effort: LOW
+    suggested_approach: |
+      1. Simplify: Graph should support both nodes and edges in constructor
+      2. Add nodes on-demand when edges created
+      3. Provide 3-4 standard traversal methods (DFS, BFS, etc.)
+      4. Keep advanced features optional (validation, complex queries)
+      
+  - id: OE-002
+    title: "Over-Specified Data Classes (50+ fields in some classes)"
+    type: over-engineering
+    severity: MEDIUM
+    files_affected:
+      - cortex/brain/core/intent/lens_context_builder.py (LENSContext, ContextNode, ContextEdge)
+      - cortex/orchestrators/core/repository_scanner.py (FileEntity, etc.)
+      - cortex/infrastructure/enhanced_audit_logger.py (AuditLogEntry)
+    description: |
+      Data classes have 20-50 fields with many optional fields.
+      Example: LENSContext has 8 fields, many optional and rarely used together.
+      Builders create overly complex objects.
+    impact: |
+      - Hard to understand what fields are needed
+      - Lots of None checks
+      - Difficult construction patterns
+      - Testing requires setting many optional fields
+    effort: MEDIUM
+    suggested_approach: |
+      1. Split large classes into smaller focused classes
+      2. Move optional fields to separate config objects
+      3. Use composition instead of inheritance
+      4. Example: LENSContext → (Context + ASTFindings + GitFindings + ...)
+      5. Reduce class complexity by 60%
+      
+  - id: OE-003
+    title: "Over-Built Configuration System (cortex/config/)"
+    type: over-engineering
+    severity: LOW
+    files_affected:
+      - cortex/config/features.yaml
+      - cortex-config.yaml
+      - Various config loading code
+    description: |
+      Complex configuration system with multiple config files, loaders, validators.
+      Most of codebase hard-codes values instead of using config system.
+      98% of potential config options unused.
+    impact: |
+      - Complex setup with little benefit
+      - Redundant configuration options
+      - Config validation rarely used
+    effort: LOW
+    suggested_approach: |
+      1. Simplify: 3-5 key configuration options only
+      2. Move feature flags to code (feature package)
+      3. Keep config for deployment-specific settings only
+      4. Remove unused configuration options
+      
+  - id: OE-004
+    title: "Over-Complicated Filter/Query System"
+    type: over-engineering
+    severity: LOW
+    files_affected:
+      - cortex/brain/core/intent/lens_context_builder.py (filter_context, _filter_* methods)
+    description: |
+      Filter system with 4 specific filter methods doing nearly same thing:
+      - _filter_ast_findings()
+      - _filter_git_findings()
+      - _filter_comment_findings()
+      - _filter_relationship_findings()
+      Each just copies dict and filters by type.
+    impact: |
+      - 150+ lines of similar code
+      - Hard to add new filter types
+      - Not actually used (no callers of filter_context)
+    effort: LOW
+    suggested_approach: |
+      1. Create generic filter: `filter(context, predicate)`
+      2. Pass filter function instead of 4 methods
+      3. Reduce 150 lines to 20 lines
+      4. OR: Remove if not used (likely case)
+      
+  - id: OE-005
+    title: "Over-Engineered Prioritization System"
+    type: over-engineering
+    severity: LOW
+    files_affected:
+      - cortex/brain/core/intent/lens_context_builder.py (prioritize_context, PrioritizationStrategy enum)
+    description: |
+      Prioritization system with 5 strategies defined but only one implemented.
+      Strategy enum has 5 options but only CHANGE_FREQUENCY has logic.
+      Interface suggests extensibility but adds complexity for 1 implementation.
+    impact: |
+      - Premature generalization
+      - Dead code paths (4/5 strategies unimplemented)
+      - Harder to understand actual logic
+    effort: LOW
+    suggested_approach: |
+      1. Remove generic strategy system if only 1 used
+      2. Implement specific prioritization function
+      3. Add strategy system when 2nd strategy actually needed
+      4. Reduce complexity by 60%
+      
+  - id: OE-006
+    title: "Over-Complicated Intent Routing"
+    type: over-engineering
+    severity: MEDIUM
+    files_affected:
+      - cortex/orchestrators/core/intent_router.py
+      - cortex/brain/intent_router/
+    description: |
+      Intent routing system with:
+      - Multiple router classes
+      - Complex dispatch logic
+      - Custom routing rules
+      Most routes follow simple pattern (type → handler)
+      Could use simple routing table.
+    impact: |
+      - 500+ lines of routing code
+      - Hard to add new routes
+      - Difficult to debug routing issues
+    effort: MEDIUM
+    suggested_approach: |
+      1. Simplify to routing table: Dict[intent_type, handler]
+      2. Use registration decorator: `@route('type.action')`
+      3. Remove complex dispatch logic
+      4. Reduce code by 70%
+      
+# ============================================================================
+# SECTION 5: UNDER-ENGINEERING (7 items)
+# ============================================================================
+
+under_engineering:
+  
+  - id: UE-001
+    title: "Incomplete Error Handling (40+ bare except clauses)"
+    type: under-engineering
+    severity: CRITICAL
+    files_affected: "~40 files across cortex/"
+    description: |
+      Widespread use of broad exception handling that silently fails:
+      ```python
+      try:
+          operation()
+      except Exception:
+          pass  # Silent failure
+      except Exception as e:
+          self.logger.debug(str(e))  # Debug level means hidden in prod
+      ```
+      Found 40+ instances. Makes debugging production issues impossible.
+    impact: |
+      - CRITICAL: Silent failures hide bugs
+      - Production issues impossible to debug
+      - Errors logged at DEBUG (hidden in prod)
+      - No error recovery strategy
+      - Audit trail gaps
+    effort: HIGH
+    suggested_approach: |
+      1. Immediate: Add error logging at WARNING/ERROR level
+      2. Replace generic Exception with specific exception types
+      3. Implement error recovery strategy
+      4. Create @safe_operation decorator for legitimate pass cases
+      5. Add pre-commit hook: fail on bare except
+      6. Add integration tests that verify errors are logged
+      
+  - id: UE-002
+    title: "Missing Input Validation (25+ entry points)"
+    type: under-engineering
+    severity: HIGH
+    files_affected:
+      - cortex/api/endpoints.py (FastAPI routes)
+      - cortex/mcp/server.py (MCP handlers)
+      - cortex/orchestrators/core/master_orchestrator.py
+      - "And 20+ more entry points"
+    description: |
+      Many entry points accept input with minimal validation.
+      Some validate, others don't. Inconsistent validation logic.
+      No central validation framework.
+      
+      Example: query parameters passed directly to functions without checking.
+    impact: |
+      - Garbage in → garbage out
+      - Easy to cause crashes with bad input
+      - No clear error messages to users
+      - Security risk (injection, etc.)
+    effort: HIGH
+    suggested_approach: |
+      1. Create ValidationMiddleware for all inputs
+      2. Define input schemas (Pydantic models)
+      3. Validate before processing
+      4. Provide clear error messages
+      5. Add input validation tests
+      
+  - id: UE-003
+    title: "No Load/Stress Testing"
+    type: under-engineering
+    severity: HIGH
+    files_affected:
+      - tests/ (no load test directory)
+      - cortex/infrastructure/ (no load testing utilities)
+    description: |
+      No integration tests or load tests.
+      Unit tests exist (400+), but no:
+      - Integration test suite
+      - Load testing (how does system handle 1000 requests?)
+      - Stress testing (what breaks first?)
+      - Chaos testing (simulate failures)
+      Only smoke tests in tests/e2e/smoke/
+    impact: |
+      - Unknown system limits
+      - Performance issues discovered in production
+      - Scalability unknown
+      - Resource limits unknown
+    effort: HIGH
+    suggested_approach: |
+      1. Create tests/load/ with load tests
+      2. Create tests/stress/ with stress tests
+      3. Use locust or similar for load testing
+      4. Measure:
+         - Requests per second
+         - Response time distribution
+         - Error rate under load
+         - Memory/CPU usage
+      5. Set performance baselines
+      
+  - id: UE-004
+    title: "No Caching for Expensive Operations"
+    type: under-engineering
+    severity: MEDIUM
+    files_affected:
+      - cortex/knowledge/retriever.py (no caching)
+      - cortex/orchestrators/core/repository_scanner.py (no caching)
+      - cortex/brain/core/intent/lens_context_builder.py (partial: _compute_* methods)
+    description: |
+      Expensive operations re-computed on every call:
+      - Repository scanning (AST parsing of all files)
+      - Knowledge queries (searching through large datasets)
+      - Context building (aggregating from 4 sources)
+      No caching strategy.
+      
+      repository_scanner.py alone: scans entire codebase on every call
+    impact: |
+      - Poor performance
+      - CPU/IO waste
+      - Slow API responses
+      - High resource usage
+    effort: MEDIUM
+    suggested_approach: |
+      1. Add caching to repository_scanner:
+         - Cache file AST parses
+         - Cache dependency graph (invalidate on file change)
+      2. Add caching to knowledge retriever:
+         - Cache query results (TTL: 5 minutes)
+         - Cache hot queries (1 hour)
+      3. Add caching to lens_context_builder:
+         - Cache computed_data (TTL: depends on input freshness)
+      4. Create cache invalidation strategy
+      5. Monitor cache hit rates
+      
+  - id: UE-005
+    title: "No Rate Limiting or Throttling"
+    type: under-engineering
+    severity: MEDIUM
+    files_affected:
+      - cortex/api/endpoints.py (no rate limit middleware)
+      - cortex/mcp/server.py (no rate limits)
+      - cortex/knowledge/retriever.py (no throttling)
+    description: |
+      No protection against abuse or overload.
+      Single bad client can DOS the system:
+      - Rapid API calls
+      - Large batch requests
+      - Concurrent connection limits
+    impact: |
+      - Vulnerable to DOS
+      - One bad client affects all clients
+      - No fairness guarantees
+    effort: MEDIUM
+    suggested_approach: |
+      1. Add rate limiting middleware:
+         - Per-IP rate limit
+         - Per-user rate limit
+         - Global rate limit
+      2. Add queue/backoff for requests
+      3. Add circuit breaker for cascading failures
+      4. Document rate limits for API
+      
+  - id: UE-006
+    title: "Minimal Error Recovery (no retries, no fallbacks)"
+    type: under-engineering
+    severity: MEDIUM
+    files_affected:
+      - cortex/orchestrators/core/master_orchestrator.py
+      - cortex/api/endpoints.py
+      - cortex/knowledge/retriever.py
+      - "~10 more files"
+    description: |
+      When operations fail, no retry or fallback logic.
+      Failures propagate immediately without recovery attempt.
+      No exponential backoff, no circuit breaker, no fallback strategies.
+    impact: |
+      - Transient failures (network hiccup) cause permanent failure
+      - No resilience to temporary outages
+      - Cascading failures
+      - Poor user experience
+    effort: MEDIUM
+    suggested_approach: |
+      1. Add @retry decorator with exponential backoff
+      2. Add circuit breaker for external dependencies
+      3. Implement fallback strategies:
+         - Stale cache
+         - Graceful degradation
+         - Default response
+      4. Add health checks
+      5. Test recovery with chaos testing
+      
+  - id: UE-007
+    title: "No Dependency Injection for Testing"
+    type: under-engineering
+    severity: MEDIUM
+    files_affected: "~30 files with hard-coded dependencies"
+    description: |
+      Classes hard-code their dependencies (logger, database, etc.)
+      Making testing difficult. Need to mock at module level or patch.
+      No dependency injection container or simple injection.
+    impact: |
+      - Hard to write unit tests
+      - Tests require extensive mocking
+      - Hard to test with different implementations
+      - Fragile tests (patch paths break easily)
+    effort: MEDIUM
+    suggested_approach: |
+      1. Add simple dependency injection:
+         - Constructor parameters with defaults
+         - Or: Simple service locator
+      2. Create @injectable decorator
+      3. Create fixture for dependency injection in tests
+      4. Update 30 files to accept dependencies
+      5. Tests become cleaner: inject test doubles
+      
+# ============================================================================
+# SECTION 6: DOCUMENTATION GAPS (8 items)
+# ============================================================================
+
+documentation_gaps:
+  
+  - id: DOC-001
+    title: "Complex Algorithms Undocumented"
+    type: doc-gap
+    severity: MEDIUM
+    files_affected:
+      - cortex/brain/core/intent/lens_context_builder.py (context building algorithm)
+      - cortex/orchestrators/core/repository_scanner.py (dependency graph building)
+      - cortex/brain/domain_brain/deduplication.py (hash chain logic)
+    description: |
+      Complex algorithms lack explanation:
+      - How context is aggregated from 4 sources?
+      - What are the priority rules?
+      - How is dependency graph built? What's the complexity?
+      - Hash chain algorithm: how is integrity verified?
+      
+      Code has docstrings but lacks algorithmic explanation.
+    impact: |
+      - Hard to understand how things work
+      - Hard to debug issues
+      - Hard to optimize
+      - New contributors struggle
+    effort: LOW
+    suggested_approach: |
+      1. Add algorithm documentation to each complex module:
+         - Algorithmic approach (why this design?)
+         - Time/space complexity
+         - Assumptions
+         - Known limitations
+      2. Add examples of algorithm flow
+      3. Add references to relevant papers/books if applicable
+      
+  - id: DOC-002
+    title: "API Documentation Incomplete"
+    type: doc-gap
+    severity: MEDIUM
+    files_affected:
+      - cortex/api/endpoints.py (some routes lack examples)
+      - cortex/mcp/protocol.py (custom protocol undocumented)
+      - cortex/orchestrators/core/master_orchestrator.py (public API unclear)
+    description: |
+      Public APIs lack:
+      - Usage examples
+      - Error response documentation
+      - Rate limit documentation
+      - Authentication/authorization docs
+      - Example workflows
+    impact: |
+      - Hard for users to use APIs
+      - Unclear what to expect
+      - No integration examples
+    effort: MEDIUM
+    suggested_approach: |
+      1. Add example requests/responses to each endpoint
+      2. Document error codes and meanings
+      3. Document rate limits
+      4. Create workflow examples:
+         - "How to analyze a codebase"
+         - "How to create a domain"
+         - etc.
+      5. Add Postman collection or OpenAPI spec
+      
+  - id: DOC-003
+    title: "Architecture Decision Records (ADRs) Incomplete"
+    type: doc-gap
+    severity: MEDIUM
+    files_affected:
+      - docs/02-architecture/adrs/ (some decisions missing)
+    description: |
+      Key architectural decisions lack ADRs:
+      - Why multiple audit logger implementations?
+      - Why custom JSON-RPC instead of official SDK?
+      - Why this folder structure?
+      - Why LENS context builder pattern?
+      - Performance vs flexibility tradeoffs?
+    impact: |
+      - Future developers don't understand why decisions were made
+      - Easy to accidentally undo important decisions
+      - No record of rejected alternatives
+    effort: MEDIUM
+    suggested_approach: |
+      1. Create ADR for each major decision:
+         - Context/problem
+         - Decision
+         - Rationale
+         - Consequences
+      2. Link ADRs from relevant code files
+      3. Include decision date and team
+      
+  - id: DOC-004
+    title: "Test Documentation Missing"
+    type: doc-gap
+    severity: LOW
+    files_affected:
+      - tests/ (test organization confusing)
+      - tests/unit/ (tests/ vs conftest.py interaction unclear)
+    description: |
+      Unclear how to run tests:
+      - How do I run just unit tests?
+      - How do I run integration tests?
+      - How do I debug failing test?
+      - What fixtures are available?
+      - How do I add a new test?
+    impact: |
+      - New contributors can't easily run/write tests
+      - Test organization confusing
+      - Duplicate test fixtures
+    effort: LOW
+    suggested_approach: |
+      1. Create tests/README.md with:
+         - Test organization explanation
+         - How to run different test types
+         - How to debug tests
+         - Available fixtures
+      2. Document test patterns and best practices
+      3. Add examples of unit, integration tests
+      
+  - id: DOC-005
+    title: "Configuration Options Undocumented"
+    type: doc-gap
+    severity: LOW
+    files_affected:
+      - cortex-config.yaml
+      - cortex/config/features.yaml
+      - docs/ (config section incomplete)
+    description: |
+      Configuration file parameters lack documentation:
+      - What does each setting do?
+      - What are valid values?
+      - What's the default?
+      - When should you change it?
+      - Impact of changing each setting?
+    impact: |
+      - Users don't know how to configure system
+      - Guessing at values leads to misconfiguration
+      - No guidance on tuning for performance
+    effort: LOW
+    suggested_approach: |
+      1. Create config documentation with:
+         - Each parameter explained
+         - Valid values
+         - Default value
+         - When to change
+         - Examples
+      2. Add comments to config files
+      3. Create configuration guide in docs/
+      
+  - id: DOC-006
+    title: "No Troubleshooting Guide for Common Issues"
+    type: doc-gap
+    severity: LOW
+    files_affected:
+      - docs/ (no troubleshooting section)
+    description: |
+      No guide for common problems:
+      - "System slow - what should I check?"
+      - "How to debug import errors?"
+      - "How to clear caches?"
+      - "How to check if system is healthy?"
+      - "What do error codes mean?"
+    impact: |
+      - Users struggle to solve problems
+      - Support burden increases
+      - Debugging takes longer
+    effort: LOW
+    suggested_approach: |
+      1. Create docs/TROUBLESHOOTING.md
+      2. Document common issues and solutions
+      3. Add diagnostic tools/commands
+      4. Add log interpretation guide
+      
+  - id: DOC-007
+    title: "Code Examples Missing"
+    type: doc-gap
+    severity: MEDIUM
+    files_affected:
+      - docs/ (examples/ directory empty or missing)
+      - Key modules (no usage examples in docstrings)
+    description: |
+      Few code examples showing how to use key components:
+      - How to use RepositoryScanner?
+      - How to build LENSContext?
+      - How to register custom rules?
+      - How to create orchestrator?
+    impact: |
+      - Hard to understand how to use library
+      - New contributors struggle
+      - Integration tests are only examples
+    effort: MEDIUM
+    suggested_approach: |
+      1. Create examples/ directory
+      2. Add example scripts for:
+         - Scanning a codebase
+         - Building context
+         - Creating custom analyzer
+         - Using API
+      3. Add docstring examples for complex classes
+      4. Link examples from docs
+      
+  - id: DOC-008
+    title: "Performance Tuning Guide Missing"
+    type: doc-gap
+    severity: MEDIUM
+    files_affected:
+      - docs/ (no performance section)
+      - cortex/ (no performance tips in comments)
+    description: |
+      No guide for improving performance:
+      - Which caches are available?
+      - How to enable caching?
+      - What's the bottleneck?
+      - How to measure performance?
+      - Trade-offs between options?
+    impact: |
+      - Users can't optimize performance
+      - Deployments run slow by default
+      - No knowledge of what's configurable
+    effort: MEDIUM
+    suggested_approach: |
+      1. Create docs/PERFORMANCE.md with:
+         - Performance characteristics
+         - Bottleneck identification
+         - Tuning recommendations
+         - Caching strategies
+      2. Add performance baselines
+      3. Document trade-offs
+      
+# ============================================================================
+# SECTION 7: TEST GAPS (9 items)
+# ============================================================================
+
+test_gaps:
+  
+  - id: TEST-001
+    title: "No Integration Tests (400+ unit tests, 0 integration tests)"
+    type: test-gap
+    severity: CRITICAL
+    files_affected:
+      - tests/unit/ (400+ files)
+      - tests/e2e/ (only smoke tests)
+      - tests/integration/ (directory exists but minimal tests)
+    description: |
+      Extensive unit tests (400+) but virtually no integration tests.
+      Components tested in isolation but not together.
+      
+      Missing:
+      - End-to-end workflow tests
+      - Component interaction tests
+      - Database + API integration
+      - Cache invalidation scenarios
+    impact: |
+      - Late discovery of integration bugs
+      - Components tested individually but fail together
+      - Real-world usage not validated
+      - Deployment issues discovered in prod
+    effort: HIGH
+    suggested_approach: |
+      1. Create tests/integration/ suite with:
+         - Complete workflow tests
+         - API + database integration
+         - Cache behavior tests
+         - Configuration loading tests
+      2. Use docker-compose for test infrastructure
+      3. Test real scenarios:
+         - Scan codebase → build context → generate insights
+         - Create domain → upload file → deduplicate
+      4. Set target: 50+ integration tests
+      
+  - id: TEST-002
+    title: "Error Path Testing Missing (happy path only)"
+    type: test-gap
+    severity: HIGH
+    files_affected: "Most test files (tests/unit/)"
+    description: |
+      Tests mostly cover happy paths. Error scenarios under-tested:
+      - Invalid input handling
+      - Network failures
+      - File not found
+      - Permission denied
+      - Out of memory
+      - Database locked
+      Most files lack error tests.
+    impact: |
+      - Error handling untested → bugs in production
+      - Error messages unclear
+      - Recovery logic uncovered
+      - Edge cases missed
+    effort: HIGH
+    suggested_approach: |
+      1. Audit existing tests for error coverage
+      2. Add error tests for:
+         - Invalid input (None, empty, wrong type)
+         - Resource errors (file not found, permission denied)
+         - External failures (API down, DB error)
+         - Concurrency issues (deadlock, race condition)
+      3. Use pytest fixtures for common error scenarios
+      4. Create error scenario library
+      5. Target: 50% error test coverage
+      
+  - id: TEST-003
+    title: "No Performance/Regression Tests"
+    type: test-gap
+    severity: HIGH
+    files_affected:
+      - tests/ (no perf test directory)
+    description: |
+      No performance tests or regression testing.
+      No detection when code gets slower:
+      - Repository scan performance
+      - Context building speed
+      - API response time
+      - Memory usage
+      
+      Only manual performance testing possible.
+    impact: |
+      - Performance regressions missed
+      - Slow features deployed without notice
+      - Users experience degradation
+    effort: HIGH
+    suggested_approach: |
+      1. Create tests/performance/ with:
+         - Benchmark repository scan
+         - Benchmark context building
+         - Benchmark API endpoints
+         - Memory usage tests
+      2. Use pytest-benchmark or similar
+      3. Track historical performance
+      4. Fail CI if performance regresses >10%
+      5. Document performance baselines
+      
+  - id: TEST-004
+    title: "Limited Concurrency Testing"
+    type: test-gap
+    severity: MEDIUM
+    files_affected:
+      - tests/unit/ (few concurrency tests)
+      - cortex/infrastructure/ (threading code lightly tested)
+    description: |
+      Concurrent code (threading, async) lightly tested.
+      Only basic threading tests exist.
+      Missing:
+      - Race condition detection
+      - Deadlock scenarios
+      - Connection pool exhaustion
+      - Concurrent modification tests
+    impact: |
+      - Concurrency bugs in production
+      - Thread safety issues missed
+      - Deadlock scenarios untested
+    effort: HIGH
+    suggested_approach: |
+      1. Create tests/concurrency/ with:
+         - Thread safety tests
+         - Race condition tests (stress test)
+         - Deadlock detection
+         - Connection pool tests
+      2. Use pytest-timeout to catch hangs
+      3. Use threading stress test library
+      4. Test thread-safety of caches
+      
+  - id: TEST-005
+    title: "Limited Security Testing"
+    type: test-gap
+    severity: MEDIUM
+    files_affected:
+      - tests/ (no security directory)
+      - cortex/infrastructure/security/ (basic tests only)
+    description: |
+      Security features lightly tested:
+      - Injection attack scenarios not tested
+      - Authentication bypass not tested
+      - Authorization edge cases missed
+      - Secrets handling not tested
+    impact: |
+      - Security vulnerabilities missed
+      - Injection attacks possible
+      - Secret leakage risk
+    effort: MEDIUM
+    suggested_approach: |
+      1. Create tests/security/ with:
+         - Input validation tests (SQL injection, etc.)
+         - Authentication tests
+         - Authorization tests
+         - Secrets handling tests
+      2. Use security testing tools (bandit)
+      3. Test against OWASP top 10
+      
+  - id: TEST-006
+    title: "No Contract Tests"
+    type: test-gap
+    severity: MEDIUM
+    files_affected:
+      - tests/ (no contract test directory)
+      - cortex/api/ (API contract unclear)
+      - cortex/mcp/ (MCP protocol not contract tested)
+    description: |
+      No contract tests ensuring API stability:
+      - Request/response format stability
+      - Error response consistency
+      - Version compatibility
+      - Backward compatibility
+    impact: |
+      - Clients break when API changes
+      - Version compatibility unclear
+      - Contract violations not caught
+    effort: MEDIUM
+    suggested_approach: |
+      1. Create tests/contract/ with:
+         - API response format tests
+         - Error response format tests
+         - MCP message format tests
+      2. Use pact or similar framework
+      3. Test version compatibility
+      4. Document contract
+      
+  - id: TEST-007
+    title: "Insufficient Fixture Reuse (duplication in test setup)"
+    type: test-gap
+    severity: LOW
+    files_affected:
+      - tests/unit/ (fixtures scattered, duplicated)
+      - conftest.py files (multiple conftest.py files)
+    description: |
+      Test fixtures defined in multiple conftest.py files
+      and directly in test files. Similar fixtures redefined
+      in different test directories.
+    impact: |
+      - Duplication in test setup
+      - Fixtures not consistent across tests
+      - Hard to reuse fixtures
+      - Changes to fixtures require multiple updates
+    effort: LOW
+    suggested_approach: |
+      1. Consolidate fixtures to single conftest.py
+      2. Create fixture library for common objects
+      3. Use pytest.fixture scope appropriately
+      4. Document available fixtures
+      
+  - id: TEST-008
+    title: "Flaky Tests (time-dependent tests)"
+    type: test-gap
+    severity: MEDIUM
+    files_affected:
+      - tests/unit/cortex/brain/core/knowledge/test_change_detection.py (line 572: time.sleep(1.1))
+    description: |
+      Tests that depend on timing:
+      - time.sleep() in tests (unreliable on CI)
+      - Implicit waits for async operations
+      - Database transaction timing assumptions
+      
+      These tests are flaky: pass locally, fail in CI.
+    impact: |
+      - Unreliable CI/CD
+      - False test failures
+      - Hard to debug
+      - Team loses confidence in tests
+    effort: MEDIUM
+    suggested_approach: |
+      1. Remove time.sleep() from tests
+      2. Use mocking for time-dependent behavior
+      3. Use polling with timeout for async operations
+      4. Create test utilities for:
+         - Waiting for condition
+         - Mocking time
+         - Mocking async
+      5. Fix 5+ existing flaky tests
+      
+  - id: TEST-009
+    title: "No Load/Chaos Testing"
+    type: test-gap
+    severity: HIGH
+    files_affected:
+      - tests/ (no load/ or chaos/ directory)
+    description: |
+      No tests for:
+      - High load scenarios
+      - Cascading failures
+      - Circuit breaker behavior
+      - Graceful degradation
+      - Chaos engineering scenarios
+    impact: |
+      - Unknown behavior under load
+      - Cascading failures not prevented
+      - Reliability under stress unknown
+    effort: HIGH
+    suggested_approach: |
+      1. Create tests/load/ with load tests
+      2. Create tests/chaos/ with chaos tests
+      3. Test scenarios:
+         - API load test (1000 req/sec)
+         - Large file processing
+         - Cascading failures
+      4. Use locust or similar for load testing
+      5. Set performance SLOs and verify
+      
+# ============================================================================
+# SECTION 8: PERFORMANCE ISSUES (8 items)
+# ============================================================================
+
+performance:
+  
+  - id: PERF-001
+    title: "Repository Scanner O(n²) Complexity"
+    type: perf
+    severity: HIGH
+    files_affected:
+      - cortex/orchestrators/core/repository_scanner.py
+    description: |
+      Repository scanning performs full AST parse of every file
+      without caching. Complexity: O(n * m) where:
+      - n = number of files
+      - m = file size
+      
+      For codebase with 300+ files, scanning takes 5+ seconds.
+      No incremental updates possible.
+    impact: |
+      - Slow analysis
+      - API endpoints timeout (queries require scan)
+      - Development iteration slow
+    effort: MEDIUM
+    suggested_approach: |
+      1. Add AST parse caching:
+         - Cache parsed AST by file hash
+         - Invalidate on file change
+      2. Add incremental scanning:
+         - Only re-scan changed files
+         - Merge results with cached results
+      3. Add lazy parsing:
+         - Parse only what's needed
+         - Defer expensive analysis
+      4. Benchmark: should scan in <500ms
+      
+  - id: PERF-002
+    title: "Context Building Aggregates All Data (memory intensive)"
+    type: perf
+    severity: MEDIUM
+    files_affected:
+      - cortex/brain/core/intent/lens_context_builder.py
+    description: |
+      LENSContextBuilder aggregates findings from 4 sources:
+      - AST findings (all functions, classes)
+      - Git findings (all history)
+      - Comment findings (all markers)
+      - Relationship findings (all imports)
+      
+      Loads everything into memory (no lazy loading).
+      For large codebase: 100MB+ context objects.
+    impact: |
+      - Memory usage high
+      - OOM errors on large codebases
+      - Slow serialization
+      - Network bandwidth for transmission
+    effort: MEDIUM
+    suggested_approach: |
+      1. Add lazy loading:
+         - Load summary first
+         - Load details on demand
+      2. Add filtering:
+         - Load only relevant context
+         - Exclude unneeded findings
+      3. Add pagination for large results
+      4. Add compression for serialization
+      
+  - id: PERF-003
+    title: "Knowledge Queries Sequential (should be parallel)"
+    type: perf
+    severity: MEDIUM
+    files_affected:
+      - cortex/knowledge/retriever.py
+      - cortex/api/endpoints.py (knowledge queries)
+    description: |
+      Knowledge queries execute sequentially:
+      - Query domain knowledge
+      - Query technical knowledge
+      - Query patterns
+      - Merge results
+      
+      Could parallelize each query (I/O bound).
+    impact: |
+      - Slower query response
+      - Unnecessary latency
+      - CPU underutilization
+    effort: LOW
+    suggested_approach: |
+      1. Use asyncio to parallelize queries
+      2. Or use concurrent.futures.ThreadPoolExecutor
+      3. Wait for all queries to complete
+      4. Merge results
+      5. Benchmark: should reduce latency by 50%
+      
+  - id: PERF-004
+    title: "No Connection Pooling (new connection per request)"
+    type: perf
+    severity: MEDIUM
+    files_affected:
+      - cortex/infrastructure/database.py
+      - cortex/core/database.py
+    description: |
+      Each database operation creates new connection.
+      No connection pooling means:
+      - Connection setup overhead per query
+      - Database connection limits exceeded
+      - Performance degradation under load
+    impact: |
+      - Slow database operations
+      - Cascading failures under load
+      - Connection limit exceeded errors
+    effort: LOW
+    suggested_approach: |
+      1. Implement connection pooling:
+         - Use sqlalchemy connection pool
+         - Or: Custom pool implementation
+      2. Configure pool size:
+         - min_size = 5
+         - max_size = 20
+      3. Test pool behavior
+      4. Monitor pool stats
+      
+  - id: PERF-005
+    title: "Recursive Graph Traversal (unbounded depth)"
+    type: perf
+    severity: MEDIUM
+    files_affected:
+      - cortex/orchestrators/core/repository_scanner.py (dependency graph)
+      - cortex/brain/core/intent/lens_context_builder.py (knowledge graph)
+    description: |
+      Graph traversal methods like get_neighbors() don't limit depth.
+      For circular dependency graphs, could traverse infinitely.
+      No memoization for visited nodes.
+    impact: |
+      - Infinite loops possible (with cycles)
+      - Stack overflow
+      - Exponential time for complex graphs
+    effort: LOW
+    suggested_approach: |
+      1. Add depth limit to traversals
+      2. Add visited set to prevent cycles
+      3. Add memoization for expensive computations
+      4. Add timeout for long traversals
+      5. Detect cycles explicitly
+      
+  - id: PERF-006
+    title: "Repeated Regex Compilation"
+    type: perf
+    severity: LOW
+    files_affected:
+      - cortex/orchestrators/core/repository_scanner.py (pattern detection)
+      - cortex/brain/core/intent/lens_context_builder.py (filtering)
+    description: |
+      Regular expressions compiled on every use instead of once.
+      Example: Same pattern used in loop, compiled each iteration.
+    impact: |
+      - Repeated regex compilation overhead
+      - Minor performance impact
+    effort: LOW
+    suggested_approach: |
+      1. Compile regexes once at module level:
+         ```python
+         FUNCTION_PATTERN = re.compile(r"def\s+(\w+)")
+         ```
+      2. Use compiled patterns in functions
+      3. Profile to verify improvement
+      
+  - id: PERF-007
+    title: "Unbounded Cache Growth (memory leak)"
+    type: perf
+    severity: MEDIUM
+    files_affected:
+      - cortex/brain/domain_brain/audit_logger.py (manual TTL cache, but bounded)
+      - cortex/brain/core/intent/lens_context_builder.py (@lru_cache, bounded but no TTL)
+      - Custom caches in various files (many unbounded)
+    description: |
+      Some caches grow unbounded:
+      - LRU caches with large size limits
+      - Caches without TTL
+      - Manual caches without cleanup
+      
+      Can consume all available memory.
+    impact: |
+      - Memory leaks
+      - OOM crashes
+      - Long-running processes fail
+    effort: MEDIUM
+    suggested_approach: |
+      1. Audit all caches for:
+         - Size limits
+         - TTL policies
+         - Eviction strategies
+      2. Implement cache management:
+         - Clear expired entries
+         - Monitor cache size
+         - Alert on high usage
+      3. Use LRU caches with reasonable size limits
+      4. Add cache statistics/monitoring
+      
+  - id: PERF-008
+    title: "N+1 Query Pattern Possible (not confirmed)"
+    type: perf
+    severity: MEDIUM
+    files_affected:
+      - cortex/knowledge/retriever.py (unclear if N+1 exists)
+      - cortex/brain/domain_brain/deduplication.py (hash computation for each upload)
+      - cortex/api/endpoints.py (possible in complex queries)
+    description: |
+      Potential N+1 query patterns in:
+      - Loading domains then loading domain metadata
+      - Computing hashes for duplicate detection
+      - Loading knowledge then filtering
+      
+      Not confirmed but possible with current code structure.
+    impact: |
+      - Possible slow queries
+      - Unnecessary database load
+      - Performance degrades with data size
+    effort: MEDIUM
+    suggested_approach: |
+      1. Profile queries:
+         - Use database query logging
+         - Use APM tool to identify slow endpoints
+      2. Identify actual N+1 patterns
+      3. Optimize:
+         - Batch loading
+         - Eager loading
+         - Query consolidation
+      4. Add query tests to prevent regressions
+      
+# ============================================================================
+# SUMMARY AND PRIORITY
+# ============================================================================
+
+summary:
+  total_debt_items: 47
+  breakdown:
+    duplication: 9
+    deprecated: 8
+    missing_abstractions: 10
+    over_engineering: 6
+    under_engineering: 7
+    documentation_gaps: 8
+    test_gaps: 9
+    performance: 8
+  
+  critical_items: 8
+    - UE-001: Incomplete error handling (40+ bare except)
+    - TEST-001: No integration tests
+    - UE-002: Missing input validation
+    - UE-003: No load/stress testing
+    - DEP-006: TODO/FIXME incomplete features
+    - DEP-001: WCF endpoints deprecated but not removed
+    - DUP-001: Multiple audit logger implementations
+    - PERF-001: Repository scanner O(n²)
+  
+  high_priority_items: 18
+    - Address all CRITICAL items first
+    - Fix all HIGH severity duplication
+    - Implement error handling improvements
+    - Add integration tests
+    - Create standardized logging
+    - Add input validation
+  
+  recommendations:
+    immediate_actions:
+      - Fix bare except clauses (UE-001)
+      - Add error logging at WARNING/ERROR level
+      - Create integration test suite (TEST-001)
+      - Consolidate audit loggers (DUP-001)
+    
+    short_term_improvements:
+      - Add input validation framework (UE-002)
+      - Create validation base class (ABS-001)
+      - Add load/stress tests (UE-003, TEST-003)
+      - Cache expensive operations (UE-004)
+      - Fix repository scanner caching (PERF-001)
+    
+    medium_term_refactoring:
+      - Consolidate logger implementations (DUP-001)
+      - Extract common validation patterns (DUP-002)
+      - Create configuration loader (DUP-003)
+      - Simplify graph implementation (OE-001)
+      - Add comprehensive error handling
+    
+    long_term_architecture:
+      - Migrate from Python 3.9 to 3.10+ (evaluate)
+      - Implement proper dependency injection
+      - Create event bus for notifications (ABS-010)
+      - Refactor governance rule validators
+      - Complete missing abstractions (ABS-1-10)
+  
+  estimated_effort:
+    immediate: 2-4 weeks
+    short_term: 6-8 weeks
+    medium_term: 12-16 weeks
+    long_term: ongoing
+
+---
+# END OF REPORT

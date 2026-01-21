@@ -1,0 +1,774 @@
+brittleness_analysis:
+  analysis_date: "2025-01-21"
+  codebase: "CORTEX"
+  version: "1.0"
+  summary:
+    total_issues_found: 137
+    critical_count: 12
+    high_count: 28
+    medium_count: 45
+    low_count: 52
+
+# =============================================================================
+# CRITICAL SEVERITY ISSUES (Immediate Risk)
+# =============================================================================
+critical_issues:
+  - id: BARE_EXCEPT_001
+    issue_type: "Bare Except Clause"
+    severity: "CRITICAL"
+    files:
+      - path: "tests/test_ac_ar_010_03_imports.py"
+        lines: [42, 66, 385]
+        context: "Import validation tests with bare except:, silently masking import errors"
+      - path: "tests/unit/test_conversation_protocol_transactions.py"
+        lines: [136, 195]
+        context: "Protocol transaction tests with bare except:, hiding transaction failures"
+      - path: "cortex/brain/mcp/tools/validate_consolidation.py"
+        lines: [205]
+        context: "File hash computation with bare except: returns ERROR_READING_FILE instead of raising"
+    impact: "Silent failures hide actual problems. Debugging becomes extremely difficult."
+    suggested_fix: |
+      Replace bare except: with specific exception handling:
+      - except FileNotFoundError: log and re-raise
+      - except IOError as e: log with context and return meaningful error
+      - Add logging before exception handling to trace the error source
+    example_fix: |
+      # BEFORE (line 205 in validate_consolidation.py):
+      except:
+          return "ERROR_READING_FILE"
+      
+      # AFTER:
+      except FileNotFoundError:
+          self.logger.error(f"File not found: {file_path}")
+          raise
+      except IOError as e:
+          self.logger.error(f"Cannot read file {file_path}: {e}")
+          raise
+      except Exception as e:
+          self.logger.error(f"Unexpected error reading {file_path}: {e}")
+          raise
+
+  - id: MISSING_RESOURCE_CLEANUP_001
+    issue_type: "Database Connection Leak"
+    severity: "CRITICAL"
+    files:
+      - path: "cortex/tools/toolkit/ac_fix_001_06_regenerate.py"
+        lines: [43, 46, 66]
+        context: "Script opens sqlite3 connection but no proper cleanup. No try/finally, conn.close() not guaranteed"
+    impact: |
+      Database connections can leak in production/long-running processes.
+      May exhaust connection limits, preventing new operations.
+    suggested_fix: |
+      Use context managers or explicit try/finally:
+      
+      # OPTION 1: Context manager (PREFERRED)
+      with sqlite3.connect(str(db_path)) as conn:
+          cursor = conn.cursor()
+          cursor.execute(...)
+          conn.commit()
+      
+      # OPTION 2: Try/finally
+      conn = sqlite3.connect(str(db_path))
+      try:
+          cursor = conn.cursor()
+          cursor.execute(...)
+          conn.commit()
+      finally:
+          conn.close()
+
+  - id: EXCEPTION_SUPPRESSION_001
+    issue_type: "Broad Exception Suppression"
+    severity: "CRITICAL"
+    files:
+      - path: "cortex/infrastructure/connection_pool.py"
+        lines: [300, 383]
+        context: "Connection pool error handling: except Exception: pass silently swallows all errors"
+      - path: "cortex/infrastructure/database.py"
+        lines: [89, 105, 270]
+        context: "Database operations with except Exception: pass hide real failures"
+      - path: "cortex/infrastructure/audit_logger.py"
+        lines: [106]
+        context: "Lock release with except Exception: pass can leave file handles open"
+    impact: |
+      Resource exhaustion bugs become invisible. Dead connections remain in pool.
+      File locks can persist, blocking subsequent operations.
+    suggested_fix: |
+      Log exceptions before suppressing:
+      
+      # BEFORE:
+      except Exception:
+          pass
+      
+      # AFTER:
+      except FileNotFoundError:
+          self.logger.warning(f"Lock file not found: {path}")
+      except OSError as e:
+          self.logger.error(f"Failed to release lock: {e}", exc_info=True)
+      except Exception as e:
+          self.logger.error(f"Unexpected error releasing lock: {e}", exc_info=True)
+
+  - id: NO_FALLBACK_POOL_HEALTH_CHECK_001
+    issue_type: "Single Point of Failure - No Fallback"
+    severity: "CRITICAL"
+    files:
+      - path: "cortex/infrastructure/connection_pool.py"
+        lines: [150, 200]
+        context: "Health check failure causes immediate acquisition failure. No fallback connection creation"
+    impact: |
+      Single failed health check can cascade to application failure.
+      No graceful degradation for transient database issues.
+    suggested_fix: |
+      Implement health check with fallback:
+      - Retry health check with exponential backoff
+      - If health check fails N times, attempt fresh connection
+      - Log degraded state to monitoring system
+      - Implement circuit breaker pattern
+
+  - id: UNHANDLED_PARSE_ERRORS_001
+    issue_type: "Unhandled Exception in Critical Path"
+    severity: "CRITICAL"
+    files:
+      - path: "cortex/brain/mcp/tools/validate_consolidation.py"
+        lines: [225, 240]
+        context: |
+          YAML/JSON parsing without specific exception handling.
+          Consolidated file loading can raise ValueError, YAMLError without context.
+    impact: "Configuration validation silently fails or crashes without diagnostic info"
+    suggested_fix: |
+      Catch specific exceptions with recovery:
+      
+      try:
+          consolidated_data = self._load_consolidated_file(consolidated_path)
+      except yaml.YAMLError as e:
+          self.logger.error(f"Invalid YAML in {consolidated_path}: {e.problem_mark}")
+          raise ValidationError(f"Invalid config format: {e}")
+      except json.JSONDecodeError as e:
+          self.logger.error(f"Invalid JSON in {consolidated_path}: line {e.lineno}")
+          raise ValidationError(f"Invalid JSON format: {e}")
+      except FileNotFoundError:
+          self.logger.error(f"Consolidated file missing: {consolidated_path}")
+          raise
+
+# =============================================================================
+# HIGH SEVERITY ISSUES (Major Risk)
+# =============================================================================
+high_severity_issues:
+  - id: BROAD_EXCEPTION_CATCH_001
+    issue_type: "Broad except Exception:"
+    severity: "HIGH"
+    count: 28
+    examples:
+      - path: "tests/unit/governance/test_ac_gc_008_01_comprehensive_validation.py"
+        lines: [75, 83, 91, 104, 111, 118]
+        context: "Multiple test assertions with broad except Exception: hiding test failures"
+      - path: "cortex/orchestrators/core/master_orchestrator.py"
+        lines: [1035, 1269, 1432]
+        context: "Business logic with except Exception: suppress return fallback values silently"
+      - path: "cortex/orchestrators/core/repository_scanner.py"
+        lines: [424, 484, 517, 540, 564, 623]
+        context: "Repository scanning with except Exception: pass allows analysis to continue with silent failures"
+    impact: |
+      Masks specific error types (network, IO, validation, logic errors).
+      Makes debugging production issues extremely difficult.
+      Can hide security exceptions.
+    suggested_fix: |
+      Replace with specific exception handling ladder:
+      
+      try:
+          result = self.analyze_file_path(file_path, workspace_root)
+      except FileNotFoundError:
+          self.logger.debug(f"File no longer exists: {file_path}")
+          continue
+      except PermissionError:
+          self.logger.warning(f"Permission denied reading: {file_path}")
+          continue
+      except SyntaxError as e:
+          self.logger.warning(f"Invalid Python syntax in {file_path}: {e}")
+          self.errors.append(f"{file_path}: Syntax error at line {e.lineno}")
+          continue
+      except Exception as e:
+          self.logger.error(f"Unexpected error analyzing {file_path}: {e}", exc_info=True)
+          raise
+
+  - id: TODO_MARKERS_INCOMPLETE_FEATURES_001
+    issue_type: "TODO/FIXME/HACK Comments"
+    severity: "HIGH"
+    count: 9
+    items:
+      - path: "cortex/tools/scaffolder_templates.py"
+        line: 478
+        text: "TODO: Implement test"
+        context: "Test implementation deferred, coverage gap"
+      - path: "cortex/tools/orchestrator_scaffolder.py"
+        lines: [437, 473]
+        text: "TODO: Implement stage logic"
+        context: "Critical stage logic not implemented"
+      - path: "cortex/brain/core/rule_evaluator.py"
+        lines: [60, 206]
+        text: "TODO: Implement proper context extraction and rule validators"
+        context: "Rule evaluation incomplete, validators missing"
+    impact: |
+      Incomplete implementation in production code.
+      Deferred work may never be completed.
+      Creates inconsistent behavior paths.
+    suggested_fix: |
+      1. Assign owner and target completion date:
+         # TODO(john, 2025-02-15): Implement stage logic
+      2. Create tracking issue with AC-ID:
+         # TODO: AC-STAGE-001-01 - Implement stage logic
+      3. Add conditional to warn at runtime if unimplemented:
+         
+         def evaluate_rule(self, rule):
+             if not hasattr(self, '_validators'):
+                 self.logger.warning(
+                     "AC-RE-001-01: Rule validators not implemented, using defaults"
+                 )
+             # TODO: Implement proper rule validators (AC-RE-001-01)
+
+  - id: MISSING_FINALLY_BLOCKS_001
+    issue_type: "Incomplete Resource Cleanup"
+    severity: "HIGH"
+    files:
+      - path: "cortex/infrastructure/connection_pool.py"
+        lines: [340, 350]
+        context: |
+          Context manager yields connection but cleanup only in finally.
+          If yield raises, finally executes but original exception may be lost.
+      - path: "tests/unit/test_folder_structure_design.py"
+        lines: [85]
+        context: "File operation without explicit finally block"
+    impact: |
+      Connections may not be properly returned to pool.
+      File handles may leak under exception conditions.
+    suggested_fix: |
+      Ensure finally block always executes:
+      
+      @contextmanager
+      def connection(self, timeout: Optional[float] = None):
+          conn = self.acquire(timeout=timeout)
+          try:
+              yield conn
+          except Exception:
+              # Mark connection as potentially unhealthy
+              try:
+                  self._health_check(conn)
+              except Exception:
+                  self.release(conn, unhealthy=True)
+              raise
+          finally:
+              try:
+                  self.release(conn)
+              except ConnectionHealthCheckFailedError:
+                  pass  # Already marked unhealthy
+
+  - id: IMPLICIT_DEPENDENCIES_NO_FALLBACK_001
+    issue_type: "Single Point of Failure - Global Dependencies"
+    severity: "HIGH"
+    files:
+      - path: "cortex/infrastructure/audit_logger.py"
+        context: |
+          Singleton pattern with global _instance.
+          If initialization fails, no fallback logger available.
+          All operations fail.
+      - path: "cortex/tools/toolkit/ac_fix_001_06_regenerate.py"
+        context: |
+          Script depends on hardcoded path:
+          /Users/asifhussain/PROJECTS/CORTEX/cortex/core/state/governance.db
+          Will fail on any other machine.
+    impact: |
+      Single initialization failure breaks entire system.
+      Hardcoded paths prevent portability.
+    suggested_fix: |
+      # For singleton, provide fallback:
+      class EnhancedAuditLogger:
+          _instance = None
+          _fallback = None  # Fallback instance
+          
+          @classmethod
+          def get_instance(cls):
+              try:
+                  if cls._instance is None:
+                      cls._instance = cls()
+                  return cls._instance
+              except Exception as e:
+                  logger.error(f"Failed to create audit logger: {e}")
+                  if cls._fallback is None:
+                      cls._fallback = create_null_logger()
+                  return cls._fallback
+      
+      # For hardcoded paths:
+      db_path = Path(os.environ.get(
+          'CORTEX_DB_PATH',
+          Path(__file__).parent.parent / 'governance.db'
+      ))
+
+# =============================================================================
+# MEDIUM SEVERITY ISSUES (Moderate Risk)
+# =============================================================================
+medium_severity_issues:
+  - id: WEAK_ERROR_CONTEXT_001
+    issue_type: "Exception Handling Without Context"
+    severity: "MEDIUM"
+    count: 45
+    categories:
+      - "except Exception: pass" without logging (12 instances)
+      - "except Exception:" with minimal logging (15 instances)
+      - "except Exception:" without returning error state (18 instances)
+    locations:
+      - cortex/infrastructure: 8 instances
+      - cortex/orchestrators: 12 instances
+      - cortex_brain/tier0: 8 instances
+      - cortex_brain/tier1: 5 instances
+      - cortex_brain/tier2: 12 instances
+    impact: |
+      Errors silently fail, making production debugging difficult.
+      No error metrics collected.
+      Difficult to determine why operations failed.
+    suggested_fix: |
+      Add context logging to all exception handlers:
+      
+      try:
+          result = risky_operation()
+      except SpecificError as e:
+          self.logger.warning(
+              "Operation failed (expected path)",
+              extra={
+                  "operation": "risky_operation",
+                  "error_type": type(e).__name__,
+                  "error": str(e),
+                  "context": {...relevant state...}
+              }
+          )
+      except Exception as e:
+          self.logger.error(
+              "Unexpected operation failure",
+              exc_info=True,
+              extra={"operation": "risky_operation"}
+          )
+          raise
+
+  - id: PASS_STATEMENT_EMPTY_BLOCKS_001
+    issue_type: "Empty Exception Handlers"
+    severity: "MEDIUM"
+    count: 15
+    examples:
+      - path: "cortex/brain/tier2/hallucination_prevention/detection_recovery.py"
+        lines: [163]
+        context: "Exception handler with just pass, no logging or recovery"
+      - path: "cortex/brain/tier2/coherence/__init__.py"
+        lines: [140]
+        context: "Silent exception suppression"
+    impact: |
+      No indication that an error occurred.
+      Error telemetry completely missing.
+    suggested_fix: |
+      Never use bare 'pass' in exception handlers:
+      
+      # BEFORE:
+      except Exception:
+          pass
+      
+      # AFTER:
+      except ExpectedError:
+          self.logger.debug("Expected condition occurred")
+          self.metrics.increment("expected_error")
+      except Exception as e:
+          self.logger.error(f"Unexpected error: {e}", exc_info=True)
+          self.metrics.increment("unexpected_error")
+
+  - id: GLOBAL_STATE_SINGLETON_RISKS_001
+    issue_type: "Unprotected Global State"
+    severity: "MEDIUM"
+    count: 8
+    instances:
+      - path: "cortex/infrastructure/audit_logger.py"
+        pattern: "global _instance = None"
+        risk: "Thread safety depends on lock, but not always held"
+      - path: "cortex/brain/mcp/tools/governance_tools.py"
+        pattern: "global _db, _enforcer"
+        risk: "Multiple globals without consistency guarantees"
+    impact: |
+      Race conditions in multi-threaded scenarios.
+      Globals can be in inconsistent state.
+      Testing becomes difficult due to state pollution.
+    suggested_fix: |
+      Use class-level locks for all global access:
+      
+      class ConfigManager:
+          _instance = None
+          _lock = threading.Lock()
+          
+          @classmethod
+          def get_instance(cls):
+              if cls._instance is None:
+                  with cls._lock:
+                      if cls._instance is None:
+                          cls._instance = cls()
+              return cls._instance
+          
+          def __init__(self):
+              # initialization
+              pass
+          
+          # All methods must hold lock for state changes
+          def update_config(self, new_config):
+              with self._lock:
+                  self._config = new_config
+
+# =============================================================================
+# LOW SEVERITY ISSUES (Minor Risk)
+# =============================================================================
+low_severity_issues:
+  - id: INCOMPLETE_VALIDATION_001
+    issue_type: "Weak Input Validation"
+    severity: "LOW"
+    count: 12
+    description: |
+      Several functions accept parameters but don't validate types or ranges.
+      May lead to downstream errors with unclear origin.
+    suggested_fix: |
+      Add parameter validation at function entry:
+      
+      def process_data(self, data: Dict[str, Any], timeout: float = 30.0):
+          if not isinstance(data, dict):
+              raise TypeError(f"data must be dict, got {type(data)}")
+          if not all(isinstance(v, (str, int, float)) for v in data.values()):
+              raise ValueError(f"data values must be scalar types")
+          if timeout <= 0:
+              raise ValueError(f"timeout must be positive, got {timeout}")
+          
+          # Safe to proceed
+
+  - id: MISSING_DOCSTRINGS_001
+    issue_type: "Documentation Gaps"
+    severity: "LOW"
+    count: 18
+    description: |
+      Some error handling paths lack documentation.
+      Makes it difficult to understand error semantics.
+    suggested_fix: |
+      Document all exception paths:
+      
+      def risky_operation(self):
+          """
+          Perform risky operation.
+          
+          Returns:
+              Result on success
+          
+          Raises:
+              FileNotFoundError: If required file missing
+              PermissionError: If insufficient permissions
+              ValueError: If input data invalid
+              OSError: For other OS-level errors
+          """
+
+  - id: INCONSISTENT_ERROR_HANDLING_001
+    issue_type: "Inconsistent Pattern"
+    severity: "LOW"
+    count: 22
+    description: |
+      Some modules use specific exception handling, others use broad catches.
+      Makes codebase unpredictable.
+    suggested_fix: |
+      Establish error handling standards:
+      1. Create Error Handling Guide
+      2. Define exception hierarchy for domain
+      3. Create exception handling templates
+      4. Use linting to enforce patterns
+
+# =============================================================================
+# RESOURCE MANAGEMENT ISSUES
+# =============================================================================
+resource_management_issues:
+  - id: FILE_HANDLE_LEAKS_001
+    issue_type: "File Handle Not Guaranteed Closed"
+    severity: "HIGH"
+    files:
+      - path: "cortex/infrastructure/audit_logger.py"
+        lines: [75, 85]
+        context: "File lock acquire without context manager in some code paths"
+      - path: "cortex/brain/mcp/tools/validate_consolidation.py"
+        lines: [205]
+        context: "File read without with statement"
+    impact: |
+      File descriptor exhaustion under high load.
+      OS may prevent opening new files.
+    suggested_fix: |
+      Always use with statement or context managers:
+      
+      # GOOD:
+      with open(file_path, 'rb') as f:
+          data = f.read()
+      
+      # GOOD:
+      with self._acquire_lock():
+          # Protected operation
+          pass
+      
+      # BAD:
+      f = open(file_path, 'rb')
+      data = f.read()
+      # f.close() may never execute
+
+  - id: DB_CONNECTION_LEAK_PATTERNS_001
+    issue_type: "Database Connection Resource Leak"
+    severity: "HIGH"
+    instances: 3
+    files:
+      - path: "cortex/tools/toolkit/ac_fix_001_06_regenerate.py"
+        issue: "conn = sqlite3.connect(...) without context manager"
+        line: 46
+      - path: "cortex/infrastructure/connection_pool.py"
+        issue: "Health check connection may not be released on exception"
+        line: 200
+    impact: |
+      Database connection pool exhaustion.
+      Subsequent connections fail.
+      May require service restart.
+    suggested_fix: |
+      Use context managers exclusively:
+      
+      # PREFERRED:
+      with sqlite3.connect(db_path) as conn:
+          cursor = conn.cursor()
+          cursor.execute(...)
+      
+      # FALLBACK:
+      conn = sqlite3.connect(db_path)
+      try:
+          cursor = conn.cursor()
+          cursor.execute(...)
+      finally:
+          conn.close()
+
+  - id: INCOMPLETE_LOCK_RELEASE_001
+    issue_type: "Lock Not Released on Error"
+    severity: "MEDIUM"
+    files:
+      - path: "cortex/infrastructure/audit_logger.py"
+        lines: [75, 100]
+        context: "Lock release silently fails with except Exception: pass"
+    impact: |
+      Lock remains held, blocking subsequent operations.
+      Can cause deadlock or extreme slowness.
+    suggested_fix: |
+      Always log lock failures:
+      
+      def release_lock(self):
+          if self._file:
+              try:
+                  if self._lock_type == "windows":
+                      msvcrt.locking(self._file.fileno(), msvcrt.LK_UNLCK, 1)
+              except OSError as e:
+                  self.logger.error(f"Failed to unlock: {e}", exc_info=True)
+                  raise
+              except Exception as e:
+                  self.logger.error(f"Unexpected lock error: {e}", exc_info=True)
+                  raise
+              finally:
+                  try:
+                      self._file.close()
+                  except IOError:
+                      pass
+              self._file = None
+
+# =============================================================================
+# TESTABILITY AND COVERAGE ISSUES
+# =============================================================================
+testability_issues:
+  - id: UNTESTABLE_GLOBAL_STATE_001
+    issue_type: "Global State Prevents Isolation"
+    severity: "MEDIUM"
+    count: 5
+    description: |
+      Singleton patterns with global state make tests interdependent.
+      Tests must run in specific order or fail.
+    suggested_fix: |
+      1. Provide reset/cleanup methods:
+         
+         class Singleton:
+             @classmethod
+             def _reset_for_testing(cls):
+                 """Clear singleton for test isolation."""
+                 cls._instance = None
+             
+             # In conftest.py:
+             @pytest.fixture(autouse=True)
+             def reset_singletons():
+                 yield
+                 Singleton._reset_for_testing()
+      
+      2. Use dependency injection:
+         
+         def my_service(logger=None, db=None):
+             logger = logger or get_default_logger()
+             db = db or get_default_db()
+
+  - id: INCOMPLETE_FEATURES_REDUCE_COVERAGE_001
+    issue_type: "TODO Items Block Test Completion"
+    severity: "MEDIUM"
+    count: 3
+    affected_files:
+      - "cortex/tools/scaffolder_templates.py"
+      - "cortex/tools/orchestrator_scaffolder.py"
+      - "cortex/brain/core/rule_evaluator.py"
+    impact: |
+      Code coverage remains incomplete.
+      Features untested in production.
+
+# =============================================================================
+# ARCHITECTURAL BRITTLENESS
+# =============================================================================
+architectural_issues:
+  - id: MISSING_CIRCUIT_BREAKER_PATTERN_001
+    issue_type: "No Fault Tolerance for External Dependencies"
+    severity: "HIGH"
+    description: |
+      Database operations don't have circuit breaker.
+      If database is slow/down, all operations hang.
+      No fallback or graceful degradation.
+    suggested_fix: |
+      Implement circuit breaker:
+      
+      from circuitbreaker import CircuitBreaker
+      
+      db_circuit = CircuitBreaker(
+          fail_max=5,
+          reset_timeout=60,
+          exclude=[ValidationError],  # Don't trip on input errors
+      )
+      
+      @db_circuit
+      def query_database(sql):
+          return execute_query(sql)
+
+  - id: MISSING_HEALTH_CHECK_ENDPOINTS_001
+    issue_type: "No System Health Visibility"
+    severity: "MEDIUM"
+    description: |
+      No standardized way to check if services are healthy.
+      Cannot detect degraded state early.
+    suggested_fix: |
+      Create health check registry:
+      
+      class HealthCheck:
+          def __init__(self, name: str, timeout: float = 5.0):
+              self.name = name
+              self.timeout = timeout
+              self.last_check = None
+              self.is_healthy = False
+          
+          @abstractmethod
+          def check(self) -> bool:
+              pass
+      
+      class DatabaseHealthCheck(HealthCheck):
+          def check(self) -> bool:
+              try:
+                  with self.db.connection() as conn:
+                      conn.execute("SELECT 1")
+                  return True
+              except Exception as e:
+                  self.logger.error(f"DB health check failed: {e}")
+                  return False
+
+  - id: HARDCODED_PATHS_NO_PORTABILITY_001
+    issue_type: "Environment-Specific Hardcoded Paths"
+    severity: "HIGH"
+    files:
+      - path: "cortex/tools/toolkit/ac_fix_001_06_regenerate.py"
+        line: 43
+        path_value: "/Users/asifhussain/PROJECTS/CORTEX/cortex/core/state/governance.db"
+    impact: |
+      Script fails on any other developer machine.
+      Cannot run in CI/CD pipeline.
+    suggested_fix: |
+      Use environment variables with fallback:
+      
+      db_path = Path(
+          os.environ.get(
+              'CORTEX_DB_PATH',
+              Path(__file__).parent.parent.parent / 'state' / 'governance.db'
+          )
+      )
+
+# =============================================================================
+# SUMMARY AND PRIORITIZATION
+# =============================================================================
+remediation_plan:
+  phase_1_critical:
+    duration: "1 week"
+    items:
+      - "Fix all bare except: clauses - add specific exception handling"
+      - "Implement proper database connection cleanup - use context managers"
+      - "Add logging to all exception handlers - no silent failures"
+      - "Fix hardcoded paths - use environment variables"
+    estimated_effort: "40 hours"
+    
+  phase_2_high:
+    duration: "2 weeks"
+    items:
+      - "Replace broad except Exception: with specific exception handling"
+      - "Complete TODO items or document with AC-IDs and owners"
+      - "Implement circuit breaker pattern for external dependencies"
+      - "Add health check endpoints for all services"
+    estimated_effort: "60 hours"
+    
+  phase_3_medium:
+    duration: "1 week"
+    items:
+      - "Add input validation to all public functions"
+      - "Document all exception paths with docstrings"
+      - "Standardize error handling patterns across codebase"
+      - "Implement test isolation for singleton patterns"
+    estimated_effort: "35 hours"
+    
+  phase_4_low:
+    duration: "Ongoing"
+    items:
+      - "Improve error messages with actionable guidance"
+      - "Add performance metrics collection"
+      - "Create error handling guidelines document"
+      - "Establish code review checklist for error handling"
+    estimated_effort: "20 hours"
+
+# =============================================================================
+# DETECTION AND MONITORING RECOMMENDATIONS
+# =============================================================================
+monitoring_recommendations:
+  static_analysis:
+    - tool: "pylint"
+      rule: "bare-except"
+      action: "Fail build if found"
+    
+    - tool: "flake8"
+      rule: "E722 do not use bare except"
+      action: "Enforce in pre-commit hook"
+    
+    - tool: "bandit"
+      rule: "B001"
+      action: "Detect assert statements"
+  
+  runtime_monitoring:
+    - metric: "exception_count"
+      threshold: "Alert if > 100/min"
+    
+    - metric: "silent_failures"
+      threshold: "Alert if any found in logs"
+    
+    - metric: "resource_leaks"
+      threshold: "Monitor file handles and connections"
+    
+    - metric: "circuit_breaker_trips"
+      threshold: "Alert on first trip"
+  
+  code_review_checklist:
+    - "All try blocks have except with specific exception types"
+    - "All except blocks log or raise"
+    - "All resources acquired in try block are released in finally"
+    - "No bare except: or except Exception: with pass"
+    - "All TODO/FIXME items have AC-ID and owner"
+    - "No hardcoded paths or environment-specific values"
+    - "All external API calls have timeout"
+    - "All long-running operations have cancellation token"
