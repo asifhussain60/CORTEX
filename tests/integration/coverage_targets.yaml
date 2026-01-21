@@ -1,0 +1,12 @@
+critical_modules:
+  - "cortex/orchestrators/core/"
+  - "cortex/mcp/"
+  - "cortex/core/governance/"
+  - "cortex/core/recovery/"
+
+target_coverage: ">80%"
+
+validation_command: "pytest --cov=cortex tests/integration/ --cov-report=term"
+
+importance: "P1-HIGH"
+status: "ESTABLISHED"

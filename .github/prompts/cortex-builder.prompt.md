@@ -24,8 +24,20 @@
 - ✅ Implement code (cortex/, cortex_brain/, tests/)
 - ✅ Run tests silently (capture pass/fail only)
 - ✅ Update cortex-impl-map.yaml status field
-- ✅ Git commit (one per phase, descriptive message)
+- ✅ Git commit (one per phase, descriptive message with machine marker)
 - ✅ One-sentence notification per phase completion
+
+### Git Commit Message Format (Machine-Specific)
+Each commit MUST include the machine marker in the message for easy merging:
+```
+{machine}: {phase-id}: {one-line-summary}
+
+Format examples:
+win: cortex-registry-001-migration: registry structure established, 7 tests passing
+mac: impl-export-completion: 44 missing exports added, errors 76→15
+```
+
+This ensures commits can be easily identified and merged by machine track later.
 
 ### Notification Format (ONLY Output)
 ```
@@ -339,11 +351,17 @@ When user specifies `machine:mac` or `machine:win`:
 3. **SILENT IMPLEMENTATION**:
    - Create code/tests silently
    - Update YAML status field only
-   - Git commit per phase (descriptive)
+   - Git commit per phase with machine marker (REQUIRED for merging)
    
-4. **PRIORITY EXECUTION**: P0 → P1 → P2 → P3
+4. **GIT COMMIT MARKERS** (CRITICAL for merge strategy):
+   - Each commit MUST start with `{machine}:` prefix
+   - Format: `win: phase-id: summary` or `mac: phase-id: summary`
+   - Enables later merge by: `git log --grep="^win:" CORTEX` or `git log --grep="^mac:" CORTEX`
+   - Allows cherry-pick by machine: `git log --grep="^win:" --oneline | cut -d' ' -f1 | xargs git cherry-pick`
    
-5. **DEPENDENCY CHECK**: Skip phases with unmet dependencies
+5. **PRIORITY EXECUTION**: P0 → P1 → P2 → P3
+   
+6. **DEPENDENCY CHECK**: Skip phases with unmet dependencies
 
 ## MACHINE-SPECIFIC WORKFLOW
 
@@ -369,6 +387,39 @@ continue with machine:mac
 2. Phases with unmet dependencies skipped
 3. P1-HIGH, P2-MEDIUM, P3-LOW in order
 4. Within same priority: earliest estimated_effort first
+
+## Machine Track Merge Strategy
+
+**Commit Identification (For Later Merging):**
+```bash
+# List all win track commits
+git log --grep="^win:" --oneline
+
+# List all mac track commits
+git log --grep="^mac:" --oneline
+
+# Cherry-pick all win track commits to another branch
+git log --grep="^win:" --reverse --format="%H" | xargs -I {} git cherry-pick {}
+
+# Cherry-pick all mac track commits to another branch
+git log --grep="^mac:" --reverse --format="%H" | xargs -I {} git cherry-pick {}
+```
+
+**Merge Workflow:**
+1. Both machine tracks commit to `CORTEX` branch with markers
+2. To merge mac track: `git log --grep="^mac:" ... | cherry-pick to stable`
+3. To merge win track: `git log --grep="^win:" ... | cherry-pick to stable`
+4. Prevents merge conflicts by keeping tracks separate in git history
+5. Enables rollback by machine: `git revert $(git log --grep="^win:" --format="%H")`
+
+**Example Session with Markers:**
+```
+✓ win: cortex-registry-001-migration: registry structure established → Next: impl-e2e-validation
+git commit -m "win: cortex-registry-001-migration: registry structure established, 7 tests passing"
+
+✓ win: impl-e2e-validation: smoke tests created, load baseline established → Next: impl-cicd-validation
+git commit -m "win: impl-e2e-validation: smoke/load/chaos tests, 35 tests passing"
+```
 
 ---
 
