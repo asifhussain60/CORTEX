@@ -1,0 +1,116 @@
+site_name: CORTEX Documentation
+site_description: AI-powered orchestration platform with multi-tier governance
+site_author: Asif Hussain
+repo_url: https://github.com/asifhussain60/CORTEX
+repo_name: asifhussain60/CORTEX
+edit_uri: edit/CORTEX/docs/
+
+docs_dir: docs
+site_dir: _build/site
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: blue
+      accent: blue
+    - scheme: slate
+      primary: blue
+      accent: blue
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.tabs.link
+  javascript:
+    - https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js
+
+plugins:
+  - search:
+      lang: en
+
+# Custom post-build hook to copy assets to site folder
+hooks:
+  - docs/_hooks/copy_assets.py
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - admonition
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+nav:
+  - Home: INDEX.md
+  - Getting Started:
+    - Installation & Setup: 01-getting-started/0-installation.md
+    - Quick Start: 01-getting-started/1-quickstart.md
+    - First Orchestrator: 01-getting-started/2-first-orchestrator.md
+    - Troubleshooting Setup: 01-getting-started/3-troubleshooting.md
+  - Architecture:
+    - System Overview: 02-architecture/1-system-overview.md
+    - Design Principles: 02-architecture/2-design-principles.md
+    - Orchestration Engine: 02-architecture/3-orchestration-engine.md
+    - Domain Brain: 02-architecture/4-domain-brain.md
+    - Resilience Patterns: 02-architecture/5-resilience-patterns.md
+    - Implementation Phases: 02-architecture/6-implementation-phases.md
+    - Intent Router: 02-architecture/7-intent-router.md
+    - State Management: 02-architecture/8-state-management.md
+    - Knowledge Protocol: 02-architecture/9-knowledge-protocol.md
+    - MCP Tool Governance: 02-architecture/10-mcp-tool-governance.md
+    - Governance Rules: 02-architecture/governance-rules.md
+    - Definition of Ready: 02-architecture/definition-of-ready.md
+    - Architecture Decision Records: 02-architecture/adrs/
+  - API Reference:
+    - Overview: 03-api-reference/0-overview.md
+    - REST API: 03-api-reference/rest-api/
+    - MCP Protocol: 03-api-reference/mcp-protocol/
+    - CLI Commands: 03-api-reference/cli/
+  - How-To Guides:
+    - Deployment:
+      - Overview: 04-guides/deployment/0-overview.md
+      - Local Development: 04-guides/deployment/1-local-development.md
+      - MkDocs Server: 04-guides/deployment/2-mkdocs-server.md
+      - FAQ: 04-guides/deployment/4-faq.md
+    - Integration:
+      - Overview: 04-guides/integration/0-overview.md
+    - Operations:
+      - Overview: 04-guides/operations/0-overview.md
+      - Troubleshooting: 04-guides/operations/4-troubleshooting.md
+    - Advanced:
+      - Overview: 04-guides/advanced/0-overview.md
+  - Reference:
+    - Glossary: 05-reference/glossary.md
+    - FAQ: 05-reference/faq.md
+    - Known Issues: 05-reference/known-issues.md
+    - Changelog: 05-reference/changelog.md
+    - Compliance Mappings: 05-reference/compliance-mappings.md
+    - Quick Reference: 05-reference/quick-reference.md
+    - Gap Analysis: 05-reference/gap-analysis.md
+    - Implementation Status: 05-reference/implementation-status.md
+    - Remediation Status: 05-reference/remediation-status.md
+    - Test AC Mapping: 05-reference/test-ac-mapping.md
+  - Tutorials:
+    - Orchestrator Tutorials: 06-tutorials/0-index.md
+  - Contributing:
+    - Contributing Guidelines: 07-contributing/1-contributing-guidelines.md
+    - Development Setup: 07-contributing/2-development-setup.md
+    - Testing Strategy: 07-contributing/3-testing-strategy.md
+    - Code Style Guide: 07-contributing/4-code-style-guide.md
+    - Pull Request Process: 07-contributing/5-pull-request-process.md
+  - License: LICENSE.md
