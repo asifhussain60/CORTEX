@@ -36,6 +36,7 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         self.domain_brain_api = api
         self.documents_processed = 0
         self.documents_failed = 0
+        self.conflicts_detected = 0
 
     def initialize(self) -> None:
         """Initialize the orchestrator."""
@@ -45,18 +46,22 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         """Shutdown the orchestrator."""
         pass
 
-    def validate_context(self) -> bool:
+    def validate_context(self) -> List[str]:
         """Validate orchestration context.
         
         Returns:
-            True if context is valid.
+            List of validation errors (empty if valid).
         """
-        return self.context is not None
+        errors = []
+        if self.context is None:
+            errors.append("Context is None")
+        return errors
 
     def on_start(self) -> None:
         """Execute on orchestrator start."""
         self.documents_processed = 0
         self.documents_failed = 0
+        self.conflicts_detected = 0
 
     def execute(self, context: Optional[Dict[str, Any]] = None) -> Optional[Dict[str, Any]]:
         """Execute orchestrator.
@@ -68,6 +73,8 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
             Execution result.
         """
         docs = self.context.parameters.get("documents", [])
+        if not docs:
+            raise ValueError("No documents provided")
         
         for doc in docs:
             try:
@@ -80,7 +87,16 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         return {
             "documents_processed": self.documents_processed,
             "documents_failed": self.documents_failed,
+            "conflicts_detected": self.conflicts_detected,
         }
+    
+    def run(self) -> Optional[Dict[str, Any]]:
+        """Run the orchestrator (alias for execute).
+        
+        Returns:
+            Execution result.
+        """
+        return self.execute()
 
     def on_complete(self) -> None:
         """Execute on orchestrator complete."""
@@ -101,8 +117,16 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         fmt = doc.get("format", "yaml")
         content = doc.get("content", {})
         
+        # Validate format
+        try:
+            doc_format = DocumentFormat(fmt) if fmt in [f.value for f in DocumentFormat] else None
+            if doc_format is None:
+                raise ValueError(f"Unsupported document format: {fmt}")
+        except (ValueError, KeyError) as e:
+            raise ValueError(f"Invalid document format: {fmt}") from e
+        
         # Parse document
-        parsed = self._parse_document(doc, DocumentFormat(fmt) if fmt in [f.value for f in DocumentFormat] else DocumentFormat.YAML)
+        parsed = self._parse_document(doc, doc_format)
         
         # Get or create domain
         domain = self.domain_brain_api.query_domain(domain_id)
@@ -132,8 +156,15 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         
         Returns:
             Parsed content as dictionary.
+            
+        Raises:
+            ValueError: If format is invalid.
         """
         content = doc.get("content", {})
+        
+        # Validate format
+        if not isinstance(fmt, DocumentFormat):
+            raise ValueError(f"Invalid document format: {fmt}")
         
         if fmt == DocumentFormat.YAML or fmt == DocumentFormat.JSON:
             return content if isinstance(content, dict) else {}
@@ -177,11 +208,18 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         Returns:
             EntityType enum value.
         """
+        # Normalize type string
+        type_str = type_str.lower().strip()
+        
         type_map = {
             "service": EntityType.SERVICE,
-            "function": EntityType.FUNCTION if hasattr(EntityType, 'FUNCTION') else EntityType.SERVICE,
-            "class": EntityType.CLASS if hasattr(EntityType, 'CLASS') else EntityType.SERVICE,
-            "database": EntityType.DATABASE if hasattr(EntityType, 'DATABASE') else EntityType.RESOURCE,
+            "function": EntityType.FUNCTION,
+            "class": EntityType.CLASS,
+            "database": EntityType.DATABASE,
+            "resource": EntityType.RESOURCE,
+            "operation": EntityType.OPERATION,
+            "data": EntityType.DATA,
+            "domain": EntityType.DOMAIN,
         }
         return type_map.get(type_str, EntityType.RESOURCE)
 

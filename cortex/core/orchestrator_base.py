@@ -128,6 +128,8 @@ class OrchestrationContext:
         self.orchestrator_name = orchestrator_name or ""
         self.parameters = parameters or {}
         self.metadata = metadata or {}
+        self.progress_percent = 0.0
+        self.domain_name = ""
 
 
 __all__ = ["OrchestratorBase", "OrchestrationContext", "OrchestrationState"]

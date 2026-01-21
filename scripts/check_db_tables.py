@@ -1,5 +1,9 @@
 import sqlite3
-conn = sqlite3.connect(r'd:\PROJECTS\CORTEX\cortex_brain\state\governance.db')
+from pathlib import Path
+
+# Dynamic path resolution (CORE-005 compliance)
+db_path = Path(__file__).parent.parent / "cortex_brain" / "state" / "governance.db"
+conn = sqlite3.connect(str(db_path))
 cursor = conn.cursor()
 cursor.execute("SELECT name FROM sqlite_master WHERE type='table'")
 print('Tables in database:')

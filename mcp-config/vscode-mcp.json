@@ -2,7 +2,7 @@
   "mcpServers": {
     "cortex": {
       "command": "python",
-      "args": ["-m", "src.mcp"],
+      "args": ["-m", "cortex.mcp"],
       "cwd": "${workspaceFolder}"
     }
   }
