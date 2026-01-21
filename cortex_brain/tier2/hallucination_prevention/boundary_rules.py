@@ -9,6 +9,8 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 from dataclasses import dataclass
 from typing import Any, Callable, Dict, List, Optional
 from enum import Enum
+import uuid
+from datetime import datetime
 
 
 class ViolationType(str, Enum):
@@ -30,11 +32,13 @@ class BoundaryViolation(Exception):
         violation_type: Type of violation
         message: Violation message
         severity: Severity level (INFO, WARNING, CRITICAL)
+        violation_id: Unique violation identifier
     """
     def __init__(self, violation_type: ViolationType, message: str, severity: str = "WARNING"):
         self.violation_type = violation_type
         self.message = message
         self.severity = severity
+        self.violation_id = str(uuid.uuid4())
         super().__init__(message)
 
 
@@ -169,6 +173,9 @@ class BehavioralBoundaryRules:
         Raises:
             BoundaryViolation: If AC deletion attempted without proper approval
         """
+        if not context:
+            return True
+        
         from datetime import datetime
         
         action = context.get("action")
@@ -229,7 +236,77 @@ class BehavioralBoundaryRules:
         Raises:
             BoundaryViolation: If governance bypass detected
         """
+        if not context:
+            return True
+        
+        import re
+        
         operation_type = context.get("operation_type")
+        
+        # Detect phase modification by unauthorized users
+        if operation_type == "PHASE_MODIFICATION":
+            tier = context.get("tier")
+            action = context.get("action")
+            
+            # Only TIER0/TIER1 users can modify phase locks
+            if action == "MODIFY_LOCK_STATUS" and tier and tier.startswith("TIER") and int(tier[4:]) > 1:
+                violation = BoundaryViolation(
+                    ViolationType.GOVERNANCE_BYPASS_ATTEMPT,
+                    f"Unauthorized tier {tier} attempt to {action}",
+                    severity="CRITICAL"
+                )
+                self.violations.append({
+                    "violation_id": violation.violation_id,
+                    "violation_type": ViolationType.GOVERNANCE_BYPASS_ATTEMPT.value,
+                    "message": violation.message,
+                    "severity": violation.severity,
+                    "timestamp": datetime.now().isoformat(),
+                })
+                raise violation
+        
+        # Detect SQL injection patterns
+        if operation_type == "QUERY_EXECUTION":
+            query = context.get("query", "").upper()
+            dangerous_patterns = [
+                r"DROP\s+TABLE",
+                r"DROP\s+DATABASE",
+                r"DELETE\s+FROM",
+                r"TRUNCATE",
+                r"ALTER\s+TABLE",
+            ]
+            
+            for pattern in dangerous_patterns:
+                if re.search(pattern, query):
+                    violation = BoundaryViolation(
+                        ViolationType.GOVERNANCE_BYPASS_ATTEMPT,
+                        f"SQL injection pattern detected: {pattern}",
+                        severity="CRITICAL"
+                    )
+                    self.violations.append({
+                        "violation_id": violation.violation_id,
+                        "violation_type": ViolationType.GOVERNANCE_BYPASS_ATTEMPT.value,
+                        "message": violation.message,
+                        "severity": violation.severity,
+                        "timestamp": datetime.now().isoformat(),
+                    })
+                    raise violation
+        
+        # Detect API bypass attempts
+        if operation_type == "API_CALL":
+            if context.get("bypass_lock"):
+                violation = BoundaryViolation(
+                    ViolationType.GOVERNANCE_BYPASS_ATTEMPT,
+                    f"API call with explicit bypass flag: {context.get('endpoint')}",
+                    severity="CRITICAL"
+                )
+                self.violations.append({
+                    "violation_id": violation.violation_id,
+                    "violation_type": ViolationType.GOVERNANCE_BYPASS_ATTEMPT.value,
+                    "message": violation.message,
+                    "severity": violation.severity,
+                    "timestamp": datetime.now().isoformat(),
+                })
+                raise violation
         
         # Detect direct database modifications that bypass governance
         if operation_type in ("DIRECT_DB_WRITE", "RAW_SQL", "ORM_BYPASS"):
@@ -245,13 +322,64 @@ class BehavioralBoundaryRules:
             
             for critical_table in critical_tables:
                 if critical_table in target or critical_table in str(context.get("table", "")):
-                    raise BoundaryViolation(
+                    violation = BoundaryViolation(
                         ViolationType.GOVERNANCE_BYPASS_ATTEMPT,
                         f"Direct modification of {target} bypasses governance",
                         severity="CRITICAL"
                     )
+                    self.violations.append({
+                        "violation_id": violation.violation_id,
+                        "violation_type": ViolationType.GOVERNANCE_BYPASS_ATTEMPT.value,
+                        "message": violation.message,
+                        "severity": violation.severity,
+                        "timestamp": datetime.now().isoformat(),
+                    })
+                    raise violation
+        
+        # Detect unauthorized user bypass attempts
+        if context.get("user_role") == "unauthorized":
+            violation = BoundaryViolation(
+                ViolationType.GOVERNANCE_BYPASS_ATTEMPT,
+                f"Unauthorized user bypass attempt",
+                severity="CRITICAL"
+            )
+            self.violations.append({
+                "violation_id": violation.violation_id,
+                "violation_type": ViolationType.GOVERNANCE_BYPASS_ATTEMPT.value,
+                "message": violation.message,
+                "severity": violation.severity,
+                "timestamp": datetime.now().isoformat(),
+            })
+            raise violation
         
         return True
+    
+    def get_recent_violations(self, limit: int = 10) -> List[Dict[str, Any]]:
+        """Get recent violations from cache.
+        
+        Args:
+            limit: Maximum number of violations to return
+            
+        Returns:
+            List of violation records
+        """
+        return self.violations[-limit:] if self.violations else []
+    
+    def get_violation_chain(self, correlation_id: Optional[str] = None, limit: int = 10) -> List[Dict[str, Any]]:
+        """Get violations in a chain (by correlation ID).
+        
+        Args:
+            correlation_id: Optional correlation ID to filter by
+            limit: Maximum number to return
+            
+        Returns:
+            List of violation records in the chain
+        """
+        if not correlation_id:
+            return self.get_recent_violations(limit)
+        
+        chain = [v for v in self.violations if v.get("correlation_id") == correlation_id]
+        return chain[-limit:] if chain else []
     
     def check_phase_lock(self, context: Dict[str, Any]) -> bool:
         """Check if phase modification is allowed.
@@ -265,16 +393,31 @@ class BehavioralBoundaryRules:
         Raises:
             BoundaryViolation: If locked phase modification attempted
         """
+        if not context:
+            return True
+        
         phase_locked = context.get("phase_locked", False)
         action = context.get("action", "READ")
         
         if phase_locked and action in ("MODIFY", "DELETE"):
             phase_id = context.get("phase_id", "UNKNOWN")
-            raise BoundaryViolation(
+            violation = BoundaryViolation(
                 ViolationType.LOCKED_PHASE_MODIFICATION,
                 f"Cannot {action} locked phase {phase_id}",
                 severity="CRITICAL"
             )
+            self.violations.append({
+                "violation_id": violation.violation_id,
+                "violation_type": ViolationType.LOCKED_PHASE_MODIFICATION.value,
+                "message": violation.message,
+                "severity": violation.severity,
+                "timestamp": datetime.now().isoformat(),
+                "phase_id": phase_id,
+                "action": action,
+                "user_id": context.get("user_id"),
+                "correlation_id": context.get("correlation_id"),
+            })
+            raise violation
         
         return True
 
