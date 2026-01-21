@@ -477,7 +477,7 @@ phases_implementation_status:
       - id: "impl-governance-content"
         title: "Phase J: Governance Tier Content Population"
         ac_ids: 5
-        status: "NOT_STARTED"
+        status: "COMPLETED"
         priority: "P1-MEDIUM"
         estimated_effort: "2-3 days"
         blocking: false
@@ -486,6 +486,8 @@ phases_implementation_status:
         note: "Populate tier1 domain rules (15-20) and tier2 context rules (25-30)"
         file: "_workspaces/roadmap/phases/impl-governance-content.yaml"
         depends_on: ["Phase A tier consolidation"]
+        completion_date: "2026-01-21"
+        tests_passing: 12
         target_state:
           tier0_rules: 29
           tier1_rules: "15-20"
