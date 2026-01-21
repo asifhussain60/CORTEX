@@ -1,0 +1,8 @@
+# Planning Registry
+# Plan-type segregation for orchestrator phases
+# Execution, Planning, Analysis, and other phase types segregated
+
+plan_types: {}
+metadata:
+  authority: "cortex-impl-map.yaml phase_execution_tracking"
+  last_updated: null
