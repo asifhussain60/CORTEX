@@ -655,12 +655,12 @@ class TestTemplateContentIntegration:
 def test_all_modules_importable():
     """Test that all PHASE-20 modules can be imported."""
     modules = [
-        'src.templates.content_strategy',
-        'src.templates.knowledge_schema',
-        'src.templates.template_manager',
-        'src.templates.template_validation',
-        'src.templates.content_generator',
-        'src.templates.quality_assurance',
+        'cortex.templates.content_strategy',
+        'cortex.templates.knowledge_schema',
+        'cortex.templates.template_manager',
+        'cortex.templates.template_validation',
+        'cortex.templates.content_generator',
+        'cortex.templates.quality_assurance',
     ]
     
     for module in modules:
