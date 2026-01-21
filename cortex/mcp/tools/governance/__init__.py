@@ -140,10 +140,24 @@ def report_governance_status(scope: str = "system", time_range: str = "24h") -> 
     }
 
 
+# Import new governance tools
+from cortex.mcp.tools.governance.tier_resolver import TierResolver
+from cortex.mcp.tools.governance.rule_evaluator import RuleEvaluator
+from cortex.mcp.tools.governance.audit_query import AuditQuery
+from cortex.mcp.tools.governance.policy_enforcer import PolicyEnforcer
+from cortex.mcp.tools.governance.compliance_reporter import ComplianceReporter
+
+
 __all__ = [
     "query_governance_context",
     "validate_governance_compliance",
     "execute_governance_check",
     "analyze_governance_impact",
     "report_governance_status",
+    # New PHASE-DEPLOYMENT-003 tools
+    "TierResolver",
+    "RuleEvaluator",
+    "AuditQuery",
+    "PolicyEnforcer",
+    "ComplianceReporter",
 ]

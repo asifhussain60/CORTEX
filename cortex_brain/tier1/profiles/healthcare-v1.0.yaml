@@ -1,0 +1,128 @@
+# Healthcare Domain Profile - Healthcare & HIPAA
+# Profile ID: healthcare-v1.0
+# Category: Healthcare, Medical, HIPAA Compliance
+# Target: Healthcare applications, EHR systems, medical data processing
+
+profile:
+  id: healthcare-v1.0
+  name: Healthcare & HIPAA
+  version: "1.0"
+  category: healthcare
+  description: >
+    Governance profile for healthcare applications requiring
+    HIPAA compliance, PHI protection, and medical data handling.
+  tags:
+    - healthcare
+    - hipaa
+    - phi
+    - medical
+    - compliance
+
+compatibility:
+  cortex_min_version: "0.8.0"
+  python_versions: ["3.10", "3.11", "3.12", "3.13"]
+
+rules:
+  # PHI Protection Rules
+  - id: HEALTH-001
+    name: phi-encryption
+    severity: critical
+    description: All PHI must be encrypted at rest and in transit
+    pattern: "AES-256 encryption for PHI"
+    enforcement: mandatory
+    
+  - id: HEALTH-002
+    name: phi-access-logging
+    severity: critical
+    description: Log all access to PHI with audit trail
+    pattern: "PHI access audit log"
+    enforcement: mandatory
+    
+  - id: HEALTH-003
+    name: phi-minimization
+    severity: high
+    description: Collect and retain only necessary PHI
+    pattern: "data minimization principle"
+    enforcement: mandatory
+    
+  - id: HEALTH-004
+    name: phi-de-identification
+    severity: high
+    description: Support PHI de-identification for analytics
+    pattern: "de-identification method"
+    enforcement: recommended
+    
+  # Access Control Rules
+  - id: HEALTH-005
+    name: role-based-access
+    severity: critical
+    description: Implement RBAC for PHI access
+    pattern: "RBAC with healthcare roles"
+    enforcement: mandatory
+    
+  - id: HEALTH-006
+    name: break-glass-procedure
+    severity: high
+    description: Support break-glass access with justification
+    pattern: "emergency access procedure"
+    enforcement: mandatory
+    
+  - id: HEALTH-007
+    name: session-timeout-strict
+    severity: high
+    description: Strict session timeout for PHI access
+    pattern: "15-minute idle timeout"
+    enforcement: mandatory
+    
+  # Audit & Compliance Rules
+  - id: HEALTH-008
+    name: audit-retention
+    severity: critical
+    description: Retain audit logs for minimum 6 years
+    pattern: "6-year retention policy"
+    enforcement: mandatory
+    
+  - id: HEALTH-009
+    name: breach-notification
+    severity: critical
+    description: Support breach detection and notification
+    pattern: "breach notification workflow"
+    enforcement: mandatory
+    
+  # Data Integrity Rules
+  - id: HEALTH-010
+    name: data-integrity-checks
+    severity: high
+    description: Implement data integrity verification
+    pattern: "checksum verification"
+    enforcement: mandatory
+    
+  - id: HEALTH-011
+    name: backup-phi
+    severity: critical
+    description: Regular encrypted backups of PHI
+    pattern: "encrypted backup schedule"
+    enforcement: mandatory
+    
+  - id: HEALTH-012
+    name: business-associate-agreement
+    severity: critical
+    description: BAA required for all third-party PHI access
+    pattern: "BAA verification"
+    enforcement: mandatory
+
+templates:
+  - name: phi-handler
+    path: templates/healthcare/phi_handler.py.j2
+  - name: audit-logger
+    path: templates/healthcare/audit_logger.py.j2
+  - name: hipaa-report
+    path: templates/healthcare/hipaa_report.py.j2
+
+hooks:
+  pre_commit:
+    - phi_detection_scan
+    - check_encryption_usage
+  pre_push:
+    - hipaa_compliance_check
+    - vulnerability_scan
