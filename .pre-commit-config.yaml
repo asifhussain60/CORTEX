@@ -20,6 +20,25 @@ repos:
         always_run: true
         description: "Validate AC-ID format and governance rule compliance"
       
+      # DEPLOYMENT-001: Sanitization validation hooks
+      - id: cortex-sanitize-check
+        name: CORTEX Sanitization Check
+        entry: python scripts/deployment/validate_sanitization.py
+        language: python
+        always_run: true
+        pass_filenames: false
+        stages: [commit]
+        description: "Validates governance.db and tier rules are in sanitized state"
+      
+      - id: cortex-dirty-state-check
+        name: CORTEX Dirty State Check
+        entry: python scripts/deployment/track_sanitize_state.py --check
+        language: python
+        always_run: true
+        pass_filenames: false
+        stages: [commit]
+        description: "Checks for unsanitized changes in governance.db"
+      
       # Phase 0 Automation - Stub Detection
       - id: detect-stubs
         name: Detect stub implementations (NO empty functions)

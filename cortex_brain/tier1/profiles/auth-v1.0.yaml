@@ -1,0 +1,130 @@
+# Auth Domain Profile - Authentication & Authorization
+# Profile ID: auth-v1.0
+# Category: Security, Identity, Access Control
+# Target: Auth services, IAM systems, SSO providers
+
+profile:
+  id: auth-v1.0
+  name: Authentication & Authorization
+  version: "1.0"
+  category: security
+  description: >
+    Governance profile for authentication and authorization services
+    including identity management, SSO, and access control systems.
+  tags:
+    - authentication
+    - authorization
+    - identity
+    - security
+    - access-control
+
+compatibility:
+  cortex_min_version: "0.8.0"
+  python_versions: ["3.10", "3.11", "3.12", "3.13"]
+
+rules:
+  # Password & Credential Rules
+  - id: AUTH-001
+    name: password-hashing
+    severity: critical
+    description: Passwords must be hashed using bcrypt, argon2, or scrypt
+    pattern: "bcrypt|argon2|scrypt hashing required"
+    enforcement: mandatory
+    auto_fix: false
+    
+  - id: AUTH-002
+    name: no-plaintext-credentials
+    severity: critical
+    description: Never store or log plaintext credentials
+    pattern: "no password in logs or storage"
+    enforcement: mandatory
+    
+  - id: AUTH-003
+    name: password-complexity
+    severity: high
+    description: Enforce password complexity requirements
+    pattern: "min 12 chars, mixed case, numbers, symbols"
+    enforcement: mandatory
+    
+  # Token Management Rules
+  - id: AUTH-004
+    name: jwt-expiration
+    severity: high
+    description: JWT tokens must have expiration claims
+    pattern: "exp claim required in JWT"
+    enforcement: mandatory
+    
+  - id: AUTH-005
+    name: token-refresh-rotation
+    severity: high
+    description: Implement token refresh with rotation
+    pattern: "refresh token rotation"
+    enforcement: mandatory
+    
+  - id: AUTH-006
+    name: secure-token-storage
+    severity: critical
+    description: Tokens must be stored securely (httpOnly cookies preferred)
+    pattern: "httpOnly, secure, sameSite"
+    enforcement: mandatory
+    
+  # Session Management Rules
+  - id: AUTH-007
+    name: session-timeout
+    severity: high
+    description: Implement session timeout and idle timeout
+    pattern: "session_timeout configuration"
+    enforcement: mandatory
+    
+  - id: AUTH-008
+    name: session-invalidation
+    severity: high
+    description: Support explicit session invalidation on logout
+    pattern: "session.invalidate() on logout"
+    enforcement: mandatory
+    
+  # Rate Limiting & Protection
+  - id: AUTH-009
+    name: brute-force-protection
+    severity: critical
+    description: Implement rate limiting on auth endpoints
+    pattern: "rate_limit on /login, /register"
+    enforcement: mandatory
+    
+  - id: AUTH-010
+    name: account-lockout
+    severity: high
+    description: Lock accounts after failed attempts
+    pattern: "lockout after 5 failed attempts"
+    enforcement: mandatory
+    
+  # Audit & Logging
+  - id: AUTH-011
+    name: auth-event-logging
+    severity: high
+    description: Log all authentication events
+    pattern: "log login, logout, failed attempts"
+    enforcement: mandatory
+    
+  - id: AUTH-012
+    name: no-credential-logging
+    severity: critical
+    description: Never log credentials or tokens
+    pattern: "scrub credentials from logs"
+    enforcement: mandatory
+
+templates:
+  - name: auth-service
+    path: templates/auth/auth_service.py.j2
+  - name: jwt-handler
+    path: templates/auth/jwt_handler.py.j2
+  - name: session-manager
+    path: templates/auth/session_manager.py.j2
+
+hooks:
+  pre_commit:
+    - check_no_plaintext_credentials
+    - validate_password_hashing
+  pre_push:
+    - security_scan
+    - dependency_vulnerability_check
