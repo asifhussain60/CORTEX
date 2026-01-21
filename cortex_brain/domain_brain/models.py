@@ -70,19 +70,29 @@ class Conflict:
 
     Attributes:
         conflict_id: Unique conflict identifier.
-        entity_a: First entity involved.
-        entity_b: Second entity involved.
+        domain_id: Domain ID for this conflict.
+        attribute: Attribute involved in conflict.
+        source_values: Dictionary of conflicting source values.
+        entity_a: First entity involved (optional).
+        entity_b: Second entity involved (optional).
         conflict_type: Type of conflict.
         severity: Conflict severity.
         resolution: Proposed resolution.
+        resolution_method: Method used to resolve conflict.
+        resolved_at: When conflict was resolved.
     """
 
     conflict_id: str
-    entity_a: str
-    entity_b: str
+    domain_id: str
+    attribute: str
+    source_values: Dict[str, Any] = field(default_factory=dict)
+    entity_a: str = ""
+    entity_b: str = ""
     conflict_type: str = ""
     severity: str = "medium"
     resolution: str = ""
+    resolution_method: str = ""
+    resolved_at: Optional[datetime] = None
 
 
 @dataclass
@@ -95,6 +105,7 @@ class DomainModel:
         description: Model description.
         created_at: When model was created.
         entities: Dictionary of entities in the domain.
+        conflicts: List of conflicts in the domain.
         metadata: Additional metadata.
     """
 
@@ -103,6 +114,7 @@ class DomainModel:
     description: str
     created_at: datetime = field(default_factory=datetime.now)
     entities: Dict[str, Any] = field(default_factory=dict)
+    conflicts: List[Conflict] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
@@ -262,6 +274,20 @@ class ConflictResolution:
     conflict_id: str
     resolution_strategy: str
     resolved: bool = False
+
+
+@dataclass
+class ValidationResult:
+    """Domain validation result.
+    
+    Attributes:
+        is_valid: Whether domain is valid.
+        errors: List of validation errors.
+        conflicts_detected: List of detected conflicts.
+    """
+    is_valid: bool = True
+    errors: List[str] = field(default_factory=list)
+    conflicts_detected: List[Any] = field(default_factory=list)
 
 
 __all__ = [
