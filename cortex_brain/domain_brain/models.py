@@ -21,6 +21,9 @@ class EntityType(Enum):
     RESOURCE = "resource"
     OPERATION = "operation"
     DATA = "data"
+    FUNCTION = "function"
+    CLASS = "class"
+    DATABASE = "database"
 
 
 class AuditOperationType(Enum):
