@@ -67,6 +67,7 @@ class VacuumOrchestrator:
         name: str = "VacuumOrchestrator",
         version: str = "1.0.0",
         strategy: VacuumStrategy = VacuumStrategy.BALANCED,
+        config: Optional[Dict[str, Any]] = None,
     ) -> None:
         """Initialize vacuum orchestrator.
         
@@ -74,10 +75,12 @@ class VacuumOrchestrator:
             name: Orchestrator name
             version: Orchestrator version
             strategy: Vacuum strategy (AGGRESSIVE, CONSERVATIVE, BALANCED)
+            config: Optional configuration dictionary
         """
         self.name = name
         self.version = version
         self.strategy = strategy
+        self.config = config or {}
         self._registry = cleaners.CleanerRegistry()
         self._state = OrchestratorState.INITIALIZED
         self._audit_trail: List[Dict[str, Any]] = []
