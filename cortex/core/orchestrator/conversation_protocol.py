@@ -11,6 +11,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 from datetime import datetime
 from pathlib import Path
+import uuid
 
 from cortex.core.result import Result, Ok, Err
 from cortex.core.interfaces import IOrchestrator, OperationMode
@@ -179,7 +180,22 @@ class ConversationProtocol:
                     "total": tokens_this_turn,
                 },
                 context=result if isinstance(result, dict) else {"result": result},
+                next_operation="continue_conversation" if self.turn_number < self.max_turns else None,
+                next_parameters={"turn_number": self.turn_number + 1} if self.turn_number < self.max_turns else {},
             )
+            
+            # Add audit entry ID
+            audit_entry_id = str(uuid.uuid4())
+            decision_dict = {
+                "turn": self.turn_number,
+                "decision": decision,
+                "timestamp": round_context.timestamp,
+                "audit_entry_id": audit_entry_id,
+            }
+            
+            # Add audit_entry_id to decision for access by tests
+            if not hasattr(decision, 'audit_entry_id'):
+                decision.audit_entry_id = audit_entry_id  # type: ignore
 
             # Add to history
             self.decisions_history.append(
