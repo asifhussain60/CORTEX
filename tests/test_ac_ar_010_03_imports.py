@@ -39,8 +39,14 @@ class TestImportUpdatesExecuted:
                 for pattern in old_patterns:
                     if pattern in content and '__pycache__' not in str(py_file):
                         found_old.append((py_file.name, pattern))
-            except:
-                pass
+            except (FileNotFoundError, PermissionError) as e:
+                # Skip files that can't be read (deleted, inaccessible)
+                import logging
+                logging.debug(f"Cannot read {py_file}: {e}")
+            except Exception as e:
+                # Log any other unexpected errors
+                import logging
+                logging.warning(f"Unexpected error reading {py_file}: {e}")
 
         # Some old imports might remain in strings/comments, but majority should be gone
         assert len(found_old) < 20, f"Too many old import paths found: {found_old[:10]}"
@@ -63,8 +69,14 @@ class TestImportUpdatesExecuted:
                 for pattern in new_patterns:
                     if pattern in content and '__pycache__' not in str(py_file):
                         found_new[pattern] = found_new.get(pattern, 0) + 1
-            except:
-                pass
+            except (FileNotFoundError, PermissionError) as e:
+                # Skip files that can't be read (deleted, inaccessible)
+                import logging
+                logging.debug(f"Cannot read {py_file}: {e}")
+            except Exception as e:
+                # Log any other unexpected errors
+                import logging
+                logging.warning(f"Unexpected error reading {py_file}: {e}")
 
         # Should find multiple instances of new patterns
         for pattern in new_patterns:
@@ -382,7 +394,13 @@ class TestPhaseCompletion:
                 content = py_file.read_text(encoding='utf-8', errors='ignore')
                 if 'from cortex.' in content or 'import cortex.' in content:
                     new_pattern_count += 1
-            except:
-                pass
+            except (FileNotFoundError, PermissionError) as e:
+                # Skip files that can't be read (deleted, inaccessible)
+                import logging
+                logging.debug(f"Cannot read {py_file}: {e}")
+            except Exception as e:
+                # Log any other unexpected errors
+                import logging
+                logging.warning(f"Unexpected error reading {py_file}: {e}")
 
         assert new_pattern_count > 50, "Not enough new import patterns found"
