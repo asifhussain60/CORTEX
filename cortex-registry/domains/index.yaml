@@ -1,0 +1,8 @@
+# Domain Registry
+# Multi-domain support for orchestrator coordination
+# Each domain gets isolated feature discovery and governance context
+
+domains: {}
+metadata:
+  authority: "cortex-impl-map.yaml phase_execution_tracking"
+  last_updated: null

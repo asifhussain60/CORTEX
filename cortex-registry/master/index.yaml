@@ -1,0 +1,8 @@
+# Master Phase Registry
+# Central registry for phase-level execution state
+# Used by autonomous execution loop to coordinate machine tracks
+
+master_phases: []
+metadata:
+  authority: "cortex-impl-map.yaml phase_execution_tracking"
+  last_updated: null
