@@ -133,6 +133,7 @@ class TypeConsistencyValidator:
         self.type_definitions: Dict[str, Dict[str, Any]] = {}
         self.type_usages: Dict[str, List[str]] = {}
         self.inconsistencies: List[str] = []
+        self.type_signatures: Dict[str, Dict[str, str]] = {}
 
     def register_type(
         self, module: str, type_name: str, type_info: Dict[str, Any]
@@ -147,6 +148,62 @@ class TypeConsistencyValidator:
         if module not in self.type_definitions:
             self.type_definitions[module] = {}
         self.type_definitions[module][type_name] = type_info
+
+    def register_type_signature(
+        self, module: str, function: str, signature: str
+    ) -> None:
+        """Register a function type signature.
+
+        Args:
+            module: Module containing the function.
+            function: Function name.
+            signature: Type signature (e.g., "str -> int").
+        """
+        if module not in self.type_signatures:
+            self.type_signatures[module] = {}
+        self.type_signatures[module][function] = signature
+
+    def check_consistency(self) -> bool:
+        """Check if registered type signatures are consistent.
+
+        Returns:
+            True if all signatures are consistent.
+        """
+        # Group signatures by function name
+        signatures_by_func: Dict[str, List[str]] = {}
+        for module, functions in self.type_signatures.items():
+            for func_name, signature in functions.items():
+                if func_name not in signatures_by_func:
+                    signatures_by_func[func_name] = []
+                signatures_by_func[func_name].append(signature)
+
+        # Check for inconsistencies
+        for func_name, sigs in signatures_by_func.items():
+            if len(set(sigs)) > 1:
+                self.inconsistencies.append(
+                    f"Function {func_name} has inconsistent signatures: {set(sigs)}"
+                )
+
+        return len(self.inconsistencies) == 0
+
+    def get_issues(self) -> List[CoherenceIssue]:
+        """Get type consistency issues.
+
+        Returns:
+            List of coherence issues.
+        """
+        issues = []
+        for inconsistency in self.inconsistencies:
+            issues.append(
+                CoherenceIssue(
+                    type=CoherenceType.TYPE_MISMATCH,
+                    severity="error",
+                    message=inconsistency,
+                    location="",
+                    suggestion="Ensure consistent type signatures across modules",
+                )
+            )
+        return issues
 
     def record_usage(self, module: str, type_name: str) -> None:
         """Record a type usage.
@@ -194,6 +251,59 @@ class StateConsistencyValidator:
         self.state_snapshots: List[Dict[str, Any]] = []
         self.transitions: List[Tuple[str, str]] = []
         self.inconsistencies: List[str] = []
+        self.states: Dict[str, Dict[str, Any]] = {}
+        self.invariants: List = []
+
+    def register_state(self, entity: str, state: Dict[str, Any]) -> None:
+        """Register state for an entity.
+
+        Args:
+            entity: Entity identifier.
+            state: State dictionary.
+        """
+        self.states[entity] = state.copy()
+
+    def add_invariant(self, invariant_func) -> None:
+        """Add state invariant check function.
+
+        Args:
+            invariant_func: Function that takes state and returns bool.
+        """
+        self.invariants.append(invariant_func)
+
+    def validate_states(self) -> bool:
+        """Validate all registered states against invariants.
+
+        Returns:
+            True if all states satisfy invariants.
+        """
+        for entity, state in self.states.items():
+            for invariant in self.invariants:
+                if not invariant(state):
+                    self.inconsistencies.append(
+                        f"Entity {entity} violates invariant"
+                    )
+                    return False
+        return True
+
+    def get_issues(self) -> List[CoherenceIssue]:
+        """Get state consistency issues.
+
+        Returns:
+            List of coherence issues.
+        """
+        issues = []
+        for inconsistency in self.inconsistencies:
+            issues.append(
+                CoherenceIssue(
+                    type=CoherenceType.STATE_INCONSISTENCY,
+                    severity="error",
+                    message=inconsistency,
+                    location="",
+                    suggestion="Ensure state meets all invariants",
+                )
+            )
+        return issues
 
     def record_state(self, state: Dict[str, Any]) -> None:
         """Record a state snapshot.
@@ -243,6 +353,41 @@ class ConfigurationCoherenceValidator:
         self.config_values: Dict[str, Any] = {}
         self.required_keys: Set[str] = set()
         self.issues: List[str] = []
+        self.configs: Dict[str, Dict[str, Any]] = {}
+
+    def register_config(self, name: str, config: Dict[str, Any]) -> None:
+        """Register a configuration.
+
+        Args:
+            name: Configuration name.
+            config: Configuration dictionary.
+        """
+        self.configs[name] = config.copy()
+
+    def check_conflicts(self) -> bool:
+        """Check for configuration conflicts.
+
+        Returns:
+            True if no conflicts, False if conflicts exist.
+        """
+        conflicts = []
+        # Check for conflicting values across configs
+        all_keys: Dict[str, List[tuple]] = {}
+        for config_name, config in self.configs.items():
+            for key, value in config.items():
+                if key not in all_keys:
+                    all_keys[key] = []
+                all_keys[key].append((config_name, value))
+
+        for key, values in all_keys.items():
+            unique_values = set(v[1] for v in values)
+            if len(unique_values) > 1:
+                conflicts.append(
+                    f"Conflicting values for '{key}': {unique_values}"
+                )
+                self.issues.append(conflicts[-1])
+
+        return len(conflicts) == 0
 
     def set_required_keys(self, keys: List[str]) -> None:
         """Set required configuration keys.
