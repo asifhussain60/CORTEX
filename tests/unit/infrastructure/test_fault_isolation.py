@@ -72,17 +72,23 @@ class TestErrorBudget:
         
         assert budget.is_exhausted()
     
+    @pytest.mark.timeout(5)  # Short timeout since we're testing the mechanism
     def test_budget_reset_after_window(self) -> None:
-        """Test error budget resets after time window."""
-        budget = ErrorBudget(max_errors_per_hour=10, window_minutes=1)
+        """Test error budget resets after time window.
+        
+        Note: This test uses a very short window (1 second) instead of 1 minute
+        to avoid long sleeps that would exceed pytest timeout. The mechanism is
+        the same - testing that failures are cleaned up after the window expires.
+        """
+        budget = ErrorBudget(max_errors_per_hour=10, window_minutes=1/60)  # 1 second window
         
         budget.record_failure()
         assert budget.remaining() == 9
         
-        # Wait for window to expire
-        time.sleep(61)
+        # Wait for short window to expire (1 second + buffer)
+        time.sleep(1.1)
         
-        # Budget should reset
+        # Budget should reset after window expires
         assert budget.remaining() == 10
     
     def test_success_restores_budget_gradually(self) -> None:
