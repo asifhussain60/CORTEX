@@ -16,7 +16,7 @@ from cortex.core.orchestrator.approval_gate import (
 @pytest.fixture
 def gate():
     """Create approval gate logic."""
-    return ApprovalGateLogic()
+    return ApprovalGateLogic(gate_id="test-gate-001")
 
 @pytest.fixture
 def engine():
