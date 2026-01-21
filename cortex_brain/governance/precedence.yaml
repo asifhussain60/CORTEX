@@ -1,0 +1,19 @@
+precedence_order:
+  - "tier0"
+  - "tier1"
+  - "tier2"
+
+resolution_strategy: "highest_tier_wins"
+conflict_resolution: "tier2_overrides_tier1_overrides_tier0"
+
+explanation: |
+  Tier precedence ensures that:
+  - Universal rules (tier0) apply everywhere
+  - Domain-specific rules (tier1) override universal for their domain
+  - Context-specific rules (tier2) override both for their context
+  
+  Example: If tier0 says "logs must include timestamp", but
+  tier2/audit-critical says "logs must include timestamp + cryptographic signature",
+  then tier2 wins and the signature is required in audit-critical context.
+
+status: "DEFINED"

@@ -1,0 +1,22 @@
+endpoints:
+  - path: "/health"
+    checks:
+      - "application_running"
+      - "database_connected"
+      - "cache_accessible"
+      - "all_dependencies_healthy"
+
+response_format:
+  status: "string"
+  timestamp: "ISO8601"
+  components:
+    application:
+      status: "string"
+    database:
+      status: "string"
+    cache:
+      status: "string"
+    dependencies:
+      status: "string"
+
+status: "DEFINED"

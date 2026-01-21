@@ -1,0 +1,67 @@
+metadata:
+  title: "CORTEX Registry Manifest"
+  version: "1.0"
+  created: "2026-01-21"
+  authority: "cortex-registry-001-migration"
+
+structure:
+  master:
+    description: "Master plans with highest authority"
+    location: "cortex-registry/master/"
+    purpose: "System-wide strategic plans"
+    content_type: "*.yaml"
+    
+  planning:
+    description: "Planning documents and roadmaps"
+    location: "cortex-registry/planning/"
+    purpose: "Development roadmaps, sprint plans"
+    content_type: "*.yaml, *.md"
+    
+  ado:
+    description: "Azure DevOps integration"
+    location: "cortex-registry/ado/"
+    purpose: "ADO work items, sprints"
+    content_type: "*.yaml"
+    
+  interaction:
+    description: "Interaction patterns and protocols"
+    location: "cortex-registry/interaction/"
+    purpose: "Communication patterns, event flows"
+    content_type: "*.yaml"
+    
+  domains:
+    description: "Domain-specific registries"
+    location: "cortex-registry/domains/"
+    purpose: "Segregated registries per business domain"
+    content_type: "folders with domain/ structure"
+    substructure:
+      - "master/"
+      - "planning/"
+      - "ado/"
+      - "interaction/"
+
+registry_access:
+  master_orchestrator:
+    - "cortex-registry/master/"
+    - authority: "highest"
+    
+  planning_orchestrator:
+    - "cortex-registry/planning/"
+    - "cortex-registry/domains/*/planning/"
+    - authority: "medium-high"
+    
+  ado_orchestrator:
+    - "cortex-registry/ado/"
+    - "cortex-registry/domains/*/ado/"
+    - authority: "medium"
+    
+  interaction_orchestrator:
+    - "cortex-registry/interaction/"
+    - "cortex-registry/domains/*/interaction/"
+    - authority: "medium"
+
+migration_status:
+  _workspaces_roadmap: "Ready for archival"
+  cortex_registry: "ACTIVE"
+  cutover_date: "2026-01-21"
+  backward_compatibility: "Symlinks maintained during transition"

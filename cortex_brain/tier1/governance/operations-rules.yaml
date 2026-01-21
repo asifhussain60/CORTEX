@@ -1,0 +1,21 @@
+domain: "operations"
+tier: "tier1"
+category: "operations"
+
+rules:
+  - id: "OPS-001"
+    name: "Health Checks"
+    description: "All services must expose health endpoints"
+    severity: "high"
+    
+  - id: "OPS-002"
+    name: "Monitoring"
+    description: "All services must export metrics"
+    severity: "high"
+    
+  - id: "OPS-003"
+    name: "Logging"
+    description: "Structured logging in JSON format"
+    severity: "high"
+
+status: "DEFINED"

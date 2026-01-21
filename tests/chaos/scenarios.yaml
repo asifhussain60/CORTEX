@@ -1,0 +1,22 @@
+scenarios:
+  - name: "database_connection_failure"
+    description: "Simulate database connection failure and recovery"
+    severity: "high"
+    
+  - name: "external_service_timeout"
+    description: "Simulate external service timeout"
+    severity: "high"
+    
+  - name: "memory_pressure"
+    description: "Simulate memory pressure and graceful degradation"
+    severity: "medium"
+    
+  - name: "cpu_spike"
+    description: "Simulate CPU spike and throttling"
+    severity: "medium"
+    
+  - name: "network_partition"
+    description: "Simulate network partition and recovery"
+    severity: "high"
+
+status: "DEFINED"
