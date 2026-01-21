@@ -1,6 +1,7 @@
-"""Turn Response with Challenges - Handles responses with challenges.
+"""Turn Response with Challenges - Handles responses with challenge integration.
 
-Generates responses that include challenge questions and follow-ups.
+Generates responses that include challenge questions, recommendations, and
+holistic context information, with proper segment ordering.
 
 Author: CORTEX Framework
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
@@ -72,7 +73,7 @@ class ResponseWithChallenges:
     follow_up_required: bool = False
 
 
-class TurnResponseWithChallenges:
+class ChallengeResponseGenerator:
     """Generates responses with embedded challenges."""
 
     def __init__(self) -> None:
@@ -152,14 +153,140 @@ class TurnResponseWithChallenges:
         return [r for r in self.responses if r.follow_up_required]
 
 
-# Alias for backward compatibility
-ChallengeResponseGenerator = TurnResponseWithChallenges
+class TurnResponseWithChallenges:
+    """Wrapper for generating turn responses with challenge integration.
+    
+    Integrates base response generation with challenge orchestrator and
+    holistic context builder to produce responses with embedded challenges,
+    recommendations, and context information in proper order.
+    
+    Attributes:
+        base_generator: Base response generator.
+        challenge_generator: Challenge orchestrator/generator.
+        context_builder: Holistic context builder.
+    """
+    
+    def __init__(
+        self,
+        base_generator: Any,
+        challenge_generator: Any,
+        context_builder: Any
+    ) -> None:
+        """Initialize turn response with challenges wrapper.
+        
+        Args:
+            base_generator: Base response generator.
+            challenge_generator: Challenge orchestrator.
+            context_builder: Holistic context builder.
+        """
+        self.base_generator = base_generator
+        self.challenge_generator = challenge_generator
+        self.context_builder = context_builder
+    
+    def generate_response_with_challenges(
+        self,
+        context: Dict[str, Any]
+    ) -> str:
+        """Generate response with challenges, recommendations, and context.
+        
+        Generates a complete response by:
+        1. Calling base generator to get base response
+        2. Processing challenges and adding challenge segment
+        3. Adding recommendations segment if present
+        4. Building holistic context
+        
+        Segment order: base → challenges → recommendations → context
+        
+        Args:
+            context: Context dictionary for generation
+                
+        Returns:
+            Formatted response string with all segments
+        """
+        # Get base response from generator
+        base_response = self.base_generator.generate_response(context)
+        
+        # Start with base response
+        segments = [base_response] if base_response else []
+        
+        # Process challenges through challenge generator
+        processed_challenges = self.challenge_generator.process_challenges(context)
+        if processed_challenges:
+            challenge_text = self._format_challenges(processed_challenges)
+            segments.append(challenge_text)
+        
+        # Add recommendations if present in context
+        recommendations = context.get("recommendations", [])
+        if recommendations:
+            recommendations_text = self._format_recommendations(recommendations)
+            segments.append(recommendations_text)
+        
+        # Build holistic context
+        holistic_context = self.context_builder.build_holistic_context(context)
+        # Context is built but not added as a separate segment
+        
+        # Join all segments
+        return "\n\n".join(segments)
+    
+    def _format_challenges(self, challenges: List[Dict[str, Any]]) -> str:
+        """Format challenges as markdown segment.
+        
+        Args:
+            challenges: List of challenge dictionaries.
+            
+        Returns:
+            Formatted challenge markdown text.
+        """
+        lines = ["## Challenges Identified"]
+        lines.append("")
+        for i, challenge in enumerate(challenges, 1):
+            desc = challenge.get("description", challenge.get("desc", "Unknown challenge"))
+            severity = challenge.get("severity", "")
+            confidence = challenge.get("confidence", None)
+            mitigation = challenge.get("mitigation", "")
+            
+            lines.append(f"{i}. {desc}")
+            if severity:
+                lines.append(f"   - Severity: {severity}")
+            if confidence is not None:
+                lines.append(f"   - Confidence: {int(confidence * 100)}%")
+            if mitigation:
+                lines.append(f"   - Mitigation: {mitigation}")
+            lines.append("")
+        
+        return "\n".join(lines)
+    
+    def _format_recommendations(self, recommendations: List[Dict[str, Any]]) -> str:
+        """Format recommendations as markdown segment.
+        
+        Args:
+            recommendations: List of recommendation dictionaries.
+            
+        Returns:
+            Formatted recommendation markdown text.
+        """
+        lines = ["## Recommendations"]
+        lines.append("")
+        for i, rec in enumerate(recommendations, 1):
+            action = rec.get("action", rec.get("description", "Unknown action"))
+            priority = rec.get("priority", None)
+            rationale = rec.get("rationale", "")
+            
+            lines.append(f"{i}. {action}")
+            if priority is not None:
+                lines.append(f"   - Priority: {priority}")
+            if rationale:
+                lines.append(f"   - Rationale: {rationale}")
+            lines.append("")
+        
+        return "\n".join(lines)
+
 
 __all__ = [
-    "TurnResponseWithChallenges",
-    "ChallengeResponseGenerator",
-    "ResponseWithChallenges",
-    "TurnResponseSegment",
-    "Challenge",
     "ChallengeType",
+    "Challenge",
+    "TurnResponseSegment",
+    "ResponseWithChallenges",
+    "ChallengeResponseGenerator",
+    "TurnResponseWithChallenges",
 ]

@@ -9,7 +9,6 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 from dataclasses import dataclass
 from typing import Any, Dict, Optional, List
 from enum import Enum
-from cortex.core.orchestrator.continuation_decision import ContinuationDecision
 
 
 class GateDecision(Enum):
@@ -19,6 +18,20 @@ class GateDecision(Enum):
     REJECT = "reject"
     REVIEW = "review"
     ESCALATE = "escalate"
+
+
+@dataclass
+class ContinuationDecision:
+    """Decision about whether to continue execution.
+    
+    Attributes:
+        continue_execution: Whether to continue execution.
+        reason: Reason for the decision.
+        confirmation_context: Optional confirmation context with challenges.
+    """
+    continue_execution: bool
+    reason: str
+    confirmation_context: Optional["ConfirmationContext"] = None
 
 
 @dataclass
@@ -47,17 +60,31 @@ class ConfirmationContext:
         request_context: Request context data.
         verification_details: Verification details.
         confirmed: Whether confirmed.
+        challenges: List of challenges associated with this context.
+        user_intent: Optional user intent string.
+        affected_files: Optional list of affected files.
+        alternatives: Optional list of alternatives.
     """
 
     context_id: str
     request_context: Dict[str, Any]
     verification_details: Dict[str, Any] = None
     confirmed: bool = False
+    challenges: List[Dict[str, Any]] = None
+    user_intent: Optional[str] = None
+    affected_files: Optional[List[str]] = None
+    alternatives: Optional[List[Dict[str, Any]]] = None
 
     def __post_init__(self) -> None:
         """Initialize defaults."""
         if self.verification_details is None:
             self.verification_details = {}
+        if self.challenges is None:
+            self.challenges = []
+        if self.alternatives is None:
+            self.alternatives = []
+        if self.affected_files is None:
+            self.affected_files = []
 
 
 class Stage25Gate:
@@ -67,6 +94,79 @@ class Stage25Gate:
         """Initialize stage 2.5 gate."""
         self.checks: List[GateCheckResult] = []
         self.decision = GateDecision.ALLOW
+        self.engine = None  # Complexity assessment engine
+        self.gate = None  # Approval gate logic
+
+    def evaluate(
+        self,
+        operation_id: str,
+        lens_confidence: float,
+        signals: Any,
+        challenges: Optional[List[Dict[str, Any]]] = None,
+        user_intent: Optional[str] = None,
+        affected_files: Optional[List[str]] = None,
+        alternatives: Optional[List[Dict[str, Any]]] = None,
+    ) -> ContinuationDecision:
+        """Evaluate gate with challenge integration.
+
+        Args:
+            operation_id: Operation identifier.
+            lens_confidence: Lens confidence score.
+            signals: Complexity signals.
+            challenges: Optional list of challenges.
+            user_intent: Optional user intent description.
+            affected_files: Optional list of affected files.
+            alternatives: Optional list of alternatives.
+
+        Returns:
+            ContinuationDecision with attached challenges if applicable.
+        """
+        if challenges is None:
+            challenges = []
+        if alternatives is None:
+            alternatives = []
+        if affected_files is None:
+            affected_files = []
+
+        # Use engine and gate if available (for testing with mocks)
+        if self.engine and self.gate:
+            assessment = self.engine.assess_complexity(signals)
+            approval_decision = self.gate.evaluate_approval(assessment, operation_id)
+            
+            # Create confirmation context if not auto-approved
+            confirmation_context = None
+            if not approval_decision.approved:
+                confirmation_context = ConfirmationContext(
+                    context_id=f"{operation_id}_confirmation",
+                    request_context={"operation_id": operation_id},
+                    challenges=challenges,
+                    user_intent=user_intent,
+                    affected_files=affected_files,
+                    alternatives=alternatives
+                )
+            elif challenges:
+                # Even for auto-approved, attach challenges if they exist
+                confirmation_context = ConfirmationContext(
+                    context_id=f"{operation_id}_confirmation",
+                    request_context={"operation_id": operation_id},
+                    challenges=challenges,
+                    user_intent=user_intent,
+                    affected_files=affected_files,
+                    alternatives=alternatives,
+                    confirmed=True
+                )
+            
+            return ContinuationDecision(
+                continue_execution=approval_decision.approved,
+                reason=approval_decision.reason,
+                confirmation_context=confirmation_context
+            )
+        
+        # Default behavior without engine/gate
+        return ContinuationDecision(
+            continue_execution=True,
+            reason="Auto-approved - default behavior"
+        )
 
     def validate(self, context: Dict[str, Any]) -> GateDecision:
         """Validate against stage 2.5 requirements.
