@@ -24,9 +24,10 @@ sys.path.insert(0, str(project_root / "src"))     # Old structure (if exists)
 sys.path.insert(0, str(project_root / "cortex_brain"))  # Tier structure (if exists)
 sys.path.insert(0, str(project_root))  # Project root
 
-# Register CORTEX test audit plugin for performance monitoring
+# Register CORTEX test audit plugins for performance monitoring and governance auditing
 def pytest_configure(config):
     """Configure pytest."""
+    # Register performance auditing plugin
     try:
         from cortex.testing.pytest_plugin_audit import cortex_test_audit_plugin
         config.pluginmanager.register(cortex_test_audit_plugin, name="cortex_test_audit")
@@ -34,6 +35,15 @@ def pytest_configure(config):
         # Plugin not available or import failed, continue without it
         import sys
         print(f"Note: Test audit plugin not loaded ({type(e).__name__})", file=sys.stderr)
+    
+    # Register governance audit trail plugin
+    try:
+        from cortex.brain.testing.test_audit_logger import TestAuditLogger
+        config.pluginmanager.register(TestAuditLogger(), name="cortex_governance_audit")
+    except Exception as e:
+        # Plugin not available or import failed, continue without it
+        import sys
+        print(f"Note: Governance audit plugin not loaded ({type(e).__name__})", file=sys.stderr)
 
 
 @pytest.fixture
