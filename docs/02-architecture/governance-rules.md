@@ -89,8 +89,8 @@ When conflicts occur, tier0 rules override tier1, which override tier2. This ens
 
 ## Related Documentation
 
-- [Architecture Overview](./0-overview.md)
-- [Multi-Tier Architecture](./2-multi-tier-architecture.md)
+- [Architecture Overview](./1-system-overview.md)
+- [Design Principles](./2-design-principles.md)
 - [Implementation Phases](./6-implementation-phases.md)
 - [Definition of Ready](./definition-of-ready.md)
 - [Governance Tiers Diagram](../_diagrams/governance-tiers.mmd)

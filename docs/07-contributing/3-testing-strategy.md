@@ -11,17 +11,19 @@ CORTEX uses a test pyramid strategy with 409 test files covering 257 unique acce
 
 ## Test Pyramid
 
-```
-        ┌─────────────┐
-        │    E2E      │  ~29 files (Smoke, Load, Chaos)
-        │   Tests     │  Slowest, Most Integration
-        ├─────────────┤
-        │ Integration │  ~80 files (Cross-module, API)
-        │   Tests     │  Medium Speed
-        ├─────────────┤
-        │    Unit     │  ~300 files (Isolated, Fast)
-        │   Tests     │  Fastest, Most Numerous
-        └─────────────┘
+```mermaid
+flowchart TB
+    subgraph PYRAMID["Test Pyramid (409 files)"]
+        E2E["E2E Tests<br/>~29 files<br/>Smoke, Load, Chaos"]
+        INT["Integration Tests<br/>~80 files<br/>Cross-module, API"]
+        UNIT["Unit Tests<br/>~300 files<br/>Isolated, Fast"]
+    end
+    
+    E2E --> INT --> UNIT
+    
+    style E2E fill:#ff6b6b,color:#000
+    style INT fill:#4ecdc4,color:#000
+    style UNIT fill:#45b7d1,color:#000
 ```
 
 ## Coverage Targets
@@ -67,21 +69,29 @@ Domains:
 
 ## Test Organization
 
-```
-tests/
-├── __init__.py
-├── conftest.py              # Shared fixtures
-├── unit/                    # Unit tests (~300 files)
-│   ├── core/               # cortex/core/ tests
-│   ├── orchestrators/      # cortex/orchestrators/ tests
-│   └── mcp/                # cortex/mcp/ tests
-├── integration/             # Integration tests (~80 files)
-│   ├── api/                # API contract tests
-│   └── database/           # DB operation tests
-└── e2e/                     # End-to-end tests (~29 files)
-    ├── smoke/              # Deployment smoke tests
-    ├── load/               # Load/performance tests
-    └── chaos/              # Chaos injection tests
+```mermaid
+flowchart TB
+    subgraph TESTS["tests/"]
+        INIT["__init__.py"]
+        CONFTEST["conftest.py<br/>Shared fixtures"]
+        
+        subgraph UNIT["unit/ (~300 files)"]
+            U_CORE["core/"]
+            U_ORCH["orchestrators/"]
+            U_MCP["mcp/"]
+        end
+        
+        subgraph INTEG["integration/ (~80 files)"]
+            I_API["api/<br/>Contract tests"]
+            I_DB["database/<br/>DB operations"]
+        end
+        
+        subgraph E2E["e2e/ (~29 files)"]
+            E_SMOKE["smoke/<br/>Deployment"]
+            E_LOAD["load/<br/>Performance"]
+            E_CHAOS["chaos/<br/>Injection"]
+        end
+    end
 ```
 
 ## Fixtures (conftest.py)

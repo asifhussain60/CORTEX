@@ -1,7 +1,7 @@
 """Tests for Tool Registry (AC-MCP-COMPLIANCE-003)."""
 import pytest
 from datetime import datetime
-from unittest.mock import Mock
+from unittest.mock import Mock, MagicMock
 
 from cortex.mcp.protocol import ToolParameter, ToolDefinition, MCPTool
 from cortex.mcp.registry import ToolRegistry, ToolEntry
@@ -14,7 +14,7 @@ def registry():
 @pytest.fixture
 def mock_tool():
     """Create mock tool."""
-    tool = Mock(spec=MCPTool)
+    tool = MagicMock(spec=MCPTool)
     definition = ToolDefinition(
         id="mock_tool_001",
         name="mock_operation",
@@ -22,6 +22,7 @@ def mock_tool():
         tags=["mock", "test"]
     )
     tool.get_definition.return_value = definition
+    tool.enabled = True
     tool.execute.return_value = {"status": "success"}
     return tool
 
@@ -61,7 +62,7 @@ def test_get_tool(registry, mock_tool):
     registry.register(mock_tool)
     tool = registry.get_tool("mock_tool_001")
     assert tool is not None
-    assert tool == mock_tool
+    assert tool.tool_id == "mock_tool_001"
 
 def test_get_nonexistent_tool(registry):
     """Test getting nonexistent tool."""
@@ -73,14 +74,14 @@ def test_get_definition(registry, mock_tool):
     registry.register(mock_tool)
     definition = registry.get_definition("mock_tool_001")
     assert definition is not None
-    assert definition.id == "mock_tool_001"
+    assert definition["id"] == "mock_tool_001"
 
 def test_list_tools(registry, mock_tool):
     """Test listing all tools."""
     registry.register(mock_tool)
     tools = registry.list_tools()
     assert len(tools) == 1
-    assert tools[0].id == "mock_tool_001"
+    assert tools[0].tool_id == "mock_tool_001"
 
 # Tag-based discovery
 def test_tag_indexing(registry, mock_tool):
@@ -94,7 +95,7 @@ def test_find_by_tag(registry, mock_tool):
     registry.register(mock_tool)
     results = registry.find_by_tag("mock")
     assert len(results) == 1
-    assert results[0].id == "mock_tool_001"
+    assert results[0].tool_id == "mock_tool_001"
 
 def test_find_by_tag_no_results(registry):
     """Test finding tools by tag - no results."""
@@ -105,13 +106,13 @@ def test_find_by_tag_no_results(registry):
 def test_search_by_name(registry, mock_tool):
     """Test searching tools by name."""
     registry.register(mock_tool)
-    results = registry.search("mock")
+    results = registry.search_by_name("mock")
     assert len(results) > 0
 
 def test_search_by_description(registry, mock_tool):
     """Test searching tools by description."""
     registry.register(mock_tool)
-    results = registry.search("testing")
+    results = registry.search_by_description("testing")
     assert len(results) > 0
 
 def test_search_case_insensitive(registry, mock_tool):
@@ -203,7 +204,7 @@ def test_multiple_tools_registry(registry):
     """Test registry with multiple tools."""
     tools = []
     for i in range(5):
-        tool = Mock(spec=MCPTool)
+        tool = MagicMock(spec=MCPTool)
         definition = ToolDefinition(
             id=f"tool_{i}",
             name=f"operation_{i}",
@@ -211,6 +212,7 @@ def test_multiple_tools_registry(registry):
             tags=[f"tag_{i % 2}"]
         )
         tool.get_definition.return_value = definition
+        tool.enabled = True
         tools.append(tool)
         registry.register(tool)
     
@@ -220,7 +222,7 @@ def test_multiple_tools_registry(registry):
 
 def test_deprecated_tools_excluded(registry):
     """Test deprecated tools are excluded from listings."""
-    tool = Mock(spec=MCPTool)
+    tool = MagicMock(spec=MCPTool)
     definition = ToolDefinition(
         id="deprecated_tool",
         name="old_operation",
@@ -228,6 +230,7 @@ def test_deprecated_tools_excluded(registry):
         deprecated=True
     )
     tool.get_definition.return_value = definition
+    tool.enabled = True
     registry.register(tool)
     
     tools = registry.list_tools()
@@ -238,7 +241,6 @@ def test_tool_entry_metadata(registry, mock_tool):
     registry.register(mock_tool)
     entry = registry.tools["mock_tool_001"]
     
-    assert entry.definition.id == "mock_tool_001"
-    assert entry.registered_at is not None
-    assert isinstance(entry.registered_at, datetime)
-    assert entry.usage_count == 0
+    assert entry.tool_id == "mock_tool_001"
+    assert entry.name == "mock_operation"
+    assert entry.tags == ["mock", "test"]

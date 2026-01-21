@@ -1,149 +1,70 @@
-# Resilience Patterns# Resilience Patterns
+# Resilience Patterns
 
-
-
-**Last Updated:** 2026-01-20  CORTEX provides built-in resilience patterns for handling failures gracefully.
-
-**Version:** 1.0.0  
-
-**Status:** Production Ready  ## Circuit Breaker Pattern
-
+**Last Updated:** 2026-01-21  
+**Version:** 1.1.0  
+**Status:** Production Ready  
 **Audience:** Architects, Developers, Operators
-
-Prevent cascading failures by failing fast:
 
 ## Overview
 
-```
+CORTEX implements comprehensive resilience patterns to ensure reliable operation in production environments. This document covers the patterns, their configuration, and how they work together to provide graceful degradation and automatic recovery.
 
-CORTEX implements comprehensive resilience patterns to ensure reliable operation in production environments. This document covers the patterns, their configuration, and how they work together to provide graceful degradation and automatic recovery.┌─ Request → Check Circuit
+---
 
-│
+## Table of Contents
 
----├─ If CLOSED: Forward request
-
-│  └─ Success → Stay closed
-
-## Table of Contents│  └─ Failure → Track failure
-
-│     └─ If failure_rate > threshold → OPEN
-
-1. [Resilience Philosophy](#resilience-philosophy)│
-
-2. [Circuit Breaker Pattern](#circuit-breaker-pattern)├─ If OPEN: Reject immediately (fail fast)
-
-3. [Retry with Backoff](#retry-with-backoff)│  └─ After timeout → Try HALF_OPEN
-
-4. [Partial Functionality Mode](#partial-functionality-mode)│
-
-5. [Rollback Capability](#rollback-capability)└─ If HALF_OPEN: Allow test request
-
-6. [Bulkhead Pattern](#bulkhead-pattern)   └─ Success → Return to CLOSED
-
-7. [Timeout Management](#timeout-management)   └─ Failure → Return to OPEN
-
-8. [Health Checking](#health-checking)```
-
+1. [Resilience Philosophy](#resilience-philosophy)
+2. [Circuit Breaker Pattern](#circuit-breaker-pattern)
+3. [Retry with Backoff](#retry-with-backoff)
+4. [Partial Functionality Mode](#partial-functionality-mode)
+5. [Rollback Capability](#rollback-capability)
+6. [Bulkhead Pattern](#bulkhead-pattern)
+7. [Timeout Management](#timeout-management)
+8. [Health Checking](#health-checking)
 9. [Configuration Reference](#configuration-reference)
+10. [Monitoring Resilience](#monitoring-resilience)
 
-10. [Monitoring Resilience](#monitoring-resilience)Configuration options:
-
-- Failure threshold (default: 50%)
-
----- Timeout (default: 30s)
-
-- Success threshold before close (default: 2 requests)
+---
 
 ## Resilience Philosophy
 
-## Partial Functionality Mode
-
 CORTEX's resilience approach follows these principles:
 
-When a component fails, degrade gracefully:
-
 1. **Fail fast**: When failure is certain, fail immediately
+2. **Degrade gracefully**: Partial operation beats total failure
+3. **Recover automatically**: Transient failures shouldn't require intervention
+4. **Audit everything**: Every failure is recorded for analysis
+5. **Isolate failures**: One component's failure shouldn't cascade
 
-2. **Degrade gracefully**: Partial operation beats total failure```
+### Failure Categories
 
-3. **Recover automatically**: Transient failures shouldn't require interventionNormal Operation:
+| Category | Response | Example |
+|----------|----------|---------|
+| **Transient** | Retry with backoff | Network blip |
+| **Persistent** | Circuit breaker | Service down |
+| **Partial** | Degraded mode | Cache unavailable |
+| **Critical** | Graceful shutdown | Database corruption |
 
-4. **Audit everything**: Every failure is recorded for analysis├─ Retrieve knowledge from Domain Brain
+---
 
-5. **Isolate failures**: One component's failure shouldn't cascade├─ Validate against governance rules
+## Circuit Breaker Pattern
 
-├─ Execute full orchestrator logic
+The circuit breaker prevents cascading failures by failing fast when a service is unhealthy.
 
-### Failure Categories└─ Return complete result
+### State Machine Diagram
 
-
-
-| Category | Response | Example |Partial Failure:
-
-|----------|----------|---------|├─ Retrieve knowledge: FAILED → Use cache
-
-| **Transient** | Retry with backoff | Network blip |├─ Validate rules: SUCCESS
-
-| **Persistent** | Circuit breaker | Service down |├─ Execute simplified logic
-
-| **Partial** | Degraded mode | Cache unavailable |└─ Return partial result with warnings
-
-| **Critical** | Graceful shutdown | Database corruption |```
-
-
-
----## Automatic Retry
-
-
-
-## Circuit Breaker PatternTransient failures are retried automatically:
-
-
-
-The circuit breaker prevents cascading failures by failing fast when a service is unhealthy.- **Exponential Backoff**: Wait times: 100ms → 200ms → 400ms → 800ms → ...
-
-- **Max Retries**: Default 3, configurable per orchestrator
-
-### State Machine- **Jitter**: Add randomness to prevent thundering herd
-
-
-
-```## Rollback Capability
-
-                    success
-
-                 ┌──────────┐Failed transactions are rolled back atomically:
-
-                 │          │
-
-                 ▼          │1. Execute transaction steps
-
-            ┌─────────┐     │2. If error at step N: Rollback steps 1..N-1
-
-   ─────────▶  CLOSED  ├────┘3. Return error with transaction ID for audit trail
-
-            └────┬────┘4. All changes recorded (even rollbacks)
-
-                 │ failure_rate > threshold
-
-                 ▼---
-
-            ┌─────────┐
-
-            │  OPEN   │◀────────────────┐See [Advanced Configuration](../guides/advanced/0-overview.md) for detailed configuration.
-
-            └────┬────┘                 │
-                 │ after timeout        │
-                 ▼                      │
-            ┌──────────┐                │
-            │HALF_OPEN │────────────────┘
-            └────┬─────┘   failure
-                 │
-                 │ success_count >= threshold
-                 ▼
-            ┌─────────┐
-            │ CLOSED  │
-            └─────────┘
+```mermaid
+stateDiagram-v2
+    [*] --> CLOSED: Initial state
+    CLOSED --> OPEN: failure_rate > threshold
+    OPEN --> HALF_OPEN: after timeout
+    HALF_OPEN --> CLOSED: success_count >= threshold
+    HALF_OPEN --> OPEN: failure
+    CLOSED --> CLOSED: success
+    
+    note right of CLOSED: Normal operation\nRequests pass through
+    note right of OPEN: All requests fail\nimmediately
+    note right of HALF_OPEN: Test requests\nallowed
 ```
 
 ### States Explained
@@ -180,7 +101,7 @@ resilience:
 ### Code Usage
 
 ```python
-from src.infrastructure.resilience import circuit_breaker
+from cortex.infrastructure.resilience import circuit_breaker
 
 class MyOrchestrator:
     @circuit_breaker("domain_brain")
@@ -224,6 +145,20 @@ Example (base=100ms, multiplier=2):
   Attempt 4: wait 800ms + jitter (capped at max_delay)
 ```
 
+### Retry Flow Diagram
+
+```mermaid
+flowchart TB
+    REQ[Request] --> CHECK{Attempt <= max?}
+    CHECK -->|Yes| TRY[Try Operation]
+    TRY -->|Success| DONE[Return Result]
+    TRY -->|Failure| RETRY{Retryable?}
+    RETRY -->|Yes| WAIT[Wait with backoff + jitter]
+    WAIT --> CHECK
+    RETRY -->|No| FAIL[Fail Immediately]
+    CHECK -->|No| FAIL
+```
+
 ### Configuration
 
 ```yaml
@@ -253,7 +188,7 @@ resilience:
 ### Code Usage
 
 ```python
-from src.infrastructure.resilience import retry_with_backoff
+from cortex.infrastructure.resilience import retry_with_backoff
 
 class MyOrchestrator:
     @retry_with_backoff(
@@ -268,18 +203,7 @@ class MyOrchestrator:
 
 ### Jitter Importance
 
-Jitter prevents the "thundering herd" problem:
-
-```
-Without jitter (bad):
-  All clients retry at: 100ms, 200ms, 400ms
-  → Service overwhelmed at same moments
-
-With jitter (good):
-  Client A: 95ms, 210ms, 380ms
-  Client B: 108ms, 195ms, 420ms
-  → Load distributed over time
-```
+Jitter prevents the "thundering herd" problem by distributing retry attempts over time rather than having all clients retry simultaneously.
 
 ---
 
@@ -289,23 +213,29 @@ When non-critical components fail, CORTEX continues operating with reduced funct
 
 ### Degradation Hierarchy
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                     FULL FUNCTIONALITY                          │
-│  All services operational                                       │
-├─────────────────────────────────────────────────────────────────┤
-│                     PARTIAL MODE - LEVEL 1                      │
-│  Cache unavailable → Use stale data with warning               │
-├─────────────────────────────────────────────────────────────────┤
-│                     PARTIAL MODE - LEVEL 2                      │
-│  Domain Brain unavailable → Use local knowledge only           │
-├─────────────────────────────────────────────────────────────────┤
-│                     PARTIAL MODE - LEVEL 3                      │
-│  Telemetry unavailable → Continue without metrics              │
-├─────────────────────────────────────────────────────────────────┤
-│                     MINIMAL MODE                                │
-│  Only governance + core execution                              │
-└─────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph FULL["FULL FUNCTIONALITY"]
+        F1["All services operational"]
+    end
+    
+    subgraph L1["PARTIAL MODE - LEVEL 1"]
+        P1["Cache unavailable<br/>→ Use stale data with warning"]
+    end
+    
+    subgraph L2["PARTIAL MODE - LEVEL 2"]
+        P2["Domain Brain unavailable<br/>→ Use local knowledge only"]
+    end
+    
+    subgraph L3["PARTIAL MODE - LEVEL 3"]
+        P3["Telemetry unavailable<br/>→ Continue without metrics"]
+    end
+    
+    subgraph MIN["MINIMAL MODE"]
+        M1["Only governance + core execution"]
+    end
+    
+    FULL --> L1 --> L2 --> L3 --> MIN
 ```
 
 ### Component Criticality
@@ -343,140 +273,78 @@ resilience:
         timeout_ms: 5000
 ```
 
-### Code Implementation
-
-```python
-class ResilientOrchestrator:
-    async def process(self, intent: str) -> Result:
-        """Process with partial mode support."""
-        warnings = []
-        
-        # Try Domain Brain, fall back to cache
-        try:
-            knowledge = await self.domain_brain.query(intent)
-        except ServiceUnavailable:
-            knowledge = await self._get_cached_knowledge(intent)
-            warnings.append("Using cached knowledge - Domain Brain unavailable")
-        
-        # Try telemetry, skip if unavailable
-        try:
-            await self.telemetry.record_intent(intent)
-        except ServiceUnavailable:
-            warnings.append("Telemetry skipped - service unavailable")
-        
-        # Execute core logic (no fallback - must succeed)
-        result = await self._execute(intent, knowledge)
-        
-        # Attach warnings to result
-        result.warnings = warnings
-        result.partial_mode = len(warnings) > 0
-        
-        return result
-```
-
 ---
 
 ## Rollback Capability
 
-CORTEX supports atomic transactions with automatic rollback on failure.
+Failed transactions are rolled back atomically to maintain consistency.
 
-### Transaction Model
+### Rollback Flow
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                      Transaction Flow                           │
-│                                                                 │
-│  BEGIN TRANSACTION                                              │
-│  ├── Step 1: Update knowledge base                             │
-│  │   ├── Execute                                               │
-│  │   └── Record rollback action                                │
-│  ├── Step 2: Update governance rules                           │
-│  │   ├── Execute                                               │
-│  │   └── Record rollback action                                │
-│  ├── Step 3: Notify external systems ← FAILURE                 │
-│  │                                                             │
-│  ROLLBACK                                                       │
-│  ├── Undo Step 2: Restore governance rules                     │
-│  ├── Undo Step 1: Restore knowledge base                       │
-│  └── Record rollback in audit trail                            │
-│                                                                 │
-│  RETURN ERROR with transaction_id                               │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Implementation
-
-```python
-from src.infrastructure.resilience import transaction
-
-class TransactionalOrchestrator:
-    async def complex_operation(self, params: dict) -> Result:
-        """Execute with transaction support."""
-        async with transaction() as txn:
-            # Step 1: Update knowledge
-            old_knowledge = await self.knowledge.get(params["id"])
-            await self.knowledge.update(params["id"], params["new_data"])
-            txn.add_rollback(
-                lambda: self.knowledge.update(params["id"], old_knowledge)
-            )
-            
-            # Step 2: Update rules
-            old_rules = await self.governance.get_rules(params["scope"])
-            await self.governance.update_rules(params["scope"], params["rules"])
-            txn.add_rollback(
-                lambda: self.governance.update_rules(params["scope"], old_rules)
-            )
-            
-            # Step 3: Notify (might fail)
-            await self.notify_external(params)
-            
-            # If we get here, commit
-            txn.commit()
-        
-        # If exception in any step, automatic rollback
-        return Result(status="success", transaction_id=txn.id)
+```mermaid
+sequenceDiagram
+    participant Client
+    participant TX as Transaction Manager
+    participant S1 as Step 1
+    participant S2 as Step 2
+    participant S3 as Step 3
+    participant Log as Audit Log
+    
+    Client->>TX: Begin Transaction
+    TX->>Log: TX_START
+    TX->>S1: Execute Step 1
+    S1-->>TX: Success
+    TX->>Log: STEP_1_COMPLETE
+    TX->>S2: Execute Step 2
+    S2-->>TX: Success
+    TX->>Log: STEP_2_COMPLETE
+    TX->>S3: Execute Step 3
+    S3-->>TX: FAILURE
+    TX->>Log: STEP_3_FAILED
+    TX->>S2: Rollback Step 2
+    TX->>S1: Rollback Step 1
+    TX->>Log: TX_ROLLED_BACK
+    TX-->>Client: Error + TX_ID
 ```
 
-### Audit Trail Integration
+### Rollback Rules
 
-Every transaction (including rollbacks) is recorded:
-
-```json
-{
-  "entry_id": "TXN-00001234",
-  "type": "transaction_rollback",
-  "transaction_id": "txn-abc-123",
-  "steps_completed": 2,
-  "steps_rolled_back": 2,
-  "failure_step": 3,
-  "failure_reason": "External notification timeout",
-  "duration_ms": 456,
-  "timestamp": "2026-01-20T14:30:00.000Z"
-}
-```
+1. Execute transaction steps in sequence
+2. If error at step N: Rollback steps 1..N-1
+3. Return error with transaction ID for audit trail
+4. All changes recorded (even rollbacks)
 
 ---
 
 ## Bulkhead Pattern
 
-Isolate resources to prevent one component from consuming all capacity.
+The bulkhead pattern isolates components to prevent cascade failures.
 
-### Resource Isolation
+### Isolation Pools
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                     Connection Pools                            │
-├───────────────┬───────────────┬───────────────┬─────────────────┤
-│  Domain Brain │  Governance   │  External API │    Reserved     │
-│   (20 conn)   │   (10 conn)   │   (15 conn)   │   (5 conn)      │
-└───────────────┴───────────────┴───────────────┴─────────────────┘
-                              Total: 50 connections
-
-If External API hangs:
-├── External API: All 15 connections blocked
-├── Domain Brain: 20 connections still available
-├── Governance: 10 connections still available
-└── System continues operating (degraded)
+```mermaid
+flowchart TB
+    subgraph POOLS["Connection Pools"]
+        subgraph DB_POOL["Database Pool (20 connections)"]
+            DB1[Connection 1]
+            DB2[Connection 2]
+            DB3[...]
+        end
+        
+        subgraph BRAIN_POOL["Domain Brain Pool (10 connections)"]
+            BR1[Connection 1]
+            BR2[Connection 2]
+            BR3[...]
+        end
+        
+        subgraph EXT_POOL["External API Pool (5 connections)"]
+            EX1[Connection 1]
+            EX2[Connection 2]
+            EX3[...]
+        end
+    end
+    
+    ORCH[Orchestrators] --> DB_POOL & BRAIN_POOL & EXT_POOL
 ```
 
 ### Configuration
@@ -486,60 +354,34 @@ If External API hangs:
 resilience:
   bulkhead:
     enabled: true
-    
     pools:
-      domain_brain:
+      database:
         max_connections: 20
-        max_pending: 50
-        timeout_ms: 5000
-        
-      governance:
+        queue_size: 100
+      domain_brain:
         max_connections: 10
-        max_pending: 20
-        timeout_ms: 2000
-        
+        queue_size: 50
       external_api:
-        max_connections: 15
-        max_pending: 30
-        timeout_ms: 10000
-```
-
-### Thread Pool Isolation
-
-```python
-from src.infrastructure.resilience import bulkhead
-
-class IsolatedOrchestrator:
-    @bulkhead("domain_brain", max_concurrent=20)
-    async def query_domain_brain(self, query: str):
-        """Query with bulkhead isolation."""
-        return await self.domain_brain.search(query)
-    
-    @bulkhead("external_api", max_concurrent=15)
-    async def call_external_api(self, request: dict):
-        """External call with isolation."""
-        return await self.http_client.post(request)
+        max_connections: 5
+        queue_size: 20
 ```
 
 ---
 
 ## Timeout Management
 
-Prevent operations from hanging indefinitely.
+Strict timeouts prevent resource exhaustion.
 
 ### Timeout Hierarchy
 
-```
-Request Timeout (30s)
-├── Orchestrator Timeout (25s)
-│   ├── LENS Processing (5s)
-│   ├── Governance Check (3s)
-│   ├── Execution (15s)
-│   │   ├── Domain Brain Query (5s)
-│   │   ├── External API Call (8s)
-│   │   └── Response Composition (2s)
-│   └── Audit Recording (2s)
-└── Buffer (5s)
+```mermaid
+flowchart TB
+    REQ["Request (30s total)"]
+    REQ --> ORCH["Orchestrator (25s)"]
+    ORCH --> LENS["LENS Processing (5s)"]
+    ORCH --> GOV["Governance Check (3s)"]
+    ORCH --> BRAIN["Domain Brain Query (10s)"]
+    ORCH --> EXEC["Execution (15s)"]
 ```
 
 ### Configuration
@@ -548,54 +390,30 @@ Request Timeout (30s)
 # cortex-config.yaml
 resilience:
   timeouts:
-    request: 30.0
-    orchestrator: 25.0
-    
+    request: 30.0       # Maximum request time
+    orchestrator: 25.0  # Orchestrator budget
     operations:
       lens_processing: 5.0
       governance_check: 3.0
-      domain_brain_query: 5.0
-      external_api_call: 8.0
-      response_composition: 2.0
-      audit_recording: 2.0
-```
-
-### Implementation
-
-```python
-from src.infrastructure.resilience import timeout
-
-class TimeoutAwareOrchestrator:
-    @timeout(seconds=25)
-    async def process(self, intent: str) -> Result:
-        """Process with timeout."""
-        async with timeout(5):
-            comprehension = await self.lens.comprehend(intent)
-        
-        async with timeout(3):
-            governance = await self.governance.check(intent)
-        
-        async with timeout(15):
-            result = await self._execute(intent, comprehension)
-        
-        return result
+      domain_brain_query: 10.0
+      execution: 15.0
 ```
 
 ---
 
 ## Health Checking
 
-Proactive health monitoring for all components.
+CORTEX exposes health endpoints for orchestration platforms.
 
-### Health Check Types
+### Health Levels
 
-| Type | Frequency | Purpose |
-|------|-----------|---------|
-| **Liveness** | 5s | Is the process alive? |
-| **Readiness** | 10s | Can it accept requests? |
-| **Deep Health** | 60s | All dependencies healthy? |
+| Endpoint | Purpose | Response |
+|----------|---------|----------|
+| `/health/live` | Process running | 200 if alive |
+| `/health/ready` | Ready for traffic | 200 or 503 |
+| `/health/deep` | Comprehensive check | JSON with all components |
 
-### Health Check Implementation
+### Code Implementation
 
 ```python
 class HealthChecker:
@@ -643,14 +461,6 @@ class HealthChecker:
             healthy=all(c.get("healthy", False) for c in checks.values()),
             checks=checks,
         )
-```
-
-### Endpoints
-
-```
-GET /health/live      → 200 OK (if process running)
-GET /health/ready     → 200 OK or 503 Service Unavailable
-GET /health/deep      → 200 OK with detailed JSON
 ```
 
 ---
@@ -763,25 +573,6 @@ groups:
           severity: warning
         annotations:
           summary: "CORTEX operating in partial mode"
-```
-
-### Dashboard
-
-Monitor resilience in Grafana:
-
-```
-┌────────────────────────────────────────────────────────────────┐
-│                    CORTEX Resilience Dashboard                  │
-├──────────────────┬──────────────────┬──────────────────────────┤
-│ Circuit Breakers │ Retry Statistics │ Partial Mode Status      │
-│ ● domain_brain   │ Attempts: 156    │ ◯ Full Functionality     │
-│   CLOSED         │ Success: 142     │ ● Partial Mode L1        │
-│ ● external_api   │ Rate: 91%        │   Cache fallback active  │
-│   HALF_OPEN      │                  │                          │
-├──────────────────┴──────────────────┴──────────────────────────┤
-│                     Health Check History                        │
-│ [██████████████████░░] 90% healthy over last hour              │
-└────────────────────────────────────────────────────────────────┘
 ```
 
 ---

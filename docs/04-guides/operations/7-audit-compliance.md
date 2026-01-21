@@ -50,5 +50,5 @@ report = audit.generate_compliance_report(
 
 ## Related Resources
 
-- [Governance Framework](../../02-architecture/6-security-governance.md)
+- [Governance Framework](../../02-architecture/governance-rules.md)
 - [Compliance Mappings](../../05-reference/compliance-mappings.md)

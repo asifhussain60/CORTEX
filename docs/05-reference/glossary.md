@@ -12,7 +12,7 @@ Key terms and concepts used throughout CORTEX documentation. Terms are organized
 
 **AC (Acceptance Criteria)**  
 Specific, measurable requirements that define when a feature or fix is complete. Each phase in the CORTEX roadmap has multiple ACs with unique IDs (e.g., `AC-AR-010-01`).  
-*See: [cortex-master.yaml](../../_workspaces/roadmap/cortex-master.yaml)*
+*See: `_workspaces/roadmap/cortex-master.yaml` in project root*
 
 **Approval Matrix**  
 A decision table that determines when user confirmation is required based on operation complexity. Part of the Complexity Gate (Stage 2.5).  
@@ -216,7 +216,7 @@ Degraded operation mode when non-critical components fail. CORTEX continues with
 
 **Phase**  
 Major development milestone in CORTEX roadmap. 25+ phases completed, each with multiple ACs and test suites.  
-*See: [cortex-master.yaml](../../_workspaces/roadmap/cortex-master.yaml)*
+*See: `_workspaces/roadmap/cortex-master.yaml` in project root*
 
 **Profile (Response)**  
 One of 5 response composition profiles: `developer`, `architect`, `manager`, `operator`, `end_user`.

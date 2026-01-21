@@ -123,7 +123,7 @@
 
 ## Related
 
-- [Architecture Overview](./0-overview.md)
+- [Architecture Overview](./1-system-overview.md)
 - [Implementation Phases](./6-implementation-phases.md)
 - [Gap Analysis](../05-reference/gap-analysis.md)
 - [Remediation Status](../05-reference/remediation-status.md)

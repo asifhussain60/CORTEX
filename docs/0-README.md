@@ -20,7 +20,7 @@
 | **E** | TDD Implementation | 15-20 days | 75% → 90% |
 | **H-J** | Validation & Governance | 7-9 days | 90% → 100% ✅ COMPLETED |
 
-**See:** [Architecture Overview](02-architecture/0-overview.md) | [Implementation Phases](02-architecture/6-implementation-phases.md) | [Definition of Ready](02-architecture/definition-of-ready.md)
+**See:** [Architecture Overview](02-architecture/1-system-overview.md) | [Implementation Phases](02-architecture/6-implementation-phases.md) | [Definition of Ready](02-architecture/definition-of-ready.md)
 
 ### Current Implementation Status
 

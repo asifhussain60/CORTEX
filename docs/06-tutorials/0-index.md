@@ -86,8 +86,8 @@ Learn to operate CORTEX in production.
 4. [Operations Guide](../04-guides/operations/0-overview.md)
 
 ### For Architects
-1. [System Overview](../02-architecture/0-overview.md)
-2. [Design Principles](../02-architecture/1-design-principles.md)
-3. [Multi-Tier Architecture](../02-architecture/2-multi-tier-architecture.md)
+1. [System Overview](../02-architecture/1-system-overview.md)
+2. [Design Principles](../02-architecture/2-design-principles.md)
+3. [Governance Rules](../02-architecture/governance-rules.md)
 4. [Resilience Patterns](../02-architecture/5-resilience-patterns.md)
 

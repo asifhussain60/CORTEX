@@ -121,6 +121,6 @@ This document identifies gaps between the current implementation state and produ
 
 ## Related
 
-- [Architecture Overview](../02-architecture/0-overview.md)
+- [Architecture Overview](../02-architecture/1-system-overview.md)
 - [Remediation Status](./remediation-status.md)
 - [Implementation Phases](../02-architecture/6-implementation-phases.md)

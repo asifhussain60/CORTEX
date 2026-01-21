@@ -25,81 +25,62 @@ CORTEX is an AI-powered development orchestration platform that provides intelli
 
 ## System Architecture Diagram
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         USER INTERFACE LAYER                                 │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────┐ │
-│  │  REST API   │  │ MCP Server  │  │     CLI     │  │  Copilot Chat       │ │
-│  │ (FastAPI)   │  │ (JSON-RPC)  │  │ (cortex-*)  │  │  (Prompts/Agents)   │ │
-│  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘  └──────────┬──────────┘ │
-└─────────┼────────────────┼────────────────┼────────────────────┼────────────┘
-          │                │                │                    │
-          └────────────────┴────────────────┴────────────────────┘
-                                    │
-                    ┌───────────────▼───────────────┐
-                    │      LENS PROTOCOL           │
-                    │  (Intent Comprehension)      │
-                    │  ├─ Language Phase           │
-                    │  ├─ Examination Phase        │
-                    │  ├─ Navigation Phase         │
-                    │  └─ Synthesis Phase          │
-                    └───────────────┬───────────────┘
-                                    │
-          ┌─────────────────────────┼─────────────────────────┐
-          │                         │                         │
-          ▼                         ▼                         ▼
-┌─────────────────┐   ┌─────────────────────┐   ┌─────────────────────┐
-│   TIER 0        │   │      TIER 1         │   │      TIER 2         │
-│ (Governance)    │   │  (Architecture)     │   │   (Standards)       │
-│                 │   │                     │   │                     │
-│ • CORE Rules    │   │ • Confirmation Gate │   │ • Response Templates│
-│ • Audit Trail   │   │ • CONF-GATE Rules   │   │ • Formatting        │
-│ • Hash Chain    │   │ • Complexity Matrix │   │ • Knowledge Base    │
-│ • Immutable     │   │ • Approval Matrix   │   │ • Best Practices    │
-└────────┬────────┘   └──────────┬──────────┘   └──────────┬──────────┘
-         │                       │                         │
-         └───────────────────────┴─────────────────────────┘
-                                 │
-                    ┌────────────▼────────────┐
-                    │   MASTER ORCHESTRATOR   │
-                    │   (ConversationProtocol)│
-                    │  ├─ Stage 1: Context    │
-                    │  ├─ Stage 2: Routing    │
-                    │  ├─ Stage 2.5: Gate     │
-                    │  ├─ Stage 3: Execute    │
-                    │  └─ Stage 4: Response   │
-                    └────────────┬────────────┘
-                                 │
-          ┌──────────────────────┼──────────────────────┐
-          │                      │                      │
-          ▼                      ▼                      ▼
-┌─────────────────┐   ┌─────────────────┐   ┌─────────────────┐
-│    PLANNING     │   │    ANALYSIS     │   │   INTEGRATION   │
-│  ORCHESTRATORS  │   │  ORCHESTRATORS  │   │  ORCHESTRATORS  │
-├─────────────────┤   ├─────────────────┤   ├─────────────────┤
-│ • Onboarding    │   │ • Gap Detection │   │ • Domain Brain  │
-│ • Challenge     │   │ • Complexity    │   │ • BKIO          │
-│ • Context Build │   │ • Assessment    │   │ • Knowledge     │
-└────────┬────────┘   └────────┬────────┘   └────────┬────────┘
-         │                     │                     │
-         └─────────────────────┴─────────────────────┘
-                               │
-                    ┌──────────▼──────────┐
-                    │    DOMAIN BRAIN     │
-                    │  (Tier 3 Knowledge) │
-                    │  ├─ AST Intelligence│
-                    │  ├─ Git History     │
-                    │  ├─ Code Comments   │
-                    │  ├─ Relationships   │
-                    │  └─ Business Rules  │
-                    └──────────┬──────────┘
-                               │
-                    ┌──────────▼──────────┐
-                    │   PERSISTENCE       │
-                    │  ├─ governance.db   │
-                    │  ├─ cortex_brain/   │
-                    │  └─ State Recovery  │
-                    └─────────────────────┘
+```mermaid
+flowchart TB
+    subgraph UI["User Interface Layer"]
+        REST["REST API<br/>(FastAPI)"]
+        MCP["MCP Server<br/>(JSON-RPC)"]
+        CLI["CLI<br/>(cortex-*)"]
+        CHAT["Copilot Chat<br/>(Prompts/Agents)"]
+    end
+    
+    subgraph LENS["LENS Protocol (Intent Comprehension)"]
+        L["Language Phase"]
+        E["Examination Phase"]
+        N["Navigation Phase"]
+        S["Synthesis Phase"]
+    end
+    
+    subgraph TIERS["Governance Tiers"]
+        T0["Tier 0<br/>CORE Rules<br/>Audit Trail<br/>Hash Chain"]
+        T1["Tier 1<br/>Confirmation Gate<br/>Complexity Matrix"]
+        T2["Tier 2<br/>Response Templates<br/>Best Practices"]
+    end
+    
+    subgraph MASTER["Master Orchestrator (ConversationProtocol)"]
+        S1["Stage 1: Context"]
+        S2["Stage 2: Routing"]
+        S25["Stage 2.5: Gate"]
+        S3["Stage 3: Execute"]
+        S4["Stage 4: Response"]
+    end
+    
+    subgraph ORCHS["Domain Orchestrators"]
+        PLAN["Planning<br/>Onboarding, Challenge"]
+        ANAL["Analysis<br/>Gap Detection, Complexity"]
+        INTEG["Integration<br/>Domain Brain, BKIO"]
+    end
+    
+    subgraph BRAIN["Domain Brain (Tier 3 Knowledge)"]
+        AST["AST Intelligence"]
+        GIT["Git History"]
+        COMMENTS["Code Comments"]
+        RELS["Relationships"]
+    end
+    
+    subgraph PERSIST["Persistence"]
+        DB[("governance.db")]
+        STATE["cortex_brain/"]
+    end
+    
+    REST & MCP & CLI & CHAT --> L
+    L --> E --> N --> S
+    S --> T0 & T1 & T2
+    T0 & T1 & T2 --> S1
+    S1 --> S2 --> S25 --> S3 --> S4
+    S3 --> PLAN & ANAL & INTEG
+    PLAN & ANAL & INTEG --> AST & GIT & COMMENTS & RELS
+    AST & GIT & COMMENTS & RELS --> DB & STATE
 ```
 
 ## Core Components
@@ -202,55 +183,45 @@ Based on `cortex-master.yaml` phase_tracker:
 
 ### Request Processing Flow
 
-```
-1. Request arrives (REST/MCP/CLI/Chat)
-         │
-         ▼
-2. LENS Protocol comprehends intent
-   ├─ Language: Parse request
-   ├─ Examination: Analyze context
-   ├─ Navigation: Select orchestrator
-   └─ Synthesis: Build execution plan
-         │
-         ▼
-3. Governance Validation (Tier 0)
-   ├─ Check CORE rules
-   ├─ Validate against blocklist
-   └─ Log audit entry (AC_START)
-         │
-         ▼
-4. Complexity Assessment (Stage 2.5)
-   ├─ Calculate complexity score (0.0-1.0)
-   ├─ Apply approval matrix
-   └─ Auto-approve/Request confirmation
-         │
-         ▼
-5. Master Orchestrator executes
-   ├─ Load orchestrator context
-   ├─ Delegate to domain orchestrator
-   └─ Apply resilience patterns
-         │
-         ▼
-6. Response Composition
-   ├─ Format per mode (CHAT/JSON/MARKDOWN)
-   ├─ Apply tone (FORMAL/TECHNICAL/etc.)
-   └─ Return result with audit trail
+```mermaid
+flowchart TD
+    A["1. Request arrives<br/>(REST/MCP/CLI/Chat)"] --> B["2. LENS Protocol<br/>comprehends intent"]
+    B --> B1["Language: Parse request"]
+    B --> B2["Examination: Analyze context"]
+    B --> B3["Navigation: Select orchestrator"]
+    B --> B4["Synthesis: Build execution plan"]
+    B1 & B2 & B3 & B4 --> C["3. Governance Validation (Tier 0)"]
+    C --> C1["Check CORE rules"]
+    C --> C2["Validate against blocklist"]
+    C --> C3["Log audit entry (AC_START)"]
+    C1 & C2 & C3 --> D["4. Complexity Assessment (Stage 2.5)"]
+    D --> D1["Calculate complexity score (0.0-1.0)"]
+    D --> D2["Apply approval matrix"]
+    D --> D3["Auto-approve/Request confirmation"]
+    D1 & D2 & D3 --> E["5. Master Orchestrator executes"]
+    E --> E1["Load orchestrator context"]
+    E --> E2["Delegate to domain orchestrator"]
+    E --> E3["Apply resilience patterns"]
+    E1 & E2 & E3 --> F["6. Response Composition"]
+    F --> F1["Format per mode (CHAT/JSON/MARKDOWN)"]
+    F --> F2["Apply tone (FORMAL/TECHNICAL/etc.)"]
+    F --> F3["Return result with audit trail"]
 ```
 
 ### Audit Trail Flow
 
 Every operation is logged with tamper-evident hash chain:
 
-```
-AC_START → AC_EXECUTE → AC_COMPLETE
-    │           │            │
-    ▼           ▼            ▼
- Hash(n)    Hash(n+1)    Hash(n+2)
-    │           │            │
-    └───────────┴────────────┘
-              │
-    Global chronological chain
-    (verified, unbroken)
+```mermaid
+flowchart LR
+    subgraph CHAIN["Audit Chain"]
+        AC_START["AC_START"] --> H1["Hash(n)"]
+        AC_EXEC["AC_EXECUTE"] --> H2["Hash(n+1)"]
+        AC_COMP["AC_COMPLETE"] --> H3["Hash(n+2)"]
+    end
+    
+    H1 --> H2 --> H3
+    H3 --> GLOBAL["Global chronological chain<br/>(verified, unbroken)"]
 ```
 
 **Audit Database:** `cortex_brain/state/governance.db` (SQLite, 5000+ entries)
@@ -281,68 +252,58 @@ AC_START → AC_EXECUTE → AC_COMPLETE
 
 ### User Flow Diagram
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    USER COPILOT CHAT REQUEST                    │
-└──────────────────────────┬──────────────────────────────────────┘
-                           │
-        ┌──────────────────┼──────────────────┐
-        │                  │                  │
-        ▼                  ▼                  ▼
-    ┌────────────┐   ┌──────────┐    ┌─────────────┐
-    │ IMPLEMENT  │   │   PLAN   │    │   REVIEW    │
-    │   NEW AC   │   │  PHASES  │    │  CODE QA    │
-    └─────┬──────┘   └────┬─────┘    └──────┬──────┘
-          │               │                 │
-          ▼               ▼                 ▼
-    ┌────────────────────────────────────────────────┐
-    │         .github/prompts/                       │
-    │                                                │
-    │  cortex-builder.prompt.md                     │
-    │  cortex-builder-continuation.prompt.md        │
-    │  cortex-planner.prompt.md                     │
-    │  cortex-gap-detection.prompt.md               │
-    │  cortex-governance.prompt.md                  │
-    │  cortex-review-*.prompt.md (4 files)          │
-    └────────────┬───────────────────────────────────┘
-                 │
-                 ▼
-    ┌────────────────────────────────────────────────┐
-    │    .github/agents/ (Copilot tools)            │
-    │                                                │
-    │  cortex-builder.md                            │
-    │  cortex-planner.md                            │
-    │  cortex-gap-detection.md                      │
-    │  cortex-review.md                             │
-    └────────────┬───────────────────────────────────┘
-                 │
-                 ▼
-    ┌────────────────────────────────────────────────┐
-    │    _workspaces/roadmap/cortex-master.yaml     │
-    │                                                │
-    │  phase_tracker: Current phase status           │
-    │  phases: Detailed AC specifications           │
-    │  architecture_decisions: Design decisions     │
-    └────────────┬───────────────────────────────────┘
-                 │
-                 ▼
-    ┌────────────────────────────────────────────────┐
-    │    cortex_brain/tier0/governance/              │
-    │                                                │
-    │  core-rules.yaml (28 SKULL rules)             │
-    │  phase-enforcement-map.yaml                   │
-    │  ac-validation-checklist.yaml                 │
-    └────────────┬───────────────────────────────────┘
-                 │
-                 ▼
-    ┌────────────────────────────────────────────────┐
-    │    IMPLEMENTATION & GOVERNANCE ENFORCEMENT     │
-    │                                                │
-    │  Create AC-IDs with tests (TDD first)         │
-    │  Log audit trail (AC_START→EXECUTE→COMPLETE) │
-    │  Verify governance rules compliance           │
-    │  Track in: cortex_brain/state/governance.db   │
-    └────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    USER["USER COPILOT CHAT REQUEST"]
+    
+    USER --> IMPL["IMPLEMENT<br/>NEW AC"]
+    USER --> PLAN["PLAN<br/>PHASES"]
+    USER --> REVIEW["REVIEW<br/>CODE QA"]
+    
+    IMPL & PLAN & REVIEW --> PROMPTS
+    
+    subgraph PROMPTS[".github/prompts/"]
+        P1["cortex-builder.prompt.md"]
+        P2["cortex-builder-continuation.prompt.md"]
+        P3["cortex-planner.prompt.md"]
+        P4["cortex-gap-detection.prompt.md"]
+        P5["cortex-governance.prompt.md"]
+        P6["cortex-review-*.prompt.md (4 files)"]
+    end
+    
+    PROMPTS --> AGENTS
+    
+    subgraph AGENTS[".github/agents/ (Copilot tools)"]
+        A1["cortex-builder.md"]
+        A2["cortex-planner.md"]
+        A3["cortex-gap-detection.md"]
+        A4["cortex-review.md"]
+    end
+    
+    AGENTS --> MASTER
+    
+    subgraph MASTER["_workspaces/roadmap/cortex-master.yaml"]
+        M1["phase_tracker: Current phase status"]
+        M2["phases: Detailed AC specifications"]
+        M3["architecture_decisions: Design decisions"]
+    end
+    
+    MASTER --> GOV
+    
+    subgraph GOV["cortex_brain/tier0/governance/"]
+        G1["core-rules.yaml (28 SKULL rules)"]
+        G2["phase-enforcement-map.yaml"]
+        G3["ac-validation-checklist.yaml"]
+    end
+    
+    GOV --> EXEC
+    
+    subgraph EXEC["IMPLEMENTATION & GOVERNANCE ENFORCEMENT"]
+        E1["Create AC-IDs with tests (TDD first)"]
+        E2["Log audit trail (AC_START→EXECUTE→COMPLETE)"]
+        E3["Verify governance rules compliance"]
+        E4["Track in: cortex_brain/state/governance.db"]
+    end
 ```
 
 ---
@@ -403,33 +364,39 @@ AC_START → AC_EXECUTE → AC_COMPLETE
 
 ### Read Operations (No Side Effects)
 
-```
-cortex-master.yaml
-  ├─ Read: phase_tracker → Current phase status
-  └─ Read: phases.PHASE-XX → AC specifications
-
-cortex_brain/tier0/governance/
-  ├─ Read: core-rules.yaml → Governance rules
-  └─ Read: phase-enforcement-map.yaml → Phase-specific rules
-
-cortex_brain/state/governance.db
-  ├─ Query: audit_log → Check AC lifecycle events
-  └─ Query: audit_log → Verify hash chain integrity
+```mermaid
+flowchart LR
+    subgraph MASTER["cortex-master.yaml"]
+        R1["phase_tracker<br/>→ Current phase status"]
+        R2["phases.PHASE-XX<br/>→ AC specifications"]
+    end
+    
+    subgraph TIER0["cortex_brain/tier0/governance/"]
+        R3["core-rules.yaml<br/>→ Governance rules"]
+        R4["phase-enforcement-map.yaml<br/>→ Phase-specific rules"]
+    end
+    
+    subgraph DB["cortex_brain/state/governance.db"]
+        R5["audit_log<br/>→ AC lifecycle events"]
+        R6["audit_log<br/>→ Hash chain integrity"]
+    end
 ```
 
 ### Write Operations (With Audit Trail)
 
-```
-AC Implementation:
-  1. Log: AC_START (audit_log)
-  2. Create: Test file
-  3. Implement: Source code
-  4. Run: Tests
-  5. Log: AC_EXECUTE (audit_log)
-  6. Commit: Git checkpoint
-  7. Log: AC_COMPLETE (audit_log)
-  8. Update: phase_tracker status
-  9. Commit: Final state update
+```mermaid
+flowchart TD
+    A1["1. Log: AC_START (audit_log)"]
+    A2["2. Create: Test file"]
+    A3["3. Implement: Source code"]
+    A4["4. Run: Tests"]
+    A5["5. Log: AC_EXECUTE (audit_log)"]
+    A6["6. Commit: Git checkpoint"]
+    A7["7. Log: AC_COMPLETE (audit_log)"]
+    A8["8. Update: phase_tracker status"]
+    A9["9. Commit: Final state update"]
+    
+    A1 --> A2 --> A3 --> A4 --> A5 --> A6 --> A7 --> A8 --> A9
 ```
 
 ---
@@ -538,37 +505,41 @@ Action Required: Rename file to ≤25 chars before phase lock
 
 ## File Organization
 
-```
-.github/
-├── prompts/                    ← All prompt files (read by user)
-│   ├── cortex-builder.prompt.md
-│   ├── cortex-builder-continuation.prompt.md
-│   ├── cortex-planner.prompt.md
-│   ├── cortex-gap-detection.prompt.md
-│   ├── cortex-governance.prompt.md
-│   └── cortex-review-*.prompt.md (4 files)
-│
-├── agents/                     ← Agent definitions for Copilot tools
-│   ├── cortex-builder.md
-│   ├── cortex-planner.md
-│   ├── cortex-gap-detection.md
-│   └── cortex-review.md
-│
-├── PROMPTS-AGENTS-INDEX.md     ← This file
-└── REFACTORING-SUMMARY-20260119.md
-
-_workspaces/roadmap/
-├── cortex-master.yaml          ← SSOT (v2.1)
-├── phases/                     ← Phase specifications
-├── reports/                    ← Generated phase reports (YAML)
-└── issues/                     ← Gap findings (YAML)
-
-cortex_brain/
-├── tier0/governance/           ← Immutable governance rules
-└── state/
-    └── governance.db           ← Audit trail (SQLite)
-
-docs/                           ← Documentation ONLY
+```mermaid
+flowchart TB
+    subgraph GITHUB[".github/"]
+        subgraph PROMPTS["prompts/ - All prompt files"]
+            P1["cortex-builder.prompt.md"]
+            P2["cortex-builder-continuation.prompt.md"]
+            P3["cortex-planner.prompt.md"]
+            P4["cortex-gap-detection.prompt.md"]
+            P5["cortex-governance.prompt.md"]
+            P6["cortex-review-*.prompt.md"]
+        end
+        
+        subgraph AGENTS["agents/ - Copilot tools"]
+            A1["cortex-builder.md"]
+            A2["cortex-planner.md"]
+            A3["cortex-gap-detection.md"]
+            A4["cortex-review.md"]
+        end
+    end
+    
+    subgraph ROADMAP["_workspaces/roadmap/"]
+        RM1["cortex-master.yaml - SSOT"]
+        RM2["phases/ - Phase specifications"]
+        RM3["reports/ - Generated reports"]
+        RM4["issues/ - Gap findings"]
+    end
+    
+    subgraph BRAIN["cortex_brain/"]
+        B1["tier0/governance/ - Immutable rules"]
+        B2["state/governance.db - Audit trail"]
+    end
+    
+    subgraph DOCS["docs/"]
+        D1["Documentation ONLY"]
+    end
 ```
 
 ---

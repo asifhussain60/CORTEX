@@ -39,9 +39,12 @@ class MCPResponse:
 @dataclass
 class ToolDefinition:
     """Tool definition."""
+    id: str  # Unique identifier
     name: str
     description: str
     parameters: list = field(default_factory=list)
+    tags: list = field(default_factory=list)  # Tag list for categorization
+    deprecated: bool = False  # Whether tool is deprecated
 
 
 @dataclass
@@ -58,6 +61,25 @@ class MCPTool:
     name: str
     definition: ToolDefinition
     enabled: bool = True
+    
+    def get_definition(self) -> ToolDefinition:
+        """Get tool definition.
+        
+        Returns:
+            ToolDefinition: Tool definition.
+        """
+        return self.definition
+    
+    def execute(self, **kwargs) -> Dict[str, Any]:
+        """Execute the tool.
+        
+        Args:
+            **kwargs: Tool parameters.
+            
+        Returns:
+            Execution result.
+        """
+        return {"status": "success"}
 
 
 class ToolValidator:

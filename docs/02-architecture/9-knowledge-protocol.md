@@ -250,4 +250,4 @@ The Consistency Validator ensures data integrity:
 
 - [Knowledge Graph Diagram](../_diagrams/knowledge-graph.mmd)
 - [Domain Brain](4-domain-brain.md)
-- [Governance Tiers](governance-tiers.mmd)
+- [Governance Tiers Diagram](../_diagrams/governance-tiers.mmd)
