@@ -100,21 +100,32 @@ class OrchestrationContext:
 
     Attributes:
         execution_id: Unique execution identifier.
+        orchestrator_id: Orchestrator identifier.
+        orchestrator_name: Orchestrator name.
         parameters: Execution parameters.
         metadata: Additional metadata.
     """
 
     def __init__(
-        self, execution_id: str, parameters: Optional[Dict[str, Any]] = None, metadata: Optional[Dict[str, Any]] = None
+        self,
+        execution_id: Optional[str] = None,
+        orchestrator_id: Optional[str] = None,
+        orchestrator_name: Optional[str] = None,
+        parameters: Optional[Dict[str, Any]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
     ) -> None:
         """Initialize orchestration context.
 
         Args:
-            execution_id: Execution ID.
+            execution_id: Execution ID (optional).
+            orchestrator_id: Orchestrator ID (optional).
+            orchestrator_name: Orchestrator name (optional).
             parameters: Optional parameters.
             metadata: Optional metadata.
         """
-        self.execution_id = execution_id
+        self.execution_id = execution_id or ""
+        self.orchestrator_id = orchestrator_id or ""
+        self.orchestrator_name = orchestrator_name or ""
         self.parameters = parameters or {}
         self.metadata = metadata or {}
 
