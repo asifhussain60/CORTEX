@@ -1,0 +1,2247 @@
+summary:
+  total: 779
+  passed: 463
+  failed: 316
+  timeout: 0
+  error: 0
+  timeout_threshold_seconds: 30
+  slow_threshold_seconds: 5.0
+hanging_tests: []
+slow_tests: []
+failed_tests:
+- test_id: tests/unit/core/hallucination_prevention/test_confidence_scoring.py::TestScoringIntegration::test_end_to_end_assessment_workflow
+  duration: 0.8
+  error: '======================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/core/hallucination_prevention/test_confidence_scoring.py::TestSc'
+- test_id: tests/unit/core/hallucination_prevention/test_confidence_scoring.py::TestScoringIntegration::test_assessment_persistence
+  duration: 0.78
+  error: '==============================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/core/hallucination_prevention/test_confidence_scoring.py'
+- test_id: tests/unit/core/hallucination_prevention/test_confidence_scoring.py::TestScoringIntegration::test_assessment_history
+  duration: 0.87
+  error: '==================================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/core/hallucination_prevention/test_confidence_scorin'
+- test_id: tests/unit/core/hallucination_prevention/test_confidence_scoring.py::TestScoringIntegration::test_assessment_comparison
+  duration: 0.75
+  error: '===============================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/core/hallucination_prevention/test_confidence_scoring.p'
+- test_id: tests/unit/core/hallucination_prevention/test_execution_sandbox.py::TestSandboxIntegration::test_sandbox_with_behavioral_boundaries
+  duration: 0.78
+  error: '=============
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/hallucination_prevention/test_execution_sandbox.py::TestSandboxIntegration::test_sa'
+- test_id: tests/unit/core/hallucination_prevention/test_execution_sandbox.py::TestSandboxIntegration::test_sandbox_with_intent_canonicalization
+  duration: 0.84
+  error: '===========
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/hallucination_prevention/test_execution_sandbox.py::TestSandboxIntegration::test_sand'
+- test_id: tests/unit/core/hallucination_prevention/test_execution_sandbox.py::TestSandboxIntegration::test_sandbox_snapshot_and_rollback_integration
+  duration: 0.81
+  error: '==================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/hallucination_prevention/test_execution_sandbox.py::TestSandbo'
+- test_id: tests/unit/core/hallucination_prevention/test_hallucination_detection.py::TestDetectionIntegration::test_end_to_end_detection_recovery_incident
+  duration: 0.85
+  error: '======================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/hallucination_prevention/test_hallucination_detection.py::TestDetectionInt'
+- test_id: tests/unit/core/hallucination_prevention/test_hallucination_detection.py::TestDetectionIntegration::test_detection_with_multiple_replicas
+  duration: 0.83
+  error: '===================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/hallucination_prevention/test_hallucination_detection.py::TestDetectionIntegr'
+- test_id: tests/unit/core/hallucination_prevention/test_hallucination_detection.py::TestDetectionIntegration::test_cascading_corruption_detection
+  duration: 0.87
+  error: '==============================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/hallucination_prevention/test_hallucination_detection.py::TestDete'
+- test_id: tests/unit/core/hallucination_prevention/test_intent_canonicalization.py::TestExtendedCanonicalizationIntegration::test_full_canonicalization_pipeline_complete
+  duration: 0.77
+  error: '======================== short test summary info ===========================
+
+    FAILED tests/unit/core/hallucination_prevention/test_intent_canonicalization.py::TestExtendedCanonicalizationIntegration::t'
+- test_id: tests/unit/core/hallucination_prevention/test_intent_canonicalization.py::TestExtendedCanonicalizationIntegration::test_full_pipeline_partial_info
+  duration: 0.75
+  error: '=========
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/hallucination_prevention/test_intent_canonicalization.py::TestExtendedCanonicalizationI'
+- test_id: tests/unit/core/hallucination_prevention/test_intent_canonicalization.py::TestExtendedCanonicalizationIntegration::test_context_from_parameter
+  duration: 0.82
+  error: '=============
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/hallucination_prevention/test_intent_canonicalization.py::TestExtendedCanonicalizat'
+- test_id: tests/unit/core/hallucination_prevention/test_intent_canonicalization.py::TestExtendedCanonicalizationIntegration::test_priority_explicit_over_context
+  duration: 0.75
+  error: '=====
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/hallucination_prevention/test_intent_canonicalization.py::TestExtendedCanonicalizationInteg'
+- test_id: tests/unit/core/hallucination_prevention/test_vision_mutations.py::TestMutationIntegration::test_end_to_end_mutation_lifecycle
+  duration: 0.84
+  error: '=========================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/core/hallucination_prevention/test_vision_mutations.py::TestM'
+- test_id: tests/unit/core/hallucination_prevention/test_vision_mutations.py::TestMutationIntegration::test_mutation_context_propagation
+  duration: 0.84
+  error: '==========================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/core/hallucination_prevention/test_vision_mutations.py::Test'
+- test_id: tests/unit/core/hallucination_prevention/test_vision_mutations.py::TestMutationIntegration::test_mutation_causality_tracking
+  duration: 0.83
+  error: '===========================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/core/hallucination_prevention/test_vision_mutations.py::Tes'
+- test_id: tests/unit/core/intelligence/test_ast_intelligence.py::TestASTIntelligenceIntegration::test_full_analysis_pipeline
+  duration: 0.94
+  error: '========= short test summary info ===========================
+
+    FAILED tests/unit/core/intelligence/test_ast_intelligence.py::TestASTIntelligenceIntegration::test_full_analysis_pipeline
+    - ImportError: c'
+- test_id: tests/unit/core/intelligence/test_ast_intelligence.py::TestASTIntelligenceIntegration::test_analysis_result_serialization
+  duration: 0.97
+  error: '====================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intelligence/test_ast_intelligence.py::TestASTIntelligenceIn'
+- test_id: tests/unit/core/intelligence/test_ast_intelligence.py::TestASTIntelligenceIntegration::test_analysis_caching
+  duration: 0.96
+  error: '=====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intelligence/test_ast_intelligence.py::Test'
+- test_id: tests/unit/core/intelligence/test_comment_analyzer.py::TestCommentAnalyzerIntegration::test_full_analysis_pipeline
+  duration: 0.94
+  error: '======================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intelligence/test_comment_analyzer.py::Tes'
+- test_id: tests/unit/core/intelligence/test_comment_analyzer.py::TestCommentAnalyzerIntegration::test_analyze_file
+  duration: 0.87
+  error: '================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intelligence/test_comment_analyz'
+- test_id: tests/unit/core/intelligence/test_comment_analyzer.py::TestCommentAnalyzerIntegration::test_serialization_to_dict
+  duration: 0.83
+  error: '=======================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intelligence/test_comment_analyzer.py::Te'
+- test_id: tests/unit/core/intelligence/test_git_history.py::TestGitHistoryIntegration::test_full_analysis_pipeline
+  duration: 2.38
+  error: '================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intelligence/test_git_history.py'
+- test_id: tests/unit/core/intelligence/test_git_history.py::TestGitHistoryIntegration::test_serialization_to_dict
+  duration: 2.51
+  error: '
+
+    Rate:     0.6 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/i'
+- test_id: tests/unit/core/intelligence/test_relationship_traversal.py::TestRelationshipEngineIntegration::test_full_analysis_pipeline
+  duration: 0.82
+  error: '=======================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intelligence/test_relationship_traversal.py::TestRelation'
+- test_id: tests/unit/core/intelligence/test_relationship_traversal.py::TestRelationshipEngineIntegration::test_serialization_to_dict
+  duration: 0.91
+  error: '========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intelligence/test_relationship_traversal.py::TestRelatio'
+- test_id: tests/unit/core/intelligence/test_relationship_traversal.py::TestRelationshipEngineIntegration::test_export_graphviz
+  duration: 0.89
+  error: '==============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intelligence/test_relationship_traversal.py::TestR'
+- test_id: tests/unit/core/intent/test_challenge_generator.py::TestChallengeGeneratorIntegration::test_full_challenge_pipeline
+  duration: 0.79
+  error: '========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_challenge_generator.py::Test'
+- test_id: tests/unit/core/intent/test_challenge_generator.py::TestChallengeGeneratorIntegration::test_serialization_to_dict
+  duration: 0.9
+  error: '==========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_challenge_generator.py::Te'
+- test_id: tests/unit/core/intent/test_challenge_generator.py::TestChallengeGeneratorIntegration::test_challenge_has_mitigation
+  duration: 0.7
+  error: '=======================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_challenge_generator.py::TestC'
+- test_id: tests/unit/core/intent/test_comprehension_yaml.py::TestContentIntegration::test_intent_preserved_in_yaml
+  duration: 0.75
+  error: '=====================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_comprehension_y'
+- test_id: tests/unit/core/intent/test_comprehension_yaml.py::TestContentIntegration::test_all_challenges_included
+  duration: 0.8
+  error: '======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_comprehension_'
+- test_id: tests/unit/core/intent/test_comprehension_yaml.py::TestContentIntegration::test_all_recommendations_included
+  duration: 0.74
+  error: '=================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_comprehension_yaml.'
+- test_id: tests/unit/core/intent/test_comprehension_yaml.py::TestContentIntegration::test_challenge_count_in_summary
+  duration: 0.77
+  error: '===================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_comprehension_yam'
+- test_id: tests/unit/core/intent/test_comprehension_yaml.py::TestContentIntegration::test_severity_distribution_in_summary
+  duration: 0.75
+  error: '=============================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_comprehension_yaml.py::'
+- test_id: tests/unit/core/intent/test_comprehension_yaml.py::TestContentIntegration::test_recommendation_count_in_summary
+  duration: 0.81
+  error: '==============================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_comprehension_yaml.py:'
+- test_id: tests/unit/core/intent/test_intent_canonicalizer.py::TestIntentCanonicalizerIntegration::test_full_canonicalization_pipeline
+  duration: 0.74
+  error: '================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_intent_canonicalizer.py::TestIntentC'
+- test_id: tests/unit/core/intent/test_intent_canonicalizer.py::TestIntentCanonicalizerIntegration::test_serialization_to_dict
+  duration: 0.8
+  error: '=========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_intent_canonicalizer.py::Te'
+- test_id: tests/unit/core/intent/test_intent_canonicalizer.py::TestIntentCanonicalizerIntegration::test_canonicalize_with_context
+  duration: 0.8
+  error: '=====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_intent_canonicalizer.py::TestIn'
+- test_id: tests/unit/core/intent/test_intent_reflection_protocol.py::TestContextAggregation::test_context_builder_integration
+  duration: 0.79
+  error: '=============================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/core/intent/test_intent_reflection_protocol.py::TestConte'
+- test_id: tests/unit/core/intent/test_intent_reflection_protocol.py::TestIntegrationScenarios::test_complete_reflection_lifecycle
+  duration: 0.74
+  error: '=========================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/core/intent/test_intent_reflection_protocol.py::TestIntegrati'
+- test_id: tests/unit/core/intent/test_intent_reflection_protocol.py::TestIntegrationScenarios::test_reflection_with_clarification_loop
+  duration: 0.77
+  error: '====================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/core/intent/test_intent_reflection_protocol.py::TestIntegrationSce'
+- test_id: tests/unit/core/intent/test_intent_reflection_protocol.py::TestIntegrationScenarios::test_orchestrator_trace_recorded
+  duration: 0.73
+  error: '===========================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/core/intent/test_intent_reflection_protocol.py::TestIntegra'
+- test_id: tests/unit/core/intent/test_intent_reflection_protocol.py::TestIntegrationScenarios::test_serialization_to_yaml_for_storage
+  duration: 0.74
+  error: '=====================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/core/intent/test_intent_reflection_protocol.py::TestIntegrationSc'
+- test_id: tests/unit/core/intent/test_intent_reflection_protocol.py::TestIntegrationScenarios::test_deserialization_from_yaml
+  duration: 0.78
+  error: '=============================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/core/intent/test_intent_reflection_protocol.py::TestInteg'
+- test_id: tests/unit/core/intent/test_intent_router.py::TestIntentRouterIntegration::test_all_intent_types_routable
+  duration: 0.79
+  error: 'sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_intent_rou'
+- test_id: tests/unit/core/intent/test_intent_router.py::TestIntentRouterIntegration::test_routing_preserves_canonical_intent
+  duration: 0.76
+  error: '=================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_intent_router.py::T'
+- test_id: tests/unit/core/intent/test_intent_router.py::TestIntentRouterIntegration::test_routing_can_be_chained
+  duration: 0.71
+  error: ' tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_int'
+- test_id: tests/unit/core/intent/test_lens_context_builder.py::TestIntegrationWithReflectionProtocol::test_context_for_reflection_request
+  duration: 0.83
+  error: '==========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_context_builder.py::TestIntegrationWi'
+- test_id: tests/unit/core/intent/test_lens_context_builder.py::TestIntegrationWithReflectionProtocol::test_context_enrichment_for_challenges
+  duration: 0.73
+  error: '===================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_context_builder.py::TestIntegrationWithRefle'
+- test_id: tests/unit/core/intent/test_lens_context_builder.py::TestIntegrationWithReflectionProtocol::test_context_for_recommendations
+  duration: 0.75
+  error: '=============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_context_builder.py::TestIntegratio'
+- test_id: tests/unit/core/intent/test_lens_context_builder.py::TestIntegrationWithReflectionProtocol::test_context_serialization_for_protocol
+  duration: 0.8
+  error: '======================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_context_builder.py::TestIntegrationWithRe'
+- test_id: tests/unit/core/intent/test_lens_integration.py::TestLENSIntegration::test_context_builder_creates_queryable_context
+  duration: 0.73
+  error: '=====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_integration.py::TestLENSIn'
+- test_id: tests/unit/core/intent/test_lens_integration.py::TestLENSIntegration::test_reflection_engine_accepts_built_context
+  duration: 0.84
+  error: '=======================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_integration.py::TestLENS'
+- test_id: tests/unit/core/intent/test_lens_integration.py::TestLENSIntegration::test_formatter_accepts_reflection_response
+  duration: 0.82
+  error: '=========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_integration.py::TestLE'
+- test_id: tests/unit/core/intent/test_lens_integration.py::TestLENSIntegration::test_complete_pipeline
+  duration: 0.76
+  error: 'ts/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_in'
+- test_id: tests/unit/core/intent/test_lens_integration.py::TestLENSIntegration::test_approval_workflow
+  duration: 0.81
+  error: 'ts/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_in'
+- test_id: tests/unit/core/intent/test_lens_integration.py::TestLENSIntegration::test_rejection_workflow
+  duration: 0.7
+  error: 's/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_int'
+- test_id: tests/unit/core/intent/test_lens_integration.py::TestLENSIntegration::test_serialization_throughout_pipeline
+  duration: 0.76
+  error: '=============================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_integration.py::Te'
+- test_id: tests/unit/core/intent/test_lens_integration.py::TestLENSIntegration::test_multiple_format_output
+  duration: 0.76
+  error: 'c
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_integra'
+- test_id: tests/unit/core/intent/test_lens_integration.py::TestLENSIntegration::test_context_filtering_affects_reflection
+  duration: 0.74
+  error: '==========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_integration.py::TestL'
+- test_id: tests/unit/core/intent/test_lens_integration.py::TestLENSIntegration::test_context_enrichment_in_pipeline
+  duration: 0.79
+  error: '================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_integration.py:'
+- test_id: tests/unit/core/intent/test_lens_integration.py::TestLENSIntegration::test_knowledge_graph_building
+  duration: 0.75
+  error: '======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_integrati'
+- test_id: tests/unit/core/intent/test_lens_integration.py::TestLENSIntegration::test_performance_of_complete_pipeline
+  duration: 0.79
+  error: '==============================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_integration.py::T'
+- test_id: tests/unit/core/intent/test_lens_integration.py::TestLENSIntegration::test_all_response_formats_valid
+  duration: 0.87
+  error: '====================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_integration'
+- test_id: tests/unit/core/intent/test_lens_response_formatter.py::TestIntegrationWithReflectionProtocol::test_format_reflection_response
+  duration: 0.78
+  error: '==================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_response_formatter.py::TestIn'
+- test_id: tests/unit/core/intent/test_lens_response_formatter.py::TestIntegrationWithReflectionProtocol::test_format_with_all_components
+  duration: 0.81
+  error: '======================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_response_formatter.py::Te'
+- test_id: tests/unit/core/intent/test_lens_response_formatter.py::TestIntegrationWithReflectionProtocol::test_format_supports_approval_workflow
+  duration: 0.89
+  error: '===========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_lens_response_formatter.py::TestIntegrati'
+- test_id: tests/unit/core/intent/test_recommendation_engine.py::TestRecommendationEngineIntegration::test_full_recommendation_pipeline
+  duration: 0.8
+  error: '=============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_recommendation_engine.py::TestRecommend'
+- test_id: tests/unit/core/intent/test_recommendation_engine.py::TestRecommendationEngineIntegration::test_serialization_to_dict
+  duration: 0.76
+  error: '====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_recommendation_engine.py::TestRe'
+- test_id: tests/unit/core/intent/test_recommendation_engine.py::TestRecommendationEngineIntegration::test_recommendation_has_rationale
+  duration: 0.8
+  error: '=============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/intent/test_recommendation_engine.py::TestRecommend'
+- test_id: tests/unit/core/knowledge/test_alert_pipeline.py::TestAlertPipelineIntegration::test_alert_pipeline_with_change_detection_service
+  duration: 0.8
+  error: '============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_alert_pipeline.py::TestAlertPipelineI'
+- test_id: tests/unit/core/knowledge/test_alert_pipeline.py::TestAlertPipelineIntegration::test_alert_notification_channel_workflow
+  duration: 0.74
+  error: '=====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_alert_pipeline.py::TestAlert'
+- test_id: tests/unit/core/knowledge/test_alert_pipeline.py::TestAlertPipelineIntegration::test_alert_threshold_enforcement
+  duration: 0.74
+  error: '=============================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_alert_pipeline.py::T'
+- test_id: tests/unit/core/knowledge/test_alert_pipeline.py::TestAlertPipelineIntegration::test_alert_retry_mechanism
+  duration: 0.85
+  error: '===================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_alert_pipeline'
+- test_id: tests/unit/core/knowledge/test_alert_pipeline.py::TestAlertPipelineIntegration::test_alert_deduplication
+  duration: 0.73
+  error: '=====================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_alert_pipeli'
+- test_id: tests/unit/core/knowledge/test_alert_pipeline.py::TestAlertPipelineIntegration::test_alert_metrics_tracking
+  duration: 0.77
+  error: '==================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_alert_pipeline.'
+- test_id: tests/unit/core/knowledge/test_alert_pipeline.py::TestAlertPipelineIntegration::test_alert_pipeline_graceful_degradation
+  duration: 0.84
+  error: '=====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_alert_pipeline.py::TestAlert'
+- test_id: tests/unit/core/knowledge/test_alert_pipeline.py::TestAlertPipelineIntegration::test_alert_pipeline_error_handling
+  duration: 0.73
+  error: '===========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_alert_pipeline.py::Tes'
+- test_id: tests/unit/core/knowledge/test_alert_pipeline.py::TestAlertPipelineIntegration::test_alert_audit_trail_logging
+  duration: 0.77
+  error: '===============================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_alert_pipeline.py:'
+- test_id: tests/unit/core/knowledge/test_change_detection.py::TestChangeDetectionIntegration::test_change_detection_with_knowledge_repository
+  duration: 0.76
+  error: '========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_change_detection.py::TestChangeDetectionI'
+- test_id: tests/unit/core/knowledge/test_change_detection.py::TestChangeDetectionIntegration::test_change_detection_continuous_monitoring
+  duration: 0.76
+  error: '============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_change_detection.py::TestChangeDetect'
+- test_id: tests/unit/core/knowledge/test_change_detection.py::TestChangeDetectionIntegration::test_change_detection_alert_routing
+  duration: 0.71
+  error: '====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_change_detection.py::TestChan'
+- test_id: tests/unit/core/knowledge/test_change_detection.py::TestChangeDetectionIntegration::test_change_detection_anomaly_scoring
+  duration: 0.9
+  error: '==================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_change_detection.py::TestChange'
+- test_id: tests/unit/core/knowledge/test_change_detection.py::TestChangeDetectionIntegration::test_change_detection_historical_tracking
+  duration: 0.86
+  error: '==============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_change_detection.py::TestChangeDete'
+- test_id: tests/unit/core/knowledge/test_change_detection.py::TestChangeDetectionIntegration::test_change_detection_pattern_analysis
+  duration: 0.8
+  error: '=================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_change_detection.py::TestChangeD'
+- test_id: tests/unit/core/knowledge/test_change_detection.py::TestChangeDetectionIntegration::test_change_detection_performance_under_load
+  duration: 0.76
+  error: '===========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_change_detection.py::TestChangeDetecti'
+- test_id: tests/unit/core/knowledge/test_change_detection.py::TestChangeDetectionIntegration::test_change_detection_graceful_degradation
+  duration: 0.78
+  error: '=============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_change_detection.py::TestChangeDetec'
+- test_id: tests/unit/core/knowledge/test_change_detection.py::TestChangeDetectionIntegration::test_change_detection_error_handling
+  duration: 0.73
+  error: '===================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_change_detection.py::TestChang'
+- test_id: tests/unit/core/knowledge/test_change_detection.py::TestChangeDetectionIntegration::test_change_detection_audit_logging
+  duration: 0.73
+  error: '====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_change_detection.py::TestChan'
+- test_id: tests/unit/core/knowledge/test_change_detection.py::TestChangeDetectionIntegration::test_change_detection_compliance_reporting
+  duration: 0.78
+  error: '=============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_change_detection.py::TestChangeDetec'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegration::test_ingestion_integration_exists
+  duration: 0.75
+  error: '==================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::TestI'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegration::test_ingestion_integration_initialization
+  duration: 0.75
+  error: '==========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestion'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegration::test_refinement_engine_integration
+  duration: 0.75
+  error: '=================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::TestIn'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegration::test_adapter_to_storage_backend_connection
+  duration: 0.8
+  error: '=========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionI'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegration::test_end_to_end_ingestion_workflow
+  duration: 0.74
+  error: '=================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::TestIn'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegration::test_ingestion_with_refinement_rules
+  duration: 0.77
+  error: '===============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::TestInge'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegration::test_batch_and_streaming_modes
+  duration: 1.15
+  error: '=====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::Te'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegration::test_error_handling_in_workflow
+  duration: 1.26
+  error: '====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::Tes'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegration::test_workflow_state_tracking
+  duration: 1.39
+  error: '=======================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegrationEnd2End::test_full_ingestion_workflow_from_source_to_storage
+  duration: 0.89
+  error: '=========================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegrationEnd2En'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegrationEnd2End::test_intake_adapter_connects_to_refinement_engine
+  duration: 0.81
+  error: '===========================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegrationEnd2'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegrationEnd2End::test_refinement_engine_connects_to_storage_backend
+  duration: 0.86
+  error: '==========================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegrationEnd2E'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegrationEnd2End::test_batch_ingestion_end_to_end
+  duration: 0.87
+  error: '=============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::TestIngest'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegrationEnd2End::test_streaming_ingestion_end_to_end
+  duration: 0.87
+  error: '=========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionI'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegrationEnd2End::test_ingestion_metrics_and_tracking
+  duration: 0.88
+  error: '=========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionI'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegrationEnd2End::test_partial_failure_recovery
+  duration: 0.79
+  error: '===============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::TestInge'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegrationEnd2End::test_validation_before_storage
+  duration: 0.71
+  error: '==============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::TestInges'
+- test_id: tests/unit/core/knowledge/test_ingestion_integration.py::TestIngestionIntegrationEnd2End::test_audit_trail_for_ingestion
+  duration: 0.8
+  error: '==============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_integration.py::TestInges'
+- test_id: tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestionIntegration::test_full_pipeline_execution_flow
+  duration: 0.7
+  error: '====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBu'
+- test_id: tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestionIntegration::test_adapter_to_storage_backend_connection
+  duration: 0.78
+  error: '===========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngesti'
+- test_id: tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestionIntegration::test_multi_step_transformation_pipeline
+  duration: 0.95
+  error: '==============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkInge'
+- test_id: tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestionIntegration::test_batch_ingestion_with_large_dataset
+  duration: 0.88
+  error: '==============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkInge'
+- test_id: tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestionIntegration::test_streaming_ingestion_mode
+  duration: 0.77
+  error: '========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_pipeline.py::Te'
+- test_id: tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestionIntegration::test_plugin_discovery_through_registry
+  duration: 0.83
+  error: '===============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIng'
+- test_id: tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestionIntegration::test_filter_chain_execution
+  duration: 0.74
+  error: '==========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_pipeline.py::'
+- test_id: tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestionIntegration::test_refinement_rule_application
+  duration: 0.72
+  error: '=====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_pipeline.py::TestB'
+- test_id: tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestionIntegration::test_output_formatting_stage
+  duration: 0.73
+  error: '=========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_pipeline.py::T'
+- test_id: tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestionIntegration::test_validation_gate_before_storage
+  duration: 0.77
+  error: '==================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulk'
+- test_id: tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestionIntegration::test_metrics_collection_throughout_pipeline
+  duration: 0.82
+  error: '==========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestio'
+- test_id: tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestionIntegration::test_error_recovery_and_partial_success
+  duration: 0.8
+  error: '==============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkInge'
+- test_id: tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestionIntegration::test_custom_plugin_creation_and_registration
+  duration: 0.81
+  error: '=========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestion'
+- test_id: tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestionIntegration::test_pipeline_state_tracking
+  duration: 0.71
+  error: '=========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_pipeline.py::T'
+- test_id: tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestionIntegration::test_graceful_degradation_with_missing_stages
+  duration: 0.71
+  error: '========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_ingestion_pipeline.py::TestBulkIngestionI'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRouterIntegration::test_orchestrator_has_router_attribute
+  duration: 0.83
+  error: ' short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRouterIntegration::test_orchestrator_has_router_attribute
+    - asse'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRouterIntegration::test_orchestrator_initializes_router_with_backends
+  duration: 0.84
+  error: '==========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrches'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRouterIntegration::test_orchestrator_route_query_instead_of_parallel
+  duration: 0.81
+  error: "286B0> = '<bound method MasterOrchestrator.coordinate_operation of <cortex.orchestrators.core.master_orchestrator.MasterOrchestrator\
+    \ object at 0x000001FFABD75010>>'.lower\n +  and   False = hasattr(Non"
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRouterIntegration::test_orchestrator_respects_routing_confidence_threshold
+  duration: 0.83
+  error: "ledge/test_orchestrator_integration.py::TestOrchestratorRouterIntegration::test_orchestrator_respects_routing_confidence_threshold\
+    \ - AssertionError: assert False\n +  where False = hasattr(None, 'confi"
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRouterIntegration::test_orchestrator_fallback_to_parallel_on_low_confidence
+  duration: 0.86
+  error: "/knowledge/test_orchestrator_integration.py::TestOrchestratorRouterIntegration::test_orchestrator_fallback_to_parallel_on_low_confidence\
+    \ - AssertionError: assert False\n +  where False = hasattr(None, "
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRouterIntegration::test_orchestrator_routes_operation_intent_query
+  duration: 0.8
+  error: '=============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrc'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRouterIntegration::test_orchestrator_captures_routing_metrics
+  duration: 0.9
+  error: '===============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::TestO'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRouterIntegration::test_orchestrator_audit_trail_includes_routing_decision
+  duration: 0.89
+  error: '=====================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestrato'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRouterIntegration::test_orchestrator_supports_parallel_fallback_results_aggregation
+  duration: 0.85
+  error: '============= short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRouterIntegration::test_orchestrator_supports_paral'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRouterIntegration::test_orchestrator_operation_returns_routing_metadata
+  duration: 0.98
+  error: '========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestr'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_routes_technical_queries_to_technical_backend
+  duration: 0.85
+  error: '================ short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_routes_techni'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_routes_business_queries_to_business_backend
+  duration: 1.0
+  error: '================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_routes_busi'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_handles_ambiguous_queries_with_fallback
+  duration: 1.01
+  error: '====================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_handles'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_tracks_routing_efficiency
+  duration: 0.85
+  error: '===================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::T'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_routing_history_preserved_across_operations
+  duration: 0.91
+  error: '=================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRou'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_confidence_score_influences_selection
+  duration: 1.05
+  error: '======================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_confi'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_preserves_query_semantics_during_routing
+  duration: 0.98
+  error: '====================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestrator'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_handles_multiple_backends_fairly
+  duration: 0.99
+  error: '=
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_error_handling_invalid_query
+  duration: 0.94
+  error: '================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::Test'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_error_handling_no_backends
+  duration: 0.89
+  error: '============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrch'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRegressions::test_coordinate_operation_still_returns_results
+  duration: 0.83
+  error: '===================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::T'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRegressions::test_parallel_fallback_mode_available
+  duration: 0.79
+  error: "ests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRegressions::test_parallel_fallback_mode_available\
+    \ - AssertionError: assert False\n +  where False = hasattr(None, 'route_quer"
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRegressions::test_performance_metrics_available
+  duration: 0.96
+  error: '=================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_integration.py::Tes'
+- test_id: tests/unit/core/knowledge/test_orchestrator_integration.py::TestOrchestratorRegressions::test_audit_trail_still_functional
+  duration: 1.0
+  error: '=================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_orchestrator_int'
+- test_id: tests/unit/core/knowledge/test_protocol_compliance.py::TestProtocolComplianceIntegration::test_repositories_interchangeable_with_protocol
+  duration: 0.73
+  error: '=========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_protocol_compliance.py::TestProtocolComp'
+- test_id: tests/unit/core/knowledge/test_protocol_compliance.py::TestProtocolComplianceIntegration::test_protocol_duck_typing_works
+  duration: 0.74
+  error: '=========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_protocol_compliance.py::'
+- test_id: tests/unit/core/knowledge/test_protocol_compliance.py::TestProtocolComplianceIntegration::test_multiple_backends_accessible_through_protocol
+  duration: 0.71
+  error: '======================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_protocol_compliance.py::TestProtocolComplia'
+- test_id: tests/unit/core/knowledge/test_query_optimization.py::TestQueryOptimizationIntegration::test_optimization_workflow
+  duration: 0.72
+  error: '====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_query_optimization.py::TestQu'
+- test_id: tests/unit/core/knowledge/test_query_optimization.py::TestQueryOptimizationIntegration::test_cache_performance_improvement
+  duration: 0.74
+  error: '============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_query_optimization.py::TestQueryOptim'
+- test_id: tests/unit/core/knowledge/test_query_optimization.py::TestQueryOptimizationIntegration::test_index_based_query_acceleration
+  duration: 0.86
+  error: '===========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_query_optimization.py::TestQueryOptimi'
+- test_id: tests/unit/core/knowledge/test_query_optimization.py::TestQueryOptimizationIntegration::test_join_query_optimization
+  duration: 0.74
+  error: '==================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_query_optimization.py::TestQuer'
+- test_id: tests/unit/core/knowledge/test_query_optimization.py::TestQueryOptimizationIntegration::test_performance_metrics_collection
+  duration: 0.72
+  error: '===========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_query_optimization.py::TestQueryOptimi'
+- test_id: tests/unit/core/knowledge/test_query_optimization.py::TestQueryOptimizationIntegration::test_recommendation_engine
+  duration: 0.84
+  error: '====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_query_optimization.py::TestQu'
+- test_id: tests/unit/core/knowledge/test_router.py::TestRouterIntegration::test_router_with_mock_backends
+  duration: 0.83
+  error: '  7.0 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/'
+- test_id: tests/unit/core/knowledge/test_router.py::TestRouterIntegration::test_router_preserves_query_history
+  duration: 0.87
+  error: ' tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_'
+- test_id: tests/unit/core/knowledge/test_router.py::TestRouterIntegration::test_router_performance_metadata
+  duration: 0.95
+  error: '8.2 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/te'
+- test_id: tests/unit/core/knowledge/test_router.py::TestRouterIntegration::test_router_fallback_mode_multi_backend
+  duration: 0.72
+  error: 'ts/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_rout'
+- test_id: tests/unit/core/knowledge/test_router.py::TestRouterIntegration::test_router_error_handling_invalid_backend
+  duration: 0.76
+  error: 'sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_router.'
+- test_id: tests/unit/core/knowledge/test_router.py::TestRouterIntegration::test_router_concurrent_queries
+  duration: 0.84
+  error: '  7.9 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/'
+- test_id: tests/unit/core/knowledge/test_router.py::TestRouterIntegration::test_router_aggregates_results_fallback
+  duration: 0.68
+  error: 'ts/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_rout'
+- test_id: tests/unit/core/knowledge/test_unified_service.py::TestUnifiedKnowledgeIntegration::test_source_attribution_and_lineage
+  duration: 0.74
+  error: "ummary info ===========================\nFAILED tests/unit/core/knowledge/test_unified_service.py::TestUnifiedKnowledgeIntegration::test_source_attribution_and_lineage\
+    \ - AssertionError: assert False\n +"
+- test_id: tests/unit/core/knowledge/test_unified_service.py::TestUnifiedKnowledgeIntegration::test_confidence_scoring_integration
+  duration: 0.74
+  error: "ary info ===========================\nFAILED tests/unit/core/knowledge/test_unified_service.py::TestUnifiedKnowledgeIntegration::test_confidence_scoring_integration\
+    \ - AssertionError: assert False\n +  w"
+- test_id: tests/unit/core/knowledge/test_unified_service.py::TestUnifiedKnowledgeIntegration::test_unified_query_across_domains
+  duration: 0.77
+  error: 'est summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_unified_service.py::TestUnifiedKnowledgeIntegration::test_unified_query_across_domains
+    - AssertionError: assert False'
+- test_id: tests/unit/core/knowledge/test_unified_service.py::TestUnifiedKnowledgeIntegration::test_result_ranking_by_confidence
+  duration: 0.68
+  error: 't test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_unified_service.py::TestUnifiedKnowledgeIntegration::test_result_ranking_by_confidence
+    - AssertionError: assert Fa'
+- test_id: tests/unit/core/knowledge/test_unified_service.py::TestUnifiedKnowledgeIntegration::test_graceful_handling_of_backend_failures
+  duration: 0.69
+  error: "fo ===========================\nFAILED tests/unit/core/knowledge/test_unified_service.py::TestUnifiedKnowledgeIntegration::test_graceful_handling_of_backend_failures\
+    \ - AssertionError: assert False\n +  "
+- test_id: tests/unit/core/knowledge/test_unified_service.py::TestUnifiedKnowledgeIntegration::test_caching_of_aggregated_results
+  duration: 0.73
+  error: '=================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/knowledge/test_unified_service.py::TestUnifiedKnowledgeIntegrat'
+- test_id: tests/unit/core/knowledge/test_unified_service.py::TestUnifiedKnowledgeIntegration::test_query_performance_metrics
+  duration: 0.77
+  error: "test summary info ===========================\nFAILED tests/unit/core/knowledge/test_unified_service.py::TestUnifiedKnowledgeIntegration::test_query_performance_metrics\
+    \ - AssertionError: assert False\n "
+- test_id: tests/unit/core/knowledge/test_versioning.py::test_rollback_integration
+  duration: 0.71
+  error: 'rs:   0
+
+    Skipped:  0
+
+    Duration: 0.1s
+
+    Rate:     0.0 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info =================='
+- test_id: tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationOrchestrator::test_confidence_threshold_filtering_excludes_low_confidence
+  duration: 0.72
+  error: '===========================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationO'
+- test_id: tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationOrchestrator::test_confidence_threshold_filtering_includes_threshold_equal
+  duration: 0.77
+  error: '==========================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationOr'
+- test_id: tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationOrchestrator::test_severity_sorting_critical_first
+  duration: 0.77
+  error: '==================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_challenge_integration.py::Te'
+- test_id: tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationOrchestrator::test_empty_challenges_returns_empty_list
+  duration: 0.76
+  error: '==============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_challenge_integration.py::TestCh'
+- test_id: tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationOrchestrator::test_mixed_severity_challenges_sorted_correctly
+  duration: 0.83
+  error: '=======================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_challenge_integration.py::TestChallenge'
+- test_id: tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationOrchestrator::test_all_low_confidence_challenges_filtered
+  duration: 0.85
+  error: '===========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_challenge_integration.py::TestChall'
+- test_id: tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationOrchestrator::test_high_confidence_challenges_all_included
+  duration: 0.73
+  error: '==========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_challenge_integration.py::TestChalle'
+- test_id: tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationOrchestrator::test_integration_with_challenge_generator
+  duration: 0.71
+  error: '=============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_challenge_integration.py::TestCha'
+- test_id: tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationOrchestrator::test_confidence_filtering_with_mixed_threshold
+  duration: 0.76
+  error: '========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_challenge_integration.py::TestChalleng'
+- test_id: tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationOrchestrator::test_single_challenge_returned_unchanged
+  duration: 0.73
+  error: '==============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_challenge_integration.py::TestCh'
+- test_id: tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationOrchestrator::test_challenges_with_empty_mitigation
+  duration: 0.73
+  error: '==================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeInteg'
+- test_id: tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationOrchestrator::test_challenges_with_code_context
+  duration: 0.77
+  error: '====================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeInt'
+- test_id: tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationOrchestrator::test_sort_stability_within_same_severity
+  duration: 0.75
+  error: '==============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_challenge_integration.py::TestCh'
+- test_id: tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationOrchestrator::test_default_confidence_threshold_0_30
+  duration: 0.74
+  error: '================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_challenge_integration.py::Test'
+- test_id: tests/unit/core/orchestrator/test_challenge_integration.py::TestChallengeIntegrationOrchestrator::test_custom_confidence_threshold_respected
+  duration: 0.8
+  error: '============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_challenge_integration.py::TestChal'
+- test_id: tests/unit/core/orchestrator/test_complexity_assessment.py::test_edge_case_cross_layer_integration
+  duration: 0.9
+  error: '==================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_complexity_assessment.py::test_edge_case_cro'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventRegistryIntegration::test_event_registry_created_by_default
+  duration: 0.89
+  error: '=============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestEventRe'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventRegistryIntegration::test_custom_event_registry_injected
+  duration: 0.87
+  error: '=================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestEventRegistryIntegr'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventRegistryIntegration::test_event_registry_methods_accessible
+  duration: 0.96
+  error: '=============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestEventRe'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventRegistryIntegration::test_event_registry_persists_across_turns
+  duration: 0.93
+  error: '==========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestEventRegis'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnMaxTurns::test_max_turns_event_fired
+  duration: 0.89
+  error: '============================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnMaxTurns::test_max_turns_event_contains_metadata
+  duration: 0.9
+  error: '================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestEven'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnTokenLimit::test_token_limit_event_fired
+  duration: 0.73
+  error: '========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnTokenLimit::test_token_limit_event_contains_usage_info
+  duration: 0.82
+  error: '==========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestEventFirin'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnTokenLimit::test_token_limit_decision_has_correct_reason
+  duration: 0.82
+  error: 'prompt'': 1, ''completion'': 14, ''total'': 15}, context={''result'': ''mock_result'',
+    ''user_input'': ''input'', ''turn'': 1}, next_operation=''continue_conversation'',
+    next_parameters={''turn_number'': 2}, governance_'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnCompletion::test_phase_completed_event_fired
+  duration: 0.88
+  error: '====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::Test'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnCompletion::test_phase_completed_event_contains_result
+  duration: 0.82
+  error: '==========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestEventFirin'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnCompletion::test_completion_decision_has_correct_reason
+  duration: 0.86
+  error: '===============
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnCompletion::test_complet'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnError::test_error_event_fired
+  duration: 0.76
+  error: '===================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integ'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnError::test_error_event_contains_details
+  duration: 1.0
+  error: '========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnError::test_error_decision_has_correct_reason
+  duration: 0.83
+  error: '===========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestEventFiri'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnApprovalRejection::test_approval_rejected_event_fired
+  duration: 0.84
+  error: '===========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestEventFiri'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnApprovalRejection::test_approval_rejected_event_contains_details
+  duration: 0.86
+  error: '================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnApprova'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnApprovalRejection::test_rejection_decision_has_correct_reason
+  duration: 0.83
+  error: '================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestEventFiringOnApprova'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventListenerVeto::test_listener_veto_blocks_continuation
+  duration: 0.92
+  error: '====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::Test'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventListenerVeto::test_listener_allows_continuation
+  duration: 0.91
+  error: '=========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py:'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventAuditIntegration::test_event_turn_number_matches_protocol_turn
+  duration: 0.79
+  error: '==========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestEventAudit'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventAuditIntegration::test_event_timestamp_is_set
+  duration: 0.87
+  error: '===========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.p'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestMultiEventScenarios::test_only_first_break_condition_fires_event
+  duration: 0.99
+  error: '=============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestMultiEv'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestMultiEventScenarios::test_event_registry_state_preserved_across_turns
+  duration: 0.81
+  error: '========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestMultiEventSc'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestMultiEventScenarios::test_multiple_event_types_can_be_registered
+  duration: 0.92
+  error: '=============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestMultiEv'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventIntegrationWithDecisions::test_max_turns_event_and_decision_align
+  duration: 0.9
+  error: '=======================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestEventIntegrat'
+- test_id: tests/unit/core/orchestrator/test_event_integration.py::TestEventIntegrationWithDecisions::test_completion_event_and_decision_align
+  duration: 0.79
+  error: '======================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_event_integration.py::TestEventIntegrati'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestMultiTurnSingleDomainWorkflows::test_three_turn_planning_workflow
+  duration: 0.87
+  error: '=========================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestMultiTurnSingleDomainWo'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestMultiTurnSingleDomainWorkflows::test_five_turn_design_workflow
+  duration: 0.96
+  error: '============================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestMultiTurnSingleDomai'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestMultiTurnSingleDomainWorkflows::test_max_turns_enforcement
+  duration: 0.83
+  error: '================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestMultiTurnSingleD'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestMultiDomainSequentialWorkflows::test_planning_to_design_transition
+  duration: 0.92
+  error: '========================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestMultiDomainSequentialWor'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestMultiDomainSequentialWorkflows::test_full_three_domain_workflow
+  duration: 1.1
+  error: '===========================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestMultiDomainSequential'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestContextAndStateManagement::test_context_propagation
+  duration: 0.86
+  error: '=======================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestContextAn'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestContextAndStateManagement::test_decision_history_accumulation
+  duration: 0.82
+  error: '=============================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestContextAndStateMana'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestTokenTrackingAndLimits::test_token_tracking_accumulation
+  duration: 0.92
+  error: '==================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestTokenTrackingA'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestTokenTrackingAndLimits::test_token_limit_enforcement
+  duration: 0.83
+  error: '======================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestTokenTrack'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestErrorHandlingAndRecovery::test_error_on_specific_turn
+  duration: 0.88
+  error: '=====================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestErrorHandli'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestErrorHandlingAndRecovery::test_recovery_after_error
+  duration: 0.91
+  error: '=======================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestErrorHand'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestEventIntegration::test_events_fired_during_workflow
+  duration: 0.8
+  error: '==========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_integratio'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestEventIntegration::test_event_veto_mechanism
+  duration: 0.83
+  error: '==================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_in'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestPerformanceCharacteristics::test_single_turn_performance
+  duration: 0.84
+  error: '==================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestPerformanceCha'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestPerformanceCharacteristics::test_hundred_turn_performance
+  duration: 0.77
+  error: '=================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestPerformanceChar'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestPerformanceCharacteristics::test_event_registry_with_many_listeners
+  duration: 0.97
+  error: '==========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestPerfor'
+- test_id: tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestComplexRealWorldScenarios::test_scenario_rapid_domain_switching
+  duration: 0.91
+  error: '===========================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_oc_004_01_integration.py::TestComplexRealWorldScena'
+- test_id: tests/unit/core/orchestrator/test_terminal_events.py::TestEventIntegration::test_registry_integration_signature
+  duration: 0.77
+  error: '========== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_terminal_events.py::TestEventIntegration::test_registry_integration_signature
+    - AssertionError: '
+- test_id: tests/unit/core/orchestrator/test_terminal_events.py::TestEventIntegration::test_event_firing_before_protocol_halt
+  duration: 0.88
+  error: '===========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_terminal_events.py:'
+- test_id: tests/unit/core/orchestrator/test_wrapped_orchestrators.py::TestOrchestratorIntegration::test_planning_to_ado_workflow
+  duration: 0.82
+  error: '====================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_wrapped_orchestrators.py::TestOrchestrator'
+- test_id: tests/unit/core/orchestrator/test_wrapped_orchestrators.py::TestOrchestratorIntegration::test_ado_to_tdd_workflow
+  duration: 0.8
+  error: '=========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_wrapped_orchestrators.py::TestOrchest'
+- test_id: tests/unit/core/orchestrator/test_wrapped_orchestrators.py::TestOrchestratorIntegration::test_orchestrator_decision_history
+  duration: 0.85
+  error: '===============================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_wrapped_orchestrators.py::TestOrchestratorInteg'
+- test_id: tests/unit/core/orchestrator/test_wrapped_orchestrators.py::TestOrchestratorIntegration::test_multiple_domain_shared_context
+  duration: 0.87
+  error: '==============================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_wrapped_orchestrators.py::TestOrchestratorIntegr'
+- test_id: tests/unit/core/orchestrator/test_wrapped_orchestrators.py::TestOrchestratorIntegration::test_error_propagation_across_domains
+  duration: 0.75
+  error: '============================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/core/orchestrator/test_wrapped_orchestrators.py::TestOrchestratorIntegrat'
+- test_id: tests/unit/dashboard/components/test_glassmorphism.py::TestAnimationsIntegration::test_animations_css_exists
+  duration: 0.85
+  error: '/components/test_glassmorphism.py::TestAnimationsIntegration::test_animations_css_exists
+    - AssertionError: animations.css not found at C:\PROJECTS\CORTEX\src\dashboard\frontend\css\animations.css
+
+    asse'
+- test_id: tests/unit/dashboard/components/test_glassmorphism.py::TestAnimationsIntegration::test_fade_in_animation
+  duration: 0.95
+  error: '===================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/dashboard/components/test_glassmorphism.py::TestAnimationsIntegration::test_fade_i'
+- test_id: tests/unit/dashboard/components/test_glassmorphism.py::TestAnimationsIntegration::test_slide_animations
+  duration: 0.8
+  error: '====================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/dashboard/components/test_glassmorphism.py::TestAnimationsIntegration::test_slide'
+- test_id: tests/unit/dashboard/components/test_glassmorphism.py::TestAnimationsIntegration::test_hover_transition_smoothness
+  duration: 0.82
+  error: '=========
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/dashboard/components/test_glassmorphism.py::TestAnimationsIntegration::test_hover_transition'
+- test_id: tests/unit/dashboard/test_phase_15_all_acs.py::TestDO001LogoIntegration::test_logo_displays_at_200x200_on_desktop
+  duration: 0.86
+  error: 'e:     7.3 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/dashboard/'
+- test_id: tests/unit/dashboard/test_phase_15_all_acs.py::TestDO001LogoIntegration::test_logo_scales_to_128px_on_tablet
+  duration: 0.78
+  error: '8.7 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/dashboard/test_ph'
+- test_id: tests/unit/dashboard/test_phase_15_all_acs.py::TestDO001LogoIntegration::test_logo_scales_to_96px_on_mobile
+  duration: 0.73
+  error: ' 8.3 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/dashboard/test_p'
+- test_id: tests/unit/dashboard/test_phase_15_all_acs.py::TestDO001LogoIntegration::test_logo_click_navigates_to_home
+  duration: 0.94
+  error: '.1s
+
+    Rate:     8.3 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/das'
+- test_id: tests/unit/dashboard/test_phase_15_all_acs.py::TestDO001LogoIntegration::test_logo_has_hover_effects
+  duration: 0.69
+  error: '0.1s
+
+    Rate:     8.9 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/da'
+- test_id: tests/unit/dashboard/test_phase_15_all_acs.py::TestDO001LogoIntegration::test_dark_mode_variant_loads_correctly
+  duration: 0.73
+  error: 'ate:     8.0 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/dashboar'
+- test_id: tests/unit/dashboard/test_phase_15_all_acs.py::TestPHASE15Integration::test_dashboard_loads_with_all_features
+  duration: 0.86
+  error: 'te:     8.5 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/dashboard'
+- test_id: tests/unit/dashboard/test_phase_15_all_acs.py::TestPHASE15Integration::test_branding_consistent_throughout
+  duration: 0.73
+  error: '1s
+
+    Rate:     9.0 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/dash'
+- test_id: tests/unit/dashboard/test_phase_15_all_acs.py::TestPHASE15Integration::test_responsive_design_works_across_all_viewports
+  duration: 0.79
+  error: '     7.5 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/dashboard/te'
+- test_id: tests/unit/dashboard/test_phase_15_all_acs.py::TestPHASE15Integration::test_all_exports_function_correctly
+  duration: 0.91
+  error: 's
+
+    Rate:     7.2 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/dashb'
+- test_id: tests/unit/domain_orchestrators/test_ecommerce_orchestrator.py::TestEcommerceShippingIntegration::test_shipping_calculation
+  duration: 0.8
+  error: '========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/domain_orchestrators/test_ecommerce_orchestrator.py::TestEcom'
+- test_id: tests/unit/domain_orchestrators/test_ecommerce_orchestrator.py::TestEcommerceShippingIntegration::test_shipping_carrier_integration
+  duration: 0.79
+  error: '================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/domain_orchestrators/test_ecommerce_orchestrator.py::TestEcommerceShi'
+- test_id: tests/unit/domain_orchestrators/test_financial_orchestrator.py::TestFinancialComplianceIntegration::test_compliance_check_on_execute
+  duration: 0.87
+  error: '===============================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/domain_orchestrators/test_financial_orchestrator.py::TestFinancialComp'
+- test_id: tests/unit/domain_orchestrators/test_financial_orchestrator.py::TestFinancialComplianceIntegration::test_compliance_failure_blocks_execution
+  duration: 0.77
+  error: '=======================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/domain_orchestrators/test_financial_orchestrator.py::TestFinancialComplianceIn'
+- test_id: tests/unit/domain_orchestrators/test_healthcare_orchestrator.py::TestHealthcareDataIntegration::test_ehr_integration_available
+  duration: 0.71
+  error: '====================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/domain_orchestrators/test_healthcare_orchestrator.py::TestHealthc'
+- test_id: tests/unit/domain_orchestrators/test_healthcare_orchestrator.py::TestHealthcareDataIntegration::test_lab_results_integration
+  duration: 0.84
+  error: '======================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/domain_orchestrators/test_healthcare_orchestrator.py::TestHealt'
+- test_id: tests/unit/domain_orchestrators/test_healthcare_orchestrator.py::TestHealthcareDataIntegration::test_pharmacy_integration
+  duration: 0.76
+  error: '=========================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/domain_orchestrators/test_healthcare_orchestrator.py::TestHe'
+- test_id: tests/unit/domain_orchestrators/test_phase08.py::TestIntegrationHandler::test_execute
+  duration: 0.77
+  error: 'sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/domain_orchestrators/test_p'
+- test_id: tests/unit/domain_orchestrators/test_phase08.py::TestIntegrationHandler::test_validate
+  duration: 0.83
+  error: 'ec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/domain_orchestrators/test_ph'
+- test_id: tests/unit/domain_orchestrators/test_phase08.py::TestIntegrationHandler::test_validate_single_domain
+  duration: 0.86
+  error: '===========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/domain_orchestrators/test_phase08.py::Test'
+- test_id: tests/unit/hallucination_prevention/test_hallucination_remediation.py::TestHallucinationPreventionIntegration::test_sandbox_execution_flow
+  duration: 0.87
+  error: '===========================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/hallucination_prevention/test_hallucination_remediation.py::TestHallucinat'
+- test_id: tests/unit/infrastructure/security/test_secrets_filter.py::TestSecretsFilterLogging::test_log_handler_integration
+  duration: 0.91
+  error: '4.3 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/infrastructure/se'
+- test_id: tests/unit/infrastructure/test_crash_recovery.py::TestRecoveryIntegration::test_complete_crash_recovery_flow
+  duration: 0.8
+  error: "ILED tests/unit/infrastructure/test_crash_recovery.py::TestRecoveryIntegration::test_complete_crash_recovery_flow\
+    \ - assert 0 >= 1\n +  where 0 = RecoveryResult(success=True, records_replayed=0,\
+    \ recover"
+- test_id: tests/unit/infrastructure/test_fault_isolation.py::TestIsolationIntegration::test_end_to_end_isolation
+  duration: 0.83
+  error: "===============\nFAILED tests/unit/infrastructure/test_fault_isolation.py::TestIsolationIntegration::test_end_to_end_isolation\
+    \ - AssertionError: assert False\n +  where False = is_domain_available('audi"
+- test_id: tests/unit/mcp/test_mcp_compliance_008.py::TestIntegrationWorkflows::test_end_to_end_tool_workflow
+  duration: 0.91
+  error: '====================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/mcp/test_mcp_compliance_008.py::T'
+- test_id: tests/unit/mcp/test_mcp_compliance_008.py::TestIntegrationWorkflows::test_request_response_serialization
+  duration: 0.93
+  error: '7 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/mcp/test_mcp_compli'
+- test_id: tests/unit/test_database_transaction_manager.py::TestHashChainCalculation::test_hash_chain_multiple_entries_form_continuous_chain
+  duration: 0.95
+  error: 'fo ===========================
+
+    ERROR tests/unit/test_database_transaction_manager.py::TestHashChainCalculation::test_hash_chain_multiple_entries_form_continuous_chain
+    - PermissionError: [WinError 32] '
+- test_id: tests/unit/test_database_transaction_manager.py::TestHashChainCalculation::test_hash_chain_different_ac_ids_have_separate_chains
+  duration: 0.87
+  error: 'bdcbd8c72b4a9bf3561d2942898432d
+
+    ERROR tests/unit/test_database_transaction_manager.py::TestHashChainCalculation::test_hash_chain_different_ac_ids_have_separate_chains
+    - PermissionError: [WinError 32] '
+- test_id: tests/unit/test_database_transaction_manager.py::TestHashChainCalculation::test_hash_calculation_includes_all_fields
+  duration: 1.08
+  error: 'st summary info ===========================
+
+    ERROR tests/unit/test_database_transaction_manager.py::TestHashChainCalculation::test_hash_calculation_includes_all_fields
+    - PermissionError: [WinError 32] '
+- test_id: tests/unit/test_governance_per_turn.py::TestConversationProtocolGovernanceValidation::test_conversation_protocol_governance_validation_integration
+  duration: 0.85
+  error: '=====
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/test_governance_per_turn.py::TestConversationProtocolGovernanceValidation::test_conversation_pro'
+- test_id: tests/unit/test_governance_per_turn.py::TestPerTurnGovernanceIntegration::test_governance_validated_on_each_turn
+  duration: 0.85
+  error: '=======================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/test_governance_per_turn.py::TestPerTurnGovernanceIntegration:'
+- test_id: tests/unit/test_governance_per_turn.py::TestPerTurnGovernanceIntegration::test_governance_registry_singleton_consistency
+  duration: 0.92
+  error: '====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/test_governance_per_turn.py::TestPerTurnGovernanc'
+- test_id: tests/unit/test_governance_per_turn.py::TestPerTurnGovernanceIntegration::test_tier0_rules_immutable_per_turn
+  duration: 0.75
+  error: '===============================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/test_governance_per_turn.py::TestPerTu'
+- test_id: tests/unit/test_phase_readiness_checker.py::TestAcceptanceCriteriaGV00402::test_ac_3_phase_lock_integration
+  duration: 1.06
+  error: '    3.2 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/test_phase_re'
+- test_id: tests/unit/test_state_machine.py::TestStateMachineIntegration::test_multiple_ac_states_independent
+  duration: 0.91
+  error: '=====================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/test_state_machine.py::TestStateMachineIntegrati'
+- test_id: tests/unit/test_state_machine.py::TestStateMachineIntegration::test_concurrent_transitions_safe
+  duration: 0.82
+  error: 'pped:  0
+
+    Duration: 0.2s
+
+    Rate:     5.4 tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    F'
+- test_id: tests/unit/test_state_machine.py::TestStateMachineIntegration::test_singleton_instance_consistency
+  duration: 0.8
+  error: 'tests/sec
+
+    ======================================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/test_state_machine.py'
+- test_id: tests/unit/tier1/governance/test_conf_gate_rules_verification.py::TestGovernanceRuleIntegration::test_all_conf_gate_rules_active
+  duration: 0.81
+  error: '====================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/tier1/governance/test_conf_gate_rules_verification.py::TestGovern'
+- test_id: tests/unit/tier1/governance/test_conf_gate_rules_verification.py::TestGovernanceRuleIntegration::test_compliance_audit_trail
+  duration: 0.86
+  error: '==============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/tier1/governance/test_conf_gate_rules_verification.py::'
+- test_id: tests/unit/tier3/test_ai_curation.py::TestCurationGovernanceIntegration::test_curator_references_ac_id
+  duration: 0.88
+  error: '=
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/tier3/test_ai_curation.py::TestCurationGovernanceIntegration::test_curator_references_ac_id
+    - Assert'
+- test_id: tests/unit/tier3/test_ai_curation.py::TestCurationGovernanceIntegration::test_curator_uses_governance_manager
+  duration: 0.79
+  error: '===============
+
+    FAILED tests/unit/tier3/test_ai_curation.py::TestCurationGovernanceIntegration::test_curator_uses_governance_manager
+    - AssertionError: AICurator should reference governance manager
+
+    ass'
+- test_id: tests/unit/tier3/test_ai_curation.py::TestCurationGovernanceIntegration::test_curator_uses_expert_registry
+  duration: 0.9
+  error: '========================
+
+    FAILED tests/unit/tier3/test_ai_curation.py::TestCurationGovernanceIntegration::test_curator_uses_expert_registry
+    - AssertionError: AICurator should reference expert registry
+
+    '
+- test_id: tests/unit/tier3/test_ai_curation.py::TestCurationGovernanceIntegration::test_curator_validates_with_governance_rules
+  duration: 0.81
+  error: '===============
+
+    FAILED tests/unit/tier3/test_ai_curation.py::TestCurationGovernanceIntegration::test_curator_validates_with_governance_rules
+    - AssertionError: AICurator should apply governance rules
+
+    a'
+- test_id: tests/unit/tier3/test_ai_curation.py::TestCurationIndexerIntegration::test_curator_has_knowledge_indexer
+  duration: 0.83
+  error: 'mary info ===========================
+
+    FAILED tests/unit/tier3/test_ai_curation.py::TestCurationIndexerIntegration::test_curator_has_knowledge_indexer
+    - AssertionError: AICurator should have indexer re'
+- test_id: tests/unit/tier3/test_ai_curation.py::TestCurationIndexerIntegration::test_curator_can_query_indexed_entries
+  duration: 1.1
+  error: '===========
+
+    FAILED tests/unit/tier3/test_ai_curation.py::TestCurationIndexerIntegration::test_curator_can_query_indexed_entries
+    - AssertionError: AICurator should be able to find similar entries
+
+    asser'
+- test_id: tests/unit/tier3/test_ai_curation.py::TestCurationIndexerIntegration::test_curator_updates_index_on_curation
+  duration: 1.17
+  error: '==============
+
+    FAILED tests/unit/tier3/test_ai_curation.py::TestCurationIndexerIntegration::test_curator_updates_index_on_curation
+    - AssertionError: AICurator should update index after curation
+
+    assert'
+- test_id: tests/unit/tier3/test_auto_indexing.py::TestIndexGoveranceIntegration::test_index_tracks_indexing_ac_id
+  duration: 2.63
+  error: '==========================
+
+    FAILED tests/unit/tier3/test_auto_indexing.py::TestIndexGoveranceIntegration::test_index_tracks_indexing_ac_id
+    - AssertionError: Index metadata missing ac_id reference
+
+    asser'
+- test_id: tests/unit/tier3/test_expert_registry.py::TestExpertGovernanceIntegration::test_registry_references_ac_id
+  duration: 1.06
+  error: '================ short test summary info ===========================
+
+    FAILED tests/unit/tier3/test_expert_registry.py::TestExpertGovernanceIntegration::test_registry_references_ac_id
+    - AssertionError: '
+- test_id: tests/unit/tier3/test_expert_registry.py::TestExpertGovernanceIntegration::test_expert_registry_links_to_governance_rules
+  duration: 1.13
+  error: '================ short test summary info ===========================
+
+    FAILED tests/unit/tier3/test_expert_registry.py::TestExpertGovernanceIntegration::test_expert_registry_links_to_governance_rules
+    - '
+- test_id: tests/unit/tier3/test_knowledge_governance.py::TestAuditTrailIntegration::test_governance_manager_has_audit_log_method
+  duration: 1.07
+  error: "owledge_governance.py::TestAuditTrailIntegration::test_governance_manager_has_audit_log_method\
+    \ - AssertionError: KnowledgeGovernanceManager missing log_entry_change method\n\
+    assert False\n +  where False"
+- test_id: tests/unit/tier3/test_knowledge_governance.py::TestAuditTrailIntegration::test_audit_trail_tracks_entry_creation
+  duration: 1.04
+  error: '=================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/tier3/test_knowledge_governance.py::TestAuditTrailIn'
+- test_id: tests/unit/tier3/test_knowledge_governance.py::TestAuditTrailIntegration::test_audit_trail_tracks_entry_update
+  duration: 0.96
+  error: '===================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/tier3/test_knowledge_governance.py::TestAuditTrail'
+- test_id: tests/unit/tier3/test_knowledge_governance.py::TestAuditTrailIntegration::test_audit_trail_tracks_entry_delete
+  duration: 1.05
+  error: '===================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/tier3/test_knowledge_governance.py::TestAuditTrail'
+- test_id: tests/unit/tier3/test_knowledge_governance.py::TestAuditTrailIntegration::test_audit_trail_has_timestamp
+  duration: 1.12
+  error: '=========================================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/tier3/test_knowledge_governance.py::TestAudi'
+- test_id: tests/unit/tier3/test_knowledge_governance.py::TestGovernanceIntegration::test_governance_manager_integrates_with_governance_db
+  duration: 0.87
+  error: '=====================
+
+    FAILED tests/unit/tier3/test_knowledge_governance.py::TestGovernanceIntegration::test_governance_manager_integrates_with_governance_db
+    - AssertionError: governance.db not found
+
+    a'
+- test_id: tests/unit/tier3/test_knowledge_governance.py::TestGovernanceIntegration::test_governance_manager_can_record_to_db
+  duration: 0.89
+  error: '===============================================
+
+    =========================== short test summary info ===========================
+
+    FAILED tests/unit/tier3/test_knowledge_governance.py::TestGovernanceInte'
+- test_id: tests/unit/tier3/test_knowledge_governance.py::TestGovernanceIntegration::test_governance_manager_references_ac_id
+  duration: 1.07
+  error: "t summary info ===========================\nFAILED tests/unit/tier3/test_knowledge_governance.py::TestGovernanceIntegration::test_governance_manager_references_ac_id\
+    \ - AssertionError: assert False\n +  "
+- test_id: tests/unit/tier3/test_knowledge_governance.py::TestGovernanceIntegration::test_governance_rules_reference_ac_id
+  duration: 1.04
+  error: '========================= short test summary info ===========================
+
+    FAILED tests/unit/tier3/test_knowledge_governance.py::TestGovernanceIntegration::test_governance_rules_reference_ac_id
+    - F'
+- test_id: tests/unit/tier3/test_knowledge_repository.py::TestKnowledgeRepositoryIntegration::test_physical_structure_matches_taxonomy_definition
+  duration: 1.16
+  error: ' short test summary info ===========================
+
+    FAILED tests/unit/tier3/test_knowledge_repository.py::TestKnowledgeRepositoryIntegration::test_physical_structure_matches_taxonomy_definition
+    - Fil'
+- test_id: tests/unit/tier3/test_knowledge_repository.py::TestKnowledgeRepositoryIntegration::test_repository_supports_entry_creation_pattern
+  duration: 1.03
+  error: '========== short test summary info ===========================
+
+    FAILED tests/unit/tier3/test_knowledge_repository.py::TestKnowledgeRepositoryIntegration::test_repository_supports_entry_creation_pattern'
+- test_id: tests/unit/tier3/test_knowledge_repository.py::TestKnowledgeRepositoryIntegration::test_knowledge_repository_version_tracking
+  duration: 1.0
+  error: '========= short test summary info ===========================
+
+    FAILED tests/unit/tier3/test_knowledge_repository.py::TestKnowledgeRepositoryIntegration::test_knowledge_repository_version_tracking
+    - Fil'
+- test_id: tests/unit/tier3/test_knowledge_repository.py::TestKnowledgeRepositoryIntegration::test_knowledge_repository_governance_reference
+  duration: 1.17
+  error: '===== short test summary info ===========================
+
+    FAILED tests/unit/tier3/test_knowledge_repository.py::TestKnowledgeRepositoryIntegration::test_knowledge_repository_governance_reference
+    - Fil'
+- test_id: tests/unit/tier3/test_retrieval_optimizer.py::TestRetrieverIntegrations::test_optimizer_references_ac_id
+  duration: 1.11
+  error: '==========================================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/tier3/test_retrieval_optimizer.py::TestRetri'
+- test_id: tests/unit/tier3/test_retrieval_optimizer.py::TestRetrieverIntegrations::test_optimizer_integrates_with_indexer
+  duration: 0.88
+  error: '===================================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/tier3/test_retrieval_optimizer.py::TestRetrieverInt'
+- test_id: tests/unit/tier3/test_retrieval_optimizer.py::TestRetrieverIntegrations::test_optimizer_integrates_with_curator
+  duration: 0.87
+  error: '===================================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/tier3/test_retrieval_optimizer.py::TestRetrieverInt'
+- test_id: tests/unit/tier3/test_retrieval_optimizer.py::TestRetrieverIntegrations::test_optimizer_integrates_with_synthesizer
+  duration: 0.95
+  error: '===============================================
+
+    =========================== short test summary info ===========================
+
+    ERROR tests/unit/tier3/test_retrieval_optimizer.py::TestRetrieverIntegra'
+- test_id: tests/unit/tier3/test_synthesis_engine.py::TestSynthesisGovernanceIntegration::test_engine_references_ac_id
+  duration: 1.22
+  error: '============ short test summary info ===========================
+
+    FAILED tests/unit/tier3/test_synthesis_engine.py::TestSynthesisGovernanceIntegration::test_engine_references_ac_id
+    - AssertionError: as'
+- test_id: tests/unit/tier3/test_synthesis_engine.py::TestSynthesisGovernanceIntegration::test_engine_integrates_with_governance
+  duration: 1.26
+  error: "ILED tests/unit/tier3/test_synthesis_engine.py::TestSynthesisGovernanceIntegration::test_engine_integrates_with_governance\
+    \ - AssertionError: SynthesisEngine should reference governance\nassert False\n\
+    \ +"
+- test_id: tests/unit/tier3/test_synthesis_engine.py::TestSynthesisGovernanceIntegration::test_synthesis_validates_with_governance
+  duration: 0.91
+  error: '=
+
+    FAILED tests/unit/tier3/test_synthesis_engine.py::TestSynthesisGovernanceIntegration::test_synthesis_validates_with_governance
+    - AssertionError: SynthesisEngine should apply governance
+
+    assert False
+
+    '
+- test_id: tests/unit/tier3/test_synthesis_engine.py::TestSynthesisGovernanceIntegration::test_engine_integrates_with_curator
+  duration: 0.88
+  error: '==============
+
+    FAILED tests/unit/tier3/test_synthesis_engine.py::TestSynthesisGovernanceIntegration::test_engine_integrates_with_curator
+    - AssertionError: SynthesisEngine should reference curator
+
+    asse'
+- test_id: tests/unit/tier3/test_synthesis_engine.py::TestSynthesisIndexerIntegration::test_engine_has_indexer_reference
+  duration: 0.84
+  error: '==============
+
+    FAILED tests/unit/tier3/test_synthesis_engine.py::TestSynthesisIndexerIntegration::test_engine_has_indexer_reference
+    - AssertionError: SynthesisEngine should have indexer reference
+
+    asse'
+- test_id: tests/unit/tier3/test_synthesis_engine.py::TestSynthesisIndexerIntegration::test_engine_uses_index_for_queries
+  duration: 0.77
+  error: "AILED tests/unit/tier3/test_synthesis_engine.py::TestSynthesisIndexerIntegration::test_engine_uses_index_for_queries\
+    \ - AssertionError: SynthesisEngine should search indexed entries\nassert False\n\
+    \ +  wh"
