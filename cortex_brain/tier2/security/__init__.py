@@ -8,9 +8,10 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 from dataclasses import dataclass
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 from enum import Enum
 from datetime import datetime
+
 
 
 class ViolationType(Enum):
@@ -30,7 +31,7 @@ class SecurityPolicy:
     Manages security policies, permissions, and access control rules.
     """
 
-    def __init__(self, policy_id: str, name: str) -> None:
+    def __init__(self, policy_id: str = "default", name: str = "Default Security Policy") -> None:
         """Initialize security policy.
 
         Args:
@@ -41,6 +42,11 @@ class SecurityPolicy:
         self.name = name
         self.rules: Dict[str, Any] = {}
         self.permissions: Dict[str, bool] = {}
+        self._policies: Dict[str, Any] = {
+            "max_input_length": 10000,
+            "allowed_file_extensions": [".py", ".yaml", ".yml", ".json", ".txt", ".md"],
+            "forbidden_modules": ["os.system", "subprocess.call", "eval", "exec"],
+        }
 
     def add_rule(self, rule_id: str, rule_config: Dict[str, Any]) -> None:
         """Add a security rule.
@@ -82,6 +88,58 @@ class SecurityPolicy:
         """
         # Basic evaluation logic
         return len(self.rules) > 0 or len(self.permissions) > 0
+    
+    def validate_policy(self, policy_name: str, value: Any) -> bool:
+        """Validate value against a security policy.
+        
+        Args:
+            policy_name: Name of the policy to validate against.
+            value: Value to validate.
+            
+        Returns:
+            True if valid, False otherwise.
+        """
+        if policy_name == "max_input_length":
+            max_length = self._policies.get("max_input_length", 10000)
+            if isinstance(value, str):
+                return len(value) <= max_length
+            return True
+        
+        elif policy_name == "allowed_file_extensions":
+            if isinstance(value, str):
+                allowed = self._policies.get("allowed_file_extensions", [])
+                # Check if any allowed extension is in the value
+                return any(value.endswith(ext) for ext in allowed)
+            return True
+        
+        elif policy_name == "forbidden_modules":
+            if isinstance(value, str):
+                forbidden = self._policies.get("forbidden_modules", [])
+                # Check if any forbidden module is in the value
+                return not any(module in value for module in forbidden)
+            return True
+        
+        return True
+    
+    def get_policy(self, policy_name: str) -> Any:
+        """Get a policy value.
+        
+        Args:
+            policy_name: Name of the policy.
+            
+        Returns:
+            Policy value or None if not found.
+        """
+        return self._policies.get(policy_name)
+    
+    def set_policy(self, policy_name: str, value: Any) -> None:
+        """Set a policy value.
+        
+        Args:
+            policy_name: Name of the policy.
+            value: Policy value.
+        """
+        self._policies[policy_name] = value
 
 
 class SecurityContext:
@@ -90,7 +148,7 @@ class SecurityContext:
     Maintains security context, credentials, and permissions.
     """
 
-    def __init__(self, user_id: str, session_id: str = "") -> None:
+    def __init__(self, user_id: str = "anonymous", session_id: str = "") -> None:
         """Initialize security context.
 
         Args:
@@ -101,6 +159,66 @@ class SecurityContext:
         self.session_id = session_id
         self.permissions: set = set()
         self.credentials: Dict[str, Any] = {}
+        self._audit_log: List[Dict[str, Any]] = []
+        self._validator = SecurityValidator(strict_mode=True)
+        self._encoder = OutputEncoder()
+        self.policy = SecurityPolicy()
+
+    def validate_and_process(self, data: str, input_type: str, context: str) -> str:
+        """Validate and process input data with security checks.
+
+        Args:
+            data: Input data to validate.
+            input_type: Type of input (sql, cmd, path, etc.).
+            context: Processing context.
+
+        Returns:
+            str: Validated data if safe.
+
+        Raises:
+            SecurityViolation: If validation fails.
+        """
+        try:
+            self._validator.validate_input(data, input_type)
+            return data
+        except SecurityViolation as e:
+            # Log the violation
+            self._audit_log.append({
+                "user_id": self.user_id,
+                "violation_type": input_type,
+                "context": context,
+                "timestamp": __import__("datetime").datetime.now().isoformat(),
+                "error": str(e)
+            })
+            raise
+
+    def get_audit_log(self) -> List[Dict[str, Any]]:
+        """Get audit log of security violations.
+
+        Returns:
+            List[Dict[str, Any]]: List of audit log entries.
+        """
+        return self._audit_log
+
+    def encode_response(self, data: str, encoding_type: str) -> str:
+        """Encode response data for safe output.
+
+        Args:
+            data: Data to encode.
+            encoding_type: Type of encoding (html, json, url, sql).
+
+        Returns:
+            str: Encoded data.
+        """
+        if encoding_type == "html":
+            return self._encoder.encode_html(data)
+        elif encoding_type == "json":
+            return self._encoder.encode_json(data)
+        elif encoding_type == "url":
+            return self._encoder.encode_url(data)
+        elif encoding_type == "sql":
+            return self._encoder.escape_sql(data)
+        return data
         self.is_authenticated = False
 
     def set_authenticated(self, authenticated: bool = True) -> None:
@@ -276,6 +394,7 @@ class SecurityValidator:
         # Command injection patterns
         command_patterns = [
             "; rm -rf",
+            "rm -rf",
             "| cat",
             "`whoami`",
             "$(whoami)",
@@ -414,6 +533,32 @@ class OutputEncoder:
         """
         import json
         return json.dumps(text)
+    
+    @staticmethod
+    def encode_url(text: str) -> str:
+        """URL-encode text.
+
+        Args:
+            text: Text to encode.
+
+        Returns:
+            URL-encoded text.
+        """
+        from urllib.parse import quote
+        return quote(text)
+    
+    @staticmethod
+    def escape_sql(text: str) -> str:
+        """Escape SQL special characters.
+
+        Args:
+            text: Text to escape.
+
+        Returns:
+            SQL-escaped text.
+        """
+        # Double single quotes for SQL escaping
+        return text.replace("'", "''")
 
     @staticmethod
     def sanitize(text: str) -> str:
