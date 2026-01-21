@@ -9,7 +9,7 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 
 class ContinuationReason(Enum):
@@ -21,6 +21,7 @@ class ContinuationReason(Enum):
     ERROR = "error"
     ESCALATE = "escalate"
     MAX_ROUNDS_REACHED = "max_rounds_reached"
+    TOKEN_LIMIT = "token_limit"
 
 
 @dataclass
@@ -55,7 +56,8 @@ class ContinuationDecision:
         context: Additional context data from this turn.
         next_operation: The next operation to execute (if any).
         next_parameters: Parameters for the next operation.
-        governance_violation: Any governance violation encountered.
+        governance_violation: Any governance violation encountered (deprecated, use governance_violations).
+        governance_violations: List of governance violations encountered.
     """
 
     reason: ContinuationReason
@@ -65,6 +67,16 @@ class ContinuationDecision:
     next_operation: Optional[str] = None
     next_parameters: Dict[str, Any] = field(default_factory=dict)
     governance_violation: Optional[str] = None
+    governance_violations: List[str] = field(default_factory=list)
+
+    @property
+    def should_continue(self) -> bool:
+        """Determine if conversation should continue.
+        
+        Returns:
+            True if conversation should continue, False otherwise.
+        """
+        return self.reason == ContinuationReason.CONTINUE
 
 
 def decide_continuation(context: ContinuationContext) -> ContinuationReason:

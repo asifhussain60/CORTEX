@@ -147,7 +147,7 @@ class TestSingleTurnExecution:
 class TestGovernanceValidation:
     """Test governance validation before/after turns."""
 
-    @patch("src.core.orchestrator.conversation_protocol.GovernanceRegistry")
+    @patch("cortex.core.orchestrator.conversation_protocol.GovernanceRegistry")
     def test_pre_turn_governance_validation_called(self, mock_registry):
         """Test that pre-turn governance validation is called."""
         orchestrator = MockIOrchestrator()

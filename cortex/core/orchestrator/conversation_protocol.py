@@ -17,6 +17,14 @@ from cortex.core.result import Result, Ok, Err
 from cortex.core.interfaces import IOrchestrator, OperationMode
 
 
+class GovernanceRegistry:
+    """Stub for governance registry (for mocking in tests)."""
+    
+    def should_proceed(self) -> bool:
+        """Check if operation should proceed."""
+        return True
+
+
 @dataclass
 class RoundContext:
     """Context for a single round of execution.
@@ -143,14 +151,14 @@ class ConversationProtocol:
             tokens_this_turn = user_tokens + result_tokens
             self.total_tokens_used += tokens_this_turn
 
-            # Check token limit - if exceeded, return OK with PAUSE reason
+            # Check token limit - if exceeded, return OK with TOKEN_LIMIT reason
             if self.total_tokens_used > self.token_limit:
                 from cortex.core.orchestrator.continuation_decision import (
                     ContinuationDecision,
                     ContinuationReason,
                 )
                 decision = ContinuationDecision(
-                    reason=ContinuationReason.PAUSE,
+                    reason=ContinuationReason.TOKEN_LIMIT,
                     turn_number=self.turn_number,
                     token_usage={
                         "prompt": user_tokens,
