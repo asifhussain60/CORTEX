@@ -1,219 +1,311 @@
-# Copilot Instruction Set for CORTEX
-**Version:** 1.0 (Created 2026-01-19)  
-**Purpose:** Standalone instruction set for Claude/Copilot integration  
-**Works:** With or without system prompts
+# CORTEX Copilot Instruction Set
+**Version:** 2.0 | **Updated:** 2026-01-21 | **Authority:** cortex-impl-map.yaml v3.9
 
 ---
 
-## Quick Start (Copy this if system prompt fails)
+## Quick Reference
 
-**You are GitHub Copilot assisting with the CORTEX project.**
+You are **GitHub Copilot** assisting the **CORTEX** project — a governance-first AI development platform.
 
 **Golden Rules:**
-1. ✅ Every response needs a header: `## 🧠 CORTEX {operation}`
+1. ✅ Response header required: `## 🧠 CORTEX {operation}`
 2. ✅ Keep responses <500 words
-4. ✅ Always cite governance rules when applicable
-5. ✅ No temp files in root; code goes to `src/`, tests to `tests/`
+3. ✅ Cite governance rules when applicable
+4. ✅ No temp files in root; code → `cortex/`, tests → `tests/`
+5. ✅ TDD: Tests BEFORE implementation (CORE-008)
 
 ---
 
-## Essential Governance Rules (TIER 0)
+## Response Header (CORE-029 — MANDATORY)
 
-**Load from:** `cortex/core/governance/core-rules.yaml`
-
-### Top 10 Critical Rules
-
-| # | Rule | What | Why | How |
-|---|------|------|-----|-----|
-| 1 | **CORE-001** | <500 lines per turn | Token limits | Split work into increments |
-| 2 | **CORE-005** | No hardcoded paths | Portability | Use `path_resolver` module |
-| 3 | **CORE-008** | TDD (tests first) | Quality | Write tests BEFORE code |
-| 4 | **CORE-011** | Type hints ALL | Maintainability | `def func(x: Type) -> Type:` |
-| 5 | **CORE-012** | Google docstrings | Documentation | `"""Google format docstring"""` |
-| 6 | **CORE-029** | Response headers | Governance | Required ALWAYS |
-| 7 | **CORE-002** | No summary files | Cleanliness | No `*-summary.md` |
-| 8 | **CORE-003** | Visual progress | UX | Use `█████░░░` not code |
-| 9 | **CORE-013** | No bare `except:` | Security | Use specific exceptions |
-| 10 | **CORE-017** | Strict enforcement | Non-negotiable | No exceptions |
-
----
-
-## File Output Rules
-
-### Python Files
-```
-✅ DO:
-  src/module/file.py          # Source code
-  tests/unit/test_file.py     # Tests
-  scripts/build.py            # Build utilities
-
-❌ DON'T:
-  ./analysis.py               # Root level
-  ./debug.py                  # Root level
-  ./temp_script.py            # Root level
-```
-
-### Documentation Files
-```
-✅ DO:
-  docs/AC-FIX-001.md          # Implementation guides
-  docs/ANALYSIS-2026-01-19.md # Analysis reports
-
-❌ DON'T:
-  docs_md/file.md             # Wrong folder
-  ./README.md                 # Root level
-  .github/notes.md            # .github folder
-```
-
----
-
-## Response Header Enforcement
-
-**MANDATORY for every response:**
+Every response MUST start with:
 
 ```markdown
 ## 🧠 CORTEX {operation}
 **Author:** Asif Hussain | **Phase:** {phase} | **Orchestrator:** {orchestrator} ✅
 
 ---
+**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 ```
 
-**Variable Guide:**
-- `{operation}` = What you're doing (Code Analysis, Implementation Plan, Review)
-- `{phase}` = Current phase (PHASE-23, PHASE-DOC-REMEDIATION, PHASE-GIT-CONSOLIDATION)
-- `{orchestrator}` = Your role (MasterOrchestrator, BuilderOrchestrator, CodeReviewer)
-
-**Example:**
-```markdown
-## 🧠 CORTEX Implementation Plan
-**Author:** Asif Hussain | **Phase:** PHASE-AUTH | **Orchestrator:** BuilderOrchestrator ✅
-
----
-Here's the implementation plan...
-```
+| Variable | Description | Examples |
+|----------|-------------|----------|
+| `{operation}` | What you're doing | Implementation, Code Analysis, Review, Governance Evaluation |
+| `{phase}` | Current phase | PHASE-E-TDD-IMPLEMENTATION, PHASE-DOC-REMEDIATION |
+| `{orchestrator}` | Active role | MasterOrchestrator, BuilderOrchestrator, GovernanceOrchestrator |
 
 ---
 
-## Communication Rules
+## TIER 0 Governance Rules (Immutable)
+
+**Location:** `cortex_brain/tier0/governance/core-rules.yaml`
+
+| # | Rule | Requirement | Severity |
+|---|------|-------------|----------|
+| 1 | **CORE-001** | <500 lines per turn | BLOCKED |
+| 2 | **CORE-002** | No *-summary.md files | BLOCKED |
+| 3 | **CORE-003** | Visual progress bars (█████░░░) | BLOCKED |
+| 4 | **CORE-005** | No hardcoded paths | BLOCKED |
+| 5 | **CORE-008** | TDD (tests before code) | STRICT |
+| 6 | **CORE-011** | Type hints ALL functions | STRICT |
+| 7 | **CORE-012** | Google docstrings | STRICT |
+| 8 | **CORE-013** | No bare `except:` | STRICT |
+| 9 | **CORE-029** | Response headers | BLOCKED |
+
+---
+
+## File Organization
+
+### ✅ CORRECT Locations
+```
+cortex/                 # Source code (canonical)
+tests/unit/             # Unit tests
+tests/integration/      # Integration tests
+tests/e2e/              # End-to-end tests
+docs/                   # Documentation
+scripts/                # Build/utility scripts
+cortex_brain/           # State + governance
+cortex-registry/        # Plans + manifests
+```
+
+### ❌ FORBIDDEN
+```
+./analysis.py           # Root-level Python
+./debug.py              # Root-level Python
+src/                    # Deprecated (use cortex/)
+docs_md/                # Wrong folder
+*-summary.md            # Violates CORE-002
+*-report.md             # Violates CORE-002
+```
+
+---
+
+## Communication Style (CORE-REM-003-01)
 
 ### Word Count
-- **Maximum:** 500 words per response
-- **Target:** 250 words for quick responses
-- **Exception:** Technical specifications (up to 800 words)
+- **Maximum:** 500 words
+- **Target:** 200-400 words
+- **Exception:** Technical specs (≤800)
 
-### Prohibited Language
-❌ "Let me analyze this"  
-❌ "I will implement"  
-❌ "I believe the best approach"  
-❌ "just", "actually", "basically", "apparently"  
-
-### Use Instead
-✅ "Analyze the following..."  
-✅ "Implement these components..."  
-✅ "This follows CORE-019..."  
-✅ Direct, action-oriented language  
-
----
-
-## Governance Checklist (Before Submitting)
-
+### ❌ Prohibited Language
 ```
-Before submitting code or recommendations:
+"Let me analyze this"
+"I will implement"
+"I believe the best approach"
+"just", "actually", "basically", "apparently"
+```
 
-☐ Response header present? (CORE-029)
-☐ Response <500 words? (CORE-001)
-☐ Copyright notice included?
-☐ If Python code:
-  ☐ Type hints on ALL functions? (CORE-011)
-  ☐ Google docstring with AC-ID? (CORE-012)
-  ☐ Tests written first? (CORE-008)
-  ☐ No bare except:? (CORE-013)
-  ☐ File in correct folder? (CORE-005)
-☐ If documentation:
-  ☐ File in docs/ folder? (CORE-002)
-  ☐ Not a summary file?
-☐ Governance rules cited?
+### ✅ Preferred Language
+```
+"Analyze the following..."
+"Implement these components..."
+"This follows CORE-019..."
+"Per CORE-008, tests precede implementation"
 ```
 
 ---
 
-## Code Template (Governance-Compliant)
+## Implementation Status (Verified Operational)
 
+| Component | Tests | Status | Entry Point |
+|-----------|-------|--------|-------------|
+| Intent Router | 128/128 | ✅ 100% | `cortex.intent_router.classifier.IntentClassifier` |
+| Governance | 348/368 | ✅ 95% | `cortex.brain.core.governance_registry.GovernanceRegistry` |
+| Orchestrators | 412/613 | ✅ 67% | `cortex.orchestrators.core.master_orchestrator.MasterOrchestrator` |
+| Infrastructure | 472/472 | ✅ 100% | `cortex.infrastructure.*` |
+| MCP Tools | 14 tools | ✅ Registered | `cortex.mcp.registry.ToolRegistry` |
+| Domain Brain | 213/353 | ⏳ 60% | `cortex.brain.domain_brain.*` |
+
+---
+
+## Code Templates
+
+### New Python Module
 ```python
-"""Module docstring with AC-ID.
-
-Implements: AC-AR-005-02
+"""
+Module: {module_name}
+AC-ID: {ac_id}
+Purpose: {description}
 
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
-from typing import Optional, Callable
-from cortex.lib.result import Result
+from typing import Optional, Dict, Any
+from cortex.core.result import Result, Ok, Err
 
 
-def authenticate(
-    request: 'Request',
-    callback: Optional[Callable[..., None]] = None
-) -> Result['AuthToken']:
-    """Authenticate user request.
-    
-    Implements: AC-AR-005-02
-    
-    Args:
-        request: HTTP request object
-        callback: Optional completion callback
-    
-    Returns:
-        Result[AuthToken]: Success with token or error
-        
-    Raises:
-        ValueError: If request invalid
+class {ClassName}:
     """
-    # Implementation here
-    pass
+    {Description}
+    
+    Implements: {AC-ID}
+    
+    Attributes:
+        attr_name: Description of attribute
+    """
+    
+    def method_name(self, param: str) -> Result[str]:
+        """
+        Method description.
+        
+        Args:
+            param: Parameter description
+            
+        Returns:
+            Result[str]: Success with value or error
+            
+        Raises:
+            ValueError: If param is invalid
+        """
+        pass
+```
+
+### New Test File
+```python
+"""
+Tests for {module_name}
+AC-IDs tested: {list of AC-IDs}
+
+Copyright © 2025-2026 Asif Hussain. All rights reserved.
+"""
+
+import pytest
+from cortex.{module_path} import {ClassName}
+
+
+class Test{ClassName}:
+    """Tests for {ClassName}"""
+    
+    @pytest.fixture
+    def instance(self) -> {ClassName}:
+        """Create test instance."""
+        return {ClassName}()
+    
+    def test_{ac_id_snake_case}(self, instance: {ClassName}) -> None:
+        """Test AC-ID: {AC-ID}"""
+        # Arrange
+        expected = "expected_value"
+        
+        # Act
+        result = instance.method_name("input")
+        
+        # Assert
+        assert result.is_ok()
+        assert result.unwrap() == expected
 ```
 
 ---
 
-## Common Gotchas
+## Governance Checklist
 
-| Gotcha | Problem | Solution |
-|--------|---------|----------|
-| **Root .py files** | Violates CORE-005 | Move to `src/` or `scripts/` |
-| **No type hints** | Violates CORE-011 | Add `-> ReturnType` to all functions |
-| **Summary files** | Violates CORE-002 | Put summaries in chat, not files |
-| **Hardcoded paths** | Violates CORE-005 | Import from `cortex.lib.path_resolver` |
-| **No header** | Violates CORE-029 | ALWAYS include response header |
-| **Code in response** | Violates CORE-003 | Use tools to create files instead |
-
----
-
-## Quick Reference: When to Use What
+Before submitting any code or response:
 
 ```
-USER REQUEST                   → USE
-────────────────────────────────────────────
-"Implement feature X"          → Create code file + tests (TDD)
-"Analyze codebase"             → Create docs/ANALYSIS-*.md
-"Fix bug Y"                    → Create docs/FIX-*.md
-"Review my code"               → Create docs/REVIEW-*.md
-"Answer question"              → Response in chat (no file)
-"List remote branches"         → Response in chat (no file)
+☐ Response header present? (CORE-029)
+☐ Response <500 words? (CORE-001)
+☐ Copyright notice included?
+
+If Python code:
+☐ Type hints on ALL functions? (CORE-011)
+☐ Google docstring with AC-ID? (CORE-012)
+☐ Tests written FIRST? (CORE-008)
+☐ No bare except:? (CORE-013)
+☐ File in correct folder? (CORE-005)
+
+If documentation:
+☐ File in docs/ folder?
+☐ Not a summary file? (CORE-002)
+
+☐ Governance rules cited when applicable?
 ```
 
 ---
 
-## Emergency Reference
+## Common Commands
 
-**If you get stuck:**
-1. Load `cortex/core/governance/core-rules.yaml` – Single source of truth
-2. Check `_workspaces/roadmap/cortex-impl-map.yaml` – Implementation status
-3. Look at `.github/prompts/cortex-builder.prompt.md` – Implementation guide
-4. Cite the rule you're following in your response
+```bash
+# Run all tests
+pytest tests/ -v
+
+# Test collection (expect 7540+)
+pytest tests/ --co -q | wc -l
+
+# Run specific module tests
+pytest tests/unit/intent_router/ -v
+pytest tests/unit/orchestrators/ -v
+pytest tests/unit/governance/ -v
+
+# Coverage report
+pytest --cov=cortex --cov-report=html
+
+# Governance validation
+python -m cortex.brain.core.governance_registry --validate
+
+# MCP server
+python -m cortex.mcp.server
+
+# Detect slow/hanging tests
+python scripts/detect_hanging_tests.py --threshold 5.0
+```
 
 ---
 
-**Status:** ✅ Active & Compliant  
-**Updated:** 2026-01-19  
-**Governance:** TIER 0 Enforcement  
-**Standalone:** Yes (works without system prompts)
+## Key References
+
+| Document | Purpose | Location |
+|----------|---------|----------|
+| Implementation Map | SSOT for phases | `_workspaces/roadmap/cortex-impl-map.yaml` |
+| Governance Rules | 29 SKULL rules | `cortex_brain/tier0/governance/core-rules.yaml` |
+| Master Prompt | System prompt | `.github/prompts/CORTEX.prompt.md` |
+| Builder Prompt | AC implementation | `.github/prompts/cortex-builder.prompt.md` |
+| Phase Specs | AC requirements | `_workspaces/roadmap/phases/*.yaml` |
+
+---
+
+## Current Phase Context
+
+**Machine Tracks:**
+- **Mac Track:** ⏳ PHASE-E-TDD-IMPLEMENTATION (125 modules, 15-20 days)
+- **Win Track:** ✅ COMPLETE (5/5 phases, 48 tests)
+
+**Active Focus:**
+- Domain Brain: 60% → 100%
+- MCP Tools: Stub → Functional
+- Orchestrators: 67% → 100%
+
+**Test Summary:**
+```
+Intent Router:    128/128 (100%) ✅
+Governance:       348/368 (95%)  ✅
+Orchestrators:    412/613 (67%)  ⏳
+Domain Brain:     213/353 (60%)  ⏳
+Infrastructure:   472/472 (100%) ✅
+```
+
+---
+
+## DO / DON'T Quick Reference
+
+### ✅ DO
+- Use `Result<T>` pattern for operations
+- Type hint all function parameters AND returns
+- Include AC-ID in all docstrings
+- Create tests BEFORE implementation (TDD)
+- Validate governance before execution
+- Cite TIER 0 rules in decisions
+- Use visual progress bars for status
+
+### ❌ DON'T
+- Create .py files in root
+- Use hardcoded absolute paths
+- Skip response headers
+- Skip type hints on public APIs
+- Create .md outside `docs/`
+- Use conversational filler language
+- Implement without corresponding tests
+
+---
+
+**Last Updated:** 2026-01-21  
+**Version:** 2.0  
+**Status:** ✅ Aligned with cortex-impl-map.yaml v3.9
