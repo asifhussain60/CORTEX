@@ -1,0 +1,150 @@
+# Phase DEPLOYMENT-004: Multi-Repo Governance
+# CORTEX as governance engine across D:\PROJECTS\*
+# Date: 2026-01-21
+# Priority: P1-HIGH
+# Authority: chat01.md requirements analysis
+
+metadata:
+  phase_id: "PHASE-DEPLOYMENT-004-multi-repo-gov"
+  title: "Multi-Repository Governance and Context Switching"
+  description: "Enable CORTEX to govern KASHKOLE, KSESSIONS, and other repos with project-specific tier1 rules"
+  priority: "P1-HIGH"
+  estimated_effort: "3 days"
+  status: "NOT_STARTED"
+  blocks_production: false
+  machine: "ah"
+
+executive_summary: |
+  CORTEX should act as governance orchestrator for all D:\PROJECTS\* repos:
+  - Auto-discover project structure (KASHKOLE, KSESSIONS, etc.)
+  - Inject tier1 rules per project (FinOps for KASHKOLE, Auth for KSESSIONS)
+  - Route intents across projects (CORTEX.prompt.md + copilot-instruction.md aware)
+  - Share audit trail via unified governance.db
+  
+  This enables "one governance engine, many projects" architecture.
+
+current_state:
+  multi_repo_support: "None"
+  project_discovery: "None"
+  tier1_injection: "Manual"
+  cross_repo_routing: "None"
+  unified_audit: "None"
+
+acceptance_criteria:
+  - id: "AC-DEP-004-01"
+    description: "Project discovery scans D:\\PROJECTS\\* and registers projects"
+    verification: "cortex_brain/state/projects.db contains all discovered projects"
+    implementation:
+      - "Create cortex/orchestrators/project_discoverer.py"
+      - "Scan D:\\PROJECTS\\* for .cortex-config.yaml (project marker)"
+      - "Detect project structure (Python, Node.js, etc.)"
+      - "Infer project type (financial → FinOps, session → Auth)"
+      - "Register in cortex_brain/state/projects.db (project_id, path, type, tier1_profile)"
+    tests:
+      - "test_scan_d_projects_folder"
+      - "test_detect_cortex_config_yaml"
+      - "test_infer_project_type"
+      - "test_register_projects_db"
+  
+  - id: "AC-DEP-004-02"
+    description: "Tier1 rule injection applies project-specific governance"
+    verification: "KASHKOLE loads finops-rules.yaml, KSESSIONS loads auth-rules.yaml"
+    implementation:
+      - "Create cortex_brain/tier1/templates/finops-rules.yaml"
+      - "Create cortex_brain/tier1/templates/auth-rules.yaml"
+      - "Create cortex_brain/tier1/templates/ml-rules.yaml"
+      - "Create cortex_brain/tier1/templates/devops-rules.yaml"
+      - "Create cortex_brain/tier1/templates/healthcare-rules.yaml"
+      - "Load appropriate template based on project type"
+      - "Validate tier0 compatibility (no rule conflicts)"
+    tests:
+      - "test_load_finops_template_for_kashkole"
+      - "test_load_auth_template_for_ksessions"
+      - "test_validate_tier0_compatibility"
+      - "test_no_rule_conflicts"
+  
+  - id: "AC-DEP-004-03"
+    description: "Cross-repo intent routing with CORTEX.prompt.md awareness"
+    verification: "Intent router correctly routes to project-specific orchestrator"
+    implementation:
+      - "Update cortex/intent_router/router.py for multi-repo"
+      - "Read CORTEX.prompt.md per project (D:\\PROJECTS\\KASHKOLE\\.github\\prompts\\CORTEX.prompt.md)"
+      - "Read copilot-instruction.md per project"
+      - "Route intent to appropriate project context"
+      - "Load tier1 rules for target project"
+    tests:
+      - "test_route_kashkole_intent"
+      - "test_route_ksessions_intent"
+      - "test_read_project_cortex_prompt"
+      - "test_load_project_tier1_rules"
+  
+  - id: "AC-DEP-004-04"
+    description: "Shared audit trail across projects"
+    verification: "governance.db tracks operations across all projects"
+    implementation:
+      - "Option 1: Unified governance.db (all projects → cortex_brain/state/governance.db)"
+      - "Option 2: Per-project governance.db with federation"
+      - "Cross-repo AC-ID tracking (find AC-FR-012 references across projects)"
+      - "Project-scoped queries (show KASHKOLE audit trail only)"
+    tests:
+      - "test_unified_audit_trail"
+      - "test_cross_repo_ac_id_search"
+      - "test_project_scoped_query"
+      - "test_audit_isolation_per_project"
+
+deliverables:
+  code:
+    - "cortex/orchestrators/project_discoverer.py"
+    - "cortex/orchestrators/tier1_injector.py"
+    - "cortex/orchestrators/cross_repo_router.py"
+    - "cortex_brain/tier1/templates/finops-rules.yaml"
+    - "cortex_brain/tier1/templates/auth-rules.yaml"
+    - "cortex_brain/tier1/templates/ml-rules.yaml"
+    - "cortex_brain/tier1/templates/devops-rules.yaml"
+    - "cortex_brain/tier1/templates/healthcare-rules.yaml"
+    - "cortex_brain/state/projects.db (project registry)"
+  
+  tests:
+    - "tests/orchestrators/test_project_discoverer.py (10 tests)"
+    - "tests/orchestrators/test_tier1_injector.py (8 tests)"
+    - "tests/orchestrators/test_cross_repo_router.py (9 tests)"
+    - "tests/orchestrators/test_shared_audit.py (7 tests)"
+
+dependencies:
+  requires: 
+    - "PHASE-DEPLOYMENT-003-mcp-expansion (multi-repo MCP tools)"
+  blocks: 
+    - "PHASE-DEPLOYMENT-005-migration"
+
+completion_verification:
+  success_criteria:
+    - "All 34 multi-repo tests passing"
+    - "projects.db contains discovered projects (KASHKOLE, KSESSIONS)"
+    - "KASHKOLE loads finops-rules.yaml tier1 profile"
+    - "KSESSIONS loads auth-rules.yaml tier1 profile"
+    - "Cross-repo intent routing functional"
+    - "Unified audit trail tracks all project operations"
+  validation_command: "pytest tests/orchestrators/test_*repo*.py -v"
+
+governance_compliance:
+  - "CORE-005: Portable paths (D:\\PROJECTS detection)"
+  - "CORE-008: Tests before implementation"
+  - "CORE-011: All functions typed"
+  - "CORE-012: Google docstrings"
+  - "CORE-017: Tier0 governance immutable across projects"
+
+notes: |
+  This phase implements the "multi-repo governance" requirement from chat01.md.
+  CORTEX becomes the governance orchestrator for all production repos:
+  
+  D:\PROJECTS\
+  ├── CORTEX (governance engine)
+  ├── KASHKOLE (financial domain) → tier1: finops-rules.yaml
+  ├── KSESSIONS (session management) → tier1: auth-rules.yaml
+  └── [future projects] → tier1: appropriate profile
+  
+  Governance profile templates enable quick-start:
+  - New financial project? Apply finops-rules.yaml
+  - New ML project? Apply ml-rules.yaml
+  
+  Unified audit trail ensures compliance tracking across all projects.
