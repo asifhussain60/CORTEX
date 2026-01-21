@@ -103,8 +103,12 @@ class CrossPlatformFileLock:
                 import msvcrt
                 try:
                     msvcrt.locking(self._file.fileno(), msvcrt.LK_UNLCK, 1)
-                except Exception:
-                    pass
+                except OSError as e:
+                    import logging
+                    logging.warning(f"Failed to release Windows lock: {e}")
+                except Exception as e:
+                    import logging
+                    logging.error(f"Unexpected error releasing lock: {e}")
             elif self._lock_type == "unix":
                 import fcntl
                 fcntl.flock(self._file.fileno(), fcntl.LOCK_UN)
