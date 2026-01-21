@@ -8,11 +8,52 @@ metadata:
   title: "CORTEX Implementation Map"
   description: "Truth-based roadmap reflecting actual implementation, tests, and MCP exposure (CORRECTED v3.1)"
   project: "CORTEX"
-  version: "3.8-phase-e-session-5"
-  updated: "2026-01-21T04:00:00Z"
+  version: "3.9-machine-autonomous-tracks"
+  updated: "2026-01-21T08:00:00Z"
   governance_mode: "STRICT"
   hallucination_remediation: "22 false 'IMPLEMENTED' claims removed per Phase 0 AC-3"
   latest_completion: "Tier3 Knowledge Ecosystem: 64/244 tests passing. GovernanceManager, ExpertRegistry, AICurator, KnowledgeIndexer, SynthesisEngine implemented."
+  
+execution_config:
+  autonomous_mode:
+    enabled: true
+    machine_filtering: true
+    silent_execution: true
+    no_reports: true
+    no_md_files: true
+    notification_style: "concise"  # One sentence per phase completion
+    auto_advance: true
+    
+  notification_format: "✓ {phase_id}: {one_sentence_summary} → Next: {next_phase_id}"
+  
+  forbidden_outputs:
+    - "*.md files (except docs/)"
+    - "status reports"
+    - "completion summaries"
+    - "execution logs"
+    - "progress reports"
+    
+  allowed_outputs:
+    - "Code files (cortex/, cortex_brain/, tests/)"
+    - "YAML updates (cortex-impl-map.yaml status changes)"
+    - "Git commits (one per phase)"
+    - "Test results (pytest output only)"
+    
+  machine_tracks:
+    mac:
+      strategy: "sequential_tdd"
+      focus: "Core implementation, test collection fixes, module implementations"
+      phases: ["impl-export-completion", "impl-circular-import-fix", "PHASE-E-TDD-IMPLEMENTATION"]
+      estimated_duration: "17-23 days"
+      blocking: true
+      
+    win:
+      strategy: "parallel_validation"
+      focus: "Infrastructure, validation, governance content"
+      phases: ["cortex-registry-001-migration", "impl-e2e-validation", "impl-cicd-validation", "impl-governance-content", "impl-features-registry-001"]
+      estimated_duration: "10-14 days"
+      blocking: false
+      depends_on_mac_completion: "PHASE-E-TDD-IMPLEMENTATION"
   
 implementation_stats:
   codebase:

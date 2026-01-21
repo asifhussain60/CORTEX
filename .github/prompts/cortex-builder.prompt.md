@@ -1,26 +1,57 @@
 # CORTEX Builder - Implementation Prompt
 
-**Role:** Implement phases from `_workspaces/roadmap/cortex-impl-map.yaml` (v3.1-corrected truth-based) with strict tier0 governance.
+**Role:** Implement phases from `_workspaces/roadmap/cortex-impl-map.yaml` (v3.9-machine-autonomous-tracks) with strict tier0 governance.
 
-## Machine-Specific Execution
+## Autonomous Machine-Specific Execution
 
 **When user specifies `machine:mac` or `machine:win`:**
-1. **IMMEDIATELY** filter `cortex-impl-map.yaml` for phases with matching `machine` property
-2. Identify next incomplete phase (status != "COMPLETED") for that machine
-3. Begin autonomous execution WITHOUT asking for confirmation
-4. Execute all ACs in sequence until phase complete
-5. Move to next phase for same machine automatically
 
-**Machine Property Behavior:**
-- `machine: mac` → Execute only mac-assigned phases
-- `machine: win` → Execute only win-assigned phases
-- No machine specified → Execute any available phase (default behavior)
-- Mixed machines in session → Complete all phases for specified machine first
+### Execution Protocol (ZERO OUTPUT MODE)
+1. **Load** `cortex-impl-map.yaml` → Read `execution_config` + filter by machine
+2. **Execute** all phases for machine sequentially (P0 → P1 → P2 → P3)
+3. **Output** one sentence per phase: `✓ {phase_id}: {summary} → Next: {next_phase}`
+4. **NO reports, NO *.md files, NO status documents**
+5. **Auto-advance** to next phase without pausing
 
-**Example:**
+### Forbidden Actions (Machine Mode)
+- ❌ Creating ANY .md files (except in docs/ if required by AC)
+- ❌ Generating status reports, summaries, or completion documents
+- ❌ Asking "Proceed to next phase?"
+- ❌ Verbose explanations between phases
+- ❌ Progress reports or execution logs
+
+### Required Actions (Machine Mode)
+- ✅ Implement code (cortex/, cortex_brain/, tests/)
+- ✅ Run tests silently (capture pass/fail only)
+- ✅ Update cortex-impl-map.yaml status field
+- ✅ Git commit (one per phase, descriptive message)
+- ✅ One-sentence notification per phase completion
+
+### Notification Format (ONLY Output)
+```
+✓ impl-export-completion: Added 44 missing exports, 76→15 errors → Next: impl-circular-import-fix
+```
+
+### Machine Tracks
+
+**Mac Track (Sequential TDD):**
+1. impl-export-completion (P0, 1 day)
+2. impl-circular-import-fix (P0, 1-2 days)
+3. PHASE-E-TDD-IMPLEMENTATION (P0, 15-20 days)
+
+**Win Track (Parallel Validation):**
+1. cortex-registry-001-migration (P0, 1 day)
+2. impl-e2e-validation (P1, 3-4 days)
+3. impl-cicd-validation (P1, 2-3 days)
+4. impl-governance-content (P1, 2-3 days)
+5. impl-features-registry-001 (P1, 6-9 hours)
+
+**Example Session:**
 ```
 User: "continue with machine:mac"
-Assistant: [Filters for mac phases] → [Executes next incomplete mac phase] → [Moves to next mac phase]
+Assistant: ✓ impl-export-completion: Added 44 exports, tests 76→15 errors → Next: impl-circular-import-fix
+          ✓ impl-circular-import-fix: Fixed recursion in orchestrators, 15→0 errors → Next: PHASE-E-TDD-IMPLEMENTATION
+          [Continues silently until all mac phases complete]
 ```
 
 ## Quick Reference
@@ -143,84 +174,59 @@ Assistant: [Filters for mac phases] → [Executes next incomplete mac phase] →
 - `/mcp-status` → MCP tool implementation status
 - `/governance-check` → Compliance verification (Note: core-rules.yaml missing)
 
-## EXECUTIVE SUMMARY FORMAT
+## ZERO OUTPUT MODE (Machine-Specific Execution)
 
-**For machine-specific execution:**
-When executing with `machine:mac` or `machine:win`, skip the "Proceed to PHASE-YY?" question.
-Automatically continue to next phase for same machine until all machine-specific phases complete.
+**When `machine:mac` or `machine:win` is specified:**
 
-**Standard format (no machine specified):**
+### Absolutely FORBIDDEN
+- ❌ Executive summaries
+- ❌ Phase completion summaries
+- ❌ "Proceed to next phase?" questions
+- ❌ Multi-line descriptions
+- ❌ Bullet-point lists of achievements
+- ❌ "What was delivered" paragraphs
+- ❌ "What's next" paragraphs
+- ❌ Any .md file creation
+- ❌ Status reports in any form
 
-On phase completion, output ONLY this format (no code snippets):
+### ONLY Allowed Output
+```
+✓ {phase-id}: {8-word-max-summary} → Next: {next-phase-id}
+```
 
+### Examples (CORRECT)
+```
+✓ impl-export-completion: 44 exports added, errors 76→15 → Next: impl-circular-import-fix
+✓ impl-circular-import-fix: Recursion fixed, errors 15→0 → Next: PHASE-E-TDD-IMPLEMENTATION
+✓ PHASE-E-TDD-IMPLEMENTATION: 125 modules implemented, 5500 tests passing → Mac track complete
+```
+
+### Examples (WRONG - Never Do This)
 ```
 ═══════════════════════════════════════════════════════════════
-                    PHASE COMPLETION SUMMARY
-═══════════════════════════════════════════════════════════════
-
-✅ COMPLETED: PHASE-XX - [Phase Title] [machine:mac/win if specified]
-
-[Single paragraph describing what was delivered - no code]
-
-Acceptance Criteria Completed:
-• AC-XXX-XX-01: [One sentence human-readable description]
-• AC-XXX-XX-02: [One sentence human-readable description]
-• AC-XXX-XX-03: [One sentence human-readable description]
-
+✅ COMPLETED: impl-export-completion
+[Any multi-line format]
 ───────────────────────────────────────────────────────────────
-
-⏭️ NEXT: PHASE-YY - [Next Phase Title] [machine:mac/win if filtered]
-
-[Single paragraph describing what will be delivered - no code]
-
-Acceptance Criteria Planned:
-• AC-YYY-YY-01: [One sentence human-readable description]
-• AC-YYY-YY-02: [One sentence human-readable description]
-
-═══════════════════════════════════════════════════════════════
-
-[If machine specified: "Continuing to PHASE-YY (machine:X)..."]
-[If no machine: "Proceed to PHASE-YY? (yes/no)"]
-```
-
-**If all phases for machine complete:**
-```
-═══════════════════════════════════════════════════════════════
-        🎉 ALL [MAC/WIN] PHASES COMPLETE 🎉
-═══════════════════════════════════════════════════════════════
-
-All phases assigned to machine:[mac/win] are now completed.
-Total phases delivered: [N]
-Remaining phases for other machines: [M]
-
-═══════════════════════════════════════════════════════════════
-```
-
-**If all phases locked:**
-```
-═══════════════════════════════════════════════════════════════
-              🎉 CORTEX IMPLEMENTATION COMPLETE 🎉
-═══════════════════════════════════════════════════════════════
-
-All phases in cortex-impl-map.yaml are now locked: true.
-Total phases delivered: [N]
-Production ready: ✅
-
-═══════════════════════════════════════════════════════════════
 ```
 
 ---
 
 ## RESPONSE GUIDELINES
 
-### Machine-Specific Execution Mode
+### Machine-Specific Execution Mode (ZERO OUTPUT)
 When user specifies `machine:mac` or `machine:win`:
 - **Fully autonomous** - execute all phases for that machine without pausing
 - **No confirmation prompts** - move directly from one phase to next
+- **Silent execution** - only one-sentence notification per phase
+- **No summaries** - no executive summaries, no completion reports
+- **No .md files** - never create status/report/summary documents
 - **Filter strictly** - only execute phases with matching `machine` property
 - **Status updates only** - brief summary after each phase completion
 - **Continue until exhausted** - stop only when all machine-specific phases complete
 
+### During AC Execution
+- **Silent execution** - no output between ACs
+- Create files, run tests, update YAML without commentary
 ### During AC Execution
 - **Silent execution** - no output between ACs
 - Create files, run tests, update YAML without commentary
@@ -237,11 +243,15 @@ When user specifies `machine:mac` or `machine:win`:
 - ❌ Step-by-step narration
 - ❌ Alternative paths or options (until all phases locked)
 
-### Forbidden Outputs (Machine-Specific Mode)
+### Forbidden Outputs (Machine-Specific ZERO OUTPUT Mode)
 - ❌ "Proceed to next phase?" questions
 - ❌ Any user confirmation prompts between phases
 - ❌ Detailed explanations between phases
-- ✅ Only brief status updates showing completion and next phase
+- ❌ Executive summaries with borders/decorations
+- ❌ Multi-line status updates
+- ❌ Achievement lists or bullet points
+- ❌ ANY .md file creation (status/report/summary)
+- ✅ ONLY: `✓ phase-id: brief-summary → Next: next-phase-id`
 
 ---
 
@@ -257,44 +267,48 @@ When user specifies `machine:mac` or `machine:win`:
 
 ---
 
-## PRODUCTION READINESS REMEDIATION PHASES (2026-01-20)
+## MACHINE TRACK EXECUTION DETAILS
 
-**Current Status**: 36% ready (172 test collection errors, 4 architecture conflicts)
-**Target**: 100% ready (5 weeks, 4 critical phases + TDD implementation)
+### Mac Track (Sequential - P0 Critical Path)
+**Total Effort:** 17-23 days  
+**Blocking:** Yes (production deployment depends on completion)
 
-### Critical Path to 100%
+1. **impl-export-completion** (1 day)
+   - Add 44 missing class/function exports
+   - Target: 76→15 test collection errors
+   
+2. **impl-circular-import-fix** (1-2 days)
+   - Fix recursion in cortex.orchestrators.core
+   - Target: 15→0 test collection errors
+   
+3. **PHASE-E-TDD-IMPLEMENTATION** (15-20 days)
+   - Implement 125 modules via TDD
+   - Target: ≥5500 tests passing (≥98%)
+   - Deliverable: Production-ready core system
 
-```
-Phase A: Tier Consolidation (1 day)
-├─ Problem: Governance split across cortex/brain/core/ + cortex_brain/
-├─ Fix: Delete duplicate governance, consolidate to single source
-├─ Unblocks: Phases B, C, impl-arch-011, impl-arch-022, impl-arch-025
-└─ Outcome: 36% → 60% ready
+### Win Track (Parallel - Infrastructure & Validation)
+**Total Effort:** 10-14 days  
+**Blocking:** No (can run after Mac completes PHASE-E)
 
-Phase B: MCP Registry Centralization (2 days)
-├─ Problem: 14 MCP tools scattered, no discovery mechanism
-├─ Fix: Create registry.py, reorganize by category, auto-discovery
-├─ Unblocks: impl-arch-022-mcp-compliance
-└─ Outcome: 60% → 95% ready
-
-Phase C: Fix Circular Imports (2 days)
-├─ Problem: 21 integration tests blocked by RecursionError in cortex.core
-├─ Fix: Refactor imports, break circular dependencies
-├─ Outcome: 95% → 98% ready (172 errors → 0)
-
-Phase D: Create Missing Modules (3-4 days)
-├─ Problem: 71 missing modules, 58 missing classes (TDD stubs)
-├─ Fix: Create stub implementations, resolve all imports
-├─ Outcome: 98% → 99% ready (all tests collectable)
-
-Phase E: TDD Implementation (15-20 days)
-├─ Scope: Implement 125 modules with full functionality
-├─ Tests: 5500+ tests, 90%+ pass rate
-├─ Outcome: 99% → 100% ready
-└─ Authority: _workspaces/roadmap/phases/impl-tdd-prod-ready.yaml
-```
-
-**Reference**: _workspaces/roadmap/REMEDIATION-PLAN-20260120.yaml (complete plan with steps)
+1. **cortex-registry-001-migration** (1 day)
+   - Migrate _workspaces/roadmap → cortex-registry/
+   - Enable plan-type segregation
+   
+2. **impl-e2e-validation** (3-4 days)
+   - Smoke, load, chaos test suites
+   - Production validation framework
+   
+3. **impl-cicd-validation** (2-3 days)
+   - GitHub Actions, pre-commit hooks
+   - Rollback automation
+   
+4. **impl-governance-content** (2-3 days)
+   - Populate tier1 (15-20 rules)
+   - Populate tier2 (25-30 rules)
+   
+5. **impl-features-registry-001** (6-9 hours)
+   - Live feature discovery system
+   - Event bus-driven registry
 
 ---
 
@@ -304,45 +318,51 @@ Phase E: TDD Implementation (15-20 days)
 |------|----------|
 | Implementation Map | `_workspaces/roadmap/cortex-impl-map.yaml` |
 | Phase Specs | `_workspaces/roadmap/phases/impl-*.yaml` |
-| MCP Status | `_workspaces/roadmap/mcp-impl-status.yaml` |
 | Source | `cortex/`, `cortex_brain/` |
 | Tests | `tests/` |
-| Docs | `docs/` |
-| Reports | `_workspaces/roadmap/reports/*.yaml` |
+| Docs | `docs/` ONLY |
 
 ---
 
-## CRITICAL RULES
+## CRITICAL RULES (Machine-Specific Mode)
 
-1. **ONE PATH FORWARD**: Until all phases are marked completed in cortex-impl-map.yaml, the only option is "Proceed to next phase? (yes/no)"
-   - **EXCEPTION**: When `machine:mac` or `machine:win` is specified, skip confirmation and execute all phases for that machine autonomously
-2. **NO ALTERNATIVES**: Do not present other options, suggestions, or detours
-3. **AUTONOMOUS**: Execute all ACs in a phase without pausing
-4. **MINIMAL OUTPUT**: Silent during execution, summary on completion
-5. **NO CODE IN SUMMARIES**: Executive summaries are human-readable, no snippets
-6. **MACHINE FILTERING**: When machine specified, ONLY execute phases with matching `machine` property in cortex-impl-map.yaml
+1. **ZERO OUTPUT MODE**: When `machine:mac` or `machine:win` specified:
+   - ONLY output: `✓ phase-id: summary → Next: next-phase`
+   - NO executive summaries, NO completion reports
+   - NO .md files, NO status documents
+   
+2. **AUTONOMOUS EXECUTION**: 
+   - Execute all phases for machine without pausing
+   - No "Proceed?" questions between phases
+   - Auto-advance until machine track complete
+   
+3. **SILENT IMPLEMENTATION**:
+   - Create code/tests silently
+   - Update YAML status field only
+   - Git commit per phase (descriptive)
+   
+4. **PRIORITY EXECUTION**: P0 → P1 → P2 → P3
+   
+5. **DEPENDENCY CHECK**: Skip phases with unmet dependencies
 
 ## MACHINE-SPECIFIC WORKFLOW
 
-**User Command Pattern:**
-- `continue with machine:mac` → Filter + execute all mac phases
-- `continue with machine:win` → Filter + execute all win phases
-- `continue` → Execute next available phase (any machine)
+**User Command:**
+```
+continue with machine:mac
+```
 
-**Execution Flow (machine specified):**
+**Execution:**
 ```
-1. Load cortex-impl-map.yaml
-2. Filter phases WHERE machine == specified_machine AND status != "COMPLETED"
-3. Sort by priority (P0 > P1 > P2 > P3)
-4. FOR EACH filtered phase:
-   a. Load phase specification file
-   b. Execute all ACs in sequence (RED → GREEN → REFACTOR)
-   c. Run tests to verify
-   d. Update cortex-impl-map.yaml status
-   e. Output brief completion summary
-   f. Move to next phase (NO PAUSE)
-5. When exhausted: Output "All [MACHINE] phases complete"
+1. Load execution_config from cortex-impl-map.yaml
+2. Filter: machine=="mac" AND status!="COMPLETED"
+3. Sort by priority
+4. Execute each phase:
+   ✓ phase-id: summary → Next: next-phase
+5. Complete: "Mac track complete (3/3 phases)"
 ```
+
+**No Summary, No Report, No .md Files**
 
 **Phase Selection Priority:**
 1. P0-CRITICAL blocking phases
