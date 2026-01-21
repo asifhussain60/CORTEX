@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from datetime import datetime
 from cortex.domain_brain.models import EntityType
+from cortex_brain.domain_brain.models import Conflict
 
 
 @dataclass
@@ -65,6 +66,7 @@ class Domain:
     name: str
     description: str
     entities: Dict[str, Entity] = field(default_factory=dict)
+    conflicts: List[Conflict] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
