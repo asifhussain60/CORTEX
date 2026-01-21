@@ -433,25 +433,51 @@ class ConfigurationCoherenceValidator:
 class ResponseExplanation:
     """Manages response explanations and reasoning."""
 
-    def __init__(self, response_id: str) -> None:
+    def __init__(self, response: str, context: Optional[Dict[str, Any]] = None) -> None:
         """Initialize response explanation.
 
         Args:
-            response_id: Response identifier.
+            response: Response text.
+            context: Optional context information.
         """
-        self.response_id = response_id
+        self.response = response
+        self.context = context or {}
+        self.reasoning: List[str] = []
+        self.decision_chain: List[str] = []
         self.explanation_text: str = ""
         self.reasoning_steps: List[str] = []
         self.sources: List[str] = []
         self.confidence_score: float = 0.0
 
-    def add_reasoning_step(self, step: str) -> None:
+    def add_reasoning(self, step: str) -> None:
         """Add a reasoning step.
 
         Args:
             step: Reasoning step description.
         """
+        self.reasoning.append(step)
         self.reasoning_steps.append(step)
+
+    def add_decision(self, decision: str) -> None:
+        """Add a decision to the chain.
+
+        Args:
+            decision: Decision description.
+        """
+        self.decision_chain.append(decision)
+
+    def get_audit_trail(self) -> Dict[str, Any]:
+        """Get audit trail of explanation.
+
+        Returns:
+            Dictionary with response, reasoning, decisions, and context.
+        """
+        return {
+            "response": self.response,
+            "reasoning": self.reasoning,
+            "decisions": self.decision_chain,
+            "context": self.context,
+        }
 
     def set_explanation(self, text: str) -> None:
         """Set the explanation text.
@@ -499,6 +525,39 @@ class ContextAwareness:
         """Initialize context awareness."""
         self.context_stack: List[Dict[str, Any]] = []
         self.context_history: List[Dict[str, Any]] = []
+        self.current_context: Dict[str, Any] = {}
+
+    def set_context(self, context: Dict[str, Any]) -> None:
+        """Set the current context.
+
+        Args:
+            context: Context information.
+        """
+        self.current_context = context.copy()
+        self.context_history.append(context.copy())
+
+    def get_context(self) -> Dict[str, Any]:
+        """Get the current context.
+
+        Returns:
+            Current context dictionary.
+        """
+        return self.current_context.copy()
+
+    def include_context_in_response(self, response: str) -> str:
+        """Include context in response.
+
+        Args:
+            response: Original response.
+
+        Returns:
+            Response with context included.
+        """
+        if not self.current_context:
+            return response
+
+        context_str = ", ".join(f"{k}={v}" for k, v in self.current_context.items())
+        return f"{response} [Context: {context_str}]"
 
     def push_context(self, context: Dict[str, Any]) -> None:
         """Push a context onto the stack.
@@ -546,6 +605,34 @@ class OutputConsistencyChecker:
         """Initialize output consistency checker."""
         self.outputs: List[Dict[str, Any]] = []
         self.inconsistencies: List[str] = []
+        self.checks: List = []
+
+    def add_check(self, check_func) -> None:
+        """Add a consistency check function.
+
+        Args:
+            check_func: Function that takes output and returns bool.
+        """
+        self.checks.append(check_func)
+
+    def check_output(self, output: Any) -> tuple:
+        """Check output against all registered checks.
+
+        Args:
+            output: Output to check.
+
+        Returns:
+            Tuple of (is_consistent, issues_list).
+        """
+        issues = []
+        for i, check in enumerate(self.checks):
+            try:
+                if not check(output):
+                    issues.append(f"Check {i} failed")
+            except Exception as e:
+                issues.append(f"Check {i} raised exception: {e}")
+
+        return (len(issues) == 0, issues)
 
     def record_output(self, output: Dict[str, Any]) -> None:
         """Record an output for comparison.
@@ -599,15 +686,47 @@ class CoherenceFallback:
         self.fallback_strategies: Dict[str, Any] = {}
         self.fallback_history: List[str] = []
         self.fallback_applied: bool = False
+        self.fallbacks: Dict[str, str] = {}
 
-    def register_fallback(self, issue_type: str, fallback_fn: Any) -> None:
+    def register_fallback(self, issue_type: str, fallback_value: Any) -> None:
         """Register a fallback for a specific issue.
 
         Args:
             issue_type: Type of issue to handle.
-            fallback_fn: Fallback function to apply.
+            fallback_value: Fallback value or function to apply.
         """
-        self.fallback_strategies[issue_type] = fallback_fn
+        self.fallback_strategies[issue_type] = fallback_value
+        if isinstance(fallback_value, str):
+            self.fallbacks[issue_type] = fallback_value
+
+    def get_fallback(self, issue_type: str) -> Optional[Any]:
+        """Get fallback for an issue type.
+
+        Args:
+            issue_type: Type of issue.
+
+        Returns:
+            Fallback value if registered, None otherwise.
+        """
+        return self.fallbacks.get(issue_type)
+
+    def handle_failure(self, issue_type: str, original_response: str) -> str:
+        """Handle failure using fallback.
+
+        Args:
+            issue_type: Type of issue.
+            original_response: Original response that failed.
+
+        Returns:
+            Fallback response or degraded original if no fallback.
+        """
+        fallback = self.get_fallback(issue_type)
+        if fallback:
+            self.fallback_history.append(issue_type)
+            self.fallback_applied = True
+            return fallback
+        # No fallback available, return degraded response
+        return f"[DEGRADED] {original_response}"
 
     def apply_fallback(self, issue_type: str) -> Optional[Any]:
         """Apply a fallback strategy.
