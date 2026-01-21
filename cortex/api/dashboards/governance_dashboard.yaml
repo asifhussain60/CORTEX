@@ -1,0 +1,36 @@
+name: "Governance Dashboard"
+
+sections:
+  - title: "Tier0 Rules"
+    metrics:
+      - "rule_count"
+      - "enforcement_rate"
+      - "violation_count"
+    rules_count: 29
+    
+  - title: "Tier1 Domain Rules"
+    metrics:
+      - "domain_coverage"
+      - "rule_compliance"
+    domains:
+      - "security"
+      - "compliance"
+      - "development"
+      - "operations"
+      - "data"
+    rules_count: "15-20"
+    
+  - title: "Tier2 Context Rules"
+    metrics:
+      - "context_coverage"
+      - "rule_compliance"
+    contexts:
+      - "production"
+      - "development"
+      - "sensitive-data"
+      - "high-risk-operations"
+      - "audit-critical"
+    rules_count: "25-30"
+
+total_rules: "69-79"
+status: "OPERATIONAL"

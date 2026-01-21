@@ -1,0 +1,31 @@
+context: "production"
+tier: "tier2"
+environment: "production"
+
+rules:
+  - id: "PROD-001"
+    name: "Zero Downtime Deployments"
+    description: "All deployments must use blue/green or canary"
+    severity: "critical"
+    
+  - id: "PROD-002"
+    name: "Backup Strategy"
+    description: "Daily backups with tested restore procedures"
+    severity: "critical"
+    
+  - id: "PROD-003"
+    name: "Disaster Recovery"
+    description: "RTO <1 hour, RPO <15 minutes"
+    severity: "critical"
+    
+  - id: "PROD-004"
+    name: "Incident Response"
+    description: "Documented incident response procedures"
+    severity: "high"
+    
+  - id: "PROD-005"
+    name: "High Availability"
+    description: "99.9% uptime SLA requirement"
+    severity: "critical"
+
+status: "DEFINED"
