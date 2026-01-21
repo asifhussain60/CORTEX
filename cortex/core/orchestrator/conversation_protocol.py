@@ -124,8 +124,10 @@ class ConversationProtocol:
             # Execute orchestrator
             result = self.orchestrator.execute(user_input, context)
 
-            # Track tokens (stub implementation)
-            tokens_this_turn = len(user_input.split()) + len(str(result).split())
+            # Track tokens (estimate: 4 chars ≈ 1 token)
+            user_tokens = len(user_input) // 4
+            result_tokens = len(str(result)) // 4
+            tokens_this_turn = user_tokens + result_tokens
             self.total_tokens_used += tokens_this_turn
 
             # Check token limit
@@ -133,17 +135,20 @@ class ConversationProtocol:
                 return Err("Token limit exceeded")
 
             # Create continuation decision
-            from cortex.brain.core.orchestrator.continuation_decision import (
+            from cortex.core.orchestrator.continuation_decision import (
                 ContinuationDecision,
                 ContinuationReason,
             )
 
             decision = ContinuationDecision(
-                should_continue=False,
-                reason=ContinuationReason.COMPLETION,
-                context=result,
-                tokens_used=tokens_this_turn,
-                round_number=self.turn_number,
+                reason=ContinuationReason.COMPLETE,
+                turn_number=self.turn_number,
+                token_usage={
+                    "prompt": user_tokens,
+                    "completion": result_tokens,
+                    "total": tokens_this_turn,
+                },
+                context=result if isinstance(result, dict) else {"result": result},
             )
 
             # Add to history
@@ -157,16 +162,8 @@ class ConversationProtocol:
 
             return Ok(decision)
 
-        except ImportError:
-            # Fallback if ContinuationDecision not available
-            return Ok(
-                {
-                    "should_continue": False,
-                    "reason": "COMPLETION",
-                    "context": context,
-                    "turn": self.turn_number,
-                }
-            )
+        except ImportError as e:
+            return Err(f"Import error: {str(e)}")
         except (ValueError, TypeError) as e:
             return Err(f"Execution failed: {str(e)}")
         except Exception as e:
