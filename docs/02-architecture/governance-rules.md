@@ -1,64 +1,97 @@
 # Governance Rules Reference
 
-**Complete 29 SKULL Rules**  
-**Version:** 1.0.0
+> Auto-generated from cortex-impl-map.yaml on 2026-01-21
+
+**Version:** 1.0.0  
+**Last Updated:** 2026-01-21
 
 ---
 
-## SKULL Framework Rules (Tier 0 - Immutable)
+## Overview
 
-All 29 CORE rules from `cortex_brain/tier0/governance/core-rules.yaml`:
+CORTEX uses a multi-tier governance system with immutable tier precedence (tier0 > tier1 > tier2). Rules are enforced at global, domain, and environment levels.
 
-### Circuit Breaker Rules (CORE-001 to CORE-002)
-- **CORE-001:** Automatic failure detection with timeout
-- **CORE-002:** Circuit breaker transition logic (closed/open/half-open)
+---
 
-### State & Concurrency (CORE-003 to CORE-010)
-- **CORE-003:** Transactional state semantics
-- **CORE-004:** Optimistic concurrency control
-- **CORE-005:** Lock-free registry semantics
-- **CORE-006:** Race condition prevention
-- **CORE-007:** Deadlock detection and recovery
-- **CORE-008:** Orphan state cleanup
-- **CORE-009:** State snapshot interval
-- **CORE-010:** Rollback completeness
+## File Naming Convention
 
-### Observability (CORE-011 to CORE-015)
-- **CORE-011:** JSON structured logging mandatory
-- **CORE-012:** Prometheus metrics exposition
-- **CORE-013:** Distributed tracing (OpenTelemetry)
-- **CORE-014:** Health check endpoints (liveness/readiness)
-- **CORE-015:** Audit trail immutability
+- **Format:** kebab-case, ≤25 characters
+- **Authority:** Filesystem scan + pytest collection + code analysis
+- **Update Frequency:** On major implementation changes
+- **Archive Policy:** Move old versions to `_archives/` with timestamp
 
-### Security (CORE-016 to CORE-029)
-- **CORE-016:** TLS mandatory for API
-- **CORE-017:** API authentication required
-- **CORE-018:** Role-based authorization
-- **CORE-019:** Secret encryption at rest
-- **CORE-020:** Credential rotation policy
-- **CORE-021:** Audit logging of all decisions
-- **CORE-022:** GDPR deletion capability
-- **CORE-023:** HIPAA compliance requirements
-- **CORE-024:** SOC 2 logging requirements
-- **CORE-025:** Zero-trust architecture
-- **CORE-026:** Input validation mandatory
-- **CORE-027:** Output sanitization
-- **CORE-028:** Rate limiting per API key
-- **CORE-029:** DDoS protection enabled
+---
+
+## Documented Rules
+
+| Rule ID | Description |
+|---------|-------------|
+| **CORE-001** | <500 lines per turn |
+| **CORE-008** | Tests before code (TDD) |
+| **CORE-011** | All functions typed |
+| **CORE-012** | Google docstrings |
+| **CORE-013** | No bare except |
+| **CORE-026** | Git checkpoints |
+| **CORE-027** | Audit trail |
+| **CORE-028** | Kebab-case ≤25 chars |
+
+---
+
+## Tier Structure
+
+### Tier 0 - Core Rules (Immutable)
+
+- **Location:** `cortex_brain/tier0/governance/core-rules.yaml`
+- **Rules:** 29 CORE-* rules
+- **Status:** ✅ CREATED (2026-01-20)
+
+### Tier 1 - Domain Rules
+
+- **Location:** `cortex_brain/tier1/governance/domain-rules.yaml`
+- **Rules:** Domain customizations
+- **Status:** 🔲 Empty (pending Phase J)
+
+### Tier 2 - Context Rules
+
+- **Location:** `cortex_brain/tier2/governance/`
+- **Rules:** Safety rules, credential protection, security policies, hallucination prevention
+- **Status:** 🔲 Empty (pending Phase J)
+
+---
+
+## Governance Database
+
+- **Location:** `cortex_brain/state/governance.db`
+- **Status:** ✅ Active
 
 ---
 
 ## Rule Application
 
-Rules apply at all tiers:
-- **Tier 0:** Rules are immutable, enforced globally
+Rules apply with strict precedence:
+- **Tier 0:** Rules are immutable, enforced globally, cannot be overridden
 - **Tier 1:** Domain rules must respect tier0 rules
 - **Tier 2:** Environment rules must respect tier0+tier1
+
+When conflicts occur, tier0 rules override tier1, which override tier2. This ensures immutable global governance cannot be weakened at domain or environment levels.
+
+---
+
+## Governance Compliance Status
+
+| Requirement | Status | Source |
+|-------------|--------|--------|
+| Phases tracked with phase_tracker | ✅ IMPLEMENTED | cortex-builder.prompt.md §3 |
+| core-rules.yaml exists | ✅ CREATED | cortex_brain/tier0/governance/ |
+| Single source of truth | ⏳ PENDING | Per cortex-builder.prompt.md |
 
 ---
 
 ## Related Documentation
 
-- [Multi-Tier Architecture](2-multi-tier-architecture.md)
-- [Security & Governance](6-security-governance.md)
+- [Architecture Overview](./0-overview.md)
+- [Multi-Tier Architecture](./2-multi-tier-architecture.md)
+- [Implementation Phases](./6-implementation-phases.md)
+- [Definition of Ready](./definition-of-ready.md)
+- [Governance Tiers Diagram](../_diagrams/governance-tiers.mmd)
 
