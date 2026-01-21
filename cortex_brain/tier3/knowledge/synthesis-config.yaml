@@ -1,0 +1,93 @@
+---
+# Knowledge Synthesis Configuration
+# AC: KN-004-01 - Cross-Domain Knowledge Synthesis
+
+metadata:
+  ac_id: "KN-004-01"
+  title: "Cross-Domain Knowledge Synthesis"
+  version: "1.0"
+  updated: "2026-01-20"
+
+domain_relationships:
+  GOVERNANCE:
+    - INTENT-ROUTING
+    - HALLUCINATION-PREVENTION
+    - SECURITY
+    
+  INTENT-ROUTING:
+    - GOVERNANCE
+    - EXECUTION-ORCHESTRATION
+    
+  HALLUCINATION-PREVENTION:
+    - GOVERNANCE
+    - SECURITY
+    - TESTING-VALIDATION
+    
+  EXECUTION-ORCHESTRATION:
+    - INTENT-ROUTING
+    - OBSERVABILITY
+    - ERROR-HANDLING
+    
+  DATA-MANAGEMENT:
+    - API-DESIGN
+    - SECURITY
+    
+  OBSERVABILITY:
+    - EXECUTION-ORCHESTRATION
+    - PERFORMANCE
+    - ERROR-HANDLING
+    
+  SECURITY:
+    - GOVERNANCE
+    - HALLUCINATION-PREVENTION
+    - DATA-MANAGEMENT
+    - API-DESIGN
+    
+  API-DESIGN:
+    - DATA-MANAGEMENT
+    - SECURITY
+    - DOCUMENTATION
+    
+  ML-MODELS:
+    - KNOWLEDGE-CURATION
+    - PERFORMANCE
+    
+  KNOWLEDGE-CURATION:
+    - ML-MODELS
+    - DOCUMENTATION
+    
+  TESTING-VALIDATION:
+    - HALLUCINATION-PREVENTION
+    - ERROR-HANDLING
+    - DEPLOYMENT
+    
+  DEPLOYMENT:
+    - TESTING-VALIDATION
+    - OBSERVABILITY
+    - ARCHITECTURE
+    
+  DOCUMENTATION:
+    - API-DESIGN
+    - KNOWLEDGE-CURATION
+    - ARCHITECTURE
+    
+  PERFORMANCE:
+    - OBSERVABILITY
+    - ML-MODELS
+    - ARCHITECTURE
+    
+  ARCHITECTURE:
+    - DEPLOYMENT
+    - DOCUMENTATION
+    - PERFORMANCE
+    
+  ERROR-HANDLING:
+    - OBSERVABILITY
+    - TESTING-VALIDATION
+    - EXECUTION-ORCHESTRATION
+
+synthesis_rules:
+  min_entries_for_synthesis: 2
+  max_domains_per_synthesis: 5
+  confidence_threshold: 0.5
+  relationship_weight: 0.3
