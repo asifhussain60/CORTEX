@@ -13,6 +13,26 @@ metadata:
   blocks_production: true
   prerequisite_for: ["PHASE-E-TDD-IMPLEMENTATION"]
   depends_on: ["impl-export-completion"]
+  
+  # Execution metadata for autonomous loops
+  execution_metadata:
+    machine_track: "mac"
+    sequence_position: 2
+    next_phase_id: "PHASE-E-TDD-IMPLEMENTATION"
+    dependencies: ["impl-export-completion"]
+    
+  completion_verification:
+    success_criteria:
+      - "pytest --collect-only reports 0 RecursionError (baseline: 15)"
+      - "All 15 affected test files collect successfully"
+      - "cortex.orchestrators.core imports without recursion"
+    on_success: "continue_to_next_phase"
+    on_failure: "stop_and_report_blocker"
+    
+  execution_loop_integration:
+    enabled: true
+    can_be_auto_executed: true
+    status_field_update: "execution_config.phase_execution_tracking.mac_track_state.phase_states[1].status"
 
 executive_summary: |
   15 test files fail with RecursionError during collection due to circular imports
