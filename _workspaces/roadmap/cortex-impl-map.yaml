@@ -1,18 +1,19 @@
 # CORTEX Implementation Master Map
-# Version: 3.1-corrected
-# Date: 2026-01-20
-# Authority: Filesystem scan + test inventory + code analysis + hallucination remediation
-# Status: CORRECTED (22 false "IMPLEMENTED" claims removed, 6 verified implementations documented)
+# Version: 3.1-corrected + REMEDIATION PHASES 2-3 ADDED
+# Date: 2026-01-21
+# Authority: Filesystem scan + test inventory + code analysis + review findings validation
+# Status: Phase 1 Complete, Phases 2-3 Planned (Security + Governance Hardening)
 
 metadata:
   title: "CORTEX Implementation Map"
-  description: "Truth-based roadmap reflecting actual implementation, tests, and MCP exposure (CORRECTED v3.1)"
+  description: "Truth-based roadmap reflecting actual implementation, tests, MCP exposure + post-review remediation phases (v3.2)"
   project: "CORTEX"
   version: "3.9-machine-autonomous-tracks"
-  updated: "2026-01-21T08:00:00Z"
+  updated: "2026-01-21T15:30:00Z"
   governance_mode: "STRICT"
   hallucination_remediation: "22 false 'IMPLEMENTED' claims removed per Phase 0 AC-3"
-  latest_completion: "Tier3 Knowledge Ecosystem: 64/244 tests passing. GovernanceManager, ExpertRegistry, AICurator, KnowledgeIndexer, SynthesisEngine implemented."
+  review_remediation: "Review findings validated: 3 CRITICAL gaps identified, 2 NEW remediation phases created for machine:ah"
+  latest_completion: "REMEDIATION-001 Complete: 104/104 tests passing. Next: REMEDIATION-002 (Security Hardening) - blocks production deployment"
   
 execution_config:
   autonomous_mode:
@@ -169,8 +170,35 @@ execution_config:
           depends_on: "ci-cd-production-release"
           completion_date: "2026-01-21"
           ac_count: 10
-      estimated_duration: "4-5 days + 5-7 days (remediation)"
-      actual_duration: "1 day + TBD"
+        
+        - phase_id: "REMEDIATION-002-security-hardening"
+          sequence: 10
+          status: "PLANNED"
+          priority: "P0-CRITICAL"
+          machine: "ah"
+          blocking_production: true
+          depends_on: "REMEDIATION-001-code-quality-hardening"
+          ac_count: 3
+          acs: ["AC-FIX-EXEC-SAFETY-001", "AC-FIX-LLM-VALIDATION-001", "AC-FIX-INJECTION-DEFENSE-001"]
+          estimated_tests: 50
+          estimated_duration: "4-5 days"
+          note: "Security hardening: Remove 1,685 eval/exec calls (RCE fix), validate 40+ LLM confidence scores, add prompt injection defense"
+        
+        - phase_id: "REMEDIATION-003-governance-compliance"
+          sequence: 11
+          status: "PLANNED"
+          priority: "P1-HIGH"
+          machine: "ah"
+          blocking_production: false
+          depends_on: "REMEDIATION-002-security-hardening"
+          ac_count: 3
+          acs: ["AC-FIX-TYPING-001", "AC-FIX-DOCSTRINGS-001", "AC-FIX-INTEGRATION-TESTS-001"]
+          estimated_tests: 80
+          estimated_duration: "5-7 days"
+          note: "Governance compliance: 150+ type hints (CORE-011), 120+ docstrings (CORE-012), 50+ integration tests"
+      
+      estimated_duration: "4-5 days (phase 1) + 4-5 days (phase 2) + 5-7 days (phase 3) = 13-17 days total"
+      actual_duration: "1 day + TBD (phase 2) + TBD (phase 3)"
       blocking: false
       deliverables:
         - "Governance DB sanitization with pre-commit hooks"
