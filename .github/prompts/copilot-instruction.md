@@ -259,6 +259,29 @@ python scripts/detect_hanging_tests.py --threshold 5.0
 | Master Prompt | System prompt | `.github/prompts/CORTEX.prompt.md` |
 | Builder Prompt | AC implementation | `.github/prompts/cortex-builder.prompt.md` |
 | Phase Specs | AC requirements | `_workspaces/roadmap/phases/*.yaml` |
+| Total Recall | Feature discovery | `.github/prompts/cortex-total-recall.prompt.md` |
+| Feedback | Issue generation | `.github/prompts/cortex-feedback.prompt.md` |
+
+---
+
+## Agent Tools
+
+| Agent | Purpose | Entry Point |
+|-------|---------|-------------|
+| **TotalRecallAgent** | Feature discovery & recall | `cortex.tools.total_recall_agent.TotalRecallAgent` |
+| **FeedbackAgent** | Feedback collection & GitHub Issues | `cortex.tools.feedback_agent.FeedbackAgent` |
+
+**Quick Commands:**
+```bash
+# Recall a feature
+python -m cortex.tools.total_recall_agent "circuit breaker" infrastructure
+
+# Generate feedback
+python -m cortex.tools.feedback_agent error yaml
+
+# Generate GitHub Issue markdown
+python -m cortex.tools.feedback_agent general markdown
+```
 
 ---
 

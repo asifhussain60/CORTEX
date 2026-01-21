@@ -7,6 +7,9 @@
 
 Generate structured YAML feedback from CORTEX operations for GitHub Issue upload. Collect metrics, errors, performance data, and improvement opportunities across all operational components.
 
+**Agent Support:** `cortex.tools.feedback_agent.FeedbackAgent`
+**Agent Prompt:** `.github/prompts/utilities/cortex-feedback-agent.prompt.md`
+
 ---
 
 ## Feedback Collection Protocol
