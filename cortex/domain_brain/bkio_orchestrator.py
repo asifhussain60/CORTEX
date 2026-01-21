@@ -65,6 +65,8 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         errors = []
         if self.context is None:
             errors.append("Context is None")
+        if self.domain_brain_api is None:
+            errors.append("Domain brain API is not available")
         return errors
 
     def on_start(self) -> None:
@@ -86,15 +88,18 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         if not docs:
             raise ValueError("No documents provided")
         
-        for doc in docs:
+        total_docs = len(docs)
+        for idx, doc in enumerate(docs):
             try:
                 self._process_document(doc)
                 self.documents_processed += 1
             except Exception as e:
                 self.documents_failed += 1
                 self._log(f"Document processing failed: {str(e)}")
+            
+            # Update progress
+            self.context.progress_percent = ((idx + 1) / total_docs) * 100
         
-<<<<<<< Updated upstream
         return OrchestrationResult(
             success=self.documents_failed == 0,
             documents_processed=self.documents_processed,
@@ -103,15 +108,6 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         )
     
     def run(self) -> Optional[OrchestrationResult]:
-=======
-        return {
-            "documents_processed": self.documents_processed,
-            "documents_failed": self.documents_failed,
-            "conflicts_detected": self.conflicts_detected,
-        }
-    
-    def run(self) -> Optional[Dict[str, Any]]:
->>>>>>> Stashed changes
         """Run the orchestrator (alias for execute).
         
         Returns:
@@ -138,12 +134,9 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         fmt = doc.get("format", "yaml")
         content = doc.get("content", {})
         
-<<<<<<< Updated upstream
         # Update context with domain name
         self.context.domain_name = domain_id
         
-=======
->>>>>>> Stashed changes
         # Validate format
         try:
             doc_format = DocumentFormat(fmt) if fmt in [f.value for f in DocumentFormat] else None
@@ -160,7 +153,7 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         if not domain:
             domain = Domain(
                 domain_id=domain_id,
-                name=name,
+                name=name or domain_id,  # Default name to domain_id if not provided
                 description=description,
             )
         else:
@@ -217,6 +210,7 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
         entity_type_str = entity_data.get("type", "resource").lower()
         name = entity_data.get("name", "")
         description = entity_data.get("description", "")
+        metadata = entity_data.get("metadata", {})
         
         entity_type = self._get_entity_type(entity_type_str)
         
@@ -259,6 +253,7 @@ class BusinessKnowledgeIngestionOrchestrator(OrchestratorBase):
             name=name,
             description=description,
             source="BKIO",
+            metadata=metadata,
         )
         
         domain.entities[entity_id] = entity
