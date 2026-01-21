@@ -2,10 +2,31 @@
 
 **Role:** Implement phases from `_workspaces/roadmap/cortex-impl-map.yaml` (v3.1-corrected truth-based) with strict tier0 governance.
 
+## Machine-Specific Execution
+
+**When user specifies `machine:mac` or `machine:win`:**
+1. **IMMEDIATELY** filter `cortex-impl-map.yaml` for phases with matching `machine` property
+2. Identify next incomplete phase (status != "COMPLETED") for that machine
+3. Begin autonomous execution WITHOUT asking for confirmation
+4. Execute all ACs in sequence until phase complete
+5. Move to next phase for same machine automatically
+
+**Machine Property Behavior:**
+- `machine: mac` → Execute only mac-assigned phases
+- `machine: win` → Execute only win-assigned phases
+- No machine specified → Execute any available phase (default behavior)
+- Mixed machines in session → Complete all phases for specified machine first
+
+**Example:**
+```
+User: "continue with machine:mac"
+Assistant: [Filters for mac phases] → [Executes next incomplete mac phase] → [Moves to next mac phase]
+```
+
 ## Quick Reference
 
 **Before implementing any phase:**
-1. Check `cortex-impl-map.yaml` → verify implementation status
+1. Check `cortex-impl-map.yaml` → verify implementation status + filter by machine if specified
 2. Load `_workspaces/roadmap/phases/impl-*.yaml` → Phase specifications
 3. Reference `cortex/core/governance/` → Governance rules (Note: core-rules.yaml missing)
 4. Create git checkpoint: `git commit -m "checkpoint: before impl-XXX"`
@@ -114,11 +135,21 @@
 ## Status Commands
 
 - `/status <phase>` → Current phase status from cortex-impl-map.yaml
-- `/next` → Next stub/partial implementation
+- `/status machine:mac` → Show all mac-assigned phases with status
+- `/status machine:win` → Show all win-assigned phases with status
+- `/next` → Next stub/partial implementation (any machine)
+- `/next machine:mac` → Next incomplete phase for mac
+- `/next machine:win` → Next incomplete phase for win
 - `/mcp-status` → MCP tool implementation status
 - `/governance-check` → Compliance verification (Note: core-rules.yaml missing)
 
 ## EXECUTIVE SUMMARY FORMAT
+
+**For machine-specific execution:**
+When executing with `machine:mac` or `machine:win`, skip the "Proceed to PHASE-YY?" question.
+Automatically continue to next phase for same machine until all machine-specific phases complete.
+
+**Standard format (no machine specified):**
 
 On phase completion, output ONLY this format (no code snippets):
 
@@ -127,7 +158,7 @@ On phase completion, output ONLY this format (no code snippets):
                     PHASE COMPLETION SUMMARY
 ═══════════════════════════════════════════════════════════════
 
-✅ COMPLETED: PHASE-XX - [Phase Title]
+✅ COMPLETED: PHASE-XX - [Phase Title] [machine:mac/win if specified]
 
 [Single paragraph describing what was delivered - no code]
 
@@ -138,7 +169,7 @@ Acceptance Criteria Completed:
 
 ───────────────────────────────────────────────────────────────
 
-⏭️ NEXT: PHASE-YY - [Next Phase Title]
+⏭️ NEXT: PHASE-YY - [Next Phase Title] [machine:mac/win if filtered]
 
 [Single paragraph describing what will be delivered - no code]
 
@@ -148,7 +179,21 @@ Acceptance Criteria Planned:
 
 ═══════════════════════════════════════════════════════════════
 
-Proceed to PHASE-YY? (yes/no)
+[If machine specified: "Continuing to PHASE-YY (machine:X)..."]
+[If no machine: "Proceed to PHASE-YY? (yes/no)"]
+```
+
+**If all phases for machine complete:**
+```
+═══════════════════════════════════════════════════════════════
+        🎉 ALL [MAC/WIN] PHASES COMPLETE 🎉
+═══════════════════════════════════════════════════════════════
+
+All phases assigned to machine:[mac/win] are now completed.
+Total phases delivered: [N]
+Remaining phases for other machines: [M]
+
+═══════════════════════════════════════════════════════════════
 ```
 
 **If all phases locked:**
@@ -168,6 +213,14 @@ Production ready: ✅
 
 ## RESPONSE GUIDELINES
 
+### Machine-Specific Execution Mode
+When user specifies `machine:mac` or `machine:win`:
+- **Fully autonomous** - execute all phases for that machine without pausing
+- **No confirmation prompts** - move directly from one phase to next
+- **Filter strictly** - only execute phases with matching `machine` property
+- **Status updates only** - brief summary after each phase completion
+- **Continue until exhausted** - stop only when all machine-specific phases complete
+
 ### During AC Execution
 - **Silent execution** - no output between ACs
 - Create files, run tests, update YAML without commentary
@@ -178,11 +231,17 @@ Production ready: ✅
 - If blocked, show minimal error context and proposed fix
 - Continue execution after fix
 
-### Forbidden Outputs
+### Forbidden Outputs (General Mode)
 - ❌ Code snippets in summaries
 - ❌ "Would you like me to..." questions during phase
 - ❌ Step-by-step narration
 - ❌ Alternative paths or options (until all phases locked)
+
+### Forbidden Outputs (Machine-Specific Mode)
+- ❌ "Proceed to next phase?" questions
+- ❌ Any user confirmation prompts between phases
+- ❌ Detailed explanations between phases
+- ✅ Only brief status updates showing completion and next phase
 
 ---
 
@@ -256,10 +315,40 @@ Phase E: TDD Implementation (15-20 days)
 ## CRITICAL RULES
 
 1. **ONE PATH FORWARD**: Until all phases are marked completed in cortex-impl-map.yaml, the only option is "Proceed to next phase? (yes/no)"
+   - **EXCEPTION**: When `machine:mac` or `machine:win` is specified, skip confirmation and execute all phases for that machine autonomously
 2. **NO ALTERNATIVES**: Do not present other options, suggestions, or detours
 3. **AUTONOMOUS**: Execute all ACs in a phase without pausing
 4. **MINIMAL OUTPUT**: Silent during execution, summary on completion
 5. **NO CODE IN SUMMARIES**: Executive summaries are human-readable, no snippets
+6. **MACHINE FILTERING**: When machine specified, ONLY execute phases with matching `machine` property in cortex-impl-map.yaml
+
+## MACHINE-SPECIFIC WORKFLOW
+
+**User Command Pattern:**
+- `continue with machine:mac` → Filter + execute all mac phases
+- `continue with machine:win` → Filter + execute all win phases
+- `continue` → Execute next available phase (any machine)
+
+**Execution Flow (machine specified):**
+```
+1. Load cortex-impl-map.yaml
+2. Filter phases WHERE machine == specified_machine AND status != "COMPLETED"
+3. Sort by priority (P0 > P1 > P2 > P3)
+4. FOR EACH filtered phase:
+   a. Load phase specification file
+   b. Execute all ACs in sequence (RED → GREEN → REFACTOR)
+   c. Run tests to verify
+   d. Update cortex-impl-map.yaml status
+   e. Output brief completion summary
+   f. Move to next phase (NO PAUSE)
+5. When exhausted: Output "All [MACHINE] phases complete"
+```
+
+**Phase Selection Priority:**
+1. P0-CRITICAL blocking phases
+2. Phases with unmet dependencies skipped
+3. P1-HIGH, P2-MEDIUM, P3-LOW in order
+4. Within same priority: earliest estimated_effort first
 
 ---
 
