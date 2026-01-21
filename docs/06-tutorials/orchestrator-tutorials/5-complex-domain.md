@@ -11,7 +11,7 @@ Complex domain orchestrators handle sophisticated business logic with governance
 
 - All previous tutorials completed
 - [Building Your First Orchestrator](../../01-getting-started/2-first-orchestrator.md)
-- [Governance Framework](../../02-architecture/6-security-governance.md)
+- [Governance Framework](../../02-architecture/governance-rules.md)
 
 ## Architecture
 
@@ -284,6 +284,6 @@ async def test_complex_orchestrator_full_flow():
 ## Related Resources
 
 - [Building Your First Orchestrator](../../01-getting-started/2-first-orchestrator.md)
-- [Governance Framework](../../02-architecture/6-security-governance.md)
+- [Governance Framework](../../02-architecture/governance-rules.md)
 - [Orchestration Engine](../../02-architecture/3-orchestration-engine.md)
 - [Domain Brain](../../02-architecture/4-domain-brain.md)

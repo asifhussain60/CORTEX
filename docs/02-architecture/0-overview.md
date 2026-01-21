@@ -69,27 +69,30 @@ Business knowledge ingestion and conflict resolution:
 
 ### Canonical Package Structure
 
-```
-cortex/               # Canonical package (413 files)
-├── api/              # API layer
-├── brain/            # Brain integration logic (269 files)
-├── core/             # Core utilities
-├── infrastructure/   # Infrastructure components
-├── mcp/              # MCP server + 14 stub tools
-├── orchestrators/    # 9 orchestrator classes (5 protocols, 4 concrete)
-└── tools/            # Reusable tooling
-
-cortex_brain/         # State management (41 files)
-├── tier0/            # Global governance (core-rules.yaml)
-├── tier1/            # Domain rules (empty)
-├── tier2/            # Context rules (empty)
-├── state/            # governance.db + runtime state
-└── ...               # Domain brain, releases, governance
-
-tests/                # Test location
-├── unit/             # ~300 test files
-├── integration/      # ~80 test files
-└── e2e/              # ~29 test files
+```mermaid
+flowchart TB
+    subgraph CORTEX["cortex/ (413 files)"]
+        API["api/<br/>API layer"]
+        BRAIN["brain/<br/>Brain integration (269 files)"]
+        CORE["core/<br/>Core utilities"]
+        INFRA["infrastructure/<br/>Infrastructure"]
+        MCP["mcp/<br/>MCP server + 14 stub tools"]
+        ORCH["orchestrators/<br/>9 classes"]
+        TOOLS["tools/<br/>Reusable tooling"]
+    end
+    
+    subgraph CORTEX_BRAIN["cortex_brain/ (41 files)"]
+        T0["tier0/<br/>Global governance"]
+        T1["tier1/<br/>Domain rules"]
+        T2["tier2/<br/>Context rules"]
+        STATE["state/<br/>governance.db"]
+    end
+    
+    subgraph TESTS["tests/"]
+        UNIT["unit/<br/>~300 files"]
+        INT["integration/<br/>~80 files"]
+        E2E["e2e/<br/>~29 files"]
+    end
 ```
 
 ---

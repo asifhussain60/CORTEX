@@ -10,7 +10,7 @@
 1. **Read This Page** - You're here! Quick overview of key information
 2. **Installation:** [01-getting-started/0-installation.md](../01-getting-started/0-installation.md)
 3. **First Steps:** [01-getting-started/1-quickstart.md](../01-getting-started/1-quickstart.md)
-4. **Architecture:** [02-architecture/0-overview.md](../02-architecture/0-overview.md)
+4. **Architecture:** [02-architecture/1-system-overview.md](../02-architecture/1-system-overview.md)
 
 ---
 
@@ -114,14 +114,13 @@ Final:     100% █████████████████████�
 
 ### I Want to Understand the System
 
-**Start here:** [02-architecture/0-overview.md](../02-architecture/0-overview.md)
+**Start here:** [02-architecture/1-system-overview.md](../02-architecture/1-system-overview.md)
 - System architecture diagram
-- 34 phases overview
-- 4 critical issues and fixes
+- Phase overview
 - Production readiness timeline
 
 Then dive into:
-- [2-multi-tier-architecture.md](../02-architecture/2-multi-tier-architecture.md) - Tier 0/1/2 governance
+- [governance-rules.md](../02-architecture/governance-rules.md) - Tier 0/1/2 governance
 - [3-orchestration-engine.md](../02-architecture/3-orchestration-engine.md) - Orchestrator lifecycle
 - [governance-rules.md](../02-architecture/governance-rules.md) - 29 SKULL rules
 
@@ -134,9 +133,7 @@ Then dive into:
 - Error handling
 
 See also:
-- [orchestrators.md](../03-api-reference/rest-api/orchestrators.md) - Orchestrator API
-- [domains.md](../03-api-reference/rest-api/domains.md) - Domain API
-- [governance.md](../03-api-reference/rest-api/governance.md) - Governance API
+- [REST API Guide](../03-api-reference/rest-api/0-guide.md) - Complete REST API reference
 
 ### I Want to Use MCP Protocol
 
@@ -166,9 +163,8 @@ Then see:
 
 Then choose your environment:
 - [Local Development](../04-guides/deployment/1-local-development.md)
-- [Staging Deployment](../04-guides/deployment/2-staging-deployment.md)
-- [Production Deployment](../04-guides/deployment/3-production-deployment.md)
-- [Azure Deployment](../04-guides/deployment/4-azure-deployment.md)
+- [MkDocs Server](../04-guides/deployment/2-mkdocs-server.md)
+- [FAQ](../04-guides/deployment/4-faq.md)
 
 ### I'm Operating CORTEX
 
@@ -282,7 +278,7 @@ See [governance-rules.md](../02-architecture/governance-rules.md) for complete r
 
 ## Next Steps
 
-1. **For Architects:** Read [02-architecture/0-overview.md](../02-architecture/0-overview.md) for system design
+1. **For Architects:** Read [02-architecture/1-system-overview.md](../02-architecture/1-system-overview.md) for system design
 2. **For Developers:** Read [04-guides/integration/0-overview.md](../04-guides/integration/0-overview.md) for integration patterns
 3. **For Operators:** Read [04-guides/deployment/0-overview.md](../04-guides/deployment/0-overview.md) for deployment
 4. **For Learners:** See [06-tutorials/0-index.md](../06-tutorials/0-index.md) for hands-on tutorials
@@ -294,10 +290,10 @@ See [governance-rules.md](../02-architecture/governance-rules.md) for complete r
 | Term | Definition | See Also |
 |------|------------|----------|
 | **Tier 0** | Global immutable governance rules (29 SKULL rules) | [Governance](../02-architecture/governance-rules.md) |
-| **Tier 1** | Domain-specific rules and customizations | [Multi-tier arch](../02-architecture/2-multi-tier-architecture.md) |
-| **Tier 2** | Environment-specific rules (safety, security) | [Multi-tier arch](../02-architecture/2-multi-tier-architecture.md) |
+| **Tier 1** | Domain-specific rules and customizations | [Governance](../02-architecture/governance-rules.md) |
+| **Tier 2** | Environment-specific rules (safety, security) | [Governance](../02-architecture/governance-rules.md) |
 | **Orchestrator** | Stateful business process executor | [Orchestration engine](../02-architecture/3-orchestration-engine.md) |
-| **Domain Brain** | Business knowledge ingestion & conflict resolution | [Domain brain](../02-architecture/7-domain-brain.md) |
+| **Domain Brain** | Business knowledge ingestion & conflict resolution | [Domain brain](../02-architecture/4-domain-brain.md) |
 | **MCP Protocol** | Model Context Protocol for AI assistant integration | [MCP spec](../03-api-reference/mcp-protocol/0-specification.md) |
 | **Circuit Breaker** | Failure detection pattern for resilience | [Resilience patterns](../02-architecture/5-resilience-patterns.md) |
 | **Saga Compensation** | Distributed transaction rollback pattern | [Resilience patterns](../02-architecture/5-resilience-patterns.md) |

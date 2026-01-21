@@ -28,4 +28,4 @@ Build enterprise-grade orchestrators with governance integration.
 
 - [Orchestration Engine Architecture](../../02-architecture/3-orchestration-engine.md)
 - [Building Your First Orchestrator](../../01-getting-started/2-first-orchestrator.md)
-- [Governance Framework](../../02-architecture/6-security-governance.md)
+- [Governance Framework](../../02-architecture/governance-rules.md)

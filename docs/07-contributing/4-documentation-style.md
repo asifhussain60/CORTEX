@@ -46,4 +46,4 @@ Always update the "Last Updated" date when modifying documentation.
 ## Related Resources
 
 - [Contributing Guidelines](1-contributing-guidelines.md)
-- [Development Setup](../04-guides/deployment/2-development-setup.md)
+- [Local Development](../04-guides/deployment/1-local-development.md)

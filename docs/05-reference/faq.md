@@ -82,18 +82,18 @@ A: Use Domain Brain BKIO interface. See [Domain Brain Guide](../02-architecture/
 
 
 
-### Can I run CORTEX on Windows?**Q: Is CORTEX HIPAA-compliant?**  
+### Can I run CORTEX on Windows?
 
+**Q: Is CORTEX HIPAA-compliant?**  
 A: See [Compliance Mappings](compliance-mappings.md) for regulatory requirements.
 
 Yes, but we recommend using **WSL2** (Windows Subsystem for Linux). Native Windows support is experimental.
 
 **Q: How is audit trail secured?**  
+A: Audit logs are immutable and encrypted. See [Governance Rules](../02-architecture/governance-rules.md) for security details.
 
-```bashA: Audit logs are immutable and encrypted. See [Security Governance](../02-architecture/6-security-governance.md).
-
+```bash
 # Install WSL2
-
 wsl --install -d Ubuntu-22.04---
 
 
