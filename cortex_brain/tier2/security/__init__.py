@@ -151,9 +151,8 @@ class SecurityContext:
         return self.credentials.get(key)
 
 
-@dataclass
-class SecurityViolation:
-    """Security violation event.
+class SecurityViolation(Exception):
+    """Security violation exception.
 
     Attributes:
         violation_type: Type of violation.
@@ -163,26 +162,42 @@ class SecurityViolation:
         context: Additional context.
     """
 
-    violation_type: ViolationType
-    severity: int
-    description: str
-    timestamp: datetime = None
-    context: Dict[str, Any] = None
-
-    def __post_init__(self) -> None:
-        """Initialize defaults."""
-        if self.timestamp is None:
-            self.timestamp = datetime.now()
-        if self.context is None:
-            self.context = {}
+    def __init__(
+        self,
+        violation_type: ViolationType,
+        severity: int,
+        description: str,
+        timestamp: datetime = None,
+        context: Dict[str, Any] = None,
+    ) -> None:
+        """Initialize security violation.
+        
+        Args:
+            violation_type: Type of violation.
+            severity: Severity level (1-5).
+            description: Violation description.
+            timestamp: When violation occurred.
+            context: Additional context.
+        """
+        self.violation_type = violation_type
+        self.severity = severity
+        self.description = description
+        self.timestamp = timestamp if timestamp else datetime.now()
+        self.context = context if context else {}
+        super().__init__(self.description)
 
 
 class SecurityValidator:
     """Validates input for security violations."""
 
-    def __init__(self) -> None:
-        """Initialize security validator."""
+    def __init__(self, strict_mode: bool = False) -> None:
+        """Initialize security validator.
+        
+        Args:
+            strict_mode: Enable strict validation mode.
+        """
         self.violations: list = []
+        self.strict_mode = strict_mode
 
     def validate(self, input_data: Any) -> bool:
         """Validate input for security issues.
@@ -208,6 +223,144 @@ class SecurityValidator:
                     )
                     self.violations.append(violation)
                     return False
+        
+        return True
+    
+    def validate_input(self, input_data: str, field_name: str = "") -> bool:
+        """Validate input data for security violations.
+        
+        Args:
+            input_data: Input string to validate.
+            field_name: Field name for context.
+            
+        Returns:
+            True if valid.
+            
+        Raises:
+            SecurityViolation: If security violation detected in strict mode.
+        """
+        # SQL injection patterns
+        sql_patterns = [
+            "union select",
+            "insert into",
+            "delete from",
+            "drop table",
+            "' or '1'='1",
+            "' or 1=1",
+            "--",
+            "/*",
+            "*/",
+            "exec(",
+            "execute(",
+        ]
+        
+        # XSS patterns
+        xss_patterns = [
+            "<script",
+            "javascript:",
+            "onerror=",
+            "onload=",
+            "<iframe",
+        ]
+        
+        # Path traversal patterns
+        path_traversal_patterns = [
+            "../",
+            "..\\",
+            "/etc/passwd",
+            "c:\\windows",
+            "..%2f",
+            "..%5c",
+        ]
+        
+        # Command injection patterns
+        command_patterns = [
+            "; rm -rf",
+            "| cat",
+            "`whoami`",
+            "$(whoami)",
+            "; ls",
+            "| ls",
+            "& dir",
+        ]
+        
+        # Script injection patterns
+        script_patterns = [
+            "__import__",
+            "eval(",
+            "exec(",
+            "pickle.loads",
+            "import os",
+            "import sys",
+            "__builtins__",
+        ]
+        
+        lower_input = input_data.lower()
+        
+        # Check SQL injection
+        for pattern in sql_patterns:
+            if pattern in lower_input:
+                violation = SecurityViolation(
+                    violation_type=ViolationType.INJECTION_ATTACK,
+                    severity=5,
+                    description=f"SQL injection detected in {field_name}: {pattern}",
+                )
+                self.violations.append(violation)
+                if self.strict_mode:
+                    raise violation
+                return False
+        
+        # Check XSS
+        for pattern in xss_patterns:
+            if pattern in lower_input:
+                violation = SecurityViolation(
+                    violation_type=ViolationType.INJECTION_ATTACK,
+                    severity=4,
+                    description=f"XSS pattern detected in {field_name}: {pattern}",
+                )
+                self.violations.append(violation)
+                if self.strict_mode:
+                    raise violation
+                return False
+        
+        # Check path traversal
+        for pattern in path_traversal_patterns:
+            if pattern in lower_input:
+                violation = SecurityViolation(
+                    violation_type=ViolationType.INJECTION_ATTACK,
+                    severity=4,
+                    description=f"Path traversal detected in {field_name}: {pattern}",
+                )
+                self.violations.append(violation)
+                if self.strict_mode:
+                    raise violation
+                return False
+        
+        # Check command injection
+        for pattern in command_patterns:
+            if pattern in lower_input:
+                violation = SecurityViolation(
+                    violation_type=ViolationType.INJECTION_ATTACK,
+                    severity=5,
+                    description=f"Command injection detected in {field_name}: {pattern}",
+                )
+                self.violations.append(violation)
+                if self.strict_mode:
+                    raise violation
+                return False
+        
+        # Check script injection
+        for pattern in script_patterns:
+            if pattern in lower_input:
+                violation = SecurityViolation(
+                    violation_type=ViolationType.INJECTION_ATTACK,
+                    severity=5,
+                    description=f"Script injection detected in {field_name}: {pattern}",
+                )
+                self.violations.append(violation)
+                if self.strict_mode:
+                    raise violation
+                return False
         
         return True
 
