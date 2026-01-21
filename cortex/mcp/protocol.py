@@ -4,7 +4,7 @@ Author: CORTEX Framework
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from enum import Enum
 
 
@@ -53,6 +53,11 @@ class ToolParameter:
     name: str
     type: str
     required: bool = False
+    description: str = ""
+    default: Optional[Any] = None
+    min_value: Optional[float] = None
+    max_value: Optional[float] = None
+    enum: Optional[List[str]] = None
 
 
 @dataclass
