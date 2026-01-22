@@ -7,6 +7,7 @@ import subprocess
 from pathlib import Path
 from typing import Generator
 from unittest.mock import MagicMock, patch
+import importlib.util
 
 import pytest
 
@@ -52,7 +53,10 @@ def precommit_module():
     Returns:
         The validate_sanitization module.
     """
-    from scripts.deployment import validate_sanitization
+    module_path = Path(__file__).parent.parent.parent / "cortex" / "scripts-root-archive" / "deployment" / "validate_sanitization.py"
+    spec = importlib.util.spec_from_file_location("validate_sanitization", module_path)
+    validate_sanitization = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(validate_sanitization)
     return validate_sanitization
 
 
