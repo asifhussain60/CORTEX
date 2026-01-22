@@ -1,0 +1,83 @@
+# Event-Driven Communication Pattern
+
+pattern_id: "event-driven-001"
+name: "Asynchronous Event-Driven"
+pattern_type: "event-driven"
+description: |
+  Asynchronous event-driven pattern where events are published and
+  consumers react to events independently. No direct response expected.
+  
+  Used for: Notifications, audit logging, async workflows, triggers
+
+required_fields:
+  - "event_id"
+  - "event_type"
+  - "event_source"
+  - "timestamp"
+  - "data"
+
+optional_fields:
+  - "correlation_id"
+  - "metadata"
+  - "ttl_seconds"
+
+event_structure:
+  event_id: "uuid"
+  event_type: "string (domain.entity.action format)"
+  event_source: "string (source component identifier)"
+  timestamp: "ISO 8601 datetime"
+  data: "object (event payload)"
+
+validation_rules:
+  event_type_format: "^[a-z]+\\.[a-z]+\\.[a-z]+$"  # domain.entity.action
+  event_source_format: "^[a-z_]+$"
+  timestamp_format: "iso8601"
+  ttl_seconds_max: 86400  # 24 hours
+
+event_types:
+  orchestration:
+    - "orchestrator.phase.started"
+    - "orchestrator.phase.completed"
+    - "orchestrator.phase.failed"
+  
+  governance:
+    - "governance.rule.violated"
+    - "governance.audit.logged"
+    - "governance.tier.accessed"
+  
+  knowledge:
+    - "knowledge.query.executed"
+    - "knowledge.document.indexed"
+    - "knowledge.backend.updated"
+
+examples:
+  - event:
+      event_id: "evt_550e8400-e29b-41d4-a716-446655440000"
+      event_type: "orchestrator.phase.completed"
+      event_source: "master_orchestrator"
+      timestamp: "2026-01-22T22:00:00Z"
+      data:
+        phase: "comprehension"
+        duration_ms: 350
+        status: "success"
+      metadata:
+        user_id: "user_123"
+        session_id: "session_456"
+
+  - event:
+      event_id: "evt_123e4567-e89b-12d3-a456-426614174000"
+      event_type: "governance.rule.violated"
+      event_source: "governance_registry"
+      timestamp: "2026-01-22T22:01:00Z"
+      data:
+        rule_id: "CORE-017"
+        violation: "Unauthorized tier access"
+        severity: "HIGH"
+      correlation_id: "550e8400-e29b-41d4-a716-446655440000"
+
+compliance_rules:
+  - "Event must include unique event_id"
+  - "Event type must follow domain.entity.action format"
+  - "Timestamp must be ISO 8601 format"
+  - "Event source must identify originating component"
+  - "Events are fire-and-forget (no response expected)"
