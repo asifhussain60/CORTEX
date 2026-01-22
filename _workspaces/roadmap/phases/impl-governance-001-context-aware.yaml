@@ -11,7 +11,6 @@ metadata:
   priority: "P0"
   estimated_effort: "4-6 days"
   source_spec: "docs/GOVERNANCE-INTELLIGENCE-BRIEF.md"
-  status: "NOT_STARTED"
   locked: false
 
 objective:

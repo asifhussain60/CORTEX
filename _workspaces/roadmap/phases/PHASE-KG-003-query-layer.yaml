@@ -10,7 +10,6 @@ metadata:
   subtitle: "Transparent KG Queries with SQLite Fallback"
   phase_sequence: "KG-003 (after PHASE-KG-002-entity-sync)"
   priority: "P2-OPTIONAL"
-  status: "NOT_STARTED"
   blocks_production: false
   machine: "eval"
   

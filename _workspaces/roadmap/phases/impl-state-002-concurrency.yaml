@@ -7,7 +7,6 @@ metadata:
   phase_id: "impl-state-002-concurrency"
   title: "State Management and Concurrency Safety"
   priority: "P0-CRITICAL"
-  status: "NOT_STARTED"
   estimated_effort: "6-8 days"
   blocks_production: true
   dependencies: ["impl-infra-001-resilience"]

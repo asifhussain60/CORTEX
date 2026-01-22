@@ -12,7 +12,6 @@ phase_metadata:
   version: "1.0.0"
   created_date: "2026-01-21"
   owner: "cortex-governance"
-  status: "PLANNED"
   
 phase_governance:
   tier: "TIER-0-CRITICAL"

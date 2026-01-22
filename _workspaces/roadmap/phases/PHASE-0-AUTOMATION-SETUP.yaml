@@ -10,7 +10,6 @@ metadata:
   phase_id: "phase-0-automation"
   name: "Automation Infrastructure for 100% Confidence"
   priority: "P0-CRITICAL"
-  status: "in_progress"
   created_date: "2026-01-20"
   owner: "CORTEX Team"
   estimated_effort: "6 hours"

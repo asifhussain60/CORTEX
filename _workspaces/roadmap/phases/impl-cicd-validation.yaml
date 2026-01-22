@@ -9,8 +9,6 @@ metadata:
   description: "Validate GitHub Actions, pre-commit hooks, rollback automation, and deployment health checks"
   priority: "P1-HIGH"
   estimated_effort: "2-3 days"
-  status: "COMPLETED"
-  completion_date: "2026-01-21"
   blocks_production: false  # Can deploy manually, but risky
   recommended_before_production: true
 
@@ -217,16 +215,12 @@ rollback_procedure:
 health_check_specification:
   endpoint: "/health"
   response_format:
-    status: "healthy|degraded|unhealthy"
     checks:
       application:
-        status: "ok|error"
         version: "1.0.0"
       database:
-        status: "ok|error"
         latency_ms: 5
       cache:
-        status: "ok|error"
         latency_ms: 1
       dependencies:
         governance_db: "ok|error"

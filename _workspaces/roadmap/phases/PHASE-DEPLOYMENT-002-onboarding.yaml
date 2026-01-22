@@ -10,7 +10,6 @@ metadata:
   description: "Auto-install requirements, configure VSCode, validate toolchain, bootstrap MCP"
   priority: "P1-HIGH"
   estimated_effort: "3 days"
-  status: "NOT_STARTED"
   blocks_production: false
   machine: "ah"
 

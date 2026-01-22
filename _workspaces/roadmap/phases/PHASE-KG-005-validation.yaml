@@ -10,7 +10,6 @@ metadata:
   subtitle: "End-to-End Correctness, Performance, and Backward Compatibility"
   phase_sequence: "KG-005 (after PHASE-KG-004-routing-optimization)"
   priority: "P2-OPTIONAL"
-  status: "NOT_STARTED"
   blocks_production: false
   machine: "eval"
   

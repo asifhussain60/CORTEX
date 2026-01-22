@@ -10,7 +10,6 @@ metadata:
   description: "Sanitize development artifacts, reset to day-zero data, gate main branch"
   priority: "P1-HIGH"
   estimated_effort: "2 days"
-  status: "NOT_STARTED"
   blocks_production: true
   machine: "ah"  # Deployment track assigned to ah
 

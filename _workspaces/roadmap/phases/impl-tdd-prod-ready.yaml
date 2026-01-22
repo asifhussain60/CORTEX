@@ -6,7 +6,6 @@ metadata:
   id: "impl-tdd-prod-ready"
   title: "TDD Implementation Gap - Production Readiness"
   priority: "P0-CRITICAL"
-  status: "PLANNED"
   blocks_production: true
   
 executive_summary: |
