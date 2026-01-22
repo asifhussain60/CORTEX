@@ -792,23 +792,29 @@ audit_and_validation:
       timestamp: "[E1 phase]"
     
     pytest_execution_e2:
-      command: "pytest tests/unit/core/test_*.py tests/unit/infrastructure/test_*.py -v"
+      command: "pytest tests/unit/core/test_*.py tests/unit/infrastructure/test_*.py -n auto -v"
       expected_result: "180+ passed"
+      parallel_workers: "auto (min 4, max 20)"
       status: "[To be verified during E2]"
     
     pytest_execution_e3:
-      command: "pytest tests/unit/core/knowledge/ tests/unit/governance/ tests/unit/orchestrators/ -v"
+      command: "pytest tests/unit/core/knowledge/ tests/unit/governance/ tests/unit/orchestrators/ -n auto -v"
       expected_result: "450+ passed"
+      parallel_workers: "auto (min 4, max 20)"
       status: "[To be verified during E3]"
     
     pytest_execution_e4:
-      command: "pytest tests/unit/intent_router/ tests/unit/domain_brain/ tests/unit/mcp/ -v"
+      command: "pytest tests/unit/intent_router/ tests/unit/domain_brain/ tests/unit/mcp/ -n auto -v"
       expected_result: "7350+ passed"
+      parallel_workers: "auto (min 4, max 20)"
       status: "[To be verified during E4]"
     
     pytest_execution_e5:
-      command: "pytest tests/unit/ -v"
+      command: "pytest tests/unit/ -n auto -v"
       expected_result: "7547 passed, 0 failed"
+      parallel_workers: "auto (min 4, max 20)"
+      mandatory_parallel: true
+      rationale: "ALL production tests MUST support parallel execution"
       status: "[To be verified during E5]"
     
     type_checking_validation:
