@@ -11,7 +11,6 @@ metadata:
   subtitle: "Establish Knowledge Graph Infrastructure for Optional Domain Brain Backend"
   phase_sequence: "KG-001 (after PHASE-E-TDD-IMPLEMENTATION complete)"
   priority: "P2-OPTIONAL"
-  status: "NOT_STARTED"
   blocks_production: false
   machine: "eval"
   

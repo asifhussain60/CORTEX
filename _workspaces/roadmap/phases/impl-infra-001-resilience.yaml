@@ -7,7 +7,6 @@ metadata:
   phase_id: "impl-infra-001-resilience"
   title: "Infrastructure Resilience Foundation"
   priority: "P0-CRITICAL"
-  status: "NOT_STARTED"
   estimated_effort: "5-7 days"
   blocks_production: true
   dependencies: []

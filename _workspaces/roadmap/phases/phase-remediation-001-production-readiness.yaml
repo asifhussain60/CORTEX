@@ -128,7 +128,6 @@ phases:
   phase_a:
     id: "Phase A - Tier Consolidation"
     duration: "1 day (4-6 hours)"
-    status: "NOT_STARTED"
     priority: "P0-CRITICAL"
     blocks: ["Phase B", "Phase C", "impl-arch-011", "impl-arch-022", "impl-arch-025"]
     depends_on: []
@@ -185,7 +184,6 @@ phases:
   phase_b:
     id: "Phase B - MCP Registry Centralization"
     duration: "2 days (8-10 hours)"
-    status: "NOT_STARTED"
     priority: "P0-CRITICAL"
     depends_on: ["Phase A"]
     blocks: ["Phase C", "impl-arch-022-mcp-compliance"]
@@ -241,7 +239,6 @@ phases:
   phase_c:
     id: "Phase C - Fix Circular Imports"
     duration: "2 days (8-12 hours)"
-    status: "NOT_STARTED"
     priority: "P0-CRITICAL"
     depends_on: ["Phase A", "Phase B"]
     blocks: ["Phase D", "Phase E"]
@@ -285,7 +282,6 @@ phases:
   phase_d:
     id: "Phase D - Create Missing Modules (Stubs)"
     duration: "3-4 days (24-32 hours)"
-    status: "NOT_STARTED"
     priority: "P0-HIGH (follows C)"
     depends_on: ["Phase C"]
     blocks: ["Phase E"]
@@ -331,7 +327,6 @@ phases:
   phase_e:
     id: "Phase E - Implement TDD Production Readiness (125 Modules)"
     duration: "2-3 weeks (15-20 days)"
-    status: "NOT_STARTED"
     priority: "P2-MEDIUM (follows D)"
     depends_on: ["Phase D"]
     
@@ -457,7 +452,6 @@ validation_criteria:
 
 prompts_and_agents_updates:
   cortex_builder_prompt:
-    status: "UPDATED"
     updates_completed:
       - "✅ Added Phase A/B/C/D/E roadmap to implementation checklist"
       - "✅ Fixed core-rules.yaml location to cortex_brain/tier0/governance/"

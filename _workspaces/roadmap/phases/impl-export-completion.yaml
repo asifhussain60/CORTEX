@@ -9,8 +9,6 @@ metadata:
   description: "Add all missing exports to stub modules to eliminate ImportError in test collection"
   priority: "P0-CRITICAL"
   estimated_effort: "4-6 hours (1 day)"
-  status: "COMPLETED"
-  completion_date: "2026-01-21"
   blocks_production: true
   prerequisite_for: ["impl-circular-import-fix", "PHASE-E-TDD-IMPLEMENTATION"]
   

@@ -10,7 +10,6 @@ metadata:
   description: "Pre-built tier1 profiles (FinOps, Auth, ML, DevOps) with versioning and quick-start wizard"
   priority: "P2-MEDIUM"
   estimated_effort: "2 days"
-  status: "NOT_STARTED"
   blocks_production: false
   machine: "ah"
 

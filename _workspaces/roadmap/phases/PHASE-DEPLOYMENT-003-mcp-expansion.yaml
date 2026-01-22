@@ -10,7 +10,6 @@ metadata:
   description: "Centralize MCP tools with registry, add governance/deployment/multi-repo tools"
   priority: "P1-HIGH"
   estimated_effort: "4 days"
-  status: "NOT_STARTED"
   blocks_production: false
   machine: "ah"
 

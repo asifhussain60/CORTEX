@@ -19,7 +19,6 @@ metadata:
   
   priority: "P0-CRITICAL"
   estimated_effort: "5-7 days"
-  status: "NOT_STARTED"
   blocks_production: true
   machine: "ah"
   depends_on:

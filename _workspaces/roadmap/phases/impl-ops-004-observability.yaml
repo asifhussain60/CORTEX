@@ -7,7 +7,6 @@ metadata:
   phase_id: "impl-ops-004-observability"
   title: "Production Observability and Operations"
   priority: "P1-HIGH"
-  status: "NOT_STARTED"
   estimated_effort: "4-6 days"
   blocks_production: false  # Can deploy without, but risky
   dependencies: ["impl-infra-001-resilience", "impl-state-002-concurrency", "impl-recovery-003-fault-tolerance"]

@@ -9,7 +9,6 @@ metadata:
   description: "Production implementations of all 14 MCP tools with cross-repo support, proper registry, and federation"
   priority: "P1"
   estimated_effort: "8-10 days"
-  status: "NOT_STARTED"
   locked: false
   cross_repo_support: true
   federation_enabled: true
@@ -424,7 +423,6 @@ performance_targets:
   - "Cache hit rate: >80%"
   - "Tool availability: >99.5%"
   - "Circuit breaker recovery time: <30s"
-
 
     
     - tool_id: "generate"

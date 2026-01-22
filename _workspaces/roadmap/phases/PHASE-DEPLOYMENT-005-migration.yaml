@@ -10,7 +10,6 @@ metadata:
   description: "Seamless CORTEX upgrades that preserve learned intelligence and augment with new capabilities"
   priority: "P1-HIGH"
   estimated_effort: "3 days"
-  status: "NOT_STARTED"
   blocks_production: false
   machine: "ah"
 

@@ -9,8 +9,6 @@ metadata:
   description: "Populate tier1 and tier2 governance content for complete rule coverage"
   priority: "P1-MEDIUM"
   estimated_effort: "2-3 days"
-  status: "COMPLETED"
-  completion_date: "2026-01-21"
   blocks_production: false  # Can run with tier0 only
   recommended_before_production: true
 
@@ -27,19 +25,16 @@ executive_summary: |
 
 current_state:
   tier0:
-    status: "IMPLEMENTED"
     location: "cortex_brain/tier0/governance/core-rules.yaml"
     rules_count: 29
     coverage: "Universal rules (CORE-001 through CORE-029)"
     
   tier1:
-    status: "EMPTY"
     location: "cortex_brain/tier1/"
     rules_count: 0
     expected_coverage: "Domain-specific rules (by business domain)"
     
   tier2:
-    status: "PLACEHOLDER"
     location: "cortex_brain/tier2/"
     rules_count: "~0 (files exist but empty/stub)"
     expected_coverage: "Context-specific rules (by environment, user role, sensitivity)"
@@ -47,7 +42,6 @@ current_state:
 target_state:
   tier0:
     rules: 29
-    status: "No changes needed"
     
   tier1:
     rules: 15-20

@@ -7,7 +7,6 @@ metadata:
   phase_id: "impl-recovery-003-fault-tolerance"
   title: "Error Recovery and Fault Tolerance"
   priority: "P0-CRITICAL"
-  status: "NOT_STARTED"
   estimated_effort: "5-7 days"
   blocks_production: true
   dependencies: ["impl-infra-001-resilience", "impl-state-002-concurrency"]

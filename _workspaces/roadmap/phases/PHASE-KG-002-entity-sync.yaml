@@ -10,7 +10,6 @@ metadata:
   subtitle: "Non-Destructive Entity Ingestion with Deduplication"
   phase_sequence: "KG-002 (after PHASE-KG-001-foundation)"
   priority: "P2-OPTIONAL"
-  status: "NOT_STARTED"
   blocks_production: false
   machine: "eval"
   

@@ -9,7 +9,6 @@ metadata:
   description: "Comprehensive security hardening, validation gating, production resilience, and cross-repo security"
   priority: "P0"
   estimated_effort: "5-7 days"
-  status: "NOT_STARTED"
   locked: false
   owasp_coverage: "Top 10 + API 2024"
   defense_in_depth: true

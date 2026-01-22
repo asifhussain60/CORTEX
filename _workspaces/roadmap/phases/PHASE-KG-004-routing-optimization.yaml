@@ -10,7 +10,6 @@ metadata:
   subtitle: "Semantic Capability Matching via KG Relationships"
   phase_sequence: "KG-004 (after PHASE-KG-003-query-layer)"
   priority: "P2-OPTIONAL"
-  status: "NOT_STARTED"
   blocks_production: false
   machine: "eval"
   

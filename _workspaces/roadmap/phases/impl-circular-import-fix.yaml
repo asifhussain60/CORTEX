@@ -9,8 +9,6 @@ metadata:
   description: "Break circular dependency in cortex.orchestrators.core hierarchy"
   priority: "P0-CRITICAL"
   estimated_effort: "1-2 days"
-  status: "COMPLETED"
-  completion_date: "2026-01-21"
   blocks_production: true
   prerequisite_for: ["PHASE-E-TDD-IMPLEMENTATION"]
   depends_on: ["impl-export-completion"]
