@@ -131,7 +131,12 @@ class ConversationProtocol:
                     turn_number=self.turn_number,
                 )
                 # Fire event
-                event = MaxTurnsReachedEvent(max_turns=self.max_turns, current_turn=self.turn_number, reason="Max turns exceeded")
+                event = MaxTurnsReachedEvent(
+                    turn_number=self.turn_number,
+                    max_turns=self.max_turns,
+                    current_turn=self.turn_number,
+                    reason="Max turns exceeded"
+                )
                 self.event_registry.fire_event(event)
                 
                 self.decisions_history.append({
@@ -167,6 +172,65 @@ class ConversationProtocol:
 
             # Execute orchestrator
             result = self.orchestrator.execute(user_input, context)
+
+            # Check if user rejected approval
+            if isinstance(result, dict) and result.get("approval_rejected"):
+                from cortex.core.orchestrator.terminal_events import UserApprovalRejectedEvent
+                event = UserApprovalRejectedEvent(
+                    approval_request=result.get("approval_request", "Unknown request"),
+                    rejection_reason=result.get("rejection_reason", "No reason provided"),
+                    turn_number=self.turn_number
+                )
+                self.event_registry.fire_event(event)
+                
+                # Return rejection decision
+                from cortex.core.orchestrator.continuation_decision import (
+                    ContinuationDecision,
+                    ContinuationReason,
+                )
+                audit_entry_id = str(uuid.uuid4())
+                decision = ContinuationDecision(
+                    should_continue=False,
+                    reason=ContinuationReason.USER_REJECTION,
+                    turn_number=self.turn_number,
+                    audit_entry_id=audit_entry_id,
+                )
+                self.decisions_history.append({
+                    "turn": self.turn_number,
+                    "decision": decision,
+                    "timestamp": round_context.timestamp,
+                })
+                return Ok(decision)
+
+            # Check if orchestrator returned an error
+            if isinstance(result, dict) and "error" in result:
+                from cortex.core.orchestrator.terminal_events import ErrorOccurredEvent
+                event = ErrorOccurredEvent(
+                    error_message=result.get("error", "Unknown error"),
+                    error_type="orchestrator_error",
+                    turn_number=self.turn_number,
+                    recoverable=False
+                )
+                self.event_registry.fire_event(event)
+                
+                # Return error decision
+                from cortex.core.orchestrator.continuation_decision import (
+                    ContinuationDecision,
+                    ContinuationReason,
+                )
+                audit_entry_id = str(uuid.uuid4())
+                decision = ContinuationDecision(
+                    should_continue=False,
+                    reason=ContinuationReason.ERROR_UNRECOVERABLE,
+                    turn_number=self.turn_number,
+                    audit_entry_id=audit_entry_id,
+                )
+                self.decisions_history.append({
+                    "turn": self.turn_number,
+                    "decision": decision,
+                    "timestamp": round_context.timestamp,
+                })
+                return Ok(decision)
 
             # Check if orchestrator completed a phase
             if isinstance(result, dict) and result.get("status") == "completed":

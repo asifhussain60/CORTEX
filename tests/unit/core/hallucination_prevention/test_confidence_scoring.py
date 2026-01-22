@@ -149,12 +149,11 @@ class TestConfidenceScoring:
             input_confidence=0.5,
             factors={},
         )
-        )
         after = datetime.utcnow()
         
         # Verify timestamp
-        assert assessment.timestamp is not None
-        assert before <= assessment.timestamp <= after
+        assert result.timestamp is not None
+        assert before <= result.timestamp <= after
 
 
 class TestLowConfidenceTrigger:
