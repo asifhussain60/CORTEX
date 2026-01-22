@@ -202,7 +202,7 @@ class TestAPIEndpointRelationships:
 
     def test_detect_flask_routes(self, api_endpoint_code: str) -> None:
         """Test detection of Flask route endpoints."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_string(api_endpoint_code)
@@ -217,7 +217,7 @@ class TestAPIEndpointRelationships:
 
     def test_detect_http_methods(self, api_endpoint_code: str) -> None:
         """Test detection of HTTP methods for endpoints."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_string(api_endpoint_code)
@@ -232,7 +232,7 @@ class TestAPIEndpointRelationships:
 
     def test_detect_fastapi_routes(self, fastapi_endpoint_code: str) -> None:
         """Test detection of FastAPI route endpoints."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_string(fastapi_endpoint_code)
@@ -255,7 +255,7 @@ class TestDatabaseSchemaRelationships:
 
     def test_detect_sqlalchemy_models(self, database_model_code: str) -> None:
         """Test detection of SQLAlchemy model definitions."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_string(database_model_code)
@@ -270,7 +270,7 @@ class TestDatabaseSchemaRelationships:
 
     def test_detect_foreign_keys(self, database_model_code: str) -> None:
         """Test detection of foreign key relationships."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_string(database_model_code)
@@ -287,7 +287,7 @@ class TestDatabaseSchemaRelationships:
 
     def test_detect_relationships(self, database_model_code: str) -> None:
         """Test detection of ORM relationships."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_string(database_model_code)
@@ -314,7 +314,7 @@ class TestConfigurationReferences:
 
     def test_detect_env_variables(self, config_reference_code: str) -> None:
         """Test detection of environment variable references."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_string(config_reference_code)
@@ -328,7 +328,7 @@ class TestConfigurationReferences:
 
     def test_detect_settings_access(self, config_reference_code: str) -> None:
         """Test detection of settings module access."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_string(config_reference_code)
@@ -352,7 +352,7 @@ class TestCrossFileDependencies:
         self, multi_file_project: Dict[str, Path]
     ) -> None:
         """Test tracking of import dependencies across files."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_directory(multi_file_project['api'].parent)
@@ -367,7 +367,7 @@ class TestCrossFileDependencies:
         self, multi_file_project: Dict[str, Path]
     ) -> None:
         """Test building a complete dependency graph."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_directory(multi_file_project['api'].parent)
@@ -391,7 +391,7 @@ class TestImpactAnalysis:
         self, multi_file_project: Dict[str, Path]
     ) -> None:
         """Test calculating impact of changing a file."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_directory(multi_file_project['api'].parent)
@@ -406,7 +406,7 @@ class TestImpactAnalysis:
         self, multi_file_project: Dict[str, Path]
     ) -> None:
         """Test identifying affected API endpoints."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_directory(multi_file_project['api'].parent)
@@ -430,7 +430,7 @@ class TestRelationshipGraph:
         self, database_model_code: str
     ) -> None:
         """Test building model relationship graph."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_string(database_model_code)
@@ -444,7 +444,7 @@ class TestRelationshipGraph:
 
     def test_find_related_models(self, database_model_code: str) -> None:
         """Test finding related models."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_string(database_model_code)
@@ -466,7 +466,7 @@ class TestRelationshipEngineIntegration:
         self, multi_file_project: Dict[str, Path]
     ) -> None:
         """Test complete relationship analysis pipeline."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_directory(multi_file_project['api'].parent)
@@ -476,7 +476,7 @@ class TestRelationshipEngineIntegration:
 
     def test_serialization_to_dict(self, api_endpoint_code: str) -> None:
         """Test serialization of analysis results."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_string(api_endpoint_code)
@@ -489,7 +489,7 @@ class TestRelationshipEngineIntegration:
 
     def test_export_graphviz(self, database_model_code: str) -> None:
         """Test exporting relationships to graphviz format."""
-        from cortex.core.intelligence.relationship_traversal import RelationshipEngine
+        from cortex.brain.core.intelligence.relationship_traversal import RelationshipEngine
         
         engine = RelationshipEngine()
         result = engine.analyze_string(database_model_code)
