@@ -7,7 +7,7 @@
 phase_metadata:
   phase_id: "REMEDIATION-002"
   phase_name: "Code Refactoring - Phase 2 (Duplication Elimination)"
-  track: "machine:ah"
+  track: "ah"
   sequence: 10
   version: "1.0.0"
   created_date: "2026-01-21"
