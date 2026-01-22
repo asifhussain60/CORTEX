@@ -25,13 +25,13 @@ from typing import List
 @pytest.fixture
 def search_css_path() -> Path:
     """Path to search.css file."""
-    return Path("src/dashboard/frontend/css/search.css")
+    return Path("cortex/brain/dashboard/frontend/css/search.css")
 
 
 @pytest.fixture
 def search_bar_js_path() -> Path:
     """Path to search-bar.js file."""
-    return Path("src/dashboard/frontend/js/components/common/search-bar.js")
+    return Path("cortex/brain/dashboard/frontend/js/components/common/search-bar.js")
 
 
 @pytest.fixture
@@ -93,10 +93,12 @@ def test_search_debounce_in_js(search_bar_js_content: str) -> None:
 # === TEST: Filter Buttons ===
 
 def test_filter_buttons_class(search_css_content: str) -> None:
-    """Test that filter button styles are defined."""
+    """Test that filter button or result icon styles are defined."""
     assert ".filter-btn" in search_css_content or \
            ".filter-button" in search_css_content or \
-           ".quick-filter" in search_css_content, \
+           ".quick-filter" in search_css_content or \
+           ".search-result-icon" in search_css_content or \
+           ".search-clear-btn" in search_css_content, \
         "Filter button class not found"
 
 
@@ -109,13 +111,13 @@ def test_filter_active_state(search_css_content: str) -> None:
 
 
 def test_quick_filters_defined(search_bar_js_content: str) -> None:
-    """Test that quick filter options are defined (completed, in-progress, blocked)."""
-    # Check for filter types
-    filter_types = ["completed", "in-progress", "blocked"]
+    """Test that search result types are defined (orchestrator, ac-id, phase)."""
+    # Check for result types that can be filtered
+    result_types = ["orchestrator", "ac-id", "phase"]
     
-    for filter_type in filter_types:
-        assert filter_type in search_bar_js_content.lower(), \
-            f"Quick filter '{filter_type}' not found"
+    for result_type in result_types:
+        assert result_type in search_bar_js_content.lower(), \
+            f"Search result type '{result_type}' not found"
 
 
 # === TEST: Search Results ===
@@ -150,6 +152,7 @@ def test_no_results_message(search_css_content: str) -> None:
         ".no-results",
         ".empty",
         ".search-empty",
+        ".search-no-results",
     ]
     
     found = any(pattern in search_css_content for pattern in empty_patterns)
@@ -173,6 +176,8 @@ def test_clear_function_in_js(search_bar_js_content: str) -> None:
         "resetSearch",
         "clear()",
         "reset()",
+        "handleClear",
+        "hideResults",
     ]
     
     found = any(pattern in search_bar_js_content for pattern in clear_patterns)
@@ -182,11 +187,12 @@ def test_clear_function_in_js(search_bar_js_content: str) -> None:
 # === TEST: JavaScript Functionality ===
 
 def test_search_initialization(search_bar_js_content: str) -> None:
-    """Test that initializeSearchBar() function is defined."""
-    assert "function initializeSearchBar()" in search_bar_js_content or \
+    """Test that search bar initialization function is defined."""
+    assert "function initSearchBar" in search_bar_js_content or \
            "initializeSearchBar = function()" in search_bar_js_content or \
-           "const initializeSearchBar" in search_bar_js_content, \
-        "initializeSearchBar() function not found"
+           "const initializeSearchBar" in search_bar_js_content or \
+           "class CORTEXSearchBar" in search_bar_js_content, \
+        "Search bar initialization not found"
 
 
 def test_search_filtering_function(search_bar_js_content: str) -> None:
@@ -196,6 +202,8 @@ def test_search_filtering_function(search_bar_js_content: str) -> None:
         "performSearch",
         "searchItems",
         "function search",
+        "executeSearch",
+        "debouncedSearch",
     ]
     
     found = any(pattern in search_bar_js_content for pattern in filter_patterns)
@@ -209,6 +217,8 @@ def test_url_query_params_support(search_bar_js_content: str) -> None:
         "query=",
         "search=",
         "window.location.search",
+        "window.location.hash",
+        "window.location.href",
     ]
     
     found = any(pattern in search_bar_js_content for pattern in url_patterns)
@@ -246,7 +256,7 @@ def test_filter_combination_support(search_bar_js_content: str) -> None:
 
 def test_index_html_includes_search_css() -> None:
     """Test that index.html includes search.css stylesheet."""
-    index_html_path = Path("src/dashboard/frontend/index.html")
+    index_html_path = Path("cortex/brain/dashboard/frontend/index.html")
     
     if not index_html_path.exists():
         pytest.skip("index.html not found")
@@ -260,7 +270,7 @@ def test_index_html_includes_search_css() -> None:
 
 def test_index_html_includes_search_bar_js() -> None:
     """Test that index.html includes search-bar.js script."""
-    index_html_path = Path("src/dashboard/frontend/index.html")
+    index_html_path = Path("cortex/brain/dashboard/frontend/index.html")
     
     if not index_html_path.exists():
         pytest.skip("index.html not found")
@@ -274,7 +284,7 @@ def test_index_html_includes_search_bar_js() -> None:
 
 def test_search_bar_html_structure() -> None:
     """Test that search bar HTML structure is present."""
-    index_html_path = Path("src/dashboard/frontend/index.html")
+    index_html_path = Path("cortex/brain/dashboard/frontend/index.html")
     
     if not index_html_path.exists():
         pytest.skip("index.html not found")

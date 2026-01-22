@@ -70,8 +70,9 @@ class ToolExecutor:
         
         try:
             # Simulate execution with timeout
-            if tool.timeout_ms > 0:
-                timeout_secs = tool.timeout_ms / 1000.0
+            timeout_ms = tool.timeout_ms or 0
+            if timeout_ms > 0:
+                timeout_secs = timeout_ms / 1000.0
                 # In real implementation, would use actual timeout mechanism
             
             # Execute tool function (simulated)

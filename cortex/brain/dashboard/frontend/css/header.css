@@ -59,8 +59,8 @@
 }
 
 .cortex-logo {
-  width: 60px;
-  height: 60px;
+  width: 200px;
+  height: 200px;
   object-fit: contain;
   filter: drop-shadow(0 2px 8px rgba(14, 165, 233, 0.1));
   transition: filter 0.3s ease;
