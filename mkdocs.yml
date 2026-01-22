@@ -92,6 +92,9 @@ nav:
     - Composition Engine: 02-orchestrators/05-composition-engine.md
     - Onboarding Orchestrator: 02-orchestrators/06-onboarding-orchestrator.md
     - Adaptive Router: 02-orchestrators/07-adaptive-router.md
+    - Orchestrators & Modules Relationship: 02-orchestrators/08-orchestrators-modules-relationship.md
+    - Orchestrator-Module Reference: 02-orchestrators/09-orchestrator-module-reference.md
+    - Complete Orchestrator Listing: 02-orchestrators/10-complete-orchestrator-listing.md
   - Getting Started:
     - Installation & Setup: 03-getting-started/0-installation.md
     - Quick Start: 03-getting-started/1-quickstart.md
