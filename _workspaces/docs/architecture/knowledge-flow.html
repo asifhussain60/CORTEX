@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Flow - CORTEX 6.0</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&family=Crimson+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Mermaid for diagrams -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                darkMode: true,
+                background: '#0f172a',
+                primaryColor: '#3b82f6',
+                primaryTextColor: '#f8fafc',
+                primaryBorderColor: '#1e40af',
+                lineColor: '#64748b',
+                secondaryColor: '#8b5cf6',
+                tertiaryColor: '#10b981'
+            }
+        });
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --accent-green: #10b981;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --border-color: rgba(148, 163, 184, 0.2);
+            --glass-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(148, 163, 184, 0.1);
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, #1a2332 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-family: 'Crimson Pro', serif;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+            font-style: italic;
+        }
+        
+        /* Breadcrumbs */
+        .breadcrumbs {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+        
+        .breadcrumbs a {
+            color: var(--accent-blue);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .breadcrumbs a:hover {
+            color: var(--accent-purple);
+        }
+        
+        /* Implementation Status Banner */
+        .status-banner {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(139, 92, 246, 0.1));
+            border: 2px solid rgba(255, 190, 11, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .status-banner-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .phase-status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .phase-status-item {
+            background: rgba(15, 23, 42, 0.5);
+            padding: 0.75rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-blue);
+        }
+        
+        .phase-status-item.ready {
+            border-left-color: var(--accent-orange);
+        }
+        
+        .phase-status-item.blocked {
+            border-left-color: var(--accent-red);
+        }
+        
+        .warning-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            padding: 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 8px;
+        }
+        
+        /* Glass Cards */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glass-card h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+        }
+        
+        .glass-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-purple);
+        }
+        
+        .glass-card h4 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--accent-green);
+        }
+        
+        /* Flow Stages */
+        .flow-stage {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid var(--accent-blue);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+        }
+        
+        .flow-stage.governance {
+            border-left-color: var(--accent-orange);
+            background: rgba(245, 158, 11, 0.1);
+        }
+        
+        .flow-stage.orchestration {
+            border-left-color: var(--accent-purple);
+            background: rgba(139, 92, 246, 0.1);
+        }
+        
+        .flow-stage.tdd {
+            border-left-color: var(--accent-red);
+            background: rgba(239, 68, 68, 0.1);
+        }
+        
+        .flow-stage.infrastructure {
+            border-left-color: var(--accent-green);
+            background: rgba(16, 185, 129, 0.1);
+        }
+        
+        .stage-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        /* Tier Grid */
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .tier-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tier-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--tier-color), transparent);
+        }
+        
+        .tier-card.tier0 {
+            --tier-color: var(--accent-red);
+        }
+        
+        .tier-card.tier1 {
+            --tier-color: var(--accent-orange);
+        }
+        
+        .tier-card.tier2 {
+            --tier-color: var(--accent-blue);
+        }
+        
+        .tier-card.tier3 {
+            --tier-color: var(--accent-green);
+        }
+        
+        .tier-header {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--tier-color);
+        }
+        
+        /* Code Blocks */
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(59, 130, 246, 0.1);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            color: var(--accent-blue);
+        }
+        
+        pre {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        pre code {
+            background: none;
+            padding: 0;
+            color: var(--text-secondary);
+        }
+        
+        /* Lists */
+        ul, ol {
+            margin: 1rem 0;
+            padding-left: 2rem;
+        }
+        
+        li {
+            margin: 0.5rem 0;
+            color: var(--text-secondary);
+        }
+        
+        strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        /* Diagram Container */
+        .diagram-container {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+        }
+        
+        /* Key Points */
+        .key-points {
+            background: rgba(59, 130, 246, 0.05);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .key-points-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--accent-blue);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1.25rem;
+            }
+            
+            .tier-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="breadcrumbs">
+            <a href="../../index.html">Home</a> &gt; 
+            <a href="../index.html">Architecture</a> &gt; 
+            Knowledge Flow
+        </div>
+        
+        <h1>🌊 Knowledge Flow</h1>
+        <p class="subtitle">How Intelligence Flows Through CORTEX 6.0</p>
+
+<div style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(139, 92, 246, 0.1)); border: 2px solid rgba(255, 190, 11, 0.3); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; backdrop-filter: blur(10px);">
+    <div style="font-family: 'Space Grotesk', sans-serif; font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+        📋 Implementation Status (Design Phase)
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1rem;">
+        <div style="background: rgba(15, 23, 42, 0.5); padding: 0.75rem; border-radius: 8px; border-left: 3px solid #f59e0b;">
+            <strong>🟡 Phase 1:</strong> ready_to_implement<br>
+            <span style="font-size: 0.875rem; color: #cbd5e1;">Foundation Enhancement</span>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.5); padding: 0.75rem; border-radius: 8px; border-left: 3px solid #ef4444;">
+            <strong>🔴 Phase 2:</strong> blocked_by_phase_1<br>
+            <span style="font-size: 0.875rem; color: #cbd5e1;">Orchestration Core</span>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.5); padding: 0.75rem; border-radius: 8px; border-left: 3px solid #ef4444;">
+            <strong>🔴 Phase 3:</strong> blocked_by_phase_2<br>
+            <span style="font-size: 0.875rem; color: #cbd5e1;">Feature Orchestrators</span>
+        </div>
+        <div style="background: rgba(15, 23, 42, 0.5); padding: 0.75rem; border-radius: 8px; border-left: 3px solid #ef4444;">
+            <strong>🔴 Phase 4:</strong> blocked_by_phase_3<br>
+            <span style="font-size: 0.875rem; color: #cbd5e1;">Intelligence Layer</span>
+        </div>
+    </div>
+    <div style="font-size: 0.875rem; color: #cbd5e1; padding: 1rem; background: rgba(239, 68, 68, 0.1); border-radius: 8px;">
+        ⚠️ <strong>Design Documentation:</strong> This describes planned architecture not yet implemented. Current status: Phase 1 ready to begin (0 AC-IDs completed). Refer to progress-tracker.json for real-time implementation status.
+    </div>
+</div>
+        
+        <div class="glass-card">
+            <h2>📊 Complete Knowledge Flow Diagram</h2>
+            <p>This interactive diagram shows how intelligence and knowledge flow through the CORTEX 6.0 system, from user request to validated response.</p>
+            
+            <div class="diagram-container">
+                <div class="mermaid">
+graph TD
+    %% Knowledge Flow: How Intelligence Flows Through CORTEX 6.0
+    
+    %% User Entry Point
+    USER[👤 User Request<br/>e.g. implement user authentication]
+    
+    %% Phase -1: Intent Classification
+    INTENT[🔍 Intent Classifier<br/>Pattern Match / LLM / Capability]
+    
+    %% Phase 0: MasterOrchestrator
+    MASTER[🎯 MasterOrchestrator<br/>Central Controller]
+    
+    %% Phase 0.5: Governance Loading
+    GOV_LOADER[📚 GovernanceMerger<br/>Load 4-Tier Rules]
+    
+    %% Tier Loading (Parallel)
+    TIER0[🔥 Tier 0: CORTEX_CORE<br/>19 SKULL rules<br/>Immutable enforcement]
+    TIER1[📋 Tier 1: BUSINESS_TIER_0<br/>Active epic, AC-INDEX<br/>Current requirements]
+    TIER2[🏗️ Tier 2: COMPANY_PRACTICES<br/>Engineering standards<br/>Quality gates]
+    TIER3[🧠 Tier 3: KNOWLEDGE_PRACTICES<br/>Learned patterns<br/>Performance insights]
+    
+    %% Phase 1: Rule Merging
+    MERGE[⚙️ Rule Merger<br/>Tier 0 wins conflicts<br/>Produces unified ruleset]
+    
+    %% Phase 2: Validation
+    VALIDATE[✅ Request Validator<br/>Check against SKULL<br/>Security approval]
+    
+    %% Phase 3: Planning
+    PLANNER[📐 Planning Orchestrator<br/>Generate breakdown<br/>AC-IDs, dependencies]
+    
+    %% Phase 4: Todo Management
+    TODO[📝 TodoManager<br/>Create trackable tasks<br/>Persist to progress-tracker.json]
+    
+    %% Phase 5: Routing to Specialist
+    ROUTE_DECISION{Route to Specialist}
+    
+    %% Specialist Orchestrators
+    TDD[🧪 TDD-Master<br/>RED→GREEN→REFACTOR]
+    ADO[📊 ADO Orchestrator<br/>Work item sync]
+    VACUUM[🧹 Vacuum Orchestrator<br/>Deep cleanup]
+    
+    %% Phase 6: TDD-Master Workflow (expanded)
+    TDD_RED[🔴 RED: Write Failing Test<br/>Load Tier 1 requirements]
+    TDD_GREEN[🟢 GREEN: Minimal Implementation<br/>Make test pass]
+    TDD_REFACTOR[♻️ REFACTOR: Apply Best Practices<br/>Inject Tier 2 standards]
+    
+    %% Best Practice Injection
+    BP_INJECT[📖 Best Practice Injector<br/>PEP8, SOLID, DRY, YAGNI<br/>Design patterns from Tier 2]
+    
+    %% Phase 7: Evidence Generation
+    EVIDENCE[📦 Evidence Bundle<br/>Test results, coverage<br/>Audit logs, git diffs]
+    
+    %% Phase 8: Audit Trail
+    AUDIT[🔐 EnhancedAuditLogger<br/>Hash chain integrity<br/>SQLite WAL]
+    
+    %% Phase 9: State Persistence
+    STATE[💾 State Manager<br/>progress-tracker.json<br/>governance.db]
+    
+    %% Phase 10: Response
+    RESPONSE[📤 Response to User<br/>Formatted output<br/>Evidence attached]
+    
+    %% === FLOW CONNECTIONS ===
+    
+    USER --> INTENT
+    INTENT --> MASTER
+    
+    MASTER --> GOV_LOADER
+    
+    GOV_LOADER --> TIER0
+    GOV_LOADER --> TIER1
+    GOV_LOADER --> TIER2
+    GOV_LOADER --> TIER3
+    
+    TIER0 --> MERGE
+    TIER1 --> MERGE
+    TIER2 --> MERGE
+    TIER3 --> MERGE
+    
+    MERGE --> VALIDATE
+    VALIDATE --> PLANNER
+    PLANNER --> TODO
+    TODO --> ROUTE_DECISION
+    
+    ROUTE_DECISION -->|TDD Request| TDD
+    ROUTE_DECISION -->|ADO Sync| ADO
+    ROUTE_DECISION -->|Cleanup| VACUUM
+    
+    TDD --> TDD_RED
+    TDD_RED --> TDD_GREEN
+    TDD_GREEN --> TDD_REFACTOR
+    
+    TDD_REFACTOR --> BP_INJECT
+    BP_INJECT -->|Apply Tier 2| TDD_REFACTOR
+    
+    TDD_REFACTOR --> EVIDENCE
+    ADO --> EVIDENCE
+    VACUUM --> EVIDENCE
+    
+    EVIDENCE --> AUDIT
+    AUDIT --> STATE
+    STATE --> RESPONSE
+    
+    RESPONSE --> USER
+    
+    %% === KNOWLEDGE INJECTION POINTS ===
+    
+    TIER0 -.->|Enforce| VALIDATE
+    TIER1 -.->|Provide Context| TDD_RED
+    TIER2 -.->|Inject Standards| BP_INJECT
+    TIER3 -.->|Suggest Optimizations| TDD_REFACTOR
+    
+    %% === DATA FLOWS ===
+    
+    MERGE -.->|Unified Rules| MASTER
+    TODO -.->|Task List| STATE
+    AUDIT -.->|Correlation ID| EVIDENCE
+                </div>
+            </div>
+            
+            <div class="key-points">
+                <div class="key-points-title">🔑 Key Flow Characteristics</div>
+                <ul>
+                    <li><strong>Solid Lines:</strong> Direct execution flow (synchronous)</li>
+                    <li><strong>Dotted Lines:</strong> Knowledge injection / data enrichment (async)</li>
+                    <li><strong>10 Phases:</strong> From user request to validated response</li>
+                    <li><strong>4-Tier Governance:</strong> Loaded in parallel, merged with precedence</li>
+                    <li><strong>TDD Enforcement:</strong> RED→GREEN→REFACTOR with best practice injection</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="glass-card">
+            <h2>🎯 Flow Stages Explained</h2>
+            
+            <div class="flow-stage">
+                <div class="stage-title">🚪 Entry: Request Classification</div>
+                <p><strong>Components:</strong> User Request → Intent Classifier → MasterOrchestrator</p>
+                <p><strong>Purpose:</strong> Route incoming requests to appropriate orchestrators using pattern matching, LLM classification, or capability mapping.</p>
+                <ul>
+                    <li><strong>Pattern-based:</strong> Regex match on keywords (e.g., "implement" → TDD-Master)</li>
+                    <li><strong>LLM-based:</strong> Fuzzy intent classification when patterns fail</li>
+                    <li><strong>Capability-based:</strong> Search for orchestrators with matching capabilities</li>
+                </ul>
+            </div>
+            
+            <div class="flow-stage governance">
+                <div class="stage-title">📚 Governance Loading & Merging</div>
+                <p><strong>Components:</strong> GovernanceMerger → 4 Tiers → Rule Merger</p>
+                <p><strong>Purpose:</strong> Load and merge governance rules from all 4 tiers with conflict resolution.</p>
+                
+                <div class="tier-grid">
+                    <div class="tier-card tier0">
+                        <div class="tier-header">🔥 Tier 0: CORTEX_CORE</div>
+                        <p><strong>Source:</strong> <code>cortex-brain/tier0/governance/core-rules.yaml</code></p>
+                        <p><strong>Content:</strong> 19 immutable SKULL rules</p>
+                        <p><strong>Precedence:</strong> HIGHEST - wins all conflicts</p>
+                        <p><strong>Examples:</strong> CORE-001 (incremental execution), CORE-019 (TDD enforcement)</p>
+                    </div>
+                    
+                    <div class="tier-card tier1">
+                        <div class="tier-header">📋 Tier 1: BUSINESS_TIER_0</div>
+                        <p><strong>Source:</strong> <code>cortex-brain/tier1/tracking/</code></p>
+                        <p><strong>Content:</strong> Active epic, AC-INDEX, progress tracking</p>
+                        <p><strong>Precedence:</strong> HIGH - provides current context</p>
+                        <p><strong>Examples:</strong> Current sprint requirements, acceptance criteria</p>
+                    </div>
+                    
+                    <div class="tier-card tier2">
+                        <div class="tier-header">🏗️ Tier 2: COMPANY_PRACTICES</div>
+                        <p><strong>Source:</strong> <code>cortex-brain/tier2/</code></p>
+                        <p><strong>Content:</strong> Engineering standards, quality gates</p>
+                        <p><strong>Precedence:</strong> MEDIUM - enforces company policies</p>
+                        <p><strong>Examples:</strong> PEP8, SOLID principles, code review checklists</p>
+                    </div>
+                    
+                    <div class="tier-card tier3">
+                        <div class="tier-header">🧠 Tier 3: KNOWLEDGE_PRACTICES</div>
+                        <p><strong>Source:</strong> <code>cortex-brain/tier3/</code></p>
+                        <p><strong>Content:</strong> Learned patterns, performance insights</p>
+                        <p><strong>Precedence:</strong> LOW - suggests optimizations</p>
+                        <p><strong>Examples:</strong> "UserAuth took 2.3x longer than estimated"</p>
+                    </div>
+                </div>
+                
+                <div class="key-points">
+                    <div class="key-points-title">Conflict Resolution Logic</div>
+                    <pre><code>if TIER0.rule conflicts with TIER1/2/3.rule:
+    return TIER0.rule  # SKULL always wins
+
+if TIER1.requirement conflicts with TIER2.standard:
+    merge both, prioritize TIER1 for scope, TIER2 for quality
+
+if TIER3.suggestion conflicts with TIER2.standard:
+    return TIER2.standard  # Enforced > Suggested</code></pre>
+                </div>
+            </div>
+            
+            <div class="flow-stage">
+                <div class="stage-title">✅ Validation & Planning</div>
+                <p><strong>Components:</strong> Request Validator → Planning Orchestrator → TodoManager</p>
+                <p><strong>Purpose:</strong> Ensure request is safe, break it down into tasks, persist state.</p>
+                
+                <h4>Validation Checks:</h4>
+                <ul>
+                    <li><strong>SKULL Compliance:</strong> Does request violate any CORE rules?</li>
+                    <li><strong>Security Approval:</strong> Does request require elevated privileges? (AC-SECURITY-005)</li>
+                    <li><strong>Path Sandboxing:</strong> Are all file paths within allowed directories? (AC-SECURITY-006)</li>
+                    <li><strong>Token Budget:</strong> Will operation exceed token limits? (CORE-001)</li>
+                </ul>
+                
+                <h4>Planning Breakdown:</h4>
+                <ul>
+                    <li><strong>Generate AC-IDs:</strong> Assign acceptance criteria identifiers</li>
+                    <li><strong>Dependency Resolution:</strong> Topological sort of tasks</li>
+                    <li><strong>Effort Estimation:</strong> Use Tier 3 insights for time estimates</li>
+                    <li><strong>Todo Creation:</strong> Persist to <code>progress-tracker.json</code></li>
+                </ul>
+            </div>
+            
+            <div class="flow-stage orchestration">
+                <div class="stage-title">🎭 Orchestrator Routing</div>
+                <p><strong>Components:</strong> Route Decision → Specialist Orchestrators</p>
+                <p><strong>Purpose:</strong> Delegate to specialized orchestrators based on request type.</p>
+                
+                <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                    <thead style="background: rgba(59, 130, 246, 0.2);">
+                        <tr>
+                            <th style="padding: 0.75rem; text-align: left; border: 1px solid var(--border-color);">Request Pattern</th>
+                            <th style="padding: 0.75rem; text-align: left; border: 1px solid var(--border-color);">Orchestrator</th>
+                            <th style="padding: 0.75rem; text-align: left; border: 1px solid var(--border-color);">Capabilities</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 0.75rem; border: 1px solid var(--border-color);"><code>implement|build|create|fix</code></td>
+                            <td style="padding: 0.75rem; border: 1px solid var(--border-color);">TDD-Master</td>
+                            <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Test-driven development, code generation</td>
+                        </tr>
+                        <tr style="background: rgba(59, 130, 246, 0.05);">
+                            <td style="padding: 0.75rem; border: 1px solid var(--border-color);"><code>ado|azure devops|work item</code></td>
+                            <td style="padding: 0.75rem; border: 1px solid var(--border-color);">ADO Orchestrator</td>
+                            <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Azure DevOps integration, work tracking</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 0.75rem; border: 1px solid var(--border-color);"><code>vacuum|cleanup|deep clean</code></td>
+                            <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Vacuum Orchestrator</td>
+                            <td style="padding: 0.75rem; border: 1px solid var(--border-color);">File cleanup, unused import removal</td>
+                        </tr>
+                        <tr style="background: rgba(59, 130, 246, 0.05);">
+                            <td style="padding: 0.75rem; border: 1px solid var(--border-color);"><code>crawl|scan|analyze</code></td>
+                            <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Crawler Orchestrator</td>
+                            <td style="padding: 0.75rem; border: 1px solid var(--border-color);">AST parsing, knowledge graph population</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="flow-stage tdd">
+                <div class="stage-title">🧪 TDD-Master Workflow (Knowledge Injection)</div>
+                <p><strong>Components:</strong> TDD-Master → RED → GREEN → REFACTOR → Best Practice Injector</p>
+                <p><strong>Purpose:</strong> Generate code using test-driven development with best practice injection at refactor phase.</p>
+                
+                <h4>Phase 1: RED - Write Failing Test</h4>
+                <p><strong>Knowledge Source:</strong> Tier 1 (Business requirements)</p>
+                <ul>
+                    <li>Load AC-ID acceptance criteria from <code>AC-INDEX.yaml</code></li>
+                    <li>Generate test case that validates AC-ID requirements</li>
+                    <li>Run test → expect failure (no implementation yet)</li>
+                </ul>
+                
+                <h4>Phase 2: GREEN - Minimal Implementation</h4>
+                <p><strong>Knowledge Source:</strong> None (minimal code to pass)</p>
+                <ul>
+                    <li>Write simplest code that makes test pass</li>
+                    <li>No optimization, no best practices yet</li>
+                    <li>Run test → expect success</li>
+                </ul>
+                
+                <h4>Phase 3: REFACTOR - Apply Best Practices</h4>
+                <p><strong>Knowledge Source:</strong> Tier 2 (Engineering standards) + Tier 3 (Learned patterns)</p>
+                <ul>
+                    <li><strong>Tier 2 Injection:</strong> PEP8 formatting, SOLID principles, design patterns</li>
+                    <li><strong>Tier 3 Suggestions:</strong> "Similar function in <code>src/utils/auth.py</code> has better error handling"</li>
+                    <li>Apply refactorings while keeping tests green</li>
+                    <li>Generate evidence bundle (test results, coverage, audit logs)</li>
+                </ul>
+                
+                <div class="key-points">
+                    <div class="key-points-title">Best Practice Injection Example</div>
+                    <pre><code># GREEN Phase (minimal):
+def authenticate(username, password):
+    if username == "admin" and password == "pass":
+        return True
+    return False
+
+# REFACTOR Phase (Tier 2 standards applied):
+from typing import Optional
+from src.models.user import User
+from src.security.hash import verify_password
+
+def authenticate(username: str, password: str) -> Optional[User]:
+    """
+    Authenticate user with username and password.
+    
+    Args:
+        username: User's unique identifier
+        password: Plaintext password to verify
+    
+    Returns:
+        User object if authenticated, None otherwise
+    
+    Raises:
+        ValidationError: If username/password format invalid
+    """
+    user = UserRepository.find_by_username(username)
+    if not user:
+        return None
+    
+    if not verify_password(password, user.password_hash):
+        return None
+    
+    return user</code></pre>
+                </div>
+            </div>
+            
+            <div class="flow-stage infrastructure">
+                <div class="stage-title">🔐 Evidence, Audit, State</div>
+                <p><strong>Components:</strong> Evidence Bundle → EnhancedAuditLogger → State Manager → Response</p>
+                <p><strong>Purpose:</strong> Generate proof of completion, log to audit trail, persist state, return to user.</p>
+                
+                <h4>Evidence Bundle Contents:</h4>
+                <ul>
+                    <li><strong>Test Results:</strong> All test runs with pass/fail status</li>
+                    <li><strong>Coverage Reports:</strong> Line/branch coverage percentages</li>
+                    <li><strong>Audit Logs:</strong> Correlation ID tracking entire operation</li>
+                    <li><strong>Git Diffs:</strong> Files changed, lines added/removed</li>
+                    <li><strong>Performance Metrics:</strong> Execution time, token usage</li>
+                </ul>
+                
+                <h4>Audit Trail (Hash Chain):</h4>
+                <p>Each operation generates a hash chain entry for tamper detection:</p>
+                <pre><code>Entry N:
+  timestamp: 2026-01-10T16:30:45Z
+  correlation_id: a1b2c3d4-...
+  ac_id: AC-TDD-001
+  operation: "TDD cycle complete"
+  previous_hash: "0x9f8e7d..."
+  current_hash: sha256(entry_data + previous_hash)</code></pre>
+                
+                <h4>State Persistence:</h4>
+                <ul>
+                    <li><strong>progress-tracker.json:</strong> Active todo, phase status, completed ACs</li>
+                    <li><strong>governance.db:</strong> SQLite with WAL mode for concurrent access</li>
+                    <li><strong>Atomic Updates:</strong> Write to temp file, validate, atomic rename</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="glass-card">
+            <h2>🔄 Knowledge Injection Points</h2>
+            <p>The diagram shows dotted lines representing <strong>knowledge injection</strong> - where governance tiers provide intelligence at specific workflow stages.</p>
+            
+            <table style="width: 100%; border-collapse: collapse; margin-top: 1rem;">
+                <thead style="background: rgba(59, 130, 246, 0.2);">
+                    <tr>
+                        <th style="padding: 0.75rem; text-align: left; border: 1px solid var(--border-color);">Injection Point</th>
+                        <th style="padding: 0.75rem; text-align: left; border: 1px solid var(--border-color);">Tier</th>
+                        <th style="padding: 0.75rem; text-align: left; border: 1px solid var(--border-color);">Knowledge Type</th>
+                        <th style="padding: 0.75rem; text-align: left; border: 1px solid var(--border-color);">Example</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="padding: 0.75rem; border: 1px solid var(--border-color);"><strong>Request Validator</strong></td>
+                        <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Tier 0</td>
+                        <td style="padding: 0.75rem; border: 1px solid var(--border-color);">SKULL enforcement</td>
+                        <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Block operations >500 lines (CORE-001)</td>
+                    </tr>
+                    <tr style="background: rgba(59, 130, 246, 0.05);">
+                        <td style="padding: 0.75rem; border: 1px solid var(--border-color);"><strong>TDD RED Phase</strong></td>
+                        <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Tier 1</td>
+                        <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Business requirements</td>
+                        <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Load AC-AUDIT-001: "Logger must support 6 levels"</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0.75rem; border: 1px solid var(--border-color);"><strong>Best Practice Injector</strong></td>
+                        <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Tier 2</td>
+                        <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Engineering standards</td>
+                        <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Apply type hints, docstrings, SOLID principles</td>
+                    </tr>
+                    <tr style="background: rgba(59, 130, 246, 0.05);">
+                        <td style="padding: 0.75rem; border: 1px solid var(--border-color);"><strong>TDD REFACTOR Phase</strong></td>
+                        <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Tier 3</td>
+                        <td style="padding: 0.75rem; border: 1px solid var(--border-color);">Learned patterns</td>
+                        <td style="padding: 0.75rem; border: 1px solid var(--border-color);">"Consider caching: similar function had 10x speedup"</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="glass-card">
+            <h2>🎓 Learning Resources</h2>
+            <ul>
+                <li><a href="governance-rules.html" style="color: var(--accent-blue);">Governance Rules</a> - Full SKULL rule documentation</li>
+                <li><a href="orchestration-design.html" style="color: var(--accent-blue);">Orchestration Design</a> - MasterOrchestrator workflow</li>
+                <li><a href="brain-architecture.html" style="color: var(--accent-blue);">Brain Architecture</a> - 4-tier knowledge hierarchy</li>
+                <li><a href="../../cortex-brain/documents/cx6-holistic-analysis/phase-1-foundation.md" style="color: var(--accent-blue);">Phase 1 Foundation</a> - Implementation details</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

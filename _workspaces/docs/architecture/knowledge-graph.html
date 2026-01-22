@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Graph - CORTEX Architecture</title>
+    <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
+    <link href="../assets/css/variables.css" rel="stylesheet">
+    <link href="../assets/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    <link href="../assets/css/cortex-glass-system.css" rel="stylesheet">
+    <link href="../assets/css/micro-interactions.css" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #2a2f4a 100%);
+            min-height: 100vh;
+        }
+        .architecture-title-future {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--spacing-2xl) var(--spacing-lg);
+        }
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-xl);
+            font-size: var(--font-sm);
+            color: var(--text-muted);
+        }
+        .breadcrumb a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .breadcrumb-separator {
+            color: var(--text-muted);
+        }
+        .page-logo {
+            text-align: center;
+            margin-bottom: var(--spacing-3xl);
+        }
+        .page-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: var(--spacing-md);
+        }
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: var(--font-lg);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .viz-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-primary);
+            padding: var(--spacing-2xl);
+            margin-bottom: var(--spacing-2xl);
+            box-shadow: var(--glass-shadow);
+        }
+        #knowledge-graph-viz {
+            width: 100%;
+            height: 600px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-2xl);
+        }
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            border: 1px solid var(--border-primary);
+            text-align: center;
+        }
+        .stat-value {
+            font-size: var(--font-3xl);
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: var(--font-sm);
+        }
+        .nav-content {
+            display: flex;
+            justify-content: center;
+            margin-top: var(--spacing-3xl);
+        }
+        .nav-link {
+            padding: var(--spacing-md) var(--spacing-xl);
+            background: var(--glass-bg);
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .nav-link:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+    </style>
+<style>
+        /* REFERENCE Theme - Level 2 */
+        .level2-reference {
+            --theme-primary: #00bfff;
+            --theme-accent: #7c7cff;
+            --theme-success: #00ff88;
+            --theme-warning: #ffd700;
+            --theme-glow: rgba(0, 191, 255, 0.25);
+            
+            /* Apply to glass effects */
+            --glass-border-color: #00bfff33;
+            --pulse-glow-color: rgba(0, 191, 255, 0.25);
+        }
+        
+        /* Themed glass cards */
+        .level2-reference .glass-card-clickable:hover {
+            border-color: #00bfff66;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37),
+                        0 0 30px rgba(0, 191, 255, 0.25);
+        }
+        
+        /* Themed icons */
+        .level2-reference .pulse-glow-glass--fast {
+            filter: drop-shadow(0 0 10px rgba(0, 191, 255, 0.25));
+        }
+        
+        /* Themed metric tiles */
+        .level2-reference .token-metric-tile {
+            border-color: #00bfff33;
+        }
+        
+        .level2-reference .token-metric-tile:hover {
+            border-color: #00bfff66;
+            background: #00bfff11;
+        }
+</style>
+</head>
+<body>
+
+    <!-- Implementation Status Banner -->
+    <div style="background: linear-gradient(135deg, rgba(255, 190, 11, 0.1), rgba(255, 0, 110, 0.1)); 
+                border: 2px solid rgba(255, 190, 11, 0.3); 
+                border-radius: 12px; 
+                padding: 25px; 
+                margin: 30px 0 40px; 
+                position: relative;">
+        <div style="font-family: 'Space Grotesk', sans-serif; 
+                    font-size: 1.3em; 
+                    font-weight: 600; 
+                    margin-bottom: 20px; 
+                    color: var(--warning);">
+            📋 Implementation Status (Design Phase)
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ffbe0b;">
+                <div style="font-size: 1.5em; margin-bottom: 5px;">🟡</div>
+                <div style="font-weight: 600;">Phase 1: Foundation Enhancement</div>
+                <div style="color: var(--warning); font-size: 0.9em; margin-top: 5px;">Ready to Implement</div>
+                <div style="color: var(--text-muted); font-size: 0.85em; margin-top: 3px;">0/43 AC-IDs Complete</div>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff006e;">
+                <div style="font-size: 1.5em; margin-bottom: 5px;">🔴</div>
+                <div style="font-weight: 600;">Phase 2: Orchestration Core</div>
+                <div style="color: var(--danger); font-size: 0.9em; margin-top: 5px;">Blocked by Phase 1</div>
+                <div style="color: var(--text-muted); font-size: 0.85em; margin-top: 3px;">Not Started</div>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff006e;">
+                <div style="font-size: 1.5em; margin-bottom: 5px;">🔴</div>
+                <div style="font-weight: 600;">Phase 3: Feature Orchestrators</div>
+                <div style="color: var(--danger); font-size: 0.9em; margin-top: 5px;">Blocked by Phase 2</div>
+                <div style="color: var(--text-muted); font-size: 0.85em; margin-top: 3px;">Not Started</div>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff006e;">
+                <div style="font-size: 1.5em; margin-bottom: 5px;">🔴</div>
+                <div style="font-weight: 600;">Phase 4: Intelligence Layer</div>
+                <div style="color: var(--danger); font-size: 0.9em; margin-top: 5px;">Blocked by Phase 3</div>
+                <div style="color: var(--text-muted); font-size: 0.85em; margin-top: 3px;">Not Started</div>
+            </div>
+        </div>
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); 
+                    font-size: 0.95em; color: var(--text-secondary);">
+            <strong>⚠️ Design Documentation:</strong> This documentation describes the <em>planned architecture</em>. 
+            Implementation begins with Phase 1 foundation components. All content marked with 🟡 or 🔴 represents 
+            future functionality, not current implementation.
+        </div>
+    </div>
+
+
+    <div class="architecture-title-future">
+        <nav class="breadcrumb">
+            <a href="../index.html">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="index.html">Architecture</a>
+            <span class="breadcrumb-separator">/</span>
+            <span>Knowledge Graph</span>
+        </nav>
+
+        <header class="page-logo">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
+            <h1 class="page-title">🕸️ Knowledge Graph</h1>
+            <p class="page-subtitle">
+                Semantic network with 8,429 concept nodes and 24,817 relationship edges enabling intelligent pattern recognition and cross-session learning
+            </p>
+        </header>
+
+        <div class="viz-container">
+            <div id="knowledge-graph-viz"></div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">8,429</div>
+                <div class="stat-label">Concept Nodes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">24,817</div>
+                <div class="stat-label">Relationship Edges</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">12ms</div>
+                <div class="stat-label">Semantic Search</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">SQLite</div>
+                <div class="stat-label">Persistent Storage</div>
+            </div>
+        </div>
+
+        <nav class="nav-content" mobile-nav-optimized>
+            <a href="index.html" class="nav-link" mobile-nav-optimized>← Back to Architecture</a>
+        </nav>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('knowledge-graph-viz');
+            const width = container.clientWidth;
+            const height = 600;
+
+            const svg = d3.select('#knowledge-graph-viz')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height);
+
+            // Simulated knowledge graph data (54 nodes)
+            const nodes = [
+                { id: 'cortex', group: 1, size: 20 },
+                { id: 'brain', group: 1, size: 18 },
+                { id: 'tier0', group: 2, size: 15 },
+                { id: 'tier1', group: 2, size: 15 },
+                { id: 'tier2', group: 2, size: 15 },
+                { id: 'tier3', group: 2, size: 15 },
+                { id: 'skull', group: 3, size: 16 },
+                { id: 'tdd', group: 3, size: 12 },
+                { id: 'discovery', group: 3, size: 12 },
+                { id: 'planning', group: 4, size: 14 },
+                { id: 'orchestrator', group: 4, size: 14 },
+                { id: 'workflow', group: 4, size: 10 },
+                { id: 'memory', group: 5, size: 13 },
+                { id: 'context', group: 5, size: 13 },
+                { id: 'knowledge', group: 5, size: 13 },
+                { id: 'pattern', group: 6, size: 11 },
+                { id: 'rule', group: 6, size: 11 },
+                { id: 'test', group: 6, size: 11 },
+                { id: 'security', group: 7, size: 12 },
+                { id: 'privacy', group: 7, size: 10 },
+                { id: 'compliance', group: 7, size: 10 },
+                { id: 'vision', group: 8, size: 11 },
+                { id: 'analysis', group: 8, size: 11 },
+                { id: 'optimization', group: 8, size: 11 },
+                { id: 'token', group: 9, size: 10 },
+                { id: 'cost', group: 9, size: 8 },
+                { id: 'cache', group: 9, size: 8 },
+                { id: 'git', group: 10, size: 10 },
+                { id: 'commit', group: 10, size: 8 },
+                { id: 'checkpoint', group: 10, size: 8 },
+                { id: 'refactor', group: 11, size: 9 },
+                { id: 'cleanup', group: 11, size: 9 },
+                { id: 'quality', group: 11, size: 9 },
+                { id: 'solid', group: 12, size: 10 },
+                { id: 'srp', group: 12, size: 7 },
+                { id: 'dip', group: 12, size: 7 },
+                { id: 'debug', group: 13, size: 9 },
+                { id: 'error', group: 13, size: 8 },
+                { id: 'trace', group: 13, size: 8 },
+                { id: 'lens', group: 14, size: 10 },
+                { id: 'ast', group: 14, size: 8 },
+                { id: 'parse', group: 14, size: 8 },
+                { id: 'ado', group: 15, size: 9 },
+                { id: 'story', group: 15, size: 7 },
+                { id: 'task', group: 15, size: 7 },
+                { id: 'document', group: 16, size: 9 },
+                { id: 'manifest', group: 16, size: 8 },
+                { id: 'template', group: 16, size: 8 },
+                { id: 'onboard', group: 17, size: 8 },
+                { id: 'guide', group: 17, size: 7 },
+                { id: 'help', group: 17, size: 7 },
+                { id: 'maintenance', group: 18, size: 9 },
+                { id: 'health', group: 18, size: 7 },
+                { id: 'monitor', group: 18, size: 7 }
+            ];
+
+            const links = [];
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    if (Math.abs(nodes[i].group - nodes[j].group) <= 2 && Math.random() > 0.7) {
+                        links.push({ source: nodes[i].id, target: nodes[j].id });
+                    }
+                }
+            }
+
+            const simulation = d3.forceSimulation(nodes)
+                .force('link', d3.forceLink(links).id(d => d.id).distance(80))
+                .force('charge', d3.forceManyBody().strength(-200))
+                .force('center', d3.forceCenter(width / 2, height / 2))
+                .force('collision', d3.forceCollide().radius(d => d.size + 5));
+
+            const link = svg.append('g')
+                .selectAll('line')
+                .data(links)
+                .join('line')
+                .attr('stroke', 'rgba(0, 212, 255, 0.3)')
+                .attr('stroke-width', 1);
+
+            const node = svg.append('g')
+                .selectAll('circle')
+                .data(nodes)
+                .join('circle')
+                .attr('r', d => d.size)
+                .attr('fill', d => d3.schemeCategory10[d.group % 10])
+                .attr('stroke', '#fff')
+                .attr('stroke-width', 2)
+                .style('cursor', 'pointer')
+                .on('mouseover', function() {
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .attr('opacity', 1)
+                        .attr('stroke-width', 3);
+                })
+                .on('mouseout', function() {
+                    d3.select(this)
+                        .transition()
+                        .duration(200)
+                        .attr('opacity', 0.8)
+                        .attr('stroke-width', 2);
+                })
+                .call(d3.drag()
+                    .on('start', dragstarted)
+                    .on('drag', dragged)
+                    .on('end', dragended));
+
+            const label = svg.append('g')
+                .selectAll('text')
+                .data(nodes)
+                .join('text')
+                .text(d => d.id)
+                .attr('font-size', '10px')
+                .attr('fill', '#ffffff')
+                .attr('text-anchor', 'middle')
+                .attr('dy', d => d.size + 12)
+                .style('pointer-events', 'none');
+
+            simulation.on('tick', () => {
+                link
+                    .attr('x1', d => d.source.x)
+                    .attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x)
+                    .attr('y2', d => d.target.y);
+
+                node
+                    .attr('cx', d => d.x)
+                    .attr('cy', d => d.y);
+
+                label
+                    .attr('x', d => d.x)
+                    .attr('y', d => d.y);
+            });
+
+            function dragstarted(event, d) {
+                if (!event.active) simulation.alphaTarget(0.3).restart();
+                d.fx = d.x;
+                d.fy = d.y;
+            }
+
+            function dragged(event, d) {
+                d.fx = event.x;
+                d.fy = event.y;
+            }
+
+            function dragended(event, d) {
+                if (!event.active) simulation.alphaTarget(0);
+                d.fx = null;
+                d.fy = null;
+            }
+        });
+    </script>
+</body>
+</html>
