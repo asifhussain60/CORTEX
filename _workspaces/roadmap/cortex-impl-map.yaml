@@ -247,7 +247,7 @@ implementation_philosophy:
       Stubs will not pass production readiness checks.
 
   
-  machine_tracks:
+    machine_tracks:
     mac:
       strategy: "sequential_tdd"
       focus: "Core implementation, test collection fixes, module implementations"
@@ -255,19 +255,19 @@ implementation_philosophy:
         - phase_id: "impl-export-completion"
           sequence: 1
           required: true
-          machine: "mac"
+          track: "mac"
         - phase_id: "impl-circular-import-fix"
           sequence: 2
           required: true
-          machine: "mac"
+          track: "mac"
         - phase_id: "PHASE-E-TDD-IMPLEMENTATION"
           sequence: 3
           required: true
-          machine: "mac"
+          track: "mac"
         - phase_id: "PHASE-F-TDD-ENHANCEMENT-OPTION-B"
           sequence: 4
           required: false
-          machine: "mac"
+          track: "mac"
           depends_on: "PHASE-E-TDD-IMPLEMENTATION"
       estimated_duration: "17-23 days (PHASE-E) + 7-10 days (PHASE-F Option B) = 24-33 days total"
       blocking: true
@@ -279,23 +279,23 @@ implementation_philosophy:
         - phase_id: "cortex-registry-001-migration"
           sequence: 1
           required: true
-          machine: "win"
+          track: "win"
         - phase_id: "impl-e2e-validation"
           sequence: 2
           required: true
-          machine: "win"
+          track: "win"
         - phase_id: "impl-cicd-validation"
           sequence: 3
           required: true
-          machine: "win"
+          track: "win"
         - phase_id: "impl-governance-content"
           sequence: 4
           required: true
-          machine: "win"
+          track: "win"
         - phase_id: "impl-features-registry-001"
           sequence: 5
           required: true
-          machine: "win"
+          track: "win"
       estimated_duration: "10-14 days"
       blocking: false
       depends_on_mac_completion: "PHASE-E-TDD-IMPLEMENTATION"
@@ -310,7 +310,7 @@ implementation_philosophy:
         - phase_id: "PHASE-KG-001-foundation"
           sequence: 1
           required: false
-          machine: "eval"
+          track: "eval"
           enhancement: "enhanced_with_knowledge_schema"
           knowledge_integration:
             - "Add BestPractice, Pattern, ExpertDomain node types to KG schema"
@@ -319,14 +319,14 @@ implementation_philosophy:
         - phase_id: "PHASE-KG-002-entity-sync"
           sequence: 2
           required: false
-          machine: "eval"
+          track: "eval"
           knowledge_integration:
             - "Sync domain entities with pattern/practice associations"
             - "Load best practices into KG nodes"
         - phase_id: "PHASE-KG-003-query-layer"
           sequence: 3
           required: false
-          machine: "eval"
+          track: "eval"
           enhancement: "semantic_knowledge_queries"
           knowledge_integration:
             - "Enable semantic queries: 'Practices applying to domain X'"
@@ -335,14 +335,14 @@ implementation_philosophy:
         - phase_id: "PHASE-KG-004-routing-optimization"
           sequence: 4
           required: false
-          machine: "eval"
+          track: "eval"
           knowledge_integration:
             - "KG-enhanced routing using pattern/practice insights"
             - "Fallback to YAML rules when KG unavailable"
         - phase_id: "PHASE-KG-005-validation"
           sequence: 5
           required: false
-          machine: "eval"
+          track: "eval"
           knowledge_integration:
             - "Validate KG correctness for knowledge nodes"
             - "Test fallback semantics with chaotic knowledge queries"
@@ -351,9 +351,7 @@ implementation_philosophy:
       blocking: false
       depends_on_mac_completion: "PHASE-E-TDD-IMPLEMENTATION"
       depends_on_domain_brain_maturity: "domain_brain ≥90% tests passing"
-      design_document: "_workspaces/roadmap/reports/KNOWLEDGE-GRAPH-ASSESSMENT.md"
-    
-    ah:
+      design_document: "_workspaces/roadmap/reports/KNOWLEDGE-GRAPH-ASSESSMENT.md"    ah:
       strategy: "deployment_automation + quality_hardening"
       focus: "Deployment infrastructure, multi-repo governance, profiles, code quality"
       status: "✅ COMPLETED"
@@ -365,37 +363,37 @@ implementation_philosophy:
           sequence: 1
           status: "COMPLETED"
           tests: "25/25"
-          machine: "ah"
+          track: "ah"
         - phase_id: "PHASE-DEPLOYMENT-002-onboarding"
           sequence: 2
           status: "COMPLETED"
           tests: "28/28"
-          machine: "ah"
+          track: "ah"
         - phase_id: "PHASE-DEPLOYMENT-003-mcp-expansion"
           sequence: 3
           status: "COMPLETED"
           tests: "66/66"
-          machine: "ah"
+          track: "ah"
         - phase_id: "PHASE-DEPLOYMENT-004-multi-repo-gov"
           sequence: 4
           status: "COMPLETED"
           tests: "35/35"
-          machine: "ah"
+          track: "ah"
         - phase_id: "PHASE-DEPLOYMENT-005-migration"
           sequence: 5
           status: "COMPLETED"
           tests: "36/36"
-          machine: "ah"
+          track: "ah"
         - phase_id: "PHASE-DEPLOYMENT-006-profiles"
           sequence: 6
           status: "COMPLETED"
           tests: "43/43"
-          machine: "ah"
+          track: "ah"
         - phase_id: "copilot-instructions-merger"
           sequence: 7
           status: "COMPLETED"
           tests: "22/22"
-          machine: "ah"
+          track: "ah"
         - phase_id: "ci-cd-production-release"
           sequence: 8
           status: "COMPLETED"
@@ -813,7 +811,7 @@ phases_implementation_status:
     phases:
       - id: "PHASE-CONV-PROTOCOL-001"
         title: "Conversation Protocol Production Enhancement"
-        machine: "win"
+        track: "win"
         priority: "P0-CRITICAL"
         estimated_effort: "6-8 hours"
         status: "NOT_STARTED"
@@ -1053,7 +1051,7 @@ phases_implementation_status:
       
       - id: "PHASE-REM-004-silent-failures"
         title: "Silent Failure and Graceful Degradation Remediation"
-        machine: "win"
+        track: "win"
         priority: "P0-CRITICAL"
         estimated_effort: "4-6 hours"
         status: "NOT_STARTED"
@@ -1337,7 +1335,7 @@ phases_implementation_status:
         estimated_effort: "4-6 hours (1 day)"
         actual_effort: "0 hours (already complete)"
         blocking: true
-        machine: "mac"
+        track: "mac"
         completion_date: "2026-01-21"
         note: "All exports verified present, 7540 tests collecting successfully with 0 ImportError"
         file: "_workspaces/roadmap/phases/impl-export-completion.yaml"
@@ -1358,7 +1356,7 @@ phases_implementation_status:
         estimated_effort: "1-2 days"
         actual_effort: "0 hours (already resolved)"
         blocking: true
-        machine: "mac"
+        track: "mac"
         completion_date: "2026-01-21"
         note: "No RecursionError detected, all orchestrator tests collecting successfully"
         file: "_workspaces/roadmap/phases/impl-circular-import-fix.yaml"
@@ -1378,7 +1376,7 @@ phases_implementation_status:
         priority: "P1-HIGH"
         estimated_effort: "3-4 days"
         blocking: false
-        machine: "win"
+        track: "win"
         recommended_before_production: true
         note: "Create comprehensive E2E test suite: smoke tests, load tests, chaos engineering"
         file: "_workspaces/roadmap/phases/impl-e2e-validation.yaml"
@@ -1393,7 +1391,7 @@ phases_implementation_status:
         priority: "P1-HIGH"
         estimated_effort: "2-3 days"
         blocking: false
-        machine: "win"
+        track: "win"
         recommended_before_production: true
         note: "Validate GitHub Actions, pre-commit hooks, rollback automation, health checks"
         file: "_workspaces/roadmap/phases/impl-cicd-validation.yaml"
@@ -1408,7 +1406,7 @@ phases_implementation_status:
         priority: "P1-MEDIUM"
         estimated_effort: "2-3 days (tier1/tier2) + 2-3 days (knowledge base) = 4-6 days total"
         blocking: false
-        machine: "win"
+        track: "win"
         recommended_before_production: true
         note: "ENHANCED: Populate tier1/tier2 governance rules + import 7 critical knowledge domains (containers, database, security, API, async, logging, testing)"
         file: "_workspaces/roadmap/phases/impl-governance-content.yaml"
@@ -1440,7 +1438,7 @@ phases_implementation_status:
         priority: "P2-OPTIONAL"
         estimated_effort: "2-3 days"
         blocking: false
-        machine: "eval"
+        track: "eval"
         required: false
         sequence: 1
         depends_on: ["PHASE-E-TDD-IMPLEMENTATION"]
@@ -1455,7 +1453,7 @@ phases_implementation_status:
         priority: "P2-OPTIONAL"
         estimated_effort: "2-3 days"
         blocking: false
-        machine: "eval"
+        track: "eval"
         required: false
         sequence: 2
         depends_on: ["PHASE-KG-001-foundation"]
@@ -1469,7 +1467,7 @@ phases_implementation_status:
         priority: "P2-OPTIONAL"
         estimated_effort: "2-3 days"
         blocking: false
-        machine: "eval"
+        track: "eval"
         required: false
         sequence: 3
         depends_on: ["PHASE-KG-002-entity-sync"]
@@ -1483,7 +1481,7 @@ phases_implementation_status:
         priority: "P2-OPTIONAL"
         estimated_effort: "2-3 days"
         blocking: false
-        machine: "eval"
+        track: "eval"
         required: false
         sequence: 4
         depends_on: ["PHASE-KG-003-query-layer"]
@@ -1497,7 +1495,7 @@ phases_implementation_status:
         priority: "P2-OPTIONAL"
         estimated_effort: "2-3 days"
         blocking: false
-        machine: "eval"
+        track: "eval"
         required: false
         sequence: 5
         depends_on: ["PHASE-KG-004-routing-optimization"]
@@ -1514,7 +1512,7 @@ phases_implementation_status:
         actual_effort: "Day 3 - E1-E5 complete"
         completion_date: "2026-01-22"
         blocking: true
-        machine: "mac"
+        track: "mac"
         note: "8142 tests collected. E1-E4 COMPLETE. E5 COMPLETE: 1877/1910 tests passing (98.3%). Production-ready implementations with full functionality."
         file: "_workspaces/roadmap/phases/PHASE-E-TDD-IMPLEMENTATION.yaml"
         implementation_guide: "_workspaces/roadmap/PHASE-E-IMPLEMENTATION-GUIDE.md"
@@ -2854,7 +2852,7 @@ phase_execution_tracking:
   description: "Real-time phase execution state for autonomous machine-specific loops"
   
   mac_track_state:
-    machine: "mac"
+    track: "mac"
     current_phase_index: 4  # 0=impl-export-completion (COMPLETED), 1=impl-circular-import-fix (COMPLETED), 2=PHASE-E (COMPLETED), 3=PHASE-F (COMPLETED), 4=ALL COMPLETE
     total_phases: 4
     phases_completed: 4
@@ -2869,7 +2867,7 @@ phase_execution_tracking:
     
     phase_states:
       - phase_id: "impl-export-completion"
-        machine: "mac"
+        track: "mac"
         sequence: 1
         status: "COMPLETED"  # PENDING | EXECUTING | COMPLETED | BLOCKED | SKIPPED
         executed_by: "machine:mac autonomous loop"  # which chat/invocation
@@ -3153,7 +3151,7 @@ phase_execution_tracking:
           - Hybrid path: Option B now + Option C later as non-breaking enhancement
   
   ah_track_state:
-    machine: "ah"
+    track: "ah"
     current_phase_index: 11
     total_phases: 11
     phases_completed: 11
@@ -3165,7 +3163,7 @@ phase_execution_tracking:
     
     phase_states:
       - phase_id: "PHASE-DEPLOYMENT-001-sanitizer"
-        machine: "ah"
+        track: "ah"
         sequence: 1
         status: "COMPLETED"
         start_time: "2026-01-21T00:00:00Z"
@@ -3260,7 +3258,7 @@ phase_execution_tracking:
     summary: "✅ ALL 11 PHASES COMPLETED (191/191 tests passing) - Deployment infrastructure and governance compliance hardened"
         
   win_track_state:
-    machine: "win"
+    track: "win"
     current_phase_index: 7
     total_phases: 7
     phases_completed: 7
@@ -3271,7 +3269,7 @@ phase_execution_tracking:
     test_files_status: "✅ 148 tests verified passing across all win track phases."
   
   eval_track_state:
-    machine: "eval"
+    track: "eval"
     current_phase_index: 0
     total_phases: 6
     phases_completed: 0
