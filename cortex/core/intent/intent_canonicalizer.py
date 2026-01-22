@@ -30,6 +30,17 @@ class Scope:
     function_name: Optional[str] = None
     ac_id: Optional[str] = None
     module_path: Optional[str] = None
+    description: str = ""  # General description of scope
+
+
+@dataclass
+class IntentScope:
+    """Alias for Scope - used in tests."""
+    description: str = ""
+    file_path: Optional[str] = None
+    class_name: Optional[str] = None
+    function_name: Optional[str] = None
+    ac_id: Optional[str] = None
 
 
 @dataclass
@@ -409,9 +420,23 @@ class IntentCanonicalizer:
         )
 
 
+@dataclass
+class CanonicalizedIntent:
+    """Alias for CanonicalIntent - used in router tests."""
+    original_text: str
+    intent_type: Any  # IntentType enum
+    scope: Any  # IntentScope
+    confidence: float
+    keywords: List[str]
+    needs_clarification: bool = False
+    clarification_prompt: Optional[str] = None
+
+
 __all__ = [
     "IntentCanonicalizer",
     "CanonicalIntent",
+    "CanonicalizedIntent",
     "IntentType",
     "Scope",
+    "IntentScope",
 ]
