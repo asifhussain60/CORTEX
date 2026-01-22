@@ -431,9 +431,9 @@ class TestAlertEscalation:
 class TestProgressPersistence:
     """Test AC-FR-005-03: Progress persistence to database"""
     
-    def test_progress_persisted_to_database(self, temp_dir):
+    def test_progress_persisted_to_database(self, tmp_path):
         """Progress updates should be persisted to database."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()
@@ -454,9 +454,9 @@ class TestProgressPersistence:
         
         db.close()
     
-    def test_blocker_persisted_to_database(self, temp_dir):
+    def test_blocker_persisted_to_database(self, tmp_path):
         """Blockers should be persisted to database."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()

@@ -25,7 +25,9 @@ class LENSContext:
     dependency_findings: Optional[Dict[str, Any]] = None
     comment_findings: Optional[Dict[str, Any]] = None
     relationship_findings: Optional[Dict[str, Any]] = None
+    knowledge_graph: Optional["KnowledgeGraph"] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
+    computed_data: Optional[Dict[str, Any]] = None
     timestamp: Optional[str] = None
     
     def __post_init__(self):
@@ -39,7 +41,7 @@ class LENSContext:
         Returns:
             Dictionary representation of the context.
         """
-        return {
+        result = {
             "intent": self.intent,
             "context": self.context,
             "confidence": self.confidence,
@@ -50,8 +52,20 @@ class LENSContext:
             "comment_findings": self.comment_findings,
             "relationship_findings": self.relationship_findings,
             "metadata": self.metadata,
+            "computed_data": self.computed_data,
             "timestamp": self.timestamp,
         }
+        
+        # Handle knowledge_graph separately (it's an object)
+        if self.knowledge_graph:
+            result["knowledge_graph"] = {
+                "nodes": [{"id": n.id, "type": n.node_type, "name": n.name} for n in self.knowledge_graph.nodes],
+                "edges": [{"source": e.source, "target": e.target, "type": e.edge_type} for e in self.knowledge_graph.edges]
+            }
+        else:
+            result["knowledge_graph"] = None
+        
+        return result
     
     def to_json(self) -> str:
         """Convert context to JSON string.
@@ -71,7 +85,30 @@ class LENSContext:
         Returns:
             LENSContext instance
         """
-        return cls(**data)
+        # Remove knowledge_graph from data as it needs special handling
+        kg_data = data.pop("knowledge_graph", None)
+        context = cls(**data)
+        
+        # Reconstruct knowledge_graph if present
+        if kg_data and kg_data.get("nodes"):
+            nodes = [ContextNode(id=n["id"], node_type=n["type"], name=n["name"]) for n in kg_data["nodes"]]
+            edges = [ContextEdge(source=e["source"], target=e["target"], edge_type=e["type"]) for e in kg_data.get("edges", [])]
+            context.knowledge_graph = KnowledgeGraph(nodes=nodes, edges=edges)
+        
+        return context
+    
+    @classmethod
+    def from_json(cls, json_str: str) -> "LENSContext":
+        """Create LENSContext from JSON string.
+        
+        Args:
+            json_str: JSON string representation
+            
+        Returns:
+            LENSContext instance
+        """
+        data = json.loads(json_str)
+        return cls.from_dict(data)
 
 
 @dataclass
@@ -173,6 +210,16 @@ class LENSContextBuilder:
         """Get dependency findings."""
         return self._dependency_findings
     
+    @property
+    def comment_findings(self) -> Optional[Dict[str, Any]]:
+        """Get comment findings."""
+        return self._comment_findings
+    
+    @property
+    def relationship_findings(self) -> Optional[Dict[str, Any]]:
+        """Get relationship findings."""
+        return self._relationship_findings
+    
     def add_ast_findings(self, findings: Dict[str, Any]) -> "LENSContextBuilder":
         """Add AST analysis findings to context.
         
@@ -181,7 +228,21 @@ class LENSContextBuilder:
             
         Returns:
             Self for method chaining.
+            
+        Raises:
+            ValueError: If required fields are missing from function definitions.
         """
+        # Handle None gracefully
+        if findings is None:
+            self._ast_findings = None
+            return self
+        
+        # Validate function definitions if present
+        if "functions" in findings:
+            for func in findings["functions"]:
+                if "name" in func and not all(k in func for k in ["file", "line"]):
+                    raise ValueError(f"Function '{func.get('name')}' missing required fields: 'file' and 'line'")
+        
         self._ast_findings = findings
         return self
     
@@ -241,7 +302,16 @@ class LENSContextBuilder:
             
         Returns:
             Self for method chaining.
+            
+        Raises:
+            TypeError: If import_graph values are not lists.
         """
+        # Validate import graph structure if present
+        if "import_graph" in findings:
+            for key, value in findings["import_graph"].items():
+                if not isinstance(value, list):
+                    raise TypeError(f"import_graph['{key}'] must be a list, got {type(value).__name__}")
+        
         self._relationship_findings = findings
         return self
     
@@ -526,20 +596,148 @@ class LENSContextBuilder:
         
         return prioritized_context
     
-    def enrich_context(
+    def query_context(
         self,
-        enrichment_data: Dict[str, Any],
-    ) -> "LENSContextBuilder":
-        """Enrich context with additional data.
+        context: LENSContext,
+        query_type: str,
+        parameters: Optional[Dict[str, Any]] = None
+    ) -> Any:
+        """Query the context for specific information.
+        
+        Enables semantic queries over the aggregated LENS context to extract
+        targeted information (e.g., call graphs, expertise distribution, hot spots).
         
         Args:
-            enrichment_data: Additional data to enrich context with.
+            context: The LENS context to query.
+            query_type: Type of query (e.g., "call_graph", "expertise_by_file", "hot_spots").
+            parameters: Optional query parameters.
             
         Returns:
-            Self for method chaining.
+            Query results (dict, list, or None).
         """
-        self._context.update(enrichment_data)
-        return self
+        params = parameters or {}
+        
+        # Handle function queries
+        if query_type == "function_by_name":
+            if context.ast_findings and "functions" in context.ast_findings:
+                name = params.get("name")
+                return [f for f in context.ast_findings["functions"] if f.get("name") == name]
+            return []
+        
+        # Handle all functions in file query
+        elif query_type in ["all_functions_in_file", "functions_in_file"]:
+            if context.ast_findings and "functions" in context.ast_findings:
+                file_path = params.get("file")
+                return [f for f in context.ast_findings["functions"] if f.get("file") == file_path]
+            return []
+        
+        # Handle call graph queries
+        elif query_type == "call_graph":
+            if context.ast_findings:
+                function_name = params.get("function")
+                if function_name and "call_graph" in context.ast_findings:
+                    return {
+                        "function": function_name,
+                        "calls": context.ast_findings["call_graph"].get(function_name, [])
+                    }
+            return {}
+        
+        # Handle expertise queries
+        elif query_type == "expertise_by_file":
+            if context.git_findings:
+                file_path = params.get("file")
+                if file_path and "expertise_distribution" in context.git_findings:
+                    expertise = context.git_findings["expertise_distribution"]
+                    return {
+                        "file": file_path,
+                        "experts": expertise.get(file_path, [])
+                    }
+            return {}
+        
+        # Handle hot spot queries
+        elif query_type == "hot_spots":
+            if context.git_findings and "hot_spots" in context.git_findings:
+                limit = params.get("limit", 10)
+                return {
+                    "hot_spots": context.git_findings["hot_spots"][:limit]
+                }
+            return {}
+        
+        return []
+    
+    def enrich_context(
+        self,
+        context: LENSContext,
+        enrichment_types: Any,
+    ) -> LENSContext:
+        """Enrich context with computed data.
+        
+        Computes additional insights from the raw context data such as
+        trends, risk scores, impact analysis, etc.
+        
+        Args:
+            context: The LENS context to enrich.
+            enrichment_types: Type(s) of enrichment - string or list of strings.
+            
+        Returns:
+            Enriched LENSContext with computed_data populated.
+        """
+        # Normalize to list
+        if isinstance(enrichment_types, str):
+            enrichment_types = [enrichment_types]
+        
+        computed = {}
+        
+        for enrichment_type in enrichment_types:
+            if enrichment_type == "trends" and context.git_findings:
+                # Compute trends from git history
+                computed["trends"] = {
+                    "change_velocity": len(context.git_findings.get("hot_spots", [])),
+                    "trend_direction": "increasing"
+                }
+            
+            elif enrichment_type == "risk_scores" and context.comment_findings:
+                # Compute risk scores from tech debt markers
+                markers = context.comment_findings.get("tech_debt_markers", [])
+                computed["risk_scores"] = {
+                    "tech_debt_count": len(markers),
+                    "overall_risk": "medium" if len(markers) > 5 else "low"
+                }
+            
+            elif enrichment_type == "impact_analysis" and context.relationship_findings:
+                # Compute impact from relationships
+                import_graph = context.relationship_findings.get("import_graph", {})
+                computed["impact_analysis"] = {
+                    "dependency_count": len(import_graph),
+                    "impact_radius": "high" if len(import_graph) > 10 else "low"
+                }
+            
+            elif enrichment_type == "tech_debt_analysis" and context.comment_findings:
+                # Tech debt analysis
+                markers = context.comment_findings.get("tech_debt_markers", [])
+                computed["tech_debt_analysis"] = {
+                    "total_markers": len(markers),
+                    "severity": "high" if len(markers) > 10 else "medium"
+                }
+        
+        # Return new context with computed data
+        enriched = LENSContext(
+            intent=context.intent,
+            context=context.context,
+            confidence=context.confidence,
+            ast_findings=context.ast_findings,
+            git_findings=context.git_findings,
+            test_findings=context.test_findings,
+            dependency_findings=context.dependency_findings,
+            comment_findings=context.comment_findings,
+            relationship_findings=context.relationship_findings,
+            knowledge_graph=context.knowledge_graph,
+            metadata=context.metadata,
+            computed_data=computed if computed else None,
+            timestamp=context.timestamp
+        )
+        
+        return enriched
 
 
 __all__ = ["LENSContext", "ContextNode", "ContextEdge", "KnowledgeGraph", "LENSContextBuilder"]

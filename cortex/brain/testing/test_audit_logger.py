@@ -366,7 +366,6 @@ class TestAuditLogger:
             return None
 
 
-# Pytest hook for automatic registration
-def pytest_plugins():
-    """Auto-register audit logger plugin."""
-    return [TestAuditLogger()]
+# Pytest hook for automatic registration - should be module variable, not function
+# pytest_plugins is automatically loaded from test modules
+pytest_plugins = []  # Not needed here - plugin registered via conftest.py

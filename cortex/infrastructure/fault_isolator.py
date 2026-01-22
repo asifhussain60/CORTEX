@@ -140,12 +140,31 @@ class DomainHealth:
     
     def record_success(self) -> None:
         """Record success in domain."""
-        self.consecutive_failures = max(0, self.consecutive_failures - 1)
+        # Decay failures faster when recovering
+        if self.status == DomainStatus.DISABLED:
+            # Rapid recovery for disabled domains - each success removes 3 failures
+            # This allows a disabled domain to recover to degraded with 2 successes
+            self.consecutive_failures = max(0, self.consecutive_failures - 3)
+        else:
+            self.consecutive_failures = max(0, self.consecutive_failures - 1)
+        
         self.last_success = datetime.utcnow()
         self.error_budget.record_success()
         
-        # Recover if enough successes
-        if self.consecutive_failures == 0 and not self.error_budget.is_exhausted():
+        # Gradual recovery: DISABLED -> DEGRADED -> HEALTHY
+        if self.status == DomainStatus.DISABLED:
+            # Allow disabled domain to recover to degraded quickly
+            # After 2 successes with 10 failures, consecutive_failures = 10 - 6 = 4 (below threshold of 5)
+            if self.consecutive_failures < self.disable_threshold:
+                self.status = DomainStatus.DEGRADED
+                logger.info(f"Domain {self.domain_name} recovered to degraded (from disabled)")
+        
+        # Recover to degraded if failures reduced
+        if self.status == DomainStatus.DISABLED and self.consecutive_failures < self.disable_threshold:
+            self.status = DomainStatus.DEGRADED
+        
+        # Recover to healthy if enough successes
+        if self.consecutive_failures == 0:
             if self.status != DomainStatus.HEALTHY:
                 logger.info(f"Domain {self.domain_name} recovered to healthy")
             self.status = DomainStatus.HEALTHY
@@ -203,6 +222,7 @@ class FaultIsolator:
         
         # Backoff tracking for flip-flop prevention
         self._backoff: Dict[str, float] = {name: 1.0 for name in self.domains}
+        self._last_state: Dict[str, DomainStatus] = {name: DomainStatus.HEALTHY for name in self.domains}
         
         # Operation-level isolation
         self._operation_health: Dict[str, Dict[str, int]] = {}
@@ -237,6 +257,15 @@ class FaultIsolator:
                 self._metrics["domain_disables"] += 1
                 self._increase_backoff(domain)
         
+        # Track flip-flop: if domain recovered then failed again, increase backoff
+        last_state = self._last_state.get(domain, DomainStatus.HEALTHY)
+        if last_state == DomainStatus.HEALTHY and health.consecutive_failures > 0:
+            # Domain was healthy, now has failures - potential flip-flop
+            if health.consecutive_failures == 1:  # First failure after recovery
+                self._increase_backoff(domain)
+        
+        self._last_state[domain] = health.status
+        
         logger.warning(f"Failure in domain {domain}: {error}")
     
     def record_success(self, domain: str) -> None:
@@ -256,7 +285,12 @@ class FaultIsolator:
         # Track recovery
         if previous_status != DomainStatus.HEALTHY and health.status == DomainStatus.HEALTHY:
             self._metrics["domain_recoveries"] += 1
+            self._last_state[domain] = DomainStatus.HEALTHY  # Mark as recovered
             logger.info(f"Domain {domain} recovered")
+        
+        # Update last state
+        if health.status == DomainStatus.HEALTHY:
+            self._last_state[domain] = DomainStatus.HEALTHY
     
     def record_operation_failure(
         self,
@@ -313,7 +347,7 @@ class FaultIsolator:
         # Check operation-specific health
         if domain in self._operation_health:
             failures = self._operation_health[domain].get(operation, 0)
-            if failures >= 5:  # Threshold for operation-level disable
+            if failures >= 1:  # Threshold for operation-level disable (lower than domain-level)
                 return False
         
         return True

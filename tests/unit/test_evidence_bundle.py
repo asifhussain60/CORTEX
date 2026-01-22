@@ -504,9 +504,9 @@ class TestBundleQueryAndRetrieval:
 class TestBundlePersistence:
     """Test bundle persistence to database"""
     
-    def test_bundle_persisted_to_database(self, temp_dir):
+    def test_bundle_persisted_to_database(self, tmp_path):
         """Finalized bundles should be persisted to database."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()

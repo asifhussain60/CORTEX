@@ -21,14 +21,21 @@ class ComponentName(str, Enum):
     DATABASE = "database"
     MCP_SERVER = "mcp_server"
     API = "api"
+    AUDIT_LOGGING = "audit_logging"
+    OUTPUT_VALIDATION = "output_validation"
 
 
 class MetricType(str, Enum):
     """Metric types for performance tracking."""
     
     LATENCY = "latency"
+    LATENCY_MS = "latency_ms"
+    RESPONSE_TIME_MS = "response_time_ms"
     THROUGHPUT = "throughput"
+    THROUGHPUT_RPS = "throughput_rps"
     ERROR_RATE = "error_rate"
+    ERROR_RATE_PCT = "error_rate_pct"
+    AVAILABILITY_PCT = "availability_pct"
     MEMORY = "memory"
     CPU = "cpu"
 
@@ -138,10 +145,10 @@ class PerformanceMonitor:
     Tracks performance measurements and detects SLA violations.
     
     Args:
-        slas: Dictionary of SLAs keyed by (component, metric)
+        slas: Dictionary of SLAs keyed by component, then metric
     """
     
-    def __init__(self, slas: Optional[Dict[tuple, PerformanceSLA]] = None) -> None:
+    def __init__(self, slas: Optional[Dict[str, Dict[str, PerformanceSLA]]] = None) -> None:
         """Initialize monitor with SLAs."""
         self._slas = slas or {}
         self._violations: List[ComplianceViolation] = []
@@ -153,8 +160,9 @@ class PerformanceMonitor:
         Args:
             sla: SLA to add
         """
-        key = (sla.component, sla.metric)
-        self._slas[key] = sla
+        if sla.component not in self._slas:
+            self._slas[sla.component] = {}
+        self._slas[sla.component][sla.metric] = sla
     
     def get_sla(self, component: str, metric: str) -> PerformanceSLA:
         """Get SLA for component and metric.
@@ -169,15 +177,11 @@ class PerformanceMonitor:
         Raises:
             ValueError: If component or metric not found
         """
-        key = (component, metric)
-        if key not in self._slas:
-            # Check if component exists at all
-            component_exists = any(k[0] == component for k in self._slas.keys())
-            if not component_exists:
-                raise ValueError(f"Unknown component: {component}")
-            else:
-                raise ValueError(f"Unknown metric: {metric}")
-        return self._slas[key]
+        if component not in self._slas:
+            raise ValueError(f"Unknown component: {component}")
+        if metric not in self._slas[component]:
+            raise ValueError(f"Unknown metric: {metric}")
+        return self._slas[component][metric]
     
     def record_measurement(
         self,
@@ -207,7 +211,7 @@ class PerformanceMonitor:
         self._measurements[key].append((timestamp, value))
         
         # Check compliance
-        sla = self._slas.get(key)
+        sla = self._slas.get(component, {}).get(metric)
         if sla is None:
             return None
         
@@ -276,13 +280,64 @@ class PerformanceMonitor:
         """Clear all recorded violations."""
         self._violations.clear()
     
+    def get_statistics(
+        self,
+        component: str,
+        metric: str
+    ) -> Dict[str, float]:
+        """Get statistics for measurements.
+        
+        Args:
+            component: Component name
+            metric: Metric type
+        
+        Returns:
+            Dictionary with count, min, max, mean, p50, p95, p99
+        """
+        measurements = self.get_measurements(component, metric)
+        if not measurements:
+            return {
+                "count": 0,
+                "min": 0,
+                "max": 0,
+                "mean": 0,
+                "p50": 0,
+                "p95": 0,
+                "p99": 0
+            }
+        
+        values = [v for _, v in measurements]
+        values_sorted = sorted(values)
+        count = len(values)
+        
+        def percentile(data: List[float], p: float) -> float:
+            """Calculate percentile."""
+            if not data:
+                return 0
+            k = (len(data) - 1) * p / 100
+            f = int(k)
+            c = f + 1 if f < len(data) - 1 else f
+            if f == c:
+                return data[f]
+            return data[f] * (c - k) + data[c] * (k - f)
+        
+        return {
+            "count": count,
+            "min": min(values),
+            "max": max(values),
+            "mean": sum(values) / count,
+            "p50": percentile(values_sorted, 50),
+            "p95": percentile(values_sorted, 95),
+            "p99": percentile(values_sorted, 99)
+        }
+    
     def check_compliance(
         self,
         component: str,
         metric: str,
         value: float
     ) -> bool:
-        """Check if value is within SLA.
+        """Check if value is within SLA and record violation if not.
         
         Args:
             component: Component name
@@ -290,61 +345,152 @@ class PerformanceMonitor:
             value: Value to check
         
         Returns:
-            True if within SLA, False otherwise
+            True if within SLA (p99), False otherwise
         """
-        sla = self._slas.get((component, metric))
+        sla = self._slas.get(component, {}).get(metric)
         if sla is None:
             return True
+        
+        # Record violation if exceeds target
+        if value > sla.target:
+            violation = ComplianceViolation(
+                component=component,
+                metric=metric,
+                measured_value=value,
+                sla_target=sla.target,
+                sla_maximum=sla.maximum,
+                timestamp=datetime.now()
+            )
+            self._violations.append(violation)
+        
+        # Compliance is based on p99
         return value <= sla.p99
 
 
 # CORE-030 baseline SLAs
-CORE_030_BASELINES: Dict[tuple, PerformanceSLA] = {
-    ("orchestrator", "latency"): PerformanceSLA(
-        component="orchestrator",
-        metric="latency",
-        target=100,
-        p99=500,
-        maximum=1000,
-        unit="ms",
-        description="Orchestrator response time"
-    ),
-    ("intent_router", "latency"): PerformanceSLA(
-        component="intent_router",
-        metric="latency",
-        target=50,
-        p99=200,
-        maximum=500,
-        unit="ms",
-        description="Intent routing time"
-    ),
-    ("knowledge_graph", "latency"): PerformanceSLA(
-        component="knowledge_graph",
-        metric="latency",
-        target=200,
-        p99=1000,
-        maximum=2000,
-        unit="ms",
-        description="Knowledge graph query time"
-    ),
-    ("database", "latency"): PerformanceSLA(
-        component="database",
-        metric="latency",
-        target=10,
-        p99=50,
-        maximum=100,
-        unit="ms",
-        description="Database query time"
-    ),
-    ("mcp_server", "latency"): PerformanceSLA(
-        component="mcp_server",
-        metric="latency",
-        target=100,
-        p99=500,
-        maximum=1000,
-        unit="ms",
-        description="MCP tool invocation time"
-    ),
+CORE_030_BASELINES: Dict[str, Dict[str, PerformanceSLA]] = {
+    "orchestrator": {
+        "latency": PerformanceSLA(
+            component="orchestrator",
+            metric="latency",
+            target=100,
+            p99=500,
+            maximum=1000,
+            unit="ms",
+            description="Orchestrator response time"
+        ),
+    },
+    "intent_router": {
+        "latency": PerformanceSLA(
+            component="intent_router",
+            metric="latency",
+            target=50,
+            p99=200,
+            maximum=500,
+            unit="ms",
+            description="Intent routing time"
+        ),
+        "response_time_ms": PerformanceSLA(
+            component="intent_router",
+            metric="response_time_ms",
+            target=50,
+            p99=200,
+            maximum=500,
+            unit="ms",
+            description="Intent router response time"
+        ),
+        "throughput_rps": PerformanceSLA(
+            component="intent_router",
+            metric="throughput_rps",
+            target=10,
+            p99=50,
+            maximum=100,
+            unit="rps",
+            description="Intent router throughput (minimum acceptable throughput)"
+        ),
+        "error_rate_pct": PerformanceSLA(
+            component="intent_router",
+            metric="error_rate_pct",
+            target=0.1,
+            p99=1.0,
+            maximum=5.0,
+            unit="%",
+            description="Intent router error rate"
+        ),
+    },
+    "knowledge_graph": {
+        "latency": PerformanceSLA(
+            component="knowledge_graph",
+            metric="latency",
+            target=200,
+            p99=1000,
+            maximum=2000,
+            unit="ms",
+            description="Knowledge graph query time"
+        ),
+    },
+    "database": {
+        "latency": PerformanceSLA(
+            component="database",
+            metric="latency",
+            target=10,
+            p99=50,
+            maximum=100,
+            unit="ms",
+            description="Database query time"
+        ),
+    },
+    "mcp_server": {
+        "latency": PerformanceSLA(
+            component="mcp_server",
+            metric="latency",
+            target=100,
+            p99=500,
+            maximum=1000,
+            unit="ms",
+            description="MCP tool invocation time"
+        ),
+    },
+    "audit_logging": {
+        "latency_ms": PerformanceSLA(
+            component="audit_logging",
+            metric="latency_ms",
+            target=10,
+            p99=50,
+            maximum=100,
+            unit="ms",
+            description="Audit log write latency"
+        ),
+        "availability_pct": PerformanceSLA(
+            component="audit_logging",
+            metric="availability_pct",
+            target=99.0,
+            p99=99.5,
+            maximum=99.9,
+            unit="%",
+            description="Audit logging availability"
+        ),
+    },
+    "output_validation": {
+        "latency_ms": PerformanceSLA(
+            component="output_validation",
+            metric="latency_ms",
+            target=50,
+            p99=200,
+            maximum=500,
+            unit="ms",
+            description="Output validation latency"
+        ),
+        "error_rate_pct": PerformanceSLA(
+            component="output_validation",
+            metric="error_rate_pct",
+            target=0.1,
+            p99=1.0,
+            maximum=5.0,
+            unit="%",
+            description="Output validation error rate"
+        ),
+    },
 }
 
 

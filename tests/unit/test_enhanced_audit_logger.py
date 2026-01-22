@@ -22,9 +22,9 @@ from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 class TestPreExecutionLogging:
     """Test that operations are logged before execution."""
     
-    def test_pre_execution_logging(self, temp_dir):
+    def test_pre_execution_logging(self, tmp_path):
         """AC-FR-001-01: Operations should be logged before execution."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()
@@ -53,9 +53,9 @@ class TestPreExecutionLogging:
         
         db.close()
     
-    def test_operation_lifecycle(self, temp_dir):
+    def test_operation_lifecycle(self, tmp_path):
         """Operations should log start, then completion."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()
@@ -99,9 +99,9 @@ class TestPreExecutionLogging:
 class TestHashChainIntegrity:
     """Test that hash chain integrity is maintained."""
     
-    def test_hash_chain_integrity(self, temp_dir):
+    def test_hash_chain_integrity(self, tmp_path):
         """AC-FR-001-02: Hash chain integrity must be maintained."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()
@@ -123,9 +123,9 @@ class TestHashChainIntegrity:
         
         db.close()
     
-    def test_each_entry_has_hash(self, temp_dir):
+    def test_each_entry_has_hash(self, tmp_path):
         """Each audit entry should have entry hash and previous hash."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()
@@ -153,9 +153,9 @@ class TestHashChainIntegrity:
         
         db.close()
     
-    def test_chain_continuity(self, temp_dir):
+    def test_chain_continuity(self, tmp_path):
         """Hashes should form continuous chain."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()
@@ -183,9 +183,9 @@ class TestHashChainIntegrity:
 class TestAuditQueryByAcId:
     """Test that audit logs are queryable by AC-ID."""
     
-    def test_audit_query_by_ac_id(self, temp_dir):
+    def test_audit_query_by_ac_id(self, tmp_path):
         """AC-FR-001-03: Audit logs should be queryable by AC-ID."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()
@@ -213,9 +213,9 @@ class TestAuditQueryByAcId:
         
         db.close()
     
-    def test_get_operation_history(self, temp_dir):
+    def test_get_operation_history(self, tmp_path):
         """Should retrieve operation history in order."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()
@@ -241,9 +241,9 @@ class TestAuditQueryByAcId:
         
         db.close()
     
-    def test_query_nonexistent_ac_id(self, temp_dir):
+    def test_query_nonexistent_ac_id(self, tmp_path):
         """Query for nonexistent AC-ID should return empty."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()
@@ -282,9 +282,9 @@ class TestEnhancedAuditLoggerSingleton:
 class TestChainStatus:
     """Test chain status reporting."""
     
-    def test_get_chain_status(self, temp_dir):
+    def test_get_chain_status(self, tmp_path):
         """Should report chain status."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()
@@ -312,9 +312,9 @@ class TestChainStatus:
 class TestOperationFailure:
     """Test logging of failed operations."""
     
-    def test_log_operation_failure(self, temp_dir):
+    def test_log_operation_failure(self, tmp_path):
         """Should log operation failure."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()

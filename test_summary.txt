@@ -1,0 +1,930 @@
+[PYTEST] Test execution started
+============================= test session starts =============================
+platform win32 -- Python 3.14.2, pytest-9.0.2, pluggy-1.6.0
+rootdir: C:\PROJECTS\CORTEX\tests
+configfile: pytest.ini
+plugins: anyio-4.12.1, timeout-2.4.0, xdist-3.8.0
+timeout: 30.0s
+timeout method: thread
+timeout func_only: False
+created: 8/8 workers
+8 workers [8129 items]
+
+..........[PYTEST PROGRESS] 10/0 - 10P 0F 0E (1.3 tests/sec) - test_assess_moderate_complexity
+..........[PYTEST PROGRESS] 20/0 - 20P 0F 0E (2.5 tests/sec) - test_business_affinity_with_business_keywords
+..........[PYTEST PROGRESS] 30/0 - 30P 0F 0E (3.8 tests/sec) - test_add_scenario
+..........[PYTEST PROGRESS] 40/0 - 40P 0F 0E (5.0 tests/sec) - test_lens_confidence_aggregation
+..........[PYTEST PROGRESS] 50/0 - 50P 0F 0E (6.3 tests/sec) - test_resources_list_message_type
+..........[PYTEST PROGRESS] 60/0 - 60P 0F 0E (7.5 tests/sec) - test_update_scenario
+..........[PYTEST PROGRESS] 70/0 - 70P 0F 0E (8.8 tests/sec) - test_search_tools
+.. [  0%]
+........[PYTEST PROGRESS] 80/0 - 80P 0F 0E (10.0 tests/sec) - test_conflict_count_tracking
+..........[PYTEST PROGRESS] 90/0 - 90P 0F 0E (11.3 tests/sec) - test_search_case_insensitive
+..........[PYTEST PROGRESS] 100/0 - 100P 0F 0E (12.5 tests/sec) - test_search_in_description
+..........[PYTEST PROGRESS] 110/0 - 110P 0F 0E (13.8 tests/sec) - test_error_throttler_get_error_rate
+..........[PYTEST PROGRESS] 120/0 - 120P 0F 0E (15.0 tests/sec) - test_error_throttler_reset
+..........[PYTEST PROGRESS] 130/0 - 130P 0F 0E (16.2 tests/sec) - test_ast_complexity_simple_function
+..........[PYTEST PROGRESS] 140/0 - 140P 0F 0E (17.5 tests/sec) - test_parameter_compliance_valid
+.... [  1%]
+......[PYTEST PROGRESS] 150/0 - 150P 0F 0E (18.7 tests/sec) - test_callgraph_depth_empty
+..........[PYTEST PROGRESS] 160/0 - 160P 0F 0E (20.0 tests/sec) - test_query_business_returns_results
+..........[PYTEST PROGRESS] 170/0 - 170P 0F 0E (21.2 tests/sec) - test_response_compliance_both_result_and_error
+..........[PYTEST PROGRESS] 180/0 - 180P 0F 0E (22.4 tests/sec) - test_enum_parameter_support
+..........[PYTEST PROGRESS] 190/0 - 190P 0F 0E (23.7 tests/sec) - test_get_results_history
+..........[PYTEST PROGRESS] 200/0 - 200P 0F 0E (24.9 tests/sec) - test_knowledge_query_result_calculates_total_matches
+..........[PYTEST PROGRESS] 210/0 - 210P 0F 0E (26.2 tests/sec) - test_tool_deprecation_support
+...... [  2%]
+....[PYTEST PROGRESS] 220/0 - 220P 0F 0E (27.4 tests/sec) - test_entity_type_case_insensitive
+..........[PYTEST PROGRESS] 230/0 - 230P 0F 0E (28.6 tests/sec) - test_registry_creation
+..........[PYTEST PROGRESS] 240/0 - 240P 0F 0E (29.8 tests/sec) - test_error_recovery_field
+..........[PYTEST PROGRESS] 250/0 - 250P 0F 0E (31.0 tests/sec) - test_dashboard_custom_title
+..........[PYTEST PROGRESS] 260/0 - 260P 0F 0E (32.2 tests/sec) - test_get_tool
+..........[PYTEST PROGRESS] 270/0 - 270P 0F 0E (33.5 tests/sec) - test_mcp_response_with_result
+..........[PYTEST PROGRESS] 280/0 - 280P 0F 0E (34.7 tests/sec) - test_list_tools
+........ [  3%]
+..[PYTEST PROGRESS] 290/0 - 290P 0F 0E (35.9 tests/sec) - test_get_metrics_updates_from_validator
+..........[PYTEST PROGRESS] 300/0 - 300P 0F 0E (37.0 tests/sec) - test_parameter_validation_boolean
+..........[PYTEST PROGRESS] 310/0 - 310P 0F 0E (38.3 tests/sec) - test_multiple_conflicts_per_domain
+..........[PYTEST PROGRESS] 320/0 - 320P 0F 0E (39.5 tests/sec) - test_search_case_insensitive
+..........[PYTEST PROGRESS] 330/0 - 330P 0F 0E (40.7 tests/sec) - test_record_execution_success
+..........[PYTEST PROGRESS] 340/0 - 340P 0F 0E (41.9 tests/sec) - test_record_execution_failure
+..........[PYTEST PROGRESS] 350/0 - 350P 0F 0E (43.1 tests/sec) - test_all_params_validation_out_of_range
+.......... [  4%]
+[PYTEST PROGRESS] 360/0 - 360P 0F 0E (44.3 tests/sec) - test_multiple_domains_per_turn
+..........[PYTEST PROGRESS] 370/0 - 370P 0F 0E (45.5 tests/sec) - test_search_results_display
+..........[PYTEST PROGRESS] 380/0 - 380P 0F 0E (46.7 tests/sec) - test_executor_with_custom_timeout
+..........[PYTEST PROGRESS] 390/0 - 390P 0F 0E (47.9 tests/sec) - test_hamburger_menu_resize_auto_close
+..........[PYTEST PROGRESS] 400/0 - 400P 0F 0E (49.1 tests/sec) - test_complex_threshold_escalation
+..........[PYTEST PROGRESS] 410/0 - 410P 0F 0E (50.2 tests/sec) - test_tool_entry_metadata
+..........[PYTEST PROGRESS] 420/0 - 420P 0F 0E (51.4 tests/sec) - test_check_audit_trail_no_db
+..........[PYTEST PROGRESS] 430/0 - 430P 0F 0E (52.6 tests/sec) - test_query_existing_domain
+.. [  5%]
+........[PYTEST PROGRESS] 440/0 - 440P 0F 0E (53.8 tests/sec) - test_index_html_includes_search_css
+..........[PYTEST PROGRESS] 450/0 - 450P 0F 0E (55.0 tests/sec) - test_check_audit_trail_invalid_phase_id
+..........[PYTEST PROGRESS] 460/0 - 460P 0F 0E (56.1 tests/sec) - test_upsert_new_domain
+..........[PYTEST PROGRESS] 470/0 - 470P 0F 0E (57.3 tests/sec) - test_delete_domain
+..........[PYTEST PROGRESS] 480/0 - 480P 0F 0E (58.4 tests/sec) - test_get_conflicts_existing
+..........[PYTEST PROGRESS] 490/0 - 490P 0F 0E (59.6 tests/sec) - test_s_008_security_logging
+..........[PYTEST PROGRESS] 500/0 - 500P 0F 0E (60.8 tests/sec) - test_redact_bearer_token
+.... [  6%]
+......[PYTEST PROGRESS] 510/0 - 510P 0F 0E (62.0 tests/sec) - test_redact_password
+..........[PYTEST PROGRESS] 520/0 - 520P 0F 0E (63.1 tests/sec) - test_index_html_includes_sidebar_css
+..........[PYTEST PROGRESS] 530/0 - 530P 0F 0E (64.3 tests/sec) - test_keyboard_navigation_support
+..........[PYTEST PROGRESS] 540/0 - 540P 0F 0E (65.4 tests/sec) - test_redact_dict_nested
+..........[PYTEST PROGRESS] 550/0 - 550P 0F 0E (66.6 tests/sec) - test_tool_deprecation_notice
+..........[PYTEST PROGRESS] 560/0 - 560P 0F 0E (67.7 tests/sec) - test_redact_json_invalid
+..........[PYTEST PROGRESS] 570/0 - 570P 0F 0E (68.8 tests/sec) - test_create_chain_entry_with_previous
+...... [  7%]
+....[PYTEST PROGRESS] 580/0 - 580P 0F 0E (70.0 tests/sec) - test_empty_dict
+..........[PYTEST PROGRESS] 590/0 - 590P 0F 0E (71.2 tests/sec) - test_validate_missing_target
+..........[PYTEST PROGRESS] 600/0 - 600P 0F 0E (72.4 tests/sec) - test_validate_missing_method
+..........[PYTEST PROGRESS] 610/0 - 610P 0F 0E (73.5 tests/sec) - test_validate_method_params
+..........[PYTEST PROGRESS] 620/0 - 620P 0F 0E (74.7 tests/sec) - test_validate_dependency_cycles
+..........[PYTEST PROGRESS] 630/0 - 630P 0F 0E (75.8 tests/sec) - test_get_journey_progress
+..........[PYTEST PROGRESS] 640/0 - 640P 0F 0E (76.9 tests/sec) - test_mode_configuration_creation
+........ [  7%]
+..[PYTEST PROGRESS] 650/0 - 650P 0F 0E (78.1 tests/sec) - test_set_and_get_execution_mode
+..........[PYTEST PROGRESS] 660/0 - 660P 0F 0E (79.3 tests/sec) - test_get_update_history_all
+..........[PYTEST PROGRESS] 670/0 - 670P 0F 0E (80.4 tests/sec) - test_registry_initialization
+..........[PYTEST PROGRESS] 680/0 - 680P 0F 0E (81.6 tests/sec) - test_register_duplicate_tool
+..........[PYTEST PROGRESS] 690/0 - 690P 0F 0E (82.7 tests/sec) - test_check_documentation_completed
+..........[PYTEST PROGRESS] 700/0 - 700P 0F 0E (83.9 tests/sec) - test_parse_string
+..........[PYTEST PROGRESS] 710/0 - 710P 0F 0E (85.0 tests/sec) - test_access_tracking
+.......... [  8%]
+[PYTEST PROGRESS] 720/0 - 720P 0F 0E (86.1 tests/sec) - test_base_template_creation
+..........[PYTEST PROGRESS] 730/0 - 730P 0F 0E (87.2 tests/sec) - test_alert_cooldown
+..........[PYTEST PROGRESS] 740/0 - 740P 0F 0E (88.2 tests/sec) - test_run_skipped_test
+..........[PYTEST PROGRESS] 750/0 - 750P 0F 0E (89.3 tests/sec) - test_empty_tag_search
+..........[PYTEST PROGRESS] 760/0 - 760P 0F 0E (90.4 tests/sec) - test_change_detection_service_exists
+..........[PYTEST PROGRESS] 770/0 - 770P 0F 0E (91.5 tests/sec) - test_thread_safety_concurrent_access
+..........[PYTEST PROGRESS] 780/0 - 780P 0F 0E (92.6 tests/sec) - test_coverage_gap_detection
+..........[PYTEST PROGRESS] 790/0 - 790P 0F 0E (93.7 tests/sec) - test_staleness_detection
+.. [  9%]
+........[PYTEST PROGRESS] 800/0 - 800P 0F 0E (94.9 tests/sec) - test_to_yaml_round_trip
+..........[PYTEST PROGRESS] 810/0 - 810P 0F 0E (95.9 tests/sec) - test_protocol_has_query_method
+..........[PYTEST PROGRESS] 820/0 - 820P 0F 0E (97.0 tests/sec) - test_custom_adapter_creation
+..........[PYTEST PROGRESS] 830/0 - 830P 0F 0E (98.2 tests/sec) - test_semantic_search_relevance
+.........s[PYTEST PROGRESS] 840/0 - 839P 0F 0E (99.2 tests/sec) - test_knowledge_repository_implements_protocol
+..s.......[PYTEST PROGRESS] 850/0 - 848P 0F 0E (100.4 tests/sec) - test_pipeline_error_handling
+s.........[PYTEST PROGRESS] 860/0 - 857P 0F 0E (101.5 tests/sec) - test_discovery_initialization
+...s [ 10%]
+s.....[PYTEST PROGRESS] 870/0 - 865P 0F 0E (102.5 tests/sec) - test_per_turn_conflict_resolution_tracking
+.........s[PYTEST PROGRESS] 880/0 - 874P 0F 0E (103.7 tests/sec) - test_business_knowledge_repository_implements_protocol
+....ss....[PYTEST PROGRESS] 890/0 - 882P 0F 0E (104.9 tests/sec) - test_per_turn_synthesis_not_applied_low_confidence
+..........[PYTEST PROGRESS] 900/0 - 892P 0F 0E (105.9 tests/sec) - test_search_backends_parameter_default
+..ss......[PYTEST PROGRESS] 910/0 - 900P 0F 0E (107.1 tests/sec) - test_include_deprecated_tools
+..........[PYTEST PROGRESS] 920/0 - 910P 0F 0E (108.2 tests/sec) - test_validate_migration_complete_success
+.......s..[PYTEST PROGRESS] 930/0 - 919P 0F 0E (109.3 tests/sec) - test_create_marker_specific_frameworks
+...... [ 11%]
+....[PYTEST PROGRESS] 940/0 - 929P 0F 0E (110.4 tests/sec) - test_create_audit_marker
+........s.[PYTEST PROGRESS] 950/0 - 938P 0F 0E (111.5 tests/sec) - test_register_version_multiple
+..........[PYTEST PROGRESS] 960/0 - 948P 0F 0E (112.6 tests/sec) - test_multiple_tag_discovery
+..........[PYTEST PROGRESS] 970/0 - 958P 0F 0E (113.7 tests/sec) - test_failure_thresholds[3-3]
+..........[PYTEST PROGRESS] 980/0 - 968P 0F 0E (114.7 tests/sec) - test_metric_units[unit0]
+..........[PYTEST PROGRESS] 990/0 - 978P 0F 0E (115.8 tests/sec) - test_successful_operations[5-operation_result1]
+..........[PYTEST PROGRESS] 1000/0 - 988P 0F 0E (117.0 tests/sec) - test_marker_metadata
+........ [ 12%]
+..[PYTEST PROGRESS] 1010/0 - 998P 0F 0E (118.0 tests/sec) - test_metric_label_variations[10]
+..........[PYTEST PROGRESS] 1020/0 - 1008P 0F 0E (119.1 tests/sec) - test_optimization_insights_optimization_opportunity
+..........[PYTEST PROGRESS] 1030/0 - 1018P 0F 0E (120.1 tests/sec) - test_performance_data_tracking
+..........[PYTEST PROGRESS] 1040/0 - 1028P 0F 0E (121.2 tests/sec) - test_validation_gate_before_storage
+..........[PYTEST PROGRESS] 1050/0 - 1038P 0F 0E (122.2 tests/sec) - test_single_challenge_returned_unchanged
+..........[PYTEST PROGRESS] 1060/0 - 1048P 0F 0E (123.2 tests/sec) - test_empty_recommendations_handled
+..........[PYTEST PROGRESS] 1070/0 - 1058P 0F 0E (124.3 tests/sec) - test_multi_step_pipeline
+.......... [ 13%]
+[PYTEST PROGRESS] 1080/0 - 1068P 0F 0E (125.3 tests/sec) - test_step_timeout
+..........[PYTEST PROGRESS] 1090/0 - 1078P 0F 0E (126.3 tests/sec) - test_pipeline_execution_order
+..........[PYTEST PROGRESS] 1100/0 - 1088P 0F 0E (127.4 tests/sec) - test_pipeline_metrics
+..........[PYTEST PROGRESS] 1110/0 - 1098P 0F 0E (128.4 tests/sec) - test_step_configuration
+..........[PYTEST PROGRESS] 1120/0 - 1108P 0F 0E (129.5 tests/sec) - test_multiple_thresholds
+..........[PYTEST PROGRESS] 1130/0 - 1118P 0F 0E (130.5 tests/sec) - test_router_handles_empty_query
+..........[PYTEST PROGRESS] 1140/0 - 1128P 0F 0E (131.5 tests/sec) - test_router_confidence_factors
+..........[PYTEST PROGRESS] 1150/0 - 1138P 0F 0E (132.5 tests/sec) - test_scan_file_imports
+.. [ 14%]
+........[PYTEST PROGRESS] 1160/0 - 1148P 0F 0E (133.5 tests/sec) - test_update_imports_unmapped_imports_preserved
+..........[PYTEST PROGRESS] 1170/0 - 1158P 0F 0E (134.5 tests/sec) - test_no_segments_if_no_challenges
+..........[PYTEST PROGRESS] 1180/0 - 1168P 0F 0E (135.5 tests/sec) - test_failed_execution
+..........[PYTEST PROGRESS] 1190/0 - 1178P 0F 0E (136.4 tests/sec) - test_multiple_concurrent_executions
+..........[PYTEST PROGRESS] 1200/0 - 1188P 0F 0E (137.4 tests/sec) - test_backward_compatibility_with_base_generator
+s.........[PYTEST PROGRESS] 1210/0 - 1197P 0F 0E (138.4 tests/sec) - test_p_001_response_time_requirements
+..s.......[PYTEST PROGRESS] 1220/0 - 1206P 0F 0E (139.4 tests/sec) - test_all_testing_packages_importable
+.... [ 15%]
+......[PYTEST PROGRESS] 1230/0 - 1216P 0F 0E (140.4 tests/sec) - test_rel_003_disaster_recovery
+s...s.....[PYTEST PROGRESS] 1240/0 - 1224P 0F 0E (141.4 tests/sec) - test_get_duration_baseline_specific_operation
+...s......[PYTEST PROGRESS] 1250/0 - 1233P 0F 0E (142.4 tests/sec) - test_failed_call_increments_failure
+s.........[PYTEST PROGRESS] 1260/0 - 1242P 0F 0E (143.4 tests/sec) - test_version_mismatch_detection
+..........[PYTEST PROGRESS] 1270/0 - 1252P 0F 0E (144.4 tests/sec) - test_rel_015_postmortem_analysis
+..........[PYTEST PROGRESS] 1280/0 - 1262P 0F 0E (145.4 tests/sec) - test_validate_invalid_version
+..........[PYTEST PROGRESS] 1290/0 - 1272P 0F 0E (146.4 tests/sec) - test_version_metadata
+...... [ 15%]
+....[PYTEST PROGRESS] 1300/0 - 1282P 0F 0E (147.3 tests/sec) - test_multiple_users_isolation
+..........[PYTEST PROGRESS] 1310/0 - 1292P 0F 0E (148.2 tests/sec) - test_query_specific_function
+..........[PYTEST PROGRESS] 1320/0 - 1302P 0F 0E (149.1 tests/sec) - test_adapter_source_name
+..........[PYTEST PROGRESS] 1330/0 - 1312P 0F 0E (149.9 tests/sec) - test_engine_initialization
+..........[PYTEST PROGRESS] 1340/0 - 1322P 0F 0E (150.9 tests/sec) - test_comprehensive_cortex_structure_design
+..........[PYTEST PROGRESS] 1350/0 - 1332P 0F 0E (151.8 tests/sec) - test_cache_entry_dataclass
+..........[PYTEST PROGRESS] 1360/0 - 1342P 0F 0E (152.7 tests/sec) - test_cache_invalidation
+........ [ 16%]
+..[PYTEST PROGRESS] 1370/0 - 1352P 0F 0E (153.7 tests/sec) - test_validate_tier_declaration_invalid_tiers
+..........[PYTEST PROGRESS] 1380/0 - 1362P 0F 0E (154.4 tests/sec) - test_validate_context_integrity_mismatch
+..........[PYTEST PROGRESS] 1390/0 - 1372P 0F 0E (155.1 tests/sec) - test_build_phase_summaries_compliant
+..........[PYTEST PROGRESS] 1400/0 - 1382P 0F 0E (155.8 tests/sec) - test_get_error_frequency_by_handler
+.......E...[PYTEST PROGRESS] 1410/0 - 1392P 0F 0E (156.5 tests/sec) - test_rejection_workflow
+...F......[PYTEST PROGRESS] 1420/0 - 1401P 1F 0E (157.2 tests/sec) - test_unified_knowledge_service_exists
+..........[PYTEST PROGRESS] 1430/0 - 1411P 1F 0E (157.9 tests/sec) - test_result_filtering_and_ranking
+......... [ 17%]
+.[PYTEST PROGRESS] 1440/0 - 1421P 1F 0E (158.8 tests/sec) - test_adapter_initialization
+..........[PYTEST PROGRESS] 1450/0 - 1431P 1F 0E (159.7 tests/sec) - test_get_all_entries
+..........[PYTEST PROGRESS] 1460/0 - 1441P 1F 0E (160.5 tests/sec) - test_evaluator_initialization
+..........[PYTEST PROGRESS] 1470/0 - 1451P 1F 0E (161.3 tests/sec) - test_cache_report
+..........[PYTEST PROGRESS] 1480/0 - 1461P 1F 0E (162.2 tests/sec) - test_repair_audit_trail
+..........[PYTEST PROGRESS] 1490/0 - 1471P 1F 0E (163.1 tests/sec) - test_escape_yaml_string_dash_escape
+..........[PYTEST PROGRESS] 1500/0 - 1481P 1F 0E (164.0 tests/sec) - test_output_sanitization
+..........[PYTEST PROGRESS] 1510/0 - 1491P 1F 0E (164.9 tests/sec) - test_score_calculation
+. [ 18%]
+.........[PYTEST PROGRESS] 1520/0 - 1501P 1F 0E (165.8 tests/sec) - test_cortex_has_core_module
+..........[PYTEST PROGRESS] 1530/0 - 1511P 1F 0E (166.6 tests/sec) - test_execute_all_strategies_fail
+..........[PYTEST PROGRESS] 1540/0 - 1521P 1F 0E (167.5 tests/sec) - test_reset_after_successful_call_in_half_open
+..........[PYTEST PROGRESS] 1550/0 - 1531P 1F 0E (168.2 tests/sec) - test_metric_unit_enum
+..........[PYTEST PROGRESS] 1560/0 - 1541P 1F 0E (168.9 tests/sec) - test_partial_repair_checkpoint
+..........[PYTEST PROGRESS] 1570/0 - 1551P 1F 0E (169.7 tests/sec) - test_query_optimization_recommendations
+..........[PYTEST PROGRESS] 1580/0 - 1561P 1F 0E (170.5 tests/sec) - test_result_prefetching
+... [ 19%]
+.....s.[PYTEST PROGRESS] 1590/0 - 1570P 1F 0E (171.2 tests/sec) - test_query_returns_dict_list
+.s...s..s.[PYTEST PROGRESS] 1600/0 - 1577P 1F 0E (172.0 tests/sec) - test_mcp_tool_decorator_category
+....s.....[PYTEST PROGRESS] 1610/0 - 1586P 1F 0E (172.9 tests/sec) - test_tool_parameter_extraction_int
+s.........[PYTEST PROGRESS] 1620/0 - 1595P 1F 0E (173.7 tests/sec) - test_get_tool
+..........[PYTEST PROGRESS] 1630/0 - 1605P 1F 0E (174.4 tests/sec) - test_get_historical_trends
+..........[PYTEST PROGRESS] 1640/0 - 1615P 1F 0E (175.2 tests/sec) - test_performance_profile_metrics
+.........s[PYTEST PROGRESS] 1650/0 - 1624P 1F 0E (176.0 tests/sec) - test_isort_check_validation
+....s [ 20%]
+.....[PYTEST PROGRESS] 1660/0 - 1633P 1F 0E (176.8 tests/sec) - test_planning_domain_templates
+..........[PYTEST PROGRESS] 1670/0 - 1643P 1F 0E (177.6 tests/sec) - test_generate_response_basic
+..........[PYTEST PROGRESS] 1680/0 - 1653P 1F 0E (178.6 tests/sec) - test_response_caching
+..........[PYTEST PROGRESS] 1690/0 - 1663P 1F 0E (179.4 tests/sec) - test_validate_template_structure
+..........[PYTEST PROGRESS] 1700/0 - 1673P 1F 0E (180.3 tests/sec) - test_validate_markdown_syntax
+..........[PYTEST PROGRESS] 1710/0 - 1683P 1F 0E (180.9 tests/sec) - test_generate_cli_command
+..........[PYTEST PROGRESS] 1720/0 - 1693P 1F 0E (181.7 tests/sec) - test_scaffold_generates_tests
+....... [ 21%]
+...[PYTEST PROGRESS] 1730/0 - 1703P 1F 0E (182.5 tests/sec) - test_scaffold_generates_integrations
+..........[PYTEST PROGRESS] 1740/0 - 1713P 1F 0E (183.2 tests/sec) - test_generated_tool_has_dependencies
+..........[PYTEST PROGRESS] 1750/0 - 1723P 1F 0E (183.9 tests/sec) - test_parse_valid_python_file
+.F....F...[PYTEST PROGRESS] 1760/0 - 1731P 3F 0E (184.5 tests/sec) - test_change_detection_graceful_degradation
+......F...[PYTEST PROGRESS] 1770/0 - 1740P 4F 0E (185.2 tests/sec) - test_qa_run_full_suite
+F.F....F..[PYTEST PROGRESS] 1780/0 - 1747P 7F 0E (185.8 tests/sec) - test_stage_2_route_method_exists
+..F...F...[PYTEST PROGRESS] 1790/0 - 1755P 9F 0E (186.4 tests/sec) - test_stage_2_tracks_routing_history
+F........ [ 22%]
+.[PYTEST PROGRESS] 1800/0 - 1764P 10F 0E (187.1 tests/sec) - test_stage_2_routing_statistics
+..........[PYTEST PROGRESS] 1810/0 - 1774P 10F 0E (187.8 tests/sec) - test_e2e_confidence_aggregation
+..........[PYTEST PROGRESS] 1820/0 - 1784P 10F 0E (188.6 tests/sec) - test_pattern_detection_threshold
+.........F[PYTEST PROGRESS] 1830/0 - 1793P 11F 0E (189.2 tests/sec) - test_get_sla_valid
+.E.E..FE.FE..F[PYTEST PROGRESS] 1840/0 - 1800P 14F 0E (189.8 tests/sec) - test_check_compliance_violation
+FEFE.F.F.E..F[PYTEST PROGRESS] 1850/0 - 1805P 19F 0E (190.5 tests/sec) - test_get_statistics_multiple_measurements
+..EF....F..[PYTEST PROGRESS] 1860/0 - 1813P 21F 0E (191.3 tests/sec) - test_cascading_failure_prevented
+..F [ 23%]
+.......[PYTEST PROGRESS] 1870/0 - 1822P 22F 0E (192.1 tests/sec) - test_validate_single_entity_broken_reference
+.......F.F[PYTEST PROGRESS] 1880/0 - 1830P 24F 0E (192.7 tests/sec) - test_partial_domain_failure_isolation
+.......E.EE..[PYTEST PROGRESS] 1890/0 - 1840P 24F 0E (191.8 tests/sec) - test_automatic_scan_schedule
+........s.[PYTEST PROGRESS] 1900/0 - 1849P 24F 0E (186.7 tests/sec) - test_exception_retryability[ValueError-True]
+..........[PYTEST PROGRESS] 1910/0 - 1859P 24F 0E (176.8 tests/sec) - test_total_backoff_time[2-100-2]
+..
+============================== warnings summary ===============================
+tests\unit\core\orchestrator\test_holistic_context_builder.py:21
+tests\unit\core\orchestrator\test_holistic_context_builder.py:21
+tests\unit\core\orchestrator\test_holistic_context_builder.py:21
+tests\unit\core\orchestrator\test_holistic_context_builder.py:21
+tests\unit\core\orchestrator\test_holistic_context_builder.py:21
+tests\unit\core\orchestrator\test_holistic_context_builder.py:21
+tests\unit\core\orchestrator\test_holistic_context_builder.py:21
+tests\unit\core\orchestrator\test_holistic_context_builder.py:21
+  C:\PROJECTS\CORTEX\tests\unit\core\orchestrator\test_holistic_context_builder.py:21: PytestCollectionWarning: cannot collect test class 'TestContext' because it has a __init__ constructor (from: unit/core/orchestrator/test_holistic_context_builder.py)
+    @dataclass
+
+cortex\intent_router\test_framework.py:74
+cortex\intent_router\test_framework.py:74
+cortex\intent_router\test_framework.py:74
+cortex\intent_router\test_framework.py:74
+cortex\intent_router\test_framework.py:74
+cortex\intent_router\test_framework.py:74
+cortex\intent_router\test_framework.py:74
+cortex\intent_router\test_framework.py:74
+  C:\PROJECTS\CORTEX\cortex\intent_router\test_framework.py:74: PytestCollectionWarning: cannot collect test class 'TestFramework' because it has a __init__ constructor (from: unit/intent_router/test_framework_docs_observability.py)
+    class TestFramework:
+
+tests\unit\mcp\test_ac_mcp_001_01.py:198
+tests\unit\mcp\test_ac_mcp_001_01.py:198
+tests\unit\mcp\test_ac_mcp_001_01.py:198
+tests\unit\mcp\test_ac_mcp_001_01.py:198
+tests\unit\mcp\test_ac_mcp_001_01.py:198
+tests\unit\mcp\test_ac_mcp_001_01.py:198
+tests\unit\mcp\test_ac_mcp_001_01.py:198
+tests\unit\mcp\test_ac_mcp_001_01.py:198
+  C:\PROJECTS\CORTEX\tests\unit\mcp\test_ac_mcp_001_01.py:198: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\unit\mcp\test_ac_mcp_001_01.py:207
+tests\unit\mcp\test_ac_mcp_001_01.py:207
+tests\unit\mcp\test_ac_mcp_001_01.py:207
+tests\unit\mcp\test_ac_mcp_001_01.py:207
+tests\unit\mcp\test_ac_mcp_001_01.py:207
+tests\unit\mcp\test_ac_mcp_001_01.py:207
+tests\unit\mcp\test_ac_mcp_001_01.py:207
+tests\unit\mcp\test_ac_mcp_001_01.py:207
+  C:\PROJECTS\CORTEX\tests\unit\mcp\test_ac_mcp_001_01.py:207: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\unit\mcp\test_ac_mcp_001_01.py:230
+tests\unit\mcp\test_ac_mcp_001_01.py:230
+tests\unit\mcp\test_ac_mcp_001_01.py:230
+tests\unit\mcp\test_ac_mcp_001_01.py:230
+tests\unit\mcp\test_ac_mcp_001_01.py:230
+tests\unit\mcp\test_ac_mcp_001_01.py:230
+tests\unit\mcp\test_ac_mcp_001_01.py:230
+tests\unit\mcp\test_ac_mcp_001_01.py:230
+  C:\PROJECTS\CORTEX\tests\unit\mcp\test_ac_mcp_001_01.py:230: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\unit\mcp\test_ac_mcp_001_01.py:259
+tests\unit\mcp\test_ac_mcp_001_01.py:259
+tests\unit\mcp\test_ac_mcp_001_01.py:259
+tests\unit\mcp\test_ac_mcp_001_01.py:259
+tests\unit\mcp\test_ac_mcp_001_01.py:259
+tests\unit\mcp\test_ac_mcp_001_01.py:259
+tests\unit\mcp\test_ac_mcp_001_01.py:259
+tests\unit\mcp\test_ac_mcp_001_01.py:259
+  C:\PROJECTS\CORTEX\tests\unit\mcp\test_ac_mcp_001_01.py:259: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\unit\mcp\test_ac_mcp_001_01.py:277
+tests\unit\mcp\test_ac_mcp_001_01.py:277
+tests\unit\mcp\test_ac_mcp_001_01.py:277
+tests\unit\mcp\test_ac_mcp_001_01.py:277
+tests\unit\mcp\test_ac_mcp_001_01.py:277
+tests\unit\mcp\test_ac_mcp_001_01.py:277
+tests\unit\mcp\test_ac_mcp_001_01.py:277
+tests\unit\mcp\test_ac_mcp_001_01.py:277
+  C:\PROJECTS\CORTEX\tests\unit\mcp\test_ac_mcp_001_01.py:277: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\unit\mcp\test_ac_mcp_001_01.py:293
+tests\unit\mcp\test_ac_mcp_001_01.py:293
+tests\unit\mcp\test_ac_mcp_001_01.py:293
+tests\unit\mcp\test_ac_mcp_001_01.py:293
+tests\unit\mcp\test_ac_mcp_001_01.py:293
+tests\unit\mcp\test_ac_mcp_001_01.py:293
+tests\unit\mcp\test_ac_mcp_001_01.py:293
+tests\unit\mcp\test_ac_mcp_001_01.py:293
+  C:\PROJECTS\CORTEX\tests\unit\mcp\test_ac_mcp_001_01.py:293: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\unit\mcp\test_ac_mcp_001_01.py:312
+tests\unit\mcp\test_ac_mcp_001_01.py:312
+tests\unit\mcp\test_ac_mcp_001_01.py:312
+tests\unit\mcp\test_ac_mcp_001_01.py:312
+tests\unit\mcp\test_ac_mcp_001_01.py:312
+tests\unit\mcp\test_ac_mcp_001_01.py:312
+tests\unit\mcp\test_ac_mcp_001_01.py:312
+tests\unit\mcp\test_ac_mcp_001_01.py:312
+  C:\PROJECTS\CORTEX\tests\unit\mcp\test_ac_mcp_001_01.py:312: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\unit\mcp\test_ac_mcp_001_01.py:323
+tests\unit\mcp\test_ac_mcp_001_01.py:323
+tests\unit\mcp\test_ac_mcp_001_01.py:323
+tests\unit\mcp\test_ac_mcp_001_01.py:323
+tests\unit\mcp\test_ac_mcp_001_01.py:323
+tests\unit\mcp\test_ac_mcp_001_01.py:323
+tests\unit\mcp\test_ac_mcp_001_01.py:323
+tests\unit\mcp\test_ac_mcp_001_01.py:323
+  C:\PROJECTS\CORTEX\tests\unit\mcp\test_ac_mcp_001_01.py:323: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\unit\mcp\test_ac_mcp_001_01.py:495
+tests\unit\mcp\test_ac_mcp_001_01.py:495
+tests\unit\mcp\test_ac_mcp_001_01.py:495
+tests\unit\mcp\test_ac_mcp_001_01.py:495
+tests\unit\mcp\test_ac_mcp_001_01.py:495
+tests\unit\mcp\test_ac_mcp_001_01.py:495
+tests\unit\mcp\test_ac_mcp_001_01.py:495
+tests\unit\mcp\test_ac_mcp_001_01.py:495
+  C:\PROJECTS\CORTEX\tests\unit\mcp\test_ac_mcp_001_01.py:495: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\unit\mcp\test_ac_mcp_001_01.py:520
+tests\unit\mcp\test_ac_mcp_001_01.py:520
+tests\unit\mcp\test_ac_mcp_001_01.py:520
+tests\unit\mcp\test_ac_mcp_001_01.py:520
+tests\unit\mcp\test_ac_mcp_001_01.py:520
+tests\unit\mcp\test_ac_mcp_001_01.py:520
+tests\unit\mcp\test_ac_mcp_001_01.py:520
+tests\unit\mcp\test_ac_mcp_001_01.py:520
+  C:\PROJECTS\CORTEX\tests\unit\mcp\test_ac_mcp_001_01.py:520: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\unit\mcp\test_ac_mcp_001_01.py:535
+tests\unit\mcp\test_ac_mcp_001_01.py:535
+tests\unit\mcp\test_ac_mcp_001_01.py:535
+tests\unit\mcp\test_ac_mcp_001_01.py:535
+tests\unit\mcp\test_ac_mcp_001_01.py:535
+tests\unit\mcp\test_ac_mcp_001_01.py:535
+tests\unit\mcp\test_ac_mcp_001_01.py:535
+tests\unit\mcp\test_ac_mcp_001_01.py:535
+  C:\PROJECTS\CORTEX\tests\unit\mcp\test_ac_mcp_001_01.py:535: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\unit\mcp\test_ac_mcp_001_01.py:555
+tests\unit\mcp\test_ac_mcp_001_01.py:555
+tests\unit\mcp\test_ac_mcp_001_01.py:555
+tests\unit\mcp\test_ac_mcp_001_01.py:555
+tests\unit\mcp\test_ac_mcp_001_01.py:555
+tests\unit\mcp\test_ac_mcp_001_01.py:555
+tests\unit\mcp\test_ac_mcp_001_01.py:555
+tests\unit\mcp\test_ac_mcp_001_01.py:555
+  C:\PROJECTS\CORTEX\tests\unit\mcp\test_ac_mcp_001_01.py:555: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+tests\unit\mcp\test_ac_mcp_001_01.py:576
+tests\unit\mcp\test_ac_mcp_001_01.py:576
+tests\unit\mcp\test_ac_mcp_001_01.py:576
+tests\unit\mcp\test_ac_mcp_001_01.py:576
+tests\unit\mcp\test_ac_mcp_001_01.py:576
+tests\unit\mcp\test_ac_mcp_001_01.py:576
+tests\unit\mcp\test_ac_mcp_001_01.py:576
+tests\unit\mcp\test_ac_mcp_001_01.py:576
+  C:\PROJECTS\CORTEX\tests\unit\mcp\test_ac_mcp_001_01.py:576: PytestUnknownMarkWarning: Unknown pytest.mark.asyncio - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.asyncio
+
+cortex_brain\tier0\test_flakiness_audit.py:29
+cortex_brain\tier0\test_flakiness_audit.py:29
+cortex_brain\tier0\test_flakiness_audit.py:29
+cortex_brain\tier0\test_flakiness_audit.py:29
+cortex_brain\tier0\test_flakiness_audit.py:29
+cortex_brain\tier0\test_flakiness_audit.py:29
+cortex_brain\tier0\test_flakiness_audit.py:29
+cortex_brain\tier0\test_flakiness_audit.py:29
+  C:\PROJECTS\CORTEX\cortex_brain\tier0\test_flakiness_audit.py:29: PytestCollectionWarning: cannot collect test class 'TestFlakinessAudit' because it has a __init__ constructor (from: unit/test_test_flakiness_audit.py)
+    class TestFlakinessAudit:
+
+cortex_brain\tier0\test_isolation_cleanup.py:29
+cortex_brain\tier0\test_isolation_cleanup.py:29
+cortex_brain\tier0\test_isolation_cleanup.py:29
+cortex_brain\tier0\test_isolation_cleanup.py:29
+cortex_brain\tier0\test_isolation_cleanup.py:29
+cortex_brain\tier0\test_isolation_cleanup.py:29
+cortex_brain\tier0\test_isolation_cleanup.py:29
+cortex_brain\tier0\test_isolation_cleanup.py:29
+  C:\PROJECTS\CORTEX\cortex_brain\tier0\test_isolation_cleanup.py:29: PytestCollectionWarning: cannot collect test class 'TestIsolationCleanup' because it has a __init__ constructor (from: unit/test_test_isolation_cleanup.py)
+    class TestIsolationCleanup:
+
+unit/domain_brain/test_ac_db_003_01.py: 64 warnings
+unit/domain_brain/test_ac_db_004_01.py: 1 warning
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py: 6 warnings
+  <string>:5: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+unit/cortex/brain/core/knowledge/test_alert_system.py: 36 warnings
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py: 11 warnings
+unit/recovery/test_orphan_detection.py: 9 warnings
+  <string>:7: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+unit/cortex/brain/core/knowledge/test_alert_system.py: 13 warnings
+  C:\PROJECTS\CORTEX\cortex\brain\core\knowledge\alert_system.py:364: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+unit/cortex/brain/core/knowledge/test_alert_system.py::TestAlertSystem::test_process_anomaly_matching_rule
+unit/cortex/brain/core/knowledge/test_alert_system.py::TestAlertSystem::test_alert_cooldown
+unit/cortex/brain/core/knowledge/test_alert_system.py::TestAlertSystem::test_get_alerts_by_rule
+unit/cortex/brain/core/knowledge/test_alert_system.py::TestAlertSystem::test_get_alerts_by_severity
+unit/cortex/brain/core/knowledge/test_alert_system.py::TestAlertSystem::test_get_alerts_by_anomaly_type
+unit/cortex/brain/core/knowledge/test_alert_system.py::TestAlertSystem::test_get_recent_alerts
+unit/cortex/brain/core/knowledge/test_alert_system.py::TestAlertSystem::test_get_metrics
+unit/cortex/brain/core/knowledge/test_alert_system.py::TestAlertSystem::test_clear_alerts
+  C:\PROJECTS\CORTEX\cortex\brain\core\knowledge\alert_system.py:184: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.last_alert_time = datetime.utcnow()
+
+unit/cortex/brain/core/knowledge/test_alert_system.py::TestAlertSystem::test_clear_alerts
+  C:\PROJECTS\CORTEX\tests\unit\cortex\brain\core\knowledge\test_alert_system.py:389: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow() - timedelta(days=2),
+
+unit/cortex/brain/core/knowledge/test_alert_system.py::TestAlertSystem::test_clear_alerts
+  C:\PROJECTS\CORTEX\cortex\brain\core\knowledge\alert_system.py:483: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    cutoff = datetime.utcnow() - timedelta(hours=older_than_hours)
+
+unit/orchestrators/test_ux_optimizer.py::TestResponseUXOptimizer::test_determine_test_winner_no_winner
+  C:\PROJECTS\CORTEX\.venv\Lib\site-packages\scipy\stats\_axis_nan_policy.py:592: RuntimeWarning: Precision loss occurred in moment calculation due to catastrophic cancellation. This occurs when the data are nearly identical. Results may be unreliable.
+    res = hypotest_fun_out(*samples, **kwds)
+
+tier2/test_circuit_breaker.py: 25 warnings
+  C:\PROJECTS\CORTEX\cortex_brain\tier2\resilience.py:1071: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.metrics.last_failure_time = datetime.utcnow()
+
+tier2/test_circuit_breaker.py: 25 warnings
+  C:\PROJECTS\CORTEX\cortex_brain\tier2\resilience.py:1072: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self._last_failure_time = datetime.utcnow()
+
+tier2/test_otel_metrics.py::TestMetricsParametrized::test_metric_types[gauge-gauge]
+tier2/test_otel_metrics.py::TestMetricsParametrized::test_metric_units[unit0]
+tier2/test_otel_metrics.py::TestMetricsParametrized::test_metric_units[unit1]
+tier2/test_otel_metrics.py::TestMetricsParametrized::test_metric_units[unit2]
+tier2/test_otel_metrics.py::TestMetricsParametrized::test_metric_units[unit3]
+tier2/test_otel_metrics.py::TestMetricsCollector::test_gauge_metric_sets_value
+tier2/test_otel_metrics.py::TestMetricsCollector::test_gauge_metric_sets_value
+  C:\PROJECTS\CORTEX\cortex_brain\tier2\resilience.py:1292: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "timestamp": datetime.utcnow(),
+
+unit/core/intelligence/test_duration_intelligence.py: 85 warnings
+  C:\PROJECTS\CORTEX\cortex\core\intelligence\duration_intelligence.py:98: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp = datetime.utcnow().isoformat()
+
+tier2/test_otel_metrics.py::TestMetricsParametrized::test_span_attribute_variations[1]
+tier2/test_otel_metrics.py::TestMetricsParametrized::test_span_attribute_variations[5]
+tier2/test_otel_metrics.py::TestMetricsParametrized::test_span_attribute_variations[20]
+tier2/test_otel_metrics.py::TestMetricsCollector::test_instrumentation_span_creation
+tier2/test_otel_metrics.py::TestMetricsCollector::test_span_add_attribute
+tier2/test_otel_metrics.py::TestMetricsCollector::test_span_add_event
+  C:\PROJECTS\CORTEX\cortex_brain\tier2\resilience.py:1214: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self._start_time = datetime.utcnow()
+
+unit/core/intelligence/test_error_intelligence.py: 61 warnings
+  C:\PROJECTS\CORTEX\cortex\core\intelligence\error_intelligence.py:102: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp = datetime.utcnow().isoformat()
+
+unit/core/intelligence/test_error_intelligence.py::TestErrorAnalyzer::test_get_error_patterns_single
+unit/core/intelligence/test_error_intelligence.py::TestErrorAnalyzer::test_get_error_patterns_multiple
+unit/core/intelligence/test_error_intelligence.py::TestErrorAnalyzer::test_get_error_patterns_threshold
+unit/core/intelligence/test_error_intelligence.py::TestErrorAnalyzer::test_error_patterns_time_window
+unit/core/intelligence/test_error_intelligence.py::TestErrorAnalyzer::test_error_patterns_empty
+  C:\PROJECTS\CORTEX\cortex\core\intelligence\error_intelligence.py:150: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    cutoff_date = (datetime.utcnow() - timedelta(days=days)).isoformat()
+
+tier2/test_circuit_breaker.py::TestCircuitBreakerParametrized::test_timeout_transitions[0.1-0.15]
+tier2/test_circuit_breaker.py::TestCircuitBreakerCore::test_reject_calls_when_open
+tier2/test_circuit_breaker.py::TestCircuitBreakerCore::test_half_open_after_timeout
+tier2/test_circuit_breaker.py::TestCircuitBreakerCore::test_reset_after_successful_call_in_half_open
+tier2/test_circuit_breaker.py::TestCircuitBreakerParametrized::test_timeout_transitions[0.5-0.6]
+tier2/test_circuit_breaker.py::TestCircuitBreakerCore::test_reopen_on_failure_in_half_open
+tier2/test_circuit_breaker.py::TestCircuitBreakerParametrized::test_timeout_transitions[1-1.1]
+  C:\PROJECTS\CORTEX\cortex_brain\tier2\resilience.py:1041: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    elapsed = (datetime.utcnow() - self._last_failure_time).total_seconds()
+
+unit/core/intelligence/test_duration_intelligence.py: 11 warnings
+  C:\PROJECTS\CORTEX\cortex\core\intelligence\duration_intelligence.py:142: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    cutoff_date = (datetime.utcnow() - timedelta(days=days)).isoformat()
+
+unit/core/intelligence/test_duration_intelligence.py::TestDurationAnalyzer::test_detect_slow_operations_single
+unit/core/intelligence/test_duration_intelligence.py::TestDurationAnalyzer::test_detect_slow_operations_multiple
+unit/core/intelligence/test_duration_intelligence.py::TestDurationAnalyzer::test_detect_slow_operations_empty
+unit/core/intelligence/test_duration_intelligence.py::TestDurationAnalyzer::test_percentile_threshold_configuration
+unit/core/intelligence/test_duration_intelligence.py::TestDurationAnalyzer::test_percentile_threshold_configuration
+  C:\PROJECTS\CORTEX\cortex\core\intelligence\duration_intelligence.py:218: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    cutoff_date = (datetime.utcnow() - timedelta(days=days)).isoformat()
+
+unit/tools/test_feedback_agent.py: 12 warnings
+  C:\PROJECTS\CORTEX\cortex\tools\feedback_agent.py:314: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    generated_at=datetime.utcnow().isoformat() + "Z",
+
+unit/core/intelligence/test_error_intelligence.py::TestErrorAnalyzer::test_get_error_frequency_by_handler
+unit/core/intelligence/test_error_intelligence.py::TestErrorAnalyzer::test_handler_brittleness_ranking
+unit/core/intelligence/test_error_intelligence.py::TestErrorAnalyzer::test_error_frequency_time_window
+  C:\PROJECTS\CORTEX\cortex\core\intelligence\error_intelligence.py:204: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    cutoff_date = (datetime.utcnow() - timedelta(days=days)).isoformat()
+
+unit/core/intent/test_lens_integration.py: 12 warnings
+  C:\PROJECTS\CORTEX\cortex\core\intent\lens_context_builder.py:36: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.timestamp = datetime.utcnow().isoformat()
+
+unit/test_governance_dashboard.py::TestGovernanceDashboardBuilder::test_build_dashboard_full
+  C:\PROJECTS\CORTEX\cortex\tools\governance_dashboard.py:165: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.datetime.utcnow().isoformat() + "Z",
+
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_detect_hash_chain_break
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_dry_run_mode
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_on_demand_repair
+  C:\PROJECTS\CORTEX\cortex\core\recovery\state_repair.py:239: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    detected_at=datetime.utcnow(),
+
+unit/recovery/test_automatic_repair.py: 14 warnings
+  <string>:10: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_actual_repair_modifies_state
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_automatic_repair.py:164: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    detected_at=datetime.utcnow(),
+
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_repair_audit_trail
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_automatic_repair.py:195: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    detected_at=datetime.utcnow(),
+
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_repair_validation
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_automatic_repair.py:225: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    detected_at=datetime.utcnow(),
+
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_rollback_on_failed_validation
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_automatic_repair.py:253: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    detected_at=datetime.utcnow(),
+
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_multiple_inconsistencies_prioritized
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_automatic_repair.py:273: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    detected_at=datetime.utcnow(),
+
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_multiple_inconsistencies_prioritized
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_automatic_repair.py:282: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    detected_at=datetime.utcnow(),
+
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_repair_conflicts_with_active_operations
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_automatic_repair.py:307: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    detected_at=datetime.utcnow(),
+
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_irreparable_corruption_quarantined
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_automatic_repair.py:332: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    detected_at=datetime.utcnow(),
+
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_irreparable_corruption_quarantined
+  C:\PROJECTS\CORTEX\cortex\core\recovery\state_repair.py:504: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "timestamp": datetime.utcnow().isoformat(),
+
+tier2/test_graceful_degradation.py::TestGracefulDegradationFramework::test_register_component_success
+tier2/test_graceful_degradation.py::TestGracefulDegradationFramework::test_register_component_duplicate_error
+tier2/test_graceful_degradation.py::TestGracefulDegradationFramework::test_execute_primary_strategy_success
+tier2/test_graceful_degradation.py::TestGracefulDegradationFramework::test_execute_primary_failure_fallback_success
+tier2/test_graceful_degradation.py::TestGracefulDegradationFramework::test_execute_all_strategies_fail
+tier2/test_graceful_degradation.py::TestGracefulDegradationFramework::test_is_degraded_check
+  C:\PROJECTS\CORTEX\cortex_brain\tier2\resilience.py:388: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "registered_at": datetime.utcnow(),
+
+tier2/test_graceful_degradation.py::TestGracefulDegradationFramework::test_execute_primary_failure_fallback_success
+tier2/test_graceful_degradation.py::TestGracefulDegradationFramework::test_execute_all_strategies_fail
+tier2/test_graceful_degradation.py::TestGracefulDegradationFramework::test_is_degraded_check
+  C:\PROJECTS\CORTEX\cortex_brain\tier2\resilience.py:451: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    state["last_failure"] = datetime.utcnow()
+
+tier2/test_graceful_degradation.py::TestGracefulDegradationFramework::test_degraded_response_wrapper
+  C:\PROJECTS\CORTEX\cortex_brain\tier2\resilience.py:126: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self._created_at: datetime = datetime.utcnow()
+
+unit/core/intelligence/test_error_intelligence.py::TestErrorAnalyzer::test_detect_new_errors_single
+unit/core/intelligence/test_error_intelligence.py::TestErrorAnalyzer::test_detect_new_errors_multiple
+unit/core/intelligence/test_error_intelligence.py::TestErrorAnalyzer::test_detect_new_errors_empty
+unit/core/intelligence/test_error_intelligence.py::TestErrorAnalyzer::test_new_error_baseline_calculation
+  C:\PROJECTS\CORTEX\cortex\core\intelligence\error_intelligence.py:253: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    recent_cutoff = (datetime.utcnow() - timedelta(days=recent_days)).isoformat()
+
+unit/core/intelligence/test_error_intelligence.py::TestErrorAnalyzer::test_detect_new_errors_single
+unit/core/intelligence/test_error_intelligence.py::TestErrorAnalyzer::test_detect_new_errors_multiple
+unit/core/intelligence/test_error_intelligence.py::TestErrorAnalyzer::test_detect_new_errors_empty
+unit/core/intelligence/test_error_intelligence.py::TestErrorAnalyzer::test_new_error_baseline_calculation
+  C:\PROJECTS\CORTEX\cortex\core\intelligence\error_intelligence.py:254: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    baseline_cutoff = (datetime.utcnow() - timedelta(days=baseline_days)).isoformat()
+
+unit/core/intelligence/test_routing_intelligence.py: 28 warnings
+  C:\PROJECTS\CORTEX\cortex\core\intelligence\routing_intelligence.py:100: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp = datetime.utcnow().isoformat()
+
+tier2/test_otel_metrics.py::TestMetricsCollector::test_metric_value_creation
+  C:\PROJECTS\CORTEX\tests\tier2\test_otel_metrics.py:127: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow(),
+
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_partial_repair_checkpoint
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_partial_repair_checkpoint
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_partial_repair_checkpoint
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_automatic_repair.py:357: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    detected_at=datetime.utcnow(),
+
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_partial_repair_checkpoint
+  C:\PROJECTS\CORTEX\cortex\core\recovery\state_repair.py:625: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "timestamp": datetime.utcnow().isoformat(),
+
+unit/recovery/test_automatic_repair.py::TestStateRepair::test_repair_metrics
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_automatic_repair.py:418: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    detected_at=datetime.utcnow(),
+
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_scan_for_changes
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_get_critical_anomalies
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_should_pause_operations_no_issues
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_should_pause_operations_with_critical
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_get_last_report
+  C:\PROJECTS\CORTEX\tests\unit\cortex\brain\core\knowledge\test_change_detection_integration.py:72: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "updated_at": datetime.utcnow().isoformat(),
+
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_scan_for_changes
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_get_critical_anomalies
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_should_pause_operations_no_issues
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_should_pause_operations_with_critical
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_get_last_report
+  C:\PROJECTS\CORTEX\tests\unit\cortex\brain\core\knowledge\test_change_detection_integration.py:78: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "updated_at": (datetime.utcnow() - timedelta(days=1)).isoformat(),
+
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_scan_for_changes
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_get_critical_anomalies
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_should_pause_operations_no_issues
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_should_pause_operations_with_critical
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_get_last_report
+  C:\PROJECTS\CORTEX\tests\unit\cortex\brain\core\knowledge\test_change_detection_integration.py:84: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "updated_at": (datetime.utcnow() - timedelta(days=30)).isoformat(),
+
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_scan_for_changes
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_get_last_report
+  <string>:3: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py: 17 warnings
+  C:\PROJECTS\CORTEX\cortex\brain\core\knowledge\change_detection.py:179: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.learning_start = datetime.utcnow()
+
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_scan_for_changes
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_get_critical_anomalies
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_should_pause_operations_no_issues
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_get_last_report
+  C:\PROJECTS\CORTEX\cortex\brain\core\knowledge\change_detection.py:541: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_record_change
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_get_recent_changes
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_get_recent_changes
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_get_recent_changes
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_get_entry_change_history
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_get_entry_change_history
+  C:\PROJECTS\CORTEX\cortex\brain\core\knowledge\change_detection.py:694: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.history[entry_id].add_change(version, datetime.utcnow(), change_summary)
+
+unit/core/intelligence/test_duration_intelligence.py::TestDurationAnalyzer::test_get_handler_average_duration
+unit/core/intelligence/test_duration_intelligence.py::TestDurationAnalyzer::test_handler_comparison
+unit/core/intelligence/test_duration_intelligence.py::TestDurationAnalyzer::test_handler_comparison
+unit/core/intelligence/test_duration_intelligence.py::TestDurationAnalyzer::test_handler_not_found
+  C:\PROJECTS\CORTEX\cortex\core\intelligence\duration_intelligence.py:274: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    cutoff_date = (datetime.utcnow() - timedelta(days=days)).isoformat()
+
+unit/cortex/brain/core/knowledge/test_change_detection_integration.py::TestChangeDetectionIntegration::test_get_recent_changes
+  C:\PROJECTS\CORTEX\cortex\brain\core\knowledge\change_detection_integration.py:350: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    since = datetime.utcnow() - timedelta(hours=lookback_hours)
+
+unit/test_rem_003_02_chat_header_injection.py: 11 warnings
+  C:\PROJECTS\CORTEX\cortex\api\chat_response_formatter.py:82: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "timestamp": datetime.utcnow().isoformat() + "Z",
+
+unit/core/intelligence/test_routing_intelligence.py::TestRoutingAnalyzer::test_get_routing_accuracy_all_handlers
+unit/core/intelligence/test_routing_intelligence.py::TestRoutingAnalyzer::test_get_routing_accuracy_specific_handler
+unit/core/intelligence/test_routing_intelligence.py::TestRoutingAnalyzer::test_get_routing_accuracy_time_window
+unit/core/intelligence/test_routing_intelligence.py::TestRoutingAnalyzer::test_accuracy_calculation_edge_cases
+unit/core/intelligence/test_routing_intelligence.py::TestRoutingAnalyzer::test_accuracy_calculation_edge_cases
+  C:\PROJECTS\CORTEX\cortex\core\intelligence\routing_intelligence.py:146: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    cutoff_date = (datetime.utcnow() - timedelta(days=days)).isoformat()
+
+tier2/test_circuit_breaker.py::TestCircuitBreakerCore::test_last_failure_timestamp
+  C:\PROJECTS\CORTEX\tests\tier2\test_circuit_breaker.py:195: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    before = datetime.utcnow()
+
+tier2/test_circuit_breaker.py::TestCircuitBreakerCore::test_last_failure_timestamp
+  C:\PROJECTS\CORTEX\tests\tier2\test_circuit_breaker.py:200: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    after = datetime.utcnow()
+
+templates/test_template_content.py::TestTemplateValidation::test_validate_all_templates
+templates/test_template_content.py::TestTemplateValidation::test_generate_validation_report
+templates/test_template_content.py::TestQualityAssurance::test_qa_generate_metrics
+templates/test_template_content.py::TestQualityAssurance::test_qa_generate_report
+templates/test_template_content.py::TestQualityAssurance::test_qa_run_full_suite
+templates/test_template_content.py::TestQualityAssurance::test_qa_export_results
+templates/test_template_content.py::TestQualityAssurance::test_qa_export_results
+  C:\PROJECTS\CORTEX\cortex\templates\template_validation.py:28: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+
+unit/core/intelligence/test_routing_intelligence.py::TestRoutingAnalyzer::test_detect_misrouting_patterns_single
+unit/core/intelligence/test_routing_intelligence.py::TestRoutingAnalyzer::test_detect_misrouting_patterns_multiple
+unit/core/intelligence/test_routing_intelligence.py::TestRoutingAnalyzer::test_detect_misrouting_patterns_empty
+unit/core/intelligence/test_routing_intelligence.py::TestRoutingAnalyzer::test_pattern_detection_threshold
+unit/core/intelligence/test_routing_intelligence.py::TestRoutingAnalyzer::test_time_window_filtering
+  C:\PROJECTS\CORTEX\cortex\core\intelligence\routing_intelligence.py:205: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    cutoff_date = (datetime.utcnow() - timedelta(days=days)).isoformat()
+
+unit/core/knowledge/test_orchestrator_integration.py: 28 warnings
+  C:\PROJECTS\CORTEX\cortex\brain\domain_brain\audit_logger.py:75: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    timestamp=datetime.utcnow(),
+
+unit/core/knowledge/test_orchestrator_integration.py: 28 warnings
+  C:\PROJECTS\CORTEX\cortex\brain\domain_brain\audit_logger.py:127: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+unit/infrastructure/test_fault_isolation.py: 80 warnings
+  C:\PROJECTS\CORTEX\cortex\infrastructure\fault_isolator.py:128: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.last_failure = datetime.utcnow()
+
+unit/infrastructure/test_fault_isolation.py: 80 warnings
+  C:\PROJECTS\CORTEX\cortex\infrastructure\fault_isolator.py:72: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self._failures.append(datetime.utcnow())
+
+unit/infrastructure/test_fault_isolation.py: 49 warnings
+  C:\PROJECTS\CORTEX\cortex\infrastructure\fault_isolator.py:102: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    cutoff = datetime.utcnow() - timedelta(minutes=self.window_minutes)
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_scan_detects_orphaned_locks
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:145: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "acquired_at": (datetime.utcnow() - timedelta(minutes=15)).isoformat(),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_scan_detects_orphaned_locks
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:146: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "last_heartbeat": (datetime.utcnow() - timedelta(minutes=15)).isoformat(),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_scan_detects_orphaned_locks
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_scan_ignores_active_locks
+  C:\PROJECTS\CORTEX\cortex\core\recovery\orphan_cleaner.py:60: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    now = datetime.utcnow()
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_scan_ignores_active_locks
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:165: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "acquired_at": (datetime.utcnow() - timedelta(minutes=15)).isoformat(),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_scan_ignores_active_locks
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:166: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "last_heartbeat": (datetime.utcnow() - timedelta(minutes=1)).isoformat(),
+
+unit/infrastructure/test_fault_isolation.py::TestFaultIsolator::test_domain_re_enabled_after_health_check
+unit/infrastructure/test_fault_isolation.py::TestFaultIsolator::test_domain_re_enabled_after_health_check
+unit/infrastructure/test_fault_isolation.py::TestFaultIsolator::test_domain_flip_flop_backoff
+unit/infrastructure/test_fault_isolation.py::TestFaultIsolator::test_error_budget_gradual_restoration
+unit/infrastructure/test_fault_isolation.py::TestFaultIsolator::test_error_budget_gradual_restoration
+unit/infrastructure/test_fault_isolation.py::TestFaultIsolator::test_error_budget_gradual_restoration
+unit/infrastructure/test_fault_isolation.py::TestFaultIsolator::test_isolation_metrics
+  C:\PROJECTS\CORTEX\cortex\infrastructure\fault_isolator.py:144: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    self.last_success = datetime.utcnow()
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_releases_orphaned_lock
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:184: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow() - timedelta(minutes=15),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_releases_orphaned_lock
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:185: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    last_activity=datetime.utcnow() - timedelta(minutes=15),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_releases_orphaned_lock
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_marks_operation_failed
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_failure_tracked
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_retries_on_failure
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_retries_on_failure
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_audit_trail
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_manual_cleanup_override
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cascading_cleanup
+  C:\PROJECTS\CORTEX\cortex\core\recovery\orphan_cleaner.py:452: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    inactive_duration = datetime.utcnow() - resource.last_activity
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_releases_orphaned_lock
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_marks_operation_failed
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_failure_tracked
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_retries_on_failure
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_retries_on_failure
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_audit_trail
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_manual_cleanup_override
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cascading_cleanup
+  C:\PROJECTS\CORTEX\cortex\core\recovery\orphan_cleaner.py:455: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    "timestamp": datetime.utcnow().isoformat(),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_verifies_liveness_before_releasing
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:204: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow() - timedelta(minutes=15),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_verifies_liveness_before_releasing
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:205: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    last_activity=datetime.utcnow() - timedelta(minutes=15),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_marks_operation_failed
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:228: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow() - timedelta(hours=2),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_marks_operation_failed
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:229: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    last_activity=datetime.utcnow() - timedelta(hours=2),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_marks_operation_failed
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cascading_cleanup
+  C:\PROJECTS\CORTEX\cortex\core\recovery\orphan_cleaner.py:421: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    inactive_hours = (datetime.utcnow() - resource.last_activity).total_seconds() / 3600
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_failure_tracked
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:250: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow() - timedelta(minutes=15),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_failure_tracked
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:251: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    last_activity=datetime.utcnow() - timedelta(minutes=15),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_retries_on_failure
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:272: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow() - timedelta(minutes=15),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_retries_on_failure
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:273: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    last_activity=datetime.utcnow() - timedelta(minutes=15),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_audit_trail
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:301: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow() - timedelta(minutes=15),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cleanup_audit_trail
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:302: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    last_activity=datetime.utcnow() - timedelta(minutes=15),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_manual_cleanup_override
+  C:\PROJECTS\CORTEX\cortex\core\recovery\orphan_cleaner.py:321: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow(),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_manual_cleanup_override
+  C:\PROJECTS\CORTEX\cortex\core\recovery\orphan_cleaner.py:322: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    last_activity=datetime.utcnow(),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cascading_cleanup
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:341: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    created_at=datetime.utcnow() - timedelta(hours=2),
+
+unit/recovery/test_orphan_detection.py::TestOrphanedResourceCleaner::test_cascading_cleanup
+  C:\PROJECTS\CORTEX\tests\unit\recovery\test_orphan_detection.py:342: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+    last_activity=datetime.utcnow() - timedelta(hours=2),
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+
+======================================================================
+PYTEST PROGRESS SUMMARY
+======================================================================
+Total:    1912/0
+Passed:   1861 (97.3%)
+Failed:   24
+Errors:   0
+Skipped:  27
+Duration: 13.1s
+Rate:     145.4 tests/sec
+======================================================================
+=========================== short test summary info ===========================
+FAILED tests\unit\core\intent\test_lens_integration.py::TestLENSIntegration::test_context_enrichment_in_pipeline
+FAILED tests\unit\core\knowledge\test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_routes_technical_queries_to_technical_backend
+FAILED tests\unit\core\knowledge\test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_routes_business_queries_to_business_backend
+FAILED tests\unit\core\knowledge\test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_handles_ambiguous_queries_with_fallback
+FAILED tests\unit\core\knowledge\test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_tracks_routing_efficiency
+FAILED tests\unit\core\knowledge\test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_routing_history_preserved_across_operations
+FAILED tests\unit\core\knowledge\test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_confidence_score_influences_selection
+FAILED tests\unit\core\knowledge\test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_preserves_query_semantics_during_routing
+FAILED tests\unit\core\knowledge\test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_handles_multiple_backends_fairly
+FAILED tests\unit\core\knowledge\test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_error_handling_invalid_query
+FAILED tests\unit\test_core_030_baselines.py::TestPerformanceMonitor::test_get_sla_valid
+FAILED tests\unit\test_core_030_baselines.py::TestPerformanceMonitor::test_get_sla_unknown_metric
+FAILED tests\unit\test_core_030_baselines.py::TestPerformanceMonitor::test_check_compliance_compliant
+FAILED tests\unit\test_core_030_baselines.py::TestPerformanceMonitor::test_check_compliance_violation
+FAILED tests\unit\core\knowledge\test_orchestrator_integration.py::TestOrchestratorRoutingBehavior::test_orchestrator_error_handling_no_backends
+FAILED tests\unit\test_core_030_baselines.py::TestPerformanceMonitor::test_violation_recorded_on_exceedance
+FAILED tests\unit\infrastructure\test_fault_isolation.py::TestFaultIsolator::test_domain_re_enabled_after_health_check
+FAILED tests\unit\test_core_030_baselines.py::TestPerformanceMonitor::test_record_measurement
+FAILED tests\unit\test_core_030_baselines.py::TestPerformanceMonitor::test_get_statistics_multiple_measurements
+FAILED tests\unit\test_core_030_baselines.py::TestPerformanceMonitor::test_get_violations_all
+FAILED tests\unit\test_core_030_baselines.py::TestPerformanceMonitor::test_get_violations_filtered_by_component
+FAILED tests\unit\test_core_030_baselines.py::TestPerformanceMonitor::test_clear_violations
+FAILED tests\unit\infrastructure\test_fault_isolation.py::TestFaultIsolator::test_domain_flip_flop_backoff
+FAILED tests\unit\infrastructure\test_fault_isolation.py::TestFaultIsolator::test_partial_domain_failure_isolation
+ERROR tests\unit\test_governance_dashboard.py::TestGovernanceDashboardBuilder::test_build_domain_summaries
+ERROR tests\unit\test_precommit_hook.py::TestACIDFormatValidation::test_valid_ac_id_single
+ERROR tests\unit\test_precommit_hook.py::TestACIDFormatValidation::test_valid_ac_id_multiple
+ERROR tests\unit\test_precommit_hook.py::TestACIDFormatValidation::test_valid_ac_id_with_content
+ERROR tests\unit\test_precommit_hook.py::TestACIDFormatValidation::test_invalid_ac_id_wrong_domain_length
+ERROR tests\unit\test_precommit_hook.py::TestACIDFormatValidation::test_invalid_ac_id_wrong_number_format
+ERROR tests\unit\test_precommit_hook.py::TestACIDFormatValidation::test_optional_ac_id_non_governance_commit
+ERROR tests\unit\test_precommit_hook.py::TestACIDFormatValidation::test_ac_id_detection_with_malformed_marker
+ERROR tests\unit\test_precommit_hook.py::TestACIDFormatValidation::test_multiple_valid_ac_ids_comma_separated
+ERROR tests\unit\test_precommit_hook.py::TestACIDFormatValidation::test_ac_id_with_ar_domain
+ERROR tests\unit\test_precommit_hook.py::TestACIDFormatValidation::test_ac_id_with_fr_domain
+ERROR tests\unit\test_precommit_hook.py::TestACIDFormatValidation::test_ac_id_with_enh_domain
+!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 36 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!! xdist.dsession.Interrupted: stopping after 30 failures !!!!!!!!!!!!
+=== 24 failed, 1861 passed, 27 skipped, 1021 warnings, 12 errors in 13.12s ====
