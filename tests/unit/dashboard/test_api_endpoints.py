@@ -9,15 +9,15 @@ from fastapi.testclient import TestClient
 import sys
 import os
 
-# Add src to path for imports
+# Add project root to path for imports
 project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-sys.path.insert(0, os.path.join(project_root, 'src'))
+sys.path.insert(0, project_root)
 
 
 @pytest.fixture(scope="module")
 def client():
     """Create test client fixture - lazy initialization to prevent hanging."""
-    from dashboard.api.main import app
+    from cortex.brain.dashboard.api.main import app
     return TestClient(app)
 
 

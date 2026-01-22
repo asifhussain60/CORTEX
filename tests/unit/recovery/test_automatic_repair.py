@@ -362,11 +362,12 @@ class TestStateRepair:
             for i in range(3)
         ]
         
-        # Second repair fails
+        # Second repair fails, then resumes successfully
         mock_hash_chain.rebuild_chain.side_effect = [
             None,  # First succeeds
             RuntimeError("crash"),  # Second crashes
-            None   # Third would succeed
+            None,  # Resume: Second succeeds
+            None   # Resume: Third succeeds
         ]
         
         try:
