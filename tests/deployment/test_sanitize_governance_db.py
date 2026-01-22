@@ -4,6 +4,7 @@ This module tests the sanitization of development entries from governance.db,
 ensuring production deployments contain only tier0 seed rules.
 """
 
+import importlib.util
 import sqlite3
 from datetime import datetime
 from pathlib import Path
@@ -62,13 +63,16 @@ def temp_db(tmp_path: Path) -> Generator[Path, None, None]:
 
 @pytest.fixture
 def sanitizer_module():
-    """Import the sanitizer module.
+    """Import the sanitizer module using dynamic loading.
     
     Returns:
         The sanitize_governance_db module.
     """
-    from scripts.deployment import sanitize_governance_db
-    return sanitize_governance_db
+    module_path = Path(__file__).parent.parent.parent / "cortex" / "scripts-root-archive" / "deployment" / "sanitize_governance_db.py"
+    spec = importlib.util.spec_from_file_location("sanitize_governance_db", module_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 class TestSanitizeRemovesDevEntries:
