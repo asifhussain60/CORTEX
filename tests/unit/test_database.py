@@ -25,9 +25,9 @@ from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
 class TestDatabaseSchema:
     """Test database schema creation."""
     
-    def test_creates_database_file(self, temp_dir):
+    def test_creates_database_file(self, tmp_path):
         """Database file should be created on initialization."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path)
         
         db = DatabaseManager(config)
@@ -36,9 +36,9 @@ class TestDatabaseSchema:
         assert db_path.exists()
         db.close()
     
-    def test_creates_ac_index_table(self, temp_dir):
+    def test_creates_ac_index_table(self, tmp_path):
         """ac_index table should exist with correct columns."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -60,9 +60,9 @@ class TestDatabaseSchema:
         
         db.close()
     
-    def test_creates_audit_log_table(self, temp_dir):
+    def test_creates_audit_log_table(self, tmp_path):
         """audit_log table should exist with hash chain columns."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -76,9 +76,9 @@ class TestDatabaseSchema:
         
         db.close()
     
-    def test_creates_phase_locks_table(self, temp_dir):
+    def test_creates_phase_locks_table(self, tmp_path):
         """phase_locks table should exist for runtime enforcement."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -96,9 +96,9 @@ class TestDatabaseSchema:
 class TestWALMode:
     """Test WAL mode configuration (AC-AR-002-02)."""
     
-    def test_wal_mode_enabled(self, temp_dir):
+    def test_wal_mode_enabled(self, tmp_path):
         """WAL mode should be enabled for concurrent access."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path, wal_mode=True)
         db = DatabaseManager(config)
         db.initialize()
@@ -110,9 +110,9 @@ class TestWALMode:
         
         db.close()
     
-    def test_wal_creates_shm_and_wal_files(self, temp_dir):
+    def test_wal_creates_shm_and_wal_files(self, tmp_path):
         """WAL mode should create -shm and -wal files after write."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path, wal_mode=True)
         db = DatabaseManager(config)
         db.initialize()
@@ -135,9 +135,9 @@ class TestWALMode:
 class TestQueryPerformance:
     """Test query performance requirements (AC-AR-002-03)."""
     
-    def test_simple_query_under_1ms(self, temp_dir):
+    def test_simple_query_under_1ms(self, tmp_path):
         """Simple queries should complete in <1ms."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -159,9 +159,9 @@ class TestQueryPerformance:
         
         db.close()
     
-    def test_indexed_lookup_performance(self, temp_dir):
+    def test_indexed_lookup_performance(self, tmp_path):
         """Indexed lookups should be fast."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -188,9 +188,9 @@ class TestQueryPerformance:
 class TestACIndexOperations:
     """Test AC-ID index operations."""
     
-    def test_insert_ac_id(self, temp_dir):
+    def test_insert_ac_id(self, tmp_path):
         """Should insert AC-ID record."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -212,9 +212,9 @@ class TestACIndexOperations:
         
         db.close()
     
-    def test_update_ac_status(self, temp_dir):
+    def test_update_ac_status(self, tmp_path):
         """Should update AC-ID status."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -229,9 +229,9 @@ class TestACIndexOperations:
         
         db.close()
     
-    def test_ac_exists_check(self, temp_dir):
+    def test_ac_exists_check(self, tmp_path):
         """Should check if AC-ID exists."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -247,9 +247,9 @@ class TestACIndexOperations:
 class TestPhaseLockOperations:
     """Test phase lock operations for runtime enforcement."""
     
-    def test_lock_phase(self, temp_dir):
+    def test_lock_phase(self, tmp_path):
         """Should lock a phase."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -263,9 +263,9 @@ class TestPhaseLockOperations:
         
         db.close()
     
-    def test_unlocked_phase_returns_false(self, temp_dir):
+    def test_unlocked_phase_returns_false(self, tmp_path):
         """Unlocked phase should return False."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -282,9 +282,9 @@ class TestPhaseLockOperations:
         
         db.close()
     
-    def test_nonexistent_phase_returns_false(self, temp_dir):
+    def test_nonexistent_phase_returns_false(self, tmp_path):
         """Non-existent phase should return False (not locked)."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -299,9 +299,9 @@ class TestPhaseLockOperations:
 class TestAuditLogOperations:
     """Test audit log operations with hash chain."""
     
-    def test_insert_audit_entry(self, temp_dir):
+    def test_insert_audit_entry(self, tmp_path):
         """Should insert audit entry with hash."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -322,9 +322,9 @@ class TestAuditLogOperations:
         
         db.close()
     
-    def test_hash_chain_integrity(self, temp_dir):
+    def test_hash_chain_integrity(self, tmp_path):
         """Hash chain should link entries."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -345,9 +345,9 @@ class TestAuditLogOperations:
         
         db.close()
     
-    def test_query_audit_by_ac_id(self, temp_dir):
+    def test_query_audit_by_ac_id(self, tmp_path):
         """Should query audit entries by AC-ID."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -375,8 +375,8 @@ class TestDatabaseConfig:
         assert config.db_path.name == "governance.db"
         assert config.wal_mode is True
     
-    def test_custom_path(self, temp_dir):
+    def test_custom_path(self, tmp_path):
         """Should accept custom database path."""
-        custom_path = temp_dir / "custom" / "db.sqlite"
+        custom_path = tmp_path / "custom" / "db.sqlite"
         config = DatabaseConfig(db_path=custom_path)
         assert config.db_path == custom_path

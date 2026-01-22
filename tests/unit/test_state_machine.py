@@ -388,9 +388,9 @@ class TestStateHistory:
         active_transition = [t for t in transitions if t.to_state == "ACTIVE"][0]
         assert active_transition.reason == reason
     
-    def test_transition_history_with_database(self, temp_dir):
+    def test_transition_history_with_database(self, tmp_path):
         """Transitions should persist to database."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()

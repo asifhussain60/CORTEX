@@ -24,9 +24,9 @@ from cortex.infrastructure.tiered_logger import TieredLogger, LogLevel, LogEntry
 class TestAuditToDb:
     """Test that AUDIT logs are written to governance.db."""
     
-    def test_audit_to_db(self, temp_dir):
+    def test_audit_to_db(self, tmp_path):
         """AC-AR-004-01: AUDIT logs should be written to governance.db."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()
@@ -52,9 +52,9 @@ class TestAuditToDb:
         
         db.close()
     
-    def test_audit_logs_have_hash_chain(self, temp_dir):
+    def test_audit_logs_have_hash_chain(self, tmp_path):
         """Audit logs should be part of hash chain."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()
@@ -148,9 +148,9 @@ class TestLogLevelConfig:
 class TestStructuredJsonLogging:
     """Test that logs are in structured JSON format."""
     
-    def test_structured_logging(self, temp_dir, caplog):
+    def test_structured_logging(self, tmp_path, caplog):
         """AC-AR-004-03: Logs should be in structured JSON format."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()
@@ -193,9 +193,9 @@ class TestStructuredJsonLogging:
         assert parsed["ac_id"] == "AC-001"
         assert parsed["context"]["key"] == "value"
     
-    def test_context_preserved_in_logs(self, temp_dir):
+    def test_context_preserved_in_logs(self, tmp_path):
         """Additional context should be preserved in logs."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()
@@ -242,9 +242,9 @@ class TestTieredLoggerSingleton:
 class TestLogIntegration:
     """Integration tests for tiered logging."""
     
-    def test_different_levels_different_messages(self, temp_dir):
+    def test_different_levels_different_messages(self, tmp_path):
         """Should handle different log levels correctly."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()
@@ -260,9 +260,9 @@ class TestLogIntegration:
         
         db.close()
     
-    def test_ac_id_tracking_in_logs(self, temp_dir):
+    def test_ac_id_tracking_in_logs(self, tmp_path):
         """AC-IDs should be tracked in logs."""
-        db_path = temp_dir / "governance.db"
+        db_path = tmp_path / "governance.db"
         db_config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(db_config)
         db.initialize()
