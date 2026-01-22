@@ -30,6 +30,13 @@ class ErrorRecoveryStrategy(Enum):
 
 
 @dataclass
+class ErrorResponse:
+    """Error response object."""
+    code: str  # Will be set from ErrorCode enum
+    message: str
+
+
+@dataclass
 class ErrorRecord:
     """Record of an error occurrence."""
     
@@ -227,6 +234,36 @@ class MCPErrorHandler:
             "recovered": recovered,
             "recovery_rate": recovered / total_errors if total_errors > 0 else 0
         }
+    
+    @staticmethod
+    def handle_exception(exc: Exception) -> ErrorResponse:
+        """Handle an exception and return appropriate error response.
+        
+        Args:
+            exc: The exception to handle
+            
+        Returns:
+            ErrorResponse with appropriate error code
+        """
+        from cortex.mcp.protocol import ErrorCode
+        
+        error_map = {
+            ValueError: ErrorCode.INVALID_PARAMS,
+            TypeError: ErrorCode.INVALID_PARAMS,
+            TimeoutError: ErrorCode.TIMEOUT,
+            KeyError: ErrorCode.NOT_FOUND,
+            PermissionError: ErrorCode.UNAUTHORIZED,
+            RuntimeError: ErrorCode.EXECUTION_ERROR,
+        }
+        
+        error_code = error_map.get(type(exc), ErrorCode.INTERNAL_ERROR)
+        
+        response = ErrorResponse(
+            code=error_code.value,
+            message=str(exc)
+        )
+        response.code = error_code
+        return response
 
 
-__all__ = ["MCPErrorHandler", "ErrorThrottler", "ErrorRecoveryStrategy", "ErrorSeverity", "ErrorRecord"]
+__all__ = ["MCPErrorHandler", "ErrorThrottler", "ErrorRecoveryStrategy", "ErrorSeverity", "ErrorRecord", "ErrorResponse"]

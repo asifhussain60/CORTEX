@@ -30,18 +30,9 @@ class ToolInputValidator:
     
     @staticmethod
     def validate_input(tool_def: Any, params: Dict[str, Any]) -> Tuple[bool, List[ValidationError]]:
-        """Validate input parameters against tool definition.
-        
-        Args:
-            tool_def: ToolDefinition with parameters
-            params: Input parameters dict
-            
-        Returns:
-            Tuple of (is_valid, error_list)
-        """
+        """Validate input parameters against tool definition."""
         errors: List[ValidationError] = []
         
-        # Check required parameters
         for param in tool_def.parameters:
             if param.required and param.name not in params:
                 errors.append(ValidationError(
@@ -50,9 +41,7 @@ class ToolInputValidator:
                     message=f"Required parameter '{param.name}' is missing"
                 ))
         
-        # Check provided parameters
         for param_name, param_value in params.items():
-            # Find parameter definition
             param_def = None
             for p in tool_def.parameters:
                 if p.name == param_name:
@@ -67,7 +56,6 @@ class ToolInputValidator:
                 ))
                 continue
             
-            # Type checking
             if param_def.type == "string" and not isinstance(param_value, str):
                 errors.append(ValidationError(
                     parameter=param_name,
@@ -84,7 +72,6 @@ class ToolInputValidator:
                 ))
                 continue
             
-            # Range checking for numbers
             if param_def.type == "number":
                 if hasattr(param_def, 'min_value') and param_def.min_value is not None:
                     if param_value < param_def.min_value:
@@ -102,7 +89,6 @@ class ToolInputValidator:
                             message=f"Parameter '{param_name}' must be <= {param_def.max_value}"
                         ))
             
-            # Enum checking
             if hasattr(param_def, 'enum') and param_def.enum:
                 if param_value not in param_def.enum:
                     errors.append(ValidationError(
@@ -112,6 +98,51 @@ class ToolInputValidator:
                     ))
         
         return len(errors) == 0, errors
+    
+    @staticmethod
+    def get_validation_error_message(errors: List[ValidationError]) -> str:
+        """Get formatted validation error message.
+        
+        Args:
+            errors: List of validation errors
+            
+        Returns:
+            Formatted error message
+        """
+        if not errors:
+            return ""
+        
+        lines = ["Validation errors:"]
+        for error in errors:
+            lines.append(f"  - {error.parameter}: {error.message}")
+        
+        return "\n".join(lines)
+    
+    @staticmethod
+    def get_validation_report(tool_def: Any, params: Dict[str, Any]) -> Dict[str, Any]:
+        """Get validation report.
+        
+        Args:
+            tool_def: Tool definition
+            params: Parameters to validate
+            
+        Returns:
+            Validation report dict
+        """
+        is_valid, errors = ToolInputValidator.validate_input(tool_def, params)
+        
+        return {
+            "is_valid": is_valid,
+            "total_errors": len(errors),
+            "errors": [
+                {
+                    "parameter": e.parameter,
+                    "error_code": e.error_code,
+                    "message": e.message
+                }
+                for e in errors
+            ]
+        }
 
 
 __all__ = ["ValidationError", "ToolInputValidator", "ValidationType"]
