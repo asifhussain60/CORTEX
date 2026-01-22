@@ -89,6 +89,7 @@ class SeleniumPatternMatcher:
         "by_import": r"from\s+selenium\.webdriver\.common\.by\s+import\s+By",
         "wait_import": r"from\s+selenium\.webdriver\.support\.ui\s+import\s+WebDriverWait",
         "expected_conditions_import": r"from\s+selenium\.webdriver\.support\s+import\s+expected_conditions",
+        "expected_conditions": r"expected_conditions\s+as\s+EC|from.*expected_conditions",  # Add this
         "chrome_driver": r"webdriver\.Chrome\s*\(",
         "firefox_driver": r"webdriver\.Firefox\s*\(",
         "safari_driver": r"webdriver\.Safari\s*\(",
@@ -99,7 +100,6 @@ class SeleniumPatternMatcher:
         "find_element_by_class": r"find_element\(By\.CLASS_NAME",
         "find_elements": r"find_elements\(",
         "webdriver_wait": r"WebDriverWait\s*\(",
-        "expected_conditions": r"expected_conditions\.",
         "click_action": r"\.click\s*\(",
         "send_keys_action": r"\.send_keys\s*\(",
         "clear_action": r"\.clear\s*\(",
@@ -227,14 +227,14 @@ class PlaywrightCodeGenerator:
         Convert Selenium selector to Playwright locator.
         
         Args:
-            selector_type: Selenium By.* type (e.g., "ID", "CLASS_NAME")
+            selector_type: Selenium By.* type (e.g., "ID", "CLASS_NAME", "By.ID")
             value: Selector value
             
         Returns:
             Playwright locator string
         """
-        # Normalize selector_type
-        selector_type = selector_type.strip().upper()
+        # Normalize selector_type - remove "By." prefix and convert to uppercase
+        selector_type = selector_type.replace("By.", "").strip().upper()
         
         if selector_type == "ID":
             return f'page.locator("#{value}")'
@@ -825,3 +825,21 @@ class SeleniumPlaywrightOrchestrator(IOrchestrator):
             return Ok(self.audit_trail[-limit:] if limit > 0 else self.audit_trail)
         except Exception as e:
             return Err(f"Failed to retrieve audit trail: {str(e)}")
+    
+    def generate_report(self, conversion_result: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Generate a human-readable conversion report.
+        
+        Args:
+            conversion_result: Result dict from conversion operation
+            
+        Returns:
+            Formatted report dict
+        """
+        return {
+            "total_files": conversion_result.get("files_converted", 0),
+            "total_patterns": conversion_result.get("patterns_replaced", 0),
+            "warnings": conversion_result.get("warnings", []),
+            "manual_review": conversion_result.get("manual_review_needed", []),
+            "status": "complete" if not conversion_result.get("manual_review_needed") else "needs_review",
+        }
