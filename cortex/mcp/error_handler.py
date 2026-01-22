@@ -52,14 +52,17 @@ class ErrorRecord:
 class ErrorThrottler:
     """Throttles error reporting to prevent flooding."""
     
-    def __init__(self, max_errors_per_minute: int = 10):
+    def __init__(self, max_errors_per_minute: int = 10, threshold: Optional[int] = None):
         """Initialize error throttler.
         
         Args:
             max_errors_per_minute: Maximum errors to report per minute
+            threshold: Threshold for recording errors per tool
         """
         self.max_errors = max_errors_per_minute
+        self.threshold = threshold if threshold is not None else max_errors_per_minute
         self.error_timestamps: List[datetime] = []
+        self.error_counts: Dict[str, int] = {}  # error_type -> count
     
     def should_report(self, error_type: str) -> bool:
         """Check if error should be reported.
@@ -82,9 +85,59 @@ class ErrorThrottler:
         
         return False
     
-    def reset(self) -> None:
-        """Reset throttler state."""
-        self.error_timestamps.clear()
+    def record_error(self, error_type: str) -> bool:
+        """Record an error and check if threshold exceeded.
+        
+        Args:
+            error_type: Type or ID of error
+            
+        Returns:
+            True if threshold exceeded, False otherwise
+        """
+        if error_type not in self.error_counts:
+            self.error_counts[error_type] = 0
+        
+        self.error_counts[error_type] += 1
+        
+        # Return True when threshold is exceeded
+        return self.error_counts[error_type] > self.threshold
+    
+    def get_error_rate(self, error_type: str) -> float:
+        """Get error rate for a specific error type.
+        
+        Args:
+            error_type: Type or ID of error
+            
+        Returns:
+            Error rate (count / threshold)
+        """
+        count = self.error_counts.get(error_type, 0)
+        return count / self.threshold if self.threshold > 0 else 0.0
+    
+    def is_throttled(self, error_type: str) -> bool:
+        """Check if an error type is currently throttled.
+        
+        Args:
+            error_type: Type or ID of error
+            
+        Returns:
+            True if throttled, False otherwise
+        """
+        count = self.error_counts.get(error_type, 0)
+        return count > self.threshold
+    
+    def reset(self, error_type: Optional[str] = None) -> None:
+        """Reset throttler state.
+        
+        Args:
+            error_type: Specific error type to reset, or None to reset all
+        """
+        if error_type is None:
+            self.error_timestamps.clear()
+            self.error_counts.clear()
+        else:
+            if error_type in self.error_counts:
+                del self.error_counts[error_type]
 
 
 class MCPErrorHandler:
