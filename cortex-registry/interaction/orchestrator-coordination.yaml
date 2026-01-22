@@ -1,0 +1,136 @@
+# Orchestrator Coordination Pattern
+
+pattern_id: "orchestrator-coordination-001"
+name: "Inter-Orchestrator Coordination"
+pattern_type: "orchestrator-coordination"
+description: |
+  Coordination pattern for communication between orchestrators,
+  including delegation, handoff, and collaborative workflows.
+  
+  Used for: Multi-stage workflows, orchestrator delegation, phase transitions
+
+required_fields:
+  - "coordination_id"
+  - "source_orchestrator"
+  - "target_orchestrator"
+  - "coordination_type"  # "delegate" | "handoff" | "collaborate"
+  - "context"
+  - "timestamp"
+
+optional_fields:
+  - "callback"
+  - "timeout_ms"
+  - "priority"
+
+coordination_types:
+  delegate:
+    description: "Source delegates subtask to target and waits for completion"
+    response_required: true
+    callback_supported: true
+  
+  handoff:
+    description: "Source transfers control to target permanently"
+    response_required: false
+    callback_supported: false
+  
+  collaborate:
+    description: "Multiple orchestrators work together on shared task"
+    response_required: true
+    callback_supported: true
+
+message_structure:
+  coordination_id: "uuid"
+  source_orchestrator: "string (orchestrator identifier)"
+  target_orchestrator: "string (orchestrator identifier)"
+  coordination_type: "enum (delegate, handoff, collaborate)"
+  context:
+    user_intent: "string"
+    phase: "string"
+    state: "object"
+    history: "array"
+  timestamp: "ISO 8601 datetime"
+
+response_structure:
+  coordination_id: "uuid (echoed from request)"
+  status: "enum (accepted, completed, rejected, failed)"
+  result: "object (orchestrator output)"
+  next_action: "enum (continue, stop, escalate)"
+
+validation_rules:
+  coordination_id_format: "uuid"
+  orchestrator_format: "^[a-z_]+$"
+  coordination_type_values: ["delegate", "handoff", "collaborate"]
+  status_values: ["accepted", "completed", "rejected", "failed"]
+  next_action_values: ["continue", "stop", "escalate"]
+
+orchestrator_registry:
+  master_orchestrator:
+    role: "primary coordinator"
+    capabilities: ["comprehension", "delegation", "monitoring"]
+  
+  planning_orchestrator:
+    role: "plan generation"
+    capabilities: ["planning", "task_breakdown", "estimation"]
+  
+  domain_orchestrator:
+    role: "domain-specific execution"
+    capabilities: ["domain_routing", "specialized_execution"]
+  
+  interaction_orchestrator:
+    role: "communication management"
+    capabilities: ["pattern_enforcement", "protocol_validation"]
+
+examples:
+  - delegation:
+      coordination_id: "coord_550e8400-e29b-41d4-a716-446655440000"
+      source_orchestrator: "master_orchestrator"
+      target_orchestrator: "planning_orchestrator"
+      coordination_type: "delegate"
+      context:
+        user_intent: "Create multi-service deployment plan"
+        phase: "planning"
+        state:
+          comprehension_complete: true
+          domain: "infrastructure"
+      timestamp: "2026-01-22T22:00:00Z"
+      callback: "master_orchestrator.receive_plan"
+      timeout_ms: 30000
+    
+    response:
+      coordination_id: "coord_550e8400-e29b-41d4-a716-446655440000"
+      status: "completed"
+      result:
+        plan_id: "plan_12345"
+        steps: [...]
+        estimated_duration_minutes: 15
+      next_action: "continue"
+
+  - handoff:
+      coordination_id: "coord_123e4567-e89b-12d3-a456-426614174000"
+      source_orchestrator: "master_orchestrator"
+      target_orchestrator: "domain_orchestrator_containers"
+      coordination_type: "handoff"
+      context:
+        user_intent: "Deploy containerized application"
+        phase: "execution"
+        state:
+          plan_approved: true
+          domain: "containers"
+      timestamp: "2026-01-22T22:01:00Z"
+    
+    response:
+      coordination_id: "coord_123e4567-e89b-12d3-a456-426614174000"
+      status: "accepted"
+      result:
+        transferred: true
+        new_owner: "domain_orchestrator_containers"
+      next_action: "stop"
+
+compliance_rules:
+  - "Coordination must include unique coordination_id"
+  - "Source and target orchestrators must be registered"
+  - "Delegate coordination requires callback mechanism"
+  - "Handoff coordination transfers full control (no callback)"
+  - "Collaborate coordination allows concurrent execution"
+  - "Context must include user_intent and phase"
+  - "Response must echo coordination_id for correlation"

@@ -166,21 +166,33 @@ class TestGovernanceDashboardBuilder:
     @pytest.fixture
     def temp_workspace(self) -> Generator[Path, Any, Any]:
         """Create temporary workspace."""
-        with tempfile.TemporaryDirectory() as tmpdir:
-            workspace = Path(tmpdir)
-            (workspace / "cortex_brain" / "state").mkdir(parents=True)
-            (workspace / "cortex_brain" / "tier0" / "governance").mkdir(parents=True)
+        tmpdir = tempfile.mkdtemp()
+        workspace = Path(tmpdir)
+        (workspace / "cortex_brain" / "state").mkdir(parents=True)
+        (workspace / "cortex_brain" / "tier0" / "governance").mkdir(parents=True)
 
-            # Create minimal rules file
-            rules_file = workspace / "cortex_brain" / "tier0" / "governance" / "core-rules.yaml"
-            rules_file.write_text(yaml.dump({
-                "rules": [
-                    {"id": "CORE-008", "title": "TDD", "domain": "test_execution", "severity": "blocked"},
-                    {"id": "CORE-011", "title": "Type Hints", "domain": "typing", "severity": "warning"},
-                ]
-            }))
+        # Create minimal rules file
+        rules_file = workspace / "cortex_brain" / "tier0" / "governance" / "core-rules.yaml"
+        rules_file.write_text(yaml.dump({
+            "rules": [
+                {"id": "CORE-008", "title": "TDD", "domain": "test_execution", "severity": "blocked"},
+                {"id": "CORE-011", "title": "Type Hints", "domain": "typing", "severity": "warning"},
+            ]
+        }))
 
-            yield workspace
+        yield workspace
+        
+        # Explicit cleanup with retry for Windows file locking
+        import time
+        import shutil
+        for attempt in range(3):
+            try:
+                shutil.rmtree(tmpdir)
+                break
+            except PermissionError:
+                time.sleep(0.1)
+                if attempt == 2:
+                    pass  # Ignore cleanup failure on final attempt
 
     def test_builder_initialization(self, temp_workspace: Path) -> None:
         """Test GovernanceDashboardBuilder initialization."""

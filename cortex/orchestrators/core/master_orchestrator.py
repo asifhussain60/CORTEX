@@ -1454,9 +1454,32 @@ class MasterOrchestrator(IOrchestrator):
                         context={"user_intent": state.user_intent}
                     )
                     if result.is_ok():
-                        phase_output.update(result.unwrap())
-                except Exception:
-                    pass  # Graceful degradation
+                        comprehension_data = result.unwrap()
+                        phase_output.update(comprehension_data)
+                        self.logger.log_operation_complete(
+                            ac_id="AC-REM-011-01",
+                            operation="STAGE_1_EXECUTE",
+                            success=True,
+                            details={
+                                "intent_type": comprehension_data.get("intent_type"),
+                                "confidence": comprehension_data.get("confidence")
+                            }
+                        )
+                    else:
+                        error = result.unwrap_err()
+                        self.logger.log_operation_complete(
+                            ac_id="AC-REM-011-01",
+                            operation="STAGE_1_EXECUTE",
+                            success=False,
+                            details={"error": error}
+                        )
+                except Exception as e:
+                    self.logger.log_operation_complete(
+                        ac_id="AC-REM-011-01",
+                        operation="STAGE_1_EXECUTE",
+                        success=False,
+                        details={"error": str(e)}
+                    )
             
             self.logger.log_operation_complete(
                 ac_id="AC-REM-011-05",

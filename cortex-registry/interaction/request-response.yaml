@@ -1,0 +1,65 @@
+# Request-Response Communication Pattern
+
+pattern_id: "request-response-001"
+name: "Synchronous Request-Response"
+pattern_type: "request-response"
+description: |
+  Classic synchronous request-response pattern where client sends request
+  and waits for orchestrator to return response before proceeding.
+  
+  Used for: CRUD operations, queries, synchronous workflows
+
+required_fields:
+  - "request_id"
+  - "action"
+  - "payload"
+
+optional_fields:
+  - "context"
+  - "metadata"
+  - "timeout_ms"
+
+response_structure:
+  required:
+    - "request_id"
+    - "status"  # "success" | "error" | "pending"
+    - "result"
+  optional:
+    - "error_message"
+    - "metadata"
+    - "duration_ms"
+
+validation_rules:
+  request_id_format: "uuid"
+  action_format: "^[a-z_]+$"
+  min_payload_size: 1
+  max_payload_size_mb: 10
+  timeout_ms_max: 300000  # 5 minutes
+
+error_handling:
+  on_timeout: "return_timeout_error"
+  on_validation_failure: "return_400_bad_request"
+  on_orchestrator_error: "return_500_internal_error"
+
+examples:
+  - request:
+      request_id: "550e8400-e29b-41d4-a716-446655440000"
+      action: "create_user"
+      payload:
+        name: "John Doe"
+        email: "john@example.com"
+      timeout_ms: 5000
+    
+    response:
+      request_id: "550e8400-e29b-41d4-a716-446655440000"
+      status: "success"
+      result:
+        user_id: "user_12345"
+        created_at: "2026-01-22T22:00:00Z"
+      duration_ms: 250
+
+compliance_rules:
+  - "Request must include request_id for tracing"
+  - "Response must echo request_id for correlation"
+  - "Orchestrator must respond within timeout_ms or return timeout error"
+  - "Status must be one of: success, error, pending"

@@ -326,6 +326,14 @@ FOR each markdown file in docs/:
 - [ ] Logo file exists in expected location
 - [ ] Favicon path is correct: `assets/images/CORTEX-logo-64.png`
 
+### Theme Configuration
+
+- [ ] Dark theme (slate) is set as default and only theme
+- [ ] Theme toggle removed (dark mode enforced)
+- [ ] Glassmorphism CSS properly applied (`cortex-glassmorphism.css`)
+- [ ] Primary and accent colors set to blue
+- [ ] All theme features enabled (navigation, search, code copy)
+
 ---
 
 ## Brittleness Analysis (Production Readiness Review)
@@ -417,17 +425,31 @@ For each discovered component:
 ### Validation Phase
 
 ```bash
-# 1. Build mkdocs site
+# 1. Apply dark theme to mkdocs.yml
+# Ensure theme.palette is set to single dark scheme (no toggle):
+#   palette:
+#     scheme: slate
+#     primary: blue
+#     accent: blue
+
+# 2. Build mkdocs site
 mkdocs build
 
-# 2. Run link validation tests
+# 3. Run link validation tests
 pytest docs/_tests/test_documentation_integrity.py -v
 
-# 3. Verify logo rendering
+# 4. Verify logo rendering
 pytest docs/_tests/test_documentation_ui.py::test_cortex_logo_displays -v
 
-# 4. Check for dead links
+# 5. Check for dead links
 pytest docs/_tests/test_link_validation.py -v
+
+# 6. Verify dark theme applies correctly
+# Open http://127.0.0.1:8000 and verify:
+# - Dark background with glassmorphism effects
+# - Blue accent colors throughout
+# - No light/dark toggle button present
+# - Custom CSS (cortex-glassmorphism.css) rendering correctly
 ```
 
 ### Phase 5: Cleanup & Reorganization
@@ -545,19 +567,25 @@ FOR each file in FILES_TO_RELOCATE:
 - `docs/07-guides/deployment/` — (if needed)
 - [... other new folders ...]
 
-### mkdocs.yml Updates
-- Updated 12 navigation references
-- Added 8 new files to navigation
-- Removed 5 obsolete entries
+## Success Criteria
 
-### Validation Results
-- ✅ Zero broken links
-- ✅ mkdocs builds successfully
-- ✅ All images display correctly
-- ✅ Navigation hierarchy consistent
-```
-
----
+- [ ] All orchestrators documented with architecture diagrams
+- [ ] All MCP tools cataloged with parameter documentation
+- [ ] All governance rules explained with enforcement mechanisms
+- [ ] Domain Brain fully documented with query examples
+- [ ] Infrastructure resilience patterns described with failure scenarios
+- [ ] mkdocs site builds without errors
+- [ ] All internal links validate successfully
+- [ ] Logo displays correctly in header
+- [ ] Zero dead/orphaned links
+- [ ] Test suite passes 100%
+- [ ] Brittleness analysis identifies all high-impact gaps
+- [ ] **Dark theme properly configured:**
+  - [ ] `mkdocs.yml` theme.palette set to single dark scheme (slate)
+  - [ ] Light/dark mode toggle removed
+  - [ ] Glassmorphism CSS effects rendering correctly
+  - [ ] Blue primary/accent colors applied throughout
+  - [ ] Custom CSS file (`cortex-glassmorphism.css`) loaded and functional
 
 ## Success Criteria
 

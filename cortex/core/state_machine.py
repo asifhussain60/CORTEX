@@ -7,6 +7,7 @@ from datetime import datetime
 
 class TransitionType(Enum):
     """Types of state transitions."""
+    FORWARD = "forward"
     VALIDATE = "validate"
     LOCK = "lock"
     COMMIT = "commit"
@@ -103,7 +104,7 @@ class StateMachine:
             return Result(error=f"Phase {phase_id} not found")
         return Result(value=self.phase_states[phase_id])
     
-    def transition_ac(self, ac_id: str, to_state: str, transition_type: TransitionType) -> Result:
+    def transition_ac(self, ac_id: str, to_state: str, transition_type: TransitionType, metadata: Optional[Dict[str, Any]] = None) -> Result:
         """Transition AC to new state."""
         if ac_id not in self.ac_states:
             return Result(error=f"AC {ac_id} not found")
@@ -115,7 +116,8 @@ class StateMachine:
         transition = StateTransition(
             from_state=from_state,
             to_state=to_state,
-            transition_type=transition_type
+            transition_type=transition_type,
+            metadata=metadata or {}
         )
         self.transitions.append(transition)
         

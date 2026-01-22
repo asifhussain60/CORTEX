@@ -1,0 +1,101 @@
+# Pub-Sub Communication Pattern
+
+pattern_id: "pub-sub-001"
+name: "Publish-Subscribe Broadcast"
+pattern_type: "pub-sub"
+description: |
+  Publish-subscribe pattern where publishers broadcast messages to topics
+  and multiple subscribers receive messages independently.
+  
+  Used for: Broadcasting, multi-consumer notifications, fan-out patterns
+
+required_fields:
+  - "message_id"
+  - "topic"
+  - "publisher"
+  - "timestamp"
+  - "payload"
+
+optional_fields:
+  - "headers"
+  - "ttl_seconds"
+  - "priority"
+
+message_structure:
+  message_id: "uuid"
+  topic: "string (hierarchical topic path)"
+  publisher: "string (publisher component identifier)"
+  timestamp: "ISO 8601 datetime"
+  payload: "object (message content)"
+
+topics:
+  system:
+    - "system.health.degraded"
+    - "system.health.recovered"
+    - "system.shutdown.initiated"
+  
+  orchestration:
+    - "orchestration.workflow.started"
+    - "orchestration.workflow.completed"
+    - "orchestration.step.executed"
+  
+  audit:
+    - "audit.access.granted"
+    - "audit.access.denied"
+    - "audit.operation.logged"
+
+validation_rules:
+  topic_format: "^[a-z]+\\.[a-z]+\\.[a-z]+$"  # category.subcategory.event
+  publisher_format: "^[a-z_]+$"
+  timestamp_format: "iso8601"
+  ttl_seconds_max: 3600  # 1 hour
+  priority_values: ["low", "medium", "high", "critical"]
+
+subscription_model:
+  type: "topic-based"
+  matching: "hierarchical wildcard"
+  wildcard_patterns:
+    - "system.*"  # All system events
+    - "orchestration.workflow.*"  # All workflow events
+    - "*.*.completed"  # All completion events
+
+examples:
+  - publish:
+      message_id: "msg_550e8400-e29b-41d4-a716-446655440000"
+      topic: "orchestration.workflow.completed"
+      publisher: "master_orchestrator"
+      timestamp: "2026-01-22T22:00:00Z"
+      payload:
+        workflow_id: "wf_12345"
+        status: "success"
+        duration_ms: 5000
+      priority: "medium"
+    
+    subscribers:
+      - "audit_logger"
+      - "metrics_collector"
+      - "notification_service"
+
+  - publish:
+      message_id: "msg_123e4567-e89b-12d3-a456-426614174000"
+      topic: "system.health.degraded"
+      publisher: "health_monitor"
+      timestamp: "2026-01-22T22:01:00Z"
+      payload:
+        component: "knowledge_repository"
+        reason: "Connection timeout"
+        severity: "warning"
+      priority: "high"
+    
+    subscribers:
+      - "alert_manager"
+      - "ops_dashboard"
+      - "incident_response"
+
+compliance_rules:
+  - "Message must include unique message_id"
+  - "Topic must follow category.subcategory.event format"
+  - "Publisher must identify source component"
+  - "All subscribed components receive message independently"
+  - "Message delivery is at-least-once (duplicates possible)"
+  - "Subscribers handle messages idempotently"

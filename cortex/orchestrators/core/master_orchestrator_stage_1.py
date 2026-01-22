@@ -379,6 +379,67 @@ class MasterOrchestrationStage1:
             List of recent comprehension operations
         """
         return self.comprehension_history[-limit:]
+    
+    def execute(self, context: Dict[str, Any]) -> Result[Dict[str, Any]]:
+        """
+        Execute Stage 1 comprehension (IOrchestrator compatibility method).
+        
+        This method wraps comprehend() to provide IOrchestrator interface compatibility
+        for MasterOrchestrator integration.
+        
+        Args:
+            context: Dictionary with operation details. Expected keys:
+                - user_intent (str): User's stated intent
+                - operation (str, optional): Operation name
+                - keywords (list, optional): Keywords list
+                - domain (str, optional): Target domain
+        
+        Returns:
+            Result[Dict[str, Any]]: Ok with comprehension results, or Err with message
+        """
+        try:
+            # Extract from context or use defaults
+            user_intent = context.get("user_intent", "")
+            operation = context.get("operation", "user_request")
+            keywords = context.get("keywords", user_intent.split())
+            domain = context.get("domain", None)
+            
+            # Build Stage1ComprehensionContext
+            stage1_context = Stage1ComprehensionContext(
+                operation=operation,
+                description=user_intent,
+                keywords=keywords,
+                domain=domain,
+                user_intent=user_intent
+            )
+            
+            # Execute comprehension
+            result = self.comprehend(stage1_context)
+            
+            if result.is_ok():
+                output = result.unwrap()
+                # Convert Stage1Output to dict for compatibility
+                return Ok({
+                    "operation": output.operation,
+                    "intent_type": output.extracted_intent.upper(),
+                    "confidence": output.confidence_score,
+                    "domain": output.domain,
+                    "keywords": output.keywords,
+                    "language_analysis": output.language_analysis,
+                    "turn_number": output.turn_number,
+                    "timestamp": output.timestamp
+                })
+            else:
+                return Err(result.unwrap_err())
+        
+        except Exception as e:
+            self.logger.log_operation_complete(
+                ac_id="AC-PROD-003-01",
+                operation="EXECUTE",
+                success=False,
+                details={"error": str(e)}
+            )
+            return Err(f"Stage 1 execution failed: {str(e)}")
 
 
 # Module exports
