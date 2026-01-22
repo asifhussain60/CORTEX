@@ -538,14 +538,19 @@ class TestEventAuditIntegration:
             lambda e: fired_events.append(e) or True
         )
         
-        before = datetime.now()
+        from datetime import datetime as dt
+        before = dt.utcnow()
         protocol.turn_number = 1
         protocol.execute_turn("input", {})
-        after = datetime.now()
+        after = dt.utcnow()
         
         event = fired_events[0]
         assert event.timestamp is not None
-        assert before <= event.timestamp <= after
+        # Normalize timestamps for comparison (handle both naive and aware)
+        event_ts = event.timestamp
+        if event_ts.tzinfo is not None:
+            event_ts = event_ts.replace(tzinfo=None)
+        assert before <= event_ts <= after
 
 
 class TestMultiEventScenarios:
