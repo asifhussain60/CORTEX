@@ -11,17 +11,19 @@ from unittest.mock import MagicMock, patch
 class TestLoadFinopsTemplateForKashkole:
     """Test loading finops template for KASHKOLE."""
 
-    def test_loads_finops_template(self):
+    def test_loads_finops_template(self, tmp_path: Path):
         """Should load finops-rules.yaml for financial projects."""
         from cortex.orchestrators.tier1_injector import Tier1Injector
         
         injector = Tier1Injector()
+        kashkole_path = tmp_path / "KASHKOLE"
+        kashkole_path.mkdir()
         
         with patch.object(injector, "_load_template") as mock_load:
             mock_load.return_value = {"profile": "finops", "rules": ["FIN-001"]}
             
             result = injector.inject_tier1(
-                project_path="D:\\PROJECTS\\KASHKOLE",
+                project_path=str(kashkole_path),
                 project_type="finops"
             )
         
@@ -42,17 +44,19 @@ class TestLoadFinopsTemplateForKashkole:
 class TestLoadAuthTemplateForKsessions:
     """Test loading auth template for KSESSIONS."""
 
-    def test_loads_auth_template(self):
+    def test_loads_auth_template(self, tmp_path: Path):
         """Should load auth-rules.yaml for session/auth projects."""
         from cortex.orchestrators.tier1_injector import Tier1Injector
         
         injector = Tier1Injector()
+        ksessions_path = tmp_path / "KSESSIONS"
+        ksessions_path.mkdir()
         
         with patch.object(injector, "_load_template") as mock_load:
             mock_load.return_value = {"profile": "auth", "rules": ["AUTH-001"]}
             
             result = injector.inject_tier1(
-                project_path="D:\\PROJECTS\\KSESSIONS",
+                project_path=str(ksessions_path),
                 project_type="auth"
             )
         
