@@ -9,6 +9,8 @@ import sqlite3
 from datetime import datetime
 from pathlib import Path
 from typing import Generator
+import sys
+import importlib.util
 
 import pytest
 
@@ -68,7 +70,10 @@ def sanitize_state_module():
     Returns:
         The track_sanitize_state module.
     """
-    from scripts.deployment import track_sanitize_state
+    module_path = Path(__file__).parent.parent.parent / "cortex" / "scripts-root-archive" / "deployment" / "track_sanitize_state.py"
+    spec = importlib.util.spec_from_file_location("track_sanitize_state", module_path)
+    track_sanitize_state = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(track_sanitize_state)
     return track_sanitize_state
 
 
