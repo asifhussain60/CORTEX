@@ -26,8 +26,8 @@ from functools import lru_cache
 import hashlib
 import json
 
-from cortex.brain.core.interfaces import IOrchestrator, OperationMode
-from cortex.brain.core.result import Result, Ok, Err
+from cortex.core.interfaces import IOrchestrator, OperationMode
+from cortex.core.result import Result, Ok, Err
 from cortex.infrastructure.enhanced_audit_logger import EnhancedAuditLogger
 
 
@@ -259,9 +259,9 @@ class IntentRouter(IOrchestrator):
         Get the operation mode of this orchestrator.
         
         Returns:
-            OperationMode: EXECUTION (routing is synchronous)
+            OperationMode: NORMAL (default routing mode)
         """
-        return OperationMode.EXECUTION
+        return OperationMode.NORMAL
     
     def validate_input(self, parameters: Dict[str, Any]) -> Result[bool]:
         """

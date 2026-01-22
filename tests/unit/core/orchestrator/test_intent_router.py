@@ -69,7 +69,7 @@ class TestIntentRouterInitialization:
         """Test that IntentRouter operates in correct mode"""
         router = IntentRouter()
         mode = router.get_mode()
-        assert mode in [OperationMode.EXECUTION, OperationMode.PLANNING, OperationMode.VALIDATION, OperationMode.RECOVERY]
+        assert mode in [OperationMode.NORMAL, OperationMode.DEBUG, OperationMode.STRICT, OperationMode.ADAPTIVE, OperationMode.PLANNING]
 
 
 class TestIntentDetection:
