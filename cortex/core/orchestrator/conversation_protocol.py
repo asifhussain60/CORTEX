@@ -15,6 +15,7 @@ import uuid
 
 from cortex.core.result import Result, Ok, Err
 from cortex.core.interfaces import IOrchestrator, OperationMode
+from cortex.core.orchestrator.terminal_events import EventRegistry
 
 
 class GovernanceRegistry:
@@ -83,7 +84,7 @@ class ConversationProtocol:
         self.max_turns = max_turns
         self.token_limit = token_limit
         self.db_path = db_path
-        self.event_registry = event_registry
+        self.event_registry = event_registry or EventRegistry()
         self.turn_number: int = 0
         self.total_tokens_used: int = 0
         self.decisions_history: List[Dict[str, Any]] = []
@@ -113,25 +114,31 @@ class ConversationProtocol:
             if not context or not isinstance(context, dict):
                 context = {}
 
+            # Increment turn counter first
+            self.turn_number += 1
+
             # Check turn limits - but still return OK with MAX_ROUNDS_REACHED reason
             if self.turn_number >= self.max_turns:
                 from cortex.core.orchestrator.continuation_decision import (
                     ContinuationDecision,
                     ContinuationReason,
                 )
+                from cortex.core.orchestrator.terminal_events import MaxTurnsReachedEvent
+                
                 decision = ContinuationDecision(
                     should_continue=False,
                     reason=ContinuationReason.MAX_ROUNDS_REACHED,
                     turn_number=self.turn_number,
                 )
+                # Fire event
+                event = MaxTurnsReachedEvent(max_turns=self.max_turns, current_turn=self.turn_number, reason="Max turns exceeded")
+                self.event_registry.fire_event(event)
+                
                 self.decisions_history.append({
                     "turn": self.turn_number,
                     "decision": decision,
                 })
                 return Ok(decision)
-
-            # Increment turn counter
-            self.turn_number += 1
 
             # Create round context
             round_context = RoundContext(

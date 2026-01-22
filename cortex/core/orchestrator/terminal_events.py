@@ -150,6 +150,19 @@ class EventRegistry:
         """Get all fired events."""
         return self._event_log.copy()
     
+    def get_listener_count(self, event_type: Optional[type] = None) -> int:
+        """Get count of listeners for event type.
+        
+        Args:
+            event_type: Event type to count listeners for (None for all)
+        
+        Returns:
+            Number of listeners
+        """
+        if event_type is None:
+            return len(self.listeners)
+        return sum(1 for listener in self.listeners if listener.event_type == event_type or listener.event_type is None)
+    
     def clear(self) -> None:
         """Clear registry and log."""
         self.listeners.clear()
