@@ -78,6 +78,10 @@ class Err:
     
     def unwrap_or(self, default):
         return default
+    
+    def unwrap_err(self) -> str:
+        """Get error message."""
+        return self.error
 
 
 def ok(value: T) -> Ok[T]:

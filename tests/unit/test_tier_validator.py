@@ -23,37 +23,80 @@ from cortex.core.tier_validator import (
 
 class Tier0Orchestrator(OrchestratorBase):
     """Orchestrator with tier 0 access only"""
+    def __init__(self, context: OrchestrationContext = None):
+        super().__init__(name="Tier0Orchestrator")
+        self.context = context
+    
     def get_tier_access(self):
         return {0}
     
-    def execute(self) -> Any:
+    def initialize(self) -> None:
+        pass
+    
+    def shutdown(self) -> None:
+        pass
+    
+    def execute(self, context: Any = None) -> Any:
         return {"tier": "0"}
 
 
 class Tier01Orchestrator(OrchestratorBase):
     """Orchestrator with tier 0,1 access"""
+    def __init__(self, context: OrchestrationContext = None):
+        super().__init__(name="Tier01Orchestrator")
+        self.context = context
+    
     def get_tier_access(self):
         return {0, 1}
     
-    def execute(self) -> Any:
+    def initialize(self) -> None:
+        pass
+    
+    def shutdown(self) -> None:
+        pass
+    
+    def execute(self, context: Any = None) -> Any:
         return {"tiers": [0, 1]}
 
 
 class AllTierOrchestrator(OrchestratorBase):
     """Orchestrator with all tiers access"""
+    def __init__(self, context: OrchestrationContext = None):
+        super().__init__(name="AllTierOrchestrator")
+        self.context = context
+    
     def get_tier_access(self):
         return {0, 1, 2, 3}
     
-    def execute(self) -> Any:
+    def initialize(self) -> None:
+        pass
+    
+    def shutdown(self) -> None:
+        pass
+    
+    def execute(self, context: Any = None) -> Any:
         return {"tiers": [0, 1, 2, 3]}
 
 
 class RuleRequiringOrchestrator(OrchestratorBase):
     """Orchestrator requiring specific rules"""
+    def __init__(self, context: OrchestrationContext = None):
+        super().__init__(name="RuleRequiringOrchestrator")
+        self.context = context
+    
+    def get_tier_access(self):
+        return {0, 1}
+    
     def get_required_rules(self):
         return ["RULE-A", "RULE-B"]
     
-    def execute(self) -> Any:
+    def initialize(self) -> None:
+        pass
+    
+    def shutdown(self) -> None:
+        pass
+    
+    def execute(self, context: Any = None) -> Any:
         return {"rules": self.get_required_rules()}
 
 
@@ -259,10 +302,10 @@ class TestViolationTracking:
         validator = TierAccessValidator(enforce_mode=False)
         
         # Create violations from different orchestrators
-        context1 = OrchestrationContext("test-1", "Test1")
+        context1 = OrchestrationContext(orchestrator_id="test-1", orchestrator_name="Test1")
         orch1 = Tier01Orchestrator(context1)
         
-        context2 = OrchestrationContext("test-2", "Test2")
+        context2 = OrchestrationContext(orchestrator_id="test-2", orchestrator_name="Test2")
         orch2 = Tier0Orchestrator(context2)
         
         validator.validate_access_attempt(orch1, 2)
@@ -386,7 +429,8 @@ class TestTierAccessEnforcer:
         """Test enforcing with governance rules"""
         enforcer = TierAccessEnforcer()
         
-        context = OrchestrationContext("test-1", "Test")
+        context = OrchestrationContext(orchestrator_id="test-1", orchestrator_name="Test")
+        context.tier_access = {0, 1}  # Match RuleRequiringOrchestrator's tiers
         context.required_rules = ["RULE-A", "RULE-B"]
         
         orch = RuleRequiringOrchestrator(context)

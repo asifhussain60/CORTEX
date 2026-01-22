@@ -23,13 +23,13 @@ from typing import List
 @pytest.fixture
 def tabs_css_path() -> Path:
     """Path to tabs.css file."""
-    return Path("src/dashboard/frontend/css/tabs.css")
+    return Path("cortex/brain/dashboard/frontend/css/tabs.css")
 
 
 @pytest.fixture
 def tab_switcher_js_path() -> Path:
     """Path to tab-switcher.js file."""
-    return Path("src/dashboard/frontend/js/components/common/tab-switcher.js")
+    return Path("cortex/brain/dashboard/frontend/js/components/common/tab-switcher.js")
 
 
 @pytest.fixture
@@ -55,7 +55,7 @@ def test_tabs_css_exists(tabs_css_path: Path) -> None:
     Test that tabs.css exists in correct location.
     
     Acceptance Criteria:
-    - File exists at src/dashboard/frontend/css/tabs.css
+    - File exists at cortex/brain/dashboard/frontend/css/tabs.css
     
     CORE-008: TDD test for file structure
     """
@@ -70,7 +70,7 @@ def test_tab_switcher_js_exists(tab_switcher_js_path: Path) -> None:
     Test that tab-switcher.js exists in correct location.
     
     Acceptance Criteria:
-    - File exists at src/dashboard/frontend/js/components/common/tab-switcher.js
+    - File exists at cortex/brain/dashboard/frontend/js/components/common/tab-switcher.js
     
     CORE-008: TDD test for file structure
     """
@@ -394,7 +394,7 @@ def test_index_html_includes_tabs_css() -> None:
     
     CORE-008: TDD test for integration
     """
-    index_html_path = Path("src/dashboard/frontend/index.html")
+    index_html_path = Path("cortex/brain/dashboard/frontend/index.html")
     
     if not index_html_path.exists():
         pytest.skip("index.html not found, skipping integration test")
@@ -415,7 +415,7 @@ def test_index_html_includes_tab_switcher_js() -> None:
     
     CORE-008: TDD test for integration
     """
-    index_html_path = Path("src/dashboard/frontend/index.html")
+    index_html_path = Path("cortex/brain/dashboard/frontend/index.html")
     
     if not index_html_path.exists():
         pytest.skip("index.html not found, skipping integration test")
@@ -437,7 +437,7 @@ def test_tab_structure_in_html() -> None:
     
     CORE-008: TDD test for HTML structure
     """
-    index_html_path = Path("src/dashboard/frontend/index.html")
+    index_html_path = Path("cortex/brain/dashboard/frontend/index.html")
     
     if not index_html_path.exists():
         pytest.skip("index.html not found, skipping integration test")

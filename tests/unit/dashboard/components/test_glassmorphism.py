@@ -21,7 +21,7 @@ class TestGlassmorphismCore:
     def glassmorphism_css_path(self) -> Path:
         """Fixture providing path to glassmorphism.css file."""
         return Path(__file__).parent.parent.parent.parent.parent / \
-               "src/dashboard/frontend/css/glassmorphism.css"
+               "cortex/brain/dashboard/frontend/css/glassmorphism.css"
     
     def test_glassmorphism_css_exists(self, glassmorphism_css_path: Path) -> None:
         """Test that glassmorphism.css file exists."""
@@ -133,18 +133,27 @@ class TestGlassmorphismCore:
         """
         content = glassmorphism_css_path.read_text()
         
-        # Check for transition definitions in target range
+        # Check for transition definitions - direct ms values
         transition_pattern = r'transition:\s*[^;]*([0-9]+)ms'
         transitions = re.findall(transition_pattern, content)
         
-        if not transitions:
+        # Also check for CSS variable-based transitions (modern best practice)
+        variable_transition_pattern = r'--transition-(?:fast|normal|smooth):\s*([0-9]+)ms'
+        variable_transitions = re.findall(variable_transition_pattern, content)
+        
+        # Check for transition usage with CSS variables
+        uses_var_transitions = bool(re.search(r'transition:\s*[^;]*var\(--transition-', content))
+        
+        all_transitions = transitions + variable_transitions
+        
+        if not all_transitions and not uses_var_transitions:
             pytest.fail(
                 "No transitions with ms timing found. Add smooth transitions "
                 "with 200-300ms duration to glass components."
             )
         
         # Validate transition durations are in acceptable range
-        for duration_str in transitions:
+        for duration_str in all_transitions:
             duration = int(duration_str)
             if duration < 150 or duration > 400:
                 pytest.skip(
@@ -160,7 +169,7 @@ class TestGlassmorphismComponents:
     def glassmorphism_css_path(self) -> Path:
         """Fixture providing path to glassmorphism.css file."""
         return Path(__file__).parent.parent.parent.parent.parent / \
-               "src/dashboard/frontend/css/glassmorphism.css"
+               "cortex/brain/dashboard/frontend/css/glassmorphism.css"
     
     def test_glass_panel_base_component(self, glassmorphism_css_path: Path) -> None:
         """
@@ -238,7 +247,7 @@ class TestAnimationsIntegration:
     def animations_css_path(self) -> Path:
         """Fixture providing path to animations.css file."""
         return Path(__file__).parent.parent.parent.parent.parent / \
-               "src/dashboard/frontend/css/animations.css"
+               "cortex/brain/dashboard/frontend/css/animations.css"
     
     def test_animations_css_exists(self, animations_css_path: Path) -> None:
         """Test that animations.css file exists."""
@@ -311,7 +320,7 @@ class TestGlassmorphismVariants:
     def glassmorphism_css_path(self) -> Path:
         """Fixture providing path to glassmorphism.css file."""
         return Path(__file__).parent.parent.parent.parent.parent / \
-               "src/dashboard/frontend/css/glassmorphism.css"
+               "cortex/brain/dashboard/frontend/css/glassmorphism.css"
     
     def test_intensity_variants(self, glassmorphism_css_path: Path) -> None:
         """

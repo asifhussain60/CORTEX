@@ -22,13 +22,13 @@ from typing import List
 @pytest.fixture
 def sidebar_css_path() -> Path:
     """Path to sidebar.css file."""
-    return Path("src/dashboard/frontend/css/sidebar.css")
+    return Path("cortex/brain/dashboard/frontend/css/sidebar.css")
 
 
 @pytest.fixture
 def sidebar_js_path() -> Path:
     """Path to sidebar.js file."""
-    return Path("src/dashboard/frontend/js/components/common/sidebar.js")
+    return Path("cortex/brain/dashboard/frontend/js/components/common/sidebar.js")
 
 
 @pytest.fixture
@@ -54,7 +54,7 @@ def test_sidebar_css_exists(sidebar_css_path: Path) -> None:
     Test that sidebar.css exists in correct location.
     
     Acceptance Criteria:
-    - File exists at src/dashboard/frontend/css/sidebar.css
+    - File exists at cortex/brain/dashboard/frontend/css/sidebar.css
     
     CORE-008: TDD test for file structure
     """
@@ -69,7 +69,7 @@ def test_sidebar_js_exists(sidebar_js_path: Path) -> None:
     Test that sidebar.js exists in correct location.
     
     Acceptance Criteria:
-    - File exists at src/dashboard/frontend/js/components/common/sidebar.js
+    - File exists at cortex/brain/dashboard/frontend/js/components/common/sidebar.js
     
     CORE-008: TDD test for file structure
     """
@@ -419,7 +419,7 @@ def test_index_html_includes_sidebar_css() -> None:
     
     CORE-008: TDD test for integration
     """
-    index_html_path = Path("src/dashboard/frontend/index.html")
+    index_html_path = Path("cortex/brain/dashboard/frontend/index.html")
     
     if not index_html_path.exists():
         pytest.skip("index.html not found, skipping integration test")
@@ -440,7 +440,7 @@ def test_index_html_includes_sidebar_js() -> None:
     
     CORE-008: TDD test for integration
     """
-    index_html_path = Path("src/dashboard/frontend/index.html")
+    index_html_path = Path("cortex/brain/dashboard/frontend/index.html")
     
     if not index_html_path.exists():
         pytest.skip("index.html not found, skipping integration test")
@@ -463,7 +463,7 @@ def test_index_html_sidebar_structure() -> None:
     
     CORE-008: TDD test for HTML structure
     """
-    index_html_path = Path("src/dashboard/frontend/index.html")
+    index_html_path = Path("cortex/brain/dashboard/frontend/index.html")
     
     if not index_html_path.exists():
         pytest.skip("index.html not found, skipping integration test")
@@ -490,7 +490,7 @@ def test_sidebar_five_main_sections() -> None:
     
     CORE-008: TDD test for navigation structure
     """
-    index_html_path = Path("src/dashboard/frontend/index.html")
+    index_html_path = Path("cortex/brain/dashboard/frontend/index.html")
     
     if not index_html_path.exists():
         pytest.skip("index.html not found, skipping integration test")

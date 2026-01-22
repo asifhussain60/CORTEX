@@ -75,6 +75,7 @@ class ToolDefinition:
     deprecated: bool = False  # Whether tool is deprecated
     version: str = "1.0"  # Tool version
     timeout_ms: Optional[int] = None  # Tool-specific timeout in milliseconds
+    returns: Optional[Dict[str, Any]] = None  # Return schema for the tool
     
     def validate_params(self, params: Dict[str, Any]) -> tuple[bool, Optional[str]]:
         """Validate parameters against definition.
@@ -123,8 +124,8 @@ class ToolParameter:
     """Tool parameter."""
     name: str
     type: str
-    required: bool = False
     description: str = ""
+    required: bool = False
     default: Optional[Any] = None
     min_value: Optional[float] = None
     max_value: Optional[float] = None
