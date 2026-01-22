@@ -82,6 +82,7 @@ nav:
     - TIER 3 Knowledge: 01-cortex-brain/04-tier3-knowledge.md
     - Token Optimization: 01-cortex-brain/05-token-optimization.md
     - Composite Requests: 01-cortex-brain/06-composite-requests.md
+    - Brain Architecture: 01-cortex-brain/05-brain-architecture.md
   - Orchestrators:
     - Architecture Overview: 02-orchestrators/00-orchestrators-index.md
     - Master Orchestrator: 02-orchestrators/01-master-orchestrator.md
@@ -148,6 +149,19 @@ nav:
     - Implementation Status: 08-reference/implementation-status.md
     - Remediation Status: 08-reference/remediation-status.md
     - Test AC Mapping: 08-reference/test-ac-mapping.md
+  - MCP Tools Framework:
+    - Overview: 11-mcp-tools/00-mcp-index.md
+    - Architecture: 11-mcp-tools/mcp-architecture.md
+  - Infrastructure & Resilience:
+    - Overview: 12-infrastructure/00-infrastructure-index.md
+  - Domain Brain:
+    - Overview: 13-domain-brain/00-domain-brain-index.md
+  - Deployment:
+    - Overview: 14-deployment/00-deployment-index.md
+  - Observability:
+    - Overview: 15-observability/00-observability-index.md
+  - Testing:
+    - Overview: 16-testing/00-testing-index.md
   - Tutorials:
     - Orchestrator Tutorials: 09-tutorials/0-index.md
   - Contributing:

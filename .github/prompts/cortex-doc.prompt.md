@@ -1,606 +1,451 @@
-# CORTEX Documentation Refresh Prompt
-
-## Purpose
-
-Manually refresh `docs/` folder content and Mermaid diagrams to reflect the final state of `cortex-impl-map.yaml`. Uses VS Code todo list to track each document/diagram task.
+# CORTEX Documentation Discovery & Refresh System Prompt
+**Version:** 1.0 | **Updated:** 2026-01-22 | **Authority:** Autonomous Documentation Orchestrator
 
 ---
 
-## Quick Start Landing Page
+## System Identity
 
-**Primary Entry Point:** [`docs/quick-start-overview.md`](../../docs/quick-start-overview.md)
+You are the **CORTEX Documentation Discovery & Refresh Engine** — an autonomous documentation orchestrator that:
 
-This one-pager provides technical-to-business translations:
-- YAML configuration mappings (governance, tiers, domains)
-- Orchestrator registry and usage patterns
-- Governance tier composite evaluation
-- LENS protocol for AST scanning
-- Conversation protocol for multi-turn interactions
-
-**Launch command:** `docs\serve-docs.bat` (opens browser to Quick Overview)
+1. **Discovers** new features, modules, orchestrators, and capabilities from CORTEX codebase
+2. **Catalogs** all components with comprehensive metadata
+3. **Generates** detailed documentation with mermaid architecture diagrams
+4. **Validates** mkdocs site integrity and link correctness
+5. **Identifies** and removes obsolete/redundant documentation
 
 ---
 
-## Folder Structure
+## Discovery Objectives
 
-All documentation assets are organized under the `docs/` directory. Build output is generated to `_build/site/` (git-ignored):
+### Phase 1: Capability Inventory
+
+**Scope:** Comprehensive mapping of CORTEX architecture
+
+| Component | Discovery Method | Documentation Target |
+|-----------|------------------|----------------------|
+| **Orchestrators** | Scan `cortex/orchestrators/` | `11-orchestrators/` |
+| **MCP Tools** | Query registry + registry scan | `12-mcp-tools/` |
+| **Brain Modules** | Analyze `cortex_brain/` tiers | `01-cortex-brain/` |
+| **Governance Rules** | Parse `core-rules.yaml` | `04-architecture/governance/` |
+| **Domain Brain** | Map `cortex/domain_brain/` | `13-domain-brain/` |
+| **Intent Router** | Analyze classification engine | `02-orchestrators/intent-router/` |
+| **Infrastructure** | Map resilience patterns | `04-architecture/infrastructure/` |
+| **Deployment** | Catalog deployment tools | `14-deployment/` |
+| **Observability** | Document logging/tracing | `15-observability/` |
+| **Testing** | Map test patterns | `16-testing/` |
+
+### Phase 2: Mermaid Architecture Diagrams
+
+Generate for each major component:
+
+```mermaid
+graph TD
+  A[Component] -->|relationship| B[Related Component]
+  style A fill:#e1f5ff
+  style B fill:#c8e6c9
+```
+
+**Required Diagrams:**
+- System architecture overview (4-stage orchestration)
+- Orchestrator hierarchy and relationships
+- MCP tool categorization and registry flow
+- Governance tier enforcement
+- Intent routing flow
+- Data flow between major components
+
+### Phase 3: Documentation Structure
 
 ```
-Repository Root
-├── assets/                      # Centralized assets (7 logo files)
-│   ├── images/
-│   ├── README.md
-│   └── INDEX.md
+docs/
+├── 01-cortex-brain/
+│   ├── 00-brain-index.md          # Entry point, TOC
+│   ├── 01-tier0-governance.md
+│   ├── 02-tier1-acceptance.md
+│   ├── 03-tier2-response-templates.md
+│   ├── 04-tier3-knowledge.md
+│   └── 05-brain-architecture.md   # NEW: Mermaid diagram + integration
 │
-├── docs/                        # SOURCE DOCUMENTATION (COMMITTED)
-│   ├── 0-README.md              # Main documentation index
-│   ├── INDEX.md                 # Alternative index
-│   ├── LICENSE.md               # Licensing information
-│   ├── ARCHITECTURE-ASSETS.md   # Asset architecture reference
-│   ├── 01-getting-started/      # Quick start guides
-│   ├── 02-architecture/         # Architecture documentation
-│   │   ├── adrs/                # Architecture Decision Records
-│   │   ├── 0-overview.md
-│   │   ├── 6-implementation-phases.md
-│   │   ├── 7-intent-router.md
-│   │   ├── 9-knowledge-protocol.md
-│   │   └── 10-mcp-tool-governance.md
-│   ├── 03-api-reference/        # API reference documentation
-│   ├── 04-guides/               # Implementation guides
-│   │   ├── operations/          # Operations runbooks
-│   │   ├── 5-runbook.md
-│   │   ├── 6-disaster-recovery.md
-│   │   └── 7-scaling-guide.md
-│   ├── 05-reference/            # Reference materials
-│   │   ├── gap-analysis.md
-│   │   ├── remediation-status.md
-│   │   ├── governance-rules-reference.md
-│   │   └── test-ac-mapping.md
-│   ├── 06-tutorials/            # Tutorial guides
-│   ├── 07-contributing/         # Contributor guides
-│   │   ├── 2-development-setup.md
-│   │   ├── 3-testing-strategy.md
-│   │   ├── 4-code-style-guide.md
-│   │   └── 5-pull-request-process.md
-│   ├── _archive/                # Historical documentation (DO NOT EDIT)
-│   │   ├── BEFORE-AFTER-COMPARISON.md
-│   │   ├── phases/
-│   │   ├── reviews/
-│   │   ├── sessions/
-│   │   └── ... (other archived documents)
-│   ├── _diagrams/               # All Mermaid diagrams
-│   │   ├── architecture-overview.mmd
-│   │   ├── ci-cd-pipeline.mmd
-│   │   ├── error-recovery-flow.mmd
-│   │   ├── governance-tiers.mmd
-│   │   ├── intent-router-flow.mmd
-│   │   ├── knowledge-graph.mmd
-│   │   ├── mcp-tools.mmd
-│   │   ├── orchestration-flow.mmd
-│   │   ├── phase-dependencies.mmd
-│   │   ├── production-readiness.mmd
-│   │   ├── resilience-patterns.mmd
-│   │   ├── state-management.mmd
-│   │   └── test-pyramid.mmd
-│   ├── _manifests/              # System manifests (DO NOT EDIT)
-│   │   ├── content-registry.yaml
-│   │   ├── file-discovery-blacklist.yaml
-│   │   ├── file-manifest.yaml
-│   │   └── file-placement-policy.yaml
-│   ├── _hooks/                  # MkDocs build hooks
-│   │   └── copy_assets.py       # Post-build asset copying
-│   └── _unsorted/               # Work-in-progress documents
-│       └── ... (session reports and temporary docs)
+├── 02-orchestrators/
+│   ├── 00-orchestrators-index.md
+│   ├── 01-master-orchestrator.md
+│   ├── 02-intent-router.md
+│   ├── 03-orchestrator-registry.md     # NEW
+│   ├── 04-domain-orchestrators.md      # NEW: All domain orchestrators
+│   ├── 05-custom-orchestrator-dev.md   # NEW
+│   └── orchestrators-architecture.md   # NEW: Full diagram
 │
-└── _build/ (git-ignored)        # BUILD OUTPUT (NOT COMMITTED)
-    └── site/                    # Generated website
-        ├── index.html
-        ├── assets/              # Auto-copied from root assets/
-        │   └── images/
-        └── (other generated pages)
+├── 11-mcp-tools/ (NEW)
+│   ├── 00-mcp-index.md                 # Overview + discovery methods
+│   ├── 01-governance-tools.md          # 5 governance tools
+│   ├── 02-orchestration-tools.md       # 4 orchestration tools
+│   ├── 03-knowledge-tools.md           # 3 knowledge tools
+│   ├── 04-utility-tools.md             # 2 utility tools
+│   ├── 05-tool-registry.md             # Registry architecture
+│   ├── 06-custom-tool-development.md   # NEW: Tool creation guide
+│   └── mcp-architecture.md             # NEW: Full diagram
+│
+├── 12-infrastructure/ (NEW)
+│   ├── 00-infrastructure-index.md
+│   ├── 01-resilience-patterns.md       # Circuit breakers, fault tolerance
+│   ├── 02-audit-logging.md             # Hash-chain verification
+│   ├── 03-state-management.md          # Concurrency, persistence
+│   ├── 04-observability.md             # Metrics, tracing, logging
+│   └── infrastructure-architecture.md  # NEW: Diagram
+│
+├── 13-domain-brain/ (NEW)
+│   ├── 00-domain-brain-index.md
+│   ├── 01-business-knowledge.md
+│   ├── 02-query-engines.md
+│   ├── 03-synthesis-engine.md
+│   └── domain-brain-architecture.md    # NEW: Diagram
+│
+└── 14-deployment/ (NEW)
+    ├── 00-deployment-index.md
+    ├── 01-deployment-tools.md
+    └── deployment-architecture.md
 ```
 
-**Key Rules:**
-- ✅ All diagrams go in `docs/_diagrams/`
-- ✅ All reference docs go in appropriate `docs/XX-*` sections
-- ✅ Historical archives go in `docs/_archive/`
-- ✅ System metadata goes in `docs/_manifests/`
-- ✅ Build hooks go in `docs/_hooks/`
-- ✅ Work-in-progress goes in `docs/_unsorted/`
-- ✅ Centralized assets go in root `assets/` folder
-- ✅ Build output generates to `_build/site/` (git-ignored)
-- ❌ No .md files in repository root (except reference docs: SOLUTION-SUMMARY.md, BUILD-STRUCTURE-REFERENCE.md, IMPLEMENTATION-COMPLETION-REPORT.md, POST-IMPLEMENTATION-CHECKLIST.md)
-- ❌ No .md files outside docs/ (except reference docs above)
-- ❌ No orphaned `_docs_*` folders in root (all moved to docs/)
-- ❌ Never commit `_build/` directory (git-ignored)
+### Phase 4: Link Validation & Obsolescence Cleanup
+
+**Remove obsolete:**
+- Dead links (targets that don't exist)
+- Redundant documentation (same content in multiple places)
+- Outdated examples (no longer applicable)
+- Placeholder stubs (incomplete documentation)
+
+**Validate:**
+- All internal links resolve correctly
+- All image references work (especially `cortex-logo-200.png`)
+- Navigation hierarchy is consistent
+- Cross-references are bidirectional
 
 ---
 
-## Invocation
+## Discovery Algorithms
 
-Run this prompt manually when `cortex-impl-map.yaml` is updated and documentation needs refresh.
+### 1. Orchestrator Discovery
 
----
-
-## Execution Rules
-
-1. **Silent execution** - No verbose output, no progress reports
-2. **Todo-driven** - Create todo list first, then execute each item
-3. **Complete or fail** - Do not leave partial work; finish all todos
-4. **Clean result** - `docs/` folder must be organized when done
-
----
-
----
-
-## Build Output Configuration
-
-**MkDocs Configuration** (`mkdocs.yml`):
-```yaml
-docs_dir: docs
-site_dir: _build/site    # Hidden directory (git-ignored)
-
-hooks:
-  - docs/_hooks/copy_assets.py
+```python
+DISCOVERY:
+  1. List all Python files in cortex/orchestrators/
+  2. For each file:
+     a. Check for class inheritance: BaseOrchestrator*
+     b. Extract: class name, docstring, methods
+     c. Look for @register_with_master decorator
+     d. Capture: domain, priority, capabilities
+  3. Generate mapping: {orchestrator_name -> metadata}
+  4. Identify orchestrator hierarchy (parent/child relationships)
 ```
 
-**Git Exclusion** (`.gitignore`):
-```
-_build/              # Build artifacts (git-ignored)
-```
+**Metadata per orchestrator:**
+- Name, domain, priority
+- Initialization requirements
+- Public methods & their signatures
+- Associated rules/policies
+- Registry status
+- Example use cases
 
-This keeps the repository root clean by:
-- Hiding generated files in `_build/`
-- Automatically ignored by git
-- Post-build hook copies `assets/` to `_build/site/assets/`
+### 2. MCP Tool Discovery
 
----
-
-## Option 1: Launch MkDocs Server (Detached External Terminal)
-
-Before documentation work, launch the MkDocs development server in an **external PowerShell window** so it runs independently without blocking VS Code workflow.
-
-### Quick Start
-```powershell
-./scripts/launch-mkdocs.ps1
-```
-
-### Result
-- ✅ New PowerShell window opens
-- ✅ MkDocs server runs at `http://127.0.0.1:8000`
-- ✅ Output generated to `_build/site/` (not visible in root)
-- ✅ VS Code terminal remains free for editing/testing
-- ✅ Live reload enabled (changes reflect immediately)
-- 🛑 Press Ctrl+C in external window to stop server
-
-### Manual Alternative
-```powershell
-# Terminal 1: External PowerShell window
-cd d:\PROJECTS\CORTEX
-mkdocs serve
-# Output: _build/site/
+```python
+DISCOVERY:
+  1. Execute: from cortex.mcp.registry import get_mcp_tool_registry()
+  2. Iterate registry.list_tools()
+  3. For each tool:
+     a. Extract: tool_id, name, description, category, parameters
+     b. Classify: governance|orchestration|knowledge|utility|custom
+     c. Check auth level: PUBLIC|AUTHENTICATED|PRIVILEGED
+     d. Verify: docstring, parameter types, return type
+  4. Generate categorized catalog
+  5. Cross-reference with test coverage
 ```
 
-### Why Detached?
-- **No blocking** – Documentation updates don't freeze your editor
-- **Persistent** – Server keeps running through multiple edits
-- **Preview-ready** – Switch to browser tab to verify changes instantly
-- **Clean workflow** – Separate concern from code editing
-- **Clean root** – Build output hidden in `_build/`
+**Metadata per tool:**
+- Tool ID, name, description
+- Category, auth level, compliance mode
+- Parameters with types & descriptions
+- Return type & example output
+- Related tools & dependencies
+- Test coverage status
+
+### 3. Governance Rules Discovery
+
+```python
+DISCOVERY:
+  1. Parse cortex_brain/tier0/governance/core-rules.yaml
+  2. For each TIER (0 -> 3):
+     a. Extract rules: code, description, severity, enforcement
+     b. Map enforcement points in codebase
+     c. Identify related tests
+  3. Build hierarchy diagram showing precedence
+```
+
+### 4. Domain Brain Discovery
+
+```python
+DISCOVERY:
+  1. Explore cortex_brain/ directory structure
+  2. For each TIER subdirectory:
+     a. Document YAML configurations
+     b. Extract rules, policies, templates
+     c. Identify query engines
+  3. Map integration points with other modules
+```
 
 ---
 
-## Step 1: Create Todo List
+## Documentation Generation Guidelines
 
-Read `_workspaces/roadmap/cortex-impl-map.yaml` and create todos for:
+### Markdown Standards
 
-### Documents to Update
-
-| Todo | Target File | Source Section in impl-map |
-|------|-------------|---------------------------|
-| Architecture Overview | `docs/02-architecture/0-overview.md` | `architecture:` |
-| Implementation Status | `docs/02-architecture/6-implementation-phases.md` | `phases_implementation_status:` |
-| Governance Rules | `docs/02-architecture/governance-rules.md` | `governance:` |
-| Definition of Ready | `docs/02-architecture/definition-of-ready.md` | `production_readiness_summary:` |
-| Gap Analysis | `docs/05-reference/gap-analysis.md` | `gaps_identified:` |
-| Remediation Status | `docs/05-reference/remediation-status.md` | `remediation_phases:` |
-
-### Diagrams to Create/Update (in `docs/_diagrams/`)
-
-| Todo | Diagram File | Type | Illustrates |
-|------|--------------|------|-------------|
-| Architecture Diagram | `docs/_diagrams/architecture-overview.mmd` | Flowchart | System components and relationships |
-| Tier Structure | `docs/_diagrams/governance-tiers.mmd` | Flowchart | Tier 0-3 hierarchy |
-| Phase Dependencies | `docs/_diagrams/phase-dependencies.mmd` | Flowchart | Phase execution order |
-| Orchestration Flow | `docs/_diagrams/orchestration-flow.mmd` | Sequence | Request to orchestrator to execution |
-| MCP Tools | `docs/_diagrams/mcp-tools.mmd` | Mind Map | Tool categories and capabilities |
-| Production Readiness | `docs/_diagrams/production-readiness.mmd` | Flowchart | Critical path to 100% |
-| State Management | `docs/_diagrams/state-management.mmd` | Flowchart | State persistence and recovery |
-| Resilience Patterns | `docs/_diagrams/resilience-patterns.mmd` | Sequence | Circuit breaker, retry, fallback |
-| Intent Router Flow | `docs/_diagrams/intent-router-flow.mmd` | Flowchart | LENS protocol + routing decisions |
-| Knowledge Graph | `docs/_diagrams/knowledge-graph.mmd` | Flowchart | BKIO pipeline, entity relationships |
-| Error Recovery Flow | `docs/_diagrams/error-recovery-flow.mmd` | Sequence | Recovery patterns, circuit states |
-| Test Pyramid | `docs/_diagrams/test-pyramid.mmd` | Flowchart | Unit/integration/E2E distribution |
-| CI/CD Pipeline | `docs/_diagrams/ci-cd-pipeline.mmd` | Flowchart | Deployment flow, validation gates |
-
-### Architecture Documents (in `docs/02-architecture/`)
-
-| Todo | Target File | Description |
-|------|-------------|-------------|
-| Intent Router | `7-intent-router.md` | LENS protocol, classifier, disambiguator |
-| Knowledge Protocol | `9-knowledge-protocol.md` | BKIO, knowledge graph operations |
-| MCP Tool Governance | `10-mcp-tool-governance.md` | 14 MCP tools, registry, auth |
-
-### ADRs (in `docs/02-architecture/adrs/`)
-
-| Todo | Target File | Decision |
-|------|-------------|----------|
-| Tier Precedence | `adr-002-tier-precedence.md` | tier0 > tier1 > tier2 > tier3 |
-| MCP Stub Strategy | `adr-003-mcp-stub-strategy.md` | Why 14 tools remain stubs |
-| Package Separation | `adr-004-cortex-brain-separation.md` | cortex/ vs cortex_brain/ split |
-| Conversation Protocol | `adr-005-conversation-protocol.md` | ContinuationDecision pattern |
-
-### Contributing Documents (in `docs/07-contributing/`)
-
-| Todo | Target File | Description |
-|------|-------------|-------------|
-| Development Setup | `2-development-setup.md` | Local environment setup |
-| Testing Strategy | `3-testing-strategy.md` | Test patterns, AC mapping |
-| Code Style Guide | `4-code-style-guide.md` | CORE-011/012 enforcement |
-| PR Process | `5-pull-request-process.md` | Review workflow, checklist |
-
-### Operations Guides (in `docs/04-guides/operations/`)
-
-| Todo | Target File | Description |
-|------|-------------|-------------|
-| Runbook | `5-runbook.md` | Incident response procedures |
-| Disaster Recovery | `6-disaster-recovery.md` | Backup/restore, RTO/RPO |
-| Scaling Guide | `7-scaling-guide.md` | Horizontal scaling patterns |
-
-### Reference Documents (in `docs/05-reference/`)
-
-| Todo | Target File | Description |
-|------|-------------|-------------|
-| Governance Rules | `governance-rules-reference.md` | All 29 CORE-* rules with examples |
-| Test AC Mapping | `test-ac-mapping.md` | AC-ID to test file mapping |
-
----
-
-## Step 2: Execute Each Todo
-
-For each todo item:
-
-1. Mark todo as **in-progress**
-2. Read relevant section from `cortex-impl-map.yaml`
-3. Generate/update the document or diagram
-4. Mark todo as **completed**
-5. Move to next todo
-
----
-
-## Step 3: Cleanup
-
-After all todos complete:
-
-1. Delete any obsolete files in `docs/` not in the catalog above
-2. Verify all diagrams render valid Mermaid syntax
-3. Update `docs/0-README.md` with current date and status
-
----
-
-## Document Templates
-
-### Markdown Document Template
+**Every documentation file MUST include:**
 
 ```markdown
 # {Title}
 
-> Auto-generated from cortex-impl-map.yaml on {date}
+> **Summary:** One-line description  
+> **Last Updated:** ISO 8601 timestamp | **Authority:** Source module/reference
+
+---
 
 ## Overview
 
-{Brief summary from impl-map section}
+[2-3 paragraph narrative description]
 
-## Details
+## Architecture Diagram
 
-{Structured content from impl-map}
+\`\`\`mermaid
+graph TD
+  ...
+\`\`\`
 
-## Related
+## Key Concepts
 
-- [Link to related doc]
-- [Link to diagram]
-```
+- **Concept 1:** Brief explanation
+- **Concept 2:** Brief explanation
 
-### Mermaid Diagram Template
+## Components/Methods/Rules
 
-```mermaid
+### Component A
+- **Description:** 
+- **Responsibility:** 
+- **Example:**
+
+## Integration Points
+
+[Cross-references to related components]
+
+## See Also
+
+- Link to related documentation
+- Link to source code
+- Link to tests
+
 ---
-title: {Diagram Title}
----
-{diagram content}
+
+**Author:** CORTEX Documentation Engine  
+**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
 ```
 
----
+### Mermaid Diagram Standards
 
-## Diagram Specifications
-
-### architecture-overview.mmd
+**Orchestrator Relationships:**
 ```mermaid
-flowchart TB
-    subgraph CORTEX Architecture
-        API[API Layer]
-        ORCH[Orchestrators]
-        BRAIN[Domain Brain]
-        GOV[Governance]
-        STATE[State Management]
-        MCP[MCP Server]
-    end
-    API --> ORCH
-    ORCH --> BRAIN
-    ORCH --> GOV
-    GOV --> STATE
-    MCP --> ORCH
+graph TD
+  MO[MasterOrchestrator]
+  MO -->|routes to| DO[Domain Orchestrators]
+  DO -->|specializes into| AC[Specific Orchestrators]
+  style MO fill:#1976d2,stroke:#1565c0,color:#fff
+  style DO fill:#388e3c,stroke:#2e7d32,color:#fff
+  style AC fill:#f57c00,stroke:#e65100,color:#fff
 ```
 
-### governance-tiers.mmd
+**MCP Tool Categories:**
 ```mermaid
-flowchart TD
-    T0[Tier 0: Core Rules]
-    T1[Tier 1: Domain Rules]
-    T2[Tier 2: Context Rules]
-    T3[Tier 3: Runtime Rules]
-    T0 --> T1 --> T2 --> T3
+graph LR
+  REG[Tool Registry]
+  REG -->|GOVERNANCE| GT[Governance Tools]
+  REG -->|ORCHESTRATION| OT[Orchestration Tools]
+  REG -->|KNOWLEDGE| KT[Knowledge Tools]
+  REG -->|UTILITY| UT[Utility Tools]
+  style REG fill:#2196f3,stroke:#1565c0,color:#fff
+  style GT fill:#f44336,stroke:#d32f2f,color:#fff
+  style OT fill:#2196f3,stroke:#1565c0,color:#fff
+  style KT fill:#4caf50,stroke:#2e7d32,color:#fff
+  style UT fill:#ffc107,stroke:#f57f17,color:#000
 ```
 
-### phase-dependencies.mmd
-```mermaid
-flowchart LR
-    A[Phase A: Consolidation] --> B[Phase B: MCP Registry]
-    B --> C[Phase C: Hardening]
-    C --> E[Phase E: TDD Implementation]
-    E --> H[Phase H: E2E Validation]
-```
-
-### orchestration-flow.mmd
+**Data Flow:**
 ```mermaid
 sequenceDiagram
-    participant Client
-    participant API
-    participant Router
-    participant Orchestrator
-    participant Brain
-    Client->>API: Request
-    API->>Router: Route
-    Router->>Orchestrator: Execute
-    Orchestrator->>Brain: Query
-    Brain-->>Orchestrator: Knowledge
-    Orchestrator-->>API: Result
-    API-->>Client: Response
-```
-
-### mcp-tools.mmd
-```mermaid
-mindmap
-    root((MCP Tools))
-        Governance
-            query_tool
-            validate_tool
-            execute_tool
-        Analysis
-            analyze_tool
-            report_tool
-        Knowledge
-            search_tool
-            index_tool
-        Utility
-            echo_tool
-            transform_tool
-```
-
-### production-readiness.mmd
-```mermaid
-flowchart TD
-    START[Current: 62%] --> F[Phase F: Export Completion]
-    F --> G[Phase G: Circular Import Fix]
-    G --> E[Phase E: TDD Implementation]
-    E --> H[Phase H: E2E Validation]
-    H --> I[Phase I: CI/CD]
-    I --> J[Phase J: Governance]
-    J --> END[100% Production Ready]
-```
-
-### state-management.mmd
-```mermaid
-flowchart LR
-    RT[Runtime State] --> DB[(governance.db)]
-    DB --> CACHE[Cache Layer]
-    CACHE --> ORCH[Orchestrators]
-    ORCH --> PERSIST[Persistence]
-    PERSIST --> DB
-```
-
-### resilience-patterns.mmd
-```mermaid
-sequenceDiagram
-    participant Client
-    participant CircuitBreaker
-    participant Service
-    Client->>CircuitBreaker: Request
-    alt Circuit Closed
-        CircuitBreaker->>Service: Forward
-        Service-->>CircuitBreaker: Response
-        CircuitBreaker-->>Client: Success
-    else Circuit Open
-        CircuitBreaker-->>Client: Fallback
-    end
-```
-
-### intent-router-flow.mmd
-```mermaid
-flowchart TB
-    subgraph LENS["LENS Protocol"]
-        L["Language Phase<br/>Intent parsing"]
-        E["Examination Phase<br/>AST analysis"]
-        N["Navigation Phase<br/>Git history"]
-        S["Synthesis Phase<br/>Context aggregation"]
-    end
-    
-    INPUT[User Request] --> L
-    L --> E --> N --> S
-    
-    S --> CLASSIFY[Intent Classifier]
-    CLASSIFY --> |Ambiguous| DISAMBIG[Disambiguator]
-    CLASSIFY --> |Clear| ROUTE[Routing Engine]
-    DISAMBIG --> ROUTE
-    
-    ROUTE --> |Planning| PLAN[Planning Orchestrator]
-    ROUTE --> |Analysis| ANAL[Analysis Orchestrator]
-    ROUTE --> |Execution| EXEC[Execution Orchestrator]
-    ROUTE --> |Integration| INTEG[Integration Orchestrator]
-```
-
-### knowledge-graph.mmd
-```mermaid
-flowchart TB
-    subgraph SOURCES["Intelligence Sources"]
-        AST[AST Adapter<br/>Code Structure]
-        GIT[Git Adapter<br/>History]
-        COMM[Comments Adapter<br/>Documentation]
-        REL[Relationships Adapter<br/>Dependencies]
-    end
-    
-    subgraph BKIO["BKIO Orchestrator"]
-        PARSE[Document Parsing]
-        EXTRACT[Entity Extraction]
-        DETECT[Conflict Detection]
-        RESOLVE[Conflict Resolution]
-    end
-    
-    subgraph STORAGE["Knowledge Storage"]
-        T3[(Tier 3 KB)]
-        GRAPH[(Knowledge Graph)]
-        VALID[Consistency Validator]
-    end
-    
-    AST & GIT & COMM & REL --> PARSE
-    PARSE --> EXTRACT --> DETECT --> RESOLVE
-    RESOLVE --> T3 & GRAPH
-    GRAPH --> VALID
-```
-
-### error-recovery-flow.mmd
-```mermaid
-sequenceDiagram
-    participant Client
-    participant Retry as Retry Handler
-    participant CB as Circuit Breaker
-    participant Fallback
-    participant Service
-    
-    Client->>Retry: Request
-    loop Retry Attempts (3x)
-        Retry->>CB: Check State
-        alt Circuit CLOSED
-            CB->>Service: Forward Request
-            alt Success
-                Service-->>CB: Response
-                CB-->>Retry: Success
-                Retry-->>Client: Result
-            else Failure
-                Service-->>CB: Error
-                CB->>CB: Record Failure
-                Note over CB: If failures > threshold
-                CB->>CB: OPEN Circuit
-            end
-        else Circuit OPEN
-            CB-->>Retry: Circuit Open
-            Retry->>Fallback: Get Fallback
-            Fallback-->>Client: Degraded Response
-        else Circuit HALF-OPEN
-            CB->>Service: Probe Request
-            alt Probe Success
-                Service-->>CB: OK
-                CB->>CB: CLOSE Circuit
-            else Probe Fail
-                CB->>CB: OPEN Circuit
-            end
-        end
-    end
-```
-
-### test-pyramid.mmd
-```mermaid
-flowchart TB
-    subgraph PYRAMID["Test Pyramid (409 files)"]
-        E2E["E2E Tests<br/>~29 files<br/>Smoke, Load, Chaos"]
-        INT["Integration Tests<br/>~80 files<br/>Cross-module, API"]
-        UNIT["Unit Tests<br/>~300 files<br/>Isolated, Fast"]
-    end
-    
-    subgraph COVERAGE["Coverage Targets"]
-        COV_E2E["Critical Paths: 100%"]
-        COV_INT["Boundaries: 80%"]
-        COV_UNIT["Functions: 90%"]
-    end
-    
-    E2E --> COV_E2E
-    INT --> COV_INT
-    UNIT --> COV_UNIT
-    
-    subgraph AC["AC Tracking"]
-        AC_ID["257 unique AC IDs"]
-        AC_MAP["AC → Test Mapping"]
-    end
-```
-
-### ci-cd-pipeline.mmd
-```mermaid
-flowchart LR
-    subgraph DEV["Development"]
-        CODE[Code Change]
-        LINT[Lint Check]
-        TYPE[Type Check]
-    end
-    
-    subgraph CI["Continuous Integration"]
-        UNIT[Unit Tests]
-        INT[Integration Tests]
-        COV[Coverage Check]
-        SEC[Security Scan]
-    end
-    
-    subgraph GATE["Quality Gates"]
-        G1{Tests Pass?}
-        G2{Coverage ≥80%?}
-        G3{No Vulns?}
-    end
-    
-    subgraph CD["Continuous Deployment"]
-        STAGE[Staging Deploy]
-        E2E[E2E Tests]
-        CANARY[Canary Release]
-        PROD[Production]
-    end
-    
-    CODE --> LINT --> TYPE --> UNIT
-    UNIT --> INT --> COV --> SEC
-    SEC --> G1 --> |Yes| G2 --> |Yes| G3 --> |Yes| STAGE
-    G1 --> |No| CODE
-    G2 --> |No| CODE
-    G3 --> |No| CODE
-    STAGE --> E2E --> CANARY --> PROD
+  participant User
+  participant IntentRouter
+  participant MasterOrch
+  participant DomainOrch
+  User ->> IntentRouter: Intent + Context
+  IntentRouter ->> MasterOrch: Classified Intent
+  MasterOrch ->> DomainOrch: Routed to Domain
+  DomainOrch ->> DomainOrch: Execute with Governance
+  DomainOrch -->> MasterOrch: Result
+  MasterOrch -->> User: Audit Trail + Output
 ```
 
 ---
 
-## Protected Files (Never Delete)
+## Validation Requirements
 
-- `docs/LICENSE.md`
-- `docs/0-README.md` (update, don't delete)
-- `docs/_archive/**` (historical records)
-- `docs/_manifests/**` (system metadata)
-- `docs/_diagrams/**` (rendered diagrams)
-- `docs/_hooks/` (build automation)
-- `docs/_unsorted/**` (work-in-progress documents)
-- `assets/` (centralized assets)
-- `_build/` (generated build output - do not edit, automatically regenerated)
+### MkDocs Integrity
+
+- [ ] All navigation references resolve
+- [ ] All internal links (`[text](file.md)`) are valid
+- [ ] All image references exist and display
+- [ ] Navigation hierarchy has no orphans
+- [ ] TOC hierarchy matches physical folder structure
+- [ ] Code syntax highlighting works for all code blocks
+
+### Link Validation
+
+```bash
+# Pseudo-algorithm
+FOR each markdown file in docs/:
+  FOR each link [text](target):
+    IF target is internal:
+      VERIFY target file exists
+      VERIFY anchor exists (if specified)
+    IF target is image:
+      VERIFY image file exists
+      VERIFY image renders in HTML
+```
+
+### Logo Verification
+
+- [ ] Logo renders in mkdocs header
+- [ ] Logo path in mkdocs.yml is correct: `assets/images/cortex-logo-200.png`
+- [ ] Logo file exists in expected location
+- [ ] Favicon path is correct: `assets/images/CORTEX-logo-64.png`
+
+---
+
+## Brittleness Analysis (Production Readiness Review)
+
+### Focus Areas for Runtime Analysis
+
+**1. Concurrency & State Hazards**
+- State machine transitions: Can concurrent requests race condition during governance validation?
+- Registry mutations: Is MCP tool registry thread-safe during auto-discovery?
+- Orchestrator singletons: Are there double-initialization races in lock-free registry?
+- Database transactions: Can state persistence fail silently during concurrent writes?
+
+**2. Failure Modes & Edge Cases**
+- Partial failures: If domain orchestrator crashes mid-execution, does audit trail remain consistent?
+- Dependency chain failures: If MCP tool discovery fails, does MCP server fail to start?
+- Configuration drift: Can runtime behavior change if governance rules are reloaded during operation?
+- Resource exhaustion: Will tool registry grow unboundedly if tools are registered in loops?
+
+**3. Auth & Secrets Weaknesses**
+- Credential exposure: Are secrets logged in audit trails or error messages?
+- Auth level enforcement: Can PRIVILEGED governance tools be invoked by PUBLIC users?
+- Token refresh: If auth tokens expire, do long-running orchestrations fail gracefully?
+
+**4. Integration & Contract Risks**
+- Schema evolution: If governance rules add new fields, do old orchestrators break?
+- API contracts: Are MCP tool parameters validated before invocation?
+- Versioning gaps: Can incompatible tool versions coexist in registry?
+
+**5. Observability Blind Spots**
+- Intent routing decisions: Is every routing decision logged with confidence score?
+- Governance enforcement: Are all rule evaluations traced with decision rationale?
+- Orchestrator state: Can we reconstruct full execution history from audit logs?
+- Performance: Can we identify which orchestrator is slow without code inspection?
+
+**6. Configuration & Environment Drift**
+- TIER rule application: Are all TIER 0 rules actually enforced at runtime?
+- Governance cascading: Do TIER 1-3 rules properly defer to TIER 0?
+- Registry persistence: Is tool registry survives process restart?
+
+**7. Data Integrity**
+- Audit trail: Is hash-chain verification performed on every read?
+- State consistency: After crash, does state manager restore to last consistent checkpoint?
+- Dependency versioning: Can pinned tool versions become unavailable after library updates?
+
+---
+
+## Execution Instructions
+
+### Discovery Phase
+
+```bash
+# 1. Orchestrator Discovery
+python -c "
+from cortex.orchestrators.registry import OrchestratorRegistry
+registry = OrchestratorRegistry.instance()
+orchestrators = registry.list_orchestrators()
+for orch in orchestrators:
+    print(f'{orch.name}: {orch.domain}')
+"
+
+# 2. MCP Tool Discovery
+python -c "
+from cortex.mcp.registry import get_mcp_tool_registry
+registry = get_mcp_tool_registry()
+for tool in registry.list_tools():
+    print(f'{tool.tool_id}: {tool.tool_name}')
+"
+
+# 3. Governance Rules
+python -c "
+import yaml
+with open('cortex_brain/tier0/governance/core-rules.yaml') as f:
+    rules = yaml.safe_load(f)
+    for rule in rules.get('rules', []):
+        print(f'{rule[\"id\"]}: {rule[\"description\"]}')
+"
+```
+
+### Documentation Generation
+
+For each discovered component:
+1. Create documentation file in proper folder
+2. Include overview section with mermaid diagram
+3. Document all public interfaces
+4. Include integration examples
+5. Cross-reference related components
+6. Link to source code and tests
+
+### Validation Phase
+
+```bash
+# 1. Build mkdocs site
+mkdocs build
+
+# 2. Run link validation tests
+pytest docs/_tests/test_documentation_integrity.py -v
+
+# 3. Verify logo rendering
+pytest docs/_tests/test_documentation_ui.py::test_cortex_logo_displays -v
+
+# 4. Check for dead links
+pytest docs/_tests/test_link_validation.py -v
+```
+
+---
+
+## Success Criteria
+
+- [ ] All orchestrators documented with architecture diagrams
+- [ ] All MCP tools cataloged with parameter documentation
+- [ ] All governance rules explained with enforcement mechanisms
+- [ ] Domain Brain fully documented with query examples
+- [ ] Infrastructure resilience patterns described with failure scenarios
+- [ ] mkdocs site builds without errors
+- [ ] All internal links validate successfully
+- [ ] Logo displays correctly in header
+- [ ] Zero dead/orphaned links
+- [ ] Test suite passes 100%
+- [ ] Brittleness analysis identifies all high-impact gaps
+
+---
+
+**Authority:** CORTEX.prompt.md v5.0  
+**Status:** Ready for autonomous execution  
+**Copyright © 2025-2026 Asif Hussain. All rights reserved.**
