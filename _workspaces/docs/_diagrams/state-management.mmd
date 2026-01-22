@@ -1,0 +1,24 @@
+---
+title: State Management
+---
+flowchart LR
+    RT["Runtime State<br/>In-memory cache"]
+    DB[("governance.db<br/>SQLite")]
+    CACHE["Cache Layer<br/>State snapshots"]
+    ORCH["Orchestrators<br/>State consumers"]
+    PERSIST["Persistence<br/>Transaction manager"]
+    AUDIT["Audit Trail<br/>Hash chain"]
+    
+    RT --> DB
+    DB --> CACHE
+    CACHE --> ORCH
+    ORCH --> PERSIST
+    PERSIST --> DB
+    PERSIST --> AUDIT
+    AUDIT --> DB
+    
+    subgraph STATE_COMPONENTS["State Components"]
+        OPT["Optimistic Lock<br/>cortex/core/state/"]
+        PHASE["Phase State Machine<br/>cortex/core/state/"]
+        TRANS["Transaction Manager<br/>cortex/infrastructure/"]
+    end

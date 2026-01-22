@@ -1,0 +1,52 @@
+```mermaid
+---
+title: Intent Router Flow (LENS Protocol)
+---
+flowchart TB
+    subgraph LENS["LENS Protocol"]
+        L["Language Phase<br/>Intent parsing"]
+        E["Examination Phase<br/>AST analysis"]
+        N["Navigation Phase<br/>Git history"]
+        S["Synthesis Phase<br/>Context aggregation"]
+    end
+    
+    INPUT[User Request] --> L
+    L --> E --> N --> S
+    
+    S --> CLASSIFY[Intent Classifier]
+    CLASSIFY --> |Ambiguous| DISAMBIG[Disambiguator]
+    CLASSIFY --> |Clear| ROUTE[Routing Engine]
+    DISAMBIG --> ROUTE
+    
+    subgraph ROUTER["Routing Engine"]
+        CONF[Confidence Scorer]
+        CTX[Context Manager]
+        EDGE[Edge Case Handler]
+        FALL[Fallback Strategy]
+    end
+    
+    ROUTE --> CONF
+    CONF --> |High| CTX
+    CONF --> |Low| EDGE
+    EDGE --> |Unresolved| FALL
+    CTX --> DISPATCH
+    FALL --> DISPATCH
+    
+    DISPATCH[Orchestration Dispatch]
+    
+    DISPATCH --> |Planning| PLAN[Planning Orchestrator]
+    DISPATCH --> |Analysis| ANAL[Analysis Orchestrator]
+    DISPATCH --> |Execution| EXEC[Execution Orchestrator]
+    DISPATCH --> |Integration| INTEG[Integration Orchestrator]
+    
+    subgraph MODULES["cortex/intent_router/ (16 modules)"]
+        M1[classifier.py]
+        M2[confidence_scorer.py]
+        M3[context_manager.py]
+        M4[disambiguator.py]
+        M5[edge_case_handler.py]
+        M6[fallback_strategy.py]
+        M7[routing_engine.py]
+        M8[intent_learner.py]
+    end
+```

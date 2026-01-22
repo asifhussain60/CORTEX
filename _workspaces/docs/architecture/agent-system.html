@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CORTEX Agent System - Specialized agents for planning, execution, learning, and analysis with autonomous coordination">
+    <meta name="keywords" content="CORTEX, agents, Planning Agent, Execution Agent, Learning Agent, Analysis Agent, autonomous agents">
+    <meta name="author" content="Asif Hussain">
+    <title>Agent System | CORTEX Architecture</title>
+    <link rel="icon" type="image/png" href="../assets/images/CORTEX-logo.png">
+    <link rel="stylesheet" href="../assets/css/variables.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    <link rel="stylesheet" href="../assets/css/purpose-driven-themes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                darkMode: true,
+                background: '#0a0e27',
+                primaryColor: '#7c7cff',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#fff',
+                lineColor: '#00d4ff',
+                secondaryColor: '#00d4ff',
+                tertiaryColor: '#ffd700'
+            }
+        });
+    </script>
+</head>
+<body>
+    <!-- Glass Header Navigation -->
+    <header class="glass-header">
+        <div class="header-content">
+            <a href="../index.html" class="logo-link" title="CORTEX Home">
+                <img src="../assets/images/CORTEX-logo.png" 
+                     alt="CORTEX - AI Development Orchestrator" 
+                     class="cortex-logo">
+            </a>
+            <nav>
+                <a href="index.html" class="nav-link">
+                    <i class="fas fa-sitemap"></i>
+                    <span>Architecture Hub</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container level2-reference" id="main-content">
+        <!-- Breadcrumb Navigation -->
+        <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+            <a href="../index.html" class="breadcrumb-link"><i class="fas fa-home"></i> Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="index.html" class="breadcrumb-link">Architecture</a>
+            <span class="breadcrumb-separator">/</span>
+            <span class="breadcrumb-current">Agent System</span>
+        </nav>
+
+        <!-- Page Title -->
+        <div class="glass-card-display animation-t1">
+            <div class="page-title-section">
+                <h1 class="page-title"><i class="fas fa-users pulse-glow-glass--fast"></i> CORTEX Agent System</h1>
+                <p class="page-subtitle">Specialized autonomous agents coordinating via shared brain tiers</p>
+            </div>
+        </div>
+
+        <!-- Overview -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-info-circle pulse-glow-glass--fast"></i> Overview</h2>
+            <p>
+                CORTEX's agent system consists of <strong>4 specialized agents</strong> that divide responsibilities 
+                for planning, execution, learning, and analysis. Unlike traditional monolithic AI assistants, CORTEX 
+                agents operate <em>autonomously</em> with clearly defined roles, coordinating through the 4-tier brain 
+                architecture.
+            </p>
+            <p>
+                This separation of concerns enables <strong>parallel processing</strong>, <strong>specialized expertise</strong>, 
+                and <strong>fail-safe isolation</strong>—if one agent encounters an error, others continue operating. 
+                Agents communicate via Tier 1 Working Memory, share knowledge through Tier 2, and respect Tier 0 governance 
+                rules universally.
+            </p>
+        </div>
+
+        <!-- Agent Architecture Diagram -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-project-diagram pulse-glow-glass--fast"></i> Agent Architecture</h2>
+            <div class="mermaid-container">
+                <div class="mermaid">
+graph TB
+    User[User Request]
+    MO[Master Orchestrator]
+    
+    PA[Planning Agent<br/>Blueprint Creation]
+    EA[Execution Agent<br/>Code Implementation]
+    LA[Learning Agent<br/>Pattern Extraction]
+    AA[Analysis Agent<br/>Root Cause Discovery]
+    
+    T0[Tier 0: SKULL Rules]
+    T1[Tier 1: Working Memory]
+    T2[Tier 2: Knowledge Graph]
+    T3[Tier 3: Dev Context]
+    
+    User --> MO
+    MO --> PA
+    MO --> EA
+    MO --> AA
+    
+    PA --> T1
+    EA --> T1
+    LA --> T2
+    AA --> T1
+    
+    T0 -.->|Guards| PA
+    T0 -.->|Guards| EA
+    T0 -.->|Guards| LA
+    T0 -.->|Guards| AA
+    
+    T1 -.->|Queries| T2
+    T2 -.->|Enriches| T3
+    EA --> T3
+    
+    PA -->|Hand-off| EA
+    EA -->|Feedback| LA
+    AA -->|Insights| T2
+    
+    style PA fill:#ffd700,stroke:#fff,stroke-width:2px,color:#000
+    style EA fill:#00ff88,stroke:#fff,stroke-width:2px,color:#000
+    style LA fill:#00d4ff,stroke:#fff,stroke-width:2px,color:#000
+    style AA fill:#ff6b6b,stroke:#fff,stroke-width:2px,color:#fff
+    style MO fill:#7c7cff,stroke:#fff,stroke-width:3px,color:#fff
+    style T0 fill:#ff6b6b,stroke:#fff,stroke-width:2px,color:#fff
+    style T1 fill:#b89500,stroke:#fff,stroke-width:2px,color:#fff
+    style T2 fill:#0088bb,stroke:#fff,stroke-width:2px,color:#fff
+    style T3 fill:#00cc66,stroke:#fff,stroke-width:2px,color:#000
+                </div>
+            </div>
+        </div>
+
+        <!-- The Four Agents -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-robot pulse-glow-glass--fast"></i> The Four Agents</h2>
+            <div class="principle-card-grid columns-2">
+                <div class="glass-card-display animation-t1">
+                    <h3><i class="fas fa-drafting-compass" style="color: #ffd700;"></i> Planning Agent</h3>
+                    <p>
+                        <strong>Role:</strong> Creates incremental development plans with phases, tasks, and acceptance criteria.<br>
+                        <strong>Input:</strong> User feature request + knowledge graph patterns<br>
+                        <strong>Output:</strong> 17-phase plan structure in Tier 1<br>
+                        <strong>Key Logic:</strong> Phase -1 knowledge loading, AST scanning integration, visual progress generation
+                    </p>
+                </div>
+                <div class="glass-card-display animation-t1">
+                    <h3><i class="fas fa-code" style="color: #00ff88;"></i> Execution Agent</h3>
+                    <p>
+                        <strong>Role:</strong> Implements code according to plan phases using TDD workflow.<br>
+                        <strong>Input:</strong> Active plan from Tier 1 + dev context from Tier 3<br>
+                        <strong>Output:</strong> Code files, tests, refactored implementation<br>
+                        <strong>Key Logic:</strong> RED→GREEN→REFACTOR enforcement, holistic discovery, git isolation
+                    </p>
+                </div>
+                <div class="glass-card-display animation-t1">
+                    <h3><i class="fas fa-brain" style="color: #00d4ff;"></i> Learning Agent</h3>
+                    <p>
+                        <strong>Role:</strong> Extracts patterns, lessons, and relationships from completed work.<br>
+                        <strong>Input:</strong> Execution results + plan outcomes + error logs<br>
+                        <strong>Output:</strong> Knowledge graph updates in Tier 2<br>
+                        <strong>Key Logic:</strong> Pattern recognition, anti-pattern detection, relationship mapping
+                    </p>
+                </div>
+                <div class="glass-card-display animation-t1">
+                    <h3><i class="fas fa-search" style="color: #ff6b6b;"></i> Analysis Agent</h3>
+                    <p>
+                        <strong>Role:</strong> Performs root cause analysis, architectural reviews, and debugging.<br>
+                        <strong>Input:</strong> Error reports + stack traces + architectural context<br>
+                        <strong>Output:</strong> Root cause report + fix recommendations<br>
+                        <strong>Key Logic:</strong> Holistic review, brittleness detection, dependency analysis
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agent Coordination -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-exchange-alt pulse-glow-glass--fast"></i> Agent Coordination Patterns</h2>
+            
+            <h3><i class="fas fa-arrow-right"></i> Sequential Hand-off</h3>
+            <p>
+                <strong>Pattern:</strong> Planning Agent → Execution Agent → Learning Agent<br>
+                <strong>Use Case:</strong> New feature development<br>
+                <strong>Flow:</strong>
+            </p>
+            <ol>
+                <li>User requests feature via Master Orchestrator</li>
+                <li>Planning Agent creates 17-phase plan, stores in Tier 1</li>
+                <li>Execution Agent reads plan, implements Phase 1, updates progress</li>
+                <li>After completion, Learning Agent extracts patterns, updates Tier 2</li>
+            </ol>
+            
+            <h3 style="margin-top: 2rem;"><i class="fas fa-random"></i> Parallel Execution</h3>
+            <p>
+                <strong>Pattern:</strong> Multiple agents run simultaneously on different tasks<br>
+                <strong>Use Case:</strong> Complex plan with independent phases<br>
+                <strong>Example:</strong> Execution Agent implements Phase 5 (API endpoint) while Learning Agent analyzes Phase 4 results
+            </p>
+            
+
+    <!-- Implementation Status Banner -->
+    <div style="background: linear-gradient(135deg, rgba(255, 190, 11, 0.1), rgba(255, 0, 110, 0.1)); 
+                border: 2px solid rgba(255, 190, 11, 0.3); 
+                border-radius: 12px; 
+                padding: 25px; 
+                margin: 30px 0 40px; 
+                position: relative;">
+        <div style="font-family: 'Space Grotesk', sans-serif; 
+                    font-size: 1.3em; 
+                    font-weight: 600; 
+                    margin-bottom: 20px; 
+                    color: var(--warning);">
+            📋 Implementation Status (Design Phase)
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ffbe0b;">
+                <div style="font-size: 1.5em; margin-bottom: 5px;">🟡</div>
+                <div style="font-weight: 600;">Phase 1: Foundation Enhancement</div>
+                <div style="color: var(--warning); font-size: 0.9em; margin-top: 5px;">Ready to Implement</div>
+                <div style="color: var(--text-muted); font-size: 0.85em; margin-top: 3px;">0/43 AC-IDs Complete</div>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff006e;">
+                <div style="font-size: 1.5em; margin-bottom: 5px;">🔴</div>
+                <div style="font-weight: 600;">Phase 2: Orchestration Core</div>
+                <div style="color: var(--danger); font-size: 0.9em; margin-top: 5px;">Blocked by Phase 1</div>
+                <div style="color: var(--text-muted); font-size: 0.85em; margin-top: 3px;">Not Started</div>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff006e;">
+                <div style="font-size: 1.5em; margin-bottom: 5px;">🔴</div>
+                <div style="font-weight: 600;">Phase 3: Feature Orchestrators</div>
+                <div style="color: var(--danger); font-size: 0.9em; margin-top: 5px;">Blocked by Phase 2</div>
+                <div style="color: var(--text-muted); font-size: 0.85em; margin-top: 3px;">Not Started</div>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff006e;">
+                <div style="font-size: 1.5em; margin-bottom: 5px;">🔴</div>
+                <div style="font-weight: 600;">Phase 4: Intelligence Layer</div>
+                <div style="color: var(--danger); font-size: 0.9em; margin-top: 5px;">Blocked by Phase 3</div>
+                <div style="color: var(--text-muted); font-size: 0.85em; margin-top: 3px;">Not Started</div>
+            </div>
+        </div>
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); 
+                    font-size: 0.95em; color: var(--text-secondary);">
+            <strong>⚠️ Design Documentation:</strong> This documentation describes the <em>planned architecture</em>. 
+            Implementation begins with Phase 1 foundation components. All content marked with 🟡 or 🔴 represents 
+            future functionality, not current implementation.
+        </div>
+    </div>
+
+
+            <h3 style="margin-top: 2rem;"><i class="fas fa-sync"></i> Reactive Invocation</h3>
+            <p>
+                <strong>Pattern:</strong> Agent triggered by system event<br>
+                <strong>Use Case:</strong> Error occurs during execution<br>
+                <strong>Flow:</strong> Execution Agent encounters error → Analysis Agent automatically invoked → Root cause report generated
+            </p>
+        </div>
+
+        <!-- Agent Communication via Tiers -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-comments pulse-glow-glass--fast"></i> Agent Communication via Brain Tiers</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <i class="fas fa-database"></i>
+                    <div>
+                        <strong>Tier 1: Shared State</strong><br>
+                        <small>Agents read/write active plans, conversation context, execution status. Primary coordination mechanism.</small>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-network-wired"></i>
+                    <div>
+                        <strong>Tier 2: Collective Knowledge</strong><br>
+                        <small>Learning Agent writes patterns. Planning/Execution agents read to improve decisions.</small>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <strong>Tier 0: Universal Constraints</strong><br>
+                        <small>All agents must obey SKULL rules. No exceptions.</small>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-code-branch"></i>
+                    <div>
+                        <strong>Tier 3: Execution Context</strong><br>
+                        <small>Only Execution Agent writes to workspace. Others read-only.</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Real-World Example -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-lightbulb pulse-glow-glass--fast"></i> Real-World Example: Feature Implementation</h2>
+            <p><strong>Scenario:</strong> User requests <code>/CORTEX plan user authentication</code></p>
+            
+            <h3><i class="fas fa-step-forward"></i> Step 1: Planning Agent (2 minutes)</h3>
+            <ul>
+                <li>Loads Phase -1 knowledge modules: API design, authentication patterns, security best practices</li>
+                <li>Scans workspace for existing auth code via AST scanning</li>
+                <li>Creates 17-phase plan with OAuth2, JWT, session management, password hashing</li>
+                <li>Stores plan in Tier 1 (PlanningStateDB), status = "active", phase = 0</li>
+            </ul>
+            
+            <h3><i class="fas fa-code"></i> Step 2: Execution Agent (45 minutes, 17 iterations)</h3>
+            <ul>
+                <li>Phase 1: Create User model (TDD: failing test → implementation → refactor)</li>
+                <li>Phase 2: Add password hashing (bcrypt integration)</li>
+                <li>Phase 3: Implement JWT token generation</li>
+                <li>...continues through Phase 17: Final REFACTOR cleanup</li>
+                <li>Updates Tier 1 after each phase (progress tracker, acceptance criteria validation)</li>
+            </ul>
+            
+            <h3><i class="fas fa-brain"></i> Step 3: Learning Agent (5 minutes)</h3>
+            <ul>
+                <li>Analyzes plan outcome: 17/17 phases complete, all tests passing</li>
+                <li>Extracts patterns: OAuth2 + JWT + Redis session pattern successful</li>
+                <li>Records lessons: "Password hashing must use bcrypt cost factor ≥12"</li>
+                <li>Updates Tier 2 knowledge graph with new authentication pattern node</li>
+            </ul>
+        </div>
+
+        <!-- Related Pages -->
+        <div class="glass-card-display animation-t1">
+            <h2 class="section-title"><i class="fas fa-link pulse-glow-glass--fast"></i> Related Topics</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <i class="fas fa-layer-group"></i>
+                    <div>
+                        <a href="four-tier-brain.html" class="level2-link">
+                            <strong>4-Tier Brain Architecture</strong><br>
+                            <small>How agents coordinate via shared memory tiers</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-memory"></i>
+                    <div>
+                        <a href="working-memory.html" class="level2-link">
+                            <strong>Working Memory (Tier 1)</strong><br>
+                            <small>PlanningStateDB and agent coordination mechanisms</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-clipboard-list"></i>
+                    <div>
+                        <a href="../features/planning-system.html" class="level2-link">
+                            <strong>Planning System</strong><br>
+                            <small>Planning Agent's 17-phase plan generation workflow</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-vial"></i>
+                    <div>
+                        <a href="../features/tdd-mastery.html" class="level2-link">
+                            <strong>TDD Mastery</strong><br>
+                            <small>Execution Agent's RED→GREEN→REFACTOR workflow</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-network-wired"></i>
+                    <div>
+                        <a href="knowledge-graph.html" class="level2-link">
+                            <strong>Knowledge Graph (Tier 2)</strong><br>
+                            <small>Learning Agent's pattern storage and retrieval</small>
+                        </a>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-search"></i>
+                    <div>
+                        <a href="../features/investigation.html" class="level2-link">
+                            <strong>Investigation Orchestrator</strong><br>
+                            <small>Analysis Agent's root cause analysis workflow</small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    
+<!-- Modern Glass Footer -->
+
+<!-- Modern Glass Footer -->
+
+<!-- Modern Glass Footer -->
+<footer class="glass-footer-modern">
+    <div class="footer-modern-content">
+        <img src="../assets/images/CORTEX-logo.png" alt="CORTEX" class="cortex-logo-footer" width="100" height="100" />
+        <p class="footer-copyright-modern">
+            Copyright © 2025-2026 <span class="copyright-author">Asif Hussain</span>. All rights reserved.
+        </p>
+    </div>
+</footer>
+</body>
+</html>

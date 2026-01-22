@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>SKULL Protection - CORTEX Architecture</title>
+    <link href="../assets/images/CORTEX-logo.png" rel="icon" type="image/png">
+    <!-- Glassmorphism v4.0 CSS Stack -->
+    <link href="../assets/css/variables.css" rel="stylesheet">
+    <link href="../assets/css/main.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/intentional-classes.css">
+    <link href="../assets/css/cortex-glass-system.css" rel="stylesheet">
+    <link href="../assets/css/micro-interactions.css" rel="stylesheet">
+    <!-- D3.js for Visualization -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #2a2f4a 100%);
+            min-height: 100vh;
+        }
+
+        .architecture-title-future {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--spacing-2xl) var(--spacing-lg);
+        }
+
+        /* Breadcrumb Navigation */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-xl);
+            font-size: var(--font-sm);
+            color: var(--text-muted);
+        }
+
+        .breadcrumb a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: var(--accent-secondary);
+        }
+
+        .breadcrumb-separator {
+            color: var(--text-muted);
+        }
+
+        /* Page Header */
+        .page-logo {
+            text-align: center;
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .page-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .page-subtitle {
+            color: var(--text-secondary);
+            font-size: var(--font-lg);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Visualization Container */
+        .viz-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-primary);
+            padding: var(--spacing-2xl);
+            margin-bottom: var(--spacing-2xl);
+            box-shadow: var(--glass-shadow);
+        }
+
+        #skull-viz {
+            width: 100%;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Layer Details */
+        .architecture-layer {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-2xl);
+        }
+
+        .architecture-layer {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            border-radius: var(--radius-lg);
+            border-left: 4px solid var(--accent-primary);
+            padding: var(--spacing-lg);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .architecture-layer:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0, 212, 255, 0.2);
+        }
+
+        .architecture-layer {
+            font-size: var(--font-2xl);
+            font-weight: 700;
+            color: var(--accent-primary);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .architecture-layer {
+            font-size: var(--font-lg);
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .architecture-layer {
+            color: var(--text-secondary);
+            font-size: var(--font-sm);
+            line-height: 1.6;
+        }
+
+        .architecture-layer {
+            margin-top: var(--spacing-sm);
+            padding-top: var(--spacing-sm);
+            border-top: 1px solid var(--border-primary);
+            color: var(--text-muted);
+            font-size: var(--font-xs);
+        }
+
+        /* Navigation Footer */
+        .nav-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: var(--spacing-3xl);
+            gap: var(--spacing-lg);
+        }
+
+        .nav-link {
+            padding: var(--spacing-md) var(--spacing-xl);
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--border-primary);
+            border-radius: var(--radius-md);
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(0, 212, 255, 0.1);
+            border-color: var(--accent-primary);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #skull-viz {
+                height: 400px;
+            }
+
+            .architecture-layer {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+<style>
+        /* REFERENCE Theme - Level 2 */
+        .level2-reference {
+            --theme-primary: #00bfff;
+            --theme-accent: #7c7cff;
+            --theme-success: #00ff88;
+            --theme-warning: #ffd700;
+            --theme-glow: rgba(0, 191, 255, 0.25);
+            
+            /* Apply to glass effects */
+            --glass-border-color: #00bfff33;
+            --pulse-glow-color: rgba(0, 191, 255, 0.25);
+        }
+        
+        /* Themed glass cards */
+        .level2-reference .glass-card-clickable:hover {
+            border-color: #00bfff66;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37),
+                        0 0 30px rgba(0, 191, 255, 0.25);
+        }
+        
+        /* Themed icons */
+        .level2-reference .pulse-glow-glass--fast {
+            filter: drop-shadow(0 0 10px rgba(0, 191, 255, 0.25));
+        }
+        
+        /* Themed metric tiles */
+        .level2-reference .token-metric-tile {
+            border-color: #00bfff33;
+        }
+        
+        .level2-reference .token-metric-tile:hover {
+            border-color: #00bfff66;
+            background: #00bfff11;
+        }
+</style>
+</head>
+<body>
+
+    <!-- Implementation Status Banner -->
+    <div style="background: linear-gradient(135deg, rgba(255, 190, 11, 0.1), rgba(255, 0, 110, 0.1)); 
+                border: 2px solid rgba(255, 190, 11, 0.3); 
+                border-radius: 12px; 
+                padding: 25px; 
+                margin: 30px 0 40px; 
+                position: relative;">
+        <div style="font-family: 'Space Grotesk', sans-serif; 
+                    font-size: 1.3em; 
+                    font-weight: 600; 
+                    margin-bottom: 20px; 
+                    color: var(--warning);">
+            📋 Implementation Status (Design Phase)
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ffbe0b;">
+                <div style="font-size: 1.5em; margin-bottom: 5px;">🟡</div>
+                <div style="font-weight: 600;">Phase 1: Foundation Enhancement</div>
+                <div style="color: var(--warning); font-size: 0.9em; margin-top: 5px;">Ready to Implement</div>
+                <div style="color: var(--text-muted); font-size: 0.85em; margin-top: 3px;">0/43 AC-IDs Complete</div>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff006e;">
+                <div style="font-size: 1.5em; margin-bottom: 5px;">🔴</div>
+                <div style="font-weight: 600;">Phase 2: Orchestration Core</div>
+                <div style="color: var(--danger); font-size: 0.9em; margin-top: 5px;">Blocked by Phase 1</div>
+                <div style="color: var(--text-muted); font-size: 0.85em; margin-top: 3px;">Not Started</div>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff006e;">
+                <div style="font-size: 1.5em; margin-bottom: 5px;">🔴</div>
+                <div style="font-weight: 600;">Phase 3: Feature Orchestrators</div>
+                <div style="color: var(--danger); font-size: 0.9em; margin-top: 5px;">Blocked by Phase 2</div>
+                <div style="color: var(--text-muted); font-size: 0.85em; margin-top: 3px;">Not Started</div>
+            </div>
+            <div style="background: rgba(0, 0, 0, 0.3); padding: 15px; border-radius: 8px; border-left: 4px solid #ff006e;">
+                <div style="font-size: 1.5em; margin-bottom: 5px;">🔴</div>
+                <div style="font-weight: 600;">Phase 4: Intelligence Layer</div>
+                <div style="color: var(--danger); font-size: 0.9em; margin-top: 5px;">Blocked by Phase 3</div>
+                <div style="color: var(--text-muted); font-size: 0.85em; margin-top: 3px;">Not Started</div>
+            </div>
+        </div>
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); 
+                    font-size: 0.95em; color: var(--text-secondary);">
+            <strong>⚠️ Design Documentation:</strong> This documentation describes the <em>planned architecture</em>. 
+            Implementation begins with Phase 1 foundation components. All content marked with 🟡 or 🔴 represents 
+            future functionality, not current implementation.
+        </div>
+    </div>
+
+
+    <div class="architecture-title-future">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="../index.html">Home</a>
+            <span class="breadcrumb-separator">/</span>
+            <a href="index.html">Architecture</a>
+            <span class="breadcrumb-separator">/</span>
+            <span>SKULL Protection</span>
+        </nav>
+
+        <!-- Page Header -->
+        <header class="page-logo">
+<style>
+/* Mobile font optimization */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+</style>
+<style>
+/* Touch target optimization */
+a, button, [role="button"] {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+<style>
+/* Mobile touch optimization */
+button, a, input, select, textarea, [role="button"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+</style>
+            <h1 class="page-title">🛡️ SKULL Protection System</h1>
+            <p class="page-subtitle">
+                15-layer concentric defense model with 118 automated rules protecting brain integrity and enforcing best practices
+            </p>
+        </header>
+
+        <!-- Visualization -->
+        <div class="viz-container">
+            <div id="skull-viz"></div>
+        </div>
+
+        <!-- Layer Details -->
+        <div class="architecture-layer">
+            <div class="architecture-layer">
+                <div class="architecture-layer">Layer 1</div>
+                <div class="architecture-layer">TDD Enforcement</div>
+                <div class="architecture-layer">
+                    Mandatory test-first development. Tests must fail (RED phase) before implementation code is written, ensuring true test-driven development.
+                </div>
+                <div class="architecture-layer">8 rules</div>
+            </div>
+
+            <div class="architecture-layer">
+                <div class="architecture-layer">Layer 2</div>
+                <div class="architecture-layer">Holistic Discovery</div>
+                <div class="architecture-layer">
+                    Search-before-create policy prevents code duplication. Comprehensive codebase search required before any new file creation.
+                </div>
+                <div class="architecture-layer">6 rules</div>
+            </div>
+
+            <div class="architecture-layer">
+                <div class="architecture-layer">Layer 3</div>
+                <div class="architecture-layer">Git Isolation</div>
+                <div class="architecture-layer">
+                    CORTEX code never commits to user repositories. Strict separation between system operations and user project modifications.
+                </div>
+                <div class="architecture-layer">10 rules</div>
+            </div>
+
+            <div class="architecture-layer">
+                <div class="architecture-layer">Layer 4</div>
+                <div class="architecture-layer">Planning Isolation</div>
+                <div class="architecture-layer">
+                    Planning commands create plans only, never implement. Clear separation between strategy formation and execution phases.
+                </div>
+                <div class="architecture-layer">7 rules</div>
+            </div>
+
+            <div class="architecture-layer">
+                <div class="architecture-layer">Layer 5</div>
+                <div class="architecture-layer">File Organization</div>
+                <div class="architecture-layer">
+                    Enforces proper document structure. All documentation in cortex-brain/documents/, never at repository root level.
+                </div>
+                <div class="architecture-layer">9 rules</div>
+            </div>
+
+            <div class="architecture-layer">
+                <div class="architecture-layer">Layer 6</div>
+                <div class="architecture-layer">SOLID Principles</div>
+                <div class="architecture-layer">
+                    Automated enforcement of Single Responsibility, Interface Segregation, and Dependency Inversion principles.
+                </div>
+                <div class="architecture-layer">12 rules</div>
+            </div>
+
+            <div class="architecture-layer">
+                <div class="architecture-layer">Layer 7</div>
+                <div class="architecture-layer">Brain Protection Tests</div>
+                <div class="architecture-layer">
+                    Every SKULL rule must have automated test coverage. Test-before-claim policy ensures rule reliability.
+                </div>
+                <div class="architecture-layer">11 rules</div>
+            </div>
+
+            <div class="architecture-layer">
+                <div class="architecture-layer">Layer 8</div>
+                <div class="architecture-layer">Security</div>
+                <div class="architecture-layer">
+                    Injection prevention, authentication checks, and threat modeling enforcement across all operations.
+                </div>
+                <div class="architecture-layer">8 rules</div>
+            </div>
+
+            <div class="architecture-layer">
+                <div class="architecture-layer">Layer 9</div>
+                <div class="architecture-layer">Privacy Protection</div>
+                <div class="architecture-layer">
+                    PII detection, commit validation, and privacy scanning before any code sharing or documentation generation.
+                </div>
+                <div class="architecture-layer">7 rules</div>
+            </div>
+
+            <div class="architecture-layer">
+                <div class="architecture-layer">Layer 10</div>
+                <div class="architecture-layer">Brain Architecture Integrity</div>
+                <div class="architecture-layer">
+                    Protects 4-tier brain structure. Prevents unauthorized modifications to Tier 0-3 governance and memory systems.
+                </div>
+                <div class="architecture-layer">9 rules</div>
+            </div>
+
+            <div class="architecture-layer">
+                <div class="architecture-layer">Layer 11</div>
+                <div class="architecture-layer">Deployment & Upgrades</div>
+                <div class="architecture-layer">
+                    Version tracking, brain preservation during upgrades, and schema migration enforcement for safe deployments.
+                </div>
+                <div class="architecture-layer">6 rules</div>
+            </div>
+
+            <div class="architecture-layer">
+                <div class="architecture-layer">Layer 12</div>
+                <div class="architecture-layer">Operational Readiness</div>
+                <div class="architecture-layer">
+                    API documentation, debug marker cleanup, and operational checklist validation before production release.
+                </div>
+                <div class="architecture-layer">8 rules</div>
+            </div>
+
+            <div class="architecture-layer">
+                <div class="architecture-layer">Layer 13</div>
+                <div class="architecture-layer">Interactive Mode</div>
+                <div class="architecture-layer">
+                    Autonomous execution protection. Requires user confirmation for critical operations and planning workflows.
+                </div>
+                <div class="architecture-layer">5 rules</div>
+            </div>
+
+            <div class="architecture-layer">
+                <div class="architecture-layer">Layer 14</div>
+                <div class="architecture-layer">Token Optimization</div>
+                <div class="architecture-layer">
+                    Enforces hierarchical loading, context compression, and smart caching to minimize LLM token consumption.
+                </div>
+                <div class="architecture-layer">7 rules</div>
+            </div>
+
+            <div class="architecture-layer">
+                <div class="architecture-layer">Layer 15</div>
+                <div class="architecture-layer">Integration & Vision</div>
+                <div class="architecture-layer">
+                    Knowledge library integration, vision API enforcement, and continuous risk analysis for external systems.
+                </div>
+                <div class="architecture-layer">5 rules</div>
+            </div>
+        </div>
+
+        <!-- CORTEX-5.0 REFACTOR Enforcement Enhancement -->
+        <div class="viz-container" style="margin-top: 3rem;">
+            <h2 style="font-size: 1.75rem; font-weight: 700; color: #8b5cf6; margin-bottom: 1.5rem;">
+                <i class="fas fa-broom pulse-glow-glass--fast"></i> CORTEX-5.0: REFACTOR Task Enforcement
+            </h2>
+            
+            <div class="alert alert-info" style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(139, 92, 246, 0.2); border: 1px solid #8b5cf6; border-radius: 8px;">
+                <strong>📋 Sub-Plan 07:</strong> REFACTOR Task Enforcement is a planned enhancement for CORTEX-5.0 that 
+                extends SKULL protection with mandatory final cleanup phases in all plans.
+            </div>
+            
+            <div class="architecture-layer" style="grid-template-columns: 1fr;">
+                <div class="architecture-layer" style="border-left-color: #8b5cf6;">
+                    <div class="architecture-layer">🚀 New Rule</div>
+                    <div class="architecture-layer">REFACTOR Task Enforcement</div>
+                    <div class="architecture-layer">
+                        <strong>Rule:</strong> Every planning manifest MUST include a final REFACTOR phase (typically Phase 12) that 
+                        enforces SKULL whole-file cleanup rules. This prevents half-implemented changes, dead code accumulation, 
+                        and ensures every plan completes with a clean codebase state.
+                        <br><br>
+                        <strong>Enforcement Scope:</strong>
+                        <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+                            <li>Dead code removal (orphaned functions, unused imports)</li>
+                            <li>Duplicate elimination (merge redundant implementations)</li>
+                            <li>Comment cleanup (remove TODO/FIXME markers)</li>
+                            <li>Test coverage validation (≥80% for modified files)</li>
+                            <li>Documentation sync (update docstrings, READMEs)</li>
+                            <li>Git checkpoint creation (final commit with cleanup summary)</li>
+                        </ul>
+                        <br>
+                        <strong>Acceptance Criteria:</strong> REFACTOR phase must be present in <code>acceptance-criteria.yaml</code> 
+                        as <code>final_refactor_required: true</code>. Plans without this flag will fail validation.
+                        <br><br>
+                        <strong>Status:</strong> <span class="badge badge-warning">⏸️ BLOCKED</span> - Waiting for Gate 1 (≥50% test coverage)
+                    </div>
+                    <div class="architecture-layer">Status: Planned</div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 2rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 8px;">
+                <h3 style="font-size: 1.25rem; font-weight: 600; color: #10b981; margin-bottom: 0.75rem;">
+                    <i class="fas fa-check-circle pulse-glow-glass--fast"></i> Benefits
+                </h3>
+                <ul style="padding-left: 1.5rem; color: rgba(255, 255, 255, 0.8);">
+                    <li><strong>Zero Technical Debt:</strong> Every plan ends with a clean state—no leftover scaffolding or debug code</li>
+                    <li><strong>Enforced Hygiene:</strong> Automated whole-file cleanup eliminates manual review burden</li>
+                    <li><strong>Predictable Completion:</strong> Plans have clear Definition of Done with measurable cleanup criteria</li>
+                    <li><strong>Integration with CI/CD:</strong> REFACTOR phase can trigger automated quality gates before merge</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Navigation Footer -->
+        <nav class="nav-content" mobile-nav-optimized>
+            <a href="index.html" class="nav-link" mobile-nav-optimized>← Back to Architecture</a>
+        </nav>
+    </div>
+
+    <!-- D3.js Concentric Rings Visualization -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.getElementById('skull-viz');
+            const width = container.clientWidth;
+            const height = 600;
+
+            const svg = d3.select('#skull-viz')
+                .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+                .attr('viewBox', `0 0 ${width} ${height}`);
+
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const maxRadius = Math.min(width, height) / 2 - 40;
+
+            // SKULL layers data
+            const layers = [
+                { id: 1, name: 'TDD Enforcement', rules: 8, color: '#ff6b6b' },
+                { id: 2, name: 'Holistic Discovery', rules: 6, color: '#ff8787' },
+                { id: 3, name: 'Git Isolation', rules: 10, color: '#ffa5a5' },
+                { id: 4, name: 'Planning Isolation', rules: 7, color: '#ffc2c2' },
+                { id: 5, name: 'File Organization', rules: 9, color: '#4ecdc4' },
+                { id: 6, name: 'SOLID Principles', rules: 12, color: '#5ed9d1' },
+                { id: 7, name: 'Brain Protection Tests', rules: 11, color: '#6ee5de' },
+                { id: 8, name: 'Security', rules: 8, color: '#45b7d1' },
+                { id: 9, name: 'Privacy Protection', rules: 7, color: '#5bc3d7' },
+                { id: 10, name: 'Brain Architecture', rules: 9, color: '#71cfdd' },
+                { id: 11, name: 'Deployment', rules: 6, color: '#96ceb4' },
+                { id: 12, name: 'Operational Readiness', rules: 8, color: '#a6d4bf' },
+                { id: 13, name: 'Interactive Mode', rules: 5, color: '#b6daca' },
+                { id: 14, name: 'Token Optimization', rules: 7, color: '#8b5cf6' },
+                { id: 15, name: 'Integration & Vision', rules: 5, color: '#9d6ff9' }
+            ];
+
+            // Create gradient definitions
+            const defs = svg.append('defs');
+            layers.forEach(layer => {
+                const gradient = defs.append('radialGradient')
+                    .attr('id', `gradient-layer-${layer.id}`)
+                    .attr('cx', '50%')
+                    .attr('cy', '50%')
+                    .attr('r', '50%');
+
+                gradient.append('stop')
+                    .attr('offset', '0%')
+                    .attr('stop-color', layer.color)
+                    .attr('stop-opacity', 0.4);
+
+                gradient.append('stop')
+                    .attr('offset', '100%')
+                    .attr('stop-color', layer.color)
+                    .attr('stop-opacity', 0.1);
+            });
+
+            // Draw concentric rings (from outer to inner)
+            const ringGroup = svg.append('g').attr('class', 'rings');
+
+            layers.reverse().forEach((layer, index) => {
+                const layerRadius = maxRadius * ((15 - index) / 15);
+
+                // Ring circle with T1 animation (opacity only)
+                ringGroup.append('circle')
+                    .attr('cx', centerX)
+                    .attr('cy', centerY)
+                    .attr('r', layerRadius)
+                    .attr('fill', `url(#gradient-layer-${layer.id})`)
+                    .attr('stroke', layer.color)
+                    .attr('stroke-width', 2)
+                    .attr('stroke-opacity', 0.6)
+                    .style('cursor', 'pointer')
+                    .on('mouseover', function() {
+                        d3.select(this)
+                            .transition()
+                            .duration(200)
+                            .attr('stroke-opacity', 1);
+                    })
+                    .on('mouseout', function() {
+                        d3.select(this)
+                            .transition()
+                            .duration(200)
+                            .attr('stroke-opacity', 0.6);
+                    });
+            });
+
+            // Center core
+            ringGroup.append('circle')
+                .attr('cx', centerX)
+                .attr('cy', centerY)
+                .attr('r', 30)
+                .attr('fill', 'rgba(0, 212, 255, 0.3)')
+                .attr('stroke', '#00d4ff')
+                .attr('stroke-width', 3);
+
+            // Core label
+            ringGroup.append('text')
+                .attr('x', centerX)
+                .attr('y', centerY - 5)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#ffffff')
+                .attr('font-size', '12px')
+                .attr('font-weight', '700')
+                .text('CORTEX');
+
+            ringGroup.append('text')
+                .attr('x', centerX)
+                .attr('y', centerY + 10)
+                .attr('text-anchor', 'middle')
+                .attr('fill', '#00d4ff')
+                .attr('font-size', '10px')
+                .attr('font-weight', '600')
+                .text('BRAIN');
+
+            // Layer labels (only show every 3rd for clarity)
+            layers.reverse(); // Back to original order
+            layers.forEach((layer, index) => {
+                if (index % 3 === 0) {
+                    const layerRadius = maxRadius * ((index + 1) / 15);
+                    const angle = -90 + (index * 15); // Spread labels
+                    const labelX = centerX + Math.cos(angle * Math.PI / 180) * (layerRadius + 20);
+                    const labelY = centerY + Math.sin(angle * Math.PI / 180) * (layerRadius + 20);
+
+                    ringGroup.append('text')
+                        .attr('x', labelX)
+                        .attr('y', labelY)
+                        .attr('text-anchor', 'middle')
+                        .attr('fill', layer.color)
+                        .attr('font-size', '11px')
+                        .attr('font-weight', '600')
+                        .text(`L${layer.id}`);
+                }
+            });
+
+            // Summary text
+            svg.append('text')
+                .attr('x', centerX)
+                .attr('y', height - 20)
+                .attr('text-anchor', 'middle')
+                .attr('fill', 'rgba(255, 255, 255, 0.6)')
+                .attr('font-size', '14px')
+                .text('15 Layers • 118 Rules • Concentric Defense Architecture');
+        });
+    </script>
+</body>
+</html>
