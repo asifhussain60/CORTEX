@@ -6,6 +6,7 @@ Author: CORTEX Framework
 from dataclasses import dataclass, field
 from typing import Dict, Any, Optional, List
 from enum import Enum
+from datetime import datetime
 
 
 class ErrorCode(Enum):
@@ -60,6 +61,7 @@ class MCPResponse:
     result: Any = None
     error: Optional[str] = None
     id: Optional[str] = None
+    timestamp: datetime = field(default_factory=datetime.now)
 
 
 @dataclass
@@ -188,5 +190,59 @@ class MCPProtocolHandler:
     def handle_request(self, request: MCPRequest) -> MCPResponse:
         """Handle request."""
         return MCPResponse(result="OK")
+
+
+class ToolValidator:
+    """Validates tool parameters."""
+    
+    @staticmethod
+    def validate_parameter(param: "ToolParameter", value: Any) -> bool:
+        """Validate a parameter value against its definition.
+        
+        Args:
+            param: ToolParameter definition
+            value: Value to validate
+            
+        Returns:
+            True if valid, False otherwise
+        """
+        # Check required
+        if param.required and value is None:
+            return False
+        
+        # Allow None for optional parameters
+        if value is None and not param.required:
+            return True
+        
+        # Type validation
+        if param.type == "string":
+            if not isinstance(value, str):
+                return False
+        elif param.type == "number":
+            if not isinstance(value, (int, float)) or isinstance(value, bool):
+                return False
+        elif param.type == "boolean":
+            if not isinstance(value, bool):
+                return False
+        elif param.type == "array":
+            if not isinstance(value, list):
+                return False
+        elif param.type == "object":
+            if not isinstance(value, dict):
+                return False
+        
+        # Range validation for numbers
+        if param.type == "number" and isinstance(value, (int, float)):
+            if param.min_value is not None and value < param.min_value:
+                return False
+            if param.max_value is not None and value > param.max_value:
+                return False
+        
+        # Enum validation
+        if param.enum and value not in param.enum:
+            return False
+        
+        return True
+
 
 __all__ = ["ErrorCode", "MCPError", "MCPRequest", "MCPResponse", "ToolDefinition", "ToolParameter", "MCPTool", "ToolValidator", "MessageType", "MCPProtocolHandler"]
