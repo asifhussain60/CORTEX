@@ -4,6 +4,44 @@
 # Authority: Filesystem scan + test inventory + code analysis + review findings validation
 # Status: Phase 1 Complete, Phases 2-3 Planned (Security + Governance Hardening)
 
+maintenance_tasks:
+  cleanup_duplicate_phase_definitions:
+    priority: "P0-CRITICAL"
+    description: "Remove duplicate phase entries from both cortex-impl-map.yaml and individual phase YAML files"
+    status: "NOT_STARTED"
+    subtasks:
+      - task_id: "CLEANUP-001"
+        description: "Remove duplicate impl-governance-content entries (old and new versions in not_started section)"
+        files_affected: ["cortex-impl-map.yaml"]
+        action: "Keep latest version with knowledge_base enhancement, delete older COMPLETED versions"
+      
+      - task_id: "CLEANUP-002"
+        description: "Remove duplicate PHASE-E-TDD-IMPLEMENTATION entries (old stub + new enhanced version)"
+        files_affected: ["cortex-impl-map.yaml", "phases/PHASE-E-TDD-IMPLEMENTATION.yaml"]
+        action: "Consolidate into single definition with both TDD modules + knowledge patterns"
+      
+      - task_id: "CLEANUP-003"
+        description: "Remove duplicate eval track phase definitions (machine:eval phases listed multiple times)"
+        files_affected: ["cortex-impl-map.yaml", "phases/PHASE-KG-*.yaml"]
+        action: "Single authoritative list in cortex-impl-map.yaml, reference in individual phase files"
+      
+      - task_id: "CLEANUP-004"
+        description: "Consolidate knowledge domain YAML references (cortex_brain/knowledge/* vs tier3/knowledge/*)"
+        files_affected: ["cortex-impl-map.yaml", "phases/impl-governance-content.yaml"]
+        action: "Move all to tier3/knowledge/ as canonical location, flatten subdirectories"
+      
+      - task_id: "CLEANUP-005"
+        description: "Remove old COMPLETED status entries that have been superseded"
+        files_affected: ["cortex-impl-map.yaml (not_started section)"]
+        action: "Audit phases list for duplicates marked COMPLETED vs NOT_STARTED - keep single source"
+  
+  validation_checklist:
+    - "✓ Each phase_id appears exactly once in cortex-impl-map.yaml"
+    - "✓ No duplicate phase definitions across PHASE-*.yaml files"
+    - "✓ knowledge_domains references consolidated to tier3/knowledge/"
+    - "✓ machine:mac/win/eval phase lists match phase definitions"
+    - "✓ No orphaned or unreferenced phases"
+
 metadata:
   title: "CORTEX Implementation Map"
   description: "Truth-based roadmap reflecting actual implementation, tests, MCP exposure + post-review remediation phases (v3.2)"
@@ -249,32 +287,53 @@ implementation_philosophy:
       depends_on_mac_completion: "PHASE-E-TDD-IMPLEMENTATION"
     
     eval:
-      strategy: "knowledge_graph_integration"
-      focus: "Optional KG backend for domain brain, governance relationships, orchestrator routing"
+      strategy: "knowledge_graph_integration + knowledge_base_semantic_engine"
+      focus: "Optional KG backend for domain brain, governance relationships, orchestrator routing + semantic knowledge retrieval"
       status: "NOT_STARTED"
       priority: "P2-OPTIONAL"
+      enhancement: "KNOWLEDGE_INTEGRATION_V1"
       phases:
         - phase_id: "PHASE-KG-001-foundation"
           sequence: 1
           required: false
           machine: "eval"
+          enhancement: "enhanced_with_knowledge_schema"
+          knowledge_integration:
+            - "Add BestPractice, Pattern, ExpertDomain node types to KG schema"
+            - "Add knowledge-aware relationships (FOLLOWS_PATTERN, EXPERT_IN, DOCUMENTED_BY)"
+            - "Create indexes on pattern/practice lookups"
         - phase_id: "PHASE-KG-002-entity-sync"
           sequence: 2
           required: false
           machine: "eval"
+          knowledge_integration:
+            - "Sync domain entities with pattern/practice associations"
+            - "Load best practices into KG nodes"
         - phase_id: "PHASE-KG-003-query-layer"
           sequence: 3
           required: false
           machine: "eval"
+          enhancement: "semantic_knowledge_queries"
+          knowledge_integration:
+            - "Enable semantic queries: 'Practices applying to domain X'"
+            - "Pattern queries: 'Patterns solving problem Y'"
+            - "Expert knowledge queries: 'Experts in operation Z'"
         - phase_id: "PHASE-KG-004-routing-optimization"
           sequence: 4
           required: false
           machine: "eval"
+          knowledge_integration:
+            - "KG-enhanced routing using pattern/practice insights"
+            - "Fallback to YAML rules when KG unavailable"
         - phase_id: "PHASE-KG-005-validation"
           sequence: 5
           required: false
           machine: "eval"
-      estimated_duration: "11-16 days"
+          knowledge_integration:
+            - "Validate KG correctness for knowledge nodes"
+            - "Test fallback semantics with chaotic knowledge queries"
+            - "Performance benchmarks (KG vs YAML semantic search)"
+      estimated_duration: "11-16 days (foundation + KG logic + knowledge integration)"
       blocking: false
       depends_on_mac_completion: "PHASE-E-TDD-IMPLEMENTATION"
       depends_on_domain_brain_maturity: "domain_brain ≥90% tests passing"
@@ -870,24 +929,35 @@ phases_implementation_status:
         tests_passing: 9
       
       - id: "impl-governance-content"
-        title: "Phase J: Governance Tier Content Population"
+        title: "Phase J: Governance Tier Content Population + Knowledge Base Expansion"
         ac_ids: 5
-        status: "COMPLETED"
+        status: "NOT_STARTED"
         priority: "P1-MEDIUM"
-        estimated_effort: "2-3 days"
+        estimated_effort: "2-3 days (tier1/tier2) + 2-3 days (knowledge base) = 4-6 days total"
         blocking: false
         machine: "win"
         recommended_before_production: true
-        note: "Populate tier1 domain rules (15-20) and tier2 context rules (25-30)"
+        note: "ENHANCED: Populate tier1/tier2 governance rules + import 7 critical knowledge domains (containers, database, security, API, async, logging, testing)"
         file: "_workspaces/roadmap/phases/impl-governance-content.yaml"
         depends_on: ["Phase A tier consolidation"]
-        completion_date: "2026-01-21"
+        completion_date: null
         tests_passing: 12
+        enhancement: "KNOWLEDGE_BASE_IMPORT_V1"
         target_state:
           tier0_rules: 29
           tier1_rules: "15-20"
           tier2_rules: "25-30"
           total_rules: "69-79"
+          knowledge_domains:
+            - containers/docker-best-practices.yaml
+            - containers/kubernetes-patterns.yaml
+            - database/sql-patterns.yaml
+            - database/graph-patterns.yaml
+            - security/security-patterns.yaml
+            - api/rest-api-patterns.yaml
+            - observability/structured-logging.yaml
+          total_knowledge_files: 7
+          estimated_lines_of_knowledge: "70,000-80,000"
       
       # EVAL TRACK PHASES - KNOWLEDGE GRAPH INTEGRATION (added from remote 2026-01-22)
       - id: "PHASE-KG-001-foundation"
@@ -963,15 +1033,15 @@ phases_implementation_status:
       
       # EXISTING PHASES
       - id: "PHASE-E-TDD-IMPLEMENTATION"
-        title: "TDD Production Implementation - 125 Modules"
+        title: "TDD Production Implementation - 125 Modules + Knowledge Domain Patterns"
         ac_ids: 6
         status: "IN_PROGRESS"
         priority: "P0-CRITICAL"
-        estimated_effort: "15-20 days"
+        estimated_effort: "15-20 days (core TDD) + 2-3 days (knowledge patterns) = 17-23 days"
         actual_effort_so_far: "2 hours - domain_brain core implementation started"
         blocking: true
         machine: "mac"
-        note: "7540 tests collecting. Domain_brain: 67/353 passing (19%). Core components implemented: AuditLogManager, DomainBrainAPI, BKIO. Remaining: 68 classes need constructor/method implementations."
+        note: "ENHANCED: Core TDD implementation (125 modules) + 4 CORTEX-specific knowledge domains (orchestration patterns, intent routing, hallucination prevention, domain brain patterns)"
         file: "_workspaces/roadmap/phases/PHASE-E-TDD-IMPLEMENTATION.yaml"
         implementation_guide: "_workspaces/roadmap/PHASE-E-IMPLEMENTATION-GUIDE.md"
         depends_on: ["impl-export-completion", "impl-circular-import-fix"]
@@ -993,15 +1063,26 @@ phases_implementation_status:
           tests_collected: 7540
           tests_passing: "≥7400 (≥98%)"
           production_ready: true
+          knowledge_domains_created: 4
+          cortex_patterns_documented: true
         progress:
           phase: "Domain_brain adapters and BKIO orchestrator complete"
           status_percentage: "56% (197/353 tests passing)"
           next_focus: "LENS integration layer, query engines, synthesis engines"
+        enhancement: "CORTEX_KNOWLEDGE_PATTERNS_V1"
+        knowledge_patterns:
+          - orchestration/orchestrator-patterns.yaml
+          - orchestration/intent-routing-patterns.yaml
+          - orchestration/hallucination-prevention.yaml
+          - domain-brain/domain-brain-patterns.yaml
         next_steps:
           - "Complete RelationshipsAdapter, DomainRegistry, EntityFactory"
           - "Implement repository adapters for AST, BKIO sources"
           - "Build conflict detection and resolution system"
           - "Implement domain query and synthesis engines"
+          - "Create 4 CORTEX-specific knowledge domain YAMLs (days 18-23)"
+          - "Index CORTEX patterns in KnowledgeRepository"
+          - "Enable semantic queries for CORTEX patterns"
       
       - id: "impl-features-registry-001"
         title: "FeatureRegistry Implementation - Live Manifest System"
