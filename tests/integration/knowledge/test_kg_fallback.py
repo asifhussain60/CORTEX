@@ -17,15 +17,10 @@ from cortex.brain.core.knowledge.graph.interface import (
 
 @pytest.fixture
 def temp_db():  # type: ignore
-    """Create a temporary database file for testing.
-
-    Yields:
-        str: Path to temporary database file
-    """
+    """Create a temporary database file for testing."""
     fd, path = tempfile.mkstemp(suffix=".db")
     os.close(fd)
     yield path
-    # Cleanup
     if os.path.exists(path):
         os.remove(path)
 
@@ -35,7 +30,6 @@ class TestGraphAdapterFallback:
 
     def test_fallback_semantics_entity_operations(self, temp_db) -> None:  # type: ignore
         """Test that mock and SQLite adapters produce equivalent results."""
-        # Create identical entities in both adapters
         mock = MockGraphAdapter()
         sqlite = SQLiteGraphAdapter(temp_db)
 
@@ -46,7 +40,6 @@ class TestGraphAdapterFallback:
         mock_entity = mock.create_entity(entity_id, entity_type, properties)
         sqlite_entity = sqlite.create_entity(entity_id, entity_type, properties)
 
-        # Verify both produce same result
         assert mock_entity.id == sqlite_entity.id
         assert mock_entity.type == sqlite_entity.type
         assert mock_entity.properties == sqlite_entity.properties
@@ -56,25 +49,22 @@ class TestGraphAdapterFallback:
         mock = MockGraphAdapter()
         sqlite = SQLiteGraphAdapter(temp_db)
 
-        # Populate both adapters with identical data
         for adapter in [mock, sqlite]:
             adapter.create_entity("s1", "Service", {"tier": "backend"})
             adapter.create_entity("s2", "Service", {"tier": "frontend"})
             adapter.create_entity("r1", "Rule", {"tier": "backend"})
 
-        # Query Service entities with filter
         mock_services = mock.query_entities("Service", {"tier": "backend"})
         sqlite_services = sqlite.query_entities("Service", {"tier": "backend"})
 
         assert len(mock_services) == len(sqlite_services)
         assert len(mock_services) == 1
 
-    def test_fallback_semantics_path_queries(self) -> None:
+    def test_fallback_semantics_path_queries(self, temp_db) -> None:  # type: ignore
         """Test that path query results are identical."""
         mock = MockGraphAdapter()
-        sqlite = SQLiteGraphAdapter()  # Uses default governance.db path
+        sqlite = SQLiteGraphAdapter(temp_db)
 
-        # Create identical network in both
         for adapter in [mock, sqlite]:
             adapter.create_entity("s1", "Service", {})
             adapter.create_entity("s2", "Service", {})
@@ -82,7 +72,6 @@ class TestGraphAdapterFallback:
             adapter.create_relationship("s1", "CALLS", "s2")
             adapter.create_relationship("s2", "CALLS", "s3")
 
-        # Query paths
         mock_paths = mock.query_paths("s1", max_hops=2)
         sqlite_paths = sqlite.query_paths("s1", max_hops=2)
 
@@ -90,16 +79,9 @@ class TestGraphAdapterFallback:
         assert len(mock_paths) >= 2
 
     def test_fallback_on_health_check_timeout(self) -> None:
-        """Test adapter health check with timeout.
-
-        Mock adapter should return HEALTHY quickly,
-        simulating behavior of fallback on timeout.
-        """
+        """Test adapter health check with timeout."""
         adapter = MockGraphAdapter()
-
-        # Health check should return immediately
         status = adapter.health_check(timeout_seconds=0.1)
-
         assert status == HealthStatus.HEALTHY
 
 
@@ -110,29 +92,23 @@ class TestGraphAdapterErrorRecovery:
         """Test that constraint violations don't corrupt adapter state."""
         adapter = MockGraphAdapter()
 
-        # Create entity
         adapter.create_entity("e1", "Service", {})
 
-        # Try to create duplicate (should fail)
         with pytest.raises(GraphQueryError):
             adapter.create_entity("e1", "Service", {})
 
-        # Verify adapter still works
         entities = adapter.query_entities("Service")
         assert len(entities) == 1
 
-    def test_sqlite_fallback_error_doesnt_corrupt_db(self) -> None:
+    def test_sqlite_fallback_error_doesnt_corrupt_db(self, temp_db) -> None:  # type: ignore
         """Test that SQLite errors don't corrupt database."""
-        adapter = SQLiteGraphAdapter()  # Uses default governance.db path
+        adapter = SQLiteGraphAdapter(temp_db)
 
-        # Create entity
         adapter.create_entity("e1", "Service", {})
 
-        # Try invalid operation
         with pytest.raises(GraphQueryError):
             adapter.create_entity("e1", "Service", {})
 
-        # Verify database still works
         entities = adapter.query_entities("Service")
         assert len(entities) == 1
 
@@ -143,11 +119,9 @@ class TestGraphAdapterErrorRecovery:
         adapter.create_entity("e1", "Service", {})
         adapter.create_entity("e2", "Service", {})
 
-        # Try to create relationship with missing entity
         with pytest.raises(GraphQueryError):
             adapter.create_relationship("e1", "CALLS", "missing-entity")
 
-        # Verify both existing entities still exist
         entities = adapter.query_entities("Service")
         assert len(entities) == 2
 
@@ -159,18 +133,14 @@ class TestAdapterTimeout:
         """Test health check responds within timeout."""
         adapter = MockGraphAdapter()
 
-        # Test multiple timeout values
         for timeout in [0.1, 1.0, 5.0]:
             status = adapter.health_check(timeout_seconds=timeout)
             assert status == HealthStatus.HEALTHY
 
-    def test_sqlite_health_check_timeout(self) -> None:
+    def test_sqlite_health_check_timeout(self, temp_db) -> None:  # type: ignore
         """Test SQLite health check with timeout."""
-        adapter = SQLiteGraphAdapter()  # Uses default governance.db path
-
-        # Should complete quickly
+        adapter = SQLiteGraphAdapter(temp_db)
         status = adapter.health_check(timeout_seconds=1.0)
-
         assert status == HealthStatus.HEALTHY
 
 
@@ -180,7 +150,7 @@ class TestAdapterEquivalence:
     def test_both_adapters_support_all_operations(self) -> None:
         """Verify both adapters implement all operations."""
         mock = MockGraphAdapter()
-        sqlite = SQLiteGraphAdapter(":memory:")
+        sqlite = SQLiteGraphAdapter()
 
         required_methods = [
             "create_entity",
@@ -202,26 +172,22 @@ class TestAdapterEquivalence:
         from cortex.brain.core.knowledge.graph.interface import IGraphAdapter
 
         mock = MockGraphAdapter()
-        sqlite = SQLiteGraphAdapter(":memory:")
+        sqlite = SQLiteGraphAdapter()
 
-        # Verify they are instances of the interface
         assert isinstance(mock, IGraphAdapter)
         assert isinstance(sqlite, IGraphAdapter)
 
-    def test_deletion_idempotency(self) -> None:
+    def test_deletion_idempotency(self, temp_db) -> None:  # type: ignore
         """Test that deleting entity twice is safe."""
         for adapter_class in [MockGraphAdapter, SQLiteGraphAdapter]:
             if adapter_class == MockGraphAdapter:
                 adapter = adapter_class()
             else:
-                adapter = adapter_class()  # Uses default governance.db path
+                adapter = adapter_class(temp_db)
 
             adapter.create_entity("e1", "Service", {})
 
-            # Delete once - should succeed
             assert adapter.delete_entity("e1") is True
-
-            # Delete again - should return False (not error)
             assert adapter.delete_entity("e1") is False
 
 
@@ -230,21 +196,14 @@ class TestNonBlockingFallback:
 
     def test_fallback_zero_impact_on_production(self) -> None:
         """Test that KG operations don't affect CORTEX core."""
-        # Import core CORTEX modules - should not import KG
-        from cortex.brain import (
-            core as cortex_core,
-        )
-
-        # Core should be functional without KG
+        from cortex.brain import core as cortex_core
         assert cortex_core is not None
 
     def test_adapter_isolation(self) -> None:
         """Test that adapter module is isolated."""
-        # Create two adapters independently
         mock1 = MockGraphAdapter()
         mock2 = MockGraphAdapter()
 
-        # Operations on one should not affect the other
         mock1.create_entity("e1", "Service", {})
 
         assert len(mock1.query_entities("Service")) == 1
