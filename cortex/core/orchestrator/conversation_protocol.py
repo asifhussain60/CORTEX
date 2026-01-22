@@ -65,6 +65,7 @@ class ConversationProtocol:
         max_turns: int = 10,
         token_limit: int = 20000,
         db_path: Optional[str] = None,
+        event_registry: Optional[Any] = None,
     ) -> None:
         """Initialize ConversationProtocol.
 
@@ -73,6 +74,7 @@ class ConversationProtocol:
             max_turns: Maximum turns before safety halt (default: 10).
             token_limit: Token budget before halt (default: 20000).
             db_path: Optional database path for persistence.
+            event_registry: Optional EventRegistry for event handling.
 
         Raises:
             TypeError: If orchestrator doesn't implement IOrchestrator protocol.
@@ -81,6 +83,7 @@ class ConversationProtocol:
         self.max_turns = max_turns
         self.token_limit = token_limit
         self.db_path = db_path
+        self.event_registry = event_registry
         self.turn_number: int = 0
         self.total_tokens_used: int = 0
         self.decisions_history: List[Dict[str, Any]] = []
@@ -117,6 +120,7 @@ class ConversationProtocol:
                     ContinuationReason,
                 )
                 decision = ContinuationDecision(
+                    should_continue=False,
                     reason=ContinuationReason.MAX_ROUNDS_REACHED,
                     turn_number=self.turn_number,
                 )
@@ -158,6 +162,7 @@ class ConversationProtocol:
                     ContinuationReason,
                 )
                 decision = ContinuationDecision(
+                    should_continue=False,
                     reason=ContinuationReason.TOKEN_LIMIT,
                     turn_number=self.turn_number,
                     token_usage={
@@ -180,16 +185,16 @@ class ConversationProtocol:
             )
 
             decision = ContinuationDecision(
-                reason=ContinuationReason.COMPLETE,
+                should_continue=self.turn_number < self.max_turns,
+                reason=ContinuationReason.COMPLETION,
                 turn_number=self.turn_number,
                 token_usage={
                     "prompt": user_tokens,
                     "completion": result_tokens,
                     "total": tokens_this_turn,
                 },
-                context=result if isinstance(result, dict) else {"result": result},
                 next_operation="continue_conversation" if self.turn_number < self.max_turns else None,
-                next_parameters={"turn_number": self.turn_number + 1} if self.turn_number < self.max_turns else {},
+                next_parameters={"turn_number": self.turn_number + 1} if self.turn_number < self.max_turns else None,
             )
             
             # Add audit entry ID
