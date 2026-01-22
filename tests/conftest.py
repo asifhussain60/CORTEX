@@ -44,6 +44,19 @@ def pytest_pycollect_makemodule(module_path, parent):
         return None
 
 
+@pytest.fixture
+def test_db_path(tmp_path):
+    """Provide temporary database path for tests.
+    
+    Args:
+        tmp_path: Pytest's temporary directory fixture.
+        
+    Returns:
+        str: Path to temporary database file.
+    """
+    return str(tmp_path / "test.db")
+
+
 @pytest.hookimpl(hookwrapper=True, tryfirst=True)
 def pytest_runtest_makereport(item, call):
     """
