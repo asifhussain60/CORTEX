@@ -129,8 +129,8 @@ class ConversationProtocol:
         self.pattern_detector = PatternDetector()
 
     def execute_turn(
-        self, user_input: str, previous_context: Dict[str, Any]
-    ) -> Result["ContinuationDecision"]:
+        self, round_context: RoundContext
+    ) -> Result[Dict[str, Any]]:
         """
         Execute one turn and return explicit continuation decision.
         
@@ -150,15 +150,18 @@ class ConversationProtocol:
         All audit entries and state changes committed atomically or rolled back together.
         
         Args:
-            user_input: User's input for this turn
-            previous_context: Context from previous turns
+            round_context: RoundContext with user_input, previous_context, orchestrator_name
         
         Returns:
-            Result[ContinuationDecision] - Decision and continuation reason
+            Result[Dict[str, Any]] - Orchestrator output or error
         
         Raises:
             None - errors wrapped in Result type
         """
+        # Extract inputs from round_context
+        user_input = round_context.user_input
+        previous_context = round_context.previous_context
+        
         # AC-FIX-001-01: Wrap entire turn in atomic transaction
         # Both turn execution and audit logging occur in single transaction boundary
         try:
