@@ -1,0 +1,4585 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="AI-powered orchestration platform with multi-tier governance">
+      
+      
+        <meta name="author" content="Asif Hussain">
+      
+      
+      
+        <link rel="prev" href="../../INDEX/">
+      
+      
+        <link rel="next" href="../01-tier0-governance/">
+      
+      
+      <link rel="icon" href="../../assets/images/CORTEX-logo-64.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+    
+    
+      
+        <title>Overview - CORTEX Documentation</title>
+      
+    
+    
+  
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+  <style>
+    /* CORTEX Logo styling - display logo in header top left */
+    .md-header__button.md-logo img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+    }
+    /* Adjust header for larger logo */
+    .md-header {
+      min-height: 72px;
+    }
+    .md-header__inner {
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+  </style>
+
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/cortex-glassmorphism.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cortex-brain-system-master-index" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CORTEX Documentation" class="md-header__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  <img src="../../assets/images/cortex-logo-200.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CORTEX Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Overview
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../INDEX/" class="md-tabs__link">
+        
+  
+    
+  
+  🚀 Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="./" class="md-tabs__link">
+          
+  
+  Domain Brain (TIER 0-3)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../02-orchestrators/00-orchestrators-index/" class="md-tabs__link">
+          
+  
+  Orchestrators
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../03-getting-started/0-installation/" class="md-tabs__link">
+          
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../04-architecture/1-system-overview/" class="md-tabs__link">
+          
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../05-lens-protocol/00-lens-index/" class="md-tabs__link">
+          
+  
+  CORTEX LENS Protocol
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../06-api-reference/0-overview/" class="md-tabs__link">
+          
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../07-guides/deployment/0-overview/" class="md-tabs__link">
+          
+  
+  How-To Guides
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../08-reference/glossary/" class="md-tabs__link">
+          
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../11-mcp-tools/00-mcp-index/" class="md-tabs__link">
+          
+  
+  MCP Tools Framework
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../12-infrastructure/00-infrastructure-index/" class="md-tabs__link">
+          
+  
+  Infrastructure & Resilience
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../13-domain-brain/00-domain-brain-index/" class="md-tabs__link">
+          
+  
+  Domain Brain
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../14-deployment/00-deployment-index/" class="md-tabs__link">
+          
+  
+  Deployment
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../15-observability/00-observability-index/" class="md-tabs__link">
+          
+  
+  Observability
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../16-testing/00-testing-index/" class="md-tabs__link">
+          
+  
+  Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../09-tutorials/0-index/" class="md-tabs__link">
+          
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../10-contributing/1-contributing-guidelines/" class="md-tabs__link">
+          
+  
+  Contributing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../LICENSE/" class="md-tabs__link">
+        
+  
+    
+  
+  License
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CORTEX Documentation" class="md-nav__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  <img src="../../assets/images/cortex-logo-200.png" alt="logo">
+
+    </a>
+    CORTEX Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INDEX/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🚀 Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Domain Brain (TIER 0-3)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Domain Brain (TIER 0-3)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#system-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 System Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-4-tier-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 The 4-Tier Architecture
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 The 4-Tier Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tier-precedence-immutability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tier Precedence &amp; Immutability
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Core Concepts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Core Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-composite-request-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Composite Request Generation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-token-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Token Optimization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-intelligent-rule-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Intelligent Rule Evaluation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 Documentation Structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 Documentation Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#main-documentation-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main Documentation Files
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#architecture-diagrams-mermaid" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture Diagrams (Mermaid)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-relationships" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Key Relationships
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔗 Key Relationships">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tier-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tier Dependencies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integration-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration Points
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-they-work-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎓 How They Work Together
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎓 How They Work Together">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-implement-feature-x" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example: "Implement Feature X"
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skull-tests-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 SKULL Tests &amp; Validation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 SKULL Tests & Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test Distribution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test Types
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-governance" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔐 Security &amp; Governance
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔐 Security & Governance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#immutability-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      Immutability Enforcement
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audit-trail-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Audit Trail Integration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-characteristics" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 Performance Characteristics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Performance Characteristics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#token-efficiency-gains" class="md-nav__link">
+    <span class="md-ellipsis">
+      Token Efficiency Gains
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      📖 Usage Examples
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📖 Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#for-system-architects" class="md-nav__link">
+    <span class="md-ellipsis">
+      For System Architects
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#for-developers" class="md-nav__link">
+    <span class="md-ellipsis">
+      For Developers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#for-governance-teams" class="md-nav__link">
+    <span class="md-ellipsis">
+      For Governance Teams
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Cross-References
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      📈 Roadmap
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      📝 Summary
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-tier0-governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 0 Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-tier1-acceptance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 1 Acceptance Criteria
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-tier2-response-templates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 2 Response Templates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-tier3-knowledge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 3 Knowledge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-token-optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Token Optimization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-composite-requests/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Composite Requests
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-brain-architecture.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Brain Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Orchestrators
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Orchestrators
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/00-orchestrators-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/01-master-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Master Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/02-intent-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/03-workflow-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Workflow Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/04-refactoring-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Refactoring Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/05-composition-engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Composition Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/06-onboarding-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Onboarding Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/07-adaptive-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Adaptive Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/08-orchestrators-modules-relationship/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrators & Modules Relationship
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/09-orchestrator-module-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrator-Module Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/10-complete-orchestrator-listing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Complete Orchestrator Listing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/0-installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation & Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/1-quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/2-first-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    First Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/3-troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/1-system-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    System Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/2-design-principles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Design Principles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/3-orchestration-engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestration Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/4-domain-brain/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Brain
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/5-resilience-patterns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Resilience Patterns
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/6-implementation-phases/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Implementation Phases
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/7-intent-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/8-state-management/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    State Management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/9-knowledge-protocol/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Knowledge Protocol
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/10-mcp-tool-governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Tool Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/governance-rules/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governance Rules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/definition-of-ready/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Definition of Ready
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/adrs" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture Decision Records
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    CORTEX LENS Protocol
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            CORTEX LENS Protocol
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/00-lens-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/01-lens-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LENS System Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/02-intent-classification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Classification (Language Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/03-ast-analysis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AST Analysis (Examination Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/04-git-navigation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Git Navigation (Navigation Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/05-knowledge-synthesis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Knowledge Synthesis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/06-lens-crawler/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LENS Crawler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/07-domain-brain-integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Brain Integration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/rest-api" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    REST API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/mcp-protocol" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Protocol
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/cli" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI Commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    How-To Guides
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            How-To Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_1" id="__nav_8_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_1">
+            <span class="md-nav__icon md-icon"></span>
+            Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/1-local-development/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Local Development
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/2-mkdocs-server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MkDocs Server
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/4-faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Integration
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2">
+            <span class="md-nav__icon md-icon"></span>
+            Integration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/integration/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_3" id="__nav_8_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operations
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_3">
+            <span class="md-nav__icon md-icon"></span>
+            Operations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/operations/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/operations/4-troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_4" id="__nav_8_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Advanced
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_4">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/advanced/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Glossary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/known-issues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Known Issues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/changelog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/compliance-mappings/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Compliance Mappings
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/quick-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/gap-analysis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gap Analysis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/implementation-status/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Implementation Status
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/remediation-status/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Remediation Status
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/test-ac-mapping/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Test AC Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    MCP Tools Framework
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            MCP Tools Framework
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-mcp-tools/00-mcp-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-mcp-tools/mcp-architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Infrastructure & Resilience
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Infrastructure & Resilience
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../12-infrastructure/00-infrastructure-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Domain Brain
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Domain Brain
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../13-domain-brain/00-domain-brain-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../14-deployment/00-deployment-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Observability
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            Observability
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../15-observability/00-observability-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Testing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            Testing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../16-testing/00-testing-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Tutorials
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            Tutorials
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-tutorials/0-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrator Tutorials
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            Contributing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/1-contributing-guidelines/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing Guidelines
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/2-development-setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/3-testing-strategy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testing Strategy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/4-code-style-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code Style Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/5-pull-request-process/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pull Request Process
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    License
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#system-overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 System Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-4-tier-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 The 4-Tier Architecture
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 The 4-Tier Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tier-precedence-immutability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tier Precedence &amp; Immutability
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Core Concepts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Core Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-composite-request-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Composite Request Generation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-token-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Token Optimization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-intelligent-rule-evaluation" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Intelligent Rule Evaluation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#documentation-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 Documentation Structure
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 Documentation Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#main-documentation-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Main Documentation Files
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#architecture-diagrams-mermaid" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture Diagrams (Mermaid)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#key-relationships" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Key Relationships
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔗 Key Relationships">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tier-dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tier Dependencies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integration-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration Points
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-they-work-together" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎓 How They Work Together
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎓 How They Work Together">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-implement-feature-x" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example: "Implement Feature X"
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#skull-tests-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 SKULL Tests &amp; Validation
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 SKULL Tests & Validation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test-distribution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test Distribution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test Types
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#security-governance" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔐 Security &amp; Governance
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔐 Security & Governance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#immutability-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      Immutability Enforcement
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#audit-trail-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Audit Trail Integration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-characteristics" class="md-nav__link">
+    <span class="md-ellipsis">
+      🚀 Performance Characteristics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🚀 Performance Characteristics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#token-efficiency-gains" class="md-nav__link">
+    <span class="md-ellipsis">
+      Token Efficiency Gains
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage-examples" class="md-nav__link">
+    <span class="md-ellipsis">
+      📖 Usage Examples
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📖 Usage Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#for-system-architects" class="md-nav__link">
+    <span class="md-ellipsis">
+      For System Architects
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#for-developers" class="md-nav__link">
+    <span class="md-ellipsis">
+      For Developers
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#for-governance-teams" class="md-nav__link">
+    <span class="md-ellipsis">
+      For Governance Teams
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cross-references" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Cross-References
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      📈 Roadmap
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      📝 Summary
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="cortex-brain-system-master-index">CORTEX Brain System - Master Index<a class="headerlink" href="#cortex-brain-system-master-index" title="Permanent link">&para;</a></h1>
+<p><strong>Version:</strong> 1.0 | <strong>Updated:</strong> 2026-01-22 | <strong>Authority:</strong> cortex_brain/tier0/governance/core-rules.yaml</p>
+<hr />
+<h2 id="system-overview">🧠 System Overview<a class="headerlink" href="#system-overview" title="Permanent link">&para;</a></h2>
+<p>The <strong>CORTEX Brain</strong> is a 4-tier hierarchical intelligence system that transforms user requests into intelligent, governance-compliant composite prompts for GitHub Copilot execution. It works by integrating governance rules, acceptance criteria tracking, response templates, and domain knowledge to produce efficient, context-aware instructions that maximize token efficiency while enforcing 29 immutable TIER 0 rules.</p>
+<p><strong>Core Purpose:</strong>
+- Synthesize user intent with governance constraints
+- Generate efficient composite prompts for AI execution
+- Enforce non-negotiable TIER 0 governance rules
+- Optimize token usage through intelligent compression
+- Track execution compliance and audit trails
+- Apply company domain best practices contextually</p>
+<hr />
+<h2 id="the-4-tier-architecture">📊 The 4-Tier Architecture<a class="headerlink" href="#the-4-tier-architecture" title="Permanent link">&para;</a></h2>
+<p>The CORTEX Brain operates as a hierarchical system where each tier builds upon the previous, creating increasingly specialized knowledge contexts.</p>
+<div class="highlight"><pre><span></span><code>┌─────────────────────────────────────────────────────────────────────────┐
+│                        COMPOSITE REQUEST GENERATION                     │
+│           (Efficient prompts overlaying ALL tier contexts)              │
+├─────────────────────────────────────────────────────────────────────────┤
+│  TIER 3: Knowledge Library (Domain-Specific Knowledge Base)            │
+│  ├─ Semantic search, caching, retrieval optimization                   │
+│  ├─ Business knowledge repository                                       │
+│  ├─ Pattern library, best practices, domain rules                      │
+│  └─ Context-aware knowledge injection                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│  TIER 2: Response Templates (Adaptive Output Formatting)               │
+│  ├─ Response templates (v4.0+), adaptive minimalism                    │
+│  ├─ Token optimization algorithms, compression rules                   │
+│  ├─ Domain-specific response patterns                                  │
+│  └─ Efficiency metrics and scaling strategies                          │
+├─────────────────────────────────────────────────────────────────────────┤
+│  TIER 1: Acceptance Criteria &amp; Tracking (Project Governance)           │
+│  ├─ AC-ID lifecycle management, evidence tracking                      │
+│  ├─ Governance compliance rules, validation gates                      │
+│  ├─ State persistence, phase checkpoints                               │
+│  └─ Audit logging, hash-chain verification                            │
+├─────────────────────────────────────────────────────────────────────────┤
+│  TIER 0: Immutable Core Rules (Brain Protection - 29 CORE Rules)       │
+│  ├─ Immutable, non-overridable SKULL governance                        │
+│  ├─ Type hints, docstrings, error handling                            │
+│  ├─ Response headers, path portability, TDD enforcement               │
+│  └─ Strict enforcement, highest precedence                            │
+└─────────────────────────────────────────────────────────────────────────┘
+</code></pre></div>
+<h3 id="tier-precedence-immutability">Tier Precedence &amp; Immutability<a class="headerlink" href="#tier-precedence-immutability" title="Permanent link">&para;</a></h3>
+<p><strong>Precedence:</strong> TIER 0 &gt; TIER 1 &gt; TIER 2 &gt; TIER 3 (Immutability decreases, Specificity increases)</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Mutability</th>
+<th>Precedence</th>
+<th>Purpose</th>
+<th>Rules Count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>TIER 0</strong></td>
+<td>Immutable</td>
+<td>HIGHEST</td>
+<td>Brain Protection &amp; Core Rules</td>
+<td>29 CORE</td>
+</tr>
+<tr>
+<td><strong>TIER 1</strong></td>
+<td>Semi-Immutable</td>
+<td>HIGH</td>
+<td>Project Governance &amp; AC-ID Tracking</td>
+<td>~50-100</td>
+</tr>
+<tr>
+<td><strong>TIER 2</strong></td>
+<td>Mutable</td>
+<td>MEDIUM</td>
+<td>Response Templates &amp; Token Optimization</td>
+<td>~30-50</td>
+</tr>
+<tr>
+<td><strong>TIER 3</strong></td>
+<td>Mutable</td>
+<td>LOW</td>
+<td>Domain-Specific Knowledge</td>
+<td>~1000+</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key Principle:</strong> If a TIER 0 rule conflicts with lower-tier rules, TIER 0 wins. No override allowed. No exceptions.</p>
+<hr />
+<h2 id="core-concepts">🎯 Core Concepts<a class="headerlink" href="#core-concepts" title="Permanent link">&para;</a></h2>
+<h3 id="1-composite-request-generation">1. Composite Request Generation<a class="headerlink" href="#1-composite-request-generation" title="Permanent link">&para;</a></h3>
+<p>A <strong>composite request</strong> is an intelligent prompt constructed by overlaying all 4 tiers:</p>
+<div class="highlight"><pre><span></span><code>Composite Request = {
+  tier0_rules:            [29 immutable constraints]
+  tier1_ac_context:       [active AC-IDs + evidence]
+  tier2_response_pattern: [template + optimization rules]
+  tier3_domain_knowledge: [best practices + company rules]
+}
+</code></pre></div>
+<p>This ensures GitHub Copilot receives:
+- <strong>Non-negotiable</strong> governance boundaries (TIER 0)
+- <strong>Project-specific</strong> constraints (TIER 1)
+- <strong>Efficient</strong> response formatting (TIER 2)
+- <strong>Domain-expert</strong> best practices (TIER 3)</p>
+<p>All compressed into minimal tokens while maintaining clarity.</p>
+<h3 id="2-token-optimization">2. Token Optimization<a class="headerlink" href="#2-token-optimization" title="Permanent link">&para;</a></h3>
+<p>The brain optimizes tokens through <strong>4-stage compression</strong>:</p>
+<ol>
+<li><strong>Rule Compression:</strong> Pack 29 CORE rules into minimal acronyms (e.g., "TDD", "Type Hints")</li>
+<li><strong>AC-ID Condensing:</strong> Summarize AC-ID evidence into checksums rather than full text</li>
+<li><strong>Template Reuse:</strong> Reference pre-compiled response templates instead of repeating</li>
+<li><strong>Domain Abstraction:</strong> Use knowledge index IDs instead of full knowledge text</li>
+</ol>
+<p><strong>Result:</strong> Efficient composite requests (200-300 tokens vs. 5000+ unoptimized)</p>
+<h3 id="3-intelligent-rule-evaluation">3. Intelligent Rule Evaluation<a class="headerlink" href="#3-intelligent-rule-evaluation" title="Permanent link">&para;</a></h3>
+<p>The governance engine evaluates rules with <strong>context-aware efficiency</strong>:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Context-aware rule lookup</span>
+<span class="k">if</span> <span class="n">request_type</span> <span class="o">==</span> <span class="s2">&quot;implementation&quot;</span><span class="p">:</span>
+    <span class="n">active_rules</span> <span class="o">=</span> <span class="p">[</span><span class="n">CORE</span><span class="o">-</span><span class="mi">008</span> <span class="p">(</span><span class="n">TDD</span><span class="p">),</span> <span class="n">CORE</span><span class="o">-</span><span class="mi">011</span> <span class="p">(</span><span class="n">Types</span><span class="p">),</span> <span class="n">CORE</span><span class="o">-</span><span class="mi">012</span> <span class="p">(</span><span class="n">Docs</span><span class="p">)]</span>
+<span class="k">elif</span> <span class="n">request_type</span> <span class="o">==</span> <span class="s2">&quot;refactoring&quot;</span><span class="p">:</span>
+    <span class="n">active_rules</span> <span class="o">=</span> <span class="p">[</span><span class="n">CORE</span><span class="o">-</span><span class="mi">014</span> <span class="p">(</span><span class="n">SOLID</span><span class="p">),</span> <span class="n">CORE</span><span class="o">-</span><span class="mi">007</span> <span class="p">(</span><span class="n">Teardown</span><span class="p">)]</span>
+<span class="k">elif</span> <span class="n">request_type</span> <span class="o">==</span> <span class="s2">&quot;documentation&quot;</span><span class="p">:</span>
+    <span class="n">active_rules</span> <span class="o">=</span> <span class="p">[</span><span class="n">CORE</span><span class="o">-</span><span class="mi">029</span> <span class="p">(</span><span class="n">Doc</span> <span class="n">Drift</span><span class="p">),</span> <span class="n">CORE</span><span class="o">-</span><span class="mi">022</span> <span class="p">(</span><span class="n">Naming</span><span class="p">)]</span>
+
+<span class="c1"># Only evaluate relevant rules based on context</span>
+<span class="n">enforce</span><span class="p">(</span><span class="n">filter_rules</span><span class="p">(</span><span class="n">active_rules</span><span class="p">,</span> <span class="n">tier_precedence</span><span class="p">))</span>
+</code></pre></div>
+<p>This dramatically reduces evaluation overhead by only checking rules applicable to the current request.</p>
+<hr />
+<h2 id="documentation-structure">📚 Documentation Structure<a class="headerlink" href="#documentation-structure" title="Permanent link">&para;</a></h2>
+<h3 id="main-documentation-files">Main Documentation Files<a class="headerlink" href="#main-documentation-files" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong><a href="./">00-brain-index.md</a></strong> (THIS FILE)</li>
+<li>System overview, 4-tier architecture, core concepts</li>
+<li>Token optimization strategy</li>
+<li>
+<p>Governance precedence rules</p>
+</li>
+<li>
+<p><strong><a href="../01-tier0-governance/">01-tier0-governance.md</a></strong></p>
+</li>
+<li>29 CORE immutable rules (SKULL governance)</li>
+<li>Rule categories and enforcement mechanisms</li>
+<li>Precedence hierarchy, override prevention</li>
+<li>
+<p>Response header requirements (CORE-030)</p>
+</li>
+<li>
+<p><strong><a href="../02-tier1-acceptance/">02-tier1-acceptance.md</a></strong></p>
+</li>
+<li>AC-ID lifecycle management (AC_START, AC_EXECUTE, AC_COMPLETE)</li>
+<li>Evidence tracking and coherence validation</li>
+<li>Governance compliance gates, phase checkpoints</li>
+<li>
+<p>Audit trail integration with hash-chain verification</p>
+</li>
+<li>
+<p><strong><a href="../03-tier2-response-templates/">03-tier2-response-templates.md</a></strong></p>
+</li>
+<li>Response template engine (v4.0+)</li>
+<li>Adaptive minimalism system for context-aware verbosity</li>
+<li>Token optimization algorithms and efficiency metrics</li>
+<li>Domain-specific response patterns</li>
+<li>
+<p>Template composition and inheritance</p>
+</li>
+<li>
+<p><strong><a href="../04-tier3-knowledge/">04-tier3-knowledge.md</a></strong></p>
+</li>
+<li>Knowledge repository architecture</li>
+<li>Semantic search and retrieval optimization</li>
+<li>Caching mechanisms and TTL strategies</li>
+<li>Business knowledge integration</li>
+<li>
+<p>Pattern library and best practices database</p>
+</li>
+<li>
+<p><strong><a href="../05-token-optimization/">05-token-optimization.md</a></strong></p>
+</li>
+<li>Token counting and budget management</li>
+<li>Composite request generation algorithm</li>
+<li>Compression strategies (rule packing, AC-ID condensing, template reuse)</li>
+<li>Token efficiency metrics and performance tuning</li>
+<li>
+<p>Context-aware token allocation</p>
+</li>
+<li>
+<p><strong><a href="../06-composite-requests/">06-composite-requests.md</a></strong></p>
+</li>
+<li>Composite request anatomy and structure</li>
+<li>Multi-tier context overlay mechanism</li>
+<li>Domain integration and rule evaluation</li>
+<li>Efficiency calculations and token predictions</li>
+<li>Real-world composite request examples</li>
+</ol>
+<h3 id="architecture-diagrams-mermaid">Architecture Diagrams (Mermaid)<a class="headerlink" href="#architecture-diagrams-mermaid" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Diagram</th>
+<th>Purpose</th>
+<th>Focus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="../diagrams/01-brain-architecture.mmd">01-brain-architecture.mmd</a></td>
+<td>System overview</td>
+<td>4-tier hierarchy, component relationships</td>
+</tr>
+<tr>
+<td><a href="../diagrams/02-tier-precedence.mmd">02-tier-precedence.mmd</a></td>
+<td>Governance hierarchy</td>
+<td>TIER 0 immutability, precedence enforcement</td>
+</tr>
+<tr>
+<td><a href="../diagrams/03-token-optimization-flow.mmd">03-token-optimization-flow.mmd</a></td>
+<td>Token efficiency</td>
+<td>4-stage compression, budget tracking</td>
+</tr>
+<tr>
+<td><a href="../diagrams/04-composite-request-gen.mmd">04-composite-request-gen.mmd</a></td>
+<td>Request building</td>
+<td>Multi-tier overlay, context injection</td>
+</tr>
+<tr>
+<td><a href="../diagrams/05-governance-evaluation.mmd">05-governance-evaluation.mmd</a></td>
+<td>Rule evaluation</td>
+<td>Context-aware filtering, efficient lookup</td>
+</tr>
+<tr>
+<td><a href="../diagrams/06-knowledge-retrieval.mmd">06-knowledge-retrieval.mmd</a></td>
+<td>TIER 3 operations</td>
+<td>Search, ranking, caching, inference</td>
+</tr>
+<tr>
+<td><a href="../diagrams/07-ac-id-lifecycle.mmd">07-ac-id-lifecycle.mmd</a></td>
+<td>AC tracking</td>
+<td>States, transitions, audit integration</td>
+</tr>
+<tr>
+<td><a href="../diagrams/08-response-template-engine.mmd">08-response-template-engine.mmd</a></td>
+<td>TIER 2 engine</td>
+<td>Template selection, adaptation, composition</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="key-relationships">🔗 Key Relationships<a class="headerlink" href="#key-relationships" title="Permanent link">&para;</a></h2>
+<h3 id="tier-dependencies">Tier Dependencies<a class="headerlink" href="#tier-dependencies" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>User Request
+    ↓
+[LENS Protocol Analysis]
+    ↓
+├─→ TIER 0: Load immutable rules (non-negotiable)
+├─→ TIER 1: Load AC-ID context + phase governance
+├─→ TIER 2: Select response template + compression rules
+└─→ TIER 3: Query domain knowledge + best practices
+    ↓
+[Composite Request Generation]
+    ↓
+[Token Optimization]
+    ↓
+[GitHub Copilot Execution]
+    ↓
+[TIER 1 Audit &amp; Compliance Tracking]
+</code></pre></div>
+<h3 id="integration-points">Integration Points<a class="headerlink" href="#integration-points" title="Permanent link">&para;</a></h3>
+<p><strong>TIER 0 ↔ TIER 1:</strong>
+- Immutable rules set constraints for AC-ID tracking
+- AC-ID evidence validated against CORE rules</p>
+<p><strong>TIER 1 ↔ TIER 2:</strong>
+- AC-ID phase determines response template type
+- Compliance state gates template selection</p>
+<p><strong>TIER 2 ↔ TIER 3:</strong>
+- Response templates reference domain patterns
+- Knowledge retrieval optimized by template requirements</p>
+<p><strong>TIER 3 ↔ TIER 0:</strong>
+- Domain knowledge must comply with CORE rules
+- Best practices cannot override TIER 0 governance</p>
+<hr />
+<h2 id="how-they-work-together">🎓 How They Work Together<a class="headerlink" href="#how-they-work-together" title="Permanent link">&para;</a></h2>
+<h3 id="example-implement-feature-x">Example: "Implement Feature X"<a class="headerlink" href="#example-implement-feature-x" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>TIER 0 (Brain Protection):</strong>
+   <div class="highlight"><pre><span></span><code>Apply immutable rules:
+- CORE-008: TDD (tests before code)
+- CORE-011: Type hints required
+- CORE-012: Docstrings required
+- CORE-025: Result[T] pattern
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>TIER 1 (Governance Context):</strong>
+   <div class="highlight"><pre><span></span><code>Load AC-IDs for Feature X:
+- AC-FR-X-01: Feature implementation (IN_PROGRESS)
+- AC-FR-X-02: Unit tests (BLOCKED, waiting for AC-FR-X-01)
+- AC-FR-X-03: Documentation (NOT_STARTED)
+
+Determine constraints:
+- Phase: PHASE-E-IMPLEMENTATION
+- Governance gates: Type checking + Docstring validation
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>TIER 2 (Response Template):</strong>
+   <div class="highlight"><pre><span></span><code>Select template:
+- Type: Implementation (multi-step)
+- Compression: High (token budget: 3000)
+- Verbosity: Minimal (context-focused)
+
+Template rules:
+- Section 1: Test skeleton (150 tokens)
+- Section 2: Implementation plan (200 tokens)
+- Section 3: Code (800 tokens)
+- Section 4: Validation (150 tokens)
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>TIER 3 (Domain Knowledge):</strong>
+   <div class="highlight"><pre><span></span><code>Retrieve context:
+- Feature X best practices (from knowledge repository)
+- Company domain rules for this feature type
+- Similar implementations (pattern matching)
+- Performance benchmarks (if applicable)
+
+Inject optimized context into template
+</code></pre></div></p>
+</li>
+<li>
+<p><strong>Composite Request (Final):</strong>
+   <div class="highlight"><pre><span></span><code>Composite = {
+  governance: &quot;TDD|Types|Docs|Result[T]&quot;,
+  phase: &quot;PHASE-E&quot;,
+  ac_ids: &quot;AC-FR-X-01,AC-FR-X-02&quot;,
+  template: &quot;impl_multi_step&quot;,
+  domain: &quot;feature_context_X&quot;,
+  constraints: [TIER0_RULES, TIER1_GATES, TIER2_COMPRESSION]
+}
+
+Sent to GitHub Copilot (290 tokens vs. 5000+ unoptimized)
+</code></pre></div></p>
+</li>
+</ol>
+<hr />
+<h2 id="skull-tests-validation">📊 SKULL Tests &amp; Validation<a class="headerlink" href="#skull-tests-validation" title="Permanent link">&para;</a></h2>
+<p>The CORTEX Brain includes <strong>404 SKULL tests</strong> across 63 core rules, achieving <strong>100% coverage</strong>.</p>
+<h3 id="test-distribution">Test Distribution<a class="headerlink" href="#test-distribution" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Rules</th>
+<th>Tests</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Auditability</td>
+<td>5</td>
+<td>40</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Governance</td>
+<td>5</td>
+<td>50</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Evidence</td>
+<td>5</td>
+<td>45</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Lifecycle</td>
+<td>5</td>
+<td>80</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Integrity</td>
+<td>5</td>
+<td>65</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Efficiency</td>
+<td>14</td>
+<td>70</td>
+<td>100%</td>
+</tr>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>39</strong></td>
+<td><strong>404</strong></td>
+<td><strong>100%</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="test-types">Test Types<a class="headerlink" href="#test-types" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Unit Tests:</strong> Individual rule validation</li>
+<li><strong>Integration Tests:</strong> Tier interaction verification</li>
+<li><strong>Performance Tests:</strong> Token optimization benchmarks</li>
+<li><strong>Compliance Tests:</strong> Governance enforcement validation</li>
+<li><strong>Hallucination Prevention Tests:</strong> Boundary enforcement</li>
+</ul>
+<hr />
+<h2 id="security-governance">🔐 Security &amp; Governance<a class="headerlink" href="#security-governance" title="Permanent link">&para;</a></h2>
+<h3 id="immutability-enforcement">Immutability Enforcement<a class="headerlink" href="#immutability-enforcement" title="Permanent link">&para;</a></h3>
+<p>TIER 0 rules are protected by:</p>
+<ol>
+<li><strong>File-Level Immutability:</strong></li>
+<li><code>cortex_brain/tier0/governance/core-rules.yaml</code> read-only</li>
+<li>
+<p>Schema validation on load</p>
+</li>
+<li>
+<p><strong>Runtime Immutability:</strong></p>
+</li>
+<li><code>MutationGuard</code> prevents programmatic changes</li>
+<li>Hash verification on startup</li>
+<li>
+<p>Modification attempts logged as CRITICAL</p>
+</li>
+<li>
+<p><strong>Git-Level Immutability:</strong></p>
+</li>
+<li>Pre-commit hooks prevent TIER 0 changes</li>
+<li>Main branch protection rules</li>
+<li>Rollback triggers on violation detection</li>
+</ol>
+<h3 id="audit-trail-integration">Audit Trail Integration<a class="headerlink" href="#audit-trail-integration" title="Permanent link">&para;</a></h3>
+<p>All brain operations are audited:</p>
+<ul>
+<li><strong>AC-ID State Changes:</strong> Logged with timestamps and evidence</li>
+<li><strong>Rule Evaluation:</strong> Decision paths captured</li>
+<li><strong>Token Usage:</strong> Budget tracking and anomaly detection</li>
+<li><strong>Knowledge Retrieval:</strong> Query logging with rankings</li>
+<li><strong>Governance Violations:</strong> Escalated immediately</li>
+</ul>
+<hr />
+<h2 id="performance-characteristics">🚀 Performance Characteristics<a class="headerlink" href="#performance-characteristics" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Typical Time</th>
+<th>Token Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Load Tier 0 rules</td>
+<td>&lt;10ms</td>
+<td>0</td>
+</tr>
+<tr>
+<td>AC-ID context lookup</td>
+<td>&lt;50ms</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Template selection</td>
+<td>&lt;25ms</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Knowledge retrieval (cached)</td>
+<td>&lt;100ms</td>
+<td>100-200</td>
+</tr>
+<tr>
+<td>Knowledge retrieval (fresh)</td>
+<td>&lt;500ms</td>
+<td>100-200</td>
+</tr>
+<tr>
+<td>Composite request generation</td>
+<td>&lt;200ms</td>
+<td>200-300</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>&lt;900ms</strong></td>
+<td><strong>200-300</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="token-efficiency-gains">Token Efficiency Gains<a class="headerlink" href="#token-efficiency-gains" title="Permanent link">&para;</a></h3>
+<p><strong>Unoptimized Composite Request:</strong> 5000-8000 tokens
+<strong>Optimized Composite Request:</strong> 200-300 tokens
+<strong>Compression Ratio:</strong> 95-96% efficiency gain</p>
+<hr />
+<h2 id="usage-examples">📖 Usage Examples<a class="headerlink" href="#usage-examples" title="Permanent link">&para;</a></h2>
+<h3 id="for-system-architects">For System Architects<a class="headerlink" href="#for-system-architects" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Review <a href="./">00-brain-index.md</a> for architecture overview</li>
+<li>Study <a href="../02-tier1-acceptance/">02-tier1-acceptance.md</a> for governance integration</li>
+<li>Examine <a href="../05-token-optimization/">05-token-optimization.md</a> for performance tuning</li>
+</ul>
+<h3 id="for-developers">For Developers<a class="headerlink" href="#for-developers" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Read <a href="../01-tier0-governance/">01-tier0-governance.md</a> for rule compliance</li>
+<li>Reference <a href="../03-tier2-response-templates/">03-tier2-response-templates.md</a> for template patterns</li>
+<li>Check <a href="../04-tier3-knowledge/">04-tier3-knowledge.md</a> for knowledge integration</li>
+</ul>
+<h3 id="for-governance-teams">For Governance Teams<a class="headerlink" href="#for-governance-teams" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Start with <a href="../02-tier1-acceptance/">02-tier1-acceptance.md</a> for AC-ID tracking</li>
+<li>Review <a href="../01-tier0-governance/">01-tier0-governance.md</a> for TIER 0 rules</li>
+<li>Audit <a href="../06-composite-requests/">06-composite-requests.md</a> for enforcement validation</li>
+</ul>
+<hr />
+<h2 id="cross-references">🔗 Cross-References<a class="headerlink" href="#cross-references" title="Permanent link">&para;</a></h2>
+<p><strong>Related Documentation:</strong>
+- <a href="../08-orchestrators/00-orchestrators-index.md">Orchestrators Documentation</a> - Master and domain orchestrators
+- <a href="../../CORTEX.prompt.md">CORTEX.prompt.md</a> - System initialization and phase tracking
+- <a href="../../cortex/brain/core/governance_registry.py">Governance Registry</a> - Implementation details
+- <a href="../../cortex/brain/core/state_manager.py">State Manager</a> - Persistence layer
+- <a href="../../cortex/brain/core/response_template_engine.py">Response Template Engine</a> - TIER 2 implementation</p>
+<hr />
+<h2 id="roadmap">📈 Roadmap<a class="headerlink" href="#roadmap" title="Permanent link">&para;</a></h2>
+<p><strong>Current Status:</strong> v1.0 - All 4 tiers operational and tested</p>
+<p><strong>Planned Enhancements:</strong>
+- Tier 3 knowledge graph visualization
+- Real-time token budget dashboards
+- AI-driven rule auto-tuning for efficiency
+- Multi-language support for composite requests
+- Domain-specific TIER 2 templates (per company domain)</p>
+<hr />
+<h2 id="summary">📝 Summary<a class="headerlink" href="#summary" title="Permanent link">&para;</a></h2>
+<p>The CORTEX Brain is a sophisticated 4-tier intelligence system that:</p>
+<p>✅ <strong>Protects</strong> execution with 29 immutable TIER 0 rules
+✅ <strong>Governs</strong> projects through AC-ID tracking and compliance gates
+✅ <strong>Optimizes</strong> responses with adaptive templates and token compression
+✅ <strong>Enriches</strong> requests with domain knowledge and best practices</p>
+<p>Together, these tiers produce <strong>efficient, governance-compliant composite prompts</strong> that guide GitHub Copilot to execute CORTEX best practices overlapped with company domain rules, achieving <strong>95-96% token compression</strong> while maintaining <strong>100% compliance</strong> with brain protection rules.</p>
+<hr />
+<p><strong>Copyright © 2025-2026 Asif Hussain. All rights reserved.</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

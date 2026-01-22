@@ -1,0 +1,44 @@
+graph TB
+    subgraph "Sequential Pattern"
+        S1["Step 1: Extract"]
+        S2["Step 2: Transform"]
+        S3["Step 3: Load"]
+        S1 --> S2
+        S2 --> S3
+    end
+    
+    subgraph "Parallel Pattern"
+        P1["Task 1"]
+        P2["Task 2"]
+        P3["Task 3"]
+        Agg["Aggregate"]
+        P1 --> Agg
+        P2 --> Agg
+        P3 --> Agg
+    end
+    
+    subgraph "Conditional Pattern"
+        Cond["Condition"]
+        PathA["Path A"]
+        PathB["Path B"]
+        Result["Result"]
+        Cond -->|IF TRUE| PathA
+        Cond -->|IF FALSE| PathB
+        PathA --> Result
+        PathB --> Result
+    end
+    
+    subgraph "Delegating Pattern"
+        Parent["Parent"]
+        Child1["Child 1"]
+        Child2["Child 2"]
+        Child3["Child 3"]
+        Parent --> Child1
+        Parent --> Child2
+        Parent --> Child3
+    end
+    
+    style S1 fill:#ff6b6b,stroke:#c92a2a,color:#fff
+    style P1 fill:#4ecdc4,stroke:#118b7f,color:#fff
+    style Cond fill:#f7b731,stroke:#d4a017,color:#000
+    style Parent fill:#95e1d3,stroke:#38ada9,color:#000

@@ -1,0 +1,38 @@
+graph TD
+    Input["Operation Description:<br/>Fix race condition in<br/>Master Orchestrator"]
+    
+    Tokenize["LANGUAGE: Tokenize<br/>& Analyze Text"]
+    Extract["EXAMINATION:<br/>Extract Keywords &<br/>Code Analysis"]
+    Navigate["NAVIGATION:<br/>Git History &<br/>Related Changes"]
+    Synthesize["SYNTHESIS:<br/>Merge Signals &<br/>Score Confidence"]
+    
+    Classify["CLASSIFICATION<br/>Intent Type<br/>Confidence Score"]
+    
+    Input --> Tokenize
+    Tokenize --> Extract
+    Extract --> Navigate
+    Navigate --> Synthesize
+    Synthesize --> Classify
+    
+    Keywords["Keywords Found:<br/>fix, race, condition<br/>synchronization"]
+    Complexity["Complexity: HIGH<br/>Scope: File<br/>Risk: MEDIUM"]
+    History["Related Changes:<br/>3 previous fixes<br/>10 current issues"]
+    
+    Tokenize -.-> Keywords
+    Extract -.-> Complexity
+    Navigate -.-> History
+    
+    Decision1{"Confidence<br/>≥ 0.7?"}
+    Decision2{"Handle<br/>Ambiguity"}
+    
+    Classify --> Decision1
+    Decision1 -->|YES| Route["Route to FIX Handler<br/>Confidence: 0.95"]
+    Decision1 -->|NO| Decision2
+    Decision2 -->|Disambiguate| Manual["Manual User Input"]
+    
+    style Tokenize fill:#ff6b6b,stroke:#c92a2a,color:#fff
+    style Extract fill:#4ecdc4,stroke:#118b7f,color:#fff
+    style Navigate fill:#45b7d1,stroke:#1e8b9a,color:#fff
+    style Synthesize fill:#f7b731,stroke:#d4a017,color:#000
+    style Classify fill:#95e1d3,stroke:#38ada9,color:#000
+    style Route fill:#a8e6cf,stroke:#56ab91,color:#000

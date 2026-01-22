@@ -1,0 +1,4488 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="AI-powered orchestration platform with multi-tier governance">
+      
+      
+        <meta name="author" content="Asif Hussain">
+      
+      
+      
+        <link rel="prev" href="../03-tier2-response-templates/">
+      
+      
+        <link rel="next" href="../05-token-optimization/">
+      
+      
+      <link rel="icon" href="../../assets/images/CORTEX-logo-64.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+    
+    
+      
+        <title>TIER 3 Knowledge - CORTEX Documentation</title>
+      
+    
+    
+  
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+  <style>
+    /* CORTEX Logo styling - display logo in header top left */
+    .md-header__button.md-logo img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+    }
+    /* Adjust header for larger logo */
+    .md-header {
+      min-height: 72px;
+    }
+    .md-header__inner {
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+  </style>
+
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/cortex-glassmorphism.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cortex-tier-3-knowledge-library-domain-specific-context" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CORTEX Documentation" class="md-header__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  <img src="../../assets/images/cortex-logo-200.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CORTEX Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              TIER 3 Knowledge
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../INDEX/" class="md-tabs__link">
+        
+  
+    
+  
+  🚀 Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00-brain-index/" class="md-tabs__link">
+          
+  
+  Domain Brain (TIER 0-3)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../02-orchestrators/00-orchestrators-index/" class="md-tabs__link">
+          
+  
+  Orchestrators
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../03-getting-started/0-installation/" class="md-tabs__link">
+          
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../04-architecture/1-system-overview/" class="md-tabs__link">
+          
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../05-lens-protocol/00-lens-index/" class="md-tabs__link">
+          
+  
+  CORTEX LENS Protocol
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../06-api-reference/0-overview/" class="md-tabs__link">
+          
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../07-guides/deployment/0-overview/" class="md-tabs__link">
+          
+  
+  How-To Guides
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../08-reference/glossary/" class="md-tabs__link">
+          
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../11-mcp-tools/00-mcp-index/" class="md-tabs__link">
+          
+  
+  MCP Tools Framework
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../12-infrastructure/00-infrastructure-index/" class="md-tabs__link">
+          
+  
+  Infrastructure & Resilience
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../13-domain-brain/00-domain-brain-index/" class="md-tabs__link">
+          
+  
+  Domain Brain
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../14-deployment/00-deployment-index/" class="md-tabs__link">
+          
+  
+  Deployment
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../15-observability/00-observability-index/" class="md-tabs__link">
+          
+  
+  Observability
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../16-testing/00-testing-index/" class="md-tabs__link">
+          
+  
+  Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../09-tutorials/0-index/" class="md-tabs__link">
+          
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../10-contributing/1-contributing-guidelines/" class="md-tabs__link">
+          
+  
+  Contributing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../LICENSE/" class="md-tabs__link">
+        
+  
+    
+  
+  License
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CORTEX Documentation" class="md-nav__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  <img src="../../assets/images/cortex-logo-200.png" alt="logo">
+
+    </a>
+    CORTEX Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INDEX/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🚀 Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Domain Brain (TIER 0-3)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Domain Brain (TIER 0-3)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-brain-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-tier0-governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 0 Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-tier1-acceptance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 1 Acceptance Criteria
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-tier2-response-templates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 2 Response Templates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    TIER 3 Knowledge
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    TIER 3 Knowledge
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Core Concepts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Core Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-knowledge-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Knowledge Repository
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-knowledge-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Knowledge Types
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-knowledge-indexing" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Knowledge Indexing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#knowledge-retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔍 Knowledge Retrieval
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔍 Knowledge Retrieval">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#semantic-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      Semantic Search
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#result-ranking" class="md-nav__link">
+    <span class="md-ellipsis">
+      Result Ranking
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#caching-mechanisms" class="md-nav__link">
+    <span class="md-ellipsis">
+      💾 Caching Mechanisms
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💾 Caching Mechanisms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-level-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-Level Caching
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ttl-time-to-live-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      TTL (Time-to-Live) Strategies
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#business-knowledge-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 Business Knowledge Integration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 Business Knowledge Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#domain-specific-knowledge" class="md-nav__link">
+    <span class="md-ellipsis">
+      Domain-Specific Knowledge
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pattern-library" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎓 Pattern Library
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎓 Pattern Library">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pattern-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pattern Structure
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#knowledge-analytics" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Knowledge Analytics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Knowledge Analytics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#performance-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dashboard
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#knowledge-governance" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔐 Knowledge Governance
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔐 Knowledge Governance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compliance-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compliance Integration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-characteristics" class="md-nav__link">
+    <span class="md-ellipsis">
+      📈 Performance Characteristics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📈 Performance Characteristics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#efficiency-gains" class="md-nav__link">
+    <span class="md-ellipsis">
+      Efficiency Gains
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compliance-checklist-tier-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Compliance Checklist (TIER 3)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      📈 Implementation Status
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Related Documentation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-token-optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Token Optimization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-composite-requests/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Composite Requests
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-brain-architecture.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Brain Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Orchestrators
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Orchestrators
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/00-orchestrators-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/01-master-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Master Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/02-intent-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/03-workflow-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Workflow Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/04-refactoring-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Refactoring Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/05-composition-engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Composition Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/06-onboarding-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Onboarding Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/07-adaptive-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Adaptive Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/08-orchestrators-modules-relationship/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrators & Modules Relationship
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/09-orchestrator-module-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrator-Module Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/10-complete-orchestrator-listing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Complete Orchestrator Listing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/0-installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation & Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/1-quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/2-first-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    First Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/3-troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/1-system-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    System Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/2-design-principles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Design Principles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/3-orchestration-engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestration Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/4-domain-brain/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Brain
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/5-resilience-patterns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Resilience Patterns
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/6-implementation-phases/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Implementation Phases
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/7-intent-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/8-state-management/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    State Management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/9-knowledge-protocol/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Knowledge Protocol
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/10-mcp-tool-governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Tool Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/governance-rules/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governance Rules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/definition-of-ready/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Definition of Ready
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/adrs" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture Decision Records
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    CORTEX LENS Protocol
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            CORTEX LENS Protocol
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/00-lens-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/01-lens-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LENS System Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/02-intent-classification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Classification (Language Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/03-ast-analysis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AST Analysis (Examination Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/04-git-navigation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Git Navigation (Navigation Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/05-knowledge-synthesis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Knowledge Synthesis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/06-lens-crawler/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LENS Crawler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/07-domain-brain-integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Brain Integration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/rest-api" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    REST API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/mcp-protocol" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Protocol
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/cli" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI Commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    How-To Guides
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            How-To Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_1" id="__nav_8_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_1">
+            <span class="md-nav__icon md-icon"></span>
+            Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/1-local-development/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Local Development
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/2-mkdocs-server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MkDocs Server
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/4-faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Integration
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2">
+            <span class="md-nav__icon md-icon"></span>
+            Integration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/integration/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_3" id="__nav_8_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operations
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_3">
+            <span class="md-nav__icon md-icon"></span>
+            Operations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/operations/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/operations/4-troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_4" id="__nav_8_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Advanced
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_4">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/advanced/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Glossary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/known-issues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Known Issues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/changelog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/compliance-mappings/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Compliance Mappings
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/quick-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/gap-analysis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gap Analysis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/implementation-status/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Implementation Status
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/remediation-status/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Remediation Status
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/test-ac-mapping/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Test AC Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    MCP Tools Framework
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            MCP Tools Framework
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-mcp-tools/00-mcp-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-mcp-tools/mcp-architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Infrastructure & Resilience
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Infrastructure & Resilience
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../12-infrastructure/00-infrastructure-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Domain Brain
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Domain Brain
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../13-domain-brain/00-domain-brain-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../14-deployment/00-deployment-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Observability
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            Observability
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../15-observability/00-observability-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Testing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            Testing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../16-testing/00-testing-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Tutorials
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            Tutorials
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-tutorials/0-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrator Tutorials
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            Contributing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/1-contributing-guidelines/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing Guidelines
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/2-development-setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/3-testing-strategy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testing Strategy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/4-code-style-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code Style Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/5-pull-request-process/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pull Request Process
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    License
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Core Concepts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Core Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-knowledge-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Knowledge Repository
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-knowledge-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Knowledge Types
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-knowledge-indexing" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Knowledge Indexing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#knowledge-retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔍 Knowledge Retrieval
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔍 Knowledge Retrieval">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#semantic-search" class="md-nav__link">
+    <span class="md-ellipsis">
+      Semantic Search
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#result-ranking" class="md-nav__link">
+    <span class="md-ellipsis">
+      Result Ranking
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#caching-mechanisms" class="md-nav__link">
+    <span class="md-ellipsis">
+      💾 Caching Mechanisms
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="💾 Caching Mechanisms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-level-caching" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-Level Caching
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ttl-time-to-live-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      TTL (Time-to-Live) Strategies
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#business-knowledge-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      📚 Business Knowledge Integration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📚 Business Knowledge Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#domain-specific-knowledge" class="md-nav__link">
+    <span class="md-ellipsis">
+      Domain-Specific Knowledge
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pattern-library" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎓 Pattern Library
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎓 Pattern Library">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pattern-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pattern Structure
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#knowledge-analytics" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Knowledge Analytics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Knowledge Analytics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#performance-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dashboard
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#knowledge-governance" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔐 Knowledge Governance
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔐 Knowledge Governance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#compliance-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compliance Integration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-characteristics" class="md-nav__link">
+    <span class="md-ellipsis">
+      📈 Performance Characteristics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📈 Performance Characteristics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#efficiency-gains" class="md-nav__link">
+    <span class="md-ellipsis">
+      Efficiency Gains
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compliance-checklist-tier-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Compliance Checklist (TIER 3)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      📈 Implementation Status
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Related Documentation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="cortex-tier-3-knowledge-library-domain-specific-context">CORTEX TIER 3 - Knowledge Library &amp; Domain-Specific Context<a class="headerlink" href="#cortex-tier-3-knowledge-library-domain-specific-context" title="Permanent link">&para;</a></h1>
+<p><strong>Version:</strong> 1.0 | <strong>Updated:</strong> 2026-01-22 | <strong>Authority:</strong> cortex_brain/tier3/knowledge (SQLite + YAML)</p>
+<hr />
+<h2 id="overview">🧠 Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p><strong>TIER 3</strong> is the <strong>Domain-Specific Knowledge Layer</strong> that enriches requests with contextual expertise, best practices, and domain-specific rules. It provides the least precedence but highest specificity—customizing generic workflows with company knowledge, patterns, and learned optimizations.</p>
+<p><strong>Key Characteristics:</strong>
+- <strong>Mutable:</strong> Knowledge can be updated without affecting TIER 0-2
+- <strong>Lowest Precedence:</strong> Overridden by TIER 0, 1, or 2 if conflicts
+- <strong>Highest Specificity:</strong> Tailored to exact use cases
+- <strong>Indexed:</strong> Semantic search for rapid retrieval
+- <strong>Cacheable:</strong> Frequently accessed knowledge stays in memory</p>
+<hr />
+<h2 id="core-concepts">🎯 Core Concepts<a class="headerlink" href="#core-concepts" title="Permanent link">&para;</a></h2>
+<h3 id="1-knowledge-repository">1. Knowledge Repository<a class="headerlink" href="#1-knowledge-repository" title="Permanent link">&para;</a></h3>
+<p>The knowledge repository is organized hierarchically:</p>
+<div class="highlight"><pre><span></span><code>cortex_brain/tier3/knowledge/
+├── index.yaml              # Knowledge index + metadata
+├── patterns/               # Reusable patterns
+│   ├── architecture/       # Architecture patterns
+│   ├── governance/         # Governance patterns
+│   └── optimization/       # Performance patterns
+├── best_practices/         # Domain best practices
+│   ├── python/            # Python best practices
+│   ├── sql/               # SQL best practices
+│   └── devops/            # DevOps best practices
+├── domain_rules/           # Company domain rules
+│   ├── security/          # Security rules
+│   ├── performance/       # Performance targets
+│   └── compliance/        # Compliance rules
+└── learning/              # Learned optimizations
+    ├── effective_patterns.db    # What works well
+    └── anti_patterns.db         # What to avoid
+</code></pre></div>
+<h3 id="2-knowledge-types">2. Knowledge Types<a class="headerlink" href="#2-knowledge-types" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Format</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pattern</strong></td>
+<td>YAML pattern definition</td>
+<td>3-tier governance pattern</td>
+</tr>
+<tr>
+<td><strong>Best Practice</strong></td>
+<td>Code + explanation</td>
+<td>Type hints for Python functions</td>
+</tr>
+<tr>
+<td><strong>Domain Rule</strong></td>
+<td>Constraint specification</td>
+<td>Security: TLS 1.3+ required</td>
+</tr>
+<tr>
+<td><strong>Optimization</strong></td>
+<td>Performance metric</td>
+<td>Token optimization techniques</td>
+</tr>
+<tr>
+<td><strong>Anti-Pattern</strong></td>
+<td>Warning + alternative</td>
+<td>Bare except clauses</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-knowledge-indexing">3. Knowledge Indexing<a class="headerlink" href="#3-knowledge-indexing" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">KnowledgeIndex</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Index entry for fast retrieval.&quot;&quot;&quot;</span>
+
+    <span class="n">knowledge_id</span><span class="p">:</span> <span class="nb">str</span>             <span class="c1"># KB-001-pattern-governance</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">knowledge_type</span><span class="p">:</span> <span class="n">KnowledgeType</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>               <span class="c1"># For semantic search</span>
+    <span class="n">relevance_score</span><span class="p">:</span> <span class="nb">float</span>        <span class="c1"># 0.0 to 1.0</span>
+    <span class="n">domain</span><span class="p">:</span> <span class="nb">str</span>                   <span class="c1"># governance, orchestration, infrastructure</span>
+    <span class="n">tier</span><span class="p">:</span> <span class="nb">int</span>                      <span class="c1"># Usually 3, can be 1 or 2</span>
+
+    <span class="c1"># For retrieval</span>
+    <span class="n">file_path</span><span class="p">:</span> <span class="n">Path</span>
+    <span class="n">content_hash</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">cached</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">last_accessed</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">access_count</span><span class="p">:</span> <span class="nb">int</span>             <span class="c1"># Popular knowledge</span>
+</code></pre></div>
+<hr />
+<h2 id="knowledge-retrieval">🔍 Knowledge Retrieval<a class="headerlink" href="#knowledge-retrieval" title="Permanent link">&para;</a></h2>
+<h3 id="semantic-search">Semantic Search<a class="headerlink" href="#semantic-search" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">KnowledgeRetrievalOptimizer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Optimize knowledge retrieval for efficiency.&quot;&quot;&quot;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">search</span><span class="p">(</span>
+        <span class="n">query</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">context</span><span class="p">:</span> <span class="n">SearchContext</span><span class="p">,</span>
+        <span class="n">max_results</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">KnowledgeEntry</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieve relevant knowledge via semantic search.</span>
+
+<span class="sd">        Process:</span>
+<span class="sd">        1. Normalize query</span>
+<span class="sd">        2. Check cache first</span>
+<span class="sd">        3. If miss, do semantic search</span>
+<span class="sd">        4. Rank by relevance</span>
+<span class="sd">        5. Return top N results</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># Step 1: Normalize query</span>
+        <span class="n">normalized_query</span> <span class="o">=</span> <span class="n">normalize_query</span><span class="p">(</span><span class="n">query</span><span class="p">)</span>
+
+        <span class="c1"># Step 2: Check cache</span>
+        <span class="n">cache_key</span> <span class="o">=</span> <span class="n">hash_query</span><span class="p">(</span><span class="n">normalized_query</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+        <span class="n">cached_result</span> <span class="o">=</span> <span class="n">knowledge_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cache_key</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">cached_result</span><span class="p">:</span>
+            <span class="n">knowledge_cache</span><span class="o">.</span><span class="n">record_hit</span><span class="p">(</span><span class="n">cache_key</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="n">cached_result</span><span class="p">)</span>
+
+        <span class="c1"># Step 3: Semantic search</span>
+        <span class="n">embedding</span> <span class="o">=</span> <span class="n">embed_query</span><span class="p">(</span><span class="n">normalized_query</span><span class="p">)</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="n">index</span><span class="o">.</span><span class="n">search_by_embedding</span><span class="p">(</span><span class="n">embedding</span><span class="p">,</span> <span class="n">top_k</span><span class="o">=</span><span class="n">max_results</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Step 4: Rank by relevance to context</span>
+        <span class="n">ranked</span> <span class="o">=</span> <span class="n">rank_by_context</span><span class="p">(</span><span class="n">candidates</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">ranked</span><span class="p">[:</span><span class="n">max_results</span><span class="p">]</span>
+
+        <span class="c1"># Step 5: Cache result</span>
+        <span class="n">knowledge_cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">cache_key</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">ttl_hours</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="result-ranking">Result Ranking<a class="headerlink" href="#result-ranking" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">rank_by_context</span><span class="p">(</span>
+    <span class="n">candidates</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">KnowledgeEntry</span><span class="p">],</span>
+    <span class="n">context</span><span class="p">:</span> <span class="n">SearchContext</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">KnowledgeEntry</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Rank results by relevance to specific context.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">relevance_score</span><span class="p">(</span><span class="n">entry</span><span class="p">:</span> <span class="n">KnowledgeEntry</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">SearchContext</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="mf">0.0</span>
+
+        <span class="c1"># Domain match (weight: 40%)</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">domain</span> <span class="o">==</span> <span class="n">context</span><span class="o">.</span><span class="n">domain</span><span class="p">:</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="mf">0.4</span>
+
+        <span class="c1"># Type match (weight: 30%)</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">context</span><span class="o">.</span><span class="n">expected_type</span><span class="p">:</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="mf">0.3</span>
+
+        <span class="c1"># Tier match (weight: 20%)</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">tier</span> <span class="o">==</span> <span class="n">context</span><span class="o">.</span><span class="n">preferred_tier</span><span class="p">:</span>
+            <span class="n">score</span> <span class="o">+=</span> <span class="mf">0.2</span>
+
+        <span class="c1"># Popularity (weight: 10%)</span>
+        <span class="n">score</span> <span class="o">+=</span> <span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">access_count</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span>
+
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">score</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>  <span class="c1"># Cap at 1.0</span>
+
+    <span class="n">ranked</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+        <span class="n">candidates</span><span class="p">,</span>
+        <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="n">relevance_score</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">context</span><span class="p">),</span>
+        <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">ranked</span>
+</code></pre></div>
+<hr />
+<h2 id="caching-mechanisms">💾 Caching Mechanisms<a class="headerlink" href="#caching-mechanisms" title="Permanent link">&para;</a></h2>
+<h3 id="multi-level-caching">Multi-Level Caching<a class="headerlink" href="#multi-level-caching" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">KnowledgeCacheManager</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Manage knowledge caching across levels.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Level 1: In-memory (fast, limited)</span>
+    <span class="n">memory_cache</span><span class="p">:</span> <span class="n">LRU</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">KnowledgeEntry</span><span class="p">]</span> <span class="o">=</span> <span class="n">LRU</span><span class="p">(</span><span class="n">max_size</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+    <span class="c1"># Level 2: Redis (medium, distributed)</span>
+    <span class="n">redis_cache</span><span class="p">:</span> <span class="n">Redis</span> <span class="o">=</span> <span class="n">Redis</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+    <span class="c1"># Level 3: Disk (persistent, slow)</span>
+    <span class="n">disk_cache</span><span class="p">:</span> <span class="n">SQLite</span> <span class="o">=</span> <span class="n">SQLite</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">retrieve</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">knowledge_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ttl</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3600</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">KnowledgeEntry</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve with cascade fallback.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Try Level 1: Memory</span>
+        <span class="k">if</span> <span class="n">knowledge_id</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">memory_cache</span><span class="p">:</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">memory_cache</span><span class="p">[</span><span class="n">knowledge_id</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+
+        <span class="c1"># Try Level 2: Redis</span>
+        <span class="n">redis_result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">redis_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">knowledge_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">redis_result</span><span class="p">:</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="n">KnowledgeEntry</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">redis_result</span><span class="p">)</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">memory_cache</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">knowledge_id</span><span class="p">,</span> <span class="n">entry</span><span class="p">)</span>  <span class="c1"># Promote to memory</span>
+            <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+
+        <span class="c1"># Try Level 3: Disk</span>
+        <span class="n">disk_result</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">disk_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">knowledge_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">disk_result</span><span class="p">:</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="n">KnowledgeEntry</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">disk_result</span><span class="p">)</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">redis_cache</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">knowledge_id</span><span class="p">,</span> <span class="n">entry</span><span class="o">.</span><span class="n">to_json</span><span class="p">(),</span> <span class="n">ttl</span><span class="o">=</span><span class="n">ttl</span><span class="p">)</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">memory_cache</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">knowledge_id</span><span class="p">,</span> <span class="n">entry</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+
+        <span class="c1"># Cache miss</span>
+        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Knowledge not found: </span><span class="si">{</span><span class="n">knowledge_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cache_metrics</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CacheMetrics</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get cache performance metrics.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">CacheMetrics</span><span class="p">(</span>
+            <span class="n">memory_hit_rate</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">memory_cache</span><span class="o">.</span><span class="n">hit_rate</span><span class="p">(),</span>
+            <span class="n">redis_hit_rate</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">redis_cache</span><span class="o">.</span><span class="n">hit_rate</span><span class="p">(),</span>
+            <span class="n">disk_hit_rate</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">disk_cache</span><span class="o">.</span><span class="n">hit_rate</span><span class="p">(),</span>
+            <span class="n">memory_size</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">memory_cache</span><span class="o">.</span><span class="n">current_size</span><span class="p">(),</span>
+            <span class="n">redis_size</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">redis_cache</span><span class="o">.</span><span class="n">memory_usage</span><span class="p">(),</span>
+            <span class="n">avg_retrieval_time</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">measure_avg_retrieval_time</span><span class="p">()</span>
+        <span class="p">)</span>
+</code></pre></div>
+<h3 id="ttl-time-to-live-strategies">TTL (Time-to-Live) Strategies<a class="headerlink" href="#ttl-time-to-live-strategies" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">cache_ttl</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Static knowledge (rarely changes)</span>
+<span class="w">  </span><span class="nt">patterns</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">ttl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">86400</span><span class="w">        </span><span class="c1"># 24 hours</span>
+
+<span class="w">  </span><span class="c1"># Semi-static knowledge</span>
+<span class="w">  </span><span class="nt">best_practices</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">ttl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">43200</span><span class="w">        </span><span class="c1"># 12 hours</span>
+
+<span class="w">  </span><span class="c1"># Dynamic knowledge</span>
+<span class="w">  </span><span class="nt">optimization_results</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">ttl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3600</span><span class="w">         </span><span class="c1"># 1 hour</span>
+
+<span class="w">  </span><span class="c1"># High-velocity knowledge</span>
+<span class="w">  </span><span class="nt">recent_errors</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">ttl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span><span class="w">          </span><span class="c1"># 5 minutes</span>
+</code></pre></div>
+<hr />
+<h2 id="business-knowledge-integration">📚 Business Knowledge Integration<a class="headerlink" href="#business-knowledge-integration" title="Permanent link">&para;</a></h2>
+<h3 id="domain-specific-knowledge">Domain-Specific Knowledge<a class="headerlink" href="#domain-specific-knowledge" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DomainKnowledge</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Knowledge specific to company domain.&quot;&quot;&quot;</span>
+
+    <span class="n">domain_name</span><span class="p">:</span> <span class="nb">str</span>              <span class="c1"># e.g., &quot;cortex_brain_governance&quot;</span>
+    <span class="n">rules</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">GovernanceRule</span><span class="p">]</span>   <span class="c1"># Domain-specific rules</span>
+    <span class="n">patterns</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Pattern</span><span class="p">]</span>       <span class="c1"># Domain patterns</span>
+    <span class="n">best_practices</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Practice</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">applies_to</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if this domain applies to request.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">domain_name</span> <span class="ow">in</span> <span class="n">request</span><span class="o">.</span><span class="n">applicable_domains</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">enhance_request</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">request</span><span class="p">:</span> <span class="n">CompositeRequest</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EnhancedRequest</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enhance request with domain knowledge.&quot;&quot;&quot;</span>
+
+        <span class="n">enhanced</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+        <span class="c1"># Add domain rules</span>
+        <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">rules</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">rule</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">enhanced</span><span class="o">.</span><span class="n">rules</span><span class="p">):</span>
+                <span class="n">enhanced</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span>
+
+        <span class="c1"># Add applicable patterns</span>
+        <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">applies_to</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+                <span class="n">enhanced</span><span class="o">.</span><span class="n">patterns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+
+        <span class="c1"># Add best practices</span>
+        <span class="k">for</span> <span class="n">practice</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">best_practices</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">practice</span><span class="o">.</span><span class="n">applicable_to</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+                <span class="n">enhanced</span><span class="o">.</span><span class="n">practices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">practice</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">enhanced</span>
+</code></pre></div>
+<hr />
+<h2 id="pattern-library">🎓 Pattern Library<a class="headerlink" href="#pattern-library" title="Permanent link">&para;</a></h2>
+<h3 id="pattern-structure">Pattern Structure<a class="headerlink" href="#pattern-structure" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nt">pattern</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">governance_3tier</span>
+<span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;3-Tier</span><span class="nv"> </span><span class="s">Governance</span><span class="nv"> </span><span class="s">Pattern&quot;</span>
+<span class="w">  </span><span class="nt">tier</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span>
+
+<span class="w">  </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">Hierarchical governance with 3 precedence levels:</span>
+<span class="w">    </span><span class="no">- TIER 0: Immutable, non-negotiable rules</span>
+<span class="w">    </span><span class="no">- TIER 1: Project governance, AC-ID tracking</span>
+<span class="w">    </span><span class="no">- TIER 2: Response templates, token optimization</span>
+
+<span class="w">  </span><span class="nt">applicability</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">request_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">implementation</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">request_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">refactoring</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">complexity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">medium</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">complexity</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">high</span>
+
+<span class="w">  </span><span class="nt">components</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Immutable</span><span class="nv"> </span><span class="s">Core</span><span class="nv"> </span><span class="s">Rules&quot;</span>
+<span class="w">      </span><span class="nt">purpose</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Brain</span><span class="nv"> </span><span class="s">protection&quot;</span>
+<span class="w">      </span><span class="nt">example</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;CORE-008:</span><span class="nv"> </span><span class="s">TDD</span><span class="nv"> </span><span class="s">Enforcement&quot;</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;AC-ID</span><span class="nv"> </span><span class="s">Tracking&quot;</span>
+<span class="w">      </span><span class="nt">purpose</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Project</span><span class="nv"> </span><span class="s">compliance&quot;</span>
+<span class="w">      </span><span class="nt">example</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;AC-FR-001-01:</span><span class="nv"> </span><span class="s">[description]&quot;</span>
+
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Response</span><span class="nv"> </span><span class="s">Templates&quot;</span>
+<span class="w">      </span><span class="nt">purpose</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Consistent</span><span class="nv"> </span><span class="s">formatting&quot;</span>
+<span class="w">      </span><span class="nt">example</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;impl_multi_step</span><span class="nv"> </span><span class="s">template&quot;</span>
+
+<span class="w">  </span><span class="nt">interaction_patterns</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TIER0</span>
+<span class="w">      </span><span class="nt">to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TIER1</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Enforcement&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TIER1</span>
+<span class="w">      </span><span class="nt">to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TIER2</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Context&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">from</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TIER2</span>
+<span class="w">      </span><span class="nt">to</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">TIER3</span>
+<span class="w">      </span><span class="nt">type</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Enhancement&quot;</span>
+
+<span class="w">  </span><span class="nt">anti_patterns</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Tier</span><span class="nv"> </span><span class="s">1</span><span class="nv"> </span><span class="s">rule</span><span class="nv"> </span><span class="s">overriding</span><span class="nv"> </span><span class="s">Tier</span><span class="nv"> </span><span class="s">0&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Bare</span><span class="nv"> </span><span class="s">except</span><span class="nv"> </span><span class="s">clauses</span><span class="nv"> </span><span class="s">(violates</span><span class="nv"> </span><span class="s">CORE-013)&quot;</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;Hardcoded</span><span class="nv"> </span><span class="s">paths</span><span class="nv"> </span><span class="s">(violates</span><span class="nv"> </span><span class="s">CORE-005)&quot;</span>
+
+<span class="w">  </span><span class="nt">when_to_use</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">Use this pattern when:</span>
+<span class="w">    </span><span class="no">- Building governance-aware systems</span>
+<span class="w">    </span><span class="no">- Multiple teams need to enforce rules</span>
+<span class="w">    </span><span class="no">- Audit compliance is critical</span>
+
+<span class="w">  </span><span class="nt">when_not_to_use</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">Don&#39;t use this pattern when:</span>
+<span class="w">    </span><span class="no">- Simple scripts without governance needs</span>
+<span class="w">    </span><span class="no">- Single-developer projects</span>
+</code></pre></div>
+<hr />
+<h2 id="knowledge-analytics">📊 Knowledge Analytics<a class="headerlink" href="#knowledge-analytics" title="Permanent link">&para;</a></h2>
+<h3 id="performance-metrics">Performance Metrics<a class="headerlink" href="#performance-metrics" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">KnowledgeMetrics</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Analytics for knowledge system.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Retrieval</span>
+    <span class="n">total_searches</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">avg_search_time_ms</span><span class="p">:</span> <span class="nb">float</span>
+    <span class="n">cache_hit_rate</span><span class="p">:</span> <span class="nb">float</span>
+
+    <span class="c1"># Quality</span>
+    <span class="n">relevance_scores</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+    <span class="n">avg_relevance</span><span class="p">:</span> <span class="nb">float</span>
+
+    <span class="c1"># Usage</span>
+    <span class="n">most_accessed</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>  <span class="c1"># knowledge_id, access_count</span>
+    <span class="n">least_used</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">system_efficiency</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Overall system efficiency score.&quot;&quot;&quot;</span>
+        <span class="c1"># Combine metrics: speed + relevance + utilization</span>
+        <span class="n">speed_score</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1000</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">avg_search_time_ms</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span> <span class="o">/</span> <span class="mi">1000</span>
+        <span class="n">relevance_score</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">avg_relevance</span>
+        <span class="n">utilization_score</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">total_searches</span> <span class="o">/</span> <span class="mi">10000</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">total_searches</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="mi">0</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">speed_score</span> <span class="o">*</span> <span class="mf">0.4</span> <span class="o">+</span> <span class="n">relevance_score</span> <span class="o">*</span> <span class="mf">0.4</span> <span class="o">+</span> <span class="n">utilization_score</span> <span class="o">*</span> <span class="mf">0.2</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="dashboard">Dashboard<a class="headerlink" href="#dashboard" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>Knowledge System Metrics:
+
+Search Performance:
+├─ Total searches: 15,432
+├─ Avg search time: 23ms ⚡ (target: &lt;50ms)
+└─ Cache hit rate: 87% ✅ (target: &gt;80%)
+
+Knowledge Quality:
+├─ Avg relevance score: 0.92/1.0 ✅
+├─ Most accessed: KB-001-governance (2,341 uses)
+└─ Least used: KB-045-anti-patterns (12 uses)
+
+System Efficiency: 94% ✅
+
+Top Knowledge (Last 7 days):
+1. KB-001-governance        | 2,341 uses | Relevance: 0.96
+2. KB-003-type-hints        | 1,850 uses | Relevance: 0.94
+3. KB-010-optimization      | 1,200 uses | Relevance: 0.89
+</code></pre></div>
+<hr />
+<h2 id="knowledge-governance">🔐 Knowledge Governance<a class="headerlink" href="#knowledge-governance" title="Permanent link">&para;</a></h2>
+<h3 id="compliance-integration">Compliance Integration<a class="headerlink" href="#compliance-integration" title="Permanent link">&para;</a></h3>
+<p>TIER 3 knowledge must comply with TIER 0 rules:</p>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">validate_knowledge_compliance</span><span class="p">(</span><span class="n">knowledge</span><span class="p">:</span> <span class="n">KnowledgeEntry</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ensure knowledge doesn&#39;t violate TIER 0 rules.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Check: No hardcoded paths (CORE-005)</span>
+    <span class="k">if</span> <span class="n">contains_hardcoded_paths</span><span class="p">(</span><span class="n">knowledge</span><span class="o">.</span><span class="n">content</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="s2">&quot;CORE-005: Knowledge contains hardcoded paths&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check: Proper naming (CORE-022, CORE-028)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">is_kebab_case</span><span class="p">(</span><span class="n">knowledge</span><span class="o">.</span><span class="n">id</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="s2">&quot;CORE-028: Knowledge ID not kebab-case&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check: Documented (CORE-012)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">knowledge</span><span class="o">.</span><span class="n">description</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">knowledge</span><span class="o">.</span><span class="n">description</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">50</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="s2">&quot;CORE-012: Knowledge not documented&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check: Type hints (if code) (CORE-011)</span>
+    <span class="k">if</span> <span class="n">knowledge</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">KnowledgeType</span><span class="o">.</span><span class="n">CODE_EXAMPLE</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">has_type_hints</span><span class="p">(</span><span class="n">knowledge</span><span class="o">.</span><span class="n">content</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="s2">&quot;CORE-011: Code example missing type hints&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="performance-characteristics">📈 Performance Characteristics<a class="headerlink" href="#performance-characteristics" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>Typical Time</th>
+<th>Token Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Semantic search</td>
+<td>15-100ms</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Cache hit retrieval</td>
+<td>&lt;5ms</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Knowledge ranking</td>
+<td>5-20ms</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Knowledge injection</td>
+<td>10-25ms</td>
+<td>50-200</td>
+</tr>
+<tr>
+<td>Total for knowledge layer</td>
+<td>40-150ms</td>
+<td>100-250</td>
+</tr>
+</tbody>
+</table>
+<h3 id="efficiency-gains">Efficiency Gains<a class="headerlink" href="#efficiency-gains" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>Knowledge injection efficiency:
+
+Without TIER 3:
+- Context must be repeated in every request
+- No learned patterns
+- Generic solutions
+
+With TIER 3:
+- Context retrieved once, reused
+- Patterns auto-applied
+- Domain-optimized solutions
+- 40-50% reduction in prompt size
+- 30-40% improvement in execution quality
+</code></pre></div>
+<hr />
+<h2 id="compliance-checklist-tier-3">✅ Compliance Checklist (TIER 3)<a class="headerlink" href="#compliance-checklist-tier-3" title="Permanent link">&para;</a></h2>
+<p>Before adding knowledge:</p>
+<ul>
+<li>[ ] Passes TIER 0 compliance check</li>
+<li>[ ] Documented with description &gt;50 chars</li>
+<li>[ ] No hardcoded paths or credentials</li>
+<li>[ ] If code: has type hints</li>
+<li>[ ] Kebab-case naming</li>
+<li>[ ] Applicable domains documented</li>
+<li>[ ] No duplicate knowledge IDs</li>
+<li>[ ] Relevant tags assigned for search</li>
+</ul>
+<hr />
+<h2 id="implementation-status">📈 Implementation Status<a class="headerlink" href="#implementation-status" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Status</th>
+<th>Tests</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Knowledge Repository</td>
+<td>✅ Complete</td>
+<td>30</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Semantic Search</td>
+<td>✅ Complete</td>
+<td>35</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Caching System</td>
+<td>✅ Complete</td>
+<td>45</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Pattern Library</td>
+<td>✅ Complete</td>
+<td>25</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Domain Integration</td>
+<td>✅ Complete</td>
+<td>20</td>
+<td>100%</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td>✅ <strong>Complete</strong></td>
+<td><strong>155</strong></td>
+<td><strong>100%</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="related-documentation">🔗 Related Documentation<a class="headerlink" href="#related-documentation" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../00-brain-index/">Brain Index</a> - System overview</li>
+<li><a href="../01-tier0-governance/">TIER 0 Governance</a> - Immutable rules</li>
+<li><a href="../02-tier1-acceptance/">TIER 1 Acceptance</a> - AC-ID tracking</li>
+<li><a href="../03-tier2-response-templates/">TIER 2 Templates</a> - Response formatting</li>
+<li><a href="../../cortex/brain/core/knowledge/knowledge_repository.py">Knowledge Repository</a> - Implementation</li>
+</ul>
+<hr />
+<p><strong>Copyright © 2025-2026 Asif Hussain. All rights reserved.</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

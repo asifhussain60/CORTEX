@@ -1,0 +1,74 @@
+graph TD
+    subgraph request["Incoming Request"]
+        req["Request Type<br/>Domain<br/>AC-IDs"]
+    end
+    
+    subgraph load["Load TIER 0 Rules"]
+        all_rules["Load all 29 CORE rules"]
+        cache_check["Check rule cache"]
+    end
+    
+    subgraph context_analysis["Context Analysis"]
+        extract_req_type["Extract request type:<br/>- implementation<br/>- refactoring<br/>- documentation"]
+        extract_domain["Extract domain:<br/>governance<br/>orchestration<br/>infrastructure"]
+        extract_ac["Extract AC-IDs:<br/>FR-001, NFR-003, etc"]
+    end
+    
+    subgraph filtering["Intelligent Filtering"]
+        impl_filter["If request_type == implementation:<br/>Activate: TDD, Types, Docs,<br/>Result[T], Error-handling"]
+        
+        refactor_filter["If request_type == refactoring:<br/>Activate: SOLID, SRP, OCP,<br/>Error-handling"]
+        
+        doc_filter["If request_type == documentation:<br/>Activate: Docs, Naming,<br/>Markdown rules"]
+    end
+    
+    subgraph precedence["Apply Precedence"]
+        higher_tier["Check TIER 1, 2, 3<br/>for conflicts"]
+        resolve["If conflict:<br/>Higher tier wins<br/>(TIER 0 > 1 > 2 > 3)"]
+        final_rules["Final rule set:<br/>Context-specific subset"]
+    end
+    
+    subgraph optimization["Efficiency Optimization"]
+        compression["Compress active rules:<br/>TDD|Types|Docs|..."]
+        budget["Allocate tokens:<br/>- Rules: 50 tokens<br/>- Context: 30 tokens<br/>- Remaining: buffer"]
+    end
+    
+    subgraph evaluation["Rule Evaluation"]
+        validate["Validate request against<br/>active rules"]
+        log_violations["Log any violations"]
+    end
+    
+    subgraph output["Output"]
+        active_rules["Active Rules:<br/>(Only relevant rules)"]
+        efficiency["Efficiency Metric:<br/>Rules evaluated: 8/29 (28%)<br/>Tokens: 50/200"]
+    end
+    
+    req --> all_rules
+    all_rules --> cache_check
+    cache_check --> extract_req_type
+    
+    extract_req_type --> impl_filter
+    extract_req_type --> refactor_filter
+    extract_req_type --> doc_filter
+    
+    extract_domain --> filtering
+    extract_ac --> filtering
+    
+    impl_filter --> higher_tier
+    refactor_filter --> higher_tier
+    doc_filter --> higher_tier
+    
+    higher_tier --> resolve
+    resolve --> final_rules
+    
+    final_rules --> compression
+    compression --> budget
+    budget --> validate
+    validate --> log_violations
+    log_violations --> active_rules
+    log_violations --> efficiency
+    
+    style all_rules fill:#ff9999
+    style final_rules fill:#ffcc99
+    style active_rules fill:#99ff99
+    style efficiency fill:#ffff99

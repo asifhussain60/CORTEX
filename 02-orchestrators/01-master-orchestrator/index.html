@@ -1,0 +1,5281 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="AI-powered orchestration platform with multi-tier governance">
+      
+      
+        <meta name="author" content="Asif Hussain">
+      
+      
+      
+        <link rel="prev" href="../00-orchestrators-index/">
+      
+      
+        <link rel="next" href="../02-intent-router/">
+      
+      
+      <link rel="icon" href="../../assets/images/CORTEX-logo-64.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+    
+    
+      
+        <title>Master Orchestrator - CORTEX Documentation</title>
+      
+    
+    
+  
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+  <style>
+    /* CORTEX Logo styling - display logo in header top left */
+    .md-header__button.md-logo img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+    }
+    /* Adjust header for larger logo */
+    .md-header {
+      min-height: 72px;
+    }
+    .md-header__inner {
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+  </style>
+
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/cortex-glassmorphism.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#master-orchestrator" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CORTEX Documentation" class="md-header__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  <img src="../../assets/images/cortex-logo-200.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CORTEX Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Master Orchestrator
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../INDEX/" class="md-tabs__link">
+        
+  
+    
+  
+  🚀 Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../01-cortex-brain/00-brain-index/" class="md-tabs__link">
+          
+  
+  Domain Brain (TIER 0-3)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00-orchestrators-index/" class="md-tabs__link">
+          
+  
+  Orchestrators
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../03-getting-started/0-installation/" class="md-tabs__link">
+          
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../04-architecture/1-system-overview/" class="md-tabs__link">
+          
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../05-lens-protocol/00-lens-index/" class="md-tabs__link">
+          
+  
+  CORTEX LENS Protocol
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../06-api-reference/0-overview/" class="md-tabs__link">
+          
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../07-guides/deployment/0-overview/" class="md-tabs__link">
+          
+  
+  How-To Guides
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../08-reference/glossary/" class="md-tabs__link">
+          
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../11-mcp-tools/00-mcp-index/" class="md-tabs__link">
+          
+  
+  MCP Tools Framework
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../12-infrastructure/00-infrastructure-index/" class="md-tabs__link">
+          
+  
+  Infrastructure & Resilience
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../13-domain-brain/00-domain-brain-index/" class="md-tabs__link">
+          
+  
+  Domain Brain
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../14-deployment/00-deployment-index/" class="md-tabs__link">
+          
+  
+  Deployment
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../15-observability/00-observability-index/" class="md-tabs__link">
+          
+  
+  Observability
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../16-testing/00-testing-index/" class="md-tabs__link">
+          
+  
+  Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../09-tutorials/0-index/" class="md-tabs__link">
+          
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../10-contributing/1-contributing-guidelines/" class="md-tabs__link">
+          
+  
+  Contributing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../LICENSE/" class="md-tabs__link">
+        
+  
+    
+  
+  License
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CORTEX Documentation" class="md-nav__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  <img src="../../assets/images/cortex-logo-200.png" alt="logo">
+
+    </a>
+    CORTEX Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INDEX/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🚀 Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Domain Brain (TIER 0-3)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Domain Brain (TIER 0-3)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-cortex-brain/00-brain-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-cortex-brain/01-tier0-governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 0 Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-cortex-brain/02-tier1-acceptance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 1 Acceptance Criteria
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-cortex-brain/03-tier2-response-templates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 2 Response Templates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-cortex-brain/04-tier3-knowledge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 3 Knowledge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-cortex-brain/05-token-optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Token Optimization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-cortex-brain/06-composite-requests/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Composite Requests
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-cortex-brain/05-brain-architecture.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Brain Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Orchestrators
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Orchestrators
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-orchestrators-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Master Orchestrator
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Master Orchestrator
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#design-pattern-coordinator-facade" class="md-nav__link">
+    <span class="md-ellipsis">
+      Design Pattern: Coordinator Facade
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Components
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      How It Works
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How It Works">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#operation-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operation Flow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-algorithms" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Algorithms
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Algorithms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-confidence-scoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Confidence Scoring
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-result-aggregation-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Result Aggregation Strategy
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#state-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      State Management
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to Use It
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to Use It">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Usage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-usage-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Usage Patterns
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Usage Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pattern-1-multi-domain-operation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pattern 1: Multi-Domain Operation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-2-custom-routing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pattern 2: Custom Routing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-3-fallback-orchestrators" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pattern 3: Fallback Orchestrators
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration Points
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integration Points">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependencies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependents
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mcp-tools-exposed" class="md-nav__link">
+    <span class="md-ellipsis">
+      MCP Tools Exposed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registry-entries" class="md-nav__link">
+    <span class="md-ellipsis">
+      Registry Entries
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Design Principles
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Design Principles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-single-responsibility-principle-srp" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Single Responsibility Principle (SRP)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-openclosed-principle-ocp" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Open/Closed Principle (OCP)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-liskov-substitution-principle-lsp" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Liskov Substitution Principle (LSP)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-interface-segregation-principle-isp" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Interface Segregation Principle (ISP)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-dependency-inversion-principle-dip" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Dependency Inversion Principle (DIP)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#governance-rules-enforced" class="md-nav__link">
+    <span class="md-ellipsis">
+      Governance Rules Enforced
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Governance Rules Enforced">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tier-0-rules-non-negotiable" class="md-nav__link">
+    <span class="md-ellipsis">
+      TIER 0 Rules (Non-Negotiable)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#domain-specific-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Domain-Specific Rules
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Handling Strategy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Handling Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#error-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Classification
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recovery-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Recovery Strategies
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-characteristics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Characteristics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Characteristics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#execution-time-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      Execution Time Breakdown
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scalability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scalability
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unit-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Unit Tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration Tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test Coverage
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Best Practices
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Best Practices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#do" class="md-nav__link">
+    <span class="md-ellipsis">
+      DO ✅
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dont" class="md-nav__link">
+    <span class="md-ellipsis">
+      DON'T ❌
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example Workflows
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Example Workflows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workflow-1-financial-transaction-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow 1: Financial Transaction Processing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-2-cross-domain-audit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow 2: Cross-Domain Audit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-3-resilient-critical-operation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow 3: Resilient Critical Operation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Issues
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debug-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debug Mode
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Related Documentation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#copyright-license" class="md-nav__link">
+    <span class="md-ellipsis">
+      Copyright &amp; License
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-intent-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-workflow-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Workflow Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-refactoring-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Refactoring Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-composition-engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Composition Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-onboarding-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Onboarding Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-adaptive-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Adaptive Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-orchestrators-modules-relationship/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrators & Modules Relationship
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-orchestrator-module-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrator-Module Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-complete-orchestrator-listing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Complete Orchestrator Listing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/0-installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation & Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/1-quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/2-first-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    First Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/3-troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/1-system-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    System Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/2-design-principles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Design Principles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/3-orchestration-engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestration Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/4-domain-brain/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Brain
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/5-resilience-patterns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Resilience Patterns
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/6-implementation-phases/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Implementation Phases
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/7-intent-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/8-state-management/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    State Management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/9-knowledge-protocol/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Knowledge Protocol
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/10-mcp-tool-governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Tool Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/governance-rules/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governance Rules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/definition-of-ready/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Definition of Ready
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/adrs" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture Decision Records
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    CORTEX LENS Protocol
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            CORTEX LENS Protocol
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/00-lens-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/01-lens-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LENS System Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/02-intent-classification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Classification (Language Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/03-ast-analysis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AST Analysis (Examination Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/04-git-navigation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Git Navigation (Navigation Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/05-knowledge-synthesis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Knowledge Synthesis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/06-lens-crawler/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LENS Crawler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/07-domain-brain-integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Brain Integration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/rest-api" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    REST API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/mcp-protocol" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Protocol
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/cli" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI Commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    How-To Guides
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            How-To Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_1" id="__nav_8_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_1">
+            <span class="md-nav__icon md-icon"></span>
+            Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/1-local-development/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Local Development
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/2-mkdocs-server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MkDocs Server
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/4-faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Integration
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2">
+            <span class="md-nav__icon md-icon"></span>
+            Integration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/integration/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_3" id="__nav_8_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operations
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_3">
+            <span class="md-nav__icon md-icon"></span>
+            Operations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/operations/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/operations/4-troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_4" id="__nav_8_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Advanced
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_4">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/advanced/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Glossary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/known-issues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Known Issues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/changelog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/compliance-mappings/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Compliance Mappings
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/quick-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/gap-analysis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gap Analysis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/implementation-status/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Implementation Status
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/remediation-status/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Remediation Status
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/test-ac-mapping/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Test AC Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    MCP Tools Framework
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            MCP Tools Framework
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-mcp-tools/00-mcp-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-mcp-tools/mcp-architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Infrastructure & Resilience
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Infrastructure & Resilience
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../12-infrastructure/00-infrastructure-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Domain Brain
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Domain Brain
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../13-domain-brain/00-domain-brain-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../14-deployment/00-deployment-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Observability
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            Observability
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../15-observability/00-observability-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Testing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            Testing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../16-testing/00-testing-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Tutorials
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            Tutorials
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-tutorials/0-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrator Tutorials
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            Contributing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/1-contributing-guidelines/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing Guidelines
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/2-development-setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/3-testing-strategy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testing Strategy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/4-code-style-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code Style Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/5-pull-request-process/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pull Request Process
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    License
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      Overview
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#purpose" class="md-nav__link">
+    <span class="md-ellipsis">
+      Purpose
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      Architecture
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Architecture">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#design-pattern-coordinator-facade" class="md-nav__link">
+    <span class="md-ellipsis">
+      Design Pattern: Coordinator Facade
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-components" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Components
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-it-works" class="md-nav__link">
+    <span class="md-ellipsis">
+      How It Works
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How It Works">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#operation-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operation Flow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#key-algorithms" class="md-nav__link">
+    <span class="md-ellipsis">
+      Key Algorithms
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Key Algorithms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-confidence-scoring" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Confidence Scoring
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-result-aggregation-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Result Aggregation Strategy
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#state-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      State Management
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      How to Use It
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How to Use It">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-usage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic Usage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-usage-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      Advanced Usage Patterns
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Advanced Usage Patterns">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pattern-1-multi-domain-operation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pattern 1: Multi-Domain Operation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-2-custom-routing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pattern 2: Custom Routing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pattern-3-fallback-orchestrators" class="md-nav__link">
+    <span class="md-ellipsis">
+      Pattern 3: Fallback Orchestrators
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration Points
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Integration Points">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dependencies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependencies
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dependents" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependents
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mcp-tools-exposed" class="md-nav__link">
+    <span class="md-ellipsis">
+      MCP Tools Exposed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#registry-entries" class="md-nav__link">
+    <span class="md-ellipsis">
+      Registry Entries
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#design-principles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Design Principles
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Design Principles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-single-responsibility-principle-srp" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Single Responsibility Principle (SRP)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-openclosed-principle-ocp" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Open/Closed Principle (OCP)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-liskov-substitution-principle-lsp" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Liskov Substitution Principle (LSP)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-interface-segregation-principle-isp" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Interface Segregation Principle (ISP)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-dependency-inversion-principle-dip" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Dependency Inversion Principle (DIP)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#governance-rules-enforced" class="md-nav__link">
+    <span class="md-ellipsis">
+      Governance Rules Enforced
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Governance Rules Enforced">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tier-0-rules-non-negotiable" class="md-nav__link">
+    <span class="md-ellipsis">
+      TIER 0 Rules (Non-Negotiable)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#domain-specific-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Domain-Specific Rules
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#error-handling-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Handling Strategy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Error Handling Strategy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#error-classification" class="md-nav__link">
+    <span class="md-ellipsis">
+      Error Classification
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recovery-strategies" class="md-nav__link">
+    <span class="md-ellipsis">
+      Recovery Strategies
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#performance-characteristics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance Characteristics
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance Characteristics">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#execution-time-breakdown" class="md-nav__link">
+    <span class="md-ellipsis">
+      Execution Time Breakdown
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scalability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Scalability
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unit-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Unit Tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#integration-tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      Integration Tests
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-coverage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test Coverage
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Best Practices
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Best Practices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#do" class="md-nav__link">
+    <span class="md-ellipsis">
+      DO ✅
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dont" class="md-nav__link">
+    <span class="md-ellipsis">
+      DON'T ❌
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-workflows" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example Workflows
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Example Workflows">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#workflow-1-financial-transaction-processing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow 1: Financial Transaction Processing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-2-cross-domain-audit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow 2: Cross-Domain Audit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workflow-3-resilient-critical-operation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow 3: Resilient Critical Operation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      Common Issues
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debug-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debug Mode
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Related Documentation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#copyright-license" class="md-nav__link">
+    <span class="md-ellipsis">
+      Copyright &amp; License
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="master-orchestrator">Master Orchestrator<a class="headerlink" href="#master-orchestrator" title="Permanent link">&para;</a></h1>
+<p><strong>Status:</strong> Production Ready | <strong>Version:</strong> 1.0.0 | <strong>Category:</strong> Core Orchestrators | <strong>Module:</strong> <code>cortex/orchestrators/core/master_orchestrator.py</code></p>
+<hr />
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>The <strong>MasterOrchestrator</strong> is the central coordinator and facade for the entire CORTEX orchestration system. It implements the <strong>Coordinator/Facade pattern</strong> to manage complex, multi-step operations by intelligently delegating work to specialized domain orchestrators.</p>
+<h3 id="purpose">Purpose<a class="headerlink" href="#purpose" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Centralized entry point for all orchestration operations</li>
+<li>Coordinates interactions between multiple domain orchestrators</li>
+<li>Manages cross-cutting concerns (audit, state, governance)</li>
+<li>Aggregates results from multiple orchestrators</li>
+<li>Maintains comprehensive audit trail for compliance</li>
+<li>Enforces governance rules and behavioral boundaries</li>
+</ul>
+<hr />
+<h2 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h2>
+<h3 id="design-pattern-coordinator-facade">Design Pattern: Coordinator Facade<a class="headerlink" href="#design-pattern-coordinator-facade" title="Permanent link">&para;</a></h3>
+<p>The MasterOrchestrator uses the <strong>Coordinator pattern</strong> combined with the <strong>Facade pattern</strong>:</p>
+<div class="highlight"><pre><span></span><code>┌──────────────────────────────┐
+│   Client/External Interface  │
+└──────────────┬───────────────┘
+               │ Request
+               ▼
+┌──────────────────────────────┐
+│   MasterOrchestrator         │
+│  (Coordinator/Facade)        │
+│                              │
+│  - Routes to domain orchs    │
+│  - Aggregates results        │
+│  - Manages state &amp; audit     │
+└──────┬───┬────────┬──────┬───┘
+       │   │        │      │
+       │   │        │      └─────────────────────┐
+       │   │        │                            │
+    ┌──▼─┐├─┐  ┌────┴─┐  ┌──────────────┐  ┌────▼──┐
+    │Ac  ││Go│  │Audit │  │Governance    │  │Custom │
+    │Orch││v │  │Orch  │  │Orch          │  │Orch   │
+    └────┘└─┘  └──────┘  └──────────────┘  └───────┘
+</code></pre></div>
+<h3 id="key-components">Key Components<a class="headerlink" href="#key-components" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Domain Orchestrator Registry</strong></li>
+<li>Maintains registry of all registered domain orchestrators</li>
+<li>Maps domains to orchestrator instances</li>
+<li>Lazy-loads orchestrators on demand</li>
+<li>
+<p>Type: <code>Dict[str, OrchestratorMetadata]</code></p>
+</li>
+<li>
+<p><strong>Operation Router</strong></p>
+</li>
+<li>Analyzes incoming operations</li>
+<li>Determines applicable domain orchestrators</li>
+<li>Routes based on operation type, domain, and context</li>
+<li>
+<p>Implements confidence scoring for decisions</p>
+</li>
+<li>
+<p><strong>Result Aggregator</strong></p>
+</li>
+<li>Collects results from multiple orchestrators</li>
+<li>Merges result data intelligently</li>
+<li>Handles conflicts and contradictions</li>
+<li>
+<p>Produces unified response</p>
+</li>
+<li>
+<p><strong>Audit &amp; Logging</strong></p>
+</li>
+<li>Logs all delegation decisions</li>
+<li>Maintains operation history</li>
+<li>Generates hash-chain audit trail</li>
+<li>
+<p>Tracks execution flow</p>
+</li>
+<li>
+<p><strong>State Manager Integration</strong></p>
+</li>
+<li>Maintains cross-phase state consistency</li>
+<li>Persists state between operations</li>
+<li>Provides state context to orchestrators</li>
+<li>
+<p>Enables state recovery</p>
+</li>
+<li>
+<p><strong>Governance Integration</strong></p>
+</li>
+<li>Enforces TIER 0 governance rules</li>
+<li>Validates operations against boundaries</li>
+<li>Manages compliance requirements</li>
+<li>Tracks governance violations</li>
+</ol>
+<hr />
+<h2 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h2>
+<h3 id="operation-flow">Operation Flow<a class="headerlink" href="#operation-flow" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>1. REQUEST ARRIVES
+   └─ Operation request with context/parameters
+
+2. INTAKE &amp; VALIDATION
+   ├─ Validate request format
+   ├─ Check governance rules (TIER 0)
+   ├─ Enforce behavioral boundaries
+   └─ Log operation initiation
+
+3. ROUTING DECISION
+   ├─ Analyze operation characteristics
+   ├─ Determine applicable domains
+   ├─ Score confidence (0.0-1.0)
+   └─ Select orchestrators if confidence ≥ 0.7
+
+4. DELEGATION
+   ├─ Invoke primary orchestrator
+   ├─ Invoke fallback/secondary orchestrators
+   ├─ Monitor execution with timeout
+   └─ Collect results
+
+5. AGGREGATION
+   ├─ Merge results from all orchestrators
+   ├─ Resolve conflicts intelligently
+   ├─ Enrich with master context
+   └─ Format unified response
+
+6. AUDIT &amp; PERSISTENCE
+   ├─ Write operation to audit log
+   ├─ Update state manager
+   ├─ Generate completion event
+   └─ Invoke post-operation hooks
+
+7. RESPONSE
+   └─ Return aggregated results to client
+</code></pre></div>
+<h3 id="key-algorithms">Key Algorithms<a class="headerlink" href="#key-algorithms" title="Permanent link">&para;</a></h3>
+<h4 id="1-confidence-scoring">1. Confidence Scoring<a class="headerlink" href="#1-confidence-scoring" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">score_routing_decision</span><span class="p">(</span><span class="n">operation</span><span class="p">,</span> <span class="n">domains</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Score = (domain_match_score * 0.4) +</span>
+<span class="sd">            (operation_history_score * 0.3) +</span>
+<span class="sd">            (context_relevance * 0.2) +</span>
+<span class="sd">            (orchestrator_availability * 0.1)</span>
+
+<span class="sd">    Range: 0.0 (no confidence) to 1.0 (high confidence)</span>
+<span class="sd">    Threshold for auto-execution: 0.7</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</code></pre></div>
+<h4 id="2-result-aggregation-strategy">2. Result Aggregation Strategy<a class="headerlink" href="#2-result-aggregation-strategy" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">aggregate_results</span><span class="p">(</span><span class="n">results_list</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For multiple orchestrator results:</span>
+<span class="sd">    1. Collect all output objects</span>
+<span class="sd">    2. Merge data structures (prefer non-empty values)</span>
+<span class="sd">    3. Combine metadata (timestamps, durations)</span>
+<span class="sd">    4. Resolve conflicts by voting/priority</span>
+<span class="sd">    5. Create unified response wrapper</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+</code></pre></div>
+<h3 id="state-management">State Management<a class="headerlink" href="#state-management" title="Permanent link">&para;</a></h3>
+<p>The MasterOrchestrator maintains state across phases:</p>
+<table>
+<thead>
+<tr>
+<th>State Type</th>
+<th>Storage</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Operation State</strong></td>
+<td>StateManager</td>
+<td>Tracks current operation progress</td>
+</tr>
+<tr>
+<td><strong>Domain State</strong></td>
+<td>Database</td>
+<td>Persists domain-specific data</td>
+</tr>
+<tr>
+<td><strong>Audit State</strong></td>
+<td>Audit Log</td>
+<td>Maintains compliance history</td>
+</tr>
+<tr>
+<td><strong>Governance State</strong></td>
+<td>Governance Registry</td>
+<td>Tracks rule violations</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="how-to-use-it">How to Use It<a class="headerlink" href="#how-to-use-it" title="Permanent link">&para;</a></h2>
+<h3 id="basic-usage">Basic Usage<a class="headerlink" href="#basic-usage" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cortex.orchestrators.core.master_orchestrator</span><span class="w"> </span><span class="kn">import</span> <span class="n">MasterOrchestrator</span>
+
+<span class="c1"># Get singleton instance</span>
+<span class="n">master</span> <span class="o">=</span> <span class="n">MasterOrchestrator</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span>
+
+<span class="c1"># Register a domain orchestrator</span>
+<span class="n">master</span><span class="o">.</span><span class="n">register_orchestrator</span><span class="p">(</span>
+    <span class="n">domain</span><span class="o">=</span><span class="s2">&quot;financial&quot;</span><span class="p">,</span>
+    <span class="n">orchestrator</span><span class="o">=</span><span class="n">financial_orch</span><span class="p">,</span>
+    <span class="n">capabilities</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;transaction_processing&quot;</span><span class="p">,</span> <span class="s2">&quot;reconciliation&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># Execute an operation</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">master</span><span class="o">.</span><span class="n">execute_operation</span><span class="p">(</span>
+    <span class="n">operation_name</span><span class="o">=</span><span class="s2">&quot;process_payments&quot;</span><span class="p">,</span>
+    <span class="n">context</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;financial&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;operation_type&quot;</span><span class="p">:</span> <span class="s2">&quot;batch&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;batch_size&quot;</span><span class="p">:</span> <span class="mi">1000</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="c1"># Check result</span>
+<span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">is_ok</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Operation succeeded: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Operation failed: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="advanced-usage-patterns">Advanced Usage Patterns<a class="headerlink" href="#advanced-usage-patterns" title="Permanent link">&para;</a></h3>
+<h4 id="pattern-1-multi-domain-operation">Pattern 1: Multi-Domain Operation<a class="headerlink" href="#pattern-1-multi-domain-operation" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># Operation that spans multiple domains</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">master</span><span class="o">.</span><span class="n">coordinate_operation</span><span class="p">(</span>
+    <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;cross_domain_audit&quot;</span><span class="p">,</span>
+    <span class="n">context</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;domains&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;financial&quot;</span><span class="p">,</span> <span class="s2">&quot;governance&quot;</span><span class="p">,</span> <span class="s2">&quot;audit&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="s2">&quot;full_system&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;report_to&quot;</span><span class="p">:</span> <span class="s2">&quot;compliance_team&quot;</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div>
+<h4 id="pattern-2-custom-routing">Pattern 2: Custom Routing<a class="headerlink" href="#pattern-2-custom-routing" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># Override default routing with custom logic</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">master</span><span class="o">.</span><span class="n">execute_with_routing</span><span class="p">(</span>
+    <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;custom_workflow&quot;</span><span class="p">,</span>
+    <span class="n">routing_strategy</span><span class="o">=</span><span class="n">CustomRoutingStrategy</span><span class="p">(),</span>
+    <span class="n">context</span><span class="o">=</span><span class="n">custom_context</span>
+<span class="p">)</span>
+</code></pre></div>
+<h4 id="pattern-3-fallback-orchestrators">Pattern 3: Fallback Orchestrators<a class="headerlink" href="#pattern-3-fallback-orchestrators" title="Permanent link">&para;</a></h4>
+<div class="highlight"><pre><span></span><code><span class="c1"># Specify fallback options for resilience</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">master</span><span class="o">.</span><span class="n">execute_with_fallbacks</span><span class="p">(</span>
+    <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;critical_operation&quot;</span><span class="p">,</span>
+    <span class="n">primary_domain</span><span class="o">=</span><span class="s2">&quot;financial&quot;</span><span class="p">,</span>
+    <span class="n">fallback_domains</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;governance&quot;</span><span class="p">,</span> <span class="s2">&quot;audit&quot;</span><span class="p">],</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mi">60</span>
+<span class="p">)</span>
+</code></pre></div>
+<h3 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h3>
+<p>The MasterOrchestrator reads configuration from:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># cortex_brain/tier0/orchestrator-config.yaml</span>
+
+<span class="nt">master_orchestrator</span><span class="p">:</span>
+<span class="w">  </span><span class="c1"># Routing settings</span>
+<span class="w">  </span><span class="nt">confidence_threshold</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.7</span>
+<span class="w">  </span><span class="nt">timeout_seconds</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">300</span>
+
+<span class="w">  </span><span class="c1"># State management</span>
+<span class="w">  </span><span class="nt">state_persistence</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">state_cache_ttl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3600</span>
+
+<span class="w">  </span><span class="c1"># Audit settings</span>
+<span class="w">  </span><span class="nt">audit_level</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;comprehensive&quot;</span>
+<span class="w">  </span><span class="nt">hash_chain_enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+
+<span class="w">  </span><span class="c1"># Governance</span>
+<span class="w">  </span><span class="nt">enforce_tier0_rules</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">boundary_check_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;strict&quot;</span>
+
+<span class="w">  </span><span class="c1"># Optimization</span>
+<span class="w">  </span><span class="nt">parallel_orchestrator_execution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">max_parallel_tasks</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10</span>
+<span class="w">  </span><span class="nt">result_caching</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+<span class="w">  </span><span class="nt">cache_ttl</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1800</span>
+</code></pre></div>
+<hr />
+<h2 id="integration-points">Integration Points<a class="headerlink" href="#integration-points" title="Permanent link">&para;</a></h2>
+<h3 id="dependencies">Dependencies<a class="headerlink" href="#dependencies" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>EnhancedAuditLogger</strong>: Audit trail logging</li>
+<li><strong>StateManager</strong>: Cross-phase state management</li>
+<li><strong>DatabaseTransactionManager</strong>: Atomic operations</li>
+<li><strong>GovernanceRegistry</strong>: Rule enforcement</li>
+<li><strong>BehavioralBoundaryRules</strong>: Boundary enforcement</li>
+<li><strong>KnowledgeRepository</strong>: Best practices</li>
+<li><strong>BusinessKnowledgeRepository</strong>: Domain knowledge</li>
+</ul>
+<h3 id="dependents">Dependents<a class="headerlink" href="#dependents" title="Permanent link">&para;</a></h3>
+<ul>
+<li>All domain orchestrators</li>
+<li>All custom orchestrators</li>
+<li>Intent Router (for stage 2 delegation)</li>
+<li>Workflow Orchestrator (for stage coordination)</li>
+</ul>
+<h3 id="mcp-tools-exposed">MCP Tools Exposed<a class="headerlink" href="#mcp-tools-exposed" title="Permanent link">&para;</a></h3>
+<p>The MasterOrchestrator exposes the following MCP tools:</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Parameters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>register_orchestrator</code></td>
+<td>Register domain orchestrator</td>
+<td>domain, orchestrator, capabilities</td>
+</tr>
+<tr>
+<td><code>get_orchestrator</code></td>
+<td>Get orchestrator instance</td>
+<td>domain</td>
+</tr>
+<tr>
+<td><code>coordinate_operation</code></td>
+<td>Coordinate multi-orchestrator operation</td>
+<td>operation, context</td>
+</tr>
+<tr>
+<td><code>get_registered_domains</code></td>
+<td>List registered domains</td>
+<td>(none)</td>
+</tr>
+<tr>
+<td><code>get_operation_history</code></td>
+<td>Get operation history</td>
+<td>limit, domain_filter</td>
+</tr>
+<tr>
+<td><code>audit_operation</code></td>
+<td>Get audit trail for operation</td>
+<td>operation_id</td>
+</tr>
+<tr>
+<td><code>validate_operation</code></td>
+<td>Pre-validate operation</td>
+<td>operation, context</td>
+</tr>
+</tbody>
+</table>
+<h3 id="registry-entries">Registry Entries<a class="headerlink" href="#registry-entries" title="Permanent link">&para;</a></h3>
+<p>Registered in <code>cortex/orchestrators/registry/orchestrator_registry.py</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="n">ORCHESTRATOR_METADATA</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;master-orchestrator&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;core&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="s2">&quot;1.0.0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;capabilities&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">&quot;coordination&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;multi_domain_orchestration&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;result_aggregation&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;audit_logging&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;state_management&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;governance_enforcement&quot;</span>
+        <span class="p">]</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<hr />
+<h2 id="design-principles">Design Principles<a class="headerlink" href="#design-principles" title="Permanent link">&para;</a></h2>
+<h3 id="1-single-responsibility-principle-srp">1. Single Responsibility Principle (SRP)<a class="headerlink" href="#1-single-responsibility-principle-srp" title="Permanent link">&para;</a></h3>
+<p>Each domain orchestrator has ONE responsibility. MasterOrchestrator only coordinates.</p>
+<h3 id="2-openclosed-principle-ocp">2. Open/Closed Principle (OCP)<a class="headerlink" href="#2-openclosed-principle-ocp" title="Permanent link">&para;</a></h3>
+<p>Open for extension (new domains) via registry, closed for modification.</p>
+<h3 id="3-liskov-substitution-principle-lsp">3. Liskov Substitution Principle (LSP)<a class="headerlink" href="#3-liskov-substitution-principle-lsp" title="Permanent link">&para;</a></h3>
+<p>All orchestrators implement <code>IOrchestrator</code> interface consistently.</p>
+<h3 id="4-interface-segregation-principle-isp">4. Interface Segregation Principle (ISP)<a class="headerlink" href="#4-interface-segregation-principle-isp" title="Permanent link">&para;</a></h3>
+<p>Minimal, focused interfaces for each orchestrator type.</p>
+<h3 id="5-dependency-inversion-principle-dip">5. Dependency Inversion Principle (DIP)<a class="headerlink" href="#5-dependency-inversion-principle-dip" title="Permanent link">&para;</a></h3>
+<p>Depends on abstractions (IOrchestrator), not concrete implementations.</p>
+<hr />
+<h2 id="governance-rules-enforced">Governance Rules Enforced<a class="headerlink" href="#governance-rules-enforced" title="Permanent link">&para;</a></h2>
+<h3 id="tier-0-rules-non-negotiable">TIER 0 Rules (Non-Negotiable)<a class="headerlink" href="#tier-0-rules-non-negotiable" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Impact</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CORE-008</td>
+<td>TDD enforcement</td>
+<td>Verify tests exist before code</td>
+</tr>
+<tr>
+<td>CORE-011</td>
+<td>Type hints mandatory</td>
+<td>Reject un-typed operations</td>
+</tr>
+<tr>
+<td>CORE-012</td>
+<td>Docstring requirement</td>
+<td>Validate documentation</td>
+</tr>
+<tr>
+<td>CORE-013</td>
+<td>No bare except</td>
+<td>Reject bare exception handlers</td>
+</tr>
+<tr>
+<td>CORE-029</td>
+<td>Response header format</td>
+<td>Wrap response with mandated header</td>
+</tr>
+</tbody>
+</table>
+<h3 id="domain-specific-rules">Domain-Specific Rules<a class="headerlink" href="#domain-specific-rules" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Financial</strong>: SOX, PCI-DSS compliance</li>
+<li><strong>Healthcare</strong>: HIPAA compliance</li>
+<li><strong>E-Commerce</strong>: PCI-DSS payment requirements</li>
+<li><strong>Audit</strong>: Complete audit trail</li>
+</ul>
+<hr />
+<h2 id="error-handling-strategy">Error Handling Strategy<a class="headerlink" href="#error-handling-strategy" title="Permanent link">&para;</a></h2>
+<h3 id="error-classification">Error Classification<a class="headerlink" href="#error-classification" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>┌─ VALIDATION ERRORS (recoverable)
+│  └─ Retry with different parameters
+│
+├─ ROUTING ERRORS (fallback available)
+│  └─ Route to fallback orchestrator
+│
+├─ EXECUTION ERRORS (retry possible)
+│  └─ Retry with exponential backoff
+│
+├─ GOVERNANCE ERRORS (blocking)
+│  └─ Halt operation, log violation
+│
+└─ CRITICAL ERRORS (system-level)
+   └─ Escalate to admin, trigger alerting
+</code></pre></div>
+<h3 id="recovery-strategies">Recovery Strategies<a class="headerlink" href="#recovery-strategies" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Error Type</th>
+<th>Strategy 1</th>
+<th>Strategy 2</th>
+<th>Strategy 3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Validation</td>
+<td>Fix &amp; retry</td>
+<td>Use default</td>
+<td>Abort</td>
+</tr>
+<tr>
+<td>Routing</td>
+<td>Fallback orch</td>
+<td>Manual route</td>
+<td>Abort</td>
+</tr>
+<tr>
+<td>Execution</td>
+<td>Retry + backoff</td>
+<td>Alternative approach</td>
+<td>Abort</td>
+</tr>
+<tr>
+<td>Governance</td>
+<td>Log violation</td>
+<td>Alert admin</td>
+<td>Abort</td>
+</tr>
+<tr>
+<td>Critical</td>
+<td>Alert + escalate</td>
+<td>Failover system</td>
+<td>Manual intervention</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="performance-characteristics">Performance Characteristics<a class="headerlink" href="#performance-characteristics" title="Permanent link">&para;</a></h2>
+<h3 id="execution-time-breakdown">Execution Time Breakdown<a class="headerlink" href="#execution-time-breakdown" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Typical Duration</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Intake &amp; Validation</td>
+<td>5-10ms</td>
+<td>Governance checks</td>
+</tr>
+<tr>
+<td>Routing Decision</td>
+<td>10-20ms</td>
+<td>Confidence scoring</td>
+</tr>
+<tr>
+<td>Orchestrator Invocation</td>
+<td>100-500ms</td>
+<td>Domain-dependent</td>
+</tr>
+<tr>
+<td>Result Aggregation</td>
+<td>10-50ms</td>
+<td>Merge complexity-dependent</td>
+</tr>
+<tr>
+<td>Audit &amp; Persistence</td>
+<td>20-100ms</td>
+<td>Log size-dependent</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>~200-700ms</strong></td>
+<td>Varies by domain &amp; complexity</td>
+</tr>
+</tbody>
+</table>
+<h3 id="scalability">Scalability<a class="headerlink" href="#scalability" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Parallel Orchestrators</strong>: Up to 10 concurrent domain orchestrators</li>
+<li><strong>Result Aggregation</strong>: O(n) where n = number of orchestrators</li>
+<li><strong>Audit Log</strong>: Append-only, scales linearly</li>
+<li><strong>Registry</strong>: O(1) lookup by domain</li>
+</ul>
+<hr />
+<h2 id="testing">Testing<a class="headerlink" href="#testing" title="Permanent link">&para;</a></h2>
+<h3 id="unit-tests">Unit Tests<a class="headerlink" href="#unit-tests" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Located in: <code>tests/unit/orchestrators/test_master_orchestrator.py</code></li>
+<li>Coverage: ~95%</li>
+<li>Key test suites:</li>
+<li>Registration and discovery</li>
+<li>Routing logic and confidence scoring</li>
+<li>Result aggregation</li>
+<li>Audit trail generation</li>
+<li>Governance enforcement</li>
+</ul>
+<h3 id="integration-tests">Integration Tests<a class="headerlink" href="#integration-tests" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Located in: <code>tests/integration/orchestrators/test_master_integration.py</code></li>
+<li>Scenarios:</li>
+<li>Multi-domain operations</li>
+<li>Fallback mechanisms</li>
+<li>State persistence</li>
+<li>Cross-orchestrator communication</li>
+</ul>
+<h3 id="test-coverage">Test Coverage<a class="headerlink" href="#test-coverage" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Coverage</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core routing</td>
+<td>98%</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Result aggregation</td>
+<td>94%</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Audit logging</td>
+<td>100%</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Governance enforcement</td>
+<td>96%</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>State management</td>
+<td>91%</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="best-practices">Best Practices<a class="headerlink" href="#best-practices" title="Permanent link">&para;</a></h2>
+<h3 id="do">DO ✅<a class="headerlink" href="#do" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Register orchestrators at startup</li>
+<li>Use confidence scoring for automatic routing</li>
+<li>Implement fallback orchestrators for critical operations</li>
+<li>Log all operations with full context</li>
+<li>Validate governance rules before execution</li>
+<li>Cache results when safe to do so</li>
+<li>Use timeouts for all operations</li>
+<li>Aggregate results intelligently</li>
+</ul>
+<h3 id="dont">DON'T ❌<a class="headerlink" href="#dont" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Register orchestrators multiple times for same domain</li>
+<li>Ignore governance violations</li>
+<li>Execute operations without audit trail</li>
+<li>Skip confidence scoring</li>
+<li>Neglect error handling</li>
+<li>Assume orchestrator availability</li>
+<li>Ignore state management requirements</li>
+<li>Execute unbounded operations</li>
+</ul>
+<hr />
+<h2 id="example-workflows">Example Workflows<a class="headerlink" href="#example-workflows" title="Permanent link">&para;</a></h2>
+<h3 id="workflow-1-financial-transaction-processing">Workflow 1: Financial Transaction Processing<a class="headerlink" href="#workflow-1-financial-transaction-processing" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Step 1: Register financial orchestrator</span>
+<span class="n">master</span><span class="o">.</span><span class="n">register_orchestrator</span><span class="p">(</span>
+    <span class="n">domain</span><span class="o">=</span><span class="s2">&quot;financial&quot;</span><span class="p">,</span>
+    <span class="n">orchestrator</span><span class="o">=</span><span class="n">FinancialOrchestrator</span><span class="p">(),</span>
+    <span class="n">capabilities</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;transaction&quot;</span><span class="p">,</span> <span class="s2">&quot;reconciliation&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># Step 2: Execute operation</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">master</span><span class="o">.</span><span class="n">execute_operation</span><span class="p">(</span>
+    <span class="n">operation_name</span><span class="o">=</span><span class="s2">&quot;process_batch_payments&quot;</span><span class="p">,</span>
+    <span class="n">context</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;domain&quot;</span><span class="p">:</span> <span class="s2">&quot;financial&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;batch_size&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="s2">&quot;priority&quot;</span><span class="p">:</span> <span class="s2">&quot;high&quot;</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="c1"># Step 3: Results include:</span>
+<span class="c1"># - Transaction summary</span>
+<span class="c1"># - Reconciliation report</span>
+<span class="c1"># - Audit trail</span>
+<span class="c1"># - Compliance attestation</span>
+</code></pre></div>
+<h3 id="workflow-2-cross-domain-audit">Workflow 2: Cross-Domain Audit<a class="headerlink" href="#workflow-2-cross-domain-audit" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Execute operation across multiple domains</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">master</span><span class="o">.</span><span class="n">coordinate_operation</span><span class="p">(</span>
+    <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;system_audit&quot;</span><span class="p">,</span>
+    <span class="n">context</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;financial&quot;</span><span class="p">,</span> <span class="s2">&quot;governance&quot;</span><span class="p">,</span> <span class="s2">&quot;audit&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;report_format&quot;</span><span class="p">:</span> <span class="s2">&quot;comprehensive&quot;</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="c1"># Results aggregated from:</span>
+<span class="c1"># - Financial: Transaction audit</span>
+<span class="c1"># - Governance: Compliance check</span>
+<span class="c1"># - Audit: Trail verification</span>
+</code></pre></div>
+<h3 id="workflow-3-resilient-critical-operation">Workflow 3: Resilient Critical Operation<a class="headerlink" href="#workflow-3-resilient-critical-operation" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Execute with fallback chain</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">master</span><span class="o">.</span><span class="n">execute_with_fallbacks</span><span class="p">(</span>
+    <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;critical_update&quot;</span><span class="p">,</span>
+    <span class="n">primary_domain</span><span class="o">=</span><span class="s2">&quot;financial&quot;</span><span class="p">,</span>
+    <span class="n">fallback_domains</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;governance&quot;</span><span class="p">,</span> <span class="s2">&quot;audit&quot;</span><span class="p">],</span>
+    <span class="n">timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+    <span class="n">retry_count</span><span class="o">=</span><span class="mi">3</span>
+<span class="p">)</span>
+
+<span class="c1"># MasterOrchestrator will:</span>
+<span class="c1"># 1. Try financial orchestrator</span>
+<span class="c1"># 2. If fails, try governance orchestrator</span>
+<span class="c1"># 3. If fails, try audit orchestrator</span>
+<span class="c1"># 4. Return best available result</span>
+</code></pre></div>
+<hr />
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="common-issues">Common Issues<a class="headerlink" href="#common-issues" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Issue</th>
+<th>Cause</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>"No orchestrator for domain"</td>
+<td>Domain not registered</td>
+<td>Register orchestrator first</td>
+</tr>
+<tr>
+<td>Low confidence score</td>
+<td>Ambiguous routing context</td>
+<td>Provide more specific context</td>
+</tr>
+<tr>
+<td>Timeout errors</td>
+<td>Orchestrator is slow</td>
+<td>Increase timeout or use async</td>
+</tr>
+<tr>
+<td>Governance violation</td>
+<td>Rule enforcement active</td>
+<td>Check TIER 0 rules</td>
+</tr>
+<tr>
+<td>State not persisting</td>
+<td>StateManager not initialized</td>
+<td>Verify database connection</td>
+</tr>
+</tbody>
+</table>
+<h3 id="debug-mode">Debug Mode<a class="headerlink" href="#debug-mode" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Enable debug logging</span>
+<span class="n">master</span><span class="o">.</span><span class="n">enable_debug_logging</span><span class="p">()</span>
+
+<span class="c1"># Get detailed operation trace</span>
+<span class="n">trace</span> <span class="o">=</span> <span class="n">master</span><span class="o">.</span><span class="n">get_operation_trace</span><span class="p">(</span><span class="n">operation_id</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">trace</span><span class="o">.</span><span class="n">to_json</span><span class="p">())</span>
+
+<span class="c1"># Get performance metrics</span>
+<span class="n">metrics</span> <span class="o">=</span> <span class="n">master</span><span class="o">.</span><span class="n">get_performance_metrics</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Avg routing time: </span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;avg_routing_ms&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">ms&quot;</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="related-documentation">Related Documentation<a class="headerlink" href="#related-documentation" title="Permanent link">&para;</a></h2>
+<ul>
+<li>📖 <a href="../02-intent-router/">Intent Router</a> - Stage 2 routing</li>
+<li>📖 <a href="../03-workflow-orchestrator/">Workflow Orchestrator</a> - Stage coordination</li>
+<li>📖 <a href="../patterns/registry-pattern.md">Orchestrator Registry</a> - Discovery system</li>
+<li>📖 <a href="../patterns/governance-enforcement.md">Governance Rules</a> - Rule engine</li>
+<li>📊 <a href="01-architecture-overview.md">Architecture Overview</a> - System diagram</li>
+</ul>
+<hr />
+<h2 id="copyright-license">Copyright &amp; License<a class="headerlink" href="#copyright-license" title="Permanent link">&para;</a></h2>
+<p><strong>Copyright © 2025-2026 Asif Hussain. All rights reserved.</strong></p>
+<p>CORTEX Framework - Master Orchestrator Module
+Status: Production Ready | Version: 1.0.0</p>
+<hr />
+<p><strong>Last Updated:</strong> 2026-01-22 | <strong>Author:</strong> CORTEX Documentation Generator</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,4929 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="AI-powered orchestration platform with multi-tier governance">
+      
+      
+        <meta name="author" content="Asif Hussain">
+      
+      
+      
+        <link rel="prev" href="../2-mkdocs-server/">
+      
+      
+        <link rel="next" href="../../integration/0-overview/">
+      
+      
+      <link rel="icon" href="../../../assets/images/CORTEX-logo-64.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+    
+    
+      
+        <title>FAQ - CORTEX Documentation</title>
+      
+    
+    
+  
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.50c56a3b.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+  <style>
+    /* CORTEX Logo styling - display logo in header top left */
+    .md-header__button.md-logo img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+    }
+    /* Adjust header for larger logo */
+    .md-header {
+      min-height: 72px;
+    }
+    .md-header__inner {
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+  </style>
+
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/cortex-glassmorphism.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cortex-deployment-faq" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="CORTEX Documentation" class="md-header__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  <img src="../../../assets/images/cortex-logo-200.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CORTEX Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              FAQ
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../INDEX/" class="md-tabs__link">
+        
+  
+    
+  
+  🚀 Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../01-cortex-brain/00-brain-index/" class="md-tabs__link">
+          
+  
+  Domain Brain (TIER 0-3)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../02-orchestrators/00-orchestrators-index/" class="md-tabs__link">
+          
+  
+  Orchestrators
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../03-getting-started/0-installation/" class="md-tabs__link">
+          
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../04-architecture/1-system-overview/" class="md-tabs__link">
+          
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../05-lens-protocol/00-lens-index/" class="md-tabs__link">
+          
+  
+  CORTEX LENS Protocol
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../06-api-reference/0-overview/" class="md-tabs__link">
+          
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../0-overview/" class="md-tabs__link">
+          
+  
+  How-To Guides
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../08-reference/glossary/" class="md-tabs__link">
+          
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../11-mcp-tools/00-mcp-index/" class="md-tabs__link">
+          
+  
+  MCP Tools Framework
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../12-infrastructure/00-infrastructure-index/" class="md-tabs__link">
+          
+  
+  Infrastructure & Resilience
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../13-domain-brain/00-domain-brain-index/" class="md-tabs__link">
+          
+  
+  Domain Brain
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../14-deployment/00-deployment-index/" class="md-tabs__link">
+          
+  
+  Deployment
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../15-observability/00-observability-index/" class="md-tabs__link">
+          
+  
+  Observability
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../16-testing/00-testing-index/" class="md-tabs__link">
+          
+  
+  Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../09-tutorials/0-index/" class="md-tabs__link">
+          
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../10-contributing/1-contributing-guidelines/" class="md-tabs__link">
+          
+  
+  Contributing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../LICENSE/" class="md-tabs__link">
+        
+  
+    
+  
+  License
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="CORTEX Documentation" class="md-nav__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  <img src="../../../assets/images/cortex-logo-200.png" alt="logo">
+
+    </a>
+    CORTEX Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../INDEX/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🚀 Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Domain Brain (TIER 0-3)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Domain Brain (TIER 0-3)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-cortex-brain/00-brain-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-cortex-brain/01-tier0-governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 0 Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-cortex-brain/02-tier1-acceptance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 1 Acceptance Criteria
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-cortex-brain/03-tier2-response-templates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 2 Response Templates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-cortex-brain/04-tier3-knowledge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 3 Knowledge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-cortex-brain/05-token-optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Token Optimization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-cortex-brain/06-composite-requests/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Composite Requests
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-cortex-brain/05-brain-architecture.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Brain Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Orchestrators
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Orchestrators
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-orchestrators/00-orchestrators-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-orchestrators/01-master-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Master Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-orchestrators/02-intent-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-orchestrators/03-workflow-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Workflow Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-orchestrators/04-refactoring-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Refactoring Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-orchestrators/05-composition-engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Composition Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-orchestrators/06-onboarding-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Onboarding Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-orchestrators/07-adaptive-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Adaptive Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-orchestrators/08-orchestrators-modules-relationship/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrators & Modules Relationship
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-orchestrators/09-orchestrator-module-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrator-Module Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-orchestrators/10-complete-orchestrator-listing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Complete Orchestrator Listing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-getting-started/0-installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation & Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-getting-started/1-quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-getting-started/2-first-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    First Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-getting-started/3-troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-architecture/1-system-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    System Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-architecture/2-design-principles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Design Principles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-architecture/3-orchestration-engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestration Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-architecture/4-domain-brain/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Brain
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-architecture/5-resilience-patterns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Resilience Patterns
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-architecture/6-implementation-phases/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Implementation Phases
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-architecture/7-intent-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-architecture/8-state-management/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    State Management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-architecture/9-knowledge-protocol/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Knowledge Protocol
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-architecture/10-mcp-tool-governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Tool Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-architecture/governance-rules/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governance Rules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-architecture/definition-of-ready/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Definition of Ready
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-architecture/adrs" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture Decision Records
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    CORTEX LENS Protocol
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            CORTEX LENS Protocol
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-lens-protocol/00-lens-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-lens-protocol/01-lens-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LENS System Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-lens-protocol/02-intent-classification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Classification (Language Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-lens-protocol/03-ast-analysis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AST Analysis (Examination Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-lens-protocol/04-git-navigation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Git Navigation (Navigation Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-lens-protocol/05-knowledge-synthesis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Knowledge Synthesis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-lens-protocol/06-lens-crawler/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LENS Crawler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-lens-protocol/07-domain-brain-integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Brain Integration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-api-reference/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-api-reference/rest-api" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    REST API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-api-reference/mcp-protocol" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Protocol
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-api-reference/cli" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI Commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    How-To Guides
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            How-To Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_8_1" id="__nav_8_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8_1">
+            <span class="md-nav__icon md-icon"></span>
+            Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1-local-development/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Local Development
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2-mkdocs-server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MkDocs Server
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#frequently-asked-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Frequently Asked Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Frequently Asked Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#general-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      General Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="General Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-what-is-cortex" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What is CORTEX?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-do-i-need-the-cortex-hub-to-develop-locally" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Do I need the CORTEX hub to develop locally?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-cortex-work-with-non-git-repositories" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can CORTEX work with non-Git repositories?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-is-cortex-open-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Is CORTEX open source?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setup-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setup &amp; Configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setup & Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-how-long-does-the-initial-setup-take" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How long does the initial setup take?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-set-up-the-hub-on-a-remote-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I set up the hub on a remote machine?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-what-python-version-is-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What Python version is required?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-change-the-hub-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I change the hub port?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-do-i-need-to-modify-my-repository-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Do I need to modify my repository structure?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage &amp; Operations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage & Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-how-often-should-i-refresh-governance-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How often should I refresh governance rules?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-what-happens-if-the-hub-goes-down" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What happens if the hub goes down?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-update-governance-rules-without-restarting-the-hub" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I update governance rules without restarting the hub?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-add-a-new-developer-to-use-cortex" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I add a new developer to use CORTEX?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-remove-a-repository-from-governance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I remove a repository from governance?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#isolation-access-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Isolation &amp; Access Control
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Isolation & Access Control">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-what-does-isolation-mode-strict-mean" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What does "isolation mode: strict" mean?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-allow-cross-repository-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I allow cross-repository access?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-temporarily-disable-isolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I temporarily disable isolation?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-what-audit-events-are-logged" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What audit events are logged?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ide-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      IDE Integration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IDE Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-which-ides-are-supported" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Which IDEs are supported?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-cortex-without-an-ide" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I use CORTEX without an IDE?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-configure-ide-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I configure IDE diagnostics?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-why-are-violations-not-showing-in-my-ide" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Why are violations not showing in my IDE?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#offline-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Offline Mode
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Offline Mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-how-long-can-i-work-offline" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How long can I work offline?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-what-happens-when-i-reconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What happens when I reconnect?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-the-offline-queue-get-too-large" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can the offline queue get too large?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-what-happens-if-hub-is-unreachable-when-i-reconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What happens if hub is unreachable when I reconnect?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-scalability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance &amp; Scalability
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance & Scalability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-how-many-repositories-can-one-hub-handle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How many repositories can one hub handle?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-long-does-file-validation-take" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How long does file validation take?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-does-validation-slow-down-my-ide" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Does validation slow down my IDE?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-batch-validate-many-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I batch validate many files?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#versioning-upgrades" class="md-nav__link">
+    <span class="md-ellipsis">
+      Versioning &amp; Upgrades
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Versioning & Upgrades">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-what-do-version-numbers-mean" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What do version numbers mean?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-upgrade-cortex" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I upgrade CORTEX?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-repos-run-different-cortex-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can repos run different CORTEX versions?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-whats-the-upgrade-path-from-09-to-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What's the upgrade path from 0.9 to 1.0?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-where-are-the-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Where are the logs?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-reset-everything-and-start-over" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I reset everything and start over?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-what-if-i-accidentally-create-an-isolation-violation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What if I accidentally create an isolation violation?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-see-what-other-repositories-are-accessing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I see what other repositories are accessing?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Best Practices
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Best Practices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-whats-the-recommended-deployment-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What's the recommended deployment strategy?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-should-i-organize-governance-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How should I organize governance rules?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-should-repos-commit-cortex-configyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Should repos commit cortex-config.yaml?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-back-up-governance-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I back up governance data?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-handle-team-onboarding" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I handle team onboarding?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#support-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Support &amp; Resources
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Support & Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-where-can-i-get-help" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Where can I get help?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-report-a-bug" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I report a bug?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-is-there-a-community" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Is there a community?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-whats-the-roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What's the roadmap?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Integration
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2">
+            <span class="md-nav__icon md-icon"></span>
+            Integration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integration/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_3" id="__nav_8_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operations
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_3">
+            <span class="md-nav__icon md-icon"></span>
+            Operations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../operations/4-troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_4" id="__nav_8_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Advanced
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_4">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../advanced/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-reference/glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Glossary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-reference/faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-reference/known-issues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Known Issues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-reference/changelog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-reference/compliance-mappings/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Compliance Mappings
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-reference/quick-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-reference/gap-analysis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gap Analysis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-reference/implementation-status/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Implementation Status
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-reference/remediation-status/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Remediation Status
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-reference/test-ac-mapping/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Test AC Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    MCP Tools Framework
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            MCP Tools Framework
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../11-mcp-tools/00-mcp-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../11-mcp-tools/mcp-architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Infrastructure & Resilience
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Infrastructure & Resilience
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../12-infrastructure/00-infrastructure-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Domain Brain
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Domain Brain
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../13-domain-brain/00-domain-brain-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../14-deployment/00-deployment-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Observability
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            Observability
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../15-observability/00-observability-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Testing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            Testing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../16-testing/00-testing-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Tutorials
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            Tutorials
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-tutorials/0-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrator Tutorials
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            Contributing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../10-contributing/1-contributing-guidelines/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing Guidelines
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../10-contributing/2-development-setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../10-contributing/3-testing-strategy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testing Strategy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../10-contributing/4-code-style-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code Style Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../10-contributing/5-pull-request-process/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pull Request Process
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../LICENSE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    License
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#frequently-asked-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Frequently Asked Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Frequently Asked Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#general-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      General Questions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="General Questions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-what-is-cortex" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What is CORTEX?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-do-i-need-the-cortex-hub-to-develop-locally" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Do I need the CORTEX hub to develop locally?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-cortex-work-with-non-git-repositories" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can CORTEX work with non-Git repositories?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-is-cortex-open-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Is CORTEX open source?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setup-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Setup &amp; Configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setup & Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-how-long-does-the-initial-setup-take" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How long does the initial setup take?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-set-up-the-hub-on-a-remote-machine" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I set up the hub on a remote machine?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-what-python-version-is-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What Python version is required?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-change-the-hub-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I change the hub port?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-do-i-need-to-modify-my-repository-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Do I need to modify my repository structure?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#usage-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Usage &amp; Operations
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Usage & Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-how-often-should-i-refresh-governance-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How often should I refresh governance rules?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-what-happens-if-the-hub-goes-down" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What happens if the hub goes down?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-update-governance-rules-without-restarting-the-hub" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I update governance rules without restarting the hub?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-add-a-new-developer-to-use-cortex" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I add a new developer to use CORTEX?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-remove-a-repository-from-governance" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I remove a repository from governance?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#isolation-access-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Isolation &amp; Access Control
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Isolation & Access Control">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-what-does-isolation-mode-strict-mean" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What does "isolation mode: strict" mean?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-allow-cross-repository-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I allow cross-repository access?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-temporarily-disable-isolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I temporarily disable isolation?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-what-audit-events-are-logged" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What audit events are logged?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ide-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      IDE Integration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="IDE Integration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-which-ides-are-supported" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Which IDEs are supported?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-use-cortex-without-an-ide" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I use CORTEX without an IDE?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-configure-ide-diagnostics" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I configure IDE diagnostics?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-why-are-violations-not-showing-in-my-ide" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Why are violations not showing in my IDE?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#offline-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      Offline Mode
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Offline Mode">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-how-long-can-i-work-offline" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How long can I work offline?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-what-happens-when-i-reconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What happens when I reconnect?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-the-offline-queue-get-too-large" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can the offline queue get too large?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-what-happens-if-hub-is-unreachable-when-i-reconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What happens if hub is unreachable when I reconnect?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#performance-scalability" class="md-nav__link">
+    <span class="md-ellipsis">
+      Performance &amp; Scalability
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Performance & Scalability">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-how-many-repositories-can-one-hub-handle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How many repositories can one hub handle?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-long-does-file-validation-take" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How long does file validation take?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-does-validation-slow-down-my-ide" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Does validation slow down my IDE?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-batch-validate-many-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I batch validate many files?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#versioning-upgrades" class="md-nav__link">
+    <span class="md-ellipsis">
+      Versioning &amp; Upgrades
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Versioning & Upgrades">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-what-do-version-numbers-mean" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What do version numbers mean?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-upgrade-cortex" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I upgrade CORTEX?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-repos-run-different-cortex-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can repos run different CORTEX versions?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-whats-the-upgrade-path-from-09-to-10" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What's the upgrade path from 0.9 to 1.0?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Troubleshooting
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-where-are-the-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Where are the logs?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-reset-everything-and-start-over" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I reset everything and start over?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-what-if-i-accidentally-create-an-isolation-violation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What if I accidentally create an isolation violation?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-can-i-see-what-other-repositories-are-accessing" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Can I see what other repositories are accessing?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#best-practices" class="md-nav__link">
+    <span class="md-ellipsis">
+      Best Practices
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Best Practices">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-whats-the-recommended-deployment-strategy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What's the recommended deployment strategy?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-should-i-organize-governance-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How should I organize governance rules?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-should-repos-commit-cortex-configyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Should repos commit cortex-config.yaml?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-back-up-governance-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I back up governance data?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-handle-team-onboarding" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I handle team onboarding?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#support-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      Support &amp; Resources
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Support & Resources">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#q-where-can-i-get-help" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Where can I get help?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-how-do-i-report-a-bug" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: How do I report a bug?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-is-there-a-community" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: Is there a community?
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#q-whats-the-roadmap" class="md-nav__link">
+    <span class="md-ellipsis">
+      Q: What's the roadmap?
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="cortex-deployment-faq">CORTEX Deployment FAQ<a class="headerlink" href="#cortex-deployment-faq" title="Permanent link">&para;</a></h1>
+<p><strong>AC-DEPLOY-ENHANCED-005-01: Comprehensive Deployment Documentation</strong></p>
+<h2 id="frequently-asked-questions">Frequently Asked Questions<a class="headerlink" href="#frequently-asked-questions" title="Permanent link">&para;</a></h2>
+<h3 id="general-questions">General Questions<a class="headerlink" href="#general-questions" title="Permanent link">&para;</a></h3>
+<h4 id="q-what-is-cortex">Q: What is CORTEX?<a class="headerlink" href="#q-what-is-cortex" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: CORTEX is a multi-repository governance system that enforces consistent rules and policies across interconnected code repositories. It consists of:
+- <strong>Central Hub</strong>: Governance authority running MCP server
+- <strong>Connected Repos</strong>: Register via <code>cortex-config.yaml</code>
+- <strong>IDE Extensions</strong>: VS Code and Visual Studio integration
+- <strong>Audit Trail</strong>: Complete logging of all governance operations</p>
+<hr />
+<h4 id="q-do-i-need-the-cortex-hub-to-develop-locally">Q: Do I need the CORTEX hub to develop locally?<a class="headerlink" href="#q-do-i-need-the-cortex-hub-to-develop-locally" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: No. Repositories can work in offline mode using cached rules. When the hub is unavailable, repos continue with locally cached governance rules and queue operations for syncing when reconnected.</p>
+<hr />
+<h4 id="q-can-cortex-work-with-non-git-repositories">Q: Can CORTEX work with non-Git repositories?<a class="headerlink" href="#q-can-cortex-work-with-non-git-repositories" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Currently designed for Git. The registration script uses Git hooks and creates Git-specific structures. However, the underlying governance principles could be adapted to other VCS systems.</p>
+<hr />
+<h4 id="q-is-cortex-open-source">Q: Is CORTEX open source?<a class="headerlink" href="#q-is-cortex-open-source" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: CORTEX is designed as an enterprise governance system. This implementation is available for internal use.</p>
+<hr />
+<h3 id="setup-configuration">Setup &amp; Configuration<a class="headerlink" href="#setup-configuration" title="Permanent link">&para;</a></h3>
+<h4 id="q-how-long-does-the-initial-setup-take">Q: How long does the initial setup take?<a class="headerlink" href="#q-how-long-does-the-initial-setup-take" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Typically 10-15 minutes for:
+1. Hub initialization (2 min)
+2. Registering 3-5 repositories (2 min each)
+3. Installing IDE extensions (2 min)</p>
+<hr />
+<h4 id="q-can-i-set-up-the-hub-on-a-remote-machine">Q: Can I set up the hub on a remote machine?<a class="headerlink" href="#q-can-i-set-up-the-hub-on-a-remote-machine" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Yes. Set <code>mcp_endpoint</code> in each <code>cortex-config.yaml</code> to point to the remote hub:
+<div class="highlight"><pre><span></span><code><span class="nt">mcp_endpoint</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;http://hub.internal.company.com:8000&quot;</span>
+</code></pre></div></p>
+<p>Ensure network connectivity and firewall rules allow connections on the hub port.</p>
+<hr />
+<h4 id="q-what-python-version-is-required">Q: What Python version is required?<a class="headerlink" href="#q-what-python-version-is-required" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Python 3.9 or higher. Check with:
+<div class="highlight"><pre><span></span><code>python3<span class="w"> </span>--version
+</code></pre></div></p>
+<hr />
+<h4 id="q-can-i-change-the-hub-port">Q: Can I change the hub port?<a class="headerlink" href="#q-can-i-change-the-hub-port" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Yes. Start the hub with custom port:
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>cortex.api.server<span class="w"> </span>--port<span class="w"> </span><span class="m">9000</span>
+
+<span class="c1"># Then update cortex-config.yaml in each repo:</span>
+mcp_endpoint:<span class="w"> </span><span class="s2">&quot;http://127.0.0.1:9000&quot;</span>
+</code></pre></div></p>
+<hr />
+<h4 id="q-do-i-need-to-modify-my-repository-structure">Q: Do I need to modify my repository structure?<a class="headerlink" href="#q-do-i-need-to-modify-my-repository-structure" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Minimally. The registration script creates:
+- <code>cortex-config.yaml</code> (root)
+- <code>.github/prompts/</code> (governance prompts)
+- <code>.github/tier0/</code> (local governance stub)</p>
+<p>These can be committed to Git or added to <code>.gitignore</code> depending on your policy.</p>
+<hr />
+<h3 id="usage-operations">Usage &amp; Operations<a class="headerlink" href="#usage-operations" title="Permanent link">&para;</a></h3>
+<h4 id="q-how-often-should-i-refresh-governance-rules">Q: How often should I refresh governance rules?<a class="headerlink" href="#q-how-often-should-i-refresh-governance-rules" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Automatically! Repos check hub health every 30 seconds (configurable in <code>cortex-config.yaml</code>).</p>
+<hr />
+<h4 id="q-what-happens-if-the-hub-goes-down">Q: What happens if the hub goes down?<a class="headerlink" href="#q-what-happens-if-the-hub-goes-down" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Repositories enter offline mode:
+1. Continue using cached governance rules
+2. Queue operations in local offline queue
+3. Automatically sync when hub comes back online</p>
+<hr />
+<h4 id="q-can-i-update-governance-rules-without-restarting-the-hub">Q: Can I update governance rules without restarting the hub?<a class="headerlink" href="#q-can-i-update-governance-rules-without-restarting-the-hub" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Yes. Rules are loaded from YAML files. Updates take effect after 30 seconds (cache TTL). For immediate effect:
+<div class="highlight"><pre><span></span><code><span class="c1"># Restart the hub</span>
+pkill<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;cortex.api.server&quot;</span>
+sleep<span class="w"> </span><span class="m">2</span>
+python<span class="w"> </span>-m<span class="w"> </span>cortex.api.server<span class="w"> </span>--port<span class="w"> </span><span class="m">8000</span>
+</code></pre></div></p>
+<hr />
+<h4 id="q-how-do-i-add-a-new-developer-to-use-cortex">Q: How do I add a new developer to use CORTEX?<a class="headerlink" href="#q-how-do-i-add-a-new-developer-to-use-cortex" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Each developer needs:
+1. Access to hub machine or network address
+2. IDE extension installed (VS Code/VS)
+3. Repository registration (automatic via <code>register-repo.sh</code>)</p>
+<p>No additional user accounts needed - hub has no authentication by default.</p>
+<hr />
+<h4 id="q-how-do-i-remove-a-repository-from-governance">Q: How do I remove a repository from governance?<a class="headerlink" href="#q-how-do-i-remove-a-repository-from-governance" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: In the repository:
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>rm<span class="w"> </span>cortex-config.yaml<span class="w"> </span>.github/
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore: Remove CORTEX governance&quot;</span>
+
+<span class="c1"># Optional: Remove from hub registry</span>
+<span class="c1"># Edit cortex_brain/tier0/repo-registry.yaml</span>
+</code></pre></div></p>
+<hr />
+<h3 id="isolation-access-control">Isolation &amp; Access Control<a class="headerlink" href="#isolation-access-control" title="Permanent link">&para;</a></h3>
+<h4 id="q-what-does-isolation-mode-strict-mean">Q: What does "isolation mode: strict" mean?<a class="headerlink" href="#q-what-does-isolation-mode-strict-mean" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Repositories cannot access files/resources in other repositories unless explicitly whitelisted in governance rules.</p>
+<hr />
+<h4 id="q-how-do-i-allow-cross-repository-access">Q: How do I allow cross-repository access?<a class="headerlink" href="#q-how-do-i-allow-cross-repository-access" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Create a whitelist rule in hub governance:
+<div class="highlight"><pre><span></span><code><span class="nt">rules</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">rule_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;ALLOW_SHARED_RESOURCES&quot;</span>
+<span class="w">    </span><span class="nt">source_repo</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;frontend&quot;</span>
+<span class="w">    </span><span class="nt">target_repo</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;shared-resources&quot;</span>
+<span class="w">    </span><span class="nt">resource_pattern</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;**/*&quot;</span>
+<span class="w">    </span><span class="nt">enforcement</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;allow&quot;</span>
+</code></pre></div></p>
+<hr />
+<h4 id="q-can-i-temporarily-disable-isolation">Q: Can I temporarily disable isolation?<a class="headerlink" href="#q-can-i-temporarily-disable-isolation" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Yes, for testing:
+<div class="highlight"><pre><span></span><code><span class="c1"># In cortex-config.yaml</span>
+<span class="nt">isolation_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;moderate&quot;</span><span class="w">  </span><span class="c1"># Allows with logging</span>
+<span class="c1"># Don&#39;t commit! Switch back after testing</span>
+<span class="nt">isolation_mode</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;strict&quot;</span><span class="w">    </span><span class="c1"># Revert before committing</span>
+</code></pre></div></p>
+<hr />
+<h4 id="q-what-audit-events-are-logged">Q: What audit events are logged?<a class="headerlink" href="#q-what-audit-events-are-logged" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Every operation:
+- Repository registrations
+- File validations
+- Governance violations
+- Isolation violations
+- Rule changes
+- Session creation/closure
+- All IDE interactions</p>
+<hr />
+<h3 id="ide-integration">IDE Integration<a class="headerlink" href="#ide-integration" title="Permanent link">&para;</a></h3>
+<h4 id="q-which-ides-are-supported">Q: Which IDEs are supported?<a class="headerlink" href="#q-which-ides-are-supported" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: 
+- <strong>VS Code</strong>: Full support via native extension
+- <strong>Visual Studio</strong>: Full support via LSP adapter
+- <strong>Others</strong>: Can be added via LSP support (JetBrains IntelliJ, Sublime, etc.)</p>
+<hr />
+<h4 id="q-can-i-use-cortex-without-an-ide">Q: Can I use CORTEX without an IDE?<a class="headerlink" href="#q-can-i-use-cortex-without-an-ide" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Yes. Use command-line or scripts:
+<div class="highlight"><pre><span></span><code><span class="c1"># Validate file via API</span>
+curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://127.0.0.1:8000/governance/validate<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;repo_id&quot;: &quot;frontend&quot;, &quot;file&quot;: &quot;src/main.ts&quot;}&#39;</span>
+</code></pre></div></p>
+<hr />
+<h4 id="q-can-i-configure-ide-diagnostics">Q: Can I configure IDE diagnostics?<a class="headerlink" href="#q-can-i-configure-ide-diagnostics" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Yes. In VS Code settings (<code>.vscode/settings.json</code>):
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;cortex.showDiagnostics&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;cortex.hubEndpoint&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;http://127.0.0.1:8000&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;cortex.healthCheckInterval&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">30</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;cortex.offlineMode&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">}</span>
+</code></pre></div></p>
+<hr />
+<h4 id="q-why-are-violations-not-showing-in-my-ide">Q: Why are violations not showing in my IDE?<a class="headerlink" href="#q-why-are-violations-not-showing-in-my-ide" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Check:
+1. Is the hub running? → <code>curl http://127.0.0.1:8000/health</code>
+2. Is the file covered by rules? → <code>curl http://127.0.0.1:8000/governance/rules</code>
+3. Is <code>cortex-config.yaml</code> in repo root? → <code>ls cortex-config.yaml</code>
+4. Is the extension connected? → Check status bar (VS Code) or Output window (VS)</p>
+<hr />
+<h3 id="offline-mode">Offline Mode<a class="headerlink" href="#offline-mode" title="Permanent link">&para;</a></h3>
+<h4 id="q-how-long-can-i-work-offline">Q: How long can I work offline?<a class="headerlink" href="#q-how-long-can-i-work-offline" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Indefinitely. Repos use cached rules and queue operations locally.</p>
+<hr />
+<h4 id="q-what-happens-when-i-reconnect">Q: What happens when I reconnect?<a class="headerlink" href="#q-what-happens-when-i-reconnect" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Automatic sync-on-reconnect:
+1. Queue of offline operations syncs with hub
+2. Rules are refreshed from hub
+3. Any offline violations are validated against latest rules</p>
+<hr />
+<h4 id="q-can-the-offline-queue-get-too-large">Q: Can the offline queue get too large?<a class="headerlink" href="#q-can-the-offline-queue-get-too-large" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Yes, if hub is down for extended time. Configure limit:
+<div class="highlight"><pre><span></span><code><span class="nt">offline_queue_max_items</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5000</span><span class="w">  </span><span class="c1"># Increased from 1000</span>
+</code></pre></div></p>
+<p>Or force sync when hub is available.</p>
+<hr />
+<h4 id="q-what-happens-if-hub-is-unreachable-when-i-reconnect">Q: What happens if hub is unreachable when I reconnect?<a class="headerlink" href="#q-what-happens-if-hub-is-unreachable-when-i-reconnect" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Sync is retried on next health check (default every 30s). You'll see warning in IDE that you're still in offline mode.</p>
+<hr />
+<h3 id="performance-scalability">Performance &amp; Scalability<a class="headerlink" href="#performance-scalability" title="Permanent link">&para;</a></h3>
+<h4 id="q-how-many-repositories-can-one-hub-handle">Q: How many repositories can one hub handle?<a class="headerlink" href="#q-how-many-repositories-can-one-hub-handle" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Tested and recommended:
+- <strong>Small scale</strong>: 10-20 repos (1 hub instance)
+- <strong>Medium scale</strong>: 50-100 repos (scale hub horizontally)
+- <strong>Large scale</strong>: 200+ repos (use hub cluster with load balancer)</p>
+<hr />
+<h4 id="q-how-long-does-file-validation-take">Q: How long does file validation take?<a class="headerlink" href="#q-how-long-does-file-validation-take" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Typical:
+- Simple validation: 10-50ms
+- Complex rules: 50-200ms
+- Cached validation: &lt;5ms</p>
+<hr />
+<h4 id="q-does-validation-slow-down-my-ide">Q: Does validation slow down my IDE?<a class="headerlink" href="#q-does-validation-slow-down-my-ide" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Minimal impact:
+- Validations run in background
+- Results cached for performance
+- IDE remains responsive</p>
+<hr />
+<h4 id="q-can-i-batch-validate-many-files">Q: Can I batch validate many files?<a class="headerlink" href="#q-can-i-batch-validate-many-files" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Not directly via IDE, but:
+<div class="highlight"><pre><span></span><code><span class="c1"># Script to batch validate</span>
+<span class="k">for</span><span class="w"> </span>file<span class="w"> </span><span class="k">in</span><span class="w"> </span>src/**/*.ts<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+<span class="w">  </span>curl<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://127.0.0.1:8000/governance/validate<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>-d<span class="w"> </span><span class="s2">&quot;{\&quot;repo_id\&quot;: \&quot;frontend\&quot;, \&quot;file\&quot;: \&quot;</span><span class="nv">$file</span><span class="s2">\&quot;}&quot;</span>
+<span class="k">done</span>
+</code></pre></div></p>
+<hr />
+<h3 id="versioning-upgrades">Versioning &amp; Upgrades<a class="headerlink" href="#versioning-upgrades" title="Permanent link">&para;</a></h3>
+<h4 id="q-what-do-version-numbers-mean">Q: What do version numbers mean?<a class="headerlink" href="#q-what-do-version-numbers-mean" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Semantic versioning (major.minor.patch):
+- <strong>1.0.0</strong>: Initial production release
+- <strong>1.0.1</strong>: Patch/bugfix
+- <strong>1.1.0</strong>: Minor feature addition
+- <strong>2.0.0</strong>: Major breaking changes</p>
+<hr />
+<h4 id="q-how-do-i-upgrade-cortex">Q: How do I upgrade CORTEX?<a class="headerlink" href="#q-how-do-i-upgrade-cortex" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: 
+1. Backup governance data: <code>cp -r cortex_brain cortex_brain.backup</code>
+2. Pull latest code
+3. Run migrations: <code>python scripts/migrate.py</code>
+4. Restart hub
+5. Verify all repos connect: <code>curl http://127.0.0.1:8000/health</code></p>
+<hr />
+<h4 id="q-can-repos-run-different-cortex-versions">Q: Can repos run different CORTEX versions?<a class="headerlink" href="#q-can-repos-run-different-cortex-versions" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Yes, via version negotiation. Each repo's <code>cortex-config.yaml</code> specifies:
+<div class="highlight"><pre><span></span><code><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span><span class="w">           </span><span class="c1"># Current version</span>
+<span class="nt">min_hub_version</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;1.0.0&quot;</span><span class="w">   </span><span class="c1"># Minimum hub version required</span>
+</code></pre></div></p>
+<p>Hub negotiates compatibility on each connection.</p>
+<hr />
+<h4 id="q-whats-the-upgrade-path-from-09-to-10">Q: What's the upgrade path from 0.9 to 1.0?<a class="headerlink" href="#q-whats-the-upgrade-path-from-09-to-10" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Minor breaking changes - follow migration guide:
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>scripts/upgrade-0.9-to-1.0.py
+</code></pre></div></p>
+<hr />
+<h3 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h3>
+<h4 id="q-where-are-the-logs">Q: Where are the logs?<a class="headerlink" href="#q-where-are-the-logs" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: 
+- <strong>Hub logs</strong>: <code>cortex_brain/state/cortex.log</code>
+- <strong>IDE logs</strong>: 
+  - VS Code: Command Palette → "Developer: Toggle Developer Tools"
+  - VS: View → Output (CORTEX channel)</p>
+<hr />
+<h4 id="q-how-do-i-reset-everything-and-start-over">Q: How do I reset everything and start over?<a class="headerlink" href="#q-how-do-i-reset-everything-and-start-over" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>:
+<div class="highlight"><pre><span></span><code><span class="c1"># WARNING: Deletes all governance data!</span>
+rm<span class="w"> </span>-rf<span class="w"> </span>cortex_brain/state/
+python<span class="w"> </span>scripts/setup_cortex_hub.py
+
+<span class="c1"># For repositories:</span>
+<span class="c1"># Re-run registration script</span>
+bash<span class="w"> </span>/path/to/scripts/register-repo.sh<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>
+</code></pre></div></p>
+<hr />
+<h4 id="q-what-if-i-accidentally-create-an-isolation-violation">Q: What if I accidentally create an isolation violation?<a class="headerlink" href="#q-what-if-i-accidentally-create-an-isolation-violation" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: It's logged but doesn't break anything:
+1. Check audit trail to see what happened
+2. Either whitelist the access or refactor to avoid it
+3. Violations don't prevent work - they're logged for audit</p>
+<hr />
+<h4 id="q-can-i-see-what-other-repositories-are-accessing">Q: Can I see what other repositories are accessing?<a class="headerlink" href="#q-can-i-see-what-other-repositories-are-accessing" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Yes, via audit trail:
+<div class="highlight"><pre><span></span><code>curl<span class="w"> </span><span class="s2">&quot;http://127.0.0.1:8000/audit/trail?operation=isolation_violation&quot;</span>
+</code></pre></div></p>
+<hr />
+<h3 id="best-practices">Best Practices<a class="headerlink" href="#best-practices" title="Permanent link">&para;</a></h3>
+<h4 id="q-whats-the-recommended-deployment-strategy">Q: What's the recommended deployment strategy?<a class="headerlink" href="#q-whats-the-recommended-deployment-strategy" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>:
+1. Start with central hub + 2-3 pilot repos
+2. Validate governance rules work as expected
+3. Gradually onboard more repos
+4. Monitor audit trail for issues
+5. Document rules and policies</p>
+<hr />
+<h4 id="q-how-should-i-organize-governance-rules">Q: How should I organize governance rules?<a class="headerlink" href="#q-how-should-i-organize-governance-rules" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>:
+- <strong>Tier 0</strong>: Core organizational policies
+- <strong>Tier 1</strong>: Team/domain specific rules
+- <strong>Tier 2</strong>: Project/repository specific overrides</p>
+<hr />
+<h4 id="q-should-repos-commit-cortex-configyaml">Q: Should repos commit <code>cortex-config.yaml</code>?<a class="headerlink" href="#q-should-repos-commit-cortex-configyaml" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Recommended yes:
+<div class="highlight"><pre><span></span><code>git<span class="w"> </span>add<span class="w"> </span>cortex-config.yaml<span class="w"> </span>.github/tier0<span class="w"> </span>.github/prompts
+git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;chore: Add CORTEX governance configuration&quot;</span>
+</code></pre></div></p>
+<p>Benefits:
+- New developers automatically get CORTEX setup
+- Config changes tracked in Git
+- Easy to see when repo was registered</p>
+<hr />
+<h4 id="q-how-do-i-back-up-governance-data">Q: How do I back up governance data?<a class="headerlink" href="#q-how-do-i-back-up-governance-data" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: 
+<div class="highlight"><pre><span></span><code><span class="c1"># Full backup</span>
+cp<span class="w"> </span>-r<span class="w"> </span>cortex_brain<span class="w"> </span>cortex_brain.backup-<span class="k">$(</span>date<span class="w"> </span>+%Y%m%d<span class="k">)</span>
+
+<span class="c1"># Or automated backup</span>
+<span class="m">0</span><span class="w"> </span><span class="m">2</span><span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>*<span class="w"> </span>tar<span class="w"> </span>-czf<span class="w"> </span>/backups/cortex-<span class="k">$(</span>date<span class="w"> </span>+<span class="se">\%</span>Y<span class="se">\%</span>m<span class="se">\%</span>d<span class="k">)</span>.tar.gz<span class="w"> </span>/path/to/cortex_brain
+</code></pre></div></p>
+<hr />
+<h4 id="q-how-do-i-handle-team-onboarding">Q: How do I handle team onboarding?<a class="headerlink" href="#q-how-do-i-handle-team-onboarding" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>:
+1. Have them clone repo
+2. <code>cortex-config.yaml</code> automatically sets up CORTEX
+3. Install IDE extension
+4. Reload IDE
+5. Done!</p>
+<hr />
+<h3 id="support-resources">Support &amp; Resources<a class="headerlink" href="#support-resources" title="Permanent link">&para;</a></h3>
+<h4 id="q-where-can-i-get-help">Q: Where can I get help?<a class="headerlink" href="#q-where-can-i-get-help" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: 
+1. Check this FAQ
+2. Review troubleshooting guide: <code>docs/DEPLOYMENT-TROUBLESHOOTING.md</code>
+3. Read setup guide: <code>docs/DEPLOYMENT-SETUP-GUIDE.md</code>
+4. Check API reference: <code>docs/DEPLOYMENT-API-REFERENCE.md</code></p>
+<hr />
+<h4 id="q-how-do-i-report-a-bug">Q: How do I report a bug?<a class="headerlink" href="#q-how-do-i-report-a-bug" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: 
+1. Reproduce the issue
+2. Collect logs from <code>cortex_brain/state/cortex.log</code>
+3. Note the exact error and steps to reproduce
+4. File issue with full details</p>
+<hr />
+<h4 id="q-is-there-a-community">Q: Is there a community?<a class="headerlink" href="#q-is-there-a-community" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: This is an internal enterprise tool. For internal questions, contact CORTEX team.</p>
+<hr />
+<h4 id="q-whats-the-roadmap">Q: What's the roadmap?<a class="headerlink" href="#q-whats-the-roadmap" title="Permanent link">&para;</a></h4>
+<p><strong>A</strong>: Planned features:
+- <strong>Phase 2</strong>: ML-based violation suggestions
+- <strong>Phase 3</strong>: Distributed hub support
+- <strong>Phase 4</strong>: Blockchain audit trail (regulated industries)
+- <strong>Phase 5</strong>: Community governance rule library</p>
+<hr />
+<p><strong>Last Updated</strong>: January 19, 2026<br />
+<strong>Version</strong>: 1.0.0<br />
+<strong>Status</strong>: Production Ready</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

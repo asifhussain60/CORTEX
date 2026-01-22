@@ -1,0 +1,4525 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="AI-powered orchestration platform with multi-tier governance">
+      
+      
+        <meta name="author" content="Asif Hussain">
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/CORTEX-logo-64.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+    
+    
+      
+        <title>CORTEX Production Readiness: Brittleness Analysis - CORTEX Documentation</title>
+      
+    
+    
+  
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+  <style>
+    /* CORTEX Logo styling - display logo in header top left */
+    .md-header__button.md-logo img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+    }
+    /* Adjust header for larger logo */
+    .md-header {
+      min-height: 72px;
+    }
+    .md-header__inner {
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+  </style>
+
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/cortex-glassmorphism.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cortex-production-readiness-brittleness-analysis" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CORTEX Documentation" class="md-header__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  <img src="../../assets/images/cortex-logo-200.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CORTEX Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CORTEX Production Readiness: Brittleness Analysis
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../INDEX/" class="md-tabs__link">
+        
+  
+    
+  
+  🚀 Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../01-cortex-brain/00-brain-index/" class="md-tabs__link">
+          
+  
+  Domain Brain (TIER 0-3)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../02-orchestrators/00-orchestrators-index/" class="md-tabs__link">
+          
+  
+  Orchestrators
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../03-getting-started/0-installation/" class="md-tabs__link">
+          
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../1-system-overview/" class="md-tabs__link">
+          
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../05-lens-protocol/00-lens-index/" class="md-tabs__link">
+          
+  
+  CORTEX LENS Protocol
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../06-api-reference/0-overview/" class="md-tabs__link">
+          
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../07-guides/deployment/0-overview/" class="md-tabs__link">
+          
+  
+  How-To Guides
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../08-reference/glossary/" class="md-tabs__link">
+          
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../11-mcp-tools/00-mcp-index/" class="md-tabs__link">
+          
+  
+  MCP Tools Framework
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../12-infrastructure/00-infrastructure-index/" class="md-tabs__link">
+          
+  
+  Infrastructure & Resilience
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../13-domain-brain/00-domain-brain-index/" class="md-tabs__link">
+          
+  
+  Domain Brain
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../14-deployment/00-deployment-index/" class="md-tabs__link">
+          
+  
+  Deployment
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../15-observability/00-observability-index/" class="md-tabs__link">
+          
+  
+  Observability
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../16-testing/00-testing-index/" class="md-tabs__link">
+          
+  
+  Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../09-tutorials/0-index/" class="md-tabs__link">
+          
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../10-contributing/1-contributing-guidelines/" class="md-tabs__link">
+          
+  
+  Contributing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../LICENSE/" class="md-tabs__link">
+        
+  
+    
+  
+  License
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CORTEX Documentation" class="md-nav__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  <img src="../../assets/images/cortex-logo-200.png" alt="logo">
+
+    </a>
+    CORTEX Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INDEX/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🚀 Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Domain Brain (TIER 0-3)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Domain Brain (TIER 0-3)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-cortex-brain/00-brain-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-cortex-brain/01-tier0-governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 0 Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-cortex-brain/02-tier1-acceptance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 1 Acceptance Criteria
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-cortex-brain/03-tier2-response-templates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 2 Response Templates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-cortex-brain/04-tier3-knowledge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 3 Knowledge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-cortex-brain/05-token-optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Token Optimization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-cortex-brain/06-composite-requests/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Composite Requests
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-cortex-brain/05-brain-architecture.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Brain Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Orchestrators
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Orchestrators
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/00-orchestrators-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/01-master-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Master Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/02-intent-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/03-workflow-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Workflow Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/04-refactoring-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Refactoring Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/05-composition-engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Composition Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/06-onboarding-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Onboarding Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/07-adaptive-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Adaptive Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/08-orchestrators-modules-relationship/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrators & Modules Relationship
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/09-orchestrator-module-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrator-Module Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/10-complete-orchestrator-listing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Complete Orchestrator Listing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/0-installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation & Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/1-quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/2-first-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    First Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/3-troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../1-system-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    System Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../2-design-principles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Design Principles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../3-orchestration-engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestration Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../4-domain-brain/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Brain
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../5-resilience-patterns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Resilience Patterns
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../6-implementation-phases/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Implementation Phases
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../7-intent-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8-state-management/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    State Management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../9-knowledge-protocol/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Knowledge Protocol
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-mcp-tool-governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Tool Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../governance-rules/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governance Rules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../definition-of-ready/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Definition of Ready
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../adrs" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture Decision Records
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    CORTEX LENS Protocol
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            CORTEX LENS Protocol
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/00-lens-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/01-lens-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LENS System Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/02-intent-classification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Classification (Language Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/03-ast-analysis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AST Analysis (Examination Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/04-git-navigation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Git Navigation (Navigation Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/05-knowledge-synthesis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Knowledge Synthesis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/06-lens-crawler/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LENS Crawler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/07-domain-brain-integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Brain Integration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/rest-api" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    REST API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/mcp-protocol" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Protocol
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/cli" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI Commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    How-To Guides
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            How-To Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_1" id="__nav_8_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_1">
+            <span class="md-nav__icon md-icon"></span>
+            Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/1-local-development/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Local Development
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/2-mkdocs-server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MkDocs Server
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/4-faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Integration
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2">
+            <span class="md-nav__icon md-icon"></span>
+            Integration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/integration/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_3" id="__nav_8_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operations
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_3">
+            <span class="md-nav__icon md-icon"></span>
+            Operations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/operations/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/operations/4-troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_4" id="__nav_8_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Advanced
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_4">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/advanced/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Glossary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/known-issues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Known Issues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/changelog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/compliance-mappings/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Compliance Mappings
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/quick-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/gap-analysis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gap Analysis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/implementation-status/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Implementation Status
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/remediation-status/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Remediation Status
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/test-ac-mapping/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Test AC Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    MCP Tools Framework
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            MCP Tools Framework
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-mcp-tools/00-mcp-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-mcp-tools/mcp-architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Infrastructure & Resilience
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Infrastructure & Resilience
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../12-infrastructure/00-infrastructure-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Domain Brain
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Domain Brain
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../13-domain-brain/00-domain-brain-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../14-deployment/00-deployment-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Observability
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            Observability
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../15-observability/00-observability-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Testing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            Testing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../16-testing/00-testing-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Tutorials
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            Tutorials
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-tutorials/0-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrator Tutorials
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            Contributing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/1-contributing-guidelines/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing Guidelines
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/2-development-setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/3-testing-strategy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testing Strategy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/4-code-style-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code Style Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/5-pull-request-process/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pull Request Process
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    License
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#executive-summary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Executive Summary
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-concurrency-state-hazards" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Concurrency &amp; State Hazards
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Concurrency & State Hazards">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-mcp-registry-mutation-during-discovery-race-condition" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.1 MCP Registry Mutation During Discovery Race Condition
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-orchestrator-singleton-double-initialization-race" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.2 Orchestrator Singleton Double-Initialization Race
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-state-persistence-write-conflict-during-concurrent-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.3 State Persistence Write-Conflict During Concurrent Operations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-governance-rule-cache-invalidation-miss" class="md-nav__link">
+    <span class="md-ellipsis">
+      1.4 Governance Rule Cache Invalidation Miss
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-failure-modes-edge-cases" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Failure Modes &amp; Edge Cases
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Failure Modes & Edge Cases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-silent-failure-in-tool-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1 Silent Failure in Tool Discovery
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-partial-orchestrator-failure-during-governance-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2 Partial Orchestrator Failure During Governance Validation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-timeout-cascade-in-nested-orchestrator-calls" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.3 Timeout Cascade in Nested Orchestrator Calls
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-governance-rule-precedence-violated-under-load" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.4 Governance Rule Precedence Violated Under Load
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-auth-secrets-weaknesses" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Auth &amp; Secrets Weaknesses
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Auth & Secrets Weaknesses">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-credentials-in-error-messages-and-logs" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1 Credentials in Error Messages and Logs
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-auth-level-bypass-in-mcp-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.2 Auth Level Bypass in MCP Tools
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-integration-contract-risks" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Integration &amp; Contract Risks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Integration & Contract Risks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-mcp-tool-parameter-validation-missing" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.1 MCP Tool Parameter Validation Missing
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-governance-rule-schema-evolution" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.2 Governance Rule Schema Evolution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-circular-dependency-in-mcp-tool-invocation" class="md-nav__link">
+    <span class="md-ellipsis">
+      4.3 Circular Dependency in MCP Tool Invocation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-observability-blind-spots" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Observability Blind Spots
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Observability Blind Spots">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-intent-routing-decision-not-logged" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.1 Intent Routing Decision Not Logged
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-governance-rule-evaluation-not-traced" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.2 Governance Rule Evaluation Not Traced
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-performance-degradation-not-observable" class="md-nav__link">
+    <span class="md-ellipsis">
+      5.3 Performance Degradation Not Observable
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-configuration-environment-drift" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Configuration &amp; Environment Drift
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Configuration & Environment Drift">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61-tier-0-rules-not-enforced-at-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.1 TIER 0 Rules Not Enforced at Runtime
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62-image-paths-hardcoded-break-in-different-deployments" class="md-nav__link">
+    <span class="md-ellipsis">
+      6.2 Image Paths Hardcoded, Break in Different Deployments
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-data-integrity" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Data Integrity
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Data Integrity">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#71-audit-trail-hash-chain-validation-missing" class="md-nav__link">
+    <span class="md-ellipsis">
+      7.1 Audit Trail Hash Chain Validation Missing
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-dependency-versioning-traps" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. Dependency &amp; Versioning Traps
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="8. Dependency & Versioning Traps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#81-pinned-tool-versions-become-unavailable" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.1 Pinned Tool Versions Become Unavailable
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#remediation-priorities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Remediation Priorities
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Remediation Priorities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tier-1-critical-deploy-before-production" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tier 1 (Critical - Deploy Before Production)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tier-2-high-deploy-in-next-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tier 2 (High - Deploy in Next Release)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tier-3-medium-plan-for-future" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tier 3 (Medium - Plan for Future)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-recommendations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Testing Recommendations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#monitoring-alerting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Monitoring &amp; Alerting
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="cortex-production-readiness-brittleness-analysis">CORTEX Production Readiness: Brittleness Analysis<a class="headerlink" href="#cortex-production-readiness-brittleness-analysis" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Summary:</strong> Production runtime analysis identifying failure scenarios, edge cases, and architectural risks<br />
+<strong>Authority:</strong> Runtime behavior analysis | <strong>Last Updated:</strong> 2026-01-22<br />
+<strong>Scope:</strong> Concurrency, failure modes, integration contracts, security, observability</p>
+</blockquote>
+<hr />
+<h2 id="executive-summary">Executive Summary<a class="headerlink" href="#executive-summary" title="Permanent link">&para;</a></h2>
+<p>CORTEX architecture demonstrates strong fundamentals (4-stage orchestration, multi-tier governance, comprehensive testing) but exhibits critical brittleness in production under real load, partial failures, and concurrent operations. This analysis identifies <strong>8 high-impact failure categories</strong> with <strong>23 specific hazards</strong> requiring remediation before production deployment. Focus areas: concurrency safety, failure isolation, state consistency, observable errors, and dependency resilience.</p>
+<hr />
+<h2 id="1-concurrency-state-hazards">1. Concurrency &amp; State Hazards<a class="headerlink" href="#1-concurrency-state-hazards" title="Permanent link">&para;</a></h2>
+<h3 id="11-mcp-registry-mutation-during-discovery-race-condition">1.1 MCP Registry Mutation During Discovery Race Condition<a class="headerlink" href="#11-mcp-registry-mutation-during-discovery-race-condition" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> MCP tool registry enumerated during concurrent tool registration<br />
+<strong>Manifestation:</strong> Discovery thread reads incomplete registry, documentation generated with missing tools. Subsequent runs show different tool counts.<br />
+<strong>Root Cause:</strong> Registry lacks read-write lock; discover_tools() iterates without snapshot isolation<br />
+<strong>Impact:</strong> Documentation inconsistency, missing tool exposure, operational confusion<br />
+<strong>Probability:</strong> High (likely occurs under load with frequent tool registration)</p>
+<p><strong>Production Scenario:</strong>
+<div class="highlight"><pre><span></span><code>Time T0: Main thread calls discover_tools(), begins iteration of registry[0..N]
+Time T1: Background thread registers new tool, inserts at registry[5]
+Time T2: Discovery thread&#39;s iterator now skips/duplicates some tools
+Time T3: Documentation shows N-1 tools; users see missing functionality
+</code></pre></div></p>
+<p><strong>Mitigation:</strong> Use read-write lock with snapshot enumeration
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">discover_tools_safely</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ToolDefinition</span><span class="p">]:</span>
+    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">registry_lock</span><span class="o">.</span><span class="n">read</span><span class="p">():</span>
+        <span class="n">snapshot</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">registry</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>  <span class="c1"># Snapshot under lock</span>
+    <span class="c1"># Process snapshot outside lock</span>
+    <span class="k">return</span> <span class="n">process_tools</span><span class="p">(</span><span class="n">snapshot</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h3 id="12-orchestrator-singleton-double-initialization-race">1.2 Orchestrator Singleton Double-Initialization Race<a class="headerlink" href="#12-orchestrator-singleton-double-initialization-race" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> Multiple threads initialize MasterOrchestrator.instance() simultaneously<br />
+<strong>Manifestation:</strong> Two singleton instances created, routing inconsistency, governance state split<br />
+<strong>Root Cause:</strong> Lock-free singleton pattern lacks atomic check-and-set<br />
+<strong>Impact:</strong> State inconsistency, rule enforcement gaps, routing decisions diverge<br />
+<strong>Probability:</strong> Medium-high (likely with 10+ concurrent requests on startup)</p>
+<p><strong>Production Scenario:</strong>
+<div class="highlight"><pre><span></span><code>Time T0: Thread A checks if MasterOrchestrator exists (False), pauses
+Time T1: Thread B checks if MasterOrchestrator exists (False), pauses
+Time T2: Thread A initializes instance #1, stores in class variable
+Time T3: Thread B initializes instance #2, overwrites instance #1
+Time T4: Thread A&#39;s governance rules not seen by Thread B&#39;s orchestrator
+</code></pre></div></p>
+<p><strong>Mitigation:</strong> Double-checked locking with volatile state
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MasterOrchestrator</span><span class="p">:</span>
+    <span class="n">_instance</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">instance</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span>
+</code></pre></div></p>
+<hr />
+<h3 id="13-state-persistence-write-conflict-during-concurrent-operations">1.3 State Persistence Write-Conflict During Concurrent Operations<a class="headerlink" href="#13-state-persistence-write-conflict-during-concurrent-operations" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> Two orchestrators simultaneously update same state key without conflict detection<br />
+<strong>Manifestation:</strong> State update lost, inconsistent memory vs database, audit trail incomplete<br />
+<strong>Root Cause:</strong> State manager uses last-write-wins without version checking<br />
+<strong>Impact:</strong> Data loss, inconsistent state recovery, audit integrity compromised<br />
+<strong>Probability:</strong> High (occurs whenever two requests modify same domain simultaneously)</p>
+<p><strong>Production Scenario:</strong>
+<div class="highlight"><pre><span></span><code>Request A: Fetch state version=42, acUpdateField(status=&quot;done&quot;)
+Request B: Fetch state version=42, acUpdateField(status=&quot;failed&quot;)
+Request A: Write state version=43 with status=&quot;done&quot;
+Request B: Write state version=43 with status=&quot;failed&quot; (overwrites A)
+Result: Request A&#39;s update lost, inconsistent audit trail
+</code></pre></div></p>
+<p><strong>Mitigation:</strong> Optimistic locking with version conflicts
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_if_version</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">current_version</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
+    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">transaction</span><span class="p">():</span>
+        <span class="n">actual_version</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">get_version</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">actual_version</span> <span class="o">!=</span> <span class="n">current_version</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">VersionConflict</span><span class="p">()</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">new_value</span><span class="p">,</span> <span class="n">current_version</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h3 id="14-governance-rule-cache-invalidation-miss">1.4 Governance Rule Cache Invalidation Miss<a class="headerlink" href="#14-governance-rule-cache-invalidation-miss" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> Governance rules reloaded during runtime; cached rules not invalidated<br />
+<strong>Manifestation:</strong> Old rules still enforced after update, audit logs show inconsistent enforcement<br />
+<strong>Root Cause:</strong> Rule cache lacks TTL or invalidation hook<br />
+<strong>Impact:</strong> Security policies unenforced, compliance gaps, audit inconsistency<br />
+<strong>Probability:</strong> High (occurs if rules updated during production operation)</p>
+<p><strong>Production Scenario:</strong>
+<div class="highlight"><pre><span></span><code>T0: Rule loaded: &quot;Only TIER 0 rules are immutable&quot; (cached)
+T1: Operator updates rule to be mutable (new rule file written)
+T2: Thread A uses cached old rule (immutable), blocks operation
+T3: Thread B loads new rule (mutable), allows operation
+T4: Audit shows same operation blocked then allowed (inconsistency)
+</code></pre></div></p>
+<p><strong>Mitigation:</strong> Cache invalidation with TTL and push-on-update
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">RuleCache</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ttl_seconds</span><span class="o">=</span><span class="mi">300</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestamps</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ttl</span> <span class="o">=</span> <span class="n">ttl_seconds</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_rule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule_id</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">rule_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">:</span>
+            <span class="n">age</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">timestamps</span><span class="p">[</span><span class="n">rule_id</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">age</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">ttl</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">rule_id</span><span class="p">]</span>
+        <span class="c1"># Re-load from source</span>
+        <span class="n">rule</span> <span class="o">=</span> <span class="n">load_from_source</span><span class="p">(</span><span class="n">rule_id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">rule_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">rule</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestamps</span><span class="p">[</span><span class="n">rule_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">rule</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">invalidate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rule_id</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">rule_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timestamps</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">rule_id</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="2-failure-modes-edge-cases">2. Failure Modes &amp; Edge Cases<a class="headerlink" href="#2-failure-modes-edge-cases" title="Permanent link">&para;</a></h2>
+<h3 id="21-silent-failure-in-tool-discovery">2.1 Silent Failure in Tool Discovery<a class="headerlink" href="#21-silent-failure-in-tool-discovery" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> Exception in tool module import silently caught, tools not discovered<br />
+<strong>Manifestation:</strong> MCP tools not exposed via endpoints, documentation incomplete, users see empty tool list<br />
+<strong>Root Cause:</strong> Discovery wraps module imports with broad except clause<br />
+<strong>Impact:</strong> Functionality unavailable, users confused, no error indication<br />
+<strong>Probability:</strong> High (import errors common if dependencies missing)</p>
+<p><strong>Production Scenario:</strong>
+<div class="highlight"><pre><span></span><code>ToolDiscoveryEngine.discover_tools():
+  try:
+    import cortex.mcp.tools.custom_module  # Missing dependency!
+  except Exception:
+    pass  # Silently skip, continue discovery
+Result: Custom tools never exposed, endpoint returns empty list
+</code></pre></div></p>
+<p><strong>Mitigation:</strong> Log and report discovery errors, track coverage
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">discover_tools</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">DiscoveryResult</span><span class="p">:</span>
+    <span class="n">tools</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">category</span><span class="p">,</span> <span class="n">module_path</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">TOOL_MODULES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">module_path</span><span class="p">)</span>
+            <span class="n">category_tools</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_scan_module</span><span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">category</span><span class="p">)</span>
+            <span class="n">tools</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">category_tools</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Discovered </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">category_tools</span><span class="p">)</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s2"> tools&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">ToolDiscoveryError</span><span class="p">(</span><span class="n">category</span><span class="p">,</span> <span class="n">module_path</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+            <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Discovery failed for </span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Verify minimum tool counts</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tools</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">NoToolsDiscovered</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">DiscoveryResult</span><span class="p">(</span><span class="n">tools</span><span class="o">=</span><span class="n">tools</span><span class="p">,</span> <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h3 id="22-partial-orchestrator-failure-during-governance-validation">2.2 Partial Orchestrator Failure During Governance Validation<a class="headerlink" href="#22-partial-orchestrator-failure-during-governance-validation" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> Governance validation succeeds but orchestrator crashes before execution<br />
+<strong>Manifestation:</strong> Operation approved but never executes, audit trail shows approval but no result, user sees timeout<br />
+<strong>Root Cause:</strong> No circuit breaker between governance and execution phases<br />
+<strong>Impact:</strong> Inconsistent audit trail, user confusion, potential financial loss (if operation is payment)<br />
+<strong>Probability:</strong> Medium (depends on infrastructure stability)</p>
+<p><strong>Production Scenario:</strong>
+<div class="highlight"><pre><span></span><code>T0: Intent classified, governance validated (✓)
+T1: Audit logged: &quot;Operation APPROVED&quot;
+T2: Orchestrator.execute() starts
+T3: Orchestrator crashes (OOM, network error)
+T4: Audit never logs execution result
+T5: User polls status, sees approval but no result
+Result: Unclear if operation executed
+</code></pre></div></p>
+<p><strong>Mitigation:</strong> Three-phase audit with explicit result logging
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">execute_with_audit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation</span><span class="p">):</span>
+    <span class="c1"># Phase 1: Pre-validation</span>
+    <span class="n">audit</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;VALIDATION_START&quot;</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">validate</span><span class="p">(</span><span class="n">operation</span><span class="p">):</span>
+        <span class="n">audit</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;VALIDATION_FAILED&quot;</span><span class="p">,</span> <span class="n">reason</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">ValidationError</span><span class="p">()</span>
+    <span class="n">audit</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;VALIDATION_COMPLETE&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Phase 2: Execution</span>
+    <span class="n">audit</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;EXECUTION_START&quot;</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">orchestrator</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span>
+        <span class="n">audit</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;EXECUTION_SUCCESS&quot;</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">audit</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;EXECUTION_FAILED&quot;</span><span class="p">,</span> <span class="n">error</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="k">raise</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">audit</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;EXECUTION_END&quot;</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h3 id="23-timeout-cascade-in-nested-orchestrator-calls">2.3 Timeout Cascade in Nested Orchestrator Calls<a class="headerlink" href="#23-timeout-cascade-in-nested-orchestrator-calls" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> Nested orchestrator calls don't propagate timeout; inner calls exceed outer deadline<br />
+<strong>Manifestation:</strong> Outer orchestrator times out, kills inner operation mid-execution, state corruption<br />
+<strong>Root Cause:</strong> Timeout deadlines not passed through orchestrator chain<br />
+<strong>Impact:</strong> Partial state updates, inconsistent recovery, orphaned resources<br />
+<strong>Probability:</strong> High (nested calls likely in production)</p>
+<p><strong>Production Scenario:</strong>
+<div class="highlight"><pre><span></span><code>Outer call: deadline = T + 30s
+  Inner call 1: deadline = T + 30s (not adjusted), takes 20s
+    Inner call 2: deadline = T + 30s (not adjusted), takes 15s
+      Database operation: started at T + 35s (exceeds deadline!)
+      Outer timeout fired, killed database transaction
+Result: Partial update, state inconsistency
+</code></pre></div></p>
+<p><strong>Mitigation:</strong> Propagate remaining deadline through context
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">execute_with_deadline</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">deadline</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">deadline</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">deadline</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">DEFAULT_TIMEOUT</span>
+
+    <span class="n">remaining</span> <span class="o">=</span> <span class="n">deadline</span> <span class="o">-</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">remaining</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="s2">&quot;Deadline already exceeded&quot;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">TimeoutContext</span><span class="p">(</span><span class="n">deadline</span><span class="p">):</span>
+        <span class="c1"># All nested calls check remaining time</span>
+        <span class="k">for</span> <span class="n">sub_op</span> <span class="ow">in</span> <span class="n">operation</span><span class="o">.</span><span class="n">sub_operations</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">execute_sub</span><span class="p">(</span><span class="n">sub_op</span><span class="p">)</span>  <span class="c1"># Gets deadline from context</span>
+</code></pre></div></p>
+<hr />
+<h3 id="24-governance-rule-precedence-violated-under-load">2.4 Governance Rule Precedence Violated Under Load<a class="headerlink" href="#24-governance-rule-precedence-violated-under-load" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> TIER 0 (immutable) rules bypassed by TIER 3 (runtime) rules under contention<br />
+<strong>Manifestation:</strong> TIER 0 security rule violated, security breach, audit shows inconsistent enforcement<br />
+<strong>Root Cause:</strong> Rule evaluation doesn't atomically enforce precedence<br />
+<strong>Impact:</strong> Security bypass, compliance violation, audit gaps<br />
+<strong>Probability:</strong> Medium (occurs if rule evaluation is slow under load)</p>
+<p><strong>Production Scenario:</strong>
+<div class="highlight"><pre><span></span><code>Governance check sequence:
+  Check TIER 0: &quot;Passwords must not contain secrets&quot; (slow, IO-bound)
+  While TIER 0 check running, TIER 3 check completes: &quot;Allow for admin&quot; 
+  TIER 3 check result returns first (faster)
+  Operation proceeds with TIER 3 approval before TIER 0 completes
+  TIER 0 check eventually fails, but operation already executed
+</code></pre></div></p>
+<p><strong>Mitigation:</strong> Atomic precedence check
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">can_execute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check governance with atomic precedence.&quot;&quot;&quot;</span>
+
+    <span class="c1"># TIER 0 is always checked and blocking</span>
+    <span class="n">tier0_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_tier0</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">tier0_result</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="c1"># Only if TIER 0 passes, check TIER 1-3</span>
+    <span class="n">tier1_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_tier1</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span>
+    <span class="n">tier2_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_tier2</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span>
+    <span class="n">tier3_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_tier3</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span>
+
+    <span class="c1"># Result is conjunction: all tiers must pass</span>
+    <span class="k">return</span> <span class="n">tier0_result</span> <span class="ow">and</span> <span class="n">tier1_result</span> <span class="ow">and</span> <span class="n">tier2_result</span> <span class="ow">and</span> <span class="n">tier3_result</span>
+</code></pre></div></p>
+<hr />
+<h2 id="3-auth-secrets-weaknesses">3. Auth &amp; Secrets Weaknesses<a class="headerlink" href="#3-auth-secrets-weaknesses" title="Permanent link">&para;</a></h2>
+<h3 id="31-credentials-in-error-messages-and-logs">3.1 Credentials in Error Messages and Logs<a class="headerlink" href="#31-credentials-in-error-messages-and-logs" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> Database connection strings, API keys logged in exception messages<br />
+<strong>Manifestation:</strong> Secrets exposed in logs, audit trails, error reports<br />
+<strong>Root Cause:</strong> Exceptions stringify full connection objects<br />
+<strong>Impact:</strong> Credential compromise, unauthorized access, compliance violation<br />
+<strong>Probability:</strong> Very High (happens automatically if exception details logged)</p>
+<p><strong>Production Scenario:</strong>
+<div class="highlight"><pre><span></span><code>Database operation fails:
+  Exception: &quot;Failed to connect to postgresql://user:password@db.example.com:5432/cortex&quot;
+  Stack trace logged with full connection string
+  Logs shipped to ELK, visible to ops team
+  Password now compromised
+</code></pre></div></p>
+<p><strong>Mitigation:</strong> Sanitize exception messages
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">safe_exception_string</span><span class="p">(</span><span class="n">exc</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return exception string with secrets redacted.&quot;&quot;&quot;</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+
+    <span class="c1"># Redact common patterns</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;password[=:]\S+&#39;</span><span class="p">,</span> <span class="s1">&#39;password=***REDACTED***&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(mongodb|postgresql)://\S+@&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;\1://***REDACTED***@&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;Bearer\s+\S+&#39;</span><span class="p">,</span> <span class="s1">&#39;Bearer ***REDACTED***&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;api[_-]key[=:]\S+&#39;</span><span class="p">,</span> <span class="s1">&#39;api_key=***REDACTED***&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">msg</span>
+
+<span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Operation failed: </span><span class="si">{</span><span class="n">safe_exception_string</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h3 id="32-auth-level-bypass-in-mcp-tools">3.2 Auth Level Bypass in MCP Tools<a class="headerlink" href="#32-auth-level-bypass-in-mcp-tools" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> PRIVILEGED tool callable by AUTHENTICATED user due to missing check<br />
+<strong>Manifestation:</strong> Non-admin user modifies governance rules, security bypass<br />
+<strong>Root Cause:</strong> Tool governance enforcement missing or skipped in some code path<br />
+<strong>Impact:</strong> Unauthorized access to privileged operations, compliance violation<br />
+<strong>Probability:</strong> High (easy to forget checks in all code paths)</p>
+<p><strong>Production Scenario:</strong>
+<div class="highlight"><pre><span></span><code>Tool invocation path 1 (REST API):
+  receives_request() -&gt; check_auth() -&gt; can_invoke_tool() -&gt; invoke()
+  ✓ Auth check enforced
+
+Tool invocation path 2 (Orchestrator method):
+  orchestrator.invoke_tool() -&gt; invoke()  # Skipped auth check!
+  ✗ Auth check missing
+
+Non-admin calls orchestrator method directly, bypasses auth
+</code></pre></div></p>
+<p><strong>Mitigation:</strong> Centralized policy check
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">ToolExecutor</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">invoke_tool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tool_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">ExecutionContext</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unified tool invocation with mandatory governance check.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Always check governance, no exceptions</span>
+        <span class="n">policy</span> <span class="o">=</span> <span class="n">governance_manager</span><span class="o">.</span><span class="n">get_tool_policy</span><span class="p">(</span><span class="n">tool_id</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">policy</span><span class="o">.</span><span class="n">can_invoke</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">context</span><span class="o">.</span><span class="n">environment</span><span class="p">):</span>
+            <span class="n">audit</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;TOOL_REJECTED&quot;</span><span class="p">,</span> <span class="n">tool_id</span><span class="p">,</span> <span class="n">policy</span><span class="o">.</span><span class="n">reason</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="n">PermissionDenied</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Tool </span><span class="si">{</span><span class="n">tool_id</span><span class="si">}</span><span class="s2"> requires </span><span class="si">{</span><span class="n">policy</span><span class="o">.</span><span class="n">auth_level</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+
+        <span class="c1"># Check rate limiting</span>
+        <span class="k">if</span> <span class="n">policy</span><span class="o">.</span><span class="n">rate_limit</span> <span class="ow">and</span> <span class="n">rate_limiter</span><span class="o">.</span><span class="n">exceeded</span><span class="p">(</span><span class="n">context</span><span class="o">.</span><span class="n">user</span><span class="p">,</span> <span class="n">tool_id</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="n">RateLimitExceeded</span><span class="p">())</span>
+
+        <span class="c1"># Execute</span>
+        <span class="n">audit</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;TOOL_START&quot;</span><span class="p">,</span> <span class="n">tool_id</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">tool_registry</span><span class="o">.</span><span class="n">get_tool</span><span class="p">(</span><span class="n">tool_id</span><span class="p">)</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+            <span class="n">audit</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;TOOL_SUCCESS&quot;</span><span class="p">,</span> <span class="n">tool_id</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">audit</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;TOOL_FAILED&quot;</span><span class="p">,</span> <span class="n">tool_id</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+            <span class="k">raise</span>
+</code></pre></div></p>
+<hr />
+<h2 id="4-integration-contract-risks">4. Integration &amp; Contract Risks<a class="headerlink" href="#4-integration-contract-risks" title="Permanent link">&para;</a></h2>
+<h3 id="41-mcp-tool-parameter-validation-missing">4.1 MCP Tool Parameter Validation Missing<a class="headerlink" href="#41-mcp-tool-parameter-validation-missing" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> Tool accepts parameters not validated against schema<br />
+<strong>Manifestation:</strong> Invalid parameter causes runtime error, tool crashes, audit incomplete<br />
+<strong>Root Cause:</strong> Tool parameter validation optional, not enforced<br />
+<strong>Impact:</strong> Unexpected behavior, poor error messages, difficult debugging<br />
+<strong>Probability:</strong> High (easy to skip validation in simple tools)</p>
+<p><strong>Production Scenario:</strong>
+<div class="highlight"><pre><span></span><code>Tool &quot;generate_report&quot;:
+  Documented parameters: {report_type: string, format: enum(pdf|html)}
+  User calls with: {report_type: 123, format: &quot;jpg&quot;}
+  No validation, tool crashes trying to format as string
+  Error message: &quot;TypeError: can&#39;t format 123&quot;
+  Audit shows tool failed but not why
+</code></pre></div></p>
+<p><strong>Mitigation:</strong> Mandatory parameter validation
+<div class="highlight"><pre><span></span><code><span class="nd">@mcp_tool</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;generate_report&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">generate_report</span><span class="p">(</span><span class="n">report_type</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">format</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="nb">bytes</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate report.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        report_type: Report type (string)</span>
+<span class="sd">        format: Output format (pdf or html)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Validate parameters</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">report_type</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;report_type must be string, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">report_type</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">format</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;pdf&quot;</span><span class="p">,</span> <span class="s2">&quot;html&quot;</span><span class="p">]:</span>
+        <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;format must be &#39;pdf&#39; or &#39;html&#39;, got &#39;</span><span class="si">{</span><span class="nb">format</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">errors</span><span class="p">)))</span>
+
+    <span class="c1"># Proceed with validated parameters</span>
+    <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="n">generate_report_impl</span><span class="p">(</span><span class="n">report_type</span><span class="p">,</span> <span class="nb">format</span><span class="p">))</span>
+</code></pre></div></p>
+<hr />
+<h3 id="42-governance-rule-schema-evolution">4.2 Governance Rule Schema Evolution<a class="headerlink" href="#42-governance-rule-schema-evolution" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> New governance rule fields added; old orchestrators don't know about them<br />
+<strong>Manifestation:</strong> Old code ignores new security rule, security bypass<br />
+<strong>Root Cause:</strong> No schema versioning or migration<br />
+<strong>Impact:</strong> Old deployments still running, missing new security controls<br />
+<strong>Probability:</strong> Medium (depends on deployment velocity)</p>
+<p><strong>Production Scenario:</strong>
+<div class="highlight"><pre><span></span><code>Old TIER 0 rule structure:
+  {id: &quot;RULE-001&quot;, description: &quot;...&quot;, severity: &quot;HIGH&quot;}
+
+New TIER 0 rule structure:
+  {id: &quot;RULE-001&quot;, description: &quot;...&quot;, severity: &quot;HIGH&quot;, 
+   requires_approval: true}  ← New field
+
+Old orchestrator (v1.0) loads new rule:
+  rule = yaml.load(rule_file)
+  if rule.severity == &quot;HIGH&quot;:
+    enforce_strictly()
+  # Old code never checks &#39;requires_approval&#39; field
+
+Result: New approval requirement ignored
+</code></pre></div></p>
+<p><strong>Mitigation:</strong> Schema versioning and validation
+<div class="highlight"><pre><span></span><code><span class="n">RULE_SCHEMA_VERSION</span> <span class="o">=</span> <span class="mi">2</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">load_governance_rule</span><span class="p">(</span><span class="n">rule_data</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">GovernanceRule</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load and validate governance rule.&quot;&quot;&quot;</span>
+
+    <span class="n">version</span> <span class="o">=</span> <span class="n">rule_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;schema_version&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">version</span> <span class="o">&gt;</span> <span class="n">RULE_SCHEMA_VERSION</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="n">SchemaVersionError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Rule requires schema v</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;this orchestrator only supports v</span><span class="si">{</span><span class="n">RULE_SCHEMA_VERSION</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">))</span>
+
+    <span class="c1"># Validate required fields</span>
+    <span class="n">required</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;severity&quot;</span><span class="p">]</span>
+    <span class="n">missing</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">required</span> <span class="k">if</span> <span class="n">f</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">rule_data</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="n">ValidationError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing required fields: </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+
+    <span class="c1"># Handle versioning</span>
+    <span class="k">if</span> <span class="n">version</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">rule</span> <span class="o">=</span> <span class="n">migrate_v1_to_v2</span><span class="p">(</span><span class="n">rule_data</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rule</span> <span class="o">=</span> <span class="n">GovernanceRule</span><span class="p">(</span><span class="o">**</span><span class="n">rule_data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h3 id="43-circular-dependency-in-mcp-tool-invocation">4.3 Circular Dependency in MCP Tool Invocation<a class="headerlink" href="#43-circular-dependency-in-mcp-tool-invocation" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> Tool A calls Tool B which calls Tool A<br />
+<strong>Manifestation:</strong> Stack overflow, recursive invocation, process crash<br />
+<strong>Root Cause:</strong> No cycle detection in tool call graph<br />
+<strong>Impact:</strong> Service outage, audit trail incomplete, manual recovery needed<br />
+<strong>Probability:</strong> Low (unlikely unless tools explicitly call each other)</p>
+<p><strong>Mitigation:</strong> Call stack tracking
+<div class="highlight"><pre><span></span><code><span class="n">_TOOL_CALL_STACK</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">local</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">invoke_tool_with_cycle_detection</span><span class="p">(</span><span class="n">tool_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">params</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Invoke tool with cycle detection.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">_TOOL_CALL_STACK</span><span class="p">,</span> <span class="s1">&#39;stack&#39;</span><span class="p">):</span>
+        <span class="n">_TOOL_CALL_STACK</span><span class="o">.</span><span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Check for cycle</span>
+    <span class="k">if</span> <span class="n">tool_id</span> <span class="ow">in</span> <span class="n">_TOOL_CALL_STACK</span><span class="o">.</span><span class="n">stack</span><span class="p">:</span>
+        <span class="n">cycle</span> <span class="o">=</span> <span class="s2">&quot; -&gt; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_TOOL_CALL_STACK</span><span class="o">.</span><span class="n">stack</span> <span class="o">+</span> <span class="p">[</span><span class="n">tool_id</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="n">CyclicToolCallError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cycle detected: </span><span class="si">{</span><span class="n">cycle</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_TOOL_CALL_STACK</span><span class="o">.</span><span class="n">stack</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="n">TooManyNestedCalls</span><span class="p">(</span><span class="s2">&quot;Tool call depth exceeds maximum&quot;</span><span class="p">))</span>
+
+    <span class="c1"># Execute</span>
+    <span class="n">_TOOL_CALL_STACK</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tool_id</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">tool_registry</span><span class="o">.</span><span class="n">get_tool</span><span class="p">(</span><span class="n">tool_id</span><span class="p">)</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">_TOOL_CALL_STACK</span><span class="o">.</span><span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+</code></pre></div></p>
+<hr />
+<h2 id="5-observability-blind-spots">5. Observability Blind Spots<a class="headerlink" href="#5-observability-blind-spots" title="Permanent link">&para;</a></h2>
+<h3 id="51-intent-routing-decision-not-logged">5.1 Intent Routing Decision Not Logged<a class="headerlink" href="#51-intent-routing-decision-not-logged" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> Routing decision made but confidence score and alternatives not recorded<br />
+<strong>Manifestation:</strong> User sees unexpected routing, can't understand why<br />
+<strong>Root Cause:</strong> Routing logs only classification, not decision rationale<br />
+<strong>Impact:</strong> Debugging difficult, trust in system decreases, audit incomplete<br />
+<strong>Probability:</strong> High (simple to implement but often overlooked)</p>
+<p><strong>Production Scenario:</strong>
+<div class="highlight"><pre><span></span><code>Intent: &quot;Refactor authentication module&quot;
+Intent Router logs: &quot;Classification: REFACTORING_INTENT&quot;
+But doesn&#39;t log:
+  - Confidence score: 0.73
+  - Second option: ARCHITECTURAL_CHANGE (0.19)
+  - Disambiguation needed? No
+  - Routing to: RefactoringOrchestrator
+  - Alternative routes rejected: DEPLOYMENT, ANALYSIS
+
+User sees operation performed, but doesn&#39;t understand why RefactoringOrchestrator was chosen
+</code></pre></div></p>
+<p><strong>Mitigation:</strong> Comprehensive routing audit
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">route_intent_with_audit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">intent</span><span class="p">:</span> <span class="n">Intent</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">Orchestrator</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Route intent with full audit trail.&quot;&quot;&quot;</span>
+
+    <span class="n">audit_entry</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;intent_id&quot;</span><span class="p">:</span> <span class="n">intent</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="s2">&quot;intent_text&quot;</span><span class="p">:</span> <span class="n">intent</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+        <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+        <span class="s2">&quot;classifications&quot;</span><span class="p">:</span> <span class="p">[],</span>
+        <span class="s2">&quot;decision&quot;</span><span class="p">:</span> <span class="p">{}</span>
+    <span class="p">}</span>
+
+    <span class="c1"># Classify</span>
+    <span class="n">classifications</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">classify</span><span class="p">(</span><span class="n">intent</span><span class="p">)</span>
+    <span class="k">for</span> <span class="bp">cls</span> <span class="ow">in</span> <span class="n">classifications</span><span class="p">:</span>
+        <span class="n">audit_entry</span><span class="p">[</span><span class="s2">&quot;classifications&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">classification</span><span class="p">,</span>
+            <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+            <span class="s2">&quot;matched_patterns&quot;</span><span class="p">:</span> <span class="bp">cls</span><span class="o">.</span><span class="n">patterns</span><span class="p">,</span>
+        <span class="p">})</span>
+
+    <span class="c1"># Select orchestrator</span>
+    <span class="n">selected_class</span> <span class="o">=</span> <span class="n">classifications</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">orchestrator</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">router</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="n">selected_class</span><span class="o">.</span><span class="n">classification</span><span class="p">)</span>
+
+    <span class="n">audit_entry</span><span class="p">[</span><span class="s2">&quot;decision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;selected_orchestrator&quot;</span><span class="p">:</span> <span class="n">orchestrator</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+        <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">selected_class</span><span class="o">.</span><span class="n">confidence</span><span class="p">,</span>
+        <span class="s2">&quot;alternatives&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">classification</span><span class="p">,</span> <span class="s2">&quot;confidence&quot;</span><span class="p">:</span> <span class="n">c</span><span class="o">.</span><span class="n">confidence</span><span class="p">}</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">classifications</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>  <span class="c1"># Top alternatives</span>
+        <span class="p">],</span>
+        <span class="s2">&quot;routing_rationale&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;Selected </span><span class="si">{</span><span class="n">selected_class</span><span class="o">.</span><span class="n">classification</span><span class="si">}</span><span class="s2"> &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">selected_class</span><span class="o">.</span><span class="n">confidence</span><span class="si">:</span><span class="s2">.2%</span><span class="si">}</span><span class="s2">) over alternatives&quot;</span>
+    <span class="p">}</span>
+
+    <span class="n">audit</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;INTENT_ROUTING_DECISION&quot;</span><span class="p">,</span> <span class="n">audit_entry</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="n">orchestrator</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h3 id="52-governance-rule-evaluation-not-traced">5.2 Governance Rule Evaluation Not Traced<a class="headerlink" href="#52-governance-rule-evaluation-not-traced" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> Rule evaluation happens but decision rationale not logged<br />
+<strong>Manifestation:</strong> Operation rejected/approved but reason unknown<br />
+<strong>Root Cause:</strong> Governance engine doesn't log decision details<br />
+<strong>Impact:</strong> Compliance audit fails, users confused, debugging slow<br />
+<strong>Probability:</strong> Very High (common oversight)</p>
+<p><strong>Production Scenario:</strong>
+<div class="highlight"><pre><span></span><code>User operation rejected:
+  Audit log: &quot;GOVERNANCE_CHECK_FAILED for operation_id=xyz&quot;
+  But missing:
+    - Which rule rejected it?
+    - What was the reason?
+    - What would make it pass?
+    - Was it TIER 0, 1, 2, or 3?
+
+User can&#39;t understand why operation failed or how to fix it
+</code></pre></div></p>
+<p><strong>Mitigation:</strong> Detailed governance audit
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">evaluate_governance_with_trace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Evaluate governance with detailed trace.&quot;&quot;&quot;</span>
+
+    <span class="n">trace</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;operation_id&quot;</span><span class="p">:</span> <span class="n">operation</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span>
+        <span class="s2">&quot;tiers&quot;</span><span class="p">:</span> <span class="p">{}</span>
+    <span class="p">}</span>
+
+    <span class="c1"># TIER 0 evaluation</span>
+    <span class="n">tier0_results</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tier0_rules</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">operation</span><span class="p">,</span> <span class="n">context</span><span class="p">)</span>
+        <span class="n">tier0_results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;rule_id&quot;</span><span class="p">:</span> <span class="n">rule</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="s2">&quot;rule_description&quot;</span><span class="p">:</span> <span class="n">rule</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+            <span class="s2">&quot;passed&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">passed</span><span class="p">,</span>
+            <span class="s2">&quot;reason&quot;</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">reason</span>
+        <span class="p">})</span>
+
+    <span class="n">trace</span><span class="p">[</span><span class="s2">&quot;tiers&quot;</span><span class="p">][</span><span class="s2">&quot;TIER_0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;rules&quot;</span><span class="p">:</span> <span class="n">tier0_results</span><span class="p">,</span>
+        <span class="s2">&quot;passed&quot;</span><span class="p">:</span> <span class="nb">all</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;passed&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">tier0_results</span><span class="p">),</span>
+        <span class="s2">&quot;severity&quot;</span><span class="p">:</span> <span class="s2">&quot;BLOCKING&quot;</span>
+    <span class="p">}</span>
+
+    <span class="c1"># If TIER 0 failed, stop here</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">trace</span><span class="p">[</span><span class="s2">&quot;tiers&quot;</span><span class="p">][</span><span class="s2">&quot;TIER_0&quot;</span><span class="p">][</span><span class="s2">&quot;passed&quot;</span><span class="p">]:</span>
+        <span class="n">failed_rules</span> <span class="o">=</span> <span class="p">[</span><span class="n">r</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">tier0_results</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">r</span><span class="p">[</span><span class="s2">&quot;passed&quot;</span><span class="p">]]</span>
+        <span class="n">trace</span><span class="p">[</span><span class="s2">&quot;decision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;REJECTED_BY_TIER_0&quot;</span>
+        <span class="n">trace</span><span class="p">[</span><span class="s2">&quot;failed_rules&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">failed_rules</span>
+        <span class="n">audit</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;GOVERNANCE_REJECTED&quot;</span><span class="p">,</span> <span class="n">trace</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="n">GovernanceViolation</span><span class="p">(</span><span class="n">failed_rules</span><span class="p">))</span>
+
+    <span class="c1"># Continue with TIER 1-3...</span>
+
+    <span class="n">trace</span><span class="p">[</span><span class="s2">&quot;decision&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;APPROVED&quot;</span>
+    <span class="n">audit</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;GOVERNANCE_APPROVED&quot;</span><span class="p">,</span> <span class="n">trace</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h3 id="53-performance-degradation-not-observable">5.3 Performance Degradation Not Observable<a class="headerlink" href="#53-performance-degradation-not-observable" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> Orchestrator execution time increases gradually, not detected until user complaints<br />
+<strong>Manifestation:</strong> Slow requests accumulate, users report timeouts, SLA violated<br />
+<strong>Root Cause:</strong> No percentile latency metrics, only average<br />
+<strong>Impact:</strong> Cascading failures, SLA violations, user dissatisfaction<br />
+<strong>Probability:</strong> Very High (performance degradation common in production)</p>
+<p><strong>Production Scenario:</strong>
+<div class="highlight"><pre><span></span><code>Metrics dashboard shows:
+  Average latency: 500ms (looks fine)
+  But doesn&#39;t show:
+    - p50: 100ms
+    - p95: 2500ms  ← Problem!
+    - p99: 8000ms  ← Critical!
+    - Max: 45000ms (45 seconds)
+
+Users experience 45-second timeouts, but dashboard shows 500ms average
+</code></pre></div></p>
+<p><strong>Mitigation:</strong> Percentile latency tracking
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">prometheus_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">Histogram</span>
+
+<span class="n">orchestration_duration</span> <span class="o">=</span> <span class="n">Histogram</span><span class="p">(</span>
+    <span class="s1">&#39;orchestration_duration_seconds&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;Orchestration execution time&#39;</span><span class="p">,</span>
+    <span class="n">buckets</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">),</span>
+    <span class="n">labelnames</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;orchestrator&#39;</span><span class="p">,</span> <span class="s1">&#39;status&#39;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">execute_with_metrics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operation</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute operation with latency metrics.&quot;&quot;&quot;</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute_impl</span><span class="p">(</span><span class="n">operation</span><span class="p">)</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;success&quot;</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="s2">&quot;error&quot;</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">duration</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
+        <span class="n">orchestration_duration</span><span class="o">.</span><span class="n">labels</span><span class="p">(</span>
+            <span class="n">orchestrator</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+            <span class="n">status</span><span class="o">=</span><span class="n">status</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">duration</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div></p>
+<p><strong>Dashboard queries:</strong>
+<div class="highlight"><pre><span></span><code># Show percentiles
+histogram_quantile(0.95, rate(orchestration_duration_seconds_bucket[5m]))
+histogram_quantile(0.99, rate(orchestration_duration_seconds_bucket[5m]))
+</code></pre></div></p>
+<hr />
+<h2 id="6-configuration-environment-drift">6. Configuration &amp; Environment Drift<a class="headerlink" href="#6-configuration-environment-drift" title="Permanent link">&para;</a></h2>
+<h3 id="61-tier-0-rules-not-enforced-at-runtime">6.1 TIER 0 Rules Not Enforced at Runtime<a class="headerlink" href="#61-tier-0-rules-not-enforced-at-runtime" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> TIER 0 rules defined in YAML but enforcement missing in code<br />
+<strong>Manifestation:</strong> Rule documented but not enforced, security/quality gap<br />
+<strong>Root Cause:</strong> Governance evaluation doesn't load or check TIER 0 rules<br />
+<strong>Impact:</strong> Rules ineffective, false sense of security, compliance failure<br />
+<strong>Probability:</strong> Medium (depends on implementation completeness)</p>
+<p><strong>Mitigation:</strong> Runtime verification
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">verify_tier0_enforcement</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify all TIER 0 rules are actually enforced.&quot;&quot;&quot;</span>
+
+    <span class="n">rules_file</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;cortex_brain/tier0/governance/core-rules.yaml&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">rules_file</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">defined_rules</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="n">enforced_rules</span> <span class="o">=</span> <span class="n">governance_registry</span><span class="o">.</span><span class="n">get_tier0_rules</span><span class="p">()</span>
+
+    <span class="n">defined_ids</span> <span class="o">=</span> <span class="p">{</span><span class="n">r</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">defined_rules</span><span class="p">[</span><span class="s2">&quot;rules&quot;</span><span class="p">]}</span>
+    <span class="n">enforced_ids</span> <span class="o">=</span> <span class="p">{</span><span class="n">r</span><span class="o">.</span><span class="n">id</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">enforced_rules</span><span class="p">}</span>
+
+    <span class="n">missing</span> <span class="o">=</span> <span class="n">defined_ids</span> <span class="o">-</span> <span class="n">enforced_ids</span>
+    <span class="k">if</span> <span class="n">missing</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">GovernanceIncomplete</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TIER 0 rules not enforced: </span><span class="si">{</span><span class="n">missing</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Verify each rule actually rejects non-compliant operations</span>
+    <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">enforced_rules</span><span class="p">:</span>
+        <span class="n">test_op</span> <span class="o">=</span> <span class="n">create_non_compliant_operation</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">rule</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">test_op</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">passed</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">GovernanceBypass</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Rule </span><span class="si">{</span><span class="n">rule</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2"> doesn&#39;t enforce its policy&quot;</span><span class="p">)</span>
+
+<span class="c1"># Run on startup</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">verify_tier0_enforcement</span><span class="p">()</span>
+</code></pre></div></p>
+<hr />
+<h3 id="62-image-paths-hardcoded-break-in-different-deployments">6.2 Image Paths Hardcoded, Break in Different Deployments<a class="headerlink" href="#62-image-paths-hardcoded-break-in-different-deployments" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> Documentation image paths hardcoded, break when docs deployed to different path<br />
+<strong>Manifestation:</strong> Images not display in prod, docs site looks broken<br />
+<strong>Root Cause:</strong> Image paths use absolute paths instead of relative<br />
+<strong>Impact:</strong> Poor user experience, technical debt, maintenance burden<br />
+<strong>Probability:</strong> High (if image URLs hardcoded)</p>
+<p><strong>Mitigation:</strong> Use relative paths and validate
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">validate_image_paths</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify all image paths are relative and valid.&quot;&quot;&quot;</span>
+
+    <span class="n">docs_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;docs&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">md_file</span> <span class="ow">in</span> <span class="n">docs_path</span><span class="o">.</span><span class="n">rglob</span><span class="p">(</span><span class="s2">&quot;*.md&quot;</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">md_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">content</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+        <span class="c1"># Find all image references</span>
+        <span class="n">image_pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;!\[([^\]]*)\]\(([^\)]+)\)&quot;</span>
+        <span class="k">for</span> <span class="n">match</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">image_pattern</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+            <span class="n">image_path</span> <span class="o">=</span> <span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+            <span class="c1"># Reject absolute paths</span>
+            <span class="k">if</span> <span class="n">image_path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">PathError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image path is absolute: </span><span class="si">{</span><span class="n">image_path</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">md_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Reject URLs (allow only relative paths)</span>
+            <span class="k">if</span> <span class="s2">&quot;://&quot;</span> <span class="ow">in</span> <span class="n">image_path</span><span class="p">:</span>
+                <span class="k">continue</span>  <span class="c1"># External URL is OK</span>
+
+            <span class="c1"># Verify relative path resolves</span>
+            <span class="n">resolved</span> <span class="o">=</span> <span class="p">(</span><span class="n">md_file</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="n">image_path</span><span class="p">)</span><span class="o">.</span><span class="n">resolve</span><span class="p">()</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">resolved</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+                <span class="k">raise</span> <span class="n">PathError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Image not found: </span><span class="si">{</span><span class="n">image_path</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="n">md_file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="7-data-integrity">7. Data Integrity<a class="headerlink" href="#7-data-integrity" title="Permanent link">&para;</a></h2>
+<h3 id="71-audit-trail-hash-chain-validation-missing">7.1 Audit Trail Hash Chain Validation Missing<a class="headerlink" href="#71-audit-trail-hash-chain-validation-missing" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> Audit entries not hashed or verification never runs<br />
+<strong>Manifestation:</strong> Audit trail can be modified without detection<br />
+<strong>Root Cause:</strong> Hash verification optional, not performed on reads<br />
+<strong>Impact:</strong> Audit trail untrustworthy, compliance violation, forensics unreliable<br />
+<strong>Probability:</strong> Low (if hash chain explicitly implemented)</p>
+<p><strong>Mitigation:</strong> Always verify hash chain on read
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_audit_entries_verified</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">start_event_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">end_event_id</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">AuditEntry</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve audit entries with hash chain verification.&quot;&quot;&quot;</span>
+
+    <span class="n">entries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">query_audit_entries</span><span class="p">(</span><span class="n">start_event_id</span><span class="p">,</span> <span class="n">end_event_id</span><span class="p">)</span>
+
+    <span class="c1"># Verify hash chain</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">)):</span>
+        <span class="n">prev_entry</span> <span class="o">=</span> <span class="n">entries</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">curr_entry</span> <span class="o">=</span> <span class="n">entries</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="c1"># Calculate expected hash of previous entry</span>
+        <span class="n">expected_hash</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hash_entry</span><span class="p">(</span><span class="n">prev_entry</span><span class="p">)</span>
+
+        <span class="c1"># Verify current entry references it</span>
+        <span class="k">if</span> <span class="n">curr_entry</span><span class="o">.</span><span class="n">prev_hash</span> <span class="o">!=</span> <span class="n">expected_hash</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AuditTamperingDetected</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Hash chain broken at entry </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">: &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;expected </span><span class="si">{</span><span class="n">expected_hash</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="n">curr_entry</span><span class="o">.</span><span class="n">prev_hash</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="8-dependency-versioning-traps">8. Dependency &amp; Versioning Traps<a class="headerlink" href="#8-dependency-versioning-traps" title="Permanent link">&para;</a></h2>
+<h3 id="81-pinned-tool-versions-become-unavailable">8.1 Pinned Tool Versions Become Unavailable<a class="headerlink" href="#81-pinned-tool-versions-become-unavailable" title="Permanent link">&para;</a></h3>
+<p><strong>Risk:</strong> Tool version pinned to v1.2.3; library yanked/deprecated<br />
+<strong>Manifestation:</strong> Tool can't load, MCP discovery fails, service down<br />
+<strong>Root Cause:</strong> No fallback to compatible versions<br />
+<strong>Impact:</strong> Service unavailability, manual recovery needed<br />
+<strong>Probability:</strong> Low-Medium (depends on how strict version pinning)</p>
+<p><strong>Mitigation:</strong> Semantic versioning with compatibility
+<div class="highlight"><pre><span></span><code><span class="n">TOOL_VERSION_SPEC</span> <span class="o">=</span> <span class="s2">&quot;1.2.3&quot;</span>  <span class="c1"># Pinned</span>
+<span class="n">COMPATIBLE_VERSIONS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;1.2.0&quot;</span><span class="p">,</span> <span class="s2">&quot;1.2.1&quot;</span><span class="p">,</span> <span class="s2">&quot;1.2.2&quot;</span><span class="p">,</span> <span class="s2">&quot;1.2.3&quot;</span><span class="p">]</span>  <span class="c1"># Fallback</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">load_tool_with_fallback</span><span class="p">(</span><span class="n">tool_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">MCPTool</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load tool with fallback to compatible versions.&quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">version</span> <span class="ow">in</span> <span class="n">COMPATIBLE_VERSIONS</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tool</span> <span class="o">=</span> <span class="n">load_tool_specific_version</span><span class="p">(</span><span class="n">tool_id</span><span class="p">,</span> <span class="n">version</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">version</span> <span class="o">!=</span> <span class="n">TOOL_VERSION_SPEC</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Tool </span><span class="si">{</span><span class="n">tool_id</span><span class="si">}</span><span class="s2"> loaded with fallback: &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">version</span><span class="si">}</span><span class="s2"> (preferred </span><span class="si">{</span><span class="n">TOOL_VERSION_SPEC</span><span class="si">}</span><span class="s2">)&quot;</span>
+                <span class="p">)</span>
+            <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="n">tool</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">ToolNotAvailable</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+    <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="n">NoCompatibleToolVersion</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Tool </span><span class="si">{</span><span class="n">tool_id</span><span class="si">}</span><span class="s2"> not available in any version: </span><span class="si">{</span><span class="n">COMPATIBLE_VERSIONS</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="p">))</span>
+</code></pre></div></p>
+<hr />
+<h2 id="remediation-priorities">Remediation Priorities<a class="headerlink" href="#remediation-priorities" title="Permanent link">&para;</a></h2>
+<h3 id="tier-1-critical-deploy-before-production">Tier 1 (Critical - Deploy Before Production)<a class="headerlink" href="#tier-1-critical-deploy-before-production" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Concurrency &amp; State (1.1-1.4):</strong> Add RW locks, fix singleton initialization, optimistic locking</li>
+<li><strong>Governance Enforcement (2.4, 4.2, 6.1):</strong> Atomic precedence, schema versioning, runtime verification</li>
+<li><strong>Credential Security (3.1):</strong> Sanitize exception messages, audit log filtering</li>
+<li><strong>Auth Bypass (3.2):</strong> Centralized policy check, mandatory validation</li>
+</ol>
+<h3 id="tier-2-high-deploy-in-next-release">Tier 2 (High - Deploy in Next Release)<a class="headerlink" href="#tier-2-high-deploy-in-next-release" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Failure Isolation (2.1, 2.2):</strong> Better error reporting, three-phase audit</li>
+<li><strong>Routing Audit (5.1):</strong> Log decision rationale</li>
+<li><strong>Performance Metrics (5.3):</strong> Percentile latencies, SLA tracking</li>
+</ol>
+<h3 id="tier-3-medium-plan-for-future">Tier 3 (Medium - Plan for Future)<a class="headerlink" href="#tier-3-medium-plan-for-future" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Timeout Propagation (2.3):</strong> Context-aware deadlines</li>
+<li><strong>Hash Chain Verification (7.1):</strong> Always verify on read</li>
+<li><strong>Dependency Resilience (8.1):</strong> Compatible version fallback</li>
+</ol>
+<hr />
+<h2 id="testing-recommendations">Testing Recommendations<a class="headerlink" href="#testing-recommendations" title="Permanent link">&para;</a></h2>
+<p><strong>Unit Tests:</strong>
+- Concurrent registry mutations (stress test with 100+ threads)
+- Singleton initialization races
+- Governance rule precedence under contention
+- Parameter validation edge cases</p>
+<p><strong>Integration Tests:</strong>
+- Nested orchestrator timeouts
+- Partial failures during governance checks
+- Auth enforcement in all code paths</p>
+<p><strong>Production Simulation Tests:</strong>
+- High concurrency (1000+ concurrent operations)
+- Partial infrastructure failure (database unavailable for 30s)
+- Governance rule updates during operation
+- Long-running operations (&gt; 60 seconds)</p>
+<hr />
+<h2 id="monitoring-alerting">Monitoring &amp; Alerting<a class="headerlink" href="#monitoring-alerting" title="Permanent link">&para;</a></h2>
+<p><strong>Key Metrics:</strong>
+- Governance rule evaluation time (p95, p99)
+- Tool discovery latency and completeness
+- Orchestrator singleton instances (should always be 1)
+- Auth failures and rate limit rejections
+- Audit entry verification failures</p>
+<p><strong>Key Alerts:</strong>
+- Multiple orchestrator singletons detected
+- Governance rule precedence violation
+- Tool discovery returned 0 tools
+- Audit hash chain verification failed
+- Auth level bypass detected</p>
+<hr />
+<p><strong>Author:</strong> CORTEX Production Readiness Team<br />
+<strong>Generated:</strong> 2026-01-22<br />
+<strong>Authority:</strong> Runtime behavior analysis<br />
+<strong>Next Review:</strong> Upon major changes to concurrency, governance, or auth logic  </p>
+<p><strong>Copyright © 2025-2026 Asif Hussain. All rights reserved.</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

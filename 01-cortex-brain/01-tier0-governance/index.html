@@ -1,0 +1,5097 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="AI-powered orchestration platform with multi-tier governance">
+      
+      
+        <meta name="author" content="Asif Hussain">
+      
+      
+      
+        <link rel="prev" href="../00-brain-index/">
+      
+      
+        <link rel="next" href="../02-tier1-acceptance/">
+      
+      
+      <link rel="icon" href="../../assets/images/CORTEX-logo-64.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+    
+    
+      
+        <title>TIER 0 Governance - CORTEX Documentation</title>
+      
+    
+    
+  
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+  <style>
+    /* CORTEX Logo styling - display logo in header top left */
+    .md-header__button.md-logo img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+    }
+    /* Adjust header for larger logo */
+    .md-header {
+      min-height: 72px;
+    }
+    .md-header__inner {
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+  </style>
+
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/cortex-glassmorphism.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cortex-tier-0-immutable-governance-rules" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CORTEX Documentation" class="md-header__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  <img src="../../assets/images/cortex-logo-200.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CORTEX Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              TIER 0 Governance
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../INDEX/" class="md-tabs__link">
+        
+  
+    
+  
+  🚀 Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00-brain-index/" class="md-tabs__link">
+          
+  
+  Domain Brain (TIER 0-3)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../02-orchestrators/00-orchestrators-index/" class="md-tabs__link">
+          
+  
+  Orchestrators
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../03-getting-started/0-installation/" class="md-tabs__link">
+          
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../04-architecture/1-system-overview/" class="md-tabs__link">
+          
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../05-lens-protocol/00-lens-index/" class="md-tabs__link">
+          
+  
+  CORTEX LENS Protocol
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../06-api-reference/0-overview/" class="md-tabs__link">
+          
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../07-guides/deployment/0-overview/" class="md-tabs__link">
+          
+  
+  How-To Guides
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../08-reference/glossary/" class="md-tabs__link">
+          
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../11-mcp-tools/00-mcp-index/" class="md-tabs__link">
+          
+  
+  MCP Tools Framework
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../12-infrastructure/00-infrastructure-index/" class="md-tabs__link">
+          
+  
+  Infrastructure & Resilience
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../13-domain-brain/00-domain-brain-index/" class="md-tabs__link">
+          
+  
+  Domain Brain
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../14-deployment/00-deployment-index/" class="md-tabs__link">
+          
+  
+  Deployment
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../15-observability/00-observability-index/" class="md-tabs__link">
+          
+  
+  Observability
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../16-testing/00-testing-index/" class="md-tabs__link">
+          
+  
+  Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../09-tutorials/0-index/" class="md-tabs__link">
+          
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../10-contributing/1-contributing-guidelines/" class="md-tabs__link">
+          
+  
+  Contributing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../LICENSE/" class="md-tabs__link">
+        
+  
+    
+  
+  License
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CORTEX Documentation" class="md-nav__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  <img src="../../assets/images/cortex-logo-200.png" alt="logo">
+
+    </a>
+    CORTEX Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INDEX/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🚀 Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Domain Brain (TIER 0-3)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Domain Brain (TIER 0-3)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-brain-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    TIER 0 Governance
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    TIER 0 Governance
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-29-core-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      📋 The 29 CORE Rules
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 The 29 CORE Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#category-1-orchestration-lifecycle-4-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Category 1: Orchestration Lifecycle (4 Rules)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Category 1: Orchestration Lifecycle (4 Rules)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-001-incremental-autonomous-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-001: Incremental Autonomous Execution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-006-phase-2-setup-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-006: Phase -2 Setup Verification
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-007-phase-n1-teardown" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-007: Phase N+1 Teardown
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-021-use-orchestrator-scaffolder" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-021: Use Orchestrator Scaffolder
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#category-2-response-formatting-4-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Category 2: Response Formatting (4 Rules)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Category 2: Response Formatting (4 Rules)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-002-no-summary-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-002: No Summary Files
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-003-visual-progress-bars-not-code-blocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-003: Visual Progress Bars (NOT Code Blocks)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-004-minimal-continuation-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-004: Minimal Continuation Prompts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-030-mandatory-cortex-response-headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-030: Mandatory CORTEX Response Headers
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#category-3-portability-1-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      Category 3: Portability (1 Rule)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Category 3: Portability (1 Rule)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-005-no-hardcoded-paths-critical" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-005: No Hardcoded Paths (CRITICAL)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#category-4-development-workflow-4-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Category 4: Development Workflow (4 Rules)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Category 4: Development Workflow (4 Rules)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-008-tdd-enforcement-red-green-refactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-008: TDD Enforcement (RED → GREEN → REFACTOR)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-009-files-in-plan-folders" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-009: Files in Plan Folders
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-010-script-consolidation" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-010: Script Consolidation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-019-tdd-master-routing-route-through-tdd-master" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-019: TDD-Master Routing (Route Through TDD-Master)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#category-5-architecture-integrity-7-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Category 5: Architecture Integrity (7 Rules)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Category 5: Architecture Integrity (7 Rules)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-014-solid-principles-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-014: SOLID Principles Required
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-018-yaml-first-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-018: YAML-First Design
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-020-no-markdown-in-brain" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-020: No Markdown in Brain
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-022-kebab-case-file-naming-with-25-char-limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-022: Kebab-Case File Naming with 25-Char Limit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-024-mcp-tool-decorator-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-024: MCP Tool Decorator Required
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-028-intelligent-kebab-case-naming-25-char-limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-028: Intelligent Kebab-Case Naming (25-Char Limit)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#category-6-quality-gates-7-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Category 6: Quality Gates (7 Rules)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Category 6: Quality Gates (7 Rules)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-011-python-type-hints-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-011: Python Type Hints Required
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-012-google-style-docstrings-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-012: Google-Style Docstrings Required
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-013-explicit-error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-013: Explicit Error Handling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-015-pep-8-import-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-015: PEP 8 Import Organization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-016-black-formatting" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-016: Black Formatting
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-023-pre-commit-file-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-023: Pre-Commit File Validation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-025-resultt-pattern-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-025: Result[T] Pattern Required
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#category-7-security-privacy-1-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      Category 7: Security &amp; Privacy (1 Rule)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Category 7: Security & Privacy (1 Rule)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-017-strict-governance-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-017: Strict Governance Enforcement
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#category-8-audit-compliance-3-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Category 8: Audit &amp; Compliance (3 Rules)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Category 8: Audit & Compliance (3 Rules)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-026-git-checkpoint-before-modify" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-026: Git Checkpoint Before Modify
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-027-audit-trail-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-027: Audit Trail Verification
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-029-documentation-drift-prevention" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-029: Documentation Drift Prevention
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rule-precedence-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Rule Precedence &amp; Enforcement
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Rule Precedence & Enforcement">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#precedence-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Precedence Hierarchy
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#immutability-mechanisms" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔒 Immutability Mechanisms
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔒 Immutability Mechanisms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-file-level-protection" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. File-Level Protection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-runtime-immutability" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Runtime Immutability
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-git-level-protection" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Git-Level Protection
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#violation-detection-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Violation Detection &amp; Response
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Violation Detection & Response">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automatic-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Automatic Detection
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compliance-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Compliance Checklist
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      📈 Metrics
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Related Documentation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-tier1-acceptance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 1 Acceptance Criteria
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-tier2-response-templates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 2 Response Templates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-tier3-knowledge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 3 Knowledge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-token-optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Token Optimization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-composite-requests/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Composite Requests
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-brain-architecture.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Brain Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Orchestrators
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Orchestrators
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/00-orchestrators-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/01-master-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Master Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/02-intent-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/03-workflow-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Workflow Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/04-refactoring-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Refactoring Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/05-composition-engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Composition Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/06-onboarding-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Onboarding Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/07-adaptive-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Adaptive Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/08-orchestrators-modules-relationship/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrators & Modules Relationship
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/09-orchestrator-module-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrator-Module Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/10-complete-orchestrator-listing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Complete Orchestrator Listing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/0-installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation & Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/1-quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/2-first-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    First Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/3-troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/1-system-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    System Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/2-design-principles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Design Principles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/3-orchestration-engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestration Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/4-domain-brain/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Brain
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/5-resilience-patterns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Resilience Patterns
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/6-implementation-phases/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Implementation Phases
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/7-intent-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/8-state-management/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    State Management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/9-knowledge-protocol/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Knowledge Protocol
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/10-mcp-tool-governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Tool Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/governance-rules/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governance Rules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/definition-of-ready/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Definition of Ready
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/adrs" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture Decision Records
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    CORTEX LENS Protocol
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            CORTEX LENS Protocol
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/00-lens-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/01-lens-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LENS System Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/02-intent-classification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Classification (Language Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/03-ast-analysis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AST Analysis (Examination Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/04-git-navigation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Git Navigation (Navigation Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/05-knowledge-synthesis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Knowledge Synthesis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/06-lens-crawler/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LENS Crawler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/07-domain-brain-integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Brain Integration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/rest-api" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    REST API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/mcp-protocol" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Protocol
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/cli" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI Commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    How-To Guides
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            How-To Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_1" id="__nav_8_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_1">
+            <span class="md-nav__icon md-icon"></span>
+            Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/1-local-development/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Local Development
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/2-mkdocs-server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MkDocs Server
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/4-faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Integration
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2">
+            <span class="md-nav__icon md-icon"></span>
+            Integration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/integration/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_3" id="__nav_8_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operations
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_3">
+            <span class="md-nav__icon md-icon"></span>
+            Operations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/operations/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/operations/4-troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_4" id="__nav_8_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Advanced
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_4">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/advanced/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Glossary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/known-issues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Known Issues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/changelog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/compliance-mappings/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Compliance Mappings
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/quick-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/gap-analysis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gap Analysis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/implementation-status/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Implementation Status
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/remediation-status/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Remediation Status
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/test-ac-mapping/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Test AC Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    MCP Tools Framework
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            MCP Tools Framework
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-mcp-tools/00-mcp-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-mcp-tools/mcp-architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Infrastructure & Resilience
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Infrastructure & Resilience
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../12-infrastructure/00-infrastructure-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Domain Brain
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Domain Brain
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../13-domain-brain/00-domain-brain-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../14-deployment/00-deployment-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Observability
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            Observability
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../15-observability/00-observability-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Testing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            Testing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../16-testing/00-testing-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Tutorials
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            Tutorials
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-tutorials/0-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrator Tutorials
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            Contributing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/1-contributing-guidelines/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing Guidelines
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/2-development-setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/3-testing-strategy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testing Strategy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/4-code-style-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code Style Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/5-pull-request-process/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pull Request Process
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    License
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-29-core-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      📋 The 29 CORE Rules
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 The 29 CORE Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#category-1-orchestration-lifecycle-4-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Category 1: Orchestration Lifecycle (4 Rules)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Category 1: Orchestration Lifecycle (4 Rules)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-001-incremental-autonomous-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-001: Incremental Autonomous Execution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-006-phase-2-setup-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-006: Phase -2 Setup Verification
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-007-phase-n1-teardown" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-007: Phase N+1 Teardown
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-021-use-orchestrator-scaffolder" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-021: Use Orchestrator Scaffolder
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#category-2-response-formatting-4-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Category 2: Response Formatting (4 Rules)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Category 2: Response Formatting (4 Rules)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-002-no-summary-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-002: No Summary Files
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-003-visual-progress-bars-not-code-blocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-003: Visual Progress Bars (NOT Code Blocks)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-004-minimal-continuation-prompts" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-004: Minimal Continuation Prompts
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-030-mandatory-cortex-response-headers" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-030: Mandatory CORTEX Response Headers
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#category-3-portability-1-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      Category 3: Portability (1 Rule)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Category 3: Portability (1 Rule)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-005-no-hardcoded-paths-critical" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-005: No Hardcoded Paths (CRITICAL)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#category-4-development-workflow-4-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Category 4: Development Workflow (4 Rules)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Category 4: Development Workflow (4 Rules)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-008-tdd-enforcement-red-green-refactor" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-008: TDD Enforcement (RED → GREEN → REFACTOR)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-009-files-in-plan-folders" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-009: Files in Plan Folders
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-010-script-consolidation" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-010: Script Consolidation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-019-tdd-master-routing-route-through-tdd-master" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-019: TDD-Master Routing (Route Through TDD-Master)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#category-5-architecture-integrity-7-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Category 5: Architecture Integrity (7 Rules)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Category 5: Architecture Integrity (7 Rules)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-014-solid-principles-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-014: SOLID Principles Required
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-018-yaml-first-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-018: YAML-First Design
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-020-no-markdown-in-brain" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-020: No Markdown in Brain
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-022-kebab-case-file-naming-with-25-char-limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-022: Kebab-Case File Naming with 25-Char Limit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-024-mcp-tool-decorator-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-024: MCP Tool Decorator Required
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-028-intelligent-kebab-case-naming-25-char-limit" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-028: Intelligent Kebab-Case Naming (25-Char Limit)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#category-6-quality-gates-7-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Category 6: Quality Gates (7 Rules)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Category 6: Quality Gates (7 Rules)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-011-python-type-hints-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-011: Python Type Hints Required
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-012-google-style-docstrings-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-012: Google-Style Docstrings Required
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-013-explicit-error-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-013: Explicit Error Handling
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-015-pep-8-import-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-015: PEP 8 Import Organization
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-016-black-formatting" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-016: Black Formatting
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-023-pre-commit-file-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-023: Pre-Commit File Validation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-025-resultt-pattern-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-025: Result[T] Pattern Required
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#category-7-security-privacy-1-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      Category 7: Security &amp; Privacy (1 Rule)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Category 7: Security & Privacy (1 Rule)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-017-strict-governance-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-017: Strict Governance Enforcement
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#category-8-audit-compliance-3-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      Category 8: Audit &amp; Compliance (3 Rules)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Category 8: Audit & Compliance (3 Rules)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#core-026-git-checkpoint-before-modify" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-026: Git Checkpoint Before Modify
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-027-audit-trail-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-027: Audit Trail Verification
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-029-documentation-drift-prevention" class="md-nav__link">
+    <span class="md-ellipsis">
+      CORE-029: Documentation Drift Prevention
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#rule-precedence-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Rule Precedence &amp; Enforcement
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Rule Precedence & Enforcement">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#precedence-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Precedence Hierarchy
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#immutability-mechanisms" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔒 Immutability Mechanisms
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔒 Immutability Mechanisms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-file-level-protection" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. File-Level Protection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-runtime-immutability" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Runtime Immutability
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-git-level-protection" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Git-Level Protection
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#violation-detection-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Violation Detection &amp; Response
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Violation Detection & Response">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#automatic-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Automatic Detection
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compliance-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Compliance Checklist
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      📈 Metrics
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Related Documentation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="cortex-tier-0-immutable-governance-rules">CORTEX TIER 0 - Immutable Governance Rules<a class="headerlink" href="#cortex-tier-0-immutable-governance-rules" title="Permanent link">&para;</a></h1>
+<p><strong>Version:</strong> 1.0 | <strong>Updated:</strong> 2026-01-22 | <strong>Authority:</strong> cortex_brain/tier0/governance/core-rules.yaml v1.0</p>
+<hr />
+<h2 id="overview">🧠 Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p><strong>TIER 0</strong> is the immutable foundation of the CORTEX Brain. It contains <strong>29 non-negotiable CORE rules</strong> (formerly called SKULL rules) that define operational boundaries, quality standards, and brain protection mechanisms. These rules cannot be overridden, modified, or bypassed under any circumstances.</p>
+<p><strong>Key Characteristics:</strong>
+- <strong>Immutability:</strong> Cannot be changed programmatically or through user requests
+- <strong>Non-Negotiable:</strong> Apply to ALL orchestrators, ALL requests, ALL phases
+- <strong>Highest Precedence:</strong> Override TIER 1, TIER 2, and TIER 3 rules completely
+- <strong>Audit-Protected:</strong> Any modification attempt triggers critical alerts and rollback
+- <strong>Enforcement:</strong> Strict, with no exceptions or special cases</p>
+<hr />
+<h2 id="the-29-core-rules">📋 The 29 CORE Rules<a class="headerlink" href="#the-29-core-rules" title="Permanent link">&para;</a></h2>
+<h3 id="category-1-orchestration-lifecycle-4-rules">Category 1: Orchestration Lifecycle (4 Rules)<a class="headerlink" href="#category-1-orchestration-lifecycle-4-rules" title="Permanent link">&para;</a></h3>
+<h4 id="core-001-incremental-autonomous-execution">CORE-001: Incremental Autonomous Execution<a class="headerlink" href="#core-001-incremental-autonomous-execution" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Prevent token limit failures by limiting work to &lt;500 line increments.</p>
+<p><strong>Rule:</strong>
+- ALL orchestrators work in small increments (&lt;500 lines per turn)
+- State MUST persist between increments
+- Token usage capped at 80%</p>
+<p><strong>Why:</strong> LLMs have context windows. Batching too much work loses state, forcing re-analysis and wasting tokens.</p>
+<p><strong>Validation:</strong>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="n">lines_per_turn</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="n">GovernanceViolation</span><span class="p">(</span><span class="s2">&quot;CORE-001: Incremental execution violated&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">state_persistence</span><span class="o">.</span><span class="n">is_lost</span><span class="p">():</span>
+    <span class="k">raise</span> <span class="n">GovernanceViolation</span><span class="p">(</span><span class="s2">&quot;CORE-001: State not persisted between turns&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+<p><strong>Example:</strong>
+<div class="highlight"><pre><span></span><code>Turn 1: Lines 1-500 → State → Checkpoint
+Turn 2: Lines 501-1000 → State → Checkpoint
+Turn 3: Lines 1001-1500 → State → Checkpoint
+</code></pre></div></p>
+<hr />
+<h4 id="core-006-phase-2-setup-verification">CORE-006: Phase -2 Setup Verification<a class="headerlink" href="#core-006-phase-2-setup-verification" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Ensure ALL dependencies exist before execution starts.</p>
+<p><strong>Rule:</strong>
+- Verify dependencies before orchestrator execution
+- Dependencies must PASS tests (not just file existence)
+- VSCode cache checked
+- Governance compliance validated</p>
+<p><strong>Why:</strong> Missing dependencies cause cascading failures mid-execution, wasting tokens and breaking workflows.</p>
+<p><strong>Validation:</strong>
+<div class="highlight"><pre><span></span><code><span class="c1"># Check dependencies</span>
+<span class="k">for</span> <span class="n">dep</span> <span class="ow">in</span> <span class="n">required_dependencies</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dep</span><span class="o">.</span><span class="n">file_exists</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="n">GovernanceViolation</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CORE-006: Missing </span><span class="si">{</span><span class="n">dep</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Test must pass, not just exist</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">dep</span><span class="o">.</span><span class="n">tests_pass</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="n">GovernanceViolation</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CORE-006: Dependency tests fail for </span><span class="si">{</span><span class="n">dep</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h4 id="core-007-phase-n1-teardown">CORE-007: Phase N+1 Teardown<a class="headerlink" href="#core-007-phase-n1-teardown" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Clean up and refactor after completion.</p>
+<p><strong>Rule:</strong>
+- Refactor modified files after completion
+- Git commit follows pattern
+- Unused code removed</p>
+<p><strong>Why:</strong> Prevents technical debt accumulation and keeps codebase clean.</p>
+<p><strong>Commit Pattern:</strong>
+<div class="highlight"><pre><span></span><code>git commit -m &quot;phase-XX: COMPLETED - refactored&quot;
+git commit -m &quot;phase-XX: COMPLETED - audit verified&quot;
+</code></pre></div></p>
+<hr />
+<h4 id="core-021-use-orchestrator-scaffolder">CORE-021: Use Orchestrator Scaffolder<a class="headerlink" href="#core-021-use-orchestrator-scaffolder" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Ensure consistent orchestrator structure.</p>
+<p><strong>Rule:</strong>
+- NEW orchestrators created via scaffolder, not manually
+- Must extend <code>BaseOrchestratorV4</code>
+- Must have <code>@register_with_master</code> decorator
+- Manifest created automatically</p>
+<p><strong>Why:</strong> Prevents architectural inconsistencies and ensures proper integration.</p>
+<hr />
+<h3 id="category-2-response-formatting-4-rules">Category 2: Response Formatting (4 Rules)<a class="headerlink" href="#category-2-response-formatting-4-rules" title="Permanent link">&para;</a></h3>
+<h4 id="core-002-no-summary-files">CORE-002: No Summary Files<a class="headerlink" href="#core-002-no-summary-files" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Keep documentation clean and prevent drift.</p>
+<p><strong>Rule:</strong>
+- Do NOT create <code>*-summary.md</code> files
+- Do NOT create <code>*-report.md</code> files
+- Do NOT create <code>completion-*.md</code> files
+- Summaries go in chat/responses only</p>
+<p><strong>Why:</strong> These files create maintenance burdens and violate documentation minimalism.</p>
+<p><strong>Invalid:</strong> ❌
+<div class="highlight"><pre><span></span><code>- AC-001-SUMMARY.md
+- IMPLEMENTATION-REPORT.md
+- completion-status.md
+</code></pre></div></p>
+<hr />
+<h4 id="core-003-visual-progress-bars-not-code-blocks">CORE-003: Visual Progress Bars (NOT Code Blocks)<a class="headerlink" href="#core-003-visual-progress-bars-not-code-blocks" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Use appropriate formatting for progress.</p>
+<p><strong>Rule:</strong>
+- Progress MUST use visual bars: █████░░░░░
+- NOT code blocks
+- Response ≤40 lines</p>
+<p><strong>Why:</strong> Visual formatting is more readable and respects communication minimalism.</p>
+<p><strong>Valid:</strong> ✅
+<div class="highlight"><pre><span></span><code>Progress: ███████░░░░░░░ 50% [████████/████████]
+</code></pre></div></p>
+<p><strong>Invalid:</strong> ❌
+<div class="highlight"><pre><span></span><code>
+</code></pre></div>
+Progress: ###############
+<div class="highlight"><pre><span></span><code>
+</code></pre></div></p>
+<hr />
+<h4 id="core-004-minimal-continuation-prompts">CORE-004: Minimal Continuation Prompts<a class="headerlink" href="#core-004-minimal-continuation-prompts" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Keep continuation context minimal.</p>
+<p><strong>Rule:</strong>
+- <code>CONTINUATION-PROMPT.md</code> MUST be &lt;500 tokens
+- Max line count: 12
+- File size: &lt;2KB
+- Use pointer pattern (reference, don't repeat)</p>
+<p><strong>Why:</strong> Reduces context pollution and token waste.</p>
+<hr />
+<h4 id="core-030-mandatory-cortex-response-headers">CORE-030: Mandatory CORTEX Response Headers<a class="headerlink" href="#core-030-mandatory-cortex-response-headers" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Ensure consistent response formatting and attribution.</p>
+<p><strong>Rule:</strong>
+- ALL responses MUST start with standard header
+- Format: <code>## 🧠 CORTEX {operation}</code>
+- Include Author, Phase, Orchestrator, Copyright</p>
+<p><strong>Exact Format:</strong>
+<div class="highlight"><pre><span></span><code><span class="gu">## 🧠 CORTEX {operation}</span>
+<span class="gs">**Author:**</span> Asif Hussain | <span class="gs">**Phase:**</span> {phase} | <span class="gs">**Orchestrator:**</span> {orchestrator} ✅
+
+---
+<span class="gs">**Copyright © 2025-2026 Asif Hussain. All rights reserved.**</span>
+</code></pre></div></p>
+<p><strong>Operation Types:</strong>
+- Code Analysis
+- Code Review
+- Implementation Plan
+- AC Execution
+- Governance Evaluation
+- Debugging
+- Response
+- Planning
+- Testing
+- Validation</p>
+<p><strong>No Exceptions:</strong> This is immutable and applies to every response.</p>
+<hr />
+<h3 id="category-3-portability-1-rule">Category 3: Portability (1 Rule)<a class="headerlink" href="#category-3-portability-1-rule" title="Permanent link">&para;</a></h3>
+<h4 id="core-005-no-hardcoded-paths-critical">CORE-005: No Hardcoded Paths (CRITICAL)<a class="headerlink" href="#core-005-no-hardcoded-paths-critical" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Ensure code works across all machines and environments.</p>
+<p><strong>Rule:</strong>
+- NEVER use hardcoded absolute paths
+- Use <code>src.core.path_resolver.get_project_root()</code>
+- Platform-agnostic path handling required</p>
+<p><strong>Wrong:</strong> ❌
+<div class="highlight"><pre><span></span><code><span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/Users/asifhussain/PROJECTS/CORTEX/cortex_brain&quot;</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;C:</span><span class="se">\\</span><span class="s2">Users</span><span class="se">\\</span><span class="s2">user</span><span class="se">\\</span><span class="s2">PROJECTS</span><span class="se">\\</span><span class="s2">CORTEX&quot;</span>
+</code></pre></div></p>
+<p><strong>Right:</strong> ✅
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cortex.brain.core.path_resolver</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_project_root</span>
+<span class="n">path</span> <span class="o">=</span> <span class="n">get_project_root</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;cortex_brain&quot;</span>
+</code></pre></div></p>
+<hr />
+<h3 id="category-4-development-workflow-4-rules">Category 4: Development Workflow (4 Rules)<a class="headerlink" href="#category-4-development-workflow-4-rules" title="Permanent link">&para;</a></h3>
+<h4 id="core-008-tdd-enforcement-red-green-refactor">CORE-008: TDD Enforcement (RED → GREEN → REFACTOR)<a class="headerlink" href="#core-008-tdd-enforcement-red-green-refactor" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Ensure code quality through test-first development.</p>
+<p><strong>Rule:</strong>
+- Tests MUST exist BEFORE implementation
+- Test fails initially (RED phase)
+- Implementation makes test pass (GREEN phase)
+- Refactor with tests passing (REFACTOR phase)</p>
+<p><strong>Why:</strong> TDD catches requirements errors early and ensures testability.</p>
+<p><strong>Workflow:</strong>
+<div class="highlight"><pre><span></span><code>1. RED:     Write test (should fail)
+2. GREEN:   Write minimal implementation (test passes)
+3. REFACTOR: Improve code (tests still pass)
+4. GIT:     Checkpoint after each phase
+</code></pre></div></p>
+<hr />
+<h4 id="core-009-files-in-plan-folders">CORE-009: Files in Plan Folders<a class="headerlink" href="#core-009-files-in-plan-folders" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Organize plan artifacts logically.</p>
+<p><strong>Rule:</strong>
+- Plan artifacts MUST live in plan folder structure
+- No plan files in workspace root
+- Structure: <code>plan_folder/artifacts/</code>, <code>plan_folder/tracking/</code></p>
+<p><strong>Why:</strong> Prevents root directory clutter and ensures discoverability.</p>
+<hr />
+<h4 id="core-010-script-consolidation">CORE-010: Script Consolidation<a class="headerlink" href="#core-010-script-consolidation" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Prevent duplicate script functionality.</p>
+<p><strong>Rule:</strong>
+- Scripts must be cataloged
+- Duplicate detection runs
+- Similar scripts consolidated</p>
+<p><strong>Why:</strong> Reduces maintenance burden and prevents inconsistencies.</p>
+<hr />
+<h4 id="core-019-tdd-master-routing-route-through-tdd-master">CORE-019: TDD-Master Routing (Route Through TDD-Master)<a class="headerlink" href="#core-019-tdd-master-routing-route-through-tdd-master" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Ensure implementation requests go through proper orchestration.</p>
+<p><strong>Rule:</strong>
+- <code>"implement X"</code> routes to TDD-Master orchestrator
+- <code>"build X"</code> routes to TDD-Master orchestrator
+- Never write code directly; always route to orchestrator</p>
+<p><strong>Why:</strong> Ensures TDD compliance, governance checking, and audit trails.</p>
+<hr />
+<h3 id="category-5-architecture-integrity-7-rules">Category 5: Architecture Integrity (7 Rules)<a class="headerlink" href="#category-5-architecture-integrity-7-rules" title="Permanent link">&para;</a></h3>
+<h4 id="core-014-solid-principles-required">CORE-014: SOLID Principles Required<a class="headerlink" href="#core-014-solid-principles-required" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Ensure maintainable, extensible code architecture.</p>
+<p><strong>Rule:</strong>
+- Code MUST follow SOLID principles:
+  - <strong>S:</strong> Single Responsibility - one reason to change
+  - <strong>O:</strong> Open/Closed - open for extension, closed for modification
+  - <strong>L:</strong> Liskov Substitution - subtypes are substitutable
+  - <strong>I:</strong> Interface Segregation - many specific interfaces
+  - <strong>D:</strong> Dependency Inversion - depend on abstractions</p>
+<p><strong>Validation:</strong>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">AnalysisResult</span><span class="p">:</span>
+    <span class="n">single_responsibility</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">open_closed</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">liskov_substitution</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">interface_segregation</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">dependency_inversion</span><span class="p">:</span> <span class="nb">bool</span>
+</code></pre></div></p>
+<hr />
+<h4 id="core-018-yaml-first-design">CORE-018: YAML-First Design<a class="headerlink" href="#core-018-yaml-first-design" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Maintain machine-readable configurations.</p>
+<p><strong>Rule:</strong>
+- Plans and configs MUST use YAML, not markdown
+- Machine-readable format required
+- Exception: README.md, docs/ only</p>
+<p><strong>Why:</strong> Enables tooling, validation, and automation.</p>
+<p><strong>Invalid:</strong> ❌
+<div class="highlight"><pre><span></span><code>- PLAN-DOCUMENT.md (config in markdown)
+</code></pre></div></p>
+<p><strong>Valid:</strong> ✅
+<div class="highlight"><pre><span></span><code>- plan-document.yaml (config in YAML)
+- README.md (documentation okay)
+</code></pre></div></p>
+<hr />
+<h4 id="core-020-no-markdown-in-brain">CORE-020: No Markdown in Brain<a class="headerlink" href="#core-020-no-markdown-in-brain" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Keep cortex_brain configuration-only.</p>
+<p><strong>Rule:</strong>
+- <code>cortex_brain/</code> MUST be YAML/JSON only
+- No <code>.md</code> files allowed in brain
+- Exception: None (absolute rule)</p>
+<p><strong>Why:</strong> Brain is configuration, not documentation. Keeps it clean and machine-readable.</p>
+<hr />
+<h4 id="core-022-kebab-case-file-naming-with-25-char-limit">CORE-022: Kebab-Case File Naming with 25-Char Limit<a class="headerlink" href="#core-022-kebab-case-file-naming-with-25-char-limit" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Ensure consistent, self-documenting file naming.</p>
+<p><strong>Rule:</strong>
+- Kebab-case only: lowercase with hyphens
+- Max 25 characters including extension
+- Use semantic acronyms to stay within limit
+- Names must be self-documenting</p>
+<p><strong>Acronym Dictionary (Semantic):</strong>
+<div class="highlight"><pre><span></span><code>cfg: config           mgr: manager       exec: execution
+db: database          util: utility      impl: implementation
+svc: service          gov: governance    sync: synchronization
+rpt: report           anal: analysis     ver: verification
+</code></pre></div></p>
+<p><strong>Valid Examples:</strong> ✅
+<div class="highlight"><pre><span></span><code>- cortex-vacuum-exec.py      (20 chars)
+- cortex-gov-rules.yaml      (19 chars)
+- plan-ac-tracker.db         (16 chars)
+- phase-completion-rpt.md    (21 chars)
+</code></pre></div></p>
+<p><strong>Invalid Examples:</strong> ❌
+<div class="highlight"><pre><span></span><code>- cortex_vacuum_executor.py                    (underscores)
+- cortex-vacuum-implementation-executor.py     (41 chars, too long)
+- CortexVacuumExecutor.py                      (PascalCase)
+</code></pre></div></p>
+<hr />
+<h4 id="core-024-mcp-tool-decorator-required">CORE-024: MCP Tool Decorator Required<a class="headerlink" href="#core-024-mcp-tool-decorator-required" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Ensure all tools are registered and discoverable.</p>
+<p><strong>Rule:</strong>
+- ALL MCP tools MUST use <code>@mcp_tool</code> decorator
+- Registered in manifest
+- No manual registration</p>
+<p><strong>Why:</strong> Prevents unregistered tools and ensures discoverability.</p>
+<p><strong>Valid:</strong> ✅
+<div class="highlight"><pre><span></span><code><span class="nd">@mcp_tool</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">my_tool</span><span class="p">(</span><span class="n">param</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tool description.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h4 id="core-028-intelligent-kebab-case-naming-25-char-limit">CORE-028: Intelligent Kebab-Case Naming (25-Char Limit)<a class="headerlink" href="#core-028-intelligent-kebab-case-naming-25-char-limit" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Strategic naming balancing clarity and conciseness.</p>
+<p><strong>Rule:</strong>
+- Use kebab-case with semantic acronyms
+- Order: <code>[domain]-[component]-[purpose].[ext]</code>
+- Max 25 chars total
+- Avoid articles (a, the), conjunctions (and), prepositions</p>
+<p><strong>Validation:</strong>
+<div class="highlight"><pre><span></span><code><span class="n">pattern</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]+)?$&#39;</span>
+<span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">25</span>
+<span class="k">assert</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h3 id="category-6-quality-gates-7-rules">Category 6: Quality Gates (7 Rules)<a class="headerlink" href="#category-6-quality-gates-7-rules" title="Permanent link">&para;</a></h3>
+<h4 id="core-011-python-type-hints-required">CORE-011: Python Type Hints Required<a class="headerlink" href="#core-011-python-type-hints-required" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Enable static analysis and catch type errors early.</p>
+<p><strong>Rule:</strong>
+- ALL Python functions MUST have complete type hints
+- Parameters require type hints
+- Return types specified
+- No bare <code>Any</code> types</p>
+<p><strong>Why:</strong> Type hints catch errors at edit time, not runtime.</p>
+<p><strong>Valid:</strong> ✅
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">process_data</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">count</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Process items and return results.&quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</code></pre></div></p>
+<p><strong>Invalid:</strong> ❌
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">process_data</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>  <span class="c1"># No type hints</span>
+    <span class="k">return</span> <span class="n">data</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">process_data</span><span class="p">(</span><span class="n">items</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">count</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>  <span class="c1"># Bare Any</span>
+    <span class="k">return</span> <span class="n">data</span>
+</code></pre></div></p>
+<hr />
+<h4 id="core-012-google-style-docstrings-required">CORE-012: Google-Style Docstrings Required<a class="headerlink" href="#core-012-google-style-docstrings-required" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Ensure all public APIs are documented.</p>
+<p><strong>Rule:</strong>
+- ALL public functions/classes MUST have docstrings
+- Google-style format required
+- Args/Returns/Raises sections
+- One-line summary, detailed description</p>
+<p><strong>Format:</strong>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">my_function</span><span class="p">(</span><span class="n">param1</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">param2</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Brief summary here.</span>
+
+<span class="sd">    More detailed description if needed.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        param1: Description of param1.</span>
+<span class="sd">        param2: Description of param2.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Result[bool]: True if successful, Err with message otherwise.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        GovernanceViolation: If governance rules violated.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">pass</span>
+</code></pre></div></p>
+<hr />
+<h4 id="core-013-explicit-error-handling">CORE-013: Explicit Error Handling<a class="headerlink" href="#core-013-explicit-error-handling" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Prevent silent failures and cryptic errors.</p>
+<p><strong>Rule:</strong>
+- NO bare <code>except:</code> clauses
+- NO catching generic <code>Exception</code>
+- Specific exception types only
+- Error context preserved</p>
+<p><strong>Invalid:</strong> ❌
+<div class="highlight"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
+    <span class="n">risky_operation</span><span class="p">()</span>
+<span class="k">except</span><span class="p">:</span>  <span class="c1"># Bare except - FORBIDDEN</span>
+    <span class="k">pass</span>
+
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># Too generic - FORBIDDEN</span>
+    <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Error occurred&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+<p><strong>Valid:</strong> ✅
+<div class="highlight"><pre><span></span><code><span class="k">try</span><span class="p">:</span>
+    <span class="n">risky_operation</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">FileNotFoundError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File not found: </span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid value: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h4 id="core-015-pep-8-import-organization">CORE-015: PEP 8 Import Organization<a class="headerlink" href="#core-015-pep-8-import-organization" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Maintain consistent, readable import structure.</p>
+<p><strong>Rule:</strong>
+- 3 import sections: stdlib, third-party, local
+- Blank line between sections
+- Sorted alphabetically within sections
+- No wildcard imports</p>
+<p><strong>Valid:</strong> ✅
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">cortex.brain.core.result</span><span class="w"> </span><span class="kn">import</span> <span class="n">Result</span><span class="p">,</span> <span class="n">Ok</span><span class="p">,</span> <span class="n">Err</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cortex.brain.core.governance_registry</span><span class="w"> </span><span class="kn">import</span> <span class="n">GovernanceRegistry</span>
+</code></pre></div></p>
+<p><strong>Invalid:</strong> ❌
+<div class="highlight"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">cortex.brain.core</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>  <span class="c1"># Wildcard - FORBIDDEN</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="o">*</span>  <span class="c1"># Wildcard - FORBIDDEN</span>
+</code></pre></div></p>
+<hr />
+<h4 id="core-016-black-formatting">CORE-016: Black Formatting<a class="headerlink" href="#core-016-black-formatting" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Enforce consistent code style.</p>
+<p><strong>Rule:</strong>
+- Python code MUST be formatted with Black
+- Line length: 100 characters
+- Double quotes
+- Trailing commas in multi-line structures</p>
+<p><strong>Validation:</strong>
+<div class="highlight"><pre><span></span><code>black<span class="w"> </span>--line-length<span class="o">=</span><span class="m">100</span><span class="w"> </span>--check<span class="w"> </span>cortex/
+</code></pre></div></p>
+<hr />
+<h4 id="core-023-pre-commit-file-validation">CORE-023: Pre-Commit File Validation<a class="headerlink" href="#core-023-pre-commit-file-validation" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Catch errors before commit.</p>
+<p><strong>Rule:</strong>
+- Modified files MUST pass type-specific validation
+- HTML: html5lib + WCAG AA
+- YAML: schema validation
+- Python: pytest pass</p>
+<p><strong>Why:</strong> Prevents broken commits.</p>
+<hr />
+<h4 id="core-025-resultt-pattern-required">CORE-025: Result[T] Pattern Required<a class="headerlink" href="#core-025-resultt-pattern-required" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Enable explicit error handling without exceptions.</p>
+<p><strong>Rule:</strong>
+- Functions MUST return <code>Result[T]</code>
+- Use <code>Ok(value)</code> for success
+- Use <code>Err(message)</code> for failure
+- Check <code>is_ok()</code> before <code>unwrap()</code></p>
+<p><strong>Why:</strong> Explicit error handling is safer than exceptions.</p>
+<p><strong>Valid:</strong> ✅
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">risky_operation</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">error_condition</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="s2">&quot;Error description&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="s2">&quot;Success result&quot;</span><span class="p">)</span>
+
+<span class="c1"># Usage</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">risky_operation</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">is_ok</span><span class="p">():</span>
+    <span class="n">value</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">unwrap</span><span class="p">()</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">error</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">error</span><span class="p">()</span>
+</code></pre></div></p>
+<hr />
+<h3 id="category-7-security-privacy-1-rule">Category 7: Security &amp; Privacy (1 Rule)<a class="headerlink" href="#category-7-security-privacy-1-rule" title="Permanent link">&para;</a></h3>
+<h4 id="core-017-strict-governance-enforcement">CORE-017: Strict Governance Enforcement<a class="headerlink" href="#core-017-strict-governance-enforcement" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Ensure governance rules are never bypassed.</p>
+<p><strong>Rule:</strong>
+- ALL rules enforced strictly
+- No overrides allowed
+- All violations logged
+- Execution halted on violation</p>
+<p><strong>Why:</strong> Without strict enforcement, governance becomes optional.</p>
+<hr />
+<h3 id="category-8-audit-compliance-3-rules">Category 8: Audit &amp; Compliance (3 Rules)<a class="headerlink" href="#category-8-audit-compliance-3-rules" title="Permanent link">&para;</a></h3>
+<h4 id="core-026-git-checkpoint-before-modify">CORE-026: Git Checkpoint Before Modify<a class="headerlink" href="#core-026-git-checkpoint-before-modify" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Enable efficient rollback on failures.</p>
+<p><strong>Rule:</strong>
+- Git checkpoint BEFORE every major action
+- Checkpoint before AC-ID start
+- Checkpoint before file modification
+- Commit after successful test pass</p>
+<p><strong>Commit Patterns:</strong>
+<div class="highlight"><pre><span></span><code>git commit -m &quot;checkpoint: before AC-XXX-XX&quot;
+git commit -m &quot;checkpoint: pre-modify&quot;
+git commit -m &quot;AC-XXX-XX: [description] - tests passing&quot;
+git commit -m &quot;phase-XX: COMPLETED - audit verified&quot;
+</code></pre></div></p>
+<hr />
+<h4 id="core-027-audit-trail-verification">CORE-027: Audit Trail Verification<a class="headerlink" href="#core-027-audit-trail-verification" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Ensure phase completion can be verified.</p>
+<p><strong>Rule:</strong>
+- Phase completion validated by audit trail
+- Each AC-ID has 3+ audit entries:
+  - <code>AC_START</code>
+  - <code>AC_EXECUTE</code>
+  - <code>AC_COMPLETE</code>
+- Hash chain integrity verified
+- No phase lock without audit verification</p>
+<p><strong>Audit Structure:</strong>
+<div class="highlight"><pre><span></span><code>AC-ID: AC-FR-001-01
+├─ AC_START:    [timestamp, audit_id, hash]
+├─ AC_EXECUTE:  [timestamp, audit_id, hash]
+├─ AC_COMPLETE: [timestamp, audit_id, hash]
+└─ Verification: ✅ Hash chain valid
+</code></pre></div></p>
+<hr />
+<h4 id="core-029-documentation-drift-prevention">CORE-029: Documentation Drift Prevention<a class="headerlink" href="#core-029-documentation-drift-prevention" title="Permanent link">&para;</a></h4>
+<p><strong>Purpose:</strong> Ensure features are documented before phase lock.</p>
+<p><strong>Rule:</strong>
+- User-facing features MUST be documented
+- Documentation required in prompts BEFORE phase lock
+- Features + documentation go together
+- Companion AC-IDs for documentation</p>
+<p><strong>Pattern:</strong>
+<div class="highlight"><pre><span></span><code>Feature AC:        AC-FR-X-01: Implement feature
+Companion AC:      AC-DOC-X-01: Document in CORTEX.prompt.md
+
+Both required for phase lock.
+</code></pre></div></p>
+<hr />
+<h2 id="rule-precedence-enforcement">🎯 Rule Precedence &amp; Enforcement<a class="headerlink" href="#rule-precedence-enforcement" title="Permanent link">&para;</a></h2>
+<h3 id="precedence-hierarchy">Precedence Hierarchy<a class="headerlink" href="#precedence-hierarchy" title="Permanent link">&para;</a></h3>
+<p>When rules conflict (they shouldn't, but theoretically):</p>
+<div class="highlight"><pre><span></span><code>TIER 0 Rules (Immutable) &gt; All other rules
+Within TIER 0:
+  1. Security/Privacy rules (CORE-017)
+  2. Portability rules (CORE-005)
+  3. Type/Format rules (CORE-011, CORE-012)
+  4. Workflow rules (CORE-008, CORE-019)
+  5. Formatting rules (CORE-002, CORE-003, CORE-004, CORE-030)
+</code></pre></div>
+<hr />
+<h2 id="immutability-mechanisms">🔒 Immutability Mechanisms<a class="headerlink" href="#immutability-mechanisms" title="Permanent link">&para;</a></h2>
+<h3 id="1-file-level-protection">1. File-Level Protection<a class="headerlink" href="#1-file-level-protection" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># cortex_brain/tier0/governance/core-rules.yaml</span>
+<span class="c1"># READ-ONLY FILE - DO NOT EDIT</span>
+
+<span class="c1"># Pre-commit hook prevents modifications</span>
+<span class="c1"># Schema validation on any load attempt</span>
+<span class="c1"># Hash verification at startup</span>
+</code></pre></div>
+<h3 id="2-runtime-immutability">2. Runtime Immutability<a class="headerlink" href="#2-runtime-immutability" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">MutationGuard</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prevents programmatic modification of TIER 0 rules.&quot;&quot;&quot;</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">protect_rule</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">rule</span><span class="p">:</span> <span class="n">GovernanceRule</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make rule immutable.&quot;&quot;&quot;</span>
+        <span class="n">rule</span><span class="o">.</span><span class="n">_immutable</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">rule</span><span class="o">.</span><span class="n">_original_hash</span> <span class="o">=</span> <span class="n">compute_hash</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">verify_integrity</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">rule</span><span class="p">:</span> <span class="n">GovernanceRule</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Verify rule hasn&#39;t been modified.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">rule</span><span class="o">.</span><span class="n">_immutable</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">GovernanceViolation</span><span class="p">(</span><span class="s2">&quot;Rule not protected&quot;</span><span class="p">)</span>
+
+        <span class="n">current_hash</span> <span class="o">=</span> <span class="n">compute_hash</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">current_hash</span> <span class="o">!=</span> <span class="n">rule</span><span class="o">.</span><span class="n">_original_hash</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">GovernanceViolation</span><span class="p">(</span><span class="s2">&quot;Rule has been modified!&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="kc">True</span>
+</code></pre></div>
+<h3 id="3-git-level-protection">3. Git-Level Protection<a class="headerlink" href="#3-git-level-protection" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="c1"># Pre-commit hook</span>
+<span class="k">if</span><span class="w"> </span>modified_file<span class="w"> </span><span class="k">in</span><span class="w"> </span>TIER0_PROTECTED_FILES:
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;ERROR: Cannot modify TIER 0 files&quot;</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+
+<span class="c1"># Branch protection</span>
+<span class="c1"># TIER 0 changes require:</span>
+<span class="c1"># - Code review</span>
+<span class="c1"># - All tests pass</span>
+<span class="c1"># - Explicit approval from governance team</span>
+</code></pre></div>
+<hr />
+<h2 id="violation-detection-response">📊 Violation Detection &amp; Response<a class="headerlink" href="#violation-detection-response" title="Permanent link">&para;</a></h2>
+<h3 id="automatic-detection">Automatic Detection<a class="headerlink" href="#automatic-detection" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GovernanceEnforcer</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_rules</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">:</span> <span class="n">Request</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check all applicable TIER 0 rules.&quot;&quot;&quot;</span>
+
+        <span class="n">active_rules</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">filter_by_context</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">active_rules</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">rule</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">Err</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;TIER 0 Violation: </span><span class="si">{</span><span class="n">rule</span><span class="o">.</span><span class="n">rule_id</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">rule</span><span class="o">.</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_violation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">violation</span><span class="p">:</span> <span class="n">GovernanceViolation</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle rule violation.&quot;&quot;&quot;</span>
+
+        <span class="c1"># 1. Log immediately (CRITICAL level)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GOVERNANCE VIOLATION: </span><span class="si">{</span><span class="n">violation</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># 2. Audit trail</span>
+        <span class="n">audit_logger</span><span class="o">.</span><span class="n">record</span><span class="p">(</span>
+            <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;GOVERNANCE_VIOLATION&quot;</span><span class="p">,</span>
+            <span class="n">violation_rule</span><span class="o">=</span><span class="n">violation</span><span class="o">.</span><span class="n">rule_id</span><span class="p">,</span>
+            <span class="n">timestamp</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+            <span class="nb">hash</span><span class="o">=</span><span class="n">compute_hash</span><span class="p">(</span><span class="n">violation</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1"># 3. Escalate</span>
+        <span class="k">raise</span> <span class="n">GovernanceViolationEvent</span><span class="p">(</span><span class="n">violation</span><span class="p">)</span>
+
+        <span class="c1"># 4. Halt execution</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">halt_orchestrator</span><span class="p">()</span>
+</code></pre></div>
+<hr />
+<h2 id="compliance-checklist">✅ Compliance Checklist<a class="headerlink" href="#compliance-checklist" title="Permanent link">&para;</a></h2>
+<p>Before any code submission:</p>
+<ul>
+<li>[ ] All functions have type hints (CORE-011)</li>
+<li>[ ] All public functions have docstrings (CORE-012)</li>
+<li>[ ] No bare <code>except</code> clauses (CORE-013)</li>
+<li>[ ] No hardcoded paths (CORE-005)</li>
+<li>[ ] Files use kebab-case, &lt;25 chars (CORE-022, CORE-028)</li>
+<li>[ ] Functions return Result[T] (CORE-025)</li>
+<li>[ ] Tests written before implementation (CORE-008)</li>
+<li>[ ] Response starts with CORTEX header (CORE-030)</li>
+<li>[ ] YAML configs used, no .md in brain (CORE-018, CORE-020)</li>
+<li>[ ] Git checkpoints created (CORE-026)</li>
+<li>[ ] Audit trail entries logged (CORE-027)</li>
+</ul>
+<hr />
+<h2 id="metrics">📈 Metrics<a class="headerlink" href="#metrics" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total TIER 0 Rules</td>
+<td>29 CORE</td>
+</tr>
+<tr>
+<td>Test Coverage</td>
+<td>404 tests, 100%</td>
+</tr>
+<tr>
+<td>Enforcement Mode</td>
+<td>Strict (no override)</td>
+</tr>
+<tr>
+<td>Average Violation Response Time</td>
+<td>&lt;10ms</td>
+</tr>
+<tr>
+<td>Immutability Verification</td>
+<td>100% on load</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="related-documentation">🔗 Related Documentation<a class="headerlink" href="#related-documentation" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../00-brain-index/">Brain Index</a> - System overview</li>
+<li><a href="../02-tier1-acceptance/">TIER 1 Governance</a> - AC-ID tracking</li>
+<li><a href="../03-tier2-response-templates/">TIER 2 Templates</a> - Response formatting</li>
+<li><a href="../04-tier3-knowledge/">TIER 3 Knowledge</a> - Domain knowledge</li>
+<li><a href="../../cortex/brain/core/governance_registry.py">Governance Registry</a> - Implementation</li>
+</ul>
+<hr />
+<p><strong>Copyright © 2025-2026 Asif Hussain. All rights reserved.</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>

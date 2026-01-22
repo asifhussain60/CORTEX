@@ -1,0 +1,60 @@
+graph TB
+    subgraph "CORTEX Orchestration Architecture"
+        Client["Client/External Interface"]
+    end
+    
+    subgraph "Master Orchestrator Layer"
+        Master["Master Orchestrator<br/>(Coordinator/Facade)"]
+    end
+    
+    subgraph "Routing Layer"
+        Router["Intent Router<br/>(Classification & Routing)"]
+        AdaptiveRouter["Adaptive Router<br/>(Load Balancing)"]
+    end
+    
+    subgraph "Orchestration Layers"
+        Workflow["Workflow Orchestrator<br/>(5-Stage Pipeline)"]
+        Composition["Composition Engine<br/>(Pattern-based)"]
+    end
+    
+    subgraph "Domain Orchestrators"
+        Refactor["Refactoring Orchestrator<br/>(SOLID Analysis)"]
+        Domain["Domain-Specific<br/>Orchestrators"]
+    end
+    
+    subgraph "Infrastructure"
+        Audit["Audit Logger<br/>(Hash-chain)"]
+        State["State Manager<br/>(Persistence)"]
+        Governance["Governance Registry<br/>(Rule Enforcement)"]
+        Boundary["Boundary Rules<br/>(Behavioral Validation)"]
+    end
+    
+    subgraph "Knowledge Layer"
+        Knowledge["Knowledge Repository<br/>(Best Practices)"]
+        Business["Business Knowledge<br/>(Domain-specific)"]
+    end
+    
+    Client -->|Request| Master
+    Master -->|Route| Router
+    Router -->|Select Handler| AdaptiveRouter
+    AdaptiveRouter -->|Route| Workflow
+    
+    Workflow -->|Execute Stages| Composition
+    Composition -->|Delegate| Refactor
+    Composition -->|Delegate| Domain
+    
+    Master -.->|Log| Audit
+    Master -.->|Persist| State
+    Master -.->|Validate| Governance
+    Master -.->|Enforce| Boundary
+    
+    Router -.->|Query| Knowledge
+    Refactor -.->|Query| Knowledge
+    Domain -.->|Query| Business
+    
+    style Master fill:#ff6b6b,stroke:#c92a2a,color:#fff
+    style Router fill:#4ecdc4,stroke:#118b7f,color:#fff
+    style Workflow fill:#45b7d1,stroke:#1e8b9a,color:#fff
+    style Refactor fill:#f7b731,stroke:#d4a017,color:#000
+    style Audit fill:#a8e6cf,stroke:#56ab91,color:#000
+    style Governance fill:#ffd3b6,stroke:#ff6b6b,color:#000

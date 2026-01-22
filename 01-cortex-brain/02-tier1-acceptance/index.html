@@ -1,0 +1,4705 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="AI-powered orchestration platform with multi-tier governance">
+      
+      
+        <meta name="author" content="Asif Hussain">
+      
+      
+      
+        <link rel="prev" href="../01-tier0-governance/">
+      
+      
+        <link rel="next" href="../03-tier2-response-templates/">
+      
+      
+      <link rel="icon" href="../../assets/images/CORTEX-logo-64.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
+    
+    
+      
+        <title>TIER 1 Acceptance Criteria - CORTEX Documentation</title>
+      
+    
+    
+  
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+  <style>
+    /* CORTEX Logo styling - display logo in header top left */
+    .md-header__button.md-logo img {
+      width: 100px;
+      height: 100px;
+      object-fit: contain;
+    }
+    /* Adjust header for larger logo */
+    .md-header {
+      min-height: 72px;
+    }
+    .md-header__inner {
+      padding-top: 4px;
+      padding-bottom: 4px;
+    }
+  </style>
+
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../stylesheets/cortex-glassmorphism.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cortex-tier-1-acceptance-criteria-project-governance" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="CORTEX Documentation" class="md-header__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  <img src="../../assets/images/cortex-logo-200.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CORTEX Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              TIER 1 Acceptance Criteria
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="blue" data-md-color-accent="blue"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../INDEX/" class="md-tabs__link">
+        
+  
+    
+  
+  🚀 Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00-brain-index/" class="md-tabs__link">
+          
+  
+  Domain Brain (TIER 0-3)
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../02-orchestrators/00-orchestrators-index/" class="md-tabs__link">
+          
+  
+  Orchestrators
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../03-getting-started/0-installation/" class="md-tabs__link">
+          
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../04-architecture/1-system-overview/" class="md-tabs__link">
+          
+  
+  Architecture
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../05-lens-protocol/00-lens-index/" class="md-tabs__link">
+          
+  
+  CORTEX LENS Protocol
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../06-api-reference/0-overview/" class="md-tabs__link">
+          
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../07-guides/deployment/0-overview/" class="md-tabs__link">
+          
+  
+  How-To Guides
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../08-reference/glossary/" class="md-tabs__link">
+          
+  
+  Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../11-mcp-tools/00-mcp-index/" class="md-tabs__link">
+          
+  
+  MCP Tools Framework
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../12-infrastructure/00-infrastructure-index/" class="md-tabs__link">
+          
+  
+  Infrastructure & Resilience
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../13-domain-brain/00-domain-brain-index/" class="md-tabs__link">
+          
+  
+  Domain Brain
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../14-deployment/00-deployment-index/" class="md-tabs__link">
+          
+  
+  Deployment
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../15-observability/00-observability-index/" class="md-tabs__link">
+          
+  
+  Observability
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../16-testing/00-testing-index/" class="md-tabs__link">
+          
+  
+  Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../09-tutorials/0-index/" class="md-tabs__link">
+          
+  
+  Tutorials
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../10-contributing/1-contributing-guidelines/" class="md-tabs__link">
+          
+  
+  Contributing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../LICENSE/" class="md-tabs__link">
+        
+  
+    
+  
+  License
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="CORTEX Documentation" class="md-nav__button md-logo" aria-label="CORTEX Documentation" data-md-component="logo">
+      
+  <img src="../../assets/images/cortex-logo-200.png" alt="logo">
+
+    </a>
+    CORTEX Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/asifhussain60/CORTEX" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    asifhussain60/CORTEX
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../INDEX/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    🚀 Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Domain Brain (TIER 0-3)
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Domain Brain (TIER 0-3)
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-brain-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-tier0-governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 0 Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    TIER 1 Acceptance Criteria
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    TIER 1 Acceptance Criteria
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      📋 Core Concepts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 Core Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-ac-id-acceptance-criteria-identifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. AC-ID (Acceptance Criteria Identifier)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-ac-id-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. AC-ID Lifecycle
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-audit-trail" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Audit Trail
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#governance-gates" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Governance Gates
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Governance Gates">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-gates" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase Gates
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gate-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gate Enforcement
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evidence-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Evidence Tracking
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Evidence Tracking">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#evidence-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evidence Types
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evidence-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evidence Collection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evidence-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evidence Validation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#state-persistence" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 State Persistence
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 State Persistence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ac-id-state-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      AC-ID State Storage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#state-consistency" class="md-nav__link">
+    <span class="md-ellipsis">
+      State Consistency
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compliance-rules-tier-1-specific" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔐 Compliance Rules (TIER 1-Specific)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔐 Compliance Rules (TIER 1-Specific)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rule-ac-id-dependency-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule: AC-ID Dependency Management
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rule-evidence-coherence" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule: Evidence Coherence
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rule-phase-lock-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule: Phase Lock Requirements
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#governance-compliance-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Governance Compliance Rules
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Governance Compliance Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tier-1-specific-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      TIER 1-Specific Rules
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tier-1-state-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Tier 1 State Management
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Tier 1 State Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#checkpoint-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      Checkpoint System
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metrics-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      📈 Metrics &amp; Dashboard
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📈 Metrics & Dashboard">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ac-id-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      AC-ID Metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboard-display" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dashboard Display
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-with-other-tiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Integration with Other Tiers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔗 Integration with Other Tiers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tier-0-tier-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      TIER 0 → TIER 1
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tier-1-tier-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      TIER 1 → TIER 2
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tier-1-tier-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      TIER 1 → TIER 3
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compliance-checklist-tier-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Compliance Checklist (TIER 1)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      📈 Implementation Status
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Related Documentation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-tier2-response-templates/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 2 Response Templates
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-tier3-knowledge/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    TIER 3 Knowledge
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-token-optimization/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Token Optimization
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-composite-requests/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Composite Requests
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-brain-architecture.md" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Brain Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Orchestrators
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Orchestrators
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/00-orchestrators-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/01-master-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Master Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/02-intent-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/03-workflow-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Workflow Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/04-refactoring-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Refactoring Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/05-composition-engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Composition Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/06-onboarding-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Onboarding Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/07-adaptive-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Adaptive Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/08-orchestrators-modules-relationship/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrators & Modules Relationship
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/09-orchestrator-module-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrator-Module Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-orchestrators/10-complete-orchestrator-listing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Complete Orchestrator Listing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/0-installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation & Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/1-quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/2-first-orchestrator/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    First Orchestrator
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-getting-started/3-troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Architecture
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/1-system-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    System Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/2-design-principles/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Design Principles
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/3-orchestration-engine/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestration Engine
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/4-domain-brain/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Brain
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/5-resilience-patterns/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Resilience Patterns
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/6-implementation-phases/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Implementation Phases
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/7-intent-router/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Router
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/8-state-management/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    State Management
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/9-knowledge-protocol/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Knowledge Protocol
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/10-mcp-tool-governance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Tool Governance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/governance-rules/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Governance Rules
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/definition-of-ready/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Definition of Ready
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-architecture/adrs" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture Decision Records
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    CORTEX LENS Protocol
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            CORTEX LENS Protocol
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/00-lens-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/01-lens-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LENS System Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/02-intent-classification/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intent Classification (Language Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/03-ast-analysis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    AST Analysis (Examination Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/04-git-navigation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Git Navigation (Navigation Layer)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/05-knowledge-synthesis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Knowledge Synthesis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/06-lens-crawler/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LENS Crawler
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-lens-protocol/07-domain-brain-integration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Domain Brain Integration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/rest-api" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    REST API
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/mcp-protocol" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MCP Protocol
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-api-reference/cli" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CLI Commands
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    How-To Guides
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            How-To Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_1" id="__nav_8_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_1">
+            <span class="md-nav__icon md-icon"></span>
+            Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/1-local-development/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Local Development
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/2-mkdocs-server/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MkDocs Server
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/deployment/4-faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_2" id="__nav_8_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Integration
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_2">
+            <span class="md-nav__icon md-icon"></span>
+            Integration
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/integration/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_3" id="__nav_8_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Operations
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_3">
+            <span class="md-nav__icon md-icon"></span>
+            Operations
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/operations/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/operations/4-troubleshooting/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Troubleshooting
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_8_4" id="__nav_8_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Advanced
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_8_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8_4">
+            <span class="md-nav__icon md-icon"></span>
+            Advanced
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-guides/advanced/0-overview/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/glossary/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Glossary
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/faq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    FAQ
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/known-issues/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Known Issues
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/changelog/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Changelog
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/compliance-mappings/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Compliance Mappings
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/quick-reference/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/gap-analysis/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gap Analysis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/implementation-status/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Implementation Status
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/remediation-status/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Remediation Status
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-reference/test-ac-mapping/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Test AC Mapping
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    MCP Tools Framework
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            MCP Tools Framework
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-mcp-tools/00-mcp-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../11-mcp-tools/mcp-architecture/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Infrastructure & Resilience
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            Infrastructure & Resilience
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../12-infrastructure/00-infrastructure-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Domain Brain
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            Domain Brain
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../13-domain-brain/00-domain-brain-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Deployment
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            Deployment
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../14-deployment/00-deployment-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" >
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Observability
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            Observability
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../15-observability/00-observability-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_15" >
+        
+          
+          <label class="md-nav__link" for="__nav_15" id="__nav_15_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Testing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_15_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_15">
+            <span class="md-nav__icon md-icon"></span>
+            Testing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../16-testing/00-testing-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_16" >
+        
+          
+          <label class="md-nav__link" for="__nav_16" id="__nav_16_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Tutorials
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_16_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_16">
+            <span class="md-nav__icon md-icon"></span>
+            Tutorials
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-tutorials/0-index/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Orchestrator Tutorials
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_17" >
+        
+          
+          <label class="md-nav__link" for="__nav_17" id="__nav_17_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Contributing
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_17_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_17">
+            <span class="md-nav__icon md-icon"></span>
+            Contributing
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/1-contributing-guidelines/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Contributing Guidelines
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/2-development-setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development Setup
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/3-testing-strategy/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Testing Strategy
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/4-code-style-guide/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Code Style Guide
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../10-contributing/5-pull-request-process/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pull Request Process
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../LICENSE/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    License
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      🧠 Overview
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-concepts" class="md-nav__link">
+    <span class="md-ellipsis">
+      📋 Core Concepts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📋 Core Concepts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-ac-id-acceptance-criteria-identifier" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. AC-ID (Acceptance Criteria Identifier)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-ac-id-lifecycle" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. AC-ID Lifecycle
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-audit-trail" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Audit Trail
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#governance-gates" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Governance Gates
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Governance Gates">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#phase-gates" class="md-nav__link">
+    <span class="md-ellipsis">
+      Phase Gates
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gate-enforcement" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gate Enforcement
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#evidence-tracking" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Evidence Tracking
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Evidence Tracking">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#evidence-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evidence Types
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evidence-collection" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evidence Collection
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evidence-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Evidence Validation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#state-persistence" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔄 State Persistence
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔄 State Persistence">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ac-id-state-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      AC-ID State Storage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#state-consistency" class="md-nav__link">
+    <span class="md-ellipsis">
+      State Consistency
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compliance-rules-tier-1-specific" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔐 Compliance Rules (TIER 1-Specific)
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔐 Compliance Rules (TIER 1-Specific)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rule-ac-id-dependency-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule: AC-ID Dependency Management
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rule-evidence-coherence" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule: Evidence Coherence
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rule-phase-lock-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Rule: Phase Lock Requirements
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#governance-compliance-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      🎯 Governance Compliance Rules
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🎯 Governance Compliance Rules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tier-1-specific-rules" class="md-nav__link">
+    <span class="md-ellipsis">
+      TIER 1-Specific Rules
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tier-1-state-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      📊 Tier 1 State Management
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📊 Tier 1 State Management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#checkpoint-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      Checkpoint System
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metrics-dashboard" class="md-nav__link">
+    <span class="md-ellipsis">
+      📈 Metrics &amp; Dashboard
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="📈 Metrics & Dashboard">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ac-id-metrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      AC-ID Metrics
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dashboard-display" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dashboard Display
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#integration-with-other-tiers" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Integration with Other Tiers
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="🔗 Integration with Other Tiers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tier-0-tier-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      TIER 0 → TIER 1
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tier-1-tier-2" class="md-nav__link">
+    <span class="md-ellipsis">
+      TIER 1 → TIER 2
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tier-1-tier-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      TIER 1 → TIER 3
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compliance-checklist-tier-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ✅ Compliance Checklist (TIER 1)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementation-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      📈 Implementation Status
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#related-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      🔗 Related Documentation
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="cortex-tier-1-acceptance-criteria-project-governance">CORTEX TIER 1 - Acceptance Criteria &amp; Project Governance<a class="headerlink" href="#cortex-tier-1-acceptance-criteria-project-governance" title="Permanent link">&para;</a></h1>
+<p><strong>Version:</strong> 1.0 | <strong>Updated:</strong> 2026-01-22 | <strong>Authority:</strong> cortex_brain/tier1/governance (SQLite + YAML)</p>
+<hr />
+<h2 id="overview">🧠 Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p><strong>TIER 1</strong> is the <strong>Project Governance Layer</strong> that tracks and enforces acceptance criteria (AC-IDs), manages state across phases, and ensures all work is auditable and verifiable. While TIER 0 defines immutable rules, TIER 1 applies those rules to specific projects and tracks execution compliance.</p>
+<p><strong>Key Characteristics:</strong>
+- <strong>Semi-Immutable:</strong> Rules can be modified, but changes are audited
+- <strong>High Precedence:</strong> Overrides TIER 2 and TIER 3
+- <strong>State-Full:</strong> Tracks AC-ID lifecycle and phase progress
+- <strong>Fully Auditable:</strong> Every change logged with hash verification
+- <strong>Phase-Aware:</strong> Enforces gates based on current execution phase</p>
+<hr />
+<h2 id="core-concepts">📋 Core Concepts<a class="headerlink" href="#core-concepts" title="Permanent link">&para;</a></h2>
+<h3 id="1-ac-id-acceptance-criteria-identifier">1. AC-ID (Acceptance Criteria Identifier)<a class="headerlink" href="#1-ac-id-acceptance-criteria-identifier" title="Permanent link">&para;</a></h3>
+<p>An <strong>AC-ID</strong> is a unique identifier for a single acceptance criterion that must be verified:</p>
+<p><strong>Format:</strong> <code>AC-{PREFIX}-{NUMBER}-{SEQUENTIAL}</code></p>
+<p><strong>Examples:</strong>
+<div class="highlight"><pre><span></span><code>AC-FR-001-01    Feature Request 001, criteria 1
+AC-FR-001-02    Feature Request 001, criteria 2
+AC-NFR-003-01   Non-Functional Requirement 003, criteria 1
+AC-REFACTOR-05-03  Refactoring task 05, criteria 3
+AC-DOC-029-01   Documentation task 029, criteria 1
+</code></pre></div></p>
+<h3 id="2-ac-id-lifecycle">2. AC-ID Lifecycle<a class="headerlink" href="#2-ac-id-lifecycle" title="Permanent link">&para;</a></h3>
+<p>Every AC-ID passes through these states:</p>
+<div class="highlight"><pre><span></span><code>DEFINED → READY → IN_PROGRESS → COMPLETE → VERIFIED → LOCKED
+   ↓
+ (optional) BLOCKED (waiting for dependency)
+</code></pre></div>
+<p><strong>State Transitions:</strong></p>
+<table>
+<thead>
+<tr>
+<th>From</th>
+<th>To</th>
+<th>Trigger</th>
+<th>Audit Entry</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DEFINED</td>
+<td>READY</td>
+<td>Dependencies satisfied</td>
+<td>AC_READY</td>
+</tr>
+<tr>
+<td>READY</td>
+<td>IN_PROGRESS</td>
+<td>Execution starts</td>
+<td>AC_START</td>
+</tr>
+<tr>
+<td>IN_PROGRESS</td>
+<td>BLOCKED</td>
+<td>Dependency found</td>
+<td>AC_BLOCKED</td>
+</tr>
+<tr>
+<td>BLOCKED</td>
+<td>READY</td>
+<td>Dependency resolved</td>
+<td>AC_UNBLOCKED</td>
+</tr>
+<tr>
+<td>IN_PROGRESS</td>
+<td>COMPLETE</td>
+<td>Work finished</td>
+<td>AC_EXECUTE</td>
+</tr>
+<tr>
+<td>COMPLETE</td>
+<td>VERIFIED</td>
+<td>Audit verified</td>
+<td>AC_COMPLETE</td>
+</tr>
+<tr>
+<td>VERIFIED</td>
+<td>LOCKED</td>
+<td>Phase locked</td>
+<td>AC_LOCKED</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-audit-trail">3. Audit Trail<a class="headerlink" href="#3-audit-trail" title="Permanent link">&para;</a></h3>
+<p>Each AC-ID maintains a hash-chain audit trail:</p>
+<div class="highlight"><pre><span></span><code>AC-FR-001-01 Audit Trail:
+├─ 2026-01-22 10:00:01 → AC_START [hash_001]
+├─ 2026-01-22 10:15:32 → AC_EXECUTE [hash_002] (references hash_001)
+├─ 2026-01-22 10:20:15 → AC_COMPLETE [hash_003] (references hash_002)
+├─ 2026-01-22 10:25:00 → AC_VERIFIED [hash_004] (references hash_003)
+└─ 2026-01-22 10:30:00 → AC_LOCKED [hash_005] (references hash_004)
+
+Chain verified: hash_005 → hash_004 → hash_003 → hash_002 → hash_001 ✅
+</code></pre></div>
+<p><strong>Hash-Chain Verification:</strong>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">verify_hash_chain</span><span class="p">(</span><span class="n">ac_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify audit trail integrity.&quot;&quot;&quot;</span>
+    <span class="n">entries</span> <span class="o">=</span> <span class="n">load_audit_entries</span><span class="p">(</span><span class="n">ac_id</span><span class="p">)</span>
+
+    <span class="n">prev_hash</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+        <span class="c1"># Each entry must reference previous</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">previous_hash</span> <span class="o">!=</span> <span class="n">prev_hash</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">AuditIntegrityError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Chain broken at </span><span class="si">{</span><span class="n">entry</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">prev_hash</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">hash</span>
+
+    <span class="k">return</span> <span class="kc">True</span>
+</code></pre></div></p>
+<hr />
+<h2 id="governance-gates">🎯 Governance Gates<a class="headerlink" href="#governance-gates" title="Permanent link">&para;</a></h2>
+<h3 id="phase-gates">Phase Gates<a class="headerlink" href="#phase-gates" title="Permanent link">&para;</a></h3>
+<p>Each phase has specific governance gates:</p>
+<p><strong>PHASE-0 (Planning):</strong>
+<div class="highlight"><pre><span></span><code>Gate: All AC-IDs have evidence attached
+      All AC-IDs pass schema validation
+      Dependency graph is acyclic
+</code></pre></div></p>
+<p><strong>PHASE-1 (Development):</strong>
+<div class="highlight"><pre><span></span><code>Gate: All AC-IDs in READY state
+      No circular dependencies
+      All type hints present (CORE-011)
+      All docstrings present (CORE-012)
+</code></pre></div></p>
+<p><strong>PHASE-2 (Testing):</strong>
+<div class="highlight"><pre><span></span><code>Gate: All unit tests pass
+      Code coverage ≥ 95%
+      No bare except clauses (CORE-013)
+      Error handling complete
+</code></pre></div></p>
+<p><strong>PHASE-3 (Validation):</strong>
+<div class="highlight"><pre><span></span><code>Gate: All AC-IDs marked VERIFIED
+      Audit trail integrity confirmed
+      Phase completion report generated
+      All deliverables present
+</code></pre></div></p>
+<p><strong>PHASE-4 (Deployment):</strong>
+<div class="highlight"><pre><span></span><code>Gate: Phase 3 fully complete
+      All gates passed
+      No outstanding issues
+      Rollback plan verified
+</code></pre></div></p>
+<h3 id="gate-enforcement">Gate Enforcement<a class="headerlink" href="#gate-enforcement" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">GovernanceGate</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enforce phase-specific governance gates.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">can_enter_phase</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phase</span><span class="p">:</span> <span class="n">Phase</span><span class="p">,</span> <span class="n">ac_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if phase entry conditions met.&quot;&quot;&quot;</span>
+
+        <span class="n">required_gates</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gates_for_phase</span><span class="p">(</span><span class="n">phase</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">gate</span> <span class="ow">in</span> <span class="n">required_gates</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">gate</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">ac_ids</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">Err</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Cannot enter </span><span class="si">{</span><span class="n">phase</span><span class="si">}</span><span class="s2">: Gate &#39;</span><span class="si">{</span><span class="n">gate</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; not satisfied&quot;</span>
+                <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="evidence-tracking">📊 Evidence Tracking<a class="headerlink" href="#evidence-tracking" title="Permanent link">&para;</a></h2>
+<p>Each AC-ID collects <strong>evidence</strong> during execution:</p>
+<h3 id="evidence-types">Evidence Types<a class="headerlink" href="#evidence-types" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Format</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Code</strong></td>
+<td>File path + line range</td>
+<td><code>cortex/brain/governance.py:1-50</code></td>
+</tr>
+<tr>
+<td><strong>Test</strong></td>
+<td>Test name + result</td>
+<td><code>test_governance_core_rules: PASS</code></td>
+</tr>
+<tr>
+<td><strong>Commit</strong></td>
+<td>Git commit SHA</td>
+<td><code>b99fb6c1c7a3f...</code></td>
+</tr>
+<tr>
+<td><strong>Audit</strong></td>
+<td>Audit entry ID</td>
+<td><code>AE-2026-01-22-001</code></td>
+</tr>
+<tr>
+<td><strong>Review</strong></td>
+<td>Reviewer + approval</td>
+<td><code>@asif-hussain: APPROVED</code></td>
+</tr>
+<tr>
+<td><strong>Performance</strong></td>
+<td>Metric + benchmark</td>
+<td><code>Token efficiency: 95.2%</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="evidence-collection">Evidence Collection<a class="headerlink" href="#evidence-collection" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Evidence</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Single piece of evidence for AC-ID.&quot;&quot;&quot;</span>
+
+    <span class="n">evidence_id</span><span class="p">:</span> <span class="nb">str</span>           <span class="c1"># Unique identifier</span>
+    <span class="n">ac_id</span><span class="p">:</span> <span class="nb">str</span>                 <span class="c1"># Parent AC-ID</span>
+    <span class="n">evidence_type</span><span class="p">:</span> <span class="n">EvidenceType</span>
+    <span class="n">content</span><span class="p">:</span> <span class="nb">str</span>               <span class="c1"># Evidence content</span>
+    <span class="n">timestamp</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="n">submitter</span><span class="p">:</span> <span class="nb">str</span>             <span class="c1"># Who provided evidence</span>
+    <span class="n">verified</span><span class="p">:</span> <span class="nb">bool</span>             <span class="c1"># Manually verified</span>
+    <span class="nb">hash</span><span class="p">:</span> <span class="nb">str</span>                  <span class="c1"># Content hash</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">verify_authenticity</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Verify evidence hasn&#39;t been modified.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">compute_hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">hash</span>
+</code></pre></div>
+<h3 id="evidence-validation">Evidence Validation<a class="headerlink" href="#evidence-validation" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">validate_evidence_complete</span><span class="p">(</span><span class="n">ac_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="nb">bool</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if AC-ID has sufficient evidence.&quot;&quot;&quot;</span>
+
+    <span class="n">evidence</span> <span class="o">=</span> <span class="n">load_evidence</span><span class="p">(</span><span class="n">ac_id</span><span class="p">)</span>
+
+    <span class="c1"># Minimum evidence requirements</span>
+    <span class="n">required</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;code&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>        <span class="c1"># At least 1 code reference</span>
+        <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>        <span class="c1"># At least 1 test passing</span>
+        <span class="s2">&quot;commit&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>      <span class="c1"># At least 1 Git commit</span>
+    <span class="p">}</span>
+
+    <span class="n">by_type</span> <span class="o">=</span> <span class="n">group_by_type</span><span class="p">(</span><span class="n">evidence</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">evidence_type</span><span class="p">,</span> <span class="n">count_required</span> <span class="ow">in</span> <span class="n">required</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">by_type</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">evidence_type</span><span class="p">,</span> <span class="p">[]))</span> <span class="o">&lt;</span> <span class="n">count_required</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Missing </span><span class="si">{</span><span class="n">evidence_type</span><span class="si">}</span><span class="s2"> evidence&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="state-persistence">🔄 State Persistence<a class="headerlink" href="#state-persistence" title="Permanent link">&para;</a></h2>
+<h3 id="ac-id-state-storage">AC-ID State Storage<a class="headerlink" href="#ac-id-state-storage" title="Permanent link">&para;</a></h3>
+<p><strong>Tier 1 maintains state in SQLite:</strong></p>
+<div class="highlight"><pre><span></span><code><span class="c1">-- AC-ID tracking table</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">ac_ids</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">ac_id</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">status</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span><span class="w">           </span><span class="c1">-- DEFINED, READY, IN_PROGRESS, etc.</span>
+<span class="w">    </span><span class="n">phase</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span><span class="w">            </span><span class="c1">-- PHASE-0, PHASE-1, ...</span>
+<span class="w">    </span><span class="n">assigned_to</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
+<span class="w">    </span><span class="n">created_at</span><span class="w"> </span><span class="k">TIMESTAMP</span><span class="p">,</span>
+<span class="w">    </span><span class="n">updated_at</span><span class="w"> </span><span class="k">TIMESTAMP</span><span class="p">,</span>
+<span class="w">    </span><span class="n">locked</span><span class="w"> </span><span class="nb">BOOLEAN</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">FALSE</span><span class="p">,</span>
+<span class="w">    </span><span class="n">phase_lockable</span><span class="w"> </span><span class="nb">BOOLEAN</span><span class="p">,</span><span class="w">       </span><span class="c1">-- Can this AC-ID be phase-locked?</span>
+<span class="w">    </span><span class="n">audit_verified</span><span class="w"> </span><span class="nb">BOOLEAN</span><span class="p">,</span><span class="w">       </span><span class="c1">-- Has audit verified?</span>
+
+<span class="w">    </span><span class="k">CONSTRAINT</span><span class="w"> </span><span class="n">valid_status</span><span class="w"> </span><span class="k">CHECK</span><span class="w"> </span><span class="p">(</span><span class="n">status</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span>
+<span class="w">        </span><span class="p">(</span><span class="s1">&#39;DEFINED&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;READY&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;IN_PROGRESS&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;BLOCKED&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;COMPLETE&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;VERIFIED&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;LOCKED&#39;</span><span class="p">))</span>
+<span class="p">);</span>
+
+<span class="c1">-- Audit trail table</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">audit_trail</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">audit_id</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">ac_id</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+<span class="w">    </span><span class="k">operation</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span><span class="w">        </span><span class="c1">-- AC_START, AC_EXECUTE, AC_COMPLETE, etc.</span>
+<span class="w">    </span><span class="k">timestamp</span><span class="w"> </span><span class="k">TIMESTAMP</span><span class="p">,</span>
+<span class="w">    </span><span class="k">operator</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
+<span class="w">    </span><span class="n">previous_hash</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">),</span><span class="w">    </span><span class="c1">-- Hash of previous entry (for chain)</span>
+<span class="w">    </span><span class="n">current_hash</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">),</span><span class="w">     </span><span class="c1">-- SHA-256 hash of this entry</span>
+<span class="w">    </span><span class="n">details</span><span class="w"> </span><span class="n">JSON</span><span class="p">,</span><span class="w">                 </span><span class="c1">-- Additional context</span>
+
+<span class="w">    </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">ac_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">ac_ids</span><span class="p">(</span><span class="n">ac_id</span><span class="p">)</span>
+<span class="p">);</span>
+
+<span class="c1">-- Evidence table</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">evidence</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="n">evidence_id</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="p">,</span>
+<span class="w">    </span><span class="n">ac_id</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span>
+<span class="w">    </span><span class="n">evidence_type</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span><span class="w">    </span><span class="c1">-- code, test, commit, audit, review, performance</span>
+<span class="w">    </span><span class="n">content</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w">    </span><span class="k">timestamp</span><span class="w"> </span><span class="k">TIMESTAMP</span><span class="p">,</span>
+<span class="w">    </span><span class="n">submitter</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">100</span><span class="p">),</span>
+<span class="w">    </span><span class="n">verified</span><span class="w"> </span><span class="nb">BOOLEAN</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="k">FALSE</span><span class="p">,</span>
+<span class="w">    </span><span class="n">hash</span><span class="w"> </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">),</span>
+
+<span class="w">    </span><span class="k">FOREIGN</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="p">(</span><span class="n">ac_id</span><span class="p">)</span><span class="w"> </span><span class="k">REFERENCES</span><span class="w"> </span><span class="n">ac_ids</span><span class="p">(</span><span class="n">ac_id</span><span class="p">)</span>
+<span class="p">);</span>
+</code></pre></div>
+<h3 id="state-consistency">State Consistency<a class="headerlink" href="#state-consistency" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ACIDState</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Current state of an AC-ID.&quot;&quot;&quot;</span>
+
+    <span class="n">ac_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">status</span><span class="p">:</span> <span class="n">ACIDStatus</span>
+    <span class="n">phase</span><span class="p">:</span> <span class="n">Phase</span>
+    <span class="n">evidence</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Evidence</span><span class="p">]</span>
+    <span class="n">audit_trail</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">AuditEntry</span><span class="p">]</span>
+    <span class="n">locked</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">verified</span><span class="p">:</span> <span class="nb">bool</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">is_complete</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if AC-ID is complete and audited.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">ACIDStatus</span><span class="o">.</span><span class="n">COMPLETE</span> <span class="ow">and</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">verified</span> <span class="ow">and</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">audit_trail_valid</span><span class="p">()</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">audit_trail_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Verify audit trail integrity.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">verify_hash_chain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">audit_trail</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="compliance-rules-tier-1-specific">🔐 Compliance Rules (TIER 1-Specific)<a class="headerlink" href="#compliance-rules-tier-1-specific" title="Permanent link">&para;</a></h2>
+<h3 id="rule-ac-id-dependency-management">Rule: AC-ID Dependency Management<a class="headerlink" href="#rule-ac-id-dependency-management" title="Permanent link">&para;</a></h3>
+<p><strong>Purpose:</strong> Prevent circular dependencies and ensure logical ordering.</p>
+<p><strong>Rule:</strong>
+- AC-IDs may depend on other AC-IDs
+- Dependencies MUST be acyclic
+- Blocked AC-IDs cannot progress until dependency resolves</p>
+<p><strong>Validation:</strong>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">validate_dependency_graph</span><span class="p">(</span><span class="n">ac_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check for circular dependencies.&quot;&quot;&quot;</span>
+
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">build_dependency_graph</span><span class="p">(</span><span class="n">ac_ids</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">has_cycle</span><span class="p">(</span><span class="n">graph</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="s2">&quot;Circular dependency detected&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check all can eventually complete</span>
+    <span class="k">for</span> <span class="n">ac_id</span> <span class="ow">in</span> <span class="n">ac_ids</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">has_topological_order</span><span class="p">(</span><span class="n">graph</span><span class="p">,</span> <span class="n">ac_id</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;AC-ID </span><span class="si">{</span><span class="n">ac_id</span><span class="si">}</span><span class="s2"> cannot be ordered&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div></p>
+<h3 id="rule-evidence-coherence">Rule: Evidence Coherence<a class="headerlink" href="#rule-evidence-coherence" title="Permanent link">&para;</a></h3>
+<p><strong>Purpose:</strong> Ensure evidence is consistent and verifiable.</p>
+<p><strong>Rule:</strong>
+- Evidence must reference actual code/tests/commits
+- All referenced items must exist and be verifiable
+- Evidence timestamps must be ordered correctly
+- Evidence cannot be modified after submission</p>
+<p><strong>Validation:</strong>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">validate_evidence_coherence</span><span class="p">(</span><span class="n">evidence</span><span class="p">:</span> <span class="n">Evidence</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate evidence against actual artifacts.&quot;&quot;&quot;</span>
+
+    <span class="k">match</span> <span class="n">evidence</span><span class="o">.</span><span class="n">type</span><span class="p">:</span>
+        <span class="k">case</span> <span class="s2">&quot;code&quot;</span><span class="p">:</span>
+            <span class="n">file</span><span class="p">,</span> <span class="n">lines</span> <span class="o">=</span> <span class="n">parse_code_reference</span><span class="p">(</span><span class="n">evidence</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">file_exists</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="ow">or</span> <span class="n">lines_missing</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Code reference invalid: </span><span class="si">{</span><span class="n">evidence</span><span class="o">.</span><span class="n">content</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">case</span> <span class="s2">&quot;test&quot;</span><span class="p">:</span>
+            <span class="n">test_name</span> <span class="o">=</span> <span class="n">evidence</span><span class="o">.</span><span class="n">content</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">test_exists</span><span class="p">(</span><span class="n">test_name</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">test_passes</span><span class="p">(</span><span class="n">test_name</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Test not passing: </span><span class="si">{</span><span class="n">test_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">case</span> <span class="s2">&quot;commit&quot;</span><span class="p">:</span>
+            <span class="n">commit_sha</span> <span class="o">=</span> <span class="n">evidence</span><span class="o">.</span><span class="n">content</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">commit_exists</span><span class="p">(</span><span class="n">commit_sha</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Commit not found: </span><span class="si">{</span><span class="n">commit_sha</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div></p>
+<h3 id="rule-phase-lock-requirements">Rule: Phase Lock Requirements<a class="headerlink" href="#rule-phase-lock-requirements" title="Permanent link">&para;</a></h3>
+<p><strong>Purpose:</strong> Ensure phases only lock when ready.</p>
+<p><strong>Rule:</strong>
+- AC-IDs must be VERIFIED before phase lock
+- All evidence must be attached and coherent
+- Audit trail must be complete
+- No outstanding issues</p>
+<p><strong>Validation:</strong>
+<div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">can_lock_phase</span><span class="p">(</span><span class="n">phase</span><span class="p">:</span> <span class="n">Phase</span><span class="p">,</span> <span class="n">ac_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if phase can be locked.&quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">ac_id</span> <span class="ow">in</span> <span class="n">ac_ids</span><span class="p">:</span>
+        <span class="n">state</span> <span class="o">=</span> <span class="n">get_ac_id_state</span><span class="p">(</span><span class="n">ac_id</span><span class="p">)</span>
+
+        <span class="c1"># Must be complete</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">is_complete</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;AC-ID </span><span class="si">{</span><span class="n">ac_id</span><span class="si">}</span><span class="s2"> not complete&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Evidence must be coherent</span>
+        <span class="k">for</span> <span class="n">evidence</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">evidence</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">validate_evidence_coherence</span><span class="p">(</span><span class="n">evidence</span><span class="p">)</span><span class="o">.</span><span class="n">is_ok</span><span class="p">():</span>
+                <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Evidence incoherent for </span><span class="si">{</span><span class="n">ac_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Audit trail must be valid</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="o">.</span><span class="n">audit_trail_valid</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Audit trail invalid for </span><span class="si">{</span><span class="n">ac_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div></p>
+<hr />
+<h2 id="governance-compliance-rules">🎯 Governance Compliance Rules<a class="headerlink" href="#governance-compliance-rules" title="Permanent link">&para;</a></h2>
+<p>TIER 1 enforces all TIER 0 rules PLUS project-specific rules:</p>
+<h3 id="tier-1-specific-rules">TIER 1-Specific Rules<a class="headerlink" href="#tier-1-specific-rules" title="Permanent link">&para;</a></h3>
+<p><strong>Rule: AC-ID Tracking Mandatory</strong>
+- Every piece of work MUST have an AC-ID
+- AC-IDs track evidence from start to completion
+- No work can progress without AC-ID</p>
+<p><strong>Rule: Evidence-Based Verification</strong>
+- Completion verified by evidence, not by assumption
+- Evidence attached to AC-IDs during execution
+- Evidence coherence validated before phase lock</p>
+<p><strong>Rule: Audit Trail Immutability</strong>
+- Audit entries cannot be modified or deleted
+- Hash-chain prevents tampering
+- Missing entries detected immediately</p>
+<p><strong>Rule: Phase-Based Governance</strong>
+- Each phase has specific gates
+- Gates must be passed to progress
+- Phase completion requires audit verification</p>
+<hr />
+<h2 id="tier-1-state-management">📊 Tier 1 State Management<a class="headerlink" href="#tier-1-state-management" title="Permanent link">&para;</a></h2>
+<h3 id="checkpoint-system">Checkpoint System<a class="headerlink" href="#checkpoint-system" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Tier1Checkpoint</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save and restore TIER 1 state at checkpoints.&quot;&quot;&quot;</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_checkpoint</span><span class="p">(</span><span class="n">phase</span><span class="p">:</span> <span class="n">Phase</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create checkpoint before phase entry.&quot;&quot;&quot;</span>
+
+        <span class="n">checkpoint_id</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;CP-</span><span class="si">{</span><span class="n">phase</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">timestamp</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="c1"># Save all AC-ID states</span>
+        <span class="n">state_snapshot</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;phase&quot;</span><span class="p">:</span> <span class="n">phase</span><span class="p">,</span>
+            <span class="s2">&quot;ac_ids&quot;</span><span class="p">:</span> <span class="n">serialize_all_ac_ids</span><span class="p">(),</span>
+            <span class="s2">&quot;audit_trail&quot;</span><span class="p">:</span> <span class="n">serialize_audit_trail</span><span class="p">(),</span>
+            <span class="s2">&quot;evidence&quot;</span><span class="p">:</span> <span class="n">serialize_evidence</span><span class="p">(),</span>
+            <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span>
+            <span class="s2">&quot;hash&quot;</span><span class="p">:</span> <span class="n">compute_state_hash</span><span class="p">(),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Persist checkpoint</span>
+        <span class="n">save_checkpoint</span><span class="p">(</span><span class="n">checkpoint_id</span><span class="p">,</span> <span class="n">state_snapshot</span><span class="p">)</span>
+
+        <span class="c1"># Log checkpoint</span>
+        <span class="n">audit_logger</span><span class="o">.</span><span class="n">record</span><span class="p">(</span>
+            <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;CHECKPOINT_CREATE&quot;</span><span class="p">,</span>
+            <span class="n">checkpoint_id</span><span class="o">=</span><span class="n">checkpoint_id</span><span class="p">,</span>
+            <span class="n">phase</span><span class="o">=</span><span class="n">phase</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="n">checkpoint_id</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">restore_checkpoint</span><span class="p">(</span><span class="n">checkpoint_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Result</span><span class="p">[</span><span class="kc">None</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Restore state from checkpoint.&quot;&quot;&quot;</span>
+
+        <span class="n">checkpoint</span> <span class="o">=</span> <span class="n">load_checkpoint</span><span class="p">(</span><span class="n">checkpoint_id</span><span class="p">)</span>
+
+        <span class="c1"># Verify checkpoint integrity</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">verify_checkpoint_hash</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">Err</span><span class="p">(</span><span class="s2">&quot;Checkpoint corrupted&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Restore state</span>
+        <span class="n">restore_ac_ids</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="s2">&quot;ac_ids&quot;</span><span class="p">])</span>
+        <span class="n">restore_audit_trail</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="s2">&quot;audit_trail&quot;</span><span class="p">])</span>
+        <span class="n">restore_evidence</span><span class="p">(</span><span class="n">checkpoint</span><span class="p">[</span><span class="s2">&quot;evidence&quot;</span><span class="p">])</span>
+
+        <span class="n">audit_logger</span><span class="o">.</span><span class="n">record</span><span class="p">(</span>
+            <span class="n">operation</span><span class="o">=</span><span class="s2">&quot;CHECKPOINT_RESTORE&quot;</span><span class="p">,</span>
+            <span class="n">checkpoint_id</span><span class="o">=</span><span class="n">checkpoint_id</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Ok</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+<hr />
+<h2 id="metrics-dashboard">📈 Metrics &amp; Dashboard<a class="headerlink" href="#metrics-dashboard" title="Permanent link">&para;</a></h2>
+<h3 id="ac-id-metrics">AC-ID Metrics<a class="headerlink" href="#ac-id-metrics" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">Tier1Metrics</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;TIER 1 operational metrics.&quot;&quot;&quot;</span>
+
+    <span class="n">total_ac_ids</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">ac_defined</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">ac_ready</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">ac_in_progress</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">ac_blocked</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">ac_complete</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">ac_verified</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">ac_locked</span><span class="p">:</span> <span class="nb">int</span>
+
+    <span class="n">phase_completion</span><span class="p">:</span> <span class="nb">float</span>      <span class="c1"># 0.0 to 1.0</span>
+    <span class="n">evidence_quality</span><span class="p">:</span> <span class="nb">float</span>      <span class="c1"># Ratio of coherent evidence</span>
+    <span class="n">audit_trail_integrity</span><span class="p">:</span> <span class="nb">bool</span>  <span class="c1"># All chains valid</span>
+    <span class="n">average_ac_duration</span><span class="p">:</span> <span class="n">timedelta</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">phase_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Visual progress indicator.&quot;&quot;&quot;</span>
+        <span class="n">filled</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">phase_completion</span> <span class="o">*</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;█&quot;</span> <span class="o">*</span> <span class="n">filled</span> <span class="o">+</span> <span class="s2">&quot;░&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">20</span> <span class="o">-</span> <span class="n">filled</span><span class="p">)</span>
+</code></pre></div>
+<h3 id="dashboard-display">Dashboard Display<a class="headerlink" href="#dashboard-display" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>PHASE-1 Progress: ███████████░░░░░░░░░ 65%
+
+AC-ID Status:
+├─ ✅ COMPLETE:  23/35 (66%)
+├─ ⏳ IN_PROGRESS: 5/35 (14%)
+├─ 🟡 BLOCKED:   3/35 (9%)
+├─ ⏸️  READY:     4/35 (11%)
+└─ ⭕ VERIFIED:   15/23 (85%)
+
+Evidence Quality: 94/98 coherent (96%)
+Audit Trail Integrity: ✅ All chains valid
+Average AC Duration: 2h 15m
+</code></pre></div>
+<hr />
+<h2 id="integration-with-other-tiers">🔗 Integration with Other Tiers<a class="headerlink" href="#integration-with-other-tiers" title="Permanent link">&para;</a></h2>
+<h3 id="tier-0-tier-1">TIER 0 → TIER 1<a class="headerlink" href="#tier-0-tier-1" title="Permanent link">&para;</a></h3>
+<ul>
+<li>TIER 1 enforces all TIER 0 rules</li>
+<li>AC-ID evidence validated against CORE rules</li>
+<li>Phase gates check TIER 0 compliance</li>
+<li>Violations escalate immediately</li>
+</ul>
+<h3 id="tier-1-tier-2">TIER 1 → TIER 2<a class="headerlink" href="#tier-1-tier-2" title="Permanent link">&para;</a></h3>
+<ul>
+<li>AC-ID status determines response template type</li>
+<li>Phase affects response verbosity level</li>
+<li>Evidence informs composite request generation</li>
+</ul>
+<h3 id="tier-1-tier-3">TIER 1 → TIER 3<a class="headerlink" href="#tier-1-tier-3" title="Permanent link">&para;</a></h3>
+<ul>
+<li>AC-ID context passed to knowledge retrieval</li>
+<li>Domain knowledge retrieved based on AC-ID type</li>
+<li>Retrieved knowledge validated against TIER 1 compliance</li>
+</ul>
+<hr />
+<h2 id="compliance-checklist-tier-1">✅ Compliance Checklist (TIER 1)<a class="headerlink" href="#compliance-checklist-tier-1" title="Permanent link">&para;</a></h2>
+<p>Before phase lock:</p>
+<ul>
+<li>[ ] All AC-IDs have evidence</li>
+<li>[ ] Evidence is coherent (references valid)</li>
+<li>[ ] Audit trails valid (hash-chain intact)</li>
+<li>[ ] No outstanding blocked AC-IDs</li>
+<li>[ ] All AC-IDs verified or locked</li>
+<li>[ ] Dependencies acyclic</li>
+<li>[ ] Phase gates all passed</li>
+<li>[ ] No TIER 0 rule violations</li>
+</ul>
+<hr />
+<h2 id="implementation-status">📈 Implementation Status<a class="headerlink" href="#implementation-status" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Status</th>
+<th>Tests</th>
+<th>Coverage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AC-ID State Machine</td>
+<td>✅ Complete</td>
+<td>45</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Audit Trail</td>
+<td>✅ Complete</td>
+<td>50</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Evidence Tracking</td>
+<td>✅ Complete</td>
+<td>40</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Hash-Chain Verification</td>
+<td>✅ Complete</td>
+<td>25</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Governance Gates</td>
+<td>✅ Complete</td>
+<td>35</td>
+<td>100%</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td>✅ <strong>Complete</strong></td>
+<td><strong>195</strong></td>
+<td><strong>100%</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="related-documentation">🔗 Related Documentation<a class="headerlink" href="#related-documentation" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../00-brain-index/">Brain Index</a> - System overview</li>
+<li><a href="../01-tier0-governance/">TIER 0 Governance</a> - Immutable rules</li>
+<li><a href="../03-tier2-response-templates/">TIER 2 Templates</a> - Response formatting</li>
+<li><a href="../04-tier3-knowledge/">TIER 3 Knowledge</a> - Domain knowledge</li>
+<li><a href="../../cortex/brain/core/state_manager.py">State Manager</a> - Implementation</li>
+</ul>
+<hr />
+<p><strong>Copyright © 2025-2026 Asif Hussain. All rights reserved.</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var tab,labels=set.querySelector(".tabbed-labels");for(tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.tabs.link"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7c377c4.min.js"></script>
+      
+        <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+      
+    
+  </body>
+</html>
