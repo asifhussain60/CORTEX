@@ -161,6 +161,7 @@ class ConversationProtocol:
                     ContinuationDecision,
                     ContinuationReason,
                 )
+                audit_entry_id = str(uuid.uuid4())
                 decision = ContinuationDecision(
                     should_continue=False,
                     reason=ContinuationReason.TOKEN_LIMIT,
@@ -170,6 +171,7 @@ class ConversationProtocol:
                         "completion": result_tokens,
                         "total": tokens_this_turn,
                     },
+                    audit_entry_id=audit_entry_id,
                 )
                 self.decisions_history.append({
                     "turn": self.turn_number,
@@ -178,12 +180,13 @@ class ConversationProtocol:
                 })
                 return Ok(decision)
 
-            # Create continuation decision
+            # Create continuation decision with audit entry ID
             from cortex.core.orchestrator.continuation_decision import (
                 ContinuationDecision,
                 ContinuationReason,
             )
 
+            audit_entry_id = str(uuid.uuid4())
             decision = ContinuationDecision(
                 should_continue=self.turn_number < self.max_turns,
                 reason=ContinuationReason.COMPLETION,
@@ -195,20 +198,8 @@ class ConversationProtocol:
                 },
                 next_operation="continue_conversation" if self.turn_number < self.max_turns else None,
                 next_parameters={"turn_number": self.turn_number + 1} if self.turn_number < self.max_turns else None,
+                audit_entry_id=audit_entry_id,
             )
-            
-            # Add audit entry ID
-            audit_entry_id = str(uuid.uuid4())
-            decision_dict = {
-                "turn": self.turn_number,
-                "decision": decision,
-                "timestamp": round_context.timestamp,
-                "audit_entry_id": audit_entry_id,
-            }
-            
-            # Add audit_entry_id to decision for access by tests
-            if not hasattr(decision, 'audit_entry_id'):
-                decision.audit_entry_id = audit_entry_id  # type: ignore
 
             # Add to history
             self.decisions_history.append(
