@@ -140,6 +140,18 @@ class ConversationProtocol:
                 })
                 return Ok(decision)
 
+            # Check if already approaching token limit (>= 90%) before this turn
+            percentage_used = (self.total_tokens_used / self.token_limit * 100) if self.token_limit > 0 else 0
+            if percentage_used >= 90:
+                from cortex.core.orchestrator.terminal_events import TokenLimitEvent
+                event = TokenLimitEvent(
+                    tokens_used=self.total_tokens_used,
+                    token_limit=self.token_limit,
+                    percentage_used=percentage_used,
+                    turn_number=self.turn_number
+                )
+                self.event_registry.fire_event(event)
+
             # Create round context
             round_context = RoundContext(
                 round_number=self.turn_number,
@@ -156,14 +168,44 @@ class ConversationProtocol:
             # Execute orchestrator
             result = self.orchestrator.execute(user_input, context)
 
+            # Check if orchestrator completed a phase
+            if isinstance(result, dict) and result.get("status") == "completed":
+                from cortex.core.orchestrator.terminal_events import PhaseCompletedEvent
+                event = PhaseCompletedEvent(
+                    operation=result.get("operation", "unknown"),
+                    result=result.get("result", {}),
+                    turn_number=self.turn_number
+                )
+                self.event_registry.fire_event(event)
+                
+                # Return COMPLETION decision with should_continue=False
+                from cortex.core.orchestrator.continuation_decision import (
+                    ContinuationDecision,
+                    ContinuationReason,
+                )
+                audit_entry_id = str(uuid.uuid4())
+                decision = ContinuationDecision(
+                    should_continue=False,
+                    reason=ContinuationReason.COMPLETION,
+                    turn_number=self.turn_number,
+                    audit_entry_id=audit_entry_id,
+                )
+                self.decisions_history.append({
+                    "turn": self.turn_number,
+                    "decision": decision,
+                    "timestamp": round_context.timestamp,
+                })
+                return Ok(decision)
+
             # Track tokens (estimate: 4 chars ≈ 1 token)
             user_tokens = len(user_input) // 4
             result_tokens = len(str(result)) // 4
             tokens_this_turn = user_tokens + result_tokens
             self.total_tokens_used += tokens_this_turn
 
-            # Check token limit - if exceeded, return OK with TOKEN_LIMIT reason
-            if self.total_tokens_used > self.token_limit:
+            # Check token limit - if at 95% or exceeded, return OK with TOKEN_LIMIT reason
+            percentage_used = (self.total_tokens_used / self.token_limit * 100) if self.token_limit > 0 else 0
+            if percentage_used >= 95 or self.total_tokens_used > self.token_limit:
                 from cortex.core.orchestrator.continuation_decision import (
                     ContinuationDecision,
                     ContinuationReason,
