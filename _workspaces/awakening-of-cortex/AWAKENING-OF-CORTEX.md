@@ -4,6 +4,31 @@
 
 ---
 
+## 🎭 MEET YOUR GUIDES
+
+Before you dive in, meet the three characters who will guide you through this journey:
+
+### Asif Codenstein
+**The ADHD coding genius.** Picture someone who can debug production issues while explaining quantum mechanics to a rubber duck, simultaneously eating pizza, and occasionally forgetting where he put his coffee (it's always behind the monitor). Asif is your narrator—brilliant, scattered, and surprisingly good at making technical concepts understandable through questionable analogies involving air traffic control, embassy passports, and organizational memory. He speaks directly to you, the reader, in first person.
+
+### Miss G (Miss Governance)
+**The imaginary girlfriend.** Miss G exists entirely in Asif's imagination—she's the voice in his head that challenges every idea, asks the uncomfortable questions, and keeps him honest. Her dialogue is always in *italics*, appearing as internal thoughts that push the narrative forward. Think of her as Asif's conscience, but with better organizational skills and a deep appreciation for well-documented architecture. She's not real, but she's essential.
+
+### Copilot Bot
+**The eager robot learning to be useful.** A cheerful AI assistant with LED lights that change color based on his mood (green = confident, amber = uncertain, red = confused, blue = curious). He started out making too many mistakes, but through CORTEX's guardrails, he's become genuinely helpful. Copilot Bot asks the questions that readers might be too embarrassed to ask, and his growth mirrors the growth of the CORTEX system itself.
+
+---
+
+## 📝 HOW TO READ THIS
+
+**For business and product owners:** Each chapter uses real-world metaphors to explain technical concepts. Skip anything that looks too technical—the stories carry the meaning.
+
+**For developers:** The character banter contains the philosophy; the metaphors translate to actual architecture. Everything here maps to real CORTEX capabilities.
+
+**For everyone:** This is a story about building something reliable. The lessons apply whether you're governing code, managing teams, or just trying to get through a Monday.
+
+---
+
 ## 📖 THE COMPLETE AWAKENING STORY
 
 This is the master index for the CORTEX Awakening narrative. The story has been expanded into individual chapter files with detailed scenarios, character development, humor, and technical depth.
