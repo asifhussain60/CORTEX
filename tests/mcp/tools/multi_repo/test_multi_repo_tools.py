@@ -18,14 +18,22 @@ class TestProjectScannerDiscoversRepos:
         
         scanner = ProjectScanner()
         
-        with patch("pathlib.Path.iterdir") as mock_iterdir:
-            mock_iterdir.return_value = [
-                MagicMock(is_dir=lambda: True, name="CORTEX"),
-                MagicMock(is_dir=lambda: True, name="ProjectA"),
-                MagicMock(is_dir=lambda: False, name="file.txt"),
-            ]
-            
-            projects = scanner.discover_projects(base_path="D:\\PROJECTS")
+        # Create proper mock Path objects that respond to is_dir()
+        mock_dir1 = MagicMock()
+        mock_dir1.name = "CORTEX"
+        mock_dir1.is_dir.return_value = True
+        
+        mock_dir2 = MagicMock()
+        mock_dir2.name = "ProjectA"
+        mock_dir2.is_dir.return_value = True
+        
+        mock_file = MagicMock()
+        mock_file.name = "file.txt"
+        mock_file.is_dir.return_value = False
+        
+        with patch("pathlib.Path.iterdir", return_value=[mock_dir1, mock_dir2, mock_file]):
+            with patch("pathlib.Path.exists", return_value=True):
+                projects = scanner.discover_projects(base_path="D:\\PROJECTS")
         
         assert len(projects) >= 2
 
