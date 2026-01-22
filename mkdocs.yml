@@ -47,7 +47,8 @@ plugins:
       lang: en
 
 exclude_docs: |
-  _archive/
+  _diagrams/
+  _hooks/
 
 # Custom post-build hook to copy assets to site folder
 hooks:
@@ -73,60 +74,86 @@ markdown_extensions:
 
 nav:
   - "🚀 Home": INDEX.md
+  - Domain Brain (TIER 0-3):
+    - Overview: 01-cortex-brain/00-brain-index.md
+    - TIER 0 Governance: 01-cortex-brain/01-tier0-governance.md
+    - TIER 1 Acceptance Criteria: 01-cortex-brain/02-tier1-acceptance.md
+    - TIER 2 Response Templates: 01-cortex-brain/03-tier2-response-templates.md
+    - TIER 3 Knowledge: 01-cortex-brain/04-tier3-knowledge.md
+    - Token Optimization: 01-cortex-brain/05-token-optimization.md
+    - Composite Requests: 01-cortex-brain/06-composite-requests.md
+  - Orchestrators:
+    - Architecture Overview: 02-orchestrators/00-orchestrators-index.md
+    - Master Orchestrator: 02-orchestrators/01-master-orchestrator.md
+    - Intent Router: 02-orchestrators/02-intent-router.md
+    - Workflow Orchestrator: 02-orchestrators/03-workflow-orchestrator.md
+    - Refactoring Orchestrator: 02-orchestrators/04-refactoring-orchestrator.md
+    - Composition Engine: 02-orchestrators/05-composition-engine.md
+    - Onboarding Orchestrator: 02-orchestrators/06-onboarding-orchestrator.md
+    - Adaptive Router: 02-orchestrators/07-adaptive-router.md
   - Getting Started:
-    - Installation & Setup: 01-getting-started/0-installation.md
-    - Quick Start: 01-getting-started/1-quickstart.md
-    - First Orchestrator: 01-getting-started/2-first-orchestrator.md
-    - Troubleshooting Setup: 01-getting-started/3-troubleshooting.md
+    - Installation & Setup: 03-getting-started/0-installation.md
+    - Quick Start: 03-getting-started/1-quickstart.md
+    - First Orchestrator: 03-getting-started/2-first-orchestrator.md
+    - Troubleshooting Setup: 03-getting-started/3-troubleshooting.md
   - Architecture:
-    - System Overview: 02-architecture/1-system-overview.md
-    - Design Principles: 02-architecture/2-design-principles.md
-    - Orchestration Engine: 02-architecture/3-orchestration-engine.md
-    - Domain Brain: 02-architecture/4-domain-brain.md
-    - Resilience Patterns: 02-architecture/5-resilience-patterns.md
-    - Implementation Phases: 02-architecture/6-implementation-phases.md
-    - Intent Router: 02-architecture/7-intent-router.md
-    - State Management: 02-architecture/8-state-management.md
-    - Knowledge Protocol: 02-architecture/9-knowledge-protocol.md
-    - MCP Tool Governance: 02-architecture/10-mcp-tool-governance.md
-    - Governance Rules: 02-architecture/governance-rules.md
-    - Definition of Ready: 02-architecture/definition-of-ready.md
-    - Architecture Decision Records: 02-architecture/adrs/
+    - System Overview: 04-architecture/1-system-overview.md
+    - Design Principles: 04-architecture/2-design-principles.md
+    - Orchestration Engine: 04-architecture/3-orchestration-engine.md
+    - Domain Brain: 04-architecture/4-domain-brain.md
+    - Resilience Patterns: 04-architecture/5-resilience-patterns.md
+    - Implementation Phases: 04-architecture/6-implementation-phases.md
+    - Intent Router: 04-architecture/7-intent-router.md
+    - State Management: 04-architecture/8-state-management.md
+    - Knowledge Protocol: 04-architecture/9-knowledge-protocol.md
+    - MCP Tool Governance: 04-architecture/10-mcp-tool-governance.md
+    - Governance Rules: 04-architecture/governance-rules.md
+    - Definition of Ready: 04-architecture/definition-of-ready.md
+    - Architecture Decision Records: 04-architecture/adrs
+  - CORTEX LENS Protocol:
+    - Overview: 05-lens-protocol/00-lens-index.md
+    - LENS System Design: 05-lens-protocol/01-lens-overview.md
+    - Intent Classification (Language Layer): 05-lens-protocol/02-intent-classification.md
+    - AST Analysis (Examination Layer): 05-lens-protocol/03-ast-analysis.md
+    - Git Navigation (Navigation Layer): 05-lens-protocol/04-git-navigation.md
+    - Knowledge Synthesis: 05-lens-protocol/05-knowledge-synthesis.md
+    - LENS Crawler: 05-lens-protocol/06-lens-crawler.md
+    - Domain Brain Integration: 05-lens-protocol/07-domain-brain-integration.md
   - API Reference:
-    - Overview: 03-api-reference/0-overview.md
-    - REST API: 03-api-reference/rest-api/
-    - MCP Protocol: 03-api-reference/mcp-protocol/
-    - CLI Commands: 03-api-reference/cli/
+    - Overview: 06-api-reference/0-overview.md
+    - REST API: 06-api-reference/rest-api
+    - MCP Protocol: 06-api-reference/mcp-protocol
+    - CLI Commands: 06-api-reference/cli
   - How-To Guides:
     - Deployment:
-      - Overview: 04-guides/deployment/0-overview.md
-      - Local Development: 04-guides/deployment/1-local-development.md
-      - MkDocs Server: 04-guides/deployment/2-mkdocs-server.md
-      - FAQ: 04-guides/deployment/4-faq.md
+      - Overview: 07-guides/deployment/0-overview.md
+      - Local Development: 07-guides/deployment/1-local-development.md
+      - MkDocs Server: 07-guides/deployment/2-mkdocs-server.md
+      - FAQ: 07-guides/deployment/4-faq.md
     - Integration:
-      - Overview: 04-guides/integration/0-overview.md
+      - Overview: 07-guides/integration/0-overview.md
     - Operations:
-      - Overview: 04-guides/operations/0-overview.md
-      - Troubleshooting: 04-guides/operations/4-troubleshooting.md
+      - Overview: 07-guides/operations/0-overview.md
+      - Troubleshooting: 07-guides/operations/4-troubleshooting.md
     - Advanced:
-      - Overview: 04-guides/advanced/0-overview.md
+      - Overview: 07-guides/advanced/0-overview.md
   - Reference:
-    - Glossary: 05-reference/glossary.md
-    - FAQ: 05-reference/faq.md
-    - Known Issues: 05-reference/known-issues.md
-    - Changelog: 05-reference/changelog.md
-    - Compliance Mappings: 05-reference/compliance-mappings.md
-    - Quick Reference: 05-reference/quick-reference.md
-    - Gap Analysis: 05-reference/gap-analysis.md
-    - Implementation Status: 05-reference/implementation-status.md
-    - Remediation Status: 05-reference/remediation-status.md
-    - Test AC Mapping: 05-reference/test-ac-mapping.md
+    - Glossary: 08-reference/glossary.md
+    - FAQ: 08-reference/faq.md
+    - Known Issues: 08-reference/known-issues.md
+    - Changelog: 08-reference/changelog.md
+    - Compliance Mappings: 08-reference/compliance-mappings.md
+    - Quick Reference: 08-reference/quick-reference.md
+    - Gap Analysis: 08-reference/gap-analysis.md
+    - Implementation Status: 08-reference/implementation-status.md
+    - Remediation Status: 08-reference/remediation-status.md
+    - Test AC Mapping: 08-reference/test-ac-mapping.md
   - Tutorials:
-    - Orchestrator Tutorials: 06-tutorials/0-index.md
+    - Orchestrator Tutorials: 09-tutorials/0-index.md
   - Contributing:
-    - Contributing Guidelines: 07-contributing/1-contributing-guidelines.md
-    - Development Setup: 07-contributing/2-development-setup.md
-    - Testing Strategy: 07-contributing/3-testing-strategy.md
-    - Code Style Guide: 07-contributing/4-code-style-guide.md
-    - Pull Request Process: 07-contributing/5-pull-request-process.md
+    - Contributing Guidelines: 10-contributing/1-contributing-guidelines.md
+    - Development Setup: 10-contributing/2-development-setup.md
+    - Testing Strategy: 10-contributing/3-testing-strategy.md
+    - Code Style Guide: 10-contributing/4-code-style-guide.md
+    - Pull Request Process: 10-contributing/5-pull-request-process.md
   - License: LICENSE.md

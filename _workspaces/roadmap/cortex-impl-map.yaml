@@ -114,6 +114,38 @@ execution_config:
       blocking: false
       depends_on_mac_completion: "PHASE-E-TDD-IMPLEMENTATION"
     
+    eval:
+      strategy: "knowledge_graph_integration"
+      focus: "Optional KG backend for domain brain, governance relationships, orchestrator routing"
+      status: "NOT_STARTED"
+      priority: "P2-OPTIONAL"
+      phases:
+        - phase_id: "PHASE-KG-001-foundation"
+          sequence: 1
+          required: false
+          machine: "eval"
+        - phase_id: "PHASE-KG-002-entity-sync"
+          sequence: 2
+          required: false
+          machine: "eval"
+        - phase_id: "PHASE-KG-003-query-layer"
+          sequence: 3
+          required: false
+          machine: "eval"
+        - phase_id: "PHASE-KG-004-routing-optimization"
+          sequence: 4
+          required: false
+          machine: "eval"
+        - phase_id: "PHASE-KG-005-validation"
+          sequence: 5
+          required: false
+          machine: "eval"
+      estimated_duration: "11-16 days"
+      blocking: false
+      depends_on_mac_completion: "PHASE-E-TDD-IMPLEMENTATION"
+      depends_on_domain_brain_maturity: "domain_brain ≥90% tests passing"
+      design_document: "_workspaces/roadmap/reports/KNOWLEDGE-GRAPH-ASSESSMENT.md"
+    
     ah:
       strategy: "deployment_automation + quality_hardening"
       focus: "Deployment infrastructure, multi-repo governance, profiles, code quality"
@@ -628,7 +660,7 @@ phases_implementation_status:
               - "Additional high-priority modules per test failure analysis"
 
   not_started:
-    count: 8  # Updated: Added 5 new phases for 100% confidence
+    count: 13  # Updated: Added 5 new eval track phases for KG integration
     phases:
       # NEW PHASES FOR 100% PRODUCTION CONFIDENCE (added 2026-01-20)
       - id: "impl-export-completion"
@@ -798,6 +830,98 @@ phases_implementation_status:
         business_value: "Eliminates ephemeral _workspaces/roadmap confusion, enables proper plan isolation, scales to multiple domains"
         completion_date: "2026-01-21"
         tests_passing: 7
+      
+      # EVAL TRACK - Knowledge Graph Integration (Optional, Post-Production)
+      - id: "PHASE-KG-001-foundation"
+        title: "KG Foundation - Neo4j/Aura Setup & Schema Design"
+        ac_ids: 3
+        status: "NOT_STARTED"
+        priority: "P2-OPTIONAL"
+        estimated_effort: "3-4 days"
+        blocking: false
+        machine: "eval"
+        dependencies: ["PHASE-E-TDD-IMPLEMENTATION"]
+        note: "Establish Knowledge Graph infrastructure for optional domain brain backend; designed as non-breaking optional layer"
+        file: "_workspaces/roadmap/phases/PHASE-KG-001-foundation.yaml"
+        category: "INFRASTRUCTURE"
+        business_value: "Enables semantic queries across governance rules, domain entities, orchestrator relationships"
+        target_state:
+          kg_backend: "Neo4j or Amazon Neptune configured"
+          schema: "Domain entity, relationship, governance rule schemas defined"
+          ingest_adapter: "Abstract adapter for entity ingestion"
+          tests: "40+ tests covering schema, ingest, fallback semantics"
+      
+      - id: "PHASE-KG-002-entity-sync"
+        title: "KG Entity Sync - Domain Brain → Knowledge Graph"
+        ac_ids: 3
+        status: "NOT_STARTED"
+        priority: "P2-OPTIONAL"
+        estimated_effort: "2-3 days"
+        blocking: false
+        machine: "eval"
+        dependencies: ["PHASE-KG-001-foundation"]
+        note: "Non-destructive sync of BusinessKnowledgeRepository entities to KG; fallback to SQLite if KG unavailable"
+        file: "_workspaces/roadmap/phases/PHASE-KG-002-entity-sync.yaml"
+        category: "INTEGRATION"
+        business_value: "Complete domain entity graph with relationships; enables impact analysis"
+        target_state:
+          entities_synced: "All domain brain entities → KG nodes"
+          relationships: "Service-to-service, API, capability relationships modeled"
+          tests: "60+ tests covering sync, deduplication, conflict resolution"
+      
+      - id: "PHASE-KG-003-query-layer"
+        title: "KG Query Layer - Wrap BusinessKnowledgeRepository"
+        ac_ids: 3
+        status: "NOT_STARTED"
+        priority: "P2-OPTIONAL"
+        estimated_effort: "2-3 days"
+        blocking: false
+        machine: "eval"
+        dependencies: ["PHASE-KG-002-entity-sync"]
+        note: "Abstract query layer enabling KG backend without modifying existing code; SQLite fallback on KG timeout"
+        file: "_workspaces/roadmap/phases/PHASE-KG-003-query-layer.yaml"
+        category: "INTEGRATION"
+        business_value: "Transparent KG queries via existing API; no breaking changes"
+        target_state:
+          query_adapter: "IQueryAdapter interface with KG and SQLite implementations"
+          multi_hop_queries: "Support 1-3 hop entity relationship queries"
+          tests: "50+ tests covering query correctness, fallback, timeout handling"
+      
+      - id: "PHASE-KG-004-routing-optimization"
+        title: "KG Routing - Optional MasterOrchestrator Enhancement"
+        ac_ids: 3
+        status: "NOT_STARTED"
+        priority: "P2-OPTIONAL"
+        estimated_effort: "2-3 days"
+        blocking: false
+        machine: "eval"
+        dependencies: ["PHASE-KG-003-query-layer"]
+        note: "Optional enhanced routing: use KG relationships to determine applicable orchestrators; non-breaking if disabled"
+        file: "_workspaces/roadmap/phases/PHASE-KG-004-routing-optimization.yaml"
+        category: "OPTIMIZATION"
+        business_value: "Improved orchestrator selection via semantic capability matching"
+        target_state:
+          routing_strategy: "Optional KG-based semantic routing in MasterOrchestrator"
+          tests: "40+ tests covering routing correctness, performance, fallback to current routing"
+      
+      - id: "PHASE-KG-005-validation"
+        title: "KG Validation & Regression Testing"
+        ac_ids: 3
+        status: "NOT_STARTED"
+        priority: "P2-OPTIONAL"
+        estimated_effort: "2-3 days"
+        blocking: false
+        machine: "eval"
+        dependencies: ["PHASE-KG-004-routing-optimization"]
+        note: "Comprehensive validation: KG correctness, fallback semantics, performance benchmarks, existing test regression"
+        file: "_workspaces/roadmap/phases/PHASE-KG-005-validation.yaml"
+        category: "VALIDATION"
+        business_value: "Confidence in KG implementation; zero impact to production if disabled"
+        target_state:
+          regression_tests: "All 7000+ existing tests still passing"
+          kg_correctness: "100% entity/relationship accuracy verified"
+          performance: "Query performance benchmarked against SQLite baseline"
+          tests: "20+ tests covering validation scenarios"
 
 phase_tracker:
   authority: "CORTEX_IMPL_MAP_v3.5-100%-CONFIDENCE"

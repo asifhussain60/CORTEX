@@ -1,0 +1,205 @@
+---
+# PHASE KG-003: Knowledge Graph Query Layer
+# Abstract Query Interface for KG Backend
+# Version: 1.0
+# Date: 2026-01-22
+
+metadata:
+  id: "PHASE-KG-003-query-layer"
+  title: "KG Query Layer - Wrap BusinessKnowledgeRepository"
+  subtitle: "Transparent KG Queries with SQLite Fallback"
+  phase_sequence: "KG-003 (after PHASE-KG-002-entity-sync)"
+  priority: "P2-OPTIONAL"
+  status: "NOT_STARTED"
+  blocks_production: false
+  machine: "eval"
+  
+  execution_metadata:
+    machine_track: "eval"
+    sequence_position: 3
+    next_phase_id: "PHASE-KG-004-routing-optimization"
+    dependencies: ["PHASE-KG-002-entity-sync"]
+
+scope:
+  total_tests: 50
+  estimated_effort: "2-3 days"
+
+executive_summary: |
+  PHASE KG-003 wraps BusinessKnowledgeRepository queries with optional KG backend.
+  
+  **Starting State:**
+  - KG infrastructure ready with synced entities (PHASE-KG-002 complete)
+  - Existing BusinessKnowledgeRepository uses SQLite
+  - Current clients expect same interface
+  
+  **Design Principle:** Decorator pattern for non-breaking optional layer
+  - KG queries wrapped transparently
+  - Timeout/error → SQLite fallback (same result)
+  - Feature flag enables/disables KG without code changes
+  - All existing tests continue passing
+  
+  **Deliverables:**
+  1. IQueryAdapter interface (1-hop, multi-hop queries)
+  2. KnowledgeGraphQueryAdapter (KG-backed queries)
+  3. SQLiteQueryAdapter (SQLite fallback)
+  4. QueryCoordinator (timeout handling, fallback logic)
+  5. 50+ tests validating query correctness, performance
+  
+  **Ending State:**
+  - Query layer abstraction complete
+  - KG queries available transparently
+  - SQLite fallback tested and verified
+  - 50/50 tests passing
+  - Ready for optional routing enhancement (PHASE-KG-004)
+
+implementation_phases:
+
+  phase_kg3_interface:
+    id: "PHASE-KG3-INTERFACE"
+    duration: "0.5 days"
+    effort_hours: 4
+    goal: "Define query adapter interface"
+    
+    acceptance_criteria:
+      - id: "AC-KG3-INT-001"
+        description: "IQueryAdapter interface with 1-hop and multi-hop query methods"
+        verification: "Interface defined in cortex/brain/core/knowledge/query/"
+    
+    implementation_tasks:
+      - task: "Create IQueryAdapter interface"
+        files:
+          - "cortex/brain/core/knowledge/query/__init__.py (NEW - ~50 lines)"
+          - "cortex/brain/core/knowledge/query/interface.py (NEW - ~150 lines)"
+        guidance: |
+          Methods:
+          - find_by_type(entity_type, filters) → List[Entity]
+          - find_by_id(id) → Entity
+          - query_relationships(source_id, rel_types) → List[Relationship]
+          - query_paths(source_id, target_id, max_hops=2) → List[Path]
+          - find_capabilities(domain_id) → List[Capability]
+          - find_dependencies(entity_id) → List[Entity]
+        verification: "All methods typed, documented"
+
+  phase_kg3_kg_adapter:
+    id: "PHASE-KG3-KG-ADAPTER"
+    duration: "1 day"
+    effort_hours: 8
+    goal: "Implement KG-backed query adapter"
+    
+    acceptance_criteria:
+      - id: "AC-KG3-KGA-001"
+        description: "KnowledgeGraphQueryAdapter implements all query methods via Cypher"
+        verification: "Adapter tests passing with mock KG"
+    
+    implementation_tasks:
+      - task: "Create KnowledgeGraphQueryAdapter"
+        files:
+          - "cortex/brain/core/knowledge/query/kg_adapter.py (NEW - ~300 lines)"
+        guidance: |
+          Implementation:
+          - find_by_type() → Cypher: MATCH (n:Type {filters})
+          - query_paths() → Cypher with APOC or native shortest path
+          - Timeout handling: 5s default, configurable
+          - Result marshaling: Cypher objects → Entity objects
+        verification: "KG adapter tests: 20+ tests passing"
+
+  phase_kg3_sqlite_adapter:
+    id: "PHASE-KG3-SQLITE-ADAPTER"
+    duration: "0.5 days"
+    effort_hours: 4
+    goal: "Implement SQLite fallback adapter"
+    
+    acceptance_criteria:
+      - id: "AC-KG3-SQLA-001"
+        description: "SQLiteQueryAdapter mirrors KG adapter results"
+        verification: "Identical results between KG and SQLite for same queries"
+    
+    implementation_tasks:
+      - task: "Create SQLiteQueryAdapter"
+        files:
+          - "cortex/brain/core/knowledge/query/sqlite_adapter.py (NEW - ~250 lines)"
+        guidance: |
+          Implementation:
+          - find_by_type() → SQL: SELECT * FROM entities WHERE type=?
+          - query_paths() → Recursive CTE or in-memory graph traversal
+          - Result format identical to KG adapter
+        verification: "SQLite adapter tests: 15+ tests passing"
+
+  phase_kg3_coordinator:
+    id: "PHASE-KG3-COORDINATOR"
+    duration: "0.5 days"
+    effort_hours: 4
+    goal: "Create query coordinator with fallback"
+    
+    acceptance_criteria:
+      - id: "AC-KG3-COORD-001"
+        description: "QueryCoordinator handles timeout and fallback transparently"
+        verification: "KG timeout → SQLite fallback verified"
+    
+    implementation_tasks:
+      - task: "Create QueryCoordinator"
+        files:
+          - "cortex/brain/core/knowledge/query/coordinator.py (NEW - ~200 lines)"
+        guidance: |
+          Logic:
+          - Try KG adapter with 5s timeout
+          - On timeout/error: log, fallback to SQLite
+          - Result validation: ensure both adapters return same structure
+          - Feature flag: disable KG via env var
+        verification: "Coordinator tests: 5+ tests"
+
+  phase_kg3_testing:
+    id: "PHASE-KG3-TESTING"
+    duration: "0.5 days"
+    effort_hours: 4
+    goal: "Comprehensive query testing"
+    
+    acceptance_criteria:
+      - id: "AC-KG3-TEST-001"
+        description: "50+ tests covering KG queries, SQLite queries, fallback, performance"
+        verification: "pytest: 50/50 PASSED"
+    
+    implementation_tasks:
+      - task: "Create query layer test suite"
+        files:
+          - "tests/integration/knowledge/test_kg_queries.py (NEW - ~350 lines, 25 tests)"
+          - "tests/integration/knowledge/test_query_fallback.py (NEW - ~200 lines, 15 tests)"
+          - "tests/unit/knowledge/test_query_interface.py (NEW - ~150 lines, 10 tests)"
+        guidance: |
+          Test coverage:
+          - Query correctness: KG vs SQLite parity (15 tests)
+          - Multi-hop paths: 1-hop, 2-hop, 3-hop queries (10 tests)
+          - Timeout handling: KG timeout triggers fallback (8 tests)
+          - Performance: KG vs SQLite baseline (10 tests)
+          - Edge cases: missing entities, cyclic relationships (7 tests)
+        verification: "50/50 tests passing"
+
+test_files:
+  total_tests: 50
+  breakdown:
+    kg_queries: 25
+    fallback: 15
+    interface: 10
+  location:
+    - "tests/integration/knowledge/test_kg_queries.py (25 tests)"
+    - "tests/integration/knowledge/test_query_fallback.py (15 tests)"
+    - "tests/unit/knowledge/test_query_interface.py (10 tests)"
+
+new_files:
+  - "cortex/brain/core/knowledge/query/__init__.py (~50 lines)"
+  - "cortex/brain/core/knowledge/query/interface.py (~150 lines)"
+  - "cortex/brain/core/knowledge/query/kg_adapter.py (~300 lines)"
+  - "cortex/brain/core/knowledge/query/sqlite_adapter.py (~250 lines)"
+  - "cortex/brain/core/knowledge/query/coordinator.py (~200 lines)"
+  - "tests/integration/knowledge/test_kg_queries.py (~350 lines, 25 tests)"
+  - "tests/integration/knowledge/test_query_fallback.py (~200 lines, 15 tests)"
+  - "tests/unit/knowledge/test_query_interface.py (~150 lines, 10 tests)"
+
+success_metrics:
+  test_pass_rate: "100% (50/50 tests)"
+  query_correctness: "KG and SQLite produce identical results"
+  fallback_reliability: "100% (timeout always triggers fallback)"
+  performance_parity: "KG queries within 2x SQLite baseline"
+  existing_tests_impact: "0 breakages"
+
+next_phase: "PHASE-KG-004-routing-optimization"
