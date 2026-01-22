@@ -21,7 +21,7 @@ class TestBrandColorPalette:
     def colors_css_path(self) -> Path:
         """Fixture providing path to colors.css file."""
         return Path(__file__).parent.parent.parent.parent.parent / \
-               "src/dashboard/frontend/css/colors.css"
+               "cortex/brain/dashboard/frontend/css/colors.css"
     
     @pytest.fixture
     def expected_colors(self) -> Dict[str, str]:
@@ -208,7 +208,7 @@ class TestColorUsagePatterns:
     def colors_css_path(self) -> Path:
         """Fixture providing path to colors.css file."""
         return Path(__file__).parent.parent.parent.parent.parent / \
-               "src/dashboard/frontend/css/colors.css"
+               "cortex/brain/dashboard/frontend/css/colors.css"
     
     def test_primary_color_usage_examples(self, colors_css_path: Path) -> None:
         """
@@ -288,7 +288,7 @@ class TestTailwindIntegration:
     def tailwind_config_path(self) -> Path:
         """Fixture providing path to tailwind-custom.css or config."""
         base_path = Path(__file__).parent.parent.parent.parent.parent / \
-                    "src/dashboard/frontend/css"
+                    "cortex/brain/dashboard/frontend/css"
         
         # Check for tailwind-custom.css or tailwind.config.js
         custom_css = base_path / "tailwind-custom.css"

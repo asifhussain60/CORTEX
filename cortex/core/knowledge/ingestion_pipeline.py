@@ -550,3 +550,97 @@ class BulkIngestionPipeline:
             Pipeline metrics.
         """
         return self._metrics
+    
+    def execute_filter_chain(
+        self,
+        data: Any,
+        filters: Optional[List[str]] = None,
+    ) -> Any:
+        """Execute the filter chain on data.
+        
+        Args:
+            data: Data to filter.
+            filters: List of filter names to apply.
+            
+        Returns:
+            Filtered data.
+        """
+        if not filters:
+            return data
+        
+        result = data
+        for filter_name in filters:
+            if filter_name in self._filters:
+                if not self._filters[filter_name].filter(result):
+                    return None
+        return result
+    
+    def apply_refinement_rules(
+        self,
+        data: Any,
+        rules: Optional[List[str]] = None,
+    ) -> Any:
+        """Apply refinement rules to data.
+        
+        Args:
+            data: Data to refine.
+            rules: List of rule names to apply.
+            
+        Returns:
+            Refined data.
+        """
+        if not rules:
+            return data
+        
+        result = data
+        for rule_name in rules:
+            if rule_name in self._rules:
+                result = self._rules[rule_name].refine(result)
+        return result
+    
+    def format_output(
+        self,
+        data: Any,
+        formatter: Optional[str] = None,
+    ) -> Any:
+        """Format data for output.
+        
+        Args:
+            data: Data to format.
+            formatter: Formatter name to use.
+            
+        Returns:
+            Formatted data.
+        """
+        if not formatter or formatter not in self._formatters:
+            return data
+        return self._formatters[formatter].format(data)
+    
+    def get_execution_state(self) -> Dict[str, Any]:
+        """Get current execution state.
+        
+        Returns:
+            Dictionary with execution state including:
+            - status: Current status (idle, executing, complete, error)
+            - metrics: Current metrics
+            - failed_items_count: Number of failed items
+        """
+        status = "idle"
+        if self._metrics.start_time and not self._metrics.end_time:
+            status = "executing"
+        elif self._metrics.end_time:
+            if self._metrics.errors:
+                status = "complete_with_errors"
+            else:
+                status = "complete"
+        
+        return {
+            "status": status,
+            "metrics": {
+                "items_processed": self._metrics.items_processed,
+                "items_successful": self._metrics.items_successful,
+                "items_failed": self._metrics.items_failed,
+            },
+            "failed_items_count": len(self._failed_items),
+            "error_count": len(self._metrics.errors),
+        }

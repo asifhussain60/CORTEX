@@ -23,13 +23,13 @@ from typing import Dict, List
 @pytest.fixture
 def responsive_css_path() -> Path:
     """Path to responsive.css file."""
-    return Path("src/dashboard/frontend/css/responsive.css")
+    return Path("cortex/brain/dashboard/frontend/css/responsive.css")
 
 
 @pytest.fixture
 def hamburger_js_path() -> Path:
     """Path to hamburger-menu.js file."""
-    return Path("src/dashboard/frontend/js/components/common/hamburger-menu.js")
+    return Path("cortex/brain/dashboard/frontend/js/components/common/hamburger-menu.js")
 
 
 @pytest.fixture
@@ -37,7 +37,7 @@ def responsive_css_content(responsive_css_path: Path) -> str:
     """Load responsive.css content."""
     if not responsive_css_path.exists():
         pytest.fail(f"responsive.css not found at {responsive_css_path}")
-    return responsive_css_path.read_text()
+    return responsive_css_path.read_text(encoding='utf-8')
 
 
 @pytest.fixture
@@ -45,7 +45,7 @@ def hamburger_js_content(hamburger_js_path: Path) -> str:
     """Load hamburger-menu.js content."""
     if not hamburger_js_path.exists():
         pytest.fail(f"hamburger-menu.js not found at {hamburger_js_path}")
-    return hamburger_js_path.read_text()
+    return hamburger_js_path.read_text(encoding='utf-8')
 
 
 # === TEST: File Existence ===
@@ -55,7 +55,7 @@ def test_responsive_css_exists(responsive_css_path: Path) -> None:
     Test that responsive.css exists in correct location.
     
     Acceptance Criteria:
-    - File exists at src/dashboard/frontend/css/responsive.css
+    - File exists at cortex/brain/dashboard/frontend/css/responsive.css
     
     CORE-008: TDD test for file structure
     """
@@ -70,7 +70,7 @@ def test_hamburger_js_exists(hamburger_js_path: Path) -> None:
     Test that hamburger-menu.js exists in correct location.
     
     Acceptance Criteria:
-    - File exists at src/dashboard/frontend/js/components/common/hamburger-menu.js
+    - File exists at cortex/brain/dashboard/frontend/js/components/common/hamburger-menu.js
     
     CORE-008: TDD test for file structure
     """
@@ -474,7 +474,7 @@ def test_index_html_includes_responsive_css() -> None:
     
     CORE-008: TDD test for integration
     """
-    index_html_path = Path("src/dashboard/frontend/index.html")
+    index_html_path = Path("cortex/brain/dashboard/frontend/index.html")
     
     if not index_html_path.exists():
         pytest.skip("index.html not found, skipping integration test")
@@ -495,7 +495,7 @@ def test_index_html_includes_hamburger_js() -> None:
     
     CORE-008: TDD test for integration
     """
-    index_html_path = Path("src/dashboard/frontend/index.html")
+    index_html_path = Path("cortex/brain/dashboard/frontend/index.html")
     
     if not index_html_path.exists():
         pytest.skip("index.html not found, skipping integration test")
@@ -517,7 +517,7 @@ def test_index_html_hamburger_button_present() -> None:
     
     CORE-008: TDD test for HTML structure
     """
-    index_html_path = Path("src/dashboard/frontend/index.html")
+    index_html_path = Path("cortex/brain/dashboard/frontend/index.html")
     
     if not index_html_path.exists():
         pytest.skip("index.html not found, skipping integration test")
@@ -544,7 +544,7 @@ def test_index_html_mobile_nav_present() -> None:
     
     CORE-008: TDD test for HTML structure
     """
-    index_html_path = Path("src/dashboard/frontend/index.html")
+    index_html_path = Path("cortex/brain/dashboard/frontend/index.html")
     
     if not index_html_path.exists():
         pytest.skip("index.html not found, skipping integration test")

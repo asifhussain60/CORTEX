@@ -458,7 +458,7 @@ class TestAuditLogging:
         
         # Verify hash chain integrity
         if len(entries) >= 2:
-            assert entries[1].previous_hash == entries[0].current_hash
+            assert entries[1]["previous_hash"] == entries[0]["current_hash"]
 
 
 class TestEdgeCases:

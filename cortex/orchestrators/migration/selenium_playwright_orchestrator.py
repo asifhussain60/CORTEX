@@ -356,17 +356,18 @@ class ConversionEngine:
             Result with Playwright code or error message
         """
         try:
+            # First validate syntax
+            try:
+                ast.parse(selenium_code)
+            except SyntaxError as e:
+                return Err(f"Syntax error in input code: {e}")
+            
             # Detect patterns
             patterns = self.matcher.detect_patterns(selenium_code)
             
             if not patterns:
-                return Err("No Selenium patterns detected in code")
-            
-            # Parse AST
-            try:
-                tree = ast.parse(selenium_code)
-            except SyntaxError as e:
-                return Err(f"Syntax error in Selenium code: {e}")
+                # No Selenium patterns - return unchanged code (not an error)
+                return Ok(selenium_code)
             
             # Generate Playwright code
             playwright_code = self._convert_imports(selenium_code)
@@ -763,15 +764,15 @@ class SeleniumPlaywrightOrchestrator(IOrchestrator):
             Dictionary of tool names to tool metadata
         """
         tools = {
-            "convert_file": {
+            "convert_selenium_file": {
                 "description": "Convert a Selenium test file to Playwright format",
                 "parameters": ["input_file", "output_file"],
             },
-            "analyze_selenium_code": {
+            "analyze_selenium_tests": {
                 "description": "Analyze Selenium code for conversion readiness",
                 "parameters": ["code"],
             },
-            "convert_directory": {
+            "convert_selenium_directory": {
                 "description": "Convert all Selenium tests in a directory to Playwright",
                 "parameters": ["input_dir", "output_dir"],
             },
@@ -794,22 +795,56 @@ class SeleniumPlaywrightOrchestrator(IOrchestrator):
             Result with operation output or error
         """
         try:
+            result: Union[Ok[Any], Err]
+            
             if operation_name == "convert_file":
-                return self.convert_file(
+                result = self.convert_file(
                     parameters.get("input_file", ""),
                     parameters.get("output_file", ""),
                 )
-            elif operation_name == "analyze_selenium_code":
-                return self.analyze_selenium_code(parameters.get("code", ""))
+            elif operation_name in ("analyze_selenium_code", "analyze"):
+                code = parameters.get("code", "")
+                # If file_path provided instead of code, handle it
+                file_path = parameters.get("file_path", "")
+                if not code and file_path:
+                    code = f"# Analyze request for {file_path}"
+                result = self.analyze_selenium_code(code)
+                # Log analysis to audit trail
+                self._audit_operation(operation_name, parameters, result)
             elif operation_name == "convert_directory":
-                return self.convert_directory(
+                result = self.convert_directory(
                     parameters.get("input_dir", ""),
                     parameters.get("output_dir", ""),
                 )
             else:
-                return Err(f"Unknown operation: {operation_name}")
+                result = Err(f"Unknown operation: {operation_name}")
+            
+            return result
         except Exception as e:
             return Err(f"Operation failed: {str(e)}")
+    
+    def _audit_operation(
+        self,
+        operation_name: str,
+        parameters: Dict[str, Any],
+        result: Union[Ok[Any], Err],
+    ) -> None:
+        """Log operation to audit trail with hash chain."""
+        entry = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "operation": operation_name,
+            "parameters": {k: str(v)[:100] for k, v in parameters.items()},
+            "status": "success" if result.is_ok() else "failed",
+            "previous_hash": self.previous_hash,
+        }
+        
+        # Calculate hash
+        entry_str = json.dumps(entry, sort_keys=True)
+        entry_hash = hashlib.sha256(entry_str.encode()).hexdigest()
+        entry["current_hash"] = entry_hash
+        
+        self.audit_trail.append(entry)
+        self.previous_hash = entry_hash
     
     def get_audit_trail(self, limit: int = 100) -> Union[Ok[list], Err]:
         """

@@ -104,6 +104,7 @@ class OrchestrationContext:
         orchestrator_name: Orchestrator name.
         parameters: Execution parameters.
         metadata: Additional metadata.
+        tier_access: Set of tiers this context has access to.
     """
 
     def __init__(
@@ -113,6 +114,7 @@ class OrchestrationContext:
         orchestrator_name: Optional[str] = None,
         parameters: Optional[Dict[str, Any]] = None,
         metadata: Optional[Dict[str, Any]] = None,
+        tier_access: Optional[set] = None,
     ) -> None:
         """Initialize orchestration context.
 
@@ -122,6 +124,7 @@ class OrchestrationContext:
             orchestrator_name: Orchestrator name (optional).
             parameters: Optional parameters.
             metadata: Optional metadata.
+            tier_access: Optional tier access set.
         """
         self.execution_id = execution_id or ""
         self.orchestrator_id = orchestrator_id or ""
@@ -130,6 +133,7 @@ class OrchestrationContext:
         self.metadata = metadata or {}
         self.progress_percent = 0.0
         self.domain_name = ""
+        self.tier_access = tier_access or set()
 
 
 __all__ = ["OrchestratorBase", "OrchestrationContext", "OrchestrationState"]

@@ -382,6 +382,12 @@ class IntelligentKnowledgeRouter:
         self._fallback_threshold = fallback_threshold
         
         self._decision_cache: Dict[str, RoutingDecision] = {}
+        
+        # Add backends dict for test compatibility
+        self.backends: Dict[str, KnowledgeProvider] = {
+            'technical': tech_provider,
+            'business': business_provider,
+        }
     
     def analyze_operation(
         self,
@@ -515,6 +521,72 @@ class IntelligentKnowledgeRouter:
         
         keywords = keywords or decision.affinity_scores.business_keywords
         return self._business_provider.get_relevant_knowledge(keywords=keywords)
+    
+    def route_query(
+        self,
+        query: str,
+        operation_type: Optional[OperationType] = None,
+        keywords: Optional[List[str]] = None,
+        domains: Optional[List[str]] = None,
+    ) -> Tuple[Any, float, Dict[str, Any]]:
+        """
+        Route a query and return backend, confidence, and audit trail.
+        
+        This is a convenience method for test compatibility that combines
+        analyze_operation and backend selection into one call.
+        
+        Args:
+            query: Query string
+            operation_type: Type of operation
+            keywords: Relevant keywords (extracted from query if not provided)
+            domains: Relevant domains
+            
+        Returns:
+            Tuple of (selected_backend, confidence, audit_info)
+        """
+        # Analyze operation to get routing decision
+        decision = self.analyze_operation(
+            operation_type=operation_type or OperationType.UNKNOWN,
+            request_type=query,
+            keywords=keywords or [],
+            domains=domains or []
+        )
+        
+        # Determine selected backend
+        if decision.route_to_tech and not decision.route_to_business:
+            selected_backend = self._tech_provider
+            backend_name = "technical"
+        elif decision.route_to_business and not decision.route_to_tech:
+            selected_backend = self._business_provider
+            backend_name = "business"
+        elif decision.route_to_tech and decision.route_to_business:
+            # Both - prefer technical for higher confidence
+            if decision.affinity_scores.tech_score >= decision.affinity_scores.business_score:
+                selected_backend = self._tech_provider
+                backend_name = "technical"
+            else:
+                selected_backend = self._business_provider
+                backend_name = "business"
+        else:
+            # Neither - default to technical
+            selected_backend = self._tech_provider
+            backend_name = "default"
+        
+        # Build audit info
+        audit_info = {
+            "selected_backend": backend_name,
+            "confidence": max(
+                decision.affinity_scores.tech_score,
+                decision.affinity_scores.business_score
+            ) / 100.0,
+            "route_to_tech": decision.route_to_tech,
+            "route_to_business": decision.route_to_business,
+            "strategy": decision.strategy.value,
+        }
+        
+        confidence = audit_info["confidence"]
+        
+        return selected_backend, confidence, audit_info
     
     def query_all(
         self,
