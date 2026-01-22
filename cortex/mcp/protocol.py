@@ -243,6 +243,51 @@ class ToolValidator:
             return False
         
         return True
+    
+    @staticmethod
+    def validate_all_params(tool_def: "ToolDefinition", params: Dict[str, Any]) -> tuple:
+        """Validate all parameters for a tool definition.
+        
+        Args:
+            tool_def: Tool definition
+            params: Dictionary of parameters to validate
+            
+        Returns:
+            Tuple of (is_valid: bool, message: str)
+        """
+        # Check required parameters
+        for param in tool_def.parameters:
+            if param.required:
+                if param.name not in params:
+                    return False, f"Missing required parameter: {param.name}"
+                
+                if not ToolValidator.validate_parameter(param, params[param.name]):
+                    return False, f"Invalid value for parameter: {param.name}"
+        
+        # Check provided parameters
+        param_names = {p.name for p in tool_def.parameters}
+        for param_name in params:
+            if param_name not in param_names:
+                return False, f"Unknown parameter: {param_name}"
+            
+            # Find the parameter definition
+            param_def = None
+            for p in tool_def.parameters:
+                if p.name == param_name:
+                    param_def = p
+                    break
+            
+            if param_def:
+                if not ToolValidator.validate_parameter(param_def, params[param_name]):
+                    # Check if it's a range error
+                    if param_def.type == "number" and isinstance(params[param_name], (int, float)):
+                        if param_def.max_value is not None and params[param_name] > param_def.max_value:
+                            return False, f"Parameter {param_name} exceeds maximum value of {param_def.max_value}"
+                        if param_def.min_value is not None and params[param_name] < param_def.min_value:
+                            return False, f"Parameter {param_name} is below minimum value of {param_def.min_value}"
+                    return False, f"Invalid value for parameter: {param_name}"
+        
+        return True, ""
 
 
 __all__ = ["ErrorCode", "MCPError", "MCPRequest", "MCPResponse", "ToolDefinition", "ToolParameter", "MCPTool", "ToolValidator", "MessageType", "MCPProtocolHandler"]
