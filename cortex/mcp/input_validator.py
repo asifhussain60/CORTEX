@@ -4,8 +4,8 @@ Author: CORTEX Framework
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
-from typing import Dict, Any, List, Optional
-from dataclasses import dataclass, field
+from typing import Dict, Any, List, Optional, Tuple
+from dataclasses import dataclass
 from enum import Enum
 
 
@@ -18,62 +18,100 @@ class ValidationType(Enum):
 
 
 @dataclass
-class ValidationRule:
-    """Validation rule."""
-    field_name: str
-    validation_type: ValidationType
-    expected_type: Optional[type] = None
-    min_value: Optional[Any] = None
-    max_value: Optional[Any] = None
-    pattern: Optional[str] = None
-
-
-class ValidationError(Exception):
+class ValidationError:
     """Validation error."""
-    
-    def __init__(self, message: str, field: Optional[str] = None, errors: Optional[List[str]] = None):
-        """Initialize validation error."""
-        super().__init__(message)
-        self.field = field
-        self.errors = errors or []
+    parameter: str
+    error_code: str
+    message: str
 
 
 class ToolInputValidator:
     """Validates MCP tool inputs."""
     
-    def __init__(self):
-        """Initialize validator."""
-        self.rules: List[ValidationRule] = []
-    
-    def add_rule(self, rule: ValidationRule) -> None:
-        """Add validation rule."""
-        self.rules.append(rule)
-    
-    def validate(self, inputs: Dict[str, Any]) -> None:
-        """Validate inputs against rules.
+    @staticmethod
+    def validate_input(tool_def: Any, params: Dict[str, Any]) -> Tuple[bool, List[ValidationError]]:
+        """Validate input parameters against tool definition.
         
         Args:
-            inputs: Input dictionary to validate.
+            tool_def: ToolDefinition with parameters
+            params: Input parameters dict
             
-        Raises:
-            ValidationError: If validation fails.
+        Returns:
+            Tuple of (is_valid, error_list)
         """
-        errors = []
+        errors: List[ValidationError] = []
         
-        for rule in self.rules:
-            if rule.validation_type == ValidationType.REQUIRED:
-                if rule.field_name not in inputs:
-                    errors.append(f"Required field '{rule.field_name}' is missing")
+        # Check required parameters
+        for param in tool_def.parameters:
+            if param.required and param.name not in params:
+                errors.append(ValidationError(
+                    parameter=param.name,
+                    error_code="missing_required",
+                    message=f"Required parameter '{param.name}' is missing"
+                ))
+        
+        # Check provided parameters
+        for param_name, param_value in params.items():
+            # Find parameter definition
+            param_def = None
+            for p in tool_def.parameters:
+                if p.name == param_name:
+                    param_def = p
+                    break
             
-            elif rule.validation_type == ValidationType.TYPE_CHECK:
-                if rule.field_name in inputs and rule.expected_type:
-                    if not isinstance(inputs[rule.field_name], rule.expected_type):
-                        errors.append(
-                            f"Field '{rule.field_name}' must be of type {rule.expected_type.__name__}"
-                        )
+            if param_def is None:
+                errors.append(ValidationError(
+                    parameter=param_name,
+                    error_code="unknown_parameter",
+                    message=f"Unknown parameter '{param_name}'"
+                ))
+                continue
+            
+            # Type checking
+            if param_def.type == "string" and not isinstance(param_value, str):
+                errors.append(ValidationError(
+                    parameter=param_name,
+                    error_code="type_error",
+                    message=f"Parameter '{param_name}' must be string, got {type(param_value).__name__}"
+                ))
+                continue
+            
+            if param_def.type == "number" and not isinstance(param_value, (int, float)):
+                errors.append(ValidationError(
+                    parameter=param_name,
+                    error_code="type_error",
+                    message=f"Parameter '{param_name}' must be number, got {type(param_value).__name__}"
+                ))
+                continue
+            
+            # Range checking for numbers
+            if param_def.type == "number":
+                if hasattr(param_def, 'min_value') and param_def.min_value is not None:
+                    if param_value < param_def.min_value:
+                        errors.append(ValidationError(
+                            parameter=param_name,
+                            error_code="range_error",
+                            message=f"Parameter '{param_name}' must be >= {param_def.min_value}"
+                        ))
+                
+                if hasattr(param_def, 'max_value') and param_def.max_value is not None:
+                    if param_value > param_def.max_value:
+                        errors.append(ValidationError(
+                            parameter=param_name,
+                            error_code="range_error",
+                            message=f"Parameter '{param_name}' must be <= {param_def.max_value}"
+                        ))
+            
+            # Enum checking
+            if hasattr(param_def, 'enum') and param_def.enum:
+                if param_value not in param_def.enum:
+                    errors.append(ValidationError(
+                        parameter=param_name,
+                        error_code="enum_error",
+                        message=f"Parameter '{param_name}' must be one of {param_def.enum}"
+                    ))
         
-        if errors:
-            raise ValidationError("Validation failed", errors=errors)
+        return len(errors) == 0, errors
 
 
-__all__ = ["ValidationRule", "ValidationType", "ValidationError", "ToolInputValidator"]
+__all__ = ["ValidationError", "ToolInputValidator", "ValidationType"]
