@@ -1,13 +1,13 @@
 # CORTEX Autonomous Documentation Discovery & Refresh Agent
-**Version:** 1.0 | **Date:** 2026-01-22 | **Type:** Autonomous Discovery + Generation Agent
+**Version:** 1.1 | **Date:** 2026-01-22 | **Type:** Autonomous Discovery + Generation + Cleanup Agent
 
 ---
 
 ## Agent Purpose
 
-This agent autonomously discovers all CORTEX capabilities (orchestrators, MCP tools, modules, features) and generates comprehensive documentation with mermaid architecture diagrams. It then validates the mkdocs site, fixes broken links, and removes obsolete documentation.
+This agent autonomously discovers all CORTEX capabilities (orchestrators, MCP tools, modules, features) and generates comprehensive documentation with mermaid architecture diagrams. It then validates the mkdocs site, fixes broken links, removes obsolete documentation, and performs a cleanup cycle to reorganize files and maintain documentation hygiene.
 
-**Execution:** `python -m cortex.documentation.discovery_agent --full-refresh`
+**Execution:** `python -m cortex.documentation.discovery_agent --full-refresh --cleanup`
 
 ---
 
@@ -307,6 +307,117 @@ class TestDocumentationCompleteness:
     def test_all_components_have_diagrams(self): ...
 ```
 
+### Stage 6: Cleanup & Reorganization Cycle
+
+**CRITICAL:** After validation passes, perform cleanup to maintain docs hygiene.
+
+#### Cleanup Algorithm
+
+```python
+# Phase 1: Identify misplaced files at docs root
+WHITELISTED_ROOT_FILES = {
+    "0-README.md",
+    "INDEX.md", 
+    "LICENSE.md",
+    "mkdocs.yml",
+    "serve-docs.bat",          # ⭐ ALWAYS KEEP (Windows launcher)
+    "serve-docs.sh",
+    "SERVE-DOCS-README.md",
+    "_hooks",
+    "_tests",
+    "_diagrams",
+    "assets",
+    "stylesheets",
+    "theme",
+    # Numbered folders 01-cortex-brain through 16-testing
+}
+
+FILES_TO_RELOCATE = {
+    "BRAIN_DOCUMENTATION_REPORT.md": "docs/01-cortex-brain/",
+    "DOCUMENTATION-SYSTEM-INTEGRATION-GUIDE.md": "docs/08-reference/",
+    "PRODUCTION-READINESS-BRITTLENESS-ANALYSIS.md": "docs/04-architecture/",
+    "TEST-EXECUTION-STRATEGY.md": "docs/16-testing/",
+    "TEST-OPTIMIZATION-SUMMARY.md": "docs/16-testing/",
+    "TEST-QUICK-REFERENCE.txt": "docs/16-testing/",
+    "CROSS-PLATFORM-SCRIPTS-IMPLEMENTATION.md": "docs/07-guides/deployment/",
+    "README-ORCHESTRATOR-MODULES.md": "docs/02-orchestrators/",
+    "DOCUMENTATION-REFACTORING-REPORT.md": "docs/_archive/",  # Delete or archive
+}
+
+# Phase 2: Relocate files
+for file, destination in FILES_TO_RELOCATE.items():
+    if os.path.exists(file):
+        if not os.path.exists(destination):
+            os.makedirs(destination)
+        
+        # Rename for consistency
+        filename = os.path.basename(file)
+        normalized_name = filename.lower().replace(" ", "-")
+        
+        dest_path = os.path.join(destination, normalized_name)
+        
+        print(f"Moving {file} → {dest_path}")
+        shutil.move(file, dest_path)
+        
+        # Update mkdocs.yml if file was referenced
+        update_mkdocs_references(file, dest_path)
+
+# Phase 3: Validate reorganization
+validation_checks = [
+    ("No .md files at docs root except whitelisted", validate_root_files),
+    ("All numbered folders (01-16) exist", validate_folder_structure),
+    ("serve-docs.bat at project root", validate_serve_script_location),
+    ("mkdocs.yml reflects new locations", validate_mkdocs_structure),
+    ("Zero broken cross-references", validate_links),
+]
+
+for check_name, check_fn in validation_checks:
+    result = check_fn()
+    print(f"✓ {check_name}" if result else f"✗ {check_name}")
+
+# Phase 4: Generate cleanup report
+cleanup_report = {
+    "timestamp": datetime.now().isoformat(),
+    "files_relocated": [relocated_files],
+    "files_deleted": [deleted_files],
+    "new_folders_created": [new_folders],
+    "mkdocs_updates": [mkdocs_changes],
+    "validation_results": [all_passed],
+}
+
+print("=" * 60)
+print("CLEANUP CYCLE COMPLETE")
+print("=" * 60)
+print(json.dumps(cleanup_report, indent=2))
+```
+
+#### Cleanup Verification
+
+After cleanup, verify:
+
+✅ **File Organization**
+- No documentation `.md` files at `docs/` root except whitelisted set
+- All files moved to proper numbered section folders
+- `serve-docs.bat` remains at project root (Windows launcher)
+- Folder structure matches mkdocs.yml navigation
+
+✅ **Link Integrity**
+- Run: `pytest docs/_tests/test_link_validation.py -v`
+- All internal links resolve correctly
+- No broken image references
+- All anchors valid
+
+✅ **Build Success**
+- Run: `mkdocs build`
+- Zero errors or warnings
+- Static site generated in `_build/site/`
+
+✅ **Documentation Completeness**
+- Run: `pytest docs/_tests/test_documentation_integrity.py -v`
+- All sections present and complete
+- Navigation hierarchy consistent
+- No orphaned files
+
 ---
 
 ## Brittleness Analysis Framework
@@ -467,9 +578,18 @@ pytest docs/_tests/ -v --cov=docs --cov-report=html
 - [ ] All test suites pass: `pytest docs/_tests/ -v`
 - [ ] Zero documentation security issues (no exposed credentials)
 - [ ] Brittleness analysis identifies all high-impact failure scenarios
+- [ ] ✅ **CLEANUP CYCLE COMPLETE:**
+  - [ ] No documentation files at `docs/` root except whitelisted
+  - [ ] All documentation files relocated to proper numbered folders
+  - [ ] serve-docs.bat remains at project root
+  - [ ] mkdocs.yml navigation reflects new file locations
+  - [ ] All cross-references updated after reorganization
+  - [ ] Zero broken links after cleanup
+  - [ ] mkdocs build succeeds with new structure
+  - [ ] Cleanup report generated and logged
 
 ---
 
-**Authority:** cortex-doc.prompt.md v1.0  
-**Status:** Ready for autonomous execution  
+**Authority:** cortex-doc.prompt.md v1.1  
+**Status:** Ready for autonomous execution with cleanup phase  
 **Copyright © 2025-2026 Asif Hussain. All rights reserved.**
