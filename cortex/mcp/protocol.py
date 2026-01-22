@@ -10,6 +10,7 @@ from enum import Enum
 
 class ErrorCode(Enum):
     """MCP error codes."""
+    SUCCESS = "success"
     INVALID_REQUEST = "invalid_request"
     INVALID_PARAMS = "invalid_params"
     METHOD_NOT_FOUND = "method_not_found"
@@ -18,11 +19,31 @@ class ErrorCode(Enum):
     TIMEOUT = "timeout"
     UNAUTHORIZED = "unauthorized"
     NOT_FOUND = "not_found"
+    PARSE_ERROR = "parse_error"
+    TOOL_NOT_FOUND = "tool_not_found"
+    UNSUPPORTED = "unsupported"
 
 
 class MCPError(Exception):
     """MCP protocol error."""
-    pass
+    
+    def __init__(
+        self,
+        code: Optional[ErrorCode] = None,
+        message: str = "",
+        data: Optional[Dict[str, Any]] = None
+    ) -> None:
+        """Initialize MCP error.
+        
+        Args:
+            code: Error code from ErrorCode enum
+            message: Error message
+            data: Additional error data
+        """
+        self.code = code
+        self.message = message
+        self.data = data
+        super().__init__(message)
 
 
 @dataclass
