@@ -38,11 +38,25 @@ class ComplexitySignals:
 @dataclass
 class ComplexityAssessment:
     """Complexity assessment result."""
-    level: ComplexityLevel
-    complexity_level: str
     complexity_score: float
+    complexity_level: str
+    level: ComplexityLevel = None
     factors: Dict[str, Any] = field(default_factory=dict)
     cached: bool = False
+    signals: Optional[Dict[str, Any]] = None
+    confidence: float = 0.95
+    
+    def __post_init__(self):
+        """Initialize level from complexity_level if not provided."""
+        if self.level is None:
+            # Convert complexity_level string to ComplexityLevel enum
+            level_str = self.complexity_level.lower()
+            for level in ComplexityLevel:
+                if level.value == level_str:
+                    self.level = level
+                    break
+            if self.level is None:
+                self.level = ComplexityLevel.MODERATE
     
     @property
     def score(self) -> float:
