@@ -1,312 +1,257 @@
 # Chapter 7: The Knowledge Graph - Teaching CORTEX to Remember
 
-## The Question Nobody Could Answer
+## The Question That Broke Us
 
-It started with a simple question from a new developer: "How do we handle payment disputes?"
+*← Previously: [Chapter 6: Phase E TDD](06-Phase-E-TDD.md)*
 
-The answer should have been simple.
+A new developer asked a simple question: "How do we handle payment disputes?"
 
-It wasn't.
+Six different people gave six different answers:
 
-Jennifer looked in the documentation: "Payment disputes are handled in the dispute resolution service."
+Jennifer: "The dispute resolution service handles that."
 
-Another developer looked in the code: "There's a dispute resolution service, but it imports a module that doesn't exist anymore."
+Another developer: "Wait, that service references a module we deleted months ago."
 
-A third developer searched the commit history: "We removed that module six months ago, but didn't update the references."
+Someone else: "Actually, we do dispute handling inline in the payment service now."
 
-A fourth developer checked the current code: "The payment service doesn't even call the dispute resolution service anymore. We changed to inline dispute handling."
+A fourth person: "The tests reference a helper function that doesn't exist anymore."
 
-A fifth developer checked the test code: "The tests reference a helper function that was deleted."
+Me, looking at the code: "There's a TODO comment from eighteen months ago that says 'fix this.'"
 
-So the answer to "How do we handle payment disputes?" was:
-- According to documentation: in the dispute resolution service
-- According to old code: using a deleted module
-- According to current code: inline in the payment service
-- According to tests: in a deleted helper function
-- According to comments: "TODO: fix this"
+*"So,"* Miss G summarizes in my head, *"the answer to 'how do we handle disputes' is: nobody knows."*
 
-Nobody knew.
+"We all know pieces," I protested.
 
-## The Problem of Lost Knowledge
-
-Asif watched as developers struggled to understand the system.
-
-"It's like," Miss G said, "we're building knowledge every day—debugging issues, making design decisions, learning from failures—but we're not capturing it anywhere. So every new problem we encounter, we solve it fresh, losing all the knowledge we gained from solving similar problems before."
-
-"We need a knowledge graph," Asif said.
-
-"What's a knowledge graph?" someone asked.
-
-"It's a database of facts," Asif explained. "Not just documentation. Not just code. Actual facts about how the system works."
-
-## The Architecture
-
-Asif designed the knowledge graph with three layers:
-
-**Layer 1: Entities**
-- Services (payment, governance, notifications, etc.)
-- Features (payments, disputes, notifications, etc.)
-- Concepts (resilience, consistency, fairness, etc.)
-- People (Asif, Miss G, Jennifer, etc.)
-
-**Layer 2: Relationships**
-- Services can: create, modify, delete features
-- Features can: use, call, depend on services
-- Concepts can: apply to, influence, constrain features
-- People can: own, maintain, debug services
-
-**Layer 3: Properties**
-- Services have: status, version, test coverage, governance score
-- Features have: complexity, documentation, test cases, dependencies
-- Concepts have: definition, examples, rules, violations
-
-When you query the knowledge graph, you can ask:
-- "What services handle payments?" → Answer: payment service, governance service, audit service
-- "What features does the payment service implement?" → Answer: process payment, handle disputes, refund, etc.
-- "What happens when a payment fails?" → Answer: Governance engine logs the failure, audit service records it, notifications service alerts the customer, etc.
-
-## The Epidemic of Lost Knowledge
-
-Asif started documenting the knowledge graph by asking developers: "How does feature X work?"
-
-He got 47 different answers.
-
-For the payment system:
-- Some developers said: "It processes payments through the payment gateway"
-- Others said: "It processes payments and checks governance rules"
-- Others said: "It processes payments, checks governance, audits the transaction, and records it in analytics"
-- One developer said: "I honestly don't know. I just call the payment service and hope it works"
-
-The last answer was most accurate.
-
-## Building the Knowledge Base
-
-Asif created a process:
-
-1. Each service must document its inputs and outputs
-2. Each feature must document its dependencies
-3. Each decision must be recorded with rationale
-4. Each test case must document what scenario it tests
-5. Each failure must be documented with root cause and solution
-
-This information went into the knowledge graph.
-
-When you opened the knowledge graph for the payment service, you saw:
-
-```
-SERVICE: payment
-Purpose: Process customer payments and refunds
-Dependencies: 
-  - governance service (must check CORE rules)
-  - audit service (must log all transactions)
-  - notifications service (must alert on errors)
-  - fraud service (must check for suspicious transactions)
-Features:
-  - process_payment: Takes amount, customer, description. Returns success/failure.
-  - handle_dispute: Takes dispute details. Marks transaction disputed.
-  - refund: Takes transaction ID. Reverses the transaction.
-  - check_capacity: Returns whether service can handle more transactions.
-Tests:
-  - test_successful_payment: Tests happy path
-  - test_payment_with_low_balance: Tests insufficient funds
-  - test_payment_timeout: Tests payment gateway timeout
-  - test_payment_with_governance_violation: Tests that governance violations are caught
-Last Updated: 2026-01-15
-Maintained By: Jennifer
-Test Coverage: 96%
-Status: Production
-```
-
-## The Dependency Revelation
-
-When Asif built the dependency graph from the knowledge base, he discovered:
-
-The payment service claimed to have no dependencies.
-
-But the knowledge graph showed it actually depended on:
-- Governance service (to check CORE rules)
-- Audit service (to log transactions)
-- Notifications service (to send alerts)
-- Fraud service (to detect fraud)
-- Customer service (to get customer data)
-- Cache service (to cache customer lookups)
-
-That's 6 dependencies, not 0.
-
-"Why didn't the payment service documentation list these?" Asif asked.
-
-"Because," the payment service maintainer said, "it's obvious that we need governance and audit. It's implicit."
-
-"Implicit doesn't mean implicit to the knowledge graph," Asif replied. "The knowledge graph only knows what you tell it."
-
-## The Governance Connection
-
-Miss G realized: "The knowledge graph should be governed."
-
-"What do you mean?" Asif asked.
-
-"I mean," Miss G said, "if a service claims to have no dependencies but the knowledge graph shows it has 6, that's a governance violation."
-
-So they added governance rules for the knowledge graph:
-
-**KNOWLEDGE-001: All services must document their dependencies**
-- If code shows a service depends on another service, the knowledge graph must list it
-- If the knowledge graph lists a dependency but the code doesn't use it, that's a violation
-
-**KNOWLEDGE-002: All features must document their complexity**
-- Complex features need more tests
-- Complex features have more edge cases
-- The knowledge graph must specify complexity
-
-**KNOWLEDGE-003: All decisions must have rationale**
-- Why did we choose this architecture?
-- Why did we build an Orchestrator instead of using choreography?
-- Every major decision must be documented
-
-## The Copilot Bot Integration
-
-Asif realized: Copilot Bot could use the knowledge graph.
-
-Instead of generating code blindly, Copilot Bot could:
-1. Query the knowledge graph: "What services are available?"
-2. Get the answer: payment service, governance service, orchestrators, etc.
-3. Query again: "How do I call the payment service?"
-4. Get the answer: "Call payment_service.process_payment(amount, customer, description)"
-5. Generate code that calls the payment service correctly
-
-Copilot Bot's hallucination rate dropped to nearly zero.
-
-He was no longer inventing APIs. He was using the knowledge graph.
-
-His code looked up dependencies instead of guessing them.
-
-## The Test Documentation Integration
-
-Asif connected the knowledge graph to the test system.
-
-Each test case in the knowledge graph had:
-- Test name
-- What scenario it tests
-- Why it's important
-- What it verifies
-
-When a new developer joined and asked "How do we test payment failures?", the knowledge graph answered:
-
-"We have 14 test cases for payment failures:
-1. test_payment_timeout (30 seconds with no response)
-2. test_payment_gateway_error (gateway returns HTTP 500)
-3. test_payment_insufficient_funds (customer doesn't have enough money)
-4. test_payment_governance_violation (payment violates CORE rules)
-[... 10 more cases ...]
-
-All 14 tests must pass for a payment change to be deployed."
-
-## The Crisis Resolution
-
-The original question—"How do we handle payment disputes?"—was now answerable.
-
-"Payment disputes are handled in the payment service through the handle_dispute function. This function:
-1. Checks the transaction against the dispute rules (from governance)
-2. Logs the dispute (via audit service)
-3. Updates the transaction status to 'disputed'
-4. Alerts the customer (via notifications service)
-5. Marks for review by human analyst
-
-Dependencies: governance service, audit service, notifications service, customer service
-Test coverage: 92% (12 out of 13 test cases passing; missing test for concurrent dispute submissions)"
-
-Nobody was confused.
-
-## The Organization Learning
-
-Over time, the knowledge graph became the system's collective memory.
-
-New developers used it to understand the system.
-
-Experienced developers used it to remember details about complex features.
-
-When a bug was found, the root cause was added to the knowledge graph along with the fix.
-
-When a security vulnerability was discovered, it was documented along with the remediation.
-
-When performance improved, the optimization was documented.
-
-The system was learning.
-
-## The 47-Domain Scaling Insight
-
-Asif realized something crucial.
-
-"The reason we couldn't scale to 47 domains was because we didn't have a knowledge graph," he told Miss G.
-
-"What do you mean?" she asked.
-
-"Each domain has its own architecture," Asif explained. "Customer service domain, payment domain, fraud domain, notifications domain, etc. Without a knowledge graph, each domain operates in isolation. You can't easily understand how they relate."
-
-"And with the knowledge graph?" Miss G asked.
-
-"With the knowledge graph, you can query: 'Show me all the services in the payment domain.' Or: 'Show me all services that depend on governance rules.' Or: 'Show me all services that are overdue for testing.'"
-
-"So the knowledge graph enables scaling," Miss G understood.
-
-"The knowledge graph enables governance at scale," Asif corrected. "You can't govern what you can't see."
-
-## The Truth About Knowledge
-
-Late one night, as Asif and Miss G looked at the knowledge graph visualization—a massive network of entities and relationships all interconnected—Miss G said:
-
-"You know what this is?"
-
-"What?" Asif asked.
-
-"This is the system explaining itself to itself," Miss G said. "The knowledge graph is CORTEX learning to talk about itself."
-
-"So if the knowledge graph has an error," Asif said, "that means the system has an incorrect self-image."
-
-"Exactly," Miss G replied. "And if the code doesn't match the knowledge graph, that's a governance violation—the code is violating what the system says it should do."
-
-"So the knowledge graph is truth," Asif said.
-
-"The knowledge graph is specification," Miss G corrected, echoing her earlier wisdom about tests. "If the code matches the knowledge graph, it's correct according to specification."
-
-The Wi-Fi router blinked red.
-
-It was the one device in the system that didn't need a knowledge graph. It just blinked.
-
-And that, somehow, seemed profound.
-
-## The Future of Knowledge
-
-As the knowledge graph grew, Asif saw a possibility.
-
-"What if we fed the knowledge graph into the Intent Router?" he asked Miss G.
-
-"What would happen?" she asked.
-
-"The Intent Router would understand intent in context of what the system knows about itself," Asif said. "Developer says: 'I want to handle payment disputes.' The Intent Router would query the knowledge graph, learn that disputes are already handled, and ask: 'Do you want to modify the existing dispute handling or create new functionality?'"
-
-"So the Intent Router would get smarter," Miss G said.
-
-"The entire system would get smarter," Asif corrected. "Because it would be learning from its own knowledge."
-
-## The 1,462 Test Integration
-
-Asif added something to the Phase E testing system.
-
-Every test case was now linked to the knowledge graph.
-
-When a test ran and passed, the knowledge graph was updated: "This scenario is tested and verified."
-
-When a test failed, the knowledge graph was updated: "This scenario failed in production."
-
-When a new test was added, the knowledge graph was updated: "We now test this scenario."
-
-So the knowledge graph didn't just document what the system did.
-
-It documented what the system had been tested to do.
-
-Test coverage and knowledge coverage were identical.
+*"Pieces that contradict each other. That's worse than knowing nothing."*
 
 ---
 
-**Next: Chapter 8 — The Registry Wars: When Metadata Fights Back**
+## The Amnesia Problem
+
+Here's what happens in every organization:
+
+Someone solves a problem. They learn something valuable. They move on to the next problem. The knowledge stays in their head. Eventually they leave, forget, or get busy with other things.
+
+The next person encounters the same problem. They solve it from scratch. Maybe the same way, maybe differently. They also learn something valuable. They also don't write it down.
+
+Repeat this for years across dozens of people and thousands of problems. The organization becomes a collection of partial, overlapping, contradictory memories scattered across individual brains.
+
+*"It's like having a team with collective amnesia,"* Miss G observes. *"Every week you wake up and have to rediscover what you already knew."*
+
+We needed a system memory. Something that could remember what the organization had learned—not just documentation, but actual knowledge about how things work, why decisions were made, and what depends on what.
+
+We needed a Knowledge Graph.
+
+---
+
+## The Connected Memory
+
+Think of a Knowledge Graph like a giant map of everything the system knows about itself.
+
+Not just "here's how to call the payment service" (that's documentation). But relationships. Connections. Context.
+
+The payment service connects to the governance service because it needs approval checks. The governance service connects to the audit log because all decisions must be recorded. The audit log connects to analytics because business needs to see trends.
+
+Everything is connected to everything else, and the Knowledge Graph captures those connections.
+
+*"So instead of asking 'where is the documentation for X',"* Miss G thinks, *"you ask 'what do we know about X and how does it relate to everything else'?"*
+
+"Exactly. Context-aware knowledge."
+
+---
+
+## Building the Memory
+
+I started by documenting what we actually knew—not what the documentation claimed, but reality.
+
+For each service, I recorded:
+- What does it actually do (not what it was supposed to do)
+- What does it actually depend on (not what the architecture diagram shows)
+- What actually happens when it fails
+- Who actually knows how it works
+
+The results were illuminating.
+
+The payment service claimed to have no dependencies. In reality, it depended on six other services. Nobody had updated the documentation when those dependencies were added.
+
+The dispute handling was documented as being in the dispute resolution service. In reality, that service hadn't worked in six months. Someone had added a workaround in the payment service that everyone had forgotten about.
+
+The authentication system was documented as using one approach. Three different developers had added three different patches over time. The actual behavior was a Frankenstein combination of all three.
+
+*"You're not building documentation,"* Miss G realizes. *"You're performing archaeology."*
+
+"And then preserving what I find so we never lose it again."
+
+---
+
+## The Relationship Revolution
+
+The power of a Knowledge Graph isn't just storing facts—it's storing relationships.
+
+"How do we handle payment disputes?"
+
+The Knowledge Graph answers with connections:
+
+"Payment disputes are handled by the handle_dispute function in the payment service. This function depends on the governance service for approval rules. It logs to the audit service for compliance. It notifies through the notification service for customer communication. It was created eight months ago to replace the deprecated dispute resolution service. Jennifer maintains it. Test coverage is 92%."
+
+Not just "here's where to look." But "here's everything you need to understand the context."
+
+*"That's actually useful,"* Miss G admits. *"I asked one question and got the whole picture."*
+
+---
+
+## Copilot Bot's Enlightenment
+
+Copilot Bot had been struggling with a fundamental problem.
+
+When asked to generate code, he didn't know what existed in the system. He'd invent API calls to services that didn't exist. He'd create functions that duplicated existing functionality. He'd make up patterns that contradicted established conventions.
+
+"I don't have context," he complained. "I'm generating in the dark."
+
+We connected him to the Knowledge Graph.
+
+Now when someone asks Copilot Bot to "add payment retry logic," he first queries the graph:
+- What services handle payments? (payment service)
+- What functions exist for retries? (retry_transaction in payment service)
+- What patterns do we use for retries? (exponential backoff with circuit breaker)
+- What tests cover this? (test_retry_success, test_retry_timeout, test_retry_exhausted)
+
+Armed with this context, his suggestions became dramatically better. He wasn't inventing anymore—he was suggesting based on actual system knowledge.
+
+*"His hallucination rate dropped,"* Miss G notes. *"Because he's not making things up. He's looking things up."*
+
+"The Knowledge Graph turned him from a guesser into a researcher."
+
+---
+
+## The Governance Connection
+
+Miss G saw an opportunity.
+
+"The Knowledge Graph should be governed," she said.
+
+If a service claims to have no dependencies but the code shows it calling six other services, that's a discrepancy. The Knowledge Graph says one thing; reality says another. That's exactly the kind of inconsistency that causes problems.
+
+We added governance rules:
+
+Services must document their actual dependencies. If code calls another service, the Knowledge Graph must list that relationship. Inconsistency is a violation.
+
+Decisions must have documented rationale. If we chose a particular approach, why? Future developers shouldn't have to guess.
+
+Failed experiments must be recorded. If we tried something and it didn't work, document it. Otherwise someone will try the same failed approach again.
+
+The Knowledge Graph became not just a memory, but a governed memory—one that was required to stay consistent with reality.
+
+---
+
+## The New Developer Experience
+
+A new developer joined the team. In the old world, they'd spend weeks asking questions, reading contradictory documentation, and piecing together understanding from fragments of tribal knowledge.
+
+In the new world:
+
+"How does the payment system work?"
+
+The Knowledge Graph provides a guided tour: "The payment system consists of four main services connected like this... The critical flow starts here and goes through these steps... These are the common failure modes and how they're handled... These are the people who maintain each part..."
+
+Questions that used to take days to answer were answered in minutes.
+
+*"You've essentially created an always-available expert,"* Miss G observes, *"who knows everything the organization knows."*
+
+"And never forgets, never leaves the company, and is always consistent."
+
+---
+
+## The 47-Domain Revelation
+
+Here's where the Knowledge Graph proved essential for scaling.
+
+With 47 different domains—customer service, payments, fraud detection, notifications, analytics, and dozens more—understanding the whole system became impossible for any single person.
+
+But the Knowledge Graph could see all 47 domains simultaneously. It could answer questions no human could:
+
+"Which services across all domains depend on the authentication service?" (Seventeen, across eight domains)
+
+"Which domains have test coverage below 80%?" (Four, with specific services listed)
+
+"Which decisions were made in the last quarter that affect cross-domain communication?" (Twelve, with rationale and impact)
+
+*"You can't govern what you can't see,"* Miss G quotes.
+
+"And now we can see everything."
+
+---
+
+## The Self-Explaining System
+
+Late one night, staring at the Knowledge Graph visualization—a vast network of interconnected nodes and relationships spanning the entire organization—I had a realization.
+
+"This is the system explaining itself to itself."
+
+*"What do you mean?"*
+
+"Before the Knowledge Graph, the system was a black box. It did things, but nobody fully understood how or why. Now the system contains its own explanation. It knows what it does, how it does it, and why."
+
+*"So if the Knowledge Graph is wrong,"* Miss G thinks slowly, *"the system has a false self-image. It thinks it works one way but actually works another."*
+
+"Which is why the Knowledge Graph must stay synchronized with reality. Through governance. Through automated checks. Through continuous validation."
+
+*"The Knowledge Graph isn't just documentation. It's self-awareness."*
+
+---
+
+## The Integration Multiplier
+
+The real power emerged when we connected the Knowledge Graph to everything else.
+
+The Intent Router used it to understand requests in context. "Add payment retry" becomes meaningful when you know what payment and retry mean in this specific system.
+
+The Governance Engine used it to enforce consistency. Rules could reference actual system structure, not abstract concepts.
+
+The Orchestrators used it to understand dependencies. Coordinating operations became easier when the graph showed exactly what depended on what.
+
+The testing system used it to validate coverage. Each scenario in the Knowledge Graph could be linked to tests that verified it.
+
+Everything became smarter because everything had access to the system's accumulated knowledge.
+
+---
+
+## What We Built
+
+The Knowledge Graph became the system's memory:
+
+- Every service documented with actual behavior and dependencies
+- Every decision recorded with rationale
+- Every failure analyzed and lessons captured
+- Every relationship mapped and maintained
+- Every question answerable with full context
+
+Developers stopped asking "how does X work?" and started querying the graph.
+
+New team members onboarded in days instead of weeks.
+
+Copilot Bot's suggestions became reliably useful.
+
+The organization stopped losing knowledge when people left.
+
+*"You've made the organization's memory persistent,"* Miss G observes. *"It no longer depends on individual brains."*
+
+The Wi-Fi router blinked red. It was the one thing in the system that didn't need knowledge. It just existed, blinking, oblivious.
+
+Sometimes I envied its simplicity.
+
+---
+
+## The Registry Question
+
+With intelligence everywhere, governance enforced, and knowledge preserved, we had one remaining problem.
+
+Different tools used different standards. Different teams defined things differently. There was no single source of truth for what tools existed and how to use them.
+
+We needed to standardize. We needed a registry.
+
+But registries, we would discover, have a way of starting wars.
+
+---
+
+*→ Continue to [Chapter 8: The Registry Wars](08-The-Registry-Wars.md)*

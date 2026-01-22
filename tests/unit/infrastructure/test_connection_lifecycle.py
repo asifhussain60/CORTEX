@@ -25,9 +25,9 @@ from cortex.infrastructure.database import DatabaseManager, DatabaseConfig
 class TestConnectionLifecycle:
     """Test database connection lifecycle and cleanup."""
     
-    def test_connection_closes_on_context_manager_exit(self, temp_dir: Path):
+    def test_connection_closes_on_context_manager_exit(self, tmp_path: Path):
         """Connection should be closed when exiting context manager."""
-        db_path = temp_dir / "test.db"
+        db_path = tmp_path / "test.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -51,9 +51,9 @@ class TestConnectionLifecycle:
         
         db.close()
     
-    def test_no_connection_leaks_after_exception(self, temp_dir: Path):
+    def test_no_connection_leaks_after_exception(self, tmp_path: Path):
         """Connection should close even if exception occurs."""
-        db_path = temp_dir / "test.db"
+        db_path = tmp_path / "test.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -71,9 +71,9 @@ class TestConnectionLifecycle:
         assert result.is_ok()
         db2.close()
     
-    def test_concurrent_connections_isolated(self, temp_dir: Path):
+    def test_concurrent_connections_isolated(self, tmp_path: Path):
         """Each thread should get its own isolated connection."""
-        db_path = temp_dir / "test.db"
+        db_path = tmp_path / "test.db"
         config = DatabaseConfig(db_path=db_path)
         
         connections = {}
@@ -119,9 +119,9 @@ class TestConnectionLifecycle:
         conn_ids = list(connections.values())
         assert len(set(conn_ids)) == 5, "All connections should be unique"
     
-    def test_load_test_100_rapid_connections(self, temp_dir: Path):
+    def test_load_test_100_rapid_connections(self, tmp_path: Path):
         """Load test: 100 rapid sequential connections should all close properly."""
-        db_path = temp_dir / "test.db"
+        db_path = tmp_path / "test.db"
         config = DatabaseConfig(db_path=db_path)
         
         for i in range(100):
@@ -143,9 +143,9 @@ class TestConnectionLifecycle:
         assert count == 100, f"Expected 100 records, got {count}"
         db_final.close()
     
-    def test_audit_log_writes_with_proper_cleanup(self, temp_dir: Path):
+    def test_audit_log_writes_with_proper_cleanup(self, tmp_path: Path):
         """Audit log writes should cleanup connections properly."""
-        db_path = temp_dir / "test.db"
+        db_path = tmp_path / "test.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -169,9 +169,9 @@ class TestConnectionLifecycle:
         
         db.close()
     
-    def test_transaction_rollback_on_error(self, temp_dir: Path):
+    def test_transaction_rollback_on_error(self, tmp_path: Path):
         """Failed transactions should rollback without leaving open connections."""
-        db_path = temp_dir / "test.db"
+        db_path = tmp_path / "test.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -202,9 +202,9 @@ class TestConnectionLifecycle:
 class TestConnectionCleanup:
     """Test that connections are properly cleaned up."""
     
-    def test_close_method_closes_thread_local_connection(self, temp_dir: Path):
+    def test_close_method_closes_thread_local_connection(self, tmp_path: Path):
         """close() should close the thread-local connection."""
-        db_path = temp_dir / "test.db"
+        db_path = tmp_path / "test.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -223,9 +223,9 @@ class TestConnectionCleanup:
         # Should be None now
         assert not hasattr(db._local, 'connection') or db._local.connection is None
     
-    def test_context_manager_auto_cleanup(self, temp_dir: Path):
+    def test_context_manager_auto_cleanup(self, tmp_path: Path):
         """With-statement should auto cleanup connection."""
-        db_path = temp_dir / "test.db"
+        db_path = tmp_path / "test.db"
         config = DatabaseConfig(db_path=db_path)
         
         db = DatabaseManager(config)
@@ -244,9 +244,9 @@ class TestConnectionCleanup:
 class TestNoConnectionLeaks:
     """Verify no connection leaks in different scenarios."""
     
-    def test_multiple_execute_calls_same_connection(self, temp_dir: Path):
+    def test_multiple_execute_calls_same_connection(self, tmp_path: Path):
         """Multiple execute calls should reuse connection, not create new ones."""
-        db_path = temp_dir / "test.db"
+        db_path = tmp_path / "test.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()
@@ -265,9 +265,9 @@ class TestNoConnectionLeaks:
         
         db.close()
     
-    def test_no_open_handles_after_close(self, temp_dir: Path):
+    def test_no_open_handles_after_close(self, tmp_path: Path):
         """After close(), no open file handles should remain."""
-        db_path = temp_dir / "test.db"
+        db_path = tmp_path / "test.db"
         config = DatabaseConfig(db_path=db_path)
         db = DatabaseManager(config)
         db.initialize()

@@ -150,7 +150,10 @@ class PerformanceMonitor:
     
     def __init__(self, slas: Optional[Dict[str, Dict[str, PerformanceSLA]]] = None) -> None:
         """Initialize monitor with SLAs."""
-        self._slas = slas or {}
+        if slas is None:
+            from cortex_brain.tier2.governance.core_030_baselines import CORE_030_BASELINES
+            slas = CORE_030_BASELINES
+        self._slas = slas
         self._violations: List[ComplianceViolation] = []
         self._measurements: Dict[tuple, List[tuple]] = {}
     
