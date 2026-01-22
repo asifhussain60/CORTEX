@@ -385,69 +385,94 @@ class LENSContextBuilder:
     
     def filter_context(
         self,
-        context: LENSContext,
-        filters: Optional[Dict[str, Any]] = None
-    ) -> LENSContext:
+        context: Optional[LENSContext] = None,
+        filters: Optional[Dict[str, Any]] = None,
+        domains: Optional[List[str]] = None,
+        files: Optional[List[str]] = None,
+        types: Optional[List[str]] = None,
+    ) -> "LENSContextBuilder":
         """Filter the context based on criteria.
         
         Args:
-            context: LENSContext to filter
+            context: LENSContext to filter (optional, uses builder state if not provided)
             filters: Filter criteria dictionary
+            domains: List of domain names to filter by
+            files: List of file paths to filter by
+            types: List of types to filter by (e.g., "function", "class")
             
         Returns:
-            Filtered LENSContext
+            Self for method chaining
         """
-        if not filters:
-            return context
+        # Build filters dict from individual parameters
+        combined_filters = filters or {}
+        if domains:
+            combined_filters["domains"] = domains
+        if files:
+            combined_filters["files"] = files
+        if types:
+            combined_filters["types"] = types
         
-        filtered_context = LENSContext(
-            intent=context.intent,
-            context=context.context.copy(),
-            confidence=context.confidence,
-            metadata=context.metadata.copy(),
-            timestamp=context.timestamp,
-        )
+        if not combined_filters:
+            return self
         
-        # Filter AST findings
-        if context.ast_findings and "file" in filters:
-            filtered_ast = {}
-            target_file = filters["file"]
+        # Apply domain filtering to AST findings
+        if "domains" in combined_filters and self._ast_findings:
+            domain_list = combined_filters["domains"]
+            filtered_ast: Dict[str, Any] = {}
             
-            if "functions" in context.ast_findings:
+            if "functions" in self._ast_findings:
                 filtered_ast["functions"] = [
-                    f for f in context.ast_findings["functions"]
-                    if f.get("file") == target_file
+                    f for f in self._ast_findings["functions"]
+                    if any(domain in f.get("file", "").lower() for domain in domain_list)
                 ]
             
-            if "classes" in context.ast_findings:
+            if "classes" in self._ast_findings:
                 filtered_ast["classes"] = [
-                    c for c in context.ast_findings["classes"]
-                    if c.get("file") == target_file
+                    c for c in self._ast_findings["classes"]
+                    if any(domain in c.get("file", "").lower() for domain in domain_list)
                 ]
             
-            filtered_context.ast_findings = filtered_ast
-        else:
-            filtered_context.ast_findings = context.ast_findings
+            self._ast_findings = filtered_ast
+        
+        # Filter AST findings by file
+        if "files" in combined_filters and self._ast_findings:
+            target_files = combined_filters["files"]
+            filtered_ast = {}
+            
+            if "functions" in self._ast_findings:
+                filtered_ast["functions"] = [
+                    f for f in self._ast_findings["functions"]
+                    if f.get("file") in target_files
+                ]
+            
+            if "classes" in self._ast_findings:
+                filtered_ast["classes"] = [
+                    c for c in self._ast_findings["classes"]
+                    if c.get("file") in target_files
+                ]
+            
+            self._ast_findings = filtered_ast
         
         # Filter by type
-        if "type" in filters:
-            if filters["type"] == "function" and context.ast_findings:
-                filtered_context.ast_findings = {
-                    "functions": context.ast_findings.get("functions", [])
-                }
+        if "types" in combined_filters and self._ast_findings:
+            type_list = combined_filters["types"]
+            filtered_ast = {}
+            
+            if "function" in type_list:
+                filtered_ast["functions"] = self._ast_findings.get("functions", [])
+            if "class" in type_list:
+                filtered_ast["classes"] = self._ast_findings.get("classes", [])
+            
+            self._ast_findings = filtered_ast
         
         # Filter tech debt markers
-        if context.comment_findings and "marker" in filters:
-            if filters["marker"] == "tech_debt":
-                filtered_context.comment_findings = {
-                    "tech_debt_markers": context.comment_findings.get("tech_debt_markers", [])
+        if self._comment_findings and "marker" in combined_filters:
+            if combined_filters["marker"] == "tech_debt":
+                self._comment_findings = {
+                    "tech_debt_markers": self._comment_findings.get("tech_debt_markers", [])
                 }
-        else:
-            filtered_context.comment_findings = context.comment_findings
         
-        filtered_context.git_findings = context.git_findings
-        filtered_context.test_findings = context.test_findings
-        filtered_context.dependency_findings = context.dependency_findings
+        return self
         filtered_context.relationship_findings = context.relationship_findings
         
         return filtered_context
