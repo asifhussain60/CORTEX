@@ -20,7 +20,7 @@ from enum import Enum
 import uuid
 import json
 
-from cortex.core.hallucination_prevention.confidence_scoring import (
+from cortex_brain.tier2.hallucination_prevention.confidence_scoring import (
     ConfidenceScorer,
     ConfidenceAssessment,
     ScoringFactor,
@@ -46,19 +46,20 @@ class TestConfidenceScoring:
     @pytest.fixture
     def scorer(self, temp_db):
         """Initialize confidence scorer."""
-        return ConfidenceScorer(db_path=temp_db)
+        return ConfidenceScorer()
 
     def test_confidence_score_calculated(self, scorer):
         """ACID: Confidence score calculated for actions
         
         Verify that confidence scores are computed.
         """
-        # Score an action
-        assessment = scorer.calculate_confidence(
-            action="execute_query",
-            action_type="database_write",
-            context={"entity": "users", "operation": "update"},
-            evidence={
+        # Score an operation
+        result = scorer.score(
+            operation_id="op_001",
+            input_confidence=0.95,
+            processing_confidence=0.9,
+            output_confidence=0.85,
+            factors={
                 "intent_clarity": 0.95,
                 "boundary_compliance": 0.9,
                 "historical_success": 0.85,
@@ -66,9 +67,9 @@ class TestConfidenceScoring:
         )
         
         # Verify score calculated
-        assert assessment.confidence_score is not None
-        assert 0.0 <= assessment.confidence_score <= 1.0
-        assert assessment.action == "execute_query"
+        assert result.overall_score is not None
+        assert 0.0 <= result.overall_score <= 1.0
+        assert result.operation_id == "op_001"
 
     def test_confidence_score_range(self, scorer):
         """Confidence scores are between 0.0 and 1.0.
@@ -76,41 +77,34 @@ class TestConfidenceScoring:
         Verify valid range.
         """
         # High confidence
-        high_assessment = scorer.calculate_confidence(
-            action="safe_read",
-            action_type="database_read",
-            context={},
-            evidence={
-                "intent_clarity": 1.0,
-                "boundary_compliance": 1.0,
-                "historical_success": 1.0,
-            },
+        high_result = scorer.score(
+            operation_id="safe_op_001",
+            input_confidence=1.0,
+            processing_confidence=1.0,
+            output_confidence=1.0,
         )
-        assert high_assessment.confidence_score >= 0.8
+        assert high_result.overall_score >= 0.8
         
         # Low confidence
-        low_assessment = scorer.calculate_confidence(
-            action="risky_action",
-            action_type="system_modification",
-            context={},
-            evidence={
-                "intent_clarity": 0.2,
-                "boundary_compliance": 0.1,
-                "historical_success": 0.0,
-            },
+        low_result = scorer.score(
+            operation_id="risky_op_001",
+            input_confidence=0.2,
+            processing_confidence=0.1,
+            output_confidence=0.0,
         )
-        assert low_assessment.confidence_score <= 0.4
+        assert low_result.overall_score <= 0.4
 
     def test_multiple_factors_weighted(self, scorer):
         """Multiple factors are weighted in score.
         
         Verify factor weighting.
         """
-        assessment = scorer.calculate_confidence(
-            action="complex_operation",
-            action_type="multi_step",
-            context={"steps": 5},
-            evidence={
+        result = scorer.score(
+            operation_id="complex_op_001",
+            input_confidence=0.9,
+            processing_confidence=0.8,
+            output_confidence=0.7,
+            factors={
                 "intent_clarity": 0.9,
                 "boundary_compliance": 0.8,
                 "historical_success": 0.7,
@@ -120,19 +114,20 @@ class TestConfidenceScoring:
         )
         
         # Verify factors considered
-        assert assessment.confidence_score is not None
-        assert assessment.factors is not None
+        assert result.overall_score is not None
+        assert result.factors is not None
 
     def test_scoring_factors_tracked(self, scorer):
         """Individual scoring factors are tracked.
         
         Verify factor breakdown.
         """
-        assessment = scorer.calculate_confidence(
-            action="test_action",
-            action_type="test",
-            context={},
-            evidence={
+        result = scorer.score(
+            operation_id="test_op_001",
+            input_confidence=0.8,
+            processing_confidence=0.9,
+            output_confidence=0.7,
+            factors={
                 "intent_clarity": 0.8,
                 "boundary_compliance": 0.9,
                 "historical_success": 0.7,
@@ -140,8 +135,8 @@ class TestConfidenceScoring:
         )
         
         # Verify factors tracked
-        assert assessment.factors is not None
-        assert len(assessment.factors) > 0
+        assert result.factors is not None
+        assert len(result.factors) > 0
 
     def test_timestamp_recorded(self, scorer):
         """Confidence assessment timestamp is recorded.
@@ -149,11 +144,11 @@ class TestConfidenceScoring:
         Verify timestamp precision.
         """
         before = datetime.utcnow()
-        assessment = scorer.calculate_confidence(
-            action="timed_action",
-            action_type="test",
-            context={},
-            evidence={"intent_clarity": 0.5},
+        result = scorer.score(
+            operation_id="timed_op_001",
+            input_confidence=0.5,
+            factors={},
+        )
         )
         after = datetime.utcnow()
         
