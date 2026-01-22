@@ -37,6 +37,11 @@ class PhaseCompletedEvent(TerminalEvent):
     operation: str = ""
     result: str = ""
     turn_number: int = 0
+    
+    def get_continuation_reason(self) -> 'ContinuationReason':
+        """Maps to COMPLETION."""
+        from cortex.core.orchestrator.continuation_decision import ContinuationReason
+        return ContinuationReason.COMPLETION
 
 
 @dataclass
@@ -53,6 +58,11 @@ class MaxTurnsReachedEvent(TerminalEvent):
     max_turns: int = 0
     current_turn: int = 0
     reason: str = "Safety limit enforced"
+    
+    def get_continuation_reason(self) -> 'ContinuationReason':
+        """Maps to MAX_ROUNDS_REACHED."""
+        from cortex.core.orchestrator.continuation_decision import ContinuationReason
+        return ContinuationReason.MAX_ROUNDS_REACHED
 
 
 @dataclass
