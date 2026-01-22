@@ -4,6 +4,7 @@ This module tests the pre-commit hook validation that prevents
 unsanitized commits to the main branch.
 """
 
+import importlib.util
 import sqlite3
 from pathlib import Path
 from typing import Generator
@@ -92,13 +93,16 @@ def temp_db_dirty(tmp_path: Path) -> Generator[Path, None, None]:
 
 @pytest.fixture
 def validator_module():
-    """Import the validator module.
+    """Import the validator module using dynamic loading.
     
     Returns:
         The validate_sanitization module.
     """
-    from scripts.deployment import validate_sanitization
-    return validate_sanitization
+    module_path = Path(__file__).parent.parent.parent / "cortex" / "scripts-root-archive" / "deployment" / "validate_sanitization.py"
+    spec = importlib.util.spec_from_file_location("validate_sanitization", module_path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 class TestPrecommitBlocksDevEntries:
