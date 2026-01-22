@@ -17,6 +17,9 @@ class ComplianceLevel(Enum):
     STRICT = "strict"
     STANDARD = "standard"
     LENIENT = "lenient"
+    FULL = "full"
+    PARTIAL = "partial"
+    NONE = "none"
 
 
 @dataclass
@@ -280,6 +283,143 @@ class MCPComplianceTester:
         
         passed = all(r.passed for r in results)
         return passed, results
-
-
+    
+    @staticmethod
+    def test_response_compliance(response: Any) -> tuple:
+        """Test response compliance.
+        
+        Args:
+            response: MCPResponse to test
+            
+        Returns:
+            Tuple of (passed: bool, results: List[ComplianceResult])
+        """
+        results = []
+        
+        # Check ID
+        result = ComplianceResult(
+            test_name="response_id",
+            passed=True,
+            level=ComplianceLevel.STANDARD,
+            message="Response ID is present"
+        )
+        if not hasattr(response, 'id') or not response.id:
+            result.passed = False
+            result.message = "Response missing required ID"
+        results.append(result)
+        
+        # Check that response doesn't have both result and error
+        result = ComplianceResult(
+            test_name="response_result_or_error",
+            passed=True,
+            level=ComplianceLevel.STANDARD,
+            message="Response has either result or error, not both"
+        )
+        has_result = hasattr(response, 'result') and response.result is not None
+        has_error = hasattr(response, 'error') and response.error is not None
+        if has_result and has_error:
+            result.passed = False
+            result.message = "Response cannot have both result and error"
+        results.append(result)
+        
+        # Check timestamp
+        result = ComplianceResult(
+            test_name="response_timestamp",
+            passed=True,
+            level=ComplianceLevel.STANDARD,
+            message="Response has timestamp"
+        )
+        if not hasattr(response, 'timestamp') or response.timestamp is None:
+            result.passed = False
+            result.message = "Response missing timestamp"
+        results.append(result)
+        
+        passed = all(r.passed for r in results)
+        return passed, results
+    
+    @staticmethod
+    def get_compliance_level(results: List[ComplianceResult]) -> ComplianceLevel:
+        """Get overall compliance level from results.
+        
+        Args:
+            results: List of compliance test results
+            
+        Returns:
+            ComplianceLevel indicating overall compliance
+        """
+        if not results:
+            return ComplianceLevel.NONE
+        
+        passed = sum(1 for r in results if r.passed)
+        total = len(results)
+        pass_rate = passed / total if total > 0 else 0
+        
+        if pass_rate == 1.0:
+            return ComplianceLevel.FULL
+        elif pass_rate >= 0.5:
+            return ComplianceLevel.PARTIAL
+        else:
+            return ComplianceLevel.NONE
+    
+    @staticmethod
+    def generate_compliance_report(tool_def: Any, errors: Optional[List] = None, responses: Optional[List] = None) -> Dict[str, Any]:
+        """Generate comprehensive compliance report for a tool.
+        
+        Args:
+            tool_def: Tool definition to test
+            errors: Optional list of errors to test
+            responses: Optional list of responses to test
+            
+        Returns:
+            Dictionary with comprehensive compliance report
+        """
+        errors = errors or []
+        responses = responses or []
+        
+        # Test tool definition
+        tool_passed, tool_results = MCPComplianceTester.test_tool_definition_compliance(tool_def)
+        
+        # Test parameters
+        param_passed, param_results = MCPComplianceTester.test_parameter_compliance(tool_def)
+        
+        # Test errors
+        error_results = []
+        for error in errors:
+            error_passed, error_test_results = MCPComplianceTester.test_error_response_compliance(error)
+            error_results.extend(error_test_results)
+        
+        # Test responses
+        response_results = []
+        for response in responses:
+            response_passed, response_test_results = MCPComplianceTester.test_response_compliance(response)
+            response_results.extend(response_test_results)
+        
+        all_results = tool_results + param_results + error_results + response_results
+        
+        total_passed = sum(1 for r in all_results if r.passed)
+        total = len(all_results)
+        
+        return {
+            "tool_id": tool_def.id if hasattr(tool_def, 'id') else "unknown",
+            "overall_level": MCPComplianceTester.get_compliance_level(all_results).value,
+            "total_checks": total,
+            "passed_checks": total_passed,
+            "pass_rate": total_passed / total if total > 0 else 0,
+            "tool_compliance": {
+                "passed": tool_passed,
+                "checks": len(tool_results)
+            },
+            "parameter_compliance": {
+                "passed": param_passed,
+                "checks": len(param_results)
+            },
+            "error_compliance": {
+                "total_errors_tested": len(errors),
+                "checks": len(error_results)
+            },
+            "response_compliance": {
+                "total_responses_tested": len(responses),
+                "checks": len(response_results)
+            }
+        }
 __all__ = ["MCPComplianceTester", "ComplianceLevel", "ComplianceResult"]
