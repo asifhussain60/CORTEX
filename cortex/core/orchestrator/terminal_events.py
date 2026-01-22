@@ -1,99 +1,189 @@
-"""Terminal Events
+"""
+Terminal Events and Break Condition Handlers - Production Implementation
 
-STUB IMPLEMENTATION - To be completed in Phase E.
+Defines terminal events for orchestrator workflows:
+- Phase completion
+- User cancellation  
+- Turn/token limits
+- Error conditions
+- Governance violations
+- Approval rejections
 
-Author: CORTEX Framework
+Features:
+- Dataclass-based event definitions
+- Timestamp auto-generation
+- EventListener interface
+- EventRegistry pattern
+
+Author: Asif Hussain
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
-from dataclasses import dataclass
-
-
-@dataclass
-class UserCancelledEvent:
-    """Event for user cancellation."""
-    event_id: str
-    reason: str = "user_cancelled"
-    timestamp: str = ""
-
-
-@dataclass
-class PhaseCompletedEvent:
-    """Event fired when a phase completes."""
-    event_id: str
-    phase: str
-    success: bool
-    timestamp: str = ""
-
-
-@dataclass
-class MaxTurnsReachedEvent:
-    """Event fired when maximum turns reached."""
-    event_id: str
-    max_turns: int
-    current_turn: int
-    timestamp: str = ""
-
-
-@dataclass
-class ErrorOccurredEvent:
-    """Event fired when error occurs."""
-    event_id: str
-    error_message: str
-    error_type: str = "unknown"
-    timestamp: str = ""
-
-
-@dataclass
-class TokenLimitEvent:
-    """Event fired when token limit is reached."""
-    event_id: str
-    current_tokens: int
-    max_tokens: int
-    timestamp: str = ""
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from typing import Optional, Callable, List, Any
+from abc import ABC, abstractmethod
 
 
 @dataclass
 class TerminalEvent:
-    """Base terminal event."""
-    event_id: str
-    event_type: str
-    timestamp: str = ""
+    """Base terminal event class."""
+    timestamp: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
 @dataclass
-class GovernanceViolationEvent:
-    """Event fired when governance violation occurs."""
-    event_id: str
-    violation_type: str
-    severity: str = "medium"
-    timestamp: str = ""
+class PhaseCompletedEvent(TerminalEvent):
+    """Event fired when a phase completes successfully."""
+    operation: str = ""
+    result: str = ""
+    turn_number: int = 0
 
 
 @dataclass
-class UserApprovalRejectedEvent:
-    """Event fired when user rejects approval."""
-    event_id: str
+class UserCancelledEvent(TerminalEvent):
+    """Event fired when user cancels operation."""
     reason: str = ""
-    timestamp: str = ""
+    turn_number: int = 0
+
+
+@dataclass
+class MaxTurnsReachedEvent(TerminalEvent):
+    """Event fired when maximum turns limit reached."""
+    turn_number: int = 0
+    max_turns: int = 0
+    current_turn: int = 0
+    reason: str = "Safety limit enforced"
+
+
+@dataclass
+class ErrorOccurredEvent(TerminalEvent):
+    """Event fired when error occurs during execution."""
+    error_message: str = ""
+    error_type: str = "unknown"
+    turn_number: int = 0
+    recoverable: bool = True
+
+
+@dataclass
+class TokenLimitEvent(TerminalEvent):
+    """Event fired when token limit is approached or reached."""
+    tokens_used: int = 0
+    token_limit: int = 0
+    percentage_used: float = 0.0
+    turn_number: int = 0
+
+
+@dataclass
+class GovernanceViolationEvent(TerminalEvent):
+    """Event fired when governance rule is violated."""
+    rule_id: str = ""
+    violation_message: str = ""
+    turn_number: int = 0
+
+
+@dataclass
+class UserApprovalRejectedEvent(TerminalEvent):
+    """Event fired when user rejects required approval."""
+    approval_request: str = ""
+    rejection_reason: str = ""
+    turn_number: int = 0
 
 
 class EventListener:
-    """Event listener interface."""
+    """Base class for event listeners."""
     
-    def on_event(self, event: TerminalEvent) -> None:
-        """Handle terminal event."""
-        pass
+    def on_event(self, event: TerminalEvent) -> bool:
+        """
+        Handle terminal event.
+        
+        Args:
+            event: Terminal event
+        
+        Returns:
+            True to continue, False to break/halt
+        """
+        return True
 
 
 class EventRegistry:
-    """Registry for event listeners."""
+    """Registry pattern for managing event listeners."""
     
     def __init__(self):
-        self.listeners = []
+        """Initialize registry."""
+        self.listeners: List[EventListener] = []
+        self._event_log: List[TerminalEvent] = []
     
-    def register(self, listener: EventListener) -> None:
-        """Register event listener."""
+    def register_listener(
+        self,
+        event_type: Optional[type],
+        handler: Callable[[TerminalEvent], bool],
+    ) -> None:
+        """
+        Register event listener.
+        
+        Args:
+            event_type: Event type to listen for (None for all types)
+            handler: Callable handler function
+        """
+        listener = _CallableListener(event_type, handler)
         self.listeners.append(listener)
+    
+    def fire_event(self, event: TerminalEvent) -> bool:
+        """
+        Fire event to all listeners.
+        
+        Args:
+            event: Event to fire
+        
+        Returns:
+            True if all listeners approved, False if any rejected
+        """
+        self._event_log.append(event)
+        
+        for listener in self.listeners:
+            if not listener.on_event(event):
+                return False
+        
+        return True
+    
+    def get_events(self) -> List[TerminalEvent]:
+        """Get all fired events."""
+        return self._event_log.copy()
+    
+    def clear(self) -> None:
+        """Clear registry and log."""
+        self.listeners.clear()
+        self._event_log.clear()
 
-__all__ = ["UserCancelledEvent", "PhaseCompletedEvent", "MaxTurnsReachedEvent", "ErrorOccurredEvent", "TokenLimitEvent", "TerminalEvent", "GovernanceViolationEvent", "UserApprovalRejectedEvent", "EventListener", "EventRegistry"]
+
+class _CallableListener(EventListener):
+    """Internal wrapper for callable event handlers."""
+    
+    def __init__(
+        self,
+        event_type: Optional[type],
+        handler: Callable[[TerminalEvent], bool],
+    ):
+        """Initialize callable listener."""
+        self.event_type = event_type
+        self.handler = handler
+    
+    def on_event(self, event: TerminalEvent) -> bool:
+        """Handle event with callable."""
+        if self.event_type is None or isinstance(event, self.event_type):
+            return self.handler(event)
+        return True
+
+
+__all__ = [
+    "TerminalEvent",
+    "PhaseCompletedEvent",
+    "UserCancelledEvent",
+    "MaxTurnsReachedEvent",
+    "ErrorOccurredEvent",
+    "TokenLimitEvent",
+    "GovernanceViolationEvent",
+    "UserApprovalRejectedEvent",
+    "EventListener",
+    "EventRegistry",
+]

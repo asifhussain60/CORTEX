@@ -3,7 +3,13 @@
 Determines whether a conversation should continue or terminate based on
 completion state, tokens, and other criteria.
 
-Author: CORTEX Framework
+Production-ready implementation with:
+- ContinuationReason enum for decision types
+- ContinuationDecision frozen dataclass
+- Token tracking and governance violation handling
+- Audit trail integration
+
+Author: Asif Hussain
 Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
@@ -14,104 +20,143 @@ from typing import Any, Dict, List, Optional
 
 class ContinuationReason(Enum):
     """Turn continuation decision types."""
-
+    COMPLETION = "completion"
     CONTINUE = "continue"
-    COMPLETE = "complete"
-    PAUSE = "pause"
-    ERROR = "error"
-    ESCALATE = "escalate"
+    IMPLICIT_NEXT_OPERATION = "implicit_next_operation"
+    USER_PROVIDED_FOLLOWUP = "user_provided_followup"
+    AUTO_REFINEMENT_LOOP = "auto_refinement_loop"
+    ERROR_UNRECOVERABLE = "error_unrecoverable"
+    ERROR_RECOVERABLE = "error_recoverable"
+    GOVERNANCE_HALT = "governance_halt"
     MAX_ROUNDS_REACHED = "max_rounds_reached"
     TOKEN_LIMIT = "token_limit"
+    USER_CANCELLED = "user_cancelled"
+    USER_REJECTION = "user_rejection"
+    INTERACTION_REQUIRED = "interaction_required"
+    
+    @classmethod
+    def from_string(cls, value: str) -> "ContinuationReason":
+        """Convert string to ContinuationReason enum.
+        
+        Args:
+            value: String value (case-insensitive)
+        
+        Returns:
+            ContinuationReason enum member
+        """
+        value_upper = value.upper().replace("CONTINUATION_", "")
+        for member in cls:
+            if member.name == value_upper:
+                return member
+        raise ValueError(f"Unknown ContinuationReason: {value}")
 
 
-@dataclass
-class ContinuationContext:
-    """Context for continuation decision.
-
-    Attributes:
-        turn_number: Current turn number.
-        tokens_used: Tokens used in current turn.
-        tokens_remaining: Tokens remaining in conversation.
-        has_more_work: Whether there's more work to do.
-        completion_percentage: Estimated completion percentage (0-100).
-        error_message: Error message if any.
-    """
-
-    turn_number: int
-    tokens_used: int
-    tokens_remaining: int
-    has_more_work: bool = True
-    completion_percentage: int = 0
-    error_message: Optional[str] = None
-
-
-@dataclass
+@dataclass(frozen=True)
 class ContinuationDecision:
     """Continuation decision for a conversation turn.
 
+    Frozen dataclass to ensure immutability.
+    
     Attributes:
+        should_continue: Whether to continue the conversation.
         reason: The reason for the decision (ContinuationReason enum).
+        next_operation: The next operation to execute (if any).
         turn_number: The turn number for this decision.
         token_usage: Dictionary with prompt, completion, and total tokens.
-        context: Additional context data from this turn.
-        next_operation: The next operation to execute (if any).
         next_parameters: Parameters for the next operation.
-        governance_violation: Any governance violation encountered (deprecated, use governance_violations).
+        audit_entry_id: ID for audit trail entry.
         governance_violations: List of governance violations encountered.
     """
 
+    should_continue: bool
     reason: ContinuationReason
+    next_operation: Optional[str] = None
     turn_number: int = 0
     token_usage: Dict[str, int] = field(default_factory=lambda: {"prompt": 0, "completion": 0, "total": 0})
-    context: Dict[str, Any] = field(default_factory=dict)
-    next_operation: Optional[str] = None
-    next_parameters: Dict[str, Any] = field(default_factory=dict)
-    governance_violation: Optional[str] = None
+    next_parameters: Optional[Dict[str, Any]] = None
+    audit_entry_id: Optional[str] = None
     governance_violations: List[str] = field(default_factory=list)
 
     @property
-    def should_continue(self) -> bool:
-        """Determine if conversation should continue.
+    def is_halt_by_governance(self) -> bool:
+        """Check if halt was due to governance violation.
         
         Returns:
-            True if conversation should continue, False otherwise.
+            True if governance violation caused halt, False otherwise.
         """
-        return self.reason == ContinuationReason.CONTINUE
-
-
-def decide_continuation(context: ContinuationContext) -> ContinuationReason:
-    """Decide whether to continue a conversation.
-
-    Args:
-        context: Continuation context.
-
-    Returns:
-        ContinuationReason indicating next action.
-    """
-    # Check for errors
-    if context.error_message:
-        return ContinuationReason.ERROR
-
-    # Check if work is complete
-    if not context.has_more_work or context.completion_percentage >= 100:
-        return ContinuationReason.COMPLETE
-
-    # Check token limits
-    if context.tokens_remaining < 100:  # Minimum for next turn
-        return ContinuationReason.PAUSE
-
-    # Check turn limits
-    if context.turn_number > 20:  # Max 20 turns
-        return ContinuationReason.COMPLETE
-
-    # Normal continuation
-    return ContinuationReason.CONTINUE
+        return (
+            self.reason == ContinuationReason.GOVERNANCE_HALT
+            or len(self.governance_violations) > 0
+        )
+    
+    @property
+    def is_user_action_required(self) -> bool:
+        """Check if user action is required to continue.
+        
+        Returns:
+            True if user interaction needed, False otherwise.
+        """
+        return self.reason == ContinuationReason.INTERACTION_REQUIRED
+    
+    @property
+    def is_safe_to_resume(self) -> bool:
+        """Check if it's safe to resume operation later.
+        
+        Returns:
+            True if safe to resume, False if error or halt.
+        """
+        safe_reasons = {
+            ContinuationReason.TOKEN_LIMIT,
+            ContinuationReason.COMPLETION,
+            ContinuationReason.INTERACTION_REQUIRED,
+        }
+        return self.reason in safe_reasons
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary representation.
+        
+        Returns:
+            Dictionary representation of decision.
+        """
+        return {
+            "should_continue": self.should_continue,
+            "reason": self.reason.name,
+            "next_operation": self.next_operation,
+            "turn_number": self.turn_number,
+            "token_usage": self.token_usage.copy(),
+            "next_parameters": self.next_parameters.copy() if self.next_parameters else {},
+            "audit_entry_id": self.audit_entry_id,
+            "governance_violations": self.governance_violations.copy(),
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "ContinuationDecision":
+        """Create ContinuationDecision from dictionary.
+        
+        Args:
+            data: Dictionary with decision data
+        
+        Returns:
+            ContinuationDecision instance
+        """
+        reason = data.get("reason", "COMPLETION")
+        if isinstance(reason, str):
+            reason = ContinuationReason.from_string(reason)
+        
+        return cls(
+            should_continue=data.get("should_continue", False),
+            reason=reason,
+            next_operation=data.get("next_operation"),
+            turn_number=data.get("turn_number", 0),
+            token_usage=data.get("token_usage", {"prompt": 0, "completion": 0, "total": 0}),
+            next_parameters=data.get("next_parameters"),
+            audit_entry_id=data.get("audit_entry_id"),
+            governance_violations=data.get("governance_violations", []),
+        )
 
 
 __all__ = [
     "ContinuationDecision",
-    "ContinuationContext",
     "ContinuationReason",
-    "decide_continuation",
 ]
 
