@@ -1,0 +1,51 @@
+{
+  "typeCheckingMode": "strict",
+  "pythonVersion": "3.9",
+  "pythonPlatform": "Linux",
+  "venvPath": ".venv",
+  
+  "include": ["cortex", "cortex_brain", "tests"],
+  "exclude": ["**/node_modules", "**/__pycache__", "tests/ignored"],
+  
+  "strict": [
+    "cortex",
+    "cortex_brain",
+    "tests"
+  ],
+  
+  "reportMissingTypeStubs": true,
+  "reportGeneralTypeIssues": true,
+  "reportOptionalMemberAccess": true,
+  "reportOptionalSubscript": true,
+  "reportOptionalCall": true,
+  "reportOptionalIterable": true,
+  "reportOptionalContextManager": true,
+  "reportOptionalOperand": true,
+  "reportTypedDictNotRequiredAccess": true,
+  "reportConstantRedefinition": true,
+  "reportInvalidStringEscapeSequence": true,
+  "reportUnnecessaryIsInstance": true,
+  "reportUnnecessaryCast": true,
+  "reportUnnecessaryComparison": true,
+  "reportUnusedImport": true,
+  "reportUnusedClass": true,
+  "reportUnusedFunction": true,
+  "reportUnusedVariable": true,
+  "reportUnusedExpression": true,
+  "reportUnnecessaryPass": true,
+  "reportDuplicateImport": true,
+  "reportIncompatibleMethodOverride": true,
+  "reportIncompatibleVariableOverride": true,
+  "reportInconsistentConstructorCalls": true,
+  "reportMatchNotExhaustive": true,
+  
+  "reportMissingSuperCall": false,
+  "reportPrivateUsage": false,
+  
+  "ignore": ["**/__init__.py"],
+  
+  "diagnosticSeverityOverrides": {
+    "reportUnnecessaryTypeIgnoreComment": "warning",
+    "reportUnnecessaryTypeIgnorePyUpgrade": "warning"
+  }
+}
