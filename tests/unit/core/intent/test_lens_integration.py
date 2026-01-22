@@ -232,11 +232,11 @@ class TestLENSIntegration:
         builder = LENSContextBuilder()
         builder.add_ast_findings(sample_findings["ast"])
         builder.add_git_findings(sample_findings["git"])
-        builder.enrich_context({"trends": [], "risk_scores": []})
         context = builder.build()
+        enriched = builder.enrich_context(context, ["trends", "risk_scores"])
         
-        assert context is not None
-        assert "trends" in context.context or "risk_scores" in context.context
+        assert enriched is not None
+        assert "trends" in enriched.computed_data or "risk_scores" in enriched.computed_data
 
     def test_knowledge_graph_building(self, sample_findings):
         """Test knowledge graph construction."""
