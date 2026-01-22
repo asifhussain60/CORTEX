@@ -264,7 +264,12 @@ implementation_philosophy:
           sequence: 3
           required: true
           machine: "mac"
-      estimated_duration: "17-23 days"
+        - phase_id: "PHASE-F-TDD-ENHANCEMENT-OPTION-B"
+          sequence: 4
+          required: false
+          machine: "mac"
+          depends_on: "PHASE-E-TDD-IMPLEMENTATION"
+      estimated_duration: "17-23 days (PHASE-E) + 7-10 days (PHASE-F Option B) = 24-33 days total"
       blocking: true
       
     win:
@@ -1724,6 +1729,260 @@ phases_implementation_status:
           performance: "Query performance benchmarked against SQLite baseline"
           tests: "20+ tests covering validation scenarios"
 
+      - id: "PHASE-F-TDD-ENHANCEMENT-OPTION-B"
+        title: "TDD Enhancement Phase - Option B (AST+Pylance Integration)"
+        ac_ids: 6
+        status: "NOT_STARTED"
+        priority: "P1-HIGH"
+        estimated_effort: "7-10 days (1 sprint)"
+        blocking: false
+        machine: "mac"
+        sequence: 4
+        depends_on: ["PHASE-E-TDD-IMPLEMENTATION"]
+        recommended_timing: "Immediately after PHASE-E completion + validation"
+        note: "Implement AST+Pylance hybrid TDD enhancement per technical evaluation. Improves TDD friction by 20% through real-time violation detection."
+        category: "TDD_ENHANCEMENT"
+        business_value: "Faster TDD feedback loop, fewer regressions, improved developer experience"
+        
+        rationale: |
+          Option B (AST+Pylance) selected over alternatives (Roslyn rejected, Option C deferred):
+          - Lower risk: 60% code reuse from existing violation_detector.py
+          - Faster delivery: 1 sprint vs 3 weeks (Option C)
+          - Architecturally aligned: Python-native, IDE-integrated
+          - Non-breaking: Can layer Option C later without code changes
+          
+        implementation_approach:
+          layers:
+            - layer_1_pre_commit: "Pre-commit hook (violation detection automation)"
+            - layer_2_ide_integration: "Pylance IDE integration (real-time feedback)"
+            - layer_3_tier0_validation: "Tier0 AST validation (governance compliance)"
+          
+          reusable_code:
+            - "cortex/testing/violation_detector.py (AST visitor pattern, 60% reuse)"
+            - "tests/test_rem_001_07_violation_detector.py (test patterns)"
+            - "Pre-commit hook framework (conftest.py hooks)"
+          
+          new_deliverables:
+            - "cortex/testing/tdd_enhancement_layer1_precommit.py (new)"
+            - "cortex/testing/tdd_enhancement_layer2_pylance.py (new)"
+            - "cortex/testing/tdd_enhancement_layer3_validation.py (new)"
+            - ".pre-commit-hooks.yaml (configuration)"
+            - "pyrightconfig.json (Pylance configuration)"
+            - "tests/test_tdd_enhancement_*.py (comprehensive tests)"
+        
+        acceptance_criteria:
+          - ac_id: "AC-TDDOPT-B-01"
+            title: "Pre-commit Hook - Violation Detection Automation"
+            description: |
+              Implement pre-commit hook that runs violation detection on changed files:
+              - Detects bare except clauses (CORE-013)
+              - Detects generic exceptions (AssertionError, RuntimeError)
+              - Checks type hints (CORE-011 - all functions typed)
+              - Validates docstrings (CORE-012 - Google-style format)
+              - Blocks commit on violations (with --no-verify override)
+            deliverables:
+              - ".pre-commit-hooks.yaml configuration"
+              - "cortex/testing/tdd_enhancement_layer1_precommit.py (hook implementation)"
+              - "tests/test_tdd_enhancement_precommit.py (15+ tests)"
+            tests: 15
+            
+          - ac_id: "AC-TDDOPT-B-02"
+            title: "Pylance IDE Integration - Real-time Feedback"
+            description: |
+              Configure Pylance for real-time violation detection in IDE:
+              - pyrightconfig.json with strict settings
+              - Highlight bare excepts, generic exceptions in editor
+              - Type checking errors (mypy-style integration)
+              - Docstring validation warnings
+              - Configuration for local + CI environments
+            deliverables:
+              - "pyrightconfig.json (Pylance configuration)"
+              - "cortex/testing/tdd_enhancement_layer2_pylance.py (IDE bridge)"
+              - ".vscode/settings.json update (if needed)"
+              - "tests/test_tdd_enhancement_pylance.py (12+ tests)"
+            tests: 12
+            
+          - ac_id: "AC-TDDOPT-B-03"
+            title: "Tier0 AST Validation - Governance Compliance"
+            description: |
+              Create Tier0 validation layer for governance compliance:
+              - Enhanced violation_detector.py with governance context
+              - Validate all CORE-* rules via AST analysis
+              - Create violation registry (SQLite or in-memory)
+              - Generate compliance reports
+            deliverables:
+              - "cortex/testing/tdd_enhancement_layer3_validation.py (Tier0 validator)"
+              - "tests/test_tdd_enhancement_validation.py (18+ tests)"
+            tests: 18
+            
+          - ac_id: "AC-TDDOPT-B-04"
+            title: "Integration Testing - End-to-End TDD Workflow"
+            description: |
+              Integration tests verifying complete TDD workflow:
+              - Pre-commit hook blocks violations correctly
+              - Pylance highlights violations in simulated IDE
+              - Tier0 validation catches governance issues
+              - Workflow: RED (violation) → GREEN (fix) → REFACTOR (polish)
+            tests: 20
+            
+          - ac_id: "AC-TDDOPT-B-05"
+            title: "Documentation - Developer Guide"
+            description: |
+              Complete documentation for developers:
+              - Setup guide (install pre-commit hook, configure Pylance)
+              - Troubleshooting guide (common violations, fixes)
+              - Performance impact analysis
+              - Configuration for different environments (local, CI, production)
+            deliverables:
+              - "_workspaces/roadmap/docs/TDDOPT-B-DEVELOPER-GUIDE.md"
+              - "docs/07-guides/tdd-enhancement-option-b.md"
+            tests: 0  # Documentation, no tests
+            
+          - ac_id: "AC-TDDOPT-B-06"
+            title: "Performance & Scalability"
+            description: |
+              Validate performance impact:
+              - Pre-commit hook execution time <1 second per commit
+              - Pylance overhead < 200ms per keystroke
+              - No regression in existing test execution time
+              - Scalable to 5000+ test files
+            tests: 8
+        
+        implementation_plan:
+          step_1_precommit_hook:
+            title: "Implement Pre-commit Hook (Layer 1)"
+            duration: "2-3 days"
+            files:
+              - ".pre-commit-hooks.yaml (new)"
+              - "cortex/testing/tdd_enhancement_layer1_precommit.py (new)"
+              - "tests/test_tdd_enhancement_precommit.py (new)"
+            tasks:
+              - "Create .pre-commit-hooks.yaml with hook configuration"
+              - "Implement pre-commit hook handler in layer1 module"
+              - "Extend violation_detector.py with precommit context"
+              - "Create 15+ unit tests for hook behavior"
+              - "Test with actual git commits"
+          
+          step_2_pylance_integration:
+            title: "Configure Pylance Integration (Layer 2)"
+            duration: "2-3 days"
+            files:
+              - "pyrightconfig.json (new or updated)"
+              - "cortex/testing/tdd_enhancement_layer2_pylance.py (new)"
+              - "tests/test_tdd_enhancement_pylance.py (new)"
+            tasks:
+              - "Create pyrightconfig.json with strict settings"
+              - "Implement Pylance bridge in layer2 module"
+              - "Configure IDE highlighting for violations"
+              - "Create 12+ tests for Pylance integration"
+              - "Test in VS Code with Pylance extension"
+          
+          step_3_tier0_validation:
+            title: "Implement Tier0 Validation (Layer 3)"
+            duration: "1-2 days"
+            files:
+              - "cortex/testing/tdd_enhancement_layer3_validation.py (new)"
+              - "tests/test_tdd_enhancement_validation.py (new)"
+            tasks:
+              - "Extend violation_detector.py with Tier0 context"
+              - "Create violation registry"
+              - "Implement compliance report generation"
+              - "Create 18+ tests for validation"
+          
+          step_4_integration_testing:
+            title: "Integration Testing & End-to-End Workflows"
+            duration: "1-2 days"
+            files:
+              - "tests/test_tdd_enhancement_e2e.py (new)"
+            tasks:
+              - "Create E2E test scenarios (RED→GREEN→REFACTOR)"
+              - "Verify hook + IDE + validation work together"
+              - "Performance benchmarking"
+              - "Create 20+ integration tests"
+          
+          step_5_documentation:
+            title: "Create Developer Documentation"
+            duration: "1 day"
+            files:
+              - "_workspaces/roadmap/docs/TDDOPT-B-DEVELOPER-GUIDE.md (new)"
+              - "docs/07-guides/tdd-enhancement-option-b.md (new)"
+            tasks:
+              - "Write setup guide"
+              - "Document common violations and fixes"
+              - "Create troubleshooting guide"
+              - "Document performance characteristics"
+          
+          step_6_performance_validation:
+            title: "Performance & Scalability Testing"
+            duration: "0.5 day"
+            files:
+              - "tests/test_tdd_enhancement_performance.py (new)"
+            tasks:
+              - "Benchmark pre-commit hook execution time"
+              - "Measure Pylance overhead"
+              - "Verify no regressions in test suite"
+              - "Create 8 performance tests"
+        
+        tests_total: 73
+        tests_breakdown:
+          precommit_hook: 15
+          pylance_integration: 12
+          tier0_validation: 18
+          integration_e2e: 20
+          performance: 8
+        
+        deliverables:
+          implementation:
+            - "cortex/testing/tdd_enhancement_layer1_precommit.py (pre-commit hook implementation)"
+            - "cortex/testing/tdd_enhancement_layer2_pylance.py (Pylance IDE bridge)"
+            - "cortex/testing/tdd_enhancement_layer3_validation.py (Tier0 validation layer)"
+            - ".pre-commit-hooks.yaml (pre-commit configuration)"
+            - "pyrightconfig.json (Pylance configuration)"
+          
+          testing:
+            - "tests/test_tdd_enhancement_precommit.py (15 tests)"
+            - "tests/test_tdd_enhancement_pylance.py (12 tests)"
+            - "tests/test_tdd_enhancement_validation.py (18 tests)"
+            - "tests/test_tdd_enhancement_e2e.py (20 tests)"
+            - "tests/test_tdd_enhancement_performance.py (8 tests)"
+          
+          documentation:
+            - "_workspaces/roadmap/docs/TDDOPT-B-DEVELOPER-GUIDE.md"
+            - "docs/07-guides/tdd-enhancement-option-b.md"
+        
+        governance_compliance:
+          - "CORE-008: TDD - tests written first, no stubs"
+          - "CORE-011: Type hints - 100% coverage on all new code"
+          - "CORE-012: Docstrings - Google-style on all functions"
+          - "CORE-013: No bare except - violation detection validates this"
+          - "CORE-026: Git checkpoints - checkpoint before implementation"
+          - "CORE-027: Audit trail - log all violations detected"
+        
+        verification:
+          - "All 73 tests passing (100%)"
+          - "Pre-commit hook blocks violations correctly"
+          - "Pylance highlights violations in IDE"
+          - "Tier0 validation enforces governance rules"
+          - "E2E workflow: RED → GREEN → REFACTOR works end-to-end"
+          - "Performance benchmarks met (<1s pre-commit, <200ms IDE)"
+          - "No regressions in existing test suite"
+        
+        production_impact:
+          before: "Manual TDD workflow, violations caught in CI/CD (latency)"
+          after: "Automated violation detection at development time, faster feedback loop (20% friction reduction)"
+        
+        success_criteria:
+          - "Phase-E-TDD-IMPLEMENTATION complete and validated"
+          - "All 73 new tests passing"
+          - "Pre-commit hook operational and integrated"
+          - "Pylance configuration deployed and tested"
+          - "Team can use TDD enhancement on Day 1 after deployment"
+        
+        future_enhancement:
+          option_c_deferral: "Option C (Bandit+AST) can be layered non-breakingly after Option B is stable"
+          timeline: "Consider Option C for Phase G (4-6 weeks after Option B deployment)"
+          compatibility: "Option B and C can coexist; both feed into shared violation registry"
+
       - id: "PHASE-STORYTELLING-001-narrative-regeneration"
         title: "CORTEX Narrative Regeneration (Story + Image Prompts)"
         ac_ids: 4
@@ -2596,8 +2855,8 @@ phase_execution_tracking:
   
   mac_track_state:
     machine: "mac"
-    current_phase_index: 2  # 0=impl-export-completion (COMPLETED), 1=impl-circular-import-fix (COMPLETED), 2=PHASE-E (EXECUTING)
-    total_phases: 3
+    current_phase_index: 2  # 0=impl-export-completion (COMPLETED), 1=impl-circular-import-fix (COMPLETED), 2=PHASE-E (EXECUTING), 3=PHASE-F-OPTION-B (QUEUED)
+    total_phases: 4
     phases_completed: 2
     phase_e_subphases_started: 5  # PHASE-E1 complete, E2 COMPLETED, E3 COMPLETED, E4 COMPLETED, E5 IN PROGRESS
     loop_active: true
@@ -2830,6 +3089,34 @@ phase_execution_tracking:
             * Orchestrator: 412/613 (67%)
             * Domain Brain: 213/353 (60%)
           - Next: Continue domain_brain implementation (query engines, synthesis, repositories)
+      
+      - phase_id: "PHASE-F-TDD-ENHANCEMENT-OPTION-B"
+        machine: "mac"
+        sequence: 4
+        status: "PENDING"  # Will execute after PHASE-E completes
+        executed_by: "machine:mac autonomous loop (scheduled)"
+        start_time: null
+        end_time: null
+        duration_seconds: null
+        passed: null
+        error_message: null
+        dependencies: ["PHASE-E-TDD-IMPLEMENTATION"]
+        next_phase: null
+        phase_f_description: |
+          TDD Enhancement - Option B (AST+Pylance Integration)
+          - 3-layer implementation: Pre-commit hook + Pylance IDE + Tier0 validation
+          - 60% code reuse from violation_detector.py
+          - 73 tests covering pre-commit, IDE, validation, integration
+          - Deliverables: 3 modules + 2 config files + documentation
+          - Estimated duration: 7-10 days (1 sprint)
+        
+        current_status_note: |
+          SCHEDULED FOR EXECUTION AFTER PHASE-E COMPLETES
+          - Timing: Day 4-9 after PHASE-E shipped + validated (per technical evaluation)
+          - Blocker: PHASE-E must complete with ≥98% test pass rate
+          - Readiness: Phase design complete, implementation ready
+          - Design Authority: Technical evaluation document (Message 4-7 of conversation)
+          - Hybrid path: Option B now + Option C later as non-breaking enhancement
   
   ah_track_state:
     machine: "ah"
