@@ -54,7 +54,7 @@ timeout /t 3 /nobreak >nul
 
 REM Open default browser
 echo [4/4] Opening browser at http://127.0.0.1:8000/
-start http://127.0.0.1:8000/INDEX/
+start http://127.0.0.1:8000/01-cortex-brain/00-brain-index/
 
 echo.
 echo ========================================
