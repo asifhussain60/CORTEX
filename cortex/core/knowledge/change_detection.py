@@ -705,3 +705,9 @@ class ChangeDetectionService:
             'escalated_to_critical': escalated,
             'compliance_status': 'compliant' if manual_review <= escalated else 'review_needed',
         }
+
+
+# Aliases for test imports
+Alert = ChangeAlert
+AnomalyType = ChangeType
+SeverityLevel = Severity
