@@ -1,0 +1,204 @@
+---
+# PHASE KG-004: Knowledge Graph Routing Optimization
+# Optional Enhanced Orchestrator Routing via KG
+# Version: 1.0
+# Date: 2026-01-22
+
+metadata:
+  id: "PHASE-KG-004-routing-optimization"
+  title: "KG Routing - Optional MasterOrchestrator Enhancement"
+  subtitle: "Semantic Capability Matching via KG Relationships"
+  phase_sequence: "KG-004 (after PHASE-KG-003-query-layer)"
+  priority: "P2-OPTIONAL"
+  status: "NOT_STARTED"
+  blocks_production: false
+  machine: "eval"
+  
+  execution_metadata:
+    machine_track: "eval"
+    sequence_position: 4
+    next_phase_id: "PHASE-KG-005-validation"
+    dependencies: ["PHASE-KG-003-query-layer"]
+
+scope:
+  total_tests: 40
+  estimated_effort: "2-3 days"
+
+executive_summary: |
+  PHASE KG-004 enhances MasterOrchestrator routing with optional semantic capability matching.
+  
+  **Starting State:**
+  - Query layer ready with KG backend (PHASE-KG-003 complete)
+  - MasterOrchestrator currently uses heuristic routing (67% test coverage)
+  - Opportunity: use KG relationships to improve routing decisions
+  
+  **Design Principle:** Optional enhancement, non-breaking
+  - Feature flag: KG-enhanced routing can be disabled
+  - Fallback: if KG unavailable, use current routing logic
+  - No impact on existing tests or routing behavior if disabled
+  - Improved routing accuracy when enabled
+  
+  **Current MasterOrchestrator Logic (to enhance):**
+  - Receive operation request
+  - Determine scope (file, module, system)
+  - Find applicable orchestrators by domain
+  - Delegate to orchestrator(s)
+  
+  **Enhanced Logic (via KG):**
+  - Load operation request
+  - Query KG for all capabilities affected by operation
+  - Find orchestrators that implement those capabilities
+  - Use relationship strength (importance score) to rank
+  - Delegate with ranked priority list
+  
+  **Deliverables:**
+  1. SemanticCapabilityMatcher for KG-based capability analysis
+  2. OrchestratorRankingEngine for priority calculation
+  3. Enhanced MasterOrchestrator routing with KG backend
+  4. Feature flag and fallback logic
+  5. 40+ tests validating routing correctness, performance
+  
+  **Ending State:**
+  - KG-enhanced routing available as optional feature
+  - Current routing behavior preserved when disabled
+  - 40/40 tests passing
+  - Ready for comprehensive validation (PHASE-KG-005)
+
+implementation_phases:
+
+  phase_kg4_capability_matcher:
+    id: "PHASE-KG4-CAPABILITY-MATCHER"
+    duration: "1 day"
+    effort_hours: 8
+    goal: "Build semantic capability matcher"
+    
+    acceptance_criteria:
+      - id: "AC-KG4-CAP-001"
+        description: "SemanticCapabilityMatcher identifies capabilities from operation"
+        verification: "For given operation, correctly identifies 5+ affected capabilities"
+    
+    implementation_tasks:
+      - task: "Create SemanticCapabilityMatcher"
+        files:
+          - "cortex/orchestrators/core/semantic_capability_matcher.py (NEW - ~250 lines)"
+        guidance: |
+          Algorithm:
+          - Parse operation intent
+          - Query KG for related capabilities
+          - Extract capability graph (1-2 hops from operation target)
+          - Return ranked list of capabilities with scores
+        verification: "Matcher tests: 15+ tests passing"
+
+  phase_kg4_ranking:
+    id: "PHASE-KG4-RANKING"
+    duration: "0.5 days"
+    effort_hours: 4
+    goal: "Implement orchestrator ranking"
+    
+    acceptance_criteria:
+      - id: "AC-KG4-RANK-001"
+        description: "OrchestratorRankingEngine ranks orchestrators by capability match"
+        verification: "For set of capabilities, returns ranked list of applicable orchestrators"
+    
+    implementation_tasks:
+      - task: "Create OrchestratorRankingEngine"
+        files:
+          - "cortex/orchestrators/core/orchestrator_ranking_engine.py (NEW - ~200 lines)"
+        guidance: |
+          Scoring:
+          - Primary score: # of matched capabilities / # of required capabilities
+          - Secondary score: relationship strength (governance rules, past success rate)
+          - Return sorted list: [Orchestrator(score=0.95), Orchestrator(score=0.80), ...]
+        verification: "Ranking tests: 10+ tests passing"
+
+  phase_kg4_master_orchestrator_enhancement:
+    id: "PHASE-KG4-MASTER-ENH"
+    duration: "0.5 days"
+    effort_hours: 4
+    goal: "Enhance MasterOrchestrator routing"
+    
+    acceptance_criteria:
+      - id: "AC-KG4-MASTER-001"
+        description: "MasterOrchestrator uses optional KG-enhanced routing"
+        verification: "Feature flag controls KG usage; fallback to current logic"
+    
+    implementation_tasks:
+      - task: "Modify MasterOrchestrator routing"
+        files:
+          - "cortex/orchestrators/core/master_orchestrator.py (modified, ~50 lines added)"
+        guidance: |
+          Changes:
+          - Add kg_enabled feature flag (env var, default False)
+          - If kg_enabled: use SemanticCapabilityMatcher → OrchestratorRankingEngine
+          - Else: use current heuristic routing
+          - Log routing decision in audit trail
+        verification: "Routing tests: 8+ tests, all with backward compatibility"
+
+  phase_kg4_testing:
+    id: "PHASE-KG4-TESTING"
+    duration: "0.5 days"
+    effort_hours: 4
+    goal: "Comprehensive routing testing"
+    
+    acceptance_criteria:
+      - id: "AC-KG4-TEST-001"
+        description: "40+ tests covering capability matching, ranking, routing, fallback"
+        verification: "pytest: 40/40 PASSED"
+      
+      - id: "AC-KG4-TEST-002"
+        description: "Routing accuracy improved or equal to current implementation"
+        verification: "KG routing accuracy ≥ current heuristic accuracy"
+    
+    implementation_tasks:
+      - task: "Create routing test suite"
+        files:
+          - "tests/unit/orchestrators/test_semantic_capability_matcher.py (NEW - ~200 lines, 15 tests)"
+          - "tests/unit/orchestrators/test_orchestrator_ranking.py (NEW - ~150 lines, 10 tests)"
+          - "tests/integration/orchestrators/test_kg_routing.py (NEW - ~200 lines, 12 tests)"
+          - "tests/integration/orchestrators/test_routing_fallback.py (NEW - ~100 lines, 3 tests)"
+        guidance: |
+          Test coverage:
+          - Capability matching: single/multi-capability operations (10 tests)
+          - Ranking accuracy: correct orchestrator priority (8 tests)
+          - Fallback: KG unavailable → current routing (3 tests)
+          - Feature flag: enable/disable KG routing (3 tests)
+          - Backward compatibility: 7000+ existing tests still pass (1 test)
+        verification: "40/40 tests passing"
+
+test_files:
+  total_tests: 40
+  breakdown:
+    capability_matching: 15
+    ranking: 10
+    kg_routing: 12
+    fallback: 3
+  location:
+    - "tests/unit/orchestrators/test_semantic_capability_matcher.py (15 tests)"
+    - "tests/unit/orchestrators/test_orchestrator_ranking.py (10 tests)"
+    - "tests/integration/orchestrators/test_kg_routing.py (12 tests)"
+    - "tests/integration/orchestrators/test_routing_fallback.py (3 tests)"
+
+new_files:
+  - "cortex/orchestrators/core/semantic_capability_matcher.py (~250 lines)"
+  - "cortex/orchestrators/core/orchestrator_ranking_engine.py (~200 lines)"
+  - "tests/unit/orchestrators/test_semantic_capability_matcher.py (~200 lines, 15 tests)"
+  - "tests/unit/orchestrators/test_orchestrator_ranking.py (~150 lines, 10 tests)"
+  - "tests/integration/orchestrators/test_kg_routing.py (~200 lines, 12 tests)"
+  - "tests/integration/orchestrators/test_routing_fallback.py (~100 lines, 3 tests)"
+
+modified_files:
+  - "cortex/orchestrators/core/master_orchestrator.py (~50 lines added: KG routing integration)"
+
+success_metrics:
+  test_pass_rate: "100% (40/40 tests)"
+  routing_accuracy_kg: "≥ current heuristic accuracy"
+  fallback_reliability: "100% (when KG unavailable)"
+  backward_compatibility: "7000+ existing tests passing"
+  feature_flag_control: "KG routing toggleable without code changes"
+
+notes:
+  - "KG-enhanced routing is optional; current routing remains default"
+  - "Feature flag allows A/B testing (KG vs heuristic routing)"
+  - "No impact to production unless explicitly enabled"
+
+next_phase: "PHASE-KG-005-validation"

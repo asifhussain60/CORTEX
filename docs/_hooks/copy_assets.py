@@ -6,6 +6,7 @@ Merges with existing Material theme assets (does not overwrite)
 
 import shutil
 import os
+import sys
 from pathlib import Path
 
 
@@ -31,6 +32,6 @@ def on_post_build(config):
                 shutil.copytree(item, dest_item)
             else:
                 shutil.copy2(item, dest_item)
-        print(f"✅ Assets merged: {assets_src} → {assets_dest}")
+        sys.stdout.write(f"Assets merged: {assets_src} -> {assets_dest}\n")
     else:
-        print(f"⚠️  Assets folder not found: {assets_src}")
+        sys.stdout.write(f"Warning: Assets folder not found: {assets_src}\n")
