@@ -889,6 +889,78 @@ phases_implementation_status:
           tier2_rules: "25-30"
           total_rules: "69-79"
       
+      # EVAL TRACK PHASES - KNOWLEDGE GRAPH INTEGRATION (added from remote 2026-01-22)
+      - id: "PHASE-KG-001-foundation"
+        title: "Knowledge Graph Foundation - Entity Models & Schema"
+        ac_ids: 4
+        status: "NOT_STARTED"
+        priority: "P2-OPTIONAL"
+        estimated_effort: "2-3 days"
+        blocking: false
+        machine: "eval"
+        required: false
+        sequence: 1
+        depends_on: ["PHASE-E-TDD-IMPLEMENTATION"]
+        depends_on_maturity: "domain_brain ≥90% tests passing"
+        note: "Entity relationship models, graph schema design, relationship type definitions"
+        business_value: "Foundation for knowledge graph backend enabling semantic reasoning"
+      
+      - id: "PHASE-KG-002-entity-sync"
+        title: "Knowledge Graph Entity Synchronization"
+        ac_ids: 4
+        status: "NOT_STARTED"
+        priority: "P2-OPTIONAL"
+        estimated_effort: "2-3 days"
+        blocking: false
+        machine: "eval"
+        required: false
+        sequence: 2
+        depends_on: ["PHASE-KG-001-foundation"]
+        note: "Sync domain entities, relationships, and governance rules to graph"
+        business_value: "Real-time graph updates from governance and domain brain changes"
+      
+      - id: "PHASE-KG-003-query-layer"
+        title: "Knowledge Graph Query and Inference Engine"
+        ac_ids: 4
+        status: "NOT_STARTED"
+        priority: "P2-OPTIONAL"
+        estimated_effort: "2-3 days"
+        blocking: false
+        machine: "eval"
+        required: false
+        sequence: 3
+        depends_on: ["PHASE-KG-002-entity-sync"]
+        note: "Graph traversal, semantic queries, rule inference, relationship analysis"
+        business_value: "Semantic query capabilities for intelligent routing and decision-making"
+      
+      - id: "PHASE-KG-004-routing-optimization"
+        title: "Knowledge Graph Routing Decision Optimization"
+        ac_ids: 4
+        status: "NOT_STARTED"
+        priority: "P2-OPTIONAL"
+        estimated_effort: "2-3 days"
+        blocking: false
+        machine: "eval"
+        required: false
+        sequence: 4
+        depends_on: ["PHASE-KG-003-query-layer"]
+        note: "Integrate KG insights into routing engine for optimized orchestration"
+        business_value: "Graph-based routing decisions improving orchestration efficiency"
+      
+      - id: "PHASE-KG-005-validation"
+        title: "Knowledge Graph Validation and Observability"
+        ac_ids: 4
+        status: "NOT_STARTED"
+        priority: "P2-OPTIONAL"
+        estimated_effort: "2-3 days"
+        blocking: false
+        machine: "eval"
+        required: false
+        sequence: 5
+        depends_on: ["PHASE-KG-004-routing-optimization"]
+        note: "Graph consistency checks, metrics, observability dashboards, health checks"
+        business_value: "Production-grade KG with full observability and validation"
+      
       # EXISTING PHASES
       - id: "PHASE-E-TDD-IMPLEMENTATION"
         title: "TDD Production Implementation - 125 Modules"
