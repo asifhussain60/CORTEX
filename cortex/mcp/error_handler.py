@@ -21,19 +21,21 @@ class ErrorSeverity(Enum):
     CRITICAL = "critical"
 
 
-class ErrorRecoveryStrategy(Enum):
-    """Error recovery strategies."""
-    RETRY = "retry"
-    FALLBACK = "fallback"
-    CIRCUIT_BREAK = "circuit_break"
-    IGNORE = "ignore"
+@dataclass
+class ErrorRecoveryStrategy:
+    """Error recovery strategy configuration."""
+    retry: bool = False
+    exponential_backoff: bool = False
+    max_retries: int = 0
+    initial_delay: float = 1.0
 
 
 @dataclass
 class ErrorResponse:
     """Error response object."""
-    code: str  # Will be set from ErrorCode enum
+    code: Any  # ErrorCode enum value
     message: str
+    data: Optional[Dict[str, Any]] = None
 
 
 @dataclass
@@ -289,11 +291,12 @@ class MCPErrorHandler:
         }
     
     @staticmethod
-    def handle_exception(exc: Exception) -> ErrorResponse:
+    def handle_exception(exc: Exception, context: Optional[Dict[str, Any]] = None) -> ErrorResponse:
         """Handle an exception and return appropriate error response.
         
         Args:
             exc: The exception to handle
+            context: Optional context information about the error
             
         Returns:
             ErrorResponse with appropriate error code
@@ -311,12 +314,69 @@ class MCPErrorHandler:
         
         error_code = error_map.get(type(exc), ErrorCode.INTERNAL_ERROR)
         
+        data = {}
+        if context:
+            data["context"] = context
+        
         response = ErrorResponse(
-            code=error_code.value,
-            message=str(exc)
+            code=error_code,
+            message=str(exc),
+            data=data if data else None
         )
-        response.code = error_code
         return response
+    
+    @staticmethod
+    def get_recovery_strategy(error_code: Any) -> Optional[ErrorRecoveryStrategy]:
+        """Get recovery strategy for an error code.
+        
+        Args:
+            error_code: The error code to get strategy for
+            
+        Returns:
+            ErrorRecoveryStrategy if available, None otherwise
+        """
+        from cortex.mcp.protocol import ErrorCode
+        
+        # Default recovery strategies
+        strategies = {
+            ErrorCode.TIMEOUT: ErrorRecoveryStrategy(
+                retry=True,
+                exponential_backoff=True,
+                max_retries=3,
+                initial_delay=1.0
+            ),
+            ErrorCode.INVALID_PARAMS: ErrorRecoveryStrategy(
+                retry=False,
+                exponential_backoff=False,
+                max_retries=0
+            ),
+            ErrorCode.INTERNAL_ERROR: ErrorRecoveryStrategy(
+                retry=True,
+                exponential_backoff=True,
+                max_retries=3,
+                initial_delay=2.0
+            ),
+        }
+        
+        return strategies.get(error_code)
+    
+    @staticmethod
+    def validate_error_response(error: Any) -> bool:
+        """Validate that an error response is properly formatted.
+        
+        Args:
+            error: Error object to validate
+            
+        Returns:
+            True if valid MCP error, False otherwise
+        """
+        # Check if it has required fields
+        if not hasattr(error, 'code') or error.code is None:
+            return False
+        if not hasattr(error, 'message'):
+            return False
+        
+        return True
 
 
 __all__ = ["MCPErrorHandler", "ErrorThrottler", "ErrorRecoveryStrategy", "ErrorSeverity", "ErrorRecord", "ErrorResponse"]

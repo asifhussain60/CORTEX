@@ -160,6 +160,126 @@ class MCPComplianceTester:
             "pass_rate": passed / total if total > 0 else 0,
             "compliance_level": self.compliance_level.value
         }
+    
+    @staticmethod
+    def test_tool_definition_compliance(tool_def: Any) -> tuple:
+        """Test tool definition compliance.
+        
+        Args:
+            tool_def: Tool definition to test
+            
+        Returns:
+            Tuple of (passed: bool, results: List[ComplianceResult])
+        """
+        results = []
+        
+        # Check ID
+        result = ComplianceResult(
+            test_name="tool_definition_id",
+            passed=True,
+            level=ComplianceLevel.STANDARD,
+            message="Tool ID is present"
+        )
+        if not hasattr(tool_def, 'id') or not tool_def.id:
+            result.passed = False
+            result.message = "Tool definition missing required ID"
+        results.append(result)
+        
+        # Check name
+        result = ComplianceResult(
+            test_name="tool_definition_name",
+            passed=True,
+            level=ComplianceLevel.STANDARD,
+            message="Tool name is present"
+        )
+        if not hasattr(tool_def, 'name') or not tool_def.name:
+            result.passed = False
+            result.message = "Tool definition missing required name"
+        results.append(result)
+        
+        # Check description
+        result = ComplianceResult(
+            test_name="tool_definition_description",
+            passed=True,
+            level=ComplianceLevel.STANDARD,
+            message="Tool description is present"
+        )
+        if not hasattr(tool_def, 'description') or not tool_def.description:
+            result.passed = False
+            result.message = "Tool definition missing required description"
+        results.append(result)
+        
+        passed = all(r.passed for r in results)
+        return passed, results
+    
+    @staticmethod
+    def test_parameter_compliance(tool_def: Any) -> tuple:
+        """Test parameter compliance.
+        
+        Args:
+            tool_def: Tool definition to test
+            
+        Returns:
+            Tuple of (passed: bool, results: List[ComplianceResult])
+        """
+        results = []
+        
+        result = ComplianceResult(
+            test_name="parameter_compliance",
+            passed=True,
+            level=ComplianceLevel.STANDARD,
+            message="Parameters are compliant"
+        )
+        
+        if hasattr(tool_def, 'parameters'):
+            for param in tool_def.parameters:
+                if not hasattr(param, 'name'):
+                    result.passed = False
+                    result.message = "Parameter missing name"
+                    break
+        
+        results.append(result)
+        passed = all(r.passed for r in results)
+        return passed, results
+    
+    @staticmethod
+    def test_error_response_compliance(error: Any) -> tuple:
+        """Test error response compliance.
+        
+        Args:
+            error: Error response to test
+            
+        Returns:
+            Tuple of (passed: bool, results: List[ComplianceResult])
+        """
+        results = []
+        
+        # Check code
+        result = ComplianceResult(
+            test_name="error_response_code",
+            passed=True,
+            level=ComplianceLevel.STANDARD,
+            message="Error code is present"
+        )
+        if not hasattr(error, 'code') or error.code is None:
+            result.passed = False
+            result.message = "Error response missing required code"
+        results.append(result)
+        
+        # Check message
+        result = ComplianceResult(
+            test_name="error_response_message",
+            passed=True,
+            level=ComplianceLevel.STANDARD,
+            message="Error message is present"
+        )
+        if not hasattr(error, 'message') or not error.message:
+            result.passed = False
+            result.message = "Error response missing required message"
+        results.append(result)
+        
+        passed = all(r.passed for r in results)
+        return passed, results
 
 
 __all__ = ["MCPComplianceTester", "ComplianceLevel", "ComplianceResult"]
