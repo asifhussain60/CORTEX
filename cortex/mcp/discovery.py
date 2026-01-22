@@ -13,12 +13,34 @@ if TYPE_CHECKING:
 @dataclass
 class DiscoveryFilter:
     """Filter for tool discovery."""
-    filter_type: str
-    criteria: dict = None
+    tags: Optional[List[str]] = None
+    name_contains: Optional[str] = None
+    domain: Optional[str] = None
+    limit: Optional[int] = None
+    include_deprecated: bool = False
+    filter_type: Optional[str] = None
+    criteria: Optional[dict] = None
     
-    def __post_init__(self):
+    def __post_init__(self) -> None:
+        """Initialize filter criteria from fields.
+        
+        Returns:
+            None
+        """
         if self.criteria is None:
             self.criteria = {}
+        
+        # Build criteria from fields
+        if self.tags is not None:
+            self.criteria["tags"] = self.tags
+        if self.name_contains is not None:
+            self.criteria["name"] = self.name_contains
+        if self.domain is not None:
+            self.criteria["domain"] = self.domain
+        if self.limit is not None:
+            self.criteria["limit"] = self.limit
+        if self.include_deprecated:
+            self.criteria["deprecated"] = True
 
 
 @dataclass
@@ -28,11 +50,16 @@ class DiscoveryMetadata:
     supported_patterns: List[str] = field(default_factory=list)
     version: str = "1.0"
     
-    def __post_init__(self):
+    def __post_init__(self) -> None:
+        """Initialize metadata with defaults.
+        
+        Returns:
+            None
+        """
         if not self.supported_filters:
             self.supported_filters = ["tags", "name", "domain", "limit", "deprecated"]
         if not self.supported_patterns:
-            self.supported_patterns = ["file_system", "registry", "annotation", "plugin"]
+            self.supported_patterns = ["list_all", "by_tag", "search", "by_capability", "by_domain"]
 
 
 class ToolDiscovery:
@@ -179,6 +206,14 @@ class ToolDiscovery:
         if tool_id not in self._capabilities[capability]:
             self._capabilities[capability].append(tool_id)
     
+    def get_capabilities(self) -> Dict[str, List[str]]:
+        """Get all registered capabilities.
+        
+        Returns:
+            Dictionary mapping capability names to list of tool IDs.
+        """
+        return self._capabilities
+    
     def discover_by_capability(self, capability: str) -> List[Any]:
         """Discover tools by capability.
         
@@ -219,6 +254,14 @@ class ToolDiscovery:
             self._domains[domain] = []
         if tool_id not in self._domains[domain]:
             self._domains[domain].append(tool_id)
+    
+    def get_domains(self) -> Dict[str, List[str]]:
+        """Get all registered domains.
+        
+        Returns:
+            Dictionary mapping domain names to list of tool IDs.
+        """
+        return self._domains
     
     def discover_by_domain(self, domain: str) -> List[Any]:
         """Discover tools by domain.
@@ -291,13 +334,21 @@ class ToolDiscovery:
         
         return results
     
-    def get_discovery_metadata(self) -> DiscoveryMetadata:
+    def get_discovery_metadata(self) -> Dict[str, Any]:
         """Get discovery metadata.
         
         Returns:
-            Discovery metadata object.
+            Discovery metadata dictionary.
         """
-        return self._metadata
+        total_tools = len(self.discover_all()) if self.registry else 0
+        return {
+            "total_tools": total_tools,
+            "capabilities": self._capabilities,
+            "domains": self._domains,
+            "supported_filters": self._metadata.supported_filters,
+            "supported_patterns": self._metadata.supported_patterns,
+            "version": self._metadata.version
+        }
 
 
 from enum import Enum
