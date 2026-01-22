@@ -77,30 +77,34 @@ class TestRouteKsessionsIntent:
 class TestReadProjectCortexPrompt:
     """Test reading CORTEX.prompt.md from projects."""
 
-    def test_reads_cortex_prompt_md(self):
+    def test_reads_cortex_prompt_md(self, tmp_path: Path):
         """Should read CORTEX.prompt.md from project."""
         from cortex.orchestrators.cross_repo_router import CrossRepoRouter
         
         router = CrossRepoRouter()
+        kashkole_path = tmp_path / "KASHKOLE"
+        kashkole_path.mkdir()
         
         with patch.object(router, "_read_file") as mock_read:
             mock_read.return_value = "# Project: KASHKOLE\nFinancial operations"
             
-            content = router.read_project_prompt("D:\\PROJECTS\\KASHKOLE")
+            content = router.read_project_prompt(str(kashkole_path))
         
         assert content is not None
         assert "KASHKOLE" in content or len(content) > 0
 
-    def test_reads_copilot_instructions(self):
+    def test_reads_copilot_instructions(self, tmp_path: Path):
         """Should read copilot-instruction.md from project."""
         from cortex.orchestrators.cross_repo_router import CrossRepoRouter
         
         router = CrossRepoRouter()
+        kashkole_path = tmp_path / "KASHKOLE"
+        kashkole_path.mkdir()
         
         with patch.object(router, "_read_file") as mock_read:
             mock_read.return_value = "Instructions for copilot"
             
-            content = router.read_copilot_instructions("D:\\PROJECTS\\KASHKOLE")
+            content = router.read_copilot_instructions(str(kashkole_path))
         
         assert content is not None
 
@@ -122,11 +126,13 @@ class TestReadProjectCortexPrompt:
 class TestLoadProjectTier1Rules:
     """Test loading project-specific tier1 rules."""
 
-    def test_loads_tier1_for_project(self):
+    def test_loads_tier1_for_project(self, tmp_path: Path):
         """Should load tier1 rules for specific project."""
         from cortex.orchestrators.cross_repo_router import CrossRepoRouter
         
         router = CrossRepoRouter()
+        kashkole_path = tmp_path / "KASHKOLE"
+        kashkole_path.mkdir()
         
         with patch.object(router, "_load_project_context") as mock_load:
             mock_load.return_value = {
@@ -134,7 +140,7 @@ class TestLoadProjectTier1Rules:
                 "rules": ["FIN-001", "FIN-002"],
             }
             
-            context = router.get_project_context("D:\\PROJECTS\\KASHKOLE")
+            context = router.get_project_context(str(kashkole_path))
         
         assert "tier1_profile" in context or "rules" in context
 
