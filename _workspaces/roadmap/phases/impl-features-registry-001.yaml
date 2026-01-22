@@ -1,0 +1,69 @@
+---
+# Win Track Phase 5: Feature Registry and Discovery
+# Live feature discovery system
+# Date: 2026-01-21
+# Priority: P1-HIGH
+
+metadata:
+  phase_id: "impl-features-registry-001"
+  title: "Feature Registry and Live Discovery System"
+  description: "Create live feature discovery and capability registry for dynamic orchestration"
+  priority: "P1-HIGH"
+  estimated_effort: "2-3 days"
+  status: "COMPLETED"
+  completion_date: "2026-01-21"
+  blocks_production: false
+  machine_track: "win"
+  sequence_position: 5
+  
+  # Execution metadata for autonomous loops
+  execution_metadata:
+    machine_track: "win"
+    sequence_position: 5
+    next_phase_id: null  # Win phase 6+ pending
+    dependencies: ["cortex-registry-001-migration", "impl-e2e-validation", "impl-cicd-validation", "impl-governance-content"]
+    
+  completion_verification:
+    success_criteria:
+      - "Feature registry operational"
+      - "Live discovery working"
+      - "9/9 tests passing"
+    on_success: "continue_to_next_phase"
+    on_failure: "stop_and_report_blocker"
+    
+  execution_loop_integration:
+    enabled: true
+    can_be_auto_executed: true
+
+executive_summary: |
+  Win track Phase 5 - Feature capabilities discovery
+  Creates registry enabling runtime feature queries,
+  capability detection, and dynamic orchestration routing.
+
+scope:
+  modules:
+    - cortex/registry/feature_registry.py
+    - cortex/orchestrators/feature_dispatcher.py
+    - cortex/api/feature_endpoints.py
+  tests: 9
+  
+acceptance_criteria:
+  - id: "AC-FEAT-001"
+    description: "Feature registry supports dynamic capability queries"
+    verification: "pytest tests/test_feature_registry.py"
+  - id: "AC-FEAT-002"
+    description: "Live feature discovery operational"
+    verification: "pytest tests/test_live_discovery.py"
+  - id: "AC-FEAT-003"
+    description: "API endpoints for feature queries"
+    verification: "pytest tests/test_feature_api.py"
+
+result:
+  status: "COMPLETED"
+  tests_passed: 9
+  tests_failed: 0
+  test_pass_rate: "100%"
+  completion_date: "2026-01-21"
+  implementation_notes: |
+    Feature discovery system complete. Dynamic routing and capability detection ready.
+    Win track infrastructure phase complete (5/5 core validation phases).
