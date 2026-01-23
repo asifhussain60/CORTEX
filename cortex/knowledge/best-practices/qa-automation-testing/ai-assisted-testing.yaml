@@ -1,0 +1,285 @@
+# AI-Assisted Test Automation with Browser Verification
+# Source: COMPANY ClassicQA Framework Documentation
+# Version: 1.0
+# Created: 2026-01-23
+# Purpose: AI-driven test generation with browser-assisted locator verification
+
+metadata:
+  title: "AI-Assisted Test Automation"
+  company: "COMPANY"
+  framework: "ClassicQA + GitHub Copilot + Playwright MCP"
+  sources:
+    - "ClassicQA/docs/browser-assisted-automation.md"
+    - "ClassicQA/docs/README.md"
+  version: "1.0"
+  created: "2026-01-23"
+  schema: "QA_Automation_GuidelineSchema"
+  tags:
+    - ai-assistance
+    - github-copilot
+    - playwright
+    - browser-automation
+    - test-generation
+    - azure-devops
+
+# ULTIMATE WORKFLOW
+ultimate_workflow:
+  concept: "Single-Command Test Generation"
+  description: >
+    Provide only an ADO work item ID, and AI automatically fetches requirements,
+    opens browser, verifies locators, generates page objects, and creates complete test class.
+  
+  command: "Automate ADO work item 123456"
+  
+  automated_steps:
+    - step: 1
+      action: "Fetch ADO work item"
+      details: "Retrieve requirements, test steps, acceptance criteria, and all related work items"
+      
+    - step: 2
+      action: "Read framework documentation"
+      details: "Load all patterns from ClassicQA docs"
+      
+    - step: 3
+      action: "Open browser"
+      details: "Navigate to application using Playwright"
+      
+    - step: 4
+      action: "Perform test steps manually"
+      details: "Execute each step from ADO requirements"
+      
+    - step: 5
+      action: "Capture page snapshots"
+      details: "Document each step with accessibility tree"
+      
+    - step: 6
+      action: "Verify locators"
+      details: "Ensure all elements exist and locators are correct"
+      
+    - step: 7
+      action: "Identify missing page objects"
+      details: "Determine what needs to be created"
+      
+    - step: 8
+      action: "Generate page objects"
+      details: "Create with verified locators following framework patterns"
+      
+    - step: 9
+      action: "Generate test class"
+      details: "Using verified locators and all framework conventions"
+      
+    - step: 10
+      action: "Report results"
+      details: "Summary of created files and verified elements"
+
+# WORKFLOW PHASES
+workflow_phases:
+  phase_1_requirements_gathering:
+    description: "Extract complete requirements from ADO"
+    actions:
+      - "Fetch work item by ID from Azure DevOps"
+      - "Extract title, description, acceptance criteria"
+      - "Identify test steps if specified"
+      - "Determine test type (UI, API, mixed)"
+      - "Fetch all related work items (user stories, parent/child, linked items)"
+      - "Gather additional context from related items"
+    
+    output: "Complete requirements and test scenario"
+  
+  phase_2_framework_context_loading:
+    description: "Load framework patterns and conventions"
+    documentation_files:
+      - "docs/framework-context.md"
+      - "docs/example-test.md"
+      - "docs/example-page-object.md"
+      - "docs/coding-standards.md"
+      - "docs/test-data-creation.md"
+    
+    output: "Framework knowledge and patterns"
+  
+  phase_3_browser_exploration:
+    description: "Interactive browser-based verification"
+    tools: "Playwright MCP"
+    
+    actions:
+      - "Open browser (headless or visible)"
+      - "Navigate to application URL"
+      - "Perform login if required"
+      - "Navigate through each test step"
+      - "At each step:"
+        - "Capture accessibility snapshot"
+        - "Identify interactive elements"
+        - "Verify element locators (ID, class, xpath)"
+        - "Test element interactions (clickable, visible, enabled)"
+        - "Capture error messages or validations"
+    
+    output: "Verified element locators and page structure"
+  
+  phase_4_locator_verification:
+    description: "Validate and optimize locators"
+    actions:
+      - "Compare required elements vs found elements"
+      - "Validate locator strategies (prefer ID > Class > XPath)"
+      - "Identify missing or incorrect locators"
+      - "Document element states and properties"
+    
+    output: "Optimized, verified locators"
+  
+  phase_5_code_generation:
+    description: "Generate production-ready code"
+    actions:
+      - "Determine if new page objects needed"
+      - "Generate page objects with verified locators"
+      - "Generate test class following framework patterns"
+      - "Include proper test phases (Arrange/Act/Assert)"
+      - "Add descriptive assertions with failure messages"
+      - "Link test to ADO with TestProperty attribute"
+    
+    output: "Complete, runnable test code and page objects"
+  
+  phase_6_validation_and_report:
+    description: "Verify and document generated code"
+    actions:
+      - "Verify generated code compiles"
+      - "Report created files"
+      - "Summarize verified locators"
+      - "Note any issues or manual steps required"
+    
+    output: "Summary report and any warnings"
+
+# PROMPT VARIATIONS
+prompt_variations:
+  basic:
+    prompt: "Automate ADO 123456"
+    usage: "Simplest form, uses defaults"
+    
+  with_url:
+    prompt: "Automate ADO 123456 starting at https://uat2.company.com"
+    usage: "Specify starting URL"
+    
+  with_user_context:
+    prompt: "Automate ADO 123456 as employer user"
+    usage: "Specify user type for authentication"
+    
+  multiple_items:
+    prompt: "Automate ADO work items: 123456, 123457, 123458"
+    usage: "Batch generation for multiple tickets"
+    
+  visible_browser:
+    prompt: "Automate ADO 123456 with visible browser"
+    usage: "Watch browser actions in real-time"
+    
+  verify_before_generating:
+    prompt: "Automate ADO 123456 but show me the verified locators before generating code"
+    usage: "Review locators before code generation"
+
+# LOCATOR VERIFICATION STRATEGY
+locator_verification:
+  preference_order:
+    - priority: 1
+      locator_type: "ID"
+      reason: "Most reliable, fastest, unique"
+      example: 'FindElement("login-email", FindTypes.ID)'
+      
+    - priority: 2
+      locator_type: "Class Name"
+      reason: "Good when class is unique to element"
+      example: 'FindElement("checkmark", FindTypes.CLASSNAME)'
+      
+    - priority: 3
+      locator_type: "CSS Selector"
+      reason: "Flexible, more readable than XPath"
+      example: 'FindElement("div.login-form input", FindTypes.CSS)'
+      
+    - priority: 4
+      locator_type: "XPath"
+      reason: "Most powerful but can be fragile"
+      example: 'FindElement("//*[contains(text(), \'For Business\')]", FindTypes.XPATH)'
+  
+  verification_checks:
+    - check: "Element exists"
+      description: "Verify element is present in DOM"
+      
+    - check: "Element visible"
+      description: "Verify element is displayed to user"
+      
+    - check: "Element interactive"
+      description: "Verify element is clickable/editable"
+      
+    - check: "Locator unique"
+      description: "Verify locator matches only one element"
+      
+    - check: "Locator stable"
+      description: "Verify locator works after page reload"
+
+# GENERATED OUTPUT
+generated_output:
+  page_objects:
+    location: "AutomationCore/PageClassesCore/"
+    naming: "[PageName]Page.cs"
+    includes:
+      - "XML documentation"
+      - "Verified element locators"
+      - "Action methods"
+      - "IsLoaded() validation"
+      - "Proper inheritance from PageBase"
+    
+  test_classes:
+    location: "ClassicQA/AutomatedTests/TestCore/Tests/"
+    naming: "[FeatureArea][Component]Tests.cs"
+    includes:
+      - "Test class inheriting from TestBase"
+      - "[TestClass] and [TestMethod] attributes"
+      - "TestProperty linking to ADO work item"
+      - "Explicit test phases (Arrange/Act/Assert)"
+      - "Page object initialization in TestInitialize"
+      - "Descriptive assertion messages"
+      - "Proper using statements"
+      - "XML documentation"
+  
+  report_summary:
+    includes:
+      - "Files created (test class, page objects)"
+      - "Verified locators count"
+      - "Test steps implemented"
+      - "Any manual steps required"
+      - "Warnings or issues encountered"
+
+# BEST PRACTICES
+best_practices:
+  do:
+    - "Always fetch complete ADO context including related work items"
+    - "Verify locators in browser before generating code"
+    - "Prefer ID locators when available"
+    - "Test generated code immediately"
+    - "Review and refine generated assertions"
+    
+  dont:
+    - "Don't skip browser verification step"
+    - "Don't use unstable locators (index-based XPath)"
+    - "Don't generate tests without ADO traceability"
+    - "Don't commit untested generated code"
+
+# INTEGRATION WITH CORTEX
+cortex_integration:
+  knowledge_sources:
+    - "qa-automation-testing/mstest-framework-patterns.yaml"
+    - "qa-automation-testing/qa-coding-standards.yaml"
+    - "qa-automation-testing/page-object-patterns.yaml"
+    - "qa-automation-testing/test-data-patterns.yaml"
+    - "qa-automation-testing/company-domain-knowledge.yaml"
+  
+  tools_used:
+    - "GitHub Copilot for code generation"
+    - "Playwright MCP for browser automation"
+    - "Azure DevOps API for work item retrieval"
+    - "CORTEX knowledge repository for patterns"
+
+# RELATED GUIDES
+related_guides:
+  - path: "qa-automation-testing/mstest-framework-patterns.yaml"
+    relevance: "Framework patterns used in generated code"
+  - path: "qa-automation-testing/page-object-patterns.yaml"
+    relevance: "Page object structure for generated objects"
+  - path: "qa-automation-testing/test-structure-templates.yaml"
+    relevance: "Test class templates"

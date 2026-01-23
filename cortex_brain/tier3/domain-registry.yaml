@@ -184,10 +184,22 @@ cortex_domains:
       - semantic_search
       - quality_curation
       - cross_domain_synthesis
-    directories: 17
+    directories: 18  # Includes qa-automation-testing
     auto_indexed: true
     status: "active"
     config_path: "cortex_brain/tier3/"
+    subdomains:
+      - architecture
+      - backend-python
+      - frontend-js-ts
+      - devops-infrastructure
+      - security
+      - testing-validation
+      - performance-optimization
+      - database-management
+      - ai-ml-domains
+      - ui-ux-design
+      - qa-automation-testing  # COMPANY QA framework patterns
 
   observability:
     domain_name: "Observability & Telemetry"

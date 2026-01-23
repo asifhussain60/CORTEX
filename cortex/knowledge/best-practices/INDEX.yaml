@@ -10,7 +10,7 @@ metadata:
   source_commits:
     - commit: "6ad2094a5"
       message: "feat: Import 35 best practices knowledge YAMLs from CORTEX-4.0"
-  total_guides: 35
+  total_guides: 40
   tech_stacks:
     - architecture
     - backend-python
@@ -22,6 +22,7 @@ metadata:
     - database-management
     - ai-ml-domains
     - ui-ux-design
+    - qa-automation-testing
 
 # ARCHITECTURE & DESIGN PATTERNS (10 guides)
 architecture:
@@ -227,6 +228,38 @@ ui-ux-design:
       keywords: ["ui-ux", "user-experience", "design", "accessibility", "usability", "design-systems"]
       design_systems: ["material-design", "accessibility"]
 
+# QA AUTOMATION & TESTING (5 guides)
+qa-automation-testing:
+  description: "Test automation frameworks, patterns, and practices for enterprise QA (COMPANY ClassicQA)"
+  count: 5
+  company: "COMPANY"
+  framework: "MSTest + HEQAutomationCore + Selenium"
+  guides:
+    - path: "qa-automation-testing/mstest-framework-patterns.yaml"
+      title: "MSTest Framework Patterns"
+      keywords: ["mstest", "csharp", "test-automation", "selenium", "page-object-model", "testbase"]
+      stack: "csharp-mstest"
+      
+    - path: "qa-automation-testing/qa-coding-standards.yaml"
+      title: "QA Coding Standards"
+      keywords: ["coding-standards", "naming-conventions", "csharp", "test-automation", "style-guide"]
+      stack: "csharp"
+      
+    - path: "qa-automation-testing/page-object-patterns.yaml"
+      title: "Page Object Model Patterns"
+      keywords: ["page-object-model", "pom", "selenium", "web-automation", "design-patterns"]
+      stack: "selenium"
+      
+    - path: "qa-automation-testing/ai-assisted-testing.yaml"
+      title: "AI-Assisted Test Automation"
+      keywords: ["ai-assistance", "github-copilot", "playwright", "test-generation", "azure-devops"]
+      stack: "ai-tools"
+      
+    - path: "qa-automation-testing/company-domain-knowledge.yaml"
+      title: "COMPANY Domain Knowledge"
+      keywords: ["company", "hsa", "fsa", "domain-knowledge", "healthcare", "benefits-administration"]
+      domain: "company-business"
+
 # DISCOVERY & NAVIGATION
 discovery:
   by_technology_stack:
@@ -287,6 +320,16 @@ discovery:
         - "security/api-security-checklist.yaml"
         - "testing-validation/testing-pyramid.yaml"
         - "performance-optimization/caching-strategies.yaml"
+    
+    - stack: "csharp-qa-automation"
+      guides:
+        - "qa-automation-testing/mstest-framework-patterns.yaml"
+        - "qa-automation-testing/qa-coding-standards.yaml"
+        - "qa-automation-testing/page-object-patterns.yaml"
+        - "qa-automation-testing/ai-assisted-testing.yaml"
+        - "qa-automation-testing/company-domain-knowledge.yaml"
+        - "testing-validation/tdd-best-practices.yaml"
+        - "testing-validation/testing-pyramid.yaml"
 
   by_concern:
     - concern: "quality"
@@ -316,6 +359,14 @@ discovery:
         - "devops-infrastructure/infrastructure-as-code.yaml"
         - "devops-infrastructure/monitoring-observability.yaml"
         - "ai-ml-domains/vector-database-guide.yaml"
+    
+    - concern: "test-automation"
+      guides:
+        - "qa-automation-testing/mstest-framework-patterns.yaml"
+        - "qa-automation-testing/page-object-patterns.yaml"
+        - "qa-automation-testing/ai-assisted-testing.yaml"
+        - "testing-validation/tdd-best-practices.yaml"
+        - "testing-validation/testing-pyramid.yaml"
 
 # GOVERNANCE & METADATA
 governance:
@@ -368,7 +419,17 @@ usage:
       - "architecture/microservices-resilience-patterns.yaml"
       - "devops-infrastructure/monitoring-observability.yaml"
       - "devops-infrastructure/infrastructure-as-code.yaml"
-      - "security/secure-coding-practices.yaml"
+      - "security/secure-coding-practices
+  
+  qa_automation_onboarding:
+    description: "Setting up QA automation for COMPANY (or similar enterprise)"
+    sequence:
+      - "qa-automation-testing/company-domain-knowledge.yaml"
+      - "qa-automation-testing/mstest-framework-patterns.yaml"
+      - "qa-automation-testing/qa-coding-standards.yaml"
+      - "qa-automation-testing/page-object-patterns.yaml"
+      - "testing-validation/tdd-best-practices.yaml"
+      - "qa-automation-testing/ai-assisted-testing.yaml".yaml"
       
   quality_improvement:
     description: "Improving code quality and maintainability"

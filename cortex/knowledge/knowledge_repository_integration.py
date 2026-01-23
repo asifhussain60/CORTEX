@@ -28,6 +28,7 @@ class KnowledgeCategory(Enum):
     DATABASE_MANAGEMENT = "database-management"
     AI_ML_DOMAINS = "ai-ml-domains"
     UI_UX_DESIGN = "ui-ux-design"
+    QA_AUTOMATION_TESTING = "qa-automation-testing"
 
 
 class KnowledgeRepository:
