@@ -16,11 +16,13 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 """
 
 import functools
+import threading
 from typing import Any, Callable, Dict, Optional
 
 
-# Global registry for decorated tools
-_REGISTERED_TOOLS = {}
+# REM-CRIT-004: Thread-safe tool registry with lock
+_REGISTERED_TOOLS: Dict[str, Any] = {}
+_REGISTRY_LOCK = threading.Lock()
 
 
 def mcp_tool(
@@ -41,37 +43,40 @@ def mcp_tool(
     Returns:
         Decorated function registered as MCP tool
     """
-    def decorator(func: Callable):
+    def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             return func(*args, **kwargs)
         
         # Store metadata
-        wrapper._mcp_tool = True
-        wrapper._mcp_name = name
-        wrapper._mcp_description = description
-        wrapper._mcp_category = category
-        wrapper._mcp_parameters = parameters or {}
+        wrapper._mcp_tool = True  # type: ignore
+        wrapper._mcp_name = name  # type: ignore
+        wrapper._mcp_description = description  # type: ignore
+        wrapper._mcp_category = category  # type: ignore
+        wrapper._mcp_parameters = parameters or {}  # type: ignore
         
-        # Register in global registry
-        _REGISTERED_TOOLS[name] = {
-            "func": wrapper,
-            "name": name,
-            "description": description,
-            "category": category,
-            "parameters": parameters or {}
-        }
+        # Register in thread-safe registry
+        with _REGISTRY_LOCK:
+            _REGISTERED_TOOLS[name] = {
+                "func": wrapper,
+                "name": name,
+                "description": description,
+                "category": category,
+                "parameters": parameters or {}
+            }
         
         return wrapper
     
     return decorator
 
 
-def get_registered_tools():
-    """Get all registered MCP tools."""
-    return _REGISTERED_TOOLS.copy()
+def get_registered_tools() -> Dict[str, Any]:
+    """Get all registered MCP tools (thread-safe)."""
+    with _REGISTRY_LOCK:
+        return _REGISTERED_TOOLS.copy()
 
 
-def get_tool(name: str):
-    """Get a specific registered tool by name."""
-    return _REGISTERED_TOOLS.get(name)
+def get_tool(name: str) -> Optional[Dict[str, Any]]:
+    """Get a specific registered tool by name (thread-safe)."""
+    with _REGISTRY_LOCK:
+        return _REGISTERED_TOOLS.get(name)

@@ -68,18 +68,23 @@ phase_execution_tracking:
   mac_track_state:
     current_phase_index: 1
     phase_states:
-    - items:
-      - id: REM-CRIT-001
-        status: PENDING
-      - id: REM-CRIT-002
-        status: PENDING
-      - id: REM-CRIT-003
-        status: PENDING
-      - id: REM-CRIT-004
-        status: PENDING
+    - end_time: '2026-01-23T07:52:41.059277'
+      items:
+      - end_time: '2026-01-23T07:52:41.059269'
+        id: REM-CRIT-001
+        status: COMPLETED
+      - end_time: '2026-01-23T07:52:41.059273'
+        id: REM-CRIT-002
+        status: COMPLETED
+      - end_time: '2026-01-23T07:52:41.059274'
+        id: REM-CRIT-003
+        status: COMPLETED
+      - end_time: '2026-01-23T07:52:41.059275'
+        id: REM-CRIT-004
+        status: COMPLETED
       phase_id: phase-001-critical-blockers
       start_time: '2026-01-23T07:50:09.510458'
-      status: EXECUTING
+      status: COMPLETED
   win_track_state:
     current_phase_index: 0
     phase_states: []

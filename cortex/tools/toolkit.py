@@ -23,20 +23,23 @@ Copyright © 2025-2026 Asif Hussain. All rights reserved.
 
 import argparse
 import sys
-from typing import List, Optional
+import threading
+from typing import List, Optional, Callable, Dict, Any
 
 from cortex.brain.core.result import Result, Ok, Err
 from cortex.brain.core.path_resolver import get_project_root
 
 
-# Tool registry - maps command to handler
-_TOOLS = {}
+# REM-CRIT-004: Thread-safe tool registry with lock
+_TOOLS: Dict[str, Callable] = {}
+_TOOLS_LOCK = threading.Lock()
 
 
-def register_tool(name: str):
-    """Decorator to register a tool handler."""
-    def decorator(func):
-        _TOOLS[name] = func
+def register_tool(name: str) -> Callable:
+    """Decorator to register a tool handler (thread-safe)."""
+    def decorator(func: Callable) -> Callable:
+        with _TOOLS_LOCK:
+            _TOOLS[name] = func
         return func
     return decorator
 
@@ -57,12 +60,13 @@ def cmd_root(args: List[str]) -> Result[str]:
 @register_tool("help")
 def cmd_help(args: List[str]) -> Result[str]:
     """Show available commands."""
-    commands = sorted(_TOOLS.keys())
+    with _TOOLS_LOCK:
+        commands = sorted(_TOOLS.keys())
     help_text = "Available commands:\n" + "\n".join(f"  {cmd}" for cmd in commands)
     return Ok(help_text)
 
 
-def main(argv: Optional[List[str]] = None):
+def main(argv: Optional[List[str]] = None) -> int:
     """Main entry point."""
     if argv is None:
         argv = sys.argv[1:]
@@ -75,12 +79,14 @@ def main(argv: Optional[List[str]] = None):
     command = argv[0]
     args = argv[1:]
     
-    if command not in _TOOLS:
-        print(f"Unknown command: {command}")
-        print("Use 'cortex help' to see available commands.")
-        return 1
+    with _TOOLS_LOCK:
+        if command not in _TOOLS:
+            print(f"Unknown command: {command}")
+            print("Use 'cortex help' to see available commands.")
+            return 1
+        tool_func = _TOOLS[command]
     
-    result = _TOOLS[command](args)
+    result = tool_func(args)
     
     if result.is_ok():
         output = result.unwrap()
